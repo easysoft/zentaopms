@@ -1,5 +1,5 @@
-library 'z-common@feat-231130'
-library 'z-zentaopms@feat-231204'
+library 'z-common@master'
+library 'z-zentaopms@feat-240801'
 
 pipeline {
   agent {
@@ -19,6 +19,7 @@ pipeline {
   parameters {
     separator(name: "action", sectionHeader: "构建动作")
     choice choices: ['auto', 'snapshot', 'release'], description: '构建包类型（快照或发版）', name: 'build_kind'
+    string defaultValue: "open,biz,max,ipd", description: '发布产品', name: 'publish_exts', trim: true
     booleanParam defaultValue: true, description: '制作开源版', name: 'publish_open'
     booleanParam defaultValue: true, description: '制作企业版', name: 'publish_biz'
     booleanParam defaultValue: false, description: '制作SAFe插件', name: 'publish_plugin_safe'
@@ -98,7 +99,7 @@ pipeline {
                 [name: "xuansrc", subDir: true, url: "https://${env.GIT_HOST}/easycorp/xuanxuan.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.xuanxuan_version}", j.getReplaySHA("xuanxuan"), "${env.XUANVERSION}"] ],
                 [name: "zdoo", subDir: true, url: "https://${env.GIT_HOST}/easycorp/zdoo.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.zdoo_version}", j.getReplaySHA("zdoo"), "${env.ZDOO_VERSION}"] ],
                 [name: "zdooext", subDir: true, url: "https://${env.GIT_HOST}/easycorp/zdooext.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.zdooext_version}", j.getReplaySHA("zdooext"), "${env.ZDOOEXT_VERSION}"] ],
-                [name: "zentaoext", subDir: true, url: "https://${env.GIT_HOST}/${env.ZENTAOEXT_GIT_REPO}.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.zentaoext_version}", j.getReplaySHA("zentaoext"), "${env.ZENTAOEXT_VERSION}"] ],
+                [name: "zentaoext", subDir: true, url: "https://${env.GITFOX_HOST}/git/${env.ZENTAOEXT_GIT_REPO}.git", credentialsId: "gitfox-zcorp-cc-ci-robot", branchs: ["${params.zentaoext_version}", j.getReplaySHA("zentaoext"), "${env.ZENTAOEXT_VERSION}", "${env.GIT_BRANCH}"] ],
                 [name: "downRepo", subDir: true, url: "https://${env.GIT_HOST}/${env.DOWNGRADE_GIT_REPO}.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.fulldown_version}", j.getReplaySHA("${env.DOWNGRADE_GIT_REPO}"), "downgrade/${env.DOWNGRADE_VERSION}/src"] ]
               ])
 
@@ -180,41 +181,41 @@ pipeline {
               }
             }
 
-            stage("SAFe") {
-              when { 
-                allOf {
-                  expression { return params.publish_biz || params.publish_plugin_safe }
-                  environment name: 'PLUGIN_SAFE_EXIST', value: '0'
-                }
-              }
-              steps {
-                container('package') {
-                    sh '''${ZENTAO_BUILD_PATH}/script/downgrade/dirDowngrade.sh -n safe -s -i \
-                      -p 8.1,7.2,7.1,7.0,5.4 \
-                      -c ${PWD}/misc -r $SRC_ZENTAOEXT_PATH/zentaopro -o ${ZENTAO_BUILD_PATH} \
-                      safe '''
-                    sh 'cp -v ${ZENTAO_BUILD_PATH}/safe-*.zip ${ZENTAO_RELEASE_PATH}/'
-                    sh 'cd $SRC_ZENTAOEXT_PATH && make safeDown'
-                }
-                script {
-                  env.UPLOADED_PLUGIN_SAFE = 'true'
-                  def versions = ["php5.4_5.6", "php7.0", "php7.1", "php7.2_7.4", "php8.1"]
-                  buildPkg.uploadSAFe(versions)
-                  if (env.BUILD_KIND=="release") {
-                    sh 'mkdir -pv ./release/upload && cd ./release/upload && mkdir -pv $MAX_VERSION/safe $IPD_VERSION/safe'
-                    for (v in versions) {
-                      sh "mv $ZENTAO_RELEASE_PATH/safe.max." + v + ".zip ./release/upload/$MAX_VERSION/safe/safe-$MAX_VERSION-" + v + ".zip"
-                      sh "mv $ZENTAO_RELEASE_PATH/safe.ipd." + v + ".zip ./release/upload/$IPD_VERSION/safe/safe-$IPD_VERSION-" + v + ".zip"
-                    }
-                    container('jnlp') {
-                      sh 'qshell account $QINIU_ACCESS_KEY $QINIU_SECRET_KEY uploader'
-                      sh 'qshell qupload2 --bucket $QINIU_BUCKET --overwrite --src-dir ./release/upload --key-prefix $OBJECT_KEY_PREFIX'
-                    }
-                  }
-                }
+            // stage("SAFe") {
+            //   when { 
+            //     allOf {
+            //       expression { return params.publish_biz || params.publish_plugin_safe }
+            //       environment name: 'PLUGIN_SAFE_EXIST', value: '0'
+            //     }
+            //   }
+            //   steps {
+            //     container('package') {
+            //         sh '''${ZENTAO_BUILD_PATH}/script/downgrade/dirDowngrade.sh -n safe -s -i \
+            //           -p 8.1,7.2,7.1,7.0,5.4 \
+            //           -c ${PWD}/misc -r $SRC_ZENTAOEXT_PATH/zentaopro -o ${ZENTAO_BUILD_PATH} \
+            //           safe '''
+            //         sh 'cp -v ${ZENTAO_BUILD_PATH}/safe-*.zip ${ZENTAO_RELEASE_PATH}/'
+            //         sh 'cd $SRC_ZENTAOEXT_PATH && make safeDown'
+            //     }
+            //     script {
+            //       env.UPLOADED_PLUGIN_SAFE = 'true'
+            //       def versions = ["php5.4_5.6", "php7.0", "php7.1", "php7.2_7.4", "php8.1"]
+            //       buildPkg.uploadSAFe(versions)
+            //       if (env.BUILD_KIND=="release") {
+            //         sh 'mkdir -pv ./release/upload && cd ./release/upload && mkdir -pv $MAX_VERSION/safe $IPD_VERSION/safe'
+            //         for (v in versions) {
+            //           sh "mv $ZENTAO_RELEASE_PATH/safe.max." + v + ".zip ./release/upload/$MAX_VERSION/safe/safe-$MAX_VERSION-" + v + ".zip"
+            //           sh "mv $ZENTAO_RELEASE_PATH/safe.ipd." + v + ".zip ./release/upload/$IPD_VERSION/safe/safe-$IPD_VERSION-" + v + ".zip"
+            //         }
+            //         container('jnlp') {
+            //           sh 'qshell account $QINIU_ACCESS_KEY $QINIU_SECRET_KEY uploader'
+            //           sh 'qshell qupload2 --bucket $QINIU_BUCKET --overwrite --src-dir ./release/upload --key-prefix $OBJECT_KEY_PREFIX'
+            //         }
+            //       }
+            //     }
 
-              }
-            }
+            //   }
+            // }
 
           }
         } // End Build
@@ -228,6 +229,7 @@ pipeline {
           matrix {
             agent {
               kubernetes {
+                inheritFrom "upload-azure"
                 containerTemplate {
                     name "package"
                     image "${MIDDLE_IMAGE_REPO}:${MIDDLE_IMAGE_TAG}"
@@ -322,17 +324,18 @@ pipeline {
                     }
                   }
 
-                  stage("Upload Qiniu") {
+                  stage("Upload Azure") {
                     when {
                       environment name: 'BUILD_KIND', value: 'release'
                     }
 
                     steps {
                       sh 'ls -l ${OUTPUT_PKG_PATH}'
-                      container('jnlp') {
-                        sh 'qshell account $QINIU_ACCESS_KEY $QINIU_SECRET_KEY uploader'
-                        sh 'qshell qupload2 --bucket $QINIU_BUCKET --overwrite --src-dir $OUTPUT_PKG_PATH --key-prefix $OBJECT_KEY_PREFIX'
-                      }    
+                      withCredentials([string(credentialsId: env.AZURE_CRED_ID, variable: 'AZURE_SAS_TOKEN')]) {
+                        container('azcopy') {
+                          sh 'azcopy cp --recursive "$OUTPUT_PKG_PATH/*" "https://zentao.blob.core.windows.net/$AZURE_BUCKET/zentao/?$AZURE_SAS_TOKEN"'
+                        }
+                      }
                     }
                   }
 
@@ -402,7 +405,7 @@ pipeline {
                       }
                     }
 
-                    stage("Upload Qiniu") {
+                    stage("Upload Azure") {
                       when {
                         environment name: 'BUILD_KIND', value: 'release'
                       }
@@ -415,9 +418,10 @@ pipeline {
                           sh "mv `find release/zh-cn/$MAX_VERSION release/en/$MAX_VERSION -type f -name 'ZenTao*.exe'` release/upload/$MAX_VERSION"
                           sh "mv `find release/zh-cn/$IPD_VERSION release/en/$IPD_VERSION -type f -name 'ZenTao*.exe'` release/upload/$IPD_VERSION"
                         }
-                        container('jnlp') {
-                          sh 'qshell account $QINIU_ACCESS_KEY $QINIU_SECRET_KEY uploader'
-                          sh 'qshell qupload2 --bucket $QINIU_BUCKET --overwrite --src-dir ./release/upload --key-prefix $OBJECT_KEY_PREFIX'
+                        withCredentials([string(credentialsId: env.AZURE_CRED_ID, variable: 'AZURE_SAS_TOKEN')]) {
+                          container('azcopy') {
+                            sh 'azcopy cp --recursive "./release/upload/*" "https://zentao.blob.core.windows.net/$AZURE_BUCKET/zentao/?$AZURE_SAS_TOKEN"'
+                          }
                         }
                       }
                     } // End Upload Qiniu
@@ -451,7 +455,7 @@ pipeline {
                       }
                     }
 
-                    stage("Upload Qiniu") {
+                    stage("Upload Azure") {
                       when {
                         environment name: 'BUILD_KIND', value: 'release'
                       }
@@ -464,9 +468,10 @@ pipeline {
                           sh "mv `find release/zh-cn/$MAX_VERSION release/en/$MAX_VERSION -type f -name 'ZenTao*'` release/upload/$MAX_VERSION"
                           sh "mv `find release/zh-cn/$IPD_VERSION release/en/$IPD_VERSION -type f -name 'ZenTao*'` release/upload/$IPD_VERSION"
                         }
-                        container('jnlp') {
-                          sh 'qshell account $QINIU_ACCESS_KEY $QINIU_SECRET_KEY uploader'
-                          sh 'qshell qupload2 --bucket $QINIU_BUCKET --overwrite --src-dir ./release/upload --key-prefix $OBJECT_KEY_PREFIX'
+                        withCredentials([string(credentialsId: env.AZURE_CRED_ID, variable: 'AZURE_SAS_TOKEN')]) {
+                          container('azcopy') {
+                            sh 'azcopy cp --recursive "./release/upload/*" "https://zentao.blob.core.windows.net/$AZURE_BUCKET/zentao/?$AZURE_SAS_TOKEN"'
+                          }
                         }
                       }
                     } // End Upload Qiniu
@@ -569,7 +574,7 @@ pipeline {
         stage("Upload rongpm") {
           agent {
             kubernetes {
-              inheritFrom "zentao-package xuanim"
+              inheritFrom "zentao-package xuanim upload-azure"
               yamlFile 'misc/ci/normal.yaml'
             }
           }
@@ -594,9 +599,10 @@ pipeline {
                 sh 'cd output/rongpm/${PMS_VERSION} && php7.2 $WORKSPACE/system/bin/buildpractice.php && rm -rf rongpm'
               }
 
-              container('jnlp') {
-                sh 'qshell account $QINIU_ACCESS_KEY $QINIU_SECRET_KEY uploader'
-                sh 'qshell qupload2 --bucket $QINIU_BUCKET --overwrite --src-dir ./output --key-prefix $OBJECT_KEY_PREFIX'
+              withCredentials([string(credentialsId: env.AZURE_CRED_ID, variable: 'AZURE_SAS_TOKEN')]) {
+                container('azcopy') {
+                  sh 'azcopy cp --recursive "./output/*" "https://zentao.blob.core.windows.net/$AZURE_BUCKET/zentao/?$AZURE_SAS_TOKEN"'
+                }
               }
             }
           }
