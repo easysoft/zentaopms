@@ -131,6 +131,7 @@ $lang->doc->person       = 'Person';
 $lang->doc->team         = 'Team';
 $lang->doc->manage       = 'Document Management';
 $lang->doc->release      = 'Release';
+$lang->doc->story        = 'Story';
 
 $lang->doc->moduleDoc     = 'By Module';
 $lang->doc->searchDoc     = 'Search';

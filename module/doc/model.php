@@ -1523,18 +1523,25 @@ class docModel extends model
      * @param  string      $type        product|project|execution
      * @param  int         $objectID
      * @param  string|bool $searchTitle
+     * @param  string      $browseType
+     * @param  int         $param
      * @param  string      $orderBy
      * @param  object      $pager
      * @access public
      * @return array
      */
-    public function getLibFiles(string $type, int $objectID, string|bool $searchTitle = false, string $orderBy = 'id_desc', object $pager = null): array
+    public function getLibFiles(string $type, int $objectID, string $browseType = '', int $param = 0, string $orderBy = 'id_desc', object $pager = null): array
     {
         if(!in_array($type, array('execution', 'project', 'product'))) return array();
 
-        list($bugIdList, $testReportIdList, $caseIdList, $docIdList, $storyIdList, $planIdList, $releaseIdList, $storyIDList, $issueIdList, $meetingIdList, $reviewIdList, $designIdList, $executionIdList, $taskIdList, $buildIdList, $testtaskIdList) = $this->getLinkedObjectData($type, $objectID);
+        $searchModule = "{$type}DocFile";
+        $queryID      = (int)$param;
+        $this->loadModel('search')->setQuery($searchModule, $queryID);
+        $docFileQuery = $this->session->{$searchModule . 'Query'};
 
-        $files = $this->dao->select('*')->from(TABLE_FILE)->alias('t1')
+        list($bugIdList, $testReportIdList, $caseIdList, $docIdList, $storyIdList, $planIdList, $releaseIdList, $issueIdList, $meetingIdList, $reviewIdList, $designIdList, $executionIdList, $taskIdList, $buildIdList, $testtaskIdList) = $this->getLinkedObjectData($type, $objectID);
+
+        $files = $this->dao->select('*')->from(TABLE_FILE)
             ->where('size')->gt('0')
             ->andWhere('deleted')->eq('0')
             ->andWhere("(objectType = '$type' and objectID = $objectID)", true)
@@ -1557,10 +1564,10 @@ class docModel extends model
             ->orWhere("(objectType = 'task' and objectID in ($taskIdList))")
             ->orWhere("(objectType = 'build' and objectID in ($buildIdList))")
             ->orWhere("(objectType = 'testtask' and objectID in ($testtaskIdList))")
-            ->beginIF($storyIDList)->orWhere("(objectType = 'story' and objectID in ($storyIDList))")->fi()
+            ->beginIF($storyIdList)->orWhere("(objectType = 'story' and objectID in ($storyIdList))")->fi()
             ->fi()
             ->markRight(1)
-            ->beginIF($searchTitle !== false)->andWhere('title')->like("%{$searchTitle}%")->fi()
+            ->beginIF($browseType == 'bySearch')->andWhere("($docFileQuery)")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -1588,7 +1595,7 @@ class docModel extends model
         if($type == 'project')   $userView = $this->app->user->view->projects;
         if($type == 'execution') $userView = $this->app->user->view->sprints;
 
-        $bugIdList = $testReportIdList = $caseIdList = $testtaskIdList = $storyIdList = $planIdList = $releaseIdList = $executionIdList = $taskIdList = $buildIdList = $issueIdList = $meetingIdList = $designIdList = $reviewIdList = $storyIDList = 0;
+        $bugIdList = $testReportIdList = $caseIdList = $testtaskIdList = $storyIdList = $planIdList = $releaseIdList = $executionIdList = $taskIdList = $buildIdList = $issueIdList = $meetingIdList = $designIdList = $reviewIdList = 0;
         $bugPairs  = $this->dao->select('id')->from(TABLE_BUG)->where($type)->eq($objectID)->andWhere('deleted')->eq('0')->beginIF(!$this->app->user->admin)->andWhere($type)->in($userView)->fi()->fetchPairs('id');
         if(!empty($bugPairs)) $bugIdList = implode(',', $bugPairs);
 
@@ -1614,14 +1621,14 @@ class docModel extends model
         }
         elseif($type == 'project')
         {
-            list($storyIDList, $issueIdList, $meetingIdList, $reviewIdList, $designIdList, $executionIdList, $taskIdList, $buildIdList) = $this->getLinkedProjectData($objectID);
+            list($storyIdList, $issueIdList, $meetingIdList, $reviewIdList, $designIdList, $executionIdList, $taskIdList, $buildIdList) = $this->getLinkedProjectData($objectID);
         }
         elseif($type == 'execution')
         {
-            list($storyIDList, $taskIdList, $buildIdList, $testtaskIdList) = $this->getLinkedExecutionData($objectID);
+            list($storyIdList, $taskIdList, $buildIdList, $testtaskIdList) = $this->getLinkedExecutionData($objectID);
         }
 
-        return array($bugIdList, $testReportIdList, $caseIdList, $docIdList, $storyIdList, $planIdList, $releaseIdList, $storyIDList, $issueIdList, $meetingIdList, $reviewIdList, $designIdList, $executionIdList, $taskIdList, $buildIdList, $testtaskIdList);
+        return array($bugIdList, $testReportIdList, $caseIdList, $docIdList, $storyIdList, $planIdList, $releaseIdList, $issueIdList, $meetingIdList, $reviewIdList, $designIdList, $executionIdList, $taskIdList, $buildIdList, $testtaskIdList);
     }
 
     /**
@@ -1635,11 +1642,11 @@ class docModel extends model
     public function getLinkedProjectData(int $projectID): array
     {
         $project     = $this->loadModel('project')->getByID($projectID);
-        $storyIDList = $issueIdList = $meetingIdList = $reviewIdList = $designIdList = $executionIdList = $taskIdList = $buildIdList = 0;
+        $storyIdList = $issueIdList = $meetingIdList = $reviewIdList = $designIdList = $executionIdList = $taskIdList = $buildIdList = 0;
         if($project && !$project->hasProduct)
         {
             $projectIDList = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->orWhere('project')->eq($projectID)->fetchPairs('id', 'id');
-            $storyIDList   = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->in($projectIDList)->fetchPairs('story', 'story');
+            $storyIdList   = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->in($projectIDList)->fetchPairs('story', 'story');
         }
 
         if(in_array($this->config->edition, array('max', 'ipd')))
@@ -1683,8 +1690,8 @@ class docModel extends model
         if(!empty($buildPairs)) $buildIdList = implode(',', $buildPairs);
 
         $executionIdList = $executionIdList ? join(',', $executionIdList) : 0;
-        $storyIDList     = $storyIDList ? join(',', $storyIDList) : 0;
-        return array($storyIDList, $issueIdList, $meetingIdList, $reviewIdList, $designIdList, $executionIdList, $taskIdList, $buildIdList);
+        $storyIdList     = $storyIdList ? join(',', $storyIdList) : 0;
+        return array($storyIdList, $issueIdList, $meetingIdList, $reviewIdList, $designIdList, $executionIdList, $taskIdList, $buildIdList);
     }
 
     /**
@@ -1697,12 +1704,12 @@ class docModel extends model
      */
     public function getLinkedExecutionData(int $executionID): array
     {
-        $storyIDList = $taskIdList = $buildIdList = $testtaskIdList = 0;
+        $storyIdList = $taskIdList = $buildIdList = $testtaskIdList = 0;
         $execution   = $this->loadModel('execution')->getByID($executionID);
         $project     = $execution ? $this->loadModel('project')->getByID((int)$execution->project) : '';
 
-        if($project && !$project->hasProduct) $storyIDList = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->fetchPairs('story', 'story');
-        $storyIDList = $storyIDList ? join(',', $storyIDList) : '';
+        if($project && !$project->hasProduct) $storyIdList = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->fetchPairs('story', 'story');
+        $storyIdList = $storyIdList ? join(',', $storyIdList) : '';
 
         $taskPairs = $this->dao->select('id')->from(TABLE_TASK)
             ->where('execution')->eq($executionID)
@@ -1725,7 +1732,7 @@ class docModel extends model
             ->fetchPairs('id');
         if(!empty($testtaskPairs)) $testtaskIdList = implode(',', $testtaskPairs);
 
-        return array($storyIDList, $taskIdList, $buildIdList, $testtaskIdList);
+        return array($storyIdList, $taskIdList, $buildIdList, $testtaskIdList);
     }
 
     /**

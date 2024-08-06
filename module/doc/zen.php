@@ -806,19 +806,19 @@ class docZen extends doc
         $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, "type={$type}&objectID={$objectID}&viewType={$viewType}&browseType=bySearch&queryID=0");
 
         $objectTypeList = array();
-        $objectTypeList['bug']         = $this->lang->bug->common;
-        $objectTypeList['testreport']  = $this->lang->testreport->common;
-        $objectTypeList['testcase']    = $this->lang->case->common;
-        $objectTypeList['doc']         = $this->lang->doc->common;
-        $objectTypeList['story']       = $this->lang->story->common;
+        $objectTypeList['story']       = $this->lang->doc->story;
         $objectTypeList['productplan'] = $this->lang->productplan->shortCommon;
         $objectTypeList['release']     = $this->lang->release->common;
-        $objectTypeList['review']      = $this->lang->review->common;
         $objectTypeList['design']      = $this->lang->design->common;
         $objectTypeList['execution']   = $this->lang->execution->common;
         $objectTypeList['task']        = $this->lang->task->common;
         $objectTypeList['build']       = $this->lang->build->common;
+        $objectTypeList['review']      = $this->lang->review->common;
+        $objectTypeList['bug']         = $this->lang->bug->common;
+        $objectTypeList['testcase']    = $this->lang->case->common;
         $objectTypeList['testtask']    = $this->lang->testtask->common;
+        $objectTypeList['testreport']  = $this->lang->testreport->common;
+        $objectTypeList['doc']         = $this->lang->doc->common;
         if(isset($this->lang->issue->common))   $objectTypeList['issue']   = $this->lang->issue->common;
         if(isset($this->lang->meeting->common)) $objectTypeList['meeting'] = $this->lang->meeting->common;
         $this->config->file->search['params']['objectType']['values'] = $objectTypeList;

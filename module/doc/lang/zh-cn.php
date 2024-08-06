@@ -131,6 +131,7 @@ $lang->doc->person       = '个人';
 $lang->doc->team         = '团队';
 $lang->doc->manage       = '文档管理';
 $lang->doc->release      = '发布';
+$lang->doc->story        = '需求';
 
 $lang->doc->moduleDoc     = '按模块浏览';
 $lang->doc->searchDoc     = '搜索';

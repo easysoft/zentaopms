@@ -285,7 +285,13 @@ class docTest
      */
     public function getLibFilesTest(string $type, int $objectID, string|bool $searchTitle = false): array
     {
-        $files = $this->objectModel->getLibFiles($type, $objectID, $searchTitle);
+        $browseType = '';
+        if($searchTitle !== false)
+        {
+            $browseType = 'bySearch';
+            $_SESSION["{$type}DocTypeQuery"] = "title LIKE '%{$searchTitle}%'";
+        }
+        $files = $this->objectModel->getLibFiles($type, $objectID, $browseType);
         if(dao::isError()) return dao::getError();
 
         return $files;
