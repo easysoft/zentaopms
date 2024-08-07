@@ -1063,4 +1063,16 @@ class gitlabRepo
         if(empty($MR->changes_count)) $MR->has_conflicts = 0;
         return $MR;
     }
+
+    public function getCommitCountByDate($startDate, $endDate)
+    {
+        $branches = $this->branch('all');
+        $statistics = array();
+        foreach($branches as $branch)
+        {
+            $commits = $this->fetch('commits', array(), true);
+            a($commits); die;
+        }
+        return $statistics;
+    }
 }

@@ -367,6 +367,11 @@ class scm
     {
         return $this->engine->pipelines();
     }
+
+    public function getCommitCountByDate($startDate, $endDate)
+    {
+        return $this->engine->getCommitCountByDate($startDate, $endDate);
+    }
 }
 
 /**
