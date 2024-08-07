@@ -294,6 +294,7 @@ $lang->pivot->draftSave       = 'The pivot table has been published and will be 
 $lang->pivot->cannotAddQuery  = 'Result filter has been added, query filter cannot be added.';
 $lang->pivot->cannotAddResult = 'Query filter has been added, result filter cannot be added.';
 //$lang->pivot->cannotAddDrill  = 'GROUP BY exists in the query statement or filters are configured. Therefore, data cannot be configured to drill down';
+$lang->pivot->permissionDenied = 'The %s directory does not have enough permissions. Run chmod 777 %s to change the permissions.';
 
 $lang->pivot->drillModalTip       = <<<EOT
 1. Select the columns to be drilled and the target objects to be drilled. The system automatically generates SQL statements based on your selection.
