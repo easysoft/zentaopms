@@ -368,9 +368,18 @@ class scm
         return $this->engine->pipelines();
     }
 
-    public function getCommitCountByDate($startDate, $endDate)
+    /**
+     * 根据开始时间和结束时间获取提交时间和提交人。
+     * Get commit count by date.
+     *
+     * @param  int    $startDate
+     * @param  int    $endDate
+     * @access public
+     * @return array
+     */
+    public function getCommitByDate($startDate, $endDate)
     {
-        return $this->engine->getCommitCountByDate($startDate, $endDate);
+        return $this->engine->getCommitByDate($startDate, $endDate);
     }
 }
 
