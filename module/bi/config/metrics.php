@@ -4382,3 +4382,17 @@ $config->bi->builtin->metrics[] = array
     'desc'       => '按代码库统计的每周代码提交次数是指代码库在单周的代码提交数量。这个度量项可以反映代码库的周开发活动频率和代码更新情况。',
     'definition' => '代码库中代码提交次数求和，提交时间为某周。'
 );
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按代码库统计的每日代码提交次数',
+    'alias'      => '代码库每日提交次数',
+    'code'       => 'count_of_daily_code_commits_in_codebase',
+    'purpose'    => 'scale',
+    'scope'      => 'system',
+    'object'     => 'code',
+    'unit'       => 'count',
+    'dateType'   => 'day',
+    'desc'       => '按代码库统计的的每日代码提交次数是指代码库每日的代码提交数量。这个度量项可以反映代码库每日开发活动频率和代码更新情况。',
+    'definition' => '代码库中代码提交次数求和，提交时间为某日。'
+);
