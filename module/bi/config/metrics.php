@@ -4424,3 +4424,17 @@ $config->bi->builtin->metrics[] = array
     'desc'       => '按执行统计的新增有效Bug总数是指在执行中发现的有效Bug的数量。这个度量项反映了执行的质量情况。新增有效Bug数越多可能代表执行的代码质量存在的问题越多，需要进行进一步的解决和改进。',
     'definition' => "执行中新增Bug个数求和\n解决方案为已解决，延期处理和不予解决或状态为激活\n过滤已删除的Bug\n过滤已删除的执行\n过滤已删除的项目\n过滤已删除的产品\n"
 );
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按执行统计的来源Bug的任务消耗工时占比',
+    'alias'      => '来源Bug的任务消耗工时占比',
+    'code'       => 'consume_rate_of_frombug_task_in_execution',
+    'purpose'    => 'hour',
+    'scope'      => 'execution',
+    'object'     => 'task',
+    'unit'       => 'hour',
+    'dateType'   => 'nodate',
+    'desc'       => '按执行统计的来源Bug的任务消耗工时占比是指执行中Bug转任务消耗的工时与执行中所有任务消耗工时的比值。该度量项反映了任务来源为Bug的资源使用情况，可以帮助团队识别缺陷管理中存在的问题，例如历史遗留缺陷过多导致执行一直在补旧账。',
+    'definition' => "复用：按执行统计的来源Bug的任务消耗工时数、按执行统计的任务消耗工时数；\n公式：按执行统计的来源Bug的任务消耗工时数/按执行统计的任务消耗工时数"
+);
