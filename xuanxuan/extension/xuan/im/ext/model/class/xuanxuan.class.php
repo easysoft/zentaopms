@@ -331,6 +331,22 @@ class xuanxuanIm extends imModel
         $data->pollingInterval = isset($this->config->xuanxuan->pollingInterval) ? $this->config->xuanxuan->pollingInterval : 15;
         $data->maxOnlineUser   = isset($setting->maxOnlineUser) ? $setting->maxOnlineUser : 0;
         $data->logPath         = 'log/';
+        $data->certPath        = 'cert/';
+        $data->debug           = 0;
+        $data->key             = $this->config->xuanxuan->key;
+        $data->syncConfig      = 1;
+        $data->thumbnail       = 1;
+
+        if($downloadType == 'config')
+        {
+            $configContent = $this->createXxdConfigFile($data);
+            if(!empty($configContent)) $this->loadModel('file')->sendDownHeader('xxd.conf', 'conf', $configContent['zh']);
+        }
+        elseif($downloadType == 'package')
+        {
+            $packageFileName = $this->createXxdPackage($data);
+            if(!empty($packageFileName)) return array('result' => 'success', 'message' => helper::createLink('im', 'downloadXxdPackage', "xxdFileName=$xxdFileName"));
+        }
 
         return array('result' => 'fail', 'message' => 'error');
     }
