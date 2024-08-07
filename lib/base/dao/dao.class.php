@@ -1040,7 +1040,7 @@ class baseDAO
             $table = trim($this->table, '`');
             if(!empty($table))
             {
-                $sql .= ";update zt_duckdbqueue set updatedTime = '$now' where object = '$table'";
+                $sql .= ";UPDATE zt_duckdbqueue SET updatedTime = '$now' WHERE object = '$table'";
                 $sql .= ";INSERT INTO zt_duckdbqueue (object, updatedTime, syncTime) SELECT '$table', '$now', NULL WHERE NOT EXISTS (SELECT 1 FROM zt_duckdbqueue WHERE object = '$table' );";
             }
         }
