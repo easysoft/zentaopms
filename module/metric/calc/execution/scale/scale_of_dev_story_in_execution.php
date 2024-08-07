@@ -18,3 +18,23 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
+class scale_of_dev_story_in_execution extends baseCalc
+{
+    public $dataset = 'getDevStoriesWithExecution';
+
+    public $fieldList = array('t3.project', 't1.estimate');
+
+    public $result = array();
+
+    public function calculate($row)
+    {
+        if(!isset($this->result[$row->project])) $this->result[$row->project] = 0;
+        $this->result[$row->project] += $row->estimate;
+    }
+
+    public function getResult($options = array())
+    {
+        $records = $this->getRecords(array('execution', 'value'));
+        return $this->filterByOptions($records, $options);
+    }
+}

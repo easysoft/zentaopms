@@ -356,10 +356,10 @@ class dataset
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.type')->eq('story')
             ->andWhere('t2.shadow')->eq(0)
-            ->andWhere('t4.deleted')->eq(0) // 已删除的执行
+            ->andWhere('t4.deleted')->eq(0)
             ->andWhere('t4.type')->in('sprint,stage,kanban')
             ->andWhere('t4.multiple')->eq('1')
-            ->andWhere('t5.deleted')->eq(0); // 已删除的项目
+            ->andWhere('t5.deleted')->eq(0);
 
         return $this->defaultWhere($stmt, 't1');
     }
