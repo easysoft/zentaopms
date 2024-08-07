@@ -134,6 +134,14 @@ class baseCalc
     public $singleSql = '';
 
     /**
+     * 是否使用 SCM。
+     *
+     * @var    bool
+     * @access public
+     */
+    public $useSCM = false;
+
+    /**
      * 设置DAO 。
      * Set DAO.
      *
