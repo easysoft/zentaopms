@@ -14,6 +14,10 @@ jsVar('libType', $type);
 formPanel
 (
     set::title($lang->doc->createLib),
+    on::change('[name=product]',   'checkObjectPriv'),
+    on::change('[name=project]',   'checkObjectPriv'),
+    on::change('[name=execution]', 'checkObjectPriv'),
+    on::change('[name^=users]',    'checkObjectPriv'),
     in_array($type, array('product', 'project')) ? formGroup
     (
         set::label($lang->doc->libType),

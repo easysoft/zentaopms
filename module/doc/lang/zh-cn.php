@@ -398,3 +398,7 @@ $lang->doc->featureBar['myspace']['draft'] = '草稿';
 
 $lang->doc->showDocList[1] = '是';
 $lang->doc->showDocList[0] = '否';
+
+$lang->doc->whitelistDeny['product']   = "<i class='icon pr-1 text-important icon-exclamation'></i>白名单用户<span class='px-1 text-important'>%s</span>暂无产品访问权限，因此无法访问文档。如需访问，请维护产品访问控制权限。";
+$lang->doc->whitelistDeny['project']   = "<i class='icon pr-1 text-important icon-exclamation'></i>白名单用户<span class='px-1 text-important'>%s</span>暂无项目访问权限，因此无法访问文档。如需访问，请维护项目访问控制权限。";
+$lang->doc->whitelistDeny['execution'] = "<i class='icon pr-1 text-important icon-exclamation'></i>白名单用户<span class='px-1 text-important'>%s</span>暂无执行访问权限，因此无法访问文档。如需访问，请维护执行访问控制权限。";
