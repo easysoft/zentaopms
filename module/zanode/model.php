@@ -648,6 +648,7 @@ class zanodemodel extends model
      */
     public function getVncUrl(object $node): false|object
     {
+        if($this->loadModel('zahost')->hiddenHost()) return false;
         if(empty($node) || empty($node->parent) || empty($node->vnc)) return false;
 
         $agnetUrl = 'http://' . $node->ip . ':' . $node->hzap . static::KVM_TOKEN_PATH;
@@ -786,7 +787,7 @@ class zanodemodel extends model
         /* 检查必填项。*/
         /* Check required fields. */
         $this->dao->update(TABLE_ZAHOST)->data($data)
-            ->batchCheck($data->hostType != 'physics' ? $this->config->zanode->create->requiredFields : $this->config->zanode->create->physicsRequiredFields, 'notempty');
+            ->batchCheck($this->config->zanode->create->requiredFields, 'notempty');
         if(dao::isError()) return false;
 
         /* 检查名称格式。*/
