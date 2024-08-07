@@ -18,3 +18,23 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
+class consume_of_test_task_in_execution extends baseCalc
+{
+    public $result  = array();
+    public $dataset = 'getTasks';
+
+    public $fieldList = array('t1.execution', 't1.consumed', 't1.parent', 't1.type');
+
+    public function calculate($row)
+    {
+        if($row->parent == '-1' || $row->type != 'test') return;
+
+        if(!isset($this->result[$row->execution])) $this->result[$row->execution] = 0;
+        $this->result[$row->execution] += $row->consumed;
+    }
+
+    public function getResult($options = array())
+    {
+        return $this->filterByOptions($this->getRecords(array('execution', 'value')), $options);
+    }
+}
