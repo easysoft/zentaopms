@@ -33,6 +33,7 @@ window.changeDoclibAcl = function(e)
         $('.executionBox').removeClass('hidden');
     }
     $('#whiteListBox').addClass('hidden');
+    $('#whiteListBox').find('[name^=users]').zui('picker').$.setValue('');
 }
 
 window.toggleNewSpace = function()

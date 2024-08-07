@@ -256,3 +256,19 @@ window.updateOrder = function(event, orders)
         $.post($.createLink('doc', 'sortDocLib'), sortedIdList);
     }
 }
+
+window.checkObjectPriv = function(e)
+{
+    let formData = new FormData();
+    users.forEach(function(user){ formData.append('users[]', user); });
+
+    let $object    = $('[name=' + libType + ']');
+    let objectType = libType;
+    let objectID   = 0;
+    if($object.length > 0) objectID = $object.val();
+    if(objectID == 0) return;
+
+    $.post($.createLink('doc', 'ajaxCheckObjectPriv', 'libType=' + libType + '&objectID=' + objectID), formData, function(data)
+    {
+    });
+}
