@@ -187,6 +187,7 @@ class doc extends control
      */
     public function editLib(int $libID)
     {
+        $lib = $this->doc->getLibByID($libID);
         if(!empty($_POST))
         {
             $this->lang->doc->name = $this->lang->doclib->name;
@@ -198,13 +199,13 @@ class doc extends control
 
             if($changes)
             {
-                $actionID = $this->action->create('docLib', $libID, 'edited');
+                $object = ($lib->type == 'custom' && $lib->parent == 0) ? 'docspace' : 'doclib';
+                $actionID = $this->action->create($object, $libID, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
             return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'closeModal' => true, 'load' => true));
         }
 
-        $lib = $this->doc->getLibByID($libID);
         if(!empty($lib->product)) $this->view->object = $this->product->getByID($lib->product);
         if(!empty($lib->project) && empty($lib->execution)) $this->view->object = $this->project->getByID($lib->project);
         if(!empty($lib->execution))
@@ -249,7 +250,10 @@ class doc extends control
         $lib = $this->doc->getLibByID($libID);
         if(!empty($lib->main)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorMainSysLib, 'load' => array('alert' => $this->lang->doc->errorMainSysLib)));
 
-        $this->doc->delete(TABLE_DOCLIB, $libID);
+        $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq('1')->where('id')->eq($libID)->exec();
+
+        $object = ($lib->type == 'custom' && $lib->parent == 0) ? 'docspace' : 'doclib';
+        $this->loadModel('action')->create($object, $libID, 'deleted');
 
         $moduleName = 'doc';
         $objectType = $lib->type;

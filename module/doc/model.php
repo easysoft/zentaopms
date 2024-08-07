@@ -238,6 +238,8 @@ class docModel extends model
 
             $this->dao->insert(TABLE_DOCLIB)->data($space, 'spaceName')->autoCheck()->exec();
             $lib->parent = $this->dao->lastInsertID();
+
+            $this->loadModel('action')->create('docspace', $lib->parent, 'created');
         }
         elseif($lib->parent <= 0 && $type == 'custom')
         {
