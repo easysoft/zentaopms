@@ -243,6 +243,7 @@ class thinkStepMenu extends wg
                 setClass('think-node-menu rounded bg-white col bg-canvas ml-4 pb-3 h-full'),
                 zui::$treeType
                 (
+                    set::_id('thinkNodeMenu'),
                     set::_tag('menu'),
                     set::defaultNestedShow(true),
                     set::hover(true),
