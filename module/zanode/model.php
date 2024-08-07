@@ -858,4 +858,19 @@ class zanodemodel extends model
 
         return $result;
     }
+
+    /**
+     * 设置菜单
+     * Set menu
+     *
+     * @access public
+     * @return void
+     */
+    public function setMenu()
+    {
+        if($this->loadModel('zahost')->hiddenHost())
+        {
+            unset($this->lang->qa->menu->automation['subMenu']->zahost);
+        }
+    }
 }
