@@ -6,9 +6,6 @@ $(function()
 
 function changeResolvedBuild(event)
 {
-    const resolution = $('[name=resolution]').val();
-    if(resolution != 'fixed') return false;
-
     if($(event.target).val() != bug.resolvedBuild && bug.resolvedBuild != '')
     {
         zui.Modal.confirm({message: confirmUnlinkBuild, onResult: function(result)

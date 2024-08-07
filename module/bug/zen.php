@@ -1970,7 +1970,7 @@ class bugZen extends bug
     {
         /* 解除旧的版本关联关系，关联新的版本。*/
         /* Unlink old resolved build and link new resolved build. */
-        if($bug->resolution == 'fixed' && !empty($bug->resolvedBuild) && $bug->resolvedBuild != $oldBug->resolvedBuild)
+        if(!empty($bug->resolvedBuild) && $bug->resolvedBuild != $oldBug->resolvedBuild)
         {
             if(!empty($oldBug->resolvedBuild)) $this->loadModel('build')->unlinkBug((int)$oldBug->resolvedBuild, $bug->id);
             $this->bug->linkBugToBuild($bug->id, $bug->resolvedBuild);
