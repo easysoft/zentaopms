@@ -11,7 +11,7 @@ fields:
     prefix: 代码库
     range: 1-100
   - field: path
-    range: 42
+    range: 3
   - field: SCM
     range: Gitlab
   - field: client
@@ -19,9 +19,9 @@ fields:
   - field: serviceHost
     range: 1
   - field: serviceProject
-    range: 42
+    range: 3
   - field: extra
-    range: 42
+    range: 3
   - field: preMerge
     range: 1
   - field: job
