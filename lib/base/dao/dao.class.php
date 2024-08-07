@@ -1034,6 +1034,17 @@ class baseDAO
         /* Assign the $sql to $this->sqlobj, so sqlError() can print the full sql statement if any exception occurs. */
         $this->sqlobj->sql = $sql;
 
+        if($this->config->bi->enableDuckdb)
+        {
+            $now   = helper::now();
+            $table = trim($this->table, '`');
+            if(!empty($table))
+            {
+                $sql .= ";update zt_duckdbqueue set updatedTime = '$now' where object = '$table'";
+                $sql .= ";INSERT INTO zt_duckdbqueue (object, updatedTime, syncTime) SELECT '$table', '$now', NULL WHERE NOT EXISTS (SELECT 1 FROM zt_duckdbqueue WHERE object = '$table' );";
+            }
+        }
+
         try
         {
             /* Real-time save log. */

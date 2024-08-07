@@ -11,8 +11,10 @@ $config->bi->default->status  = json_decode('{"lock":false,"hide":false}');
 $config->bi->default->request = json_decode('{"requestDataType":0,"requestHttpType":"get","requestUrl":"","requestInterval":null,"requestIntervalUnit":"second","requestContentType":0,"requestParamsBodyType":"none","requestSQLContent":{"sql":"select * from  where"},"requestParams":{"Body":{"form-data":{},"x-www-form-urlencoded":{},"json":"","xml":""},"Header":{},"Params":{}}}');
 $config->bi->default->events  = json_decode('{"baseEvent":{"click":null,"dblclick":null,"mouseenter":null,"mouseleave":null},"advancedEvents":{"vnodeMounted":null,"vnodeBeforeMount":null}}');
 
-$config->bi->cdnUrl     = 'https://dl.zentao.net/duckdb/';
-$config->bi->duckdbHelp = 'https://www.zentao.net/book/zentaopms/1313.html';
+// 是否开启 base/dao exec 的记录 zt_duckdbqueue 功能
+$config->bi->enableDuckdb = false;
+$config->bi->cdnUrl       = 'https://dl.zentao.net/duckdb/';
+$config->bi->duckdbHelp   = 'https://www.zentao.net/book/zentaopms/1313.html';
 
 $config->bi->duckdbBin = array();
 $config->bi->duckdbBin['win']   = array('path' => '/bin/duckdb/',   'file' => 'duckdb.exe', 'fileUrl' => $config->bi->cdnUrl . 'win/duckdb.zip');
