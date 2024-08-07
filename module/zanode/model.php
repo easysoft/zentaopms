@@ -620,6 +620,7 @@ class zanodemodel extends model
      */
     protected function processNodeStatus(object $node): object
     {
+        $oldNodeStatus = $node->status;
         $host = $node->hostType == '' ? $this->loadModel('zahost')->getByID($node->parent) : clone $node;
         $host->status = in_array($host->status, array('running', 'ready')) ? 'online' : $host->status;
 
@@ -633,6 +634,11 @@ class zanodemodel extends model
             {
                 $node->status = $node->hostType == '' ? 'wait' : 'offline';
             }
+        }
+
+        if($oldNodeStatus != $node->status)
+        {
+            $this->dao->update(TABLE_ZAHOST)->set('status')->eq($node->status)->where('id')->eq($node->id)->exec();
         }
 
         return $node;

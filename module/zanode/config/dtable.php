@@ -7,7 +7,7 @@ $config->zanode->dtable = new stdclass();
 $config->zanode->dtable->fieldList['id']['title'] = $lang->idAB;
 $config->zanode->dtable->fieldList['id']['type']  = 'id';
 
-$config->zanode->dtable->fieldList['name']['type'] = 'name';
+$config->zanode->dtable->fieldList['name']['type'] = 'title';
 $config->zanode->dtable->fieldList['name']['link'] = array('module' => 'zanode', 'method' => 'view', 'params' => 'id={id}');
 
 $config->zanode->dtable->fieldList['type']['name']     = 'hostType';
