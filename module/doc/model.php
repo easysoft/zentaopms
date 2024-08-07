@@ -2863,6 +2863,22 @@ class docModel extends model
     }
 
     /**
+     * 更新文档库顺序。
+     * Update doclib order.
+     *
+     * @param  int    $catalogID
+     * @param  int    $order
+     * @access public
+     * @return bool
+     */
+    public function updateDoclibOrder(int $id, int $order): bool
+    {
+        $this->dao->update(TABLE_DOCLIB)->set('`order`')->eq($order)->where('id')->eq($id)->exec();
+
+        return !dao::isError();
+    }
+
+    /**
      * 更新目录顺序。
      * Update catalog order.
      *
