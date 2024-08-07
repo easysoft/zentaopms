@@ -4242,3 +4242,17 @@ $config->bi->builtin->metrics[] = array
     'desc'       => '按执行统计的研发需求规模数表示执行中所有研发需求的总规模，这个度量项可以反映执行周期内团队需要进行研发的工作规模，可以用于评估执行团队的工作负载和研发成果。',
     'definition' => "执行中所有研发需求的规模数求和\n过滤已删除的研发需求\n过滤已删除的执行\n过滤已删除的项目\n过滤已删除的产品"
 );
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按执行统计的测试任务消耗工时数',
+    'alias'      => '测试任务消耗工时数',
+    'code'       => 'consume_of_test_task_in_execution',
+    'purpose'    => 'hour',
+    'scope'      => 'execution',
+    'object'     => 'task',
+    'unit'       => 'hour',
+    'dateType'   => 'nodate',
+    'desc'       => '按执行统计的测试任务消耗工时数是指任务类型为测试时已消耗的工时总和，该度量项反映了测试任务的资源使用情况，可以帮助团队掌握执行的测试成本。',
+    'definition' => "执行中满足以下条件的任务消耗工时数求和\n任务类型为测试\n过滤已删除的任务\n过滤父任务\n过滤已删除的执行\n过滤已删除的项目"
+);
