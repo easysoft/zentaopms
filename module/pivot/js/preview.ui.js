@@ -1,4 +1,9 @@
 window.pivotID = pivotID;
+window.afterPageUpdate = function($target, info, options)
+{
+    $(document).off('click', '#export-data-button').on('click', '#export-data-button', () => exportData());
+}
+
 /**
  * 查询条件改变时重新加载 Bug 创建表。
  * Reload bug create table when query conditions changed.
