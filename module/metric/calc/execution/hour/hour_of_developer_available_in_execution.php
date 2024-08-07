@@ -28,6 +28,9 @@ class hour_of_developer_available_in_execution extends baseCalc
 
     public function calculate($row)
     {
+        if($row->role != 'dev') return;
+        if(!isset($this->result[$row->id])) $this->result[$row->id] = 0;
+        $this->result[$row->id] += $row->days * $row->hours;
     }
 
     public function getResult($options = array())
