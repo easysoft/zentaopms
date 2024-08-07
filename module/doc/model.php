@@ -2424,7 +2424,7 @@ class docModel extends model
         $item->id         = $lib->id;
         $item->type       = $lib->type == 'api' ? 'apiLib' : 'docLib';
         $item->name       = $lib->name;
-        $item->parent     = $lib->parent;
+        $item->parent     = isset($lib->parent) ? $lib->parent : '';
         $item->order      = $lib->order;
         $item->objectType = $type;
         $item->objectID   = $objectID;
