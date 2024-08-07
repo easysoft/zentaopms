@@ -127,8 +127,11 @@ $doneCount    = 0;
                 common::printIcon('testtask', 'cases',    "taskID=$task->id", $task, 'list', 'sitemap');
                 common::printIcon('testtask', 'linkCase', "taskID=$task->id", $task, 'list', 'link');
                 common::printIcon('project', 'testreport', "projectID=$task->project&objectType=project&extra=$task->id", '', 'list', 'summary', '', '', false, "data-app='project'", $this->lang->testreport->common);
-                common::printIcon('testtask', 'edit',   "taskID=$task->id", $task, 'list');
-                common::printIcon('testtask', 'delete', "taskID=$task->id", $task, 'list', 'trash', 'hiddenwin');
+
+                echo $this->project->buildMenu('testtask', 'edit', "taskID={$task->id}", $task, 'browse');
+
+                $deleteable = $this->project->buildMenu('testtask', 'delete', "taskID={$task->id}", $task, 'browse', '', '', '', '', '', '', false);
+                common::printIcon('testtask', 'delete', "taskID=$task->id", $task, 'list', 'trash', 'hiddenwin', $deleteable ? '' : 'disabled');
             }
             ?>
           </td>
