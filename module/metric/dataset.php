@@ -1155,4 +1155,22 @@ class dataset
 
         return $stmt;
     }
+
+    /**
+     * 获取代码库提交数量。
+     * Get repo commits.
+     *
+     * @param  string       $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getRepoCommits($fieldList)
+    {
+        $stmt = $this->dao->select($fieldList)->from(TABLE_REPO)->alias('t1')
+            ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t2.repo=t1.id')
+            ->leftJoin(TABLE_PIPELINE)->alias('t3')->on('t3.id=t1.serviceHost')
+            ->where('t1.deleted')->eq(0);
+
+        return $this->defaultWhere($stmt, 't1');
+    }
 }
