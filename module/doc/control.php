@@ -1080,6 +1080,15 @@ class doc extends control
         }
     }
 
+    /**
+     * Ajax: 检查对象权限。
+     * Ajax check object priv.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @access public
+     * @return void
+     */
     public function ajaxCheckObjectPriv(string $objectType, int $objectID)
     {
         $accounts = $this->post->users;
@@ -1091,6 +1100,17 @@ class doc extends control
         $userViews = $this->dao->select('*')->from(TABLE_USERVIEW)->where('account')->in($accounts)->fetchAll('account');
         $userPairs = $this->dao->select('account,realname')->from(TABLE_USER)->where('account')->in($accounts)->fetchPairs('account', 'realname');
         $denyUsers = array();
+        foreach($accounts as $account)
+        {
+            if(strpos(",{$this->app->company->admins}", ",{$account},") !== false) continue;
+
+            $userView = zget($userViews, $account, '');
+            if(empty($userView)) continue;
+
+            if($objectType == 'product'   && strpos(",{$userView->products},", ",{$objectID},") === false) $denyUsers[$account] = zget($userPairs, $account);
+            if($objectType == 'project'   && strpos(",{$userView->projects},", ",{$objectID},") === false) $denyUsers[$account] = zget($userPairs, $account);
+            if($objectType == 'execution' && strpos(",{$userView->sprints},",  ",{$objectID},") === false) $denyUsers[$account] = zget($userPairs, $account);
+        }
 
         if(empty($denyUsers)) return print('');
         if(isset($this->lang->doc->whitelistDeny[$objectType])) return printf($this->lang->doc->whitelistDeny[$objectType], implode('、', $denyUsers));
