@@ -18,6 +18,15 @@ foreach($nodeList as $node)
     $node->diskSize .= $lang->zahost->unitList['GB'];
 }
 
+if($hiddenHost)
+{
+    foreach(array('type', 'cpuCores', 'memory', 'diskSize', 'hostName') as $disableField)
+    {
+        unset($config->zanode->dtable->fieldList[$disableField]);
+    }
+    $config->zanode->dtable->fieldList['actions']['menu'] = array('edit', 'destroy');
+}
+
 $nodeList = initTableData($nodeList, $config->zanode->dtable->fieldList, $this->zanode);
 
 \zin\featureBar
@@ -39,14 +48,6 @@ toolBar
     hasPriv('zanode', 'create') ? item(set($createItem)) : null,
 );
 
-if($hiddenHost)
-{
-    foreach(array('type', 'cpuCores', 'memory', 'diskSize', 'hostName') as $disableField)
-    {
-        unset($config->zanode->dtable->fieldList[$disableField]);
-    }
-}
-
 dtable
 (
     set::cols($config->zanode->dtable->fieldList),
@@ -54,10 +55,8 @@ dtable
     set::onRenderCell(jsRaw('window.renderList')),
     set::afterRender(jsRaw('window.afterRender')),
     set::sortLink(createLink('zanode', 'browse', "browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
-    set::orderBy($orderBy),
     set::footPager(usePager()),
     set::orderBy(str_replace('t1.', '', $orderBy))
 );
 
 render();
-
