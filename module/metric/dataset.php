@@ -609,6 +609,14 @@ class dataset
         return $this->defaultWhere($stmt, 't2');
     }
 
+    /**
+     * 获取执行下的用例数据。
+     * Get case list under execution.
+     *
+     * @param  string       $fieldList
+     * @access public
+     * @return PDOStatement
+     */
     public function getExecutionCases($fieldList)
     {
         $stmt = $this->dao->select($fieldList)->from(TABLE_PROJECTCASE)->alias('t1')
