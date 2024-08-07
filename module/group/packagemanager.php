@@ -3220,7 +3220,7 @@ $config->group->package->deleteKanban->privs['kanban-delete'] = array('edition' 
 
 $config->group->package->deleteZANode = new stdclass();
 $config->group->package->deleteZANode->order  = 20;
-$config->group->package->deleteZANode->subset = 'zanode';
+$config->group->package->deleteZANode->subset = 'autotest';
 $config->group->package->deleteZANode->privs  = array();
 $config->group->package->deleteZANode->privs['zanode-destroy'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('zanode-browse', 'zanode-view'), 'recommend' => array());
 

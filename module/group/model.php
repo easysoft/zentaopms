@@ -909,6 +909,7 @@ class groupModel extends model
 
         /* Filter privs equal or greater than this version.*/
         if($version) $versionPrivs = $this->getPrivsAfterVersion($version);
+        $hiddenHost = $this->loadModel('zahost')->hiddenHost();
 
         /* Privs in package. */
         foreach($this->config->group->package as $packageCode => $packageData)
@@ -919,6 +920,9 @@ class groupModel extends model
             {
                 list($moduleName, $methodName) = explode('-', $privCode);
                 $allPrivs[$privCode] = $privCode;
+
+                if($hiddenHost && $moduleName == 'zahost') continue;
+                if($hiddenHost && $moduleName == 'zanode' && !in_array($methodName, $this->config->group->showNodePriv)) continue;
 
                 if(!$this->config->inQuickon && in_array("{$moduleName}-{$methodName}", $this->config->group->hiddenPriv)) continue;
                 if(strpos(',' . $priv['edition'] . ',', ',' . $this->config->edition . ',') === false) continue;
