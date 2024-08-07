@@ -20,7 +20,8 @@
  */
 class consume_of_test_task_in_execution extends baseCalc
 {
-    public $result  = array();
+    public $result = array();
+
     public $dataset = 'getTasks';
 
     public $fieldList = array('t1.execution', 't1.consumed', 't1.parent', 't1.type');
