@@ -682,7 +682,8 @@ class dataset
             ->beginIF(strpos($fieldList, 't4') !== false)->leftJoin(TABLE_TASKTEAM)->alias('t4')->on("t1.id=t4.task and t1.mode='multi'")->fi()
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t3.deleted')->eq(0);
+            ->andWhere('t3.deleted')->eq(0)
+            ->andWhere('t2.type')->in('sprint,stage,kanban');
 
         return $this->defaultWhere($stmt, 't1');
     }
