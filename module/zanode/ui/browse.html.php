@@ -39,6 +39,14 @@ toolBar
     hasPriv('zanode', 'create') ? item(set($createItem)) : null,
 );
 
+if($hiddenHost)
+{
+    foreach(array('type', 'cpuCores', 'memory', 'diskSize', 'hostName') as $disableField)
+    {
+        unset($config->zanode->dtable->fieldList[$disableField]);
+    }
+}
+
 dtable
 (
     set::cols($config->zanode->dtable->fieldList),
