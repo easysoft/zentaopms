@@ -82,11 +82,11 @@ pipeline {
             checkout scm
             script {
               def triggeredBy = currentBuild.getBuildCauses()
-              println "Build triggered by: ${triggeredBy}"              
+              println "Build triggered by: ${triggeredBy}"
 
               env.GIT_URL = sh(returnStdout: true, script: 'git config --get remote.origin.url').trim()
               env.GIT_COMMIT = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
-              
+
               def j = job.newJob()
 
               zentaopms.setupStaticEnv()
@@ -94,8 +94,8 @@ pipeline {
 
               zCheckout([
                 [name: "xuansrc", subDir: true, url: "https://${env.GIT_HOST}/easycorp/xuanxuan.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.xuanxuan_version}", j.getReplaySHA("xuanxuan"), "${env.XUANVERSION}"] ],
-                [name: "zdoo", subDir: true, url: "https://${env.GIT_HOST}/easycorp/zdoo.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.zdoo_version}", j.getReplaySHA("zdoo"), "${env.ZDOO_VERSION}"] ],
-                [name: "zdooext", subDir: true, url: "https://${env.GIT_HOST}/easycorp/zdooext.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.zdooext_version}", j.getReplaySHA("zdooext"), "${env.ZDOOEXT_VERSION}"] ],
+                [name: "zdoo", subDir: true, url: "https://${env.GIT_HOST}/easycorp/zdoo.git", credentialsId: "git-jenkins-bot-http", branchs: ["077a8d0e406d1ae7fa06d6769b6561f8fac89f9e"] ],
+                [name: "zdooext", subDir: true, url: "https://${env.GIT_HOST}/easycorp/zdooext.git", credentialsId: "git-jenkins-bot-http", branchs: ["76f5cf2116b1428f6fec18760c4ff008958512d0"] ],
                 [name: "zentaoext", subDir: true, url: "https://${env.GITFOX_HOST}/git/${env.ZENTAOEXT_GIT_REPO}.git", credentialsId: "gitfox-zcorp-cc-ci-robot", branchs: ["${params.zentaoext_version}", j.getReplaySHA("zentaoext"), "${env.ZENTAOEXT_VERSION}", "${env.GIT_BRANCH}"] ],
                 [name: "downRepo", subDir: true, url: "https://${env.GIT_HOST}/${env.DOWNGRADE_GIT_REPO}.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.fulldown_version}", j.getReplaySHA("${env.DOWNGRADE_GIT_REPO}"), "downgrade/${env.DOWNGRADE_VERSION}/src"] ]
               ])
@@ -105,7 +105,7 @@ pipeline {
             }
 
             sh 'mkdir -pv ${ZENTAO_RELEASE_PATH} && chown 1000:1000 ${ZENTAO_RELEASE_PATH}'
-          
+
           }
         }
 
@@ -181,7 +181,7 @@ pipeline {
             }
 
             // stage("SAFe") {
-            //   when { 
+            //   when {
             //     allOf {
             //       expression { return params.publish_biz || params.publish_plugin_safe }
             //       environment name: 'PLUGIN_SAFE_EXIST', value: '0'
@@ -266,7 +266,7 @@ pipeline {
             }
 
             stages {
-              
+
               stage("ZIP") {
                 environment {
                   ARTIFACT_NAME = """${sh(
@@ -311,7 +311,7 @@ pipeline {
                         buildPkg.doUploadExt()
                       }
 
-                      
+
                     }
                   } // End upload zip
 
@@ -545,19 +545,19 @@ pipeline {
 
                   sh 'make test-biz'
                   sh 'make build-biz'
-                  
+
                   sh 'make test-biz-k8s'
                   sh 'make build-biz-k8s'
 
                   sh 'make test-max'
                   sh 'make build-max'
-                  
+
                   sh 'make test-max-k8s'
                   sh 'make build-max-k8s'
-                  
+
                   sh 'make test-ipd'
                   sh 'make build-ipd'
-                  
+
                   sh 'make test-ipd-k8s'
                   sh 'make build-ipd-k8s'
 
@@ -592,7 +592,7 @@ pipeline {
               expression { return params.publish_biz }
               environment name:'BUILD_KIND', value:'release'
             }
-            
+
             beforeAgent true
           }
 
@@ -619,7 +619,7 @@ pipeline {
 
       }
 
-      
+
     } // end publish
 
   }
