@@ -585,6 +585,7 @@ CREATE VIEW `view_datasource_5`  AS select `id`,`name` from `zt_task` where `del
 DROP VIEW IF EXISTS `view_datasource_46`;
 CREATE VIEW `view_datasource_46` AS select `id`,`name` from `zt_task` where `deleted` = '0' and vision = 'lite';
 
+ALTER TABLE `zt_user` ADD `visions` varchar(20) NOT NULL DEFAULT 'rnd,lite' AFTER `visits`;
 UPDATE `zt_user` SET `visions` = 'lite' WHERE `feedback` = '1';
 
 REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
