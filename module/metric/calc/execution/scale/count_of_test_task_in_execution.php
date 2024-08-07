@@ -18,3 +18,20 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
+class count_of_test_task_in_execution extends baseCalc
+{
+    public $dataset = 'getTasks';
+
+    public $fieldList = array('t1.type', 't1.execution');
+
+    public $result = array();
+
+    public function calculate($row)
+    {
+        if($row->type == 'test')
+        {
+            if(!isset($this->result[$row->execution])) $this->result[$row->execution] = 0;
+            $this->result[$row->execution] ++;
+        }
+    }
+}
