@@ -321,7 +321,10 @@ class biModel extends model
 
         try
         {
-            $rows     = $dbh->query($limitSql)->fetchAll();
+            $stmt = $dbh->query($limitSql);
+            if($stmt === false) return array('result' => 'fail', 'message' => 'Sql error.');
+
+            $rows     = $stmt->fetchAll();
             $querySQL = "SELECT FOUND_ROWS() as count";
             if($driver == 'duckdb') $querySQL = "SELECT COUNT(1) as count FROM ( $sql )";
             if($driver == 'dm')     $querySQL = "SELECT COUNT(1) as count";
@@ -1336,8 +1339,8 @@ class biModel extends model
         $sql       = $this->processVars($stateObj->sql, $stateObj->getFilters());
         $statement = $this->sql2Statement($sql);
 
-        $recPerPage = $stateObj->pager->recPerPage;
-        $pageID     = $stateObj->pager->pageID;
+        $recPerPage = $stateObj->pager['recPerPage'];
+        $pageID     = $stateObj->pager['pageID'];
         $limitSql   = $this->prepareSqlPager($statement, $recPerPage, $pageID, $driver);
 
         $mysqlCountSql  = "SELECT FOUND_ROWS() AS count";
