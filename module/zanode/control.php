@@ -11,6 +11,17 @@
  */
 class zanode extends control
 {
+    /**
+     * 执行节点介绍页。
+     * View ZenAgent Node instruction.
+     *
+     * @access public
+     * @return void
+     */
+    public function instruction()
+    {
+        $this->display();
+    }
 
     /**
      * 执行节点列表页。
@@ -57,6 +68,7 @@ class zanode extends control
         $this->view->title       = $this->lang->zanode->common;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->nodeList    = $this->zanode->getListByQuery($browseType, $queryID, $orderBy, $pager);
+        $this->view->hiddenHost  = $this->zahost->hiddenHost();
         $this->view->pager       = $pager;
         $this->view->param       = $param;
         $this->view->orderBy     = $orderBy;
