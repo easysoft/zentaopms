@@ -812,54 +812,35 @@ class pivotState
      */
     public function updateFromPost($post)
     {
-        if(!isset($post['pivotState']))
+        if(!isset($post['data'])) return;
+
+        $data = json_decode($post['data'], true);
+        foreach($data as $key => $value)
         {
-            $this->firstEnterDesign = true;
-            return;
+            $this->$key = $value;
         }
-        $json = $post['pivotState'];
-        $array = json_decode($json, true);
 
-        extract($array);
+        $this->formatSettingColumns();
+        $this->processFieldSettingsLang();
+        $this->completeFiltersDefault();
+    }
 
-        $this->id        = $id;
-        $this->dimension = $dimension;
-        $this->group     = $group;
-        $this->code      = $code;
-        $this->driver    = $driver;
-        $this->name      = $name;
-        $this->names     = $names;
-        $this->desc      = $desc;
-        $this->descs     = $descs;
-        $this->sql       = $sql;
-        $this->step      = $step;
-        $this->stage     = $stage;
+    /**
+     * Update from cache.
+     *
+     * @param  object  $cache
+     * @access public
+     * @return void
+     */
+    public function updateFromCache($cache)
+    {
+        if($cache === false) return;
+        foreach($cache as $key => $value)
+        {
+            if(is_array($value) || is_object($value)) $value = json_decode(json_encode($value), true);
+            $this->$key = $value;
+        }
 
-        $this->fields    = $fields;
-        $this->langs     = $langs;
-        $this->vars      = $vars;
-        $this->objects   = $objects;
-        $this->settings  = $settings;
-        $this->filters   = $filters;
-
-        $this->drills        = $drills;
-        $this->defaultDrill  = $defaultDrill;
-        $this->autoGenDrills = $autoGenDrills;
-
-        $this->action        = $action;
-        $this->queryCols     = $queryCols;
-        $this->queryData     = $queryData;
-        $this->pivotCols     = $pivotCols;
-        $this->pivotData     = $pivotData;
-        $this->pivotCellSpan = $pivotCellSpan;
-        $this->pivotFilters  = $pivotFilters;
-
-        $this->addQueryFilter = $addQueryFilter;
-
-        $this->fieldSettings  = $fieldSettings;
-        $this->relatedObject  = $relatedObject;
-        $this->step2FinishSql = $step2FinishSql;
-        $this->setPager($pager['total'], $pager['recPerPage'], $pager['pageID']);
         $this->formatSettingColumns();
         $this->processFieldSettingsLang();
         $this->completeFiltersDefault();
@@ -1305,10 +1286,10 @@ class pivotState
      */
     public function setPager($total = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->pager = new stdclass();
-        $this->pager->total      = $total;
-        $this->pager->recPerPage = $recPerPage;
-        $this->pager->pageID     = $pageID;
+        $this->pager = array();
+        $this->pager['total']      = $total;
+        $this->pager['recPerPage'] = $recPerPage;
+        $this->pager['pageID']     = $pageID;
     }
 
     /**
@@ -1322,7 +1303,7 @@ class pivotState
     {
         if(empty($json)) return array();
         if(is_string($json)) return json_decode($json, true);
-        if(is_object($json)) return json_decode(json_encode($json), true);
+        if(is_object($json) || is_array($json)) return json_decode(json_encode($json), true);
 
         return $json;
     }
