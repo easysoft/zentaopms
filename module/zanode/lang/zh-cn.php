@@ -1,5 +1,6 @@
 <?php
 $lang->zanode->common          = '执行节点';
+$lang->zanode->instruction     = '说明';
 $lang->zanode->browse          = '执行节点列表';
 $lang->zanode->nodeList        = '执行节点列表';
 $lang->zanode->create          = '创建执行节点';
