@@ -3600,6 +3600,7 @@ $config->group->package->manageDoc->privs['doc-showFiles']   = array('edition' =
 $config->group->package->manageDoc->privs['doc-addCatalog']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 5, 'depend' => array('doc-index'), 'recommend' => array('doc-editCatalog', 'doc-sortCatalog'));
 $config->group->package->manageDoc->privs['doc-editCatalog'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 6, 'depend' => array('doc-index'), 'recommend' => array('doc-addCatalog', 'doc-sortCatalog'));
 $config->group->package->manageDoc->privs['doc-sortCatalog'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 7, 'depend' => array('doc-index'), 'recommend' => array('doc-addCatalog', 'doc-editCatalog'));
+$config->group->package->manageDoc->privs['doc-sortDoclib']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 8, 'depend' => array('doc-index'), 'recommend' => array());
 
 $config->group->package->deleteDoc = new stdclass();
 $config->group->package->deleteDoc->order  = 20;

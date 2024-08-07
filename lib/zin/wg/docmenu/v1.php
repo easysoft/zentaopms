@@ -145,7 +145,8 @@ class docMenu extends wg
                 'actions'     => $this->getActions($setting)
             );
 
-            if($sortTree && $setting->type == 'module') $item['trailingIcon'] = 'move muted cursor-move';
+            if($sortTree && ($setting->type == 'module' && hasPriv('doc', 'sortCatalog'))) $item['trailingIcon'] = 'move muted cursor-move';
+            if($sortTree && ($setting->type == 'docLib' && hasPriv('doc', 'sortDocLib')))  $item['trailingIcon'] = 'move muted cursor-move';
 
             $children = zget($setting, 'children', array());
             if(!empty($children))
