@@ -405,4 +405,17 @@ class zahostModel extends model
 
         return true;
     }
+
+    /**
+     * 根据是否有宿主机，判断是否隐藏。
+     * Judge an action is clickable or not.
+     *
+     * @access public
+     * @return bool
+     */
+    public function hiddenHost(): bool
+    {
+        $pager = pager::init(0, 20, 1);
+        return empty($this->getList('all', 0, 'id_desc', $pager));
+    }
 }
