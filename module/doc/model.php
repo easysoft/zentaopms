@@ -2269,7 +2269,7 @@ class docModel extends model
 
                 $myItem = new stdclass();
                 $myItem->id         = 0;
-                $myItem->name       = $this->lang->doc->{$mineMethod};
+                $myItem->name       = $type == 'mine' ? '' : $this->lang->doc->{$mineMethod};
                 $myItem->type       = $type;
                 $myItem->objectType = 'doc';
                 $myItem->objectID   = 0;

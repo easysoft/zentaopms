@@ -196,11 +196,11 @@ class docZen extends doc
      * @param  array     $docs
      * @param  object    $pager
      * @param  array     $libs
-     * @param  string    $objectDropdown
+     * @param  string    $objectTitle
      * @access protected
      * @return void
      */
-    protected function assignVarsForMySpace(string $type, int $objectID, int $libID, int $moduleID, string $browseType, int $param, string $orderBy, array $docs, object $pager, array $libs, string $objectDropdown): void
+    protected function assignVarsForMySpace(string $type, int $objectID, int $libID, int $moduleID, string $browseType, int $param, string $orderBy, array $docs, object $pager, array $libs, string $objectTitle): void
     {
         $this->view->title             = $this->lang->doc->common;
         $this->view->type              = $type;
@@ -211,7 +211,7 @@ class docZen extends doc
         $this->view->orderBy           = $orderBy;
         $this->view->docs              = $docs;
         $this->view->pager             = $pager;
-        $this->view->objectDropdown    = $objectDropdown;
+        $this->view->objectTitle       = $objectTitle;
         $this->view->objectID          = 0;
         $this->view->libType           = 'lib';
         $this->view->spaceType         = 'mine';

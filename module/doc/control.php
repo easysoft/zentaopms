@@ -81,9 +81,9 @@ class doc extends control
         if($moduleID) $libID = $this->tree->getById($moduleID)->root;
         list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType('mine', 0, $libID);
 
-        $titleList      = array('mine' => 'myLib', 'view' => 'myView', 'collect' => 'myCollection', 'createdby' => 'myCreation', 'editedby' => 'myEdited');
-        $objectTitle    = $this->lang->doc->{$titleList[$type]};
-        $objectDropdown = "<div id='sidebarHeader'><div class='title' title='{$objectTitle}'>{$objectTitle}</div></div>";
+        $titleList   = array('mine' => 'myLib', 'view' => 'myView', 'collect' => 'myCollection', 'createdby' => 'myCreation', 'editedby' => 'myEdited');
+        $objectTitle = $this->lang->doc->{$titleList[$type]};
+        if($type == 'mine') $objectTitle = $objectDropdown['text'];
 
         /* Build the search form. */
         $queryID    = $browseType == 'bysearch' ? $param : 0;
@@ -117,7 +117,7 @@ class doc extends control
             $docs = $this->doc->getMineList($type, $browseType, $queryID, $orderBy, $pager);
         }
 
-        $this->docZen->assignVarsForMySpace($type, $objectID, $libID, $moduleID, $browseType, $param, $orderBy, $docs, $pager, $libs, $objectDropdown);
+        $this->docZen->assignVarsForMySpace($type, $objectID, $libID, $moduleID, $browseType, $param, $orderBy, $docs, $pager, $libs, $objectTitle);
         $this->display();
     }
 

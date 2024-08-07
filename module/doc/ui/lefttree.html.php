@@ -10,19 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$moduleTitle = '';
-if($app->rawModule == 'doc' && $app->rawMethod == 'myspace')
-{
-    foreach($libTree as $lib)
-    {
-        if(strtolower($lib->type) == $type)
-        {
-            $moduleTitle = $lib->name;
-            break;
-        }
-    }
-}
-
 $canSort = hasPriv('doc', 'sortCatalog');
 sidebar
 (
@@ -42,7 +29,7 @@ sidebar
         set::sortable(array('handle' => '.icon-move')),
         set::onSort(jsRaw('window.updateOrder')),
         set::canSortTo(jsRaw('window.canSortTo')),
-        set::title(!empty($objectDropdown['text']) ? $objectDropdown['text'] : $moduleTitle),
+        set::title(!empty($objectDropdown['text']) ? $objectDropdown['text'] : $objectTitle),
         set::menuLink(isset($objectDropdown['link']) ? $objectDropdown['link'] : ''),
         set::settingLink($app->rawModule == 'doc' && $app->rawMethod == 'view' && common::hasPriv('doc', 'displaySetting') ? inlink('displaySetting') : ''),
         set::settingText($lang->doc->displaySetting),
