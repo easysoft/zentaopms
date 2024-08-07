@@ -12,6 +12,19 @@
 class zanode extends control
 {
     /**
+     * __construct
+     *
+     * @access public
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->zanode->setMenu();
+    }
+
+    /**
      * 执行节点介绍页。
      * View ZenAgent Node instruction.
      *
@@ -20,6 +33,7 @@ class zanode extends control
      */
     public function instruction()
     {
+        $this->view->title = $this->lang->zanode->instruction;
         $this->display();
     }
 
