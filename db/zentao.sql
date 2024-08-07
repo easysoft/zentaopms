@@ -2652,6 +2652,18 @@ CREATE TABLE IF NOT EXISTS `zt_im_conferenceuser` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 CREATE UNIQUE INDEX `conferenceuser` ON `zt_im_conferenceuser`(`conference`, `user`);
 
+-- DROP TABLE IF EXISTS `zt_im_conferenceinvite`;
+CREATE TABLE IF NOT EXISTS `zt_im_conferenceinvite` (
+  `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `conferenceID` mediumint(8) unsigned NOT NULL,
+  `inviteeID` mediumint(8) unsigned NOT NULL,
+  `status` enum('pending', 'accepted', 'rejected') NOT NULL DEFAULT 'pending',
+  `createdDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updatedDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`),
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `conference_user` ON `zt_im_conferenceinvite` (`conferenceID`, `inviteeID`);
+
 -- DROP TABLE IF EXISTS `zt_im_userdevice`;
 CREATE TABLE IF NOT EXISTS `zt_im_userdevice` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
