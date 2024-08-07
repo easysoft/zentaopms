@@ -609,6 +609,22 @@ class dataset
         return $this->defaultWhere($stmt, 't2');
     }
 
+    public function getExecutionCases($fieldList)
+    {
+        $stmt = $this->dao->select($fieldList)->from(TABLE_PROJECTCASE)->alias('t1')
+            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t4.id = t1.project')
+            ->leftJoin(TABLE_PROJECT)->alias('t5')->on('t5.id = t4.project'))
+            ->where('t4.deleted')->eq('0')
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t3.deleted')->eq('0')
+            ->andWhere('t5.deleted')->eq('0')
+            ->andWhere('t4.type')->in('sprint,kanban,stage');
+
+        return $this->defaultWhere($stmt, 't4');
+    }
+
     /**
      * 获取所有用例数据。
      * Get all case list.
