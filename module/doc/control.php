@@ -1079,4 +1079,20 @@ class doc extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
     }
+
+    public function ajaxCheckObjectPriv(string $objectType, int $objectID)
+    {
+        $accounts = $this->post->users;
+        $object   = $this->doc->getObjectByID($objectType, $objectID);
+        if(empty($object)) return print('');
+        if($object->acl == 'open') return print('');
+
+        $this->loadModel('user');
+        $userViews = $this->dao->select('*')->from(TABLE_USERVIEW)->where('account')->in($accounts)->fetchAll('account');
+        $userPairs = $this->dao->select('account,realname')->from(TABLE_USER)->where('account')->in($accounts)->fetchPairs('account', 'realname');
+        $denyUsers = array();
+
+        if(empty($denyUsers)) return print('');
+        if(isset($this->lang->doc->whitelistDeny[$objectType])) return printf($this->lang->doc->whitelistDeny[$objectType], implode('、', $denyUsers));
+    }
 }
