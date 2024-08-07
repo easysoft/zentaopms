@@ -18,3 +18,20 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
+class hour_of_developer_available_in_execution extends baseCalc
+{
+    public $dataset = 'getTeamMembers';
+
+    public $fieldList = array('t2.id', 't1.days', 't1.hours', 't4.role');
+
+    public $result = array();
+
+    public function calculate($row)
+    {
+    }
+
+    public function getResult($options = array())
+    {
+        return $this->filterByOptions($this->getRecords(array('execution', 'value')), $options);
+    }
+}
