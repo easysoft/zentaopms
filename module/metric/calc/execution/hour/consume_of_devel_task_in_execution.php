@@ -18,7 +18,7 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
-class consume_of_test_task_in_execution extends baseCalc
+class consume_of_devel_task_in_execution extends baseCalc
 {
     public $result = array();
 
