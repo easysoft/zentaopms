@@ -4233,7 +4233,7 @@ $config->bi->builtin->metrics[] = array
 (
     'name'       => '按执行统计的研发需求规模数',
     'alias'      => '研发需求规模数',
-    'code'       => 'scale_of_dev_story_in_execution',
+    'code'       => 'scale_of_story_in_execution',
     'purpose'    => 'scale',
     'scope'      => 'execution',
     'object'     => 'story',
