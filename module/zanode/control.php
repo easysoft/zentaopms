@@ -118,9 +118,10 @@ class zanode extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('view', "id=$nodeID")));
         }
 
-        $this->view->title     = $this->lang->zanode->create;
-        $this->view->hostPairs = array('' => '') + $this->loadModel('zahost')->getPairs($this->session->product);
-        $this->view->hostID    = $hostID;
+        $this->view->title      = $this->lang->zanode->create;
+        $this->view->hostPairs  = array('' => '') + $this->loadModel('zahost')->getPairs($this->session->product);
+        $this->view->hiddenHost = $this->loadModel('zahost')->hiddenHost();
+        $this->view->hostID     = $hostID;
 
         return $this->display();
     }
@@ -164,6 +165,7 @@ class zanode extends control
             $this->view->host  = $this->zanode->getHostByID($zanode->parent);
             $this->view->image = $this->zanode->getImageByID($zanode->image);
         }
+        $this->view->hiddenHost = $this->loadModel('zahost')->hiddenHost();
         $this->display();
     }
 
@@ -189,6 +191,7 @@ class zanode extends control
         $this->view->initBash     = sprintf(zget($this->config->zanode->versionToOs, $node->osName, '') != '' ? $this->config->zanode->initPosh : $this->config->zanode->initBash, $node->secret, getWebRoot(true));
         $this->view->actions      = $this->loadModel('action')->getList('zanode', $id);
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->hiddenHost   = $this->loadModel('zahost')->hiddenHost();
 
         $this->display();
     }
