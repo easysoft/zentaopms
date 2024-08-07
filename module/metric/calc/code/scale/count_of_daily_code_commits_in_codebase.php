@@ -20,6 +20,8 @@
  */
 class count_of_daily_code_commits_in_codebase extends baseCalc
 {
+    public $useSCM = true;
+
     public $dataset = 'getRepoCommits';
 
     public $fieldList = array('t1.id', 't1.name', 't1.serviceHost', 't1.serviceProject', 't1.SCM', 't2.time', 't1.client', 't1.path', 't1.account', 't1.password', 't1.encoding', 't3.url', 't3.token');
@@ -36,10 +38,11 @@ class count_of_daily_code_commits_in_codebase extends baseCalc
      * Get commits by API.
      *
      * @param  object $repo
+     * @param  array  $options
      * @access public
      * @return object
      */
-    public function getCommitCount($repo)
+    public function getCommitCount($repo, $options = array())
     {
         if(isset($this->result[$repo->id])) return false;
 
@@ -50,31 +53,64 @@ class count_of_daily_code_commits_in_codebase extends baseCalc
         $repo->apiPath  = sprintf($this->apiPath[$repo->SCM], $repo->url, $repo->serviceProject);
         $this->scm->setEngine($repo);
 
-        $begin = '2023-01-01';
-        $end   = '2023-02-28';
-        return $this->scm->getCommitCountByDate($begin, $end);
+        $commits = $this->scm->getCommitByDate($options['begin'], $options['end']);
+        foreach($commits as $commit)
+        {
+            $commit->id = $repo->id;
+            $this->setResult($commit);
+        }
     }
 
+    /**
+     * 设置结果集。
+     * Set result set.
+     *
+     * @param  object $row
+     * @access public
+     * @return void
+     */
+    public function setResult($row)
+    {
+        $date = substr($row->time, 0, 10);
+        list($year, $month, $day) = explode('-', $date);
+
+        if(!isset($this->result[$row->id]))                      $this->result[$row->id] = array();
+        if(!isset($this->result[$row->id][$year]))               $this->result[$row->id][$year] = array();
+        if(!isset($this->result[$row->id][$year][$month]))       $this->result[$row->id][$year][$month] = array();
+        if(!isset($this->result[$row->id][$year][$month][$day])) $this->result[$row->id][$year][$month][$day] = 0;
+
+        $this->result[$row->id][$year][$month][$day] ++;
+    }
+
+    /**
+     * 计算并保存结果。
+     * Calculate and save result.
+     *
+     * @param  object $row
+     * @access public
+     * @return void
+     */
     public function calculate($row)
     {
+        $options = array('begin' => '2023-02-27', 'end' => '2023-02-28');
         if(in_array($row->SCM, array('Gitlab', 'GitFox')))
         {
             if(isset($this->result[$row->id])) return false;
 
-            $row = $this->getCommitCount($row);
+            return $this->getCommitCount($row, $options);
         }
 
-        $date = substr($row->time, 0, 10);
-        list($year, $month, $day) = explode('-', $date);
-
-        if(!isset($this->result[$row->id]))                      $this->result[$row->product] = array();
-        if(!isset($this->result[$row->id][$year]))               $this->result[$row->product][$year] = array();
-        if(!isset($this->result[$row->id][$year][$month]))       $this->result[$row->product][$year][$month] = array();
-        if(!isset($this->result[$row->id][$year][$month][$day])) $this->result[$row->product][$year][$month][$day] = 0;
-
-        $this->result[$row->id][$year][$month][$day] += isset($row->count) ? $row->count : 0;
+        $this->setResult($row);
     }
 
+    /**
+     * 获取结果。
+     * Get result.
+     *
+     * @param  array  $options
+     * @access public
+     * @return void
+     */
     public function getResult($options = array())
     {
         $records = $this->getRecords(array('repo', 'year', 'month', 'day'));
