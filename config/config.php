@@ -75,6 +75,7 @@ $config->db->prefix          = 'zt_';     // 数据库表名前缀。       The 
 $config->db->enableSqlite    = false;     // 是否启用SQLite         Enable SQLite or not.
 $config->slaveDBList         = array();   // 支持多个从库。         Support multiple slave dbs.
 
+$config->enableDuckdb = false;
 $config->metricDB = new stdclass();
 $config->metricDB->type      = 'mysql';   // 度量计算数据库类型。   The type of metric database.
 

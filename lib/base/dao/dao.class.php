@@ -1034,7 +1034,7 @@ class baseDAO
         /* Assign the $sql to $this->sqlobj, so sqlError() can print the full sql statement if any exception occurs. */
         $this->sqlobj->sql = $sql;
 
-        if($this->config->bi->enableDuckdb)
+        if($this->config->enableDuckdb)
         {
             $now   = helper::now();
             $table = trim($this->table, '`');

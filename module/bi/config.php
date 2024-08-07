@@ -12,7 +12,6 @@ $config->bi->default->request = json_decode('{"requestDataType":0,"requestHttpTy
 $config->bi->default->events  = json_decode('{"baseEvent":{"click":null,"dblclick":null,"mouseenter":null,"mouseleave":null},"advancedEvents":{"vnodeMounted":null,"vnodeBeforeMount":null}}');
 
 // 是否开启 base/dao exec 的记录 zt_duckdbqueue 功能
-$config->bi->enableDuckdb = false;
 $config->bi->cdnUrl       = 'https://dl.zentao.net/duckdb/';
 $config->bi->duckdbHelp   = 'https://www.zentao.net/book/zentaopms/1313.html';
 
