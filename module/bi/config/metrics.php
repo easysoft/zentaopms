@@ -4354,3 +4354,17 @@ $config->bi->builtin->metrics[] = array
     'desc'       => '按代码库统计的的年度代码提交次数是指代码库在某个年度的代码提交数量。这个度量项可以反映代码库的年度开发活动频率和代码更新情况。',
     'definition' => "代码库中代码提交次数求和，提交时间为某年。"
 );
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按代码库统计的月度代码提交次数',
+    'alias'      => '代码库月度提交次数',
+    'code'       => 'count_of_monthly_code_commits_in_codebase',
+    'purpose'    => 'scale',
+    'scope'      => 'system',
+    'object'     => 'code',
+    'unit'       => 'count',
+    'dateType'   => 'month',
+    'desc'       => '按代码库统计的的月度代码提交次数是指代码库在某个月的代码提交数量。这个度量项可以反映代码库的月开发活动频率和代码更新情况。',
+    'definition' => '代码库中代码提交次数求和，提交时间为某月。'
+);
