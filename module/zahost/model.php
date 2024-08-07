@@ -415,7 +415,9 @@ class zahostModel extends model
      */
     public function hiddenHost(): bool
     {
+        $this->app->loadClass('pager', $static = true);
         $pager = pager::init(0, 20, 1);
+
         return empty($this->getList('all', 0, 'id_desc', $pager));
     }
 }

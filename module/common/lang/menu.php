@@ -510,7 +510,7 @@ $lang->qa->dividerMenu = ',bug,testtask,caselib,automation,';
 $lang->qa->menu->automation['subMenu'] = new stdclass();
 $lang->qa->menu->automation['subMenu']->instruction = array('link' => "{$lang->zanode->instruction}|zanode|instruction", 'subModule' => 'instruction');
 $lang->qa->menu->automation['subMenu']->zahost      = array('link' => "{$lang->zahost->common}|zahost|browse", 'subModule' => 'zahost');
-$lang->qa->menu->automation['subMenu']->zanode      = array('link' => "{$lang->zanode->common}|zanode|browse", 'subModule' => 'zandoe');
+$lang->qa->menu->automation['subMenu']->zanode      = array('link' => "{$lang->zanode->common}|zanode|browse", 'subModule' => 'zanode');
 
 /* DevOps menu. */
 $lang->devops->homeMenu = new stdclass();
