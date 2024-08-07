@@ -2658,9 +2658,9 @@ CREATE TABLE IF NOT EXISTS `zt_im_conferenceinvite` (
   `conferenceID` mediumint(8) unsigned NOT NULL,
   `inviteeID` mediumint(8) unsigned NOT NULL,
   `status` enum('pending', 'accepted', 'rejected') NOT NULL DEFAULT 'pending',
-  `createdDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updatedDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`id`),
+  `createdDate` datetime NULL,
+  `updatedDate` datetime NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 CREATE UNIQUE INDEX `conference_user` ON `zt_im_conferenceinvite` (`conferenceID`, `inviteeID`);
 
