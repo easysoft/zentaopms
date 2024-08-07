@@ -224,6 +224,31 @@ class dataset
     }
 
     /**
+     * 获取执行bug数据。
+     * Get execution product bug list.
+     *
+     * @param  string       $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getExecutionBugs($fieldList)
+    {
+        $stmt = $this->dao->select($fieldList)
+            ->from(TABLE_BUG)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.execution=t3.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.project=t4.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t2.shadow')->eq(0)
+            ->andWhere('t3.deleted')->eq(0)
+            ->andWhere('t3.type')->in('sprint,stage,kanban')
+            ->andWhere('t4.deleted')->eq(0);
+
+        return $this->defaultWhere($stmt, 't2');
+    }
+
+    /**
      * 获取所有bug数据。
      * Get all bug list.
      *

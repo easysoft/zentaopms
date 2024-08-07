@@ -4396,3 +4396,17 @@ $config->bi->builtin->metrics[] = array
     'desc'       => '按代码库统计的的每日代码提交次数是指代码库每日的代码提交数量。这个度量项可以反映代码库每日开发活动频率和代码更新情况。',
     'definition' => '代码库中代码提交次数求和，提交时间为某日。'
 );
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按执行统计的新增有效Bug总数',
+    'alias'      => '新增有效Bug总数',
+    'code'       => 'count_of_effective_bug_in_execution',
+    'purpose'    => 'scale',
+    'scope'      => 'execution',
+    'object'     => 'bug',
+    'unit'       => 'count',
+    'dateType'   => 'nodate',
+    'desc'       => '按执行统计的新增有效Bug总数是指在执行中发现的有效Bug的数量。这个度量项反映了执行的质量情况。新增有效Bug数越多可能代表执行的代码质量存在的问题越多，需要进行进一步的解决和改进。',
+    'definition' => "执行中新增Bug个数求和\n解决方案为已解决，延期处理和不予解决或状态为激活\n过滤已删除的Bug\n过滤已删除的执行\n过滤已删除的项目\n过滤已删除的产品\n"
+);
