@@ -891,6 +891,7 @@ class dataset
             ->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t2.id=t1.root')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t3.id=t2.project')
+            ->leftJoin(TABLE_USER)->alias('t4')->on('t1.account=t4.account')
             ->where('t1.type')->eq('execution')
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t3.deleted')->eq(0);
