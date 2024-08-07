@@ -9373,6 +9373,8 @@ class upgradeModel extends model
      */
     public function createDemoAPI()
     {
+        $this->app->loadLang('api');
+        $this->dao->delete()->from(TABLE_DOCLIB)->where('name')->eq($this->lang->api->zentaoAPI)->exec();
         $this->loadModel('api')->createDemoData($this->lang->api->zentaoAPI, commonModel::getSysURL() . $this->app->config->webRoot . 'api.php/v1', '16.0');
         return true;
     }
