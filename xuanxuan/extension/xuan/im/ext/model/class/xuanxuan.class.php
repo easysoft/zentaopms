@@ -312,6 +312,26 @@ class xuanxuanIm extends imModel
             if(empty($data)) return array('result' => 'fail', 'message' => 'Failed to download xxd package.');
             $fopenPackage = fopen($basePackage, 'w');
             fwrite($fopenPackage, $data);
+        }
+
+        $data                  = new stdClass();
+        $data->xxdDirectory    = $xxdDirectory;
+        $data->sslcrt          = $setting->sslcrt;
+        $data->sslkey          = $setting->sslkey;
+        $data->basePackage     = $basePackage;
+        $data->xxdFileName     = $xxdFileName;
+        $data->host            = trim($this->getServer(), '/') . (zget($this->config->xuanxuan, 'backend', 'xxb') == 'ranzhi' ? dirname($this->config->webRoot) : $this->config->webRoot);
+        $data->ip              = $setting->ip ?: '0.0.0.0';
+        $data->commonPort      = $setting->commonPort ?: '11443';
+        $data->chatPort        = $setting->chatPort ?: '11444';
+        $data->https           = $setting->https ?: 'on';
+        $data->enableAES       = $setting->aes == 'off' ? 0 : 1;
+        $data->uploadPath      = 'files/';
+        $data->uploadFileSize  = $setting->uploadFileSize ?: '20';
+        $data->pollingInterval = isset($this->config->xuanxuan->pollingInterval) ? $this->config->xuanxuan->pollingInterval : 15;
+        $data->maxOnlineUser   = isset($setting->maxOnlineUser) ? $setting->maxOnlineUser : 0;
+        $data->logPath         = 'log/';
+
         return array('result' => 'fail', 'message' => 'error');
     }
 }
