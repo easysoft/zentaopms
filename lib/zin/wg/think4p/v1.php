@@ -31,7 +31,7 @@ class think4p extends thinkModel
 
         return div
         (
-            setClass('relative col justify-between py-2 bg-canvas border border-canvas border-2 model-block', "bg-$blockColor-100", "block-$order"),
+            setClass('relative col justify-between py-2 px-2.5 bg-canvas border border-canvas border-2 model-block', "bg-$blockColor-100", "block-$order"),
             setStyle($blockStyle),
             div
             (
@@ -48,14 +48,14 @@ class think4p extends thinkModel
         global $app, $lang;
         $app->loadLang('thinkwizard');
 
-        $blocks = $this->prop('blocks');
+        list($blocks, $mode) = $this->prop(array('blocks', 'mode'));
         return div
         (
-            setClass('px-2.5 col items-center'),
-            div(setClass('w-full flex items-center justify-between mt-1.5 mb-1 text-gray-400'), span($lang->thinkwizard->block . $lang->thinkwizard->blockList[$key]), span($lang->thinkwizard->block . $lang->thinkwizard->blockList[$key + 1])),
+            setClass('col items-center'),
+            $mode == 'preview' ? div(setClass('w-full flex items-center justify-between mt-1.5 mb-1 text-gray-400'), span($lang->thinkwizard->block . $lang->thinkwizard->blockList[$key]), span($lang->thinkwizard->block . $lang->thinkwizard->blockList[$key + 1])) : null,
             div
             (
-                setClass('w-full flex items-center'),
+                setClass('w-full flex items-stretch'),
                 $this->buildItem($key, $blocks[$key]),
                 $this->buildItem($key + 1, $blocks[$key + 1])
             )
