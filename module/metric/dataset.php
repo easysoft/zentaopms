@@ -704,10 +704,10 @@ class dataset
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution=t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project=t3.id')
             ->beginIF(strpos($fieldList, 't4') !== false)->leftJoin(TABLE_TASKTEAM)->alias('t4')->on("t1.id=t4.task and t1.mode='multi'")->fi()
-            ->where('t1.deleted')->eq(0)
-            ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t3.deleted')->eq(0)
-            ->andWhere('t2.type')->in('sprint,stage,kanban');
+            ->where('t2.type')->in('sprint,kanban,stage')
+            ->andWhere('t1.deleted')->eq('0')
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t3.deleted')->eq('0');
 
         return $this->defaultWhere($stmt, 't1');
     }
