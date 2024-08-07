@@ -28,6 +28,8 @@ class count_of_daily_code_commits_in_codebase extends baseCalc
 
     public $result = array();
 
+    public $rows = array();
+
     public $apiPath = array(
         'Gitlab' => '%s/api/v4/projects/%s/repository/',
         'GitFox' => '%s/api/v1/repos/%s/+/'
@@ -93,7 +95,7 @@ class count_of_daily_code_commits_in_codebase extends baseCalc
      */
     public function calculate($row)
     {
-        $this->result[] = $row;
+        $this->rows[] = $row;
     }
 
     /**
@@ -114,7 +116,7 @@ class count_of_daily_code_commits_in_codebase extends baseCalc
         $begin = "{$year}-{$month}-{$begin}";
         $end   = "{$year}-{$month}-{$end} 23:59:59";
 
-        foreach($this->result as $row)
+        foreach($this->rows as $row)
         {
             if(in_array($row->SCM, array('Gitlab', 'GitFox')))
             {
