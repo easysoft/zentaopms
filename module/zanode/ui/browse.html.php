@@ -18,20 +18,11 @@ foreach($nodeList as $node)
     $node->diskSize .= $lang->zahost->unitList['GB'];
 }
 
-if($hiddenHost)
-{
-    foreach(array('type', 'cpuCores', 'memory', 'diskSize', 'hostName') as $disableField)
-    {
-        unset($config->zanode->dtable->fieldList[$disableField]);
-    }
-    $config->zanode->dtable->fieldList['actions']['menu'] = array('edit', 'destroy');
-}
-
 $nodeList = initTableData($nodeList, $config->zanode->dtable->fieldList, $this->zanode);
 
 \zin\featureBar
 (
-    li(searchToggle(set::open($browseType == 'bySearch'))),
+    li(searchToggle(set::open($browseType == 'bySearch'), set::module('zanode'))),
     a
     (
         setClass('btn btn-link'),

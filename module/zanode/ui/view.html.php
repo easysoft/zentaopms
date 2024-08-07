@@ -34,7 +34,11 @@ foreach($config->zanode->view->operateList as $operate)
 
     if(!common::hasPriv('zanode', $operate)) continue;
     $action = $config->zanode->dtable->fieldList['actions']['list'][$operate];
-    if(!$this->zanode->isClickable($zanode, $operate)) unset($action);
+    if(!$this->zanode->isClickable($zanode, $operate))
+    {
+        unset($action);
+        continue;
+    }
 
     if($operate === 'edit' || $operate === 'destroy')
     {

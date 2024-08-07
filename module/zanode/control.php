@@ -79,10 +79,32 @@ class zanode extends control
             $this->loadModel('setting')->setItem('system.common.global.skipAutomation', $accounts);
         }
 
+        $hiddenHost = $this->zahost->hiddenHost();
+        if($hiddenHost)
+        {
+            foreach(array('type', 'cpuCores', 'memory', 'diskSize', 'hostName') as $disableField)
+            {
+                unset($this->config->zanode->dtable->fieldList[$disableField]);
+                unset($this->config->zanode->search['fields'][$disableField]);
+                unset($this->config->zanode->search['params'][$disableField]);
+            }
+
+            unset($this->config->zanode->search['fields']['host']);
+            unset($this->config->zanode->search['params']['host']);
+            foreach($this->lang->zanode->statusList as $statusKey => $statusValue)
+            {
+                if(!in_array($statusKey, array('online', 'offline'))) unset($this->lang->zanode->statusList[$statusKey]);
+            }
+            $this->config->zanode->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => array('' => '') + $this->lang->zanode->statusList);
+
+            $this->config->zanode->dtable->fieldList['actions']['menu'] = array('edit', 'destroy');
+            $this->loadModel('search')->setSearchParams($this->config->zanode->search);
+        }
+
         $this->view->title       = $this->lang->zanode->common;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->nodeList    = $this->zanode->getListByQuery($browseType, $queryID, $orderBy, $pager);
-        $this->view->hiddenHost  = $this->zahost->hiddenHost();
+        $this->view->hiddenHost  = $hiddenHost;
         $this->view->pager       = $pager;
         $this->view->param       = $param;
         $this->view->orderBy     = $orderBy;
