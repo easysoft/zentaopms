@@ -292,6 +292,26 @@ class xuanxuanIm extends imModel
      */
     public function downloadXXD($setting, $downloadType)
     {
+        set_time_limit(0);
+        $system          = $this->getSystem($setting->os);
+        $version         = $this->config->xuanxuan->version;
+        $xxdDirectory    = $this->app->tmpRoot . 'xxd' . DS . $version;
+        $basePackage     = $xxdDirectory . DS . $system .  '.base.zip';
+        $xxdFileName     = "xxd.$version.$system.zip";
+        $downloadCDNLink = $this->config->im->xxdDownloadUrl . $version . '/' . $xxdFileName;
+
+        if(!is_dir($xxdDirectory)) mkdir($xxdDirectory, 0777, true);
+        if(!file_exists($basePackage) && $downloadType == 'package')
+        {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_URL, $downloadCDNLink);
+            $data = curl_exec($ch);
+            curl_close($ch);
+            if(empty($data)) return array('result' => 'fail', 'message' => 'Failed to download xxd package.');
+            $fopenPackage = fopen($basePackage, 'w');
+            fwrite($fopenPackage, $data);
         return array('result' => 'fail', 'message' => 'error');
     }
 }
