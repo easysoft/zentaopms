@@ -2322,12 +2322,13 @@ class docModel extends model
                 if(empty($libTree['execution'][$executionID]))
                 {
                     $execution = new stdclass();
-                    $execution->id        = $executionID;
-                    $execution->name      = zget($executionPairs, $executionID);
-                    $execution->type      = 'execution';
-                    $execution->active    = $item->active;
-                    $execution->hasAction = false;
-                    $execution->children  = array();
+                    $execution->id         = $executionID;
+                    $execution->name       = zget($executionPairs, $executionID);
+                    $execution->type       = 'execution';
+                    $execution->active     = $item->active;
+                    $execution->hasAction  = false;
+                    $execution->objectType = 'execution';
+                    $execution->children   = array();
                     if(count($executionLibs[$executionID]) == 1)
                     {
                         $execution->id        = $item->id;
@@ -2441,7 +2442,7 @@ class docModel extends model
             if($type == 'project' && !empty($libTree['execution'])) $libTree['execution'] = array_values($libTree['execution']);
 
             $annex = new stdclass();
-            $annex->id         = 0;
+            $annex->id         = 'annex';
             $annex->name       = $this->lang->doclib->files;
             $annex->type       = 'annex';
             $annex->objectType = $type;

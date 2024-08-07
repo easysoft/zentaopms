@@ -244,7 +244,11 @@ window.updateOrder = function(event, orders)
     const type = $(event.item).children('div').attr('data-type');
 
     let sortedIdList = {};
-    for(let i in orders) sortedIdList['orders[' + orders[i] + ']'] = i;
+    for(let i in orders)
+    {
+        if(i != 'annex') sortedIdList['orders[' + orders[i] + ']'] = i;
+    }
+
     sortedIdList['type'] = 'doc';
 
     if(type == 'module')
@@ -253,8 +257,14 @@ window.updateOrder = function(event, orders)
     }
     else if(type == 'docLib')
     {
-        $.post($.createLink('doc', 'sortDocLib'), sortedIdList);
+        $.post($.createLink('doc', 'sortDoclib'), sortedIdList);
     }
+}
+
+window.canSortTo = function(e, from, to)
+{
+    if(from['data-objectType'] != to['data-objectType']) return false;
+    if(to['data-type'] == 'annex') return false;
 }
 
 window.checkObjectPriv = function(e)

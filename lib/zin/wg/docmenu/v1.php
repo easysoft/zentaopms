@@ -25,7 +25,8 @@ class docMenu extends wg
         'objectID?: int=0',
         'hover?: bool=true',
         'sortable?: array',
-        'onSort?: function'
+        'onSort?: function',
+        'canSortTo?: function'
     );
 
     public static function getPageCSS(): ?string
@@ -130,19 +131,20 @@ class docMenu extends wg
             $selected   = $itemID && $itemID == $activeKey;
 
             $item = array(
-                'key'         => $itemID,
-                'text'        => $setting->name,
-                'hint'        => $setting->name,
-                'icon'        => $this->getIcon($setting),
-                'url'         => $this->buildLink($setting),
-                'titleAttrs'  => array('data-app' => $this->tab, 'class' => 'item-title w-full'),
-                'data-id'     => $itemID,
-                'data-lib'    => in_array($setting->type, array('docLib', 'apiLib')) ? $itemID : zget($setting, 'libID', ''),
-                'data-type'   => $setting->type,
-                'data-parent' => $setting->parentID,
-                'data-module' => $moduleName,
-                'selected'    => zget($setting, 'active', $selected),
-                'actions'     => $this->getActions($setting)
+                'key'             => $itemID,
+                'text'            => $setting->name,
+                'hint'            => $setting->name,
+                'icon'            => $this->getIcon($setting),
+                'url'             => $this->buildLink($setting),
+                'titleAttrs'      => array('data-app' => $this->tab, 'class' => 'item-title w-full'),
+                'data-id'         => $itemID,
+                'data-lib'        => in_array($setting->type, array('docLib', 'apiLib')) ? $itemID : zget($setting, 'libID', ''),
+                'data-type'       => $setting->type,
+                'data-objectType' => $setting->objectType,
+                'data-parent'     => $setting->parentID,
+                'data-module'     => $moduleName,
+                'selected'        => zget($setting, 'active', $selected),
+                'actions'         => $this->getActions($setting)
             );
 
             if($sortTree && ($setting->type == 'module' && hasPriv('doc', 'sortCatalog'))) $item['trailingIcon'] = 'move muted cursor-move';
@@ -221,7 +223,6 @@ class docMenu extends wg
     private function getActions($item): array|null
     {
         $versionBtn = array();
-        $sortTree   = $this->prop('sortable') || $this->prop('onSort');
         if(isset($item->versions) && $item->versions)
         {
             global $lang;
@@ -438,7 +439,7 @@ class docMenu extends wg
         $title     = $this->getTitle();
         $menuLink  = $this->prop('menuLink', '');
         $objectID  = $this->prop('objectID', 0);
-        $treeProps = $this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'hover', 'sortable', 'onSort'));
+        $treeProps = $this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'hover', 'sortable', 'onSort', 'canSortTo'));
         $preserve  = $this->prop('preserve', $app->rawModule . '-' . $app->rawMethod);
 
         $isInSidebar = $this->parent instanceof sidebar;

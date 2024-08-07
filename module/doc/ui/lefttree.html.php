@@ -41,6 +41,7 @@ sidebar
         set::objectID(isset($objectID) ? $objectID : 0),
         set::sortable(array('handle' => '.icon-move')),
         set::onSort(jsRaw('window.updateOrder')),
+        set::canSortTo(jsRaw('window.canSortTo')),
         set::title(!empty($objectDropdown['text']) ? $objectDropdown['text'] : $moduleTitle),
         set::menuLink(isset($objectDropdown['link']) ? $objectDropdown['link'] : ''),
         set::settingLink($app->rawModule == 'doc' && $app->rawMethod == 'view' && common::hasPriv('doc', 'displaySetting') ? inlink('displaySetting') : ''),
