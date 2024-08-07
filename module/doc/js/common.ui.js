@@ -241,9 +241,18 @@ $(document).on('mousedown', '.ajaxCollect', function (event)
 
 window.updateOrder = function(event, orders)
 {
+    const type = $(event.item).children('div').attr('data-type');
+
     let sortedIdList = {};
     for(let i in orders) sortedIdList['orders[' + orders[i] + ']'] = i;
     sortedIdList['type'] = 'doc';
 
-    $.post($.createLink('doc', 'sortCatalog'), sortedIdList);
+    if(type == 'module')
+    {
+        $.post($.createLink('doc', 'sortCatalog'), sortedIdList);
+    }
+    else if(type == 'docLib')
+    {
+        $.post($.createLink('doc', 'sortDocLib'), sortedIdList);
+    }
 }
