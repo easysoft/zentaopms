@@ -390,6 +390,16 @@ class pivotZen extends pivot
         $this->view->currentMenu = 'workload';
     }
 
+    /**
+     * 获取下钻列配置。
+     * Get drill.
+     *
+     * @param  int    $pivotID
+     * @param  string $colName
+     * @param  string $status
+     * @access public
+     * @return object
+     */
     public function getDrill(int $pivotID, string $colName, string $status = 'published'): object
     {
         if($status == 'published') return $this->pivot->fetchPivotDrill($pivotID, $colName);
