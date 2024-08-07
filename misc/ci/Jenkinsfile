@@ -171,7 +171,7 @@ pipeline {
                   sh 'cd $SRC_ZENTAOEXT_PATH && make'
                   sh 'cp ${ZENTAO_BUILD_PATH}/zentao*.zip ./'
                   sh 'cp ${ZENTAO_BUILD_PATH}/docker/Dockerfile.release.ext ./Dockerfile.release.ext'
-                  sh """sed -i -e 's/master/18\.13/' ./Dockerfile.release.ext """
+                  sh """sed -i -e 's/master/18\\.13/' ./Dockerfile.release.ext """
                   sh 'cat ./Dockerfile.release.ext'
                 }
                 container('docker') {
