@@ -3657,6 +3657,20 @@ $config->bi->builtin->metrics[] = array
 
 $config->bi->builtin->metrics[] = array
 (
+    'name'       => '按执行统计的执行关闭时已完成的测试任务数',
+    'alias'      => '执行关闭时已完成测试任务数',
+    'code'       => 'count_of_finished_test_task_in_execution_when_closing',
+    'purpose'    => 'scale',
+    'scope'      => 'execution',
+    'object'     => 'task',
+    'unit'       => 'count',
+    'dateType'   => 'nodate',
+    'desc'       => '按执行统计的执行关闭时已完成测试任务数表示执行关闭时任务状态为已完成的测试任务个数求和。该度量项反映了执行结束时测试人员完成的测试任务个数，可以评估执行中测试人员的实际工作量和测试效率。',
+    'definition' => "执行关闭时执行中满足以下条件的测试任务个数求和，条件是：任务类型为测试，状态为已完成或已关闭且关闭原因为已完成，过滤已删除的任务，过滤已删除的执行，过滤已删除的项目。"
+);
+
+$config->bi->builtin->metrics[] = array
+(
     'name'       => '按执行统计的任务剩余工时数',
     'alias'      => '任务剩余工时数',
     'code'       => 'left_of_task_in_execution',
