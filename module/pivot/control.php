@@ -83,7 +83,7 @@ class pivot extends control
      */
     public function drillModal(int $pivotID, string $colName, string $status, string $conditions, string $filterValues, string $value)
     {
-        $drill        = $this->pivot->fetchPivotDrill($pivotID, $colName, $status);
+        $drill        = $this->pivotZen->getDrill($pivotID, $colName, $status);
         $conditions   = json_decode(base64_decode($conditions), true);
         $filterValues = json_decode(base64_decode($filterValues), true);
 

@@ -436,12 +436,11 @@ EOT)->from(TABLE_TASK)->alias('t1')
      * @access public
      * @return object|bool
      */
-    public function fetchPivotDrill(int $pivotID, string $field, string $status = 'published'): object|bool
+    public function fetchPivotDrill(int $pivotID, string $field): object|bool
     {
         $record = $this->dao->select('*')->from(TABLE_PIVOTDRILL)
             ->where('pivot')->eq($pivotID)
             ->andWhere('field')->eq($field)
-            ->beginIF($status == 'design')->andWhere('status')->eq('design')->andWhere('account')->eq($this->app->user->account)->fi()
             ->fetch();
 
         if($record) $record->condition = json_decode($record->condition, true);

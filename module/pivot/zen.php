@@ -389,4 +389,19 @@ class pivotZen extends pivot
         $this->view->assign      = $assign;
         $this->view->currentMenu = 'workload';
     }
+
+    public function getDrill(int $pivotID, string $colName, string $status = 'published'): object
+    {
+        if($status == 'published') return $this->pivot->fetchPivotDrill($pivotID, $colName);
+
+        $cache  = $this->getCache($pivotID);
+        $drills = json_decode(json_encode($cache->drills), true);
+        foreach($drills as $drill)
+        {
+            $drill = (object)$drill;
+            $drill->condition = (array)$drill->condition;
+            if($drill->field == $colName) return $drill;
+        }
+        return new stdclass();
+    }
 }
