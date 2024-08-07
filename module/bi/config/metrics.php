@@ -3643,6 +3643,20 @@ $config->bi->builtin->metrics[] = array
 
 $config->bi->builtin->metrics[] = array
 (
+    'name'       => '按执行统计的截止执行开始当天的测试任务数',
+    'alias'      => '截止执行开始当天的测试任务数',
+    'code'       => 'count_of_test_task_in_execution_when_starting',
+    'purpose'    => 'scale',
+    'scope'      => 'execution',
+    'object'     => 'task',
+    'unit'       => 'count',
+    'dateType'   => 'nodate',
+    'desc'       => '按执行统计的截止执行开始当天的测试任务数表示执行开始时已创建的测试任务的数量。该度量项反映了本期执行计划完成的测试任务数量，可以用于评估执行团队测试人员的工作负载。',
+    'definition' => "截止执行开始当天23:59分的任务个数求和，任务类型为测试，过滤已删除的任务，过滤已取消的任务数，过滤已删除的执行，过滤已删除的项目。"
+);
+
+$config->bi->builtin->metrics[] = array
+(
     'name'       => '按执行统计的任务剩余工时数',
     'alias'      => '任务剩余工时数',
     'code'       => 'left_of_task_in_execution',
