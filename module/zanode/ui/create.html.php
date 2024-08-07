@@ -37,37 +37,40 @@ formPanel
             setClass('text-gray')
         )
     )),
-    formGroup
-    (
-        set::label($lang->zahost->type),
-        set::width('1/2'),
-        set::control('static'),
-        picker
-        (
-            set::name('hostType'),
-            set::value('node'),
-            set::items($lang->zanode->typeList),
-            set::required(true),
-            on::change('onChangeType')
-        )
-    ),
-    formRow
+    $hiddenHost ? array(formHidden('hostType', 'physics'), formHidden('parent', 0)) : array
     (
         formGroup
         (
-            set::name('parent'),
-            set::label($lang->zanode->hostName),
-            set::items($hostPairs),
-            set::value($hostID),
+            set::label($lang->zahost->type),
             set::width('1/2'),
-            on::change('onHostChange')
+            set::control('static'),
+            picker
+            (
+                set::name('hostType'),
+                set::value('node'),
+                set::items($lang->zanode->typeList),
+                set::required(true),
+                on::change('onChangeType')
+            )
         ),
-        a
+        formRow
         (
-            set::href(createLink('zahost', 'create')),
-            $lang->zahost->create,
-            setData(array('toggle' => 'modal')),
-            setClass('leading-8 ml-2')
+            formGroup
+            (
+                set::name('parent'),
+                set::label($lang->zanode->hostName),
+                set::items($hostPairs),
+                set::value($hostID),
+                set::width('1/2'),
+                on::change('onHostChange')
+            ),
+            a
+            (
+                set::href(createLink('zahost', 'create')),
+                $lang->zahost->create,
+                setData(array('toggle' => 'modal')),
+                setClass('leading-8 ml-2')
+            )
         )
     ),
     formGroup
@@ -79,7 +82,7 @@ formPanel
     ),
     formRow
     (
-        setClass('hidden'),
+        $hiddenHost ? null : setClass('hidden'),
         formGroup
         (
             set::name('extranet'),
@@ -88,74 +91,77 @@ formPanel
             set::width('1/2')
         )
     ),
-    formGroup
-    (
-        set::name('image'),
-        set::label($lang->zanode->image),
-        set::items(array()),
-        set::width('1/2'),
-        on::change('onImageChange')
-    ),
-    formGroup
-    (
-        set::label($lang->zanode->cpuCores),
-        set::width('1/2'),
-        set::control('static'),
-        picker
-        (
-            set::name('cpuCores'),
-            set::items($config->zanode->os->cpuCores),
-            set::required(true)
-        )
-    ),
-    formRow
+    $hiddenHost ? array(formHidden('image', 0), formHidden('cpuCores', 0), formHidden('memory', 0), formHidden('diskSize', 0)) : array
     (
         formGroup
         (
-            set::label($lang->zanode->memory),
-            set::required(true),
+            set::name('image'),
+            set::label($lang->zanode->image),
+            set::items(array()),
             set::width('1/2'),
-            inputGroup
-            (
-                input
-                (
-                    set::name('memory')
-                ),
-                'GB'
-            )
-        )
-    ),
-    formRow
-    (
+            on::change('onImageChange')
+        ),
         formGroup
         (
-            set::label($lang->zanode->diskSize),
+            set::label($lang->zanode->cpuCores),
             set::width('1/2'),
-            inputGroup
+            set::control('static'),
+            picker
             (
-                input
-                (
-                    set::name('diskSize')
-                ),
-                'GB'
+                set::name('cpuCores'),
+                set::items($config->zanode->os->cpuCores),
+                set::required(true)
             )
-        )
-    ),
-    formRow
-    (
-        formGroup
+        ),
+        formRow
         (
-            set::name('osName'),
-            set::label($lang->zanode->osName),
-            set::required(true),
-            set::readonly(true),
-            set::width('1/2')
+            formGroup
+            (
+                set::label($lang->zanode->memory),
+                set::required(true),
+                set::width('1/2'),
+                inputGroup
+                (
+                    input
+                    (
+                        set::name('memory')
+                    ),
+                    'GB'
+                )
+            )
+        ),
+        formRow
+        (
+            formGroup
+            (
+                set::label($lang->zanode->diskSize),
+                set::width('1/2'),
+                inputGroup
+                (
+                    input
+                    (
+                        set::name('diskSize')
+                    ),
+                    'GB'
+                )
+            )
+        ),
+        formRow
+        (
+            formGroup
+            (
+                set::name('osName'),
+                set::label($lang->zanode->osName),
+                set::required(true),
+                set::readonly(true),
+                set::width('1/2')
+            )
         )
     ),
     formRow
     (
         setID('osNamePhysicsContainer'),
-        setClass('hidden'),
+        $hiddenHost ? null : setClass('hidden'),
         formGroup
         (
             setID('osNamePhysicsPre'),

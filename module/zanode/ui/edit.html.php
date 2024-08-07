@@ -62,47 +62,50 @@ formPanel
         set::width('1/2'),
         set::value($zanode->extranet)
     ),
-    formGroup
-    (
-        set::label($lang->zanode->cpuCores),
-        set::width('1/2'),
-        set::name(''),
-        set::value(zget($config->zanode->os->cpuCores, $zanode->cpuCores)),
-        set::readonly(true)
-    ),
-    formRow
+    $hiddenHost ? array(formHidden('cpuCores', 0), formHidden('memory', 0), formHidden('diskSize', 0)) : array
     (
         formGroup
         (
-            set::label($lang->zanode->memory),
+            set::label($lang->zanode->cpuCores),
             set::width('1/2'),
-            inputGroup
+            set::name(''),
+            set::value(zget($config->zanode->os->cpuCores, $zanode->cpuCores)),
+            set::readonly(true)
+        ),
+        formRow
+        (
+            formGroup
             (
-                input
+                set::label($lang->zanode->memory),
+                set::width('1/2'),
+                inputGroup
                 (
-                    set::name('memory'),
-                    set::readonly(true),
-                    set::value($zanode->memory)
-                ),
-                'GB'
+                    input
+                    (
+                        set::name('memory'),
+                        set::readonly(true),
+                        set::value($zanode->memory)
+                    ),
+                    'GB'
+                )
             )
-        )
-    ),
-    formRow
-    (
-        formGroup
+        ),
+        formRow
         (
-            set::label($lang->zanode->diskSize),
-            set::width('1/2'),
-            inputGroup
+            formGroup
             (
-                input
+                set::label($lang->zanode->diskSize),
+                set::width('1/2'),
+                inputGroup
                 (
-                    set::name('diskSize'),
-                    set::readonly(true),
-                    set::value($zanode->diskSize)
-                ),
-                'GB'
+                    input
+                    (
+                        set::name('diskSize'),
+                        set::readonly(true),
+                        set::value($zanode->diskSize)
+                    ),
+                    'GB'
+                )
             )
         )
     ),

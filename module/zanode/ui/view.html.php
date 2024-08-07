@@ -92,7 +92,7 @@ if($zanode->hostType == 'physics')
             )
         )
     );
-    $baseInfo[] = div
+    $hiddenHost || $zanode->cpuCores == 0 ? null : $baseInfo[] = div
     (
         setClass('w-1/6'),
         span
@@ -108,7 +108,7 @@ if($zanode->hostType == 'physics')
     );
     $baseInfo[] = div
     (
-        setClass('w-1/3 mt-4'),
+        $hiddenHost || $zanode->cpuCores == 0 ? setClass('w-1/6') : setClass('w-1/3 mt-2'),
         span
         (
             setClass('text-gray'),
@@ -120,7 +120,7 @@ if($zanode->hostType == 'physics')
             zget($lang->zanode->statusList, $zanode->status)
         )
     );
-    $baseInfo[] = div
+    $hiddenHost || $zanode->memory == 0 ? null : $baseInfo[] = div
     (
         setClass('w-1/2 mt-4'),
         span
@@ -134,7 +134,7 @@ if($zanode->hostType == 'physics')
             $zanode->memory . 'GB'
         )
     );
-    $baseInfo[] = div
+    $hiddenHost || $zanode->diskSize == 0 ? null : $baseInfo[] = div
     (
         setClass('w-1/6 mt-4'),
         span
