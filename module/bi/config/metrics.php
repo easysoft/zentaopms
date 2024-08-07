@@ -3629,6 +3629,20 @@ $config->bi->builtin->metrics[] = array
 
 $config->bi->builtin->metrics[] = array
 (
+    'name'       => '按执行统计的测试任务数',
+    'alias'      => '测试任务数',
+    'code'       => 'count_of_test_task_in_execution',
+    'purpose'    => 'scale',
+    'scope'      => 'execution',
+    'object'     => 'task',
+    'unit'       => 'count',
+    'dateType'   => 'nodate',
+    'desc'       => '按执行统计的测试任务数是指执行中任务类型为测试的任务数求和。该度量项反映了执行中测试的工作量，可以帮助团队进行测试资源调配。',
+    'definition' => "执行中满足以下条件的任务个数求和，条件是：任务类型为测试，过滤已删除的任务，过滤已删除的执行，过滤已删除的项目。"
+);
+
+$config->bi->builtin->metrics[] = array
+(
     'name'       => '按执行统计的任务剩余工时数',
     'alias'      => '任务剩余工时数',
     'code'       => 'left_of_task_in_execution',
