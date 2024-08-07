@@ -16683,6 +16683,14 @@ CREATE INDEX `metricID` ON `zt_metriclib`(`metricID`);
 CREATE INDEX `metricCode` ON `zt_metriclib`(`metricCode`);
 CREATE INDEX `date` ON zt_metriclib (date);
 
+-- DROP TABLE IF EXISTS `zt_duckdbqueue`;
+CREATE TABLE IF NOT EXISTS `zt_duckdbqueue` (
+  `object` varchar(255) NOT NULL DEFAULT '',
+  `updatedTime` datetime NULL,
+  `syncTime` datetime NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE UNIQUE INDEX `object` ON `zt_duckdbqueue`(`object`);
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`) VALUES ('30', '23', '*', '*', '*', 'moduleName=execution&methodName=computeTaskEffort', '计算任务剩余工时', 'zentao', '1', 'normal');
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`) VALUES ('30', '7', '*', '*', '*', 'moduleName=effort&methodName=remindNotRecord', '提醒录入日志', 'zentao', '1', 'stop');
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES ('1', '1', '*', '*', '*', 'moduleName=metric&methodName=updateMetricLib', '计算度量数据', 'zentao', 1, 'normal', NUll);
