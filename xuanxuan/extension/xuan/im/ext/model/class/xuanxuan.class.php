@@ -281,4 +281,17 @@ class xuanxuanIm extends imModel
 
         return $notificationData;
     }
+
+    /**
+     * Download xxd.
+     *
+     * @param  object $setting
+     * @param  string $downloadType
+     * @access public
+     * @return array
+     */
+    public function downloadXXD($setting, $downloadType)
+    {
+        return array('result' => 'fail', 'message' => 'error');
+    }
 }

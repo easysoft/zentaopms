@@ -20,3 +20,5 @@ $config->im->cards['execution']['bug']    = array('width' => '700px', 'height' =
 $config->im->cards['execution']['story']  = array('width' => '700px', 'height' => '467px');
 $config->im->cards['bug']['browse']       = array('width' => '700px', 'height' => '467px');
 $config->im->cards['product']['browse']   = array('width' => '700px', 'height' => '467px');
+
+$config->im->xxdDownloadUrl = 'https://www.xuanim.com/dl/xuanxuan/';

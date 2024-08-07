@@ -33,3 +33,8 @@ public function messageGetNotifyList()
 {
     return $this->loadExtension('xuanxuan')->messageGetNotifyList();
 }
+
+public function downloadXXD()
+{
+    return $this->loadExtension('xuanxuan')->downloadXXD($setting, $downloadType);
+}
