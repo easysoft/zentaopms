@@ -841,6 +841,13 @@ class docZen extends doc
         $this->loadModel('search')->setSearchParams($this->config->file->search);
     }
 
+    /**
+     * 初始化我的空间的文档库。
+     * Init Lib for mySpace.
+     *
+     * @access public
+     * @return void
+     */
     public function initLibForMySpace()
     {
         $mineLibCount = $this->dao->select('count(1) as count')->from(TABLE_DOCLIB)->where('type')->eq('mine')->andWhere('addedBy')->eq($this->app->user->account)->fetch('count');
