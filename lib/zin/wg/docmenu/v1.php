@@ -41,6 +41,8 @@ class docMenu extends wg
 
     private function buildLink($item, $releaseID = 0): string
     {
+        if(isset($item->objectType) && $item->objectType == 'custom' && $item->parent == 0) return '';
+
         global $app;
         $url = zget($item, 'url', '');
         if(!empty($url)) return $url;
