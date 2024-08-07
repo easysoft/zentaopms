@@ -1,7 +1,7 @@
 <?php
 /**
  * 按执行统计的研发需求规模数
- * Scale of dev story in execution.
+ * Scale of story in execution.
  *
  * 范围：execution
  * 对象：story
@@ -18,7 +18,7 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
-class scale_of_dev_story_in_execution extends baseCalc
+class scale_of_story_in_execution extends baseCalc
 {
     public $dataset = 'getDevStoriesWithExecution';
 
