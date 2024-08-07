@@ -71,13 +71,7 @@ pipeline {
 
       agent {
         kubernetes {
-          inheritFrom "zentao-package build-docker xuanim"
-          containerTemplate {
-              name "package"
-              image "hub.qucheng.com/ci/zentao-package:18.13"
-              command "sleep"
-              args "99d"
-          }
+          inheritFrom "zentao-package-1813 build-docker xuanim"
           yamlFile 'misc/ci/basic-build.yaml'
         }
       }
