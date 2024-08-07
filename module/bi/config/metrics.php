@@ -4340,3 +4340,17 @@ $config->bi->builtin->metrics[] = array
     'desc'       => '按执行统计的测试用例数是指执行下的测试用例个数的求和，可以帮助团队评估需求测试用例的覆盖程度。',
     'definition' => "执行中满足以下条件的测试用例个数的求和\n执行用例列表中的用例\n过滤已删除的用例\n过滤已删除的执行\n过滤已删除的项目\n过滤已删除的产品"
 );
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按代码库统计的年度代码提交次数',
+    'alias'      => '代码库年度提交次数',
+    'code'       => 'count_of_yearly_code_commits_in_codebase',
+    'purpose'    => 'scale',
+    'scope'      => 'system',
+    'object'     => 'code',
+    'unit'       => 'count',
+    'dateType'   => 'year',
+    'desc'       => '按代码库统计的的年度代码提交次数是指代码库在某个年度的代码提交数量。这个度量项可以反映代码库的年度开发活动频率和代码更新情况。',
+    'definition' => "代码库中代码提交次数求和，提交时间为某年。"
+);
