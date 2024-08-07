@@ -38,11 +38,12 @@ class count_of_daily_code_commits_in_codebase extends baseCalc
      * Get commits by API.
      *
      * @param  object $repo
-     * @param  array  $options
+     * @param  string $begin
+     * @param  string $end
      * @access public
      * @return object
      */
-    public function getCommitCount($repo, $options = array())
+    public function getCommitCount($repo, $begin, $end)
     {
         if(isset($this->result[$repo->id])) return false;
 
@@ -53,7 +54,7 @@ class count_of_daily_code_commits_in_codebase extends baseCalc
         $repo->apiPath  = sprintf($this->apiPath[$repo->SCM], $repo->url, $repo->serviceProject);
         $this->scm->setEngine($repo);
 
-        $commits = $this->scm->getCommitByDate($options['begin'], $options['end']);
+        $commits = $this->scm->getCommitByDate($begin, $end);
         foreach($commits as $commit)
         {
             $commit->id = $repo->id;
@@ -92,15 +93,7 @@ class count_of_daily_code_commits_in_codebase extends baseCalc
      */
     public function calculate($row)
     {
-        $options = array('begin' => '2023-02-27', 'end' => '2023-02-28');
-        if(in_array($row->SCM, array('Gitlab', 'GitFox')))
-        {
-            if(isset($this->result[$row->id])) return false;
-
-            return $this->getCommitCount($row, $options);
-        }
-
-        $this->setResult($row);
+        $this->result[] = $row;
     }
 
     /**
@@ -113,7 +106,26 @@ class count_of_daily_code_commits_in_codebase extends baseCalc
      */
     public function getResult($options = array())
     {
-        $records = $this->getRecords(array('repo', 'year', 'month', 'day'));
-        return $this->filterByOptions($records, $options);
+        $year  = (int)$options['year'];
+        $month = (int)$options['month'];
+        $day   = $options['day'];
+
+        list($begin, $end) = explode(',', $day);
+        $begin = "{$year}-{$month}-{$begin}";
+        $end   = "{$year}-{$month}-{$end} 23:59:59";
+
+        foreach($this->result as $row)
+        {
+            if(in_array($row->SCM, array('Gitlab', 'GitFox')))
+            {
+                if(isset($this->result[$row->id])) continue;
+
+                $this->getCommitCount($row, $begin, $end);
+                continue;
+            }
+
+            $this->setResult($row);
+        }
+        return $this->getRecords(array('repo', 'year', 'month', 'day'));
     }
 }
