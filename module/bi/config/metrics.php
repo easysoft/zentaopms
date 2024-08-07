@@ -4256,3 +4256,17 @@ $config->bi->builtin->metrics[] = array
     'desc'       => '按执行统计的测试任务消耗工时数是指任务类型为测试时已消耗的工时总和，该度量项反映了测试任务的资源使用情况，可以帮助团队掌握执行的测试成本。',
     'definition' => "执行中满足以下条件的任务消耗工时数求和\n任务类型为测试\n过滤已删除的任务\n过滤父任务\n过滤已删除的执行\n过滤已删除的项目"
 );
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按执行统计的开发任务消耗工时数',
+    'alias'      => '开发任务消耗工时数',
+    'code'       => 'consume_of_devel_task_in_execution',
+    'purpose'    => 'hour',
+    'scope'      => 'execution',
+    'object'     => 'task',
+    'unit'       => 'hour',
+    'dateType'   => 'nodate',
+    'desc'       => '按执行统计的开发任务消耗工时数是指任务类型为开发时已经消耗的工时总和，该度量项反映了开发任务的资源使用情况，可以帮助团队掌握执行的开发成本。',
+    'definition' => "执行中满足以下条件的任务消耗工时数求和\n任务类型为开发\n过滤已删除的任务\n过滤父任务\n过滤已删除的执行\n过滤已删除的项目"
+);
