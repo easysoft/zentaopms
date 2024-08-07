@@ -861,7 +861,7 @@ class gitlabRepo
             {
                 for($page = 1; true; $page++)
                 {
-                    $results = json_decode(commonModel::http($api . "&page={$page}", null, array(), array(), 'data', 'POST', 30, true, false));
+                    $results = json_decode(commonModel::http($api . "&page={$page}", null, array(), array(), 'json'));
                     if(!is_array($results)) break;
                     if(!empty($results)) $allResults = array_merge($allResults, $results);
                     if(count($results) < 100) break;
@@ -1064,14 +1064,29 @@ class gitlabRepo
         return $MR;
     }
 
-    public function getCommitCountByDate($startDate, $endDate)
+    /**
+     * 根据开始时间和结束时间获取提交时间和提交人。
+     * Get commit count by date.
+     *
+     * @param  int    $startDate
+     * @param  int    $endDate
+     * @access public
+     * @return array
+     */
+    public function getCommitByDate($startDate, $endDate)
     {
-        $branches = $this->branch('all');
+        $branches   = $this->branch();
         $statistics = array();
         foreach($branches as $branch)
         {
-            $commits = $this->fetch('commits', array(), true);
-            a($commits); die;
+            $commits = $this->fetch('commits', array('ref_name' => $branch, 'since' => $startDate, 'until' => $endDate), true);
+            foreach($commits as $commit)
+            {
+                $item = new stdclass();
+                $item->author = $commit->author_name;
+                $item->time   = date('Y-m-d H:i:s', strtotime($commit->committed_date));
+                $statistics[] = $item;
+            }
         }
         return $statistics;
     }
