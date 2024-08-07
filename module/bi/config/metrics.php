@@ -4298,3 +4298,17 @@ $config->bi->builtin->metrics[] = array
     'desc'       => '按执行统计的开发人员可用工时是指执行团队中角色为研发的可用工时之和。该度量项反映了团队中开发人员能够投入在本迭代的时间，有助于计算执行团队的工作负载。',
     'definition' => "执行团队成员每日可用工时*可用工日\n人员职位为研发\n过滤已删除的执行\n过滤已删除的项目"
 );
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按执行统计的测试用例数',
+    'alias'      => '测试用例数',
+    'code'       => 'count_of_case_in_execution',
+    'purpose'    => 'scale',
+    'scope'      => 'execution',
+    'object'     => 'case',
+    'unit'       => 'count',
+    'dateType'   => 'nodate',
+    'desc'       => '按执行统计的测试用例数是指执行下的测试用例个数的求和，可以帮助团队评估需求测试用例的覆盖程度。',
+    'definition' => "执行中满足以下条件的测试用例个数的求和\n执行用例列表中的用例\n过滤已删除的用例\n过滤已删除的执行\n过滤已删除的项目\n过滤已删除的产品"
+);
