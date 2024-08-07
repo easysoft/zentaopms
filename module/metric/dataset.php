@@ -1166,11 +1166,13 @@ class dataset
      */
     public function getRepoCommits($fieldList)
     {
-        $stmt = $this->dao->select($fieldList)->from(TABLE_REPO)->alias('t1')
+        $options = array('begin' => '2023-02-27', 'end' => '2023-02-28');
+        return $this->dao->select($fieldList)->from(TABLE_REPO)->alias('t1')
             ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t2.repo=t1.id')
             ->leftJoin(TABLE_PIPELINE)->alias('t3')->on('t3.id=t1.serviceHost')
-            ->where('t1.deleted')->eq(0);
-
-        return $this->defaultWhere($stmt, 't1');
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t1.SCM', true)->in(array('Gitlab', 'GitFox'))
+            ->orWhere('t2.time')->between($options['begin'], $options['end'])
+            ->markRight(1);
     }
 }
