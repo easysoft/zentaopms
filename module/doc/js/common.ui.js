@@ -259,16 +259,36 @@ window.updateOrder = function(event, orders)
 
 window.checkObjectPriv = function(e)
 {
-    let formData = new FormData();
-    users.forEach(function(user){ formData.append('users[]', user); });
+    $whiteListBox = $('#whiteListBox');
+    if($whiteListBox.length == 0 || $whiteListBox.hasClass('hidden')) return;
 
+    let $users = $('[name^=users]');
+    let users  = $users.val();
+    if(users.length == 0) return;
+
+    let formData   = new FormData();
     let $object    = $('[name=' + libType + ']');
     let objectType = libType;
     let objectID   = 0;
     if($object.length > 0) objectID = $object.val();
+    if(libType == 'project')
+    {
+        let $extension = $('[name=execution]');
+        if($extension.length > 0 && $extension.val())
+        {
+            objectType = 'execution';
+            objectID   = $extension.val();
+        }
+    }
     if(objectID == 0) return;
 
+    users.forEach(function(user){ formData.append('users[]', user); });
     $.post($.createLink('doc', 'ajaxCheckObjectPriv', 'libType=' + libType + '&objectID=' + objectID), formData, function(data)
     {
+        $inputGroupBox = $users.closest('.input-group').parent();
+        $inputGroupBox.find('.notice').remove();
+
+        if(!data) return;
+        $inputGroupBox.append("<div class='notice pt-1'>" + data + '</div>');
     });
 }
