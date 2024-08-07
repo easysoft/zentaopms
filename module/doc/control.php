@@ -1015,6 +1015,24 @@ class doc extends control
     }
 
     /**
+     * 文档库排序
+     * Doclib sorting.
+     *
+     * @access public
+     * @return void
+     */
+    public function sortDoclib()
+    {
+        if($_POST)
+        {
+            foreach($_POST['orders'] as $id => $order) $this->doc->updateDocLibOrder($id, (int)$order);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success'));
+        }
+    }
+
+    /**
      * 目录排序
      * Catalog sorting.
      *
