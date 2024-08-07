@@ -78,24 +78,19 @@ function renderBuilds()
         $('#resolvedBuild').data('zui.picker').destroy();
         $('#resolvedBuild').picker({list: resolvedBuilds, allowSingleDeselect: 'true'});
         $('#resolvedBuild').data('zui.picker').setValue(oldResolvedBuild);
-
-        resolution = $('#resolution').val();
-        if(resolution == 'fixed')
+        $('#resolvedBuildBox').change(function()
         {
-            $('#resolvedBuildBox').change(function()
+            if($('#resolvedBuild').val() != oldResolvedBuild)
             {
-                if($('#resolvedBuild').val() != oldResolvedBuild)
+                confirmUnlinkBuild = confirmUnlinkBuild.replace('%s', data.resolvedBuildName);
+                confirmResult = confirm(confirmUnlinkBuild);
+                if(!confirmResult)
                 {
-                    confirmUnlinkBuild = confirmUnlinkBuild.replace('%s', data.resolvedBuildName);
-                    confirmResult = confirm(confirmUnlinkBuild);
-                    if(!confirmResult)
-                    {
-                        var resolvedBuildPicker = $('#resolvedBuild').data('zui.picker');
-                        resolvedBuildPicker.setValue(oldResolvedBuild);
-                    }
+                    var resolvedBuildPicker = $('#resolvedBuild').data('zui.picker');
+                    resolvedBuildPicker.setValue(oldResolvedBuild);
                 }
-            });
-        }
+            }
+        });
     }, 'json');
 }
 

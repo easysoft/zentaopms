@@ -765,7 +765,7 @@ class bugModel extends model
         if(!dao::isError())
         {
             /* Link bug to build and release. */
-            if($bug->resolution == 'fixed' and !empty($bug->resolvedBuild) and $oldBug->resolvedBuild != $bug->resolvedBuild)
+            if(!empty($bug->resolvedBuild) and $oldBug->resolvedBuild != $bug->resolvedBuild)
             {
                 if(!empty($oldBug->resolvedBuild)) $this->loadModel('build')->unlinkBug($oldBug->resolvedBuild, (int)$bugID);
                 $this->linkBugToBuild($bugID, $bug->resolvedBuild);
