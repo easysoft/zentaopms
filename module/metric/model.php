@@ -604,13 +604,12 @@ class metricModel extends model
             $fieldList  = implode(',', $calculator->fieldList);
             $statement  = $dataset->$dataSource($fieldList);
         }
-        else
+
+        if($calculator->useSCM)
         {
             $calculator->setDAO($dao);
             $scm = $this->app->loadClass('scm');
             $calculator->setSCM($scm);
-
-            $statement = $calculator->getStatement();
         }
 
         if($returnType == 'sql') return $statement->get();
