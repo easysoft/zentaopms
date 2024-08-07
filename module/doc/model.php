@@ -880,12 +880,20 @@ class docModel extends model
      */
     public function getTeamSpaces(): array
     {
-        return $this->dao->select('id, name')->from(TABLE_DOCLIB)
+        $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)
             ->where('type')->eq('custom')
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
-            ->fetchPairs();
+            ->fetchAll();
+
+        $pairs = array();
+        foreach($objectLibs as $lib)
+        {
+            if($this->checkPrivLib($lib)) $pairs[$lib->id] = $lib->name;
+        }
+
+        return $pairs;
     }
 
     /**
