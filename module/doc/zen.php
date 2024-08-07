@@ -840,4 +840,19 @@ class docZen extends doc
         $this->config->file->search['actionURL'] = $actionURL;
         $this->loadModel('search')->setSearchParams($this->config->file->search);
     }
+
+    public function initLibForMySpace()
+    {
+        $mineLibCount = $this->dao->select('count(1) as count')->from(TABLE_DOCLIB)->where('type')->eq('mine')->andWhere('addedBy')->eq($this->app->user->account)->fetch('count');
+        if(!empty($mineLibCount)) return;
+
+        $mineLib = new stdclass();
+        $mineLib->type      = 'mine';
+        $mineLib->vision    = $this->config->vision;
+        $mineLib->name      = $this->lang->doclib->defaultMyLib;
+        $mineLib->acl       = 'private';
+        $mineLib->addedBy   = $this->app->user->account;
+        $mineLib->addedDate = helper::now();
+        $this->dao->insert(TABLE_DOCLIB)->data($mineLib)->exec();
+    }
 }

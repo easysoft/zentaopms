@@ -21,6 +21,7 @@ $lang->doclib->execution    = $lang->executionCommon . '库';
 $lang->doclib->product      = $lang->productCommon . '库';
 $lang->doclib->apiLibName   = '库名称';
 $lang->doclib->defaultSpace = '默认空间';
+$lang->doclib->defaultMyLib = '我的库';
 $lang->doclib->spaceName    = '空间名称';
 $lang->doclib->createSpace  = '新建空间';
 $lang->doclib->editSpace    = '编辑空间';

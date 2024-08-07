@@ -78,6 +78,7 @@ class doc extends control
         $this->session->set('spaceType', 'mine', 'doc');
         $this->loadModel('search');
 
+        if(empty($libID)) $this->docZen->initLibForMySpace();
         if($moduleID) $libID = $this->tree->getById($moduleID)->root;
         list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType('mine', 0, $libID);
 

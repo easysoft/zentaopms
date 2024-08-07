@@ -21,6 +21,7 @@ $lang->doclib->execution    = $lang->executionCommon . ' Library';
 $lang->doclib->product      = $lang->productCommon . ' Library';
 $lang->doclib->apiLibName   = 'Library Name';
 $lang->doclib->defaultSpace = 'Default Space';
+$lang->doclib->defaultMyLib = 'My Library';
 $lang->doclib->spaceName    = 'Space Name';
 $lang->doclib->createSpace  = 'Create Space';
 $lang->doclib->editSpace    = 'Edit Space';
