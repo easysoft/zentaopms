@@ -2648,6 +2648,11 @@ class baseRouter
      */
     public function loadCacheConfig()
     {
+        $installed = true;
+        if(!isset($this->config->installed) || !$this->config->installed) $installed = false;
+        if(($this->config->inContainer || $this->config->inQuickon) && $installed && !$this->getInstalledVersion()) $installed = false;
+        if(!$installed) return false;
+
         $globalCache = $this->dbQuery("SELECT value FROM " . TABLE_CONFIG . " WHERE `module` = 'common' AND `section` = 'global' AND `key` = 'cache' LIMIT 1")->fetch();
         if(!$globalCache) return false;
 
