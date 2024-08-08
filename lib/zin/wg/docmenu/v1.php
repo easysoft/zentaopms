@@ -79,7 +79,7 @@ class docMenu extends wg
         }
         else
         {
-            $methodName = (isset($this->spaceMethod[$objectType]) && $this->spaceMethod[$objectType]) ? $this->spaceMethod[$objectType] : 'teamSpace';
+            $methodName = empty($this->spaceMethod[$objectType]) ? 'teamSpace' : $this->spaceMethod[$objectType];
             if(in_array($objectType, $this->mineTypes))
             {
                 $moduleID = $item->id;
