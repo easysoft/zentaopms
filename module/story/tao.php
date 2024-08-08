@@ -2503,7 +2503,12 @@ class storyTao extends storyModel
         uasort($stories, function($a, $b) {
             $pathA = explode(',', trim($a->path, ','));
             $pathB = explode(',', trim($b->path, ','));
-            return count($pathB) - count($pathA);
+
+            $countA = count($pathA);
+            $countB = count($pathB);
+            if($countA == $countB) return 0;
+
+            return ($countA < $countB) ? -1 : 1;
         });
 
         /* 将需求按照父子关系组成树形结构。*/
