@@ -823,6 +823,8 @@ class storyModel extends model
             $oldStory->twins = '';
         }
 
+        if($oldStory->stage != 'verified' && $story->stage == 'verified') $story->verifiedDate = helper::now();
+
         $moduleName = $this->app->rawModule;
         $this->dao->update(TABLE_STORY)->data($story, 'reviewer,spec,verify,deleteFiles,finalResult')
             ->autoCheck()
@@ -1111,6 +1113,9 @@ class storyModel extends model
         foreach($stories as $storyID => $story)
         {
             $oldStory = $oldStories[$storyID];
+
+            if($oldStory->stage != 'verified' && $story->stage == 'verified') $story->verifiedDate = helper::now();
+
             $this->dao->update(TABLE_STORY)->data($story)
                 ->autoCheck()
                 ->checkIF($story->closedBy, 'closedReason', 'notempty')
