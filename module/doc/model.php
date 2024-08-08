@@ -749,6 +749,21 @@ class docModel extends model
     {
         $modules = $moduleID && $mode == 'children' ? $this->loadModel('tree')->getAllChildID($moduleID) : $moduleID;
 
+        /* 团队空间下的空间列出所有子库的文档。 */
+        if(count($libIdList) == 1)
+        {
+            $libID = current($libIdList);
+            $lib   = $this->getLibByID($libID);
+            if($lib->type == 'custom' && $lib->parent == 0)
+            {
+                $libs = $this->dao->select('*')->from(TABLE_DOCLIB)->where('parent')->eq($libID)->andWhere('deleted')->eq('0')->fetchAll();
+                foreach($libs as $subLib)
+                {
+                    if($this->checkPrivLib($subLib)) $libIdList[] = $subLib->id;
+                }
+            }
+        }
+
         $stmt = $this->dao->select('*')->from(TABLE_DOC)
             ->where('vision')->eq($this->config->vision)
             ->andWhere('templateType')->eq('')
