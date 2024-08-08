@@ -8,7 +8,6 @@ class thinkResult extends wg
         'wizard: object',       // 模型数据
         'mode?: string="view"', // 模型展示模式。 preview 后台设计预览 | view 前台结果展示
         'blocks: array',        // 模型节点
-        'modelTitle: string',   // 模型列表
         'conclusion: string'    // 分析结论
     );
 
@@ -38,7 +37,7 @@ class thinkResult extends wg
         global $app, $lang;
         $app->loadLang('thinkwizard');
 
-        list($wizard, $mode, $modelTitle, $conclusion) = $this->prop(array('wizard', 'mode', 'modelTitle', 'conclusion'));
+        list($wizard, $mode, $conclusion) = $this->prop(array('wizard', 'mode', 'conclusion'));
         $introduction = $mode == 'preview' ? $lang->thinkwizard->introduction : '';
         $introduction = $wizard->introduction ? $wizard->introduction : $introduction;
         $suggestion   = $mode == 'preview' ? $lang->thinkwizard->suggestion : '';
@@ -59,7 +58,7 @@ class thinkResult extends wg
                 setClass('think-model-content', $modelClass, 'is-' . $mode),
                 setStyle('min-height', '200px'),
                 $this->buildModel(),
-                div(setClass('mt-4 text-center font-bold text-gray-950 text-3xl'), $modelTitle)
+                div(setClass('mt-4 text-center font-bold text-gray-950 text-3xl'), $wizard->name)
             ),
             div
             (
