@@ -18,3 +18,7 @@ zendata('projectcase')->loadYaml('projectcase', true, 4)->gen(1000);
 
 $metric = new metricTest();
 $calc   = $metric->calcMetric(__FILE__);
+
+r(count($calc->getResult())) && p('') && e('20'); // 测试分组数。
+
+r($calc->getResult(array('execution' => '21'))) && p('0:value') && e('3');  // 测试执行21
