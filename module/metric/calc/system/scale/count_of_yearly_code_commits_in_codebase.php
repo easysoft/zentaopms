@@ -107,12 +107,8 @@ class count_of_yearly_code_commits_in_codebase extends baseCalc
     public function getResult($options = array())
     {
         $year  = (int)$options['year'];
-        $month = (int)$options['month'];
-        $day   = $options['day'];
-
-        list($begin, $end) = explode(',', $day);
-        $begin = "{$year}-{$month}-{$begin}";
-        $end   = "{$year}-{$month}-{$end} 23:59:59";
+        $begin = "{$year}-01-01";
+        $end   = "{$year}-12-31";
 
         foreach($this->rows as $row)
         {

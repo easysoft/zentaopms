@@ -113,8 +113,17 @@ class count_of_daily_code_commits_in_codebase extends baseCalc
         $day   = $options['day'];
 
         list($begin, $end) = explode(',', $day);
+        if(!$begin) $begin = '01';
         $begin = "{$year}-{$month}-{$begin}";
-        $end   = "{$year}-{$month}-{$end} 23:59:59";
+
+        if(!$end)
+        {
+            $end = date('Y-m-d', strtotime("$begin +1 day"));
+        }
+        else
+        {
+            $end = "{$year}-{$month}-{$end}";
+        }
 
         foreach($this->rows as $row)
         {

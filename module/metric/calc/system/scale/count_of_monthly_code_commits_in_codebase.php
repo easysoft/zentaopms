@@ -109,11 +109,9 @@ class count_of_monthly_code_commits_in_codebase extends baseCalc
     {
         $year  = (int)$options['year'];
         $month = (int)$options['month'];
-        $day   = $options['day'];
 
-        list($begin, $end) = explode(',', $day);
-        $begin = "{$year}-{$month}-{$begin}";
-        $end   = "{$year}-{$month}-{$end} 23:59:59";
+        $begin = "{$year}-{$month}-01";
+        $end   = date('Y-m-d', strtotime("$begin +1 month"));
 
         foreach($this->rows as $row)
         {
