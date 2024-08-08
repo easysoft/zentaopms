@@ -18,3 +18,21 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
+class consume_rate_of_frombug_task_in_execution extends baseCalc
+{
+    public $result = array();
+
+    public $dataset = 'getTasks';
+
+    public $fieldList = array('t1.execution', 't1.consumed', 't1.parent', 't1.fromBug');
+
+    public function calculate($row)
+    {
+        if($row->parent == '-1') return;
+
+        if(!isset($this->result[$row->execution])) $this->result[$row->execution] = array('fromBug' => 0, 'total' => 0);
+
+        if($row->frombug != 0) $this->result[$row->execution]['fromBug'] += $row->consumed;
+        $this->result[$row->execution]['total'] += $row->consumed;
+    }
+}
