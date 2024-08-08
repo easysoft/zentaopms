@@ -18,3 +18,23 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
+class count_of_case_expect_in_execution extends baseCalc
+{
+    public $dataset = 'getExecutionCasesSteps';
+
+    public $fieldList = array('t2.project as execution', 't1.expect');
+
+    public $result = array();
+
+    public function calculate($row)
+    {
+        if(empty($row->expect)) return;
+        if(!isset($this->result[$row->execution])) $this->result[$row->execution] = 0;
+        $this->result[$row->execution] += 1;
+    }
+
+    public function getResult($options = array())
+    {
+        return $this->filterByOptions($this->getRecords(array('execution', 'value')), $options);
+    }
+}
