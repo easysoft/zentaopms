@@ -87,6 +87,7 @@ formPanel
                     $spaces ? null : setClass('hidden'),
                     set::name('parent'),
                     set::items($spaces),
+                    set::value($spaceID),
                     set::required(true)
                 ),
                 input

@@ -128,10 +128,11 @@ class doc extends control
      *
      * @param  string $type     api|project|product|execution|custom|mine
      * @param  int    $objectID
+     * @param  int    $libID
      * @access public
      * @return void
      */
-    public function createLib(string $type = '', int $objectID = 0)
+    public function createLib(string $type = '', int $objectID = 0, int $libID = 0)
     {
         if(!empty($_POST))
         {
@@ -165,7 +166,12 @@ class doc extends control
             if($execution->type == 'stage') $this->lang->doc->execution = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doc->execution);
         }
 
-        if($type == 'custom') $this->view->spaces = $this->doc->getTeamSpaces();
+        if($type == 'custom')
+        {
+            $lib = $this->doc->getLibByID($libID);
+            $this->view->spaces  = $this->doc->getTeamSpaces();
+            $this->view->spaceID = !empty($lib->parent) ? $lib->parent : $libID;
+        }
 
         $this->docZen->setAclForCreateLib($type);
 
