@@ -4441,6 +4441,20 @@ $config->bi->builtin->metrics[] = array
 
 $config->bi->builtin->metrics[] = array
 (
+    'name'       => '按执行统计的执行关闭时已交付的研发需求规模数',
+    'alias'      => '执行关闭时已交付研发需求规模数',
+    'code'       => 'scale_of_delivered_story_in_closed_execution',
+    'purpose'    => 'scale',
+    'scope'      => 'execution',
+    'object'     => 'story',
+    'unit'       => 'hour',
+    'dateType'   => 'nodate',
+    'desc'       => '按执行统计的执行关闭时已交付研发需求规模数表示执行关闭时需求阶段为已发布或状态为已关闭且关闭原因为已完成的研发需求的规模。该度量项反映了执行结束时能够交付给用户的研发需求的规模，可以用于评估执行团队的研发需求交付能力。',
+    'definition' => "执行关闭时，满足以下条件的执行中研发需求规模数求和，条件是：所处阶段为已发布或关闭原因为已完成\n过滤已删除的研发需求\n过滤已删除的执行\n过滤已删除的项目\n过滤已删除的产品\n"
+);
+
+$config->bi->builtin->metrics[] = array
+(
     'name'       => '按执行统计的来源Bug的任务消耗工时占比',
     'alias'      => '来源Bug的任务消耗工时占比',
     'code'       => 'consume_rate_of_frombug_task_in_execution',
