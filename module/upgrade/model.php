@@ -9633,4 +9633,30 @@ class upgradeModel extends model
 
         return true;
     }
+
+    /**
+     * 更新需求的验收时间。
+     * Update verifiedDate for story.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateStoryVerifiedDate()
+    {
+        $verifiedDatePairs = $this->dao->select('t1.objectID, t1.date')->from(TABLE_ACTION)->alias('t1')
+            ->leftJoin(TABLE_HISTORY)->alias('t2')->on('t1.id = t2.action')
+            ->where('t1.objectType')->eq('story')
+            ->andWhere('t1.action')->eq('edited')
+            ->andWhere('t2.field')->eq('stage')
+            ->andWhere('t2.new')->eq('verified')
+            ->orderBy('date_desc')
+            ->fetchPairs();
+
+        foreach($verifiedDatePairs as $storyID => $verifiedDate)
+        {
+            $this->dao->update(TABLE_STORY)->set('verifiedDate')->eq($verifiedDate)->where('id')->eq($storyID)->andWhere('stage')->eq('verified')->exec();
+        }
+
+        return !dao::isError();
+    }
 }
