@@ -346,6 +346,7 @@ $config->block->size['qa']['case']      = array(2 => 6, 1 => 6);
 
 $config->block->size['doc']['docstatistic']    = array(2 => 3, 1 => 3);
 $config->block->size['doc']['docmycollection'] = array(2 => 4, 1 => 4);
+$config->block->size['doc']['docmycreated']    = array(2 => 4, 1 => 4);
 $config->block->size['doc']['docrecentupdate'] = array(2 => 4, 1 => 4);
 $config->block->size['doc']['productdoc']      = array(2 => 6, 1 => 6);
 $config->block->size['doc']['projectdoc']      = array(2 => 6, 1 => 6);

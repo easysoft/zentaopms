@@ -2276,6 +2276,32 @@ class blockZen extends block
     }
 
     /**
+     * 打印我创建的文档区块。
+     * Print my collection of documents block.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function printDocMyCreatedBlock(): void
+    {
+        /* Load pager. */
+        $this->app->loadClass('pager', true);
+        $pager = new pager(0, 6, 1);
+
+        $docList = $this->loadModel('doc')->getDocsByBrowseType('openedbyme', 0, 0, 'addedDate_desc', $pager);
+        $libList = array();
+        foreach($docList as $doc)
+        {
+            $doc->editedDate   = substr($doc->editedDate, 0, 10);
+            $doc->editInterval = helper::getDateInterval($doc->editedDate);
+
+            $libList[] = $doc->lib;
+        }
+
+        $this->view->docList = $docList;
+    }
+
+    /**
      * 打印我关注的文档区块。
      * Print my collection of documents block.
      *
