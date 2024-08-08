@@ -1075,18 +1075,14 @@ class gitlabRepo
      */
     public function getCommitByDate($startDate, $endDate)
     {
-        $branches   = $this->branch();
         $statistics = array();
-        foreach($branches as $branch)
+        $commits    = $this->fetch('commits', array('since' => $startDate, 'until' => $endDate), true);
+        foreach($commits as $commit)
         {
-            $commits = $this->fetch('commits', array('ref_name' => $branch, 'since' => $startDate, 'until' => $endDate), true);
-            foreach($commits as $commit)
-            {
-                $item = new stdclass();
-                $item->author = $commit->author_name;
-                $item->time   = date('Y-m-d H:i:s', strtotime($commit->committed_date));
-                $statistics[] = $item;
-            }
+            $item = new stdclass();
+            $item->author = $commit->author_name;
+            $item->time   = date('Y-m-d H:i:s', strtotime($commit->committed_date));
+            $statistics[] = $item;
         }
         return $statistics;
     }
