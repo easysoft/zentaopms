@@ -380,7 +380,6 @@ class dataset
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.type')->eq('story')
-            ->andWhere('t2.shadow')->eq(0)
             ->andWhere('t4.deleted')->eq(0)
             ->andWhere('t4.type')->in('sprint,stage,kanban')
             ->andWhere('t5.deleted')->eq(0);
@@ -406,7 +405,6 @@ class dataset
             ->leftJoin(TABLE_PROJECT)->alias('t5')->on('t4.project=t5.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t2.shadow')->eq(0)
             ->andWhere('t4.deleted')->eq(0) // 已删除的执行
             ->andWhere('t4.type')->in('sprint,stage,kanban')
             ->andWhere('t4.multiple')->eq('1')

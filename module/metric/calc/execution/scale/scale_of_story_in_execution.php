@@ -22,12 +22,13 @@ class scale_of_story_in_execution extends baseCalc
 {
     public $dataset = 'getDevStoriesWithExecution';
 
-    public $fieldList = array('t3.project', 't1.estimate');
+    public $fieldList = array('t3.project', 't1.estimate', 't1.isParent');
 
     public $result = array();
 
     public function calculate($row)
     {
+        if($row->isParent == 1) return;
         if(!isset($this->result[$row->project])) $this->result[$row->project] = 0;
         $this->result[$row->project] += $row->estimate;
     }
