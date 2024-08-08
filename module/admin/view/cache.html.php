@@ -21,7 +21,7 @@
           <td class='w-400px'><?php echo html::radio('enable', $lang->admin->cacheStatusList, $config->cache->dao->enable);?></td>
           <td class='w-400px'></td>
         </tr>
-        <?php if($helper::isAPCuEnabled()):?>
+        <?php if(helper::isAPCuEnabled()):?>
         <tr>
           <th><?php echo $lang->admin->memory;?></th>
           <td>
