@@ -208,6 +208,7 @@ $lang->block->default['full']['my'][] = array('title' => "{$lang->execution->com
 
 $lang->block->default['doc'][] = array('title' => 'Statistic',                       'module' => 'doc', 'code' => 'docstatistic',    'width' => '2');
 $lang->block->default['doc'][] = array('title' => 'My Collection Document',          'module' => 'doc', 'code' => 'docmycollection', 'width' => '2');
+$lang->block->default['doc'][] = array('title' => 'My Created Document',             'module' => 'doc', 'code' => 'docmycreated',    'width' => '2');
 $lang->block->default['doc'][] = array('title' => 'Recently Update Document',        'module' => 'doc', 'code' => 'docrecentupdate', 'width' => '2');
 if($config->vision == 'rnd') $lang->block->default['doc'][] = array('title' => "{$lang->productCommon} Document", 'module' => 'doc', 'code' => 'productdoc',      'width' => '2', 'params' => array('count' => '20'));
 $lang->block->default['doc'][] = array('title' => "{$lang->projectCommon} Document", 'module' => 'doc', 'code' => 'projectdoc',      'width' => '2', 'params' => array('count' => '20'));
@@ -302,6 +303,7 @@ $lang->block->modules['doc'] = new stdclass();
 $lang->block->modules['doc']->availableBlocks['docstatistic']    = 'Statistic';
 $lang->block->modules['doc']->availableBlocks['docdynamic']      = 'Dynamic';
 $lang->block->modules['doc']->availableBlocks['docmycollection'] = 'My Collection';
+$lang->block->modules['doc']->availableBlocks['docmycollection'] = 'My Created';
 $lang->block->modules['doc']->availableBlocks['docrecentupdate'] = 'Recently Update';
 $lang->block->modules['doc']->availableBlocks['docviewlist']     = 'Browse Leaderboard';
 if($config->vision == 'rnd') $lang->block->modules['doc']->availaableBlocks['productdoc'] = $lang->productCommon . 'Document';

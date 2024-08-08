@@ -208,6 +208,7 @@ $lang->block->default['full']['my'][] = array('title' => "{$lang->execution->com
 
 $lang->block->default['doc'][] = array('title' => '文档统计',                   'module' => 'doc', 'code' => 'docstatistic',    'width' => '2');
 $lang->block->default['doc'][] = array('title' => '我收藏的文档',               'module' => 'doc', 'code' => 'docmycollection', 'width' => '2');
+$lang->block->default['doc'][] = array('title' => '我创建的文档',               'module' => 'doc', 'code' => 'docmycreated',    'width' => '2');
 $lang->block->default['doc'][] = array('title' => '最近更新的文档',             'module' => 'doc', 'code' => 'docrecentupdate', 'width' => '2');
 if($config->vision == 'rnd') $lang->block->default['doc'][] = array('title' => "{$lang->productCommon}文档", 'module' => 'doc', 'code' => 'productdoc',      'width' => '2', 'params' => array('count' => '20'));
 $lang->block->default['doc'][] = array('title' => "{$lang->projectCommon}文档", 'module' => 'doc', 'code' => 'projectdoc',      'width' => '2', 'params' => array('count' => '20'));
@@ -301,7 +302,8 @@ $lang->block->modules['todo']->availableBlocks['list'] = '待办列表';
 $lang->block->modules['doc'] = new stdclass();
 $lang->block->modules['doc']->availableBlocks['docstatistic']    = '文档统计';
 $lang->block->modules['doc']->availableBlocks['docdynamic']      = '文档动态';
-$lang->block->modules['doc']->availableBlocks['docmycollection'] = '我的收藏';
+$lang->block->modules['doc']->availableBlocks['docmycollection'] = '我收藏的文档';
+$lang->block->modules['doc']->availableBlocks['docmycreated']    = '我创建的文档';
 $lang->block->modules['doc']->availableBlocks['docrecentupdate'] = '最近更新';
 $lang->block->modules['doc']->availableBlocks['docviewlist']     = '浏览排行榜';
 if($config->vision == 'rnd') $lang->block->modules['doc']->availableBlocks['productdoc'] = $lang->productCommon . '文档';
