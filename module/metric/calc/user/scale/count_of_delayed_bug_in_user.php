@@ -22,6 +22,10 @@
  */
 class count_of_delayed_bug_in_user extends baseCalc
 {
+    public $dataset = 'getBugs';
+
+    public $fieldList = array('t1.assignedTo', 't1.status', 't1.assignedDate', 'DATEDIFF(CURDATE(), t1.assignedDate) as delayDays');
+
     public $result = array();
 
     public function getStatement()
@@ -46,10 +50,19 @@ class count_of_delayed_bug_in_user extends baseCalc
 
     public function calculate($row)
     {
-        $user  = $row->user;
-        $value = $row->value;
+        $user   = $row->assignedTo;
+        $status = $row->status;
+        $date   = $row->assignedDate;
 
-        $this->result[$user] = $value;
+        $delayDays = $row->delayDays;
+        $longlife  = $row->longlife;
+
+        if($status != 'active') return false;
+        if($delayDays <= $longlife) return false;
+
+
+        if(!isset($this->result[$user])) $this->result[$user] = 0;
+        $this->result[$user] += 1;
     }
 
     public function getResult($options = array())

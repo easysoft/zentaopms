@@ -213,7 +213,15 @@ class dataset
      */
     public function getBugs($fieldList)
     {
-        $stmt = $this->dao->select($fieldList)
+        $longlife = $this->dao->select('value')
+            ->from(TABLE_CONFIG)
+            ->where('module')->eq('bug')
+            ->andWhere('key')->eq('longlife')
+            ->fetch('value');
+
+        if(!$longlife) $longlife = 7;
+
+        $stmt = $this->dao->select("$fieldList, $longlife as longlife")
             ->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t1.deleted')->eq(0)
