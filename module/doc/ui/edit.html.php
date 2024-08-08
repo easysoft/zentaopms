@@ -15,3 +15,4 @@ include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
 $isTextDoc = $doc->type == 'text';
 
 if($isTextDoc) include 'edit.text.html.php';
+else           include 'edit.office.html.php';
