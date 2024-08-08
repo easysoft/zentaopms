@@ -64,7 +64,7 @@ class doc extends control
         $browseType = strtolower($browseType);
         $type       = strtolower($type);
 
-        if(empty($orderBy) && $type == 'mine') $orderBy = 'status,editedDate_desc';
+        if(empty($orderBy) && $type == 'mine') $orderBy = 'order_asc';
         if(empty($orderBy) && ($type == 'view' || $type == 'collect')) $orderBy = 'status,date_desc';
         if(empty($orderBy) && ($type == 'createdby')) $orderBy = 'status,addedDate_desc';
         if(empty($orderBy) && ($type == 'editedby')) $orderBy = 'status,editedDate_desc';
@@ -831,6 +831,7 @@ class doc extends control
         $this->view->exportMethod      = $libType == 'api' ? 'export' : $type . '2export';
         $this->view->linkParams        = "objectID={$objectID}&%s&browseType=&orderBy={$orderBy}&param=0";
         $this->view->defaultNestedShow = $this->docZen->getDefaultNestedShow($libID, $moduleID, $type, $executionID);
+        $this->view->canUpdateOrder    = !($lib->type == 'custom' && $lib->parent == 0) && common::hasPriv('doc', 'sortDoc') && $orderBy == 'order_asc';
 
         $this->display();
     }

@@ -213,6 +213,7 @@ class docZen extends doc
         $this->view->pager             = $pager;
         $this->view->objectTitle       = $objectTitle;
         $this->view->objectID          = 0;
+        $this->view->canUpdateOrder    = common::hasPriv('doc', 'sortDoc') && $orderBy == 'order_asc';
         $this->view->libType           = 'lib';
         $this->view->spaceType         = 'mine';
         $this->view->users             = $this->user->getPairs('noletter');

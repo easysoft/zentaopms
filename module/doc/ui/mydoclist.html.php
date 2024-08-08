@@ -37,6 +37,7 @@ if($app->rawMethod == 'myspace')
     $sortParams = "type={$type}&" . $sortParams;
     $params     = "type={$type}&" . $params;
 }
+
 $docContent = dtable
 (
     setID('docTable'),
@@ -55,6 +56,9 @@ $docContent = dtable
     set::createLink($createDocLink),
     set::createTip($lang->doc->create),
     set::orderBy($orderBy),
+    set::sortable(boolval($canUpdateOrder)),
+    $canUpdateOrder ? set::onSortEnd(jsRaw('window.onSortEnd')) : null,
+    $canUpdateOrder ? set::plugins(array('sortable')) : null,
     set::sortLink(createLink('doc', $app->rawMethod, $sortParams)),
     set::footPager(usePager(array('linkCreator' => helper::createLink('doc', $app->rawMethod, $params))))
 );
