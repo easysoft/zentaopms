@@ -379,7 +379,9 @@ class scm
      */
     public function getCommitByDate($startDate, $endDate)
     {
-        return $this->engine->getCommitByDate($startDate, $endDate);
+        $startDate = trim($startDate, '-');
+        $endDate   = trim($endDate, '-');
+        return $this->engine->getCommitByDate($this->formatDate($startDate), $this->formatDate($endDate, false, true));
     }
 }
 
