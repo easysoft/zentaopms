@@ -1,10 +1,10 @@
-.xxc-embed #menu {display: none!important;}
-.xxc-embed #appsBar, .xxc-embed #apps {left: 0!important;}
-.xxc-embed #userMenu-toggle {display: none;}
-.xxc-embed #toolbar {position: fixed; right: 130px; height: 47px; z-index: 9999;}
-.xxc-embed .re-login-btn {display: none;}
-.xxc-embed .messagers {bottom: 40px !important;}
-.xxc-embed #userDropDownMenu {display: none !important;}
-.xxc-embed .titleBox #promptRegenerate {right: 120px;}
-.xxc-embed #basicInfoLink {margin-right: 120px;}
-.xxc-embed #appsBar {display: none;}
+body.xxc-embed #menu {display: none!important;}
+body.xxc-embed #appsBar, body.xxc-embed #apps {left: 0!important;}
+body.xxc-embed #userMenu-toggle {display: none;}
+body.xxc-embed #toolbar {position: fixed; right: 130px; height: 47px; z-index: 9999;}
+body.xxc-embed .re-login-btn {display: none;}
+body.xxc-embed .messagers {bottom: 40px !important;}
+body.xxc-embed #userDropDownMenu {display: none !important;}
+body.xxc-embed .titleBox #promptRegenerate {right: 120px;}
+body.xxc-embed #basicInfoLink {margin-right: 120px;}
+body.xxc-embed #appsBar {display: none;}
