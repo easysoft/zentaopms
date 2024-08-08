@@ -158,6 +158,7 @@ $lang->doc->editCatalog   = 'Edit Catalog';
 $lang->doc->deleteCatalog = 'Delete Catalog';
 $lang->doc->sortCatalog   = 'Catalog Sorting';
 $lang->doc->sortDoclib    = 'Space/Library Sorting';
+$lang->doc->sortDoc       = 'Document Sorting';
 $lang->doc->docStatistic  = 'Statistic';
 $lang->doc->docCreated    = 'Created Documents';
 $lang->doc->docEdited     = 'Edited Documents';

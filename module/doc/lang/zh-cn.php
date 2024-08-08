@@ -158,6 +158,7 @@ $lang->doc->editCatalog   = '编辑目录';
 $lang->doc->deleteCatalog = '删除目录';
 $lang->doc->sortCatalog   = '目录排序';
 $lang->doc->sortDoclib    = '空间/文档库排序';
+$lang->doc->sortDoc       = '文档排序';
 $lang->doc->docStatistic  = '文档统计';
 $lang->doc->docCreated    = '创建的文档';
 $lang->doc->docEdited     = '编辑的文档';
