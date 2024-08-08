@@ -2647,9 +2647,9 @@ $config->group->package->user->privs['user-unlock']         = array('edition' =>
 $config->group->package->user->privs['user-delete']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 7, 'depend' => array('admin-index', 'admin-register', 'company-browse', 'user-view'), 'recommend' => array('user-create', 'user-edit', 'user-unlock'));
 $config->group->package->user->privs['user-batchEdit']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 5, 'depend' => array('admin-index', 'admin-register', 'company-browse', 'user-view'), 'recommend' => array('user-edit'));
 $config->group->package->user->privs['user-unbind']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 8, 'depend' => array('admin-index', 'admin-register'), 'recommend' => array());
-$config->group->package->user->privs['user-export']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,or', 'order' => 9, 'depend' => array('company-browse'), 'recommend' => array());
-$config->group->package->user->privs['user-exportTemplate'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,or', 'order' => 10, 'depend' => array('company-browse', 'user-import'), 'recommend' => array());
-$config->group->package->user->privs['user-import']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,or', 'order' => 11, 'depend' => array('company-browse', 'user-exportTemplate'), 'recommend' => array());
+$config->group->package->user->privs['user-export']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 9, 'depend' => array('company-browse'), 'recommend' => array());
+$config->group->package->user->privs['user-exportTemplate'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 10, 'depend' => array('company-browse', 'user-import'), 'recommend' => array());
+$config->group->package->user->privs['user-import']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 11, 'depend' => array('company-browse', 'user-exportTemplate'), 'recommend' => array());
 $config->group->package->user->privs['admin-sso']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 65, 'depend' => array('admin-index', 'admin-register'), 'recommend' => array());
 
 $config->group->package->extension = new stdclass();
