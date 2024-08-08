@@ -368,6 +368,24 @@ class scm
         return $this->engine->pipelines();
     }
 
+    private function formatDate($date, $hasTime = false, $isEnd = false)
+    {
+        $format = $hasTime ? 'Y-m-d H:i:s' : 'Y-m-d';
+        if(is_numeric($date))
+        {
+            if($date > 100000000) return date($format, $date);
+
+            $date = $isEnd ? "{$date}-12-31" : "{$date}-01-01";
+            if($isEnd) $date = date('Y-m-d', strtotime($date) + 86400);
+        }
+        elseif($isEnd)
+        {
+            $date = date('Y-m-d', strtotime($date) + 86400);
+        }
+
+        return date($format, strtotime($date));
+    }
+
     /**
      * 根据开始时间和结束时间获取提交时间和提交人。
      * Get commit count by date.
