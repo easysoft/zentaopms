@@ -21,9 +21,8 @@ $basicInfoModal = modal
     set::title($lang->doc->release . $lang->doc->common),
     set::id('modalBasicInfo'),
     set::bodyClass('form form-horz'),
-    on::change('#modalBasicInfo [name=product]',   "loadObjectModules"),
-    on::change('#modalBasicInfo [name=project]',   "loadExecutions"),
-    on::change('#modalBasicInfo [name=execution]', "loadObjectModules"),
+    on::change('[name=product],[name=execution]')->call('loadObjectModules', jsRaw('event')),
+    on::change('[name=project]')->call('loadExecutions', jsRaw('event')),
     formGroup
     (
         setClass('flex items-center'),

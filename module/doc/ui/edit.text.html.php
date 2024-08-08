@@ -22,7 +22,7 @@ $basicInfoModal = modal
     set::id('modalBasicInfo'),
     set::bodyClass('form form-horz'),
     set::title($lang->doc->release . $lang->doc->common),
-    bind::change('#product,#project,#execution', 'loadObjectModules'),
+    on::change('#product,#project,#execution')->call('loadObjectModules', jsRaw('event')),
     $type == 'execution' ? formHidden('project', $doc->project) : null,
     (strpos('product|project|execution', $type) !== false) ? formGroup
     (
