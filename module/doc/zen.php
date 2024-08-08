@@ -817,10 +817,12 @@ class docZen extends doc
         $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, "type={$type}&objectID={$objectID}&viewType={$viewType}&browseType=bySearch&queryID=0");
 
         $objectTypeList = array();
+        $objectTypeList['product']     = $this->lang->product->common;
         $objectTypeList['story']       = $this->lang->doc->story;
         $objectTypeList['productplan'] = $this->lang->productplan->shortCommon;
         $objectTypeList['release']     = $this->lang->release->common;
         $objectTypeList['design']      = $this->lang->design->common;
+        $objectTypeList['project']     = $this->lang->project->common;
         $objectTypeList['execution']   = $this->lang->execution->common;
         $objectTypeList['task']        = $this->lang->task->common;
         $objectTypeList['build']       = $this->lang->build->common;
