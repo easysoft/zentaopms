@@ -35,4 +35,17 @@ class consume_rate_of_frombug_task_in_execution extends baseCalc
         if($row->frombug != 0) $this->result[$row->execution]['fromBug'] += $row->consumed;
         $this->result[$row->execution]['total'] += $row->consumed;
     }
+
+    public function getResult($options = array())
+    {
+        $records = array();
+        foreach($this->result as $executionID => $consumedData)
+        {
+            $records[] = array(
+                'execution' => $executionID,
+                'value' => $consumedData['total'] ? round($consumedData['fromBug'] / $consumedData['total']) : 0
+            );
+        }
+        return $this->filterByOptions($records, $options);
+    }
 }
