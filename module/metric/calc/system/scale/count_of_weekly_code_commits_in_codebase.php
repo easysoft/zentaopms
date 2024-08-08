@@ -48,6 +48,7 @@ class count_of_weekly_code_commits_in_codebase extends baseCalc
     public function getCommitCount($repo, $begin, $end)
     {
         if(isset($this->result[$repo->id])) return false;
+        $this->result[$repo->id] = array();
 
         $repo->client   = '';
         $repo->account  = '';
