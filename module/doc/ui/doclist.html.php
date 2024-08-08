@@ -19,9 +19,10 @@ foreach($config->doc->dtable->fieldList as $colName => $col)
     $cols[$colName] = $col;
 }
 
-$params        = "objectID={$objectID}&libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&orderBy={$orderBy}&param={$param}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}";
-$tableData     = empty($docs) ? array() : initTableData($docs, $cols);
-$createDocLink = '';
+$params         = "objectID={$objectID}&libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&orderBy={$orderBy}&param={$param}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}";
+$tableData      = empty($docs) ? array() : initTableData($docs, $cols);
+$createDocLink  = '';
+$canUpdateOrder = !($lib->type == 'custom' && $lib->parent == 0) && hasPriv('doc', 'sortDoc') && $orderBy == 'order_asc';
 if($browseType != 'bysearch' && $libID && common::hasPriv('doc', 'create')) $createDocLink = createLink('doc', 'create', "objectType={$type}&objectID={$objectID}&libID={$lib->id}&moduleID={$moduleID}&type=html");
 $docContent = dtable(
     setID('docTable'),
@@ -41,6 +42,8 @@ $docContent = dtable(
     set::createLink($createDocLink),
     set::createTip($lang->doc->create),
     set::orderBy($orderBy),
+    set::onSortEnd($canUpdateOrder ? jsRaw('window.onSortEnd') : null),
+    $canUpdateOrder ? set::plugins(array('sortable')) : null,
     set::sortLink(createLink($app->rawModule, $app->rawMethod, "objectID={$objectID}&libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&orderBy={name}_{sortType}&param={$param}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footPager(usePager(array('linkCreator' => helper::createLink('doc', $app->rawMethod, $params))))
 );

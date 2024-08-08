@@ -99,6 +99,7 @@ class docModel extends model
             $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)->where('id')->in($appendLibs)->orderBy("`order`_asc, id_asc")->query();
             while($lib = $stmt->fetch())
             {
+                if($lib->type == 'custom' && $lib->parent == 0) continue;
                 if(!isset($libPairs[$lib->id]) && $this->checkPrivLib($lib, $extra)) $libPairs[$lib->id] = $lib->name;
             }
         }
@@ -165,7 +166,11 @@ class docModel extends model
                     }
                     if($lib->project != 0)     $lib->name = zget($projects, $lib->project, '') . ' / ' . $lib->name;
                     if($lib->type == 'mine')   $lib->name = $this->lang->doc->person . ' / ' . $lib->name;
-                    if($lib->type == 'custom') $lib->name = $this->lang->doc->team . ' / ' . $lib->name;
+                    if($lib->type == 'custom')
+                    {
+                        if($lib->parent == 0) continue;
+                        $lib->name = $this->lang->doc->team . ' / ' . $lib->name;
+                    }
                 }
                 $libPairs[$lib->id] = $lib->name;
             }
@@ -1052,6 +1057,8 @@ class docModel extends model
         if(dao::isError()) return false;
 
         $docID = $this->dao->lastInsertID();
+
+        $this->dao->update(TABLE_DOC)->set('`order`')->eq($docID)->where('id')->eq($docID)->exec();
         $this->file->updateObjectID($this->post->uid, $docID, 'doc');
         $files = $this->file->saveUpload('doc', $docID);
 
@@ -2426,7 +2433,7 @@ class docModel extends model
 
         $showDoc = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=doc&key=showDoc');
         $showDoc = $showDoc === '0' ? 0 : 1;
-        if($this->app->rawMethod == 'view' && $lib->type != 'apiLib' && $showDoc)
+        if($this->app->rawMethod == 'view' && $lib->type != 'apiLib' && $showDoc && !($lib->type == 'custom' && $lib->parent == 0))
         {
             $docIDList = $this->getPrivDocs(array($lib->id));
             $docs      = $this->dao->select('*, title as name')->from(TABLE_DOC)
@@ -2903,6 +2910,31 @@ class docModel extends model
         $this->dao->update(TABLE_DOCLIB)->set('`order`')->eq($order)->where('id')->eq($id)->exec();
 
         return !dao::isError();
+    }
+
+    /**
+     * 更新文档顺序。
+     * Update doc order.
+     *
+     * @param  array $sortedIdList
+     * @access public
+     * @return void
+     */
+    public function updateDocOrder(array $sortedIdList): void
+    {
+        /* Remove programID. */
+        $sortedIdList = array_values(array_filter(array_map(function($id){return (is_numeric($id) and $id > 0) ? $id : null;}, $sortedIdList)));
+        if(empty($sortedIdList)) return;
+
+        $docs = $this->dao->select('`order`, id')->from(TABLE_DOC)->where('id')->in($sortedIdList)->orderBy('order_asc')->fetchPairs('order', 'id');
+
+        /* Update order by sorted id list. */
+        foreach($docs as $order => $id)
+        {
+            $newID = array_shift($sortedIdList);
+            if($id == $newID) continue;
+            $this->dao->update(TABLE_DOC)->set('`order`')->eq($order)->where('id')->eq($newID)->exec();
+        }
     }
 
     /**
