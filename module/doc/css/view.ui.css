@@ -6,7 +6,7 @@
 #docPanel.is-in-fullscreen .panel-actions, #docPanel.is-in-fullscreen .selelct-version {display: none;}
 #docPanel {flex: 1 1 100%; margin-right: 1.5rem;}
 
-.scrollbar-hover { overflow-y: scroll; }
+.sidebar .scrollbar-hover { overflow-y: scroll; }
 #mainContent .panel+.panel {flex: none}
 #history{ position: relative; flex: 0 1 40%; z-index: 120; min-width: 300px;}
 #history > #closeBtn { position: absolute; right: 0; top: 0;}
