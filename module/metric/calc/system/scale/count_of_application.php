@@ -20,15 +20,11 @@
  */
 class count_of_application extends baseCalc
 {
+    public $dataset = 'getApplications';
+
+    public $fieldList = array('count', 'instanceCount');
+
     public $result = 0;
-
-    public function getStatement()
-    {
-        $count = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_INSTANCE)->where('deleted')->eq(0)->fetch('count');
-
-        return $this->dao->select("COUNT(1) AS count, {$count} as instanceCount")->from(TABLE_PIPELINE)
-            ->where('deleted')->eq(0);
-    }
 
     public function calculate($row)
     {
