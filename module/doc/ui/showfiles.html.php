@@ -16,7 +16,7 @@ jsVar('+searchLink', createLink('doc', 'showFiles', "type={$type}&objectID={$obj
 
 $filesBody = null;
 $canExport = $config->edition != 'open' && common::hasPriv('doc', 'exportFiles');
-$linkTpl = array('linkCreator' => helper::createLink('doc', $app->rawMethod, "type={$type}&objectID={$objectID}&viewType={$viewType}&orderBy={$orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}&searchTitle={$searchTitle}"));
+$linkTpl = array('linkCreator' => helper::createLink('doc', $app->rawMethod, "type={$type}&objectID={$objectID}&viewType={$viewType}&browseType={$browseType}&param={$param}&orderBy={$orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}&searchTitle={$searchTitle}"));
 if($viewType == 'list')
 {
     $fieldList = $config->doc->showfiles->dtable->fieldList;
