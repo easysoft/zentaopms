@@ -3365,8 +3365,8 @@ $config->group->package->executionRelation->privs['execution-relation']         
 $config->group->package->executionRelation->privs['execution-createrelation']      = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('execution-gantt', 'execution-relation'), 'recommend' => array());
 $config->group->package->executionRelation->privs['execution-editrelation']        = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('execution-gantt', 'execution-relation'), 'recommend' => array());
 $config->group->package->executionRelation->privs['execution-batcheditrelation']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 6, 'depend' => array('execution-gantt', 'execution-relation'), 'recommend' => array());
-$config->group->package->executionRelation->privs['execution-deleterelation']      = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('execution-gantt', 'execution-relation'), 'recommend' => array());
-$config->group->package->executionRelation->privs['execution-batchdeleterelation'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('execution-gantt', 'execution-relation'), 'recommend' => array());
+$config->group->package->executionRelation->privs['execution-deleterelation']      = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 7, 'depend' => array('execution-gantt', 'execution-relation'), 'recommend' => array());
+$config->group->package->executionRelation->privs['execution-batchdeleterelation'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 8, 'depend' => array('execution-gantt', 'execution-relation'), 'recommend' => array());
 
 $config->group->package->browseBuild = new stdclass();
 $config->group->package->browseBuild->order  = 5;
