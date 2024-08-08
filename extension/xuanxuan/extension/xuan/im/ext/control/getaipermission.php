@@ -33,6 +33,7 @@ class myIm extends im {
         $output = new stdclass();
         $output->method = 'getaipermission';
         $output->result = 'success';
+        $output->users  = array($userID);
 
         $output->data = new stdclass();
         $output->data->hasAiChatPermission = $aiChatPermission;
