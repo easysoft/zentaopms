@@ -1,0 +1,14 @@
+---
+title: zt_projectcase
+author: zhouxin
+version: "1.0"
+fields:
+- field: case
+  range: 1-1000
+- field: project
+  range: 1-100
+- field: product
+  range: 1-100
+- field: product
+  range: 1-10
+...
