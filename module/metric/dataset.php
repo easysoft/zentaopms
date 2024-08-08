@@ -647,6 +647,14 @@ class dataset
         return $this->defaultWhere($stmt, 't2');
     }
 
+    /**
+     * 获取执行下的用例步骤数据。
+     * Get case steps data with execution.
+     *
+     * @param  string       $fieldList
+     * @access public
+     * @return PDOStatement
+     */
     public function getExecutionCasesSteps($fieldList)
     {
         $stmt = $this->dao->select($fieldList)->from(TABLE_CASESTEP)->alias('t1')
