@@ -1,2 +1,3 @@
 .m-doc-edit .doc-menu-header.is-fixed {position: relative; top: auto; width: calc(100% - 10px); margin-bottom: 12px;}
 .m-doc-edit .doc-menu {max-height: calc(100vh - 115px);}
+.m-doc-edit #pick-docDropmenuMenu {position: relative; top: auto; margin-bottom: 12px; background: var(--color-canvas);}
