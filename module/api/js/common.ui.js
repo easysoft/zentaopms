@@ -383,9 +383,18 @@ function toggleLibType(e)
 
 window.updateOrder = function(event, orders)
 {
+    const type = $(event.item).children('div').attr('data-type');
+
     let sortedIdList = {};
     for(let i in orders) sortedIdList['orders[' + orders[i] + ']'] = i;
     sortedIdList['type'] = 'api';
 
-    $.post($.createLink('doc', 'sortCatalog'), sortedIdList);
+    if(type == 'module')
+    {
+        $.post($.createLink('doc', 'sortCatalog'), sortedIdList);
+    }
+    else if(type == 'apiLib')
+    {
+        $.post($.createLink('doc', 'sortDoclib'), sortedIdList);
+    }
 }
