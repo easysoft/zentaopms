@@ -70,15 +70,6 @@ class zanode extends control
         $this->config->zanode->search['params']['host']['values'] = array('' => '') + $hosts;
         $this->loadModel('search')->setSearchParams($this->config->zanode->search);
 
-        $showFeature = false;
-        $accounts = !empty($this->config->global->skipAutomation) ? $this->config->global->skipAutomation : '';
-        if(strpos(",$accounts,", $this->app->user->account) === false)
-        {
-            $showFeature = true;
-            $accounts .= ',' . $this->app->user->account;
-            $this->loadModel('setting')->setItem('system.common.global.skipAutomation', $accounts);
-        }
-
         $hiddenHost = $this->zahost->hiddenHost();
         if($hiddenHost)
         {
@@ -109,7 +100,6 @@ class zanode extends control
         $this->view->param       = $param;
         $this->view->orderBy     = $orderBy;
         $this->view->browseType  = $browseType;
-        $this->view->showFeature = $showFeature;
 
         $this->display();
     }
