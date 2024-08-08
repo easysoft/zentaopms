@@ -289,7 +289,7 @@ class metricTest
 
         if(!$calc->reuse)
         {
-            $stmt= $this->objectModel->getDataStatement($calc);
+            $stmt = $this->objectModel->getDataStatement($calc);
             $rows = $stmt->fetchAll();
 
             foreach($rows as $row)
