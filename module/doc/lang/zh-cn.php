@@ -212,6 +212,8 @@ $lang->doc->showFiles         = '附件库';
 $lang->doc->editLib           = '编辑库';
 $lang->doc->editLibAction     = '编辑空间/库';
 $lang->doc->deleteLibAction   = '删除空间/库';
+$lang->doc->moveLibAction     = '移动库';
+$lang->doc->moveDocAction     = '移动文档';
 $lang->doc->fixedMenu         = '固定到菜单栏';
 $lang->doc->removeMenu        = '从菜单栏移除';
 $lang->doc->search            = '搜索';
@@ -227,6 +229,7 @@ $lang->doc->uploadFile        = '上传文件';
 $lang->doc->uploadDoc         = '上传文档';
 $lang->doc->uploadFormat      = '上传格式';
 $lang->doc->editedList        = '文档编辑者';
+$lang->doc->moveTo            = '移动至';
 
 $lang->doc->uploadFormatList = array();
 $lang->doc->uploadFormatList['separateDocs'] = '每个文件存为不同文档';
