@@ -24,6 +24,95 @@ jsVar('beginLessThanParent', $lang->project->beginLessThanParent);
 jsVar('endGreatThanParent', $lang->project->endGreatThanParent);
 
 $setCode = (isset($config->setCode) and $config->setCode == 1);
+$items = array();
+$items[] = array
+(
+    'name'    => 'id',
+    'label'   => $lang->idAB,
+    'control' => 'hidden',
+    'hidden'  => true
+);
+$items[] = array
+(
+    'name'    => 'id',
+    'label'   => $lang->idAB,
+    'control' => 'index',
+    'width'   => '38px'
+);
+$items[] = array
+(
+    'name'    => 'parent',
+    'label'   => $lang->project->program,
+    'control' => 'picker',
+    'items'   => $programs,
+    'width'   => '136px'
+);
+$items[] = array
+(
+    'name'     => 'name',
+    'required' => true,
+    'label'    => $lang->project->name,
+);
+if($setCode)
+{
+    $items[] = array
+    (
+        'name'     => 'code',
+        'label'    => $lang->project->code,
+        'required' => strpos($config->project->edit->requiredFields, 'code') !== false,
+        'width'    => '136px'
+    );
+}
+$items[] = array
+(
+    'name'         => 'PM',
+    'label'        => $lang->project->PM,
+    'control'      => 'picker',
+    'ditto'        => true,
+    'defaultDitto' => 'off',
+    'items'        => $PMUsers,
+    'width'        => '136px'
+);
+$items[] = array
+(
+    'name'     => 'begin',
+    'required' => true,
+    'label'    => $lang->project->begin,
+    'control'  => 'date',
+    'width'    => '120px'
+);
+$items[] = array
+(
+    'name'     => 'end',
+    'required' => true,
+    'label'    => $lang->project->end,
+    'width'    => '120px',
+    'control'  => array
+    (
+        'control' => 'date',
+        'display' => jsRaw("(value) => (value === '" . LONG_TIME . "' ? '" . $lang->project->longTime . "' : zui.formatDate(value, 'yyyy-MM-dd'))"),
+        'actions' => array
+        (
+            array('text' => $lang->datepicker->dpText->TEXT_TODAY, 'data-set-date' => helper::today()),
+            array('text' => $lang->project->longTime, 'data-set-date' => LONG_TIME)
+        )
+    ),
+);
+$items[] = array
+(
+    'name'  => 'days',
+    'label' => $lang->project->days,
+    'width' => '84px'
+);
+$items[] = array
+(
+    'name'    => 'acl',
+    'label'   => $lang->project->acl,
+    'control' => 'picker',
+    'items'   => array(),
+    'width'   => '76px'
+);
+
 formBatchPanel
 (
     set::title($lang->project->batchEdit),
@@ -32,90 +121,7 @@ formBatchPanel
     set::onRenderRow(jsRaw('renderRowData')),
     on::change('[name^=begin],[name^=end]', 'batchComputeWorkDays'),
     $config->systemMode != 'light' ? on::change('[name^=begin],[name^=end],[name^=parent]', 'batchCheckDate') : null,
-    formBatchItem
-    (
-        set::name('id'),
-        set::label($lang->idAB),
-        set::control('hidden'),
-        set::hidden(true)
-    ),
-    formBatchItem
-    (
-        set::name('id'),
-        set::label($lang->idAB),
-        set::control('index'),
-        set::width('38px')
-    ),
-    formBatchItem
-    (
-        set::name('parent'),
-        set::label($lang->project->program),
-        set::control('picker'),
-        set::items($programs),
-        set::width('136px')
-    ),
-    formBatchItem
-    (
-        set::name('name'),
-        set::required(true),
-        set::label($lang->project->name),
-    ),
-    $setCode ? formBatchItem
-    (
-        set::name('code'),
-        set::label($lang->project->code),
-        set::required(strpos($config->project->edit->requiredFields, 'code') !== false),
-        set::width('136px')
-    ) : null,
-    formBatchItem
-    (
-        set::name('PM'),
-        set::label($lang->project->PM),
-        set::control('picker'),
-        set::ditto(true),
-        set::defaultDitto('off'),
-        set::items($PMUsers),
-        set::width('136px')
-    ),
-    formBatchItem
-    (
-        set::name('begin'),
-        set::required(true),
-        set::label($lang->project->begin),
-        set::control('date'),
-        set::width('120px')
-    ),
-    formBatchItem
-    (
-        set::name('end'),
-        set::required(true),
-        set::label($lang->project->end),
-        set::width('120px'),
-        set::control(array
-        (
-            'control' => 'date',
-            'display' => jsRaw("(value) => (value === '" . LONG_TIME . "' ? '" . $lang->project->longTime . "' : zui.formatDate(value, 'yyyy-MM-dd'))"),
-            'actions' => array
-            (
-                array('text' => $lang->datepicker->dpText->TEXT_TODAY, 'data-set-date' => helper::today()),
-                array('text' => $lang->project->longTime, 'data-set-date' => LONG_TIME)
-            )
-        )),
-    ),
-    formBatchItem
-    (
-        set::name('days'),
-        set::label($lang->project->days),
-        set::width('84px')
-    ),
-    formBatchItem
-    (
-        set::name('acl'),
-        set::label($lang->project->acl),
-        set::control('picker'),
-        set::items(array()),
-        set::width('76px')
-    )
+    set::items($items)
 );
 
 h::table
