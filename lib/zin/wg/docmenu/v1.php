@@ -140,7 +140,7 @@ class docMenu extends wg
                 'data-id'         => $itemID,
                 'data-lib'        => in_array($setting->type, array('docLib', 'apiLib')) ? $itemID : zget($setting, 'libID', ''),
                 'data-type'       => $setting->type,
-                'data-objectType' => $setting->objectType,
+                'data-objectType' => isset($setting->objectType) ? $setting->objectType : '',
                 'data-parent'     => $setting->parentID,
                 'data-module'     => $moduleName,
                 'selected'        => zget($setting, 'active', $selected),
