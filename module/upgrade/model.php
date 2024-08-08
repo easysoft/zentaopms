@@ -9604,4 +9604,33 @@ class upgradeModel extends model
                  ->exec();
         }
     }
+
+    /*
+     * Update the priv of task relation.
+     *
+     * @access public
+     * @return bool
+     */
+    public function updateTaskRelationPriv()
+    {
+        $groupIdList = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)
+            ->where('module')->eq('execution')
+            ->andWhere('method')->eq('maintainrelation')
+            ->fetchPairs('group');
+
+        foreach($groupIdList as $groupID)
+        {
+            $this->dao->update(TABLE_GROUPPRIV)
+                ->set('method')->eq('createrelation')
+                ->where('`group`')->eq($groupID)
+                ->andWhere('module')->eq('execution')
+                ->andWhere('method')->eq('maintainrelation')
+                ->exec();
+
+            $this->dao->replace(TABLE_GROUPPRIV)->set('`group`')->eq($groupID)->set('module')->eq('execution')->set('method')->eq('editrelation')->exec();
+            $this->dao->replace(TABLE_GROUPPRIV)->set('`group`')->eq($groupID)->set('module')->eq('execution')->set('method')->eq('batcheditrelation')->exec();
+        }
+
+        return true;
+    }
 }

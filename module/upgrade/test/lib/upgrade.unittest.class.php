@@ -760,4 +760,19 @@ class upgradeTest
             ->andWhere('vision')->eq('rnd')
             ->fetch('value');
     }
+
+    /**
+     * 测试更新任务关系权限。
+     * Test update the priv of task relation.
+     *
+     * @access public
+     * @return array
+     */
+    public function updateTaskRelationPrivTest()
+    {
+        $this->objectModel->updateTaskRelationPriv();
+        return $this->objectModel->dao->select('method')->from(TABLE_GROUPPRIV)
+            ->where('module')->eq('execution')
+            ->fetchPairs();
+    }
 }
