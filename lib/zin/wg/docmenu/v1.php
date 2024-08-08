@@ -305,6 +305,7 @@ class docMenu extends wg
                     'icon'        => 'folder-move',
                     'text'        => $this->lang->doc->moveTo,
                     'data-toggle' => 'modal',
+                    'data-size'   => 'sm',
                     'data-url'    => createlink($moduleName, 'moveLib', "libID={$itemID}")
                 );
             }
