@@ -1529,6 +1529,7 @@ $lang->resource->doc->addCatalog     = 'addCatalog';
 $lang->resource->doc->editCatalog    = 'editCatalog';
 $lang->resource->doc->sortDoclib     = 'sortDoclib';
 $lang->resource->doc->sortCatalog    = 'sortCatalog';
+$lang->resource->doc->sortDoc        = 'sortDoc';
 $lang->resource->doc->deleteCatalog  = 'deleteCatalog';
 $lang->resource->doc->displaySetting = 'displaySetting';
 $lang->resource->doc->exportFiles    = 'exportFiles';
@@ -1558,9 +1559,10 @@ $lang->doc->methodOrder[110] = 'addCatalog';
 $lang->doc->methodOrder[115] = 'editCatalog';
 $lang->doc->methodOrder[120] = 'sortDoclib';
 $lang->doc->methodOrder[125] = 'sortCatalog';
-$lang->doc->methodOrder[130] = 'deleteCatalog';
-$lang->doc->methodOrder[135] = 'displaySetting';
-$lang->doc->methodOrder[140] = 'exportFiles';
+$lang->doc->methodOrder[130] = 'sortDoc';
+$lang->doc->methodOrder[135] = 'deleteCatalog';
+$lang->doc->methodOrder[140] = 'displaySetting';
+$lang->doc->methodOrder[145] = 'exportFiles';
 
 /* Mail. */
 $lang->resource->mail = new stdclass();
