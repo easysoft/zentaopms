@@ -10,10 +10,8 @@ cid=1
 
 - 测试添加物理机节点时必填项
  - 第name条的0属性 @『名称』不能为空。
- - 第extranet条的0属性 @『IP/域名』不能为空。
  - 第cpu条的0属性 @『cpu』不能为空。
  - 第memory条的0属性 @『内存』不能为空。
- - 第osNamePhysics条的0属性 @『操作系统』不能为空。
 - 测试添加虚拟机节点时必填项
  - 第name条的0属性 @『名称』不能为空。
  - 第host条的0属性 @『所属宿主机』不能为空。
@@ -44,7 +42,7 @@ $physicsRequiredTest['extranet']      = '';
 $physicsRequiredTest['cpu']           = '';
 $physicsRequiredTest['memory']        = '';
 $physicsRequiredTest['osNamePhysics'] = '';
-r($zanode->checkFields4CreateTest($physicsRequiredTest)) && p('name:0;extranet:0;cpu:0;memory:0;osNamePhysics:0') && e('『名称』不能为空。;『IP/域名』不能为空。;『cpu』不能为空。;『内存』不能为空。;『操作系统』不能为空。'); //测试添加物理机节点时必填项
+r($zanode->checkFields4CreateTest($physicsRequiredTest)) && p('name:0;cpu:0;memory:0') && e('『名称』不能为空。;『cpu』不能为空。;『内存』不能为空。'); //测试添加物理机节点时必填项
 
 $virtualRequiredTest = array();
 $virtualRequiredTest['hostType'] = '';

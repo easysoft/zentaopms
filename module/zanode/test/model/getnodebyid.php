@@ -45,7 +45,7 @@ $id = array(1, 2, 3, 4, 7, 10,  1000);
 r($zanode->getNodeByID($id[0])) && p('id,status') && e('1,offline');  // 测试获取 id 1 的节点
 r($zanode->getNodeByID($id[1])) && p('id,status') && e('2,offline');  // 测试获取 id 1 的节点id 2 的节点
 r($zanode->getNodeByID($id[2])) && p('id,status') && e('3,wait');     // 测试获取 id 1 的节点id 3 的节点
-r($zanode->getNodeByID($id[3])) && p('id,status') && e('4,wait');     // 测试获取 id 4 的节点
+r($zanode->getNodeByID($id[3])) && p('id,status') && e('4,shutoff');     // 测试获取 id 4 的节点
 r($zanode->getNodeByID($id[4])) && p('id,status') && e('7,wait');     // 测试获取 id 7 的节点
 r($zanode->getNodeByID($id[5])) && p('id,status') && e('10,shutoff'); // 测试获取 id 10 的节点
 r($zanode->getNodeByID($id[6])) && p()            && e('0');          // 测试获取 不存在的 id 1000 的节点

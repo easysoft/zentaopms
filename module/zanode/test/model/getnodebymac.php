@@ -45,7 +45,7 @@ $mac = array('mac1', 'mac2', 'mac3', 'mac4', 'mac7', 'mac10',  'mac1000');
 r($zanode->getNodeByMac($mac[0])) && p('id,status') && e('1,offline');  // 测试获取 mac 地址 mac1 的节点
 r($zanode->getNodeByMac($mac[1])) && p('id,status') && e('2,offline');  // 测试获取 mac 地址 mac1 的节点mac 地址 mac2 的节点
 r($zanode->getNodeByMac($mac[2])) && p('id,status') && e('3,wait');     // 测试获取 mac 地址 mac1 的节点mac 地址 mac3 的节点
-r($zanode->getNodeByMac($mac[3])) && p('id,status') && e('4,wait');     // 测试获取 mac 地址 mac4 的节点
+r($zanode->getNodeByMac($mac[3])) && p('id,status') && e('4,shutoff');     // 测试获取 mac 地址 mac4 的节点
 r($zanode->getNodeByMac($mac[4])) && p('id,status') && e('7,wait');     // 测试获取 mac 地址 mac7 的节点
 r($zanode->getNodeByMac($mac[5])) && p('id,status') && e('10,shutoff'); // 测试获取 mac 地址 mac10 的节点
 r($zanode->getNodeByMac($mac[6])) && p()            && e('0');          // 测试获取 不存在的 mac 地址 mac1000 的节点
