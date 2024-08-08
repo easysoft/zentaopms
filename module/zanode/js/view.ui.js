@@ -103,8 +103,6 @@ window.checkServiceStatus = function(){
             $(".service-status, .status-notice").removeClass('hidden')
         }, 500);
     });
-
-    return
 }
 
 function copyToClipboard(text) {
