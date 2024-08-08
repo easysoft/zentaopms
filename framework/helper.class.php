@@ -409,6 +409,18 @@ class helper extends baseHelper
                 return (string)$value;
         }
     }
+
+    /**
+     * 检查是否启用APCu。
+     * Check if APCu is enabled.
+     *
+     * @access public
+     * @return bool
+     */
+    public static function isAPCuEnabled(): bool
+    {
+        return extension_loaded('apcu') && ini_get('apc.enabled') == '1';
+    }
 }
 
 /**

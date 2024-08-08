@@ -9642,4 +9642,16 @@ class upgradeModel extends model
 
         $this->setting->setItem('system.common.closedFeatures', trim($closedFeatures . ',otherOA', ','));
     }
+
+    /**
+     * 根据是否加载 APCu 扩展，开启缓存。
+     * Open cache by load APCu or not.
+     *
+     * @access public
+     * @return bool
+     */
+    public function openCacheByAPCu(): bool
+    {
+        return $this->loadModel('install')->enableDaoCache();
+    }
 }

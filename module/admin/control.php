@@ -575,4 +575,75 @@ class admin extends control
         $this->view->data = $data;
         $this->display();
     }
+
+    /**
+     * 设置是否启用缓存。
+     * Set cache enable.
+     *
+     * @access public
+     * @return void
+     */
+    public function cache()
+    {
+        if($_POST)
+        {
+            if(!extension_loaded('apcu')) return $this->send(array('result' => 'fail', 'message' => $this->lang->admin->apcuNotLoaded));
+            if(!ini_get('apc.enabled')) return $this->send(array('result' => 'fail', 'message' => $this->lang->admin->apcuNotEnabled));
+
+            $cache = array('dao' => array('enable' => (int)$this->post->enable));
+            $this->loadModel('setting')->setItem('system.common.global.cache', json_encode($cache));
+
+            if($cache->dao['enable'] != $this->config->cache->dao->enable) $this->dao->clearCache();
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+        }
+
+        if(helper::isAPCuEnabled())
+        {
+            $this->view->rate  = $this->getAPCuMemory('rate');
+            $this->view->used  = $this->getAPCuMemory('used');
+            $this->view->total = $this->getAPCuMemory('total');
+        }
+
+        $this->view->title = $this->lang->admin->cache;
+        $this->display();
+    }
+
+    /**
+     * 获取APCu内存使用数据。
+     * Get APCu memory data.
+     *
+     * @param  string $type total|free|used
+     * @access protected
+     * @return string|float
+     */
+    public function getAPCuMemory($type = 'total')
+    {
+        if(!helper::isAPCuEnabled()) return '';
+
+        $info = apcu_sma_info(true);
+
+        if($type == 'total') return helper::formatKB($info['seg_size']);
+        if($type == 'free')  return helper::formatKB($info['avail_mem']);
+        if($type == 'used')  return helper::formatKB($info['seg_size'] - $info['avail_mem']);
+        if($type == 'rate')  return round(($info['seg_size'] - $info['avail_mem']) / $info['seg_size'] * 100, 2);
+        return '';
+    }
+
+    /**
+     * 清空APCu缓存。
+     * Clear APCu cache.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxClearCache()
+    {
+        if(!extension_loaded('apcu')) return $this->send(array('result' => 'fail', 'message' => $this->lang->admin->apcuNotLoaded));
+        if(!ini_get('apc.enabled')) return $this->send(array('result' => 'fail', 'message' => $this->lang->admin->apcuNotEnabled));
+
+        $this->dao->clearCache();
+
+        return $this->send(array('result' => 'success'));
+    }
 }

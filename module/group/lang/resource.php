@@ -1775,6 +1775,7 @@ $lang->resource->admin->sso             = 'ssoAction';
 $lang->resource->admin->register        = 'register';
 $lang->resource->admin->resetPWDSetting = 'resetPWDSetting';
 $lang->resource->admin->tableEngine     = 'tableEngine';
+$lang->resource->admin->cache           = 'cache';
 
 $lang->admin->methodOrder[0]  = 'index';
 $lang->admin->methodOrder[10] = 'safeIndex';
@@ -1783,6 +1784,7 @@ $lang->admin->methodOrder[20] = 'sso';
 $lang->admin->methodOrder[25] = 'register';
 $lang->admin->methodOrder[35] = 'resetPWDSetting';
 $lang->admin->methodOrder[40] = 'tableEngine';
+$lang->admin->methodOrder[40] = 'cache';
 
 /* Extension. */
 $lang->resource->extension = new stdclass();

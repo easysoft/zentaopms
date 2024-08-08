@@ -53,6 +53,17 @@ $lang->admin->engineInfo     = "The <strong>%s</strong> table engine is <strong>
 $lang->admin->engineSummary['hasMyISAM'] = "There are %s tables that are not InnoDB engines";
 $lang->admin->engineSummary['allInnoDB'] = "All tables are InnoDB engines";
 
+$lang->admin->clearCache     = 'Clear Cache';
+$lang->admin->daoCache       = 'DAO Cache';
+$lang->admin->memory         = 'Memory';
+$lang->admin->usedMemory     = 'Total %s, %s used';
+$lang->admin->apcuNotLoaded  = 'Please load the APCu extension before enabling DAO cache';
+$lang->admin->apcuNotEnabled = 'Please enable the apc.enabled option before enabling DAO cache';
+$lang->admin->clearConfirm   = 'Are you sure to clear the cache?';
+
+$lang->admin->cacheStatusList[1] = 'On';
+$lang->admin->cacheStatusList[0] = 'Off';
+
 $lang->admin->info = new stdclass();
 $lang->admin->info->version = 'La version actuelle est %s customisée. ';
 $lang->admin->info->links   = 'Vous pouvez visiter les liens ci-dessous';
