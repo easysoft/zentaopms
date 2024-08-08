@@ -2201,6 +2201,20 @@ $config->bi->builtin->metrics[] = array
 
 $config->bi->builtin->metrics[] = array
 (
+    'name'       => '按产品统计的研发完毕的研发需求规模数',
+    'alias'      => '研发完毕的研发需求规模数',
+    'code'       => 'scale_of_developed_story_in_product',
+    'purpose'    => 'scale',
+    'scope'      => 'product',
+    'object'     => 'story',
+    'unit'       => 'count',
+    'dateType'   => 'nodate',
+    'desc'       => '按产品统计的研发完毕的研发需求规模数是指产品中阶段为研发完毕及以后的研发需求的规模。这个度量项可以反映产品在研发过程中的进展和成就。研发完毕的研发需求规模数越多，说明产品取得了更多的研发成果。',
+    'definition' => "产品中研发需求规模数求和\n阶段为（研发完毕、测试中、测试完毕、已验收、已发布）或关闭原因为已完成的\n过滤已删除的研发需求\n过滤已删除的产品"
+);
+
+$config->bi->builtin->metrics[] = array
+(
     'name'       => '按产品统计的已立项研发需求的用例覆盖率',
     'alias'      => '已立项研发需求的用例覆盖率',
     'code'       => 'case_coverage_of_projected_story_in_product',
