@@ -156,6 +156,7 @@ toolbar
         'url'   => $createLink
     ))) : null,
     hasPriv('execution', 'create') && !$isStage && $project->model == 'agileplus' ?  btngroup(
+        setClass('create-execution-btn'),
         btn(setClass('btn primary'), set::icon('plus'), set::url($createLink), $lang->execution->create),
         dropdown
         (
