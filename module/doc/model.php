@@ -2978,4 +2978,18 @@ class docModel extends model
 
         return !dao::isError();
     }
+
+    public function moveLib(int $libID, object $data): bool
+    {
+        $lib     = $this->getLibByID($libID);
+        $changes = common::createChanges($lib, $data);
+        if(empty($changes)) return false;
+
+        unset($data->space);
+        $this->dao->update(TABLE_DOCLIB)->data($data)->where('id')->eq($libID)->exec();
+
+        $actionID = $this->loadModel('action')->create('docLib', $libID, 'Moved', '', json_encode(array('from' => $lib->type == 'mine' ? 'mine' : $lib->parent, 'to' => $data->type == 'mine' ? 'mine' : $data->parent)));
+        $this->action->logHistory($actionID, $changes);
+        return true;
+    }
 }
