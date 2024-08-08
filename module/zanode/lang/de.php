@@ -137,7 +137,6 @@ $lang->zanode->statusList['suspend']      = 'Suspend';
 $lang->zanode->statusList['offline']      = 'Offline';
 $lang->zanode->statusList['destroy']      = 'Destroyed';
 $lang->zanode->statusList['shutoff']      = 'Shutoff';
-$lang->zanode->statusList['shutodown']    = 'shutdown';
 $lang->zanode->statusList['destroy_fail'] = 'Destroy Fail';
 $lang->zanode->statusList['wait']         = 'Initializing';
 $lang->zanode->statusList['online']       = 'Online';

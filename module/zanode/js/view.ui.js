@@ -1,4 +1,4 @@
-function checkServiceStatus(){
+window.checkServiceStatus = function(){
     toggleLoading('#serviceContent', true);
     $.get($.createLink('zanode', 'ajaxGetServiceStatus', 'nodeID=' + nodeID), function(response)
     {
@@ -7,6 +7,9 @@ function checkServiceStatus(){
 
         for (var key in resultData.data)
         {
+            console.log(key)
+            console.log(resultData.data[key])
+            console.log(nodeStatus)
             if(key == "ZTF")
             {
                 if(resultData.data[key] == 'ready')
@@ -50,7 +53,7 @@ function checkServiceStatus(){
             {
                 if(resultData.data[key] && zanodeLang.statusList[nodeStatus] != zanodeLang.statusList[resultData.data[key]])
                 {
-                    window.location.reload();
+                    loadCurrentPage();
                 }
             }
             else
@@ -97,11 +100,13 @@ function checkServiceStatus(){
             $('.init-success').removeClass('hidden');
             $('.init-fail').addClass('hidden');
         }
+
         setTimeout(function() {
             toggleLoading('#serviceContent', false);
             $(".service-status, .status-notice").removeClass('hidden')
         }, 500);
     });
+
     return
 }
 

@@ -19,6 +19,8 @@ jsVar('webRoot', getWebRoot());
 $account = strpos(strtolower($zanode->osName), "windows") !== false ? $config->zanode->defaultWinAccount : $config->zanode->defaultAccount;
 $ssh     = $zanode->hostType == 'physics' ? ('ssh ' . $zanode->extranet) : ($zanode->ssh ? 'ssh ' . $account . '@' . $zanode->ip . ' -p ' . $zanode->ssh : '');
 
+$snapshotUrl = helper::createLink('zanode', 'browseSnapshot', "nodeID={$zanode->id}");
+
 $mainActions   = array();
 $commonActions = array();
 foreach($config->zanode->view->operateList as $operate)
@@ -337,6 +339,7 @@ detailBody
 (
     sectionList
     (
+        setID('baseInfoContent'),
         section
         (
             set::title($lang->zanode->baseInfo),
@@ -364,6 +367,7 @@ detailBody
     ),
     sectionList
     (
+        setID('serviceContent'),
         div
         (
             setClass('text-lg font-bold'),
@@ -373,7 +377,7 @@ detailBody
                 setClass('ghost btn'),
                 icon('refresh', setClass('text-primary')),
                 $lang->zanode->init->checkStatus,
-                on::click('checkServiceStatus')
+                on::click()->call('window.checkServiceStatus')
             )
         ),
         $zanode->hostType != 'physics' ? div
@@ -418,7 +422,7 @@ detailBody
         ),
         div
         (
-            setClass('status-notice hide'),
+            setClass('status-notice'),
             span
             (
                 setClass('init-success hidden'),
@@ -478,7 +482,7 @@ detailBody
         !empty($snapshotList) ? div
         (
             setID('snapshotList'),
-            h::js('loadTarget("' . createLink('zanode', 'browseSnapshot', "nodeID={$zanode->id}") . '", "#snapshotList")')
+            on::init()->do("$('#snapshotList').load('{$snapshotUrl}');"),
         ) : $lang->noData
     ) : null,
     floatToolbar

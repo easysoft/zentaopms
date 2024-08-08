@@ -12,7 +12,7 @@ $config->zanode->dtable->fieldList['name']['link'] = array('module' => 'zanode',
 
 $config->zanode->dtable->fieldList['type']['name']     = 'hostType';
 $config->zanode->dtable->fieldList['type']['title']    = $lang->zahost->type;
-$config->zanode->dtable->fieldList['type']['map']      = array('physics' => $this->lang->zanode->typeList['physics'], 'physical' => $this->lang->zanode->typeList['node']);
+$config->zanode->dtable->fieldList['type']['map']      = array('physics' => $this->lang->zanode->typeList['physics'], '' => $this->lang->zanode->typeList['node']);
 $config->zanode->dtable->fieldList['type']['sortType'] = true;
 
 $config->zanode->dtable->fieldList['extranet']['name'] = 'extranet';
