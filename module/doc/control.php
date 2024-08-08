@@ -381,7 +381,9 @@ class doc extends control
         if(empty($lib) && $libID) $lib = $this->doc->getLibByID($libID);
         if($this->config->edition != 'open') $this->loadModel('file');
 
-        list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($objectType, (int)$objectID, (int)$libID, (int)$appendLib);
+        $libData = $this->doc->setMenuByType($objectType, (int)$objectID, (int)$libID, (int)$appendLib);
+        if(is_string($libData)) return $this->locate($libData);
+        list($libs, $libID, $object, $objectID, $objectDropdown) = $libData;
 
         $this->docZen->setObjectsForCreate($lib->type, $lib, $unclosed, zget($lib, $lib->type, 0));
 
@@ -402,7 +404,7 @@ class doc extends control
         $this->view->groups           = $this->loadModel('group')->getPairs();
         $this->view->users            = $this->user->getPairs('nocode|noclosed|nodeleted');
         $this->view->linkParams       = "objectID={$objectID}&%s&browseType=&orderBy=status,id_desc&param=0";
-        $this->view->defaultNestedShow = $this->getDefaultNestedShow($libID, $moduleID);
+        $this->view->defaultNestedShow = $this->getDefaultNestedShow((int)$libID, (int)$moduleID, $objectType);
         $this->display();
     }
 
