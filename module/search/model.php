@@ -1366,7 +1366,7 @@ class searchModel extends model
             if(!is_numeric($key) or empty($value) or strlen($key) != 5 or $key < 0 or $key > 65535) continue;
             if(isset($savedDict[$key])) continue;
 
-            $this->dao->insert(TABLE_SEARCHDICT)->data(array('key' => $key, 'value' => $value))->exec();
+            $this->dao->replace(TABLE_SEARCHDICT)->data(array('key' => $key, 'value' => $value))->exec();
             $savedDict[$key] = $key;
         }
     }
