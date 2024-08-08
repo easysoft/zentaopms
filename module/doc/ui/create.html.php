@@ -12,4 +12,7 @@ namespace zin;
 
 include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
 
-include 'create.text.html.php';
+$isOfficeDoc = $docType != '' && strpos($config->doc->officeTypes, $docType) !== false;
+
+if($isOfficeDoc) include 'create.office.html.php';
+else             include 'create.text.html.php';
