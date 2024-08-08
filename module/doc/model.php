@@ -2981,6 +2981,21 @@ class docModel extends model
 
     public function moveLib(int $libID, object $data): bool
     {
+        if(is_numeric($data->space))
+        {
+            $data->type   = 'custom';
+            $data->parent = $data->space;
+        }
+        elseif($data->space == 'mine')
+        {
+            $data->type = 'mine';
+            $data->parent = 0;
+        }
+        else
+        {
+            return false;
+        }
+
         $lib     = $this->getLibByID($libID);
         $changes = common::createChanges($lib, $data);
         if(empty($changes)) return false;
