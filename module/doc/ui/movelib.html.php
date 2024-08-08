@@ -29,4 +29,23 @@ formPanel
         set::items($spaces),
         set::required(true)
     ),
+    formRow
+    (
+        setID('aclBox'),
+        formGroup
+        (
+            set::label($lang->doclib->control),
+            radioList
+            (
+                set::name('acl'),
+                set::items($lang->doclib->aclList),
+                set::value($targetSpace == 'mine' ? 'private' : 'open'),
+                on::change("toggleLibAcl")
+            )
+        )
+    ),
+    formRow
+    (
+        setID('whiteListBox'),
+    )
 );
