@@ -1854,6 +1854,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `retractedReason` enum('', 'omit', 'other') NOT NULL DEFAULT '',
   `retractedBy` varchar(30) NOT NULL DEFAULT '',
   `retractedDate` datetime,
+  `verifiedDate` datetime,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
