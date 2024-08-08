@@ -2990,6 +2990,7 @@ class docModel extends model
      */
     public function moveLib(int $libID, object $data): bool
     {
+        if(empty($libID) || empty($data->space)) return false;
         if(is_numeric($data->space))
         {
             $data->type   = 'custom';
