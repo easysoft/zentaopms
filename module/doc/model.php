@@ -2979,6 +2979,15 @@ class docModel extends model
         return !dao::isError();
     }
 
+    /**
+     * 移动文档库。
+     * Move library.
+     *
+     * @param  int    $docID
+     * @param  object $data
+     * @access public
+     * @return bool
+     */
     public function moveLib(int $libID, object $data): bool
     {
         if(is_numeric($data->space))

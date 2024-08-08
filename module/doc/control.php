@@ -1134,6 +1134,15 @@ class doc extends control
         }
     }
 
+    /**
+     * 移动文档库
+     * Move Lib.
+     *
+     * @param  int    $libID
+     * @param  string $targetSpace  mine|[int]
+     * @access public
+     * @return void
+     */
     public function moveLib(int $libID, string $targetSpace = '')
     {
         if(!empty($_POST))
