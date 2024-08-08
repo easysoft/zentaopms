@@ -368,6 +368,16 @@ class scm
         return $this->engine->pipelines();
     }
 
+    /**
+     * 格式化时间。
+     * Format date.
+     *
+     * @param  int|string $date
+     * @param  bool       $hasTime
+     * @param  bool       $isEnd
+     * @access private
+     * @return string
+     */
     private function formatDate($date, $hasTime = false, $isEnd = false)
     {
         $format = $hasTime ? 'Y-m-d H:i:s' : 'Y-m-d';
