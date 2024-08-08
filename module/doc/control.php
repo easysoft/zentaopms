@@ -342,10 +342,11 @@ class doc extends control
      * @param  int|string $libID
      * @param  int        $moduleID
      * @param  string     $docType    html|word|ppt|excel
+     * @param  int        $appendLib
      * @access public
      * @return void
      */
-    public function create(string $objectType, int $objectID, int $libID, int $moduleID = 0, string $docType = '')
+    public function create(string $objectType, int $objectID, int $libID, int $moduleID = 0, string $docType = '', int $appendLib = 0)
     {
         if(!empty($_POST))
         {
@@ -374,26 +375,34 @@ class doc extends control
 
         /* Get libs and the default lib ID. */
         $unclosed   = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
-        $libs       = $this->doc->getLibs($lib->type, "withObject,{$unclosed}", $libID, $objectID);
+        $libPairs       = $this->doc->getLibs($lib->type, "withObject,{$unclosed}", $libID, $objectID);
         $moduleID   = $moduleID ? (int)$moduleID : (int)$this->cookie->lastDocModule;
-        if(!$libID && !empty($libs)) $libID = key($libs);
+        if(!$libID && !empty($libPairs)) $libID = key($libPairs);
         if(empty($lib) && $libID) $lib = $this->doc->getLibByID($libID);
         if($this->config->edition != 'open') $this->loadModel('file');
+
+        list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($objectType, (int)$objectID, (int)$libID, (int)$appendLib);
 
         $this->docZen->setObjectsForCreate($lib->type, $lib, $unclosed, zget($lib, $lib->type, 0));
 
         $this->view->title            = zget($lib, 'name', '', $lib->name . $this->lang->hyphen) . $this->lang->doc->create;
         $this->view->objectType       = $objectType;
-        $this->view->objectID         = zget($lib, $lib->type, 0);
+        $this->view->spaceType        = $objectType;
+        $this->view->object           = $object;
+        $this->view->objectID         = $objectID;
+        $this->view->objectDropdown   = $objectDropdown;
         $this->view->libID            = $libID;
         $this->view->lib              = $lib;
-        $this->view->libs             = $libs;
+        $this->view->libs             = $libPairs;
+        $this->view->libTree          = $this->doc->getLibTree((int)$libID, $libs, $objectType, (int)$moduleID, (int)$objectID);
         $this->view->libName          = zget($lib, 'name', '');
-        $this->view->moduleOptionMenu = $this->doc->getLibsOptionMenu($libs);
+        $this->view->moduleOptionMenu = $this->doc->getLibsOptionMenu($libPairs);
         $this->view->moduleID         = $libID . '_' . $moduleID;
         $this->view->docType          = $docType;
         $this->view->groups           = $this->loadModel('group')->getPairs();
         $this->view->users            = $this->user->getPairs('nocode|noclosed|nodeleted');
+        $this->view->linkParams       = "objectID={$objectID}&%s&browseType=&orderBy=status,id_desc&param=0";
+        $this->view->defaultNestedShow = $this->getDefaultNestedShow($libID, $moduleID);
         $this->display();
     }
 
