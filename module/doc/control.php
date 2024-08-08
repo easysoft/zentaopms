@@ -753,7 +753,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function tableContents(string $type = 'custom', int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'status,id_desc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function tableContents(string $type = 'custom', int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'order_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->docZen->setSpacePageStorage($type, $browseType, $objectID, $libID, $moduleID, $param);
 
@@ -828,7 +828,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function productSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'status,id_desc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function productSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'order_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $products = $this->product->getPairs('nocode');
         $objectID = $this->product->checkAccess($objectID, $products);
@@ -852,7 +852,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function projectSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'status,id_desc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function projectSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'order_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $projects = $this->project->getPairsByProgram();
         $objectID = $this->project->checkAccess($objectID, $projects);
@@ -876,7 +876,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function teamSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'status,id_desc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function teamSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'order_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         echo $this->fetch('doc', 'tableContents', "type=custom&objectID={$objectID}&libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&orderBy={$orderBy}&param={$param}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
     }
@@ -1036,10 +1036,30 @@ class doc extends control
     {
         if($_POST)
         {
-            foreach($_POST['orders'] as $id => $order) $this->doc->updateDocLibOrder($id, (int)$order);
+            foreach($_POST['orders'] as $id => $order) $this->doc->updateDoclibOrder($id, (int)$order);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success'));
+        }
+    }
+
+    /**
+     * 文档排序
+     * Doc sorting.
+     *
+     * @access public
+     * @return void
+     */
+    public function sortDoc()
+    {
+        if($_POST)
+        {
+            $orders = json_decode($this->post->orders, true);
+            asort($orders);
+            $orders = array_flip($orders);
+
+            /* Sort by sorted id list. */
+            $this->doc->updateDocOrder($orders);
         }
     }
 
