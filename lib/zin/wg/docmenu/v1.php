@@ -298,6 +298,17 @@ class docMenu extends wg
                 );
             }
 
+            if($item->type == 'docLib' && ($item->objectType == 'mine' || ($item->objectType == 'custom' && $item->parent > 0)) && hasPriv($moduleName, 'moveLib'))
+            {
+                $menus[] = array(
+                    'key'         => 'movelib',
+                    'icon'        => 'folder-move',
+                    'text'        => $this->lang->doc->moveTo,
+                    'data-toggle' => 'modal',
+                    'data-url'    => createlink($moduleName, 'moveLib', "libID={$itemID}")
+                );
+            }
+
             if(hasPriv($moduleName, 'editLib'))
             {
                 $menus[] = array(
