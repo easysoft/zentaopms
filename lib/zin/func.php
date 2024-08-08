@@ -217,6 +217,11 @@ function thinkPffa(): thinkPffa {return createWg('thinkPffa', func_get_args());}
 function thinkPestel(): thinkPestel {return createWg('thinkPestel', func_get_args());}
 function think4p(): think4p {return createWg('think4p', func_get_args());}
 
+if(is_dir(__DIR__ . DS . 'wg' . DS . 'schedule'))
+{
+    function schedule(): schedule {return createWg('schedule', func_get_args());}
+}
+
 if(is_dir(__DIR__ . DS . 'wg' . DS . 'boardeditor'))
 {
     function boardEditor(): boardEditor {return createWg('boardeditor', func_get_args());}
