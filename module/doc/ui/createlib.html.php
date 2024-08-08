@@ -87,6 +87,7 @@ formPanel
                     $spaces ? null : setClass('hidden'),
                     set::name('parent'),
                     set::items($spaces),
+                    set::value($spaceID),
                     set::required(true)
                 ),
                 input
@@ -96,7 +97,7 @@ formPanel
                 ),
                 div
                 (
-                    setClass('ml-2 w-1/6 items-center flex'),
+                    setClass('ml-2 w-1/3 items-center flex'),
                     checkbox
                     (
                         on::change('toggleNewSpace'),

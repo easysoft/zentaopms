@@ -20,6 +20,7 @@ $config->action->objectNameFields['board']        = 'name';
 $config->action->objectNameFields['boardspace']   = 'name';
 $config->action->objectNameFields['doc']          = 'title';
 $config->action->objectNameFields['doclib']       = 'name';
+$config->action->objectNameFields['docspace']     = 'name';
 $config->action->objectNameFields['todo']         = 'name';
 $config->action->objectNameFields['branch']       = 'name';
 $config->action->objectNameFields['module']       = 'name';

@@ -238,6 +238,8 @@ class docModel extends model
 
             $this->dao->insert(TABLE_DOCLIB)->data($space, 'spaceName')->autoCheck()->exec();
             $lib->parent = $this->dao->lastInsertID();
+
+            $this->loadModel('action')->create('docspace', $lib->parent, 'created');
         }
         elseif($lib->parent <= 0 && $type == 'custom')
         {
@@ -746,6 +748,21 @@ class docModel extends model
     public function getPrivDocs(array $libIdList = array(), int $moduleID = 0, string $mode = 'normal'): array
     {
         $modules = $moduleID && $mode == 'children' ? $this->loadModel('tree')->getAllChildID($moduleID) : $moduleID;
+
+        /* 团队空间下的空间列出所有子库的文档。 */
+        if(count($libIdList) == 1)
+        {
+            $libID = current($libIdList);
+            $lib   = $this->getLibByID($libID);
+            if($lib->type == 'custom' && $lib->parent == 0)
+            {
+                $libs = $this->dao->select('*')->from(TABLE_DOCLIB)->where('parent')->eq($libID)->andWhere('deleted')->eq('0')->fetchAll();
+                foreach($libs as $subLib)
+                {
+                    if($this->checkPrivLib($subLib)) $libIdList[] = $subLib->id;
+                }
+            }
+        }
 
         $stmt = $this->dao->select('*')->from(TABLE_DOC)
             ->where('vision')->eq($this->config->vision)
