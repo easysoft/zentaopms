@@ -1134,6 +1134,25 @@ class doc extends control
         }
     }
 
+    public function moveLib(int $libID, string $targetSpace = '')
+    {
+        $lib = $this->doc->getLibByID($libID);
+        if(empty($targetSpace)) $targetSpace = $lib->type == 'mine' ? 'mine' : $lib->parent;
+
+        $this->docZen->setAclForCreateLib(is_numeric($targetSpace) ? 'custom' : 'mine');
+        if(is_numeric($targetSpace))
+        {
+            $this->view->groups = $this->loadModel('group')->getPairs();
+            $this->view->users  = $this->loadModel('user')->getPairs('nocode|noclosed');
+        }
+
+        $this->view->title       = $this->lang->doc->moveLibAction;
+        $this->view->spaces      = array('mine' => $this->lang->doc->spaceList['mine']) + $this->doc->getTeamSpaces();
+        $this->view->lib         = $lib;
+        $this->view->targetSpace = $targetSpace;
+        $this->display();
+    }
+
     /**
      * Ajax: 检查对象权限。
      * Ajax check object priv.
