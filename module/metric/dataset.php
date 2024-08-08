@@ -23,6 +23,14 @@ class dataset
         $this->vision = $vision;
     }
 
+    /**
+     * append where condition of vision.
+     *
+     * @param  PDOStatement $query
+     * @param  string       $table
+     * @access public
+     * @return PDOStatement
+     */
     public function defaultWhere($query, $table)
     {
         $visions = explode(',', $this->vision);
