@@ -10,3 +10,5 @@ CREATE UNIQUE INDEX `object` ON `zt_duckdbqueue`(`object`);
 ALTER TABLE `zt_metriclib` ADD COLUMN `repo` char(30) NOT NULL DEFAULT '';
 
 REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'zanode', 'instruction' FROM `zt_grouppriv` WHERE `module` in ('zanode', 'zahost') AND `method` = 'browse';
+
+UPDATE `zt_doc` SET `order` = id;
