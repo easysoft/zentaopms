@@ -35,8 +35,8 @@ foreach($docList as $doc)
 
     $docItems[] = cell
     (
-        set::width('49%'),
-        setStyle('width', '49%'),
+        set::width('32%'),
+        setStyle('width', '32%'),
         setClass('border rounded-lg p-2'),
         a
         (
