@@ -1,19 +1,2 @@
-.editor-container {margin-top: 0px !important;}
-#titleBox #title {border: unset; font-size: 18px; font-weight: bold; color: #3c4353; padding-left: 16px; --tw-ring-shadow: none}
-#titleBox #title:focus {box-shadow: none; outline: unset}
-.titleBox{padding: 7px; background: #fff}
-#modalBasicInfo .form-group {margin-top: 0.5rem}
-.form-horz>:not([hidden])~:not([hidden]){margin-top: 0;}
-#whitelistBox .form-group-wrapper+.form-group-wrapper {margin-top: 10px;}
-#titleBox:before {position: absolute; --tw-translate-y: .125rem; --tw-scale-x: 1.25; --tw-scale-y: 1.25; --tw-text-opacity: 1; color: rgba(var(--color-danger-500-rgb),var(--tw-text-opacity)); content: "*"; display: inline-block; margin-left: 0.25rem; transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skew(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)); }
-#titleBox {margin-left: 5px}
-.alert.warning-pale {display: block; font-weight: 600}
-
-.m-doc-create #header,
-.m-doc-create #mainNavbar {display: none!important;}
-.m-doc-create #mainContent {padding-top: 0;}
-.m-doc-create #main {min-height: 0;}
-.m-doc-create #main > .container {max-width: initial!important; padding: 0!important}
-
-#mainContent > .form{display: flex; flex-direction: column; position: fixed; top: 0; left: 0; right: 0; bottom: 0; padding: 0px 2px 2px 2px}
-[data-name='showTitle'].items-center {align-items: center !important;}
+.m-doc-create .doc-menu-header.is-fixed {position: relative; top: auto; width: calc(100% - 10px); margin-bottom: 12px;}
+.m-doc-create .doc-menu {max-height: calc(100vh - 115px);}

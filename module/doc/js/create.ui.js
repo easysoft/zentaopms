@@ -1,28 +1,3 @@
-$(function()
-{
-    $('.form').on('click', '#basicInfoLink', function()
-    {
-        if($('#title').val() == '')
-        {
-            zui.Modal.alert(titleNotEmpty);
-            return false;
-        }
-
-        if(requiredFields.indexOf('content') >= 0)
-        {
-            if($('[name="content"]').val() == '')
-            {
-                zui.Modal.alert(contentNotEmpty);
-                return false;
-            }
-        }
-        $('span.showTitle').text($('#title').val());
-
-        $('#status').val('normal');
-    });
-    if($('#modalBasicInfo input[name="project"]').length) loadExecutions();
-})
-
 window.loadExecutions = function(e)
 {
     const projectElement   = officeTypes.includes(docType) ? '.projectBox input[name="project"]': '#modalBasicInfo input[name="project"]';
@@ -50,7 +25,14 @@ window.loadExecutions = function(e)
     });
 }
 
-window.clickSubmit = function(e)
+window.handleSubmitForm = function(e)
 {
-    if($(e.submitter).hasClass('save-draft')) $('input[name=status]').val('draft');
-}
+    const isDraft = $(e.submitter).hasClass('save-draft');
+    const $showTitle = $('#showTitle');
+    if(isDraft && !$showTitle.val().length)
+    {
+        zui.Modal.alert($showTitle.data('titleHint')).then(() => $showTitle[0].focus());
+        return false;
+    }
+    $(e.target).find('input[name=status]').val(isDraft ? 'draft' : 'normal');
+};
