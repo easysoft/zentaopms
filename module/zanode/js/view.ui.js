@@ -7,9 +7,6 @@ window.checkServiceStatus = function(){
 
         for (var key in resultData.data)
         {
-            console.log(key)
-            console.log(resultData.data[key])
-            console.log(nodeStatus)
             if(key == "ZTF")
             {
                 if(resultData.data[key] == 'ready')
