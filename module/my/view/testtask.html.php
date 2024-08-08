@@ -65,7 +65,7 @@
         <td class='nobr' title='<?php echo $task->build == 'trunk' ? $lang->trunk : $task->buildName;?>'><?php $task->build == 'trunk' ? print($lang->trunk) : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName));?></td>
         <?php
         $executionName = $task->executionName;
-        if(empty($task->executionMultiple)) $executionName = $task->projectName . "({$this->lang->project->disableExecution})";
+        if(!empty($task->execution) && !empty($task->executionName)) $executionName = $task->projectName . "({$this->lang->project->disableExecution})";
         ?>
         <td class='nobr' title='<?php echo $executionName;?>'><?php echo $executionName;?></td>
         <td title='<?php echo $this->processStatus('testtask', $task);?>'><span class="status-task status-<?php echo $task->status;?>"><?php echo $this->processStatus('testtask', $task);?></span></td>
