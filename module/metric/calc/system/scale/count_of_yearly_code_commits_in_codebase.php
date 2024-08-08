@@ -79,7 +79,7 @@ class count_of_yearly_code_commits_in_codebase extends baseCalc
         list($year, $month, $day) = explode('-', $date);
 
         if(!isset($this->result[$row->id]))        $this->result[$row->id] = array();
-        if(!isset($this->result[$row->id][$year])) $this->result[$row->id][$year] = array();
+        if(!isset($this->result[$row->id][$year])) $this->result[$row->id][$year] = 0;
 
         $this->result[$row->id][$year] ++;
     }

@@ -80,7 +80,7 @@ class count_of_monthly_code_commits_in_codebase extends baseCalc
 
         if(!isset($this->result[$row->id]))                $this->result[$row->id] = array();
         if(!isset($this->result[$row->id][$year]))         $this->result[$row->id][$year] = array();
-        if(!isset($this->result[$row->id][$year][$month])) $this->result[$row->id][$year][$month] = array();
+        if(!isset($this->result[$row->id][$year][$month])) $this->result[$row->id][$year][$month] = 0;
 
         $this->result[$row->id][$year][$month] ++;
     }
@@ -112,7 +112,7 @@ class count_of_monthly_code_commits_in_codebase extends baseCalc
         $month = (int)$options['month'];
 
         $begin = "{$year}-{$month}-01";
-        $end   = date('Y-m-d', strtotime("$begin +1 month"));
+        $end   = date('Y-m-d', strtotime("$begin +1 month -1 day"));
 
         foreach($this->rows as $row)
         {

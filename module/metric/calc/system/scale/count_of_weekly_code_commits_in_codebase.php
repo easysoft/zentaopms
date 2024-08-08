@@ -79,12 +79,11 @@ class count_of_weekly_code_commits_in_codebase extends baseCalc
         list($year, $month, $day) = explode('-', $date);
         $week = date('W', strtotime($date));
 
-        if(!isset($this->result[$row->id]))                       $this->result[$row->id] = array();
-        if(!isset($this->result[$row->id][$year]))                $this->result[$row->id][$year] = array();
-        if(!isset($this->result[$row->id][$year][$month]))        $this->result[$row->id][$year][$month] = array();
-        if(!isset($this->result[$row->id][$year][$month][$week])) $this->result[$row->id][$year][$month][$week] = 0;
+        if(!isset($this->result[$row->id]))               $this->result[$row->id] = array();
+        if(!isset($this->result[$row->id][$year]))        $this->result[$row->id][$year] = array();
+        if(!isset($this->result[$row->id][$year][$week])) $this->result[$row->id][$year][$week] = 0;
 
-        $this->result[$row->id][$year][$month][$week] ++;
+        $this->result[$row->id][$year][$week] ++;
     }
 
     /**
@@ -112,11 +111,11 @@ class count_of_weekly_code_commits_in_codebase extends baseCalc
     {
         $year  = (int)$options['year'];
         $month = (int)$options['month'];
-        $day   = $options['day'];
+        $day   = (int)$options['day'];
 
-        list($begin, $end) = explode(',', $day);
-        $begin = "{$year}-{$month}-{$begin}";
-        $end   = "{$year}-{$month}-{$end} 23:59:59";
+        $date  = strtotime("{$year}-{$month}-{$day}");
+        $begin = date('Y-m-d', strtotime('this week monday', $date));
+        $end   = date('Y-m-d 23:59:59', strtotime('this week sunday', $date));
 
         foreach($this->rows as $row)
         {
@@ -130,6 +129,6 @@ class count_of_weekly_code_commits_in_codebase extends baseCalc
 
             $this->setResult($row);
         }
-        return $this->getRecords(array('repo', 'year', 'month', 'week'));
+        return $this->getRecords(array('repo', 'year', 'week'));
     }
 }
