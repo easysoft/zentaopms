@@ -22,41 +22,33 @@ class bug_concentration_of_developed_story_in_product extends baseCalc
 {
     public $result = array();
 
-    public function getStatement()
+    public $reuse = true;
+
+    public $reuseMetrics = array('bug' => 'count_of_effective_bug_in_product', 'estimate' => 'scale_of_developed_story_in_product');
+
+    public $reuseRule = '{bug} / {estimate}';
+
+    public function calculate($metrics)
     {
-        $developedStory = $this->dao->select('product, count(id) AS storyNum')
-            ->from(TABLE_STORY)
-            ->where('deleted')->eq('0')
-            ->andWhere("vision NOT LIKE '%or%'")
-            ->andWhere("vision NOT LIKE '%lite%'")
-            ->andWhere('stage', true)->in('developed,testing,tested,verified,released')
-            ->orWhere('closedReason')->eq('done')
-            ->markRight(1)
-            ->groupBy('product')
-            ->get();
+        $bugs      = $metrics['bug'];
+        $estimates = $metrics['estimate'];
+        if(empty($bugs) || empty($estimates)) return false;
 
-        $effectiveBug = $this->dao->select('product, count(id) AS bugNum')
-            ->from(TABLE_BUG)
-            ->where('resolution')->in('fixed,postponed')
-            ->orWhere('status')->eq('active')
-            ->groupBy('product')
-            ->get();
+        $all = array_merge($bugs, $estimates);
 
-        return $this->dao->select('t1.id, t1.name, t2.storyNum, t3.bugNum')
-            ->from(TABLE_PRODUCT)->alias('t1')
-            ->leftJoin("($developedStory)")->alias('t2')->on('t1.id = t2.product')
-            ->leftJoin("($effectiveBug)")->alias('t3')->on('t1.id = t3.product')
-            ->where('t1.deleted')->eq(0)
-            ->andWhere('t1.shadow')->eq(0);
-    }
+        $products = array_column($all, 'product', 'product');
 
-    public function calculate($data)
-    {
-        $product    = $data->id;
-        $storyCount = $data->storyNum;
-        $bugCount   = $data->bugNum;
+        $bugs      = $this->generateUniqueKey($bugs);
+        $estimates = $this->generateUniqueKey($estimates);
 
-        $this->result[$product] = (empty($storyCount) || empty($bugCount)) ? 0 : round($bugCount / $storyCount, 4);
+        foreach($products as $product)
+        {
+            $bug      = isset($bugs[$product]) ? $bugs[$product] : 0;
+            $estimate = isset($estimates[$product]) ? $estimates[$product] : 0;
+
+            if($estimate == 0) continue;
+            $this->result[$product] = round($bug / $estimate, 4);
+        }
     }
 
     public function getResult($options = null)
@@ -64,5 +56,17 @@ class bug_concentration_of_developed_story_in_product extends baseCalc
         $records = array();
         foreach($this->result as $product => $value) $records[] = array('product' => $product, 'value' => $value);
         return $this->filterByOptions($records, $options);
+    }
+
+    public function generateUniqueKey($records)
+    {
+        $uniqueKeyRecords = array();
+        foreach($records as $record)
+        {
+            $key = $record['product'];
+            $uniqueKeyRecords[$key] = $record['value'];
+        }
+
+        return $uniqueKeyRecords;
     }
 }
