@@ -57,8 +57,8 @@ $docContent = dtable
     set::createTip($lang->doc->create),
     set::orderBy($orderBy),
     set::sortable(boolval($canUpdateOrder)),
-    $canUpdateOrder ? set::onSortEnd(jsRaw('window.onSortEnd')) : null,
-    $canUpdateOrder ? set::plugins(array('sortable')) : null,
+    set::onSortEnd(jsRaw('window.onSortEnd')),
+    set::plugins(array('sortable')),
     set::sortLink(createLink('doc', $app->rawMethod, $sortParams)),
     set::footPager(usePager(array('linkCreator' => helper::createLink('doc', $app->rawMethod, $params))))
 );
