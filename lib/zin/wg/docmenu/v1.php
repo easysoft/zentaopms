@@ -396,7 +396,7 @@ class docMenu extends wg
         return '';
     }
 
-    private function getTitle(): string
+    private function getTitle(): ?string
     {
         global $lang;
         $activeKey = $this->prop('activeKey');
