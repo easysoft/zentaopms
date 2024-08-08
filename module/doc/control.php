@@ -412,10 +412,11 @@ class doc extends control
      *
      * @param  int     $docID
      * @param  bool    $comment
+     * @param  int     $appendLib
      * @access public
      * @return void
      */
-    public function edit(int $docID, bool $comment = false)
+    public function edit(int $docID, bool $comment = false, int $appendLib = 0)
     {
         $doc = $this->doc->getByID($docID);
         if(!empty($_POST))
@@ -443,23 +444,36 @@ class doc extends control
         }
 
         /* Get doc and set menu. */
-        $lib      = $this->doc->getLibByID((int)$doc->lib);
-        $objectID = zget($lib, $lib->type, 0);
-        $libs     = $this->doc->getLibs($lib->type, 'withObject', $doc->lib, $objectID);
+        $moduleID   = (int)$doc->module;
+        $libID      = (int)$doc->lib;
+        $lib        = $this->doc->getLibByID($libID);
+        $objectType = isset($lib->type) ? $lib->type : 'custom';
+        $objectID   = zget($lib, $lib->type, 0);
+        $libPairs   = $this->doc->getLibs($lib->type, 'withObject', $doc->lib, $objectID);
+        list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($objectType, $objectID, (int)$doc->lib, (int)$appendLib);
 
         $this->docZen->setObjectsForEdit($lib->type, $objectID);
 
-        $this->view->title            = $lib->name . $this->lang->hyphen . $this->lang->doc->edit;
-        $this->view->doc              = $doc;
-        $this->view->moduleOptionMenu = $this->doc->getLibsOptionMenu($libs);
-        $this->view->type             = $lib->type;
-        $this->view->libs             = $libs;
-        $this->view->lib              = $lib;
-        $this->view->groups           = $this->loadModel('group')->getPairs();
-        $this->view->users            = $this->user->getPairs('noletter|noclosed|nodeleted', $doc->users);
-        $this->view->files            = $this->loadModel('file')->getByObject('doc', $docID);
-        $this->view->objectID         = $objectID;
-        $this->view->otherEditing     = $this->doc->checkOtherEditing($docID);
+        $this->view->title             = $lib->name . $this->lang->hyphen . $this->lang->doc->edit;
+        $this->view->doc               = $doc;
+        $this->view->moduleOptionMenu  = $this->doc->getLibsOptionMenu($libPairs);
+        $this->view->type              = $lib->type;
+        $this->view->libs              = $libPairs;
+        $this->view->lib               = $lib;
+        $this->view->libID             = $libID;
+        $this->view->libTree           = $this->doc->getLibTree($libID, $libs, $objectType, $moduleID, (int)$objectID, '', 0, $docID);
+        $this->view->groups            = $this->loadModel('group')->getPairs();
+        $this->view->users             = $this->user->getPairs('noletter|noclosed|nodeleted', $doc->users);
+        $this->view->files             = $this->loadModel('file')->getByObject('doc', $docID);
+        $this->view->objectType        = $objectType;
+        $this->view->object            = $object;
+        $this->view->objectID          = $objectID;
+        $this->view->objectDropdown    = $objectDropdown;
+        $this->view->moduleID          = $moduleID;
+        $this->view->spaceType         = $objectType;
+        $this->view->defaultNestedShow = $this->getDefaultNestedShow($libID, $moduleID);
+        $this->view->linkParams        = "objectID={$objectID}&%s&browseType=&orderBy=status,id_desc&param=0";
+        $this->view->otherEditing      = $this->doc->checkOtherEditing($docID);
         $this->display();
     }
 
