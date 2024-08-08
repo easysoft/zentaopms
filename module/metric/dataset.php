@@ -1219,4 +1219,23 @@ class dataset
             ->leftJoin(TABLE_PIPELINE)->alias('t3')->on('t3.id=t1.serviceHost')
             ->where('t1.deleted')->eq(0);
     }
+
+    /**
+     * 获取应用信息。
+     * Get applications.
+     *
+     * @param  string       $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getApplications($fieldList)
+    {
+        $count = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_INSTANCE)
+            ->where('deleted')->eq(0)
+            ->fetch('count');
+
+        return $this->dao->select("COUNT(1) AS count, {$count} as instanceCount")->from(TABLE_PIPELINE)
+            ->where('deleted')->eq(0);
+
+    }
 }
