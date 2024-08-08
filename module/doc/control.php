@@ -1136,6 +1136,24 @@ class doc extends control
 
     public function moveLib(int $libID, string $targetSpace = '')
     {
+        if(!empty($_POST))
+        {
+            $data = form::data()
+                ->setIF($this->post->acl == 'open', 'groups', '')
+                ->setIF($this->post->acl == 'open', 'users', '')
+                ->get();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $targetSpace = $data->space;
+            $this->doc->moveLib($libID, $data);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $locateLink = true;
+            if($targetSpace == 'mine')$locateLink = $this->createLink('doc', 'mySpace', "type=mine&libID={$libID}");
+            if($targetSpace != 'mine')$locateLink = $this->createLink('doc', 'teamSpace', "objectID=0&libID={$libID}");
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $locateLink));
+        }
+
         $lib = $this->doc->getLibByID($libID);
         if(empty($targetSpace)) $targetSpace = $lib->type == 'mine' ? 'mine' : $lib->parent;
 
