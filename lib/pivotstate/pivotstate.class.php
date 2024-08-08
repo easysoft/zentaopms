@@ -303,7 +303,7 @@ class pivotState
         $this->names     = $pivot->names;
         $this->descs     = $pivot->descs;
         $this->sql       = $pivot->sql;
-        $this->step      = 1;
+        $this->step      = 'query';
         $this->stage     = $pivot->stage;
 
         $this->drills       = $drills;

@@ -1441,7 +1441,7 @@ class pivotModel extends model
     {
         foreach($data as $key => $value)
         {
-            if($value === '$totalGroup$') $data[$key] = $this->lang->pivot->step2->total;
+            if($value === '$totalGroup$') $data[$key] = $this->lang->pivot->stepDesign->total;
         }
     }
 
@@ -1682,8 +1682,8 @@ class pivotModel extends model
         if(!$showOrigin)
         {
             $colLabel = str_replace('{$field}', $colLabel, $this->lang->pivot->colLabel);
-            $colLabel = str_replace('{$stat}', zget($this->lang->pivot->step2->statList, $stat), $colLabel);
-            if($showMode != 'default') $colLabel .= sprintf($this->lang->pivot->colShowMode, zget($this->lang->pivot->step2->showModeList, $showMode));
+            $colLabel = str_replace('{$stat}', zget($this->lang->pivot->stepDesign->statList, $stat), $colLabel);
+            if($showMode != 'default') $colLabel .= sprintf($this->lang->pivot->colShowMode, zget($this->lang->pivot->stepDesign->showModeList, $showMode));
         }
         $col->label = $colLabel;
 
@@ -1720,7 +1720,7 @@ class pivotModel extends model
                 $childCol = new stdclass();
                 $childCol->name    = 'sum';
                 $childCol->isGroup = false;
-                $childCol->label   = $this->lang->pivot->step2->total;
+                $childCol->label   = $this->lang->pivot->stepDesign->total;
                 $childCol->colspan = $monopolize ? 2 : 1;
                 $cols[1][] = $childCol;
                 $col->colspan += $childCol->colspan;
@@ -2329,7 +2329,7 @@ class pivotModel extends model
         if($useColumnTotal and !empty($data->array))
         {
             $table .= "<tr class='text-center'>";
-            $table .= "<td colspan='" . count($data->groups) . "'>{$this->lang->pivot->step2->total}</td>";
+            $table .= "<td colspan='" . count($data->groups) . "'>{$this->lang->pivot->stepDesign->total}</td>";
             foreach(end($data->array) as $field => $total)
             {
                 if(in_array($field, $data->groups)) continue;
