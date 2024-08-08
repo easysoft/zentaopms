@@ -100,7 +100,7 @@ $config->upgrade->execFlow['20_0']        = array('functions' => 'openCacheByAPC
 $config->upgrade->execFlow['20_1_0']      = array('functions' => 'completeClassifyLang');
 $config->upgrade->execFlow['20_1_1']      = array('functions' => 'syncActivityAndOutput,changeCustomStoryStage,processStoryRelation,processLinkStories,addERName,addTR4APoint');
 $config->upgrade->execFlow['20_3_0']      = array('functions' => 'importBuildinWorkflow,addFlowFields,processProjectRoadmapsByCharter', 'params' => array('importBuildinWorkflow' => array('or'), 'addFlowFields' => array('biz10.2')));
-$config->upgrade->execFlow['20_4_0']      = array('functions' => 'createDefaultDoclibSpace');
+$config->upgrade->execFlow['20_4']        = array('functions' => 'createDefaultDoclibSpace');
 
 if(!empty($config->isINT))
 {
@@ -132,6 +132,7 @@ if($config->edition != 'open')
     $config->upgrade->execFlow['17_6_2']['functions']     = 'processFeedbackModule';
     $config->upgrade->execFlow['18_3']['functions']      .= ',processDataset,processChart,processReport,processDashboard';
     $config->upgrade->execFlow['18_4_beta1']['functions'] = 'processDeployStepAction,updateBISQL,updatePivotStage';
+    $config->upgrade->execFlow['20_4']['functions']      .= ',updateTaskRelationPriv';
 }
 
 if(in_array($this->config->edition, array('max', 'ipd'))) $config->upgrade->execFlow['18_7']['functions'] = 'processOldMetrics,processHistoryDataForMetric,metric-updateMetricDate';
