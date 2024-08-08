@@ -814,7 +814,7 @@ class docZen extends doc
     public function buildSearchFormForShowFiles(string $type, int $objectID, string $viewType = '', int $param = 0)
     {
         $this->loadModel('file');
-        $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, "type={$type}&objectID={$objectID}&viewType={$viewType}&browseType=bySearch&queryID=0");
+        $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, "type={$type}&objectID={$objectID}&viewType={$viewType}&browseType=bySearch&queryID=myQueryID");
 
         $objectTypeList = array();
         $objectTypeList['product']     = $this->lang->product->common;
@@ -838,7 +838,7 @@ class docZen extends doc
 
         $this->config->file->search['module']    = "{$type}DocFile";
         $this->config->file->search['onMenuBar'] = 'no';
-        $this->config->file->search['queryID']   = $param;
+        $this->config->file->search['queryID']   = (int)$param;
         $this->config->file->search['actionURL'] = $actionURL;
         $this->loadModel('search')->setSearchParams($this->config->file->search);
     }
