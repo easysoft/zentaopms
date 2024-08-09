@@ -192,7 +192,6 @@ dtable
 (
     set::cols($cols),
     set::data(array_values($bugs)),
-    set::fixedLeftWidth('0.44'),
     set::userMap($users),
     set::customCols(true),
     set::checkable($canBatchAction),

@@ -15,6 +15,7 @@ $config->execution->dtable->fieldList['nameCol']['title']        = $lang->execut
 $config->execution->dtable->fieldList['nameCol']['name']         = 'nameCol';
 $config->execution->dtable->fieldList['nameCol']['fixed']        = 'left';
 $config->execution->dtable->fieldList['nameCol']['type']         = 'nestedTitle';
+$config->execution->dtable->fieldList['nameCol']['width']        = '38%';
 $config->execution->dtable->fieldList['nameCol']['sortType']     = true;
 $config->execution->dtable->fieldList['nameCol']['minWidth']     = '356';
 $config->execution->dtable->fieldList['nameCol']['nestedToggle'] = true;

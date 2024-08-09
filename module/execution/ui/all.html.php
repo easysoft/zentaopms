@@ -82,7 +82,6 @@ dtable
     set::cols($setting),
     set::data($tableData),
     set::checkable($canBatchAction),
-    set::fixedLeftWidth('44%'),
     set::customCols(true),
     set::footToolbar($footToolbar),
     set::onRenderCell(jsRaw('window.onRenderCell')),
