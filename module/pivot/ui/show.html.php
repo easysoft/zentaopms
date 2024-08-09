@@ -12,7 +12,7 @@ namespace zin;
 
 jsVar('currentGroup', $currentGroup);
 jsVar('pivotID', $pivot->id);
-jsVar('drillModalTitle', $this->lang->pivot->step3->drillView);
+jsVar('drillModalTitle', $this->lang->pivot->stepDrill->drillView);
 
 $filters = array();
 $options = array();

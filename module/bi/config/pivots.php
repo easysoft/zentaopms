@@ -2163,8 +2163,8 @@ $config->bi->builtin->pivots[] = array
     'sql'       => <<<EOT
 select actor,LEFT(`date`,10) as `day` from zt_action
 where `action`='login'
-and if(\$startDate='',1,`date`>=cast(\$startDate as date))
-and if(\$endDate='',1,`date`<=cast(\$endDate as date))
+and if(\$startDate='',1,LEFT(`date`, 10)>=cast(\$startDate as date))
+and if(\$endDate='',1,LEFT(`date`, 10)<=cast(\$endDate as date))
 order by `date` asc, actor asc
 EOT,
     'settings'  => array
