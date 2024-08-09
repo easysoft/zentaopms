@@ -158,15 +158,16 @@ class pivotZen extends pivot
         {
             foreach($this->post->filterValues as $key => $value) $pivot->filters[$key]['default'] = $value;
         }
-        if(isset($_POST['summary']) and $_POST['summary']) $pivot->settings['summary'] = $this->post->summary;
+        $showOrigin = false;
+        if(isset($_POST['summary']) and $_POST['summary']) $showOrigin = $this->post->summary == 'notuse';
 
         list($sql, $filterFormat) = $this->pivot->getFilterFormat($pivot->sql, $pivot->filters);
 
         $fields = json_decode(json_encode($pivot->fieldSettings), true);
         $langs  = json_decode($pivot->langs, true) ?? array();
 
-        $showOrigin = isset($pivot->settings['summary']) && $pivot->settings['summary'] == 'notuse';
-        if($showOrigin)
+        $settingShowOrigin = isset($pivot->settings['summary']) && $pivot->settings['summary'] == 'notuse';
+        if($showOrigin || $settingShowOrigin)
         {
             list($data, $configs) = $this->pivot->genOriginSheet($fields, $pivot->settings, $sql, $filterFormat, $langs, $driver);
         }

@@ -14,35 +14,55 @@ jsVar('currentGroup', $currentGroup);
 jsVar('pivotID', $pivot->id);
 jsVar('drillModalTitle', $this->lang->pivot->stepDrill->drillView);
 
-$filters = array();
-$options = array();
-foreach($pivot->filters as $filter)
+$fnGenerateFilters = function() use($pivot, $showOrigin, $lang)
 {
-    $type  = $filter['type'];
-    $name  = $filter['name'];
-    $field = $filter['field'];
-    $value = zget($filter, 'default', '');
-    $from  = zget($filter, 'from');
-    if($from == 'query')
-    {
-        $typeOption = $filter['typeOption'];
-        if($type == 'select' && !isset($options[$typeOption])) $options[$typeOption] = $this->pivot->getSysOptions($typeOption);
+    $hasFilter = !empty($pivot->filters);
+    if($showOrigin || !$hasFilter) return div(setID('conditions'), setClass('mb-4'));
 
-        $filters[] = filter(set(array('title' => $name, 'type' => $type, 'name' => $field, 'value' => $value, 'items' => zget($options, $typeOption, array()))));
-    }
-    else
+    $filters = array();
+    $options = array();
+    foreach($pivot->filters as $filter)
     {
-        if($type == 'select' && !isset($options[$field]))
+        $type  = $filter['type'];
+        $name  = $filter['name'];
+        $field = $filter['field'];
+        $value = zget($filter, 'default', '');
+        $from  = zget($filter, 'from');
+        if($from == 'query')
         {
-            $fieldSetting = $pivot->fieldSettings->$field;
-            $options[$field] = $this->pivot->getSysOptions($fieldSetting->type, $fieldSetting->object, $fieldSetting->field, $pivot->sql, zget($filter, 'saveAs', ''));
+            $typeOption = $filter['typeOption'];
+            if($type == 'select' && !isset($options[$typeOption])) $options[$typeOption] = $this->pivot->getSysOptions($typeOption);
+
+            $filters[] = filter(set(array('title' => $name, 'type' => $type, 'name' => $field, 'value' => $value, 'items' => zget($options, $typeOption, array()))));
         }
+        else
+        {
+            if($type == 'select' && !isset($options[$field]))
+            {
+                $fieldSetting = $pivot->fieldSettings->$field;
+                $options[$field] = $this->pivot->getSysOptions($fieldSetting->type, $fieldSetting->object, $fieldSetting->field, $pivot->sql, zget($filter, 'saveAs', ''));
+            }
 
-        $filters[] = resultFilter(set(array('title' => $name, 'type' => $type, 'name' => $field, 'value' => $value, 'items' => zget($options, $field, array()))));
+            $filters[] = resultFilter(set(array('title' => $name, 'type' => $type, 'name' => $field, 'value' => $value, 'items' => zget($options, $field, array()))));
+        }
     }
-}
 
-$generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $configs, $showOrigin)
+    $isSingleFilter = count($filters) == 1;
+
+    return div
+    (
+        setID('conditions'),
+        setClass('flex justify-start bg-canvas mt-4 mb-2 w-full' . ($isSingleFilter ? ' flex-wrap' : ' items-center')),
+        $isSingleFilter ? $filters : div
+        (
+            setClass('flex flex-wrap w-full'),
+            $filters
+        ),
+        button(setClass('btn primary mb-2'), on::click('loadCustomPivot'), $lang->pivot->query)
+    );
+};
+
+$generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $configs, $showOrigin, $fnGenerateFilters)
 {
     $clickable = !$pivot->builtin;
     list($cols, $rows, $cellSpan) = $this->loadModel('bi')->convertDataForDtable($data, $configs);
@@ -109,17 +129,7 @@ $generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $con
                 ))) : null) : null
             ),
             div(setClass('divider')),
-            !$showOrigin && $filters ? div
-            (
-                setID('conditions'),
-                setClass('flex justify-start bg-canvas mt-4 mb-2 w-full' . (count($filters) == 1 ? ' flex-wrap' : ' items-center')),
-                count($filters) == 1 ? $filters : div
-                (
-                    setClass('flex flex-wrap w-full'),
-                    $filters
-                ),
-                button(setClass('btn primary mb-2'), on::click('loadCustomPivot'), $lang->pivot->query)
-            ) : div(setID('conditions'), setClass('mb-4')),
+            $fnGenerateFilters(),
             dtable
             (
                 set::striped(true),
