@@ -33,12 +33,16 @@ modalHeader
 
 formPanel
 (
+    on::change('[name^=users]', 'checkObjectPriv'),
     in_array($lib->type, array('product', 'project', 'execution')) ? formGroup
     (
         set::label($lang->doc->{$lib->type}),
         set::control('static'),
         set::value($object->name)
     ) : null,
+    formHidden('product',   $lib->product),
+    formHidden('project',   $lib->project),
+    formHidden('execution', $lib->execution),
     isset($spaces) ? formGroup
     (
         set::name('space'),
