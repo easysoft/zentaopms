@@ -137,7 +137,7 @@ class dao extends baseDAO
             }
             else
             {
-                if(strpos(',radio,checkbox,multi-select,', ",$field->control,") !== false) $data->{$field->field} = '';
+                if(strpos(',radio,checkbox,multi-select,', ",$field->control,") !== false && isset($_POST[$field->field])) $data->{$field->field} = '';
             }
         }
 
