@@ -13,3 +13,16 @@ declare(strict_types=1);
 namespace zin;
 
 modalHeader(set::title($lang->doc->moveDocAction));
+
+$libType    = $space == 'mine' ? 'mine' : 'custom';
+$defaultAcl = $doc->acl;
+if($libType == 'mine') $defaultAcl = 'private';
+if($libType == 'mine') $this->lang->doc->aclList = $this->lang->doclib->mySpaceAclList;
+if($libType == 'custom' && $doc->lib != $libID) $defaultAcl = 'open';
+
+jsVar('space', $space);
+jsVar('libID', $libID);
+jsVar('docID', $docID);
+formPanel
+(
+);
