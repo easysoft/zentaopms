@@ -3601,6 +3601,20 @@ $config->bi->builtin->metrics[] = array
 
 $config->bi->builtin->metrics[] = array
 (
+    'name'       => '按执行统计的研发需求计划负载',
+    'alias'      => '执行计划负载',
+    'code'       => 'workload_of_plan_in_execution',
+    'purpose'    => 'qc',
+    'scope'      => 'execution',
+    'object'     => 'execution',
+    'unit'       => 'percentage',
+    'dateType'   => 'nodate',
+    'desc'       => '按执行统计的研发需求计划负载是指执行开始时计划的需求规模数与执行开发人员可用工时数的比率。该度量项反映了团队的工作负载，可以帮助团队进行资源调配和需求规划。',
+    'definition' => "复用：按执行统计的截止执行开始当天研发需求规模数、按执行统计的开发人员可用工时；公式：按执行统计的截止执行开始当天研发需求规模数/按执行统计的开发人员可用工时"
+);
+
+$config->bi->builtin->metrics[] = array
+(
     'name'       => '按执行统计的执行结束时测试缺陷密度',
     'alias'      => '执行结束时测试缺陷密度',
     'code'       => 'test_concentration_in_execution_when_closing',
