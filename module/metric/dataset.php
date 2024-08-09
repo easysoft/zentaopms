@@ -754,7 +754,29 @@ class dataset
     }
 
     /**
-     * 获取项目数据。
+     * 获取任务数据，包括团队成员。
+     * Get all tasks data with team.
+     *
+     * @param  string       $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getTasksWithTeam($fieldList)
+    {
+        $stmt = $this->dao->select($fieldList)->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution=t2.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project=t3.id')
+            ->beginIF(strpos($fieldList, 't4') !== false)->leftJoin(TABLE_TASKTEAM)->alias('t4')->on("t1.id=t4.task and t1.mode='multi'")->fi()
+            ->where('t2.type')->in('sprint,kanban,stage')
+            ->andWhere('t1.deleted')->eq('0')
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t3.deleted')->eq('0');
+
+        return $this->defaultWhere($stmt, 't1');
+    }
+
+    /**
+     * 获取任务数据。
      * Get all tasks.
      *
      * @param  string       $fieldList
@@ -766,7 +788,6 @@ class dataset
         $stmt = $this->dao->select($fieldList)->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution=t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project=t3.id')
-            ->beginIF(strpos($fieldList, 't4') !== false)->leftJoin(TABLE_TASKTEAM)->alias('t4')->on("t1.id=t4.task and t1.mode='multi'")->fi()
             ->where('t2.type')->in('sprint,kanban,stage')
             ->andWhere('t1.deleted')->eq('0')
             ->andWhere('t2.deleted')->eq('0')

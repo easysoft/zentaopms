@@ -20,7 +20,7 @@
  */
 class count_of_assigned_task_in_user extends baseCalc
 {
-    public $dataset = 'getTasks';
+    public $dataset = 'getTasksWithTeam';
 
     public $fieldList = array('t1.id', "case when t1.mode != '' and t4.status != 'done' then t4.account when t1.mode != '' and t4.status = 'done' then '' else t1.assignedTo end as assignedTo", 't1.status', 't1.mode', 't4.account', 't3.status as projectStatus', 't2.status as executionStatus', 't4.status as teamStatus');
 
