@@ -2407,8 +2407,9 @@ class pivotModel extends model
 
             foreach($fieldList as $fieldName => $field)
             {
-                $fieldLabel = $fieldName;
-                if(!empty($field['name'])) $fieldLabel = $field['name'];
+                if(empty($field['name'])) continue;
+
+                $fieldLabel = $field['name'];
                 if(isset($this->lang->$object->$fieldName)) $fieldLabel = $this->lang->$object->$fieldName;
 
                 $cols[$fieldName] = array('name' => $fieldName, 'title' => $fieldLabel);
