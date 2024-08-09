@@ -10,6 +10,15 @@ declare(strict_types=1);
  */
 namespace zin;
 
+h::css
+(
+    <<<CSS
+    [data-type="mine"]{display: none;}
+    [data-type="mine"] + menu{--list-nested-indent: 0px !important; border-bottom-width: 1px; padding-bottom: 8px; margin-bottom: 8px; max-height: calc(100vh - 250px); overflow-y:auto; padding-left:5px; padding-right: 5px;}
+    [data-type="mine"] + menu:before{border-left-width: 0px !important;}
+    CSS
+);
+
 $canSort = hasPriv('doc', 'sortCatalog');
 sidebar
 (

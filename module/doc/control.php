@@ -188,10 +188,11 @@ class doc extends control
      * Edit a library.
      *
      * @param  int    $libID
+     * @param  string $targetSpace
      * @access public
      * @return void
      */
-    public function editLib(int $libID)
+    public function editLib(int $libID, string $targetSpace = '')
     {
         $lib = $this->doc->getLibByID($libID);
         if(!empty($_POST))
@@ -231,12 +232,18 @@ class doc extends control
             $this->view->object = $execution;
         }
 
-        $this->docZen->setAclForEditLib($lib);
+        $this->docZen->setAclForEditLib($lib, $targetSpace);
 
-        $this->view->lib    = $lib;
-        $this->view->groups = $this->loadModel('group')->getPairs();
-        $this->view->users  = $this->user->getPairs('noletter|noclosed', $lib->users);
-        $this->view->libID  = $libID;
+        if(($lib->type == 'custom' && $lib->parent > 0) || $lib->type == 'mine')
+        {
+            $this->view->spaces      = $this->docZen->getAllSpaces();
+            $this->view->targetSpace = $targetSpace ? $targetSpace : ($lib->type == 'mine' ? 'mine' : $lib->parent);
+        }
+
+        $this->view->lib         = $lib;
+        $this->view->groups      = $this->loadModel('group')->getPairs();
+        $this->view->users       = $this->user->getPairs('noletter|noclosed', $lib->users);
+        $this->view->libID       = $libID;
 
         $this->display();
     }
@@ -1177,7 +1184,7 @@ class doc extends control
         }
 
         $this->view->title       = $this->lang->doc->moveLibAction;
-        $this->view->spaces      = array('mine' => $this->lang->doc->spaceList['mine']) + $this->doc->getTeamSpaces();
+        $this->view->spaces      = $this->docZen->getAllSpaces;
         $this->view->lib         = $lib;
         $this->view->targetSpace = $targetSpace;
         $this->display();

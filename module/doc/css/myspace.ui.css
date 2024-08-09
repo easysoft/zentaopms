@@ -1,6 +1,2 @@
 .dtable-cells div[data-col=title] .dtable-cell-html {width: inherit;}
 .doc-title[data-status=draft] .doc-name {max-width: calc(100% - 60px); overflow: hidden;}
-
-[data-type="mine"]{display: none;}
-[data-type="mine"] + menu{--list-nested-indent: 0px !important; border-bottom-width: 1px; padding-bottom: 8px; margin-bottom: 8px; max-height: calc(100vh - 250px); overflow-y:auto; padding-left:5px; padding-right: 5px;}
-[data-type="mine"] + menu:before{border-left-width: 0px !important;}
