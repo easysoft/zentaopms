@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 $cols = array();
+if($type == 'custom') $config->doc->dtable->fieldList['actions']['menu'] = array('edit', 'movedoc', 'delete');
 foreach($config->doc->dtable->fieldList as $colName => $col)
 {
     if($canExport && $colName == 'id') $col['type'] = 'checkID';
