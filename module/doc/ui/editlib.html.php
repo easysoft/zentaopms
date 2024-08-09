@@ -10,6 +10,17 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$libType    = $lib->type;
+$defaultAcl = empty($lib->main) ? $lib->acl : 'default';
+if(!empty($targetSpace))
+{
+    jsVar('space', $targetSpace);
+    $libType = $targetSpace == 'mine' ? 'mine' : 'custom';
+
+    if($lib->type != $libType && $libType == 'mine')   $defaultAcl = 'private';
+    if($lib->type != $libType && $libType == 'custom') $defaultAcl = 'open';
+}
+
 jsVar('doclibID', $lib->id);
 jsVar('libType', $libType);
 modalHeader
@@ -31,7 +42,10 @@ formPanel
     (
         set::name('space'),
         set::label($lang->doc->space),
-        set::control(array('control' => 'picker', 'value' => $targetSpace, 'items' => $spaces, 'required' => true)),
+        set::control('picker'),
+        set::value($targetSpace),
+        set::items($spaces),
+        set::required(true),
         on::change('changeSpace')
     ) : null,
     formGroup
