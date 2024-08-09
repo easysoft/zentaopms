@@ -3909,76 +3909,6 @@ $config->bi->builtin->metrics[] = array
 
 $config->bi->builtin->metrics[] = array
 (
-    'name'       => '按代码库统计代码问题提交次数',
-    'alias'      => '代码问题提交次数',
-    'code'       => 'count_of_submitted_code_issues_in_codebase',
-    'purpose'    => 'qc',
-    'scope'      => 'code',
-    'object'     => 'issue',
-    'unit'       => 'count',
-    'dateType'   => 'nodate',
-    'desc'       => '按代码库统计代码问题提交次数，可作为度量项衡量研发过程中出现的代码问题频率。代码问题提交次数反映了代码质量和稳定性方面的情况。',
-    'definition' => "代码库中问题提交次数相加。\n不包含已删除。"
-);
-
-$config->bi->builtin->metrics[] = array
-(
-    'name'       => '按代码库统计代码问题解决总数',
-    'alias'      => '代码问题解决总数',
-    'code'       => 'count_of_resolved_code_issues_in_codebase',
-    'purpose'    => 'qc',
-    'scope'      => 'code',
-    'object'     => 'issue',
-    'unit'       => 'count',
-    'dateType'   => 'nodate',
-    'desc'       => '按代码库统计的代码问题解决总数是指在特定代码库中解决的所有代码问题的总数。它可以反映团队在代码质量方面的工作效能和改进情况。',
-    'definition' => "代码库中问题解决次数相加。\n不包含已删除。"
-);
-
-$config->bi->builtin->metrics[] = array
-(
-    'name'       => '按代码库统计代码中待处理的问题总数',
-    'alias'      => '待处理问题总数',
-    'code'       => 'count_of_pending_issues_in_codebase',
-    'purpose'    => 'qc',
-    'scope'      => 'code',
-    'object'     => 'issue',
-    'unit'       => 'count',
-    'dateType'   => 'nodate',
-    'desc'       => '按代码库统计的代码问题库存总数是指在代码库中记录的所有未解决的代码问题的总数，它反映了代码质量和稳定性。',
-    'definition' => "代码库中所有未关闭的问题数量相加。\n不包含已删除。"
-);
-
-$config->bi->builtin->metrics[] = array
-(
-    'name'       => '按代码库统计合并请求合并次数',
-    'alias'      => '合并请求合并次数',
-    'code'       => 'count_of_merged_pull_requests_in_codebase',
-    'purpose'    => 'rate',
-    'scope'      => 'code',
-    'object'     => 'mergeRequest',
-    'unit'       => 'count',
-    'dateType'   => 'nodate',
-    'desc'       => '按代码库统计的合并请求合并次数是指在代码库中完成的全部合并请求的数量。该度量项反映了代码库的合并流程和代码合并质量，有助于评估团队的协作效率和代码更新情况。',
-    'definition' => "代码库中合并请求合并次数相加。\n不包含已删除。"
-);
-
-$config->bi->builtin->metrics[] = array
-(
-    'name'       => '按代码库统计代码提交次数',
-    'alias'      => '代码提交次数',
-    'code'       => 'count_of_code_commits_in_codebase',
-    'purpose'    => 'rate',
-    'scope'      => 'code',
-    'object'     => 'commit',
-    'unit'       => 'count',
-    'dateType'   => 'nodate',
-    'desc'       => '按代码库统计的代码提交次数是指代码库中的全部代码提交（Commit）操作的数量。代码提交次数反映了代码库的开发活动频率和代码更新情况，可以评估开发团队的工作量和迭代速度。',
-    'definition' => "代码库中代码提交次数相加。\n不包含已删除。"
-);
-
-$config->bi->builtin->metrics[] = array
-(
     'name'       => '按产品统计的每周新增反馈数',
     'alias'      => '新增反馈数',
     'code'       => 'count_of_weekly_created_feedback_in_product',
@@ -4381,62 +4311,6 @@ $config->bi->builtin->metrics[] = array
     'dateType'   => 'nodate',
     'desc'       => '按执行统计的测试用例数是指执行下的测试用例个数的求和，可以帮助团队评估需求测试用例的覆盖程度。',
     'definition' => "执行中满足以下条件的测试用例个数的求和\n执行用例列表中的用例\n过滤已删除的用例\n过滤已删除的执行\n过滤已删除的项目\n过滤已删除的产品"
-);
-
-$config->bi->builtin->metrics[] = array
-(
-    'name'       => '按代码库统计的年度代码提交次数',
-    'alias'      => '代码库年度提交次数',
-    'code'       => 'count_of_yearly_code_commits_in_codebase',
-    'purpose'    => 'rate',
-    'scope'      => 'code',
-    'object'     => 'codebase',
-    'unit'       => 'count',
-    'dateType'   => 'year',
-    'desc'       => '按代码库统计的的年度代码提交次数是指代码库在某个年度的代码提交数量。这个度量项可以反映代码库的年度开发活动频率和代码更新情况。',
-    'definition' => "代码库中代码提交次数求和，提交时间为某年。"
-);
-
-$config->bi->builtin->metrics[] = array
-(
-    'name'       => '按代码库统计的月度代码提交次数',
-    'alias'      => '代码库月度提交次数',
-    'code'       => 'count_of_monthly_code_commits_in_codebase',
-    'purpose'    => 'rate',
-    'scope'      => 'code',
-    'object'     => 'codebase',
-    'unit'       => 'count',
-    'dateType'   => 'month',
-    'desc'       => '按代码库统计的的月度代码提交次数是指代码库在某个月的代码提交数量。这个度量项可以反映代码库的月开发活动频率和代码更新情况。',
-    'definition' => '代码库中代码提交次数求和，提交时间为某月。'
-);
-
-$config->bi->builtin->metrics[] = array
-(
-    'name'       => '按代码库统计的每周代码提交次数',
-    'alias'      => '代码库每周提交次数',
-    'code'       => 'count_of_weekly_code_commits_in_codebase',
-    'purpose'    => 'rate',
-    'scope'      => 'code',
-    'object'     => 'codebase',
-    'unit'       => 'count',
-    'dateType'   => 'week',
-    'desc'       => '按代码库统计的每周代码提交次数是指代码库在单周的代码提交数量。这个度量项可以反映代码库的周开发活动频率和代码更新情况。',
-    'definition' => '代码库中代码提交次数求和，提交时间为某周。'
-);
-
-$config->bi->builtin->metrics[] = array
-(
-    'name'       => '按代码库统计的每日代码提交次数',
-    'alias'      => '代码库每日提交次数',
-    'code'       => 'count_of_daily_code_commits_in_codebase',
-    'purpose'    => 'rate',
-    'scope'      => 'code',
-    'object'     => 'codebase',
-    'unit'       => 'count',
-    'dateType'   => 'day',
-    'desc'       => '按代码库统计的的每日代码提交次数是指代码库每日的代码提交数量。这个度量项可以反映代码库每日开发活动频率和代码更新情况。',
-    'definition' => '代码库中代码提交次数求和，提交时间为某日。'
 );
 
 $config->bi->builtin->metrics[] = array
