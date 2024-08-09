@@ -1011,6 +1011,11 @@ if($config->edition != 'open')
 
     if($config->visions == ',lite,') unset($lang->resource->feedback);
 
+    /* User. */
+    $lang->resource->user->import         = 'import';
+    $lang->resource->user->export         = 'export';
+    $lang->resource->user->exportTemplate = 'exportTemplate';
+
     /* Faq. */
     $lang->resource->faq = new stdclass();
     $lang->resource->faq->browse = 'browse';
