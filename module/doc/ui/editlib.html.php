@@ -9,8 +9,9 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+
 jsVar('doclibID', $lib->id);
-jsVar('libType', $lib->type);
+jsVar('libType', $libType);
 modalHeader
 (
     set::title($lib->type == 'custom' && $lib->parent == 0 ? $lang->doclib->editSpace : $lang->doc->editLib),
@@ -26,6 +27,13 @@ formPanel
         set::control('static'),
         set::value($object->name)
     ) : null,
+    isset($spaces) ? formGroup
+    (
+        set::name('space'),
+        set::label($lang->doc->space),
+        set::control(array('control' => 'picker', 'value' => $targetSpace, 'items' => $spaces, 'required' => true)),
+        on::change('changeSpace')
+    ) : null,
     formGroup
     (
         set::label($lib->type == 'custom' && $lib->parent == 0 ? $lang->doclib->spaceName : $lang->doc->libName),
@@ -36,7 +44,7 @@ formPanel
             setClass('hidden'),
             set::name('acl'),
             set::items($lang->doc->libTypeList),
-            set::value($lib->type)
+            set::value($libType)
         )
     ),
     formRow
@@ -49,7 +57,7 @@ formPanel
             (
                 set::name('acl'),
                 set::items($lib->type == 'api' ? $lang->api->aclList : $lang->doclib->aclList),
-                set::value(empty($lib->main) ?  $lib->acl : 'default'),
+                set::value($defaultAcl),
                 on::change("toggleAcl('lib')")
             )
         )

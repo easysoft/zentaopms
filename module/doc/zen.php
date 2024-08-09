@@ -311,28 +311,33 @@ class docZen extends doc
      * Handle the access control of editing document library.
      *
      * @param  object    $lib
+     * @param  string    $targetSpace
      * @access protected
      * @return void
      */
-    protected function setAclForEditLib(object $lib): void
+    protected function setAclForEditLib(object $lib, string $targetSpace = ''): void
     {
-        if($lib->type == 'custom')
+        $libType = $lib->type;
+        if($targetSpace == 'mine')   $libType = 'mine';
+        if(is_numeric($targetSpace)) $libType = 'custom';
+
+        if($libType == 'custom')
         {
             unset($this->lang->doclib->aclList['default']);
         }
-        elseif($lib->type == 'api')
+        elseif($libType == 'api')
         {
             $this->app->loadLang('api');
             $type = !empty($lib->product) ? 'product' : 'project';
             $this->lang->api->aclList['default'] = sprintf($this->lang->api->aclList['default'], $this->lang->{$type}->common);
         }
-        elseif($lib->type == 'mine')
+        elseif($libType == 'mine')
         {
             $this->lang->doclib->aclList = $this->lang->doclib->mySpaceAclList;
         }
-        elseif($lib->type != 'custom')
+        elseif($libType != 'custom')
         {
-            $type = isset($type) ? $type : $lib->type;
+            $type = isset($type) ? $type : $libType;
             $this->lang->doclib->aclList['default'] = sprintf($this->lang->doclib->aclList['default'], $this->lang->{$type}->common);
             $this->lang->doclib->aclList['private'] = sprintf($this->lang->doclib->privateACL, $this->lang->{$type}->common);
             unset($this->lang->doclib->aclList['open']);
@@ -864,5 +869,10 @@ class docZen extends doc
         $mineLib->addedBy   = $this->app->user->account;
         $mineLib->addedDate = helper::now();
         $this->dao->insert(TABLE_DOCLIB)->data($mineLib)->exec();
+    }
+
+    public function getAllSpaces(): array
+    {
+        return array('mine' => $this->lang->doc->spaceList['mine']) + $this->doc->getTeamSpaces();
     }
 }
