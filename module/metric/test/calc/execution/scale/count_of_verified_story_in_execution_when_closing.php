@@ -18,7 +18,7 @@ include dirname(__FILE__, 4) . '/lib/calc.unittest.class.php';
 
 zendata('product')->loadYaml('product', true, 4)->gen(10);
 zendata('project')->loadYaml('project_type', true, 4)->gen(100);
-zendata('story')->loadYaml('story_status_closedreason', true, 4)->gen(1000);
+zendata('story')->loadYaml('story_stage_verified', true, 4)->gen(1000);
 zendata('projectstory')->loadYaml('executionstory', true, 4)->gen(1000);
 
 $metric = new metricTest();
