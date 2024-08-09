@@ -382,7 +382,7 @@ class doc extends control
 
         /* Get libs and the default lib ID. */
         $unclosed   = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
-        $libPairs       = $this->doc->getLibs($lib->type, "withObject,{$unclosed}", $libID, $objectID);
+        $libPairs   = $this->doc->getLibs($lib->type, "withObject,{$unclosed}", $libID, $objectID);
         $moduleID   = $moduleID ? (int)$moduleID : (int)$this->cookie->lastDocModule;
         if(!$libID && !empty($libPairs)) $libID = key($libPairs);
         if(empty($lib) && $libID) $lib = $this->doc->getLibByID($libID);
@@ -1185,9 +1185,28 @@ class doc extends control
         }
 
         $this->view->title       = $this->lang->doc->moveLibAction;
-        $this->view->spaces      = $this->docZen->getAllSpaces;
+        $this->view->spaces      = $this->docZen->getAllSpaces();
         $this->view->lib         = $lib;
         $this->view->targetSpace = $targetSpace;
+        $this->display();
+    }
+
+    public function moveDoc(int $docID, int $libID = 0, string $space = '')
+    {
+        $doc = $this->doc->getByID($docID);
+        if(empty($libID)) $libID = (int)$doc->lib;
+
+        $lib = $this->doc->getLibByID($libID);
+        if(empty($space)) $space = $lib->type == 'mine' ? 'mine' : $lib->parent;
+
+        $this->view->docID      = $docID;
+        $this->view->libID      = $libID;
+        $this->view->space      = $space;
+        $this->view->doc        = $doc;
+        $this->view->lib        = $lib;
+        $this->view->spaces     = $this->docZen->getAllSpaces();
+        $this->view->libPairs   = $this->doc->getLibPairs($space == 'mine' ? 'mine' : 'custom', '', (int)$space);
+        $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu($libID);
         $this->display();
     }
 

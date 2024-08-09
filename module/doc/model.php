@@ -142,6 +142,7 @@ class docModel extends model
                 ->beginIF($type)->andWhere('type')->eq($type)->fi()
                 ->beginIF(!$type)->andWhere('type')->ne('api')->fi()
                 ->beginIF($objectID && strpos(',product,project,execution,', ",$type,") !== false)->andWhere($type)->eq($objectID)->fi()
+                ->beginIF($objectID && $type == 'custom')->andWhere('parent')->eq($objectID)->fi()
                 ->orderBy('id_asc')
                 ->query();
         }
