@@ -56,4 +56,16 @@ class test_concentration_in_execution_when_closing extends baseCalc
         foreach($this->result as $execution => $value) $records[] = array('execution' => $execution, 'value' => $value);
         return $this->filterByOptions($records, $options);
     }
+
+    public function generateUniqueKey($records)
+    {
+        $uniqueKeyRecords = array();
+        foreach($records as $record)
+        {
+            $key = $record['execution'];
+            $uniqueKeyRecords[$key] = $record['value'];
+        }
+
+        return $uniqueKeyRecords;
+    }
 }
