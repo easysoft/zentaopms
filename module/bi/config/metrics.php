@@ -3601,6 +3601,20 @@ $config->bi->builtin->metrics[] = array
 
 $config->bi->builtin->metrics[] = array
 (
+    'name'       => '按执行统计的执行结束时测试缺陷密度',
+    'alias'      => '执行结束时测试缺陷密度',
+    'code'       => 'test_concentration_in_execution_when_closing',
+    'purpose'    => 'qc',
+    'scope'      => 'execution',
+    'object'     => 'execution',
+    'unit'       => 'percentage',
+    'dateType'   => 'nodate',
+    'desc'       => '按执行统计的执行测试缺陷密度是指执行产生的有效Bug数与执行交付的研发需求数的比率。该度量项反映了团队交付的研发需求的质量，可以帮助团队识别研发中存在的潜在问题。',
+    'definition' => "复用：按执行统计的执行结束时已交付的研发需求规模数、按执行统计的新增有效Bug数；公式：按执行统计的新增有效Bug数/按执行统计的执行结束时已交付的研发需求规模数"
+);
+
+$config->bi->builtin->metrics[] = array
+(
     'name'       => '按执行统计的任务总数',
     'alias'      => '任务总数',
     'code'       => 'count_of_task_in_execution',
