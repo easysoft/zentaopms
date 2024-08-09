@@ -379,10 +379,12 @@ class docModel extends model
             $this->checkApiLibName($lib, $type, $libID);
         }
 
-        $this->dao->update(TABLE_DOCLIB)->data($lib)->autoCheck()
+        $this->dao->update(TABLE_DOCLIB)->data($lib, 'space')->autoCheck()
             ->batchCheck($this->config->doc->editlib->requiredFields, 'notempty')
             ->where('id')->eq($libID)
             ->exec();
+
+        $this->moveLib($libID, $lib);
 
         if(dao::isError()) return false;
         return common::createChanges($oldLib, $lib);

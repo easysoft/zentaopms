@@ -20,6 +20,7 @@ $config->doc->form->createlib['vision']    = array('type' => 'string',   'requir
 $config->doc->form->createlib['addedBy']   = array('type' => 'string',   'required' => false, 'default' => '');
 $config->doc->form->createlib['addedDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);
 
+$config->doc->form->editlib['space']  = array('type' => 'string',   'required' => true,  'default' => '');
 $config->doc->form->editlib['name']   = array('type' => 'string',   'required' => true,  'default' => '', 'filter' => 'trim');
 $config->doc->form->editlib['acl']    = array('type' => 'string',   'required' => false, 'default' => '');
 $config->doc->form->editlib['groups'] = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
