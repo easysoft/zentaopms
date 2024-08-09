@@ -1819,9 +1819,16 @@ class repo extends control
         {
             $tag->repoID    = $repoID;
             $tag->tagName   = urlencode(helper::safe64Encode($tag->name));
+
+            $tag->commitID = isset($tag->commit->id) ? $tag->commit->id : '';
+            if(isset($tag->commit->sha)) $tag->commitID = $tag->commit->sha;
+            $tag->commitID = substr($tag->commitID, 0, 10);
+
             $tag->committer = isset($tag->commit->author_name) ? $tag->commit->author_name : '';
-            if(isset($tag->tagger->identity->name)) $tag->committer = $tag->tagger->identity->name;
+            if(isset($tag->commit->author->identity->name)) $tag->committer = $tag->commit->author->identity->name;
             $tag->committer = zget($committers, $tag->committer);
+
+            $tag->createdBy = isset($tag->tagger->identity->name) ? zget($committers, $tag->tagger->identity->name) : '';
 
             $tag->date = isset($tag->commit->committed_date) ? date('Y-m-d H:i:s', strtotime($tag->commit->committed_date)) : '';
             if(isset($tag->tagger->when)) $tag->date = date('Y-m-d H:i:s', strtotime($tag->tagger->when));
