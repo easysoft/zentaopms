@@ -1902,6 +1902,9 @@ class repo extends control
 
             $branch->commitDate = isset($branch->commit->committed_date) ? date('Y-m-d H:i:s', strtotime($branch->commit->committed_date)) : '';
             if(isset($branch->commit->author->when)) $branch->commitDate = date('Y-m-d H:i:s', strtotime($branch->commit->author->when));
+
+            $branch->ahead  = isset($branch->divergence->ahead) ? $branch->divergence->ahead : 0;
+            $branch->behind = isset($branch->divergence->behind) ? $branch->divergence->behind : 0;
         }
 
         /* Data sort. */

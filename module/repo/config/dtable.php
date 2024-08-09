@@ -306,13 +306,16 @@ $config->repo->dtable->branch->fieldList['commitID']['type']     = 'text';
 $config->repo->dtable->branch->fieldList['commitID']['link']     = helper::createLink('repo', 'revision', 'repoID={repoID}&objectID=0&revision={commitID}');
 $config->repo->dtable->branch->fieldList['commitID']['data-app'] = $app->tab;
 $config->repo->dtable->branch->fieldList['commitID']['sortType'] = true;
+$config->repo->dtable->branch->fieldList['commitID']['order']    = 30;
 
 $config->repo->dtable->branch->fieldList['committer']['title']    = $lang->repo->lastCommitter;
 $config->repo->dtable->branch->fieldList['committer']['type']     = 'text';
 $config->repo->dtable->branch->fieldList['committer']['sortType'] = true;
+$config->repo->dtable->branch->fieldList['committer']['order']    = 40;
 
-$config->repo->dtable->branch->fieldList['commitDate']['title']      = $lang->repo->lastSubmitTime;
+$config->repo->dtable->branch->fieldList['commitDate']['title']      = $lang->repo->time;
 $config->repo->dtable->branch->fieldList['commitDate']['name']       = 'commitDate';
 $config->repo->dtable->branch->fieldList['commitDate']['type']       = 'datetime';
 $config->repo->dtable->branch->fieldList['commitDate']['width']      = 300;
 $config->repo->dtable->branch->fieldList['commitDate']['formatDate'] = 'YYYY-MM-dd hh:mm';
+$config->repo->dtable->branch->fieldList['commitDate']['order']      = 50;
