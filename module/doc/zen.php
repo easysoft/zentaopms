@@ -343,7 +343,7 @@ class docZen extends doc
             unset($this->lang->doclib->aclList['open']);
         }
 
-        if(!empty($lib->main)) unset($this->lang->doclib->aclList['private'], $this->lang->doclib->aclList['open']);
+        if(!empty($lib->main) && $libType != 'mine') unset($this->lang->doclib->aclList['private'], $this->lang->doclib->aclList['open']);
     }
 
     /**
@@ -865,12 +865,20 @@ class docZen extends doc
         $mineLib->type      = 'mine';
         $mineLib->vision    = $this->config->vision;
         $mineLib->name      = $this->lang->doclib->defaultMyLib;
+        $mineLib->main      = '1';
         $mineLib->acl       = 'private';
         $mineLib->addedBy   = $this->app->user->account;
         $mineLib->addedDate = helper::now();
         $this->dao->insert(TABLE_DOCLIB)->data($mineLib)->exec();
     }
 
+    /**
+     * 获取所有空间。
+     * Get all spaces.
+     *
+     * @access public
+     * @return array
+     */
     public function getAllSpaces(): array
     {
         return array('mine' => $this->lang->doc->spaceList['mine']) + $this->doc->getTeamSpaces();

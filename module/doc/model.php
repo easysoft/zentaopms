@@ -2428,6 +2428,7 @@ class docModel extends model
         $item->name       = $lib->name;
         $item->parent     = isset($lib->parent) ? $lib->parent : '';
         $item->order      = $lib->order;
+        $item->main       = zget($lib, 'main', 0);
         $item->objectType = $type;
         $item->objectID   = $objectID;
         $item->active     = $lib->id == $libID && $browseType != 'bysearch' ? 1 : 0;

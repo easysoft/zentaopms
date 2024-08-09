@@ -290,7 +290,7 @@ class docMenu extends wg
             $moduleName = $item->type == 'docLib' ? 'doc' : 'api';
             if(hasPriv($moduleName, 'addCatalog') && !(isset($item->objectType) && $item->objectType == 'custom' && $item->parent == 0))
             {
-                $menus[] = array(
+                $menus['adddirectory'] = array(
                     'key'     => 'adddirectory',
                     'icon'    => 'add-directory',
                     'text'    => $this->lang->doc->libDropdown['addModule'],
@@ -300,7 +300,7 @@ class docMenu extends wg
 
             if($item->type == 'docLib' && ($item->objectType == 'mine' || ($item->objectType == 'custom' && $item->parent > 0)) && hasPriv($moduleName, 'moveLib'))
             {
-                $menus[] = array(
+                $menus['movelib'] = array(
                     'key'         => 'movelib',
                     'icon'        => 'folder-move',
                     'text'        => $this->lang->doc->moveTo,
@@ -312,7 +312,7 @@ class docMenu extends wg
 
             if(hasPriv($moduleName, 'editLib'))
             {
-                $menus[] = array(
+                $menus['editlib'] = array(
                     'key'         => 'editlib',
                     'icon'        => 'edit',
                     'text'        => (isset($item->objectType) && $item->objectType == 'custom' && $item->parent == 0) ? $this->lang->doc->libDropdown['editSpace'] : $this->lang->doc->libDropdown['editLib'],
@@ -323,7 +323,7 @@ class docMenu extends wg
 
             if(hasPriv($moduleName, 'deleteLib'))
             {
-                $menus[] = array(
+                $menus['dellib'] = array(
                     'key'          => 'dellib',
                     'icon'         => 'trash',
                     'text'         => (isset($item->objectType) && $item->objectType == 'custom' && $item->parent == 0) ? $this->lang->doc->libDropdown['deleteSpace'] : $this->lang->doc->libDropdown['deleteLib'],
@@ -332,19 +332,20 @@ class docMenu extends wg
                     'data-confirm' => (isset($item->objectType) && $item->objectType == 'custom' && $item->parent == 0) ? $this->lang->doc->confirmDeleteSpace : $this->lang->{$moduleName}->confirmDeleteLib
                 );
             }
+            if($item->objectType == 'mine' && $item->main == 1) unset($menus['dellib'], $menus['movelib']);
         }
         elseif($item->type == 'module')
         {
             $moduleName = $item->objectType == 'api' ? 'api' : 'doc';
             if(hasPriv($moduleName, 'addCatalog'))
             {
-                $menus[] = array(
+                $menus['adddirectory'] = array(
                     'key'     => 'adddirectory',
                     'icon'    => 'add-directory',
                     'text'    => $this->lang->doc->libDropdown['addSameModule'],
                     'onClick' => jsRaw("() => addModule({$item->id}, 'same')")
                 );
-                $menus[] = array(
+                $menus['addsubdirectory'] = array(
                     'key'     => 'addsubdirectory',
                     'icon'    => 'add-directory',
                     'text'    => $this->lang->doc->libDropdown['addSubModule'],
@@ -354,7 +355,7 @@ class docMenu extends wg
 
             if(hasPriv($moduleName, 'editCatalog'))
             {
-                $menus[] = array(
+                $menus['editmodule'] = array(
                     'key'  => 'editmodule',
                     'icon' => 'edit',
                     'text' => $this->lang->doc->libDropdown['editModule'],
@@ -366,7 +367,7 @@ class docMenu extends wg
 
             if(hasPriv($moduleName, 'deleteCatalog'))
             {
-                $menus[] = array(
+                $menus['delmodule'] = array(
                     'key'          => 'delmodule',
                     'icon'         => 'trash',
                     'text'         => $this->lang->doc->libDropdown['delModule'],
@@ -377,7 +378,7 @@ class docMenu extends wg
             }
         }
 
-        return $menus;
+        return array_values($menus);
     }
 
     private function getIcon($item): string

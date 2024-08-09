@@ -11,7 +11,8 @@ declare(strict_types=1);
 namespace zin;
 
 $libType    = $lib->type;
-$defaultAcl = empty($lib->main) ? $lib->acl : 'default';
+$defaultAcl = $lib->acl;
+if(!empty($lib->main) && $lib->type != 'mine') $defaultAcl = 'default';
 if(!empty($targetSpace))
 {
     jsVar('space', $targetSpace);

@@ -234,7 +234,7 @@ class doc extends control
 
         $this->docZen->setAclForEditLib($lib, $targetSpace);
 
-        if(($lib->type == 'custom' && $lib->parent > 0) || $lib->type == 'mine')
+        if(($lib->type == 'custom' && $lib->parent > 0) || ($lib->type == 'mine' && $lib->main == 0))
         {
             $this->view->spaces      = $this->docZen->getAllSpaces();
             $this->view->targetSpace = $targetSpace ? $targetSpace : ($lib->type == 'mine' ? 'mine' : $lib->parent);
@@ -1155,6 +1155,10 @@ class doc extends control
      */
     public function moveLib(int $libID, string $targetSpace = '')
     {
+        $lib = $this->doc->getLibByID($libID);
+        if(empty($targetSpace)) $targetSpace = $lib->type == 'mine' ? 'mine' : $lib->parent;
+        if(!empty($lib->main)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorEditSystemDoc));
+
         if(!empty($_POST))
         {
             $data = form::data()
@@ -1170,11 +1174,8 @@ class doc extends control
             $locateLink = true;
             if($targetSpace == 'mine')$locateLink = $this->createLink('doc', 'mySpace', "type=mine&libID={$libID}");
             if($targetSpace != 'mine')$locateLink = $this->createLink('doc', 'teamSpace', "objectID=0&libID={$libID}");
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $locateLink));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $locateLink));
         }
-
-        $lib = $this->doc->getLibByID($libID);
-        if(empty($targetSpace)) $targetSpace = $lib->type == 'mine' ? 'mine' : $lib->parent;
 
         $this->docZen->setAclForCreateLib(is_numeric($targetSpace) ? 'custom' : 'mine');
         if(is_numeric($targetSpace))
