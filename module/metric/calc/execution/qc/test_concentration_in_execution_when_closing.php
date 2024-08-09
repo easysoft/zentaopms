@@ -30,5 +30,23 @@ class test_concentration_in_execution_when_closing extends baseCalc
 
     public function calculate($metrics)
     {
+        $bugs    = $metrics['bug'];
+        $stories = $metrics['story'];
+        if(empty($bugs) || empty($stories)) return false;
+
+        $all = array_merge($bugs, $stories);
+
+        $bugs    = $this->generateUniqueKey($bugs);
+        $stories = $this->generateUniqueKey($stories);
+
+        $executions = array_column($all, 'execution', 'execution');
+        foreach($executions as $execution)
+        {
+            $bug   = isset($bugs[$execution]) ? $bugs[$execution] : 0;
+            $story = isset($stories[$execution]) ? $stories[$execution] : 0;
+
+            if($story == 0) continue;
+            $this->result[$execution] = round($bug / $story, 4);
+        }
     }
 }
