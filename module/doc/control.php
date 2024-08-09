@@ -412,6 +412,12 @@ class doc extends control
         $this->view->users            = $this->user->getPairs('nocode|noclosed|nodeleted');
         $this->view->linkParams       = "objectID={$objectID}&%s&browseType=&orderBy=status,id_desc&param=0";
         $this->view->defaultNestedShow = $this->getDefaultNestedShow((int)$libID, (int)$moduleID, $objectType);
+
+        if(!empty($objectType) && $objectType !== 'custom')
+        {
+            $objectIDVar = $objectType . 'ID';
+            $this->view->$objectIDVar = $objectID;
+        }
         $this->display();
     }
 
