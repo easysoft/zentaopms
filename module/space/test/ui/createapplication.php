@@ -26,4 +26,14 @@ $application = array(
 
 $url  = array('id' => 55);
 
-r($tester->createApplication($url, $application)) && p('message,status') && e('创建应用成功,SUCCESS'); //验证创建zdoo应用
+r($tester->createApplication($url, $application)) && p('message,status') && e('创建应用成功,SUCCESS'); //验证创建GitLab应用
+
+$application = array(
+    'customName'   => 'zdoo' . time(),
+    'customDomain' => randomString(),
+    'appType'      => 'GitFox',
+    'name'         => 'app' . time(),
+    'url'          => 'http://10.0.0.51:3000',
+    'token'        => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTAzMTAzOTAsImlzcyI6IkdpdG5lc3MiLCJwaWQiOjMsInRrbiI6eyJ0eXAiOiJwYXQiLCJpZCI6M319.CS5l5r2UqtHVBOJo2F_yOwCJCg9qCaRDReeyfqcHurQ'
+);
+r($tester->createApplication($url, $application)) && p('message,status') && e('创建应用成功,SUCCESS'); //验证创建GitFox应用
