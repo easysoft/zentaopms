@@ -1,4 +1,4 @@
-(function (){
+function saveButtonEvent(){
     const input = document.createElement("input");
     input.type = "hidden";
     input.name = "publish";
@@ -8,12 +8,21 @@
 
     const submitButton = document.getElementById('save-assistant-button');
     const publishButton = document.getElementById('save-publish-assistant-button');
-    publishButton.addEventListener('click', function(e){
-        form.appendChild(input);
-        submitButton.click();
-        form.removeChild(input);
-    });
-})();
+    if (publishButton) {
+        publishButton.addEventListener('click', function(e){
+            form.appendChild(input);
+            submitButton.click();
+            form.removeChild(input);
+        });
+    }
+
+    $('#theme-buttons button').on('click', changeMiniProgramTheme);
+    $('#icon-buttons svg').on('click', changeMiniProgramIcon);
+    $('#save-icon-button').on('click', saveMiniProgramIcon);
+}
+
+saveButtonEvent();
+window.afterPageUpdate = saveButtonEvent;
 
 let selectedTheme = iconTheme ?? 7;
 let selectedIcon = iconName ?? 'coding';
@@ -52,10 +61,3 @@ function saveMiniProgramIcon()
     $('input[name="iconTheme"]').prop('value', selectedTheme);
     $('input[name="iconName"]').prop('value', selectedIcon);
 }
-
-$(function()
-{
-    $('#theme-buttons button').on('click', changeMiniProgramTheme);
-    $('#icon-buttons svg').on('click', changeMiniProgramIcon);
-    $('#save-icon-button').on('click', saveMiniProgramIcon);
-});
