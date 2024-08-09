@@ -128,6 +128,12 @@ class dtable extends wg
                 'saveFieldsUrl' => str_replace('ajaxcustom', 'ajaxsavefields', $customUrl)
             ));
             $this->setProp('customCol', true);
+
+            $fixedLeftWidth = $this->prop('fixedLeftWidth');
+            if($fixedLeftWidth)
+            {
+                $this->triggerError('Table custom columns feature is enabled, it\'s not recommended to set the fixedLeftWidth property, because it restricts the user from resizing fixed columns, you can remove the setting code: "set::fixedLeftWidth(' . json_encode($fixedLeftWidth) . ')".', E_USER_NOTICE);
+            }
         }
     }
 
