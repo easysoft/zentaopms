@@ -6285,6 +6285,7 @@ LEFT JOIN zt_project AS t3 ON SUBSTR(t1.path, 2, POSITION(',' IN SUBSTR(t1.path,
 WHERE t1.deleted = '0'
 AND t1.status = 'doing'
 AND t1.type = 'project'
+AND FIND_IN_SET('rnd', t1.vision)
 EOT
 ,
     'settings'  => array
