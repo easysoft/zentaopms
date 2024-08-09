@@ -1705,7 +1705,7 @@ select
     t1.name as execution,
     t1.id as executionID,
     t2.id as bugID,
-    if(t2.assignedTo='', '未指派', t2.assignedTo) assignedTo
+    t2.assignedTo
 from zt_project as t1
 left join zt_bug as t2 on t1.id=t2.execution
 left join zt_project as t3 on t3.id=t1.project
