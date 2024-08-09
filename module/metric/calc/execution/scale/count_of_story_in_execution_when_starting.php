@@ -18,7 +18,7 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
-class count_of_story_in_beginning_execution extends baseCalc
+class count_of_story_in_execution_when_starting extends baseCalc
 {
     public $dataset = 'getExecutionDevStories';
 

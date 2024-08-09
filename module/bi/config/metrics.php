@@ -4331,7 +4331,7 @@ $config->bi->builtin->metrics[] = array
 (
     'name'       => '按执行统计的执行关闭时已交付的研发需求规模数',
     'alias'      => '执行关闭时已交付研发需求规模数',
-    'code'       => 'scale_of_delivered_story_in_closed_execution',
+    'code'       => 'scale_of_delivered_story_in_execution_when_closing',
     'purpose'    => 'scale',
     'scope'      => 'execution',
     'object'     => 'story',
@@ -4345,7 +4345,7 @@ $config->bi->builtin->metrics[] = array
 (
     'name'       => '按执行统计的截止执行开始当天的研发需求数',
     'alias'      => '截止执行开始当天的研发需求数',
-    'code'       => 'count_of_story_in_beginning_execution',
+    'code'       => 'count_of_story_in_execution_when_starting',
     'purpose'    => 'scale',
     'scope'      => 'execution',
     'object'     => 'story',

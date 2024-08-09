@@ -18,7 +18,7 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
-class scale_of_delivered_story_in_closed_execution extends baseCalc
+class scale_of_delivered_story_in_execution_when_closing extends baseCalc
 {
     public $dataset = 'getDevStoriesWithExecution';
 
