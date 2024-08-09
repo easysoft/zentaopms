@@ -1706,6 +1706,7 @@ class pivotModel extends model
                 $childCol->name       = $field;
                 $childCol->isGroup    = false;
                 $childCol->label      = isset($optionList[$field]) ? $optionList[$field] : $field;
+                $childCol->label      = empty($childCol->label) ? $this->lang->pivot->empty : $childCol->label;
                 $childCol->colspan    = $monopolize ? 2 : 1;
                 $childCol->isDrilling = $isDrilling;
                 $childCol->drillField = $drillField;

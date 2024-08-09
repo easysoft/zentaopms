@@ -84,6 +84,7 @@ $lang->pivot->project     = $lang->projectCommon;
 $lang->pivot->PO          = 'PO';
 $lang->pivot->showPivot   = 'Show Pivot table';
 $lang->pivot->showOrigin  = 'Show Origin Data';
+$lang->pivot->empty       = 'Empty';
 
 $lang->pivot->showOriginItem = 'Show origin item';
 $lang->pivot->recTotalTip    = '<strong> %s </strong> items in total';
