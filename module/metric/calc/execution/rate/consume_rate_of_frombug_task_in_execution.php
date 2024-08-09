@@ -5,9 +5,9 @@
  *
  * 范围：execution
  * 对象：task
- * 目的：hour
+ * 目的：rate
  * 度量名称：按执行统计的来源Bug的任务消耗工时占比
- * 单位：小时
+ * 单位：百分比
  * 描述：按执行统计的来源Bug的任务消耗工时占比是指执行中Bug转任务消耗的工时与执行中所有任务消耗工时的比值。该度量项反映了任务来源为Bug的资源使用情况，可以帮助团队识别缺陷管理中存在的问题，例如历史遗留缺陷过多导致执行一直在补旧账。
  * 定义：复用：按执行统计的来源Bug的任务消耗工时数、按执行统计的任务消耗工时数；公式：按执行统计的来源Bug的任务消耗工时数/按执行统计的任务消耗工时数。
  *
@@ -32,7 +32,7 @@ class consume_rate_of_frombug_task_in_execution extends baseCalc
 
         if(!isset($this->result[$row->execution])) $this->result[$row->execution] = array('fromBug' => 0, 'total' => 0);
 
-        if($row->frombug != 0) $this->result[$row->execution]['fromBug'] += $row->consumed;
+        if($row->fromBug != 0) $this->result[$row->execution]['fromBug'] += $row->consumed;
         $this->result[$row->execution]['total'] += $row->consumed;
     }
 
@@ -43,7 +43,7 @@ class consume_rate_of_frombug_task_in_execution extends baseCalc
         {
             $records[] = array(
                 'execution' => $executionID,
-                'value' => $consumedData['total'] ? round($consumedData['fromBug'] / $consumedData['total']) : 0
+                'value' => $consumedData['total'] ? round($consumedData['fromBug'] / $consumedData['total'], 4) : 0
             );
         }
         return $this->filterByOptions($records, $options);
