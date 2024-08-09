@@ -18,3 +18,17 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
+class test_concentration_in_execution_when_closing extends baseCalc
+{
+    public $result = array();
+
+    public $reuse = true;
+
+    public $reuseMetrics = array('story' => 'count_of_delivered_story_in_execution_when_closing', 'bug' => 'count_of_effective_bug_in_execution');
+
+    public $reuseRule = '{bug} / {story}';
+
+    public function calculate($metrics)
+    {
+    }
+}
