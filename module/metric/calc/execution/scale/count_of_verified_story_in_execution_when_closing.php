@@ -28,15 +28,13 @@ class count_of_verified_story_in_execution_when_closing extends baseCalc
 
     public function calculate($row)
     {
-        $execution = $row->project;
+        $execution  = $row->project;
+        $isVerified = $row->stage == 'verified' &&  $row->verifiedDate <= $row->closedDate;
+        $isReleased = $row->stage == 'released' && $row->releasedDate <= $row->closedDate;
+        $isClosed   = $row->closedReason == 'done' && $row->storyClosedDate <= $row->closedDate;
 
         if(!isset($this->result[$execution])) $this->result[$execution] = 0;
-        if($row->stage == 'verified' &&  $row->verifiedDate <= $row->closedDate
-            || $row->stage == 'released' && $row->releasedDate <= $row->closedDate
-            || $row->closedReason == 'done' && $row->storyClosedDate <= $row->closedDate)
-        {
-            $this->result[$execution] += 1;
-        }
+        if($isVerified || $isReleased || $isClosed) $this->result[$execution] += 1;
     }
 
     public function getResult($options = array())
