@@ -71,7 +71,7 @@ sidebar
         (
             div
             (
-                setClass('bg-canvas my-3 mx-5 text-xl font-semibold text-ellipsis'),
+                setClass('bg-canvas my-3 mx-5 text-xl font-semibold text-ellipsis h-7 flex-none'),
                 $groups[$groupID]
             )
         ),
