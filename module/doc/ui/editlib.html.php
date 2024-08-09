@@ -18,8 +18,9 @@ if(!empty($targetSpace))
     jsVar('space', $targetSpace);
     $libType = $targetSpace == 'mine' ? 'mine' : 'custom';
 
-    if($lib->type != $libType && $libType == 'mine')   $defaultAcl = 'private';
-    if($lib->type != $libType && $libType == 'custom') $defaultAcl = 'open';
+    if($lib->type == 'custom') unset($spaces['mine']);
+    if($libType == 'mine') $defaultAcl = 'private';
+    if($libType == 'custom' && ($lib->type == 'mine' || $lib->parent != $targetSpace)) $defaultAcl = 'open';
 }
 
 jsVar('doclibID', $lib->id);
