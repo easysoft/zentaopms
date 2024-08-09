@@ -2656,6 +2656,7 @@ class baseRouter
         $globalCache = $this->dbQuery("SELECT value FROM " . TABLE_CONFIG . " WHERE `module` = 'common' AND `section` = 'global' AND `key` = 'cache' LIMIT 1")->fetch();
         if(!$globalCache) return false;
 
+        if(isset($globalCache->VALUE) && !isset($globalCache->value)) $globalCache->value = $globalCache->VALUE;
         $caches = json_decode($globalCache->value);
         foreach($caches as $cacheKey => $cache)
         {
