@@ -25,6 +25,8 @@ jsVar('libID', $libID);
 jsVar('docID', $docID);
 formPanel
 (
+    on::change('[name=space]', 'changeSpace'),
+    on::change('[name=lib]', 'changeLib'),
     formGroup
     (
         set::width('5/6'),
@@ -44,5 +46,20 @@ formPanel
         set::width('5/6'),
         set::label($lang->doc->module),
         set::control(array('control' => "picker", 'name' => 'module', 'items' => $optionMenu, 'value' => $doc->module, 'required' => true))
+    ),
+    formRow
+    (
+        setID('aclBox'),
+        formGroup
+        (
+            set::label($lang->doclib->control),
+            radioList
+            (
+                set::name('acl'),
+                set::items($lang->doc->aclList),
+                set::value($defaultAcl),
+                on::change("toggleDocAcl")
+            )
+        )
     ),
 );
