@@ -1300,7 +1300,7 @@ EOT,
         'project'       => array('zh-cn' => '项目ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'executionname' => array('zh-cn' => '执行名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
         'execution'     => array('zh-cn' => '执行ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'stage'         => array('zh-cn' => '不同阶段Bug', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '')
+        'stage'         => array('zh-cn' => '不同阶段需求', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '')
     ),
     'vars'      => array
     (
