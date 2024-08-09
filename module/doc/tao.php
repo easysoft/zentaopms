@@ -219,4 +219,18 @@ class docTao extends docModel
             ->page($pager)
             ->fetchAll('id');
     }
+
+    /**
+     * 更新文档。
+     * Update document.
+     *
+     * @param  int       $docID
+     * @param  object    $doc
+     * @access protected
+     * @return void
+     */
+    protected function doUpdateDoc(int $docID, object $doc)
+    {
+        $this->dao->update(TABLE_DOC)->data($doc)->autoCheck()->where('id')->eq($docID)->exec();
+    }
 }
