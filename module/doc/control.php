@@ -1167,46 +1167,60 @@ class doc extends control
                 ->get();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $targetSpace = $data->space;
             $this->doc->moveLib($libID, $data);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $locateLink = true;
-            if($targetSpace == 'mine')$locateLink = $this->createLink('doc', 'mySpace', "type=mine&libID={$libID}");
-            if($targetSpace != 'mine')$locateLink = $this->createLink('doc', 'teamSpace', "objectID=0&libID={$libID}");
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $locateLink));
+            return $this->docZen->responseAfterMove($this->post->space, $libID);
         }
 
         $this->docZen->setAclForCreateLib(is_numeric($targetSpace) ? 'custom' : 'mine');
-        if(is_numeric($targetSpace))
-        {
-            $this->view->groups = $this->loadModel('group')->getPairs();
-            $this->view->users  = $this->loadModel('user')->getPairs('nocode|noclosed');
-        }
 
         $this->view->title       = $this->lang->doc->moveLibAction;
         $this->view->spaces      = $this->docZen->getAllSpaces();
         $this->view->lib         = $lib;
         $this->view->targetSpace = $targetSpace;
+        $this->view->groups      = $this->loadModel('group')->getPairs();
+        $this->view->users       = $this->loadModel('user')->getPairs('nocode|noclosed');
         $this->display();
     }
 
     public function moveDoc(int $docID, int $libID = 0, string $space = '')
     {
         $doc = $this->doc->getByID($docID);
-        if(empty($libID)) $libID = (int)$doc->lib;
+        if(!empty($_POST))
+        {
+            $data = form::data()->setIF($this->post->acl == 'open', 'groups', '')->setIF($this->post->acl == 'open', 'users', '')->get();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            $changes = common::createChanges($doc, $data);
+            if($changes)
+            {
+                $this->doc->doUpdateDoc($docID, $data);
+                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+                $actionID = $this->loadModel('action')->create('doc', $docID, 'Moved', '', json_encode(array('from' => $doc->lib, 'to' => $data->lib)));
+                $this->action->logHistory($actionID, $changes);
+            }
+
+            return $this->docZen->responseAfterMove($this->post->space, $data->lib);
+        }
+
+        if(empty($libID)) $libID = (int)$doc->lib;
         $lib = $this->doc->getLibByID($libID);
         if(empty($space)) $space = $lib->type == 'mine' ? 'mine' : $lib->parent;
+
+        $libPairs = $this->doc->getLibPairs($space == 'mine' ? 'mine' : 'custom', '', (int)$space);
+        if(!isset($libPairs[$libID])) $libID = key($libPairs);
 
         $this->view->docID      = $docID;
         $this->view->libID      = $libID;
         $this->view->space      = $space;
         $this->view->doc        = $doc;
-        $this->view->lib        = $lib;
         $this->view->spaces     = $this->docZen->getAllSpaces();
-        $this->view->libPairs   = $this->doc->getLibPairs($space == 'mine' ? 'mine' : 'custom', '', (int)$space);
-        $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu($libID);
+        $this->view->libPairs   = $libPairs;
+        $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
+        $this->view->groups     = $this->loadModel('group')->getPairs();
+        $this->view->users      = $this->loadModel('user')->getPairs('nocode|noclosed');
         $this->display();
     }
 

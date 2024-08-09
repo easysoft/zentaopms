@@ -72,3 +72,9 @@ $config->doc->form->movelib['space']  = array('type' => 'string',   'required' =
 $config->doc->form->movelib['acl']    = array('type' => 'string',   'required' => true,  'default' => '');
 $config->doc->form->movelib['groups'] = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
 $config->doc->form->movelib['users']  = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
+
+$config->doc->form->movedoc['lib']    = array('type' => 'int',      'required' => true,  'default' => '');
+$config->doc->form->movedoc['module'] = array('type' => 'int',      'required' => false, 'default' => '');
+$config->doc->form->movedoc['acl']    = array('type' => 'string',   'required' => true,  'default' => '');
+$config->doc->form->movedoc['groups'] = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
+$config->doc->form->movedoc['users']  = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
