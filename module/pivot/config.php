@@ -215,3 +215,8 @@ $config->pivot->objectTableFields->product['status']['name']          = 'status'
 $config->pivot->objectTableFields->product['status']['title']         = $lang->statusAB;
 $config->pivot->objectTableFields->product['status']['type']          = 'status';
 $config->pivot->objectTableFields->product['status']['statusMap']     = $lang->product->statusList;
+
+$config->pivot->objectTableFields->product['totalEpics']['width']        = 100;
+$config->pivot->objectTableFields->product['totalRequirements']['width'] = 100;
+$config->pivot->objectTableFields->product['totalStories']['width']      = 100;
+$config->pivot->objectTableFields->product['unresolvedBugs']['width']    = 100;
