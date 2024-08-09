@@ -143,8 +143,10 @@ $lang->repo->linkTask           = '关联任务';
 $lang->repo->unlink             = '取消关联';
 $lang->repo->viewBugs           = '查看Bug';
 $lang->repo->lastSubmitTime     = '最后提交时间';
-$lang->repo->lastCommitter      = '最后提交人';
+$lang->repo->lastCommitter      = '提交人';
 $lang->repo->lastUpdateTime     = '最后修改时间';
+$lang->repo->createdBy          = '创建人';
+$lang->repo->sourceCommit       = '来源提交';
 
 $lang->repo->title      = '标题';
 $lang->repo->status     = '状态';
