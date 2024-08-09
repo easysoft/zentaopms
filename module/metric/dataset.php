@@ -404,6 +404,32 @@ class dataset
     }
 
     /**
+     * 获取执行的研发需求数据，以执行为主表。
+     * Get execution story list, story type is story.
+     *
+     * @param  string       $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getExecutionDevStories($fieldList)
+    {
+        $stmt = $this->dao->select($fieldList)
+            ->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_PROJECTSTORY)->alias('t3')->on('t1.id=t3.project')
+            ->leftJoin(TABLE_STORY)->alias('t4')->on('t3.story=t4.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t5')->on('t1.project=t5.id')
+            ->leftJoin(TABLE_ACTION)->alias('t6')->on('t3.story=t6.objectID')
+            ->where('t1.type')->in('sprint,stage,kanban')
+            ->andWhere('t6.objectType')->eq('story')
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t4.type')->eq('story')
+            ->andWhere('t4.deleted')->eq(0)
+            ->andWhere('t5.deleted')->eq(0);
+
+        return $this->defaultWhere($stmt, 't1');
+    }
+
+    /**
      * 获取执行的所有需求数据。
      * Get story list, with execution story.
      *

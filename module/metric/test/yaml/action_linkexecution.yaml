@@ -1,0 +1,23 @@
+title: table zt_action
+desc: "系统日志"
+author: automated export
+version: "1.0"
+fields:
+  - field: objectType
+    range: story
+  - field: objectID
+    range: "1-100000"
+  - field: objectType
+    range: "story"
+  - field: product
+    range: "1-100000"
+    prefix: ","
+    postfix: ","
+  - field: project
+    range: "1-100000"
+  - field: action
+    range: linked2execution,unlinked2execution
+  - field: date
+    range: "20110101 000000-20111101 230000:10D"
+    type: timestamp
+    format: YYYY-MM-DD hh:mm:ss

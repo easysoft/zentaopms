@@ -4343,6 +4343,20 @@ $config->bi->builtin->metrics[] = array
 
 $config->bi->builtin->metrics[] = array
 (
+    'name'       => '按执行统计的截止执行开始当天的研发需求数',
+    'alias'      => '截止执行开始当天的研发需求数',
+    'code'       => 'count_of_story_in_beginning_execution',
+    'purpose'    => 'scale',
+    'scope'      => 'execution',
+    'object'     => 'story',
+    'unit'       => 'count',
+    'dateType'   => 'nodate',
+    'desc'       => '按执行统计的截止执行开始当天的研发需求数表示执行开始当天已关联进执行的研发需求的数量。该度量项反映了本期执行计划完成的需求数量，可以用于评估执行团队的工作负载。',
+    'definition' => "截止到执行开始当天的23:59分的研发需求个数求和，过滤已删除的研发需求\n过滤已删除的执行\n过滤已删除的项目\n过滤已删除的产品\n"
+);
+
+$config->bi->builtin->metrics[] = array
+(
     'name'       => '按执行统计的来源Bug的任务消耗工时占比',
     'alias'      => '来源Bug的任务消耗工时占比',
     'code'       => 'consume_rate_of_frombug_task_in_execution',
