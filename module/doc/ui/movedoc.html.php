@@ -62,4 +62,12 @@ formPanel
             )
         )
     ),
+    formRow
+    (
+        setID('whiteListBox'),
+        setClass(($libID == $doc->lib && $libType != 'mine' && $defaultAcl == 'private') ? '' : 'hidden'),
+        formGroup
+        (
+        )
+    )
 );
