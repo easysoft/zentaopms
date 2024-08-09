@@ -13,14 +13,6 @@ fields:
   range: "20100101 000000-20210101 230000:10D"
   type: timestamp
   format: YYYY-MM-DD hh:mm:ss
-- field: verifiedDate
-  range: "20110101 000000-20210101 230000:10D"
-  type: timestamp
-  format: YYYY-MM-DD hh:mm:ss
-- field: releasedDate
-  range: "20110105 000000-20210101 230000:10D"
-  type: timestamp
-  format: YYYY-MM-DD hh:mm:ss
 - field: closedDate
   range: "20110110 000000-20210101 230000:10D"
   type: timestamp
@@ -29,8 +21,6 @@ fields:
   range: bydesign{1},cancel{1},done{1},duplicate{1},postponed{1},subdivided{1},willnotdo{1}
 - field: status
   range: changing{7},active{7},draft{7},reviewing{7},closed{7}
-- field: stage
-  range: verified{7},released{7},closed{7},projected{7},developing{7},developed{7},testing{7},tested{7}
 - field: type
   range: story
 - field: deleted
