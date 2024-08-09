@@ -49,4 +49,11 @@ class test_concentration_in_execution_when_closing extends baseCalc
             $this->result[$execution] = round($bug / $story, 4);
         }
     }
+
+    public function getResult($options = null)
+    {
+        $records = array();
+        foreach($this->result as $execution => $value) $records[] = array('execution' => $execution, 'value' => $value);
+        return $this->filterByOptions($records, $options);
+    }
 }
