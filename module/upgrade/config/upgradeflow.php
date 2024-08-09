@@ -100,7 +100,7 @@ $config->upgrade->execFlow['20_0']        = array('functions' => 'openCacheByAPC
 $config->upgrade->execFlow['20_1_0']      = array('functions' => 'completeClassifyLang');
 $config->upgrade->execFlow['20_1_1']      = array('functions' => 'syncActivityAndOutput,changeCustomStoryStage,processStoryRelation,processLinkStories,addERName,addTR4APoint');
 $config->upgrade->execFlow['20_3_0']      = array('functions' => 'importBuildinWorkflow,addFlowFields,processProjectRoadmapsByCharter', 'params' => array('importBuildinWorkflow' => array('or'), 'addFlowFields' => array('biz10.2')));
-$config->upgrade->execFlow['20_4']        = array('functions' => 'createDefaultDoclibSpace');
+$config->upgrade->execFlow['20_4']        = array('functions' => 'createDefaultDoclibSpace,updateStoryVerifiedDate');
 
 if(!empty($config->isINT))
 {
@@ -167,7 +167,6 @@ $config->upgrade->execFlow['biz5_3_1']     = array('functions' => 'processFeedba
 $config->upgrade->execFlow['biz6_4']       = array('functions' => 'importLiteModules');
 $config->upgrade->execFlow['biz8_12']      = array('functions' => 'AddFeedbackDatasource');
 $config->upgrade->execFlow['biz10_0_0']    = array('functions' => 'importERURModules');
-$config->upgrade->execFlow['biz10_4']      = array('functions' => 'updateStoryVerifiedDate');
 
 if(!empty($config->isINT))
 {
