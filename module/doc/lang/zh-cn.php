@@ -357,6 +357,7 @@ $lang->doc->confirmUpdateContent = '检查到您有未保存的文档内容，�
 $lang->doc->selectLibType        = '请选择文档库类型';
 $lang->doc->noLibreOffice        = '您还没有office转换设置访问权限!';
 $lang->doc->errorParentChapter   = '父章节不能是自身章节及子章节！';
+$lang->doc->errorOthersCreated   = '该库下其他人创建的文档暂不支持移动，是否确认移动？';
 
 $lang->doc->noticeAcl['lib']['product']['default']   = "有所选{$lang->productCommon}访问权限的用户可以访问。";
 $lang->doc->noticeAcl['lib']['product']['custom']    = "有所选{$lang->productCommon}访问权限或白名单里的用户可以访问。";

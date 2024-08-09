@@ -1181,12 +1181,13 @@ class doc extends control
 
         $this->docZen->setAclForCreateLib(is_numeric($targetSpace) ? 'custom' : 'mine');
 
-        $this->view->title       = $this->lang->doc->moveLibAction;
-        $this->view->spaces      = $this->docZen->getAllSpaces();
-        $this->view->lib         = $lib;
-        $this->view->targetSpace = $targetSpace;
-        $this->view->groups      = $this->loadModel('group')->getPairs();
-        $this->view->users       = $this->loadModel('user')->getPairs('nocode|noclosed');
+        $this->view->title        = $this->lang->doc->moveLibAction;
+        $this->view->spaces       = $this->docZen->getAllSpaces();
+        $this->view->lib          = $lib;
+        $this->view->targetSpace  = $targetSpace;
+        $this->view->hasOthersDoc = $this->doc->hasOthersDoc($lib);
+        $this->view->groups       = $this->loadModel('group')->getPairs();
+        $this->view->users        = $this->loadModel('user')->getPairs('nocode|noclosed');
         $this->display();
     }
 

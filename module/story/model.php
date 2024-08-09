@@ -1778,6 +1778,10 @@ class storyModel extends model
 
             $story->parent = $parentID;
             $this->doChangeParent($story->id, $story, $oldStory);
+
+            if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent, false);
+            if($story->parent > 0) $this->updateParentStatus($storyID, $story->parent, false);
+
             $this->setStage($story->id);
         }
 

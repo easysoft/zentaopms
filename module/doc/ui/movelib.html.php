@@ -21,9 +21,11 @@ if($libType == 'custom' && ($lib->type == 'mine' || $lib->parent != $targetSpace
 
 jsVar('targetSpace', $targetSpace);
 jsVar('libID', $lib->id);
+jsVar('errorOthersCreated', $lang->doc->errorOthersCreated);
 formPanel
 (
     on::change('[name=space]', 'changeSpace'),
+    $hasOthersDoc ? set::ajax(array('beforeSubmit' => jsRaw("clickSubmit"))) : null,
     formGroup
     (
         set::width('5/6'),

@@ -92,6 +92,7 @@ div
     zui::kanbanList
     (
         set::key('kanban'),
+        set('$replace', false),
         set::items($kanbanList),
         set::height('calc(100vh - 120px)')
     )
