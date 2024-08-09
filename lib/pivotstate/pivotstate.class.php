@@ -1190,6 +1190,7 @@ class pivotState
      */
     public function setAction($action)
     {
+        if($action == 'enterDesign') $action = 'design';
         $this->action = $action;
     }
 
