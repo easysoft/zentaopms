@@ -409,6 +409,23 @@ class docZen extends doc
     }
 
     /**
+     * 在移动库或文档后的返回。
+     * Return after move lib or doc.
+     *
+     * @param  string     $space
+     * @param  int        $libID
+     * @access protected
+     * @return bool|int
+     */
+    protected function responseAfterMove(string $space, int $libID = 0): bool|int
+    {
+        $locateLink = true;
+        if($space == 'mine')   $locateLink = $this->createLink('doc', 'mySpace', "type=mine&libID={$libID}");
+        if(is_numeric($space)) $locateLink = $this->createLink('doc', 'teamSpace', "objectID=0&libID={$libID}");
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $locateLink));
+    }
+
+    /**
      * 为创建文档设置所属对象下拉值。
      * Set the dropdown values of object for creating document.
      *
@@ -858,7 +875,7 @@ class docZen extends doc
      */
     public function initLibForMySpace()
     {
-        $mineLibCount = $this->dao->select('count(1) as count')->from(TABLE_DOCLIB)->where('type')->eq('mine')->andWhere('addedBy')->eq($this->app->user->account)->fetch('count');
+        $mineLibCount = $this->dao->select('count(1) as count')->from(TABLE_DOCLIB)->where('type')->eq('mine')->andWhere('addedBy')->eq($this->app->user->account)->andWhere('vision')->eq($this->config->vision)->fetch('count');
         if(!empty($mineLibCount)) return;
 
         $mineLib = new stdclass();
