@@ -690,7 +690,6 @@ class dataset
             ->leftJoin(TABLE_PROJECT)->alias('t5')->on('t5.id = t2.project')
             ->leftJoin(TABLE_PROJECT)->alias('t6')->on('t6.id = t5.project')
             ->where('t3.deleted')->eq('0')
-            ->andWhere('t4.deleted')->eq('0')
             ->andWhere('t5.deleted')->eq('0')
             ->andWhere('t6.deleted')->eq('0')
             ->andWhere('t5.type')->in('sprint,kanban,stage');
@@ -715,7 +714,6 @@ class dataset
             ->leftJoin(TABLE_PROJECT)->alias('t5')->on('t5.id = t4.project')
             ->where('t4.deleted')->eq('0')
             ->andWhere('t2.deleted')->eq('0')
-            ->andWhere('t3.deleted')->eq('0')
             ->andWhere('t5.deleted')->eq('0')
             ->andWhere('t4.type')->in('sprint,kanban,stage');
 
