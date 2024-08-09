@@ -17,6 +17,7 @@ jsVar('projectspacePriv', common::hasPriv('doc', 'projectspace'));
 jsVar('teamspacePriv', common::hasPriv('doc', 'teamspace'));
 
 $cols = array();
+$config->doc->dtable->fieldList['actions']['menu'] = array('edit', 'movedoc', 'delete');
 foreach($config->doc->dtable->fieldList as $colName => $col)
 {
     if($type == 'mine' && in_array($colName, array('objectName', 'module', 'editedBy'))) continue;
@@ -25,7 +26,6 @@ foreach($config->doc->dtable->fieldList as $colName => $col)
     if($canExport && $colName == 'id') $col['type'] = 'checkID';
     $cols[$colName] = $col;
 }
-
 
 $params        = "libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&param={$param}&orderBy={$orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}";
 $sortParams    = "libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";

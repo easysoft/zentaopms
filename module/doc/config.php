@@ -89,6 +89,13 @@ $config->doc->search['params']['editedDate'] = array('operator' => '=',       'c
 $config->doc->search['params']['keywords']   = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->doc->search['params']['version']    = array('operator' => '=',       'control' => 'input',  'values' => '');
 
+$config->doc->actionList['movedoc']['icon']        = 'folder-move';
+$config->doc->actionList['movedoc']['hint']        = $lang->doc->moveDocAction;
+$config->doc->actionList['movedoc']['text']        = $lang->doc->moveDocAction;
+$config->doc->actionList['movedoc']['url']         = helper::createLink('doc', 'moveDoc', 'docID={id}');
+$config->doc->actionList['movedoc']['data-toggle'] = 'modal';
+$config->doc->actionList['movedoc']['data-size']   = 'sm';
+
 $config->doc->actionList['edit']['icon']     = 'edit';
 $config->doc->actionList['edit']['hint']     = $lang->edit;
 $config->doc->actionList['edit']['text']     = $lang->edit;
