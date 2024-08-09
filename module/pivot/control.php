@@ -99,7 +99,7 @@ class pivot extends control
 
         if(strpos(',story,task,bug,', ",{$drill->object},") !== false) $datas = $this->pivot->processKanbanDatas($drill->object, $datas);
 
-        $this->view->title = $this->lang->pivot->step3->drillView;
+        $this->view->title = $this->lang->pivot->stepDrill->drillView;
         $this->view->cols  = $cols;
         $this->view->datas = $datas;
         $this->view->users = $this->loadModel('user')->getPairs('noletter');

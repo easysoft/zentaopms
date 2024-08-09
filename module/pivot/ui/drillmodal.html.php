@@ -13,7 +13,7 @@ namespace zin;
 modalHeader
 (
     set::titleClass('text-lg font-bold'),
-    set::title($lang->pivot->step3->drillView)
+    set::title($lang->pivot->stepDrill->drillView)
 );
 
 foreach($datas as $index => $data)
