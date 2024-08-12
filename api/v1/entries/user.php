@@ -344,7 +344,7 @@ class userEntry extends entry
                         $app->rawMethod = 'work';
                         $this->config->logonMethods[] = 'my.myMeeting';
                         $control = $this->loadController('my', 'myMeeting');
-                        $control->myMeeting('futureMeeting', '', 'id_desc', 0, $this->param('limit', 5), 1);
+                        $control->myMeeting('futureMeeting', 0, 'id_desc', 0, $this->param('limit', 5), 1);
                         $data = $this->getData();
 
                         if($data->status == 'success')
