@@ -33,5 +33,22 @@ div
     ),
     div
     (
+        h5($lang->zanode->instructionPage->h2),
+        div
+        (
+            set::className('space-y-6'),
+            div
+            (
+                set::className('leading-normal whitespace-pre-line'),
+                $lang->zanode->instructionPage->ZAgentDesc
+            ),
+            a(set::href($lang->zanode->instructionPage->ZAgentUrl), set::target('_blank'), $lang->zanode->instructionPage->ZAgentUrl),
+            div
+            (
+                set::className('leading-normal whitespace-pre-line'),
+                $lang->zanode->instructionPage->ZTFDesc
+            ),
+            a(set::href($lang->zanode->instructionPage->ZTFUrl), set::target('_blank'), $lang->zanode->instructionPage->ZTFUrl),
+        )
     )
 );
