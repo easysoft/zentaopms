@@ -241,7 +241,7 @@ window.loadLibModules = function(e)
 window.toggleWhiteList = function(e)
 {
     const acl = e.target.value;
-    $('#whitelistBox').toggleClass('hidden', acl == 'open');
+    $('#whiteListBox').toggleClass('hidden', acl == 'open');
 }
 
 $(document).on('mousedown', '.ajaxCollect', function (event)
@@ -300,7 +300,7 @@ window.checkObjectPriv = function(e)
     $whiteListBox = $('#whiteListBox');
     if($whiteListBox.length == 0 || $whiteListBox.hasClass('hidden')) return;
 
-    let $users = $('[name^=users]');
+    let $users = $('#whiteListBox [name^=users]');
     let users  = $users.val();
     if(users.length == 0) return;
 
@@ -328,5 +328,23 @@ window.checkObjectPriv = function(e)
 
         if(!data) return;
         $inputGroupBox.append("<div class='notice pt-1'>" + data + '</div>');
+    });
+}
+
+window.checkLibPriv = function(e)
+{
+    $whiteListBox = $('#whiteListBox');
+    if($whiteListBox.length == 0 || $whiteListBox.hasClass('hidden')) return;
+
+    let $users = $('#whiteListBox [name^=users]');
+    let users  = $users.val();
+    if(users.length == 0) return;
+
+    let formData = new FormData();
+    let libID    = $('[name=lib]').val();
+
+    users.forEach(function(user){ formData.append('users[]', user); });
+    $.post($.createLink('doc', 'ajaxCheckLibPriv', 'libID=' + libID), formData, function(data)
+    {
     });
 }
