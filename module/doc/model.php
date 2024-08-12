@@ -1243,6 +1243,12 @@ class docModel extends model
     {
         if(empty($object)) return false;
 
+        if(!empty($object->parent))
+        {
+            $parent = $this->getLibByID($object->parent);
+            return $this->checkPrivLib($parent);
+        }
+
         /* Only the creator can access the document library under my space. */
         if($object->type == 'mine' && $object->addedBy == $this->app->user->account) return true;
         if($this->app->user->admin && $object->type != 'mine') return true;
