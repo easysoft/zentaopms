@@ -303,7 +303,7 @@ $lang->block->modules['doc'] = new stdclass();
 $lang->block->modules['doc']->availableBlocks['docstatistic']    = 'Statistic';
 $lang->block->modules['doc']->availableBlocks['docdynamic']      = 'Dynamic';
 $lang->block->modules['doc']->availableBlocks['docmycollection'] = 'My Collection';
-$lang->block->modules['doc']->availableBlocks['docmycollection'] = 'My Created';
+$lang->block->modules['doc']->availableBlocks['docmycreated']    = 'My Created';
 $lang->block->modules['doc']->availableBlocks['docrecentupdate'] = 'Recently Update';
 $lang->block->modules['doc']->availableBlocks['docviewlist']     = 'Browse Leaderboard';
 if($config->vision == 'rnd') $lang->block->modules['doc']->availaableBlocks['productdoc'] = $lang->productCommon . 'Document';
