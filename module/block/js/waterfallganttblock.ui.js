@@ -1,6 +1,10 @@
 $(function()
 {
-    if(ganttPlans) initWaterfallGanttBlock();
+    if(ganttPlans)
+    {
+        $('#ganttPlans .gantt-plan, #ganttContainer .gantt-row').remove();
+        initWaterfallGanttBlock();
+    }
     $('#ganttContainer').off('scroll').on('scroll', function(e) {
         $('#ganttPlans').scrollTop = e.target.scrollTop;
     });
