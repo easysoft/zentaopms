@@ -30,12 +30,17 @@ class rate_of_finished_test_task_in_execution_when_closing extends baseCalc
     {
         if(!isset($this->result[$row->execution])) $this->result[$row->execution] = array('finished', 'total');
         if($row->type == 'test' && ($row->status == 'done' || ($row->status == 'closed' && $row->closedReason == 'done')) && !empty($row->realEnd) && date('Y-m-d', strtotime($row->closedDate)) <= $row->realEnd) $this->result[$row->execution]['finished'] ++;
-        if($row->type == 'test') $this->result[$row->execution]['finished'] ++;
+        if($row->type == 'test') $this->result[$row->execution]['total'] ++;
     }
 
     public function getResult($options = array())
     {
-        $records = $this->getRecords(array('execution', 'value'));
+        $records = array();
+        foreach($this->result as $execution => $value)
+        {
+            $rate = $value['total'] == 0 ? 0 : round($value['finished'] / $value['total'], 4);
+            $records[] = array('execution' => $execution, 'value' => $rate);
+        }
         return $this->filterByOptions($records, $options);
     }
 }
