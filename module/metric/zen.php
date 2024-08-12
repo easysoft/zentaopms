@@ -246,7 +246,7 @@ class metricZen extends metric
                 foreach($results as $record)
                 {
                     $record = (object)$record;
-                    if(!is_numeric($record->value)) continue;
+                    if(!is_numeric($record->value) || empty($record->value)) continue;
 
                     $record->metricID   = $calc->id;
                     $record->metricCode = $code;
