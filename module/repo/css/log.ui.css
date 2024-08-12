@@ -1,4 +1,3 @@
-#featureBar .nav .btn>.icon {color: #ffffff;}
-.repo-select {margin-right: 10px;}
+#featureBar .nav #pick-logRepoBranchDropMenu-menu > .icon {color: #ffffff;}
 .repo-select > div {display: inline-block;}
 .dtable-cell-html {width: 100%;}
