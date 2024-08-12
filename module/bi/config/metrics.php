@@ -3629,6 +3629,20 @@ $config->bi->builtin->metrics[] = array
 
 $config->bi->builtin->metrics[] = array
 (
+    'name'       => '按执行统计的执行关闭时执行验收通过率',
+    'alias'      => '执行验收通过率',
+    'code'       => 'rate_of_verified_story_in_execution_when_closing',
+    'purpose'    => 'qc',
+    'scope'      => 'execution',
+    'object'     => 'execution',
+    'unit'       => 'percentage',
+    'dateType'   => 'nodate',
+    'desc'       => '按执行统计的执行验收通过率是指执行结束时通过验收需求数量与执行所有需求的比率。该度量项反映了已完成的需求是否符合需求验收标准，可以帮助团队识别研发质量存在的潜在问题。',
+    'definition' => "复用： 按执行统计的执行结束时验收通过的研发需求数、按执行统计的有效研发需求数；公式：按执行统计的执行结束时已验收的研发需求数/按执行统计的有效研发需求数"
+);
+
+$config->bi->builtin->metrics[] = array
+(
     'name'       => '按执行统计的任务总数',
     'alias'      => '任务总数',
     'code'       => 'count_of_task_in_execution',
