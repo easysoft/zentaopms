@@ -1251,6 +1251,14 @@ class doc extends control
         if(isset($this->lang->doc->whitelistDeny[$objectType])) return printf($this->lang->doc->whitelistDeny[$objectType], implode('、', $denyUsers));
     }
 
+    /**
+     * Ajax: 检查库权限。
+     * Ajax check lib priv.
+     *
+     * @param  int    $libID
+     * @access public
+     * @return void
+     */
     public function ajaxCheckLibPriv(int $libID)
     {
         $accounts = $this->post->users;
@@ -1263,6 +1271,14 @@ class doc extends control
         if($lib->users)
         {
             foreach(array_filter(explode(',', $lib->users)) as $account) $authAccounts[$account] = $account;
+        }
+
+        $userPairs = $this->dao->select('account,realname')->from(TABLE_USER)->where('account')->in($accounts)->fetchPairs('account', 'realname');
+        $denyUsers = array();
+        foreach($accounts as $account)
+        {
+            if(strpos(",{$this->app->company->admins}", ",{$account},") !== false) continue;
+            if(!isset($authAccounts[$account])) $denyUsers[$account] = zget($userPairs, $account);
         }
 
         if(empty($denyUsers)) return print('');
