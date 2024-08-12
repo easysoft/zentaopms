@@ -798,7 +798,7 @@ class repoZen extends repo
         else
         {
             $this->setRepoBranch('');
-            return array('', array(), array());
+            return array($branchID, array(), array());
         }
     }
 
@@ -1790,5 +1790,25 @@ class repoZen extends repo
 
         if(!$hasSession) session_write_close();
         return $repoID;
+    }
+
+    /**
+     * 构建提交页面搜索表单。
+     * Build commit search form.
+     *
+     * @param  int       $queryID
+     * @param  string    $actionURL
+     * @access protected
+     * @return void
+     */
+    protected function buildSearchForm(int $queryID, string $actionURL)
+    {
+        session_start();
+        $this->config->repo->search = $this->config->repo->searchCommits;
+        $this->config->repo->search['actionURL'] = $actionURL;
+        $this->config->repo->search['queryID']   = $queryID;
+
+        $this->loadModel('search')->setSearchParams($this->config->repo->search);
+        session_write_close();
     }
 }
