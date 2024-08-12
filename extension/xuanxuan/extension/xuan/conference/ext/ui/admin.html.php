@@ -10,21 +10,7 @@
  * @link        https://xuanim.com
  */
 namespace zin;
-?>
-<style>
-    #enabledRow {
-        align-items: center;
-    }
 
-    #save-button {
-        display: none;
-    }
-
-    #cancel-button {
-        display: none;
-    }
-</style>
-<?php
 formPanel(
     set::title($lang->conference->common),
     set::labelWidth('140px'),

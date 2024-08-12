@@ -1,0 +1,11 @@
+#enabledRow {
+    align-items: center;
+}
+
+#save-button {
+    display: none;
+}
+
+#cancel-button {
+    display: none;
+}
