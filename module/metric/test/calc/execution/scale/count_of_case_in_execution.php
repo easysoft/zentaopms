@@ -7,6 +7,9 @@ title=count_of_case_in_execution
 timeout=0
 cid=1
 
+- 测试分组数。 @20
+- 测试执行21第0条的value属性 @5
+
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';
 include dirname(__FILE__, 4) . '/lib/calc.unittest.class.php';
@@ -21,4 +24,4 @@ $calc   = $metric->calcMetric(__FILE__);
 
 r(count($calc->getResult())) && p('') && e('20'); // 测试分组数。
 
-r($calc->getResult(array('execution' => '21'))) && p('0:value') && e('3');  // 测试执行21
+r($calc->getResult(array('execution' => '21'))) && p('0:value') && e('5');  // 测试执行21
