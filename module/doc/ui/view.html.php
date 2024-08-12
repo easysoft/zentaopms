@@ -80,11 +80,7 @@ if($config->vision == 'rnd' and ($config->edition == 'max' or $config->edition =
 
     $importLibBtn = $importLibItems ? dropdown
     (
-        btn
-        (
-            setClass('ghost btn square btn-default'),
-            icon('diamond')
-        ),
+        btn(setClass('ghost btn square btn-default'), icon('diamond')),
         set::items($importLibItems)
     ) : null;
 }
@@ -96,14 +92,7 @@ if($doc->keywords)
 {
     foreach($doc->keywords as $keywords)
     {
-        if($keywords)
-        {
-            $keywordsLabel[] = span
-            (
-                setClass('label secondary-outline ml-2'),
-                $keywords
-            );
-        }
+        if($keywords) $keywordsLabel[] = span(setClass('label secondary-outline ml-2'), $keywords);
     }
 }
 
@@ -126,17 +115,9 @@ if(!empty($editors))
 
     $editorGroup = count($items) > 0 ? dropdown
     (
-        btn
-        (
-            setClass('ghost btn btn-default'),
-            $editorInfo
-        ),
+        btn(setClass('ghost btn btn-default'), $editorInfo),
         set::items($items)
-    ) : btn
-    (
-        setClass('ghost btn btn-default'),
-        $editorInfo
-    );
+    ) : btn(setClass('ghost btn btn-default'), $editorInfo);
 }
 
 $contentDom = div
@@ -204,11 +185,7 @@ $contentDom = div
                     on::click('showHistory')
                 )
             ),
-            div
-            (
-                set::id('editorBox'),
-                $editorGroup
-            )
+            div(set::id('editorBox'), $editorGroup)
         )
     ),
     div
@@ -217,38 +194,22 @@ $contentDom = div
         div
         (
             setClass('user-time text-gray mr-2 inline-flex items-center'),
-            icon
-            (
-                'contacts',
-                setClass('mr-2')
-            ),
+            icon('contacts', setClass('mr-2')),
             $createInfo
         ),
         div
         (
             setClass('user-time text-gray mr-2 inline-flex items-center'),
-            icon
-            (
-                'star-empty',
-                setClass('mr-1')
-            ),
+            icon('star-empty', setClass('mr-1')),
             $doc->collects ? $doc->collects : 0
         ),
         div
         (
             setClass('user-time text-gray inline-flex items-center'),
-            icon
-            (
-                'eye',
-                setClass('mr-1')
-            ),
+            icon('eye', setClass('mr-1')),
             $doc->views
         ),
-        $keywordsLabel ? span
-        (
-            setClass('keywords'),
-            $keywordsLabel
-        ) : null
+        $keywordsLabel ? span(setClass('keywords'), $keywordsLabel) : null
     ),
     div
     (
@@ -289,13 +250,13 @@ $treeDom = isset($outlineTree) ? div
 ) : null;
 
 $toggleTreeBtn = isset($outlineTree) ? btn
-    (
-        setID('outlineToggle'),
-        setClass('btn ghost'),
-        setStyle('background', '#FFF'),
-        icon('menu-arrow-right'),
-        on::click('toggleOutline')
-    ) : null;
+(
+    setID('outlineToggle'),
+    setClass('btn ghost'),
+    setStyle('background', '#FFF'),
+    icon('menu-arrow-right'),
+    on::click('toggleOutline')
+) : null;
 
 $historyDom = div
 (

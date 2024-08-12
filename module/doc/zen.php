@@ -731,6 +731,13 @@ class docZen extends doc
      */
     protected function assignVarsForView(int $docID, int $version, string $type, int $objectID, int $libID, object $doc, object $object, string $objectType, array $libs, array $objectDropdown): void
     {
+        $defaultNestedShow = $this->getDefaultNestedShow($libID, (int)$doc->module, $type);
+        if($defaultNestedShow)
+        {
+            $showNested = key($defaultNestedShow) . ":{$docID}";
+            $defaultNestedShow = array($showNested => true);
+        }
+
         $this->view->title             = $this->lang->doc->common . $this->lang->hyphen . $doc->title;
         $this->view->docID             = $docID;
         $this->view->type              = $type;
@@ -754,10 +761,10 @@ class docZen extends doc
         $this->view->editors           = $this->doc->getEditors($docID);
         $this->view->linkParams        = "objectID={$objectID}&%s&browseType=&orderBy=status,id_desc&param=0";
         $this->view->spaceType         = $objectType;
-        $this->view->defaultNestedShow = $this->getDefaultNestedShow($libID, (int)$doc->module);
         $this->view->productID         = $doc->product;
         $this->view->projectID         = $doc->project;
         $this->view->executionID       = $doc->execution;
+        $this->view->defaultNestedShow = $defaultNestedShow;
     }
 
     /**

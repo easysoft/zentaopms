@@ -16,7 +16,6 @@ jsVar('browseType', $browseType);
 jsVar('docLang', $lang->doc);
 jsVar('confirmDelete', $lang->doc->confirmDelete);
 jsVar('appTab', $app->tab);
-jsVar('treeData', $libTree);
 
 /* zin: Define the set::module('doc') feature bar on main menu. */
 featureBar

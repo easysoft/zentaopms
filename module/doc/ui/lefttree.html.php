@@ -45,3 +45,17 @@ sidebar
         set::defaultNestedShow($defaultNestedShow)
     )
 );
+
+if($spaceType == 'mine')
+{
+    h::js
+    (
+        <<<JAVASCRIPT
+        waitDom('.doc-menu .listitem[data-type="mine"]', function()
+        {
+            let \$item = \$(this).parent();
+            if(\$item.hasClass('is-nested-hide')) \$item.trigger('click');
+        })
+        JAVASCRIPT
+    );
+}
