@@ -1864,6 +1864,10 @@ class repoZen extends repo
                 if($field['operator'] == '<')  $query->end   = date('Y-m-d', strtotime("{$field['value']} -1 day"));
                 if($field['operator'] == '=')  $query->end   = $field['value'] . ' 23:59:59';
             }
+            elseif(in_array($field['field'], array('committer', 'commit')) && $field['value'])
+            {
+                $query->{$field['field']} = $field['value'];
+            }
         }
         return $query;
     }
