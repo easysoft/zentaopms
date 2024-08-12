@@ -9,6 +9,12 @@ fields:
   range: "20110101 000000-20210101 000000:10D"
   type: timestamp
   format: YYYY-MM-DD
+- field: account
+  fields:
+  - field: account1
+    range: admin,user{10},test{10},dev{10},pm{10},po{10}
+  - field: account2
+    range: "[],1-10,1-10,1-10,1-10,1-10"
 - field: deleted
-  range: 0{1},1{2}
+  range: 0{1},1{1}
 ...
