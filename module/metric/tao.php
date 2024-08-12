@@ -460,7 +460,7 @@ class metricTao extends metricModel
     protected function createDistinctTempTable()
     {
         $sql  = "CREATE TABLE IF NOT EXISTS `metriclib_distinct` ( ";
-        $sql .= " id INT AUTO_INCREMENT PRIMARY KEY ";
+        $sql .= " id INT";
         $sql .= " )";
 
         $this->dao->exec($sql);
