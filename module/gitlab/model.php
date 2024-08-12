@@ -267,14 +267,25 @@ class gitlabModel extends model
      * @param  object $pager
      * @param  string $begin
      * @param  string $end
+     * @param  object $query
      * @access public
      * @return array
      */
-    public function getCommits(object $repo, string $entry, object $pager = null, string $begin = '', string $end = ''): array
+    public function getCommits(object $repo, string $entry, object $pager = null, string $begin = '', string $end = '', object|null $query = null): array
     {
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
-        $comments = $scm->engine->getCommitsByPath($entry, '', '', isset($pager->recPerPage) ? $pager->recPerPage : 10, isset($pager->pageID) ? $pager->pageID : 1, false, $begin, $end);
+        $fromRevision = $toRevision = $committer = '';
+        if($query)
+        {
+            $fromRevision = zget($query, 'commit', '');
+            $toRevision   = $fromRevision;
+            $committer    = zget($query, 'committer', '');
+
+            if($query->begin) $begin = $query->begin;
+            if($query->end)   $end   = $query->end;
+        }
+        $comments = $scm->engine->getCommitsByPath($entry, $fromRevision, $toRevision, isset($pager->recPerPage) ? $pager->recPerPage : 10, isset($pager->pageID) ? $pager->pageID : 1, $begin, $end, $committer);
         if(!is_array($comments)) return array();
 
         if(isset($pager->recTotal)) $pager->recTotal = count($comments) < $pager->recPerPage ? $pager->recPerPage * $pager->pageID : $pager->recPerPage * ($pager->pageID + 1);
