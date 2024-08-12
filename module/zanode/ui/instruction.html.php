@@ -33,7 +33,7 @@ div
     ),
     div
     (
-        h5($lang->zanode->instructionPage->AppIntroduction),
+        h5($lang->zanode->instructionPage->appIntroduction),
         div
         (
             set::className('space-y-6'),

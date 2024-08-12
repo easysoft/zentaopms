@@ -183,7 +183,7 @@ $lang->zanode->instructionPage->image            = 'static/svg/zanode_instructio
 $lang->zanode->instructionPage->concept          = '1、核心概念';
 $lang->zanode->instructionPage->conceptDesc      = '宿主机包括实体主机、K8s集群、云服务器以及云容器实例，主要用于创建虚拟机或容器实例。宿主机推荐安装的操作系统为Ubuntu或CentOS的LTS版本。
 执行节点是由宿主机创建的虚拟机或容器实例，是执行测试任务的测试环境。';
-$lang->zanode->instructionPage->AppIntroduction  = '2、应用介绍';
+$lang->zanode->instructionPage->appIntroduction  = '2、应用介绍';
 $lang->zanode->instructionPage->ZAgentDesc       = 'ZAgent是禅道开源的软件自动化测试调度平台，它借助虚拟化技术，为用户提供了一个分布式、集中管理的的测试环境。';
 $lang->zanode->instructionPage->ZAgentUrl        = 'https://github.com/easysoft/zenagent/blob/main/guide/deploy/index.md';
 $lang->zanode->instructionPage->ZTFDesc          = 'ZTF是禅道开源的自动化测试管理框架，它帮助用户将测试脚本统一管理。ZTF与禅道深度集成，每一个脚本都可以和测试管理系统里面的一个用例进行关联，脚本里面的步骤信息和管理系统里面的用例信息可以互相同步。';
