@@ -71,7 +71,7 @@ $selected    = '';
 
 foreach($branches as $branchName)
 {
-    $selected       = ($branchName == $branchID and $branchOrTag == 'branch') ? $branchName : $selected;
+    $selected       = $branchName == $branchID ? $branchName : $selected;
     $base64BranchID = helper::safe64Encode(base64_encode($branchName));
     $branchLink     = $this->createLink('repo', 'log', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID");
     $branchMenus[] = array('text' => $branchName, 'id' => $branchName, 'keys' => zget(common::convert2Pinyin(array($branchName), $branchName), ''), 'url' => $branchLink, 'data-app' => $app->tab);
@@ -79,9 +79,9 @@ foreach($branches as $branchName)
 
 foreach($tags as $tagName)
 {
-    $selected    = ($tagName == $branchID and $branchOrTag == 'tag') ? $tagName : $selected;
+    $selected    = $tagName == $branchID ? $tagName : $selected;
     $base64TagID = helper::safe64Encode(base64_encode($tagName));
-    $tagLink     = $this->createLink('repo', 'log', "repoID=$repoID&branchID=$base64TagID&objectID=$objectID&path=&revision=HEAD&refresh=0&branchOrTag=tag");
+    $tagLink     = $this->createLink('repo', 'log', "repoID=$repoID&branchID=$base64TagID&objectID=$objectID&path=");
     $tagMenus[] = array('text' => $tagName, 'id' => $tagName, 'keys' => zget(common::convert2Pinyin(array($tagName), $tagName), ''), 'url' => $tagLink, 'data-app' => $app->tab);
 }
 $menuData = array('branch' => $branchMenus, 'tag' => $tagMenus);
@@ -120,7 +120,16 @@ $tabs     = array(array('name' => 'branch', 'text' => $lang->repo->branch), arra
             set::data(array('data' => $menuData, 'tabs' => $tabs))
         ) : null
     ),
-    ...$breadcrumbItems
+    $breadcrumbItems,
+    div
+    (
+        $repo->SCM != 'Subversion' ? setClass('ml-4') : null,
+        searchToggle
+        (
+            set::module('repoCommits'),
+            set::open($browseType == 'bysearch')
+        )
+    )
 );
 
 dtable

@@ -272,7 +272,7 @@ $config->repo->commentDtable->fieldList['id']['checkbox'] = jsRaw('(rowID) => ro
 if(in_array($repo->SCM, $config->repo->notSyncSCM)) unset($config->repo->commentDtable->fieldList['commit']);
 $commentsTableData = initTableData($revisions, $config->repo->commentDtable->fieldList, $this->repo);
 
-$readAllLink = $this->repo->createLink('log', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID&entry=" . $encodePath . "&revision=HEAD&branchOrTag=$branchOrTag&type=$logType&source=browse");
+$readAllLink = $this->repo->createLink('log', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID&entry=" . $encodePath . "&source=browse");
 $footToolbar['items'][] = array('text' => $lang->repo->diff, 'className' => "btn primary size-sm btn-diff", 'btnType' => 'primary', 'onClick' => jsRaw('window.diffClick'));
 $footToolbar['items'][] = array('text' => $lang->repo->allLog, 'url' => $readAllLink, 'data-app' => $this->app->tab);
 
