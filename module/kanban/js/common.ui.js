@@ -75,6 +75,15 @@ window.changeKanbanSpace = function()
             $('[name=owner]').zui('picker').render({items: data});
         });
     }
+
+    if(config.currentMethod == 'space')
+    {
+        const getTeamUrl = $.createLink('kanban', 'ajaxGetSpaceTeam', 'spaceID=' + spaceID);
+        $.getJSON(getTeamUrl, function(team)
+        {
+            $('[name^=team]').zui('picker').$.setValue(team)
+        });
+    }
 }
 
 /**
