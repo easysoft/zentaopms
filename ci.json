@@ -1,8 +1,8 @@
 {
   "pkg": {
     "xuanxuan": {
-      "gitVersion": "ba1a5aa068bdc44fc4123909f4df35a753160f01",
-      "version": "8.2"
+      "gitVersion": "5196c3f7c28fc01d4639e9aa053c7b515ae337d6",
+      "version": "9.0"
     },
     "zentaoext": {
       "gitRepo": "zentao/zentaoext"
