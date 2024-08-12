@@ -10,7 +10,7 @@ namespace zin;
  * @param ?array $userSetting
  * @return array
  */
-function usePager(string|array $pagerName = 'pager', string $extra = '', ?array $userSetting = null, ?array $sizeMenuItems = null): ?array
+function usePager(string|array $pagerName = 'pager', string $extra = '', ?array $userSetting = null, ?array $sizeMenuItems = null, ?string $customLink = ''): ?array
 {
     if(is_array($pagerName))
     {
@@ -53,6 +53,16 @@ function usePager(string|array $pagerName = 'pager', string $extra = '', ?array 
         $setting['items'][] = array('type' => 'link', 'page' => 'prev', 'hint' => $pager->lang->pager->previousPage, 'icon' => 'icon-angle-left');
         $setting['items'][] = array('type' => 'info', 'text' => '{page}/{pageTotal}');
         $setting['items'][] = array('type' => 'link', 'page' => 'next', 'hint' => $pager->lang->pager->nextPage, 'icon' => 'icon-angle-right');
+    }
+    elseif($extra == 'customLink')
+    {
+        $setting['items'][] = array('type' => 'info', 'text' => str_replace('<strong>', '', str_replace('</strong>', '', $pager->lang->pager->pageSize)));
+        $setting['items'][] = array('type' => 'info', 'text' => $pager->lang->pager->totalCountAB);
+        $setting['items'][] = array('page' => 'first', 'hint' => $pager->lang->pager->firstPage, 'icon' => 'icon-first-page', 'onClick' => jsRaw("(e, item) => {$customLink}(e, item)"));
+        $setting['items'][] = array('page' => 'prev', 'hint' => $pager->lang->pager->previousPage, 'icon' => 'icon-angle-left', 'onClick' => jsRaw("(e, item) => {$customLink}(e, item)"));
+        $setting['items'][] = array('type' => 'info', 'text' => '{page}/{pageTotal}');
+        $setting['items'][] = array('page' => 'next', 'hint' => $pager->lang->pager->nextPage, 'icon' => 'icon-angle-right', 'onClick' => jsRaw("(e, item) => {$customLink}(e, item)"));
+        $setting['items'][] = array('page' => 'last', 'hint' => $pager->lang->pager->lastPage, 'icon' => 'icon-last-page', 'onClick' => jsRaw("(e, item) => {$customLink}(e, item)"));
     }
     else
     {
