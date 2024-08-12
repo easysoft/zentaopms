@@ -812,20 +812,21 @@ class repoModel extends model
      * 获取代码库的提交列表。
      * Get commits.
      *
-     * @param  object $repo
-     * @param  string $entry
-     * @param  string $revision
-     * @param  string $type
-     * @param  object $pager
-     * @param  string $begin
-     * @param  string $end
+     * @param  object        $repo
+     * @param  string        $entry
+     * @param  string        $revision
+     * @param  string        $type
+     * @param  object        $pager
+     * @param  string        $begin
+     * @param  string        $end
+     * @param  object|string $query
      * @access public
      * @return array
      */
-    public function getCommits(object $repo, string $entry, string $revision = 'HEAD', string $type = 'dir', object|null $pager = null, string $begin = '', string $end = ''): array
+    public function getCommits(object $repo, string $entry, string $revision = 'HEAD', string $type = 'dir', object|null $pager = null, string $begin = '', string $end = '', object|string|null $query = null): array
     {
         if(!isset($repo->id)) return array();
-        if(in_array($repo->SCM, $this->config->repo->notSyncSCM)) return $this->loadModel('gitlab')->getCommits($repo, $entry, $pager, $begin, $end);
+        if(in_array($repo->SCM, $this->config->repo->notSyncSCM)) return $this->loadModel('gitlab')->getCommits($repo, $entry, $pager, $begin, $end, $query);
 
         $entry         = ltrim($entry, '/');
         $entry         = $repo->prefix . (empty($entry) ? '' : '/' . $entry);
@@ -861,6 +862,7 @@ class repoModel extends model
             ->beginIF($revisionTime)->andWhere('t1.`time`')->le($revisionTime)->fi()
             ->beginIF($begin)->andWhere('t1.`time`')->ge($begin)->fi()
             ->beginIF($end)->andWhere('t1.`time`')->le($end)->fi()
+            ->beginIF($query)->andWhere($query)->fi()
             ->beginIF($hasBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
             ->beginIF($entry != '/' && !empty($entry))->andWhere('t1.id')->in($historyIdList)->fi()
             ->beginIF($begin)->andWhere('t1.time')->ge($begin)->fi()
