@@ -270,17 +270,33 @@ class metricZen extends metric
         return $records;
     }
 
+    /**
+     * 获取复用的度量数据。
+     * Prepare metric result for reuse metric.
+     *
+     * @param  object    $calc
+     * @param  array     $options
+     * @access protected
+     * @return array
+     */
     protected function prepareReuseMetricResult($calc, $options)
     {
         $reuseMetrics = array();
-        foreach($calc->reuseMetrics as $key => $reuseMetric)
-        {
-            $reuseMetrics[$key] = $this->metric->getResultByCode($reuseMetric, $options);
-        }
-
+        foreach($calc->reuseMetrics as $key => $reuseMetric) $reuseMetrics[$key] = $this->metric->getResultByCode($reuseMetric, $options);
         $calc->calculate($reuseMetrics);
     }
 
+    /**
+     * 获取某度量项某日期的度量数据。
+     * Get metric record by code and date.
+     *
+     * @param  string    $code
+     * @param  object    $calc
+     * @param  string    $date
+     * @param  string    $type
+     * @access protected
+     * @return array
+     */
     protected function getRecordByCodeAndDate($code, $calc, $date, $type = 'single')
     {
         $now = helper::now();
@@ -366,11 +382,10 @@ class metricZen extends metric
      * 根据度量项范围，构建度量数据的通用字段。
      * Build common fields of metric data based on metric scope.
      *
-     * @param  int     $metricID
-     * @param  string  $code
-     * @param  string  $scope
-     * @param  string  $scopeValue
-     * @param  string  $date
+     * @param  int       $metricID
+     * @param  string    $code
+     * @param  string    $date
+     * @param  array     $dateValues
      * @access protected
      * @return array
      */
