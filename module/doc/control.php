@@ -833,7 +833,7 @@ class doc extends control
         $this->view->exportMethod      = $libType == 'api' ? 'export' : $type . '2export';
         $this->view->linkParams        = "objectID={$objectID}&%s&browseType=&orderBy={$orderBy}&param=0";
         $this->view->defaultNestedShow = $this->docZen->getDefaultNestedShow($libID, $moduleID, $type, $executionID);
-        $this->view->canUpdateOrder    = !($lib->type == 'custom' && $lib->parent == 0) && common::hasPriv('doc', 'sortDoc') && $orderBy == 'order_asc';
+        $this->view->canUpdateOrder    = $lib && !($lib->type == 'custom' && $lib->parent == 0) && common::hasPriv('doc', 'sortDoc') && $orderBy == 'order_asc';
 
         $this->display();
     }
