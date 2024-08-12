@@ -534,17 +534,16 @@ class repo extends control
      * @param  string $branchID
      * @param  int    $objectID
      * @param  string $entry
-     * @param  string $revision
-     * @param  string $branchOrTag
-     * @param  string $type
      * @param  string $source
+     * @param  string $browseType
+     * @param  int    $param
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function log(int $repoID = 0, string $branchID = '', int $objectID = 0, string $entry = '', string $revision = 'HEAD', string $branchOrTag = 'branch', string $type = 'dir', string $source = 'log', int $recTotal = 0, int $recPerPage = 50, int $pageID = 1)
+    public function log(int $repoID = 0, string $branchID = '', int $objectID = 0, string $entry = '', string $source = 'log', string $browseType = 'list', int $param = 0, int $recTotal = 0, int $recPerPage = 50, int $pageID = 1)
     {
         $repoID = $this->repo->saveState($repoID, $objectID);
         $this->commonAction($repoID, $objectID);
@@ -568,36 +567,38 @@ class repo extends control
             $this->locate($this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=" . $this->repo->encodePath($file) . "&oldrevision=$oldRevision&newRevision=$newRevision"));
         }
 
-        $this->commonAction($repoID, $objectID);
-        $this->scm->setEngine($repo);
-        $info = $this->scm->info($entry, $revision);
-
-        $logs = $this->repo->getCommits($repo, $entry, $revision, $type, $pager);
-
         /* Set branch or tag for git. */
         $branchID = $branchID ? base64_decode(helper::safe64Decode($branchID)) : '';
         list($branchID, $branches, $tags) = $this->repoZen->setBranchTag($repo, $branchID);
         if($this->app->tab == 'devops' && $repo->SCM != 'Subversion' && empty($branches)) return $this->sendError($this->lang->repo->error->empty, true);
 
-        $this->view->repo        = $repo;
-        $this->view->title       = $this->lang->repo->common;
-        $this->view->logs        = $logs;
-        $this->view->revision    = $revision;
-        $this->view->repoID      = $repoID;
-        $this->view->objectID    = $objectID;
-        $this->view->entry       = $entry;
-        $this->view->type        = $type;
-        $this->view->branchID    = $this->cookie->repoBranch;
-        $this->view->entry       = urldecode($entry);
-        $this->view->path        = urldecode($entry);
-        $this->view->file        = urldecode($file);
-        $this->view->pager       = $pager;
-        $this->view->info        = $info;
-        $this->view->repoPairs   = $this->repo->getRepoPairs($this->app->tab, $objectID);
-        $this->view->branches    = $branches;
-        $this->view->tags        = $tags;
-        $this->view->branchOrTag = $branchOrTag;
-        $this->view->source      = $source;
+        /* Build the search form. */
+        $browseType = strtolower($browseType);
+        $queryID    = $browseType == 'bysearch' ? $param : 0;
+        $branchID   = helper::safe64Encode(base64_encode($branchID));
+        $actionURL  = $this->createLink('repo', 'log', "repoID={$repoID}&branchID={$branchID}&objectID={$objectID}&entry=&source={$source}&browseType=bySearch&param=myQueryID");
+        $this->repoZen->buildSearchForm($queryID, $actionURL);
+
+        $this->commonAction($repoID, $objectID);
+        $query = $browseType == 'bysearch' ? $this->repoZen->getSearchForm($queryID, !in_array($repo->SCM, $this->config->repo->notSyncSCM)) : null;
+        $logs = $this->repo->getCommits($repo, $entry, $branchID, 'dir', $pager, '', '', $query);
+
+        $this->view->repo       = $repo;
+        $this->view->title      = $this->lang->repo->common;
+        $this->view->logs       = $logs;
+        $this->view->repoID     = $repoID;
+        $this->view->objectID   = $objectID;
+        $this->view->branchID   = $this->cookie->repoBranch;
+        $this->view->entry      = urldecode($entry);
+        $this->view->path       = urldecode($entry);
+        $this->view->file       = urldecode($file);
+        $this->view->pager      = $pager;
+        $this->view->repoPairs  = $this->repo->getRepoPairs($this->app->tab, $objectID);
+        $this->view->branches   = $branches;
+        $this->view->tags       = $tags;
+        $this->view->source     = $source;
+        $this->view->browseType = $browseType;
+        $this->view->param      = $param;
         $this->display();
     }
 
