@@ -612,18 +612,25 @@ class metricZen extends metric
     }
 
     /**
-     * 根据table宽度返回pager extra。
-     * Return pager extra based on the table width.
+     * Get pager extra.
      *
      * @param  string    $tableWidth
      * @access protected
-     * @return int
+     * @return string
      */
     public function getPagerExtra($tableWidth)
     {
         return ($tableWidth > 300) ? '' : 'shortPageSize';
     }
 
+    /**
+     * 格式化异常为字符串。
+     * Format exception to string.
+     *
+     * @param  Exception $e
+     * @access protected
+     * @return string
+     */
     public function formatException($e)
     {
         $message = $e->getMessage();
