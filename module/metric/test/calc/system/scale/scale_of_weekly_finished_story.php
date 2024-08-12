@@ -24,6 +24,6 @@ $calc   = $metric->calcMetric(__FILE__);
 
 r(count($calc->getResult())) && p('') && e('7'); // 测试分组数
 
-r($calc->getResult(array('year' => '2013', 'week' => '16'))) && p('0:value') && e('7'); // 测试2013年第16周的需求数。
-r($calc->getResult(array('year' => '2017', 'week' => '07'))) && p('0:value') && e('9'); // 测试2017年第7周的需求数。
+r($calc->getResult(array('year' => '2013', 'week' => '19'))) && p('0:value') && e('7'); // 测试2013年第16周的需求数。
+r($calc->getResult(array('year' => '2014', 'week' => '46'))) && p('0:value') && e('3'); // 测试2017年第7周的需求数。
 r($calc->getResult(array('year' => '2016', 'week' => '99'))) && p('0:value') && e('0'); // 测试错误的周数。
