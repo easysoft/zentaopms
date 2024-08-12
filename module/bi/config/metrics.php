@@ -4338,7 +4338,7 @@ $config->bi->builtin->metrics[] = array
     'unit'       => 'hour',
     'dateType'   => 'nodate',
     'desc'       => '按执行统计的开发人员可用工时是指执行团队中角色为研发的可用工时之和。该度量项反映了团队中开发人员能够投入在本迭代的时间，有助于计算执行团队的工作负载。',
-    'definition' => "执行团队成员每日可用工时*可用工日\n人员职位为研发\n过滤已删除的执行\n过滤已删除的项目"
+    'definition' => "执行团队成员每日可用工时*可用工日\n人员职位为研发\n过滤已删除的用户\n过滤已删除的执行\n过滤已删除的项目"
 );
 
 $config->bi->builtin->metrics[] = array
