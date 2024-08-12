@@ -14,6 +14,8 @@ formPanel
     modalHeader(),
     on::change('[name=product],[name=project],[name=execution],[name=space]', "loadObjectModules"),
     on::change('[name=lib]', "loadLibModules"),
+    on::change('[name=lib]',    'checkLibPriv'),
+    on::change('[name^=users]', 'checkLibPriv'),
     (strpos('product|project|execution', $type) !== false) ? formGroup
     (
         set::width('1/2'),
@@ -81,7 +83,7 @@ formPanel
     (
         $doc->acl == 'open' ? setClass('hidden') : null,
         set::label($lang->doc->whiteList),
-        set::id('whitelistBox'),
+        set::id('whiteListBox'),
         div
         (
             setClass('w-full check-list'),

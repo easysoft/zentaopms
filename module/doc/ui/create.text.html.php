@@ -24,6 +24,8 @@ $basicInfoModal = modal
     on::change('[name=space],[name=product],[name=execution]')->call('loadObjectModules', jsRaw('event')),
     on::change('[name=lib]')->call('loadLibModules', jsRaw('event')),
     on::change('[name=project]')->call('loadExecutions', jsRaw('event')),
+    on::change('[name=lib]',    'checkLibPriv'),
+    on::change('[name^=users]', 'checkLibPriv'),
     formGroup
     (
         setClass('flex items-center'),
@@ -108,9 +110,9 @@ $basicInfoModal = modal
     ),
     formGroup
     (
+        setID('whiteListBox'),
         setClass('hidden'),
         set::label($lang->doc->whiteList),
-        set::id('whitelistBox'),
         div
         (
             setClass('w-full check-list'),

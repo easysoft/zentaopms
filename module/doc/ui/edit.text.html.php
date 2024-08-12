@@ -25,6 +25,9 @@ $basicInfoModal = modal
     set::title($lang->doc->release . $lang->doc->common),
     on::change('[name="space"],[name="product"],[name="project"],[name="execution"]')->call('loadObjectModules', jsRaw('event')),
     on::change('[name="lib"]')->call('loadLibModules', jsRaw('event')),
+    on::change('[name=lib]',    'checkLibPriv'),
+    on::change('[name^=users]', 'checkLibPriv'),
+
     $type == 'execution' ? formHidden('project', $doc->project) : null,
     (strpos('product|project|execution', $type) !== false) ? formGroup
     (
@@ -81,7 +84,7 @@ $basicInfoModal = modal
     (
         $doc->acl == 'open' ? setClass('hidden') : null,
         set::label($lang->doc->whiteList),
-        set::id('whitelistBox'),
+        set::id('whiteListBox'),
         div
         (
             setClass('w-full check-list'),
