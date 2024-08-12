@@ -33,11 +33,8 @@ class count_of_delivered_story_in_execution_when_closing extends baseCalc
         // 如果项目的关闭时间大于等于需求的关闭时间且需求的关闭原因为已完成
         $condition2 = (!helper::isZeroDate($row->executionClosed) && !helper::isZeroDate($row->storyClosedDate) && $row->executionClosed >= $row->storyClosedDate && $row->closedReason == 'done');
 
-        if($condition1 || $condition2)
-        {
-            if(!isset($this->result[$row->execution])) $this->result[$row->execution] = 0;
-            $this->result[$row->execution] ++;
-        }
+        if(!isset($this->result[$row->execution])) $this->result[$row->execution] = 0;
+        if($condition1 || $condition2) $this->result[$row->execution] ++;
     }
 
     public function getResult($options = array())
