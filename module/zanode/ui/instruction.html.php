@@ -49,6 +49,24 @@ div
                 $lang->zanode->instructionPage->ZTFDesc
             ),
             a(set::href($lang->zanode->instructionPage->ZTFUrl), set::target('_blank'), $lang->zanode->instructionPage->ZTFUrl),
+            div
+            (
+                set::className('leading-normal whitespace-pre-line'),
+                $lang->zanode->instructionPage->KVMDesc
+            ),
+            a(set::href($lang->zanode->instructionPage->KVMUrl), set::target('_blank'), $lang->zanode->instructionPage->KVMUrl),
+            div
+            (
+                set::className('leading-normal whitespace-pre-line'),
+                $lang->zanode->instructionPage->NginxDesc
+            ),
+            a(set::href($lang->zanode->instructionPage->NginxUrl), set::target('_blank'), $lang->zanode->instructionPage->NginxUrl),
+            div
+            (
+                set::className('leading-normal whitespace-pre-line'),
+                $lang->zanode->instructionPage->noVNCDesc
+            ),
+            a(set::href($lang->zanode->instructionPage->noVNCUrl), set::target('_blank'), $lang->zanode->instructionPage->noVNCUrl),
         )
     )
 );
