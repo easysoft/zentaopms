@@ -6,7 +6,7 @@ fields:
 - field: id
   range: 1-10000
 - field: join
-  range: "20110101 000000-20210101 000000:10D"
+  range: "20110101 000000-20210101 000000:1Y"
   type: timestamp
   format: YYYY-MM-DD
 - field: account
