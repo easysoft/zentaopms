@@ -357,11 +357,11 @@ class doc extends control
     {
         if(!empty($_POST))
         {
+            $libID    = $this->post->lib;
             $docLib   = $this->loadModel('doc')->getLibByID($libID);
             $canVisit = $this->docZen->checkPrivForCreate($docLib, $objectType);
             if(!$canVisit) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->accessDenied));
 
-            $libID    = $this->post->lib;
             $moduleID = $this->post->module;
             if(empty($libID) && strpos($this->post->module, '_') !== false) list($libID, $moduleID) = explode('_', $this->post->module);
             helper::setcookie('lastDocModule', $moduleID);
@@ -377,39 +377,20 @@ class doc extends control
             return $this->docZen->responseAfterCreate($docData->lib, $docResult);
         }
 
-        $lib = $libID ? $this->doc->getLibByID($libID) : '';
-        if(empty($objectID) && $lib) $objectID = zget($lib, $lib->type, 0);
+        $this->docZen->assignVarsForCreate($objectType, $objectID, $libID, $moduleID, $docType);
 
-        /* Get libs and the default lib ID. */
-        $unclosed   = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
-        $libPairs   = $this->doc->getLibs($lib->type, "withObject,{$unclosed}", $libID, $objectID);
-        $moduleID   = $moduleID ? (int)$moduleID : (int)$this->cookie->lastDocModule;
-        if(!$libID && !empty($libPairs)) $libID = key($libPairs);
-        if(empty($lib) && $libID) $lib = $this->doc->getLibByID($libID);
-        if($this->config->edition != 'open') $this->loadModel('file');
-
-        $libData = $this->doc->setMenuByType($objectType, (int)$objectID, (int)$libID, (int)$appendLib);
+        $lib      = $this->view->lib;
+        $objectID = $this->view->objectID;
+        $libData  = $this->doc->setMenuByType($lib->type, (int)$objectID, (int)$lib->id, (int)$appendLib);
         if(is_string($libData)) return $this->locate($libData);
         list($libs, $libID, $object, $objectID, $objectDropdown) = $libData;
-
-        $this->docZen->setObjectsForCreate($lib->type, $lib, $unclosed, zget($lib, $lib->type, 0));
+        if($this->config->edition != 'open') $this->loadModel('file');
 
         $this->view->title            = zget($lib, 'name', '', $lib->name . $this->lang->hyphen) . $this->lang->doc->create;
-        $this->view->objectType       = $objectType;
-        $this->view->spaceType        = $objectType;
         $this->view->object           = $object;
-        $this->view->objectID         = $objectID;
         $this->view->objectDropdown   = $objectDropdown;
-        $this->view->libID            = $libID;
-        $this->view->lib              = $lib;
-        $this->view->libs             = $libPairs;
+        $this->view->spaces           = $this->docZen->getAllSpaces();
         $this->view->libTree          = $this->doc->getLibTree((int)$libID, $libs, $objectType, (int)$moduleID, (int)$objectID);
-        $this->view->libName          = zget($lib, 'name', '');
-        $this->view->moduleOptionMenu = $this->doc->getLibsOptionMenu($libPairs);
-        $this->view->moduleID         = $libID . '_' . $moduleID;
-        $this->view->docType          = $docType;
-        $this->view->groups           = $this->loadModel('group')->getPairs();
-        $this->view->users            = $this->user->getPairs('nocode|noclosed|nodeleted');
         $this->view->linkParams       = "objectID={$objectID}&%s&browseType=&orderBy=status,id_desc&param=0";
         $this->view->defaultNestedShow = $this->getDefaultNestedShow((int)$libID, (int)$moduleID, $objectType);
 
@@ -439,7 +420,6 @@ class doc extends control
             $changes = $files = array();
             if($comment == false)
             {
-                if(!isset($_POST['lib']) && strpos($_POST['module'], '_') !== false) list($_POST['lib'], $_POST['module']) = explode('_', $_POST['module']);
                 $docData = form::data()
                     ->setDefault('editedBy', $this->app->user->account)
                     ->setIF(strpos(",$doc->editedList,", ",{$this->app->user->account},") === false, 'editedList', $doc->editedList . ",{$this->app->user->account}")
@@ -464,14 +444,17 @@ class doc extends control
         $lib        = $this->doc->getLibByID($libID);
         $objectType = isset($lib->type) ? $lib->type : 'custom';
         $objectID   = zget($lib, $lib->type, 0);
-        $libPairs   = $this->doc->getLibs($lib->type, 'withObject', $doc->lib, $objectID);
+        if($lib->type == 'custom') $objectID = $lib->parent;
+
+        $libPairs = $this->doc->getLibs($lib->type, '', $doc->lib, $objectID);
         list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($objectType, $objectID, (int)$doc->lib, (int)$appendLib);
 
+        if($lib->type == 'custom' || $lib->type == 'mine') $this->view->spaces = $this->docZen->getAllSpaces($lib->type == 'mine' ? 'onlymine' : 'nomine');
         $this->docZen->setObjectsForEdit($lib->type, $objectID);
 
         $this->view->title             = $lib->name . $this->lang->hyphen . $this->lang->doc->edit;
         $this->view->doc               = $doc;
-        $this->view->moduleOptionMenu  = $this->doc->getLibsOptionMenu($libPairs);
+        $this->view->optionMenu        = $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
         $this->view->type              = $lib->type;
         $this->view->libs              = $libPairs;
         $this->view->lib               = $lib;
@@ -551,12 +534,12 @@ class doc extends control
      */
     public function ajaxGetModules(string $objectType, int $objectID, string $docType = 'doc')
     {
-        if(empty($objectID)) return print(array());
+        if($objectType != 'mine' && empty($objectID)) return print(json_encode(array()));
 
         if($docType == 'doc')
         {
             $unclosed = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
-            $libPairs = $this->doc->getLibs($objectType, "withObject,{$unclosed}", '', $objectID);
+            $libPairs = $this->doc->getLibs($objectType, $unclosed, '', (int)$objectID);
         }
         elseif($docType == 'api')
         {
@@ -564,15 +547,18 @@ class doc extends control
             $libPairs = array();
             foreach($libs as $libID => $lib) $libPairs[$libID] = $lib->name;
         }
+        $libItems = array();
+        foreach($libPairs as $id => $name) $libItems[] = array('text' => $name, 'value' => $id, 'keys' => $name);
 
-        $items            = array();
-        $moduleOptionMenu = $this->doc->getLibsOptionMenu($libPairs, $docType);
-        foreach($moduleOptionMenu as $id => $name)
+        $moduleItems = array();
+        $libID       = key($libPairs);
+        if($libID)
         {
-            $items[] = array('text' => $name, 'value' => $id, 'keys' => $name);
+            $optionMenu  = $this->loadModel('tree')->getOptionMenu($libID, $docType, $startModuleID = 0);
+            foreach($optionMenu as $id => $name) $moduleItems[] = array('text' => $name, 'value' => $id, 'keys' => $name);
         }
 
-        return print(json_encode($items));
+        return print(json_encode(array('libs' => $libItems, 'modules' => $moduleItems)));
     }
 
     /**
@@ -590,7 +576,7 @@ class doc extends control
         if($docType == 'doc')
         {
             $unclosed = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
-            $libPairs = $this->doc->getLibs($type, "withObject,$unclosed");
+            $libPairs = $this->doc->getLibs($type, $unclosed);
         }
         elseif($docType == 'api')
         {
@@ -599,15 +585,18 @@ class doc extends control
             foreach($libs as $libID => $lib) $libPairs[$libID] = $lib->name;
         }
 
-        $items = array();
-        $moduleOptionMenu = $this->doc->getLibsOptionMenu($libPairs, $docType);
-        foreach($moduleOptionMenu as $id => $name)
+        $libItems = array();
+        foreach($libPairs as $id => $name) $libItems[] = array('text' => $name, 'value' => $id, 'keys' => $name);
+
+        $moduleItems = array();
+        $libID       = key($libPairs);
+        if($libID)
         {
-            if(empty($id)) continue;
-            $items[] = array('text' => $name, 'value' => $id, 'keys' => $name);
+            $optionMenu  = $this->loadModel('tree')->getOptionMenu($libID, $docType, $startModuleID = 0);
+            foreach($optionMenu as $id => $name) $moduleItems[] = array('text' => $name, 'value' => $id, 'keys' => $name);
         }
 
-        return print(json_encode($items));
+        return print(json_encode(array('libs' => $libItems, 'modules' => $moduleItems)));
     }
 
     /**
@@ -932,17 +921,14 @@ class doc extends control
         if($_POST)
         {
             $response = array();
-            if(empty($_POST['module']))
-            {
-                $response['result'] = 'fail';
-                $response['message']['module'] = sprintf($this->lang->error->notempty, $this->lang->doc->libAndModule);
-                return $this->send($response);
-            }
+
+            $libID    = (int)$this->post->lib;
+            $moduleID = (int)$this->post->module;
 
             if(strpos($this->post->module, '_') !== false) list($libID, $moduleID) = explode('_', $this->post->module);
             $response['result']     = 'success';
             $response['closeModal'] = true;
-            $response['callback']   = "redirectParentWindow(\"{$this->post->space}\", {$libID}, {$moduleID}, \"{$this->post->type}\")";
+            $response['callback']   = "redirectParentWindow(\"{$this->post->rootSpace}\", {$libID}, {$moduleID}, \"{$this->post->type}\")";
             return $this->send($response);
         }
 
@@ -964,6 +950,7 @@ class doc extends control
         $this->view->typeList  = $typeList;
         $this->view->products  = $products;
         $this->view->projects  = $projects;
+        $this->view->spaces    = $this->docZen->getAllSpaces('nomine');
 
         $this->display();
     }

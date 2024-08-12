@@ -17,39 +17,41 @@ if($doc->status == 'draft') $headingActions['items'][] = array('type' => 'second
 $headingActions['items'][] = array('type' => 'primary', 'class' => 'btn-wide', 'text' => $lang->doc->release, 'btnType' => 'submit');
 $headingActions['items'][] = array('type' => 'ghost', 'icon' => 'cog-outline', 'text' => $lang->settings, 'url' => '#modalBasicInfo', 'data-toggle' => 'modal');
 
+if($type == 'custom') unset($spaces['mine']);
 $basicInfoModal = modal
 (
     set::id('modalBasicInfo'),
     set::bodyClass('form form-horz'),
     set::title($lang->doc->release . $lang->doc->common),
-    on::change('#product,#project,#execution')->call('loadObjectModules', jsRaw('event')),
+    on::change('[name="space"],[name="product"],[name="project"],[name="execution"]')->call('loadObjectModules', jsRaw('event')),
+    on::change('[name="lib"]')->call('loadLibModules', jsRaw('event')),
     $type == 'execution' ? formHidden('project', $doc->project) : null,
     (strpos('product|project|execution', $type) !== false) ? formGroup
     (
         set::width('1/2'),
-        set::required(true),
         set::label($lang->doc->{$type}),
-        picker
-        (
-            set::name($type),
-            set::id($type),
-            set::items($objects),
-            set::value($objectID),
-            set::required(true)
-        )
+        set::required(true),
+        set::control(array('control' => 'picker', 'name' => $type, 'items' => $objects, 'required' => true, 'value' => $objectID))
+    ) : null,
+    ($type == 'mine' || $type == 'custom') ? formGroup
+    (
+        set::width('1/2'),
+        set::label($lang->doc->space),
+        set::required(true),
+        set::control(array('control' => 'picker', 'name' => 'space', 'items' => $spaces, 'required' => true, 'value' => $type == 'mine' ? 'mine' : $lib->parent, 'disabled' => $type == 'mine' ? true : false))
     ) : null,
     formGroup
     (
         set::width('1/2'),
+        set::label($lang->doc->lib),
         set::required(true),
-        set::label($lang->doc->libAndModule),
-        picker
-        (
-            set::name('module'),
-            set::items($moduleOptionMenu),
-            set::value($doc->lib . '_' . $doc->module),
-            set::required(true)
-        )
+        set::control(array('control' => 'picker', 'name' => 'lib', 'items' => $libs, 'required' => true, 'value' => $doc->lib))
+    ),
+    formGroup
+    (
+        set::width('1/2'),
+        set::label($lang->doc->module),
+        set::control(array('control' => 'picker', 'name' => 'module', 'items' => $optionMenu, 'required' => true, 'value' => $doc->module))
     ),
     formGroup
     (

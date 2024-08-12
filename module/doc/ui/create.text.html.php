@@ -21,7 +21,8 @@ $basicInfoModal = modal
     set::title($lang->doc->release . $lang->doc->common),
     set::id('modalBasicInfo'),
     set::bodyClass('form form-horz'),
-    on::change('[name=product],[name=execution]')->call('loadObjectModules', jsRaw('event')),
+    on::change('[name=space],[name=product],[name=execution]')->call('loadObjectModules', jsRaw('event')),
+    on::change('[name=lib]')->call('loadLibModules', jsRaw('event')),
     on::change('[name=project]')->call('loadExecutions', jsRaw('event')),
     formGroup
     (
@@ -38,25 +39,14 @@ $basicInfoModal = modal
         (
             setClass('w-1/2'),
             set::label($lang->doc->project),
-            picker
-            (
-                set::name('project'),
-                set::id('project'),
-                set::items($objects),
-                isset($execution) ? set::value($execution->project) : set::value($objectID),
-            )
+            set::required(true),
+            set::control(array('control' => 'picker', 'name' => 'project', 'items' => $objects, 'required' => true, 'value' => isset($execution) ? $execution->project : $objectID))
         ),
         ($this->app->tab == 'doc' and $config->vision == 'rnd') ? formGroup
         (
             setClass('w-1/2'),
             set::label($lang->doc->execution),
-            picker
-            (
-                set::name('execution'),
-                set::id('execution'),
-                set::items($executions),
-                set::value(isset($execution) ? $objectID : '')
-            )
+            set::control(array('control' => 'picker', 'name' => 'execution', 'items' => $executions, 'value' => isset($execution) ? $objectID : ''))
         ) : null
     ) : null,
     ($lib->type == 'execution') ? formGroup
@@ -64,41 +54,35 @@ $basicInfoModal = modal
         set::width('1/2'),
         set::label($lang->doc->execution),
         set::required(true),
-        picker
-        (
-            set::name('execution'),
-            set::id('execution'),
-            set::items($objects),
-            set::value($objectID),
-            set::required(true)
-        )
+        set::control(array('control' => 'picker', 'name' => 'execution', 'items' => $objects, 'required' => true, 'value' => $objectID))
     ) : null,
     ($lib->type == 'product') ? formGroup
     (
         set::width('1/2'),
         set::label($lang->doc->product),
         set::required(true),
-        picker
-        (
-            set::name('product'),
-            set::id('product'),
-            set::items($objects),
-            set::value($objectID),
-            set::required(true)
-        )
+        set::control(array('control' => 'picker', 'name' => 'product', 'items' => $objects, 'required' => true, 'value' => $objectID))
+    ) : null,
+    ($lib->type == 'mine' || $lib->type == 'custom') ? formGroup
+    (
+        set::width('1/2'),
+        set::label($lang->doc->space),
+        set::required(true),
+        set::control(array('control' => 'picker', 'name' => 'space', 'items' => $spaces, 'required' => true, 'value' => $objectID))
     ) : null,
     formGroup
     (
         set::width('1/2'),
-        set::label($lang->doc->libAndModule),
+        set::label($lang->doc->lib),
         set::required(true),
-        picker
-        (
-            set::name('module'),
-            set::items($moduleOptionMenu),
-            set::value($moduleID),
-            set::required(true)
-        )
+        picker(set::name('lib'), set::items($libs), set::value($libID), set::required(true))
+    ),
+    formGroup
+    (
+        set::width('1/2'),
+        set::label($lang->doc->module),
+        set::required(true),
+        picker(set::name('module'), set::items($optionMenu), set::value($moduleID), set::required(true))
     ),
     formGroup
     (
@@ -153,12 +137,7 @@ $basicInfoModal = modal
         div
         (
             setClass('form-actions form-group no-label'),
-            btn
-            (
-                set::type('primary'),
-                set::btnType('submit'),
-                $lang->doc->release
-            )
+            btn(set::type('primary'), set::btnType('submit'), $lang->doc->release)
         )
     )
 );

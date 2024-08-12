@@ -267,7 +267,8 @@ $lang->doc->statusList['draft']  = "Draft";
 $lang->doc->aclList['open']    = "Public (Access with library permissions)";
 $lang->doc->aclList['private'] = "Private (Only creators and whitelist users can access)";
 
-$lang->doc->space = 'Space';
+$lang->doc->selectSpace = 'Select Space';
+$lang->doc->space       = 'Space';
 $lang->doc->spaceList['mine']    = 'My Space';
 $lang->doc->spaceList['product'] = $lang->productCommon . ' Space';
 $lang->doc->spaceList['project'] = $lang->projectCommon . ' Space';

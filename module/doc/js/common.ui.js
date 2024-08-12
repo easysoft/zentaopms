@@ -186,8 +186,14 @@ window.rendDocCell = function(result, {col, row})
 
 window.loadObjectModules = function(e)
 {
-    const objectID   = e.target.value;
-    const objectType = e.target.name;
+    let objectID   = e.target.value;
+    let objectType = e.target.name;
+
+    if(objectType == 'space')
+    {
+        objectType = objectID == 'mine' ? 'mine' : 'custom';
+        if(objectID == 'mine') objectID = 0;;
+    }
 
     if(objectType == 'execution' && objectID == 0)
     {
@@ -195,7 +201,7 @@ window.loadObjectModules = function(e)
         objectID   = $('[name=project]').val();
     }
 
-    if(!objectID || !objectType) return false;
+    if(!objectType || (objectType != 'mine' && !objectID)) return false;
 
     let docType = $('.radio-primary [name=type]:not(.hidden):checked').val();
     if(typeof docType == 'undefined') docType = 'doc';
@@ -204,9 +210,31 @@ window.loadObjectModules = function(e)
     $.get(link, function(data)
     {
         data = JSON.parse(data);
-        const $picker = $("[name='module']").zui('picker');
-        $picker.render({items: data});
-        $picker.$.setValue('');
+        const $libPicker = $("[name='lib']").zui('picker');
+        $libPicker.render({items: data.libs});
+        $libPicker.$.setValue('');
+
+        const $modulePicker = $("[name='module']").zui('picker');
+        $modulePicker.render({items: data.modules});
+        $modulePicker.$.setValue('');
+    });
+}
+
+window.loadLibModules = function(e)
+{
+    const objectID = e.target.value;
+
+    let docType = $('.radio-primary [name=type]:not(.hidden):checked').val();
+    if(typeof docType == 'undefined') docType = 'doc';
+
+    const link = $.createLink('tree', 'ajaxGetOptionMenu', 'rootID=' + objectID + '&viewType=' + docType + '&branch=all&rootModuleID=0&returnType=items');
+    $.get(link, function(data)
+    {
+        data = JSON.parse(data);
+
+        const $modulePicker = $("[name='module']").zui('picker');
+        $modulePicker.render({items: data});
+        $modulePicker.$.setValue('');
     });
 }
 

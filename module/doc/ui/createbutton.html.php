@@ -10,19 +10,30 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$createButton  = $emptyCreateBtn = null;
-$typeID        = empty($lib) ? $objectID : zget($lib, (string)$lib->type, 0);
-$createType    = empty($lib) ? '' : $lib->type;
-$buttonItems   = array();
-foreach($lang->doc->createList as $typeKey => $typeName)
-{
-    $method  = 'create';
-    $docType = zget($config->doc->iconList, $typeKey);
-    $params  = "objectType={$createType}&objectID={$typeID}&libID={$libID}&moduleID={$moduleID}&type={$typeKey}";
-    if($typeKey == 'template' && $config->edition == 'max') $params = "objectType={$createType}&objectID={$typeID}&libID={$libID}&moduleID={$moduleID}&type=html";
-    if($typeKey == 'attachment') $method = 'uploadDocs';
+$createButton = $emptyCreateBtn = null;
+$typeID       = empty($lib) ? $objectID : zget($lib, (string)$lib->type, 0);
 
-    $buttonItems[] = array
+$docModel = $this->doc;
+$buildCreateBtn = function($type, $typeID, $libID, $moduleID) use($lib, $docModel)
+{
+    global $app, $config, $lang;
+    if($lib->type == 'custom')
+    {
+        $typeID = $lib->parent > 0 ? $lib->parent : $lib->id;
+        if($lib->parent == 0) $libID = $docModel->dao->select('*')->from(TABLE_DOCLIB)->where('parent')->eq($typeID)->andWhere('deleted')->eq('0')->orderBy('id_asc')->limit(1)->fetch('id');
+    }
+
+    $buttonItems = array();
+    $createType  = empty($lib) ? '' : $lib->type;
+    foreach($lang->doc->createList as $typeKey => $typeName)
+    {
+        $method  = 'create';
+        $docType = zget($config->doc->iconList, $typeKey);
+        $params  = "objectType={$createType}&objectID={$typeID}&libID={$libID}&moduleID={$moduleID}&type={$typeKey}";
+        if($typeKey == 'template' && $config->edition == 'max') $params = "objectType={$createType}&objectID={$typeID}&libID={$libID}&moduleID={$moduleID}&type=html";
+        if($typeKey == 'attachment') $method = 'uploadDocs';
+
+        $buttonItems[] = array
         (
             'content'     => array('html' => "<img class='mr-2' src='static/svg/{$docType}.svg'/>{$typeName}", 'class' => 'flex w-full'),
             'url'         => createLink('doc', $method, $params),
@@ -30,11 +41,9 @@ foreach($lang->doc->createList as $typeKey => $typeName)
             'data-toggle' => strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'modal' : ''
         );
 
-    if($typeKey == 'template') $buttonItems[] = array('type' => 'divider');
-}
+        if($typeKey == 'template') $buttonItems[] = array('type' => 'divider');
+    }
 
-$buildCreateBtn = function($type, $typeID, $libID, $moduleID, $buttonItems) use($app, $lang)
-{
     return btngroup(
         btn
         (
@@ -54,4 +63,4 @@ $buildCreateBtn = function($type, $typeID, $libID, $moduleID, $buttonItems) use(
     );
 };
 
-$createButton = $buildCreateBtn($type, $typeID, $libID, $moduleID, $buttonItems);
+$createButton = $buildCreateBtn($type, $typeID, $libID, $moduleID);

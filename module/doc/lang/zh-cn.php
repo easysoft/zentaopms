@@ -267,7 +267,8 @@ $lang->doc->statusList['draft']  = "草稿";
 $lang->doc->aclList['open']    = "公开（有所属库权限即可访问）";
 $lang->doc->aclList['private'] = "私有（仅创建者和白名单用户可访问）";
 
-$lang->doc->space = '所属空间';
+$lang->doc->selectSpace = '选择空间';
+$lang->doc->space       = '所属空间';
 $lang->doc->spaceList['mine']    = '我的空间';
 $lang->doc->spaceList['product'] = $lang->productCommon . '空间';
 $lang->doc->spaceList['project'] = $lang->projectCommon . '空间';

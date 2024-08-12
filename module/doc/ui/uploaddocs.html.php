@@ -56,12 +56,31 @@ formPanel
         on::change('loadObjectModules'),
         set::required(true)
     ) : null,
+    ($objectType == 'custom' || $objectType == 'mine') ? formGroup
+    (
+        set::label($lang->doc->space),
+        set::name('space'),
+        set::items($spaces),
+        set::value($objectID),
+        on::change('loadObjectModules'),
+        set::disabled($objectType == 'mine'),
+        set::required(true)
+    ) : null,
+    formGroup
+    (
+        set::label($lang->doc->lib),
+        set::name('lib'),
+        set::items($libs),
+        set::value($libID),
+        on::change('loadLibModules'),
+        set::required(true)
+    ),
     formGroup
     (
         setClass('moduleBox'),
-        set::label($lang->doc->libAndModule),
+        set::label($lang->doc->module),
         set::name('module'),
-        set::items($moduleOptionMenu),
+        set::items($optionMenu),
         set::value($moduleID),
         set::required(true)
     ),

@@ -9,39 +9,37 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-
 formPanel
 (
     modalHeader(),
-    on::change('#product',   "loadObjectModules"),
-    on::change('#project',   "loadObjectModules"),
-    on::change('#execution', "loadObjectModules"),
+    on::change('[name=product],[name=project],[name=execution],[name=space]', "loadObjectModules"),
+    on::change('[name=lib]', "loadLibModules"),
     (strpos('product|project|execution', $type) !== false) ? formGroup
     (
         set::width('1/2'),
-        set::required(true),
         set::label($lang->doc->{$type}),
-        picker
-        (
-            set::name($type),
-            set::id($type),
-            set::items($objects),
-            set::value($objectID),
-            set::required(true)
-        )
+        set::required(true),
+        set::control(array('control' => 'picker', 'name' => $type, 'items' => $objects, 'required' => true, 'value' => $objectID))
+    ) : null,
+    ($type == 'mine' || $type == 'custom') ? formGroup
+    (
+        set::width('1/2'),
+        set::label($lang->doc->space),
+        set::required(true),
+        set::control(array('control' => 'picker', 'name' => 'space', 'items' => $spaces, 'required' => true, 'disabled' => $type == 'mine' ? true : false, 'value' => $type == 'mine' ? 'mine' : $lib->parent))
     ) : null,
     formGroup
     (
         set::width('1/2'),
+        set::label($lang->doc->lib),
         set::required(true),
-        set::label($lang->doc->libAndModule),
-        picker
-        (
-            set::name('module'),
-            set::items($moduleOptionMenu),
-            set::value($doc->lib . '_' . $doc->module),
-            set::required(true)
-        )
+        set::control(array('control' => 'picker', 'name' => 'lib', 'items' => $libs, 'required' => true, 'value' => $doc->lib))
+    ),
+    formGroup
+    (
+        set::width('1/2'),
+        set::label($lang->doc->module),
+        set::control(array('control' => 'picker', 'name' => 'module', 'items' => $optionMenu, 'required' => true, 'value' => $doc->module))
     ),
     formGroup
     (
@@ -79,7 +77,7 @@ formPanel
             on::change('toggleWhiteList')
         )
     ),
-    formGroup
+    $lib->type != 'mine' ? formGroup
     (
         $doc->acl == 'open' ? setClass('hidden') : null,
         set::label($lang->doc->whiteList),
@@ -105,7 +103,7 @@ formPanel
                 userPicker(set::label($lang->doc->users), set::items($users), set::value($doc->users))
             )
         )
-    ),
+    ) : null,
     formHidden('contentType', $doc->contentType),
     formHidden('type', $doc->type),
     formHidden('status', $doc->status),
