@@ -28,6 +28,7 @@ $config->zanode->dtable->fieldList['diskSize']['name']     = 'diskSize';
 $config->zanode->dtable->fieldList['diskSize']['sortType'] = true;
 
 $config->zanode->dtable->fieldList['osName']['name']  = 'osName';
+$config->zanode->dtable->fieldList['osName']['map']   = $config->zanode->linuxList + $config->zanode->windowsList;
 
 $config->zanode->dtable->fieldList['status']['name']     = 'status';
 $config->zanode->dtable->fieldList['status']['map']      = $lang->zanode->statusList;
