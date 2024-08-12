@@ -4441,6 +4441,20 @@ $config->bi->builtin->metrics[] = array
 
 $config->bi->builtin->metrics[] = array
 (
+    'name'       => '按执行统计的执行结束时研发需求按计划完成率',
+    'alias'      => '执行关闭时研发需求按计划完成率',
+    'code'       => 'rate_of_planned_developed_story_in_execution_when_closing',
+    'purpose'    => 'rate',
+    'scope'      => 'execution',
+    'object'     => 'story',
+    'unit'       => 'percentage',
+    'dateType'   => 'nodate',
+    'desc'       => '按执行统计的研发需求按计划完成率是指执行结束时已交付的研发需求与执行开始时计划的研发需求数的比率。该度量项反映了团队能否按期完成规划的需求，可以帮助团队识别研发中存在的潜在问题。',
+    'definition' => "复用： 按执行统计的执行关闭时已交付的研发需求数、按执行统计的截止执行开始当天的研发需求数；公式：按执行统计的执行关闭时已交付的研发需求数/按执行统计的截止执行开始当天的研发需求数"
+);
+
+$config->bi->builtin->metrics[] = array
+(
     'name'       => '按执行统计的开发人员执行外任务消耗工时数',
     'alias'      => '开发人员执行外任务消耗工时数',
     'code'       => 'hour_of_outplan_task_in_execution',
