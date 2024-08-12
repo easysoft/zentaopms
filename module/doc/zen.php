@@ -159,30 +159,6 @@ class docZen extends doc
     }
 
     /**
-     * 设置文档树默认展开的节点。
-     * Set the default expanded nodes of the document tree.
-     *
-     * @param  int       $libID
-     * @param  int       $moduleID
-     * @param  string    $objectType mine|product|project|execution|custom
-     * @param  int       $executionID
-     * @access protected
-     * @return array
-     */
-    protected function getDefaultNestedShow(int $libID, int $moduleID, string $objectType = '', int $executionID = 0): array
-    {
-        if(!$libID && !$moduleID) return array();
-
-        $prefix = $objectType == 'mine' ? "0:" : '';
-        if($libID && !$moduleID) return array("{$prefix}{$libID}" => true);
-
-        $module = $this->loadModel('tree')->getByID($moduleID);
-        $path   = explode(',', trim($module->path, ','));
-        $path   = implode(':', $path);
-        return array("{$prefix}{$libID}:{$path}" => true);
-    }
-
-    /**
      * 展示我的空间相关变量。
      * Show my space related variables.
      *
@@ -202,26 +178,25 @@ class docZen extends doc
      */
     protected function assignVarsForMySpace(string $type, int $objectID, int $libID, int $moduleID, string $browseType, int $param, string $orderBy, array $docs, object $pager, array $libs, string $objectTitle): void
     {
-        $this->view->title             = $this->lang->doc->common;
-        $this->view->type              = $type;
-        $this->view->libID             = $libID;
-        $this->view->moduleID          = $moduleID;
-        $this->view->browseType        = $browseType;
-        $this->view->param             = $param;
-        $this->view->orderBy           = $orderBy;
-        $this->view->docs              = $docs;
-        $this->view->pager             = $pager;
-        $this->view->objectTitle       = $objectTitle;
-        $this->view->objectID          = 0;
-        $this->view->canUpdateOrder    = common::hasPriv('doc', 'sortDoc') && $orderBy == 'order_asc';
-        $this->view->libType           = 'lib';
-        $this->view->spaceType         = 'mine';
-        $this->view->users             = $this->user->getPairs('noletter');
-        $this->view->lib               = $this->doc->getLibByID($libID);
-        $this->view->libTree           = $this->doc->getLibTree($type != 'mine' ? 0 : $libID, $libs, 'mine', $moduleID, 0, $browseType);
-        $this->view->canExport         = ($this->config->edition != 'open' && common::hasPriv('doc', 'mine2export') && $type == 'mine');
-        $this->view->linkParams        = "objectID={$objectID}&%s&browseType=&orderBy={$orderBy}&param=0";
-        $this->view->defaultNestedShow = $this->getDefaultNestedShow($libID, $moduleID, $type);
+        $this->view->title          = $this->lang->doc->common;
+        $this->view->type           = $type;
+        $this->view->libID          = $libID;
+        $this->view->moduleID       = $moduleID;
+        $this->view->browseType     = $browseType;
+        $this->view->param          = $param;
+        $this->view->orderBy        = $orderBy;
+        $this->view->docs           = $docs;
+        $this->view->pager          = $pager;
+        $this->view->objectTitle    = $objectTitle;
+        $this->view->objectID       = 0;
+        $this->view->canUpdateOrder = common::hasPriv('doc', 'sortDoc') && $orderBy == 'order_asc';
+        $this->view->libType        = 'lib';
+        $this->view->spaceType      = 'mine';
+        $this->view->users          = $this->user->getPairs('noletter');
+        $this->view->lib            = $this->doc->getLibByID($libID);
+        $this->view->libTree        = $this->doc->getLibTree($type != 'mine' ? 0 : $libID, $libs, 'mine', $moduleID, 0, $browseType);
+        $this->view->canExport      = ($this->config->edition != 'open' && common::hasPriv('doc', 'mine2export') && $type == 'mine');
+        $this->view->linkParams     = "objectID={$objectID}&%s&browseType=&orderBy={$orderBy}&param=0";
     }
 
     /**
@@ -731,40 +706,32 @@ class docZen extends doc
      */
     protected function assignVarsForView(int $docID, int $version, string $type, int $objectID, int $libID, object $doc, object $object, string $objectType, array $libs, array $objectDropdown): void
     {
-        $defaultNestedShow = $this->getDefaultNestedShow($libID, (int)$doc->module, $type);
-        if($defaultNestedShow)
-        {
-            $showNested = key($defaultNestedShow) . ":{$docID}";
-            $defaultNestedShow = array($showNested => true);
-        }
-
-        $this->view->title             = $this->lang->doc->common . $this->lang->hyphen . $doc->title;
-        $this->view->docID             = $docID;
-        $this->view->type              = $type;
-        $this->view->objectID          = $objectID;
-        $this->view->libID             = $libID;
-        $this->view->doc               = $doc;
-        $this->view->version           = $version;
-        $this->view->object            = $object;
-        $this->view->objectType        = $objectType;
-        $this->view->lib               = isset($libs[$libID]) ? $libs[$libID] : new stdclass();
-        $this->view->libs              = $libs;
-        $this->view->canBeChanged      = common::canModify($type, $object); // Determines whether an object is editable.
-        $this->view->actions           = $docID ? $this->action->getList('doc', $docID) : array();
-        $this->view->users             = $this->loadModel('user')->getPairs('noclosed,noletter');
-        $this->view->libTree           = $this->doc->getLibTree((int)$libID, (array)$libs, $type, (int)$doc->module, (int)$objectID, '', 0, $docID);
-        $this->view->preAndNext        = $this->loadModel('common')->getPreAndNextObject('doc', $docID);
-        $this->view->moduleID          = $doc->module;
-        $this->view->objectDropdown    = $objectDropdown;
-        $this->view->canExport         = ($this->config->edition != 'open' && common::hasPriv('doc', $type . '2export'));
-        $this->view->exportMethod      = $type . '2export';
-        $this->view->editors           = $this->doc->getEditors($docID);
-        $this->view->linkParams        = "objectID={$objectID}&%s&browseType=&orderBy=status,id_desc&param=0";
-        $this->view->spaceType         = $objectType;
-        $this->view->productID         = $doc->product;
-        $this->view->projectID         = $doc->project;
-        $this->view->executionID       = $doc->execution;
-        $this->view->defaultNestedShow = $defaultNestedShow;
+        $this->view->title          = $this->lang->doc->common . $this->lang->hyphen . $doc->title;
+        $this->view->docID          = $docID;
+        $this->view->type           = $type;
+        $this->view->objectID       = $objectID;
+        $this->view->libID          = $libID;
+        $this->view->doc            = $doc;
+        $this->view->version        = $version;
+        $this->view->object         = $object;
+        $this->view->objectType     = $objectType;
+        $this->view->lib            = isset($libs[$libID]) ? $libs[$libID] : new stdclass();
+        $this->view->libs           = $libs;
+        $this->view->canBeChanged   = common::canModify($type, $object); // Determines whether an object is editable.
+        $this->view->actions        = $docID ? $this->action->getList('doc', $docID) : array();
+        $this->view->users          = $this->loadModel('user')->getPairs('noclosed,noletter');
+        $this->view->libTree        = $this->doc->getLibTree((int)$libID, (array)$libs, $type, (int)$doc->module, (int)$objectID, '', 0, $docID);
+        $this->view->preAndNext     = $this->loadModel('common')->getPreAndNextObject('doc', $docID);
+        $this->view->moduleID       = $doc->module;
+        $this->view->objectDropdown = $objectDropdown;
+        $this->view->canExport      = ($this->config->edition != 'open' && common::hasPriv('doc', $type . '2export'));
+        $this->view->exportMethod   = $type . '2export';
+        $this->view->editors        = $this->doc->getEditors($docID);
+        $this->view->linkParams     = "objectID={$objectID}&%s&browseType=&orderBy=status,id_desc&param=0";
+        $this->view->spaceType      = $objectType;
+        $this->view->productID      = $doc->product;
+        $this->view->projectID      = $doc->project;
+        $this->view->executionID    = $doc->execution;
     }
 
     /**

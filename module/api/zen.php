@@ -12,26 +12,6 @@ declare(strict_types=1);
 class apiZen extends api
 {
     /**
-     * 设置文档树默认展开的节点。
-     * Set the default expanded nodes of the document tree.
-     *
-     * @param  int       $libID
-     * @param  int       $moduleID
-     * @access protected
-     * @return array
-     */
-    protected function getDefaultNestedShow(int $libID, int $moduleID): array
-    {
-        if(!$libID && !$moduleID) return array();
-        if($libID && !$moduleID) return array("{$libID}" => true);
-
-        $module = $this->loadModel('tree')->getByID($moduleID);
-        $path   = explode(',', trim($module->path, ','));
-        $path   = implode(':', $path);
-        return array("{$libID}:{$path}" => true);
-    }
-
-    /**
      * 解析cookie里的docSpaceParam值。
      * Parse docSpaceParam cookie.
      *
@@ -67,15 +47,14 @@ class apiZen extends api
             $libTree = $this->doc->getLibTree($libID, $libs, $spaceType, $moduleID);
         }
 
-        $this->view->type              = $type;
-        $this->view->objectType        = $type;
-        $this->view->objectID          = $objectID;
-        $this->view->libID             = $libID;
-        $this->view->moduleID          = $moduleID;
-        $this->view->libTree           = $libTree;
-        $this->view->objectDropdown    = $objectDropdown;
-        $this->view->spaceType         = $spaceType;
-        $this->view->defaultNestedShow = $this->getDefaultNestedShow($libID, $moduleID);
+        $this->view->type           = $type;
+        $this->view->objectType     = $type;
+        $this->view->objectID       = $objectID;
+        $this->view->libID          = $libID;
+        $this->view->moduleID       = $moduleID;
+        $this->view->libTree        = $libTree;
+        $this->view->objectDropdown = $objectDropdown;
+        $this->view->spaceType      = $spaceType;
     }
 
     /**
