@@ -178,7 +178,15 @@ class metricZen extends metric
         return $scopeList;
     }
 
-    protected function calculateMetric($classifiedCalcGroup )
+    /**
+     * 计算度量数据。
+     * Calculate metric data.
+     *
+     * @param  array     $classifiedCalcGroup
+     * @access protected
+     * @return void
+     */
+    protected function calculateMetric($classifiedCalcGroup)
     {
         foreach($classifiedCalcGroup as $calcGroup)
         {
