@@ -62,7 +62,7 @@ formPanel
         set::width('1/2'),
         set::value($zanode->extranet)
     ),
-    $hiddenHost ? array(formHidden('cpuCores', 0), formHidden('memory', 0), formHidden('diskSize', 0)) : array
+    $hiddenHost || $zanode->hostType == 'physics' ? array(formHidden('cpuCores', 0), formHidden('memory', 0), formHidden('diskSize', 0)) : array
     (
         formGroup
         (

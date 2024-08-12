@@ -60,9 +60,8 @@ class zanodeZen extends zanode
     {
         if($this->post->hostType == 'physics') $this->config->zanode->create->requiredFields = $this->config->zanode->create->physicsRequiredFields;
 
-        if($this->loadModel('zahost')->hiddenHost())
+        if($this->loadModel('zahost')->hiddenHost() || $this->post->hostType == 'physics')
         {
-            $this->config->zanode->create->requiredFields = str_replace("cpu,memory,", '', $this->config->zanode->create->requiredFields);
             $this->config->zanode->form->create['memory']['required']   = false;
             $this->config->zanode->form->create['diskSize']['required'] = false;
         }

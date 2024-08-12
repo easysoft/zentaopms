@@ -10,6 +10,9 @@ function onChangeType()
     {
         $("[name^='parent']").closest('.form-row').hide();
         $("[name^='image']").closest('.form-group').hide();
+        $("[name='cpuCores']").closest('.form-group').hide();
+        $("[name='memory']").closest('.form-row').hide();
+        $("[name='diskSize']").closest('.form-row').hide();
         $('#extranet').closest('.form-row').removeClass('hidden');
         $('#osName').closest('.form-row').addClass('hidden');
         $('#osNamePhysicsContainer').removeClass('hidden');
