@@ -24,7 +24,7 @@ class devel_efficiency_in_execution_when_closing extends baseCalc
 
     public $reuse = true;
 
-    public $reuseMetrics = array('storyScale' => 'scale_of_story_in_execution_when_starting', 'taskConsumed' => 'consume_of_task_in_execution');
+    public $reuseMetrics = array('storyScale' => 'scale_of_delivered_story_in_execution_when_closing', 'taskConsumed' => 'consume_of_task_in_execution');
 
     public $reuseRule = '{storyScale} / {taskConsumed}';
 
