@@ -9,12 +9,29 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-
-h::iframe
+div
 (
-    set::width('100%'),
-    set::id('iframe-instruction'),
-    set::frameborder(0),
-    set::src('https://www.zentao.net/book/zentaopms/978.html?fullScreen=zentao&theme=default'),
-    on::init()->call('window.getIframeHeight')
+    set::className('space-y-4'),
+    div
+    (
+        h3($lang->zanode->instructionPage->title),
+        div
+        (
+            set::className('leading-normal'),
+            $lang->zanode->instructionPage->desc
+        )
+    ),
+    div
+    (
+        h5($lang->zanode->instructionPage->imageInstruction),
+        img(set::className('w-1/2'), set::src($lang->zanode->instructionPage->image))
+    ),
+    div
+    (
+        h5($lang->zanode->instructionPage->h1),
+        div(set::className('leading-normal whitespace-pre-line'), $lang->zanode->instructionPage->h1Desc),
+    ),
+    div
+    (
+    )
 );
