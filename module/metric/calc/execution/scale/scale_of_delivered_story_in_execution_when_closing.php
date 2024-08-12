@@ -22,7 +22,7 @@ class scale_of_delivered_story_in_execution_when_closing extends baseCalc
 {
     public $dataset = 'getDevStoriesWithExecution';
 
-    public $fieldList = array('t4.id as execution', 't1.id', 't1.estimate', 't4.closedDate as executionClosed', 't1.closedDate as storyClosedDate', 't1.releasedDate as storyReleasedDate', 't1.stage', 't1.closedReason');
+    public $fieldList = array('t4.id as execution', 't1.id', 't1.estimate', "if(t4.multiple = '1', t4.closedDate, t5.closedDate) as executionClosed", 't1.closedDate as storyClosedDate', 't1.releasedDate as storyReleasedDate', 't1.stage', 't1.closedReason');
 
     public $result = array();
 

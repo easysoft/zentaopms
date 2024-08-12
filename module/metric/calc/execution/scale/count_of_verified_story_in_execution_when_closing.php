@@ -22,16 +22,16 @@ class count_of_verified_story_in_execution_when_closing extends baseCalc
 {
     public $dataset = 'getAllStoriesWithExecution';
 
-    public $fieldList = array('t3.project', 't1.stage', 't1.closedReason', 't1.releasedDate', 't1.closedDate AS storyClosedDate', 't4.closedDate');
+    public $fieldList = array('t3.project', 't1.stage', 't1.closedReason', 't1.releasedDate', 't1.closedDate AS storyClosedDate', "if(t4.multiple = '1', t4.closedDate, t5.closedDate) as executionClosed");
 
     public $result = array();
 
     public function calculate($row)
     {
         $execution  = $row->project;
-        $isVerified = $row->stage == 'verified' &&  $row->verifiedDate <= $row->closedDate;
-        $isReleased = $row->stage == 'released' && $row->releasedDate <= $row->closedDate;
-        $isClosed   = $row->closedReason == 'done' && $row->storyClosedDate <= $row->closedDate;
+        $isVerified = $row->stage == 'verified' &&  $row->verifiedDate <= $row->executionClosed;
+        $isReleased = $row->stage == 'released' && $row->releasedDate <= $row->executionClosed;
+        $isClosed   = $row->closedReason == 'done' && $row->storyClosedDate <= $row->executionClosed;
 
         if(!isset($this->result[$execution])) $this->result[$execution] = 0;
         if($isVerified || $isReleased || $isClosed) $this->result[$execution] += 1;
