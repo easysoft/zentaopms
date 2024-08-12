@@ -698,11 +698,13 @@ class gitlabRepo
      * @param  string    $toRevision
      * @param  int       $perPage
      * @param  int       $page
-     * @param  bool      $getUrl
+     * @param  string    $beginDate
+     * @param  string    $endDate
+     * @param  string    $committer
      * @access public
      * @return array
      */
-    public function getCommitsByPath($path, $fromRevision = '', $toRevision = '', $perPage = 0, $page = 1, $getUrl = false, $beginDate = '', $endDate = '')
+    public function getCommitsByPath($path, $fromRevision = '', $toRevision = '', $perPage = 0, $page = 1, $beginDate = '', $endDate = '', $committer = '')
     {
         $path = ltrim($path, DIRECTORY_SEPARATOR);
         $api = "commits";
@@ -725,22 +727,16 @@ class gitlabRepo
         {
             $since = $fromDate;
         }
+        elseif($toRevision || $endDate)
+        {
+            $until = $toDate;
+        }
         if($since) $param->since = $since;
         if($until) $param->until = $until;
 
-        if($perPage) $param->per_page = $perPage;
-        if($page)    $param->page = $page;
-
-        if($getUrl)
-        {
-            $params = (array) $param;
-            $params['private_token'] = $this->token;
-            $params['per_page']      = isset($params['per_page']) ? $params['per_page'] : 100;
-
-            $api = ltrim($api, '/');
-            $api = $this->root . $api . '?' . http_build_query($params);
-            return $api;
-        }
+        if($perPage)   $param->per_page = $perPage;
+        if($page)      $param->page     = $page;
+        if($committer) $param->author   = $committer;
 
         return $this->fetch($api, $param);
     }

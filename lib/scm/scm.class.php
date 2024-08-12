@@ -411,6 +411,11 @@ class scm
         $endDate   = trim($endDate, '-');
         return $this->engine->getCommitByDate($this->formatDate($startDate), $this->formatDate($endDate, false, true));
     }
+
+    public function __call($funcName, $arguments)
+    {
+        if(method_exists($this->engine, $funcName)) return call_user_func_array(array($this->engine, $funcName), $arguments);
+    }
 }
 
 /**
