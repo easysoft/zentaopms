@@ -5363,4 +5363,63 @@ class storyModel extends model
             }
         }
     }
+
+    /**
+     * 更新需求关联的代码提交记录。
+     * Update the commit logs linked with the stories.
+     *
+     * @param  int       $storyID
+     * @param  int       $repoID
+     * @param  array     $revisions
+     * @access protected
+     * @return bool
+     */
+    public function updateLinkedCommits(int $storyID, int $repoID, array $revisions): bool
+    {
+        if(!$storyID || !$repoID || empty($revisions)) return true;
+        $story = $this->dao->select('product')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
+        if(!$story) return true;
+        foreach($revisions as $revision)
+        {
+            $data = new stdclass();
+            $data->product  = $story->product;
+            $data->AType    = 'story';
+            $data->AID      = $storyID;
+            $data->BType    = 'commit';
+            $data->BID      = $revision;
+            $data->relation = 'completedin';
+            $data->extra    = $repoID;
+            $this->dao->replace(TABLE_RELATION)->data($data)->autoCheck()->exec();
+
+            $data->AType    = 'commit';
+            $data->AID      = $revision;
+            $data->BType    = 'story';
+            $data->BID      = $storyID;
+            $data->relation = 'completedfrom';
+            $this->dao->replace(TABLE_RELATION)->data($data)->autoCheck()->exec();
+        }
+
+        return !dao::isError();
+    }
+
+    /**
+     * 获取需求关联的提交数据。
+     * Get the commit data for the associated stories
+     * @param  int       $storyID
+     * @param  int       $repoID
+     * @param  array     $revisions
+     * @access protected
+     * @return bool
+     */
+    public function getLinkedCommits(int $repoID, array $revisions): array
+    {
+        return $this->dao->select('h.revision,s.id AS id,s.title AS title')
+            ->from(TABLE_REPOHISTORY)->alias('h')
+            ->leftJoin(TABLE_RELATION)->alias('r')->on('r.relation="completedin" and r.BType="commit" and r.BID=h.id')
+            ->leftJoin(TABLE_STORY)->alias('s')->on('r.AType="story" and r.AID=s.id')
+            ->where('h.revision')->in($revisions)
+            ->andWhere('h.repo')->eq($repoID)
+            ->andWhere('s.id')->ne('')
+            ->fetchGroup('revision', 'id');
+    }
 }

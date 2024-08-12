@@ -104,7 +104,7 @@ $lang->repo->password           = '密码';
 $lang->repo->encoding           = '编码';
 $lang->repo->client             = '客户端';
 $lang->repo->size               = '大小';
-$lang->repo->revision           = '查看提交';
+$lang->repo->revision           = '提交';
 $lang->repo->revisionA          = '提交';
 $lang->repo->revisions          = '提交';
 $lang->repo->time               = '提交时间';
@@ -147,6 +147,8 @@ $lang->repo->lastCommitter      = '提交人';
 $lang->repo->lastUpdateTime     = '最后修改时间';
 $lang->repo->createdBy          = '创建人';
 $lang->repo->sourceCommit       = '来源提交';
+$lang->repo->design             = '相关设计';
+$lang->repo->story              = '需求';
 
 $lang->repo->title      = '标题';
 $lang->repo->status     = '状态';

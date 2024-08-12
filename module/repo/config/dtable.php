@@ -156,6 +156,11 @@ $config->repo->logDtable->fieldList['date']['width']    = '160';
 $config->repo->logDtable->fieldList['committer']['name']  = 'committer';
 $config->repo->logDtable->fieldList['committer']['width'] = '160';
 
+$config->repo->logDtable->fieldList['design']['name']  = 'designName';
+$config->repo->logDtable->fieldList['design']['type']  = 'html';
+$config->repo->logDtable->fieldList['design']['width'] = '450';
+$config->repo->logDtable->fieldList['design']['title'] =  $lang->repo->design;
+
 $config->repo->logDtable->fieldList['comment']['type']  = 'html';
 $config->repo->logDtable->fieldList['comment']['width'] = '400';
 

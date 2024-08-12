@@ -3279,4 +3279,61 @@ class taskModel extends model
     {
         return $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->orderBy($orderBy)->fetchAll('id');
     }
+
+    /**
+     * 更新任务关联的代码提交记录。
+     * Update the commit logs linked with the tasks.
+     *
+     * @param  int       $taskID
+     * @param  int       $repoID
+     * @param  array     $revisions
+     * @access public
+     * @return bool
+     */
+    public function updateLinkedCommits(int $taskID, int $repoID, array $revisions): bool
+    {
+        if(!$taskID || !$repoID || empty($revisions)) return true;
+        $task = $this->dao->select('project')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
+        if(!$task) return true;
+        foreach($revisions as $revision)
+        {
+            $data = new stdclass();
+            $data->project  = $task->project;
+            $data->AType    = 'task';
+            $data->AID      = $taskID;
+            $data->BType    = 'commit';
+            $data->BID      = $revision;
+            $data->relation = 'completedin';
+            $data->extra    = $repoID;
+            $this->dao->replace(TABLE_RELATION)->data($data)->autoCheck()->exec();
+
+            $data->AType    = 'commit';
+            $data->AID      = $revision;
+            $data->BType    = 'task';
+            $data->BID      = $taskID;
+            $data->relation = 'completedfrom';
+            $this->dao->replace(TABLE_RELATION)->data($data)->autoCheck()->exec();
+        }
+        return !dao::isError();
+    }
+
+    /**
+     * 获取Task关联的提交数据。
+     * Get the commit data for the associated bugs
+     * @param  int       $repoID
+     * @param  array     $revisions
+     * @access public
+     * @return bool
+     */
+    public function getLinkedCommits(int $repoID, array $revisions): array
+    {
+        return $this->dao->select('h.revision,t.id AS id,t.name AS name')
+            ->from(TABLE_REPOHISTORY)->alias('h')
+            ->leftJoin(TABLE_RELATION)->alias('r')->on('r.relation="completedin" and r.BType="commit" and r.BID=h.id')
+            ->leftJoin(TABLE_TASK)->alias('t')->on('r.AType="task" and r.AID=t.id')
+            ->where('h.revision')->in($revisions)
+            ->andWhere('h.repo')->eq($repoID)
+            ->andWhere('t.id')->ne('')
+            ->fetchGroup('revision', 'id');
+    }
 }

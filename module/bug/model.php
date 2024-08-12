@@ -2085,4 +2085,62 @@ class bugModel extends model
         foreach($branches as $branchID => $branchName) $modules += $this->tree->getOptionMenu($productID, 'bug', 0, (string)$branchID);
         return $modules;
     }
+
+    /**
+     * 更新Bug关联的代码提交记录。
+     * Update the commit logs linked with the bugs.
+     *
+     * @param  int       $bugID
+     * @param  int       $repoID
+     * @param  array     $revisions
+     * @access protected
+     * @return bool
+     */
+    public function updateLinkedCommits(int $bugID, int $repoID, array $revisions): bool
+    {
+        if(!$bugID || !$repoID || empty($revisions)) return true;
+        $bug = $this->dao->select('product')->from(TABLE_BUG)->where('id')->eq($bugID)->fetch();
+        if(!$bug) return true;
+        foreach($revisions as $revision)
+        {
+            $data = new stdclass();
+            $data->project  = $bug->project;
+            $data->product  = $bug->product;
+            $data->AType    = 'bug';
+            $data->AID      = $bugID;
+            $data->BType    = 'commit';
+            $data->BID      = $revision;
+            $data->relation = 'completedin';
+            $data->extra    = $repoID;
+            $this->dao->replace(TABLE_RELATION)->data($data)->autoCheck()->exec();
+
+            $data->AType    = 'commit';
+            $data->AID      = $revision;
+            $data->BType    = 'bug';
+            $data->BID      = $bugID;
+            $data->relation = 'completedfrom';
+            $this->dao->replace(TABLE_RELATION)->data($data)->autoCheck()->exec();
+        }
+        return !dao::isError();
+    }
+
+    /**
+     * 获取Bug关联的提交数据。
+     * Get the commit data for the associated bugs
+     * @param  int       $repoID
+     * @param  array     $revisions
+     * @access protected
+     * @return bool
+     */
+    public function getLinkedCommits(int $repoID, array $revisions): array
+    {
+        return $this->dao->select('h.revision,b.id AS id,b.title AS title')
+            ->from(TABLE_REPOHISTORY)->alias('h')
+            ->leftJoin(TABLE_RELATION)->alias('r')->on('r.relation="completedin" and r.BType="commit" and r.BID=h.id')
+            ->leftJoin(TABLE_BUG)->alias('b')->on('r.AType="bug" and r.AID=b.id')
+            ->where('h.revision')->in($revisions)
+            ->andWhere('h.repo')->eq($repoID)
+            ->andWhere('b.id')->ne('')
+            ->fetchGroup('revision', 'id');
+    }
 }

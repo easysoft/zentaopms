@@ -53,6 +53,30 @@ if($fileName) $breadcrumbItems[] = h::span($fileName);
 foreach($logs as $log)
 {
     $log->revision = substr($log->revision, 0, 10);
+    $log->designName = '';
+    if(!empty($log->relations['stroies']))
+    {
+        $log->designName .= html::commonButton($lang->repo->story , '', 'btn size-sm mx-2');
+        foreach($log->relations['stroies'] as $item) $log->designName .= html::a($item->url, '#'.$item->id, '_blank');
+    }
+
+    if(!empty($log->relations['designs']))
+    {
+        $log->designName .= html::commonButton($lang->design->common , '', 'btn size-sm mx-2');
+        foreach($log->relations['designs'] as $item) $log->designName .= html::a($item->url, '#'.$item->id,'_blank');
+    }
+
+    if(!empty($log->relations['tasks']))
+    {
+        $log->designName .= html::commonButton($lang->task->common , '', 'btn size-sm mx-2');
+        foreach($log->relations['tasks'] as $item) $log->designName .= html::a($item->url, '#'.$item->id,'_blank');
+    }
+
+    if(!empty($log->relations['bugs']))
+    {
+        $log->designName .= html::commonButton($lang->bug->common , '', 'btn size-sm mx-2');
+        foreach($log->relations['bugs'] as $item) $log->designName .= html::a($item->url, '#'.$item->id,'_blank');
+    }
 }
 
 /* Disbale check all checkbox of table header */

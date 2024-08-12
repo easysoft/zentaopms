@@ -1882,8 +1882,33 @@ class repoModel extends model
                     }
                 }
             }
-        }
 
+            if(!empty($objects['stories']) || !empty($objects['tasks']) || !empty($objects['bugs']))
+            {
+                $historyLog = new stdclass();
+                $historyLog->committer = $log->author;
+                $historyLog->revision  = $log->revision;
+                $historyLog->comment   = $commit->message;
+                $historyLog->time      = date("Y-m-d H:i:s", strtotime($time));
+                $this->saveCommit($repo->id, array('commits' => [$historyLog]), 0);
+                $revisions = $this->dao->select('id')->from(TABLE_REPOHISTORY)
+                    ->where('revision')->in([$log->revision])
+                    ->andWhere('repo')->eq($repo->id)
+                    ->fetchPairs('id');
+                if(!empty($objects['stories']))
+                {
+                    foreach($objects['stories'] as $storyID) $this->loadModel('story')->updateLinkedCommits((int)$storyID, $repo->id, $revisions);
+                }
+                if(!empty($objects['tasks']))
+                {
+                    foreach($objects['tasks'] as $taskID) $this->loadModel('task')->updateLinkedCommits((int)$taskID, $repo->id, $revisions);
+                }
+                if(!empty($objects['bugs']))
+                {
+                    foreach($objects['bugs'] as $bugID) $this->loadModel('bug')->updateLinkedCommits((int)$bugID, $repo->id, $revisions);
+                }
+            }
+        }
         return !dao::isError();
     }
 

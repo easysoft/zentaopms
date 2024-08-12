@@ -147,6 +147,8 @@ $lang->repo->lastCommitter      = 'committer';
 $lang->repo->lastUpdateTime     = 'Last update time';
 $lang->repo->createdBy          = 'Created by';
 $lang->repo->sourceCommit       = 'Source Commit';
+$lang->repo->design             = 'Design';
+$lang->repo->story              = 'Story';
 
 $lang->repo->title      = 'Title';
 $lang->repo->status     = 'Status';

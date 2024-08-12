@@ -413,4 +413,25 @@ class designModel extends model
     {
         return $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('id')->eq($revisionID)->fetch();
     }
+
+    /**
+     * 获取设计关联的提交数据。
+     * Get the commit data for the associated designs
+     * @param  int       $repoID
+     * @param  array     $revisions
+     * @access public
+     * @return bool
+     */
+    public function getLinkedCommits(int $repoID, array $revisions): array
+    {
+        return $this->dao->select('h.revision,d.id AS id,d.name AS title')
+            ->from(TABLE_REPOHISTORY)->alias('h')
+            ->leftJoin(TABLE_RELATION)->alias('r')->on('r.relation="completedin" and r.BType="commit" and r.BID=h.id')
+            ->leftJoin(TABLE_DESIGN)->alias('d')->on('r.AType="design" and r.AID=d.id')
+            ->where('h.revision')->in($revisions)
+            ->andWhere('h.repo')->eq($repoID)
+            ->andWhere('d.id')->ne('')
+            ->orderBy('id')
+            ->fetchGroup('revision', 'id');
+    }
 }

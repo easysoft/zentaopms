@@ -583,6 +583,47 @@ class repo extends control
         $query = $browseType == 'bysearch' ? $this->repoZen->getSearchForm($queryID, !in_array($repo->SCM, $this->config->repo->notSyncSCM)) : null;
         $logs = $this->repo->getCommits($repo, $entry, $branchID, 'dir', $pager, '', '', $query);
 
+        $revisionIds = array_column($logs, 'revision');
+
+        $stories = $this->loadModel('story')->getLinkedCommits($repoID, $revisionIds);
+        $designs = $this->loadModel('design')->getLinkedCommits($repoID, $revisionIds);
+        $tasks = $this->loadModel('task')->getLinkedCommits($repoID, $revisionIds);
+        $bugs = $this->loadModel('bug')->getLinkedCommits($repoID, $revisionIds);
+        foreach($logs as $logItem)
+        {
+            if(!empty($designs[$logItem->revision]))
+            {
+                foreach($designs[$logItem->revision] as $item) $item->url = !empty($item->id) ?
+                    $this->createLink('design', 'view','designID=' .  $item->id) :
+                    '';
+                $logItem->relations['designs'] = $designs[$logItem->revision];
+            }
+
+            if(!empty($stories[$logItem->revision]))
+            {
+                foreach($stories[$logItem->revision] as $item) $item->url = !empty($item->id) ?
+                    $this->createLink('story', 'view','storyID=' .  $item->id) :
+                    '';
+                $logItem->relations['stroies'] = $stories[$logItem->revision];
+            }
+
+            if(!empty($tasks[$logItem->revision]))
+            {
+                foreach($tasks[$logItem->revision] as $item) $item->url = !empty($item->id) ?
+                    $this->createLink('task', 'view','taskID=' .  $item->id) :
+                    '';
+                $logItem->relations['tasks'] = $tasks[$logItem->revision];
+            }
+
+            if(!empty($bugs[$logItem->revision]))
+            {
+                foreach($bugs[$logItem->revision] as $item) $item->url = !empty($item->id) ?
+                    $this->createLink('bug', 'view','bugID=' .  $item->id) :
+                    '';
+                $logItem->relations['bugs'] = $bugs[$logItem->revision];
+            }
+        }
+
         $this->view->repo       = $repo;
         $this->view->title      = $this->lang->repo->common;
         $this->view->logs       = $logs;
