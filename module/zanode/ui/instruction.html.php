@@ -67,6 +67,12 @@ div
                 $lang->zanode->instructionPage->noVNCDesc
             ),
             a(set::href($lang->zanode->instructionPage->noVNCUrl), set::target('_blank'), $lang->zanode->instructionPage->noVNCUrl),
+            div
+            (
+                set::className('leading-normal whitespace-pre-line'),
+                $lang->zanode->instructionPage->WebsockifyDesc
+            ),
+            a(set::href($lang->zanode->instructionPage->WebsockifyUrl), set::target('_blank'), $lang->zanode->instructionPage->WebsockifyUrl)
         )
     )
 );
