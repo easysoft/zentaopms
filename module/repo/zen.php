@@ -1846,6 +1846,25 @@ class repoZen extends repo
         $thisMonth = date::getThisMonth();
         $yesterday = date::yesterday();
         $today     = date(DT_DATE1);
+        foreach($this->session->repoCommitsForm as $field)
+        {
+            if(empty($field['value'])) continue;
+
+            if(strpos($field['value'], '$') !== false)
+            {
+                $dateField = substr($field['value'], 1);
+                $query->begin = ${$dateField}['begin'] . ' 00:00:00';
+                $query->end   = ${$dateField}['end'] . ' 23:59:59';
+            }
+            elseif($field['field'] == 'date')
+            {
+                if($field['operator'] == '>=' || $field['operator'] == '=') $query->begin = $field['value'];
+                if($field['operator'] == '>')  $query->begin = date('Y-m-d', strtotime("{$field['value']} +1 day"));
+                if($field['operator'] == '<=') $query->end   = $field['value'];
+                if($field['operator'] == '<')  $query->end   = date('Y-m-d', strtotime("{$field['value']} -1 day"));
+                if($field['operator'] == '=')  $query->end   = $field['value'] . ' 23:59:59';
+            }
+        }
         return $query;
     }
 }
