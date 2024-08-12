@@ -23,7 +23,7 @@ class storyEntry extends entry
         $this->resetOpenApp($this->param('tab', 'product'));
 
         $control = $this->loadController('story', 'view');
-        $control->view($storyID);
+        $control->view($storyID, 0, 0, $this->param('type', 'story'));
 
         $data = $this->getData();
 
