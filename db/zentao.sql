@@ -2527,12 +2527,15 @@ CREATE TABLE IF NOT EXISTS `zt_im_message` (
   `contentType` enum('text', 'plain', 'emotion', 'image', 'file', 'object', 'code') NOT NULL DEFAULT 'text',
   `data` text NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `legacy` tinyint(1) NOT NULL DEFAULT 0,
+  `uniqueIndex` int(11) GENERATED ALWAYS AS (CASE WHEN `legacy` = 1 THEN NULL WHEN `cgid` = 'notification' THEN NULL ELSE `index` END) STORED,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE INDEX `mgid`  ON `zt_im_message` (`gid`);
 CREATE INDEX `mcgid` ON `zt_im_message` (`cgid`);
 CREATE INDEX `muser` ON `zt_im_message` (`user`);
 CREATE INDEX `mtype` ON `zt_im_message` (`type`);
+CREATE UNIQUE INDEX `uniqueIndexInChat` ON `zt_im_message`(`cgid`, `uniqueIndex`);
 
 -- DROP TABLE IF EXISTS `zt_im_message_backup`;
 CREATE TABLE IF NOT EXISTS `zt_im_message_backup` (
@@ -2613,7 +2616,7 @@ CREATE TABLE IF NOT EXISTS `zt_im_conference` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `rid` char(40) NOT NULL DEFAULT '',
   `cgid` char(40) NOT NULL DEFAULT '',
-  `status` enum ('closed', 'open', 'notStarted') DEFAULT 'closed' NOT NULL,
+  `status` enum ('closed', 'open', 'notStarted', 'canceled') NOT NULL DEFAULT 'closed',
   `participants` text NULL,
   `subscribers` text NULL,
   `invitee` text NULL,
@@ -2628,6 +2631,9 @@ CREATE TABLE IF NOT EXISTS `zt_im_conference` (
   `note` text NULL,
   `sentNotify` tinyint(1) NOT NULL DEFAULT 0,
   `reminderTime` int NOT NULL DEFAULT 0,
+  `moderators` text NOT NULL,
+  `isPrivate` enum ('0', '1') NOT NULL DEFAULT '0',
+  `isInner` enum('0', '1') NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 CREATE INDEX `status` ON `zt_im_conference` (`status`);
@@ -2653,6 +2659,18 @@ CREATE TABLE IF NOT EXISTS `zt_im_conferenceuser` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 CREATE UNIQUE INDEX `conferenceuser` ON `zt_im_conferenceuser`(`conference`, `user`);
+
+-- DROP TABLE IF EXISTS `zt_im_conferenceinvite`;
+CREATE TABLE IF NOT EXISTS `zt_im_conferenceinvite` (
+  `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `conferenceID` mediumint(8) unsigned NOT NULL,
+  `inviteeID` mediumint(8) unsigned NOT NULL,
+  `status` enum('pending', 'accepted', 'rejected') NOT NULL DEFAULT 'pending',
+  `createdDate` datetime NULL,
+  `updatedDate` datetime NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `conference_user` ON `zt_im_conferenceinvite` (`conferenceID`, `inviteeID`);
 
 -- DROP TABLE IF EXISTS `zt_im_userdevice`;
 CREATE TABLE IF NOT EXISTS `zt_im_userdevice` (

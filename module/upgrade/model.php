@@ -6975,6 +6975,26 @@ class upgradeModel extends model
     }
 
     /**
+     * Xuan: Notify users for upgrade 9.0 jitsi conference.
+     *
+     * @access public
+     * @return bool
+     */
+    public function notifyJitsiConference()
+    {
+        $users = array_keys($this->dao->select('id')->from(TABLE_USER)->where('admin')->ne('super')->andWhere('deleted')->eq('0')->fetchAll('id'));
+        $super = array_values(explode(',', $this->dao->select('admins')->from(TABLE_COMPANY)->where('id')->eq($this->app->company->id)->fetch('admins')));
+        $this->loadModel('im');
+        $sender = new stdclass();
+        $sender->id = 0;
+        $sender->displayName = $this->lang->im->bot->commonName;
+        $sender->avatar = commonModel::getSysURL() . $this->config->webRoot . 'data/image/xuanbot.png';
+        $this->im->messageCreateNotify($super, '', '', $this->lang->upgrade->jitsiConferenceNotice->super, 'text',  $this->lang->upgrade->jitsiConferenceNotice->setupLink, array(), $sender);
+        $this->im->messageCreateNotify($users, '', '', $this->lang->upgrade->jitsiConferenceNotice->user, 'text', $this->lang->upgrade->jitsiConferenceNotice->manualLink, array(), $sender);
+        return !dao::isError();
+    }
+
+    /**
      * Init shadow builds.
      *
      * @access public

@@ -10,6 +10,7 @@ class myIm extends im
         $output         = new stdclass();
         $output->method = 'getaiassistant';
         $output->result = 'success';
+        $output->users  = array($userID);
         $output->data   = $assistants;
 
         return $this->im->sendOutput($output, 'getaiassistantResponse');
