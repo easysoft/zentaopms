@@ -346,5 +346,10 @@ window.checkLibPriv = function(e)
     users.forEach(function(user){ formData.append('users[]', user); });
     $.post($.createLink('doc', 'ajaxCheckLibPriv', 'libID=' + libID), formData, function(data)
     {
+        $inputGroupBox = $users.closest('.input-group').parent();
+        $inputGroupBox.find('.notice').remove();
+
+        if(!data) return;
+        $inputGroupBox.append("<div class='notice pt-1'>" + data + '</div>');
     });
 }
