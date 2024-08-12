@@ -192,3 +192,7 @@ $lang->zanode->instructionPage->KVMDesc          = 'KVM(for Kernel-based Virtual
 $lang->zanode->instructionPage->KVMUrl           = 'https://www.linux-kvm.org/page/Documents';
 $lang->zanode->instructionPage->NginxDesc        = 'Nginx is a high performance HTTP and reverse proxy web server, and also provides IMAP/POP3/SMTP services.';
 $lang->zanode->instructionPage->NginxUrl         = 'http://nginx.org/en/docs/';
+$lang->zanode->instructionPage->noVNCDesc        = 'noVNC is a HTML VNC client JavaScript class library and it is based on the class library. noVNC runs on any modern browser (including mobile browsers such as iOS and Android).';
+$lang->zanode->instructionPage->noVNCUrl         = 'https://novnc.com/info.html';
+$lang->zanode->instructionPage->WebsockifyDesc   = 'Websockify is a WebSockets to socket converter. Websockify accepts WebSockets handshakes, parses it, and starts forwarding traffic between client and target.';
+$lang->zanode->instructionPage->WebsockifyUrl    = 'https://github.com/novnc/websockify';
