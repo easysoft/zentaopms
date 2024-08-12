@@ -4352,7 +4352,7 @@ $config->bi->builtin->metrics[] = array
     'unit'       => 'count',
     'dateType'   => 'nodate',
     'desc'       => '按执行统计的测试用例数是指执行下的测试用例个数的求和，可以帮助团队评估需求测试用例的覆盖程度。',
-    'definition' => "执行中满足以下条件的测试用例个数的求和\n执行用例列表中的用例\n过滤已删除的用例\n过滤已删除的执行\n过滤已删除的项目\n过滤已删除的产品"
+    'definition' => "执行中满足以下条件的测试用例个数的求和\n执行用例列表中的用例\n过滤已删除的用例\n过滤已删除的执行\n过滤已删除的项目"
 );
 
 $config->bi->builtin->metrics[] = array
@@ -4366,7 +4366,7 @@ $config->bi->builtin->metrics[] = array
     'unit'       => 'count',
     'dateType'   => 'nodate',
     'desc'       => '按执行统计的新增有效Bug总数是指在执行中发现的有效Bug的数量。这个度量项反映了执行的质量情况。新增有效Bug数越多可能代表执行的代码质量存在的问题越多，需要进行进一步的解决和改进。',
-    'definition' => "执行中新增Bug个数求和\n解决方案为已解决，延期处理和不予解决或状态为激活\n过滤已删除的Bug\n过滤已删除的执行\n过滤已删除的项目\n过滤已删除的产品\n"
+    'definition' => "执行中新增Bug个数求和\n解决方案为已解决，延期处理和不予解决或状态为激活\n过滤已删除的Bug\n过滤已删除的执行\n过滤已删除的项目"
 );
 
 $config->bi->builtin->metrics[] = array
@@ -4436,7 +4436,7 @@ $config->bi->builtin->metrics[] = array
     'unit'       => 'count',
     'dateType'   => 'nodate',
     'desc'       => '按执行统计的测试用例预期条目数是指关联进执行的所有用例的预期条目数之和，可以用于评估测试用例的细致程度，可以帮助团队评估测试的深度和需求的复杂性。',
-    'definition' => "执行中满足以下条件的用例预期条目的求和\n执行下用例列表中的用例数\n过滤已删除的用例\n过滤已删除的执行\n过滤已删除的项目\n过滤已删除的产品"
+    'definition' => "执行中满足以下条件的用例预期条目的求和\n执行下用例列表中的用例数\n过滤已删除的用例\n过滤已删除的执行\n过滤已删除的项目"
 );
 
 $config->bi->builtin->metrics[] = array
