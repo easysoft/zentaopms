@@ -1758,4 +1758,18 @@ class kanban extends control
         }
         return print(json_encode($itemList));
     }
+
+    /**
+     * 获取空间的团队成员。
+     * Ajax get space team memebers.
+     *
+     * @param  int    $spaceID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetSpaceTeam(int $spaceID)
+    {
+        $space = $this->loadModel('kanban')->getSpaceById($spaceID);
+        return print(json_encode($space->team));
+    }
 }

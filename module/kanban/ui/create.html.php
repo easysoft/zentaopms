@@ -129,7 +129,9 @@ formPanel
                 set::name('team'),
                 set::items($users),
                 set::multiple(true),
-                set::value(isset($copyKanban->team) ? $copyKanban->team : '')
+                set::value(isset($copyKanban->team) ? $copyKanban->team : $spaceTeam),
+                set::menu(array('checkbox' => true)),
+                set::toolbar(true)
             )
         )
     ),
