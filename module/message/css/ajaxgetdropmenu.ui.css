@@ -1,3 +1,3 @@
 #messageTabs .tabs-header{border-bottom-width: 1px;}
-#header .messageDropdownBox{z-index:100 !important;}
+#header #dropdownMessageMenu{background-color: #fff; overflow-y: auto; max-height: calc(100vh - 50px); min-height: 280px}
 #messageTabs .label-dot{width:5px; height:5px; vertical-align: middle;}

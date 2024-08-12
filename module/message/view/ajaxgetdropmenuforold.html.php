@@ -110,7 +110,7 @@ $buildMessageList = function($messageGroup) use ($lang, $noDataHtml)
 .switch>label:hover:before { border-color: gba(235, 237, 243); }
 .switch>input:checked+label:after { color: #3883fa; left: 18px; }
 
-#header .messageDropdownBox{z-index:100 !important;}
+#header #dropdownMessageMenu{background-color: #fff; overflow-y: auto; max-height: calc(100vh - 50px); min-height: 280px;}
 </style>
 
 <div id='messageTabs' class='text-black pt-10px px-5 pb-5 relative' style='width:400px; background-color:#fff; color: rgb(49, 60, 82)'>

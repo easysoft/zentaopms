@@ -1341,7 +1341,6 @@ function fetchMessage(force, fetchUrl)
 {
     let $this     = $('#messageBar');
     let $dropmenu = $("#dropdownMessageMenu");
-    let maxHeight = $(window).height() - $('#header').height() - 5;
     let isOpen    = $this.hasClass('open');
 
     if(typeof(force) === 'undefined' || typeof(force) === 'object') force = false;
@@ -1353,6 +1352,5 @@ function fetchMessage(force, fetchUrl)
     }
     if(isOpen && !force) return;
 
-    $dropmenu.css('height', maxHeight).css('max-height', maxHeight).css('overflow-y', 'auto').css('background-color', '#fff');
     $dropmenu.load(fetchUrl);
 }

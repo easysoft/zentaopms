@@ -1562,7 +1562,6 @@
     {
         let $this     = $('#messageBar');
         let $dropmenu = $("#dropdownMessageMenu");
-        let maxHeight = $(window).height() - $('#header').height() - 5;
 
         if(typeof(force) === 'undefined' || typeof(force) === 'object') force = false;
         if(typeof(fetchUrl) === 'undefined') fetchUrl = $this.attr('data-fetcher');
@@ -1574,7 +1573,6 @@
             if(dropdown) isOpen = dropdown.shown;
             if(!isOpen && !force) return;
 
-            $dropmenu.css('height', maxHeight).css('max-height', maxHeight).css('overflow-y', 'auto').css('background-color', '#fff');
             $dropmenu.load(fetchUrl);
         }, 100);
     }
