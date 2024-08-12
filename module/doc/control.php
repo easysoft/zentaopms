@@ -306,7 +306,6 @@ class doc extends control
 
             $libID    = $this->post->lib;
             $moduleID = $this->post->module;
-            if(empty($libID) && strpos($this->post->module, '_') !== false) list($libID, $moduleID) = explode('_', $this->post->module);
             helper::setcookie('lastDocModule', $moduleID);
 
             if(!isset($_POST['lib']) && strpos($_POST['module'], '_') !== false) list($_POST['lib'], $_POST['module']) = explode('_', $_POST['module']);
@@ -363,7 +362,6 @@ class doc extends control
             if(!$canVisit) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->accessDenied));
 
             $moduleID = $this->post->module;
-            if(empty($libID) && strpos($this->post->module, '_') !== false) list($libID, $moduleID) = explode('_', $this->post->module);
             helper::setcookie('lastDocModule', $moduleID);
 
             if(!isset($_POST['lib']) && strpos($_POST['module'], '_') !== false) list($_POST['lib'], $_POST['module']) = explode('_', $_POST['module']);
@@ -925,7 +923,6 @@ class doc extends control
             $libID    = (int)$this->post->lib;
             $moduleID = (int)$this->post->module;
 
-            if(strpos($this->post->module, '_') !== false) list($libID, $moduleID) = explode('_', $this->post->module);
             $response['result']     = 'success';
             $response['closeModal'] = true;
             $response['callback']   = "redirectParentWindow(\"{$this->post->rootSpace}\", {$libID}, {$moduleID}, \"{$this->post->type}\")";
@@ -1243,7 +1240,7 @@ class doc extends control
             if(strpos(",{$this->app->company->admins}", ",{$account},") !== false) continue;
 
             $userView = zget($userViews, $account, '');
-            if(empty($userView)) continue;
+            if(empty($userView)) $userView = $this->user->computeUserView($account);
 
             if($objectType == 'product'   && strpos(",{$userView->products},", ",{$objectID},") === false) $denyUsers[$account] = zget($userPairs, $account);
             if($objectType == 'project'   && strpos(",{$userView->projects},", ",{$objectID},") === false) $denyUsers[$account] = zget($userPairs, $account);
@@ -1252,5 +1249,23 @@ class doc extends control
 
         if(empty($denyUsers)) return print('');
         if(isset($this->lang->doc->whitelistDeny[$objectType])) return printf($this->lang->doc->whitelistDeny[$objectType], implode('、', $denyUsers));
+    }
+
+    public function ajaxCheckLibPriv(int $libID)
+    {
+        $accounts = $this->post->users;
+        $lib      = $this->doc->getLibByID($libID);
+        if(empty($lib)) return print('');
+        if($lib->acl == 'open') return print('');
+
+        $authAccounts = array();
+        if($lib->groups) $authAccounts += $this->loadModel('group')->getGroupAccounts(explode(',', $lib->groups));
+        if($lib->users)
+        {
+            foreach(array_filter(explode(',', $lib->users)) as $account) $authAccounts[$account] = $account;
+        }
+
+        if(empty($denyUsers)) return print('');
+        if(isset($this->lang->doc->whitelistDeny['doc'])) return printf($this->lang->doc->whitelistDeny['doc'], implode('、', $denyUsers));
     }
 }
