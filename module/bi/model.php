@@ -1353,7 +1353,7 @@ class biModel extends model
 
             list($columns, $relatedObject) = $this->prepareColumns($limitSql, $statement, $driver);
 
-            $stateObj->setPager($total);
+            $stateObj->setPager($total, $recPerPage, $pageID);
             $stateObj->setFieldSettings($columns);
             $stateObj->setFieldRelatedObject($relatedObject);
             $stateObj->buildQuerySqlCols();

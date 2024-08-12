@@ -880,7 +880,6 @@ class pivotState
         $this->pivotCols     = array();
         $this->pivotData     = array();
         $this->pivotCellSpan = array();
-        $this->setPager();
     }
 
     /**
@@ -1285,12 +1284,13 @@ class pivotState
      * @access public
      * @return void
      */
-    public function setPager($total = 0, $recPerPage = 20, $pageID = 1)
+    public function setPager($total = 0, $recPerPage = 10, $pageID = 1)
     {
         $this->pager = array();
         $this->pager['total']      = $total;
         $this->pager['recPerPage'] = $recPerPage;
         $this->pager['pageID']     = $pageID;
+        $this->pager['pageTotal']  = $total % $recPerPage == 0 ? (int)($total / $recPerPage) : (int)($total / $recPerPage) + 1;
     }
 
     /**
