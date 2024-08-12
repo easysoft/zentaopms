@@ -28,12 +28,12 @@ div
     ),
     div
     (
-        h5($lang->zanode->instructionPage->h1),
-        div(set::className('leading-normal whitespace-pre-line'), $lang->zanode->instructionPage->h1Desc),
+        h5($lang->zanode->instructionPage->concept),
+        div(set::className('leading-normal whitespace-pre-line'), $lang->zanode->instructionPage->conceptDesc),
     ),
     div
     (
-        h5($lang->zanode->instructionPage->h2),
+        h5($lang->zanode->instructionPage->AppIntroduction),
         div
         (
             set::className('space-y-6'),

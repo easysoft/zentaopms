@@ -180,10 +180,10 @@ $lang->zanode->instructionPage->title            = "禅道自动化测试解决�
 $lang->zanode->instructionPage->desc             = "禅道自动化测试解决方案实现了对测试用例，测试脚本、脚本执行、测试结果以及测试环境的集中化管理，在降低测试管理成本的同时提高了测试执行的效率。通过解决方案你可以更容易地建立起适配当前项目管理和研发流程的自动化测试体系，借助自动化技术减少测试工作的投入。";
 $lang->zanode->instructionPage->imageInstruction = '架构图如下:';
 $lang->zanode->instructionPage->image            = 'static/svg/zanode_instruction.svg';
-$lang->zanode->instructionPage->h1               = '1、核心概念';
-$lang->zanode->instructionPage->h1Desc           = '宿主机包括实体主机、K8s集群、云服务器以及云容器实例，主要用于创建虚拟机或容器实例。宿主机推荐安装的操作系统为Ubuntu或CentOS的LTS版本。
+$lang->zanode->instructionPage->concept          = '1、核心概念';
+$lang->zanode->instructionPage->conceptDesc      = '宿主机包括实体主机、K8s集群、云服务器以及云容器实例，主要用于创建虚拟机或容器实例。宿主机推荐安装的操作系统为Ubuntu或CentOS的LTS版本。
 执行节点是由宿主机创建的虚拟机或容器实例，是执行测试任务的测试环境。';
-$lang->zanode->instructionPage->h2               = '2、应用介绍';
+$lang->zanode->instructionPage->AppIntroduction  = '2、应用介绍';
 $lang->zanode->instructionPage->ZAgentDesc       = 'ZAgent是禅道开源的软件自动化测试调度平台，它借助虚拟化技术，为用户提供了一个分布式、集中管理的的测试环境。';
 $lang->zanode->instructionPage->ZAgentUrl        = 'https://github.com/easysoft/zenagent/blob/main/guide/deploy/index.md';
 $lang->zanode->instructionPage->ZTFDesc          = 'ZTF是禅道开源的自动化测试管理框架，它帮助用户将测试脚本统一管理。ZTF与禅道深度集成，每一个脚本都可以和测试管理系统里面的一个用例进行关联，脚本里面的步骤信息和管理系统里面的用例信息可以互相同步。';
