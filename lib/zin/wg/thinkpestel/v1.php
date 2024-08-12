@@ -18,7 +18,7 @@ class thinkPestel extends thinkModel
     protected function buildItem(object $block): array
     {
         $cards = array();
-        foreach($block->steps as &$step) $cards[] = div(setClass('w-64 bg-canvas p-2 shadow relative'), $this->buildQuestionItem($step));
+        foreach($block->steps as &$step) $cards[] = div(setClass('w-64 bg-canvas p-2 shadow relative', "card-{$step->options->questionType}"), $this->buildQuestionItem($step));
         return $cards;
     }
 

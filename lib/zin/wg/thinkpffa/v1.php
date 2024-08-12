@@ -18,7 +18,7 @@ class thinkPffa extends thinkModel
     protected function buildQuestion(array $steps): array
     {
         $questionList = array();
-        foreach($steps as $step) $questionList[] = div(setClass('w-64 bg-canvas p-2 shadow'), $this->buildQuestionItem($step));
+        foreach($steps as $step) $questionList[] = div(setClass('w-64 bg-canvas p-2 shadow', "card-{$step->options->questionType}"), $this->buildQuestionItem($step));
         return $questionList;
     }
 
