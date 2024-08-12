@@ -16,7 +16,7 @@ class convertTao extends convertModel
         $user->account  = isset($data['lowerUserName']) ? $data['lowerUserName'] : '';
         $user->realname = isset($data['lowerDisplayName']) ? $data['lowerDisplayName'] : '';
         $user->email    = isset($data['emailAddress']) ? $data['emailAddress'] : '';
-        $user->join     = isset($data['createdDate']) ? $data['createdDate'] : '';
+        $user->join     = isset($data['createdDate']) ? $data['createdDate'] : null;
 
         return $user;
     }
@@ -694,7 +694,7 @@ class convertTao extends convertModel
             $file->objectType = $objectType;
             $file->objectID   = $objectID;
             $file->addedBy    = $this->getJiraAccount(isset($fileAttachment->AUTHOR) ? $fileAttachment->AUTHOR : '', $method);
-            $file->addedDate  = isset($fileAttachment->CREATED) ? substr($fileAttachment->CREATED, 0, 19) : '';
+            $file->addedDate  = isset($fileAttachment->CREATED) ? substr($fileAttachment->CREATED, 0, 19) : null;
             $this->dao->dbh($this->dbh)->insert(TABLE_FILE)->data($file)->exec();
 
             $jiraFile = $this->app->getTmpRoot() . 'attachments/' . $filePaths[$issueID] .  $fileID;
@@ -878,7 +878,7 @@ class convertTao extends convertModel
         $story->stage      = $this->convertStage($data->issuestatus);
         $story->status     = $this->convertStatus('story', $data->issuestatus);
         $story->openedBy   = $this->getJiraAccount(isset($data->CREATOR) ? $data->CREATOR : '', $method);
-        $story->openedDate = isset($data->CREATED) ? substr($data->CREATED, 0, 19) : '';
+        $story->openedDate = isset($data->CREATED) ? substr($data->CREATED, 0, 19) : null;
         $story->assignedTo = $this->getJiraAccount(isset($data->ASSIGNEE) ? $data->ASSIGNEE : '', $method);
 
         if($data->RESOLUTION)
@@ -960,7 +960,7 @@ class convertTao extends convertModel
         $task->status     = $this->convertStatus('task', $data->issuestatus);
         $task->desc       = isset($data->DESCRIPTION) ? $data->DESCRIPTION: '';
         $task->openedBy   = $this->getJiraAccount(isset($data->CREATOR) ? $data->CREATOR : '', $method);
-        $task->openedDate = isset($data->CREATED) ? substr($data->CREATED, 0, 19) : '';
+        $task->openedDate = isset($data->CREATED) ? substr($data->CREATED, 0, 19) : null;
         $task->assignedTo = $this->getJiraAccount(isset($data->ASSIGNEE) ? $data->ASSIGNEE : '', $method);
         if($data->RESOLUTION)
         {
@@ -1017,7 +1017,7 @@ class convertTao extends convertModel
         $bug->status      = $this->convertStatus('bug', $data->issuestatus);
         $bug->steps       = isset($data->DESCRIPTION) ? $data->DESCRIPTION : '';
         $bug->openedBy    = $this->getJiraAccount(isset($data->CREATOR) ? $data->CREATOR : '', $method);
-        $bug->openedDate  = isset($data->CREATED) ? substr($data->CREATED, 0, 19) : '';
+        $bug->openedDate  = isset($data->CREATED) ? substr($data->CREATED, 0, 19) : null;
         $bug->openedBuild = 'trunk';
         $bug->assignedTo  = $bug->status == 'closed' ? 'closed' : $this->getJiraAccount(isset($data->ASSIGNEE) ? $data->ASSIGNEE : '', $method);
 
@@ -1248,7 +1248,7 @@ class convertTao extends convertModel
             if($objectType == 'story')
             {
                 if(empty($issueStories[$dest]) || empty($issueStories[$source])) continue;
-                $this->dao->dbh($this->dbh)->update(TABLE_STORY)->set('duplicateStory')->eq($$issueStories[$dest])->where('id')->eq($issueStories[$source])->exec();
+                $this->dao->dbh($this->dbh)->update(TABLE_STORY)->set('duplicateStory')->eq($issueStories[$dest])->where('id')->eq($issueStories[$source])->exec();
             }
             elseif($objectType == 'bug')
             {
