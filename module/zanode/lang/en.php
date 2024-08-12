@@ -174,3 +174,25 @@ $lang->zanode->scriptTips     = 'Write the directory where the script is located
 $lang->zanode->shellTips      = 'Before running the automated test script on the execution node, you can execute a custom shell command.';
 $lang->zanode->automationTips = "Before executing the test task on the execution node, you need to set up the execution node corresponding to the {$lang->productCommon}, the directory of the automated test script, and the custom Shell command to execute.";
 $lang->zanode->nameUnique     = $lang->zanode->name . 'already exist';
+
+$lang->zanode->instructionPage = new stdClass();
+$lang->zanode->instructionPage->title            = "ZenDao Automation Testing Solution";
+$lang->zanode->instructionPage->desc             = "ZenTao automated testing solution realizes centralized management of test cases, test scripts, script execution, test results and test environment, reducing test management costs while improving test execution efficiency. Through the solution, you can more easily establish an automated testing system that adapts to the current project management and R&D processes, and reduce the investment in testing work with the help of automation technology.";
+$lang->zanode->instructionPage->imageInstruction = 'Architecture diagram: ';
+$lang->zanode->instructionPage->image            = 'static/svg/zanode_instruction.svg';
+$lang->zanode->instructionPage->h1               = '1、Core Concepts';
+$lang->zanode->instructionPage->h1Desc           = 'Hosts include physical hosts, K8s clusters, cloud servers, and cloud container instances, which are mainly used to create virtual machines or container instances. The recommended operating system installed on the host machine is the LTS version of Ubuntu or CentOS.
+The execution node is a virtual machine or container instance created by the host machine and is a test environment for executing test tasks.';
+$lang->zanode->instructionPage->h2               = '2、Application Introduction';
+$lang->zanode->instructionPage->ZAgentDesc       = 'ZAgent is the ZenTao open source software automation testing scheduling platform, which provides a distributed and centralized test environment.';
+$lang->zanode->instructionPage->ZAgentUrl        = 'https://github.com/easysoft/zenagent/blob/main/guide/deploy/index.md';
+$lang->zanode->instructionPage->ZTFDesc          = "ZTF is ZenTao's open source automated test management framework, which helps users manage test scripts in a unified manner. ZTF is deeply integrated with ZenTao. Each script can be associated with a use case in the test management system. The step information in the script and the use case information in the management system can be synchronized with each other.";
+$lang->zanode->instructionPage->ZTFUrl           = 'https://ztf.im/';
+$lang->zanode->instructionPage->KVMDesc          = 'KVM(for Kernel-based Virtual Machine) is an x86 hardware based Linux virtualization solution, including virtualization extensions(Intel VT or AMD-V).';
+$lang->zanode->instructionPage->KVMUrl           = 'https://www.linux-kvm.org/page/Documents';
+$lang->zanode->instructionPage->NginxDesc        = 'Nginx is a high performance HTTP and reverse proxy web server, and also provides IMAP/POP3/SMTP services.';
+$lang->zanode->instructionPage->NginxUrl         = 'http://nginx.org/en/docs/';
+$lang->zanode->instructionPage->noVNCDesc        = 'noVNC is a HTML VNC client JavaScript class library and it is based on the class library. noVNC runs on any modern browser (including mobile browsers such as iOS and Android).';
+$lang->zanode->instructionPage->noVNCUrl         = 'https://novnc.com/info.html';
+$lang->zanode->instructionPage->WebsockifyDesc   = 'Websockify is a WebSockets to socket converter. Websockify accepts WebSockets handshakes, parses it, and starts forwarding traffic between client and target.';
+$lang->zanode->instructionPage->WebsockifyUrl    = 'https://github.com/novnc/websockify';
