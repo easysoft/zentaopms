@@ -7,8 +7,8 @@ title=count_of_user
 timeout=0
 cid=1
 
-- 测试356条数据。第0条的value属性 @119
-- 测试652条数据。第0条的value属性 @218
+- 测试356条数据。第0条的value属性 @5
+- 测试652条数据。第0条的value属性 @10
 
 */
 include dirname(__FILE__, 7) . '/test/lib/init.php';
