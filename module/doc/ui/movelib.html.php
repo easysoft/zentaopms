@@ -54,7 +54,7 @@ formPanel
     formRow
     (
         setID('whiteListBox'),
-        setClass(($lib->type != 'mine' && $defaultAcl == 'private') ? '' : 'hidden'),
+        setClass(($libType != 'mine' && $defaultAcl == 'private') ? '' : 'hidden'),
         formGroup
         (
             set::label($lang->doc->whiteList),
