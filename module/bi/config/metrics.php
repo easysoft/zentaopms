@@ -4508,3 +4508,17 @@ $config->bi->builtin->metrics[] = array
     'desc'       => '按执行统计的执行外任务消耗工时占比表示执行中非本期执行任务所消耗的工时在执行中开发人员可用工时的占比，可以帮助团队识别影响执行效率或计划完成率的影响因子。',
     'definition' => "按执行统计的执行外任务消耗工时占比=按执行统计的执行外任务消耗工时数/按执行统计的开发人员可用工时数"
 );
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按执行统计的执行关闭时执行开发效率',
+    'alias'      => '执行开发效率',
+    'code'       => 'devel_efficiency_in_execution_when_closing',
+    'purpose'    => 'rate',
+    'scope'      => 'execution',
+    'object'     => 'execution',
+    'unit'       => 'percentage',
+    'dateType'   => 'nodate',
+    'desc'       => '按执行统计的执行开发效率是指执行交付研发需求规模数与执行所有任务消耗工时的比率。该度量项反映了执行的开发速度，可以帮助团队识别潜在问题并采取改进措施提高研发效率。',
+    'definition' => "复用：按执行统计的任务消耗工时数、按执行统计的执行关闭时已交付的研发需求规模数；\n公式：按执行统计的执行关闭时已交付的研发需求规模数/按执行统计的任务消耗工时数"
+);
