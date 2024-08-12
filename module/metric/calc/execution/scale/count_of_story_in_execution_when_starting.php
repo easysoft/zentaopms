@@ -1,7 +1,7 @@
 <?php
 /**
- * 按执行统计的执行关闭时已交付的研发需求规模数
- * Count of story at execution begin.
+ * 按执行统计的截止执行开始当天的研发需求数
+ * Count of story in execution when starting.
  *
  * 范围：execution
  * 对象：story
