@@ -19,9 +19,9 @@ $application = array(
     'customName'   => 'zdoo' . time(),
     'customDomain' => randomString(),
     'appType'      => 'GitLab',
-    'name'         => 'app' . time(),
-    'url'          => 'http://10.0.7.242:9980',
-    'token'        => 'y2UBqwPPzaLxsniy8R6A'
+    'name'         => 'GitLab' . time(),
+    'url'          => getenv('GITLAB_URL'),
+    'token'        => getenv('GITLAB_TOKEN')
 );
 
 $url  = array('id' => 55);
@@ -32,8 +32,8 @@ $application = array(
     'customName'   => 'zdoo' . time(),
     'customDomain' => randomString(),
     'appType'      => 'GitFox',
-    'name'         => 'app' . time(),
-    'url'          => 'http://10.0.0.51:3000',
-    'token'        => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTAzMTAzOTAsImlzcyI6IkdpdG5lc3MiLCJwaWQiOjMsInRrbiI6eyJ0eXAiOiJwYXQiLCJpZCI6M319.CS5l5r2UqtHVBOJo2F_yOwCJCg9qCaRDReeyfqcHurQ'
+    'name'         => 'GitFox' . time(),
+    'url'          => getenv('GITFOX_URL'),
+    'token'        => getenv('GITFOX_TOKEN')
 );
 r($tester->createApplication($url, $application)) && p('message,status') && e('创建应用成功,SUCCESS'); //验证创建GitFox应用
