@@ -182,9 +182,7 @@ class thinkStepMenu extends wg
                 'icon'           => 'trash',
                 'text'           => $this->lang->thinkstep->actions['delete'],
                 'innerClass'     => 'text-gray opacity-50',
-                'data-toggle'    => 'tooltip',
-                'data-title'     => $this->lang->thinkstep->cannotDeleteNode,
-                'data-placement' => 'right',
+                'hint'           => $this->lang->thinkstep->cannotDeleteNode,
             )) : null
         ), $transitionAction);
 
