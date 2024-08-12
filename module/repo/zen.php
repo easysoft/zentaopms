@@ -1829,6 +1829,23 @@ class repoZen extends repo
             $query = str_replace("`date`", 't1.`time`', $query);
             $query = str_replace("`committer`", 't1.`committer`', $query);
             $query = str_replace("`commit`", 't1.`revision`', $query);
+            return $query;
         }
+
+        $query = new stdclass();
+        $query->begin     = '';
+        $query->end       = '';
+        $query->committer = '';
+        $query->commit    = '';
+        if(!$this->session->repoCommitsForm) return $query;
+
+        $this->app->loadClass('date');
+        $lastWeek  = date::getLastWeek();
+        $thisWeek  = date::getThisWeek();
+        $lastMonth = date::getLastMonth();
+        $thisMonth = date::getThisMonth();
+        $yesterday = date::yesterday();
+        $today     = date(DT_DATE1);
+        return $query;
     }
 }
