@@ -7,7 +7,7 @@ title=scale_of_story_in_beginning_execution
 timeout=0
 cid=1
 
-- 测试分组数。 @6
+- 测试分组数。 @11
 - 测试项目4。第0条的value属性 @40
 
 */
@@ -19,7 +19,6 @@ zendata('product')->loadYaml('product', true, 4)->gen(10);
 zendata('project')->loadYaml('project_type', true, 4)->gen(100);
 zendata('story')->loadYaml('story_closeddate', true, 4)->gen(1000);
 zendata('projectstory')->loadYaml('executionstory', true, 4)->gen(1000);
-
 
 $metric = new metricTest();
 $calc   = $metric->calcMetric(__FILE__);

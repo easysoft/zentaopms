@@ -19,7 +19,6 @@ zendata('project')->loadYaml('project_type', true, 4)->gen(100);
 zendata('story')->loadYaml('story_closeddate', true, 4)->gen(1000);
 zendata('projectstory')->loadYaml('executionstory', true, 4)->gen(1000);
 
-
 $metric = new metricTest();
 $calc   = $metric->calcMetric(__FILE__);
 
