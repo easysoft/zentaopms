@@ -47,6 +47,7 @@ featureBar
 );
 
 $config->repo->dtable->branch->fieldList['committer']['map'] = $users;
+if(!hasPriv('repo', 'revision')) unset($config->repo->dtable->branch->fieldList['commitID']['link']);
 $branchList = initTableData($branchList, $config->repo->dtable->branch->fieldList);
 $urlParams = array(
     'repoID'     => $repo->id,

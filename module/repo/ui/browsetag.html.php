@@ -47,6 +47,7 @@ featureBar
 );
 
 $config->repo->dtable->tag->fieldList['committer']['map'] = $users;
+if(!hasPriv('repo', 'revision')) unset($config->repo->dtable->tag->fieldList['commitID']['link']);
 $tagList = initTableData($tagList, $config->repo->dtable->tag->fieldList);
 $urlParams = array(
     'repoID'     => $repo->id,
