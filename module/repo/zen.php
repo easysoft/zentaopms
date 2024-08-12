@@ -1811,4 +1811,24 @@ class repoZen extends repo
         $this->loadModel('search')->setSearchParams($this->config->repo->search);
         session_write_close();
     }
+
+    /**
+     * 获取搜索表单字段。
+     * Get search form field.
+     *
+     * @param  int       $queryID
+     * @param  bool      $getSql
+     * @access protected
+     * @return object|string
+     */
+    protected function getSearchForm(int $queryID = 0, bool $getSql = false): object|string
+    {
+        if($getSql)
+        {
+            $query = $this->session->repoCommitsQuery;
+            $query = str_replace("`date`", 't1.`time`', $query);
+            $query = str_replace("`committer`", 't1.`committer`', $query);
+            $query = str_replace("`commit`", 't1.`revision`', $query);
+        }
+    }
 }
