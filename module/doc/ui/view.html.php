@@ -14,38 +14,7 @@ include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
 
 jsVar('docID', $docID);
 
-if(!isInModal())
-{
-    featureBar
-    (
-        li(backBtn(setClass('ghost'), set::icon('back'), $lang->goback)),
-    );
-
-    if($libID && common::hasPriv('doc', 'create')) include 'createbutton.html.php';
-    include 'lefttree.html.php';
-
-    toolbar
-    (
-        $canExport ? item(set(array
-        (
-            'id'     => $exportMethod,
-            'icon'   => 'export',
-            'target' => '_self',
-            'class'  => 'ghost export',
-            'text'   => $lang->export,
-            'url'    => createLink('doc', $exportMethod, "libID={$libID}&moduleID={$moduleID}&docID={$doc->id}")
-        ))) : null,
-        common::hasPriv('doc', 'createLib') ? item(set(array
-        (
-            'icon'        => 'plus',
-            'class'       => 'btn secondary',
-            'text'        => $lang->doc->createLib,
-            'url'         => createLink('doc', 'createLib', "type={$type}&objectID={$objectID}"),
-            'data-toggle' => 'modal'
-        ))) : null,
-        $libID && common::hasPriv('doc', 'create') ? $createButton : null
-    );
-}
+if(!isInModal()) include 'lefttree.html.php';
 
 $versionList = array();
 for($itemVersion = $doc->version; $itemVersion > 0; $itemVersion--)
@@ -53,15 +22,15 @@ for($itemVersion = $doc->version; $itemVersion > 0; $itemVersion--)
     $versionList[] = array('text' => "V$itemVersion", 'url' => createLink('doc', 'view', "docID={$docID}&version={$itemVersion}"), 'key' => $itemVersion, 'active' => $itemVersion == $version);
 }
 
-$menuOptions = array();
+$versionMenuOptions = array();
 if($config->edition != 'open' && common::hasPriv('doc', 'diff'))
 {
-    $menuOptions['header']       = jsRaw('window.getVersionHeader');
-    $menuOptions['footer']       = jsRaw('window.getVersionFooter');
-    $menuOptions['getItem']      = jsRaw('window.getDropdownItem');
-    $menuOptions['onClickItem']  = jsRaw('window.onClickDropdownItem');
-    $menuOptions['width']        = 200;
-    $menuOptions['checkOnClick'] = '.has-checkbox .item';
+    $versionMenuOptions['header']       = jsRaw('window.getVersionHeader');
+    $versionMenuOptions['footer']       = jsRaw('window.getVersionFooter');
+    $versionMenuOptions['getItem']      = jsRaw('window.getDropdownItem');
+    $versionMenuOptions['onClickItem']  = jsRaw('window.onClickDropdownItem');
+    $versionMenuOptions['width']        = 200;
+    $versionMenuOptions['checkOnClick'] = '.has-checkbox .item';
 }
 
 $star        = strpos($doc->collector, ',' . $app->user->account . ',') !== false ? 'star' : 'star-empty';
@@ -92,7 +61,8 @@ if($doc->keywords)
 {
     foreach($doc->keywords as $keywords)
     {
-        if($keywords) $keywordsLabel[] = span(setClass('label secondary-outline ml-2'), $keywords);
+        if(!$keywords) continue;
+        $keywordsLabel[] = span(setClass('label secondary-outline'), $keywords);
     }
 }
 
@@ -120,109 +90,118 @@ if(!empty($editors))
     ) : btn(setClass('ghost btn btn-default'), $editorInfo);
 }
 
-$contentDom = div
+$docHeader = div
 (
-    setClass('flex-auto'),
-    setID('docPanel'),
+    setID('docHeader'),
+    setClass('w-full row items-center gap-4'),
     div
     (
-        setClass('panel-heading pl-0'),
+        setClass('flex-auto row items-center min-w-0 gap-2'),
+        setStyle('max-width', 'calc(100% - 200px)'),
         div
         (
-            setClass('flex-1 w-0'),
-            div
-            (
-                setClass('title clip inline-flex'),
-                set::title($doc->title),
-                $doc->title
-            ),
-            $doc->status != 'draft' ? dropdown
-            (
-                btn
-                (
-                    setClass('ghost btn square btn-default selelct-version inline-flex ml-1'),
-                    span(setClass('pl-1'), 'V' . ($version ? $version : $doc->version))
-                ),
-                set::items($versionList),
-                set::menu($menuOptions)
-            ) : null
+            setClass('title clip inline-flex text-xl font-bold'),
+            set::title($doc->title),
+            $doc->title
         ),
-        $doc->deleted ? span(setClass('label danger'), $lang->doc->deleted) : null,
-        div
+        $doc->status != 'draft' ? dropdown
         (
-            setClass('panel-actions flex'),
-            $editorGroup ? setClass('hasEditor') : null,
-            div
+            btn
             (
-                setClass('toolbar'),
-                btn
-                (
-                    setClass('btn ghost'),
-                    icon('fullscreen'),
-                    set::url('javascript:$("#docPanel").fullscreen()'),
-                ),
-                common::hasPriv('doc', 'collect') && !$doc->deleted ? html($starBtn) : null,
-                ($config->vision == 'rnd' and ($config->edition == 'max' or $config->edition == 'ipd') and $app->tab == 'project') ? $importLibBtn : null,
-                common::hasPriv('doc', 'edit') && !$doc->deleted ? btn
-                (
-                    set::url(createLink('doc', 'edit', "docID=$doc->id")),
-                    $doc->type != 'text' ? setData('toggle', 'modal') : null,
-                    setClass('btn ghost'),
-                    icon('edit')
-                ) : null,
-                common::hasPriv('doc', 'delete') && !$doc->deleted ? btn
-                (
-                    set::url(createLink('doc', 'delete', "docID=$doc->id")),
-                    setClass('btn ghost ajax-submit'),
-                    set('data-confirm', array('message' => $lang->doc->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x')),
-                    icon('trash')
-                ) : null,
-                btn
-                (
-                    set::id('hisTrigger'),
-                    setClass('btn ghost'),
-                    icon('clock'),
-                    on::click('showHistory')
-                )
+                set::type('gray-pale'),
+                setClass('rounded-full size-xs gap-1'),
+                'V' . ($version ? $version : $doc->version)
             ),
-            div(set::id('editorBox'), $editorGroup)
-        )
+            set::items($versionList),
+            set::menu($versionMenuOptions)
+        ) : null,
+        $doc->deleted ? span(setClass('label danger size-sm'), $lang->doc->deleted) : null
     ),
     div
     (
-        setClass('info mb-4'),
+        setClass('flex-none flex items-center'),
+        $editorGroup ? setClass('hasEditor') : null,
         div
         (
-            setClass('user-time text-gray mr-2 inline-flex items-center'),
-            icon('contacts', setClass('mr-2')),
+            setClass('toolbar'),
+            btn
+            (
+                setClass('btn ghost'),
+                icon('fullscreen'),
+                set::url('javascript:$("#docPanel").fullscreen()'),
+            ),
+            common::hasPriv('doc', 'collect') && !$doc->deleted ? html($starBtn) : null,
+            ($config->vision == 'rnd' and ($config->edition == 'max' or $config->edition == 'ipd') and $app->tab == 'project') ? $importLibBtn : null,
+            common::hasPriv('doc', 'edit') && !$doc->deleted ? btn
+            (
+                set::url(createLink('doc', 'edit', "docID=$doc->id")),
+                $doc->type != 'text' ? setData('toggle', 'modal') : null,
+                setClass('btn ghost'),
+                icon('edit')
+            ) : null,
+            common::hasPriv('doc', 'delete') && !$doc->deleted ? btn
+            (
+                set::url(createLink('doc', 'delete', "docID=$doc->id")),
+                setClass('btn ghost ajax-submit'),
+                set('data-confirm', array('message' => $lang->doc->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x')),
+                icon('trash')
+            ) : null,
+            btn
+            (
+                set::id('hisTrigger'),
+                setClass('btn ghost'),
+                icon('clock'),
+                on::click()->do('$("#docPanel").toggleClass("show-history")')
+            )
+        ),
+        div(set::id('editorBox'), $editorGroup)
+    )
+);
+
+$contentDom = div
+(
+    setID('docContent'),
+    setClass('flex-auto min-w-0 px-4'),
+    div
+    (
+        setClass('row items-center py-1 gap-3'),
+        div
+        (
+            setClass('text-gray inline-flex items-center gap-2'),
+            icon('contacts'),
             $createInfo
         ),
         div
         (
-            setClass('user-time text-gray mr-2 inline-flex items-center'),
-            icon('star-empty', setClass('mr-1')),
+            setClass('text-gray inline-flex items-center gap-2'),
+            icon('star-empty'),
             $doc->collects ? $doc->collects : 0
         ),
         div
         (
-            setClass('user-time text-gray inline-flex items-center'),
-            icon('eye', setClass('mr-1')),
+            setClass('text-gray inline-flex items-center gap-2'),
+            icon('eye'),
             $doc->views
-        ),
-        $keywordsLabel ? span(setClass('keywords'), $keywordsLabel) : null
+        )
     ),
+    $keywordsLabel ? div
+    (
+        setClass('row items-center gap-2 mt-1 pl-px'),
+        $keywordsLabel,
+    ) : null,
     div
     (
-        setID('diffContain'),
+        setID('docEditor'),
         setClass('detail-content article'),
-        $doc->contentType == 'markdown' ? editor
+        editor
         (
-            set::size('full'),
-            set::markdown(true),
+            set::resizable(false),
+            set::markdown($doc->contentType == 'markdown'),
             set::readonly(true),
             set::hideUI(true),
+            set::size('auto'),
             html($doc->content)
-        ) : html($doc->content)
+        )
     ),
     div
     (
@@ -239,8 +218,9 @@ $contentDom = div
 
 $treeDom = isset($outlineTree) ? div
 (
-    setClass('mt-8 border-l of-auto'),
-    setID('contentTree'),
+    setID('docOutline'),
+    setStyle('max-height', 'calc(100vh - 121px)'),
+    setStyle('top', '48px'),
     tree
     (
         set::className('pl-4'),
@@ -252,29 +232,46 @@ $treeDom = isset($outlineTree) ? div
 $toggleTreeBtn = isset($outlineTree) ? btn
 (
     setID('outlineToggle'),
-    setClass('btn ghost'),
-    setStyle('background', '#FFF'),
+    setClass('canvas ring-0 absolute right-8'),
+    setStyle('top', '60px'),
     icon('menu-arrow-right'),
-    on::click('toggleOutline')
+    on::click()->do('$("#docPanel").toggleClass("show-outline")'),
 ) : null;
 
 $historyDom = div
 (
-    set::id('history'),
-    setClass('hidden border-l'),
+    setId('docHistory'),
+    setClass('relative'),
+    btn
+    (
+        setID('closeBtn'),
+        setClass('canvas ring-0 absolute right-2 top-0'),
+        set::type('ghost'),
+        set::icon('close'),
+        on::click()->do('$("#docPanel").removeClass("show-history")')
+    ),
     history(set::objectID($doc->id), set::objectType('doc'))
 );
 
 panel
 (
-    set::bodyClass('doc-content'),
+    setID('docPanel'),
+    setClass('ring  scrollbar-hover overflow-y-auto'),
+    set::headingClass('sticky top-0 z-10 bg-canvas'),
+    set::bodyClass('w-full p-0'),
+    to::heading($docHeader),
     div
     (
-        setClass('flex'),
+        setClass('flex-auto w-full row'),
         $contentDom,
-        $treeDom,
-        $toggleTreeBtn,
-        $historyDom
+        div
+        (
+            setID('docSidebar'),
+            setClass('flex-none w-72 overflow-y-auto scrollbar-hover sticky border-l'),
+            $treeDom,
+            $historyDom,
+        ),
+        $toggleTreeBtn
     )
 );
 
