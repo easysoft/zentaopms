@@ -1271,6 +1271,20 @@ class pivotModel extends model
         return $flattenGroupRecords;
     }
 
+    public function getShowOriginsWithRecord(array|object $record, $showOrigins): array
+    {
+        $columns = array();
+        foreach(array_keys((array)$record) as $index => $field)
+        {
+            foreach($showOrigins as $shortField => $showOrigin)
+            {
+                if(strpos(strrev($field), strrev($shortField)) !== 0) continue;
+                $columns[$index] = $showOrigin;
+            }
+        }
+
+        return $columns;
+    }
 
     /**
      * Calculate group merge cell config.
