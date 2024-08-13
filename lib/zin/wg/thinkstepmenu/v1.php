@@ -178,11 +178,11 @@ class thinkStepMenu extends wg
                 'data-url'     => createLink('thinkstep', 'delete', "marketID={$marketID}&stepID={$item->id}"),
                 'data-confirm' => $confirmTips,
             ) : array(
-                'key'            => 'deleteNode',
-                'icon'           => 'trash',
-                'text'           => $this->lang->thinkstep->actions['delete'],
-                'innerClass'     => 'text-gray opacity-50',
-                'hint'           => $this->lang->thinkstep->cannotDeleteNode,
+                'key'        => 'deleteNode',
+                'icon'       => 'trash',
+                'text'       => $this->lang->thinkstep->actions['delete'],
+                'innerClass' => 'text-gray opacity-50',
+                'hint'       => $this->lang->thinkstep->cannotDeleteNode,
             )) : null
         ), $transitionAction);
 
