@@ -69,6 +69,7 @@ formPanel
     ),
     formRow
     (
+        ($lib->type == 'custom' && $lib->parent == 0) ? setClass('hidden') : null,
         setID('aclBox'),
         formGroup
         (

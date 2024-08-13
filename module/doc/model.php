@@ -242,6 +242,7 @@ class docModel extends model
             $space = clone $lib;
             $space->name   = $space->spaceName;
             $space->parent = 0;
+            $space->acl    = 'open';
 
             $this->dao->insert(TABLE_DOCLIB)->data($space, 'spaceName')->autoCheck()->exec();
             $lib->parent = $this->dao->lastInsertID();
@@ -1242,12 +1243,6 @@ class docModel extends model
     public function checkPrivLib(object|bool $object, string $extra = ''): bool
     {
         if(empty($object)) return false;
-
-        if(!empty($object->parent))
-        {
-            $parent = $this->getLibByID($object->parent);
-            return $this->checkPrivLib($parent);
-        }
 
         /* Only the creator can access the document library under my space. */
         if($object->type == 'mine' && $object->addedBy == $this->app->user->account) return true;
