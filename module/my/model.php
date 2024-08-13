@@ -285,6 +285,18 @@ class myModel extends model
                 ->page($pager)
                 ->fetchAll('id');
         }
+        if($objectType == 'feedback' || $objectType == 'ticket')
+        {
+            return $this->dao->select('t1.*,t2.dept')->from($this->config->objectTables[$module])->alias('t1')
+                ->leftJoin(TABLE_USER)->alias('t2')->on('t1.openedBy = t2.account')
+                ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('t3.deleted')->eq(0)
+                ->andWhere('t1.id')->in($objectIdList)
+                ->orderBy('t1.' . $orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
         return $this->dao->select('*')->from($this->config->objectTables[$module])
             ->where('deleted')->eq(0)
             ->andWhere('id')->in($objectIdList)
