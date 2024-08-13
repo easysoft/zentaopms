@@ -286,7 +286,7 @@ $config->repo->dtable->tag->fieldList['commitID']['type']     = 'desc';
 $config->repo->dtable->tag->fieldList['commitID']['flex']     = 0;
 $config->repo->dtable->tag->fieldList['commitID']['sortType'] = true;
 $config->repo->dtable->tag->fieldList['commitID']['order']    = 40;
-$config->repo->dtable->tag->fieldList['commitID']['width']    = 100;
+$config->repo->dtable->tag->fieldList['commitID']['width']    = 130;
 $config->repo->dtable->tag->fieldList['commitID']['group']    = 2;
 
 $config->repo->dtable->tag->fieldList['committer']['title']    = $lang->repo->lastCommitter;
