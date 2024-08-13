@@ -66,6 +66,12 @@ $basicInfoModal = modal
     ),
     formGroup
     (
+        setStyle('min-height', 'auto'),
+        set::label($lang->doc->files),
+        fileSelector()
+    ),
+    formGroup
+    (
         set::label($lang->doc->mailto),
         mailto(set::items($users), set::value($doc->mailto))
     ),
