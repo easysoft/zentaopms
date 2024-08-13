@@ -2187,6 +2187,10 @@ class storyTao extends storyModel
      */
     public function getLeafNodes(array $stories, string $storyType = 'epic'): array
     {
+        $stmt = $this->dao->select('id,project,commit,name as title,status,story,type AS designType')->from(TABLE_DESIGN)->where('story')->in(array_keys($stories))->andWhere('deleted')->eq(0)->orderBy('project')->query();
+        $designGroup = array();
+        while($design = $stmt->fetch()) $designGroup[$design->story][$design->id] = $design;
+
         $leafNodes = array();
         foreach($stories as $story)
         {
@@ -2194,6 +2198,7 @@ class storyTao extends storyModel
             if($storyType == 'story' && ($story->type == 'epic' || $story->type == 'requirement')) continue;
 
             if(empty($story->isParent)) $leafNodes[$story->id] = $story;
+            if(!isset($leafNodes[$story->id]) && isset($designGroup[$story->id])) $leafNodes[$story->id] = $story;
         }
 
         return $leafNodes;
