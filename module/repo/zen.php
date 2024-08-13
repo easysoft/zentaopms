@@ -1823,15 +1823,33 @@ class repoZen extends repo
      */
     protected function getSearchForm(int $queryID = 0, bool $getSql = false): object|string
     {
+        session_start();
+
         if($getSql)
         {
             $query = $this->session->repoCommitsQuery;
             $query = str_replace("`date`", 't1.`time`', $query);
             $query = str_replace("`committer`", 't1.`committer`', $query);
             $query = str_replace("`commit`", 't1.`revision`', $query);
-            return $query;
+        }
+        else
+        {
+            $query = $this->getSearchFormQuery();
         }
 
+        session_write_close();
+        return $query;
+    }
+
+    /**
+     * 获取搜索表单查询字段。
+     * Get search form query field.
+     *
+     * @access protected
+     * @return object
+     */
+    protected function getSearchFormQuery(): object
+    {
         $query = new stdclass();
         $query->begin     = '';
         $query->end       = '';
@@ -1869,6 +1887,7 @@ class repoZen extends repo
                 $query->{$field['field']} = $field['value'];
             }
         }
+
         return $query;
     }
 }
