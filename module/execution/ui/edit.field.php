@@ -106,7 +106,9 @@ if($project && $project->model != 'ipd')
 $fields->field('planDate')
     ->width('1/2')
     ->label($lang->execution->dateRange)
-    ->controlBegin('dateRangePicker')
+    ->control('inputGroup')
+    ->itemBegin('dateRangePicker')
+    ->control('dateRangePicker')
     ->beginName('begin')
     ->beginPlaceholder($lang->execution->begin)
     ->beginValue(data('execution.begin'))
@@ -114,7 +116,7 @@ $fields->field('planDate')
     ->endPlaceholder($lang->execution->end)
     ->endValue(data('execution.end'))
     ->endList($lang->execution->endList)
-    ->controlEnd();
+    ->itemEnd();
 
 $hasPercent = data('execution.type') == 'stage' && isset($config->setPercent) && $config->setPercent == 1;
 $fields->field('days')

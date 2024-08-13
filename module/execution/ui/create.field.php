@@ -52,7 +52,9 @@ $fields->field('type')
 $plan = data('plan');
 $fields->field('dateRange')
     ->required()
-    ->controlBegin('dateRangePicker')
+    ->control('inputGroup')
+    ->itemBegin('dateRangePicker')
+    ->control('dateRangePicker')
     ->beginName('begin')
     ->beginPlaceholder($lang->execution->begin)
     ->beginValue(empty($plan->begin) ? date('Y-m-d') : $plan->begin)
@@ -60,7 +62,7 @@ $fields->field('dateRange')
     ->endPlaceholder($lang->execution->end)
     ->endValue(empty($plan->end) ? '' : $plan->end)
     ->endList($lang->execution->endList)
-    ->controlEnd();
+    ->itemEnd();
 
 $fields->field('days')
     ->width('1/4')
