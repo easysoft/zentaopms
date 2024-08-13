@@ -28,6 +28,7 @@ function toggleAcl(type)
         $('#whiteListBox').addClass('hidden');
         $('#groupBox').addClass('hidden');
     }
+    $('#whiteListBox .notice').remove();
 
     if(type == 'lib')
     {

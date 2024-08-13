@@ -34,6 +34,7 @@ window.changeDoclibAcl = function(e)
     }
     $('#whiteListBox').addClass('hidden');
     $('#whiteListBox').find('[name^=users]').zui('picker').$.setValue('');
+    $('#whiteListBox .notice').remove();
 }
 
 window.toggleNewSpace = function()
