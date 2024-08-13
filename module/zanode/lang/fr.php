@@ -185,7 +185,7 @@ $lang->zanode->instructionPage->conceptDesc      = 'Hosts include physical hosts
 The execution node is a virtual machine or container instance created by the host machine and is a test environment for executing test tasks.';
 $lang->zanode->instructionPage->appIntroduction  = '2、Application Introduction';
 $lang->zanode->instructionPage->ZAgentDesc       = 'ZAgent is the ZenTao open source software automation testing scheduling platform, which provides a distributed and centralized test environment.';
-$lang->zanode->instructionPage->ZAgentUrl        = 'https://github.com/easysoft/zenagent/blob/main/guide/deploy/index.md';
+$lang->zanode->instructionPage->ZAgentUrl        = 'https://github.com/easysoft/zagent/blob/main/guide/deploy/index.md';
 $lang->zanode->instructionPage->ZTFDesc          = "ZTF is ZenTao's open source automated test management framework, which helps users manage test scripts in a unified manner. ZTF is deeply integrated with ZenTao. Each script can be associated with a use case in the test management system. The step information in the script and the use case information in the management system can be synchronized with each other.";
 $lang->zanode->instructionPage->ZTFUrl           = 'https://ztf.im/';
 $lang->zanode->instructionPage->KVMDesc          = 'KVM(for Kernel-based Virtual Machine) is an x86 hardware based Linux virtualization solution, including virtualization extensions(Intel VT or AMD-V).';
