@@ -399,6 +399,7 @@ class zanodemodel extends model
 
         foreach($nodeList as $node)
         {
+            $oldNodeStatus   = $node->status;
             $node->heartbeat = empty($node->heartbeat) ? '' : $node->heartbeat;
             $host            = $node->hostType == '' ? zget($hosts, $node->parent) : clone $node;
             if(is_object($host))
@@ -416,6 +417,11 @@ class zanodemodel extends model
                 }
 
                 if($host->status != 'online' || time() - strtotime($host->heartbeat) > 60) $node->status = $node->hostType == '' ? 'wait' : 'offline';
+            }
+
+            if($oldNodeStatus != $node->status)
+            {
+                $this->dao->update(TABLE_ZAHOST)->set('status')->eq($node->status)->where('id')->eq($node->id)->exec();
             }
 
             if(!empty($osList[$node->osName]))
