@@ -1988,12 +1988,14 @@ class repo extends control
     public function ajaxGetBranchCommits(int $repoID, string $branchID)
     {
         $repo = $this->repo->getByID($repoID);
-        $branchID   = helper::safe64Encode(base64_encode($branchID));
+        $branchID = helper::safe64Encode(base64_encode($branchID));
         $pageSize = 10;
+
         $this->app->loadClass('pager', true);
-        $pager = new pager(0, $pageSize, 1);
+        $pager             = new pager(0, $pageSize, 1);
         $pager->recPerPage = $pageSize;
-        $commits = $this->repo->getCommits($repo, "", $branchID, 'dir', $pager, '', '', null);
+        $commits           = $this->repo->getCommits($repo, '', $branchID, 'dir', $pager, '', '', null);
+
         $retCommits = array();
         if(!empty($commits))
         {

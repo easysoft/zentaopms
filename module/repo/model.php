@@ -1895,17 +1895,15 @@ class repoModel extends model
                     ->where('revision')->in([$log->revision])
                     ->andWhere('repo')->eq($repo->id)
                     ->fetchPairs('id');
-                if(!empty($objects['stories']))
+                foreach (array('stories'=>'story', 'tasks'=>'task', 'bugs'=>'bug') as $objectType=>$modelType)
                 {
-                    foreach($objects['stories'] as $storyID) $this->loadModel('story')->updateLinkedCommits((int)$storyID, $repo->id, $revisions);
-                }
-                if(!empty($objects['tasks']))
-                {
-                    foreach($objects['tasks'] as $taskID) $this->loadModel('task')->updateLinkedCommits((int)$taskID, $repo->id, $revisions);
-                }
-                if(!empty($objects['bugs']))
-                {
-                    foreach($objects['bugs'] as $bugID) $this->loadModel('bug')->updateLinkedCommits((int)$bugID, $repo->id, $revisions);
+                    if(!empty($objects[$objectType]))
+                    {
+                        foreach($objects[$objectType] as $modelID)
+                        {
+                            $this->loadModel($modelType)->updateLinkedCommits((int)$modelID, $repo->id, $revisions);
+                        }
+                    }
                 }
             }
         }
