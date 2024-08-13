@@ -130,23 +130,24 @@ class myZen extends my
      */
     protected function buildSearchFormForFeedback(int $queryID, string $orderBy): void
     {
-        $products = $this->loadModel('product')->getPairs();
-
-        $this->config->feedback->search['module']    = 'workFeedback';
-        $this->config->feedback->search['actionURL'] = inlink('work', "mode=feedback&browseType=bysearch&param=myQueryID&orderBy={$orderBy}");
+        $rawMethod = $this->app->rawMethod;
+        $this->config->feedback->search['module']    = $rawMethod . 'Feedback';
+        $this->config->feedback->search['actionURL'] = inlink($rawMethod, "mode=feedback&browseType=bysearch&param=myQueryID&orderBy={$orderBy}");
         $this->config->feedback->search['queryID']   = $queryID;
-        $this->config->feedback->search['onMenuBar'] = 'no';
-        $this->config->feedback->search['params']['product']['values']     = $products;
+        $this->config->feedback->search['params']['product']['values']     = $this->loadModel('product')->getPairs();
         $this->config->feedback->search['params']['module']['values']      = $this->loadModel('tree')->getOptionMenu(0, 'feedback', 0);
         $this->config->feedback->search['params']['processedBy']['values'] = $this->loadModel('feedback')->getFeedbackPairs('admin');
 
-        unset($this->config->feedback->search['fields']['assignedTo']);
-        unset($this->config->feedback->search['fields']['closedBy']);
-        unset($this->config->feedback->search['fields']['closedDate']);
-        unset($this->config->feedback->search['fields']['closedReason']);
-        unset($this->config->feedback->search['fields']['processedBy']);
-        unset($this->config->feedback->search['fields']['processedDate']);
-        unset($this->config->feedback->search['fields']['solution']);
+        if($rawMethod == 'work')
+        {
+            unset($this->config->feedback->search['fields']['assignedTo']);
+            unset($this->config->feedback->search['fields']['closedBy']);
+            unset($this->config->feedback->search['fields']['closedDate']);
+            unset($this->config->feedback->search['fields']['closedReason']);
+            unset($this->config->feedback->search['fields']['processedBy']);
+            unset($this->config->feedback->search['fields']['processedDate']);
+            unset($this->config->feedback->search['fields']['solution']);
+        }
 
         $this->loadModel('search')->setSearchParams($this->config->feedback->search);
     }

@@ -1094,15 +1094,19 @@ class my extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         $this->loadModel('feedback');
-        if($browseType == 'assignedBy')
+        if($browseType == 'assignedby')
         {
             $feedbacks = $this->my->getAssignedByMe($this->app->user->account, $pager, $orderBy, 'feedback');
         }
+        elseif($browseType == 'bysearch')
+        {
+            $feedbacks = $this->my->getFeedbacksBySearch($queryID, $orderBy, $pager);
+        }
         else
         {
-            $feedbacks = $browseType != 'bysearch' ? $this->feedback->getList(strtolower($browseType), $orderBy, $pager) : $this->feedback->getBySearch($queryID, $orderBy, $pager);
+            $feedbacks = $this->feedback->getList($browseType, $orderBy, $pager);
         }
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'workFeedback');
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'feedback', false);
 
         $this->loadModel('datatable');
         $this->lang->datatable->moduleSetting  = str_replace($this->lang->module, $this->lang->feedback->moduleAB, $this->lang->datatable->moduleSetting);
