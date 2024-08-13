@@ -2981,7 +2981,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function doc($executionID, $libID = 0, $moduleID = 0, $browseType = 'all', $orderBy = 'status,id_desc', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function doc($executionID, $libID = 0, $moduleID = 0, $browseType = 'all', $orderBy = 'order_asc', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         echo $this->fetch('doc', 'tableContents', "type=execution&objectID=$executionID&libID=$libID&moduleID=$moduleID&browseType=$browseType&orderBy=$orderBy&param=$param&recTotal=$recTotal&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
