@@ -59,7 +59,7 @@ foreach($logs as $log)
         if(!empty($log->relations[$value]))
         {
             $log->designName .= html::commonButton($lang->repo->{$value} , '', 'btn size-sm mx-2');
-            foreach($log->relations[$value] as $item) $log->designName .= html::a($item->url, '#'.$item->id, '_blank');
+            foreach($log->relations[$value] as $item) $log->designName .= html::a($item->url, '#' . $item->id, '_blank');
         }
     }
 }

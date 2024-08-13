@@ -2000,7 +2000,7 @@ class repo extends control
         $retCommits = array();
         if(!empty($commits))
         {
-            foreach ($commits as $item) array_push($retCommits, array('commitID'=>$item->revision, 'shortID'=>substr($item->revision, 0, 10), 'message'=>$item->message));
+            foreach ($commits as $item) array_push($retCommits, array('commitID' => $item->revision, 'shortID' => substr($item->revision, 0, 10), 'message' => $item->message));
         }
         echo json_encode($retCommits);
     }
