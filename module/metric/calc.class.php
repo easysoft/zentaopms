@@ -110,6 +110,14 @@ class baseCalc
     public $reuse = false;
 
     /**
+     * 是否启用initMetricRecords，尽可能补零逻辑
+     *
+     * @var bool
+     * @access public
+     */
+    public $initRecord = true;
+
+    /**
      * 是否支持独立查询
      *
      * @var bool

@@ -237,7 +237,7 @@ class metricZen extends metric
             $metric       = $this->metric->getByCode($code);
             $dateType     = $this->metric->getDateTypeByCode($code);
             $recordCommon = $this->buildRecordCommonFields($metric->id, $code, $now, $dateValues->$dateType);
-            $initRecords  = $this->initMetricRecords($recordCommon, $metric->scope);
+            $initRecords  = !$calc->initRecord ? array() : $this->initMetricRecords($recordCommon, $metric->scope);
 
             if($calc->reuse) $this->prepareReuseMetricResult($calc, $options);
             $results = $calc->getResult($options);
