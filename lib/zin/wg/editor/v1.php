@@ -14,7 +14,7 @@ class editor extends wg
         'fullscreenable?: bool=true',           // 是否可全屏
         'resizable?: bool=true',                // 是否可拖拽调整大小
         'exposeEditor?: bool=true',             // 是否将编辑器实例挂载到 `window.$zenEditors`
-        'size?: string="sm"',                   // 尺寸，可选值 'sm', 'lg', 'full'
+        'size?: string="sm"',                   // 尺寸，可选值 'sm', 'lg', 'full', 'auto'
         'hideMenubar?: bool=false',             // 是否隐藏菜单栏
         'hideUI?: bool=false',                  // 是否隐藏整个编辑器 UI
         'readonly?: bool=false',                // 是否只读
@@ -97,7 +97,7 @@ class editor extends wg
         $editor = new h
         (
             setTag('zen-editor'),
-            setClass('form-control', 'p-0'),
+            setClass('p-0', $this->prop('readonly') ? '' : 'form-control'),
             $this->prop('size') === 'full' ? setStyle('height', '100%') : setClass('h-auto')
         );
 
@@ -119,7 +119,7 @@ class editor extends wg
 
         return div
         (
-            setClass('editor-container p-px mt-px rounded relative'),
+            setClass('editor-container p-px mt-px rounded relative', $this->prop('readonly') ? 'is-readonly' : ''),
             $props['size'] === 'full' ? setStyle('height', '100%') : setClass('h-auto'),
             h::css(self::$css), // Inject CSS on page, for tippy menus.
             $templateType ? $this->buildTemplate($this->prop('name'), $templateType) : null,
