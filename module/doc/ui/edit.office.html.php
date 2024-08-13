@@ -28,7 +28,7 @@ formPanel
         set::width('1/2'),
         set::label($lang->doc->space),
         set::required(true),
-        set::control(array('control' => 'picker', 'name' => 'space', 'items' => $spaces, 'required' => true, 'disabled' => $type == 'mine' ? true : false, 'value' => $type == 'mine' ? 'mine' : $lib->parent))
+        set::control(array('control' => 'picker', 'name' => 'space', 'items' => $spaces, 'required' => true, 'value' => $type == 'mine' ? 'mine' : $lib->parent, 'disabled' => $type == 'mine'))
     ) : null,
     formGroup
     (
@@ -75,7 +75,7 @@ formPanel
         (
             set::name('acl'),
             set::items($lang->doc->aclList),
-            set::value($doc->acl),
+            set::value(isset($lang->doc->aclList[$doc->acl]) ? $doc->acl : key($lang->doc->aclList)),
             on::change('toggleWhiteList')
         )
     ),
