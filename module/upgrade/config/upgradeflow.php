@@ -100,7 +100,7 @@ $config->upgrade->execFlow['20_0']        = array('functions' => 'openCacheByAPC
 $config->upgrade->execFlow['20_1_0']      = array('functions' => 'completeClassifyLang');
 $config->upgrade->execFlow['20_1_1']      = array('functions' => 'syncActivityAndOutput,changeCustomStoryStage,processStoryRelation,processLinkStories,addERName,addTR4APoint');
 $config->upgrade->execFlow['20_3_0']      = array('functions' => 'importBuildinWorkflow,addFlowFields,processProjectRoadmapsByCharter', 'params' => array('importBuildinWorkflow' => array('or'), 'addFlowFields' => array('biz10.2')));
-$config->upgrade->execFlow['20_4']        = array('functions' => 'createDefaultDoclibSpace,updateStoryVerifiedDate');
+$config->upgrade->execFlow['20_4']        = array('functions' => 'createDefaultDoclibSpace,updateStoryVerifiedDate,xuanNotifyJitsiConference', 'xxsqls' => "$appRoot/db/upgradexuanxuan7.3.sql,$appRoot/db/upgradexuanxuan9.0.sql");
 
 if(!empty($config->isINT))
 {
