@@ -1,15 +1,15 @@
 <?php
 /**
- * 按执行统计的执行结束时测试缺陷密度。
+ * 按执行统计的执行关闭时测试缺陷密度。
  * Test concentration in executionw when the execution closing.
  *
  * 范围：execution
  * 对象：execution
  * 目的：qc
- * 度量名称：按执行统计的执行结束时测试缺陷密度
+ * 度量名称：按执行统计的执行关闭时测试缺陷密度
  * 单位：%
  * 描述：按执行统计的执行测试缺陷密度是指执行产生的有效Bug数与执行交付的研发需求数的比率。该度量项反映了团队交付的研发需求的质量，可以帮助团队识别研发中存在的潜在问题。
- * 定义：复用：按执行统计的执行结束时已交付的研发需求规模数、按执行统计的新增有效Bug数；公式：按执行统计的新增有效Bug数/按执行统计的执行结束时已交付的研发需求规模数
+ * 定义：复用：按执行统计的执行关闭时已交付的研发需求规模数、按执行统计的新增有效Bug数；公式：按执行统计的新增有效Bug数/按执行统计的执行关闭时已交付的研发需求规模数
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    Daitingting <daitingting@xirangit.com>
