@@ -1892,7 +1892,7 @@ class repoModel extends model
                 $historyLog->time      = date("Y-m-d H:i:s", strtotime($time));
                 $this->saveCommit($repo->id, array('commits' => [$historyLog]), 0);
                 $revisions = $this->dao->select('id')->from(TABLE_REPOHISTORY)
-                    ->where('revision')->in([$log->revision])
+                    ->where('revision')->in($log->revision)
                     ->andWhere('repo')->eq($repo->id)
                     ->fetchPairs('id');
                 foreach (array('stories' => 'story', 'tasks' => 'task', 'bugs' => 'bug') as $objectType=>$modelType)
