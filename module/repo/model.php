@@ -1895,7 +1895,7 @@ class repoModel extends model
                     ->where('revision')->in([$log->revision])
                     ->andWhere('repo')->eq($repo->id)
                     ->fetchPairs('id');
-                foreach (array('stories'=>'story', 'tasks'=>'task', 'bugs'=>'bug') as $objectType=>$modelType)
+                foreach (array('stories' => 'story', 'tasks' => 'task', 'bugs' => 'bug') as $objectType=>$modelType)
                 {
                     if(!empty($objects[$objectType]))
                     {
