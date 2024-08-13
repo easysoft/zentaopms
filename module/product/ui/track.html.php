@@ -125,6 +125,7 @@ empty($tracks) ? div(setClass('dtable-empty-tip bg-white shadow'), span(setClass
     zui::kanbanList
     (
         set::key('kanban'),
+        set('$replace', false),
         set::items(array(array(
             'data'        => $tracks,
             'getLaneCol'  => jsRaw('window.getLaneCol'),
