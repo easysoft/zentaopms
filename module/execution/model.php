@@ -2035,10 +2035,19 @@ class executionModel extends model
             if(strpos($this->session->taskQuery, "deleted =") === false) $this->session->set('taskQuery', $this->session->taskQuery . " AND deleted = '0'");
 
             $taskQuery = $this->session->taskQuery;
+
             /* Limit current execution when no execution. */
-            if(strpos($taskQuery, "`execution` =") === false) $taskQuery .= " AND `execution` = $executionID";
+            if(strpos($taskQuery, "`execution` =") === false && strpos($taskQuery, "`project` =") === false) $taskQuery .= " AND `execution` = $executionID";
             $executionQuery = "`execution` " . helper::dbIN(array_keys($executions));
             $taskQuery      = str_replace("`execution` = 'all'", $executionQuery, $taskQuery); // Search all execution.
+            /* Process all project query. */
+            if(strpos($taskQuery, "`project` = 'all'") !== false)
+            {
+                $projects     = $this->loadModel('project')->getPairsByProgram();
+                $projectQuery = "`project` " . helper::dbIN(array_keys($projects));
+                $taskQuery = str_replace("`project` = 'all'", $projectQuery, $taskQuery);;
+            }
+
             $this->session->set('taskQueryCondition', $taskQuery, $this->app->tab);
             $this->session->set('taskOnlyCondition', true, $this->app->tab);
 
@@ -4101,6 +4110,9 @@ class executionModel extends model
         $this->config->execution->search['actionURL'] = $actionURL;
         $this->config->execution->search['queryID']   = $queryID;
         $this->config->execution->search['params']['execution']['values'] = array(''=>'', $executionID => $executions[$executionID], 'all' => $this->lang->execution->allExecutions);
+
+        $projects = $this->loadModel('project')->getPairsByProgram();
+        $this->config->execution->search['params']['project']['values'] = $projects + array('all' => $this->lang->project->allProjects);
 
         $showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $this->config->execution->search['params']['module']['values'] = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, $showAllModule ? 'allModule' : '');
