@@ -406,6 +406,11 @@ class zanodemodel extends model
                     ->where('id')->eq($node->id)
                     ->exec();
             }
+
+            if(!empty($osList[$node->osName]))
+            {
+                $this->dao->update(TABLE_ZAHOST)->set('osName')->eq($osList[$node->osName])->where('id')->eq($node->id)->exec();
+            }
         }
 
         return $nodeList;
