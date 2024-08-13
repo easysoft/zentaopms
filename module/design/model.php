@@ -424,13 +424,13 @@ class designModel extends model
      */
     public function getLinkedCommits(int $repoID, array $revisions): array
     {
-        return $this->dao->select('h.revision,d.id AS id,d.name AS title')
-            ->from(TABLE_REPOHISTORY)->alias('h')
-            ->leftJoin(TABLE_RELATION)->alias('r')->on('r.relation="completedin" and r.BType="commit" and r.BID=h.id')
-            ->leftJoin(TABLE_DESIGN)->alias('d')->on('r.AType="design" and r.AID=d.id')
-            ->where('h.revision')->in($revisions)
-            ->andWhere('h.repo')->eq($repoID)
-            ->andWhere('d.id')->ne('')
+        return $this->dao->select('t1.revision,t3.id AS id,t3.name AS title')
+            ->from(TABLE_REPOHISTORY)->alias('t1')
+            ->leftJoin(TABLE_RELATION)->alias('t2')->on('t2.relation="completedin" and t2.BType="commit" and t2.BID=t1.id')
+            ->leftJoin(TABLE_DESIGN)->alias('t3')->on('t2.AType="design" and t2.AID=t3.id')
+            ->where('t1.revision')->in($revisions)
+            ->andWhere('t1.repo')->eq($repoID)
+            ->andWhere('t3.id')->ne('')
             ->orderBy('id')
             ->fetchGroup('revision', 'id');
     }

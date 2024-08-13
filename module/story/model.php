@@ -5413,13 +5413,13 @@ class storyModel extends model
      */
     public function getLinkedCommits(int $repoID, array $revisions): array
     {
-        return $this->dao->select('h.revision,s.id AS id,s.title AS title')
-            ->from(TABLE_REPOHISTORY)->alias('h')
-            ->leftJoin(TABLE_RELATION)->alias('r')->on('r.relation="completedin" and r.BType="commit" and r.BID=h.id')
-            ->leftJoin(TABLE_STORY)->alias('s')->on('r.AType="story" and r.AID=s.id')
-            ->where('h.revision')->in($revisions)
-            ->andWhere('h.repo')->eq($repoID)
-            ->andWhere('s.id')->ne('')
+        return $this->dao->select('t1.revision,t3.id AS id,t3.title AS title')
+            ->from(TABLE_REPOHISTORY)->alias('t1')
+            ->leftJoin(TABLE_RELATION)->alias('t2')->on('t2.relation="completedin" and t2.BType="commit" and t2.BID=t1.id')
+            ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.AType="story" and t2.AID=t3.id')
+            ->where('t1.revision')->in($revisions)
+            ->andWhere('t1.repo')->eq($repoID)
+            ->andWhere('t3.id')->ne('')
             ->fetchGroup('revision', 'id');
     }
 }
