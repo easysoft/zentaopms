@@ -32,7 +32,7 @@ class filter extends wg
 
         return picker
         (
-            setClass('w-full'),
+            setClass('flex-auto'),
             set::name($name),
             set::value($value),
             set::items($items),
@@ -48,7 +48,7 @@ class filter extends wg
 
         return datePicker
         (
-            setClass('w-full'),
+            setClass('flex-auto'),
             set::name($name),
             set::value($value),
             on::change("$onChange(e, '$name')")
@@ -61,7 +61,7 @@ class filter extends wg
 
         return datetimePicker
         (
-            setClass('w-full'),
+            setClass('flex-auto'),
             set::name($name),
             set::value($value),
             on::change("$onChange(e, '$name')")
@@ -74,6 +74,7 @@ class filter extends wg
 
         return input
         (
+            setClass('flex-auto'),
             set::name($name),
             set::value($value),
             on::change("$onChange(e, '$name')")
@@ -91,11 +92,12 @@ class filter extends wg
     protected function build()
     {
         list($type, $layout) = $this->prop(array('type', 'layout'));
-        $class = $this->prop('class', $layout === 'horz' ? 'w-1/2' : '');
+        $isHorz = $layout === 'horz';
+        $class  = $this->prop('class', array('w-1/2' => $isHorz));
 
         return inputGroup
         (
-            setClass("filter filter-{$type} {$class}" . ($layout === 'horz' ? ' mb-2 pr-4' : '')),
+            setClass("filter filter-{$type} flex", $class, array('mb-2 pr-4' => $isHorz)),
             $this->prop('title'),
             $this->buildControl($type)
         );
