@@ -93,6 +93,7 @@ $lang->doc->editedBy     = 'Bearbeitet von';
 $lang->doc->editedDate   = 'UpdatedDate';
 $lang->doc->editingDate  = 'Editing user and time';
 $lang->doc->lastEditedBy = 'Last Editor';
+$lang->doc->updateInfo   = 'Informationen aktualisieren';
 $lang->doc->version      = 'Version';
 $lang->doc->basicInfo    = 'Basis Info';
 $lang->doc->deleted      = 'Gelöscht';

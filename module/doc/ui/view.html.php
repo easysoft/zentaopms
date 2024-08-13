@@ -78,6 +78,7 @@ if(hasPriv('doc', 'delete') && !$doc->deleted)
         'data-confirm' => array('message' => $lang->doc->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x'),
     );
 }
+if(!empty($docMoreActions)) $docMoreActions[] = array('type' => 'divider');
 $docMoreActions[] = array
 (
     'id'      => 'hisTrigger',
@@ -90,12 +91,7 @@ $docMoreActions[] = array
 $editorGroup = '';
 if(!empty($editors))
 {
-    $space       = common::checkNotCN() ? ' ' : '';
-    $firstEditor = current($editors);
-    $editorInfo  = zget($users, $firstEditor->account) . ' ' . substr($firstEditor->date, 0, 10) . $space . $lang->doc->update;
-
-    array_shift($editors);
-
+    $space = common::checkNotCN() ? ' ' : '';
     $items = array();
     foreach($editors as $editor)
     {
@@ -105,7 +101,8 @@ if(!empty($editors))
 
     $docMoreActions[] = array
     (
-        'text'  => $editorInfo,
+        'icon'  => 'info',
+        'text'  => $lang->doc->updateInfo,
         'items' => $items
     );
 }
