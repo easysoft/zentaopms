@@ -24,6 +24,23 @@ class docModel extends model
     const DOC_TYPE_REST = 'restapi';
 
     /**
+     * Adjust the action clickable.
+     *
+     * @param  object $story
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public static function isClickable(object $doc, string $action): bool
+    {
+        global $app;
+        $action = strtolower($action);
+
+        if($action == 'movedoc') return $doc->addedBy == $app->user->account;
+        return true;
+    }
+
+    /**
      * 通过ID获取文档库信息。
      * Get library by id.
      *
