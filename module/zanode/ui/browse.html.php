@@ -14,8 +14,8 @@ $createItem = array('text' => $lang->zanode->create, 'url' => createLink('zanode
 
 foreach($nodeList as $node)
 {
-    $node->memory   .= $lang->zahost->unitList['GB'];
-    $node->diskSize .= $lang->zahost->unitList['GB'];
+    $node->memory   = $node->memory == 0 ? '-' : $node->memory . $lang->zahost->unitList['GB'];
+    $node->diskSize = $node->diskSize == 0 ? '-' : $node->diskSize . $lang->zahost->unitList['GB'];
 }
 
 $nodeList = initTableData($nodeList, $config->zanode->dtable->fieldList, $this->zanode);
