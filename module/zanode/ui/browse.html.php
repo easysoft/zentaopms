@@ -22,7 +22,7 @@ $nodeList = initTableData($nodeList, $config->zanode->dtable->fieldList, $this->
 
 \zin\featureBar
 (
-    li(searchToggle(set::open($browseType == 'bySearch'), set::module('zanode'))),
+    li(searchToggle(set::open($browseType == 'bysearch'), set::module('zanode'))),
     a
     (
         setClass('btn btn-link'),
