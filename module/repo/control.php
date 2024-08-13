@@ -593,7 +593,7 @@ class repo extends control
         {
             if(!empty($designs[$logItem->revision]))
             {
-                foreach($designs[$logItem->revision] as $item) $item->url = !empty($item->id) ? $this->createLink('design', 'view', 'designID='. $item->id) : '';
+                foreach($designs[$logItem->revision] as $item) $item->url = !empty($item->id) ? $this->createLink('design', 'view', 'designID=' . $item->id) : '';
                 $logItem->relations['designs'] = $designs[$logItem->revision];
             }
 
