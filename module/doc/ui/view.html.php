@@ -66,6 +66,26 @@ if($doc->keywords)
     }
 }
 
+$docMoreActions = array();
+if(hasPriv('doc', 'delete') && !$doc->deleted)
+{
+    $docMoreActions[] = array
+    (
+        'class'        => 'ajax-submit',
+        'url'          => createLink('doc', 'delete', "docID=$doc->id"),
+        'icon'         => 'trash',
+        'text'         => $lang->delete,
+        'data-confirm' => array('message' => $lang->doc->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x'),
+    );
+}
+$docMoreActions[] = array
+(
+    'id'      => 'hisTrigger',
+    'icon'    => 'clock',
+    'text'    => $lang->history,
+    'onClick' => jsRaw('() => $("#docPanel").toggleClass("show-history")')
+);
+
 /* Build editor group. */
 $editorGroup = '';
 if(!empty($editors))
@@ -83,11 +103,11 @@ if(!empty($editors))
         $items[] = array('text' => $info);
     }
 
-    $editorGroup = count($items) > 0 ? dropdown
+    $docMoreActions[] = array
     (
-        btn(setClass('ghost btn btn-default'), $editorInfo),
-        set::items($items)
-    ) : btn(setClass('ghost btn btn-default'), $editorInfo);
+        'text'  => $editorInfo,
+        'items' => $items
+    );
 }
 
 $docHeader = div
@@ -134,27 +154,24 @@ $docHeader = div
             ($config->vision == 'rnd' and ($config->edition == 'max' or $config->edition == 'ipd') and $app->tab == 'project') ? $importLibBtn : null,
             common::hasPriv('doc', 'edit') && !$doc->deleted ? btn
             (
+                set::type('ghost'),
                 set::url(createLink('doc', 'edit', "docID=$doc->id")),
                 $doc->type != 'text' ? setData('toggle', 'modal') : null,
-                setClass('btn ghost'),
-                icon('edit')
+                set::icon('edit text-primary'),
+                set::text($lang->edit)
             ) : null,
-            common::hasPriv('doc', 'delete') && !$doc->deleted ? btn
+            dropdown
             (
-                set::url(createLink('doc', 'delete', "docID=$doc->id")),
-                setClass('btn ghost ajax-submit'),
-                set('data-confirm', array('message' => $lang->doc->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x')),
-                icon('trash')
-            ) : null,
-            btn
-            (
-                set::id('hisTrigger'),
-                setClass('btn ghost'),
-                icon('clock'),
-                on::click()->do('$("#docPanel").toggleClass("show-history")')
+                btn
+                (
+                    set::type('ghost'),
+                    set::caret(false),
+                    span(setClass('more-vert text-primary')),
+                    span($lang->more),
+                ),
+                set::items($docMoreActions)
             )
-        ),
-        div(set::id('editorBox'), $editorGroup)
+        )
     )
 );
 
