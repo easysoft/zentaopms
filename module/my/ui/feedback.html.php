@@ -71,7 +71,6 @@ dtable
     set::data(array_values($feedbacks)),
     set::checkable($canBatchAction),
     set::userMap($users),
-    set::fixedLeftWidth('44%'),
     set::orderBy($orderBy),
     set::customCols(true),
     set::sortLink(createLink('my', $app->rawMethod, "mode={$mode}&type={$type}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
