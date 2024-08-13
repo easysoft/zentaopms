@@ -117,6 +117,5 @@ else
         }
     }
     JAVASCRIPT);
-    css('.form-batch-container .form-batch-control .check-list-inline {padding-top: 0;}');
+    pageCSS('.form-batch-container .form-batch-control .check-list-inline {padding-top: 0;}');
 }
-
