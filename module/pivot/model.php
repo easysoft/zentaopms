@@ -1356,6 +1356,25 @@ class pivotModel extends model
     }
 
     /**
+     * Calculate merge cell config.
+     *
+     * @param  array    $groups
+     * @param  array    $records
+     * @access public
+     * @return array
+     */
+    public function calculateMergeCellConfig(array $groups, array $columns, array $records)
+    {
+        if(empty($records)) return array();
+
+        $showOrigins = $this->getShowOriginsFromColumns($columns);
+        $showOrigins = $this->getShowOriginsWithRecord($records[0], $showOrigins);
+
+        $configs = $this->calculateGroupMergeCellConfig($groups, $records);
+        return $this->calculateColumnMergeCellConfig($configs, $showOrigins);
+    }
+
+    /**
      * Gen sheet.
      *
      * @param  array  $fields
