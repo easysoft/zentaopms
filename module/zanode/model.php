@@ -419,14 +419,13 @@ class zanodemodel extends model
                 if($host->status != 'online' || time() - strtotime($host->heartbeat) > 60) $node->status = $node->hostType == '' ? 'wait' : 'offline';
             }
 
-            if($oldNodeStatus != $node->status)
+            if($oldNodeStatus != $node->status || !empty($osList[$node->osName]))
             {
-                $this->dao->update(TABLE_ZAHOST)->set('status')->eq($node->status)->where('id')->eq($node->id)->exec();
-            }
-
-            if(!empty($osList[$node->osName]))
-            {
-                $this->dao->update(TABLE_ZAHOST)->set('osName')->eq($osList[$node->osName])->where('id')->eq($node->id)->exec();
+                $this->dao->update(TABLE_ZAHOST)
+                          ->beginIF($oldNodeStatus != $node->status)->set('status')->eq($node->status)->fi()
+                          ->beginIF(!empty($osList[$node->osName]))->set('osName')->eq($osList[$node->osName])->fi()
+                          ->where('id')->eq($node->id)
+                          ->exec();
             }
         }
 
