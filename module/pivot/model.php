@@ -1272,6 +1272,26 @@ class pivotModel extends model
     }
 
     /**
+     * Get show origin from columns.
+     *
+     * @param  array $columns
+     * @access public
+     * @return array
+     */
+    public function getShowOriginsFromColumns(array $columns): array
+    {
+        $showOrigins = array();
+        foreach($columns as $index => $column)
+        {
+            $field      = $column['field'];
+            $showOrigin = zget($column, 'showOrigin', 0);
+            $showOrigins[$field . $index] = $showOrigin;
+        }
+
+        return $showOrigins;
+    }
+
+    /**
      * Get show origin with record.
      *
      * @param  array|object $record
