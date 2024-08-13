@@ -1824,6 +1824,19 @@ class repoZen extends repo
     protected function getSearchForm(int $queryID = 0, bool $getSql = false): object|string
     {
         session_start();
+        if($queryID)
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set('repoCommitsQuery', $query->sql);
+                $this->session->set('repoCommitsForm', $query->form);
+            }
+            else
+            {
+                $this->session->set('repoCommitsQuery', ' 1 = 1');
+            }
+        }
 
         if($getSql)
         {
