@@ -15,12 +15,20 @@ window.toggleLibAcl = function(e)
 
 window.clickSubmit = function(e)
 {
+    const formUrl  = $('form').attr('action');
+    const formData = new FormData($("form")[0]);
+    const target   = $('[name="space"]').val();
+
+    if(target != 'mine')
+    {
+        $.ajaxSubmit({url: formUrl, data: formData});
+        return;
+    }
+
     zui.Modal.confirm({message: errorOthersCreated}).then((res) =>
     {
         if(res)
         {
-            const formUrl  = $('form').attr('action');
-            const formData = new FormData($("form")[0]);
             $.ajaxSubmit({url: formUrl, data: formData});
         }
     });
