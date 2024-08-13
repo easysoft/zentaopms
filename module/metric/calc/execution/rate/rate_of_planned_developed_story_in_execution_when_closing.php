@@ -22,6 +22,8 @@ class rate_of_planned_developed_story_in_execution_when_closing extends baseCalc
 {
     public $result = array();
 
+    public $initRecord = false;
+
     public $reuse = true;
 
     public $reuseMetrics = array('storyfinish' => 'count_of_delivered_story_in_execution_when_closing', 'storylink' => 'count_of_story_in_execution_when_starting');

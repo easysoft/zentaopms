@@ -22,15 +22,20 @@ class rate_of_finished_test_task_in_execution_when_closing extends baseCalc
 {
     public $dataset = 'getTasks';
 
-    public $fieldList = array('t1.type', 't1.status', 't1.closedReason', 't1.closedDate', 't1.execution', 't2.realEnd');
+    public $fieldList = array('t1.type', 't1.status', 't1.closedReason', 't1.closedDate', 't1.execution', "if(t2.multiple = '1', t2.closedDate, t3.closedDate) as executionClosed");
 
     public $result = array();
 
+    public $initRecord = false;
+
     public function calculate($row)
     {
-        if(!isset($this->result[$row->execution])) $this->result[$row->execution] = array('finished', 'total');
-        if($row->type == 'test' && ($row->status == 'done' || ($row->status == 'closed' && $row->closedReason == 'done')) && !empty($row->realEnd) && date('Y-m-d', strtotime($row->closedDate)) <= $row->realEnd) $this->result[$row->execution]['finished'] ++;
-        if($row->type == 'test') $this->result[$row->execution]['total'] ++;
+        if(!helper::isZeroDate($row->executionClosed))
+        {
+            if(!isset($this->result[$row->execution])) $this->result[$row->execution] = array('finished' => 0, 'total' => 0);
+            if($row->type == 'test' && ($row->status == 'done' || ($row->status == 'closed' && $row->closedReason == 'done')) && !empty($row->executionClosed) && date('Y-m-d', strtotime($row->closedDate)) <= $row->executionClosed) $this->result[$row->execution]['finished'] ++;
+            if($row->type == 'test') $this->result[$row->execution]['total'] ++;
+        }
     }
 
     public function getResult($options = array())

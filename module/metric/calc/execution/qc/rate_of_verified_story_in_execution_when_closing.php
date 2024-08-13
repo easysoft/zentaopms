@@ -22,6 +22,8 @@ class rate_of_verified_story_in_execution_when_closing extends baseCalc
 {
     public $result = array();
 
+    public $initRecord = false;
+
     public $reuse = true;
 
     public $reuseMetrics = array('verifiedStories' => 'count_of_verified_story_in_execution_when_closing', 'validStories' => 'count_of_valid_story_in_execution');

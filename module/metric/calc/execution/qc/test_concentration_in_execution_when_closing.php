@@ -22,6 +22,8 @@ class test_concentration_in_execution_when_closing extends baseCalc
 {
     public $result = array();
 
+    public $initRecord = false;
+
     public $reuse = true;
 
     public $reuseMetrics = array('story' => 'scale_of_delivered_story_in_execution_when_closing', 'bug' => 'count_of_effective_bug_in_execution');

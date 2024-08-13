@@ -26,6 +26,8 @@ class count_of_finished_test_task_in_execution_when_closing extends baseCalc
 
     public $result = array();
 
+    public $initRecord = false;
+
     public function calculate($row)
     {
         if($row->type == 'test' && ($row->status == 'done' || ($row->status == 'closed' && $row->closedReason == 'done')) && !empty($row->realEnd) && date('Y-m-d', strtotime($row->closedDate)) <= $row->realEnd)

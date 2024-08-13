@@ -26,6 +26,8 @@ class scale_of_delivered_story_in_execution_when_closing extends baseCalc
 
     public $result = array();
 
+    public $initRecord = false;
+
     public function calculate($row)
     {
         // 如果项目的关闭时间大于等于需求的发布时间

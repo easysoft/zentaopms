@@ -26,6 +26,8 @@ class count_of_story_in_execution_when_starting extends baseCalc
 
     public $result = array();
 
+    public $initRecord = false;
+
     public $storyInfo = array();
     /* e.g $storyInfo[3] = array('link' => 1, 'unlink' => 1, execution => 3); */
 

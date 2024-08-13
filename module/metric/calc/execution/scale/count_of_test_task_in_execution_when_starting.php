@@ -26,6 +26,8 @@ class count_of_test_task_in_execution_when_starting extends baseCalc
 
     public $result = array();
 
+    public $initRecord = false;
+
     public function calculate($row)
     {
         if($row->type == 'test' && $row->status != 'cancel' && !empty($row->realBegan) && date('Y-m-d', strtotime($row->openedDate)) <= $row->realBegan)

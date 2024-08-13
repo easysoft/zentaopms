@@ -26,9 +26,11 @@ class count_of_verified_story_in_execution_when_closing extends baseCalc
 
     public $result = array();
 
+    public $initRecord = false;
+
     public function calculate($row)
     {
-        if(!helper::isZeroDate($row->closedDate))
+        if(!helper::isZeroDate($row->executionClosed))
         {
             $execution  = $row->project;
             $isVerified = $row->stage == 'verified' &&  $row->verifiedDate <= $row->executionClosed;
