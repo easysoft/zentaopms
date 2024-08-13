@@ -1271,6 +1271,14 @@ class pivotModel extends model
         return $flattenGroupRecords;
     }
 
+    /**
+     * Get show origin with record.
+     *
+     * @param  array|object $record
+     * @param  int    $showOrigins
+     * @access public
+     * @return array
+     */
     public function getShowOriginsWithRecord(array|object $record, $showOrigins): array
     {
         $columns = array();
