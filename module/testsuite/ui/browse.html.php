@@ -15,6 +15,7 @@ jsVar('authorList', $lang->testsuite->authorList);
 $config->testsuite->dtable->fieldList['addedBy']['userMap'] = $users;
 
 $tableData = initTableData($suites, $config->testsuite->dtable->fieldList, $this->testsuite);
+foreach($tableData as $testsuite) $testsuite->desc = strip_tags($testsuite->desc);
 
 $cols = array_values($config->testsuite->dtable->fieldList);
 $data = array_values($tableData);
