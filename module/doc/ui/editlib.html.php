@@ -112,11 +112,7 @@ formPanel
                 div
                 (
                     setClass('w-full'),
-                    inputGroup
-                    (
-                        $lang->doclib->user,
-                        userPicker(set::items($users), set::value($lib->users))
-                    )
+                    userPicker(set::label($lang->doclib->user), set::items($users), set::value($lib->users))
                 )
             )
         )
