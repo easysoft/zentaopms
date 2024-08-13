@@ -62,7 +62,7 @@ $fnGenerateFilters = function() use($pivot, $showOrigin, $lang)
     );
 };
 
-$generateData = function() use ($lang, $pivotName, $pivot, $filters, $data, $configs, $showOrigin, $fnGenerateFilters)
+$generateData = function() use ($lang, $pivotName, $pivot, $data, $configs, $showOrigin, $fnGenerateFilters)
 {
     $clickable = !$pivot->builtin;
     list($cols, $rows, $cellSpan) = $this->loadModel('bi')->convertDataForDtable($data, $configs);
