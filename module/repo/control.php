@@ -1975,4 +1975,30 @@ class repo extends control
         $this->view->users      = $this->user->getPairs('noletter');
         $this->display();
     }
+
+    /**
+     * 分支下提交记录。
+     * Commit records of branch.
+     *
+     * @param  int    $repoID
+     * @param  string $branchID
+     * @access public
+     * @return array
+     */
+    public function ajaxGetBranchCommits(int $repoID, string $branchID)
+    {
+        $repo = $this->repo->getByID($repoID);
+        $branchID   = helper::safe64Encode(base64_encode($branchID));
+        $pageSize = 10;
+        $this->app->loadClass('pager', true);
+        $pager = new pager(0, $pageSize, 1);
+        $pager->recPerPage = $pageSize;
+        $commits = $this->repo->getCommits($repo, "", $branchID, 'dir', $pager, '', '', null);
+        $retCommits = array();
+        if(!empty($commits))
+        {
+            foreach ($commits as $item) array_push($retCommits, array('commitID'=>$item->revision, 'shortID'=>substr($item->revision,0,7), 'message'=>$item->message));
+        }
+        echo json_encode($retCommits);
+    }
 }
