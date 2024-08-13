@@ -129,6 +129,13 @@ class entityTitle extends wg
 
     protected function build()
     {
+        /* Convert line break to space on copy. 复制时将换行转换为空格。see https://back.zcorp.cc/pms/ticket-view-1334.html */
+        $handleCopy = <<<'JS'
+        const lines = document.getSelection().toString().split('\n');
+        event.clipboardData.setData('text/plain', lines.join(' '));
+        event.preventDefault();
+        JS;
+
         return div
         (
             setClass('entity-title', $this->prop('inline') ? '' : 'row items-center gap-' . $this->prop('gap', 2)),
@@ -136,7 +143,8 @@ class entityTitle extends wg
             $this->block('prefix'),
             $this->buildTitle(),
             $this->children(),
-            $this->block('suffix')
+            $this->block('suffix'),
+            on::copy()->do($handleCopy)
         );
     }
 }
