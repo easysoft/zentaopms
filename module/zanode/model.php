@@ -422,10 +422,10 @@ class zanodemodel extends model
             if($oldNodeStatus != $node->status || !empty($osList[$node->osName]))
             {
                 $this->dao->update(TABLE_ZAHOST)
-                          ->beginIF($oldNodeStatus != $node->status)->set('status')->eq($node->status)->fi()
-                          ->beginIF(!empty($osList[$node->osName]))->set('osName')->eq($osList[$node->osName])->fi()
-                          ->where('id')->eq($node->id)
-                          ->exec();
+                    ->beginIF($oldNodeStatus != $node->status)->set('status')->eq($node->status)->fi()
+                    ->beginIF(!empty($osList[$node->osName]))->set('osName')->eq($osList[$node->osName])->fi()
+                    ->where('id')->eq($node->id)
+                    ->exec();
             }
         }
 
