@@ -389,12 +389,13 @@ class zanodemodel extends model
                 if($this->session->zanodeQuery == false) $this->session->set('zanodeQuery', ' 1 = 1');
             }
             $query = $this->session->zanodeQuery;
-            $query = preg_replace('/`(id|name|status|os|parent|cpuCores|memory|diskSize|extranet)`/', 't1.`\1`', $query);
+            $query = preg_replace('/`(id|name|status|osName|parent|cpuCores|memory|diskSize|extranet)`/', 't1.`\1`', $query);
             $query = str_replace('`hostID`', 't2.`id`', $query);
         }
 
-        $nodeList  = $this->zanodeTao->getZaNodeListByQuery($query, $orderBy, $pager);
-        $hosts = $this->zanodeTao->getHostsByIDList(array_unique(array_column($nodeList, 'parent')));
+        $nodeList = $this->zanodeTao->getZaNodeListByQuery($query, $orderBy, $pager);
+        $hosts    = $this->zanodeTao->getHostsByIDList(array_unique(array_column($nodeList, 'parent')));
+        $osList   = $this->config->zanode->linuxList + $this->config->zanode->windowsList;
 
         foreach($nodeList as $node)
         {
@@ -415,6 +416,11 @@ class zanodemodel extends model
                 }
 
                 if($host->status != 'online' || time() - strtotime($host->heartbeat) > 60) $node->status = $node->hostType == '' ? 'wait' : 'offline';
+            }
+
+            if(!empty($osList[$node->osName]))
+            {
+                $this->dao->update(TABLE_ZAHOST)->set('osName')->eq($osList[$node->osName])->where('id')->eq($node->id)->exec();
             }
         }
 
