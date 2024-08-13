@@ -232,9 +232,8 @@ $treeDom = isset($outlineTree) ? div
 $toggleTreeBtn = isset($outlineTree) ? btn
 (
     setID('outlineToggle'),
-    setClass('canvas ring-0 absolute right-8'),
-    setStyle('top', '60px'),
-    icon('menu-arrow-right'),
+    setClass('canvas ring-0 absolute right-2 top-0'),
+    icon('menu-arrow-left'),
     on::click()->do('$("#docPanel").toggleClass("show-outline")'),
 ) : null;
 
@@ -262,7 +261,7 @@ panel
     to::heading($docHeader),
     div
     (
-        setClass('flex-auto w-full row'),
+        setClass('flex-auto w-full row relative'),
         $contentDom,
         div
         (

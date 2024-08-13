@@ -14,3 +14,4 @@
 .show-history #hisTrigger {color: var(--color-primary-500)}
 #docHistory .history-panel {padding: 0;}
 #docHistory .panel-heading {padding-top: 0;}
+.show-outline #outlineToggle > .icon {transform: rotate(180deg);}
