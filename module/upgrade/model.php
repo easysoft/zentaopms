@@ -9599,7 +9599,7 @@ class upgradeModel extends model
      */
     public function createDefaultDoclibSpace()
     {
-        $this->app->loadLang('doclib');
+        $this->app->loadLang('doc');
 
         $doclib = new stdclass();
         $doclib->type      = 'custom';
