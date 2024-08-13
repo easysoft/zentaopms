@@ -45,8 +45,7 @@ class rate_of_planned_developed_story_in_execution_when_closing extends baseCalc
             $finish = isset($storyFinish[$execution]) ? $storyFinish[$execution] : 0;
             $link   = isset($storyLink[$execution])   ? $storyLink[$execution]   : 0;
 
-            if($finish == 0 || $link == 0) continue;
-            $this->result[$execution] = round($finish / $link, 4);
+            $this->result[$execution] = $link == 0 ? 0 : round($finish / $link, 4);
         }
     }
 

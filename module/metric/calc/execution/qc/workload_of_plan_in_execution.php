@@ -45,8 +45,7 @@ class workload_of_plan_in_execution extends baseCalc
             $story = isset($stories[$execution]) ? $stories[$execution] : 0;
             $hour  = isset($hours[$execution]) ? $hours[$execution] : 0;
 
-            if($hour == 0) continue;
-            $this->result[$execution] = round($story / $hour, 4);
+            $this->result[$execution] = $hour == 0 ? 0 : round($story / $hour, 4);
         }
     }
 
