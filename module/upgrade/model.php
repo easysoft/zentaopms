@@ -9621,6 +9621,7 @@ class upgradeModel extends model
                  ->set('parent')->eq($doclibID)
                  ->where('vision')->eq($vision)
                  ->andWhere('type')->eq('custom')
+                 ->andWhere('id')->ne($doclibID)
                  ->exec();
         }
     }
