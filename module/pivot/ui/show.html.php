@@ -52,7 +52,7 @@ $fnGenerateFilters = function() use($pivot, $showOrigin, $lang)
     return div
     (
         setID('conditions'),
-        setClass('flex justify-start bg-canvas mt-4 mb-2 w-full' . ($isSingleFilter ? ' flex-wrap' : ' items-center')),
+        setClass('flex justify-start bg-canvas mt-4 mb-2 w-full', array('flex-wrap' => $isSingleFilter, 'items-center' => !$isSingleFilter)),
         $isSingleFilter ? $filters : div
         (
             setClass('flex flex-wrap w-full'),
