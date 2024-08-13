@@ -1169,6 +1169,16 @@ class doc extends control
         $this->display();
     }
 
+    /**
+     * 移动文档
+     * Move Document.
+     *
+     * @param  int    $docID
+     * @param  int    $libID
+     * @param  string $space  mine|[int]
+     * @access public
+     * @return void
+     */
     public function moveDoc(int $docID, int $libID = 0, string $space = '')
     {
         $doc = $this->doc->getByID($docID);
@@ -1195,7 +1205,7 @@ class doc extends control
         if(empty($space)) $space = $lib->type == 'mine' ? 'mine' : $lib->parent;
 
         $libPairs = $this->doc->getLibPairs($space == 'mine' ? 'mine' : 'custom', '', (int)$space);
-        if(!isset($libPairs[$libID])) $libID = key($libPairs);
+        if(!isset($libPairs[$libID])) $libID = (int)key($libPairs);
 
         $this->view->docID      = $docID;
         $this->view->libID      = $libID;
