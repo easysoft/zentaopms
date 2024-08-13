@@ -1977,7 +1977,7 @@ class repo extends control
     }
 
     /**
-     * 分支下提交记录。
+     * 获取分支下提交记录。
      * Commit records of branch.
      *
      * @param  int    $repoID
