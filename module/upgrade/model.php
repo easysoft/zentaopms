@@ -6982,7 +6982,7 @@ class upgradeModel extends model
      */
     public function xuanNotifyJitsiConference()
     {
-        $users = array_keys($this->dao->select('id')->from(TABLE_USER)->where('admin')->ne('super')->andWhere('deleted')->eq('0')->fetchAll('id'));
+        $users = array_keys($this->dao->select('id')->from(TABLE_USER)->where('deleted')->eq('0')->fetchAll('id'));
         $super = array_values(explode(',', $this->dao->select('admins')->from(TABLE_COMPANY)->where('id')->eq($this->app->company->id)->fetch('admins')));
         $this->loadModel('im');
         $sender = new stdclass();
