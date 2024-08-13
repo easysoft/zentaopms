@@ -90,7 +90,7 @@ function jsVar()
     call_user_func_array('\zin\context::jsVar', func_get_args());
 }
 
-function css()
+function pageCSS()
 {
     call_user_func_array('\zin\context::css', func_get_args());
 }
