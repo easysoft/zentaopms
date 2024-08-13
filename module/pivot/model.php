@@ -1271,71 +1271,88 @@ class pivotModel extends model
         return $flattenGroupRecords;
     }
 
+
     /**
-     * Calculate merge cell config.
+     * Calculate group merge cell config.
      *
-     * @param  array    $groups
-     * @param  array    $records
+     * @param  array $groups
+     * @param  array $records
      * @access public
      * @return array
      */
-    public function calculateMergeCellConfig(array $groups, array $records)
+    public function calculateGroupMergeCellConfig(array $groups, array $records): array
     {
-        $configs = array();
-        foreach($groups as $index => $group)
+        $getGroupValue = function($groups, $groupIndex, $record)
         {
-            if($index == 0)
+            $values = array();
+            foreach($groups as $index => $group)
             {
-                $groupRecords = array();
-                foreach($records as $record) $groupRecords[$record->$group][] = $record;
+                if($index > $groupIndex) break;
+                $values[] = $record->$group;
             }
 
-            $haveNext = isset($groups[$index + 1]);
-            $this->getColumnConfig($groupRecords, $configs, $groups, $index, $haveNext);
+            return implode('-', $values);
+        };
+
+        $setConfig = function($configs, $lastConfig, $groupIndex)
+        {
+            extract($lastConfig);
+            if(!isset($configs[$startIndex])) $configs[$startIndex] = array();
+            $configs[$startIndex][$groupIndex] = $lineCount;
+            return $configs;
+        };
+
+        $configs = array();
+        foreach($groups as $groupIndex => $group)
+        {
+            $lastGroup  = null;
+            $lastConfig = array();
+            foreach($records as $rowIndex => $record)
+            {
+                $groupValue = $getGroupValue($groups, $groupIndex, $record);
+                /* 上一个分组的值与当前分组的值不一致。*/
+                if($lastGroup !== $groupValue)
+                {
+                    /* 如果不是首行，那么需要记录config。*/
+                    if($rowIndex != 0) $configs = $setConfig($configs, $lastConfig, $groupIndex);
+
+                    $lastGroup  = $groupValue;
+                    $lastConfig = array('startIndex' => $rowIndex, 'lineCount' => 1);
+                }
+                elseif($rowIndex != 0)
+                {
+                    $lastConfig['lineCount'] += 1;
+                }
+            }
+
+            $configs = $setConfig($configs, $lastConfig, $groupIndex);
         }
+
         return $configs;
     }
 
     /**
-     * Get column config to merge table cell.
+     * Calculate column merge cell config.
      *
-     * @param  array $groupRows
      * @param  array $configs
-     * @param  array $groups
-     * @param  int   $index
-     * @param  bool  $haveNext
+     * @param  array $showOrigins
      * @access public
-     * @return void
-     *
-     * Init $groupRows like this: array('people1' => [0 => ['create' => 'people1', 'product' => 'product1']], 'people2' => ['create' => 'people2', 'product' => 'product2']])
-     * The second time the function is executed, groupRows is passed in array('people1_product1' => [0 => ['create' => 'people1', 'product' => 'product1']], 'people2_product2' => ['create' => 'people2', 'product' => 'product2']])
-     *
-     * The key value of this array is unique;
+     * @return array
      */
-    public function getColumnConfig(array &$groupRows, array &$configs, array $groups, int $index, bool $haveNext): void
+    public function calculateColumnMergeCellConfig(array $configs, array $showOrigins): array
     {
-        $newRows = array();
-        $start = 1;
-        $next  = $index + 1;
-        foreach($groupRows as $key => $datas)
+        foreach($configs as $rowIndex => $config)
         {
-            $number = count($datas);
-
-            $configs[$start - 1][$next - 1] = $number;
-            $start += $number;
-
-            if($haveNext)
+            $lineCount = end($config);
+            foreach($showOrigins as $colIndex => $showOrigin)
             {
-                $nextGroup = $groups[$next];
-                foreach($datas as $data)
-                {
-                    $newKey = $key . '_' . $data->$nextGroup;
-                    $newRows[$newKey][] = $data;
-                }
+                if($showOrigin === 1) continue;
+                $config[$colIndex] = $lineCount;
             }
+            $configs[$rowIndex] = $config;
         }
 
-        if($haveNext) $groupRows = $newRows;
+        return $configs;
     }
 
     /**
@@ -1418,7 +1435,7 @@ class pivotModel extends model
         $data->columnTotal = isset($settings['columnTotal']) ? $settings['columnTotal'] : '';
         $data->drills      = $mergeDrillRecords;
 
-        $configs = $this->calculateMergeCellConfig($groups, $mergeRecords);
+        $configs = $this->calculateMergeCellConfig($groups, $settings['columns'], $mergeRecords);
 
         /* $data->groups  array 代表分组，最多三个
          * $data->cols    array thead数据，其中对象有三个属性：name：分组，label：列的名字，isGroup：标识是不是分组
