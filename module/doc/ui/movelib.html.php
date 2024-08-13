@@ -58,6 +58,7 @@ formPanel
         formGroup
         (
             set::label($lang->doc->whiteList),
+            set::width('5/6'),
             div
             (
                 setClass('w-full check-list'),
