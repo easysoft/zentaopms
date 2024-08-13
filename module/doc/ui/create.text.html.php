@@ -65,12 +65,12 @@ $basicInfoModal = modal
         set::required(true),
         set::control(array('control' => 'picker', 'name' => 'product', 'items' => $objects, 'required' => true, 'value' => $objectID))
     ) : null,
-    ($lib->type == 'mine' || $lib->type == 'custom') ? formGroup
+    isset($spaces) ? formGroup
     (
         set::width('1/2'),
         set::label($lang->doc->space),
         set::required(true),
-        set::control(array('control' => 'picker', 'name' => 'space', 'items' => $spaces, 'required' => true, 'value' => $objectID))
+        set::control(array('control' => 'picker', 'name' => 'space', 'items' => $spaces, 'required' => true, 'value' => $objectID, 'disabled' => $lib->type == 'mine'))
     ) : null,
     formGroup
     (

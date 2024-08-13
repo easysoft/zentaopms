@@ -383,11 +383,11 @@ class doc extends control
         if(is_string($libData)) return $this->locate($libData);
         list($libs, $libID, $object, $objectID, $objectDropdown) = $libData;
         if($this->config->edition != 'open') $this->loadModel('file');
+        if($lib->type == 'custom' || $lib->type == 'mine') $this->view->spaces = $this->docZen->getAllSpaces($lib->type == 'mine' ? 'onlymine' : 'nomine');
 
         $this->view->title            = zget($lib, 'name', '', $lib->name . $this->lang->hyphen) . $this->lang->doc->create;
         $this->view->object           = $object;
         $this->view->objectDropdown   = $objectDropdown;
-        $this->view->spaces           = $this->docZen->getAllSpaces();
         $this->view->libTree          = $this->doc->getLibTree((int)$libID, $libs, $objectType, (int)$moduleID, (int)$objectID);
         $this->view->linkParams       = "objectID={$objectID}&%s&browseType=&orderBy=status,id_desc&param=0";
 

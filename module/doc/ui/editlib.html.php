@@ -51,7 +51,7 @@ formPanel
         set::control('picker'),
         set::value($targetSpace),
         set::items($spaces),
-        set::disabled($libType == 'mine' ? true : false),
+        set::disabled($libType == 'mine'),
         set::required(true),
         on::change('changeSpace')
     ) : null,
