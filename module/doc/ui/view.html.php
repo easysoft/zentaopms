@@ -113,7 +113,7 @@ if(!empty($editors))
 $docHeader = div
 (
     setID('docHeader'),
-    setClass('w-full row items-center gap-4'),
+    setClass('w-full row items-center gap-4 sticky top-0 z-10 bg-canvas py-3 pl-4 pr-2'),
     div
     (
         setClass('flex-auto row items-center min-w-0 gap-2'),
@@ -272,10 +272,10 @@ $historyDom = div
 panel
 (
     setID('docPanel'),
-    setClass('ring  scrollbar-hover overflow-y-auto'),
-    set::headingClass('sticky top-0 z-10 bg-canvas'),
+    setClass('ring scrollbar-hover overflow-y-auto'),
     set::bodyClass('w-full p-0'),
-    to::heading($docHeader),
+    set::bodyProps(array('id' => 'docBody')),
+    $docHeader,
     div
     (
         setClass('flex-auto w-full row relative'),
@@ -283,7 +283,8 @@ panel
         div
         (
             setID('docSidebar'),
-            setClass('flex-none w-72 overflow-y-auto scrollbar-hover sticky border-l'),
+            setClass('flex-none overflow-y-auto scrollbar-hover sticky border-l'),
+            setStyle('width', 'var(--doc-sidebar-width)'),
             $treeDom,
             $historyDom,
         ),

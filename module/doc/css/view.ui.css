@@ -2,10 +2,12 @@
 .m-doc-view .doc-menu {max-height: calc(100vh - 115px);}
 .m-doc-view #pick-docDropmenuMenu {position: relative; top: auto; margin-bottom: 12px; background: var(--color-canvas);}
 
-#docPanel {max-height: calc(100vh - 72px);}
+#docPanel {max-height: calc(100vh - 72px); --doc-max-width: 1120; --doc-sidebar-width: 0px;}
 #docEditor {margin: 0 -0.75em -1.25em -1em}
 .doc-menu [data-type="mine"] + menu {max-height: calc(100vh - 300px);}
+#docBody {margin: 0 auto; max-width: calc(var(--doc-max-width) + var(--doc-sidebar-width));}
 
+#docPanel.show-outline, #docPanel.show-history {--doc-sidebar-width: 300px;}
 #docOutline, #docHistory, #docSidebar {display: none;}
 .show-outline #docSidebar, .show-history #docSidebar,
 .show-outline #docOutline, .show-history #docHistory {display: block;}
@@ -15,3 +17,6 @@
 #docHistory .history-panel {padding: 0;}
 #docHistory .panel-heading {padding-top: 0;}
 .show-outline #outlineToggle > .icon {transform: rotate(180deg);}
+
+@media (max-width: 1366px) {#docPanel {--doc-max-width: 760px}}
+@media (max-width: 1920px) {#docPanel {--doc-max-width: 920px}}
