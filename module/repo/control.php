@@ -1992,14 +1992,15 @@ class repo extends control
         $pageSize = 10;
 
         $this->app->loadClass('pager', true);
-        $pager             = new pager(0, $pageSize, 1);
+        $pager = new pager(0, $pageSize, 1);
+
         $pager->recPerPage = $pageSize;
         $commits           = $this->repo->getCommits($repo, '', $branchID, 'dir', $pager, '', '', null);
 
         $retCommits = array();
         if(!empty($commits))
         {
-            foreach ($commits as $item) array_push($retCommits, array('commitID'=>$item->revision, 'shortID'=>substr($item->revision,0,7), 'message'=>$item->message));
+            foreach ($commits as $item) array_push($retCommits, array('commitID'=>$item->revision, 'shortID'=>substr($item->revision, 0, 10), 'message'=>$item->message));
         }
         echo json_encode($retCommits);
     }

@@ -2099,7 +2099,7 @@ class bugModel extends model
     public function updateLinkedCommits(int $bugID, int $repoID, array $revisions): bool
     {
         if(!$bugID || !$repoID || empty($revisions)) return true;
-        $bug = $this->dao->select('product')->from(TABLE_BUG)->where('id')->eq($bugID)->fetch();
+        $bug = $this->dao->select('product, project')->from(TABLE_BUG)->where('id')->eq($bugID)->fetch();
         if(!$bug) return true;
         foreach($revisions as $revision)
         {
