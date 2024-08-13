@@ -1270,7 +1270,7 @@ class doc extends control
         if(empty($lib)) return print('');
         if($lib->acl == 'open') return print('');
 
-        $authAccounts = array();
+        $authAccounts[$lib->addedBy] = $lib->addedBy;
         if($lib->groups) $authAccounts += $this->loadModel('group')->getGroupAccounts(explode(',', $lib->groups));
         if($lib->users)
         {
