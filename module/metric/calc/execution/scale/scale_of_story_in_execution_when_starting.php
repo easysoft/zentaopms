@@ -22,7 +22,7 @@ class scale_of_story_in_execution_when_starting extends baseCalc
 {
     public $dataset = 'getExecutionDevStories';
 
-    public $fieldList = array('t1.id as execution', 't1.multiple', "if(t1.multiple = '1', t1.realBegan, t5.realBegan) as realBegan", 't3.story', 't4.estimate', 't6.action', 't6.id as actionID', 't6.date as actionDate');
+    public $fieldList = array('t1.id as execution', 't1.multiple', "if(t1.multiple = '1', t1.realBegan, t5.realBegan) as realBegan", 't3.story', 't4.estimate', 't4.isParent', 't6.action', 't6.id as actionID', 't6.date as actionDate');
 
     public $result = array();
 
@@ -31,16 +31,19 @@ class scale_of_story_in_execution_when_starting extends baseCalc
 
     public function calculate($row)
     {
-        // 关联、取消关联的时间是否小于等于项目的开始时间
-        $actionDate = !helper::isZeroDate($row->actionDate) ? substr($row->actionDate, 0, 10) : null;
-        $realBegan  = !helper::isZeroDate($row->realBegan)  ? $row->realBegan : null;
-
-        $condition1 = ($actionDate && $realBegan && $actionDate <= $realBegan);
-        if(!isset($this->storyInfo[$row->story])) $this->storyInfo[$row->story] = array('link' => 0, 'unlink' => 0, 'estimate' => $row->estimate, 'execution' => $row->execution);
-        if($condition1)
+        if($row->isParent == '0')
         {
-            if($row->action == 'linked2execution' || ($row->multiple == 0 && $row->action == 'linked2project'))     $this->storyInfo[$row->story]['link'] += 1;
-            if($row->action == 'unlinked2execution' || ($row->multiple == 0 && $row->action == 'unlinked2project')) $this->storyInfo[$row->story]['unlink'] += 1;
+            // 关联、取消关联的时间是否小于等于项目的开始时间
+            $actionDate = !helper::isZeroDate($row->actionDate) ? substr($row->actionDate, 0, 10) : null;
+            $realBegan  = !helper::isZeroDate($row->realBegan)  ? $row->realBegan : null;
+
+            $condition1 = ($actionDate && $realBegan && $actionDate <= $realBegan);
+            if(!isset($this->storyInfo[$row->story])) $this->storyInfo[$row->story] = array('link' => 0, 'unlink' => 0, 'estimate' => $row->estimate, 'execution' => $row->execution);
+            if($condition1)
+            {
+                if($row->action == 'linked2execution' || ($row->multiple == 0 && $row->action == 'linked2project'))     $this->storyInfo[$row->story]['link'] += 1;
+                if($row->action == 'unlinked2execution' || ($row->multiple == 0 && $row->action == 'unlinked2project')) $this->storyInfo[$row->story]['unlink'] += 1;
+            }
         }
     }
 
