@@ -27,7 +27,7 @@ $basicInfoModal = modal
     on::change('[name=lib],[name^=users]', 'checkLibPriv'),
     formGroup
     (
-        setClass('flex items-center'),
+        setClass('flex items-center preserve-on-morph'),
         set::label($lang->doc->title),
         set::name('title'),
         set::control('input'),
@@ -167,9 +167,10 @@ formBase
 (
     set::actions(false),
     set::ajax(array('beforeSubmit' => jsRaw($handleSubmitForm))),
+    set::morph(),
     panel
     (
-        setClass('doc-form'),
+        setClass('doc-form preserve-on-morph'),
         to::heading
         (
             input

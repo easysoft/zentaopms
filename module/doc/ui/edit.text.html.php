@@ -146,10 +146,11 @@ $handleSubmitForm = <<<'JS'
 formBase
 (
     set::actions(false),
+    set::morph(),
     set::ajax(array('beforeSubmit' => jsRaw($handleSubmitForm))),
     panel
     (
-        setClass('doc-form'),
+        setClass('doc-form preserve-on-morph'),
         to::heading
         (
             input
