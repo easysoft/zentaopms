@@ -12,26 +12,17 @@ namespace zin;
 
 to::header
 (
-   span
-   (
-       $lang->testcase->automation,
-       setClass('text-lg font-bold')
-   ),
-   icon
-   (
-       'help',
-       setClass('text-gray'),
-       toggle::tooltip
-       (
-           array
-           (
-               'title'     => $lang->zanode->automationTips,
-               'placement' => 'right',
-               'type'      => 'white',
-               'className' => 'text-dark border border-light'
-           )
-       )
-   )
+    span
+    (
+        $lang->testcase->automation,
+        setClass('text-lg font-bold')
+    ),
+    icon
+    (
+        'help',
+        set::title($lang->zanode->automationTips),
+        setClass('text-gray')
+    )
 );
 
 formPanel
