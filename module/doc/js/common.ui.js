@@ -312,11 +312,11 @@ window.checkObjectPriv = function(e)
     if($object.length > 0) objectID = $object.val();
     if(libType == 'project')
     {
-        let $extension = $('[name=execution]');
-        if($extension.length > 0 && $extension.val())
+        let $execution = $('[name=execution]');
+        if($execution.length > 0 && parseInt($execution.val()) > 0)
         {
             objectType = 'execution';
-            objectID   = $extension.val();
+            objectID   = $execution.val();
         }
     }
     if(objectID == 0) return;
