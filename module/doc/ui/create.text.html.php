@@ -179,7 +179,7 @@ formBase
                 set::maxlength(100),
                 set::placeholder($lang->doc->titlePlaceholder),
                 setData('title-hint', sprintf($lang->error->notempty, $lang->doc->title)),
-                on::init()->do('$element.on("change input", () => $("#title").val($element.val()))')
+                on::init()->do('$element.on("change input", () => {$("#title").val($element.val()).removeClass("has-error");$("#titleTip").remove();})')
             )
         ),
         set::headingActions($headingActions),
