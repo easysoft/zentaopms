@@ -2598,11 +2598,10 @@ class pivotModel extends model
      * @param  object $drill
      * @param  array  $conditions
      * @param  array  $filterValues
-     * @param  string $status
      * @access public
      * @return array
      */
-    public function getDrillDatas(object $pivotState, object $drill, string $status, array $conditions, array $filterValues = array()): array
+    public function getDrillDatas(object $pivotState, object $drill, array $conditions, array $filterValues = array()): array
     {
         $filters = $pivotState->setFiltersDefaultValue($filterValues);
         foreach($conditions as $index => $condition)
