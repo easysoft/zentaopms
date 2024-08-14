@@ -169,6 +169,11 @@ class zanode extends control
                 ->add('editedDate', helper::now())
                 ->get();
 
+            $this->config->zanode->create->requiredFields = 'name';
+            $checkResult = $this->zanode->checkFields4Create($hostInfo);
+
+            if(!$checkResult) return $this->sendError(dao::getError());
+
             $changes = $this->zanode->update($id, $hostInfo);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 

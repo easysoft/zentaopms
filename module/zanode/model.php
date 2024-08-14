@@ -305,8 +305,8 @@ class zanodemodel extends model
         if($node->hostType != 'physics')
         {
             $req = array( 'name' => $node->name );
-            $agnetUrl = 'http://' . $node->ip . ':' . $node->hzap;
-            $result = commonModel::http($agnetUrl . '/api/v1/kvm/remove', json_encode($req), array(), array("Authorization:$node->tokenSN"), 'data', 'POST', 10);
+            $agentUrl = 'http://' . $node->ip . ':' . $node->hzap;
+            $result = commonModel::http($agentUrl . '/api/v1/kvm/remove', json_encode($req), array(), array("Authorization:$node->tokenSN"), 'data', 'POST', 10);
 
             $data = json_decode($result, true);
             if(empty($data)) return $this->lang->zanode->notFoundAgent;
