@@ -150,6 +150,9 @@ $lang->repo->sourceCommit       = 'Commit';
 $lang->repo->relations          = 'Relations';
 $lang->repo->story              = 'Story';
 $lang->repo->searchTips         = 'Search by %s';
+$lang->repo->design             = 'Design';
+$lang->repo->bug                = 'Bug';
+$lang->repo->task               = 'Task';
 
 $lang->repo->title      = 'Title';
 $lang->repo->status     = 'Status';
