@@ -47,17 +47,10 @@ function onCopy()
     document.getElementById('initBash').select();
     document.execCommand("Copy");
     $('#initBash').addClass('hidden');
-    $('.btn-init-copy').tooltip({
-        trigger: 'click',
-        placement: 'bottom',
-        title: zahostLang.copied,
-        tipClass: 'tooltip-success'
-    });
 
-    $(this).tooltip('show');
-    var that = this;
-    setTimeout(function()
-    {
-        $(that).tooltip('hide')
-    }, 2000)
+    zui.Messager.show({
+        type:    'success',
+        content: zahostLang.copied,
+        time:    2000
+    });
 }
