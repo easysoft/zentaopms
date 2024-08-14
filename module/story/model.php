@@ -5376,7 +5376,6 @@ class storyModel extends model
      */
     public function updateLinkedCommits(int $storyID, int $repoID, array $revisions): bool
     {
-        file_put_contents('/tmp/t.log', 'story: '. var_export(func_get_args(), true)."\n", FILE_APPEND);
         if(!$storyID || !$repoID || empty($revisions)) return true;
         $story = $this->dao->select('product')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
         if(!$story) return true;
