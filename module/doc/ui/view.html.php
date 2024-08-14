@@ -67,7 +67,9 @@ if($doc->keywords)
 }
 
 $docMoreActions = array();
-if(hasPriv('doc', 'movedoc') && ($lib->type === 'custom' || $lib->type === 'mine'))
+$isCreator      = isset($doc->addedBy) && $doc->addedBy == $this->app->user->account;
+$canMoveDoc     = $isCreator && hasPriv('doc', 'movedoc');
+if($canMoveDoc && ($lib->type === 'custom' || $lib->type === 'mine'))
 {
     $docMoreActions[] = array
     (
