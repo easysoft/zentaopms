@@ -309,7 +309,7 @@ class metricZen extends metric
 
         $dateConfig   = $this->metric->parseDateStr($date, $dateType);
         $recordCommon = $this->buildRecordCommonFields($metric->id, $code, $now, $dateConfig);
-        $initRecords  = $this->initMetricRecords($recordCommon, $metric->scope, "{$date} 23:59:59");
+        $initRecords  = !$calc->initRecord ? array() : $this->initMetricRecords($recordCommon, $metric->scope, "{$date} 23:59:59");
 
         $results = $calc->getResult($dateConfig);
         if(is_array($results))
