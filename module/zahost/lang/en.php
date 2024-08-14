@@ -19,8 +19,8 @@ $lang->zahost->copied         = 'Copy successful';
 $lang->zahost->baseInfo       = 'Basic information';
 
 $lang->zahost->name        = 'Name';
-$lang->zahost->IP          = 'Extranet Address';
-$lang->zahost->extranet    = 'Extranet Address';
+$lang->zahost->IP          = 'Host';
+$lang->zahost->extranet    = 'Host';
 $lang->zahost->memory      = 'Memory Size';
 $lang->zahost->cpuCores    = 'CPU';
 $lang->zahost->diskSize    = 'Disk Size';

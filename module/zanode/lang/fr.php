@@ -69,7 +69,7 @@ $lang->zanode->showPwd         = 'Show Password';
 $lang->zanode->hidePwd         = 'Hide Password';
 $lang->zanode->baseInfo        = 'Basic information';
 $lang->zanode->cpuUnit         = 'CORE';
-$lang->zanode->IP              = 'Extranet Address';
+$lang->zanode->IP              = 'Host';
 
 $lang->zanode->typeList['node']    = 'Virtual machine';
 $lang->zanode->typeList['physics'] = 'Physical machine';
