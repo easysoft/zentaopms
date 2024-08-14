@@ -588,6 +588,7 @@ class repo extends control
         $designs     = $this->loadModel('design')->getLinkedCommits($repoID, $revisionIds);
         $tasks       = $this->loadModel('task')->getLinkedCommits($repoID, $revisionIds);
         $bugs        = $this->loadModel('bug')->getLinkedCommits($repoID, $revisionIds);
+        /* Set tips and buttons for different relations. */
         foreach($logs as $logItem)
         {
             $logItem->relationFieldTips = '';
@@ -596,7 +597,7 @@ class repo extends control
                 if(!empty(${$fieldType}[$logItem->revision]))
                 {
                     $fieldCommits = ${$fieldType}[$logItem->revision];
-                    $logItem->relationFieldTips .= $this->lang->repo->{$moduleName};
+                    $logItem->relationFieldTips .= ' ' . $this->lang->repo->{$moduleName};
                     foreach($fieldCommits as $item) $item->url = !empty($item->id) ? $this->createLink($moduleName, 'view', "{$moduleName}ID=" . $item->id) : '';
                     $logItem->relationFieldTips .= ' #'.implode(' #', array_column($fieldCommits, 'id'));
                     $logItem->relationField[$fieldType] = ${$fieldType}[$logItem->revision];
