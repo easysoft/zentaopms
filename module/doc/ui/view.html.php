@@ -114,7 +114,6 @@ $docHeader = div
     div
     (
         setClass('flex-auto row items-center min-w-0 gap-2'),
-        setStyle('max-width', 'calc(100% - 200px)'),
         div
         (
             setClass('title clip inline-flex text-xl font-bold'),
@@ -154,8 +153,7 @@ $docHeader = div
                 set::type('ghost'),
                 set::url(createLink('doc', 'edit', "docID=$doc->id")),
                 $doc->type != 'text' ? setData('toggle', 'modal') : null,
-                set::icon('edit text-primary'),
-                set::text($lang->edit)
+                set::icon('edit')
             ) : null,
             dropdown
             (
@@ -163,8 +161,8 @@ $docHeader = div
                 (
                     set::type('ghost'),
                     set::caret(false),
-                    span(setClass('more-vert text-primary')),
-                    span($lang->more),
+                    set::square(),
+                    span(setClass('more-vert'))
                 ),
                 set::items($docMoreActions)
             )
@@ -219,10 +217,12 @@ $contentDom = div
     ),
     div
     (
-        setClass('docFile'),
-        $doc->files ? h::hr(setClass('mt-4')) : null,
+        setID('docFile'),
+        $doc->files ? setClass('surface px-4 pt-4 pb-2 rounded mb-4') : null,
         $doc->files ? fileList
         (
+            setClass('bg-transparent'),
+            set::padding(false),
             set::objectType('doc'),
             set::objectID($doc->id),
             set::files($doc->files)
