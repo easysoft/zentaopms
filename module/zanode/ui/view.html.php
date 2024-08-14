@@ -390,7 +390,7 @@ detailBody
             ),
             span
             (
-                ' ZenAgent ',
+                ' ZAgent ',
                 span
                 (
                     setClass('zenagent-status'),
