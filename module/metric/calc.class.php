@@ -691,4 +691,19 @@ class baseCalc
 
         return $actualDays;
     }
+
+    public function getExecutions()
+    {
+        global $dao;
+        $executions = $dao->select("t1.id, t1.name, if(t1.multiple='1', t1.status, t2.status) as status, if(t1.multiple='1', t1.realBegan, t2.realBegan) as realBegan, if(t1.multiple='1', t1.closedDate, t2.closedDate) as closedDate")->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t1.type')->in('sprint,stage,kanban')
+            ->andWhere("t1.vision LIKE '%rnd%'", true)
+            ->orWhere("t1.vision IS NULL")->markRight(1)
+            ->fetchAll('id');
+
+        return $executions;
+    }
 }
