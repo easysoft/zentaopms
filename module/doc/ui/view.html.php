@@ -33,9 +33,12 @@ if($config->edition != 'open' && common::hasPriv('doc', 'diff'))
     $versionMenuOptions['checkOnClick'] = '.has-checkbox .item';
 }
 
-$star        = strpos($doc->collector, ',' . $app->user->account . ',') !== false ? 'star' : 'star-empty';
-$collectLink = $this->createLink('doc', 'collect', "objectID=$doc->id");
-$starBtn     = "<a data-url='$collectLink' title='{$lang->doc->collect}' class='ajax-submit btn btn-link'>" . html::image("static/svg/{$star}.svg", "class='$star'") . '</a>';
+$canCollect = hasPriv('doc', 'collect') && !$doc->deleted;
+if($canCollect)
+{
+    $star        = strpos($doc->collector, ',' . $app->user->account . ',') !== false ? 'star' : 'star-empty';
+    $starBtn     = "<a title='{$lang->doc->collect}' class='btn btn-link square doc-collect-btn' href='javascript:collectDoc(\"$doc->id\")'><img src='" . "static/svg/{$star}.svg" . '\'></a>';
+}
 
 /* 导入资产库的按钮. */
 $importLibItems = array();
@@ -89,7 +92,7 @@ if(hasPriv('doc', 'delete') && !$doc->deleted)
         'url'          => createLink('doc', 'delete', "docID=$doc->id"),
         'icon'         => 'trash',
         'text'         => $lang->delete,
-        'data-confirm' => array('message' => $lang->doc->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x'),
+        'data-confirm' => array('message' => $lang->doc->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x')
     );
 }
 if(!empty($docMoreActions)) $docMoreActions[] = array('type' => 'divider');
@@ -156,11 +159,11 @@ $docHeader = div
             setClass('toolbar'),
             btn
             (
-                setClass('btn ghost'),
+                setClass('btn ghost square'),
                 icon('fullscreen'),
                 set::url('javascript:$("#docPanel").fullscreen()'),
             ),
-            common::hasPriv('doc', 'collect') && !$doc->deleted ? html($starBtn) : null,
+            $canCollect ? html($starBtn) : null,
             ($config->vision == 'rnd' and ($config->edition == 'max' or $config->edition == 'ipd') and $app->tab == 'project') ? $importLibBtn : null,
             common::hasPriv('doc', 'edit') && !$doc->deleted ? btn
             (
