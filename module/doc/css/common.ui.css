@@ -3,7 +3,7 @@
 .doc-title .ajaxCollect > img {width: 16px;}
 
 .doc-form .form-control {--tw-ring-shadow: none; outline: none}
-.doc-form .panel-body {min-height: calc(100vh - 120px); display: flex; align-items: stretch; justify-content: stretch;}
+.doc-form .panel-body {min-height: calc(100vh - 127px); display: flex; align-items: stretch; justify-content: stretch;}
 .doc-form .editor-container {height: auto!important; box-shadow: none!important;}
 
 .table-empty-tip {padding: 80px 10px; text-align: center; background: #fff;}
