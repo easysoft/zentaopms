@@ -95,7 +95,7 @@ class pivot extends control
         }
 
         $pivot      = $this->pivot->getByID($pivotID);
-        $pivotState = $this->pivotZen->initPivotState($pivot);
+        $pivotState = $this->pivotZen->initPivotState($pivot, $status == 'design');
         $cols       = $this->pivot->getDrillCols($drill->object);
         $datas      = $value == 0 ? array() : $this->pivot->getDrillDatas($pivotState, $drill, $mergeConditions, $filterValues);
 
