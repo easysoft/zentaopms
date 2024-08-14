@@ -1882,8 +1882,6 @@ class repoModel extends model
                     }
                 }
             }
-
-            file_put_contents('/tmp/t.log', 'objects:' . var_export($objects, true)."\n", FILE_APPEND);
             if(!empty($objects['stories']) || !empty($objects['tasks']) || !empty($objects['bugs']))
             {
                 $historyLog = new stdclass();
