@@ -118,38 +118,22 @@ function sshCopy()
 {
     copyToClipboard($('#ssh-copy').val());
 
-    $('.btn-ssh-copy').tooltip({
-        trigger: 'click',
-        placement: 'bottom',
-        title: zanodeLang.copied,
-        tipClass: 'tooltip-success'
+    zui.Messager.show({
+        type:    'success',
+        content: zanodeLang.copied,
+        time:    2000
     });
-
-    $(this).tooltip('show');
-    var that = this;
-    setTimeout(function()
-    {
-        $(that).tooltip('hide')
-    }, 2000)
 }
 
 function pwdCopy()
 {
     copyToClipboard($('#pwd-copy').val());
 
-    $('.btn-pwd-copy').tooltip({
-        trigger: 'click',
-        placement: 'bottom',
-        title: zanodeLang.copied,
-        tipClass: 'tooltip-success'
+    zui.Messager.show({
+        type:    'success',
+        content: zanodeLang.copied,
+        time:    2000
     });
-
-    $(this).tooltip('show');
-    var that = this;
-    setTimeout(function()
-    {
-        $(that).tooltip('hide')
-    }, 2000)
 }
 
 function pwdShow()
@@ -172,23 +156,13 @@ function pwdShow()
 
 function onCopy()
 {
-    $('#initBash').removeClass('hidden');
-    document.getElementById('initBash').select();
-    document.execCommand("Copy");
-    $('#initBash').addClass('hidden');
-    $('.btn-init-copy').tooltip({
-        trigger: 'click',
-        placement: 'bottom',
-        title: zanodeLang.copied,
-        tipClass: 'tooltip-success'
-    });
+    copyToClipboard($('#initBash').val());
 
-    $(this).tooltip('show');
-    var that = this;
-    setTimeout(function()
-    {
-        $(that).tooltip('hide')
-    }, 2000)
+    zui.Messager.show({
+        type:    'success',
+        content: zanodeLang.copied,
+        time:    2000
+    });
 }
 
 $(function()
