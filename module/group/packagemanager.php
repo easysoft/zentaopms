@@ -2041,7 +2041,7 @@ $config->group->package->browseZAHost = new stdclass();
 $config->group->package->browseZAHost->order  = 5;
 $config->group->package->browseZAHost->subset = 'autotest';
 $config->group->package->browseZAHost->privs  = array();
-$config->group->package->browseZAHost->privs['zahost-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('zanode-instruction'), 'recommend' => array('zahost-view'));
+$config->group->package->browseZAHost->privs['zahost-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array('zahost-view'));
 $config->group->package->browseZAHost->privs['zahost-view']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('zahost-browse'), 'recommend' => array());
 
 $config->group->package->manageZAHost = new stdclass();
@@ -2069,7 +2069,7 @@ $config->group->package->browseZANode = new stdclass();
 $config->group->package->browseZANode->order  = 5;
 $config->group->package->browseZANode->subset = 'autotest';
 $config->group->package->browseZANode->privs  = array();
-$config->group->package->browseZANode->privs['zanode-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('zanode-instruction'), 'recommend' => array('zanode-view'));
+$config->group->package->browseZANode->privs['zanode-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array('zanode-view'));
 $config->group->package->browseZANode->privs['zanode-view']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 50, 'depend' => array('zanode-browse'), 'recommend' => array());
 
 $config->group->package->manageZANode = new stdclass();
