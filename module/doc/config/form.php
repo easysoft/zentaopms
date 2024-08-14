@@ -56,7 +56,7 @@ $config->doc->form->edit['product']    = array('type' => 'int',      'required' 
 $config->doc->form->edit['project']    = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->doc->form->edit['execution']  = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->doc->form->edit['module']     = array('type' => 'string',   'required' => false, 'default' => '');
-$config->doc->form->edit['lib']        = array('type' => 'int',      'required' => false, 'default' => 0);
+$config->doc->form->edit['lib']        = array('type' => 'int',      'required' => false, 'default' => 0, 'skipRequired' => true);
 $config->doc->form->edit['status']     = array('type' => 'string',   'required' => false, 'default' => 'normal');
 $config->doc->form->edit['type']       = array('type' => 'string',   'required' => false, 'default' => '');
 $config->doc->form->edit['keywords']   = array('type' => 'string',   'required' => false, 'default' => '', 'skipRequired' => true);

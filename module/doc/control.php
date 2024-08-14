@@ -358,8 +358,11 @@ class doc extends control
         {
             $libID    = (int)$this->post->lib;
             $docLib   = $this->loadModel('doc')->getLibByID($libID);
-            $canVisit = $this->docZen->checkPrivForCreate($docLib, $objectType);
-            if(!$canVisit) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->accessDenied));
+            if($docLib)
+            {
+                $canVisit = $this->docZen->checkPrivForCreate($docLib, $objectType);
+                if(!$canVisit) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->accessDenied));
+            }
 
             $moduleID = $this->post->module;
             helper::setcookie('lastDocModule', $moduleID);
@@ -424,7 +427,7 @@ class doc extends control
                 $result  = $this->doc->update($docID, $docData);
                 if(dao::isError())
                 {
-                    if(!empty(dao::$errors['keywords'])) return $this->send(array('result' => 'fail', 'message' => dao::getError(), 'callback' => "zui.Modal.open({id: 'modalBasicInfo'});"));
+                    if(!empty(dao::$errors['lib']) || !empty(dao::$errors['keywords'])) return $this->send(array('result' => 'fail', 'message' => dao::getError(), 'callback' => "zui.Modal.open({id: 'modalBasicInfo'});"));
                     return $this->send(array('result' => 'fail', 'message' => dao::getError()));
                 }
 

@@ -11,7 +11,7 @@ $config->doc->showfiles = new stdclass();
 $config->doc->createlib->requiredFields = 'name';
 $config->doc->editlib->requiredFields   = 'name';
 $config->doc->create->requiredFields    = 'lib,title';
-$config->doc->edit->requiredFields      = 'title';
+$config->doc->edit->requiredFields      = 'lib,title';
 
 $config->doc->customObjectLibs  = 'files,customFiles';
 $config->doc->notArticleType    = '';
