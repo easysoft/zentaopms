@@ -487,7 +487,7 @@ class docMenu extends wg
                     h::main
                     (
                         setClass($menuLink ? 'pt-3' : ''),
-                        setClass('col flex-auto overflow-y-auto overflow-x-hidden pl-2 pr-1 py-1'),
+                        setClass('col flex-auto overflow-y-auto overflow-x-hidden pl-2 pr-1 py-1 scrollbar-hover'),
                         setStyle('--menu-selected-bg', 'none'),
                         zui::$treeType
                         (
