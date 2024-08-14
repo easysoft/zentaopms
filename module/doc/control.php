@@ -1272,6 +1272,7 @@ class doc extends control
         $lib      = $this->doc->getLibByID($libID);
         if(empty($lib)) return print('');
         if($lib->acl == 'open') return print('');
+        if($lib->acl == 'default' && strpos("product,project,execution", $lib->type) !== false) return $this->ajaxCheckObjectPriv($lib->type, zget($lib, $lib->type, 0));
 
         $authAccounts[$lib->addedBy] = $lib->addedBy;
         if($lib->groups) $authAccounts += $this->loadModel('group')->getGroupAccounts(explode(',', $lib->groups));
