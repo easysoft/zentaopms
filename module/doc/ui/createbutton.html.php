@@ -63,4 +63,5 @@ $buildCreateBtn = function($type, $typeID, $libID, $moduleID) use($lib, $docMode
     );
 };
 
-$createButton = $buildCreateBtn($type, $typeID, $libID, $moduleID);
+$createObjectType = (isset($spaceType) && $spaceType === 'mine') ? 'mine' : $type;
+$createButton = $buildCreateBtn($createObjectType, $typeID, $libID, $moduleID);
