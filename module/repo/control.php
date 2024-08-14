@@ -584,35 +584,23 @@ class repo extends control
         $logs = $this->repo->getCommits($repo, $entry, $branchID, 'dir', $pager, '', '', $query);
 
         $revisionIds = array_column($logs, 'revision');
-
-        $stories = $this->loadModel('story')->getLinkedCommits($repoID, $revisionIds);
-        $designs = $this->loadModel('design')->getLinkedCommits($repoID, $revisionIds);
-        $tasks   = $this->loadModel('task')->getLinkedCommits($repoID, $revisionIds);
-        $bugs    = $this->loadModel('bug')->getLinkedCommits($repoID, $revisionIds);
+        $stories     = $this->loadModel('story')->getLinkedCommits($repoID, $revisionIds);
+        $designs     = $this->loadModel('design')->getLinkedCommits($repoID, $revisionIds);
+        $tasks       = $this->loadModel('task')->getLinkedCommits($repoID, $revisionIds);
+        $bugs        = $this->loadModel('bug')->getLinkedCommits($repoID, $revisionIds);
         foreach($logs as $logItem)
         {
-            if(!empty($designs[$logItem->revision]))
+            $logItem->relationFieldTips = '';
+            foreach(array('designs' => 'design', 'stroies' => 'story', 'tasks' => 'task' , 'bugs' => 'bug') as $fieldType=>$moduleName)
             {
-                foreach($designs[$logItem->revision] as $item) $item->url = !empty($item->id) ? $this->createLink('design', 'view', 'designID=' . $item->id) : '';
-                $logItem->relationField['designs'] = $designs[$logItem->revision];
-            }
-
-            if(!empty($stories[$logItem->revision]))
-            {
-                foreach($stories[$logItem->revision] as $item) $item->url = !empty($item->id) ? $this->createLink('story', 'view', 'storyID=' . $item->id) : '';
-                $logItem->relationField['stroies'] = $stories[$logItem->revision];
-            }
-
-            if(!empty($tasks[$logItem->revision]))
-            {
-                foreach($tasks[$logItem->revision] as $item) $item->url = !empty($item->id) ? $this->createLink('task', 'view', 'taskID=' . $item->id) : '';
-                $logItem->relationField['tasks'] = $tasks[$logItem->revision];
-            }
-
-            if(!empty($bugs[$logItem->revision]))
-            {
-                foreach($bugs[$logItem->revision] as $item) $item->url = !empty($item->id) ? $this->createLink('bug', 'view', 'bugID=' . $item->id) : '';
-                $logItem->relationField['bugs'] = $bugs[$logItem->revision];
+                if(!empty(${$fieldType}[$logItem->revision]))
+                {
+                    $fieldCommits = ${$fieldType}[$logItem->revision];
+                    $logItem->relationFieldTips .= $this->lang->repo->{$moduleName};
+                    foreach($fieldCommits as $item) $item->url = !empty($item->id) ? $this->createLink($moduleName, 'view', "{$moduleName}ID=" . $item->id) : '';
+                    $logItem->relationFieldTips .= ' #'.implode(' #', array_column($fieldCommits, 'id'));
+                    $logItem->relationField[$fieldType] = ${$fieldType}[$logItem->revision];
+                }
             }
         }
 

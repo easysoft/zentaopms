@@ -1,3 +1,5 @@
 #featureBar .nav .icon-angle-right {color: #ffffff;}
 .repo-select > div {display: inline-block;}
 .dtable-cell-html {width: 100%;}
+.relationsField {overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
+.relationsField > button{ height: 18px;}
