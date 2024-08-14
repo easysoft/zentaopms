@@ -706,7 +706,8 @@ class pivotState
         $lang    = $this->clientLang;
         foreach($this->fieldSettings as $field => $settings)
         {
-            $options[] = array('text' => isset($settings[$lang]) ? $settings[$lang] : $settings['name'], 'value' => $field, 'key' => $field);
+            $text      = zget($settings, $lang, $settings['name']);
+            $options[] = array('text' => empty($text) ? $field : $text, 'value' => $field, 'key' => $field);
         }
 
         return $options;
