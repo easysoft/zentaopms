@@ -4469,20 +4469,6 @@ $config->bi->builtin->metrics[] = array
 
 $config->bi->builtin->metrics[] = array
 (
-    'name'       => '按执行统计的开发人员执行外任务消耗工时数',
-    'alias'      => '开发人员执行外任务消耗工时数',
-    'code'       => 'hour_of_outplan_task_in_execution',
-    'purpose'    => 'hour',
-    'scope'      => 'execution',
-    'object'     => 'effort',
-    'unit'       => 'hour',
-    'dateType'   => 'nodate',
-    'desc'       => '按执行统计的执行外任务消耗工时数表示执行中非本期执行任务所消耗的工时，例如执行外的临时会议、帮助同事解决问题等。',
-    'definition' => "执行中任务消耗工时求和\n关键词为计划外\n创建人的职位为研发\n过滤已删除的任务\n过滤已删除的执行\n过滤已删除的项目"
-);
-
-$config->bi->builtin->metrics[] = array
-(
     'name'       => '按执行统计的执行关闭时测试任务完成率',
     'alias'      => '执行关闭时测试任务完成率',
     'code'       => 'rate_of_finished_test_task_in_execution_when_closing',
@@ -4493,20 +4479,6 @@ $config->bi->builtin->metrics[] = array
     'dateType'   => 'nodate',
     'desc'       => '按执行统计的测试任务按计划完成率是指执行时已完成的测试任务数与执行开始时计划的测试任务数的比率。该度量项反映了团队能否按期完成规划的测试任务，可以帮助团队识别执行中存在的潜在问题，例如测试介入时间晚等。',
     'definition' => "复用：按执行统计的执行关闭时已完成的测试任务数、按执行统计的测试任务数\n公式：按执行统计的执行关闭时已完成的测试任务数/按执行统计的测试任务数"
-);
-
-$config->bi->builtin->metrics[] = array
-(
-    'name'       => '按执行统计的执行外任务消耗工时占比',
-    'alias'      => '执行外任务消耗工时占比',
-    'code'       => 'rate_of_outplan_task_in_execution',
-    'purpose'    => 'rate',
-    'scope'      => 'execution',
-    'object'     => 'effort',
-    'unit'       => 'percentage',
-    'dateType'   => 'nodate',
-    'desc'       => '按执行统计的执行外任务消耗工时占比表示执行中非本期执行任务所消耗的工时在执行中开发人员可用工时的占比，可以帮助团队识别影响执行效率或计划完成率的影响因子。',
-    'definition' => "按执行统计的执行外任务消耗工时占比=按执行统计的执行外任务消耗工时数/按执行统计的开发人员可用工时数"
 );
 
 $config->bi->builtin->metrics[] = array
