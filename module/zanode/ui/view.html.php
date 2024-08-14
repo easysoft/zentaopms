@@ -380,7 +380,7 @@ detailBody
                 on::click()->call('window.checkServiceStatus')
             )
         ),
-        $zanode->hostType != 'physics' ? div
+        div
         (
             setClass('service-status hidden'),
             span
@@ -397,7 +397,7 @@ detailBody
                     $lang->zanode->initializing
                 )
             )
-        ) : null,
+        ),
         div
         (
             setClass('service-status hidden'),
