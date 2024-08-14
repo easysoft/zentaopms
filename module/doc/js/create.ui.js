@@ -24,15 +24,3 @@ window.loadExecutions = function(e)
         $picker.$.setValue('');
     });
 }
-
-window.handleSubmitForm = function(e)
-{
-    const isDraft = $(e.submitter).hasClass('save-draft');
-    const $showTitle = $('#showTitle');
-    if(isDraft && !$showTitle.val().length)
-    {
-        zui.Modal.alert($showTitle.data('titleHint')).then(() => $showTitle[0].focus());
-        return false;
-    }
-    $(e.target).find('input[name=status]').val(isDraft ? 'draft' : 'normal');
-};
