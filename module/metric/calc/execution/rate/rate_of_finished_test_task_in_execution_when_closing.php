@@ -41,6 +41,13 @@ class rate_of_finished_test_task_in_execution_when_closing extends baseCalc
     public function getResult($options = array())
     {
         $records = array();
+        $executions = $this->getExecutions();
+        $closedExecutions = array_filter($executions, function($execution) { return $execution->status === 'closed'; });
+        foreach($closedExecutions as $executionID => $executionInfo)
+        {
+            if(!isset($this->result[$executionID])) $this->result[$executionID] = array('finished' => 0, 'total' => 0);
+        }
+
         foreach($this->result as $execution => $value)
         {
             $rate = $value['total'] == 0 ? 0 : round($value['finished'] / $value['total'], 4);

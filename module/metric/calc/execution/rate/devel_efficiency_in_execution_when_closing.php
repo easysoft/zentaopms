@@ -22,6 +22,8 @@ class devel_efficiency_in_execution_when_closing extends baseCalc
 {
     public $result = array();
 
+    public $initRecord = false;
+
     public $reuse = true;
 
     public $reuseMetrics = array('storyScale' => 'scale_of_delivered_story_in_execution_when_closing', 'taskConsumed' => 'consume_of_task_in_execution');
@@ -41,9 +43,10 @@ class devel_efficiency_in_execution_when_closing extends baseCalc
         $executions = array_column($all, 'execution', 'execution');
         foreach($executions as $execution)
         {
-            $storyScaleItem   = isset($storyScale[$execution])   ? $storyScale[$execution]   : 0;
-            $taskConsumedItem = isset($taskConsumed[$execution]) ? $taskConsumed[$execution] : 0;
+            if(!isset($storyScale[$execution])) continue;
 
+            $storyScaleItem   = $storyScale[$execution];
+            $taskConsumedItem = isset($taskConsumed[$execution]) ? $taskConsumed[$execution] : 0;
             $this->result[$execution] = $taskConsumedItem == 0 ? 0 : round($storyScaleItem / $taskConsumedItem, 4);
         }
     }

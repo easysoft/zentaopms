@@ -44,9 +44,10 @@ class rate_of_planned_developed_story_in_execution_when_closing extends baseCalc
         $executions = array_column($all, 'execution', 'execution');
         foreach($executions as $execution)
         {
-            $finish = isset($storyFinish[$execution]) ? $storyFinish[$execution] : 0;
-            $link   = isset($storyLink[$execution])   ? $storyLink[$execution]   : 0;
+            if(!isset($storyFinish[$execution])) continue;
 
+            $finish = $storyFinish[$execution];
+            $link   = isset($storyLink[$execution])   ? $storyLink[$execution]   : 0;
             $this->result[$execution] = $link == 0 ? 0 : round($finish / $link, 4);
         }
     }

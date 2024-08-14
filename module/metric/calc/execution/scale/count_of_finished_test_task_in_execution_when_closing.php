@@ -39,6 +39,13 @@ class count_of_finished_test_task_in_execution_when_closing extends baseCalc
 
     public function getResult($options = array())
     {
+        $executions = $this->getExecutions();
+        $closedExecutions = array_filter($executions, function($execution) { return $execution->status === 'closed'; });
+        foreach($closedExecutions as $executionID => $executionInfo)
+        {
+            if(!isset($this->result[$executionID])) $this->result[$executionID] = 0;
+        }
+
         $records = $this->getRecords(array('execution', 'value'));
         return $this->filterByOptions($records, $options);
     }

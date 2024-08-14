@@ -44,9 +44,10 @@ class test_concentration_in_execution_when_closing extends baseCalc
         $executions = array_column($all, 'execution', 'execution');
         foreach($executions as $execution)
         {
-            $bug   = isset($bugs[$execution]) ? $bugs[$execution] : 0;
-            $story = isset($stories[$execution]) ? $stories[$execution] : 0;
+            if(!isset($stories[$execution])) continue;
 
+            $bug   = isset($bugs[$execution]) ? $bugs[$execution] : 0;
+            $story = $stories[$execution];
             $this->result[$execution] = $story == 0 ? 0 : round($bug / $story, 4);
         }
     }

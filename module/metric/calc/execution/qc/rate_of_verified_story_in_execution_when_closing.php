@@ -45,9 +45,10 @@ class rate_of_verified_story_in_execution_when_closing extends baseCalc
         $executions = array_column($all, 'execution', 'execution');
         foreach($executions as $execution)
         {
-            $verifiedStory = isset($verifiedStories[$execution]) ? $verifiedStories[$execution] : 0;
-            $validStory    = isset($validStories[$execution]) ? $validStories[$execution] : 0;
+            if(!isset($verifiedStories[$execution])) continue;
 
+            $verifiedStory = $verifiedStories[$execution];
+            $validStory    = isset($validStories[$execution]) ? $validStories[$execution] : 0;
             $this->result[$execution] = $validStory == 0 ? 0 : round($verifiedStory / $validStory, 4);
         }
     }

@@ -64,6 +64,13 @@ class scale_of_story_in_execution_when_starting extends baseCalc
             $this->result[$execution] += $estimate;
         }
 
+        $executions = $this->getExecutions();
+        $beginExecutions = array_filter($executions, function($execution) { return !empty($execution->realBegan); });
+        foreach($beginExecutions as $executionID => $executionInfo)
+        {
+            if(!isset($this->result[$executionID])) $this->result[$executionID] = 0;
+        }
+
         $records = $this->getRecords(array('execution', 'value'));
         return $this->filterByOptions($records, $options);
     }
