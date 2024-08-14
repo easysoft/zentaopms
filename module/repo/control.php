@@ -1848,7 +1848,9 @@ class repo extends control
 
         $this->scm->setEngine($repo);
         $tagList    = $this->scm->tags('all');
-        $committers = $this->loadModel('user')->getCommiters('account');
+
+        $committers      = $this->loadModel('user')->getCommiters('account');
+        $showCreatedDate = false;
         foreach($tagList as $index => &$tag)
         {
             $tag->repoID    = $repoID;
@@ -1864,6 +1866,10 @@ class repo extends control
 
             $tag->createdBy = isset($tag->tagger->identity->name) ? zget($committers, $tag->tagger->identity->name) : '';
 
+            $tag->createdDate = isset($tag->tagger->when) ? date('Y-m-d H:i:s', strtotime($tag->tagger->when)) : '';
+            if(isset($tag->created_at)) $tag->createdDate = date('Y-m-d H:i:s', strtotime($tag->created_at));
+            if($tag->createdDate) $showCreatedDate = true;
+
             $tag->date = isset($tag->commit->committed_date) ? date('Y-m-d H:i:s', strtotime($tag->commit->committed_date)) : '';
             if(isset($tag->tagger->when)) $tag->date = date('Y-m-d H:i:s', strtotime($tag->tagger->when));
 
@@ -1876,6 +1882,7 @@ class repo extends control
         }
 
         if($orderList) array_multisort($orderList, $sort == 'desc' ? SORT_DESC : SORT_ASC, $tagList);
+        if(!$showCreatedDate) unset($this->config->repo->dtable->tag->fieldList['createdDate']);
 
         /* Pager. */
         $this->app->loadClass('pager', true);

@@ -276,13 +276,16 @@ $config->repo->dtable->tag = new stdclass();
 $config->repo->dtable->tag->fieldList['name']['title'] = $lang->repo->tag;
 $config->repo->dtable->tag->fieldList['name']['type']  = 'title';
 $config->repo->dtable->tag->fieldList['name']['name']  = 'name';
+$config->repo->dtable->tag->fieldList['name']['fixed'] = 0;
+$config->repo->dtable->tag->fieldList['name']['width'] = 250;
 $config->repo->dtable->tag->fieldList['name']['order'] = 10;
 $config->repo->dtable->tag->fieldList['name']['group'] = 1;
 
-$config->repo->dtable->tag->fieldList['message']['title'] = $lang->repo->comment;
-$config->repo->dtable->tag->fieldList['message']['type']  = 'text';
-$config->repo->dtable->tag->fieldList['message']['order'] = 70;
-$config->repo->dtable->tag->fieldList['message']['group'] = 3;
+$config->repo->dtable->tag->fieldList['createdDate']['title']      = $lang->repo->openedDate;
+$config->repo->dtable->tag->fieldList['createdDate']['type']       = 'datetime';
+$config->repo->dtable->tag->fieldList['createdDate']['formatDate'] = 'YYYY-MM-dd hh:mm';
+$config->repo->dtable->tag->fieldList['createdDate']['order']      = 30;
+$config->repo->dtable->tag->fieldList['createdDate']['group']      = 1;
 
 $config->repo->dtable->tag->fieldList['commitID']['title']    = $lang->repo->sourceCommit;
 $config->repo->dtable->tag->fieldList['commitID']['link']     = helper::createLink('repo', 'revision', 'repoID={repoID}&objectID=0&revision={commitID}');
@@ -290,14 +293,14 @@ $config->repo->dtable->tag->fieldList['commitID']['data-app'] = $app->tab;
 $config->repo->dtable->tag->fieldList['commitID']['type']     = 'desc';
 $config->repo->dtable->tag->fieldList['commitID']['flex']     = 0;
 $config->repo->dtable->tag->fieldList['commitID']['sortType'] = true;
-$config->repo->dtable->tag->fieldList['commitID']['order']    = 40;
-$config->repo->dtable->tag->fieldList['commitID']['width']    = 130;
+$config->repo->dtable->tag->fieldList['commitID']['order']    = 50;
+$config->repo->dtable->tag->fieldList['commitID']['width']    = 100;
 $config->repo->dtable->tag->fieldList['commitID']['group']    = 2;
 
 $config->repo->dtable->tag->fieldList['committer']['title']    = $lang->repo->lastCommitter;
 $config->repo->dtable->tag->fieldList['committer']['type']     = 'user';
 $config->repo->dtable->tag->fieldList['committer']['sortType'] = true;
-$config->repo->dtable->tag->fieldList['committer']['order']    = 50;
+$config->repo->dtable->tag->fieldList['committer']['order']    = 60;
 $config->repo->dtable->tag->fieldList['committer']['width']    = 100;
 $config->repo->dtable->tag->fieldList['committer']['group']    = 2;
 
@@ -305,8 +308,13 @@ $config->repo->dtable->tag->fieldList['date']['title']      = $lang->repo->time;
 $config->repo->dtable->tag->fieldList['date']['name']       = 'date';
 $config->repo->dtable->tag->fieldList['date']['type']       = 'datetime';
 $config->repo->dtable->tag->fieldList['date']['formatDate'] = 'YYYY-MM-dd hh:mm';
-$config->repo->dtable->tag->fieldList['date']['order']      = 60;
+$config->repo->dtable->tag->fieldList['date']['order']      = 70;
 $config->repo->dtable->tag->fieldList['date']['group']      = 2;
+
+$config->repo->dtable->tag->fieldList['message']['title'] = $lang->repo->comment;
+$config->repo->dtable->tag->fieldList['message']['type']  = 'text';
+$config->repo->dtable->tag->fieldList['message']['order'] = 40;
+$config->repo->dtable->tag->fieldList['message']['group'] = 1;
 
 $config->repo->dtable->branch = new stdclass();
 $config->repo->dtable->branch->fieldList['name']['title'] = $lang->repo->branch;
