@@ -94,8 +94,10 @@ class pivot extends control
             $mergeConditions[] = $condition;
         }
 
-        $cols  = $this->pivot->getDrillCols($drill->object);
-        $datas = $value == 0 ? array() : $this->pivot->getDrillDatas($pivotID, $drill, $status, $mergeConditions, $filterValues);
+        $pivot      = $this->pivot->getByID($pivotID);
+        $pivotState = $this->pivotZen->initPivotState($pivot);
+        $cols       = $this->pivot->getDrillCols($drill->object);
+        $datas      = $value == 0 ? array() : $this->pivot->getDrillDatas($pivotState, $drill, $status, $mergeConditions, $filterValues);
 
         if(strpos(',story,task,bug,', ",{$drill->object},") !== false) $datas = $this->pivot->processKanbanDatas($drill->object, $datas);
 

@@ -2594,7 +2594,7 @@ class pivotModel extends model
     /**
      * Get drill datas.
      *
-     * @param  int    $pivotID
+     * @param  object $pivotState
      * @param  object $drill
      * @param  array  $conditions
      * @param  array  $filterValues
@@ -2602,13 +2602,8 @@ class pivotModel extends model
      * @access public
      * @return array
      */
-    public function getDrillDatas(int $pivotID, object $drill, string $status, array $conditions, array $filterValues = array()): array
+    public function getDrillDatas(object $pivotState, object $drill, string $status, array $conditions, array $filterValues = array()): array
     {
-        $pivot = $this->getById($pivotID, false, false, $status);
-
-        $this->app->loadClass('pivotstate', true);
-        $pivotState = new pivotState($pivot, array(), $this->app->getClientLang());
-
         $filters = $pivotState->setFiltersDefaultValue($filterValues);
         foreach($conditions as $index => $condition)
         {
