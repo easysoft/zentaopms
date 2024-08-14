@@ -44,5 +44,8 @@ function computeImportTimes()
 
 function importNextPage()
 {
-    return loadPage($.createLink('caselib', 'showImport', "libID='" + libID + "'&pageID=" + $('#pageID').val() + '&maxImport=' + $('#maxImport').val()));
+    let pageID = $('#pageID').val();
+    if(typeof pageID == 'undefined' || pageID == '') pageID = 1;
+
+    return loadPage($.createLink('caselib', 'showImport', "libID=" + libID + "&pageID=" + pageID + '&maxImport=' + $('#maxImport').val()));
 }

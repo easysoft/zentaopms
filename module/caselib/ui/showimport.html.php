@@ -9,6 +9,10 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+
+jsVar('libID', $libID);
+jsVar('newTestcase', $lang->testcase->new);
+
 if(isset($suhosinInfo))
 {
     div
@@ -34,8 +38,6 @@ elseif(empty($maxImport) && $totalAmount > $this->config->file->maxImport)
 else
 {
     jsVar('stepData', $stepData);
-    jsVar('libID', $libID);
-    jsVar('newTestcase', $lang->testcase->new);
 
     $items[] = array
     (
