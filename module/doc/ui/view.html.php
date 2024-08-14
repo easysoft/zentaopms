@@ -19,7 +19,7 @@ if(!isInModal()) include 'lefttree.html.php';
 $versionList = array();
 for($itemVersion = $doc->version; $itemVersion > 0; $itemVersion--)
 {
-    $versionList[] = array('text' => "V$itemVersion", 'url' => createLink('doc', 'view', "docID={$docID}&version={$itemVersion}"), 'key' => $itemVersion, 'active' => $itemVersion == $version);
+    $versionList[] = array('text' => "#$itemVersion", 'url' => createLink('doc', 'view', "docID={$docID}&version={$itemVersion}"), 'key' => $itemVersion, 'active' => $itemVersion == $version);
 }
 
 $versionMenuOptions = array();
@@ -127,7 +127,7 @@ $docHeader = div
             (
                 set::type('gray-pale'),
                 setClass('rounded-full size-xs gap-1'),
-                'V' . ($version ? $version : $doc->version)
+                '#' . ($version ? $version : $doc->version)
             ),
             set::items($versionList),
             set::menu($versionMenuOptions)
