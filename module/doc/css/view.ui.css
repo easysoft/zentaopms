@@ -5,7 +5,13 @@
 #docPanel {max-height: calc(100vh - 72px); --doc-max-width: 1120; --doc-sidebar-width: 0px;}
 #docEditor {margin: 0 -0.75em -1em}
 #docEditor zen-editor {min-height: 100px;}
-.doc-menu [data-type="mine"] + menu {max-height: calc(100vh - 300px);}
+.doc-menu [data-type="mine"] + menu {max-height: calc(100vh - 296px); margin-right: -4px; margin-top: -4px}
+.doc-menu [data-type="mine"] + menu::-webkit-scrollbar,
+.doc-menu [data-type="mine"] + menu::-webkit-scrollbar-thumb,
+.doc-menu [data-type="mine"] + menu::-webkit-scrollbar-track {visibility: hidden;}
+.doc-menu [data-type="mine"] + menu:hover::-webkit-scrollbar,
+.doc-menu [data-type="mine"] + menu:hover::-webkit-scrollbar-thumb,
+.doc-menu [data-type="mine"] + menu:hover::-webkit-scrollbar-track {visibility: visible;}
 #docBody {margin: 0 auto; max-width: calc(var(--doc-max-width) + var(--doc-sidebar-width));}
 
 #docPanel.show-outline, #docPanel.show-history {--doc-sidebar-width: 300px;}
