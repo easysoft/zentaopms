@@ -1284,7 +1284,7 @@ class pivotModel extends model
         foreach($columns as $index => $column)
         {
             $field      = $column['field'];
-            $showOrigin = zget($column, 'showOrigin', 0);
+            $showOrigin = (int)zget($column, 'showOrigin', 0);
             $showOrigins[$field . $index] = $showOrigin;
         }
 
