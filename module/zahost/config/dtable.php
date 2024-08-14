@@ -68,6 +68,7 @@ $config->zahost->imageDtable->fieldList['status']['title'] = $lang->zahost->stat
 $config->zahost->imageDtable->fieldList['status']['map']   = $lang->zahost->image->statusList;
 
 $config->zahost->imageDtable->fieldList['path']['title'] = $lang->zahost->image->path;
+$config->zahost->imageDtable->fieldList['path']['hint']  = true;
 
 $config->zahost->imageDtable->fieldList['progress']['title'] = $lang->zahost->image->progress;
 
