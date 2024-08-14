@@ -815,7 +815,8 @@ class myModel extends model
 
         $grantProducts = $this->loadModel('feedback')->getGrantProducts();
 
-        $this->config->ticket->search['module']    = 'workTicket';
+        $queryName = $this->app->rawMethod . 'Ticket';
+        $this->config->ticket->search['module']    = $queryName;
         $this->config->ticket->search['queryID']   = $queryID;
         $this->config->ticket->search['actionURL'] = $actionURL;
         $this->config->ticket->search['params']['product']['values'] = $grantProducts;

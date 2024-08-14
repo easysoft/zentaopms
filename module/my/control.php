@@ -1164,7 +1164,7 @@ class my extends control
         }
         foreach($tickets as $ticket) $ticket->feedback = '#' . $ticket->feedback;
 
-        $actionURL = $this->createLink('my', 'work', "mode=ticket&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+        $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=ticket&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
         $this->my->buildTicketSearchForm($queryID, $actionURL);
 
         $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
