@@ -243,12 +243,12 @@ class pivotState
     public $pager;
 
     /**
-     * changedWithoutSave
+     * filterChanged.
      *
      * @var bool
      * @access public
      */
-    public $changedWithoutSave = false;
+    public $filterChanged = false;
 
     /**
      * addQueryFilter
