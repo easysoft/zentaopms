@@ -584,23 +584,24 @@ class repo extends control
         $logs  = $this->repo->getCommits($repo, $entry, $branchID, 'dir', $pager, '', '', $query);
 
         $revisionIds = array_column($logs, 'revision');
-        $stories     = $this->loadModel('story')->getLinkedCommits($repoID, $revisionIds);
-        $designs     = $this->loadModel('design')->getLinkedCommits($repoID, $revisionIds);
-        $tasks       = $this->loadModel('task')->getLinkedCommits($repoID, $revisionIds);
-        $bugs        = $this->loadModel('bug')->getLinkedCommits($repoID, $revisionIds);
+        $modelCommits = new stdClass();
+        $modelCommits->stories = $this->loadModel('story')->getLinkedCommits($repoID, $revisionIds);
+        $modelCommits->designs = $this->loadModel('design')->getLinkedCommits($repoID, $revisionIds);
+        $modelCommits->tasks   = $this->loadModel('task')->getLinkedCommits($repoID, $revisionIds);
+        $modelCommits->bugs    = $this->loadModel('bug')->getLinkedCommits($repoID, $revisionIds);
         /* Set tips and buttons for different relations. */
         foreach($logs as $logItem)
         {
             $logItem->relationFieldTips = '';
             foreach(array('designs' => 'design', 'stroies' => 'story', 'tasks' => 'task' , 'bugs' => 'bug') as $fieldType=>$moduleName)
             {
-                if(!empty(${$fieldType}[$logItem->revision]))
+                if(!empty($modelCommits->{$fieldType}[$logItem->revision]))
                 {
-                    $fieldCommits = ${$fieldType}[$logItem->revision];
+                    $fieldCommits = $modelCommits->{$fieldType}[$logItem->revision];
                     $logItem->relationFieldTips .= ' ' . $this->lang->repo->{$moduleName};
                     foreach($fieldCommits as $item) $item->url = !empty($item->id) ? $this->createLink($moduleName, 'view', "{$moduleName}ID=" . $item->id) : '';
                     $logItem->relationFieldTips .= ' #'.implode(' #', array_column($fieldCommits, 'id'));
-                    $logItem->relationField[$fieldType] = ${$fieldType}[$logItem->revision];
+                    $logItem->relationField[$fieldType] = $fieldCommits;
                 }
             }
         }

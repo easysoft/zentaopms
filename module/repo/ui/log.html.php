@@ -60,7 +60,8 @@ foreach($logs as $log)
         if (!empty($log->relationField[$key]))
         {
             $log->relations .= html::commonButton($lang->repo->{$value}, '', 'btn size-sm mx-2');
-            foreach ($log->relationField[$key] as $item) {
+            foreach ($log->relationField[$key] as $item)
+            {
                 $log->relations .= html::a($item->url, '#' . $item->id);
             }
         }
