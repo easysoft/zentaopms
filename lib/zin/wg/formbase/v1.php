@@ -30,6 +30,7 @@ class formBase extends wg
         'cancelBtnText?: string',       // 表单取消按钮文本，如果不指定则使用 `$lang->goback` 的值。
         'back?: string="APP"',          // 表单返回行为。
         'backUrl?: string',             // 表单返回链接。
+        'morph?: bool|"preserve"',      // 是否禁用表单平滑更新，或者使用特殊值“preserve”在平滑更新时忽略。
         'ajax?:array'                   // Ajax 表单选项。
     );
 
@@ -88,11 +89,11 @@ class formBase extends wg
 
     protected function buildProps(): array
     {
-        list($url, $target, $method, $id, $enctype, $tagName) = $this->prop(array('url', 'target', 'method', 'id', 'enctype', 'tagName'));
+        list($url, $target, $method, $id, $enctype, $tagName, $morph) = $this->prop(array('url', 'target', 'method', 'id', 'enctype', 'tagName', 'morph'));
         $props = array
         (
             set::id($id),
-            set::className('form load-indicator no-morph', $target === 'ajax' ? 'form-ajax' : '')
+            set::className('form load-indicator', array('form-ajax' => $target === 'ajax', 'no-morph' => !$morph, 'preserve-on-morph' => $morph === 'preserve'))
         );
         if($tagName === 'form')
         {
