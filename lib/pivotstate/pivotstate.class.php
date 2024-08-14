@@ -283,6 +283,14 @@ class pivotState
     public $autoGenDrills = false;
 
     /**
+     * Check step design.
+     *
+     * @var bool
+     * @access public
+     */
+    public $checkStepDesign = false;
+
+    /**
      * __construct method.
      *
      * @param  pivot      object
