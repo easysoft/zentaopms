@@ -53,13 +53,13 @@ if($fileName) $breadcrumbItems[] = h::span($fileName);
 foreach($logs as $log)
 {
     $log->revision = substr($log->revision, 0, 10);
-    $log->designName = '';
+    $log->relations = '';
     foreach(array('stroies', 'designs', 'tasks', 'bugs') as $value)
     {
         if(!empty($log->relations[$value]))
         {
-            $log->designName .= html::commonButton($lang->repo->{$value} , '', 'btn size-sm mx-2');
-            foreach($log->relations[$value] as $item) $log->designName .= html::a($item->url, '#' . $item->id, '_blank');
+            $log->relations .= html::commonButton($lang->repo->{$value} , '', 'btn size-sm mx-2');
+            foreach($log->relations[$value] as $item) $log->relations .= html::a($item->url, '#' . $item->id, '_blank');
         }
     }
 }

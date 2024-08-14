@@ -147,7 +147,7 @@ $lang->repo->lastCommitter      = '提交人';
 $lang->repo->lastUpdateTime     = '最后修改时间';
 $lang->repo->createdBy          = '创建人';
 $lang->repo->sourceCommit       = '来源提交';
-$lang->repo->design             = '相关设计';
+$lang->repo->relations          = '相关';
 $lang->repo->story              = '需求';
 
 $lang->repo->title      = '标题';
