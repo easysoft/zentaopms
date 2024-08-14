@@ -1900,7 +1900,6 @@ class repoModel extends model
                     {
                         foreach($objects[$objectType] as $modelID)
                         {
-
                             $this->loadModel($modelType)->updateLinkedCommits((int)$modelID, $repo->id, $revisions);
                         }
                     }
