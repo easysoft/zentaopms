@@ -54,12 +54,13 @@ foreach($logs as $log)
 {
     $log->revision = substr($log->revision, 0, 10);
     $log->relations = '';
-    foreach(array('stroies', 'designs', 'tasks', 'bugs') as $value)
+    if(empty($log->relationField)) continue;
+    foreach(array('stroies', 'relations', 'tasks', 'bugs') as $value)
     {
-        if(!empty($log->relations[$value]))
+        if(!empty($log->relationField[$value]))
         {
             $log->relations .= html::commonButton($lang->repo->{$value} , '', 'btn size-sm mx-2');
-            foreach($log->relations[$value] as $item) $log->relations .= html::a($item->url, '#' . $item->id, '_blank');
+            foreach($log->relationField[$value] as $item) $log->relations .= html::a($item->url, '#' . $item->id, '_blank');
         }
     }
 }
