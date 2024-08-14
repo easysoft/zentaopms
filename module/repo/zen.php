@@ -1884,8 +1884,8 @@ class repoZen extends repo
             if(strpos($field['value'], '$') !== false)
             {
                 $dateField = substr($field['value'], 1);
-                $query->begin = ${$dateField}['begin'] . ' 00:00:00';
-                $query->end   = ${$dateField}['end'] . ' 23:59:59';
+                $query->begin = substr(${$dateField}['begin'], 0, 10) . ' 00:00:00';
+                $query->end   = substr(${$dateField}['end'], 0, 10) . ' 23:59:59';
             }
             elseif($field['field'] == 'date')
             {
