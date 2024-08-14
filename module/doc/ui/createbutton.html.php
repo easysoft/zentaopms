@@ -49,7 +49,7 @@ $buildCreateBtn = function($type, $typeID, $libID, $moduleID) use($lib, $docMode
         (
             setClass('btn primary ml-2'),
             set::icon('plus'),
-            set::url(createLink('doc', 'create', "objectType={$type}&objectID={$typeID}&libID={$libID}&moduleID={$moduleID}&type=html")),
+            set::url(createLink('doc', 'create', "objectType={$createType}&objectID={$typeID}&libID={$libID}&moduleID={$moduleID}&type=html")),
             set('data-app', $app->tab),
             $lang->doc->create
         ),
