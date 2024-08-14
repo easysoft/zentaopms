@@ -149,6 +149,7 @@ $lang->repo->createdBy          = 'Created by';
 $lang->repo->sourceCommit       = 'Source Commit';
 $lang->repo->relations          = 'Relations';
 $lang->repo->story              = 'story';
+$lang->repo->searchTips         = 'Search by %s';
 
 $lang->repo->title      = 'Title';
 $lang->repo->status     = 'Status';

@@ -33,7 +33,7 @@ featureBar
         setClass('flex'),
         input
         (
-            set::placeholder($lang->searchAB),
+            set::placeholder(sprintf($lang->repo->searchTips, strtolower($lang->repo->branch))),
             set::name('keyword'),
             set::value(base64_decode($keyword))
         ),

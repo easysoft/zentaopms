@@ -149,6 +149,7 @@ $lang->repo->createdBy          = '创建人';
 $lang->repo->sourceCommit       = '来源提交';
 $lang->repo->relations          = '相关';
 $lang->repo->story              = '需求';
+$lang->repo->searchTips         = '按%s搜索';
 
 $lang->repo->title      = '标题';
 $lang->repo->status     = '状态';
