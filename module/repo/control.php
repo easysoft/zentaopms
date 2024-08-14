@@ -581,7 +581,7 @@ class repo extends control
 
         $this->commonAction($repoID, $objectID);
         $query = $browseType == 'bysearch' ? $this->repoZen->getSearchForm($queryID, !in_array($repo->SCM, $this->config->repo->notSyncSCM)) : null;
-        $logs = $this->repo->getCommits($repo, $entry, $branchID, 'dir', $pager, '', '', $query);
+        $logs  = $this->repo->getCommits($repo, $entry, $branchID, 'dir', $pager, '', '', $query);
 
         $revisionIds = array_column($logs, 'revision');
         $stories     = $this->loadModel('story')->getLinkedCommits($repoID, $revisionIds);
@@ -1972,32 +1972,4 @@ class repo extends control
         $this->display();
     }
 
-    /**
-     * 获取分支下提交记录。
-     * Commit records of branch.
-     *
-     * @param  int    $repoID
-     * @param  string $branchID
-     * @access public
-     * @return array
-     */
-    public function ajaxGetBranchCommits(int $repoID, string $branchID)
-    {
-        $repo = $this->repo->getByID($repoID);
-        $branchID = helper::safe64Encode(base64_encode($branchID));
-        $pageSize = 10;
-
-        $this->app->loadClass('pager', true);
-        $pager = new pager(0, $pageSize, 1);
-
-        $pager->recPerPage = $pageSize;
-        $commits           = $this->repo->getCommits($repo, '', $branchID, 'dir', $pager, '', '', null);
-
-        $retCommits = array();
-        if(!empty($commits))
-        {
-            foreach ($commits as $item) array_push($retCommits, array('commitID' => $item->revision, 'shortID' => substr($item->revision, 0, 10), 'message' => $item->message));
-        }
-        echo json_encode($retCommits);
-    }
 }
