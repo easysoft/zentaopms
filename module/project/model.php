@@ -1188,14 +1188,16 @@ class projectModel extends model
      * @access public
      * @return bool
      */
-    public function updateTeamMembers(object $project, object $oldProject, array $newMembers): bool
+    public function updateTeamMembers(object $project, object $oldProject, array $newMembers = array()): bool
     {
         /* Get old project's team and roles. */
+        $projectID  = (int)$oldProject->id;
+        $oldMembers = $this->loadModel('user')->getTeamMemberPairs($projectID, 'project');
+
+        if(empty($newMembers)) $newMembers = array_keys($oldMembers);
         array_push($newMembers, $project->PM);
         $newMembers = array_unique($newMembers);
         $roles      = $this->loadModel('user')->getUserRoles(array_values($newMembers));
-        $projectID  = (int)$oldProject->id;
-        $oldMembers = $this->loadModel('user')->getTeamMemberPairs($projectID, 'project');
 
         /* Delete members while old model is kanban. */
         if($oldProject->model == 'kanban')
@@ -1226,6 +1228,7 @@ class projectModel extends model
 
         /* Add members. */
         if(!empty(count($addMembers))) $this->loadModel('execution')->addProjectMembers($projectID, $addMembers);
+        if(!isset($_POST['teamMembers'])) $_POST['teamMembers'] = $newMembers;
 
         return !dao::isError();
     }
@@ -1343,7 +1346,7 @@ class projectModel extends model
 
         $this->updatePlans($projectID, (array)$this->post->plans); // 更新关联的计划列表。
         if($oldProject->hasProduct > 0) $this->updateProducts($projectID, (array)$this->post->products, $postProductData); // 更新关联的产品列表。
-        $this->updateTeamMembers($project, $oldProject, (array)$this->post->teamMembers); // 更新关联的用户信息。
+        $this->updateTeamMembers($project, $oldProject, zget($_POST, 'teamMembers', array())); // 更新关联的用户信息。
         if($postProductData) $this->updateProductStage($projectID, (string)$oldProject->stageBy, $postProductData); // 更新关联的所有产品的阶段。
 
         $this->file->updateObjectID((string)$this->post->uid, $projectID, 'project'); // 通过uid更新文件id。
