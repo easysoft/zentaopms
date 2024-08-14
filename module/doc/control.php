@@ -1182,7 +1182,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function moveDoc(int $docID, int $libID = 0, string $space = '')
+    public function moveDoc(int $docID, int $libID = 0, string $space = '', string $locate = '')
     {
         $doc = $this->doc->getByID($docID);
         if(!empty($_POST))
@@ -1200,7 +1200,7 @@ class doc extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            return $this->docZen->responseAfterMove($this->post->space, $data->lib);
+            return $this->docZen->responseAfterMove($this->post->space, $data->lib, $locate);
         }
 
         if(empty($libID)) $libID = (int)$doc->lib;

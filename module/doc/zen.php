@@ -392,11 +392,15 @@ class docZen extends doc
      * @access protected
      * @return bool|int
      */
-    protected function responseAfterMove(string $space, int $libID = 0): bool|int
+    protected function responseAfterMove(string $space, int $libID = 0, string $locateLink = ''): bool|int
     {
-        $locateLink = true;
-        if($space == 'mine')   $locateLink = $this->createLink('doc', 'mySpace', "type=mine&libID={$libID}");
-        if(is_numeric($space)) $locateLink = $this->createLink('doc', 'teamSpace', "objectID=0&libID={$libID}");
+        if(empty($locateLink))
+        {
+            if($space == 'mine')       $locateLink = $this->createLink('doc', 'mySpace', "type=mine&libID={$libID}");
+            elseif(is_numeric($space)) $locateLink = $this->createLink('doc', 'teamSpace', "objectID=0&libID={$libID}");
+            else                       $locateLink = true;
+        }
+        if($locateLink === 'true') $locateLink = true;
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $locateLink));
     }
 
