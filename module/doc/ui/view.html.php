@@ -67,6 +67,18 @@ if($doc->keywords)
 }
 
 $docMoreActions = array();
+if(hasPriv('doc', 'movedoc') && ($lib->type === 'custom' || $lib->type === 'mine'))
+{
+    $docMoreActions[] = array
+    (
+        'icon'        => 'folder-move',
+        'hint'        => $lang->doc->moveDocAction,
+        'text'        => $lang->doc->moveDocAction,
+        'url'         => createLink('doc', 'moveDoc', "docID=$doc->id&libID=&space=&locate=true"),
+        'data-toggle' => 'modal',
+        'data-size'   => 'sm'
+    );
+}
 if(hasPriv('doc', 'delete') && !$doc->deleted)
 {
     $docMoreActions[] = array
