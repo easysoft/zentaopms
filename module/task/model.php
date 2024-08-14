@@ -3292,6 +3292,7 @@ class taskModel extends model
      */
     public function updateLinkedCommits(int $taskID, int $repoID, array $revisions): bool
     {
+        file_put_contents('/tmp/t.log', 'task: '. var_export(func_get_args(), true)."\n", FILE_APPEND);
         if(!$taskID || !$repoID || empty($revisions)) return true;
         $task = $this->dao->select('project')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
         if(!$task) return true;

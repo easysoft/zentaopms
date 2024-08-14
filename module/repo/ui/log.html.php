@@ -53,16 +53,19 @@ if($fileName) $breadcrumbItems[] = h::span($fileName);
 foreach($logs as $log)
 {
     $log->revision = substr($log->revision, 0, 10);
-    $log->relations = '';
-    if(empty($log->relationField)) continue;
-    foreach(array('stroies', 'relations', 'tasks', 'bugs') as $value)
+    $log->relations = '<div class="relationsField">';
+    if (empty($log->relationField)) continue;
+    foreach (array('stroies' => 'story', 'designs' => 'design', 'tasks' => 'task', 'bugs' => 'bug') as $key => $value)
     {
-        if(!empty($log->relationField[$value]))
+        if (!empty($log->relationField[$key]))
         {
-            $log->relations .= html::commonButton($lang->repo->{$value} , '', 'btn size-sm mx-2');
-            foreach($log->relationField[$value] as $item) $log->relations .= html::a($item->url, '#' . $item->id, '_blank');
+            $log->relations .= html::commonButton($lang->repo->{$value}, '', 'btn size-sm mx-2');
+            foreach ($log->relationField[$key] as $item) {
+                $log->relations .= html::a($item->url, '#' . $item->id);
+            }
         }
     }
+    $log->relations .= '</div>';
 }
 
 /* Disbale check all checkbox of table header */
