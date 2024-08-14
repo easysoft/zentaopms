@@ -178,6 +178,7 @@ $docHeader = div
                     set::square(),
                     span(setClass('more-vert'))
                 ),
+                set::placement('bottom-end'),
                 set::items($docMoreActions)
             )
         )
