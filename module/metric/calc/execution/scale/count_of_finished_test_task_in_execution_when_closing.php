@@ -22,7 +22,7 @@ class count_of_finished_test_task_in_execution_when_closing extends baseCalc
 {
     public $dataset = 'getTasks';
 
-    public $fieldList = array('t1.type', 't1.status', 't1.closedReason', 't1.closedDate', 't1.execution', 't2.realEnd');
+    public $fieldList = array('t1.type', 't1.status', 't1.closedReason', "IF(t1.finishedDate, t1.finishedDate, t1.closedDate) AS finishedDate", 't1.execution', 't2.closedDate AS executionClosedDate');
 
     public $result = array();
 
@@ -30,10 +30,13 @@ class count_of_finished_test_task_in_execution_when_closing extends baseCalc
 
     public function calculate($row)
     {
-        if($row->type == 'test' && ($row->status == 'done' || ($row->status == 'closed' && $row->closedReason == 'done')) && !empty($row->realEnd) && date('Y-m-d', strtotime($row->closedDate)) <= $row->realEnd)
+        if(!helper::isZeroDate($row->executionClosedDate))
         {
-            if(!isset($this->result[$row->execution])) $this->result[$row->execution] = 0;
-            $this->result[$row->execution] ++;
+            if($row->type == 'test' && ($row->status == 'done' || $row->status == 'closed' && $row->closedReason == 'done') && $row->finishedDate <= $row->executionClosedDate)
+            {
+                if(!isset($this->result[$row->execution])) $this->result[$row->execution] = 0;
+                $this->result[$row->execution] ++;
+            }
         }
     }
 
