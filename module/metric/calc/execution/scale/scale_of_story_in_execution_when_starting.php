@@ -42,26 +42,27 @@ class scale_of_story_in_execution_when_starting extends baseCalc
             $condition1 = ($actionDate && $realBegan && $actionDate <= $realBegan);
             if($condition1)
             {
-                if(!isset($this->storyInfo[$row->story])) $this->storyInfo[$row->story] = array('link' => 0, 'unlink' => 0, 'estimate' => $row->estimate, 'execution' => $row->execution);
-                if($row->action == 'linked2execution' || ($row->multiple == 0 && $row->action == 'linked2project'))     $this->storyInfo[$row->story]['link'] += 1;
-                if($row->action == 'unlinked2execution' || ($row->multiple == 0 && $row->action == 'unlinked2project')) $this->storyInfo[$row->story]['unlink'] += 1;
+                if(!isset($this->storyInfo[$row->execution])) $this->storyInfo[$row->execution] = array();
+                if(!isset($this->storyInfo[$row->execution][$row->story])) $this->storyInfo[$row->execution][$row->story] = array('link' => 0, 'unlink' => 0, 'estimate' => $row->estimate);
+                if($row->action == 'linked2execution'      || ($row->multiple == '0' && $row->action == 'linked2project'))      $this->storyInfo[$row->execution][$row->story]['link']   += 1;
+                if($row->action == 'unlinkedfromexecution' || ($row->multiple == '0' && $row->action == 'unlinkedfromproject')) $this->storyInfo[$row->execution][$row->story]['unlink'] += 1;
             }
         }
     }
 
     public function getResult($options = array())
     {
-        foreach($this->storyInfo as $storyID => $storyInfo)
+        foreach($this->storyInfo as $execution => $storyInfo)
         {
-            $link      = $storyInfo['link'];
-            $unlink    = $storyInfo['unlink'];
-            $estimate  = $storyInfo['estimate'];
-            $execution = $storyInfo['execution'];
+            foreach($storyInfo as $story)
+            {
+                $link   = $story['link'];
+                $unlink = $story['unlink'];
+                if($link - $unlink <= 0) continue;
 
-            if($link - $unlink <= 0) continue;
-
-            if(!isset($this->result[$execution])) $this->result[$execution] = 0;
-            $this->result[$execution] += $estimate;
+                if(!isset($this->result[$execution])) $this->result[$execution] = 0;
+                $this->result[$execution] += $story['estimate'];
+            }
         }
 
         $executions = $this->getExecutions();
