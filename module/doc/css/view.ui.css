@@ -3,7 +3,7 @@
 .m-doc-view #pick-docDropmenuMenu {position: relative; top: auto; margin-bottom: 12px; background: var(--color-canvas);}
 
 #docPanel {max-height: calc(100vh - 72px); --doc-max-width: 1120; --doc-sidebar-width: 0px;}
-#docEditor {margin: 0 -0.75em -1em}
+#docEditor {margin: 0 -0.75em 0 -1em}
 #docEditor zen-editor {min-height: 100px;}
 .doc-menu [data-type="mine"] + menu {max-height: calc(100vh - 296px); margin-right: -4px; margin-top: -4px}
 .doc-menu [data-type="mine"] + menu::-webkit-scrollbar,
