@@ -129,6 +129,16 @@ class sqlparser
         return "$name($argStr)";
     }
 
+    /**
+     * Get expression.
+     *
+     * @param  string $table
+     * @param  string $column
+     * @param  string $alias
+     * @param  string $function
+     * @access public
+     * @return PhpMyAdmin\SqlParser\Components\Expression
+     */
     public function getExpression($table = null, $column = null, $alias = null, $function = null)
     {
         $expression = new PhpMyAdmin\SqlParser\Components\Expression();
