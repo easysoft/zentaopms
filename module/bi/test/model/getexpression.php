@@ -18,6 +18,7 @@ cid=1
 - 测试 year(date) @YEAR(`date`)
 - 测试 year(date) as year @YEAR(`date`) AS `year`
 - 测试 year(t1.date) as year @YEAR(`t1`.`date`) AS `year`
+- 测试 year(t1.date) as year @`zt_task` AS `t1`
 
 */
 
@@ -31,3 +32,5 @@ r($bi->getExpressionTest('t1', 'id', 'project'))        && p('') && e('`t1`.`id`
 r($bi->getExpressionTest(null, 'date', null, 'year'))   && p('') && e('YEAR(`date`)');                // 测试 year(date)
 r($bi->getExpressionTest(null, 'date', 'year', 'year')) && p('') && e('YEAR(`date`) AS `year`');      // 测试 year(date) as year
 r($bi->getExpressionTest('t1', 'date', 'year', 'year')) && p('') && e('YEAR(`t1`.`date`) AS `year`'); // 测试 year(t1.date) as year
+
+r($bi->getExpressionTest('zt_task', null, 't1')) && p('') && e('`zt_task` AS `t1`'); // 测试 year(t1.date) as year
