@@ -259,6 +259,7 @@ $config->execution->linkStory->dtable->fieldList['title']['nestedToggle'] = true
 $config->execution->linkStory->dtable->fieldList['title']['data-app']     = $app->tab;
 $config->execution->linkStory->dtable->fieldList['title']['data-toggle']  = 'modal';
 $config->execution->linkStory->dtable->fieldList['title']['data-size']    = 'lg';
+$config->execution->linkStory->dtable->fieldList['title']['styleMap']     = array('--color-link' => 'color');
 
 $config->execution->linkStory->dtable->fieldList['pri']['title']    = $lang->story->pri;
 $config->execution->linkStory->dtable->fieldList['pri']['type']     = 'pri';
