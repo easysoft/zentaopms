@@ -9,6 +9,16 @@ title=biModel->getExpression();
 timeout=0
 cid=1
 
+- 测试 * @*
+- 测试 id @`id`
+- 测试 t1.id @`t1`.`id`
+- 测试 t1.* @`t1`.*
+- 测试 id as project @`id` AS `project`
+- 测试 t1.id as project @`t1`.`id` AS `project`
+- 测试 year(date) @YEAR(`date`)
+- 测试 year(date) as year @YEAR(`date`) AS `year`
+- 测试 year(t1.date) as year @YEAR(`t1`.`date`) AS `year`
+
 */
 
 $bi = new biTest();
