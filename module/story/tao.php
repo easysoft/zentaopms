@@ -1980,7 +1980,7 @@ class storyTao extends storyModel
             $actions[] = array('name' => 'dropdown', 'type' => 'dropdown', 'items' => array($actRecall + array('innerClass' => 'ajax-submit')));
         }
 
-        if($this->config->vision != 'lite' && $story->status != 'closed') $actions[] = array('name' => 'close', 'url' => $canClose ? $closeLink : null, 'data-toggle' => 'modal');
+        if($this->config->vision != 'lite' && $story->status != 'closed') $actions[] = array('name' => 'close', 'hint' => $lang->close, 'data-toggle' => 'modal', 'url' => $canClose ? $closeLink : null, 'disabled' => !$canClose);
         if($this->config->vision != 'lite' && $story->status == 'closed') $actions[] = array('name' => 'activate', 'url' => $canActivate ? $activateLink : null, 'data-toggle' => 'modal');
 
         /* Render divider line. */
