@@ -49,6 +49,24 @@ class biTest
     }
 
     /**
+     * get condition test.
+     *
+     * @param  mixed  $tableA
+     * @param  mixed  $columnA
+     * @param  string $operator
+     * @param  mixed  $tableB
+     * @param  mixed  $columnB
+     * @param  int    $group
+     * @access public
+     * @return string
+     */
+    public function getConditionTest(mixed $tableA = null, mixed $columnA = null, string $operator = '', mixed $tableB = null, mixed $columnB = null, int $group = 1): string
+    {
+        $condition = $this->objectModel->getCondition($tableA, $columnA, $operator, $tableB, $columnB, $group);
+        return $condition->build($condition);
+    }
+
+    /**
      * get columns native type
      *
      * @param  string $sql
