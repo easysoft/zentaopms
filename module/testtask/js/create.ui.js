@@ -24,12 +24,14 @@ function loadExecutions(productID)
 {
     $.get($.createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + projectID + '&branch='), function(data)
     {
-        let $executionPicker = $('[name="execution"]').zui('picker');
-        if(data)
+        let $execution       = $('[name="execution"]');
+        let executionID      = $execution.val();
+        let $executionPicker = $execution.zui('picker');
+        if($executionPicker && data)
         {
             data = JSON.parse(data);
             $executionPicker.render({items: data});
-            $executionPicker.$.changeState({value: '0'});
+            $executionPicker.$.setValue(executionID);
         }
     });
 }

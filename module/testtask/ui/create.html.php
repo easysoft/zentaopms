@@ -14,6 +14,9 @@ jsVar('projectID', $projectID);
 jsVar('multiple', isset($moMultipleExecutionID) ? false : true);
 
 $buildExecutionID = $executionID ? $executionID : (isset($noMultipleExecutionID) ? $noMultipleExecutionID : 0);
+$hideExecution    = false;
+if(isset($noMultipleExecutionID)) $hideExecution = true;
+if($app->tab == 'execution' && $executionID) $hideExecution = true;
 
 formPanel
 (
@@ -31,23 +34,14 @@ formPanel
         set::control('picker'),
         set::items($products)
     ),
-    isset($noMultipleExecutionID) ? input
+    $hideExecution ? formHidden('execution', isset($noMultipleExecutionID) ? $noMultipleExecutionID : $executionID) : formGroup
     (
-        set::type('hidden'),
+        set::width('1/2'),
+        set::label($lang->testtask->execution),
         set::name('execution'),
-        set::value($noMultipleExecutionID)
-    ) : formRow
-    (
-        set::className(($app->tab == 'execution' && $executionID) ? 'hidden' : ''),
-        formGroup
-        (
-            set::width('1/2'),
-            set::label($lang->testtask->execution),
-            set::name('execution'),
-            set::value($executionID),
-            set::control('picker'),
-            set::items($executions)
-        )
+        set::value($executionID),
+        set::control('picker'),
+        set::items($executions)
     ),
     formGroup
     (
