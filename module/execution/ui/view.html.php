@@ -319,7 +319,7 @@ div
         div
         (
             setID('chartLine'),
-            h::js("loadTarget('{$chartURL}', '#chartLine')")
+            on::init()->call('loadTarget', $chartURL, '#chartLine')
         )
     )
 );
