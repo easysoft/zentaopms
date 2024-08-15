@@ -469,6 +469,9 @@ class doc extends control
         $this->view->objectDropdown = $objectDropdown;
         $this->view->moduleID       = $moduleID;
         $this->view->spaceType      = $objectType;
+        $this->view->productID      = $doc->product;
+        $this->view->projectID      = $doc->project;
+        $this->view->executionID    = $doc->execution;
         $this->view->linkParams     = "objectID={$objectID}&%s&browseType=&orderBy=status,id_desc&param=0";
         $this->view->otherEditing   = $this->doc->checkOtherEditing($docID);
         $this->display();
