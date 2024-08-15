@@ -132,6 +132,14 @@ window.loadObjectModulesForSelect = function(objectType, objectID)
         objectID   = $(`.modal-body input[name=project]`).val();
     }
 
+    let $libPicker = $('#selectLibTypeForm [name=lib]').zui('picker');
+    $libPicker.render({items: []});
+    $libPicker.$.setValue('');
+
+    let $modulePicker = $('#selectLibTypeForm [name="module"]').zui('picker');
+    $modulePicker.render({items: []});
+    $modulePicker.$.setValue('');
+
     if(!objectID || !objectType) return false;
 
     let docType = $('.modal-body .radio-primary [name=type]:not(.hidden):checked').val();
@@ -140,13 +148,8 @@ window.loadObjectModulesForSelect = function(objectType, objectID)
     const link = $.createLink('doc', 'ajaxGetModules', 'objectType=' + objectType + '&objectID=' + objectID + '&type=' + docType);
     $.getJSON(link, function(data)
     {
-        const $libPicker = $('#selectLibTypeForm [name=lib]').zui('picker');
         $libPicker.render({items: data.libs});
-        $libPicker.$.setValue('');
-
-        const $modulePicker = $('#selectLibTypeForm [name="module"]').zui('picker');
         $modulePicker.render({items: data.modules});
-        $modulePicker.$.setValue('');
     });
 }
 

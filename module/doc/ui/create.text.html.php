@@ -67,7 +67,7 @@ $basicInfoModal = modal
         set::width('1/2'),
         set::label($lang->doc->lib),
         set::required(true),
-        picker(set::name('lib'), set::items($libs), set::value($libID), set::required(true))
+        picker(set::name('lib'), set::items($libs), set::value(isset($libs[$libID]) ? $libID : ''), set::required(true))
     ),
     formGroup
     (
