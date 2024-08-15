@@ -12,14 +12,14 @@ cid=1
 */
 
 $bi = new biTest();
-r($bi->getConditionTest(null, 'deleted', '=', null, "'0'"))       && p('') && e("`deleted` = '0'"); // 测试 *
-r($bi->getConditionTest('t1', 'deleted', '=', null, "'0'"))       && p('') && e("`t1`.`deleted` = '0'"); // 测试 *
-r($bi->getConditionTest('t1', 'project', '=', 't2', 'id'))        && p('') && e("`t1`.`project` = `t2`.`id`"); // 测试 *
-r($bi->getConditionTest('`t1`', '`project`', '=', 't2', 'id'))    && p('') && e("`t1`.`project` = `t2`.`id`"); // 测试 *
-r($bi->getConditionTest('`t1`', '`project`  ', '=', 't2', 'id'))  && p('') && e("`t1`.`project` = `t2`.`id`"); // 测试 *
+r($bi->getConditionTest(null, 'deleted', '=', null, "'0'"))       && p('') && e("`deleted` = '0'");            // 测试 `deleted` = '0'
+r($bi->getConditionTest('t1', 'deleted', '=', null, "'0'"))       && p('') && e("`t1`.`deleted` = '0'");       // 测试 `t1`.`deleted` = '0'
+r($bi->getConditionTest('t1', 'project', '=', 't2', 'id'))        && p('') && e("`t1`.`project` = `t2`.`id`"); // 测试 `t1`.`project` = `t2`.`id`
+r($bi->getConditionTest('`t1`', '`project`', '=', 't2', 'id'))    && p('') && e("`t1`.`project` = `t2`.`id`"); // 测试 `t1`.`project` = `t2`.`id`
+r($bi->getConditionTest('`t1`', '`project`  ', '=', 't2', 'id'))  && p('') && e("`t1`.`project` = `t2`.`id`"); // 测试 `t1`.`project` = `t2`.`id`
 
-r($bi->getConditionTest('t1', 'type', 'in', null, "('sprint', 'stage', 'kanban')"))     && p('') && e("`t1`.`type` IN ('sprint', 'stage', 'kanban')"); // 测试 *
-r($bi->getConditionTest('t1', 'type', 'not in', null, "('sprint', 'stage', 'kanban')")) && p('') && e("`t1`.`type` NOT IN ('sprint', 'stage', 'kanban')"); // 测试 *
+r($bi->getConditionTest('t1', 'type', 'in', null, "('sprint', 'stage', 'kanban')"))     && p('') && e("`t1`.`type` IN ('sprint', 'stage', 'kanban')");     // 测试 `t1`.`type` IN ('sprint', 'stage', 'kanban')
+r($bi->getConditionTest('t1', 'type', 'not in', null, "('sprint', 'stage', 'kanban')")) && p('') && e("`t1`.`type` NOT IN ('sprint', 'stage', 'kanban')"); // 测试 `t1`.`type` NOT IN ('sprint', 'stage', 'kanban')
 
-r($bi->getConditionTest('t1', 'name', 'is', null, 'not null')) && p('') && e("`t1`.`name` IS not null"); // 测试 *
-r($bi->getConditionTest('t1', 'name', 'is', null, 'null'))     && p('') && e("`t1`.`name` IS null"); // 测试 *
+r($bi->getConditionTest('t1', 'name', 'is', null, 'not null')) && p('') && e("`t1`.`name` IS not null"); // 测试 `t1`.`name` IS not null
+r($bi->getConditionTest('t1', 'name', 'is', null, 'null'))     && p('') && e("`t1`.`name` IS null");     // 测试 `t1`.`name` IS not null`t1`.`name` IS null
