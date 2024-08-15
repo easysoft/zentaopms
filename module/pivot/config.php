@@ -94,7 +94,7 @@ $config->pivot->transTypes['double']   = 'number';
 $config->pivot->transTypes['datetime'] = 'date';
 $config->pivot->transTypes['date']     = 'date';
 
-global $app, $lang;
+global $config, $app, $lang;
 $config->pivot->drillObjectFields = array();
 $config->pivot->drillObjectFields['program']     = array('id', 'name', 'status', 'PM', 'budget', 'progress', 'begin', 'end');
 $config->pivot->drillObjectFields['project']     = array('id', 'name', 'status', 'PM', 'model', 'budget', 'progress', 'estimate', 'consumed', 'begin', 'end');
@@ -147,44 +147,47 @@ $config->pivot->objectTableFields->user['gender']['map']     = $lang->user->gend
 $config->pivot->objectTableFields->user['role']['title']     = $lang->user->role;
 $config->pivot->objectTableFields->user['role']['map']       = $lang->user->roleList;
 
-$config->pivot->objectTableFields->ticket = array();
-$config->pivot->objectTableFields->ticket['id']['name']     = 'id';
-$config->pivot->objectTableFields->ticket['id']['title']    = $lang->idAB;
-$config->pivot->objectTableFields->ticket['id']['type']     = 'id';
-$config->pivot->objectTableFields->ticket['id']['sortType'] = false;
+if($config->edition != 'open')
+{
+    $config->pivot->objectTableFields->ticket = array();
+    $config->pivot->objectTableFields->ticket['id']['name']     = 'id';
+    $config->pivot->objectTableFields->ticket['id']['title']    = $lang->idAB;
+    $config->pivot->objectTableFields->ticket['id']['type']     = 'id';
+    $config->pivot->objectTableFields->ticket['id']['sortType'] = false;
 
-$config->pivot->objectTableFields->ticket['title']['name']  = 'title';
-$config->pivot->objectTableFields->ticket['title']['type']  = 'title';
-$config->pivot->objectTableFields->ticket['title']['title'] = $lang->ticket->title;
-$config->pivot->objectTableFields->ticket['title']['link']  = array('module' => 'ticket', 'method' => 'view', 'params' => "ticketID={id}");
+    $config->pivot->objectTableFields->ticket['title']['name']  = 'title';
+    $config->pivot->objectTableFields->ticket['title']['type']  = 'title';
+    $config->pivot->objectTableFields->ticket['title']['title'] = $lang->ticket->title;
+    $config->pivot->objectTableFields->ticket['title']['link']  = array('module' => 'ticket', 'method' => 'view', 'params' => "ticketID={id}");
 
-$config->pivot->objectTableFields->ticket['pri']['name']  = 'pri';
-$config->pivot->objectTableFields->ticket['pri']['type']  = 'pri';
-$config->pivot->objectTableFields->ticket['pri']['title'] = $lang->ticket->pri;
+    $config->pivot->objectTableFields->ticket['pri']['name']  = 'pri';
+    $config->pivot->objectTableFields->ticket['pri']['type']  = 'pri';
+    $config->pivot->objectTableFields->ticket['pri']['title'] = $lang->ticket->pri;
 
-$config->pivot->objectTableFields->ticket['status']['name']      = 'status';
-$config->pivot->objectTableFields->ticket['status']['title']     = $lang->ticket->status;
-$config->pivot->objectTableFields->ticket['status']['type']      = 'status';
-$config->pivot->objectTableFields->ticket['status']['statusMap'] = $lang->ticket->statusList;
-$config->pivot->objectTableFields->ticket['status']['sortType']  = false;
+    $config->pivot->objectTableFields->ticket['status']['name']      = 'status';
+    $config->pivot->objectTableFields->ticket['status']['title']     = $lang->ticket->status;
+    $config->pivot->objectTableFields->ticket['status']['type']      = 'status';
+    $config->pivot->objectTableFields->ticket['status']['statusMap'] = $lang->ticket->statusList;
+    $config->pivot->objectTableFields->ticket['status']['sortType']  = false;
 
-$config->pivot->objectTableFields->ticket['type']['name']  = 'type';
-$config->pivot->objectTableFields->ticket['type']['title'] = $lang->ticket->type;
-$config->pivot->objectTableFields->ticket['type']['type']  = 'category';
-$config->pivot->objectTableFields->ticket['type']['map']   = $lang->ticket->typeList;
+    $config->pivot->objectTableFields->ticket['type']['name']  = 'type';
+    $config->pivot->objectTableFields->ticket['type']['title'] = $lang->ticket->type;
+    $config->pivot->objectTableFields->ticket['type']['type']  = 'category';
+    $config->pivot->objectTableFields->ticket['type']['map']   = $lang->ticket->typeList;
 
-$config->pivot->objectTableFields->ticket['assignedTo']['name']     = 'assignedTo';
-$config->pivot->objectTableFields->ticket['assignedTo']['title']    = $lang->ticket->assignedTo;
-$config->pivot->objectTableFields->ticket['assignedTo']['type']     = 'user';
-$config->pivot->objectTableFields->ticket['assignedTo']['sortType'] = false;
+    $config->pivot->objectTableFields->ticket['assignedTo']['name']     = 'assignedTo';
+    $config->pivot->objectTableFields->ticket['assignedTo']['title']    = $lang->ticket->assignedTo;
+    $config->pivot->objectTableFields->ticket['assignedTo']['type']     = 'user';
+    $config->pivot->objectTableFields->ticket['assignedTo']['sortType'] = false;
 
-$config->pivot->objectTableFields->ticket['estimate']['title'] = $lang->ticket->estimate;
-$config->pivot->objectTableFields->ticket['estimate']['type']  = 'number';
+    $config->pivot->objectTableFields->ticket['estimate']['title'] = $lang->ticket->estimate;
+    $config->pivot->objectTableFields->ticket['estimate']['type']  = 'number';
 
-$config->pivot->objectTableFields->ticket['openedBy']['name']     = 'openedBy';
-$config->pivot->objectTableFields->ticket['openedBy']['title']    = $lang->ticket->openedBy;
-$config->pivot->objectTableFields->ticket['openedBy']['type']     = 'user';
-$config->pivot->objectTableFields->ticket['openedBy']['sortType'] = false;
+    $config->pivot->objectTableFields->ticket['openedBy']['name']     = 'openedBy';
+    $config->pivot->objectTableFields->ticket['openedBy']['title']    = $lang->ticket->openedBy;
+    $config->pivot->objectTableFields->ticket['openedBy']['type']     = 'user';
+    $config->pivot->objectTableFields->ticket['openedBy']['sortType'] = false;
+}
 
 $config->pivot->objectTableFields->story = array();
 $config->pivot->objectTableFields->story['title']['title']   = $lang->pivot->drill->storyName;
