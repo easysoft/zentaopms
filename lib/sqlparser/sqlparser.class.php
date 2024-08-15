@@ -129,6 +129,21 @@ class sqlparser
         return "$name($argStr)";
     }
 
+    public function getExpression($table = null, $column = null, $alias = null, $function = null)
+    {
+        $expression = new PhpMyAdmin\SqlParser\Components\Expression();
+
+        if(!empty($function))
+        {
+            $expression->function = $function;
+            $expression->expr     = $this->getFunction($function, $expression->build($this->getExpression($table, $column)));
+        }
+
+        $expression->alias = $alias;
+
+        return $expression;
+    }
+
     /**
      * Match columns with table.
      *
