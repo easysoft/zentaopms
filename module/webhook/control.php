@@ -171,7 +171,7 @@ class webhook extends control
         }
 
         $webhook = $this->webhook->getById($id);
-        if(!in_array($webhook->type, array('dinguser', 'wechatuser', 'feishuuser'))) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->webhook->note->bind, 'locate' => $this->createLink('webhook', 'browse'))));
+        if(!in_array($webhook->type, array('dinguser', 'wechatuser', 'feishuuser'))) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->webhook->note->bind, 'load' => $this->createLink('webhook', 'browse'))));
         $webhook->secret = json_decode($webhook->secret);
 
         /* Get selected depts. */
@@ -185,8 +185,9 @@ class webhook extends control
 
         if($response['result'] == 'fail')
         {
-            if($response['message'] == 'nodept') return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->webhook->error->noDept, 'locate' => $this->createLink('webhook', 'chooseDept', "id={$id}"))));
-            return $this->send(array('result' => 'fail', 'load' => array('alert' => $response['message'], 'locate' => $this->createLink('webhook', 'browse'))));
+            if($response['message'] == 'nodept') return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->webhook->error->noDept, 'load' => $this->createLink('webhook', 'chooseDept', "id={$id}"))));
+            if(is_array($response['message'])) $response['message'] = implode(',', $response['message']);
+            return $this->send(array('result' => 'fail', 'load' => array('alert' => $response['message'], 'load' => $this->createLink('webhook', 'browse'))));
         }
 
         $oauthUsers = $response['data'];
