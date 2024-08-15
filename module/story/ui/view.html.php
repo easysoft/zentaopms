@@ -218,7 +218,7 @@ foreach($actions as $key => $action)
     if(isset($action['icon']) && $action['icon'] == 'split')
     {
         $canBatchCreateStory = $story->grade < $maxGradeGroup[$story->type] && empty($story->hasOtherTypeChild);
-        $objectID = $app->tab == 'project' ? $projectID : $executionID;
+        $objectID = $app->tab == 'project' ? ($project->multiple ? $projectID : $executionID) : $executionID;
         if($canBatchCreateStory)
         {
             $actions[$key]['url'] = createLink($story->type, 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id&executionID=$objectID");

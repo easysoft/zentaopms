@@ -545,7 +545,6 @@ class story extends control
             {
                 $project   = $this->loadModel('project')->getByShadowProduct($product->id);
                 $projectID = $project->id;
-
             }
             else
             {
@@ -556,9 +555,10 @@ class story extends control
             $this->view->project   = $project;
             if(!$project->multiple)
             {
+                $executionID = $param ? $param : $this->session->execution;
                 $this->project->setMenu((int)$project->project);
-                $this->view->executionID = $projectID;
-                $this->view->execution   = $project;
+                $this->view->executionID = $executionID;
+                $this->view->execution   = $this->loadModel('execution')->fetchByID($executionID);
             }
             else
             {
