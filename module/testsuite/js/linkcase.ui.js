@@ -4,12 +4,15 @@ $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
     const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return;
 
-    const url  = $(this).data('url');
-    const form = new FormData();
+    const formData = dtable.$.getFormData();
+    const url      = $(this).data('url');
+    const form     = new FormData();
     checkedList.forEach((id) =>
     {
         form.append('cases[]', id);
-        form.append('versions[' + id + ']', $("[name='version\[" + id + "\]']").val());
+
+        let key = 'version[' + id + ']';
+        form.append(key, formData[key]);
     });
 
     if($(this).hasClass('ajax-btn'))
