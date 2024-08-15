@@ -409,14 +409,14 @@ class docZen extends doc
      * 为创建文档设置所属对象下拉值。
      * Set the dropdown values of object for creating document.
      *
-     * @param  string    $linkType product|project|execution|custom
-     * @param  object    $lib
-     * @param  string    $unclosed
-     * @param  string    $objectID
+     * @param  string      $linkType product|project|execution|custom
+     * @param  object|null $lib
+     * @param  string      $unclosed
+     * @param  string      $objectID
      * @access protected
      * @return void
      */
-    protected function setObjectsForCreate(string $linkType, object $lib, string $unclosed, int $objectID): void
+    protected function setObjectsForCreate(string $linkType, object|null $lib, string $unclosed, int $objectID): void
     {
         $objects  = array();
         if($linkType == 'project')
@@ -521,7 +521,7 @@ class docZen extends doc
         if(!$libID && !empty($libPairs)) $libID = key($libPairs);
         if(empty($lib) && $libID) $lib = $this->doc->getLibByID($libID);
 
-        $this->setObjectsForCreate(empty($lib->type) ? '' : $lib->type, $lib, $unclosed, $objectID);
+        $this->setObjectsForCreate(empty($lib->type) ? '' : $lib->type, empty($lib) ? null : $lib, $unclosed, $objectID);
 
         $this->view->objectType = $objectType;
         $this->view->spaceType  = $objectType;

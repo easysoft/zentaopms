@@ -30,8 +30,9 @@ foreach($config->doc->dtable->fieldList as $colName => $col)
 $params        = "libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&param={$param}&orderBy={$orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}";
 $sortParams    = "libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";
 $tableData     = empty($docs) ? array() : initTableData($docs, $cols);
+$createType    = empty($lib) ? '' : $lib->type;
 $createDocLink = '';
-if($browseType != 'bysearch' && $libID && common::hasPriv('doc', 'create')) $createDocLink = createLink('doc', 'create', "objectType={$type}&objectID={$objectID}&libID={$libID}&moduleID={$moduleID}&type=html");
+if($browseType != 'bysearch' && $libID && common::hasPriv('doc', 'create')) $createDocLink = createLink('doc', 'create', "objectType={$createType}&objectID={$objectID}&libID={$libID}&moduleID={$moduleID}&type=html");
 if($app->rawMethod == 'myspace')
 {
     $sortParams = "type={$type}&" . $sortParams;
