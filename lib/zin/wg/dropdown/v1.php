@@ -44,7 +44,6 @@ class dropdown extends wg
         if(!($triggerBlock instanceof node)) return null;
 
         if($triggerBlock instanceof btn) $triggerBlock->setDefaultProps(array('caret' => $caret));
-        $triggerOptions = $triggerBlock->prop('zui-toggle-dropdown', array());
         $triggerOptions = array_merge(array
         (
             'placement'      => $placement,
@@ -53,7 +52,7 @@ class dropdown extends wg
             'flip'           => $flip,
             'offset'         => $offset,
             'target'         => $target
-        ), $triggerOptions, is_array($triggerProps) ? $triggerProps : array());
+        ), is_array($triggerProps) ? $triggerProps : array());
 
         if($dynamicMenu)
         {
