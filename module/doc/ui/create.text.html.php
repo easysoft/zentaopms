@@ -25,15 +25,6 @@ $basicInfoModal = modal
     on::change('[name=lib]')->call('loadLibModules', jsRaw('event')),
     on::change('[name=project]')->call('loadExecutions', jsRaw('event')),
     on::change('[name=lib],[name^=users]', 'checkLibPriv'),
-    formGroup
-    (
-        setClass('flex items-center preserve-on-morph'),
-        set::label($lang->doc->title),
-        set::name('title'),
-        set::control('input'),
-        set::required(),
-        on::change()->do('$("#showTitle").val($("#title").val())')
-    ),
     $lib->type == 'project' ? formRow
     (
         formGroup
@@ -84,6 +75,15 @@ $basicInfoModal = modal
         set::label($lang->doc->module),
         set::required(true),
         picker(set::name('module'), set::items($optionMenu), set::value($moduleID), set::required(true))
+    ),
+    formGroup
+    (
+        setClass('flex items-center preserve-on-morph'),
+        set::label($lang->doc->title),
+        set::name('title'),
+        set::control('input'),
+        set::required(),
+        on::change()->do('$("#showTitle").val($("#title").val())')
     ),
     formGroup
     (
