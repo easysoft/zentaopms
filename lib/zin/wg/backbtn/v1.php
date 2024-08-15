@@ -77,8 +77,9 @@ class backBtn extends btn
             'ai'             => 'ai-models',
             'api'            => 'api-index',
             'demand'         => 'demand-browse,demand-view,my-work,feedback-adminview,feedback-admin,my-index,demandpool-track,product-dynamic',
-            'issue'          => 'issue-browse,issue-view',
-            'risk'           => 'risk-browse,risk-view',
+            'issue'          => 'issue-browse,issue-view,my-index,project-dynamic,execution-dynamic',
+            'risk'           => 'risk-browse,risk-view,my-index,project-dynamic,execution-dynamic',
+            'meeting'        => 'meeting-browse,meeting-view,my-index,project-dynamic,execution-dynamic',
             'todo'           => 'my-todo,my-effort',
             'ticket'         => 'my-effort',
             'designguide'    => 'designguide-browse,designguide-view,execution-task,task-view', // For designguide plugin.
