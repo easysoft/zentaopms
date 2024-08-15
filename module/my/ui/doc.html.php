@@ -32,7 +32,6 @@ dtable
     set::cols($cols),
     set::data($data),
     set::userMap($users),
-    set::fixedLeftWidth('44%'),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::orderBy($orderBy),
     set::sortLink(createLink('my', $app->rawMethod, "mode=doc&type={$type}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),

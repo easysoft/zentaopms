@@ -1189,13 +1189,12 @@ $config->my->doc->dtable->fieldList['id']['type']  = 'id';
 
 $config->my->doc->dtable->fieldList['title']['name']  = 'title';
 $config->my->doc->dtable->fieldList['title']['title'] = $lang->doc->title;
-$config->my->doc->dtable->fieldList['title']['type']  = 'text';
+$config->my->doc->dtable->fieldList['title']['type']  = 'title';
 $config->my->doc->dtable->fieldList['title']['link']  = array('module' => 'doc', 'method' => 'view', 'params' => 'docID={id}');
-$config->my->doc->dtable->fieldList['title']['fixed'] = 'left';
 
 $config->my->doc->dtable->fieldList['object']['name']  = 'objectName';
 $config->my->doc->dtable->fieldList['object']['title'] = $lang->doc->object;
-$config->my->doc->dtable->fieldList['object']['type']  = 'text';
+$config->my->doc->dtable->fieldList['object']['type']  = 'desc';
 $config->my->doc->dtable->fieldList['object']['group'] = 'object';
 
 $config->my->doc->dtable->fieldList['addedBy']['name']  = 'addedBy';
