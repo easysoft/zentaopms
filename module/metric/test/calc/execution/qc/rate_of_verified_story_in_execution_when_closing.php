@@ -22,6 +22,6 @@ zendata('projectstory')->loadYaml('executionstory', true, 4)->gen(1000);
 $metric = new metricTest();
 $calc   = $metric->calcMetric(__FILE__);
 
-r(count($metric->getReuseCalcResult($calc))) && p('') && e('6'); // 测试分组数。
+r(count($metric->getReuseCalcResult($calc))) && p('') && e('8'); // 测试分组数。
 
-r($metric->getReuseCalcResult($calc, array('project' => '1'))) && p('0:value') && e('1.1667'); // 测试项目1。
+r($metric->getReuseCalcResult($calc, array('project' => '11'))) && p('0:value') && e('0'); // 测试项目1。

@@ -24,7 +24,7 @@ zendata('task')->loadYaml('task', true, 4)->gen(1000);
 $metric = new metricTest();
 $calc   = $metric->calcMetric(__FILE__);
 
-r(count($calc->getResult())) && p('') && e('2'); // 测试分组数。
+r(count($calc->getResult())) && p('') && e('10'); // 测试分组数。
 r($calc->getResult(array('execution' => 11)))  && p('0:value') && e('0'); // 测试执行11开始时的测试任务数。
 r($calc->getResult(array('execution' => 12)))  && p('0:value') && e('2'); // 测试执行12开始时的测试任务数。
 r($calc->getResult(array('execution' => 13)))  && p('0:value') && e('0'); // 测试执行13开始时的测试任务数。

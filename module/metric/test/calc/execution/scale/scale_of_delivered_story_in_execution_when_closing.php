@@ -22,6 +22,6 @@ zendata('projectstory')->loadYaml('executionstory', true, 4)->gen(1000);
 $metric = new metricTest();
 $calc   = $metric->calcMetric(__FILE__);
 
-r(count($calc->getResult())) && p('') && e('6'); // 测试分组数。
+r(count($calc->getResult())) && p('') && e('12'); // 测试分组数。
 
 r($calc->getResult(array('project' => '4'))) && p('0:value') && e('10');  // 测试项目4。

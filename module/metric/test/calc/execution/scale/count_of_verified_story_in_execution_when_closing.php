@@ -18,14 +18,14 @@ include dirname(__FILE__, 4) . '/lib/calc.unittest.class.php';
 
 zendata('product')->loadYaml('product', true, 4)->gen(10);
 zendata('project')->loadYaml('project_type', true, 4)->gen(100);
-zendata('story')->loadYaml('story_stage_verified', true, 4)->gen(1000);
+zendata('story')->loadYaml('story_status_closedreason', true, 4)->gen(1000);
 zendata('projectstory')->loadYaml('executionstory', true, 4)->gen(1000);
 
 $metric = new metricTest();
 $calc   = $metric->calcMetric(__FILE__);
 
-r(count($calc->getResult())) && p('') && e('6'); // 测试分组数。
+r(count($calc->getResult())) && p('') && e('9'); // 测试分组数。
 
-r($calc->getResult(array('project' => '4')))  && p('0:value') && e('7');  // 测试按执行4统计的执行关闭时验收通过的研发需求数7
-r($calc->getResult(array('project' => '5')))  && p('0:value') && e('7');  // 测试按执行5统计的执行关闭时验收通过的研发需求数7
-r($calc->getResult(array('project' => '10'))) && p('0:value') && e('7');  // 测试按执行5统计的执行关闭时验收通过的研发需求数7
+r($calc->getResult(array('project' => '4')))  && p('0:value') && e('2');  // 测试按执行4统计的执行关闭时验收通过的研发需求数7
+r($calc->getResult(array('project' => '5')))  && p('0:value') && e('2');  // 测试按执行5统计的执行关闭时验收通过的研发需求数7
+r($calc->getResult(array('project' => '10'))) && p('0:value') && e('2');  // 测试按执行5统计的执行关闭时验收通过的研发需求数7

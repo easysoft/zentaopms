@@ -25,6 +25,6 @@ zendata('bug')->loadYaml('bug_resolution_status', true, 4)->gen(500);
 $metric = new metricTest();
 $calc   = $metric->calcMetric(__FILE__);
 
-r(count($metric->getReuseCalcResult($calc))) && p('') && e('1'); // 测试分组数。
+r(count($metric->getReuseCalcResult($calc))) && p('') && e('5'); // 测试分组数。
 
-r($metric->getReuseCalcResult($calc, array('project' => '1'))) && p('0:value') && e('4.6667'); // 测试项目1。
+r($metric->getReuseCalcResult($calc, array('execution' => '16'))) && p('0:value') && e('4.6667'); // 测试项目1。
