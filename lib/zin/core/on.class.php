@@ -120,6 +120,20 @@ class on extends jsCallback
     }
 
     /**
+     * Set to only trigger event once.
+     * 设置只触发一次事件选项。
+     *
+     * @access public
+     * @param  bool $once Whether only trigger event once.
+     * @return self
+     */
+    public function once(bool $once = true): self
+    {
+        $this->options['once'] = $once;
+        return $this;
+    }
+
+    /**
      * Convert to js code.
      * 转换为 js 代码。
      *
@@ -132,7 +146,7 @@ class on extends jsCallback
         if($this->event === 'init') return parent::buildBody($joiner);
 
         $options    = $this->options;
-        $bindMethod = (isset($options['once']) && $options['once']) ? 'once' : 'on';
+        $bindMethod = (isset($options['once']) && $options['once']) ? 'one' : 'on';
         $selector   = $this->selector ? (',' . json_encode($this->selector)) : '';
 
         $callback = parent::toJS($joiner);
