@@ -136,14 +136,14 @@ window.changeMode = function()
 }
 
 
-$('#teamTable .team-saveBtn').on('click.team', '.btn', function()
+window.saveTeam = function()
 {
     let memberCount   = '';
     let totalEstimate = 0;
     let totalConsumed = 0;
     let totalLeft     = 0;
     let error         = false;
-    $(this).closest('#teamTable').find('.picker-box').each(function()
+    $('#teamTable').find('.picker-box').each(function()
     {
         if(!$(this).find('[name^=team]').val()) return;
 
@@ -212,7 +212,7 @@ $('#teamTable .team-saveBtn').on('click.team', '.btn', function()
 
     zui.Modal.hide();
     return false;
-});
+}
 
 /**
  * Update assignedTo.

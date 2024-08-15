@@ -421,7 +421,8 @@ detailBody
                         set::control('input'),
                         set::hidden(true)
                     ),
-                    set::actions(array(array('text' => $lang->save, 'class' => 'primary team-saveBtn')))
+                    set::actions(array(array('text' => $lang->save, 'class' => 'primary team-saveBtn'))),
+                    on::click('.team-saveBtn')->call('saveTeam')
                 )
             )
         ),
