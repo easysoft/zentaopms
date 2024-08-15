@@ -404,14 +404,7 @@ function groupItemChange()
     {
         var dataid = $(this).attr('data-id');
         var $priv  = $('#privPackageList').find('.group-item input[data-id="' + dataid + '"]');
-        if(checked)
-        {
-            $priv.attr('checked', true);
-        }
-        else
-        {
-            $priv.removeAttr('checked');
-        }
+        $priv.prop('checked', checked);
     }
 
     var moduleName = $(this).closest('.group-item').attr('data-module');
