@@ -52,8 +52,8 @@ window.loadExecutionBuilds = function()
         let createBuild = $('[name="build"]').closest('.input-group').find('.input-group-addon');
         if(data.length == 0 && executionID != 0)
         {
-            var url = createBuild.find('a').attr('href');
-            createBuild.find('a').attr('href', url.replace('{executionID}', executionID));
+            var url = createBuild.find('#buildCreateLink').attr('href');
+            createBuild.find('#buildCreateLink').attr('href', url.replace('{executionID}', executionID));
             createBuild.removeClass('hidden');
         }
         else
