@@ -9,7 +9,6 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-jsVar('stepData', $stepData);
 jsVar('productID', $productID);
 jsVar('branch', $branch);
 
@@ -37,6 +36,7 @@ elseif(empty($maxImport) && $allCount > $this->config->file->maxImport)
 }
 else
 {
+    jsVar('stepData', $stepData);
     $priList = array_filter($lang->testcase->priList);
     $requiredFields = $config->testcase->create->requiredFields;
     $items[] = array
