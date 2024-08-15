@@ -45,7 +45,17 @@ $canCreateCase       = hasPriv('testcase', 'create');
 $canBatchCreateCase  = $productID && hasPriv('testcase', 'batchCreate');
 $canCreateScene      = $productID && hasPriv('testcase', 'createScene');
 $canImportUnitResult = hasPriv('testtask', 'importUnitResult');
-$canCreate           = $canCreateCase || $canBatchCreateCase || $canCreateScene;
+
+if($this->app->tab != 'qa')
+{
+    $canBatchCreateCase = false;
+    $canCreateScene     = false;
+    $canImport          = false;
+    $canImportFromLib   = false;
+    $canImportXmind     = false;
+}
+
+$canCreate  = $canCreateCase || $canBatchCreateCase || $canCreateScene;
 
 $lang->testcase->typeList[''] = $lang->testcase->allType;
 if(!isset($param)) $param = 0;
@@ -179,7 +189,6 @@ featureBar
 $viewItems   = array(array('text' => $lang->testcase->listView, 'url' => $app->tab == 'project' ? createLink('project', 'testcase', "projectID={$projectID}") : inlink('browse', "productID=$productID&branch=$branch&browseType=all"), 'active' => $rawMethod != 'groupcase' ? true : false));
 $exportItems = array();
 $importItems = array();
-$createItems = array();
 if($canBrowseGroupCase)
 {
     $link = inlink('groupCase', "productID=$productID&branch=$branch&groupBy=story&projectID=$projectID&caseType=$caseType");
