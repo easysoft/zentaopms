@@ -1631,14 +1631,14 @@ class blockZen extends block
 
         if(!empty($bugFixRate))   $bugFixRate   = array_column($bugFixRate,   null, 'product');
         if(!empty($effectiveBug)) $effectiveBug = array_column($effectiveBug, null, 'product');
-        if(!empty($fixedBug))     $fixedBug     = array_column($fixedBug,  null, 'product');
+        if(!empty($fixedBug))     $fixedBug     = array_column($fixedBug,     null, 'product');
         if(!empty($activatedBug)) $activatedBug = array_column($activatedBug, null, 'product');
 
         $productIdList     = array_keys($products);
         $unclosedTesttasks = $this->dao->select('product,id,name')->from(TABLE_TESTTASK)
             ->where('product')->in($productIdList)
             ->andWhere('project')->ne(0)
-            ->andWhere('status')->ne('closed')
+            ->andWhere('status')->ne('done')
             ->andWhere('deleted')->eq(0)
             ->orderBy('id_desc')
             ->fetchGroup('product');
@@ -1686,7 +1686,7 @@ class blockZen extends block
             $product->totalBug          = isset($effectiveBug[$productID]['value']) ? $effectiveBug[$productID]['value']     : 0;
             $product->fixedBug          = isset($fixedBug[$productID]['value'])     ? $fixedBug[$productID]['value']         : 0;
             $product->activatedBug      = isset($activatedBug[$productID]['value']) ? $activatedBug[$productID]['value']     : 0;
-            $product->unclosedTesttasks = isset($unclosedTesttasks[$productID])    ? $unclosedTesttasks[$productID]        : '';
+            $product->unclosedTesttasks = isset($unclosedTesttasks[$productID])     ? $unclosedTesttasks[$productID]         : '';
         }
 
         $this->view->products = $products;
