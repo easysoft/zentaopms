@@ -73,7 +73,6 @@ $basicInfoModal = modal
     (
         set::width('1/2'),
         set::label($lang->doc->module),
-        set::required(true),
         picker(set::name('module'), set::items($optionMenu), set::value($moduleID), set::required(true))
     ),
     formGroup
