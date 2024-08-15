@@ -83,6 +83,9 @@ DROP VIEW IF EXISTS `view_datasource_4`;
 CREATE VIEW `view_datasource_2` AS select `id`,`title` from `zt_story` where `deleted` = '0' and type = 'epic';
 CREATE VIEW `view_datasource_3` AS select `id`,`title` from `zt_story` where `deleted` = '0' and type = 'requirement';
 CREATE VIEW `view_datasource_4` AS select `id`,`title` from `zt_story` where `deleted` = '0' and type = 'story';
+UPDATE `zt_workflowdatasource` SET `keyField`='id', `valueField`='title' WHERE `view`='view_datasource_2';
+UPDATE `zt_workflowdatasource` SET `keyField`='id', `valueField`='title' WHERE `view`='view_datasource_3';
+UPDATE `zt_workflowdatasource` SET `keyField`='id', `valueField`='title' WHERE `view`='view_datasource_4';
 
 INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`, `createdBy`, `createdDate`, `datasource`, `view`, `keyField`, `valueField`) VALUES
 ('sql', '用户需求', 'requirements', '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'select id,title from zt_story where deleted=\"0\" and type=\"requirement\"',    'view_datasource_3',    'id',   'title'),
