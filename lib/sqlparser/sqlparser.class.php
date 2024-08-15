@@ -311,6 +311,12 @@ class sqlparser
         return $expression;
     }
 
+    /**
+     * and condition.
+     *
+     * @access public
+     * @return object
+     */
     public function andCondition()
     {
         $condition = new PhpMyAdmin\SqlParser\Components\Condition();
@@ -320,6 +326,12 @@ class sqlparser
         return $condition;
     }
 
+    /**
+     * or condition.
+     *
+     * @access public
+     * @return object
+     */
     public function orCondition()
     {
         $condition = new PhpMyAdmin\SqlParser\Components\Condition();
