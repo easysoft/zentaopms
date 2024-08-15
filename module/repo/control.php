@@ -593,7 +593,7 @@ class repo extends control
         foreach($logs as $logItem)
         {
             $logItem->relationFieldTips = '';
-            foreach(array('designs' => 'design', 'stroies' => 'story', 'tasks' => 'task' , 'bugs' => 'bug') as $fieldType=>$moduleName)
+            foreach(array('designs' => 'design', 'stories' => 'story', 'tasks' => 'task' , 'bugs' => 'bug') as $fieldType => $moduleName)
             {
                 if(!empty($modelCommits->{$fieldType}[$logItem->revision]))
                 {

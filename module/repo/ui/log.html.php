@@ -55,7 +55,7 @@ foreach($logs as $log)
     $log->revision = substr($log->revision, 0, 10);
     if (empty($log->relationField)) continue;
     $log->relations = '<div class="relationsField" title="' . $log->relationFieldTips . '">';
-    foreach (array('stroies' => 'story', 'designs' => 'design', 'tasks' => 'task', 'bugs' => 'bug') as $key => $value)
+    foreach (array('stories' => 'story', 'designs' => 'design', 'tasks' => 'task', 'bugs' => 'bug') as $key => $value)
     {
         if (!empty($log->relationField[$key]))
         {

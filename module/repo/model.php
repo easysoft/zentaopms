@@ -409,9 +409,9 @@ class repoModel extends model
     public function link(int $repoID, string $revision, string $type = 'story', string $from = 'repo'): bool
     {
         $this->loadModel('action');
-        if($type == 'story') $links = $this->post->stories;
-        if($type == 'bug')   $links = $this->post->bugs;
-        if($type == 'task')  $links = $this->post->tasks;
+        if($type == 'story') $links = $objects['stories'] = $this->post->stories;
+        if($type == 'bug')   $links = $objects['bugs'] = $this->post->bugs;
+        if($type == 'task')  $links = $objects['task'] = $this->post->tasks;
 
         $revisionInfo = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->andWhere('revision')->eq($revision)->fetch();
         if(empty($revisionInfo))
@@ -450,6 +450,8 @@ class repoModel extends model
             $relation->BType    = $type;
             $relation->BID      = $linkID;
 
+            /* record module related information. */
+            $this->loadModel($type)->updateLinkedCommits((int)$linkID, $repoID, [$revisionID]);
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
 
             $this->action->create($type, (int)$linkID, 'linked2revision', '', substr($revisionInfo->revision, 0, 10), $committer);
@@ -495,6 +497,20 @@ class repoModel extends model
             ->andWhere('relation')->eq('commit')
             ->andWhere('BType')->eq($objectType)
             ->andWhere('BID')->eq($objectID)->exec();
+
+        $this->dao->delete()->from(TABLE_RELATION)
+            ->where('AType')->eq($objectType)
+            ->andWhere('AID')->eq($objectID)
+            ->andWhere('BType')->eq('commit')
+            ->andWhere('BID')->eq($revisionID)
+            ->andWhere('relation')->eq('completedin')->exec();
+
+        $this->dao->delete()->from(TABLE_RELATION)
+            ->where('AType')->eq('commit')
+            ->andWhere('AID')->eq($revisionID)
+            ->andWhere('BType')->eq('story')
+            ->andWhere('BID')->eq($objectID)
+            ->andWhere('relation')->eq('completedfrom')->exec();
 
         if(!dao::isError()) $this->loadModel('action')->create($objectType, $objectID, 'unlinkedfromrevision', '', substr($revision, 0, 10));
         return !dao::isError();
