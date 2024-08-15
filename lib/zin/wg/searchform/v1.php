@@ -51,6 +51,22 @@ class searchForm extends wg
             if(!$this->hasProp('url'))        $this->setProp('url', createLink('search', 'buildZinForm', 'module=' . $this->prop('module')));
             if(!$this->hasProp('searchUrl'))  $this->setProp('searchUrl', createLink('search', 'buildZinQuery'));
         }
-        return zui::searchForm(inherit($this));
+        return zui::searchForm
+        (
+            inherit($this),
+            set::_children
+            (
+                on::init()->do('$element.attr("data-last-url", $.apps.getAppUrl())'),
+                on::skipMorph()
+                    ->beginIf('$.apps.getAppUrl() !== $element.attr("data-last-url")')
+                    ->do
+                    (
+                        '$element.attr("data-last-url", $.apps.getAppUrl())',
+                        'zui.SearchForm.get($element).$.load(true)',
+                        'console.log("skip morph", event);'
+                    )
+                    ->endIf()
+            )
+        );
     }
 }
