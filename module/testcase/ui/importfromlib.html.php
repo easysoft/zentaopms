@@ -33,7 +33,7 @@ featureBar
             set::items($libraries),
             set::value($libID),
             set::required(true),
-            bind::change("window.toggleLib(event)")
+            on::change()->call("window.toggleLib(event)")
         )
     )
 );
