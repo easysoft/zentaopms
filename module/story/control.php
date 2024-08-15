@@ -598,6 +598,7 @@ class story extends control
         $this->view->showGrade     = !empty($this->config->showStoryGrade);
         $this->view->actions       = $this->action->getList('story', $storyID);
         $this->view->branch        = $story->branch;
+        $this->view->project       = isset($projectID) ? $this->loadModel('project')->getById($projectID) : null;
 
         $this->display();
     }
