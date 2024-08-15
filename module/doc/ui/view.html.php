@@ -95,6 +95,19 @@ if(hasPriv('doc', 'delete') && !$doc->deleted)
         'data-confirm' => array('message' => $lang->doc->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x')
     );
 }
+
+if($canExport)
+{
+    $docMoreActions[] = array
+    (
+        'class'  => 'ghost export',
+        'url'    => createLink('doc', $exportMethod, "libID={$libID}&moduleID={$moduleID}&docID={$doc->id}"),
+        'icon'   => 'export',
+        'text'   => $lang->export,
+        'target' => '_self',
+    );
+}
+
 if(!empty($docMoreActions)) $docMoreActions[] = array('type' => 'divider');
 $docMoreActions[] = array
 (
