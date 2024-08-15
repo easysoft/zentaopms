@@ -28,12 +28,13 @@ class zui extends wg
         '_style?: array',
         '_id?: string',
         '_class?: string',
-        '_call?: string'
+        '_call?: string',
+        '_children?: array',
     );
 
     protected function build(): mixed
     {
-        list($name, $target, $tagName, $targetProps, $style, $id, $class, $map, $call, $userOptions) = $this->prop(array('_name', '_to', '_tag', '_props', '_style', '_id', '_class', '_map', '_call', '_options'));
+        list($name, $target, $tagName, $targetProps, $style, $id, $class, $map, $call, $userOptions, $targetChildren) = $this->prop(array('_name', '_to', '_tag', '_props', '_style', '_id', '_class', '_map', '_call', '_options', '_children'));
 
         $options  = $this->getRestProps();
         $children = $this->children();
@@ -56,7 +57,7 @@ class zui extends wg
             return array
             (
                 h::jsCall($call, $name, $target, $options),
-                $this->children()
+                $children
             );
         }
 
@@ -68,6 +69,7 @@ class zui extends wg
             $style ? setStyle($style) : null,
             static::create($name, $options),
             set($targetProps),
+            $targetChildren,
             $children,
         );
     }
