@@ -11,7 +11,6 @@ declare(strict_types=1);
 namespace zin;
 
 $fields = useFields('project.edit');
-$fields->autoLoad('parent', 'acl');
 $fields->orders('begin,days,PM,budget', !empty($config->setCode) ? 'parent,hasProduct,name,code,begin' : 'parent,name,hasProduct,begin');
 $fields->fullModeOrders('begin,days,PM,budget', !empty($config->setCode) ? 'parent,hasProduct,name,code,begin' : 'parent,name,hasProduct,begin');
 $loadUrl = $this->createLink('project', 'create', "model={$model}&program={parent}");
@@ -33,6 +32,8 @@ jsVar('from', $from);
 jsVar('programID', $programID);
 jsVar('LONG_TIME', LONG_TIME);
 jsVar('storyType', $project->storyType);
+jsVar('subAclList', $lang->project->subAclList);
+jsVar('aclList', $lang->project->aclList);
 
 unset($lang->project->endList['999']);
 jsVar('endList', $lang->project->endList);
@@ -69,6 +70,7 @@ formGridPanel
     on::change('[name=future]', 'toggleBudget'),
     on::change('[name=begin], [name=end]', 'computeWorkDays'),
     on::change('[name=parent], [name=budget]', 'checkBudget'),
+    on::change('[name=parent]', 'changeAcl'),
     on::change('[name^=products]', 'toggleStageBy'),
     on::change('[name^=storyType]', 'toggleStoryType'),
     set::modeSwitcher(false),

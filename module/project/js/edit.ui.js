@@ -48,3 +48,21 @@ window.toggleStoryType = function(e)
         $('input[value=requirement]').prop('checked', true);
     }
 }
+
+window.changeAcl = function(e)
+{
+    const parentID   = e.target.value;
+    const defaultVal = $('.aclBox .check-list [name=acl]:checked').val();
+    const useList    = parentID > 0 ? subAclList : aclList;
+    const hasDefault = typeof(useList[defaultVal]) != 'undefined';
+
+    let aclHtml = '';
+    let checkedID = hasDefault ? defaultVal : 'open';
+    for(key in useList)
+    {
+        let checked = key == checkedID;
+        aclHtml += '<div class="radio-primary"><input type="radio" id="acl' + key + '" name="acl"' + (checked ? ' checked' : '') + ' value="' + key +'"><label for="acl' + key + '">' + useList[key] + '</label></div>';
+    }
+    $('.aclBox .check-list').html(aclHtml);
+    setWhite();
+}
