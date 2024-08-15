@@ -22,17 +22,6 @@ for($itemVersion = $doc->version; $itemVersion > 0; $itemVersion--)
     $versionList[] = array('text' => "#$itemVersion", 'url' => createLink('doc', 'view', "docID={$docID}&version={$itemVersion}"), 'key' => $itemVersion, 'active' => $itemVersion == $version);
 }
 
-$versionMenuOptions = array();
-if($config->edition != 'open' && common::hasPriv('doc', 'diff'))
-{
-    $versionMenuOptions['header']       = jsRaw('window.getVersionHeader');
-    $versionMenuOptions['footer']       = jsRaw('window.getVersionFooter');
-    $versionMenuOptions['getItem']      = jsRaw('window.getDropdownItem');
-    $versionMenuOptions['onClickItem']  = jsRaw('window.onClickDropdownItem');
-    $versionMenuOptions['width']        = 200;
-    $versionMenuOptions['checkOnClick'] = '.has-checkbox .item';
-}
-
 $canCollect = hasPriv('doc', 'collect') && !$doc->deleted;
 if($canCollect)
 {
@@ -152,14 +141,14 @@ $docHeader = div
         ),
         $doc->status != 'draft' ? dropdown
         (
+            setID('versionDropdown'),
+            set::items($versionList),
             btn
             (
                 set::type('gray-pale'),
                 setClass('rounded-full size-xs gap-1'),
                 '#' . ($version ? $version : $doc->version)
-            ),
-            set::items($versionList),
-            set::menu($versionMenuOptions)
+            )
         ) : null,
         $doc->deleted ? span(setClass('label danger size-sm'), $lang->doc->deleted) : null
     ),
