@@ -919,6 +919,7 @@ class doc extends control
 
             $libID    = (int)$this->post->lib;
             $moduleID = (int)$this->post->module;
+            if(empty($libID)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->error->notempty, $this->lang->doc->lib)));
 
             $response['result']     = 'success';
             $response['closeModal'] = true;
