@@ -70,6 +70,7 @@ formPanel
             on::change('changeRoot')
         )
     ) : null,
+    $type == 'api' ? formHidden('root', $module->root) : null,
     formGroup
     (
         set::className($hidden ? 'hidden' : ''),

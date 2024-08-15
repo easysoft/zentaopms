@@ -185,7 +185,7 @@ class tree extends control
             $this->view->libs = $this->doc->getLibs($docLib->type, '', '', $objectID, 'book');
         }
 
-        if($type == 'doc' or $type == 'api')
+        if($type == 'doc' || $type == 'api')
         {
             $name  = $this->lang->tree->dir;
             $title = $this->lang->tree->editDir;
