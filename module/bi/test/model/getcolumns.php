@@ -13,11 +13,11 @@ timeout=0
 cid=1
 
 - 获取产品表ID和name字段的类型。
- - 属性id @number
- - 属性name @string
+ - 属性id @INT24
+ - 属性name @VAR_STRING
 - 获取BUG表ID和name字段的类型。
- - 属性id @number
- - 属性title @string
+ - 属性id @INT24
+ - 属性title @VAR_STRING
 
 */
 $bi = new biTest();
