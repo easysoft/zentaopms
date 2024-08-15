@@ -237,7 +237,7 @@ class release extends control
         $this->releaseZen->assignVarsForView($release, $type, $link, $param, $orderBy, $storyPager, $bugPager, $leftBugPager);
 
         $this->commonAction($release->product);
-        if($this->app->rawModule == 'projectrelease')
+        if($this->app->tab == 'project')
         {
             $projectID = (int)$this->session->project;
             $this->loadModel('project')->setMenu($projectID);
