@@ -360,6 +360,7 @@ $lang->doc->selectLibType        = 'Please select a type of doc library.';
 $lang->doc->noLibreOffice        = 'You does not have access to office conversion settings!';
 $lang->doc->errorParentChapter   = 'The parent chapter cannot be its own chapter or sub chapter!';
 $lang->doc->errorOthersCreated   = 'There are documents created by others in this library. You cannot move it.';
+$lang->doc->confirmLeaveOnEdit   = 'Vérifiez que vous avez du contenu de document non sauvegardé, voulez-vous continuer?';
 
 $lang->doc->noticeAcl['lib']['product']['default']   = "Users who can access the selected {$lang->productCommon} can access it.";
 $lang->doc->noticeAcl['lib']['product']['custom']    = "Users who can access the selected {$lang->productCommon} or users in the whiltelist can access it.";
