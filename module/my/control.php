@@ -1162,7 +1162,7 @@ class my extends control
         {
             $tickets = $this->loadModel('ticket')->getBySearch($queryID, $orderBy, $pager);
         }
-        foreach($tickets as $ticket) $ticket->feedback = '#' . $ticket->feedback;
+        foreach($tickets as $ticket) $ticket->feedback = $ticket->feedback != 0 ? '#' . $ticket->feedback : '';
 
         $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=ticket&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
         $this->my->buildTicketSearchForm($queryID, $actionURL);
