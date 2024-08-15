@@ -155,7 +155,7 @@ class docModel extends model
         {
             $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('deleted')->eq(0)
-                ->andWhere('vision')->eq($this->config->vision)
+                ->beginIF($type != 'product' or $this->config->vision != 'or')->andWhere('vision')->eq($this->config->vision)->fi()
                 ->beginIF($type)->andWhere('type')->eq($type)->fi()
                 ->beginIF(!$type)->andWhere('type')->ne('api')->fi()
                 ->beginIF($objectID && strpos(',product,project,execution,', ",$type,") !== false)->andWhere($type)->eq($objectID)->fi()
