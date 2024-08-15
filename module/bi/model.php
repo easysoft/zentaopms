@@ -1228,6 +1228,24 @@ class biModel extends model
     }
 
     /**
+     * Get expression.
+     *
+     * @param  mixed  $table
+     * @param  mixed  $column
+     * @param  mixed  $alias
+     * @param  mixed  $function
+     * @access public
+     * @return object
+     */
+    public function getExpression(mixed $table = null, mixed $column = null, mixed $alias = null, mixed $function = null): object
+    {
+        $this->app->loadClass('sqlparser', true);
+        $parser = new sqlparser($sql);
+
+        return $parser->getExpression($table, $column, $alias, $function);
+    }
+
+    /**
      * Validate sql.
      *
      * @param  string    $sql
