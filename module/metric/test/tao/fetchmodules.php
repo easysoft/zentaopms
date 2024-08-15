@@ -19,8 +19,8 @@ include dirname(__FILE__, 2) . '/lib/calc.unittest.class.php';
 
 $metric = new metricTest();
 
-r(count($metric->fetchModules('system'))) && p() && e(27);   // 获取范围为系统的分组个数
-r(count($metric->fetchModules('product'))) && p() && e(10);  // 获取范围为产品的分组个数
-r(count($metric->fetchModules('project'))) && p() && e(12);  // 获取范围为项目的分组个数
-r(count($metric->fetchModules('execution'))) && p() && e(5); // 获取范围为执行的分组个数
-r(count($metric->fetchModules('user'))) && p() && e(5);      // 获取范围为用户的分组个数
+r(count($metric->fetchModules('system'))) && p() && e(27);    // 获取范围为系统的分组个数
+r(count($metric->fetchModules('product'))) && p() && e(11);   // 获取范围为产品的分组个数
+r(count($metric->fetchModules('project'))) && p() && e(14);   // 获取范围为项目的分组个数
+r(count($metric->fetchModules('execution'))) && p() && e(10); // 获取范围为执行的分组个数
+r(count($metric->fetchModules('user'))) && p() && e(12);      // 获取范围为用户的分组个数
