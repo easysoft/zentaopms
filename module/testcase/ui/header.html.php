@@ -169,7 +169,7 @@ featureBar
         (
             setID('onlyAutoCase'),
             set::checked($this->cookie->onlyAutoCase),
-            bind::change('window.toggleOnlyAutoCase(event)'),
+            on::change('toggleOnlyAutoCase'),
             $lang->testcase->onlyAutomated
         )
     ) : null,
