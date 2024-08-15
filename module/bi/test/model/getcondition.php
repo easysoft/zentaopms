@@ -9,6 +9,18 @@ title=biModel->getCondition();
 timeout=0
 cid=1
 
+- 测试 `deleted` = '0' @`deleted` = '0'
+- 测试 `t1`.`deleted` = '0' @`t1`.`deleted` = '0'
+- 测试 `t1`.`project` = `t2`.`id` @`t1`.`project` = `t2`.`id`
+- 测试 `t1`.`project` = `t2`.`id` @`t1`.`project` = `t2`.`id`
+- 测试 `t1`.`project` = `t2`.`id` @`t1`.`project` = `t2`.`id`
+- 测试 `t1`.`type` IN ('sprint', 'stage', 'kanban') @`t1`.`type` IN ('sprint', 'stage', 'kanban')
+
+- 测试 `t1`.`type` NOT IN ('sprint', 'stage', 'kanban') @`t1`.`type` NOT IN ('sprint', 'stage', 'kanban')
+
+- 测试 `t1`.`name` IS not null @`t1`.`name` IS not null
+- 测试 `t1`.`name` IS not null`t1`.`name` IS null @`t1`.`name` IS null
+
 */
 
 $bi = new biTest();
