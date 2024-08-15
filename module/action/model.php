@@ -1182,6 +1182,7 @@ class actionModel extends model
         if($action->objectType == 'team') list($moduleName, $methodName, $params) = $this->getObjectTypeTeamParams($action);
         if($action->objectType == 'story' && $this->config->vision == 'lite') list($moduleName, $methodName, $params) = array('projectstory', 'view', "storyID={$action->objectID}");
         if($action->objectType == 'review') list($moduleName, $methodName, $params) = array('review', 'view', "reviewID={$action->objectID}");
+        if($action->objectType == 'build' && $this->app->tab == 'project') $moduleName = 'projectbuild';
 
         if(empty($action->hasLink)) $action->objectLink = !$this->actionTao->checkActionClickable($action, $deptUsers, $moduleName, $methodName) ? '' : helper::createLink($moduleName, $methodName, $params);
 
