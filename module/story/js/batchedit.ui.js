@@ -29,8 +29,9 @@ window.renderRowData = function($row, index, story)
 
         if(story.rawStatus == 'closed')
         {
+            let branchID       = story.branch.replace('branch', '');
             let productStories = typeof(productStoryList[story.product]) == 'undefined' ? [] : productStoryList[story.product];
-            productStories     = typeof(productStories[story.branch]) == 'undefined' ? [] : productStories[story.branch];
+            productStories     = typeof(productStories[branchID]) == 'undefined' ? [] : productStories[branchID];
 
             let appendStoryHtml = "<span id='duplicateStoryBox" + story.id + "' " + (story.closedReason != 'duplicate' ? "class='hidden'" : '') + ">";
             appendStoryHtml    += "<div class='form-control picker-box' data-name='duplicateStory' style='padding:0'></div></span>";
