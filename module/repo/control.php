@@ -1871,7 +1871,7 @@ class repo extends control
             if($tag->createdDate) $showCreatedDate = true;
 
             $tag->date = isset($tag->commit->committed_date) ? date('Y-m-d H:i:s', strtotime($tag->commit->committed_date)) : '';
-            if(isset($tag->tagger->when)) $tag->date = date('Y-m-d H:i:s', strtotime($tag->tagger->when));
+            if(isset($tag->commit->committer->when)) $tag->date = date('Y-m-d H:i:s', strtotime($tag->commit->committer->when));
 
             if($keyword && strpos($tag->name, $keyword) === false)
             {
