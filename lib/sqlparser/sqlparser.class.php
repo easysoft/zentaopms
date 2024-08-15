@@ -329,6 +329,18 @@ class sqlparser
         return $condition;
     }
 
+    /**
+     * Get condition.
+     *
+     * @param  mixed    $tableA
+     * @param  mixed    $columnA
+     * @param  string   $operator
+     * @param  mixed    $tableB
+     * @param  mixed    $columnB
+     * @param  mixed    $group
+     * @access public
+     * @return object
+     */
     public function getCondition($tableA = null, $columnA = null, $operator = '', $tableB = null, $columnB = null, $group = 1)
     {
         $condition = new PhpMyAdmin\SqlParser\Components\Condition();
