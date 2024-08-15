@@ -43,10 +43,14 @@ class programTao extends programModel
         if($program->type == 'program' && !str_contains(",{$this->app->user->view->programs},", ",$program->id,")) return array();
         if($program->type == 'project') $this->loadModel('project');
 
+        $modelClass = '';
+        if($program->type == 'project') $modelClass = get_class($this->project);
+        if($program->type == 'program') $modelClass = get_class($this);
+
         $actionsMap         = array();
-        $canStartProgram    = common::hasPriv($program->type, 'start', $program);
-        $canSuspendProgram  = common::hasPriv($program->type, 'suspend', $program);
-        $canCloseProgram    = common::hasPriv($program->type, 'close', $program);
+        $canStartProgram    = common::hasPriv($program->type, 'start',    $program);
+        $canSuspendProgram  = common::hasPriv($program->type, 'suspend',  $program);
+        $canCloseProgram    = common::hasPriv($program->type, 'close',    $program);
         $canActivateProgram = common::hasPriv($program->type, 'activate', $program);
         $normalActions      = array('start', 'close', 'activate');
         foreach($normalActions as $action)
@@ -58,6 +62,7 @@ class programTao extends programModel
             $item = new stdclass();
             $item->name   = $action;
             $item->url    = helper::createLink($program->type, $action, "programID={$program->id}");
+            if($modelClass && !call_user_func_array(array($modelClass, 'isClickable'), array($program, $action))) $item->disabled = true;
             $actionsMap[] = $item;
             break;
         }
@@ -77,7 +82,7 @@ class programTao extends programModel
                 $item = new stdclass();
                 $item->name     = $action;
                 $item->url      = helper::createLink($program->type, $action, "programID={$program->id}");
-                $item->disabled = !static::isClickable($program, $action);
+                if($modelClass && !call_user_func_array(array($modelClass, 'isClickable'), array($program, $action))) $item->disabled = true;
 
                 if($action == 'close' && $program->status == 'closed')      $item->hint = $this->lang->{$program->type}->tip->closed;
                 if($action == 'activate' && $program->status == 'doing')    $item->hint = $this->lang->{$program->type}->tip->actived;
@@ -167,6 +172,7 @@ class programTao extends programModel
                     $item->disabled = true;
                     $item->hint     = $this->lang->project->tip->group;
                 }
+                if(!call_user_func_array(array($this->project, 'isClickable'), array($project, $item->name))) $item->disabled = true;
 
                 $more->items[] = $item;
             }
