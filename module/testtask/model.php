@@ -1585,6 +1585,7 @@ class testtaskModel extends model
 
             foreach($stepResults as $step)
             {
+                if(!isset($step['result'])) continue;
                 if($step['result'] == 'pass')
                 {
                     $passCount++;

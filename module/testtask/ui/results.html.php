@@ -178,7 +178,7 @@ foreach($results as $i => $result)
     $stepResultTrs[] = !empty($result->ZTFResult) && $result->node > 0 ? div
     (
         h::p($lang->testtask->runningLog),
-        h::p($result->ZTFResult)
+        h::p(html($result->ZTFResult))
     ) : '';
 
     $projectParam   = $this->app->tab == 'project' ? "projectID={$this->session->project}," : '';
