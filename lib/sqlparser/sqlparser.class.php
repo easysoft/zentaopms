@@ -78,6 +78,7 @@ class sqlparser
     public function __construct($query)
     {
         $query = $this->skipLineBreak($query);
+        if(empty($query)) return;
 
         $this->parser          = new PhpMyAdmin\SqlParser\Parser($query);
         $this->statements      = $this->parser->statements;
@@ -88,6 +89,18 @@ class sqlparser
     }
 
     /**
+     * Set dao.
+     *
+     * @param  object    $dao
+     * @access public
+     * @return void
+     */
+    public function setDAO($dao)
+    {
+        $this->dao = $dao;
+    }
+
+    /**
      * Parse statement.
      *
      * @access public
@@ -95,6 +108,8 @@ class sqlparser
      */
     public function parseStatement()
     {
+        if(empty($this->statement)) return;
+
         $this->columns = $this->parseColumns();
         $this->tables  = $this->parseTables();
     }
@@ -107,6 +122,8 @@ class sqlparser
      */
     public function matchColumnsWithTable()
     {
+        if(empty($this->statement)) return array();
+
         if(count($this->tables) == 1) return $this->combineSingleTable();
         return $this->combineMultipleTable();
     }
@@ -114,10 +131,10 @@ class sqlparser
     /**
      * Combine single table to columns.
      *
-     * @access public
+     * @access private
      * @return array
      */
-    public function combineSingleTable()
+    private function combineSingleTable()
     {
         $combineColumns = array();
         $fromTable = current($this->tables);
@@ -134,10 +151,10 @@ class sqlparser
     /**
      * Combine multiple table to columns.
      *
-     * @access public
+     * @access private
      * @return array
      */
-    public function combineMultipleTable()
+    private function combineMultipleTable()
     {
         foreach($this->columns as $columnName => $column)
         {
@@ -154,10 +171,10 @@ class sqlparser
      * @param  string    $tableName
      * @param  string    $tables
      * @param  string    $column
-     * @access public
+     * @access private
      * @return string|false
      */
-    public function searchTables($tableName, $tables, $column)
+    private function searchTables($tableName, $tables, $column)
     {
         /* 如果能使用别名匹配上，那么直接返回。*/
         /* If it can be matched using an alias, then it returns. */
@@ -184,10 +201,10 @@ class sqlparser
     /**
      * Parse columns.
      *
-     * @access public
+     * @access private
      * @return void
      */
-    public function parseColumns()
+    private function parseColumns()
     {
         $fields = array();
         foreach($this->statement->expr as $expr)
@@ -204,10 +221,10 @@ class sqlparser
     /**
      * Parse tables.
      *
-     * @access public
+     * @access private
      * @return void
      */
-    public function parseTables()
+    private function parseTables()
     {
         $from  = current($this->statement->from);
         $joins = $this->statement->join;
@@ -225,10 +242,10 @@ class sqlparser
      *
      * @param  object    $expr
      * @param  string    $type
-     * @access public
+     * @access private
      * @return void
      */
-    public function parseTable($expr, $type)
+    private function parseTable($expr, $type)
     {
         $isTable = empty($expr->subquery);
 
@@ -243,10 +260,10 @@ class sqlparser
      *
      * @param  string    $table
      * @param  bool    $isTable
-     * @access public
+     * @access private
      * @return string|array
      */
-    public function getOriginTable($table, $isTable)
+    private function getOriginTable($table, $isTable)
     {
         if(!$isTable)
         {
@@ -266,10 +283,10 @@ class sqlparser
      *
      * @param  string    $table
      * @param  string    $column
-     * @access public
+     * @access private
      * @return bool
      */
-    public function columnExistInOriginTable($table, $column)
+    private function columnExistInOriginTable($table, $column)
     {
         $originTable = $this->getOriginTableColumns($table);
         if(!$originTable) return false;
@@ -281,10 +298,10 @@ class sqlparser
      * Get origin table columns.
      *
      * @param  string    $table
-     * @access public
+     * @access private
      * @return array|null
      */
-    public function getOriginTableColumns($table)
+    private function getOriginTableColumns($table)
     {
         $originTables = $this->originTables;
         return isset($originTables[$table]) ? $originTables[$table] : null;
@@ -294,34 +311,22 @@ class sqlparser
      * Store origin table.
      *
      * @param  string    $table
-     * @access public
+     * @access private
      * @return void
      */
-    public function storeOriginTable($table)
+    private function storeOriginTable($table)
     {
         if(!isset($this->originTables[$table])) $this->originTables[$table] = $this->dao->descTable($table);
-    }
-
-    /**
-     * Set dao.
-     *
-     * @param  object    $dao
-     * @access public
-     * @return void
-     */
-    public function setDAO($dao)
-    {
-        $this->dao = $dao;
     }
 
     /**
      * Skip line break in sql.
      *
      * @param  string    $sql
-     * @access public
+     * @access private
      * @return string
      */
-    public function skipLineBreak($sql)
+    private function skipLineBreak($sql)
     {
         $sql = str_replace("\n\t", " ", $sql);
         $sql = str_replace("\t\n", " ", $sql);
