@@ -166,6 +166,26 @@ class sqlparser
 
         return $expression;
     }
+    public function getCondition($tableA = null, $columnA = null, $operator = '', $tableB = null, $columnB = null, $group = 1)
+    {
+        $condition = new PhpMyAdmin\SqlParser\Components\Condition();
+
+        $tableA  = $this->trimExpr($tableA);
+        $columnA = $this->trimExpr($columnA);
+        $tableB  = $this->trimExpr($tableB);
+
+        /* 如果tableB不为空，那么columnB就是字段，需要trim。*/
+        if(!empty($tableB)) $columnA = $this->trimExpr($columnA);
+
+        $exprA = empty($tableA) ? "`$columnA`" : "`$tableA`.`$columnA`";
+        $exprB = empty($tableB) ? "$columnB" : "`$tableB`.`$columnB`";
+
+        $operator = strtoupper($operator);
+
+        $condition->expr = "$exprA $operator $exprB";
+
+        return $condition;
+    }
 
     /**
      * Match columns with table.
