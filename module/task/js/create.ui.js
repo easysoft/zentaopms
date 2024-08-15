@@ -488,7 +488,7 @@ window.checkTeamMember = function()
     assignedToList = assignedToList.replace(regex, '');
     $('div.assignedToList').prepend(assignedToList);
 
-    zui.Modal.hide();
+    zui.Modal.hide('#modalTeam');
     return false;
 };
 
