@@ -30,6 +30,7 @@ toolbar
     (
         'icon'        => 'export',
         'class'       => 'ghost export',
+        'id'          => 'mine2export',
         'text'        => $lang->export,
         'url'         => createLink('doc', 'mine2export', "libID={$libID}&moduleID={$moduleID}"),
         'data-size'   => 'sm',

@@ -8,3 +8,12 @@ window.onSortEnd = function(from, to, type)
     $.ajaxSubmit({url, data: form});
     return true;
 }
+
+$(document).off('click', '#actionBar #mine2export').on('click', '#actionBar #mine2export', function()
+{
+    const dtable = zui.DTable.query($('#mainContent .dtable'));
+    if(!$('#mainContent .dtable').length) return;
+
+    const checkedList = dtable.$.getChecks();
+    $.cookie.set('checkedItem', checkedList, {expires:config.cookieLife, path:config.webRoot});
+});
