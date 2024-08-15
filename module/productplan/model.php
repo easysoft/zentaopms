@@ -143,7 +143,7 @@ class productplanModel extends model
             $plan->expired  = $plan->end < helper::today();
 
             /* Sync linked stories. */
-            if(!isset($storyCountInTable[$plan->id]) || $storyCountInTable[$plan->id] != $plan->stories) $this->productplanTao->syncLinkedStories($plan->id, array_keys($storyPairs));
+            if(!isset($storyCountInTable[$plan->id]) || $storyCountInTable[$plan->id] != $plan->stories) $this->productplanTao->syncLinkedStories($plan->id, array_keys($storyPairs), false);
 
             if(!$plan->parent || !isset($plans[$plan->parent])) continue;
             $plans[$plan->parent]->bugs    = zget($plans[$plan->parent], 'bugs', 0)    + $plan->bugs;
