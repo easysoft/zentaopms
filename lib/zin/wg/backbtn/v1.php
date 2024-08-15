@@ -52,7 +52,7 @@ class backBtn extends btn
             'testreport'     => 'testreport-browse,project-testreport,execution-testreport,execution-testtask',
             'tree'           => 'product-browse,project-browse,execution-task,bug-browse,projectstory-story,host-browse,execution-story,feedback-admin,ticket-browse,testcase-browse,caselib-browse',
             'doc'            => 'doc-mySpace,doc-productSpace,doc-projectSpace,doc-teamSpace,doc-view,execution-doc',
-            'design'         => 'design-browse,projectstory-track,my-effort',
+            'design'         => 'design-browse,projectstory-track,my-effort,my-index',
             'release'        => 'release-browse,release-view,product-roadmap,kanban-view,projectrelease-browse,story-view,my-index,my-effort,product-dynamic,project-dynamic',
             'productplan'    => 'productplan-browse,kanban-view,projectplan-browse,my-index,my-effort,product-dynamic,project-dynamic',
             'programplan'    => 'project-execution',

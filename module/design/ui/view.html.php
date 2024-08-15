@@ -74,7 +74,7 @@ detailBody
     (
         set::prefix
         (
-            array(array('icon' => 'back', 'text' => $lang->goback, 'url' => 'javascript:goBack("design-browse")'))
+            array(array('icon' => 'back', 'text' => $lang->goback, 'data-back' => 'design-browse,projectstory-track,my-effort,my-index', 'className' => 'open-url'))
         ),
         set::main($operateMenus),
         set::suffix($commonActions),
