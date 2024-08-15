@@ -524,15 +524,12 @@
         const target    = options.target || '#main';
         const selectors = (Array.isArray(options.selector) ? options.selector : options.selector.split(',')).map(selector => selector.replace(':component', ':type=json&data=props'));
         const url       = options.url;
-
         if(DEBUG && !selectors.includes('zinDebug()')) selectors.push('zinDebug()');
         const isDebugRequest = DEBUG && selectors.length === 1 || selectors[0] === 'zinDebug()';
         if(options.modal === undefined) options.modal = $(target[0] !== '#' && target[0] !== '.' ? `#${target}` : target).closest('.modal').length;
         const headers = {'X-ZIN-Options': JSON.stringify($.extend({selector: selectors, type: 'list'}, options.zinOptions)), 'X-ZIN-App': currentCode, 'X-Zin-Cache-Time': 0};
         if(options.modal) headers['X-Zui-Modal'] = 'true';
         const requestMethod = (options.method || 'GET').toUpperCase();
-        options.isDiffPage = isDiffPage(url);
-        options.pageID     = getUrlID(url);
         if(!options.cache && options.cache !== false) options.cache = !!(requestMethod === 'GET' && config.clientCache && !options.partial);
         if(options.cache === true) options.cache = url + (url.includes('?') ? '&zin=' : '?zin=') + encodeURIComponent(selectors.join(','));
         const cacheKey = options.cache;
@@ -552,7 +549,6 @@
             }, []), renderOptions);
             if(!onlyZinDebug) updatePerfInfo(options, 'renderEnd', {perf: {clientCache: cacheHit ? cacheKey : null}});
         };
-        updatePerfInfo(options, 'requestBegin', {perf: {renderBegin: undefined, renderEnd: undefined}});
         const ajax = new zui.Ajax(
         {
             url:     url + (url.includes('?') ? '&zin=1' : '?zin=1'),
@@ -740,20 +736,7 @@
                 }
             }
         });
-        const sendRequest = () =>
-        {
-            if(window.beforeRequestContent)
-            {
-                const result = window.beforeRequestContent(options, ajax);
-                if(result === false) return;
-                if(result instanceof Promise)
-                {
-                    result.then((result) => result && ajax.send());
-                    return;
-                }
-            }
-            ajax.send();
-        };
+        updatePerfInfo(options, 'requestBegin', {perf: {renderBegin: undefined, renderEnd: undefined}});
         if(DEBUG) showLog('Request', `${ajax.setting.type}:${options.id} ${getUrlID(url)} task ${rid}`, options, {cacheKey, ajax});
         if(currentCode) $.cookie.set('tab', currentCode, {expires: config.cookieLife, path: config.webRoot});
         if(cacheKey)
@@ -795,12 +778,12 @@
                 {
                     if(DEBUG && localCacheFirst) showLog('Request', 'no local cache', {url, cacheKey, options});
                 }
-                sendRequest();
+                ajax.send();
             });
         }
         else
         {
-            sendRequest();
+            ajax.send();
         }
         return ajax;
     }
@@ -818,40 +801,55 @@
 
         selectors = Array.isArray(selectors) ? selectors.join(',') : selectors;
         const id = selectors.includes('pageJS') ? 'page' : (options.id || selectors);
-        options = $.extend({}, options, {url: url, selectors: selectors, id: id});
-
         let task = fetchTasks.get(id);
-        if(task)
+        if(task && !options.partial && task.url === url)
         {
-            if(!options.partial && task.url === url)
+            if(DEBUG) showLog('Request', [`success:same request ${task.rid}`, url], {task, options});
+            return;
+        }
+
+        options = $.extend({}, options, {url: url, selectors: selectors, id: id, isDiffPage: isDiffPage(url), pageID: getUrlID(url)});
+        const dispatchTask = () =>
+        {
+            if(task)
             {
-                if(DEBUG) showLog('Request', [`success:same request ${task.rid}`, url], {task, options});
+                if(task.xhr)     task.xhr.abort();
+                if(task.timerID) clearTimeout(task.timerID);
+                if(task.rid)     ridSet.delete(task.rid);
+            }
+            const rid = $.guid++;
+            task = {url: url, selectors: selectors, options: options, rid: rid};
+            options.rid = rid;
+            fetchTasks.set(id, task);
+            ridSet.add(rid);
+
+            task.timerID = setTimeout(() =>
+            {
+                task.timerID = 0;
+                task.xhr = requestContent(options, () =>
+                {
+                    if(task.xhr)
+                    {
+                        const runID = task.xhr.getResponseHeader('Xhprof-RunID');
+                        if(runID) updateZinbar({id: id, xhprof: `${config.webRoot}xhprof/xhprof_html/index.php?run=${runID}&source=${config.currentModule}_${config.currentMethod}`});
+                        task.xhr = null;
+                    }
+                    fetchTasks.delete(id);
+                    ridSet.delete(rid);
+                });
+            }, options.delayTime || 0);
+        };
+        if(window.beforeRequestContent)
+        {
+            const result = window.beforeRequestContent(options, task);
+            if(result === false) return;
+            if(result instanceof Promise)
+            {
+                result.then((result) => result && dispatchTask());
                 return;
             }
-            if (task.xhr) task.xhr.abort();
-            if(task.timerID) clearTimeout(task.timerID);
-            if(task.rid) ridSet.delete(task.rid);
         }
-        const rid = $.guid++;
-        task = {url: url, selectors: selectors, options: options, rid: rid};
-        fetchTasks.set(id, task);
-        ridSet.add(rid);
-        options.rid = rid;
-        task.timerID = setTimeout(() =>
-        {
-            task.timerID = 0;
-            task.xhr = requestContent(options, () =>
-            {
-                if(task.xhr)
-                {
-                    const runID = task.xhr.getResponseHeader('Xhprof-RunID');
-                    updateZinbar({id: id, xhprof: `${config.webRoot}xhprof/xhprof_html/index.php?run=${runID}&source=${config.currentModule}_${config.currentMethod}`});
-                    task.xhr = null;
-                }
-                fetchTasks.delete(id);
-                ridSet.delete(rid);
-            });
-        }, options.delayTime || 0);
+        dispatchTask();
     }
 
     /** Load an old page. */
