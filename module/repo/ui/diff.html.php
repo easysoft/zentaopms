@@ -119,7 +119,7 @@ else
         set::value($oldRevision),
         set::placeholder($lang->repo->source)
     );
-    $breadcrumbItems[] = span(setClass('label label-exchange mr-2'), icon('exchange'));
+    $breadcrumbItems[] = span(setClass('label label-exchange mr-2 text-white'), icon('exchange'));
     $breadcrumbItems[] = input
     (
         setClass('svn-version mr-2'),
