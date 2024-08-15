@@ -36,9 +36,14 @@ $(document).off('click', '.import-btn').on('click', '.import-btn', function()
     const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return false;
 
-    const url      = $('#importFromLibForm').attr('action');
-    const formData = new FormData($("#importFromLibForm")[0]);
-    checkedList.forEach((id) => formData.append(`caseIdList[${id}]`, id));
+    const url        = $('#importFromLibForm').attr('action');
+    const formData   = new FormData($("#importFromLibForm")[0]);
+    const dtableData = dtable.$.getFormData();
+    checkedList.forEach((id) =>
+    {
+        formData.append(`caseIdList[${id}]`, id);
+        formData.append(`module[${id}]`, dtableData[`module[${id}]`]);
+    });
 
     $.ajaxSubmit({url: url, data: formData});
 
