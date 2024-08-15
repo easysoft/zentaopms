@@ -159,7 +159,7 @@ $handleSubmitForm = <<<'JS'
             zui.Modal.alert($showTitle.data('titleHint')).then(() => $showTitle[0].focus());
             return false;
         }
-        $(e.target).find('input[name=status]').val(isDraft ? 'draft' : 'normal');
+        $(e.target).removeClass('has-changed').find('input[name=status]').val(isDraft ? 'draft' : 'normal');
     }
     JS;
 
@@ -167,7 +167,7 @@ formBase
 (
     setID('docForm'),
     set::actions(false),
-    set::ajax(array('beforeSubmit' => jsRaw($handleSubmitForm))),
+    set::ajax(array('beforeSubmit' => jsRaw($handleSubmitForm), 'onFail' => jsRaw('$("#docForm").addClass("has-changed")'))),
     set::morph(),
     setData('unsavedConfirm', $lang->doc->confirmLeaveOnEdit),
     on::change('#showTitle,zen-editor')->once()->do('$element.addClass("has-changed")'),
