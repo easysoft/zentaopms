@@ -153,7 +153,7 @@ window.rendDocCell = function(result, {col, row})
     {
         const moduleDivide = row.data.moduleName ? ' > ' : '';
         const moduleName   = row.data.libName + moduleDivide + row.data.moduleName;
-        const spaceMethod  = spaceMethodList[row.data.objectType];
+        const spaceMethod  = typeof spaceMethodList != 'undefined' ? spaceMethodList[row.data.objectType] : '';
 
         let moduleHtml = '';
         if(spaceMethod && eval(`${spaceMethod}Priv`))
