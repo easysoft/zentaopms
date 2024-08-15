@@ -179,7 +179,7 @@ $lang->zanode->instructionPage = new stdClass();
 $lang->zanode->instructionPage->title            = "ZenDao Automation Testing Solution";
 $lang->zanode->instructionPage->desc             = "ZenTao automated testing solution realizes centralized management of test cases, test scripts, script execution, test results and test environment, reducing test management costs while improving test execution efficiency. Through the solution, you can more easily establish an automated testing system that adapts to the current project management and R&D processes, and reduce the investment in testing work with the help of automation technology.";
 $lang->zanode->instructionPage->imageInstruction = 'Architecture diagram: ';
-$lang->zanode->instructionPage->image            = 'static/svg/zanode_instruction.svg';
+$lang->zanode->instructionPage->image            = 'static/svg/zanode_instruction_en.svg';
 $lang->zanode->instructionPage->concept          = '1、Core Concepts';
 $lang->zanode->instructionPage->conceptDesc      = 'Hosts include physical hosts, K8s clusters, cloud servers, and cloud container instances, which are mainly used to create virtual machines or container instances. The recommended operating system installed on the host machine is the LTS version of Ubuntu or CentOS.
 The execution node is a virtual machine or container instance created by the host machine and is a test environment for executing test tasks.';
