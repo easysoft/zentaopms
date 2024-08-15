@@ -33,6 +33,22 @@ class biTest
     }
 
     /**
+     * get expression test.
+     *
+     * @param  string    $table
+     * @param  string    $column
+     * @param  string    $alias
+     * @param  string    $function
+     * @access public
+     * @return string
+     */
+    public function getExpressionTest($table = null, $column = null, $alias = null, $function = null)
+    {
+        $expression = $this->objectModel->getExpression($table, $column, $alias, $function);
+        return $expression->build($expression);
+    }
+
+    /**
      * get columns native type
      *
      * @param  string $sql
