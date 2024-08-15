@@ -2245,8 +2245,9 @@ class taskModel extends model
     public function manageTaskTeam(string $mode, object $task, object $teamData): array|false
     {
         /* Get old team member, and delete old task team. */
-        $oldTeams   = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->fetchAll();
-        $oldMembers = array_column($oldTeams, 'account');
+        $oldTeamData = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->fetchAll('account');
+        $oldTeams    = array_values($oldTeamData);
+        $oldMembers  = array_column($oldTeams, 'account');
         $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->exec();
 
         /* Set effort left = 0 when linear task members be changed. */
@@ -2258,7 +2259,7 @@ class taskModel extends model
         }
 
         /* Manage task team member. */
-        $teams = $this->manageTaskTeamMember($mode, $task, $teamData);
+        $teams = $this->manageTaskTeamMember($mode, $task, $teamData, $oldTeamData);
         if(dao::isError()) return false;
 
         /* Set effort left = 0 when multi task members be removed. */
@@ -2279,10 +2280,11 @@ class taskModel extends model
      * @param  string      $mode
      * @param  object      $task
      * @param  object      $teamData
+     * @param  array       $oldTeamData
      * @access public
      * @return false|array
      */
-    public function manageTaskTeamMember(string $mode, object $task, object $teamData): false|array
+    public function manageTaskTeamMember(string $mode, object $task, object $teamData, array $oldTeamData = array()): false|array
     {
         /* If status of the task is doing, get the person who did not complete the task. */
         $undoneUsers = array();
@@ -2309,7 +2311,7 @@ class taskModel extends model
             $member->estimate = isset($teamData->teamEstimate) ? (float)zget($teamData->teamEstimate, $index, 0.00) : 0.00;
             $member->consumed = isset($teamData->teamConsumed) ? (float)zget($teamData->teamConsumed, $index, 0.00) : 0.00;
             $member->left     = isset($teamData->teamLeft) ? (float)zget($teamData->teamLeft, $index, 0.00) : 0.00;
-            $member->status   = 'wait';
+            $member->status   = isset($oldTeamData[$account]->status) ? $oldTeamData[$account]->status : 'wait';
             if($task->status == 'wait' && $member->estimate > 0 && $member->left == 0) $member->left = $member->estimate;
             if($task->status == 'done') $member->left = 0;
 
