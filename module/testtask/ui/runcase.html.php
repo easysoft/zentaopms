@@ -71,7 +71,6 @@ if($confirm != 'yes')
             h::td
             (
                 setClass('result-td'),
-                setClass('text-center'),
                 picker
                 (
                     on::change('checkStepValue'),
