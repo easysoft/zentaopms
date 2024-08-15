@@ -453,7 +453,7 @@ class taskModel extends model
         $oldTask = $this->getById($task->id);
 
         /* Check task left. */
-        if(!in_array($oldTask->status, array('done', 'closed')) && isset($task->left) && $task->left == 0)
+        if($oldTask->parent >= 0 && !in_array($oldTask->status, array('done', 'closed')) && isset($task->left) && $task->left == 0)
         {
             dao::$errors['left'] = sprintf($this->lang->error->notempty, $this->lang->task->left);
             return false;
