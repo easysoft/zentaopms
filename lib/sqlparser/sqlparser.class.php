@@ -310,6 +310,16 @@ class sqlparser
 
         return $expression;
     }
+
+    public function andCondition()
+    {
+        $condition = new PhpMyAdmin\SqlParser\Components\Condition();
+        $condition->isOperator = true;
+        $condition->expr       = 'AND';
+
+        return $condition;
+    }
+
     public function getCondition($tableA = null, $columnA = null, $operator = '', $tableB = null, $columnB = null, $group = 1)
     {
         $condition = new PhpMyAdmin\SqlParser\Components\Condition();
