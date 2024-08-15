@@ -266,7 +266,7 @@ class doc extends control
         $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq('1')->where('id')->eq($libID)->exec();
 
         $object = ($lib->type == 'custom' && $lib->parent == 0) ? 'docspace' : 'doclib';
-        $this->loadModel('action')->create($object, $libID, 'deleted');
+        $this->loadModel('action')->create($object, $libID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
 
         $moduleName = 'doc';
         $objectType = $lib->type;
