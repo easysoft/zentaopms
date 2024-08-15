@@ -389,6 +389,7 @@ class docZen extends doc
      *
      * @param  string     $space
      * @param  int        $libID
+     * @param  string     $locateLink
      * @access protected
      * @return bool|int
      */
@@ -520,7 +521,7 @@ class docZen extends doc
         if(!$libID && !empty($libPairs)) $libID = key($libPairs);
         if(empty($lib) && $libID) $lib = $this->doc->getLibByID($libID);
 
-        $this->setObjectsForCreate($lib->type, $lib, $unclosed, $objectID);
+        $this->setObjectsForCreate(empty($lib->type) ? '' : $lib->type, $lib, $unclosed, $objectID);
 
         $this->view->objectType = $objectType;
         $this->view->spaceType  = $objectType;
@@ -529,11 +530,11 @@ class docZen extends doc
         $this->view->objectID   = $objectID;
         $this->view->libs       = $libPairs;
         $this->view->libName    = zget($lib, 'name', '');
-        $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
         $this->view->moduleID   = $moduleID;
         $this->view->docType    = $docType;
         $this->view->groups     = $this->loadModel('group')->getPairs();
         $this->view->users      = $this->user->getPairs('nocode|noclosed|nodeleted');
+        $this->view->optionMenu = empty($libID) ? array() : $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
     }
 
     /**

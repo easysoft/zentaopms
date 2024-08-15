@@ -339,6 +339,7 @@ $lang->doc->confirmOtherEditing  = "This document is currently editing. Continui
 $lang->doc->errorEditSystemDoc   = "You don't have to change system document library.";
 $lang->doc->errorEmptyProduct    = "No {$lang->productCommon}. It cannot be created.";
 $lang->doc->errorEmptyProject    = "No {$lang->executionCommon}. It cannot be created.";
+$lang->doc->errorEmptySpaceLib   = "There is no document library in this space. It cannot be created. Please create a document library first";
 $lang->doc->errorMainSysLib      = "This library cannot be deleted.";
 $lang->doc->accessDenied         = "Access is denied!";
 $lang->doc->versionNotFount      = 'It does not exist in this build.';

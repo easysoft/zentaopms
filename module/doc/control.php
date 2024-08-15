@@ -380,7 +380,9 @@ class doc extends control
 
         $this->docZen->assignVarsForCreate($objectType, $objectID, $libID, $moduleID, $docType);
 
-        $lib      = $this->view->lib;
+        $lib = $this->view->lib;
+        if(empty($lib)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorEmptySpaceLib));
+
         $objectID = $this->view->objectID;
         $libData  = $this->doc->setMenuByType($lib->type, (int)$objectID, (int)$lib->id, (int)$appendLib);
         if(is_string($libData)) return $this->locate($libData);

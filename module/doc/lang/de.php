@@ -339,6 +339,7 @@ $lang->doc->confirmOtherEditing  = "This document is currently editing. Continui
 $lang->doc->errorEditSystemDoc   = "System Dokumentenbibliothek darf nicht geändert werden.";
 $lang->doc->errorEmptyProduct    = "Kein {$lang->productCommon}. Kann nicht erstellt werden.";
 $lang->doc->errorEmptyProject    = "Kein {$lang->executionCommon}. Kann nicht erstellt werden.";
+$lang->doc->errorEmptySpaceLib   = "There is no document library in this space. It cannot be created. Please create a document library first";
 $lang->doc->errorMainSysLib      = "Diese Bibliothek kann nicht gelöscht werden.";
 $lang->doc->accessDenied         = "Zugriff verweigert!";
 $lang->doc->versionNotFount      = 'Existiert nicht in diesem Build.';
