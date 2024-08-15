@@ -796,6 +796,7 @@ class doc extends control
 
         /* Build the search form. */
         $queryID = $browseType == 'bySearch' ? $param : 0;
+        $queryID = $queryID == 'myQueryID' ? 0 : $queryID;
         $params  = "objectID={$objectID}&libID={$libID}&moduleID=0&browseType=bySearch&orderBy={$orderBy}&param=myQueryID";
         if($this->app->rawMethod == 'tablecontents') $params = "type={$type}&" . $params;
         $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, $params);
