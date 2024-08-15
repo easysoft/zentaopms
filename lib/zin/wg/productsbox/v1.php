@@ -365,7 +365,7 @@ class productsBox extends wg
                         set::multiple(true)
                     )
                 ) : null,
-                $disabledProduct ? null : div
+                div
                 (
                     setClass('pl-2 flex self-center line-btn c-actions', $i == 0 ? 'first-action' : ''),
                     btn
@@ -378,7 +378,7 @@ class productsBox extends wg
                     (
                         bind::click('removeLine(event)'),
                         setClass('btn btn-link text-gray removeLine'),
-                        setClass($i == 0 ? 'hidden' : ''),
+                        setClass(($i == 0 || $disabledProduct) ? 'hidden' : ''),
                         icon('trash')
                     )
                 )
