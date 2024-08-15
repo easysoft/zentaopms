@@ -2473,10 +2473,17 @@ class gitlabModel extends model
         $repo->codePath = str_replace('https://', 'http://', $repo->codePath);
 
         $fullPath = trim(str_replace($repo->client, '', $repo->codePath), '/');
-        $query    = sprintf($query, $fullPath);
+        if(strpos($fullPath, 'http://') === 0)
+        {
+            $project = $this->apiGetSingleProject((int)$repo->serviceHost, (int)$repo->serviceProject);
+            if(isset($project->path_with_namespace)) $fullPath = $project->path_with_namespace;
 
-        $url = rtrim($gitlab->url, '/') . '/api/graphql' . "?private_token={$gitlab->token}";
-        return json_decode(commonModel::http($url, array('query' => $query), array(CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1)));
+            if(isset($repo->apiPath) && substr($repo->apiPath, 0, 5) == 'https') $repo->client = str_replace('http://', 'https://', $repo->client);
+            $this->dao->update(TABLE_REPO)->set('path')->eq("{$repo->client}/{$fullPath}")->where('id')->eq($repo->id)->exec();
+        }
+
+        $url = rtrim($gitlab->url, '/') . "/api/graphql?private_token={$gitlab->token}";
+        return json_decode(commonModel::http($url, array('query' => sprintf($query, $fullPath)), array(CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1)));
     }
 
     /**
