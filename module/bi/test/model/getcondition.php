@@ -17,3 +17,9 @@ r($bi->getConditionTest('t1', 'deleted', '=', null, "'0'"))       && p('') && e(
 r($bi->getConditionTest('t1', 'project', '=', 't2', 'id'))        && p('') && e("`t1`.`project` = `t2`.`id`"); // 测试 *
 r($bi->getConditionTest('`t1`', '`project`', '=', 't2', 'id'))    && p('') && e("`t1`.`project` = `t2`.`id`"); // 测试 *
 r($bi->getConditionTest('`t1`', '`project`  ', '=', 't2', 'id'))  && p('') && e("`t1`.`project` = `t2`.`id`"); // 测试 *
+
+r($bi->getConditionTest('t1', 'type', 'in', null, "('sprint', 'stage', 'kanban')"))     && p('') && e("`t1`.`type` IN ('sprint', 'stage', 'kanban')"); // 测试 *
+r($bi->getConditionTest('t1', 'type', 'not in', null, "('sprint', 'stage', 'kanban')")) && p('') && e("`t1`.`type` NOT IN ('sprint', 'stage', 'kanban')"); // 测试 *
+
+r($bi->getConditionTest('t1', 'name', 'is', null, 'not null')) && p('') && e("`t1`.`name` IS not null"); // 测试 *
+r($bi->getConditionTest('t1', 'name', 'is', null, 'null'))     && p('') && e("`t1`.`name` IS null"); // 测试 *
