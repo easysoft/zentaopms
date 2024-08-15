@@ -1240,9 +1240,29 @@ class biModel extends model
     public function getExpression(mixed $table = null, mixed $column = null, mixed $alias = null, mixed $function = null): object
     {
         $this->app->loadClass('sqlparser', true);
-        $parser = new sqlparser($sql);
+        $parser = new sqlparser(null);
 
         return $parser->getExpression($table, $column, $alias, $function);
+    }
+
+    /**
+     * Get condition.
+     *
+     * @param  mixed  $tableA
+     * @param  mixed  $columnA
+     * @param  string $operator
+     * @param  mixed  $tableB
+     * @param  mixed  $columnB
+     * @param  int    $group
+     * @access public
+     * @return object
+     */
+    public function getCondition(mixed $tableA = null, mixed $columnA = null, string $operator = '', mixed $tableB = null, mixed $columnB = null, int $group = 1): object
+    {
+        $this->app->loadClass('sqlparser', true);
+        $parser = new sqlparser(null);
+
+        return $parser->getCondition($tableA, $columnA, $operator, $tableB, $columnB, $group);
     }
 
     /**
