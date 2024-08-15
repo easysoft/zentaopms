@@ -317,8 +317,8 @@ class programplanModel extends model
      */
     public function create(array $plans, int $projectID = 0, int $productID = 0, int $parentID = 0): bool
     {
-        if(empty($plans)) dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->programplan->name);
         if(!$this->isCreateTask($parentID)) dao::$errors['message'][] = $this->lang->programplan->error->createdTask;
+        if(empty($plans)) dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->programplan->name);
         if(dao::isError()) return false;
 
         /* Get linked product by projectID. */
