@@ -129,9 +129,12 @@ window.setStatistics = function(element, checkedIdList)
         if(storyType == story.data.type) total += 1;
         if(story)
         {
-            checkedEstimate += parseFloat(story.data.estimate);
             if(cases[rowID]) checkedCase += 1;
-            if(story.data.isParent == '0') rateCount += 1;
+            if(story.data.isParent == '0')
+            {
+                checkedEstimate += parseFloat(story.data.estimate);
+                rateCount += 1;
+            }
         }
     })
 
