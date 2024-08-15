@@ -152,7 +152,7 @@ class sqlparser
         {
             if($column === '*')
             {
-                $table = trim(trim($table), '`');
+                $table = $this->trimExpr($table);
                 $expression->expr = empty($table) ? '*' : "`$table`.*";
             }
             else
@@ -179,6 +179,18 @@ class sqlparser
 
         if(count($this->tables) == 1) return $this->combineSingleTable();
         return $this->combineMultipleTable();
+    }
+
+    /**
+     * Trim expr.
+     *
+     * @param  string    $expr
+     * @access private
+     * @return string
+     */
+    private function trimExpr($expr)
+    {
+        return trim(trim($expr), '`');
     }
 
     /**
