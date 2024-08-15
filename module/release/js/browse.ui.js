@@ -11,17 +11,20 @@ window.renderCell = function(result, {col, row})
 
     if(col.name == 'build')
     {
-        result[0] = '';
+        result = [];
         if(!row.data.build.name) return result;
 
         let branchLabel = showBranch ? "<span class='label label-outline label-badge mr-1' title='" + row.data.build.branchName + "'>" + row.data.build.branchName + '</span> ' : '';
-        result[result.length] = {html: branchLabel + "<a href='" + row.data.build.link + "' title='" + row.data.build.name + "'>" + row.data.build.name + '</a>'}
+        result.push({html: branchLabel + "<a href='" + row.data.build.link + "' title='" + row.data.build.name + "'>" + row.data.build.name + '</a>'});
         return result;
     }
 
     if(col.name == 'project')
     {
-        result[0] = {html: `<span title='${row.data.projectName}'>${row.data.projectName}</span>`};
+        result = [];
+        if(!row.data.projectName) return result;
+
+        result.push({html: `<span title='${row.data.projectName}'>${row.data.projectName}</span>`});
         return result;
     }
 

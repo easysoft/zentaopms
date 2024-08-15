@@ -42,7 +42,6 @@ dtable
     set::cols(array_values($cols)),
     set::data($tableData),
     set::customCols(true),
-    set::fixedLeftWidth('0.33'),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::sortLink(createLink('projectrelease', 'browse', "projectID={$project->id}&executionID={$executionID}&type={$type}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footer([jsRaw("function(){return {html: '{$pageSummary}'};}"), 'flex', 'pager']),
