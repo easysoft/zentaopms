@@ -49,8 +49,8 @@ if($task) modalHeader(set::title($lang->zanode->createImage));
         setClass('progress'),
         div
         (
-            setClass('progress-bar primary'),
-            setStyle('width', $task->rate)
+            setClass('progress-bar primary rate'),
+            setStyle('width', (string)$task->rate)
         )
     ),
     h6

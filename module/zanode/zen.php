@@ -134,7 +134,7 @@ class zanodeZen extends zanode
      * @access protected
      * @return false|array
      */
-    protected function getTaskStatus(object $node, int $taskID = 0, string $type = '', string $status = ''): false|array
+    protected function getTaskStatus(object $node, int $taskID = 0, string $type = '', string $status = ''): false|array|object
     {
         $agnetUrl = 'http://' . $node->ip . ':' . $node->hzap . '/api/v1/task/getStatus';
         $result   = json_decode(commonModel::http($agnetUrl, array(), array(CURLOPT_CUSTOMREQUEST => 'POST'), array("Authorization:$node->tokenSN"), 'json', 'POST', 10));

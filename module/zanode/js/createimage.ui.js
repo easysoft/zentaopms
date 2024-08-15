@@ -1,6 +1,6 @@
 if(task)
 {
-    var setProgress = self.setInterval("getTaskProgress()", 1500);
+    var setProgress = self.setInterval("getTaskProgress()", 5000);
 
     $(function()
     {
@@ -29,7 +29,7 @@ if(task)
                 $('.status-title').text(zanodeLang.createImaging)
             }
 
-            $('.rate').css('width', rate*100 + '%');
+            $('.rate').css('width', rate * 100 + '%');
             if(rate == 1 || (status != 'inprogress' && status != 'created' && status != 'pending'))
             {
                 updateStatus(data);

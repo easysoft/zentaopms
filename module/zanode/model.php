@@ -394,35 +394,14 @@ class zanodemodel extends model
         }
 
         $nodeList = $this->zanodeTao->getZaNodeListByQuery($query, $orderBy, $pager);
-        $hosts    = $this->zanodeTao->getHostsByIDList(array_unique(array_column($nodeList, 'parent')));
         $osList   = $this->config->zanode->linuxList + $this->config->zanode->windowsList;
 
         foreach($nodeList as $node)
         {
-            $oldNodeStatus   = $node->status;
-            $node->heartbeat = empty($node->heartbeat) ? '' : $node->heartbeat;
-            $host            = $node->hostType == '' ? zget($hosts, $node->parent) : clone $node;
-            if(is_object($host))
-            {
-                $host->status    = in_array($host->status, array('running', 'ready')) ? 'online' : $host->status;
-                $host->heartbeat = empty($host->heartbeat) ? '' : $host->heartbeat;
-            }
-
-            if($node->status == 'running' || $node->status == 'ready')
-            {
-                if(!is_object($host))
-                {
-                    $node->status = self::STATUS_SHUTOFF;
-                    continue;
-                }
-
-                if($host->status != 'online' || time() - strtotime($host->heartbeat) > 60) $node->status = $node->hostType == '' ? 'wait' : 'offline';
-            }
-
-            if($oldNodeStatus != $node->status || !empty($osList[$node->osName]))
+            $node = $this->processNodeStatus($node);
+            if(isset($osList[$node->osName]) && !empty($osList[$node->osName]))
             {
                 $this->dao->update(TABLE_ZAHOST)
-                    ->beginIF($oldNodeStatus != $node->status)->set('status')->eq($node->status)->fi()
                     ->beginIF(isset($osList[$node->osName]) && !empty($osList[$node->osName]))->set('osName')->eq($osList[$node->osName])->fi()
                     ->where('id')->eq($node->id)
                     ->exec();
@@ -647,6 +626,12 @@ class zanodemodel extends model
             }
         }
 
+        if($node->status == 'creating_img')
+        {
+            $customImage  = $this->getCustomImage($node->id);
+            $node->status = !empty($customImage->status) && in_array($customImage->status, array('failed', 'completed')) ? 'running' : $node->status;
+        }
+
         if($oldNodeStatus != $node->status)
         {
             $this->dao->update(TABLE_ZAHOST)->set('status')->eq($node->status)->where('id')->eq($node->id)->exec();
@@ -786,7 +771,8 @@ class zanodemodel extends model
         if($action == 'start')  return $node->status == 'shutoff' && $node->hostType != 'physics';
         if($action == 'getvnc') return $node->hostType == '' && in_array($node->status, array('running', 'launch', 'wait'));
         if($action == 'close'   || $action == 'reboot') return $node->hostType != 'physics' && !in_array($node->status, array('wait', 'creating_img', 'creating_snap', 'restoring', 'shutoff'));
-        if($action == 'suspend' || $action == 'createsnapshot' || $action == 'createimage') return $node->status == 'running' && $node->hostType != 'physics';
+        if($action == 'suspend' || $action == 'createsnapshot') return $node->status == 'running' && $node->hostType != 'physics';
+        if($action == 'createimage') return ($node->status == 'running' || $node->status == 'creating_img') && $node->hostType != 'physics';
 
         return true;
     }
