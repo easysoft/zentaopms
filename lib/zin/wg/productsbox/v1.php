@@ -365,7 +365,7 @@ class productsBox extends wg
                         set::multiple(true)
                     )
                 ) : null,
-                div
+                (!empty($project) && (in_array($product->id, $unmodifiableProducts) || $isStage)) ? null : div
                 (
                     setClass('pl-2 flex self-center line-btn c-actions', $i == 0 ? 'first-action' : ''),
                     btn
