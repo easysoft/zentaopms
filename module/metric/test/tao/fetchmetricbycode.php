@@ -41,7 +41,7 @@ $codeList[4] = 'count_of_invalid_story_in_execution';
 $codeList[5] = 'count_of_daily_fixed_bug_in_user';
 
 r($metric->fetchMetricByCode($codeList[1])) && p('id,purpose,object') && e('13,scale,product');      // 获取codeList[1]的id,scale,product
-r($metric->fetchMetricByCode($codeList[2])) && p('id,purpose,object') && e('145,scale,productplan'); // 获取codeList[2]的id,scale,product
-r($metric->fetchMetricByCode($codeList[3])) && p('id,purpose,object') && e('205,scale,execution');   // 获取codeList[3]的id,scale,product
-r($metric->fetchMetricByCode($codeList[4])) && p('id,purpose,object') && e('244,scale,story');       // 获取codeList[4]的id,scale,product
-r($metric->fetchMetricByCode($codeList[5])) && p('id,purpose,object') && e('262,scale,bug');         // 获取codeList[5]的id,scale,product
+r($metric->fetchMetricByCode($codeList[2])) && p('id,purpose,object') && e('146,scale,productplan'); // 获取codeList[2]的id,scale,product
+r($metric->fetchMetricByCode($codeList[3])) && p('id,purpose,object') && e('206,scale,execution');   // 获取codeList[3]的id,scale,product
+r($metric->fetchMetricByCode($codeList[4])) && p('id,purpose,object') && e('245,scale,story');       // 获取codeList[4]的id,scale,product
+r($metric->fetchMetricByCode($codeList[5])) && p('id,purpose,object') && e('263,scale,bug');         // 获取codeList[5]的id,scale,product

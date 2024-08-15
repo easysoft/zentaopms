@@ -37,10 +37,10 @@ su('admin');
 
 $metric = new metricTest();
 
-r($metric->getCalcInstanceList()) && p('count_of_task_in_project:dataset,id')           && e('getTasks,221');                 // 测试count_of_task_in_project的数据源和编号
-r($metric->getCalcInstanceList()) && p('count_of_unclosed_story_in_project:dataset,id') && e('getAllStoriesWithProject,213'); // 测试count_of_unclosed_story_in_project的数据源和编号
-r($metric->getCalcInstanceList()) && p('count_of_user_in_project:dataset,id')           && e('getTeamMembers,236');           // 测试count_of_user_in_project的数据源和编号
-r($metric->getCalcInstanceList()) && p('count_of_valid_story_in_project:dataset,id')    && e('getDevStoriesWithProject,216'); // 测试count_of_valid_story_in_project的数据源和编号
-r($metric->getCalcInstanceList()) && p('consume_of_all_in_project:dataset,id')          && e('getProjectEfforts,237');        // 测试consume_of_all_in_project的数据源和编号
-r($metric->getCalcInstanceList()) && p('ac_of_weekly_all_in_waterfall:dataset,id')      && e('getWaterfallEfforts,239');      // 测试ac_of_all_in_waterfall的数据源和编号
-r($metric->getCalcInstanceList()) && p('count_of_pending_story_in_user:dataset,id')     && e('getAllDevStories,259');         // 测试count_of_pending_story_in_user的数据源和编号
+r($metric->getCalcInstanceList()) && p('count_of_task_in_project:dataset,id')           && e('getTasks,222');                 // 测试count_of_task_in_project的数据源和编号
+r($metric->getCalcInstanceList()) && p('count_of_unclosed_story_in_project:dataset,id') && e('getAllStoriesWithProject,214'); // 测试count_of_unclosed_story_in_project的数据源和编号
+r($metric->getCalcInstanceList()) && p('count_of_user_in_project:dataset,id')           && e('getTeamMembers,237');           // 测试count_of_user_in_project的数据源和编号
+r($metric->getCalcInstanceList()) && p('count_of_valid_story_in_project:dataset,id')    && e('getDevStoriesWithProject,217'); // 测试count_of_valid_story_in_project的数据源和编号
+r($metric->getCalcInstanceList()) && p('consume_of_all_in_project:dataset,id')          && e('getProjectEfforts,238');        // 测试consume_of_all_in_project的数据源和编号
+r($metric->getCalcInstanceList()) && p('ac_of_weekly_all_in_waterfall:dataset,id')      && e('getWaterfallEfforts,284');      // 测试ac_of_all_in_waterfall的数据源和编号
+r($metric->getCalcInstanceList()) && p('count_of_pending_story_in_user:dataset,id')     && e('getAllDevStories,260');         // 测试count_of_pending_story_in_user的数据源和编号

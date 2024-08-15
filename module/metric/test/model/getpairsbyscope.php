@@ -36,10 +36,10 @@ zenData('user')->loadYaml('user', true)->gen(30);
 zenData('product')->loadYaml('product', true)->gen(10);
 zenData('project')->loadYaml('project', true)->gen(40);
 
-r(count($metric->getPairsByScope('user')))    && p('') && e('10'); // 测试user对象数
+r(count($metric->getPairsByScope('user')))    && p('') && e('15'); // 测试user对象数
 r(count($metric->getPairsByScope('product'))) && p('') && e('5');  // 测试product对象数
 r(count($metric->getPairsByScope('project'))) && p('') && e('20'); // 测试project对象数
 
-r($metric->getPairsByScope('user'))    && p('admin,user3,user6,user9') && e('admin,用户3,用户6,用户9');       // 测试部分user对象
+r($metric->getPairsByScope('user'))    && p('admin,user2,user4,user8') && e('admin,用户2,用户4,用户8');       // 测试部分user对象
 r($metric->getPairsByScope('product')) && p('1,3,5')                   && e('正常产品1,正常产品3,正常产品5'); // 测试部分product对象
 r($metric->getPairsByScope('project')) && p('11,13,15')                && e('项目11,项目13,项目15');          // 测试部分project对象

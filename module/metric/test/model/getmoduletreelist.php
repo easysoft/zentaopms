@@ -52,7 +52,7 @@ su('admin');
 $metric = new metricTest();
 
 r($metric->getModuleTreeList('system'))    && p('0:object,purpose;1:object,purpose;2:object,purpose') && e('application,scale,artifact,scale,bug,rate'); // 测试范围为system的模块树
-r($metric->getModuleTreeList('project'))   && p('0:object,purpose;1:object,purpose;2:object,purpose') && e('bug,scale,effort,hour,execution,scale');     // 测试范围为project的模块树
+r($metric->getModuleTreeList('project'))   && p('0:object,purpose;1:object,purpose;2:object,purpose') && e('bug,scale,effort,hour,epic,scale');     // 测试范围为project的模块树
 r($metric->getModuleTreeList('product'))   && p('0:object,purpose;1:object,purpose;2:object,purpose') && e('bug,rate,bug,scale,case,scale');             // 测试范围为product的模块树
-r($metric->getModuleTreeList('execution')) && p('0:object,purpose;1:object,purpose;2:object,purpose') && e('story,rate,story,scale,task,hour');          // 测试范围为execution的模块树
-r($metric->getModuleTreeList('user'))      && p('0:object,purpose;1:object,purpose;2:object,purpose') && e('bug,scale,case,scale,feedback,scale');       // 测试范围为user的模块树
+r($metric->getModuleTreeList('execution')) && p('0:object,purpose;1:object,purpose;2:object,purpose') && e('bug,scale,case,scale,effort,hour');          // 测试范围为execution的模块树
+r($metric->getModuleTreeList('user'))      && p('0:object,purpose;1:object,purpose;2:object,purpose') && e('bug,scale,case,scale,demand,scale');       // 测试范围为user的模块树
