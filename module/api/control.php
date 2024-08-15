@@ -277,6 +277,7 @@ class api extends control
 
         if(!empty($_POST))
         {
+            $this->lang->api->name = $this->lang->api->structName;
             $formData = form::data($this->config->api->form->createStruct)->add('lib', $libID)->add('version', 1)->add('addedBy', $this->app->user->account)->add('addedDate', helper::now())->get();
 
             $this->api->createStruct($formData);
