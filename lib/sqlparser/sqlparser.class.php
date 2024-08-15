@@ -138,6 +138,19 @@ class sqlparser
             $expression->function = $function;
             $expression->expr     = $this->getFunction($function, $expression->build($this->getExpression($table, $column)));
         }
+        else
+        {
+            if($column === '*')
+            {
+                $table = trim(trim($table), '`');
+                $expression->expr = empty($table) ? '*' : "`$table`.*";
+            }
+            else
+            {
+                $expression->table  = $table;
+                $expression->column = $column;
+            }
+        }
 
         $expression->alias = $alias;
 
