@@ -191,14 +191,13 @@
     {
         if(window.onPageUnmount) window.onPageUnmount();
 
-        window.beforePageLoad = null;
-        window.onPageUnmount = null;
-        window.beforePageUpdate = null;
-        window.afterPageUpdate = null;
-        window.onPageRender = null;
+        ['beforePageLoad', 'beforeRequestContent', 'onPageUnmount', 'beforePageUpdate', 'afterPageUpdate', 'onPageRender'].forEach(key =>
+        {
+            if(window[key]) delete window[key];
+        });
 
         if(timers.interval.length) timers.interval.forEach(clearInterval);
-        if(timers.timeout.length) timers.timeout.forEach(clearTimeout);
+        if(timers.timeout.length)  timers.timeout.forEach(clearTimeout);
         timers.interval = [];
         timers.timeout = [];
 
@@ -556,11 +555,11 @@
         updatePerfInfo(options, 'requestBegin', {perf: {renderBegin: undefined, renderEnd: undefined}});
         const ajax = new zui.Ajax(
         {
-            url:         url + (url.includes('?') ? '&zin=1' : '?zin=1'),
-            headers:     headers,
-            type:        requestMethod,
-            data:        options.data,
-            type:        (options.method || 'GET').toUpperCase(),
+            url:     url + (url.includes('?') ? '&zin=1' : '?zin=1'),
+            headers: headers,
+            type:    requestMethod,
+            data:    options.data,
+            type:    (options.method || 'GET').toUpperCase(),
             beforeSend: () =>
             {
                 updatePerfInfo(options, 'requestBegin');
@@ -741,6 +740,20 @@
                 }
             }
         });
+        const sendRequest = () =>
+        {
+            if(window.beforeRequestContent)
+            {
+                const result = window.beforeRequestContent(options, ajax);
+                if(result === false) return;
+                if(result instanceof Promise)
+                {
+                    result.then((result) => result && ajax.send());
+                    return;
+                }
+            }
+            ajax.send();
+        };
         if(DEBUG) showLog('Request', `${ajax.setting.type}:${options.id} ${getUrlID(url)} task ${rid}`, options, {cacheKey, ajax});
         if(currentCode) $.cookie.set('tab', currentCode, {expires: config.cookieLife, path: config.webRoot});
         if(cacheKey)
@@ -782,12 +795,12 @@
                 {
                     if(DEBUG && localCacheFirst) showLog('Request', 'no local cache', {url, cacheKey, options});
                 }
-                ajax.send();
+                sendRequest();
             });
         }
         else
         {
-            ajax.send();
+            sendRequest();
         }
         return ajax;
     }
@@ -939,8 +952,9 @@
 
         if(window.beforePageLoad)
         {
-            const newOptions = window.beforePageLoad(options);
-            if(newOptions) $.extend(options, newOptions);
+            const result = window.beforePageLoad(options);
+            if(result === false) return;
+            if(result) $.extend(options, result);
         }
         if(DEBUG) showLog('Load', getUrlID(options.url), options);
         fetchContent(options.url, options.selector, options);
