@@ -559,10 +559,10 @@ $lang->doc->dividerMenu = ',product,';
 /* Doc menu order. */
 $lang->doc->menuOrder[5]  = 'dashboard';
 $lang->doc->menuOrder[10] = 'my';
-$lang->doc->menuOrder[15] = 'product';
-$lang->doc->menuOrder[20] = 'project';
-$lang->doc->menuOrder[25] = 'api';
-$lang->doc->menuOrder[30] = 'team';
+$lang->doc->menuOrder[15] = 'team';
+$lang->doc->menuOrder[20] = 'product';
+$lang->doc->menuOrder[25] = 'project';
+$lang->doc->menuOrder[30] = 'api';
 
 /* BI menu.*/
 $lang->bi->menu         = new stdclass();

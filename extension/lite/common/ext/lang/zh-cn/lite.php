@@ -140,8 +140,8 @@ $lang->doc->dividerMenu = ',project,';
 $lang->doc->menuOrder     = array();
 $lang->doc->menuOrder[5]  = 'dashboard';
 $lang->doc->menuOrder[10] = 'my';
-$lang->doc->menuOrder[15] = 'project';
-$lang->doc->menuOrder[20] = 'custom';
+$lang->doc->menuOrder[15] = 'custom';
+$lang->doc->menuOrder[20] = 'project';
 
 /* Admin menu. */
 $lang->admin->menu = new stdclass();
