@@ -115,6 +115,17 @@ class sqlparser
     }
 
     /**
+     * Create statement.
+     *
+     * @access public
+     * @return void
+     */
+    public function createStatement()
+    {
+        $this->statement = new PhpMyAdmin\SqlParser\Statements\SelectStatement();
+    }
+
+    /**
      * Get function.
      *
      * @param  string $name
