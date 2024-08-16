@@ -431,7 +431,7 @@ class docMenu extends wg
                 setStyle('background', 'rgb(var(--color-primary-50-rgb))'),
                 setStyle('box-shadow', 'none'),
                 set('data-app', $app->tab),
-                set('data-size', array('width' => '600px', 'height' => '200px')),
+                set('data-size', array('width' => '600px', 'height' => '210px')),
                 set('data-toggle', 'modal'),
                 set('data-class-name', 'doc-setting-modal'),
                 set::href($settingLink),

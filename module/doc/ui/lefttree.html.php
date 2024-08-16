@@ -28,7 +28,8 @@ if($app->rawModule == 'doc' && $app->rawMethod == 'view')
 }
 elseif(hasPriv('doc', 'editLib') && $lib->type == 'custom')
 {
-    $settingLink = inlink('editLib', "libID=$libID");
+    $spaceID     = $lib->parent ? $lib->parent : $lib->id;
+    $settingLink = inlink('editLib', "libID=$spaceID");
     $settingText = $lang->doclib->editSpace;
 }
 else
