@@ -231,7 +231,7 @@ $fnGenerateFootToolbar = function() use ($lang, $app, $product, $productID, $pro
 {
     /* Flag variables of permissions. */
     $canBeChanged = common::canModify('product', $product);
-    if($isProjectStory)
+    if($isProjectStory && $config->vision == 'rnd')
     {
         $canBatchClose      = hasPriv('projectstory', 'batchClose') && strtolower($browseType) != 'closedbyme';
         $canBatchEdit       = hasPriv('projectstory', 'batchEdit');
