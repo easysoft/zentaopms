@@ -202,16 +202,16 @@ class docMenu extends wg
                     $treeTitle = $lang->execution->common;
                     $treeIcon  = 'run';
                 }
-                else
+
+                if($treeType != 'annex')
                 {
-                    $treeTitle = $lang->files;
-                    $treeIcon  = 'paper-clip';
+                    $items[] = array(
+                        'text'  => $treeTitle,
+                        'icon'  => $treeIcon,
+                        'class' => 'project-tree-title ' . ($index > 0 ? 'border-t mt-2 pt-2' : ''),
+                        'innerClass' => 'items-center'
+                    );
                 }
-                $items[] = array(
-                    'text'  => $treeTitle,
-                    'icon'  => $treeIcon,
-                    'class' => 'project-tree-title ' . ($index > 0 ? 'border-t mt-2 pt-2' : '')
-                );
 
                 $items = array_merge($items, $this->buildMenuTree($modules, $this->libID));
                 $index ++;

@@ -32,7 +32,7 @@
 .doc-menu-header.is-fixed > .btn-close {position: absolute; right: 0; font-weight: normal;}
 .doc-menu-header.is-fixed > .btn-close:not(:hover) {opacity: .5;}
 
-.tree > .tree-item.project-tree-title {font-size: 16px; margin-bottom: 0.5rem; pointer-events: none;}
+.tree > .tree-item.project-tree-title {margin-bottom: 0.5rem; pointer-events: none;}
 .tree > .tree-item.project-tree-title .text {margin-left: 0.5rem;}
 .tree > .tree-item.project-tree-title .item-icon {color: var(--nav-active-color); opacity: 1;}
 .tree > .tree-item.project-tree-title > .tree-toggle-icon {display: none;}

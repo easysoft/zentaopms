@@ -2517,8 +2517,21 @@ class docModel extends model
             $annex->objectType = $type;
             $annex->objectID   = $objectID;
             $annex->active     = empty($libID) ? 1 : 0;
-            if($type == 'project') $libTree['annex'][] = $annex;
-            if($type != 'project') $libTree[$type][''] = $annex;
+            if($type == 'project')
+            {
+                $newLibTree = array();
+                foreach($libTree as $key => $libs)
+                {
+                    $newLibTree[$key] = $libs;
+                    if($key == 'project') $newLibTree['annex'][''] = $annex;
+                }
+
+                $libTree = $newLibTree;
+            }
+            else
+            {
+                $libTree[$type][''] = $annex;
+            }
         }
         elseif($type == 'api')
         {
