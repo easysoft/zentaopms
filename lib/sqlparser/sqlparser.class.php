@@ -138,6 +138,26 @@ class sqlparser
     }
 
     /**
+     * Add select.
+     *
+     * @param  array|object $exprs
+     * @access public
+     * @return void
+     */
+    public function addSelect($exprs)
+    {
+        if(empty($exprs)) return;
+
+        if($exprs instanceof PhpMyAdmin\SqlParser\Components\Expression)
+        {
+            $this->statement->expr[] = $exprs;
+            return;
+        }
+
+        foreach($exprs as $expr) $this->addSelect($expr);
+    }
+
+    /**
      * Get function.
      *
      * @param  string $name
