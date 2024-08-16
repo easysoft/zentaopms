@@ -5,3 +5,7 @@ $lang->project->select          = "请选择{$lang->project->common}";
 $lang->project->noProject       = "暂时没有{$lang->project->common}。";
 
 $lang->project->aclList['private'] = "私有 (只有{$lang->projectCommon}负责人、团队成员可访问)";
+
+$lang->project->storyPoints    = '目标规模';
+$lang->project->storyCount     = '目标条目数';
+$lang->project->executionCount = '看板数';

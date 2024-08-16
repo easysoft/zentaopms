@@ -9,6 +9,7 @@ $lang->execution->noExecution     = "暂时没有看板。";
 $lang->execution->importTask      = '转入任务';
 $lang->execution->batchCreateTask = '批量创建任务';
 $lang->execution->linkStory       = "关联{$lang->SRCommon}";
+$lang->execution->closedExecution = '已关闭的看板';
 
 $lang->execution->kanbanGroup['default']    = '默认方式';
 $lang->execution->kanbanGroup['story']      = '目标';

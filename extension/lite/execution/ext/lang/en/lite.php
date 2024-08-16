@@ -9,6 +9,7 @@ $lang->execution->noExecution     = "No Executions.";
 $lang->execution->importTask      = 'Import Tsak';
 $lang->execution->batchCreateTask = 'Batch Create Task';
 $lang->execution->linkStory       = "Link {$lang->SRCommon}";
+$lang->execution->closedExecution = 'Closed Kanban';
 
 $lang->execution->kanbanGroup['default']    = 'Default';
 $lang->execution->kanbanGroup['story']      = 'Target';
