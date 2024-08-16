@@ -1038,6 +1038,7 @@ if($config->edition != 'open')
     /* Feedback. */
     $lang->resource->feedback = new stdclass();
     $lang->resource->feedback->create         = 'create';
+    $lang->resource->feedback->batchCreate    = 'batchCreate';
     $lang->resource->feedback->edit           = 'edit';
     $lang->resource->feedback->browse         = 'browse';
     $lang->resource->feedback->view           = 'view';
