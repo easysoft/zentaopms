@@ -253,8 +253,9 @@ $contentDom = div
 $treeDom = isset($outlineTree) ? div
 (
     setID('docOutline'),
-    setStyle('max-height', 'calc(100vh - 121px)'),
-    setStyle('top', '48px'),
+    setClass('sticky overflow-y-auto scrollbar-hover'),
+    setStyle('max-height', 'calc(100vh - 130px)'),
+    setStyle('top', '58px'),
     tree
     (
         set::className('pl-4'),
@@ -300,7 +301,7 @@ panel
         div
         (
             setID('docSidebar'),
-            setClass('flex-none overflow-y-auto scrollbar-hover sticky border-l'),
+            setClass('flex-none border-l'),
             setStyle('width', 'var(--doc-sidebar-width)'),
             $treeDom,
             $historyDom,
