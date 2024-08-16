@@ -132,7 +132,7 @@ class sqlparser
     /**
      * Get expression.
      *
-     * @param  string $table
+     * @param  string|array $table
      * @param  string $column
      * @param  string $alias
      * @param  string $function
@@ -141,6 +141,8 @@ class sqlparser
      */
     public function getExpression($table = null, $column = null, $alias = null, $function = null)
     {
+        if(is_array($table)) return call_user_func_array(array($this, 'getExpression'), $table);
+
         $expression = new PhpMyAdmin\SqlParser\Components\Expression();
 
         if(!empty($function))
@@ -211,6 +213,8 @@ class sqlparser
      */
     public function getCondition($tableA = null, $columnA = null, $operator = '', $tableB = null, $columnB = null, $group = 1)
     {
+        if(is_array($tableA)) return call_user_func_array(array($this, 'getCondition'), $tableA);
+
         $condition = new PhpMyAdmin\SqlParser\Components\Condition();
 
         $tableA  = $this->trimExpr($tableA);
@@ -225,7 +229,8 @@ class sqlparser
 
         $operator = strtoupper($operator);
 
-        $condition->expr = "$exprA $operator $exprB";
+        $condition->expr  = "$exprA $operator $exprB";
+        $condition->group = $group;
 
         return $condition;
     }
