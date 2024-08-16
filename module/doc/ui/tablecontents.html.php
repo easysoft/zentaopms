@@ -17,6 +17,7 @@ $createLibButton = common::hasPriv('doc', 'createLib') ? btn
     set::icon('plus'),
     set::url(createLink('doc', 'createLib', "type={$type}&objectID={$objectID}&libID=$libID")),
     setData('toggle', 'modal'),
+    setData('size', 'sm'),
     $lang->doc->createLib
 ) : null;
 

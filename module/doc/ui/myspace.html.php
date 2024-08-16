@@ -42,7 +42,8 @@ toolbar
         'class'       => 'btn secondary',
         'text'        => $lang->doc->createLib,
         'url'         => createLink('doc', 'createLib', 'type=mine'),
-        'data-toggle' => 'modal'
+        'data-toggle' => 'modal',
+        'data-size'   => '500'
     ))) : null,
     $libID && common::hasPriv('doc', 'create') ? $createButton : null
 );

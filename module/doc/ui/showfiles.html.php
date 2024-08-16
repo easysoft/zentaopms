@@ -154,7 +154,8 @@ toolbar
             set::text($lang->doc->createLib),
             set::icon('plus'),
             set::url(createLink('doc', 'createLib', "type={$type}&objectID={$objectID}")),
-            set('data-toggle', 'modal')
+            setData('toggle', 'modal'),
+            setData('size', 'sm')
         ) : null
     )
 );
