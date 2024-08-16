@@ -279,6 +279,8 @@ window.renderRowData = function($row, index, row)
             const $team = info[0];
             $team.render({disabled: true});
         })
+
+        $row.find('[data-type=delete]').addClass('hidden'); // 已完成的成员不允许删除
     }
     if(row && row.hourDisabled)
     {
