@@ -233,4 +233,23 @@ class docTao extends docModel
     {
         $this->dao->update(TABLE_DOC)->data($doc)->autoCheck()->where('id')->eq($docID)->exec();
     }
+
+    /**
+     * 插入文档库。
+     * Insert doclib.
+     *
+     * @param  object    $lib
+     * @param  string    $requiredFields
+     * @access protected
+     * @return int|false
+     */
+    protected function doInsertLib(object $lib, string $requiredFields = ''): int|false
+    {
+        $this->dao->insert(TABLE_DOCLIB)->data($lib, 'spaceName')->autoCheck()
+            ->batchCheck($requiredFields, 'notempty')
+            ->exec();
+
+        if(dao::isError()) return false;
+        return $this->dao->lastInsertID();
+    }
 }

@@ -123,6 +123,30 @@ class doc extends control
     }
 
     /**
+     * 创建一个空间。
+     * Create a space.
+     *
+     * @access public
+     * @return void
+     */
+    public function createSpace()
+    {
+        if(!empty($_POST))
+        {
+            $space = form::data()->setDefault('addedBy', $this->app->user->account)->get();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $spaceID = $this->doc->doInsertLib($space);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->loadModel('action')->create('docspace', $spaceID, 'created');
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
+        }
+
+        $this->display();
+    }
+
+    /**
      * 创建一个文档库。
      * Create a library.
      *

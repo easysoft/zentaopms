@@ -5,6 +5,13 @@ global $app, $config;
 
 $config->doc->form = new stdclass();
 
+$config->doc->form->createspace['name']      = array('type' => 'string',   'required' => true,  'default' => '', 'filter' => 'trim');
+$config->doc->form->createspace['parent']    = array('type' => 'int',      'required' => false, 'default' => 0);
+$config->doc->form->createspace['type']      = array('type' => 'string',   'required' => false, 'default' => 'custom');
+$config->doc->form->createspace['acl']       = array('type' => 'string',   'required' => false, 'default' => 'open');
+$config->doc->form->createspace['vision']    = array('type' => 'string',   'required' => false, 'default' => $config->vision);
+$config->doc->form->createspace['addedDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);
+
 $config->doc->form->createlib['name']      = array('type' => 'string',   'required' => true,  'default' => '', 'filter' => 'trim');
 $config->doc->form->createlib['spaceName'] = array('type' => 'string',   'required' => false, 'default' => '', 'filter' => 'trim');
 $config->doc->form->createlib['parent']    = array('type' => 'int',      'required' => false, 'default' => 0);

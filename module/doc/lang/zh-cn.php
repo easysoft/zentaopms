@@ -208,6 +208,7 @@ $lang->doc->custom            = '自定义文档库';
 $lang->doc->customAB          = '自定义库';
 $lang->doc->createLib         = '创建库';
 $lang->doc->createLibAction   = '创建空间/库';
+$lang->doc->createSpace       = '创建空间';
 $lang->doc->allLibs           = '库列表';
 $lang->doc->objectLibs        = "库文档详情";
 $lang->doc->showFiles         = '附件库';

@@ -208,6 +208,7 @@ $lang->doc->custom            = 'Custom Document Library';
 $lang->doc->customAB          = 'Custom Doc Lib';
 $lang->doc->createLib         = 'Create Library';
 $lang->doc->createLibAction   = 'Create Library/Space';
+$lang->doc->createSpace       = 'Create Space';
 $lang->doc->allLibs           = 'Library List';
 $lang->doc->objectLibs        = "Document View of Library";
 $lang->doc->showFiles         = 'Attachments';

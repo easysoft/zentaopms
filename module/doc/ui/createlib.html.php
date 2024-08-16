@@ -97,7 +97,7 @@ formPanel
                 ),
                 div
                 (
-                    setClass('ml-2 w-1/3 items-center flex'),
+                    setClass('input-group-addon'),
                     checkbox
                     (
                         on::change('toggleNewSpace'),

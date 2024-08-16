@@ -14,7 +14,7 @@ $createButton = $emptyCreateBtn = null;
 $typeID       = empty($lib) ? $objectID : zget($lib, (string)$lib->type, 0);
 
 $docModel = $this->doc;
-$buildCreateBtn = function($type, $typeID, $libID, $moduleID) use($lib, $docModel)
+$buildCreateBtn = function($typeID, $libID, $moduleID) use($lib, $docModel)
 {
     global $app, $config, $lang;
     if($lib->type == 'custom')
@@ -63,5 +63,4 @@ $buildCreateBtn = function($type, $typeID, $libID, $moduleID) use($lib, $docMode
     );
 };
 
-$createObjectType = (isset($spaceType) && $spaceType === 'mine') ? 'mine' : $type;
-$createButton = $buildCreateBtn($createObjectType, $typeID, $libID, $moduleID);
+$createButton = $buildCreateBtn($typeID, $libID, $moduleID);

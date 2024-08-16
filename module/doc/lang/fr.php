@@ -208,6 +208,7 @@ $lang->doc->custom            = 'Personnaliser Bibliothèque de Documents';
 $lang->doc->customAB          = 'Person. Bib Doc';
 $lang->doc->createLib         = 'Create Library';
 $lang->doc->createLibAction   = 'Create Space/Library';
+$lang->doc->createSpace       = 'Create Space';
 $lang->doc->allLibs           = 'Liste des Bibliothèque';
 $lang->doc->objectLibs        = "{$lang->productCommon}/{$lang->executionCommon} Bibliothèque";
 $lang->doc->showFiles         = 'Pièces Jointes';

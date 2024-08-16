@@ -11,20 +11,49 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('exportMethod', $exportMethod);
-$createLibButton = common::hasPriv('doc', 'createLib') ? btn
-(
-    setClass('secondary'),
-    set::icon('plus'),
-    set::url(createLink('doc', 'createLib', "type={$type}&objectID={$objectID}&libID=$libID")),
-    setData('toggle', 'modal'),
-    setData('size', 'sm'),
-    $lang->doc->createLib
-) : null;
+
+$buildCreateLibBtn = function() use($type, $objectID, $libID)
+{
+    if(!common::hasPriv('doc', 'createLib')) return null;
+
+    global $lang;
+    $createURL    = createLink('doc', 'createLib', "type={$type}&objectID={$objectID}&libID={$libID}");
+    $createLibBtn = function() use($createURL, $lang)
+    {
+        return btn
+        (
+            setClass('secondary'),
+            set::icon('plus'),
+            set::url($createURL),
+            setData('toggle', 'modal'),
+            setData('size', 'sm'),
+            $lang->doc->createLib
+        );
+    };
+
+    if($type != 'custom') return $createLibBtn();
+
+    $buttonItems = array();
+    if(common::hasPriv('doc', 'createSpace')) $buttonItems[] = array('text' => $lang->doc->createSpace, 'url' => createLink('doc', 'createSpace'), 'data-toggle' => 'modal', 'data-size' => 'sm');
+    if(empty($buttonItems)) return $createLibBtn();
+
+    return btngroup
+    (
+        $createLibBtn(),
+        dropdown
+        (
+            btn(setClass('btn secondary dropdown-toggle'),
+            setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
+            set::placement('bottom-end'),
+            set::items($buttonItems)
+        )
+    );
+};
 
 if(empty($libTree))
 {
     featureBar();
-    toolbar($createLibButton);
+    toolbar($buildCreateLibBtn());
     dtable(
         set::cols(array()),
         set::data(array()),
@@ -90,7 +119,7 @@ toolbar
         'data-size'   => 'sm',
         'data-toggle' => 'modal'
     ))) : null,
-    $createLibButton,
+    $buildCreateLibBtn(),
     $libType == 'api' && common::hasPriv('api', 'create') ? item(set(array
     (
         'icon'        => 'plus',

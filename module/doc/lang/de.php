@@ -208,6 +208,7 @@ $lang->doc->custom            = 'Eigene Dok Bibliothek';
 $lang->doc->customAB          = 'Eigene Bibliothek';
 $lang->doc->createLib         = 'Create Library';
 $lang->doc->createLibAction   = 'Create Library/Space';
+$lang->doc->createSpace       = 'Create Space';
 $lang->doc->allLibs           = 'Bibliothek';
 $lang->doc->objectLibs        = "{$lang->productCommon}/{$lang->executionCommon} Bibliothek Liste";
 $lang->doc->showFiles         = 'Dok Bibliothek';

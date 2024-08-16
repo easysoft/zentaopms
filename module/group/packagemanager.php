@@ -3594,6 +3594,7 @@ $config->group->package->manageDoc = new stdclass();
 $config->group->package->manageDoc->order  = 15;
 $config->group->package->manageDoc->subset = 'doc';
 $config->group->package->manageDoc->privs  = array();
+$config->group->package->manageDoc->privs['doc-createSpace'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0, 'depend' => array('doc-index', 'doc-teamSpace'), 'recommend' => array('doc-createLib'));
 $config->group->package->manageDoc->privs['doc-createLib']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0, 'depend' => array('doc-index'), 'recommend' => array('doc-editLib', 'doc-showFiles', 'doc-moveLib', 'doc-sortDoclib'));
 $config->group->package->manageDoc->privs['doc-editLib']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 1, 'depend' => array('doc-index'), 'recommend' => array('doc-createLib', 'doc-showFiles', 'doc-sortDoclib'));
 $config->group->package->manageDoc->privs['doc-create']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 3, 'depend' => array('doc-index'), 'recommend' => array('doc-collect', 'doc-edit', 'doc-moveDoc', 'doc-sortDoc'));

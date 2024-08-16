@@ -261,10 +261,11 @@ class docModel extends model
             $space->parent = 0;
             $space->acl    = 'open';
 
-            $this->dao->insert(TABLE_DOCLIB)->data($space, 'spaceName')->autoCheck()->exec();
-            $lib->parent = $this->dao->lastInsertID();
+            $spaceID = $this->docTao->doInsertLib($space);
+            if(dao::isError()) return false;
 
-            $this->loadModel('action')->create('docspace', $lib->parent, 'created');
+            $lib->parent = $spaceID;
+            $this->loadModel('action')->create('docspace', $spaceID, 'created');
         }
         elseif($lib->parent <= 0 && $type == 'custom')
         {
@@ -284,12 +285,9 @@ class docModel extends model
             $this->checkApiLibName($lib, $type);
         }
 
-        $this->dao->insert(TABLE_DOCLIB)->data($lib, 'spaceName')->autoCheck()
-            ->batchCheck($this->config->doc->createlib->requiredFields, 'notempty')
-            ->exec();
-
+        $libID = $this->docTao->doInsertLib($lib, $this->config->doc->createlib->requiredFields);
         if(dao::isError()) return false;
-        return $this->dao->lastInsertID();
+        return $libID;
     }
 
     /**
