@@ -2528,7 +2528,7 @@ CREATE TABLE IF NOT EXISTS `zt_im_message` (
   `data` text NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   `legacy` tinyint(1) NOT NULL DEFAULT 0,
-  `uniqueIndex` int(11) NOT NULL DEFAULT 0,
+  `uniqueIndex` int(11) GENERATED ALWAYS AS (CASE WHEN `legacy` = 1 THEN NULL WHEN `cgid` = 'notification' THEN NULL ELSE `index` END) STORED,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE INDEX `mgid`  ON `zt_im_message` (`gid`);
