@@ -4124,7 +4124,8 @@ class upgradeModel extends model
     protected function updateProjectMembers(): void
     {
         /* Get projects and project teams. */
-        $projects     = $this->dao->select('id,days,PM')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchAll('id');
+        $sprints      = $this->dao->select('id,days,PM,multiple')->from(TABLE_PROJECT)->where('type')->eq('sprint')->andWhere('multiple')->eq('0')->fetchAll('project');
+        $projects     = $this->dao->select('id,days,PM,multiple')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchAll('id');
         $projectTeams = $this->getProjectTeams(array_keys($projects));
 
         $this->app->loadLang('user');
@@ -4162,6 +4163,26 @@ class upgradeModel extends model
                 $team->days    = $project->days;
                 $team->hours   = '7.0';
                 $this->dao->replace(TABLE_TEAM)->data($team)->exec();
+            }
+
+            if(empty($project->multiple) && !empty($sprints[$project->id]))
+            {
+                $sprint = $sprints[$project->id];
+                foreach($projectMember as $account)
+                {
+                    if(!isset($users[$account])) continue;
+
+                    $user = $users[$account];
+                    $team = new stdclass();
+                    $team->root    = $sprint->id;
+                    $team->type    = 'execution';
+                    $team->account = $account;
+                    $team->role    = zget($this->lang->user->roleList, $user->role);
+                    $team->join    = $today;
+                    $team->days    = $sprint->days;
+                    $team->hours   = '7.0';
+                    $this->dao->replace(TABLE_TEAM)->data($team)->exec();
+                }
             }
         }
     }
