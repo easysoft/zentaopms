@@ -14,7 +14,7 @@ namespace zin;
 
 !isAjaxRequest() && dropmenu();
 
-$showFields = array('module', 'title', 'spec', 'pri', 'estimate', 'reviewer', 'keywords');
+$showFields = array('module', 'title', 'spec', 'parent', 'grade', 'pri', 'estimate', 'reviewer', 'keywords');
 foreach($fields as $fieldKey => $fieldConfig)
 {
     if(!in_array($fieldKey, $showFields)) unset($fields[$fieldKey]);
@@ -31,6 +31,7 @@ $fnGenerateFields = function() use ($lang, $fields, $stories, $config)
     $cols = array_merge($items, array_map(function($name, $field)
     {
         $field['name'] = $name;
+        if($field['name'] == 'grade') $field['hidden'] = true;
         if(!empty($field['options'])) $field['items'] = $field['options'];
         if(!empty($field['default'])) $field['value'] = $field['default'];
         if($field['control'] == 'select') $field['control'] = 'picker';

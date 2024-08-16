@@ -192,7 +192,7 @@ class story extends control
                 $gradeOptions = $this->story->getGradeOptions($story, $storyType);
                 if(empty($gradeOptions)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->story->errorNoGradeSplit, 'locate' => $this->session->storyList)));
                 $fields['grade']['options'] = $gradeOptions;
-                $fields['grade']['default'] = current($gradeOptions);
+                $fields['grade']['default'] = key($gradeOptions);
             }
 
             $this->view->story      = $story;

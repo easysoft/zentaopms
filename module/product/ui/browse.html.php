@@ -30,7 +30,7 @@ $projectIDParam    = $isProjectStory ? "projectID=$projectID&" : '';
 $storyBrowseType   = $this->session->storyBrowseType;
 $storyProductIds   = array();
 
-$hideGrade = ($app->tab == 'product' && $storyType == 'story' && count($gradeGroup['story']) <= 2);
+$hideGrade = ($app->tab == 'product' && $storyType == 'story' && count($gradeGroup['story']) <= 2) || $config->vision != 'rnd';
 
 jsVar('projectHasProduct', $projectHasProduct);
 

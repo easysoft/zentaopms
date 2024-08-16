@@ -718,7 +718,7 @@ class storyZen extends story
                 break;
         }
 
-        $fields['grade']['default']      = current($grades);
+        $fields['grade']['default']      = key($grades);
         $fields['module']['options']     = $modules;
         $fields['grade']['options']      = $grades;
         $fields['reviewer']['options']   = $reviewers;
