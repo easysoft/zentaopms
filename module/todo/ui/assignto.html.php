@@ -27,6 +27,7 @@ formPanel
         (
             set::name('assignedTo'),
             set::items($members),
+            set::value($todo->assignedTo),
             set::required(true)
         )
     ),
