@@ -269,7 +269,8 @@ class tutorialModel extends model
         $story->fromBug        = 0;
         $story->title          = 'Test story';
         $story->keywords       = '';
-        $story->type           = '';
+        $story->type           = 'story';
+        $story->grade          = 1;
         $story->pri            = 3;
         $story->estimate       = 1;
         $story->status         = 'active';
