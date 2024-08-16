@@ -221,7 +221,7 @@ class doc extends control
         $lib = $this->doc->getLibByID($libID);
         if(!empty($_POST))
         {
-            $this->lang->doc->name = $this->lang->doclib->name;
+            $this->lang->doc->name = $this->lang->nameAB;
             $libData = form::data()->get();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
