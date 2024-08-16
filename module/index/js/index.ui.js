@@ -202,8 +202,9 @@ function openApp(url, code, options)
     const needLoad = !isSameUrl || forceReload !== false;
     if(needLoad)
     {
-        reloadApp(code, url, options);
-        openedApp.$app.toggleClass('open-from-hidden', openedApp.zIndex < apps.zIndex);
+        const openFromHidden = openedApp.zIndex < apps.zIndex;
+        reloadApp(code, url, openFromHidden ? $.extend({loadingIndicatorDelay: '0s'}, options) : options);
+        openedApp.$app.toggleClass('open-from-hidden', openFromHidden);
     }
     else
     {
