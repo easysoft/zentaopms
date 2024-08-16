@@ -57,11 +57,13 @@ if(empty($libTree))
     dtable(
         set::cols(array()),
         set::data(array()),
-        set::createLink(createLink('doc', 'createLib', "type={$type}&objectID={$objectID}")),
+        set::createLink(createLink('doc', 'createLib', "type={$type}&objectID={$objectID}&libID={$libID}")),
         set::createTip($lang->doc->createLib),
         set::createAttr("data-toggle='modal'"),
         set::emptyTip($lang->doc->noLib)
     );
+
+    if($libID) include 'lefttree.html.php';
     return;
 }
 
