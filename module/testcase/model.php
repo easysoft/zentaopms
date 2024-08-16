@@ -270,8 +270,8 @@ class testcaseModel extends model
         }
 
         if($browseType == 'needconfirm') return $this->testcaseTao->getNeedConfirmList($productID, $branch, $modules, $auto, $caseType, $orderBy, $pager);
-        if($browseType == 'bysuite')     return $this->testcaseTao->getBySuite($productID, $branch, $queryID, $modules, $auto, $orderBy, $pager);
-        if($browseType == 'bysearch')    return $this->getBySearch($productID, $branch, $queryID, $auto, $orderBy, $pager);
+        if($browseType == 'bysuite')     return $this->testcaseTao->getBySuite($productID, $branch, (int)$queryID, $modules, $auto, $orderBy, $pager);
+        if($browseType == 'bysearch')    return $this->getBySearch($productID, $branch, (int)$queryID, $auto, $orderBy, $pager);
 
         return array();
     }
@@ -291,6 +291,7 @@ class testcaseModel extends model
      */
     public function getBySearch(int $productID, int|string $branch = 0, int $queryID = 0, string $auto = 'no', string $orderBy = 'id_desc', object $pager = null): array
     {
+        $queryID = (int)$queryID;
         if($queryID)
         {
             $query = $this->loadModel('search')->getQuery($queryID);
@@ -715,7 +716,7 @@ class testcaseModel extends model
         if($browseType != 'bySearch') return array();
 
         $case       = $this->getByID($caseID);
-        $cases2Link = $this->getBySearch($case->product, $case->branch, $queryID, $auto = 'no', $orderBy = 'id');
+        $cases2Link = $this->getBySearch($case->product, $case->branch, (int)$queryID, $auto = 'no', $orderBy = 'id');
         foreach($cases2Link as $key => $case2Link)
         {
             if($case2Link->id == $caseID) unset($cases2Link[$key]);
@@ -739,7 +740,7 @@ class testcaseModel extends model
         if($browseType != 'bySearch') return array();
 
         $case      = $this->getByID($caseID);
-        $bugs2Link = $this->loadModel('bug')->getBySearch('bug', $case->product, (string)$case->branch, 0, 0, $queryID, '', 'id');
+        $bugs2Link = $this->loadModel('bug')->getBySearch('bug', $case->product, (string)$case->branch, 0, 0, (int)$queryID, '', 'id');
         foreach($bugs2Link as $key => $bug2Link)
         {
             if($bug2Link->case != 0) unset($bugs2Link[$key]);
@@ -2577,6 +2578,7 @@ class testcaseModel extends model
         $query = '';
         if($browseType == 'bysearch')
         {
+            $queryID = (int)$queryID;
             if($queryID)
             {
                 $this->session->set('testsuiteQuery', ' 1 = 1');
