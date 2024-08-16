@@ -1583,10 +1583,23 @@ class kanban extends control
      */
     public function ajaxMoveCard(int $cardID = 0, int $fromColID = 0, int $toColID = 0, int $fromLaneID = 0, int $toLaneID = 0, int $executionID = 0, string $browseType = 'all', string $groupBy = '', int $regionID = 0, string $orderBy = '')
     {
+        $fromCell = $this->dao->select('id, cards, lane')->from(TABLE_KANBANCELL)
+            ->where('kanban')->eq($executionID)
+            ->andWhere('`column`')->eq($fromColID)
+            ->beginIF(!$groupBy or $groupBy == 'default')->andWhere('lane')->eq($fromLaneID)->fi()
+            ->beginIF($groupBy and $groupBy != 'default')
+            ->andWhere('type')->eq($browseType)
+            ->andWhere('cards')->like("%,$cardID,%")
+            ->fi()
+            ->fetch();
+
         if($groupBy and $groupBy != 'default') $fromLaneID = $toLaneID = $fromCell->lane;
 
-        $fromCell = $this->kanban->getExecutionFromCell($cardID, $executionID, $fromColID, $fromLaneID, $groupBy, $browseType);
-        $toCell   = $this->kanban->getExecutionToCell($executionID, $toColID, $toLaneID);
+        $toCell = $this->dao->select('id, cards')->from(TABLE_KANBANCELL)
+            ->where('kanban')->eq($executionID)
+            ->andWhere('lane')->eq($toLaneID)
+            ->andWhere('`column`')->eq($toColID)
+            ->fetch();
 
         $fromCards = str_replace(",$cardID,", ',', $fromCell->cards);
         $fromCards = $fromCards == ',' ? '' : $fromCards;
@@ -1611,6 +1624,7 @@ class kanban extends control
 
         $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
         $rdSearchValue   = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+        a($regionID);die;
         if($regionID == 0)
         {
             list($kanbanGroup, $links) = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, $taskSearchValue);
