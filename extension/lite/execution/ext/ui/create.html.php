@@ -180,3 +180,60 @@ formPanel
     formHidden('type', 'kanban'),
     formHidden('vision', 'lite')
 );
+
+modalTrigger
+(
+    modal
+    (
+        set::id('copyExecutionModal'),
+        set::footerClass('justify-center'),
+        to::header
+        (
+            div
+            (
+                setClass('w-full'),
+                div
+                (
+                    h4
+                    (
+                        set::className('copy-title'),
+                        $lang->execution->copyTitle
+                    )
+                ),
+                div
+                (
+                    setClass('flex items-center py-4 border-b border-b-1'),
+                    span
+                    (
+                        setClass('mr-2'),
+                        $lang->execution->selectProject
+                    ),
+                    picker
+                    (
+                        set::className('flex-1 w-full'),
+                        set::name('project'),
+                        set::items($copyProjects),
+                        set::value($projectID),
+                        set::required(true),
+                        on::change('loadProjectExecutions')
+                    )
+                )
+            )
+        ),
+        to::footer
+        (
+            setClass('mt-4'),
+            btn
+            (
+                setClass('primary btn-wide hidden confirmBtn'),
+                set::text($lang->execution->copyExec),
+                on::click('setCopyExecution')
+            )
+        ),
+        div
+        (
+            set::id('copyExecutions'),
+            setClass('flex items-center flex-wrap gap-4')
+        )
+    )
+);
