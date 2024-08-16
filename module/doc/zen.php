@@ -78,11 +78,13 @@ class docZen extends doc
                 $currentLevel = (int)ltrim($headElement[1], 'h');
 
                 $item = array();
-                $item['id']    = $index;
-                $item['title'] = array('html' => strip_tags($headElement[3]));
-                $item['hint']  = strip_tags($headElement[3]);
-                $item['url']   = '#anchor' . $index;
-                $item['level'] = $currentLevel;
+                $item['id']         = $index;
+                $item['title']      = array('html' => strip_tags($headElement[3]));
+                $item['hint']       = strip_tags($headElement[3]);
+                $item['url']        = '#anchor' . $index;
+                $item['level']      = $currentLevel;
+                $item['data-level'] = $item['level'];
+                $item['data-index'] = $index;
 
                 if($currentLevel == $topLevel)
                 {
