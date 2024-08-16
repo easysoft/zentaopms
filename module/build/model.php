@@ -67,11 +67,13 @@ class buildModel extends model
      */
     public function getProjectBuilds(int $projectID = 0, string $type = 'all', string $param = '', string $orderBy = 't1.date_desc,t1.id_desc', object $pager = null): array
     {
-        $builds = $this->dao->select('t1.*, t2.name as productName')
+        $shadows = $this->dao->select('shadow')->from(TABLE_RELEASE)->where("FIND_IN_SET({$projectID}, project)")->fetchPairs('shadow', 'shadow');
+        $builds  = $this->dao->select('t1.*, t2.name as productName')
             ->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.project')->ne(0)
+            ->andWhere('t1.id')->notIN($shadows)
             ->beginIF($projectID)->andWhere('t1.project')->eq((int)$projectID)->fi()
             ->beginIF($type == 'product' && $param)->andWhere('t1.product')->eq((int)$param)->fi()
             ->beginIF($type == 'bysearch')->andWhere($param)->fi()
