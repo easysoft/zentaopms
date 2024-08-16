@@ -1074,6 +1074,11 @@ if($config->edition != 'open')
     $lang->resource->ticket->exportTemplate = 'exportTemplate';
     $lang->resource->ticket->import         = 'import';
     $lang->resource->ticket->export         = 'exportAction';
+    $lang->resource->ticket->batchCreate    = 'batchCreate';
+    $lang->resource->ticket->batchEdit      = 'batchEdit';
+    $lang->resource->ticket->batchActivate  = 'batchActivate';
+    $lang->resource->ticket->batchFinish    = 'batchFinish';
+    $lang->resource->ticket->batchAssignTo  = 'batchAssignTo';
 
     /* Attend */
     $lang->resource->attend = new stdclass();
