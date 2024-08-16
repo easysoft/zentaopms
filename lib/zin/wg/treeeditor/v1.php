@@ -93,7 +93,7 @@ class treeEditor extends wg
                     if($canEdit)      $item['actions']['items'][] = array('key' => 'edit', 'icon' => 'edit', 'data-toggle' => 'modal', 'url' =>  createLink('tree', 'edit', 'moduleID=' . $item['id'] . '&type=' . ($viewType ? $viewType : $item['type'])));
                     if($itemCanSplit) $item['actions']['items'][] = array('key' => 'view',  'icon' => 'split', 'url' => $item['url'], 'data-app' => $app->tab);
                 }
-                elseif($item['type'] != 'branch')
+                elseif(isset($item['type']) && $item['type'] != 'branch')
                 {
                     if($sortTree) $item['trailingIcon'] = 'move muted cursor-move';
 
