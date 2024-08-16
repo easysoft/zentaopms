@@ -64,10 +64,10 @@ class entityLabel extends wg
         $titlePrefix = $this->prop('titlePrefix');
 
         $titleClass = empty($level)
-            ? ''
+            ? 'entity-title'
             : "entity-title entity-title-$level";
 
-        if(empty($href)) return div
+        if(empty($href)) return span
         (
             setClass($titleClass, $className),
             set($labelProps),
