@@ -4124,8 +4124,8 @@ class upgradeModel extends model
     protected function updateProjectMembers(): void
     {
         /* Get projects and project teams. */
-        $sprints      = $this->dao->select('id,days,PM,multiple')->from(TABLE_PROJECT)->where('type')->eq('sprint')->andWhere('multiple')->eq('0')->fetchAll('project');
-        $projects     = $this->dao->select('id,days,PM,multiple')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchAll('id');
+        $sprints      = $this->dao->select('id,project,days,PM,multiple')->from(TABLE_PROJECT)->where('type')->eq('sprint')->andWhere('multiple')->eq('0')->fetchAll('project');
+        $projects     = $this->dao->select('id,project,days,PM,multiple')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchAll('id');
         $projectTeams = $this->getProjectTeams(array_keys($projects));
 
         $this->app->loadLang('user');
