@@ -2503,52 +2503,51 @@ class storyTao extends storyModel
      */
     public function reorderStories(array $stories): array
     {
-        $storyCount = count($stories);
+        $tree = $this->buildStoryTree($stories);
 
-        /* 按照需求的层级倒序排序。*/
-        uasort($stories, function($a, $b) {
-            $pathA = explode(',', trim($a->path, ','));
-            $pathB = explode(',', trim($b->path, ','));
-
-            $countA = count($pathA);
-            $countB = count($pathB);
-            if($countA == $countB) return 0;
-
-            return ($countA < $countB) ? -1 : 1;
-        });
-
-        /* 将需求按照父子关系组成树形结构。*/
-        foreach($stories as $id => $story)
-        {
-            if(!isset($stories[$story->parent])) continue;
-
-            $stories[$story->parent]->children[] = $story;
-            unset($stories[$id]);
-        }
-
-        /* 把树形嵌套数组提取成一维数组。*/
-        $orderedStories = $this->extractStories($stories);
+        $result = array();
+        $this->buildReorderResult($tree, $result);
 
         /* 重排后数量如果和重排之前不一致，说明该列表只有子任务、没有父任务，使用重排之前的顺序。*/
-        return $storyCount == count($orderedStories) ? $orderedStories : array_keys($stories);
+        return count($stories) == count($result) ? $result : array_keys($stories);
     }
 
     /**
-     * 把树形嵌套数组提取成一维数组。
-     * Extract stories from nested array.
+     * 递归将一维需求数组构造成父子关系的嵌套数组。
+     * Build story tree by parent and children.
      *
      * @param  array  $stories
-     * @access public
+     * @param  int    $parentId
      * @return array
      */
-    public function extractStories(array $stories): array
+    public function buildStoryTree(array &$stories, int $parentId = 0)
     {
-        $result = [];
-        foreach($stories as $story)
+        $tree = array();
+        foreach($stories as $id => $parent)
         {
-            $result[$story->id] = $story->id;
-            if(!empty($story->children)) $result += $this->extractStories($story->children);
+            if($parent == $parentId)
+            {
+                $tree[$id] = $this->buildStoryTree($stories, $id);
+            }
         }
-        return $result;
+
+        return $tree;
+    }
+
+     /**
+     * 递归将父子关系的嵌套数组构造成一维需求数组。
+     * Build story result by parent and children.
+     *
+     * @param  array  $parent
+     * @param  array  $result
+     * @access public
+     */
+    public function buildReorderResult(array $parent, array &$result)
+    {
+        foreach($parent as $key => $children)
+        {
+            $result[$key] = $key;
+            if(!empty($children)) $this->buildReorderResult($children, $result);
+        }
     }
 }

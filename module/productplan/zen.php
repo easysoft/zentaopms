@@ -440,7 +440,7 @@ class productplanZen extends productplan
         /* 取出用户重新排序的关键字段。*/
         $stories = array();
         $query   = $this->dao->query($sql);
-        while($story = $query->fetch()) $stories[$story->id] = (object)['id' => $story->id, 'parent' => $story->parent, 'path' => $story->path];
+        while($story = $query->fetch()) $stories[$story->id] = $story->parent;
 
         /* 对需求重新按照父子关系排序，保证进入需求详情后上一页下一页的URL符合预期。 */
         $objectList = $this->loadModel('story')->reorderStories($stories);
