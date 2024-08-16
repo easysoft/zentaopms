@@ -910,7 +910,8 @@ class pivotState
             $oldSetting = isset($oldFieldSettings[$field]) ? $oldFieldSettings[$field] : array();
             if(!empty($oldSetting))
             {
-                $newFieldSettings[$field] = $this->processFieldSettingLang($field, $oldSetting);
+                $newFieldSettings[$field] = $this->processFieldSettingLang($field, $oldSetting, $setting);
+
                 if($setting['type'] != $oldSetting['type'] && in_array($setting['type'], array('user', 'type'))) $newFieldSettings[$field]['type'] = $setting['type'];
             }
             else
@@ -1007,17 +1008,23 @@ class pivotState
      *
      * @param  string  $field
      * @param  array   $fieldSetting
+     * @param  array   $newSetting
      * @access public
      * @return array
      */
-    public function processFieldSettingLang($field, $fieldSetting)
+    public function processFieldSettingLang($field, $oldSetting, $newSetting = array())
     {
         $lang = $this->clientLang;
-        if(isset($fieldSetting[$lang])) return $fieldSetting;
+        if(!empty($oldSetting[$lang])) return $oldSetting;
 
-        $fieldSetting[$lang] = isset($fieldSetting['name']) ? $fieldSetting['name'] : $field;
+        if(!empty($newSetting[$lang]))
+        {
+            $oldSetting[$lang] = $newSetting[$lang];
+            return $oldSetting;
+        }
 
-        return $fieldSetting;
+        $oldSetting[$lang] = isset($oldSetting['name']) ? $oldSetting['name'] : $field;
+        return $oldSetting;
     }
 
     /**
