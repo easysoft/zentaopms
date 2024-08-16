@@ -236,6 +236,26 @@ class sqlparser
     }
 
     /**
+     * Get left join.
+     *
+     * @param  string  $table
+     * @param  string  $alias
+     * @param  array   $on
+     * @access public
+     * @return object
+     */
+    public function getLeftJoin($table, $alias, $on)
+    {
+        $left = new PhpMyAdmin\SqlParser\Components\JoinKeyword();
+
+        $left->type = 'LEFT';
+        $left->expr = $this->getExpression($table, null, $alias);
+        $left->on   = $this->combineConditions($on);
+
+        return $left;
+    }
+
+    /**
      * Match columns with table.
      *
      * @access public
