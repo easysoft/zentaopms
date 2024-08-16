@@ -38,7 +38,7 @@ foreach($docList as $doc)
     (
         set::width('32%'),
         setStyle('width', '32%'),
-        setClass('border rounded-lg p-2'),
+        setClass('border rounded p-2'),
         a
         (
             setClass('text-left w-full'),
