@@ -140,8 +140,7 @@ class testcase extends control
 
         /* 设置菜单。 */
         /* Set menu. */
-        if($this->app->tab == 'project') $this->loadModel('project')->setMenu((int)$this->session->project);
-        if($this->app->tab == 'qa') $this->testcase->setMenu($productID, $branch);
+        $this->testcaseZen->setMenu((int)$this->session->project, 0, $productID, $branch);
 
         /* 展示变量. */
         /* Show the variables. */
@@ -181,9 +180,9 @@ class testcase extends control
         /* Set session, cookie and set menu. */
         $this->session->set('storyList', $this->app->getURI(true) . '#app=' . $this->app->tab, 'product');
         $this->session->set('caseList', $this->app->getURI(true), $this->app->tab);
+        $this->testcaseZen->setMenu((int)$this->session->project, 0, $productID, $branchID);
         if($this->app->tab == 'project')
         {
-            $this->loadModel('project')->setMenu($this->session->project);
             $products  = $this->product->getProducts($this->session->project, 'all', '', false);
             $productID = $this->product->checkAccess($productID, $products);
             $this->config->hasSwitcherMethods[] = 'testcase-zerocase';
@@ -199,7 +198,6 @@ class testcase extends control
             $this->loadModel('qa');
             $this->app->rawModule = 'testcase';
             foreach($this->config->qa->menuList as $module) $this->lang->navGroup->$module = 'qa';
-            $this->qa->setMenu($productID, $branchID);
         }
 
         /* 设置 分页。*/
@@ -334,7 +332,7 @@ class testcase extends control
 
         /* 设置菜单。 */
         /* Set menu. */
-        $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($productID, $branch);
+        $this->testcaseZen->setMenu((int)$this->session->project, 0, $productID, $branch);
 
         /* 指派产品、分支、需求、自定义字段等变量. */
         /* Assign the variables about product, branches, story and custom fields. */
@@ -440,6 +438,7 @@ class testcase extends control
         {
             $libraries = $this->loadModel('caselib')->getLibraries();
             $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->caselib->setLibMenu($libraries, $case->lib);
+            if($this->app->tab == 'project') $this->view->projectID = (int)$this->session->project;
 
             $this->view->libID   = $case->lib;
             $this->view->title   = "CASE #$case->id $case->title - " . $libraries[$case->lib];
@@ -1191,7 +1190,7 @@ class testcase extends control
 
         /* 设置菜单。 */
         /* Set menu. */
-        $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($productID, $branch);
+        $this->testcaseZen->setMenu((int)$this->session->project, 0, $productID, $branch);
 
         $browseType = strtolower($browseType);
 
@@ -1245,7 +1244,7 @@ class testcase extends control
             return $this->testcaseZen->responseAfterShowImport($productID, $branch, $maxImport, $tmpFile);
         }
 
-        $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($productID, $branch);
+        $this->testcaseZen->setMenu((int)$this->session->project, 0, $productID, $branch);
 
         /* Get imported data. */
         if(!empty($maxImport) && file_exists($tmpFile))
@@ -1808,8 +1807,7 @@ class testcase extends control
         if(!commonModel::hasPriv('testcase', 'importXmind')) $this->loadModel('common')->deny('testcase', 'importXmind');
 
         /* Set menu. */
-        if($this->app->tab == 'project') $this->loadModel('project')->setMenu(null);
-        if($this->app->tab == 'qa') $this->testcase->setMenu($productID, $branch);
+        $this->testcaseZen->setMenu(0, 0, $productID, $branch);
 
         $product  = $this->product->getByID($productID);
         $branches = (isset($product->type) && $product->type != 'normal') ? $this->loadModel('branch')->getPairs($productID, 'active') : array();

@@ -45,17 +45,7 @@ $canCreateCase       = hasPriv('testcase', 'create');
 $canBatchCreateCase  = $productID && hasPriv('testcase', 'batchCreate');
 $canCreateScene      = $productID && hasPriv('testcase', 'createScene');
 $canImportUnitResult = hasPriv('testtask', 'importUnitResult');
-
-if($this->app->tab != 'qa')
-{
-    $canBatchCreateCase = false;
-    $canCreateScene     = false;
-    $canImport          = false;
-    $canImportFromLib   = false;
-    $canImportXmind     = false;
-}
-
-$canCreate  = $canCreateCase || $canBatchCreateCase || $canCreateScene;
+$canCreate           = $canCreateCase || $canBatchCreateCase || $canCreateScene;
 
 $lang->testcase->typeList[''] = $lang->testcase->allType;
 if(!isset($param)) $param = 0;

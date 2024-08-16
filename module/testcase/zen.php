@@ -111,12 +111,15 @@ class testcaseZen extends testcase
      * @access protected
      * @return array
      */
-    protected function setBrowseMenu(int $productID, string|bool $branch, int $projectID): array
+    protected function setBrowseMenu(int $productID, string|bool $branch, int $projectID = 0): array
     {
         /* 在不同的应用中，设置不同的导航。 */
         /* Set menu, save session. */
         if($this->app->tab == 'project')
         {
+            if(empty($projectID)) $projectID = (int)$this->session->project;
+            if(empty($projectID)) return array($productID, $branch);
+
             $linkedProducts = $this->product->getProducts($projectID, 'all', '', false);
             $this->products = count($linkedProducts) > 1 ? array('0' => $this->lang->product->all) + $linkedProducts : $linkedProducts;
             $productID      = count($linkedProducts) > 1 ? $productID : key($linkedProducts);
@@ -128,11 +131,12 @@ class testcaseZen extends testcase
             $this->loadModel('project')->setMenu($projectID);
 
             $this->view->products   = $this->products;
+            $this->view->projectID  = $projectID;
             $this->view->hasProduct = $hasProduct;
         }
         else
         {
-            $this->qa->setMenu($productID, $branch);
+            $this->loadModel('qa')->setMenu($productID, $branch);
         }
 
         return array($productID, $branch);
@@ -149,7 +153,7 @@ class testcaseZen extends testcase
      * @access protected
      * @return void
      */
-    protected function setMenu(int $projectID, int $executionID, int $productID, string|int $branch)
+    protected function setMenu(int $projectID = 0, int $executionID = 0, int $productID = 0, string|int $branch = '')
     {
         if($this->app->tab == 'project') $this->loadModel('project')->setMenu($projectID);
         if($this->app->tab == 'execution') $this->loadModel('execution')->setMenu($executionID);
