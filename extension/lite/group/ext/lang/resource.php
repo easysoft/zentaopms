@@ -235,6 +235,7 @@ if($config->systemMode == 'ALM')
     $lang->resource->projectstory->linkStory         = 'linkStory';
     $lang->resource->projectstory->unlinkStory       = 'unlinkStory';
     $lang->resource->projectstory->batchUnlinkStory  = 'batchUnlinkStory';
+    $lang->resource->projectstory->batchReview       = 'batchReview';
 //    $lang->resource->projectstory->importplanstories = 'importplanstories';
 
     $lang->projectstory->methodOrder[5]  = 'story';
@@ -243,6 +244,7 @@ if($config->systemMode == 'ALM')
     $lang->projectstory->methodOrder[20] = 'linkStory';
     $lang->projectstory->methodOrder[25] = 'unlinkStory';
     $lang->projectstory->methodOrder[23] = 'importplanstories';
+    $lang->projectstory->methodOrder[30] = 'batchReview';
 }
 
 /* Story. */
