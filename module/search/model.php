@@ -252,6 +252,37 @@ class searchModel extends model
     }
 
     /**
+     * 转换 queryForm 格式以适应 buildQuery 的检查。
+     * Convert queryForm to fit the buildQuery check.
+     *
+     * @param  array  $queryForm
+     * @access public
+     * @return array
+     */
+    public function convertQueryForm(array $queryForm): array
+    {
+        if(isset($queryForm['field1'])) return $queryForm;
+
+        $convertedForm = array();
+        foreach($queryForm as $i => $formItem)
+        {
+            $i++;
+            if(isset($formItem['groupAndOr']))
+            {
+                $convertedForm['groupAndOr'] = $formItem['groupAndOr'];
+            }
+            elseif(isset($formItem['field']))
+            {
+                $convertedForm['field' . $i]    = $formItem['field'];
+                $convertedForm['andOr' . $i]    = $formItem['andOr'];
+                $convertedForm['operator' . $i] = $formItem['operator'];
+                $convertedForm['value' . $i]    = $formItem['value'];
+            }
+        }
+        return $convertedForm;
+    }
+
+    /**
      * 获取查询。
      * Get a query.
      *
@@ -276,11 +307,11 @@ class searchModel extends model
         $query->form = unserialize($query->form);
         if($hasDynamic)
         {
-            $_POST = $query->form;
+            $_POST           = $this->convertQueryForm($query->form);
             $_POST['module'] = $query->module;
 
             $this->buildQuery();
-            $querySessionName = $query->form['module'] . 'Query';
+            $querySessionName = $query->module . 'Query';
             $query->sql = $_SESSION[$querySessionName];
         }
 
