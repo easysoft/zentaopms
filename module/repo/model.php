@@ -410,8 +410,8 @@ class repoModel extends model
     {
         $this->loadModel('action');
         if($type == 'story') $links = $objects['stories'] = $this->post->stories;
-        if($type == 'bug')   $links = $objects['bugs'] = $this->post->bugs;
-        if($type == 'task')  $links = $objects['task'] = $this->post->tasks;
+        if($type == 'bug')   $links = $objects['bugs']    = $this->post->bugs;
+        if($type == 'task')  $links = $objects['task']    = $this->post->tasks;
 
         $revisionInfo = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->andWhere('revision')->eq($revision)->fetch();
         if(empty($revisionInfo))
