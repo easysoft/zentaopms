@@ -26,7 +26,7 @@ if($app->rawModule == 'doc' && $app->rawMethod == 'view')
     $settingLink = hasPriv('doc', 'displaySetting') ? inlink('displaySetting') : '';
     $settingText = $lang->doc->displaySetting;
 }
-elseif(hasPriv('doc', 'editLib') && $lib->type == 'custom')
+elseif(hasPriv('doc', 'editLib') && !empty($lib) && $lib->type == 'custom')
 {
     $spaceID     = $lib->parent ? $lib->parent : $lib->id;
     $settingLink = inlink('editLib', "libID=$spaceID");
