@@ -265,8 +265,6 @@ $tbody = function() use($tasks, $lang, $groupBy, $users, $groupByList, $executio
         foreach($groupTasks as $task)
         {
             $assignedToStyle = $task->assignedTo == $app->user->account ? "style='color:red'" : '';
-            $taskLink        = $this->createLink('task','view',"taskID=$task->id");
-
             $tbody[] = h::tr
             (
                 set(array('data-id' => $groupIndex)),
@@ -309,7 +307,7 @@ $tbody = function() use($tasks, $lang, $groupBy, $users, $groupByList, $executio
                     !empty($task->team) ? span(setClass('label gray-pale rounded-xl'), $lang->task->multipleAB) : null,
                     $task->parent > 0  ? span(setClass('label gray-pale rounded-xl'), $lang->task->childrenAB) : null,
                     (isset($task->children) && $task->children == true) ? span(setClass('label gray-pale rounded-xl'), $lang->task->parentAB) : null,
-                    a(set::href(createLink('task', 'view', "task=$task->id")), $task->name)
+                    a(set::href(createLink('task', 'view', "task=$task->id")), $task->name, setData(array('toggle' => 'modal', 'size' => 'lg')))
                 ),
                 h::td
                 (
