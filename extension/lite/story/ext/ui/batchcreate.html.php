@@ -32,6 +32,7 @@ $fnGenerateFields = function() use ($lang, $fields, $stories, $config)
     {
         $field['name'] = $name;
         if($field['name'] == 'grade') $field['hidden'] = true;
+        if($field['name'] == 'parent') $field['items'] = array();
         if(!empty($field['options'])) $field['items'] = $field['options'];
         if(!empty($field['default'])) $field['value'] = $field['default'];
         if($field['control'] == 'select') $field['control'] = 'picker';
