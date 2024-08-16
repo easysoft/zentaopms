@@ -273,31 +273,17 @@ class sqlparser
     }
 
     /**
-     * and condition.
+     * operatorCondition
      *
+     * @param  string $type
      * @access public
-     * @return object
+     * @return void
      */
-    public function andCondition()
+    public function operatorCondition($type)
     {
         $condition = new PhpMyAdmin\SqlParser\Components\Condition();
         $condition->isOperator = true;
-        $condition->expr       = 'AND';
-
-        return $condition;
-    }
-
-    /**
-     * or condition.
-     *
-     * @access public
-     * @return object
-     */
-    public function orCondition()
-    {
-        $condition = new PhpMyAdmin\SqlParser\Components\Condition();
-        $condition->isOperator = true;
-        $condition->expr       = 'OR';
+        $condition->expr       = strtoupper($type);
 
         return $condition;
     }
