@@ -249,7 +249,7 @@ $fnGenerateFootToolbar = function() use ($lang, $app, $product, $productID, $pro
     }
 
     $canBatchChangeGrade   = $canBeChanged && hasPriv($storyType, 'batchChangeGrade') && count($gradePairs) > 1 && $config->{$storyType}->gradeRule == 'cross' && !$isProjectStory;
-    $canBatchChangeStage   = $canBeChanged && hasPriv('story', 'batchChangeStage') && $storyType == 'story';
+    $canBatchChangeStage   = $canBeChanged && hasPriv('story', 'batchChangeStage') && $storyType == 'story' && $config->vision != 'lite';
     $canBatchChangeBranch  = $canBeChanged && hasPriv($storyType, 'batchChangeBranch') && $product && $product->type != 'normal' && $productID;
     $canBatchChangeModule  = $canBeChanged && hasPriv($storyType, 'batchChangeModule') && $productID && (($product->type != 'normal' && $branchID != 'all') || $product->type == 'normal') && !$isProjectStory;
     $canBatchChangeParent  = $canBeChanged && hasPriv($storyType, 'batchChangeParent') && !($storyType == 'epic' && count($gradeGroup['epic']) < 2) && $app->tab == 'product';
@@ -305,13 +305,13 @@ $fnGenerateFootToolbar = function() use ($lang, $app, $product, $productID, $pro
             array
             (
                 'text'      => $lang->edit,
-                'className' => 'secondary batch-btn',
+                'className' => 'secondary batch-btn' . (empty($navActionItems) && !$canBatchEdit ? ' hidden' : ''),
                 'disabled'  => ($canBatchEdit ? '': 'disabled'),
                 'data-page' => 'batch',
                 'data-formaction' => $this->createLink($storyType, 'batchEdit', "productID=$storyProductID&projectID=$projectID&branch=$branch&type=$storyType")
             ),
             /* Popup menu trigger icon. */
-            array('caret' => 'up', 'className' => 'size-sm secondary', 'items' => $navActionItems, 'data-toggle' => 'dropdown', 'data-placement' => 'top-start')
+            array('caret' => 'up', 'className' => 'size-sm secondary' . (empty($navActionItems) ? ' hidden' : ''), 'items' => $navActionItems, 'data-toggle' => 'dropdown', 'data-placement' => 'top-start')
         )),
         /* Unlink stories button. */
         !$canBatchUnlink ? null : array

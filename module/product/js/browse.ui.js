@@ -1,6 +1,8 @@
 $(document).off('click', '[data-formaction]').on('click', '[data-formaction]', function()
 {
-    const $this       = $(this);
+    const $this = $(this);
+    if($this.attr('class').indexOf('disabled') !== -1) return;
+
     const dtable      = zui.DTable.query($('#stories'));
     const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return;
