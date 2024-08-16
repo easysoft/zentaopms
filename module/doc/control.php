@@ -704,7 +704,7 @@ class doc extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $this->app->rawMethod = $rawMethod;
 
-        $files       = $this->doc->getLibFiles($type, $objectID, $browseType, $param, $orderBy, $pager);
+        $files       = $this->doc->getLibFiles($type, $objectID, $browseType, (int)$param, $orderBy, $pager);
         $fileIcon    = $this->doc->getFileIcon($files);
         $sourcePairs = $this->doc->getFileSourcePairs($files);
 
