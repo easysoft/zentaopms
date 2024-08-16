@@ -197,7 +197,7 @@ class props extends \zin\utils\dataset
             {
                 if(!is_string($value)) $value = json_encode($value);
 
-                $pairs[] = $name . '="' . static::encodeValue($value) . '"';
+                $pairs[] = $name . '="' . static::encodeValue($value, str_starts_with($name, 'zui-create-')) . '"';
             }
         }
 
@@ -281,8 +281,8 @@ class props extends \zin\utils\dataset
         return $props;
     }
 
-    public static function encodeValue(mixed $value): string
+    public static function encodeValue(mixed $value, bool $doubleEncode = false): string
     {
-        return htmlspecialchars($value, ENT_COMPAT | ENT_SUBSTITUTE | ENT_HTML5, null, true);
+        return htmlspecialchars($value, ENT_COMPAT | ENT_SUBSTITUTE | ENT_HTML5, null, $doubleEncode);
     }
 }
