@@ -240,7 +240,7 @@ $contentDom = div
     div
     (
         setID('docFile'),
-        $doc->files ? setClass('surface px-4 pt-4 pb-2 rounded mb-4') : null,
+        $doc->files ? setClass('surface px-4 pb-2 rounded mb-4') : null,
         $doc->files ? fileList
         (
             setClass('bg-transparent'),
