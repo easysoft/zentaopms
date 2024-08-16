@@ -32,6 +32,7 @@ class editor extends wg
 
     protected static string $css = <<<CSS
         .editor {border: unset; border-radius: unset;}
+        .editor.size-auto {min-height: 0;}
         zen-editor-menu-item > .menu-item {color: #9ea3b0!important;}
         zen-editor-menu-item > .menu-item:hover {color: var(--color-primary-400)!important; background-color: var(--color-gray-200)!important;}
         zen-editor-menu-item > .menu-item.is-active {color: var(--color-primary-400)!important; background-color: transparent!important; box-shadow: inset 0 0 0 1px var(--color-primary-300);}
