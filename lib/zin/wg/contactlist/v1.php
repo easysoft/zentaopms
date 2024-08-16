@@ -56,7 +56,7 @@ class contactList extends wg
         return span
         (
             setID('contactBox'),
-            setClass('input-group-' . ($items ? 'addon p-0 w-24' : 'btn')),
+            setClass('w-auto input-group-' . ($items ? 'addon p-0 w-24' : 'btn')),
             picker
             (
                 $items ? null : setClass('hidden'),
