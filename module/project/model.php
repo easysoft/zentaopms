@@ -540,15 +540,16 @@ class projectModel extends model
              ->andWhere('deleted')->eq(0)
              ->fetch('bugCount');
 
-        $taskCount = $this->dao->select('COUNT(1) AS count,
-            sum(case when status = "wait" then 1 else 0 end) as waitCount,
-            sum(case when status = "doing" then 1 else 0 end) as doingCount,
-            sum(case when finishedBy != "" then 1 else 0 end) as finishedCount')->from(TABLE_TASK)
+        $taskCount = $this->dao->select("COUNT(1) AS `count`,
+            SUM(CASE WHEN `status` = 'wait' THEN 1 ELSE 0 END) AS `waitCount`,
+            SUM(CASE WHEN `status` = 'doing' THEN 1 ELSE 0 END) AS `doingCount`,
+            SUM(CASE WHEN `finishedBy` != '' THEN 1 ELSE 0 END) AS `finishedCount`")
+            ->from(TABLE_TASK)
             ->where('execution')->in(array_keys($executions))
             ->andWhere('deleted')->eq('0')
             ->fetch();
 
-        $delayedCount = $this->dao->select('count(id) as count')->from(TABLE_TASK)
+        $delayedCount = $this->dao->select('COUNT(id) AS `count`')->from(TABLE_TASK)
             ->where('execution')->in(array_keys($executions))
             ->andWhere('deadline')->notZeroDate()
             ->andWhere('deadline')->lt(helper::today())
