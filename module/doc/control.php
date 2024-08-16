@@ -133,6 +133,7 @@ class doc extends control
     {
         if(!empty($_POST))
         {
+            $this->lang->doc->name = $this->lang->doclib->spaceName;
             $space = form::data()->setDefault('addedBy', $this->app->user->account)->get();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
