@@ -126,6 +126,18 @@ class sqlparser
     }
 
     /**
+     * Set from.
+     *
+     * @param  object $from
+     * @access public
+     * @return void
+     */
+    public function setFrom($from)
+    {
+        $this->statement->from = array($from);
+    }
+
+    /**
      * Get function.
      *
      * @param  string $name
