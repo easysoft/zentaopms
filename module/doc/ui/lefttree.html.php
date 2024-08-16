@@ -20,6 +20,23 @@ h::css
 );
 
 $canSort = hasPriv('doc', 'sortCatalog');
+
+if($app->rawModule == 'doc' && $app->rawMethod == 'view')
+{
+    $settingLink = hasPriv('doc', 'displaySetting') ? inlink('displaySetting') : '';
+    $settingText = $lang->doc->displaySetting;
+}
+elseif(hasPriv('doc', 'editLib') && $lib->type == 'custom')
+{
+    $settingLink = inlink('editLib', "libID=$libID");
+    $settingText = $lang->doclib->editSpace;
+}
+else
+{
+    $settingLink = '';
+    $settingText = '';
+}
+
 sidebar
 (
     set::width(200),
@@ -40,8 +57,8 @@ sidebar
         set::canSortTo(jsRaw('window.canSortTo')),
         set::title(!empty($objectDropdown['text']) ? $objectDropdown['text'] : $objectTitle),
         set::menuLink(isset($objectDropdown['link']) ? $objectDropdown['link'] : ''),
-        set::settingLink($app->rawModule == 'doc' && $app->rawMethod == 'view' && common::hasPriv('doc', 'displaySetting') ? inlink('displaySetting') : ''),
-        set::settingText($lang->doc->displaySetting),
+        set::settingLink($settingLink),
+        set::settingText($settingText),
         set::defaultNestedShow(true)
     )
 );

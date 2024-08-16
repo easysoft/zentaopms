@@ -406,6 +406,7 @@ if($canBatchAction)
         $stageItems = array();
         foreach($lang->story->stageList as $stageID => $stage)
         {
+            if($stageID == 'delivered' || $stageID == 'delivering') continue;
             $stageItems[] = array(
                 'text'       => $stage,
                 'innerClass' => 'batch-btn ajax-btn',

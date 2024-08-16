@@ -2164,7 +2164,17 @@ class docModel extends model
         {
             $libs = $this->getLibsByObject($type, 0, $appendLib);
             if(($libID == 0 || !isset($libs[$libID])) && !empty($libs)) $libID = reset($libs)->id;
-            if(isset($libs[$libID])) $objectDropdown['text'] = zget($libs[$libID], 'name', '');
+            if(isset($libs[$libID]))
+            {
+                $objectDropdown['text'] = zget($libs[$libID], 'name', '');
+                if($type == 'custom')
+                {
+                    $currentLib = $libs[$libID];
+                    $space      = $currentLib->parent ? $libs[$currentLib->parent] : $currentLib;
+                    $objectDropdown['text'] = $space->name;
+                    $objectDropdown['link'] = helper::createLink('doc', 'ajaxGetSpaceMenu', "libID={$space->id}&module={$this->app->rawModule}&method={$this->app->rawMethod}");
+                }
+            }
 
             $object     = new stdclass();
             $object->id = 0;
@@ -2403,15 +2413,17 @@ class docModel extends model
             if($item->type == 'apiLib') $apiLibIDList[] = $lib->id;
         }
 
-        /* 将团队空间下的库分为空间和库的结构。 */
+        /* 团队空间下，只展示当前空间下的库。 */
         if($type == 'custom' && !empty($libTree['custom']))
         {
+            $currentLib = $libs[$libID];
+            $space      = $currentLib->parent ? $libs[$currentLib->parent] : $currentLib;
             foreach($libTree['custom'] as $id => $lib)
             {
-                if($lib->parent > 0)
+                if($lib->parent != $space->id)
                 {
-                    if(isset($libTree['custom'][$lib->parent])) $libTree['custom'][$lib->parent]->children[] = $lib;
                     unset($libTree['custom'][$id]);
+                    continue;
                 }
             }
         }

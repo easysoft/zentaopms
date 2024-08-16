@@ -983,6 +983,26 @@ class doc extends control
     }
 
     /**
+     * Ajax: 获取空间的下拉数据。
+     * Ajax: Get the space drop down.
+     *
+     * @param  int    $libID
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return void
+     */
+    public function ajaxGetSpaceMenu(int $libID, string $module, string $method)
+    {
+        $this->view->libID  = $libID;
+        $this->view->module = $module;
+        $this->view->method = $method;
+        $this->view->spaces = $this->docZen->getAllSpaces('nomine');
+
+        $this->display();
+    }
+
+    /**
      * Ajax: 获取执行下拉数据。
      * Ajax: Get the execution drop down by the projectID.
      *
