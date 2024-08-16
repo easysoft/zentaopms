@@ -24,11 +24,14 @@ class consume_of_frombug_task_in_execution extends baseCalc
 
     public $dataset = 'getTasks';
 
-    public $fieldList = array('t1.execution', 't1.consumed', 't1.parent', 't1.fromBug');
+    public $fieldList = array('t1.execution', 't1.consumed', 't1.parent', 't1.fromBug', 't5.fromBug as parentFromBug');
 
     public function calculate($row)
     {
-        if($row->parent == '-1' || $row->fromBug == 0) return;
+        if($row->parent == '-1') return;
+        if($row->parent == '0' && $row->fromBug == 0) return;
+        if($row->parent > 0 && (empty($row->parentFromBug) || $row->parentFromBug == 0)) return;
+
         if(!isset($this->result[$row->execution])) $this->result[$row->execution] = 0;
         $this->result[$row->execution] += $row->consumed;
     }
