@@ -1883,6 +1883,7 @@ class storyTao extends storyModel
     protected function buildBrowseActionBtnList(object $story, string $params = '', string $storyType = 'story', object $execution = null, array $maxGradeGroup = array()): array
     {
         global $lang;
+        $actions = array();
 
         $tutorialMode = commonModel::isTutorialMode();
         if($this->config->edition == 'ipd' && $storyType == 'story')
@@ -1927,7 +1928,7 @@ class storyTao extends storyModel
         /* Change button. */
         $canChange = common::hasPriv($story->type, 'change') && $this->isClickable($story, 'change');
         $title     = $canChange ? $lang->story->change : $this->lang->story->changeTip;
-        $actions[] = array('name' => 'change', 'url' => $canChange ? $changeLink : null, 'hint' => $title, 'disabled' => !$canChange);
+        if(common::hasPriv($story->type, 'change')) $actions[] = array('name' => 'change', 'url' => $canChange ? $changeLink : null, 'hint' => $title, 'disabled' => !$canChange);
 
         /* Submitreview, review, recall buttons. */
         if(strpos('draft,changing', $story->status) !== false)
@@ -1980,18 +1981,18 @@ class storyTao extends storyModel
             $actions[] = array('name' => 'dropdown', 'type' => 'dropdown', 'items' => array($actRecall + array('innerClass' => 'ajax-submit')));
         }
 
-        if($this->config->vision != 'lite' && $story->status != 'closed') $actions[] = array('name' => 'close',    'url' => $canClose ? $closeLink : null,       'data-toggle' => 'modal',  'disabled' => !$canClose);
-        if($this->config->vision != 'lite' && $story->status == 'closed') $actions[] = array('name' => 'activate', 'url' => $canActivate ? $activateLink : null, 'data-toggle' => 'modal');
+        if($this->config->vision != 'lite' && $story->status != 'closed' && common::hasPriv($story->type, 'close'))    $actions[] = array('name' => 'close',    'url' => $canClose ? $closeLink : null,       'data-toggle' => 'modal',  'disabled' => !$canClose);
+        if($this->config->vision != 'lite' && $story->status == 'closed' && common::hasPriv($story->type, 'activate')) $actions[] = array('name' => 'activate', 'url' => $canActivate ? $activateLink : null, 'data-toggle' => 'modal');
 
         /* Render divider line. */
-        $actions[] = array('name' => 'divider', 'type'=>'divider');
+        if(!empty($actions)) $actions[] = array('name' => 'divider', 'type'=>'divider');
 
         /* Edit button. */
         $canEdit = common::hasPriv($story->type, 'edit') && $this->isClickable($story, 'edit');
-        $actions[] = array('name' => 'edit', 'url' => $this->isClickable($story, 'edit') ? $editLink : null, 'disabled' => !$canEdit);
+        if(common::hasPriv($story->type, 'edit')) $actions[] = array('name' => 'edit', 'url' => $this->isClickable($story, 'edit') ? $editLink : null, 'disabled' => !$canEdit);
 
         /* Create test case button. */
-        if($story->type == 'story' && $this->config->vision != 'lite') $actions[] = array('name' => 'testcase', 'url' => common::hasPriv('testcase', 'create') && $story->isParent == '0' ? $createCaseLink : null, 'disabled' => $story->isParent == '1' || !common::hasPriv('testcase', 'create'), 'data-toggle' => 'modal', 'data-size' => 'lg');
+        if($story->type == 'story' && $this->config->vision != 'lite' && common::hasPriv('testcase', 'create')) $actions[] = array('name' => 'testcase', 'url' => common::hasPriv('testcase', 'create') && $story->isParent == '0' ? $createCaseLink : null, 'disabled' => $story->isParent == '1' || !common::hasPriv('testcase', 'create'), 'data-toggle' => 'modal', 'data-size' => 'lg');
 
         /* Batch create button. */
         $shadow = $this->dao->findByID($story->product)->from(TABLE_PRODUCT)->fetch('shadow');
