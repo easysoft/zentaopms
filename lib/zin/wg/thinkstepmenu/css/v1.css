@@ -20,7 +20,6 @@
 .think-node-menu .tree .tree-item .tree-item-inner {gap: 10px; padding-left: calc(3*var(--space));}
 .think-node-menu .tree.is-nested-root>.tree-item>.listitem {border: 1px solid #eee; border-radius: calc(4*var(--space)); width: fit-content; max-width: 100%; padding: 0 calc(3*var(--space)); background: #fff; position: relative; z-index: 2;}
 .think-node-menu .tree.is-nested-root>.tree-item>.listitem.selected {background: rgba(var(--color-primary-50-rgb), .8);}
-.think-node-menu .tree .tree-toggle {display: none;}
 .think-node-menu .tree .listitem>.item-icon {font-size: 16px; z-index: 2;}
 
 .think-node-menu .tree.is-nested-root>.tree-item>.tree::before {left: 20px;}

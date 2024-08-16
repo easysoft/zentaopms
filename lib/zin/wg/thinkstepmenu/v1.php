@@ -246,8 +246,7 @@ class thinkStepMenu extends wg
                     set::_tag('menu'),
                     set::defaultNestedShow(true),
                     set::hover(true),
-                    set::collapsedIcon('caret-right cursor-pointer'),
-                    set::expandedIcon('caret-down cursor-pointer'),
+                    set::toggleIcons(array('expanded' => 'caret-down cursor-pointer', 'collapsed' => 'caret-right cursor-pointer')),
                     set::className('tree-lines bg-canvas col flex-auto scrollbar-hover scrollbar-thin overflow-y-auto overflow-x-hidden'),
                     set($treeProps)
                 ),
