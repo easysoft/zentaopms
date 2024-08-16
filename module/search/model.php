@@ -277,6 +277,7 @@ class searchModel extends model
         if($hasDynamic)
         {
             $_POST = $query->form;
+            $_POST['module'] = $query->module;
 
             $this->buildQuery();
             $querySessionName = $query->form['module'] . 'Query';
