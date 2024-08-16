@@ -371,17 +371,37 @@ class sqlparser
         if(empty($conditions)) return array();
 
         if($conditions instanceof PhpMyAdmin\SqlParser\Components\Condition === true) return $conditions;
-        foreach($conditions as $index => $condition)
+
+        $first = reset($conditions);
+        $last  = end($conditions);
+
+        if($quote)
         {
-            $isFirst   = $index == 0;
-            $isLast    = $index == count($conditions) - 1;
-            $condition = $this->combineConditions($condition, true);
-
-            if($quote && $isFirst) $condition->expr = '(' . $condition->expr;
-            if($quote && $isLast)  $condition->expr = $condition->expr . ')';
-
-            $conditions[$index] = $condition;
+            $first = $this->addQuote($first, 'left');
+            $last  = $this->addQuote($last, 'right');
         }
+
+        $quote = true;
+        if(is_array($first)) $first = $this->combineConditions($first, $quote);
+        if(is_array($last))  $last  = $this->combineConditions($last, $quote);
+
+        $conditions[0] = $first;
+        $conditions[count($conditions) - 1] = $last;
+        return $conditions;
+    }
+
+    public function addQuote($conditions, $side)
+    {
+        if($conditions instanceof PhpMyAdmin\SqlParser\Components\Condition === true)
+        {
+            $expr  = $conditions->expr;
+            $conditions->expr = $side == 'left' ? '(' . $expr : $expr . ')';
+            return $conditions;
+        }
+
+        $condition = $side == 'left' ? current($conditions) : end($conditions);
+        $index     = $side == 'left' ? 0 : count($conditions) - 1;
+        $conditions[$index] = $this->addQuote($condition, $side);
         return $conditions;
     }
 
