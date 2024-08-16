@@ -1,9 +1,9 @@
 const today = zui.formatDate(new Date(), 'yyyy-MM-dd');
 window.onRenderExecutionCell = function(result, info)
 {
-    if(info.col.name === 'name' && systemMode == 'ALM')
+    if(info.col.name === 'name' && (systemMode == 'ALM' || systemMode == 'PLM'))
     {
-        const executionLink = $.createLink('execution', 'task', `executionID=${info.id}`);
+        const executionLink = $.createLink('execution', 'task', `executionID=${info.row.id}`);
         const executionType = typeList[info.row.data.type];
 
         let executionName   = `<span class='label secondary-pale flex-none'>${executionType}</span> `;
