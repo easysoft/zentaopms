@@ -77,7 +77,6 @@ if(hasPriv('doc', 'delete') && !$doc->deleted)
 {
     $docMoreActions[] = array
     (
-        'class'        => 'ajax-submit',
         'url'          => createLink('doc', 'delete', "docID=$doc->id"),
         'icon'         => 'trash',
         'text'         => $lang->delete,
