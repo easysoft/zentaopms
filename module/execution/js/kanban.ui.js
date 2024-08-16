@@ -130,7 +130,7 @@ window.buildColCardActions = function(col)
     else if(col.type == 'wait')
     {
         if(priv.canCreateTask) actions.push({text: taskLang.create, url: $.createLink('task', 'create', 'executionID=' + executionID + '&storyID=0&moduleID=0&taskID=0&todoID=0&extra=regionID=' + col.region + ',laneID=' + laneID + ',columnID=' + col.id), 'data-toggle': 'modal', 'data-size' : 'lg'});
-        if(priv.canBatchCreateTask) actions.push({text: taskLang.batchCreate, url: $.createLink('task', 'batchcreate', 'executionID=' + executionID + '&storyID=0&moduleID=0&taskID=0&iframe=0&extra=regionID=' + col.region + ',laneID=' + laneID + ',columnID=' + col.id), 'data-toggle': 'modal', 'data-size' : 'lg'});
+        if(priv.canBatchCreateTask) actions.push({text: taskLang.batchCreate, url: $.createLink('task', 'batchcreate', 'executionID=' + executionID + '&storyID=0&moduleID=0&taskID=0&extra=regionID=' + col.region + ',laneID=' + laneID + ',columnID=' + col.id), 'data-toggle': 'modal', 'data-size' : 'lg'});
         if(priv.canImportBug && vision == 'rnd') actions.push({text: executionLang.importBug, url: $.createLink('execution', 'importBug', 'executionID=' + executionID + '&storyID=0&moduleID=0&taskID=0&todoID=0&extra=laneID=' + laneID + ',columnID=' + col.id), 'data-toggle': 'modal', 'data-size' : 'lg'});
     }
 
