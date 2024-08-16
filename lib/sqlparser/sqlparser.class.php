@@ -497,6 +497,25 @@ class sqlparser
         return $group;
     }
 
+    public function combineConditions($conditions, $quote = false)
+    {
+        if(empty($conditions)) return array();
+
+        if($conditions instanceof PhpMyAdmin\SqlParser\Components\Condition === true) return $conditions;
+        foreach($conditions as $index => $condition)
+        {
+            $isFirst   = $index == 0;
+            $isLast    = $index == count($conditions) - 1;
+            $condition = $this->combineConditions($condition, true);
+
+            if($quote && $isFirst) $condition->expr = '(' . $condition->expr;
+            if($quote && $isLast)  $condition->expr = $condition->expr . ')';
+
+            $conditions[$index] = $condition;
+        }
+        return $conditions;
+    }
+
     /**
      * Combine conditions.
      *
