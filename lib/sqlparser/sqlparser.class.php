@@ -256,6 +256,21 @@ class sqlparser
     }
 
     /**
+     * Get group.
+     *
+     * @param  object $expr
+     * @access public
+     * @return void
+     */
+    public function getGroup($expr)
+    {
+        $group = new PhpMyAdmin\SqlParser\Components\GroupKeyword();
+        $group->expr = $expr;
+
+        return $group;
+    }
+
+    /**
      * Match columns with table.
      *
      * @access public
