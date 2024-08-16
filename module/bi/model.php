@@ -1285,6 +1285,19 @@ class biModel extends model
         return $conditionExprs;
     }
 
+    /**
+     * sqlBuilder
+     *
+     * @param  array $selects
+     * @param  array $from
+     * @param  array $joins
+     * @param  array $functions
+     * @param  array $wheres
+     * @param  array $querys
+     * @param  array $groups
+     * @access public
+     * @return object
+     */
     public function sqlBuilder(array $selects, array $from, array $joins = array(), array $functions = array(), array $wheres = array(), array $querys = array(), array $groups = array()): object
     {
         $this->app->loadClass('sqlparser', true);
