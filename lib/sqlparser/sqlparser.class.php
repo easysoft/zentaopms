@@ -158,6 +158,26 @@ class sqlparser
     }
 
     /**
+     * Add join.
+     *
+     * @param  array|object $joins
+     * @access public
+     * @return void
+     */
+    public function addJoin($joins)
+    {
+        if(empty($joins)) return;
+
+        if($joins instanceof PhpMyAdmin\SqlParser\Components\JoinKeyword)
+        {
+            $this->statement->join[] = $joins;
+            return;
+        }
+
+        foreach($joins as $join) $this->addJoin($join);
+    }
+
+    /**
      * Get function.
      *
      * @param  string $name
