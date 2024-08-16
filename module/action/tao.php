@@ -363,6 +363,7 @@ class actionTao extends actionModel
         if(in_array($type, array('execution', 'kanban')))
         {
             $execution = $this->fetchObjectInfoByID(TABLE_EXECUTION, (int)$action->extra, 'name, type, multiple');
+            if(!$execution) return false;
             if($execution->type != 'project' && empty($execution->multiple)) return false;
 
             $name = $execution->name;
@@ -372,6 +373,7 @@ class actionTao extends actionModel
         elseif($type == 'project')
         {
             $project = $this->fetchObjectInfoByID($table, (int)$action->extra, 'name, model, multiple');
+            if(!$project) return false;
 
             $name = $project->name;
             if($project->model == 'kanban') $method = $project->multiple ? 'kanban' : 'index';
