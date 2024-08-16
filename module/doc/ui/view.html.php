@@ -256,6 +256,7 @@ $treeDom = isset($outlineTree) ? div
     setClass('sticky overflow-y-auto scrollbar-hover'),
     setStyle('max-height', 'calc(100vh - 130px)'),
     setStyle('top', '58px'),
+    on::click('.tree-item>.listitem')->call('scrollIntoDoc', jsRaw('$this')),
     tree
     (
         set::className('pl-4'),
