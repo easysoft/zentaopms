@@ -1266,6 +1266,26 @@ class biModel extends model
     }
 
     /**
+     * Get conditions from array.
+     *
+     * @param  object       $parser
+     * @param  array|string $conditions
+     * @access public
+     * @return mixed
+     */
+    public function getConditionsFromArray(object $parser, array|string $conditions): mixed
+    {
+        if(is_string($conditions)) return $parser->operatorCondition($conditions);
+
+        if(!is_array(current($conditions))) return $parser->getCondition($conditions);
+
+        $conditionExprs = array();
+        foreach($conditions as $condition) $conditionExprs[] = $this->getConditionsFromArray($parser, $condition);
+
+        return $conditionExprs;
+    }
+
+    /**
      * Validate sql.
      *
      * @param  string    $sql
