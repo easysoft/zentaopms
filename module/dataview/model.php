@@ -237,7 +237,7 @@ class dataviewModel extends model
 
         $mergeField = isset($this->lang->$moduleName->$fieldName) ? $this->lang->$moduleName->$fieldName : $field;
 
-        if(!isset($workflowFields[$moduleName]) && $this->config->edition != 'open') $workflowFields[$moduleName] = $this->loadModel('workflowfield')->getFieldPairs($moduleName);
+        if(!isset($workflowFields[$moduleName]) && $this->config->edition != 'open') $workflowFields[$moduleName] = $this->loadModel('workflowfield')->getFieldPairs($moduleName, '0');
         if(isset($workflowFields[$moduleName][$fieldName])) $mergeField = $workflowFields[$moduleName][$fieldName];
 
         return array($mergeField, $moduleName, $workflowFields);
