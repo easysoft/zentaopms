@@ -1307,7 +1307,7 @@ class biModel extends model
 
         foreach($selects as $select) $parser->addSelect($parser->getExpression($select));
 
-        foreach($functions as $function) $parser->addSelect($parser->getExpression($function));
+        if(!empty($functions)) foreach($functions as $function) $parser->addSelect($parser->getExpression($function));
 
         $parser->setFrom($parser->getExpression($from));
 
@@ -1319,9 +1319,9 @@ class biModel extends model
             $parser->addJoin($leftJoinExpr);
         }
 
-        $parser->addWhere($parser->combineConditions($this->getConditionsFromArray($parser, $wheres)));
+        if(!empty($wheres)) $parser->addWhere($parser->combineConditions($this->getConditionsFromArray($parser, $wheres)));
 
-        foreach($groups as $group) $parser->addGroup($parser->getGroup($parser->getExpression($group)));
+        if(!empty($groups)) foreach($groups as $group) $parser->addGroup($parser->getGroup($parser->getExpression($group)));
 
         return $parser->statement;
     }
