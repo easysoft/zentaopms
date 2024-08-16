@@ -166,7 +166,7 @@ formBase
 (
     setID('docForm'),
     set::actions(false),
-    set::ajax(array('beforeSubmit' => jsRaw($handleSubmitForm), 'onFail' => jsRaw('$("#docForm").addClass("has-changed")'))),
+    set::ajax(array('beforeSubmit' => jsRaw($handleSubmitForm), 'onFail' => jsRaw('() => $("#docForm").addClass("has-changed")'))),
     set::morph(),
     setData('unsavedConfirm', $lang->doc->confirmLeaveOnEdit),
     on::change('#showTitle,zen-editor')->once()->do('$element.addClass("has-changed")'),
