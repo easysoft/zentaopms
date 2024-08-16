@@ -152,7 +152,7 @@ zentaoxx:
 	sed -i '/deviceToken/d' zentaoxx/db/*.sql
 	sed -i '/deviceType/d' zentaoxx/db/*.sql
 	sed -i 's/xxb_/zt_/g' zentaoxx/db/*.sql
-	sed -i 's/ GENERATED ALWAYS AS (CASE WHEN `legacy` = 1 THEN NULL WHEN `cgid` = '\''notification'\'' THEN NULL ELSE `index` END) STORED//g' zentaoxx/db/*.sql
+	sed -i 's/GENERATED ALWAYS AS (CASE WHEN `legacy` = 1 THEN NULL WHEN `cgid` = '\''notification'\'' THEN NULL ELSE `index` END) STORED/NOT NULL DEFAULT 0/g' zentaoxx/db/*.sql
 	sed -i "/fetch('push', 'pushMessage');/d" zentaoxx/extension/xuan/im/control.php
 	#sed -i "s/marked\.html\.php';?>/marked\.html\.php';?>\n<div id='mainMenu' class='clearfix'><div class='btn-toolbar pull-left'><?php common::printAdminSubMenu('xuanxuan');?><\/div><\/div>/g" zentaoxx/extension/xuan/client/view/checkupgrade.html.php
 	sed -i '/var serverVersions/d' zentaoxx/extension/xuan/client/js/checkupgrade.js
