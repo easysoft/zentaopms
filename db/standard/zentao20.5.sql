@@ -1674,7 +1674,7 @@ CREATE TABLE `zt_im_message` (
   `data` text DEFAULT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   `legacy` tinyint(1) NOT NULL DEFAULT 0,
-  `uniqueIndex` int(11) GENERATED ALWAYS AS (case when `legacy` = 1 then NULL when `cgid` = 'notification' then NULL else `index` end) STORED,
+  `uniqueIndex` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uniqueIndexInChat` (`cgid`,`uniqueIndex`),
   KEY `mgid` (`gid`),
