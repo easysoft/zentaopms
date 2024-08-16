@@ -111,7 +111,6 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
             {
                 if(common::hasPriv('requirement', 'create'))      $items[]      = array('text' => $lang->requirement->create, 'url' => createLink('requirement', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&requirementID=0&projectID=$projectID") . '#app=project');
                 if(common::hasPriv('requirement', 'batchCreate')) $batchItems[] = array('text' => $lang->URCommon, 'url' => createLink('requirement', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&requirementID=0&project=$projectID") . '#app=project');
-    $batchCreateLink = createLink($storyType, 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=0&project=$projectID&plan=0&storyType=$storyType"). ($isProjectStory ? '#app=project' : '');
             }
 
             if(str_contains($project->storyType, 'epic') && $this->config->enableER)
