@@ -178,6 +178,26 @@ class sqlparser
     }
 
     /**
+     * Add where.
+     *
+     * @param  array|object $wheres
+     * @access public
+     * @return void
+     */
+    public function addWhere($wheres)
+    {
+        if(empty($wheres)) return;
+
+        if($wheres instanceof PhpMyAdmin\SqlParser\Components\Condition)
+        {
+            $this->statement->where[] = $wheres;
+            return;
+        }
+
+        foreach($wheres as $where) $this->addWhere($where);
+    }
+
+    /**
      * Get function.
      *
      * @param  string $name
