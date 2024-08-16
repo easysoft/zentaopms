@@ -239,7 +239,8 @@ $config->ai->menuPrint->locations['projectrelease']['view']->objectVarName = nul
 
 $config->ai->menuPrint->locations['doc']['view'] = (object)array(
     'module'          => 'doc',
-    'targetContainer' => '#docPanel > .panel-heading > .panel-actions > .toolbar',
+    'targetContainer' => '#docMoreActionsBtn',
+    'injectMethod'    => 'before',
     'buttonPlacement' => 'bottom-end'
 );
 

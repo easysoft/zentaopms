@@ -159,6 +159,7 @@ $docHeader = div
         div
         (
             setClass('toolbar'),
+            setID('docToolbar'),
             btn
             (
                 setClass('btn ghost square'),
@@ -178,6 +179,7 @@ $docHeader = div
             (
                 btn
                 (
+                    setID('docMoreActionsBtn'),
                     set::type('ghost'),
                     set::caret(false),
                     set::square(),
