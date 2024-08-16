@@ -61,7 +61,7 @@ class pivotModel extends model
         $pivot->filters = $pivotFilters;
 
         $pivot = $this->processPivot($pivot);
-        if(isset($pivot->stage) && $pivot->stage == 'published') $this->processFieldSettings($pivot);
+        if(isset($pivot->stage) && $pivot->stage == 'published' && $this->app->methodName == 'preview') $this->processFieldSettings($pivot);
 
         return $pivot;
     }
