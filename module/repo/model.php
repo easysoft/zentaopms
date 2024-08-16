@@ -3078,6 +3078,8 @@ class repoModel extends model
         $showCommit = $repoPairs  && common::hasPriv('repo', 'log');
         foreach($menuGroup as $module)
         {
+            if(!isset($this->lang->{$module}->menu->devops)) continue;
+
             if(!$showMR)     unset($this->lang->{$module}->menu->devops['subMenu']->mr);
             if(!$showTag)    unset($this->lang->{$module}->menu->devops['subMenu']->tag);
             if(!$showBranch) unset($this->lang->{$module}->menu->devops['subMenu']->branch);
