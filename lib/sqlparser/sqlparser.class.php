@@ -497,6 +497,13 @@ class sqlparser
         return $group;
     }
 
+    /**
+     * Combine conditions.
+     *
+     * @param  array|object $conditions
+     * @access public
+     * @return array
+     */
     public function combineConditions($conditions, $quote = false)
     {
         if(empty($conditions)) return array();
