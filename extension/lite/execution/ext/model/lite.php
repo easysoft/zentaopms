@@ -114,59 +114,6 @@ public function setSubNav(array $kanbanList, object $currentKanban): void
 }
 
 /**
- * 获取树状图结构。
- * Get tree structure.
- *
- * @param  int    $executionID
- * @access public
- * @return array
- */
-public function getTree(int $executionID): array
-{
-    $fullTrees = $this->loadModel('tree')->getTaskStructure($executionID, 0);
-
-    array_unshift($fullTrees, array('id' => 0, 'name' => '/', 'type' => 'task', 'actions' => false, 'root' => $executionID));
-
-    foreach($fullTrees as $i => $tree)
-    {
-        $tree = (object)$tree;
-
-        if($tree->type == 'product') array_unshift($tree->children, array('id' => 0, 'name' => '/', 'type' => 'story', 'actions' => false, 'root' => $tree->root));
-        $fullTree = $this->fillTasksInTree($tree, $executionID);
-
-        if(empty($fullTree->children))
-        {
-            unset($fullTrees[$i]);
-        }
-        else
-        {
-            $fullTrees[$i] = $fullTree;
-        }
-    }
-
-    if(isset($fullTrees[0]) and empty($fullTrees[0]->children)) array_shift($fullTrees);
-
-    $newTrees = array();
-
-    foreach($fullTrees as $i => $tree)
-    {
-        if($tree->type == 'product')
-        {
-            foreach($tree->children as $value)
-            {
-                $newTrees[] = $value;
-            }
-        }
-        else
-        {
-            $newTrees[] = $tree;
-        }
-    }
-
-    return array_values($newTrees);
-}
-
-/**
  * 设置右上角页面切换按钮。
  * Set right top page switch button.
  *

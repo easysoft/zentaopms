@@ -21,6 +21,7 @@ featureBar
     (
         set::rootClass('ml-2'),
         set::name('showStory'),
+        set::checked($this->cookie->showStory),
         set::text($lang->execution->treeLevel['story']),
         on::change('changeDisplay')
     )
