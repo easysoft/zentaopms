@@ -1351,7 +1351,7 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getLibsByObject(string $type, int $objectID, int $appendLib = 0): array
+    public function getLibsByObject(string $type, int $objectID = 0, int $appendLib = 0): array
     {
         if(!in_array($type, array('mine', 'custom', 'product', 'project', 'execution'))) return array();
         if(in_array($type, array('mine', 'custom')))
@@ -1359,10 +1359,10 @@ class docModel extends model
             $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('deleted')->eq(0)
                 ->andWhere('vision')->eq($this->config->vision)
-                ->beginIF($type == 'mine')->andWhere('type')->eq($type)->fi()
-                ->beginIF($type == 'custom')->andWhere('type')->in('custom,space')->fi()
-                ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
+                ->andWhere('type')->eq($type)
+                ->beginIF($type == 'custom')->andWhere('parent')->eq($objectID)->fi()
                 ->beginIF($type == 'mine')->andWhere('addedBy')->eq($this->app->user->account)->fi()
+                ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
                 ->orderBy('`order` asc, id_asc')
                 ->fetchAll('id');
         }
@@ -2160,18 +2160,19 @@ class docModel extends model
         }
         else
         {
-            $libs = $this->getLibsByObject($type, 0, $appendLib);
-            if(($libID == 0 || !isset($libs[$libID])) && !empty($libs)) $libID = reset($libs)->id;
-            if(isset($libs[$libID]))
+            if($type == 'custom')
             {
-                $objectDropdown['text'] = zget($libs[$libID], 'name', '');
-                if($type == 'custom')
-                {
-                    $currentLib = $libs[$libID];
-                    $space      = $currentLib->parent ? $libs[$currentLib->parent] : $currentLib;
-                    $objectDropdown['text'] = $space->name;
-                    $objectDropdown['link'] = helper::createLink('doc', 'ajaxGetSpaceMenu', "libID={$space->id}&module={$this->app->rawModule}&method={$this->app->rawMethod}");
-                }
+                $spaces = $this->getTeamSpaces();
+                if(empty($objectID)) $objectID = (int)key($spaces);
+                if(!isset($spaces[$objectID])) $objectID = (int)key($spaces);
+            }
+            $libs = $this->getLibsByObject($type, $objectID, $appendLib);
+            if(($libID == 0 || !isset($libs[$libID])) && !empty($libs)) $libID = reset($libs)->id;
+            if(isset($libs[$libID])) $objectDropdown['text'] = zget($libs[$libID], 'name', '');
+            if($type == 'custom')
+            {
+                $objectDropdown['text'] = zget($spaces, $objectID, '');
+                $objectDropdown['link'] = helper::createLink('doc', 'ajaxGetSpaceMenu', "libID={$objectID}&module={$this->app->rawModule}&method={$this->app->rawMethod}");
             }
 
             $object     = new stdclass();
@@ -2409,21 +2410,6 @@ class docModel extends model
             }
 
             if($item->type == 'apiLib') $apiLibIDList[] = $lib->id;
-        }
-
-        /* 团队空间下，只展示当前空间下的库。 */
-        if($type == 'custom' && !empty($libTree['custom']))
-        {
-            $currentLib = $libs[$libID];
-            $space      = $currentLib->parent ? $libs[$currentLib->parent] : $currentLib;
-            foreach($libTree['custom'] as $id => $lib)
-            {
-                if($lib->parent != $space->id)
-                {
-                    unset($libTree['custom'][$id]);
-                    continue;
-                }
-            }
         }
 
         return array($libTree, $apiLibs, $apiLibIDList);

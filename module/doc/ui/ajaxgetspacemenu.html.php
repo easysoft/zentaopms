@@ -39,7 +39,7 @@ $tabs[] = array('name' => 'normal', 'text' => '');
  * 定义最终的 JSON 数据。
  * Define the final json data.
  */
-$link = $this->createLink('doc', 'teamSpace', "type=custom&objectID=%s");
+$link = $this->createLink('doc', 'teamSpace', "objectID=%s");
 
 $json = array();
 $json['data']       = $data;

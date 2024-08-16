@@ -63,7 +63,7 @@ if(empty($libTree))
         set::emptyTip($lang->doc->noLib)
     );
 
-    if($libID) include 'lefttree.html.php';
+    if($objectID) include 'lefttree.html.php';
     return;
 }
 
