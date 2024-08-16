@@ -198,6 +198,26 @@ class sqlparser
     }
 
     /**
+     * Add group.
+     *
+     * @param  array|object $groups
+     * @access public
+     * @return void
+     */
+    public function addGroup($groups)
+    {
+        if(empty($groups)) return;
+
+        if($groups instanceof PhpMyAdmin\SqlParser\Components\GroupKeyword)
+        {
+            $this->statement->group[] = $groups;
+            return;
+        }
+
+        foreach($groups as $group) $this->addGroup($group);
+    }
+
+    /**
      * Get function.
      *
      * @param  string $name
