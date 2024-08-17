@@ -216,8 +216,8 @@ pms:
 	make zentaoxx
 	unzip zentaoxx.*.zip
 	cp zentaoxx/* zentaopms/ -r
-	sed -i 's/legacy/d' zentaopms/db/*.sql
-	sed -i 's/uniqueIndex/d' zentaopms/db/*.sql
+	sed -i '/legacy/d' zentaopms/db/*.sql
+	sed -i '/uniqueIndex/d' zentaopms/db/*.sql
 	make package
 	zip -rq -9 ZenTaoPMS.$(VERSION).zip zentaopms
 	rm -fr zentaopms zentaoxx zentaoxx.*.zip
