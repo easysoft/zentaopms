@@ -1973,4 +1973,25 @@ class repo extends control
         $this->display();
     }
 
+    /**
+     * 通过ajax获取代码库的分支。
+     * Ajax: Get branches.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetBranchOptions(int $repoID)
+    {
+        $repo = $this->repo->getByID($repoID);
+        $scm  = $this->app->loadClass('scm');
+        $scm->setEngine($repo);
+
+        $options = $this->getBranchAndTagOptions($this->scm);
+        if(!empty($options[0]['items']))
+        {
+            return print(json_encode($options[0]['items']));
+        }
+        return print(json_encode(array()));
+    }
 }
