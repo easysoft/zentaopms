@@ -310,6 +310,9 @@ ciCommon:
             find zentaopms -name "*.php" | xargs sed -i '/^declare(strict_types/d'
         endif
 
+	sed -i '/legacy/d' zentaopms/db/*.sql
+	sed -i '/uniqueIndex/d' zentaopms/db/*.sql
+
 	cp -a zentaopms zentaoalm
 	sed -i '/^\s*$$config->langs\['"'"'de'"'"']/d' zentaopms/config/config.php
 	sed -i '/^\s*$$config->langs\['"'"'fr'"'"']/d' zentaopms/config/config.php
