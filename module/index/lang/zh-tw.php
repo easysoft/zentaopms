@@ -9,6 +9,10 @@ $lang->index->dock = new stdClass();
 $lang->index->dock->open   = '打開';
 $lang->index->dock->reload = '刷新';
 $lang->index->dock->close  = '關閉';
+$lang->index->dock->move   = '移動';
+$lang->index->dock->save   = '保存順序';
+$lang->index->dock->hide   = '隱藏';
+$lang->index->dock->add    = '添加';
 
 $lang->index->upgradeVersion = '可升級版本';
 $lang->index->upgradeNow     = '現在升級';

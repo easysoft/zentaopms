@@ -9,6 +9,10 @@ $lang->index->dock = new stdClass();
 $lang->index->dock->open   = 'Open';
 $lang->index->dock->reload = 'Reload';
 $lang->index->dock->close  = 'Close';
+$lang->index->dock->move   = 'Move';
+$lang->index->dock->save   = 'Save order';
+$lang->index->dock->hide   = 'Hide';
+$lang->index->dock->add    = 'Add';
 
 $lang->index->upgradeVersion = 'Upgradable version';
 $lang->index->upgradeNow     = 'Upgrade now';
