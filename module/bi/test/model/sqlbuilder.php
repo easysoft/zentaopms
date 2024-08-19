@@ -76,3 +76,14 @@ $withGroup = array
 );
 
 r($bi->sqlBuilderTest($withGroup)) && p('') && e("SELECT `t1`.`type`, SUM(`t1`.`consumed`) AS `consumed` FROM `zt_task` AS `t1` GROUP BY `t1`.`type`"); // 测试 分组sql
+
+$withWhere = array
+(
+    'selects' => array
+    (
+        array('t1', 'id')
+    ),
+    'from' => array('zt_task', null, 't1')
+);
+
+r($bi->sqlBuilderTest($withWhere)) && p('') && e("SELECT `t1`.`id` FROM `zt_task` AS `t1` WHERE `t1`.`deleted` = '0' AND (`t1`.`status` = 'done' OR (`t1`.`status` = 'closed' AND `t1`.`closedReason` = 'done'))"); // 测试 查询条件sql
