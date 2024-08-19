@@ -113,6 +113,7 @@ function history(): history {return createWg('history', func_get_args());}
 function floatToolbar(): floatToolbar {return createWg('floatToolbar', func_get_args());}
 function formItemDropdown(): formItemDropdown {return createWg('formItemDropdown', func_get_args());}
 function editor(): editor {return createWg('editor', func_get_args());}
+function pageEditor(): pageEditor {return createWg('pageEditor', func_get_args());}
 function commentBtn(): commentBtn {return createWg('commentBtn', func_get_args());}
 function commentDialog(): commentDialog {return createWg('commentDialog', func_get_args());}
 function commentForm(): commentForm {return createWg('commentForm', func_get_args());}
