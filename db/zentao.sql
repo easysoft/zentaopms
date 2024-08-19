@@ -15411,7 +15411,7 @@ CREATE TABLE IF NOT EXISTS `zt_pivot`  (
   `group` varchar(255) NOT NULL DEFAULT '',
   `code` varchar(255) NOT NULL DEFAULT '',
   `driver` enum('mysql', 'duckdb') not NULL default 'mysql',
-  `mode` enum('text', 'builder') not NULL default 'text',
+  `mode` enum('text', 'builder') not NULL default 'builder',
   `name` text NULL,
   `desc` text NULL,
   `acl` enum('open','private') NOT NULL DEFAULT 'open',

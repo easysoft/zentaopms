@@ -15,4 +15,5 @@ UPDATE `zt_doc` SET `order` = id;
 
 ALTER TABLE `zt_story` ADD `verifiedDate` datetime NULL AFTER `retractedDate`;
 
-ALTER TABLE `zt_pivot` ADD `mode` enum('text', 'builder') not NULL default 'text' AFTER `driver`;
+ALTER TABLE `zt_pivot` ADD `mode` enum('text', 'builder') not NULL default 'builder' AFTER `driver`;
+UPDATE `zt_pivot` SET `mode` = 'text';
