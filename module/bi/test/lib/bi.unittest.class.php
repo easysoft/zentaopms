@@ -67,6 +67,26 @@ class biTest
     }
 
     /**
+     * sql builder test.
+     *
+     * @param  array $args
+     * @access public
+     * @return string
+     */
+    public function sqlBuilderTest(array $args): string
+    {
+        $selects   = zget($args, 'selects', array());
+        $from      = zget($args, 'from', array());
+        $joins     = zget($args, 'joins', array());
+        $functions = zget($args, 'functions', array());
+        $wheres    = zget($args, 'wheres', array());
+        $querys    = zget($args, 'querys', array());
+        $groups    = zget($args, 'groups', array());
+        $statement = $this->objectModel->sqlBuilder($selects, $from, $joins, $functions, $wheres, $querys, $groups);
+        return $statement->build();
+    }
+
+    /**
      * get columns native type
      *
      * @param  string $sql
