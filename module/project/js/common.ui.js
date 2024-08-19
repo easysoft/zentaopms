@@ -76,7 +76,7 @@ function computeDaysDelta(date1, date2)
  * @access public
  * @return void
  */
-function computeWorkDays()
+window.computeWorkDays = function()
 {
     const begin = $('input[name=begin]').val();
     const end   = $('input[name=end]').val();

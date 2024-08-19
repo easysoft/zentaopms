@@ -25,6 +25,7 @@ formPanel
             set::label($lang->execution->dateRange),
             inputGroup
             (
+                setID('dateBox'),
                 datePicker
                 (
                     set::control('date'),

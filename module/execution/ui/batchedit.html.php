@@ -18,6 +18,160 @@ jsVar('stageList', $lang->stage->typeList);
 jsVar('confirmSync', $lang->execution->confirmSync);
 jsVar('parents', $parents);
 
+$items = array();
+$items[] = array
+(
+    'name'    => 'id',
+    'label'   => $lang->idAB,
+    'control' => 'hidden',
+    'hidden'  => true
+);
+$items[] = array
+(
+    'name'    => 'id',
+    'label'   => $lang->idAB,
+    'control' => 'index',
+    'width'   => '38px'
+);
+if(isset($project) && $project->model == 'scrum') $items[] = array
+(
+    'label'    => $lang->execution->projectName,
+    'control'  => 'picker',
+    'name'     => "project",
+    'items'    => $allProjects,
+    'required' => true,
+    'width'    => '136px'
+);
+$items[] = array
+(
+    'name'     => 'name',
+    'label'    => $app->tab == 'execution' ? $lang->execution->execName : $lang->execution->name,
+    'width'    => '240px',
+    'required' => true
+);
+if($showMethod) $items[] = array
+(
+    'name'     => 'type',
+    'label'    => $lang->execution->method,
+    'control'  => array('control' => 'picker', 'required' => true),
+    'items'    => $lang->execution->typeList,
+    'disabled' => true,
+    'width'    => '100px'
+);
+if($setCode) $items[] = array
+(
+    'name'     => 'code',
+    'label'    => $app->tab == 'execution' ? $lang->execution->execCode : $lang->execution->code,
+    'width'    => '136px',
+    'required' => strpos(",{$config->execution->edit->requiredFields},", ',code,') !== false
+);
+$items[] = array
+(
+    'name'         => 'PM',
+    'label'        => $app->tab == 'execution' ? $lang->execution->execPM : $lang->execution->PM,
+    'control'      => 'picker',
+    'ditto'        => true,
+    'defaultDitto' => 'off',
+    'items'        => $pmUsers,
+    'hidden'       => strpos("{$showFields}", 'PM') === false,
+    'width'        => '112px'
+);
+$items[] = array
+(
+    'name'         => 'PO',
+    'label'        => $lang->execution->PO,
+    'control'      => 'picker',
+    'ditto'        => true,
+    'defaultDitto' => 'off',
+    'items'        => $poUsers,
+    'hidden'       => strpos("{$showFields}", 'PO') === false,
+    'width'        => '180px'
+);
+$items[] = array
+(
+    'name'         => 'QD',
+    'label'        => $lang->execution->QD,
+    'control'      => 'picker',
+    'ditto'        => true,
+    'defaultDitto' => 'off',
+    'items'        => $qdUsers,
+    'hidden'       => strpos("{$showFields}", 'QD') === false,
+    'width'        => '180px'
+);
+$items[] = array
+(
+    'name'         => 'RD',
+    'label'        => $lang->execution->RD,
+    'control'      => 'picker',
+    'ditto'        => true,
+    'defaultDitto' => 'off',
+    'items'        => $rdUsers,
+    'hidden'       => strpos("{$showFields}", 'RD') === false,
+    'width'        => '180px'
+);
+$items[] = array
+(
+    'name'     => 'lifetime',
+    'label'    => $app->tab == 'execution' ? $lang->execution->execType : $lang->execution->type,
+    'control'  => 'picker',
+    'items'    => $lang->execution->lifeTimeList,
+    'width'    => '120px',
+    'tipIcon'  => 'help',
+    'hidden'   => strpos("{$showFields}", 'lifetime') === false,
+    'tip'      => $lang->execution->typeTip,
+    'tipProps' => array
+    (
+        'id'              => 'tooltipHover',
+        'data-toggle'     => 'tooltip',
+        'data-placement'  => 'right',
+        'data-type'       => 'white',
+        'data-class-name' => 'text-gray border border-gray-300'
+    )
+);
+$items[] = array
+(
+    'name'     => 'begin',
+    'label'    => $lang->execution->begin,
+    'control'  => 'date',
+    'width'    => '120px',
+    'required' => true
+);
+$items[] = array
+(
+    'name'     => 'end',
+    'label'    => $lang->execution->end,
+    'control'  => 'date',
+    'width'    => '120px',
+    'required' => true
+);
+$items[] = array
+(
+    'name'   => 'team',
+    'label'  => $lang->execution->teamName,
+    'width'  => '136px',
+    'hidden' => strpos("{$showFields}", 'team') === false
+);
+$items[] = array
+(
+    'name'    => 'desc',
+    'label'   => $app->tab == 'execution' ? $lang->execution->execDesc : $lang->execution->desc,
+    'control' => 'textarea',
+    'width'   => '160px',
+    'hidden'  => strpos("{$showFields}", 'desc') === false
+);
+$items[] = array
+(
+    'name'  => 'days',
+    'label' => $lang->execution->days,
+    'control' => array
+    (
+        'control'     => 'inputControl',
+        'suffix'      => $lang->execution->day,
+        'suffixWidth' => 20
+    ),
+    'width' => '80px',
+    'hidden' => strpos("{$showFields}", 'days') === false
+);
 formBatchPanel
 (
     set::title($lang->execution->batchEditAction),
@@ -30,166 +184,7 @@ formBatchPanel
     on::change('[data-name="begin"]', "computeWorkDays($(e.target).attr('name'))"),
     on::change('[data-name="end"]', "computeWorkDays($(e.target).attr('name'))"),
     on::change('[data-name="attribute"]', 'changeAttribute'),
-    formBatchItem
-    (
-        set::name('id'),
-        set::label($lang->idAB),
-        set::control('hidden'),
-        set::hidden(true)
-    ),
-    formBatchItem
-    (
-        set::name('id'),
-        set::label($lang->idAB),
-        set::control('index'),
-        set::width('38px')
-    ),
-    isset($project) && $project->model == 'scrum' ? formBatchItem
-    (
-        set::label($lang->execution->projectName),
-        set::control('picker'),
-        set::name("project"),
-        set::items($allProjects),
-        set::required(true),
-        set::width('136px')
-    ) : null,
-    formBatchItem
-    (
-        set::name('name'),
-        set::label($app->tab == 'execution' ? $lang->execution->execName : $lang->execution->name),
-        set::width('240px'),
-        set::required(true)
-    ),
-    $showMethod ? formBatchItem
-    (
-        set::name('type'),
-        set::label($lang->execution->method),
-        set::control(array('control' => 'picker', 'required' => true)),
-        set::items($lang->execution->typeList),
-        set::disabled(true),
-        set::width('100px')
-    ) : null,
-    $setCode ? formBatchItem
-    (
-        set::name('code'),
-        set::label($app->tab == 'execution' ? $lang->execution->execCode : $lang->execution->code),
-        set::width('136px'),
-        set::required(strpos(",{$config->execution->edit->requiredFields},", ',code,') !== false)
-    ) : null,
-    formBatchItem
-    (
-        set::name('PM'),
-        set::label($app->tab == 'execution' ? $lang->execution->execPM : $lang->execution->PM),
-        set::control('picker'),
-        set::ditto(true),
-        set::defaultDitto('off'),
-        set::items($pmUsers),
-        set::hidden(strpos("{$showFields}", 'PM') === false),
-        set::width('112px')
-    ),
-    formBatchItem
-    (
-        set::name('PO'),
-        set::label($lang->execution->PO),
-        set::control('picker'),
-        set::ditto(true),
-        set::defaultDitto('off'),
-        set::items($poUsers),
-        set::hidden(strpos("{$showFields}", 'PO') === false),
-        set::width('180px')
-    ),
-    formBatchItem
-    (
-        set::name('QD'),
-        set::label($lang->execution->QD),
-        set::control('picker'),
-        set::ditto(true),
-        set::defaultDitto('off'),
-        set::items($qdUsers),
-        set::hidden(strpos("{$showFields}", 'QD') === false),
-        set::width('180px')
-    ),
-    formBatchItem
-    (
-        set::name('RD'),
-        set::label($lang->execution->RD),
-        set::control('picker'),
-        set::ditto(true),
-        set::defaultDitto('off'),
-        set::items($rdUsers),
-        set::hidden(strpos("{$showFields}", 'RD') === false),
-        set::width('180px')
-    ),
-    formBatchItem
-    (
-        set::name('lifetime'),
-        set::label($app->tab == 'execution' ? $lang->execution->execType : $lang->execution->type),
-        set::control('picker'),
-        set::items($lang->execution->lifeTimeList),
-        set::width('120px'),
-        set::tipIcon('help'),
-        set::hidden(strpos("{$showFields}", 'lifetime') === false),
-        set::tip($lang->execution->typeTip),
-        set
-        (
-            'tipProps',
-            array
-            (
-                'id'              => 'tooltipHover',
-                'data-toggle'     => 'tooltip',
-                'data-placement'  => 'right',
-                'data-type'       => 'white',
-                'data-class-name' => 'text-gray border border-gray-300'
-            )
-        )
-    ),
-    formBatchItem
-    (
-        set::name('begin'),
-        set::label($lang->execution->begin),
-        set::control('date'),
-        set::width('120px'),
-        set::required(true)
-    ),
-    formBatchItem
-    (
-        set::name('end'),
-        set::label($lang->execution->end),
-        set::control('date'),
-        set::width('120px'),
-        set::required(true)
-    ),
-    formBatchItem
-    (
-        set::name('team'),
-        set::label($lang->execution->teamName),
-        set::width('136px'),
-        set::hidden(strpos("{$showFields}", 'team') === false)
-    ),
-    formBatchItem
-    (
-        set::name('desc'),
-        set::label($app->tab == 'execution' ? $lang->execution->execDesc : $lang->execution->desc),
-        set::control('textarea'),
-        set::width('160px'),
-        set::hidden(strpos("{$showFields}", 'desc') === false)
-    ),
-    formBatchItem
-    (
-        set::name('days'),
-        set::label($lang->execution->days),
-        set::control
-        (
-            array
-            (
-                'type'   => 'inputControl',
-                'suffix' => $lang->execution->day,
-                'suffixWidth' => 20
-            )
-        ),
-        set::width('80px'),
-        set::hidden(strpos("{$showFields}", 'days') === false)
-    )
+    set::items($items)
 );
 
 render();

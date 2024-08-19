@@ -576,12 +576,12 @@ class projectTao extends projectModel
      * 构造批量更新项目的数据。
      * Build bathc update project data.
      *
-     * @param  array     $data
-     * @param  array     $oldProjects
-     * @access protected
+     * @param  array  $data
+     * @param  array  $oldProjects
+     * @access public
      * @return array
      */
-    protected function buildBatchUpdateProjects(array $data, array $oldProjects): array
+    public function buildBatchUpdateProjects(array $data, array $oldProjects): array
     {
         if(empty($data)) return array();
 
@@ -600,6 +600,7 @@ class projectTao extends projectModel
             $projects[$projectID]->begin          = $project->begin;
             $projects[$projectID]->end            = $project->end == $this->lang->project->longTime ? LONG_TIME : $project->end;
             $projects[$projectID]->acl            = $project->acl;
+            $projects[$projectID]->days           = $project->days;
             $projects[$projectID]->lastEditedBy   = $this->app->user->account;
             $projects[$projectID]->lastEditedDate = helper::now();
 

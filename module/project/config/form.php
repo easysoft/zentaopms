@@ -47,14 +47,14 @@ $config->project->form->activate['end']          = array('type' => 'date',   're
 $config->project->form->activate['readjustTime'] = array('type' => 'int',    'required' => false, 'default' => '');
 $config->project->form->activate['readjustTask'] = array('type' => 'array',  'required' => false, 'default' => '');
 
-$config->project->form->batchedit['id']      = array('type' => 'int',    'required' => false, 'base' => true);
-$config->project->form->batchedit['parent']  = array('type' => 'int',    'required' => false);
-$config->project->form->batchedit['name']    = array('type' => 'string', 'required' => true, 'filter' => 'trim');
-$config->project->form->batchedit['PM']      = array('type' => 'string', 'required' => false);
-$config->project->form->batchedit['begin']   = array('type' => 'date',   'required' => true);
-$config->project->form->batchedit['end']     = array('type' => 'date',   'required' => true);
-$config->project->form->batchedit['day']     = array('type' => 'int',    'required' => false);
-$config->project->form->batchedit['acl']     = array('type' => 'string', 'required' => false);
+$config->project->form->batchedit['id']     = array('type' => 'int',    'required' => false, 'base' => true);
+$config->project->form->batchedit['parent'] = array('type' => 'int',    'required' => false);
+$config->project->form->batchedit['name']   = array('type' => 'string', 'required' => true, 'filter' => 'trim');
+$config->project->form->batchedit['PM']     = array('type' => 'string', 'required' => false);
+$config->project->form->batchedit['begin']  = array('type' => 'date',   'required' => true);
+$config->project->form->batchedit['end']    = array('type' => 'date',   'required' => true);
+$config->project->form->batchedit['days']   = array('type' => 'int',    'required' => false);
+$config->project->form->batchedit['acl']    = array('type' => 'string', 'required' => false);
 if(isset($config->setCode) and $config->setCode == 1) $config->project->form->batchedit['code'] = array('type' => 'string', 'required' => false, 'filter' => 'trim');
 
 $config->project->form->manageMembers['account'] = array('type' => 'string', 'required' => false, 'base' => true);

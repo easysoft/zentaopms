@@ -4,7 +4,7 @@
  * @access public
  * @return void
  */
-function computeWorkDays(currentID)
+window.computeWorkDays = function(currentID)
 {
     isBatchEdit = false;
     if(currentID)
