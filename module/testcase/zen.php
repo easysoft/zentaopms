@@ -288,7 +288,7 @@ class testcaseZen extends testcase
 
         /* 设置模块和需求。 */
         /* Set modules. */
-        $this->assignModulesAndStoiresForCreate($productID, $moduleID, $branch, $case->story, $branches);
+        $this->assignModulesAndStoriesForCreate($productID, $moduleID, $branch, $case->story, $branches);
 
         $this->view->product        = $product;
         $this->view->projectID      = isset($projectID) ? $projectID : 0;
@@ -405,7 +405,7 @@ class testcaseZen extends testcase
      * @access protected
      * @return void
      */
-    protected function assignModulesAndStoiresForCreate(int $productID, int $moduleID, string $branch, int $storyID, array $branches)
+    protected function assignModulesAndStoriesForCreate(int $productID, int $moduleID, string $branch, int $storyID, array $branches)
     {
         if($storyID)
         {

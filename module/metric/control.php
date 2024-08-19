@@ -177,7 +177,6 @@ class metric extends control
         $classifiedCalcGroup = $this->metric->classifyCalc($calcList);
         $this->metricZen->calculateMetric($classifiedCalcGroup);
 
-
         // 恢复之前的调试状态
         $this->config->debug = $originalDebug;
 
