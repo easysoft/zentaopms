@@ -273,7 +273,6 @@ class docZen extends doc
         if($type == 'project'   && $this->post->project)   $objectID = $this->post->project;
         if($type == 'product'   && $this->post->product)   $objectID = $this->post->product;
         if($type == 'execution' && $this->post->execution) $objectID = $this->post->execution;
-        if($type == 'custom')                              $objectID = 0;
 
         $type = $type == 'execution' && $this->app->tab != 'execution' ? 'project' : $type;
 
@@ -400,7 +399,7 @@ class docZen extends doc
         if(empty($locateLink))
         {
             if($space == 'mine')       $locateLink = $this->createLink('doc', 'mySpace', "type=mine&libID={$libID}");
-            elseif(is_numeric($space)) $locateLink = $this->createLink('doc', 'teamSpace', "objectID=0&libID={$libID}");
+            elseif(is_numeric($space)) $locateLink = $this->createLink('doc', 'teamSpace', "objectID={$space}&libID={$libID}");
             else                       $locateLink = true;
         }
         if($locateLink === 'true') $locateLink = true;
