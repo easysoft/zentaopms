@@ -1882,6 +1882,7 @@ class treeModel extends model
             }
             else
             {
+                $originID = $moduleID;
                 $short    = $shorts[$moduleID];
                 $order    = $orders[$moduleID];
                 $moduleID = (int)str_replace('id', '', $moduleID);
@@ -1889,9 +1890,10 @@ class treeModel extends model
                 $oldModule = $this->getByID($moduleID);
 
                 $data = new stdClass();
-                $data->name  = strip_tags(trim($moduleName));
-                $data->short = $short;
-                $data->order = $order;
+                $data->name   = strip_tags(trim($moduleName));
+                $data->short  = $short;
+                $data->order  = $order;
+                $data->branch = isset($branches[$originID]) ? $branches[$originID] : 0;
 
                 $this->setModuleLang();
                 $this->dao->update(TABLE_MODULE)->data($data)->autoCheck()->where('id')->eq($moduleID)->limit(1)->exec();
