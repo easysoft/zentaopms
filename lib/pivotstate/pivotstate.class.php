@@ -314,6 +314,8 @@ class pivotState
      */
     public $checkStepDesign = false;
 
+    public $sqlBuilder = array();
+
     /**
      * __construct method.
      *
@@ -356,6 +358,12 @@ class pivotState
         $this->setPager();
         $this->formatSettingColumns();
         $this->setStep2FinishSql();
+        $this->initSqlBuilder();
+    }
+
+    public function initSqlBuilder()
+    {
+        $this->sqlBuilder['step'] = 'table';
     }
 
     /**
