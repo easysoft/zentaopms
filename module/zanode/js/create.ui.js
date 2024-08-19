@@ -21,6 +21,9 @@ function onChangeType()
     {
         $("[name^='parent']").closest('.form-row').show();
         $("[name^='image']").closest('.form-group').show();
+        $("[name='cpuCores']").closest('.form-group').show();
+        $("[name='memory']").closest('.form-row').show();
+        $("[name='diskSize']").closest('.form-row').show();
         $('#extranet').closest('.form-row').addClass('hidden');
         $('#osName').closest('.form-row').removeClass('hidden');
         $('#osNamePhysicsContainer').addClass('hidden');
