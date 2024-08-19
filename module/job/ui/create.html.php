@@ -40,6 +40,7 @@ formPanel
     on::click('.delete-param', 'deleteItem'),
     on::click('.custom', 'setValueInput'),
     on::click('select.paramValue', 'changeCustomField'),
+    on::change('[name=sonarqubeServer]')->call('window.changeSonarqubeServer'),
     set::actionsClass('w-2/3'),
     formGroup
     (
@@ -177,11 +178,9 @@ formPanel
         (
             set::name('sonarqubeServer'),
             set::label($lang->job->sonarqubeServer),
-            set::items($sonarqubeServerList),
-            set::value(''),
             set::width('1/2'),
+            set::items($sonarqubeServerList),
             set::required(true),
-            on::change('changeSonarqubeServer')
         )
     ),
     formRow
