@@ -195,6 +195,9 @@ class form extends fixer
 
         $module = $app->getModuleName() == 'story' ? $app->rawModule : $app->getModuleName();
         $method = $app->getMethodName();
+        if($module == 'feedback' && $app->rawMethod == 'tostory')     $module = 'story';
+        if($module == 'feedback' && $app->rawMethod == 'touserstory') $module = 'requirement';
+        if($module == 'feedback' && $app->rawMethod == 'toepic')      $module = 'epic';
 
         if($method == 'batchcreate') $method = 'create';
         if($method == 'batchedit')   $method = 'edit';
