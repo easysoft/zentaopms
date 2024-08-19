@@ -39,12 +39,12 @@ class tutorial extends control
         $this->loadModel('setting')->setItem($this->app->user->account . '.common.global.novice', 0);
         $this->session->set('tutorialMode', true);
 
-        $this->view->title   = $this->lang->tutorial->common;
-        $this->view->current = $task;
-        $this->view->tasks   = $this->config->tutorial->tasksConfig;
-        $this->view->setting = $setting;
-        $this->view->referer = base64_decode($referer);
-        $this->view->mode    = $this->setting->getItem('owner=system&module=common&section=global&key=mode');
+        $this->view->title       = $this->lang->tutorial->common;
+        $this->view->currentTask = $task;
+        $this->view->guides      = $this->config->tutorial->guides;
+        $this->view->setting     = $setting;
+        $this->view->referer     = base64_decode($referer);
+        $this->view->mode        = $this->setting->getItem('owner=system&module=common&section=global&key=mode');
         $this->display();
     }
 
@@ -113,13 +113,14 @@ class tutorial extends control
         define('WIZARD_METHOD', $method);
 
         /* Check priv for tutorial. */
-        $hasPriv = false;
+        $hasPriv     = false;
         $moduleLower = strtolower($module);
-        foreach($this->config->tutorial->tasksConfig as $task)
+        foreach($this->config->tutorial->guides as $guide)
         {
-            $taskModule     = strtolower($task['nav']['module']);
-            $taskMenuModule = strtolower($task['nav']['menuModule']);
-            if($taskModule == $moduleLower || $taskMenuModule == $moduleLower)
+            if(!isset($guide->modules)) continue;
+
+            $guideModules = explode(',', strtolower($guide->modules));
+            if(in_array($moduleLower, $guideModules))
             {
                 $hasPriv = true;
                 break;

@@ -10,9 +10,10 @@
  * @link        https://www.zentao.net
  */
 $lang->tutorial = new stdclass();
-$lang->tutorial->common           = '新手教程';
+$lang->tutorial->common           = '使用教程';
 $lang->tutorial->desc             = '通过完成一系列任务，快速了解禅道的基本使用方法。这可能会花费你10分钟，你可以随时退出任务。';
-$lang->tutorial->start            = '立即开始';
+$lang->tutorial->start            = '开始';
+$lang->tutorial->continue         = '继续';
 $lang->tutorial->exit             = '退出教程';
 $lang->tutorial->congratulation   = '恭喜，你已完成了所有任务！';
 $lang->tutorial->restart          = '重新开始';
@@ -20,6 +21,7 @@ $lang->tutorial->currentTask      = '当前任务';
 $lang->tutorial->allTasks         = '所有任务';
 $lang->tutorial->previous         = '上一个';
 $lang->tutorial->nextTask         = '下一个任务';
+$lang->tutorial->nextStep         = '下一步';
 $lang->tutorial->openTargetPage   = '打开 <strong class="task-page-name">目标</strong> 页面';
 $lang->tutorial->atTargetPage     = '已在 <strong class="task-page-name">目标</strong> 页面';
 $lang->tutorial->reloadTargetPage = '重新载入';
@@ -32,6 +34,11 @@ $lang->tutorial->serverErrorTip   = '发生了一些错误。';
 $lang->tutorial->ajaxSetError     = '必须指定已完成的任务，如果要重置任务，请设置值为空。';
 $lang->tutorial->novice           = "你可能初次使用禅道，是否进入新手教程";
 $lang->tutorial->dataNotSave      = "教程任务中，数据不会保存。";
+
+$lang->tutorial->guideTypes        = array();
+$lang->tutorial->guideTypes['starter'] = '快速上手';
+$lang->tutorial->guideTypes['basic']   = '基础教程';
+$lang->tutorial->guideTypes['advance'] = '进阶教程';
 
 $lang->tutorial->tasks = new stdclass();
 $lang->tutorial->tasks->createAccount = new stdclass();
