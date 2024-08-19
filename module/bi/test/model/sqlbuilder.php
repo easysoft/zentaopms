@@ -36,3 +36,23 @@ $simple = array
 );
 
 r($bi->sqlBuilderTest($simple)) && p('') && e("SELECT `t1`.`id`, `t1`.`name` FROM `zt_task` AS `t1`"); // 测试 简单别名sql
+$withJoin = array
+(
+    'selects' => array
+    (
+        array('t1', 'id'),
+        array('t1', 'name'),
+        array('t2', 'name', 'execution')
+    ),
+    'from' => array('zt_task', null, 't1'),
+    'joins' => array
+    (
+        array
+        (
+            'zt_project', 't2',
+            array(array('t1', 'execution', '=', 't2', 'id'))
+        )
+    )
+);
+
+r($bi->sqlBuilderTest($withJoin)) && p('') && e("SELECT `t1`.`id`, `t1`.`name`, `t2`.`name` AS `execution` FROM `zt_task` AS `t1` LEFT JOIN `zt_project` AS `t2` ON `t1`.`execution` = `t2`.`id`"); // 测试 联表sql
