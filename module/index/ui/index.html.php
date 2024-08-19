@@ -176,7 +176,7 @@ div(setID('apps'));
 div
 (
     setID('appsBar'),
-    div(setID('visionSwitcher'), visionSwitcher()),
+    div(setID('visionSwitcher'), visionSwitcher(), setData('vision', $app->config->vision)),
     ul(setID('appTabs'), setClass('nav')),
     toolbar
     (
