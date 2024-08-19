@@ -56,16 +56,19 @@ window.submitSelectedDepts = function()
     loadPage(link);
 };
 
-if(webhookType == 'feishuuser')
+window.loadDeptTree = function()
 {
-    $.getJSON(feishuUrl, function(deptTree)
+    if(webhookType == 'feishuuser')
     {
-        $('#loadPrompt').remove();
+        $.getJSON(feishuUrl, function(deptTree)
+        {
+            $('#loadPrompt').remove();
+            tree = new zui.Tree('#deptList', {checkbox: true, checkOnClick: true, defaultNestedShow: true, items: buildTreeItems(deptTree)});
+        });
+    }
+    else
+    {
         tree = new zui.Tree('#deptList', {checkbox: true, checkOnClick: true, defaultNestedShow: true, items: buildTreeItems(deptTree)});
-    });
-}
-else
-{
-    tree = new zui.Tree('#deptList', {checkbox: true, checkOnClick: true, defaultNestedShow: true, items: buildTreeItems(deptTree)});
-    $('#loadPrompt').remove();
-}
+        $('#loadPrompt').remove();
+    }
+};
