@@ -14,3 +14,5 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'zanod
 UPDATE `zt_doc` SET `order` = id;
 
 ALTER TABLE `zt_story` ADD `verifiedDate` datetime NULL AFTER `retractedDate`;
+
+ALTER TABLE `zt_pivot` ADD `mode` enum('text', 'builder') not NULL default 'text' AFTER `driver`;
