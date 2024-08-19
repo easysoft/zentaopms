@@ -48,7 +48,7 @@ $lang->changePassword = '修改密码';
 $lang->unfoldMenu     = '展开导航';
 $lang->collapseMenu   = '收起导航';
 $lang->preference     = '个性化设置';
-$lang->tutorialAB     = '新手引导';
+$lang->tutorialAB     = '使用教程';
 $lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>时间: %s 毫秒, 内存: %s KB, 查询: %s.  </div></div>";
 $lang->agreement      = "已阅读并同意。<span class='text-danger'>未经许可，不得去除、隐藏或遮掩禅道软件的任何标志及链接。</span>";
 $lang->designedByAIUX = "<a href='https://api.zentao.net/goto.php?item=aiux' class='link-aiux listitem item-inner menu-item-inner state' target='_blank'><i class='icon icon-aiux item-icon'></i><div class='item-content text'>艾体验设计</div></a>";
