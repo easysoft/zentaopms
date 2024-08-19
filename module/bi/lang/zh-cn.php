@@ -9,3 +9,17 @@ $lang->bi->aclList['private'] = '私有（仅创建者和白名单用户可访�
 $lang->bi->driver = '数据库类型';
 $lang->bi->driverList = array();
 $lang->bi->driverList['mysql'] = 'MySQL';
+
+$lang->bi->sqlQuery   = 'SQL语句查询';
+$lang->bi->sqlBuilder = 'SQL构建器';
+
+$lang->bi->toggleSqlText    = '手写SQL语句';
+$lang->bi->toggleSqlBuilder = 'SQL构建器';
+
+$lang->bi->builderStepList = array();
+$lang->bi->builderStepList['table'] = '查询数据表';
+$lang->bi->builderStepList['field'] = '选择查询字段';
+$lang->bi->builderStepList['func']  = '新增函数字段';
+$lang->bi->builderStepList['where'] = '添加查询条件';
+$lang->bi->builderStepList['query'] = '添加查询筛选器';
+$lang->bi->builderStepList['group'] = '设置分组并聚合';
