@@ -1387,9 +1387,12 @@ eof;
         {
             $app->loadLang('tutorial');
             $app->loadConfig('tutorial');
-            foreach($app->config->tutorial->tasksConfig as $task)
+            foreach($app->config->tutorial->guides as $guide)
             {
-                if($task['nav']['module'] == $module and $task['nav']['method'] = $method) return true;
+                if(!isset($guide->modules)) continue;
+
+                $guideModules = explode(',', strtolower($guide->modules));
+                if(in_array($module, $guideModules)) return true;
             }
         }
 
