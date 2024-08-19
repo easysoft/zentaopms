@@ -91,7 +91,7 @@ class moduleMenu extends wg
             );
             $items = $this->buildMenuTree($child->id);
             if($items) $item['items'] = $items;
-            if($child->id == $activeKey)
+            if($child->id == $activeKey || $child->id == 'product-' . $activeKey)
             {
                 $itemKey = $this->prop('checkbox') ? 'checked' : 'selected';
                 $item[$itemKey] = true;
@@ -129,7 +129,7 @@ class moduleMenu extends wg
 
         $modules    = $this->prop('modules');
         $moduleName = '';
-        if($modules) array_map(function($module) use(&$moduleName, $activeKey) { if($module->id == $activeKey) $moduleName = $module->name; }, $modules);
+        if($modules) array_map(function($module) use(&$moduleName, $activeKey) { if($module->id == $activeKey || $module->id == 'product-' . $activeKey) $moduleName = $module->name; }, $modules);
 
         return $moduleName;
     }
