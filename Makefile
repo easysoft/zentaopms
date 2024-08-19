@@ -312,6 +312,7 @@ ciCommon:
 
 	sed -i '/legacy/d' zentaopms/db/*.sql
 	sed -i '/uniqueIndex/d' zentaopms/db/*.sql
+	sed -i 's/KEY `mtype` (`type`),/KEY `mtype` (`type`)/g' zentaopms/db/xuanxuan.sql
 
 	cp -a zentaopms zentaoalm
 	sed -i '/^\s*$$config->langs\['"'"'de'"'"']/d' zentaopms/config/config.php
