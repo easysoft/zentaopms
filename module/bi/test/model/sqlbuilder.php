@@ -24,3 +24,15 @@ $simple = array
 );
 
 r($bi->sqlBuilderTest($simple)) && p('') && e("SELECT `id`, `name` FROM `zt_task`"); // 测试 简单sql
+
+$simple = array
+(
+    'selects' => array
+    (
+        array('t1', 'id'),
+        array('t1', 'name')
+    ),
+    'from' => array('zt_task', null, 't1')
+);
+
+r($bi->sqlBuilderTest($simple)) && p('') && e("SELECT `t1`.`id`, `t1`.`name` FROM `zt_task` AS `t1`"); // 测试 简单别名sql
