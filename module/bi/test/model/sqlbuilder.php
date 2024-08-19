@@ -12,3 +12,15 @@ cid=1
 */
 
 $bi = new biTest();
+
+$simple = array
+(
+    'selects' => array
+    (
+        array('id'),
+        array('name')
+    ),
+    'from' => array('zt_task')
+);
+
+r($bi->sqlBuilderTest($simple)) && p('') && e("SELECT `id`, `name` FROM `zt_task`"); // 测试 简单sql
