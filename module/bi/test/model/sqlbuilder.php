@@ -83,7 +83,23 @@ $withWhere = array
     (
         array('t1', 'id')
     ),
-    'from' => array('zt_task', null, 't1')
+    'from' => array('zt_task', null, 't1'),
+    'wheres' => array
+    (
+        array('t1', 'deleted', '=', null, "'0'"),
+        'and',
+        array
+        (
+            array('t1', 'status', '=' , null, "'done'"),
+            'or',
+            array
+            (
+                array('t1', 'status', '=', null, "'closed'"),
+                'and',
+                array('t1', 'closedReason', '=', null, "'done'")
+            )
+        )
+    )
 );
 
 r($bi->sqlBuilderTest($withWhere)) && p('') && e("SELECT `t1`.`id` FROM `zt_task` AS `t1` WHERE `t1`.`deleted` = '0' AND (`t1`.`status` = 'done' OR (`t1`.`status` = 'closed' AND `t1`.`closedReason` = 'done'))"); // 测试 查询条件sql
