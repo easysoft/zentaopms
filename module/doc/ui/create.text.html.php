@@ -190,7 +190,7 @@ formBase
         set::headingActions($headingActions),
         set::headingClass('py-3'),
         set::bodyClass('p-0 border-t'),
-        editor
+        pageEditor
         (
             set::name('content'),
             set::size('full'),
