@@ -42,6 +42,14 @@ class pivotState
     public $driver;
 
     /**
+     * Pivot state mode.
+     *
+     * @var string
+     * @access public
+     */
+    public $mode;
+
+    /**
      * Pivot state name.
      *
      * @var string
@@ -322,6 +330,7 @@ class pivotState
         $this->group     = $pivot->group;
         $this->code      = $pivot->code;
         $this->driver    = $pivot->driver;
+        $this->mode      = $pivot->mode;
         $this->name      = $pivot->name;
         $this->desc      = $pivot->desc;
         $this->names     = $pivot->names;
