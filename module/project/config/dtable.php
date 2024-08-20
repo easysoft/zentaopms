@@ -55,6 +55,7 @@ $config->project->dtable->fieldList['PM']['link']        = array('module' => 'us
 $config->project->dtable->fieldList['PM']['data-toggle'] = 'modal';
 $config->project->dtable->fieldList['PM']['data-size']   = 'sm';
 $config->project->dtable->fieldList['PM']['group']       = 3;
+$config->project->dtable->fieldList['PM']['show']        = true;
 
 $config->project->dtable->fieldList['storyPoints']['title']    = $lang->project->storyPoints;
 $config->project->dtable->fieldList['storyPoints']['type']     = 'count';
