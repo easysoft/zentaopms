@@ -800,16 +800,20 @@ class baseDAO
             /* If field can not null, add this field use default value. */
             foreach($desc as $field)
             {
-                if(strtolower($field->null) == 'yes') continue;
+                $fieldNull = strtolower($field->null);
+
+                if($fieldNull == 'yes' || $fieldNull == 'y') continue; // MySQL 中是 YES，达梦中是 Y。
                 if($field->field == 'id') continue;
                 if($field->default !== '') continue;
 
                 $values[$field->field] = "''";
-                if(strpos($field->type, 'date')    !== false) $values[$field->field] = "'0000-00-00'";
-                if(strpos($field->type, 'int')     !== false) $values[$field->field] = "0";
-                if(strpos($field->type, 'float')   !== false) $values[$field->field] = "0";
-                if(strpos($field->type, 'decimal') !== false) $values[$field->field] = "0";
-                if(strpos($field->type, 'double')  !== false) $values[$field->field] = "0";
+
+                $fieldType = strtolower($field->type);
+                if(strpos($fieldType, 'date')    !== false) $values[$field->field] = "'0000-00-00'";
+                if(strpos($fieldType, 'int')     !== false) $values[$field->field] = "0";
+                if(strpos($fieldType, 'float')   !== false) $values[$field->field] = "0";
+                if(strpos($fieldType, 'decimal') !== false) $values[$field->field] = "0";
+                if(strpos($fieldType, 'double')  !== false) $values[$field->field] = "0";
             }
 
             $sql .= '(`' . implode('`,`', array_keys($values)) . '`)' . ' VALUES(' . implode(',', $values) . ')';
