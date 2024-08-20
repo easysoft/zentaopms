@@ -388,6 +388,21 @@ class pivotState
         $this->sqlBuilder['from'] = array('table' => $table, 'alias' => 't1');
     }
 
+    public function addJoin($left, $alias = '', $columnA = '', $fieldA = '', $fieldB = '')
+    {
+        if(is_array($left))
+        {
+            $this->sqlBuilder['joins'][] = $left;
+            return;
+        }
+        $join = array();
+        $join['table'] = $left;
+        $join['alias'] = $alias;
+        $join['on']    = array($columnA, $fieldA, '=', $alias, $fieldB);
+
+        $this->sqlBuilder['joins'][] = $join;
+    }
+
     /**
      * Clear fieldSettings.
      *
