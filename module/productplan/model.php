@@ -379,7 +379,6 @@ class productplanModel extends model
             ->where('product')->eq($productID)
             ->andWhere('deleted')->eq(0)
             ->beginIF(!empty($branchQuery))->andWhere($branchQuery)->fi()
-            ->beginIF($branches != '')->andWhere('branch')->in($branches)->fi()
             ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('end')->ge(helper::today())->fi()
             ->orderBy('begin desc')
             ->fetchAll('id');
