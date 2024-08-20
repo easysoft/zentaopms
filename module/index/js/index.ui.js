@@ -826,11 +826,45 @@ function getMenuNavData()
     $nav.children().each(function(index, element) {
         const $elm = $(element);
         data[index] = $elm.is('.divider')
-            ? '-'
+            ? 'divider'
             : $elm.data('app');
 
     });
     return data;
+}
+
+function generateAddMenuNavItems(onClick)
+{
+    const items = [
+        {
+            icon: 'icon-minus',
+            text: '分割线',
+            onClick: () => onClick('divider'),
+        },
+
+    ];
+
+    const allAppCodeSet = new Set(allAppsItemsMap.keys());
+    const data = getMenuNavData();
+    for(const name of data) 
+    {
+        if(name === 'divider') continue;
+        allAppCodeSet.delete(name);
+    }
+
+    if(allAppCodeSet.size === 0) return items;
+    for(const name of allAppCodeSet) 
+    {
+        const [icon, title] = getAppItemIconAndTitle(name);
+        items.push(
+            {
+                icon,
+                text: title,
+                onClick: () => onClick(name)
+            }
+        );
+    }
+    return items;
 }
 
 $('#menuNav .divider').on('contextmenu', function(event) 
@@ -881,6 +915,43 @@ $('#menuNav .divider').on('contextmenu', function(event)
             }
         }
     );
+    items.push(
+        {
+            text: langData.add,
+            items: generateAddMenuNavItems(
+                (name) => {
+                    const $li = $divider.closest('li');
+                    if(name === 'divider') return $li.after('<li class="divider"></li>');
+
+                    let item = allAppsItemsMap.get(name);
+                    const oldItem = apps.map[item.code];
+                    if(oldItem !== item && oldItem) item = $.extend({}, oldItem, item, {active: false});
+                    item.external = item.external || item.url && item.url.includes('://');
+
+                    const $link= $('<a data-pos="menu"></a>')
+                        .attr('data-app', item.notApp ? undefined : item.code)
+                        .attr('href', item.url || '#')
+                        .attr('target', item.notApp ? '_blank' : undefined)
+                        .addClass('rounded' + (item.notApp ? '' : ' show-in-app'))
+                        .html(item.title, false);
+
+                    item.icon = item.icon || ($link.find('.icon').attr('class') || '').replace('icon ', '');
+                    item.text = $link.text().trim();
+                    $link.html('<i class="icon ' + item.icon + '"></i><span class="text">' + item.text + '</span>', false);
+                    if(['devops', 'bi', 'safe'].includes(item.code)) $link.find('.text').addClass('font-brand');
+                    apps.map[item.code] = item;
+
+                    $('<li class="hint-right"></li>')
+                        .attr({'data-app': item.code, 'data-hint': item.text})
+                        .append($link)
+                        .insertAfter($li);
+
+                    if(!apps.defaultCode) apps.defaultCode = item.code;
+                }
+            )
+        }
+    );
+
 
     zui.ContextMenu.show(
         {
@@ -966,6 +1037,44 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
             }
         }
     );
+
+    items.push(
+        {
+            text: langData.add,
+            items: generateAddMenuNavItems(
+                (name) => {
+                    const $li = $btn.closest('li');
+                    if(name === 'divider') return $li.after('<li class="divider"></li>');
+
+                    let item = allAppsItemsMap.get(name);
+                    const oldItem = apps.map[item.code];
+                    if(oldItem !== item && oldItem) item = $.extend({}, oldItem, item, {active: false});
+                    item.external = item.external || item.url && item.url.includes('://');
+
+                    const $link= $('<a data-pos="menu"></a>')
+                        .attr('data-app', item.notApp ? undefined : item.code)
+                        .attr('href', item.url || '#')
+                        .attr('target', item.notApp ? '_blank' : undefined)
+                        .addClass('rounded' + (item.notApp ? '' : ' show-in-app'))
+                        .html(item.title, false);
+
+                    item.icon = item.icon || ($link.find('.icon').attr('class') || '').replace('icon ', '');
+                    item.text = $link.text().trim();
+                    $link.html('<i class="icon ' + item.icon + '"></i><span class="text">' + item.text + '</span>', false);
+                    if(['devops', 'bi', 'safe'].includes(item.code)) $link.find('.text').addClass('font-brand');
+                    apps.map[item.code] = item;
+
+                    $('<li class="hint-right"></li>')
+                        .attr({'data-app': item.code, 'data-hint': item.text})
+                        .append($link)
+                        .insertAfter($li);
+
+                    if(!apps.defaultCode) apps.defaultCode = item.code;
+                }
+            )
+        }
+    );
+
     zui.ContextMenu.show(
         {
             hideOthers: true, 
@@ -1196,3 +1305,30 @@ $(document).on('click', e =>
         $('#bizLink').removeClass('active');
     }
 });
+
+let allAppsItemsMap = new Map();
+void function generateAllAppsItemsMap() {
+    for(const item of allAppsItems) 
+    {
+        if(item === 'divider') continue;
+        
+        allAppsItemsMap.set(item.code, item);
+    }
+}();
+
+function getAppItemIconAndTitle(name)
+{
+    if(!allAppsItemsMap.has(name)) return[];
+    const item = allAppsItemsMap.get(name);
+    const str = item.title;
+    const regex = /class=["']icon (\S*)["']\>\<\/i\>\s(\S*)/;
+    const matches = str.match(regex);
+
+    if(matches) 
+    {
+        const icon = matches[1];
+        const text = matches[2].trim();
+        return [icon, text];
+    }
+    return [];
+}
