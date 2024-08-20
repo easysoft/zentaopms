@@ -1615,8 +1615,8 @@ $config->group->package->importFeedback->order  = 15;
 $config->group->package->importFeedback->subset = 'feedback';
 $config->group->package->importFeedback->privs  = array();
 $config->group->package->importFeedback->privs['feedback-export']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,or,lite', 'order' => 0, 'depend' => array('feedback-admin'), 'recommend' => array());
-$config->group->package->importFeedback->privs['feedback-import']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,or', 'order' => 2, 'depend' => array('feedback-admin', 'feedback-exportTemplate'), 'recommend' => array());
-$config->group->package->importFeedback->privs['feedback-exportTemplate'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,or', 'order' => 1, 'depend' => array('feedback-admin', 'feedback-import'), 'recommend' => array());
+$config->group->package->importFeedback->privs['feedback-import']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,or,lite', 'order' => 2, 'depend' => array('feedback-admin', 'feedback-exportTemplate'), 'recommend' => array());
+$config->group->package->importFeedback->privs['feedback-exportTemplate'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,or,lite', 'order' => 1, 'depend' => array('feedback-admin', 'feedback-import'), 'recommend' => array());
 
 $config->group->package->handleFeedback = new stdclass();
 $config->group->package->handleFeedback->order  = 20;
