@@ -23,7 +23,7 @@ class modulesEntry extends entry
         $objectID   = $this->param('id', '');
 
         if(!$objectType or !$objectID) return $this->sendError(400, 'Need id and type.');
-        if(!in_array($objectType, array('story', 'task', 'bug', 'case'))) return $this->sendError(400, 'Type is not allowed');
+        if(!in_array($objectType, array('story', 'task', 'bug', 'case', 'feedback', 'product'))) return $this->sendError(400, 'Type is not allowed');
 
         if($objectType == 'task')
         {
