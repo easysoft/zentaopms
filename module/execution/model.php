@@ -2282,7 +2282,7 @@ class executionModel extends model
         foreach($products as $productID => $product)
         {
             $productPairs[$product->id] = $product->name;
-            $planGroup = $this->productplan->getBranchPlanPairs($productID, array(BRANCH_MAIN) + $product->branches, 'unexpired', true);
+            $planGroup = $this->productplan->getBranchPlanPairs($productID, array(BRANCH_MAIN) + $product->branches, '', true);
             foreach($planGroup as $plans) $planPairs += $plans;
 
             if($product->type == 'normal') continue;
