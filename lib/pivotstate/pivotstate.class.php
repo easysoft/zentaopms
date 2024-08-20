@@ -483,6 +483,21 @@ class pivotState
         return "t{$next}";
     }
 
+    public function getTableDescList($alias)
+    {
+        $from      = $this->sqlBuilder['from'];
+        $joins     = $this->sqlBuilder['joins'];
+        $tableDesc = $this->sqlBuilder['tableDesc'];
+        array_unshift($joins, $from);
+
+        foreach($joins as $join)
+        {
+            if($alias == $join['alias'] && isset($tableDesc[$join['table']])) return $tableDesc[$join['table']];
+        }
+
+        return array();
+    }
+
     /**
      * Clear fieldSettings.
      *
