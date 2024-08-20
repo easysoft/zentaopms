@@ -66,9 +66,10 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
 {
     if(!common::canModify('product', $product)) return null;
 
-    global $app,$config;
-    $createLink      = createLink($storyType, 'create', "product=" . (empty($productID) ? current(array_keys($projectProducts)) : $productID) . "&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&storyType=$storyType") . ($isProjectStory ? '#app=project' : '');
-    $batchCreateLink = createLink($storyType, 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=0&project=$projectID&plan=0&storyType=$storyType"). ($isProjectStory ? '#app=project' : '');
+    global $app, $config;
+    $currentProductID = empty($productID) ? current(array_keys($projectProducts)) : $productID;
+    $createLink       = createLink($storyType, 'create', "product=" . $currentProductID . "&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&storyType=$storyType") . ($isProjectStory ? '#app=project' : '');
+    $batchCreateLink  = createLink($storyType, 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=0&project=$projectID&plan=0&storyType=$storyType"). ($isProjectStory ? '#app=project' : '');
 
     $createBtnLink  = '';
     $createBtnTitle = '';
@@ -87,7 +88,7 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
     if(empty($createBtnLink)) return null;
 
     /* With batch create privileges then render the dropdown menu. */
-    if(!empty($productID) && hasPriv($storyType, 'batchCreate') && hasPriv($storyType, 'create'))
+    if(hasPriv($storyType, 'batchCreate') && hasPriv($storyType, 'create'))
     {
         $items = array();
 
@@ -106,20 +107,20 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
 
         if($isProjectStory && $config->vision != 'lite')
         {
-            $batchItems[] = array('text' => $lang->SRCommon, 'url' => $batchCreateLink);
+            if(!empty($productID)) $batchItems[] = array('text' => $lang->SRCommon, 'url' => $batchCreateLink);
             if(str_contains($project->storyType, 'requirement') && $this->config->URAndSR)
             {
-                if(common::hasPriv('requirement', 'create'))      $items[]      = array('text' => $lang->requirement->create, 'url' => createLink('requirement', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&requirementID=0&projectID=$projectID") . '#app=project');
-                if(common::hasPriv('requirement', 'batchCreate')) $batchItems[] = array('text' => $lang->URCommon, 'url' => createLink('requirement', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&requirementID=0&project=$projectID") . '#app=project');
+                if(common::hasPriv('requirement', 'create')) $items[] = array('text' => $lang->requirement->create, 'url' => createLink('requirement', 'create', "product=$currentProductID&branch=$branch&moduleID=$moduleID&requirementID=0&projectID=$projectID") . '#app=project');
+                if(common::hasPriv('requirement', 'batchCreate') && !empty($productID)) $batchItems[] = array('text' => $lang->URCommon, 'url' => createLink('requirement', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&requirementID=0&project=$projectID") . '#app=project');
             }
 
             if(str_contains($project->storyType, 'epic') && $this->config->enableER)
             {
-                if(common::hasPriv('epic', 'create'))      $items[]      = array('text' => $lang->epic->create, 'url' => createLink('epic', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&epicID=0&projectID=$projectID") . '#app=project');
-                if(common::hasPriv('epic', 'batchCreate')) $batchItems[] = array('text' => $lang->ERCommon, 'url' => createLink('epic', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&epicID=0&project=$projectID") . '#app=project');
+                if(common::hasPriv('epic', 'create')) $items[] = array('text' => $lang->epic->create, 'url' => createLink('epic', 'create', "product=$currentProductID&branch=$branch&moduleID=$moduleID&epicID=0&projectID=$projectID") . '#app=project');
+                if(common::hasPriv('epic', 'batchCreate') && !empty($productID)) $batchItems[] = array('text' => $lang->ERCommon, 'url' => createLink('epic', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&epicID=0&project=$projectID") . '#app=project');
             }
 
-            $items[] = array('text' => $lang->story->batchCreate, 'items' => $batchItems);
+            if(!empty($productID)) $items[] = array('text' => $lang->story->batchCreate, 'items' => $batchItems);
         }
         else
         {
