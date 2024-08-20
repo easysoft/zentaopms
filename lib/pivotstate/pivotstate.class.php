@@ -377,6 +377,18 @@ class pivotState
     }
 
     /**
+     * Set form.
+     *
+     * @param  string $table
+     * @access public
+     * @return void
+     */
+    public function setFrom($table)
+    {
+        $this->sqlBuilder['from'] = array('table' => $table, 'alias' => 't1');
+    }
+
+    /**
      * Clear fieldSettings.
      *
      * @access public
