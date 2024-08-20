@@ -78,7 +78,7 @@ class pageEditor extends wg
 
         return div
         (
-            setClass('editor-container p-px mt-px rounded relative w-full', $readonly ? 'is-readonly' : ''),
+            setClass('editor-container p-px mt-px rounded relative w-full no-morph', $readonly ? 'is-readonly' : ''),
             $size === 'full' ? setStyle('height', '100%') : setClass('h-auto'),
             setCssVar('--affine-editor-side-padding', '0'),
             zui::pageEditor
