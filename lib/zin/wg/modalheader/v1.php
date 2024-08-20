@@ -50,9 +50,10 @@ class modalHeader extends wg
             ($entityText || $entityID) ? entityLabel
             (
                 set::level(1),
-                setClass('pl-2'),
+                setClass('pl-2 flex'),
                 $entityText ? set::text($entityText) : null,
                 $entityID ? set::entityID($entityID) : null,
+                $entityID ? set::idClass('self-center') : null,
                 set::reverse(true)
             ) : null,
             $this->block('suffix')
