@@ -127,7 +127,6 @@ class executionsEntry extends entry
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
 
         $account  = $this->app->user->account;
-        $projects = $data->data->projects;
         $dropMenu = array('involved' => array(), 'other' => array(), 'closed' => array());
         foreach($data->data->projects as $projectID => $projectName)
         {
@@ -139,8 +138,7 @@ class executionsEntry extends entry
                 $teams     = $execution->teams;
                 $execution = $this->filterFields($execution, 'id,project,model,type,name,code,status,PM,delay');
 
-                $projectName = zget($projects, $execution->project, '');
-                if($projectName) $execution->name = $projectName . '/' . $execution->name;
+                $execution->name = $projectName . '/' . $execution->name;
 
                 if($execution->status == 'closed')
                 {
