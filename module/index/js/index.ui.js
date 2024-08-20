@@ -825,13 +825,9 @@ function getMenuNavData()
     const $nav = $('#menuMainNav');
     $nav.children().each(function(index, element) {
         const $elm = $(element);
-        if($elm.is('.divider')) 
-        {
-            data[index] = '-';
-        }
         data[index] = $elm.is('.divider')
             ? '-'
-            : $elm.data('app')
+            : $elm.data('app');
 
     });
     return data;
