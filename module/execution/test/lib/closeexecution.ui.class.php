@@ -17,4 +17,21 @@ class closeExecutionTester extends tester
         $form->wait(1);
         $form->dom->closeSubmit->click();
     }
+
+    /**
+     * 正常关闭执行。
+     * Close execution.
+     *
+     * @param  string $realEnd
+     * @access public
+     * @return bool
+     */
+    public function close($realEnd)
+    {
+        $this->inputFields($realEnd);
+        $form = $this->loadPage();
+        if($form->dom->status->getText() != $this->lang->execution->statusList->closed) return $this->failed('执行状态错误');
+        if($form->dom->realEnd1->getText() != $realEnd) return $this->failed('执行实际完成日期错误');
+        return $this->success('关闭执行成功');
+    }
 }
