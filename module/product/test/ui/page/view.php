@@ -9,7 +9,7 @@ class viewPage extends page
             'type'             => "//*[@id='mainContent']/div[1]/div[1]/div[1]/div[2]/div[1]/span[2]",
             'acl'              => "//*[@id='mainContent']/div[1]/div[1]/div[1]/div[2]/div[1]/span[3]",
             'branchProductACL' => "//*[@id='mainContent']/div[1]/div[1]/div[1]/div[2]/div[1]/span[4]",
-            'closeBtn'         => "/html/body/div[2]/div/div/div[3]/div[1]/div/form/div[2]/div/button",
+            'confirmBtn'       => "/html/body/div[2]/div/div/div[3]/div[1]/div/form/div[2]/div/button",
             'status'           => "//*[@id='mainContent']/div[1]/div[1]/div[1]/div[2]/div[1]/span[2]",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);

@@ -8,6 +8,7 @@ $tester = new changeStatus();
 $tester->login();
 
 $productID['productID'] = 1;
-r($tester->closeProduct($productID))  && p('message,status') && e('关闭产品成功,SUCCESS');
+r($tester->closeProduct($productID))    && p('message,status') && e('关闭产品成功,SUCCESS');
+r($tester->activateProduct($productID)) && p('message,status') && e('激活产品成功,SUCCESS');
 
 $tester->closeBrowser();
