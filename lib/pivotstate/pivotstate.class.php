@@ -505,6 +505,13 @@ class pivotState
         return array();
     }
 
+    /**
+     * Get select tables.
+     *
+     * @param  array $tableList
+     * @access public
+     * @return array
+     */
     public function getSelectTables($tableList)
     {
         $selectTables = array();
