@@ -30,6 +30,19 @@ class testcaseEntry extends entry
 
         $case = $data->case;
         $case->steps = (isset($case->steps) and !empty($case->steps)) ? array_values(get_object_vars((object)$case->steps)) : array();
+        if(!empty($case->steps))
+        {
+            foreach($case->steps as &$step)
+            {
+                foreach(array('step', 'desc', 'expect') as $field)
+                {
+                    if(isset($step->$field) && $step->$field != '')
+                    {
+                        $step->$field = str_replace(array("&amp;quot;", "&amp;#039;", "&amp;lt;", "&amp;gt;"), array('"', "'", "<", ">"), $step->$field);
+                    }
+                }
+            }
+        }
 
         return $this->send(200, $this->format($case, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,lastRunDate:time,scriptedDate:date,reviewedBy:user,reviewedDate:date,steps:array,deleted:bool'));
     }
