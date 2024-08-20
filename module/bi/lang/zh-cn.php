@@ -23,3 +23,16 @@ $lang->bi->builderStepList['func']  = '新增函数字段';
 $lang->bi->builderStepList['where'] = '添加查询条件';
 $lang->bi->builderStepList['query'] = '添加查询筛选器';
 $lang->bi->builderStepList['group'] = '设置分组并聚合';
+
+$lang->bi->stepTableTitle = '选择要查询的数据表';
+$lang->bi->stepTableTip   = '请选择要查询的数据表，用于指定您想要从哪张表或哪些表中检索数据。';
+
+$lang->bi->fromTable     = '主表';
+$lang->bi->leftTable     = '左连接';
+$lang->bi->joinCondition = '连接条件为';
+$lang->bi->joinTable     = ' = %s的';
+$lang->bi->of            = '的';
+
+$lang->bi->stepFieldTitle = '选择查询表中的字段';
+$lang->bi->stepFieldTip   = '选择查询表中的字段用于从已选择的查询表中获取所需的数据。';
+$lang->bi->leftTableTip   = '在SQL中，左连接（Left join）是一种表与表之间的关联操作，它返回左表中所有记录以及与右表中匹配的记录。左连接根据指定的条件从两个表中组合数据，其中左表是查询的主表，而右表是要连接的表。具体请看联表查询常用方式：左连接。';
