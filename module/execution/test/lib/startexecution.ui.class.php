@@ -7,6 +7,7 @@ class startExecutionTester extends tester
      * Input fields.
      *
      * @param  string $realBegan
+     * @param  string $executionId
      * @access public
      */
     public function inputFields($realBegan, $executionId = '101')
