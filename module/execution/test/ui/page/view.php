@@ -25,7 +25,7 @@ class viewPage extends page
             'startSubmit'    => "//*[@name='realBegan']/../../../../div[3]/div/button",
             /* 关闭执行弹窗中的元素 */
             'realEndField' => "//div[@data-name='realEnd']/label/span",
-            'endSubmit'    => "//*[@name='realEnd']/../../../../div[3]/div/button",
+            'closeSubmit'    => "//*[@name='realEnd']/../../../../div[3]/div/button",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
