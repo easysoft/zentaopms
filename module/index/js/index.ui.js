@@ -819,6 +819,24 @@ setTimeout(refreshMenu, 500);
 $(document).on('click', '.menu-toggle', () => toggleMenu());
 toggleMenu(!$('body').hasClass('hide-menu'));
 
+function getMenuNavData() 
+{
+    const data = [];
+    const $nav = $('#menuMainNav');
+    $nav.children().each(function(index, element) {
+        const $elm = $(element);
+        if($elm.is('.divider')) 
+        {
+            data[index] = '-';
+        }
+        data[index] = $elm.is('.divider')
+            ? '-'
+            : $elm.data('app')
+
+    });
+    return data;
+}
+
 $('#menuNav .divider').on('contextmenu', function(event) 
 {
     const $divider = $(this);
@@ -832,6 +850,8 @@ $('#menuNav .divider').on('contextmenu', function(event)
                 text: langData.save,
                 onClick: () => {
                     $divider.closest('.nav').zui().destroy();
+                    const data = getMenuNavData();
+                    console.log(data);
                 }
             }
         );
@@ -857,7 +877,11 @@ $('#menuNav .divider').on('contextmenu', function(event)
         {
             text: langData.hide,
             onClick: () => {
-                $divider.closest('li').remove();
+                const $li = $divider.closest('li');
+                const appName = $li.data('app');
+                $li.remove();
+                const data = getMenuNavData();
+                console.log(appName, data);
             }
         }
     );
@@ -908,7 +932,9 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
             {
                 text: langData.save,
                 onClick: () => {
-                    $btn.closest('.nav').zui().destroy();  
+                    $btn.closest('.nav').zui().destroy();
+                    const data = getMenuNavData();
+                    console.log(data);
                 }
             }
         );
@@ -935,7 +961,12 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
         {
             text: langData.hide,
             onClick: () => {
-                $btn.closest('li').remove();
+                const $li = $btn.closest('li');
+                const appName = $li.data('app');
+                $li.remove();
+                const data = getMenuNavData();
+                
+                console.log(appName, data);
             }
         }
     );
