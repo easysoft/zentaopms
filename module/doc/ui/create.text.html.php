@@ -163,23 +163,24 @@ $handleSubmitForm = <<<'JS'
         $(e.target).removeClass('has-changed').find('input[name=status]').val(isDraft ? 'draft' : 'normal');
 
         const pageEditor = $('#docEditor').zui('pageEditor');
-        if (pageEditor) {
-            return pageEditor.syncData().then(() => true);
-        }
+        if(pageEditor) return pageEditor.syncData().then(() => true);
     }
     JS;
 
 formBase
 (
     setID('docForm'),
+    setData('unsavedConfirm', $lang->doc->confirmLeaveOnEdit),
     set::actions(false),
     set::ajax(array('beforeSubmit' => jsRaw($handleSubmitForm), 'onFail' => jsRaw('() => $("#docForm").addClass("has-changed")'))),
     set::morph(),
-    setData('unsavedConfirm', $lang->doc->confirmLeaveOnEdit),
     on::change('#showTitle,zen-editor')->once()->do('$element.addClass("has-changed")'),
     panel
     (
         setClass('doc-form preserve-on-morph'),
+        set::headingActions($headingActions),
+        set::headingClass('py-3'),
+        set::bodyClass('p-0 border-t'),
         to::heading
         (
             input
@@ -192,9 +193,6 @@ formBase
                 on::init()->do('$element.on("change input", () => {$("#title").val($element.val()).removeClass("has-error");$("#titleTip").remove();})')
             )
         ),
-        set::headingActions($headingActions),
-        set::headingClass('py-3'),
-        set::bodyClass('p-0 border-t'),
         pageEditor
         (
             set::_id('docEditor'),
