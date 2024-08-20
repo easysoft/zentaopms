@@ -459,6 +459,25 @@ class pivotState
         return array();
     }
 
+    public function getSelectTables($tableList)
+    {
+        $selectTables = array();
+        $from  = $this->sqlBuilder['from'];
+        $joins = $this->sqlBuilder['joins'];
+        array_unshift($joins, $from);
+
+        foreach($joins as $join)
+        {
+            $table = $join['table'];
+            if(empty($table)) continue;
+            $alias = $join['alias'];
+            $name  = $tableList[$table];
+            $selectTables[$alias] = "$name($alias)";
+        }
+
+        return $selectTables;
+    }
+
     /**
      * Clear fieldSettings.
      *
