@@ -316,9 +316,9 @@ class caselibZen extends caselib
             $step = trim($step);
             if(empty($step)) continue;
 
-            preg_match('/^((([0-9]+)[.]([0-9]+))[.]([0-9]+))[.、](.*)$/U', $step, $out);
-            if(!$out) preg_match('/^(([0-9]+)[.]([0-9]+))[.、](.*)$/U', $step, $out);
-            if(!$out) preg_match('/^([0-9]+)[.、](.*)$/U', $step, $out);
+            preg_match('/^((([0-9]+)[.]([0-9]+))[.]([0-9]+))[.、](.*)$/Uu', $step, $out);
+            if(!$out) preg_match('/^(([0-9]+)[.]([0-9]+))[.、](.*)$/Uu', $step, $out);
+            if(!$out) preg_match('/^([0-9]+)[.、](.*)$/Uu', $step, $out);
             if($out)
             {
                 $count   = count($out);

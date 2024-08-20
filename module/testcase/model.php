@@ -1518,9 +1518,9 @@ class testcaseModel extends model
                         $trimmedStep = trim($step);
                         if(empty($trimmedStep)) continue;
 
-                        preg_match('/^((([0-9]+)[.]([0-9]+))[.]([0-9]+))[.、](.*)$/U', $trimmedStep, $out);
-                        if(!$out) preg_match('/^(([0-9]+)[.]([0-9]+))[.、](.*)$/U', $trimmedStep, $out);
-                        if(!$out) preg_match('/^([0-9]+)[.、](.*)$/U', $trimmedStep, $out);
+                        preg_match('/^((([0-9]+)[.]([0-9]+))[.]([0-9]+))[.、](.*)$/Uu', $trimmedStep, $out);
+                        if(!$out) preg_match('/^(([0-9]+)[.]([0-9]+))[.、](.*)$/Uu', $trimmedStep, $out);
+                        if(!$out) preg_match('/^([0-9]+)[.、](.*)$/Uu', $trimmedStep, $out);
                         if($out)
                         {
                             $count  = count($out);
