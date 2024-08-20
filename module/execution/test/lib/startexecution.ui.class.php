@@ -9,9 +9,9 @@ class startExecutionTester extends tester
      * @param  string $realBegan
      * @access public
      */
-    public function inputFields($realBegan)
+    public function inputFields($realBegan, $executionId = '101')
     {
-        $form = $this->initForm('execution', 'view', array('execution' => '101'), 'appIframe-execution');
+        $form = $this->initForm('execution', 'view', array('execution' => $executionId ), 'appIframe-execution');
         $form->wait(1);
         $form->dom->start->click();
         $form->wait(1);
