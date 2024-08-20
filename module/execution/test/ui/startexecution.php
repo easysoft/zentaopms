@@ -8,7 +8,7 @@ cid=1
 */
 
 chdir(__DIR__);
-include '../lib/startexecution.class.php';
+include '../lib/startexecution.ui.class.php';
 
 zendata('project')->loadYaml('execution', false, 2)->gen(10);
 $tester = new startExecutionTester();
