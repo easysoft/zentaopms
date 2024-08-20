@@ -28,7 +28,7 @@ class storyCloseEntry extends entry
 
         $data = $this->getData();
         if(!$data) return $this->send400('error');
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
+        if(isset($data->result) && $data->result == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
         $story = $this->loadModel('story')->getByID($storyID);
 
