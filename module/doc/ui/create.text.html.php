@@ -161,6 +161,11 @@ $handleSubmitForm = <<<'JS'
             return false;
         }
         $(e.target).removeClass('has-changed').find('input[name=status]').val(isDraft ? 'draft' : 'normal');
+
+        const pageEditor = $('#docEditor').zui('pageEditor');
+        if (pageEditor) {
+            return pageEditor.syncData().then(() => true);
+        }
     }
     JS;
 
@@ -179,11 +184,11 @@ formBase
         (
             input
             (
-                setClass('ring-0 text-xl font-bold px-0'),
                 setID('showTitle'),
+                setClass('ring-0 text-xl font-bold px-0'),
+                setData('title-hint', sprintf($lang->error->notempty, $lang->doc->title)),
                 set::maxlength(100),
                 set::placeholder($lang->doc->titlePlaceholder),
-                setData('title-hint', sprintf($lang->error->notempty, $lang->doc->title)),
                 on::init()->do('$element.on("change input", () => {$("#title").val($element.val()).removeClass("has-error");$("#titleTip").remove();})')
             )
         ),
@@ -192,14 +197,15 @@ formBase
         set::bodyClass('p-0 border-t'),
         pageEditor
         (
+            set::_id('docEditor'),
             set::name('content'),
-            set::size('full'),
+            set::size('auto'),
             set::resizable(false),
             set::placeholder($lang->noticePasteImg)
         )
     ),
     formHidden('status', 'normal'),
-    formHidden('contentType', 'html'),
+    formHidden('contentType', 'doc'),
     formHidden('type', 'text'),
     $basicInfoModal
 );
