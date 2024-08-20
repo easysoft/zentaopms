@@ -361,9 +361,19 @@ class pivotState
         $this->initSqlBuilder();
     }
 
+    /**
+     * Init sql builder.
+     *
+     * @access public
+     * @return void
+     */
     public function initSqlBuilder()
     {
-        $this->sqlBuilder['step'] = 'table';
+        $this->sqlBuilder['step']      = 'table';
+        $this->sqlBuilder['joins']     = array();
+        $this->sqlBuilder['tableDesc'] = array();
+
+        if(!isset($this->sqlBuilder['from'])) $this->setFrom('');
     }
 
     /**
