@@ -210,14 +210,15 @@ window.setStatistics = function(element, checks)
 /**
  * Get selected case id list.
  *
+ * @param  string selector
  * @access public
  * @return void
  */
-function getCheckedCaseIdList()
+function getCheckedCaseIdList(selector)
 {
     let caseIdList = '';
 
-    const dtable = zui.DTable.query('#table-testcase-browse');
+    const dtable = zui.DTable.query('#' + selector);
     $.each(dtable.$.getChecks(), function(index, caseID)
     {
         if(index > 0) caseIdList += ',';
