@@ -160,9 +160,11 @@ $buildTutorialTabPane = function($type) use ($groupedGuides, $lang, $currentType
 jsVar('guides', $guides);
 jsVar('lang', array
 (
-    'nextStep'       => $lang->tutorial->nextStep,
-    'clickTipFormat' => $lang->tutorial->clickTipFormat,
-    'clickAndOpenIt' => $lang->tutorial->clickAndOpenIt
+    'nextTask'         => $lang->tutorial->nextTask,
+    'nextStep'         => $lang->tutorial->nextStep,
+    'clickTipFormat'   => $lang->tutorial->clickTipFormat,
+    'clickAndOpenIt'   => $lang->tutorial->clickAndOpenIt,
+    'congratulateTask' => $lang->tutorial->congratulateTask
 ));
 
 div
