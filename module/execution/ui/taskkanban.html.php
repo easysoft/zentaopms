@@ -36,6 +36,12 @@ foreach($kanbanGroup as $index => $group)
         if(isset($col['parent']) && $col['parent'] != '-1') $groupCols[$groupID][$col['id']] = $col['title'];
     }
 
+    if($execution->displayCards > 0)
+    {
+        $group['minLaneHeight'] = $execution->displayCards * 70;
+        $group['maxLaneHeight'] = $execution->displayCards * 70;
+    }
+
     $kanbanGroup[$index] = $group;
 }
 $laneCount += count($kanbanGroup);
