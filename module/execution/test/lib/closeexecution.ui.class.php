@@ -34,4 +34,23 @@ class closeExecutionTester extends tester
         if($form->dom->realEnd1->getText() != $realEnd) return $this->failed('执行实际完成日期错误');
         return $this->success('关闭执行成功');
     }
+
+    /**
+     * 实际完成日期大于当前日期。
+     * The real end date is greater than the current date.
+     *
+     * @param  string $realEnd
+     * @access public
+     * @return bool
+     */
+    public function closeWithGreaterDate($realEnd)
+    {
+        $this->inputFields($realEnd);
+        $form  = $this->loadPage();
+        $field = $form->dom->realEndField->getText();
+        $text  = $form->dom->realEndTip->getText();
+        $info  = sprintf($lang->error->le, $field, $realEnd);
+        if($text != $info) return $this->success('关闭执行表单页提示信息正确');
+        return $this->failed('关闭执行表单页提示信息不正确');
+    }
 }
