@@ -3507,7 +3507,7 @@ eof;
         if(!$config->message->browser->turnon) return;
 
         $showCount   = $config->message->browser->count;
-        $unreadCount = $app->dbh->query("SELECT COUNT(1) as count FROM " . TABLE_NOTIFY . " WHERE `objectType` = 'message' AND status != 'read' AND `toList` = ',{$app->user->account},'")->fetch()->count;
+        $unreadCount = $app->dbh->query("SELECT COUNT(1) AS `count` FROM " . TABLE_NOTIFY . " WHERE `objectType` = 'message' AND status != 'read' AND `toList` = ',{$app->user->account},'")->fetch()->count;
         $dotStyle    = static::getDotStyle($showCount != '0', $unreadCount);
         if($unreadCount > 99) $unreadCount = '99+';
 
