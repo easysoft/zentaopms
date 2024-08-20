@@ -41,7 +41,7 @@
     let zinbar        = null;
     let historyState  = parent.window.history.state;
     const hasZinBar   = DEBUG && window.zin && window.zin.zinTool && !isIndexPage;
-    const localCacheFirst = config.cache === 'local-first';
+    const localCacheFirst = config.clientCache === 'local-first';
 
     function getUrlID(url)
     {

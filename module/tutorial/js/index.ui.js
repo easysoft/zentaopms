@@ -1,48 +1,97 @@
 let currentGuide   = '';
 let currentTask    = '';
-let currentStep    = 0;
-const lastTaskStep = {};
+let currentStep    = null;
 let popover        = null;
 
 function highlightStepTarget(global, $target, step, popoverOptions)
 {
-    if(popover) popover.destroy();
+    if(popover)
+    {
+        const triggerElement = popover.getTriggerElement();
+        if(triggerElement) triggerElement.classList.remove('tutorial-hl');
+        popover.destroy();
+    }
     popoverOptions = $.extend(
     {
+        key             : 'tutorialPopover',
         title           : step.title,
+        strategy        : 'fixed',
         show            : true,
         mask            : false,
         trigger         : 'manual',
         destroyOnHide   : true,
         closeBtn        : false,
         content         : step.desc,
-        contentClass    : 'px-4',
+        contentClass    : 'popover-content px-4',
         className       : 'tutorial-popover rounded-md',
         titleClass      : 'popover-title text-lg pl-1',
         minWidth        : 280,
+        headingClass    : 'popover-heading bg-transparent',
         elementShowClass: 'with-popover-show tutorial-hl',
-        actions:
+        footer:
         {
-            className: 'py-3 px-4 justify-between mt-2',
-            items:
-            [
-                {component: 'span', html: `${step.index + 1}/${step.task.steps.length}`},
-                {type: 'primary', text: lang.nextStep},
-            ]
+            component: 'toolbar',
+            props: {
+                className: 'py-3 px-4 justify-between',
+                items:
+                [
+                    {component: 'span', html: `${step.index + 1}/${step.task.steps.length}`},
+                    {type: 'primary', text: lang.nextStep, onClick: () => goToNextStep(step)},
+                ]
+            }
         }
     }, step.popover, popoverOptions);
+    if(popoverOptions.title === null)
+    {
+        const text = $target.text().trim();
+        if(['openApp'].includes(step.type)) popoverOptions.title = lang.clickTipFormat.replace('%s', text);
+    }
     popover = new global.zui.Popover($target, popoverOptions);
-    console.log('> highlightStepTarget', $target, {popover, step});
+}
+
+function goToNextStep(step)
+{
+    step = step || currentStep;
 }
 
 function showOpenAppStep(step)
 {
-    const indexWindow  = $('#iframePage')[0].contentWindow;
-    const index$       = indexWindow.$;
-    const $menuMainNav = index$('#menuMainNav');
-    let   $appNav      = $menuMainNav.children(`li[data-app="${step.app}"]`);
-    console.log('> showOpenAppStep', step, $menuMainNav, $appNav);
-    if($appNav.length) return highlightStepTarget(indexWindow, $appNav.find('a'), step, {placement: 'right'});
+    const indexWindow = $('#iframePage')[0].contentWindow;
+    const index$      = indexWindow.$;
+    const $menuNav    = index$('#menuNav');
+
+    if(!$menuNav.data('checkOpenAppStep'))
+    {
+        const checkOpenAppStep = (event, info) =>
+        {
+            if(!currentStep || currentStep.type !== 'openApp') return;
+            if(event.type === 'shown' && info[0].options.target !== '#menuMoreList') return;
+            showOpenAppStep(currentStep);
+        };
+        $(indexWindow).on('resize', checkOpenAppStep);
+        indexWindow.$('#menuMoreBtn').on('shown', checkOpenAppStep);
+        $menuNav.data('checkOpenAppStep', true);
+    }
+
+    const $menuMainNav = $menuNav.find('#menuMainNav');
+    const $appNav = $menuMainNav.children(`li[data-app="${step.app}"]`);
+    let $targetNav = $appNav;
+    if($appNav.hasClass('hidden'))
+    {
+        const $menuMoreList = $menuNav.find('#menuMoreList.in');
+        if($menuMoreList.length) $targetNav = $menuMoreList.children(`li[data-app="${step.app}"]`);
+        else                     $targetNav = $menuNav.find('#menuMoreBtn');
+    }
+
+    if(!$targetNav.length) return;
+    const popoverOptions = {placement: 'right'};
+    if($targetNav.is('#menuMoreBtn'))
+    {
+        popoverOptions.title   = null;
+        popoverOptions.footer  = undefined;
+        popoverOptions.content = lang.clickAndOpenIt.replace('%s', $targetNav.text().trim()).replace('%s', $appNav.text().trim());
+    }
+    return highlightStepTarget(indexWindow, $targetNav.is('a') ? $targetNav : $targetNav.find('a'), step, popoverOptions);
 }
 
 function toggleActiveTarget(type, name, toggle)
@@ -60,6 +109,7 @@ function unactiveTask()
 {
     toggleActiveTarget('task', currentTask, false);
     currentTask = '';
+    currentStep = null;
 }
 
 function activeTaskStep(guideName, taskName, stepIndex)
@@ -81,8 +131,9 @@ function activeTaskStep(guideName, taskName, stepIndex)
     step.index  = stepIndex;
     step.isLast = stepIndex === task.steps.length - 1;
 
+    currentStep = step;
+
     if(step.type === 'openApp') return showOpenAppStep(step);
-    console.log('activeTaskStep', guideName, taskName, step);
 }
 
 function activeTask(guideName, taskName, step = 0)
@@ -97,7 +148,6 @@ function activeTask(guideName, taskName, step = 0)
         toggleActiveTarget('task', currentTask, true);
     }
 
-    step = step || lastTaskStep[taskName] || 0;
     activeTaskStep(guideName, taskName, step);
 }
 

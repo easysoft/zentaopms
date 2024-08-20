@@ -32,6 +32,8 @@ $lang->tutorial->serverErrorTip   = 'Error!';
 $lang->tutorial->ajaxSetError     = 'Finished task must be defined. If you want to reset the Task, please set its value as null.';
 $lang->tutorial->novice           = "For a quick start, let's go through a two-minute Tutorial.";
 $lang->tutorial->dataNotSave      = "Data generated in this Tutorial will not be saved!";
+$lang->tutorial->clickTipFormat   = "cliquez %s";
+$lang->tutorial->clickAndOpenIt   = "Click %s to open %s.";
 
 $lang->tutorial->tasks = new stdclass();
 $lang->tutorial->tasks->createAccount = new stdclass();

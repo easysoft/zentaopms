@@ -34,6 +34,8 @@ $lang->tutorial->serverErrorTip   = '发生了一些错误。';
 $lang->tutorial->ajaxSetError     = '必须指定已完成的任务，如果要重置任务，请设置值为空。';
 $lang->tutorial->novice           = "你可能初次使用禅道，是否进入新手教程";
 $lang->tutorial->dataNotSave      = "教程任务中，数据不会保存。";
+$lang->tutorial->clickTipFormat   = "点击%s";
+$lang->tutorial->clickAndOpenIt   = "点击%s打开%s。";
 
 $lang->tutorial->guideTypes        = array();
 $lang->tutorial->guideTypes['starter'] = '快速上手';

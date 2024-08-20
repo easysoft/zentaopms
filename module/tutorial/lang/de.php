@@ -32,6 +32,8 @@ $lang->tutorial->serverErrorTip   = 'Fehler!';
 $lang->tutorial->ajaxSetError     = 'Abgeschlossene Aufgabe muss definiert sein. Wenn Sie die Aufgabe zurücksetzen möchten, setzen Sie den Wert auf Null.';
 $lang->tutorial->novice           = "Für einen Schnellstart, beginnen Sie mit einer 2 Minuten Anleitung?";
 $lang->tutorial->dataNotSave      = "In der Anleitung erstellte Daten werden nicht gespeichert!";
+$lang->tutorial->clickTipFormat   = "klicken %s";
+$lang->tutorial->clickAndOpenIt   = "Click %s to open %s.";
 
 $lang->tutorial->tasks = new stdclass();
 $lang->tutorial->tasks->createAccount = new stdclass();
