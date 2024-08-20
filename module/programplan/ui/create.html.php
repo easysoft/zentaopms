@@ -269,7 +269,7 @@ jsVar('plans',            $plans);
 jsVar('cropStageTip',     $lang->programplan->cropStageTip);
 jsVar('ipdStagePoint',    $project->model == 'ipd' ? $config->review->ipdReviewPoint : array());
 jsVar('attributeList',    $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList);
-jsvar('reviewedPoints',   $project->model == 'ipd' ? $reviewedPoints : array());
+jsVar('reviewedPoints',   $project->model == 'ipd' ? $reviewedPoints : array());
 jsVar('reviewedPointTip', $project->model == 'ipd' ? $lang->programplan->reviewedPointTip : '');
 
 featureBar(li
