@@ -1,5 +1,3 @@
-console.log('> guides', guides);
-
 let currentGuide   = '';
 let currentTask    = '';
 let currentStep    = 0;
@@ -125,7 +123,6 @@ function activeGuide(guideName)
         toggleActiveTarget('guide', currentGuide, true);
     }
 }
-
 
 window.handleClickGuide = function(event)
 {
