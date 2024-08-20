@@ -176,8 +176,9 @@
         config = window.config;
         const $body = $(document.body);
         const classList = ($body.attr('class') || '').split(' ').filter(x => x.length && !x.startsWith('m-'));
-        classList.push(`m-${config.currentModule}-${config.currentMethod}`);
-        $body.attr('class', classList.join(' '));
+        const pageID = `${config.currentModule}-${config.currentMethod}`;
+        classList.push(`m-${pageID}`);
+        $body.attr('class', classList.join(' ')).attr('data-page', pageID);
     }
 
     function updatePageCSS(data, _info, options)
@@ -570,6 +571,7 @@
                 if(isDebugRequest) return;
                 if(options.loadingTarget !== false) toggleLoading(options.loadingTarget || target, true, options.loadingClass, options.loadingIndicatorDelay || (options.partial ? '.2s' : (cache ? '5s' : '1s')));
                 if(options.before) options.before();
+                if(!options.partial) $('body').addClass('loading-page');
             },
             success(rawData)
             {
@@ -730,6 +732,7 @@
             },
             complete: () =>
             {
+                if(!options.partial) $('body').removeClass('loading-page');
                 if(ajax.canceled) return;
                 if(onFinish) onFinish();
                 $(document).data('zinCache', null);
