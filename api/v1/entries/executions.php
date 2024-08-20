@@ -129,9 +129,11 @@ class executionsEntry extends entry
         $account  = $this->app->user->account;
         $projects = $data->data->projects;
         $dropMenu = array('involved' => array(), 'other' => array(), 'closed' => array());
-        foreach($data->data->executions as $projectID => $projectExecutions)
+        foreach($data->data->projects as $projectID => $projectName)
         {
-            foreach($projectExecutions as $execution)
+            if(!isset($data->data->projectExecutions->$projectID)) continue;
+
+            foreach($data->data->projectExecutions->$projectID as $execution)
             {
                 if(helper::diffDate(date('Y-m-d'), $execution->end) > 0) $execution->delay = true;
                 $teams     = $execution->teams;
