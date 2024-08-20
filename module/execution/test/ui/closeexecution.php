@@ -11,6 +11,7 @@ chdir(__DIR__);
 include '../lib/closeexecution.ui.class.php';
 
 zendata('project')->loadYaml('execution', false, 2)->gen(10);
+
 $tester = new closeExecutionTester();
 $tester->login();
 
