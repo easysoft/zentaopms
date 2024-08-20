@@ -11,3 +11,6 @@ CREATE TABLE IF NOT EXISTS `zt_workflowui` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 ALTER TABLE `zt_workflowlayout` ADD `ui` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `action`;
+
+ALTER TABLE `zt_approvalflow` CHANGE `type` `workflow` char(30) NOT NULL DEFAULT '';
+UPDATE `zt_approvalflow` SET `workflow` = '';
