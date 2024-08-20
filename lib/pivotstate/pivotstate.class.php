@@ -437,6 +437,13 @@ class pivotState
         return "t{$next}";
     }
 
+    /**
+     * Get table desc field list.
+     *
+     * @param  string $alias
+     * @access public
+     * @return array
+     */
     public function getTableDescList($alias)
     {
         $from      = $this->sqlBuilder['from'];
