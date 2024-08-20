@@ -10,19 +10,10 @@ class pageEditor extends wg
         'uploadUrl?: string',                   // 图片上传链接
         'placeholder?: string=""',              // 占位文本
         'fullscreenable?: bool=true',           // 是否可全屏
-        'resizable?: bool=true',                // 是否可拖拽调整大小
-        'exposeEditor?: bool=true',             // 是否将编辑器实例挂载到 `window.$zenEditors`
         'size?: string="sm"',                   // 尺寸，可选值 'sm', 'lg', 'full', 'auto'
         'readonly?: bool=false',                // 是否只读
-        'bubbleMenu?: bool=false',              // 是否启用浮动菜单
-        'slashMenu?: bool=false',               // 是否启用 `/` 菜单
-        'menubarMode?: string="compact"',       // 菜单栏模式，可选值 'basic', 'compact', 'full'
         'locale?: string',                      // 语言，可选值 'zh', 'en'，默认跟随浏览器，也可以是自定义的语言项 JSON，详见 ZenEditor 文档
-        'markdown?: bool=false',                // 是否启用 Markdown 模式，若启用，为了兼容性将会隐藏一些功能
-        'neglectDefaultTextStyle?: bool=false', // 是否不赋予默认的文本样式
-        'preferHardBreak?: bool=false',         // 是否优先使用硬回车而不是新段落
         'value?: string',                       // 初始内容
-        'templateType?: string',                // 模板类型
         'uid?: string'                          // 图片上传 uid
     );
 
