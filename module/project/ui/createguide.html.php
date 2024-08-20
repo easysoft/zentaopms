@@ -31,7 +31,7 @@ foreach($lang->project->modelList as $model => $modelName)
     $titleKey   = "{$model}Title";
     $itemList[] = center
     (
-        setClass('model-block p-2'),
+        setClass('model-block p-2 ' . $model),
         div
         (
             setClass('model-item col items-center cursor-pointer'),

@@ -283,6 +283,7 @@ div
         ),
         set::actions(array(
             array(
+            'id'      => 'saveButton',
             'text'    => $lang->save,
             'type'    => 'primary',
             'btnType' => 'button',

@@ -93,3 +93,84 @@ $lang->tutorial->tasks->createBug = new stdClass();
 $lang->tutorial->tasks->createBug->title          = '提Bug';
 $lang->tutorial->tasks->createBug->targetPageName = '提Bug';
 $lang->tutorial->tasks->createBug->desc           = "<p>在系统中提交一个Bug：</p><ul><li data-target='nav'>打开 <span class='task-nav'> 测试 <i class='icon icon-angle-right'></i> Bug <i class='icon icon-angle-right'></i> 提Bug</span>；</li><li data-target='form'>在表单中填写Bug信息；</li><li data-target='submit'>保存Bug信息。</li></ul>";
+
+$lang->tutorial->scrumProjectManage = new stdClass();
+$lang->tutorial->scrumProjectManage->title = 'Scrum项目管理教程';
+
+$lang->tutorial->scrumProjectManage->manageProject = new stdClass();
+$lang->tutorial->scrumProjectManage->manageProject->title = '项目维护';
+
+$lang->tutorial->scrumProjectManage->manageProject->step1 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageProject->step1->name = '点击项目';
+$lang->tutorial->scrumProjectManage->manageProject->step1->desc = '您可以在这里创建项目';
+
+$lang->tutorial->scrumProjectManage->manageProject->step2 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageProject->step2->name = '点击创建项目';
+$lang->tutorial->scrumProjectManage->manageProject->step2->desc = '您可以选择不同项目管理方式来创建不同类型的项目，请点击Scrum进行创建';
+
+$lang->tutorial->scrumProjectManage->manageProject->step3 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageProject->step3->name = '点击Scrum项目';
+$lang->tutorial->scrumProjectManage->manageProject->step3->desc = '请点击Scrum创建Scrum项目';
+
+$lang->tutorial->scrumProjectManage->manageProject->step4 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageProject->step4->name = '填写表单';
+
+$lang->tutorial->scrumProjectManage->manageProject->step5 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageProject->step5->name = '保存表单';
+$lang->tutorial->scrumProjectManage->manageProject->step5->desc = '保存后会显示在项目列表中';
+
+$lang->tutorial->scrumProjectManage->manageProject->step6 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageProject->step6->name = '点击项目名称';
+$lang->tutorial->scrumProjectManage->manageProject->step6->desc = '点击项目名称进入项目';
+
+$lang->tutorial->scrumProjectManage->manageProject->step7 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageProject->step7->name = '点击设置';
+$lang->tutorial->scrumProjectManage->manageProject->step7->desc = '点击设置开始维护团队';
+
+$lang->tutorial->scrumProjectManage->manageProject->step8 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageProject->step8->name = '点击团队';
+$lang->tutorial->scrumProjectManage->manageProject->step8->desc = '点击团队可以查看该项目中的团队成员';
+
+$lang->tutorial->scrumProjectManage->manageProject->step9 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageProject->step9->name = '点击团队管理';
+$lang->tutorial->scrumProjectManage->manageProject->step9->desc = '点击团队管理可以对当前项目的团队成员进行维护';
+
+$lang->tutorial->scrumProjectManage->manageProject->step10 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageProject->step10->name = '填写表单';
+
+$lang->tutorial->scrumProjectManage->manageProject->step11 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageProject->step11->name = '保存表单';
+$lang->tutorial->scrumProjectManage->manageProject->step11->desc = '保存后可以在团队中查看团队成员';
+
+$lang->tutorial->scrumProjectManage->manageExecution = new stdClass();
+$lang->tutorial->scrumProjectManage->manageExecution->title = '迭代管理';
+
+$lang->tutorial->scrumProjectManage->manageExecution->step1 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageExecution->step1->name = '点击迭代';
+$lang->tutorial->scrumProjectManage->manageExecution->step1->desc = '点击迭代开始添加新迭代';
+
+$lang->tutorial->scrumProjectManage->manageExecution->step2 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageExecution->step2->name = '点击添加迭代';
+$lang->tutorial->scrumProjectManage->manageExecution->step2->desc = '您可以在这里添加迭代';
+
+$lang->tutorial->scrumProjectManage->manageExecution->step3 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageExecution->step3->name = '填写表单';
+
+$lang->tutorial->scrumProjectManage->manageExecution->step4 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageExecution->step4->name = '保存表单';
+$lang->tutorial->scrumProjectManage->manageExecution->step4->desc = '保存后可以选择设置团队、关联需求、创建任务、返回任务列表和返回执行列表';
+
+$lang->tutorial->scrumProjectManage->manageExecution->step5 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageExecution->step5->name = '点击关联需求';
+$lang->tutorial->scrumProjectManage->manageExecution->step5->desc = '点击关联需求进入关联需求列表';
+
+$lang->tutorial->scrumProjectManage->manageExecution->step6 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageExecution->step6->name = '选择需求';
+
+$lang->tutorial->scrumProjectManage->manageExecution->step7 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageExecution->step7->name = '点击保存';
+$lang->tutorial->scrumProjectManage->manageExecution->step7->desc = '点击保存可以将需求关联到需求列表中，返回到需求列表';
+
+$lang->tutorial->scrumProjectManage->manageExecution->step8 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageExecution->step8->name = '点击燃尽图';
+$lang->tutorial->scrumProjectManage->manageExecution->step8->desc = '点击燃尽图可以查看迭代燃尽图';

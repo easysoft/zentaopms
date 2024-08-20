@@ -40,7 +40,7 @@ panel
         ),
         $execution->lifetime != 'ops' ? btn
         (
-            set::className('mr-2 tipBtn'),
+            set::className('mr-2 tipBtn linkstory-btn'),
             $lang->execution->linkStory,
             set('data-url', createLink('execution', 'linkstory', "executionID=$executionID"))
         ) : null,
