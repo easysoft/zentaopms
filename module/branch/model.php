@@ -262,7 +262,7 @@ class branchModel extends model
         $this->dao->update(TABLE_BRANCH)->data($branch)
             ->where('id')->eq($branchID)
             ->batchCheck($this->config->branch->edit->requiredFields, 'notempty')
-            ->checkIF(!empty($branch->name)&& $branch->name != $oldBranch->name, 'name', 'unique', "product = $oldBranch->product")
+            ->checkIF(!empty($branch->name) && $branch->name != $oldBranch->name, 'name', 'unique', "product = $oldBranch->product && id != $oldBranch->id")
             ->exec();
         if(dao::isError()) return false;
 
