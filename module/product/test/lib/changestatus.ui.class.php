@@ -49,4 +49,23 @@ class changeStatus extends tester
         }
         return $this->failed('激活产品失败');
     }
+    /**
+     * 删除产品
+     * delete product
+     *
+     * @param  $producrID 产品ID
+     * @return mixed
+     */
+    public function deleteProduct($productID)
+    {
+        $form = $this->initForm('product', 'view', $productID, 'appIframe-product');
+        $form->dom->delBtn->click();//产品详情页中点击删除
+        $form->wait(1);
+        $form->dom->delConfirmBtn->click();//删除弹窗中点确认
+        $form->wait(2);
+        $viewPage = $this->initForm('product', 'view', $productID, 'appIframe-product');
+        $deleted  = $this->lang->product->deleted;//产品详情页中已删除状态的语言项
+        //判断详情页中的状态是否为[已删除]
+        return ($viewPage->dom->status->getText() == $deleted) ? $this->success('删除产品成功') : $this->failed('删除产品失败');
+    }
 }

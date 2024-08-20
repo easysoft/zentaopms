@@ -10,5 +10,6 @@ $tester->login();
 $productID['productID'] = 1;
 r($tester->closeProduct($productID))    && p('message,status') && e('关闭产品成功,SUCCESS');
 r($tester->activateProduct($productID)) && p('message,status') && e('激活产品成功,SUCCESS');
+r($tester->deleteProduct($productID))   && p('message,status') && e('删除产品成功,SUCCESS');
 
 $tester->closeBrowser();
