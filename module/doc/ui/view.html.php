@@ -226,9 +226,13 @@ $contentDom = div
     ) : null,
     div
     (
-        setID('docEditor'),
         setClass('detail-content article'),
-        editor
+        $doc->contentType === 'doc' ? pageEditor
+        (
+            set::size('auto'),
+            set::readonly(true),
+            set::value($doc->content)
+        ) : editor
         (
             set::resizable(false),
             set::markdown($doc->contentType == 'markdown'),
