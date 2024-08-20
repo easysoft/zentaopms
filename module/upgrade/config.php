@@ -271,11 +271,7 @@ $config->upgrade->ipdVersion['ipd2_0_0']       = '20_1_1';
 $config->upgrade->ipdVersion['ipd2_1_0']       = '20_2_0';
 $config->upgrade->ipdVersion['ipd2_2_0']       = '20_3_0';
 $config->upgrade->ipdVersion['ipd2_3']         = '20_4';
-<<<<<<< HEAD
 $config->upgrade->ipdVersion['ipd2_4']         = '20_5'; // ipd insert position.
-=======
-$config->upgrade->ipdVersion['ipd2_4']         = '20_5'; // max insert position.
->>>>>>> 26337c1730 (* [misc] update version info.)
 
 $config->upgrade->lowerTables = array();
 $config->upgrade->lowerTables[$config->db->prefix . 'caseStep']       = $config->db->prefix . 'casestep';
