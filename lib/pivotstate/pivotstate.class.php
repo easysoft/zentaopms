@@ -460,6 +460,12 @@ class pivotState
         $this->sqlBuilder['joins'][] = $join;
     }
 
+    /**
+     * Get next table alias.
+     *
+     * @access public
+     * @return string
+     */
     public function getNextTableAlias()
     {
         $joins = $this->sqlBuilder['joins'];
