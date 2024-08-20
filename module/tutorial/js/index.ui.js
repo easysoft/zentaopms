@@ -3,7 +3,7 @@ let currentTask    = '';
 let currentStep    = null;
 let popover        = null;
 
-function highlightStepTarget(global, $target, step, popoverOptions)
+function highlightStepTarget($target, step, popoverOptions)
 {
     if(popover)
     {
@@ -46,19 +46,40 @@ function highlightStepTarget(global, $target, step, popoverOptions)
         const text = $target.text().trim();
         if(['openApp'].includes(step.type)) popoverOptions.title = lang.clickTipFormat.replace('%s', text);
     }
-    popover = new global.zui.Popover($target, popoverOptions);
+    const scope = getStepScope(step);
+    popover = new scope.zui.Popover($target, popoverOptions);
+
+    const $doc = scope.$(scope.document);
+    if($doc.data('tutorialCheckBinding')) return;
+    $doc.data('tutorialCheckBinding', true).on('click', '[zui-tutorial-step]', function()
+    {
+        if(!currentStep) return;
+        const stepID = this.getAttribute('zui-tutorial-step');
+        if(stepID === currentStep.id) activeNextStep();
+    });
+}
+
+function activeNextStep(step)
+{
+    step = step || currentStep;
+    if(!step || step.task.steps.length - 1 === step.index) return;
+    activeTaskStep(step.guide.name, step.task.name, step.index + 1);
 }
 
 function goToNextStep(step)
 {
     step = step || currentStep;
+    if(!step) return;
+
+    const $target = getStepScope(step).$(`[zui-tutorial-step="${step.id}"]`);
+    if(!$target.length) $target.click();
+    activeNextStep(step);
 }
 
 function showOpenAppStep(step)
 {
-    const indexWindow = $('#iframePage')[0].contentWindow;
-    const index$      = indexWindow.$;
-    const $menuNav    = index$('#menuNav');
+    const scope    = getStepScope(step);
+    const $menuNav = scope.$('#menuNav');
 
     if(!$menuNav.data('checkOpenAppStep'))
     {
@@ -68,8 +89,8 @@ function showOpenAppStep(step)
             if(event.type === 'shown' && info[0].options.target !== '#menuMoreList') return;
             showOpenAppStep(currentStep);
         };
-        $(indexWindow).on('resize', checkOpenAppStep);
-        indexWindow.$('#menuMoreBtn').on('shown', checkOpenAppStep);
+        scope.$(scope).on('resize', checkOpenAppStep);
+        scope.$('#menuMoreBtn').on('shown', checkOpenAppStep);
         $menuNav.data('checkOpenAppStep', true);
     }
 
@@ -91,7 +112,12 @@ function showOpenAppStep(step)
         popoverOptions.footer  = undefined;
         popoverOptions.content = lang.clickAndOpenIt.replace('%s', $targetNav.text().trim()).replace('%s', $appNav.text().trim());
     }
-    return highlightStepTarget(indexWindow, $targetNav.is('a') ? $targetNav : $targetNav.find('a'), step, popoverOptions);
+    else
+    {
+        $targetNav = $targetNav.find('a');
+        $targetNav.attr('zui-tutorial-step', step.id);
+    }
+    return highlightStepTarget($targetNav, step, popoverOptions);
 }
 
 function toggleActiveTarget(type, name, toggle)
@@ -112,6 +138,22 @@ function unactiveTask()
     currentStep = null;
 }
 
+function getStepScope(step)
+{
+    if(step.scope) return step.scope;
+    const homeWindow = $('#iframePage')[0].contentWindow;
+    if(step.type === 'openApp')
+    {
+        step.scope = homeWindow;
+    }
+    else
+    {
+        const openedApp = homeWindow.$.apps.openedApps[step.app];
+        if(openedApp) step.scope = openedApp.iframe.contentWindow;
+    }
+    return step.scope;
+}
+
 function activeTaskStep(guideName, taskName, stepIndex)
 {
     const $guide = $('#tutorialTabs').find(`.tutorial-guide[data-name="${guideName}"]`);
@@ -126,10 +168,14 @@ function activeTaskStep(guideName, taskName, stepIndex)
     const task  = guide.tasks[taskName];
     const step  = task.steps[stepIndex];
 
-    step.guide  = guide;
-    step.task   = task;
-    step.index  = stepIndex;
-    step.isLast = stepIndex === task.steps.length - 1;
+    if(!step.id)
+    {
+        step.id     = `${guideName}-${taskName}-${stepIndex}`;
+        step.guide  = guide;
+        step.task   = task;
+        step.index  = stepIndex;
+        step.isLast = stepIndex === task.steps.length - 1;
+    }
 
     currentStep = step;
 
