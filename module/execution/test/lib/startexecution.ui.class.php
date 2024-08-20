@@ -35,7 +35,7 @@ class startExecutionTester extends tester
         $this->inputFields($realBegan);
         $form = $this->loadPage();
         if($form->dom->status->getText() != $this->lang->execution->statusList->doing) return $this->failed('执行状态错误');
-        if($form->dom->realBegan1->getText() != $realBegan) return $this->failed('执行实际开始日期错误');
+        if($form->dom->realBeganView->getText() != $realBegan) return $this->failed('执行实际开始日期错误');
         return $this->success('开始执行成功');
     }
 
