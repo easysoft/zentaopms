@@ -14,6 +14,7 @@ class viewPage extends page
             'realBegan1'    => "//*[@id='mainContent']/div[2]/div[1]/div/table[3]/tbody/tr/td/div/div[3]/span[2]",
             'edit'          => "//*[@id='mainContent']/div[3]/div/a[last()-1]",
             'start'         => "//*[@id='mainContent']/div[3]/div/a[2]",
+            'close'         => "//*[@id='mainContent']/div[3]/div/a[last()-2]",
             /* 编辑执行弹窗中元素 */
             'products'    => "//*[@name='products[0]']",
             'productsTip' => "//*[@id='products[0]Tip']",
@@ -21,6 +22,9 @@ class viewPage extends page
             /* 开始执行弹窗中的元素 */
             'realBeganField' => "//div[@data-name='realBegan']/label/span",
             'startSubmit'    => "//*[@name='realBegan']/../../../../div[3]/div/button",
+            /* 关闭执行弹窗中的元素 */
+            'realEndField' => "//div[@data-name='realEnd']/label/span",
+            'endSubmit'    => "//*[@name='realEnd']/../../../../div[3]/div/button",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
