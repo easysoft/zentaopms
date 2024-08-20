@@ -2478,12 +2478,22 @@ class testcaseZen extends testcase
         /* 获取产品列表。Get productList. */
         if($this->app->tab == 'project' && !$productID)
         {
-            $productList = $products;
+            if($projectID)
+            {
+                $products = $this->loadModel('product')->getProducts($projectID);
+                $productList = array(0 => '');
+                foreach($products as $product) $productList[$product->id] = $product->name;
+                $productList['all'] = $this->lang->product->allProductsOfProject;
+            }
+            else
+            {
+                $productList = $products;
+            }
             $this->config->testcase->search['params']['story']['values'] = $this->loadModel('story')->getExecutionStoryPairs($projectID, 0, 'all', $moduleID, 'full', 'active');
         }
         else
         {
-            $productList = array();
+            $productList = array(0 => '');
             $productList['all'] = $this->lang->all;
             if(isset($products[$productID])) $productList[$productID] = $products[$productID];
             $this->config->testcase->search['params']['story']['values'] = $this->loadModel('story')->getProductStoryPairs($productID, $branch, array(), 'active,reviewing', 'id_desc', 0, '', 'story', false);
@@ -2501,7 +2511,7 @@ class testcaseZen extends testcase
             foreach($products as $id => $name) $modules += $this->loadModel('tree')->getOptionMenu($id, 'case', 0);
         }
 
-        $this->config->testcase->search['params']['product']['values'] = array('') + $productList;
+        $this->config->testcase->search['params']['product']['values'] = $productList;
         $this->config->testcase->search['params']['module']['values']  = $modules;
         $this->config->testcase->search['params']['scene']['values']   = $this->testcase->getSceneMenu($productID, $moduleID, $branch, 0, 0, true);
         $this->config->testcase->search['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();
