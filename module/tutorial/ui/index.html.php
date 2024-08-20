@@ -15,7 +15,16 @@ set::zui(true);
 
 /* 将所有教程按类型进行分组。Grouped all guides by type. */
 $groupedGuides = array();
-foreach($guides as $guideID => $guide) $groupedGuides[$guide->type][$guideID] = $guide;
+foreach($guides as $guideID => $guide)
+{
+    $taskIndex = 0;
+    foreach($guide->tasks as $taskID => $task)
+    {
+        $task['index'] = $taskIndex++;
+        $guide->tasks[$taskID] = $task;
+    }
+    $groupedGuides[$guide->type][$guideID] = $guide;
+}
 
 /* 当前选中的类型。Current active type. */
 $currentType = 'starter';
