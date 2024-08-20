@@ -1,5 +1,6 @@
 <?php
-include dirname(__FILE__, 5) . '/test/lib/ui.php';
+#include dirname(__FILE__, 5) . '/test/lib/ui.php';
+include 'startexecution.ui.class.php';
 class closeExecutionTester extends tester
 {
     /**
@@ -7,11 +8,12 @@ class closeExecutionTester extends tester
      * Input fields.
      *
      * @param  string $realEnd
+     * @param  string $executionId
      * @access public
      */
-    public function inputFields($realEnd)
+    public function inputFields($realEnd, $executionId = '101')
     {
-        $form = $this->initForm('execution', 'view', array('execution' => '101'), 'appIframe-execution');
+        $form = $this->initForm('execution', 'view', array('execution' => $executionId), 'appIframe-execution');
         $form->dom->close->click();
         if(isset($realEnd)) $form->dom->realEnd->datePicker($realEnd);
         $form->wait(1);
@@ -32,7 +34,7 @@ class closeExecutionTester extends tester
         $this->inputFields($realEnd);
         $form = $this->loadPage();
         if($form->dom->status->getText() != $this->lang->execution->statusList->closed) return $this->failed('执行状态错误');
-        if($form->dom->realEnd1->getText() != $realEnd) return $this->failed('执行实际完成日期错误');
+        if($form->dom->realEndView->getText() != $realEnd) return $this->failed('执行实际完成日期错误');
         return $this->success('关闭执行成功');
     }
 
