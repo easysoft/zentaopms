@@ -1015,16 +1015,18 @@ class bugZen extends bug
         $productID   = (int)$bug->productID;
         $branch      = (string)$bug->branch;
         $moduleID    = (int)$bug->moduleID;
+        $projectID   = (int)$bug->projectID;
         $executionID = (int)$bug->executionID;
 
-        if($executionID)
+        if($executionID || $projectID)
         {
-            $stories = $this->story->getExecutionStoryPairs($executionID, $productID, $branch, '', 'full', 'all', 'story', false);
+            $stories = $this->story->getExecutionStoryPairs($executionID ? $executionID : $projectID, $productID, $branch, '', 'full', 'all', 'story', false);
         }
         else
         {
             $stories = $this->story->getProductStoryPairs($productID, $branch, $moduleID, 'active,closed', 'id_desc', 0, '', 'story', false);
         }
+
         if(!isset($stories[$bug->storyID]))
         {
             $bugStory = $this->story->fetchById($bug->storyID);
