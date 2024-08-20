@@ -140,26 +140,29 @@ if($efforts)
 
 if(!$this->task->canOperateEffort($task))
 {
-    $notice = '';
-    if(!isset($task->members[$app->user->account]))
+    if($task->status != 'closed')
     {
-        $notice = html(sprintf($lang->task->deniedNotice, '<strong>' . $lang->task->teamMember . '</strong>', $lang->task->logEfforts));
-    }
-    elseif($task->assignedTo != $app->user->account and $task->mode == 'linear')
-    {
-        $notice = html(sprintf($lang->task->deniedNotice, '<strong>' . zget($users, $task->assignedTo) . '</strong>', $lang->task->logEfforts));
-    }
+        $notice = '';
+        if(!isset($task->members[$app->user->account]))
+        {
+            $notice = html(sprintf($lang->task->deniedNotice, '<strong>' . $lang->task->teamMember . '</strong>', $lang->task->logEfforts));
+        }
+        elseif($task->assignedTo != $app->user->account and $task->mode == 'linear')
+        {
+            $notice = html(sprintf($lang->task->deniedNotice, '<strong>' . zget($users, $task->assignedTo) . '</strong>', $lang->task->logEfforts));
+        }
 
-    div
-    (
-        setClass('alert with-icon'),
-        icon('exclamation-sign text-gray text-4xl'),
         div
         (
-            setClass('content'),
-            $notice
-        )
-    );
+            setClass('alert with-icon'),
+            icon('exclamation-sign text-gray text-4xl'),
+            div
+            (
+                setClass('content'),
+                $notice
+            )
+        );
+    }
 }
 else
 {
