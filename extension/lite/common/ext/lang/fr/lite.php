@@ -68,9 +68,6 @@ if($config->edition != 'open')
     $lang->feedback->menuOrder[10] = 'ticket';
     $lang->feedback->menuOrder[15] = 'faq';
     $lang->feedback->menuOrder[20] = 'products';
-
-    $lang->feedback->SRCommon = $lang->SRCommon;
-    $lang->feedback->URCommon = $lang->URCommon;
 }
 
 /* My menu. */
