@@ -75,6 +75,7 @@ class thinkStepBase extends wg
                 (
                     setClass('h-full text-fore text-lg'),
                     $requiredSymbal,
+                    isset($step->index) ? $step->index . '. ' : '',
                     $step->title,
                     $questionTips,
                     $errorText
