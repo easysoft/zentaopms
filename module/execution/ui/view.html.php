@@ -479,7 +479,7 @@ div
                                 common::hasPriv('execution', 'manageproducts') && $execution->type != 'stage' && $project->model != 'waterfallplus' ? btn
                                 (
                                     setClass('ghost text-gray font-normal'),
-                                    set::icon('link text-primary'),
+                                    set::trailingIcon('caret-right pb-0.5'),
                                     set::url(createLink('execution', 'manageproducts', "projectID={$execution->id}")),
                                     $lang->more
                                 ) : null
