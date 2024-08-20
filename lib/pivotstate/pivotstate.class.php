@@ -460,6 +460,23 @@ class pivotState
         $this->sqlBuilder['joins'][] = $join;
     }
 
+    public function getNextTableAlias()
+    {
+        $joins = $this->sqlBuilder['joins'];
+        $indexes = array();
+        foreach($joins as $join)
+        {
+            if(!is_array($join)) continue;
+
+            $alias = $join['alias'];
+            $indexes[] = (int)str_replace('t', '', $alias);
+        }
+        $max = empty($indexes) ? 1 : max($indexes);
+        $next = $max + 1;
+
+        return "t{$next}";
+    }
+
     /**
      * Clear fieldSettings.
      *
