@@ -26,10 +26,12 @@ class storyChangeEntry extends entry
         $this->batchSetPost($fields);
         $fields = 'title,spec,verify';
         $this->batchSetPost($fields, $oldStory);
+        $this->setPost('status', 'reviewing');
 
         /* If reviewer is not post, set needNotReview. */
         if(!$this->request('reviewer'))
         {
+            $this->setPost('status', $oldStory->status);
             $this->setPost('reviewer', array());
             $this->setPost('needNotReview', 1);
         }
@@ -37,11 +39,12 @@ class storyChangeEntry extends entry
         $control = $this->loadController('story', 'change');
         $this->requireFields('title');
 
-        $control->change($storyID);
+        $control->change($storyID, '', $oldStory->type);
 
         $data = $this->getData();
-        if(!$data or !isset($data->status)) return $this->send400('error');
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
+        if(!$data) return $this->send400('error');
+        if(isset($data->result) && $data->result == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
+        if(isset($data->status) && $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
         $story = $this->loadModel('story')->getByID($storyID);
 
