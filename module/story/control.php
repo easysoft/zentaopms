@@ -1902,9 +1902,6 @@ class story extends control
 
         $this->story->replaceURLang($storyType);
 
-        $fileName = $this->lang->SRCommon;
-        if($storyType == 'requirement') $fileName = $this->lang->URCommon;
-        if($storyType == 'epic')        $fileName = $this->lang->ERCommon;
         $project  = null;
         $hasBranch = false;
         if($executionID)
@@ -1941,7 +1938,7 @@ class story extends control
                 $browseType = isset($this->lang->product->moreSelects[$browseType]) ? $this->lang->product->moreSelects[$browseType] : '';
             }
 
-            $fileName = $productName . $this->lang->dash . $browseType . $fileName;
+            $fileName = $productName . $this->lang->dash . $browseType . $this->lang->common->story;
         }
 
         /* Unset branch field.  */
