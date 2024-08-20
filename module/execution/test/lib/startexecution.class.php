@@ -6,9 +6,8 @@ class startExecutionTester extends tester
      * 开始执行弹窗中输入实际开始日期。
      * Input fields.
      *
-     * @param  string  realBegan
+     * @param  string $realBegan
      * @access public
-     * @return bool
      */
     public function inputFields($realBegan)
     {
@@ -26,7 +25,7 @@ class startExecutionTester extends tester
      * 正常开始执行。
      * Start execution.
      *
-     * @param  array  realBegan
+     * @param  string $realBegan
      * @access public
      * @return bool
      */
@@ -43,7 +42,7 @@ class startExecutionTester extends tester
      * 实际开始日期大于当前日期。
      * The real start date is greater than the current date.
      *
-     * @param  array  $realBegan
+     * @param  string $realBegan
      * @access public
      * @return bool
      */
