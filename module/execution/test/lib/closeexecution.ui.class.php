@@ -16,6 +16,7 @@ class closeExecutionTester extends tester
         if(isset($realEnd)) $form->dom->realEnd->datePicker($realEnd);
         $form->wait(1);
         $form->dom->closeSubmit->click();
+        $form->wait(1);
     }
 
     /**
