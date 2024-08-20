@@ -853,6 +853,14 @@ $('#menuNav .divider').on('contextmenu', function(event)
             }
         );
     }
+    items.push(
+        {
+            text: langData.hide,
+            onClick: () => {
+                $divider.closest('li').remove();
+            }
+        }
+    );
 
     zui.ContextMenu.show(
         {
@@ -923,6 +931,14 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
         );
     }
 
+    items.push(
+        {
+            text: langData.hide,
+            onClick: () => {
+                $btn.closest('li').remove();
+            }
+        }
+    );
     zui.ContextMenu.show(
         {
             hideOthers: true, 
