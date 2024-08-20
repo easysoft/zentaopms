@@ -922,6 +922,7 @@ class storyModel extends model
             $childPath = strstr($childPath, ",{$parent->id},");
             $this->dao->update(TABLE_STORY)
                  ->set('product')->eq($parent->product)
+                 ->set('branch')->eq($parent->branch)
                  ->set('module')->eq(0)
                  ->set('root')->eq($parent->root)
                  ->set('path')->eq($childPath)
