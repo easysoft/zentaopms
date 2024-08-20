@@ -53,7 +53,7 @@ class thinkStepMenu extends wg
             $unClickable = $toggleNonNodeShow && $setting->id != $activeKey && $setting->type != 'node' && json_decode($setting->answer) == null;
             $item        = array(
                 'key'         => $setting->id,
-                'text'        => $setting->title,
+                'text'        => (isset($setting->index) ? ($setting->index . '. ') : '') . $setting->title,
                 'hint'        => $unClickable ? $this->lang->thinkrun->error->unanswered :$setting->title,
                 'url'         => $unClickable || !$canView ? '' : $setting->url,
                 'data-id'     => $setting->id,
