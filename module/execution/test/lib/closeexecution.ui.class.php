@@ -1,6 +1,5 @@
 <?php
-#include dirname(__FILE__, 5) . '/test/lib/ui.php';
-include 'startexecution.ui.class.php';
+include dirname(__FILE__, 5) . '/test/lib/ui.php';
 class closeExecutionTester extends tester
 {
     /**
