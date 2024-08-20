@@ -1881,7 +1881,6 @@ class taskModel extends model
             ->where('deleted')->eq(0)
             ->andWhere('parent')->le(0)
             ->andWhere('status')->notin('cancel,closed')
-            ->andWhere('consumed')->eq('0')
             ->andWhere('execution')->eq($executionID)
             ->beginIF($appendIdList)->orWhere('id')->in($appendIdList)->fi()
             ->fetchPairs();
