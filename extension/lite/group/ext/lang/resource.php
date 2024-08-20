@@ -1043,6 +1043,7 @@ if($config->edition != 'open')
     $lang->resource->feedback->browse         = 'browse';
     $lang->resource->feedback->view           = 'view';
     $lang->resource->feedback->comment        = 'comment';
+    $lang->resource->feedback->ask            = 'ask';
     $lang->resource->feedback->delete         = 'delete';
     $lang->resource->feedback->close          = 'closeAction';
     $lang->resource->feedback->activate       = 'activate';
