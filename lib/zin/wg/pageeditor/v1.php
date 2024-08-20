@@ -50,10 +50,31 @@ class pageEditor extends wg
 
     protected function build()
     {
-        $value       = $this->prop('value');
-        $readonly    = $this->prop('readonly');
-        $name        = $this->prop('name');
-        $size        = $this->prop('size');
+        global $config;
+
+        $value    = $this->prop('value');
+        $readonly = $this->prop('readonly');
+        $name     = $this->prop('name');
+        $size     = $this->prop('size');
+
+        $zuiPath = isset($config->zuiEditorPath) ? $config->zuiEditorPath : null;
+        $zuiPathSetting = null;
+        if($zuiPath)
+        {
+            $zuiPathSetting = js
+            (
+                <<<JS
+                $.registerLib('blocksuite', {
+                    src: [
+                        '$zuiPath/editor.umd.cjs',
+                        '$zuiPath/editor.css',
+                    ],
+                    root: false,
+                    check: 'BlockSuite',
+                });
+                JS
+            );
+        }
 
         return div
         (
@@ -73,7 +94,8 @@ class pageEditor extends wg
                 set::name('uid'),
                 set::value($this->prop('uid')),
                 setClass('hidden')
-            )
+            ),
+            $zuiPathSetting
         );
     }
 }
