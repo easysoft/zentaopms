@@ -13,8 +13,6 @@ class pageEditor extends wg
         'resizable?: bool=true',                // 是否可拖拽调整大小
         'exposeEditor?: bool=true',             // 是否将编辑器实例挂载到 `window.$zenEditors`
         'size?: string="sm"',                   // 尺寸，可选值 'sm', 'lg', 'full', 'auto'
-        'hideMenubar?: bool=false',             // 是否隐藏菜单栏
-        'hideUI?: bool=false',                  // 是否隐藏整个编辑器 UI
         'readonly?: bool=false',                // 是否只读
         'bubbleMenu?: bool=false',              // 是否启用浮动菜单
         'slashMenu?: bool=false',               // 是否启用 `/` 菜单
@@ -61,24 +59,22 @@ class pageEditor extends wg
 
     protected function build()
     {
-        $props = $this->props->pick(array('uploadUrl', 'placeholder', 'fullscreenable', 'resizable', 'exposeEditor', 'size', 'hideMenubar', 'hideUI', 'readonly', 'bubbleMenu', 'slashMenu', 'menubarMode', 'locale', 'markdown', 'neglectDefaultTextStyle', 'preferHardBreak'));
-
-        $customProps = $this->getRestProps();
-        if(!isset($customProps['class'])) $customProps['class'] = 'w-full';
+        $value       = $this->prop('value');
+        $readonly    = $this->prop('readonly');
+        $name        = $this->prop('name');
+        $size        = $this->prop('size');
 
         return div
         (
-            setClass('editor-container p-px mt-px rounded relative w-full', $this->prop('readonly') ? 'is-readonly' : ''),
-            $props['size'] === 'full' ? setStyle('height', '100%') : setClass('h-auto'),
+            setClass('editor-container p-px mt-px rounded relative w-full', $readonly ? 'is-readonly' : ''),
+            $size === 'full' ? setStyle('height', '100%') : setClass('h-auto'),
             zui::pageEditor
             (
-                set::_class('w-full h-full')
-            ),
-            textarea
-            (
-                $this->prop('value'),
-                set::rows(1),
-                set::size($props['size'])
+                set::_class('w-full h-full'),
+                set::name($name),
+                set::data($value),
+                set::readonly($readonly),
+                set($this->getRestProps())
             ),
             input
             (
