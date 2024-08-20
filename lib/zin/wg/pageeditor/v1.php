@@ -68,6 +68,7 @@ class pageEditor extends wg
         (
             setClass('editor-container p-px mt-px rounded relative w-full', $readonly ? 'is-readonly' : ''),
             $size === 'full' ? setStyle('height', '100%') : setClass('h-auto'),
+            setCssVar('--affine-editor-side-padding', '0'),
             zui::pageEditor
             (
                 set::_class('w-full h-full'),
