@@ -129,6 +129,7 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
 
         return btnGroup
         (
+            $app->tab == 'project' ? setData('app', 'project') : null,
             btn
             (
                 setClass(($app->tab != 'product' ? 'secondary' : 'primary') . ' create-story-btn'),
