@@ -33,6 +33,7 @@ class storiesEntry extends entry
         $stories      = $data->data->stories;
         $pager        = $data->data->pager;
         $requirements = $this->loadModel('story')->getRequirements($productID);
+        if(!empty($requirements)) $requirements = $this->story->getByList(array_keys($requirements));
 
         $result  = array();
         $this->loadModel('product');
