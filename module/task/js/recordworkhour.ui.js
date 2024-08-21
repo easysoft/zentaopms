@@ -36,8 +36,7 @@ window.toggleFold = function()
     if(fold)
     {
         /* Update icon and text. */
-        $icon.removeClass('angle-down')
-            .addClass('angle-top');
+        $icon.removeClass('angle-down').addClass('angle-top');
         $text.text(foldEffort);
 
         /* Show all efforts. */
@@ -45,8 +44,7 @@ window.toggleFold = function()
     }
     else
     {
-        $icon.removeClass('angle-top')
-            .addClass('angle-down');
+        $icon.removeClass('angle-top').addClass('angle-down');
         $text.text(unfoldEffort);
 
         /* Efforts whose number is greater than 3 are hidden. */
