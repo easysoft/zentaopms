@@ -14,6 +14,8 @@ jsVar('roleGroup', $roleGroup);
 jsVar('passwordStrengthList', $lang->user->passwordStrengthList);
 h::jsCall('$.getLib', 'md5.js', array('root' => $this->app->getWebRoot() . 'js/'));
 
+$companies += array('ditto' => $lang->user->ditto);
+
 formBatchPanel
 (
     set::title($lang->user->batchCreate),
@@ -24,6 +26,7 @@ formBatchPanel
     on::keyup('[data-name="password"]', 'batchTogglePasswordStrength'),
     on::keyup('[name="verifyPassword"]', 'changePassword'),
     on::click('button[type=submit]', 'encryptPassword'),
+    set::onRenderRow(jsRaw('renderRowData')),
     to::titleSuffix
     (
         div
