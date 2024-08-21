@@ -503,7 +503,7 @@ class pivotState
     {
         $builder = $this->sqlBuilder;
         $joins   = $builder['joins'];
-        foreach($joins as $index => $join)
+        foreach($joins as $join)
         {
             $alias = $join['alias'];
             if(empty($join['table'])) return $this->setBuilderError('join', 'table', $alias);
