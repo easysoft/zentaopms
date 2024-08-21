@@ -353,8 +353,11 @@ function getStepScope(step)
 function ensureStepScope(step, callback)
 {
     const scope = getStepScope(step);
-    if(config.debug) showLog('Ensure step scope', step, null, {scope});
-    if(scope && scope.$ && (scope.name === 'iframePage' || (!scope.$('body').hasClass('loading-page') && scope.$('body').attr('data-page') && (!step.page || scope.$('body').attr('data-page') === step.page)))) return setTimeout(() => callback(scope), 300);
+    if(scope && scope.$ && (scope.name === 'iframePage' || (!scope.$('body').hasClass('loading-page') && scope.$('body').attr('data-page') && (!step.page || scope.$('body').attr('data-page') === step.page))))
+    {
+        if(config.debug) showLog('Ensure step scope', step, null, {scope});
+        return setTimeout(() => callback(scope), 300);
+    }
     step.waitScopeTimer = setTimeout(() => ensureStepScope(step, callback), 200);
 }
 
