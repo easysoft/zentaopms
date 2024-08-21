@@ -320,6 +320,8 @@ class pivotState
 
     public $tableDesc = array();
 
+    public $builderError = array();
+
     /**
      * __construct method.
      *
@@ -402,12 +404,53 @@ class pivotState
     public function checkFrom()
     {
         $builder = $this->sqlBuilder;
-        if(!isset($builder['from'])) return false;
-
-        $from = $builder['from'];
-        if(empty($from['table'])) return false;
+        $from    = $builder['from'];
+        if(empty($from['table'])) return $this->setBuilderError('from', 'table', $from['alias']);
 
         return true;
+    }
+
+    /**
+     * Reset builder error.
+     *
+     * @access public
+     * @return void
+     */
+    public function resetBuilderError()
+    {
+        $this->builderError = array();
+    }
+
+    /**
+     * Set builder error.
+     *
+     * @param  string $key
+     * @param  string $type
+     * @param  string $field
+     * @access public
+     * @return bool
+     */
+    public function setBuilderError($key, $type = '', $field = '')
+    {
+        $key = implode('_', array_filter(array($key, $type, $field)));
+        $this->builderError[$key] = true;
+
+        return false;
+    }
+
+    /**
+     * Get builder error.
+     *
+     * @param  string $key
+     * @param  string $type
+     * @param  string $field
+     * @access public
+     * @return bool
+     */
+    public function getBuilderError($key, $type = '', $field = '')
+    {
+        $key = implode('_', array_filter(array($key, $type, $field)));
+        return isset($this->builderError[$key]);
     }
 
     /**
@@ -420,12 +463,15 @@ class pivotState
     {
         $builder = $this->sqlBuilder;
         $joins   = $builder['joins'];
-        foreach($joins as $join)
+        foreach($joins as $index => $join)
         {
-            if(empty($join['table'])) return false;
+            $alias = $join['alias'];
+            if(empty($join['table'])) return $this->setBuilderError('join', 'table', $alias);
 
             list($columnA, $fieldA, $fieldB) = array($join['on'][0], $join['on'][1], $join['on'][4]);
-            if(empty($columnA) || empty($fieldA) || empty($fieldB)) return false;
+            if(empty($columnA)) return $this->setBuilderError('join', 'columnA', $alias);
+            if(empty($fieldA))  return $this->setBuilderError('join', 'fieldA', $alias);
+            if(empty($fieldB))  return $this->setBuilderError('join', 'fieldB', $alias);
         }
 
         return true;
@@ -447,7 +493,9 @@ class pivotState
         $select  = array_merge($select, $from['select']);
         foreach($joins as $join) $select = array_merge($select, $join['select']);
 
-        return !empty($select);
+        if(empty($select)) return $this->setBuilderError('select', 'field');
+
+        return true;
     }
 
     /**
