@@ -179,7 +179,7 @@
         const classList = ($body.attr('class') || '').split(' ').filter(x => x.length && !x.startsWith('m-'));
         const pageID = `${config.currentModule}-${config.currentMethod}`;
         classList.push(`m-${pageID}`);
-        $body.attr('class', classList.join(' ')).attr('data-page', pageID);
+        $body.attr('class', classList.join(' ')).attr('data-page', pageID).attr('data-page-raw', `${config.rawModule}-${config.rawMethod}`);
     }
 
     function updatePageCSS(data, _info, options)
