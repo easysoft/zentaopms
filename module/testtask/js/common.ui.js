@@ -131,7 +131,8 @@ function createBug(event)
     });
 
     var link = $.createLink('bug', 'create', $form.data('params') + ',stepIdList=' + stepIdList);
-    openPage(link, 'qa');
+    window.open(link, '_blank');
+    //openPage(link, 'qa');
 
     $('#runCaseModal').closest('.modal').off('hide.zui.modal');
     $('#casesResults').closest('.modal').off('hide.zui.modal');
