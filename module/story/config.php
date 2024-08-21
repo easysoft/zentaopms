@@ -38,7 +38,7 @@ $config->story->exportFields = '
     openedBy, openedDate, assignedTo, assignedDate, mailto,
     reviewedBy, reviewedDate,
     closedBy, closedDate, closedReason,
-    lastEditedBy, lastEditedDate,
+    lastEditedBy, lastEditedDate, feedbackBy,
     duplicateStory, files';
 
 $config->story->list->customCreateFields      = '';
