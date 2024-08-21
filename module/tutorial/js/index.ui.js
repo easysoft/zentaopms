@@ -260,6 +260,11 @@ function updateTaskUI(task, change)
         if($tabToggle.length && !$tabToggle.hasClass('active')) setTimeout(() => $tabToggle[0].click(), 200);
         $task.scrollIntoView();
     }
+
+    const url = $.createLink('tutorial', 'index', `referer=&guide=${guideName}&task=${taskName}`);
+    const prevState = window.history.state;
+    if(prevState.url !== url) window.history.replaceState({url}, '', url);
+
     return true;
 }
 
