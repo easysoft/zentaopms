@@ -36,7 +36,7 @@ class feedbackEntry extends entry
         if(!$data or !isset($data->status)) return $this->send400('error');
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
-        $feedback->actions = $this->loadModel('action')->processActionForAPI($data->data->actions, $data->data->users, $this->lang->feedback);
+        $feedback->actions = $this->loadModel('action')->processActionForAPI($data->data->history, $data->data->users, $this->lang->feedback);
         return $this->send(200, $this->format($feedback, 'activatedDate:time,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,mailto:userList,resolvedBy:user,resolvedDate:time,closedBy:user,closedDate:time,lastEditedBy:user,lastEditedDate:time,deadline:date,deleted:bool'));
     }
 
@@ -51,7 +51,7 @@ class feedbackEntry extends entry
     {
         $oldFeedback = $this->loadModel('feedback')->getById($feedbackID);
 
-        $fields = 'module,product,type,title,public,desc,status,feedbackBy,notifyEmail,notify,uid';
+        $fields = 'module,product,type,title,public,desc,status,feedbackBy,notifyEmail,notify,uid,pri';
         $this->batchSetPost($fields, $oldFeedback);
 
         $control = $this->loadController('feedback', 'edit');
