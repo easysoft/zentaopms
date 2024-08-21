@@ -208,7 +208,7 @@ class storyBasicInfo extends wg
         $items[$lang->story->source] = array
         (
             'control' => 'text',
-            'content' => zget($lang->story->sourceList, $story->source, ''),
+            'content' => zget($lang->{$story->type}->sourceList, $story->source, ''),
             'id'      => 'sourceBox'
         );
         $items[$lang->story->sourceNote] = array
@@ -230,12 +230,12 @@ class storyBasicInfo extends wg
             'class'   => 'stage-line',
             'text'    => zget($lang->{$story->type}->stageList, $this->getMinStage($story, $branches), '')
         );
-        $items[$lang->story->category] = zget($lang->story->categoryList, $story->category);
+        $items[$lang->story->category] = zget($lang->{$story->type}->categoryList, $story->category);
         $items[$lang->story->pri] = array
         (
             'control' => 'pri',
             'pri'     => $story->pri,
-            'text'    => $lang->story->priList
+            'text'    => $lang->{$story->type}->priList
         );
         $items[$lang->story->estimate] = $story->estimate . $config->hourUnit;
         if(in_array($story->source, $config->story->feedbackSource))
