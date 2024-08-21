@@ -21,6 +21,7 @@ class thinkMatrixOptions extends wg
         'name?: string="fields"', // 输入框作为表单项的名称。
         'data?: array',           // 默认值。
         'deleteTip?: string',     // 禁用删除提示。
+        'addTip?: string',        // 禁用添加提示。
         'addColText: string',     // 添加列按钮文字
     );
 
@@ -41,6 +42,7 @@ class thinkMatrixOptions extends wg
         $id         = $this->prop('id') ? $this->prop('id') : $this->gid;
         $deleteTip  = $this->prop('deleteTip', $lang->thinkstep->tips->deleteCol);
         $addColText = $this->prop('addColText', $lang->thinkstep->addCol);
+        $addTip     = $this->prop('addTip', $lang->thinkstep->tips->addCol);
 
         return div
         (
@@ -53,6 +55,7 @@ class thinkMatrixOptions extends wg
                 set::deleteTip($deleteTip),
                 set::enterPlaceholder($lang->thinkstep->label->columnTitle),
                 set::addColText($addColText),
+                set::addTip($addTip),
                 set($this->props->pick(array('name', 'data')))
             )
         );
