@@ -430,28 +430,64 @@ class pivotState
      */
     public function checkSqlBuilder()
     {
+        return $this->checkFrom() && $this->checkJoins() && $this->checkSelects();
+    }
+
+    /**
+     * check from.
+     *
+     * @access public
+     * @return bool
+     */
+    public function checkFrom()
+    {
         $builder = $this->sqlBuilder;
         if(!isset($builder['from'])) return false;
 
-        $select = array();
         $from = $builder['from'];
         if(empty($from['table'])) return false;
-        $select = array_merge($select, $from['select']);
 
-        $joins = $builder['joins'];
+        return true;
+    }
+
+    /**
+     * check joins
+     *
+     * @access public
+     * @return bool
+     */
+    public function checkJoins()
+    {
+        $builder = $this->sqlBuilder;
+        $joins   = $builder['joins'];
         foreach($joins as $join)
         {
             if(empty($join['table'])) return false;
 
             list($columnA, $fieldA, $fieldB) = array($join['on'][0], $join['on'][1], $join['on'][4]);
             if(empty($columnA) || empty($fieldA) || empty($fieldB)) return false;
-
-            $select = array_merge($select, $join['select']);
         }
 
-        if(empty($select)) return false;
-
         return true;
+    }
+
+    /**
+     * check selects.
+     *
+     * @access public
+     * @return bool
+     */
+    public function checkSelects()
+    {
+        $builder = $this->sqlBuilder;
+        $from    = $builder['from'];
+        $joins   = $builder['joins'];
+
+        $select  = array();
+        $select  = array_merge($select, $from['select']);
+        foreach($joins as $join) $select = array_merge($select, $join['select']);
+
+        return !empty($select);
     }
 
     /**
