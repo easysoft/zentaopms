@@ -3,7 +3,131 @@ let currentTask    = '';
 let currentStep    = null;
 let popover        = null;
 
-if(config.debug) console.log('[TUTORIAL] guides', guides);
+function showLog(name, step, moreTitles, moreInfos)
+{
+    if(!config.debug) return;
+    const titles = ['%c TUTORIAL '];
+    const titleColors = ['color:#fff;font-weight:bold;background:#9c27b0'];
+    if(step)
+    {
+        if(step.guide)
+        {
+            titles.push(`%c ${step.guide.title || step.guide.name} `);
+            titleColors.push('background:rgba(156, 39, 176, 0.2);color:#9c27b0;');
+        }
+        if(step.task)
+        {
+            titles.push(`%c> ${step.task.title || step.task.name} `);
+            titleColors.push('background:rgba(156, 39, 176, 0.2);color:#9c27b0;');
+        }
+        titles.push(`%c> ${step.index + 1}: ${step.title || step.name} `);
+        titleColors.push('background:rgba(156, 39, 176, 0.2);color:#9c27b0;');
+    }
+    if(name)
+    {
+        titles.push(`%c ${name} `);
+        titleColors.push('color:#9c27b0;font-weight:bold;');
+    }
+    if(!Array.isArray(moreTitles) && moreTitles) moreTitles = [moreTitles];
+    if(Array.isArray(moreTitles) && typeof moreTitles[0] === 'string' && (moreTitles[0].startsWith('success:') || moreTitles[0].startsWith('error:')))
+    {
+        const message = moreTitles.shift();
+        const [type, content] = message.split(':', 2);
+        titles.push(`%c ${content} `);
+        titleColors.push(`color:${type === 'error' ? '#f56c6c' : '#67c23a'};`);
+    }
+    console.groupCollapsed(titles.join(''), ...titleColors, ...(moreTitles || []));
+    if(step) console.trace('step', step);
+    if(moreInfos)
+    {
+        if($.isPlainObject(moreInfos)) Object.keys(moreInfos).forEach((infoName) => console.log(infoName, moreInfos[infoName]));
+        else console.log(moreInfos);
+    }
+    console.groupEnd();
+}
+
+if(config.debug) showLog('Guides data', null, null, {guides});
+
+const stepPresenters =
+{
+    openApp: function(step)
+    {
+        const scope    = getStepScope(step);
+        const $menuNav = scope.$('#menuNav');
+
+        if(!$menuNav.data('checkOpenAppStep'))
+        {
+            const checkOpenAppStep = (event, info) =>
+            {
+                if(!currentStep || currentStep.type !== 'openApp') return;
+                if(event.type === 'shown' && info[0].options.target !== '#menuMoreList') return;
+                showOpenAppStep(currentStep);
+            };
+            scope.$(scope).on('resize', checkOpenAppStep);
+            scope.$('#menuMoreBtn').on('shown', checkOpenAppStep);
+            $menuNav.data('checkOpenAppStep', true);
+        }
+
+        const $menuMainNav = $menuNav.find('#menuMainNav');
+        const $appNav = $menuMainNav.children(`li[data-app="${step.app}"]`);
+        let $targetNav = $appNav;
+        if($appNav.hasClass('hidden'))
+        {
+            const $menuMoreList = $menuNav.find('#menuMoreList.in');
+            if($menuMoreList.length) $targetNav = $menuMoreList.children(`li[data-app="${step.app}"]`);
+            else                     $targetNav = $menuNav.find('#menuMoreBtn');
+        }
+
+        const popoverOptions = {placement: 'right'};
+        if($targetNav.is('#menuMoreBtn'))
+        {
+            $.extend(popoverOptions, {title: null, footer: undefined, content: lang.clickAndOpenIt.replace('%s', $targetNav.text().trim()).replace('%s', $appNav.text().trim()), notFinalTarget: true});
+        }
+        else
+        {
+            $targetNav = $targetNav.find('a');
+        }
+        scope.$.apps.closeApp(step.app);
+        return highlightStepTarget($targetNav, step, popoverOptions);
+    },
+    click: function(step)
+    {
+        const scope   = getStepScope(step);
+        const $target = scope.$(step.target);
+        return highlightStepTarget($target, step);
+    },
+    clickNavbar: function(step)
+    {
+        const scope   = getStepScope(step);
+        const $target = scope.$('.#'.includes(step.target[0]) ? step.target : `#navbar>.nav>.item>a[data-id="${step.target}"]`);
+        return highlightStepTarget($target, step);
+    },
+    clickMainNavbar: function(step)
+    {
+        const scope   = getStepScope(step);
+        const $target = scope.$('.#'.includes(step.target[0]) ? step.target : `#mainNavbar nav>.item>a[data-id="${step.target}"]`);
+        return highlightStepTarget($target, step);
+    },
+    form: function(step)
+    {
+        const scope   = getStepScope(step);
+        const $target = scope.$(step.target || 'form');
+        return highlightStepTarget($target, step);
+    },
+    saveForm: function(step)
+    {
+        const scope   = getStepScope(step);
+        const $target = scope.$(step.target);
+
+        /* Check form. */
+        let $form   = $target.closest('form');
+        if(!$form.length) $form = scope.$('form');
+        if(!$form.length) return console.error(`[TUTORIAL] Cannot find form for step "${step.guide.title || step.guide.name} > ${step.task.title || step.task.name} > ${step.title}"`, step);
+
+        const $saveBtn = $form.find('[type="submit"]');
+        return highlightStepTarget($saveBtn.length ? $saveBtn : $target, step);
+    }
+};
 
 function destroyPopover(callback)
 {
@@ -31,12 +155,7 @@ function destroyPopover(callback)
 
 function highlightStepTarget($target, step, popoverOptions)
 {
-    if(config.debug)
-    {
-        console.groupCollapsed('[TUTORIAL] Highlight target', {step, $target, popover, popoverOptions});
-        console.trace();
-        console.groupEnd();
-    }
+    if(config.debug) showLog('Highlight', step, null, {$target, popover, popoverOptions});
     if(popover) return destroyPopover(() => highlightStepTarget($target, step, popoverOptions));
     if(!$target.length) return console.error(`[TUTORIAL] Cannot find target for step "${step.guide.title || step.guide.name} > ${step.task.title || step.task.name} > ${step.title}"`, step);
     popoverOptions = $.extend(
@@ -147,12 +266,7 @@ function activeNextStep(step)
 {
     step = step || currentStep;
     if(!step) return;
-    if(config.debug)
-    {
-        console.groupCollapsed('[TUTORIAL] Active next step', step.id, step.index, step.title, step);
-        console.trace();
-        console.groupEnd();
-    }
+    if(config.debug) showLog('Active next step', step);
     destroyPopover(() =>
     {
         if(step.task.steps.length - 1 === step.index)
@@ -182,89 +296,6 @@ function goToNextStep(step)
     }
 
     setTimeout(() => activeNextStep(step), 200);
-}
-
-function showOpenAppStep(step)
-{
-    const scope    = getStepScope(step);
-    const $menuNav = scope.$('#menuNav');
-
-    if(!$menuNav.data('checkOpenAppStep'))
-    {
-        const checkOpenAppStep = (event, info) =>
-        {
-            if(!currentStep || currentStep.type !== 'openApp') return;
-            if(event.type === 'shown' && info[0].options.target !== '#menuMoreList') return;
-            showOpenAppStep(currentStep);
-        };
-        scope.$(scope).on('resize', checkOpenAppStep);
-        scope.$('#menuMoreBtn').on('shown', checkOpenAppStep);
-        $menuNav.data('checkOpenAppStep', true);
-    }
-
-    const $menuMainNav = $menuNav.find('#menuMainNav');
-    const $appNav = $menuMainNav.children(`li[data-app="${step.app}"]`);
-    let $targetNav = $appNav;
-    if($appNav.hasClass('hidden'))
-    {
-        const $menuMoreList = $menuNav.find('#menuMoreList.in');
-        if($menuMoreList.length) $targetNav = $menuMoreList.children(`li[data-app="${step.app}"]`);
-        else                     $targetNav = $menuNav.find('#menuMoreBtn');
-    }
-
-    const popoverOptions = {placement: 'right'};
-    if($targetNav.is('#menuMoreBtn'))
-    {
-        $.extend(popoverOptions, {title: null, footer: undefined, content: lang.clickAndOpenIt.replace('%s', $targetNav.text().trim()).replace('%s', $appNav.text().trim()), notFinalTarget: true});
-    }
-    else
-    {
-        $targetNav = $targetNav.find('a');
-    }
-    scope.$.apps.closeApp(step.app);
-    return highlightStepTarget($targetNav, step, popoverOptions);
-}
-
-function showClickStep(step)
-{
-    const scope   = getStepScope(step);
-    const $target = scope.$(step.target);
-    return highlightStepTarget($target, step);
-}
-
-function showClickNavbarStep(step)
-{
-    const scope   = getStepScope(step);
-    const $target = scope.$('.#'.includes(step.target[0]) ? step.target : `#navbar>.nav>.item>a[data-id="${step.target}"]`);
-    return highlightStepTarget($target, step);
-}
-
-function showClickMainNavbarStep(step)
-{
-    const scope   = getStepScope(step);
-    const $target = scope.$('.#'.includes(step.target[0]) ? step.target : `#mainNavbar nav>.item>a[data-id="${step.target}"]`);
-    return highlightStepTarget($target, step);
-}
-
-function showFormStep(step)
-{
-    const scope   = getStepScope(step);
-    const $target = scope.$(step.target || 'form');
-    return highlightStepTarget($target, step);
-}
-
-function showSaveFormStep(step)
-{
-    const scope   = getStepScope(step);
-    const $target = scope.$(step.target);
-
-    /* Check form. */
-    let $form   = $target.closest('form');
-    if(!$form.length) $form = scope.$('form');
-    if(!$form.length) return console.error(`[TUTORIAL] Cannot find form for step "${step.guide.title || step.guide.name} > ${step.task.title || step.task.name} > ${step.title}"`, step);
-
-    const $saveBtn = $form.find('[type="submit"]');
-    return highlightStepTarget($saveBtn.length ? $saveBtn : $target, step);
 }
 
 function toggleActiveTarget(type, name, toggle)
@@ -309,7 +340,7 @@ function getStepScope(step)
 function ensureStepScope(step, callback)
 {
     const scope = getStepScope(step);
-    if(config.debug) console.log(`[TUTORIAL] Ensure step scope "${step.guide.title || step.guide.name} > ${step.task.title || step.task.name} > ${step.title}"`, {step, scope});
+    if(config.debug) showLog('Ensure step scope', step, null, {scope});
     if(scope && scope.$ && (scope.name === 'iframePage' || (!scope.$('body').hasClass('loading-page') && scope.$('body').attr('data-page') && (!step.page || scope.$('body').attr('data-page') === step.page)))) return setTimeout(() => callback(scope), 300);
     step.waitScopeTimer = setTimeout(() => ensureStepScope(step, callback), 200);
 }
@@ -365,16 +396,12 @@ function activeTaskStep(guideName, taskName, stepIndex)
     else if(stepIndex === 0 && task.startUrl) openApp(task.startUrl, task.app);
 
     currentStep = step;
-    if(config.debug) console.log(`[TUTORIAL] Active step "${guideName} > ${taskName} > ${step.title}"`, step);
+    if(config.debug) showLog('Active step', step);
     ensureStepScope(step, () =>
     {
-        if(config.debug) console.log(`[TUTORIAL] Show step "${guideName} > ${taskName} > ${step.title}"`, step);
-        if(step.type === 'click')       return showClickStep(step);
-        if(step.type === 'clickNavbar') return showClickNavbarStep(step);
-        if(step.type === 'form')        return showFormStep(step);
-        if(step.type === 'saveForm')    return showSaveFormStep(step);
-        if(step.type === 'openApp')     return showOpenAppStep(step);
-        if(step.type === 'clickMainNavbar') return showClickMainNavbarStep(step);
+        const presenter = stepPresenters[step.type];
+        if(config.debug) showLog('Present step', step, null, {presenter});
+        if(presenter) presenter(step);
     });
 }
 
