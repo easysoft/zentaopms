@@ -75,6 +75,12 @@ class thinkRadio extends thinkQuestion
                         set::value($setOption),
                         set::items($lang->thinkstep->setOptionList)
                     )
+                ),
+                icon
+                (
+                    setClass('mt-10 text-gray-400 cursor-pointer ml-1'),
+                    toggle::tooltip(array('placement' => 'top', 'title' => $lang->thinkstep->tips->setOption, 'width' => '220px')),
+                    'help'
                 )
             ) : null,
             formGroup
