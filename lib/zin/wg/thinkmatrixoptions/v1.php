@@ -33,4 +33,28 @@ class thinkMatrixOptions extends wg
     {
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
+
+    protected function build()
+    {
+        global $lang, $app;
+        $app->loadLang('thinkstep');
+        $id         = $this->prop('id') ? $this->prop('id') : $this->gid;
+        $deleteTip  = $this->prop('deleteTip', $lang->thinkstep->deleteOptionTip);
+        $addColText = $this->prop('addColText') ? $this->prop('addColText') : $lang->thinkstep->addCol;
+
+        return div
+        (
+            setID($id),
+            setClass('think-multiple w-full h-full overflow-x-auto overflow-y-hidden px-px pb-0.5'),
+            div(setClass('think-multiple-body flex')),
+            zui::thinkMatrixOptions
+            (
+                set::_to("#$id"),
+                set::deleteTip($deleteTip),
+                set::enterPlaceholder($lang->thinkstep->label->columnTitle),
+                set::addColText($addColText),
+                set($this->props->pick(array('name', 'data')))
+            )
+        );
+    }
 }
