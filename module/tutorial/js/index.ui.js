@@ -335,7 +335,8 @@ function getHomeScope()
 
 function getStepScope(step)
 {
-    if(step.scope) return step.scope;
+    if(step.scope && step.scope.name) return step.scope;
+    step.scope = null;
     const homeScope = getHomeScope();
     if(step.type === 'openApp')
     {
@@ -390,7 +391,7 @@ function activeTaskStep(guideName, taskName, stepIndex)
         step.task      = task;
         step.index     = stepIndex;
         step.isLast    = stepIndex === task.steps.length - 1;
-        step.checkType = step.type === 'form' ? 'change' : 'click';
+        step.checkType = step.type === 'form' ? (step.type === 'saveForm' ? 'success' : 'change') : 'click';
 
         if(step.type === 'openApp' && !task.app) task.app = step.app;
         if(!step.app) step.app = task.app || guide.app;
