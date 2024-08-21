@@ -381,7 +381,7 @@ class baseEntry
     {
         $output = helper::removeUTF8Bom(ob_get_clean());
         $output = json_decode((string) $output);
-        if(isset($output->data)) $output->data = json_decode((string) $output->data);
+        if(isset($output->data) && !is_object($output->data)) $output->data = json_decode((string) $output->data);
         if(isset($output->load))
         {
             $output->code    = 400;
