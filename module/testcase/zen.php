@@ -1433,10 +1433,20 @@ class testcaseZen extends testcase
         $forceNotReview = $this->testcase->forceNotReview();
         $storyVersions  = array();
         $testcases      = form::batchData($this->config->testcase->form->batchCreate)->get();
+
+        $projectID   = $this->app->tab == 'project' ? $this->session->project : 0;
+        $executionID = 0;
+        if($projectID)
+        {
+            $project = $this->loadModel('project')->getByID($projectID);
+            if(!$project->multiple) $executionID = $this->dao->select('id')->from(TABLE_PROJECT)->where('parent')->eq($projectID)->fetch('id');
+        }
+
         foreach($testcases as $testcase)
         {
-            $testcase->product = $productID;
-            if($this->app->tab == 'project') $testcase->project = $this->session->project;
+            $testcase->product      = $productID;
+            $testcase->project      = $projectID;
+            $testcase->execution    = $executionID;
             $testcase->openedBy     = $account;
             $testcase->openedDate   = $now;
             $testcase->status       = $forceNotReview || $testcase->review == 0 ? 'normal' : 'wait';
