@@ -73,7 +73,7 @@ $scrumProjectManage->tasks['manageProject']['steps'][] = array(
 $scrumProjectManage->tasks['manageProject']['steps'][] = array(
     'type'   => 'clickNavbar',
     'target' => 'members',
-    'page'   => 'project-team',
+    'page'   => 'project-view',
     'title'  => $lang->tutorial->scrumProjectManage->manageProject->step8->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageProject->step8->desc
 );
@@ -81,7 +81,7 @@ $scrumProjectManage->tasks['manageProject']['steps'][] = array(
 $scrumProjectManage->tasks['manageProject']['steps'][] = array(
     'type'   => 'click',
     'target' => '#mainContainer #mainMenu #actionBar a',
-    'page'   => 'project-manageMembers',
+    'page'   => 'project-team',
     'title'  => $lang->tutorial->scrumProjectManage->manageProject->step9->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageProject->step9->desc
 );
