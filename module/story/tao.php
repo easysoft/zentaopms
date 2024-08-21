@@ -2503,7 +2503,7 @@ class storyTao extends storyModel
      */
     public function reorderStories(array $stories): array
     {
-        $tree = $this->buildStoryTree($stories);
+        $tree = $this->buildStoryTree($stories, 0, $stories);
 
         $result = array();
         $this->buildReorderResult($tree, $result);
@@ -2520,14 +2520,14 @@ class storyTao extends storyModel
      * @param  int    $parentId
      * @return array
      */
-    public function buildStoryTree(array &$stories, int $parentId = 0)
+    public function buildStoryTree(array &$stories, int $parentId = 0, array $originStories = array())
     {
         $tree = array();
         foreach($stories as $id => $parent)
         {
-            if($parent == $parentId)
+            if($parent == $parentId || (!isset($originStories[$parent]) && $parentId == 0))
             {
-                $tree[$id] = $this->buildStoryTree($stories, $id);
+                $tree[$id] = $this->buildStoryTree($stories, $id, $originStories);
             }
         }
 
