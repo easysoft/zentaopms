@@ -3,7 +3,13 @@
 chdir(__DIR__);
 include '../lib/changestatus.ui.class.php';
 
-zendata('product')->loadYaml('product', false, 2)->gen(10);
+$product = zenData('product');
+$product->id->range('1');
+$product->name->range('产品1');
+$product->status->range('normal');
+$product->type->range('normal');
+$product->gen(1);
+
 $tester = new changeStatus();
 $tester->login();
 
