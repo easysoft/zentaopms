@@ -61,7 +61,7 @@ toolbar
         'icon'          => 'plus',
         'text'          => $lang->project->create,
         'class'         => 'primary create-project-btn',
-        'url'           => commonModel::isTutorialMode() ? createLink('project', 'create', 'mode=scrum&programID=0') : createLink('project', 'createGuide', "programID={$programID}"),
+        'url'           => createLink('project', 'createGuide', "programID={$programID}"),
         'data-toggle'   => 'modal',
         'data-position' => 'center'
     ))) : null

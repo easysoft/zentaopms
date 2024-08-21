@@ -174,3 +174,95 @@ $lang->tutorial->scrumProjectManage->manageExecution->step7->desc = '点击保�
 $lang->tutorial->scrumProjectManage->manageExecution->step8 = new stdClass();
 $lang->tutorial->scrumProjectManage->manageExecution->step8->name = '点击燃尽图';
 $lang->tutorial->scrumProjectManage->manageExecution->step8->desc = '点击燃尽图可以查看迭代燃尽图';
+
+$lang->tutorial->scrumProjectManage->manageTask = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTask->title = '任务管理';
+
+$lang->tutorial->scrumProjectManage->manageTask->step1 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTask->step1->name = '点击需求';
+$lang->tutorial->scrumProjectManage->manageTask->step1->desc = '进入需求列表，您可以在这里看到之前关联的需求需求';
+
+$lang->tutorial->scrumProjectManage->manageTask->step2 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTask->step2->name = '选择需求';
+
+$lang->tutorial->scrumProjectManage->manageTask->step3 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTask->step3->name = '分解任务';
+$lang->tutorial->scrumProjectManage->manageTask->step3->desc = '您可以在这里将需求分解为任务，支持批量分解';
+
+$lang->tutorial->scrumProjectManage->manageTask->step4 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTask->step4->name = '填写表单';
+
+$lang->tutorial->scrumProjectManage->manageTask->step5 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTask->step5->name = '保存表单';
+$lang->tutorial->scrumProjectManage->manageTask->step5->desc = '保存后可以在任务列表中查看分解的任务';
+
+$lang->tutorial->scrumProjectManage->manageTask->step6 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTask->step6->name = '点击指派给';
+$lang->tutorial->scrumProjectManage->manageTask->step6->desc = '您可以在这里将任务指派给对应的用户';
+
+$lang->tutorial->scrumProjectManage->manageTask->step7 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTask->step7->name = '填写表单';
+
+$lang->tutorial->scrumProjectManage->manageTask->step8 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTask->step8->name = '保存表单';
+$lang->tutorial->scrumProjectManage->manageTask->step8->desc = '保存后在任务列表中指派给字段会显示被指派的用户';
+
+$lang->tutorial->scrumProjectManage->manageTask->step9 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTask->step9->name = '点击开始任务';
+$lang->tutorial->scrumProjectManage->manageTask->step9->desc = '您可以在这里开始任务，并记录消耗和剩余工时';
+
+$lang->tutorial->scrumProjectManage->manageTask->step10 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTask->step10->name = '填写表单';
+
+$lang->tutorial->scrumProjectManage->manageTask->step11 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTask->step11->name = '保存表单';
+$lang->tutorial->scrumProjectManage->manageTask->step11->desc = '保存后返回任务列表';
+
+$lang->tutorial->scrumProjectManage->manageTask->step12 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTask->step12->name = '点击记录工时';
+$lang->tutorial->scrumProjectManage->manageTask->step12->desc = '您可以在这里记录消耗和剩余工时，当剩余工时为0后，任务会自动完成';
+
+$lang->tutorial->scrumProjectManage->manageTask->step13 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTask->step13->name = '填写表单';
+
+$lang->tutorial->scrumProjectManage->manageTask->step14 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTask->step14->name = '保存表单';
+$lang->tutorial->scrumProjectManage->manageTask->step14->desc = '保存后返回任务列表';
+
+$lang->tutorial->scrumProjectManage->manageTask->step15 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTask->step15->name = '点击完成任务';
+$lang->tutorial->scrumProjectManage->manageTask->step15->desc = '您可以在这里完成任务';
+
+$lang->tutorial->scrumProjectManage->manageTask->step16 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTask->step16->name = '填写表单';
+
+$lang->tutorial->scrumProjectManage->manageTask->step17 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTask->step17->name = '保存表单';
+$lang->tutorial->scrumProjectManage->manageTask->step17->desc = '保存后返回任务列表';
+
+$lang->tutorial->scrumProjectManage->manageTask->step18 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTask->step18->name = '点击版本';
+$lang->tutorial->scrumProjectManage->manageTask->step18->desc = '进入版本模块中可以创建版本';
+
+$lang->tutorial->scrumProjectManage->manageTask->step19 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTask->step19->name = '点击创建版本';
+$lang->tutorial->scrumProjectManage->manageTask->step19->desc = '******************************************';
+
+$lang->tutorial->scrumProjectManage->manageTask->step20 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTask->step20->name = '填写表单';
+
+$lang->tutorial->scrumProjectManage->manageTask->step21 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTask->step21->name = '保存表单';
+$lang->tutorial->scrumProjectManage->manageTask->step21->desc = '保存后进入版本详情';
+
+$lang->tutorial->scrumProjectManage->manageTask->step22 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTask->step22->name = '关联需求';
+$lang->tutorial->scrumProjectManage->manageTask->step22->desc = '可以将完成的研发需求关联在版本中';
+
+$lang->tutorial->scrumProjectManage->manageTask->step23 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTask->step23->name = '选择需求';
+$lang->tutorial->scrumProjectManage->manageTask->step23->desc = '在这里可以选择勾选需要关联的需求';
+
+$lang->tutorial->scrumProjectManage->manageTask->step24 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTask->step24->name = '保存关联的需求';
+$lang->tutorial->scrumProjectManage->manageTask->step24->desc = '您可以将完成的需求关联在当前版本中';
