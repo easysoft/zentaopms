@@ -1749,16 +1749,6 @@ class projectModel extends model
         $accounts = $this->projectTao->insertMember($members, $projectID, $oldJoin);
         $this->projectTao->updateMemberView($projectID, $accounts, $oldJoin);
 
-        /* Remove execution members. */
-        if($this->post->removeExecution == 'yes' and !empty($childSprints) and !empty($removedAccounts))
-        {
-            $this->dao->delete()->from(TABLE_TEAM)
-                ->where('root')->in($childSprints)
-                ->andWhere('type')->eq('execution')
-                ->andWhere('account')->in($removedAccounts)
-                ->exec();
-        }
-
         if(empty($project->multiple) and $project->model != 'waterfall') $this->loadModel('execution')->syncNoMultipleSprint($projectID);
 
         return !dao::isError();
