@@ -687,3 +687,22 @@ let checkHasCheckedData = function(item, checkedValue)
 {
     return item.value == checkedValue;
 };
+
+function loadBuilds()
+{
+    const productID   = $('[name="product"]').val();
+    const projectID   = $('[name="project"]').val() == 'undefined' ? 0 : $('[name="project"]').val();
+    const executionID = $('[name="execution"]').val() == 'undefined' ? 0 : $('[name="execution"]').val();
+    if(executionID)
+    {
+        loadExecutionBuilds(executionID);
+    }
+    else if(projectID)
+    {
+        loadProjectBuilds(projectID);
+    }
+    else
+    {
+        loadProductBuilds(productID);
+    }
+}
