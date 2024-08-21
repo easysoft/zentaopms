@@ -235,6 +235,7 @@ detailBody
                     (
                         btn
                         (
+                            $app->tab == 'project' ? setData('app', 'project') : null,
                             set::text($lang->story->create),
                             setClass('open-url secondary' . (empty($createStoryLink) ? ' disabled' : '')),
                             set::icon('plus'),
