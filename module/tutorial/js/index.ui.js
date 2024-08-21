@@ -92,42 +92,53 @@ const stepPresenters =
     },
     click: function(step)
     {
-        const scope   = getStepScope(step);
-        const $target = scope.$(step.target);
-        return highlightStepTarget($target, step);
+        return highlightStepTarget((scope) => scope.$(step.target), step);
     },
     clickNavbar: function(step)
     {
-        const scope   = getStepScope(step);
-        const $target = scope.$('.#'.includes(step.target[0]) ? step.target : `#navbar>.nav>.item>a[data-id="${step.target}"]`);
-        return highlightStepTarget($target, step);
+        return highlightStepTarget((scope) => scope.$('.#'.includes(step.target[0]) ? step.target : `#navbar>.nav>.item>a[data-id="${step.target}"]`), step);
     },
     clickMainNavbar: function(step)
     {
-        const scope   = getStepScope(step);
-        const $target = scope.$('.#'.includes(step.target[0]) ? step.target : `#mainNavbar nav>.item>a[data-id="${step.target}"]`);
-        return highlightStepTarget($target, step);
+        return highlightStepTarget((scope) => scope.$('.#'.includes(step.target[0]) ? step.target : `#mainNavbar nav>.item>a[data-id="${step.target}"]`), step);
     },
     form: function(step)
     {
-        const scope   = getStepScope(step);
-        const $target = scope.$(step.target || 'form');
-        return highlightStepTarget($target, step);
+        return highlightStepTarget((scope) => {
+            const $target = scope.$(step.target || 'form');
+
+            /* Check form. */
+            const $form = getForm(scope, $target);
+            if(!$form.length) console.error(`[TUTORIAL] Cannot find form for step "${step.guide.name} > ${step.task.name} > ${step.title}"`, step);
+            $form.attr('zui-tutorial-step', step.id);
+            step.$form = $form;
+            return $target;
+        }, step);
     },
     saveForm: function(step)
     {
-        const scope   = getStepScope(step);
-        const $target = scope.$(step.target);
+        return highlightStepTarget((scope) => {
+            const $target = scope.$(step.target);
 
-        /* Check form. */
-        let $form   = $target.closest('form');
-        if(!$form.length) $form = scope.$('form');
-        if(!$form.length) return console.error(`[TUTORIAL] Cannot find form for step "${step.guide.name} > ${step.task.name} > ${step.title}"`, step);
+            /* Check form. */
+            const $form = getForm(scope, $target);
+            if(!$form.length) console.error(`[TUTORIAL] Cannot find form for step "${step.guide.name} > ${step.task.name} > ${step.title}"`, step);
+            $form.attr('zui-tutorial-step', step.id);
+            step.$form = $form;
 
-        const $saveBtn = $form.find('[type="submit"]');
-        return highlightStepTarget($saveBtn.length ? $saveBtn : $target, step);
+            const $saveBtn = $form.find('[type="submit"]');
+            return $saveBtn.length ? $saveBtn : $target;
+        }, step);
     }
 };
+
+function getForm(scope, $target)
+{
+    let $form   = $target.closest('form');
+    if(!$form.length) $form = $target.find('form');
+    if(!$form.length) $form = scope.$('form');
+    return $form;
+}
 
 function destroyPopover(callback)
 {
@@ -147,89 +158,144 @@ function destroyPopover(callback)
     popover = null;
 }
 
+function isStepFormFilled(step, event)
+{
+    if(!step.$form || !step.$form.length) return;
+    let requiredFields = step.requiredFields;
+    if(!requiredFields)
+    {
+        requiredFields = [];
+        step.$form.find('.form-group.required').each(function()
+        {
+            const $group = $(this);
+            let name = $group.attr('data-name');
+            if(!name) name = $group.find('[name]').attr('name');
+            if(name) requiredFields.push(name);
+        });
+        step.requiredFields = requiredFields;
+    }
+    if(typeof requiredFields === 'string') requiredFields = requiredFields.split(',');
+    const formData = new FormData(step.$form[0]);
+    for(let i = 0; i < requiredFields.length; i++)
+    {
+        const fieldName = requiredFields[i];
+        if(!formData.has(fieldName) || !formData.get(fieldName))
+        {
+            const $group = step.$form.find(`[name="${fieldName}"]`).closest('.form-group');
+            const label = $group.find('.form-label').text();
+            if(label) highlightStepTarget(step.$target, step, {content: lang.inputFieldTip.replace('%s', label)});
+            return false;
+        }
+    }
+    return true;
+}
+
+function isStepFormSubmitted(step, event, info)
+{
+    if(!step.$form || !step.$form.length || !Array.isArray(info) || info.length < 2) return;
+    const response = info[1] || {};
+    if(response.result === 'fail')
+    {
+        highlightStepTarget(step.$target, step, {content: typeof response.message === 'string' ? response.message : lang.formSubmitFailed});
+        return false;
+    }
+    return true;
+}
+
 function highlightStepTarget($target, step, popoverOptions)
 {
     if(config.debug) showLog('Highlight', step, null, {$target, popover, popoverOptions});
     if(popover) return destroyPopover(() => highlightStepTarget($target, step, popoverOptions));
-    if(!$target.length) return console.error(`[TUTORIAL] Cannot find target for step "${step.guide.title || step.guide.name} > ${step.task.title || step.task.name} > ${step.title}"`, step);
-    popoverOptions = $.extend(
+    ensureStepScope(step, (scope) =>
     {
-        key             : `tutorial-popover-${step.id}`,
-        title           : step.title,
-        strategy        : 'fixed',
-        show            : true,
-        limitInScreen   : true,
-        mask            : false,
-        trigger         : 'manual',
-        destroyOnHide   : true,
-        closeBtn        : false,
-        content         : step.desc,
-        contentClass    : 'popover-content px-4',
-        className       : 'tutorial-popover rounded-md',
-        titleClass      : 'popover-title text-lg pl-1',
-        minWidth        : 280,
-        maxWidth        : 400,
-        headingClass    : 'popover-heading bg-transparent',
-        elementShowClass: 'with-popover-show tutorial-hl',
-        destroyOnHide   : true,
-        shift           : true,
-        hideOthers      : false,
-        hideNewOnHide   : false,
-        footer:
+        if(typeof $target === 'function') $target = $target(scope);
+        if(!$target.length) return console.error(`[TUTORIAL] Cannot find target for step "${step.guide.title || step.guide.name} > ${step.task.title || step.task.name} > ${step.title}"`, step);
+        popoverOptions = $.extend(
         {
-            component: 'toolbar',
-            props:
+            key             : `tutorial-popover-${step.id}`,
+            title           : step.title,
+            strategy        : 'fixed',
+            show            : true,
+            limitInScreen   : true,
+            mask            : false,
+            trigger         : 'manual',
+            destroyOnHide   : true,
+            closeBtn        : false,
+            content         : step.desc,
+            contentClass    : 'popover-content px-4 whitespace-pre-line',
+            className       : 'tutorial-popover rounded-md',
+            titleClass      : 'popover-title text-lg pl-1',
+            minWidth        : 280,
+            maxWidth        : 400,
+            headingClass    : 'popover-heading bg-transparent',
+            elementShowClass: 'with-popover-show tutorial-hl',
+            destroyOnHide   : true,
+            shift           : true,
+            hideOthers      : false,
+            hideNewOnHide   : false,
+            footer:
             {
-                className: 'py-3 px-4 justify-between',
-                items:
-                [
-                    {component: 'span', html: `${step.index + 1}/${step.task.steps.length}`},
-                    {type: 'primary', text: lang.nextStep, onClick: () => goToNextStep(step)},
-                ]
+                component: 'toolbar',
+                props:
+                {
+                    className: 'py-3 px-4 justify-between',
+                    items:
+                    [
+                        {component: 'span', html: `${step.index + 1}/${step.task.steps.length}`},
+                        {type: 'primary', text: lang.nextStep, onClick: () => goToNextStep(step)},
+                    ]
+                }
+            },
+            onHide: function()
+            {
+                $(this.trigger).closest('body').find('.tutorial-light-box').addClass('opacity-0');
+            },
+            onLayout: function(info)
+            {
+                const $trigger = $(info.trigger);
+                const $body = $trigger.closest('body');
+                const triggerRect = info.trigger.getBoundingClientRect();
+                let $lightElement = $body.find('.tutorial-light-box');
+                if(!$lightElement.length) $lightElement = $('<div class="tutorial-light-box fixed pointer-events-none rounded" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.4), 0 0 0 9999px rgba(0, 0, 0, 0.4); z-index: 1690; transition: opacity .3s;"></div>').appendTo($body);
+                $lightElement.removeClass('opacity-0').css(
+                {
+                    top         : triggerRect.top,
+                    left        : triggerRect.left,
+                    width       : triggerRect.width,
+                    height      : triggerRect.height,
+                    borderRadius: $trigger.css('borderRadius')
+                });
             }
-        },
-        onHide: function()
+        }, step.popover, popoverOptions);
+        if(popoverOptions.title === null)
         {
-            $(this.trigger).closest('body').find('.tutorial-light-box').addClass('opacity-0');
-        },
-        onLayout: function(info)
-        {
-            const $trigger = $(info.trigger);
-            const $body = $trigger.closest('body');
-            const triggerRect = info.trigger.getBoundingClientRect();
-            let $lightElement = $body.find('.tutorial-light-box');
-            if(!$lightElement.length) $lightElement = $('<div class="tutorial-light-box fixed pointer-events-none rounded" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.4), 0 0 0 9999px rgba(0, 0, 0, 0.4); z-index: 1690; transition: top .1s, left .1s, opacity .3s;"></div>').appendTo($body);
-            $lightElement.removeClass('opacity-0').css(
-            {
-                top         : triggerRect.top,
-                left        : triggerRect.left,
-                width       : triggerRect.width,
-                height      : triggerRect.height,
-                borderRadius: $trigger.css('borderRadius')
-            });
+            const text = $target.text().trim();
+            if(['openApp'].includes(step.type)) popoverOptions.title = lang.clickTipFormat.replace('%s', text);
         }
-    }, step.popover, popoverOptions);
-    if(popoverOptions.title === null)
-    {
-        const text = $target.text().trim();
-        if(['openApp'].includes(step.type)) popoverOptions.title = lang.clickTipFormat.replace('%s', text);
-    }
-    const scope = getStepScope(step);
-    popover = new scope.zui.Popover($target, popoverOptions);
-    if(!popoverOptions.notFinalTarget) $target.attr('zui-tutorial-step', step.id);
-    $target.scrollIntoView();
+        step.$target = $target;
+        popover = new scope.zui.Popover($target, popoverOptions);
+        if(!popoverOptions.notFinalTarget) $target.attr('zui-tutorial-step', step.id);
+        $target.scrollIntoView();
 
-    const $doc = scope.$(scope.document);
-    if($doc.data('tutorialCheckBinding')) return;
-    $doc.data('tutorialCheckBinding', true).on('click change', '[zui-tutorial-step]', function(event)
-    {
-        if(!currentStep || currentStep.checkType !== event.type) return;
-        const stepID = this.getAttribute('zui-tutorial-step');
-        if(stepID === currentStep.id)
+        const $doc = scope.$(scope.document);
+        if($doc.data('tutorialCheckBinding')) return;
+        $doc.data('tutorialCheckBinding', true).on('click change complete', '[zui-tutorial-step]', function(event, info)
         {
+            if(!currentStep || currentStep.checkType !== event.type) return;
+
+            const stepID = this.getAttribute('zui-tutorial-step');
+            if(stepID !== currentStep.id) return;
+
+            if(currentStep.type === 'form' && !isStepFormFilled(currentStep, event)) return;
+            if(currentStep.type === 'saveForm' && !isStepFormSubmitted(currentStep, event, info)) return;
+
             if(config.debug) showLog(`Step target ${event.type}`, currentStep, null, {stepID, event});
             activeNextStep();
-        }
+        });
+
+        scope.zui.AjaxForm.optionsModifiers.push(() => {
+            return {headers: {'X-ZIN-Tutorial': currentStep.id}};
+        });
     });
 }
 
