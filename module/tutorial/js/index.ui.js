@@ -237,6 +237,7 @@ function highlightStepTarget($target, step, popoverOptions)
             shift           : true,
             hideOthers      : false,
             hideNewOnHide   : false,
+            offset          : 32,
             footer:
             {
                 component: 'toolbar',
