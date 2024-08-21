@@ -14,7 +14,8 @@ class checkList extends wg
         'value?: string|array',
         'items?: array',
         'inline?: bool',
-        'disabled?: bool'
+        'disabled?: bool',
+        'title?: string'
     );
 
     public function getValueList()
@@ -51,7 +52,7 @@ class checkList extends wg
 
     protected function build()
     {
-        list($items, $inline, $disabled, $className) = $this->prop(array('items', 'inline', 'disabled', 'className'));
+        list($items, $inline, $disabled, $className, $title) = $this->prop(array('items', 'inline', 'disabled', 'className', 'title'));
 
         if(!empty($items))
         {
@@ -60,6 +61,7 @@ class checkList extends wg
             {
                 if(!is_array($item))         $item = array('text' => $item, 'value' => $key);
                 if(!isset($item['checked'])) $item['checked'] = in_array($item['value'], $valueList);
+                if(!empty($title)) $item['title'] = $item[$title];
                 $items[$key] = $this->onBuildItem($item);
             }
         }

@@ -15,7 +15,8 @@ class checkbox extends wg
         'value?: string',
         'typeClass?: string',
         'rootClass?: string',
-        'labelClass?: string'
+        'labelClass?: string',
+        'title?: string'
     );
 
     public function onAddChild($child)
@@ -29,7 +30,7 @@ class checkbox extends wg
 
     protected function buildPrimary()
     {
-        list($id, $text, $name, $checked, $disabled, $type, $typeClass, $rootClass, $labelClass, $value) = $this->prop(array('id', 'text', 'name', 'checked', 'disabled', 'type', 'typeClass', 'rootClass', 'labelClass', 'value'));
+        list($id, $text, $name, $checked, $disabled, $type, $typeClass, $rootClass, $labelClass, $value, $title) = $this->prop(array('id', 'text', 'name', 'checked', 'disabled', 'type', 'typeClass', 'rootClass', 'labelClass', 'value', 'title'));
 
         if(empty($typeClass)) $typeClass = $type;
         if(empty($id))        $id        = empty($name) ? $this->gid : ($name . '_' . $value);
@@ -49,6 +50,7 @@ class checkbox extends wg
             (
                 set('for', $id),
                 setClass($labelClass),
+                !empty($title) ? set('title', $title) : null,
                 html($text)
             ),
             $this->children()
