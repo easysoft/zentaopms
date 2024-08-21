@@ -1031,6 +1031,7 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
             onClick: hideDisabled
                 ? null
                 : () => {
+                    closeApp(code);
                     const $li = $btn.closest('li');
                     const appName = $li.data('app');
                     $li.remove();
