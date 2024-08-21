@@ -71,7 +71,7 @@ $scrumProjectManage->tasks['manageProject']['steps'][] = array(
 );
 
 $scrumProjectManage->tasks['manageProject']['steps'][] = array(
-    'type'   => 'clickNavbar',
+    'type'   => 'clickMainNavbar',
     'target' => 'members',
     'page'   => 'project-view',
     'title'  => $lang->tutorial->scrumProjectManage->manageProject->step8->name,
@@ -126,6 +126,7 @@ $scrumProjectManage->tasks['manageExecution']['steps'][] = array(
 $scrumProjectManage->tasks['manageExecution']['steps'][] = array(
     'type'   => 'form',
     'target' => '#form-execution-create',
+    'app'    => 'execution',
     'page'   => 'execution-create',
     'title'  => $lang->tutorial->scrumProjectManage->manageExecution->step3->name
 );
