@@ -1215,10 +1215,17 @@ class bugZen extends bug
             $assignedToList = array_filter($assignedToList);
             if(empty($assignedToList)) $assignedToList = $this->user->getPairs('devfirst|noclosed');
         }
-        if(!isset($openedBuilds[$bug->openedBuild]))
+        $bugOpenedBuilds = explode(',', $bug->openedBuild);
+        if(!empty($bugOpenedBuilds))
         {
-            $build = $this->build->getByID((int)$bug->openedBuild);
-            if($build) $openedBuilds[$bug->openedBuild] = $build->name;
+            foreach($bugOpenedBuilds as $bugOpenedBuild)
+            {
+                if(!isset($openedBuilds[$bugOpenedBuild]))
+                {
+                    $build = $this->build->getByID((int)$bugOpenedBuild);
+                    if($build) $openedBuilds[$bugOpenedBuild] = $build->name;
+                }
+            }
         }
         $openedBuilds = $this->build->addReleaseLabelForBuilds($bug->product, $openedBuilds);
 
