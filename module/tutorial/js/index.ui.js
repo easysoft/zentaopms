@@ -230,7 +230,11 @@ function highlightStepTarget($target, step, popoverOptions)
     {
         if(!currentStep || currentStep.checkType !== event.type) return;
         const stepID = this.getAttribute('zui-tutorial-step');
-        if(stepID === currentStep.id) activeNextStep();
+        if(stepID === currentStep.id)
+        {
+            if(config.debug) showLog(`Step target ${event.type}`, currentStep, null, {stepID, event});
+            activeNextStep();
+        }
     });
 }
 
@@ -413,9 +417,9 @@ function activeTaskStep(guideName, taskName, stepIndex)
     });
 }
 
-function activeTask(guideName, taskName, step)
+function activeTask(guideName, taskName, stepIndex)
 {
-    if(step === undefined) step = 0;
+    if(stepIndex === undefined) stepIndex = 0;
     if(currentGuide !== guideName) activeGuide(guideName);
 
     if(currentTask && currentTask !== taskName) unactiveTask();
