@@ -889,7 +889,7 @@ class docModel extends model
         $doc->content        = isset($docContent->content) ? $docContent->content : '';
         $doc->contentType    = isset($docContent->type) ? $docContent->type : '';
         $doc->contentVersion = isset($docContent->version) ? $docContent->version : $version;
-        if($doc->type != 'url' && $doc->contentType != 'markdown') $doc = $this->loadModel('file')->replaceImgURL($doc, 'content,draft');
+        if($doc->type != 'url' && $doc->contentType != 'markdown' && $doc->contentType != 'doc') $doc = $this->loadModel('file')->replaceImgURL($doc, 'content,draft');
         if($setImgSize) $doc->content = $this->file->setImgSize($doc->content);
         $doc->files = $docFiles;
 
