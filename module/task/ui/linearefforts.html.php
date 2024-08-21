@@ -56,10 +56,13 @@ foreach($myCountList as $order => $count)
         $allOrders[$order]
     );
 
+    $i = 1;
     foreach($myEfforts[$order] as $index => $effort)
     {
+        $hidden = ($taskEffortFold and $i > 3) ? 'hidden' : '';
         $myEffortTable[] = h::tr
         (
+            setClass($hidden),
             $tdDom,
             h::td($effort->date),
             h::td(zget($users, $effort->account)),
@@ -84,8 +87,11 @@ foreach($myCountList as $order => $count)
             )
         );
         $tdDom = null;
+        $i ++;
     }
 }
+$iconClass = $taskEffortFold ? 'angle-down' : 'angle-top';
+$iconText  = $taskEffortFold ? $lang->task->unfoldEffort : $lang->task->foldEffort;
 
 $allEffortTable = array();
 foreach($recorders as $order => $accounts)
@@ -125,7 +131,7 @@ div
             set::title($lang->task->myEffort),
             h::table
             (
-                setClass('table condensed bordered'),
+                setClass('table condensed bordered taskEffort'),
                 h::tr
                 (
                     h::th
@@ -161,7 +167,15 @@ div
                     )
                 ),
                 $myEffortTable
-            )
+            ),
+            count($myEffortTable) > 3 ?  div
+            (
+                setID('toggleFoldIcon'),
+                on::click('toggleFold'),
+                setClass('text-primary'),
+                span(setClass($iconClass . ' mr-1 icon-toggle'), icon('back-circle')),
+                span(setClass('text'), $iconText)
+            ) : null
         ),
         tabPane
         (
