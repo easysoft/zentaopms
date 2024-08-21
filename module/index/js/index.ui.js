@@ -911,6 +911,7 @@ $('#menuNav .divider').on('contextmenu', function(event)
                 const appName = $li.data('app');
                 $li.remove();
                 const data = getMenuNavData();
+                refreshMenu();
                 console.log(appName, data);
             }
         }
@@ -946,6 +947,7 @@ $('#menuNav .divider').on('contextmenu', function(event)
                         .append($link)
                         .insertAfter($li);
 
+                    refreshMenu();
                     if(!apps.defaultCode) apps.defaultCode = item.code;
                 }
             )
@@ -1036,7 +1038,7 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
                     const appName = $li.data('app');
                     $li.remove();
                     const data = getMenuNavData();
-                    
+                    refreshMenu();
                     console.log(appName, data);
                 },
             disabled: hideDisabled,
@@ -1074,6 +1076,7 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
                         .append($link)
                         .insertAfter($li);
 
+                    refreshMenu();
                     if(!apps.defaultCode) apps.defaultCode = item.code;
                 }
             )
