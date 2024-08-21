@@ -42,6 +42,7 @@
     let historyState  = parent.window.history.state;
     const hasZinBar   = DEBUG && window.zin && window.zin.zinTool && !isIndexPage;
     const localCacheFirst = config.clientCache === 'local-first';
+    const isTutorial  = top.config.currentModule === 'tutorial';
 
     function getUrlID(url)
     {
@@ -529,8 +530,14 @@
         if(DEBUG && !selectors.includes('zinDebug()')) selectors.push('zinDebug()');
         const isDebugRequest = DEBUG && selectors.length === 1 || selectors[0] === 'zinDebug()';
         if(options.modal === undefined) options.modal = $(target[0] !== '#' && target[0] !== '.' ? `#${target}` : target).closest('.modal').length;
-        const headers = {'X-ZIN-Options': JSON.stringify($.extend({selector: selectors, type: 'list'}, options.zinOptions)), 'X-ZIN-App': currentCode, 'X-Zin-Cache-Time': 0};
+        const headers =
+        {
+            'X-ZIN-Options': JSON.stringify($.extend({selector: selectors, type: 'list'}, options.zinOptions)),
+            'X-ZIN-App': currentCode,
+            'X-Zin-Cache-Time': 0,
+        };
         if(options.modal) headers['X-Zui-Modal'] = 'true';
+        if(isTutorial && top.getCurrentStepID) headers['X-ZIN-Tutorial'] = top.getCurrentStepID();
         const requestMethod = (options.method || 'GET').toUpperCase();
         if(!options.cache && options.cache !== false) options.cache = !!(requestMethod === 'GET' && config.clientCache && !options.partial);
         if(options.cache === true) options.cache = url + (url.includes('?') ? '&zin=' : '?zin=') + encodeURIComponent(selectors.join(','));

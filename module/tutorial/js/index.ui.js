@@ -417,6 +417,11 @@ function activeGuide(guideName)
     }
 }
 
+window.getCurrentStepID = function()
+{
+    return currentStep ? currentStep.id : '';
+};
+
 window.handleClickGuide = function(event)
 {
     const guideName = $(event.target).closest('.tutorial-guide').data('name');
