@@ -919,38 +919,7 @@ $('#menuNav .divider').on('contextmenu', function(event)
     items.push(
         {
             text: langData.add,
-            items: generateAddMenuNavItems(
-                (name) => {
-                    const $li = $divider.closest('li');
-                    if(name === 'divider') return $li.after('<li class="divider"></li>');
-
-                    let item = allAppsItemsMap.get(name);
-                    const oldItem = apps.map[item.code];
-                    if(oldItem !== item && oldItem) item = $.extend({}, oldItem, item, {active: false});
-                    item.external = item.external || item.url && item.url.includes('://');
-
-                    const $link= $('<a data-pos="menu"></a>')
-                        .attr('data-app', item.notApp ? undefined : item.code)
-                        .attr('href', item.url || '#')
-                        .attr('target', item.notApp ? '_blank' : undefined)
-                        .addClass('rounded' + (item.notApp ? '' : ' show-in-app'))
-                        .html(item.title, false);
-
-                    item.icon = item.icon || ($link.find('.icon').attr('class') || '').replace('icon ', '');
-                    item.text = $link.text().trim();
-                    $link.html('<i class="icon ' + item.icon + '"></i><span class="text">' + item.text + '</span>', false);
-                    if(['devops', 'bi', 'safe'].includes(item.code)) $link.find('.text').addClass('font-brand');
-                    apps.map[item.code] = item;
-
-                    $('<li class="hint-right"></li>')
-                        .attr({'data-app': item.code, 'data-hint': item.text})
-                        .append($link)
-                        .insertAfter($li);
-
-                    refreshMenu();
-                    if(!apps.defaultCode) apps.defaultCode = item.code;
-                }
-            )
+            items: generateAddMenuNavItems(addMenuToMainNavCb($divider))
         }
     );
 
@@ -1048,38 +1017,7 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
     items.push(
         {
             text: langData.add,
-            items: generateAddMenuNavItems(
-                (name) => {
-                    const $li = $btn.closest('li');
-                    if(name === 'divider') return $li.after('<li class="divider"></li>');
-
-                    let item = allAppsItemsMap.get(name);
-                    const oldItem = apps.map[item.code];
-                    if(oldItem !== item && oldItem) item = $.extend({}, oldItem, item, {active: false});
-                    item.external = item.external || item.url && item.url.includes('://');
-
-                    const $link= $('<a data-pos="menu"></a>')
-                        .attr('data-app', item.notApp ? undefined : item.code)
-                        .attr('href', item.url || '#')
-                        .attr('target', item.notApp ? '_blank' : undefined)
-                        .addClass('rounded' + (item.notApp ? '' : ' show-in-app'))
-                        .html(item.title, false);
-
-                    item.icon = item.icon || ($link.find('.icon').attr('class') || '').replace('icon ', '');
-                    item.text = $link.text().trim();
-                    $link.html('<i class="icon ' + item.icon + '"></i><span class="text">' + item.text + '</span>', false);
-                    if(['devops', 'bi', 'safe'].includes(item.code)) $link.find('.text').addClass('font-brand');
-                    apps.map[item.code] = item;
-
-                    $('<li class="hint-right"></li>')
-                        .attr({'data-app': item.code, 'data-hint': item.text})
-                        .append($link)
-                        .insertAfter($li);
-
-                    refreshMenu();
-                    if(!apps.defaultCode) apps.defaultCode = item.code;
-                }
-            )
+            items: generateAddMenuNavItems(addMenuToMainNavCb($btn.closest('li')))
         }
     );
 
@@ -1339,4 +1277,36 @@ function getAppItemIconAndTitle(name)
         return [icon, text];
     }
     return [];
+}
+
+function addMenuToMainNavCb($li) {
+    return (name) => {
+        if(name === 'divider') return $li.after('<li class="divider"></li>');
+
+        let item = allAppsItemsMap.get(name);
+        const oldItem = apps.map[item.code];
+        if(oldItem !== item && oldItem) item = $.extend({}, oldItem, item, {active: false});
+        item.external = item.external || item.url && item.url.includes('://');
+
+        const $link= $('<a data-pos="menu"></a>')
+            .attr('data-app', item.notApp ? undefined : item.code)
+            .attr('href', item.url || '#')
+            .attr('target', item.notApp ? '_blank' : undefined)
+            .addClass('rounded' + (item.notApp ? '' : ' show-in-app'))
+            .html(item.title, false);
+
+        item.icon = item.icon || ($link.find('.icon').attr('class') || '').replace('icon ', '');
+        item.text = $link.text().trim();
+        $link.html('<i class="icon ' + item.icon + '"></i><span class="text">' + item.text + '</span>', false);
+        if(['devops', 'bi', 'safe'].includes(item.code)) $link.find('.text').addClass('font-brand');
+        apps.map[item.code] = item;
+
+        $('<li class="hint-right"></li>')
+            .attr({'data-app': item.code, 'data-hint': item.text})
+            .append($link)
+            .insertAfter($li);
+
+        refreshMenu();
+        if(!apps.defaultCode) apps.defaultCode = item.code;
+    };
 }
