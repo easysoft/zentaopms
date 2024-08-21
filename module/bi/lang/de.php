@@ -19,3 +19,28 @@ $lang->bi->builderStepList['func']  = 'add function field';
 $lang->bi->builderStepList['where'] = 'Add where';
 $lang->bi->builderStepList['query'] = 'Add query filter';
 $lang->bi->builderStepList['group'] = 'set group by';
+
+$lang->bi->stepTableTitle = 'Select the data table to query';
+$lang->bi->stepTableTip   = 'Select the data table to query, which specifies which table or tables you want to retrieve data from.';
+
+$lang->bi->fromTable     = 'Main table';
+$lang->bi->leftTable     = 'Left join';
+$lang->bi->joinCondition = 'Condition';
+$lang->bi->joinTable     = ' = %s';
+$lang->bi->of            = 'Of';
+
+$lang->bi->stepFieldTitle = 'Select a field in the lookup table';
+$lang->bi->stepFieldTip   = 'The fields in the select query table are used to get the required data from the selected query table.';
+$lang->bi->leftTableTip   = 'In SQL, a Left join is a table-to-table join that returns all the rows in the left table and the matching rows in the right table. The left join combines data from two tables based on the specified criteria, where the left table is the main table of the query and the right table is the table to be joined. See the specific table query common way: left join.';
+
+$lang->bi->stepFuncTitle = 'New function fields';
+$lang->bi->stepFuncTip   = 'To display the data you expect in the query results. You can set functions on the fields in the query table to add a new column of the data you want to the query result.';
+
+$lang->bi->stepWhereTitle = 'Add deterministic query conditions';
+$lang->bi->stepWhereTip   = '(1) Query criteria are used to filter the data that does not meet the requirements. You can add query criteria as needed to get the corresponding query results.<br/>(2)Use =,! For =, >, >=, <, <=, and fuzzy matching (like) condition symbols, enter the corresponding condition value in the input box to the right of the symbol.<br/>(3) When using the include (in) condition symbol, please enter one or more condition values in the input box to the right of the symbol, separated by English commas, for example: task type include (in) development, test.';
+
+$lang->bi->stepQueryTitle = 'Add a dynamic query filter';
+$lang->bi->stepQueryTip   = 'Adding a dynamic query filterThe dynamic query filter is a filtering method that implements dynamic queries by inserting variables in the SQL. The result filter configured in the third step is to further filter the SQL query results.';
+
+$lang->bi->stepGroupTitle = 'Set up groups and aggregate';
+$lang->bi->stepGroupTip   = 'First, you need to select the field for grouping. The system will group according to the field you selected. When you select multiple grouping fields, the system will group in turn according to the selection order. After grouping, click Configure aggregation to perform aggregation operations for other non-grouped fields, and get the summary values under different groups. You can use aggregate functions (count, sum, mean, maximum, minimum) to aggregate data from ungrouped fields.';
