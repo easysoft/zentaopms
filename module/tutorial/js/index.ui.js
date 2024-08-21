@@ -100,7 +100,7 @@ const stepPresenters =
     },
     clickMainNavbar: function(step)
     {
-        return highlightStepTarget((scope) => scope.$('.#'.includes(step.target[0]) ? step.target : `#mainNavbar nav>.item>a[data-id="${step.target}"]`), step);
+        return highlightStepTarget((scope) => scope.$('.#'.includes(step.target[0]) ? step.target : `#mainNavbar .nav>.item>a[data-id="${step.target}"]`), step);
     },
     form: function(step)
     {
@@ -112,7 +112,9 @@ const stepPresenters =
             if(!$form.length) console.error(`[TUTORIAL] Cannot find form for step "${step.guide.name} > ${step.task.name} > ${step.title}"`, step);
             $form.attr('zui-tutorial-step', step.id);
             step.$form = $form;
-            return $target;
+
+            const $panel = $target.closest('.panel');
+            return $panel.length ? $panel : $target;
         }, step);
     },
     saveForm: function(step)
@@ -165,8 +167,10 @@ function isStepFormFilled(step, event)
     if(!requiredFields)
     {
         requiredFields = [];
+        const scope = getStepScope(step);
         step.$form.find('.form-group.required').each(function()
         {
+            if(!scope.zui.dom.isVisible(this, {checkZeroSize:true})) return;
             const $group = $(this);
             let name = $group.attr('data-name');
             if(!name) name = $group.find('[name]').attr('name');
@@ -196,7 +200,7 @@ function isStepFormSubmitted(step, event, info)
     const response = info[1] || {};
     if(response.result === 'fail')
     {
-        highlightStepTarget(step.$target, step, {content: typeof response.message === 'string' ? response.message : lang.formSubmitFailed});
+        highlightStepTarget(step.$form, step, {content: typeof response.message === 'string' ? response.message : lang.formSubmitFailed});
         return false;
     }
     return true;
@@ -372,6 +376,10 @@ function goToNextStep(step)
         const $target = getStepScope(step).$(`[zui-tutorial-step="${step.id}"]`);
         if($target.length) return $target.trigger('click', 'skipCheckStep');
     }
+    else if(step.type === 'saveForm' && step.$form)
+    {
+        step.$form[0].submit();
+    }
 
     setTimeout(() => activeNextStep(step), 200);
 }
@@ -419,12 +427,28 @@ function getStepScope(step)
 function ensureStepScope(step, callback)
 {
     const scope = getStepScope(step);
-    if(scope && scope.$ && (scope.name === 'iframePage' || (!scope.$('body').hasClass('loading-page') && scope.$('body').attr('data-page') && (!step.page || scope.$('body').attr('data-page') === step.page))))
+    const waitStepScope = (reason) =>
     {
-        if(config.debug) showLog('Ensure step scope', step, null, {scope});
-        return setTimeout(() => callback(scope), 300);
+        if(config.debug) showLog(`Wait step scope: ${reason}`, step, null, {scope});
+        if(step.waitScopeTimer) clearTimeout(step.waitScopeTimer);
+        step.waitScopeTimer = setTimeout(() =>
+        {
+            delete step.waitScopeTimer;
+            ensureStepScope(step, callback);
+        }, 500);
+    };
+    if(!scope || !scope.$) return waitStepScope('no scope');
+    if(scope.name !== 'iframePage')
+    {
+        const $body = scope.$('body');
+        if($body.hasClass('loading-page')) return waitStepScope('page is loading');
+        const scopePage = ($body.attr('data-page') || '').toLowerCase();
+        if(!scopePage) return waitStepScope('page is not ready');
+        const scopePageRaw = ($body.attr('data-page-raw') || '').toLowerCase();
+        const stepPage = (step.page || '').toLowerCase();
+        if(stepPage && stepPage !== scopePage && stepPage !== scopePageRaw) return waitStepScope(['page not match', stepPage,scopePage,scopePageRaw]);
     }
-    step.waitScopeTimer = setTimeout(() => ensureStepScope(step, callback), 200);
+    return setTimeout(() => callback(scope), 200);
 }
 
 function openApp(url, app)
@@ -463,6 +487,7 @@ function activeTaskStep(guideName, taskName, stepIndex)
         step.checkType = step.type === 'form' ? 'change' : (step.type === 'saveForm' ? 'complete' : 'click');
 
         if(step.type === 'openApp' && !task.app) task.app = step.app;
+        if(!step.app && stepIndex) step.app = task.steps[stepIndex - 1].app;
         if(!step.app) step.app = task.app || guide.app;
         if(!step.app)
         {
