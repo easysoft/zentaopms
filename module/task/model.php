@@ -395,6 +395,7 @@ class taskModel extends model
 
         if(!empty($task->parent)) $this->updateParent($task, $isParentChanged);
         if($this->config->edition != 'open' && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
+        if(!empty($oldTask->mode) && empty($task->mode)) $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->exec();
     }
 
     /**
