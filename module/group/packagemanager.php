@@ -2531,8 +2531,11 @@ $config->group->package->workflowLayout = new stdclass();
 $config->group->package->workflowLayout->order  = 20;
 $config->group->package->workflowLayout->subset = 'workflow';
 $config->group->package->workflowLayout->privs  = array();
-$config->group->package->workflowLayout->privs['workflowlayout-admin'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 5, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
-$config->group->package->workflowLayout->privs['workflowlayout-block'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 10, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
+$config->group->package->workflowLayout->privs['workflowlayout-admin']    = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 5, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
+$config->group->package->workflowLayout->privs['workflowlayout-block']    = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 10, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
+$config->group->package->workflowLayout->privs['workflowlayout-addUI']    = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 10, 'depend' => array('workflow-browseFlow', 'workflowlayout-admin'), 'recommend' => array('workflowlayout-editUI', 'workflowlayout-deleteUI'));
+$config->group->package->workflowLayout->privs['workflowlayout-editUI']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 10, 'depend' => array('workflow-browseFlow', 'workflowlayout-admin'), 'recommend' => array('workflowlayout-addUI',  'workflowlayout-deleteUI'));
+$config->group->package->workflowLayout->privs['workflowlayout-deleteUI'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 10, 'depend' => array('workflow-browseFlow', 'workflowlayout-admin'), 'recommend' => array('workflowlayout-editUI', 'workflowlayout-addUI'));
 
 $config->group->package->workflowCondition = new stdclass();
 $config->group->package->workflowCondition->order  = 25;
