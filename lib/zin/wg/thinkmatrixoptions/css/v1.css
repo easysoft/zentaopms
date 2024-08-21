@@ -16,3 +16,18 @@
 .think-multiple-item-move:hover {color: var(--color-primary-500);}
 .has-dragging .think-multiple-item-move > .icon-move {display: none;}
 .think-multiple-item.move-hover {background-color: rgba(var(--color-primary-100-rgb),.2);}
+.think-multiple-item.is-dragging {background-color: rgba(var(--color-primary-100-rgb),.4);}
+.think-multiple-item.is-sub-dragging {background-color: rgba(var(--color-primary-100-rgb),.2);}
+.think-multiple-item.is-dropping {z-index: 5;}
+.think-multiple-item.is-dropping::before,
+.think-multiple-item.is-dropping::after {content: ' '; display: block; position: absolute; top: 0; z-index: 110;}
+.think-multiple-item.is-dropping::after {transform: translateX(-2px);}
+.think-multiple-item.is-dropping::before {width: 2px; height: 100%; background: var(--color-primary-500); top: 0;}
+.think-multiple-item.is-dropping[data-drop-side="left"]::before {left: 0;}
+.think-multiple-item.is-dropping[data-drop-side="right"]::before {right: 0;}
+.think-multiple-item.is-dropping[data-drop-side="left"]::after {left: 0;}
+.think-multiple-item.is-dropping[data-drop-side="right"]::after {right: -4px;}
+.think-multiple-item.is-dropping::after {width: 6px; height: 6px; border-radius: 50%; background: var(--color-primary-500); border: var(--color-primary-100) 3px solid; z-index: 120;}
+.think-multiple-item.is-invalid-drop-level.is-dropping::before,
+.think-multiple-item.is-invalid-drop-level.is-dropping::after {filter: grayscale(1); opacity: .5;}
+.think-multiple .think-multiple-buttons { width: 100%; position: absolute; bottom: -20px; right: 0; text-align: right;}
