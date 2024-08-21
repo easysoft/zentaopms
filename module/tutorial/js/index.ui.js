@@ -342,7 +342,7 @@ function getStepScope(step)
     {
         step.scope = homeScope;
     }
-    else
+    else if(homeScope.$ && homeScope.$.apps)
     {
         const openedApp = step.app ? homeScope.$.apps.openedApps[step.app] : homeScope.$.apps.getLastApp();
         if(openedApp) step.scope = openedApp.iframe.contentWindow;
