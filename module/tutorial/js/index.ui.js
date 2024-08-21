@@ -391,7 +391,7 @@ function activeTaskStep(guideName, taskName, stepIndex)
         step.task      = task;
         step.index     = stepIndex;
         step.isLast    = stepIndex === task.steps.length - 1;
-        step.checkType = step.type === 'form' ? (step.type === 'saveForm' ? 'success' : 'change') : 'click';
+        step.checkType = step.type === 'form' ? 'change' : (step.type === 'saveForm' ? 'complete' : 'click');
 
         if(step.type === 'openApp' && !task.app) task.app = step.app;
         if(!step.app) step.app = task.app || guide.app;
