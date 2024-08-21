@@ -316,6 +316,10 @@ class pivotState
 
     public $sqlBuilder = array();
 
+    public $builderStep = 'table';
+
+    public $tableDesc = array();
+
     /**
      * __construct method.
      *
@@ -369,9 +373,11 @@ class pivotState
      */
     public function initSqlBuilder()
     {
-        $this->sqlBuilder['step']      = 'table';
+        $this->builderStep = 'table';
+        $this->tableDesc   = array();
+
         $this->sqlBuilder['joins']     = array();
-        $this->sqlBuilder['tableDesc'] = array();
+
 
         if(!isset($this->sqlBuilder['from'])) $this->setFrom('');
     }
@@ -385,7 +391,7 @@ class pivotState
      */
     public function setFrom($table)
     {
-        $this->sqlBuilder['from'] = array('table' => $table, 'alias' => 't1');
+        $this->sqlBuilder['from'] = array('table' => $table, 'alias' => 't1', 'select' => array());
     }
 
     /**
@@ -407,9 +413,10 @@ class pivotState
             return;
         }
         $join = array();
-        $join['table'] = $left;
-        $join['alias'] = $alias;
-        $join['on']    = array($columnA, $fieldA, '=', $alias, $fieldB);
+        $join['table']  = $left;
+        $join['alias']  = $alias;
+        $join['select'] = array();
+        $join['on']     = array($columnA, $fieldA, '=', $alias, $fieldB);
 
         $this->sqlBuilder['joins'][] = $join;
     }
@@ -448,7 +455,7 @@ class pivotState
     {
         $from      = $this->sqlBuilder['from'];
         $joins     = $this->sqlBuilder['joins'];
-        $tableDesc = $this->sqlBuilder['tableDesc'];
+        $tableDesc = $this->tableDesc;
         array_unshift($joins, $from);
 
         foreach($joins as $join)
