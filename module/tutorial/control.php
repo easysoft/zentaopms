@@ -32,19 +32,20 @@ class tutorial extends control
      * @access public
      * @return void
      */
-    public function index(string $referer = '', string $task = '')
+    public function index(string $referer = '', $guide = '', string $task = '')
     {
         $setting = isset($this->config->tutorial->tasks->setting) ? $this->config->tutorial->tasks->setting : '';
 
         $this->loadModel('setting')->setItem($this->app->user->account . '.common.global.novice', 0);
         $this->session->set('tutorialMode', true);
 
-        $this->view->title       = $this->lang->tutorial->common;
-        $this->view->currentTask = $task;
-        $this->view->guides      = $this->config->tutorial->guides;
-        $this->view->setting     = $setting;
-        $this->view->referer     = base64_decode($referer);
-        $this->view->mode        = $this->setting->getItem('owner=system&module=common&section=global&key=mode');
+        $this->view->title        = $this->lang->tutorial->common;
+        $this->view->currentGuide = $guide;
+        $this->view->currentTask  = $task;
+        $this->view->guides       = $this->config->tutorial->guides;
+        $this->view->setting      = $setting;
+        $this->view->referer      = base64_decode($referer);
+        $this->view->mode         = $this->setting->getItem('owner=system&module=common&section=global&key=mode');
         $this->display();
     }
 

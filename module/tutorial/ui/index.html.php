@@ -147,6 +147,7 @@ $buildTutorialTabPane = function($type) use ($groupedGuides, $lang, $currentType
         set::title($lang->tutorial->guideTypes[$type]),
         set::active($type === $currentType),
         set::class('px-2.5'),
+        set::key($type),
         simpleList
         (
             setData('type', $type),
@@ -190,6 +191,7 @@ div
         setID('sidebar'), // 侧边栏。Sidebar.
         setClass('absolute top-0 bottom-0 right-0 border-l'),
         style::width('--sidebar-width'),
+        ($currentGuide && $currentTask) ? on::init()->call('activeTask', $currentGuide, $currentTask) : null,
         h::header
         (
             setClass('row items-center flex-nowrap p-2'),

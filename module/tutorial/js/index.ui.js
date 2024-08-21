@@ -248,6 +248,13 @@ function updateTaskUI(task, change)
     $task.attr('data-status', task.status).toggleClass('active', !!task.active);
     const $steps = $task.find('.tutorial-step').removeClass('active');
     if(task.currentStepIndex !== undefined) $steps.filter(`[data-step="${task.currentStepIndex}"]`).addClass('active');
+
+    if(task.active)
+    {
+        const $tabToggle = $(`#tutorialTabs .tabs-nav>.nav-item[data-key="${task.guide.type}"]>a`);
+        if($tabToggle.length && !$tabToggle.hasClass('active')) setTimeout(() => $tabToggle[0].click(), 200);
+        $task.scrollIntoView();
+    }
     return true;
 }
 
@@ -419,7 +426,7 @@ function activeTask(guideName, taskName, step)
         toggleActiveTarget('task', currentTask, true);
     }
 
-    activeTaskStep(guideName, taskName, step);
+    activeTaskStep(guideName, taskName, stepIndex);
 }
 
 function unactiveGuide()
@@ -444,6 +451,8 @@ function activeGuide(guideName)
         toggleActiveTarget('guide', currentGuide, true);
     }
 }
+
+window.activeTask = activeTask;
 
 window.getCurrentStepID = function()
 {
