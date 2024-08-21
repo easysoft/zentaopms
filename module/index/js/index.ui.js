@@ -1024,17 +1024,21 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
         );
     }
 
+    const hideDisabled = code === 'my' || $btn.is('.active');
     items.push(
         {
             text: langData.hide,
-            onClick: () => {
-                const $li = $btn.closest('li');
-                const appName = $li.data('app');
-                $li.remove();
-                const data = getMenuNavData();
-                
-                console.log(appName, data);
-            }
+            onClick: hideDisabled
+                ? null
+                : () => {
+                    const $li = $btn.closest('li');
+                    const appName = $li.data('app');
+                    $li.remove();
+                    const data = getMenuNavData();
+                    
+                    console.log(appName, data);
+                },
+            disabled: hideDisabled,
         }
     );
 
