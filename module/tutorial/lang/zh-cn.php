@@ -246,7 +246,7 @@ $lang->tutorial->scrumProjectManage->manageTask->step18->desc = '进入版本模
 
 $lang->tutorial->scrumProjectManage->manageTask->step19 = new stdClass();
 $lang->tutorial->scrumProjectManage->manageTask->step19->name = '点击创建版本';
-$lang->tutorial->scrumProjectManage->manageTask->step19->desc = '******************************************';
+$lang->tutorial->scrumProjectManage->manageTask->step19->desc = '可以在这里创建新的版本';
 
 $lang->tutorial->scrumProjectManage->manageTask->step20 = new stdClass();
 $lang->tutorial->scrumProjectManage->manageTask->step20->name = '填写表单';

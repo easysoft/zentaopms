@@ -104,13 +104,13 @@ $scrumProjectManage->tasks['manageProject']['steps'][] = array(
 $scrumProjectManage->tasks['manageExecution'] = array();
 $scrumProjectManage->tasks['manageExecution']['name']     = 'manageExecution';
 $scrumProjectManage->tasks['manageExecution']['title']    = $lang->tutorial->scrumProjectManage->manageExecution->title;
-$scrumProjectManage->tasks['manageExecution']['startUrl'] = array('execution', 'all');
+$scrumProjectManage->tasks['manageExecution']['startUrl'] = array('project', 'index', 'project=2');
 $scrumProjectManage->tasks['manageExecution']['steps']    = array();
 
 $scrumProjectManage->tasks['manageExecution']['steps'][] = array(
     'type'   => 'clickNavbar',
     'target' => 'execution',
-    'page'   => 'project-execution',
+    'page'   => 'project-index',
     'title'  => $lang->tutorial->scrumProjectManage->manageExecution->step1->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageExecution->step1->desc
 );
@@ -118,7 +118,7 @@ $scrumProjectManage->tasks['manageExecution']['steps'][] = array(
 $scrumProjectManage->tasks['manageExecution']['steps'][] = array(
     'type'   => 'click',
     'target' => '#mainMenu #actionBar a.create-execution-btn',
-    'page'   => 'execution-create',
+    'page'   => 'project-execution',
     'title'  => $lang->tutorial->scrumProjectManage->manageExecution->step2->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageExecution->step2->desc
 );
@@ -308,7 +308,6 @@ $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step18->desc
 );
 
-//创建版本按钮
 $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'type'   => 'click',
     'target' => '#mainContainer #actionBar a',
@@ -316,7 +315,6 @@ $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'title'  => $lang->tutorial->scrumProjectManage->manageTask->step19->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step19->desc
 );
-/**************************/
 
 $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'type'   => 'form',
@@ -333,13 +331,28 @@ $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step21->desc
 );
 
-//版本列表中关联需求按钮
 $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'type'   => 'click',
-    'target' => '',
+    'target' => '', //版本列表中关联需求按钮
     'page'   => 'execution-build',
     'title'  => $lang->tutorial->scrumProjectManage->manageTask->step22->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step22->desc
+);
+
+$scrumProjectManage->tasks['manageTask']['steps'][] = array(
+    'type'   => 'selectRow',
+    'target' => '#unlinkStoryList',
+    'page'   => 'build-view',
+    'title'  => $lang->tutorial->scrumProjectManage->manageTask->step23->name,
+    'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step23->desc
+);
+
+$scrumProjectManage->tasks['manageTask']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#unlinkStoryList .dtable-footer .linkObjectBtn',
+    'page'   => 'build-view',
+    'title'  => $lang->tutorial->scrumProjectManage->manageTask->step24->name,
+    'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step24->desc
 );
 
 $config->tutorial->guides[$scrumProjectManage->name] = $scrumProjectManage;
