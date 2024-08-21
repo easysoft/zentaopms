@@ -1561,10 +1561,19 @@ class testcaseModel extends model
                     }
                     unset($num);
                     unset($sign);
+                    if($stepKey == 'expect' && !empty($stepData[$row]['desc']))
+                    {
+                        foreach($stepData[$row]['desc'] as $stepDescValue)
+                        {
+                            if(empty($stepDescValue['number'])) continue;
+                            $caseNumber = $stepDescValue['number'];
+
+                            if($stepDescValue && !isset($caseStep[$caseNumber]) || empty($caseStep[$caseNumber]['content'])) $caseStep[$caseNumber] = '';
+                        }
+                    }
                     $stepVars += count($caseStep, COUNT_RECURSIVE) - count($caseStep);
                     $stepData[$row][$stepKey] = $caseStep;
                 }
-
             }
         }
         return $stepData;

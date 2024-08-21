@@ -2631,7 +2631,6 @@ class testcaseZen extends testcase
 
         $fields   = $this->testcase->getImportFields($productID);
         $fields   = array_flip($fields);
-        $endField = end($fields);
         $caseData = array();
         $stepData = array();
         $stepVars = 0;
@@ -2654,9 +2653,21 @@ class testcaseZen extends testcase
                     $steps   = (array)$cellValue;
                     if(strpos($cellValue, "\r")) $steps = explode("\r", $cellValue);
                     if(strpos($cellValue, "\n")) $steps = explode("\n", $cellValue);
-
                     $caseStep  = $this->getImportSteps($field, $steps, $stepData, $row);
+
+                    if($stepKey == 'expect' && !empty($stepData[$row]['desc']))
+                    {
+                        foreach($stepData[$row]['desc'] as $stepDescValue)
+                        {
+                            if(empty($stepDescValue['number'])) continue;
+                            $caseNumber = $stepDescValue['number'];
+
+                            if($stepDescValue && !isset($caseStep[$caseNumber]) || empty($caseStep[$caseNumber]['content'])) $caseStep[$caseNumber] = '';
+                        }
+                    }
+
                     $stepVars += count($caseStep, COUNT_RECURSIVE) - count($caseStep);
+
                     $stepData[$row][$stepKey] = array_values($caseStep);
                 }
             }
