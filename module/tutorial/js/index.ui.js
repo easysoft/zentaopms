@@ -122,7 +122,7 @@ const stepPresenters =
         /* Check form. */
         let $form   = $target.closest('form');
         if(!$form.length) $form = scope.$('form');
-        if(!$form.length) return console.error(`[TUTORIAL] Cannot find form for step "${step.guide.title || step.guide.name} > ${step.task.title || step.task.name} > ${step.title}"`, step);
+        if(!$form.length) return console.error(`[TUTORIAL] Cannot find form for step "${step.guide.name} > ${step.task.name} > ${step.title}"`, step);
 
         const $saveBtn = $form.find('[type="submit"]');
         return highlightStepTarget($saveBtn.length ? $saveBtn : $target, step);
@@ -141,12 +141,6 @@ function destroyPopover(callback)
     {
         $trigger.removeClass('tutorial-hl');
         $trigger.closest('body').find('.tutorial-light-box').addClass('opacity-0');
-    }
-    if(config.debug)
-    {
-        console.groupCollapsed('[TUTORIAL] Destroy popover', popover.gid, {popover, $trigger});
-        console.trace();
-        console.groupEnd();
     }
     if(callback) setTimeout(callback, popover.shown ? 300 : 200);
     popover.hide(true);
