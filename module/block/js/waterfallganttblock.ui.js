@@ -6,7 +6,7 @@ $(function()
         initWaterfallGanttBlock();
     }
     $('#ganttContainer').off('scroll').on('scroll', function(e) {
-        $('#ganttPlans').scrollTop = e.target.scrollTop;
+        $('#ganttPlans')[0].scrollTop = e.target.scrollTop;
     });
 });
 
