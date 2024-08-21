@@ -14,6 +14,7 @@ class thinkRadio extends thinkQuestion
     (
         'enableOther?: bool',
         'fields?: array',
+        'setOption?: bool=false',
     );
 
     protected function buildDetail(): array
@@ -48,18 +49,34 @@ class thinkRadio extends thinkQuestion
         $app->loadLang('thinkstep');
         $formItems = parent::buildFormItem();
 
-        list($step, $questionType, $required, $enableOther, $fields) = $this->prop(array('step', 'questionType', 'required', 'enableOther', 'fields'));
+        list($step, $questionType, $required, $enableOther, $fields, $setOption) = $this->prop(array('step', 'questionType', 'required', 'enableOther', 'fields', 'setOption'));
         $requiredItems = $lang->thinkstep->requiredList;
         if($step)
         {
             $enableOther = $step->options->enableOther ?? 0;
             $required    = $step->options->required;
+            $setOption   = isset($step->options->setOption) ? $step->options->setOption : false;
             if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);
             $fields = $step->options->fields ?? array();
         }
 
         $formItems[] = array(
             formHidden('options[questionType]', $questionType),
+            $questionType == 'checkbox' ? formRow
+            (
+                formGroup
+                (
+                    setClass('w-66'),
+                    set::label($lang->thinkstep->label->setOption),
+                    radioList
+                    (
+                        set::name('options[setOption]'),
+                        set::inline(true),
+                        set::value($setOption),
+                        set::items($lang->thinkstep->setOptionList)
+                    )
+                )
+            ) : null,
             formGroup
             (
                 set::label($lang->thinkstep->label->option),
