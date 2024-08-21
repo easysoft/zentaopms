@@ -106,6 +106,8 @@ $lang->bi->queryFilterFormHeader['default'] = '默认值';
 $lang->bi->emptyError     = '不能为空';
 $lang->bi->duplicateError = '存在重复';
 
+$lang->bi->emptyError = '不能为空';
+
 $lang->bi->stepFieldTitle = '选择查询表中的字段';
 $lang->bi->stepFieldTip   = '选择查询表中的字段用于从已选择的查询表中获取所需的数据。';
 $lang->bi->leftTableTip   = '在SQL中，左连接（Left join）是一种表与表之间的关联操作，它返回左表中所有记录以及与右表中匹配的记录。左连接根据指定的条件从两个表中组合数据，其中左表是查询的主表，而右表是要连接的表。具体请看联表查询常用方式：左连接。';
