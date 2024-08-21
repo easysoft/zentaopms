@@ -2667,7 +2667,6 @@ class testcaseZen extends testcase
                     }
 
                     $stepVars += count($caseStep, COUNT_RECURSIVE) - count($caseStep);
-
                     $stepData[$row][$stepKey] = array_values($caseStep);
                 }
             }
