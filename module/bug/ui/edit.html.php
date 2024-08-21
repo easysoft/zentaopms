@@ -480,7 +480,7 @@ detailBody
             item
             (
                 set::name($lang->bug->resolvedDate),
-                datePicker
+                datetimePicker
                 (
                     set::name('resolvedDate'),
                     set::value($bug->resolvedDate)
