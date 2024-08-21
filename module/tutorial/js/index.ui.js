@@ -198,7 +198,7 @@ function highlightStepTarget($target, step, popoverOptions)
             const $body = $trigger.closest('body');
             const triggerRect = info.trigger.getBoundingClientRect();
             let $lightElement = $body.find('.tutorial-light-box');
-            if(!$lightElement.length) $lightElement = $('<div class="tutorial-light-box fixed pointer-events-none rounded" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.4), 0 0 0 9999px rgba(0, 0, 0, 0.4); z-index: 1690; transition: top .2s, left .2s, opacity .2s;"></div>').appendTo($body);
+            if(!$lightElement.length) $lightElement = $('<div class="tutorial-light-box fixed pointer-events-none rounded" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.4), 0 0 0 9999px rgba(0, 0, 0, 0.4); z-index: 1690; transition: top .1s, left .1s, opacity .3s;"></div>').appendTo($body);
             $lightElement.removeClass('opacity-0').css(
             {
                 top         : triggerRect.top,
