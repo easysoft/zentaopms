@@ -13,6 +13,21 @@ declare(strict_types=1);
 class tutorialModel extends model
 {
     /**
+     * 获取当前所在的教程和任务。
+     * Get guide and task.
+     *
+     * @access public
+     * @return bool
+     */
+    public function getGuideTaskName()
+    {
+        if(empty($_SERVER['HTTP_X_ZIN_TUTORIAL'])) return array('guide' => '', 'guideTask' => '');
+
+        list($guide, $guideTask, $guideStepIndex) = explode('-', $_SERVER['HTTP_X_ZIN_TUTORIAL']);
+        return array('guide' => $guide, 'guideTask' => $guideTask);
+    }
+
+    /**
      * 检查新手模式配置。
      * Check novice mode config.
      *
