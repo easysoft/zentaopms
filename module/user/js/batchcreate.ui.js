@@ -1,3 +1,21 @@
+window.renderRowData = function($row, index, row)
+{
+    $row.find('[data-name="companyItem"]').find('.picker-box').on('inited', function(e, info)
+    {
+        let $compnayPicker = info[0];
+        if(index == 0)
+        {
+            let companyItems   = info[0].options.items;
+            companyItems.pop();
+            $compnayPicker.render({items: companyItems});
+        }
+        else
+        {
+            $compnayPicker.$.setValue('ditto');
+        }
+    });
+};
+
 /**
  * 根据用户类型切换控件的显示和隐藏。
  * Toggle the display of controls according to the user type.
