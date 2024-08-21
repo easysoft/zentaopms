@@ -39,8 +39,8 @@ class thinkMatrixOptions extends wg
         global $lang, $app;
         $app->loadLang('thinkstep');
         $id         = $this->prop('id') ? $this->prop('id') : $this->gid;
-        $deleteTip  = $this->prop('deleteTip', $lang->thinkstep->deleteOptionTip);
-        $addColText = $this->prop('addColText') ? $this->prop('addColText') : $lang->thinkstep->addCol;
+        $deleteTip  = $this->prop('deleteTip', $lang->thinkstep->tips->deleteCol);
+        $addColText = $this->prop('addColText', $lang->thinkstep->addCol);
 
         return div
         (
