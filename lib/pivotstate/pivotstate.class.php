@@ -423,6 +423,38 @@ class pivotState
      */
 
     /**
+     * Check sql builder.
+     *
+     * @access public
+     * @return bool
+     */
+    public function checkSqlBuilder()
+    {
+        $builder = $this->sqlBuilder;
+        if(!isset($builder['from'])) return false;
+
+        $select = array();
+        $from = $builder['from'];
+        if(empty($from['table'])) return false;
+        $select = array_merge($select, $from['select']);
+
+        $joins = $builder['joins'];
+        foreach($joins as $join)
+        {
+            if(empty($join['table'])) return false;
+
+            list($columnA, $fieldA, $operator, $alias, $fieldB) = $join['on'];
+            if(empty($columnA) || empty($fieldA) || empty($fieldB)) return false;
+
+            $select = array_merge($select, $join['select']);
+        }
+
+        if(empty($select)) return false;
+
+        return true;
+    }
+
+    /**
      * Set form.
      *
      * @param  string $table
