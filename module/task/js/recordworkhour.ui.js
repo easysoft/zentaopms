@@ -24,3 +24,32 @@ $(document).on('click', '.modal-actions > button', function()
 {
     loadCurrentPage();
 })
+
+window.toggleFold = function()
+{
+    const fold  = $('#toggleFoldIcon').find('.angle-down').length > 0;
+    const $icon = $('#toggleFoldIcon').find('.icon-toggle');
+    const $text = $('#toggleFoldIcon').find('.text');
+
+    $.cookie.set('taskEffortFold', fold ? 0 : 1, {expires:config.cookieLife, path:config.webRoot});
+
+    if(fold)
+    {
+        /* Update icon and text. */
+        $icon.removeClass('angle-down')
+            .addClass('angle-top');
+        $text.text(foldEffort);
+
+        /* Show all efforts. */
+        $('.taskEffort > tbody > tr').removeClass('hidden');
+    }
+    else
+    {
+        $icon.removeClass('angle-top')
+            .addClass('angle-down');
+        $text.text(unfoldEffort);
+
+        /* Efforts whose number is greater than 3 are hidden. */
+        $('.taskEffort > tbody').children('tr:nth-child(n+5)').addClass('hidden');
+    }
+}

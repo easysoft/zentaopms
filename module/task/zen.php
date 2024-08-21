@@ -407,13 +407,21 @@ class taskZen extends task
         if(!$orderBy) $orderBy = 'id_desc';
 
         /* Set the fold state of the current task. */
-        $taskEffortFold = 0;
-        $currentAccount = $this->app->user->account;
-        if($task->assignedTo == $currentAccount) $taskEffortFold = 1;
-        if(!empty($task->team))
+        $referer = strtolower($_SERVER['HTTP_REFERER']);
+        if(strpos($referer, 'recordworkhour') and $this->cookie->taskEffortFold !== false)
         {
-            $teamMember = array_column($task->team, 'account');
-            if(in_array($currentAccount, $teamMember)) $taskEffortFold = 1;
+            $taskEffortFold = $this->cookie->taskEffortFold;
+        }
+        else
+        {
+            $taskEffortFold = 0;
+            $currentAccount = $this->app->user->account;
+            if($task->assignedTo == $currentAccount) $taskEffortFold = 1;
+            if(!empty($task->team))
+            {
+                $teamMember = array_column($task->team, 'account');
+                if(in_array($currentAccount, $teamMember)) $taskEffortFold = 1;
+            }
         }
 
         $this->view->title          = $this->lang->task->record;

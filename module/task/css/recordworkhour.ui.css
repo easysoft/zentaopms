@@ -7,3 +7,8 @@
 .modal-body .panel-form-batch {padding-top: 1rem;}
 .modal-body .table {margin-bottom: 1.5rem;}
 .modal-body .table + .panel-form-batch {padding-top: 0;}
+
+#toggleFoldIcon:hover {cursor: pointer;}
+#toggleFoldIcon {margin-bottom: 10px;}
+#toggleFoldIcon .angle-top > .icon-back-circle:before {transform: rotate(90deg);}
+#toggleFoldIcon .angle-down > .icon-back-circle:before {transform: rotate(270deg);}

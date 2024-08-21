@@ -11,6 +11,9 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('confirmRecord', $lang->task->confirmRecord);
+jsVar('foldEffort', $lang->task->foldEffort);
+jsVar('unfoldEffort', $lang->task->unfoldEffort);
+
 if(isInModal()) set::id("modal-record-hours-task-{$task->id}");
 
 modalHeader
@@ -57,12 +60,15 @@ if($efforts)
     else
     {
         $effortRows = array();
+        $i = 1;
         foreach($efforts as $effort)
         {
             $canOperateEffort = $this->task->canOperateEffort($task, $effort);
             $operateTips      = $canOperateEffort ? '' : $lang->task->effortOperateTips;
+            $hidden           = ($taskEffortFold and $i > 3) ? 'hidden' : '';
             $effortRows[] = h::tr
             (
+                setClass($hidden),
                 h::td($effort->id),
                 h::td($effort->date),
                 h::td(zget($users, $effort->account)),
@@ -90,6 +96,7 @@ if($efforts)
                     ) : null
                 )
             );
+            $i ++;
         }
         div
         (
@@ -98,7 +105,7 @@ if($efforts)
         );
         h::table
         (
-            setClass('table condensed bordered'),
+            setClass('table condensed bordered taskEffort'),
             h::tr
             (
                 h::th
@@ -135,6 +142,19 @@ if($efforts)
             ),
             $effortRows
         );
+        if(count($efforts) > 3)
+        {
+            $iconClass = $taskEffortFold ? 'angle-down' : 'angle-top';
+            $iconText  = $taskEffortFold ? $lang->task->unfoldEffort : $lang->task->foldEffort;
+            div
+            (
+                setID('toggleFoldIcon'),
+                on::click('toggleFold'),
+                setClass('text-primary'),
+                span(setClass($iconClass . ' mr-1 icon-toggle'), icon('back-circle')),
+                span(setClass('text'), $iconText)
+            );
+        }
     }
 }
 
