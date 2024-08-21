@@ -359,8 +359,13 @@ function ensureStepScope(step, callback)
 
 function openApp(url, app)
 {
-    if(Array.isArray(url)) url = $.createLink.apply(null, url);
     const homeScope = getHomeScope();
+    if(!homeScope.$ || !homeScope.$.apps)
+    {
+        setTimeout(() => openApp(url, app), 200);
+        return;
+    }
+    if(Array.isArray(url)) url = $.createLink.apply(null, url);
     const openedApp = homeScope.$.apps.open(url, app, {forceReload: true});
     if(openedApp && openedApp.iframe.contentWindow.$)
     {
