@@ -443,7 +443,7 @@ class pivotState
         {
             if(empty($join['table'])) return false;
 
-            list($columnA, $fieldA, $operator, $alias, $fieldB) = $join['on'];
+            list($columnA, $fieldA, $fieldB) = array($join['on'][0], $join['on'][1], $join['on'][4]);
             if(empty($columnA) || empty($fieldA) || empty($fieldB)) return false;
 
             $select = array_merge($select, $join['select']);
