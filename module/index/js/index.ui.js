@@ -867,7 +867,7 @@ function generateAddMenuNavItems(onClick)
     return items;
 }
 
-$('#menuNav .divider').on('contextmenu', function(event) 
+$(document).on('contextmenu', '#menuNav .divider', function(event) 
 {
     const $divider = $(this);
     const $nav = $divider.closest('.nav');
