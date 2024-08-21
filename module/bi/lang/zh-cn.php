@@ -33,6 +33,8 @@ $lang->bi->joinCondition = '连接条件为';
 $lang->bi->joinTable     = ' = %s的';
 $lang->bi->of            = '的';
 $lang->bi->enable        = '启用';
+$lang->bi->allFields     = '全部字段(*)';
+$lang->bi->previewSql    = '预览构建的sql语句';
 
 $lang->bi->stepFieldTitle = '选择查询表中的字段';
 $lang->bi->stepFieldTip   = '选择查询表中的字段用于从已选择的查询表中获取所需的数据。';

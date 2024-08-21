@@ -29,6 +29,8 @@ $lang->bi->joinCondition = 'Condition';
 $lang->bi->joinTable     = ' = %s';
 $lang->bi->of            = 'Of';
 $lang->bi->enable        = 'Enable';
+$lang->bi->allFields     = 'Select *';
+$lang->bi->previewSql    = 'Preview SQL statement';
 
 $lang->bi->stepFieldTitle = 'Select a field in the lookup table';
 $lang->bi->stepFieldTip   = 'The fields in the select query table are used to get the required data from the selected query table.';
