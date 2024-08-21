@@ -177,6 +177,7 @@ function highlightStepTarget($target, step, popoverOptions)
         headingClass    : 'popover-heading bg-transparent',
         elementShowClass: 'with-popover-show tutorial-hl',
         destroyOnHide   : true,
+        shift           : true,
         hideOthers      : false,
         hideNewOnHide   : false,
         footer:
@@ -219,7 +220,7 @@ function highlightStepTarget($target, step, popoverOptions)
         if(['openApp'].includes(step.type)) popoverOptions.title = lang.clickTipFormat.replace('%s', text);
     }
     const scope = getStepScope(step);
-    popover = new zui.Popover($target, popoverOptions);
+    popover = new scope.zui.Popover($target, popoverOptions);
     if(!popoverOptions.notFinalTarget) $target.attr('zui-tutorial-step', step.id);
     $target.scrollIntoView();
 
