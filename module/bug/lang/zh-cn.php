@@ -440,6 +440,7 @@ $lang->bug->notice->delayWarning          = " <strong class='text-danger'> 延�
 $lang->bug->notice->skipNotActive         = "Bug %s 已解决或已关闭，不再修改。";
 
 $lang->bug->error = new stdclass();
-$lang->bug->error->notExist       = 'Bug不存在。';
-$lang->bug->error->cannotActivate = '状态不是已解决或已关闭的Bug不能激活。';
-$lang->bug->error->stepsNotEmpty  = "重现步骤不能为空。";
+$lang->bug->error->notExist             = 'Bug不存在。';
+$lang->bug->error->cannotActivate       = '状态不是已解决或已关闭的Bug不能激活。';
+$lang->bug->error->stepsNotEmpty        = "重现步骤不能为空。";
+$lang->bug->error->duplicateBugNotExist = '重复Bug不存在。';
