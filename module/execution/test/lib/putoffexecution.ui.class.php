@@ -9,6 +9,7 @@ class putoffExecutionTester extends tester
      * @param  array  $execution
      * @param  string $executionId
      * @access public
+     * @return bool
      */
     public function inputFields($execution, $executionId)
     {
@@ -19,6 +20,7 @@ class putoffExecutionTester extends tester
         if(isset($execution['end'])) $form->dom->end->datePicker($execution['end']);
         $form->dom->putoffSubmit->click();
         $form->wait(1);
+        return $status;
     }
 
     /**
@@ -30,14 +32,14 @@ class putoffExecutionTester extends tester
      * @access public
      * @return bool
      */
-    public function putoff($execution = '', $executionId)
+    public function putoff($execution, $executionId)
     {
-        $this->inputFields($execution, $executionId);
+        $status = $this->inputFields($execution, $executionId);
         $form = $this->loadPage();
 
         if($form->dom->status->getText() != $status) return $this->failed('执行状态错误');
-        if($form->dom->plannedBegin->getText() != $execution['begin']) return $this->failed('计划开始时间错误');
-        if($form->dom->plannedEnd->getText() != $execution['end']) return $this->failed('计划完成时间错误');
+        if(isset($execution['begin']) && $form->dom->plannedBegin->getText() != $execution['begin']) return $this->failed('计划开始时间错误');
+        if(isset($execution['end']) && $form->dom->plannedEnd->getText() != $execution['end']) return $this->failed('计划完成时间错误');
         return $this->success('延期执行成功');
     }
 
@@ -51,7 +53,7 @@ class putoffExecutionTester extends tester
      * @access public
      * @return bool
      */
-    Public function putoffiWithWrongDate($execution = '', $executionId, $dateType = 'end')
+    Public function putoffiWithWrongDate($execution, $executionId, $dateType = 'end')
     {
         $this->inputFields($execution, $executionId);
 
