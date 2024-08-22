@@ -17,12 +17,12 @@ class thinkMatrixOptions extends wg
 {
     protected static array $defineProps = array
     (
-        'id?: string="$GID"',     // 组件根元素的 ID。
-        'name?: string="fields"', // 输入框作为表单项的名称。
-        'data?: array',           // 默认值。
-        'deleteTip?: string',     // 禁用删除提示。
-        'addTip?: string',        // 禁用添加提示。
-        'addColText: string',     // 添加列按钮文字
+        'id?: string="$GID"',           // 组件根元素的 ID。
+        'colName?: string="colFields"', // 列数据的名称。
+        'cols?: array',                 // 列数据的默认值。
+        'deleteColTip?: string',        // 禁用删除提示。
+        'addColTip?: string',           // 禁用添加提示。
+        'addColText: string',           // 添加列按钮文字。
     );
 
     public static function getPageJS(): ?string
@@ -39,10 +39,10 @@ class thinkMatrixOptions extends wg
     {
         global $lang, $app;
         $app->loadLang('thinkstep');
-        $id         = $this->prop('id') ? $this->prop('id') : $this->gid;
-        $deleteTip  = $this->prop('deleteTip', $lang->thinkstep->tips->deleteCol);
-        $addColText = $this->prop('addColText', $lang->thinkstep->addCol);
-        $addTip     = $this->prop('addTip', $lang->thinkstep->tips->addCol);
+        $id           = $this->prop('id') ? $this->prop('id') : $this->gid;
+        $deleteColTip = $this->prop('deleteColTip', $lang->thinkstep->tips->deleteCol);
+        $addColText   = $this->prop('addColText', $lang->thinkstep->addCol);
+        $addColTip    = $this->prop('addColTip', $lang->thinkstep->tips->addCol);
 
         return div
         (
@@ -52,11 +52,11 @@ class thinkMatrixOptions extends wg
             zui::thinkMatrixOptions
             (
                 set::_to("#$id"),
-                set::deleteTip($deleteTip),
-                set::enterPlaceholder($lang->thinkstep->label->columnTitle),
+                set::deleteColTip($deleteColTip),
+                set::colPlaceholder($lang->thinkstep->label->columnTitle),
                 set::addColText($addColText),
-                set::addTip($addTip),
-                set($this->props->pick(array('name', 'data')))
+                set::addColTip($addColTip),
+                set($this->props->pick(array('colName', 'cols')))
             )
         );
     }
