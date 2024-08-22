@@ -21,12 +21,18 @@ class thinkMulticolumn extends thinkQuestion
         list($step, $questionType, $required, $enableOther, $fields) = $this->prop(array('step', 'questionType', 'required', 'enableOther', 'fields'));
         $requiredItems = $lang->thinkstep->requiredList;
 
+        $requiredCols = array();
         if($step)
         {
             $enableOther = $step->options->enableOther ?? 0;
             $required    = $step->options->required;
             if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);
-            $fields = $step->options->fields ?? array('', '', '', '');
+            $fields       = $step->options->fields ?? array('', '', '', '');
+            $requiredCols = $step->options->requiredCols ?? array();
+        }
+        else
+        {
+            $requiredCols = isset($_COOKIE['thinkRequiredCols']) ? json_decode($_COOKIE['thinkRequiredCols']) : array();
         }
 
         $formItems[] = array(
@@ -39,7 +45,7 @@ class thinkMulticolumn extends thinkQuestion
             ),
             formRow
             (
-                setClass('mb-3 required-options-row'),
+                setClass('mb-3'),
                 formGroup
                 (
                     set::width('1/2'),
@@ -56,12 +62,12 @@ class thinkMulticolumn extends thinkQuestion
                 formGroup
                 (
                     set::width('1/2'),
-                    set::label($lang->thinkstep->label->required),
+                    set::label($lang->thinkstep->label->requiredCol),
                     setClass('required-options'),
                     picker
                     (
                         set::name('options[requiredCols][]'),
-                        set::items(array()),
+                        set::items($requiredCols),
                         set::multiple(true)
                     )
                 ),
