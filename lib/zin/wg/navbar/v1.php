@@ -310,12 +310,14 @@ class navbar extends wg
      */
     protected function build()
     {
+        $items = $this->getItems();
+        jsVar('allNavbarItems', $items);
         return h::nav
         (
             set::id('navbar'),
             new nav
             (
-                set::items($this->getItems()),
+                set::items($items),
                 $this->children()
             )
         );
