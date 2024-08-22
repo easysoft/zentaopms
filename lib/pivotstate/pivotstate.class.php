@@ -606,6 +606,20 @@ class pivotState
     }
 
     /**
+     * Get funcs.
+     *
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function getFuncs($type)
+    {
+        $funcs = array();
+        foreach($this->sqlBuilder['funcs'] as $func) if($func['type'] == $type) $funcs[] = $func;
+        return $funcs;
+    }
+
+    /**
      * Get next table alias.
      *
      * @access public
