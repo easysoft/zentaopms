@@ -105,6 +105,7 @@ class thinkRadio extends thinkQuestion
             ) : null,
             formGroup
             (
+                setClass('think-options-field', ($questionType === 'checkbox' && $setOption == 1) ? 'hidden' : ''),
                 set::label($lang->thinkstep->label->option),
                 thinkOptions
                 (
