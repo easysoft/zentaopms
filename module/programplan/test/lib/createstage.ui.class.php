@@ -20,3 +20,11 @@ class createStageTester extends tester
             $programplanForm->dom->$btn->click();
             $programplanForm->wait(1);
         }
+
+        if(isset($waterfall['name_0']))  $programplanForm->dom->name_0->setValue($waterfall['name_0']);
+        if(isset($waterfall['begin_0'])) $programplanForm->dom->begin->setValue($waterfall['begin_0']);
+        if(isset($waterfall['end_0']))   $programplanForm->dom->end->setValue($waterfall['end_0']);
+        $programplanForm->wait(1);
+        $programplanForm->dom->submitBtn->click();
+        $programplanForm->wait(1);
+}
