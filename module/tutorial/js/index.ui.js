@@ -454,6 +454,12 @@ function ensureStepScope(step, callback)
 
 function openApp(url, app)
 {
+    if(url.includes('#app='))
+    {
+        const [urlPart, appPart] = url.split('#app=', 2);
+        url = urlPart;
+        app = appPart;
+    }
     const homeScope = getHomeScope();
     if(!homeScope.$ || !homeScope.$.apps)
     {
