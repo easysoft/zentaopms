@@ -482,6 +482,36 @@ class pivotState
     }
 
     /**
+     * Check funcs.
+     *
+     * @access public
+     * @return bool
+     */
+    public function checkFuncs()
+    {
+        $builder = $this->sqlBuilder;
+        $funcs   = $builder['funcs'];
+
+        foreach($funcs as $index => $func)
+        {
+            $table    = empty($func['table']);
+            $field    = empty($func['field']);
+            $function = empty($func['function']);
+            $alias    = empty($func['alias']);
+
+            $allEmpty = (int)$table + (int)$field + (int)$function + (int)$alias;
+            if($allEmpty === 0) continue;
+
+            if($table)    return $this->setBuilderError('func', 'table', $index);
+            if($field)    return $this->setBuilderError('func', 'field', $index);
+            if($function) return $this->setBuilderError('func', 'function', $index);
+            if($alias)    return $this->setBuilderError('func', 'alias', $index);
+        }
+
+        return true;
+    }
+
+    /**
      * Init sql builder.
      *
      * @access public
@@ -573,10 +603,17 @@ class pivotState
      * @access public
      * @return array
      */
-    public function getFuncs($type)
+    public function getFuncs($type, $skipEmpty = false)
     {
         $funcs = array();
-        foreach($this->sqlBuilder['funcs'] as $func) if($func['type'] == $type) $funcs[] = $func;
+        foreach($this->sqlBuilder['funcs'] as $func)
+        {
+            $hasEmpty = empty($func['table']) || empty($func['field']);
+            $hasEmpty = $hasEmpty || empty($func['function']) || empty($func['alias']);
+            if($skipEmpty && $hasEmpty) continue;
+
+            if($func['type'] == $type || $type == 'all') $funcs[] = $func;
+        }
         return $funcs;
     }
 
