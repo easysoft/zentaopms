@@ -92,7 +92,7 @@ const stepPresenters =
     },
     click: function(step)
     {
-        return highlightStepTarget((scope) => scope.$(step.target), step);
+        return highlightStepTarget((scope) => scope.$(step.target), step, {placement: 'bottom'});
     },
     clickNavbar: function(step)
     {

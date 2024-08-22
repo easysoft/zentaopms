@@ -610,6 +610,7 @@ class tutorialModel extends model
         $build->deleted        = 0;
         $build->executionName  = 'Test execution';
         $build->productName    = 'Test product';
+        $build->allBugs        = '1';
         return $build;
     }
 

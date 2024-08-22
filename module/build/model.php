@@ -25,6 +25,8 @@ class buildModel extends model
      */
     public function getByID(int $buildID, bool $setImgSize = false): object|false
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getBuild();
+
         $build = $this->dao->select('t1.*, t2.name as executionName, t3.name as productName, t3.type as productType')
             ->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
