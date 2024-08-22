@@ -183,13 +183,7 @@ function isStepFormFilled(step, event)
     for(let i = 0; i < requiredFields.length; i++)
     {
         const fieldName = requiredFields[i];
-        if(!formData.has(fieldName) || !formData.get(fieldName))
-        {
-            const $group = step.$form.find(`[name="${fieldName}"]`).closest('.form-group');
-            const label = $group.find('.form-label').text();
-            if(label) highlightStepTarget(step.$target, step, {content: lang.inputFieldTip.replace('%s', label)});
-            return false;
-        }
+        if(!formData.has(fieldName) || !formData.get(fieldName)) return false;
     }
     return true;
 }

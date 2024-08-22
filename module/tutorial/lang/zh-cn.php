@@ -36,7 +36,6 @@ $lang->tutorial->novice           = "你可能初次使用禅道，是否进入�
 $lang->tutorial->dataNotSave      = "教程任务中，数据不会保存。";
 $lang->tutorial->clickTipFormat   = "点击%s";
 $lang->tutorial->clickAndOpenIt   = "点击%s打开%s。";
-$lang->tutorial->inputFieldTip    = "请填写 %s。";
 $lang->tutorial->formSubmitFailed = "表单提交失败，请检查输入的内容。";
 
 $lang->tutorial->guideTypes        = array();
