@@ -58,6 +58,7 @@ $scrumProjectManage->tasks['manageProject']['steps'][] = array(
     'type'   => 'click',
     'target' => '#table-project-browse .dtable-body div[data-row="2"] a',
     'page'   => 'project-browse',
+    'url'    => array('project', 'browse'),
     'title'  => $lang->tutorial->scrumProjectManage->manageProject->step6->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageProject->step6->desc
 );
@@ -173,13 +174,14 @@ $scrumProjectManage->tasks['manageExecution']['steps'][] = array(
 $scrumProjectManage->tasks['manageTask'] = array();
 $scrumProjectManage->tasks['manageTask']['name']     = 'manageTask';
 $scrumProjectManage->tasks['manageTask']['title']    = $lang->tutorial->scrumProjectManage->manageTask->title;
-$scrumProjectManage->tasks['manageTask']['startUrl'] = array('execution', 'task', 'executionID=1');
+$scrumProjectManage->tasks['manageTask']['startUrl'] = array('execution', 'task', 'executionID=3');
 $scrumProjectManage->tasks['manageTask']['steps']    = array();
 
 $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'type'   => 'clickNavbar',
     'target' => 'story',
-    'page'   => 'execution-story',
+    'page'   => 'execution-task',
+    'app'    => 'execution',
     'title'  => $lang->tutorial->scrumProjectManage->manageTask->step1->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step1->desc
 );
@@ -187,7 +189,9 @@ $scrumProjectManage->tasks['manageTask']['steps'][] = array(
 $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'type'   => 'selectRow',
     'target' => '#table-execution-story',
+    'url'    => array('execution', 'story', 'executionID=3'),
     'page'   => 'execution-story',
+    'app'    => 'execution',
     'title'  => $lang->tutorial->scrumProjectManage->manageTask->step2->name,
 );
 
