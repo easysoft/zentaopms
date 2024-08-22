@@ -70,7 +70,7 @@ class putoffExecutionTester extends tester
         $date   = $matches[0];                                                                                                                                                                    ~
         $params = str_replace($date, '', $text);                                                                                                                                                  ~
         $params = trim($params);
-        if($params == $info) return true;
-        return false;
+        if($params == $info) return $this->success('延期执行表单页提示信息正确');
+        return $this->failed('延期执行表单页提示信息不正确');
     }
 }
