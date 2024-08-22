@@ -40,12 +40,8 @@ $user3->password        = '';
 $user3->verifyPassword  = $config->uitest->defaultPassword;
 
 r($tester->batchCreateNormalUser($user))         && p('message')  && e('批量建用户成功');          // 创建用户后的跳转链接检查
-
 r($tester->batchCreateEmptyAccountUser($user1))  && p('message')  && e('批量创建用户失败');        // 创建用户后的跳转链接检查
-
 r($tester->batchCreateEmptyRealnameUser($user2)) && p('message')  && e('姓名不能为空');            // 创建用户后的跳转链接检查
-
 r($tester->batchCreateEmptyPasswordUser($user3)) && p('message')  && e('密码不能为空');            // 创建用户后的跳转链接检查
-
 
 $tester->closeBrowser();
