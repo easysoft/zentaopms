@@ -12,7 +12,10 @@ class navbar extends wg
 
     public static function getPageCSS(): ?string
     {
-        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
+        return <<<'CSS'
+        #navbar .nav[z-use-sortable] > li:hover {cursor: grab !important;}
+        #navbar .nav[z-use-sortable] > li > a:hover {cursor: grab !important;}
+        CSS;
     }
 
     public static function getPageJS(): ?string
