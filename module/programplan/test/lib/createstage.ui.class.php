@@ -2,6 +2,13 @@
 include dirname(__FILE__, 5) . '/test/lib/ui.php';
 class createStageTester extends tester
 {
+    /**
+     * Create a stage.
+     *
+     * @param  arrary $waterfall
+     * @access public
+     * @return object
+     */
     public function createStage(array $waterfall)
     {
         $programplanForm = $this->initForm('programplan', 'create' , array('projectID' => 5), 'appIframe-project');
