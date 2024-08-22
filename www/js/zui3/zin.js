@@ -1769,7 +1769,7 @@
             return zui.Modal.confirm(data.confirm).then(confirmed =>
             {
                 if(confirmed) $(document).trigger('locate.zt', data.confirmed);
-                else $(document).trigger('locate.zt', data.cancelled);
+                else $(document).trigger('locate.zt', data.cancelled || data.canceled);
             });
         }
         if(data.alert)
