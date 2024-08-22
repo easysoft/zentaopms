@@ -10,6 +10,17 @@ chdir(__DIR__);
 include '../lib/putoffexecution.ui.class.php';
 
 zenData('project')->loadYaml('execution', false, 2)->gen(10);
+$ptoject = zenData('project');
+$project->id->range('1');
+$project->name->range('项目');
+$project->project->range('0');
+$project->type->range('project');
+$project->anth->range('extend');
+$project->path->range('`,1,`');
+$project->grade->range('1');
+$project->begin->range('(-2M)-(-M):1D')->type('timestamp')->format('YY/MM/DD');
+$project->end->range('(+2M)-(+3M):1D')->type('timestamp')->format('YY/MM/DD');
+
 $tester = new putoffexecutionTester();
 $tester->login();
 
