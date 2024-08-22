@@ -148,7 +148,6 @@ $config->story->actionList['edit']['text']      = $lang->story->edit;
 $config->story->actionList['edit']['hint']      = $lang->story->edit;
 $config->story->actionList['edit']['url']       = array('module' => 'story', 'method' => 'edit', 'params' => 'storyID={id}&kanbanGroup=default&storyType={type}');
 $config->story->actionList['edit']['data-app']  = $app->tab;
-$config->story->actionList['edit']['notInModal'] = true;
 
 $config->story->actionList['copy']['icon']      = 'copy';
 $config->story->actionList['copy']['text']      = $lang->story->copy;
