@@ -9,7 +9,6 @@ cid=1
 chdir(__DIR__);
 include '../lib/putoffexecution.ui.class.php';
 
-zenData('project')->loadYaml('execution', false, 2)->gen(10);
 $ptoject = zenData('project');
 $project->id->range('1');
 $project->name->range('项目');
