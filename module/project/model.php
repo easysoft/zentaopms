@@ -1075,6 +1075,8 @@ class projectModel extends model
      */
     public function create(object $project, object $postData): int|bool
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->createProject($project);
+
         $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->create['id'], $this->post->uid);
 
         $this->projectTao->doCreate($project);

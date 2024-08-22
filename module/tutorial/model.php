@@ -142,6 +142,21 @@ class tutorialModel extends model
     }
 
     /**
+     * 创建新手模式项目。
+     * Create project for tutorial;
+     *
+     * @param  object $postData
+     * @access public
+     * @return object
+     */
+    public function createProject(object $project): int
+    {
+        $guideInfo = $this->getGuideTaskName();
+        $this->session->set($guideInfo['guide'] . '_' . $guideInfo['guideTask'] . '_project', $project);
+        return 3;
+    }
+
+    /**
      * 获取新手模式项目。
      * Get project for tutorial;
      *
@@ -227,6 +242,23 @@ class tutorialModel extends model
         if($browseType && $browseType != 'all') $project->name .= '-' . $browseType; // Fix bug #21096
 
         $projectStat[$project->id] = $project;
+
+        $guideInfo   = $this->getGuideTaskName();
+        $sessionName = $guideInfo['guide'] . '_' . $guideInfo['guideTask'] . '_project';
+        if(!empty($_SESSION[$sessionName]))
+        {
+            $newProject = $this->getProject();
+            $newProject->id = 3;
+
+            $userProject = $this->session->{$sessionName};
+            foreach($userProject as $key => $value)
+            {
+                if(!empty($value)) $newProject->$key = $value;
+            }
+
+            $projectStat[$newProject->id] = $newProject;
+        }
+
         return $projectStat;
     }
 
