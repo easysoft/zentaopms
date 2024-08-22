@@ -5,7 +5,7 @@ class createStageTester extends tester
     /**
      * Create a stage.
      *
-     * @param  arrary    $waterfall
+     * @param  array  $waterfall
      * @access public
      * @return object
      */
