@@ -17,6 +17,7 @@ class viewPage extends page
             'start'         => "//*[@id='mainContent']/div[3]/div/a[2]",
             'close'         => "//*[@id='mainContent']/div[3]/div/a[last()-2]",
             'suspend'       => "//*[@id='mainContent']/div[3]/div/a[last()-3]",
+            'putoff'        => "//*[@id='mainContent']/div[3]/div/a",
             /* 编辑执行弹窗中元素 */
             'products'    => "//*[@name='products[0]']",
             'productsTip' => "//*[@id='products[0]Tip']",
@@ -29,6 +30,8 @@ class viewPage extends page
             'closeSubmit'    => "//*[@name='realEnd']/../../../../div[3]/div/button",
             /* 挂起执行弹窗中的元素 */
             'suspendSubmit' => "//*[@class='modal-actions']/../div[3]/div/div/form/div[2]/div/button",
+            /* 延期执行弹窗中的元素 */
+            'putoffSubmit'  => "//*[@class='modal-actions']/../div[3]/div/div/form/div[4]/div/button".
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
