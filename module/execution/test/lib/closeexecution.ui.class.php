@@ -51,8 +51,28 @@ class closeExecutionTester extends tester
         $form  = $this->loadPage();
         $field = $form->dom->realEndField->getText();
         $text  = $form->dom->realEndTip->getText();
-        $info  = sprintf($lang->error->le, $field, $realEnd);
-        if($text != $info) return $this->success('关闭执行表单页提示信息正确');
+        $info  = sprintf($this->lang->error->le, $field, date('Y-m-d'));
+        if($text == $info) return $this->success('关闭执行表单页提示信息正确');
+        return $this->failed('关闭执行表单页提示信息不正确');
+    }
+
+    /**
+     * 实际完成日期小于实际开始日期。
+     * The real end date is less than the real start date.
+     *
+     * @param  string $realEnd
+     * @access public
+     * @return bool
+     */
+    public function closeWithLessDate($realEnd)
+    {
+        $this->inputFields($realEnd, $executionId = '110');
+        $form      = $this->loadPage();
+        $realBegan = $form->dom->realBeganView->getText();
+        $field     = $form->dom->realEndField->getText();
+        $text      = $form->dom->realEndTip->getText();
+        $info      = sprintf($this->lang->execution->ge, $field, $realBegan);
+        if($text == $info) return $this->success('关闭执行表单页提示信息正确');
         return $this->failed('关闭执行表单页提示信息不正确');
     }
 }
