@@ -26,3 +26,15 @@ $user1->account         = '';
 $user1->realname        = '李娟1';
 $user1->password        = '123456';
 $user1->verifyPassword  = $config->uitest->defaultPassword;
+
+$user2 = new stdclass();
+$user2->account         = 'ljjj';
+$user2->realname        = '';
+$user2->password        = '123456';
+$user2->verifyPassword  = $config->uitest->defaultPassword;
+
+$user3 = new stdclass();
+$user3->account         = 'ljuanj';
+$user3->realname        = '李娟2';
+$user3->password        = '';
+$user3->verifyPassword  = $config->uitest->defaultPassword;
