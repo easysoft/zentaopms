@@ -108,7 +108,7 @@ const stepPresenters =
             const $target = scope.$(step.target || 'form');
 
             /* Check form. */
-            const $form = getForm(scope, $target);
+            const $form = getStepForm(scope, $target);
             if(!$form.length) console.error(`[TUTORIAL] Cannot find form for step "${step.guide.name} > ${step.task.name} > ${step.title}"`, step);
             $form.attr('zui-tutorial-step', step.id);
             step.$form = $form;
@@ -123,13 +123,10 @@ const stepPresenters =
             const $target = scope.$(step.target);
 
             /* Check form. */
-            const $form = getForm(scope, $target);
+            const $form = getStepForm(scope, $target);
             if(!$form.length) console.error(`[TUTORIAL] Cannot find form for step "${step.guide.name} > ${step.task.name} > ${step.title}"`, step);
             $form.attr('zui-tutorial-step', step.id);
             step.$form = $form;
-
-            const ajaxForm = $form.zui('ajaxForm');
-            ajaxForm.setOptions({beforeSubmit: () => false});
 
             const $saveBtn = $form.find('[type="submit"]');
             return $saveBtn.length ? $saveBtn : $target;
@@ -161,11 +158,27 @@ const stepPresenters =
     }
 };
 
-function getForm(scope, $target)
+function getStepForm(scope, $target)
 {
     let $form   = $target.closest('form');
     if(!$form.length) $form = $target.find('form');
     if(!$form.length) $form = scope.$('form');
+
+    if(!$form.data('tutorial.formBinding'))
+    {
+        $form.data('tutorial.formBinding', true);
+        const ajaxForm = $form.zui('ajaxForm');
+        ajaxForm.setOptions({beforeSubmit: () =>
+        {
+            if(currentStep.type === 'form')
+            {
+                const nextStep = currentStep.task.steps[currentStep.index + 1];
+                activeNextStep((nextStep && nextStep.type === 'saveForm') ? nextStep : currentStep);
+            }
+            return false;
+        }});
+    }
+
     return $form;
 }
 
@@ -353,6 +366,7 @@ function activeNextStep(step)
 {
     step = step || currentStep;
     if(!step) return;
+    formatStep(step);
     if(config.debug) showLog('Active next step', step);
 
     if(step.endUrl) openApp(step.endUrl, step.app);
@@ -480,45 +494,58 @@ function openApp(url, app)
     }
 }
 
+function formatStep(step, guideName, taskName, stepIndex)
+{
+    if(step.id) return step;
+
+    guideName = guideName || step.guideName;
+    taskName  = taskName || step.taskName;
+    stepIndex = typeof stepIndex !== 'number' ? step.index : stepIndex;
+
+    const guide = guides[guideName];
+    const task  = guide.tasks[taskName];
+
+    step.id        = `${guideName}-${taskName}-${stepIndex}`;
+    step.guide     = guide;
+    step.task      = task;
+    step.index     = stepIndex;
+    step.isLast    = stepIndex === task.steps.length - 1;
+    step.checkType = step.type === 'form' ? 'change' : 'click';
+
+    if(step.type === 'openApp' && !task.app) task.app = step.app;
+    if(!step.app && stepIndex) step.app = task.steps[stepIndex - 1].app;
+    if(!step.app) step.app = task.app || guide.app;
+    if(!step.app)
+    {
+        const taskNames = Object.keys(guide.tasks);
+        for(let i = 0; i < taskNames.length; i++)
+        {
+            const thisTask = guide.tasks[taskNames[i]];
+            if(thisTask.app && thisTask.index < task.index)
+            {
+                step.app = thisTask.app;
+                break;
+            }
+        }
+    }
+
+    return step;
+}
+
 function activeTaskStep(guideName, taskName, stepIndex)
 {
     const guide = guides[guideName];
     const task  = guide.tasks[taskName];
     const step  = task.steps[stepIndex];
-    task.guide = guide;
-    if(currentStep === step) return;
 
+    if(currentStep === step) return;
+    task.guide = guide;
     if(!updateTaskUI(task, {active: true, status: 'doing', currentStepIndex: stepIndex})) return;
 
-    if(!step.id)
-    {
-        step.id        = `${guideName}-${taskName}-${stepIndex}`;
-        step.guide     = guide;
-        step.task      = task;
-        step.index     = stepIndex;
-        step.isLast    = stepIndex === task.steps.length - 1;
-        step.checkType = step.type === 'form' ? 'change' : 'click';
-
-        if(step.type === 'openApp' && !task.app) task.app = step.app;
-        if(!step.app && stepIndex) step.app = task.steps[stepIndex - 1].app;
-        if(!step.app) step.app = task.app || guide.app;
-        if(!step.app)
-        {
-            const taskNames = Object.keys(guide.tasks);
-            for(let i = 0; i < taskNames.length; i++)
-            {
-                const thisTask = guide.tasks[taskNames[i]];
-                if(thisTask.app && thisTask.index < task.index)
-                {
-                    step.app = thisTask.app;
-                    break;
-                }
-            }
-        }
-    }
+    formatStep(step, guideName, taskName);
 
     if(step.url)                              openApp(step.url, step.app);
-    else if(stepIndex === 0 && task.startUrl) openApp(task.startUrl, task.app);
+    else if(stepIndex === 0 && task.startUrl) openApp(step.task.startUrl, step.task.app);
 
     currentStep = step;
     if(config.debug) showLog('Active step', step);

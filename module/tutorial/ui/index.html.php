@@ -15,15 +15,22 @@ set::zui(true);
 
 /* 将所有教程按类型进行分组。Grouped all guides by type. */
 $groupedGuides = array();
-foreach($guides as $guideID => $guide)
+foreach($guides as $guideName => $guide)
 {
     $taskIndex = 0;
-    foreach($guide->tasks as $taskID => $task)
+    foreach($guide->tasks as $tasID => $task)
     {
         $task['index'] = $taskIndex++;
-        $guide->tasks[$taskID] = $task;
+        foreach($task['steps'] as $index => $step)
+        {
+            $step['index']     = $index;
+            $step['guideName'] = $guideName;
+            $step['taskName']  = $task['name'];
+            $task['steps'][$index] = $step;
+        }
+        $guide->tasks[$tasID] = $task;
     }
-    $groupedGuides[$guide->type][$guideID] = $guide;
+    $groupedGuides[$guide->type][$guideName] = $guide;
 }
 
 /* 当前选中的类型。Current active type. */
