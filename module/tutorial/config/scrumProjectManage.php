@@ -323,7 +323,6 @@ $scrumProjectManage->tasks['manageTask']['steps'][] = array(
 
 $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'type'   => 'form',
-    'target' => 'form',
     'page'   => 'build-create',
     'title'  => $lang->tutorial->scrumProjectManage->manageTask->step20->name,
 );
@@ -338,8 +337,9 @@ $scrumProjectManage->tasks['manageTask']['steps'][] = array(
 
 $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'type'   => 'click',
-    'target' => '', //版本列表中关联需求按钮
+    'target' => 'div[data-row="1"] a.build-linkstory-btn',
     'page'   => 'execution-build',
+    'url'    => array('execution', 'build', 'executionID=3'),
     'title'  => $lang->tutorial->scrumProjectManage->manageTask->step22->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step22->desc
 );

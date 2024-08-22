@@ -509,7 +509,7 @@ class tutorialModel extends model
         $task->fromBug            = 0;
         $task->feedback           = 0;
         $task->fromIssue          = 0;
-        $task->name               = 'Test Task';
+        $task->name               = 'Test task';
         $task->type               = 'devel';
         $task->mode               = '';
         $task->pri                = 3;
@@ -578,5 +578,53 @@ class tutorialModel extends model
         $tasks = array();
         $tasks[$task->id] = $task;
         return $tasks;
+    }
+
+    /**
+     * 获取新手模式版本。
+     * Get build.
+     *
+     * @access public
+     * @return object
+     */
+    public function getBuild(): object
+    {
+        $build = new stdClass();
+        $build->id             = 1;
+        $build->project        = 2;
+        $build->product        = 1;
+        $build->branch         = 0;
+        $build->execution      = 3;
+        $build->builds         = '';
+        $build->name           = 'Test build';
+        $build->scmPath        = '';
+        $build->filePath       = '';
+        $build->date           = '';
+        $build->stories        = '';
+        $build->bugs           = '';
+        $build->artifactRepoID = 0;
+        $build->builder        = 'test';
+        $build->desc           = '';
+        $build->createdBy      = '';
+        $build->createdDate    = '';
+        $build->deleted        = 0;
+        $build->executionName  = 'Test execution';
+        $build->productName    = 'Test product';
+        return $build;
+    }
+
+    /**
+     * 获取新手模式版本。
+     * Get build.
+     *
+     * @access public
+     * @return string
+     */
+    public function getBuilds(): array
+    {
+        $build  = $this->getBuild();
+        $builds = array();
+        $builds[$build->id] = $build;
+        return $builds;
     }
 }

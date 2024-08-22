@@ -33,6 +33,7 @@ $config->build->actionList['linkStory']['text']     = $lang->build->linkStory;
 $config->build->actionList['linkStory']['hint']     = $lang->build->linkStory;
 $config->build->actionList['linkStory']['url']      = array('module' => 'build', 'method' => 'view', 'params' => 'buildID={id}&type=story&link=true');
 $config->build->actionList['linkStory']['data-app'] = $app->tab;
+$config->build->actionList['linkStory']['class']    = 'build-linkstory-btn';
 
 $config->build->actionList['linkProjectStory']        = $config->build->actionList['linkStory'];
 $config->build->actionList['linkProjectStory']['url'] = array('module' => 'projectbuild', 'method' => 'view', 'params' => 'buildID={id}&type=story&link=true');

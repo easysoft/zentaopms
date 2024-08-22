@@ -163,6 +163,8 @@ class buildModel extends model
      */
     public function getExecutionBuilds(int $executionID, string $type = '', string $param = '', string $orderBy = 't1.date_desc,t1.id_desc', object $pager = null): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getBuilds();
+
         return $this->dao->select('t1.*, t2.name as executionName, t3.name as productName')
             ->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
