@@ -32,11 +32,24 @@ $lang->bi->leftTable     = '左连接';
 $lang->bi->joinCondition = '连接条件为';
 $lang->bi->joinTable     = ' = %s的';
 $lang->bi->of            = '的';
+$lang->bi->do            = '对';
+$lang->bi->set           = '进行';
+$lang->bi->funcAs        = '运算，对结果重命名为';
 $lang->bi->enable        = '启用';
 $lang->bi->allFields     = '全部字段(*)';
 $lang->bi->previewSql    = '预览构建的sql语句';
 $lang->bi->addFunc       = '新增函数字段';
 $lang->bi->emptyFuncs    = '暂未新增函数字段。';
+
+$lang->bi->selectTableTip = '请选择数据表';
+$lang->bi->selectFieldTip = '请选择字段';
+$lang->bi->selectFuncTip  = '请选择函数';
+$lang->bi->selectInputTip = '请输入';
+
+$lang->bi->funcList = array();
+$lang->bi->funcList['date']  = '提取日期';
+$lang->bi->funcList['month'] = '提取月份';
+$lang->bi->funcList['year']  = '提取年份';
 
 $lang->bi->emptyError = '不能为空';
 
