@@ -13,7 +13,10 @@ class putoffExecutionTester extends tester
     public function inputFields($execution, $executionId)
     {
         $form = $this->initForm('execution', 'view', array('execution' => $executionId ), 'appIframe-execution');
+        $status = $form->dom->status->getText();
         $form->dom->putoff->click();
+        if(isset($execution['begin'])) $form->dom->begin->datePicker($execution['begin']);
+        if(isset($execution['end'])) $form->dom->end->datePicker($execution['end']);
         $form->dom->putoffSubmit->click();
         $form->wait(1);
     }
