@@ -1692,7 +1692,7 @@ class taskZen extends task
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
         /* Return task id when call the API. */
-        if($this->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $taskIdList));
+        if($this->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api')) return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $taskIdList);
 
         $response['result']  = 'success';
         $response['message'] = $this->lang->saveSuccess;
