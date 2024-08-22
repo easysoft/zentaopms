@@ -381,12 +381,13 @@ class baseEntry
     {
         $output = helper::removeUTF8Bom(ob_get_clean());
         $output = json_decode((string) $output);
-        if(isset($output->data) && !is_object($output->data)) $output->data = json_decode((string) $output->data);
-        if(isset($output->load))
+        if(isset($output->data) && !is_object($output->data)) $output->data   = json_decode((string) $output->data);
+        if(!isset($output->status) && isset($output->result)) $output->status = $output->result;
+        if(isset($output->load->alert))
         {
             $output->code    = 400;
             $output->status  = 'fail';
-            $output->message = isset($output->load->alert) ? $output->load->alert : zget($output, 'confirm', '');
+            $output->message = $output->load->alert;
             unset($output->load);
         }
 
