@@ -22,7 +22,7 @@ $fields->field('mailto')->foldable();
 $fields->field('keywords')->foldable();
 
 /* Set assignedTo field. */
-$buildAssignedTo = function($props)
+$buildAssignedTo = function()
 {
     $assignedToListBox = null;
     if(!empty(data('task.team')))
@@ -104,7 +104,7 @@ $fields->field('lane')
     ->value(data('laneID'));
 
 /* Set story field control. */
-$buildStoryBox = function($props)
+$buildStoryBox = function()
 {
     if(!empty(data('execution.hasProduct')))
     {
@@ -214,7 +214,7 @@ $fields->field('taskEstimate')
     ->control('input');
 
 /* Set test story task control. */
-$buildTestStoryBox = function($props)
+$buildTestStoryBox = function()
 {
     return div(setID('testStoryBox'));
 };
