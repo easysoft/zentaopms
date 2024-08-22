@@ -128,6 +128,9 @@ const stepPresenters =
             $form.attr('zui-tutorial-step', step.id);
             step.$form = $form;
 
+            const ajaxForm = $form.zui('ajaxForm');
+            ajaxForm.setOptions({beforeSubmit: () => false});
+
             const $saveBtn = $form.find('[type="submit"]');
             return $saveBtn.length ? $saveBtn : $target;
         }, step);
@@ -184,18 +187,6 @@ function isStepFormFilled(step, event)
     {
         const fieldName = requiredFields[i];
         if(!formData.has(fieldName) || !formData.get(fieldName)) return false;
-    }
-    return true;
-}
-
-function isStepFormSubmitted(step, event, info)
-{
-    if(!step.$form || !step.$form.length || !Array.isArray(info) || info.length < 2) return;
-    const response = info[1] || {};
-    if(response.result === 'fail')
-    {
-        highlightStepTarget(step.$form, step, {content: typeof response.message === 'string' ? response.message : lang.formSubmitFailed});
-        return false;
     }
     return true;
 }
@@ -278,7 +269,7 @@ function highlightStepTarget($target, step, popoverOptions)
 
         const $doc = scope.$(scope.document);
         if($doc.data('tutorialCheckBinding')) return;
-        $doc.data('tutorialCheckBinding', true).on('click change complete', '[zui-tutorial-step]', function(event, info)
+        $doc.data('tutorialCheckBinding', true).on('click change', '[zui-tutorial-step]', function(event, info)
         {
             if(!currentStep || currentStep.checkType !== event.type) return;
 
@@ -286,14 +277,9 @@ function highlightStepTarget($target, step, popoverOptions)
             if(stepID !== currentStep.id) return;
 
             if(currentStep.type === 'form' && !isStepFormFilled(currentStep, event)) return;
-            if(currentStep.type === 'saveForm' && !isStepFormSubmitted(currentStep, event, info)) return;
 
             if(config.debug) showLog(`Step target ${event.type}`, currentStep, null, {stepID, event});
             activeNextStep();
-        });
-
-        scope.zui.AjaxForm.optionsModifiers.push(() => {
-            return {headers: {'X-ZIN-Tutorial': currentStep.id}};
         });
     });
 }
@@ -487,7 +473,7 @@ function activeTaskStep(guideName, taskName, stepIndex)
         step.task      = task;
         step.index     = stepIndex;
         step.isLast    = stepIndex === task.steps.length - 1;
-        step.checkType = step.type === 'form' ? 'change' : (step.type === 'saveForm' ? 'complete' : 'click');
+        step.checkType = step.type === 'form' ? 'change' : 'click';
 
         if(step.type === 'openApp' && !task.app) task.app = step.app;
         if(!step.app && stepIndex) step.app = task.steps[stepIndex - 1].app;

@@ -34,7 +34,6 @@ $lang->tutorial->novice           = "Für einen Schnellstart, beginnen Sie mit e
 $lang->tutorial->dataNotSave      = "In der Anleitung erstellte Daten werden nicht gespeichert!";
 $lang->tutorial->clickTipFormat   = "klicken %s";
 $lang->tutorial->clickAndOpenIt   = "Click %s to open %s.";
-$lang->tutorial->formSubmitFailed = "Failed to submit the form. Please check and try again.";
 
 $lang->tutorial->tasks = new stdclass();
 $lang->tutorial->tasks->createAccount = new stdclass();

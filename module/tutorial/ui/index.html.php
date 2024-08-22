@@ -165,7 +165,6 @@ jsVar('lang', array
     'nextStep'         => $lang->tutorial->nextStep,
     'clickTipFormat'   => $lang->tutorial->clickTipFormat,
     'clickAndOpenIt'   => $lang->tutorial->clickAndOpenIt,
-    'formSubmitFailed' => $lang->tutorial->formSubmitFailed,
     'congratulateTask' => $lang->tutorial->congratulateTask
 ));
 
