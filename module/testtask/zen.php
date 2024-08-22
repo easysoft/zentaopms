@@ -703,7 +703,7 @@ class testtaskZen extends testtask
     {
         if($caseResult == 'fail')
         {
-            $link = inlink('results',"runID=$runID&caseID=$caseID&version=$version");
+            $link = inlink('runCase', "runID={$runID}&caseID={$caseID}&version={$version}");
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "loadModal('$link', 'runCaseModal')"));
         }
 
