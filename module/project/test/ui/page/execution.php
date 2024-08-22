@@ -16,5 +16,6 @@ class executionPage extends page
             'planBegin' => "//*[@id='table-project-execution']/div[2]/div[2]/div/div[4]/div",
             'planEnd'   => "//*[@id='table-project-execution']/div[2]/div[2]/div/div[5]/div",
         );
+        $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
 }
