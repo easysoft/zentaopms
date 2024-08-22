@@ -593,7 +593,7 @@ class tutorialModel extends model
         $build->id             = 1;
         $build->project        = 2;
         $build->product        = 1;
-        $build->branch         = 0;
+        $build->branch         = '0';
         $build->execution      = 3;
         $build->builds         = '';
         $build->name           = 'Test build';
@@ -610,7 +610,10 @@ class tutorialModel extends model
         $build->deleted        = 0;
         $build->executionName  = 'Test execution';
         $build->productName    = 'Test product';
+        $build->productType    = 'normal';
         $build->allBugs        = '1';
+        $build->allStories     = '1';
+        $build->files          = array();
         return $build;
     }
 
