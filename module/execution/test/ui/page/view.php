@@ -31,7 +31,7 @@ class viewPage extends page
             /* 挂起执行弹窗中的元素 */
             'suspendSubmit' => "//*[@class='modal-actions']/../div[3]/div/div/form/div[2]/div/button",
             /* 延期执行弹窗中的元素 */
-            'putoffSubmit'  => "//*[@class='modal-actions']/../div[3]/div/div/form/div[4]/div/button".
+            'putoffSubmit'  => "//*[@class='modal-actions']/../div[3]/div/div/form/div[4]/div/button",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
