@@ -22,7 +22,7 @@ $fields->field('mailto')->foldable();
 $fields->field('keywords')->foldable();
 
 /* Set assignedTo field. */
-$buildAssginedTo = function($props)
+$buildAssignedTo = function($props)
 {
     $assignedToListBox = null;
     if(!empty(data('task.team')))
@@ -75,7 +75,7 @@ $buildAssginedTo = function($props)
 $fields->field('assignedToBox')
     ->label($lang->task->assignedTo)
     ->checkbox(array('text' => $lang->task->multiple, 'name' => 'multiple', 'checked' => !empty(data('task.mode'))))
-    ->control($buildAssginedTo);
+    ->control($buildAssignedTo);
 
 /* Set name field width. */
 $nameWidth = 'w-1/2';
