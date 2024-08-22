@@ -106,6 +106,16 @@ $lang->bi->queryFilterFormHeader['default'] = '默认值';
 $lang->bi->emptyError     = '不能为空';
 $lang->bi->duplicateError = '存在重复';
 
+$lang->bi->selectTableTip = '请选择数据表';
+$lang->bi->selectFieldTip = '请选择字段';
+$lang->bi->selectFuncTip  = '请选择函数';
+$lang->bi->selectInputTip = '请输入';
+
+$lang->bi->funcList = array();
+$lang->bi->funcList['date']  = '提取日期';
+$lang->bi->funcList['month'] = '提取月份';
+$lang->bi->funcList['year']  = '提取年份';
+
 $lang->bi->emptyError = '不能为空';
 
 $lang->bi->stepFieldTitle = '选择查询表中的字段';

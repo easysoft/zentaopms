@@ -620,6 +620,26 @@ class pivotState
     }
 
     /**
+     * Generate func alias.
+     *
+     * @access public
+     * @return void
+     */
+    public function generateFuncAlias()
+    {
+        $funcs = $this->sqlBuilder['funcs'];
+        foreach($funcs as $index => $func)
+        {
+            $alias = $func['alias'];
+            $table = $func['table'];
+            $field = $func['field'];
+            if(!empty($alias) || empty($table) || empty($field)) continue;
+
+            $this->sqlBuilder['funcs'][$index]['alias'] = "{$table}_{$field}_{$index}";
+        }
+    }
+
+    /**
      * Get next table alias.
      *
      * @access public
