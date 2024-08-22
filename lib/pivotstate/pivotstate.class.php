@@ -537,11 +537,22 @@ class pivotState
         $this->sqlBuilder['joins'][] = $join;
     }
 
-    public function addFunc($type, $table, $field, $function, $alias)
+    /**
+     * Add func.
+     *
+     * @param  string|array $type
+     * @param  string       $table
+     * @param  string       $field
+     * @param  string       $function
+     * @param  string       $alias
+     * @access public
+     * @return void
+     */
+    public function addFunc($type, $table = '', $field = '', $function = '', $alias = '')
     {
-        if(is_array($table))
+        if(is_array($type))
         {
-            $this->sqlBuilder['funcs'][] = $table;
+            $this->sqlBuilder['funcs'][] = $type;
             return;
         }
 
