@@ -576,6 +576,24 @@ class pivotState
         $this->sqlBuilder['joins'][] = $join;
     }
 
+    public function addFunc($type, $table, $field, $function, $alias)
+    {
+        if(is_array($table))
+        {
+            $this->sqlBuilder['funcs'][] = $table;
+            return;
+        }
+
+        $func = array();
+        $func['type']     = $type;
+        $func['table']    = $table;
+        $func['field']    = $field;
+        $func['function'] = $function;
+        $func['alias']    = $alias;
+
+        $this->sqlBuilder['funcs'][] = $func;
+    }
+
     /**
      * Get next table alias.
      *
