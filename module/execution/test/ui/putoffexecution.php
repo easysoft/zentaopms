@@ -20,6 +20,22 @@ $project->path->range('`,1,`');
 $project->grade->range('1');
 $project->begin->range('(-2M)-(-M):1D')->type('timestamp')->format('YY/MM/DD');
 $project->end->range('(+2M)-(+3M):1D')->type('timestamp')->format('YY/MM/DD');
+$project->gen(1, false);
+
+$execution = zenData('project');
+$execution->id->range('101', '103');
+$execution->project->range('1');
+$execution->type->range('sprint');
+$execution->parent->range('11');
+$execution->path->range('`,1,101,`', '`,1,103,`');
+$execution->grade->range('1');
+$execution->name->range('未开始执行', '进行中执行');
+$execution->hasProduct->range('1');
+$execution->begin->range('(-M)-(-3W):1D')->type('timestamp')->format('YY/MM/DD');
+$execution->end->range('(+1M)-(+2M):1D')->type('timestamp')->format('YY/MM/DD');
+$execution->realBegan->range('(-2W)-(+W):1D')->type('timestamp')->format('YY/MM/DD');
+$execution->status->range('wait', 'doing');
+$execution->gen(2, false);
 
 $tester = new putoffexecutionTester();
 $tester->login();
