@@ -6,7 +6,7 @@ $scrumProjectManage->name    = 'scrumProjectManage';
 $scrumProjectManage->title   = $lang->tutorial->scrumProjectManage->title;
 $scrumProjectManage->icon    = 'project text-special';
 $scrumProjectManage->type    = 'basic';
-$scrumProjectManage->modules = 'project,execution,build';
+$scrumProjectManage->modules = 'project,execution,build,task';
 $scrumProjectManage->app     = 'project';
 $scrumProjectManage->tasks   = array();
 
@@ -187,40 +187,36 @@ $scrumProjectManage->tasks['manageTask']['steps'][] = array(
 );
 
 $scrumProjectManage->tasks['manageTask']['steps'][] = array(
-    'type'   => 'selectRow',
-    'target' => '#table-execution-story',
+    'type'   => 'click',
+    'target' => '#table-execution-story a.create-task-btn',
     'url'    => array('execution', 'story', 'executionID=3'),
     'page'   => 'execution-story',
     'app'    => 'execution',
-    'title'  => $lang->tutorial->scrumProjectManage->manageTask->step2->name,
-);
-
-$scrumProjectManage->tasks['manageTask']['steps'][] = array(
-    'type'   => 'click',
-    'target' => '#table-execution-story ', //分解任务的按钮没有选中
-    'page'   => 'execution-story',
     'title'  => $lang->tutorial->scrumProjectManage->manageTask->step3->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step3->desc
 );
 
 $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'type'   => 'form',
-    'page'   => 'task-batchCreate',
+    'url'    => array('task', 'create', 'executionID=3'),
+    'app'    => 'execution',
+    'page'   => 'task-create',
     'title'  => $lang->tutorial->scrumProjectManage->manageTask->step4->name,
 );
 
 $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'type'   => 'saveForm',
     'target' => 'form button[type="submit"]',
-    'page'   => 'task-batchCreate',
+    'page'   => 'task-create',
     'title'  => $lang->tutorial->scrumProjectManage->manageTask->step5->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step5->desc
 );
 
 $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'type'   => 'click',
-    'target' => '', //任务列表的指派给按钮
+    'target' => '#table-execution-task div[data-row="1"] a.dtable-assign-btn',
     'page'   => 'execution-task',
+    'url'    => array('execution', 'task', 'executionID=3'),
     'title'  => $lang->tutorial->scrumProjectManage->manageTask->step6->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step6->desc
 );

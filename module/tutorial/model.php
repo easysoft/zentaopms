@@ -173,6 +173,7 @@ class tutorialModel extends model
         $project->consumed     = 0;
         $project->estimate     = 0;
         $project->left         = 0;
+        $project->storyType    = 'story,requirement,epic';
 
         return $project;
     }
@@ -268,6 +269,7 @@ class tutorialModel extends model
         $story->planTitle      = '';
         $story->color          = '';
         $story->source         = 'po';
+        $story->sourceNote     = '';
         $story->fromBug        = 0;
         $story->title          = 'Test story';
         $story->keywords       = '';
@@ -295,6 +297,8 @@ class tutorialModel extends model
         $story->order          = '0';
         $story->URChanged      = false;
         $story->mailto         = '';
+        $story->isParent       = 0;
+        $story->roadmap        = 0;
 
         $stories = array();
         $stories[] = $story;
@@ -481,5 +485,98 @@ class tutorialModel extends model
     public function getTutorialed(): string
     {
         return $this->dao->select('*')->from(TABLE_CONFIG)->where('module')->eq('tutorial')->andWhere('owner')->eq($this->app->user->account)->andWhere('section')->eq('tasks')->andWhere('`key`')->eq('setting')->fetch('value');
+    }
+
+    /**
+     * 获取新手模式任务。
+     * Get task.
+     *
+     * @access public
+     * @return string
+     */
+    public function getTask(): object
+    {
+        $task = new stdClass();
+        $task->id                 = 1;
+        $task->project            = 2;
+        $task->parent             = 0;
+        $task->execution          = 3;
+        $task->module             = 0;
+        $task->design             = 0;
+        $task->story              = 0;
+        $task->storyVersion       = 1;
+        $task->designVersion      = 1;
+        $task->fromBug            = 0;
+        $task->feedback           = 0;
+        $task->fromIssue          = 0;
+        $task->name               = 'Test Task';
+        $task->type               = 'devel';
+        $task->mode               = '';
+        $task->pri                = 3;
+        $task->estimate           = 0;
+        $task->consumed           = 0;
+        $task->left               = 0;
+        $task->deadline           = '';
+        $task->status             = 'wait';
+        $task->subStatus          = '';
+        $task->color              = '';
+        $task->mailto             = '';
+        $task->keywords           = '';
+        $task->desc               = '';
+        $task->version            = 1;
+        $task->openedBy           = 'admin';
+        $task->openedDate         = '';
+        $task->assignedTo         = '';
+        $task->assignedDate       = '';
+        $task->estStarted         = '';
+        $task->realStarted        = '';
+        $task->finishedBy         = '';
+        $task->finishedDate       = '';
+        $task->finishedList       = '';
+        $task->canceledBy         = '';
+        $task->canceledDate       = '';
+        $task->closedBy           = '';
+        $task->closedDate         = '';
+        $task->planDuration       = 0;
+        $task->realDuration       = 0;
+        $task->closedReason       = '';
+        $task->lastEditedBy       = '';
+        $task->lastEditedDate     = '';
+        $task->activatedDate      = '';
+        $task->order              = 0;
+        $task->repo               = 0;
+        $task->mr                 = 0;
+        $task->entry              = '';
+        $task->lines              = '';
+        $task->deleted            = 0;
+        $task->vision             = 'rnd';
+        $task->storyID            = '';
+        $task->storyTitle         = '';
+        $task->product            = '';
+        $task->branch             = '';
+        $task->latestStoryVersion = '';
+        $task->storyStatus        = '';
+        $task->priOrder           = 3;
+        $task->assignedToRealName = '';
+        $task->needConfirm        = '';
+        $task->progress           = 0;
+
+        return $task;
+    }
+
+    /**
+     * 获取新手模式任务。
+     * Get taks.
+     *
+     * @access public
+     * @return string
+     */
+    public function getTasks(): array
+    {
+        $task = $this->getTask();
+
+        $tasks = array();
+        $tasks[$task->id] = $task;
+        return $tasks;
     }
 }

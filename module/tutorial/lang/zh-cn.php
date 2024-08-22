@@ -182,9 +182,6 @@ $lang->tutorial->scrumProjectManage->manageTask->step1 = new stdClass();
 $lang->tutorial->scrumProjectManage->manageTask->step1->name = '点击需求';
 $lang->tutorial->scrumProjectManage->manageTask->step1->desc = '进入需求列表，您可以在这里看到之前关联的需求需求';
 
-$lang->tutorial->scrumProjectManage->manageTask->step2 = new stdClass();
-$lang->tutorial->scrumProjectManage->manageTask->step2->name = '选择需求';
-
 $lang->tutorial->scrumProjectManage->manageTask->step3 = new stdClass();
 $lang->tutorial->scrumProjectManage->manageTask->step3->name = '分解任务';
 $lang->tutorial->scrumProjectManage->manageTask->step3->desc = '您可以在这里将需求分解为任务，支持批量分解';

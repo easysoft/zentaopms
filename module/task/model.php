@@ -1244,6 +1244,8 @@ class taskModel extends model
      */
     public function getByID(int $taskID, bool $setImgSize = false, $vision = ''): false|object
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getTask();
+
         if($vision == '') $vision = $this->config->vision; // TODO: $vision is for compatibling with viewing drill data.
         $task = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus')
             ->from(TABLE_TASK)->alias('t1')

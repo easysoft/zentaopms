@@ -2003,6 +2003,8 @@ class executionModel extends model
      */
     public function getTasks(int $productID, int $executionID, array $executions, string $browseType, int $queryID, int $moduleID, string $sort, object $pager = null): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getTasks();
+
         /* Set modules and $browseType. */
         $modules = array();
         if($moduleID) $modules = $this->loadModel('tree')->getAllChildID($moduleID);

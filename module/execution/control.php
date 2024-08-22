@@ -458,7 +458,7 @@ class execution extends control
 
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
-        $project     = $this->loadModel('project')->fetchById($execution->project);
+        $project     = $this->loadModel('project')->getByID($execution->project);
 
         /* Build the search form. */
         $products  = $this->product->getProducts($executionID);
