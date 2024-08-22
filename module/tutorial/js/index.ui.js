@@ -350,6 +350,8 @@ function activeNextStep(step)
     step = step || currentStep;
     if(!step) return;
     if(config.debug) showLog('Active next step', step);
+
+    if(step.endUrl) openApp(step.endUrl, step.app);
     destroyPopover(() =>
     {
         if(step.task.steps.length - 1 === step.index)
