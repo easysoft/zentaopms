@@ -20,4 +20,24 @@ class putoffExecutionTester extends tester
         $form->dom->putoffSubmit->click();
         $form->wait(1);
     }
+
+    /*
+     * 延期执行。
+     * Putoff execution.
+     *
+     * @param  array  $execution
+     * @param  string $executionId
+     * @access public
+     * @return bool
+     */
+    public function putoff($execution, $executionId)
+    {
+        $this->inputFields($execution, $executionId);
+        $form = $this->loadPage();
+
+        if($form->dom->status->getText() != $status) return $this->failed('执行状态错误');
+        if($form->dom->plannedBegin->getText() != $execution['begin']) return $this->failed('计划开始时间错误');
+        if($form->dom->plannedEnd->getText() != $execution['end']) return $this->failed('计划完成时间错误');
+        return $this->success('延期执行成功');
+    }
 }
