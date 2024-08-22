@@ -153,7 +153,7 @@ $fields->field('productsBox')
         'from'              => 'execution'
     ));
 
-if($execution->type != 'stage' || $execution->attribute != 'review')
+if($execution->attribute != 'review')
 {
     $fields->field('PO')
         ->label($lang->execution->PO)
@@ -162,7 +162,7 @@ if($execution->type != 'stage' || $execution->attribute != 'review')
         ->value(data('execution.PO'));
 }
 
-if($execution->type != 'stage' || !in_array($execution->attribute, array('request', 'design', 'review')))
+if(!in_array($execution->attribute, array('request', 'design', 'review')))
 {
     $fields->field('QD')
         ->label($lang->execution->QD)
@@ -177,7 +177,7 @@ $fields->field('PM')
     ->items(data('pmUsers'))
     ->value(data('execution.PM'));
 
-if($execution->type != 'stage' || !in_array($execution->attribute, array('request', 'design', 'review')))
+if(!in_array($execution->attribute, array('request', 'design', 'review')))
 {
     $fields->field('RD')
         ->label($lang->execution->RD)
