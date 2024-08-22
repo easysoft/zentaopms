@@ -843,7 +843,7 @@ class storyModel extends model
         $this->storyTao->doUpdateSpec($storyID, $story, $oldStory, $addedFiles);
         $this->storyTao->doUpdateLinkStories($storyID, $story, $oldStory);
 
-        if($story->product != $oldStory->product)
+        if($story->product != $oldStory->product || $story->branch != $oldStory->branch)
         {
             $this->dao->update(TABLE_PROJECTSTORY)->set('product')->eq($story->product)->where('story')->eq($storyID)->exec();
             $childStories = $this->getAllChildId($storyID, false);
@@ -924,7 +924,7 @@ class storyModel extends model
                  ->set('product')->eq($parent->product)
                  ->set('branch')->eq($parent->branch)
                  ->set('module')->eq(0)
-                 ->set('root')->eq($parent->root)
+                 ->set('root')->eq($parent->id)
                  ->set('path')->eq($childPath)
                  ->where('id')->eq($storyID)
                  ->exec();
