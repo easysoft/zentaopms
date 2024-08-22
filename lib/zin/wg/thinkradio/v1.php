@@ -111,6 +111,19 @@ class thinkRadio extends thinkQuestion
                             'value'       => $quoteTitle
                         ))
                     )
+                ),
+                formGroup
+                (
+                    setClass('think-quote-title', $setOption == 0 ? 'hidden' : ''),
+                    set::label($lang->thinkstep->label->citation),
+                    set::labelClass('required'),
+                    radioList
+                    (
+                        set::name('options[citation]'),
+                        set::inline(true),
+                        set::value($citation),
+                        set::items($lang->thinkstep->citationList)
+                    )
                 )
             ) : null,
             formGroup
