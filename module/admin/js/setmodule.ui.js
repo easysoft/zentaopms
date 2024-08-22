@@ -7,6 +7,26 @@ function changeModule($target)
     }
     else
     {
+        if(name == 'module[productUR]' || name == 'module[productER]')
+        {
+            zui.Modal.confirm(
+            {
+                message: confirmDisableStoryType,
+                icon: 'icon-exclamation-sign',
+                iconClass: 'warning-pale rounded-full icon-2x'
+            }).then((res) =>
+            {
+               if(res)
+                {
+                    $("input[type=hidden][name='" + name + "']").val('0').removeAttr('disabled');
+                    return false;
+                }
+
+                $target.prop('checked', true);
+            });
+            return false;
+        }
+
         $("input[type=hidden][name='" + name + "']").val('0').removeAttr('disabled');
     }
 };
