@@ -212,6 +212,12 @@ class thinkStepMenu extends wg
                 'text'    => $this->lang->thinkstep->createStep . $this->lang->thinkstep->actions['tableInput'],
                 'onClick' => jsRaw("() => addQuestion({$item->id}, {$parentID}, 'question', 'tableInput')"),
             ),
+            array(
+                'key'     => 'multicolumn',
+                'icon'    => 'cell-input', // TODO
+                'text'    => $this->lang->thinkstep->createStep . $this->lang->thinkstep->actions['multicolumn'],
+                'onClick' => jsRaw("() => addQuestion({$item->id}, {$parentID}, 'question', 'multicolumn')"),
+            ),
         ));
         return $menus;
     }
