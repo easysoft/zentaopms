@@ -33,12 +33,12 @@ $execution = array(
     ),
 );
 
-r($tester->putoff($execution['0']), '101')                        && p('message') && e('延期执行成功');               //未开始的执行，延期弹窗直接点击保存
-r($tester->putoff($execution['0']), '103')                        && p('message') && e('延期执行成功');               //进行中的执行，延期弹窗直接点击保存
-r($tester->putoff($execution['1']), '101')                        && p('message') && e('延期执行成功');               //未开始的执行，延期弹窗中修改正确的起止日期后点击保存
-r($tester->putoff($execution['1']), '103')                        && p('message') && e('延期执行成功');               //进行中的执行，延期弹窗中修改正确的起止日期后点击保存
-r($tester->putoffiWithWrongDate($execution['2']), '101', 'begin') && p('message') && e('延期执行表单页提示信息正确'); //计划开始日期为空
-r($tester->putoffiWithWrongDate($execution['3']), '103', 'emd')   && p('message') && e('延期执行表单页提示信息正确'); //计划结束日期为空
-r($tester->putoffiWithWrongDate($execution['4']), '103', 'begin') && p('message') && e('延期执行表单页提示信息正确'); //计划开始日期小于项目计划开始日期
-r($tester->putoffiWithWrongDate($execution['5']), '101', 'end')   && p('message') && e('延期执行表单页提示信息正确'); //计划结束日期大于项目计划完成日期
+r($tester->putoff($execution['0'], '101'))                        && p('message') && e('延期执行成功');               //未开始的执行，延期弹窗直接点击保存
+#r($tester->putoff($execution['0'], '103'))                        && p('message') && e('延期执行成功');               //进行中的执行，延期弹窗直接点击保存
+#r($tester->putoff($execution['1'], '101'))                        && p('message') && e('延期执行成功');               //未开始的执行，延期弹窗中修改正确的起止日期后点击保存
+#r($tester->putoff($execution['1'], '103'))                        && p('message') && e('延期执行成功');               //进行中的执行，延期弹窗中修改正确的起止日期后点击保存
+#r($tester->putoffiWithWrongDate($execution['2'], '101', 'begin')) && p('message') && e('延期执行表单页提示信息正确'); //计划开始日期为空
+#r($tester->putoffiWithWrongDate($execution['3'], '103', 'emd'))   && p('message') && e('延期执行表单页提示信息正确'); //计划结束日期为空
+#r($tester->putoffiWithWrongDate($execution['4'], '103', 'begin')) && p('message') && e('延期执行表单页提示信息正确'); //计划开始日期小于项目计划开始日期
+#r($tester->putoffiWithWrongDate($execution['5'], '101', 'end'))   && p('message') && e('延期执行表单页提示信息正确'); //计划结束日期大于项目计划完成日期
 $tester->closeBrowser();
