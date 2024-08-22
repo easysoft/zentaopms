@@ -819,7 +819,7 @@ setTimeout(refreshMenu, 500);
 $(document).on('click', '.menu-toggle', () => toggleMenu());
 toggleMenu(!$('body').hasClass('hide-menu'));
 
-function getMenuNavData() 
+function getMenuNavData()
 {
     const data = [];
     const $nav = $('#menuMainNav');
@@ -838,7 +838,7 @@ function generateAddMenuNavItems(onClick)
     const items = [
         {
             icon: 'icon-minus',
-            text: '分割线',
+            text: langData.divider,
             onClick: () => onClick('divider'),
         },
 
@@ -846,14 +846,14 @@ function generateAddMenuNavItems(onClick)
 
     const allAppCodeSet = new Set(allAppsItemsMap.keys());
     const data = getMenuNavData();
-    for(const name of data) 
+    for(const name of data)
     {
         if(name === 'divider') continue;
         allAppCodeSet.delete(name);
     }
 
     if(allAppCodeSet.size === 0) return items;
-    for(const name of allAppCodeSet) 
+    for(const name of allAppCodeSet)
     {
         const [icon, title] = getAppItemIconAndTitle(name);
         items.push(
@@ -867,13 +867,13 @@ function generateAddMenuNavItems(onClick)
     return items;
 }
 
-$(document).on('contextmenu', '#menuNav .divider', function(event) 
+$(document).on('contextmenu', '#menuNav .divider', function(event)
 {
     const $divider = $(this);
     const $nav = $divider.closest('.nav');
     const isMoving = $nav.is('[z-use-sortable]');
     const items = [];
-    if(isMoving) 
+    if(isMoving)
     {
         items.push(
             {
@@ -926,11 +926,11 @@ $(document).on('contextmenu', '#menuNav .divider', function(event)
 
     zui.ContextMenu.show(
         {
-            hideOthers: true, 
-            element: $divider[0], 
-            placement: 'right-start', 
-            items: items, 
-            event: event, 
+            hideOthers: true,
+            element: $divider[0],
+            placement: 'right-start',
+            items: items,
+            event: event,
             onClickItem: (info) => info.event.preventDefault()
         }
     );
@@ -977,7 +977,7 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
             }
         );
     }
-    else 
+    else
     {
         items.push(
             {
@@ -1023,11 +1023,11 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
 
     zui.ContextMenu.show(
         {
-            hideOthers: true, 
-            element: $btn[0], 
-            placement: $btn.closest('#appTabs').length ? 'top-start' : 'right-start', 
-            items: items, 
-            event: event, 
+            hideOthers: true,
+            element: $btn[0],
+            placement: $btn.closest('#appTabs').length ? 'top-start' : 'right-start',
+            items: items,
+            event: event,
             onClickItem: (info) => info.event.preventDefault()
         }
     );
@@ -1254,10 +1254,10 @@ $(document).on('click', e =>
 
 let allAppsItemsMap = new Map();
 void function generateAllAppsItemsMap() {
-    for(const item of allAppsItems) 
+    for(const item of allAppsItems)
     {
         if(item === 'divider') continue;
-        
+
         allAppsItemsMap.set(item.code, item);
     }
 }();
@@ -1270,7 +1270,7 @@ function getAppItemIconAndTitle(name)
     const regex = /class=["']icon (\S*)["']\>\<\/i\>\s(\S*)/;
     const matches = str.match(regex);
 
-    if(matches) 
+    if(matches)
     {
         const icon = matches[1];
         const text = matches[2].trim();
