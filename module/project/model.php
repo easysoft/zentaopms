@@ -1666,7 +1666,7 @@ class projectModel extends model
      * @access public
      * @return void
      */
-    public function unlinkStoryByType($projectID, $storyType)
+    public function unlinkStoryByType($projectID = 0, $storyType = '')
     {
         $idList = $this->dao->select('id')->from(TABLE_PROJECT)
             ->where('deleted')->eq(0)
@@ -1677,11 +1677,11 @@ class projectModel extends model
 
         $storyIdList = $this->dao->select('t1.story')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-            ->where('t1.project')->in($idList)
-            ->andWhere('t2.type')->in($storyType)
+            ->where('t2.type')->in($storyType)
+            ->beginIF($projectID > 0)->andWhere('t1.project')->in($idList)->fi()
             ->fetchPairs();
 
-        if($storyIdList) $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('story')->in($storyIdList)->andWhere('project')->in($idList)->exec();
+        if($storyIdList) $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('story')->in($storyIdList)->beginIF($projectID > 0)->andWhere('project')->in($idList)->fi()->exec();
     }
 
     /**
