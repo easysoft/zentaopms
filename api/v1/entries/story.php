@@ -96,7 +96,7 @@ class storyEntry extends entry
         $oldStory = $this->loadModel('story')->getByID($storyID);
 
         /* Set $_POST variables. */
-        $fields = 'title,product,parent,reviewer,type,plan,module,source,sourceNote,category,pri,estimate,mailto,keywords,uid,stage,notifyEmail';
+        $fields = 'title,product,parent,reviewer,type,plan,module,source,sourceNote,category,pri,estimate,mailto,keywords,uid,stage,notifyEmail,status';
         $this->batchSetPost($fields, $oldStory);
 
         $control = $this->loadController('story', 'edit');
