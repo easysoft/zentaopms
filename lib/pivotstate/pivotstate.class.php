@@ -368,23 +368,6 @@ class pivotState
     }
 
     /**
-     * Init sql builder.
-     *
-     * @access public
-     * @return void
-     */
-    public function initSqlBuilder()
-    {
-        $this->builderStep = 'table';
-        $this->tableDesc   = array();
-
-        $this->sqlBuilder['joins'] = array();
-        $this->sqlBuilder['funcs'] = array();
-
-        if(!isset($this->sqlBuilder['from'])) $this->setFrom('');
-    }
-
-    /**
      * Check sql builder.
      *
      * @access public
@@ -496,6 +479,23 @@ class pivotState
         if(empty($select)) return $this->setBuilderError('select', 'field');
 
         return true;
+    }
+
+    /**
+     * Init sql builder.
+     *
+     * @access public
+     * @return void
+     */
+    public function initSqlBuilder()
+    {
+        $this->builderStep = 'table';
+        $this->tableDesc   = array();
+
+        $this->sqlBuilder['joins'] = array();
+        $this->sqlBuilder['funcs'] = array();
+
+        if(!isset($this->sqlBuilder['from'])) $this->setFrom('');
     }
 
     /**
