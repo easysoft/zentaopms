@@ -37,6 +37,23 @@ class thinkMulticolumn extends thinkQuestion
                 setStyle(array('padding-bottom' => 'calc(4 * var(--space))')),
                 thinkMatrixOptions(set::colName('options[fields]'), set::cols($fields))
             ),
+            formRow
+            (
+                setClass('mb-3 required-options-row'),
+                formGroup
+                (
+                    set::width('1/2'),
+                    set::label($lang->thinkstep->label->required),
+                    radioList
+                    (
+                        set::name('options[required]'),
+                        set::inline(true),
+                        set::value($required),
+                        set::items($requiredItems),
+                        on::change()->toggleClass('.required-options', 'hidden', 'target.value == 0')
+                    )
+                ),
+            )
         );
         return $formItems;
     }
