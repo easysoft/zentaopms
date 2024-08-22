@@ -55,7 +55,7 @@ const stepPresenters =
         const scope    = getStepScope(step);
         const $menuNav = scope.$('#menuNav');
 
-        if(!$menuNav.data('checkOpenAppStep'))
+        if(!$menuNav.data('tutorial.checkOpenAppStep'))
         {
             const checkOpenAppStep = (event, info) =>
             {
@@ -65,7 +65,7 @@ const stepPresenters =
             };
             scope.$(scope).on('resize', checkOpenAppStep);
             scope.$('#menuMoreBtn').on('shown', checkOpenAppStep);
-            $menuNav.data('checkOpenAppStep', true);
+            $menuNav.data('tutorial.checkOpenAppStep', true);
         }
 
         const $menuMainNav = $menuNav.find('#menuMainNav');
@@ -145,9 +145,9 @@ const stepPresenters =
             if(!$table.length) console.error(`[TUTORIAL] Cannot find table for step "${step.guide.name} > ${step.task.name} > ${step.title}"`, step);
             step.$table = $table;
 
-            if(!$table.data('selectRowBinding'))
+            if(!$table.data('tutorial.selectRowBinding'))
             {
-                $table.data('selectRowBinding', true);
+                $table.data('tutorial.selectRowBinding', true);
                 const dtable = $table.zui('dtable');
                 dtable.setOptions({onCheckChange: function()
                 {
@@ -292,8 +292,8 @@ function highlightStepTarget($target, step, popoverOptions)
         $target.scrollIntoView();
 
         const $doc = scope.$(scope.document);
-        if($doc.data('tutorialCheckBinding')) return;
-        $doc.data('tutorialCheckBinding', true).on('click change', '[zui-tutorial-step]', function(event, info)
+        if($doc.data('tutorial.checkBinding')) return;
+        $doc.data('tutorial.checkBinding', true).on('click change', '[zui-tutorial-step]', function(event, info)
         {
             if(!currentStep || currentStep.checkType !== event.type) return;
 
