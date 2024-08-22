@@ -102,6 +102,7 @@ $config->task->actionList['start']['hint']        = $lang->task->start;
 $config->task->actionList['start']['text']        = $lang->task->start;
 $config->task->actionList['start']['url']         = array('module' => 'task', 'method' => 'start', 'params' => 'taskID={id}');
 $config->task->actionList['start']['data-toggle'] = 'modal';
+$config->task->actionList['start']['class']       = 'task-start-btn';
 
 $config->task->actionList['restart']['icon']        = 'restart';
 $config->task->actionList['restart']['hint']        = $lang->task->restart;
@@ -114,6 +115,7 @@ $config->task->actionList['finish']['hint']        = $lang->task->finish;
 $config->task->actionList['finish']['text']        = $lang->task->finish;
 $config->task->actionList['finish']['url']         = array('module' => 'task', 'method' => 'finish', 'params' => 'taskID={id}');
 $config->task->actionList['finish']['data-toggle'] = 'modal';
+$config->task->actionList['finish']['class']       = 'task-finish-btn';
 
 $config->task->actionList['close']['icon']        = 'off';
 $config->task->actionList['close']['hint']        = $lang->task->close;
@@ -126,6 +128,7 @@ $config->task->actionList['recordWorkhour']['hint']        = $lang->task->record
 $config->task->actionList['recordWorkhour']['text']        = $lang->task->record;
 $config->task->actionList['recordWorkhour']['url']         = array('module' => 'task', 'method' => 'recordWorkhour', 'params' => 'taskID={id}');
 $config->task->actionList['recordWorkhour']['data-toggle'] = 'modal';
+$config->task->actionList['recordWorkhour']['class']       = 'task-record-btn';
 
 $config->task->actionList['edit']['icon']     = 'edit';
 $config->task->actionList['edit']['hint']     = $lang->task->edit;

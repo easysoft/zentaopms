@@ -237,8 +237,9 @@ $scrumProjectManage->tasks['manageTask']['steps'][] = array(
 
 $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'type'   => 'click',
-    'target' => '', //任务列表的开始按钮
+    'target' => '#table-execution-task div[data-row="1"] a.task-start-btn',
     'page'   => 'execution-task',
+    'url'    => array('execution', 'task', 'executionID=3'),
     'title'  => $lang->tutorial->scrumProjectManage->manageTask->step9->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step9->desc
 );
@@ -259,8 +260,9 @@ $scrumProjectManage->tasks['manageTask']['steps'][] = array(
 
 $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'type'   => 'click',
-    'target' => '', //任务列表的记录工时按钮
+    'target' => '#table-execution-task div[data-row="1"] a.task-record-btn',
     'page'   => 'execution-task',
+    'url'    => array('execution', 'task', 'executionID=3'),
     'title'  => $lang->tutorial->scrumProjectManage->manageTask->step12->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step12->desc
 );
@@ -281,8 +283,9 @@ $scrumProjectManage->tasks['manageTask']['steps'][] = array(
 
 $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'type'   => 'click',
-    'target' => '', //任务列表的完成按钮
+    'target' => '#table-execution-task div[data-row="1"] a.task-finish-btn',
     'page'   => 'execution-task',
+    'url'    => array('execution', 'task', 'executionID=3'),
     'title'  => $lang->tutorial->scrumProjectManage->manageTask->step15->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step15->desc
 );
@@ -305,6 +308,7 @@ $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'type'   => 'clickNavbar',
     'target' => 'build',
     'page'   => 'execution-task',
+    'url'    => array('execution', 'task', 'executionID=3'),
     'title'  => $lang->tutorial->scrumProjectManage->manageTask->step18->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step18->desc
 );
