@@ -18,3 +18,23 @@ class batchCreateUserTester extends tester
         $form->dom->verifyPassword->setValue($user->verifyPassword);
         $form->dom->btn($this->lang->save)->click();
         $form->wait(1);
+
+        return $this->success('批量创建用户成功');
+    }
+
+    /**
+     * Check the page jump after batchcreate a empty account user.
+     *
+     * @param  string    $user
+     * @access public
+     * @return object
+     */
+    public function batchCreateEmptyAccountUser($user)
+    {
+        $form = $this->initForm('user', 'batchCreate', array(), 'appIframe-admin');
+        $form->dom->account->setValue($user->account);
+        $form->dom->realname->setValue($user->realname);
+        $form->dom->passwordfield->setValue($user->passwordfield);
+        $form->dom->verifyPassword->setValue($user->verifyPassword);
+        $form->dom->btn($this->lang->save)->click();
+        $form->wait(1);
