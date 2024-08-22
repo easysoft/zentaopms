@@ -167,7 +167,7 @@ class projectModel extends model
     public function getByID(int $projectID, string $type = ''): object|false
     {
         /* Using demo data during tutorials. */
-        if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getProject();
+        if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getProject($projectID);
 
         /* Get project info. */
         $project = $this->projectTao->fetchProjectInfo($projectID, $type);
@@ -2133,7 +2133,7 @@ class projectModel extends model
         if(!$this->loadModel('common')->isOpenMethod($moduleName, $methodName) and !commonModel::hasPriv($moduleName, $methodName)) $this->common->deny($moduleName, $methodName, false);
 
         $projectID = (int)$this->checkAccess($projectID, $this->getPairsByProgram());
-        $project   = commonModel::isTutorialMode() ? $this->loadModel('tutorial')->getProject() : $this->projectTao->fetchProjectInfo($projectID);
+        $project   = commonModel::isTutorialMode() ? $this->loadModel('tutorial')->getProject($projectID) : $this->projectTao->fetchProjectInfo($projectID);
         if(!$project) return false;
 
         /* Reset project priv. */

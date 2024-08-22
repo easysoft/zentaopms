@@ -21,10 +21,10 @@ class tutorialModel extends model
      */
     public function getGuideTaskName()
     {
-        if(empty($_SERVER['HTTP_X_ZIN_TUTORIAL'])) return array('guide' => '', 'guideTask' => '');
+        if(empty($_SERVER['HTTP_X_ZIN_TUTORIAL'])) return array('guide' => '', 'guideTask' => '', 'stepIndex' => 0);
 
         list($guide, $guideTask, $guideStepIndex) = explode('-', $_SERVER['HTTP_X_ZIN_TUTORIAL']);
-        return array('guide' => $guide, 'guideTask' => $guideTask);
+        return array('guide' => $guide, 'guideTask' => $guideTask, 'stepIndex' => $guideStepIndex);
     }
 
     /**
@@ -160,13 +160,14 @@ class tutorialModel extends model
      * 获取新手模式项目。
      * Get project for tutorial;
      *
+     * @param  int    $projectID 内置项目ID是2，用户自己创建项目ID是3
      * @access public
      * @return object
      */
-    public function getProject(): object
+    public function getProject(int $projectID = 2): object
     {
         $project = new stdclass();
-        $project->id           = 2;
+        $project->id           = $projectID;
         $project->project      = 0;
         $project->model        = 'scrum';
         $project->type         = 'project';
@@ -184,7 +185,7 @@ class tutorialModel extends model
         $project->goal         = '';
         $project->acl          = 'open';
         $project->parent       = 0;
-        $project->path         = ',2,';
+        $project->path         = ",$projectID,";
         $project->grade        = 1;
         $project->PM           = $this->app->user->account;
         $project->PO           = $this->app->user->account;
@@ -203,6 +204,22 @@ class tutorialModel extends model
         $project->consumed     = 0;
         $project->estimate     = 0;
         $project->left         = 0;
+
+        if($projectID == 3)
+        {
+            $guideInfo   = $this->getGuideTaskName();
+            $sessionName = $guideInfo['guide'] . '_' . $guideInfo['guideTask'] . '_project';
+            if(!empty($_SESSION[$sessionName]))
+            {
+                $project->id = 3;
+
+                $userProject = $this->session->{$sessionName};
+                foreach($userProject as $key => $value)
+                {
+                    if(!empty($value)) $project->$key = $value;
+                }
+            }
+        }
 
         return $project;
     }
@@ -245,17 +262,9 @@ class tutorialModel extends model
 
         $guideInfo   = $this->getGuideTaskName();
         $sessionName = $guideInfo['guide'] . '_' . $guideInfo['guideTask'] . '_project';
-        if(!empty($_SESSION[$sessionName]))
+        if(!empty($_SESSION[$sessionName]) && $guideInfo['stepIndex'] == 4)
         {
-            $newProject = $this->getProject();
-            $newProject->id = 3;
-
-            $userProject = $this->session->{$sessionName};
-            foreach($userProject as $key => $value)
-            {
-                if(!empty($value)) $newProject->$key = $value;
-            }
-
+            $newProject = $this->getProject(3);
             $projectStat[$newProject->id] = $newProject;
         }
 
@@ -475,7 +484,7 @@ class tutorialModel extends model
     public function getTeamMembers(): array
     {
         $member = new stdclass();
-        $member->project     = 1;
+        $member->project     = 2;
         $member->account     = $this->app->user->account;
         $member->role        = $this->app->user->role;
         $member->join        = $this->app->user->join;
