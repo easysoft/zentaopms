@@ -134,6 +134,30 @@ const stepPresenters =
             const $saveBtn = $form.find('[type="submit"]');
             return $saveBtn.length ? $saveBtn : $target;
         }, step);
+    },
+    selectRow: function(step)
+    {
+        return highlightStepTarget((scope) => {
+            const $target = scope.$(step.target || '.dtable');
+            let $table   = $target.closest('[z-use-dtable]');
+            if(!$table.length) $table = $target.find('[z-use-dtable]');
+            if(!$table.length) $table = scope.$('[z-use-dtable]');
+            if(!$table.length) console.error(`[TUTORIAL] Cannot find table for step "${step.guide.name} > ${step.task.name} > ${step.title}"`, step);
+            step.$table = $table;
+
+            if(!$table.data('selectRowBinding'))
+            {
+                $table.data('selectRowBinding', true);
+                const dtable = $table.zui('dtable');
+                dtable.setOptions({onCheckChange: function()
+                {
+                    if(!this.getChecks().length) return;
+                    activeNextStep(step);
+                }});
+            }
+
+            return $target;
+        }, step);
     }
 };
 
