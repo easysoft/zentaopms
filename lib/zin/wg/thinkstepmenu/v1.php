@@ -188,38 +188,23 @@ class thinkStepMenu extends wg
 
         if($canCreate && (($showQuestionOfNode && $item->type == 'node') || $item->hasSameQuestion || $item->type == 'question')) $menus = array_merge($menus, array(
             array('type' => 'divider'),
-            array(
-                'key'     => 'radio',
-                'icon'    => 'radio',
-                'text'    => $this->lang->thinkstep->createStep . $this->lang->thinkstep->actions['radio'],
-                'onClick' => jsRaw("() => addQuestion({$item->id}, {$parentID}, 'question', 'radio')"),
-            ),
-            array(
-                'key'     => 'checkbox',
-                'icon'    => 'checkbox',
-                'text'    => $this->lang->thinkstep->createStep . $this->lang->thinkstep->actions['checkbox'],
-                'onClick' => jsRaw("() => addQuestion({$item->id}, {$parentID}, 'question', 'checkbox')"),
-            ),
-            array(
-                'key'     => 'input',
-                'icon'    => 'input',
-                'text'    => $this->lang->thinkstep->createStep . $this->lang->thinkstep->actions['input'],
-                'onClick' => jsRaw("() => addQuestion({$item->id}, {$parentID}, 'question', 'input')"),
-            ),
-            array(
-                'key'     => 'tableInput',
-                'icon'    => 'cell-input',
-                'text'    => $this->lang->thinkstep->createStep . $this->lang->thinkstep->actions['tableInput'],
-                'onClick' => jsRaw("() => addQuestion({$item->id}, {$parentID}, 'question', 'tableInput')"),
-            ),
-            array(
-                'key'     => 'multicolumn',
-                'icon'    => 'cell-input', // TODO
-                'text'    => $this->lang->thinkstep->createStep . $this->lang->thinkstep->actions['multicolumn'],
-                'onClick' => jsRaw("() => addQuestion({$item->id}, {$parentID}, 'question', 'multicolumn')"),
-            ),
+            $this->buildMenuItem('radio', 'radio', $this->lang->thinkstep->createStep . $this->lang->thinkstep->actions['radio'], $item, $parentID, 'radio'),
+            $this->buildMenuItem('checkbox', 'checkbox', $this->lang->thinkstep->createStep . $this->lang->thinkstep->actions['checkbox'], $item, $parentID, 'checkbox'),
+            $this->buildMenuItem('input', 'input', $this->lang->thinkstep->createStep . $this->lang->thinkstep->actions['input'], $item, $parentID, 'input'),
+            $this->buildMenuItem('tableInput', 'cell-input', $this->lang->thinkstep->createStep . $this->lang->thinkstep->actions['tableInput'], $item, $parentID, 'tableInput'),
+            $this->buildMenuItem('multicolumn', 'cell-input', $this->lang->thinkstep->createStep . $this->lang->thinkstep->actions['multicolumn'], $item, $parentID, 'multicolumn'),
         ));
         return $menus;
+    }
+
+    private function buildMenuItem(string $key, string $icon, string $text, object $item, int $parentID): array
+    {
+        return array(
+            'key'     => $key,
+            'icon'    => $icon,
+            'text'    => $text,
+            'onClick' => jsRaw("() => addQuestion({$item->id}, {$parentID}, 'question', '{$key}')"),
+        );
     }
 
     private function buildActions(): node
