@@ -42,6 +42,9 @@ class projectBuild extends control
     {
         $executionID = 0;
         $project     = $this->loadModel('project')->fetchById($projectID);
+
+        if($project->model == 'waterfall') $this->lang->projectbuild->execution = $this->lang->project->stage;
+
         if(strpos('stage,sprint,kanban', $project->type) !== false)
         {
             $executionID = $projectID;

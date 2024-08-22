@@ -47,6 +47,22 @@ class build extends control
      */
     public function create(int $executionID = 0, int $productID = 0, int $projectID = 0)
     {
+        $this->loadModel('execution');
+        $this->loadModel('project');
+
+        /* Set menu. */
+        if($this->app->tab == 'project')
+        {
+            $this->project->setMenu($projectID);
+        }
+        elseif(in_array($this->app->tab, array('execution', 'qa')))
+        {
+            $execution = $this->execution->getByID($executionID);
+            $projectID = $execution ? $execution->project : 0;
+        }
+
+        if($this->app->tab == 'execution') $this->execution->setMenu($executionID);
+
         if(!empty($_POST))
         {
             $build = form::data()->setDefault('createdBy', $this->app->user->account)->get();
@@ -64,24 +80,9 @@ class build extends control
             return $this->sendSuccess(array('load' => $this->createLink($this->app->rawModule, 'view', "buildID=$buildID"), 'id' => $buildID));
         }
 
-        $status = empty($this->config->CRProduct) ? 'noclosed' : '';
-        $this->loadModel('execution');
-        $this->loadModel('project');
-
-        /* Set menu. */
-        if($this->app->tab == 'project')
-        {
-            $this->project->setMenu($projectID);
-        }
-        elseif(in_array($this->app->tab, array('execution', 'qa')))
-        {
-            $execution = $this->execution->getByID($executionID);
-            $projectID = $execution ? $execution->project : 0;
-        }
-
-        if($this->app->tab == 'execution') $this->execution->setMenu($executionID);
         if(in_array($this->app->tab, array('execution', 'project'))) $this->session->set('project', $projectID);
 
+        $status = empty($this->config->CRProduct) ? 'noclosed' : '';
         $this->buildZen->assignCreateData($productID, $executionID, $projectID, $status);
     }
 
