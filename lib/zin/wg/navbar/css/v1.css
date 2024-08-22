@@ -1,0 +1,2 @@
+#navbar .nav[z-use-sortable] > li:hover {cursor: grab !important;}
+#navbar .nav[z-use-sortable] > li > a:hover {cursor: grab !important;}

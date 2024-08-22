@@ -10,6 +10,19 @@ class navbar extends wg
         'items?: array'
     );
 
+    public static function getPageCSS(): ?string
+    {
+        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
+    }
+
+    public static function getPageJS(): ?string
+    {
+        global $lang, $app;
+        $app->loadLang('index');
+        jsVar('langData', $lang->index->dock);
+        return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
+    }
+
     protected function getExecutionMoreItem($executionID)
     {
         if(defined('TUTORIAL')) return;
