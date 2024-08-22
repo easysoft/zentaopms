@@ -32,3 +32,11 @@ $execution = array(
         'end' => date('Y-m-d', strtotime('+10 months')),
     ),
 );
+
+r($tester->putoff($execution['0']))               && p('message') && e('延期执行成功');
+r($tester->putoff($execution['1']))               && p('message') && e('延期执行成功');
+r($tester->putoffiWithWrongDate($execution['2'])) && p('message') && e('延期执行表单页提示信息正确');
+r($tester->putoffiWithWrongDate($execution['3'])) && p('message') && e('延期执行表单页提示信息正确');
+r($tester->putoffiWithWrongDate($execution['4'])) && p('message') && e('延期执行表单页提示信息正确');
+r($tester->putoffiWithWrongDate($execution['5'])) && p('message') && e('延期执行表单页提示信息正确');
+$tester->closeBrowser();
