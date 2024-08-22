@@ -28,6 +28,16 @@ class thinkMulticolumn extends thinkQuestion
             if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);
             $fields = $step->options->fields ?? array('', '', '', '');
         }
+
+        $formItems[] = array(
+            formHidden('options[questionType]', $questionType),
+            formGroup
+            (
+                set::label($lang->thinkstep->label->columnTitle),
+                setStyle(array('padding-bottom' => 'calc(4 * var(--space))')),
+                thinkMatrixOptions(set::colName('options[fields]'), set::cols($fields))
+            ),
+        );
         return $formItems;
     }
 }
