@@ -56,7 +56,7 @@ $scrumProjectManage->tasks['manageProject']['steps'][] = array(
 
 $scrumProjectManage->tasks['manageProject']['steps'][] = array(
     'type'   => 'click',
-    'target' => '#table-project-browse .dtable-body div[data-row="3"] a',
+    'target' => '#table-project-browse .dtable-body div[data-row="2"] a',
     'page'   => 'project-browse',
     'title'  => $lang->tutorial->scrumProjectManage->manageProject->step6->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageProject->step6->desc

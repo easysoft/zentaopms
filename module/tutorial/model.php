@@ -13,21 +13,6 @@ declare(strict_types=1);
 class tutorialModel extends model
 {
     /**
-     * 获取当前所在的教程和任务。
-     * Get guide and task.
-     *
-     * @access public
-     * @return bool
-     */
-    public function getGuideTaskName()
-    {
-        if(empty($_SERVER['HTTP_X_ZIN_TUTORIAL'])) return array('guide' => '', 'guideTask' => '', 'stepIndex' => 0);
-
-        list($guide, $guideTask, $guideStepIndex) = explode('-', $_SERVER['HTTP_X_ZIN_TUTORIAL']);
-        return array('guide' => $guide, 'guideTask' => $guideTask, 'stepIndex' => $guideStepIndex);
-    }
-
-    /**
      * 检查新手模式配置。
      * Check novice mode config.
      *
@@ -142,32 +127,16 @@ class tutorialModel extends model
     }
 
     /**
-     * 创建新手模式项目。
-     * Create project for tutorial;
-     *
-     * @param  object $postData
-     * @access public
-     * @return object
-     */
-    public function createProject(object $project): int
-    {
-        $guideInfo = $this->getGuideTaskName();
-        $this->session->set($guideInfo['guide'] . '_' . $guideInfo['guideTask'] . '_project', $project);
-        return 3;
-    }
-
-    /**
      * 获取新手模式项目。
      * Get project for tutorial;
      *
-     * @param  int    $projectID 内置项目ID是2，用户自己创建项目ID是3
      * @access public
      * @return object
      */
-    public function getProject(int $projectID = 2): object
+    public function getProject(): object
     {
         $project = new stdclass();
-        $project->id           = $projectID;
+        $project->id           = 2;
         $project->project      = 0;
         $project->model        = 'scrum';
         $project->type         = 'project';
@@ -185,7 +154,7 @@ class tutorialModel extends model
         $project->goal         = '';
         $project->acl          = 'open';
         $project->parent       = 0;
-        $project->path         = ",$projectID,";
+        $project->path         = ",2,";
         $project->grade        = 1;
         $project->PM           = $this->app->user->account;
         $project->PO           = $this->app->user->account;
@@ -204,22 +173,6 @@ class tutorialModel extends model
         $project->consumed     = 0;
         $project->estimate     = 0;
         $project->left         = 0;
-
-        if($projectID == 3)
-        {
-            $guideInfo   = $this->getGuideTaskName();
-            $sessionName = $guideInfo['guide'] . '_' . $guideInfo['guideTask'] . '_project';
-            if(!empty($_SESSION[$sessionName]))
-            {
-                $project->id = 3;
-
-                $userProject = $this->session->{$sessionName};
-                foreach($userProject as $key => $value)
-                {
-                    if(!empty($value)) $project->$key = $value;
-                }
-            }
-        }
 
         return $project;
     }
@@ -259,15 +212,6 @@ class tutorialModel extends model
         if($browseType && $browseType != 'all') $project->name .= '-' . $browseType; // Fix bug #21096
 
         $projectStat[$project->id] = $project;
-
-        $guideInfo   = $this->getGuideTaskName();
-        $sessionName = $guideInfo['guide'] . '_' . $guideInfo['guideTask'] . '_project';
-        if(!empty($_SESSION[$sessionName]) && $guideInfo['stepIndex'] == 4)
-        {
-            $newProject = $this->getProject(3);
-            $projectStat[$newProject->id] = $newProject;
-        }
-
         return $projectStat;
     }
 
