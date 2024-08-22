@@ -115,7 +115,7 @@ const stepPresenters =
 
             const $panel = $target.closest('.panel');
             return $panel.length ? $panel : $target;
-        }, step);
+        }, step, (!step.popover || !step.popover.placement) ? {placement: 'right'} : null);
     },
     saveForm: function(step)
     {
