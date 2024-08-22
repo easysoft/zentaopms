@@ -5,7 +5,6 @@ global $lang, $config;
 $fields   = defineFieldList('execution.create');
 $project  = data('project');
 $from     = data('from');
-$hidden   = empty($project->hasProduct) ? 'hidden' : '';
 $isStage  = isset($project->model) && in_array($project->model, array('waterfall', 'waterfallplus'));
 $isKanban = data('isKanban');
 $showExecutionExec = ($from == 'execution' || $from == 'doc');
@@ -78,7 +77,6 @@ $fields->field('percent')
 
 $fields->field('productsBox')
     ->width('full')
-    ->className($hidden)
     ->control(array
     (
         'control'           => 'productsBox',
