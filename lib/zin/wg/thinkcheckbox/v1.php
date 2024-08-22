@@ -38,7 +38,7 @@ class thinkCheckbox extends thinkRadio
             (
                 set::label($lang->thinkstep->label->minCount),
                 set::labelClass('required'),
-                setClass($className),
+                setClass($className, 'min-count'),
                 input
                 (
                     set::placeholder($lang->thinkstep->placeholder->inputContent),
@@ -52,7 +52,7 @@ class thinkCheckbox extends thinkRadio
             (
                 set::label($lang->thinkstep->label->maxCount),
                 set::labelClass('required'),
-                setClass($className),
+                setClass($className, 'max-count'),
                 input
                 (
                     set::placeholder($lang->thinkstep->placeholder->inputContent),

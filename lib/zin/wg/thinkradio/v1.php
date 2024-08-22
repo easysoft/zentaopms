@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 namespace zin;
 
 requireWg('thinkQuestion');
@@ -16,8 +15,14 @@ class thinkRadio extends thinkQuestion
         'fields?: array',
         'setOption?: bool=false',
         'quoteTitle?: string',
-        'quoteQuestions?: array'
+        'quoteQuestions?: array',
+        'citation?: int=1',
     );
+
+    public static function getPageJS(): ?string
+    {
+        return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
+    }
 
     protected function buildDetail(): array
     {
@@ -25,6 +30,7 @@ class thinkRadio extends thinkQuestion
         $detailWg = parent::buildDetail();
         list($step, $mode) = $this->prop(array('step', 'mode'));
         if($mode != 'detail') return array();
+        jsVar('maxCountPlaceholder', $lang->thinkstep->placeholder->maxCount);
 
         $answer   = $step->answer;
         $result   = isset($answer->result) ? $answer->result : array();
@@ -49,9 +55,10 @@ class thinkRadio extends thinkQuestion
     {
         global $lang, $app;
         $app->loadLang('thinkstep');
+
         $formItems = parent::buildFormItem();
 
-        list($step, $questionType, $required, $enableOther, $fields, $setOption, $quoteTitle, $quoteQuestions) = $this->prop(array('step', 'questionType', 'required', 'enableOther', 'fields', 'setOption', 'quoteTitle', 'quoteQuestions'));
+        list($step, $questionType, $required, $enableOther, $fields, $setOption, $quoteTitle, $quoteQuestions, $citation) = $this->prop(array('step', 'questionType', 'required', 'enableOther', 'fields', 'setOption', 'quoteTitle', 'quoteQuestions', 'citation'));
         $requiredItems = $lang->thinkstep->requiredList;
         if($step)
         {
@@ -65,42 +72,45 @@ class thinkRadio extends thinkQuestion
 
         $formItems[] = array(
             formHidden('options[questionType]', $questionType),
-            $questionType == 'checkbox' ? formRow
+            $questionType == 'checkbox' ? array
             (
-                formGroup
+                formRow
                 (
-                    setClass('w-66'),
-                    set::label($lang->thinkstep->label->setOption),
-                    radioList
+                    formGroup
                     (
-                        set::name('options[setOption]'),
-                        set::inline(true),
-                        set::value($setOption),
-                        set::items($lang->thinkstep->setOptionList),
-                        on::change()->do("$('.think-options-field').toggleClass('hidden', target.value == 1); $('.think-quote-title').toggleClass('hidden', target.value == 0)")
+                        setClass('w-66'),
+                        set::label($lang->thinkstep->label->setOption),
+                        radioList
+                        (
+                            set::name('options[setOption]'),
+                            set::inline(true),
+                            set::value($setOption),
+                            set::items($lang->thinkstep->setOptionList),
+                            bind::change('changeOption(event)')
+                        )
+                    ),
+                    icon
+                    (
+                        setClass('mt-10 text-gray-400 cursor-pointer ml-1'),
+                        toggle::tooltip(array('placement' => 'top', 'title' => $lang->thinkstep->tips->setOption, 'width' => '220px')),
+                        'help'
                     )
                 ),
-                icon
+                formGroup
                 (
-                    setClass('mt-10 text-gray-400 cursor-pointer ml-1'),
-                    toggle::tooltip(array('placement' => 'top', 'title' => $lang->thinkstep->tips->setOption, 'width' => '220px')),
-                    'help'
-                )
-            ) : null,
-            $questionType == 'checkbox' ? formGroup
-            (
-                setClass('think-quote-title', $setOption == 0 ? 'hidden' : ''),
-                set::label($lang->thinkstep->label->quoteTitle),
-                set::labelClass('required'),
-                picker
-                (
-                    set(array
+                    setClass('think-quote-title', $setOption == 0 ? 'hidden' : ''),
+                    set::label($lang->thinkstep->label->quoteTitle),
+                    set::labelClass('required'),
+                    picker
                     (
-                        'name'        => 'options[quoteTitle]',
-                        'placeholder' => $lang->thinkstep->placeholder->quoteTitle,
-                        'items'       => $quoteQuestions,
-                        'value'       => $quoteTitle
-                    ))
+                        set(array
+                        (
+                            'name'        => 'options[quoteTitle]',
+                            'placeholder' => $lang->thinkstep->placeholder->quoteTitle,
+                            'items'       => $quoteQuestions,
+                            'value'       => $quoteTitle
+                        ))
+                    )
                 )
             ) : null,
             formGroup
