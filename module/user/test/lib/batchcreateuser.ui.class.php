@@ -38,3 +38,6 @@ class batchCreateUserTester extends tester
         $form->dom->verifyPassword->setValue($user->verifyPassword);
         $form->dom->btn($this->lang->save)->click();
         $form->wait(1);
+
+        return $this->failed('批量创建用户失败');
+    }
