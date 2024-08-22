@@ -64,5 +64,12 @@ class createStageTester extends tester
             }
             return $this->failed('创建阶段表单页提示信息不正确');
         }
+
+        $executionPage = $this->loadPage('project', 'execution');
+        if($executionPage->dom->name->getText()  != $waterfall['name_0']) return $this->failed('阶段名称错误');
+        if($executionPage->dom->begin->getText() != $waterfall['begin_0']) return $this->failed('阶段计划开始错误');
+        if($executionPage->dom->end->getText()   != $waterfall['end_0']) return $this->failed('阶段计划完成错误');
+
+        return $this->success();
     }
 }
