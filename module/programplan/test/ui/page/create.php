@@ -17,9 +17,4 @@ class createPage extends page
             'beginTip'    => "//*[@id='begin[1]Tip']",
             'endTip'      => "//*[@id='end[1]Tip']",
             'nameTip'     => "//*[@class='modal modal-async load-indicator modal-alert modal-trans show in']/div/div/div[2]/div",
-            'confirmBtn'  => "//*[@class='modal modal-async load-indicator modal-alert modal-trans show in']/div/div/div[3]/nav/button/span
-",
-        );
-        $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
-    }
-}
+            'confirmBtn'  => "//*[@class='modal modal-async load-indicator modal-alert modal-trans show in']/div/div/div[3]/nav/button/span",
