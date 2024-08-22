@@ -61,7 +61,7 @@ const stepPresenters =
             {
                 if(!currentStep || currentStep.type !== 'openApp') return;
                 if(event.type === 'shown' && info[0].options.target !== '#menuMoreList') return;
-                showOpenAppStep(currentStep);
+                stepPresenters.openApp(currentStep);
             };
             scope.$(scope).on('resize', checkOpenAppStep);
             scope.$('#menuMoreBtn').on('shown', checkOpenAppStep);
