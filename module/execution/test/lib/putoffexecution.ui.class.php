@@ -55,5 +55,22 @@ class putoffExecutionTester extends tester
     {
         $this->inputFields($execution, $executionId);
 
+        if($dateType == 'end')
+        {
+            $info = sprintf($this->lang->execution->errorCommonEnd, '');
+            $test = $form->dom->endTip->getText();
+        }
+        else
+        {
+            $info = sprintf($this->lang->execution->errorCommonBegin, '');
+            $test = $form->dom->beginTip->getText();
+        }
+        /* 获取页面返回信息中除日期外的内容 */
+        preg_match_all('/(\d{4}-\d{2}-\d{2})/', $text, $matches);                                                                                                                                 ~
+        $date   = $matches[0];                                                                                                                                                                    ~
+        $params = str_replace($date, '', $text);                                                                                                                                                  ~
+        $params = trim($params);
+        if($params == $info) return true;
+        return false;
     }
 }
