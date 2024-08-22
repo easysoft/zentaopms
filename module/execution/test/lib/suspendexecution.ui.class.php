@@ -16,5 +16,8 @@ class suspendExecutionTester extends tester
         $form->dom->suspend->click();
         $form->dom->suspendSubmit->click();
         $form->wait(1);
+
+        if($form->dom->status->getText() != $this->lang->execution->statusList->suspended) return $this->failed('执行状态错误');
+        return $this->success('挂起执行成功');
     }
 }
