@@ -79,6 +79,7 @@ if($task->fromBug)
     $sections[] = setting()
         ->title($lang->task->fromBug)
         ->control('detailCard')
+        ->url(createLink('bug', 'view', "bugID=$fromBug->id"))
         ->object($fromBug)
         ->content(setting()->title($lang->bug->steps)->control('html')->content(empty($fromBug->steps) ? $lang->noData : $fromBug->steps));
 }
