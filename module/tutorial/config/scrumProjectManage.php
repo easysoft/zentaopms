@@ -223,14 +223,14 @@ $scrumProjectManage->tasks['manageTask']['steps'][] = array(
 
 $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'type'   => 'form',
-    'page'   => 'task-assignTo',
+    'page'   => 'execution-task',
     'title'  => $lang->tutorial->scrumProjectManage->manageTask->step7->name,
 );
 
 $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'type'   => 'saveForm',
     'page'   => 'form button[type="submit"]',
-    'page'   => 'task-assignTo',
+    'page'   => 'execution-task',
     'title'  => $lang->tutorial->scrumProjectManage->manageTask->step8->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step8->desc
 );
@@ -246,14 +246,14 @@ $scrumProjectManage->tasks['manageTask']['steps'][] = array(
 
 $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'type'   => 'form',
-    'page'   => 'task-start',
+    'page'   => 'execution-task',
     'title'  => $lang->tutorial->scrumProjectManage->manageTask->step10->name,
 );
 
 $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'type'   => 'saveForm',
     'page'   => 'form button[type="submit"]',
-    'page'   => 'task-start',
+    'page'   => 'execution-task',
     'title'  => $lang->tutorial->scrumProjectManage->manageTask->step11->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step11->desc
 );
@@ -269,14 +269,14 @@ $scrumProjectManage->tasks['manageTask']['steps'][] = array(
 
 $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'type'   => 'form',
-    'page'   => 'task-recordWorkhour',
+    'page'   => 'execution-task',
     'title'  => $lang->tutorial->scrumProjectManage->manageTask->step13->name,
 );
 
 $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'type'   => 'saveForm',
     'page'   => 'form button[type="submit"]',
-    'page'   => 'task-recordWorkhour',
+    'page'   => 'execution-task',
     'title'  => $lang->tutorial->scrumProjectManage->manageTask->step14->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step14->desc
 );
@@ -292,14 +292,14 @@ $scrumProjectManage->tasks['manageTask']['steps'][] = array(
 
 $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'type'   => 'form',
-    'page'   => 'task-finish',
+    'page'   => 'execution-task',
     'title'  => $lang->tutorial->scrumProjectManage->manageTask->step16->name,
 );
 
 $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'type'   => 'saveForm',
     'target' => 'form button[type="submit"]',
-    'page'   => 'task-finish',
+    'page'   => 'execution-task',
     'title'  => $lang->tutorial->scrumProjectManage->manageTask->step17->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step17->desc
 );
