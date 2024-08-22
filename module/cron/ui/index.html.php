@@ -23,6 +23,7 @@ foreach($crons as $cron)
     if($cron->buildin == 0 and common::hasPriv('cron', 'delete'))  $actionsHtml .= html::a(inlink('delete', "id={$cron->id}"), $lang->delete, '', "class='primary-500 ajax-submit' data-confirm={$lang->cron->confirmDelete}");
 
     $cron->actions = $actionsHtml;
+    if($cron->command == '') $cron->lastTime = '';
     if($cron->lastTime) $cron->lastTime = substr($cron->lastTime, 2, 17);
 }
 
