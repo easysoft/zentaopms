@@ -171,7 +171,7 @@ div
                 (
                     setID('notice'),
                     setClass('alert secondary'),
-                    div(setClass('content'), icon(setClass('text-secondary'), 'exclamation-sign'), $expiredCountTips)
+                    div(setClass('content'), icon(setClass('text-secondary'), 'exclamation-sign'), html($expiredCountTips))
                 )
             ) : null,
             empty($demoUsers) ? null : div
