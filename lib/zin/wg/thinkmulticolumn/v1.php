@@ -53,6 +53,18 @@ class thinkMulticolumn extends thinkQuestion
                         on::change()->toggleClass('.required-options', 'hidden', 'target.value == 0')
                     )
                 ),
+                formGroup
+                (
+                    set::width('1/2'),
+                    set::label($lang->thinkstep->label->required),
+                    setClass('required-options'),
+                    picker
+                    (
+                        set::name('options[requiredCols][]'),
+                        set::items(array()),
+                        set::multiple(true)
+                    )
+                ),
             )
         );
         return $formItems;
