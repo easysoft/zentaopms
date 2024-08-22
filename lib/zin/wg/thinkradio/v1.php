@@ -15,6 +15,8 @@ class thinkRadio extends thinkQuestion
         'enableOther?: bool',
         'fields?: array',
         'setOption?: bool=false',
+        'quoteTitle?: string',
+        'quoteQuestions?: array'
     );
 
     protected function buildDetail(): array
@@ -49,13 +51,14 @@ class thinkRadio extends thinkQuestion
         $app->loadLang('thinkstep');
         $formItems = parent::buildFormItem();
 
-        list($step, $questionType, $required, $enableOther, $fields, $setOption) = $this->prop(array('step', 'questionType', 'required', 'enableOther', 'fields', 'setOption'));
+        list($step, $questionType, $required, $enableOther, $fields, $setOption, $quoteTitle, $quoteQuestions) = $this->prop(array('step', 'questionType', 'required', 'enableOther', 'fields', 'setOption', 'quoteTitle', 'quoteQuestions'));
         $requiredItems = $lang->thinkstep->requiredList;
         if($step)
         {
             $enableOther = $step->options->enableOther ?? 0;
             $required    = $step->options->required;
             $setOption   = isset($step->options->setOption) ? $step->options->setOption : false;
+            $quoteTitle  = isset($step->options->quoteTitle) ? $step->options->quoteTitle : null;
             if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);
             $fields = $step->options->fields ?? array();
         }
@@ -73,7 +76,8 @@ class thinkRadio extends thinkQuestion
                         set::name('options[setOption]'),
                         set::inline(true),
                         set::value($setOption),
-                        set::items($lang->thinkstep->setOptionList)
+                        set::items($lang->thinkstep->setOptionList),
+                        on::change()->do("$('.think-options-field').toggleClass('hidden', target.value == 1); $('.think-quote-title').toggleClass('hidden', target.value == 0)")
                     )
                 ),
                 icon
@@ -81,6 +85,22 @@ class thinkRadio extends thinkQuestion
                     setClass('mt-10 text-gray-400 cursor-pointer ml-1'),
                     toggle::tooltip(array('placement' => 'top', 'title' => $lang->thinkstep->tips->setOption, 'width' => '220px')),
                     'help'
+                )
+            ) : null,
+            $questionType == 'checkbox' ? formGroup
+            (
+                setClass('think-quote-title', $setOption == 0 ? 'hidden' : ''),
+                set::label($lang->thinkstep->label->quoteTitle),
+                set::labelClass('required'),
+                picker
+                (
+                    set(array
+                    (
+                        'name'        => 'options[quoteTitle]',
+                        'placeholder' => $lang->thinkstep->placeholder->quoteTitle,
+                        'items'       => $quoteQuestions,
+                        'value'       => $quoteTitle
+                    ))
                 )
             ) : null,
             formGroup
