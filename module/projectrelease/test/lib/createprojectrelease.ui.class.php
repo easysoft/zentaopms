@@ -16,5 +16,19 @@ class createProjectReleaseTester extends tester
         if(isset($release['status']))      $form->dom->status->picker($release['status']);
         $form->wait(2);
         if(isset($release['plandate']))    $form->dom->date->datepicker($release['plandate']);
+        if(isset($release['releasedate'])) $form->dom->releasedDate->datepicker($release['releasedate']);
+
+        $form->dom->btn($this->lang->save)->click();
+        $form->wait(5);
+        return $this->checkResult($release);
     }
+
+    /**
+     * Check the result after creating the project release.
+     * 创建项目发布后检查结果
+     *
+     * @param  array $release
+     * @access public
+     * @return object
+     */
 }
