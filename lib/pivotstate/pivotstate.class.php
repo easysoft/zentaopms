@@ -378,8 +378,8 @@ class pivotState
         $this->builderStep = 'table';
         $this->tableDesc   = array();
 
-        $this->sqlBuilder['joins']     = array();
-
+        $this->sqlBuilder['joins'] = array();
+        $this->sqlBuilder['funcs'] = array();
 
         if(!isset($this->sqlBuilder['from'])) $this->setFrom('');
     }

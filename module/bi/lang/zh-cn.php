@@ -35,6 +35,8 @@ $lang->bi->of            = '的';
 $lang->bi->enable        = '启用';
 $lang->bi->allFields     = '全部字段(*)';
 $lang->bi->previewSql    = '预览构建的sql语句';
+$lang->bi->addFunc       = '新增函数字段';
+$lang->bi->emptyFuncs    = '暂未新增函数字段。';
 
 $lang->bi->emptyError = '不能为空';
 
