@@ -63,7 +63,17 @@ class mainNavbar extends nav
         #mainNavbar .main-navbar-left #switcher .icon-angle-right {display: none;}
         #mainNavbar .main-navbar-left #switcher .caret {color: rgb(var(--color-link-hover-rgb));}
         #mainNavbar .main-navbar-left #switcher .text {color: rgb(var(--color-primary-500-rgb));}
+        #mainNavbar .nav[z-use-sortable] > li:hover {cursor: grab !important;}
+        #mainNavbar .nav[z-use-sortable] > li > a:hover {cursor: grab !important;}
         CSS;
+    }
+
+    public static function getPageJS(): ?string
+    {
+        global $lang, $app;
+        $app->loadLang('index');
+        jsVar('langData', $lang->index->dock);
+        return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
     protected function created()
