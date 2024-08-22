@@ -108,7 +108,9 @@ class thinkRadio extends thinkQuestion
                             'name'        => 'options[quoteTitle]',
                             'placeholder' => $lang->thinkstep->placeholder->quoteTitle,
                             'items'       => $quoteQuestions,
-                            'value'       => $quoteTitle
+                            'value'       => $quoteTitle,
+                            'disabled'    => empty($quoteQuestions),
+                            'title'       => empty($quoteQuestions) ? $lang->thinkstep->tips->quoteTitle : null
                         ))
                     )
                 ),
