@@ -410,6 +410,15 @@ class bugModel extends model
     {
         /* Get old bug. */
         $oldBug = $this->getById($bug->id);
+        if(!empty($bug->duplicateBug))
+        {
+            $duplicateBug = $this->fetchByID($bug->duplicateBug);
+            if(!$duplicateBug || $duplicateBug->deleted == '1' || $duplicateBug->product != $oldBug->product)
+            {
+                dao::$errors['duplicateBug'][] = $this->lang->bug->error->duplicateBugNotExist;
+                return false;
+            }
+        }
 
         /* Update bug. */
         $this->dao->update(TABLE_BUG)->data($bug, 'buildName,createBuild,buildExecution,comment')
