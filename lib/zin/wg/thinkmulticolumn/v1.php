@@ -28,10 +28,6 @@ class thinkMulticolumn extends thinkQuestion
             $fields       = $step->options->fields ?? array('', '', '', '');
             $requiredCols = $step->options->requiredCols ?? array();
         }
-        else
-        {
-            $requiredCols = isset($_COOKIE['thinkRequiredCols']) ? json_decode($_COOKIE['thinkRequiredCols']) : array();
-        }
 
         $formItems[] = array(
             formHidden('options[questionType]', $questionType),
