@@ -16,5 +16,18 @@ class thinkMulticolumn extends thinkQuestion
     {
         global $lang, $app;
         $app->loadLang('thinkstep');
+        $formItems = parent::buildFormItem();
+
+        list($step, $questionType, $required, $enableOther, $fields) = $this->prop(array('step', 'questionType', 'required', 'enableOther', 'fields'));
+        $requiredItems = $lang->thinkstep->requiredList;
+
+        if($step)
+        {
+            $enableOther = $step->options->enableOther ?? 0;
+            $required    = $step->options->required;
+            if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);
+            $fields = $step->options->fields ?? array('', '', '', '');
+        }
+        return $formItems;
     }
 }
