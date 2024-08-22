@@ -429,7 +429,7 @@ function ensureStepScope(step, callback)
         if(!scopePage) return waitStepScope('page is not ready');
         const scopePageRaw = ($body.attr('data-page-raw') || '').toLowerCase();
         const stepPage = (step.page || '').toLowerCase();
-        if(stepPage && stepPage !== scopePage && stepPage !== scopePageRaw) return waitStepScope(['page not match', stepPage,scopePage,scopePageRaw]);
+        if(stepPage && stepPage !== scopePage && stepPage !== scopePageRaw) return waitStepScope(`step page "${stepPage}" not match "${scopePage}" or "${scopePageRaw}"`);
     }
     return setTimeout(() => callback(scope), 200);
 }
