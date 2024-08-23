@@ -450,7 +450,8 @@ foreach($setting as $col)
 
     if($col['name'] == 'title')
     {
-        $col['link']  = createLink('execution', 'storyView', array('storyID' => '{id}', 'execution' => $execution->id));
+        $tab = $execution->multiple ? 'execution' : 'project';
+        $col['link']  = createLink('execution', 'storyView', array('storyID' => '{id}', 'execution' => $execution->id)) . "#app={$tab}";
         $col['title'] = $this->lang->story->name;
     }
 
