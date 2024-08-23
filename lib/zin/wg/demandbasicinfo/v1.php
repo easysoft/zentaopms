@@ -41,7 +41,7 @@ class demandBasicInfo extends wg
                     zget($demands, $demand->parent),
                     set::href(helper::createLink('demand', 'view', "demandID=$demand->parent")),
                     set::title(zget($demands, $demand->parent)),
-                    setClass('basis-32 text-clip mr-2.5'),
+                    setClass('basis-52 text-clip mr-2.5'),
                     setData('toggle', 'modal'),
                     setData('size', 'lg')
                 ),
