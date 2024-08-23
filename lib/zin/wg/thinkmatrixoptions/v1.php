@@ -47,8 +47,8 @@ class thinkMatrixOptions extends wg
         return div
         (
             setID($id),
-            setClass('think-multiple w-full h-full overflow-x-auto overflow-y-hidden px-px pb-0.5'),
-            div(setClass('think-multiple-body flex')),
+            setClass('think-multiple w-full'),
+            div(setClass('think-multiple-body flex overflow-x-auto overflow-y-hidden')),
             zui::thinkMatrixOptions
             (
                 set::_to("#$id"),
