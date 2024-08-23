@@ -226,7 +226,7 @@ class tutorialModel extends model
      */
     public function getExecutionStats($browseType = ''): array
     {
-        $execution = $this->getProject();
+        $execution = $this->getExecution();
 
         $execution->progress     = 0;
         $execution->estimate     = 0;
@@ -469,7 +469,6 @@ class tutorialModel extends model
     {
         $account = $this->app->user->account;
 
-        $users['']       = '';
         $users[$account] = $account;
         $users['test']   = 'Test';
         return $users;

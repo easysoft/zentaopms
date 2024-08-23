@@ -120,6 +120,7 @@ $scrumProjectManage->tasks['manageExecution']['steps'][] = array(
     'type'   => 'click',
     'target' => '#mainMenu #actionBar a.create-execution-btn',
     'page'   => 'project-execution',
+    'url'    => array('project', 'execution', 'status=all&projectID=2'),
     'title'  => $lang->tutorial->scrumProjectManage->manageExecution->step2->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageExecution->step2->desc
 );
@@ -142,7 +143,7 @@ $scrumProjectManage->tasks['manageExecution']['steps'][] = array(
 
 $scrumProjectManage->tasks['manageExecution']['steps'][] = array(
     'type'   => 'click',
-    'target' => '#table-project-execution div[data-row="pid2"] a',
+    'target' => '#table-project-execution div[data-row="pid3"] a',
     'page'   => 'project-execution',
     'url'    => array('project', 'execution', 'status=all&projectID=2'),
     'title'  => $lang->tutorial->scrumProjectManage->manageExecution->step5->name,
