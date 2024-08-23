@@ -890,7 +890,7 @@ $(document).on('contextmenu', '#menuNav .divider', function(event)
     {
         items.push(
             {
-                text: langData.move,
+                text: langData.sort,
                 onClick: () => {
                     const sortable = new zui.Sortable(
                         '#menuMainNav',
@@ -983,7 +983,7 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
         {
             items.push(
                 {
-                    text: langData.move,
+                    text: langData.sort,
                     onClick: () => {
                         const sortable = new zui.Sortable(
                             '#menuMainNav',
