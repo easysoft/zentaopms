@@ -45,6 +45,7 @@ if(isset($createFields['branch']) && $type == 'story')
 }
 
 $fields->field('parent')
+    ->id('parentBox')
     ->hidden(data('hiddenParent'))
     ->items($createFields['parent']['options'])
     ->value($createFields['parent']['default']);

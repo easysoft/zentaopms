@@ -39,7 +39,7 @@ window.loadProduct = function(e)
     const $modal    = $this.closest('.modal');
     const inModal   = $modal.length > 0;
     if(inModal)  loadModal($.createLink('story', 'create', 'productID=' + productID + '&' + createParams), $modal.attr('id'));
-    if(!inModal) loadPage($.createLink('story', 'create', 'productID=' + productID + '&' + createParams));
+    if(!inModal) loadPage($.createLink('story', 'create', 'productID=' + productID + '&' + createParams), '#moduleBox,#parentBox,#reviewerBox,#planIdBox');
 };
 
 window.loadProductPlans = function(productID, branch)
