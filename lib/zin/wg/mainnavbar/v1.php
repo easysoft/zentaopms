@@ -161,6 +161,7 @@ class mainNavbar extends nav
         $leftBlock  = $this->block('left');
         $rightBlock = $this->block('right');
         if(empty($leftBlock)) $leftBlock = $this->buildSwitcher();
+        jsVar('allMainNavbarItems', $this->prop('items'));
 
         return div
         (
