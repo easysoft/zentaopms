@@ -706,7 +706,7 @@ class tutorialModel extends model
         $step1->id     = 1;
         $step1->step   = 'Test step1';
         $step1->desc   = 'Test step1';
-        $step1->expect = '';
+        $step1->expect = 'Step1 expect';
         $step1->type   = 'step';
         $step1->parent = 0;
         $step1->grade  = 1;
@@ -716,11 +716,11 @@ class tutorialModel extends model
         $step2->id     = 2;
         $step2->step   = 'Test step2';
         $step2->desc   = 'Test step2';
-        $step2->expect = '';
+        $step2->expect = 'Step2 expect';
         $step2->type   = 'step';
         $step2->parent = 0;
         $step2->grade  = 1;
-        $case->steps   = array($step1, $step2);
+        $case->steps   = array(1 => $step1, 2 => $step2);
 
         return $case;
     }
@@ -766,7 +766,7 @@ class tutorialModel extends model
                 'version' => 1,
                 'type'    => 'step',
                 'desc'    => 'Test step1',
-                'expect'  => '',
+                'expect'  => 'Step1 expect',
                 'name'    => 1,
                 'grade'   => 1,
                 'result'  => 'fail',
@@ -780,7 +780,7 @@ class tutorialModel extends model
                 'version' => 1,
                 'type'    => 'step',
                 'desc'    => 'Test step2',
-                'expect'  => '',
+                'expect'  => 'Step2 expect',
                 'name'    => 2,
                 'grade'   => 1,
                 'result'  => 'pass',
