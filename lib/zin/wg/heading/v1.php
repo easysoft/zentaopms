@@ -75,6 +75,7 @@ class heading extends wg
             if($app->tab == 'qa') $module = 'product';
             if($app->tab == 'bi') $module = 'dimension';
 
+            if($app->tab == 'feedback' && $moduleName == 'ticket') $module = 'product';
             if($app->tab == 'qa' && ($moduleName == 'caselib' || data('isLibCase'))) $module = 'caselib';
             return new dropmenu(set::tab($module));
         }
