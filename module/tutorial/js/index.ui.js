@@ -184,6 +184,7 @@ function getStepForm(scope, $target)
 
 function destroyPopover(callback, scope)
 {
+    if(config.debug) showLog('Destroy popover', currentStep, popover ? `${popover.gid}/${popover.options.key}` : 'no popover', {popover, callback, scope});
     if(!popover)
     {
         if(scope && scope.$)
@@ -235,8 +236,12 @@ function isStepFormFilled(step, event)
 
 function highlightStepTarget($target, step, popoverOptions)
 {
-    if(config.debug) showLog('Highlight', step, null, {$target, popover, popoverOptions});
-    if(popover) return destroyPopover(() => highlightStepTarget($target, step, popoverOptions));
+    if(config.debug) showLog('Highlight', step, popover ? `${popover.gid}/${popover.options.key}` : 'no popover', {$target, popover, popoverOptions});
+    if(popover)
+    {
+        if(popover.options.key === step.id) return;
+        return destroyPopover(() => highlightStepTarget($target, step, popoverOptions));
+    }
     ensureStepScope(step, (scope) =>
     {
         if(typeof $target === 'function') $target = $target(scope);
@@ -244,7 +249,7 @@ function highlightStepTarget($target, step, popoverOptions)
         if(!$target.length) return console.error(`[TUTORIAL] Cannot find target for step "${step.guide.title || step.guide.name} > ${step.task.title || step.task.name} > ${step.title}"`, step);
         popoverOptions = $.extend(
         {
-            key             : `tutorial-popover-${step.id}`,
+            key             : step.id,
             title           : step.title,
             strategy        : 'fixed',
             show            : true,
@@ -309,6 +314,7 @@ function highlightStepTarget($target, step, popoverOptions)
         popover = new scope.zui.Popover($target, popoverOptions);
         if(!popoverOptions.notFinalTarget) $target.attr('zui-tutorial-step', step.id);
         $target.scrollIntoView();
+        if(config.debug) showLog('Show popover', step, `${popover.gid}/${popover.options.key}`, {$target, popover, popoverOptions});
 
         const $doc = scope.$(scope.document);
         if($doc.data('tutorial.checkBinding')) return;
