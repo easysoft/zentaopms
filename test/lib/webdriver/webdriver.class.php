@@ -999,8 +999,14 @@ class dom
 
                 if($xpath != 'form')
                 {
-                    $this->driver->findElement(WebDriverBy::xpath("//a[@title='$value']"))->click();
-                    $this->driver->findElement(WebDriverBy::xpath("//*[@id='pick-pop-$pickerID']//span[@class='is-match-keys']"))->click();
+                    try
+                    {
+                        $this->driver->findElement(WebDriverBy::xpath("//a[@title='$value']"))->click();
+                    }
+                    catch(Exception $xpathException)
+                    {
+                        $this->driver->findElement(WebDriverBy::xpath("//*[@id='pick-pop-$pickerID']//span[@class='is-match-keys']"))->click();
+                    }
                 }
                 else
                 {
