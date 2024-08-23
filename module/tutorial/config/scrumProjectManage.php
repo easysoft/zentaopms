@@ -143,7 +143,7 @@ $scrumProjectManage->tasks['manageExecution']['steps'][] = array(
 
 $scrumProjectManage->tasks['manageExecution']['steps'][] = array(
     'type'   => 'click',
-    'target' => '#table-project-execution div[data-row="pid3"] a',
+    'target' => '#table-project-execution .dtable-cell[data-row="pid3"][data-col="nameCol"] a',
     'page'   => 'project-execution',
     'url'    => array('project', 'execution', 'status=all&projectID=2'),
     'title'  => $lang->tutorial->scrumProjectManage->manageExecution->step5->name,
