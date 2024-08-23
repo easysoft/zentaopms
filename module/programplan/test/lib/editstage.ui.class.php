@@ -2,6 +2,14 @@
 include dirname(__FILE__, 5) . '/test/lib/ui.php';
 class editStageTester extends tester
 {
+    /**
+     * Check the page input when edit the stage.
+     * 编辑阶段时检查页面输入。
+     *
+     * @param  array $waterfall
+     * @access public
+     * @return object
+     */
     public function checkInput(array $waterfall)
     {
         $form = $this->initForm('project', 'execution' , array('status' => 'undone', 'projectID' => 60), 'appIframe-project');
