@@ -38,6 +38,7 @@ class putoffExecutionTester extends tester
         $status = $this->inputFields($execution, $executionId);
         $form = $this->loadPage();
 
+        if($form->dom->putoffSubmit === true) return $this->failed('延期失败');
         if($form->dom->status->getText() != $status) return $this->failed('执行状态错误');
         if(isset($execution['begin']) && $form->dom->plannedBegin->getText() != $execution['begin']) return $this->failed('计划开始时间错误');
         if(isset($execution['end']) && $form->dom->plannedEnd->getText() != $execution['end']) return $this->failed('计划完成时间错误');
@@ -60,7 +61,7 @@ class putoffExecutionTester extends tester
         $form = $this->loadPage();
         $form->wait(1);
 
-        if($form->dom->putoffSubmit === false) return $this->failed('错误的延期成功了');
+        if($form->dom->putoffSubmit === false) return $this->failed('错误的延期成功');
         if($dateType == 'end')
         {
             $info = sprintf($this->lang->execution->errorCommonEnd, '');
@@ -77,6 +78,25 @@ class putoffExecutionTester extends tester
         $params = str_replace($date, '', $text);                                                                                                                                                  ~
         $params = trim($params);
         if($params == $info) return $this->success('延期执行表单页提示信息正确');
+        return $this->failed('延期执行表单页提示信息不正确');
+    }
+
+    /**
+     * 延期执行的可用工日不正确。
+     * Putoff execution with wrong days.
+     *
+     * @param  array  $execution
+     * @param  string $executionId
+     * @access public
+     * @return bool
+     */
+    public function putoffWithWrongDays($execution, $executionId)
+    {
+        $this->inputFields($execution, $executionId);
+        $form = $this->loadPage();
+        $form->wait(1);
+        if($form->dom->putoffSubmit === false) return $this->failed('错误的延期成功');
+        if($form->dom->daysTip->getText() == $lang->project->copyProject->daysTips) return $this->success('延期执行表单页提示信息正确');
         return $this->failed('延期执行表单页提示信息不正确');
     }
 }
