@@ -92,4 +92,6 @@ r($tester->putoffWithWrongDate($execution['2'], '101', 'begin')) && p('message')
 r($tester->putoffWithWrongDate($execution['3'], '103', 'end'))   && p('message') && e('延期执行表单页提示信息正确'); //计划结束日期为空
 r($tester->putoffWithWrongDate($execution['4'], '103', 'begin')) && p('message') && e('延期执行表单页提示信息正确'); //计划开始日期小于项目计划开始日期
 r($tester->putoffWithWrongDate($execution['5'], '101', 'end'))   && p('message') && e('延期执行表单页提示信息正确'); //计划结束日期大于项目计划完成日期
+r($tester->putoffWithWrongDays($execution['6'], '101'))          && p('message') && e('延期执行表单页提示信息正确'); //可用工日为空
+r($tester->putoffWithWrongDays($execution['7'], '101'))          && p('message') && e('延期执行表单页提示信息正确'); //可用工日为非数字
 $tester->closeBrowser();
