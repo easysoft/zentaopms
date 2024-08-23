@@ -161,19 +161,27 @@ $lang->tutorial->scrumProjectManage->manageExecution->step4->name = '保存表�
 $lang->tutorial->scrumProjectManage->manageExecution->step4->desc = '保存后可以选择设置团队、关联需求、创建任务、返回任务列表和返回执行列表';
 
 $lang->tutorial->scrumProjectManage->manageExecution->step5 = new stdClass();
-$lang->tutorial->scrumProjectManage->manageExecution->step5->name = '点击关联需求';
-$lang->tutorial->scrumProjectManage->manageExecution->step5->desc = '点击关联需求进入关联需求列表';
+$lang->tutorial->scrumProjectManage->manageExecution->step5->name = '点击迭代';
+$lang->tutorial->scrumProjectManage->manageExecution->step5->desc = '点击迭代名称进入迭代';
 
 $lang->tutorial->scrumProjectManage->manageExecution->step6 = new stdClass();
-$lang->tutorial->scrumProjectManage->manageExecution->step6->name = '选择需求';
+$lang->tutorial->scrumProjectManage->manageExecution->step6->name = '点击需求';
+$lang->tutorial->scrumProjectManage->manageExecution->step6->desc = '点击需求查看已关联的需求';
 
 $lang->tutorial->scrumProjectManage->manageExecution->step7 = new stdClass();
-$lang->tutorial->scrumProjectManage->manageExecution->step7->name = '点击保存';
-$lang->tutorial->scrumProjectManage->manageExecution->step7->desc = '点击保存可以将需求关联到需求列表中，返回到需求列表';
+$lang->tutorial->scrumProjectManage->manageExecution->step7->name = '点击关联需求';
+$lang->tutorial->scrumProjectManage->manageExecution->step7->desc = '点击关联需求进入关联需求列表';
 
 $lang->tutorial->scrumProjectManage->manageExecution->step8 = new stdClass();
-$lang->tutorial->scrumProjectManage->manageExecution->step8->name = '点击燃尽图';
-$lang->tutorial->scrumProjectManage->manageExecution->step8->desc = '点击燃尽图可以查看迭代燃尽图';
+$lang->tutorial->scrumProjectManage->manageExecution->step8->name = '选择需求';
+
+$lang->tutorial->scrumProjectManage->manageExecution->step9 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageExecution->step9->name = '点击保存';
+$lang->tutorial->scrumProjectManage->manageExecution->step9->desc = '点击保存可以将需求关联到需求列表中，返回到需求列表';
+
+$lang->tutorial->scrumProjectManage->manageExecution->step10 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageExecution->step10->name = '点击燃尽图';
+$lang->tutorial->scrumProjectManage->manageExecution->step10->desc = '点击燃尽图可以查看迭代燃尽图';
 
 $lang->tutorial->scrumProjectManage->manageTask = new stdClass();
 $lang->tutorial->scrumProjectManage->manageTask->title = '任务管理';

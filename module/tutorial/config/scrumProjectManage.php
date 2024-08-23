@@ -142,33 +142,52 @@ $scrumProjectManage->tasks['manageExecution']['steps'][] = array(
 
 $scrumProjectManage->tasks['manageExecution']['steps'][] = array(
     'type'   => 'click',
-    'target' => '#tipsModal div.panel-body button.linkstory-btn',
-    'page'   => 'execution-create', //注意：需要验证一下，写execution-create正确还是execution-tips正确
+    'target' => '#table-project-execution div[data-row="pid2"] a',
+    'page'   => 'project-execution',
+    'url'    => array('project', 'execution', 'status=all&projectID=2'),
     'title'  => $lang->tutorial->scrumProjectManage->manageExecution->step5->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageExecution->step5->desc
 );
 
 $scrumProjectManage->tasks['manageExecution']['steps'][] = array(
-    'type'   => 'selectRow',
-    'target' => '#table-execution-linkstory',
-    'page'   => 'execution-linkstory',
-    'title'  => $lang->tutorial->scrumProjectManage->manageExecution->step6->name
+    'type'   => 'clickNavbar',
+    'target' => 'story',
+    'page'   => 'execution-task',
+    'url'    => array('execution', 'task', 'executionID=3'),
+    'title'  => $lang->tutorial->scrumProjectManage->manageExecution->step6->name,
+    'desc'   => $lang->tutorial->scrumProjectManage->manageExecution->step6->desc
 );
 
 $scrumProjectManage->tasks['manageExecution']['steps'][] = array(
     'type'   => 'click',
-    'target' => '#table-execution-linkstory .dtable-footer .link-story-btn',
-    'page'   => 'execution-linkstory',
+    'target' => '#actionBar a.link-story-btn',
+    'page'   => 'execution-story',
     'title'  => $lang->tutorial->scrumProjectManage->manageExecution->step7->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageExecution->step7->desc
+);
+
+$scrumProjectManage->tasks['manageExecution']['steps'][] = array(
+    'type'   => 'selectRow',
+    'target' => 'div.dtable',
+    'page'   => 'execution-linkstory',
+    'title'  => $lang->tutorial->scrumProjectManage->manageExecution->step8->name
+);
+
+$scrumProjectManage->tasks['manageExecution']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'div.dtable .dtable-footer .link-story-btn',
+    'page'   => 'execution-linkstory',
+    'title'  => $lang->tutorial->scrumProjectManage->manageExecution->step9->name,
+    'desc'   => $lang->tutorial->scrumProjectManage->manageExecution->step9->desc
 );
 
 $scrumProjectManage->tasks['manageExecution']['steps'][] = array(
     'type'   => 'clickNavbar',
     'target' => 'burn',
     'page'   => 'execution-story',
-    'title'  => $lang->tutorial->scrumProjectManage->manageExecution->step8->name,
-    'desc'   => $lang->tutorial->scrumProjectManage->manageExecution->step8->desc
+    'url'    => array('execution', 'story', 'executionID=3'),
+    'title'  => $lang->tutorial->scrumProjectManage->manageExecution->step10->name,
+    'desc'   => $lang->tutorial->scrumProjectManage->manageExecution->step10->desc
 );
 
 $scrumProjectManage->tasks['manageTask'] = array();
