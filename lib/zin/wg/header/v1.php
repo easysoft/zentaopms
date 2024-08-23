@@ -81,7 +81,7 @@ class header extends wg
         );
     }
 
-    static function userBar()
+    public static function userBar()
     {
         global $lang, $app, $config;
 
@@ -246,7 +246,7 @@ class header extends wg
         );
     }
 
-    static function messageBar()
+    public static function messageBar()
     {
         global $app, $lang, $config;
 
@@ -286,7 +286,7 @@ class header extends wg
         );
     }
 
-    static function quickAddMenu()
+    public static function quickAddMenu()
     {
         global $app, $config, $lang;
 
