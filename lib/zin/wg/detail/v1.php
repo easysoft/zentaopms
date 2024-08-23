@@ -465,6 +465,7 @@ CSS;
 
         list($linkCreator, $prevBtn, $nextBtn, $objectType) = $this->prop(array('linkCreator', 'prevBtn', 'nextBtn', 'objectType'));
         $preAndNext = data('preAndNext');
+        $idKey      = $preAndNext->idKey;
 
         global $app;
         if(!$linkCreator && $preAndNext && ($prevBtn === true || $nextBtn === true))
@@ -473,9 +474,10 @@ CSS;
         }
         if($prevBtn === true && $preAndNext && $preAndNext->pre && $linkCreator)
         {
-            $prevBtn = array();
-            $prevBtn['url']  = str_replace('{id}', "{$preAndNext->pre->id}", $linkCreator);
-            $prevBtn['hint'] = "#{$preAndNext->pre->id} " . (isset($preAndNext->pre->title) ? $preAndNext->pre->title : $preAndNext->pre->name);
+            $prevBtn  = array();
+            $objectID = isset($preAndNext->pre->$idKey) ? $preAndNext->pre->$idKey : $preAndNext->pre->id;
+            $prevBtn['url']  = str_replace('{id}', "{$objectID}", $linkCreator);
+            $prevBtn['hint'] = "#{$objectID} " . (isset($preAndNext->pre->title) ? $preAndNext->pre->title : $preAndNext->pre->name);
         }
         elseif(is_string($prevBtn))
         {
@@ -484,8 +486,9 @@ CSS;
         if($nextBtn === true && $preAndNext && $preAndNext->next && $linkCreator)
         {
             $nextBtn = array();
-            $nextBtn['url']  = str_replace('{id}', "{$preAndNext->next->id}", $linkCreator);
-            $nextBtn['hint'] = "#{$preAndNext->next->id} " . (isset($preAndNext->next->title) ? $preAndNext->next->title : $preAndNext->next->name);
+            $objectID = isset($preAndNext->next->$idKey) ? $preAndNext->next->$idKey : $preAndNext->next->id;
+            $nextBtn['url']  = str_replace('{id}', "{$objectID}", $linkCreator);
+            $nextBtn['hint'] = "#{$objectID} " . (isset($preAndNext->next->title) ? $preAndNext->next->title : $preAndNext->next->name);
         }
         elseif(is_string($nextBtn))
         {

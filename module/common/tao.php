@@ -171,6 +171,8 @@ class commonTao extends commonModel
             if(is_numeric($preAndNextObject->next)) $preAndNextObject->next = $objectIdIndex + 1 < count($objectIdList) ? $objects[$objectIdList[$objectIdIndex + 1]] : '';
         }
 
+        $preAndNextObject->idKey = $key;
+
         return $preAndNextObject;
     }
 
