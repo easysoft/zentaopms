@@ -775,6 +775,19 @@ class upgrade extends control
     }
 
     /**
+     * 升级度量项内置数据。
+     * Upgrade metric built-in data.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxUpgradeMetricData()
+    {
+        $this->upgrade->upgradeMetricData();
+        echo 'ok';
+    }
+
+    /**
      * 安装DuckDB引擎。
      * AJAX: Install duckdb.
      *
