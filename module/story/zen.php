@@ -1549,6 +1549,7 @@ class storyZen extends story
             $story->stage          = empty($story->stage) ? $oldStory->stage : $story->stage;
             $story->branch         = $story->branch === '' ? $oldStory->branch : str_replace('branch', '', $story->branch);
 
+            if(empty($story->roadmap)) $story->roadmap = $oldStory->roadmap;
             if($oldStory->assignedTo != $story->assignedTo) $story->assignedDate = $now;
             if($oldStory->parent < 0) $story->plan = '';
             if($story->stage != $oldStory->stage) $story->stagedBy = (str_contains('|tested|verified|rejected|pending|released|closed|', "|{$story->stage}|")) ? $account : '';

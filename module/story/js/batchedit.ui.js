@@ -86,7 +86,8 @@ window.renderRowData = function($row, index, story)
         })
     }
 
-    $title.attr('disabled', 'disabled').attr('title', story.title).after("<input type='hidden' name='title[" + story.id + "]' value='" + story.title + "' />");
+    $title.attr('title', story.title).before("<input type='hidden' name='title[" + story.id + "]' value='" + story.title + "' />");
+    if(story.rawStatus != 'draft') $title.attr('disabled', 'disabled');
     $row.find('.form-control-static[data-name="status"]').addClass('status-' + story.rawStatus);
     if($branch.length > 0)
     {
