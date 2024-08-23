@@ -28,7 +28,7 @@ $execution = zenData('project');
 $execution->id->range('101,103');
 $execution->project->range('1');
 $execution->type->range('sprint');
-$execution->parent->range('11');
+$execution->parent->range('1');
 $execution->path->range('`,1,101,`, `,1,103,`');
 $execution->grade->range('1');
 $execution->name->range('未开始执行, 进行中执行');
