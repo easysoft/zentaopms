@@ -338,7 +338,7 @@ class programplanModel extends model
             if($plan->id)
             {
                 $stageID = $plan->id;
-                unset($plan->id, $plan->type, $plan->order);
+                unset($plan->id, $plan->type);
                 $changes = $this->programplanTao->updateRow($stageID, $projectID, $plan);
                 if(dao::isError()) return false;
                 if(empty($changes)) continue;
