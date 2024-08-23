@@ -1151,6 +1151,7 @@ class dom
         $name = $this->element->getAttribute('name');
         if(!$name) return false;
 
+        if(strpos($name, '[') !== false) $name = '"' . $name . '"';
         $this->driver->executeScript("return $('[name={$name}]').zui('datePicker').$.setValue('$value')");
         return $this;
     }
