@@ -18,6 +18,7 @@ class putoffExecutionTester extends tester
         $form->dom->putoff->click();
         if(isset($execution['begin'])) $form->dom->begin->datePicker($execution['begin']);
         if(isset($execution['end'])) $form->dom->end->datePicker($execution['end']);
+        if(isset($execution['days'])) $form->dom->days->setValue($execution['days']));
         $form->dom->putoffSubmit->click();
         $form->wait(1);
         return $status;
@@ -56,20 +57,22 @@ class putoffExecutionTester extends tester
     Public function putoffiWithWrongDate($execution, $executionId, $dateType = 'end')
     {
         $this->inputFields($execution, $executionId);
+        $form = $this->loadPage();
+        $form->wait(1);
 
         if($dateType == 'end')
         {
             $info = sprintf($this->lang->execution->errorCommonEnd, '');
-            $test = $form->dom->endTip->getText();
+            $text = $form->dom->endTip->getText();
         }
         else
         {
             $info = sprintf($this->lang->execution->errorCommonBegin, '');
-            $test = $form->dom->beginTip->getText();
+            $text = $form->dom->beginTip->getText();
         }
         /* 获取页面返回信息中除日期外的内容 */
         preg_match_all('/(\d{4}-\d{2}-\d{2})/', $text, $matches);                                                                                                                                 ~
-        $date   = $matches[0];                                                                                                                                                                    ~
+        $date   = $matches[0][0];                                                                                                                                                                    ~
         $params = str_replace($date, '', $text);                                                                                                                                                  ~
         $params = trim($params);
         if($params == $info) return $this->success('延期执行表单页提示信息正确');
