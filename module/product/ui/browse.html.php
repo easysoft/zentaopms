@@ -374,9 +374,13 @@ featureBar
             set::width('150px'),
             setStyle('justify-content', 'center'),
             set::display($lang->story->viewAllGrades),
-            set::menu(array('checkbox' => true)),
+            set::menu(array('checkbox' => true, 'itemProps' => array('innerComponent' => 'a'))),
             set::value($showGrades),
-            set::onPopHidden(jsRaw('setShowGrades'))
+            set::toolbar
+            (
+                array('text' => $lang->confirm, 'onClick' => jsRaw('(e,info) => {setShowGrades();info.relativeTarget.close();}')),
+                array('text' => $lang->cancel, 'onClick' => jsRaw('(e,info) => info.relativeTarget.close()')),
+            )
         )
     ),
     set::current($storyBrowseType),
