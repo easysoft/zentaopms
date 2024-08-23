@@ -179,6 +179,7 @@ class file extends control
     {
         $fields = $this->post->fields;
         $rows   = $this->post->rows;
+        $domain = common::getSysURL();
 
         /* Build csv content. */
         $output = '';
@@ -190,6 +191,14 @@ class file extends control
                 $output .= '"';
                 foreach($fields as $fieldName => $fieldLabel)
                 {
+                    /* <img>标签替换成链接。 */
+                    if(in_array($fieldName, $this->config->file->img2href))
+                    {
+                        $pattern         = '/<img src="\{([^"]*)\}" alt="([^"]*)"\s*\/>/';
+                        $replacement     = '$1 (' . $domain . '/$2)';
+                        $row->$fieldName = preg_replace($pattern, $replacement, $row->$fieldName);
+                    }
+
                     $output .= isset($row->$fieldName) ? str_replace(array('"', '&nbsp;', '&gt;'), array('“', ' ', '>'), htmlSpecialString(strip_tags((string)$row->$fieldName, '<img>'))) : '';
                     $output .= '","';
                 }

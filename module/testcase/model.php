@@ -63,7 +63,7 @@ class testcaseModel extends model
         /* Insert testcase steps. */
         $this->testcaseTao->insertSteps($caseID, $case->steps, $case->expects, $case->stepType);
 
-        if($case->auto != 'auto')
+        if(isset($case->auto) && $case->auto != 'auto')
         {
             ob_start();
             setcookie('onlyAutoCase', '0');
