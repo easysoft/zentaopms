@@ -33,7 +33,7 @@ class fieldSelectPanel extends wg
 
     protected function build()
     {
-        list($table, $alias, $fields, $values, $col) = $this->prop(array('table', 'alias', 'fields', 'values', 'col'));
+        list($table, $alias, $col) = $this->prop(array('table', 'alias', 'col'));
 
         $panelClass = $col == 1 ? "w-full" : 'w-1/' . min($col, 6) . '-gap-4';
         $checkClass = 'checkbox-col-' . max(floor(6 / $col), 1);
