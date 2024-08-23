@@ -280,16 +280,18 @@ class baseCalc
      * 获取数据源的SQL语句
      * Get SQL of data source.
      *
+     * @param  object $dao
+     * @param  object $config
      * @access public
      * @return string
      */
-    public function getSQL($dao)
+    public function getSQL($dao, $config)
     {
         if(!empty($this->dataset))
         {
             $dataSource = $this->dataset;
             include_once dirname(__FILE__) . '/dataset.php';
-            $dataset = new dataset($dao);
+            $dataset = new dataset($dao, $config);
 
             $statement = $dataset->$dataSource(implode(',', $this->fieldList));
             return $statement->queryString;
@@ -303,13 +305,13 @@ class baseCalc
      * Print SQL of data source.
      *
      * @param  object $dao
+     * @param  object $config
      * @access public
      * @return mixed
      */
-    public function printSQL($dao)
+    public function printSQL($dao, $config)
     {
-        a($dao);
-        echo $this->getSQL($dao);
+        echo $this->getSQL($dao, $config);
     }
 
     /**
@@ -317,16 +319,17 @@ class baseCalc
      * Get rows of data source.
      *
      * @param  object $dao
+     * @param  object $config
      * @access public
      * @return array
      */
-    public function getRows($dao = null)
+    public function getRows($dao, $config)
     {
         if(!empty($this->dataset))
         {
             $dataSource = $this->dataset;
             include_once dirname(__FILE__) . '/dataset.php';
-            $dataset = new dataset($dao);
+            $dataset = new dataset($dao, $config);
 
             $statement = $dataset->$dataSource(implode(',', $this->fieldList));
             return $statement->fetchAll();
