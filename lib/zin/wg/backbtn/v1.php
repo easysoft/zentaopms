@@ -89,7 +89,8 @@ class backBtn extends btn
             'domain'         => 'domain-browse,domain-view',
             'researchtask'   => 'marketresearch-task,my-index,product-dynamic,project-dynamic,project-view',
             'review'         => 'review-browse,my-index,product-dynamic,project-dynamic,project-view',
-            'charter'        => 'charter-browse'
+            'charter'        => 'charter-browse',
+            'approvalflow'   => 'approvalflow-browse'
         );
 
         $props  = parent::getProps();
