@@ -22,18 +22,19 @@ class thinkMulticolumn extends thinkQuestion
         $app->loadLang('thinkstep');
         $formItems = parent::buildFormItem();
 
-        list($step, $questionType, $required, $fields, $supportAdd, $canAddRows) = $this->prop(array('step', 'questionType', 'required', 'fields', 'supportAdd', 'canAddRows'));
+        list($step, $questionType, $required, $fields, $supportAdd, $canAddRows, $requiredCols) = $this->prop(array('step', 'questionType', 'required', 'fields', 'supportAdd', 'canAddRows', 'requiredCols'));
         $requiredItems = $lang->thinkstep->requiredList;
 
-        $requiredCols = array();
+        $requiredOptions = array();
         if($step)
         {
             $required = isset($step->options->required) ? $step->options->required : 1;
             if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);
-            $fields       = $step->options->fields ?? array('', '', '', '');
-            $requiredCols = $step->options->requiredCols ?? array();
+            $fields       = $step->options->fields;
+            $requiredCols = $required && isset($step->options->requiredCols) ? $step->options->requiredCols : '';
             $supportAdd   = $step->options->supportAdd;
-            $canAddRows   = $step->options->canAddRows;
+            $canAddRows   = $supportAdd ? $step->options->canAddRows: '';
+            foreach($fields as $key => $field) $requiredOptions[] = array('value' => $key + 1, 'text' => $field);
         }
 
         $formItems[] = array(
@@ -69,7 +70,8 @@ class thinkMulticolumn extends thinkQuestion
                     picker
                     (
                         set::name('options[requiredCols][]'),
-                        set::items($requiredCols),
+                        set::items($requiredOptions),
+                        set::value($requiredCols),
                         set::multiple(true)
                     )
                 )
