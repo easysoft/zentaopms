@@ -72,7 +72,6 @@ $lang->bi->whereItemOperatorList['in']    = '包含';
 $lang->bi->whereItemOperatorList['notIn'] = '不包含';
 $lang->bi->whereItemOperatorList['like']  = '模糊匹配';
 
-
 $lang->bi->emptyError = '不能为空';
 
 $lang->bi->stepFieldTitle = '选择查询表中的字段';

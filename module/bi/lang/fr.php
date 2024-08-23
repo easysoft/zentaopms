@@ -28,9 +28,47 @@ $lang->bi->leftTable     = 'Left join';
 $lang->bi->joinCondition = 'Condition';
 $lang->bi->joinTable     = ' = %s';
 $lang->bi->of            = 'Of';
+$lang->bi->do            = 'Do';
+$lang->bi->set           = 'Set';
+$lang->bi->funcAs        = 'calculate，rename result as';
 $lang->bi->enable        = 'Enable';
 $lang->bi->allFields     = 'Select *';
 $lang->bi->previewSql    = 'Preview SQL statement';
+$lang->bi->addFunc       = 'Add function';
+$lang->bi->emptyFuncs    = 'Empty function。';
+$lang->bi->addWhere      = 'Add group';
+$lang->bi->emptyWheres   = 'Empty where。';
+
+$lang->bi->whereGroupTitle  = 'The %s group';
+$lang->bi->addWhereGroup    = 'Add group';
+$lang->bi->removeWhereGroup = 'Delete group';
+
+$lang->bi->selectTableTip = 'Select table';
+$lang->bi->selectFieldTip = 'Select field';
+$lang->bi->selectFuncTip  = 'Select function';
+$lang->bi->selectInputTip = 'Input something';
+
+$lang->bi->funcList = array();
+$lang->bi->funcList['date']  = 'Date';
+$lang->bi->funcList['month'] = 'Month';
+$lang->bi->funcList['year']  = 'Year';
+
+$lang->bi->whereOperatorList = array();
+$lang->bi->whereOperatorList['and'] = 'AND';
+$lang->bi->whereOperatorList['or']  = 'OR';
+
+$lang->bi->whereItemOperatorList = array();
+$lang->bi->whereItemOperatorList['=']     = '=';
+$lang->bi->whereItemOperatorList['!=']    = '!=';
+$lang->bi->whereItemOperatorList['>']     = '>';
+$lang->bi->whereItemOperatorList['>=']    = '>=';
+$lang->bi->whereItemOperatorList['<']     = '<';
+$lang->bi->whereItemOperatorList['<=']    = '<=';
+$lang->bi->whereItemOperatorList['in']    = 'IN';
+$lang->bi->whereItemOperatorList['notIn'] = 'NOT IN';
+$lang->bi->whereItemOperatorList['like']  = 'LIKE';
+
+$lang->bi->emptyError = 'Can not be empty';
 
 $lang->bi->stepFieldTitle = 'Select a field in the lookup table';
 $lang->bi->stepFieldTip   = 'The fields in the select query table are used to get the required data from the selected query table.';
