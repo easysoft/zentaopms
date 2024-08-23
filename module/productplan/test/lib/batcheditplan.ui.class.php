@@ -27,4 +27,39 @@ class batchEditPlanTester extends tester
         $form->wait(2);
         return $this->checkBatchEdit($productplan, $form, $firstID);
     }
+    /**
+     * 检查批量编辑计划的结果
+     * Check the result of batch edit productplan
+     *
+     * @param  object $productplan
+     * @param  object $form
+     * @param  string $firstID
+     * @return mixed
+     */
+    public function checkBatchEdit($productplan, $form, $firstID)
+    {
+        //编辑失败时校验错误提示信息
+        if ($this->response('method') != 'browse')
+        {
+            $titleTip = sprintf($this->lang->error->notempty, $this->lang->productplan->title);
+            $firstTitleTipDom = "title[{$firstID}]Tip";//第一行的名称提示信息
+            $firstBeginTipDom = "begin[{$firstID}]Tip";//第一行的日期校验提示信息
+            if ($form->dom->$firstBeginTipDom)
+            {
+                $beginTipform = $form->dom->$firstBeginTipDom->getText();
+                $beginTip     = sprintf($this->lang->productplan->beginGeEnd, $firstID);
+                return ($beginTipform == $beginTip) ? $this->success('日期校验提示信息正确') : $this->failed('日期校验提示信息不正确');
+            }
+            $titleTipform = $form->dom->$firstTitleTipDom->getText();
+            return ($titleTipform == $titleTip) ? $this->success('计划名称必填提示信息正确') : $this->failed('计划名称提示信息不正确');
+        }
+        else
+        {
+            $viewUrl['planID'] = $firstID;
+            $viewPage = $this->initForm('productplan', 'view', $viewUrl, 'appIframe-product');
+            $viewPage->waitElement($this->lang->productplan->view);
+            $viewPage->dom->btn($this->lang->productplan->view)->click();//进入计划详情页
+            return ($viewPage->dom->planTitle->getText() == $productplan->title) ? $this->success('编辑计划成功') : $this->failed('编辑计划失败');
+        }
+    }
 }
