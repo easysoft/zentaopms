@@ -532,12 +532,29 @@ class dataset
      */
     public function getDevStories($fieldList)
     {
-        $caseQuery = $this->dao->select('story, COUNT(DISTINCT id) AS case_count')->from(TABLE_CASE)->groupBy('story')->get();
+        if(strpos($fieldList, 't3.') === false)
+        {
+            $stmt = $this->dao->select($fieldList)
+                ->from(TABLE_STORY)->alias('t1')
+                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+                ->where('t1.deleted')->eq('0')
+                ->andWhere('t2.deleted')->eq('0')
+                ->andWhere('t1.type')->eq('story')
+                ->andWhere('t1.isParent')->eq('0')
+                ->andWhere('t2.shadow')->eq('0');
+
+            return $this->defaultWhere($stmt, 't1');
+        }
+
+        $table = 'tmp_case_getDevStories';
+        $this->dao->exec("DROP TABLE IF EXISTS `{$table}`");
+        $this->dao->exec("CREATE TABLE `{$table}` AS SELECT `story`, COUNT(`id`) AS `case_count` FROM " . TABLE_CASE . 'GROUP BY `story`');
+        $this->dao->exec("CREATE INDEX `story` ON `{$table}` (`story`)");
 
         $stmt = $this->dao->select($fieldList)
             ->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
-            ->leftJoin("($caseQuery)")->alias('t3')->on('t1.id=t3.story')
+            ->leftJoin("`{$table}`")->alias('t3')->on('t1.id=t3.story')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t2.deleted')->eq('0')
             ->andWhere('t1.type')->eq('story')
