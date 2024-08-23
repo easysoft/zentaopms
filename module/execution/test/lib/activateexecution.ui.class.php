@@ -40,21 +40,41 @@ Class activateExecutionTester extends tester
     }
 
     /**
-     * 激活执行时计划完成日期错误。
-     * Activate execution with wrong planned end.
+     * 激活执行时计划完成日期小于计划开始日期。
+     * Activate execution with end less than begin.
      *
      * @param  string $end
      * @param  string $executionId
      * @access public
      * @return bool
      */
-    public function activateWithWrongEnd($end, $executionId)
+    public function activateWithLessEnd($end, $executionId)
     {
         $this->inputFields($end, $executionId);
         $form  = $this->loadPage();
         $begin = $form->dom->begin->getText();
         $info  = sprint($this->lang->execution->errorLesserPlan, $end, $begin )
         if($form->dom->endTip->getText() == $info) return $this->success('激活执行表单页提示信息正确');
+        return $this->failed('激活执行表单页提示信息不正确');
+    }
+
+    /**
+     * 激活执行时计划完成日期大于项目计划完成日期。
+     * Activate execution with end greater than begin.
+     *
+     * @param  string $end
+     * @param  string $executionId
+     * @access public
+     * @return bool
+     */
+    public function activateWithGreaterEnd($end, $executionId)
+    {
+        $this->inputFields($end, $executionId);
+        $form  = $this->loadPage();
+        $info  = sprint($this->lang->execution->errorGreaterParent, '');
+        $text = $form->dom->endTip->getText();
+        /* 获取页面返回信息中除日期外的内容 */
+        if($params == $info) return $this->success('激活执行表单页提示信息正确');
         return $this->failed('激活执行表单页提示信息不正确');
     }
 }
