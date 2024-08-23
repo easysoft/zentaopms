@@ -51,8 +51,8 @@ Class activateExecutionTester extends tester
     public function activateWithLessEnd($end, $executionId)
     {
         $this->inputFields($end, $executionId);
-        $form  = $this->loadPage();
-        $info  = sprintf($this->lang->execution->errorLesserPlan, $end, date('Y-m-d') );
+        $form = $this->loadPage();
+        $info = sprintf($this->lang->execution->errorLesserPlan, $end, date('Y-m-d'));
         if($form->dom->endTip->getText() == $info) return $this->success('激活执行表单页提示信息正确');
         return $this->failed('激活执行表单页提示信息不正确');
     }
@@ -69,8 +69,8 @@ Class activateExecutionTester extends tester
     public function activateWithGreaterEnd($end, $executionId)
     {
         $this->inputFields($end, $executionId);
-        $form  = $this->loadPage();
-        $info  = sprintf($this->lang->execution->errorGreaterParent, '');
+        $form = $this->loadPage();
+        $info = sprintf($this->lang->execution->errorGreaterParent, '');
         $text = $form->dom->endTip->getText();
         /* 获取页面返回信息中除日期外的内容 */
         preg_match_all('/(\d{4}-\d{2}-\d{2})/', $text, $matches);                                                                                                                                 ~
