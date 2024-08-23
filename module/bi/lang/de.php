@@ -38,6 +38,8 @@ $lang->bi->addFunc       = 'Add function';
 $lang->bi->emptyFuncs    = 'Empty function。';
 $lang->bi->addWhere      = 'Add group';
 $lang->bi->emptyWheres   = 'Empty where。';
+$lang->bi->checkAll      = 'Check All';
+$lang->bi->cancelAll     = 'Cancel All';
 
 $lang->bi->whereGroupTitle  = 'The %s group';
 $lang->bi->addWhereGroup    = 'Add group';

@@ -33,10 +33,12 @@ class fieldSelectPanel extends wg
 
     protected function build()
     {
-        list($table, $alias, $col) = $this->prop(array('table', 'alias', 'col'));
+        global $lang;
+        list($table, $alias, $fields, $values, $col) = $this->prop(array('table', 'alias', 'fields', 'values', 'col'));
 
-        $panelClass = $col == 1 ? "w-full" : 'w-1/' . min($col, 6) . '-gap-4';
-        $checkClass = 'checkbox-col-' . max(floor(6 / $col), 1);
+        $isCheckedAll = count($fields) == count($values);
+        $panelClass   = $col == 1 ? "w-full" : 'w-1/' . min($col, 6) . '-gap-4';
+        $checkClass   = 'checkbox-col-' . max(floor(6 / $col), 1);
 
         return panel
         (
@@ -45,21 +47,21 @@ class fieldSelectPanel extends wg
             set::title("$table({$alias})"),
             set::headingClass('bg-gray-100 relative'),
             set::bodyClass('h-70 overflow-y-auto'),
-            /*to::heading
+            to::heading
             (
                 div
                 (
-                    setClass('absolute right-4'),
-                    checkbox
+                    setClass('absolute right-4 flex gap-x-2'),
+                    btn
                     (
-                        setClass('select-field-checkbox'),
-                        set::name("{$alias}all"),
-                        set::text($lang->bi->allFields),
-                        set::value('*'),
-                        set('data-alias', $alias)
+                        setClass('p-0 check-all'),
+                        set('data-alias', $alias),
+                        set('data-checked', $isCheckedAll),
+                        set::type('ghost'),
+                        $isCheckedAll ? $lang->bi->cancelAll : $lang->bi->checkAll
                     )
                 )
-            ),*/
+            ),
             checkList
             (
                 setClass("flex justify-start gap-x-0 checkbox-col $checkClass"),

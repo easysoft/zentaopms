@@ -648,6 +648,24 @@ class pivotState
     }
 
     /**
+     * Process check all.
+     *
+     * @access public
+     * @return void
+     */
+    public function processCheckAll()
+    {
+        $from  = $this->sqlBuilder['from'];
+        $joins = $this->sqlBuilder['joins'];
+        if($from['select'] == '*') $this->sqlBuilder['from']['select'] = array_keys($this->getTableDescList($from['alias']));
+
+        foreach($joins as $index => $join)
+        {
+            if($join['select'] == '*') $this->sqlBuilder['joins'][$index]['select'] = array_keys($this->getTableDescList($join['alias']));
+        }
+    }
+
+    /**
      * Generate func alias.
      *
      * @access public
