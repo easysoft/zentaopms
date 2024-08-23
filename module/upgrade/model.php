@@ -185,6 +185,7 @@ class upgradeModel extends model
         $this->loadModel('product')->refreshStats(true);
         $this->deletePatch();
         $this->processDataset();
+        $this->upgradeMetricData();
 
         if($fromEdition == 'open')
         {
