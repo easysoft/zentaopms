@@ -106,6 +106,10 @@ $lang->bi->queryFilterFormHeader['default'] = '默认值';
 $lang->bi->emptyError     = '不能为空';
 $lang->bi->duplicateError = '存在重复';
 
+$lang->bi->whereGroupTitle  = '第%s组确定性查询条件';
+$lang->bi->addWhereGroup    = '添加组';
+$lang->bi->removeWhereGroup = '删除组';
+
 $lang->bi->selectTableTip = '请选择数据表';
 $lang->bi->selectFieldTip = '请选择字段';
 $lang->bi->selectFuncTip  = '请选择函数';
