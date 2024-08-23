@@ -4610,7 +4610,10 @@ class executionModel extends model
      */
     public function buildTree(array $trees, bool $hasProduct = true, array $gradeGroup = array()): array
     {
-        $treeData = array();
+        $treeData     = array();
+        $canViewTask  = common::hasPriv('execution', 'treeTask');
+        $canViewStory = common::hasPriv('execution', 'treeStory');
+
         foreach($trees as $index => $tree)
         {
             $tree = (object)$tree;
@@ -4620,9 +4623,9 @@ class executionModel extends model
             {
                 case 'task':
                     $label = $tree->parent > 0 ? $this->lang->task->children : $this->lang->task->common;
-                    $treeData[$index]['url']    = helper::createLink('execution', 'treeTask', "taskID={$tree->id}");
+                    $treeData[$index]['url']     = $canViewTask ? helper::createLink('execution', 'treeTask', "taskID={$tree->id}") : '';
                     $treeData[$index]['content'] = array(
-                        'html' => "<div class='tree-link'><span class='label gray-pale rounded-full align-sub'>{$label}</span><span class='ml-4 align-sub'>{$tree->id}</span><span class='title ml-4 text-primary align-sub' title='{$tree->title}'>" . $tree->title . '</span>'. $assigedToHtml . '</div>',
+                        'html' => "<div class='tree-link'><span class='label gray-pale rounded-full align-sub'>{$label}</span><span class='ml-4 align-sub'>{$tree->id}</span><span class='title ml-4 " . ($canViewTask ? 'text-primary' : '') . " align-sub' title='{$tree->title}'>" . $tree->title . '</span>'. $assigedToHtml . '</div>',
                     );
                     break;
                 case 'product':
@@ -4634,9 +4637,9 @@ class executionModel extends model
                     $this->app->loadLang('story');
                     $gradePairs = zget($gradeGroup, $tree->type, array());
                     $grade      = zget($gradePairs, $tree->grade, $tree->grade);
-                    $treeData[$index]['url']     = helper::createLink('execution', 'treeStory', "taskID={$tree->storyId}");
+                    $treeData[$index]['url']     = $canViewStory ? helper::createLink('execution', 'treeStory', "taskID={$tree->storyId}") : '';
                     $treeData[$index]['content'] = array(
-                        'html' => "<div class='tree-link'><span class='label gray-pale rounded-full'>{$grade->name}</span><span class='ml-4'>{$tree->storyId}</span><span class='title text-primary ml-4' title='{$tree->title}'>{$tree->title}</span>" . $assigedToHtml . '</div>',
+                        'html' => "<div class='tree-link'><span class='label gray-pale rounded-full'>{$grade->name}</span><span class='ml-4'>{$tree->storyId}</span><span class='title " . ($canViewStory ? 'text-primary' : '') . " ml-4' title='{$tree->title}'>{$tree->title}</span>" . $assigedToHtml . '</div>',
                     );
                     break;
                 case 'requirement':
