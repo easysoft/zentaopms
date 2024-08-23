@@ -608,9 +608,9 @@ class pivotState
      * @access public
      * @return void
      */
-    public function addWhereGroup($items = array())
+    public function addWhereGroup($group)
     {
-        $this->sqlBuilder['wheres'][] = $items;
+        $this->sqlBuilder['wheres'][] = $group;
     }
 
     /**
