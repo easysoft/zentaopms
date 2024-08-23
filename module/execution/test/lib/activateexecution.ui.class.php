@@ -53,7 +53,7 @@ Class activateExecutionTester extends tester
         $this->inputFields($end, $executionId);
         $form  = $this->loadPage();
         $begin = $form->dom->begin->getText();
-        $info  = sprint($this->lang->execution->errorLesserPlan, $end, $begin )
+        $info  = sprint($this->lang->execution->errorLesserPlan, $end, $begin );
         if($form->dom->endTip->getText() == $info) return $this->success('激活执行表单页提示信息正确');
         return $this->failed('激活执行表单页提示信息不正确');
     }
