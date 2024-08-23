@@ -1883,7 +1883,7 @@ class story extends control
             /* Create field lists. */
             if(!$productID or $browseType == 'bysearch')
             {
-                $this->config->story->dtable->fieldList['branch']['dataSource']           = array('module' => 'branch', 'method' => 'getAllPairs', 'params' => 1);
+                $this->config->story->dtable->fieldList['branch']['dataSource']           = array('module' => 'branch', 'method' => 'getAllPairs');
                 $this->config->story->dtable->fieldList['module']['dataSource']['method'] = 'getAllModulePairs';
                 $this->config->story->dtable->fieldList['module']['dataSource']['params'] = 'story';
 
