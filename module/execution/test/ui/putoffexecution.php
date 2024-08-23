@@ -48,18 +48,37 @@ $execution = array(
     '1' => array(
         'begin' => date('Y-m-d', strtotime('-1 days')),
         'end'   => date('Y-m-d', strtotime('+1 days')),
+        'days'  => '10',
     ),
     '2' => array(
         'begin' => '',
+        'end'   => 'date('Y-m-d')',
+        'days'  => '10',
     ),
     '3' =>array(
-        'end' => '',
+        'begin' => 'date('Y-m-d')',
+        'end'   => '',
+        'days'  => '10',
     ),
     '4' => array(
         'begin' => date('Y-m-d', strtotime('-10 months')),
+        'end'   => 'date('Y-m-d')',
+        'days'  => '10',
     ),
     '5' => array(
-        'end' => date('Y-m-d', strtotime('+10 months')),
+        'begin' => 'date('Y-m-d')',
+        'end'   => date('Y-m-d', strtotime('+10 months')),
+        'days'  => '10',
+    ),
+    '6' => array(
+        'begin' => 'date('Y-m-d')',
+        'end'   => 'date('Y-m-d')',
+        'days'  => '',
+    ),
+    '7' => array(
+        'begin' => 'date('Y-m-d')',
+        'end'   => 'date('Y-m-d')',
+        'days'  => 'aaa',
     ),
 );
 
