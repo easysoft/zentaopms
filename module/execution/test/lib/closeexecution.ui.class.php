@@ -13,7 +13,7 @@ class closeExecutionTester extends tester
     public function inputFields($realEnd, $executionId = '101')
     {
         $form = $this->initForm('execution', 'view', array('execution' => $executionId), 'appIframe-execution');
-        $form->dom->close->click();
+        $form->dom->btn($this->lang->execution->close)->click();
         if(isset($realEnd)) $form->dom->realEnd->datePicker($realEnd);
         $form->wait(1);
         $form->dom->closeSubmit->click();

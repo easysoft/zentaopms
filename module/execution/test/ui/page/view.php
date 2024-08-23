@@ -14,10 +14,6 @@ class viewPage extends page
             'realBeganView' => "//*[@id='mainContent']/div[2]/div[1]/div/table[3]/tbody/tr/td/div/div[3]/span[2]",
             'realEndView'   => "//*[@id='mainContent']/div[2]/div[1]/div/table[3]/tbody/tr/td/div/div[4]/span[2]",
             'edit'          => "//*[@id='mainContent']/div[3]/div/a[last()-1]",
-            'start'         => "//*[@id='mainContent']/div[3]/div/a[2]",
-            'close'         => "//*[@id='mainContent']/div[3]/div/a[last()-2]",
-            'suspend'       => "//*[@id='mainContent']/div[3]/div/a[last()-3]",
-            'putoff'        => "//*[@id='mainContent']/div[3]/div/a",
             /* 编辑执行弹窗中元素 */
             'products'    => "//*[@name='products[0]']",
             'productsTip' => "//*[@id='products[0]Tip']",

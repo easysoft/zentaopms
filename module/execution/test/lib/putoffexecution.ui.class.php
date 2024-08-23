@@ -15,7 +15,7 @@ class putoffExecutionTester extends tester
     {
         $form = $this->initForm('execution', 'view', array('execution' => $executionId ), 'appIframe-execution');
         $status = $form->dom->status->getText();
-        $form->dom->putoff->click();
+        $form->dom->btn($this->lang->execution->putoff)->click();
         if(isset($execution['begin'])) $form->dom->begin->datePicker($execution['begin']);
         if(isset($execution['end'])) $form->dom->end->datePicker($execution['end']);
         if(isset($execution['days'])) $form->dom->days->setValue($execution['days']);

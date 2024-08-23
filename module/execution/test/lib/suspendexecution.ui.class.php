@@ -13,7 +13,7 @@ class suspendExecutionTester extends tester
     public function suspend($executionId)
     {
         $form = $this->initForm('execution', 'view', array('execution' => $executionId ), 'appIframe-execution');
-        $form->dom->suspend->click();
+        $form->dom->btn($this->lang->execution->suspend)->click();
         $form->dom->suspendSubmit->click();
         $form->wait(1);
 

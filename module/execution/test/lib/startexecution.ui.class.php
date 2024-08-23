@@ -14,7 +14,7 @@ class startExecutionTester extends tester
     {
         $form = $this->initForm('execution', 'view', array('execution' => $executionId ), 'appIframe-execution');
         $form->wait(1);
-        $form->dom->start->click();
+        $form->dom->btn($this->lang->execution->start)->click();
         $form->wait(1);
         if(isset($realBegan)) $form->dom->realBegan->datePicker($realBegan);
         $form->wait(1);
