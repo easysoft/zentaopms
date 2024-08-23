@@ -19,6 +19,15 @@ Class activateExecutionTester extends tester
         $form->wait(1);
     }
 
+    /**
+     * 激活执行。
+     * Activate execution.
+     *
+     * @param string $end
+     * @param string $executionId
+     * @access public
+     * @return bool
+     */
     public function activate($end, $executionId)
     {
         $this->inputFields($end, $executionId);
@@ -29,4 +38,6 @@ Class activateExecutionTester extends tester
         if($form->dom->plannedEnd->getText() != $end) return $this->failed('计划完成时间错误');
         return $this->success('激活执行成功');
     }
+
+
 }
