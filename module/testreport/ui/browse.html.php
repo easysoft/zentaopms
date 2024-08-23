@@ -15,7 +15,7 @@ include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
 foreach($reports as $report)
 {
     $taskName = '';
-    foreach(explode(',', $report->tasks) as $taskID) $taskName .= '#' . $taskID . $tasks[$taskID] . ' ';
+    foreach(explode(',', $report->tasks) as $taskID) $taskName .= '#' . $taskID . ' ' . $tasks[$taskID] . ' ';
     $report->taskName = $taskName;
 }
 
