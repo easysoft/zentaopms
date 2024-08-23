@@ -9172,9 +9172,8 @@ class upgradeModel extends model
             $pivotSQLs   = $this->bi->prepareBuiltinPivotSQL('update');
             $upgradeSqls = array_merge($upgradeSqls, $chartSQLs, $pivotSQLs);
         }
-        $metricSQLs  = $this->bi->prepareBuiltinMetricSQL('update');
         $screenSQLs  = $this->bi->prepareBuiltinScreenSQL('update');
-        $upgradeSqls = array_merge($upgradeSqls, $metricSQLs, $screenSQLs);
+        $upgradeSqls = array_merge($upgradeSqls, $screenSQLs);
 
         try
         {
