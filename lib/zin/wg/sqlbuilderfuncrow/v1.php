@@ -10,14 +10,15 @@ require_once dirname(__DIR__) . DS . 'formgroup' . DS . 'v1.php';
 class sqlBuilderFuncRow extends wg
 {
     protected static array $defineProps = array(
-        'index?: int',               // 索引。
-        'tables?: array',            // 表名下拉数据。
-        'fields?: array',            // 字段名下拉数据。
-        'value?: array',             // 值。
-        'tableError?:bool=false',    // 表名选择是否存在错误。
-        'fieldError?:bool=false',    // 字段名选择是否存在错误。
-        'functionError?:bool=false', // 函数名选择是否存在错误。
-        'aliasError?:bool=false'     // 别名是否存在错误。
+        'index?: int',                // 索引。
+        'tables?: array',             // 表名下拉数据。
+        'fields?: array',             // 字段名下拉数据。
+        'value?: array',              // 值。
+        'tableError?:bool=false',     // 表名选择是否存在错误。
+        'fieldError?:bool=false',     // 字段名选择是否存在错误。
+        'functionError?:bool=false',  // 函数名选择是否存在错误。
+        'aliasError?:bool=false',      // 别名是否存在错误。
+        'duplicateError?:bool=false' // 别名是否存在重复。
     );
 
     protected function buildTable(): node
@@ -76,9 +77,10 @@ class sqlBuilderFuncRow extends wg
     protected function buildAlias(): node
     {
         global $lang;
-        list($index, $value, $error) = $this->prop(array('index', 'value', 'aliasError'));
+        list($index, $value, $emptyError, $duplicateError) = $this->prop(array('index', 'value', 'aliasError', 'duplicateError'));
 
         $value = $value['alias'];
+        $errorText = $duplicateError ? $lang->bi->duplicateError : null;
         return sqlBuilderInput
         (
             set::name("alias_$index"),
@@ -87,7 +89,8 @@ class sqlBuilderFuncRow extends wg
             set::placeholder($lang->bi->selectInputTip),
             set::width('80'),
             set::labelWidth('160px'),
-            set::error($error)
+            set::error($emptyError || $duplicateError),
+            set::errorText($errorText)
         );
     }
 

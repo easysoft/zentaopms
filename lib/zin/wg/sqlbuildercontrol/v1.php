@@ -21,7 +21,8 @@ class sqlBuilderControl extends wg
         'labelWidth?: string="80px"', // 标签宽度。
         'width?: string="60"',        // 控件宽度。
         "suffix?: string",            // 后缀内容。
-        "error?: bool=false"          // 是否存在错误。
+        "error?: bool=false",          // 是否存在错误。
+        'errorText?: string'          // 错误提示。
     );
 
     /**
@@ -66,7 +67,7 @@ class sqlBuilderControl extends wg
     protected function build()
     {
         global $lang;
-        list($class, $label, $labelWidth, $width, $suffix, $error) = $this->prop(array('class', 'label', 'labelWidth', 'width', 'suffix', 'error'));
+        list($class, $label, $labelWidth, $width, $suffix, $error, $errorText) = $this->prop(array('class', 'label', 'labelWidth', 'width', 'suffix', 'error', 'errorText'));
 
         return formGroup
         (
@@ -87,7 +88,7 @@ class sqlBuilderControl extends wg
                 span
                 (
                     setClass('text-danger', array('hidden' => !$error)),
-                    $lang->bi->emptyError
+                    empty($errorText) ? $lang->bi->emptyError : $errorText
                 )
             )
         );

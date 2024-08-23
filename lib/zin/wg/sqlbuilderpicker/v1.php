@@ -16,7 +16,7 @@ class sqlBuilderPicker extends sqlBuilderControl
         'width?: string="60"',
         "suffix?: string",
         "error?: bool=false",
-        "errorMsg?: string"
+        "errorText?: string"
     );
 
     protected function build()

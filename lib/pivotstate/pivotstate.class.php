@@ -492,6 +492,7 @@ class pivotState
         $builder = $this->sqlBuilder;
         $funcs   = $builder['funcs'];
 
+        $checkDuplicate = array();
         foreach($funcs as $index => $func)
         {
             $table    = empty($func['table']);
@@ -499,13 +500,20 @@ class pivotState
             $function = empty($func['function']);
             $alias    = empty($func['alias']);
 
-            $allEmpty = (int)$table + (int)$field + (int)$function + (int)$alias;
-            if($allEmpty === 0) continue;
-
             if($table)    return $this->setBuilderError('func', 'table', $index);
             if($field)    return $this->setBuilderError('func', 'field', $index);
             if($function) return $this->setBuilderError('func', 'function', $index);
             if($alias)    return $this->setBuilderError('func', 'alias', $index);
+
+            $alias = $func['alias'];
+            if(!isset($checkDuplicate[$alias]))
+            {
+                $checkDuplicate[$alias] = $index;
+            }
+            else
+            {
+                return $this->setBuilderError('func', 'duplicate', $index);
+            }
         }
 
         return true;

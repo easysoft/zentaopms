@@ -70,7 +70,8 @@ $lang->bi->whereItemOperatorList['in']    = 'IN';
 $lang->bi->whereItemOperatorList['notIn'] = 'NOT IN';
 $lang->bi->whereItemOperatorList['like']  = 'LIKE';
 
-$lang->bi->emptyError = 'Can not be empty';
+$lang->bi->emptyError     = 'Can not be empty';
+$lang->bi->duplicateError = 'Duplicate';
 
 $lang->bi->stepFieldTitle = 'Select a field in the lookup table';
 $lang->bi->stepFieldTip   = 'The fields in the select query table are used to get the required data from the selected query table.';
