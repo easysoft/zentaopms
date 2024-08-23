@@ -31,6 +31,7 @@ class projectEntry extends entry
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
         $project = $this->format($data->data->project, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,realBegan:date,realEnd:date,PM:user,whitelist:userList,deleted:bool');
+        if(!$project->multiple) $project->executionID = $this->loadModel('execution')->getNoMultipleID($projectID);
 
         $this->loadModel('testcase');
         $project->caseReview = ($this->config->testcase->needReview or !empty($this->config->testcase->forceReview));
