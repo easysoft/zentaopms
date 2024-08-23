@@ -74,6 +74,10 @@ Class activateExecutionTester extends tester
         $info  = sprint($this->lang->execution->errorGreaterParent, '');
         $text = $form->dom->endTip->getText();
         /* 获取页面返回信息中除日期外的内容 */
+        preg_match_all('/(\d{4}-\d{2}-\d{2})/', $text, $matches);                                                                                                                                 ~
+        $date   = $matches[0][0];                                                                                                                                                                    ~
+        $params = str_replace($date, '', $text);                                                                                                                                                  ~
+        $params = trim($params);
         if($params == $info) return $this->success('激活执行表单页提示信息正确');
         return $this->failed('激活执行表单页提示信息不正确');
     }
