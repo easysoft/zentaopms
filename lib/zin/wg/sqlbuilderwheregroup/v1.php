@@ -62,7 +62,9 @@ class sqlBuilderWhereGroup extends wg
                 setClass('w-16 mb-4', array('hidden' => $isLast)),
                 picker
                 (
-                    set::name("operator$index"),
+                    setID("builderPicker_operator_$index"),
+                    setClass('builder-picker'),
+                    set::name("operator_{$index}_"),
                     set::required(true),
                     set::items($lang->bi->whereOperatorList),
                     set::value($operator)
