@@ -33,7 +33,7 @@ class thinkMulticolumn extends thinkQuestion
             $fields       = $step->options->fields;
             $requiredCols = $required && isset($step->options->requiredCols) ? $step->options->requiredCols : '';
             $supportAdd   = $step->options->supportAdd;
-            $canAddRows   = $supportAdd ? $step->options->canAddRows: '';
+            $canAddRows   = $supportAdd && isset($step->options->canAddRows) ? $step->options->canAddRows: '';
             foreach($fields as $key => $field) $requiredOptions[] = array('value' => $key + 1, 'text' => $field);
         }
 
