@@ -43,6 +43,10 @@ $lang->bi->emptyFuncs    = '暂未新增函数字段。';
 $lang->bi->addWhere      = '添加组';
 $lang->bi->emptyWheres   = '暂未添加确定性查询条件。';
 
+$lang->bi->whereGroupTitle  = '第%s组确定性查询条件';
+$lang->bi->addWhereGroup    = '添加组';
+$lang->bi->removeWhereGroup = '删除组';
+
 $lang->bi->selectTableTip = '请选择数据表';
 $lang->bi->selectFieldTip = '请选择字段';
 $lang->bi->selectFuncTip  = '请选择函数';

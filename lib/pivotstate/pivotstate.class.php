@@ -598,6 +598,22 @@ class pivotState
     }
 
     /**
+     * Add where group.
+     *
+     * @param  string|array $type
+     * @param  string       $table
+     * @param  string       $field
+     * @param  string       $function
+     * @param  string       $alias
+     * @access public
+     * @return void
+     */
+    public function addWhereGroup($items = array())
+    {
+        $this->sqlBuilder['wheres'][] = $items;
+    }
+
+    /**
      * Get funcs.
      *
      * @param  string $type
