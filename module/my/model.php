@@ -219,7 +219,7 @@ class myModel extends model
         $contribute->myBugTotal           = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_BUG)->where('assignedTo')->eq($account)->andWhere('deleted')->eq(0)->fetch('count');
         $contribute->docCreatedTotal      = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_DOC)->where('addedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
         $contribute->ownerProductTotal    = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_PRODUCT)->where('PO')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
-        $contribute->involvedProjectTotal = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_PROJECT)
+        $contribute->involvedProjectTotal = (int)$this->dao->select('COUNT(DISTINCT id) AS count')->from(TABLE_PROJECT)
             ->where('deleted')->eq('0')
             ->andWhere('type')->eq('project')
             ->andWhere('id', true)->in($inTeam)
