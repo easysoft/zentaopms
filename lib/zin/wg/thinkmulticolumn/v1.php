@@ -11,6 +11,11 @@ class thinkMulticolumn extends thinkQuestion
         'fields?: array',
     );
 
+    public static function getPageJS(): string
+    {
+        return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
+    }
+
     protected function buildFormItem(): array
     {
         global $lang, $app;
@@ -86,6 +91,21 @@ class thinkMulticolumn extends thinkQuestion
                         on::change()->toggleClass('.can-add-rows', 'hidden', 'target.value == 0')
                     )
                 ),
+                formGroup
+                (
+                    setClass('w-1/2 can-add-rows', (is_null($supportAdd) || $supportAdd) ? '' : 'hidden'),
+                    set::label($lang->thinkstep->label->canAddRows),
+                    set::required(true),
+                    input
+                    (
+                        set::type('number'),
+                        set::name('options[canAddRows]'),
+                        set::value($canAddRows),
+                        set::placeholder($lang->thinkstep->placeholder->inputContent),
+                        set::min(1),
+                        on::input('changeRows')
+                    )
+                )
             )
         );
         return $formItems;
