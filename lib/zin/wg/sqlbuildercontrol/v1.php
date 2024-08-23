@@ -50,7 +50,7 @@ class sqlBuilderControl extends wg
             setClass('builder-input', array('has-error' => $error)),
             set::name($name),
             set::placeholder($placeholder),
-            !empty($value) ? set::value($value) : null
+            set::value($value)
         );
 
         return null;
