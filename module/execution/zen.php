@@ -754,7 +754,7 @@ class executionZen extends execution
 
             if(!empty($this->config->limitTaskDate))
             {
-                $this->task->checkEstStartedAndDeadline($executionID, $task->estStarted, $task->deadline);
+                $this->task->checkEstStartedAndDeadline($execution->id, (string)$task->estStarted, (string)$task->deadline);
                 if(dao::isError()) return false;
             }
 
