@@ -199,7 +199,7 @@ if(!$config->inQuickon)
     $lang->repo->scmList['Subversion'] = 'Subversion';
 }
 
-$lang->repo->aclList['private'] = '私有 (所属产品和相关项目人员可访问)';
+$lang->repo->aclList['private'] = '私有 (所属产品人员可访问)';
 $lang->repo->aclList['open']    = '公开 (有DevOps视图权限即可访问)';
 $lang->repo->aclList['custom']  = '自定义';
 
