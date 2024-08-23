@@ -373,3 +373,57 @@ $lang->tutorial->scrumProjectManage->manageTest->step26->desc = '保存后可以
 $lang->tutorial->scrumProjectManage->manageTest->step27 = new stdClass();
 $lang->tutorial->scrumProjectManage->manageTest->step27->name = '点击测试报告';
 $lang->tutorial->scrumProjectManage->manageTest->step27->desc = '可以在这里查看测试报告列表';
+
+$lang->tutorial->scrumProjectManage->manageBug = new stdClass();
+$lang->tutorial->scrumProjectManage->manageBug->title = 'Bug管理';
+
+$lang->tutorial->scrumProjectManage = new stdClass();
+$lang->tutorial->scrumProjectManage->manageBug = new stdClass();
+
+$lang->tutorial->scrumProjectManage->manageBug->step1 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageBug->step1->name = '点击Bug';
+$lang->tutorial->scrumProjectManage->manageBug->step1->desc = '可以在这里管理Bug';
+
+$lang->tutorial->scrumProjectManage->manageBug->step2 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageBug->step2->name = '点击提bug';
+$lang->tutorial->scrumProjectManage->manageBug->step2->desc = '可以在这里创建bug';
+
+$lang->tutorial->scrumProjectManage->manageBug->step3 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageBug->step3->name = '填写表单';
+
+$lang->tutorial->scrumProjectManage->manageBug->step4 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageBug->step4->name = '保存表单';
+$lang->tutorial->scrumProjectManage->manageBug->step4->desc = '保存后进入Bug列表';
+
+$lang->tutorial->scrumProjectManage->manageBug->step5 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageBug->step5->name = '确认Bug';
+$lang->tutorial->scrumProjectManage->manageBug->step5->desc = '可以在这里确认Bug';
+
+$lang->tutorial->scrumProjectManage->manageBug->step6 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageBug->step6->name = '填写表单';
+
+$lang->tutorial->scrumProjectManage->manageBug->step7 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageBug->step7->name = '保存表单';
+$lang->tutorial->scrumProjectManage->manageBug->step7->desc = '保存后进入Bug列表';
+
+$lang->tutorial->scrumProjectManage->manageBug->step8 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageBug->step8->name = '解决Bug';
+$lang->tutorial->scrumProjectManage->manageBug->step8->desc = '可以在这里解决Bug';
+
+$lang->tutorial->scrumProjectManage->manageBug->step9 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageBug->step9->name = '填写表单';
+
+$lang->tutorial->scrumProjectManage->manageBug->step10 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageBug->step10->name = '保存表单';
+$lang->tutorial->scrumProjectManage->manageBug->step10->desc = '保存后可以将解决完的bug进行验证';
+
+$lang->tutorial->scrumProjectManage->manageBug->step11 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageBug->step11->name = '关闭Bug';
+$lang->tutorial->scrumProjectManage->manageBug->step11->desc = '可以在这里关闭Bug';
+
+$lang->tutorial->scrumProjectManage->manageBug->step12 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageBug->step12->name = '填写表单';
+
+$lang->tutorial->scrumProjectManage->manageBug->step13 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageBug->step13->name = '保存表单';
+$lang->tutorial->scrumProjectManage->manageBug->step13->desc = '保存后可以将验证完的Bug关闭';
