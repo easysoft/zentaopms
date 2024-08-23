@@ -176,3 +176,4 @@ if(!empty($config->isINT))
 }
 
 $config->upgrade->execFlow['max2_2'] = array('functions' => 'addDefaultKanbanPri');
+$config->upgrade->execFlow['max5_4'] = array('functions' => 'updateApprovalCondition');
