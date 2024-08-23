@@ -961,6 +961,10 @@ class taskZen extends task
 
         foreach($tasks as $rowIndex => $task)
         {
+            if(mb_strlen($task->name) > 255)
+            {
+                dao::$errors["name[$rowIndex]"] = sprintf($this->lang->task->error->length, 255);
+            }
             if(!empty($this->post->estimate[$rowIndex]) and !preg_match("/^[0-9]+(.[0-9]+)?$/", (string)$this->post->estimate[$rowIndex]))
             {
                 dao::$errors["estimate[$rowIndex]"] = $this->lang->task->error->estimateNumber;
