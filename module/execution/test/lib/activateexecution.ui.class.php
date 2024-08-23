@@ -6,8 +6,8 @@ Class activateExecutionTester extends tester
      * 输入激活执行表单字段。
      * Input fields.
      *
-     * @param string $end
-     * @param string $executionId
+     * @param  string $end
+     * @param  string $executionId
      * @access public
      */
     public function inputFields($end, $executionId)
@@ -23,8 +23,8 @@ Class activateExecutionTester extends tester
      * 激活执行。
      * Activate execution.
      *
-     * @param string $end
-     * @param string $executionId
+     * @param  string $end
+     * @param  string $executionId
      * @access public
      * @return bool
      */
@@ -39,5 +39,22 @@ Class activateExecutionTester extends tester
         return $this->success('激活执行成功');
     }
 
-
+    /**
+     * 激活执行时计划完成日期错误。
+     * Activate execution with wrong planned end.
+     *
+     * @param  string $end
+     * @param  string $executionId
+     * @access public
+     * @return bool
+     */
+    public function activateWithWrongEnd($end, $executionId)
+    {
+        $this->inputFields($end, $executionId);
+        $form  = $this->loadPage();
+        $begin = $form->dom->begin->getText();
+        $info  = sprint($this->lang->execution->errorLesserPlan, $end, $begin )
+        if($form->dom->endTip->getText() == $info) return $this->success('激活执行表单页提示信息正确');
+        return $this->failed('激活执行表单页提示信息不正确');
+    }
 }
