@@ -18,7 +18,7 @@ class putoffExecutionTester extends tester
         $form->dom->putoff->click();
         if(isset($execution['begin'])) $form->dom->begin->datePicker($execution['begin']);
         if(isset($execution['end'])) $form->dom->end->datePicker($execution['end']);
-        if(isset($execution['days'])) $form->dom->days->setValue($execution['days']));
+        if(isset($execution['days'])) $form->dom->days->setValue($execution['days']);
         $form->dom->putoffSubmit->click();
         $form->wait(1);
         return $status;
@@ -54,12 +54,13 @@ class putoffExecutionTester extends tester
      * @access public
      * @return bool
      */
-    Public function putoffiWithWrongDate($execution, $executionId, $dateType = 'end')
+    Public function putoffWithWrongDate($execution, $executionId, $dateType = 'end')
     {
         $this->inputFields($execution, $executionId);
         $form = $this->loadPage();
         $form->wait(1);
 
+        if($form->dom->putoffSubmit === false) return $this->failed('错误的延期成功了');
         if($dateType == 'end')
         {
             $info = sprintf($this->lang->execution->errorCommonEnd, '');
