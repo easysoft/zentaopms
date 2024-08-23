@@ -22,7 +22,7 @@ class sqlBuilderWhereGroup extends wg
             setClass('w-full mb-4'),
             set::title(sprintf($lang->bi->whereGroupTitle, $index + 1)),
             set::headingClass('relative bg-gray-100'),
-            set::bodyClass('bg-gray-100'),
+            set::bodyClass('bg-gray-100 flex gap-y-4 col'),
             to::heading
             (
                 div
@@ -64,7 +64,7 @@ class sqlBuilderWhereGroup extends wg
                 (
                     set::name("operator$index"),
                     set::required(true),
-                    set::items($lang->bi->whereGroupOperatorList),
+                    set::items($lang->bi->whereOperatorList),
                     set::value($operator)
                 )
             )

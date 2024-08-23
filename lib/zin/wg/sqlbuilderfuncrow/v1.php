@@ -17,7 +17,7 @@ class sqlBuilderFuncRow extends wg
         'tableError?:bool=false',
         'fieldError?:bool=false',
         'functionError?:bool=false',
-        'aliasError?:bool=false',
+        'aliasError?:bool=false'
     );
 
     protected function buildTable()

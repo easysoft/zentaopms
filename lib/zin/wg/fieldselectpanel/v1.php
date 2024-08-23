@@ -44,7 +44,7 @@ class fieldSelectPanel extends wg
             setClass("h-full $panelClass flex-none"),
             set::title("$table({$alias})"),
             set::headingClass('bg-gray-100 relative'),
-            set::bodyClass('h-64 overflow-y-auto'),
+            set::bodyClass('h-70 overflow-y-auto'),
             /*to::heading
             (
                 div

@@ -620,9 +620,9 @@ class pivotState
      * @access public
      * @return void
      */
-    public function addWhereItem($index, $table = '', $field = '', $operator = '', $value = '')
+    public function addWhereItem($index, $table = '', $field = '', $operator = '', $value = '', $conditionOperator = 'and')
     {
-        $item = is_array($table) ? $table : array($table, $field, $operator, null, $value);
+        $item = is_array($table) ? $table : array($table, $field, $operator, null, $value, $conditionOperator);
         $this->sqlBuilder['wheres'][$index]['items'][] = $item;
     }
 

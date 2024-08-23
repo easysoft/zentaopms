@@ -57,9 +57,21 @@ $lang->bi->funcList['date']  = '提取日期';
 $lang->bi->funcList['month'] = '提取月份';
 $lang->bi->funcList['year']  = '提取年份';
 
-$lang->bi->whereGroupOperatorList = array();
-$lang->bi->whereGroupOperatorList['and'] = '且';
-$lang->bi->whereGroupOperatorList['or']  = '或';
+$lang->bi->whereOperatorList = array();
+$lang->bi->whereOperatorList['and'] = '且';
+$lang->bi->whereOperatorList['or']  = '或';
+
+$lang->bi->whereItemOperatorList = array();
+$lang->bi->whereItemOperatorList['=']     = '=';
+$lang->bi->whereItemOperatorList['!=']    = '!=';
+$lang->bi->whereItemOperatorList['>']     = '>';
+$lang->bi->whereItemOperatorList['>=']    = '>=';
+$lang->bi->whereItemOperatorList['<']     = '<';
+$lang->bi->whereItemOperatorList['<=']    = '<=';
+$lang->bi->whereItemOperatorList['in']    = '包含';
+$lang->bi->whereItemOperatorList['notIn'] = '不包含';
+$lang->bi->whereItemOperatorList['like']  = '模糊匹配';
+
 
 $lang->bi->emptyError = '不能为空';
 

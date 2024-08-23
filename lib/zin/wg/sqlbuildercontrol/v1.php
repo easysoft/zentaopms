@@ -11,10 +11,12 @@ class sqlBuilderControl extends wg
 {
     protected static array $defineProps = array(
         "type?: string",
+        "class?: string",
         "name?: string",
         "label?: string",
         "items?: array",
         "value?: string",
+        'required?: bool=false',
         "placeholder?: string",
         'labelWidth?: string="80px"',
         'width?: string="60"',
@@ -24,18 +26,23 @@ class sqlBuilderControl extends wg
 
     protected function buildControl()
     {
-        list($type, $name, $items, $value, $placeholder, $error) = $this->prop(array('type', 'name', 'items', 'value', 'placeholder', 'error'));
+        list($type, $name, $items, $value, $required, $placeholder, $error) = $this->prop(array('type', 'name', 'items', 'value', 'required', 'placeholder', 'error'));
 
-        if($type == 'picker') return picker
-        (
-            setID("builderPicker_$name"),
-            setClass('builder-picker', array('has-error' => $error)),
-            set::name($name),
-            set::items($items),
-            set::placeholder($placeholder),
-            set::disabled(empty($items)),
-            !empty($value) ? set::value($value) : null
-        );
+        if($type == 'picker')
+        {
+            if(!isset($items[$value])) $value = null;
+            return picker
+            (
+                setID("builderPicker_$name"),
+                setClass('builder-picker', array('has-error' => $error)),
+                set::name($name),
+                set::items($items),
+                set::placeholder($placeholder),
+                set::disabled(empty($items)),
+                set::required($required),
+                !empty($value) ? set::value($value) : null
+            );
+        }
 
         if($type == 'input') return input
         (
@@ -52,10 +59,11 @@ class sqlBuilderControl extends wg
     protected function build()
     {
         global $lang;
-        list($label, $labelWidth, $width, $suffix, $error) = $this->prop(array('label', 'labelWidth', 'width', 'suffix', 'error'));
+        list($class, $label, $labelWidth, $width, $suffix, $error) = $this->prop(array('class', 'label', 'labelWidth', 'width', 'suffix', 'error'));
 
         return formGroup
         (
+            setClass($class),
             set::label($label),
             set::labelWidth($labelWidth),
             set::labelClass('bg-gray-100 ring ring-border-strong font-bold px-1-important justify-center-important'),
