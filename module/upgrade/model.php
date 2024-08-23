@@ -9113,6 +9113,35 @@ class upgradeModel extends model
         return true;
     }
 
+    public function upgradeMetricData()
+    {
+        $this->saveLogs('Run Method ' . __FUNCTION__);
+        $this->dao->clearTablesDescCache();
+
+        $metricSQLs = $this->loadModel('bi')->prepareBuiltinMetricSQL('update');
+        try
+        {
+            foreach($metricSQLs as $sql)
+            {
+                $sql = trim($sql);
+                if(empty($sql)) continue;
+
+                $this->saveLogs($sql);
+
+                $sql = str_replace('zt_', $this->config->db->prefix, $sql);
+                $this->dbh->query($sql);
+                if(dao::isError()) return false;
+            }
+        }
+        catch(Error $e)
+        {
+            a($e->getMessage());
+            die;
+        }
+
+        return true;
+    }
+
     /**
      * 更新升级BI内置数据。
      * Import BI data.
