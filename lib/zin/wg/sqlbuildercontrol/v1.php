@@ -10,21 +10,28 @@ require_once dirname(__DIR__) . DS . 'input' . DS . 'v1.php';
 class sqlBuilderControl extends wg
 {
     protected static array $defineProps = array(
-        "type?: string",
+        "type?: string",              // 控件类型。
         "class?: string",
-        "name?: string",
-        "label?: string",
-        "items?: array",
-        "value?: string",
-        'required?: bool=false',
-        "placeholder?: string",
-        'labelWidth?: string="80px"',
-        'width?: string="60"',
-        "suffix?: string",
-        "error?: bool=false"
+        "name?: string",              // 控件名。
+        "label?: string",             // 控件标签。
+        "items?: array",              // 控件下拉选项，仅type=picker时有效。
+        "value?: string",             // 控件值。
+        'required?: bool=false',      // 控件是否可清空，仅type=picker时有效。
+        "placeholder?: string",       // 提示文本。
+        'labelWidth?: string="80px"', // 标签宽度。
+        'width?: string="60"',        // 控件宽度。
+        "suffix?: string",            // 后缀内容。
+        "error?: bool=false"          // 是否存在错误。
     );
 
-    protected function buildControl()
+    /**
+     * 构建控件。
+     * Build control.
+     *
+     * @access protected
+     * @return node|null
+     */
+    protected function buildControl(): node|null
     {
         list($type, $name, $items, $value, $required, $placeholder, $error) = $this->prop(array('type', 'name', 'items', 'value', 'required', 'placeholder', 'error'));
 

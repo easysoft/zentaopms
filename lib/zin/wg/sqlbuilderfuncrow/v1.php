@@ -10,17 +10,17 @@ require_once dirname(__DIR__) . DS . 'formgroup' . DS . 'v1.php';
 class sqlBuilderFuncRow extends wg
 {
     protected static array $defineProps = array(
-        'index?: int',
-        'tables?: array',
-        'fields?: array',
-        'value?: array',
-        'tableError?:bool=false',
-        'fieldError?:bool=false',
-        'functionError?:bool=false',
-        'aliasError?:bool=false'
+        'index?: int',               // 索引。
+        'tables?: array',            // 表名下拉数据。
+        'fields?: array',            // 字段名下拉数据。
+        'value?: array',             // 值。
+        'tableError?:bool=false',    // 表名选择是否存在错误。
+        'fieldError?:bool=false',    // 字段名选择是否存在错误。
+        'functionError?:bool=false', // 函数名选择是否存在错误。
+        'aliasError?:bool=false'     // 别名是否存在错误。
     );
 
-    protected function buildTable()
+    protected function buildTable(): node
     {
         global $lang;
         list($index, $items, $value, $error) = $this->prop(array('index', 'tables', 'value', 'tableError'));
@@ -39,7 +39,7 @@ class sqlBuilderFuncRow extends wg
         );
     }
 
-    protected function buildField()
+    protected function buildField(): node
     {
         global $lang;
         list($index, $items, $value, $error) = $this->prop(array('index', 'fields', 'value', 'fieldError'));
@@ -56,7 +56,7 @@ class sqlBuilderFuncRow extends wg
         );
     }
 
-    protected function buildFunction()
+    protected function buildFunction(): node
     {
         global $lang;
         list($index, $value, $error) = $this->prop(array('index', 'value', 'functionError'));
@@ -73,7 +73,7 @@ class sqlBuilderFuncRow extends wg
         );
     }
 
-    protected function buildAlias()
+    protected function buildAlias(): node
     {
         global $lang;
         list($index, $value, $error) = $this->prop(array('index', 'value', 'aliasError'));

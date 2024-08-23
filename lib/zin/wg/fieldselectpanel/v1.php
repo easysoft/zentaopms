@@ -8,14 +8,14 @@ require_once dirname(__DIR__) . DS . 'checklist' . DS . 'v1.php';
 class fieldSelectPanel extends wg
 {
     protected static array $defineProps = array(
-        'table?: string',
-        'alias?: string',
-        'fields?: array',
-        'values?: array',
-        'col?: int'
+        'table?: string', // 表名。
+        'alias?: string', // 表别名。
+        'fields?: array', // 表字段列表。
+        'values?: array', // 选中值。
+        'col?: int'       // 列数。
     );
 
-    protected function getFieldList()
+    protected function getFieldList(): array
     {
         list($alias, $fields, $values) = $this->prop(array('alias', 'fields', 'values'));
 
