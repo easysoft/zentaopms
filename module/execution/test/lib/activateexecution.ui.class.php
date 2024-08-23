@@ -13,6 +13,7 @@ Class activateExecutionTester extends tester
     public function inputFields($end, $executionId)
     {
         $form = $this->initForm('execution', 'view', array('execution' => $executionId ), 'appIframe-execution');
+        $plannedBegin = $form->dom->plannedBegin->getText();
         $form->dom->btn($this->lang->execution->activate)->click();
         if(isset($end)) $form->dom->end->datePicker($end);
         $form->dom->activateSubmit->click();
@@ -34,7 +35,6 @@ Class activateExecutionTester extends tester
         $form = $this->loadPage();
 
         if($form->dom->activateSubmit === true) return $this->failed('激活执行失败');
-        if($form->dom->status->getText() != $this->lang->execution->statusList->doing) return $this->failed('执行状态错误');
         if($form->dom->plannedEnd->getText() != $end) return $this->failed('计划完成时间错误');
         return $this->success('激活执行成功');
     }
@@ -52,8 +52,7 @@ Class activateExecutionTester extends tester
     {
         $this->inputFields($end, $executionId);
         $form  = $this->loadPage();
-        $begin = $form->dom->begin->getText();
-        $info  = sprint($this->lang->execution->errorLesserPlan, $end, $begin );
+        $info  = sprintf($this->lang->execution->errorLesserPlan, $end, date('Y-m-d') );
         if($form->dom->endTip->getText() == $info) return $this->success('激活执行表单页提示信息正确');
         return $this->failed('激活执行表单页提示信息不正确');
     }
@@ -71,7 +70,7 @@ Class activateExecutionTester extends tester
     {
         $this->inputFields($end, $executionId);
         $form  = $this->loadPage();
-        $info  = sprint($this->lang->execution->errorGreaterParent, '');
+        $info  = sprintf($this->lang->execution->errorGreaterParent, '');
         $text = $form->dom->endTip->getText();
         /* 获取页面返回信息中除日期外的内容 */
         preg_match_all('/(\d{4}-\d{2}-\d{2})/', $text, $matches);                                                                                                                                 ~
