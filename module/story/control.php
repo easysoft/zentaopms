@@ -142,7 +142,7 @@ class story extends control
 
             $stories = $this->storyZen->buildStoriesForBatchCreate($productID, $storyType);
             if(empty($stories)) return $this->sendError($this->lang->story->errorEmptyStory, true);
-            if(dao::isError())  return $this->sendError(dao::getError(), true);
+            if(dao::isError())  return $this->sendError(dao::getError());
 
             $storyIdList = $this->story->batchCreate($stories);
             if(dao::isError()) return $this->sendError(dao::getError(), true);

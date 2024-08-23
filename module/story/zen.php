@@ -1497,6 +1497,11 @@ class storyZen extends story
         $stories = form::batchData($fields)->get();
         foreach($stories as $i => $story)
         {
+            if(!empty($story->title) && mb_strlen($story->title) > 255)
+            {
+                dao::$errors["title[$i]"] = sprintf($this->lang->story->error->length, 255);
+            }
+
             $story->type       = $storyType;
             $story->status     = (empty($story->reviewer) && !$forceReview) ? 'active' : 'reviewing';
             $story->status     = $saveDraft ? 'draft' : $story->status;

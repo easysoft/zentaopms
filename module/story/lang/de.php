@@ -580,3 +580,6 @@ $lang->story->trackOrderByList['category'] = 'Order by category';
 
 $lang->story->trackSortList['asc']  = ' Ascending';
 $lang->story->trackSortList['desc'] = ' Descending';
+
+$lang->story->error = new stdclass();
+$lang->story->error->length = "Length exceeds %d characters, cannot save. Please modify it and try again.";

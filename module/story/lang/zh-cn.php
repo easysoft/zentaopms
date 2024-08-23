@@ -580,3 +580,6 @@ $lang->story->trackOrderByList['category'] = '按类别';
 
 $lang->story->trackSortList['asc']  = '升序';
 $lang->story->trackSortList['desc'] = '降序';
+
+$lang->story->error = new stdclass();
+$lang->story->error->length = "长度超过了%d个字符，无法保存，请修改后再试";
