@@ -14,10 +14,6 @@ timeout=0
 chdir(__DIR__);
 include '../lib/productview.ui.class.php';
 
-#$programs = new stdclass();
-#$programs->productProgram = '项目集1';
-#$programs->program        = '项目集1';
-
 $tester = new createProgramTester();
 $tester->login();
 
