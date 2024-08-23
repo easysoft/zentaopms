@@ -17,16 +17,18 @@ class thinkMulticolumn extends thinkQuestion
         $app->loadLang('thinkstep');
         $formItems = parent::buildFormItem();
 
-        list($step, $questionType, $required, $fields) = $this->prop(array('step', 'questionType', 'required', 'fields'));
+        list($step, $questionType, $required, $fields, $supportAdd, $canAddRows) = $this->prop(array('step', 'questionType', 'required', 'fields', 'supportAdd', 'canAddRows'));
         $requiredItems = $lang->thinkstep->requiredList;
 
         $requiredCols = array();
         if($step)
         {
-            $required = $step->options->required;
+            $required = isset($step->options->required) ? $step->options->required : 1;
             if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);
             $fields       = $step->options->fields ?? array('', '', '', '');
             $requiredCols = $step->options->requiredCols ?? array();
+            $supportAdd   = $step->options->supportAdd;
+            $canAddRows   = $step->options->canAddRows;
         }
 
         $formItems[] = array(
@@ -57,12 +59,31 @@ class thinkMulticolumn extends thinkQuestion
                 (
                     set::width('1/2'),
                     set::label($lang->thinkstep->label->requiredCol),
+                    set::required(true),
                     setClass('required-options'),
                     picker
                     (
                         set::name('options[requiredCols][]'),
                         set::items($requiredCols),
                         set::multiple(true)
+                    )
+                )
+            ),
+            formRow
+            (
+                setClass('mb-3'),
+                formGroup
+                (
+                    setClass('w-1/2'),
+                    set::label($lang->thinkstep->label->isSupportAdd),
+                    set::labelHint($lang->thinkstep->tips->supportAdd),
+                    radioList
+                    (
+                        set::name('options[supportAdd]'),
+                        set::inline(true),
+                        set::items($lang->thinkstep->requiredList),
+                        set::value(is_null($supportAdd) ? 1 : $supportAdd),
+                        on::change()->toggleClass('.can-add-rows', 'hidden', 'target.value == 0')
                     )
                 ),
             )
