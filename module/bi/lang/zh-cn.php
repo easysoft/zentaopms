@@ -57,6 +57,10 @@ $lang->bi->funcList['date']  = '提取日期';
 $lang->bi->funcList['month'] = '提取月份';
 $lang->bi->funcList['year']  = '提取年份';
 
+$lang->bi->whereGroupOperatorList = array();
+$lang->bi->whereGroupOperatorList['and'] = '且';
+$lang->bi->whereGroupOperatorList['or']  = '或';
+
 $lang->bi->emptyError = '不能为空';
 
 $lang->bi->stepFieldTitle = '选择查询表中的字段';
