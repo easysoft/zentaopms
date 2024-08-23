@@ -491,7 +491,7 @@ class tutorialModel extends model
      * Get task.
      *
      * @access public
-     * @return string
+     * @return object
      */
     public function getTask(): object
     {
@@ -568,7 +568,7 @@ class tutorialModel extends model
      * Get taks.
      *
      * @access public
-     * @return string
+     * @return array
      */
     public function getTasks(): array
     {
@@ -621,7 +621,7 @@ class tutorialModel extends model
      * Get build.
      *
      * @access public
-     * @return string
+     * @return array
      */
     public function getBuilds(): array
     {
@@ -636,7 +636,7 @@ class tutorialModel extends model
      * Get Cases.
      *
      * @access public
-     * @return string
+     * @return object
      */
     public function getCase(): object
     {
@@ -694,6 +694,12 @@ class tutorialModel extends model
         $case->caseFails       = 1;
         $case->stepNumber      = 1;
         $case->needconfirm     = '';
+        $case->task            = 1;
+        $case->case            = 1;
+        $case->assignedTo      = '';
+        $case->caseVersion     = '';
+        $case->storyTitle      = '';
+        $case->caseStatus      = 'normal';
 
         $step1 = new stdClass();
         $step1->name   = 1;
@@ -724,7 +730,7 @@ class tutorialModel extends model
      * Get Cases.
      *
      * @access public
-     * @return string
+     * @return array
      */
     public function getCases(): array
     {
@@ -739,7 +745,7 @@ class tutorialModel extends model
      * Get results.
      *
      * @access public
-     * @return string
+     * @return array
      */
     public function getResults(): array
     {
@@ -795,5 +801,125 @@ class tutorialModel extends model
         $result->nodeName    = '';
         $result->files       = array();
         return array(1 => $result);
+    }
+
+    /**
+     * 获取新手模式测试单。
+     * Get testtask.
+     *
+     * @access public
+     * @return object
+     */
+    public function getTesttask(): object
+    {
+        $testtask = new stdClass();
+        $testtask->id               = 1;
+        $testtask->project          = 2;
+        $testtask->product          = 1;
+        $testtask->name             = 'Test testtask';
+        $testtask->execution        = 3;
+        $testtask->build            = 1;
+        $testtask->type             = '';
+        $testtask->owner            = '';
+        $testtask->pri              = 3;
+        $testtask->begin            = helper::today();
+        $testtask->end              = helper::today();
+        $testtask->realBegan        = '';
+        $testtask->realFinishedDate = '';
+        $testtask->mailto           = '';
+        $testtask->desc             = '';
+        $testtask->report           = '';
+        $testtask->status           = 'wait';
+        $testtask->testreport       = 0;
+        $testtask->auto             = 'no';
+        $testtask->subStatus        = '';
+        $testtask->createdBy        = $this->app->user->account;
+        $testtask->createdDate      = helper::now();
+        $testtask->deleted          = 0;
+        $testtask->members          = '';
+        $testtask->buildName        = 'Test build';
+        $testtask->productName      = 'Test product';
+        $testtask->productType      = 'normal';
+        $testtask->branch           = '0';
+        $testtask->executionName    = 'Test execution';
+        $testtask->buildName        = 'Test build';
+        $testtask->files            = array();
+        return $testtask;
+    }
+
+    /**
+     * 获取新手模式测试单列表。
+     * Get testtasks.
+     *
+     * @access public
+     * @return array
+     */
+    public function getTesttasks(): array
+    {
+        $testtask  = $this->getTesttask();
+        $testtasks = array();
+        $testtasks[$testtask->id] = $testtask;
+        return $testtasks;
+    }
+
+    /**
+     * 获取新手模式测试单键值对。
+     * Get testtask pairs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getTesttaskPairs(): array
+    {
+        return array(1 => 'Test testtask');
+    }
+
+    /**
+     * 获取新手模式测试报告。
+     * Get testreport.
+     *
+     * @access public
+     * @return object
+     */
+    public function getTestReport(): object
+    {
+        $testreport = new stdClass();
+        $testreport->id            = 1;
+        $testreport->project       = 2;
+        $testreport->product       = 1;
+        $testreport->execution     = 3;
+        $testreport->tasks         = '1';
+        $testreport->builds        = '1';
+        $testreport->title         = 'Test testreport';
+        $testreport->begin         = helper::today();
+        $testreport->end           = helper::today();
+        $testreport->owner         = $this->app->user->account;
+        $testreport->members       = '';
+        $testreport->stories       = '';
+        $testreport->bugs          = '';
+        $testreport->cases         = '';
+        $testreport->report        = '';
+        $testreport->objectType    = 'execution';
+        $testreport->objectID      = 3;
+        $testreport->createdBy     = $this->app->user->account;
+        $testreport->createdDate   = helper::now();
+        $testreport->deleted       = 0;
+        $testreport->taskName      = 'Test testtask';
+        return $testreport;
+    }
+
+    /**
+     * 获取新手模式测试报告列表。
+     * Get testreports.
+     *
+     * @access public
+     * @return array
+     */
+    public function getTestReports(): array
+    {
+        $testreport  = $this->getTestReport();
+        $testreports = array();
+        $testreports[$testreport->id] = $testreport;
+        return $testreports;
     }
 }

@@ -88,7 +88,7 @@ toolbar
     ),
     $canLinkCase ? btn
     (
-        setClass('ghost'),
+        setClass('ghost linkCase-btn'),
         set::icon('link'),
         set::url(inlink('linkCase', "taskID={$task->id}")),
         set('data-app', $app->tab),

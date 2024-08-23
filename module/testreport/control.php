@@ -58,8 +58,15 @@ class testreport extends control
             }
             else
             {
-                $objectID = $this->session->{$tab};
-                $products = $this->product->getProducts($objectID, 'all', '', false);
+                if(common::isTutorialMode())
+                {
+                    $products = $this->loadModel('tutorial')->getProductStats();
+                }
+                else
+                {
+                    $objectID = $this->session->{$tab};
+                    $products = $this->product->getProducts($objectID, 'all', '', false);
+                }
             }
             if(empty($products) && !isInModal() && (helper::isAjaxRequest('zin') || helper::isAjaxRequest('fetch'))) $this->locate($this->createLink('product', 'showErrorNone', "moduleName={$tab}&activeMenu=testreport&objectID=$objectID"));
         }

@@ -94,6 +94,8 @@ class testreportModel extends model
      */
     public function getList(int $objectID, string $objectType, int $extra = 0, string $orderBy = 'id_desc', object $pager = null): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getTestReports();
+
         return $this->dao->select('*')->from(TABLE_TESTREPORT)
             ->where('deleted')->eq(0)
             ->beginIF($objectType == 'execution')->andWhere('execution')->eq($objectID)->fi()
