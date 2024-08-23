@@ -9747,9 +9747,6 @@ class upgradeModel extends model
      */
     public function updateApprovalCondition()
     {
-        $nodes = file_get_contents($this->app->getWwwRoot() . 'test.json');
-        $nodes = json_decode($nodes);
-
         $specs = $this->dao->select('id, nodes')->from(TABLE_APPROVALFLOWSPEC)->fetchPairs();
 
         foreach($specs as $specID => $spec)
@@ -9795,7 +9792,7 @@ class upgradeModel extends model
                         {
                             $newCondition->conditionField = 'submitUsers';
                             $newCondition->conditionValue = $account;
-                            $newConditions[] = $newCondition;
+                            $newConditions[] = clone $newCondition;
                         }
                     }
                     elseif($condition->selectType == 'role')
@@ -9804,7 +9801,7 @@ class upgradeModel extends model
                         {
                             $newCondition->conditionField = 'submitRoles';
                             $newCondition->conditionValue = $role;
-                            $newConditions[] = $newCondition;
+                            $newConditions[] = clone $newCondition;
                         }
                     }
                     elseif($condition->selectType == 'position')
@@ -9813,7 +9810,7 @@ class upgradeModel extends model
                         {
                             $newCondition->conditionField = 'submitPositions';
                             $newCondition->conditionValue = $position;
-                            $newConditions[] = $newCondition;
+                            $newConditions[] = clone $newCondition;
                         }
                     }
                     elseif($condition->selectType == 'dept')
@@ -9822,7 +9819,7 @@ class upgradeModel extends model
                         {
                             $newCondition->conditionField = 'submitDepts';
                             $newCondition->conditionValue = $dept;
-                            $newConditions[] = $newCondition;
+                            $newConditions[] = clone $newCondition;
                         }
                     }
                 }
