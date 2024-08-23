@@ -16,5 +16,17 @@ Class activateExecutionTester extends tester
         $form->dom->btn($this->lang->execution->activate)->click();
         if(isset($end)) $form->dom->end->datePicker($end);
         $form->dom->activateSubmit->click();
+        $form->wait(1);
+    }
+
+    public function activate($end, $executionId)
+    {
+        $this->inputFields($end, $executionId);
+        $form = $this->loadPage();
+
+        if($form->dom->activateSubmit === true) return $this->failed('激活执行失败');
+        if($form->dom->status->getText() != $this->lang->execution->statusList->doing) return $this->failed('执行状态错误');
+        if($form->dom->plannedEnd->getText() != $end) return $this->failed('计划完成时间错误');
+        return $this->success('激活执行成功');
     }
 }
