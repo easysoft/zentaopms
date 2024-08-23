@@ -238,7 +238,6 @@ class header extends wg
             ),
 
             set::id('userMenu'),
-            set::trigger('hover'),
             set::placement('bottom-end'),
             set::menu(array('style' => array('color' => 'var(--color-fore)'))),
             set::strategy('fixed'),
@@ -462,7 +461,6 @@ class header extends wg
 
             set::id('quickAddMenu'),
             set::menu(array('style' => array('color' => 'var(--color-fore)'))),
-            set::trigger('hover'),
             set::placement('bottom'),
             set::strategy('fixed'),
             set::arrow(true),
