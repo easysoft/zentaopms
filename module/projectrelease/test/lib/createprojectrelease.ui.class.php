@@ -12,8 +12,8 @@ class createProjectReleaseTester extends tester
     public function checkInput($release)
     {
         $form = $this->initForm('projectrelease', 'create', array('projectID' => 1), 'appIframe-project');
-        if(isset($release['name']))        $form->dom->name->setValue($release['name']);
-        if(isset($release['status']))      $form->dom->status->picker($release['status']);
+        if(isset($release['name']))   $form->dom->name->setValue($release['name']);
+        if(isset($release['status'])) $form->dom->status->picker($release['status']);
         $form->wait(2);
         if(isset($release['plandate']))    $form->dom->date->datepicker($release['plandate']);
         if(isset($release['releasedate'])) $form->dom->releasedDate->datepicker($release['releasedate']);
