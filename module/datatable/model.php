@@ -149,6 +149,17 @@ class datatableModel extends model
             }
 
             if(in_array($module, array('product', 'project', 'execution')) and empty($this->config->setCode)) unset($fieldSetting['code']);
+
+            if($module == 'story' && $method == 'browse' && $this->app->tab == 'project')
+            {
+                $project      = $this->loadModel('project')->getByID((int)$this->session->project);
+                $projectModel = $project->model;
+                if(($projectModel == 'waterfall' || $projectModel == 'waterfallplus') && isset($fieldSetting['plan']))
+                {
+                    unset($fieldSetting['plan']);
+                }
+            }
+
         }
 
         uasort($fieldSetting, array('datatableModel', 'sortCols'));
