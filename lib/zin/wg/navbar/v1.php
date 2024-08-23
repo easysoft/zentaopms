@@ -15,6 +15,7 @@ class navbar extends wg
         return <<<'CSS'
         #navbar .nav[z-use-sortable] > li:hover {cursor: grab !important;}
         #navbar .nav[z-use-sortable] > li > a:hover {cursor: grab !important;}
+        #navbar .nav li.nav-divider.divider {border: none; width: 1px; background: currentColor; margin: 0; padding-left: var(--nav-divider-margin); padding-right: var(--nav-divider-margin); box-sizing: content-box; background-clip: content-box;}
         CSS;
     }
 
