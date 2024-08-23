@@ -182,10 +182,15 @@ function getStepForm(scope, $target)
     return $form;
 }
 
-function destroyPopover(callback)
+function destroyPopover(callback, scope)
 {
     if(!popover)
     {
+        if(scope && scope.$)
+        {
+            scope.$('.tutorial-hl').removeClass('tutorial-hl');
+            scope.$('.tutorial-light-box').addClass('opacity-0');
+        }
         if(callback) callback();
         return;
     };
@@ -318,6 +323,10 @@ function highlightStepTarget($target, step, popoverOptions)
 
             if(config.debug) showLog(`Step target ${event.type}`, currentStep, null, {stepID, event});
             activeNextStep();
+        });
+        $doc.on('pageload.app', function()
+        {
+            presentStep();
         });
     });
 }
@@ -468,7 +477,12 @@ function ensureStepScope(step, callback)
         if(!scopePage) return waitStepScope('page is not ready');
         const scopePageRaw = ($body.attr('data-page-raw') || '').toLowerCase();
         const stepPage = (step.page || '').toLowerCase();
-        if(stepPage && stepPage !== scopePage && stepPage !== scopePageRaw) return waitStepScope(`step page "${stepPage}" not match "${scopePage}" or "${scopePageRaw}"`);
+        if(stepPage && stepPage !== scopePage && stepPage !== scopePageRaw)
+        {
+            destroyPopover(null, scope);
+            if(config.debug) showLog(`Page scope not match: ${stepPage}, current page is ${scopePage}`, step, null, {scope});
+            return;
+        }
     }
     return setTimeout(() => callback(scope), 200);
 }
@@ -533,6 +547,16 @@ function formatStep(step, guideName, taskName, stepIndex)
     return step;
 }
 
+function presentStep(step)
+{
+    step = step || currentStep;
+    if(!step) return;
+
+    const presenter = stepPresenters[step.type];
+    if(config.debug) showLog('Present step', step, null, {presenter});
+    if(presenter) presenter(step);
+}
+
 function activeTaskStep(guideName, taskName, stepIndex)
 {
     const guide = guides[guideName];
@@ -550,12 +574,7 @@ function activeTaskStep(guideName, taskName, stepIndex)
 
     currentStep = step;
     if(config.debug) showLog('Active step', step);
-    ensureStepScope(step, () =>
-    {
-        const presenter = stepPresenters[step.type];
-        if(config.debug) showLog('Present step', step, null, {presenter});
-        if(presenter) presenter(step);
-    });
+    ensureStepScope(step, () => presentStep(step));
 }
 
 function activeTask(guideName, taskName, stepIndex)
