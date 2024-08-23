@@ -25,4 +25,23 @@ class editStageTester extends tester
         $editForm->wait(1);
         return $this->checkResult($editForm, $waterfall);
     }
-}
+
+    /**
+     * Check the result after edit the stage.
+     * 编辑阶段后检查结果。
+     *
+     * @param  array $waterfall
+     * @access public
+     * @return object
+     */
+    public function checkResult(object $editForm, array $waterfall)
+    {
+        if($this->response('module') == 'project')
+        {
+            if($editForm->dom->nameTip)
+            {
+                //检查阶段名称不能为空
+                $nameTipText = $editForm->dom->nameTip->getText();
+                $nameTip     = sprintf($this->lang->error->notempty, $this->lang->programplan->name);
+                return ($nameTipText == $nameTip) ? $this->success('编辑阶段表单页提示信息正确') : $this->failed('编辑阶段表单页提示信息不正确');
+            }
