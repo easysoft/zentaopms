@@ -1,4 +1,11 @@
 <?php
+
+/**
+title=激活执行
+timeout=0
+cid=1
+*/
+
 chdir(__DIR__);
 include '../lib/activateexecution.ui.class.php';
 
