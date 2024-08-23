@@ -55,7 +55,7 @@ class putoffExecutionTester extends tester
      * @access public
      * @return bool
      */
-    Public function putoffWithWrongDate($execution, $executionId, $dateType = 'end')
+    public function putoffWithWrongDate($execution, $executionId, $dateType = 'end')
     {
         $this->inputFields($execution, $executionId);
         $form = $this->loadPage();

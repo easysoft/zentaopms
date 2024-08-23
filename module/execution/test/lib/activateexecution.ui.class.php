@@ -1,6 +1,6 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/ui.php';
-Class activateExecutionTester extends tester
+class activateExecutionTester extends tester
 {
     /**
      * 输入激活执行表单字段。
@@ -13,7 +13,6 @@ Class activateExecutionTester extends tester
     public function inputFields($end, $executionId)
     {
         $form = $this->initForm('execution', 'view', array('execution' => $executionId ), 'appIframe-execution');
-        $plannedBegin = $form->dom->plannedBegin->getText();
         $form->dom->btn($this->lang->execution->activate)->click();
         if(isset($end)) $form->dom->end->datePicker($end);
         $form->dom->activateSubmit->click();
