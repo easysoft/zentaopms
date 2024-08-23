@@ -18,6 +18,7 @@ $config->testcase->actionList['runCase']['notLoadModel'] = true;
 $config->testcase->actionList['runCase']['data-toggle']  = 'modal';
 $config->testcase->actionList['runCase']['data-size']    = 'lg';
 $config->testcase->actionList['runCase']['notInModal']   = true;
+$config->testcase->actionList['runCase']['class']        = 'testtask-runCase-btn';
 
 $config->testcase->actionList['ztfRun']['icon']         = 'play';
 $config->testcase->actionList['ztfRun']['text']         = $lang->testtask->runCase;
@@ -35,6 +36,7 @@ $config->testcase->actionList['runResult']['url']         = array('module' => 't
 $config->testcase->actionList['runResult']['data-toggle'] = 'modal';
 $config->testcase->actionList['runResult']['data-size']   = 'lg';
 $config->testcase->actionList['runResult']['notInModal']  = true;
+$config->testcase->actionList['runResult']['class']       = 'testtask-results-btn';
 
 $config->testcase->actionList['edit']['icon']       = 'edit';
 $config->testcase->actionList['edit']['text']       = $lang->testcase->edit;

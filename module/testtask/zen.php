@@ -488,6 +488,8 @@ class testtaskZen extends testtask
      */
     protected function getProducts(): array
     {
+        if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getProductPairs();
+
         /* 如果是在非弹窗页面的项目或执行应用下打开的测试单，则获取当前项目或执行对应的产品。*/
         /* If the testtask is opened under a project or execution application on a non-pop-up page, get the current project or execution corresponding product. */
         $tab = $this->app->tab;

@@ -1450,6 +1450,8 @@ class testtaskModel extends model
      */
     public function getResults(int $runID, int $caseID = 0, string $status = 'all', string $type = 'all', int $deployID = 0): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getResults();
+
         $results = $this->dao->select('*')->from(TABLE_TESTRESULT)
             ->beginIF($runID > 0)->where('run')->eq($runID)->fi()
             ->beginIF($runID <= 0)->where('`case`')->eq($caseID)->fi()

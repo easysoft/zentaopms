@@ -271,3 +271,53 @@ $lang->tutorial->scrumProjectManage->manageTask->step23->desc = '在这里可以
 $lang->tutorial->scrumProjectManage->manageTask->step24 = new stdClass();
 $lang->tutorial->scrumProjectManage->manageTask->step24->name = '保存关联的需求';
 $lang->tutorial->scrumProjectManage->manageTask->step24->desc = '您可以将完成的需求关联在当前版本中';
+
+$lang->tutorial->scrumProjectManage->manageTest = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTest->title = '测试管理';
+
+$lang->tutorial->scrumProjectManage->manageTest->step1 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTest->step1->name = '点击测试';
+$lang->tutorial->scrumProjectManage->manageTest->step1->desc = '可以在这里进行测试管理';
+
+$lang->tutorial->scrumProjectManage->manageTest->step2 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTest->step2->name = '点击用例';
+$lang->tutorial->scrumProjectManage->manageTest->step2->desc = '在这里可以查看用例';
+
+$lang->tutorial->scrumProjectManage->manageTest->step3 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTest->step3->name = '点击创建用例';
+$lang->tutorial->scrumProjectManage->manageTest->step3->desc = '在这里可以创建用例';
+
+$lang->tutorial->scrumProjectManage->manageTest->step4 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTest->step4->name = '填写表单';
+
+$lang->tutorial->scrumProjectManage->manageTest->step5 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTest->step5->name = '保存表单';
+$lang->tutorial->scrumProjectManage->manageTest->step5->desc = '保存后进入用例列表';
+
+$lang->tutorial->scrumProjectManage->manageTest->step6 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTest->step6->name = '点击执行';
+$lang->tutorial->scrumProjectManage->manageTest->step6->desc = '点击执行可以执行用例';
+
+$lang->tutorial->scrumProjectManage->manageTest->step7 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTest->step7->name = '填写表单';
+
+$lang->tutorial->scrumProjectManage->manageTest->step8 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTest->step8->name = '保存表单';
+$lang->tutorial->scrumProjectManage->manageTest->step8->desc = '保存后返回用例列表';
+
+$lang->tutorial->scrumProjectManage->manageTest->step9 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTest->step9->name = '点击结果';
+$lang->tutorial->scrumProjectManage->manageTest->step9->desc = '点击这里可以查看用例执行结果';
+
+$lang->tutorial->scrumProjectManage->manageTest->step10 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTest->step10->name = '选择步骤';
+
+$lang->tutorial->scrumProjectManage->manageTest->step11 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTest->step11->name = '点击转bug';
+$lang->tutorial->scrumProjectManage->manageTest->step11->desc = '可以将未通过的执行结果转Bug处理';
+
+$lang->tutorial->scrumProjectManage->manageTest->step12 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTest->step12->name = '填写表单';
+
+$lang->tutorial->scrumProjectManage->manageTest->step13 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageTest->step13->name = '保存表单';

@@ -630,4 +630,170 @@ class tutorialModel extends model
         $builds[$build->id] = $build;
         return $builds;
     }
+
+    /**
+     * 获取新手模式用例。
+     * Get Cases.
+     *
+     * @access public
+     * @return string
+     */
+    public function getCase(): object
+    {
+        $case = new stdClass();
+        $case->project         = 2;
+        $case->product         = 1;
+        $case->case            = 1;
+        $case->count           = 1;
+        $case->version         = 1;
+        $case->order           = 0;
+        $case->id              = 1;
+        $case->execution       = 3;
+        $case->branch          = 0;
+        $case->lib             = 0;
+        $case->module          = 0;
+        $case->path            = 0;
+        $case->story           = 0;
+        $case->storyVersion    = 1;
+        $case->title           = 'Test case';
+        $case->precondition    = '';
+        $case->keywords        = '';
+        $case->pri             = 3;
+        $case->type            = 'feature';
+        $case->auto            = 'no';
+        $case->frame           = '';
+        $case->stage           = 'unittest';
+        $case->howRun          = '';
+        $case->script          = '';
+        $case->scriptedBy      = '';
+        $case->scriptedDate    = '';
+        $case->scriptStatus    = '';
+        $case->scriptLocation  = '';
+        $case->status          = 'normal';
+        $case->subStatus       = '';
+        $case->color           = '';
+        $case->frequency       = 1;
+        $case->openedBy        = '';
+        $case->openedDate      = '';
+        $case->reviewedBy      = '';
+        $case->reviewedDate    = '';
+        $case->lastEditedBy    = '';
+        $case->lastEditedDate  = '';
+        $case->linkCase        = '';
+        $case->fromBug         = 0;
+        $case->fromCaseID      = 0;
+        $case->fromCaseVersion = 1;
+        $case->deleted         = 0;
+        $case->lastRunner      = '';
+        $case->lastRunDate     = '';
+        $case->lastRunResult   = 'fail';
+        $case->scene           = 0;
+        $case->sort            = 0;
+        $case->bugs            = 1;
+        $case->results         = 1;
+        $case->caseFails       = 1;
+        $case->stepNumber      = 1;
+        $case->needconfirm     = '';
+
+        $step1 = new stdClass();
+        $step1->name   = 1;
+        $step1->id     = 1;
+        $step1->step   = 'Test step1';
+        $step1->desc   = 'Test step1';
+        $step1->expect = '';
+        $step1->type   = 'step';
+        $step1->parent = 0;
+        $step1->grade  = 1;
+
+        $step2 = new stdClass();
+        $step2->name   = 2;
+        $step2->id     = 2;
+        $step2->step   = 'Test step2';
+        $step2->desc   = 'Test step2';
+        $step2->expect = '';
+        $step2->type   = 'step';
+        $step2->parent = 0;
+        $step2->grade  = 1;
+        $case->steps   = array($step1, $step2);
+
+        return $case;
+    }
+
+    /**
+     * 获取新手模式用例。
+     * Get Cases.
+     *
+     * @access public
+     * @return string
+     */
+    public function getCases(): array
+    {
+        $case  = $this->getCase();
+        $cases = array();
+        $cases[$case->id] = $case;
+        return $cases;
+    }
+
+    /**
+     * 获取新手模式用例执行结果。
+     * Get results.
+     *
+     * @access public
+     * @return string
+     */
+    public function getResults(): array
+    {
+        $result = new stdClass();
+
+        $result->id          = 1;
+        $result->run         = 0;
+        $result->case        = 1;
+        $result->version     = 1;
+        $result->job         = 0;
+        $result->compile     = 0;
+        $result->caseResult  = 'fail';
+        $result->stepResults = array(
+            1 => array(
+                'id'      => 1,
+                'parent'  => 0,
+                'case'    => 1,
+                'version' => 1,
+                'type'    => 'step',
+                'desc'    => 'Test step1',
+                'expect'  => '',
+                'name'    => 1,
+                'grade'   => 1,
+                'result'  => 'fail',
+                'real'    => '',
+                'files'   => array()
+            ),
+            2 => array(
+                'id'      => 2,
+                'parent'  => 0,
+                'case'    => 1,
+                'version' => 1,
+                'type'    => 'step',
+                'desc'    => 'Test step2',
+                'expect'  => '',
+                'name'    => 2,
+                'grade'   => 1,
+                'result'  => 'pass',
+                'real'    => '',
+                'files'   => array()
+            )
+        );
+
+        $result->ZTFResult   = '';
+        $result->node        = 0;
+        $result->lastRunner  = $this->app->user->account;
+        $result->date        = helper::now();
+        $result->duration    = 0;
+        $result->xml         = '';
+        $result->deploy      = 0;
+        $result->build       = 0;
+        $result->task        = 0;
+        $result->nodeName    = '';
+        $result->files       = array();
+        return array(1 => $result);
+    }
 }

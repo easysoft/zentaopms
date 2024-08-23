@@ -127,6 +127,8 @@ class testcaseModel extends model
      */
     public function getExecutionCases(string $browseType = 'all', int $executionID = 0, int $productID = 0, int|string $branchID = 0, int $moduleID = 0, int $paramID = 0, string $orderBy = 'id_desc', object $pager = null): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getCases();
+
         if($browseType == 'needconfirm')
         {
             return $this->dao->select('distinct t1.*, t2.*')->from(TABLE_PROJECTCASE)->alias('t1')
@@ -170,6 +172,8 @@ class testcaseModel extends model
      */
     public function getById(int $caseID, int $version = 0): object|bool
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getCase();
+
         $case = $this->dao->findById($caseID)->from(TABLE_CASE)->fetch();
         if(!$case) return false;
 
