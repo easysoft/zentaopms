@@ -9113,6 +9113,13 @@ class upgradeModel extends model
         return true;
     }
 
+    /**
+     * 更新升级度量项数据。
+     * Import metric data.
+     *
+     * @access public
+     * @return bool
+     */
     public function upgradeMetricData()
     {
         $this->saveLogs('Run Method ' . __FUNCTION__);
