@@ -18,6 +18,7 @@ $('#runCaseModal').closest('.modal').off('hide.zui.modal').on('hide.zui.modal', 
 function loadResult()
 {
     loadCurrentPage({url: resultsLink, selector: '#casesResults', partial: true});
+    window.waitDom('#casesResults .result-item', function(){ $('#casesResults .result-item').first().trigger('click');})
 }
 
 /**
