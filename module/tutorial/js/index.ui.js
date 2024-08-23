@@ -235,6 +235,7 @@ function highlightStepTarget($target, step, popoverOptions)
     ensureStepScope(step, (scope) =>
     {
         if(typeof $target === 'function') $target = $target(scope);
+        $target = $target.first();
         if(!$target.length) return console.error(`[TUTORIAL] Cannot find target for step "${step.guide.title || step.guide.name} > ${step.task.title || step.task.name} > ${step.title}"`, step);
         popoverOptions = $.extend(
         {
