@@ -96,7 +96,7 @@ class putoffExecutionTester extends tester
         $form = $this->loadPage();
         $form->wait(1);
         if($form->dom->putoffSubmit === false) return $this->failed('错误的延期成功');
-        if($form->dom->daysTip->getText() == $lang->project->copyProject->daysTips) return $this->success('延期执行表单页提示信息正确');
+        if($form->dom->daysTip->getText() == $this->lang->project->copyProject->daysTips) return $this->success('延期执行表单页提示信息正确');
         return $this->failed('延期执行表单页提示信息不正确');
     }
 }
