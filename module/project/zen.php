@@ -1012,7 +1012,6 @@ class projectZen extends project
             ->setDefault('lastEditedDate', helper::now())
             ->setIF($rawdata->begin == '0000-00-00', 'begin', '')
             ->setIF($rawdata->end   == '0000-00-00', 'end', '')
-            ->setIF(!helper::isZeroDate($oldProject->realBegan), 'realBegan', helper::today())
             ->stripTags($editorIdList, $this->config->allowedTags)
             ->get();
     }
