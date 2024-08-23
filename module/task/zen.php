@@ -961,7 +961,7 @@ class taskZen extends task
 
         foreach($tasks as $rowIndex => $task)
         {
-            if(!empty($this->post->estimate[$rowIndex]) and !preg_match("/^[0-9]+(.[0-9]+)?$/", $this->post->estimate[$rowIndex]))
+            if(!empty($this->post->estimate[$rowIndex]) and !preg_match("/^[0-9]+(.[0-9]+)?$/", (string)$this->post->estimate[$rowIndex]))
             {
                 dao::$errors["estimate[$rowIndex]"] = $this->lang->task->error->estimateNumber;
             }
