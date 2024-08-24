@@ -71,6 +71,16 @@ class thinkRadio extends thinkQuestion
             if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);
             $fields = !empty($step->options->fields) ? $step->options->fields :  array('', '', '');
         }
+
+        $quoteQuestionsItems = array();
+        if(!empty($quoteQuestions))
+        {
+            foreach($quoteQuestions as $item)
+            {
+                $quoteQuestionsItems[] = array('text' => $item->title, 'value' => $item->id);
+            }
+        }
+
         $formItems[] = array(
             formHidden('options[questionType]', $questionType),
             $questionType == 'checkbox' ? array
