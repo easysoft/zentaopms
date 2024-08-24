@@ -175,6 +175,21 @@ class thinkRadio extends thinkQuestion
                             set::value($citation),
                             set::items($lang->thinkstep->multiCitationList)
                         )
+                    ),
+                    formGroup
+                    (
+                        setClass('select-column', $citation != 3 ? 'hidden' : ''),
+                        set::label($lang->thinkstep->label->selectColumn),
+                        set::labelClass('required'),
+                        picker(
+                            set(array(
+                                'name'        => 'options[selectColumn]',
+                                'placeholder' => $lang->thinkstep->placeholder->quoteTitle,
+                                'required'    => true,
+                                'items'       => array(),
+                                'value'       => $selectColumn,
+                            ))
+                        )
                     )
                 )
             ) : null,
