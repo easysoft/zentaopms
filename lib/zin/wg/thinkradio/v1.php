@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace zin;
 
 requireWg('thinkQuestion');
@@ -30,7 +31,6 @@ class thinkRadio extends thinkQuestion
         $detailWg = parent::buildDetail();
         list($step, $mode) = $this->prop(array('step', 'mode'));
         if($mode != 'detail') return array();
-        jsVar('maxCountPlaceholder', $lang->thinkstep->placeholder->maxCount);
 
         $answer   = $step->answer;
         $result   = isset($answer->result) ? $answer->result : array();
@@ -57,17 +57,18 @@ class thinkRadio extends thinkQuestion
         $app->loadLang('thinkstep');
 
         $formItems = parent::buildFormItem();
+        list($step, $questionType, $required, $enableOther, $fields, $setOption, $quoteTitle, $quoteQuestions, $citation, $selectColumn) = $this->prop(array('step', 'questionType', 'required', 'enableOther', 'fields', 'setOption', 'quoteTitle', 'quoteQuestions', 'citation', 'selectColumn'));
 
-        list($step, $questionType, $required, $enableOther, $fields, $setOption, $quoteTitle, $quoteQuestions, $citation) = $this->prop(array('step', 'questionType', 'required', 'enableOther', 'fields', 'setOption', 'quoteTitle', 'quoteQuestions', 'citation'));
         $requiredItems = $lang->thinkstep->requiredList;
         if($step)
         {
-            $enableOther = $step->options->enableOther ?? 0;
-            $required    = $step->options->required;
-            $setOption   = isset($step->options->setOption) ? $step->options->setOption : false;
-            $quoteTitle  = isset($step->options->quoteTitle) ? $step->options->quoteTitle : null;
+            $enableOther  = $step->options->enableOther ?? 0;
+            $required     = $step->options->required;
+            $setOption    = isset($step->options->setOption) ? $step->options->setOption : false;
+            $quoteTitle   = isset($step->options->quoteTitle) ? $step->options->quoteTitle : null;
+            $selectColumn = isset($step->options->selectColumn) ? $step->options->selectColumn : null;
             if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);
-            $fields = $step->options->fields ?? array();
+            $fields = !empty($step->options->fields) ? $step->options->fields :  array('', '', '');
         }
 
         $formItems[] = array(
@@ -86,7 +87,6 @@ class thinkRadio extends thinkQuestion
                             set::inline(true),
                             set::value($setOption),
                             set::items($lang->thinkstep->setOptionList),
-                            bind::change('changeOption(event)')
                         )
                     ),
                     icon
@@ -98,33 +98,41 @@ class thinkRadio extends thinkQuestion
                 ),
                 formGroup
                 (
-                    setClass('think-quote-title', $setOption == 0 ? 'hidden' : ''),
+                    setClass('think-quote', $setOption == 0 ? 'hidden' : ''),
                     set::label($lang->thinkstep->label->quoteTitle),
                     set::labelClass('required'),
                     picker
                     (
+                        setdata('quote-questions', $quoteQuestions),
                         set(array
                         (
+                            'class'       => 'options-quote-title',
                             'name'        => 'options[quoteTitle]',
                             'placeholder' => $lang->thinkstep->placeholder->quoteTitle,
-                            'items'       => $quoteQuestions,
-                            'value'       => $quoteTitle,
+                            'items'       => $quoteQuestionsItems,
+                            'value'       => !empty($quoteTitle) && !empty($quoteQuestionsItems) ? ($quoteTitle || $quoteQuestionsItems[0]) : '',
                             'disabled'    => empty($quoteQuestions),
-                            'title'       => empty($quoteQuestions) ? $lang->thinkstep->tips->quoteTitle : null
-                        ))
+                            'title'       => empty($quoteQuestions) ? $lang->thinkstep->tips->quoteTitle : null,
+                            'required'    => true,
+                        )),
+                        bind::change('changeQuoteTitle(event)')
                     )
                 ),
-                formGroup
+                formRow
                 (
-                    setClass('think-quote-title', $setOption == 0 ? 'hidden' : ''),
-                    set::label($lang->thinkstep->label->citation),
-                    set::labelClass('required'),
-                    radioList
+                    setClass('think-quote quote-citation', $setOption == 0 ? 'hidden' : ''),
+                    formGroup
                     (
-                        set::name('options[citation]'),
-                        set::inline(true),
-                        set::value($citation),
-                        set::items($lang->thinkstep->citationList)
+                        setClass('citation'),
+                        set::label($lang->thinkstep->label->citation),
+                        set::labelClass('required'),
+                        radioList
+                        (
+                            set::name('options[citation]'),
+                            set::inline(true),
+                            set::value($citation),
+                            set::items($lang->thinkstep->citationList)
+                        )
                     )
                 )
             ) : null,
