@@ -18,6 +18,7 @@ class thinkRadio extends thinkQuestion
         'quoteTitle?: string',
         'quoteQuestions?: array',
         'citation?: int=1',
+        'selectColumn?: int',
     );
 
     public static function getPageJS(): ?string
@@ -70,7 +71,6 @@ class thinkRadio extends thinkQuestion
             if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);
             $fields = !empty($step->options->fields) ? $step->options->fields :  array('', '', '');
         }
-
         $formItems[] = array(
             formHidden('options[questionType]', $questionType),
             $questionType == 'checkbox' ? array
@@ -87,6 +87,25 @@ class thinkRadio extends thinkQuestion
                             set::inline(true),
                             set::value($setOption),
                             set::items($lang->thinkstep->setOptionList),
+                            on::change()
+                                ->const('maxCountPlaceholder', $lang->thinkstep->placeholder->maxCount)
+                                ->const('inputContent', $lang->thinkstep->placeholder->inputContent)
+                                ->do("
+                                    $('.think-options-field').toggleClass('hidden', target.value == 1);
+                                    $('.think-quote').toggleClass('hidden', target.value == 0);
+                                    if(target.value == 1)
+                                    {
+                                        $('.min-count input').val(1).attr('disabled', 'disabled');
+                                        $('.max-count input').val('').attr('placeholder', maxCountPlaceholder).attr('disabled', 'disabled');
+                                    }
+                                    else
+                                    {
+                                        $('.min-count input').val('').removeAttr('disabled');
+                                        $('.max-count input').attr('placeholder', inputContent).removeAttr('disabled');
+                                    }
+                                    $('.text-danger').remove();
+                                    $('.has-error').removeClass('has-error');
+                                ")
                         )
                     ),
                     icon
