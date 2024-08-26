@@ -159,7 +159,7 @@ $runs = array_map(
     function($run)
     {
         if($run->version < $run->caseVersion) $run->status = 'changed';
-        if(str_starts_with((string)$run->id, 'scene')) unset($run->actions);
+        if($run->isScene) unset($run->actions);
         return $run;
     },
     $runs
