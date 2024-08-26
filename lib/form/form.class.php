@@ -65,15 +65,16 @@ class form extends fixer
      * Get the form data.
      *
      * @param array|null $configObject
+     * @param int        $objectID
      * @return form
      */
-    public static function data(array $configObject = null): form
+    public static function data(array $configObject = null, int $objectID = 0): form
     {
         global $app, $config;
 
         $form = new form;
         if($configObject === null) $configObject = $config->{$app->moduleName}->form->{$app->methodName};
-        $configObject = $form->appendExtendFormConfig($configObject);
+        $configObject = $form->appendExtendFormConfig($configObject, '', '', $objectID);
         return $form->config($configObject);
     }
 
@@ -102,10 +103,11 @@ class form extends fixer
      * @param  array  $config
      * @param  string $moduleName
      * @param  string $methodName
+     * @param  int    $objectID
      * @access public
      * @return array
      */
-    public function appendExtendFormConfig(array $configObject, string $moduleName = '', string $methodName = ''): array
+    public function appendExtendFormConfig(array $configObject, string $moduleName = '', string $methodName = '', int $objectID = 0): array
     {
         global $app, $config;
         if($config->edition == 'open' ||  !empty($app->installing)) return $configObject;
@@ -119,8 +121,9 @@ class form extends fixer
         $action = $app->control->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
         if(!$action || $action->extensionType != 'extend') return $configObject;
 
-        $fieldList    = $app->control->workflowaction->getFields($flow->module, $action->action);
-        $layouts      = $app->control->loadModel('workflowlayout')->getFields($moduleName, $methodName);
+        $uiID         = $app->control->loadModel('workflowlayout')->getUIByDataID($flow->module, $action->action, $objectID);
+        $fieldList    = $app->control->workflowaction->getFields($flow->module, $action->action, true, null, $uiID);
+        $layouts      = $app->control->workflowlayout->getFields($moduleName, $methodName, $uiID);
         $notEmptyRule = $app->control->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
         if($layouts)
         {
