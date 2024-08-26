@@ -252,6 +252,12 @@ function highlightStepTarget($target, step, popoverOptions)
         if(typeof $target === 'function') $target = $target(scope);
         $target = $target.first();
         if(!$target.length) return console.error(`[TUTORIAL] Cannot find target for step "${step.guide.title || step.guide.name} > ${step.task.title || step.task.name} > ${step.title}"`, step);
+        if($target.is('[data-toggle="dropdown"]'))
+        {
+            if($target.is('[data-trigger="hover"]')) $target.attr('data-trigger', 'click');
+            const dropdown = $target.zui('dropdown');
+            if(dropdown && dropdown.options.trigger === 'hover') dropdown.destroy();
+        }
         popoverOptions = $.extend(
         {
             key             : step.id,
