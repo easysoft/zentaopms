@@ -375,7 +375,7 @@ class pivotState
      */
     public function checkSqlBuilder()
     {
-        return $this->checkFrom() && $this->checkJoins() && $this->checkSelects();
+        return $this->checkFrom() && $this->checkJoins() && $this->checkSelects() && $this->checkFuncs();
     }
 
     /**
@@ -628,7 +628,7 @@ class pivotState
      * @access public
      * @return void
      */
-    public function addWhereItem($index, $table = '', $field = '', $operator = '', $value = '', $conditionOperator = 'and')
+    public function addWhereItem($index, $table = '', $field = '', $operator = '=', $value = '', $conditionOperator = 'and')
     {
         $item = is_array($table) ? $table : array($table, $field, $operator, null, $value, $conditionOperator);
         $this->sqlBuilder['wheres'][$index]['items'][] = $item;
@@ -653,6 +653,34 @@ class pivotState
             if($func['type'] == $type || $type == 'all') $funcs[] = $func;
         }
         return $funcs;
+    }
+
+    /**
+     * Get wheres.
+     *
+     * @access public
+     * @return array
+     */
+    public function getWheres()
+    {
+        $whereArray = array();
+        $wheres = $this->sqlBuilder['wheres'];
+        $groupCount = count($wheres);
+        foreach($wheres as $groupIndex => $group)
+        {
+            $groupArray = array();
+            foreach($group['items'] as $itemIndex => $item)
+            {
+                list($columnA, $fieldA, $operator, $columnB, $fieldB, $conditionOperator) = $item;
+                if($itemIndex !== 0) $groupArray[] = $conditionOperator;
+                $groupArray[] = array($columnA, $fieldA, $operator, $columnB, $fieldB);
+            }
+
+            $whereArray[] = $groupArray;
+            if($groupIndex + 1 < $groupCount) $whereArray[] = $group['operator'];
+        }
+
+        return $whereArray;
     }
 
     /**
