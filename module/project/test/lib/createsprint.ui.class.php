@@ -17,3 +17,23 @@ class createSprintTester extends tester
         if(isset($sprint['name']))    $form->dom->name->setValue($sprint['name']);
         if(isset($sprint['project'])) $form->dom->project->picker($sprint['project']);
         if(isset($sprint['end']))     $form->dom->end->datepicker($sprint['end']);
+
+        $form->dom->btn($this->lang->save)->click();
+        $form->wait(5);
+        return $this->checkResult($sprint);
+    }
+
+    /**
+     * Check the result after creating the sprint.
+     *
+     * @param  string $scrum
+     * @access public
+     * @return object
+     */
+    public function checkResult($sprint)
+    {
+        //检查创建页面时的提示信息
+        if(strpos($this->response('url'), 'executionID') == false)
+        {
+            if($this->checkFormTips('execution')) return $this->success('创建迭代表单页提示信息正确');
+            if($form->dom->endTip)
