@@ -516,6 +516,7 @@ $lang->story->notice = new stdClass();
 $lang->story->notice->closed           = "{$lang->SRCommon} that you select is closed!";
 $lang->story->notice->reviewerNotEmpty = "This {$lang->SRCommon} needs to be reviewed, and the reviewedby is required.";
 $lang->story->notice->changePlan       = 'The plan can be changed to only one item.';
+$lang->story->notice->notDeleted       = 'People who have been reviewed cannot be deleted.';
 
 $lang->story->convertToTask = new stdClass();
 $lang->story->convertToTask->fieldList = array();

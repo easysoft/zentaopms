@@ -68,6 +68,17 @@ window.changeReviewer = function()
 {
     var $reviewer     = $('[name^="reviewer"]');
     var reviewerCount = $reviewer.val().filter(Boolean).length;
+    var $value        = $reviewer.val();
+
+    const isContained = reviewedBy.every(element => $value.includes(element));
+
+    if(!isContained)
+    {
+        zui.Modal.alert(notDeleted);
+        $reviewer.zui('picker').$.setValue($value.concat(reviewedBy));
+        return;
+    }
+
     if(storyStatus == 'reviewing')
     {
         if(!reviewerCount)
