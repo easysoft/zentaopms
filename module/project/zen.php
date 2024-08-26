@@ -153,6 +153,12 @@ class projectZen extends project
             $multipleProducts = $this->loadModel('product')->getMultiBranchPairs($topProgramID);
             foreach($rawdata->products as $index => $productID)
             {
+                if(defined('RUN_MODE') && RUN_MODE == 'api')
+                {
+                    $product = $this->loadModel('product')->getById($productID);
+                    if(empty($product)) dao::$errors['products'][$index][$productID] = $this->lang->project->api->error->productNotFound;
+                }
+
                 if(isset($multipleProducts[$productID]))
                 {
                     foreach($rawdata->branch[$index] as $branchID)
