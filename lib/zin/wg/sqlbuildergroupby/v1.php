@@ -74,7 +74,29 @@ class sqlBuilderGroupBy extends wg
 
     protected function buildAggFieldRow($agg)
     {
-        return null;
+        global $lang;
+        list($table, $field, $function, $alias) = array($agg['table'], $agg['field'], $agg['function'], $agg['alias']);
+        return formRow
+        (
+            sqlBuilderPicker
+            (
+                set::name("agg{$table}{$field}"),
+                set::label(sprintf($lang->bi->aggTipA, $table, $field)),
+                set::labelWidth('256px'),
+                set::labelAlign('left'),
+                set::width('96'),
+                set::items($lang->bi->aggList),
+                set::placeholder($lang->bi->selectFuncTip),
+                set::value($function)
+            ),
+            sqlBuilderControl
+            (
+                set::type(''),
+                set::label(sprintf($lang->bi->aggTipB, $alias)),
+                set::labelWidth('256px'),
+                set::labelAlign('left')
+            )
+        );
     }
 
     protected function buildAggField()
@@ -106,6 +128,7 @@ class sqlBuilderGroupBy extends wg
             (
                 setClass('w-60 h-78'),
                 set::headingClass('bg-gray-100'),
+                set::bodyClass('h-70 overflow-y-auto flex col gap-y-2'),
                 set::title($lang->bi->groupField),
                 to::heading($this->buildHelpIcon($lang->bi->groupFieldTip))
             ),
@@ -113,6 +136,7 @@ class sqlBuilderGroupBy extends wg
             (
                 setClass('flex-auto h-78'),
                 set::headingClass('bg-gray-100'),
+                set::bodyClass('h-70 overflow-y-auto flex col gap-y-2'),
                 set::title($lang->bi->aggField),
                 to::heading($this->buildHelpIcon($lang->bi->aggFieldTip)),
                 $this->buildAggField()
