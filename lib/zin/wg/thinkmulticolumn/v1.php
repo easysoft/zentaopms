@@ -8,7 +8,10 @@ class thinkMulticolumn extends thinkQuestion
 {
     protected static array $defineProps = array
     (
-        'fields?: array',
+        'fields?: array',       // 列标题
+        'requiredCols?: array', // 必填列
+        'supportAdd?: int=1',   // 是否支持用户添加行
+        'canAddRows: int',      // 可添加行数
     );
 
     public static function getPageJS(): string
@@ -33,7 +36,7 @@ class thinkMulticolumn extends thinkQuestion
             $fields       = $step->options->fields;
             $requiredCols = $required && isset($step->options->requiredCols) ? $step->options->requiredCols : '';
             $supportAdd   = $step->options->supportAdd;
-            $canAddRows   = $supportAdd && isset($step->options->canAddRows) ? $step->options->canAddRows: '';
+            $canAddRows   = $supportAdd && isset($step->options->canAddRows) ? $step->options->canAddRows : '';
             foreach($fields as $key => $field) $requiredOptions[] = array('value' => $key + 1, 'text' => $field);
         }
 
@@ -66,7 +69,7 @@ class thinkMulticolumn extends thinkQuestion
                     set::width('1/2'),
                     set::label($lang->thinkstep->label->requiredCol),
                     set::required(true),
-                    setClass('required-options'),
+                    setClass('required-options', $required ? '' : 'hidden'),
                     picker
                     (
                         set::name('options[requiredCols][]'),
