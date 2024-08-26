@@ -216,7 +216,7 @@ $('.inline-appose').on('click', function()
     return;
 });
 
-$(".label-exchange").on('click', function()
+window.changeDiff = function()
 {
     var source = $('#oldRevision').val();
     var target = $('#newRevision').val();
@@ -226,7 +226,7 @@ $(".label-exchange").on('click', function()
         $('#newRevision').val(source);
         window.goDiff();
     }
-});
+}
 
 /**
  * 在当前页面用modal加载链接。

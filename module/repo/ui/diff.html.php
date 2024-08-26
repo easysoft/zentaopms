@@ -138,6 +138,7 @@ else
 }
 div(
     setClass($inModal ? 'hidden' : ''),
+    on::click('.label-exchange')->call('changeDiff'),
     \zin\featureBar
     (
         backBtn(set::icon('back'), setClass('bg-transparent diff-back-btn'), set::back('GLOBAL'), $lang->goback),
