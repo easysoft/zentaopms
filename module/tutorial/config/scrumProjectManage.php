@@ -1,5 +1,5 @@
 <?php
-global $lang;
+global $lang,$config;
 
 $scrumProjectManage = new stdClass();
 $scrumProjectManage->name    = 'scrumProjectManage';
@@ -702,5 +702,22 @@ $scrumProjectManage->tasks['manageBug']['steps'][] = array(
     'title'  => $lang->tutorial->scrumProjectManage->manageBug->step13->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageBug->step13->desc
 );
+
+if(in_array($config->edition, array('max', 'ipd')))
+{
+    $scrumProjectManage->tasks['manageIssue'] = array();
+    $scrumProjectManage->tasks['manageIssue']['name']     = 'manageIssue';
+    $scrumProjectManage->tasks['manageIssue']['title']    = $lang->tutorial->scrumProjectManage->manageIssue->title;
+    $scrumProjectManage->tasks['manageIssue']['startUrl'] = array('project', 'index', 'projectID=2');
+    $scrumProjectManage->tasks['manageIssue']['steps']    = array();
+
+    $scrumProjectManage->tasks['manageIssue']['steps'][] = array(
+        'type'   => 'clickNavbar',
+        'target' => 'other',
+        'page'   => 'project-index',
+        'title'  => $lang->tutorial->scrumProjectManage->manageIssue->step1->name,
+        'desc'   => $lang->tutorial->scrumProjectManage->manageIssue->step1->desc
+    );
+}
 
 $config->tutorial->guides[$scrumProjectManage->name] = $scrumProjectManage;

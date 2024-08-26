@@ -424,3 +424,10 @@ $lang->tutorial->scrumProjectManage->manageBug->step12->name = '填写表单';
 $lang->tutorial->scrumProjectManage->manageBug->step13 = new stdClass();
 $lang->tutorial->scrumProjectManage->manageBug->step13->name = '保存表单';
 $lang->tutorial->scrumProjectManage->manageBug->step13->desc = '保存后可以将验证完的Bug关闭';
+
+$lang->tutorial->scrumProjectManage->manageIssue = new stdClass();
+$lang->tutorial->scrumProjectManage->manageIssue->title = '问题管理';
+
+$lang->tutorial->scrumProjectManage->manageIssue->step1 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageIssue->step1->name = '点击问题';
+$lang->tutorial->scrumProjectManage->manageIssue->step1->desc = '可以在这里进行问题管理';
