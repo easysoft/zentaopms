@@ -431,14 +431,33 @@ class releaseModel extends model
                 $openedByList   = $this->dao->select('openedBy')->from(TABLE_STORY)->where('id')->in($stories)->fetchPairs();
                 $notifyPersons += $openedByList;
             }
-            elseif(($notify == 'ET' || $notify == 'PT') && !empty($release->build))
+            elseif($notify == 'ET' && !empty($release->build))
             {
-                $type    = $notify == 'ET' ? 'execution' : 'project';
-                $table   = $notify == 'ET' ? TABLE_BUILD : TABLE_RELEASE;
-                $members = $this->dao->select('t2.account')->from($table)->alias('t1')
-                    ->leftJoin(TABLE_TEAM)->alias('t2')->on("t1.$type=t2.root")
-                    ->where('t1.id')->in($notify == 'ET' ? $release->build : $release->id)
-                    ->andWhere('t2.type')->eq($notify == 'ET' ? 'execution' : 'project')
+                $releaseBuilds = $this->dao->select('id, builds')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll('id');
+
+                $allBuilds = array_keys($releaseBuilds);
+                foreach($releaseBuilds as $releaseBuild)
+                {
+                    if(empty($releaseBuild->builds)) continue;
+
+                    $allBuilds = array_merge($allBuilds, explode(',', $releaseBuild->builds));
+                }
+
+                $members = $this->dao->select('t2.account')->from(TABLE_BUILD)->alias('t1')
+                    ->leftJoin(TABLE_TEAM)->alias('t2')->on('t2.root = t1.execution')
+                    ->where('t1.id')->in(array_filter(array_unique($allBuilds)))
+                    ->andWhere('t2.type')->eq('execution')
+                    ->fetchPairs();
+                if(empty($members)) continue;
+
+                $notifyPersons += $members;
+            }
+            elseif($notify == 'PT' && !empty($release->build))
+            {
+                $members = $this->dao->select('t2.account')->from(TABLE_RELEASE)->alias('t1')
+                    ->leftJoin(TABLE_TEAM)->alias('t2')->on("FIND_IN_SET(t2.root, t1.project)")
+                    ->where('t1.id')->eq($release->id)
+                    ->andWhere('t2.type')->eq('project')
                     ->fetchPairs();
                 if(empty($members)) continue;
 
