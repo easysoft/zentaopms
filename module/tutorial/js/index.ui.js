@@ -309,10 +309,10 @@ function highlightStepTarget($target, step, popoverOptions)
                     height      : rect.height,
                     borderRadius: $trigger.css('borderRadius'),
                 });
-                $lightElement.find('.is-left').css({left: -rect.left, width: rect.left});
-                $lightElement.find('.is-right').css({width: window.innerWidth - rect.right});
-                $lightElement.find('.is-top').css({top: -rect.top, height: rect.top, left: -rect.left, right: rect.right - window.innerWidth});
-                $lightElement.find('.is-bottom').css({height: window.innerHeight - rect.bottom, left: -rect.left, right: rect.right - window.innerWidth});
+                $lightElement.find('.is-left').css({left: -rect.left, width: Math.round(rect.left)});
+                $lightElement.find('.is-right').css({width: Math.round(window.innerWidth - rect.right)});
+                $lightElement.find('.is-top').css({top: -rect.top, height: Math.round(rect.top), left: -rect.left, right: rect.right - window.innerWidth});
+                $lightElement.find('.is-bottom').css({height: Math.round(window.innerHeight - rect.bottom), left: -rect.left, right: rect.right - window.innerWidth});
             }
         }, step.popover, popoverOptions);
         if(popoverOptions.title === null)
