@@ -238,7 +238,7 @@ class tutorialModel extends model
         $execution->hasProduct   = '1';
         $execution->multiple     = '';
         $execution->order        = 1;
-        $execution->burns        = array('');
+        $execution->burns        = array();
         $execution->type         = 'sprint';
         $execution->projectName  = '';
         $execution->projectModel = 'scrum';
