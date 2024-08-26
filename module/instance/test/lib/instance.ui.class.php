@@ -12,20 +12,29 @@ class instance extends tester
         $this->page->webdriver->driver->findElement(WebDriverBy::xpath("//div[@data-col='name' and @data-row=$elementCount]//a[text()]"))->click();
         $this->webdriver->wait(1);
         $newPage = $this->loadPage('instance', 'view');
+        $buttonCount = $this->page->webdriver->driver->findElements(WebDriverBy::xpath($newPage->dom->xpath['copyButton']));
         if($type == 'GitLab' || $type == 'SonarQube')
         {
             $form->dom->btn($this->lang->instance->management)->click();
         }
-        elseif($type == 'GitFox')
-        {
-            $newPage->dom->tokenCopy->click();
-        }
         else
         {
-            $newPage->dom->passwdCopy->click();
-            $this->webdriver->wait(1);
-            $newPage->dom->tokenCopy->click();
+            if($this->instanceViewAssert($newPage, $buttonCount)) return $this->success($type . '详情页无误');
+            return $this->failed($type . '详情页有误，请检查');
         }
-        $this->webdriver->wait(1);
+    }
+
+    public function instanceViewAssert($page, $buttonCount)
+    {
+        $toastList = [];
+        foreach($buttonCount as $element)
+        {
+            $element->click();
+            $this->webdriver->wait(1);
+            $toast = $page->dom->toast->getText();
+            if($toast == '复制成功') $toastList[] = $toast;
+        }
+        if(count($toastList) == count($buttonCount)) return true;
+        return false;
     }
 }
