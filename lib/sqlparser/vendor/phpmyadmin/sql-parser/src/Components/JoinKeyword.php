@@ -209,7 +209,7 @@ class JoinKeyword extends Component
     {
         $ret = [];
         foreach ($component as $c) {
-            $ret[] = array_search($c->type, static::$JOINS) . ' ' . $c->expr
+            $ret[] = PHP_EOL . array_search($c->type, static::$JOINS) . ' ' . trim((string)$c->expr, PHP_EOL)
                 . (! empty($c->on)
                     ? ' ON ' . Condition::build($c->on) : '')
                 . (! empty($c->using)

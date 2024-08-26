@@ -488,6 +488,6 @@ class Expression extends Component
             $ret .= ' AS ' . Context::escape($component->alias);
         }
 
-        return $ret;
+        return $ret . PHP_EOL;
     }
 }

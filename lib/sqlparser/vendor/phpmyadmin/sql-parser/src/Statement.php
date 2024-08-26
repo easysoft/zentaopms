@@ -190,7 +190,7 @@ abstract class Statement implements Stringable
 
             // Checking if the name of the clause should be added.
             if ($type & 2) {
-                $query = trim($query) . ' ' . $name;
+                $query = trim($query) . ' ' . PHP_EOL . $name;
             }
 
             // Checking if the result of the builder should be added.

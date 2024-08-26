@@ -235,6 +235,6 @@ class Condition extends Component
             return implode(' ', $component);
         }
 
-        return $component->expr;
+        return $component->expr . PHP_EOL;
     }
 }
