@@ -234,7 +234,9 @@ class Condition extends Component
         if (is_array($component)) {
             return implode(' ', $component);
         }
-
-        return $component->expr . PHP_EOL;
+        $expr = (string)$component->expr;
+        $expr = str_replace('AND', PHP_EOL . 'AND' , $expr);
+        $expr = str_replace('OR', PHP_EOL . 'OR' , $expr);
+        return $expr;
     }
 }
