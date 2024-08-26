@@ -1050,6 +1050,15 @@ class testtaskModel extends model
             ->fetchAll('id');
     }
 
+    /**
+     * 获取用例以及场景数据。
+     * Get cases with scenes data.
+     *
+     * @param  int   $productID
+     * @param  array $runs
+     * @access public
+     * @return array
+     */
     public function getSceneCases($productID, $runs)
     {
         $scenes = $this->dao->select('*')->from(TABLE_SCENE)
