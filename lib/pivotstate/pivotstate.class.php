@@ -649,7 +649,7 @@ class pivotState
         $selects = array();
 
         $tables = $joins;
-        array_unshift($from);
+        array_unshift($tables, $from);
 
         foreach($tables as $table)
         {
