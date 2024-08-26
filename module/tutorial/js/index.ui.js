@@ -96,11 +96,11 @@ const stepPresenters =
     },
     clickNavbar: function(step)
     {
-        return highlightStepTarget((scope) => scope.$('.#'.includes(step.target[0]) ? step.target : `#navbar>.nav>.item>a[data-id="${step.target}"]`), step);
+        return highlightStepTarget((scope) => scope.$('.#'.includes(step.target) ? step.target : `#navbar>.nav>.item>a[data-id="${step.target}"]`), step);
     },
     clickMainNavbar: function(step)
     {
-        return highlightStepTarget((scope) => scope.$('.#'.includes(step.target[0]) ? step.target : `#mainNavbar .nav>.item>a[data-id="${step.target}"]`), step);
+        return highlightStepTarget((scope) => scope.$('.#'.includes(step.target) ? step.target : `#mainNavbar .nav>.item>a[data-id="${step.target}"]`), step);
     },
     form: function(step)
     {

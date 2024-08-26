@@ -366,7 +366,7 @@ $scrumProjectManage->tasks['manageTask']['steps'][] = array(
 
 $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'type'   => 'selectRow',
-    'target' => '#unlinkStoryList',
+    'target' => '#unlinkStoryList div.dtable-body',
     'page'   => 'build-view',
     'title'  => $lang->tutorial->scrumProjectManage->manageTask->step23->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step23->desc
@@ -458,6 +458,7 @@ $scrumProjectManage->tasks['manageTest']['steps'][] = array(
 
 $scrumProjectManage->tasks['manageTest']['steps'][] = array(
     'type'   => 'form',
+    'target' => '.resultSteps div.steps-body',
     'page'   => 'execution-testcase',
     'title'  => $lang->tutorial->scrumProjectManage->manageTest->step10->name
 );
@@ -535,7 +536,7 @@ $scrumProjectManage->tasks['manageTest']['steps'][] = array(
 
 $scrumProjectManage->tasks['manageTest']['steps'][] = array(
     'type'   => 'selectRow',
-    'target' => 'div.dtable',
+    'target' => 'div.dtable div.dtable-body',
     'page'   => 'testtask-linkCase',
     'title'  => $lang->tutorial->scrumProjectManage->manageTest->step20->name
 );
