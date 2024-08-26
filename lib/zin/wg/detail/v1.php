@@ -543,7 +543,7 @@ CSS;
             $this->buildHeader(),
             $this->buildBody(),
             $layout === 'simple' ? null : $this->buildPrevAndNext(),
-            html($app->control->appendExtendCssAndJS())
+            html($app->control->appendExtendCssAndJS('', '', $this->prop('object'))),
         );
     }
 }

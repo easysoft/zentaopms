@@ -73,13 +73,21 @@ class formPanel extends panel
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
+    protected function getData()
+    {
+        global $app;
+        $moduleName = $app->getModuleName();
+        if($moduleName == 'caselib') $moduleName = 'lib';
+        return data($moduleName);
+    }
+
     protected function created()
     {
         $fields = $this->prop('fields');
         if(is_object($fields))
         {
             global $app;
-            $fields = $app->control->appendExtendFields($fields);
+            $fields = $app->control->appendExtendFields($fields, '', '', $this->getData());
             $this->setProp('fields', $fields);
         }
 
@@ -171,9 +179,7 @@ class formPanel extends panel
         $layout = $this->prop('layout');
         if($layout == 'grid') return null;
 
-        $moduleName = $app->getModuleName();
-        if($moduleName == 'caselib') $moduleName = 'lib';
-        $data      = data($moduleName);
+        $data      = $this->getData();
         $fields    = $app->control->appendExtendForm('info', $data);
         $extraMain = array();
         foreach($fields as $field)
@@ -206,7 +212,7 @@ class formPanel extends panel
     {
         global $app;
 
-        $data   = data($app->getModuleName());
+        $data   = $this->getData;
         $fields = $app->control->appendExtendForm('info', $data);
 
         $formBatchItem = array();
@@ -309,7 +315,7 @@ class formPanel extends panel
             setClass('panel-body ' . $this->prop('bodyClass')),
             set($this->prop('bodyProps')),
             $this->buildContainer($this->buildForm()),
-            html($app->control->appendExtendCssAndJS())
+            html($app->control->appendExtendCssAndJS('', '', $this->getData()))
         );
     }
 }
