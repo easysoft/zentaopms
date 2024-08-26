@@ -636,6 +636,41 @@ class pivotState
     }
 
     /**
+     * Set group by.
+     *
+     * @param  bool   $status
+     * @access public
+     * @return void
+     */
+    public function setGroupBy($status)
+    {
+        if(!$status)
+        {
+            $this->sqlBuilder['groups'] = false;
+            return;
+        }
+
+        $selects = $this->getSelects(false);
+        $funcs   = $this->getFuncs('func', true);
+
+        foreach($funcs as $func)
+        {
+            list($alias, $field, $function) = array($func['table'], $func['field'], $func['function']);
+            $field = strtoupper($function) . "(`{$alias}`.`{$field}`)";
+            $selects[] = array(null, $field, null, null);
+        }
+
+        $groups = array();
+
+        foreach($selects as $select)
+        {
+            $groups[] = array('select' => $select, 'type' => 'agg');
+        }
+
+        $this->sqlBuilder['groups'] = $groups;
+    }
+
+    /**
      * Get selects.
      *
      * @param  bool    $withAlias
@@ -654,7 +689,7 @@ class pivotState
         foreach($tables as $table)
         {
             $alias = $table['alias'];
-            foreach($table['select'] as $field) $selects[] = array($alias, $field, $withAlias ? "{$alias}_{$field}" : null);
+            foreach($table['select'] as $field) $selects[] = array($alias, $field, $withAlias ? "{$alias}_{$field}" : null, null);
         }
 
         return $selects;
