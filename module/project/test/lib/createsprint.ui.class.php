@@ -37,3 +37,16 @@ class createSprintTester extends tester
         {
             if($this->checkFormTips('execution')) return $this->success('创建迭代表单页提示信息正确');
             if($form->dom->endTip)
+            {
+                //检查结束日期不能为空
+                $endTiptext = $form->dom->endTip->getText();
+                $endTip     = sprintf($this->lang->copyProject->endTip,'');
+                return ($endTiptext == $endTip) ? $this->success('创建迭代表单页提示信息正确') : $this->failed('创建迭代表单页提示信息不正确');
+                form->wait(1);
+            }
+            return $this->failed('创建迭代表单页提示信息不正确');
+        }
+        //检查创建成功后的断言
+        else
+        {
+        $sprintForm = $this->initForm('project', 'execution', array('status' => 'undone', 'projectID' => '1'), 'appIframe-project');
