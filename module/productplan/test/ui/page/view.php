@@ -6,6 +6,7 @@ class viewPage extends page
         parent::__construct($webdriver);
         $xpath = array(
             'planTitle' => "//*[@id='planInfo']/table/tbody/tr[1]/td",
+            'delTag'    =>"//*[@id='mainContent']/div[1]/div/span[2]",
             'confirm'   => "//button[@z-key='confirm']",
             'status'    => "//*[@id='planInfo']/table/tbody/tr[last()-1]/td",
             'begin'     => "//*[@id='planInfo']/table/tbody/tr[2]/td",

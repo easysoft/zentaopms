@@ -98,4 +98,25 @@ class changePlanStatus extends tester
         //判断详情页中的状态是否为[进行中]
         return ($viewPage->dom->status->getText() == $active) ? $this->success('激活计划成功') : $this->failed('激活计划失败');
     }
+
+    /**
+     * 删除计划
+     * delete plan
+     *
+     * @param $planID 计划ID
+     * @return mixed
+     */
+    public function deletePlan($planID)
+    {
+        $form = $this->initForm('productplan', 'view', $planID, 'appIframe-product');
+        $form->dom->btn($this->lang->delete)->click();//点击删除按钮
+        $form->wait(1);
+        $form->dom->confirm->click();//弹窗中点确认
+        $form->wait(1);
+        $viewPage = $this->initForm('productplan', 'view', $planID, 'appIframe-product');
+        $form->wait(1);
+        $deleted = $this->lang->productplan->deleted;//已删除的语言项
+        //判断详情页是否有[已删除]的标签
+        return ($viewPage->dom->delTag->getText() == $deleted) ? $this->success('删除计划成功') : $this->failed('删除计划失败');
+    }
 }
