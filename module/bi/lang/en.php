@@ -88,3 +88,4 @@ $lang->bi->stepQueryTip   = 'Adding a dynamic query filterThe dynamic query filt
 
 $lang->bi->stepGroupTitle = 'Set up groups and aggregate';
 $lang->bi->stepGroupTip   = 'First, you need to select the field for grouping. The system will group according to the field you selected. When you select multiple grouping fields, the system will group in turn according to the selection order. After grouping, click Configure aggregation to perform aggregation operations for other non-grouped fields, and get the summary values under different groups. You can use aggregate functions (count, sum, mean, maximum, minimum) to aggregate data from ungrouped fields.';
+$lang->bi->emptyGroups    = 'After enabling "Set group and aggregation", the system will automatically display your selected query field and the newly added function field here; You can set the grouping field in turn, as well as any other fields that need to be aggregated.';
