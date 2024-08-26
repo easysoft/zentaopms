@@ -353,7 +353,8 @@ class deptModel extends model
         $type       = $type == 'outside' ? 'outside' : 'inside';
 
         return $this->dao->select("$keyField, realname")->from(TABLE_USER)
-            ->where('deleted')->eq(0)
+            ->where('1=1')
+            ->beginIF(strpos($params, 'queryAll') === false)->andWhere('deleted')->eq(0)->fi()
             ->beginIF(strpos($params, 'all') === false)->andWhere('type')->eq($type)->fi()
             ->beginIF($childDepts)->andWhere('dept')->in($childDepts)->fi()
             ->beginIF($this->config->vision)->andWhere("CONCAT(',', visions, ',')")->like("%,{$this->config->vision},%")->fi()
