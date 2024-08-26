@@ -41,6 +41,7 @@ class thinkBaseCheckbox extends wg
         global $lang;
 
         if($item instanceof item) $item = $item->props->toJSON();
+        $disabled = $this->prop('disabled');
 
         if(!isset($item['checked']))
         {
@@ -65,7 +66,7 @@ class thinkBaseCheckbox extends wg
             (
                 setClass('item-control has-input w-full py-2 px-3 flex gap-3 items-center justify-between border cursor-pointer ' . $itemClass),
                 setData('type', $this->prop('type')),
-                on::click('toggleChecked'),
+                !$disabled ? on::click('toggleChecked') : null,
                 div
                 (
                     setClass('flex items-start text-md gap-1.5 flex-1'),
@@ -95,7 +96,7 @@ class thinkBaseCheckbox extends wg
         return div
         (
             setData('type', $this->prop('type')),
-            on::click('toggleChecked'),
+            !$disabled ? on::click('toggleChecked') : null,
             setClass('item-control w-full py-2 px-3 flex gap-3 items-center justify-between border cursor-pointer ' . $itemClass),
             div(setClass('text-md flex-1 break-all'), $text),
             new checkbox
@@ -127,7 +128,7 @@ class thinkBaseCheckbox extends wg
 
                 if(!is_array($item))         $item = array('text' => $item, 'value' => $key);
                 if(!isset($item['checked'])) $item['checked'] = !empty($item['value']) && in_array($item['value'], $valueList);
-                $item['text'] = $prefix . '. ' . $item['text'];
+                $item['text'] = !empty($item['disabledPrefix']) ? $item['text'] : $prefix . '. ' . $item['text'];
                 $items[$key]  = $this->onBuildItem($item);
             }
         }
