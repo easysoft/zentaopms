@@ -378,8 +378,8 @@ $lang->tutorial->scrumProjectManage->manageBug = new stdClass();
 $lang->tutorial->scrumProjectManage->manageBug->title = 'Bug管理';
 
 $lang->tutorial->scrumProjectManage->manageBug->step1 = new stdClass();
-$lang->tutorial->scrumProjectManage->manageBug->step1->name = '点击Bug';
-$lang->tutorial->scrumProjectManage->manageBug->step1->desc = '可以在这里管理Bug';
+$lang->tutorial->scrumProjectManage->manageBug->step1->name = '点击测试';
+$lang->tutorial->scrumProjectManage->manageBug->step1->desc = '可以在这里进行Bug管理';
 
 $lang->tutorial->scrumProjectManage->manageBug->step2 = new stdClass();
 $lang->tutorial->scrumProjectManage->manageBug->step2->name = '点击提bug';

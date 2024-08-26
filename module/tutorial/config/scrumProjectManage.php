@@ -599,4 +599,107 @@ $scrumProjectManage->tasks['manageTest']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageTest->step27->desc
 );
 
+$scrumProjectManage->tasks['manageBug'] = array();
+$scrumProjectManage->tasks['manageBug']['name']     = 'manageBug';
+$scrumProjectManage->tasks['manageBug']['title']    = $lang->tutorial->scrumProjectManage->manageBug->title;
+$scrumProjectManage->tasks['manageBug']['startUrl'] = array('execution', 'task', 'executionID=3');
+$scrumProjectManage->tasks['manageBug']['steps']    = array();
+
+$scrumProjectManage->tasks['manageBug']['steps'][] = array(
+    'type'   => 'clickNavbar',
+    'target' => 'qa',
+    'page'   => 'execution-task',
+    'app'    => 'execution',
+    'title'  => $lang->tutorial->scrumProjectManage->manageBug->step1->name,
+    'desc'   => $lang->tutorial->scrumProjectManage->manageBug->step1->desc
+);
+
+$scrumProjectManage->tasks['manageBug']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#actionBar a.createBug-btn',
+    'page'   => 'execution-bug',
+    'url'    => array('execution', 'bug', 'executionID=3'),
+    'title'  => $lang->tutorial->scrumProjectManage->manageBug->step2->name,
+    'desc'   => $lang->tutorial->scrumProjectManage->manageBug->step2->desc
+);
+
+$scrumProjectManage->tasks['manageBug']['steps'][] = array(
+    'type'   => 'form',
+    'page'   => 'bug-create',
+    'title'  => $lang->tutorial->scrumProjectManage->manageBug->step3->name
+);
+
+$scrumProjectManage->tasks['manageBug']['steps'][] = array(
+    'type'   => 'saveForm',
+    'page'   => 'bug-create',
+    'title'  => $lang->tutorial->scrumProjectManage->manageBug->step4->name,
+    'desc'   => $lang->tutorial->scrumProjectManage->manageBug->step4->desc
+);
+
+$scrumProjectManage->tasks['manageBug']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'div.dtable-cells div[data-col="actions"][data-row="1"] a.bug-confirm-btn',
+    'page'   => 'execution-bug',
+    'url'    => array('execution', 'bug', 'executionID=3'),
+    'title'  => $lang->tutorial->scrumProjectManage->manageBug->step5->name,
+    'desc'   => $lang->tutorial->scrumProjectManage->manageBug->step5->desc
+);
+
+$scrumProjectManage->tasks['manageBug']['steps'][] = array(
+    'type'   => 'form',
+    'page'   => 'execution-bug',
+    'title'  => $lang->tutorial->scrumProjectManage->manageBug->step6->name
+);
+
+$scrumProjectManage->tasks['manageBug']['steps'][] = array(
+    'type'   => 'saveForm',
+    'page'   => 'execution-bug',
+    'title'  => $lang->tutorial->scrumProjectManage->manageBug->step7->name,
+    'desc'   => $lang->tutorial->scrumProjectManage->manageBug->step7->desc
+);
+
+$scrumProjectManage->tasks['manageBug']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'div.dtable-cells div[data-col="actions"][data-row="1"] a.bug-resolve-btn',
+    'page'   => 'execution-bug',
+    'url'    => array('execution', 'bug', 'executionID=3'),
+    'title'  => $lang->tutorial->scrumProjectManage->manageBug->step8->name,
+    'desc'   => $lang->tutorial->scrumProjectManage->manageBug->step8->desc
+);
+
+$scrumProjectManage->tasks['manageBug']['steps'][] = array(
+    'type'   => 'form',
+    'page'   => 'execution-bug',
+    'title'  => $lang->tutorial->scrumProjectManage->manageBug->step9->name
+);
+
+$scrumProjectManage->tasks['manageBug']['steps'][] = array(
+    'type'   => 'saveForm',
+    'page'   => 'execution-bug',
+    'title'  => $lang->tutorial->scrumProjectManage->manageBug->step10->name,
+    'desc'   => $lang->tutorial->scrumProjectManage->manageBug->step10->desc
+);
+
+$scrumProjectManage->tasks['manageBug']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'div.dtable-cells div[data-col="actions"][data-row="2"] a.bug-close-btn',
+    'page'   => 'execution-bug',
+    'url'    => array('execution', 'bug', 'executionID=3'),
+    'title'  => $lang->tutorial->scrumProjectManage->manageBug->step11->name,
+    'desc'   => $lang->tutorial->scrumProjectManage->manageBug->step11->desc
+);
+
+$scrumProjectManage->tasks['manageBug']['steps'][] = array(
+    'type'   => 'form',
+    'page'   => 'execution-bug',
+    'title'  => $lang->tutorial->scrumProjectManage->manageBug->step12->name
+);
+
+$scrumProjectManage->tasks['manageBug']['steps'][] = array(
+    'type'   => 'saveForm',
+    'page'   => 'execution-bug',
+    'title'  => $lang->tutorial->scrumProjectManage->manageBug->step13->name,
+    'desc'   => $lang->tutorial->scrumProjectManage->manageBug->step13->desc
+);
+
 $config->tutorial->guides[$scrumProjectManage->name] = $scrumProjectManage;

@@ -91,6 +91,7 @@ $config->bug->actionList['confirm']['text']        = $lang->bug->abbr->confirmed
 $config->bug->actionList['confirm']['hint']        = $lang->bug->abbr->confirmed;
 $config->bug->actionList['confirm']['url']         = array('module' => 'bug', 'method' => 'confirm', 'params' => 'bugID={id}');
 $config->bug->actionList['confirm']['data-toggle'] = 'modal';
+$config->bug->actionList['confirm']['class']       = 'bug-confirm-btn';
 
 $config->bug->actionList['assignTo']['icon']        = 'hand-right';
 $config->bug->actionList['assignTo']['text']        = $lang->bug->assignTo;
@@ -103,12 +104,14 @@ $config->bug->actionList['resolve']['text']        = $lang->bug->resolve;
 $config->bug->actionList['resolve']['hint']        = $lang->bug->resolve;
 $config->bug->actionList['resolve']['url']         = array('module' => 'bug', 'method' => 'resolve', 'params' => 'bugID={id}');
 $config->bug->actionList['resolve']['data-toggle'] = 'modal';
+$config->bug->actionList['resolve']['class']       = 'bug-resolve-btn';
 
 $config->bug->actionList['close']['icon']        = 'off';
 $config->bug->actionList['close']['text']        = $lang->bug->close;
 $config->bug->actionList['close']['hint']        = $lang->bug->close;
 $config->bug->actionList['close']['url']         = array('module' => 'bug', 'method' => 'close', 'params' => 'bugID={id}');
 $config->bug->actionList['close']['data-toggle'] = 'modal';
+$config->bug->actionList['close']['class']       = 'bug-close-btn';
 
 $config->bug->actionList['activate']['icon']        = 'magic';
 $config->bug->actionList['activate']['text']        = $lang->bug->activate;

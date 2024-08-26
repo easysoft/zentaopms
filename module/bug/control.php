@@ -67,7 +67,14 @@ class bug extends control
             $objectID = ($tab == 'project' or $tab == 'execution') ? $this->session->{$tab} : 0;
             if($tab == 'project' or $tab == 'execution')
             {
-                $products = $this->product->getProducts($objectID, $mode, '', false);
+                if(common::isTutorialMode())
+                {
+                    $products = $this->loadModel('tutorial')->getProductPairs();
+                }
+                else
+                {
+                    $products = $this->product->getProducts($objectID, $mode, '', false);
+                }
             }
             else
             {

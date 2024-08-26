@@ -33,7 +33,7 @@ if($canExportBug) $exportItem = array
 if($canCreateBug) $createItem = array
 (
     'icon' => 'plus',
-    'class' => 'primary',
+    'class' => 'primary createBug-btn',
     'text' => $lang->bug->create,
     'data-app' => 'execution',
     'url' => $this->createLink('bug', 'create', "productID={$defaultProduct}&branch=0&extras=executionID={$execution->id}")

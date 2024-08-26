@@ -922,4 +922,109 @@ class tutorialModel extends model
         $testreports[$testreport->id] = $testreport;
         return $testreports;
     }
+
+    /**
+     * 获取新手模式Bug。
+     * Get bug.
+     *
+     * @access public
+     * @return object
+     */
+    public function getBug(): object
+    {
+        $bug = new stdClass();
+        $bug->id            = 1;
+        $bug->project       = 2;
+        $bug->product       = 1;
+        $bug->injection     = 0;
+        $bug->identify      = 0;
+        $bug->branch        = 0;
+        $bug->module        = 0;
+        $bug->execution     = 3;
+        $bug->plan          = 0;
+        $bug->story         = 0;
+        $bug->storyVersion  = 0;
+        $bug->task          = 0;
+        $bug->toTask        = 0;
+        $bug->toStory       = 0;
+        $bug->title         = 'Test bug-active';
+        $bug->keywords      = '';
+        $bug->severity      = 3;
+        $bug->pri           = 3;
+        $bug->type          = 'codeerror';
+        $bug->os            = '';
+        $bug->browser       = '';
+        $bug->hardware      = '';
+        $bug->found         = '';
+        $bug->steps         = '';
+        $bug->status        = 'active';
+        $bug->subStatus     = '';
+        $bug->color         = '';
+        $bug->confirmed     = 0;
+        $bug->activatedCount= 0;
+        $bug->activatedDate = '';
+        $bug->feedbackBy    = '';
+        $bug->notifyEmail   = '';
+        $bug->mailto        = '';
+        $bug->openedBy      = '';
+        $bug->openedDate    = '';
+        $bug->openedBuild   = '1';
+        $bug->assignedTo    = 'Test';
+        $bug->assignedDate  = '';
+        $bug->deadline      = '';
+        $bug->resolvedBy    = '';
+        $bug->resolution    = '';
+        $bug->resolvedBuild = '';
+        $bug->resolvedDate  = '';
+        $bug->closedBy      = '';
+        $bug->closedDate    = '';
+        $bug->duplicateBug  = 0;
+        $bug->relatedBug    = '';
+        $bug->case          = 0;
+        $bug->caseVersion   = 0;
+        $bug->feedback      = 0;
+        $bug->result        = 0;
+        $bug->repo          = 0;
+        $bug->mr            = 0;
+        $bug->entry         = '';
+        $bug->lines         = '';
+        $bug->v1            = '';
+        $bug->v2            = '';
+        $bug->repoType      = '';
+        $bug->issueKey      = '';
+        $bug->testtask      = 0;
+        $bug->lastEditedBy  = '';
+        $bug->lastEditedDate= '';
+        $bug->deleted       = 0;
+        $bug->priOrder      = 3;
+        $bug->severityOrder = 3;
+        $bug->isParent      = '';
+        return $bug;
+
+    }
+
+    /**
+     * 获取新手模式Bug列表。
+     * Get bugs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getBugs(): array
+    {
+        $activeBug = $this->getBug();
+        $activeBug->id     = 1;
+        $activeBug->status = 'active';
+        $activeBug->title  = 'Test bug-active';
+
+        $resolvedBug = $this->getBug();
+        $resolvedBug->id     = 2;
+        $resolvedBug->status = 'resolved';
+        $resolvedBug->title  = 'Test bug-resolved';
+
+        $bugs = array();
+        $bugs[$activeBug->id]   = $activeBug;
+        $bugs[$resolvedBug->id] = $resolvedBug;
+        return $bugs;
+    }
 }

@@ -151,6 +151,8 @@ class bugModel extends model
      */
     public function getByID(int $bugID, bool $setImgSize = false): object|false
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getBug();
+
         $bug = $this->bugTao->fetchBugInfo($bugID);
         if(!$bug) return false;
 
@@ -935,6 +937,8 @@ class bugModel extends model
      */
     public function getExecutionBugs(int $executionID, int $productID = 0, string|int $branchID = 'all', string|array $builds = '0', string $type = '', int $param = 0, string $orderBy = 'id_desc', string $excludeBugs = '', object $pager = null): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getBugs();
+
         if(strpos($orderBy, 'pri_') !== false)      $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
         if(strpos($orderBy, 'severity_') !== false) $orderBy = str_replace('severity_', 'severityOrder_', $orderBy);
 
