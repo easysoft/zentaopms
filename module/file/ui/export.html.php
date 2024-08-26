@@ -274,6 +274,8 @@ window.onChangeFileType = function(event)
 
     encodePicker.$.setValue('utf-8');
     encodePicker.render({disabled: true});
+
+    $('#tplBox').toggleClass('hidden', fileType == 'word');
 }
 
 window.onChangeFileName = function(event)
