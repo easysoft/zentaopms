@@ -587,7 +587,7 @@ class pivotState
      * @access public
      * @return void
      */
-    public function addFunc($type, $table = '', $field = '', $function = '', $alias = '')
+    public function addFunc($type, $table = '', $field = '', $function = '', $alias = '', $name = '')
     {
         if(is_array($type))
         {
@@ -601,6 +601,7 @@ class pivotState
         $func['field']    = $field;
         $func['function'] = $function;
         $func['alias']    = $alias;
+        $func['name']     = $name;
 
         $this->sqlBuilder['funcs'][] = $func;
     }
@@ -648,8 +649,8 @@ class pivotState
         {
             if($group['type'] == 'group') continue;
 
-            list($table, $field) = $group['select'];
-            $this->addFunc('agg', $table, $field);
+            list($table, $field, $alias, $function, $name) = $group['select'];
+            $this->addFunc('agg', $table, $field, $function, $alias, $name);
         }
     }
 
@@ -692,14 +693,17 @@ class pivotState
         foreach($selects as $index => $select)
         {
             list($table, $field, $alias) = $select;
-            $name = $alias;
+            $name      = $alias;
             if(empty($alias))
             {
                 $fieldList = $this->getTableDescList($table);
                 $name = $table . '_' . $fieldList[$field];
+                $select[2] = "{$table}_{$field}";
             }
-            $select[2] = null;
-            $groups[] = array('select' => $select, 'type' => 'agg', 'order' => $index, 'name' => $name);
+            $select[2] .= "_count";
+            $select[3] = 'count';
+            $select[4] = $name;
+            $groups[]  = array('select' => $select, 'type' => 'agg', 'order' => $index, 'name' => $name);
         }
 
         $this->sqlBuilder['groups'] = $groups;
