@@ -30,7 +30,7 @@ class thinkRadio extends thinkQuestion
     {
         global $lang;
         $detailWg = parent::buildDetail();
-        list($step, $mode) = $this->prop(array('step', 'mode'));
+        list($step, $mode, $isRun, $quoteQuestions) = $this->prop(array('step', 'mode', 'isRun', 'quoteQuestions'));
         if($mode != 'detail') return array();
 
         $answer   = $step->answer;
@@ -39,7 +39,8 @@ class thinkRadio extends thinkQuestion
 
         $fields = $step->options->fields ?? array();
         $items  = array();
-        foreach($fields as $field) $items[] = array('text' => $field, 'value' => $field);
+        if(!empty($fields)) foreach($fields as $field) $items[] = array('text' => $field, 'value' => $field);
+        if(empty($fields) && !$isRun) $items[] = array('text' => $lang->thinkstep->optionReference, 'disabledPrefix' => true);
         if(!empty($step->options->enableOther)) $items[] = array('text' => $lang->other, 'value' => 'other', 'isOther' => '1', 'other' => isset($answer->other) ? $answer->other : '');
 
         $detailWg[] = thinkBaseCheckbox
@@ -48,7 +49,22 @@ class thinkRadio extends thinkQuestion
             set::items($items),
             set::name('result[]'),
             set::value($step->options->questionType == 'radio' ? ($result[0] ?? '') : $result),
+            set::disabled($step->options->questionType == 'checkbox' && !empty($step->options->setOption) && $step->options->setOption == 1 )
         );
+        $quoteItem = $step->options->questionType == 'checkbox' && !empty($step->options->setOption) && $step->options->setOption == 1;
+        $quoteName = '';
+        if($quoteItem)
+        {
+            foreach($quoteQuestions as $item)
+            {
+                if($item->id == $step->options->quoteTitle) $quoteName = $item->title;
+            };
+            $detailWg[] = div
+            (
+                setClass('mt-3'),
+                sprintf($lang->thinkstep->tips->checkbox, $quoteName)
+            );
+        }
         return $detailWg;
     }
 
@@ -66,7 +82,8 @@ class thinkRadio extends thinkQuestion
             $enableOther  = $step->options->enableOther ?? 0;
             $required     = $step->options->required;
             $setOption    = isset($step->options->setOption) ? $step->options->setOption : false;
-            $quoteTitle   = isset($step->options->quoteTitle) ? $step->options->quoteTitle : null;
+            $defaultQuote = !empty($quoteQuestions) ? $quoteQuestions[0]->id : null;
+            $quoteTitle   = isset($step->options->quoteTitle) ? $step->options->quoteTitle : $defaultQuote;
             $selectColumn = isset($step->options->selectColumn) ? $step->options->selectColumn : null;
             if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);
             $fields = !empty($step->options->fields) ? $step->options->fields :  array('', '', '');
@@ -95,7 +112,7 @@ class thinkRadio extends thinkQuestion
                         (
                             set::name('options[setOption]'),
                             set::inline(true),
-                            set::value($setOption),
+                            set::value($setOption ? $setOption : false),
                             set::items($lang->thinkstep->setOptionList),
                             on::change()
                                 ->const('maxCountPlaceholder', $lang->thinkstep->placeholder->maxCount)
@@ -139,7 +156,7 @@ class thinkRadio extends thinkQuestion
                             'name'        => 'options[quoteTitle]',
                             'placeholder' => $lang->thinkstep->placeholder->quoteTitle,
                             'items'       => $quoteQuestionsItems,
-                            'value'       => !empty($quoteTitle) && !empty($quoteQuestionsItems) ? ($quoteTitle || $quoteQuestionsItems[0]) : '',
+                            'value'       => !empty($quoteTitle) && !empty($quoteQuestionsItems) ? $quoteTitle : '',
                             'disabled'    => empty($quoteQuestions),
                             'title'       => empty($quoteQuestions) ? $lang->thinkstep->tips->quoteTitle : null,
                             'required'    => true,
