@@ -110,7 +110,13 @@ foreach($spaceList as $space)
                             set::className('flex-1 text-right card-settings'),
                             dropdown
                             (
-                                btn(setClass('btn dropdown-toggle ghost'), set::icon('ellipsis-v'), set::caret(false)),
+                                btn
+                                (
+                                    on::click()->prevent(),
+                                    setClass('btn dropdown-toggle ghost'),
+                                    set::icon('ellipsis-v'),
+                                    set::caret(false)
+                                ),
                                 set::items($cardActions)
                             )
                         ) : null
@@ -134,7 +140,6 @@ foreach($spaceList as $space)
         set::title($space->name),
         set::titleIcon('cube'),
         $space->status == 'closed' ? to::titleSuffix(span(set::className('label gray'), $lang->kanban->closed)) : null,
-        on::click('.card-settings')->do('return false;'),
         set::headingActions($headingActions),
         !empty($space->kanbans) ? div(set::className('flex flex-wrap'), $kanbans) : div(set::className('dtable'), div(set::className('dtable-empty-tip'), span(set::className('text-gray'),  $lang->kanban->empty)))
     );
