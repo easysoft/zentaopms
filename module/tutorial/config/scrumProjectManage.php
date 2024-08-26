@@ -89,7 +89,7 @@ $scrumProjectManage->tasks['manageProject']['steps'][] = array(
 
 $scrumProjectManage->tasks['manageProject']['steps'][] = array(
     'type'   => 'form',
-    'target' => '#teamForm',
+    'target' => '#teamForm table',
     'page'   => 'project-manageMembers',
     'title'  => $lang->tutorial->scrumProjectManage->manageProject->step10->name,
 );
