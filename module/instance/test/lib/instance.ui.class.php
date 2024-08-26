@@ -36,6 +36,15 @@ class instance extends tester
         }
     }
 
+    /**
+     * 应用详情页添加断言。
+     * instance view assert.
+     *
+     * @param  object  $page
+     * @param  array   $buttonCount
+     * @access public
+     * @return bool
+     */
     public function instanceViewAssert(object $page, array $buttonList)
     {
         $toastList = [];
