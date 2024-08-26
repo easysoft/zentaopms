@@ -13,8 +13,8 @@ class createProgramTester extends tester
     public function createProgramProduct()
     {
         /* 提交表单。 */
-        $this->openUrl('program','productview');
-        $form = $this->loadPage('program','productview');
+        $this->openUrl('program', 'productview');
+        $form = $this->loadPage('program', 'productview');
         $form->dom->caretBtn->click();
         $form->dom->addProduct->click();
         $form->wait(1);
@@ -27,12 +27,12 @@ class createProgramTester extends tester
         $form->wait(1);
 
         /*检查产品是否显示在了产品视角下*/
-        $this->openUrl('program','productview');
-        $form = $this->loadPage('program','productview');
+        $this->openUrl('program', 'productview');
+        $form = $this->loadPage('program', 'productview');
         $form->dom->fstProgram->click();
         $form->wait(1);
         if($form->dom->fstProduct->getText() != '产品A') return $this->failed('产品视角下创建产品失败');
-        $this->openUrl('program','productView');
+        $this->openUrl('program', 'productView');
         return $this->success('产品视角下创建产品成功');
     }
 
@@ -47,8 +47,8 @@ class createProgramTester extends tester
     public function manageProductLine()
     {
         /*维护表单*/
-        $this->openUrl('program','productview');
-        $form = $this->loadPage('program','productview');
+        $this->openUrl('program', 'productview');
+        $form = $this->loadPage('program', 'productview');
         $form->dom->caretBtn->click();
         $form->dom->manageProductLine->click();
         $form->wait(1);
@@ -59,12 +59,12 @@ class createProgramTester extends tester
         $form->dom->btn($this->lang->save)->click();
 
         /*检查产品线是否创建成功*/
-        $this->openUrl('program','productview');
-        $form = $this->loadPage('program','productView');
+        $this->openUrl('program', 'productview');
+        $form = $this->loadPage('program', 'productView');
         $form->dom->search(array("项目集名称,=,项目集3"));
         $form->wait(1);
         if($form->dom->productLine->getText() != '产品线A') return $this->failed('维护产品线失败');
-        $this->openUrl('program','productView');
+        $this->openUrl('program', 'productView');
 
         return $this->success('维护产品线成功');
     }
