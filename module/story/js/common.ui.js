@@ -73,17 +73,14 @@ window.loadProductPlans = function(productID, branch)
 
     $.get(planLink, function(data)
     {
-        if(data && data != '[]')
+        let items = JSON.parse(data);
+        let $inputGroup = $planIdBox.closest('.input-group');
+        $inputGroup.html("<span id='planIdBox'><div class='picker-box' id='plan'></div></span>")
+        new zui.Picker('#planIdBox #plan', {items: items, name: 'plan', defaultValue: planID.toString()});
+        if(items.length == 0)
         {
-            let items = JSON.parse(data);
-            let $inputGroup = $planIdBox.closest('.input-group');
-            $inputGroup.html("<span id='planIdBox'><div class='picker-box' id='plan'></div></span>")
-            new zui.Picker('#planIdBox #plan', {items: items, name: 'plan', defaultValue: planID.toString()});
-            if(items.length == 0)
-            {
-                $inputGroup.append('<a class="btn btn-default" type="button" data-toggle="modal" href="' + $.createLink('productplan', 'create', 'productID=' + productID + '&branch=' + branch) + '"><i class="icon icon-plus"></i></a>');
-                $inputGroup.append('<button class="refresh btn" type="button" onclick="window.loadProductPlans(' + productID + ')"><i class="icon icon-refresh"></i></button>');
-            }
+            $inputGroup.append('<a class="btn btn-default" type="button" data-toggle="modal" href="' + $.createLink('productplan', 'create', 'productID=' + productID + '&branch=' + branch) + '"><i class="icon icon-plus"></i></a>');
+            $inputGroup.append('<button class="refresh btn" type="button" onclick="window.loadProductPlans(' + productID + ')"><i class="icon icon-refresh"></i></button>');
         }
     })
 };
