@@ -187,14 +187,6 @@ function showCommitInfo()
     })
 }
 
-/* 初始化数据 */
-$(function()
-{
-    setTimeout(() => {
-        initPage();
-    }, 200);
-});
-
 /**
  * 初始化页面。
  * Init page.
@@ -202,7 +194,9 @@ $(function()
  * @access public
  * @return void
  */
-function initPage()
+
+/* 初始化数据 */
+window.afterPageUpdate = function initPage()
 {
     codeHeight = $.cookie.get('codeContainerHeight');
     $('#codeContainer').css('height', $.cookie.get('codeContainerHeight'));
