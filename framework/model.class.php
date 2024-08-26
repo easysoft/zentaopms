@@ -353,15 +353,16 @@ class model extends baseModel
     /**
      * Get flow extend fields.
      *
+     * @param  int    $objectID
      * @access public
      * @return array
      */
-    public function getFlowExtendFields()
+    public function getFlowExtendFields(int $objectID = 0): array
     {
         if($this->config->edition == 'open') return array();
         if(!empty($this->app->installing) || !empty($this->app->upgrading)) return array();
 
-        return $this->loadModel('flow')->getExtendFields($this->app->getModuleName(), $this->app->getMethodName());
+        return $this->loadModel('flow')->getExtendFields($this->app->getModuleName(), $this->app->getMethodName(), $objectID);
     }
 
     /**
@@ -398,7 +399,8 @@ class model extends baseModel
 
         $this->loadModel('file');
         if($this->post->uid) $this->file->updateObjectID($this->post->uid, $objectID, $moduleName);
-        $fields = $this->workflowaction->getFields($moduleName, $action->action, '');
+        $uiID   = $this->loadModel('workflowlayout')->getUIByDataID($moduleName, $methodName, $objectID);
+        $fields = $this->workflowaction->getFields($moduleName, $action->action, '', null, $uiID);
         foreach($fields as $field)
         {
             if($field->control == 'file' && $field->show && !$field->readonly)
