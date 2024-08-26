@@ -1001,11 +1001,11 @@ class dom
                 {
                     try
                     {
-                        $this->driver->findElement(WebDriverBy::xpath("//a[@title='$value']"))->click();
+                        $this->driver->findElement(WebDriverBy::xpath("//*[@id='pick-pop-$pickerID']//span[@class='is-match-keys']"))->click();
                     }
                     catch(Exception $xpathException)
                     {
-                        $this->driver->findElement(WebDriverBy::xpath("//*[@id='pick-pop-$pickerID']//span[@class='is-match-keys']"))->click();
+                        $this->driver->findElement(WebDriverBy::xpath("//a[@title='$value']"))->click();
                     }
                 }
                 else
