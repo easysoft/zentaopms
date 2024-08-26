@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'panel' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'sqlbuilderpicker' . DS . 'v1.php';
 
 class sqlBuilderGroupBy extends wg
 {
@@ -71,6 +72,21 @@ class sqlBuilderGroupBy extends wg
         return $items;
     }
 
+    protected function buildAggFieldRow($agg)
+    {
+        return null;
+    }
+
+    protected function buildAggField()
+    {
+        list($aggs) = $this->prop(array('aggs'));
+
+        $formRows = array();
+        foreach($aggs as $agg) $formRows[] = $this->buildAggFieldRow($agg);
+
+        return $formRows;
+    }
+
     protected function build()
     {
         global $lang;
@@ -98,7 +114,8 @@ class sqlBuilderGroupBy extends wg
                 setClass('flex-auto h-78'),
                 set::headingClass('bg-gray-100'),
                 set::title($lang->bi->aggField),
-                to::heading($this->buildHelpIcon($lang->bi->aggFieldTip))
+                to::heading($this->buildHelpIcon($lang->bi->aggFieldTip)),
+                $this->buildAggField()
             )
         );
     }
