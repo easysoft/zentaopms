@@ -109,7 +109,7 @@ const stepPresenters =
 
             /* Check form. */
             const $form = getStepForm(scope, $target);
-            if(!$form.length) console.error(`[TUTORIAL] Cannot find form for step "${step.guide.name} > ${step.task.name} > ${step.title}"`, step);
+            if(!$form || !$form.length) console.error(`[TUTORIAL] Cannot find form for step "${step.guide.name} > ${step.task.name} > ${step.title}"`, step);
             $form.attr('zui-tutorial-step', step.id);
             step.$form = $form;
 
@@ -124,7 +124,7 @@ const stepPresenters =
 
             /* Check form. */
             const $form = getStepForm(scope, $target);
-            if(!$form.length) console.error(`[TUTORIAL] Cannot find form for step "${step.guide.name} > ${step.task.name} > ${step.title}"`, step);
+            if(!$form || !$form.length) console.error(`[TUTORIAL] Cannot find form for step "${step.guide.name} > ${step.task.name} > ${step.title}"`, step);
             $form.attr('zui-tutorial-step', step.id);
             step.$form = $form;
 
@@ -168,6 +168,7 @@ function getStepForm(scope, $target)
     {
         $form.data('tutorial.formBinding', true);
         const ajaxForm = $form.zui('ajaxForm');
+        if(!ajaxForm) return console.error(`[TUTORIAL] Cannot find ajaxForm for step "${currentStep.guide.name} > ${currentStep.task.name} > ${currentStep.title}"`, currentStep);
         ajaxForm.setOptions({beforeSubmit: () =>
         {
             if(currentStep.type === 'form')
@@ -241,7 +242,7 @@ function highlightStepTarget($target, step, popoverOptions)
     {
         if(popover.options.key === step.id)
         {
-            const target = (typeof $target === 'function' ? $target() : $target)[0];
+            const target = (typeof $target === 'function' ? $target(getStepScope(step)) : $target)[0];
             if(target === popover.trigger) return;
         }
         return destroyPopover(() => highlightStepTarget($target, step, popoverOptions));
@@ -290,6 +291,7 @@ function highlightStepTarget($target, step, popoverOptions)
             },
             onHide: function()
             {
+                if(this.options.key !== step.id) return;
                 $(this.trigger).closest('body').find('.tutorial-light-box').addClass('opacity-0');
             },
             onLayout: function(info)
@@ -498,7 +500,12 @@ function ensureStepScope(step, callback)
             return;
         }
     }
-    return setTimeout(() => callback(scope), 200);
+    if(step.waitScopeTimer) clearTimeout(step.waitScopeTimer);
+    step.waitScopeTimer = setTimeout(() =>
+    {
+        delete step.waitScopeTimer;
+        callback(scope);
+    }, 200);
 }
 
 function openApp(url, app)
