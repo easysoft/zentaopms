@@ -107,7 +107,7 @@ foreach($spaceList as $space)
                         $space->type == 'cooperation' && $kanban->owner == $this->app->user->account ? cell(set::className('label text-important ring-important mx-1'), setStyle(array('min-width' => '44px')), $lang->kanban->mine) : null,
                         $cardActions ? cell
                         (
-                            set::className('flex-1 text-right'),
+                            set::className('flex-1 text-right card-settings'),
                             dropdown
                             (
                                 btn(setClass('btn dropdown-toggle ghost'), set::icon('ellipsis-v'), set::caret(false)),
@@ -134,6 +134,7 @@ foreach($spaceList as $space)
         set::title($space->name),
         set::titleIcon('cube'),
         $space->status == 'closed' ? to::titleSuffix(span(set::className('label gray'), $lang->kanban->closed)) : null,
+        on::click('.card-settings')->do('return false;'),
         set::headingActions($headingActions),
         !empty($space->kanbans) ? div(set::className('flex flex-wrap'), $kanbans) : div(set::className('dtable'), div(set::className('dtable-empty-tip'), span(set::className('text-gray'),  $lang->kanban->empty)))
     );
