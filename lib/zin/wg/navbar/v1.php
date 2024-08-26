@@ -140,8 +140,8 @@ class navbar extends wg
         if($isTutorialMode and defined('WIZARD_MODULE')) $currentModule = WIZARD_MODULE;
         if($isTutorialMode and defined('WIZARD_METHOD')) $currentMethod = WIZARD_METHOD;
 
-        $menu         = \customModel::getMainMenu();
         $tab          = $app->tab;
+        $menu         = \customModel::getMainMenu();
         $activeMenu   = '';
         $activeMenuID = data('activeMenuID');
         $items        = array();
@@ -179,6 +179,13 @@ class navbar extends wg
             elseif($subModule and in_array($currentModule, $subModule) and !str_contains(",$exclude,", ",$currentModule-$currentMethod,"))
             {
                 $isActive = true;
+            }
+
+            if($menuItem->link['module'] == 'project' and $menuItem->link['method'] == 'index')
+            {
+                $projectID    = str_replace('project=', '', $menuItem->link['vars']);
+                $projectModel = $app->dbh->query("SELECT `model` FROM " . TABLE_PROJECT . " WHERE `id` = '$projectID'")->fetch();
+                if($projectModel) jsVar('projectModel', $projectModel->model);
             }
 
             if($menuItem->link['module'] == 'execution' and $menuItem->link['method'] == 'more')

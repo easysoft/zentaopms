@@ -226,7 +226,7 @@ class customModel extends model
             else
             {
                 $isFirst = false;
-                if(!isset($menu[$item->order]->divider))$menu[$item->order]->divider = false;
+                if(!isset($menu[$item->order]->divider)) $menu[$item->order]->divider = false;
             }
         }
 
@@ -275,10 +275,14 @@ class customModel extends model
             }
             elseif(is_array($customMenu))
             {
+                $prev = '';
                 foreach($customMenu as $customMenuItem)
                 {
+                    $name = $customMenuItem->name;
                     if(!isset($customMenuItem->order)) $customMenuItem->order = $order;
-                    $customMenuMap[$customMenuItem->name] = $customMenuItem;
+                    if($prev == 'divider') $customMenuItem->divider = true;
+                    if($name != 'divider') $customMenuMap[$name]    = $customMenuItem;
+                    $prev = $name;
                     $order ++;
                 }
             }
@@ -327,6 +331,8 @@ class customModel extends model
         $module         = $menuModuleName;
         foreach($allMenu as $name => $item)
         {
+            if($menuModuleName == 'main' && !isset($customMenuMap[$name])) continue; // 顶部一级导航，自定义过滤掉的菜单不显示。
+
             $name = (string)$name;
             if(is_object($item)) $item = (array)$item;
 
@@ -387,6 +393,7 @@ class customModel extends model
                 /* Process menu item's order and hidden attirbute. */
                 $menuItem = static::buildMenuItem($item, $customMenuMap, $name, $label, $itemLink, $isTutorialMode, $subMenu);
                 $menuItem->order = (isset($customMenuMap[$name]) && isset($customMenuMap[$name]->order) ? $customMenuMap[$name]->order : $order ++);
+                if(isset($customMenuMap[$name]) && isset($customMenuMap[$name]->divider)) $menuItem->divider = true;
                 if($app->viewType == 'mhtml' && isset($config->custom->moblieHidden[$menuModuleName]) && in_array($name, $config->custom->moblieHidden[$menuModuleName])) $menuItem->hidden = 1; // Hidden menu by config in mobile.
                 while(isset($menu[$menuItem->order])) $menuItem->order ++;
                 $menu[$menuItem->order] = $menuItem;
@@ -474,8 +481,12 @@ class customModel extends model
         if($module == 'main' and !empty($lang->menu)) $allMenu = $lang->menu;
         if($module != 'main' and isset($lang->menu->$module) and isset($lang->menu->{$module}['subMenu'])) $allMenu = $lang->menu->{$module}['subMenu'];
         if($module == 'product' and isset($allMenu->branch)) $allMenu->branch = str_replace('@branch@', $lang->custom->branch, $allMenu->branch);
-        $flowModule = $config->global->flow . '_' . $module;
-        $customMenu = isset($config->customMenu->$flowModule) ? $config->customMenu->$flowModule : array();
+
+        /* 获取自定义过的导航。 */
+        $isHomeMenu = in_array($app->tab, array('program', 'product', 'project', 'execution')) && count((array)$allMenu) <= 3;
+        $customKey  = $isHomeMenu ? $app->tab . '-home' : $app->tab;
+        $customMenu = isset($config->customMenu->{$customKey}) ? $config->customMenu->{$customKey}: array();
+
         if(!empty($customMenu) && is_string($customMenu) && substr($customMenu, 0, 1) === '[') $customMenu = json_decode($customMenu);
         if($module == 'my' && empty($config->global->scoreStatus)) unset($allMenu->score);
 
