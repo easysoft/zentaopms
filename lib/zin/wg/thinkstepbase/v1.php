@@ -45,7 +45,7 @@ class thinkStepBase extends wg
         {
             $questionType = $options->questionType;
             $tips         = $lang->thinkstep->$questionType;
-            if($options->required && $questionType == 'checkbox')
+            if($options->required && $questionType == 'checkbox' && $options->setOption == 0)
             {
                 $tips = $lang->thinkrun->requiredTitle[$questionType];
                 $tips = str_replace(array('%min%', '%max%'), array($options->minCount, $options->maxCount), $tips);
