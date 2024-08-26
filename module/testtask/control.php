@@ -408,6 +408,7 @@ class testtask extends control
         /* 从数据库中查询一个测试单下关联的测试用例。*/
         /* Query the cases associated with a testtask from the database. */
         $runs = $this->testtask->getTaskCases($productID, $browseType, $queryID, $moduleID, $sort, $pager, $testtask);
+        $runs = $this->testtask->getSceneCases($productID, $runs);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
 
         list($runs, $scenes) = $this->testtask->getSceneCases($productID, $runs);

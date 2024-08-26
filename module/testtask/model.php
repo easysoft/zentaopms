@@ -1050,6 +1050,24 @@ class testtaskModel extends model
             ->fetchAll('id');
     }
 
+    public function getSceneCases($productID, $runs)
+    {
+        $scenes = $this->dao->select('*')->from(TABLE_SCENE)
+            ->where('deleted')->eq('0')
+            ->andWhere('product')->eq($productID)
+            ->orderBy('grade_desc, sort_asc')
+            ->fetchAll('id');
+
+        foreach($runs as $run) $run->parent = !empty($run->scene) ? 'scene-' . $scenes[$run->scene]->id : 0;
+        foreach($scenes as $scene)
+        {
+            $scene->parent = !empty($scene->parent) ? 'scene-' . $scene->parent : 0;
+            $scene->id     = 'scene-' . $scene->id;
+        }
+
+        return array_merge($runs, $scenes);
+    }
+
     /**
      * 获取用例以及场景数据。
      * Get cases with scenes data.
