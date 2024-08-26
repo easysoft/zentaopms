@@ -174,6 +174,7 @@ class tutorialModel extends model
         $project->estimate     = 0;
         $project->left         = 0;
         $project->storyType    = 'story,requirement,epic';
+        $project->charter      = 0;
 
         return $project;
     }
@@ -1026,5 +1027,73 @@ class tutorialModel extends model
         $bugs[$activeBug->id]   = $activeBug;
         $bugs[$resolvedBug->id] = $resolvedBug;
         return $bugs;
+    }
+
+    /**
+     * 获取新手模式问题。
+     * Get issue.
+     *
+     * @access public
+     * @return object
+     */
+    public function getIssue(): object
+    {
+        $issue = new stdClass();
+        $issue->id               = 1;
+        $issue->resolvedBy       = '';
+        $issue->project          = 2;
+        $issue->execution        = 0;
+        $issue->title            = 'Test issue-unconfirmed';
+        $issue->desc             = '';
+        $issue->pri              = 3;
+        $issue->severity         = 1;
+        $issue->type             = 'design';
+        $issue->activity         = '';
+        $issue->deadline         = '';
+        $issue->resolution       = '';
+        $issue->resolutionComment= '';
+        $issue->objectID         = '';
+        $issue->resolvedDate     = '';
+        $issue->status           = 'unconfirmed';
+        $issue->owner            = 'admin';
+        $issue->lib              = 0;
+        $issue->from             = 0;
+        $issue->version          = 1;
+        $issue->createdBy        = '';
+        $issue->createdDate      = '';
+        $issue->editedBy         = '';
+        $issue->editedDate       = '';
+        $issue->activateBy       = '';
+        $issue->activateDate     = '';
+        $issue->closedBy         = '';
+        $issue->closedDate       = '';
+        $issue->assignedTo       = '';
+        $issue->assignedBy       = '';
+        $issue->assignedDate     = '';
+        $issue->approvedDate     = '';
+        $issue->deleted          = 0;
+
+        return $issue;
+    }
+
+    /**
+     * 获取新手模式问题列表。
+     * Get issues.
+     *
+     * @access public
+     * @return array
+     */
+    public function getIssues(): array
+    {
+        $unconfirmedIssue = $this->getIssue();
+        $confirmedIssue   = $this->getIssue();
+        $confirmedIssue->id     = 2;
+        $confirmedIssue->title  = 'Test issue-confirmed';
+        $confirmedIssue->status = 'confirmed';
+
+        $issues = array();
+        $issues[$unconfirmedIssue->id] = $unconfirmedIssue;
+        $issues[$confirmedIssue->id]   = $confirmedIssue;
+        return $issues;
     }
 }

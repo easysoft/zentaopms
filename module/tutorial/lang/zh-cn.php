@@ -429,5 +429,52 @@ $lang->tutorial->scrumProjectManage->manageIssue = new stdClass();
 $lang->tutorial->scrumProjectManage->manageIssue->title = '问题管理';
 
 $lang->tutorial->scrumProjectManage->manageIssue->step1 = new stdClass();
-$lang->tutorial->scrumProjectManage->manageIssue->step1->name = '点击问题';
-$lang->tutorial->scrumProjectManage->manageIssue->step1->desc = '可以在这里进行问题管理';
+$lang->tutorial->scrumProjectManage->manageIssue->step1->name = '点击其他';
+
+$lang->tutorial->scrumProjectManage->manageIssue->step2 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageIssue->step2->name = '点击问题';
+$lang->tutorial->scrumProjectManage->manageIssue->step2->desc = '可以在这里进行问题管理';
+
+$lang->tutorial->scrumProjectManage->manageIssue->step3 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageIssue->step3->name = '点击新建问题';
+$lang->tutorial->scrumProjectManage->manageIssue->step3->desc = '在这里新建问题，支持批量创建';
+
+$lang->tutorial->scrumProjectManage->manageIssue->step4 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageIssue->step4->name = '填写表单';
+
+$lang->tutorial->scrumProjectManage->manageIssue->step5 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageIssue->step5->name = '保存表单';
+$lang->tutorial->scrumProjectManage->manageIssue->step5->desc = '保存后进入问题列表';
+
+$lang->tutorial->scrumProjectManage->manageIssue->step6 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageIssue->step6->name = '确认问题';
+$lang->tutorial->scrumProjectManage->manageIssue->step6->desc = '可以在这里确认当前项目的问题';
+
+$lang->tutorial->scrumProjectManage->manageIssue->step7 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageIssue->step7->name = '填写表单';
+
+$lang->tutorial->scrumProjectManage->manageIssue->step8 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageIssue->step8->name = '保存表单';
+$lang->tutorial->scrumProjectManage->manageIssue->step8->desc = '确认后回到问题列表';
+
+$lang->tutorial->scrumProjectManage->manageIssue->step9 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageIssue->step9->name = '解决问题';
+$lang->tutorial->scrumProjectManage->manageIssue->step9->desc = '可以在这里解决问题';
+
+$lang->tutorial->scrumProjectManage->manageIssue->step10 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageIssue->step10->name = '填写表单';
+
+$lang->tutorial->scrumProjectManage->manageIssue->step11 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageIssue->step11->name = '保存表单';
+$lang->tutorial->scrumProjectManage->manageIssue->step11->desc = '保存后返回问题列表';
+
+$lang->tutorial->scrumProjectManage->manageIssue->step12 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageIssue->step12->name = '关闭问题';
+$lang->tutorial->scrumProjectManage->manageIssue->step12->desc = '可以将已经处理的问题关闭';
+
+$lang->tutorial->scrumProjectManage->manageIssue->step13 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageIssue->step13->name = '填写表单';
+
+$lang->tutorial->scrumProjectManage->manageIssue->step14 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageIssue->step14->name = '保存表单';
+$lang->tutorial->scrumProjectManage->manageIssue->step14->desc = '可以在这里关闭问题';

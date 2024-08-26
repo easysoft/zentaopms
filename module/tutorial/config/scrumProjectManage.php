@@ -6,7 +6,7 @@ $scrumProjectManage->name    = 'scrumProjectManage';
 $scrumProjectManage->title   = $lang->tutorial->scrumProjectManage->title;
 $scrumProjectManage->icon    = 'project text-special';
 $scrumProjectManage->type    = 'basic';
-$scrumProjectManage->modules = 'project,execution,build,task,bug,testreport';
+$scrumProjectManage->modules = 'project,execution,build,task,bug,testreport,issue';
 $scrumProjectManage->app     = 'project';
 $scrumProjectManage->tasks   = array();
 
@@ -715,8 +715,108 @@ if(in_array($config->edition, array('max', 'ipd')))
         'type'   => 'clickNavbar',
         'target' => 'other',
         'page'   => 'project-index',
-        'title'  => $lang->tutorial->scrumProjectManage->manageIssue->step1->name,
-        'desc'   => $lang->tutorial->scrumProjectManage->manageIssue->step1->desc
+        'title'  => $lang->tutorial->scrumProjectManage->manageIssue->step1->name
+    );
+
+    $scrumProjectManage->tasks['manageIssue']['steps'][] = array(
+        'type'   => 'click',
+        'target' => '#other a[data-id="issue"]',
+        'page'   => 'project-index',
+        'title'  => $lang->tutorial->scrumProjectManage->manageIssue->step2->name,
+        'desc'   => $lang->tutorial->scrumProjectManage->manageIssue->step2->desc
+    );
+
+    $scrumProjectManage->tasks['manageIssue']['steps'][] = array(
+        'type'   => 'click',
+        'target' => 'a.create-issue-btn',
+        'page'   => 'issue-browse',
+        'title'  => $lang->tutorial->scrumProjectManage->manageIssue->step3->name,
+        'desc'   => $lang->tutorial->scrumProjectManage->manageIssue->step3->desc
+    );
+
+    $scrumProjectManage->tasks['manageIssue']['steps'][] = array(
+        'type'   => 'form',
+        'page'   => 'issue-create',
+        'title'  => $lang->tutorial->scrumProjectManage->manageIssue->step4->name
+    );
+
+    $scrumProjectManage->tasks['manageIssue']['steps'][] = array(
+        'type'   => 'saveForm',
+        'page'   => 'issue-create',
+        'title'  => $lang->tutorial->scrumProjectManage->manageIssue->step5->name,
+        'desc'   => $lang->tutorial->scrumProjectManage->manageIssue->step5->desc
+    );
+
+    $scrumProjectManage->tasks['manageIssue']['steps'][] = array(
+        'type'   => 'click',
+        'target' => 'div[data-row="1"] a.issue-confirm-btn',
+        'page'   => 'issue-browse',
+        'url'    => array('issue', 'browse', 'projectID=2'),
+        'title'  => $lang->tutorial->scrumProjectManage->manageIssue->step6->name,
+        'desc'   => $lang->tutorial->scrumProjectManage->manageIssue->step6->desc
+    );
+
+    $scrumProjectManage->tasks['manageIssue']['steps'][] = array(
+        'type'   => 'form',
+        'target' => '#confirmPanel',
+        'page'   => 'issue-browse',
+        'title'  => $lang->tutorial->scrumProjectManage->manageIssue->step7->name
+    );
+
+    $scrumProjectManage->tasks['manageIssue']['steps'][] = array(
+        'type'   => 'saveForm',
+        'target' => '#confirmPanel button[type="submit"]',
+        'page'   => 'issue-browse',
+        'title'  => $lang->tutorial->scrumProjectManage->manageIssue->step8->name,
+        'desc'   => $lang->tutorial->scrumProjectManage->manageIssue->step8->desc
+    );
+
+    $scrumProjectManage->tasks['manageIssue']['steps'][] = array(
+        'type'   => 'click',
+        'target' => 'div[data-row="2"] a.issue-resolve-btn',
+        'page'   => 'issue-browse',
+        'url'    => array('issue', 'browse', 'projectID=2'),
+        'title'  => $lang->tutorial->scrumProjectManage->manageIssue->step9->name,
+        'desc'   => $lang->tutorial->scrumProjectManage->manageIssue->step9->desc
+    );
+
+    $scrumProjectManage->tasks['manageIssue']['steps'][] = array(
+        'type'   => 'form',
+        'target' => '#resolvePanel',
+        'page'   => 'issue-browse',
+        'title'  => $lang->tutorial->scrumProjectManage->manageIssue->step10->name
+    );
+
+    $scrumProjectManage->tasks['manageIssue']['steps'][] = array(
+        'type'   => 'saveForm',
+        'target' => '#resolvePanel button[type="submit"]',
+        'page'   => 'issue-browse',
+        'title'  => $lang->tutorial->scrumProjectManage->manageIssue->step11->name,
+        'desc'   => $lang->tutorial->scrumProjectManage->manageIssue->step11->desc
+    );
+
+    $scrumProjectManage->tasks['manageIssue']['steps'][] = array(
+        'type'   => 'click',
+        'target' => 'div[data-row="2"] a.issue-close-btn',
+        'page'   => 'issue-browse',
+        'url'    => array('issue', 'browse', 'projectID=2'),
+        'title'  => $lang->tutorial->scrumProjectManage->manageIssue->step12->name,
+        'desc'   => $lang->tutorial->scrumProjectManage->manageIssue->step12->desc
+    );
+
+    $scrumProjectManage->tasks['manageIssue']['steps'][] = array(
+        'type'   => 'form',
+        'target' => '#closePanel',
+        'page'   => 'issue-browse',
+        'title'  => $lang->tutorial->scrumProjectManage->manageIssue->step13->name
+    );
+
+    $scrumProjectManage->tasks['manageIssue']['steps'][] = array(
+        'type'   => 'saveForm',
+        'target' => '#closePanel button[type="submit"]',
+        'page'   => 'issue-browse',
+        'title'  => $lang->tutorial->scrumProjectManage->manageIssue->step14->name,
+        'desc'   => $lang->tutorial->scrumProjectManage->manageIssue->step14->desc
     );
 }
 
