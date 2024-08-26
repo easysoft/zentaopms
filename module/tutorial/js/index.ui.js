@@ -60,7 +60,7 @@ const stepPresenters =
             const checkOpenAppStep = (event, info) =>
             {
                 if(!currentStep || currentStep.type !== 'openApp') return;
-                if(event.type === 'shown' && info[0].options.target !== '#menuMoreList') return;
+                if((event.type === 'shown' || event.type === 'hidden') && info[0].options.target !== '#menuMoreList') return;
                 stepPresenters.openApp(currentStep);
             };
             scope.$(scope).on('resize', checkOpenAppStep);
@@ -239,7 +239,11 @@ function highlightStepTarget($target, step, popoverOptions)
     if(config.debug) showLog('Highlight', step, popover ? `${popover.gid}/${popover.options.key}` : 'no popover', {$target, popover, popoverOptions});
     if(popover)
     {
-        if(popover.options.key === step.id) return;
+        if(popover.options.key === step.id)
+        {
+            const target = (typeof $target === 'function' ? $target() : $target)[0];
+            if(target === popover.trigger) return;
+        }
         return destroyPopover(() => highlightStepTarget($target, step, popoverOptions));
     }
     ensureStepScope(step, (scope) =>
@@ -291,18 +295,22 @@ function highlightStepTarget($target, step, popoverOptions)
             onLayout: function(info)
             {
                 const $trigger = $(info.trigger);
-                const $body = $trigger.closest('body');
-                const triggerRect = info.trigger.getBoundingClientRect();
+                const $body    = $trigger.closest('body');
+                const rect     = info.trigger.getBoundingClientRect();
                 let $lightElement = $body.find('.tutorial-light-box');
-                if(!$lightElement.length) $lightElement = $('<div class="tutorial-light-box fixed pointer-events-none rounded" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.4), 0 0 0 9999px rgba(0, 0, 0, 0.4); z-index: 1690; transition: opacity .3s;"></div>').appendTo($body);
+                if(!$lightElement.length) $lightElement = $('<div class="tutorial-light-box fixed pointer-events-none rounded" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.4), 0 0 0 9999px rgba(0, 0, 0, 0.4); z-index: 1690; transition: opacity .5s;"><div class="is-left pointer-events-auto absolute top-0 bottom-0"></div><div class="is-top pointer-events-auto absolute"></div><div class="is-right pointer-events-auto absolute top-0 bottom-0 left-full"></div><div class="is-bottom pointer-events-auto absolute top-full"></div><style>.tutorial-light-box.opacity-0>div{pointer-events:none!important}</style></div>').appendTo($body);
                 $lightElement.removeClass('opacity-0').css(
                 {
-                    top         : triggerRect.top,
-                    left        : triggerRect.left,
-                    width       : triggerRect.width,
-                    height      : triggerRect.height,
-                    borderRadius: $trigger.css('borderRadius')
+                    top         : rect.top,
+                    left        : rect.left,
+                    width       : rect.width,
+                    height      : rect.height,
+                    borderRadius: $trigger.css('borderRadius'),
                 });
+                $lightElement.find('.is-left').css({left: -rect.left, width: rect.left});
+                $lightElement.find('.is-right').css({width: window.innerWidth - rect.right});
+                $lightElement.find('.is-top').css({top: -rect.top, height: rect.top, left: -rect.left, right: rect.right - window.innerWidth});
+                $lightElement.find('.is-bottom').css({height: window.innerHeight - rect.bottom, left: -rect.left, right: rect.right - window.innerWidth});
             }
         }, step.popover, popoverOptions);
         if(popoverOptions.title === null)
