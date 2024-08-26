@@ -485,3 +485,7 @@ $lang->project->executionList['waterfallplus'] = $lang->projectCommon . ' Stage'
 $lang->project->featureBar['team']['all'] = 'Members';
 
 $lang->project->featureBar['managemembers']['all'] = 'Manage Team';
+
+$lang->project->api = new stdclass();
+$lang->project->api->error = new stdclass();
+$lang->project->api->error->productNotFound = 'Product not found';
