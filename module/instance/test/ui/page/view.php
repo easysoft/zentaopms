@@ -5,8 +5,8 @@ class viewPage extends page
     {
         parent::__construct($webdriver);
         $xpath = array(
-            'passwdCopy' => "//*[@id='password']/following-sibling::button",
-            'tokenCopy'  => "//*[@id='token']/following-sibling::button"
+            'copyButton' => "//div[@id='instanceInfoContainer']//button",
+            'toast'      => "//div[text()='复制成功']"
         );
 
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
