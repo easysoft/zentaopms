@@ -29,6 +29,48 @@ class sqlBuilderGroupBy extends wg
         );
     }
 
+    protected function buildFieldItem(int $index, array $group): node
+    {
+        global $lang;
+        list($name, $type) = array($group['name'], $group['type']);
+
+        return div
+        (
+            setClass('flex row gap-x-4 justify-between'),
+            span($name),
+            btnGroup
+            (
+                btn
+                (
+                    setClass('switch-group-by'),
+                    set::size('sm'),
+                    set::type($type == 'group' ? 'secondary' : 'default'),
+                    set('data-index', $index),
+                    set('data-type', 'group'),
+                    $lang->bi->groupField
+                ),
+                btn
+                (
+                    setClass('switch-group-by'),
+                    set::size('sm'),
+                    set::type($type == 'agg' ? 'secondary' : 'default'),
+                    set('data-index', $index),
+                    set('data-type', 'agg'),
+                    $lang->bi->aggField
+                )
+            )
+        );
+    }
+
+    protected function buildAllField()
+    {
+        list($groups) = $this->prop(array('groups'));
+        $items = array();
+        foreach($groups as $index => $group) $items[] = $this->buildFieldItem($index, $group);
+
+        return $items;
+    }
+
     protected function build()
     {
         global $lang;
@@ -39,8 +81,10 @@ class sqlBuilderGroupBy extends wg
             (
                 setClass('w-80 h-78'),
                 set::headingClass('bg-gray-100'),
+                set::bodyClass('h-70 overflow-y-auto flex col gap-y-2'),
                 set::title($lang->bi->allFields),
-                to::heading($this->buildHelpIcon($lang->bi->allFieldsTip))
+                to::heading($this->buildHelpIcon($lang->bi->allFieldsTip)),
+                $this->buildAllField()
             ),
             panel
             (
