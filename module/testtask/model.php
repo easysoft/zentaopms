@@ -1773,7 +1773,7 @@ class testtaskModel extends model
         $suiteCase = new stdclass();
         $testRun   = new stdclass();
         $testRun->task   = $taskID;
-        $testRun->status = 'done';
+        $testRun->status = 'normal';
 
         $existSuites = $suiteNames ? $this->getExistSuitesOfUnitResult($suiteNames, $productID, $auto) : array();
 
@@ -2239,7 +2239,7 @@ class testtaskModel extends model
             $case->steps         = $steps;
             $case->lastRunResult = $result->caseResult;
             if(isset($caseResult->id))  $case->id      = $caseResult->id;
-            if(!isset($caseResult->id)) $case->product = $productID;
+            $case->product = $productID;
 
             $caseTitles[$suiteIndex][]        = $case->title;
             $cases[$suiteIndex][$caseIndex]   = $case;
