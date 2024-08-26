@@ -533,6 +533,7 @@ class pivotState
         $this->sqlBuilder['joins']  = array();
         $this->sqlBuilder['funcs']  = array();
         $this->sqlBuilder['wheres'] = array();
+        $this->sqlBuilder['groups'] = false;
 
         if(!isset($this->sqlBuilder['from'])) $this->setFrom('');
     }
@@ -632,6 +633,31 @@ class pivotState
     {
         $item = is_array($table) ? $table : array($table, $field, $operator, null, $value, $conditionOperator);
         $this->sqlBuilder['wheres'][$index]['items'][] = $item;
+    }
+
+    /**
+     * Get selects.
+     *
+     * @param  bool    $withAlias
+     * @access public
+     * @return array
+     */
+    public function getSelects($withAlias = true)
+    {
+        $from    = $this->sqlBuilder['from'];
+        $joins   = $this->sqlBuilder['joins'];
+        $selects = array();
+
+        $tables = $joins;
+        array_unshift($from);
+
+        foreach($tables as $table)
+        {
+            $alias = $table['alias'];
+            foreach($table['select'] as $field) $selects[] = array($alias, $field, $withAlias ? "{$alias}_{$field}" : null);
+        }
+
+        return $selects;
     }
 
     /**

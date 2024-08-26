@@ -83,7 +83,7 @@ class biTest
         $querys    = zget($args, 'querys', array());
         $groups    = zget($args, 'groups', array());
         $statement = $this->objectModel->sqlBuilder($selects, $from, $joins, $functions, $wheres, $querys, $groups);
-        return $statement->build();
+        return str_replace(PHP_EOL, '', $statement->build());
     }
 
     /**
