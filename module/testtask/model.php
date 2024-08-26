@@ -1067,11 +1067,16 @@ class testtaskModel extends model
             ->orderBy('grade_desc, sort_asc')
             ->fetchAll('id');
 
-        foreach($runs as $run) $run->parent = !empty($run->scene) ? 'scene-' . $scenes[$run->scene]->id : 0;
+        foreach($runs as $run)
+        {
+            $run->parent  = !empty($run->scene) ? 'scene-' . $scenes[$run->scene]->id : 0;
+            $run->isScene = false;
+        }
         foreach($scenes as $scene)
         {
             $scene->parent = !empty($scene->parent) ? 'scene-' . $scene->parent : 0;
             $scene->id     = 'scene-' . $scene->id;
+            $run->isScene  = true;
         }
 
         return array_merge($runs, $scenes);
