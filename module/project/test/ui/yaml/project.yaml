@@ -33,3 +33,13 @@ fields:
     type: timestamp
     format: "YYYY-MM-DD"
     postfix: "\t"
+  - field: grade
+    range: 1
+  - field: parent
+    range: 0
+  - field: path
+    prefix: ","
+    range: 1
+    postfix: ","
+  - field: multiple
+    range: 1
