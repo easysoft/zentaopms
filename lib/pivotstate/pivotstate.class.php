@@ -655,9 +655,9 @@ class pivotState
 
         $groups = array();
 
-        foreach($selects as $select)
+        foreach($selects as $index => $select)
         {
-            $groups[] = array('select' => $select, 'type' => 'agg');
+            $groups[] = array('select' => $select, 'type' => 'agg', 'order' => $index);
         }
 
         $this->sqlBuilder['groups'] = $groups;
