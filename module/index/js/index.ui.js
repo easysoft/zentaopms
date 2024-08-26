@@ -825,23 +825,29 @@ function getMenuNavData()
     const $nav = $('#menuMainNav');
     $nav.children().each(function(index, element) {
         const $elm = $(element);
-        data[index] = $elm.is('.divider')
-            ? 'divider'
-            : $elm.data('app');
-
+        data.push(
+            {
+                name:  $elm.is('.divider') ? 'divider' : $elm.data('app'),
+                order: index * 5
+            }
+        );
     });
     return data;
 }
 
 function generateAddMenuNavItems(onClick)
 {
+    const customUrl = $.createLink('custom', 'ajaxSetMenu');
     const items = [
         {
             icon: 'icon-minus',
             text: langData.divider,
-            onClick: () => onClick('divider'),
-        },
-
+            onClick: () => {
+                onClick('divider');
+                const data = getMenuNavData();
+                $.ajaxSubmit({url: customUrl, data: {menu: 'nav', items: JSON.stringify(data)}});
+            }
+        }
     ];
 
     const allAppCodeSet = new Set(allAppsItemsMap.keys());
@@ -860,7 +866,11 @@ function generateAddMenuNavItems(onClick)
             {
                 icon,
                 text: title,
-                onClick: () => onClick(name)
+                onClick: () => {
+                    onClick(name);
+                    const data = getMenuNavData();
+                    $.ajaxSubmit({url: customUrl, data: {menu: 'nav', items: JSON.stringify(data)}});
+                }
             }
         );
     }
@@ -873,6 +883,7 @@ $(document).on('contextmenu', '#menuNav .divider', function(event)
     const $nav = $divider.closest('.nav');
     const isMoving = $nav.is('[z-use-sortable]');
     const items = [];
+    const customUrl = $.createLink('custom', 'ajaxSetMenu');
     if(isMoving)
     {
         items.push(
@@ -881,7 +892,7 @@ $(document).on('contextmenu', '#menuNav .divider', function(event)
                 onClick: () => {
                     $divider.closest('.nav').zui().destroy();
                     const data = getMenuNavData();
-                    console.log(data);
+                    $.ajaxSubmit({url: customUrl, data: {menu: 'nav', items: JSON.stringify(data)}});
                 }
             }
         );
@@ -908,11 +919,10 @@ $(document).on('contextmenu', '#menuNav .divider', function(event)
             text: langData.hide,
             onClick: () => {
                 const $li = $divider.closest('li');
-                const appName = $li.data('app');
                 $li.remove();
                 const data = getMenuNavData();
                 refreshMenu();
-                console.log(appName, data);
+                $.ajaxSubmit({url: customUrl, data: {menu: 'nav', items: JSON.stringify(data)}});
             }
         }
     );
@@ -962,6 +972,7 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
         if(code !== 'my') items.push({text: langData.close, onClick: () => closeApp(code)});
     }
 
+    const customUrl = $.createLink('custom', 'ajaxSetMenu');
     if($btn.closest('#menuNav').length !== 0)
     {
         const $nav = $btn.closest('.nav');
@@ -974,7 +985,7 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
                     onClick: () => {
                         $btn.closest('.nav').zui().destroy();
                         const data = getMenuNavData();
-                        console.log(data);
+                        $.ajaxSubmit({url: customUrl, data: {menu: 'nav', items: JSON.stringify(data)}});
                     }
                 }
             );
@@ -1006,11 +1017,10 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
                     : () => {
                         closeApp(code);
                         const $li = $btn.closest('li');
-                        const appName = $li.data('app');
                         $li.remove();
                         const data = getMenuNavData();
                         refreshMenu();
-                        console.log(appName, data);
+                        $.ajaxSubmit({url: customUrl, data: {menu: 'nav', items: JSON.stringify(data)}});
                     },
                 disabled: hideDisabled,
             }

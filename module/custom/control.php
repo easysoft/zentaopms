@@ -552,4 +552,24 @@ class custom extends control
 
         $this->display();
     }
+
+    /**
+     * Ajax set menu
+     *-
+     * @access public
+     * @return void
+     */
+    public function ajaxSetMenu()
+    {
+        if($_POST)
+        {
+            $menu    = $this->post->menu;  // 导航类型，nav(左侧主导航)|main(顶部一级导航)|module(顶部二级导航)
+            $items   = $this->post->items; // 导航项
+            $account = $this->app->user->account;
+
+            if($menu && $items) $this->loadModel('setting')->setItem("$account.common.customMenu.$menu@{$this->config->vision}", $items);
+        }
+
+        $this->send(array('result' => 'success'));
+    }
 }
