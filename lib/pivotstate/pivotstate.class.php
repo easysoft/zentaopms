@@ -642,6 +642,7 @@ class pivotState
      */
     public function addAggFunc()
     {
+        $this->clearAggFunc();
         $groups = $this->sqlBuilder['groups'];
         foreach($groups as $group)
         {
@@ -650,6 +651,22 @@ class pivotState
             list($table, $field) = $group['select'];
             $this->addFunc('agg', $table, $field);
         }
+    }
+
+    /**
+     * Clear agg func.
+     *
+     * @access public
+     * @return void
+     */
+    public function clearAggFunc()
+    {
+        $funcs = array();
+        foreach($this->sqlBuilder['funcs'] as $func)
+        {
+            if($func['type'] != 'agg') $funcs[] = $func;
+        }
+        $this->sqlBuilder['funcs'] = $funcs;
     }
 
     /**
