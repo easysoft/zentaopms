@@ -4,9 +4,13 @@ $(function()
     loadResult();
 });
 
-$('#runCaseModal').closest('.modal').off('hide.zui.modal').on('hide.zui.modal', function(e)
+$('#runCaseModal').closest('.modal').off('hide.zui.modal').on('hide.zui.modal', function(e, info)
 {
-    if($(e.target).attr('id').indexOf('fileModal') == -1) loadCurrentPage();
+    const $target = $(e.target);
+    if($target.is('.modal') || (Array.isArray(info) && info[0] instanceof zui.Modal))
+    {
+        if($(e.target).attr('id').indexOf('fileModal') == -1) loadCurrentPage();
+    }
 });
 
 /**
