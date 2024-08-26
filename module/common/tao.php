@@ -215,13 +215,14 @@ class commonTao extends commonModel
      */
     protected static function checkPrivByRights(string $module, string $method, array $acls, mixed $object): bool
     {
-        global $lang;
+        global $lang, $app;
         if(!commonModel::hasDBPriv($object, $module, $method)) return false;
 
         if(empty($acls['views'])) return true;
         $menu = isset($lang->navGroup->$module) ? $lang->navGroup->$module : $module;
         if($module == 'my' and $method == 'team') $menu = 'system'; // Fix bug #18642.
         $menu = strtolower($menu);
+        if($menu == 'product' && $app->tab != 'product' && in_array($module, array('story', 'requirement', 'epic'))) return true;
         if($menu != 'qa' and $menu != 'project' and !isset($lang->$menu->menu)) return true;
         if(($menu == 'my' and $method != 'team') or $menu == 'index' or $module == 'tree') return true;
         if($module == 'company' and $method == 'dynamic') return true;
