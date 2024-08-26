@@ -638,18 +638,11 @@ class pivotState
     /**
      * Set group by.
      *
-     * @param  bool   $status
      * @access public
      * @return void
      */
-    public function setGroupBy($status)
+    public function setGroupBy()
     {
-        if(!$status)
-        {
-            $this->sqlBuilder['groups'] = false;
-            return;
-        }
-
         $selects = $this->getSelects(false);
         $funcs   = $this->getFuncs('func', true);
 
