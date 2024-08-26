@@ -17,3 +17,10 @@ include '../lib/createstory.ui.class.php';
 
 $tester = new createStoryTester();
 $tester->login();
+
+$releaseName              = '测试发布';
+$releaseStatus            = array();
+$releaseStatus['wait']    = '未发布';
+$releaseStatus['release'] = '已发布';
+
+r($tester->createRelease($releaseName, $releaseStatus('wait'))) && p('status') && e('SUCCESS');
