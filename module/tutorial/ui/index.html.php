@@ -158,7 +158,7 @@ $buildTutorialTabPane = function($type) use ($groupedGuides, $lang, $currentType
         simpleList
         (
             setData('type', $type),
-            setClass('tutorial-guide-list'),
+            setClass('tutorial-guide-list', ($type == 'starter' && is_array($guides) && count($guides) === 1) ? 'is-single-guide' : ''),
             set::items($guides),
             set::onRenderItem($buildGuideItem)
         )

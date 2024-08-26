@@ -7,6 +7,8 @@
 .tutorial-guide.active .tutorial-guide-item .tutorial-guide-icon {display: none;}
 .tutorial-guide.active .tutorial-guide-item .tutorial-guide-trailing-icon {order: -1; opacity: 1; --tw-rotate: 90deg;}
 .tutorial-guide.active .tutorial-guide-tasks {display: block;}
+.tutorial-guide-list.is-single-guide .tutorial-guide-tasks {display: block;}
+.tutorial-guide-list.is-single-guide .tutorial-guide-item {display: none;}
 
 .tutorial-step-list {display: none;}
 .tutorial-task.active .tutorial-step-list {display: block;}
