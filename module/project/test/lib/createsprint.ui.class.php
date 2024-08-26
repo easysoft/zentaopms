@@ -33,14 +33,14 @@ class createSprintTester extends tester
     public function checkResult($sprint)
     {
         //检查创建页面时的提示信息
-        if(strpos($this->response('url'), 'executionID') == false)
+        if(strpos($this->response('url'), 'executionID') === false)
         {
             if($this->checkFormTips('execution')) return $this->success('创建迭代表单页提示信息正确');
             if($form->dom->endTip)
             {
                 //检查结束日期不能为空
                 $endTiptext = $form->dom->endTip->getText();
-                $endTip     = sprintf($this->lang->copyProject->endTip,'');
+                $endTip     = sprintf($this->lang->copyProject->endTip, '');
                 return ($endTiptext == $endTip) ? $this->success('创建迭代表单页提示信息正确') : $this->failed('创建迭代表单页提示信息不正确');
                 form->wait(1);
             }
@@ -49,15 +49,15 @@ class createSprintTester extends tester
         //检查创建成功后的断言
         else
         {
-        $sprintForm = $this->initForm('project', 'execution', array('status' => 'undone', 'projectID' => '1'), 'appIframe-project');
-        /* 跳转到项目迭代列表页面，查看列表中的迭代信息是否正确*/
-        $browsePage = $this->loadPage('project', 'execution');
+            $sprintForm = $this->initForm('project', 'execution', array('status' => 'undone', 'projectID' => '1'), 'appIframe-project');
+            /* 跳转到项目迭代列表页面，查看列表中的迭代信息是否正确*/
+            $browsePage = $this->loadPage('project', 'execution');
 
-        //断言检查迭代名称、计划完成日期是否正确
-        if($browsePage->dom->sprintName->getText() != $sprint['name']) return $this->failed('名称错误');
-        if($browsePage->dom->planEnd->getText() != $sprint['end'])     return $this->failed('计划完成日期错误');
+            //断言检查名称、项目类型是否正确
+            if($browsePage->dom->sprintName->getText() != $sprint['name']) return $this->failed('名称错误');
+            if($browsePage->dom->planEnd->getText() != $sprint['end'])     return $this->failed('名称错误');
 
-        return $this->success();
+            return $this->success();
         }
     }
 }
