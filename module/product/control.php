@@ -234,7 +234,7 @@ class product extends control
     {
         if(!empty($_POST))
         {
-            $productData = $this->productZen->buildProductForEdit();
+            $productData = $this->productZen->buildProductForEdit($productID);
 
             $this->product->update($productID, $productData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -309,7 +309,7 @@ class product extends control
     {
         if(!empty($_POST))
         {
-            $productData = $this->productZen->buildProductForActivate();
+            $productData = $this->productZen->buildProductForActivate($productID);
 
             $this->product->activate($productID, $productData, $this->post->comment);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -342,7 +342,7 @@ class product extends control
     {
         if(!empty($_POST))
         {
-            $productData = $this->productZen->buildProductForClose();
+            $productData = $this->productZen->buildProductForClose($productID);
 
             $this->product->close($productID, $productData, $this->post->comment);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));

@@ -459,7 +459,7 @@ class story extends control
     {
         if(!empty($_POST))
         {
-            $postData = $this->storyZen->buildStoryForActivate();
+            $postData = $this->storyZen->buildStoryForActivate($storyID);
             $changes  = $this->story->activate($storyID, $postData);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -818,7 +818,7 @@ class story extends control
     {
         if($_POST)
         {
-            $storyData = $this->storyZen->buildStoryForSubmitReview();
+            $storyData = $this->storyZen->buildStoryForSubmitReview($storyID);
             if(!$storyData) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $changes = $this->story->submitReview($storyID, $storyData);
@@ -876,7 +876,7 @@ class story extends control
 
         if(!empty($_POST))
         {
-            $postData = form::data($this->config->story->form->close)
+            $postData = form::data($this->config->story->form->close, $storyID)
                 ->stripTags($this->config->story->editor->close['id'], $this->config->allowedTags)
                 ->removeIF($this->post->closedReason != 'duplicate', 'duplicateStory')
                 ->get();
@@ -1294,7 +1294,7 @@ class story extends control
     {
         if(!empty($_POST))
         {
-            $story = form::data($this->config->story->form->assignTo)->get();
+            $story = form::data($this->config->story->form->assignTo, $storyID)->get();
             $this->story->assign($storyID, $story);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 

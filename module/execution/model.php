@@ -4987,7 +4987,7 @@ class executionModel extends model
         $postData->uid       = '';
 
         /* Handle extend fields. */
-        $extendFields = $this->loadModel('project')->getFlowExtendFields();
+        $extendFields = $this->loadModel('project')->getFlowExtendFields($projectID);
         foreach($extendFields as $field) $_POST[$field->field] = $project->field;
         if(isset($this->config->setCode) and $this->config->setCode == 1) $postData->code = $project->code;
 

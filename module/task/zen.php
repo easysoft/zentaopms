@@ -454,7 +454,7 @@ class taskZen extends task
         if(dao::isError()) return false;
 
         $now  = helper::now();
-        $task = form::data($this->config->task->form->edit)
+        $task = form::data($this->config->task->form->edit, $task->id)
             ->add('id', $task->id)
             ->add('lastEditedDate', $now)
             ->setIF(!$task->assignedTo && !empty($oldTask->team) && !empty($this->post->team), 'assignedTo', $this->task->getAssignedTo4Multi($this->post->team, $oldTask))
@@ -650,7 +650,7 @@ class taskZen extends task
      */
     protected function buildTaskForActivate(int $taskID): object
     {
-        $task = form::data()->add('id', $taskID)->get();
+        $task = form::data($this->config->task->form->activate, $taskID)->add('id', $taskID)->get();
         unset($task->comment);
 
         return $this->loadModel('file')->processImgURL($task, $this->config->task->editor->activate['id'], (string)$this->post->uid);
@@ -667,7 +667,7 @@ class taskZen extends task
     protected function buildTaskForStart(object $oldTask): false|object
     {
         $now  = helper::now();
-        $task = form::data($this->config->task->form->start)->add('id', $oldTask->id)
+        $task = form::data($this->config->task->form->start, $oldTask->id)->add('id', $oldTask->id)
             ->setIF($oldTask->assignedTo != $this->app->user->account, 'assignedDate', $now)
             ->get();
 
@@ -700,7 +700,7 @@ class taskZen extends task
     protected function buildTaskForCancel(object $oldTask): object
     {
         $now  = helper::now();
-        $task = form::data($this->config->task->form->cancel)
+        $task = form::data($this->config->task->form->cancel, $oldTask->id)
             ->add('id', $oldTask->id)
             ->setDefault('status', 'cancel')
             ->setDefault('assignedTo', $oldTask->openedBy)
@@ -797,7 +797,7 @@ class taskZen extends task
     protected function buildTaskForFinish(object $oldTask): object
     {
         $now = helper::now();
-        $task = form::data($this->config->task->form->finish)
+        $task = form::data($this->config->task->form->finish, $oldTask->id)
             ->setIF(!$this->post->realStarted && helper::isZeroDate($oldTask->realStarted), 'realStarted', $now)
             ->setDefault('assignedTo', $oldTask->openedBy)
             ->get();
@@ -849,7 +849,7 @@ class taskZen extends task
      */
     protected function buildTaskForClose(object $oldTask): object
     {
-        $task = form::data($this->config->task->form->close)->add('id', $oldTask->id)
+        $task = form::data($this->config->task->form->close, $oldTask->id)->add('id', $oldTask->id)
             ->setIF($oldTask->status == 'done',   'closedReason', 'done')
             ->setIF($oldTask->status == 'cancel', 'closedReason', 'cancel')
             ->get();

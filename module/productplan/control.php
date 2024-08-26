@@ -130,7 +130,7 @@ class productplan extends control
         $plan = $this->productplan->getByID($planID);
         if(!empty($_POST))
         {
-            $planData = form::data($this->config->productplan->form->edit)
+            $planData = form::data($this->config->productplan->form->edit, $planID)
                 ->setIF($this->post->future || empty($_POST['begin']), 'begin', $this->config->productplan->future)
                 ->setIF($this->post->future || empty($_POST['end']), 'end', $this->config->productplan->future)
                 ->get();

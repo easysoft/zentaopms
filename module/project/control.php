@@ -468,7 +468,7 @@ class project extends control
             if($this->post->longTime) $this->config->project->form->edit['end']['skipRequired'] = true;
             if($this->post->delta == '999') $this->config->project->form->edit['end']['skipRequired'] = true;
 
-            $postData        = form::data($this->config->project->form->edit);
+            $postData        = form::data($this->config->project->form->edit, $projectID);
             $postProductData = !empty($project->hasProduct) ? form::data($this->config->project->form->edit)->get('products,plans,branch') : new stdclass();
             $newProject      = $this->projectZen->prepareProject($postData, $project->hasProduct);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -1286,7 +1286,7 @@ class project extends control
 
         if(!empty($_POST))
         {
-            $postData = form::data($this->config->project->form->start);
+            $postData = form::data($this->config->project->form->start, $projectID);
             $postData = $this->projectZen->prepareStartExtras($postData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $changes  = $this->project->start($projectID, $postData);
@@ -1314,7 +1314,7 @@ class project extends control
         /* Processing parameter passing while suspend project. */
         if(!empty($_POST))
         {
-            $postData = form::data($this->config->project->form->suspend);
+            $postData = form::data($this->config->project->form->suspend, $projectID);
             $postData = $this->projectZen->prepareSuspendExtras($projectID, $postData);
 
             /* Update the database status to suspended. */
@@ -1346,7 +1346,7 @@ class project extends control
         /* Processing parameter passing while close project. */
         if(!empty($_POST))
         {
-            $postData = form::data($this->config->project->form->close);
+            $postData = form::data($this->config->project->form->close, $projectID);
             $postData = $this->projectZen->prepareClosedExtras($projectID, $postData);
 
             /* Update the database status to closed. */
@@ -1379,7 +1379,7 @@ class project extends control
 
         if(!empty($_POST))
         {
-            $postData = form::data($this->config->project->form->activate);
+            $postData = form::data($this->config->project->form->activate, $projectID);
             $postData = $this->projectZen->prepareActivateExtras($projectID, $postData);
 
             $changes = $this->project->activate($projectID, $postData);

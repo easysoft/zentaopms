@@ -2404,7 +2404,7 @@ class testcaseZen extends testcase
         $now    = helper::now();
         $status = $this->getStatusForReview($oldCase);
 
-        $case = form::data($this->config->testcase->form->review)->add('id', $caseID)
+        $case = form::data($this->config->testcase->form->review, $caseID)->add('id', $caseID)
             ->setForce('status', $status)
             ->setDefault('reviewedDate', substr($now, 0, 10))
             ->setDefault('lastEditedBy', $this->app->user->account)

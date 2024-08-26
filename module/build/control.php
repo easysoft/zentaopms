@@ -98,7 +98,7 @@ class build extends control
     {
         if(!empty($_POST))
         {
-            $build = form::data()->get();
+            $build = form::data($this->config->build->form->edit, $buildID)->get();
             $changes = $this->build->update($buildID, $build);
             if(dao::isError()) return $this->sendError(dao::getError());
 

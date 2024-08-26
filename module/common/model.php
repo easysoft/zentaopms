@@ -356,11 +356,12 @@ class commonModel extends model
      *
      * @param  string $module
      * @param  string $method
+     * @param  int    $objectID
      * @static
      * @access public
      * @return array
      */
-    public static function formConfig(string $module, string $method): array
+    public static function formConfig(string $module, string $method, int $objectID = 0): array
     {
         global $config, $app;
         if($config->edition == 'open') return array();
@@ -368,7 +369,7 @@ class commonModel extends model
         $formConfig = array();
         $common     = new self();
         $required   = $common->dao->select('*')->from(TABLE_WORKFLOWRULE)->where('type')->eq('system')->andWhere('rule')->eq('notempty')->fetch();
-        $fields     = $common->loadModel('flow')->getExtendFields($module, $method);
+        $fields     = $common->loadModel('flow')->getExtendFields($module, $method, $objectID);
 
         $type       = 'string';
         foreach($fields as $fieldObject)

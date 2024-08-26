@@ -164,7 +164,7 @@ class release extends control
                 $this->config->release->edit->requiredFields = str_replace(',date', '', $this->config->release->edit->requiredFields);
             }
 
-            $releaseData = form::data()->setIF($this->post->build === false, 'build', 0)->get();
+            $releaseData = form::data(null, $releaseID)->setIF($this->post->build === false, 'build', 0)->get();
 
             $changes = $this->release->update($releaseData, $release);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));

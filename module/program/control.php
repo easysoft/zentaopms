@@ -245,7 +245,7 @@ class program extends control
             $hasUnfinished = $this->program->hasUnfinishedChildren($program);
             if($hasUnfinished) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$this->lang->program->closeErrorMessage}');"));
 
-            $programData = form::data()->get();
+            $programData = form::data(null, $programID)->get();
             $changes     = $this->program->close($programData, $program);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -282,7 +282,7 @@ class program extends control
 
         if(!empty($_POST))
         {
-            $postData = form::data($this->config->program->form->start);
+            $postData = form::data($this->config->program->form->start, $programID);
             $postData = $this->programZen->prepareStartExtras($postData);
             $changes  = $this->project->start($programID, $postData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -320,7 +320,7 @@ class program extends control
 
         if(!empty($_POST))
         {
-            $programData = form::data()->get();
+            $programData = form::data(null, $programID)->get();
             $changes     = $this->program->activate($programData, $program);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -357,6 +357,7 @@ class program extends control
     {
         $this->loadModel('action');
 
+        $this->extendRequireFields($programID);
         if(!empty($_POST))
         {
             $postData = fixer::input('post')

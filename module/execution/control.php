@@ -1108,7 +1108,7 @@ class execution extends control
             $oldExecution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
 
             /* Get the data from the post. */
-            $formData = form::data()
+            $formData = form::data(null, $executionID)
                 ->add('id', $executionID)
                 ->setDefault('lastEditedBy', $this->app->user->account)
                 ->setDefault('lastEditedDate', helper::now())
@@ -1248,6 +1248,7 @@ class execution extends control
             $this->config->excludeDropmenuList[] = 'execution-batchedit';
         }
 
+        $this->extendRequireFields($executionID);
         if($this->post->name)
         {
             $postData   = fixer::input('post')->get();
@@ -1372,6 +1373,7 @@ class execution extends control
         $executionID = $execution->id;
         if($execution->type == 'kanban') $this->lang->executionCommon = $this->lang->execution->kanban;
 
+        $this->extendRequireFields($executionID);
         if(!empty($_POST))
         {
             $postData = fixer::input('post')
@@ -1417,6 +1419,7 @@ class execution extends control
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
 
+        $this->extendRequireFields($executionID);
         if(!empty($_POST))
         {
             $postData = fixer::input('post')
@@ -1458,6 +1461,7 @@ class execution extends control
         $executionID = $execution->id;
         if($execution->type == 'kanban') $this->lang->executionCommon = $this->lang->execution->kanban;
 
+        $this->extendRequireFields($executionID);
         if(!empty($_POST))
         {
             $postData = fixer::input('post')
@@ -1505,6 +1509,7 @@ class execution extends control
         $executionID = $execution->id;
         if($execution->type == 'kanban') $this->lang->executionCommon = $this->lang->execution->kanban;
 
+        $this->extendRequireFields($executionID);
         if(!empty($_POST))
         {
             $postData = fixer::input('post')
@@ -1560,6 +1565,7 @@ class execution extends control
         $executionID = $execution->id;
         if($execution->type == 'kanban') $this->lang->executionCommon = $this->lang->execution->kanban;
 
+        $this->extendRequireFields($executionID);
         if(!empty($_POST))
         {
             $now      = helper::now();

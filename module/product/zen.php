@@ -567,13 +567,14 @@ class productZen extends product
      * 构建编辑产品的数据。
      * Build product data for edit.
      *
+     * @param  int       $productID
      * @access protected
      * @return object
      */
-    protected function buildProductForEdit(): object
+    protected function buildProductForEdit(int $productID): object
     {
         $editorFields = array_keys(array_filter(array_map(function($config){return (!empty($config['control']) && $config['control'] == 'editor');}, $this->config->product->form->edit)));
-        $productData  = form::data($this->config->product->form->edit)
+        $productData  = form::data($this->config->product->form->edit, $productID)
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->get();
 
@@ -584,12 +585,13 @@ class productZen extends product
      * 构建激活产品数据。
      * Build product data for activate.
      *
+     * @param  int       $productID
      * @access protected
      * @return object
      */
-    protected function buildProductForActivate(): object
+    protected function buildProductForActivate(int $productID): object
     {
-        $productData = form::data($this->config->product->form->activate)
+        $productData = form::data($this->config->product->form->activate, $productID)
             ->setIF($this->config->vision == 'or', 'status', 'normal')
             ->get();
 
@@ -600,12 +602,13 @@ class productZen extends product
      * 构建关闭产品数据。
      * Build product data for close.
      *
+     * @param  int       $productID
      * @access protected
      * @return object
      */
-    protected function buildProductForClose(): object
+    protected function buildProductForClose(int $productID): object
     {
-        $productData = form::data($this->config->product->form->close)->get();
+        $productData = form::data($this->config->product->form->close, $productID)->get();
         return $this->loadModel('file')->processImgURL($productData, $this->config->product->editor->close['id'], $this->post->uid);
     }
 
