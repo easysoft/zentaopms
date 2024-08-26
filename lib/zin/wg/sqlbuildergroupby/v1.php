@@ -75,16 +75,17 @@ class sqlBuilderGroupBy extends wg
     protected function buildAggFieldRow($agg)
     {
         global $lang;
-        list($table, $field, $function, $alias) = array($agg['table'], $agg['field'], $agg['function'], $agg['alias']);
+        list($table, $field, $function, $alias, $name) = array($agg['table'], $agg['field'], $agg['function'], $agg['alias'], $agg['name']);
         return formRow
         (
             sqlBuilderPicker
             (
-                set::name("agg{$table}{$field}"),
-                set::label(sprintf($lang->bi->aggTipA, $table, $field)),
-                set::labelWidth('256px'),
+                set::name("agg_{$table}_{$field}"),
+                set::label(sprintf($lang->bi->aggTipA, $name)),
+                set::labelWidth('176px'),
                 set::labelAlign('left'),
-                set::width('96'),
+                set::width('64'),
+                set::required(true),
                 set::items($lang->bi->aggList),
                 set::placeholder($lang->bi->selectFuncTip),
                 set::value($function)
@@ -93,7 +94,8 @@ class sqlBuilderGroupBy extends wg
             (
                 set::type(''),
                 set::label(sprintf($lang->bi->aggTipB, $alias)),
-                set::labelWidth('256px'),
+                set::labelWidth('320px'),
+                set::width('96'),
                 set::labelAlign('left')
             )
         );
@@ -117,7 +119,7 @@ class sqlBuilderGroupBy extends wg
             setClass('flex row w-full gap-x-4'),
             panel
             (
-                setClass('w-80 h-78'),
+                setClass('basis-72 h-78'),
                 set::headingClass('bg-gray-100'),
                 set::bodyClass('h-70 overflow-y-auto flex col gap-y-2'),
                 set::title($lang->bi->allFields),
@@ -126,7 +128,7 @@ class sqlBuilderGroupBy extends wg
             ),
             panel
             (
-                setClass('w-60 h-78'),
+                setClass('basis-36 h-78'),
                 set::headingClass('bg-gray-100'),
                 set::bodyClass('h-70 overflow-y-auto flex col gap-y-2'),
                 set::title($lang->bi->groupField),
@@ -134,7 +136,7 @@ class sqlBuilderGroupBy extends wg
             ),
             panel
             (
-                setClass('flex-auto h-78'),
+                setClass('flex-1 h-78'),
                 set::headingClass('bg-gray-100'),
                 set::bodyClass('h-70 overflow-y-auto flex col gap-y-2'),
                 set::title($lang->bi->aggField),
