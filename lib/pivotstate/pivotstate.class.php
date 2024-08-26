@@ -648,16 +648,24 @@ class pivotState
 
         foreach($funcs as $func)
         {
-            list($alias, $field, $function) = array($func['table'], $func['field'], $func['function']);
-            $field = strtoupper($function) . "(`{$alias}`.`{$field}`)";
-            $selects[] = array(null, $field, null, null);
+            list($table, $field, $alias, $function) = array($func['table'], $func['field'], $func['alias'], $func['function']);
+            $field = strtoupper($function) . "(`{$table}`.`{$field}`)";
+            $selects[] = array(null, $field, $alias, null);
         }
 
         $groups = array();
 
         foreach($selects as $index => $select)
         {
-            $groups[] = array('select' => $select, 'type' => 'agg', 'order' => $index);
+            list($table, $field, $alias) = $select;
+            $name = $alias;
+            if(empty($alias))
+            {
+                $fieldList = $this->getTableDescList($table);
+                $name = $table . '_' . $fieldList[$field];
+            }
+            $select[2] = null;
+            $groups[] = array('select' => $select, 'type' => 'agg', 'order' => $index, 'name' => $name);
         }
 
         $this->sqlBuilder['groups'] = $groups;
