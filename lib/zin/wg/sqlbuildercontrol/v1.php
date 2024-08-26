@@ -10,19 +10,20 @@ require_once dirname(__DIR__) . DS . 'input' . DS . 'v1.php';
 class sqlBuilderControl extends wg
 {
     protected static array $defineProps = array(
-        "type?: string",              // 控件类型。
+        "type?: string",                // 控件类型。
         "class?: string",
-        "name?: string",              // 控件名。
-        "label?: string",             // 控件标签。
-        "items?: array",              // 控件下拉选项，仅type=picker时有效。
-        "value?: string",             // 控件值。
-        'required?: bool=false',      // 控件是否可清空，仅type=picker时有效。
-        "placeholder?: string",       // 提示文本。
-        'labelWidth?: string="80px"', // 标签宽度。
-        'width?: string="60"',        // 控件宽度。
-        "suffix?: string",            // 后缀内容。
-        "error?: bool=false",          // 是否存在错误。
-        'errorText?: string'          // 错误提示。
+        "name?: string",                // 控件名。
+        "label?: string",               // 控件标签。
+        "items?: array",                // 控件下拉选项，仅type=picker时有效。
+        "value?: string",               // 控件值。
+        'required?: bool=false',        // 控件是否可清空，仅type=picker时有效。
+        "placeholder?: string",         // 提示文本。
+        'labelWidth?: string="80px"',   // 标签宽度。
+        'lableAlign?: string="center"', // 标签对齐方式。
+        'width?: string="60"',          // 控件宽度。
+        "suffix?: string",              // 后缀内容。
+        "error?: bool=false",           // 是否存在错误。
+        'errorText?: string'            // 错误提示。
     );
 
     /**
@@ -67,14 +68,15 @@ class sqlBuilderControl extends wg
     protected function build()
     {
         global $lang;
-        list($class, $label, $labelWidth, $width, $suffix, $error, $errorText) = $this->prop(array('class', 'label', 'labelWidth', 'width', 'suffix', 'error', 'errorText'));
+        list($class, $label, $labelWidth, $labelAlign, $width, $suffix, $error, $errorText) = $this->prop(array('class', 'label', 'labelWidth', 'labelAlign', 'width', 'suffix', 'error', 'errorText'));
 
+        $padding = $labelAlign == 'center' ? 1 : 3;
         return formGroup
         (
             setClass($class),
             set::label($label),
             set::labelWidth($labelWidth),
-            set::labelClass('bg-gray-100 ring ring-border-strong font-bold px-1-important justify-center-important'),
+            set::labelClass('bg-gray-100 ring ring-border-strong font-bold', "justify-$labelAlign-important px-{$padding}-important" ),
             set::width($width),
             inputGroup
             (
