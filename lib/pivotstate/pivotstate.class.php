@@ -650,7 +650,7 @@ class pivotState
             if($group['type'] == 'group') continue;
 
             list($table, $field, $alias, $function, $name) = $group['select'];
-            $this->addFunc('agg', $table, $field, $function, $alias, $name);
+            $this->addFunc('agg', $table, $field, $function, "{$alias}_{$function}", $name);
         }
     }
 
@@ -700,7 +700,6 @@ class pivotState
                 $name = $table . '_' . $fieldList[$field];
                 $select[2] = "{$table}_{$field}";
             }
-            $select[2] .= "_count";
             $select[3] = 'count';
             $select[4] = $name;
             $groups[]  = array('select' => $select, 'type' => 'agg', 'order' => $index, 'name' => $name);
