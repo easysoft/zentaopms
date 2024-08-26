@@ -260,6 +260,7 @@ function highlightStepTarget($target, step, popoverOptions)
         }
         popoverOptions = $.extend(
         {
+            $optionsFromDataset: false,
             key             : step.id,
             title           : step.title,
             strategy        : 'fixed',
@@ -314,7 +315,8 @@ function highlightStepTarget($target, step, popoverOptions)
                     width       : rect.width,
                     height      : rect.height,
                     borderRadius: $trigger.css('borderRadius'),
-                });
+                    zIndex      : this._zIndex - 1
+                }).appendTo($body);
                 $lightElement.find('.is-left').css({left: -rect.left, width: Math.round(rect.left)});
                 $lightElement.find('.is-right').css({width: Math.round(window.innerWidth - rect.right)});
                 $lightElement.find('.is-top').css({top: -rect.top, height: Math.round(rect.top), left: -rect.left, right: rect.right - window.innerWidth});
