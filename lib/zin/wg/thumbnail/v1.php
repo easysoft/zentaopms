@@ -45,12 +45,12 @@ class thumbnail extends wg
         (
             div
             (
-                setClass('flex items-center justify-center cursor-pointer bg-gray-100 w-full h-60'),
+                setClass('flex items-center justify-center cursor-pointer bg-white w-full h-60 '),
                 setData(array('on' => 'click', 'call' => 'uploadThumbnail')),
                 img
                 (
                     setID('thumbnail-img'),
-                    setClass('w-full h-full' . ($src ? '' : ' hidden')),
+                    setClass('h-full' . ($src ? '' : ' hidden')),
                     set::src($src),
                     set::title($tips)
                 ),
