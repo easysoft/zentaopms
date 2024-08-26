@@ -1418,7 +1418,14 @@ class my extends control
 
         if($_POST)
         {
-            foreach($_POST as $key => $value) $this->setting->setItem("{$this->app->user->account}.common.$key", $value);
+            $keyList = array('URSR', 'programLink', 'productLink', 'projectLink', 'executionLink');
+            foreach($_POST as $key => $value)
+            {
+                if(!in_array($key, $keyList)) continue;
+                if($key != 'URSR' && !isset($this->lang->my->{$key . 'List'}[$value])) continue;
+                if($key == 'URSR') $value = (int)$value;
+                $this->setting->setItem("{$this->app->user->account}.common.$key", $value);
+            }
 
             $this->setting->setItem("{$this->app->user->account}.common.preferenceSetted", 1);
 
