@@ -53,9 +53,9 @@ class createSprintTester extends tester
         /* 跳转到项目迭代列表页面，查看列表中的迭代信息是否正确*/
         $browsePage = $this->loadPage('project', 'execution');
 
-        //断言检查名称、项目类型是否正确
+        //断言检查迭代名称、计划完成日期是否正确
         if($browsePage->dom->sprintName->getText() != $sprint['name']) return $this->failed('名称错误');
-        if($browsePage->dom->planEnd->getText() != $sprint['end'])     return $this->failed('名称错误');
+        if($browsePage->dom->planEnd->getText() != $sprint['end'])     return $this->failed('计划完成日期错误');
 
         return $this->success();
         }
