@@ -64,7 +64,7 @@ const stepPresenters =
                 stepPresenters.openApp(currentStep);
             };
             scope.$(scope).on('resize', checkOpenAppStep);
-            scope.$('#menuMoreBtn').on('shown', checkOpenAppStep);
+            scope.$('#menuMoreBtn').on('shown hidden', checkOpenAppStep);
             $menuNav.data('tutorial.checkOpenAppStep', true);
         }
 
