@@ -487,10 +487,9 @@ class pivotState
      * @access public
      * @return bool
      */
-    public function checkFuncs()
+    public function checkFuncs($type = 'func')
     {
-        $builder = $this->sqlBuilder;
-        $funcs   = $builder['funcs'];
+        $funcs = $this->getFuncs($type);
 
         $checkDuplicate = array();
         foreach($funcs as $index => $func)
@@ -636,6 +635,24 @@ class pivotState
     }
 
     /**
+     * Add agg func.
+     *
+     * @access public
+     * @return void
+     */
+    public function addAggFunc()
+    {
+        $groups = $this->sqlBuilder['groups'];
+        foreach($groups as $group)
+        {
+            if($group['type'] == 'group') continue;
+
+            list($table, $field) = $group['select'];
+            $this->addFunc('agg', $table, $field);
+        }
+    }
+
+    /**
      * Set group by.
      *
      * @access public
@@ -669,6 +686,7 @@ class pivotState
         }
 
         $this->sqlBuilder['groups'] = $groups;
+        $this->addAggFunc();
     }
 
     /**
