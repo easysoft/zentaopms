@@ -1074,9 +1074,9 @@ class testtaskModel extends model
         }
         foreach($scenes as $scene)
         {
-            $scene->parent = !empty($scene->parent) ? 'scene-' . $scene->parent : 0;
-            $scene->id     = 'scene-' . $scene->id;
-            $run->isScene  = true;
+            $scene->parent  = !empty($scene->parent) ? 'scene-' . $scene->parent : 0;
+            $scene->id      = 'scene-' . $scene->id;
+            $scene->isScene = true;
         }
 
         return array_merge($runs, $scenes);
