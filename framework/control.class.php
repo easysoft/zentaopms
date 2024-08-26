@@ -533,7 +533,7 @@ class control extends baseControl
         $action = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
         if(!$action || $action->extensionType != 'extend') return $fields;
 
-        $uiID      = $this->loadModel('workflowlayout')->matchUIByData($flow->module, $action->action, $object);
+        $uiID      = $this->loadModel('workflowlayout')->getUIByData($flow->module, $action->action, $object);
         $fieldList = $this->workflowaction->getFields($flow->module, $action->action, true, null, $uiID);
         return $this->loadModel('flow')->buildFormFields($fields, $fieldList);
     }
@@ -562,7 +562,7 @@ class control extends baseControl
         $action = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
         if(!$action || $action->extensionType == 'none') return '';
 
-        $uiID      = $this->loadModel('workflowlayout')->matchUIByData($flow->module, !empty($action->action) ? $action->action: '', $object);
+        $uiID      = $this->loadModel('workflowlayout')->getUIByData($flow->module, !empty($action->action) ? $action->action: '', $object);
         $fieldList = $this->loadModel('workflowaction')->getFields($flow->module, !empty($action->action) ? $action->action: '', true, null, $uiID);
 
         $html = '';
@@ -605,7 +605,7 @@ class control extends baseControl
         $action = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
         if(!$action || $action->extensionType != 'extend') return array();
 
-        $uiID = is_object($object) ? $this->loadModel('workflowlayout')->matchUIByData($flow->module, $action->action, $object) : 0;
+        $uiID = is_object($object) ? $this->loadModel('workflowlayout')->getUIByData($flow->module, $action->action, $object) : 0;
 
         $wrapControl  = array('textarea', 'richtext', 'file');
         $fieldList    = $this->workflowaction->getFields($flow->module, $action->action, true, $object, $uiID);
