@@ -6,7 +6,7 @@ $scrumProjectManage->name    = 'scrumProjectManage';
 $scrumProjectManage->title   = $lang->tutorial->scrumProjectManage->title;
 $scrumProjectManage->icon    = 'project text-special';
 $scrumProjectManage->type    = 'basic';
-$scrumProjectManage->modules = 'project,execution,build,task,bug,testreport,issue';
+$scrumProjectManage->modules = 'project,execution,build,task,bug,testreport,issue,risk';
 $scrumProjectManage->app     = 'project';
 $scrumProjectManage->tasks   = array();
 
@@ -817,6 +817,95 @@ if(in_array($config->edition, array('max', 'ipd')))
         'page'   => 'issue-browse',
         'title'  => $lang->tutorial->scrumProjectManage->manageIssue->step14->name,
         'desc'   => $lang->tutorial->scrumProjectManage->manageIssue->step14->desc
+    );
+
+    $scrumProjectManage->tasks['manageRisk'] = array();
+    $scrumProjectManage->tasks['manageRisk']['name']     = 'manageRisk';
+    $scrumProjectManage->tasks['manageRisk']['title']    = $lang->tutorial->scrumProjectManage->manageRisk->title;
+    $scrumProjectManage->tasks['manageRisk']['startUrl'] = array('project', 'index', 'projectID=2');
+    $scrumProjectManage->tasks['manageRisk']['steps']    = array();
+
+    $scrumProjectManage->tasks['manageRisk']['steps'][] = array(
+        'type'   => 'clickNavbar',
+        'target' => 'other',
+        'page'   => 'project-index',
+        'title'  => $lang->tutorial->scrumProjectManage->manageRisk->step1->name
+    );
+
+    $scrumProjectManage->tasks['manageRisk']['steps'][] = array(
+        'type'   => 'click',
+        'target' => '#other a[data-id="risk"]',
+        'page'   => 'project-index',
+        'title'  => $lang->tutorial->scrumProjectManage->manageRisk->step2->name,
+        'desc'   => $lang->tutorial->scrumProjectManage->manageRisk->step2->desc
+    );
+
+    $scrumProjectManage->tasks['manageRisk']['steps'][] = array(
+        'type'   => 'click',
+        'target' => 'a.create-risk-btn',
+        'page'   => 'risk-browse',
+        'title'  => $lang->tutorial->scrumProjectManage->manageRisk->step3->name,
+        'desc'   => $lang->tutorial->scrumProjectManage->manageRisk->step3->desc
+    );
+
+    $scrumProjectManage->tasks['manageRisk']['steps'][] = array(
+        'type'   => 'form',
+        'page'   => 'risk-create',
+        'title'  => $lang->tutorial->scrumProjectManage->manageRisk->step4->name
+    );
+
+    $scrumProjectManage->tasks['manageRisk']['steps'][] = array(
+        'type'   => 'saveForm',
+        'page'   => 'risk-create',
+        'title'  => $lang->tutorial->scrumProjectManage->manageRisk->step5->name,
+        'desc'   => $lang->tutorial->scrumProjectManage->manageRisk->step5->desc
+    );
+
+    $scrumProjectManage->tasks['manageRisk']['steps'][] = array(
+        'type'   => 'click',
+        'target' => 'div[data-row="1"] a.risk-track-btn',
+        'page'   => 'risk-browse',
+        'url'    => array('risk', 'browse', 'projectID=2'),
+        'title'  => $lang->tutorial->scrumProjectManage->manageRisk->step6->name,
+        'desc'   => $lang->tutorial->scrumProjectManage->manageRisk->step6->desc
+    );
+
+    $scrumProjectManage->tasks['manageRisk']['steps'][] = array(
+        'type'   => 'form',
+        'target' => '#form-risk-track',
+        'page'   => 'risk-browse',
+        'title'  => $lang->tutorial->scrumProjectManage->manageRisk->step7->name
+    );
+
+    $scrumProjectManage->tasks['manageRisk']['steps'][] = array(
+        'type'   => 'saveForm',
+        'target' => '#form-risk-track button[type="submit"]',
+        'page'   => 'risk-browse',
+        'title'  => $lang->tutorial->scrumProjectManage->manageRisk->step8->name,
+        'desc'   => $lang->tutorial->scrumProjectManage->manageRisk->step8->desc
+    );
+
+    $scrumProjectManage->tasks['manageRisk']['steps'][] = array(
+        'type'   => 'click',
+        'target' => 'div[data-row="1"] a.risk-close-btn',
+        'page'   => 'risk-browse',
+        'url'    => array('risk', 'browse', 'projectID=2'),
+        'title'  => $lang->tutorial->scrumProjectManage->manageRisk->step9->name,
+        'desc'   => $lang->tutorial->scrumProjectManage->manageRisk->step9->desc
+    );
+
+    $scrumProjectManage->tasks['manageRisk']['steps'][] = array(
+        'type'   => 'form',
+        'target' => '#risk-close-form',
+        'page'   => 'risk-browse',
+        'title'  => $lang->tutorial->scrumProjectManage->manageRisk->step10->name
+    );
+
+    $scrumProjectManage->tasks['manageRisk']['steps'][] = array(
+        'type'   => 'saveForm',
+        'target' => '#risk-close-form button[type="submit"]',
+        'page'   => 'risk-browse',
+        'title'  => $lang->tutorial->scrumProjectManage->manageRisk->step11->name
     );
 }
 

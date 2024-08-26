@@ -1096,4 +1096,71 @@ class tutorialModel extends model
         $issues[$confirmedIssue->id]   = $confirmedIssue;
         return $issues;
     }
+
+    /**
+     * 获取新手模式风险。
+     * Get risk.
+     *
+     * @access public
+     * @return object
+     */
+    public function getRisk(): object
+    {
+        $risk = new stdClass();
+        $risk->id               = 1;
+        $risk->project          = 2;
+        $risk->execution        = 0;
+        $risk->name             = 'Test risk';
+        $risk->source           = '';
+        $risk->category         = '';
+        $risk->strategy         = '';
+        $risk->status           = 'active';
+        $risk->impact           = 3;
+        $risk->probability      = 3;
+        $risk->rate             = 9;
+        $risk->pri              = 'middle';
+        $risk->identifiedDate   = '';
+        $risk->prevention       = '';
+        $risk->remedy           = '';
+        $risk->plannedClosedDate= '';
+        $risk->actualClosedDate = '';
+        $risk->lib              = 0;
+        $risk->from             = 0;
+        $risk->version          = 1;
+        $risk->createdBy        = '';
+        $risk->createdDate      = '';
+        $risk->editedBy         = '';
+        $risk->editedDate       = '';
+        $risk->resolution       = '';
+        $risk->resolvedBy       = '';
+        $risk->activateBy       = '';
+        $risk->activateDate     = '';
+        $risk->assignedTo       = '';
+        $risk->closedBy         = '';
+        $risk->closedDate       = '';
+        $risk->cancelBy         = '';
+        $risk->cancelDate       = '';
+        $risk->cancelReason     = '';
+        $risk->hangupBy         = '';
+        $risk->hangupDate       = '';
+        $risk->trackedBy        = '';
+        $risk->trackedDate      = '';
+        $risk->assignedDate     = '';
+        $risk->approvedDate     = '';
+        $risk->deleted          = 0;
+        return $risk;
+    }
+
+    /**
+     * 获取新手模式风险列表。
+     * Get risks.
+     *
+     * @access public
+     * @return array
+     */
+    public function getRisks(): array
+    {
+        $risk = $this->getRisk();
+        return array($risk->id => $risk);
+    }
 }

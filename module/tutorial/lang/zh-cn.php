@@ -478,3 +478,45 @@ $lang->tutorial->scrumProjectManage->manageIssue->step13->name = '填写表单';
 $lang->tutorial->scrumProjectManage->manageIssue->step14 = new stdClass();
 $lang->tutorial->scrumProjectManage->manageIssue->step14->name = '保存表单';
 $lang->tutorial->scrumProjectManage->manageIssue->step14->desc = '可以在这里关闭问题';
+
+$lang->tutorial->scrumProjectManage->manageRisk = new stdClass();
+$lang->tutorial->scrumProjectManage->manageRisk->title = '风险管理';
+
+$lang->tutorial->scrumProjectManage->manageRisk->step1 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageRisk->step1->name = '点击其他';
+
+$lang->tutorial->scrumProjectManage->manageRisk->step2 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageRisk->step2->name = '点击风险';
+$lang->tutorial->scrumProjectManage->manageRisk->step2->desc = '可以在这里进行风险管理';
+
+$lang->tutorial->scrumProjectManage->manageRisk->step3 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageRisk->step3->name = '点击添加风险';
+$lang->tutorial->scrumProjectManage->manageRisk->step3->desc = '在这里可以添加当前项目的风险，支持批量创建';
+
+$lang->tutorial->scrumProjectManage->manageRisk->step4 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageRisk->step4->name = '填写表单';
+
+$lang->tutorial->scrumProjectManage->manageRisk->step5 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageRisk->step5->name = '保存表单';
+$lang->tutorial->scrumProjectManage->manageRisk->step5->desc = '可以在这里将风险添加到风险列表中';
+
+$lang->tutorial->scrumProjectManage->manageRisk->step6 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageRisk->step6->name = '跟踪风险';
+$lang->tutorial->scrumProjectManage->manageRisk->step6->desc = '可以在这里跟踪风险';
+
+$lang->tutorial->scrumProjectManage->manageRisk->step7 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageRisk->step7->name = '填写表单';
+
+$lang->tutorial->scrumProjectManage->manageRisk->step8 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageRisk->step8->name = '保存表单';
+$lang->tutorial->scrumProjectManage->manageRisk->step8->desc = '保存后返回风险列表';
+
+$lang->tutorial->scrumProjectManage->manageRisk->step9 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageRisk->step9->name = '关闭风险';
+$lang->tutorial->scrumProjectManage->manageRisk->step9->desc = '可以在这里将风险关闭';
+
+$lang->tutorial->scrumProjectManage->manageRisk->step10 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageRisk->step10->name = '填写表单';
+
+$lang->tutorial->scrumProjectManage->manageRisk->step11 = new stdClass();
+$lang->tutorial->scrumProjectManage->manageRisk->step11->name = '保存表单';
