@@ -1,4 +1,4 @@
-.model-pestel .model-block::after {position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #fff; font-size: 160px; font-weight: 600; pointer-events: none;}
+.model-pestel .model-block::after {position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #fff; font-size: 7.5rem; font-weight: 600; pointer-events: none;}
 .model-pestel .block-0 .model-block::after {content: 'P';}
 .model-pestel .block-1 .model-block::after {content: 'E';}
 .model-pestel .block-2 .model-block::after {content: 'S';}

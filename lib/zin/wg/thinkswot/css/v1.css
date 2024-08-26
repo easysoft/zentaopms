@@ -1,6 +1,6 @@
 .model-swot .block-0, .model-swot .block-1 {border-bottom: none;}
 .model-swot .model-block:nth-child(odd) {border-right: none;}
-.model-swot .model-block::after {position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #fff; font-size: 160px; font-weight: 600; pointer-events: none;}
+.model-swot .model-block::after {position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #fff; font-size: 9rem; font-weight: 600; pointer-events: none;}
 .model-swot .model-block.block-0::after {content: 'S';}
 .model-swot .model-block.block-1::after {content: 'W';}
 .model-swot .model-block.block-2::after {content: 'O';}
