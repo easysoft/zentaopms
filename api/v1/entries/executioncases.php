@@ -24,7 +24,7 @@ class executionCasesEntry extends entry
         if(empty($executionID)) return $this->sendError(400, 'Need execution id.');
 
         $control = $this->loadController('execution', 'testcase');
-        $control->testcase($executionID, $this->param('product', 0), $this->param('branch', 0), $this->param('status', 'all'), $this->param('module', 0), $this->param('order', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
+        $control->testcase($executionID, (int)$this->param('product', 0), $this->param('branch', 'all'), $this->param('status', 'all'), 0, (int)$this->param('module', 0), $this->param('order', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
 
         $data = $this->getData();
 
