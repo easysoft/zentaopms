@@ -117,8 +117,8 @@ $inModal ? null : sidebar
             set::id('monacoTree'),
             set::items($tree),
             set::canSplit(false),
-            set::collapsedIcon('folder'),
-            set::expandedIcon('folder-open'),
+            set::collapsedIcon('folder text-warning'),
+            set::expandedIcon('folder-open text-warning'),
             set::normalIcon('file-text-alt'),
             set::selected($file),
             set::onClickItem(jsRaw('window.treeClick'))
