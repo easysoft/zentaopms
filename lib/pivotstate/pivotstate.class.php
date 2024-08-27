@@ -680,25 +680,36 @@ class pivotState
     {
         $selects = array_merge($this->getSelects(false), $this->getFuncSelects());
 
-        $groups = array();
+        $this->sqlBuilder['groups'] = array();
+        foreach($selects as $index => $select) $this->addGroupBy('agg', $index, $select);
 
-        foreach($selects as $index => $select)
+        $this->addAggFunc();
+    }
+
+    /**
+     * addGroupBy
+     *
+     * @param  int    $type
+     * @param  int    $order
+     * @param  int    $select
+     * @param  string $function
+     * @access public
+     * @return void
+     */
+    public function addGroupBy($type, $order, $select, $function = 'count')
+    {
+        list($table, $field, $alias) = $select;
+        $name = $alias;
+        if(empty($alias))
         {
-            list($table, $field, $alias) = $select;
-            $name      = $alias;
-            if(empty($alias))
-            {
-                $fieldList = $this->getTableDescList($table);
-                $name = $table . '_' . $fieldList[$field];
-                $select[2] = "{$table}_{$field}";
-            }
-            $select[3] = 'count';
-            $select[4] = $name;
-            $groups[]  = array('select' => $select, 'type' => 'agg', 'order' => $index, 'name' => $name);
+            $fieldList = $this->getTableDescList($table);
+            $name = $table . '_' . $fieldList[$field];
+            $select[2] = "{$table}_{$field}";
         }
 
-        $this->sqlBuilder['groups'] = $groups;
-        $this->addAggFunc();
+        $select[3] = $function;
+        $select[4] = $name;
+        $this->sqlBuilder['groups'][]  = array('select' => $select, 'type' => $type, 'order' => $order, 'name' => $name);
     }
 
     /**
@@ -821,9 +832,8 @@ class pivotState
 
         // TODO
 
-
         ksort($groups, SORT_NUMERIC);
-        $thi->sqlBuilder['groups'] = $groups;
+        $this->sqlBuilder['groups'] = $groups;
     }
 
     /**
