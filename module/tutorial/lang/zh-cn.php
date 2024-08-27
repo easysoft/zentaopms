@@ -568,3 +568,33 @@ $lang->tutorial->waterfallProjectManage->manageProject->step10->name = '填写�
 $lang->tutorial->waterfallProjectManage->manageProject->step11 = new stdClass();
 $lang->tutorial->waterfallProjectManage->manageProject->step11->name = '保存表单';
 $lang->tutorial->waterfallProjectManage->manageProject->step11->desc = '保存后可以在团队中查看团队成员';
+
+$lang->tutorial->waterfallProjectManage->setStage = new stdClass();
+$lang->tutorial->waterfallProjectManage->setStage->title = '阶段设置';
+
+$lang->tutorial->waterfallProjectManage->setStage->step1 = new stdClass();
+$lang->tutorial->waterfallProjectManage->setStage->step1->name = '点击阶段';
+$lang->tutorial->waterfallProjectManage->setStage->step1->desc = '可以在这里维护阶段';
+
+$lang->tutorial->waterfallProjectManage->setStage->step2 = new stdClass();
+$lang->tutorial->waterfallProjectManage->setStage->step2->name = '点击设置阶段';
+$lang->tutorial->waterfallProjectManage->setStage->step2->desc = '点击设置阶段可以确定项目的各个阶段，将阶段设置为里程碑，可以查看相关里程碑报告。';
+
+$lang->tutorial->waterfallProjectManage->setStage->step3 = new stdClass();
+$lang->tutorial->waterfallProjectManage->setStage->step3->name = '填写表单';
+
+$lang->tutorial->waterfallProjectManage->setStage->step4 = new stdClass();
+$lang->tutorial->waterfallProjectManage->setStage->step4->name = '保存表单';
+$lang->tutorial->waterfallProjectManage->setStage->step4->desc = '可以为每个阶段设置起止日期，保存在阶段列表中查看所有阶段';
+
+$lang->tutorial->waterfallProjectManage->setStage->step5 = new stdClass();
+$lang->tutorial->waterfallProjectManage->setStage->step5->name = '切换视图';
+$lang->tutorial->waterfallProjectManage->setStage->step5->desc = '在这里可以切换为甘特图视图查看阶段';
+
+$lang->tutorial->waterfallProjectManage->setStage->step6 = new stdClass();
+$lang->tutorial->waterfallProjectManage->setStage->step6->name = '点击开发阶段';
+$lang->tutorial->waterfallProjectManage->setStage->step6->desc = '可以在每个阶段中分配相应的资源和任务';
+
+$lang->tutorial->waterfallProjectManage->setStage->step7 = new stdClass();
+$lang->tutorial->waterfallProjectManage->setStage->step7->name = '点击燃尽图';
+$lang->tutorial->waterfallProjectManage->setStage->step7->desc = '查看燃尽图可以跟进阶段';

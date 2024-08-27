@@ -41,6 +41,8 @@ class programplanModel extends model
      */
     public function getStage(int $executionID = 0, int $productID = 0, string $browseType = 'all', string $orderBy = 'id_asc'): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getStages();
+
         $plans = $this->programplanTao->getStageList($executionID, $productID, $browseType, $orderBy);
         return $this->processPlans($plans);
     }

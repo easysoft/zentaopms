@@ -150,6 +150,8 @@ class stageModel extends model
      */
     public function getStages(string $orderBy = 'id_desc', int $projectID = 0, string $type = ''): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getStages();
+
         if($projectID)
         {
             return $this->dao->select('`id`,name,type,percent,openedBy as createdBy,`begin` as createdDate,lastEditedBy as editedBy,`end` as editedDate,deleted')

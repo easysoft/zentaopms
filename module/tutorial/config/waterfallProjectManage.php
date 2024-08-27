@@ -6,7 +6,7 @@ $waterfallProjectManage->name    = 'waterfallProjectManage';
 $waterfallProjectManage->title   = $lang->tutorial->waterfallProjectManage->title;
 $waterfallProjectManage->icon    = 'waterfall text-special';
 $waterfallProjectManage->type    = 'basic';
-$waterfallProjectManage->modules = 'project,execution,build,task,bug,testreport,issue,risk';
+$waterfallProjectManage->modules = 'project,execution,build,task,bug,testreport,issue,risk,programplan';
 $waterfallProjectManage->app     = 'project';
 $waterfallProjectManage->tasks   = array();
 
@@ -100,6 +100,74 @@ $waterfallProjectManage->tasks['manageProject']['steps'][] = array(
     'page'   => 'project-manageMembers',
     'title'  => $lang->tutorial->waterfallProjectManage->manageProject->step11->name,
     'desc'   => $lang->tutorial->waterfallProjectManage->manageProject->step11->desc
+);
+
+$waterfallProjectManage->tasks['setStage'] = array();
+$waterfallProjectManage->tasks['setStage']['name']     = 'setStage';
+$waterfallProjectManage->tasks['setStage']['title']    = $lang->tutorial->waterfallProjectManage->setStage->title;
+$waterfallProjectManage->tasks['setStage']['startUrl'] = array('project', 'index', 'project=2');
+$waterfallProjectManage->tasks['setStage']['steps']    = array();
+
+$waterfallProjectManage->tasks['setStage']['steps'][] = array(
+    'type'   => 'clickNavbar',
+    'target' => 'execution',
+    'page'   => 'project-index',
+    'title'  => $lang->tutorial->waterfallProjectManage->setStage->step1->name,
+    'desc'   => $lang->tutorial->waterfallProjectManage->setStage->step1->desc
+);
+
+$waterfallProjectManage->tasks['setStage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => in_array($config->edition, array('max', 'ipd')) ? '#actionBar a.programplan-create-btn' : '#actionBar a.create-execution-btn',
+    'page'   => in_array($config->edition, array('max', 'ipd')) ? 'programplan-browse' : 'project-execution',
+    'url'    => in_array($config->edition, array('max', 'ipd')) ? array('programplan', 'browse', 'projectID=2') : array('project', 'execution', 'status=all&projectID=2'),
+    'title'  => $lang->tutorial->waterfallProjectManage->setStage->step2->name,
+    'desc'   => $lang->tutorial->waterfallProjectManage->setStage->step2->desc
+);
+
+$waterfallProjectManage->tasks['setStage']['steps'][] = array(
+    'type'   => 'form',
+    'target' => '#dataform',
+    'page'   => 'programplan-create',
+    'title'  => $lang->tutorial->waterfallProjectManage->setStage->step3->name
+);
+
+$waterfallProjectManage->tasks['setStage']['steps'][] = array(
+    'type'   => 'saveForm',
+    'target' => '#dataform button[type="submit"]',
+    'page'   => 'programplan-create',
+    'title'  => $lang->tutorial->waterfallProjectManage->setStage->step4->name,
+    'desc'   => $lang->tutorial->waterfallProjectManage->setStage->step4->desc
+);
+
+if(in_array($config->edition, array('max', 'ipd')))
+{
+    $waterfallProjectManage->tasks['setStage']['steps'][] = array(
+        'type'   => 'click',
+        'target' => '#actionBar a.switchBtn',
+        'page'   => 'programplan-browse',
+        'url'    => array('programplan', 'browse', 'projectID=2'),
+        'title'  => $lang->tutorial->waterfallProjectManage->setStage->step5->name,
+        'desc'   => $lang->tutorial->waterfallProjectManage->setStage->step5->desc
+    );
+}
+
+$waterfallProjectManage->tasks['setStage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#table-project-execution .dtable-cell[data-row="pid3"][data-col="nameCol"] a',
+    'page'   => 'project-execution',
+    'url'    => array('project', 'execution', 'status=all&projectID=2'),
+    'title'  => $lang->tutorial->waterfallProjectManage->setStage->step6->name,
+    'desc'   => $lang->tutorial->waterfallProjectManage->setStage->step6->desc
+);
+
+$waterfallProjectManage->tasks['setStage']['steps'][] = array(
+    'type'   => 'clickNavbar',
+    'target' => 'burn',
+    'page'   => 'execution-task',
+    'url'    => array('execution', 'task', 'executionID=3'),
+    'title'  => $lang->tutorial->waterfallProjectManage->setStage->step7->name,
+    'desc'   => $lang->tutorial->waterfallProjectManage->setStage->step7->desc
 );
 
 $config->tutorial->guides[$waterfallProjectManage->name] = $waterfallProjectManage;

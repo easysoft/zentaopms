@@ -176,7 +176,7 @@ class tutorialModel extends model
         $project->storyType    = 'story,requirement,epic';
         $project->charter      = 0;
 
-        list($guide, $guideTask, $guideStepIndex) = explode('-', $_SERVER['HTTP_X_ZIN_TUTORIAL']);
+        list($guide, $guideTask, $guideStepIndex) = empty($_SERVER['HTTP_X_ZIN_TUTORIAL']) ? array() : explode('-', $_SERVER['HTTP_X_ZIN_TUTORIAL']);
         if($guide == 'scrumProjectManage')
         {
             $project->name  = 'Scrum Project';
@@ -335,6 +335,41 @@ class tutorialModel extends model
     }
 
     /**
+     * 获取新手模式阶段。
+     * Get tutorial stage.
+     *
+     * @access public
+     * @return object
+     */
+    public function getStage(): object
+    {
+        $stage = new stdClass();
+        $stage->id          = 3;
+        $stage->name        = 'Development stage';
+        $stage->percent     = 50;
+        $stage->type        = 'dev';
+        $stage->projectType = 'waterfall';
+        $stage->createdBy   = '';
+        $stage->createdDate = '';
+        $stage->editedBy    = '';
+        $stage->editedDate  = '';
+        $stage->deleted     = 0;
+        return $stage;
+    }
+
+    /**
+     * 获取新手模式阶段列表。
+     * Get tutorial stages.
+     *
+     * @access public
+     * @return array
+     */
+    public function getStages(): array
+    {
+        return array(3 => $this->getStage());
+    }
+
+    /**
      * 获取新手模式执行。
      * Get tutorial execution.
      *
@@ -390,6 +425,18 @@ class tutorialModel extends model
         $execution->hasProduct    = '1';
         $execution->multiple      = '';
         $execution->colWidth      = '200';
+
+        list($guide, $guideTask, $guideStepIndex) = empty($_SERVER['HTTP_X_ZIN_TUTORIAL']) ? array() : explode('-', $_SERVER['HTTP_X_ZIN_TUTORIAL']);
+        if($guide == 'scrumProjectManage')
+        {
+            $execution->name = 'Test Sprint';
+            $execution->type = 'sprint';
+        }
+        if($guide == 'waterfallProjectManage')
+        {
+            $execution->name = 'Test Stage';
+            $execution->type = 'stage';
+        }
 
         return $execution;
     }
