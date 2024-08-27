@@ -212,7 +212,7 @@ class formPanel extends panel
     {
         global $app;
 
-        $data   = $this->getData;
+        $data   = $this->getData();
         $fields = $app->control->appendExtendForm('info', $data);
 
         $formBatchItem = array();
