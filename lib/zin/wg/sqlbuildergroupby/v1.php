@@ -111,6 +111,20 @@ class sqlBuilderGroupBy extends wg
         return $formRows;
     }
 
+    protected function buildGroupField()
+    {
+        list($groups) = $this->prop(array('groups'));
+        $items = array();
+        foreach($groups as $index => $group) if($group['type'] == 'group') $items[] = array('text' => $group['name'], 'data-index' => $index);
+
+        return zui::SortableList
+        (
+            setClass('group-by-sort'),
+            set::items($items),
+            set::itemProps(array('icon' => 'move muted'))
+        );
+    }
+
     protected function build()
     {
         global $lang;
@@ -132,7 +146,8 @@ class sqlBuilderGroupBy extends wg
                 set::headingClass('bg-gray-100'),
                 set::bodyClass('h-70 overflow-y-auto flex col gap-y-2'),
                 set::title($lang->bi->groupField),
-                to::heading($this->buildHelpIcon($lang->bi->groupFieldTip))
+                to::heading($this->buildHelpIcon($lang->bi->groupFieldTip)),
+                $this->buildGroupField()
             ),
             panel
             (
