@@ -112,10 +112,11 @@ class mainNavbar extends nav
                 $item = array();
                 $link = $menuItem['link'];
                 $name = $menuItem['name'];
-                $item['text']     = $menuItem['text'];
-                $item['url']      = commonModel::createMenuLink((object)$menuItem, $app->tab);
-                $item['data-id']  = $name;
-                $item['data-app'] = $app->tab;
+                $item['text']       = $menuItem['text'];
+                $item['url']        = commonModel::createMenuLink((object)$menuItem, $app->tab);
+                $item['data-id']    = $name;
+                $item['data-app']   = $app->tab;
+                $item['data-group'] = $app->tab . '-' . $activeMenu;
 
                 $active = '';
                 if($activeItem && $activeItem == $name)

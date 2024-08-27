@@ -248,43 +248,17 @@ class customModel extends model
         global $lang;
         $customMenuMap = array();
         $order         = 1;
-        if($customMenu)
+        if($customMenu && is_array($customMenu))
         {
-            if(is_string($customMenu))
+            $prev = '';
+            foreach($customMenu as $customMenuItem)
             {
-                $customMenuItems = explode(',', $customMenu);
-                foreach($customMenuItems as $customMenuItem)
-                {
-                    $item = new stdclass();
-                    $item->name   = $customMenuItem;
-                    $item->order  = $order ++;
-                    $item->hidden = false;
-                    $customMenuMap[$item->name] = $item;
-                }
-                foreach($allMenu as $name => $item)
-                {
-                    if(!isset($customMenuMap[$name]))
-                    {
-                        $item = new stdclass();
-                        $item->name   = $name;
-                        $item->hidden = true;
-                        $item->order  = $order ++;
-                        $customMenuMap[$name] = $item;
-                    }
-                }
-            }
-            elseif(is_array($customMenu))
-            {
-                $prev = '';
-                foreach($customMenu as $customMenuItem)
-                {
-                    $name = $customMenuItem->name;
-                    if(!isset($customMenuItem->order)) $customMenuItem->order = $order;
-                    if($prev == 'divider') $customMenuItem->divider = true;
-                    if($name != 'divider') $customMenuMap[$name]    = $customMenuItem;
-                    $prev = $name;
-                    $order ++;
-                }
+                $name = $customMenuItem->name;
+                if(!isset($customMenuItem->order)) $customMenuItem->order = $order;
+                if($prev == 'divider') $customMenuItem->divider = true;
+                if($name != 'divider') $customMenuMap[$name]    = $customMenuItem;
+                $prev = $name;
+                $order ++;
             }
         }
         elseif($module)
@@ -331,7 +305,7 @@ class customModel extends model
         $module         = $menuModuleName;
         foreach($allMenu as $name => $item)
         {
-            if($menuModuleName == 'main' && !isset($customMenuMap[$name])) continue; // 顶部一级导航，自定义过滤掉的菜单不显示。
+            if(!empty($customMenuMap) && !isset($customMenuMap[$name])) continue; // 自定义过滤掉的菜单不显示。
 
             $name = (string)$name;
             if(is_object($item)) $item = (array)$item;
@@ -419,13 +393,6 @@ class customModel extends model
      */
     public static function buildMenuItem(array|string $item, $customMenuMap, string $name = '', string $label = '', string|array $itemLink = '', bool $isTutorialMode = false, array $subMenu = array()): object
     {
-        if($item === '-')
-        {
-            $menuItem = new stdclass();
-            $menuItem->type = 'divider';
-            return $menuItem;
-        }
-
         if(is_array($item) && (isset($item['subMenu']) || isset($item['dropMenu'])))
         {
             foreach(array('subMenu', 'dropMenu') as $key)
@@ -434,13 +401,6 @@ class customModel extends model
                 foreach($item[$key] as $subItem)
                 {
                     if(isset($subItem->link['module']) && isset($subItem->link['method'])) $subItem->hidden = !common::hasPriv($subItem->link['module'], $subItem->link['method']);
-                }
-                if(isset($customMenuMap[$name]->$key))
-                {
-                    foreach($customMenuMap[$name]->$key as $subItem)
-                    {
-                        if(isset($subItem->hidden) && isset($item[$key][$subItem->name])) $item[$key][$subItem->name]->hidden = $subItem->hidden;
-                    }
                 }
             }
         }
@@ -483,8 +443,8 @@ class customModel extends model
         if($module == 'product' and isset($allMenu->branch)) $allMenu->branch = str_replace('@branch@', $lang->custom->branch, $allMenu->branch);
 
         /* 获取自定义过的导航。 */
-        $isHomeMenu = in_array($app->tab, array('program', 'product', 'project', 'execution')) && count((array)$allMenu) <= 3;
-        $customKey  = $isHomeMenu ? $app->tab . '-home' : $app->tab;
+        $isHomeMenu = in_array($app->tab, array('program', 'product', 'project', 'execution')) && count((array)$allMenu) <= 3 && $module == 'main';
+        $customKey  = $isHomeMenu ? $app->tab . '-home' : ($module == 'main' ? $app->tab : $app->tab . '-' . $module);
         $customMenu = isset($config->customMenu->{$customKey}) ? $config->customMenu->{$customKey}: array();
 
         if(!empty($customMenu) && is_string($customMenu) && substr($customMenu, 0, 1) === '[') $customMenu = json_decode($customMenu);
