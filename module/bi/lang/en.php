@@ -40,6 +40,24 @@ $lang->bi->addWhere      = 'Add group';
 $lang->bi->emptyWheres   = 'Empty where。';
 $lang->bi->checkAll      = 'Check All';
 $lang->bi->cancelAll     = 'Cancel All';
+$lang->bi->groupField    = 'Group field';
+$lang->bi->aggField      = 'Aggregate field';
+$lang->bi->allFields     = 'Selected/Function field';
+
+$lang->bi->allFieldsTip  = 'Selected and function field is already checked.';
+$lang->bi->groupFieldTip = 'Group by the result with group field.';
+$lang->bi->aggFieldTip   = 'The aggregation function operation is configured for the aggregation field, so as to obtain the summary data under different groups.';
+
+$lang->bi->aggTipA = 'For %s';
+$lang->bi->aggTipB = 'calculate, Rename to %s';
+
+$lang->bi->aggList = array();
+$lang->bi->aggList['count']         = 'Count';
+$lang->bi->aggList['countdistinct'] = 'Count Distinct';
+$lang->bi->aggList['avg']           = 'Average';
+$lang->bi->aggList['sum']           = 'Sum';
+$lang->bi->aggList['max']           = 'Max';
+$lang->bi->aggList['min']           = 'Min';
 
 $lang->bi->whereGroupTitle  = 'The %s group';
 $lang->bi->addWhereGroup    = 'Add group';

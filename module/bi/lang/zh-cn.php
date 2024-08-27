@@ -44,6 +44,24 @@ $lang->bi->addWhere      = '添加组';
 $lang->bi->emptyWheres   = '暂未添加确定性查询条件。';
 $lang->bi->checkAll      = '全选';
 $lang->bi->cancelAll     = '取消全选';
+$lang->bi->groupField    = '分组字段';
+$lang->bi->aggField      = '聚合字段';
+$lang->bi->allFields     = '已选/新增字段';
+
+$lang->bi->allFieldsTip  = '已选的查询字段和新增的函数字段。';
+$lang->bi->groupFieldTip = '使用分组字段对查询结果进行分组。';
+$lang->bi->aggFieldTip   = '对聚合字段配置聚合函数运算，从而得到不同分组下的汇总数据。';
+
+$lang->bi->aggTipA = '对 %s 进行';
+$lang->bi->aggTipB = '运算，对结果重命名为 %s';
+
+$lang->bi->aggList = array();
+$lang->bi->aggList['count']         = '计数';
+$lang->bi->aggList['countdistinct'] = '去重后计数';
+$lang->bi->aggList['avg']           = '平均值';
+$lang->bi->aggList['sum']           = '求和';
+$lang->bi->aggList['max']           = '最大值';
+$lang->bi->aggList['min']           = '最小值';
 
 $lang->bi->whereGroupTitle  = '第%s组确定性查询条件';
 $lang->bi->addWhereGroup    = '添加组';
