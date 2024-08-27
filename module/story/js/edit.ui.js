@@ -70,7 +70,8 @@ window.changeReviewer = function()
     var reviewerCount = $reviewer.val().filter(Boolean).length;
     var $value        = $reviewer.val();
 
-    const isContained = reviewedBy.every(element => $value.includes(element));
+    const filteredArray = reviewedBy.filter(value => value !== '');
+    const isContained   = filteredArray.every(element => $value.includes(element));
 
     if(!isContained)
     {

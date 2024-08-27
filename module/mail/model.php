@@ -66,7 +66,7 @@ class mailModel extends model
         $config->password = '';
         $config->debug    = 1;
         $config->charset  = 'utf-8';
-        if(!isset($config->secure))   $config->secure   = '';
+        if(!isset($config->secure))   $config->secure   = 0;
         if(!isset($config->username)) $config->username = $username;
         if(!isset($config->host))     $config->host = '';
         if(!isset($config->auth))     $config->auth = 1;
@@ -92,7 +92,7 @@ class mailModel extends model
         $config->username = $username;
         $config->auth     = 1;
         if(!isset($config->port))   $config->port   = 25;
-        if(!isset($config->secure)) $config->secure = '';
+        if(!isset($config->secure)) $config->secure = 0;
         return $config;
     }
 
@@ -163,7 +163,7 @@ class mailModel extends model
         $config->host     = $host;
         $config->auth     = 1;
         $config->port     = $port;
-        $config->secure   = $port == 465 ? 'ssl' : '';
+        $config->secure   = $port == 465 ? 'ssl' : 0;
 
         return $config;
      }
