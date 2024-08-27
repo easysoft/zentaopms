@@ -133,6 +133,7 @@ class sqlBuilderGroupBy extends wg
             setClass('flex row w-full gap-x-4'),
             panel
             (
+                setID('allFieldPanel'),
                 setClass('basis-72 h-78'),
                 set::headingClass('bg-gray-100'),
                 set::bodyClass('h-70 overflow-y-auto flex col gap-y-2'),
@@ -142,6 +143,7 @@ class sqlBuilderGroupBy extends wg
             ),
             panel
             (
+                setID('groupFieldPanel'),
                 setClass('basis-36 h-78'),
                 set::headingClass('bg-gray-100'),
                 set::bodyClass('h-70 overflow-y-auto flex col gap-y-2'),
@@ -151,6 +153,7 @@ class sqlBuilderGroupBy extends wg
             ),
             panel
             (
+                setID('aggFieldPanel'),
                 setClass('flex-1 h-78'),
                 set::headingClass('bg-gray-100'),
                 set::bodyClass('h-70 overflow-y-auto flex col gap-y-2'),
