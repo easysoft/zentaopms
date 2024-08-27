@@ -114,6 +114,7 @@ class sqlBuilderGroupBy extends wg
     protected function buildGroupField()
     {
         list($groups) = $this->prop(array('groups'));
+        usort($groups, function($a, $b) {return $a['order'] <= $b['order'] ? -1 : 1;});
         $items = array();
         foreach($groups as $index => $group) if($group['type'] == 'group') $items[] = array('text' => $group['name'], 'data-index' => $index);
 
