@@ -53,6 +53,13 @@ class thinkMulticolumn extends thinkQuestion
         {
             $batchItems[] = $this->buildFormBatchItem($field, $key);
         }
+        $detailWg[] = formBatch
+        (
+            setClass('think-form-batch'),
+            set::minRows(5),
+            set::actions(array()),
+            $batchItems
+        );
         return $detailWg;
     }
 
