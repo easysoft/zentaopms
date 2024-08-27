@@ -841,6 +841,16 @@ function getMenuNavData()
 }
 
 /**
+ * Save menu nav to server.
+ */
+function saveMenuNavToServer()
+{
+    const customUrl = $.createLink('custom', 'ajaxSetMenu');
+    const data = getMenuNavData();
+    $.ajaxSubmit({url: customUrl, data: {menu: 'nav', items: JSON.stringify(data)}});
+}
+
+/**
  * Generate menu nav items to be added.
  *
  * @param {(item: string) => void} onClick click handler of menu item.
@@ -848,19 +858,18 @@ function getMenuNavData()
  */
 function generateAddMenuNavItems(onClick)
 {
-    const customUrl = $.createLink('custom', 'ajaxSetMenu');
-    const data = getMenuNavData();
     const items = [
         {
             icon: 'icon-minus',
             text: langData.divider,
             onClick: () => {
                 onClick('divider');
-                $.ajaxSubmit({url: customUrl, data: {menu: 'nav', items: JSON.stringify(data)}});
+                saveMenuNavToServer();
             }
         }
     ];
 
+    const data = getMenuNavData();
     const allAppCodeSet = new Set(allAppsItemsMap.keys());
     for(const {name} of data)
     {
@@ -878,8 +887,7 @@ function generateAddMenuNavItems(onClick)
                 text: title,
                 onClick: () => {
                     onClick(name);
-                    const data = getMenuNavData();
-                    $.ajaxSubmit({url: customUrl, data: {menu: 'nav', items: JSON.stringify(data)}});
+                    saveMenuNavToServer();
                 }
             }
         );
@@ -893,7 +901,6 @@ $(document).on('contextmenu', '#menuNav .divider', function(event)
     const $nav = $divider.closest('.nav');
     const isMoving = $nav.is('[z-use-sortable]');
     const items = [];
-    const customUrl = $.createLink('custom', 'ajaxSetMenu');
     if(isMoving)
     {
         items.push(
@@ -901,8 +908,7 @@ $(document).on('contextmenu', '#menuNav .divider', function(event)
                 text: langData.save,
                 onClick: () => {
                     $divider.closest('.nav').zui().destroy();
-                    const data = getMenuNavData();
-                    $.ajaxSubmit({url: customUrl, data: {menu: 'nav', items: JSON.stringify(data)}});
+                    saveMenuNavToServer();
                 }
             }
         );
@@ -930,9 +936,8 @@ $(document).on('contextmenu', '#menuNav .divider', function(event)
             onClick: () => {
                 const $li = $divider.closest('li');
                 $li.remove();
-                const data = getMenuNavData();
                 refreshMenu();
-                $.ajaxSubmit({url: customUrl, data: {menu: 'nav', items: JSON.stringify(data)}});
+                saveMenuNavToServer();
             }
         }
     );
@@ -942,7 +947,6 @@ $(document).on('contextmenu', '#menuNav .divider', function(event)
             items: generateAddMenuNavItems(addMenuToMainNavCb($divider))
         }
     );
-
 
     zui.ContextMenu.show(
         {
@@ -982,7 +986,6 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
         if(code !== 'my') items.push({text: langData.close, onClick: () => closeApp(code)});
     }
 
-    const customUrl = $.createLink('custom', 'ajaxSetMenu');
     if($btn.closest('#menuNav').length !== 0)
     {
         const $nav = $btn.closest('.nav');
@@ -994,8 +997,7 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
                     text: langData.save,
                     onClick: () => {
                         $btn.closest('.nav').zui().destroy();
-                        const data = getMenuNavData();
-                        $.ajaxSubmit({url: customUrl, data: {menu: 'nav', items: JSON.stringify(data)}});
+                        saveMenuNavToServer();
                     }
                 }
             );
@@ -1028,9 +1030,8 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
                         closeApp(code);
                         const $li = $btn.closest('li');
                         $li.remove();
-                        const data = getMenuNavData();
                         refreshMenu();
-                        $.ajaxSubmit({url: customUrl, data: {menu: 'nav', items: JSON.stringify(data)}});
+                        saveMenuNavToServer();
                     },
                 disabled: hideDisabled,
             }
@@ -1275,15 +1276,18 @@ $(document).on('click', e =>
     }
 });
 
-let allAppsItemsMap = new Map();
-void function generateAllAppsItemsMap() {
-    for(const item of allAppsItems)
+const allAppsItemsMap = new Map();
+$(document).ready(
+    function()
     {
-        if(item === 'divider') continue;
+        for(const item of allAppsItems)
+        {
+            if(item === 'divider') continue;
 
-        allAppsItemsMap.set(item.code, item);
+            allAppsItemsMap.set(item.code, item);
+        }
     }
-}();
+);
 
 /**
  * Get icon and title of app item.
