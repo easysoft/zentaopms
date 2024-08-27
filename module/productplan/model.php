@@ -160,18 +160,21 @@ class productplanModel extends model
      *
      * @param  int    $productID
      * @param  string $exclude
+     * @param  int    $append
      * @access public
      * @return array
      */
-    public function getTopPlanPairs(int $productID, string $exclude = ''): array
+    public function getTopPlanPairs(int $productID, string $exclude = '', int $append = 0): array
     {
-        return $this->dao->select("id,title")->from(TABLE_PRODUCTPLAN)
+        $pairs = $this->dao->select("id,title")->from(TABLE_PRODUCTPLAN)
             ->where('product')->eq($productID)
             ->andWhere('parent')->le(0)
             ->andWhere('deleted')->eq(0)
             ->beginIF($exclude)->andWhere('status')->notin($exclude)->fi()
             ->orderBy('id_desc')
             ->fetchPairs();
+        if($append) $pairs += $this->dao->select("id,title")->from(TABLE_PRODUCTPLAN)->where('id')->eq($append)->fetchPairs();
+        return $pairs;
     }
 
     /**
