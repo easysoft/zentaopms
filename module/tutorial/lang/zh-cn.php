@@ -598,3 +598,6 @@ $lang->tutorial->waterfallProjectManage->setStage->step6->desc = '可以在每�
 $lang->tutorial->waterfallProjectManage->setStage->step7 = new stdClass();
 $lang->tutorial->waterfallProjectManage->setStage->step7->name = '点击燃尽图';
 $lang->tutorial->waterfallProjectManage->setStage->step7->desc = '查看燃尽图可以跟进阶段';
+
+$lang->tutorial->waterfallProjectManage->manageTask = new stdClass();
+$lang->tutorial->waterfallProjectManage->manageTask = $lang->tutorial->scrumProjectManage->manageTask;

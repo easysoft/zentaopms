@@ -49,6 +49,7 @@ class build extends control
     {
         $this->loadModel('execution');
         $this->loadModel('project');
+        $this->loadModel('file');
 
         /* Set menu. */
         if($this->app->tab == 'project')
