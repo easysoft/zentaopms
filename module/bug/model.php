@@ -1714,7 +1714,8 @@ class bugModel extends model
                         ->fetchPairs('id');
                     if(empty($story)) $story = array(0);
 
-                    $bugQuery = preg_replace("/`story`[ ]+(NOT[ ]*)?LIKE[ ]+'%$searchValue%'/Ui", '`story` $1 IN (' . implode(',', $story) .')', $bugQuery);
+                    $searchValue = preg_quote($searchValue, '/');
+                    $bugQuery    = preg_replace("/`story`[ ]+(NOT[ ]*)?LIKE[ ]+'%$searchValue%'/Ui", '`story` $1 IN (' . implode(',', $story) .')', $bugQuery);
                 }
             }
             $bugQuery .= ' AND `story` != 0';
