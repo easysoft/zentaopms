@@ -229,7 +229,7 @@ class thinkStepMenu extends wg
         (
             div
             (
-                setClass('think-node-menu rounded bg-white col bg-canvas pb-3 h-full'),
+                setClass('think-node-menu rounded bg-white col bg-canvas pb-3 h-full no-morph'),
                 zui::$treeType
                 (
                     set::_id('thinkNodeMenu'),
