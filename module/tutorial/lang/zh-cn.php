@@ -604,3 +604,6 @@ $lang->tutorial->waterfallProjectManage->manageTask = $lang->tutorial->scrumProj
 
 $lang->tutorial->waterfallProjectManage->manageTest = new stdClass();
 $lang->tutorial->waterfallProjectManage->manageTest = $lang->tutorial->scrumProjectManage->manageTest;
+
+$lang->tutorial->waterfallProjectManage->manageBug = new stdClass();
+$lang->tutorial->waterfallProjectManage->manageBug = $lang->tutorial->scrumProjectManage->manageBug;

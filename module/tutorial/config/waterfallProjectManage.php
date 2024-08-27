@@ -177,4 +177,7 @@ $waterfallProjectManage->tasks['manageTask'] = $scrumProjectManage->tasks['manag
 $waterfallProjectManage->tasks['manageTest'] = array();
 $waterfallProjectManage->tasks['manageTest'] = $scrumProjectManage->tasks['manageTest'];
 
+$waterfallProjectManage->tasks['manageBug'] = array();
+$waterfallProjectManage->tasks['manageBug'] = $scrumProjectManage->tasks['manageBug'];
+
 $config->tutorial->guides[$waterfallProjectManage->name] = $waterfallProjectManage;
