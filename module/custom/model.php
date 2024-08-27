@@ -1,5 +1,4 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 /**
  * The model file of custom module of ZenTaoCMS.
  *
@@ -428,10 +427,11 @@ class customModel extends model
      * Get module menu data, if module is 'main' then return main menu.
      *
      * @param  string $module
+     * @param  bool   $isHomeMenu
      * @access public
      * @return array
      */
-    public static function getModuleMenu($module = 'main'): array
+    public static function getModuleMenu($module = 'main', $isHomeMenu = false): array
     {
         global $app, $lang, $config;
 
@@ -443,7 +443,6 @@ class customModel extends model
         if($module == 'product' and isset($allMenu->branch)) $allMenu->branch = str_replace('@branch@', $lang->custom->branch, $allMenu->branch);
 
         /* 获取自定义过的导航。 */
-        $isHomeMenu = in_array($app->tab, array('program', 'product', 'project', 'execution')) && count((array)$allMenu) <= 3 && $module == 'main';
         $customKey  = $isHomeMenu ? $app->tab . '-home' : ($module == 'main' ? $app->tab : $app->tab . '-' . $module);
         $customMenu = isset($config->customMenu->{$customKey}) ? $config->customMenu->{$customKey}: array();
 
@@ -457,12 +456,13 @@ class customModel extends model
      * 获取主菜单数据。
      * Get main menu data.
      *
+     * @param  bool   $isHomeMenu
      * @access public
      * @return array
      */
-    public static function getMainMenu(): array
+    public static function getMainMenu($isHomeMenu = false): array
     {
-        return static::getModuleMenu('main');
+        return static::getModuleMenu('main', $isHomeMenu);
     }
 
     /**

@@ -401,6 +401,7 @@ $lang->execution->menuOrder[55] = 'build';
 $lang->execution->menuOrder[60] = 'release';
 $lang->execution->menuOrder[65] = 'action';
 $lang->execution->menuOrder[70] = 'settings';
+$lang->execution->menuOrder[75] = 'more';
 
 $lang->execution->menu->view['subMenu']            = new stdclass();
 $lang->execution->menu->view['subMenu']->groupTask = "$lang->groupView|execution|grouptask|executionID=%s";
@@ -437,7 +438,7 @@ $lang->execution->menu->settings['subMenu']->products  = array('link' => "$lang-
 $lang->execution->menu->settings['subMenu']->team      = array('link' => "{$lang->team->common}|execution|team|executionID=%s", 'alias' => 'managemembers');
 $lang->execution->menu->settings['subMenu']->whitelist = array('link' => "$lang->whitelist|execution|whitelist|executionID=%s", 'subModule' => 'personnel', 'alias' => 'addwhitelist');
 
-$lang->execution->dividerMenu = ',story,build,';
+$lang->execution->dividerMenu = ',story,build,more,';
 
 $lang->project->noMultiple                          = new stdclass();
 $lang->project->noMultiple->scrum                   = new stdclass();
