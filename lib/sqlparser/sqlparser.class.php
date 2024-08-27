@@ -429,6 +429,7 @@ class sqlparser
      */
     private function trimExpr($expr)
     {
+        if(empty($expr)) return $expr;
         return trim(trim($expr), '`');
     }
 
@@ -632,6 +633,8 @@ class sqlparser
      */
     private function skipLineBreak($sql)
     {
+        if(empty($sql)) return $sql;
+
         $sql = str_replace("\n\t", " ", $sql);
         $sql = str_replace("\t\n", " ", $sql);
         $sql = str_replace("\n\r", " ", $sql);
