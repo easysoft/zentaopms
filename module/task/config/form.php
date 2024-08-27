@@ -67,6 +67,7 @@ $config->task->form->edit['type']           = array('type' => 'string',   'requi
 $config->task->form->edit['status']         = array('type' => 'string',   'required' => true);
 $config->task->form->edit['pri']            = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->task->form->edit['estStarted']     = array('type' => 'date',     'required' => false, 'default' => null);
+$config->task->form->edit['realStarted']    = array('type' => 'datetime', 'required' => false, 'default' => null);
 $config->task->form->edit['deadline']       = array('type' => 'date',     'required' => false, 'default' => null);
 $config->task->form->edit['estimate']       = array('type' => 'float',    'required' => false, 'default' => 0);
 $config->task->form->edit['left']           = array('type' => 'float',    'required' => false, 'default' => 0);
