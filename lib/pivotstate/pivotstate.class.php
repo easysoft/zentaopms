@@ -537,6 +537,7 @@ class pivotState
             $this->sqlBuilder['funcs']  = array();
             $this->sqlBuilder['wheres'] = array();
             $this->sqlBuilder['groups'] = false;
+            $this->sqlBuilder['querys'] = array();
         }
 
         if(!isset($this->sqlBuilder['from'])) $this->setFrom('');

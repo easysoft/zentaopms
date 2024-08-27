@@ -36,7 +36,6 @@ $lang->bi->do            = '对';
 $lang->bi->set           = '进行';
 $lang->bi->funcAs        = '运算，对结果重命名为';
 $lang->bi->enable        = '启用';
-$lang->bi->allFields     = '全部字段(*)';
 $lang->bi->previewSql    = '预览构建的sql语句';
 $lang->bi->addFunc       = '新增函数字段';
 $lang->bi->emptyFuncs    = '暂未新增函数字段。';
@@ -47,6 +46,8 @@ $lang->bi->cancelAll     = '取消全选';
 $lang->bi->groupField    = '分组字段';
 $lang->bi->aggField      = '聚合字段';
 $lang->bi->allFields     = '已选/新增字段';
+$lang->bi->addQuery      = '添加动态查询筛选器';
+$lang->bi->emptyQuerys   = '暂未添加动态查询筛选器。';
 
 $lang->bi->allFieldsTip  = '已选的查询字段和新增的函数字段。';
 $lang->bi->groupFieldTip = '使用分组字段对查询结果进行分组。';

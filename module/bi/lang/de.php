@@ -32,7 +32,6 @@ $lang->bi->do            = 'Do';
 $lang->bi->set           = 'Set';
 $lang->bi->funcAs        = 'calculate，rename result as';
 $lang->bi->enable        = 'Enable';
-$lang->bi->allFields     = 'Select *';
 $lang->bi->previewSql    = 'Preview SQL statement';
 $lang->bi->addFunc       = 'Add function';
 $lang->bi->emptyFuncs    = 'Empty function。';
@@ -43,6 +42,8 @@ $lang->bi->cancelAll     = 'Cancel All';
 $lang->bi->groupField    = 'Group field';
 $lang->bi->aggField      = 'Aggregate field';
 $lang->bi->allFields     = 'Selected/Function field';
+$lang->bi->addQuery      = 'Add a dynamic query filter';
+$lang->bi->emptyQuerys   = 'Empty dynamic query filter.';
 
 $lang->bi->allFieldsTip  = 'Selected and function field is already checked.';
 $lang->bi->groupFieldTip = 'Group by the result with group field.';
