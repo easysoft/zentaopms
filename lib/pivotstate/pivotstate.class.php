@@ -678,15 +678,7 @@ class pivotState
      */
     public function setGroupBy()
     {
-        $selects = $this->getSelects(false);
-        $funcs   = $this->getFuncs('func', true);
-
-        foreach($funcs as $func)
-        {
-            list($table, $field, $alias, $function) = array($func['table'], $func['field'], $func['alias'], $func['function']);
-            $field = strtoupper($function) . "(`{$table}`.`{$field}`)";
-            $selects[] = array(null, $field, $alias, null);
-        }
+        $selects = array_merge($this->getSelects(false), $this->getFuncSelects());
 
         $groups = array();
 
@@ -707,6 +699,27 @@ class pivotState
 
         $this->sqlBuilder['groups'] = $groups;
         $this->addAggFunc();
+    }
+
+    /**
+     * Get func selects.
+     *
+     * @access public
+     * @return array
+     */
+    public function getFuncSelects()
+    {
+        $funcs   = $this->getFuncs('func', true);
+        $selects = array();
+
+        foreach($funcs as $func)
+        {
+            list($table, $field, $alias, $function) = array($func['table'], $func['field'], $func['alias'], $func['function']);
+            $field = strtoupper($function) . "(`{$table}`.`{$field}`)";
+            $selects[] = array(null, $field, $alias, null);
+        }
+
+        return $selects;
     }
 
     /**
@@ -799,6 +812,18 @@ class pivotState
         {
             if($join['select'] == '*') $this->sqlBuilder['joins'][$index]['select'] = array_keys($this->getTableDescList($join['alias']));
         }
+    }
+
+    public function processGroupBy()
+    {
+        $groups = $this->sqlBuilder['groups'];
+        uasort($groups, function($a, $b) {return $a['order'] <= $b['order'] ? -1 : 1;});
+
+        // TODO
+
+
+        ksort($groups, SORT_NUMERIC);
+        $thi->sqlBuilder['groups'] = $groups;
     }
 
     /**
