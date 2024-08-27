@@ -29,7 +29,7 @@ toolbar
 (
     $canCreate && $canBatchCreate ? btnGroup
     (
-        btn(setClass('btn primary'), set::icon('plus'), set::url($createItem['url']), $lang->design->create),
+        btn(setClass('btn primary design-create-btn'), set::icon('plus'), set::url($createItem['url']), $lang->design->create),
         dropdown
         (
             btn(setClass('btn primary dropdown-toggle'),

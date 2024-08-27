@@ -1226,4 +1226,50 @@ class tutorialModel extends model
         $risk = $this->getRisk();
         return array($risk->id => $risk);
     }
+
+    /**
+     * 获取新手模式设计。
+     * Get design.
+     *
+     * @access public
+     * @return array
+     */
+    public function getDesign(): object
+    {
+        $design = new stdClass();
+        $design->id           = 1;
+        $design->project      = 2;
+        $design->product      = 0;
+        $design->commit       = '';
+        $design->commitedBy   = '';
+        $design->execution    = 0;
+        $design->name         = 'Test Design';
+        $design->status       = '';
+        $design->createdBy    = '';
+        $design->createdDate  = '';
+        $design->editedBy     = '';
+        $design->editedDate   = '';
+        $design->assignedTo   = '';
+        $design->assignedBy   = '';
+        $design->assignedDate = '';
+        $design->deleted      = 0;
+        $design->story        = 0;
+        $design->desc         = 'Design Description';
+        $design->version      = 1;
+        $design->type         = 'HLDS';
+        return $design;
+    }
+
+    /**
+     * 获取新手模式设计列表。
+     * Get designs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getDesigns(): array
+    {
+        $design = $this->getDesign();
+        return array($design->id => $design);
+    }
 }

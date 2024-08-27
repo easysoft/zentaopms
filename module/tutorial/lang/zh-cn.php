@@ -607,3 +607,37 @@ $lang->tutorial->waterfallProjectManage->manageTest = $lang->tutorial->scrumProj
 
 $lang->tutorial->waterfallProjectManage->manageBug = new stdClass();
 $lang->tutorial->waterfallProjectManage->manageBug = $lang->tutorial->scrumProjectManage->manageBug;
+
+$lang->tutorial->waterfallProjectManage->design = new stdClass();
+$lang->tutorial->waterfallProjectManage->design->title = '设计管理';
+
+$lang->tutorial->waterfallProjectManage->design->step1 = new stdClass();
+$lang->tutorial->waterfallProjectManage->design->step1->name = '点击设计';
+$lang->tutorial->waterfallProjectManage->design->step1->desc = '可以在这里进行设计管理';
+
+$lang->tutorial->waterfallProjectManage->design->step2 = new stdClass();
+$lang->tutorial->waterfallProjectManage->design->step2->name = '点击创建设计';
+$lang->tutorial->waterfallProjectManage->design->step2->desc = '您可以在这里创建版本';
+
+$lang->tutorial->waterfallProjectManage->design->step3 = new stdClass();
+$lang->tutorial->waterfallProjectManage->design->step3->name = '填写表单';
+
+$lang->tutorial->waterfallProjectManage->design->step4 = new stdClass();
+$lang->tutorial->waterfallProjectManage->design->step4->name = '保存表单';
+$lang->tutorial->waterfallProjectManage->design->step4->desc = '保存后进入设计列表中查看全部设计';
+
+$lang->tutorial->waterfallProjectManage->design->step5 = new stdClass();
+$lang->tutorial->waterfallProjectManage->design->step5->name = '点击设计名称';
+$lang->tutorial->waterfallProjectManage->design->step5->desc = '可以在这里进入设计详情';
+
+$lang->tutorial->waterfallProjectManage->design->step6 = new stdClass();
+$lang->tutorial->waterfallProjectManage->design->step6->name = '点击关联提交';
+$lang->tutorial->waterfallProjectManage->design->step6->desc = '您可以在这里关联提交';
+
+$lang->tutorial->waterfallProjectManage->design->step7 = new stdClass();
+$lang->tutorial->waterfallProjectManage->design->step7->name = '填写表单';
+$lang->tutorial->waterfallProjectManage->design->step7->desc = '空';
+
+$lang->tutorial->waterfallProjectManage->design->step8 = new stdClass();
+$lang->tutorial->waterfallProjectManage->design->step8->name = '保存表单';
+$lang->tutorial->waterfallProjectManage->design->step8->desc = '保存后可以在设计详情查看已经关联的提交';

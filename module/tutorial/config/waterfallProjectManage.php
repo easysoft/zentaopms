@@ -6,7 +6,7 @@ $waterfallProjectManage->name    = 'waterfallProjectManage';
 $waterfallProjectManage->title   = $lang->tutorial->waterfallProjectManage->title;
 $waterfallProjectManage->icon    = 'waterfall text-special';
 $waterfallProjectManage->type    = 'basic';
-$waterfallProjectManage->modules = 'project,execution,build,task,bug,testreport,issue,risk,programplan';
+$waterfallProjectManage->modules = 'project,execution,build,task,bug,testreport,issue,risk,programplan,design';
 $waterfallProjectManage->app     = 'project';
 $waterfallProjectManage->tasks   = array();
 
@@ -179,5 +179,75 @@ $waterfallProjectManage->tasks['manageTest'] = $scrumProjectManage->tasks['manag
 
 $waterfallProjectManage->tasks['manageBug'] = array();
 $waterfallProjectManage->tasks['manageBug'] = $scrumProjectManage->tasks['manageBug'];
+
+if(in_array($config->edition, array('max', 'ipd')))
+{
+    $waterfallProjectManage->tasks['design'] = array();
+    $waterfallProjectManage->tasks['design']['name']     = 'design';
+    $waterfallProjectManage->tasks['design']['title']    = $lang->tutorial->waterfallProjectManage->design->title;
+    $waterfallProjectManage->tasks['design']['startUrl'] = array('project', 'index', 'project=2');
+    $waterfallProjectManage->tasks['design']['steps']    = array();
+
+    $waterfallProjectManage->tasks['design']['steps'][] = array(
+        'type'   => 'clickNavbar',
+        'target' => 'design',
+        'page'   => 'project-index',
+        'url'    => array('project', 'index', 'projectID=2'),
+        'title'  => $lang->tutorial->waterfallProjectManage->design->step1->name,
+        'desc'   => $lang->tutorial->waterfallProjectManage->design->step1->desc
+    );
+
+    $waterfallProjectManage->tasks['design']['steps'][] = array(
+        'type'   => 'click',
+        'target' => 'a.design-create-btn',
+        'page'   => 'design-browse',
+        'url'    => array('design', 'browse', 'projectID=2'),
+        'title'  => $lang->tutorial->waterfallProjectManage->design->step2->name,
+        'desc'   => $lang->tutorial->waterfallProjectManage->design->step2->desc
+    );
+
+    $waterfallProjectManage->tasks['design']['steps'][] = array(
+        'type'   => 'form',
+        'page'   => 'design-create',
+        'title'  => $lang->tutorial->waterfallProjectManage->design->step3->name
+    );
+
+    $waterfallProjectManage->tasks['design']['steps'][] = array(
+        'type'   => 'saveForm',
+        'page'   => 'design-create',
+        'title'  => $lang->tutorial->waterfallProjectManage->design->step4->name,
+        'desc'   => $lang->tutorial->waterfallProjectManage->design->step4->desc
+    );
+
+    $waterfallProjectManage->tasks['design']['steps'][] = array(
+        'type'   => 'click',
+        'target' => 'div[data-col="name"][data-row="1"] a',
+        'page'   => 'design-browse',
+        'url'    => array('design', 'browse', 'projectID=2'),
+        'title'  => $lang->tutorial->waterfallProjectManage->design->step5->name,
+        'desc'   => $lang->tutorial->waterfallProjectManage->design->step5->desc
+    );
+
+    $waterfallProjectManage->tasks['design']['steps'][] = array(
+        'type'   => 'click',
+        'target' => 'a.linkCommit-btn',
+        'page'   => 'design-view',
+        'title'  => $lang->tutorial->waterfallProjectManage->design->step6->name,
+        'desc'   => $lang->tutorial->waterfallProjectManage->design->step6->desc
+    );
+
+    $waterfallProjectManage->tasks['design']['steps'][] = array(
+        'type'   => 'form',
+        'page'   => 'repo-create',
+        'title'  => $lang->tutorial->waterfallProjectManage->design->step7->name
+    );
+
+    $waterfallProjectManage->tasks['design']['steps'][] = array(
+        'type'   => 'saveForm',
+        'page'   => 'repo-create',
+        'title'  => $lang->tutorial->waterfallProjectManage->design->step8->name,
+        'desc'   => $lang->tutorial->waterfallProjectManage->design->step8->desc
+    );
+}
 
 $config->tutorial->guides[$waterfallProjectManage->name] = $waterfallProjectManage;

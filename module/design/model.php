@@ -316,6 +316,8 @@ class designModel extends model
      */
     public function getList(int $projectID = 0, int $productID = 0, string $type = 'all', int $param = 0, string $orderBy = 'id_desc', object $pager = null): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getDesigns();
+
         if($type == 'bySearch')
         {
             $designs = $this->getBySearch($projectID, $productID, $param, $orderBy, $pager);
