@@ -845,9 +845,18 @@ function getMenuNavData()
  */
 function saveMenuNavToServer()
 {
-    const customUrl = $.createLink('custom', 'ajaxSetMenu');
+    const url = $.createLink('custom', 'ajaxSetMenu');
     const data = getMenuNavData();
-    $.ajaxSubmit({url: customUrl, data: {menu: 'nav', items: JSON.stringify(data)}});
+    $.ajaxSubmit({url, data: {menu: 'nav', items: JSON.stringify(data)}});
+}
+
+/**
+ * Restore menu nav to server.
+ */
+function restoreMenuNavToServer()
+{
+    const url = $.createLink('custom', 'ajaxRestoreMenu');
+    $.ajaxSubmit({url, data: {menu: 'nav'}});
 }
 
 /**
@@ -955,7 +964,7 @@ $(document).on('contextmenu', '#menuNav .divider', function(event)
             text: langData.restore,
             onClick: () => {
                 initAppsMenu(allAppsItems);
-                saveMenuNavToServer();
+                restoreMenuNavToServer();
             }
         }
     );
@@ -1062,7 +1071,7 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
                 text: langData.restore,
                 onClick: () => {
                     initAppsMenu(allAppsItems);
-                    saveMenuNavToServer();
+                    restoreMenuNavToServer();
                 }
             }
         );
