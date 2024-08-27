@@ -25,6 +25,20 @@ class thinkMulticolumn extends thinkQuestion
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css') . $baseCss;
     }
 
+    protected function buildFormBatchItem(string $label, int $index): wg
+    {
+        $step         = $this->prop('step');
+        $key          = $index + 1;
+        $requiredCols = isset($step->options->requiredCols) ? $step->options->requiredCols : array();
+        return formBatchItem
+        (
+            set::label($label),
+            set::name("result[col$key][]"),
+            set::width('110px'),
+            set::required(in_array($key, $step->options->requiredCols))
+        );
+    }
+
     protected function buildFormItem(): array
     {
         global $lang, $app;
