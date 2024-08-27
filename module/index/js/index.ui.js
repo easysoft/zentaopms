@@ -819,6 +819,11 @@ setTimeout(refreshMenu, 500);
 $(document).on('click', '.menu-toggle', () => toggleMenu());
 toggleMenu(!$('body').hasClass('hide-menu'));
 
+/**
+ * Get current menu nav data.
+ *
+ * @returns {Array<{name: string; order: number;}>}
+ */
 function getMenuNavData()
 {
     const data = [];
@@ -835,24 +840,29 @@ function getMenuNavData()
     return data;
 }
 
+/**
+ * Generate menu nav items to be added.
+ *
+ * @param {(item: string) => void} onClick click handler of menu item.
+ * @returns {Array<{icon: string; text: string; onClick: () => void;}>}
+ */
 function generateAddMenuNavItems(onClick)
 {
     const customUrl = $.createLink('custom', 'ajaxSetMenu');
+    const data = getMenuNavData();
     const items = [
         {
             icon: 'icon-minus',
             text: langData.divider,
             onClick: () => {
                 onClick('divider');
-                const data = getMenuNavData();
                 $.ajaxSubmit({url: customUrl, data: {menu: 'nav', items: JSON.stringify(data)}});
             }
         }
     ];
 
     const allAppCodeSet = new Set(allAppsItemsMap.keys());
-    const data = getMenuNavData();
-    for(const name of data)
+    for(const {name} of data)
     {
         if(name === 'divider') continue;
         allAppCodeSet.delete(name);
@@ -909,7 +919,7 @@ $(document).on('contextmenu', '#menuNav .divider', function(event)
                             animation: 150,
                             ghostClass: 'bg-primary-pale',
                         }
-                    )
+                    );
                 }
             }
         );
@@ -1275,6 +1285,12 @@ void function generateAllAppsItemsMap() {
     }
 }();
 
+/**
+ * Get icon and title of app item.
+ *
+ * @param {string} name app name
+ * @returns {[string, string]}
+ */
 function getAppItemIconAndTitle(name)
 {
     if(!allAppsItemsMap.has(name)) return[];
@@ -1292,6 +1308,12 @@ function getAppItemIconAndTitle(name)
     return [];
 }
 
+/**
+ * Add menu item to #mainNav callback, used by generateAddMenuNavItems.
+ *
+ * @param {Cash} $li menu item li
+ * @returns {(name: string) => void}
+ */
 function addMenuToMainNavCb($li) {
     return (name) => {
         if(name === 'divider') return $li.after('<li class="divider"></li>');
