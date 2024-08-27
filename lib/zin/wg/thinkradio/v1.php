@@ -32,6 +32,7 @@ class thinkRadio extends thinkQuestion
         $detailWg = parent::buildDetail();
         list($step, $mode, $isRun, $quoteQuestions) = $this->prop(array('step', 'mode', 'isRun', 'quoteQuestions'));
         if($mode != 'detail') return array();
+        jsVar('citation', !empty($step->options->citation) ? $step->options->citation : 1);
 
         $answer   = $step->answer;
         $result   = isset($answer->result) ? $answer->result : array();
@@ -39,6 +40,7 @@ class thinkRadio extends thinkQuestion
 
         $fields = $step->options->fields ?? array();
         $items  = array();
+
         if(!empty($fields)) foreach($fields as $field) $items[] = array('text' => $field, 'value' => $field);
         if(empty($fields) && !$isRun) $items[] = array('text' => $lang->thinkstep->optionReference, 'disabledPrefix' => true);
         if(!empty($step->options->enableOther)) $items[] = array('text' => $lang->other, 'value' => 'other', 'isOther' => '1', 'other' => isset($answer->other) ? $answer->other : '');
@@ -49,15 +51,17 @@ class thinkRadio extends thinkQuestion
             set::items($items),
             set::name('result[]'),
             set::value($step->options->questionType == 'radio' ? ($result[0] ?? '') : $result),
-            set::disabled($step->options->questionType == 'checkbox' && !empty($step->options->setOption) && $step->options->setOption == 1 )
+            set::disabled($step->options->questionType == 'checkbox' && !empty($step->options->setOption) && $step->options->setOption == 1 && !$isRun)
         );
         $quoteItem = $step->options->questionType == 'checkbox' && !empty($step->options->setOption) && $step->options->setOption == 1;
         $quoteName = '';
-        if($quoteItem)
+
+        if($quoteItem && !empty($quoteQuestions))
         {
             foreach($quoteQuestions as $item)
             {
-                if($item->id == $step->options->quoteTitle) $quoteName = $item->title;
+                if(!$isRun && $item->id == $step->options->quoteTitle) $quoteName = $item->title;
+                if($isRun && $item->origin == $step->options->quoteTitle) $quoteName = $item->title;
             }
             $detailWg[] = div
             (
@@ -84,6 +88,7 @@ class thinkRadio extends thinkQuestion
             $setOption    = isset($step->options->setOption) ? $step->options->setOption : false;
             $defaultQuote = !empty($quoteQuestions) ? $quoteQuestions[0]->id : null;
             $quoteTitle   = isset($step->options->quoteTitle) ? $step->options->quoteTitle : $defaultQuote;
+            $citation     = isset($step->options->citation) ? $step->options->citation : 1;
             $selectColumn = isset($step->options->selectColumn) ? $step->options->selectColumn : null;
             if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);
             $fields = !empty($step->options->fields) ? $step->options->fields :  array('', '', '');
@@ -112,7 +117,7 @@ class thinkRadio extends thinkQuestion
                         (
                             set::name('options[setOption]'),
                             set::inline(true),
-                            set::value($setOption ? $setOption : false),
+                            set::value($setOption),
                             set::items($lang->thinkstep->setOptionList),
                             on::change()
                                 ->const('maxCountPlaceholder', $lang->thinkstep->placeholder->maxCount)
