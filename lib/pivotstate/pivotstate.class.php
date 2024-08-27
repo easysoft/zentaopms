@@ -678,7 +678,7 @@ class pivotState
      */
     public function setGroupBy()
     {
-        $selects = array_merge($this->getSelects(false), $this->getFuncSelects());
+        $selects = array_merge($this->getSelects(), $this->getFuncSelects());
 
         $this->sqlBuilder['groups'] = array();
         foreach($selects as $index => $select) $this->addGroupBy('agg', $index, $select);
@@ -700,11 +700,10 @@ class pivotState
     {
         list($table, $field, $alias) = $select;
         $name = $alias;
-        if(empty($alias))
+        if(!empty($table))
         {
             $fieldList = $this->getTableDescList($table);
             $name = $table . '_' . $fieldList[$field];
-            $select[2] = "{$table}_{$field}";
         }
 
         $select[3] = $function;
@@ -768,13 +767,13 @@ class pivotState
     public function getFuncs($type, $skipEmpty = false)
     {
         $funcs = array();
-        foreach($this->sqlBuilder['funcs'] as $func)
+        foreach($this->sqlBuilder['funcs'] as $index => $func)
         {
             $hasEmpty = empty($func['table']) || empty($func['field']);
             $hasEmpty = $hasEmpty || empty($func['function']) || empty($func['alias']);
             if($skipEmpty && $hasEmpty) continue;
 
-            if($func['type'] == $type || $type == 'all') $funcs[] = $func;
+            if($func['type'] == $type || $type == 'all') $funcs[$index] = $func;
         }
         return $funcs;
     }
@@ -825,15 +824,92 @@ class pivotState
         }
     }
 
-    public function processGroupBy()
+    /**
+     * Get selects with key.
+     *
+     * @access public
+     * @return array
+     */
+    public function getSelectsWithKey()
     {
-        $groups = $this->sqlBuilder['groups'];
+        $selects        = array_merge($this->getSelects(), $this->getFuncSelects());
+        $selectsWithKey = array();
+        foreach($selects as $select)
+        {
+            list($table, $field, $alias) = $select;
+            $key = "{$table}_{$field}_{$alias}";
+            $selectsWithKey[$key] = $select;
+        }
+
+        return $selectsWithKey;
+    }
+
+    /**
+     * Update group from selects.
+     *
+     * @access public
+     * @return array
+     */
+    public function updateGroupsFromSelects()
+    {
+        $selects = $this->getSelectsWithKey();
+        $groups  = $this->sqlBuilder['groups'];
+
+        $filteredGroups = array();
+        foreach($groups as $group)
+        {
+            list($table, $field, $alias) = $group['select'];
+            $key = "{$table}_{$field}_{$alias}";
+
+            if(!isset($selects[$key])) continue;
+            $filteredGroups[] = $group;
+            unset($selects[$key]);
+        }
+
+        return array($selects, $filteredGroups);
+    }
+
+    /**
+     * Reorder group by.
+     *
+     * @param  array  $groups
+     * @access public
+     * @return array
+     */
+    public function reorderGroupBy($groups)
+    {
         uasort($groups, function($a, $b) {return $a['order'] <= $b['order'] ? -1 : 1;});
 
-        // TODO
-
+        $order = 0;
+        foreach($groups as $index => $group)
+        {
+            $groups[$index]['order'] = $order;
+            $order += 1;
+        }
         ksort($groups, SORT_NUMERIC);
-        $this->sqlBuilder['groups'] = $groups;
+
+        return $groups;
+    }
+
+    /**
+     * Process group by.
+     *
+     * @access public
+     * @return void
+     */
+    public function processGroupBy()
+    {
+        list($selects, $groups) = $this->updateGroupsFromSelects();
+
+        $this->sqlBuilder['groups'] = $this->reorderGroupBy($groups);
+
+        $order = count($groups);
+        foreach($selects as $select)
+        {
+            $this->addGroupBy('agg', $order, $select);
+            $order += 1;
+        }
+        $this->addAggFunc();
     }
 
     /**
