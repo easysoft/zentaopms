@@ -14,6 +14,7 @@ $lang->index->dock->save    = 'Exit sort';
 $lang->index->dock->hide    = 'Hide';
 $lang->index->dock->add     = 'Add';
 $lang->index->dock->divider = 'Divider';
+$lang->index->dock->restore = 'Restore defaults';
 
 $lang->index->upgradeVersion = 'Upgradable version';
 $lang->index->upgradeNow     = 'Upgrade now';

@@ -14,6 +14,7 @@ $lang->index->dock->save    = '退出排序';
 $lang->index->dock->hide    = '隱藏';
 $lang->index->dock->add     = '添加';
 $lang->index->dock->divider = '分割線';
+$lang->index->dock->restore = '恢復預設';
 
 $lang->index->upgradeVersion = '可升級版本';
 $lang->index->upgradeNow     = '現在升級';

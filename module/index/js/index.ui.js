@@ -947,6 +947,15 @@ $(document).on('contextmenu', '#menuNav .divider', function(event)
             items: generateAddMenuNavItems(addMenuToMainNavCb($divider))
         }
     );
+    items.push(
+        {
+            text: langData.restore,
+            onClick: () => {
+                initAppsMenu(allAppsItems);
+                saveMenuNavToServer();
+            }
+        }
+    );
 
     zui.ContextMenu.show(
         {
@@ -1036,11 +1045,19 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
                 disabled: hideDisabled,
             }
         );
-
         items.push(
             {
                 text: langData.add,
                 items: generateAddMenuNavItems(addMenuToMainNavCb($btn.closest('li')))
+            }
+        );
+        items.push(
+            {
+                text: langData.restore,
+                onClick: () => {
+                    initAppsMenu(allAppsItems);
+                    saveMenuNavToServer();
+                }
             }
         );
     }
