@@ -434,8 +434,12 @@ class tutorialModel extends model
         }
         if($guide == 'waterfallProjectManage')
         {
-            $execution->name = 'Test Stage';
-            $execution->type = 'stage';
+            $execution->name      = 'Test Stage';
+            $execution->type      = 'stage';
+            $execution->enabled   = 'on';
+            $execution->percent   = 50;
+            $execution->milestone = 0;
+            $execution->parallel  = 1;
         }
 
         return $execution;

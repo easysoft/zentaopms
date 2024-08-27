@@ -127,7 +127,7 @@ $waterfallProjectManage->tasks['setStage']['steps'][] = array(
 
 $waterfallProjectManage->tasks['setStage']['steps'][] = array(
     'type'   => 'form',
-    'target' => '#dataform',
+    'target' => '#dataform div.form-batch-container',
     'page'   => 'programplan-create',
     'title'  => $lang->tutorial->waterfallProjectManage->setStage->step3->name
 );
@@ -154,7 +154,7 @@ if(in_array($config->edition, array('max', 'ipd')))
 
 $waterfallProjectManage->tasks['setStage']['steps'][] = array(
     'type'   => 'click',
-    'target' => '#table-project-execution .dtable-cell[data-row="pid3"][data-col="nameCol"] a',
+    'target' => '#table-project-execution div[data-col="nameCol"][data-row="pid3"] a',
     'page'   => 'project-execution',
     'url'    => array('project', 'execution', 'status=all&projectID=2'),
     'title'  => $lang->tutorial->waterfallProjectManage->setStage->step6->name,
@@ -165,6 +165,7 @@ $waterfallProjectManage->tasks['setStage']['steps'][] = array(
     'type'   => 'clickNavbar',
     'target' => 'burn',
     'page'   => 'execution-task',
+    'app'    => 'execution',
     'url'    => array('execution', 'task', 'executionID=3'),
     'title'  => $lang->tutorial->waterfallProjectManage->setStage->step7->name,
     'desc'   => $lang->tutorial->waterfallProjectManage->setStage->step7->desc
