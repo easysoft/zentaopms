@@ -229,6 +229,7 @@ class sqlparser
     {
         $name = strtoupper($name);
         $argStr = implode(', ', $args);
+        $argStr = str_replace(PHP_EOL, '', $argStr);
         return "$name($argStr)";
     }
 
