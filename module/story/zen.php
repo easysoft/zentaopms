@@ -1244,7 +1244,7 @@ class storyZen extends story
         $fields       = $this->config->story->form->edit;
         $editorFields = array_keys(array_filter(array_map(function($config){return $config['control'] == 'editor';}, $fields)));
 
-        $storyData = form::data($fields, $taskID)
+        $storyData = form::data($fields, $storyID)
             ->add('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->add('demand', $oldStory->demand)
