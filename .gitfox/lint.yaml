@@ -12,13 +12,13 @@ spec:
               container:
                 image: hub.zentao.net/ci/git:2.45.2
               script:
-              - git diff --name-only --diff-filter=d ${DRONE_COMMIT_AFTER} ${DRONE_COMMIT_BEFORE} | tee .changes
+              - git diff --name-only --diff-filter=d ${GITFOX_COMMIT_AFTER} ${GITFOX_COMMIT_BEFORE} | tee .changes
               - |
                 cat > sonar-project.properties <<EOL
                 sonar.projectKey=$(echo $CI_REPO_NAME | tr '/' ':')
                 sonar.sources=.
                 sonar.language=php
-                sonar.branch.name=${DRONE_TARGET_BRANCH}
+                sonar.branch.name=${GITFOX_TARGET_BRANCH}
                 sonar.inclusions=$(xargs < .changes | tr ' ' ',')
                 sonar.working.directory=/tmp
                 sonar.exclusions=**/extension/**/ext/**,**/*.bak,**/*.sql,**/*.js,**/*.css,**/*.yaml,**/*.zip,**/*.out,**/lang/*,doc/*
