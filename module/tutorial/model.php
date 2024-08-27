@@ -176,6 +176,18 @@ class tutorialModel extends model
         $project->storyType    = 'story,requirement,epic';
         $project->charter      = 0;
 
+        list($guide, $guideTask, $guideStepIndex) = explode('-', $_SERVER['HTTP_X_ZIN_TUTORIAL']);
+        if($guide == 'scrumProjectManage')
+        {
+            $project->name  = 'Scrum Project';
+            $project->model = 'scrum';
+        }
+        if($guide == 'waterfallProjectManage')
+        {
+            $project->name  = 'Waterfall Project';
+            $project->model = 'waterfall';
+        }
+
         return $project;
     }
 

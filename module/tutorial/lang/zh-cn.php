@@ -520,3 +520,51 @@ $lang->tutorial->scrumProjectManage->manageRisk->step10->name = '填写表单';
 
 $lang->tutorial->scrumProjectManage->manageRisk->step11 = new stdClass();
 $lang->tutorial->scrumProjectManage->manageRisk->step11->name = '保存表单';
+
+$lang->tutorial->waterfallProjectManage = new stdClass();
+$lang->tutorial->waterfallProjectManage->title = '瀑布项目管理教程';
+
+$lang->tutorial->waterfallProjectManage->manageProject = new stdClass();
+$lang->tutorial->waterfallProjectManage->manageProject->title = '项目维护';
+
+$lang->tutorial->waterfallProjectManage->manageProject->step1 = new stdClass();
+$lang->tutorial->waterfallProjectManage->manageProject->step1->name = '点击项目';
+$lang->tutorial->waterfallProjectManage->manageProject->step1->desc = '您可以在这里创建项目';
+
+$lang->tutorial->waterfallProjectManage->manageProject->step2 = new stdClass();
+$lang->tutorial->waterfallProjectManage->manageProject->step2->name = '点击创建项目';
+$lang->tutorial->waterfallProjectManage->manageProject->step2->desc = '您可以选择不同项目管理方式来创建不同类型的项目';
+
+$lang->tutorial->waterfallProjectManage->manageProject->step3 = new stdClass();
+$lang->tutorial->waterfallProjectManage->manageProject->step3->name = '点击瀑布项目';
+$lang->tutorial->waterfallProjectManage->manageProject->step3->desc = '可以在这里创建瀑布项目';
+
+$lang->tutorial->waterfallProjectManage->manageProject->step4 = new stdClass();
+$lang->tutorial->waterfallProjectManage->manageProject->step4->name = '填写表单';
+
+$lang->tutorial->waterfallProjectManage->manageProject->step5 = new stdClass();
+$lang->tutorial->waterfallProjectManage->manageProject->step5->name = '保存表单';
+$lang->tutorial->waterfallProjectManage->manageProject->step5->desc = '保存后会显示在项目列表中';
+
+$lang->tutorial->waterfallProjectManage->manageProject->step6 = new stdClass();
+$lang->tutorial->waterfallProjectManage->manageProject->step6->name = '点击项目名称';
+$lang->tutorial->waterfallProjectManage->manageProject->step6->desc = '点击项目名称进入瀑布项目';
+
+$lang->tutorial->waterfallProjectManage->manageProject->step7 = new stdClass();
+$lang->tutorial->waterfallProjectManage->manageProject->step7->name = '点击设置';
+$lang->tutorial->waterfallProjectManage->manageProject->step7->desc = '点击设置开始维护团队';
+
+$lang->tutorial->waterfallProjectManage->manageProject->step8 = new stdClass();
+$lang->tutorial->waterfallProjectManage->manageProject->step8->name = '点击团队';
+$lang->tutorial->waterfallProjectManage->manageProject->step8->desc = '点击团队可以查看该项目中的团队成员';
+
+$lang->tutorial->waterfallProjectManage->manageProject->step9 = new stdClass();
+$lang->tutorial->waterfallProjectManage->manageProject->step9->name = '点击团队管理';
+$lang->tutorial->waterfallProjectManage->manageProject->step9->desc = '点击团队管理可以对当前项目的团队成员进行维护';
+
+$lang->tutorial->waterfallProjectManage->manageProject->step10 = new stdClass();
+$lang->tutorial->waterfallProjectManage->manageProject->step10->name = '填写表单';
+
+$lang->tutorial->waterfallProjectManage->manageProject->step11 = new stdClass();
+$lang->tutorial->waterfallProjectManage->manageProject->step11->name = '保存表单';
+$lang->tutorial->waterfallProjectManage->manageProject->step11->desc = '保存后可以在团队中查看团队成员';

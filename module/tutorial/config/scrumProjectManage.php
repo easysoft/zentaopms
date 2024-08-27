@@ -4,7 +4,7 @@ global $lang,$config;
 $scrumProjectManage = new stdClass();
 $scrumProjectManage->name    = 'scrumProjectManage';
 $scrumProjectManage->title   = $lang->tutorial->scrumProjectManage->title;
-$scrumProjectManage->icon    = 'project text-special';
+$scrumProjectManage->icon    = 'sprint text-special';
 $scrumProjectManage->type    = 'basic';
 $scrumProjectManage->modules = 'project,execution,build,task,bug,testreport,issue,risk';
 $scrumProjectManage->app     = 'project';
