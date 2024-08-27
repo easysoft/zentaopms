@@ -19,6 +19,12 @@ class thinkMulticolumn extends thinkQuestion
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
+    public static function getPageCSS(): ?string
+    {
+        $baseCss = file_get_contents(dirname(__FILE__, 2) . DS . 'thinkstepbase' . DS . 'css' . DS . 'v1.css');
+        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css') . $baseCss;
+    }
+
     protected function buildFormItem(): array
     {
         global $lang, $app;
