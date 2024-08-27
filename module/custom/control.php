@@ -563,7 +563,7 @@ class custom extends control
     {
         if($_POST)
         {
-            $menu    = $this->post->menu;  // 导航类型，nav(左侧主导航)|main(顶部一级导航)|module(顶部二级导航)
+            $menu    = $this->post->menu;  // 导航类型，nav(左侧主导航)|$app(顶部一级导航)|$app-home(项目集、项目的首页导航)|$app-$subMenu（顶部二级导航）|admin-$menuKey(后台导航)
             $items   = $this->post->items; // 导航项
             $account = $this->app->user->account;
 
