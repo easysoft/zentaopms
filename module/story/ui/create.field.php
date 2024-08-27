@@ -152,12 +152,14 @@ $fields->field('sourceNote')
 $fields->field('feedbackBy')
     ->foldable()
     ->className('feedbackBox')
+    ->className(!in_array($createFields['source']['default'], $config->story->feedbackSource) ? 'hidden' : '')
     ->id('feedbackBy')
     ->value($createFields['feedbackBy']['default']);
 
 $fields->field('notifyEmail')
     ->foldable()
     ->className('feedbackBox')
+    ->className(!in_array($createFields['source']['default'], $config->story->feedbackSource) ? 'hidden' : '')
     ->id('notifyEmail')
     ->value($createFields['notifyEmail']['default']);
 
