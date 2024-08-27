@@ -1362,11 +1362,18 @@ if($config->edition != 'open')
 
     /* workflowlayout */
     $lang->resource->workflowlayout = new stdclass();
-    $lang->resource->workflowlayout->admin = 'admin';
-    $lang->resource->workflowlayout->block = 'block';
+    $lang->resource->workflowlayout->admin    = 'admin';
+    $lang->resource->workflowlayout->block    = 'block';
+    $lang->resource->workflowlayout->addUI    = 'addUI';
+    $lang->resource->workflowlayout->editUI   = 'editUI';
+    $lang->resource->workflowlayout->deleteUI = 'deleteUI';
+
 
     $lang->workflowlayout->methodOrder[5]  = 'admin';
     $lang->workflowlayout->methodOrder[10] = 'block';
+    $lang->workflowlayout->methodOrder[15] = 'addUI';
+    $lang->workflowlayout->methodOrder[20] = 'editUI';
+    $lang->workflowlayout->methodOrder[25] = 'deleteUI';
 
     /* workflowlinkage */
     $lang->resource->workflowlinkage = new stdclass();
