@@ -844,7 +844,8 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
         if(code !== 'my') items.push({text: langData.close, onClick: function(){closeApp(code)}});
     }
 
-    zui.ContextMenu.show({hideOthers: true, element: $btn[0], placement: $btn.closest('#appTabs').length ? 'top-start' : 'right-start', items: items, event: event, onClickItem: function(info){info.event.preventDefault();}});
+    if(apps.openedMenu) apps.openedMenu.hide();
+    apps.openedMenu = zui.ContextMenu.show({element: $btn[0], placement: $btn.closest('#appTabs').length ? 'top-start' : 'right-start', items: items, event: event, onClickItem: function(info){info.event.preventDefault();}, onHide: () => {apps.openedMenu = null}});
     event.preventDefault();
 });
 
