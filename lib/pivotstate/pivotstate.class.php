@@ -472,6 +472,9 @@ class pivotState
      */
     public function setBuilderError($key, $type = '', $field = '')
     {
+        $step = $key;
+        if($step == 'select') $step = 'field';
+        $this->builderStep = $step;
         $key = implode('_', array_filter(array($key, $type, $field)));
         $this->builderError[$key] = true;
 
