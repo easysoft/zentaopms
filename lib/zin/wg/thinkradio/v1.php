@@ -58,7 +58,7 @@ class thinkRadio extends thinkQuestion
             foreach($quoteQuestions as $item)
             {
                 if($item->id == $step->options->quoteTitle) $quoteName = $item->title;
-            };
+            }
             $detailWg[] = div
             (
                 setClass('mt-3'),
