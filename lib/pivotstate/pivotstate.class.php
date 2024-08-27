@@ -807,6 +807,29 @@ class pivotState
     }
 
     /**
+     * Get group by.
+     *
+     * @param  bool   $sort
+     * @access public
+     * @return array
+     */
+    public function getGroupBy($sort = true)
+    {
+        $groups = $this->sqlBuilder['groups'];
+        $groupBy = array();
+        foreach($groups as $group)
+        {
+            if($group['type'] != 'group') continue;
+            $groupBy[] = $group;
+        }
+
+        if(!$sort) return $groupBy;
+
+        uasort($groupBy, function($a, $b) {return $a['order'] <= $b['order'] ? -1 : 1;});
+        return $groupBy;
+    }
+
+    /**
      * Process check all.
      *
      * @access public
