@@ -352,6 +352,8 @@ class pivotState
         $this->drills       = $drills;
         $this->defaultDrill = $this->initDrill();
 
+        $this->sqlBuilder = $this->json2Array($pivot->builder);
+
         $this->fields    = $this->json2Array($pivot->fieldSettings);
         $this->langs     = $this->json2Array($pivot->langs);
         $this->vars      = $this->json2Array($pivot->vars);
@@ -415,9 +417,6 @@ class pivotState
      */
     public function setBuilderError($key, $type = '', $field = '')
     {
-        $step = $key;
-        if($step == 'select') $step = 'field';
-        $this->builderStep = $step;
         $key = implode('_', array_filter(array($key, $type, $field)));
         $this->builderError[$key] = true;
 
@@ -532,10 +531,13 @@ class pivotState
         $this->builderStep = 'table';
         $this->tableDesc   = array();
 
-        $this->sqlBuilder['joins']  = array();
-        $this->sqlBuilder['funcs']  = array();
-        $this->sqlBuilder['wheres'] = array();
-        $this->sqlBuilder['groups'] = false;
+        if(empty($this->sqlBuilder))
+        {
+            $this->sqlBuilder['joins']  = array();
+            $this->sqlBuilder['funcs']  = array();
+            $this->sqlBuilder['wheres'] = array();
+            $this->sqlBuilder['groups'] = false;
+        }
 
         if(!isset($this->sqlBuilder['from'])) $this->setFrom('');
     }
@@ -648,6 +650,8 @@ class pivotState
     {
         $this->clearAggFunc();
         $groups = $this->sqlBuilder['groups'];
+        if($groups === false) return;
+
         foreach($groups as $group)
         {
             if($group['type'] == 'group') continue;
@@ -819,6 +823,8 @@ class pivotState
     public function getGroupBy($sort = true, $onlyField = true)
     {
         $groups = $this->sqlBuilder['groups'];
+        if($groups === false) return array();
+
         $groupByList = array();
         foreach($groups as $group)
         {
@@ -888,6 +894,7 @@ class pivotState
     {
         $selects = $this->getSelectsWithKey();
         $groups  = $this->sqlBuilder['groups'];
+        if($groups === false) return array(array(), array());
 
         $filteredGroups = array();
         foreach($groups as $group)
@@ -933,6 +940,7 @@ class pivotState
      */
     public function processGroupBy()
     {
+        if($this->sqlBuilder['groups'] === false) return;
         list($selects, $groups) = $this->updateGroupsFromSelects();
 
         $this->sqlBuilder['groups'] = $this->reorderGroupBy($groups);
