@@ -78,6 +78,7 @@ class navbar extends wg
             'text'    => $lang->more,
             'trigger' => 'hover',
             'id'      => 'navbarMoreMenu',
+            'data-id' => 'more',
             'menu'    => array('style' => array('max-width' => '300px'))
         );
     }
@@ -128,10 +129,18 @@ class navbar extends wg
         if(!empty($items)) return $items;
 
         global $app, $lang, $config;
-        if($app->tab == 'admin') $app->control->loadModel('admin')->setMenu();
+        if($app->tab == 'admin')
+        {
+            $app->control->loadModel('admin')->setMenu();
+            $adminMenuKey = $app->control->loadModel('admin')->getMenuKey();
+            jsVar('adminMenuKey', $adminMenuKey);
+        }
+
         commonModel::replaceMenuLang();
-        commonModel::setMainMenu();
+        $isHomeMenu = commonModel::setMainMenu();
         commonModel::checkMenuVarsReplaced();
+
+        jsVar('isHomeMenu', $isHomeMenu);
 
         $isTutorialMode = commonModel::isTutorialMode();
         $currentModule = $app->rawModule;
@@ -141,7 +150,7 @@ class navbar extends wg
         if($isTutorialMode and defined('WIZARD_METHOD')) $currentMethod = WIZARD_METHOD;
 
         $tab          = $app->tab;
-        $menu         = \customModel::getMainMenu();
+        $menu         = \customModel::getMainMenu($isHomeMenu);
         $activeMenu   = '';
         $activeMenuID = data('activeMenuID');
         $items        = array();
@@ -194,7 +203,6 @@ class navbar extends wg
                 $executionMoreItem = $this->getExecutionMoreItem($executionID);
                 if(!empty($executionMoreItem))
                 {
-                    $items[] = array('type' => 'divider');
                     $items[] = $executionMoreItem;
                 }
             }

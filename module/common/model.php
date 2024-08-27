@@ -2056,9 +2056,9 @@ eof;
      *
      * @static
      * @access public
-     * @return void
+     * @return bool
      */
-    public static function setMainMenu()
+    public static function setMainMenu(): bool
     {
         global $app, $lang;
         $tab = $app->tab;
@@ -2072,12 +2072,12 @@ eof;
         $lang->menu      = isset($lang->$tab->menu) ? $lang->$tab->menu : array();
         $lang->menuOrder = isset($lang->$tab->menuOrder) ? $lang->$tab->menuOrder : array();
 
-        if(!isset($lang->$tab->homeMenu)) return;
+        if(!isset($lang->$tab->homeMenu)) return false;
 
         if($currentModule == $tab and $currentMethod == 'create')
         {
             $lang->menu = $lang->$tab->homeMenu;
-            return;
+            return true;
         }
 
         /* If the method is in homeMenu, display homeMenu. */
@@ -2090,7 +2090,7 @@ eof;
             if($method == $currentMethod)
             {
                 $lang->menu = $lang->$tab->homeMenu;
-                return;
+                return true;
             }
 
             $alias   = isset($menu['alias'])   ? explode(',', strtolower($menu['alias']))   : array();
@@ -2098,15 +2098,17 @@ eof;
             if(in_array($currentMethod, $alias) && !in_array("{$currentModule}-{$currentMethod}", $exclude))
             {
                 $lang->menu = $lang->$tab->homeMenu;
-                return;
+                return true;
             }
 
             if(isset($menu['subModule']) and strpos(",{$menu['subModule']},", ",$currentModule,") !== false)
             {
                 $lang->menu = $lang->$tab->homeMenu;
-                return;
+                return true;
             }
         }
+
+        return false;
     }
 
     /**
