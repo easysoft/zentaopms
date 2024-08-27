@@ -813,20 +813,28 @@ class pivotState
      * @access public
      * @return array
      */
-    public function getGroupBy($sort = true)
+    public function getGroupBy($sort = true, $onlyField = true)
     {
         $groups = $this->sqlBuilder['groups'];
-        $groupBy = array();
+        $groupByList = array();
         foreach($groups as $group)
         {
             if($group['type'] != 'group') continue;
-            $groupBy[] = $group;
+            $groupByList[] = $group;
         }
 
-        if(!$sort) return $groupBy;
+        if($sort) uasort($groupByList, function($a, $b) {return $a['order'] <= $b['order'] ? -1 : 1;});
 
-        uasort($groupBy, function($a, $b) {return $a['order'] <= $b['order'] ? -1 : 1;});
-        return $groupBy;
+        if($onlyField)
+        {
+            foreach($groupByList as $index => $groupBy)
+            {
+                list($table, $field) = $groupBy['select'];
+                $groupByList[$index] = array($table, $field);
+            }
+        }
+
+        return array_values($groupByList);
     }
 
     /**
