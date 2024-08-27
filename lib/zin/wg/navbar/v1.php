@@ -157,7 +157,6 @@ class navbar extends wg
         $flows        = $config->edition != 'open' ? $app->control->loadModel('my')->getFlowPairs() : array();
         foreach($menu as $menuItem)
         {
-            if(isset($menuItem->hidden) and $menuItem->hidden and (!isset($menuItem->tutorial) or !$menuItem->tutorial)) continue;
             if(isset($menuItem->class) && strpos($menuItem->class, 'automation-menu'))
             {
                 if($menuItem->divider) $items[] = array('type' => 'divider');
@@ -306,7 +305,8 @@ class navbar extends wg
                         'active'   => $isActive,
                         'target'   => $target,
                         'data-id'  => $menuItem->name,
-                        'data-app' => $dataApp
+                        'data-app' => $dataApp,
+                        'hidden'   => (isset($menuItem->hidden) && $menuItem->hidden && (!isset($menuItem->tutorial) || !$menuItem->tutorial))
                     );
                 }
             }
@@ -318,6 +318,9 @@ class navbar extends wg
 
         /* Set active menu to global data, make it accessible to other widgets */
         data('activeMenu', $activeMenu);
+        jsVar('allNavbarItems', $items);
+
+        $items = array_filter($items, function($item) { return empty($item['hidden']); });
 
         return $items;
     }
@@ -330,7 +333,6 @@ class navbar extends wg
     protected function build()
     {
         $items = $this->getItems();
-        jsVar('allNavbarItems', $items);
         return h::nav
         (
             set::id('navbar'),

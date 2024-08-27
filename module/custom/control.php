@@ -555,7 +555,7 @@ class custom extends control
 
     /**
      * Ajax set menu
-     *-
+     *
      * @access public
      * @return void
      */
@@ -568,6 +568,24 @@ class custom extends control
             $account = $this->app->user->account;
 
             if($menu && $items) $this->loadModel('setting')->setItem("$account.common.customMenu.$menu@{$this->config->vision}", $items);
+        }
+
+        $this->send(array('result' => 'success'));
+    }
+
+    /**
+     * Ajax restore menu
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxRestoreMenu()
+    {
+        if($_POST)
+        {
+            $account = $this->app->user->account;
+            $menu    = $this->post->menu;
+            $this->loadModel('setting')->deleteItems("owner={$account}&module=common&section=customMenu&key=$menu");
         }
 
         $this->send(array('result' => 'success'));

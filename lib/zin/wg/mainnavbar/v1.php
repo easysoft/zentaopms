@@ -114,6 +114,7 @@ class mainNavbar extends nav
                 $name = $menuItem['name'];
                 $item['text']       = $menuItem['text'];
                 $item['url']        = commonModel::createMenuLink((object)$menuItem, $app->tab);
+                $item['hidden']     = !empty($menuItem['hidden']);
                 $item['data-id']    = $name;
                 $item['data-app']   = $app->tab;
                 $item['data-group'] = $app->tab . '-' . $activeMenu;
@@ -140,6 +141,9 @@ class mainNavbar extends nav
                 $items[] = $item;
             }
 
+            jsVar('allMainNavbarItems', $items);
+            $items = array_filter($items, function($item) { return empty($item['hidden']); });
+
             $this->setProp('items', $items);
         }
     }
@@ -162,7 +166,6 @@ class mainNavbar extends nav
         $leftBlock  = $this->block('left');
         $rightBlock = $this->block('right');
         if(empty($leftBlock)) $leftBlock = $this->buildSwitcher();
-        jsVar('allMainNavbarItems', $this->prop('items'));
 
         return div
         (

@@ -924,9 +924,9 @@ $(document).on('contextmenu', '#menuNav .divider', function(event)
                         {
                             animation: 150,
                             ghostClass: 'bg-primary-pale',
-                            onEnd(e) {
-                                console.log('End of drag', e);
-                            },
+                            onSort: () => {
+                                saveMenuNavToServer();
+                            }
                         }
                     );
                 }
@@ -1025,9 +1025,9 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
                             {
                                 animation: 150,
                                 ghostClass: 'bg-primary-pale',
-                                onEnd(e) {
-                                    console.log('End of drag', e);
-                                },
+                                onSort: () => {
+                                    saveMenuNavToServer();
+                                }
                             }
                         );
                     }

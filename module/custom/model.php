@@ -304,8 +304,6 @@ class customModel extends model
         $module         = $menuModuleName;
         foreach($allMenu as $name => $item)
         {
-            if(!empty($customMenuMap) && !isset($customMenuMap[$name])) continue; // 自定义过滤掉的菜单不显示。
-
             $name = (string)$name;
             if(is_object($item)) $item = (array)$item;
 
@@ -366,6 +364,7 @@ class customModel extends model
                 /* Process menu item's order and hidden attirbute. */
                 $menuItem = static::buildMenuItem($item, $customMenuMap, $name, $label, $itemLink, $isTutorialMode, $subMenu);
                 $menuItem->order = (isset($customMenuMap[$name]) && isset($customMenuMap[$name]->order) ? $customMenuMap[$name]->order : $order ++);
+                if(!empty($customMenuMap) && !isset($customMenuMap[$name])) $menuItem->hidden = true; // 自定义过滤掉的菜单不显示。
                 if(isset($customMenuMap[$name]) && isset($customMenuMap[$name]->divider)) $menuItem->divider = true;
                 if($app->viewType == 'mhtml' && isset($config->custom->moblieHidden[$menuModuleName]) && in_array($name, $config->custom->moblieHidden[$menuModuleName])) $menuItem->hidden = 1; // Hidden menu by config in mobile.
                 while(isset($menu[$menuItem->order])) $menuItem->order ++;
