@@ -2040,12 +2040,13 @@ class executionModel extends model
             if(strpos($taskQuery, "`execution` =") === false && strpos($taskQuery, "`project` =") === false) $taskQuery .= " AND `execution` = $executionID";
             $executionQuery = "`execution` " . helper::dbIN(array_keys($executions));
             $taskQuery      = str_replace("`execution` = 'all'", $executionQuery, $taskQuery); // Search all execution.
+            if(strpos($taskQuery, "`execution`") === false) $taskQuery .= " AND `execution` " . helper::dbIN(array_keys($executions));
             /* Process all project query. */
             if(strpos($taskQuery, "`project` = 'all'") !== false)
             {
                 $projects     = $this->loadModel('project')->getPairsByProgram();
                 $projectQuery = "`project` " . helper::dbIN(array_keys($projects));
-                $taskQuery = str_replace("`project` = 'all'", $projectQuery, $taskQuery);;
+                $taskQuery    = str_replace("`project` = 'all'", $projectQuery, $taskQuery);;
             }
 
             $this->session->set('taskQueryCondition', $taskQuery, $this->app->tab);
@@ -3739,7 +3740,6 @@ class executionModel extends model
             $onSQL = trim($onSQL, ' or ');
             $sql = $sql->leftJoin(TABLE_TASKTEAM)->alias('t2')->on("t2.task = t1.id and ({$onSQL})");
         }
-
 
         $orderBy = array_map(function($value){return 't1.' . $value;}, explode(',', $orderBy));
         $orderBy = implode(',', $orderBy);
