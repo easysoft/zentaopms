@@ -15417,6 +15417,7 @@ CREATE TABLE IF NOT EXISTS `zt_pivot`  (
   `acl` enum('open','private') NOT NULL DEFAULT 'open',
   `whitelist` text NULL,
   `sql` mediumtext NULL,
+  `builder` mediumtext NULL,
   `fields` mediumtext NULL,
   `langs` mediumtext NULL,
   `vars` mediumtext NULL,
