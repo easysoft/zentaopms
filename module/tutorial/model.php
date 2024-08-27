@@ -1272,4 +1272,57 @@ class tutorialModel extends model
         $design = $this->getDesign();
         return array($design->id => $design);
     }
+
+    /**
+     * 获取新手模式评审。
+     * Get review.
+     *
+     * @access public
+     * @return object
+     */
+    public function getReview(): object
+    {
+        $review = new stdClass();
+        $review->id              = 1;
+        $review->project         = 2;
+        $review->title           = 'Test Review';
+        $review->object          = 1;
+        $review->template        = 0;
+        $review->doc             = 0;
+        $review->docVersion      = 0;
+        $review->status          = 'draft';
+        $review->reviewedBy      = '';
+        $review->auditedBy       = '';
+        $review->createdBy       = '';
+        $review->createdDate     = '';
+        $review->begin           = '';
+        $review->deadline        = '';
+        $review->lastReviewedBy  = '';
+        $review->lastReviewedDate= '';
+        $review->lastAuditedBy   = '';
+        $review->lastAuditedDate = '';
+        $review->lastEditedBy    = '';
+        $review->lastEditedDate  = '';
+        $review->result          = '';
+        $review->auditResult     = '';
+        $review->deleted         = 0;
+        $review->version         = '01';
+        $review->category        = 'PP';
+        $review->product         = 1;
+        $review->approval        = 1;
+        $review->isPending       = '';
+        return $review;
+    }
+
+    /**
+     * 获取新手模式评审列表。
+     * Get reviews.
+     *
+     * @access public
+     * @return array
+     */
+    public function getReviews(): array
+    {
+        return array(1 => $this->getReview());
+    }
 }

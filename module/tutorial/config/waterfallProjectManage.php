@@ -6,7 +6,7 @@ $waterfallProjectManage->name    = 'waterfallProjectManage';
 $waterfallProjectManage->title   = $lang->tutorial->waterfallProjectManage->title;
 $waterfallProjectManage->icon    = 'waterfall text-special';
 $waterfallProjectManage->type    = 'basic';
-$waterfallProjectManage->modules = 'project,execution,build,task,bug,testreport,issue,risk,programplan,design';
+$waterfallProjectManage->modules = 'project,execution,build,task,bug,testreport,issue,risk,programplan,design,review';
 $waterfallProjectManage->app     = 'project';
 $waterfallProjectManage->tasks   = array();
 
@@ -247,6 +247,74 @@ if(in_array($config->edition, array('max', 'ipd')))
         'page'   => 'repo-create',
         'title'  => $lang->tutorial->waterfallProjectManage->design->step8->name,
         'desc'   => $lang->tutorial->waterfallProjectManage->design->step8->desc
+    );
+
+    $waterfallProjectManage->tasks['review'] = array();
+    $waterfallProjectManage->tasks['review']['name']     = 'review';
+    $waterfallProjectManage->tasks['review']['title']    = $lang->tutorial->waterfallProjectManage->review->title;
+    $waterfallProjectManage->tasks['review']['startUrl'] = array('project', 'index', 'project=2');
+    $waterfallProjectManage->tasks['review']['steps']    = array();
+
+    $waterfallProjectManage->tasks['review']['steps'][] = array(
+        'type'   => 'clickNavbar',
+        'target' => 'review',
+        'page'   => 'project-index',
+        'url'    => array('project', 'index', 'projectID=2'),
+        'title'  => $lang->tutorial->waterfallProjectManage->review->step1->name,
+        'desc'   => $lang->tutorial->waterfallProjectManage->review->step1->desc
+    );
+
+    $waterfallProjectManage->tasks['review']['steps'][] = array(
+        'type'   => 'clickMainNavbar',
+        'target' => 'browse',
+        'page'   => 'review-browse',
+        'url'    => array('review', 'browse', 'projectID=2'),
+        'title'  => $lang->tutorial->waterfallProjectManage->review->step2->name,
+        'desc'   => $lang->tutorial->waterfallProjectManage->review->step2->desc
+    );
+
+    $waterfallProjectManage->tasks['review']['steps'][] = array(
+        'type'   => 'click',
+        'target' => '#actionBar a.review-create-btn',
+        'page'   => 'review-browse',
+        'url'    => array('review', 'browse', 'projectID=2'),
+        'title'  => $lang->tutorial->waterfallProjectManage->review->step3->name,
+        'desc'   => $lang->tutorial->waterfallProjectManage->review->step3->desc
+    );
+
+    $waterfallProjectManage->tasks['review']['steps'][] = array(
+        'type'   => 'form',
+        'page'   => 'review-create',
+        'title'  => $lang->tutorial->waterfallProjectManage->review->step4->name
+    );
+
+    $waterfallProjectManage->tasks['review']['steps'][] = array(
+        'type'   => 'saveForm',
+        'page'   => 'review-create',
+        'title'  => $lang->tutorial->waterfallProjectManage->review->step5->name,
+        'desc'   => $lang->tutorial->waterfallProjectManage->review->step5->desc
+    );
+
+    $waterfallProjectManage->tasks['review']['steps'][] = array(
+        'type'   => 'click',
+        'target' => 'div[data-row="1"] a.review-submit-btn',
+        'page'   => 'review-browse',
+        'url'    => array('review', 'browse', 'projectID=2'),
+        'title'  => $lang->tutorial->waterfallProjectManage->review->step6->name,
+        'desc'   => $lang->tutorial->waterfallProjectManage->review->step6->desc
+    );
+
+    $waterfallProjectManage->tasks['review']['steps'][] = array(
+        'type'   => 'form',
+        'page'   => 'review-browse',
+        'title'  => $lang->tutorial->waterfallProjectManage->review->step7->name
+    );
+
+    $waterfallProjectManage->tasks['review']['steps'][] = array(
+        'type'   => 'saveForm',
+        'page'   => 'review-browse',
+        'title'  => $lang->tutorial->waterfallProjectManage->review->step8->name,
+        'desc'   => $lang->tutorial->waterfallProjectManage->review->step8->desc
     );
 }
 

@@ -641,3 +641,36 @@ $lang->tutorial->waterfallProjectManage->design->step7->desc = '空';
 $lang->tutorial->waterfallProjectManage->design->step8 = new stdClass();
 $lang->tutorial->waterfallProjectManage->design->step8->name = '保存表单';
 $lang->tutorial->waterfallProjectManage->design->step8->desc = '保存后可以在设计详情查看已经关联的提交';
+
+$lang->tutorial->waterfallProjectManage->review = new stdClass();
+$lang->tutorial->waterfallProjectManage->review->title = '评审和配置管理';
+
+$lang->tutorial->waterfallProjectManage->review->step1 = new stdClass();
+$lang->tutorial->waterfallProjectManage->review->step1->name = '点击评审';
+$lang->tutorial->waterfallProjectManage->review->step1->desc = '可以在这里进行评审管理';
+
+$lang->tutorial->waterfallProjectManage->review->step2 = new stdClass();
+$lang->tutorial->waterfallProjectManage->review->step2->name = '点击基线评审列表';
+$lang->tutorial->waterfallProjectManage->review->step2->desc = '可以在这里查看所有评审项';
+
+$lang->tutorial->waterfallProjectManage->review->step3 = new stdClass();
+$lang->tutorial->waterfallProjectManage->review->step3->name = '点击发起评审';
+$lang->tutorial->waterfallProjectManage->review->step3->desc = '可以在这里发起评审';
+
+$lang->tutorial->waterfallProjectManage->review->step4 = new stdClass();
+$lang->tutorial->waterfallProjectManage->review->step4->name = '填写表单';
+
+$lang->tutorial->waterfallProjectManage->review->step5 = new stdClass();
+$lang->tutorial->waterfallProjectManage->review->step5->name = '保存表单';
+$lang->tutorial->waterfallProjectManage->review->step5->desc = '保存后可以在基线评审列表中查看，在后台可配置创建模板，在相关模板字段下引用';
+
+$lang->tutorial->waterfallProjectManage->review->step6 = new stdClass();
+$lang->tutorial->waterfallProjectManage->review->step6->name = '点击提交审计';
+$lang->tutorial->waterfallProjectManage->review->step6->desc = '可以在这里提交审计，评审未通过的可以在问题列表中查看问题和添加问题';
+
+$lang->tutorial->waterfallProjectManage->review->step7 = new stdClass();
+$lang->tutorial->waterfallProjectManage->review->step7->name = '填写表单';
+
+$lang->tutorial->waterfallProjectManage->review->step8 = new stdClass();
+$lang->tutorial->waterfallProjectManage->review->step8->name = '保存表单';
+$lang->tutorial->waterfallProjectManage->review->step8->desc = '保存后回到基线评审列表';
