@@ -11,7 +11,7 @@
  */
 class bugConfirmEntry extends entry
 {
-    /** 
+    /**
      * POST method.
      *
      * @param  int    $bugID
@@ -19,9 +19,10 @@ class bugConfirmEntry extends entry
      * @return string
      **/
     public function post($bugID)
-    {   
-        $fields = 'assignedTo,mailto,comment,pri,type';
-        $this->batchSetPost($fields);
+    {
+        $fields = 'assignedTo,mailto,comment,pri,type,status,deadline';
+        $bug    = $this->loadModel('bug')->getByID($bugID);
+        $this->batchSetPost($fields, $bug);
 
         $control = $this->loadController('bug', 'confirm');
         $control->confirm($bugID);
@@ -33,6 +34,6 @@ class bugConfirmEntry extends entry
         $bug = $this->loadModel('bug')->getById($bugID);
 
         return $this->send(200, $this->format($bug, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
-    }   
+    }
 }
 
