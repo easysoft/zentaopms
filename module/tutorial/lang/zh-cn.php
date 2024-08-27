@@ -601,3 +601,6 @@ $lang->tutorial->waterfallProjectManage->setStage->step7->desc = '查看燃尽�
 
 $lang->tutorial->waterfallProjectManage->manageTask = new stdClass();
 $lang->tutorial->waterfallProjectManage->manageTask = $lang->tutorial->scrumProjectManage->manageTask;
+
+$lang->tutorial->waterfallProjectManage->manageTest = new stdClass();
+$lang->tutorial->waterfallProjectManage->manageTest = $lang->tutorial->scrumProjectManage->manageTest;

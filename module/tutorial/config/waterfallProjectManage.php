@@ -174,4 +174,7 @@ $waterfallProjectManage->tasks['setStage']['steps'][] = array(
 $waterfallProjectManage->tasks['manageTask'] = array();
 $waterfallProjectManage->tasks['manageTask'] = $scrumProjectManage->tasks['manageTask'];
 
+$waterfallProjectManage->tasks['manageTest'] = array();
+$waterfallProjectManage->tasks['manageTest'] = $scrumProjectManage->tasks['manageTest'];
+
 $config->tutorial->guides[$waterfallProjectManage->name] = $waterfallProjectManage;
