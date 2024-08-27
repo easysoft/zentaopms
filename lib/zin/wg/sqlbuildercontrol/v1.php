@@ -19,7 +19,7 @@ class sqlBuilderControl extends wg
         'required?: bool=false',        // 控件是否可清空，仅type=picker时有效。
         "placeholder?: string",         // 提示文本。
         'labelWidth?: string="80px"',   // 标签宽度。
-        'lableAlign?: string="center"', // 标签对齐方式。
+        'labelAlign?: string="center"', // 标签对齐方式。
         'width?: string="60"',          // 控件宽度。
         "suffix?: string",              // 后缀内容。
         "error?: bool=false",           // 是否存在错误。
