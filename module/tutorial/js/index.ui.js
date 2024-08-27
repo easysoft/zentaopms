@@ -111,6 +111,7 @@ const stepPresenters =
             const $form = getStepForm(scope, $target);
             if(!$form || !$form.length) console.error(`[TUTORIAL] Cannot find form for step "${step.guide.name} > ${step.task.name} > ${step.title}"`, step);
             $form.attr('zui-tutorial-step', step.id);
+            $form.find('.open-url,[data-back],[data-load],.ajax-submit').addClass('pointer-events-none');
             step.$form = $form;
 
             const $panel = $target.closest('.panel');
@@ -403,6 +404,7 @@ function activeNextStep(step)
     formatStep(step);
     if(config.debug) showLog('Active next step', step);
 
+    if(step.type === 'saveForm' && step.$form) step.$form.find('.open-url,[data-back],[data-load],.ajax-submit').addClass('pointer-events-none');
     if(step.endUrl) openApp(step.endUrl, step.app);
     destroyPopover(() =>
     {
