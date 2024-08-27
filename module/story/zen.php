@@ -1420,7 +1420,6 @@ class storyZen extends story
         if(isset($_POST['plan']) and is_array($_POST['plan'])) $story->plan   = trim(implode(',', $_POST['plan']), ',');
         if(isset($_POST['branch']) and $_POST['branch'] == 0)  $story->branch = 0;
         if(isset($story->stage) and $oldStory->stage != $story->stage) $story->stagedBy = (strpos('tested|verified|rejected|pending|released|closed', $story->stage) !== false) ? $this->app->user->account : '';
-        if(isset($_POST['reviewer']) or isset($_POST['needNotReview'])) $this->story->doUpdateReviewer($storyID, $story);
     }
 
     /**

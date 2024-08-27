@@ -891,12 +891,27 @@ class storyModel extends model
         unset($oldStory->parent, $story->parent);
         if($this->config->edition != 'open' && $oldStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
 
+        if(isset($story->reviewer))
+        {
+            $oldReviewer = $this->getReviewerPairs($storyID, $oldStory->version);
+            $oldStory->reviewers = implode(',', array_keys($oldReviewer));
+            $story->reviewers    = implode(',', $story->reviewer);
+            if($story->reviewers != $oldStory->reviewers)
+            {
+                $oldStatus = $story->status;
+                $this->doUpdateReviewer($storyID, $story);
+                if($story->status != $oldStatus) $this->dao->update(TABLE_STORY)->set('status')->eq($story->status)->where('id')->eq($storyID)->exec();
+                if($story->status == 'active')   $story->finalResult = $story->status;
+            }
+        }
+
         $changes = common::createChanges($oldStory, $story);
         if(!empty($comment) or !empty($changes))
         {
             $action   = !empty($changes) ? 'Edited' : 'Commented';
             $actionID = $this->action->create('story', $storyID, $action, $comment);
             $this->action->logHistory($actionID, $changes);
+            if(isset($story->finalResult)) $this->action->create('story', $storyID, 'ReviewPassed', '', "pass|$oldStatus");
         }
 
         if(isset($story->closedReason) and $story->closedReason == 'done') $this->loadModel('score')->create('story', 'close');
@@ -4528,6 +4543,7 @@ class storyModel extends model
 
         $reviewerList = $this->getReviewerPairs($storyID, (int)$oldStory->version);
         $reviewedBy   = explode(',', trim($story->reviewedBy, ','));
+
         if(!array_diff(array_keys($reviewerList), $reviewedBy))
         {
             $reviewResult = $this->getReviewResult($reviewerList);
