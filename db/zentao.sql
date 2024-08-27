@@ -179,7 +179,7 @@ CREATE TABLE IF NOT EXISTS `zt_approvalflow` (
   `version` mediumint(8) NOT NULL DEFAULT '1',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
-  `type` varchar(30) NOT NULL DEFAULT '',
+  `workflow` varchar(30) NOT NULL DEFAULT '',
   `deleted` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -14453,8 +14453,8 @@ CREATE TABLE `zt_scene` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-REPLACE INTO `zt_approvalflow` (`id`, `name`, `code`, `desc`, `version`, `createdBy`, `createdDate`, `type`, `deleted`) VALUES
-(1, '最简审批', 'simple', '', 1, 'admin', '2022-04-29 08:46:40', 'project', 0);
+REPLACE INTO `zt_approvalflow` (`id`, `name`, `code`, `desc`, `version`, `createdBy`, `createdDate`, `workflow`, `deleted`) VALUES
+(1, '最简审批', 'simple', '', 1, 'admin', '2022-04-29 08:46:40', '', 0);
 
 REPLACE INTO `zt_approvalflowspec` (`id`, `flow`, `version`, `nodes`, `createdBy`, `createdDate`) VALUES
 (1, 1, 1, '[{\"type\":\"start\",\"ccs\":[]},{\"id\":\"3ewcj92p55e\",\"type\":\"approval\",\"title\":\"审批\",\"reviewType\":\"manual\",\"multiple\":\"and\",\"agentType\":\"pass\",\"reviewers\":[{\"type\":\"select\"}],\"ccs\":[]},{\"type\":\"end\",\"ccs\":[]}]', 'admin', '2022-04-29 08:46:40');
