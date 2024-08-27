@@ -58,6 +58,7 @@ div(
         set::id('monacoTabs'),
         set::className('relative'),
         on::click('.monaco-close')->call('closeTab', jsRaw('this')),
+        on::click('.repoDropDownMenu')->call('dropdownClick', jsRaw('this')),
         div(setStyle(array('position' => 'absolute', 'width' => '100%', 'height' => '40px', 'background' => '#efefef', 'top' => '0px'))),
         tabPane
         (
