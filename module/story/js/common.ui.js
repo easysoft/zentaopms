@@ -76,7 +76,7 @@ window.loadProductPlans = function(productID, branch)
         let items = JSON.parse(data);
         let $inputGroup = $planIdBox.closest('.input-group');
         $inputGroup.html("<span id='planIdBox'><div class='picker-box' id='plan'></div></span>")
-        new zui.Picker('#planIdBox #plan', {items: items, name: 'plan', defaultValue: planID.toString()});
+        new zui.Picker('#planIdBox #plan', {items: items, name: 'plan', defaultValue: ''});
         if(items.length == 0)
         {
             $inputGroup.append('<a class="btn btn-default" type="button" data-toggle="modal" href="' + $.createLink('productplan', 'create', 'productID=' + productID + '&branch=' + branch) + '"><i class="icon icon-plus"></i></a>');
