@@ -39,6 +39,23 @@ class thinkMulticolumn extends thinkQuestion
         );
     }
 
+    protected function buildDetail(): array
+    {
+        global $lang;
+        $detailWg = parent::buildDetail();
+        list($step, $fields, $supportAdd, $canAddRows, $requiredCols, $mode) = $this->prop(array('step', 'fields', 'supportAdd', 'canAddRows', 'requiredCols', 'mode'));
+        if($mode != 'detail') return array();
+
+        if($step) $fields = $step->options->fields;
+
+        $batchItems = array();
+        foreach($fields as $key => $field)
+        {
+            $batchItems[] = $this->buildFormBatchItem($field, $key);
+        }
+        return $detailWg;
+    }
+
     protected function buildFormItem(): array
     {
         global $lang, $app;
