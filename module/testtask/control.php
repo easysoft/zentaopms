@@ -925,19 +925,33 @@ class testtask extends control
         $cases      = $this->testtaskZen->prepareCasesForBatchRun($productID, $orderBy, $from, $taskID, $confirm, $caseIdList);
         if(empty($cases)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->testtask->skipChangedCases, 'locate' => $url)));
 
+        $steps = $this->loadModel('testcase')->getStepGroupByIdList($caseIdList);
+
+        $emptyCases = '';
+        foreach($cases as $caseID => $case)
+        {
+            if(empty($steps[$case->id]))
+            {
+                unset($cases[$caseID]);
+
+                $emptyCases .= empty($emptyCases) ? "{$case->id}" : ",{$case->id}";
+            }
+        }
+
         /* 获取用例所属模块的键值对。*/
         /* Get key-value pairs of case module. */
         $this->loadModel('tree');
         $modules = array('/');
         foreach($cases as $case) $modules += $this->tree->getModulesName((array)$case->module);
 
-        $this->view->title       = $this->lang->testtask->batchRun;
-        $this->view->steps       = $this->loadModel('testcase')->getStepGroupByIdList($caseIdList);
-        $this->view->modules     = $modules;
-        $this->view->cases       = $cases;
-        $this->view->caseIdList  = $caseIdList;
-        $this->view->productID   = $productID;
-        $this->view->from        = $from;
+        $this->view->title      = $this->lang->testtask->batchRun;
+        $this->view->steps      = $this->loadModel('testcase')->getStepGroupByIdList($caseIdList);
+        $this->view->modules    = $modules;
+        $this->view->cases      = $cases;
+        $this->view->caseIdList = $caseIdList;
+        $this->view->productID  = $productID;
+        $this->view->from       = $from;
+        $this->view->emptyCases = $emptyCases;
         $this->display();
     }
 

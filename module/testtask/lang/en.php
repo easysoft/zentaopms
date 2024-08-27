@@ -120,6 +120,7 @@ $lang->testtask->pageSummary       = 'Total testtasks: <strong>%s</strong>.';
 $lang->testtask->mySummary         = 'Total testtasks: <strong>%s</strong>, Wait: <strong>%s</strong>, Testing: <strong>%s</strong>, Blocked: <strong>%s</strong>.';
 $lang->testtask->allSummary        = 'Total testtasks: <strong>%s</strong>, Wait: <strong>%s</strong>, Testing: <strong>%s</strong>, Blocked: <strong>%s</strong>, Done: <strong>%s</strong>.';
 $lang->testtask->checkedAllSummary = 'Seleted: <strong>%total%</strong>, Wait: <strong>%wait%</strong>, Testing: <strong>%testing%</strong>, Blocked: <strong>%blocked%</strong>.';
+$lang->testtask->emptyCases        = 'Cases %s have no steps, filter to show.';
 
 $lang->testtask->beginAndEnd = 'Duration';
 $lang->testtask->to          = 'To';

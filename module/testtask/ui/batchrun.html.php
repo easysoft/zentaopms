@@ -15,6 +15,12 @@ if(count($cases) != count($caseIdList))
     h::js("zui.Modal.alert('{$lang->testtask->skipChangedCases}');");
 }
 
+if(!empty($emptyCases))
+{
+    $emptyCasesTip = sprintf($lang->testtask->emptyCases, $emptyCases);
+    pageJS("zui.Modal.alert({message: '{$emptyCasesTip}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'});\n");
+}
+
 unset($lang->testcase->resultList['n/a']);
 
 $caseItems = array();
