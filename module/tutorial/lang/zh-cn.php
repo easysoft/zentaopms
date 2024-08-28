@@ -761,3 +761,25 @@ $lang->tutorial->kanbanProjectManage->manageKanban->step18->name = '填写表单
 $lang->tutorial->kanbanProjectManage->manageKanban->step19 = new stdClass();
 $lang->tutorial->kanbanProjectManage->manageKanban->step19->name = '保存表单';
 $lang->tutorial->kanbanProjectManage->manageKanban->step19->desc = '可以将Bug添加到Bug泳道中';
+
+$lang->tutorial->kanbanProjectManage->manageBuild = new stdClass();
+$lang->tutorial->kanbanProjectManage->manageBuild->title = '版本管理';
+
+$lang->tutorial->kanbanProjectManage->manageBuild->step1 = new stdClass();
+$lang->tutorial->kanbanProjectManage->manageBuild->step1->name = '点击版本';
+$lang->tutorial->kanbanProjectManage->manageBuild->step1->desc = '可以在这里进行版本管理';
+
+$lang->tutorial->kanbanProjectManage->manageBuild->step2 = new stdClass();
+$lang->tutorial->kanbanProjectManage->manageBuild->step2->name = '点击创建版本';
+$lang->tutorial->kanbanProjectManage->manageBuild->step2->desc = '可以在这里创建新的版本';
+
+$lang->tutorial->kanbanProjectManage->manageBuild->step3 = new stdClass();
+$lang->tutorial->kanbanProjectManage->manageBuild->step3->name = '填写表单';
+
+$lang->tutorial->kanbanProjectManage->manageBuild->step4 = new stdClass();
+$lang->tutorial->kanbanProjectManage->manageBuild->step4->name = '保存表单';
+$lang->tutorial->kanbanProjectManage->manageBuild->step4->desc = '保存后在版本列表中显示';
+
+$lang->tutorial->kanbanProjectManage->manageBuild->step5 = new stdClass();
+$lang->tutorial->kanbanProjectManage->manageBuild->step5->name = '点击累积流图';
+$lang->tutorial->kanbanProjectManage->manageBuild->step5->desc = '可以在这里查看累积流图进行看板跟踪';

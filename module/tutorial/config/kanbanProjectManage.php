@@ -256,3 +256,49 @@ $kanbanProjectManage->tasks['manageKanban']['steps'][] = array(
     'title'  => $lang->tutorial->kanbanProjectManage->manageKanban->step19->name,
     'desc'   => $lang->tutorial->kanbanProjectManage->manageKanban->step19->desc
 );
+
+$kanbanProjectManage->tasks['manageBuild'] = array();
+$kanbanProjectManage->tasks['manageBuild']['name']     = 'manageBuild';
+$kanbanProjectManage->tasks['manageBuild']['title']    = $lang->tutorial->kanbanProjectManage->manageBuild->title;
+$kanbanProjectManage->tasks['manageBuild']['startUrl'] = array('execution', 'kanban', 'execution=3');
+$kanbanProjectManage->tasks['manageBuild']['steps']   = array();
+
+$kanbanProjectManage->tasks['manageBuild']['steps'][] = array(
+    'type'   => 'clickNavbar',
+    'target' => 'build',
+    'page'   => 'execution-kanban',
+    'app'    => 'execution',
+    'url'    => array('execution', 'kanban', 'executionID=3'),
+    'title'  => $lang->tutorial->kanbanProjectManage->manageBuild->step1->name,
+    'desc'   => $lang->tutorial->kanbanProjectManage->manageBuild->step1->desc
+);
+
+$kanbanProjectManage->tasks['manageBuild']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#actionBar a',
+    'page'   => 'execution-build',
+    'title'  => $lang->tutorial->kanbanProjectManage->manageBuild->step2->name,
+    'desc'   => $lang->tutorial->kanbanProjectManage->manageBuild->step2->desc
+);
+
+$kanbanProjectManage->tasks['manageBuild']['steps'][] = array(
+    'type'   => 'form',
+    'page'   => 'build-create',
+    'title'  => $lang->tutorial->kanbanProjectManage->manageBuild->step3->name
+);
+
+$kanbanProjectManage->tasks['manageBuild']['steps'][] = array(
+    'type'   => 'saveForm',
+    'page'   => 'build-create',
+    'title'  => $lang->tutorial->kanbanProjectManage->manageBuild->step4->name,
+    'desc'   => $lang->tutorial->kanbanProjectManage->manageBuild->step4->desc
+);
+
+$kanbanProjectManage->tasks['manageBuild']['steps'][] = array(
+    'type'   => 'clickNavbar',
+    'target' => 'CFD',
+    'page'   => 'execution-build',
+    'url'    => array('execution', 'build', 'executionID=3'),
+    'title'  => $lang->tutorial->kanbanProjectManage->manageBuild->step5->name,
+    'desc'   => $lang->tutorial->kanbanProjectManage->manageBuild->step5->desc
+);

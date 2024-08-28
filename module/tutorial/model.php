@@ -430,6 +430,8 @@ class tutorialModel extends model
         $execution->hasProduct    = '1';
         $execution->multiple      = '';
         $execution->colWidth      = '200';
+        $execution->openedDate    = helper::now();
+        $execution->closedDate    = helper::now();
 
         list($guide, $guideTask, $guideStepIndex) = empty($_SERVER['HTTP_X_ZIN_TUTORIAL']) ? array() : explode('-', $_SERVER['HTTP_X_ZIN_TUTORIAL']);
         if($guide == 'scrumProjectManage')
