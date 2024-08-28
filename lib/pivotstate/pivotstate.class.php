@@ -496,15 +496,10 @@ class pivotState
         $checkDuplicate = array();
         foreach($funcs as $index => $func)
         {
-            $table    = empty($func['table']);
-            $field    = empty($func['field']);
-            $function = empty($func['function']);
-            $alias    = empty($func['alias']);
-
-            if($table)    return $this->setBuilderError('func', 'table', $index);
-            if($field)    return $this->setBuilderError('func', 'field', $index);
-            if($function) return $this->setBuilderError('func', 'function', $index);
-            if($alias)    return $this->setBuilderError('func', 'alias', $index);
+            if(empty($func['table']))    return $this->setBuilderError('func', 'table', $index);
+            if(empty($func['field']))    return $this->setBuilderError('func', 'field', $index);
+            if(empty($func['function'])) return $this->setBuilderError('func', 'function', $index);
+            if(empty($func['alias']))    return $this->setBuilderError('func', 'alias', $index);
 
             $alias = $func['alias'];
             if(!isset($checkDuplicate[$alias]))
