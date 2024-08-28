@@ -10,8 +10,23 @@ class sqlBuilderQueryFilter extends wg
         'querys?: array'
     );
 
-    protected function build()
+    protected function buildFormHeader()
     {
         return null;
+    }
+
+    protected function buildFormRows()
+    {
+        return null;
+    }
+
+    protected function build()
+    {
+        return formBase
+        (
+            set::actions(array()),
+            $this->buildFormHeader(),
+            $this->buildFormRows()
+        );
     }
 }
