@@ -3299,26 +3299,8 @@ class executionModel extends model
         /* Update the user's execution permission. */
         $this->updateUserView($executionID, 'sprint', array($account));
 
-        /* Remove team members from the sprint or stage, and determine whether to remove team members from the project. */
-        if(strpos(',stage,sprint,kanban,', ",$execution->type,") !== false)
-        {
-            $teamMember = $this->dao->select('t1.id, t2.account')->from(TABLE_EXECUTION)->alias('t1')
-                ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id = t2.root')
-                ->where('t1.project')->eq($execution->project)
-                ->andWhere('t1.type')->eq($execution->type)
-                ->andWhere('t2.account')->eq($account)
-                ->fetch();
-
-            /* Remove the user from the project team members and update the user's product permission. */
-            if(empty($teamMember))
-            {
-                $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($execution->project)->andWhere('type')->eq('project')->andWhere('account')->eq($account)->exec();
-                $this->loadModel('user')->updateUserView(array($execution->project), 'project', array($account));
-
-                $linkedProducts = $this->loadModel('product')->getProductPairsByProject($execution->project);
-                if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', array($account));
-            }
-        }
+        $linkedProducts = $this->loadModel('product')->getProductPairsByProject($execution->id);
+        if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', array($account));
     }
 
     /**
