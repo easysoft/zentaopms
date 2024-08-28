@@ -35,7 +35,7 @@ class thinkMulticolumn extends thinkQuestion
             set::label($label),
             set::name("result[col$key][]"),
             set::width('110px'),
-            set::required(in_array($key, $step->options->requiredCols))
+            set::required(in_array($key, $requiredCols))
         );
     }
 
@@ -43,10 +43,16 @@ class thinkMulticolumn extends thinkQuestion
     {
         global $lang;
         $detailWg = parent::buildDetail();
-        list($step, $fields, $supportAdd, $canAddRows, $requiredCols, $mode) = $this->prop(array('step', 'fields', 'supportAdd', 'canAddRows', 'requiredCols', 'mode'));
+        list($step, $fields, $canAddRows, $mode) = $this->prop(array('step', 'fields', 'canAddRows', 'mode'));
         if($mode != 'detail') return array();
 
-        if($step) $fields = $step->options->fields;
+        if($step)
+        {
+            $fields     = $step->options->fields;
+            $canAddRows = $step->options->supportAdd == 1 ? $step->options->canAddRows : 0;
+        }
+        jsVar('canAddRowsOfMulticol', $canAddRows + 5);
+        jsVar('addRowsTips', $lang->thinkrun->tips->add);
 
         $batchItems = array();
         foreach($fields as $key => $field)
@@ -58,6 +64,7 @@ class thinkMulticolumn extends thinkQuestion
             setClass('think-form-batch'),
             set::minRows(5),
             set::actions(array()),
+            set::onRenderRow(jsRaw('renderRowData')),
             $batchItems
         );
         return $detailWg;
