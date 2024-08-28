@@ -522,6 +522,8 @@ class repoModel extends model
      */
     public function saveState(int $repoID = 0, int $objectID = 0): int
     {
+        if(session_id()) session_write_close();
+
         session_start();
         if($repoID > 0) $this->session->set('repoID', (int)$repoID);
 
