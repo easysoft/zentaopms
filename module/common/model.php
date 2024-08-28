@@ -2140,6 +2140,11 @@ eof;
                 foreach($menu['subMenu'] as $key1 => $subMenu)
                 {
                     $lang->$moduleName->$menuKey->{$label}['subMenu']->$key1 = static::setMenuVarsEx($subMenu, $objectID, $params);
+                    if(!isset($subMenu['dropMenu'])) continue;
+                    foreach($subMenu['dropMenu'] as $key2 => $dropMenu)
+                    {
+                        $lang->$moduleName->$menuKey->{$label}['subMenu']->$key1['dropMenu']->$key2 = static::setMenuVarsEx($dropMenu, $objectID, $params);
+                    }
                 }
             }
 
