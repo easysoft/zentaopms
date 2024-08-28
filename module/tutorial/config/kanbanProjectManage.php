@@ -101,3 +101,158 @@ $kanbanProjectManage->tasks['manageProject']['steps'][] = array(
     'title'  => $lang->tutorial->kanbanProjectManage->manageProject->step11->name,
     'desc'   => $lang->tutorial->kanbanProjectManage->manageProject->step11->desc
 );
+
+$kanbanProjectManage->tasks['manageKanban'] = array();
+$kanbanProjectManage->tasks['manageKanban']['name']     = 'manageKanban';
+$kanbanProjectManage->tasks['manageKanban']['title']    = $lang->tutorial->kanbanProjectManage->manageKanban->title;
+$kanbanProjectManage->tasks['manageKanban']['startUrl'] = array('project', 'browse');
+$kanbanProjectManage->tasks['manageKanban']['steps']   = array();
+
+$kanbanProjectManage->tasks['manageKanban']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#actionBar a.execution-create-btn',
+    'page'   => 'project-index',
+    'url'    => array('project', 'index', 'projectID=2'),
+    'title'  => $lang->tutorial->kanbanProjectManage->manageKanban->step1->name,
+    'desc'   => $lang->tutorial->kanbanProjectManage->manageKanban->step1->desc
+);
+
+$kanbanProjectManage->tasks['manageKanban']['steps'][] = array(
+    'type'   => 'form',
+    'page'   => 'execution-create',
+    'app'    => 'execution',
+    'title'  => $lang->tutorial->kanbanProjectManage->manageKanban->step2->name
+);
+
+$kanbanProjectManage->tasks['manageKanban']['steps'][] = array(
+    'type'   => 'saveForm',
+    'page'   => 'execution-create',
+    'app'    => 'execution',
+    'title'  => $lang->tutorial->kanbanProjectManage->manageKanban->step3->name,
+    'desc'   => $lang->tutorial->kanbanProjectManage->manageKanban->step3->desc
+);
+
+$kanbanProjectManage->tasks['manageKanban']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'div.kanban-region nav.toolbar button',
+    'page'   => 'execution-kanban',
+    'url'    => array('execution', 'kanban', 'executionID=3'),
+    'title'  => $lang->tutorial->kanbanProjectManage->manageKanban->step4->name
+);
+
+$kanbanProjectManage->tasks['manageKanban']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '.kanban-createRegion-btn a',
+    'page'   => 'execution-kanban',
+    'url'    => array('execution', 'kanban', 'executionID=3'),
+    'title'  => $lang->tutorial->kanbanProjectManage->manageKanban->step5->name,
+    'desc'   => $lang->tutorial->kanbanProjectManage->manageKanban->step5->desc
+);
+
+$kanbanProjectManage->tasks['manageKanban']['steps'][] = array(
+    'type'   => 'form',
+    'target' => '#createRegionForm',
+    'page'   => 'execution-kanban',
+    'title'  => $lang->tutorial->kanbanProjectManage->manageKanban->step6->name
+);
+
+$kanbanProjectManage->tasks['manageKanban']['steps'][] = array(
+    'type'   => 'saveForm',
+    'target' => '#createRegionForm button[type="submit"]',
+    'page'   => 'execution-kanban',
+    'title'  => $lang->tutorial->kanbanProjectManage->manageKanban->step7->name,
+    'desc'   => $lang->tutorial->kanbanProjectManage->manageKanban->step7->desc
+);
+
+$kanbanProjectManage->tasks['manageKanban']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '.create-btn',
+    'page'   => 'execution-kanban',
+    'url'    => array('execution', 'kanban', 'executionID=3'),
+    'title'  => $lang->tutorial->kanbanProjectManage->manageKanban->step8->name,
+    'desc'   => $lang->tutorial->kanbanProjectManage->manageKanban->step8->desc
+);
+
+$kanbanProjectManage->tasks['manageKanban']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '.linkStory-btn a',
+    'page'   => 'execution-kanban',
+    'title'  => $lang->tutorial->kanbanProjectManage->manageKanban->step9->name,
+    'desc'   => $lang->tutorial->kanbanProjectManage->manageKanban->step9->desc
+);
+
+$kanbanProjectManage->tasks['manageKanban']['steps'][] = array(
+    'type'   => 'selectRow',
+    'target' => '#table-execution-linkstory .dtable-body div[data-col="id"]',
+    'page'   => 'execution-kanban',
+    'title'  => $lang->tutorial->kanbanProjectManage->manageKanban->step10->name
+);
+
+$kanbanProjectManage->tasks['manageKanban']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#table-execution-linkstory button.link-story-btn',
+    'page'   => 'execution-kanban',
+    'title'  => $lang->tutorial->kanbanProjectManage->manageKanban->step11->name,
+    'desc'   => $lang->tutorial->kanbanProjectManage->manageKanban->step11->desc
+);
+
+$kanbanProjectManage->tasks['manageKanban']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'div[z-key="group1"] div[z-lane="1"] div[z-col="1"] .card-list .card-actions button',
+    'page'   => 'execution-kanban',
+    'title'  => $lang->tutorial->kanbanProjectManage->manageKanban->step12->name
+);
+
+$kanbanProjectManage->tasks['manageKanban']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'li.task-create-btn a',
+    'page'   => 'execution-kanban',
+    'title'  => $lang->tutorial->kanbanProjectManage->manageKanban->step13->name,
+    'desc'   => $lang->tutorial->kanbanProjectManage->manageKanban->step13->desc
+);
+
+$kanbanProjectManage->tasks['manageKanban']['steps'][] = array(
+    'type'   => 'form',
+    'target' => '#form-task-create',
+    'page'   => 'execution-kanban',
+    'title'  => $lang->tutorial->kanbanProjectManage->manageKanban->step14->name
+);
+
+$kanbanProjectManage->tasks['manageKanban']['steps'][] = array(
+    'type'   => 'saveForm',
+    'target' => '#form-task-create button[type="submit"]',
+    'page'   => 'execution-kanban',
+    'title'  => $lang->tutorial->kanbanProjectManage->manageKanban->step15->name,
+    'desc'   => $lang->tutorial->kanbanProjectManage->manageKanban->step15->desc
+);
+
+$kanbanProjectManage->tasks['manageKanban']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '.create-btn',
+    'page'   => 'execution-kanban',
+    'url'    => array('execution', 'kanban', 'executionID=3'),
+    'title'  => $lang->tutorial->kanbanProjectManage->manageKanban->step16->name
+);
+
+$kanbanProjectManage->tasks['manageKanban']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '.bug-create-btn a',
+    'page'   => 'execution-kanban',
+    'title'  => $lang->tutorial->kanbanProjectManage->manageKanban->step17->name,
+    'desc'   => $lang->tutorial->kanbanProjectManage->manageKanban->step17->desc
+);
+
+$kanbanProjectManage->tasks['manageKanban']['steps'][] = array(
+    'type'   => 'form',
+    'target' => '#form-bug-create',
+    'page'   => 'execution-kanban',
+    'title'  => $lang->tutorial->kanbanProjectManage->manageKanban->step18->name
+);
+
+$kanbanProjectManage->tasks['manageKanban']['steps'][] = array(
+    'type'   => 'saveForm',
+    'target' => '#form-bug-create button[type="submit"]',
+    'page'   => 'execution-kanban',
+    'title'  => $lang->tutorial->kanbanProjectManage->manageKanban->step19->name,
+    'desc'   => $lang->tutorial->kanbanProjectManage->manageKanban->step19->desc
+);

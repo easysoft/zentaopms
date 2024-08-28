@@ -26,7 +26,7 @@ if(hasPriv('execution', 'create'))
         (
             'icon'  => 'plus',
             'text'  => $lang->project->createKanban,
-            'class' => 'primary',
+            'class' => 'primary execution-create-btn',
             'url'   => createLink('execution', 'create', "projectID={$project->id}")
         )))
     );

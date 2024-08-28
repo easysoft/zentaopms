@@ -690,3 +690,74 @@ $lang->tutorial->kanbanProjectManage->manageProject = $lang->tutorial->scrumProj
 $lang->tutorial->kanbanProjectManage->manageProject->step3 = new stdClass();
 $lang->tutorial->kanbanProjectManage->manageProject->step3->name = '点击项目看板';
 $lang->tutorial->kanbanProjectManage->manageProject->step3->desc = '可以在这里创建看板项目';
+
+$lang->tutorial->kanbanProjectManage->manageKanban = new stdClass();
+$lang->tutorial->kanbanProjectManage->manageKanban->title = '看板管理';
+
+$lang->tutorial->kanbanProjectManage->manageKanban->step1 = new stdClass();
+$lang->tutorial->kanbanProjectManage->manageKanban->step1->name = '点击添加看板';
+$lang->tutorial->kanbanProjectManage->manageKanban->step1->desc = '您可以在这里添加看板';
+
+$lang->tutorial->kanbanProjectManage->manageKanban->step2 = new stdClass();
+$lang->tutorial->kanbanProjectManage->manageKanban->step2->name = '填写表单';
+
+$lang->tutorial->kanbanProjectManage->manageKanban->step3 = new stdClass();
+$lang->tutorial->kanbanProjectManage->manageKanban->step3->name = '保存表单';
+$lang->tutorial->kanbanProjectManage->manageKanban->step3->desc = '可以在这里完成看板的创建';
+
+$lang->tutorial->kanbanProjectManage->manageKanban->step4 = new stdClass();
+$lang->tutorial->kanbanProjectManage->manageKanban->step4->name = '点击更多';
+
+$lang->tutorial->kanbanProjectManage->manageKanban->step5 = new stdClass();
+$lang->tutorial->kanbanProjectManage->manageKanban->step5->name = '点击新增区域';
+$lang->tutorial->kanbanProjectManage->manageKanban->step5->desc = '您可以在这里添加新的区域';
+
+$lang->tutorial->kanbanProjectManage->manageKanban->step6 = new stdClass();
+$lang->tutorial->kanbanProjectManage->manageKanban->step6->name = '填写表单';
+
+$lang->tutorial->kanbanProjectManage->manageKanban->step7 = new stdClass();
+$lang->tutorial->kanbanProjectManage->manageKanban->step7->name = '保存表单';
+$lang->tutorial->kanbanProjectManage->manageKanban->step7->desc = '可以新增区域到看板项目中';
+
+$lang->tutorial->kanbanProjectManage->manageKanban->step8 = new stdClass();
+$lang->tutorial->kanbanProjectManage->manageKanban->step8->name = '点击新建';
+$lang->tutorial->kanbanProjectManage->manageKanban->step8->desc = '可以选择关联/新建需求';
+
+$lang->tutorial->kanbanProjectManage->manageKanban->step9 = new stdClass();
+$lang->tutorial->kanbanProjectManage->manageKanban->step9->name = '点击关联需求';
+$lang->tutorial->kanbanProjectManage->manageKanban->step9->desc = '您可以在需求泳道中关联/创建需求';
+
+$lang->tutorial->kanbanProjectManage->manageKanban->step10 = new stdClass();
+$lang->tutorial->kanbanProjectManage->manageKanban->step10->name = '填写表单';
+
+$lang->tutorial->kanbanProjectManage->manageKanban->step11 = new stdClass();
+$lang->tutorial->kanbanProjectManage->manageKanban->step11->name = '保存表单';
+$lang->tutorial->kanbanProjectManage->manageKanban->step11->desc = '可以将需求关联到需求泳道中';
+
+$lang->tutorial->kanbanProjectManage->manageKanban->step12 = new stdClass();
+$lang->tutorial->kanbanProjectManage->manageKanban->step12->name = '点击更多';
+
+$lang->tutorial->kanbanProjectManage->manageKanban->step13 = new stdClass();
+$lang->tutorial->kanbanProjectManage->manageKanban->step13->name = '点击分解任务';
+$lang->tutorial->kanbanProjectManage->manageKanban->step13->desc = '可以将需求分解为任务';
+
+$lang->tutorial->kanbanProjectManage->manageKanban->step14 = new stdClass();
+$lang->tutorial->kanbanProjectManage->manageKanban->step14->name = '填写表单';
+
+$lang->tutorial->kanbanProjectManage->manageKanban->step15 = new stdClass();
+$lang->tutorial->kanbanProjectManage->manageKanban->step15->name = '保存表单';
+$lang->tutorial->kanbanProjectManage->manageKanban->step15->desc = '可以将任务添加到任务泳道中';
+
+$lang->tutorial->kanbanProjectManage->manageKanban->step16 = new stdClass();
+$lang->tutorial->kanbanProjectManage->manageKanban->step16->name = '点击新建';
+
+$lang->tutorial->kanbanProjectManage->manageKanban->step17 = new stdClass();
+$lang->tutorial->kanbanProjectManage->manageKanban->step17->name = '点击新建Bug';
+$lang->tutorial->kanbanProjectManage->manageKanban->step17->desc = '可以在这里提Bug';
+
+$lang->tutorial->kanbanProjectManage->manageKanban->step18 = new stdClass();
+$lang->tutorial->kanbanProjectManage->manageKanban->step18->name = '填写表单';
+
+$lang->tutorial->kanbanProjectManage->manageKanban->step19 = new stdClass();
+$lang->tutorial->kanbanProjectManage->manageKanban->step19->name = '保存表单';
+$lang->tutorial->kanbanProjectManage->manageKanban->step19->desc = '可以将Bug添加到Bug泳道中';

@@ -446,6 +446,11 @@ class tutorialModel extends model
             $execution->milestone = 0;
             $execution->parallel  = 1;
         }
+        if($guide == 'kanbanProjectManage')
+        {
+            $execution->name = 'Test Kanban';
+            $execution->type = 'kanban';
+        }
 
         return $execution;
     }
@@ -1329,5 +1334,168 @@ class tutorialModel extends model
     public function getReviews(): array
     {
         return array(1 => $this->getReview());
+    }
+
+    /**
+     * 获取新手模式看板默认区域。
+     * Get region pairs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getRegionPairs(): array
+    {
+        $this->loadModel('kanban');
+        return array(1 => $this->lang->kanbanregion->default);
+    }
+    /**
+     * 获取新手模式看板组。
+     * Get groups.
+     *
+     * @access public
+     * @return array
+     */
+    public function getGroups(): array
+    {
+        $groups    = array();
+        $groups[1] = array();
+        foreach(array(1, 2, 3) as $key)
+        {
+            $group = new stdClass();
+            $group->id     = $key;
+            $group->kanban = 3;
+            $group->region = 1;
+            $group->order  = $key;
+            $groups[1][$key] = $group;
+        }
+        return $groups;
+    }
+
+    /**
+     * 获取新手模式看板泳道。
+     * Get lane.
+     *
+     * @access public
+     * @return object
+     */
+    public function getLaneGroup(): array
+    {
+        $this->loadModel('kanban');
+
+        $laneGroup = array();
+        foreach(array(1 => 'story', 2 => 'task', 3 => 'bug') as $key => $objectType)
+        {
+            $lane = array();
+            $lane['execution']  = 3;
+            $lane['region']     = 1;
+            $lane['id']         = $key;
+            $lane['type']       = $objectType;
+            $lane['name']       = $key;
+            $lane['title']      = $this->config->kanban->default->{$objectType}->name;
+            $lane['color']      = $this->config->kanban->default->{$objectType}->color;
+            $lane['order']      = $this->config->kanban->default->{$objectType}->order;
+            $laneGroup[$key] = array($lane);
+        }
+        return $laneGroup;
+    }
+
+    /**
+     * 获取新手模式看板列。
+     * Get lane.
+     *
+     * @access public
+     * @return object
+     */
+    public function getColumns(): array
+    {
+        $this->loadModel('kanban');
+
+        $columnID = 1;
+        $columns  = array();
+        foreach(array(1 => 'story', 2 => 'task', 3 => 'bug') as $key => $objectType)
+        {
+            $columnList = array();
+            foreach($this->lang->kanban->{$objectType . 'Column'} as $type => $name)
+            {
+                $column = array();
+                $column['parent']     = 0;
+                $column['region']     = 1;
+                $column['group']      = 1;
+                $column['color']      = '#333';
+                $column['limit']      = -1;
+                $column['actionList'] = array('setColumn', 'setWIP', 'deleteColumn');
+                $column['id']         = $columnID ++;
+                $column['name']       = $column['id'];
+                $column['type']       = $type;
+                $column['title']      = $name;
+                $columnList[] = $column;
+            }
+            $columns[$key] = $columnList;
+        }
+        return $columns;
+    }
+
+    /**
+     * 获取新手模式看板卡片。
+     * Get card.
+     *
+     * @access public
+     * @return array
+     */
+    public function getCardGroup(): array
+    {
+        $card = array();
+        $card['id']            = 1;
+        $card['name']          = 1;
+        $card['pri']           = 3;
+        $card['color']         = '';
+        $card['assignedTo']    = '';
+        $card['parent']        = 0;
+        $card['progress']      = 0;
+        $card['group']         = '';
+        $card['region']        = '';
+        $card['begin']         = '';
+        $card['end']           = '';
+        $card['fromID']        = 0;
+        $card['fromType']      = '';
+        $card['desc']          = '';
+        $card['originDesc']    = '';
+        $card['delay']         = 0;
+        $card['objectStatus']  = '';
+        $card['deleted']       = 0;
+        $card['date']          = '';
+        $card['estimate']      = 0;
+        $card['deadline']      = '';
+        $card['severity']      = '';
+        $card['avatarList']    = array();
+        $card['realnames']     = '';
+        $card['order']         = 0;
+        $card['acl']           = 'open';
+
+        $storyCard = $card;
+        $storyCard['title']    = 'Test story';
+        $storyCard['column']   = 1;
+        $storyCard['lane']     = 1;
+        $storyCard['status']   = 'active';
+        $storyCard['cardType'] = 'story';
+
+        $taskCard = $card;
+        $taskCard['title']      = 'Test task';
+        $taskCard['column']     = 16;
+        $taskCard['lane']       = 2;
+        $taskCard['left']       = 0;
+        $taskCard['estStarted'] = '';
+        $taskCard['mode']       = '';
+        $taskCard['status']     = 'wait';
+        $taskCard['cardType']   = 'task';
+
+        $bugCard = $card;
+        $bugCard['title']    = 'Test bug';
+        $bugCard['column']   = 23;
+        $bugCard['lane']     = 3;
+        $bugCard['status']   = 'active';
+        $bugCard['cardType'] = 'bug';
+
+        return array(1 => array(1 => array(1 => array($storyCard))), 2 => array(2 => array(16 => array($taskCard))), 3 => array(3 => array(23 => array($bugCard))));
     }
 }

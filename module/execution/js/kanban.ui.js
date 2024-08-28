@@ -270,7 +270,7 @@ window.buildStoryActions = function(item)
 
     if(priv.canEditStory) actions.push({text: storyLang.edit, icon: 'edit', url: $.createLink('story', 'edit', 'storyID=' + item.id + '&kanbanGroup=' + groupBy), 'data-toggle': 'modal', 'data-size': 'lg'});
     if(priv.canChangeStory && item.status == 'active') actions.push({text: storyLang.change, icon: 'change', url: $.createLink('story', 'change', 'storyID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
-    if(priv.canCreateTask && item.status == 'active') actions.push({text: executionLang.wbs, icon: 'plus', url: $.createLink('task', 'create', 'executionID=' + executionID + '&storyID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
+    if(priv.canCreateTask && item.status == 'active') actions.push({text: executionLang.wbs, icon: 'plus', url: $.createLink('task', 'create', 'executionID=' + executionID + '&storyID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg', 'class': 'task-create-btn'});
     if(priv.canBatchCreateTask && item.status == 'active') actions.push({text: executionLang.batchWBS, icon: 'pluses', url: $.createLink('task', 'batchCreate', 'executionID=' + executionID + '&storyID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
     if(priv.canActivateStory && item.status == 'closed') actions.push({text: executionLang.activate, icon: 'magic', url: $.createLink('story', 'activate', 'storyID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
     if(priv.canUnlinkStory) actions.push({text: executionLang.unlinkStory, icon: 'unlink', url: $.createLink('execution', 'unlinkStory', 'executionID=' + executionID + '&storyID=' + item.id + '&confirm=no&from=' + '&laneID=' + item.lane + '&columnID=' + item.column), 'innerClass' : 'ajax-submit'});

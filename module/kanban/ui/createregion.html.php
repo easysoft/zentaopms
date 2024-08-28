@@ -13,6 +13,7 @@ modalHeader(set::title($lang->kanban->createRegion), set::titleClass('text-lg fo
 
 formPanel
 (
+    set::id('createRegionForm'),
     formRow
     (
         formGroup

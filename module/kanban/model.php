@@ -816,7 +816,7 @@ class kanbanModel extends model
         $action['caret'] = false;
         $action['items'] = array();
 
-        if(common::hasPriv('kanban', 'createRegion'))                       $action['items'][] = array('text' => $this->lang->kanban->createRegion, 'url' => helper::createLink('kanban', 'createRegion', "kanbanID=$kanbanID&from=execution"), 'data-toggle' => 'modal', 'icon' => 'plus');
+        if(common::hasPriv('kanban', 'createRegion'))                       $action['items'][] = array('text' => $this->lang->kanban->createRegion, 'url' => helper::createLink('kanban', 'createRegion', "kanbanID=$kanbanID&from=execution"), 'data-toggle' => 'modal', 'icon' => 'plus', 'class' => 'kanban-createRegion-btn');
         if(common::hasPriv('kanban', 'editRegion'))                         $action['items'][] = array('text' => $this->lang->kanban->editRegion,   'url' => helper::createLink('kanban', 'editRegion', "regionID=$regionID"), 'data-toggle' => 'modal', 'icon' => 'edit');
         if(common::hasPriv('kanban', 'createLane'))                         $action['items'][] = array('text' => $this->lang->kanban->createLane,   'url' => helper::createLink('kanban', 'createLane', "kanbanID=$kanbanID&regionID=$regionID&from=execution"), 'data-toggle' => 'modal', 'icon' => 'plus');
         if(common::hasPriv('kanban', 'deleteRegion') && ($regionCount > 1)) $action['items'][] = array('text' => $this->lang->kanban->deleteRegion, 'url' => helper::createLink('kanban', 'deleteRegion', "regionID=$regionID"), 'data-confirm' => $this->lang->kanbanregion->confirmDelete, 'icon' => 'trash', 'innerClass' => 'ajax-submit');
@@ -1008,6 +1008,8 @@ class kanbanModel extends model
      */
     public function getRegionPairs(int $kanbanID, int $regionID = 0, string $from = 'kanban'): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getRegionPairs();
+
         return $this->dao->select('id,name')->from(TABLE_KANBANREGION)
             ->where('kanban')->eq($kanbanID)
             ->andWhere('deleted')->eq('0')
@@ -1041,6 +1043,8 @@ class kanbanModel extends model
      */
     public function getGroupGroupByRegions(array $regions): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getGroups();
+
         return $this->dao->select('*')->from(TABLE_KANBANGROUP)
             ->where('region')->in($regions)
             ->orderBy('order')
@@ -1058,6 +1062,8 @@ class kanbanModel extends model
      */
     public function getLaneGroupByRegions(array $regions, string $browseType = 'all'): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getLaneGroup();
+
         $lanes = $this->dao->select('*')->from(TABLE_KANBANLANE)
             ->where('deleted')->eq('0')
             ->andWhere('region')->in($regions)
@@ -1319,6 +1325,8 @@ class kanbanModel extends model
      */
     public function getRDColumnGroupByRegions(array $regions, array $groupIDList = array())
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getColumns();
+
         $columnGroup = $this->dao->select("*")->from(TABLE_KANBANCOLUMN)
             ->where('deleted')->eq('0')
             ->andWhere('region')->in($regions)
@@ -1373,6 +1381,8 @@ class kanbanModel extends model
      */
     public function getCardGroupByExecution(int $executionID, string $browseType = 'all', string $orderBy = 'id_asc', string $searchValue = ''): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getCardGroup();
+
         $cards = $this->dao->select('t1.*, t2.type as columnType, t2.group')
             ->from(TABLE_KANBANCELL)->alias('t1')
             ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.column=t2.id')
