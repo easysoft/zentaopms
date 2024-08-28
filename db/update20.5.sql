@@ -3,11 +3,11 @@ CREATE TABLE IF NOT EXISTS `zt_workflowui` (
   `module` varchar(30) NOT NULL,
   `action` varchar(50) NOT NULL,
   `name` varchar(30) NOT NULL,
-  `conditions` text NOT NULL,
-  PRIMARY KEY `id` (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-CREATE INDEX `module`  ON `zt_workflowui` (`module`);
-CREATE INDEX `action`  ON `zt_workflowui` (`action`);
+  `conditions` text NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE INDEX `module` ON `zt_workflowui` (`module`);
+CREATE INDEX `action` ON `zt_workflowui` (`action`);
 
 ALTER TABLE `zt_workflowlayout` ADD `ui` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `action`;
 ALTER TABLE `zt_workflowrelationlayout` ADD `ui` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `action`;
