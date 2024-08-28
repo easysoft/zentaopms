@@ -555,7 +555,7 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function linkStory(int $planID = 0, string $browseType = '', int $param = 0, string $orderBy = 'order_desc', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
+    public function linkStory(int $planID = 0, string $browseType = '', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
     {
         if(!empty($_POST['stories']))
         {
@@ -582,11 +582,11 @@ class productplan extends control
         $planStories = $this->loadModel('story')->getPlanStories($planID);
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch($plan->product, "0,{$plan->branch}", (int)$param, 'id_desc', 0, $this->config->enableER ? 'all' : 'story,requirement', array_keys($planStories), '', $pager);
+            $allStories = $this->story->getBySearch($plan->product, "0,{$plan->branch}", (int)$param, $orderBy, 0, $this->config->enableER ? 'all' : 'story,requirement', array_keys($planStories), '', $pager);
         }
         else
         {
-            $allStories = $this->story->getProductStories($this->view->product->id, $plan->branch ? "0,{$plan->branch}" : 0, '0', 'draft,reviewing,active,changing', $this->config->enableER ? 'all' : 'story,requirement', 'id_desc', true, array_keys($planStories), $pager);
+            $allStories = $this->story->getProductStories($this->view->product->id, $plan->branch ? "0,{$plan->branch}" : 0, '0', 'draft,reviewing,active,changing', $this->config->enableER ? 'all' : 'story,requirement', $orderBy, true, array_keys($planStories), $pager);
         }
 
         $modules = $this->loadModel('tree')->getOptionMenu($plan->product, 'story', 0, 'all');
