@@ -338,33 +338,30 @@ class group extends control
         $recommendSelect  = zget($_POST, 'recommendSelect');
 
         $relatedPrivData = $this->group->getRelatedPrivs(explode(',', $allPrivList), explode(',', $selectedPrivList), explode(',', $recommendSelect));
-        if($recommendSelect)
+        $recommendList = array();
+        foreach($relatedPrivData['recommend'] as $privs)
         {
-            $recommendList = array();
-            foreach($relatedPrivData['recommend'] as $privs)
+            $children             = array();
+            $checkedChildrenCount = 0;
+            foreach($privs['children'] as $child)
             {
-                $children             = array();
-                $checkedChildrenCount = 0;
-                foreach($privs['children'] as $child)
+                if($recommendSelect && strpos(",{$recommendSelect},", ",{$child['id']},") !== false)
                 {
-                    if(strpos(",{$recommendSelect},", ",{$child['id']},") !== false)
-                    {
-                        $child['checked'] = true;
-                        $checkedChildrenCount ++;
-                    }
-                    $children[] = $child;
+                    $child['checked'] = true;
+                    $checkedChildrenCount ++;
                 }
-
-                $privs['checked']    = false;
-                $privs['labelClass'] = '';
-                if($checkedChildrenCount == count($children)) $privs['checked'] = true;
-                if($checkedChildrenCount > 0 && $checkedChildrenCount < count($children)) $privs['labelClass'] = 'checkbox-indeterminate-block';
-
-                $privs['children'] = $children;
-                $recommendList[] = $privs;
+                $children[] = $child;
             }
-            $relatedPrivData['recommend'] = $recommendList;
+
+            $privs['checked']    = false;
+            $privs['labelClass'] = '';
+            if($checkedChildrenCount == count($children)) $privs['checked'] = true;
+            if($checkedChildrenCount > 0 && $checkedChildrenCount < count($children)) $privs['labelClass'] = 'checkbox-indeterminate-block';
+
+            $privs['children'] = $children;
+            $recommendList[] = $privs;
         }
+        $relatedPrivData['recommend'] = $recommendList;
 
         $this->view->relatedPrivData = $relatedPrivData;
 
