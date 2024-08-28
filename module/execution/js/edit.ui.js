@@ -11,7 +11,7 @@ $(function()
  * @access public
  * @return void
  */
-window.changeProject = function(e)
+window.changeProject = function()
 {
     let projectID = $('#form-execution-edit [name=project]').val();
     if($('#syncStories').length == 0) $('button[type=submit]').after("<input type='hidden' id='syncStories' name='syncStories' value='no' />");
