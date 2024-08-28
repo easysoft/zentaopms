@@ -2730,6 +2730,7 @@ class executionModel extends model
         $this->dao->update(TABLE_DOCLIB)->set('project')->eq($newProjectID)->where('project')->eq($oldProjectID)->andWhere('execution')->eq($executionID)->exec();
         $this->dao->update(TABLE_TASK)->set('project')->eq($newProjectID)->where('project')->eq($oldProjectID)->andWhere('execution')->eq($executionID)->exec();
         $this->dao->update(TABLE_TESTREPORT)->set('project')->eq($newProjectID)->where('project')->eq($oldProjectID)->andWhere('execution')->eq($executionID)->exec();
+        $this->dao->update(TABLE_TESTTASK)->set('project')->eq($newProjectID)->where('project')->eq($oldProjectID)->andWhere('execution')->eq($executionID)->exec();
 
         /* Update the team members and whitelist of the project. */
         $addedAccounts = $this->updateProjectUsers($executionID, $newProjectID);
