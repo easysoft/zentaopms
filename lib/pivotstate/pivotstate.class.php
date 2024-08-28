@@ -638,7 +638,19 @@ class pivotState
         $this->sqlBuilder['wheres'][$index]['items'][] = $item;
     }
 
-    public function addBuilderQueryFilter($table, $field, $name, $type, $typeOption, $default)
+    /**
+     * add builder query filter.
+     *
+     * @param  string $table
+     * @param  string $field
+     * @param  string $name
+     * @param  string $type
+     * @param  string $typeOption
+     * @param  string $default
+     * @access public
+     * @return void
+     */
+    public function addBuilderQueryFilter($table = '', $field = '', $name = '', $type = '', $typeOption = '', $default = '')
     {
         if(is_array($table))
         {
