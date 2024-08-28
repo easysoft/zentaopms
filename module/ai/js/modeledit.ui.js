@@ -27,9 +27,9 @@ window.testConnection = () =>
     });
 };
 
-const handleModelTypeChange = () =>
+const handleModelTypeChange = (modelType = '') =>
 {
-    const modelType = $('select[name="type"]').val();
+    if(!modelType) modelType = $('select[name="type"]').val();
     const vendorList = window.vendorListLang[modelType];
     $('select[name="vendor"]').html('');
     for(const vendor in vendorList) $('select[name="vendor"]').append('<option value="' + vendor + '">' + vendorList[vendor] + '</option>');
@@ -37,9 +37,9 @@ const handleModelTypeChange = () =>
     $('select[name="vendor"]').trigger('change');
 };
 
-const handleVendorChange = () =>
+const handleVendorChange = (vendor = '') =>
 {
-    const vendor = $('select[name="vendor"]').val();
+    vendor ? $('select[name="vendor"]').val(vendor) : (vendor = $('select[name="vendor"]').val());
     const requiredFields = window.vendorList[vendor]['credentials'];
     const vendorTip = window.vendorTipsLang[vendor];
     $('.vendor-tips').html(vendorTip ? vendorTip : '');
@@ -53,8 +53,8 @@ const handleProxyTypeChange = () =>
 
 $(() =>
 {
-    handleModelTypeChange();
-    handleVendorChange();
+    handleModelTypeChange(window.modelData.type);
+    handleVendorChange(window.modelData.vendor);
     handleProxyTypeChange();
     $('select[name="type"]').on('change', handleModelTypeChange);
     $('select[name="vendor"]').on('change', handleVendorChange);
