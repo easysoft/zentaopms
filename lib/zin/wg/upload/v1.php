@@ -48,6 +48,8 @@ class upload extends wg
     {
         global $lang, $app;
 
+        $app->loadLang('file');
+
         /* Check file type. */
         $checkFiles = jsCallback('file')
             ->const('dangerFileTypes', ",{$app->config->file->dangers},")
