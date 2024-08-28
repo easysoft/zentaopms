@@ -314,6 +314,7 @@ class file extends control
 
             /* Update test case version for test case synchronization. */
             if($file->objectType == 'testcase') $this->file->updateTestcaseVersion($file);
+            if($file->objectType == 'charter')  $this->loadModel('charter')->updateFileByDelete($file);
 
             if(!helper::isAjaxRequest()) return print(js::reload('parent'));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
