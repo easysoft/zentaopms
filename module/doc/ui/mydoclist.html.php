@@ -39,6 +39,22 @@ if($app->rawMethod == 'myspace')
     $params     = "type={$type}&" . $params;
 }
 
+/* Remove move doc action when doc under project/product/execution. */
+foreach($tableData as $key => $row)
+{
+    if(($row->project || $row->product || $row->execution) && isset($row->actions))
+    {
+        foreach($row->actions as $id => $action)
+        {
+            if($action['name'] == 'movedoc')
+            {
+                $tableData[$key]->actions[$id]['disabled'] = true;
+                break;
+            }
+        }
+    }
+}
+
 $docContent = dtable
 (
     setID('docTable'),
