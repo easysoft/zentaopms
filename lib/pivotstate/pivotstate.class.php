@@ -322,6 +322,8 @@ class pivotState
 
     public $builderError = array();
 
+    public $canChangeMode = true;
+
     /**
      * __construct method.
      *
@@ -1541,6 +1543,18 @@ class pivotState
         $this->formatSettingColumns();
         $this->processFieldSettingsLang();
         $this->completeFiltersDefault();
+        $this->canChangeMode = $this->setCanChangeMode();
+    }
+
+    public function setCanChangeMode()
+    {
+        if($this->mode == 'builder') return true;
+
+        $from = $this->sqlBuilder['from'];
+        $table = zget($from, 'table', '');
+        if(empty($table) && empty($this->sql)) return true;
+
+        return false;
     }
 
     /**
