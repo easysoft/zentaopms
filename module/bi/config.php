@@ -1,7 +1,20 @@
 <?php
 $config->bi = new stdclass();
-$config->bi->builtin = new stdclass();
+$config->bi->pickerHeight = 150;
 
+$config->bi->conditionList = array();
+$config->bi->conditionList['=']           = '=';
+$config->bi->conditionList['!=']          = '!=';
+$config->bi->conditionList['<']           = '<';
+$config->bi->conditionList['>']           = '>';
+$config->bi->conditionList['>=']          = '≥ ';
+$config->bi->conditionList['<=']          = '≤ ';
+$config->bi->conditionList['IN']          = 'IN';
+$config->bi->conditionList['NOT IN']      = 'NOT IN';
+$config->bi->conditionList['IS NOT NULL'] = 'IS NOT NULL';
+$config->bi->conditionList['IS NULL']     = 'IS NULL';
+
+$config->bi->builtin = new stdclass();
 $config->bi->builtin->modules = new stdclass();
 $config->bi->builtin->screens = array(1, 2, 3, 4, 5, 6, 7, 8,1001);
 

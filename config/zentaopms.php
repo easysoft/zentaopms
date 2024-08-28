@@ -749,9 +749,6 @@ $config->featureGroup->waterfallplus = array();
 $config->featureGroup->assetlib      = array();
 $config->featureGroup->other         = array('devops', 'kanban', 'setCode');
 
-$config->bi = new stdclass();
-$config->bi->pickerHeight = 150;
-
 $config->db->sqliteBlacklist  = array('sqlite_queue', 'cron');
 $config->hasDropmenuApps      = array('program', 'project', 'product', 'execution', 'qa', 'admin', 'bi', 'feedback', 'demandpool');
 $config->hasBranchMenuModules = array('product', 'story', 'release', 'bug', 'testcase', 'testtask', 'branch', 'tree');
