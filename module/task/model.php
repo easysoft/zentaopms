@@ -54,7 +54,7 @@ class taskModel extends model
             ->exec();
         if(dao::isError()) return false;
 
-        if($task->consumed != $oldTask->consumed || $task->left != $oldTask->left) $this->loadModel('program')->refreshProjectStats($oldTask->project);
+        if($task->left != $oldTask->left) $this->loadModel('program')->refreshProjectStats($oldTask->project);
 
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
         if($oldTask->parent == '-1')
