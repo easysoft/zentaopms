@@ -95,6 +95,13 @@ $lang->bi->whereItemOperatorList['in']    = '包含';
 $lang->bi->whereItemOperatorList['notIn'] = '不包含';
 $lang->bi->whereItemOperatorList['like']  = '模糊匹配';
 
+$lang->bi->queryFilterFormHeader = array();
+$lang->bi->queryFilterFormHeader['table']   = '选择表';
+$lang->bi->queryFilterFormHeader['field']   = '选择字段';
+$lang->bi->queryFilterFormHeader['name']    = '筛选器名称';
+$lang->bi->queryFilterFormHeader['type']    = '筛选器类型';
+$lang->bi->queryFilterFormHeader['default'] = '默认值';
+
 $lang->bi->emptyError     = '不能为空';
 $lang->bi->duplicateError = '存在重复';
 

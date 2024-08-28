@@ -12,7 +12,19 @@ class sqlBuilderQueryFilter extends wg
 
     protected function buildFormHeader()
     {
-        return null;
+        global $lang;
+        $headers = array();
+
+        foreach($lang->bi->queryFilterFormHeader as $text)
+        {
+            $headers[] = div
+            (
+                setClass('form-header-item font-bold text-center'),
+                $text
+            )
+        }
+
+        return $headers;
     }
 
     protected function buildFormRows()
