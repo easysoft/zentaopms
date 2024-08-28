@@ -364,7 +364,7 @@ class searchTao extends searchModel
         $users = $products = $executions = array();
         if($hasUser)
         {
-            $users = $this->loadModel('user')->getPairs('realname|noclosed', $appendUsers, $this->config->maxCount);
+            $users = $this->loadModel('user')->getPairs('realname|noclosed', $appendUsers);
             $users['$@me'] = $this->lang->search->me;
         }
 

@@ -199,12 +199,7 @@ class searchZen extends search
         {
             if(!isset($params[$fieldName])) $params[$fieldName] = array('operator' => '=', 'control' => 'input', 'values' => '');
 
-            if($params[$fieldName]['values'] == 'users')
-            {
-                if(!empty($this->config->user->moreLink)) $this->config->moreLinks["field{$fieldName}"] = $this->config->user->moreLink;
-                $params[$fieldName]['values'] = $users;
-            }
-
+            if($params[$fieldName]['values'] == 'users')      $params[$fieldName]['values'] = $users;
             if($params[$fieldName]['values'] == 'products')   $params[$fieldName]['values'] = $products;
             if($params[$fieldName]['values'] == 'executions') $params[$fieldName]['values'] = $executions;
 
