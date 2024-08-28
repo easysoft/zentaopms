@@ -544,6 +544,19 @@ CSS;
             $this->buildBody(),
             $layout === 'simple' ? null : $this->buildPrevAndNext(),
             html($app->control->appendExtendCssAndJS('', '', $this->prop('object'))),
+            js
+            (
+                'const $doc = $(document)',
+                'const binddedKey = "zt.detail.bindded"',
+                'if($doc.data(binddedKey)) return',
+                '$doc.on("keyup.detail.zt", e => {',
+                    'let $btn = null',
+                    'if(e.keyCode === 37) $btn = $(".detail-prev-btn")',
+                    'else if(e.keyCode === 39) $btn = $(".detail-next-btn")',
+                    'if($btn && $btn.length) $btn[0].click()',
+                '}).data(binddedKey, true)',
+                '$doc.one("pageunmount.app", () => {$(document).off("keyup.detail.zt").removeData(binddedKey)})'
+            )
         );
     }
 }
