@@ -41,7 +41,7 @@ class design extends control
      * @access public
      * @return void
      */
-    public function commonAction(int $projectID = 0, int $productID = 0, int $designID = 0, $type = 'all')
+    public function commonAction(int $projectID = 0, int $productID = 0, int $designID = 0, string $type = 'all')
     {
         $products    = $this->product->getProductPairsByProject($projectID);
         $products[0] = $this->lang->product->all;
