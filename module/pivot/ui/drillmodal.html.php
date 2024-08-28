@@ -22,15 +22,15 @@ foreach($datas as $index => $data)
     {
         foreach($cols as $col)
         {
-            if($col['name'] != $key) continue;
-            if($col['type'] == 'user' && strpos($value, ',') !== false) $datas[$index]->$key = explode(',', $value);
+            if(isset($col['name']) && $col['name'] != $key) continue;
+            if(isset($col['type']) && $col['type'] == 'user' && is_string($value) && strpos($value, ',') !== false) $datas[$index]->$key = explode(',', $value);
         }
     }
 }
 
 dtable
 (
-    $from == 'screen' ? set::_class('dark') : null,
+    isset($from) && $from == 'screen' ? set::_class('dark') : null,
     set::striped(true),
     set::bordered(true),
     set::cols($cols),
