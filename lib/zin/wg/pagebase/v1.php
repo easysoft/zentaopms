@@ -87,7 +87,7 @@ class pageBase extends wg
             $zinDebugData = array('config' => jsRaw('window.config'));
             if($config->debug > 4)
             {
-                $zinDebugData['zinTool']      = $config->zinTool;
+                $zinDebugData['zinTool'] = isset($config->zinTool) ? $config->zinTool : false;
                 if($config->debug > 5)
                 {
                     $zinDebugData['page']         = $this->toJSON();
