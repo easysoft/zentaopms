@@ -10,7 +10,8 @@ class sqlBuilderQueryFilter extends wg
     protected static array $defineProps = array(
         'querys?: array',
         'tables?: array',
-        'fields?: array'
+        'fields?: array',
+        'defaultItems?: array'
     );
 
     protected static array $controls = array(
@@ -43,8 +44,8 @@ class sqlBuilderQueryFilter extends wg
     protected function buildFormGroup($index, $name, $rowValue)
     {
         global $lang;
-        list($tables, $fields) = $this->prop(array('tables', 'fields'));
-        $fields     = zget($fields, $rowValue['table'], array());
+        list($tables, $fields, $defaultItems) = $this->prop(array('tables', 'fields', 'defaultItems'));
+        $fields     = \zget($fields, $rowValue['table'], array());
         $typeList   = $lang->dataview->varFilter->requestTypeList;
         $selectList = $lang->dataview->varFilter->selectList;
 
@@ -55,6 +56,13 @@ class sqlBuilderQueryFilter extends wg
         $isSelect = $name == 'type' && $value == 'select';
 
         if($isSelect) $width = (string)(int)$width / 2;
+
+        if($name == 'default')
+        {
+            $type = $rowValue['type'];
+            if($type == 'select') $type = 'picker';
+            $items = \zget($defaultItems, $rowValue['typeOption'], array());
+        }
 
         return div
         (

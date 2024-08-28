@@ -62,6 +62,24 @@ class sqlBuilderControl extends wg
             set::value($value)
         );
 
+        if($type == 'date') return datePicker
+        (
+            setID("builderDate$name"),
+            setClass('builder-date', array('has-error' => $error)),
+            set::name($name),
+            set::placeholder($placeholder),
+            set::value($value)
+        );
+
+        if($type == 'datetime') return datetimePicker
+        (
+            setID("builderDatetime$name"),
+            setClass('builder-datetime', array('has-error' => $error)),
+            set::name($name),
+            set::placeholder($placeholder),
+            set::value($value)
+        );
+
         return null;
     }
 
