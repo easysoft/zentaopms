@@ -31,6 +31,9 @@ $manageAccount->tasks['addUser']['steps'][]  = array('type' => 'form', 'page' =>
 $manageAccount->tasks['addUser']['steps'][]  = array('type' => 'saveForm', 'page' => 'user-create', 'title' => '保存人员信息', 'desc' => '保存后可以在人员列表中查看。');
 
 $config->tutorial->guides = array();
-$config->tutorial->guides[$manageAccount->name]     = $manageAccount;
+$config->tutorial->guides[$manageAccount->name]          = $manageAccount;
+$config->tutorial->guides[$scrumProjectManage->name]     = $scrumProjectManage;
+$config->tutorial->guides[$waterfallProjectManage->name] = $waterfallProjectManage;
+$config->tutorial->guides[$kanbanProjectManage->name]    = $kanbanProjectManage;
 
 if($config->systemMode == 'light') unset($config->tutorial->guides[$managePrograms->name]);

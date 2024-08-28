@@ -680,3 +680,9 @@ $lang->tutorial->waterfallProjectManage->manageIssue = $lang->tutorial->scrumPro
 
 $lang->tutorial->waterfallProjectManage->manageRisk = new stdClass();
 $lang->tutorial->waterfallProjectManage->manageRisk = $lang->tutorial->scrumProjectManage->manageRisk;
+
+$lang->tutorial->kanbanProjectManage = new stdClass();
+$lang->tutorial->kanbanProjectManage->title = '看板项目管理教程';
+
+$lang->tutorial->kanbanProjectManage->manageProject = new stdClass();
+$lang->tutorial->kanbanProjectManage->manageProject = $lang->tutorial->scrumProjectManage->manageProject;

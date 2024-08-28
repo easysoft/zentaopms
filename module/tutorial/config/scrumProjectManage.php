@@ -908,5 +908,3 @@ if(in_array($config->edition, array('max', 'ipd')))
         'title'  => $lang->tutorial->scrumProjectManage->manageRisk->step11->name
     );
 }
-
-$config->tutorial->guides[$scrumProjectManage->name] = $scrumProjectManage;
