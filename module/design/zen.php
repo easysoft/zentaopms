@@ -38,14 +38,15 @@ class designZen extends control
         {
             $key     = strtolower($key);
             $exclude = $type == $key ? '' : 'design';
+            $alias   = $type == $key ? $this->app->rawMethod : '';
 
-            if($count <= 4) $this->lang->waterfall->menu->design['subMenu']->$key = array('link' => "{$value}|design|browse|projectID=%s&productID={$productID}&browseType={$key}", 'exclude' => $exclude);
+            if($count <= 4) $this->lang->waterfall->menu->design['subMenu']->$key = array('link' => "{$value}|design|browse|projectID=%s&productID={$productID}&browseType={$key}", 'exclude' => $exclude, 'alias' => $alias);
             if($count == 5)
             {
-                $this->lang->waterfall->menu->design['subMenu']->more = array('link' => "{$this->lang->design->more}|design|browse|projectID=%s&productID={$productID}&browseType={$key}", 'class' => 'dropdown dropdown-hover', 'exclude' => $exclude);
+                $this->lang->waterfall->menu->design['subMenu']->more = array('link' => "{$this->lang->design->more}|design|browse|projectID=%s&productID={$productID}&browseType={$key}", 'class' => 'dropdown dropdown-hover', 'exclude' => $exclude, 'alias' => $alias);
                 $this->lang->waterfall->menu->design['subMenu']->more['dropMenu'] = new stdclass();
             }
-            if($count >= 5) $this->lang->waterfall->menu->design['subMenu']->more['dropMenu']->$key = array('link' => "{$value}|design|browse|projectID=%s&productID={$productID}&browseType={$key}", 'exclude' => $exclude);
+            if($count >= 5) $this->lang->waterfall->menu->design['subMenu']->more['dropMenu']->$key = array('link' => "{$value}|design|browse|projectID=%s&productID={$productID}&browseType={$key}", 'exclude' => $exclude, 'alias' => $alias);
 
             $count ++;
         }
