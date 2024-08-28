@@ -316,6 +316,12 @@ if(in_array($config->edition, array('max', 'ipd')))
         'title'  => $lang->tutorial->waterfallProjectManage->review->step8->name,
         'desc'   => $lang->tutorial->waterfallProjectManage->review->step8->desc
     );
+
+    $waterfallProjectManage->tasks['manageIssue'] = array();
+    $waterfallProjectManage->tasks['manageIssue'] = $scrumProjectManage->tasks['manageIssue'];
+
+    $waterfallProjectManage->tasks['manageRisk'] = array();
+    $waterfallProjectManage->tasks['manageRisk'] = $scrumProjectManage->tasks['manageRisk'];
 }
 
 $config->tutorial->guides[$waterfallProjectManage->name] = $waterfallProjectManage;

@@ -674,3 +674,9 @@ $lang->tutorial->waterfallProjectManage->review->step7->name = '填写表单';
 $lang->tutorial->waterfallProjectManage->review->step8 = new stdClass();
 $lang->tutorial->waterfallProjectManage->review->step8->name = '保存表单';
 $lang->tutorial->waterfallProjectManage->review->step8->desc = '保存后回到基线评审列表';
+
+$lang->tutorial->waterfallProjectManage->manageIssue = new stdClass();
+$lang->tutorial->waterfallProjectManage->manageIssue = $lang->tutorial->scrumProjectManage->manageIssue;
+
+$lang->tutorial->waterfallProjectManage->manageRisk = new stdClass();
+$lang->tutorial->waterfallProjectManage->manageRisk = $lang->tutorial->scrumProjectManage->manageRisk;
