@@ -37,10 +37,11 @@ class design extends control
      * @param  int    $projectID
      * @param  int    $productID
      * @param  int    $designID
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function commonAction(int $projectID = 0, int $productID = 0, int $designID = 0)
+    public function commonAction(int $projectID = 0, int $productID = 0, int $designID = 0, $type = 'all')
     {
         $products    = $this->product->getProductPairsByProject($projectID);
         $products[0] = $this->lang->product->all;
@@ -49,6 +50,7 @@ class design extends control
 
         $productID = $this->product->getAccessibleProductID($productID, $products);
 
+        $this->designZen->setMenu($projectID, $productID, strtolower($type));
         $this->project->setMenu($projectID);
 
         $project = $this->project->getByID($projectID);
@@ -79,7 +81,7 @@ class design extends control
      */
     public function browse(int $projectID = 0, int $productID = 0, string $type = 'all', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $productID = $this->commonAction($projectID, $productID);
+        $productID = $this->commonAction($projectID, $productID, 0, $type);
         $project   = $this->project->getByID($projectID);
 
         /* Save session for design list. */
@@ -132,7 +134,7 @@ class design extends control
      */
     public function create(int $projectID = 0, int $productID = 0, string $type = 'all')
     {
-        $productID = $this->commonAction($projectID, $productID);
+        $productID = $this->commonAction($projectID, $productID, 0, $type);
 
         if($_POST)
         {
@@ -175,7 +177,7 @@ class design extends control
      */
     public function batchCreate(int $projectID = 0, int $productID = 0, string $type = 'all')
     {
-        $productID = $this->commonAction($projectID, $productID);
+        $productID = $this->commonAction($projectID, $productID, 0, $type);
 
         if($_POST)
         {
@@ -213,7 +215,7 @@ class design extends control
     public function view(int $designID = 0)
     {
         $design = $this->design->getByID($designID);
-        $this->commonAction($design->project, $design->product, $designID);
+        $this->commonAction($design->project, $design->product, $designID, $design->type);
 
         $this->session->set('revisionList', $this->app->getURI(true));
         $this->session->set('storyList', $this->app->getURI(true), 'product');
@@ -246,7 +248,7 @@ class design extends control
     {
         $design = $this->design->getByID($designID);
         $design = $this->design->getAffectedScope($design);
-        $this->commonAction($design->project, $design->product, $designID);
+        $this->commonAction($design->project, $design->product, $designID, $design->type);
 
         if($_POST)
         {
@@ -301,7 +303,7 @@ class design extends control
         }
 
         $design = $this->design->getByID($designID);
-        $this->commonAction($design->project, $design->product, $designID);
+        $this->commonAction($design->project, $design->product, $designID, $design->type);
 
         /* Get project and date. */
         $project = $this->loadModel('project')->getByID($design->project);
@@ -384,7 +386,7 @@ class design extends control
         $pager = pager::init(0, $recPerPage, $pageID);
 
         $design = $this->design->getCommit($designID, $pager);
-        $this->commonAction($design->project, $design->product, $designID);
+        $this->commonAction($design->project, $design->product, $designID, $design->type);
 
         $this->config->design->viewcommit->dtable->fieldList['actions']['list']['unlinkCommit']['url'] = sprintf($this->config->design->viewcommit->actionList['unlinkCommit']['url'], $designID);
 
