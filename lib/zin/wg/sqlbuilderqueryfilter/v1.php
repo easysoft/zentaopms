@@ -42,7 +42,7 @@ class sqlBuilderQueryFilter extends wg
     {
         global $lang;
         list($tables, $fields) = $this->prop(array('tables', 'fields'));
-        $fields = $fields[$rowValue['table']];
+        $fields     = zget($fields, $rowValue['table'], array());
         $typeList   = $lang->dataview->varFilter->requestTypeList;
         $selectList = $lang->dataview->varFilter->selectList;
 
@@ -122,9 +122,9 @@ class sqlBuilderQueryFilter extends wg
 
     protected function build()
     {
-        return formBase
+        return div
         (
-            set::actions(array()),
+            setClass('gap-4 flex col'),
             formRow
             (
                 setClass('flex form-header justify-start h-10 gap-x-4 bg-gray-100 items-center'),
