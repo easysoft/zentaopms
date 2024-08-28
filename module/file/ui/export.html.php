@@ -276,6 +276,7 @@ window.onChangeFileType = function(event)
     encodePicker.render({disabled: true});
 
     $('#tplBox').toggleClass('hidden', fileType == 'word');
+    $('.customFieldsBox').toggleClass('hidden', fileType == 'word' || !$('#showCustomFieldsBox').prop('checked'));
 }
 
 window.onChangeFileName = function(event)
