@@ -10,6 +10,17 @@ class sqlBuilderQueryFilter extends wg
         'querys?: array'
     );
 
+    protected static array controls = array(
+        'table'   => array('type' => 'picker', 'items' => 'tables'),
+        'field'   => array('type' => 'picker', 'items' => 'fields'),
+        'name'    => array('type' => 'input'),
+        'type'    => array(
+            array('type' => 'picker', 'items' => 'typeList'),
+            array('type' => 'picker', 'items' => 'selectList')
+        ),
+        'default' => array('type' => 'input')
+    );
+
     protected function buildFormHeader()
     {
         global $lang;
@@ -37,7 +48,11 @@ class sqlBuilderQueryFilter extends wg
         return formBase
         (
             set::actions(array()),
-            $this->buildFormHeader(),
+            div
+            (
+                setClass('flex form-header justify-between h-10'),
+                $this->buildFormHeader()
+            )
             $this->buildFormRows()
         );
     }
