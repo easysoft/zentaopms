@@ -24,6 +24,7 @@ $isCustomExport      = (!empty($customExport) and !empty($allExportFields));
 $showBizGuide        = $config->edition == 'open' && empty($config->{$this->moduleName}->closeBizGuide) ? true : false;
 $bizGuideLink        = common::checkNotCN() ? 'https://www.zentao.pm/page/zentao-pricing.html' : 'https://www.zentao.net/page/enterprise.html';
 $bizName             = $showBizGuide ? "<a href='{$bizGuideLink}' target='_blank' class='text-primary'>{$lang->bizName}</a>" : '';
+$defaultExportFields = '';
 
 if($isCustomExport)
 {
