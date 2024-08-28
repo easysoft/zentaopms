@@ -650,7 +650,7 @@ class pivotState
      * @access public
      * @return void
      */
-    public function addBuilderQueryFilter($table = '', $field = '', $name = '', $type = '', $typeOption = '', $default = '')
+    public function addBuilderQueryFilter($table = '', $field = '', $name = '', $type = 'input', $typeOption = '', $default = '')
     {
         if(is_array($table))
         {

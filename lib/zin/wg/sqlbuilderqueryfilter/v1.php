@@ -40,7 +40,7 @@ class sqlBuilderQueryFilter extends wg
         return $headers;
     }
 
-    protected function buildFormGroup($name, $rowValue)
+    protected function buildFormGroup($index, $name, $rowValue)
     {
         global $lang;
         list($tables, $fields) = $this->prop(array('tables', 'fields'));
@@ -52,8 +52,9 @@ class sqlBuilderQueryFilter extends wg
         extract($config);
         if($type == 'picker') $items = $$items;
         $value = $rowValue[$name];
+        $isSelect = $name == 'type' && $value == 'select';
 
-        if($name == 'type') $width = (string)(int)$width / 2;
+        if($isSelect) $width = (string)(int)$width / 2;
 
         return div
         (
@@ -61,14 +62,15 @@ class sqlBuilderQueryFilter extends wg
             sqlBuilderControl
             (
                 set::type($type),
-                set::name($name),
+                set::name("{$name}_{$index}"),
                 $type == 'picker' ? set::items($items) : null,
                 set::width($width),
-                set::value($value)
+                set::value($value),
+                set::required($name == 'type')
             ),
-            $name == 'type' ? sqlBuilderPicker
+            $isSelect ? sqlBuilderPicker
             (
-                set::name('typeOption'),
+                set::name("typeOption_$index"),
                 set::items($selectList),
                 set::width($width),
                 set::value($rowValue['typeOption'])
@@ -84,7 +86,7 @@ class sqlBuilderQueryFilter extends wg
         {
             $items = array();
             $names = array_keys($query);
-            foreach($names as $name) if(isset(static::$controls[$name])) $items[] = $this->buildFormGroup($name, $query);
+            foreach($names as $name) if(isset(static::$controls[$name])) $items[] = $this->buildFormGroup($index, $name, $query);
 
             $items[] = formGroup
             (
