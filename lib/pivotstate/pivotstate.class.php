@@ -1546,6 +1546,12 @@ class pivotState
         $this->canChangeMode = $this->setCanChangeMode();
     }
 
+    /**
+     * Set can change mode.
+     *
+     * @access public
+     * @return bool
+     */
     public function setCanChangeMode()
     {
         if($this->mode == 'builder') return true;
