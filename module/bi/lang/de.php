@@ -22,6 +22,8 @@ $lang->bi->builderStepList['group'] = 'set group by';
 
 $lang->bi->stepTableTitle = 'Select the data table to query';
 $lang->bi->stepTableTip   = 'Select the data table to query, which specifies which table or tables you want to retrieve data from.';
+$lang->bi->changeModeTip  = "This switch will clear the current builder configuration and echo the built SQL statement into the handwritten SQL statement. You can't switch back to SQL Builder mode. Do you want to continue?";
+$lang->bi->modeDisableTip = 'Hand-written SQL statements are more flexible, and there is no support for switching back to SQL builder mode';
 
 $lang->bi->fromTable     = 'Main table';
 $lang->bi->leftTable     = 'Left join';

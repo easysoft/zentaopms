@@ -26,6 +26,8 @@ $lang->bi->builderStepList['group'] = '设置分组并聚合';
 
 $lang->bi->stepTableTitle = '选择要查询的数据表';
 $lang->bi->stepTableTip   = '请选择要查询的数据表，用于指定您想要从哪张表或哪些表中检索数据。';
+$lang->bi->changeModeTip  = '此次切换将清空当前构建器的配置、并将构建的SQL语句回显到手写SQL语句中；且不可再切换回SQL构建器模式，是否继续？';
+$lang->bi->modeDisableTip = '手写SQL语句灵活性较高，暂不支持切回SQL构建器模式';
 
 $lang->bi->fromTable     = '主表';
 $lang->bi->leftTable     = '左连接';
