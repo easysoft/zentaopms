@@ -78,7 +78,22 @@ class sqlBuilderQueryFilter extends wg
 
     protected function buildFormRows()
     {
-        return null;
+        list($querys) = $this->prop(array('querys'));
+        $formRows = array();
+        foreach($querys as $index => $query)
+        {
+            $items = array();
+            $names = array_keys($query);
+            foreach($names => $name) $items[] = $this->buildFormGroup($name, $query);
+
+            $fromRows[] = formRow
+            (
+                setClass('flex form-body justify-between items-end max-h-16 query-filter-row'),
+                set('data-index', $index),
+                $items
+            )
+        }
+        return $formRows;
     }
 
     protected function build()
