@@ -83,16 +83,25 @@ if($canBatchAction)
 
     if($canBatchChangeStatus)
     {
+        $footToolbar['items'][] = array(
+            'text'      => $lang->close,
+            'className' => 'btn batch-btn size-sm secondary',
+            'data-url'  => $this->createLink('productplan', 'batchChangeStatus', "status=closed&productID={$productID}")
+        );
+    }
+
+    if($canBatchChangeStatus)
+    {
         $items = array();
         foreach($lang->productplan->statusList as $statusKey => $statusText)
         {
+            if($statusKey == 'closed') continue;
             $items[$statusKey] = array
             (
                 'text'     => $statusText,
                 'class'    => 'batch-btn ajax-btn not-open-url',
                 'data-url' => createLink('productplan', 'batchChangeStatus', "status={$statusKey}&productID={$productID}")
             );
-            if($statusKey == 'closed') $items[$statusKey]['data-page'] = 'batch';
         }
 
         menu
