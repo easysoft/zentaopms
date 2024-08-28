@@ -410,6 +410,15 @@ class bugModel extends model
     {
         /* Get old bug. */
         $oldBug = $this->getById($bug->id);
+        if(!empty($bug->duplicateBug))
+        {
+            $duplicateBug = $this->fetchByID($bug->duplicateBug);
+            if(!$duplicateBug || $duplicateBug->deleted == '1' || $duplicateBug->product != $oldBug->product)
+            {
+                dao::$errors['duplicateBug'][] = $this->lang->bug->error->duplicateBugNotExist;
+                return false;
+            }
+        }
 
         /* Update bug. */
         $this->dao->update(TABLE_BUG)->data($bug, 'buildName,createBuild,buildExecution,comment')
@@ -1705,7 +1714,8 @@ class bugModel extends model
                         ->fetchPairs('id');
                     if(empty($story)) $story = array(0);
 
-                    $bugQuery = preg_replace("/`story`[ ]+(NOT[ ]*)?LIKE[ ]+'%$searchValue%'/Ui", '`story` $1 IN (' . implode(',', $story) .')', $bugQuery);
+                    $searchValue = preg_quote($searchValue, '/');
+                    $bugQuery    = preg_replace("/`story`[ ]+(NOT[ ]*)?LIKE[ ]+'%$searchValue%'/Ui", '`story` $1 IN (' . implode(',', $story) .')', $bugQuery);
                 }
             }
             $bugQuery .= ' AND `story` != 0';

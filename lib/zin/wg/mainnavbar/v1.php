@@ -138,7 +138,62 @@ class mainNavbar extends nav
                 if($itemProps) $item = array_merge($item, $itemProps);
                 if(is_callable($onRenderItem)) $item = $onRenderItem($item, $menuItem);
 
-                $items[] = $item;
+                if(isset($menuItem['dropMenu']))
+                {
+                    $dropItems  = array();
+                    $label      = $menuItem['text'];
+                    $menuActive = '';
+                    foreach($menuItem['dropMenu'] as $dropMenuKey => $dropMenuItem)
+                    {
+                        if(isset($dropMenuItem['hidden']) && $dropMenuItem['hidden']) continue;
+
+                        if(empty($dropMenuItem['alias']))   $dropMenuItem['alias'] = '';
+                        if(empty($dropMenuItem['exclude'])) $dropMenuItem['exclude'] = '';
+
+                        list($dropMenuName, $dropMenuModule, $dropMenuMethod, $dropMenuParams) = explode('|', $dropMenuItem['link']);
+                        $dropActive = '';
+                        $dropModule = isset($dropMenuModule) ? $dropMenuModule : '';
+                        $dropMethod = isset($dropMenuMethod) ? $dropMenuMethod : '';
+                        $dropParams = isset($dropMenuParams) ? $dropMenuParams : '';
+                        $dropLabel  = isset($dropMenuName) ? $dropMenuName : '';
+                        $dropLink   = helper::createLink($dropModule, $dropMethod, $dropParams);
+
+                        $subModule = isset($dropMenuItem['subModule']) ? explode(',', $dropMenuItem['subModule']) : array();
+                        if($subModule && in_array($currentModule, $subModule)) $dropActive = 'active';
+                        if($dropModule == $currentModule && $dropMethod == $currentMethod) $dropActive = 'active';
+                        if($dropModule == $currentModule && strpos(",{$dropMenuItem['alias']},", ",{$currentMethod},") !== false) $dropActive = 'active';
+                        if(strpos(",{$dropMenuItem['exclude']},", ",{$currentModule}-{$currentMethod},") !== false || strpos(",{$dropMenuItem['exclude']},", ",{$currentModule},") !== false) $dropActive = '';
+                        if($dropActive)
+                        {
+                            $label      = $dropLabel;
+                            $menuActive = 'active';
+                        }
+
+                        $dropItems[] = array(
+                            'active'   => $dropActive ? true : false,
+                            'data-id'  => $dropMenuKey,
+                            'url'      => $dropLink,
+                            'text'     => $dropLabel,
+                            'data-app' => $app->tab
+                        );
+                    }
+
+                    if(empty($dropItems)) continue;
+                    $items[] = array
+                    (
+                        'type'     => 'dropdown',
+                        'items'    => $dropItems,
+                        'text'     => $label,
+                        'data-id'  => $name,
+                        'data-app' => $app->tab,
+                        'trigger'  => 'hover',
+                        'class'    => $menuActive
+                    );
+                }
+                else
+                {
+                    $items[] = $item;
+                }
             }
 
             jsVar('allMainNavbarItems', $items);

@@ -1093,8 +1093,20 @@ class my extends control
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $feedbacks = $browseType != 'bysearch' ?$this->loadModel('feedback')->getList($browseType, $orderBy, $pager) : $this->loadModel('feedback')->getBySearch($queryID, $orderBy, $pager);
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'workFeedback');
+        $this->loadModel('feedback');
+        if($browseType == 'assignedby')
+        {
+            $feedbacks = $this->my->getAssignedByMe($this->app->user->account, $pager, $orderBy, 'feedback');
+        }
+        elseif($browseType == 'bysearch')
+        {
+            $feedbacks = $this->my->getFeedbacksBySearch($queryID, $orderBy, $pager);
+        }
+        else
+        {
+            $feedbacks = $this->feedback->getList($browseType, $orderBy, $pager);
+        }
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'feedback', false);
 
         $this->loadModel('datatable');
         $this->lang->datatable->moduleSetting  = str_replace($this->lang->module, $this->lang->feedback->moduleAB, $this->lang->datatable->moduleSetting);
@@ -1150,8 +1162,9 @@ class my extends control
         {
             $tickets = $this->loadModel('ticket')->getBySearch($queryID, $orderBy, $pager);
         }
+        foreach($tickets as $ticket) $ticket->feedbackTip = $ticket->feedback != 0 ? '#' . $ticket->feedback : '';
 
-        $actionURL = $this->createLink('my', 'work', "mode=ticket&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+        $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=ticket&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
         $this->my->buildTicketSearchForm($queryID, $actionURL);
 
         $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
@@ -1405,7 +1418,14 @@ class my extends control
 
         if($_POST)
         {
-            foreach($_POST as $key => $value) $this->setting->setItem("{$this->app->user->account}.common.$key", $value);
+            $keyList = array('URSR', 'programLink', 'productLink', 'projectLink', 'executionLink');
+            foreach($_POST as $key => $value)
+            {
+                if(!in_array($key, $keyList)) continue;
+                if($key != 'URSR' && !isset($this->lang->my->{$key . 'List'}[$value])) continue;
+                if($key == 'URSR') $value = (int)$value;
+                $this->setting->setItem("{$this->app->user->account}.common.$key", $value);
+            }
 
             $this->setting->setItem("{$this->app->user->account}.common.preferenceSetted", 1);
 

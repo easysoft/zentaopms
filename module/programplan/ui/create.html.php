@@ -142,7 +142,7 @@ $fnGenerateSubPlanManageFields = function() use ($lang, $planID, $project, $exec
 $fnGenerateFields = function() use ($config, $lang, $requiredFields, $showFields, $fields, $PMUsers, $enableOptionalAttr, $programPlan, $planID, $executionType, $project)
 {
     $items   = array();
-    $items[] = $project->model == 'ipd' ? null : array('name' => 'id', 'label' => $lang->idAB, 'control' => 'index', 'width' => '32px');
+    $items[] = $project->model == 'ipd' ? null : array('name' => 'index', 'label' => $lang->programplan->idAB, 'control' => 'index', 'width' => '40px');
 
     $fields['attribute']['required'] = $fields['acl']['required'] = true;
     if(isset($requiredFields['code'])) $fields['code']['required'] = true;
@@ -153,6 +153,11 @@ $fnGenerateFields = function() use ($config, $lang, $requiredFields, $showFields
     foreach($fields as $name => $field)
     {
         $field['name'] = $name;
+        if($name == 'id')
+        {
+            $field['control'] = 'hidden';
+            $field['hidden']  = true;
+        }
         if(!empty($field['default'])) $field['value'] = $field['default'];
 
         /* Convert 'options' to 'items'. */
@@ -199,7 +204,7 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
 {
     $items = array();
 
-    /* Created a new project witho no stages. */
+    /* Created a new project with no stages. */
     if(empty($plans) && $planID == 0)
     {
         foreach($stages as $stage)
@@ -269,7 +274,7 @@ jsVar('plans',            $plans);
 jsVar('cropStageTip',     $lang->programplan->cropStageTip);
 jsVar('ipdStagePoint',    $project->model == 'ipd' ? $config->review->ipdReviewPoint : array());
 jsVar('attributeList',    $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList);
-jsvar('reviewedPoints',   $project->model == 'ipd' ? $reviewedPoints : array());
+jsVar('reviewedPoints',   $project->model == 'ipd' ? $reviewedPoints : array());
 jsVar('reviewedPointTip', $project->model == 'ipd' ? $lang->programplan->reviewedPointTip : '');
 
 featureBar(li
@@ -291,6 +296,7 @@ toolbar
 formBatchPanel
 (
     setID('dataform'),
+    set::idKey('index'),
     set::onRenderRow(jsRaw('window.onRenderRow')),
     to::headingActions(array($fnGenerateSubPlanManageFields())),
     set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'createFields')),

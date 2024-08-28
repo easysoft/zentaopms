@@ -172,6 +172,7 @@ $docHeader = div
                 set::type('ghost'),
                 set::url(createLink('doc', 'edit', "docID=$doc->id")),
                 $doc->type != 'text' ? setData('toggle', 'modal') : null,
+                setData('app', $app->tab),
                 set::icon('edit')
             ) : null,
             dropdown

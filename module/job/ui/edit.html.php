@@ -268,7 +268,7 @@ formPanel
             set::name('sonarqubeServer'),
             set::label($lang->job->sonarqubeServer),
             set::width('1/2'),
-            set::items(array('' => '') +$sonarqubeServerList),
+            set::items($sonarqubeServerList),
             set::value($job->sonarqubeServer),
             set::required(true),
             on::change('changeSonarqubeServer')

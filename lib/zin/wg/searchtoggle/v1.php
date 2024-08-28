@@ -29,6 +29,8 @@ class searchToggle extends wg
 
     protected function build()
     {
+        if(!common::hasPriv('search', 'buildForm')) return;
+
         global $lang, $app, $config;
         list($target, $module, $open, $url, $searchUrl, $text) = $this->prop(array('target', 'module', 'open', 'url', 'searchUrl', 'text'));
 

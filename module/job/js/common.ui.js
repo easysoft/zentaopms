@@ -72,8 +72,9 @@ window.changeTrigger = function(event)
 
     if(useZentao === '1')
     {
+        const frame = $('[name=frame]').val();
         $('.job-form #paramDiv').show();
-        $('.job-form .sonarqube').show();
+        if(frame == 'sonarqube') $('.job-form .sonarqube').removeClass('hidden');
         $('.job-form .custom-fields').show();
         $('.job-form .comment-fields').css('display', 'flex');
         $('.job-form [data-name="triggerType"]').show();
@@ -81,7 +82,7 @@ window.changeTrigger = function(event)
     else
     {
         $('.job-form #paramDiv').hide();
-        $('.job-form .sonarqube').hide();
+        $('.job-form .sonarqube').addClass('hidden');
         $('.job-form .custom-fields').hide();
         $('.job-form .comment-fields').hide();
         $('.job-form [data-name="triggerType"]').hide();
@@ -96,10 +97,11 @@ window.checkSonarquebLink = function()
 {
     const repoID = $('[name=repo]').val();
     const frame  = $('[name=frame]').val();
+    const jobID  = typeof(job) == 'undefined' ? 0 : job.id;
 
     if(frame != 'sonarqube' || repoID == 0) return false;
 
-    $.getJSON($.createLink('job', 'ajaxCheckSonarqubeLink', 'repoID=' + repoID), function(result)
+    $.getJSON($.createLink('job', 'ajaxCheckSonarqubeLink', 'repoID=' + repoID + '&jobID=' + jobID), function(result)
     {
         if(result.result  != 'success') zui.Modal.alert(result.message);
     })
@@ -145,7 +147,7 @@ window.changeTriggerType = function(event)
 
 window.changeSonarqubeServer = function(event)
 {
-    const sonarqubeID = $(event.target).val();
+    const sonarqubeID = $('[name=sonarqubeServer]').val();
     $.get($.createLink('sonarqube', 'ajaxGetProjectList', 'sonarqubeID=' + sonarqubeID), function(data)
     {
         data = JSON.parse(data);
@@ -158,13 +160,14 @@ window.changeSonarqubeServer = function(event)
 
 window.changeFrame = function(event)
 {
-    const frame = $(event.target).val();
+    const frame     = $(event.target).val();
+    const useZentao = $('[name=useZentao]:checked').val();
     if(frame == 'sonarqube')
     {
-        $('div.sonarqube').removeClass('hidden');
-
         /* Check exists sonarqube data. */
         checkSonarquebLink();
+
+        if(useZentao == '1') $('div.sonarqube').removeClass('hidden');
     }
     else
     {

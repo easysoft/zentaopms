@@ -10,6 +10,10 @@ declare(strict_types=1);
  */
 namespace zin;
 
+global $app;
+$app->loadLang('project');
+jsVar('confirmDisableStoryType', $lang->project->confirmDisableStoryType);
+
 if(strpos(",$disabledFeatures,", ",productUR,") !== false) $disabledFeatures .= ',productER';
 
 $rows = array();

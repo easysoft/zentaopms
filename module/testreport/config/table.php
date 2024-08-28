@@ -40,8 +40,8 @@ $config->testreport->dtable->fieldList['title']['data-app'] = $app->tab;
 
 $config->testreport->dtable->fieldList['execution']['name']     = 'execution';
 $config->testreport->dtable->fieldList['execution']['title']    = $lang->testreport->execution;
-$config->testreport->dtable->fieldList['execution']['type']     = 'text';
 $config->testreport->dtable->fieldList['execution']['sortType'] = true;
+$config->testreport->dtable->fieldList['execution']['width']    = '150px';
 
 $config->testreport->dtable->fieldList['tasks']['name']  = 'taskName';
 $config->testreport->dtable->fieldList['tasks']['title'] = $lang->testreport->testtask;

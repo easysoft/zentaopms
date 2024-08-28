@@ -22,7 +22,7 @@ $fields->field('mailto')->foldable();
 $fields->field('keywords')->foldable();
 
 /* Set assignedTo field. */
-$buildAssginedTo = function($props)
+$buildAssignedTo = function()
 {
     $assignedToListBox = null;
     if(!empty(data('task.team')))
@@ -75,7 +75,7 @@ $buildAssginedTo = function($props)
 $fields->field('assignedToBox')
     ->label($lang->task->assignedTo)
     ->checkbox(array('text' => $lang->task->multiple, 'name' => 'multiple', 'checked' => !empty(data('task.mode'))))
-    ->control($buildAssginedTo);
+    ->control($buildAssignedTo);
 
 /* Set name field width. */
 $nameWidth = 'w-1/2';
@@ -104,7 +104,7 @@ $fields->field('lane')
     ->value(data('laneID'));
 
 /* Set story field control. */
-$buildStoryBox = function($props)
+$buildStoryBox = function()
 {
     if(!empty(data('execution.hasProduct')))
     {
@@ -119,6 +119,7 @@ $buildStoryBox = function($props)
                     setClass('text-primary'),
                     isInModal() ? setData('toggle', 'modal') : null,
                     isInModal() ? setData('size', 'lg') : null,
+                    !isInModal() ? set('target', '_blank') : null,
                     setData('app', data('app.tab')),
                     data('lang.execution.linkStory')
                 )
@@ -214,7 +215,7 @@ $fields->field('taskEstimate')
     ->control('input');
 
 /* Set test story task control. */
-$buildTestStoryBox = function($props)
+$buildTestStoryBox = function()
 {
     return div(setID('testStoryBox'));
 };

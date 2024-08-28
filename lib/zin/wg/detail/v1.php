@@ -465,6 +465,7 @@ CSS;
 
         list($linkCreator, $prevBtn, $nextBtn, $objectType) = $this->prop(array('linkCreator', 'prevBtn', 'nextBtn', 'objectType'));
         $preAndNext = data('preAndNext');
+        $idKey      = isset($preAndNext->idKey) ? $preAndNext->idKey : 'id';
 
         global $app;
         if(!$linkCreator && $preAndNext && ($prevBtn === true || $nextBtn === true))
@@ -473,9 +474,10 @@ CSS;
         }
         if($prevBtn === true && $preAndNext && $preAndNext->pre && $linkCreator)
         {
-            $prevBtn = array();
-            $prevBtn['url']  = str_replace('{id}', "{$preAndNext->pre->id}", $linkCreator);
-            $prevBtn['hint'] = "#{$preAndNext->pre->id} " . (isset($preAndNext->pre->title) ? $preAndNext->pre->title : $preAndNext->pre->name);
+            $prevBtn  = array();
+            $objectID = $preAndNext->pre->$idKey;
+            $prevBtn['url']  = str_replace('{id}', "{$objectID}", $linkCreator);
+            $prevBtn['hint'] = "#{$objectID} " . (isset($preAndNext->pre->title) ? $preAndNext->pre->title : $preAndNext->pre->name);
         }
         elseif(is_string($prevBtn))
         {
@@ -483,9 +485,10 @@ CSS;
         }
         if($nextBtn === true && $preAndNext && $preAndNext->next && $linkCreator)
         {
-            $nextBtn = array();
-            $nextBtn['url']  = str_replace('{id}', "{$preAndNext->next->id}", $linkCreator);
-            $nextBtn['hint'] = "#{$preAndNext->next->id} " . (isset($preAndNext->next->title) ? $preAndNext->next->title : $preAndNext->next->name);
+            $nextBtn  = array();
+            $objectID = $preAndNext->next->$idKey;
+            $nextBtn['url']  = str_replace('{id}', "{$objectID}", $linkCreator);
+            $nextBtn['hint'] = "#{$objectID} " . (isset($preAndNext->next->title) ? $preAndNext->next->title : $preAndNext->next->name);
         }
         elseif(is_string($nextBtn))
         {
@@ -540,7 +543,20 @@ CSS;
             $this->buildHeader(),
             $this->buildBody(),
             $layout === 'simple' ? null : $this->buildPrevAndNext(),
-            html($app->control->appendExtendCssAndJS())
+            html($app->control->appendExtendCssAndJS('', '', $this->prop('object'))),
+            js
+            (
+                'const $doc = $(document)',
+                'const binddedKey = "zt.detail.bindded"',
+                'if($doc.data(binddedKey)) return',
+                '$doc.on("keyup.detail.zt", e => {',
+                    'let $btn = null',
+                    'if(e.keyCode === 37) $btn = $(".detail-prev-btn")',
+                    'else if(e.keyCode === 39) $btn = $(".detail-next-btn")',
+                    'if($btn && $btn.length) $btn[0].click()',
+                '}).data(binddedKey, true)',
+                '$doc.one("pageunmount.app", () => {$(document).off("keyup.detail.zt").removeData(binddedKey)})'
+            )
         );
     }
 }

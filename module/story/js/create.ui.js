@@ -42,27 +42,6 @@ window.loadProduct = function(e)
     if(!inModal) loadPage($.createLink('story', 'create', 'productID=' + productID + '&' + createParams));
 };
 
-window.loadProductPlans = function(productID, branch)
-{
-    if(typeof(branch) == 'undefined') branch = 0;
-    if(!branch) branch = 0;
-
-    let planID     = $('[name=plan]').val();
-    let planLink   = $.createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=' + branch + '&planID=' + planID + '&fieldID=&needCreate=true&expired=unexpired&param=skipParent,forStory,' + config.currentMethod);
-    let $planIdBox = $('#planIdBox');
-
-    $.getJSON(planLink, function(items)
-    {
-        if(items.length == 0) return;
-
-        const $planPicker = $('#planIdBox [name^=plan]').zui('picker');
-        $planPicker.render({items: items});
-        $planPicker.$.setValue(planID);
-
-        $('#planIdBox + .btn.square, #loadProductPlans').addClass('hidden');
-    })
-};
-
 window.setLane = function(e)
 {
     const regionID = $(e.target).val();

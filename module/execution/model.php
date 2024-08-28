@@ -2035,10 +2035,20 @@ class executionModel extends model
             if(strpos($this->session->taskQuery, "deleted =") === false) $this->session->set('taskQuery', $this->session->taskQuery . " AND deleted = '0'");
 
             $taskQuery = $this->session->taskQuery;
+
             /* Limit current execution when no execution. */
-            if(strpos($taskQuery, "`execution` =") === false) $taskQuery .= " AND `execution` = $executionID";
+            if(strpos($taskQuery, "`execution` =") === false && strpos($taskQuery, "`project` =") === false) $taskQuery .= " AND `execution` = $executionID";
             $executionQuery = "`execution` " . helper::dbIN(array_keys($executions));
             $taskQuery      = str_replace("`execution` = 'all'", $executionQuery, $taskQuery); // Search all execution.
+            if(strpos($taskQuery, "`execution`") === false) $taskQuery .= " AND `execution` " . helper::dbIN(array_keys($executions));
+            /* Process all project query. */
+            if(strpos($taskQuery, "`project` = 'all'") !== false)
+            {
+                $projects     = $this->loadModel('project')->getPairsByProgram();
+                $projectQuery = "`project` " . helper::dbIN(array_keys($projects));
+                $taskQuery    = str_replace("`project` = 'all'", $projectQuery, $taskQuery);;
+            }
+
             $this->session->set('taskQueryCondition', $taskQuery, $this->app->tab);
             $this->session->set('taskOnlyCondition', true, $this->app->tab);
 
@@ -2273,7 +2283,7 @@ class executionModel extends model
         foreach($products as $productID => $product)
         {
             $productPairs[$product->id] = $product->name;
-            $planGroup = $this->productplan->getBranchPlanPairs($productID, array(BRANCH_MAIN) + $product->branches, 'unexpired', true);
+            $planGroup = $this->productplan->getBranchPlanPairs($productID, array(BRANCH_MAIN) + $product->branches, '', true);
             foreach($planGroup as $plans) $planPairs += $plans;
 
             if($product->type == 'normal') continue;
@@ -3715,15 +3725,21 @@ class executionModel extends model
     {
         if(strpos($condition, '`assignedTo`') !== false)
         {
-            preg_match("/`assignedTo`\s+(([^']*) ('([^']*)'))/", $condition, $matches);
+            preg_match_all("/`assignedTo`\s+(([^']*) ('([^']*)'))/", $condition, $matches);
             $condition = preg_replace('/`(\w+)`/', 't1.`$1`', $condition);
-            $condition = str_replace("t1.$matches[0]", "(t1.$matches[0] or (t1.mode = 'multi' and t2.`account` $matches[1] and t1.status != 'closed' and t2.status != 'done') )", $condition);
+            foreach($matches[0] as $matchIndex => $match) $condition = str_replace("t1.{$match}", "(t1.{$match} or (t1.mode = 'multi' and t2.`account` {$matches[1][$matchIndex]} and t1.status != 'closed' and t2.status != 'done') )", $condition);
 
             $this->session->set('taskQueryCondition', $condition, $this->app->tab);
         }
 
         $sql = $this->dao->select('t1.id')->from(TABLE_TASK)->alias('t1');
-        if(strpos($condition, '`assignedTo`') !== false) $sql = $sql->leftJoin(TABLE_TASKTEAM)->alias('t2')->on("t2.task = t1.id and t2.account $matches[1]");
+        if(strpos($condition, '`assignedTo`') !== false)
+        {
+            $onSQL = '';
+            foreach($matches[1] as $matchIndex => $match) $onSQL .= "t2.account {$match} or ";
+            $onSQL = trim($onSQL, ' or ');
+            $sql = $sql->leftJoin(TABLE_TASKTEAM)->alias('t2')->on("t2.task = t1.id and ({$onSQL})");
+        }
 
         $orderBy = array_map(function($value){return 't1.' . $value;}, explode(',', $orderBy));
         $orderBy = implode(',', $orderBy);
@@ -4101,6 +4117,9 @@ class executionModel extends model
         $this->config->execution->search['actionURL'] = $actionURL;
         $this->config->execution->search['queryID']   = $queryID;
         $this->config->execution->search['params']['execution']['values'] = array(''=>'', $executionID => $executions[$executionID], 'all' => $this->lang->execution->allExecutions);
+
+        $projects = $this->loadModel('project')->getPairsByProgram();
+        $this->config->execution->search['params']['project']['values'] = $projects + array('all' => $this->lang->project->allProjects);
 
         $showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $this->config->execution->search['params']['module']['values'] = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, $showAllModule ? 'allModule' : '');
@@ -4591,7 +4610,10 @@ class executionModel extends model
      */
     public function buildTree(array $trees, bool $hasProduct = true, array $gradeGroup = array()): array
     {
-        $treeData = array();
+        $treeData     = array();
+        $canViewTask  = common::hasPriv('execution', 'treeTask');
+        $canViewStory = common::hasPriv('execution', 'treeStory');
+
         foreach($trees as $index => $tree)
         {
             $tree = (object)$tree;
@@ -4601,9 +4623,9 @@ class executionModel extends model
             {
                 case 'task':
                     $label = $tree->parent > 0 ? $this->lang->task->children : $this->lang->task->common;
-                    $treeData[$index]['url']    = helper::createLink('execution', 'treeTask', "taskID={$tree->id}");
+                    $treeData[$index]['url']     = $canViewTask ? helper::createLink('execution', 'treeTask', "taskID={$tree->id}") : '';
                     $treeData[$index]['content'] = array(
-                        'html' => "<div class='tree-link'><span class='label gray-pale rounded-full align-sub'>{$label}</span><span class='ml-4 align-sub'>{$tree->id}</span><span class='title ml-4 text-primary align-sub' title='{$tree->title}'>" . $tree->title . '</span>'. $assigedToHtml . '</div>',
+                        'html' => "<div class='tree-link'><span class='label gray-pale rounded-full align-sub'>{$label}</span><span class='ml-4 align-sub'>{$tree->id}</span><span class='title ml-4 " . ($canViewTask ? 'text-primary' : '') . " align-sub' title='{$tree->title}'>" . $tree->title . '</span>'. $assigedToHtml . '</div>',
                     );
                     break;
                 case 'product':
@@ -4615,9 +4637,9 @@ class executionModel extends model
                     $this->app->loadLang('story');
                     $gradePairs = zget($gradeGroup, $tree->type, array());
                     $grade      = zget($gradePairs, $tree->grade, $tree->grade);
-                    $treeData[$index]['url']     = helper::createLink('execution', 'treeStory', "taskID={$tree->storyId}");
+                    $treeData[$index]['url']     = $canViewStory ? helper::createLink('execution', 'treeStory', "taskID={$tree->storyId}") : '';
                     $treeData[$index]['content'] = array(
-                        'html' => "<div class='tree-link'><span class='label gray-pale rounded-full'>{$grade->name}</span><span class='ml-4'>{$tree->storyId}</span><span class='title text-primary ml-4' title='{$tree->title}'>{$tree->title}</span>" . $assigedToHtml . '</div>',
+                        'html' => "<div class='tree-link'><span class='label gray-pale rounded-full'>{$grade->name}</span><span class='ml-4'>{$tree->storyId}</span><span class='title " . ($canViewStory ? 'text-primary' : '') . " ml-4' title='{$tree->title}'>{$tree->title}</span>" . $assigedToHtml . '</div>',
                     );
                     break;
                 case 'requirement':
@@ -4965,7 +4987,7 @@ class executionModel extends model
         $postData->uid       = '';
 
         /* Handle extend fields. */
-        $extendFields = $this->loadModel('project')->getFlowExtendFields();
+        $extendFields = $this->loadModel('project')->getFlowExtendFields($projectID);
         foreach($extendFields as $field) $_POST[$field->field] = $project->field;
         if(isset($this->config->setCode) and $this->config->setCode == 1) $postData->code = $project->code;
 

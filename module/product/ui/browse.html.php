@@ -66,9 +66,10 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
 {
     if(!common::canModify('product', $product)) return null;
 
-    global $app,$config;
-    $createLink      = createLink($storyType, 'create', "product=" . (empty($productID) ? current(array_keys($projectProducts)) : $productID) . "&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&storyType=$storyType") . ($isProjectStory ? '#app=project' : '');
-    $batchCreateLink = createLink($storyType, 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=0&project=$projectID&plan=0&storyType=$storyType"). ($isProjectStory ? '#app=project' : '');
+    global $app, $config;
+    $currentProductID = empty($productID) ? current(array_keys($projectProducts)) : $productID;
+    $createLink       = createLink($storyType, 'create', "product=" . $currentProductID . "&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&storyType=$storyType") . ($isProjectStory ? '#app=project' : '');
+    $batchCreateLink  = createLink($storyType, 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=0&project=$projectID&plan=0&storyType=$storyType"). ($isProjectStory ? '#app=project' : '');
 
     $createBtnLink  = '';
     $createBtnTitle = '';
@@ -87,7 +88,7 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
     if(empty($createBtnLink)) return null;
 
     /* With batch create privileges then render the dropdown menu. */
-    if(!empty($productID) && hasPriv($storyType, 'batchCreate') && hasPriv($storyType, 'create'))
+    if(hasPriv($storyType, 'batchCreate') && hasPriv($storyType, 'create'))
     {
         $items = array();
 
@@ -106,20 +107,20 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
 
         if($isProjectStory && $config->vision != 'lite')
         {
-            $batchItems[] = array('text' => $lang->SRCommon, 'url' => $batchCreateLink);
+            if(!empty($productID)) $batchItems[] = array('text' => $lang->SRCommon, 'url' => $batchCreateLink);
             if(str_contains($project->storyType, 'requirement') && $this->config->URAndSR)
             {
-                if(common::hasPriv('requirement', 'create'))      $items[]      = array('text' => $lang->requirement->create, 'url' => createLink('requirement', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&requirementID=0&projectID=$projectID") . '#app=project');
-                if(common::hasPriv('requirement', 'batchCreate')) $batchItems[] = array('text' => $lang->URCommon, 'url' => createLink('requirement', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&requirementID=0&project=$projectID") . '#app=project');
+                if(common::hasPriv('requirement', 'create')) $items[] = array('text' => $lang->requirement->create, 'url' => createLink('requirement', 'create', "product=$currentProductID&branch=$branch&moduleID=$moduleID&requirementID=0&projectID=$projectID") . '#app=project');
+                if(common::hasPriv('requirement', 'batchCreate') && !empty($productID)) $batchItems[] = array('text' => $lang->URCommon, 'url' => createLink('requirement', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&requirementID=0&project=$projectID") . '#app=project');
             }
 
             if(str_contains($project->storyType, 'epic') && $this->config->enableER)
             {
-                if(common::hasPriv('epic', 'create'))      $items[]      = array('text' => $lang->epic->create, 'url' => createLink('epic', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&epicID=0&projectID=$projectID") . '#app=project');
-                if(common::hasPriv('epic', 'batchCreate')) $batchItems[] = array('text' => $lang->ERCommon, 'url' => createLink('epic', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&epicID=0&project=$projectID") . '#app=project');
+                if(common::hasPriv('epic', 'create')) $items[] = array('text' => $lang->epic->create, 'url' => createLink('epic', 'create', "product=$currentProductID&branch=$branch&moduleID=$moduleID&epicID=0&projectID=$projectID") . '#app=project');
+                if(common::hasPriv('epic', 'batchCreate') && !empty($productID)) $batchItems[] = array('text' => $lang->ERCommon, 'url' => createLink('epic', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID&epicID=0&project=$projectID") . '#app=project');
             }
 
-            $items[] = array('text' => $lang->story->batchCreate, 'items' => $batchItems);
+            if(!empty($productID)) $items[] = array('text' => $lang->story->batchCreate, 'items' => $batchItems);
         }
         else
         {
@@ -128,6 +129,7 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
 
         return btnGroup
         (
+            $app->tab == 'project' ? setData('app', 'project') : null,
             btn
             (
                 setClass(($app->tab != 'product' ? 'secondary' : 'primary') . ' create-story-btn'),
@@ -255,7 +257,7 @@ $fnGenerateFootToolbar = function() use ($lang, $app, $product, $productID, $pro
     $canBatchChangeParent  = $canBeChanged && hasPriv($storyType, 'batchChangeParent') && !($storyType == 'epic' && count($gradeGroup['epic']) < 2) && $app->tab == 'product';
     $canBatchUnlink        = $canBeChanged && $projectHasProduct && hasPriv('projectstory', 'batchUnlinkStory');
     $canBatchImportToLib   = $canBeChanged && $isProjectStory && in_array($this->config->edition, array('max', 'ipd')) && hasPriv('story', 'batchImportToLib') && helper::hasFeature('storylib');
-    $canBatchChangeRoadmap = $canBeChanged && hasPriv('story', 'batchChangeRoadmap') && $config->vision == 'or' && $storyType == 'requirement';
+    $canBatchChangeRoadmap = $canBeChanged && hasPriv($storyType, 'batchChangeRoadmap') && $config->vision == 'or' && $storyType == 'requirement';
     $canBatchAction        = $canBatchEdit || $canBatchClose || $canBatchReview || $canBatchChangeGrade || $canBatchChangeStage || $canBatchChangeModule || $canBatchChangePlan || $canBatchChangeParent || $canBatchAssignTo || $canBatchUnlink || $canBatchImportToLib || $canBatchChangeBranch || $canBatchChangeRoadmap;
 
     /* Remove empty data from data list. */
@@ -273,7 +275,7 @@ $fnGenerateFootToolbar = function() use ($lang, $app, $product, $productID, $pro
     foreach($branchTagOption as $branchID => $branchName)      $branchItems[]           = array('text' => $branchName, 'class' => 'batch-btn', 'data-formaction' => $this->createLink($isProjectStory ? 'projectstory' : $storyType, 'batchChangeBranch', "branchID=$branchID"));
     foreach($modules as $moduleID => $moduleName)              $moduleItems[]           = array('text' => $moduleName, 'class' => 'batch-btn', 'data-formaction' => $this->createLink($isProjectStory ? 'projectstory' : $storyType, 'batchChangeModule', "moduleID=$moduleID"));
     foreach($plans as $planID => $planName)                    $planItems[]             = array('text' => $planName,   'class' => 'batch-btn', 'data-formaction' => $this->createLink($isProjectStory ? 'projectstory' : $storyType, 'batchChangePlan', "planID=$planID"));
-    foreach($noclosedRoadmaps as $roadmapID => $roadmapName)   $roadmapItems[]          = array('text' => empty($roadmapName) ? $lang->null : $roadmapName, 'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchChangeRoadmap', "roadmapID=$roadmapID"));
+    foreach($noclosedRoadmaps as $roadmapID => $roadmapName)   $roadmapItems[]          = array('text' => empty($roadmapName) ? $lang->null : $roadmapName, 'class' => 'batch-btn', 'data-formaction' => $this->createLink($storyType, 'batchChangeRoadmap', "roadmapID=$roadmapID"));
 
     foreach($lang->story->stageList as $key => $stageName)
     {
@@ -372,9 +374,13 @@ featureBar
             set::width('150px'),
             setStyle('justify-content', 'center'),
             set::display($lang->story->viewAllGrades),
-            set::menu(array('checkbox' => true)),
+            set::menu(array('checkbox' => true, 'itemProps' => array('innerComponent' => 'a'))),
             set::value($showGrades),
-            set::onPopHidden(jsRaw('setShowGrades'))
+            set::toolbar
+            (
+                array('text' => $lang->confirm, 'onClick' => jsRaw('(e,info) => {setShowGrades();info.relativeTarget.close();}')),
+                array('text' => $lang->cancel, 'onClick' => jsRaw('(e,info) => info.relativeTarget.close()')),
+            )
         )
     ),
     set::current($storyBrowseType),

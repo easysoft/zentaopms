@@ -190,6 +190,7 @@
     function updatePageJS(data, _info, options)
     {
         if(window.onPageUnmount) window.onPageUnmount();
+        $(document).trigger('pageunmount.app');
 
         ['beforePageLoad', 'beforeRequestContent', 'onPageUnmount', 'beforePageUpdate', 'afterPageUpdate', 'onPageRender'].forEach(key =>
         {
@@ -549,6 +550,13 @@
             }, []), renderOptions);
             if(!onlyZinDebug) updatePerfInfo(options, 'renderEnd', {perf: {clientCache: cacheHit ? cacheKey : null}});
         };
+        const callCallback = (name, args) =>
+        {
+            let callback = options[name];
+            if(!callback) return;
+            if(typeof callback === 'string') callback = zui.evalValue(callback);
+            return callback.apply(null, args);
+        };
         const ajax = new zui.Ajax(
         {
             url:     url + (url.includes('?') ? '&zin=1' : '?zin=1'),
@@ -634,7 +642,7 @@
                         renderPageData(data, true);
                     }
                     $(document).trigger('pagerender.app');
-                    if(options.success) options.success(data);
+                    callCallback('success', [data]);
                     if(cacheKey)
                     {
                         const cacheTime = +response.headers.get('X-Zin-Cache-Time');
@@ -718,7 +726,7 @@
                 if(type === 'abort') return console.log('[ZIN] ', 'Abord fetch data from ' + url, {type, error});
                 if(DEBUG) console.error('[ZIN] ', 'Fetch data failed from ' + url, {type, error});
                 if(!data) zui.Messager.show('ZIN: Fetch data failed from ' + url);
-                if(options.error) options.error(data, error);
+                callCallback('error', [data, error]);
             },
             complete: () =>
             {
@@ -726,7 +734,7 @@
                 if(onFinish) onFinish();
                 $(document).data('zinCache', null);
                 if(options.loadingTarget !== false) toggleLoading(options.loadingTarget || target, false, options.loadingClass);
-                if(options.complete) options.complete();
+                callCallback('complete', []);
                 $(document).trigger('pageload.app');
                 const frameElement = window.frameElement;
                 if(frameElement)
@@ -1769,7 +1777,7 @@
             return zui.Modal.confirm(data.confirm).then(confirmed =>
             {
                 if(confirmed) $(document).trigger('locate.zt', data.confirmed);
-                else $(document).trigger('locate.zt', data.cancelled);
+                else $(document).trigger('locate.zt', data.cancelled || data.canceled);
             });
         }
         if(data.alert)

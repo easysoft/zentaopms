@@ -520,7 +520,6 @@ class todo extends control
                 $assemble->risks         = $iroData[1];
                 $assemble->opportunities = $iroData[2];
             }
-            if(isset($this->config->qcVersion)) $assemble->reviews = $this->todoZen->exportAssociated('qcVersion', (string)$user->account);
 
             $todos = $this->todoZen->assembleExportData((array)$todos, $assemble, $todoLang, (array)$times);
 

@@ -58,6 +58,7 @@ div(
         set::id('monacoTabs'),
         set::className('relative'),
         on::click('.monaco-close')->call('closeTab', jsRaw('this')),
+        on::click('.repoDropDownMenu')->call('dropdownClick', jsRaw('this')),
         div(setStyle(array('position' => 'absolute', 'width' => '100%', 'height' => '40px', 'background' => '#efefef', 'top' => '0px'))),
         tabPane
         (
@@ -117,8 +118,8 @@ $inModal ? null : sidebar
             set::id('monacoTree'),
             set::items($tree),
             set::canSplit(false),
-            set::collapsedIcon('folder'),
-            set::expandedIcon('folder-open'),
+            set::collapsedIcon('folder text-warning'),
+            set::expandedIcon('folder-open text-warning'),
             set::normalIcon('file-text-alt'),
             set::selected($file),
             set::onClickItem(jsRaw('window.treeClick'))

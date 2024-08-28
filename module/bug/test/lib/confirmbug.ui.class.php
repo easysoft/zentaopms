@@ -113,7 +113,7 @@ class confirmBugTester extends tester
     {
         if(empty($bugTitle) || !is_object($list)) return $this->failed('获取bug标题失败');
 
-        $bugTitleLists = $list->dom->bugTitleList->getElementList($list->dom->page->xpath['bugTitleList']);
+        $bugTitleLists = $list->dom->getElementList($list->dom->xpath['bugTitleList']);
         $bugList = array_map(function($element){return $element->getText();}, $bugTitleLists->element);
         if(!in_array($bugTitle, $bugList)) return $this->success('操作bug成功');
         return $this->failed('操作bug失败');

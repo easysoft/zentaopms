@@ -183,3 +183,8 @@ else
 {
     $config->search->searchObject = array('trash');
 }
+
+$config->search->controlProps = array();
+$config->search->controlProps['executionCase']['lastRunResult'] = (object)array('emptyValue' => '');
+$config->search->controlProps['testtask']['lastRunResult']      = (object)array('emptyValue' => '');
+$config->search->controlProps['testcase']['lastRunResult']      = (object)array('emptyValue' => '');

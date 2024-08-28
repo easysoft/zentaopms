@@ -20,7 +20,7 @@ class createPlanTester extends tester
         if (isset($productplan->title))  $form->dom->title->setValue($productplan->title);
         if (isset($productplan->begin))  $form->dom->begin->datePicker($productplan->begin);
         if (isset($productplan->future)) $form->dom->future->click();
-        if (isset($productplan->end))    $form->dom->end->setValue($productplan->end);
+        if (isset($productplan->end))    $form->dom->end->datePicker($productplan->end);
 
         $form->dom->btn($this->lang->save)->click();//保存
         $form->wait(3);
@@ -58,7 +58,7 @@ class createPlanTester extends tester
             $browsePage = $this->initForm('productplan', 'browse', $planurl, 'appIframe-product');
             //计划创建成功后的检查
             $browsePage->dom->search->click();
-            $browsePage->dom->searchInput1->setValue($productplan->title);
+            $browsePage->dom->value1->setValue($productplan->title);
             $browsePage->dom->searchBtn->click();
             $browsePage->wait(2);
             // 获取搜索结果的第一个计划ID

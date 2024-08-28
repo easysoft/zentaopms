@@ -197,7 +197,7 @@ foreach($actions as $key => $action)
         continue;
     }
 
-    if(isset($action['key']) && $action['key'] == 'createTask' && ($story->type != 'story' || $story->isParent == '1' || $app->tab == 'product' || $isInModal || ($app->tab == 'project' && !empty($project) && $project->multiple)))
+    if(isset($action['key']) && $action['key'] == 'createTask' && ($story->type != 'story' || in_array($story->status, array('reviewing', 'closed')) || $story->isParent == '1' || $app->tab == 'product' || $isInModal || ($app->tab == 'project' && !empty($project) && $project->multiple)))
     {
         unset($actions[$key]);
         continue;

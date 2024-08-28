@@ -64,7 +64,7 @@ class programplanZen extends programplan
         foreach($plans as $rowID => $plan)
         {
             if(empty($parentID) and empty($oldPlans)) $plan->id = '';
-            $plan->days       = helper::diffDate($plan->end, $plan->begin) + 1;
+            $plan->days       = $this->calcDaysForStage($plan->begin, $plan->end);
             $plan->project    = $projectID;
             $plan->parent     = $parentID ? $parentID : $projectID;
             $plan->order      = (int)array_shift($orders);
@@ -99,6 +99,36 @@ class programplanZen extends programplan
         }
         if(!empty($this->config->setPercent) and $totalPercent > 100) dao::$errors["percent[$rowID]"] = $this->lang->programplan->error->percentOver;
         return $plans;
+    }
+
+    /**
+     * 根据阶段的开始和结束，计算工作日。
+     * Calc stage days by stage begin and end.
+     *
+     * @param  string $start
+     * @param  string $end
+     * @access public
+     * @return int
+     */
+    public function calcDaysForStage($start, $end)
+    {
+        $weekend = $this->config->execution->weekend;
+
+        $start = new DateTime($start);
+        $end   = new DateTime($end);
+        $end->modify('+1 day'); // 包含结束日期
+
+        $interval  = new DateInterval('P1D'); // 每次递增一天
+        $dateRange = new DatePeriod($start, $interval, $end);
+
+        $days = 0;
+        foreach($dateRange as $date)
+        {
+            if(($weekend == 2 && $date->format('N') == 6) || $date->format('N') == 7) continue;
+            $days++;
+        }
+
+        return $days;
     }
 
     /**

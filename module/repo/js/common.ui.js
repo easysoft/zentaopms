@@ -3,14 +3,19 @@ $(function()
     $('#log').on('click', '.btn-close', closeRelation);
     window.onScmChange();
 
-    $('#monacoTabs').on('show.zui.tab', function(e, tab)
+    setTimeout(function()
     {
-        $('#monacoTree .listitem').removeClass('selected');
+        $('#monacoTabs').on('show.zui.tab', function(e, tab)
+        {
+            if($(e.target).hasClass('monaco-dropmenu')) return;
 
-        if(!tab || !tab[tab.length - 1]) return;
-        const fileKey = tab[tab.length - 1].substring(5).replace(/-/g, '=');
-        $('li[z-key="' + fileKey + '"] .listitem').addClass('selected');
-    });
+            $('#monacoTree .listitem').removeClass('selected');
+            if(!tab || !tab[tab.length - 1] || typeof tab[tab.length - 1] != 'string') return;
+
+            const fileKey = tab[tab.length - 1].substring(5).replace(/-/g, '=');
+            $('li[z-key="' + fileKey + '"] .listitem').addClass('selected');
+        });
+    }, 1000);
 });
 
 /**

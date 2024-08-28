@@ -3294,7 +3294,7 @@ class baseRouter
         if(!empty($this->config->debug) && $this->config->debug > 1)
         {
             /* Send non-serious errors to page in zin mode. */
-            $isZinRequest      = isset($this->config->zin) || isset($_SERVER['HTTP_X_ZIN_OPTIONS']);
+            $isZinRequest      = isset($_SERVER['HTTP_X_ZIN_OPTIONS']);
             $isNonSeriousError = $level !== E_ERROR && $level !== E_PARSE && $level !== E_CORE_ERROR && $level !== E_COMPILE_ERROR;
             if($isZinRequest && $isNonSeriousError)
             {

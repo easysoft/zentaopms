@@ -152,12 +152,14 @@ if(isset($cols['title']['link']['params'])) $cols['title']['link']['params'] = '
 if(isset($cols['bugs']['link']['params'])) $cols['bugs']['link']['params'] = 'caseID={case}';
 if(isset($cols['scene'])) $cols['scene']['map'] = $iscenes;
 if(isset($cols['status'])) $cols['status']['statusMap']['changed'] = $lang->testcase->changed;
+if(isset($cols['title'])) $cols['title']['nestedToggle'] = true;
 
 $runs = initTableData($runs, $cols);
 $runs = array_map(
     function($run)
     {
         if($run->version < $run->caseVersion) $run->status = 'changed';
+        if($run->isScene) unset($run->actions);
         return $run;
     },
     $runs
@@ -167,6 +169,7 @@ dtable
 (
     set::customCols(true),
     set::userMap($users),
+    set::nested(true),
     set::cols($cols),
     set::data($runs),
     set::orderBy($orderBy),

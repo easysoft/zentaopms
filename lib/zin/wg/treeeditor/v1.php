@@ -90,8 +90,8 @@ class treeEditor extends wg
                     $item['actions'] = array();
                     $item['actions']['items'] = array();
 
-                    if($canEdit)      $item['actions']['items'][] = array('key' => 'edit', 'icon' => 'edit', 'data-toggle' => 'modal', 'url' =>  createLink('tree', 'edit', 'moduleID=' . $item['id'] . '&type=' . ($viewType ? $viewType : $item['type'])));
-                    if($itemCanSplit) $item['actions']['items'][] = array('key' => 'view',  'icon' => 'split', 'url' => $item['url'], 'data-app' => $app->tab);
+                    if($canEdit && $editType != 'task') $item['actions']['items'][] = array('key' => 'edit', 'icon' => 'edit', 'data-toggle' => 'modal', 'url' =>  createLink('tree', 'edit', 'moduleID=' . $item['id'] . '&type=' . ($viewType ? $viewType : $item['type'])));
+                    if($itemCanSplit)                   $item['actions']['items'][] = array('key' => 'view',  'icon' => 'split', 'url' => $item['url'], 'data-app' => $app->tab);
                 }
                 elseif(isset($item['type']) && $item['type'] != 'branch')
                 {

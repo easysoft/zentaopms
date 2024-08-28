@@ -29,3 +29,8 @@ function printError(result)
         zui.Modal.alert(msg);
     })
 }
+
+window.onSearchLinks = function(type, result)
+{
+    loadComponent('#table-execution-importbug', {url: result.load, component: 'dtable', partial: true});
+};

@@ -16,6 +16,7 @@ foreach($fieldParams as $name => $param)
     $condition->name            = $name;
     $condition->control         = $param['control'];
     $condition->defaultOperator = $param['operator'];
+    if(isset($config->search->controlProps[$module][$name])) $condition->controlProps = $config->search->controlProps[$module][$name];
     $condition->placeholder     = '';
 
     if(isset($param['class']) && in_array('date', explode(' ', $param['class'])))
@@ -37,6 +38,7 @@ foreach($fieldParams as $name => $param)
             $condition->items[] = array('value' => $value, 'text' => $text);
         }
     }
+
 
     $conditions[] = $condition;
 }
@@ -94,6 +96,7 @@ $setting->actionURL           = $actionURL;
 $setting->operators           = $operators;
 $setting->conditions          = $conditions;
 $setting->defaultData         = $defaultData;
+$setting->groupItemCount      = $config->search->groupItems;
 $setting->groupTitles         = array($lang->search->group1, $lang->search->group2);
 $setting->andText             = $lang->search->andor['and'];
 $setting->orText              = $lang->search->andor['or'];

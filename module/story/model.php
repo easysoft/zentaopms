@@ -843,7 +843,7 @@ class storyModel extends model
         $this->storyTao->doUpdateSpec($storyID, $story, $oldStory, $addedFiles);
         $this->storyTao->doUpdateLinkStories($storyID, $story, $oldStory);
 
-        if($story->product != $oldStory->product)
+        if($story->product != $oldStory->product || $story->branch != $oldStory->branch)
         {
             $this->dao->update(TABLE_PROJECTSTORY)->set('product')->eq($story->product)->where('story')->eq($storyID)->exec();
             $childStories = $this->getAllChildId($storyID, false);
@@ -891,12 +891,27 @@ class storyModel extends model
         unset($oldStory->parent, $story->parent);
         if($this->config->edition != 'open' && $oldStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
 
+        if(isset($story->reviewer))
+        {
+            $oldReviewer = $this->getReviewerPairs($storyID, $oldStory->version);
+            $oldStory->reviewers = implode(',', array_keys($oldReviewer));
+            $story->reviewers    = implode(',', $story->reviewer);
+            if($story->reviewers != $oldStory->reviewers)
+            {
+                $oldStatus = $story->status;
+                $this->doUpdateReviewer($storyID, $story);
+                if($story->status != $oldStatus) $this->dao->update(TABLE_STORY)->set('status')->eq($story->status)->where('id')->eq($storyID)->exec();
+                if($story->status == 'active')   $story->finalResult = $story->status;
+            }
+        }
+
         $changes = common::createChanges($oldStory, $story);
         if(!empty($comment) or !empty($changes))
         {
             $action   = !empty($changes) ? 'Edited' : 'Commented';
             $actionID = $this->action->create('story', $storyID, $action, $comment);
             $this->action->logHistory($actionID, $changes);
+            if(isset($story->finalResult)) $this->action->create('story', $storyID, 'ReviewPassed', '', "pass|$oldStatus");
         }
 
         if(isset($story->closedReason) and $story->closedReason == 'done') $this->loadModel('score')->create('story', 'close');
@@ -922,8 +937,9 @@ class storyModel extends model
             $childPath = strstr($childPath, ",{$parent->id},");
             $this->dao->update(TABLE_STORY)
                  ->set('product')->eq($parent->product)
+                 ->set('branch')->eq($parent->branch)
                  ->set('module')->eq(0)
-                 ->set('root')->eq($parent->root)
+                 ->set('root')->eq($parent->id)
                  ->set('path')->eq($childPath)
                  ->where('id')->eq($storyID)
                  ->exec();
@@ -2235,6 +2251,8 @@ class storyModel extends model
             ->andWhere("FIND_IN_SET('{$this->config->vision}', vision)")
             ->beginIF($type != 'all')->andWhere('type')->in($type)->fi()
             ->beginIF($showGrades)->andWhere('grade')->in($showGrades)->fi()
+            ->beginIF(empty($this->config->enableER))->andWhere('type')->ne('epic')->fi()
+            ->beginIF(empty($this->config->URAndSR) && $this->config->edition != 'ipd')->andWhere('type')->ne('requirement')->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -2741,6 +2759,8 @@ class storyModel extends model
             ->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
             ->beginIF($type != 'all')->andWhere('t1.type')->in($type)->fi()
             ->beginIF($showGrades)->andWhere('t1.grade')->in($showGrades)->fi()
+            ->beginIF(empty($this->config->enableER))->andWhere('t1.type')->ne('epic')->fi()
+            ->beginIF(empty($this->config->URAndSR) && $this->config->edition != 'ipd')->andWhere('t1.type')->ne('requirement')->fi()
             ->orderBy($orderBy)
             ->page($pager, 't1.id')
             ->fetchAll('id');
@@ -4527,6 +4547,7 @@ class storyModel extends model
 
         $reviewerList = $this->getReviewerPairs($storyID, (int)$oldStory->version);
         $reviewedBy   = explode(',', trim($story->reviewedBy, ','));
+
         if(!array_diff(array_keys($reviewerList), $reviewedBy))
         {
             $reviewResult = $this->getReviewResult($reviewerList);
@@ -5123,7 +5144,7 @@ class storyModel extends model
             $storyTitle = is_string($stories[$story->id]) ? $stories[$story->id] : $story->title;
             if(isset($gradePairs[$story->grade]))
             {
-                $options[] = array('text' => array('html' => "<span class='label rounded-xl ring-0 inverse bg-opacity-10 text-inherit mr-1 size-sm'>{$gradePairs[$story->grade]->name}</span> {$storyTitle}"), 'value' => $story->id, 'keys' => $storyTitle);
+                $options[] = array('text' => array('html' => "<span class='label rounded-xl ring-0 inverse bg-opacity-10 text-inherit mr-1 size-sm'>{$gradePairs[$story->grade]->name}</span> {$storyTitle}"), 'hint' => $storyTitle, 'value' => $story->id, 'keys' => $storyTitle);
             }
             else
             {

@@ -179,7 +179,7 @@ CREATE TABLE IF NOT EXISTS `zt_approvalflow` (
   `version` mediumint(8) NOT NULL DEFAULT '1',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
-  `type` varchar(30) NOT NULL DEFAULT '',
+  `workflow` varchar(30) NOT NULL DEFAULT '',
   `deleted` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -2440,256 +2440,6 @@ INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'story', '', 'gradeRule', 'stepwise');
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'requirement', '', 'gradeRule', 'stepwise');
 INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'epic', '', 'gradeRule', 'stepwise');
--- DROP TABLE IF EXISTS `zt_im_chat`;
-CREATE TABLE IF NOT EXISTS `zt_im_chat` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `gid` char(40) NOT NULL DEFAULT '',
-  `name` varchar(60) NOT NULL DEFAULT '',
-  `type` varchar(20) NOT NULL DEFAULT 'group',
-  `admins` varchar(255) NOT NULL DEFAULT '',
-  `committers` varchar(255) NOT NULL DEFAULT '',
-  `subject` mediumint(8) unsigned NOT NULL DEFAULT 0,
-  `public` enum('0', '1') NOT NULL DEFAULT '0',
-  `createdBy` varchar(30) NOT NULL DEFAULT '',
-  `createdDate` datetime NULL,
-  `ownedBy` varchar(30) NOT NULL DEFAULT '',
-  `editedBy` varchar(30) NOT NULL DEFAULT '',
-  `editedDate` datetime NULL,
-  `mergedDate` datetime NULL,
-  `lastActiveTime` datetime NULL,
-  `lastMessage` int(11) unsigned NOT NULL DEFAULT 0,
-  `lastMessageIndex` int(11) unsigned NOT NULL DEFAULT 0,
-  `dismissDate` datetime NULL,
-  `pinnedMessages` text NULL,
-  `mergedChats` text NULL,
-  `adminInvite` enum('0','1') NOT NULL DEFAULT '0',
-  `avatar` text NULL,
-  `archiveDate` datetime NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE INDEX `gid`       ON `zt_im_chat` (`gid`);
-CREATE INDEX `name`      ON `zt_im_chat` (`name`);
-CREATE INDEX `type`      ON `zt_im_chat` (`type`);
-CREATE INDEX `public`    ON `zt_im_chat` (`public`);
-CREATE INDEX `createdBy` ON `zt_im_chat` (`createdBy`);
-CREATE INDEX `editedBy`  ON `zt_im_chat` (`editedBy`);
-
--- DROP TABLE IF EXISTS `zt_im_chatuser`;
-CREATE TABLE IF NOT EXISTS `zt_im_chatuser` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `cgid` char(40) NOT NULL DEFAULT '',
-  `user` mediumint(8) NOT NULL DEFAULT 0,
-  `order` smallint(5) NOT NULL DEFAULT 0,
-  `star` enum('0', '1') NOT NULL DEFAULT '0',
-  `hide` enum('0', '1') NOT NULL DEFAULT '0',
-  `mute` enum('0', '1') NOT NULL DEFAULT '0',
-  `freeze` enum('0', '1') NOT NULL DEFAULT '0',
-  `join` datetime NULL,
-  `quit` datetime NULL,
-  `category` varchar(40) NOT NULL DEFAULT '',
-  `lastReadMessage` int(11) unsigned NOT NULL DEFAULT 0,
-  `lastReadMessageIndex` int(11) unsigned NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE UNIQUE INDEX `chatuser` ON `zt_im_chatuser`(`cgid`, `user`);
-CREATE INDEX `cgid`  ON `zt_im_chatuser` (`cgid`);
-CREATE INDEX `user`  ON `zt_im_chatuser` (`user`);
-CREATE INDEX `order` ON `zt_im_chatuser` (`order`);
-CREATE INDEX `star`  ON `zt_im_chatuser` (`star`);
-CREATE INDEX `hide`  ON `zt_im_chatuser` (`hide`);
-
--- DROP TABLE IF EXISTS `zt_im_client`;
-CREATE TABLE IF NOT EXISTS `zt_im_client` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `version` char(30) NOT NULL DEFAULT '',
-  `desc` varchar(100) NOT NULL DEFAULT '',
-  `changeLog` text NULL,
-  `strategy` varchar(10) NOT NULL DEFAULT '',
-  `downloads` text NULL,
-  `createdDate` datetime NULL,
-  `createdBy` varchar(30) NOT NULL DEFAULT '',
-  `editedDate` datetime NULL,
-  `editedBy` varchar(30) NOT NULL DEFAULT '',
-  `status` enum('released','wait') NOT NULL DEFAULT 'wait',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- DROP TABLE IF EXISTS `zt_im_message`;
-CREATE TABLE IF NOT EXISTS `zt_im_message` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `gid` char(40) NOT NULL DEFAULT '',
-  `cgid` char(40) NOT NULL DEFAULT '',
-  `user` varchar(30) NOT NULL DEFAULT '',
-  `date` datetime NULL,
-  `index` int(11) unsigned NOT NULL DEFAULT 0,
-  `type` enum('normal','broadcast','notify','bulletin','botcommand') NOT NULL DEFAULT 'normal',
-  `content` text NULL,
-  `contentType` enum('text', 'plain', 'emotion', 'image', 'file', 'object', 'code') NOT NULL DEFAULT 'text',
-  `data` text NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
-  `legacy` tinyint(1) NOT NULL DEFAULT 0,
-  `uniqueIndex` int(11) GENERATED ALWAYS AS (CASE WHEN `legacy` = 1 THEN NULL WHEN `cgid` = 'notification' THEN NULL ELSE `index` END) STORED,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE INDEX `mgid`  ON `zt_im_message` (`gid`);
-CREATE INDEX `mcgid` ON `zt_im_message` (`cgid`);
-CREATE INDEX `muser` ON `zt_im_message` (`user`);
-CREATE INDEX `mtype` ON `zt_im_message` (`type`);
-CREATE UNIQUE INDEX `uniqueIndexInChat` ON `zt_im_message`(`cgid`, `uniqueIndex`);
-
--- DROP TABLE IF EXISTS `zt_im_message_backup`;
-CREATE TABLE IF NOT EXISTS `zt_im_message_backup` (
-  `id` int(11) unsigned NOT NULL DEFAULT '0',
-  `gid` char(40) NOT NULL DEFAULT '',
-  `cgid` char(40) NOT NULL DEFAULT '',
-  `user` varchar(30) NOT NULL DEFAULT '',
-  `date` datetime NULL,
-  `index` int(11) unsigned NOT NULL DEFAULT 0,
-  `type` enum('normal', 'broadcast', 'notify') NOT NULL DEFAULT 'normal',
-  `content` text NULL,
-  `contentType` enum('text', 'plain', 'emotion', 'image', 'file', 'object', 'code') NOT NULL DEFAULT 'text',
-  `data` text NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- DROP TABLE IF EXISTS `zt_im_message_index`;
-CREATE TABLE IF NOT EXISTS `zt_im_message_index` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `tableName` char(64) NOT NULL DEFAULT '',
-  `start` int(11) unsigned NOT NULL DEFAULT '0',
-  `end` int(11) unsigned NOT NULL DEFAULT '0',
-  `startDate` datetime NULL,
-  `endDate` datetime NULL,
-  `chats` text NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE INDEX `tableName` ON `zt_im_message_index` (`tableName`);
-CREATE INDEX `start`     ON `zt_im_message_index` (`start`);
-CREATE INDEX `end`       ON `zt_im_message_index` (`end`);
-CREATE INDEX `startDate` ON `zt_im_message_index` (`startDate`);
-CREATE INDEX `endDate`   ON `zt_im_message_index` (`endDate`);
-
--- DROP TABLE IF EXISTS `zt_im_chat_message_index`;
-CREATE TABLE IF NOT EXISTS `zt_im_chat_message_index` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `gid` char(40) NOT NULL DEFAULT '',
-  `tableName` char(64) NOT NULL DEFAULT '',
-  `start` int(11) unsigned NOT NULL DEFAULT '0',
-  `end` int(11) unsigned NOT NULL DEFAULT '0',
-  `startIndex` int(11) unsigned NOT NULL DEFAULT '0',
-  `endIndex` int(11) unsigned NOT NULL DEFAULT '0',
-  `startDate` datetime NULL,
-  `endDate` datetime NULL,
-  `count` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE UNIQUE INDEX `chattable` ON `zt_im_chat_message_index`(`gid`,`tableName`);
-CREATE INDEX `start`          ON `zt_im_chat_message_index` (`start`);
-CREATE INDEX `end`            ON `zt_im_chat_message_index` (`end`);
-CREATE INDEX `startDate`      ON `zt_im_chat_message_index` (`startDate`);
-CREATE INDEX `endDate`        ON `zt_im_chat_message_index` (`endDate`);
-CREATE INDEX `chatstartindex` ON `zt_im_chat_message_index` (`gid`, `startIndex`);
-CREATE INDEX `chatendindex`   ON `zt_im_chat_message_index` (`gid`, `endIndex`);
-
--- DROP TABLE IF EXISTS `zt_im_messagestatus`;
-CREATE TABLE IF NOT EXISTS `zt_im_messagestatus` (
-  `user` mediumint(8) NOT NULL DEFAULT 0,
-  `message` int(11) unsigned NOT NULL DEFAULT '0',
-  `status` enum('waiting','sent','readed','deleted') NOT NULL DEFAULT 'waiting'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE UNIQUE INDEX `user` ON `zt_im_messagestatus`(`user`,`message`);
-
--- DROP TABLE IF EXISTS `zt_im_queue`;
-CREATE TABLE IF NOT EXISTS `zt_im_queue` (
-  `id` mediumint(8) unsigned NOT NULL auto_increment,
-  `type` char(30) NOT NULL DEFAULT '',
-  `content` text NULL,
-  `addDate` datetime NULL,
-  `processDate` datetime NULL,
-  `result` text NULL,
-  `status` char(30) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-
--- DROP TABLE IF EXISTS `zt_im_conference`;
-CREATE TABLE IF NOT EXISTS `zt_im_conference` (
-  `id` mediumint(8) unsigned NOT NULL auto_increment,
-  `rid` char(40) NOT NULL DEFAULT '',
-  `cgid` char(40) NOT NULL DEFAULT '',
-  `status` enum ('closed', 'open', 'notStarted', 'canceled') NOT NULL DEFAULT 'closed',
-  `participants` text NULL,
-  `subscribers` text NULL,
-  `invitee` text NULL,
-  `openedBy` mediumint(8) NOT NULL DEFAULT 0,
-  `openedDate` datetime NULL,
-  `topic` text NULL,
-  `startTime` datetime NULL,
-  `endTime` datetime NULL,
-  `password` char(20) NOT NULL DEFAULT '',
-  `type` enum('default', 'periodic', 'scheduled') NOT NULL DEFAULT 'default',
-  `number` char(20) NOT NULL DEFAULT '',
-  `note` text NULL,
-  `sentNotify` tinyint(1) NOT NULL DEFAULT 0,
-  `reminderTime` int NOT NULL DEFAULT 0,
-  `moderators` text NOT NULL,
-  `isPrivate` enum ('0', '1') NOT NULL DEFAULT '0',
-  `isInner` enum('0', '1') NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-CREATE INDEX `status` ON `zt_im_conference` (`status`);
-
--- DROP TABLE IF EXISTS `zt_im_conferenceaction`;
-CREATE TABLE IF NOT EXISTS `zt_im_conferenceaction` (
-  `id` mediumint(8) unsigned NOT NULL auto_increment,
-  `rid` char(40) NOT NULL DEFAULT '',
-  `type` enum('create','invite','join','leave','close','publish') NOT NULL DEFAULT 'create',
-  `data` text NULL,
-  `user` mediumint(8) NOT NULL DEFAULT 0,
-  `date` datetime NULL,
-  `device` char(40) NOT NULL DEFAULT 'default',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-
--- DROP TABLE IF EXISTS `zt_im_conferenceuser`;
-CREATE TABLE IF NOT EXISTS `zt_im_conferenceuser` (
-  `id` mediumint(8) unsigned NOT NULL auto_increment,
-  `conference` mediumint(8) NOT NULL DEFAULT 0,
-  `user` mediumint(8) NOT NULL DEFAULT 0,
-  `hide` enum('0', '1') NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-CREATE UNIQUE INDEX `conferenceuser` ON `zt_im_conferenceuser`(`conference`, `user`);
-
--- DROP TABLE IF EXISTS `zt_im_conferenceinvite`;
-CREATE TABLE IF NOT EXISTS `zt_im_conferenceinvite` (
-  `id` mediumint(8) unsigned NOT NULL auto_increment,
-  `conferenceID` mediumint(8) unsigned NOT NULL,
-  `inviteeID` mediumint(8) unsigned NOT NULL,
-  `status` enum('pending', 'accepted', 'rejected') NOT NULL DEFAULT 'pending',
-  `createdDate` datetime NULL,
-  `updatedDate` datetime NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-CREATE UNIQUE INDEX `conference_user` ON `zt_im_conferenceinvite` (`conferenceID`, `inviteeID`);
-
--- DROP TABLE IF EXISTS `zt_im_userdevice`;
-CREATE TABLE IF NOT EXISTS `zt_im_userdevice` (
-  `id` mediumint(8) unsigned NOT NULL auto_increment,
-  `user` mediumint(8) NOT NULL DEFAULT 0,
-  `device` char(40) NOT NULL DEFAULT 'default',
-  `deviceID` char(40) NOT NULL DEFAULT '',
-  `token` char(64) NOT NULL DEFAULT '',
-  `validUntil` datetime NULL,
-  `lastLogin` datetime NULL,
-  `lastLogout` datetime NULL,
-  `online` tinyint(1) DEFAULT 0 NOT NULL,
-  `version` char(10) DEFAULT '' NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-CREATE UNIQUE INDEX `userdevice` ON `zt_im_userdevice`(`user`, `device`);
-CREATE INDEX `user`       ON `zt_im_userdevice` (`user`);
-CREATE INDEX `lastLogin`  ON `zt_im_userdevice` (`lastLogin`);
-CREATE INDEX `lastLogout` ON `zt_im_userdevice` (`lastLogout`);
 
  -- DROP TABLE IF EXISTS `zt_relationoftasks`;
 CREATE TABLE IF NOT EXISTS `zt_relationoftasks` (
@@ -13572,6 +13322,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowlayout` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `module` varchar(30) NOT NULL DEFAULT '',
   `action` varchar(50) NOT NULL DEFAULT '',
+  `ui` mediumint(8) NOT NULL DEFAULT 0,
   `field` varchar(50) NOT NULL DEFAULT '',
   `order` smallint(5) unsigned NOT NULL DEFAULT '0',
   `width` varchar(50) NOT NULL DEFAULT '0',
@@ -13584,7 +13335,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowlayout` (
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE UNIQUE INDEX `unique` ON `zt_workflowlayout`(`module`,`action`,`field`,`vision`);
+CREATE UNIQUE INDEX `unique` ON `zt_workflowlayout`(`module`,`action`,`ui`,`field`,`vision`);
 CREATE INDEX `module` ON `zt_workflowlayout` (`module`);
 CREATE INDEX `action` ON `zt_workflowlayout` (`action`);
 CREATE INDEX `order`  ON `zt_workflowlayout` (`order`);
@@ -13640,11 +13391,12 @@ CREATE TABLE IF NOT EXISTS `zt_workflowrelationlayout` (
   `prev` varchar(30) NOT NULL DEFAULT '',
   `next` varchar(30) NOT NULL DEFAULT '',
   `action` varchar(50) NOT NULL DEFAULT '',
+  `ui` mediumint(8) NOT NULL DEFAULT 0,
   `field` varchar(50) NOT NULL DEFAULT '',
   `order` smallint(5) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE UNIQUE INDEX `unique` ON `zt_workflowrelationlayout`(`prev`, `next`, `action`, `field`);
+CREATE UNIQUE INDEX `unique` ON `zt_workflowrelationlayout`(`prev`, `next`, `action`,`ui`,`field`);
 CREATE INDEX `prev` ON `zt_workflowrelationlayout` (`prev`);
 CREATE INDEX `next` ON `zt_workflowrelationlayout` (`next`);
 CREATE INDEX `action` ON `zt_workflowrelationlayout` (`action`);
@@ -13699,6 +13451,18 @@ CREATE TABLE IF NOT EXISTS `zt_workflowversion` (
 CREATE UNIQUE INDEX `moduleversion` ON `zt_workflowversion`(`module`, `version`);
 CREATE INDEX `module`  ON `zt_workflowversion` (`module`);
 CREATE INDEX `version` ON `zt_workflowversion` (`version`);
+
+-- DROP TABLE IF EXISTS `zt_workflowui`;
+CREATE TABLE IF NOT EXISTS `zt_workflowui` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `module` varchar(30) NOT NULL,
+  `action` varchar(50) NOT NULL,
+  `name` varchar(30) NOT NULL,
+  `conditions` text NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE INDEX `module` ON `zt_workflowui` (`module`);
+CREATE INDEX `action` ON `zt_workflowui` (`action`);
 
 -- DROP TABLE IF EXISTS `zt_workflowreport`;
 CREATE TABLE IF NOT EXISTS `zt_workflowreport` (
@@ -14689,8 +14453,8 @@ CREATE TABLE `zt_scene` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-REPLACE INTO `zt_approvalflow` (`id`, `name`, `code`, `desc`, `version`, `createdBy`, `createdDate`, `type`, `deleted`) VALUES
-(1, '最简审批', 'simple', '', 1, 'admin', '2022-04-29 08:46:40', 'project', 0);
+REPLACE INTO `zt_approvalflow` (`id`, `name`, `code`, `desc`, `version`, `createdBy`, `createdDate`, `workflow`, `deleted`) VALUES
+(1, '最简审批', 'simple', '', 1, 'admin', '2022-04-29 08:46:40', '', 0);
 
 REPLACE INTO `zt_approvalflowspec` (`id`, `flow`, `version`, `nodes`, `createdBy`, `createdDate`) VALUES
 (1, 1, 1, '[{\"type\":\"start\",\"ccs\":[]},{\"id\":\"3ewcj92p55e\",\"type\":\"approval\",\"title\":\"审批\",\"reviewType\":\"manual\",\"multiple\":\"and\",\"agentType\":\"pass\",\"reviewers\":[{\"type\":\"select\"}],\"ccs\":[]},{\"type\":\"end\",\"ccs\":[]}]', 'admin', '2022-04-29 08:46:40');

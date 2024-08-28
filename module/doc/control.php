@@ -195,7 +195,7 @@ class doc extends control
         {
             $lib = $this->doc->getLibByID($libID);
             $this->view->spaces  = $this->doc->getTeamSpaces();
-            $this->view->spaceID = !empty($lib->parent) ? $lib->parent : $libID;
+            $this->view->spaceID = !empty($lib->parent) ? $lib->parent : $objectID;
         }
 
         $this->docZen->setAclForCreateLib($type);
@@ -769,7 +769,7 @@ class doc extends control
 
         $objectType = isset($lib->type) ? $lib->type : 'custom';
         $objectID   = zget($doc, $objectType, 0);
-        if($objectType == 'custom') $this->lang->doc->menu->custom['alias'] = 'teamspace,view';
+        if($objectType == 'custom') $objectID = $lib->parent;
         list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($objectType, $objectID, (int)$doc->lib, (int)$appendLib);
 
         /* Get doc. */

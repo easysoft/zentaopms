@@ -29,12 +29,8 @@ if(!empty($lang->custom->{$module}->fields))
         if($module == 'approvalflow')
         {
             $currentModule = 'approvalflow';
-            if(in_array($key, array('project', 'workflow')))
-            {
-                $method = 'browse';
-                $params = "type=$key";
-                $active = (isset($type) and $type == $key) ? 'active' : $active;
-            }
+            $method        = $key;
+            $params        = '';
         }
 
         if($module == 'setDate')

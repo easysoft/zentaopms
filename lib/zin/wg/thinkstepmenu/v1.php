@@ -53,7 +53,7 @@ class thinkStepMenu extends wg
             $unClickable = $toggleNonNodeShow && $setting->id != $activeKey && $setting->type != 'node' && json_decode($setting->answer) == null;
             $item        = array(
                 'key'         => $setting->id,
-                'text'        => $setting->title,
+                'text'        => (isset($setting->index) ? ($setting->index . '. ') : '') . $setting->title,
                 'hint'        => $unClickable ? $this->lang->thinkrun->error->unanswered :$setting->title,
                 'url'         => $unClickable || !$canView ? '' : $setting->url,
                 'data-id'     => $setting->id,
@@ -188,32 +188,23 @@ class thinkStepMenu extends wg
 
         if($canCreate && (($showQuestionOfNode && $item->type == 'node') || $item->hasSameQuestion || $item->type == 'question')) $menus = array_merge($menus, array(
             array('type' => 'divider'),
-            array(
-                'key'     => 'radio',
-                'icon'    => 'radio',
-                'text'    => $this->lang->thinkstep->createStep . $this->lang->thinkstep->actions['radio'],
-                'onClick' => jsRaw("() => addQuestion({$item->id}, {$parentID}, 'question', 'radio')"),
-            ),
-            array(
-                'key'     => 'checkbox',
-                'icon'    => 'checkbox',
-                'text'    => $this->lang->thinkstep->createStep . $this->lang->thinkstep->actions['checkbox'],
-                'onClick' => jsRaw("() => addQuestion({$item->id}, {$parentID}, 'question', 'checkbox')"),
-            ),
-            array(
-                'key'     => 'input',
-                'icon'    => 'input',
-                'text'    => $this->lang->thinkstep->createStep . $this->lang->thinkstep->actions['input'],
-                'onClick' => jsRaw("() => addQuestion({$item->id}, {$parentID}, 'question', 'input')"),
-            ),
-            array(
-                'key'     => 'tableInput',
-                'icon'    => 'cell-input',
-                'text'    => $this->lang->thinkstep->createStep . $this->lang->thinkstep->actions['tableInput'],
-                'onClick' => jsRaw("() => addQuestion({$item->id}, {$parentID}, 'question', 'tableInput')"),
-            ),
+            $this->buildMenuItem('radio', 'radio', $this->lang->thinkstep->createStep . $this->lang->thinkstep->actions['radio'], $item, $parentID, 'radio'),
+            $this->buildMenuItem('checkbox', 'checkbox', $this->lang->thinkstep->createStep . $this->lang->thinkstep->actions['checkbox'], $item, $parentID, 'checkbox'),
+            $this->buildMenuItem('input', 'input', $this->lang->thinkstep->createStep . $this->lang->thinkstep->actions['input'], $item, $parentID, 'input'),
+            $this->buildMenuItem('tableInput', 'cell-input', $this->lang->thinkstep->createStep . $this->lang->thinkstep->actions['tableInput'], $item, $parentID, 'tableInput'),
+            $this->buildMenuItem('multicolumn', 'multi-input', $this->lang->thinkstep->createStep . $this->lang->thinkstep->actions['multicolumn'], $item, $parentID, 'multicolumn'),
         ));
         return $menus;
+    }
+
+    private function buildMenuItem(string $key, string $icon, string $text, object $item, int $parentID): array
+    {
+        return array(
+            'key'     => $key,
+            'icon'    => $icon,
+            'text'    => $text,
+            'onClick' => jsRaw("() => addQuestion({$item->id}, {$parentID}, 'question', '{$key}')"),
+        );
     }
 
     private function buildActions(): node
@@ -238,7 +229,7 @@ class thinkStepMenu extends wg
         (
             div
             (
-                setClass('think-node-menu rounded bg-white col bg-canvas pb-3 h-full'),
+                setClass('think-node-menu rounded bg-white col bg-canvas pb-3 h-full no-morph'),
                 zui::$treeType
                 (
                     set::_id('thinkNodeMenu'),

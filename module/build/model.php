@@ -479,6 +479,7 @@ class buildModel extends model
                 }
             }
             if($relationBranch) $build->branch = implode(',', $relationBranch);
+            $this->config->build->create->requiredFields = str_replace('execution,', '', $this->config->build->create->requiredFields);
         }
         else
         {

@@ -489,7 +489,7 @@ class testcase extends control
 
         if(!empty($_POST))
         {
-            $formData = form::data($this->config->testcase->form->edit);
+            $formData = form::data($this->config->testcase->form->edit, $caseID);
             $case     = $this->testcaseZen->prepareEditExtras($formData, $oldCase);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 

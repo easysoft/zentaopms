@@ -107,10 +107,16 @@ foreach($spaceList as $space)
                         $space->type == 'cooperation' && $kanban->owner == $this->app->user->account ? cell(set::className('label text-important ring-important mx-1'), setStyle(array('min-width' => '44px')), $lang->kanban->mine) : null,
                         $cardActions ? cell
                         (
-                            set::className('flex-1 text-right'),
+                            set::className('flex-1 text-right card-settings'),
                             dropdown
                             (
-                                btn(setClass('btn dropdown-toggle ghost'), set::icon('ellipsis-v'), set::caret(false)),
+                                btn
+                                (
+                                    on::click()->prevent(),
+                                    setClass('btn dropdown-toggle ghost'),
+                                    set::icon('ellipsis-v'),
+                                    set::caret(false)
+                                ),
                                 set::items($cardActions)
                             )
                         ) : null
@@ -139,7 +145,5 @@ foreach($spaceList as $space)
     );
 }
 
-!empty($spaceList) ? $blocks : div(set::className('dtable'), div(set::className('dtable-empty-tip'), span(set::className('text-gray'),  $lang->kanbanspace->empty)));
-if(!empty($spaceList)) div(set::className('table-footer'), pager(set(usePager()), set::className('pull-right')));
-
-render();
+!empty($spaceList) ? $blocks : div(set::className('dtable'), setKey('empty-tip'), div(set::className('dtable-empty-tip'), span(set::className('text-gray'),  $lang->kanbanspace->empty)));
+if(!empty($spaceList)) div(set::className('table-footer'), setKey('pager'), pager(set(usePager()), set::className('pull-right')));

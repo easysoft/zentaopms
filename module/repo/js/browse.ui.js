@@ -5,7 +5,7 @@ window.renderCell = function(result, {col, row})
 {
     if(col.name === 'name')
     {
-        var iconHtml = '<span class="' + (row.data.kind == 'dir' ? 'directory' : 'file') + ' mini-icon"></span>';
+        const iconHtml = '<i class="icon card-icon mr-2 icon-' + (row.data.kind == 'dir' ? 'folder text-warning' : 'file-text-alt') + '"></i>';
         result[0] = {html: iconHtml + '<a href="' + row.data.link + '" data-app="' + appTab + '">' + row.data.name + '</a>', className: row.data.account ? '' : 'hidden'};
 
         return result;

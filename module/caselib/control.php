@@ -73,7 +73,7 @@ class caselib extends control
     {
         if(!empty($_POST))
         {
-            $formData = form::data($this->config->caselib->form->edit);
+            $formData = form::data($this->config->caselib->form->edit, $libID);
             $lib      = $this->caselibZen->prepareEditExtras($formData, $libID);
 
             $this->caselib->update($lib);

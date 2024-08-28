@@ -60,9 +60,9 @@ class detailCard extends wg
         $objectID   = $this->prop('objectID');
         $object     = $this->prop('object');
 
-        if(!$objectType)     $objectType = $app->rawModule;
-        if(!$object)         $object     = data($objectType);
-        if(!$objectID)       $objectID   = $object ? $object->id : data($objectType . 'ID');
+        if(!$objectType) $objectType = $app->rawModule;
+        if(!$object)     $object     = data($objectType);
+        if(!$objectID)   $objectID   = $object ? $object->id : data($objectType . 'ID');
 
         if(!$this->hasProp('objectType'))  $this->setProp('objectType', $objectType);
         if(!$this->hasProp('objectID'))    $this->setProp('objectID',   $objectID);

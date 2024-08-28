@@ -1433,10 +1433,20 @@ class testcaseZen extends testcase
         $forceNotReview = $this->testcase->forceNotReview();
         $storyVersions  = array();
         $testcases      = form::batchData($this->config->testcase->form->batchCreate)->get();
+
+        $projectID   = $this->app->tab == 'project' ? $this->session->project : 0;
+        $executionID = 0;
+        if($projectID)
+        {
+            $project = $this->loadModel('project')->getByID($projectID);
+            if(!$project->multiple) $executionID = $this->dao->select('id')->from(TABLE_PROJECT)->where('parent')->eq($projectID)->fetch('id');
+        }
+
         foreach($testcases as $testcase)
         {
-            $testcase->product = $productID;
-            if($this->app->tab == 'project') $testcase->project = $this->session->project;
+            $testcase->product      = $productID;
+            $testcase->project      = $projectID;
+            $testcase->execution    = $executionID;
             $testcase->openedBy     = $account;
             $testcase->openedDate   = $now;
             $testcase->status       = $forceNotReview || $testcase->review == 0 ? 'normal' : 'wait';
@@ -2394,7 +2404,7 @@ class testcaseZen extends testcase
         $now    = helper::now();
         $status = $this->getStatusForReview($oldCase);
 
-        $case = form::data($this->config->testcase->form->review)->add('id', $caseID)
+        $case = form::data($this->config->testcase->form->review, $caseID)->add('id', $caseID)
             ->setForce('status', $status)
             ->setDefault('reviewedDate', substr($now, 0, 10))
             ->setDefault('lastEditedBy', $this->app->user->account)
@@ -2478,12 +2488,22 @@ class testcaseZen extends testcase
         /* 获取产品列表。Get productList. */
         if($this->app->tab == 'project' && !$productID)
         {
-            $productList = $products;
+            if($projectID)
+            {
+                $products = $this->loadModel('product')->getProducts($projectID);
+                $productList = array(0 => '');
+                foreach($products as $product) $productList[$product->id] = $product->name;
+                $productList['all'] = $this->lang->product->allProductsOfProject;
+            }
+            else
+            {
+                $productList = $products;
+            }
             $this->config->testcase->search['params']['story']['values'] = $this->loadModel('story')->getExecutionStoryPairs($projectID, 0, 'all', $moduleID, 'full', 'active');
         }
         else
         {
-            $productList = array();
+            $productList = array(0 => '');
             $productList['all'] = $this->lang->all;
             if(isset($products[$productID])) $productList[$productID] = $products[$productID];
             $this->config->testcase->search['params']['story']['values'] = $this->loadModel('story')->getProductStoryPairs($productID, $branch, array(), 'active,reviewing', 'id_desc', 0, '', 'story', false);
@@ -2501,7 +2521,7 @@ class testcaseZen extends testcase
             foreach($products as $id => $name) $modules += $this->loadModel('tree')->getOptionMenu($id, 'case', 0);
         }
 
-        $this->config->testcase->search['params']['product']['values'] = array('') + $productList;
+        $this->config->testcase->search['params']['product']['values'] = $productList;
         $this->config->testcase->search['params']['module']['values']  = $modules;
         $this->config->testcase->search['params']['scene']['values']   = $this->testcase->getSceneMenu($productID, $moduleID, $branch, 0, 0, true);
         $this->config->testcase->search['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();
@@ -2621,7 +2641,6 @@ class testcaseZen extends testcase
 
         $fields   = $this->testcase->getImportFields($productID);
         $fields   = array_flip($fields);
-        $endField = end($fields);
         $caseData = array();
         $stepData = array();
         $stepVars = 0;
@@ -2644,8 +2663,19 @@ class testcaseZen extends testcase
                     $steps   = (array)$cellValue;
                     if(strpos($cellValue, "\r")) $steps = explode("\r", $cellValue);
                     if(strpos($cellValue, "\n")) $steps = explode("\n", $cellValue);
-
                     $caseStep  = $this->getImportSteps($field, $steps, $stepData, $row);
+
+                    if($stepKey == 'expect' && !empty($stepData[$row]['desc']))
+                    {
+                        foreach($stepData[$row]['desc'] as $stepDescValue)
+                        {
+                            if(empty($stepDescValue['number'])) continue;
+                            $caseNumber = $stepDescValue['number'];
+
+                            if($stepDescValue && !isset($caseStep[$caseNumber]) || empty($caseStep[$caseNumber]['content'])) $caseStep[$caseNumber] = '';
+                        }
+                    }
+
                     $stepVars += count($caseStep, COUNT_RECURSIVE) - count($caseStep);
                     $stepData[$row][$stepKey] = array_values($caseStep);
                 }
@@ -2722,9 +2752,9 @@ class testcaseZen extends testcase
             $step = trim($step);
             if(empty($step)) continue;
 
-            preg_match('/^((([0-9]+)[.]([0-9]+))[.]([0-9]+))[.、](.*)$/U', $step, $out);
-            if(!$out) preg_match('/^(([0-9]+)[.]([0-9]+))[.、](.*)$/U', $step, $out);
-            if(!$out) preg_match('/^([0-9]+)[.、](.*)$/U', $step, $out);
+            preg_match('/^((([0-9]+)[.]([0-9]+))[.]([0-9]+))[.、](.*)$/Uu', $step, $out);
+            if(!$out) preg_match('/^(([0-9]+)[.]([0-9]+))[.、](.*)$/Uu', $step, $out);
+            if(!$out) preg_match('/^([0-9]+)[.、](.*)$/Uu', $step, $out);
             if($out)
             {
                 $count  = count($out);

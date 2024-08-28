@@ -266,7 +266,7 @@ class projectTao extends projectModel
 
         $childSprints = $this->dao->select('id')->from(TABLE_PROJECT)
             ->where('project')->eq($projectID)
-            ->andWhere('type')->in('stage,sprint')
+            ->andWhere('type')->in('stage,sprint,kanban')
             ->andWhere('deleted')->eq('0')
             ->fetchPairs();
 
@@ -280,6 +280,16 @@ class projectTao extends projectModel
         $this->loadModel('user')->updateUserView(array($projectID), 'project', $changedAccounts);
         if(!empty($childSprints))   $this->user->updateUserView($childSprints, 'sprint', $changedAccounts);
         if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', $changedAccounts);
+
+        /* Remove execution members. */
+        if($this->post->removeExecution == 'yes' and !empty($childSprints) and !empty($removedAccounts))
+        {
+            $this->dao->delete()->from(TABLE_TEAM)
+                ->where('root')->in($childSprints)
+                ->andWhere('type')->eq('execution')
+                ->andWhere('account')->in($removedAccounts)
+                ->exec();
+        }
     }
 
     /**
@@ -788,7 +798,7 @@ class projectTao extends projectModel
             ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
             ->beginIF($status == 'unclosed')->andWhere('status')->ne('closed')->fi()
             ->beginIF($status && !in_array($status, array('all', 'undone', 'unclosed')))->andWhere('status')->eq($status)->fi()
-            ->beginIF($projectID)->andWhere('id')->eq($projectID)->fi()
+            ->beginIF($projectID)->orWhere('id')->eq($projectID)->fi()
             ->orderBy($orderBy)
             ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll('id');

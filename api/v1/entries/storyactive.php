@@ -29,8 +29,8 @@ class storyActiveEntry extends entry
         $control->activate($storyID);
 
         $data = $this->getData();
-        if(!$data or !isset($data->status)) return $this->send400('error');
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
+        if(!$data || !isset($data->result)) return $this->send400('error');
+        if($data->result == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
         $story = $this->loadModel('story')->getByID($storyID);
 

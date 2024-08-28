@@ -185,6 +185,7 @@ class upgradeModel extends model
         $this->loadModel('product')->refreshStats(true);
         $this->deletePatch();
         $this->processDataset();
+        $this->upgradeMetricData();
 
         if($fromEdition == 'open')
         {
@@ -9114,6 +9115,42 @@ class upgradeModel extends model
     }
 
     /**
+     * 更新升级度量项数据。
+     * Import metric data.
+     *
+     * @access public
+     * @return bool
+     */
+    public function upgradeMetricData()
+    {
+        $this->saveLogs('Run Method ' . __FUNCTION__);
+        $this->dao->clearTablesDescCache();
+
+        $metricSQLs = $this->loadModel('bi')->prepareBuiltinMetricSQL('update');
+        try
+        {
+            foreach($metricSQLs as $sql)
+            {
+                $sql = trim($sql);
+                if(empty($sql)) continue;
+
+                $this->saveLogs($sql);
+
+                $sql = str_replace('zt_', $this->config->db->prefix, $sql);
+                $this->dbh->query($sql);
+                if(dao::isError()) return false;
+            }
+        }
+        catch(Error $e)
+        {
+            a($e->getMessage());
+            die;
+        }
+
+        return true;
+    }
+
+    /**
      * 更新升级BI内置数据。
      * Import BI data.
      *
@@ -9135,9 +9172,8 @@ class upgradeModel extends model
             $pivotSQLs   = $this->bi->prepareBuiltinPivotSQL('update');
             $upgradeSqls = array_merge($upgradeSqls, $chartSQLs, $pivotSQLs);
         }
-        $metricSQLs  = $this->bi->prepareBuiltinMetricSQL('update');
         $screenSQLs  = $this->bi->prepareBuiltinScreenSQL('update');
-        $upgradeSqls = array_merge($upgradeSqls, $metricSQLs, $screenSQLs);
+        $upgradeSqls = array_merge($upgradeSqls, $screenSQLs);
 
         try
         {
@@ -9700,5 +9736,116 @@ class upgradeModel extends model
         }
 
         return !dao::isError();
+    }
+
+    /**
+     * 更新审批流的条件分支数据结构。
+     * Update the condition branch data structure of the approval flow.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateApprovalCondition()
+    {
+        $specs = $this->dao->select('id, nodes')->from(TABLE_APPROVALFLOWSPEC)->fetchPairs();
+
+        foreach($specs as $specID => $spec)
+        {
+            $nodes = json_decode($spec);
+
+            $hasBranch = false;
+            foreach($nodes as $id => $node)
+            {
+                if($node->type != 'branch') continue;
+
+                $hasBranch = true;
+                $nodes[$id] = $this->transferCondition($node);
+            }
+
+            if($hasBranch) $this->dao->update(TABLE_APPROVALFLOWSPEC)->set('nodes')->eq(json_encode($nodes))->where('id')->eq($specID)->exec();
+        }
+    }
+
+    /**
+     * 递归转换条件分支的数据结构。
+     * Transfer branch conditions.
+     *
+     * @param  object $node
+     * @access public
+     * @return object
+     */
+    public function transferCondition($node)
+    {
+        foreach($node->branches as $index => $branch)
+        {
+            if(isset($branch->conditions))
+            {
+                $newConditions = array();
+                $newCondition  = new stdClass();
+                $newCondition->conditionOperator = 'equal';
+                $newCondition->conditionLogical  = 'or';
+                foreach($branch->conditions as $condition)
+                {
+                    if($condition->selectType == 'account')
+                    {
+                        foreach($condition->users as $account)
+                        {
+                            $newCondition->conditionField = 'submitUsers';
+                            $newCondition->conditionValue = $account;
+                            $newConditions[] = clone $newCondition;
+                        }
+                    }
+                    elseif($condition->selectType == 'role')
+                    {
+                        foreach($condition->roles as $role)
+                        {
+                            $newCondition->conditionField = 'submitRoles';
+                            $newCondition->conditionValue = $role;
+                            $newConditions[] = clone $newCondition;
+                        }
+                    }
+                    elseif($condition->selectType == 'position')
+                    {
+                        foreach($condition->positions as $position)
+                        {
+                            $newCondition->conditionField = 'submitPositions';
+                            $newCondition->conditionValue = $position;
+                            $newConditions[] = clone $newCondition;
+                        }
+                    }
+                    elseif($condition->selectType == 'dept')
+                    {
+                        foreach($condition->depts as $dept)
+                        {
+                            $newCondition->conditionField = 'submitDepts';
+                            $newCondition->conditionValue = $dept;
+                            $newConditions[] = clone $newCondition;
+                        }
+                    }
+                }
+
+                $node->branches[$index]->conditions = $newConditions;
+            }
+
+            if(isset($branch->nodes))
+            {
+                foreach($branch->nodes as $branchID => $branchNode)
+                {
+                    if($branchNode->type != 'branch') continue;
+                    $node->branches[$index]->nodes[$branchID] = $this->transferCondition($branchNode);
+
+                    if(isset($branchNode->default->nodes))
+                    {
+                        foreach($branchNode->default->nodes as $defaultID => $defaultNode)
+                        {
+                            if($defaultNode->type != 'branch') continue;
+                            $node->branches[$index]->nodes[$branchID]->default->nodes[$defaultID] = $this->transferCondition($defaultNode);
+                        }
+                    }
+                }
+            }
+        }
+
+        return $node;
     }
 }

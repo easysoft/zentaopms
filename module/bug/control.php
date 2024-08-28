@@ -269,7 +269,7 @@ class bug extends control
         $oldBug = $this->bug->getByID($bugID);
         if(!empty($_POST))
         {
-            $formData = form::data($this->config->bug->form->edit);
+            $formData = form::data($this->config->bug->form->edit, $bugID);
             $bug      = $this->bugZen->prepareEditExtras($formData, $oldBug);
             $this->bugZen->checkRquiredForEdit($bug);
 
@@ -315,7 +315,7 @@ class bug extends control
         {
             /* 初始化 bug 数据。*/
             /* Init bug data. */
-            $bug = form::data($this->config->bug->form->assignTo)->add('id', $bugID)->get();
+            $bug = form::data($this->config->bug->form->assignTo, $bugID)->add('id', $bugID)->get();
 
             if($this->app->rawMethod == 'batchassignto') unset($bug->mailto);
 
@@ -376,7 +376,7 @@ class bug extends control
 
             /* 构造 bug 的表单数据。*/
             /* Structure the bug form data. */
-            $bug = form::data($this->config->bug->form->confirm)->add('id', $bugID)->setDefault('confirmed', 1)->get();
+            $bug = form::data($this->config->bug->form->confirm, $bugID)->add('id', $bugID)->setDefault('confirmed', 1)->get();
 
             $this->bug->confirm($bug, $kanbanData);
 
@@ -501,7 +501,7 @@ class bug extends control
 
             /* 获取bug信息。 */
             /* Build bug data. */
-            $bug = form::data($this->config->bug->form->activate)->setDefault('assignedTo', $oldBug->resolvedBy)->add('activatedCount', $oldBug->activatedCount + 1)->add('id', $bugID)->add('resolvedDate', null)->add('closedDate', null)->get();
+            $bug = form::data($this->config->bug->form->activate, $bugID)->setDefault('assignedTo', $oldBug->resolvedBy)->add('activatedCount', $oldBug->activatedCount + 1)->add('id', $bugID)->add('resolvedDate', null)->add('closedDate', null)->get();
 
             /* 解析看板信息。 */
             /* Parse kanban information. */
@@ -550,7 +550,7 @@ class bug extends control
         {
             /* 设置bug信息。 */
             /* Set bug information. */
-            $bug = form::data($this->config->bug->form->close)->add('id', $bugID)->get();
+            $bug = form::data($this->config->bug->form->close, $bugID)->add('id', $bugID)->get();
 
             /* 设置额外变量。 */
             /* Set extra variables. */

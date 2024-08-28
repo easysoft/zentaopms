@@ -1244,7 +1244,7 @@ class storyZen extends story
         $fields       = $this->config->story->form->edit;
         $editorFields = array_keys(array_filter(array_map(function($config){return $config['control'] == 'editor';}, $fields)));
 
-        $storyData = form::data($fields)
+        $storyData = form::data($fields, $storyID)
             ->add('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->add('demand', $oldStory->demand)
@@ -1307,7 +1307,7 @@ class storyZen extends story
         $now          = helper::now();
         $fields       = $this->config->story->form->change;
         $editorFields = array_keys(array_filter(array_map(function($config){return $config['control'] == 'editor';}, $fields)));
-        $story        = form::data($fields)
+        $story        = form::data($fields, $storyID)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('deleteFiles', array())
             ->setDefault('lastEditedDate', $now)
@@ -1420,7 +1420,6 @@ class storyZen extends story
         if(isset($_POST['plan']) and is_array($_POST['plan'])) $story->plan   = trim(implode(',', $_POST['plan']), ',');
         if(isset($_POST['branch']) and $_POST['branch'] == 0)  $story->branch = 0;
         if(isset($story->stage) and $oldStory->stage != $story->stage) $story->stagedBy = (strpos('tested|verified|rejected|pending|released|closed', $story->stage) !== false) ? $this->app->user->account : '';
-        if(isset($_POST['reviewer']) or isset($_POST['needNotReview'])) $this->story->doUpdateReviewer($storyID, $story);
     }
 
     /**
@@ -1459,7 +1458,7 @@ class storyZen extends story
         $editorFields = array_keys(array_filter(array_map(function($config){return $config['control'] == 'editor';}, $fields)));
         $result       = $this->post->result;
         $closedReason = $this->post->closedReason;
-        $storyData    = form::data($fields)
+        $storyData    = form::data($fields, $storyID)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->removeIF($result != 'reject', 'closedReason,duplicateStory')
@@ -1497,6 +1496,11 @@ class storyZen extends story
         $stories = form::batchData($fields)->get();
         foreach($stories as $i => $story)
         {
+            if(!empty($story->title) && mb_strlen($story->title) > 255)
+            {
+                dao::$errors["title[$i]"] = sprintf($this->lang->story->error->length, 255);
+            }
+
             $story->type       = $storyType;
             $story->status     = (empty($story->reviewer) && !$forceReview) ? 'active' : 'reviewing';
             $story->status     = $saveDraft ? 'draft' : $story->status;
@@ -1544,6 +1548,7 @@ class storyZen extends story
             $story->stage          = empty($story->stage) ? $oldStory->stage : $story->stage;
             $story->branch         = $story->branch === '' ? $oldStory->branch : str_replace('branch', '', $story->branch);
 
+            if(empty($story->roadmap)) $story->roadmap = $oldStory->roadmap;
             if($oldStory->assignedTo != $story->assignedTo) $story->assignedDate = $now;
             if($oldStory->parent < 0) $story->plan = '';
             if($story->stage != $oldStory->stage) $story->stagedBy = (str_contains('|tested|verified|rejected|pending|released|closed|', "|{$story->stage}|")) ? $account : '';
@@ -1910,11 +1915,13 @@ class storyZen extends story
     /**
      * Build story post data for activating the story.
      *
+     * @param  int       $storyID
+     * @access protected
      * @return object
      */
-    protected function buildStoryForActivate(): object
+    protected function buildStoryForActivate(int $storyID): object
     {
-        $postData = form::data($this->config->story->form->activate)->get();
+        $postData = form::data($this->config->story->form->activate, $storyID)->get();
         $story    = $this->loadModel('file')->processImgURL($postData, $this->config->story->editor->activate['id'], $this->post->uid);
         return $story;
     }
@@ -1922,9 +1929,11 @@ class storyZen extends story
     /**
      * Build story post data for submitReview the story.
      *
+     * @param  int       $storyID
+     * @access protected
      * @return object|false
      */
-    protected function buildStoryForSubmitReview(): object|false
+    protected function buildStoryForSubmitReview(int $storyID): object|false
     {
         if(isset($_POST['reviewer'])) $_POST['reviewer'] = array_filter($_POST['reviewer']);
         if(!$this->post->needNotReview and empty($_POST['reviewer']))
@@ -1933,7 +1942,7 @@ class storyZen extends story
             return false;
         }
 
-        return form::data($this->config->story->form->submitReview)->get();
+        return form::data($this->config->story->form->submitReview, $storyID)->get();
     }
 
     /**

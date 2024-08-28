@@ -190,6 +190,7 @@ class productsBox extends wg
                 set::className('planBox'),
                 picker
                 (
+                    set::className('pr-2.5'),
                     set::name("plans[{$planProductID}][]"),
                     set::items(!empty($productPlans) ? $productPlans : array()),
                     set::value($currentPlan),

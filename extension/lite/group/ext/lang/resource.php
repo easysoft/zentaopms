@@ -1038,13 +1038,21 @@ if($config->edition != 'open')
     /* Feedback. */
     $lang->resource->feedback = new stdclass();
     $lang->resource->feedback->create         = 'create';
+    $lang->resource->feedback->batchCreate    = 'batchCreate';
     $lang->resource->feedback->edit           = 'edit';
     $lang->resource->feedback->browse         = 'browse';
     $lang->resource->feedback->view           = 'view';
     $lang->resource->feedback->comment        = 'comment';
+    $lang->resource->feedback->ask            = 'ask';
     $lang->resource->feedback->delete         = 'delete';
     $lang->resource->feedback->close          = 'closeAction';
+    $lang->resource->feedback->activate       = 'activate';
+    $lang->resource->feedback->batchEdit      = 'batchEdit';
+    $lang->resource->feedback->batchClose     = 'batchClose';
+    $lang->resource->feedback->batchAssignTo  = 'batchAssignTo';
     $lang->resource->feedback->export         = 'exportAction';
+    $lang->resource->feedback->import         = 'import';
+    $lang->resource->feedback->exportTemplate = 'exportTemplate';
     $lang->resource->feedback->assignTo       = 'assignAction';
     $lang->resource->feedback->products       = 'products';
     $lang->resource->feedback->manageProduct  = 'manageProduct';
@@ -1069,6 +1077,11 @@ if($config->edition != 'open')
     $lang->resource->ticket->exportTemplate = 'exportTemplate';
     $lang->resource->ticket->import         = 'import';
     $lang->resource->ticket->export         = 'exportAction';
+    $lang->resource->ticket->batchCreate    = 'batchCreate';
+    $lang->resource->ticket->batchEdit      = 'batchEdit';
+    $lang->resource->ticket->batchActivate  = 'batchActivate';
+    $lang->resource->ticket->batchFinish    = 'batchFinish';
+    $lang->resource->ticket->batchAssignTo  = 'batchAssignTo';
 
     /* Attend */
     $lang->resource->attend = new stdclass();
@@ -1349,11 +1362,18 @@ if($config->edition != 'open')
 
     /* workflowlayout */
     $lang->resource->workflowlayout = new stdclass();
-    $lang->resource->workflowlayout->admin = 'admin';
-    $lang->resource->workflowlayout->block = 'block';
+    $lang->resource->workflowlayout->admin    = 'admin';
+    $lang->resource->workflowlayout->block    = 'block';
+    $lang->resource->workflowlayout->addUI    = 'addUI';
+    $lang->resource->workflowlayout->editUI   = 'editUI';
+    $lang->resource->workflowlayout->deleteUI = 'deleteUI';
+
 
     $lang->workflowlayout->methodOrder[5]  = 'admin';
     $lang->workflowlayout->methodOrder[10] = 'block';
+    $lang->workflowlayout->methodOrder[15] = 'addUI';
+    $lang->workflowlayout->methodOrder[20] = 'editUI';
+    $lang->workflowlayout->methodOrder[25] = 'deleteUI';
 
     /* workflowlinkage */
     $lang->resource->workflowlinkage = new stdclass();

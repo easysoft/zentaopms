@@ -79,11 +79,13 @@ class featureBar extends wg
 
                 foreach($moreSelects as $key => $text)
                 {
+                    $searchModule = data("config.{$currentModule}.search.module") ? data("config.{$currentModule}.search.module") : $currentModule;
+
                     $subItem = array();
                     $subItem['text']   = $text;
                     $subItem['active'] = $key == $current;
                     $subItem['url']    = ($callback instanceof \Closure) ? $callback($key, $text) : str_replace('{key}', (string)$key, $link);
-                    $subItem['attrs']  = ['data-id' => $key, 'data-load' => $load, 'data-target' => $loadID, 'data-app' => $tab];
+                    $subItem['attrs']  = ['data-id' => $key, 'data-load' => $load, 'data-target' => $loadID, 'data-app' => $tab, 'data-success' => "() => zui.updateSearchForm('$searchModule')"];
 
                     if($item->name == 'QUERY')
                     {

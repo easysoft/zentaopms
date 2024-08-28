@@ -855,6 +855,7 @@ class todoZen extends todo
             $todo->end   = $todo->end   == '2400' ? '' : $end;
 
             $todo->assignedTo = zget($assemble->users, $todo->assignedTo);
+            if($todo->date == '2030-01-01') $todo->date = $this->lang->todo->future;
 
             $type = $todo->type;
             if(isset($assemble->users[$todo->account])) $todo->account = $assemble->users[$todo->account];
@@ -872,7 +873,6 @@ class todoZen extends todo
                 if($type == 'risk')        $todo->name = isset($assemble->risks[$todo->objectID])  ? $assemble->risks[$todo->objectID]  . "(#$todo->objectID)" : '';
                 if($type == 'opportunity') $todo->name = isset($assemble->opportunities[$todo->objectID]) ? $assemble->opportunities[$todo->objectID] . "(#$todo->objectID)" : '';
             }
-            if($type == 'review' && isset($this->config->qcVersion)) $todo->name = isset($assemble->reviews[$todo->objectID]) ? $assemble->reviews[$todo->objectID] . "(#$todo->objectID)" : '';
 
             if(isset($todoLang->typeList[$type]))           $todo->type   = $todoLang->typeList[$type];
             if(isset($todoLang->priList[$todo->pri]))       $todo->pri    = $todoLang->priList[$todo->pri];

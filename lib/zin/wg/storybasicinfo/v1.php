@@ -107,7 +107,7 @@ class storyBasicInfo extends wg
                     $demand->title,
                     set::href(helper::createLink('demand', 'view', "demandID=$story->demand")),
                     set::title($demand->title),
-                    setClass('basis-32 text-clip mr-2.5'),
+                    setClass('basis-52 text-clip mr-2.5'),
                     setData('toggle', 'modal'),
                     setData('size', 'lg')
                 ) : $demand->title,
@@ -142,7 +142,7 @@ class storyBasicInfo extends wg
                     $story->parentName,
                     set::href(helper::createLink($story->parentType, 'view', "storyID=$story->parent")),
                     set::title($story->parentName),
-                    setClass('basis-32 text-clip mr-2.5'),
+                    setClass('basis-52 text-clip mr-2.5'),
                     setData('toggle', 'modal'),
                     setData('size', 'lg')
                 ),
@@ -208,7 +208,7 @@ class storyBasicInfo extends wg
         $items[$lang->story->source] = array
         (
             'control' => 'text',
-            'content' => zget($lang->story->sourceList, $story->source, ''),
+            'content' => zget($lang->{$story->type}->sourceList, $story->source, ''),
             'id'      => 'sourceBox'
         );
         $items[$lang->story->sourceNote] = array
@@ -230,12 +230,12 @@ class storyBasicInfo extends wg
             'class'   => 'stage-line',
             'text'    => zget($lang->{$story->type}->stageList, $this->getMinStage($story, $branches), '')
         );
-        $items[$lang->story->category] = zget($lang->story->categoryList, $story->category);
+        $items[$lang->story->category] = zget($lang->{$story->type}->categoryList, $story->category);
         $items[$lang->story->pri] = array
         (
             'control' => 'pri',
             'pri'     => $story->pri,
-            'text'    => $lang->story->priList
+            'text'    => $lang->{$story->type}->priList
         );
         $items[$lang->story->estimate] = $story->estimate . $config->hourUnit;
         if(in_array($story->source, $config->story->feedbackSource))

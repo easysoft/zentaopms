@@ -166,9 +166,9 @@ class userEntry extends entry
                     {
                         $myExecutions['owner'] = array();
                         $myExecutions['other'] = array();
-                        foreach($data->data->executions as $projectID => $projectExecutions)
+                        foreach($data->data->projectExecutions as $executionList)
                         {
-                            foreach($projectExecutions as $execution)
+                            foreach($executionList as $execution)
                             {
                                 if($execution->status == 'done' or $execution->status == 'closed') continue;
 

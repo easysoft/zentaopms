@@ -27,7 +27,7 @@ class projectCasesEntry extends entry
         $this->app->session->set('project', $projectID, $this->app->tab);
 
         $control = $this->loadController('project', 'testcase');
-        $control->testcase($projectID, $this->param('product', 0), $this->param('branch', 0), $this->param('status', 'all'), 0, $this->param('order', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
+        $control->testcase($projectID, $this->param('product', 0), $this->param('branch', 'all'), $this->param('status', 'all'), 0, $this->param('caseType', ''), $this->param('order', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
 
         $data = $this->getData();
 

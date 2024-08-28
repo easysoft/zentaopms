@@ -40,9 +40,13 @@ featureBar
             set::width('150px'),
             setStyle('justify-content', 'center'),
             set::display($lang->story->viewAllGrades),
-            set::menu(array('checkbox' => true)),
+            set::menu(array('checkbox' => true, 'itemProps' => array('innerComponent' => 'a'))),
             set::value($showGrades),
-            set::onPopHidden(jsRaw('setShowGrades'))
+            set::toolbar
+            (
+                array('text' => $lang->confirm, 'onClick' => jsRaw('(e,info) => {setShowGrades();info.relativeTarget.close();}')),
+                array('text' => $lang->cancel, 'onClick' => jsRaw('(e,info) => info.relativeTarget.close()')),
+            )
         )
     ),
     set::current($this->session->storyBrowseType),
@@ -201,7 +205,7 @@ $product ? toolbar
         'class' => 'ghost',
         'url'   => createLink('story', 'report', "productID={$product->id}&branchID=&storyType={$storyType}&browseType={$type}&moduleID={$param}&chartType=pie&projectID={$execution->id}") . "#app={$app->tab}"
     ))) : null,
-    hasPriv('story', 'export') && $type == 'byproduct' ? item(set(array
+    hasPriv('story', 'export') && ($linkedProductCount < 2 || $type == 'byproduct' || $type == 'bymodule') ? item(set(array
     (
         'text'        => $lang->export,
         'icon'        => 'export',
@@ -450,7 +454,8 @@ foreach($setting as $col)
 
     if($col['name'] == 'title')
     {
-        $col['link']  = createLink('execution', 'storyView', array('storyID' => '{id}', 'execution' => $execution->id));
+        $tab = $execution->multiple ? 'execution' : 'project';
+        $col['link']  = createLink('execution', 'storyView', array('storyID' => '{id}', 'execution' => $execution->id)) . "#app={$tab}";
         $col['title'] = $this->lang->story->name;
     }
 

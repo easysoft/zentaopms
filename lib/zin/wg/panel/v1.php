@@ -12,6 +12,7 @@ class panel extends wg
         'size?: "sm"|"lg"',             // 额外尺寸。
         'title?: string',               // 标题。
         'shadow?: bool=true',           // 阴影效果。
+        'titleIcon?: string',           // 标题图标。
         'titleClass?: string',          // 标题类名。
         'titleProps?: array',           // 标题属性。
         'headingClass?: string',        // 标题栏类名。

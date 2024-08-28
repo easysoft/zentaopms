@@ -72,7 +72,7 @@ $lang->mail->debugList[2] = '较高';
 $lang->mail->authList[1] = '需要';
 $lang->mail->authList[0] = '不需要';
 
-$lang->mail->secureList['']    = '不加密';
+$lang->mail->secureList['0']   = '不加密';
 $lang->mail->secureList['ssl'] = 'ssl';
 $lang->mail->secureList['tls'] = 'tls';
 

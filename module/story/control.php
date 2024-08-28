@@ -142,7 +142,7 @@ class story extends control
 
             $stories = $this->storyZen->buildStoriesForBatchCreate($productID, $storyType);
             if(empty($stories)) return $this->sendError($this->lang->story->errorEmptyStory, true);
-            if(dao::isError())  return $this->sendError(dao::getError(), true);
+            if(dao::isError())  return $this->sendError(dao::getError());
 
             $storyIdList = $this->story->batchCreate($stories);
             if(dao::isError()) return $this->sendError(dao::getError(), true);
@@ -459,7 +459,7 @@ class story extends control
     {
         if(!empty($_POST))
         {
-            $postData = $this->storyZen->buildStoryForActivate();
+            $postData = $this->storyZen->buildStoryForActivate($storyID);
             $changes  = $this->story->activate($storyID, $postData);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -818,7 +818,7 @@ class story extends control
     {
         if($_POST)
         {
-            $storyData = $this->storyZen->buildStoryForSubmitReview();
+            $storyData = $this->storyZen->buildStoryForSubmitReview($storyID);
             if(!$storyData) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $changes = $this->story->submitReview($storyID, $storyData);
@@ -876,7 +876,7 @@ class story extends control
 
         if(!empty($_POST))
         {
-            $postData = form::data($this->config->story->form->close)
+            $postData = form::data($this->config->story->form->close, $storyID)
                 ->stripTags($this->config->story->editor->close['id'], $this->config->allowedTags)
                 ->removeIF($this->post->closedReason != 'duplicate', 'duplicateStory')
                 ->get();
@@ -1294,7 +1294,7 @@ class story extends control
     {
         if(!empty($_POST))
         {
-            $story = form::data($this->config->story->form->assignTo)->get();
+            $story = form::data($this->config->story->form->assignTo, $storyID)->get();
             $this->story->assign($storyID, $story);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -1883,7 +1883,7 @@ class story extends control
             /* Create field lists. */
             if(!$productID or $browseType == 'bysearch')
             {
-                $this->config->story->dtable->fieldList['branch']['dataSource']           = array('module' => 'branch', 'method' => 'getAllPairs', 'params' => 1);
+                $this->config->story->dtable->fieldList['branch']['dataSource']           = array('module' => 'branch', 'method' => 'getAllPairs');
                 $this->config->story->dtable->fieldList['module']['dataSource']['method'] = 'getAllModulePairs';
                 $this->config->story->dtable->fieldList['module']['dataSource']['params'] = 'story';
 
@@ -1902,9 +1902,6 @@ class story extends control
 
         $this->story->replaceURLang($storyType);
 
-        $fileName = $this->lang->SRCommon;
-        if($storyType == 'requirement') $fileName = $this->lang->URCommon;
-        if($storyType == 'epic')        $fileName = $this->lang->ERCommon;
         $project  = null;
         $hasBranch = false;
         if($executionID)
@@ -1941,7 +1938,7 @@ class story extends control
                 $browseType = isset($this->lang->product->moreSelects[$browseType]) ? $this->lang->product->moreSelects[$browseType] : '';
             }
 
-            $fileName = $productName . $this->lang->dash . $browseType . $fileName;
+            $fileName = $productName . $this->lang->dash . $browseType . $this->lang->common->story;
         }
 
         /* Unset branch field.  */

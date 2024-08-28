@@ -16,7 +16,14 @@ featureBar
 (
     set::current('all'),
     set::linkParams("executionID={$execution->id}"),
-    isInModal() ? null : li(searchToggle(set::module('importBug')))
+);
+
+searchForm
+(
+    set::module('importBug'),
+    set::simple(true),
+    set::show(true),
+    set::onSearch(jsRaw("window.onSearchLinks.bind(null, 'importBug')"))
 );
 
 $footToolbar['items'][] = array(

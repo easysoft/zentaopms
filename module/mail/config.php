@@ -14,7 +14,7 @@ $config->mail->smtp->charset  = 'utf-8';    // Charset
 $config->mail->smtp->auth     = true;       // Need auth or not. true|false
 $config->mail->smtp->host     = 'localhost';// The smtp server host address.
 $config->mail->smtp->port     = '25';       // The smtp server host port.
-$config->mail->smtp->secure   = '';         // The type to encode datas, 'ssl' or 'tls' allowed
+$config->mail->smtp->secure   = 0;         // The type to encode datas, 'ssl' or 'tls' allowed
 $config->mail->smtp->username = '';         // The smtp user, may be a full email adress.
 $config->mail->smtp->password = '';         // The smtp user's password.
 

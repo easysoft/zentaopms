@@ -592,13 +592,19 @@ class userModel extends model
         $this->dao->begin();
 
         $userIdList = array();
-        foreach($users as $user)
+        $preCompany = 0;
+        foreach($users as $index => $user)
         {
             if(empty($user->account)) continue;
 
             $user->password = md5($user->password);
 
-            if($user->type == 'outside' && $user->new) $user->company = $this->createCompany($user->newCompany);
+            if($user->type == 'outside')
+            {
+                if($user->new) $user->company = $this->createCompany($user->newCompany);
+                if($this->post->company[$index] != 'ditto') $preCompany = $user->company;
+                if($this->post->company[$index] == 'ditto') $user->company = $preCompany;
+            }
 
             $this->dao->insert(TABLE_USER)->data($user, 'new,newCompany,group')->autoCheck()->exec();
             if(dao::isError()) return $this->rollback();

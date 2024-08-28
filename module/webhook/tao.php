@@ -122,7 +122,7 @@ class webhookTao extends webhookModel
         }
         elseif(isset($data->content))
         {
-            $text = $data->content->text;
+            $text = empty($data->content->text) ? '' : (string)$data->content->text;
             $text = substr($text, 0, strpos($text, '(http')) ? substr($text, 0, strpos($text, '(http')) : zget($users, $data->user, $this->app->user->realname) . $this->lang->action->label->{$action->action} . $this->lang->action->objectTypes[$action->objectType] . "[#{$action->objectID}::{$object->$field}]";
         }
         else

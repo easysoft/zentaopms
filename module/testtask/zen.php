@@ -151,7 +151,7 @@ class testtaskZen extends testtask
      */
     protected function buildTaskForEdit(int $taskID, int $productID): object
     {
-        $task = form::data($this->config->testtask->form->edit)
+        $task = form::data($this->config->testtask->form->edit, $taskID)
             ->add('id', $taskID)
             ->add('product', $productID)
             ->stripTags($this->config->testtask->editor->edit['id'], $this->config->allowedTags)
@@ -185,7 +185,7 @@ class testtaskZen extends testtask
      */
     protected function buildTaskForStart(int $taskID): object
     {
-        $task = form::data($this->config->testtask->form->start)
+        $task = form::data($this->config->testtask->form->start, $taskID)
             ->add('id', $taskID)
             ->stripTags($this->config->testtask->editor->start['id'], $this->config->allowedTags)
             ->get();
@@ -202,7 +202,7 @@ class testtaskZen extends testtask
      */
     protected function buildTaskForClose(int $taskID): object
     {
-        $task = form::data($this->config->testtask->form->close)
+        $task = form::data($this->config->testtask->form->close, $taskID)
             ->add('id', $taskID)
             ->stripTags($this->config->testtask->editor->close['id'], $this->config->allowedTags)
             ->get();
@@ -219,7 +219,7 @@ class testtaskZen extends testtask
      */
     protected function buildTaskForActivate(int $taskID): object
     {
-        $task = form::data($this->config->testtask->form->activate)
+        $task = form::data($this->config->testtask->form->activate, $taskID)
             ->add('id', $taskID)
             ->stripTags($this->config->testtask->editor->activate['id'], $this->config->allowedTags)
             ->get();
@@ -236,7 +236,7 @@ class testtaskZen extends testtask
      */
     protected function buildTaskForBlock(int $taskID): object
     {
-        $task = form::data($this->config->testtask->form->block)
+        $task = form::data($this->config->testtask->form->block, $taskID)
             ->add('id', $taskID)
             ->stripTags($this->config->testtask->editor->block['id'], $this->config->allowedTags)
             ->get();
@@ -703,7 +703,7 @@ class testtaskZen extends testtask
     {
         if($caseResult == 'fail')
         {
-            $link = inlink('results',"runID=$runID&caseID=$caseID&version=$version");
+            $link = inlink('runCase', "runID={$runID}&caseID={$caseID}&version={$version}");
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "loadModal('$link', 'runCaseModal')"));
         }
 

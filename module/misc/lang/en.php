@@ -114,7 +114,9 @@ $lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec
 $lang->misc->feature->promptLearnMore   = 'https://www.zentao.net/book/zentaopms/1097.html';
 
 /* Release Date. */
+$lang->misc->releaseDate['20.6']        = '2024-08-30';
 $lang->misc->releaseDate['20.5']        = '2024-08-16';
+$lang->misc->releaseDate['18.13']       = '2024-08-09';
 $lang->misc->releaseDate['20.4']        = '2024-08-02';
 $lang->misc->releaseDate['20.3.0']      = '2024-07-22';
 $lang->misc->releaseDate['20.2.0']      = '2024-07-10';
@@ -233,7 +235,9 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
+$lang->misc->feature->all['20.6'][]        = array('title' => "The workflow now allows for the configuration of multiple interfaces. The approval workflow can be customized to include conditional logic based on workflow fields. Bug fixes implemented.", 'desc' => '');
 $lang->misc->feature->all['20.5'][]        = array('title' => 'Document optimized; 23 new built-in metric items added.', 'desc' => '');
+$lang->misc->feature->all['18.13'][]       = array('title' => "Enhanced list views for My Work, Story, Task, and Bug, along with improved detail pages for Product and Project. ZenTao now offers compatibility with Dameng database. Copying Stories, Tasks, Bugs, and Test Cases now includes the ability to copy custom fields and values added through workflow customization. Bug fixes implemented.", 'desc' => '');
 $lang->misc->feature->all['20.4'][]        = array('title' => 'Add a new message center. Enhance release management. Implement branch and tag management. Enable additional signers in the approval workflow.', 'desc' => '');
 $lang->misc->feature->all['20.3.0'][]      = array('title' => "The pivot table functionality now supports custom drill-down capabilities. The requirement pool feature allows users to view a matrix of requirements at multiple levels, including requirement pool requirements, business requirements, user requirements, and development requirements. When changes occur in the upstream requirement pool, the downstream requirements will need to be manually confirmed. The product roadmap can now associate business requirements and user requirements at any level of the hierarchy. We've optimized the operation button logic for managing requirement pool requirements, business requirements, and user requirements. The search tag conditions for these different types of requirements have also been streamlined. Additionally, when restoring a previously deleted requirement, the system will automatically recalculate the stage of the upstream requirements.", 'desc' => '');
 $lang->misc->feature->all['20.2.0'][]      = array('title' => "This release included optimizations to the product matrix, new features to configure platform-level application settings, improvements to the approval process workflow, additions to the OR interface to capture more business requirements, the ability to track new roadmaps and the Charter projected phase for user stories, support for unlimited levels of business requirements split, new estimation capabilities for the development stage of business requirements, support for estimating delivery stage when distributing or decomposing OR requirements, the option to distribute OR requirements as business requirements, estimation for OR requirements and user requirements during upgrades, and a new TR4A review point added to the development stage.", 'desc' => '');

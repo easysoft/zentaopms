@@ -180,7 +180,7 @@ class projectrelease extends control
                 $this->config->release->edit->requiredFields = str_replace(',date', '', $this->config->release->edit->requiredFields);
             }
 
-            $releaseData = form::data($this->config->release->form->edit)->setIF($this->post->build === false, 'build', 0)->get();
+            $releaseData = form::data($this->config->release->form->edit, $releaseID)->setIF($this->post->build === false, 'build', 0)->get();
             $changes     = $this->release->update($releaseData, $release);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($changes)

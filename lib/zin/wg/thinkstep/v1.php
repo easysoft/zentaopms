@@ -9,11 +9,12 @@ class thinkStep  extends wg
         'action?: string="detail"',
         'addType?: string',
         'isRun?: bool=false',        // 是否是分析活动
+        'quoteQuestions?: array',    // 引用题目的下拉选项
     );
 
     protected function buildBody(): wg|array
     {
-        list($item, $action, $addType, $isRun) = $this->prop(array('item', 'action', 'addType', 'isRun'));
+        list($item, $action, $addType, $isRun, $quoteQuestions) = $this->prop(array('item', 'action', 'addType', 'isRun', 'quoteQuestions'));
 
         $step         = $addType ? null : $item;
         $questionType = $addType ? $addType : ($item->options->questionType ?? '');
@@ -21,8 +22,9 @@ class thinkStep  extends wg
         if($addType === 'transition' || !$addType && $item->type === 'transition') return thinkTransition(set::step($step), set::mode($action), set::isRun($isRun));
         if($questionType === 'input')      return thinkInput(set::step($step), set::questionType('input'), set::mode($action), set::isRun($isRun));
         if($questionType === 'radio')      return thinkRadio(set::step($step), set::questionType('radio'), set::mode($action), set::isRun($isRun));
-        if($questionType === 'checkbox')   return thinkCheckbox(set::step($step), set::questionType('checkbox'), set::mode($action), set::isRun($isRun));
+        if($questionType === 'checkbox')   return thinkCheckbox(set::step($step), set::questionType('checkbox'), set::mode($action), set::isRun($isRun), set::quoteQuestions($quoteQuestions));
         if($questionType === 'tableInput') return thinkTableInput(set::step($step), set::questionType('tableInput'), set::mode($action), set::isRun($isRun));
+        if($questionType === 'multicolumn') return thinkMulticolumn(set::step($step), set::questionType('multicolumn'), set::mode($action), set::isRun($isRun));
         return array();
     }
 

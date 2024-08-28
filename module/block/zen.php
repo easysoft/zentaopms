@@ -439,7 +439,7 @@ class blockZen extends block
         $yesterday = strtotime("-1 day");
         /* 获取昨日完成的任务数。 */
         $finishTask      = 0;
-        $finishTaskGroup = $this->loadModel('metric')->getResultByCode('count_of_daily_finished_task_in_user', array('user' => $this->app->user->account, 'year' => date('Y', $yesterday), 'month' => date('m', $yesterday), 'day' => date('d', $yesterday)), 'realtime', null, $this->config->vision);
+        $finishTaskGroup = $this->loadModel('metric')->getResultByCode('count_of_daily_finished_task_in_user', array('user' => $this->app->user->account, 'year' => date('Y', $yesterday), 'month' => date('m', $yesterday), 'day' => date('d', $yesterday)), 'cron', null, $this->config->vision);
         if(!empty($finishTaskGroup))
         {
             $finishTaskGroup = reset($finishTaskGroup);
@@ -448,7 +448,7 @@ class blockZen extends block
 
         /* 获取昨日解决的Bug数。 */
         $fixBug      = 0;
-        $fixBugGroup = $this->metric->getResultByCode('count_of_daily_fixed_bug_in_user', array('user' => $this->app->user->account, 'year' => date('Y', $yesterday), 'month' => date('m', $yesterday), 'day' => date('d', $yesterday)));
+        $fixBugGroup = $this->metric->getResultByCode('count_of_daily_fixed_bug_in_user', array('user' => $this->app->user->account, 'year' => date('Y', $yesterday), 'month' => date('m', $yesterday), 'day' => date('d', $yesterday)), 'cron', null, $this->config->vision);
         if(!empty($fixBugGroup))
         {
             $fixBugGroup = reset($fixBugGroup);

@@ -234,7 +234,7 @@ class product extends control
     {
         if(!empty($_POST))
         {
-            $productData = $this->productZen->buildProductForEdit();
+            $productData = $this->productZen->buildProductForEdit($productID);
 
             $this->product->update($productID, $productData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -309,7 +309,7 @@ class product extends control
     {
         if(!empty($_POST))
         {
-            $productData = $this->productZen->buildProductForActivate();
+            $productData = $this->productZen->buildProductForActivate($productID);
 
             $this->product->activate($productID, $productData, $this->post->comment);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -342,7 +342,7 @@ class product extends control
     {
         if(!empty($_POST))
         {
-            $productData = $this->productZen->buildProductForClose();
+            $productData = $this->productZen->buildProductForClose($productID);
 
             $this->product->close($productID, $productData, $this->post->comment);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -1051,18 +1051,14 @@ class product extends control
      *
      * @param  int    $productID
      * @param  string $branch
-     * @param  int    $planID
-     * @param  string $fieldID
-     * @param  int    $needCreate
-     * @param  string $expired
-     * @param  string $param
+     * @param  string $params
+     * @param  bool   $skipParent
      * @access public
      * @return void
      */
-    public function ajaxGetPlans(int $productID, string $branch = '', int $planID = 0, string $fieldID = '', int $needCreate = 0, string $expired = '', string $param = '')
+    public function ajaxGetPlans(int $productID, string $branch = '', string $params = '', bool $skipParent = false)
     {
-        $param = strtolower($param);
-        $plans = $this->loadModel('productplan')->getPairs($productID, empty($branch) ? 'all' : $branch, $expired, strpos($param, 'skipparent') !== false);
+        $plans = $this->loadModel('productplan')->getPairs($productID, empty($branch) ? 'all' : $branch, $params, $skipParent);
 
         $items = array();
         foreach($plans as $id => $name)

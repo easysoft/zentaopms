@@ -219,7 +219,7 @@ class myModel extends model
         $contribute->myBugTotal           = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_BUG)->where('assignedTo')->eq($account)->andWhere('deleted')->eq(0)->fetch('count');
         $contribute->docCreatedTotal      = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_DOC)->where('addedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
         $contribute->ownerProductTotal    = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_PRODUCT)->where('PO')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
-        $contribute->involvedProjectTotal = (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_PROJECT)
+        $contribute->involvedProjectTotal = (int)$this->dao->select('COUNT(DISTINCT id) AS count')->from(TABLE_PROJECT)
             ->where('deleted')->eq('0')
             ->andWhere('type')->eq('project')
             ->andWhere('id', true)->in($inTeam)
@@ -280,6 +280,18 @@ class myModel extends model
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t2.deleted')->eq(0)
+                ->andWhere('t1.id')->in($objectIdList)
+                ->orderBy('t1.' . $orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
+        if($objectType == 'feedback' || $objectType == 'ticket')
+        {
+            return $this->dao->select('t1.*,t2.dept')->from($this->config->objectTables[$module])->alias('t1')
+                ->leftJoin(TABLE_USER)->alias('t2')->on('t1.openedBy = t2.account')
+                ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('t3.deleted')->eq(0)
                 ->andWhere('t1.id')->in($objectIdList)
                 ->orderBy('t1.' . $orderBy)
                 ->page($pager)
@@ -803,7 +815,8 @@ class myModel extends model
 
         $grantProducts = $this->loadModel('feedback')->getGrantProducts();
 
-        $this->config->ticket->search['module']    = 'workTicket';
+        $queryName = $this->app->rawMethod . 'Ticket';
+        $this->config->ticket->search['module']    = $queryName;
         $this->config->ticket->search['queryID']   = $queryID;
         $this->config->ticket->search['actionURL'] = $actionURL;
         $this->config->ticket->search['params']['product']['values'] = $grantProducts;

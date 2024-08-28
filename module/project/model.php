@@ -1666,7 +1666,7 @@ class projectModel extends model
      * @access public
      * @return void
      */
-    public function unlinkStoryByType($projectID, $storyType)
+    public function unlinkStoryByType($projectID = 0, $storyType = '')
     {
         $idList = $this->dao->select('id')->from(TABLE_PROJECT)
             ->where('deleted')->eq(0)
@@ -1677,11 +1677,11 @@ class projectModel extends model
 
         $storyIdList = $this->dao->select('t1.story')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-            ->where('t1.project')->in($idList)
-            ->andWhere('t2.type')->in($storyType)
+            ->where('t2.type')->in($storyType)
+            ->beginIF($projectID > 0)->andWhere('t1.project')->in($idList)->fi()
             ->fetchPairs();
 
-        if($storyIdList) $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('story')->in($storyIdList)->andWhere('project')->in($idList)->exec();
+        if($storyIdList) $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('story')->in($storyIdList)->beginIF($projectID > 0)->andWhere('project')->in($idList)->fi()->exec();
     }
 
     /**
@@ -1748,16 +1748,6 @@ class projectModel extends model
 
         $accounts = $this->projectTao->insertMember($members, $projectID, $oldJoin);
         $this->projectTao->updateMemberView($projectID, $accounts, $oldJoin);
-
-        /* Remove execution members. */
-        if($this->post->removeExecution == 'yes' and !empty($childSprints) and !empty($removedAccounts))
-        {
-            $this->dao->delete()->from(TABLE_TEAM)
-                ->where('root')->in($childSprints)
-                ->andWhere('type')->eq('execution')
-                ->andWhere('account')->in($removedAccounts)
-                ->exec();
-        }
 
         if(empty($project->multiple) and $project->model != 'waterfall') $this->loadModel('execution')->syncNoMultipleSprint($projectID);
 

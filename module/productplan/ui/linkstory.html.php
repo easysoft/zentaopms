@@ -19,11 +19,10 @@ $cols['title']['nestedToggle'] = true;
 $cols['title']['data-toggle']  = 'modal';
 $cols['title']['data-size']    = 'lg';
 $cols['plan']['name']          = 'planTitle';
+$cols['plan']['sortType']      = false;
 $cols['assignedTo']['type']    = 'user';
 $cols['module']['type']        = 'text';
 $cols['module']['map']         = $modules;
-
-foreach($cols as $colKey => $colConfig) $cols[$colKey]['sort'] = true;
 
 foreach($allStories as $story) $story->estimate = $story->estimate . $config->hourUnit;
 
@@ -43,6 +42,8 @@ dtable
     set::userMap($users),
     set::cols($cols),
     set::data(array_values($allStories)),
+    set::orderBy($orderBy),
+    set::sortLink(inlink('linkStory', "planID={$plan->id}&browseType=$browseType&param=$param&orderBy={name}_{sortType}")),
     set::noNestedCheck(),
     set::onRenderCell(jsRaw('window.renderStoryCell')),
     set::extraHeight('+144'),

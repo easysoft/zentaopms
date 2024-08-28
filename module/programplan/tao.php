@@ -532,7 +532,7 @@ class programplanTao extends programplanModel
         $plan->stageBy       = empty($project) ? 'product' : $project->stageBy;
         $plan->version       = 1;
         $plan->parentVersion = $plan->parent == 0 ? 0 : $this->dao->findByID($plan->parent)->from(TABLE_PROJECT)->fetch('version');
-        $plan->team          = substr($plan->name,0, 30);
+        $plan->team          = mb_substr($plan->name, 0, 30);
         $plan->openedBy      = $account;
         $plan->openedDate    = helper::now();
         $plan->openedVersion = $this->config->version;

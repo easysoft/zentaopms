@@ -153,17 +153,23 @@ $fields->field('productsBox')
         'from'              => 'execution'
     ));
 
-$fields->field('PO')
-    ->label($lang->execution->PO)
-    ->required(in_array('PO', explode(',', $config->execution->edit->requiredFields)))
-    ->items(data('poUsers'))
-    ->value(data('execution.PO'));
+if($execution->attribute != 'review')
+{
+    $fields->field('PO')
+        ->label($lang->execution->PO)
+        ->required(in_array('PO', explode(',', $config->execution->edit->requiredFields)))
+        ->items(data('poUsers'))
+        ->value(data('execution.PO'));
+}
 
-$fields->field('QD')
-    ->label($lang->execution->QD)
-    ->required(in_array('QD', explode(',', $config->execution->edit->requiredFields)))
-    ->items(data('qdUsers'))
-    ->value(data('execution.QD'));
+if(!in_array($execution->attribute, array('request', 'design', 'review')))
+{
+    $fields->field('QD')
+        ->label($lang->execution->QD)
+        ->required(in_array('QD', explode(',', $config->execution->edit->requiredFields)))
+        ->items(data('qdUsers'))
+        ->value(data('execution.QD'));
+}
 
 $fields->field('PM')
     ->label($lang->execution->PM)
@@ -171,11 +177,14 @@ $fields->field('PM')
     ->items(data('pmUsers'))
     ->value(data('execution.PM'));
 
-$fields->field('RD')
-    ->label($lang->execution->RD)
-    ->required(in_array('RD', explode(',', $config->execution->edit->requiredFields)))
-    ->items(data('rdUsers'))
-    ->value(data('execution.RD'));
+if(!in_array($execution->attribute, array('request', 'design', 'review')))
+{
+    $fields->field('RD')
+        ->label($lang->execution->RD)
+        ->required(in_array('RD', explode(',', $config->execution->edit->requiredFields)))
+        ->items(data('rdUsers'))
+        ->value(data('execution.RD'));
+}
 
 $fields->field('team')
     ->width('full')

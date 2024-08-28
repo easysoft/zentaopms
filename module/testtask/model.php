@@ -1041,6 +1041,54 @@ class testtaskModel extends model
     }
 
     /**
+     * 获取用例以及场景数据。
+     * Get cases with scenes data.
+     *
+     * @param  int   $productID
+     * @param  array $runs
+     * @access public
+     * @return array
+     */
+    public function getSceneCases($productID, $runs)
+    {
+        $scenes = $this->dao->select('*')->from(TABLE_SCENE)
+            ->where('deleted')->eq('0')
+            ->andWhere('product')->eq($productID)
+            ->orderBy('grade_desc, sort_asc')
+            ->fetchAll('id');
+
+        $displayScenes = array();
+        foreach($runs as $run)
+        {
+            if(!empty($run->scene)) $displayScenes[] = $run->scene;
+            $run->parent  = !empty($run->scene) ? 'scene-' . $scenes[$run->scene]->id : 0;
+            $run->isScene = false;
+        }
+
+        foreach($scenes as $scene)
+        {
+            foreach($displayScenes as $displayScene)
+            {
+                if(str_contains($scene->path, $displayScene . ','))
+                {
+                    $displayScenes += explode(',', trim($scene->path, ','));
+                }
+            }
+        }
+
+        $displayScenes = array_unique($displayScenes);
+        foreach($scenes as $id => $scene)
+        {
+            if(!in_array($id, $displayScenes)) unset($scenes[$id]);
+            $scene->parent  = !empty($scene->parent) ? 'scene-' . $scene->parent : 0;
+            $scene->id      = 'scene-' . $scene->id;
+            $scene->isScene = true;
+        }
+
+        return array_merge($runs, $scenes);
+    }
+
+    /**
      * 获取一个测试单关联的用例。
      * Get cases associated with a testtask.
      *
@@ -1741,7 +1789,7 @@ class testtaskModel extends model
         $suiteCase = new stdclass();
         $testRun   = new stdclass();
         $testRun->task   = $taskID;
-        $testRun->status = 'done';
+        $testRun->status = 'normal';
 
         $existSuites = $suiteNames ? $this->getExistSuitesOfUnitResult($suiteNames, $productID, $auto) : array();
 
@@ -2207,7 +2255,7 @@ class testtaskModel extends model
             $case->steps         = $steps;
             $case->lastRunResult = $result->caseResult;
             if(isset($caseResult->id))  $case->id      = $caseResult->id;
-            if(!isset($caseResult->id)) $case->product = $productID;
+            $case->product = $productID;
 
             $caseTitles[$suiteIndex][]        = $case->title;
             $cases[$suiteIndex][$caseIndex]   = $case;

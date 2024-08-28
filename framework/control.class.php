@@ -44,7 +44,6 @@ class control extends baseControl
         /* Code for task #9224. Set requiredFields for workflow. */
         if($this->dbh && ($this->app->isServing() || (defined('RUN_MODE') and RUN_MODE == 'api')))
         {
-            $this->extendRequireFields();
             $this->extendExportFields();
             $this->extendEditorFields();
 
@@ -495,7 +494,7 @@ class control extends baseControl
         {
             parse_str($extras, $result);
             $html  = $this->flow->buildExtendHtmlValue($object, zget($result, 'position', 'info'));
-            $html .= $this->appendExtendCssAndJS($moduleName, $methodName);
+            $html .= $this->appendExtendCssAndJS($moduleName, $methodName, $object);
         }
         else
         {
@@ -516,10 +515,11 @@ class control extends baseControl
      * @param  zin\fieldList $fields
      * @param  string        $moduleName
      * @param  string        $methodName
+     * @param  object        $object
      * @access public
      * @return zin\fieldList
      */
-    public function appendExtendFields(zin\fieldList $fields, string $moduleName = '', string $methodName = ''): zin\fieldList
+    public function appendExtendFields(zin\fieldList $fields, string $moduleName = '', string $methodName = '', object $object = null): zin\fieldList
     {
         if($this->config->edition == 'open') return $fields;
         if(!empty($this->app->installing) || !empty($this->app->upgrading)) return $fields;
@@ -533,7 +533,8 @@ class control extends baseControl
         $action = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
         if(!$action || $action->extensionType != 'extend') return $fields;
 
-        $fieldList = $this->workflowaction->getFields($flow->module, $action->action);
+        $uiID      = $this->loadModel('workflowlayout')->getUIByData($flow->module, $action->action, $object);
+        $fieldList = $this->workflowaction->getFields($flow->module, $action->action, true, null, $uiID);
         return $this->loadModel('flow')->buildFormFields($fields, $fieldList);
     }
 
@@ -543,10 +544,11 @@ class control extends baseControl
      *
      * @param  string $moduleName
      * @param  string $methodName
+     * @param  object $object
      * @access public
      * @return string
      */
-    public function appendExtendCssAndJS(string $moduleName = '', string $methodName = ''): string
+    public function appendExtendCssAndJS(string $moduleName = '', string $methodName = '', object $object = null): string
     {
         if($this->config->edition == 'open') return '';
         if(!empty($this->app->installing) || !empty($this->app->upgrading)) return '';
@@ -560,7 +562,8 @@ class control extends baseControl
         $action = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
         if(!$action || $action->extensionType == 'none') return '';
 
-        $fieldList = $this->workflowaction->getFields($flow->module, !empty($action->action) ? $action->action: '');
+        $uiID      = $this->loadModel('workflowlayout')->getUIByData($flow->module, !empty($action->action) ? $action->action: '', $object);
+        $fieldList = $this->loadModel('workflowaction')->getFields($flow->module, !empty($action->action) ? $action->action: '', true, null, $uiID);
 
         $html = '';
         if(!empty($flow->css))   $html .= "<style>$flow->css</style>";
@@ -593,8 +596,6 @@ class control extends baseControl
         $moduleName = $moduleName ? $moduleName : $this->app->rawModule;
         $methodName = $methodName ? $moduleName : $this->app->rawMethod;
 
-        if(!$object) $object = new stdclass();
-
         $this->loadModel('flow');
         $this->loadModel('workflowfield');
 
@@ -604,9 +605,11 @@ class control extends baseControl
         $action = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
         if(!$action || $action->extensionType != 'extend') return array();
 
+        $uiID = is_object($object) ? $this->loadModel('workflowlayout')->getUIByData($flow->module, $action->action, $object) : 0;
+
         $wrapControl  = array('textarea', 'richtext', 'file');
-        $fieldList    = $this->workflowaction->getFields($flow->module, $action->action);
-        $layouts      = $this->loadModel('workflowlayout')->getFields($moduleName, $methodName);
+        $fieldList    = $this->workflowaction->getFields($flow->module, $action->action, true, $object, $uiID);
+        $layouts      = $this->loadModel('workflowlayout')->getFields($moduleName, $methodName, $uiID);
         $notEmptyRule = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
 
         if($layouts)
@@ -622,13 +625,13 @@ class control extends baseControl
                 if($field->buildin || !$field->show || !isset($layouts[$field->field]) || (!empty($field->position) && $position != $field->position)) unset($fieldList[$key]);
 
                 if((is_numeric($field->default) || $field->default) && empty($field->defaultValue)) $field->defaultValue = $field->default;
-                if(empty($object->{$field->field})) $object->{$field->field} = $field->defaultValue;
+                if($object && empty($object->{$field->field})) $object->{$field->field} = $field->defaultValue;
                 if(in_array($field->type, $this->config->workflowfield->numberTypes)) $field = $this->workflowfield->processNumberField($field);
 
                 $field->required = $field->readonly || ($notEmptyRule && strpos(",$field->rules,", ",{$notEmptyRule->id},") !== false);
                 $field->control  = $this->flow->buildFormControl($field);
                 $field->items    = $field->options ? array_filter($field->options) : null;
-                $field->value    = !empty($object) ? zget($object, $field->field, '') : $defaultValue;
+                $field->value    = !empty($object) ? zget($object, $field->field, '') : '';
                 $field->width    = $field->width != 'auto' ? $field->width : 'full';
             }
 
@@ -684,13 +687,15 @@ class control extends baseControl
      * 将工作流扩展的必填字段加到requiredFields里，类似批量操作的会在checkFlow之前手动校验。
      * append workflow extension fields to requiredFields.
      *
+     * @param int     $objectID
      * @access public
      * @return void
      */
-    public function extendRequireFields()
+    public function extendRequireFields(int $objectID = 0)
     {
-        $fields       = $this->loadModel('workflowaction')->getFields($this->moduleName, $this->methodName);
-        $layouts      = $this->loadModel('workflowlayout')->getFields($this->moduleName, $this->methodName);
+        $uiID         = $this->loadModel('workflowlayout')->getUIByDataID($this->moduleName, $this->methodName, $objectID);
+        $fields       = $this->loadModel('workflowaction')->getFields($this->moduleName, $this->methodName, true, null, $uiID);
+        $layouts      = $this->loadModel('workflowlayout')->getFields($this->moduleName, $this->methodName, $uiID);
         $notEmptyRule = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
         foreach($fields as $field)
         {

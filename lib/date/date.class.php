@@ -43,7 +43,7 @@ class date
      */
     public static function today()
     {
-        return date(DT_DATE2, time());
+        return date(DT_DATE1, time());
     }
 
     /**

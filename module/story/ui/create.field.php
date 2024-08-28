@@ -45,6 +45,7 @@ if(isset($createFields['branch']) && $type == 'story')
 }
 
 $fields->field('parent')
+    ->id('parentBox')
     ->hidden(data('hiddenParent'))
     ->items($createFields['parent']['options'])
     ->value($createFields['parent']['default']);
@@ -132,7 +133,7 @@ if(!(isset($createFields['branch']) && $type == 'story') && isset($createFields[
         ->control('inputGroup')
         ->items(false)
         ->itemBegin('plan')->control('picker')->id('planIdBox')->items($createFields['plan']['options'])->value($createFields['plan']['default'])->multiple($type != 'story')->itemEnd()
-        ->item(empty($createFields['plan']['options']) ? field()->control('btn')->icon('plus')->url(createLink('productplan', 'create', 'productID=' . data('productID') . '&branch=' . data('branch')))->set(array('data-toggle' => 'modal', 'data-size' => 'lg'))->set('title', $lang->productplan->create) : null)
+        ->item(empty($createFields['plan']['options']) && hasPriv('productplan', 'create') ? field()->control('btn')->icon('plus')->url(createLink('productplan', 'create', 'productID=' . data('productID') . '&branch=' . data('branch')))->set(array('data-toggle' => 'modal', 'data-size' => 'lg'))->set('title', $lang->productplan->create) : null)
         ->item(empty($createFields['plan']['options']) ? field()->control('btn')->icon('refresh')->id("loadProductPlans")->set('title', $lang->refresh) : null);
 }
 
@@ -151,12 +152,14 @@ $fields->field('sourceNote')
 $fields->field('feedbackBy')
     ->foldable()
     ->className('feedbackBox')
+    ->className(!in_array($createFields['source']['default'], $config->story->feedbackSource) ? 'hidden' : '')
     ->id('feedbackBy')
     ->value($createFields['feedbackBy']['default']);
 
 $fields->field('notifyEmail')
     ->foldable()
     ->className('feedbackBox')
+    ->className(!in_array($createFields['source']['default'], $config->story->feedbackSource) ? 'hidden' : '')
     ->id('notifyEmail')
     ->value($createFields['notifyEmail']['default']);
 

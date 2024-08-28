@@ -1,11 +1,13 @@
 <?php
-class createPage extends page
+class batchCreatePage extends page
 {
     public function __construct($webdriver)
     {
         parent::__construct($webdriver);
         $xpath = array(
-            'settings' => "//*[@id='navbar']//a[@data-id='settings']/span"
+            'account'       => "//*[@id='account_0']",
+            'realname'      => "//*[@id='realname_0']",
+            'passwordfield' => "//*[@id='passwordfield_0']",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }

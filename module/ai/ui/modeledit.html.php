@@ -10,6 +10,7 @@ $allCredFields      = array_unique(array_reduce((array)$config->ai->vendorList, 
 jsVar('window.vendorList',     $config->ai->vendorList);
 jsVar('window.vendorListLang', $lang->ai->models->vendorList);
 jsVar('window.vendorTipsLang', $lang->ai->models->vendorTips);
+jsVar('window.modelData',      $model);
 
 formPanel
 (

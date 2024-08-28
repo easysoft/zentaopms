@@ -318,6 +318,7 @@ $lang->task->error->beginGtExecution  = "任务开始日期应小于等于%s的�
 $lang->task->error->endGtExecution    = "任务截止日期应小于等于%s的结束日期：%s。";
 $lang->task->error->endLtExecution    = "任务截止日期应大于等于%s的开始日期：%s。";
 $lang->task->error->dateExceed        = "任务%s的计划日期超过该{$lang->execution->common}计划日期，将自动改为{$lang->execution->common}的计划日期。";
+$lang->task->error->length            = "长度超过了%d个字符，无法保存，请修改后再试";
 
 /* Report. */
 $lang->task->report         = new stdclass();

@@ -63,9 +63,9 @@ $('body').off('click', '.dropmenu-tree .dropmenu-item').on('click', '.dropmenu-t
     openUrl(currentLink, {app: appTab});
 })
 
-$('.repoDropDownMenu').on('click', function()
+window.dropdownClick = function(event)
 {
-    const url  = $(this).data('link');
+    const url  = $(event).data('link');
     const file = $('#monacoTabs .nav-item .active').attr('href').substring(5).replace(/-/g, '=');
     if(url.indexOf('blame') >=0 && url.indexOf('download') == -1)
     {
@@ -75,8 +75,9 @@ $('.repoDropDownMenu').on('click', function()
     {
         window.open(url.replace('{path}', file), '_self');
     }
+
     return;
-})
+}
 
 /**
  * 打开新tab。

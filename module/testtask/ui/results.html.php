@@ -264,7 +264,6 @@ foreach($results as $i => $result)
                             (
                                 setClass('btn h-7 px-6 ml-8 to-bug-button'),
                                 set::type('primary'),
-                                set('data-dismiss', 'modal'),
                                 on::click('createBug'),
                                 $lang->testcase->createBug
                             )

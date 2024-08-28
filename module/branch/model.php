@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
- * The model file of branch module of ZenTaoCMS.
+ * The model file of branch module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
@@ -262,7 +262,7 @@ class branchModel extends model
         $this->dao->update(TABLE_BRANCH)->data($branch)
             ->where('id')->eq($branchID)
             ->batchCheck($this->config->branch->edit->requiredFields, 'notempty')
-            ->checkIF(!empty($branch->name)&& $branch->name != $oldBranch->name, 'name', 'unique', "product = $oldBranch->product")
+            ->checkIF(!empty($branch->name) && $branch->name != $oldBranch->name, 'name', 'unique', "product = $oldBranch->product && id != $oldBranch->id")
             ->exec();
         if(dao::isError()) return false;
 

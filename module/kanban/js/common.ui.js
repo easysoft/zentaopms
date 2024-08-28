@@ -39,11 +39,11 @@ window.changeKanbanType = function()
     const url  = $.createLink('kanban', 'create', 'spaceID=' + spaceID + '&type=' + type);
     loadPartial(url, '#WIPCountBox, #spaceBox, #nameBox, #ownerBox, #teamBox, #fixedColBox, #autoColBox, #archiveBox, #manageProgressBox, #alignmentBox, #descBox, #whitelistBox', {success: function()
     {
-        waitDom('#spaceBox [name=space]', function()
+        setTimeout(function()
         {
             const copySpaceID = $('#spaceBox input[name=space]').val();
             $('#spaceBox input[name=space]').zui('picker').$.setValue(copySpaceID);
-        });
+        }, 10)
     }});
 }
 
@@ -69,10 +69,19 @@ window.changeKanbanSpace = function()
     }
     else
     {
-        url = $.createLink('kanban', 'ajaxLoadUsers', 'spaceID=' + spaceID + '&field=owner');
+        const url = $.createLink('kanban', 'ajaxLoadUsers', 'spaceID=' + spaceID + '&field=owner');
         $.getJSON(url, function(data)
         {
             $('[name=owner]').zui('picker').render({items: data});
+        });
+    }
+
+    if(config.currentMethod == 'space')
+    {
+        const getTeamUrl = $.createLink('kanban', 'ajaxGetSpaceTeam', 'spaceID=' + spaceID);
+        $.getJSON(getTeamUrl, function(team)
+        {
+            $('[name^=team]').zui('picker').$.setValue(team)
         });
     }
 }

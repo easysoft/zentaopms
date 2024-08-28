@@ -1015,16 +1015,18 @@ class bugZen extends bug
         $productID   = (int)$bug->productID;
         $branch      = (string)$bug->branch;
         $moduleID    = (int)$bug->moduleID;
+        $projectID   = (int)$bug->projectID;
         $executionID = (int)$bug->executionID;
 
-        if($executionID)
+        if($executionID || $projectID)
         {
-            $stories = $this->story->getExecutionStoryPairs($executionID, $productID, $branch, '', 'full', 'all', 'story', false);
+            $stories = $this->story->getExecutionStoryPairs($executionID ? $executionID : $projectID, $productID, $branch, '', 'full', 'all', 'story', false);
         }
         else
         {
             $stories = $this->story->getProductStoryPairs($productID, $branch, $moduleID, 'active,closed', 'id_desc', 0, '', 'story', false);
         }
+
         if(!isset($stories[$bug->storyID]))
         {
             $bugStory = $this->story->fetchById($bug->storyID);
@@ -1213,10 +1215,17 @@ class bugZen extends bug
             $assignedToList = array_filter($assignedToList);
             if(empty($assignedToList)) $assignedToList = $this->user->getPairs('devfirst|noclosed');
         }
-        if(!isset($openedBuilds[$bug->openedBuild]))
+        $bugOpenedBuilds = explode(',', $bug->openedBuild);
+        if(!empty($bugOpenedBuilds))
         {
-            $build = $this->build->getByID((int)$bug->openedBuild);
-            if($build) $openedBuilds[$bug->openedBuild] = $build->name;
+            foreach($bugOpenedBuilds as $bugOpenedBuild)
+            {
+                if(!isset($openedBuilds[$bugOpenedBuild]))
+                {
+                    $build = $this->build->getByID((int)$bugOpenedBuild);
+                    if($build) $openedBuilds[$bugOpenedBuild] = $build->name;
+                }
+            }
         }
         $openedBuilds = $this->build->addReleaseLabelForBuilds($bug->product, $openedBuilds);
 
@@ -1272,7 +1281,7 @@ class bugZen extends bug
      */
     protected function buildBugForResolve(object $oldBug): object
     {
-        $bug = form::data($this->config->bug->form->resolve)
+        $bug = form::data($this->config->bug->form->resolve, $oldBug->id)
             ->setDefault('assignedTo', $oldBug->openedBy)
             ->setDefault('resolvedDate', helper::now())
             ->add('id',        $oldBug->id)

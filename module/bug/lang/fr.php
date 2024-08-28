@@ -440,6 +440,7 @@ $lang->bug->notice->delayWarning          = " <strong class='text-danger'> Retar
 $lang->bug->notice->skipNotActive         = "Bug %s has/have been resolved or closed, it won't be changed again";
 
 $lang->bug->error = new stdclass();
-$lang->bug->error->notExist       = "Bug doesn't exist.";
-$lang->bug->error->cannotActivate = 'Bugs with a status other than Resolved or Closed cannot be activated.';
-$lang->bug->error->stepsNotEmpty  = "The reproduction step cannot be empty.";
+$lang->bug->error->notExist             = "Bug doesn't exist.";
+$lang->bug->error->cannotActivate       = 'Bugs with a status other than Resolved or Closed cannot be activated.';
+$lang->bug->error->stepsNotEmpty        = "The reproduction step cannot be empty.";
+$lang->bug->error->duplicateBugNotExist = 'The duplicate bug does not exist.';

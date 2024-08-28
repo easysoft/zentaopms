@@ -33,10 +33,11 @@ class taskEntry extends entry
         $task = $data->data->task;
 
         if(!empty($task->children)) $task->children = array_values((array)$task->children);
-        if($task->parent > 0) $task->parentPri = $this->dao->select('pri')->from(TABLE_TASK)->where('id')->eq($task->parent)->fetch('pri');
+        if($task->parent > 0) $task->parentPri = $this->dao->findById($task->parent)->from(TABLE_TASK)->fetch('pri');
 
         /* Set execution name */
-        $task->executionName = $data->data->execution->name;
+        $task->executionName   = $data->data->execution->name;
+        $task->executionStatus = $data->data->execution->status;
 
         /* Set module title */
         $moduleTitle = '';
@@ -87,8 +88,6 @@ class taskEntry extends entry
         $task->preAndNext['pre']  = $preAndNext->pre  ? $preAndNext->pre->id : '';
         $task->preAndNext['next'] = $preAndNext->next ? $preAndNext->next->id : '';
 
-        $execution             = $this->loadModel('project')->getByID($task->execution, 'execution,sprint');
-        $task->executionStatus = $execution->status;
 
         return $this->send(200, $this->format($task, 'deadline:date,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,realStarted:time,finishedBy:user,finishedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,lastEditedBy:user,lastEditedDate:time,deleted:bool,mailto:userList'));
     }

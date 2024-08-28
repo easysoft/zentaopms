@@ -33,14 +33,9 @@ class repoModel extends model
 
         if($acl == 'private')
         {
-            $userProjects = explode(',', $this->app->user->view->projects);
             $userProducts = explode(',', $this->app->user->view->products);
-            $repoProjects = explode(',', $repo->projects);
             $repoProducts = explode(',', $repo->product);
-
-            $sameProjects = array_intersect($userProjects, $repoProjects);
-            $sameProducts = array_intersect($userProducts, $repoProducts);
-            if(!empty($sameProjects) || !empty($sameProducts)) return true;
+            if(!array_intersect($userProducts, $repoProducts)) return true;
         }
 
         if(!empty($repo->acl->groups))

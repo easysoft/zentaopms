@@ -81,7 +81,7 @@ class header extends wg
         );
     }
 
-    static function userBar()
+    public static function userBar()
     {
         global $lang, $app, $config;
 
@@ -238,7 +238,6 @@ class header extends wg
             ),
 
             set::id('userMenu'),
-            set::trigger('hover'),
             set::placement('bottom-end'),
             set::menu(array('style' => array('color' => 'var(--color-fore)'))),
             set::strategy('fixed'),
@@ -247,7 +246,7 @@ class header extends wg
         );
     }
 
-    static function messageBar()
+    public static function messageBar()
     {
         global $app, $lang, $config;
 
@@ -287,7 +286,7 @@ class header extends wg
         );
     }
 
-    static function quickAddMenu()
+    public static function quickAddMenu()
     {
         global $app, $config, $lang;
 
@@ -462,7 +461,6 @@ class header extends wg
 
             set::id('quickAddMenu'),
             set::menu(array('style' => array('color' => 'var(--color-fore)'))),
-            set::trigger('hover'),
             set::placement('bottom'),
             set::strategy('fixed'),
             set::arrow(true),

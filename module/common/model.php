@@ -356,11 +356,12 @@ class commonModel extends model
      *
      * @param  string $module
      * @param  string $method
+     * @param  int    $objectID
      * @static
      * @access public
      * @return array
      */
-    public static function formConfig(string $module, string $method): array
+    public static function formConfig(string $module, string $method, int $objectID = 0): array
     {
         global $config, $app;
         if($config->edition == 'open') return array();
@@ -368,7 +369,7 @@ class commonModel extends model
         $formConfig = array();
         $common     = new self();
         $required   = $common->dao->select('*')->from(TABLE_WORKFLOWRULE)->where('type')->eq('system')->andWhere('rule')->eq('notempty')->fetch();
-        $fields     = $common->loadModel('flow')->getExtendFields($module, $method);
+        $fields     = $common->loadModel('flow')->getExtendFields($module, $method, $objectID);
 
         $type       = 'string';
         foreach($fields as $fieldObject)
@@ -1296,7 +1297,7 @@ eof;
          * The following pages can be allowed to open in non-iframe, so ignore these pages.
          */
         $module     = $this->app->getModuleName();
-        $whitelist  = is_string($whitelist) ? $whitelist : '|index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-preview|file-uploadimages|file-ajaxwopifiles|report-annualdata|misc-captcha|execution-printkanban|traincourse-ajaxuploadlargefile|traincourse-playvideo|screen-view|zanode-create|screen-ajaxgetchart|ai-chat|integration-wopi|instance-terminal|';
+        $whitelist  = is_string($whitelist) ? $whitelist : '|index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-preview|file-uploadimages|file-ajaxwopifiles|report-annualdata|misc-captcha|execution-printkanban|traincourse-ajaxuploadlargefile|traincourse-playvideo|screen-view|zanode-create|screen-ajaxgetchart|ai-chat|integration-wopi|instance-terminal|conference-getconferencepermissions|';
         $iframeList = '|cron-index|zanode-create|';
 
         if(strpos($iframeList, "|{$module}-{$method}|") === false && (strpos($whitelist, "|{$module}|") !== false || strpos($whitelist, "|{$module}-{$method}|") !== false)) return true;
@@ -2164,6 +2165,11 @@ eof;
                 foreach($menu['subMenu'] as $key1 => $subMenu)
                 {
                     $lang->$moduleName->$menuKey->{$label}['subMenu']->$key1 = static::setMenuVarsEx($subMenu, $objectID, $params);
+                    if(!isset($subMenu['dropMenu'])) continue;
+                    foreach($subMenu['dropMenu'] as $key2 => $dropMenu)
+                    {
+                        $lang->$moduleName->$menuKey->{$label}['subMenu']->$key1['dropMenu']->$key2 = static::setMenuVarsEx($dropMenu, $objectID, $params);
+                    }
                 }
             }
 
@@ -3532,7 +3538,7 @@ eof;
         if(!$config->message->browser->turnon) return;
 
         $showCount   = $config->message->browser->count;
-        $unreadCount = $app->dbh->query("SELECT COUNT(1) as count FROM " . TABLE_NOTIFY . " WHERE `objectType` = 'message' AND status != 'read' AND `toList` = ',{$app->user->account},'")->fetch()->count;
+        $unreadCount = $app->dbh->query("SELECT COUNT(1) AS `count` FROM " . TABLE_NOTIFY . " WHERE `objectType` = 'message' AND status != 'read' AND `toList` = ',{$app->user->account},'")->fetch()->count;
         $dotStyle    = static::getDotStyle($showCount != '0', $unreadCount);
         if($unreadCount > 99) $unreadCount = '99+';
 

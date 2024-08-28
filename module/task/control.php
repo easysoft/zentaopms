@@ -258,9 +258,7 @@ class task extends control
 
         if(!empty($_POST))
         {
-            $task = form::data($this->config->task->form->assign)
-                ->add('id', $taskID)
-                ->get();
+            $task = form::data($this->config->task->form->assign, $taskID)->add('id', $taskID)->get();
 
             $this->task->assign($task);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -665,8 +663,7 @@ class task extends control
             $oldTask = $this->task->getByID($taskID);
 
             /* Init task data. */
-            $task = form::data($this->config->task->form->pause)->get();
-            $task->id = $taskID;
+            $task = form::data($this->config->task->form->pause, $taskID)->add('id', $taskID)->get();
 
             /* Pause task. */
             $changes = $this->task->pause($task, $output);

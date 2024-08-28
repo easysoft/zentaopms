@@ -63,7 +63,7 @@ class testcaseModel extends model
         /* Insert testcase steps. */
         $this->testcaseTao->insertSteps($caseID, $case->steps, $case->expects, $case->stepType);
 
-        if($case->auto != 'auto')
+        if(isset($case->auto) && $case->auto != 'auto')
         {
             ob_start();
             setcookie('onlyAutoCase', '0');
@@ -1518,9 +1518,9 @@ class testcaseModel extends model
                         $trimmedStep = trim($step);
                         if(empty($trimmedStep)) continue;
 
-                        preg_match('/^((([0-9]+)[.]([0-9]+))[.]([0-9]+))[.、](.*)$/U', $trimmedStep, $out);
-                        if(!$out) preg_match('/^(([0-9]+)[.]([0-9]+))[.、](.*)$/U', $trimmedStep, $out);
-                        if(!$out) preg_match('/^([0-9]+)[.、](.*)$/U', $trimmedStep, $out);
+                        preg_match('/^((([0-9]+)[.]([0-9]+))[.]([0-9]+))[.、](.*)$/Uu', $trimmedStep, $out);
+                        if(!$out) preg_match('/^(([0-9]+)[.]([0-9]+))[.、](.*)$/Uu', $trimmedStep, $out);
+                        if(!$out) preg_match('/^([0-9]+)[.、](.*)$/Uu', $trimmedStep, $out);
                         if($out)
                         {
                             $count  = count($out);
@@ -1561,10 +1561,19 @@ class testcaseModel extends model
                     }
                     unset($num);
                     unset($sign);
+                    if($stepKey == 'expect' && !empty($stepData[$row]['desc']))
+                    {
+                        foreach($stepData[$row]['desc'] as $stepDescValue)
+                        {
+                            if(empty($stepDescValue['number'])) continue;
+                            $caseNumber = $stepDescValue['number'];
+
+                            if($stepDescValue && !isset($caseStep[$caseNumber]) || empty($caseStep[$caseNumber]['content'])) $caseStep[$caseNumber] = '';
+                        }
+                    }
                     $stepVars += count($caseStep, COUNT_RECURSIVE) - count($caseStep);
                     $stepData[$row][$stepKey] = $caseStep;
                 }
-
             }
         }
         return $stepData;

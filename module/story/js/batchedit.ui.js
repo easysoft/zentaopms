@@ -86,7 +86,8 @@ window.renderRowData = function($row, index, story)
         })
     }
 
-    $title.attr('disabled', 'disabled').attr('title', story.title).after("<input type='hidden' name='title[" + story.id + "]' value='" + story.title + "' />");
+    $title.attr('title', story.title).before("<input type='hidden' name='title[" + story.id + "]' value='" + story.title + "' />");
+    if(story.rawStatus != 'draft') $title.attr('disabled', 'disabled');
     $row.find('.form-control-static[data-name="status"]').addClass('status-' + story.rawStatus);
     if($branch.length > 0)
     {
@@ -199,7 +200,7 @@ window.renderRowData = function($row, index, story)
 window.loadBranches = function(product, obj)
 {
     $this  = $(obj.target);
-    branch = $this.find('input[name^=branch]').val();
+    branch = $this.find('input[name^=branch]').val().replace('branch', '');
 
     let storyID         = $this.closest('tr').find('.form-batch-input[data-name="storyIdList"]').val();
     let $module         = $this.closest('tr').find('.form-batch-control[data-name="module"]');
@@ -209,21 +210,33 @@ window.loadBranches = function(product, obj)
     {
         let $picker = $this.closest('tr').find('.picker-box[data-name="module"]').zui('picker');
         let options = $picker.options;
-        options.items = items;
-        $picker.render(options);
-        $picker.$.setValue(0);
+
+        let oldItems = options.items.map(item => item.value.toString());
+        let newItems = items.map(item => item.value.toString());
+
+        if(JSON.stringify(newItems.slice().sort()) != JSON.stringify(oldItems.slice().sort()))
+        {
+            options.items = items;
+            $picker.render(options);
+            $picker.$.setValue(0);
+        }
     });
 
-    let $plan    = $this.closest('tr').find('.form-batch-control[data-name="plan"]');
-    let planID   = $plan.val();
-    let planLink = $.createLink('product', 'ajaxGetPlans', 'productID=' + product + '&branch=' + branch + '&planID=' + planID + '&fieldID=' + storyID + '&needCreate=false&expired=&param=skipParent');
+    let planLink = $.createLink('product', 'ajaxGetPlans', 'productID=' + product + '&branch=' + branch + '&params=&skipparent=true');
     $.getJSON(planLink, function(items)
     {
         let $picker = $this.closest('tr').find('.picker-box[data-name="plan"]').zui('picker');
         let options = $picker.options;
-        options.items = items;
-        $picker.render(options);
-        $picker.$.setValue('');
+
+        let oldItems = options.items.map(item => item.value.toString());
+        let newItems = items.map(item => item.value.toString());
+
+        if(JSON.stringify(newItems.slice().sort()) != JSON.stringify(oldItems.slice().sort()))
+        {
+            options.items = items;
+            $picker.render(options);
+            $picker.$.setValue('');
+        }
     });
 }
 

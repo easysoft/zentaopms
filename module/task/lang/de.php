@@ -318,6 +318,7 @@ $lang->task->error->beginGtExecution  = "The 'StartDate' of the task must be les
 $lang->task->error->endGtExecution    = "The 'Deadline' of the task must be less than or equal the 'Planned End' of %s to %s.";
 $lang->task->error->endLtExecution    = "The 'Deadline' of the task must be greater than or equal the 'Planned Begin' of %s to %s.";
 $lang->task->error->dateExceed        = "Because the scheduled date of task %s exceeds the scheduled date of {$lang->execution->common}, it is automatically changed to the scheduled date of {$lang->execution->common}";
+$lang->task->error->length            = "Length exceeds the limit of %d characters, cannot be saved. Please modify it again.";
 
 /* Report. */
 $lang->task->report = new stdclass();

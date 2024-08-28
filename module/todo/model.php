@@ -221,10 +221,10 @@ class todoModel extends model
      */
     public function getList(string $type = 'today', string $account = '', string|array $status = 'all', int $limit = 0, object $pager = null, string $orderBy="date,status,begin"): array
     {
-        $type  = strtolower($type);
+        $this->app->loadClass('date', true);
 
+        $type      = strtolower($type);
         $dateRange = $this->dateRange($type);
-
         if(empty($account)) $account = $this->app->user->account;
 
         $todos = $this->todoTao->getListBy($type, $account, $status, (string)$dateRange['begin'], (string)$dateRange['end'], $limit, $orderBy, $pager);
@@ -254,24 +254,20 @@ class todoModel extends model
      * @access protected
      * @return array
      */
-    protected function dateRange($type): array
+    protected function dateRange(string $type): array
     {
-        $this->app->loadClass('date');
-        $dateRange['all']             = array('begin' => '1970-01-01',  'end' => '2109-01-01');
-        $dateRange['assignedtoother'] = array('begin' => '1970-01-01',  'end' => '2109-01-01');
-        $dateRange['today']           = array('begin' => date::today(), 'end' => date::today());
-        $dateRange['future']          = array('begin' => '2030-01-01',  'end' => '2030-01-01');
-        $dateRange['before']          = array('begin' => '1970-01-01',  'end' => date::today());
-        $dateRange['cycle']           = array('begin' => '', 'end' => '');
-        $dateRange['yesterday']       = array('begin' => date::yesterday(), 'end' => date::yesterday());
-        $dateRange['thisweek']        = array('begin' => date::getThisWeek()['begin'],   'end' => date::getThisWeek()['end']);
-        $dateRange['lastweek']        = array('begin' => date::getLastWeek()['begin'],   'end' => date::getLastWeek()['end']);
-        $dateRange['thismonth']       = array('begin' => date::getThisMonth()['begin'],  'end' => date::getThisMonth()['end']);
-        $dateRange['lastmonth']       = array('begin' => date::getLastMonth()['begin'],  'end' => date::getLastMonth()['end']);
-        $dateRange['thisseason']      = array('begin' => date::getThisSeason()['begin'], 'end' => date::getThisSeason()['end']);
-        $dateRange['thisyear']        = array('begin' => date::getThisYear()['begin'],   'end' => date::getThisYear()['end']);
+        if($type == 'future') return array('begin' => '2030-01-01', 'end' => '2030-01-01');
 
-        return isset($dateRange[$type]) ? $dateRange[$type] : array('begin' => $type, 'end' => $type);
+        if(strpos(',before,today,yesterday,thisweek,lastweek,thismonth,lastmonth,thisseason,thisyear,', ",$type,") === false) return array('begin' => '', 'end' => '');
+
+        if($type == 'before') return array('begin' => '', 'end' => date::yesterday());
+
+        $funcName = ($type == 'today' || $type == 'yesterday') ? $type : 'get' . ucfirst($type);
+        $dateRange = date::$funcName();
+
+        if($type == 'today' || $type == 'yesterday') return array('begin' => $dateRange, 'end' => $dateRange);
+
+        return $dateRange;
     }
 
     /**

@@ -52,7 +52,9 @@ $config->upgrade->maxVersion['max5_0_0']       = '20_1_1';
 $config->upgrade->maxVersion['max5_1_0']       = '20_2_0';
 $config->upgrade->maxVersion['max5_2_0']       = '20_3_0';
 $config->upgrade->maxVersion['max5_3']         = '20_4';
-$config->upgrade->maxVersion['max5_4']         = '20_5'; // max insert position.
+$config->upgrade->maxVersion['max4_13']        = '18_13';
+$config->upgrade->maxVersion['max5_4']         = '20_5';
+$config->upgrade->maxVersion['max5_5']         = '20_6'; // max insert position.
 
 $config->upgrade->bizVersion = array();
 $config->upgrade->bizVersion['biz1_0']          = '9_5_1';
@@ -143,7 +145,9 @@ $config->upgrade->bizVersion['biz10_0_0']       = '20_1_1';
 $config->upgrade->bizVersion['biz10_1_0']       = '20_2_0';
 $config->upgrade->bizVersion['biz10_2_0']       = '20_3_0';
 $config->upgrade->bizVersion['biz10_3']         = '20_4';
-$config->upgrade->bizVersion['biz10_4']         = '20_5'; // biz insert position.
+$config->upgrade->maxVersion['biz8_13']         = '18_13';
+$config->upgrade->bizVersion['biz10_4']         = '20_5';
+$config->upgrade->bizVersion['biz10_5']         = '20_6'; // biz insert position.
 
 $config->upgrade->proVersion = array();
 $config->upgrade->proVersion['pro1_0']        = '3_1';
@@ -271,7 +275,9 @@ $config->upgrade->ipdVersion['ipd2_0_0']       = '20_1_1';
 $config->upgrade->ipdVersion['ipd2_1_0']       = '20_2_0';
 $config->upgrade->ipdVersion['ipd2_2_0']       = '20_3_0';
 $config->upgrade->ipdVersion['ipd2_3']         = '20_4';
-$config->upgrade->ipdVersion['ipd2_4']         = '20_5'; // ipd insert position.
+$config->upgrade->maxVersion['ipd1_5']         = '18_13';
+$config->upgrade->ipdVersion['ipd2_4']         = '20_5';
+$config->upgrade->ipdVersion['ipd2_5']         = '20_6'; // ipd insert position.
 
 $config->upgrade->lowerTables = array();
 $config->upgrade->lowerTables[$config->db->prefix . 'caseStep']       = $config->db->prefix . 'casestep';
@@ -1295,6 +1301,8 @@ $config->delete['20_4'][] = 'extension/ipd/repo/ext/lang/zh-cn/zentaomax.php';
 $config->delete['20_4'][] = 'extension/ipd/repo/ext/model/zentaomax.php';
 $config->delete['20_4'][] = 'extension/ipd/repo/ext/view/log.html.php';
 $config->delete['20_4'][] = 'extension/xuan/index/ext/config/xuan.php';
+
+$config->delete['20_5'][] = 'extension/custom/my/ext/control/preference.php';
 
 $config->upgrade->openModules  = array('action', 'admin', 'ai', 'bi', 'aiapp', 'api', 'automation', 'backup', 'block', 'branch', 'budget', 'bug', 'build', 'caselib', 'chart', 'ci', 'client', 'common', 'company', 'compile', 'convert', 'cron', 'custom', 'datatable', 'dataview', 'dept', 'design', 'dev', 'dimension', 'doc', 'durationestimation', 'entry', 'execution', 'extension', 'file', 'git', 'gitlab', 'group', 'holiday', 'im', 'index', 'index.html', 'install', 'issue', 'jenkins', 'job', 'kanban', 'license', 'mail', 'message', 'metric', 'misc', 'mr', 'my', 'personnel', 'pipeline', 'product', 'productplan', 'productset', 'program', 'programplan', 'project', 'projectbuild', 'projectplan', 'projectrelease', 'projectstory', 'pivot', 'qa', 'release', 'repo', 'report', 'risk', 'score', 'screen', 'search', 'setting', 'sonarqube', 'sso', 'stage', 'stakeholder', 'story', 'subject', 'svn', 'task', 'testcase', 'testreport', 'testsuite', 'testtask', 'todo', 'tree', 'tutorial', 'upgrade', 'user', 'webhook', 'weekly', 'workestimation', 'gitea', 'gogs', 'transfer', 'zahost', 'zanode', 'editor', 'charter', 'roadmap', 'account', 'cne', 'host', 'instance', 'ops', 'serverroom', 'space', 'store', 'system', 'solution', 'demand', 'gitfox', 'epic', 'requirement');
 $config->upgrade->unsetModules = array('design', 'program', 'programplan', 'projectbuild', 'projectrelease', 'stage', 'stakeholder', 'product', 'branch', 'productplan', 'release', 'build', 'qa', 'bug', 'testcase', 'testtask', 'testreport', 'testsuite', 'caselib', 'automation', 'repo', 'ci', 'compile', 'jenkins', 'job', 'svn', 'gitlab', 'sonarqube', 'mr', 'git', 'report', 'sqlbuilder', 'feedback', 'faq', 'attend', 'holiday', 'leave', 'makeup', 'overtime', 'lieu', 'ops', 'host', 'serverroom', 'account', 'domain', 'service', 'deploy', 'conference', 'traincourse', 'pssp', 'baseline', 'classify', 'cm', 'cmcl', 'auditcl', 'reviewcl', 'process', 'activity', 'zoutput', 'auditplan', 'nc', 'subject', 'weekly', 'workestimation', 'issue', 'durationestimation', 'risk', 'opportunity', 'trainplan', 'gapanalysis', 'researchplan', 'researchreport', 'meeting', 'meetingroom', 'budget', 'reviewissue', 'reviewsetting', 'review', 'milestone', 'measurement', 'measrecord', 'assetlib', 'setting', 'im', 'client', 'ldap', 'dev', 'api', 'gitea', 'gogs', 'zanode', 'zahost');

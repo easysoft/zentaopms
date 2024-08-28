@@ -20,7 +20,7 @@ window.setModuleAndPlanByBranch = function(e)
         if(!$row.find('td[data-name="module"][data-ditto="on"]').length) break;
     }
 
-    var planLink = $.createLink('productPlan', 'ajaxGetProductPlans', 'productID=' + productID + '&branch=' + branchID);
+    let planLink = $.createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=' + branchID + '&params=unexpired,noclosed&skipParent=true');
     let $rows    = $branch.closest('tr');
     while($rows.length)
     {

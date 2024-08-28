@@ -22,6 +22,7 @@ $lang->programplan->activate      = '激活阶段';
 $lang->programplan->createSubPlan = '创建子阶段';
 $lang->programplan->subPlanManage = '子阶段的管理方法';
 $lang->programplan->submit        = '提交评审';
+$lang->programplan->idAB          = '序号';
 
 $lang->programplan->parent           = '父阶段';
 $lang->programplan->emptyParent      = '无';

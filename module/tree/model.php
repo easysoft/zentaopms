@@ -533,7 +533,7 @@ class treeModel extends model
             if($productNum > 1)
             {
                 $menuItem = new stdclass();
-                $menuItem->id     = $id;
+                $menuItem->id     = "product-$id";
                 $menuItem->name   = $product;
                 $menuItem->parent = 0;
                 $menuItem->url    = helper::createLink('execution', 'task', "executionID=$rootID&status=byProduct&praram=$id");
@@ -554,6 +554,7 @@ class treeModel extends model
                 {
                     if(!isset($executionModules[$module->id]) && strpos($extra['extra'], 'allModule') === false) continue;
 
+                    if($module->type == 'story' && $module->root > 0) $module->parent = "product-{$module->root}";
                     $module->url = helper::createLink('execution', 'task', "executionID={$rootID}&type=byModule&param={$module->id}");
                     $menu[$module->id] = $module;
                 }
@@ -576,7 +577,8 @@ class treeModel extends model
                 $menu[$module->id] = $module;
             }
         }
-        return array_values($menu);
+
+        return $menu;
     }
 
     /**
@@ -1882,6 +1884,7 @@ class treeModel extends model
             }
             else
             {
+                $originID = $moduleID;
                 $short    = $shorts[$moduleID];
                 $order    = $orders[$moduleID];
                 $moduleID = (int)str_replace('id', '', $moduleID);
@@ -1889,9 +1892,10 @@ class treeModel extends model
                 $oldModule = $this->getByID($moduleID);
 
                 $data = new stdClass();
-                $data->name  = strip_tags(trim($moduleName));
-                $data->short = $short;
-                $data->order = $order;
+                $data->name   = strip_tags(trim($moduleName));
+                $data->short  = $short;
+                $data->order  = $order;
+                $data->branch = isset($branches[$originID]) ? $branches[$originID] : 0;
 
                 $this->setModuleLang();
                 $this->dao->update(TABLE_MODULE)->data($data)->autoCheck()->where('id')->eq($moduleID)->limit(1)->exec();

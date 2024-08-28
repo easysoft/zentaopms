@@ -58,6 +58,7 @@ class kanbanZen extends kanban
         $this->view->enableImport  = $enableImport;
         $this->view->importObjects = $importObjects;
         $this->view->copyRegion    = isset($output['copyRegion']) ? 1 : 0;
+        $this->view->spaceTeam     = !empty($space->team) ? $space->team : '';
 
         $this->display();
     }

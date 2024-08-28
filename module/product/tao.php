@@ -62,7 +62,7 @@ class productTao extends productModel
             ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
             ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF(strpos("|$mode|", '|closed|') !== false)->andWhere('t1.status')->eq('closed')->fi()
-            ->beginIF(!$this->app->user->admin and $this->config->vision != 'lite')->andWhere('t1.id')->in($this->app->user->view->products)->fi()
+            ->beginIF(!$this->app->user->admin && $this->config->vision != 'lite' && $this->app->rawModule != 'repo')->andWhere('t1.id')->in($this->app->user->view->products)->fi()
             ->markRight(1)
             ->beginIF($append)->orWhere('(t1.id')->in($append)->markRight(1)->fi()
             ->markRight(1)

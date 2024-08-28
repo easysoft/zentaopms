@@ -54,7 +54,7 @@ class taskModel extends model
             ->exec();
         if(dao::isError()) return false;
 
-        if($task->consumed != $oldTask->consumed || $task->left != $oldTask->left) $this->loadModel('program')->refreshProjectStats($oldTask->project);
+        if($task->left != $oldTask->left) $this->loadModel('program')->refreshProjectStats($oldTask->project);
 
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
         if($oldTask->parent == '-1')
@@ -395,6 +395,7 @@ class taskModel extends model
 
         if(!empty($task->parent)) $this->updateParent($task, $isParentChanged);
         if($this->config->edition != 'open' && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
+        if(!empty($oldTask->mode) && empty($task->mode)) $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->exec();
     }
 
     /**
@@ -1881,7 +1882,6 @@ class taskModel extends model
             ->where('deleted')->eq(0)
             ->andWhere('parent')->le(0)
             ->andWhere('status')->notin('cancel,closed')
-            ->andWhere('consumed')->eq('0')
             ->andWhere('execution')->eq($executionID)
             ->beginIF($appendIdList)->orWhere('id')->in($appendIdList)->fi()
             ->fetchPairs();

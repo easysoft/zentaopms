@@ -235,6 +235,7 @@ detailBody
                     (
                         btn
                         (
+                            $app->tab == 'project' ? setData('app', 'project') : null,
                             set::text($lang->story->create),
                             setClass('open-url secondary' . (empty($createStoryLink) ? ' disabled' : '')),
                             set::icon('plus'),
@@ -242,12 +243,12 @@ detailBody
                             set::url($createStoryLink)
                         ),
                         set::items(array(
-                            $this->config->URAndSR  ? array('text' => $lang->requirement->create, 'url' => $createRequirementLink, 'class' => empty($createRequirementLink) ? 'disabled' : '') : null,
-                            $this->config->enableER ? array('text' => $lang->epic->create, 'url' => $createEpicLink, 'class' => empty($createEpicLink) ? 'disabled' : '') : null,
+                            $this->config->URAndSR  ? array('text' => $lang->requirement->create, 'url' => $createRequirementLink, 'class' => empty($createRequirementLink) ? 'disabled' : '', 'data-app' => $app->tab) : null,
+                            $this->config->enableER ? array('text' => $lang->epic->create, 'url' => $createEpicLink, 'class' => empty($createEpicLink) ? 'disabled' : '', 'data-app' => $app->tab) : null,
                             array('text' => $lang->story->batchCreate, 'items' => array(
-                                array('text' => $lang->SRCommon, 'url' => $batchCreateStoryLink, 'class' => empty($batchCreateStoryLink) ? 'disabled' : ''),
-                                $this->config->URAndSR  ? array('text' => $lang->URCommon, 'url' => $batchCreateRequirementLink, 'class' => empty($batchCreateRequirementLink) ? 'disabled' : '') : null,
-                                $this->config->enableER ? array('text' => $lang->ERCommon, 'url' => $batchCreateEpicLink, 'class' => empty($batchCreateEpicLink) ? 'disabled' : '') : null
+                                array('text' => $lang->SRCommon, 'url' => $batchCreateStoryLink, 'class' => empty($batchCreateStoryLink) ? 'disabled' : '', 'data-app' => $app->tab),
+                                $this->config->URAndSR  ? array('text' => $lang->URCommon, 'url' => $batchCreateRequirementLink, 'class' => empty($batchCreateRequirementLink) ? 'disabled' : '', 'data-app' => $app->tab) : null,
+                                $this->config->enableER ? array('text' => $lang->ERCommon, 'url' => $batchCreateEpicLink, 'class' => empty($batchCreateEpicLink) ? 'disabled' : '', 'data-app' => $app->tab) : null
                             ))
                         )),
                         set::trigger('hover'),

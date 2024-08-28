@@ -1,6 +1,6 @@
 <?php
 /**
- * The model file of vm module of ZenTaoCMS.
+ * The model file of vm module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
@@ -403,6 +403,15 @@ class zanodemodel extends model
             {
                 $this->dao->update(TABLE_ZAHOST)
                     ->beginIF(isset($osList[$node->osName]) && !empty($osList[$node->osName]))->set('osName')->eq($osList[$node->osName])->fi()
+                    ->where('id')->eq($node->id)
+                    ->exec();
+            }
+
+            if($oldNodeStatus != $node->status || !empty($osList[$node->osName]))
+            {
+                $this->dao->update(TABLE_ZAHOST)
+                    ->beginIF($oldNodeStatus != $node->status)->set('status')->eq($node->status)->fi()
+                    ->beginIF(!empty($osList[$node->osName]))->set('osName')->eq($osList[$node->osName])->fi()
                     ->where('id')->eq($node->id)
                     ->exec();
             }

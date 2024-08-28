@@ -248,6 +248,7 @@ class admin extends control
     public function setModule()
     {
         $this->loadModel('setting');
+        $this->loadModel('project');
 
         if($_POST)
         {
@@ -265,6 +266,14 @@ class admin extends control
             $enableER = $this->config->edition == 'ipd' ? 1 : zget($data->module, 'productER', 0);
             $URAndSR  = $this->config->edition == 'ipd' ? 1 : zget($data->module, 'productUR', 0);
             if($enableER && !$URAndSR) $this->send(array('result' => 'fail', 'message' => $this->lang->admin->notice->openUR));
+
+            foreach($closedFeatures as $closedFeature)
+            {
+                if(in_array($closedFeature, array('productER', 'productUR')))
+                {
+                    $this->project->unlinkStoryByType(0, $closedFeature == 'productER' ? 'epic' : 'requirement');
+                }
+            }
 
             $this->setting->setItem('system.common.closedFeatures', implode(',', $closedFeatures));
             $this->setting->setItem('system.common.global.scoreStatus', zget($data->module, 'myScore', 0));

@@ -30,18 +30,95 @@ if($confirm != 'yes')
     if(empty($steps))
     {
         $stepTrs[] = h::tr
+        (
+            setClass("step"),
+            h::td
             (
-                h::td
+                setClass('text-left border'),
+                div
                 (
-                    setClass('border'),
-                    set('colspan', '4'),
-                    div
+                    setClass('inputGroup row', 'pl-0'),
+                    h::span
                     (
-                        setClass('text-center text-gray py-4'),
-                        $lang->testcase->noStep
+                        setClass('step-item-id mr-2'),
+                    ),
+                    div(html())
+                )
+            ),
+            h::td
+            (
+                setClass('text-left border'),
+                html()
+            ),
+            h::td
+            (
+                setClass('result-td'),
+                picker
+                (
+                    on::change('checkStepValue'),
+                    set::name("result[0]"),
+                    set::items($lang->testcase->resultList),
+                    set::value('pass'),
+                    set::required()
+                )
+            ),
+            h::td
+            (
+                setClass('real-td'),
+                h::table
+                (
+                    setClass('w-full'),
+                    h::tr
+                    (
+                        h::td
+                        (
+                            setClass('p-0 bd-0'),
+                            textarea
+                            (
+                                on::keyup('realChange'),
+                                setClass('leading-4 w-60' ),
+                                set('rows', '1'),
+                                set::name("real[0]")
+                            )
+                        ),
+                        h::td
+                        (
+                            setClass('p-0 bd-0'),
+                            width('40px'),
+                            btn
+                            (
+                                setClass('ml-2 text-primary'),
+                                set::target("#fileModal0"),
+                                set('data-toggle', 'modal'),
+                                on::click('setFileModalHeight'),
+                                set('title', $lang->testtask->files),
+                                set::icon('paper-clip'),
+                            )
+                        )
                     )
                 )
-            );
+            )
+        );
+        $fileModals[] = modal
+        (
+            set::id("fileModal0"),
+            set::title($lang->testtask->files),
+            setData('position', 'center'),
+            fileSelector
+            (
+                set::name("files0[]")
+            ),
+            div
+            (
+                setClass('text-center'),
+                btn
+                (
+                    setClass('btn-wide primary'),
+                    set('data-dismiss', 'modal'),
+                    $lang->save
+                )
+            )
+        );
     }
     foreach($steps as $key => $step)
     {
@@ -218,7 +295,7 @@ form
                             set('data-load', 'modal'),
                             $lang->testtask->pre
                         ) : '',
-                        $run->case->status != 'wait' && $confirm != 'yes' && !empty($run->case->steps) ? btn
+                        $run->case->status != 'wait' && $confirm != 'yes' ? btn
                         (
                             setClass('primary btn-wide w-24 m-3'),
                             set::btnType('submit'),

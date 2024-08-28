@@ -92,7 +92,7 @@ class detailBody extends wg
                     empty($floating) ? null : center(setClass('pt-6 sticky bottom-0'), $floating)
                 ),
                 $side,
-                html($app->control->appendExtendCssAndJS())
+                html($app->control->appendExtendCssAndJS('', '', data($app->getModuleName())))
             );
         }
 
@@ -123,7 +123,7 @@ class detailBody extends wg
                     $side
                 )
             ),
-            html($app->control->appendExtendCssAndJS())
+            html($app->control->appendExtendCssAndJS('', '', data($app->getModuleName())))
         );
     }
 }

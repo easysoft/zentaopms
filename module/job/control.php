@@ -120,7 +120,7 @@ class job extends control
         $this->view->repo                = $repoID ? $this->repo->getByID($repoID) : null;
         $this->view->products            = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->projectID);
         $this->view->jenkinsServerList   = $this->loadModel('pipeline')->getPairs('jenkins');
-        $this->view->sonarqubeServerList = $this->pipeline->getPairs('sonarqube');
+        $this->view->sonarqubeServerList = array('' => '') + $this->pipeline->getPairs('sonarqube');
 
         $this->display();
     }
@@ -179,7 +179,7 @@ class job extends control
         $this->view->repo                = $repo;
         $this->view->products            = $products;
         $this->view->jenkinsServerList   = $this->loadModel('pipeline')->getPairs('jenkins');
-        $this->view->sonarqubeServerList = $this->pipeline->getPairs('sonarqube');
+        $this->view->sonarqubeServerList = array('' => '') + $this->pipeline->getPairs('sonarqube');
 
         $this->display();
     }
@@ -380,6 +380,12 @@ class job extends control
     public function ajaxCheckSonarqubeLink(int $repoID, int $jobID = 0)
     {
         $repo = $this->loadModel('job')->getSonarqubeByRepo(array($repoID), $jobID, true);
+
+        foreach($repo as $linkRepo)
+        {
+            if($linkRepo->id == $jobID) $this->send(array('result' => 'success', 'message' => ''));
+        }
+
         if(!empty($repo))
         {
             $message = $repo[$repoID]->deleted ? $this->lang->job->jobIsDeleted : sprintf($this->lang->job->repoExists, $repo[$repoID]->id . '-' . $repo[$repoID]->name);

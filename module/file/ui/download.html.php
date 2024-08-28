@@ -55,9 +55,10 @@ else
         ) : null
     );
 
+    $fileContent = null;
     if($fileType == 'image')
     {
-        div
+        $fileContent = div
         (
             setID('imageFile'),
             h::img(set::src($this->createLink('file', 'read', "fileID={$file->id}")))
@@ -65,25 +66,27 @@ else
     }
     elseif($fileType == 'video')
     {
-        div
+        $fileContent = div
         (
             setID('videoFile'),
             h::video(set::src($file->webPath), set::controls(true), set::autoplay(true), set::controlsList('nodownload'), set::onerror('showError()'), set::onloadedmetadata('loadedmetadata()'), set::style(array('width' => '100%'))),
             div
             (
-                setClass('playfailed hide'),
+                setClass('playfailed hidden'),
                 $lang->file->playFailed
             )
         );
     }
     else
     {
-        div
+        $fileContent = div
         (
             setID('txtFile'),
             h::pre(set::style(array('background-color' => 'rgb(var(--color-gray-200-rgb))')), $fileContent)
         );
     }
+
+    div(setClass('panel-form'), $fileContent);
 
 $isInModal = isInModal();
 h::js
@@ -101,7 +104,7 @@ window.setCharset = function(obj)
 
 function showError()
 {
-    $('.playfailed').show();
+    $('.playfailed').removeClass('hidden');
 }
 
 function loadedmetadata()

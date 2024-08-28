@@ -129,7 +129,7 @@ formPanel
     (
         set::width('1/3'),
         set::label($lang->bug->resolvedDate),
-        set::control('datePicker'),
+        set::control('datetimePicker'),
         set::name('resolvedDate'),
         set::value(helper::now())
     ),
