@@ -11,11 +11,12 @@ $(function()
  * @access public
  * @return void
  */
-function changeProject(e)
+window.changeProject = function(e)
 {
-    let projectID = $(e.target).val();
+    let projectID = $('#form-execution-edit [name=project]').val();
     if($('#syncStories').length == 0) $('button[type=submit]').after("<input type='hidden' id='syncStories' name='syncStories' value='no' />");
 
+    if(lastProjectID != 'undefined' && projectID == lastProjectID) return;
     zui.Modal.confirm(confirmSync).then((res) =>
     {
         if(res)
@@ -26,7 +27,7 @@ function changeProject(e)
         else
         {
             $("#syncStories").val('no');
-            $('#project').val(lastProjectID);
+            $('#form-execution-edit [name=project]').zui('picker').$.setValue(lastProjectID);
         }
     });
 };
