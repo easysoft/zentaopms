@@ -120,10 +120,12 @@ class productplanModel extends model
         $bugs = $this->dao->select('plan, id')->from(TABLE_BUG)->where("plan")->in($planIdList)->andWhere('deleted')->eq(0)->fetchGroup('plan', 'id');
         foreach($plans as $plan)
         {
-            $storyPairs = array();
+            $storyPairs    = array();
+            $plan->stories = 0;
             if(!empty($product) && $product->type == 'normal')
             {
-                $stories = zget($storyGroups, $plan->id, array());
+                $stories       = zget($storyGroups, $plan->id, array());
+                $plan->stories = count($stories);
                 foreach($stories as $story)
                 {
                     if($story->isParent == '1') continue;
@@ -132,13 +134,13 @@ class productplanModel extends model
             }
             else
             {
-                $storyPairs = $this->story->getPairs(0, $plan->id, 'estimate');
+                $storyPairs    = $this->story->getPairs(0, $plan->id, 'estimate');
+                $plan->stories = count($storyPairs);
             }
 
             $bugCount = isset($bugs[$plan->id]) ? count($bugs[$plan->id]) : 0;
-            $plan->bugs     = zget($plan, 'bugs', 0)    + $bugCount;
-            $plan->hour     = zget($plan, 'hour', 0)    + round(array_sum($storyPairs), 1);
-            $plan->stories  = zget($plan, 'stories', 0) + count($storyPairs);
+            $plan->bugs     = zget($plan, 'bugs', 0) + $bugCount;
+            $plan->hour     = zget($plan, 'hour', 0) + round(array_sum($storyPairs), 1);
             $plan->projects = zget($planProjects, $plan->id, '');
             $plan->expired  = $plan->end < helper::today();
 
