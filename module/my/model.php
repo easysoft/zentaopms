@@ -819,9 +819,10 @@ class myModel extends model
         $this->config->ticket->search['module']    = $queryName;
         $this->config->ticket->search['queryID']   = $queryID;
         $this->config->ticket->search['actionURL'] = $actionURL;
-        $this->config->ticket->search['params']['product']['values'] = $grantProducts;
-        $this->config->ticket->search['params']['module']['values']  = $this->loadModel('feedback')->getModuleList('ticket', true, 'no');
+        $this->config->ticket->search['params']['product']['values']     = $grantProducts;
+        $this->config->ticket->search['params']['module']['values']      = $this->loadModel('feedback')->getModuleList('ticket', true, 'no');
         $this->config->ticket->search['params']['openedBuild']['values'] = $this->loadModel('build')->getBuildPairs(array_keys($grantProducts), 'all', 'releasetag');
+        $this->config->ticket->search['params']['feedback']['values']    = $this->feedback->getPairs();
 
         $this->loadModel('search')->setSearchParams($this->config->ticket->search);
 
