@@ -235,7 +235,7 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
-$lang->misc->feature->all['20.6'][]        = array('title' => '', 'desc' => '');
+$lang->misc->feature->all['20.6'][]        = array('title' => '工作流支持配置多界面；审批流支持使用工作流中字段配置条件；修复Bug。', 'desc' => '');
 $lang->misc->feature->all['20.5'][]        = array('title' => '文档优化；新增23个内置度量项。', 'desc' => '');
 $lang->misc->feature->all['18.13'][]       = array('title' => '性能优化：我的待办和需求、任务、Bug列表页面、项目、产品的详情页面。禅道兼容达梦数据库；复制需求、任务、Bug、用例时，可以复制工作流中添加的字段和值；修复Bug。', 'desc' => '');
 $lang->misc->feature->all['20.4'][]        = array('title' => '新增消息中心;完善发布管理;增加分支和标签管理;审批流支持加签设置。', 'desc' => '');
