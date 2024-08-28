@@ -190,6 +190,7 @@
     function updatePageJS(data, _info, options)
     {
         if(window.onPageUnmount) window.onPageUnmount();
+        $(document).trigger('pageunmount.app');
 
         ['beforePageLoad', 'beforeRequestContent', 'onPageUnmount', 'beforePageUpdate', 'afterPageUpdate', 'onPageRender'].forEach(key =>
         {
