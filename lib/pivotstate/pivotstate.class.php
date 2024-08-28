@@ -638,6 +638,25 @@ class pivotState
         $this->sqlBuilder['wheres'][$index]['items'][] = $item;
     }
 
+    public function addBuilderQueryFilter($table, $field, $name, $type, $typeOption, $default)
+    {
+        if(is_array($table))
+        {
+            $this->sqlBuilder['querys'][] = $table;
+            return;
+        }
+
+        $query = array();
+        $query['table']      = $table;
+        $query['field']      = $field;
+        $query['name']       = $name;
+        $query['type']       = $type;
+        $query['typeOption'] = $typeOption;
+        $query['default']    = $default;
+
+        $this->sqlBuilder['querys'][] = $query;
+    }
+
     /**
      * Add agg func.
      *
