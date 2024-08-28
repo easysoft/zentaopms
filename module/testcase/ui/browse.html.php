@@ -122,6 +122,10 @@ foreach($cases as $case)
     if(!empty($case->needconfirm)) $case->status = 'changed';
     if(isset($case->script)) unset($case->script);
 
+    $stages = array();
+    foreach(explode(',', $case->stage) as $stage) $stages[] = zget($lang->testcase->stageList, $stage, '');
+
+    $case->stage      = implode(',', array_filter($stages));
     $case->browseType = $browseType;
     initTableData(array($case), $cols, $this->testcase);
 }
