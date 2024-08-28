@@ -174,12 +174,6 @@ $waterfallProjectManage->tasks['setStage']['steps'][] = array(
 $waterfallProjectManage->tasks['manageTask'] = array();
 $waterfallProjectManage->tasks['manageTask'] = $scrumProjectManage->tasks['manageTask'];
 
-$waterfallProjectManage->tasks['manageTest'] = array();
-$waterfallProjectManage->tasks['manageTest'] = $scrumProjectManage->tasks['manageTest'];
-
-$waterfallProjectManage->tasks['manageBug'] = array();
-$waterfallProjectManage->tasks['manageBug'] = $scrumProjectManage->tasks['manageBug'];
-
 if(in_array($config->edition, array('max', 'ipd')))
 {
     $waterfallProjectManage->tasks['design'] = array();
@@ -323,5 +317,11 @@ if(in_array($config->edition, array('max', 'ipd')))
     $waterfallProjectManage->tasks['manageRisk'] = array();
     $waterfallProjectManage->tasks['manageRisk'] = $scrumProjectManage->tasks['manageRisk'];
 }
+
+$waterfallProjectManage->tasks['manageTest'] = array();
+$waterfallProjectManage->tasks['manageTest'] = $scrumProjectManage->tasks['manageTest'];
+
+$waterfallProjectManage->tasks['manageBug'] = array();
+$waterfallProjectManage->tasks['manageBug'] = $scrumProjectManage->tasks['manageBug'];
 
 $config->tutorial->guides[$waterfallProjectManage->name] = $waterfallProjectManage;
