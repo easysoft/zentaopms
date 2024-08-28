@@ -41,6 +41,26 @@ class thinkRadio extends thinkQuestion
         $fields = $step->options->fields ?? array();
         $items  = array();
 
+        if(empty($fields) && $isRun)
+        {
+            if($step->options->setOption == 1)
+            {
+                foreach($quoteQuestions as $item)
+                {
+                    if($isRun && $item->origin == $step->options->quoteTitle)
+                    {
+                        $item->answer = json_decode($item->answer);
+                        $item->options = json_decode($item->options);
+                        $quoteFields = $item->options->fields;
+                        if($step->options->citation == 0) $fields = $quoteFields;
+                        if($step->options->citation == 1) $fields = array_intersect($item->options->fields, $item->answer->result);
+                        if($step->options->citation == 2) $fields = array_diff($item->options->fields, $item->answer->result);
+                        if(in_array('other',$item->answer->result)) $fields[] = $item->answer->other;
+                    }
+                }
+            }
+            $fields = array_values($fields);
+        }
         if(!empty($fields)) foreach($fields as $field) $items[] = array('text' => $field, 'value' => $field);
         if(empty($fields) && !$isRun) $items[] = array('text' => $lang->thinkstep->optionReference, 'disabledPrefix' => true);
         if(!empty($step->options->enableOther)) $items[] = array('text' => $lang->other, 'value' => 'other', 'isOther' => '1', 'other' => isset($answer->other) ? $answer->other : '');
