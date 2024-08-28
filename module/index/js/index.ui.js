@@ -907,7 +907,7 @@ function generateAddMenuNavItems($item, onClick)
     return items;
 }
 
-$(document).on('contextmenu', '#menuNav .divider', function(event)
+$(document).on('contextmenu', '#menuMainNav .divider', function(event)
 {
     const $divider = $(this);
     const $nav = $divider.closest('.nav');
@@ -1017,7 +1017,7 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
         if(code !== 'my') items.push({text: langData.close, onClick: () => closeApp(code)});
     }
 
-    if($btn.closest('#menuNav').length !== 0)
+    if($btn.closest('#menuMainNav').length !== 0)
     {
         const $nav = $btn.closest('.nav');
         const isMoving = $nav.is('[z-use-sortable]');
