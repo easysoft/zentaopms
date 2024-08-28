@@ -1264,7 +1264,8 @@ class blockZen extends block
         $plans         = $this->loadModel('programplan')->getStage($this->session->project, $productID, 'all', 'order');
         $plans         = $this->programplan->initGanttPlans($plans);
         $plansProgress = $this->loadModel('metric')->getResultByCodeWithArray('progress_of_task_in_execution', array('execution' => implode(',', $plans['planIdList'])), 'cron'); // Get plan progress by metric.
-        $plans         = $plans['datas']['data'];
+        $plans         = $plans['datas'] ? $plans['datas']['data'] : array();
+
         /* Set progress from metric. */
         foreach($plansProgress as $metric)
         {
