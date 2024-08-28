@@ -41,6 +41,8 @@ class thinkRadio extends thinkQuestion
         $fields = $step->options->fields ?? array();
         $items  = array();
 
+        /* 多选题引用其他题目，将符合条件的选项渲染为该题的选项。 */
+        /* Multiple-choice questions reference other questions and render the options that meet the conditions as the options of this question. */
         if(empty($fields) && $isRun)
         {
             if($step->options->setOption == 1)
