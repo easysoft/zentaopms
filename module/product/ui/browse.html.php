@@ -257,7 +257,7 @@ $fnGenerateFootToolbar = function() use ($lang, $app, $product, $productID, $pro
     $canBatchChangeParent  = $canBeChanged && hasPriv($storyType, 'batchChangeParent') && !($storyType == 'epic' && count($gradeGroup['epic']) < 2) && $app->tab == 'product';
     $canBatchUnlink        = $canBeChanged && $projectHasProduct && hasPriv('projectstory', 'batchUnlinkStory');
     $canBatchImportToLib   = $canBeChanged && $isProjectStory && in_array($this->config->edition, array('max', 'ipd')) && hasPriv('story', 'batchImportToLib') && helper::hasFeature('storylib');
-    $canBatchChangeRoadmap = $canBeChanged && hasPriv('story', 'batchChangeRoadmap') && $config->vision == 'or' && $storyType == 'requirement';
+    $canBatchChangeRoadmap = $canBeChanged && hasPriv($storyType, 'batchChangeRoadmap') && $config->vision == 'or' && $storyType == 'requirement';
     $canBatchAction        = $canBatchEdit || $canBatchClose || $canBatchReview || $canBatchChangeGrade || $canBatchChangeStage || $canBatchChangeModule || $canBatchChangePlan || $canBatchChangeParent || $canBatchAssignTo || $canBatchUnlink || $canBatchImportToLib || $canBatchChangeBranch || $canBatchChangeRoadmap;
 
     /* Remove empty data from data list. */
@@ -275,7 +275,7 @@ $fnGenerateFootToolbar = function() use ($lang, $app, $product, $productID, $pro
     foreach($branchTagOption as $branchID => $branchName)      $branchItems[]           = array('text' => $branchName, 'class' => 'batch-btn', 'data-formaction' => $this->createLink($isProjectStory ? 'projectstory' : $storyType, 'batchChangeBranch', "branchID=$branchID"));
     foreach($modules as $moduleID => $moduleName)              $moduleItems[]           = array('text' => $moduleName, 'class' => 'batch-btn', 'data-formaction' => $this->createLink($isProjectStory ? 'projectstory' : $storyType, 'batchChangeModule', "moduleID=$moduleID"));
     foreach($plans as $planID => $planName)                    $planItems[]             = array('text' => $planName,   'class' => 'batch-btn', 'data-formaction' => $this->createLink($isProjectStory ? 'projectstory' : $storyType, 'batchChangePlan', "planID=$planID"));
-    foreach($noclosedRoadmaps as $roadmapID => $roadmapName)   $roadmapItems[]          = array('text' => empty($roadmapName) ? $lang->null : $roadmapName, 'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchChangeRoadmap', "roadmapID=$roadmapID"));
+    foreach($noclosedRoadmaps as $roadmapID => $roadmapName)   $roadmapItems[]          = array('text' => empty($roadmapName) ? $lang->null : $roadmapName, 'class' => 'batch-btn', 'data-formaction' => $this->createLink($storyType, 'batchChangeRoadmap', "roadmapID=$roadmapID"));
 
     foreach($lang->story->stageList as $key => $stageName)
     {
