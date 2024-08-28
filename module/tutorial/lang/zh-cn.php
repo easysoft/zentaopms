@@ -762,6 +762,19 @@ $lang->tutorial->kanbanProjectManage->manageKanban->step19 = new stdClass();
 $lang->tutorial->kanbanProjectManage->manageKanban->step19->name = '保存表单';
 $lang->tutorial->kanbanProjectManage->manageKanban->step19->desc = '可以将Bug添加到Bug泳道中';
 
+$lang->tutorial->kanbanProjectManage->manageKanban->step20 = new stdClass();
+$lang->tutorial->kanbanProjectManage->manageKanban->step20->name = '点击更多';
+
+$lang->tutorial->kanbanProjectManage->manageKanban->step21 = new stdClass();
+$lang->tutorial->kanbanProjectManage->manageKanban->step21->name = '点击在制品设置';
+$lang->tutorial->kanbanProjectManage->manageKanban->step21->desc = '可以灵活设置在制品数量';
+
+$lang->tutorial->kanbanProjectManage->manageKanban->step22 = new stdClass();
+$lang->tutorial->kanbanProjectManage->manageKanban->step22->name = '填写表单';
+
+$lang->tutorial->kanbanProjectManage->manageKanban->step23 = new stdClass();
+$lang->tutorial->kanbanProjectManage->manageKanban->step23->name = '保存表单';
+
 $lang->tutorial->kanbanProjectManage->manageBuild = new stdClass();
 $lang->tutorial->kanbanProjectManage->manageBuild->title = '版本管理';
 

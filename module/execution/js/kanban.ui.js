@@ -81,6 +81,7 @@ window.getColActions = function(col)
             icon: 'ellipsis-v',
             caret: false,
             items: buildColActions(col),
+            class: 'actionDrop'
         }
     );
 
@@ -92,7 +93,7 @@ window.buildColActions = function(col)
     let actions = [];
 
     if(col.actionList && col.actionList.includes('setColumn')) actions.push({text: kanbanLang.setColumn, url: $.createLink('kanban', 'setColumn', `columnID=${col.id}&executionID=${executionID}&from=RDKanban`), 'data-toggle': 'modal', 'icon': 'edit'});
-    if(col.actionList && col.actionList.includes('setWIP') && !ERURColumn.includes(col.type)) actions.push({text: kanbanLang.setWIP, url: $.createLink('kanban', 'setWIP', `columnID=${col.id}&executionID=${executionID}&from=RDKanban`), 'data-toggle': 'modal', 'icon': 'alert'});
+    if(col.actionList && col.actionList.includes('setWIP') && !ERURColumn.includes(col.type)) actions.push({text: kanbanLang.setWIP, url: $.createLink('kanban', 'setWIP', `columnID=${col.id}&executionID=${executionID}&from=RDKanban`), 'data-toggle': 'modal', 'icon': 'alert', 'class': 'setWIP-btn'});
 
     return actions;
 }

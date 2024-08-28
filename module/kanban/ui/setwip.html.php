@@ -14,6 +14,7 @@ modalHeader(set::title($lang->kanban->setWIP), set::entityText($column->name), s
 $stage = \zget($config->kanban->storyColumnStageList, $column->type);
 formPanel
 (
+    set::id('setWIPform'),
     on::change('[name=noLimit]', 'changeColumnLimit'),
     $column->parent != -1 && $from !='kanban' ? formRow
     (

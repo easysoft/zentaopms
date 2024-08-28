@@ -257,6 +257,40 @@ $kanbanProjectManage->tasks['manageKanban']['steps'][] = array(
     'desc'   => $lang->tutorial->kanbanProjectManage->manageKanban->step19->desc
 );
 
+if(in_array($config->edition, array('max', 'ipd')))
+{
+    $kanbanProjectManage->tasks['manageKanban']['steps'][] = array(
+        'type'   => 'click',
+        'target' => 'div[z-key="group1"] div[z-col="1"] .kanban-header-col-actions button.actionDrop',
+        'page'   => 'execution-kanban',
+        'url'    => array('execution', 'kanban', 'executionID=3'),
+        'title'  => $lang->tutorial->kanbanProjectManage->manageKanban->step20->name
+    );
+
+    $kanbanProjectManage->tasks['manageKanban']['steps'][] = array(
+        'type'   => 'click',
+        'target' => 'li.setWIP-btn a',
+        'page'   => 'execution-kanban',
+        'url'    => array('execution', 'kanban', 'executionID=3'),
+        'title'  => $lang->tutorial->kanbanProjectManage->manageKanban->step21->name,
+        'desc'   => $lang->tutorial->kanbanProjectManage->manageKanban->step21->desc
+    );
+
+    $kanbanProjectManage->tasks['manageKanban']['steps'][] = array(
+        'type'   => 'form',
+        'target' => '#setWIPform',
+        'page'   => 'execution-kanban',
+        'title'  => $lang->tutorial->kanbanProjectManage->manageKanban->step22->name
+    );
+
+    $kanbanProjectManage->tasks['manageKanban']['steps'][] = array(
+        'type'   => 'saveForm',
+        'target' => '#setWIPform button[type="submit"]',
+        'page'   => 'execution-kanban',
+        'title'  => $lang->tutorial->kanbanProjectManage->manageKanban->step23->name
+    );
+}
+
 $kanbanProjectManage->tasks['manageBuild'] = array();
 $kanbanProjectManage->tasks['manageBuild']['name']     = 'manageBuild';
 $kanbanProjectManage->tasks['manageBuild']['title']    = $lang->tutorial->kanbanProjectManage->manageBuild->title;
