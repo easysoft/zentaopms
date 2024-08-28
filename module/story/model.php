@@ -2251,6 +2251,8 @@ class storyModel extends model
             ->andWhere("FIND_IN_SET('{$this->config->vision}', vision)")
             ->beginIF($type != 'all')->andWhere('type')->in($type)->fi()
             ->beginIF($showGrades)->andWhere('grade')->in($showGrades)->fi()
+            ->beginIF(empty($this->config->enableER))->andWhere('type')->ne('epic')->fi()
+            ->beginIF(empty($this->config->URAndSR) && $this->config->edition != 'ipd')->andWhere('type')->ne('requirement')->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -2757,6 +2759,8 @@ class storyModel extends model
             ->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
             ->beginIF($type != 'all')->andWhere('t1.type')->in($type)->fi()
             ->beginIF($showGrades)->andWhere('t1.grade')->in($showGrades)->fi()
+            ->beginIF(empty($this->config->enableER))->andWhere('t1.type')->ne('epic')->fi()
+            ->beginIF(empty($this->config->URAndSR) && $this->config->edition != 'ipd')->andWhere('t1.type')->ne('requirement')->fi()
             ->orderBy($orderBy)
             ->page($pager, 't1.id')
             ->fetchAll('id');
