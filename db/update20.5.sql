@@ -20,3 +20,18 @@ CREATE UNIQUE INDEX `unique` ON `zt_workflowlayout`(`module`,`action`,`ui`,`fiel
 
 DROP INDEX `unique` ON `zt_workflowrelationlayout`;
 CREATE UNIQUE INDEX `unique` ON `zt_workflowrelationlayout`(`prev`, `next`, `action`,`ui`,`field`);
+
+UPDATE `zt_workflowaction` SET `method`='create',         `type`='single' WHERE `module`='epic' AND `action`='create';
+UPDATE `zt_workflowaction` SET `method`='batchcreate',    `type`='batch'  WHERE `module`='epic' AND `action`='batchcreate';
+UPDATE `zt_workflowaction` SET `method`='batchoperate',   `type`='batch'  WHERE `module`='epic' AND `action`='batchedit';
+UPDATE `zt_workflowaction` SET `method`='exporttemplate', `type`='single' WHERE `module`='epic' AND `action`='exporttemplate';
+UPDATE `zt_workflowaction` SET `method`='import',         `type`='single' WHERE `module`='epic' AND `action`='import';
+UPDATE `zt_workflowaction` SET `method`='showimport',     `type`='single' WHERE `module`='epic' AND `action`='showimport';
+UPDATE `zt_workflowaction` SET `method`='edit',           `type`='single' WHERE `module`='epic' AND `action`='edit';
+UPDATE `zt_workflowaction` SET `method`='view',           `type`='single' WHERE `module`='epic' AND `action`='view';
+UPDATE `zt_workflowaction` SET `method`='delete',         `type`='single' WHERE `module`='epic' AND `action`='delete';
+UPDATE `zt_workflowaction` SET `method`='operate',        `type`='single' WHERE `module`='epic' AND `action`='close';
+UPDATE `zt_workflowaction` SET `method`='operate',        `type`='single' WHERE `module`='epic' AND `action`='activate';
+UPDATE `zt_workflowaction` SET `method`='operate',        `type`='single' WHERE `module`='epic' AND `action`='assignTo';
+UPDATE `zt_workflowaction` SET `method`='operate',        `type`='single' WHERE `module`='epic' AND `action`='review';
+UPDATE `zt_workflowaction` SET `method`='operate',        `type`='single' WHERE `module`='epic' AND `action`='change';
