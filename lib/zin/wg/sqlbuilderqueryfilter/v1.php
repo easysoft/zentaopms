@@ -13,11 +13,11 @@ class sqlBuilderQueryFilter extends wg
     );
 
     protected static array $controls = array(
-        'table'   => array('type' => 'picker', 'items' => 'tables'),
-        'field'   => array('type' => 'picker', 'items' => 'fields'),
-        'name'    => array('type' => 'input'),
-        'type'    => array('type' => 'picker', 'items' => 'typeList'),
-        'default' => array('type' => 'input')
+        'table'   => array('type' => 'picker', 'items' => 'tables', 'width' => 'w-32'),
+        'field'   => array('type' => 'picker', 'items' => 'fields', 'width' => 'w-32'),
+        'name'    => array('type' => 'input', 'width' => 'w-32'),
+        'type'    => array('type' => 'picker', 'items' => 'typeList', 'width' => 'w-56'),
+        'default' => array('type' => 'input', 'width' => 'w-32')
     );
 
     protected function buildFormHeader()
@@ -25,13 +25,14 @@ class sqlBuilderQueryFilter extends wg
         global $lang;
         $headers = array();
 
-        foreach($lang->bi->queryFilterFormHeader as $text)
+        foreach($lang->bi->queryFilterFormHeader as $name => $text)
         {
-            $headers[] = div
+            $config = static::$controls[$name];
+            $headers[] = formGroup
             (
-                setClass('form-header-item font-bold text-center'),
-                $text
-            )
+                setClass('form-header-item font-bold align-middle', $config['width']),
+                set::label($text)
+            );
         }
 
         return $headers;
@@ -39,39 +40,44 @@ class sqlBuilderQueryFilter extends wg
 
     protected function buildFormGroup($name, $rowValue)
     {
+        global $lang;
         list($tables, $fields) = $this->prop(array('tables', 'fields'));
+        $fields = $fields[$rowValue['table']];
         $typeList   = $lang->dataview->varFilter->requestTypeList;
         $selectList = $lang->dataview->varFilter->selectList;
 
         $config = static::$controls[$name];
         extract($config);
         if($type == 'picker') $items = $$items;
-        $value = $rowValue;
+        $value = $rowValue[$name];
 
         return formGroup
         (
-            setClass('self-start'),
-            div
+            setClass($width),
+            inputGroup
             (
-                setClass('flex justify-between'),
+                setClass('flex justify-start'),
                 $type == 'picker' ? picker
                 (
+                    setClass('flex-auto', array('basis-24' => $name == 'type')),
                     set::name($name),
                     set::items($items),
+                    set::disabled(empty($items)),
                     set::value($value)
                 ) : null,
                 $type == 'input' ? input
                 (
+                    setClass('flex-auto'),
                     set::name($name),
                     set::value($value)
                 ) : null,
                 $name == 'type' ? picker
                 (
-                    setClass('w-36'),
+                    setClass('basis-24'),
                     set::name('typeOption'),
                     set::items($selectList),
                     set::value($rowValue['typeOption'])
-                )
+                ) : null
             )
         );
     }
@@ -84,14 +90,32 @@ class sqlBuilderQueryFilter extends wg
         {
             $items = array();
             $names = array_keys($query);
-            foreach($names => $name) $items[] = $this->buildFormGroup($name, $query);
+            foreach($names as $name) if(isset(static::$controls[$name])) $items[] = $this->buildFormGroup($name, $query);
 
-            $fromRows[] = formRow
+            $items[] = formGroup
             (
-                setClass('flex form-body justify-between items-end max-h-16 query-filter-row'),
+                btn
+                (
+                    setClass('add-query'),
+                    set('data-index', $index),
+                    set::type('ghost'),
+                    set::icon('plus')
+                ),
+                btn
+                (
+                    setClass('remove-query'),
+                    set('data-index', $index),
+                    set::type('ghost'),
+                    set::icon('minus')
+                )
+            );
+
+            $formRows[] = formRow
+            (
+                setClass('flex form-body justify-start items-end max-h-16 query-filter-row gap-x-4'),
                 set('data-index', $index),
                 $items
-            )
+            );
         }
         return $formRows;
     }
@@ -101,11 +125,11 @@ class sqlBuilderQueryFilter extends wg
         return formBase
         (
             set::actions(array()),
-            div
+            formRow
             (
-                setClass('flex form-header justify-between h-10'),
+                setClass('flex form-header justify-start h-10 gap-x-4 bg-gray-100 items-center'),
                 $this->buildFormHeader()
-            )
+            ),
             $this->buildFormRows()
         );
     }
