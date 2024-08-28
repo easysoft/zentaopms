@@ -106,7 +106,7 @@ $lang->tutorial->scrumProjectManage->manageProject->step1->desc = '您可以在�
 
 $lang->tutorial->scrumProjectManage->manageProject->step2 = new stdClass();
 $lang->tutorial->scrumProjectManage->manageProject->step2->name = '点击创建项目';
-$lang->tutorial->scrumProjectManage->manageProject->step2->desc = '您可以选择不同项目管理方式来创建不同类型的项目，请点击Scrum进行创建';
+$lang->tutorial->scrumProjectManage->manageProject->step2->desc = '您可以选择不同项目管理方式来创建不同类型的项目';
 
 $lang->tutorial->scrumProjectManage->manageProject->step3 = new stdClass();
 $lang->tutorial->scrumProjectManage->manageProject->step3->name = '点击Scrum项目';
@@ -686,3 +686,7 @@ $lang->tutorial->kanbanProjectManage->title = '看板项目管理教程';
 
 $lang->tutorial->kanbanProjectManage->manageProject = new stdClass();
 $lang->tutorial->kanbanProjectManage->manageProject = $lang->tutorial->scrumProjectManage->manageProject;
+
+$lang->tutorial->kanbanProjectManage->manageProject->step3 = new stdClass();
+$lang->tutorial->kanbanProjectManage->manageProject->step3->name = '点击项目看板';
+$lang->tutorial->kanbanProjectManage->manageProject->step3->desc = '可以在这里创建看板项目';

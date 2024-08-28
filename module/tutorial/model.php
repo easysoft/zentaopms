@@ -187,6 +187,11 @@ class tutorialModel extends model
             $project->name  = 'Waterfall Project';
             $project->model = 'waterfall';
         }
+        if($guide == 'kanbanProjectManage')
+        {
+            $project->name  = 'Kanban Project';
+            $project->model = 'kanban';
+        }
 
         return $project;
     }

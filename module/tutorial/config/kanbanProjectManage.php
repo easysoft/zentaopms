@@ -33,7 +33,7 @@ $kanbanProjectManage->tasks['manageProject']['steps'][] = array(
 
 $kanbanProjectManage->tasks['manageProject']['steps'][] = array(
     'type'   => 'click',
-    'target' => '#modelList div.scrum div.model-item',
+    'target' => '#modelList div.kanban div.model-item',
     'page'   => 'project-browse',
     'title'  => $lang->tutorial->kanbanProjectManage->manageProject->step3->name,
     'desc'   => $lang->tutorial->kanbanProjectManage->manageProject->step3->desc
