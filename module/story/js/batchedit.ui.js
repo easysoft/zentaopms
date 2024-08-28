@@ -222,9 +222,7 @@ window.loadBranches = function(product, obj)
         }
     });
 
-    let $plan    = $this.closest('tr').find('.form-batch-control[data-name="plan"]');
-    let planID   = $plan.val();
-    let planLink = $.createLink('product', 'ajaxGetPlans', 'productID=' + product + '&branch=' + branch + '&planID=' + planID + '&fieldID=' + storyID + '&needCreate=false&expired=&param=skipParent');
+    let planLink = $.createLink('product', 'ajaxGetPlans', 'productID=' + product + '&branch=' + branch + '&params=&skipparent=true');
     $.getJSON(planLink, function(items)
     {
         let $picker = $this.closest('tr').find('.picker-box[data-name="plan"]').zui('picker');

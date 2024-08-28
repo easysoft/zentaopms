@@ -66,9 +66,8 @@ window.loadProductPlans = function(productID, branch)
     if(typeof(branch) == 'undefined') branch = 0;
     if(!branch) branch = 0;
 
-    let planID     = $('[name=plan]').val();
-    let expired    = config.currentMethod == 'create' ? 'unexpired' : '';
-    let planLink   = $.createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=' + branch + '&planID=' + planID + '&fieldID=&needCreate=true&expired='+ expired +'&param=skipParent,forStory,' + config.currentMethod);
+    let params     = config.currentMethod == 'create' ? 'unexpired,noclosed' : '';
+    let planLink   = $.createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=' + branch + '&params=' + params + '&skipParent=true');
     let $planIdBox = $('#planIdBox');
 
     $.get(planLink, function(data)
