@@ -66,29 +66,31 @@ class tutorialModel extends model
     public function getProduct(): object
     {
         $product = new stdclass();
-        $product->id             = 1;
-        $product->program        = 0;
-        $product->line           = 0;
-        $product->plan           = 0;
-        $product->name           = 'Test product';
-        $product->code           = 'test';
-        $product->type           = 'normal';
-        $product->status         = 'normal';
-        $product->desc           = '';
-        $product->shadow         = '0';
-        $product->PO             = $this->app->user->account;
-        $product->QD             = '';
-        $product->RD             = '';
-        $product->acl            = 'open';
-        $product->createdBy      = $this->app->user->account;
-        $product->createdDate    = helper::now();
-        $product->createdVersion = '8.1.3';
-        $product->order          = 10;
-        $product->deleted        = '0';
-        $product->branch         = '';
-        $product->reviewer       = $this->app->user->account;
-        $product->branches       = array();
-        $product->plans          = array('1' => 'Test plan');
+        $product->id                = 1;
+        $product->program           = 0;
+        $product->line              = 0;
+        $product->plan              = 0;
+        $product->name              = 'Test product';
+        $product->code              = 'test';
+        $product->type              = 'normal';
+        $product->status            = 'normal';
+        $product->desc              = '';
+        $product->shadow            = '0';
+        $product->PO                = $this->app->user->account;
+        $product->QD                = '';
+        $product->RD                = '';
+        $product->acl               = 'open';
+        $product->createdBy         = $this->app->user->account;
+        $product->createdDate       = helper::now();
+        $product->createdVersion    = '8.1.3';
+        $product->order             = 10;
+        $product->deleted           = '0';
+        $product->branch            = '';
+        $product->reviewer          = $this->app->user->account;
+        $product->branches          = array();
+        $product->plans             = array('1' => 'Test plan');
+        $product->totalEpics        = 0;
+        $product->totalRequirements = 0;
 
         return $product;
     }
