@@ -44,7 +44,7 @@ class mr extends control
             }
 
             /* Unlock session for wait to get data of repo. */
-            session_write_close();
+            if(!in_array(strtolower($this->app->methodName), array('linkbug', 'linkstory', 'linktask'))) session_write_close();
         }
     }
 
