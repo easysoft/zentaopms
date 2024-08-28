@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'sqlbuilderpicker' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'sqlbuilderinput' . DS . 'v1.php';
 
 class sqlBuilderQueryFilter extends wg
 {
@@ -13,11 +14,11 @@ class sqlBuilderQueryFilter extends wg
     );
 
     protected static array $controls = array(
-        'table'   => array('type' => 'picker', 'items' => 'tables', 'width' => 'w-32'),
-        'field'   => array('type' => 'picker', 'items' => 'fields', 'width' => 'w-32'),
-        'name'    => array('type' => 'input', 'width' => 'w-32'),
-        'type'    => array('type' => 'picker', 'items' => 'typeList', 'width' => 'w-56'),
-        'default' => array('type' => 'input', 'width' => 'w-32')
+        'table'   => array('type' => 'picker', 'items' => 'tables', 'width' => '32'),
+        'field'   => array('type' => 'picker', 'items' => 'fields', 'width' => '32'),
+        'name'    => array('type' => 'input', 'width' => '32'),
+        'type'    => array('type' => 'picker', 'items' => 'typeList', 'width' => '56'),
+        'default' => array('type' => 'input', 'width' => '32')
     );
 
     protected function buildFormHeader()
@@ -30,7 +31,8 @@ class sqlBuilderQueryFilter extends wg
             $config = static::$controls[$name];
             $headers[] = formGroup
             (
-                setClass('form-header-item font-bold align-middle', $config['width']),
+                setClass('form-header-item font-bold align-middle'),
+                set::width($config['width']),
                 set::label($text)
             );
         }
@@ -51,34 +53,26 @@ class sqlBuilderQueryFilter extends wg
         if($type == 'picker') $items = $$items;
         $value = $rowValue[$name];
 
-        return formGroup
+        if($name == 'type') $width = (string)(int)$width / 2;
+
+        return div
         (
-            setClass($width),
-            inputGroup
+            setClass('flex row'),
+            sqlBuilderControl
             (
-                setClass('flex justify-start'),
-                $type == 'picker' ? picker
-                (
-                    setClass('flex-auto', array('basis-24' => $name == 'type')),
-                    set::name($name),
-                    set::items($items),
-                    set::disabled(empty($items)),
-                    set::value($value)
-                ) : null,
-                $type == 'input' ? input
-                (
-                    setClass('flex-auto'),
-                    set::name($name),
-                    set::value($value)
-                ) : null,
-                $name == 'type' ? picker
-                (
-                    setClass('basis-24'),
-                    set::name('typeOption'),
-                    set::items($selectList),
-                    set::value($rowValue['typeOption'])
-                ) : null
-            )
+                set::type($type),
+                set::name($name),
+                $type == 'picker' ? set::items($items) : null,
+                set::width($width),
+                set::value($value)
+            ),
+            $name == 'type' ? sqlBuilderPicker
+            (
+                set::name('typeOption'),
+                set::items($selectList),
+                set::width($width),
+                set::value($rowValue['typeOption'])
+            ) : null
         );
     }
 
