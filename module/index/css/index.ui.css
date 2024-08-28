@@ -35,7 +35,7 @@
 
 .hide-menu #menu {width: var(--zt-menu-fold-width)!important;}
 .hide-menu #menu .nav > li {padding: 4px}
-.hide-menu #menu .nav > .divider {padding: 0; margin: 6px}
+.hide-menu #menu .nav > .divider {padding: 6px;}
 .hide-menu #menu .nav > li > a {justify-content: center;}
 .hide-menu #menu .nav > li > a > .text {display: none;}
 .hide-menu #menu #menuMoreNav .nav > li > a > .text {display: flex;}
