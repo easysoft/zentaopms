@@ -10,12 +10,13 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$space = common::checkNotCN() ? ' ' : '';
+
 modalHeader
 (
     set::title($lang->execution->start . $space . $lang->executionCommon),
 );
 
-$space = common::checkNotCN() ? ' ' : '';
 formPanel
 (
     set::submitBtnText($lang->execution->start . $space . $lang->executionCommon),
