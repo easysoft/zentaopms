@@ -862,21 +862,24 @@ function restoreMenuNavToServer()
 /**
  * Generate menu nav items to be added.
  *
+ * @param {Cash} $item
  * @param {(item: string) => void} onClick click handler of menu item.
  * @returns {Array<{icon: string; text: string; onClick: () => void;}>}
  */
-function generateAddMenuNavItems(onClick)
+function generateAddMenuNavItems($item, onClick)
 {
-    const items = [
-        {
-            icon: 'icon-minus',
-            text: langData.divider,
-            onClick: () => {
-                onClick('divider');
-                saveMenuNavToServer();
+    const items = canAddDivider($item)
+        ? [
+            {
+                icon: 'icon-minus',
+                text: langData.divider,
+                onClick: () => {
+                    onClick('divider');
+                    saveMenuNavToServer();
+                }
             }
-        }
-    ];
+        ]
+        : [];
 
     const data = getMenuNavData();
     const allAppCodeSet = new Set(allAppsItemsMap.keys());
@@ -953,17 +956,24 @@ $(document).on('contextmenu', '#menuNav .divider', function(event)
             }
         }
     );
+    const toAddedItems = generateAddMenuNavItems($divider, addMenuToMainNavCb($divider));
     items.push(
-        {
-            text: langData.add,
-            items: generateAddMenuNavItems(addMenuToMainNavCb($divider))
-        }
+        toAddedItems.length === 0
+            ? {
+                text: langData.add,
+                disabled: true,
+            }
+            : {
+                text: langData.add,
+                items: toAddedItems,
+            }
     );
     items.push(
         {
             text: langData.restore,
             onClick: () => {
                 initAppsMenu(allAppsItems);
+                refreshMenu();
                 restoreMenuNavToServer();
             }
         }
@@ -1060,17 +1070,24 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
                 disabled: hideDisabled,
             }
         );
+        const toAddedItems = generateAddMenuNavItems($btn, addMenuToMainNavCb($btn.closest('li')));
         items.push(
-            {
-                text: langData.add,
-                items: generateAddMenuNavItems(addMenuToMainNavCb($btn.closest('li')))
-            }
+            toAddedItems.length === 0
+                ? {
+                    text: langData.add,
+                    disabled: true,
+                }
+                : {
+                    text: langData.add,
+                    items: toAddedItems,
+                }
         );
         items.push(
             {
                 text: langData.restore,
                 onClick: () => {
                     initAppsMenu(allAppsItems);
+                    refreshMenu();
                     restoreMenuNavToServer();
                 }
             }
@@ -1352,7 +1369,12 @@ function getAppItemIconAndTitle(name)
  */
 function addMenuToMainNavCb($li) {
     return (name) => {
-        if(name === 'divider') return $li.after('<li class="divider"></li>');
+        if(name === 'divider')
+        {
+            $li.after('<li class="divider"></li>');
+            refreshMenu();
+            return
+        }
 
         let item = allAppsItemsMap.get(name);
         const oldItem = apps.map[item.code];
@@ -1380,4 +1402,17 @@ function addMenuToMainNavCb($li) {
         refreshMenu();
         if(!apps.defaultCode) apps.defaultCode = item.code;
     };
+}
+
+/**
+ * Check whether current element can add a divider.
+ * @param {Cash} $item
+ * @returns {boolean}
+ */
+function canAddDivider($item)
+{
+    $item = $item.closest('li');
+    if($item.is('.divider'))        return false;
+    if($item.next().is('.divider')) return false;
+    return true;
 }
