@@ -438,8 +438,7 @@ class dataset
      */
     public function getAllStoriesWithExecution($fieldList)
     {
-        $stmt = $this->dao->select($fieldList)
-            ->from(TABLE_STORY)->alias('t1')
+        $stmt = $this->dao->select($fieldList)->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t3')->on('t1.id=t3.story')
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t3.project=t4.id')

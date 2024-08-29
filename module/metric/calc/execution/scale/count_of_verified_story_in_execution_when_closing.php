@@ -20,7 +20,7 @@
  */
 class count_of_verified_story_in_execution_when_closing extends baseCalc
 {
-    public $dataset = 'getAllStoriesWithExecution';
+    public $dataset = 'getDevStoriesWithExecution';
 
     public $fieldList = array('t3.project', 't1.stage', 't1.closedReason', 't1.verifiedDate', 't1.releasedDate', 't1.closedDate AS storyClosedDate', "if(t4.multiple = '1', t4.closedDate, t5.closedDate) as executionClosed");
 
