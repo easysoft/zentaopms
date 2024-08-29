@@ -458,7 +458,7 @@ class bug extends control
         $this->qa->setMenu($oldBug->product, $oldBug->branch);
 
         $users  = $this->loadModel('user')->getPairs('noclosed');
-        $builds = $this->loadModel('build')->getBuildPairs(array($oldBug->product), $oldBug->branch, 'withbranch,noreleased');
+        $builds = $this->loadModel('build')->getBuildPairs(array($oldBug->product), $oldBug->branch, 'withbranch,noreleased,nofail');
 
         /* 展示相关变量。 */
         /* Show the variables associated. */
@@ -525,7 +525,7 @@ class bug extends control
         $this->view->title   = $this->lang->bug->activate;
         $this->view->bug     = $oldBug;
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed', $oldBug->resolvedBy);
-        $this->view->builds  = $this->loadModel('build')->getBuildPairs(array($productID), $oldBug->branch, 'noempty,noreleased', 0, 'execution', $oldBug->openedBuild);
+        $this->view->builds  = $this->loadModel('build')->getBuildPairs(array($productID), $oldBug->branch, 'noempty,noreleased,nofail', 0, 'execution', $oldBug->openedBuild);
         $this->view->actions = $this->loadModel('action')->getList('bug', $bugID);
         $this->display();
     }
@@ -1290,7 +1290,7 @@ class bug extends control
         $this->view->title     = $this->products[$productID] . $this->lang->hyphen . $this->lang->bug->batchActivate;
         $this->view->bugs      = $this->bug->getByIdList($bugIdList);
         $this->view->users     = $this->user->getPairs('noclosed');
-        $this->view->builds    = $this->loadModel('build')->getBuildPairs(array($productID), $branch, 'noempty,noreleased');
+        $this->view->builds    = $this->loadModel('build')->getBuildPairs(array($productID), $branch, 'noempty,noreleased,nofail');
         $this->view->productID = $productID;
         $this->display();
     }

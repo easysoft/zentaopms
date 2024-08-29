@@ -987,15 +987,15 @@ class bugZen extends bug
         }
         elseif($executionID)
         {
-            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,noreleased,nowaitrelease', $executionID, 'execution');
+            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,noreleased,nowaitrelease,nofail', $executionID, 'execution');
         }
         elseif($projectID)
         {
-            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,noreleased,nowaitrelease', $projectID, 'project');
+            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,noreleased,nowaitrelease,nofail', $projectID, 'project');
         }
         else
         {
-            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,withbranch,noreleased,nowaitrelease');
+            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,withbranch,noreleased,nowaitrelease,nofail');
         }
         $builds = $this->build->addReleaseLabelForBuilds($productID, $builds);
 
@@ -1200,17 +1200,17 @@ class bugZen extends bug
 
         if($bug->execution)
         {
-            $openedBuilds   = $this->loadModel('build')->getBuildPairs(array($bug->product), $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased', $bug->execution, 'execution');
+            $openedBuilds   = $this->loadModel('build')->getBuildPairs(array($bug->product), $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased,nofail', $bug->execution, 'execution');
             $assignedToList = $this->user->getTeamMemberPairs($bug->execution, 'execution');
         }
         elseif($bug->project)
         {
-            $openedBuilds   = $this->loadModel('build')->getBuildPairs(array($bug->product), $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased', $bug->project, 'project');
+            $openedBuilds   = $this->loadModel('build')->getBuildPairs(array($bug->product), $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased,nofail', $bug->project, 'project');
             $assignedToList = $this->loadModel('project')->getTeamMemberPairs($bug->project);
         }
         else
         {
-            $openedBuilds   = $this->loadModel('build')->getBuildPairs(array($bug->product), $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased');
+            $openedBuilds   = $this->loadModel('build')->getBuildPairs(array($bug->product), $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased,nofail');
             $assignedToList = $this->bug->getProductMemberPairs($bug->product, (string)$bug->branch);
             $assignedToList = array_filter($assignedToList);
             if(empty($assignedToList)) $assignedToList = $this->user->getPairs('devfirst|noclosed');
