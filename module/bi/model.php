@@ -1352,7 +1352,7 @@ class biModel extends model
         }
 
         if(!empty($wheres)) $parser->addWhere($parser->combineConditions($this->getConditionsFromArray($parser, $wheres)));
-
+        if(!empty($querys)) $parser->addWhere($parser->combineConditions($this->getConditionsFromArray($parser, $querys)));
         if(!empty($groups)) foreach($groups as $group) $parser->addGroup($parser->getGroup($parser->getExpression($group)));
 
         return $parser->statement;
