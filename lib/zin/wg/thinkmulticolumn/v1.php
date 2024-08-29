@@ -90,6 +90,8 @@ class thinkMulticolumn extends thinkQuestion
             $canAddRows   = $supportAdd && isset($step->options->canAddRows) ? $step->options->canAddRows : '';
             foreach($fields as $key => $field) $requiredOptions[] = array('value' => $key + 1, 'text' => $field);
         }
+        jsVar('canAddRowsOfMulticol', (int)$canAddRows + 5);
+        jsVar('addRowsTips', $lang->thinkrun->tips->add);
 
         $formItems[] = array(
             formHidden('options[questionType]', $questionType),
