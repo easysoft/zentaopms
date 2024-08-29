@@ -91,10 +91,10 @@ function buildBody(array $cols): form
         if(!isset($col['fixed']) || empty($col['fixed'])) $col['fixed'] = 'no';
         $itemsList[$col['fixed']][] = array(
             'required' => isset($col['required']) && $col['required'] === true,
-            'title' => $col['title'],
-            'width' => $col['width'],
-            'name' => $col['name'],
-            'show' => !empty($col['show'])
+            'title'    => zget($col, 'title', ''),
+            'width'    => zget($col, 'width', ''),
+            'name'     => zget($col, 'name', ''),
+            'show'     => !empty($col['show'])
         );
     }
 
