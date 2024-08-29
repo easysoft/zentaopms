@@ -1211,6 +1211,9 @@ class project extends control
         $this->view->deptTree     = $this->loadModel('dept')->getTreeMenu(0, array('deptModel', 'createGroupManageMemberLink'), (int)$groupID);
         $this->view->groupUsers   = $groupUsers;
         $this->view->otherUsers   = $otherUsers;
+        $this->view->deptID       = $deptID;
+        $this->view->noUsers      = empty($groupUsers) && empty($otherUsers);
+
         $this->view->outsideUsers = array_diff_assoc($outsideUsers, $groupUsers);
 
         $this->display('group', 'manageMember');
