@@ -548,7 +548,7 @@ class pivotState
         {
             if(empty($query['table'])) return $this->setBuilderError('query', 'table', $index);
             if(empty($query['field'])) return $this->setBuilderError('query', 'field', $index);
-            if(empty($query['name']) && !is_numeric($value))  return $this->setBuilderError('query', 'name', $index);
+            if(empty($query['name']) && !is_numeric($query['name']))  return $this->setBuilderError('query', 'name', $index);
         }
         return true;
     }
@@ -770,7 +770,7 @@ class pivotState
      */
     public function addGroupBy($type, $order, $select, $function = 'count')
     {
-        list($table, $field, $alias, $function) = $select;
+        list($table, $field, $function) = array($select[0], $select[1], $select[3]);
 
         $fieldList = $this->getTableDescList($table);
         $name = $table . '_' . $fieldList[$field];
@@ -923,6 +923,7 @@ class pivotState
             foreach($groupByList as $index => $groupBy)
             {
                 list($table, $field, $alias, $function) = $groupBy['select'];
+                list($table, $field, $function) = array($groupBy['select'][0], $groupBy['select'][1], $groupBy['select'][3]);
                 $groupByList[$index] = array($table, $field, null, $function);
             }
         }
