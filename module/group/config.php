@@ -49,10 +49,11 @@ $config->group->actionList['manageView']['text'] = $lang->group->manageView;
 $config->group->actionList['manageView']['hint'] = $lang->group->manageView;
 $config->group->actionList['manageView']['url']  = helper::createLink('group', 'manageView', 'groupID={id}');
 
-$config->group->actionList['managePriv']['icon'] = 'lock';
-$config->group->actionList['managePriv']['text'] = $lang->group->managePriv;
-$config->group->actionList['managePriv']['hint'] = $lang->group->managePriv;
-$config->group->actionList['managePriv']['url']  = helper::createLink('group', 'managepriv', 'type=byPackage&groupID={id}');
+$config->group->actionList['managePriv']['icon']  = 'lock';
+$config->group->actionList['managePriv']['text']  = $lang->group->managePriv;
+$config->group->actionList['managePriv']['hint']  = $lang->group->managePriv;
+$config->group->actionList['managePriv']['url']   = helper::createLink('group', 'managepriv', 'type=byPackage&groupID={id}');
+$config->group->actionList['managePriv']['class'] = 'group-managepriv-btn';
 
 $config->group->actionList['manageProjectAdmin']['icon']        = 'persons';
 $config->group->actionList['manageProjectAdmin']['text']        = $lang->group->manageProjectAdmin;
@@ -65,6 +66,7 @@ $config->group->actionList['manageMember']['hint']        = $lang->group->manage
 $config->group->actionList['manageMember']['url']         = helper::createLink('group', 'manageMember', 'groupID={id}');
 $config->group->actionList['manageMember']['data-toggle'] = 'modal';
 $config->group->actionList['manageMember']['data-size']   = 'lg';
+$config->group->actionList['manageMember']['class']       = 'group-manageMember-btn';
 
 $config->group->actionList['edit']['icon']        = 'edit';
 $config->group->actionList['edit']['text']        = $lang->group->edit;

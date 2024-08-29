@@ -21,7 +21,7 @@ $canManagePriv     = hasPriv('group', 'managePriv');
 $canCreateGroup    = hasPriv('group', 'create');
 
 if($canManagePriv) $managePrivItem = array('class' => 'btn ghost', 'text' => $lang->group->managePrivByModule, 'url' => inLink('managePriv', 'type=byModule'), 'data-toggle' => 'modal');
-if($canCreateGroup) $createItem = array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->group->create, 'url' => inLink('create', '', '', true),  'data-toggle' => 'modal');
+if($canCreateGroup) $createItem = array('icon' => 'plus', 'class' => 'primary group-create-btn', 'text' => $lang->group->create, 'url' => inLink('create', '', '', true),  'data-toggle' => 'modal');
 toolbar
 (
     $canManagePriv ? item(set($managePrivItem)) : null,

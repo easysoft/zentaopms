@@ -983,3 +983,87 @@ $lang->tutorial->testManage->step24->name = '填写表单';
 $lang->tutorial->testManage->step25 = new stdClass();
 $lang->tutorial->testManage->step25->name = '保存表单';
 $lang->tutorial->testManage->step25->desc = '保存后可以生成测试报告';
+
+$lang->tutorial->accountManage = new stdClass();
+$lang->tutorial->accountManage->title = '账号管理教程';
+
+$lang->tutorial->accountManage->deptManage = new stdClass();
+$lang->tutorial->accountManage->deptManage->title = '维护部门';
+
+$lang->tutorial->accountManage->deptManage->step1 = new stdClass();
+$lang->tutorial->accountManage->deptManage->step1->name = '点击后台';
+$lang->tutorial->accountManage->deptManage->step1->desc = '您可以在这里维护管理账号，进行各类配置项的设置。';
+
+$lang->tutorial->accountManage->deptManage->step2 = new stdClass();
+$lang->tutorial->accountManage->deptManage->step2->name = '点击人员管理';
+$lang->tutorial->accountManage->deptManage->step2->desc = '您可以在这里维护部门、添加人员和分组配置权限';
+
+$lang->tutorial->accountManage->deptManage->step3 = new stdClass();
+$lang->tutorial->accountManage->deptManage->step3->name = '点击部门';
+$lang->tutorial->accountManage->deptManage->step3->desc = '您可以点击这里进行部门维护';
+
+$lang->tutorial->accountManage->deptManage->step4 = new stdClass();
+$lang->tutorial->accountManage->deptManage->step4->name = '填写表单';
+
+$lang->tutorial->accountManage->deptManage->step5 = new stdClass();
+$lang->tutorial->accountManage->deptManage->step5->name = '保存表单';
+$lang->tutorial->accountManage->deptManage->step5->desc = '保存后可以在左侧目录中看到';
+
+$lang->tutorial->accountManage->addUser = new stdClass();
+$lang->tutorial->accountManage->addUser->title = '添加人员';
+
+$lang->tutorial->accountManage->addUser->step1 = new stdClass();
+$lang->tutorial->accountManage->addUser->step1->name = '点击用户';
+$lang->tutorial->accountManage->addUser->step1->desc = '您可以在这里维护公司人员';
+
+$lang->tutorial->accountManage->addUser->step2 = new stdClass();
+$lang->tutorial->accountManage->addUser->step2->name = '点击添加人员按钮';
+$lang->tutorial->accountManage->addUser->step2->desc = '点击添加公司人员';
+
+$lang->tutorial->accountManage->addUser->step3 = new stdClass();
+$lang->tutorial->accountManage->addUser->step3->name = '填写表单';
+
+$lang->tutorial->accountManage->addUser->step4 = new stdClass();
+$lang->tutorial->accountManage->addUser->step4->name = '保存表单';
+$lang->tutorial->accountManage->addUser->step4->desc = '保存后可以在人员列表中查看';
+
+$lang->tutorial->accountManage->privManage = new stdClass();
+$lang->tutorial->accountManage->privManage->title = '维护权限';
+
+$lang->tutorial->accountManage->privManage->step1 = new stdClass();
+$lang->tutorial->accountManage->privManage->step1->name = '点击权限';
+$lang->tutorial->accountManage->privManage->step1->desc = '您可以在这里查看人员分组、维护人员权限。';
+
+$lang->tutorial->accountManage->privManage->step2 = new stdClass();
+$lang->tutorial->accountManage->privManage->step2->name = '点击新增分组';
+$lang->tutorial->accountManage->privManage->step2->desc = '点击增加人员分组';
+
+$lang->tutorial->accountManage->privManage->step3 = new stdClass();
+$lang->tutorial->accountManage->privManage->step3->name = '填写表单';
+
+$lang->tutorial->accountManage->privManage->step4 = new stdClass();
+$lang->tutorial->accountManage->privManage->step4->name = '保存表单';
+$lang->tutorial->accountManage->privManage->step4->desc = '保存后可以在人员列表中查看';
+
+$lang->tutorial->accountManage->privManage->step5 = new stdClass();
+$lang->tutorial->accountManage->privManage->step5->name = '点击成员维护';
+$lang->tutorial->accountManage->privManage->step5->desc = '您可以为权限组添加公司人员以便后面分组授权。';
+
+$lang->tutorial->accountManage->privManage->step6 = new stdClass();
+$lang->tutorial->accountManage->privManage->step6->name = '填写表单';
+
+$lang->tutorial->accountManage->privManage->step7 = new stdClass();
+$lang->tutorial->accountManage->privManage->step7->name = '保存表单';
+$lang->tutorial->accountManage->privManage->step7->desc = '保存后可以在人员列表中查看';
+
+$lang->tutorial->accountManage->privManage->step8 = new stdClass();
+$lang->tutorial->accountManage->privManage->step8->name = '点击分配权限';
+$lang->tutorial->accountManage->privManage->step8->desc = '点击为用户组维护权限';
+
+$lang->tutorial->accountManage->privManage->step9 = new stdClass();
+$lang->tutorial->accountManage->privManage->step9->name = '点击权限包的展开按钮';
+$lang->tutorial->accountManage->privManage->step9->desc = '点击查看权限包下的权限';
+
+$lang->tutorial->accountManage->privManage->step10 = new stdClass();
+$lang->tutorial->accountManage->privManage->step10->name = '保存表单';
+$lang->tutorial->accountManage->privManage->step10->desc = '保存后该分组的人员拥有分配到的权限';
