@@ -52,7 +52,7 @@ class thinkMulticolumn extends thinkQuestion
             $canAddRows = $step->options->supportAdd == 1 ? $step->options->canAddRows : 0;
         }
         jsVar('canAddRowsOfMulticol', $canAddRows + 5);
-        jsVar('addRowsTips', $lang->thinkrun->tips->add);
+        jsVar('addRowsTips', $lang->thinkrun->tips->addRow);
 
         $batchItems = array();
         foreach($fields as $key => $field)
@@ -91,7 +91,7 @@ class thinkMulticolumn extends thinkQuestion
             foreach($fields as $key => $field) $requiredOptions[] = array('value' => $key + 1, 'text' => $field);
         }
         jsVar('canAddRowsOfMulticol', (int)$canAddRows + 5);
-        jsVar('addRowsTips', $lang->thinkrun->tips->add);
+        jsVar('addRowsTips', $lang->thinkrun->tips->addRow);
 
         $formItems[] = array(
             formHidden('options[questionType]', $questionType),
