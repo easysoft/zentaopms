@@ -56,7 +56,7 @@ if(!empty($task->team))
         $member->memberDisabled = false;
         if($member->status == 'done') $member->memberDisabled = true;
 
-        $member->hourDisabled = $memberDisabled;
+        $member->hourDisabled = $member->memberDisabled;
         if($task->mode == 'multi') $member->hourDisabled = false;
     }
 }
