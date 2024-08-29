@@ -37,3 +37,7 @@ class changeStoryTester extends tester
         $viewPage = $this->loadPage('story', 'view');
         if($viewPage->dom->storyName->getText() != $storyName) return $this->failed('需求名称不正确');
         if($viewPage->dom->status->getText()    != '评审中') return $this->failed('需求状态不正确');
+
+        return $this->success('变更需求成功');
+}
+}
