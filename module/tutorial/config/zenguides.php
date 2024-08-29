@@ -36,10 +36,11 @@ $config->tutorial->guides[$manageAccount->name]          = $manageAccount;
 /* Basic tutorial. */
 $config->tutorial->guides[$scrumProjectManage->basic->name]     = $scrumProjectManage->basic;
 $config->tutorial->guides[$waterfallProjectManage->basic->name] = $waterfallProjectManage->basic;
-$config->tutorial->guides[$kanbanProjectManage->name]    = $kanbanProjectManage;
+$config->tutorial->guides[$kanbanProjectManage->basic->name]    = $kanbanProjectManage->basic;
 
 /* Advance tutorial. */
 $config->tutorial->guides[$scrumProjectManage->advance->name]     = $scrumProjectManage->advance;
 $config->tutorial->guides[$waterfallProjectManage->advance->name] = $waterfallProjectManage->advance;
+$config->tutorial->guides[$kanbanProjectManage->advance->name]    = $kanbanProjectManage->advance;
 
 if($config->systemMode == 'light') unset($config->tutorial->guides[$managePrograms->name]);
