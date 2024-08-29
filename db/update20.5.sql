@@ -35,3 +35,5 @@ UPDATE `zt_workflowaction` SET `method`='operate',        `type`='single' WHERE 
 UPDATE `zt_workflowaction` SET `method`='operate',        `type`='single' WHERE `module`='epic' AND `action`='assignTo';
 UPDATE `zt_workflowaction` SET `method`='operate',        `type`='single' WHERE `module`='epic' AND `action`='review';
 UPDATE `zt_workflowaction` SET `method`='operate',        `type`='single' WHERE `module`='epic' AND `action`='change';
+
+UPDATE `zt_workflow` SET `table` = 'zt_story' WHERE `table` = '`zt_story`';
