@@ -314,6 +314,9 @@ ciCommon:
 	sed -i '/uniqueIndex/d' zentaopms/db/standard/*.sql
 	sed -i 's/KEY `mtype` (`type`),/KEY `mtype` (`type`)/g' zentaopms/db/xuanxuan.sql
 
+	# Merge xuanxuan sql to zentao.
+	cat zentaopms/db/xuanxuan.sql >> zentaopms/db/zentao.sql
+
 	cp -a zentaopms zentaoalm
 	sed -i '/^\s*$$config->langs\['"'"'de'"'"']/d' zentaopms/config/config.php
 	sed -i '/^\s*$$config->langs\['"'"'fr'"'"']/d' zentaopms/config/config.php
