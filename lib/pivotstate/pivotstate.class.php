@@ -498,6 +498,7 @@ class pivotState
     public function checkFuncs($type = 'func')
     {
         $funcs = $this->getFuncs($type);
+        if(empty($funcs)) return false;
 
         $checkDuplicate = array();
         foreach($funcs as $index => $func)

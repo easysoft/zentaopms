@@ -50,6 +50,7 @@ $lang->bi->aggField      = '聚合字段';
 $lang->bi->allFields     = '已选/新增字段';
 $lang->bi->addQuery      = '添加动态查询筛选器';
 $lang->bi->emptyQuerys   = '暂未添加动态查询筛选器。';
+$lang->bi->emptySelect   = '请至少选择一个字段。';
 
 $lang->bi->allFieldsTip  = '已选的查询字段和新增的函数字段。';
 $lang->bi->groupFieldTip = '使用分组字段对查询结果进行分组。';
