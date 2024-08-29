@@ -48,10 +48,10 @@ class createStoryTester extends tester
         $browsePage->dom->browseStoryName->click();
         $form->wait(1);
 
-        $viewPafe = $this->loadPage('story', 'view');
-        if($viewPafe->dom->storyName->getText() != $storyName) return $this->failed('需求名称不正确');
-        if($viewPafe->dom->status->getText() != '激活') return $this->failed('需求状态不正确');
-        if($viewPafe->dom->historyOpenedBy->getText() != 'admin') return $this->failed('创建人不正确');
+        $viewPage = $this->loadPage('story', 'view');
+        if($viewPage->dom->storyName->getText() != $storyName) return $this->failed('需求名称不正确');
+        if($viewPage->dom->status->getText() != '激活') return $this->failed('需求状态不正确');
+        if($viewPage->dom->historyOpenedBy->getText() != 'admin') return $this->failed('创建人不正确');
 
         return $this->success('创建需求成功');
 }
