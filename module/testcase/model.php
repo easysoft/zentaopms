@@ -262,6 +262,8 @@ class testcaseModel extends model
      */
     public function getTestCases(int $productID, string|int $branch, string $browseType, int $queryID, int $moduleID, string $caseType = '', string $auto = 'no', string $orderBy = 'id_desc', object $pager = null): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getCases();
+
         $modules    = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : array();
         $browseType = ($browseType == 'bymodule' and $this->session->caseBrowseType and $this->session->caseBrowseType != 'bysearch') ? $this->session->caseBrowseType : $browseType;
         $auto       = $this->cookie->onlyAutoCase ? 'auto' : $auto;

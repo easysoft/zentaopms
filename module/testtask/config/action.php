@@ -45,6 +45,7 @@ $config->testtask->actionList['report']['text']     = $lang->testtask->testrepor
 $config->testtask->actionList['report']['hint']     = $lang->testtask->testreport;
 $config->testtask->actionList['report']['url']      = array('module' => 'testreport', 'method' => 'browse', 'params' => 'objectID={product}&objectType=product&extra={id}');
 $config->testtask->actionList['report']['data-app'] = $app->tab;
+$config->testtask->actionList['report']['class']    = 'testreport-browse-btn';
 
 $config->testtask->actionList['view']['icon']        = 'list-alt';
 $config->testtask->actionList['view']['text']        = $lang->testtask->view;
@@ -91,6 +92,7 @@ $config->testtask->cases->actionList['runCase']['hint']        = $lang->testtask
 $config->testtask->cases->actionList['runCase']['url']         = array('module' => 'testtask', 'method' => 'runCase', 'params' => 'id={id}');
 $config->testtask->cases->actionList['runCase']['data-size']   = 'lg';
 $config->testtask->cases->actionList['runCase']['data-toggle'] = 'modal';
+$config->testtask->cases->actionList['runCase']['class']       = 'testtask-runCase-btn';
 
 $config->testtask->cases->actionList['results']['icon'] = 'list-alt';
 $config->testtask->cases->actionList['results']['text'] = $lang->testtask->results;
@@ -98,6 +100,7 @@ $config->testtask->cases->actionList['results']['hint'] = $lang->testtask->resul
 $config->testtask->cases->actionList['results']['url']  = array('module' => 'testtask', 'method' => 'results', 'params' => 'id={id}');
 $config->testtask->cases->actionList['results']['data-size']   = 'lg';
 $config->testtask->cases->actionList['results']['data-toggle'] = 'modal';
+$config->testtask->cases->actionList['results']['class']       = 'testtask-results-btn';
 
 $config->testtask->cases->actionList['unlinkCase']['icon']         = 'unlink';
 $config->testtask->cases->actionList['unlinkCase']['text']         = $lang->testtask->unlinkCase;

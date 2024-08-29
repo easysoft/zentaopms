@@ -38,6 +38,7 @@ $config->tutorial->guides[$scrumProjectManage->basic->name]     = $scrumProjectM
 $config->tutorial->guides[$waterfallProjectManage->basic->name] = $waterfallProjectManage->basic;
 $config->tutorial->guides[$kanbanProjectManage->basic->name]    = $kanbanProjectManage->basic;
 $config->tutorial->guides[$taskManage->name]                    = $taskManage;
+$config->tutorial->guides[$testManage->name]                    = $testManage;
 
 /* Advance tutorial. */
 $config->tutorial->guides[$scrumProjectManage->advance->name]     = $scrumProjectManage->advance;

@@ -726,6 +726,28 @@ class tutorialModel extends model
     }
 
     /**
+     * 获取新手模式测试单。
+     * Get run.
+     *
+     * @access public
+     * @return object
+     */
+    public function getRun(): object
+    {
+        $run = new stdClass();
+        $run->id            = 1;
+        $run->task          = 1;
+        $run->version       = 1;
+        $run->assignedTo    = '';
+        $run->lastRunner    = '';
+        $run->lastRunDate   = '';
+        $run->lastRunResult = '';
+        $run->status        = 'normal';
+        $run->case          = 1;
+        return $run;
+    }
+
+    /**
      * 获取新手模式用例。
      * Get Cases.
      *

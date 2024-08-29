@@ -1211,7 +1211,7 @@ class testtaskModel extends model
      */
     public function getRunById(int $runID): object|false
     {
-        $run = $this->dao->findById($runID)->from(TABLE_TESTRUN)->fetch();
+        $run = common::isTutorialMode() ? $this->loadModel('tutorial')->getRun() : $this->dao->findById($runID)->from(TABLE_TESTRUN)->fetch();
         if(!$run) return false;
 
         $run->case = $this->loadModel('testcase')->getById($run->case, $run->version);

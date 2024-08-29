@@ -888,3 +888,98 @@ $lang->tutorial->taskManage->step23->name = '填写表单';
 $lang->tutorial->taskManage->step24 = new stdClass();
 $lang->tutorial->taskManage->step24->name = '保存表单';
 $lang->tutorial->taskManage->step24->desc = '保存后任务状态变为已关闭';
+
+$lang->tutorial->testManage = new stdClass();
+$lang->tutorial->testManage->title = '测试管理教程';
+
+$lang->tutorial->testManage->step1 = new stdClass();
+$lang->tutorial->testManage->step1->name = '点击测试';
+$lang->tutorial->testManage->step1->desc = '点击测试进行测试管理';
+
+$lang->tutorial->testManage->step2 = new stdClass();
+$lang->tutorial->testManage->step2->name = '点击用例';
+$lang->tutorial->testManage->step2->desc = '点击用例进行用例管理';
+
+$lang->tutorial->testManage->step3 = new stdClass();
+$lang->tutorial->testManage->step3->name = '点击创建用例';
+$lang->tutorial->testManage->step3->desc = '可以在这里创建用例';
+
+$lang->tutorial->testManage->step4 = new stdClass();
+$lang->tutorial->testManage->step4->name = '填写表单';
+
+$lang->tutorial->testManage->step5 = new stdClass();
+$lang->tutorial->testManage->step5->name = '保存表单';
+$lang->tutorial->testManage->step5->desc = '保存后在用例列表中查看';
+
+$lang->tutorial->testManage->step6 = new stdClass();
+$lang->tutorial->testManage->step6->name = '点击测试单';
+$lang->tutorial->testManage->step6->desc = '点击维护测试单信息';
+
+$lang->tutorial->testManage->step7 = new stdClass();
+$lang->tutorial->testManage->step7->name = '点击提交测试';
+$lang->tutorial->testManage->step7->desc = '点击提交测试单会生成测试单';
+
+$lang->tutorial->testManage->step8 = new stdClass();
+$lang->tutorial->testManage->step8->name = '填写表单';
+
+$lang->tutorial->testManage->step9 = new stdClass();
+$lang->tutorial->testManage->step9->name = '保存表单';
+$lang->tutorial->testManage->step9->desc = '保存后在测试单列表查看';
+
+$lang->tutorial->testManage->step10 = new stdClass();
+$lang->tutorial->testManage->step10->name = '点击测试单名称';
+$lang->tutorial->testManage->step10->desc = '点击查看测试单详情';
+
+$lang->tutorial->testManage->step11 = new stdClass();
+$lang->tutorial->testManage->step11->name = '点击关联用例';
+$lang->tutorial->testManage->step11->desc = '点击将用例关联进测试单';
+
+$lang->tutorial->testManage->step12 = new stdClass();
+$lang->tutorial->testManage->step12->name = '勾选用例';
+$lang->tutorial->testManage->step12->desc = '您可以将用例关联在测试单中';
+
+$lang->tutorial->testManage->step13 = new stdClass();
+$lang->tutorial->testManage->step13->name = '点击保存';
+$lang->tutorial->testManage->step13->desc = '保存后用例成功关联进测试单';
+
+$lang->tutorial->testManage->step14 = new stdClass();
+$lang->tutorial->testManage->step14->name = '点击执行';
+$lang->tutorial->testManage->step14->desc = '点击执行用例';
+
+$lang->tutorial->testManage->step15 = new stdClass();
+$lang->tutorial->testManage->step15->name = '填写表单';
+
+$lang->tutorial->testManage->step16 = new stdClass();
+$lang->tutorial->testManage->step16->name = '保存表单';
+$lang->tutorial->testManage->step16->desc = '保存后可以完成用例的执行';
+
+$lang->tutorial->testManage->step17 = new stdClass();
+$lang->tutorial->testManage->step17->name = '点击执行结果';
+$lang->tutorial->testManage->step17->desc = '可以在这里执行用例';
+
+$lang->tutorial->testManage->step18 = new stdClass();
+$lang->tutorial->testManage->step18->name = '选择用例步骤';
+
+$lang->tutorial->testManage->step19 = new stdClass();
+$lang->tutorial->testManage->step19->name = '点击转Bug';
+$lang->tutorial->testManage->step19->desc = '可以将执行失败的用例步骤转为Bug';
+
+$lang->tutorial->testManage->step20 = new stdClass();
+$lang->tutorial->testManage->step20->name = '填写表单';
+
+$lang->tutorial->testManage->step21 = new stdClass();
+$lang->tutorial->testManage->step21->name = '保存表单';
+
+$lang->tutorial->testManage->step22 = new stdClass();
+$lang->tutorial->testManage->step22->name = '点击测试单';
+
+$lang->tutorial->testManage->step23 = new stdClass();
+$lang->tutorial->testManage->step23->name = '生成测试报告';
+$lang->tutorial->testManage->step23->desc = '可以在这里生成测试报告';
+
+$lang->tutorial->testManage->step24 = new stdClass();
+$lang->tutorial->testManage->step24->name = '填写表单';
+
+$lang->tutorial->testManage->step25 = new stdClass();
+$lang->tutorial->testManage->step25->name = '保存表单';
+$lang->tutorial->testManage->step25->desc = '保存后可以生成测试报告';

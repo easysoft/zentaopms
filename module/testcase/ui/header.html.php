@@ -294,7 +294,7 @@ toolbar
             setClass('btn primary'),
             set::icon('plus'),
             set::url($currentCreateItem['url']),
-            set(array('data-app' => $app->tab)),
+            set(array('data-app' => $app->tab, 'class' => 'createBtn')),
             $currentCreateItem['text']
         ),
         count($createItems) > 1 ?  dropdown
