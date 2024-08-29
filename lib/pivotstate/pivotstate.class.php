@@ -518,6 +518,22 @@ class pivotState
     }
 
     /**
+     * Check wheres.
+     *
+     * @access public
+     * @return bool
+     */
+    public function checkWheres()
+    {
+        return true;
+    }
+
+    public function checkQuerys()
+    {
+        return true;
+    }
+
+    /**
      * Init sql builder.
      *
      * @access public
