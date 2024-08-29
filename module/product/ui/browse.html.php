@@ -248,7 +248,7 @@ $fnGenerateFootToolbar = function() use ($lang, $app, $product, $productID, $pro
         $canBatchClose      = hasPriv($storyType, 'batchClose') && strtolower($browseType) != 'closedbyme' && strtolower($browseType) != 'closedstory';
         $canBatchReview     = $canBeChanged && hasPriv($storyType, 'batchReview');
         $canBatchAssignTo   = $canBeChanged && hasPriv($storyType, 'batchAssignTo');
-        $canBatchChangePlan = $canBeChanged && hasPriv($storyType, 'batchChangePlan') && $productID && $product && (($product->type != 'normal' && $branchID != 'all') || $product->type == 'normal');
+        $canBatchChangePlan = $canBeChanged && hasPriv($storyType, 'batchChangePlan') && $config->vision == 'rnd' && $productID && $product && (($product->type != 'normal' && $branchID != 'all') || $product->type == 'normal');
     }
 
     $canBatchChangeGrade   = $canBeChanged && hasPriv($storyType, 'batchChangeGrade') && count($gradePairs) > 1 && $config->{$storyType}->gradeRule == 'cross' && !$isProjectStory;
