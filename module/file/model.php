@@ -1182,8 +1182,8 @@ class fileModel extends model
             if(stripos($officeTypes, $file->extension) !== false) $canPreview = true;
         }
 
-        if($canPreview) $html .= html::a($downloadLink, "<i class='icon icon-eye'></i>", '_blank', "class='fileAction btn btn-link text-primary' title='{$this->lang->file->preview}' onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title')\"");
-        if(common::hasPriv('file', 'download')) $html .= html::a(helper::createLink('file', 'download', "fileID=$file->id"), "<i class='icon icon-download'></i>", '_blank', "class='fileAction btn btn-link text-primary' title='{$this->lang->file->downloadFile}'");
+        if($canPreview) $html .= html::a(helper::createLink('file', 'download', "fileID=$file->id&mouse=left"), "<i class='icon icon-eye'></i>", '', "class='fileAction btn btn-link text-primary' title='{$this->lang->file->preview}' data-toggle='modal' data-size='lg'");
+        if(common::hasPriv('file', 'download')) $html .= html::a($downloadLink, "<i class='icon icon-download'></i>", '_blank', "class='fileAction btn btn-link text-primary' title='{$this->lang->file->downloadFile}'");
         if(common::hasPriv($objectType, 'edit', $object))
         {
             if($showEdit and common::hasPriv('file', 'edit')) $html .= html::a('###', "<i class='icon icon-pencil-alt'></i>", '', "id='renameFile$file->id' class='fileAction btn btn-link edit text-primary' onclick='showRenameBox($file->id)' title='{$this->lang->file->edit}'");
