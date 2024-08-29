@@ -120,7 +120,8 @@ class actionTao extends actionModel
                 if($extra == 'sprint' || $extra == 'stage') $execution = $objectID;
                 break;
             case 'module':
-                $module = $this->dao->select('type,root')->from(TABLE_MODULE)->where('id')->eq($actionType != 'deleted' ? $extra : $objectID)->fetch();
+                $moduleID = $actionType != 'deleted' ? (int)$extra : (int)$objectID;
+                $module   = $this->dao->select('type,root')->from(TABLE_MODULE)->where('id')->eq($moduleID)->fetch();
                 if(!empty($module) && $module->type == 'story') $product = array($module->root);
                 break;
             case 'review':
