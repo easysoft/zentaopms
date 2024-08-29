@@ -1067,3 +1067,20 @@ $lang->tutorial->accountManage->privManage->step9->desc = '点击查看权限包
 $lang->tutorial->accountManage->privManage->step10 = new stdClass();
 $lang->tutorial->accountManage->privManage->step10->name = '保存表单';
 $lang->tutorial->accountManage->privManage->step10->desc = '保存后该分组的人员拥有分配到的权限';
+
+$lang->tutorial->productManage = new stdClass();
+$lang->tutorial->productManage->title = '产品管理教程';
+
+$lang->tutorial->productManage->addProduct = new stdClass();
+$lang->tutorial->productManage->addProduct->title = '产品维护';
+
+$lang->tutorial->productManage->addProduct->step1 = new stdClass();
+$lang->tutorial->productManage->addProduct->step1->name = '点击添加产品';
+$lang->tutorial->productManage->addProduct->step1->desc = '点击添加产品';
+
+$lang->tutorial->productManage->addProduct->step2 = new stdClass();
+$lang->tutorial->productManage->addProduct->step2->name = '填写表单';
+
+$lang->tutorial->productManage->addProduct->step3 = new stdClass();
+$lang->tutorial->productManage->addProduct->step3->name = '保存表单';
+$lang->tutorial->productManage->addProduct->step3->desc = '保存后可以在产品列表中查看';

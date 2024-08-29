@@ -5,6 +5,7 @@ $config->tutorial->guides = array();
 
 /* Basic tutorial. */
 $config->tutorial->guides[$accountManage->name]                 = $accountManage;
+$config->tutorial->guides[$productManage->name]                 = $productManage;
 $config->tutorial->guides[$scrumProjectManage->basic->name]     = $scrumProjectManage->basic;
 $config->tutorial->guides[$waterfallProjectManage->basic->name] = $waterfallProjectManage->basic;
 $config->tutorial->guides[$kanbanProjectManage->basic->name]    = $kanbanProjectManage->basic;
