@@ -44,6 +44,7 @@ class taskModel extends model
 
             $this->manageTaskTeam($oldTask->mode, $task, $teamData);
             $task = $this->computeMultipleHours($oldTask, $task);
+            if($task->assignedTo == 'closed') $task->assignedTo = '';
         }
 
         $this->dao->update(TABLE_TASK)->data($task)
