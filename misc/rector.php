@@ -16,12 +16,14 @@ $cacheDir = getenv('RECTOR_CACHE_DIR');
 $cacheDir = $cacheDir ?: '/tmp/rector_cached_files';
 
 return static function (RectorConfig $rectorConfig) use ($version, $cacheDir): void {
-    $rectorConfig->skip([
+    $skipFiles = array(
         'test/*',
         'framework/zand',
-        'lib/requests',
         '*/export2xlsx.php',
-    ]);
+    );
+    if($version == '81') $skipFiles[] = 'lib/requests/*';
+    $rectorConfig->skip($skipFiles);
+
     $rectorConfig->phpVersion(constant(PhpVersion::class . '::PHP_' . $version));
     $rectorConfig->sets([constant(DowngradeLevelSetList::class . '::DOWN_TO_PHP_' . $version)]);
     $rectorConfig->rules([
