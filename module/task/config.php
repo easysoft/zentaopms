@@ -122,6 +122,7 @@ $config->task->actionList['close']['hint']        = $lang->task->close;
 $config->task->actionList['close']['text']        = $lang->task->close;
 $config->task->actionList['close']['url']         = array('module' => 'task', 'method' => 'close', 'params' => 'taskID={id}');
 $config->task->actionList['close']['data-toggle'] = 'modal';
+$config->task->actionList['close']['class']       = 'task-close-btn';
 
 $config->task->actionList['recordWorkhour']['icon']        = 'time';
 $config->task->actionList['recordWorkhour']['hint']        = $lang->task->record;

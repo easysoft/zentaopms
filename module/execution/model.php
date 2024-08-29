@@ -1331,6 +1331,8 @@ class executionModel extends model
      */
     public function getList(int $projectID = 0, string $type = 'all',string  $status = 'all', int $limit = 0, int $productID = 0, int $branch = 0, object|null $pager = null, bool $withChildren = true)
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getExecutionStats($type);
+
         if($status == 'involved') return $this->getInvolvedExecutionList($projectID, $status, $limit, $productID, $branch);
 
         if($productID != 0)
@@ -1823,6 +1825,8 @@ class executionModel extends model
      */
     public function getNoMultipleID(int $projectID): int
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getExecution()->id;
+
         return (int)$this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->andWhere('multiple')->eq(0)->andWhere('deleted')->eq(0)->fetch('id');
     }
 

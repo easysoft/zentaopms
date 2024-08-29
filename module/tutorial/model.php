@@ -192,6 +192,12 @@ class tutorialModel extends model
             $project->name  = 'Kanban Project';
             $project->model = 'kanban';
         }
+        if($guide && strpos($guide, 'taskManage') !== false)
+        {
+            $project->name     = 'No multiple Project';
+            $project->model    = 'scrum';
+            $project->multiple = '0';
+        }
 
         return $project;
     }
@@ -453,6 +459,12 @@ class tutorialModel extends model
             $execution->name = 'Test Kanban';
             $execution->type = 'kanban';
         }
+        if($guide && strpos($guide, 'taskManage') !== false)
+        {
+            $execution->name     = 'No multiple execution';
+            $execution->type     = 'spring';
+            $execution->multiple = 0;
+        }
 
         return $execution;
     }
@@ -648,10 +660,16 @@ class tutorialModel extends model
      */
     public function getTasks(): array
     {
-        $task = $this->getTask();
+        $waitTask = $this->getTask();
+
+        $doneTask = $this->getTask();
+        $doneTask->id         = 2;
+        $doneTask->status     = 'done';
+        $doneTask->finishedBy = 'test';
 
         $tasks = array();
-        $tasks[$task->id] = $task;
+        $tasks[$waitTask->id] = $waitTask;
+        $tasks[$doneTask->id] = $doneTask;
         return $tasks;
     }
 

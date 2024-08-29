@@ -37,6 +37,7 @@ $config->tutorial->guides[$manageAccount->name]          = $manageAccount;
 $config->tutorial->guides[$scrumProjectManage->basic->name]     = $scrumProjectManage->basic;
 $config->tutorial->guides[$waterfallProjectManage->basic->name] = $waterfallProjectManage->basic;
 $config->tutorial->guides[$kanbanProjectManage->basic->name]    = $kanbanProjectManage->basic;
+$config->tutorial->guides[$taskManage->name]                    = $taskManage;
 
 /* Advance tutorial. */
 $config->tutorial->guides[$scrumProjectManage->advance->name]     = $scrumProjectManage->advance;

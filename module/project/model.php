@@ -2164,7 +2164,7 @@ class projectModel extends model
     {
         $this->session->set('multiple', true);
 
-        $project = $this->projectTao->fetchProjectInfo($projectID);
+        $project = common::isTutorialMode() ? $this->loadModel('tutorial')->getProject() : $this->projectTao->fetchProjectInfo($projectID);
         if(empty($project) || $project->multiple) return false;
         if(!in_array($project->type, array('project', 'sprint', 'kanban'))) return false;
 

@@ -114,7 +114,7 @@ toolbar
     ) : null,
     $canCreate && $canBatchCreate ? btngroup
     (
-        btn(setClass('btn primary'), set::icon('plus'), set::url($createLink), $lang->task->create),
+        btn(setClass('btn primary createTask-btn'), set::icon('plus'), set::url($createLink), $lang->task->create),
         dropdown
         (
             btn(setClass('btn primary dropdown-toggle'),
@@ -123,7 +123,7 @@ toolbar
             set::placement('bottom-end')
         )
     ) : null,
-    $canCreate && !$canBatchCreate ? item(set($createItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
+    $canCreate && !$canBatchCreate ? item(set($createItem + array('class' => 'btn primary createTask-btn', 'icon' => 'plus'))) : null,
     $canBatchCreate && !$canCreate ? item(set($batchCreateItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null
 );
 

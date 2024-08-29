@@ -796,3 +796,95 @@ $lang->tutorial->kanbanProjectManage->manageBuild->step4->desc = '保存后在�
 $lang->tutorial->kanbanProjectManage->manageBuild->step5 = new stdClass();
 $lang->tutorial->kanbanProjectManage->manageBuild->step5->name = '点击累积流图';
 $lang->tutorial->kanbanProjectManage->manageBuild->step5->desc = '可以在这里查看累积流图进行看板跟踪';
+
+$lang->tutorial->taskManage = new stdClass();
+$lang->tutorial->taskManage->title = '任务管理教程';
+
+$lang->tutorial->taskManage->step1 = new stdClass();
+$lang->tutorial->taskManage->step1->name = '点击项目';
+$lang->tutorial->taskManage->step1->desc = '点击进入项目，对项目及其任务进行管理';
+
+$lang->tutorial->taskManage->step2 = new stdClass();
+$lang->tutorial->taskManage->step2->name = '点击创建项目';
+$lang->tutorial->taskManage->step2->desc = '点击创建一个无迭代的项目管理任务';
+
+$lang->tutorial->taskManage->step3 = new stdClass();
+$lang->tutorial->taskManage->step3->name = '点击Scrum项目';
+$lang->tutorial->taskManage->step3->desc = '点击创建一个无迭代的项目';
+
+$lang->tutorial->taskManage->step4 = new stdClass();
+$lang->tutorial->taskManage->step4->name = '填写表单';
+
+$lang->tutorial->taskManage->step5 = new stdClass();
+$lang->tutorial->taskManage->step5->name = '保存表单';
+$lang->tutorial->taskManage->step5->desc = '保存后在项目列表查看';
+
+$lang->tutorial->taskManage->step6 = new stdClass();
+$lang->tutorial->taskManage->step6->name = '点击项目名称';
+$lang->tutorial->taskManage->step6->desc = '点击项目名称，进入项目';
+
+$lang->tutorial->taskManage->step7 = new stdClass();
+$lang->tutorial->taskManage->step7->name = '点击新建任务';
+$lang->tutorial->taskManage->step7->desc = '点击创建项目的任务';
+
+$lang->tutorial->taskManage->step8 = new stdClass();
+$lang->tutorial->taskManage->step8->name = '填写表单';
+
+$lang->tutorial->taskManage->step9 = new stdClass();
+$lang->tutorial->taskManage->step9->name = '保存表单';
+$lang->tutorial->taskManage->step9->desc = '保存后可以在任务列表中查看任务';
+
+$lang->tutorial->taskManage->step10 = new stdClass();
+$lang->tutorial->taskManage->step10->name = '点击指派给';
+$lang->tutorial->taskManage->step10->desc = '点击领取、分配任务到人';
+
+$lang->tutorial->taskManage->step11 = new stdClass();
+$lang->tutorial->taskManage->step11->name = '填写表单';
+
+$lang->tutorial->taskManage->step12 = new stdClass();
+$lang->tutorial->taskManage->step12->name = '保存表单';
+$lang->tutorial->taskManage->step12->desc = '保存后在任务列表中指派给字段会显示被指派的用户';
+
+$lang->tutorial->taskManage->step13 = new stdClass();
+$lang->tutorial->taskManage->step13->name = '点击开始任务';
+$lang->tutorial->taskManage->step13->desc = '您可以在这里开始任务，并记录消耗和剩余工时';
+
+$lang->tutorial->taskManage->step14 = new stdClass();
+$lang->tutorial->taskManage->step14->name = '填写表单';
+
+$lang->tutorial->taskManage->step15 = new stdClass();
+$lang->tutorial->taskManage->step15->name = '保存表单';
+$lang->tutorial->taskManage->step15->desc = '保存后任务状态变为进行中';
+
+$lang->tutorial->taskManage->step16 = new stdClass();
+$lang->tutorial->taskManage->step16->name = '点击记录工时';
+$lang->tutorial->taskManage->step16->desc = '您可以在这里记录消耗和剩余工时，当剩余工时为0后，任务会自动完成';
+
+$lang->tutorial->taskManage->step17 = new stdClass();
+$lang->tutorial->taskManage->step17->name = '填写表单';
+
+$lang->tutorial->taskManage->step18 = new stdClass();
+$lang->tutorial->taskManage->step18->name = '保存表单';
+$lang->tutorial->taskManage->step18->desc = '保存后返回任务列表';
+
+$lang->tutorial->taskManage->step19 = new stdClass();
+$lang->tutorial->taskManage->step19->name = '点击完成任务';
+$lang->tutorial->taskManage->step19->desc = '您可以在这里完成任务';
+
+$lang->tutorial->taskManage->step20 = new stdClass();
+$lang->tutorial->taskManage->step20->name = '填写表单';
+
+$lang->tutorial->taskManage->step21 = new stdClass();
+$lang->tutorial->taskManage->step21->name = '保存表单';
+$lang->tutorial->taskManage->step21->desc = '保存后任务状态变为已完成';
+
+$lang->tutorial->taskManage->step22 = new stdClass();
+$lang->tutorial->taskManage->step22->name = '点击关闭任务';
+$lang->tutorial->taskManage->step22->desc = '确认任务完成后点击关闭任务';
+
+$lang->tutorial->taskManage->step23 = new stdClass();
+$lang->tutorial->taskManage->step23->name = '填写表单';
+
+$lang->tutorial->taskManage->step24 = new stdClass();
+$lang->tutorial->taskManage->step24->name = '保存表单';
+$lang->tutorial->taskManage->step24->desc = '保存后任务状态变为已关闭';
