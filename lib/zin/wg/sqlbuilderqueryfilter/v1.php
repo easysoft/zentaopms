@@ -11,7 +11,8 @@ class sqlBuilderQueryFilter extends wg
         'querys?: array',
         'tables?: array',
         'fields?: array',
-        'defaultItems?: array'
+        'defaultItems?: array',
+        'error?: array'
     );
 
     protected static array $controls = array(
@@ -44,16 +45,18 @@ class sqlBuilderQueryFilter extends wg
     protected function buildFormGroup($index, $name, $rowValue)
     {
         global $lang;
-        list($tables, $fields, $defaultItems) = $this->prop(array('tables', 'fields', 'defaultItems'));
+        list($tables, $fields, $defaultItems, $error) = $this->prop(array('tables', 'fields', 'defaultItems', 'error'));
         $fields     = \zget($fields, $rowValue['table'], array());
         $typeList   = $lang->dataview->varFilter->requestTypeList;
         $selectList = $lang->dataview->varFilter->selectList;
 
         $config = static::$controls[$name];
         extract($config);
-        if($type == 'picker') $items = $$items;
-        $value = $rowValue[$name];
+
+        $items    = $type == 'picker' ? $$items : array();
+        $value    = $rowValue[$name];
         $isSelect = $name == 'type' && $value == 'select';
+        $errorKey = "query_{$name}_{$index}";
 
         if($isSelect) $width = (string)(int)$width / 2;
 
@@ -71,10 +74,11 @@ class sqlBuilderQueryFilter extends wg
             (
                 set::type($type),
                 set::name("{$name}_{$index}"),
-                $type == 'picker' ? set::items($items) : null,
+                set::items($items),
                 set::width($width),
                 set::value($value),
-                set::required($name == 'type')
+                set::required($name == 'type'),
+                set::error(isset($error[$errorKey]))
             ),
             $isSelect ? sqlBuilderPicker
             (

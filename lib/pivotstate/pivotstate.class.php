@@ -537,6 +537,7 @@ class pivotState
         {
             if(empty($query['table'])) return $this->setBuilderError('query', 'table', $index);
             if(empty($query['field'])) return $this->setBuilderError('query', 'field', $index);
+            if(empty($query['name']))  return $this->setBuilderError('query', 'name', $index);
         }
         return true;
     }
