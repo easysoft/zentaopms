@@ -108,6 +108,10 @@ zentaoxx:
 	mv zentaoxx/db/ zentaoxx/db_bak
 	mkdir zentaoxx/db/
 	sed -i "s/datetime NOT NULL DEFAULT '0000-00-00 00:00:00'/datetime NULL/" zentaoxx/db_bak/*.sql
+	sed -i "s/datetime NOT NULL/datetime NULL/" zentaoxx/db_bak/*.sql
+	sed -i "s/text NOT NULL DEFAULT ''/text NULL/" zentaoxx/db_bak/*.sql
+	sed -i "s/text NOT NULL/text NULL/" zentaoxx/db_bak/*.sql
+	sed -i "s/ENGINE=MyISAM/ENGINE=InnoDB/" zentaoxx/db_bak/*.sql
 	sed -i "/`xxb_user` ADD `clientStatus`/d; /`xxb_user` ADD `clientLang`/d; /`xxb_file` CHANGE `pathname`/d" zentaoxx/db_bak/xuanxuan.sql
 	cp zentaoxx/db_bak/upgradexuanxuan*.sql zentaoxx/db_bak/xuanxuan.sql zentaoxx/db/
 	rm -rf zentaoxx/db_bak/
