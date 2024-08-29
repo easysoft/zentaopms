@@ -1278,6 +1278,7 @@ class storyModel extends model
             $story->lastEditedBy   = $account;
             $story->lastEditedDate = $now;
             $story->status         = $oldStory->status;
+            $story->closedReason   = $result == 'reject' ? $reason : '';
             $story->reviewedBy     = str_contains(",{$oldStory->reviewedBy},", ",{$account},") ? $oldStory->reviewedBy : ($oldStory->reviewedBy . ',' . $account);
 
             $twinsIdList = $storyID . ($oldStory->twins ? ",{$oldStory->twins}" : '');
@@ -1297,7 +1298,7 @@ class storyModel extends model
 
             $story->id     = $storyID;
             $story->result = $result;
-            $this->recordReviewAction($oldStories[$storyID], $story, $reason);
+            $this->recordReviewAction($oldStories[$storyID], $story);
 
             /* Sync twins. */
             $changes = common::createChanges($oldStory, $story);
