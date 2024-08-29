@@ -18,3 +18,22 @@ class changeStoryTester extends tester
      * @param  string $storyName $reviewer
      * @access public
      * @return object
+     */
+    public function changeStory($storyName)
+    {
+        $form = $this->initForm('story', 'change', array('id' => 7), 'appIframe-product');
+        $form->dom->title->setValue($storyName);
+        $form->dom->btn($this->lang->save)->click();
+        $form->wait(1);
+
+        if($this->response('method') != 'view')
+        {
+            if($form->dom->alertmodal('text') == '『研发需求名称』不能为空。') return $this->success('变更需求表单页面提示正确');
+           return $this->failed('变更需求表单页面提示信息不正确');
+        }
+
+        /* 跳转到需求列表页面搜索创建需求并进入该需求详情页。 */
+
+        $viewPage = $this->loadPage('story', 'view');
+        if($viewPage->dom->storyName->getText() != $storyName) return $this->failed('需求名称不正确');
+        if($viewPage->dom->status->getText()    != '评审中') return $this->failed('需求状态不正确');
