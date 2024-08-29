@@ -372,32 +372,6 @@ class pivotState
     }
 
     /**
-     * Check sql builder.
-     *
-     * @access public
-     * @return bool
-     */
-    public function checkSqlBuilder()
-    {
-        return $this->checkFrom() && $this->checkJoins() && $this->checkSelects() && $this->checkFuncs();
-    }
-
-    /**
-     * check from.
-     *
-     * @access public
-     * @return bool
-     */
-    public function checkFrom()
-    {
-        $builder = $this->sqlBuilder;
-        $from    = $builder['from'];
-        if(empty($from['table'])) return $this->setBuilderError('from', 'table', $from['alias']);
-
-        return true;
-    }
-
-    /**
      * Reset builder error.
      *
      * @access public
@@ -438,6 +412,32 @@ class pivotState
     {
         $key = implode('_', array_filter(array($key, $type, $field)));
         return isset($this->builderError[$key]);
+    }
+
+    /**
+     * Check sql builder.
+     *
+     * @access public
+     * @return bool
+     */
+    public function checkSqlBuilder()
+    {
+        return $this->checkFrom() && $this->checkJoins() && $this->checkSelects() && $this->checkFuncs();
+    }
+
+    /**
+     * check from.
+     *
+     * @access public
+     * @return bool
+     */
+    public function checkFrom()
+    {
+        $builder = $this->sqlBuilder;
+        $from    = $builder['from'];
+        if(empty($from['table'])) return $this->setBuilderError('from', 'table', $from['alias']);
+
+        return true;
     }
 
     /**
