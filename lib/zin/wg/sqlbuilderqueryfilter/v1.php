@@ -81,7 +81,8 @@ class sqlBuilderQueryFilter extends wg
                 set::name("typeOption_$index"),
                 set::items($selectList),
                 set::width($width),
-                set::value($rowValue['typeOption'])
+                set::value($rowValue['typeOption']),
+                set::required(true)
             ) : null
         );
     }
