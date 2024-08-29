@@ -19,6 +19,7 @@ $execution->totalStory        = '';
 $execution->totalTask         = '';
 $execution->undoneTask        = '';
 $execution->yesterdayDoneTask = '';
+$execution->type              = '';
 
 $items = array();
 foreach($executions as $executionItem)
