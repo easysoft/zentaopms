@@ -58,7 +58,6 @@ class groupModel extends model
     {
         $this->lang->error->unique = $this->lang->group->repeat;
         $this->dao->update(TABLE_GROUP)->data($group)
-            ->check('name', 'unique', "id != {$groupID} AND vision = '{$this->config->vision}' AND project = '{$group->project}'")
             ->where('id')->eq($groupID)
             ->exec();
 
