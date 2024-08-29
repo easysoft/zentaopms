@@ -1089,6 +1089,7 @@ class bug extends control
                 $bug->id         = $bugID;
                 $bug->confirmed  = 1;
                 $bug->assignedTo = $this->app->user->account;
+                unset($bug->deadline);
 
                 $this->bug->confirm($bug);
                 $message = $this->executeHooks($bugID);
