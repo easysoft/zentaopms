@@ -110,6 +110,8 @@ window.renderCell = function(result, info)
         if(showGrade) gradeLabel = gradeMap[story.grade];
         if(gradeLabel) html += "<span class='label gray-pale rounded-xl clip'>" + gradeLabel + "</span> ";
         if(story.color) result[0].props.style = 'color: ' + story.color;
+
+        if(story.type == 'story' && !storyViewPriv) result[0] = result[0].props.children;
         if(html) result.unshift({html});
     }
     if(info.col.name == 'status' && result)

@@ -21,6 +21,7 @@ jsVar('storyType', $storyType);
 jsVar('tab', $app->tab);
 jsVar('vision', $config->vision);
 jsVar('window.globalSearchType', $storyType);
+jsVar('storyViewPriv', hasPriv('story', 'view'));
 
 $viewType          = $this->cookie->storyViewType ? $this->cookie->storyViewType : 'tree';
 $storyCommon       = $storyType == 'requirement' ? $lang->URCommon : $lang->SRCommon;

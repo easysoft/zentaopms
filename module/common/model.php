@@ -1351,7 +1351,7 @@ eof;
         parse_str($vars, $params);
 
         if(empty($app->user)) return false;
-        list($module, $method) = commonTao::getStoryModuleAndMethod($module, $method, $params);
+        //list($module, $method) = commonTao::getStoryModuleAndMethod($module, $method, $params);
         list($module, $method) = commonTao::getBoardModuleAndMethod($module, $method, $params);
 
         /* Compatible with old search. */

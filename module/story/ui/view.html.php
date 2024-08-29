@@ -98,6 +98,7 @@ if($story->children)
         $cols['title']['data-toggle'] = 'modal';
         $cols['title']['data-size']   = 'lg';
     }
+    if(!hasPriv('story', 'view')) unset($cols['title']['link']);
 
     if(($story->type == 'story' && $config->vision == 'or') || ($story->vision == 'or' && $config->vision == 'rnd')) unset($cols['actions']);
 
