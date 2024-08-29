@@ -80,16 +80,16 @@ class groupZen extends group
         /* Browse action in workflow. */
         if(isset($this->lang->$module->menus) && $method == 'browse')
         {
-            $this->config->group->package->$packageCode->privs["$module-$method"] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 5, 'depend' => array(), 'recommend' => array());
+            $this->config->group->package->$packageCode->privs["$module-$method"] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 5, 'depend' => array(), 'recommend' => array());
 
             foreach($this->lang->$module->menus as $flowMethod => $flowName)
             {
-                $this->config->group->package->$packageCode->privs["$module-$flowMethod"] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 5, 'depend' => array("$module-$method"), 'recommend' => array());
+                $this->config->group->package->$packageCode->privs["$module-$flowMethod"] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 5, 'depend' => array("$module-$method"), 'recommend' => array());
             }
         }
         else
         {
-            $this->config->group->package->$packageCode->privs["$module-$method"] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 5, 'depend' => array(), 'recommend' => array());
+            $this->config->group->package->$packageCode->privs["$module-$method"] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 5, 'depend' => array(), 'recommend' => array());
         }
     }
     /**
