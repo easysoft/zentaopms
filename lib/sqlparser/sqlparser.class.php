@@ -311,15 +311,24 @@ class sqlparser
         $columnA = $this->trimExpr($columnA);
         $tableB  = $this->trimExpr($tableB);
 
-        /* 如果tableB不为空，那么columnB就是字段，需要trim。*/
-        if(!empty($tableB)) $columnA = $this->trimExpr($columnA);
+        $expr = '';
+        if(empty($operator))
+        {
+            $expr = $columnA;
+        }
+        else
+        {
+            /* 如果tableB不为空，那么columnB就是字段，需要trim。*/
+            if(!empty($tableB)) $columnA = $this->trimExpr($columnA);
 
-        $exprA = empty($tableA) ? "`$columnA`" : "`$tableA`.`$columnA`";
-        $exprB = empty($tableB) ? "$columnB" : "`$tableB`.`$columnB`";
+            $exprA = empty($tableA) ? "`$columnA`" : "`$tableA`.`$columnA`";
+            $exprB = empty($tableB) ? "$columnB" : "`$tableB`.`$columnB`";
 
-        $operator = strtoupper($operator);
+            $operator = strtoupper($operator);
+            $expr = "$exprA $operator $exprB";
+        }
 
-        $condition->expr  = "$exprA $operator $exprB";
+        $condition->expr  = $expr;
         $condition->group = $group;
 
         return $condition;

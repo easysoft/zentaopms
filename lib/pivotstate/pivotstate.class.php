@@ -876,6 +876,28 @@ class pivotState
     }
 
     /**
+     * Get querys.
+     *
+     * @access public
+     * @return array
+     */
+    public function getQuerys()
+    {
+        $queryArray = array();
+        $querys = $this->sqlBuilder['querys'];
+        foreach($querys as $index => $query)
+        {
+            $variable = "var$index";
+            $table    = $query['table'];
+            $field    = $query['field'];
+            $queryArray[] = array(null, "if(\${$variable}='',true,\${$variable}=`{$table}`.`{$field}`)");
+            if($index < count($querys) - 1)$queryArray[] = 'and';
+        }
+
+        return $queryArray;
+    }
+
+    /**
      * Get group by.
      *
      * @param  bool   $sort
