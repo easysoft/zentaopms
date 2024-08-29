@@ -185,6 +185,8 @@ class programplanZen extends programplan
      */
     protected function prepareEditPlan(int $planID, int $projectID, object $plan, object|null $parentStage = null): object|false
     {
+        if($plan->end < $plan->begin) dao::$errors['end'] = $this->lang->programplan->error->planFinishSmall;
+
         if($plan->parent)
         {
             if(!empty($parentStage) && $plan->begin < $parentStage->begin) dao::$errors['begin'] = sprintf($this->lang->programplan->error->letterParent,  $parentStage->begin);
