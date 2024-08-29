@@ -575,7 +575,7 @@ class fileModel extends model
 
         $objectType = $file->objectType;
         $objectID   = $file->objectID;
-        $table      = $this->config->objectTables[$objectType];
+        $table      = zget($this->config->objectTables, $objectType, '');
 
         if(!$table) return true;
 
