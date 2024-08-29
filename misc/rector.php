@@ -19,6 +19,7 @@ return static function (RectorConfig $rectorConfig) use ($version, $cacheDir): v
     $skipFiles = array(
         'test/*',
         'framework/zand',
+        'lib/requests',
         '*/export2xlsx.php',
     );
     if($version == '81') $skipFiles[] = 'lib/requests/*';
