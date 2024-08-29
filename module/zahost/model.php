@@ -157,8 +157,6 @@ class zahostModel extends model
      */
     public function ping(string $address): bool
     {
-        if(!filter_var($address, FILTER_VALIDATE_IP) && !filter_var(gethostbyname($address), FILTER_VALIDATE_IP)) return false;
-
         if(strcasecmp(PHP_OS, 'WINNT') === 0)
         {
             exec("ping -n 1 {$address}", $outcome, $status);
@@ -183,7 +181,8 @@ class zahostModel extends model
     {
         $address = str_replace(array('https://', 'http://'), '', $address);
 
-        if ($this->ping($address)) return true;
+        if(!filter_var($address, FILTER_VALIDATE_IP) && !filter_var(gethostbyname($address), FILTER_VALIDATE_IP)) return false;
+        if($this->ping($address)) return true;
 
         foreach(array(80, 443, $this->config->zahost->defaultPort) as $port)
         {
