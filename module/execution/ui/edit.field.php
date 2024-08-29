@@ -16,7 +16,13 @@ $hidden          = empty($project->hasProduct) ? 'hidden' : '';
 
 if($project)
 {
-    if($project->model == 'scrum')
+    if(!$project->hasProduct || !$project->multiple)
+    {
+        $fields->field('project')
+            ->className('hidden')
+            ->value(data('execution.project'));
+    }
+    elseif($project->model == 'scrum')
     {
         $fields->field('project')
             ->label($lang->execution->projectName)
