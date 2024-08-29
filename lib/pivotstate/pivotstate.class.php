@@ -393,7 +393,7 @@ class pivotState
      */
     public function setBuilderError($key, $type = '', $field = '')
     {
-        $key = implode('_', array_filter(array($key, $type, $field)));
+        $key = implode('_', array_filter(array($key, $type, $field), function($value) { return $value !== ''; }));
         $this->builderError[$key] = true;
 
         return false;
@@ -410,7 +410,7 @@ class pivotState
      */
     public function getBuilderError($key, $type = '', $field = '')
     {
-        $key = implode('_', array_filter(array($key, $type, $field)));
+        $key = implode('_', array_filter(array($key, $type, $field), function($value) { return $value !== ''; }));
         return isset($this->builderError[$key]);
     }
 
