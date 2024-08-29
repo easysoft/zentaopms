@@ -199,6 +199,7 @@ class file extends control
                         $row->$fieldName = preg_replace($pattern, $replacement, $row->$fieldName);
                     }
 
+                    if(isset($row->$fieldName) && is_numeric($row->$fieldName)) $row->$fieldName = $row->$fieldName . "\t";
                     $output .= isset($row->$fieldName) ? str_replace(array('"', '&nbsp;', '&gt;'), array('“', ' ', '>'), htmlSpecialString(strip_tags((string)$row->$fieldName, '<img>'))) : '';
                     $output .= '","';
                 }
