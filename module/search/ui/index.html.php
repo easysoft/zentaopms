@@ -79,6 +79,7 @@ form
     setClass('w-1/2'),
     setStyle(array('margin' => '0 auto')),
     set::actions(false),
+    set::ajax(array('beforeSubmit' => jsRaw('() => {searchWords($(event.target));return false;}'))),
     inputGroup
     (
         input
@@ -115,7 +116,7 @@ form
             btn
             (
                 setClass('text-primary shadow-none'),
-                on::click('searchWords'),
+                on::click("searchWords($(event.target).closest('form'))"),
                 icon('search')
             )
         )

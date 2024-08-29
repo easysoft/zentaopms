@@ -1,7 +1,5 @@
-function searchWords()
+searchWords = function($form)
 {
-    const $target = $(event.target).closest('button');
-    const $form = $target.closest('#mainContent').find('form');
     const words = $form.find('input[name=words]').val();
     if(words == '')
     {
