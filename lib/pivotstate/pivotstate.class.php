@@ -1071,6 +1071,30 @@ class pivotState
     }
 
     /**
+     * Match field setting from builder.
+     *
+     * @param  string $key
+     * @param  array  $setting
+     * @access public
+     * @return array
+     */
+    public function matchFieldSettingFromBuilder($key, $setting)
+    {
+        $selects = array_merge($this->getSelects(), $this->getFuncSelects());
+        foreach($selects as $select)
+        {
+            list($table, $field, $alias) = $select;
+            if($key != $alias) continue;
+
+            $fieldList = $this->getTableDescList($table);
+            $name = zget($fieldList, $field, $field);
+            $setting[$this->clientLang] = $name;
+            $setting['field']           = $field;
+        }
+        return $setting;
+    }
+
+    /**
      * Generate func alias.
      *
      * @access public
@@ -1765,7 +1789,7 @@ class pivotState
             }
             else
             {
-                $newFieldSettings[$field] = $setting;
+                $newFieldSettings[$field] = $this->matchFieldSettingFromBuilder($field, $setting);
             }
         }
 
