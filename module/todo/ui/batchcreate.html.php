@@ -89,7 +89,7 @@ formBatchPanel
     (
         set::label($lang->todo->beginAndEnd),
         set::width('260px'),
-        set::control(false),
+        set::control('inputGroup'),
         set::name('beginAndEnd'),
         inputGroup
         (
