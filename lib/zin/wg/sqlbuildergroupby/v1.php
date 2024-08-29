@@ -38,7 +38,12 @@ class sqlBuilderGroupBy extends wg
         return div
         (
             setClass('flex row gap-x-4 justify-between'),
-            span($name),
+            span
+            (
+                setClass('ellipsis'),
+                set::title($name),
+                $name
+            ),
             btnGroup
             (
                 btn
