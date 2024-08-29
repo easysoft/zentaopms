@@ -1277,7 +1277,9 @@ class biModel extends model
     {
         if(is_string($conditions)) return $parser->operatorCondition($conditions);
 
-        if(!is_array(current($conditions))) return $parser->getCondition($conditions);
+        $first = current($conditions);
+
+        if(!is_array($first) && !in_array($first, array('and', 'or'))) return $parser->getCondition($conditions);
 
         $conditionExprs = array();
         foreach($conditions as $condition) $conditionExprs[] = $this->getConditionsFromArray($parser, $condition);

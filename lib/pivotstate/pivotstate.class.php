@@ -888,13 +888,14 @@ class pivotState
     {
         $queryArray = array();
         $querys = $this->sqlBuilder['querys'];
+        $hasWhere = count($this->sqlBuilder['wheres']) > 0;
         foreach($querys as $index => $query)
         {
+            if($index != 0 || $hasWhere) $queryArray[] = 'and';
             $variable = "var$index";
             $table    = $query['table'];
             $field    = $query['field'];
             $queryArray[] = array(null, "if(\${$variable}='',true,\${$variable}=`{$table}`.`{$field}`)");
-            if($index < count($querys) - 1)$queryArray[] = 'and';
         }
 
         return $queryArray;
