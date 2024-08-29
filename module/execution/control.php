@@ -937,6 +937,8 @@ class execution extends control
                 ->add('consumed', empty($burn) ? 0 : $burn->consumed)
                 ->get();
 
+            if(!$burnData->left) $burnData->left = 0;
+
             if(is_numeric($burnData->estimate)) $this->execution->fixFirst($burnData);
             return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
         }
