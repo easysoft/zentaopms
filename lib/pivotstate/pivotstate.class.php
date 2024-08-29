@@ -1016,6 +1016,12 @@ class pivotState
         $this->addAggFunc();
     }
 
+    /**
+     * Process query filters.
+     *
+     * @access public
+     * @return void
+     */
     public function processQueryFilters()
     {
         $querys = $this->sqlBuilder['querys'];
