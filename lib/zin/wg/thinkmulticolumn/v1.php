@@ -53,6 +53,7 @@ class thinkMulticolumn extends thinkQuestion
         }
         jsVar('canAddRowsOfMulticol', $canAddRows + 5);
         jsVar('addRowsTips', $lang->thinkrun->tips->addRow);
+        jsVar('addLang', $lang->thinkrun->add);
 
         $batchItems = array();
         foreach($fields as $key => $field)
@@ -92,6 +93,7 @@ class thinkMulticolumn extends thinkQuestion
         }
         jsVar('canAddRowsOfMulticol', (int)$canAddRows + 5);
         jsVar('addRowsTips', $lang->thinkrun->tips->addRow);
+        jsVar('addLang', $lang->thinkrun->add);
 
         $formItems[] = array(
             formHidden('options[questionType]', $questionType),
