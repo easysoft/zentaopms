@@ -25,6 +25,8 @@ class zfile
      */
     public function copyDir($from, $to, $logLevel = false, $logFile = '', $excludeFiles = array(), $toIsLink = false)
     {
+        if(is_file($from)) return false;
+
         static $copiedFiles = array();
         static $errorFiles  = array();
         $count = $size = 0;

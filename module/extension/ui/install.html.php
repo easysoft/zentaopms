@@ -18,12 +18,15 @@ modalHeader
 );
 
 $fileItems = array();
-foreach($files as $fileName => $md5)
+if(!empty($files))
 {
-    $fileItems[] = li
-    (
-        $fileName
-    );
+    foreach($files as $fileName => $md5)
+    {
+        $fileItems[] = li
+        (
+            $fileName
+        );
+    }
 }
 
 !empty($error) ? div
@@ -93,11 +96,11 @@ empty($error) && !isset($license) ? div
         div
         (
             setClass('alert-content'),
-            p 
+            p
             (
                 $lang->extension->successDownloadedPackage
             ),
-            p 
+            p
             (
                 $lang->extension->successCopiedFiles
             ),
@@ -105,7 +108,7 @@ empty($error) && !isset($license) ? div
             (
                 $fileItems
             ),
-            p 
+            p
             (
                 $lang->extension->successInstallDB
             )
