@@ -922,7 +922,6 @@ class pivotState
         {
             foreach($groupByList as $index => $groupBy)
             {
-                list($table, $field, $alias, $function) = $groupBy['select'];
                 list($table, $field, $function) = array($groupBy['select'][0], $groupBy['select'][1], $groupBy['select'][3]);
                 $groupByList[$index] = array($table, $field, null, $function);
             }
