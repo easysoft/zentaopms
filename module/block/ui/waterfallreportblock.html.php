@@ -15,8 +15,8 @@ $items[] = array
 (
     'id'        => $project->id,
     'text'      => $project->name,
-    'url'       => createLink('project', 'index', "projectID={$projectItem->id}"),
-    'activeUrl' => createLink('block', 'printBlock', "blockID={$block->id}&params={$params}")
+    'url'       => createLink('project', 'index', "projectID={$project->id}"),
+    'activeUrl' => createLink('block', 'printBlock', "blockID={$block->id}&params=" . helper::safe64Encode(http_build_query($params)))
 );
 
 $remainingDays   = !empty($project->remainingDays) ? $project->remainingDays : 0;

@@ -3341,6 +3341,24 @@ class blockZen extends block
         $getScrum     = in_array($modelType, array('all', 'scrum'));
         $getWaterfall = in_array($modelType, array('all', 'waterfall'));
 
+        $investedGroup      = array();
+        $consumeTaskGroup   = array();
+        $leftTaskGroup      = array();
+        $countStoryGroup    = array();
+        $finishedStoryGroup = array();
+        $unclosedStoryGroup = array();
+        $countTaskGroup     = array();
+        $waitTaskGroup      = array();
+        $doingTaskGroup     = array();
+        $countBugGroup      = array();
+        $closedBugGroup     = array();
+        $activatedBugGroup  = array();
+        $SVGroup            = array();
+        $PVGroup            = array();
+        $EVGroup            = array();
+        $CVGroup            = array();
+        $ACGroup            = array();
+        $taskProgressGroup  = array();
         if($getScrum)
         {
             /* 敏捷项目的统计信息。 */
