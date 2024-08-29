@@ -28,7 +28,7 @@ $lang->bi->modeDisableTip = 'Hand-written SQL statements are more flexible, and 
 $lang->bi->fromTable     = 'Main table';
 $lang->bi->leftTable     = 'Left join';
 $lang->bi->joinCondition = 'Condition';
-$lang->bi->joinTable     = ' = %s';
+$lang->bi->joinTable     = '%s';
 $lang->bi->of            = 'Of';
 $lang->bi->do            = 'Do';
 $lang->bi->set           = 'Set';

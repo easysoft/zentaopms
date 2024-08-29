@@ -32,7 +32,7 @@ $lang->bi->modeDisableTip = '手写SQL语句灵活性较高，暂不支持切回
 $lang->bi->fromTable     = '主表';
 $lang->bi->leftTable     = '左连接';
 $lang->bi->joinCondition = '连接条件为';
-$lang->bi->joinTable     = ' = %s的';
+$lang->bi->joinTable     = '%s的';
 $lang->bi->of            = '的';
 $lang->bi->do            = '对';
 $lang->bi->set           = '进行';

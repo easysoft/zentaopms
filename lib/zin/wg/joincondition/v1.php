@@ -81,6 +81,11 @@ class joinCondition extends wg
         (
             $this->buildColumnA(),
             $this->buildFieldA(),
+            span
+            (
+                setClass('mx-4 leading-8'),
+                '='
+            ),
             $this->buildFieldB(),
             formGroup
             (
