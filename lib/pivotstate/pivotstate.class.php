@@ -773,11 +773,11 @@ class pivotState
      */
     public function addGroupBy($type, $order, $select, $function = 'count')
     {
-        list($table, $field, $function) = array($select[0], $select[1], $select[3]);
+        list($table, $field, $selectFunc) = array($select[0], $select[1], $select[3]);
 
         $fieldList = $this->getTableDescList($table);
         $name = $table . '_' . $fieldList[$field];
-        if(!empty($function)) $name = $name . '_' . $function;
+        if(!empty($selectFunc)) $name = $name . '_' . $selectFunc;
 
         $select[3] = $function;
         $select[4] = $name;
@@ -925,7 +925,8 @@ class pivotState
         {
             foreach($groupByList as $index => $groupBy)
             {
-                list($table, $field, $function) = array($groupBy['select'][0], $groupBy['select'][1], $groupBy['select'][3]);
+                $select = $groupBy['select'];
+                list($table, $field, $function) = array($select[0], $select[1], $select[3]);
                 $groupByList[$index] = array($table, $field, null, $function);
             }
         }
