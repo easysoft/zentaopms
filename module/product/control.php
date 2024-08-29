@@ -952,7 +952,7 @@ class product extends control
     {
         $projects = $this->product->getProjectPairsByProduct($productID, $branch);
         if($this->app->getViewType() == 'json') return print(json_encode($projects));
-        if($pageType == 'old') return print(html::select('project', $projects, $projectID, "class='form-control' onchange='loadProductExecutions({$productID}, this.value)'"));;
+        if($pageType == 'old') return print(html::select('project', array(0 => '') + $projects, $projectID, "class='form-control' onchange='loadProductExecutions({$productID}, this.value)'"));;
 
         $items = array();
         foreach($projects as $projectID => $projectName) $items[] = array('text' => $projectName, 'value' => $projectID, 'keys' => $projectName);
@@ -1008,7 +1008,7 @@ class product extends control
         if($pageType == 'old')
         {
             $datamultiple = !empty($project) ? "data-multiple={$project->multiple}" : '';
-            return print(html::select('execution', $executions, $executionID, "class='form-control' $datamultiple"));
+            return print(html::select('execution', array(0 => '') + $executions, $executionID, "class='form-control' $datamultiple"));
         }
 
         $executionList = array();
