@@ -1581,7 +1581,7 @@ class project extends control
         if($pageType == 'old')
         {
             $disabled = empty($project->multiple) ? 'disabled' : '';
-            return print(html::select('execution', $executions, '', "class='form-control $disabled' $disabled"));
+            return print(html::select('execution', array(0 => '') + $executions, '', "class='form-control $disabled' $disabled"));
         }
 
         $data             = array();
