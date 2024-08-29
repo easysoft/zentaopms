@@ -19,7 +19,7 @@ $linkCommitItem = $canLinkCommit ? btn(
     set::icon('plus'),
     set::text($lang->design->linkCommit),
     set::type('primary'),
-    set('url', empty($repos) ? createLink('repo', 'create', "projectID={$desgin->project}"): createLink('design', 'linkCommit', "designID={$design->id}")),
+    set('url', empty($repos) ? createLink('repo', 'create', "projectID={$design->project}"): createLink('design', 'linkCommit', "designID={$design->id}")),
     empty($repos) ? setData('dismiss', true) : setData('load', 'modal')
 ) : null;
 
