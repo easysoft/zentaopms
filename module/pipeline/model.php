@@ -111,7 +111,7 @@ class pipelineModel extends model
         $this->dao->insert(TABLE_PIPELINE)->data($server)
             ->batchCheck($this->config->pipeline->create->requiredFields, 'notempty')
             ->batchCheck("url", 'URL')
-            ->check('name', 'unique', "`type` = '$type'")
+            ->check('name', 'unique', "`type` = '$server->type'")
             ->checkIF($server->type == 'jenkins', 'account', 'notempty')
             ->checkIF($server->type == 'jenkins' && !$server->token, 'password', 'notempty')
             ->checkIF($server->type == 'jenkins' && !$server->password, 'token', 'notempty')
