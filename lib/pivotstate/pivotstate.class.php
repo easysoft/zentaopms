@@ -1039,6 +1039,29 @@ class pivotState
     }
 
     /**
+     * Set query filters name.
+     *
+     * @access public
+     * @return void
+     */
+    public function setQueryFiltersName()
+    {
+        $querys = $this->sqlBuilder['querys'];
+
+        foreach($querys as $index => $query)
+        {
+            $table = $query['table'];
+            $field = $query['field'];
+            $name  = $query['name'];
+            if(!empty($field) && empty($name))
+            {
+                $fieldList = $this->getTableDescList($table);
+                $this->sqlBuilder['querys'][$index]['name'] = zget($fieldList, $field, $field);
+            }
+        }
+    }
+
+    /**
      * Process query filters.
      *
      * @access public
