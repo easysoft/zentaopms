@@ -503,7 +503,7 @@ class pivotState
             if(empty($func['table']))    return $this->setBuilderError('func', 'table', $index);
             if(empty($func['field']))    return $this->setBuilderError('func', 'field', $index);
             if(empty($func['function'])) return $this->setBuilderError('func', 'function', $index);
-            if(empty($func['alias']))    return $this->setBuilderError('func', 'alias', $index);
+            if(empty($func['alias']) && !is_numeric($func['alias'])) return $this->setBuilderError('func', 'alias', $index);
 
             $alias = $func['alias'];
             if(!isset($checkDuplicate[$alias]))
@@ -535,7 +535,7 @@ class pivotState
                 list($table, $field, $value) = array($item[0], $item[1], $item[4]);
                 if(empty($table)) return $this->setBuilderError('where', "{$groupIndex}_{$itemIndex}_0");
                 if(empty($field)) return $this->setBuilderError('where', "{$groupIndex}_{$itemIndex}_1");
-                if(empty($value)) return $this->setBuilderError('where', "{$groupIndex}_{$itemIndex}_4");
+                if(empty($value) && !is_numeric($value)) return $this->setBuilderError('where', "{$groupIndex}_{$itemIndex}_4");
             }
         }
         return true;
@@ -548,7 +548,7 @@ class pivotState
         {
             if(empty($query['table'])) return $this->setBuilderError('query', 'table', $index);
             if(empty($query['field'])) return $this->setBuilderError('query', 'field', $index);
-            if(empty($query['name']))  return $this->setBuilderError('query', 'name', $index);
+            if(empty($query['name']) && !is_numeric($value))  return $this->setBuilderError('query', 'name', $index);
         }
         return true;
     }
