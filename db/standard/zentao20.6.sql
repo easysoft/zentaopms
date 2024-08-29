@@ -304,7 +304,7 @@ CREATE TABLE `zt_approvalflow` (
   `version` mediumint(8) NOT NULL DEFAULT 1,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
-  `type` varchar(30) NOT NULL DEFAULT '',
+  `workflow` varchar(30) NOT NULL DEFAULT '',
   `deleted` tinyint(4) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1539,10 +1539,10 @@ CREATE TABLE `zt_im_chat` (
   `lastMessage` int(11) unsigned NOT NULL DEFAULT 0,
   `lastMessageIndex` int(11) unsigned NOT NULL DEFAULT 0,
   `dismissDate` datetime DEFAULT NULL,
-  `pinnedMessages` text DEFAULT NULL,
-  `mergedChats` text DEFAULT NULL,
+  `pinnedMessages` text NOT NULL DEFAULT '',
+  `mergedChats` text NOT NULL DEFAULT '',
   `adminInvite` enum('0','1') NOT NULL DEFAULT '0',
-  `avatar` text DEFAULT NULL,
+  `avatar` text NOT NULL DEFAULT '',
   `archiveDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `gid` (`gid`),
@@ -1551,18 +1551,18 @@ CREATE TABLE `zt_im_chat` (
   KEY `public` (`public`),
   KEY `createdBy` (`createdBy`),
   KEY `editedBy` (`editedBy`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_im_chat_message_index` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `gid` char(40) NOT NULL DEFAULT '',
-  `tableName` char(64) NOT NULL DEFAULT '',
-  `start` int(11) unsigned NOT NULL DEFAULT 0,
-  `end` int(11) unsigned NOT NULL DEFAULT 0,
-  `startIndex` int(11) unsigned NOT NULL DEFAULT 0,
-  `endIndex` int(11) unsigned NOT NULL DEFAULT 0,
+  `gid` char(40) NOT NULL,
+  `tableName` char(64) NOT NULL,
+  `start` int(11) unsigned NOT NULL,
+  `end` int(11) unsigned NOT NULL,
+  `startIndex` int(11) unsigned NOT NULL,
+  `endIndex` int(11) unsigned NOT NULL,
   `startDate` datetime DEFAULT NULL,
   `endDate` datetime DEFAULT NULL,
-  `count` mediumint(8) unsigned NOT NULL DEFAULT 0,
+  `count` mediumint(8) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `chattable` (`gid`,`tableName`),
   KEY `start` (`start`),
@@ -1571,7 +1571,7 @@ CREATE TABLE `zt_im_chat_message_index` (
   KEY `endDate` (`endDate`),
   KEY `chatstartindex` (`gid`,`startIndex`),
   KEY `chatendindex` (`gid`,`endIndex`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_im_chatuser` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `cgid` char(40) NOT NULL DEFAULT '',
@@ -1593,38 +1593,38 @@ CREATE TABLE `zt_im_chatuser` (
   KEY `order` (`order`),
   KEY `star` (`star`),
   KEY `hide` (`hide`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_im_client` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `version` char(30) NOT NULL DEFAULT '',
   `desc` varchar(100) NOT NULL DEFAULT '',
-  `changeLog` text DEFAULT NULL,
+  `changeLog` text NOT NULL,
   `strategy` varchar(10) NOT NULL DEFAULT '',
-  `downloads` text DEFAULT NULL,
-  `createdDate` datetime DEFAULT NULL,
+  `downloads` text NOT NULL,
+  `createdDate` datetime NOT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
-  `editedDate` datetime DEFAULT NULL,
+  `editedDate` datetime NOT NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `status` enum('released','wait') NOT NULL DEFAULT 'wait',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_im_conference` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `rid` char(40) NOT NULL DEFAULT '',
   `cgid` char(40) NOT NULL DEFAULT '',
   `status` enum('closed','open','notStarted','canceled') NOT NULL DEFAULT 'closed',
-  `participants` text DEFAULT NULL,
-  `subscribers` text DEFAULT NULL,
-  `invitee` text DEFAULT NULL,
+  `participants` text NOT NULL,
+  `subscribers` text NOT NULL,
+  `invitee` text NOT NULL,
   `openedBy` mediumint(8) NOT NULL DEFAULT 0,
   `openedDate` datetime DEFAULT NULL,
-  `topic` text DEFAULT NULL,
+  `topic` text NOT NULL,
   `startTime` datetime DEFAULT NULL,
   `endTime` datetime DEFAULT NULL,
   `password` char(20) NOT NULL DEFAULT '',
   `type` enum('default','periodic','scheduled') NOT NULL DEFAULT 'default',
   `number` char(20) NOT NULL DEFAULT '',
-  `note` text DEFAULT NULL,
+  `note` text NOT NULL,
   `sentNotify` tinyint(1) NOT NULL DEFAULT 0,
   `reminderTime` int(11) NOT NULL DEFAULT 0,
   `moderators` text NOT NULL,
@@ -1632,17 +1632,17 @@ CREATE TABLE `zt_im_conference` (
   `isInner` enum('0','1') NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `status` (`status`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_im_conferenceaction` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `rid` char(40) NOT NULL DEFAULT '',
   `type` enum('create','invite','join','leave','close','publish') NOT NULL DEFAULT 'create',
-  `data` text DEFAULT NULL,
+  `data` text NOT NULL DEFAULT '',
   `user` mediumint(8) NOT NULL DEFAULT 0,
   `date` datetime DEFAULT NULL,
   `device` char(40) NOT NULL DEFAULT 'default',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_im_conferenceinvite` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `conferenceID` mediumint(8) unsigned NOT NULL,
@@ -1652,7 +1652,7 @@ CREATE TABLE `zt_im_conferenceinvite` (
   `updatedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `conference_user` (`conferenceID`,`inviteeID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_im_conferenceuser` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `conference` mediumint(8) NOT NULL DEFAULT 0,
@@ -1660,7 +1660,7 @@ CREATE TABLE `zt_im_conferenceuser` (
   `hide` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `conferenceuser` (`conference`,`user`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_im_message` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `gid` char(40) NOT NULL DEFAULT '',
@@ -1669,63 +1669,60 @@ CREATE TABLE `zt_im_message` (
   `date` datetime DEFAULT NULL,
   `index` int(11) unsigned NOT NULL DEFAULT 0,
   `type` enum('normal','broadcast','notify','bulletin','botcommand') NOT NULL DEFAULT 'normal',
-  `content` text DEFAULT NULL,
+  `content` text NOT NULL DEFAULT '',
   `contentType` enum('text','plain','emotion','image','file','object','code') NOT NULL DEFAULT 'text',
-  `data` text DEFAULT NULL,
+  `data` text NOT NULL DEFAULT '',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
-  `legacy` tinyint(1) NOT NULL DEFAULT 0,
-  `uniqueIndex` int(11) GENERATED ALWAYS AS (case when `legacy` = 1 then NULL when `cgid` = 'notification' then NULL else `index` end) STORED,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uniqueIndexInChat` (`cgid`,`uniqueIndex`),
   KEY `mgid` (`gid`),
   KEY `mcgid` (`cgid`),
   KEY `muser` (`user`),
   KEY `mtype` (`type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_im_message_backup` (
-  `id` int(11) unsigned NOT NULL DEFAULT 0,
+  `id` int(11) unsigned NOT NULL,
   `gid` char(40) NOT NULL DEFAULT '',
   `cgid` char(40) NOT NULL DEFAULT '',
   `user` varchar(30) NOT NULL DEFAULT '',
   `date` datetime DEFAULT NULL,
   `index` int(11) unsigned NOT NULL DEFAULT 0,
   `type` enum('normal','broadcast','notify') NOT NULL DEFAULT 'normal',
-  `content` text DEFAULT NULL,
+  `content` text NOT NULL DEFAULT '',
   `contentType` enum('text','plain','emotion','image','file','object','code') NOT NULL DEFAULT 'text',
-  `data` text DEFAULT NULL,
+  `data` text NOT NULL DEFAULT '',
   `deleted` enum('0','1') NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_im_message_index` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `tableName` char(64) NOT NULL DEFAULT '',
-  `start` int(11) unsigned NOT NULL DEFAULT 0,
-  `end` int(11) unsigned NOT NULL DEFAULT 0,
+  `tableName` char(64) NOT NULL,
+  `start` int(11) unsigned NOT NULL,
+  `end` int(11) unsigned NOT NULL,
   `startDate` datetime DEFAULT NULL,
   `endDate` datetime DEFAULT NULL,
-  `chats` text DEFAULT NULL,
+  `chats` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `tableName` (`tableName`),
   KEY `start` (`start`),
   KEY `end` (`end`),
   KEY `startDate` (`startDate`),
   KEY `endDate` (`endDate`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_im_messagestatus` (
   `user` mediumint(8) NOT NULL DEFAULT 0,
-  `message` int(11) unsigned NOT NULL DEFAULT 0,
+  `message` int(11) unsigned NOT NULL,
   `status` enum('waiting','sent','readed','deleted') NOT NULL DEFAULT 'waiting',
   UNIQUE KEY `user` (`user`,`message`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_im_queue` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `type` char(30) NOT NULL DEFAULT '',
-  `content` text DEFAULT NULL,
-  `addDate` datetime DEFAULT NULL,
-  `processDate` datetime DEFAULT NULL,
-  `result` text DEFAULT NULL,
-  `status` char(30) NOT NULL DEFAULT '',
+  `type` char(30) NOT NULL,
+  `content` text NOT NULL,
+  `addDate` datetime NOT NULL,
+  `processDate` datetime NOT NULL,
+  `result` text NOT NULL,
+  `status` char(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_im_userdevice` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `user` mediumint(8) NOT NULL DEFAULT 0,
@@ -1742,7 +1739,7 @@ CREATE TABLE `zt_im_userdevice` (
   KEY `user` (`user`),
   KEY `lastLogin` (`lastLogin`),
   KEY `lastLogout` (`lastLogout`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_image` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `host` int(11) unsigned NOT NULL DEFAULT 0,
@@ -4269,6 +4266,7 @@ CREATE TABLE `zt_workflowlayout` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `module` varchar(30) NOT NULL DEFAULT '',
   `action` varchar(50) NOT NULL DEFAULT '',
+  `ui` mediumint(8) NOT NULL DEFAULT 0,
   `field` varchar(50) NOT NULL DEFAULT '',
   `order` smallint(5) unsigned NOT NULL DEFAULT 0,
   `width` varchar(50) NOT NULL DEFAULT '0',
@@ -4280,7 +4278,7 @@ CREATE TABLE `zt_workflowlayout` (
   `layoutRules` varchar(255) NOT NULL DEFAULT '',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `unique` (`module`,`action`,`field`,`vision`),
+  UNIQUE KEY `unique` (`module`,`action`,`ui`,`field`,`vision`),
   KEY `module` (`module`),
   KEY `action` (`action`),
   KEY `order` (`order`)
@@ -4311,10 +4309,11 @@ CREATE TABLE `zt_workflowrelationlayout` (
   `prev` varchar(30) NOT NULL DEFAULT '',
   `next` varchar(30) NOT NULL DEFAULT '',
   `action` varchar(50) NOT NULL DEFAULT '',
+  `ui` mediumint(8) NOT NULL DEFAULT 0,
   `field` varchar(50) NOT NULL DEFAULT '',
   `order` smallint(5) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `unique` (`prev`,`next`,`action`,`field`),
+  UNIQUE KEY `unique` (`prev`,`next`,`action`,`ui`,`field`),
   KEY `prev` (`prev`),
   KEY `next` (`next`),
   KEY `action` (`action`),
@@ -4360,6 +4359,16 @@ CREATE TABLE `zt_workflowsql` (
   PRIMARY KEY (`id`),
   KEY `module` (`module`),
   KEY `field` (`field`),
+  KEY `action` (`action`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `zt_workflowui` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `module` varchar(30) NOT NULL,
+  `action` varchar(50) NOT NULL,
+  `name` varchar(30) NOT NULL,
+  `conditions` text DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `module` (`module`),
   KEY `action` (`action`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_workflowversion` (
