@@ -422,7 +422,9 @@ class pivotState
      */
     public function checkSqlBuilder()
     {
-        return $this->checkFrom() && $this->checkJoins() && $this->checkSelects() && $this->checkFuncs();
+        $checkList = array('checkFrom', 'checkJoins', 'checkSelects', 'checkFuncs', 'checkQuerys');
+        foreach($checkList as $check) if(!$this->$check()) return false;
+        return true;
     }
 
     /**
@@ -530,6 +532,12 @@ class pivotState
 
     public function checkQuerys()
     {
+        $querys = $this->sqlBuilder['querys'];
+        foreach($querys as $index => $query)
+        {
+            if(empty($query['table'])) return $this->setBuilderError('query', 'table', $index);
+            if(empty($query['field'])) return $this->setBuilderError('query', 'field', $index);
+        }
         return true;
     }
 
