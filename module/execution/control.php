@@ -1031,7 +1031,7 @@ class execution extends control
             $executionID = $this->execution->create($execution, isset($_POST['teamMembers']) ? $_POST['teamMembers'] : array());
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->loadModel('action')->create($this->objectType, $executionID, 'opened', '', $execution->hasProduct ? implode(',', $_POST['products']) : '');
+            $this->loadModel('action')->create($this->objectType, $executionID, 'opened', '', $project->hasProduct ? implode(',', $_POST['products']) : '');
             if(!empty($projectID) and strpos(',kanban,agileplus,waterfallplus,', ",$project->model,") !== false and $execution->type == 'kanban')
             {
                 $execution = $this->execution->fetchByID($executionID);
@@ -1062,7 +1062,7 @@ class execution extends control
         $this->view->productID           = $productID;
         $this->view->projectID           = $projectID;
         $this->view->from                = $this->app->tab;
-        $this->view->isStage             = isset($project->model) && in_array($project->model, array('waterfall', 'waterfallplus'));
+        $this->view->isStage             = isset($output['type']) && $output['type'] == 'stage';
         $this->view->isKanban            = isset($output['type']) && $output['type'] == 'kanban';
         $this->view->project             = $project;
         $this->view->planID              = $planID;

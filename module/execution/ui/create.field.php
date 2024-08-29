@@ -1,12 +1,15 @@
 <?php
 namespace zin;
-global $lang, $config;
+global $lang, $config, $app;
 
+$app->loadlang('stage');
 $fields   = defineFieldList('execution.create');
 $project  = data('project');
 $from     = data('from');
-$isStage  = isset($project->model) && in_array($project->model, array('waterfall', 'waterfallplus'));
+$isStage  = data('isStage');
 $isKanban = data('isKanban');
+$isIPD    = $project->model == 'ipd' && $isStage;
+
 $showExecutionExec = ($from == 'execution' || $from == 'doc');
 $requiredFields    = ",{$config->execution->create->requiredFields},";
 
@@ -17,16 +20,17 @@ $fields->field('project')
     ->items(data('allProjects'))
     ->value(data('projectID'));
 
-if(!empty($project->model) and $project->model == 'agileplus')
+if(!empty($project->model) && in_array($project->model, array('agileplus', 'ipd', 'waterfallplus')))
 {
-    unset($lang->execution->typeList['stage'], $lang->execution->typeList['']);
+    unset($lang->execution->typeList['']);
+    if($project->model == 'agileplus') unset($lang->execution->typeList['stage']);
+
     $fields->field('method')
         ->required()
         ->name('type')
         ->label($lang->execution->method)
         ->labelHint($lang->execution->agileplusMethodTip)
-        ->items($lang->execution->typeList)
-        ->value(data('execution.type'));
+        ->items($lang->execution->typeList);
 }
 
 $fields->field('name')
@@ -45,7 +49,7 @@ $fields->field('type')
     ->control($isStage ? 'picker' : 'checkBtnGroup')
     ->label($showExecutionExec ? $lang->execution->execType : $lang->execution->type)
     ->name($isStage ? 'attribute' : 'lifetime')
-    ->hidden($isKanban)
+    ->hidden($isKanban || $isIPD)
     ->value($isStage ? 'dev' : 'short')
     ->items($isStage ? $lang->stage->typeList : $lang->execution->lifeTimeList);
 

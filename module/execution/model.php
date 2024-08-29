@@ -264,10 +264,11 @@ class executionModel extends model
         /* Api create infinites stages. */
         if(isset($execution->parent) && ($execution->parent != $execution->project) && ($execution->type == 'stage' || $project->model == 'ipd'))
         {
-            $parent = $this->fetchByID($execution->parent);
+            $parent = $this->fetchByID((int)$execution->parent);
             $grade  = $parent->grade + 1;
             $path   = rtrim($parent->path, ',') . ",{$executionID}";
-            $this->dao->update(TABLE_EXECUTION)->set('path')->eq($path)->set('grade')->eq($grade)->where('id')->eq($executionID)->exec();
+            $attribute = $parent->attribute;
+            $this->dao->update(TABLE_EXECUTION)->set('attribute')->eq($attribute)->set('path')->eq($path)->set('grade')->eq($grade)->where('id')->eq($executionID)->exec();
         }
 
         /* Save order. */
