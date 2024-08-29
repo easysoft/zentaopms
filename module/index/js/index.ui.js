@@ -979,7 +979,8 @@ $(document).on('contextmenu', '#menuMainNav .divider', function(event)
         }
     );
 
-    zui.ContextMenu.show(
+    if(apps.openedMenu) apps.openedMenu.hide();
+    apps.openedMenu = zui.ContextMenu.show(
         {
             hideOthers: true,
             element: $divider[0],
