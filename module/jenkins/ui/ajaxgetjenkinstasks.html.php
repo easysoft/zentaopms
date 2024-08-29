@@ -13,7 +13,7 @@ namespace zin;
 $data['pipeline'] = $tasks;
 
 $tabs = array();
-$tabs[] = array('name' => 'pipeline', 'text' => $lang->repo->pipeline);
+$tabs[] = array('name' => 'pipeline', 'text' => $lang->pipeline->common);
 
 /**
  * 定义最终的 JSON 数据。
