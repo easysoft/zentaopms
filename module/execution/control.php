@@ -1032,7 +1032,7 @@ class execution extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create($this->objectType, $executionID, 'opened', '', $project->hasProduct ? implode(',', $_POST['products']) : '');
-            if(!empty($projectID) and strpos(',kanban,agileplus,waterfallplus,', ",$project->model,") !== false and $execution->type == 'kanban')
+            if(!empty($projectID) and strpos(',kanban,agileplus,waterfallplus,ipd,', ",$project->model,") !== false and $execution->type == 'kanban')
             {
                 $execution = $this->execution->fetchByID($executionID);
                 $this->loadModel('kanban')->createRDKanban($execution);
