@@ -45,6 +45,7 @@ class thinkRadio extends thinkQuestion
         if(!empty($fields)) foreach($fields as $field) $items[] = array('text' => $field, 'value' => $field);
         if(empty($fields) && !$isRun) $items[] = array('text' => $lang->thinkstep->optionReference, 'disabledPrefix' => true);
         if(!empty($step->options->enableOther)) $items[] = array('text' => $lang->other, 'value' => 'other', 'isOther' => '1', 'other' => isset($answer->other) ? $answer->other : '');
+        $isQutoCheckbox = $step->options->questionType == 'checkbox' && !empty($step->options->setOption) && $step->options->setOption == 1;
 
         $detailWg[] = thinkBaseCheckbox
         (
@@ -52,7 +53,7 @@ class thinkRadio extends thinkQuestion
             set::items($items),
             set::name('result[]'),
             set::value($step->options->questionType == 'radio' ? ($result[0] ?? '') : $result),
-            set::disabled(($step->options->questionType == 'checkbox' && !empty($step->options->setOption) && $step->options->setOption == 1 && !$isRun)|| $isResult)
+            set::disabled(($isQutoCheckbox && !$isRun)|| $isResult)
         );
         $quoteItem = $step->options->questionType == 'checkbox' && !empty($step->options->setOption) && $step->options->setOption == 1;
         $quoteName = '';
