@@ -1539,10 +1539,10 @@ CREATE TABLE `zt_im_chat` (
   `lastMessage` int(11) unsigned NOT NULL DEFAULT 0,
   `lastMessageIndex` int(11) unsigned NOT NULL DEFAULT 0,
   `dismissDate` datetime DEFAULT NULL,
-  `pinnedMessages` text NOT NULL DEFAULT '',
-  `mergedChats` text NOT NULL DEFAULT '',
+  `pinnedMessages` text DEFAULT NULL,
+  `mergedChats` text DEFAULT NULL,
   `adminInvite` enum('0','1') NOT NULL DEFAULT '0',
-  `avatar` text NOT NULL DEFAULT '',
+  `avatar` text DEFAULT NULL,
   `archiveDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `gid` (`gid`),
@@ -1551,7 +1551,7 @@ CREATE TABLE `zt_im_chat` (
   KEY `public` (`public`),
   KEY `createdBy` (`createdBy`),
   KEY `editedBy` (`editedBy`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_im_chat_message_index` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `gid` char(40) NOT NULL,
@@ -1571,7 +1571,7 @@ CREATE TABLE `zt_im_chat_message_index` (
   KEY `endDate` (`endDate`),
   KEY `chatstartindex` (`gid`,`startIndex`),
   KEY `chatendindex` (`gid`,`endIndex`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_im_chatuser` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `cgid` char(40) NOT NULL DEFAULT '',
@@ -1593,56 +1593,56 @@ CREATE TABLE `zt_im_chatuser` (
   KEY `order` (`order`),
   KEY `star` (`star`),
   KEY `hide` (`hide`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_im_client` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `version` char(30) NOT NULL DEFAULT '',
   `desc` varchar(100) NOT NULL DEFAULT '',
-  `changeLog` text NOT NULL,
+  `changeLog` text DEFAULT NULL,
   `strategy` varchar(10) NOT NULL DEFAULT '',
-  `downloads` text NOT NULL,
-  `createdDate` datetime NOT NULL,
+  `downloads` text DEFAULT NULL,
+  `createdDate` datetime DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
-  `editedDate` datetime NOT NULL,
+  `editedDate` datetime DEFAULT NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `status` enum('released','wait') NOT NULL DEFAULT 'wait',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_im_conference` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `rid` char(40) NOT NULL DEFAULT '',
   `cgid` char(40) NOT NULL DEFAULT '',
   `status` enum('closed','open','notStarted','canceled') NOT NULL DEFAULT 'closed',
-  `participants` text NOT NULL,
-  `subscribers` text NOT NULL,
-  `invitee` text NOT NULL,
+  `participants` text DEFAULT NULL,
+  `subscribers` text DEFAULT NULL,
+  `invitee` text DEFAULT NULL,
   `openedBy` mediumint(8) NOT NULL DEFAULT 0,
   `openedDate` datetime DEFAULT NULL,
-  `topic` text NOT NULL,
+  `topic` text DEFAULT NULL,
   `startTime` datetime DEFAULT NULL,
   `endTime` datetime DEFAULT NULL,
   `password` char(20) NOT NULL DEFAULT '',
   `type` enum('default','periodic','scheduled') NOT NULL DEFAULT 'default',
   `number` char(20) NOT NULL DEFAULT '',
-  `note` text NOT NULL,
+  `note` text DEFAULT NULL,
   `sentNotify` tinyint(1) NOT NULL DEFAULT 0,
   `reminderTime` int(11) NOT NULL DEFAULT 0,
-  `moderators` text NOT NULL,
+  `moderators` text DEFAULT NULL,
   `isPrivate` enum('0','1') NOT NULL DEFAULT '0',
   `isInner` enum('0','1') NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `status` (`status`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_im_conferenceaction` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `rid` char(40) NOT NULL DEFAULT '',
   `type` enum('create','invite','join','leave','close','publish') NOT NULL DEFAULT 'create',
-  `data` text NOT NULL DEFAULT '',
+  `data` text DEFAULT NULL,
   `user` mediumint(8) NOT NULL DEFAULT 0,
   `date` datetime DEFAULT NULL,
   `device` char(40) NOT NULL DEFAULT 'default',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_im_conferenceinvite` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `conferenceID` mediumint(8) unsigned NOT NULL,
@@ -1652,7 +1652,7 @@ CREATE TABLE `zt_im_conferenceinvite` (
   `updatedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `conference_user` (`conferenceID`,`inviteeID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_im_conferenceuser` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `conference` mediumint(8) NOT NULL DEFAULT 0,
@@ -1660,7 +1660,7 @@ CREATE TABLE `zt_im_conferenceuser` (
   `hide` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `conferenceuser` (`conference`,`user`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_im_message` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `gid` char(40) NOT NULL DEFAULT '',
@@ -1669,16 +1669,16 @@ CREATE TABLE `zt_im_message` (
   `date` datetime DEFAULT NULL,
   `index` int(11) unsigned NOT NULL DEFAULT 0,
   `type` enum('normal','broadcast','notify','bulletin','botcommand') NOT NULL DEFAULT 'normal',
-  `content` text NOT NULL DEFAULT '',
+  `content` text DEFAULT NULL,
   `contentType` enum('text','plain','emotion','image','file','object','code') NOT NULL DEFAULT 'text',
-  `data` text NOT NULL DEFAULT '',
+  `data` text DEFAULT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `mgid` (`gid`),
   KEY `mcgid` (`cgid`),
   KEY `muser` (`user`),
   KEY `mtype` (`type`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_im_message_backup` (
   `id` int(11) unsigned NOT NULL,
   `gid` char(40) NOT NULL DEFAULT '',
@@ -1687,11 +1687,11 @@ CREATE TABLE `zt_im_message_backup` (
   `date` datetime DEFAULT NULL,
   `index` int(11) unsigned NOT NULL DEFAULT 0,
   `type` enum('normal','broadcast','notify') NOT NULL DEFAULT 'normal',
-  `content` text NOT NULL DEFAULT '',
+  `content` text DEFAULT NULL,
   `contentType` enum('text','plain','emotion','image','file','object','code') NOT NULL DEFAULT 'text',
-  `data` text NOT NULL DEFAULT '',
+  `data` text DEFAULT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_im_message_index` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `tableName` char(64) NOT NULL,
@@ -1699,30 +1699,30 @@ CREATE TABLE `zt_im_message_index` (
   `end` int(11) unsigned NOT NULL,
   `startDate` datetime DEFAULT NULL,
   `endDate` datetime DEFAULT NULL,
-  `chats` text NOT NULL,
+  `chats` text DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `tableName` (`tableName`),
   KEY `start` (`start`),
   KEY `end` (`end`),
   KEY `startDate` (`startDate`),
   KEY `endDate` (`endDate`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_im_messagestatus` (
   `user` mediumint(8) NOT NULL DEFAULT 0,
   `message` int(11) unsigned NOT NULL,
   `status` enum('waiting','sent','readed','deleted') NOT NULL DEFAULT 'waiting',
   UNIQUE KEY `user` (`user`,`message`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_im_queue` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `type` char(30) NOT NULL,
-  `content` text NOT NULL,
-  `addDate` datetime NOT NULL,
-  `processDate` datetime NOT NULL,
-  `result` text NOT NULL,
+  `content` text DEFAULT NULL,
+  `addDate` datetime DEFAULT NULL,
+  `processDate` datetime DEFAULT NULL,
+  `result` text DEFAULT NULL,
   `status` char(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_im_userdevice` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `user` mediumint(8) NOT NULL DEFAULT 0,
@@ -1739,7 +1739,7 @@ CREATE TABLE `zt_im_userdevice` (
   KEY `user` (`user`),
   KEY `lastLogin` (`lastLogin`),
   KEY `lastLogout` (`lastLogout`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_image` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `host` int(11) unsigned NOT NULL DEFAULT 0,
