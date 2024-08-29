@@ -1016,6 +1016,32 @@ class pivotState
         $this->addAggFunc();
     }
 
+    public function processQueryFilters()
+    {
+        $querys = $this->sqlBuilder['querys'];
+        $this->clearFilters();
+        if(empty($querys)) return;
+
+        if(!$this->checkQuerys())
+        {
+            $this->resetBuilderError();
+            return;
+        }
+
+        foreach($querys as $index => $query)
+        {
+            $filter = $this->getDefaultQueryFilter();
+            $field  = "var$index";
+            foreach(array_keys($filter) as $key)
+            {
+                if($key == 'field') $filter[$key] = $field;
+                else                $filter[$key] = $query[$key];
+            }
+            $filter['from'] = 'query';
+            $this->filters[] = $filter;
+        }
+    }
+
     /**
      * Generate func alias.
      *
