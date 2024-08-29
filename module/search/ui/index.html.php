@@ -149,6 +149,7 @@ panel
     $items,
     $items ? div
     (
+        setKey('footer'),
         setClass('flex justify-between'),
         span
         (
