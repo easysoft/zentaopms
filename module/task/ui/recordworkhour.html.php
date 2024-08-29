@@ -205,7 +205,7 @@ else
             set::required(true),
             set::name('date'),
             set::label($lang->task->date),
-            set::width('120px'),
+            set::width('130px'),
             set::control(array('control' => 'date', 'id' => '$GID')),
             set::value(helper::today())
         ),
