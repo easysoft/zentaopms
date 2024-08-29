@@ -3,7 +3,7 @@ global $lang,$config;
 
 $kanbanProjectManage = new stdClass();
 $kanbanProjectManage->basic = new stdClass();
-$kanbanProjectManage->basic->name    = 'kanbanProjectManage';
+$kanbanProjectManage->basic->name    = 'kanbanProjectManageBasic';
 $kanbanProjectManage->basic->title   = $lang->tutorial->kanbanProjectManage->title;
 $kanbanProjectManage->basic->icon    = 'kanban text-special';
 $kanbanProjectManage->basic->type    = 'basic';
@@ -306,7 +306,7 @@ $kanbanProjectManage->basic->tasks['manageBuild']['steps'][] = array(
 
 $kanbanProjectManage->advance = new stdClass();
 $kanbanProjectManage->advance = clone $kanbanProjectManage->basic;
-$kanbanProjectManage->advance->name = 'kanbanProjectManage-advance';
+$kanbanProjectManage->advance->name = 'kanbanProjectManageAdvance';
 $kanbanProjectManage->advance->type = 'advance';
 
 $kanbanProjectManage->advance->tasks['manageKanban']['steps'][] = array(

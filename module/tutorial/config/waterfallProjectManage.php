@@ -3,7 +3,7 @@ global $lang,$config;
 
 $waterfallProjectManage = new stdClass();
 $waterfallProjectManage->basic = new stdClass();
-$waterfallProjectManage->basic->name    = 'waterfallProjectManage-basic';
+$waterfallProjectManage->basic->name    = 'waterfallProjectManageBasic';
 $waterfallProjectManage->basic->title   = $lang->tutorial->waterfallProjectManage->title;
 $waterfallProjectManage->basic->icon    = 'waterfall text-special';
 $waterfallProjectManage->basic->type    = 'basic';
@@ -686,7 +686,7 @@ $waterfallProjectManage->basic->tasks['manageBug']['steps'][] = array(
 
 $waterfallProjectManage->advance = new stdClass();
 $waterfallProjectManage->advance = clone $waterfallProjectManage->basic;
-$waterfallProjectManage->advance->name  = 'waterfallProjectManage-advance';
+$waterfallProjectManage->advance->name  = 'waterfallProjectManageAdvance';
 $waterfallProjectManage->advance->type  = 'advance';
 $waterfallProjectManage->advance->tasks = array();
 $waterfallProjectManage->advance->tasks['manageProject'] = $waterfallProjectManage->basic->tasks['manageProject'];

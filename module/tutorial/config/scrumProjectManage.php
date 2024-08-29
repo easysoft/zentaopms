@@ -3,7 +3,7 @@ global $lang,$config;
 
 $scrumProjectManage = new stdClass();
 $scrumProjectManage->basic = new stdClass();
-$scrumProjectManage->basic->name    = 'scrumProjectManage-basic';
+$scrumProjectManage->basic->name    = 'scrumProjectManageBasic';
 $scrumProjectManage->basic->title   = $lang->tutorial->scrumProjectManage->title;
 $scrumProjectManage->basic->icon    = 'sprint text-special';
 $scrumProjectManage->basic->type    = 'basic';
@@ -706,7 +706,7 @@ $scrumProjectManage->basic->tasks['manageBug']['steps'][] = array(
 
 $scrumProjectManage->advance = new stdClass();
 $scrumProjectManage->advance = clone $scrumProjectManage->basic;
-$scrumProjectManage->advance->name = 'scrumProjectManage-advance';
+$scrumProjectManage->advance->name = 'scrumProjectManageAdvance';
 $scrumProjectManage->advance->type = 'advance';
 
 if(in_array($config->edition, array('max', 'ipd')))
