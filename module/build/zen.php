@@ -228,12 +228,27 @@ class buildZen extends build
         $this->view->objectID   = $objectID;
     }
 
+    /**
+     * 为创建页面构建版本数据。
+     * Build build data for create.
+     *
+     * @access public
+     * @return object
+     */
     public function buildBuildForCreate()
     {
         if($this->post->isIntegrated == 'yes') $this->config->build->create->requiredFields = str_replace(',execution,', ',', ',' . $this->config->build->create->requiredFields . ',');
         return form::data($this->config->build->form->create)->setDefault('createdBy', $this->app->user->account)->get();
     }
 
+    /**
+     * 为编辑页面构建版本数据。
+     * Build build data for edit.
+     *
+     * @param  int    $buildID
+     * @access public
+     * @return object
+     */
     public function buildBuildForEdit($buildID)
     {
         $build = $this->build->getById($buildID);
