@@ -159,6 +159,8 @@ class tree extends control
      */
     public function edit(int $moduleID, string $type, string $branch = '0')
     {
+        $this->app->loadLang('task');
+
         if(!empty($_POST))
         {
             $this->tree->update($moduleID, $type);
@@ -215,7 +217,7 @@ class tree extends control
         if($showProduct)
         {
             $product = $this->loadModel('product')->getById($module->root);
-            if($product->type != 'normal') $this->view->branches = $this->loadModel('branch')->getPairs($module->root, 'withClosed');
+            $this->view->branches = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($module->root, 'withClosed') : array();
             $this->view->product  = $product;
             $this->view->products = $this->product->getPairs('', $product->program);
             if($product->shadow) $showProduct = false;
