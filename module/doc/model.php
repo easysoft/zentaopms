@@ -2458,7 +2458,7 @@ class docModel extends model
             $docIDList = $this->getPrivDocs(array($lib->id));
             $docs      = $this->dao->select('*, title as name')->from(TABLE_DOC)
                 ->where('id')->in($docIDList)
-                ->andWhere("(status = 'normal' || (status = 'draft' && addedBy='{$this->app->user->account}'))")
+                ->andWhere("(status = 'normal' or (status = 'draft' && addedBy='{$this->app->user->account}'))")
                 ->andWhere('deleted')->eq(0)
                 ->andWhere('module')->eq(0)
                 ->fetchAll('id');
