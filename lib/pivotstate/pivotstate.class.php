@@ -422,7 +422,7 @@ class pivotState
      */
     public function checkSqlBuilder()
     {
-        $checkList = array('checkFrom', 'checkJoins', 'checkSelects', 'checkFuncs', 'checkQuerys');
+        $checkList = array('checkFrom', 'checkJoins', 'checkSelects', 'checkFuncs', 'checkWheres', 'checkQuerys');
         foreach($checkList as $check) if(!$this->$check()) return false;
         return true;
     }
@@ -527,6 +527,17 @@ class pivotState
      */
     public function checkWheres()
     {
+        $wheres = $this->sqlBuilder['wheres'];
+        foreach($wheres as $groupIndex => $group)
+        {
+            foreach($group['items'] as $itemIndex => $item)
+            {
+                list($table, $field, $value) = array($item[0], $item[1], $item[4]);
+                if(empty($table)) return $this->setBuilderError('where', "{$groupIndex}_{$itemIndex}_0");
+                if(empty($field)) return $this->setBuilderError('where', "{$groupIndex}_{$itemIndex}_1");
+                if(empty($value)) return $this->setBuilderError('where', "{$groupIndex}_{$itemIndex}_4");
+            }
+        }
         return true;
     }
 
