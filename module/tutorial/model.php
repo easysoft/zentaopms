@@ -177,17 +177,17 @@ class tutorialModel extends model
         $project->charter      = 0;
 
         list($guide, $guideTask, $guideStepIndex) = empty($_SERVER['HTTP_X_ZIN_TUTORIAL']) ? array() : explode('-', $_SERVER['HTTP_X_ZIN_TUTORIAL']);
-        if(strpos($guide, 'scrumProjectManage') !== false)
+        if($guide && strpos($guide, 'scrumProjectManage') !== false)
         {
             $project->name  = 'Scrum Project';
             $project->model = 'scrum';
         }
-        if(strpos($guide, 'waterfallProjectManage') !== false)
+        if($guide && strpos($guide, 'waterfallProjectManage') !== false)
         {
             $project->name  = 'Waterfall Project';
             $project->model = 'waterfall';
         }
-        if(strpos($guide, 'kanbanProjectManage') !== false)
+        if($guide && strpos($guide, 'kanbanProjectManage') !== false)
         {
             $project->name  = 'Kanban Project';
             $project->model = 'kanban';
@@ -434,12 +434,12 @@ class tutorialModel extends model
         $execution->closedDate    = helper::now();
 
         list($guide, $guideTask, $guideStepIndex) = empty($_SERVER['HTTP_X_ZIN_TUTORIAL']) ? array() : explode('-', $_SERVER['HTTP_X_ZIN_TUTORIAL']);
-        if(strpos($guide, 'scrumProjectManage') !== false)
+        if($guide && strpos($guide, 'scrumProjectManage') !== false)
         {
             $execution->name = 'Test Sprint';
             $execution->type = 'sprint';
         }
-        if(strpos($guide, 'waterfallProjectManage') !== false)
+        if($guide && strpos($guide, 'waterfallProjectManage') !== false)
         {
             $execution->name      = 'Test Stage';
             $execution->type      = 'stage';
@@ -448,7 +448,7 @@ class tutorialModel extends model
             $execution->milestone = 0;
             $execution->parallel  = 1;
         }
-        if(strpos($guide, 'kanbanProjectManage') !== false)
+        if($guide && strpos($guide, 'kanbanProjectManage') !== false)
         {
             $execution->name = 'Test Kanban';
             $execution->type = 'kanban';
