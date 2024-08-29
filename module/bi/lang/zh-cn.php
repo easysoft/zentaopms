@@ -20,8 +20,8 @@ $lang->bi->builderStepList = array();
 $lang->bi->builderStepList['table'] = '查询数据表';
 $lang->bi->builderStepList['field'] = '选择查询字段';
 $lang->bi->builderStepList['func']  = '新增函数字段';
-$lang->bi->builderStepList['where'] = '添加查询条件';
-$lang->bi->builderStepList['query'] = '添加查询筛选器';
+$lang->bi->builderStepList['where'] = '确定性查询条件';
+$lang->bi->builderStepList['query'] = '动态查询筛选器';
 $lang->bi->builderStepList['group'] = '设置分组并聚合';
 
 $lang->bi->stepTableTitle = '选择要查询的数据表';
