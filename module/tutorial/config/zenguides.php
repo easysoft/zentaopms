@@ -32,8 +32,13 @@ $manageAccount->tasks['addUser']['steps'][]  = array('type' => 'saveForm', 'page
 
 $config->tutorial->guides = array();
 $config->tutorial->guides[$manageAccount->name]          = $manageAccount;
-$config->tutorial->guides[$scrumProjectManage->name]     = $scrumProjectManage;
+
+/* Basic tutorial. */
+$config->tutorial->guides[$scrumProjectManage->basic->name]   = $scrumProjectManage->basic;
 $config->tutorial->guides[$waterfallProjectManage->name] = $waterfallProjectManage;
 $config->tutorial->guides[$kanbanProjectManage->name]    = $kanbanProjectManage;
+
+/* Advance tutorial. */
+$config->tutorial->guides[$scrumProjectManage->advance->name] = $scrumProjectManage->advance;
 
 if($config->systemMode == 'light') unset($config->tutorial->guides[$managePrograms->name]);

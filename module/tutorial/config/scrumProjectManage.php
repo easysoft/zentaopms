@@ -2,28 +2,29 @@
 global $lang,$config;
 
 $scrumProjectManage = new stdClass();
-$scrumProjectManage->name    = 'scrumProjectManage';
-$scrumProjectManage->title   = $lang->tutorial->scrumProjectManage->title;
-$scrumProjectManage->icon    = 'sprint text-special';
-$scrumProjectManage->type    = 'basic';
-$scrumProjectManage->modules = 'project,execution,build,task,bug,testreport,issue,risk';
-$scrumProjectManage->app     = 'project';
-$scrumProjectManage->tasks   = array();
+$scrumProjectManage->basic = new stdClass();
+$scrumProjectManage->basic->name    = 'scrumProjectManage-basic';
+$scrumProjectManage->basic->title   = $lang->tutorial->scrumProjectManage->title;
+$scrumProjectManage->basic->icon    = 'sprint text-special';
+$scrumProjectManage->basic->type    = 'basic';
+$scrumProjectManage->basic->modules = 'project,execution,build,task,bug,testreport,issue,risk';
+$scrumProjectManage->basic->app     = 'project';
+$scrumProjectManage->basic->tasks   = array();
 
-$scrumProjectManage->tasks['manageProject'] = array();
-$scrumProjectManage->tasks['manageProject']['name']     = 'manageProject';
-$scrumProjectManage->tasks['manageProject']['title']    = $lang->tutorial->scrumProjectManage->manageProject->title;
-$scrumProjectManage->tasks['manageProject']['startUrl'] = array('project', 'browse');
-$scrumProjectManage->tasks['manageProject']['steps']   = array();
+$scrumProjectManage->basic->tasks['manageProject'] = array();
+$scrumProjectManage->basic->tasks['manageProject']['name']     = 'manageProject';
+$scrumProjectManage->basic->tasks['manageProject']['title']    = $lang->tutorial->scrumProjectManage->manageProject->title;
+$scrumProjectManage->basic->tasks['manageProject']['startUrl'] = array('project', 'browse');
+$scrumProjectManage->basic->tasks['manageProject']['steps']   = array();
 
-$scrumProjectManage->tasks['manageProject']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageProject']['steps'][] = array(
     'type'  => 'openApp',
     'app'   => 'project',
     'title' => $lang->tutorial->scrumProjectManage->manageProject->step1->name,
     'desc'  => $lang->tutorial->scrumProjectManage->manageProject->step1->desc
 );
 
-$scrumProjectManage->tasks['manageProject']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageProject']['steps'][] = array(
     'type'   => 'click',
     'target' => '#actionBar .create-project-btn',
     'page'   => 'project-browse',
@@ -31,7 +32,7 @@ $scrumProjectManage->tasks['manageProject']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageProject->step2->desc
 );
 
-$scrumProjectManage->tasks['manageProject']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageProject']['steps'][] = array(
     'type'   => 'click',
     'target' => '#modelList div.scrum div.model-item',
     'page'   => 'project-browse',
@@ -39,14 +40,14 @@ $scrumProjectManage->tasks['manageProject']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageProject->step3->desc
 );
 
-$scrumProjectManage->tasks['manageProject']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageProject']['steps'][] = array(
     'type'   => 'form',
     'target' => '#form-project-create',
     'page'   => 'project-create',
     'title'  => $lang->tutorial->scrumProjectManage->manageProject->step4->name
 );
 
-$scrumProjectManage->tasks['manageProject']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageProject']['steps'][] = array(
     'type'   => 'saveForm',
     'target' => '#form-project-create .form-actions button[type="submit"]',
     'page'   => 'project-create',
@@ -54,7 +55,7 @@ $scrumProjectManage->tasks['manageProject']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageProject->step5->desc
 );
 
-$scrumProjectManage->tasks['manageProject']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageProject']['steps'][] = array(
     'type'   => 'click',
     'target' => '#table-project-browse .dtable-body div[data-row="2"] a',
     'page'   => 'project-browse',
@@ -63,7 +64,7 @@ $scrumProjectManage->tasks['manageProject']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageProject->step6->desc
 );
 
-$scrumProjectManage->tasks['manageProject']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageProject']['steps'][] = array(
     'type'   => 'clickNavbar',
     'target' => 'settings',
     'page'   => 'project-index',
@@ -71,7 +72,7 @@ $scrumProjectManage->tasks['manageProject']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageProject->step7->desc
 );
 
-$scrumProjectManage->tasks['manageProject']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageProject']['steps'][] = array(
     'type'   => 'clickMainNavbar',
     'target' => 'members',
     'page'   => 'project-view',
@@ -79,7 +80,7 @@ $scrumProjectManage->tasks['manageProject']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageProject->step8->desc
 );
 
-$scrumProjectManage->tasks['manageProject']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageProject']['steps'][] = array(
     'type'   => 'click',
     'target' => '#mainContainer #mainMenu #actionBar a',
     'page'   => 'project-team',
@@ -87,14 +88,14 @@ $scrumProjectManage->tasks['manageProject']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageProject->step9->desc
 );
 
-$scrumProjectManage->tasks['manageProject']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageProject']['steps'][] = array(
     'type'   => 'form',
     'target' => '#teamForm table',
     'page'   => 'project-manageMembers',
     'title'  => $lang->tutorial->scrumProjectManage->manageProject->step10->name,
 );
 
-$scrumProjectManage->tasks['manageProject']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageProject']['steps'][] = array(
     'type'   => 'saveForm',
     'target' => '#teamForm #saveButton',
     'page'   => 'project-manageMembers',
@@ -102,13 +103,13 @@ $scrumProjectManage->tasks['manageProject']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageProject->step11->desc
 );
 
-$scrumProjectManage->tasks['manageExecution'] = array();
-$scrumProjectManage->tasks['manageExecution']['name']     = 'manageExecution';
-$scrumProjectManage->tasks['manageExecution']['title']    = $lang->tutorial->scrumProjectManage->manageExecution->title;
-$scrumProjectManage->tasks['manageExecution']['startUrl'] = array('project', 'index', 'project=2');
-$scrumProjectManage->tasks['manageExecution']['steps']    = array();
+$scrumProjectManage->basic->tasks['manageExecution'] = array();
+$scrumProjectManage->basic->tasks['manageExecution']['name']     = 'manageExecution';
+$scrumProjectManage->basic->tasks['manageExecution']['title']    = $lang->tutorial->scrumProjectManage->manageExecution->title;
+$scrumProjectManage->basic->tasks['manageExecution']['startUrl'] = array('project', 'index', 'project=2');
+$scrumProjectManage->basic->tasks['manageExecution']['steps']    = array();
 
-$scrumProjectManage->tasks['manageExecution']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageExecution']['steps'][] = array(
     'type'   => 'clickNavbar',
     'target' => 'execution',
     'page'   => 'project-index',
@@ -116,7 +117,7 @@ $scrumProjectManage->tasks['manageExecution']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageExecution->step1->desc
 );
 
-$scrumProjectManage->tasks['manageExecution']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageExecution']['steps'][] = array(
     'type'   => 'click',
     'target' => '#mainMenu #actionBar a.create-execution-btn',
     'page'   => 'project-execution',
@@ -125,7 +126,7 @@ $scrumProjectManage->tasks['manageExecution']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageExecution->step2->desc
 );
 
-$scrumProjectManage->tasks['manageExecution']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageExecution']['steps'][] = array(
     'type'   => 'form',
     'target' => '#form-execution-create',
     'app'    => 'execution',
@@ -133,7 +134,7 @@ $scrumProjectManage->tasks['manageExecution']['steps'][] = array(
     'title'  => $lang->tutorial->scrumProjectManage->manageExecution->step3->name
 );
 
-$scrumProjectManage->tasks['manageExecution']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageExecution']['steps'][] = array(
     'type'   => 'saveForm',
     'target' => '#form-execution-create .form-actions button[type="submit"]',
     'page'   => 'execution-create',
@@ -141,7 +142,7 @@ $scrumProjectManage->tasks['manageExecution']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageExecution->step4->desc
 );
 
-$scrumProjectManage->tasks['manageExecution']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageExecution']['steps'][] = array(
     'type'   => 'click',
     'target' => '#table-project-execution .dtable-cell[data-row="pid3"][data-col="nameCol"] a',
     'page'   => 'project-execution',
@@ -150,7 +151,7 @@ $scrumProjectManage->tasks['manageExecution']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageExecution->step5->desc
 );
 
-$scrumProjectManage->tasks['manageExecution']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageExecution']['steps'][] = array(
     'type'   => 'clickNavbar',
     'target' => 'story',
     'page'   => 'execution-task',
@@ -159,7 +160,7 @@ $scrumProjectManage->tasks['manageExecution']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageExecution->step6->desc
 );
 
-$scrumProjectManage->tasks['manageExecution']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageExecution']['steps'][] = array(
     'type'   => 'click',
     'target' => '#actionBar a.link-story-btn',
     'page'   => 'execution-story',
@@ -167,14 +168,14 @@ $scrumProjectManage->tasks['manageExecution']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageExecution->step7->desc
 );
 
-$scrumProjectManage->tasks['manageExecution']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageExecution']['steps'][] = array(
     'type'   => 'selectRow',
     'target' => 'div.dtable div.dtable-body div[data-col="id"]',
     'page'   => 'execution-linkstory',
     'title'  => $lang->tutorial->scrumProjectManage->manageExecution->step8->name
 );
 
-$scrumProjectManage->tasks['manageExecution']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageExecution']['steps'][] = array(
     'type'   => 'click',
     'target' => 'div.dtable .dtable-footer .link-story-btn',
     'page'   => 'execution-linkstory',
@@ -182,7 +183,7 @@ $scrumProjectManage->tasks['manageExecution']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageExecution->step9->desc
 );
 
-$scrumProjectManage->tasks['manageExecution']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageExecution']['steps'][] = array(
     'type'   => 'clickNavbar',
     'target' => 'burn',
     'page'   => 'execution-story',
@@ -191,13 +192,13 @@ $scrumProjectManage->tasks['manageExecution']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageExecution->step10->desc
 );
 
-$scrumProjectManage->tasks['manageTask'] = array();
-$scrumProjectManage->tasks['manageTask']['name']     = 'manageTask';
-$scrumProjectManage->tasks['manageTask']['title']    = $lang->tutorial->scrumProjectManage->manageTask->title;
-$scrumProjectManage->tasks['manageTask']['startUrl'] = array('execution', 'task', 'executionID=3');
-$scrumProjectManage->tasks['manageTask']['steps']    = array();
+$scrumProjectManage->basic->tasks['manageTask'] = array();
+$scrumProjectManage->basic->tasks['manageTask']['name']     = 'manageTask';
+$scrumProjectManage->basic->tasks['manageTask']['title']    = $lang->tutorial->scrumProjectManage->manageTask->title;
+$scrumProjectManage->basic->tasks['manageTask']['startUrl'] = array('execution', 'task', 'executionID=3');
+$scrumProjectManage->basic->tasks['manageTask']['steps']    = array();
 
-$scrumProjectManage->tasks['manageTask']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
     'type'   => 'clickNavbar',
     'target' => 'story',
     'page'   => 'execution-task',
@@ -206,7 +207,7 @@ $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step1->desc
 );
 
-$scrumProjectManage->tasks['manageTask']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
     'type'   => 'click',
     'target' => '#table-execution-story a.create-task-btn',
     'url'    => array('execution', 'story', 'executionID=3'),
@@ -216,7 +217,7 @@ $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step3->desc
 );
 
-$scrumProjectManage->tasks['manageTask']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
     'type'   => 'form',
     'url'    => array('task', 'create', 'executionID=3'),
     'app'    => 'execution',
@@ -224,7 +225,7 @@ $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'title'  => $lang->tutorial->scrumProjectManage->manageTask->step4->name,
 );
 
-$scrumProjectManage->tasks['manageTask']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
     'type'   => 'saveForm',
     'target' => 'form button[type="submit"]',
     'page'   => 'task-create',
@@ -232,7 +233,7 @@ $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step5->desc
 );
 
-$scrumProjectManage->tasks['manageTask']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
     'type'   => 'click',
     'target' => '#table-execution-task div[data-row="1"] a.dtable-assign-btn',
     'page'   => 'execution-task',
@@ -241,13 +242,13 @@ $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step6->desc
 );
 
-$scrumProjectManage->tasks['manageTask']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
     'type'   => 'form',
     'page'   => 'execution-task',
     'title'  => $lang->tutorial->scrumProjectManage->manageTask->step7->name,
 );
 
-$scrumProjectManage->tasks['manageTask']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
     'type'   => 'saveForm',
     'page'   => 'form button[type="submit"]',
     'page'   => 'execution-task',
@@ -255,7 +256,7 @@ $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step8->desc
 );
 
-$scrumProjectManage->tasks['manageTask']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
     'type'   => 'click',
     'target' => '#table-execution-task div[data-row="1"] a.task-start-btn',
     'page'   => 'execution-task',
@@ -264,13 +265,13 @@ $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step9->desc
 );
 
-$scrumProjectManage->tasks['manageTask']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
     'type'   => 'form',
     'page'   => 'execution-task',
     'title'  => $lang->tutorial->scrumProjectManage->manageTask->step10->name,
 );
 
-$scrumProjectManage->tasks['manageTask']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
     'type'   => 'saveForm',
     'page'   => 'form button[type="submit"]',
     'page'   => 'execution-task',
@@ -278,7 +279,7 @@ $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step11->desc
 );
 
-$scrumProjectManage->tasks['manageTask']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
     'type'   => 'click',
     'target' => '#table-execution-task div[data-row="1"] a.task-record-btn',
     'page'   => 'execution-task',
@@ -287,13 +288,13 @@ $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step12->desc
 );
 
-$scrumProjectManage->tasks['manageTask']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
     'type'   => 'form',
     'page'   => 'execution-task',
     'title'  => $lang->tutorial->scrumProjectManage->manageTask->step13->name,
 );
 
-$scrumProjectManage->tasks['manageTask']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
     'type'   => 'saveForm',
     'page'   => 'form button[type="submit"]',
     'page'   => 'execution-task',
@@ -301,7 +302,7 @@ $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step14->desc
 );
 
-$scrumProjectManage->tasks['manageTask']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
     'type'   => 'click',
     'target' => '#table-execution-task div[data-row="1"] a.task-finish-btn',
     'page'   => 'execution-task',
@@ -310,13 +311,13 @@ $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step15->desc
 );
 
-$scrumProjectManage->tasks['manageTask']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
     'type'   => 'form',
     'page'   => 'execution-task',
     'title'  => $lang->tutorial->scrumProjectManage->manageTask->step16->name,
 );
 
-$scrumProjectManage->tasks['manageTask']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
     'type'   => 'saveForm',
     'target' => 'form button[type="submit"]',
     'page'   => 'execution-task',
@@ -324,7 +325,7 @@ $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step17->desc
 );
 
-$scrumProjectManage->tasks['manageTask']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
     'type'   => 'clickNavbar',
     'target' => 'build',
     'page'   => 'execution-task',
@@ -333,7 +334,7 @@ $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step18->desc
 );
 
-$scrumProjectManage->tasks['manageTask']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
     'type'   => 'click',
     'target' => '#mainContainer #actionBar a',
     'page'   => 'execution-build',
@@ -341,13 +342,13 @@ $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step19->desc
 );
 
-$scrumProjectManage->tasks['manageTask']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
     'type'   => 'form',
     'page'   => 'build-create',
     'title'  => $lang->tutorial->scrumProjectManage->manageTask->step20->name,
 );
 
-$scrumProjectManage->tasks['manageTask']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
     'type'   => 'saveForm',
     'target' => 'form button[type="submit"]',
     'page'   => 'build-create',
@@ -355,7 +356,7 @@ $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step21->desc
 );
 
-$scrumProjectManage->tasks['manageTask']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
     'type'   => 'click',
     'target' => 'div[data-row="1"] a.build-linkstory-btn',
     'page'   => 'execution-build',
@@ -364,7 +365,7 @@ $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step22->desc
 );
 
-$scrumProjectManage->tasks['manageTask']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
     'type'   => 'selectRow',
     'target' => '#unlinkStoryList div.dtable-body div[data-col="id"]',
     'page'   => 'build-view',
@@ -372,7 +373,7 @@ $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step23->desc
 );
 
-$scrumProjectManage->tasks['manageTask']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
     'type'   => 'click',
     'target' => '#unlinkStoryList .dtable-footer .linkObjectBtn',
     'page'   => 'build-view',
@@ -380,13 +381,13 @@ $scrumProjectManage->tasks['manageTask']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step24->desc
 );
 
-$scrumProjectManage->tasks['manageTest'] = array();
-$scrumProjectManage->tasks['manageTest']['name']     = 'manageTest';
-$scrumProjectManage->tasks['manageTest']['title']    = $lang->tutorial->scrumProjectManage->manageTest->title;
-$scrumProjectManage->tasks['manageTest']['startUrl'] = array('execution', 'task', 'executionID=3');
-$scrumProjectManage->tasks['manageTest']['steps']    = array();
+$scrumProjectManage->basic->tasks['manageTest'] = array();
+$scrumProjectManage->basic->tasks['manageTest']['name']     = 'manageTest';
+$scrumProjectManage->basic->tasks['manageTest']['title']    = $lang->tutorial->scrumProjectManage->manageTest->title;
+$scrumProjectManage->basic->tasks['manageTest']['startUrl'] = array('execution', 'task', 'executionID=3');
+$scrumProjectManage->basic->tasks['manageTest']['steps']    = array();
 
-$scrumProjectManage->tasks['manageTest']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'clickNavbar',
     'target' => 'qa',
     'page'   => 'execution-task',
@@ -395,7 +396,7 @@ $scrumProjectManage->tasks['manageTest']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageTest->step1->desc
 );
 
-$scrumProjectManage->tasks['manageTest']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'clickMainNavbar',
     'target' => 'testcase',
     'page'   => 'execution-bug',
@@ -404,7 +405,7 @@ $scrumProjectManage->tasks['manageTest']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageTest->step2->desc
 );
 
-$scrumProjectManage->tasks['manageTest']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'click',
     'target' => '#actionBar a',
     'page'   => 'execution-testcase',
@@ -412,20 +413,20 @@ $scrumProjectManage->tasks['manageTest']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageTest->step3->desc
 );
 
-$scrumProjectManage->tasks['manageTest']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'form',
     'page'   => 'testcase-create',
     'title'  => $lang->tutorial->scrumProjectManage->manageTest->step4->name
 );
 
-$scrumProjectManage->tasks['manageTest']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'saveForm',
     'page'   => 'testcase-create',
     'title'  => $lang->tutorial->scrumProjectManage->manageTest->step5->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageTest->step5->desc
 );
 
-$scrumProjectManage->tasks['manageTest']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'click',
     'target' => 'div.dtable div[data-col="actions"][data-row="1"] a.testtask-runCase-btn',
     'page'   => 'execution-testcase',
@@ -434,20 +435,20 @@ $scrumProjectManage->tasks['manageTest']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageTest->step6->desc
 );
 
-$scrumProjectManage->tasks['manageTest']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'form',
     'page'   => 'execution-testcase',
     'title'  => $lang->tutorial->scrumProjectManage->manageTest->step7->name
 );
 
-$scrumProjectManage->tasks['manageTest']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'saveForm',
     'page'   => 'execution-testcase',
     'title'  => $lang->tutorial->scrumProjectManage->manageTest->step8->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageTest->step8->desc
 );
 
-$scrumProjectManage->tasks['manageTest']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'click',
     'target' => 'div.dtable div[data-col="actions"][data-row="1"] a.testtask-results-btn',
     'page'   => 'execution-testcase',
@@ -456,14 +457,14 @@ $scrumProjectManage->tasks['manageTest']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageTest->step9->desc
 );
 
-$scrumProjectManage->tasks['manageTest']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'form',
     'target' => '.resultSteps div.steps-body',
     'page'   => 'execution-testcase',
     'title'  => $lang->tutorial->scrumProjectManage->manageTest->step10->name
 );
 
-$scrumProjectManage->tasks['manageTest']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'saveForm',
     'target' => 'div.resultSteps button.to-bug-button',
     'page'   => 'execution-testcase',
@@ -471,7 +472,7 @@ $scrumProjectManage->tasks['manageTest']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageTest->step11->desc
 );
 
-$scrumProjectManage->tasks['manageTest']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'form',
     'page'   => 'bug-create',
     'app'    => 'qa',
@@ -479,14 +480,14 @@ $scrumProjectManage->tasks['manageTest']['steps'][] = array(
     'title'  => $lang->tutorial->scrumProjectManage->manageTest->step12->name
 );
 
-$scrumProjectManage->tasks['manageTest']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'saveForm',
     'page'   => 'bug-create',
     'app'    => 'qa',
     'title'  => $lang->tutorial->scrumProjectManage->manageTest->step13->name
 );
 
-$scrumProjectManage->tasks['manageTest']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'clickMainNavbar',
     'target' => 'testtask',
     'page'   => 'execution-testcase',
@@ -496,7 +497,7 @@ $scrumProjectManage->tasks['manageTest']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageTest->step14->desc
 );
 
-$scrumProjectManage->tasks['manageTest']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'click',
     'target' => '#actionBar a',
     'page'   => 'execution-testtask',
@@ -504,20 +505,20 @@ $scrumProjectManage->tasks['manageTest']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageTest->step15->desc
 );
 
-$scrumProjectManage->tasks['manageTest']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'form',
     'page'   => 'testtask-create',
     'title'  => $lang->tutorial->scrumProjectManage->manageTest->step16->name
 );
 
-$scrumProjectManage->tasks['manageTest']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'saveForm',
     'page'   => 'testtask-create',
     'title'  => $lang->tutorial->scrumProjectManage->manageTest->step17->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageTest->step17->desc
 );
 
-$scrumProjectManage->tasks['manageTest']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'click',
     'target' => 'div.dtable div[data-col="name"][data-row="1"] a',
     'page'   => 'execution-testtask',
@@ -526,7 +527,7 @@ $scrumProjectManage->tasks['manageTest']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageTest->step18->desc
 );
 
-$scrumProjectManage->tasks['manageTest']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'click',
     'target' => '#actionBar a.linkCase-btn',
     'page'   => 'testtask-cases',
@@ -534,14 +535,14 @@ $scrumProjectManage->tasks['manageTest']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageTest->step19->desc
 );
 
-$scrumProjectManage->tasks['manageTest']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'selectRow',
     'target' => 'div.dtable div.dtable-body div[data-col="id"]',
     'page'   => 'testtask-linkCase',
     'title'  => $lang->tutorial->scrumProjectManage->manageTest->step20->name
 );
 
-$scrumProjectManage->tasks['manageTest']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'click',
     'target' => 'div.dtable-footer nav.toolbar button',
     'page'   => 'testtask-linkCase',
@@ -549,7 +550,7 @@ $scrumProjectManage->tasks['manageTest']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageTest->step21->desc
 );
 
-$scrumProjectManage->tasks['manageTest']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'clickMainNavbar',
     'target' => 'testtask',
     'page'   => 'testtask-cases',
@@ -558,14 +559,14 @@ $scrumProjectManage->tasks['manageTest']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageTest->step22->desc
 );
 
-$scrumProjectManage->tasks['manageTest']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'selectRow',
     'target' => '#taskTable div.dtable-body div[data-col="id"]',
     'page'   => 'execution-testtask',
     'title'  => $lang->tutorial->scrumProjectManage->manageTest->step23->name
 );
 
-$scrumProjectManage->tasks['manageTest']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'click',
     'target' => 'div.dtable-footer nav.toolbar button',
     'page'   => 'execution-testtask',
@@ -574,7 +575,7 @@ $scrumProjectManage->tasks['manageTest']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageTest->step24->desc
 );
 
-$scrumProjectManage->tasks['manageTest']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'form',
     'page'   => 'testreport-create',
     'app'    => 'qa',
@@ -582,7 +583,7 @@ $scrumProjectManage->tasks['manageTest']['steps'][] = array(
     'title'  => $lang->tutorial->scrumProjectManage->manageTest->step25->name
 );
 
-$scrumProjectManage->tasks['manageTest']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'saveForm',
     'page'   => 'testreport-create',
     'app'    => 'qa',
@@ -590,7 +591,7 @@ $scrumProjectManage->tasks['manageTest']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageTest->step26->desc
 );
 
-$scrumProjectManage->tasks['manageTest']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'clickMainNavbar',
     'target' => 'testreport',
     'page'   => 'execution-testtask',
@@ -600,13 +601,13 @@ $scrumProjectManage->tasks['manageTest']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageTest->step27->desc
 );
 
-$scrumProjectManage->tasks['manageBug'] = array();
-$scrumProjectManage->tasks['manageBug']['name']     = 'manageBug';
-$scrumProjectManage->tasks['manageBug']['title']    = $lang->tutorial->scrumProjectManage->manageBug->title;
-$scrumProjectManage->tasks['manageBug']['startUrl'] = array('execution', 'task', 'executionID=3');
-$scrumProjectManage->tasks['manageBug']['steps']    = array();
+$scrumProjectManage->basic->tasks['manageBug'] = array();
+$scrumProjectManage->basic->tasks['manageBug']['name']     = 'manageBug';
+$scrumProjectManage->basic->tasks['manageBug']['title']    = $lang->tutorial->scrumProjectManage->manageBug->title;
+$scrumProjectManage->basic->tasks['manageBug']['startUrl'] = array('execution', 'task', 'executionID=3');
+$scrumProjectManage->basic->tasks['manageBug']['steps']    = array();
 
-$scrumProjectManage->tasks['manageBug']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageBug']['steps'][] = array(
     'type'   => 'clickNavbar',
     'target' => 'qa',
     'page'   => 'execution-task',
@@ -615,7 +616,7 @@ $scrumProjectManage->tasks['manageBug']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageBug->step1->desc
 );
 
-$scrumProjectManage->tasks['manageBug']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageBug']['steps'][] = array(
     'type'   => 'click',
     'target' => '#actionBar a.createBug-btn',
     'page'   => 'execution-bug',
@@ -624,20 +625,20 @@ $scrumProjectManage->tasks['manageBug']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageBug->step2->desc
 );
 
-$scrumProjectManage->tasks['manageBug']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageBug']['steps'][] = array(
     'type'   => 'form',
     'page'   => 'bug-create',
     'title'  => $lang->tutorial->scrumProjectManage->manageBug->step3->name
 );
 
-$scrumProjectManage->tasks['manageBug']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageBug']['steps'][] = array(
     'type'   => 'saveForm',
     'page'   => 'bug-create',
     'title'  => $lang->tutorial->scrumProjectManage->manageBug->step4->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageBug->step4->desc
 );
 
-$scrumProjectManage->tasks['manageBug']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageBug']['steps'][] = array(
     'type'   => 'click',
     'target' => 'div.dtable-cells div[data-col="actions"][data-row="1"] a.bug-confirm-btn',
     'page'   => 'execution-bug',
@@ -646,20 +647,20 @@ $scrumProjectManage->tasks['manageBug']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageBug->step5->desc
 );
 
-$scrumProjectManage->tasks['manageBug']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageBug']['steps'][] = array(
     'type'   => 'form',
     'page'   => 'execution-bug',
     'title'  => $lang->tutorial->scrumProjectManage->manageBug->step6->name
 );
 
-$scrumProjectManage->tasks['manageBug']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageBug']['steps'][] = array(
     'type'   => 'saveForm',
     'page'   => 'execution-bug',
     'title'  => $lang->tutorial->scrumProjectManage->manageBug->step7->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageBug->step7->desc
 );
 
-$scrumProjectManage->tasks['manageBug']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageBug']['steps'][] = array(
     'type'   => 'click',
     'target' => 'div.dtable-cells div[data-col="actions"][data-row="1"] a.bug-resolve-btn',
     'page'   => 'execution-bug',
@@ -668,20 +669,20 @@ $scrumProjectManage->tasks['manageBug']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageBug->step8->desc
 );
 
-$scrumProjectManage->tasks['manageBug']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageBug']['steps'][] = array(
     'type'   => 'form',
     'page'   => 'execution-bug',
     'title'  => $lang->tutorial->scrumProjectManage->manageBug->step9->name
 );
 
-$scrumProjectManage->tasks['manageBug']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageBug']['steps'][] = array(
     'type'   => 'saveForm',
     'page'   => 'execution-bug',
     'title'  => $lang->tutorial->scrumProjectManage->manageBug->step10->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageBug->step10->desc
 );
 
-$scrumProjectManage->tasks['manageBug']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageBug']['steps'][] = array(
     'type'   => 'click',
     'target' => 'div.dtable-cells div[data-col="actions"][data-row="2"] a.bug-close-btn',
     'page'   => 'execution-bug',
@@ -690,35 +691,40 @@ $scrumProjectManage->tasks['manageBug']['steps'][] = array(
     'desc'   => $lang->tutorial->scrumProjectManage->manageBug->step11->desc
 );
 
-$scrumProjectManage->tasks['manageBug']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageBug']['steps'][] = array(
     'type'   => 'form',
     'page'   => 'execution-bug',
     'title'  => $lang->tutorial->scrumProjectManage->manageBug->step12->name
 );
 
-$scrumProjectManage->tasks['manageBug']['steps'][] = array(
+$scrumProjectManage->basic->tasks['manageBug']['steps'][] = array(
     'type'   => 'saveForm',
     'page'   => 'execution-bug',
     'title'  => $lang->tutorial->scrumProjectManage->manageBug->step13->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageBug->step13->desc
 );
 
+$scrumProjectManage->advance = new stdClass();
+$scrumProjectManage->advance = clone $scrumProjectManage->basic;
+$scrumProjectManage->advance->name = 'scrumProjectManage-advance';
+$scrumProjectManage->advance->type = 'advance';
+
 if(in_array($config->edition, array('max', 'ipd')))
 {
-    $scrumProjectManage->tasks['manageIssue'] = array();
-    $scrumProjectManage->tasks['manageIssue']['name']     = 'manageIssue';
-    $scrumProjectManage->tasks['manageIssue']['title']    = $lang->tutorial->scrumProjectManage->manageIssue->title;
-    $scrumProjectManage->tasks['manageIssue']['startUrl'] = array('project', 'index', 'projectID=2');
-    $scrumProjectManage->tasks['manageIssue']['steps']    = array();
+    $scrumProjectManage->advance->tasks['manageIssue'] = array();
+    $scrumProjectManage->advance->tasks['manageIssue']['name']     = 'manageIssue';
+    $scrumProjectManage->advance->tasks['manageIssue']['title']    = $lang->tutorial->scrumProjectManage->manageIssue->title;
+    $scrumProjectManage->advance->tasks['manageIssue']['startUrl'] = array('project', 'index', 'projectID=2');
+    $scrumProjectManage->advance->tasks['manageIssue']['steps']    = array();
 
-    $scrumProjectManage->tasks['manageIssue']['steps'][] = array(
+    $scrumProjectManage->advance->tasks['manageIssue']['steps'][] = array(
         'type'   => 'clickNavbar',
         'target' => 'other',
         'page'   => 'project-index',
         'title'  => $lang->tutorial->scrumProjectManage->manageIssue->step1->name
     );
 
-    $scrumProjectManage->tasks['manageIssue']['steps'][] = array(
+    $scrumProjectManage->advance->tasks['manageIssue']['steps'][] = array(
         'type'   => 'click',
         'target' => '#other a[data-id="issue"]',
         'page'   => 'project-index',
@@ -726,7 +732,7 @@ if(in_array($config->edition, array('max', 'ipd')))
         'desc'   => $lang->tutorial->scrumProjectManage->manageIssue->step2->desc
     );
 
-    $scrumProjectManage->tasks['manageIssue']['steps'][] = array(
+    $scrumProjectManage->advance->tasks['manageIssue']['steps'][] = array(
         'type'   => 'click',
         'target' => 'a.create-issue-btn',
         'page'   => 'issue-browse',
@@ -734,20 +740,20 @@ if(in_array($config->edition, array('max', 'ipd')))
         'desc'   => $lang->tutorial->scrumProjectManage->manageIssue->step3->desc
     );
 
-    $scrumProjectManage->tasks['manageIssue']['steps'][] = array(
+    $scrumProjectManage->advance->tasks['manageIssue']['steps'][] = array(
         'type'   => 'form',
         'page'   => 'issue-create',
         'title'  => $lang->tutorial->scrumProjectManage->manageIssue->step4->name
     );
 
-    $scrumProjectManage->tasks['manageIssue']['steps'][] = array(
+    $scrumProjectManage->advance->tasks['manageIssue']['steps'][] = array(
         'type'   => 'saveForm',
         'page'   => 'issue-create',
         'title'  => $lang->tutorial->scrumProjectManage->manageIssue->step5->name,
         'desc'   => $lang->tutorial->scrumProjectManage->manageIssue->step5->desc
     );
 
-    $scrumProjectManage->tasks['manageIssue']['steps'][] = array(
+    $scrumProjectManage->advance->tasks['manageIssue']['steps'][] = array(
         'type'   => 'click',
         'target' => 'div[data-row="1"] a.issue-confirm-btn',
         'page'   => 'issue-browse',
@@ -756,14 +762,14 @@ if(in_array($config->edition, array('max', 'ipd')))
         'desc'   => $lang->tutorial->scrumProjectManage->manageIssue->step6->desc
     );
 
-    $scrumProjectManage->tasks['manageIssue']['steps'][] = array(
+    $scrumProjectManage->advance->tasks['manageIssue']['steps'][] = array(
         'type'   => 'form',
         'target' => '#confirmPanel',
         'page'   => 'issue-browse',
         'title'  => $lang->tutorial->scrumProjectManage->manageIssue->step7->name
     );
 
-    $scrumProjectManage->tasks['manageIssue']['steps'][] = array(
+    $scrumProjectManage->advance->tasks['manageIssue']['steps'][] = array(
         'type'   => 'saveForm',
         'target' => '#confirmPanel button[type="submit"]',
         'page'   => 'issue-browse',
@@ -771,7 +777,7 @@ if(in_array($config->edition, array('max', 'ipd')))
         'desc'   => $lang->tutorial->scrumProjectManage->manageIssue->step8->desc
     );
 
-    $scrumProjectManage->tasks['manageIssue']['steps'][] = array(
+    $scrumProjectManage->advance->tasks['manageIssue']['steps'][] = array(
         'type'   => 'click',
         'target' => 'div[data-row="2"] a.issue-resolve-btn',
         'page'   => 'issue-browse',
@@ -780,14 +786,14 @@ if(in_array($config->edition, array('max', 'ipd')))
         'desc'   => $lang->tutorial->scrumProjectManage->manageIssue->step9->desc
     );
 
-    $scrumProjectManage->tasks['manageIssue']['steps'][] = array(
+    $scrumProjectManage->advance->tasks['manageIssue']['steps'][] = array(
         'type'   => 'form',
         'target' => '#resolvePanel',
         'page'   => 'issue-browse',
         'title'  => $lang->tutorial->scrumProjectManage->manageIssue->step10->name
     );
 
-    $scrumProjectManage->tasks['manageIssue']['steps'][] = array(
+    $scrumProjectManage->advance->tasks['manageIssue']['steps'][] = array(
         'type'   => 'saveForm',
         'target' => '#resolvePanel button[type="submit"]',
         'page'   => 'issue-browse',
@@ -795,7 +801,7 @@ if(in_array($config->edition, array('max', 'ipd')))
         'desc'   => $lang->tutorial->scrumProjectManage->manageIssue->step11->desc
     );
 
-    $scrumProjectManage->tasks['manageIssue']['steps'][] = array(
+    $scrumProjectManage->advance->tasks['manageIssue']['steps'][] = array(
         'type'   => 'click',
         'target' => 'div[data-row="2"] a.issue-close-btn',
         'page'   => 'issue-browse',
@@ -804,14 +810,14 @@ if(in_array($config->edition, array('max', 'ipd')))
         'desc'   => $lang->tutorial->scrumProjectManage->manageIssue->step12->desc
     );
 
-    $scrumProjectManage->tasks['manageIssue']['steps'][] = array(
+    $scrumProjectManage->advance->tasks['manageIssue']['steps'][] = array(
         'type'   => 'form',
         'target' => '#closePanel',
         'page'   => 'issue-browse',
         'title'  => $lang->tutorial->scrumProjectManage->manageIssue->step13->name
     );
 
-    $scrumProjectManage->tasks['manageIssue']['steps'][] = array(
+    $scrumProjectManage->advance->tasks['manageIssue']['steps'][] = array(
         'type'   => 'saveForm',
         'target' => '#closePanel button[type="submit"]',
         'page'   => 'issue-browse',
@@ -819,20 +825,20 @@ if(in_array($config->edition, array('max', 'ipd')))
         'desc'   => $lang->tutorial->scrumProjectManage->manageIssue->step14->desc
     );
 
-    $scrumProjectManage->tasks['manageRisk'] = array();
-    $scrumProjectManage->tasks['manageRisk']['name']     = 'manageRisk';
-    $scrumProjectManage->tasks['manageRisk']['title']    = $lang->tutorial->scrumProjectManage->manageRisk->title;
-    $scrumProjectManage->tasks['manageRisk']['startUrl'] = array('project', 'index', 'projectID=2');
-    $scrumProjectManage->tasks['manageRisk']['steps']    = array();
+    $scrumProjectManage->advance->tasks['manageRisk'] = array();
+    $scrumProjectManage->advance->tasks['manageRisk']['name']     = 'manageRisk';
+    $scrumProjectManage->advance->tasks['manageRisk']['title']    = $lang->tutorial->scrumProjectManage->manageRisk->title;
+    $scrumProjectManage->advance->tasks['manageRisk']['startUrl'] = array('project', 'index', 'projectID=2');
+    $scrumProjectManage->advance->tasks['manageRisk']['steps']    = array();
 
-    $scrumProjectManage->tasks['manageRisk']['steps'][] = array(
+    $scrumProjectManage->advance->tasks['manageRisk']['steps'][] = array(
         'type'   => 'clickNavbar',
         'target' => 'other',
         'page'   => 'project-index',
         'title'  => $lang->tutorial->scrumProjectManage->manageRisk->step1->name
     );
 
-    $scrumProjectManage->tasks['manageRisk']['steps'][] = array(
+    $scrumProjectManage->advance->tasks['manageRisk']['steps'][] = array(
         'type'   => 'click',
         'target' => '#other a[data-id="risk"]',
         'page'   => 'project-index',
@@ -840,7 +846,7 @@ if(in_array($config->edition, array('max', 'ipd')))
         'desc'   => $lang->tutorial->scrumProjectManage->manageRisk->step2->desc
     );
 
-    $scrumProjectManage->tasks['manageRisk']['steps'][] = array(
+    $scrumProjectManage->advance->tasks['manageRisk']['steps'][] = array(
         'type'   => 'click',
         'target' => 'a.create-risk-btn',
         'page'   => 'risk-browse',
@@ -848,20 +854,20 @@ if(in_array($config->edition, array('max', 'ipd')))
         'desc'   => $lang->tutorial->scrumProjectManage->manageRisk->step3->desc
     );
 
-    $scrumProjectManage->tasks['manageRisk']['steps'][] = array(
+    $scrumProjectManage->advance->tasks['manageRisk']['steps'][] = array(
         'type'   => 'form',
         'page'   => 'risk-create',
         'title'  => $lang->tutorial->scrumProjectManage->manageRisk->step4->name
     );
 
-    $scrumProjectManage->tasks['manageRisk']['steps'][] = array(
+    $scrumProjectManage->advance->tasks['manageRisk']['steps'][] = array(
         'type'   => 'saveForm',
         'page'   => 'risk-create',
         'title'  => $lang->tutorial->scrumProjectManage->manageRisk->step5->name,
         'desc'   => $lang->tutorial->scrumProjectManage->manageRisk->step5->desc
     );
 
-    $scrumProjectManage->tasks['manageRisk']['steps'][] = array(
+    $scrumProjectManage->advance->tasks['manageRisk']['steps'][] = array(
         'type'   => 'click',
         'target' => 'div[data-row="1"] a.risk-track-btn',
         'page'   => 'risk-browse',
@@ -870,14 +876,14 @@ if(in_array($config->edition, array('max', 'ipd')))
         'desc'   => $lang->tutorial->scrumProjectManage->manageRisk->step6->desc
     );
 
-    $scrumProjectManage->tasks['manageRisk']['steps'][] = array(
+    $scrumProjectManage->advance->tasks['manageRisk']['steps'][] = array(
         'type'   => 'form',
         'target' => '#form-risk-track',
         'page'   => 'risk-browse',
         'title'  => $lang->tutorial->scrumProjectManage->manageRisk->step7->name
     );
 
-    $scrumProjectManage->tasks['manageRisk']['steps'][] = array(
+    $scrumProjectManage->advance->tasks['manageRisk']['steps'][] = array(
         'type'   => 'saveForm',
         'target' => '#form-risk-track button[type="submit"]',
         'page'   => 'risk-browse',
@@ -885,7 +891,7 @@ if(in_array($config->edition, array('max', 'ipd')))
         'desc'   => $lang->tutorial->scrumProjectManage->manageRisk->step8->desc
     );
 
-    $scrumProjectManage->tasks['manageRisk']['steps'][] = array(
+    $scrumProjectManage->advance->tasks['manageRisk']['steps'][] = array(
         'type'   => 'click',
         'target' => 'div[data-row="1"] a.risk-close-btn',
         'page'   => 'risk-browse',
@@ -894,14 +900,14 @@ if(in_array($config->edition, array('max', 'ipd')))
         'desc'   => $lang->tutorial->scrumProjectManage->manageRisk->step9->desc
     );
 
-    $scrumProjectManage->tasks['manageRisk']['steps'][] = array(
+    $scrumProjectManage->advance->tasks['manageRisk']['steps'][] = array(
         'type'   => 'form',
         'target' => '#risk-close-form',
         'page'   => 'risk-browse',
         'title'  => $lang->tutorial->scrumProjectManage->manageRisk->step10->name
     );
 
-    $scrumProjectManage->tasks['manageRisk']['steps'][] = array(
+    $scrumProjectManage->advance->tasks['manageRisk']['steps'][] = array(
         'type'   => 'saveForm',
         'target' => '#risk-close-form button[type="submit"]',
         'page'   => 'risk-browse',
