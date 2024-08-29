@@ -258,7 +258,7 @@ $fnGenerateFootToolbar = function() use ($lang, $app, $product, $productID, $pro
     $canBatchChangeParent  = $canBeChanged && hasPriv($storyType, 'batchChangeParent') && !($storyType == 'epic' && count($gradeGroup['epic']) < 2) && $app->tab == 'product';
     $canBatchUnlink        = $canBeChanged && $projectHasProduct && hasPriv('projectstory', 'batchUnlinkStory');
     $canBatchImportToLib   = $canBeChanged && $isProjectStory && in_array($this->config->edition, array('max', 'ipd')) && hasPriv('story', 'batchImportToLib') && helper::hasFeature('storylib');
-    $canBatchChangeRoadmap = $canBeChanged && hasPriv($storyType, 'batchChangeRoadmap') && $config->vision == 'or' && $storyType == 'requirement';
+    $canBatchChangeRoadmap = $canBeChanged && hasPriv($storyType, 'batchChangeRoadmap') && $config->vision == 'or' && ($storyType == 'requirement' || $storyType == 'epic');
     $canBatchAction        = $canBatchEdit || $canBatchClose || $canBatchReview || $canBatchChangeGrade || $canBatchChangeStage || $canBatchChangeModule || $canBatchChangePlan || $canBatchChangeParent || $canBatchAssignTo || $canBatchUnlink || $canBatchImportToLib || $canBatchChangeBranch || $canBatchChangeRoadmap;
 
     /* Remove empty data from data list. */
