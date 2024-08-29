@@ -57,7 +57,7 @@ class thinkMulticolumn extends thinkQuestion
         $batchItems = array();
         foreach($fields as $key => $field)
         {
-            $batchItems[] = $this->buildFormBatchItem($field, $key);
+            $batchItems[] = $this->buildFormBatchItem($field, (int)$key);
         }
         $detailWg[] = formBatch
         (
