@@ -332,6 +332,7 @@ class metric extends control
         $this->view->metric        = $metric;
         $this->view->chartTypeList = $this->metric->getChartTypeList($resultHeader);
         $this->view->echartOptions = $this->metric->getEchartsOptions($resultHeader, $allResultData);
+        $this->view->noDataTip     = $this->metric->getNoDataTip($metric->code);
 
         $this->display();
     }
