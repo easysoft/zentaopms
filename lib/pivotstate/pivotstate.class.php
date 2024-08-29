@@ -422,7 +422,7 @@ class pivotState
      */
     public function checkSqlBuilder()
     {
-        $checkList = array('checkFrom', 'checkJoins', 'checkSelects', 'checkFuncs', 'checkWheres', 'checkQuerys');
+        $checkList = array('checkFrom', 'checkJoins', 'checkSelects', 'checkWheres', 'checkQuerys');
         foreach($checkList as $check) if(!$this->$check()) return false;
         return true;
     }
@@ -474,6 +474,8 @@ class pivotState
      */
     public function checkSelects()
     {
+        if($this->checkFuncs()) return true;
+
         $builder = $this->sqlBuilder;
         $from    = $builder['from'];
         $joins   = $builder['joins'];
