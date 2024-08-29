@@ -8,7 +8,7 @@ $project  = data('project');
 $from     = data('from');
 $isStage  = data('isStage');
 $isKanban = data('isKanban');
-$isIPD    = $project->model == 'ipd' && $isStage;
+$isIPD    = isset($project->model) && $project->model == 'ipd' && $isStage;
 
 $showExecutionExec = ($from == 'execution' || $from == 'doc');
 $requiredFields    = ",{$config->execution->create->requiredFields},";
