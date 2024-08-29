@@ -23,3 +23,5 @@ $tester->login();
 $closeReason = array('已完成', '不做');
 
 r($tester->closeStory(3, $closeReason[0])) && p('message,status') && e('关闭需求成功，SUCCESS');
+
+$tester->closeBrowser();
