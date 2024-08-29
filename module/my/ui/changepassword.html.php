@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$reason = $app->user->modifyPasswordReason;
+$reason = isset($app->user->modifyPasswordReason) ? $app->user->modifyPasswordReason : '';
 
 formPanel
 (
