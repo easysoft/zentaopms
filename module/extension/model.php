@@ -575,7 +575,7 @@ class extensionModel extends model
             catch(PDOException $e)
             {
                 $errorInfo = $e->errorInfo;
-                $errorCode = $errorInfo ?$errorInfo[1] : '';
+                $errorCode = $errorInfo ? $errorInfo[1] : '';
                 if(strpos($ignoreCode, "|$errorCode|") === false) $result->error .= '<p>' . $e->getMessage() . "<br />THE SQL IS: $sql</p>";
             }
         }
