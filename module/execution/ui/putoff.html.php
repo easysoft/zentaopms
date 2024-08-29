@@ -12,12 +12,8 @@ namespace zin;
 
 jsVar('weekend', $config->execution->weekend);
 
-modalHeader
-(
-    set::title($lang->execution->putoff . $space . $lang->executionCommon),
-);
-
 $space = common::checkNotCN() ? ' ' : '';
+modalHeader(set::title($lang->execution->putoff . $space . $lang->executionCommon));
 formPanel
 (
     set::submitBtnText($lang->execution->putoff . $space . $lang->executionCommon),

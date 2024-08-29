@@ -11,11 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 $space = common::checkNotCN() ? ' ' : '';
-modalHeader
-(
-    set::title($lang->execution->close . $space . $lang->executionCommon),
-);
-
+modalHeader(set::title($lang->execution->close . $space . $lang->executionCommon));
 formPanel
 (
     set::submitBtnText($lang->execution->close . $space . $lang->executionCommon),
@@ -30,11 +26,7 @@ formPanel
     formGroup
     (
         set::label($lang->comment),
-        editor
-        (
-            set::name('comment'),
-            set::rows('6')
-        )
+        editor(set::name('comment'), set::rows('6'))
     )
 );
 hr();
