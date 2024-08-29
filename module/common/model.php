@@ -3615,7 +3615,7 @@ eof;
             }
             else
             {
-                echo html::a(helper::createLink('user', 'logout'), "<i class='icon icon-exit'></i> " . $lang->logout, '_top');
+                echo html::a('javascript:$.apps.logout()', "<i class='icon icon-exit'></i> " . $lang->logout, '_top');
             }
             echo '</li></ul>';
 
