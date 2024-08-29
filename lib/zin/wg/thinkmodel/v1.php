@@ -15,6 +15,6 @@ class thinkModel extends wg
         $wgMap        = array('input' => 'thinkInput', 'radio' => 'thinkRadio', 'checkbox' => 'thinkCheckbox', 'tableInput' => 'thinkTableInput');
         if(!isset($wgMap[$questionType])) return array();
 
-        return createWg($wgMap[$questionType], array(set::step($step), set::questionType($questionType), set::mode('detail')));
+        return createWg($wgMap[$questionType], array(set::step($step), set::questionType($questionType), set::mode('detail'), set::isResult(true)));
     }
 }

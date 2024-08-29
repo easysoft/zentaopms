@@ -19,6 +19,7 @@ class thinkRadio extends thinkQuestion
         'quoteQuestions?: array',
         'citation?: int=1',
         'selectColumn?: int',
+        'isResult?: bool = false',
     );
 
     public static function getPageJS(): ?string
@@ -30,7 +31,7 @@ class thinkRadio extends thinkQuestion
     {
         global $lang;
         $detailWg = parent::buildDetail();
-        list($step, $mode, $isRun, $quoteQuestions) = $this->prop(array('step', 'mode', 'isRun', 'quoteQuestions'));
+        list($step, $mode, $isRun, $quoteQuestions, $isResult) = $this->prop(array('step', 'mode', 'isRun', 'quoteQuestions', 'isResult'));
         if($mode != 'detail') return array();
         jsVar('citation', !empty($step->options->citation) ? $step->options->citation : 1);
 
@@ -51,7 +52,7 @@ class thinkRadio extends thinkQuestion
             set::items($items),
             set::name('result[]'),
             set::value($step->options->questionType == 'radio' ? ($result[0] ?? '') : $result),
-            set::disabled($step->options->questionType == 'checkbox' && !empty($step->options->setOption) && $step->options->setOption == 1 && !$isRun)
+            set::disabled(($step->options->questionType == 'checkbox' && !empty($step->options->setOption) && $step->options->setOption == 1 && !$isRun)|| $isResult)
         );
         $quoteItem = $step->options->questionType == 'checkbox' && !empty($step->options->setOption) && $step->options->setOption == 1;
         $quoteName = '';
@@ -61,7 +62,7 @@ class thinkRadio extends thinkQuestion
             foreach($quoteQuestions as $item)
             {
                 if(!$isRun && $item->id == $step->options->quoteTitle) $quoteName = $item->index . '. ' . $item->title;
-                if($isRun && $item->origin == $step->options->quoteTitle) $quoteName = $item->title;
+                if($isRun && $item->origin == $step->options->quoteTitle) $quoteName = $item->index . '. ' . $item->title;
             }
             $detailWg[] = div
             (
