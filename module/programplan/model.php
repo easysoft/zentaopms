@@ -349,6 +349,8 @@ class programplanModel extends model
                 /* Add PM to stage teams and project teams. */
                 if(!empty($plan->PM)) $this->execution->addExecutionMembers($stageID, array($plan->PM));
                 if($plan->acl != 'open') $updateUserViewIdList[] = $stageID;
+
+                $this->updateSubStageAttr($stageID, $plan->attribute);
             }
             else
             {
