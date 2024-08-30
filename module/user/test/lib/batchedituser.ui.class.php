@@ -68,3 +68,11 @@ class batchEditUserTester extends tester
         $form->wait(1);
         $form->dom->getElement('//*[@id="userList"]/div[3]/nav[1]/button')->click();
 
+        $form->dom->realname->setValue($user->realname);
+        $form->dom->verifyPassword->setValue($user->verifyPassword);
+        $form->wait(1);
+        $form->dom->btn($this->lang->save)->click();
+        $form->wait(1);
+        return $this->failed('验证失败，请检查您的系统登录密码是否正确');
+    }
+}
