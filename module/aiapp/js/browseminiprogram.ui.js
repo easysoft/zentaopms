@@ -435,7 +435,7 @@ $(function()
     $('#to-language-model').prop('href', $.createLink('ai', 'models'));
     $('#reload-current').on('click', () =>
     {
-        loadCurrentPage();
+        loadCurrentPage('.mini-program');
     });
 
     if(messages && messages.length)
