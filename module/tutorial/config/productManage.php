@@ -255,7 +255,55 @@ $productManage->tasks['planManage']['steps'][] = array(
     'type'   => 'click',
     'target' => '#stories button.linkStory-btn',
     'page'   => 'productplan-view',
-    'url'    => array('productplan', 'view', 'planID=1'),
     'title'  => $lang->tutorial->productManage->planManage->step6->name,
     'desc'   => $lang->tutorial->productManage->planManage->step6->desc
+);
+
+$productManage->tasks['planManage']['steps'][] = array(
+    'type'   => 'selectRow',
+    'target' => 'div.dtable div[data-col="id"][data-row="2"]',
+    'page'   => 'productplan-view',
+    'title'  => $lang->tutorial->productManage->planManage->step7->name
+);
+
+$productManage->tasks['planManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'div.dtable-footer button.linkObjectBtn',
+    'page'   => 'productplan-view',
+    'title'  => $lang->tutorial->productManage->planManage->step8->name,
+    'desc'   => $lang->tutorial->productManage->planManage->step8->desc
+);
+
+$productManage->tasks['planManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'li[data-key="bugs"] a',
+    'page'   => 'productplan-view',
+    'title'  => $lang->tutorial->productManage->planManage->step8->name,
+    'desc'   => $lang->tutorial->productManage->planManage->step8->desc
+);
+
+$productManage->tasks['planManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#stories button.linkBug-btn',
+    'page'   => 'productplan-view',
+    'url'    => array('productplan', 'view', 'planID=1&type=bug'),
+    'title'  => $lang->tutorial->productManage->planManage->step9->name,
+    'desc'   => $lang->tutorial->productManage->planManage->step9->desc
+);
+
+$productManage->tasks['planManage']['steps'][] = array(
+    'type'   => 'selectRow',
+    'target' => 'div.dtable div[data-col="id"][data-row="1"]',
+    'page'   => 'productplan-view',
+    'url'    => array('productplan', 'view', 'planID=1&type=bug'),
+    'title'  => $lang->tutorial->productManage->planManage->step10->name
+);
+
+$productManage->tasks['planManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'div.dtable-footer button.linkObjectBtn',
+    'page'   => 'productplan-view',
+    'url'    => array('productplan', 'view', 'planID=1&type=bug'),
+    'title'  => $lang->tutorial->productManage->planManage->step11->name,
+    'desc'   => $lang->tutorial->productManage->planManage->step11->desc
 );

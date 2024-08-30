@@ -307,6 +307,7 @@ detailBody
                         set::type('primary'),
                         set::icon('link'),
                         set::text($lang->productplan->linkBug),
+                        set::className('linkBug-btn'),
                         bind::click("window.showLink('bug')")
                     )
                 ) : null,
