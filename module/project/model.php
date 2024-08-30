@@ -1348,7 +1348,7 @@ class projectModel extends model
         $this->updatePlans($projectID, (array)$this->post->plans); // 更新关联的计划列表。
         if($oldProject->hasProduct > 0) $this->updateProducts($projectID, (array)$this->post->products, $postProductData); // 更新关联的产品列表。
         $this->updateTeamMembers($project, $oldProject, zget($_POST, 'teamMembers', array())); // 更新关联的用户信息。
-        if($postProductData) $this->updateProductStage($projectID, (string)$oldProject->stageBy, $postProductData); // 更新关联的所有产品的阶段。
+        if(!empty((array)$postProductData)) $this->updateProductStage($projectID, (string)$oldProject->stageBy, $postProductData); // 更新关联的所有产品的阶段。
 
         $this->file->updateObjectID((string)$this->post->uid, $projectID, 'project'); // 通过uid更新文件id。
 
