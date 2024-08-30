@@ -1714,4 +1714,25 @@ class tutorialModel extends model
     {
         return array(1 => $this->getRelease());
     }
+
+    /**
+     * 获取新手模式项目集列表。
+     * Get programs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getPrograms(): array
+    {
+        $program = $this->getProject();
+        $program->id      = 1;
+        $program->name    = 'Test program';
+        $program->project = 0;
+        $program->type    = 'program';
+        $program->parent  = 0;
+        $program->path    = ',1,';
+        $program->grade   = 1;
+
+        return array(1 => $program);
+    }
 }

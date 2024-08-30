@@ -6,7 +6,7 @@ $programManage->name    = 'programManage';
 $programManage->title   = $lang->tutorial->programManage->title;
 $programManage->icon    = 'program text-special';
 $programManage->type    = 'advance';
-$programManage->modules = 'program,product,project';
+$programManage->modules = 'program,product,project,personnel';
 $programManage->app     = 'program';
 $programManage->tasks   = array();
 
@@ -111,4 +111,56 @@ $programManage->tasks['addProgram']['steps'][] = array(
     'page'   => 'product-create',
     'title'  => $lang->tutorial->programManage->addProgram->step13->name,
     'desc'   => $lang->tutorial->programManage->addProgram->step13->desc
+);
+
+$programManage->tasks['whitelistManage'] = array();
+$programManage->tasks['whitelistManage']['name']     = 'whitelistManage';
+$programManage->tasks['whitelistManage']['title']    = $lang->tutorial->programManage->whitelistManage->title;
+$programManage->tasks['whitelistManage']['startUrl'] = array('program', 'browse');
+$programManage->tasks['whitelistManage']['steps']    = array();
+
+$programManage->tasks['whitelistManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'div.dtable div[data-col="name"][data-row="1"] a',
+    'page'   => 'program-browse',
+    'title'  => $lang->tutorial->programManage->whitelistManage->step1->name,
+    'desc'   => $lang->tutorial->programManage->whitelistManage->step1->desc
+);
+
+$programManage->tasks['whitelistManage']['steps'][] = array(
+    'type'   => 'clickNavbar',
+    'target' => 'personnel',
+    'page'   => 'program-project',
+    'title'  => $lang->tutorial->programManage->whitelistManage->step2->name,
+    'desc'   => $lang->tutorial->programManage->whitelistManage->step2->desc
+);
+
+$programManage->tasks['whitelistManage']['steps'][] = array(
+    'type'   => 'clickMainNavbar',
+    'target' => 'whitelist',
+    'page'   => 'personnel-invest',
+    'title'  => $lang->tutorial->programManage->whitelistManage->step3->name,
+    'desc'   => $lang->tutorial->programManage->whitelistManage->step3->desc
+);
+
+$programManage->tasks['whitelistManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#actionBar a',
+    'page'   => 'personnel-whitelist',
+    'url'    => array('personnel', 'whitelist', 'programID=1'),
+    'title'  => $lang->tutorial->programManage->whitelistManage->step4->name,
+    'desc'   => $lang->tutorial->programManage->whitelistManage->step4->desc
+);
+
+$programManage->tasks['whitelistManage']['steps'][] = array(
+    'type'   => 'form',
+    'page'   => 'personnel-addWhitelist',
+    'title'  => $lang->tutorial->programManage->whitelistManage->step5->name
+);
+
+$programManage->tasks['whitelistManage']['steps'][] = array(
+    'type'   => 'saveForm',
+    'page'   => 'personnel-addWhitelist',
+    'title'  => $lang->tutorial->programManage->whitelistManage->step6->name,
+    'desc'   => $lang->tutorial->programManage->whitelistManage->step6->desc
 );

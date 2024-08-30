@@ -1344,3 +1344,29 @@ $lang->tutorial->programManage->addProgram->step12->name = '填写表单';
 $lang->tutorial->programManage->addProgram->step13 = new stdClass();
 $lang->tutorial->programManage->addProgram->step13->name = '保存表单';
 $lang->tutorial->programManage->addProgram->step13->desc = '保存后在产品视角列表查看';
+
+$lang->tutorial->programManage->whitelistManage = new stdClass();
+$lang->tutorial->programManage->whitelistManage->title = '维护白名单';
+
+$lang->tutorial->programManage->whitelistManage->step1 = new stdClass();
+$lang->tutorial->programManage->whitelistManage->step1->name = '点击项目集名称';
+$lang->tutorial->programManage->whitelistManage->step1->desc = '点击进入项目集，查看项目集的详细信息.';
+
+$lang->tutorial->programManage->whitelistManage->step2 = new stdClass();
+$lang->tutorial->programManage->whitelistManage->step2->name = '点击人员';
+$lang->tutorial->programManage->whitelistManage->step2->desc = '点击查看项目集投入人员、可访问人员及白名单信息';
+
+$lang->tutorial->programManage->whitelistManage->step3 = new stdClass();
+$lang->tutorial->programManage->whitelistManage->step3->name = '点击白名单';
+$lang->tutorial->programManage->whitelistManage->step3->desc = '点击管理项目集白名单';
+
+$lang->tutorial->programManage->whitelistManage->step4 = new stdClass();
+$lang->tutorial->programManage->whitelistManage->step4->name = '点击添加白名单';
+$lang->tutorial->programManage->whitelistManage->step4->desc = '点击维护白名单人员';
+
+$lang->tutorial->programManage->whitelistManage->step5 = new stdClass();
+$lang->tutorial->programManage->whitelistManage->step5->name = '填写表单';
+
+$lang->tutorial->programManage->whitelistManage->step6 = new stdClass();
+$lang->tutorial->programManage->whitelistManage->step6->name = '保存表单';
+$lang->tutorial->programManage->whitelistManage->step6->desc = '保存后白名单人员可以查看项目集';

@@ -184,6 +184,8 @@ class programModel extends model
      */
     public function getList(string $status = 'all', string $orderBy = 'id_asc', string $type = '', array $topIdList = array(), object $pager = null): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getPrograms();
+
         $userViewIdList = trim($this->app->user->view->programs, ',') . ',' . trim($this->app->user->view->projects, ',');
         $userViewIdList = array_filter(explode(',', $userViewIdList));
 
