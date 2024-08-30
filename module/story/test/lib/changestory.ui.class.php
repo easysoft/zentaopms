@@ -29,7 +29,7 @@ class changeStoryTester extends tester
         if($this->response('method') != 'view')
         {
             if($form->dom->alertmodal('text') == '『研发需求名称』不能为空。') return $this->success('变更需求表单页面提示正确');
-           return $this->failed('变更需求表单页面提示信息不正确');
+            return $this->failed('变更需求表单页面提示信息不正确');
         }
 
         /* 跳转到需求列表页面搜索创建需求并进入该需求详情页。 */
