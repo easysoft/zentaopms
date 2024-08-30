@@ -36,7 +36,8 @@ function printVisionSwitch()
                 img
                 (
                     set('class', 'p-2'),
-                    set('src', $image)
+                    set('src', $image),
+                    set('style', array('height' => count($lang->block->visions) > 2 ? 'auto' : '180px'))
                 ),
                 div
                 (
