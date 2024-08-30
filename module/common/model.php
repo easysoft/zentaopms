@@ -1647,7 +1647,10 @@ eof;
      */
     public static function convert2Pinyin($items): array
     {
-        if(!is_string(reset($items))) return array();
+        foreach($items as $item)
+        {
+            if(!is_string($items)) return array();
+        }
 
         global $app;
         static $allConverted = array();

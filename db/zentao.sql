@@ -13494,8 +13494,6 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 ('system',      '项目',           'projects',                 '1', 'rnd', 'admin', '1970-01-01 00:00:01', '{\"app\":\"system\",\"module\":\"project\",\"method\":\"getPairsByModel\",\"methodDesc\":\"Get project pairs by model and project.\",\"params\":[{\"name\":\"model\",\"type\":\"string\",\"desc\":\"all|scrum|waterfall\",\"value\":\"all\"},{\"name\":\"programID\",\"type\":\"int\",\"desc\":\"\",\"value\":\"0\"},{\"name\":\"param\",\"type\":\"\",\"desc\":\"\",\"value\":\"\"}]}',  '',     '',     ''),
 ('system',      '产品线',         'productLines',             '1', 'rnd', 'admin', '1970-01-01 00:00:01', '{\"app\":\"system\",\"module\":\"product\",\"method\":\"getLinePairs\",\"methodDesc\":\"Get line pairs.\",\"params\":[{\"name\":\"useShort\",\"type\":\"bool\",\"desc\":\"\",\"value\":\"\"}]}',  '',     '',     ''),
 ('sql',         '软件需求',       'stories',                  '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'select id,title from zt_story where deleted=\"0\" and type=\"story\"',    'view_datasource_4',    'id',   'title'),
-('sql',         '用户需求',       'requirements',             '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'select id,title from zt_story where deleted=\"0\" and type=\"requirement\"',    'view_datasource_3',    'id',   'title'),
-('sql',         '业务需求',       'epics',                    '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'select id,title from zt_story where deleted=\"0\" type=\"epic\"',    'view_datasource_2',    'id',   'title'),
 ('sql',         '任务',           'tasks',                    '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'select id,name from zt_task where deleted=\"0\" and vision=\"rnd\"',      'view_datasource_5',    'id',   'name'),
 ('sql',         'Bug',            'bugs',                     '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'select id,title from zt_bug where deleted=\"0\"',      'view_datasource_6',    'id',   'title'),
 ('system',      '权限分组',       'groups',                   '1', 'rnd', 'admin', '1970-01-01 00:00:01', '{\"app\":\"system\",\"module\":\"group\",\"method\":\"getPairs\",\"methodDesc\":\"\",\"params\":[]}',  '',     '',     ''),
@@ -13535,7 +13533,7 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 ('sql',         '用例',           'cases',                    '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'select id,title from zt_case where deleted=\"0\"',     'view_datasource_41',   'id',   'title'),
 ('system',      '反馈分支',       'feedbackModules',          '1', 'rnd', 'admin', '1970-01-01 00:00:01', '{\"app\":\"system\",\"module\":\"tree\",\"method\":\"getOptionMenu\",\"methodDesc\":\"Create an option menu in html.\",\"params\":[{\"name\":\"rootID\",\"type\":\"int\",\"desc\":\"\",\"value\":\"0\"},{\"name\":\"type\",\"type\":\"string\",\"desc\":\"\",\"value\":\"feedback\"},{\"name\":\"startModule\",\"type\":\"int\",\"desc\":\"\",\"value\":\"0\"},{\"name\":\"branch\",\"type\":\"\",\"desc\":\"\",\"value\":\"0\"}]}',   '',     '',     ''),
 ('lang',        '需求类型',       'storyType',                '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'storyType',    '',     '',     ''),
-('system',	'执行',	          'executions',               '1', 'rnd', 'admin', '1970-01-01 00:00:01', '{\"app\":\"system\",\"module\":\"execution\",\"method\":\"getPairs\",\"methodDesc\":\"Get execution pairs.\",\"params\":[{\"name\":\"projectID\",\"type\":\"int\",\"desc\":\"\",\"value\":\"0\"},{\"name\":\"type\",\"type\":\"string\",\"desc\":\"all|sprint|stage|kanban\",\"value\":\"all\"},{\"name\":\"mode\",\"type\":\"string\",\"desc\":\"all|noclosed|stagefilter or empty\",\"value\":\"\"}]}',  '',     '',     ''),
+('system',  	'执行',	          'executions',               '1', 'rnd', 'admin', '1970-01-01 00:00:01', '{\"app\":\"system\",\"module\":\"execution\",\"method\":\"getPairs\",\"methodDesc\":\"Get execution pairs.\",\"params\":[{\"name\":\"projectID\",\"type\":\"int\",\"desc\":\"\",\"value\":\"0\"},{\"name\":\"type\",\"type\":\"string\",\"desc\":\"all|sprint|stage|kanban\",\"value\":\"all\"},{\"name\":\"mode\",\"type\":\"string\",\"desc\":\"all|noclosed|stagefilter or empty\",\"value\":\"\"}]}',  '',     '',     ''),
 ('lang',        '项目模型',       'projectModel',             '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'projectModel', '', '', ''),
 ('lang',        '反馈类型',       'feedbackType',             '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'feedbackType', '', '', ''),
 ('lang',        '反馈处理方案',   'feedbackSolution',         '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'feedbackSolution',     '', '', ''),
@@ -13570,7 +13568,9 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 ('lang',        '需求类别',       'demandCategory',           '1', 'or',  'admin',  '1970-01-01 00:00:01', 'demandCategory', '', '', ''),
 ('lang',        '需求状态',       'demandStatus',             '1', 'or',  'admin',  '1970-01-01 00:00:01', 'demandStatus', '', '', ''),
 ('lang',        '需求管理周期',   'demandDuration',           '1', 'or',  'admin',  '1970-01-01 00:00:01', 'demandDuration', '', '', ''),
-('lang',        '需求BSA',        'demandBSA',                '1', 'or',  'admin',  '1970-01-01 00:00:01', 'demandBSA', '', '', '');
+('lang',        '需求BSA',        'demandBSA',                '1', 'or',  'admin',  '1970-01-01 00:00:01', 'demandBSA', '', '', ''),
+('sql',         '用户需求',       'requirements',             '1', 'rnd', 'admin',  '1970-01-01 00:00:01', 'select id,title from zt_story where deleted=\"0\" and type=\"requirement\"',    'view_datasource_3',    'id',   'title'),
+('sql',         '业务需求',       'epics',                    '1', 'rnd', 'admin',  '1970-01-01 00:00:01', 'select id,title from zt_story where deleted=\"0\" type=\"epic\"',    'view_datasource_2',    'id',   'title');
 
 DROP VIEW IF EXISTS `view_datasource_2`;
 DROP VIEW IF EXISTS `view_datasource_3`;
@@ -13872,7 +13872,7 @@ CREATE TABLE IF NOT EXISTS `zt_basicmeas` (
   `object` char(30) NOT NULL DEFAULT '',
   `name` varchar(90) NOT NULL DEFAULT '',
   `code` char(30) NOT NULL DEFAULT '',
-  `unit` varchar(10) NOT NULL DEFAULT '',
+  `unit` varchar(100) NOT NULL DEFAULT '',
   `configure` text NULL,
   `params` text NULL,
   `definition` text NULL,

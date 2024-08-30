@@ -531,7 +531,7 @@ CREATE TABLE `zt_basicmeas` (
   `object` char(30) NOT NULL DEFAULT '',
   `name` varchar(90) NOT NULL DEFAULT '',
   `code` char(30) NOT NULL DEFAULT '',
-  `unit` varchar(10) NOT NULL DEFAULT '',
+  `unit` varchar(100) NOT NULL DEFAULT '',
   `configure` text DEFAULT NULL,
   `params` text DEFAULT NULL,
   `definition` text DEFAULT NULL,

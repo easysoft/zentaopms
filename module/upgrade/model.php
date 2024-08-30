@@ -9848,4 +9848,19 @@ class upgradeModel extends model
 
         return $node;
     }
+
+    public function fixWorkflowFieldOptions()
+    {
+        $datasourceID = $this->dao->select('*')->from(TABLE_WORKFLOWDATASOURCE)->where('code')->eq('requirements')->fetch('id');
+        if($datasourceID != 5) return true;
+
+        $fieldOptions = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->where('options')->ne('')->fetchPairs('id', 'options');
+        foreach($fieldOptions as $id => $options)
+        {
+            if(!is_numeric($options)) continue;
+            if($options < 5) continue;
+            $this->dao->update(TABLE_WORKFLOWFIELD)->set('options')->eq($options + 2)->where('id')->eq($id)->exec();
+        }
+        return true;
+    }
 }
