@@ -259,6 +259,7 @@ detailBody
                         set::type('primary'),
                         set::icon('link'),
                         set::text($lang->productplan->linkStory),
+                        set::className('linkStory-btn'),
                         bind::click("window.showLink('story')")
                     ) : null
                 ) : null,

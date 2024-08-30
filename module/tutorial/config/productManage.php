@@ -6,7 +6,7 @@ $productManage->name    = 'productManage';
 $productManage->title   = $lang->tutorial->productManage->title;
 $productManage->icon    = 'product text-special';
 $productManage->type    = 'basic';
-$productManage->modules = 'product,tree,story,plan,release';
+$productManage->modules = 'product,tree,story,productplan,release';
 $productManage->app     = 'product';
 $productManage->tasks   = array();
 
@@ -204,4 +204,58 @@ $productManage->tasks['storyManage']['steps'][] = array(
     'url'    => array('product', 'browse', 'productID=1&branch=&browseType=all&param=0&storyType=epic'),
     'title'  => $lang->tutorial->productManage->storyManage->step17->name,
     'desc'   => $lang->tutorial->productManage->storyManage->step17->desc
+);
+
+$productManage->tasks['planManage'] = array();
+$productManage->tasks['planManage']['name']     = 'planManage';
+$productManage->tasks['planManage']['title']    = $lang->tutorial->productManage->planManage->title;
+$productManage->tasks['planManage']['startUrl'] = array('product', 'browse', 'productID=1&branch=&browseType=all&param=0&storyType=epic');
+$productManage->tasks['planManage']['steps']    = array();
+
+$productManage->tasks['planManage']['steps'][] = array(
+    'type'   => 'clickNavbar',
+    'target' => 'plan',
+    'page'   => 'product-browse',
+    'title'  => $lang->tutorial->productManage->planManage->step1->name,
+    'desc'   => $lang->tutorial->productManage->planManage->step1->desc
+);
+
+$productManage->tasks['planManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#actionBar a.plan-create-btn',
+    'page'   => 'productplan-browse',
+    'url'    => array('productplan', 'browse', 'productID=1'),
+    'title'  => $lang->tutorial->productManage->planManage->step2->name,
+    'desc'   => $lang->tutorial->productManage->planManage->step2->desc
+);
+
+$productManage->tasks['planManage']['steps'][] = array(
+    'type'   => 'form',
+    'page'   => 'productplan-create',
+    'title'  => $lang->tutorial->productManage->planManage->step3->name
+);
+
+$productManage->tasks['planManage']['steps'][] = array(
+    'type'   => 'saveForm',
+    'page'   => 'productplan-create',
+    'title'  => $lang->tutorial->productManage->planManage->step4->name,
+    'desc'   => $lang->tutorial->productManage->planManage->step4->desc
+);
+
+$productManage->tasks['planManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'div.dtable div[data-col="title"][data-row="1"] a',
+    'page'   => 'productplan-browse',
+    'url'    => array('productplan', 'browse', 'productID=1'),
+    'title'  => $lang->tutorial->productManage->planManage->step5->name,
+    'desc'   => $lang->tutorial->productManage->planManage->step5->desc
+);
+
+$productManage->tasks['planManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#stories button.linkStory-btn',
+    'page'   => 'productplan-view',
+    'url'    => array('productplan', 'view', 'planID=1'),
+    'title'  => $lang->tutorial->productManage->planManage->step6->name,
+    'desc'   => $lang->tutorial->productManage->planManage->step6->desc
 );

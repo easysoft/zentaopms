@@ -25,6 +25,8 @@ class productplanModel extends model
      */
     public function getByID(int $planID, bool $setImgSize = false): object|false
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getPlan();
+
         $plan = $this->dao->findByID($planID)->from(TABLE_PRODUCTPLAN)->fetch();
         if(!$plan) return false;
 
@@ -102,6 +104,8 @@ class productplanModel extends model
      */
     public function getList(int $productID = 0, string $branch = '', string $browseType = 'undone', object|null $pager = null, string $orderBy = 'begin_desc', string $param = '', int $queryID = 0): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getPlans();
+
         $this->loadModel('search')->setQuery('productplan', $queryID);
 
         $products = (strpos($param, 'noproduct') !== false && empty($productID)) ? $this->loadModel('product')->getPairs($param) : array($productID => $productID);

@@ -1601,4 +1601,51 @@ class tutorialModel extends model
 
         return array(1 => array(1 => array(1 => array($storyCard))), 2 => array(2 => array(16 => array($taskCard))), 3 => array(3 => array(23 => array($bugCard))));
     }
+
+    /**
+     * 获取新手模式计划。
+     * Get plan.
+     *
+     * @access public
+     * @return array
+     */
+    public function getPlan(): object
+    {
+        $plan = new stdClass();
+        $plan->id           = 1;
+        $plan->product      = 1;
+        $plan->branch       = 0;
+        $plan->parent       = 0;
+        $plan->title        = 'Test plan';
+        $plan->status       = 'wait';
+        $plan->desc         = '';
+        $plan->begin        = helper::today();
+        $plan->end          = helper::today();
+        $plan->finishedDate = '';
+        $plan->closedDate   = '';
+        $plan->order        = 0;
+        $plan->closedReason = '';
+        $plan->createdBy    = $this->app->user->account;
+        $plan->createdDate  = helper::now();
+        $plan->deleted      = 0;
+        $plan->bugs         = 0;
+        $plan->hour         = 0;
+        $plan->stories      = 0;
+        $plan->projects     = array();
+        $plan->expired      = '';
+        $plan->branchName   = '';
+        return $plan;
+    }
+
+    /**
+     * 获取新手模式计划列表。
+     * Get plans.
+     *
+     * @access public
+     * @return array
+     */
+    public function getPlans(): array
+    {
+        return array(1 => $this->getPlan());
+    }
 }
