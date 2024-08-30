@@ -52,3 +52,19 @@ class batchEditUserTester extends tester
         return $this->failed('姓名不能为空');
     }
 
+    /**
+     * Check the page jump after enter the wrong verify password.
+     *
+     * @param  string    $user
+     * @access public
+     * @return object
+     */
+    public function wrongVerifyPassword($user)
+    {
+        $form = $this->initForm('user', 'batchEdit', '', 'appIframe-admin');
+
+        // 在用户列表勾选所有用户并点击编辑按钮,进入编辑页面
+        $form->dom->getElement('//*[@id="userList"]/div[3]/div[1]/div')->click();
+        $form->wait(1);
+        $form->dom->getElement('//*[@id="userList"]/div[3]/nav[1]/button')->click();
+
