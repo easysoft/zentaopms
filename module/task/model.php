@@ -2315,6 +2315,7 @@ class taskModel extends model
             $member->status   = isset($oldTeamData[$account]->status) ? $oldTeamData[$account]->status : 'wait';
             if($task->status == 'wait' && $member->estimate > 0 && $member->left == 0) $member->left = $member->estimate;
             if($task->status == 'done') $member->left = 0;
+            if($member->status == 'done' && !empty($member->left)) $member->status = 'doing';
 
             /* Compute task status of member. */
             if($member->left == 0 && $member->consumed > 0)
