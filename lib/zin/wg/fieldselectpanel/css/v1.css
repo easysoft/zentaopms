@@ -1,0 +1,12 @@
+.w-1\/6-gap-4 {width: calc(16.666667% - 1rem);}
+.w-1\/5-gap-4 {width: calc(20% - 1rem);}
+.w-1\/4-gap-4 {width: calc(25% - 1rem);}
+.w-1\/3-gap-4 {width: calc(33.333334% - 1rem);}
+.w-1\/2-gap-4 {width: calc(50% - 1rem);}
+.btn-group>.btn:not(:first-child) {border-left-color: var(--color-transparent);}
+
+.checkbox-col-6 .checkbox-primary {width: calc(100% / 6); flex: none;}
+.checkbox-col-3 .checkbox-primary {width: calc(100% / 3); flex: none;}
+.checkbox-col-2 .checkbox-primary {width: calc(100% / 2); flex: none;}
+.checkbox-col-1 .checkbox-primary {width: 100%; flex: none;}
+.checkbox-col .checkbox-primary>label {width: calc(100% - var(--checkbox-size) - 16px); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}

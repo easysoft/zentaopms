@@ -15,6 +15,11 @@ class fieldSelectPanel extends wg
         'col?: int'       // 列数。
     );
 
+    public static function getPageCSS(): ?string
+    {
+        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
+    }
+
     protected function getFieldList(): array
     {
         list($alias, $fields, $values) = $this->prop(array('alias', 'fields', 'values'));

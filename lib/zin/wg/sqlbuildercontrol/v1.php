@@ -26,6 +26,11 @@ class sqlBuilderControl extends wg
         'errorText?: string'            // 错误提示。
     );
 
+    public static function getPageCSS(): ?string
+    {
+        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
+    }
+
     /**
      * 构建控件。
      * Build control.

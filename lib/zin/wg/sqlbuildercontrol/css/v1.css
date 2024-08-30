@@ -1,0 +1,6 @@
+.justify-center-important {justify-content: center !important;}
+.justify-left-important {justify-content: flex-start !important;}
+.justify-right-important {justify-content: flex-end !important;}
+.px-1-important {padding: 0 4px !important;}
+.px-3-important {padding: 0 12px !important;}
+.items-center-important {align-items: center !important;}
