@@ -66,7 +66,8 @@ div(
         (
             set::arrow(false),
             set::staticMenu(true),
-            on::click('#repoDownloadCode', 'downloadCode'),
+            on::click('#repoDownloadCode')->call('downloadCode'),
+            on::click('.inline-appose')->call('inlineAppose'),
             btn
             (
                 setClass('ghost text-black pull-right absolute top-0 right-0 z-10 monaco-dropmenu'),

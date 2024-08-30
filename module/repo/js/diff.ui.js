@@ -199,7 +199,7 @@ $(document).ready(function()
     $('.btn-right').on('click', function() {arrowTabs('monacoTabs', -2);});
 });
 
-$('.inline-appose').on('click', function()
+window.inlineAppose = function()
 {
     $('.inline-appose').hide();
     diffAppose = !diffAppose;
@@ -214,7 +214,7 @@ $('.inline-appose').on('click', function()
     var tabID = $('#monacoTabs .nav-item .active').attr('href');
     updateEditorInline(tabID);
     return;
-});
+}
 
 window.changeDiff = function()
 {
