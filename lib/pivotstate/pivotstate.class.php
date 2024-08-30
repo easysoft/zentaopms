@@ -1,4 +1,6 @@
 <?php
+require __DIR__ . '/sqlbuilder.class.php';
+
 class pivotState
 {
     /**
@@ -318,8 +320,6 @@ class pivotState
 
     public $builderStep = 'table';
 
-    public $tableDesc = array();
-
     public $builderError = array();
 
     public $canChangeMode = true;
@@ -354,7 +354,8 @@ class pivotState
         $this->drills       = $drills;
         $this->defaultDrill = $this->initDrill();
 
-        $this->sqlBuilder = $this->json2Array($pivot->builder);
+        $this->sqlBuilder  = new sqlBuilder($this->json2Array($pivot->builder));
+        $this->builderStep = 'table';
 
         $this->fields    = $this->json2Array($pivot->fieldSettings);
         $this->langs     = $this->json2Array($pivot->langs);
@@ -368,7 +369,6 @@ class pivotState
         $this->setPager();
         $this->formatSettingColumns();
         $this->setStep2FinishSql();
-        $this->initSqlBuilder();
     }
 
     /**
@@ -415,6 +415,26 @@ class pivotState
     }
 
     /**
+     * Clear sql builder.
+     *
+     * @access public
+     * @return void
+     */
+    public function clearSqlBuilder()
+    {
+        $this->sqlBuilder->setFrom('');
+        $this->sqlBuilder->joins     = array();
+        $this->sqlBuilder->funcs     = array();
+        $this->sqlBuilder->wheres    = array();
+        $this->sqlBuilder->querys    = array();
+        $this->sqlBuilder->groups    = false;
+        $this->sqlBuilder->tableDesc = array();
+
+        $this->builderStep = 'table';
+        $this->resetBuilderError();
+    }
+
+    /**
      * Check sql builder.
      *
      * @access public
@@ -423,647 +443,15 @@ class pivotState
     public function checkSqlBuilder()
     {
         $checkList = array('checkFrom', 'checkJoins', 'checkSelects', 'checkWheres', 'checkQuerys');
-        foreach($checkList as $check) if(!$this->$check()) return false;
-        return true;
-    }
-
-    /**
-     * check from.
-     *
-     * @access public
-     * @return bool
-     */
-    public function checkFrom()
-    {
-        $builder = $this->sqlBuilder;
-        $from    = $builder['from'];
-        if(empty($from['table'])) return $this->setBuilderError('from', 'table', $from['alias']);
-
-        return true;
-    }
-
-    /**
-     * check joins
-     *
-     * @access public
-     * @return bool
-     */
-    public function checkJoins()
-    {
-        $builder = $this->sqlBuilder;
-        $joins   = $builder['joins'];
-        foreach($joins as $join)
+        foreach($checkList as $check)
         {
-            $alias = $join['alias'];
-            if(empty($join['table'])) return $this->setBuilderError('join', 'table', $alias);
+            $result = $this->sqlBuilder->$check();
+            if($result === true) continue;
 
-            list($columnA, $fieldA, $fieldB) = array($join['on'][0], $join['on'][1], $join['on'][4]);
-            if(empty($columnA)) return $this->setBuilderError('join', 'columnA', $alias);
-            if(empty($fieldA))  return $this->setBuilderError('join', 'fieldA', $alias);
-            if(empty($fieldB))  return $this->setBuilderError('join', 'fieldB', $alias);
-        }
-
-        return true;
-    }
-
-    /**
-     * check selects.
-     *
-     * @access public
-     * @return bool
-     */
-    public function checkSelects()
-    {
-        if($this->checkFuncs()) return true;
-
-        $builder = $this->sqlBuilder;
-        $from    = $builder['from'];
-        $joins   = $builder['joins'];
-
-        $select  = array();
-        $select  = array_merge($select, $from['select']);
-        foreach($joins as $join) $select = array_merge($select, $join['select']);
-
-        if(empty($select)) return $this->setBuilderError('select', 'field');
-
-        return true;
-    }
-
-    /**
-     * Check funcs.
-     *
-     * @access public
-     * @return bool
-     */
-    public function checkFuncs($type = 'func')
-    {
-        $funcs = $this->getFuncs($type);
-        if(empty($funcs)) return false;
-
-        $checkDuplicate = array();
-        foreach($funcs as $index => $func)
-        {
-            if(empty($func['table']))    return $this->setBuilderError('func', 'table', $index);
-            if(empty($func['field']))    return $this->setBuilderError('func', 'field', $index);
-            if(empty($func['function'])) return $this->setBuilderError('func', 'function', $index);
-            if(empty($func['alias']) && !is_numeric($func['alias'])) return $this->setBuilderError('func', 'alias', $index);
-
-            $alias = $func['alias'];
-            if(!isset($checkDuplicate[$alias]))
-            {
-                $checkDuplicate[$alias] = $index;
-            }
-            else
-            {
-                return $this->setBuilderError('func', 'duplicate', $index);
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Check wheres.
-     *
-     * @access public
-     * @return bool
-     */
-    public function checkWheres()
-    {
-        $wheres = $this->sqlBuilder['wheres'];
-        foreach($wheres as $groupIndex => $group)
-        {
-            foreach($group['items'] as $itemIndex => $item)
-            {
-                list($table, $field, $value) = array($item[0], $item[1], $item[4]);
-                if(empty($table)) return $this->setBuilderError('where', "{$groupIndex}_{$itemIndex}_0");
-                if(empty($field)) return $this->setBuilderError('where', "{$groupIndex}_{$itemIndex}_1");
-                if(empty($value) && !is_numeric($value)) return $this->setBuilderError('where', "{$groupIndex}_{$itemIndex}_4");
-            }
+            $this->builderError[$result] = true;
+            return false;
         }
         return true;
-    }
-
-    public function checkQuerys()
-    {
-        $querys = $this->sqlBuilder['querys'];
-        foreach($querys as $index => $query)
-        {
-            if(empty($query['table'])) return $this->setBuilderError('query', 'table', $index);
-            if(empty($query['field'])) return $this->setBuilderError('query', 'field', $index);
-            if(empty($query['name']) && !is_numeric($query['name']))  return $this->setBuilderError('query', 'name', $index);
-        }
-        return true;
-    }
-
-    /**
-     * Init sql builder.
-     *
-     * @access public
-     * @return void
-     */
-    public function initSqlBuilder()
-    {
-        $this->builderStep = 'table';
-        $this->tableDesc   = array();
-
-        if(empty($this->sqlBuilder))
-        {
-            $this->sqlBuilder['joins']  = array();
-            $this->sqlBuilder['funcs']  = array();
-            $this->sqlBuilder['wheres'] = array();
-            $this->sqlBuilder['groups'] = false;
-            $this->sqlBuilder['querys'] = array();
-        }
-
-        if(!isset($this->sqlBuilder['from'])) $this->setFrom('');
-    }
-
-    /**
-     * Set form.
-     *
-     * @param  string $table
-     * @access public
-     * @return void
-     */
-    public function setFrom($table)
-    {
-        $this->sqlBuilder['from'] = array('table' => $table, 'alias' => 't1', 'select' => array());
-    }
-
-    /**
-     * Add join
-     *
-     * @param  string|array $left
-     * @param  string       $alias
-     * @param  string       $columnA
-     * @param  string       $fieldA
-     * @param  string       $fieldB
-     * @access public
-     * @return void
-     */
-    public function addJoin($left, $alias = '', $columnA = '', $fieldA = '', $fieldB = '')
-    {
-        if(is_array($left))
-        {
-            $this->sqlBuilder['joins'][] = $left;
-            return;
-        }
-        $join = array();
-        $join['table']  = $left;
-        $join['alias']  = $alias;
-        $join['select'] = array();
-        $join['on']     = array($columnA, $fieldA, '=', $alias, $fieldB);
-
-        $this->sqlBuilder['joins'][] = $join;
-    }
-
-    /**
-     * Add func.
-     *
-     * @param  string|array $type
-     * @param  string       $table
-     * @param  string       $field
-     * @param  string       $function
-     * @param  string       $alias
-     * @access public
-     * @return void
-     */
-    public function addFunc($type, $table = '', $field = '', $function = '', $alias = '', $name = '')
-    {
-        if(is_array($type))
-        {
-            $this->sqlBuilder['funcs'][] = $type;
-            return;
-        }
-
-        $func = array();
-        $func['type']     = $type;
-        $func['table']    = $table;
-        $func['field']    = $field;
-        $func['function'] = $function;
-        $func['alias']    = $alias;
-        $func['name']     = $name;
-
-        $this->sqlBuilder['funcs'][] = $func;
-    }
-
-    /**
-     * Add where group.
-     *
-     * @param  array $group
-     * @access public
-     * @return void
-     */
-    public function addWhereGroup($group)
-    {
-        $this->sqlBuilder['wheres'][] = $group;
-    }
-
-    /**
-     * Add where item.
-     *
-     * @param  int          $index
-     * @param  string|array $table
-     * @param  string       $field
-     * @param  string       $operator
-     * @param  string       $value
-     * @access public
-     * @return void
-     */
-    public function addWhereItem($index, $table = '', $field = '', $operator = '=', $value = '', $conditionOperator = 'and')
-    {
-        $item = is_array($table) ? $table : array($table, $field, $operator, null, $value, $conditionOperator);
-        $this->sqlBuilder['wheres'][$index]['items'][] = $item;
-    }
-
-    /**
-     * add builder query filter.
-     *
-     * @param  string $table
-     * @param  string $field
-     * @param  string $name
-     * @param  string $type
-     * @param  string $typeOption
-     * @param  string $default
-     * @access public
-     * @return void
-     */
-    public function addBuilderQueryFilter($table = '', $field = '', $name = '', $type = 'input', $typeOption = 'user', $default = '')
-    {
-        if(is_array($table))
-        {
-            $this->sqlBuilder['querys'][] = $table;
-            return;
-        }
-
-        $query = array();
-        $query['table']      = $table;
-        $query['field']      = $field;
-        $query['name']       = $name;
-        $query['type']       = $type;
-        $query['typeOption'] = $typeOption;
-        $query['default']    = $default;
-
-        $this->sqlBuilder['querys'][] = $query;
-    }
-
-    /**
-     * Add agg func.
-     *
-     * @access public
-     * @return void
-     */
-    public function addAggFunc()
-    {
-        $this->clearAggFunc();
-        $groups = $this->sqlBuilder['groups'];
-        if($groups === false) return;
-
-        foreach($groups as $group)
-        {
-            if($group['type'] == 'group') continue;
-
-            list($table, $field, $alias, $function, $name) = $group['select'];
-            $this->addFunc('agg', $table, $field, $function, "{$alias}_{$function}", $name);
-        }
-    }
-
-    /**
-     * Clear agg func.
-     *
-     * @access public
-     * @return void
-     */
-    public function clearAggFunc()
-    {
-        $funcs = array();
-        foreach($this->sqlBuilder['funcs'] as $func)
-        {
-            if($func['type'] != 'agg') $funcs[] = $func;
-        }
-        $this->sqlBuilder['funcs'] = $funcs;
-    }
-
-    /**
-     * Set group by.
-     *
-     * @access public
-     * @return void
-     */
-    public function setGroupBy()
-    {
-        $selects = array_merge($this->getSelects(), $this->getFuncSelects());
-
-        $this->sqlBuilder['groups'] = array();
-        foreach($selects as $index => $select) $this->addGroupBy('agg', $index, $select);
-
-        $this->addAggFunc();
-    }
-
-    /**
-     * addGroupBy
-     *
-     * @param  int    $type
-     * @param  int    $order
-     * @param  int    $select
-     * @param  string $function
-     * @access public
-     * @return void
-     */
-    public function addGroupBy($type, $order, $select, $function = 'count')
-    {
-        list($table, $field, $selectFunc) = array($select[0], $select[1], $select[3]);
-
-        $fieldList = $this->getTableDescList($table);
-        $name = $table . '_' . $fieldList[$field];
-        if(!empty($selectFunc)) $name = $name . '_' . $selectFunc;
-
-        $select[3] = $function;
-        $select[4] = $name;
-        $this->sqlBuilder['groups'][]  = array('select' => $select, 'type' => $type, 'order' => $order, 'name' => $name);
-    }
-
-    /**
-     * Get func selects.
-     *
-     * @access public
-     * @return array
-     */
-    public function getFuncSelects()
-    {
-        $funcs   = $this->getFuncs('func', true);
-        $selects = array();
-
-        foreach($funcs as $func)
-        {
-            list($table, $field, $alias, $function) = array($func['table'], $func['field'], $func['alias'], $func['function']);
-            $selects[] = array($table, $field, $alias, $function);
-        }
-
-        return $selects;
-    }
-
-    /**
-     * Get selects.
-     *
-     * @param  bool    $withAlias
-     * @access public
-     * @return array
-     */
-    public function getSelects($withAlias = true)
-    {
-        $from    = $this->sqlBuilder['from'];
-        $joins   = $this->sqlBuilder['joins'];
-        $selects = array();
-
-        $tables = $joins;
-        array_unshift($tables, $from);
-
-        foreach($tables as $table)
-        {
-            $alias = $table['alias'];
-            foreach($table['select'] as $field) $selects[] = array($alias, $field, $withAlias ? "{$alias}_{$field}" : null, null);
-        }
-
-        return $selects;
-    }
-
-    /**
-     * Get funcs.
-     *
-     * @param  string $type
-     * @access public
-     * @return array
-     */
-    public function getFuncs($type, $skipEmpty = false)
-    {
-        $funcs = array();
-        foreach($this->sqlBuilder['funcs'] as $index => $func)
-        {
-            $hasEmpty = empty($func['table']) || empty($func['field']);
-            $hasEmpty = $hasEmpty || empty($func['function']) || empty($func['alias']);
-            if($skipEmpty && $hasEmpty) continue;
-
-            if($func['type'] == $type || $type == 'all') $funcs[$index] = $func;
-        }
-        return $funcs;
-    }
-
-    /**
-     * Get wheres.
-     *
-     * @access public
-     * @return array
-     */
-    public function getWheres()
-    {
-        $whereArray = array();
-        $wheres = $this->sqlBuilder['wheres'];
-        $groupCount = count($wheres);
-        foreach($wheres as $groupIndex => $group)
-        {
-            $groupArray = array();
-            foreach($group['items'] as $itemIndex => $item)
-            {
-                list($columnA, $fieldA, $operator, $columnB, $fieldB, $conditionOperator) = $item;
-                if($itemIndex !== 0) $groupArray[] = $conditionOperator;
-                $groupArray[] = array($columnA, $fieldA, $operator, $columnB, $fieldB);
-            }
-
-            $whereArray[] = $groupArray;
-            if($groupIndex + 1 < $groupCount) $whereArray[] = $group['operator'];
-        }
-
-        return $whereArray;
-    }
-
-    /**
-     * Get querys.
-     *
-     * @access public
-     * @return array
-     */
-    public function getQuerys()
-    {
-        $queryArray = array();
-        $querys = $this->sqlBuilder['querys'];
-        $hasWhere = count($this->sqlBuilder['wheres']) > 0;
-        foreach($querys as $index => $query)
-        {
-            if($index != 0 || $hasWhere) $queryArray[] = 'and';
-            $variable = "var$index";
-            $table    = $query['table'];
-            $field    = $query['field'];
-            $queryArray[] = array(null, "if(\${$variable}='',true,\${$variable}=`{$table}`.`{$field}`)");
-        }
-
-        return $queryArray;
-    }
-
-    /**
-     * Get group by.
-     *
-     * @param  bool   $sort
-     * @access public
-     * @return array
-     */
-    public function getGroupBy($sort = true, $onlyField = true)
-    {
-        $groups = $this->sqlBuilder['groups'];
-        if($groups === false) return array();
-
-        $groupByList = array();
-        foreach($groups as $group)
-        {
-            if($group['type'] != 'group') continue;
-            $groupByList[] = $group;
-        }
-
-        if($sort) uasort($groupByList, function($a, $b) {return $a['order'] <= $b['order'] ? -1 : 1;});
-
-        if($onlyField)
-        {
-            foreach($groupByList as $index => $groupBy)
-            {
-                $select = $groupBy['select'];
-                list($table, $field, $function) = array($select[0], $select[1], $select[3]);
-                $groupByList[$index] = array($table, $field, null, $function);
-            }
-        }
-
-        return array_values($groupByList);
-    }
-
-    /**
-     * Process check all.
-     *
-     * @access public
-     * @return void
-     */
-    public function processCheckAll()
-    {
-        $from  = $this->sqlBuilder['from'];
-        $joins = $this->sqlBuilder['joins'];
-        if($from['select'] == '*') $this->sqlBuilder['from']['select'] = array_keys($this->getTableDescList($from['alias']));
-
-        foreach($joins as $index => $join)
-        {
-            if($join['select'] == '*') $this->sqlBuilder['joins'][$index]['select'] = array_keys($this->getTableDescList($join['alias']));
-        }
-    }
-
-    /**
-     * Get selects with key.
-     *
-     * @access public
-     * @return array
-     */
-    public function getSelectsWithKey()
-    {
-        $selects        = array_merge($this->getSelects(), $this->getFuncSelects());
-        $selectsWithKey = array();
-        foreach($selects as $select)
-        {
-            list($table, $field, $alias) = $select;
-            $key = "{$table}_{$field}_{$alias}";
-            $selectsWithKey[$key] = $select;
-        }
-
-        return $selectsWithKey;
-    }
-
-    /**
-     * Update group from selects.
-     *
-     * @access public
-     * @return array
-     */
-    public function updateGroupsFromSelects()
-    {
-        $selects = $this->getSelectsWithKey();
-        $groups  = $this->sqlBuilder['groups'];
-        if($groups === false) return array(array(), array());
-
-        $filteredGroups = array();
-        foreach($groups as $group)
-        {
-            list($table, $field, $alias) = $group['select'];
-            $key = "{$table}_{$field}_{$alias}";
-
-            if(!isset($selects[$key])) continue;
-            $filteredGroups[] = $group;
-            unset($selects[$key]);
-        }
-
-        return array($selects, $filteredGroups);
-    }
-
-    /**
-     * Reorder group by.
-     *
-     * @param  array  $groups
-     * @access public
-     * @return array
-     */
-    public function reorderGroupBy($groups)
-    {
-        uasort($groups, function($a, $b) {return $a['order'] <= $b['order'] ? -1 : 1;});
-
-        $order = 0;
-        foreach($groups as $index => $group)
-        {
-            $groups[$index]['order'] = $order;
-            $order += 1;
-        }
-        ksort($groups, SORT_NUMERIC);
-
-        return $groups;
-    }
-
-    /**
-     * Process group by.
-     *
-     * @access public
-     * @return void
-     */
-    public function processGroupBy()
-    {
-        if($this->sqlBuilder['groups'] === false) return;
-        list($selects, $groups) = $this->updateGroupsFromSelects();
-
-        $this->sqlBuilder['groups'] = $this->reorderGroupBy($groups);
-
-        $order = count($groups);
-        foreach($selects as $select)
-        {
-            $this->addGroupBy('agg', $order, $select);
-            $order += 1;
-        }
-        $this->addAggFunc();
-    }
-
-    /**
-     * Set query filters name.
-     *
-     * @access public
-     * @return void
-     */
-    public function setQueryFiltersName()
-    {
-        $querys = $this->sqlBuilder['querys'];
-
-        foreach($querys as $index => $query)
-        {
-            $table = $query['table'];
-            $field = $query['field'];
-            $name  = $query['name'];
-            if(!empty($field) && empty($name))
-            {
-                $fieldList = $this->getTableDescList($table);
-                $this->sqlBuilder['querys'][$index]['name'] = zget($fieldList, $field, $field);
-            }
-        }
     }
 
     /**
@@ -1074,11 +462,11 @@ class pivotState
      */
     public function processQueryFilters()
     {
-        $querys = $this->sqlBuilder['querys'];
+        $querys = $this->sqlBuilder->querys;
         $this->clearFilters();
         if(empty($querys)) return;
 
-        if(!$this->checkQuerys())
+        if($this->sqlBuilder->checkQuerys() !== true)
         {
             $this->resetBuilderError();
             return;
@@ -1108,109 +496,18 @@ class pivotState
      */
     public function matchFieldSettingFromBuilder($key, $setting)
     {
-        $selects = array_merge($this->getSelects(), $this->getFuncSelects());
+        $selects = array_merge($this->sqlBuilder->getSelects(), $this->sqlBuilder->getFuncSelects());
         foreach($selects as $select)
         {
             list($table, $field, $alias) = $select;
             if($key != $alias) continue;
 
-            $fieldList = $this->getTableDescList($table);
+            $fieldList = $this->sqlBuilder->getTableDescList($table);
             $name = zget($fieldList, $field, $field);
             $setting[$this->clientLang] = $name;
             $setting['field']           = $field;
         }
         return $setting;
-    }
-
-    /**
-     * Generate func alias.
-     *
-     * @access public
-     * @return void
-     */
-    public function generateFuncAlias()
-    {
-        $funcs = $this->sqlBuilder['funcs'];
-        foreach($funcs as $index => $func)
-        {
-            $alias = $func['alias'];
-            $table = $func['table'];
-            $field = $func['field'];
-            if(!empty($alias) || empty($table) || empty($field)) continue;
-
-            $this->sqlBuilder['funcs'][$index]['alias'] = "{$table}_{$field}_{$index}";
-        }
-    }
-
-    /**
-     * Get next table alias.
-     *
-     * @access public
-     * @return string
-     */
-    public function getNextTableAlias()
-    {
-        $joins = $this->sqlBuilder['joins'];
-        $indexes = array();
-        foreach($joins as $join)
-        {
-            if(!is_array($join)) continue;
-
-            $alias = $join['alias'];
-            $indexes[] = (int)str_replace('t', '', $alias);
-        }
-        $max = empty($indexes) ? 1 : max($indexes);
-        $next = $max + 1;
-
-        return "t{$next}";
-    }
-
-    /**
-     * Get table desc field list.
-     *
-     * @param  string $alias
-     * @access public
-     * @return array
-     */
-    public function getTableDescList($alias)
-    {
-        $from      = $this->sqlBuilder['from'];
-        $joins     = $this->sqlBuilder['joins'];
-        $tableDesc = $this->tableDesc;
-        array_unshift($joins, $from);
-
-        foreach($joins as $join)
-        {
-            if($alias == $join['alias'] && isset($tableDesc[$join['table']])) return $tableDesc[$join['table']];
-        }
-
-        return array();
-    }
-
-    /**
-     * Get select tables.
-     *
-     * @param  array $tableList
-     * @access public
-     * @return array
-     */
-    public function getSelectTables($tableList)
-    {
-        $selectTables = array();
-        $from  = $this->sqlBuilder['from'];
-        $joins = $this->sqlBuilder['joins'];
-        array_unshift($joins, $from);
-
-        foreach($joins as $join)
-        {
-            $table = $join['table'];
-            if(empty($table)) continue;
-            $alias = $join['alias'];
-            $name  = $tableList[$table];
-            $selectTables[$alias] = "$name($alias)";
-        }
-
-        return $selectTables;
     }
 
     /**
@@ -1710,6 +1007,7 @@ class pivotState
         $data = json_decode($post['data'], true);
         foreach($data as $key => $value)
         {
+            if($key == 'sqlBuilder') $value = new sqlBuilder($value);
             $this->$key = $value;
         }
 
@@ -1749,6 +1047,7 @@ class pivotState
         foreach($cache as $key => $value)
         {
             if(is_array($value) || is_object($value)) $value = json_decode(json_encode($value), true);
+            if($key == 'sqlBuilder') $value = new sqlBuilder($value);
             $this->$key = $value;
         }
 
