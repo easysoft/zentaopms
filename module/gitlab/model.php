@@ -282,8 +282,8 @@ class gitlabModel extends model
             $toRevision   = $fromRevision;
             $committer    = zget($query, 'committer', '');
 
-            if($query->begin) $begin = $query->begin;
-            if($query->end)   $end   = $query->end;
+            if(!empty($query->begin)) $begin = $query->begin;
+            if(!empty($query->end))   $end   = $query->end;
         }
         $comments = $scm->engine->getCommitsByPath($entry, $fromRevision, $toRevision, isset($pager->recPerPage) ? $pager->recPerPage : 10, isset($pager->pageID) ? $pager->pageID : 1, $begin, $end, $committer);
         if(!is_array($comments)) return array();
