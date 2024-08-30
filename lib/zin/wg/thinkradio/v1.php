@@ -18,7 +18,7 @@ class thinkRadio extends thinkQuestion
         'quoteTitle?: string',
         'quoteQuestions?: array',
         'citation?: int=1',
-        'selectColumn?: int',
+        'selectColumn?: string',
         'isResult?: bool = false',
     );
 
@@ -157,6 +157,7 @@ class thinkRadio extends thinkQuestion
                     picker
                     (
                         setdata('quote-questions', $quoteQuestions),
+                        setdata('selectColumn', $selectColumn),
                         set(array
                         (
                             'class'       => 'options-quote-title',
@@ -211,7 +212,7 @@ class thinkRadio extends thinkQuestion
                                 'placeholder' => $lang->thinkstep->placeholder->quoteTitle,
                                 'required'    => true,
                                 'items'       => array(),
-                                'value'       => $selectColumn,
+                                'value'       => $selectColumn
                             ))
                         )
                     )
