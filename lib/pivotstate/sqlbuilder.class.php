@@ -516,7 +516,7 @@ class sqlBuilder
      */
     public function checkFrom()
     {
-        if(empty($this->from['table'])) return $this->getError('from', 'table', $from['alias']);
+        if(empty($this->from['table'])) return $this->getError('from', 'table', $this->from['alias']);
 
         return true;
     }
