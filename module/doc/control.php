@@ -169,6 +169,12 @@ class doc extends control
             $libID = $this->doc->createLib($lib, (string)$this->post->type, (string)$this->post->libType);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            if($type == 'custom')
+            {
+                $lib      = $this->doc->getLibByID($libID);
+                $objectID = $lib->parent;
+            }
+
             return $this->docZen->responseAfterCreateLib($type, $objectID, $libID);
         }
 
