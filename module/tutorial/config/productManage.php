@@ -71,3 +71,137 @@ $productManage->tasks['moduleManage']['steps'][] = array(
     'title'  => $lang->tutorial->productManage->moduleManage->step4->name,
     'desc'   => $lang->tutorial->productManage->moduleManage->step4->desc
 );
+
+$productManage->tasks['storyManage'] = array();
+$productManage->tasks['storyManage']['name']     = 'storyManage';
+$productManage->tasks['storyManage']['title']    = $lang->tutorial->productManage->storyManage->title;
+$productManage->tasks['storyManage']['startUrl'] = array('product', 'dashboard', 'productID=1');
+$productManage->tasks['storyManage']['steps']    = array();
+
+$productManage->tasks['storyManage']['steps'][] = array(
+    'type'   => 'clickNavbar',
+    'target' => 'epic',
+    'page'   => 'product-dashboard',
+    'title'  => $lang->tutorial->productManage->storyManage->step1->name,
+    'desc'   => $lang->tutorial->productManage->storyManage->step1->desc
+);
+
+$productManage->tasks['storyManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#actionBar a.create-story-btn',
+    'page'   => 'product-browse',
+    'title'  => $lang->tutorial->productManage->storyManage->step2->name,
+    'desc'   => $lang->tutorial->productManage->storyManage->step2->desc
+);
+
+$productManage->tasks['storyManage']['steps'][] = array(
+    'type'   => 'form',
+    'page'   => 'story-create',
+    'title'  => $lang->tutorial->productManage->storyManage->step3->name
+);
+
+$productManage->tasks['storyManage']['steps'][] = array(
+    'type'   => 'saveForm',
+    'page'   => 'story-create',
+    'title'  => $lang->tutorial->productManage->storyManage->step4->name,
+    'desc'   => $lang->tutorial->productManage->storyManage->step4->desc
+);
+
+$productManage->tasks['storyManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'div.dtable div[data-col="actions"][data-row="1"] a.epic-createRequirement-btn',
+    'page'   => 'product-browse',
+    'url'    => array('product', 'browse', 'productID=1&branch=&browseType=all&param=0&storyType=epic'),
+    'title'  => $lang->tutorial->productManage->storyManage->step5->name,
+    'desc'   => $lang->tutorial->productManage->storyManage->step5->desc
+);
+
+$productManage->tasks['storyManage']['steps'][] = array(
+    'type'   => 'form',
+    'target' => 'div.panel-body div.form-batch-container',
+    'page'   => 'requirement-batchCreate',
+    'title'  => $lang->tutorial->productManage->storyManage->step6->name
+);
+
+$productManage->tasks['storyManage']['steps'][] = array(
+    'type'   => 'saveForm',
+    'page'   => 'requirement-batchCreate',
+    'title'  => $lang->tutorial->productManage->storyManage->step7->name,
+    'desc'   => $lang->tutorial->productManage->storyManage->step7->desc
+);
+
+$productManage->tasks['storyManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'div.dtable div[data-col="actions"][data-row="2"] a.requirement-createStory-btn',
+    'page'   => 'product-browse',
+    'url'    => array('product', 'browse', 'productID=1&branch=&browseType=all&param=0&storyType=epic'),
+    'title'  => $lang->tutorial->productManage->storyManage->step8->name,
+    'desc'   => $lang->tutorial->productManage->storyManage->step8->desc
+);
+
+$productManage->tasks['storyManage']['steps'][] = array(
+    'type'   => 'form',
+    'target' => 'div.panel-body div.form-batch-container',
+    'page'   => 'story-batchCreate',
+    'title'  => $lang->tutorial->productManage->storyManage->step9->name
+);
+
+$productManage->tasks['storyManage']['steps'][] = array(
+    'type'   => 'saveForm',
+    'page'   => 'story-batchCreate',
+    'title'  => $lang->tutorial->productManage->storyManage->step10->name,
+    'desc'   => $lang->tutorial->productManage->storyManage->step10->desc
+);
+
+$productManage->tasks['storyManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'div.dtable div[data-col="actions"][data-row="4"] a.story-review-btn',
+    'page'   => 'product-browse',
+    'url'    => array('product', 'browse', 'productID=1&branch=&browseType=all&param=0&storyType=epic'),
+    'title'  => $lang->tutorial->productManage->storyManage->step11->name,
+    'desc'   => $lang->tutorial->productManage->storyManage->step11->desc
+);
+
+$productManage->tasks['storyManage']['steps'][] = array(
+    'type'   => 'form',
+    'page'   => 'story-review',
+    'title'  => $lang->tutorial->productManage->storyManage->step12->name
+);
+
+$productManage->tasks['storyManage']['steps'][] = array(
+    'type'   => 'saveForm',
+    'page'   => 'story-review',
+    'title'  => $lang->tutorial->productManage->storyManage->step13->name,
+    'desc'   => $lang->tutorial->productManage->storyManage->step13->desc
+);
+
+$productManage->tasks['storyManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'div.dtable div[data-col="actions"][data-row="3"] a.story-change-btn',
+    'page'   => 'product-browse',
+    'url'    => array('product', 'browse', 'productID=1&branch=&browseType=all&param=0&storyType=epic'),
+    'title'  => $lang->tutorial->productManage->storyManage->step14->name,
+    'desc'   => $lang->tutorial->productManage->storyManage->step14->desc
+);
+
+$productManage->tasks['storyManage']['steps'][] = array(
+    'type'   => 'form',
+    'page'   => 'story-change',
+    'title'  => $lang->tutorial->productManage->storyManage->step15->name
+);
+
+$productManage->tasks['storyManage']['steps'][] = array(
+    'type'   => 'saveForm',
+    'page'   => 'story-change',
+    'title'  => $lang->tutorial->productManage->storyManage->step16->name,
+    'desc'   => $lang->tutorial->productManage->storyManage->step16->desc
+);
+
+$productManage->tasks['storyManage']['steps'][] = array(
+    'type'   => 'clickNavbar',
+    'target' => 'track',
+    'page'   => 'product-browse',
+    'url'    => array('product', 'browse', 'productID=1&branch=&browseType=all&param=0&storyType=epic'),
+    'title'  => $lang->tutorial->productManage->storyManage->step17->name,
+    'desc'   => $lang->tutorial->productManage->storyManage->step17->desc
+);

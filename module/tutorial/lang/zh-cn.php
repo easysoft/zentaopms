@@ -1102,3 +1102,69 @@ $lang->tutorial->productManage->moduleManage->step3->name = '填写表单';
 $lang->tutorial->productManage->moduleManage->step4 = new stdClass();
 $lang->tutorial->productManage->moduleManage->step4->name = '保存表单';
 $lang->tutorial->productManage->moduleManage->step4->desc = '保存后可以在创建需求时选择模块进行分类';
+
+$lang->tutorial->productManage->storyManage = new stdClass();
+$lang->tutorial->productManage->storyManage->title = '需求管理';
+
+$lang->tutorial->productManage->storyManage->step1 = new stdClass();
+$lang->tutorial->productManage->storyManage->step1->name = '点击业务需求';
+$lang->tutorial->productManage->storyManage->step1->desc = '您可以在这里管理产品的业务需求';
+
+$lang->tutorial->productManage->storyManage->step2 = new stdClass();
+$lang->tutorial->productManage->storyManage->step2->name = '点击提业务需求';
+$lang->tutorial->productManage->storyManage->step2->desc = '点击提业务需求';
+
+$lang->tutorial->productManage->storyManage->step3 = new stdClass();
+$lang->tutorial->productManage->storyManage->step3->name = '填写表单';
+
+$lang->tutorial->productManage->storyManage->step4 = new stdClass();
+$lang->tutorial->productManage->storyManage->step4->name = '保存表单';
+$lang->tutorial->productManage->storyManage->step4->desc = '保存后在业务需求列表查看';
+
+$lang->tutorial->productManage->storyManage->step5 = new stdClass();
+$lang->tutorial->productManage->storyManage->step5->name = '点击拆分业务需求';
+$lang->tutorial->productManage->storyManage->step5->desc = '点击将业务需拆分成用户需求';
+
+$lang->tutorial->productManage->storyManage->step6 = new stdClass();
+$lang->tutorial->productManage->storyManage->step6->name = '填写表单';
+
+$lang->tutorial->productManage->storyManage->step7 = new stdClass();
+$lang->tutorial->productManage->storyManage->step7->name = '保存表单';
+$lang->tutorial->productManage->storyManage->step7->desc = '保存后可以在需求列表中查看';
+
+$lang->tutorial->productManage->storyManage->step8 = new stdClass();
+$lang->tutorial->productManage->storyManage->step8->name = '点拆分用户需求';
+$lang->tutorial->productManage->storyManage->step8->desc = '点击将用户需求拆分成研发需求';
+
+$lang->tutorial->productManage->storyManage->step9 = new stdClass();
+$lang->tutorial->productManage->storyManage->step9->name = '填写表单';
+
+$lang->tutorial->productManage->storyManage->step10 = new stdClass();
+$lang->tutorial->productManage->storyManage->step10->name = '保存表单';
+$lang->tutorial->productManage->storyManage->step10->desc = '保存后在需求列表中查看';
+
+$lang->tutorial->productManage->storyManage->step11 = new stdClass();
+$lang->tutorial->productManage->storyManage->step11->name = '点击评审按钮';
+$lang->tutorial->productManage->storyManage->step11->desc = '点击对需求进行评审';
+
+$lang->tutorial->productManage->storyManage->step12 = new stdClass();
+$lang->tutorial->productManage->storyManage->step12->name = '填写表单';
+
+$lang->tutorial->productManage->storyManage->step13 = new stdClass();
+$lang->tutorial->productManage->storyManage->step13->name = '保存表单';
+$lang->tutorial->productManage->storyManage->step13->desc = '保存后需求的状态根据评审结果变动';
+
+$lang->tutorial->productManage->storyManage->step14 = new stdClass();
+$lang->tutorial->productManage->storyManage->step14->name = '点击变更按钮';
+$lang->tutorial->productManage->storyManage->step14->desc = '点击对需求进行变更';
+
+$lang->tutorial->productManage->storyManage->step15 = new stdClass();
+$lang->tutorial->productManage->storyManage->step15->name = '填写表单';
+
+$lang->tutorial->productManage->storyManage->step16 = new stdClass();
+$lang->tutorial->productManage->storyManage->step16->name = '保存表单';
+$lang->tutorial->productManage->storyManage->step16->desc = '保存后，需求变更完成';
+
+$lang->tutorial->productManage->storyManage->step17 = new stdClass();
+$lang->tutorial->productManage->storyManage->step17->name = '点击矩阵';
+$lang->tutorial->productManage->storyManage->step17->desc = '您可以在这里跟进需求的进展情况';

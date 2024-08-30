@@ -274,28 +274,28 @@ class tutorialModel extends model
     }
 
     /**
-     * 获取新手模式故事点。
-     * Get tutorial stories.
+     * 获取新手模式研发需求。
+     * Get tutorial story.
      *
      * @access public
-     * @return array
+     * @return object
      */
-    public function getStories(): array
+    public function getStory(): object
     {
         $story = new stdclass();
-        $story->id             = 1;
+        $story->id             = 3;
         $story->product        = 1;
         $story->branch         = 0;
-        $story->parent         = 0;
+        $story->parent         = 2;
         $story->category       = 0;
-        $story->module         = 1;
+        $story->module         = 0;
         $story->plan           = '';
         $story->planTitle      = '';
         $story->color          = '';
         $story->source         = 'po';
         $story->sourceNote     = '';
         $story->fromBug        = 0;
-        $story->title          = 'Test story';
+        $story->title          = 'Test active story';
         $story->keywords       = '';
         $story->type           = 'story';
         $story->grade          = 1;
@@ -323,13 +323,74 @@ class tutorialModel extends model
         $story->mailto         = '';
         $story->isParent       = 0;
         $story->roadmap        = 0;
+        $story->root           = 1;
+        $story->path           = ',1,2,3,';
+        return $story;
+    }
+
+    /**
+     * 获取新手模式业务需求。
+     * Get tutorial epic.
+     *
+     * @access public
+     * @return object
+     */
+    public function getEpic(): object
+    {
+        $epic = $this->getStory();
+        $epic->id       = 1;
+        $epic->title    = 'Test epic';
+        $epic->type     = 'epic';
+        $epic->isParent = 1;
+        $epic->parent   = 0;
+        $epic->root     = 1;
+        $epic->path     = ',1,';
+        return $epic;
+    }
+
+    /**
+     * 获取新手模式用户需求。
+     * Get tutorial requirement.
+     *
+     * @access public
+     * @return object
+     */
+    public function getRequirement(): object
+    {
+        $requirement = $this->getStory();
+        $requirement->id       = 2;
+        $requirement->title    = 'Test requirement';
+        $requirement->type     = 'requirement';
+        $requirement->status   = 'active';
+        $requirement->isParent = 1;
+        $requirement->parent   = 1;
+        $requirement->root     = 1;
+        $requirement->path     = ',1,2,';
+        return $requirement;
+    }
+
+    /**
+     * 获取新手模式故事点。
+     * Get tutorial stories.
+     *
+     * @access public
+     * @return array
+     */
+    public function getStories(): array
+    {
+        $activeStory    = $this->getStory();
+        $reviewingStory = $this->getStory();
+        $reviewingStory->id        = 4;
+        $reviewingStory->status    = 'reviewing';
+        $reviewingStory->notReview = array($this->app->user->account);
+        $reviewingStory->title     = 'Test reviewing story';
+        $reviewingStory->path      = ',1,2,4,';
 
         $stories = array();
-        $stories[] = $story;
-        $story = json_decode(json_encode($stories[0]));
-        $story->id    = 2;
-        $story->title = 'Test story 2';
-        $stories[] = $story;
+        $stories[] = $this->getEpic();
+        $stories[] = $this->getRequirement();
+        $stories[] = $activeStory;
+        $stories[] = $reviewingStory;
         return $stories;
     }
 
