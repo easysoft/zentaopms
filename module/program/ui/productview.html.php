@@ -19,7 +19,7 @@ $fnGenerateCreateProgramBtns = function() use ($lang, $browseType)
 {
     $items = array();
     hasPriv('program', 'create')     && $items[] = array('text' => $lang->program->create,        'icon' => 'plus', 'url'      => createLink('program', 'create'));
-    hasPriv('product', 'create')     && $items[] = array('text' => $lang->program->createProduct, 'icon' => 'plus', 'url'      => createLink('product', 'create'), 'data-app' => 'product');
+    hasPriv('product', 'create')     && $items[] = array('text' => $lang->program->createProduct, 'icon' => 'plus', 'url'      => createLink('product', 'create'), 'data-app' => 'product', 'class' => 'product-create-btn');
     hasPriv('product', 'manageLine') && $items[] = array('text' => $lang->program->manageLine,    'icon' => 'edit', 'data-url' => createLink('product', 'manageLine', $browseType), 'data-toggle' => 'modal', 'data-id' => 'manageLineModal');
 
     if(empty($items)) return null;

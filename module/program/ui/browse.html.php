@@ -168,7 +168,7 @@ toolbar
     ([
         'text'  => $lang->program->createProject,
         'icon'  => 'plus',
-        'class' => 'btn secondary',
+        'class' => 'btn secondary create-project-btn',
         'url'   => createLink('project', 'createGuide'),
         'data-toggle' => 'modal'
     ])) : null,

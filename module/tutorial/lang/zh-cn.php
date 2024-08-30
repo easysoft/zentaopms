@@ -1290,3 +1290,57 @@ $lang->tutorial->productManage->releaseManage->step18->name = '填写表单';
 $lang->tutorial->productManage->releaseManage->step19 = new stdClass();
 $lang->tutorial->productManage->releaseManage->step19->name = '保存表单';
 $lang->tutorial->productManage->releaseManage->step19->desc = '保存后，需求会根据发布状态改变阶段';
+
+$lang->tutorial->programManage = new stdClass();
+$lang->tutorial->programManage->title = '项目集管理教程';
+
+$lang->tutorial->programManage->addProgram = new stdClass();
+$lang->tutorial->programManage->addProgram->title = '项目集维护';
+
+$lang->tutorial->programManage->addProgram->step1 = new stdClass();
+$lang->tutorial->programManage->addProgram->step1->name = '点击项目集';
+$lang->tutorial->programManage->addProgram->step1->desc = '您可以在这里维护管理项目集';
+
+$lang->tutorial->programManage->addProgram->step2 = new stdClass();
+$lang->tutorial->programManage->addProgram->step2->name = '点击添加项目集';
+$lang->tutorial->programManage->addProgram->step2->desc = '点击添加项目集';
+
+$lang->tutorial->programManage->addProgram->step3 = new stdClass();
+$lang->tutorial->programManage->addProgram->step3->name = '填写表单';
+
+$lang->tutorial->programManage->addProgram->step4 = new stdClass();
+$lang->tutorial->programManage->addProgram->step4->name = '保存表单';
+$lang->tutorial->programManage->addProgram->step4->desc = '保存在项目视角和产品视角列表中均可查看';
+
+$lang->tutorial->programManage->addProgram->step5 = new stdClass();
+$lang->tutorial->programManage->addProgram->step5->name = '点击添加项目';
+$lang->tutorial->programManage->addProgram->step5->desc = '点击维护项目集下的项目';
+
+$lang->tutorial->programManage->addProgram->step6 = new stdClass();
+$lang->tutorial->programManage->addProgram->step6->name = '点击Scrum';
+$lang->tutorial->programManage->addProgram->step6->desc = '可以在这里为该项目集添加项目';
+
+$lang->tutorial->programManage->addProgram->step7 = new stdClass();
+$lang->tutorial->programManage->addProgram->step7->name = '填写表单';
+
+$lang->tutorial->programManage->addProgram->step8 = new stdClass();
+$lang->tutorial->programManage->addProgram->step8->name = '保存表单';
+$lang->tutorial->programManage->addProgram->step8->desc = '保存后可以在项目视角列表中查看';
+
+$lang->tutorial->programManage->addProgram->step9 = new stdClass();
+$lang->tutorial->programManage->addProgram->step9->name = '点击产品视角';
+$lang->tutorial->programManage->addProgram->step9->desc = '在这里您可以查看维护项目集和产品的关系';
+
+$lang->tutorial->programManage->addProgram->step10 = new stdClass();
+$lang->tutorial->programManage->addProgram->step10->name = '点击展开';
+
+$lang->tutorial->programManage->addProgram->step11 = new stdClass();
+$lang->tutorial->programManage->addProgram->step11->name = '点击添加产品';
+$lang->tutorial->programManage->addProgram->step11->desc = '点击维护项目集下的产品';
+
+$lang->tutorial->programManage->addProgram->step12 = new stdClass();
+$lang->tutorial->programManage->addProgram->step12->name = '填写表单';
+
+$lang->tutorial->programManage->addProgram->step13 = new stdClass();
+$lang->tutorial->programManage->addProgram->step13->name = '保存表单';
+$lang->tutorial->programManage->addProgram->step13->desc = '保存后在产品视角列表查看';
