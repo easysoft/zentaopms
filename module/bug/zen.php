@@ -987,15 +987,15 @@ class bugZen extends bug
         }
         elseif($executionID)
         {
-            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,noreleased,nofail', $executionID, 'execution');
+            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,noreleased,nowaitreleased,nofail', $executionID, 'execution');
         }
         elseif($projectID)
         {
-            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,noreleased,nofail', $projectID, 'project');
+            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,noreleased,nowaitreleased,nofail', $projectID, 'project');
         }
         else
         {
-            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,withbranch,noreleased,nofail');
+            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,withbranch,noreleased,nowaitreleased,nofail');
         }
         $builds = $this->build->addReleaseLabelForBuilds($productID, $builds);
 
