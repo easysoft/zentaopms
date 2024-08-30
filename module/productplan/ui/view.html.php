@@ -260,7 +260,7 @@ detailBody
                         set::icon('link'),
                         set::text($lang->productplan->linkStory),
                         set::className('linkStory-btn'),
-                        bind::click("window.showLink('story')")
+                        bind::click('window.showLink', array('params' => array('story')))
                     ) : null
                 ) : null,
                 dtable
@@ -308,7 +308,7 @@ detailBody
                         set::icon('link'),
                         set::text($lang->productplan->linkBug),
                         set::className('linkBug-btn'),
-                        bind::click("window.showLink('bug')")
+                        bind::click('window.showLink', array('params' => array('bug')))
                     )
                 ) : null,
                 dtable
