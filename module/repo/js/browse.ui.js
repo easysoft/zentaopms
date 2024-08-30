@@ -103,11 +103,11 @@ window.renderCommentCell = function(result, {col, row})
 };
 
 /* Open download page when downZip btn click. */
-$('.downloadZip-btn').on('click', function()
+window.downloadZip = function()
 {
     var link = $.createLink('repo', 'downloadCode', 'repoID=' + repo.id + '&branch=' + branch);
     $.ajaxSubmit({url: link});
-})
+}
 
 /* Refresh page when repo changed. */
 $('#repo-select').on('change', function()

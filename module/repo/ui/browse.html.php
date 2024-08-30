@@ -205,6 +205,7 @@ $downloadWg = div
         setStyle(array('margin-top' => '20px')),
         btn
         (
+            on::click()->call('downloadZip'),
             set::icon('down-circle'),
             set::className('downloadZip-btn'),
             set::text($lang->repo->downloadZip)
