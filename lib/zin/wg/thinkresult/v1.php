@@ -45,7 +45,7 @@ class thinkResult extends wg
         $modelClass   = $mode == 'preview' ? 'w-full' : '';
         return div
         (
-            setClass('think-result-content col items-center px-12 py-6 gap-4 mx-auto'),
+            setClass('think-result-content col items-center px-8 py-6 gap-4 mx-auto'),
             div
             (
                 setClass('w-full flex items-center justify-center text-left'),
