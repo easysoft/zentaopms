@@ -87,8 +87,8 @@ class messageModel extends model
         /* 如果是业需和用需，则使用它们的发信配置。*/
         if($objectType == 'story')
         {
-            $story      = $this->loadModel('story')->fetchByID($objectID);
-            $objectType = $story->type;
+            $story = $this->loadModel('story')->fetchByID($objectID);
+            if($story) $objectType = $story->type;
         }
 
         if(isset($messageSetting['mail']))
