@@ -1,5 +1,5 @@
 <?php
-require __DIR__ . '/sqlbuilder.class.php';
+require dirname(__DIR__) . '/sqlbuilder/sqlbuilder.class.php';
 
 class pivotState
 {
