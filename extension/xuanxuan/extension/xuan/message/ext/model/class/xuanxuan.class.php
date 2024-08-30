@@ -65,7 +65,10 @@ class xuanxuanMessage extends messageModel
                 {
                     $feedback   = $this->loadModel('feedback')->getByID($objectID);
                     $senderUser = $this->feedback->getToAndCcList($feedback);
-                    foreach($senderUser as $user) $target .= ',' . $user;
+                    if(is_array($senderUser) && !empty($senderUser))
+                    {
+                        foreach($senderUser as $user) $target .= ',' . $user;
+                    }
                 }
                 else
                 {
