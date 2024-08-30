@@ -675,7 +675,7 @@ class fileModel extends model
                 $file['title']     = str_replace(".$extension", '', basename($file['pathname']));
 
                 $imagePath = $this->savePath . $this->getSaveName($file['pathname']);
-                if(is_writable($imagePath)) file_put_contents($imagePath, $imageData);
+                if(is_writable(dirname($imagePath))) file_put_contents($imagePath, $imageData);
                 $this->dao->insert(TABLE_FILE)->data($file)->exec();
                 $fileID = $this->dao->lastInsertID();
                 if($uid) $_SESSION['album'][$uid][] = $fileID;
