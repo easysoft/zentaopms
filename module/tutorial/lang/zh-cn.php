@@ -1193,22 +1193,26 @@ $lang->tutorial->productManage->planManage->step5->desc = '点击进入计划的
 
 $lang->tutorial->productManage->planManage->step6 = new stdClass();
 $lang->tutorial->productManage->planManage->step6->name = '点击关联需求';
-$lang->tutorial->productManage->planManage->step6->desc = '点击将该计划要完成的需求关联进计划中';
+$lang->tutorial->productManage->planManage->step6->desc = '将该计划要完成的需求关联进计划中';
 
 $lang->tutorial->productManage->planManage->step7 = new stdClass();
 $lang->tutorial->productManage->planManage->step7->name = '勾选需求';
 
 $lang->tutorial->productManage->planManage->step8 = new stdClass();
-$lang->tutorial->productManage->planManage->step8->name = '点击Bug';
+$lang->tutorial->productManage->planManage->step8->name = '点击保存';
 $lang->tutorial->productManage->planManage->step8->desc = '保存后，需求成功关联进计划中';
 
 $lang->tutorial->productManage->planManage->step9 = new stdClass();
-$lang->tutorial->productManage->planManage->step9->name = '点击关联Bug';
-$lang->tutorial->productManage->planManage->step9->desc = '点击将该计划要解决的Bug关联进计划中';
+$lang->tutorial->productManage->planManage->step9->name = '点击Bug';
+$lang->tutorial->productManage->planManage->step9->desc = '将该计划要解决的Bug关联进计划中';
 
 $lang->tutorial->productManage->planManage->step10 = new stdClass();
-$lang->tutorial->productManage->planManage->step10->name = '勾选Bug';
+$lang->tutorial->productManage->planManage->step10->name = '点击关联Bug';
+$lang->tutorial->productManage->planManage->step10->desc = '点击将该计划要解决的Bug关联进计划中';
 
 $lang->tutorial->productManage->planManage->step11 = new stdClass();
-$lang->tutorial->productManage->planManage->step11->name = '点击保存';
-$lang->tutorial->productManage->planManage->step11->desc = '保存后，Bug成功关联进计划中';
+$lang->tutorial->productManage->planManage->step11->name = '勾选Bug';
+
+$lang->tutorial->productManage->planManage->step12 = new stdClass();
+$lang->tutorial->productManage->planManage->step12->name = '点击保存';
+$lang->tutorial->productManage->planManage->step12->desc = '保存后，Bug成功关联进计划中';

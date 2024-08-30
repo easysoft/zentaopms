@@ -278,8 +278,8 @@ $productManage->tasks['planManage']['steps'][] = array(
     'type'   => 'click',
     'target' => 'li[data-key="bugs"] a',
     'page'   => 'productplan-view',
-    'title'  => $lang->tutorial->productManage->planManage->step8->name,
-    'desc'   => $lang->tutorial->productManage->planManage->step8->desc
+    'title'  => $lang->tutorial->productManage->planManage->step9->name,
+    'desc'   => $lang->tutorial->productManage->planManage->step9->desc
 );
 
 $productManage->tasks['planManage']['steps'][] = array(
@@ -287,8 +287,8 @@ $productManage->tasks['planManage']['steps'][] = array(
     'target' => '#stories button.linkBug-btn',
     'page'   => 'productplan-view',
     'url'    => array('productplan', 'view', 'planID=1&type=bug'),
-    'title'  => $lang->tutorial->productManage->planManage->step9->name,
-    'desc'   => $lang->tutorial->productManage->planManage->step9->desc
+    'title'  => $lang->tutorial->productManage->planManage->step10->name,
+    'desc'   => $lang->tutorial->productManage->planManage->step10->desc
 );
 
 $productManage->tasks['planManage']['steps'][] = array(
@@ -296,7 +296,7 @@ $productManage->tasks['planManage']['steps'][] = array(
     'target' => 'div.dtable div[data-col="id"][data-row="1"]',
     'page'   => 'productplan-view',
     'url'    => array('productplan', 'view', 'planID=1&type=bug'),
-    'title'  => $lang->tutorial->productManage->planManage->step10->name
+    'title'  => $lang->tutorial->productManage->planManage->step11->name
 );
 
 $productManage->tasks['planManage']['steps'][] = array(
@@ -304,6 +304,6 @@ $productManage->tasks['planManage']['steps'][] = array(
     'target' => 'div.dtable-footer button.linkObjectBtn',
     'page'   => 'productplan-view',
     'url'    => array('productplan', 'view', 'planID=1&type=bug'),
-    'title'  => $lang->tutorial->productManage->planManage->step11->name,
-    'desc'   => $lang->tutorial->productManage->planManage->step11->desc
+    'title'  => $lang->tutorial->productManage->planManage->step12->name,
+    'desc'   => $lang->tutorial->productManage->planManage->step12->desc
 );
