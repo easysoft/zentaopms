@@ -419,6 +419,8 @@ class storyModel extends model
      */
     public function getPlanStories(int $planID, string $status = 'all', string $orderBy = 'id_desc', object|null $pager = null): array
     {
+        if(common::isTutorialMode()) return array();
+
         if(strpos($orderBy, 'module') !== false)
         {
             $orderBy = (strpos($orderBy, 'module_asc') !== false) ? 't3.path asc' : 't3.path desc';

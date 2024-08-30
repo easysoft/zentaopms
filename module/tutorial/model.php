@@ -1614,7 +1614,7 @@ class tutorialModel extends model
         $plan = new stdClass();
         $plan->id           = 1;
         $plan->product      = 1;
-        $plan->branch       = 0;
+        $plan->branch       = '0';
         $plan->parent       = 0;
         $plan->title        = 'Test plan';
         $plan->status       = 'wait';

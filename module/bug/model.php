@@ -125,6 +125,8 @@ class bugModel extends model
      */
     public function getPlanBugs(int $planID, string $status = 'all', string $orderBy = 'id_desc', object $pager = null): array
     {
+        if(common::isTutorialMode()) return array();
+
         if(strpos($orderBy, 'pri_') !== false) $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
 
         $bugs = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) AS priOrder")->from(TABLE_BUG)
@@ -214,6 +216,8 @@ class bugModel extends model
      */
     public function getActiveBugs(array|int $products, int|string $branch, string $executions, array $excludeBugs, object $pager = null, string $orderBy = 'id desc'): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getBugs();
+
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where('status')->eq('active')
             ->andWhere('toStory')->eq(0)
