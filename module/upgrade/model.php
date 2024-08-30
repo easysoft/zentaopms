@@ -9849,7 +9849,14 @@ class upgradeModel extends model
         return $node;
     }
 
-    public function fixWorkflowFieldOptions()
+    /**
+     * 修正工作流字段选项。
+     * Fix workflowfield options.
+     *
+     * @access public
+     * @return bool
+     */
+    public function fixWorkflowFieldOptions(): bool
     {
         $datasourceID = $this->dao->select('*')->from(TABLE_WORKFLOWDATASOURCE)->where('code')->eq('requirements')->fetch('id');
         if($datasourceID != 5) return true;
