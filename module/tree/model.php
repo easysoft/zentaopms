@@ -529,16 +529,13 @@ class treeModel extends model
         $productNum = count($products);
         foreach($products as $id => $product)
         {
-            /* 如果一个执行或项目关联了多个产品，产品名也要放在树状菜单上。 If executon/project has multiple products, show the product in tree menu. */
-            if($productNum > 1)
-            {
-                $menuItem = new stdclass();
-                $menuItem->id     = "product-$id";
-                $menuItem->name   = $product;
-                $menuItem->parent = 0;
-                $menuItem->url    = helper::createLink('execution', 'task', "executionID=$rootID&status=byProduct&praram=$id");
-                $menu["product-$id"] = $menuItem;
-            }
+            /* 产品名也要放在树状菜单上。Show the product in tree menu. */
+            $menuItem = new stdclass();
+            $menuItem->id     = "product-$id";
+            $menuItem->name   = $product;
+            $menuItem->parent = 0;
+            $menuItem->url    = helper::createLink('execution', 'task', "executionID=$rootID&status=byProduct&praram=$id");
+            $menu["product-$id"] = $menuItem;
 
             /* tree menu. */
             if(empty($branchGroups[$id])) $branchGroups[$id]['0'] = '';
