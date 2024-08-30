@@ -650,7 +650,7 @@ class programplanTao extends programplanModel
         $data->taskProgress  = $plan->progress . '%';
 
         if($data->endDate > $data->start_date)                $data->duration = helper::diffDate($data->endDate, $data->start_date) + 1;
-        if(empty($data->start_date) or empty($data->endDate)) $data->duration = 1;
+        if(empty($data->start_date) || empty($data->endDate)) $data->duration = 1;
 
         if(!empty($this->config->setPercent)) $data->percent = $plan->percent;
         if($data->start_date) $data->start_date = date('d-m-Y', strtotime($data->start_date));

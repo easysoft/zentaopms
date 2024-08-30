@@ -33,6 +33,7 @@ class transferTao extends transferModel
         /* 解析dataSource params中配置的参数。 */
         /* Parse params. */
         if(is_string($params)) $params = explode('&', $params);
+
         foreach($params as $param => $value)
         {
             /* 如果参数是$开头的变量，则从SESSION中获取该变量。 */
