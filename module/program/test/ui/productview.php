@@ -15,5 +15,14 @@ include '../lib/productview.ui.class.php';
 $tester = new createProgramTester();
 $tester->login();
 
-r($tester->createProgramProduct()) && p('message,status') && e('产品视角下创建产品成功，SUCCESS');     //产品视角下创建产品成功
-r($tester->manageProductLine())    && p('message,status') && e('产品视角下维护产品线成功，SUCCESS');   //产品视角下创建产品成功
+$programs = new stdClass();
+$programs->program = '项目集3';
+
+$products = new stdClass();
+$products->programProduct = '产品A';
+
+$productLines = new stdClass();
+$productLines->productLine = '产品线A';
+
+r($tester->createProgramProduct($programs, $products))  && p('message,status') && e('产品视角下创建产品成功，SUCCESS');     //产品视角下创建产品成功
+r($tester->manageProductLine($programs, $productLines)) && p('message,status') && e('产品视角下维护产品线成功，SUCCESS');   //产品视角下创建产品成功
