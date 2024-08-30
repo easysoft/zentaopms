@@ -959,11 +959,8 @@ class storyTao extends storyModel
     {
         if(empty($bugID) or empty($storyID)) return;
 
-        if($this->config->edition != 'open')
-        {
-            $oldBug = $this->dao->select('feedback, status')->from(TABLE_BUG)->where('id')->eq($bugID)->fetch();
-            if($oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, 'closed', $oldBug->status);
-        }
+        $oldBug = $this->dao->select('*')->from(TABLE_BUG)->where('id')->eq($bugID)->fetch();
+        if($this->config->edition != 'open' && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, 'closed', $oldBug->status);
 
         $now = helper::now();
         $bug = new stdclass();
@@ -980,7 +977,9 @@ class storyTao extends storyModel
         $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bugID)->exec();
 
         $this->loadModel('action')->create('bug', $bugID, 'ToStory', '', $storyID);
-        $this->action->create('bug', $bugID, 'Closed');
+        $actionID = $this->action->create('bug', $bugID, 'Closed');
+        $changes  = common::createChanges($oldBug, $bug, 'bug');
+        $this->action->logHistory($actionID, $changes);
 
         /* add files to story from bug. */
         $files = $this->dao->select('*')->from(TABLE_FILE)->where('objectType')->eq('bug')->andWhere('objectID')->eq($bugID)->fetchAll();
