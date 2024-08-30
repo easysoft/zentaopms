@@ -1647,6 +1647,8 @@ eof;
      */
     public static function convert2Pinyin($items): array
     {
+        if(!is_string(reset($items))) return array();
+
         global $app;
         static $allConverted = array();
         static $pinyin;

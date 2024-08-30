@@ -96,12 +96,13 @@ class picker extends wg
         if(is_array($defaultValue)) $defaultValue = implode($this->prop('valueSplitter', ','), $defaultValue);
         if(is_array($items) && !empty($items))
         {
+            $pinyinItems = ($pinyinKeys && !isset($item['keys']) && class_exists('common')) ? common::convert2Pinyin($items) : array();
             foreach($items as $key => $item)
             {
                 if(!is_array($item))           $item = array('text' => $item, 'value' => $key);
                 if(isset($item['value']) && !is_string($item['value'])) $item['value'] = strval($item['value']);
                 if(isset($item['value']) && $item['value'] === '0') $hasZeroValue  = true;
-                if($pinyinKeys && !isset($item['keys']) && class_exists('common')) $item['keys'] = implode(' ', common::convert2Pinyin(array($item['text'])));
+                $item['keys']  = zget($pinyinItems, $item['text'], '');
                 $pickerItems[] = $item;
             }
         }
