@@ -307,7 +307,7 @@ class mrModel extends model
         if($needExecJob && isset($MR->jobID) && $MR->jobID)
         {
             $this->execJob($MRID, (int)$MR->jobID);
-            if(dao::isError()) return array('result' => 'fail', 'message' => import("\n", dao::getError()));
+            if(dao::isError()) return array('result' => 'fail', 'message' => implode("\n", dao::getError()));
         }
 
         /* Known issue: `reviewer_ids` takes no effect. */
