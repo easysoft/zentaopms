@@ -17,3 +17,5 @@ $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
         postAndLoadPage(url, form);
     }
 })
+
+$('.section-list').removeClass('pt-4 px-6');
