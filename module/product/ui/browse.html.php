@@ -22,6 +22,8 @@ jsVar('tab', $app->tab);
 jsVar('vision', $config->vision);
 jsVar('window.globalSearchType', $storyType);
 jsVar('storyViewPriv', hasPriv('story', 'view'));
+jsVar('requirementViewPriv', hasPriv('requirement', 'view'));
+jsVar('epicViewPriv', hasPriv('epic', 'view'));
 
 $viewType          = $this->cookie->storyViewType ? $this->cookie->storyViewType : 'tree';
 $storyCommon       = $storyType == 'requirement' ? $lang->URCommon : $lang->SRCommon;
