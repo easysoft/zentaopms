@@ -18,3 +18,12 @@ class batchEditUserTester extends tester
         $form->wait(1);
         $form->dom->getElement('//*[@id="userList"]/div[3]/nav[1]/button')->click();
 
+        $form->dom->realname->setValue($user->realname);
+        $form->dom->verifyPassword->setValue($user->verifyPassword);
+        $form->wait(1);
+        $form->dom->getElement('//*[@id="zin_user_batchedit_formBatch"]/div[3]/button[1]')->click();
+        $form->wait(1);
+
+        return $this->success('保存成功');
+    }
+
