@@ -159,6 +159,8 @@ class doc extends control
      */
     public function createLib(string $type = '', int $objectID = 0, int $libID = 0)
     {
+        $this->app->loadLang('api');
+
         if(!empty($_POST))
         {
             $lib = $this->docZen->buildLibForCreateLib();
