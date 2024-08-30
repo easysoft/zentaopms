@@ -1,5 +1,8 @@
 <?php
 declare(strict_types=1);
+
+use function zin\import;
+
 /**
  * The model file of mr module of ZenTaoPMS.
  *
@@ -303,7 +306,11 @@ class mrModel extends model
 
         /* Exec Job */
         $needExecJob = isset($diff['targetBranch']) || isset($diff['jobID']) ? true : false;
-        if($needExecJob && isset($MR->jobID) && $MR->jobID) $this->execJob($MRID, (int)$MR->jobID);
+        if($needExecJob && isset($MR->jobID) && $MR->jobID)
+        {
+            $this->execJob($MRID, (int)$MR->jobID);
+            if(dao::isError()) return array('result' => 'fail', 'message' => import("\n", dao::getError()));
+        }
 
         /* Known issue: `reviewer_ids` takes no effect. */
         $rawMR = $this->apiUpdateMR($oldMR, $MR);

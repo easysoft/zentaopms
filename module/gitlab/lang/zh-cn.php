@@ -120,6 +120,7 @@ $lang->gitlab->apiError[] = 'avatar is invalid';
 $lang->gitlab->apiError[] = 'file format is not supported. Please try one of the following supported formats: image/png, image/jpeg, image/gif, image/bmp, image/tiff, image/vnd.microsoft.icon';
 $lang->gitlab->apiError[] = 'must not contain commonly used combinations of words and letters';
 $lang->gitlab->apiError[] = 'must be greater than or equal to 0';
+$lang->gitlab->apiError[] = '500 Internal Server Error';
 
 $lang->gitlab->errorLang[] = '私有分组的项目，可见性级别不能设为内部。';
 $lang->gitlab->errorLang[] = '私有分组的项目，可见性级别不能设为公开。';
@@ -139,6 +140,7 @@ $lang->gitlab->errorLang[] = '头像格式不正确';
 $lang->gitlab->errorLang[] = '文件格式不支持，请尝试以下格式：image/png,image/jpeg,image/gif,image/bmp,image/tiff,image/vnd.microsoft.icon';
 $lang->gitlab->errorLang[] = '不能使用常用的数字或字母组合';
 $lang->gitlab->errorLang[] = '必须大于等于0';
+$lang->gitlab->errorLang[] = '服务器返回错误：500';
 
 $lang->gitlab->errorResonse['Email has already been taken']    = '邮箱已存在';
 $lang->gitlab->errorResonse['Username has already been taken'] = '用户名已存在';

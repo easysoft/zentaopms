@@ -120,6 +120,7 @@ $lang->gitlab->apiError[] = 'avatar is invalid';
 $lang->gitlab->apiError[] = 'file format is not supported. Please try one of the following supported formats: image/png, image/jpeg, image/gif, image/bmp, image/tiff, image/vnd.microsoft.icon';
 $lang->gitlab->apiError[] = 'must not contain commonly used combinations of words and letters';
 $lang->gitlab->apiError[] = 'must be greater than or equal to 0';
+$lang->gitlab->apiError[] = '500 Internal Server Error';
 
 $lang->gitlab->errorLang[] = 'You cannot set Internal as its Visibility Level, if it is private in GitLab.';
 $lang->gitlab->errorLang[] = 'You cannot set Public as its Visibility Level, if it is private in GitLab.';
@@ -139,6 +140,7 @@ $lang->gitlab->errorLang[] = 'Avatar is invalid';
 $lang->gitlab->errorLang[] = 'File format is not supported. Please try one of the following supported formats: image/png, image/jpeg, image/gif, image/bmp, image/tiff, image/vnd.microsoft.icon';
 $lang->gitlab->errorLang[] = 'must not contain commonly used combinations of words and letters';
 $lang->gitlab->errorLang[] = 'must be greater than or equal to 0';
+$lang->gitlab->errorLang[] = '500 Internal Server Error';
 
 $lang->gitlab->errorResonse['Email has already been taken']    = 'Email has already been taken';
 $lang->gitlab->errorResonse['Username has already been taken'] = 'Username has already been taken';

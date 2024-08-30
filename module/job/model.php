@@ -417,14 +417,17 @@ class jobModel extends model
         /* Set pipeline params. */
         $customParams = json_decode($job->customParam);
         $variables    = array();
-        foreach($customParams as $paramName => $paramValue)
+        if($customParams)
         {
-            $variable = array();
-            $variable['key']           = $paramName;
-            $variable['value']         = $paramValue;
-            $variable['variable_type'] = "env_var";
+            foreach($customParams as $paramName => $paramValue)
+            {
+                $variable = array();
+                $variable['key']           = $paramName;
+                $variable['value']         = $paramValue;
+                $variable['variable_type'] = "env_var";
 
-            $variables[] = $variable;
+                $variables[] = $variable;
+            }
         }
         if(!empty($variables)) $pipelineParams->variables = $variables;
 
