@@ -201,6 +201,8 @@ class productplanModel extends model
      */
     public function getPairs(array|int $productIdList = 0, int|string|array $branch = '', string $param = '', bool $skipParent = false): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getPlanPairs();
+
         $this->app->loadLang('branch');
 
         /* Get the query condition for the branch. */

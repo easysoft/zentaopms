@@ -1634,6 +1634,7 @@ class tutorialModel extends model
         $plan->projects     = array();
         $plan->expired      = '';
         $plan->branchName   = '';
+        $plan->isParent     = 0;
         return $plan;
     }
 
@@ -1647,5 +1648,17 @@ class tutorialModel extends model
     public function getPlans(): array
     {
         return array(1 => $this->getPlan());
+    }
+
+    /**
+     * 获取新手模式计划键值对。
+     * Get plan pairs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getPlanPairs(): array
+    {
+        return array(1 => $this->getPlan()->title);
     }
 }
