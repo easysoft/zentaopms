@@ -1084,3 +1084,21 @@ $lang->tutorial->productManage->addProduct->step2->name = '填写表单';
 $lang->tutorial->productManage->addProduct->step3 = new stdClass();
 $lang->tutorial->productManage->addProduct->step3->name = '保存表单';
 $lang->tutorial->productManage->addProduct->step3->desc = '保存后可以在产品列表中查看';
+
+$lang->tutorial->productManage->moduleManage = new stdClass();
+$lang->tutorial->productManage->moduleManage->title = '产品模块维护';
+
+$lang->tutorial->productManage->moduleManage->step1 = new stdClass();
+$lang->tutorial->productManage->moduleManage->step1->name = '点击产品名称';
+$lang->tutorial->productManage->moduleManage->step1->desc = '点击进入产品，查看产品的详细信息.';
+
+$lang->tutorial->productManage->moduleManage->step2 = new stdClass();
+$lang->tutorial->productManage->moduleManage->step2->name = '点击模块设置';
+$lang->tutorial->productManage->moduleManage->step2->desc = '点击去维护产品的模块';
+
+$lang->tutorial->productManage->moduleManage->step3 = new stdClass();
+$lang->tutorial->productManage->moduleManage->step3->name = '填写表单';
+
+$lang->tutorial->productManage->moduleManage->step4 = new stdClass();
+$lang->tutorial->productManage->moduleManage->step4->name = '保存表单';
+$lang->tutorial->productManage->moduleManage->step4->desc = '保存后可以在创建需求时选择模块进行分类';

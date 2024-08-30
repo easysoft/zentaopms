@@ -101,7 +101,7 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
             $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID");
             if($isProjectStory) $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID&storyID=&projectID=$projectID");
             $link = $this->createLink('tutorial', 'wizard', "module=story&method=create&params=$wizardParams");
-            $items[] = array('text' => $lang->story->createCommon, 'url' => $link);
+            $items[] = array('text' => $lang->story->create, 'url' => $link);
         }
         elseif(!$isProjectStory)
         {
