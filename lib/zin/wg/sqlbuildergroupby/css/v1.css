@@ -5,3 +5,4 @@
 .h-86 {height: 344px;
 .h-78 {height: 312px;}
 .h-70 {height: 280px;}
+.btn-group>.btn:not(:first-child) {border-left-color: var(--color-transparent);}
