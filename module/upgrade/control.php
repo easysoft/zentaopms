@@ -775,15 +775,15 @@ class upgrade extends control
     }
 
     /**
-     * 升级度量项内置数据。
-     * Upgrade metric built-in data.
+     * 升级大屏和度量项内置数据。
+     * Upgrade screen and metric built-in data.
      *
      * @access public
      * @return void
      */
-    public function ajaxUpgradeMetricData()
+    public function ajaxUpgradeScreenAndMetricData()
     {
-        $this->upgrade->upgradeMetricData();
+        $this->upgrade->upgradeScreenAndMetricData();
         echo 'ok';
     }
 

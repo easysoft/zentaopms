@@ -185,7 +185,7 @@ class upgradeModel extends model
         $this->loadModel('product')->refreshStats(true);
         $this->deletePatch();
         $this->processDataset();
-        $this->upgradeMetricData();
+        $this->upgradeScreenAndMetricData();
 
         if($fromEdition == 'open')
         {
@@ -9115,21 +9115,25 @@ class upgradeModel extends model
     }
 
     /**
-     * 更新升级度量项数据。
-     * Import metric data.
+     * 更新升级大屏和度量项数据。
+     * Import screen and metric data.
      *
      * @access public
      * @return bool
      */
-    public function upgradeMetricData()
+    public function upgradeScreenAndMetricData()
     {
+        $this->loadModel('bi');
         $this->saveLogs('Run Method ' . __FUNCTION__);
         $this->dao->clearTablesDescCache();
 
-        $metricSQLs = $this->loadModel('bi')->prepareBuiltinMetricSQL('update');
+        $metricSQLs  = $this->bi->prepareBuiltinMetricSQL('update');
+        $screenSQLs  = $this->bi->prepareBuiltinScreenSQL('update');
+        $upgradeSqls = array_merge($metricSQLs, $screenSQLs);
+
         try
         {
-            foreach($metricSQLs as $sql)
+            foreach($upgradeSqls as $sql)
             {
                 $sql = trim($sql);
                 if(empty($sql)) continue;
@@ -9161,19 +9165,14 @@ class upgradeModel extends model
     {
         $this->loadModel('bi');
         $this->saveLogs('Run Method ' . __FUNCTION__);
-
         $this->dao->clearTablesDescCache();
-        /* Prepare built-in sqls of bi. */
 
-        $upgradeSqls = array();
-        if($this->config->db->driver == 'mysql')
-        {
-            $chartSQLs   = $this->bi->prepareBuiltinChartSQL('update');
-            $pivotSQLs   = $this->bi->prepareBuiltinPivotSQL('update');
-            $upgradeSqls = array_merge($upgradeSqls, $chartSQLs, $pivotSQLs);
-        }
-        $screenSQLs  = $this->bi->prepareBuiltinScreenSQL('update');
-        $upgradeSqls = array_merge($upgradeSqls, $screenSQLs);
+        if($this->config->db->driver != 'mysql') return true;
+
+        /* Prepare built-in sqls of bi. */
+        $chartSQLs   = $this->bi->prepareBuiltinChartSQL('update');
+        $pivotSQLs   = $this->bi->prepareBuiltinPivotSQL('update');
+        $upgradeSqls = array_merge($chartSQLs, $pivotSQLs);
 
         try
         {
