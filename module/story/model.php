@@ -326,6 +326,8 @@ class storyModel extends model
      */
     public function batchGetExecutionStories(string $executionIdList = '', int $productID = 0, string $orderBy = 't1.`order`_desc', string $type = 'byModule', string $param = '0', string $storyType = 'story', array|string $excludeStories = '', object|null $pager = null): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getStories();
+
         if(empty($executionIdList)) return array();
 
         /* 格式化参数。 */

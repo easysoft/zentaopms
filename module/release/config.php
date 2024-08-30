@@ -38,6 +38,7 @@ $config->release->actionList['publish']['hint']         = $this->lang->release->
 $config->release->actionList['publish']['url']          = array('module' => $app->tab == 'project' ? 'projectrelease' : 'release', 'method' => 'publish', 'params' => 'releaseID={id}');
 $config->release->actionList['publish']['notLoadModel'] = true;
 $config->release->actionList['publish']['data-toggle']  = 'modal';
+$config->release->actionList['publish']['class']        = 'publish-btn';
 
 $config->release->actionList['play']['icon']         = 'play';
 $config->release->actionList['play']['text ']        = $this->lang->release->changeStatusList['normal'];

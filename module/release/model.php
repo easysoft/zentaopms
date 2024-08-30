@@ -25,6 +25,8 @@ class releaseModel extends model
      */
     public function getByID(int $releaseID, bool $setImgSize = false): object|false
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getRelease();
+
         $release = $this->dao->select('t1.*, t2.name as productName, t2.type as productType')
             ->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
@@ -69,6 +71,8 @@ class releaseModel extends model
      */
     public function getList(int $productID, string|int $branch = 'all', string $type = 'all', string $orderBy = 't1.date_desc', string $releaseQuery = '', object $pager = null): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getReleases();
+
         $releases = $this->dao->select('t1.*, t2.name as productName, t2.type as productType')->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t1.deleted')->eq(0)

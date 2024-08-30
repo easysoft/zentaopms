@@ -307,3 +307,163 @@ $productManage->tasks['planManage']['steps'][] = array(
     'title'  => $lang->tutorial->productManage->planManage->step12->name,
     'desc'   => $lang->tutorial->productManage->planManage->step12->desc
 );
+
+$productManage->tasks['releaseManage'] = array();
+$productManage->tasks['releaseManage']['name']     = 'releaseManage';
+$productManage->tasks['releaseManage']['title']    = $lang->tutorial->productManage->releaseManage->title;
+$productManage->tasks['releaseManage']['startUrl'] = array('product', 'browse', 'productID=1&branch=&browseType=all&param=0&storyType=epic');
+$productManage->tasks['releaseManage']['steps']    = array();
+
+$productManage->tasks['releaseManage']['steps'][] = array(
+    'type'   => 'clickNavbar',
+    'target' => 'release',
+    'page'   => 'product-browse',
+    'title'  => $lang->tutorial->productManage->releaseManage->step1->name,
+    'desc'   => $lang->tutorial->productManage->releaseManage->step1->desc
+);
+
+$productManage->tasks['releaseManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#actionBar a',
+    'page'   => 'release-browse',
+    'url'    => array('release', 'browse', 'productID=1'),
+    'title'  => $lang->tutorial->productManage->releaseManage->step2->name,
+    'desc'   => $lang->tutorial->productManage->releaseManage->step2->desc
+);
+
+$productManage->tasks['releaseManage']['steps'][] = array(
+    'type'   => 'form',
+    'page'   => 'release-create',
+    'title'  => $lang->tutorial->productManage->releaseManage->step3->name
+);
+
+$productManage->tasks['releaseManage']['steps'][] = array(
+    'type'   => 'saveForm',
+    'page'   => 'release-create',
+    'title'  => $lang->tutorial->productManage->releaseManage->step4->name,
+    'desc'   => $lang->tutorial->productManage->releaseManage->step4->desc
+);
+
+$productManage->tasks['releaseManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'div.dtable div[data-col="name"][data-row="1"] a',
+    'page'   => 'release-browse',
+    'url'    => array('release', 'browse', 'productID=1'),
+    'title'  => $lang->tutorial->productManage->releaseManage->step5->name,
+    'desc'   => $lang->tutorial->productManage->releaseManage->step5->desc
+);
+
+$productManage->tasks['releaseManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#finishedStory button.linkStory-btn',
+    'page'   => 'release-view',
+    'title'  => $lang->tutorial->productManage->releaseManage->step6->name,
+    'desc'   => $lang->tutorial->productManage->releaseManage->step6->desc
+);
+
+$productManage->tasks['releaseManage']['steps'][] = array(
+    'type'   => 'selectRow',
+    'target' => 'div.dtable div[data-col="id"][data-row="1"]',
+    'page'   => 'release-view',
+    'title'  => $lang->tutorial->productManage->releaseManage->step7->name
+);
+
+$productManage->tasks['releaseManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'div.dtable-footer button.linkObjectBtn',
+    'page'   => 'release-view',
+    'title'  => $lang->tutorial->productManage->releaseManage->step8->name,
+    'desc'   => $lang->tutorial->productManage->releaseManage->step8->desc
+);
+
+$productManage->tasks['releaseManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'div[data-key="resolvedBug"] a',
+    'page'   => 'release-view',
+    'url'    => array('release', 'view', 'releaseID=1&type=bug'),
+    'title'  => $lang->tutorial->productManage->releaseManage->step9->name,
+    'desc'   => $lang->tutorial->productManage->releaseManage->step9->desc
+);
+
+$productManage->tasks['releaseManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#resolvedBug button.linkBug-btn',
+    'page'   => 'release-view',
+    'url'    => array('release', 'view', 'releaseID=1&type=bug'),
+    'title'  => $lang->tutorial->productManage->releaseManage->step10->name,
+    'desc'   => $lang->tutorial->productManage->releaseManage->step10->desc
+);
+
+$productManage->tasks['releaseManage']['steps'][] = array(
+    'type'   => 'selectRow',
+    'target' => 'div.dtable div[data-col="id"][data-row="1"]',
+    'page'   => 'release-view',
+    'url'    => array('release', 'view', 'releaseID=1&type=bug'),
+    'title'  => $lang->tutorial->productManage->releaseManage->step11->name
+);
+
+$productManage->tasks['releaseManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'div.dtable-footer button.linkObjectBtn',
+    'page'   => 'release-view',
+    'url'    => array('release', 'view', 'releaseID=1&type=bug'),
+    'title'  => $lang->tutorial->productManage->releaseManage->step12->name,
+    'desc'   => $lang->tutorial->productManage->releaseManage->step12->desc
+);
+
+$productManage->tasks['releaseManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'div[data-key="leftBug"] a',
+    'page'   => 'release-view',
+    'url'    => array('release', 'view', 'releaseID=1&type=leftBug'),
+    'title'  => $lang->tutorial->productManage->releaseManage->step13->name,
+    'desc'   => $lang->tutorial->productManage->releaseManage->step13->desc
+);
+
+$productManage->tasks['releaseManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#leftBug button.leftBug-btn',
+    'page'   => 'release-view',
+    'url'    => array('release', 'view', 'releaseID=1&type=leftBug'),
+    'title'  => $lang->tutorial->productManage->releaseManage->step14->name,
+    'desc'   => $lang->tutorial->productManage->releaseManage->step14->desc
+);
+
+$productManage->tasks['releaseManage']['steps'][] = array(
+    'type'   => 'selectRow',
+    'target' => 'div.dtable div[data-col="id"][data-row="1"]',
+    'page'   => 'release-view',
+    'url'    => array('release', 'view', 'releaseID=1&type=leftBug'),
+    'title'  => $lang->tutorial->productManage->releaseManage->step15->name
+);
+
+$productManage->tasks['releaseManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'div.dtable-footer button.linkObjectBtn',
+    'page'   => 'release-view',
+    'url'    => array('release', 'view', 'releaseID=1&type=leftBug'),
+    'title'  => $lang->tutorial->productManage->releaseManage->step16->name,
+    'desc'   => $lang->tutorial->productManage->releaseManage->step16->desc
+);
+
+$productManage->tasks['releaseManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'div.detail-header a.publish-btn',
+    'page'   => 'release-view',
+    'url'    => array('release', 'view', 'releaseID=1&type=leftBug'),
+    'title'  => $lang->tutorial->productManage->releaseManage->step17->name,
+    'desc'   => $lang->tutorial->productManage->releaseManage->step17->desc
+);
+
+$productManage->tasks['releaseManage']['steps'][] = array(
+    'type'   => 'form',
+    'page'   => 'release-view',
+    'title'  => $lang->tutorial->productManage->releaseManage->step18->name
+);
+
+$productManage->tasks['releaseManage']['steps'][] = array(
+    'type'   => 'saveForm',
+    'page'   => 'release-view',
+    'title'  => $lang->tutorial->productManage->releaseManage->step19->name,
+    'desc'   => $lang->tutorial->productManage->releaseManage->step19->desc
+);

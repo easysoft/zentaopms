@@ -1607,7 +1607,7 @@ class tutorialModel extends model
      * Get plan.
      *
      * @access public
-     * @return array
+     * @return object
      */
     public function getPlan(): object
     {
@@ -1660,5 +1660,58 @@ class tutorialModel extends model
     public function getPlanPairs(): array
     {
         return array(1 => $this->getPlan()->title);
+    }
+
+    /**
+     * 获取新手模式发布。
+     * Get releases.
+     *
+     * @access public
+     * @return object
+     */
+    public function getRelease(): object
+    {
+        $release = new stdClass();
+        $release->id           = 1;
+        $release->project      = 0;
+        $release->product      = 1;
+        $release->branch       = '0';
+        $release->shadow       = 1;
+        $release->build        = '';
+        $release->name         = 'Test release';
+        $release->marker       = 0;
+        $release->date         = helper::today();
+        $release->releasedDate = '';
+        $release->stories      = '';
+        $release->bugs         = '';
+        $release->leftBugs     = '';
+        $release->desc         = '';
+        $release->mailto       = '';
+        $release->notify       = '';
+        $release->status       = 'wait';
+        $release->subStatus    = '';
+        $release->createdBy    = $this->app->user->account;
+        $release->createdDate  = helper::now();
+        $release->deleted      = 0;
+        $release->productName  = 'Test product';
+        $release->productType  = 'normal';
+        $release->builds       = array();
+        $release->branchName   = 'Test branch';
+        $release->projectName  = '';
+        $release->files        = array();
+
+        return $release;
+    }
+
+    /**
+     * 获取新手模式发布列表。
+     * Get releases.
+     *
+     * @access public
+     * @return array
+     */
+    public function getReleases(): array
+    {
+        return array(1 => $this->getRelease());
     }
 }

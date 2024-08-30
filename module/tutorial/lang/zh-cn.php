@@ -1216,3 +1216,77 @@ $lang->tutorial->productManage->planManage->step11->name = '勾选Bug';
 $lang->tutorial->productManage->planManage->step12 = new stdClass();
 $lang->tutorial->productManage->planManage->step12->name = '点击保存';
 $lang->tutorial->productManage->planManage->step12->desc = '保存后，Bug成功关联进计划中';
+
+$lang->tutorial->productManage->releaseManage = new stdClass();
+$lang->tutorial->productManage->releaseManage->title = '发布管理';
+
+$lang->tutorial->productManage->releaseManage->step1 = new stdClass();
+$lang->tutorial->productManage->releaseManage->step1->name = '点击发布';
+$lang->tutorial->productManage->releaseManage->step1->desc = '您可以在这里维护管理产品的发布信息';
+
+$lang->tutorial->productManage->releaseManage->step2 = new stdClass();
+$lang->tutorial->productManage->releaseManage->step2->name = '点击创建发布';
+$lang->tutorial->productManage->releaseManage->step2->desc = '点击为产品创建发布';
+
+$lang->tutorial->productManage->releaseManage->step3 = new stdClass();
+$lang->tutorial->productManage->releaseManage->step3->name = '填写表单';
+
+$lang->tutorial->productManage->releaseManage->step4 = new stdClass();
+$lang->tutorial->productManage->releaseManage->step4->name = '保存表单';
+$lang->tutorial->productManage->releaseManage->step4->desc = '保存后，在发布列表中查看';
+
+$lang->tutorial->productManage->releaseManage->step5 = new stdClass();
+$lang->tutorial->productManage->releaseManage->step5->name = '点击发布名称';
+$lang->tutorial->productManage->releaseManage->step5->desc = '点击进入发布，查看管理发布详细信息';
+
+$lang->tutorial->productManage->releaseManage->step6 = new stdClass();
+$lang->tutorial->productManage->releaseManage->step6->name = '点击关联需求';
+$lang->tutorial->productManage->releaseManage->step6->desc = '点击将本次要发布的研发需求关联进发布';
+
+$lang->tutorial->productManage->releaseManage->step7 = new stdClass();
+$lang->tutorial->productManage->releaseManage->step7->name = '勾选需求';
+
+$lang->tutorial->productManage->releaseManage->step8 = new stdClass();
+$lang->tutorial->productManage->releaseManage->step8->name = '点击保存';
+$lang->tutorial->productManage->releaseManage->step8->desc = '保存后需求成功关联进发布';
+
+$lang->tutorial->productManage->releaseManage->step9 = new stdClass();
+$lang->tutorial->productManage->releaseManage->step9->name = '点击解决的Bug';
+$lang->tutorial->productManage->releaseManage->step9->desc = '点击查看管理本次发布解决的Bug';
+
+$lang->tutorial->productManage->releaseManage->step10 = new stdClass();
+$lang->tutorial->productManage->releaseManage->step10->name = '点击关联Bug';
+$lang->tutorial->productManage->releaseManage->step10->desc = '点击将本次发布解决的bug关联进发布';
+
+$lang->tutorial->productManage->releaseManage->step11 = new stdClass();
+$lang->tutorial->productManage->releaseManage->step11->name = '勾选Bug';
+
+$lang->tutorial->productManage->releaseManage->step12 = new stdClass();
+$lang->tutorial->productManage->releaseManage->step12->name = '点击保存';
+$lang->tutorial->productManage->releaseManage->step12->desc = '保存后，Bug成功关联进发布中';
+
+$lang->tutorial->productManage->releaseManage->step13 = new stdClass();
+$lang->tutorial->productManage->releaseManage->step13->name = '点击遗留的Bug';
+$lang->tutorial->productManage->releaseManage->step13->desc = '点击查看管理本次发布解决的Bug';
+
+$lang->tutorial->productManage->releaseManage->step14 = new stdClass();
+$lang->tutorial->productManage->releaseManage->step14->name = '点击关联Bug';
+$lang->tutorial->productManage->releaseManage->step14->desc = '点击将本次发布遗留未解决的bug关联进发布';
+
+$lang->tutorial->productManage->releaseManage->step15 = new stdClass();
+$lang->tutorial->productManage->releaseManage->step15->name = '勾选Bug';
+
+$lang->tutorial->productManage->releaseManage->step16 = new stdClass();
+$lang->tutorial->productManage->releaseManage->step16->name = '点击保存';
+$lang->tutorial->productManage->releaseManage->step16->desc = '保存后，Bug成功关联进发布中';
+
+$lang->tutorial->productManage->releaseManage->step17 = new stdClass();
+$lang->tutorial->productManage->releaseManage->step17->name = '点击发布按钮';
+$lang->tutorial->productManage->releaseManage->step17->desc = '点击进行发布';
+
+$lang->tutorial->productManage->releaseManage->step18 = new stdClass();
+$lang->tutorial->productManage->releaseManage->step18->name = '填写表单';
+
+$lang->tutorial->productManage->releaseManage->step19 = new stdClass();
+$lang->tutorial->productManage->releaseManage->step19->name = '保存表单';
+$lang->tutorial->productManage->releaseManage->step19->desc = '保存后，需求会根据发布状态改变阶段';

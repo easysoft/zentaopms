@@ -999,6 +999,8 @@ class bugModel extends model
      */
     public function getProductLeftBugs(array $buildIdList, int $productID, int|string $branch = '', string $linkedBugs = '', object $pager = null): array|null
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getBugs();
+
         /* 获取版本关联的执行。 */
         /* Get executions of builds. */
         $executionIdList = $this->getLinkedExecutionByIdList($buildIdList);
@@ -1111,6 +1113,8 @@ class bugModel extends model
      */
     public function getReleaseBugs(array $buildIdList, int $productID, int|string $branch = 0, string $linkedBugs = '', object $pager = null): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getBugs();
+
         $executionIdList = $this->getLinkedExecutionByIdList($buildIdList);
         if(empty($executionIdList)) return array();
 
