@@ -164,3 +164,38 @@ $programManage->tasks['whitelistManage']['steps'][] = array(
     'title'  => $lang->tutorial->programManage->whitelistManage->step6->name,
     'desc'   => $lang->tutorial->programManage->whitelistManage->step6->desc
 );
+
+$programManage->tasks['addStakeholder'] = array();
+$programManage->tasks['addStakeholder']['name']     = 'addStakeholder';
+$programManage->tasks['addStakeholder']['title']    = $lang->tutorial->programManage->addStakeholder->title;
+$programManage->tasks['addStakeholder']['startUrl'] = array('program', 'product', 'programID=1');
+$programManage->tasks['addStakeholder']['steps']    = array();
+
+$programManage->tasks['addStakeholder']['steps'][] = array(
+    'type'   => 'clickNavbar',
+    'target' => 'stakeholder',
+    'page'   => 'program-product',
+    'title'  => $lang->tutorial->programManage->addStakeholder->step1->name,
+    'desc'   => $lang->tutorial->programManage->addStakeholder->step1->desc
+);
+
+$programManage->tasks['addStakeholder']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#actionBar a',
+    'page'   => 'program-stakeholder',
+    'title'  => $lang->tutorial->programManage->addStakeholder->step2->name,
+    'desc'   => $lang->tutorial->programManage->addStakeholder->step2->desc
+);
+
+$programManage->tasks['addStakeholder']['steps'][] = array(
+    'type'   => 'form',
+    'page'   => 'program-createstakeholder',
+    'title'  => $lang->tutorial->programManage->addStakeholder->step3->name
+);
+
+$programManage->tasks['addStakeholder']['steps'][] = array(
+    'type'   => 'saveForm',
+    'page'   => 'program-createstakeholder',
+    'title'  => $lang->tutorial->programManage->addStakeholder->step4->name,
+    'desc'   => $lang->tutorial->programManage->addStakeholder->step4->desc
+);

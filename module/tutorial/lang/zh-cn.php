@@ -1370,3 +1370,21 @@ $lang->tutorial->programManage->whitelistManage->step5->name = '填写表单';
 $lang->tutorial->programManage->whitelistManage->step6 = new stdClass();
 $lang->tutorial->programManage->whitelistManage->step6->name = '保存表单';
 $lang->tutorial->programManage->whitelistManage->step6->desc = '保存后白名单人员可以查看项目集';
+
+$lang->tutorial->programManage->addStakeholder = new stdClass();
+$lang->tutorial->programManage->addStakeholder->title = '创建干系人';
+
+$lang->tutorial->programManage->addStakeholder->step1 = new stdClass();
+$lang->tutorial->programManage->addStakeholder->step1->name = '点击干系人';
+$lang->tutorial->programManage->addStakeholder->step1->desc = '点击管理项目集的干系人';
+
+$lang->tutorial->programManage->addStakeholder->step2 = new stdClass();
+$lang->tutorial->programManage->addStakeholder->step2->name = '点击添加干系人';
+$lang->tutorial->programManage->addStakeholder->step2->desc = '点击添加项目集内外部干系人';
+
+$lang->tutorial->programManage->addStakeholder->step3 = new stdClass();
+$lang->tutorial->programManage->addStakeholder->step3->name = '填写表单';
+
+$lang->tutorial->programManage->addStakeholder->step4 = new stdClass();
+$lang->tutorial->programManage->addStakeholder->step4->name = '保存表单';
+$lang->tutorial->programManage->addStakeholder->step4->desc = '保存后白名单人员可以查看项目集';
