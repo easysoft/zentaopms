@@ -172,7 +172,7 @@ class navbar extends wg
             }
             if(empty($menuItem->link)) continue;
 
-            if($menuItem->divider) $items[] = array('type' => 'divider');
+            if($menuItem->divider && empty($menuItem->hidden)) $items[] = array('type' => 'divider');
 
             /* Init the these vars. */
             $subModule = isset($menuItem->subModule) ? explode(',', $menuItem->subModule) : array();
@@ -202,6 +202,7 @@ class navbar extends wg
                 $executionMoreItem = $this->getExecutionMoreItem($executionID);
                 if(!empty($executionMoreItem))
                 {
+                    $items[] = array('type' => 'divider');
                     $items[] = $executionMoreItem;
                 }
             }

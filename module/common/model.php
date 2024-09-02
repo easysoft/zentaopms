@@ -730,8 +730,8 @@ class commonModel extends model
             $items[] = $item;
         }
 
-        /* Fix bug 14574. */
-        if(end($items) == 'divider') array_pop($items);
+        // 如果最后一个是分割线，则删除
+        while(!empty($items) && end($items) === 'divider') { array_pop($items); }
         return $items;
     }
 
