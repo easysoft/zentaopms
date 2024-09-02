@@ -30,12 +30,13 @@ class thinkMulticolumn extends thinkQuestion
         $step         = $this->prop('step');
         $key          = $index + 1;
         $requiredCols = isset($step->options->requiredCols) ? $step->options->requiredCols : array();
+
         return formBatchItem
         (
             set::label($label),
-            set::name("result[col$key][]"),
+            set::name("result[col$key]"),
             set::width('110px'),
-            set::required(in_array($key, $requiredCols))
+            set::required(in_array($key, $requiredCols)),
         );
     }
 
@@ -43,13 +44,16 @@ class thinkMulticolumn extends thinkQuestion
     {
         global $lang;
         $detailWg = parent::buildDetail();
-        list($step, $fields, $canAddRows, $mode) = $this->prop(array('step', 'fields', 'canAddRows', 'mode'));
+        list($step, $fields, $canAddRows, $mode, $isRun) = $this->prop(array('step', 'fields', 'canAddRows', 'mode', 'isRun'));
         if($mode != 'detail') return array();
 
+        $result = array();
         if($step)
         {
             $fields     = $step->options->fields;
             $canAddRows = $step->options->supportAdd == 1 ? $step->options->canAddRows : 0;
+            $answer     = $step->answer;
+            $result     = isset($answer->result) && !empty($answer->result) ? (array) $answer->result : array();
         }
         jsVar('canAddRowsOfMulticol', $canAddRows + 5);
         jsVar('addRowsTips', $lang->thinkrun->tips->addRow);
@@ -66,6 +70,8 @@ class thinkMulticolumn extends thinkQuestion
             set::minRows(5),
             set::actions(array()),
             set::onRenderRow(jsRaw('renderRowData')),
+            $isRun ? formHidden('status', '') : null,
+            set::data(array_values($result)),
             $batchItems
         );
         return $detailWg;
