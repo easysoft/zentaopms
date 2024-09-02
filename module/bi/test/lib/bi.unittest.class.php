@@ -67,13 +67,13 @@ class biTest
     }
 
     /**
-     * sql builder test.
+     * build SQL test.
      *
      * @param  array $args
      * @access public
      * @return string
      */
-    public function sqlBuilderTest(array $args): string
+    public function buildSQLTest(array $args): string
     {
         $selects   = zget($args, 'selects', array());
         $from      = zget($args, 'from', array());
@@ -82,7 +82,7 @@ class biTest
         $wheres    = zget($args, 'wheres', array());
         $querys    = zget($args, 'querys', array());
         $groups    = zget($args, 'groups', array());
-        $statement = $this->objectModel->sqlBuilder($selects, $from, $joins, $functions, $wheres, $querys, $groups);
+        $statement = $this->objectModel->buildSQL($selects, $from, $joins, $functions, $wheres, $querys, $groups);
         return str_replace(PHP_EOL, '', $statement->build());
     }
 

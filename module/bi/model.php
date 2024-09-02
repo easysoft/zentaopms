@@ -1266,29 +1266,7 @@ class biModel extends model
     }
 
     /**
-     * Get conditions from array.
-     *
-     * @param  object       $parser
-     * @param  array|string $conditions
-     * @access public
-     * @return mixed
-     */
-    public function getConditionsFromArray(object $parser, array|string $conditions): mixed
-    {
-        if(is_string($conditions)) return $parser->operatorCondition($conditions);
-
-        $first = current($conditions);
-
-        if(!is_array($first) && !in_array($first, array('and', 'or'))) return $parser->getCondition($conditions);
-
-        $conditionExprs = array();
-        foreach($conditions as $condition) $conditionExprs[] = $this->getConditionsFromArray($parser, $condition);
-
-        return $conditionExprs;
-    }
-
-    /**
-     * sqlBuilder
+     * buildSQL
      *
      * @param  array $selects
      * @param  array $from
@@ -1300,7 +1278,7 @@ class biModel extends model
      * @access public
      * @return object
      */
-    public function sqlBuilder(array $selects, array $from, array $joins = array(), array $functions = array(), array $wheres = array(), array $querys = array(), array $groups = array()): object
+    public function buildSQL(array $selects, array $from, array $joins = array(), array $functions = array(), array $wheres = array(), array $querys = array(), array $groups = array()): object
     {
         $this->app->loadClass('sqlparser', true);
         $parser = new sqlparser(null);
@@ -1316,7 +1294,7 @@ class biModel extends model
         foreach($joins as $join)
         {
             list($table, $alias, $ons) = $join;
-            $onExprs      = $parser->getConditionsFromArray($parser, $ons);
+            $onExprs      = $parser->getConditionsFromArray($ons);
             $leftJoinExpr = $parser->getLeftJoin($table, $alias, $onExprs);
             $parser->addJoin($leftJoinExpr);
         }

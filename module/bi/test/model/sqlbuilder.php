@@ -5,7 +5,7 @@ include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
 
 /**
 
-title=biModel->sqlBuilder();
+title=biModel->buildSQL();
 timeout=0
 cid=1
 
@@ -33,7 +33,7 @@ $simple = array
     'from' => array('zt_task')
 );
 
-r($bi->sqlBuilderTest($simple)) && p('') && e("SELECT `id`, `name` FROM `zt_task`"); // 测试 简单sql
+r($bi->buildSQLTest($simple)) && p('') && e("SELECT `id`, `name` FROM `zt_task`"); // 测试 简单sql
 
 $simple = array
 (
@@ -45,7 +45,7 @@ $simple = array
     'from' => array('zt_task', null, 't1')
 );
 
-r($bi->sqlBuilderTest($simple)) && p('') && e("SELECT `t1`.`id`, `t1`.`name` FROM `zt_task` AS `t1`"); // 测试 简单别名sql
+r($bi->buildSQLTest($simple)) && p('') && e("SELECT `t1`.`id`, `t1`.`name` FROM `zt_task` AS `t1`"); // 测试 简单别名sql
 
 $withJoin = array
 (
@@ -66,7 +66,7 @@ $withJoin = array
     )
 );
 
-r($bi->sqlBuilderTest($withJoin)) && p('') && e("SELECT `t1`.`id`, `t1`.`name`, `t2`.`name` AS `execution` FROM `zt_task` AS `t1` LEFT JOIN `zt_project` AS `t2` ON `t1`.`execution` = `t2`.`id`"); // 测试 联表sql
+r($bi->buildSQLTest($withJoin)) && p('') && e("SELECT `t1`.`id`, `t1`.`name`, `t2`.`name` AS `execution` FROM `zt_task` AS `t1` LEFT JOIN `zt_project` AS `t2` ON `t1`.`execution` = `t2`.`id`"); // 测试 联表sql
 
 $withGroup = array
 (
@@ -86,7 +86,7 @@ $withGroup = array
     )
 );
 
-r($bi->sqlBuilderTest($withGroup)) && p('') && e("SELECT `t1`.`type`, SUM(`t1`.`consumed`) AS `consumed` FROM `zt_task` AS `t1` GROUP BY `t1`.`type`, YEAR(`t1`.`date`)"); // 测试 分组sql
+r($bi->buildSQLTest($withGroup)) && p('') && e("SELECT `t1`.`type`, SUM(`t1`.`consumed`) AS `consumed` FROM `zt_task` AS `t1` GROUP BY `t1`.`type`, YEAR(`t1`.`date`)"); // 测试 分组sql
 
 $withWhere = array
 (
@@ -113,4 +113,4 @@ $withWhere = array
     )
 );
 
-r($bi->sqlBuilderTest($withWhere)) && p('') && e("SELECT `t1`.`id` FROM `zt_task` AS `t1` WHERE `t1`.`deleted` = '0' AND (`t1`.`status` = 'done' OR (`t1`.`status` = 'closed' AND `t1`.`closedReason` = 'done'))"); // 测试 查询条件sql
+r($bi->buildSQLTest($withWhere)) && p('') && e("SELECT `t1`.`id` FROM `zt_task` AS `t1` WHERE `t1`.`deleted` = '0' AND (`t1`.`status` = 'done' OR (`t1`.`status` = 'closed' AND `t1`.`closedReason` = 'done'))"); // 测试 查询条件sql
