@@ -115,7 +115,12 @@ class productplanModel extends model
         $product = $this->loadModel('product')->getById($productID);
         $this->loadModel('story');
         if(!empty($product) && $product->type == 'normal') $storyGroups = $this->story->getStoriesByPlanIdList($planIdList);
-        $storyCountInTable = $this->dao->select('plan,count(story) as count')->from(TABLE_PLANSTORY)->where('plan')->in($planIdList)->groupBy('plan')->fetchPairs('plan', 'count');
+        $storyCountInTable = $this->dao->select('t1.plan, count(t1.story) as count')->from(TABLE_PLANSTORY)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->where('t1.plan')->in($planIdList)
+            ->andWhere('t2.deleted')->eq('0')
+            ->groupBy('t1.plan')
+            ->fetchPairs('plan', 'count');
 
         $bugs = $this->dao->select('plan, id')->from(TABLE_BUG)->where("plan")->in($planIdList)->andWhere('deleted')->eq(0)->fetchGroup('plan', 'id');
         foreach($plans as $plan)
