@@ -73,7 +73,7 @@ class simpleList extends wg
         $onRenderItem  = $this->prop('onRenderItem');
         $itemsView     = array();
 
-        if(is_array($itemsView))
+        if(is_array($items))
         {
             foreach ($items as $key => $item)
             {
