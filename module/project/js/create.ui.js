@@ -25,7 +25,7 @@ function removeTips()
  * @access public
  * @return void
  */
-function removeAllTips()
+window.removeAllTips = function()
 {
     $('.has-warning').removeClass('has-warning');
     $('.text-warning').remove();
