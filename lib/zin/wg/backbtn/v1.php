@@ -72,7 +72,7 @@ class backBtn extends btn
             'gitfox'         => 'space-browse',
             'zanode'         => 'zanode-browse,zanode-view',
             'zahost'         => 'zahost-browse,zahost-view',
-            'stakeholder'    => 'stakeholder-browse',
+            'stakeholder'    => 'stakeholder-browse,program-stakeholder',
             'execution'      => 'execution-story,execution-team,execution-index,execution->view,project-execution,execution-all,project-index,user-execution,execution-relation',
             'ai'             => 'ai-models',
             'api'            => 'api-index',
