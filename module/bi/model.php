@@ -1316,13 +1316,13 @@ class biModel extends model
         foreach($joins as $join)
         {
             list($table, $alias, $ons) = $join;
-            $onExprs      = $this->getConditionsFromArray($parser, $ons);
+            $onExprs      = $parser->getConditionsFromArray($parser, $ons);
             $leftJoinExpr = $parser->getLeftJoin($table, $alias, $onExprs);
             $parser->addJoin($leftJoinExpr);
         }
 
-        if(!empty($wheres)) $parser->addWhere($parser->combineConditions($this->getConditionsFromArray($parser, $wheres)));
-        if(!empty($querys)) $parser->addWhere($parser->combineConditions($this->getConditionsFromArray($parser, $querys)));
+        if(!empty($wheres)) $parser->addWhere($parser->combineConditions($parser->getConditionsFromArray($wheres)));
+        if(!empty($querys)) $parser->addWhere($parser->combineConditions($parser->getConditionsFromArray($querys)));
         if(!empty($groups)) foreach($groups as $group) $parser->addGroup($parser->getGroup($parser->getExpression($group)));
 
         return $parser->statement;

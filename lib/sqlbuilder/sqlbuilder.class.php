@@ -58,6 +58,14 @@ class sqlBuilder
     public $tableDesc = array();
 
     /**
+     * sql
+     *
+     * @var string
+     * @access public
+     */
+    public $sql = '';
+
+    /**
      * __construct method.
      *
      * @param  pivot      object
@@ -408,8 +416,8 @@ class sqlBuilder
             foreach($groupBys as $index => $groupBy)
             {
                 $select = $groupBy['select'];
-                list($table, $field, $function) = array($select[0], $select[1], $select[3]);
-                $groupBys[$index] = array($table, $field, null, $function);
+                list($table, $field) = array($select[0], $select[1]);
+                $groupBys[$index] = array($table, $field);
             }
         }
 
@@ -457,6 +465,21 @@ class sqlBuilder
         }
 
         return array();
+    }
+
+    /**
+     * Build functions.
+     *
+     * @access public
+     * @return void
+     */
+    public function buildFunctions()
+    {
+        $functions = $this->getFuncs('all', true);
+        $funcArr = array();
+        foreach($functions as $function) $funcArr[] = array($function['table'], $function['field'], $function['alias'], $function['function']);
+
+        return $funcArr;
     }
 
     /**
@@ -776,5 +799,65 @@ class sqlBuilder
         ksort($groups, SORT_NUMERIC);
 
         return $groups;
+    }
+
+    /**
+     * build
+     *
+     * @param  array $selects
+     * @param  array $from
+     * @param  array $joins
+     * @param  array $functions
+     * @param  array $wheres
+     * @param  array $querys
+     * @param  array $groups
+     * @access public
+     * @return object
+     */
+    public function build($prefix, $parser): void
+    {
+        $checkList = array('checkFrom', 'checkJoins', 'checkSelects', 'checkWheres', 'checkQuerys');
+        foreach($checkList as $check) if($this->$check() !== true) return;
+
+        $parser->createStatement();
+
+        /* from */
+        $from = array($prefix . $this->from['table'], null, $this->from['alias']);
+        $parser->setFrom($parser->getExpression($from));
+
+        /* join */
+        $joins = array();
+        foreach($this->joins as $join)
+        {
+            $alias = $join['alias'];
+            $table = $join['table'];
+            $on    = $join['on'];
+
+            $onExprs      = $parser->getCondition($on);
+            $leftJoinExpr = $parser->getLeftJoin($prefix . $table, $alias, $onExprs);
+            $parser->addJoin($leftJoinExpr);
+        }
+
+        /* select */
+        $selects = $this->getSelects();
+        foreach($selects as $select) $parser->addSelect($parser->getExpression($select));
+
+        /* function */
+        $functions = $this->buildFunctions();
+        if(!empty($functions)) foreach($functions as $function) $parser->addSelect($parser->getExpression($function));
+
+        /* where */
+        $wheres = $this->buildWheres();
+        if(!empty($wheres)) $parser->addWhere($parser->combineConditions($this->getConditionsFromArray($parser, $wheres)));
+
+        /* querys */
+        $querys = $this->buildQuerys();
+        if(!empty($querys)) $parser->addWhere($parser->combineConditions($this->getConditionsFromArray($parser, $querys)));
+
+        /* group by */
+        $groups = $this->getGroupBy(true, true);
+        if(!empty($groups)) foreach($groups as $group) $parser->addGroup($parser->getGroup($parser->getExpression($group)));
+
+        $this->sql = $parser->statement->build();
     }
 }

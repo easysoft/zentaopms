@@ -335,6 +335,26 @@ class sqlparser
     }
 
     /**
+     * Get conditions from array.
+     *
+     * @param  array  $conditions
+     * @access public
+     * @return array
+     */
+    public function getConditionsFromArray($conditions)
+    {
+        if(is_string($conditions)) return $this->operatorCondition($conditions);
+
+        $first = current($conditions);
+        if(!is_array($first) && !in_array($first, array('and', 'or'))) return $this->getCondition($conditions);
+
+        $conditionExprs = array();
+        foreach($conditions as $condition) $conditionExprs[] = $this->getConditionsFromArray($condition);
+
+        return $conditionExprs;
+    }
+
+    /**
      * Get left join.
      *
      * @param  string  $table
