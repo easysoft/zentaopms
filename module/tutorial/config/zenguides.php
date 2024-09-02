@@ -1,5 +1,5 @@
 <?php
-global $lang;
+global $lang,$app;
 
 $config->tutorial->guides = array();
 
@@ -18,3 +18,4 @@ $config->tutorial->guides[$productManage->advance->name]          = $productMana
 $config->tutorial->guides[$scrumProjectManage->advance->name]     = $scrumProjectManage->advance;
 $config->tutorial->guides[$waterfallProjectManage->advance->name] = $waterfallProjectManage->advance;
 $config->tutorial->guides[$kanbanProjectManage->advance->name]    = $kanbanProjectManage->advance;
+if($app->config->edition != 'open') $config->tutorial->guides[$feedbackManage->name] = $feedbackManage;

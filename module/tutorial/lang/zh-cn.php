@@ -1470,3 +1470,56 @@ $lang->tutorial->programManage->addStakeholder->step3->name = '填写表单';
 $lang->tutorial->programManage->addStakeholder->step4 = new stdClass();
 $lang->tutorial->programManage->addStakeholder->step4->name = '保存表单';
 $lang->tutorial->programManage->addStakeholder->step4->desc = '保存后白名单人员可以查看项目集';
+
+$lang->tutorial->feedbackManage = new stdClass();
+$lang->tutorial->feedbackManage->title = '反馈管理教程';
+
+$lang->tutorial->feedbackManage->feedback = new stdClass();
+$lang->tutorial->feedbackManage->feedback->title = '反馈管理';
+
+$lang->tutorial->feedbackManage->feedback->step1 = new stdClass();
+$lang->tutorial->feedbackManage->feedback->step1->name = '点击反馈';
+$lang->tutorial->feedbackManage->feedback->step1->desc = '您在这里可以添加、处理反馈';
+
+$lang->tutorial->feedbackManage->feedback->step2 = new stdClass();
+$lang->tutorial->feedbackManage->feedback->step2->name = '点击创建反馈';
+$lang->tutorial->feedbackManage->feedback->step2->desc = '点击给某产品提反馈';
+
+$lang->tutorial->feedbackManage->feedback->step3 = new stdClass();
+$lang->tutorial->feedbackManage->feedback->step3->name = '填写表单';
+
+$lang->tutorial->feedbackManage->feedback->step4 = new stdClass();
+$lang->tutorial->feedbackManage->feedback->step4->name = '保存表单';
+$lang->tutorial->feedbackManage->feedback->step4->desc = '保存后在反馈列表跟进处理进度';
+
+$lang->tutorial->feedbackManage->feedback->step5 = new stdClass();
+$lang->tutorial->feedbackManage->feedback->step5->name = '点击评审';
+$lang->tutorial->feedbackManage->feedback->step5->desc = '点击对该条反馈进行评审';
+
+$lang->tutorial->feedbackManage->feedback->step6 = new stdClass();
+$lang->tutorial->feedbackManage->feedback->step6->name = '填写表单';
+
+$lang->tutorial->feedbackManage->feedback->step7 = new stdClass();
+$lang->tutorial->feedbackManage->feedback->step7->name = '保存表单';
+$lang->tutorial->feedbackManage->feedback->step7->desc = '保存后反馈状态变为待处理';
+
+$lang->tutorial->feedbackManage->feedback->step8 = new stdClass();
+$lang->tutorial->feedbackManage->feedback->step8->name = '点击转Bug';
+$lang->tutorial->feedbackManage->feedback->step8->desc = '点击选择反馈的处理方式';
+
+$lang->tutorial->feedbackManage->feedback->step9 = new stdClass();
+$lang->tutorial->feedbackManage->feedback->step9->name = '填写表单';
+
+$lang->tutorial->feedbackManage->feedback->step10 = new stdClass();
+$lang->tutorial->feedbackManage->feedback->step10->name = '保存表单';
+$lang->tutorial->feedbackManage->feedback->step10->desc = '保存后反馈的状态变为处理中，当转化的需求、任务等完成后，反馈的状态才会变为已处理';
+
+$lang->tutorial->feedbackManage->feedback->step11 = new stdClass();
+$lang->tutorial->feedbackManage->feedback->step11->name = '关闭反馈';
+$lang->tutorial->feedbackManage->feedback->step11->desc = '点击关闭处理完的反馈，反馈处理完成';
+
+$lang->tutorial->feedbackManage->feedback->step12 = new stdClass();
+$lang->tutorial->feedbackManage->feedback->step12->name = '填写表单';
+
+$lang->tutorial->feedbackManage->feedback->step13 = new stdClass();
+$lang->tutorial->feedbackManage->feedback->step13->name = '保存表单';

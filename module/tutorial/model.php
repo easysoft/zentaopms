@@ -1782,4 +1782,78 @@ class tutorialModel extends model
 
         return array($main, $branch);
     }
+
+    /**
+     * 获取新手模式反馈。
+     * Get feedback.
+     *
+     * @access public
+     * @return object
+     */
+    public function getFeedback(): object
+    {
+        $feedback = new stdClass();
+        $feedback->id             = 1;
+        $feedback->product        = 1;
+        $feedback->module         = 0;
+        $feedback->title          = 'Test feedback';
+        $feedback->type           = '';
+        $feedback->solution       = '';
+        $feedback->desc           = '';
+        $feedback->pri            = 3;
+        $feedback->status         = 'noreview';
+        $feedback->subStatus      = '';
+        $feedback->public         = 1;
+        $feedback->notify         = 1;
+        $feedback->notifyEmail    = '';
+        $feedback->source         = '';
+        $feedback->likes          = '';
+        $feedback->result         = 0;
+        $feedback->faq            = 0;
+        $feedback->openedBy       = $this->app->user->account;
+        $feedback->openedDate     = helper::now();
+        $feedback->reviewedBy     = '';
+        $feedback->reviewedDate   = '';
+        $feedback->processedBy    = '';
+        $feedback->processedDate  = '';
+        $feedback->closedBy       = '';
+        $feedback->closedDate     = '';
+        $feedback->closedReason   = '';
+        $feedback->editedBy       = '';
+        $feedback->editedDate     = '';
+        $feedback->assignedTo     = '';
+        $feedback->assignedDate   = '';
+        $feedback->activatedBy    = '';
+        $feedback->activatedDate  = '';
+        $feedback->feedbackBy     = '';
+        $feedback->repeatFeedback = 0;
+        $feedback->mailto         = '';
+        $feedback->keywords       = '';
+        $feedback->deleted        = 0;
+        $feedback->dept           = 0;
+
+        return $feedback;
+    }
+
+    /**
+     * 获取新手模式反馈列表。
+     * Get feedbacks.
+     *
+     * @access public
+     * @return array
+     */
+    public function getFeedbacks(): array
+    {
+        $waitFeedback = $this->getFeedback();
+        $waitFeedback->id     = 1;
+        $waitFeedback->title  = 'Wait feedback';
+        $waitFeedback->status = 'wait';
+
+        $noReviewFeedback = $this->getFeedback();
+        $noReviewFeedback->id     = 2;
+        $noReviewFeedback->title  = 'Not review feedback';
+        $noReviewFeedback->status = 'noreview';
+
+        return array($waitFeedback->id => $waitFeedback, $noReviewFeedback->id => $noReviewFeedback);
+    }
 }
