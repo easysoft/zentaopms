@@ -1308,6 +1308,7 @@
             location.href = $.createLink('index', 'app', 'url=' + btoa(url));
             return;
         }
+        if(getUrlID(url) === 'index-index') return top.location.href = url;
         $.apps.openApp(url, $.extend({code: appCode, forceReload: true}, options));
     }
 
