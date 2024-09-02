@@ -66,9 +66,11 @@ class demandBasicInfo extends wg
             );
         }
 
+        $productNames = trim($productList, ', ') ? trim($productList, ', ') : $lang->demand->undetermined;
+
         $items[$lang->demand->status]       = array('control' => 'status', 'class' => 'status-story', 'status' => $demand->status, 'text' => zget($lang->demand->statusList, $demand->status));
         $items[$lang->demand->stage]        = zget($lang->demand->stageList, $demand->stage);
-        $items[$lang->demand->product]      = trim($productList, ', ') ? trim($productList, ', ') : $lang->demand->undetermined;
+        $items[$lang->demand->product]      = array('control' => 'text', 'text' => $productNames, 'title' => $productNames, 'class' => 'whitespace-pre-line break-normal');
         $items[$lang->demand->pri]          = array('control' => 'pri', 'text' => $lang->demand->priList, 'pri' => $demand->pri);
         $items[$lang->demand->category]     = zget($lang->demand->categoryList, $demand->category);
         $items[$lang->demand->source]       = zget($lang->demand->sourceList, $demand->source);
