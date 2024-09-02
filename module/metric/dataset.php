@@ -1182,16 +1182,31 @@ class dataset
             ->fetch('value');
         if(empty($defaultHours)) $defaultHours = 7;
 
-        $task = $this->dao->select('SUM(t1.consumed) as consumed, t1.project')
+        if(strpos($fieldList, 't2.') === false)
+        {
+            $stmt = $this->dao->select("$fieldList, $defaultHours AS defaultHours")
+                ->from(TABLE_PROJECT)->alias('t1')
+                ->where('t1.type')->eq('project')
+                ->andWhere('t1.deleted')->eq('0');
+
+            return $this->defaultWhere($stmt, 't1');
+        }
+
+        $task = $this->dao->select('SUM(t1.consumed) AS consumed, t1.project')
             ->from(TABLE_TASK)->alias('t1')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.parent')->ne('-1');
 
-        $task = $this->defaultWhere($task, 't1')->groupBy('t1.project')->get();
+        $query = $this->defaultWhere($task, 't1')->groupBy('t1.project')->get();
 
-        $stmt =  $this->dao->select("$fieldList, $defaultHours as defaultHours")
+        $table = 'tmp_task_getProjectTasks';
+        $this->dao->exec("DROP TABLE IF EXISTS `{$table}`");
+        $this->dao->exec("CREATE TABLE `{$table}` AS {$query}");
+        $this->dao->exec("CREATE INDEX `project` ON `{$table}` (`project`)");
+
+        $stmt = $this->dao->select("$fieldList, $defaultHours AS defaultHours")
             ->from(TABLE_PROJECT)->alias('t1')
-            ->leftJoin("($task)")->alias('t2')->on('t1.id = t2.project')
+            ->leftJoin($table)->alias('t2')->on('t1.id = t2.project')
             ->where('t1.type')->eq('project')
             ->andWhere('t1.deleted')->eq('0');
 
