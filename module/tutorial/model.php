@@ -91,6 +91,15 @@ class tutorialModel extends model
         $product->plans             = array('1' => 'Test plan');
         $product->totalEpics        = 0;
         $product->totalRequirements = 0;
+        $product->feedback          = 0;
+        $product->ticket            = 0;
+
+        list($guide, $guideTask, $guideStepIndex) = empty($_SERVER['HTTP_X_ZIN_TUTORIAL']) ? array('', '', '') : explode('-', $_SERVER['HTTP_X_ZIN_TUTORIAL']);
+        if($guide == 'productManageAdvance' && $guideTask == 'branchManage')
+        {
+            $product->type = 'branch';
+            $product->name = 'Test branch product';
+        }
 
         return $product;
     }
@@ -1734,5 +1743,43 @@ class tutorialModel extends model
         $program->grade   = 1;
 
         return array(1 => $program);
+    }
+
+    /**
+     * 获取新手模式分支列表。
+     * Get branches.
+     *
+     * @access public
+     * @return array
+     */
+    public function getBranches(): array
+    {
+        $this->loadModel('branch');
+
+        $main = new stdClass();
+        $main->id          = 0;
+        $main->product     = 1;
+        $main->name        = $this->lang->branch->main;
+        $main->default     = 1;
+        $main->status      = 'active';
+        $main->desc        = $this->lang->branch->defaultBranch;
+        $main->createdDate = helper::today();
+        $main->closedDate  = '';
+        $main->order       = 0;
+        $main->deleted     = 0;
+
+        $branch = new stdClass();
+        $branch->id          = 1;
+        $branch->product     = 1;
+        $branch->name        = 'Test branch';
+        $branch->default     = 0;
+        $branch->status      = 'active';
+        $branch->desc        = '';
+        $branch->createdDate = helper::today();
+        $branch->closedDate  = '';
+        $branch->order       = 1;
+        $branch->deleted     = 0;
+
+        return array($main, $branch);
     }
 }

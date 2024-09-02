@@ -1453,7 +1453,7 @@ class productModel extends model
         common::setMenuVars('product', $productID, $params);
         if(strpos($extra, 'requirement') !== false) unset($this->lang->product->moreSelects['willclose']);
 
-        $product = $this->fetchByID($productID);
+        $product = $this->getByID($productID);
         if(!$product) return false;
 
         /* 设置1.5级导航数据。*/

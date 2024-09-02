@@ -1291,6 +1291,88 @@ $lang->tutorial->productManage->releaseManage->step19 = new stdClass();
 $lang->tutorial->productManage->releaseManage->step19->name = '保存表单';
 $lang->tutorial->productManage->releaseManage->step19->desc = '保存后，需求会根据发布状态改变阶段';
 
+$lang->tutorial->productManage->lineManage = new stdClass();
+$lang->tutorial->productManage->lineManage->title = '产品线管理';
+
+$lang->tutorial->productManage->lineManage->step1 = new stdClass();
+$lang->tutorial->productManage->lineManage->step1->name = '点击产品';
+$lang->tutorial->productManage->lineManage->step1->desc = '您可以在这里对产品进行维护管理';
+
+$lang->tutorial->productManage->lineManage->step2 = new stdClass();
+$lang->tutorial->productManage->lineManage->step2->name = '点击产品线按钮';
+$lang->tutorial->productManage->lineManage->step2->desc = '点击维护产品线';
+
+$lang->tutorial->productManage->lineManage->step3 = new stdClass();
+$lang->tutorial->productManage->lineManage->step3->name = '填写表单';
+
+$lang->tutorial->productManage->lineManage->step4 = new stdClass();
+$lang->tutorial->productManage->lineManage->step4->name = '保存表单';
+$lang->tutorial->productManage->lineManage->step4->desc = '保存后在维护产品时可以选择对应的产品线';
+
+$lang->tutorial->productManage->branchManage = new stdClass();
+$lang->tutorial->productManage->branchManage->title = '多分支/平台管理';
+
+$lang->tutorial->productManage->branchManage->step1 = new stdClass();
+$lang->tutorial->productManage->branchManage->step1->name = '点击产品';
+$lang->tutorial->productManage->branchManage->step1->desc = '您可以在这里对产品进行维护管理';
+
+$lang->tutorial->productManage->branchManage->step2 = new stdClass();
+$lang->tutorial->productManage->branchManage->step2->name = '点击添加产品';
+$lang->tutorial->productManage->branchManage->step2->desc = '点击添加产品';
+
+$lang->tutorial->productManage->branchManage->step3 = new stdClass();
+$lang->tutorial->productManage->branchManage->step3->name = '填写表单';
+
+$lang->tutorial->productManage->branchManage->step4 = new stdClass();
+$lang->tutorial->productManage->branchManage->step4->name = '保存表单';
+
+$lang->tutorial->productManage->branchManage->step5 = new stdClass();
+$lang->tutorial->productManage->branchManage->step5->name = '点击设置';
+$lang->tutorial->productManage->branchManage->step5->desc = '点击维护产品的信息';
+
+$lang->tutorial->productManage->branchManage->step6 = new stdClass();
+$lang->tutorial->productManage->branchManage->step6->name = '点击分支';
+$lang->tutorial->productManage->branchManage->step6->desc = '点击维护产品分支';
+
+$lang->tutorial->productManage->branchManage->step7 = new stdClass();
+$lang->tutorial->productManage->branchManage->step7->name = '点击新建分支';
+$lang->tutorial->productManage->branchManage->step7->desc = '点击为产品添加新的分支';
+
+$lang->tutorial->productManage->branchManage->step8 = new stdClass();
+$lang->tutorial->productManage->branchManage->step8->name = '填写表单';
+
+$lang->tutorial->productManage->branchManage->step9 = new stdClass();
+$lang->tutorial->productManage->branchManage->step9->name = '保存表单';
+$lang->tutorial->productManage->branchManage->step9->desc = '保存后在分支列表查看分支';
+
+$lang->tutorial->productManage->branchManage->step10 = new stdClass();
+$lang->tutorial->productManage->branchManage->step10->name = '勾选分支';
+
+$lang->tutorial->productManage->branchManage->step11 = new stdClass();
+$lang->tutorial->productManage->branchManage->step11->name = '点击合并';
+
+$lang->tutorial->productManage->branchManage->step12 = new stdClass();
+$lang->tutorial->productManage->branchManage->step12->name = '选择分支';
+
+$lang->tutorial->productManage->branchManage->step13 = new stdClass();
+$lang->tutorial->productManage->branchManage->step13->name = '保存表单';
+$lang->tutorial->productManage->branchManage->step13->desc = '保存后分支下面对应的发布、计划、版本、模块、需求、Bug、用例都合并到新的分支下';
+
+$lang->tutorial->productManage->branchManage->step14 = new stdClass();
+$lang->tutorial->productManage->branchManage->step14->name = '点击研发需求';
+$lang->tutorial->productManage->branchManage->step14->desc = '您可以在这里管理产品的研发需求';
+
+$lang->tutorial->productManage->branchManage->step15 = new stdClass();
+$lang->tutorial->productManage->branchManage->step15->name = '点击提研发需求';
+$lang->tutorial->productManage->branchManage->step15->desc = '点击创建孪生需求';
+
+$lang->tutorial->productManage->branchManage->step16 = new stdClass();
+$lang->tutorial->productManage->branchManage->step16->name = '填写表单';
+
+$lang->tutorial->productManage->branchManage->step17 = new stdClass();
+$lang->tutorial->productManage->branchManage->step17->name = '保存表单';
+$lang->tutorial->productManage->branchManage->step17->desc = '保存后每个分支会建立一个需求，需求间互为孪生关系。孪生需求间除产品、分支、模块、计划、阶段字段外均保持同步，在需求详情页可以解除孪生关系。';
+
 $lang->tutorial->programManage = new stdClass();
 $lang->tutorial->programManage->title = '项目集管理教程';
 
