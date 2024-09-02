@@ -14,6 +14,7 @@ namespace zin;
 
 formPanel
 (
+    set::id('createBranchForm'),
     set::title(sprintf($lang->branch->create, $lang->product->branchName[$product->type])),
     set::shadow(!isInModal()),
     formGroup
