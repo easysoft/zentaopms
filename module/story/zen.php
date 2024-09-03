@@ -1037,8 +1037,6 @@ class storyZen extends story
 
         if($this->app->tab === 'project' || $this->app->tab === 'execution')
         {
-            $hiddenParent = true;
-
             $project = $this->dao->findById((int)$objectID)->from(TABLE_PROJECT)->fetch();
             if(!empty($project->project)) $project = $this->dao->findById((int)$project->project)->from(TABLE_PROJECT)->fetch();
 

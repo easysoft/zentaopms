@@ -38,12 +38,12 @@ if(isset($this->config->{$type}->custom->createFields));
 /* Set layout in execution tab. */
 if(!empty($objectID))
 {
-    $createFields->remove('parent');
+    if($app->tab != 'project' && $app->tab != 'execution') $createFields->remove('parent');
     $createFields->field('source')->className('full:w-1/2');
     $createFields->field('sourceNote')->className('full:w-1/2');
 
-    $orders         = 'product,module,twinsStory,assignedTo,reviewer,region,lane,title,category,pri,estimate,spec,verify,files';
-    $fullModeOrders = 'product,module,twinsStory,plan,reviewer,region,lane,assignedTo,category,title,pri,estimate,spec,verify,files';
+    $orders         = 'product,module,twinsStory,parent,grade,assignedTo,reviewer,region,lane,title,category,pri,estimate,spec,verify,files';
+    $fullModeOrders = 'product,module,twinsStory,plan,parent,grade,reviewer,region,lane,assignedTo,category,title,pri,estimate,spec,verify,files';
     if(!isset($fields['plan']))
     {
         $createFields->field('source')->width('1/2');
@@ -51,16 +51,16 @@ if(!empty($objectID))
         $createFields->field('category')->width('1/2');
         $createFields->field('pri')->width('1/4');
         $createFields->field('estimate')->width('1/4');
-        $orders         = 'product,module,twinsStory,assignedTo,category,reviewer,region,lane,title,pri,estimate,spec,verify,files';
-        $fullModeOrders = 'product,module,twinsStory,assignedTo,category,reviewer,region,lane,title,pri,estimate,spec,verify,files';
+        $orders         = 'product,module,twinsStory,parent,grade,assignedTo,category,reviewer,region,lane,title,pri,estimate,spec,verify,files';
+        $fullModeOrders = 'product,module,twinsStory,parent,grade,assignedTo,category,reviewer,region,lane,title,pri,estimate,spec,verify,files';
     }
     else
     {
         $createFields->field('category')->className('full:w-1/6');
         $createFields->field('pri')->className('full:w-1/6');
         $createFields->field('estimate')->className('full:w-1/6');
-        $orders         = 'product,module,twinsStory,reviewer,region,lane,assignedTo,category,title,pri,estimate,spec,verify,files';
-        $fullModeOrders = 'product,module,twinsStory,reviewer,region,lane,plan,assignedTo,title,category,pri,estimate,spec,verify,files';
+        $orders         = 'product,module,twinsStory,reviewer,region,lane,parent,grade,assignedTo,category,title,pri,estimate,spec,verify,files';
+        $fullModeOrders = 'product,module,twinsStory,reviewer,region,lane,plan,parent,grade,assignedTo,title,category,pri,estimate,spec,verify,files';
     }
 
     $createFields->orders($orders);
