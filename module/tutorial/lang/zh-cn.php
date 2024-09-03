@@ -350,7 +350,7 @@ $lang->tutorial->scrumProjectManage->manageTest->step20->name = '选择要关联
 
 $lang->tutorial->scrumProjectManage->manageTest->step21 = new stdClass();
 $lang->tutorial->scrumProjectManage->manageTest->step21->name = '保存表单';
-$lang->tutorial->scrumProjectManage->manageTest->step21->desc = '您可以将用例关联在测试单中，在这里可以查看全部已关联的用例';
+$lang->tutorial->scrumProjectManage->manageTest->step21->desc = '您可以将用例关联在测试单中，在这里可以查看到可关联的用例';
 
 $lang->tutorial->scrumProjectManage->manageTest->step22 = new stdClass();
 $lang->tutorial->scrumProjectManage->manageTest->step22->name = '点击测试单';
