@@ -26,7 +26,7 @@ class thinkResult extends wg
         list($wizard, $mode, $blocks) = $this->prop(array('wizard', 'mode', 'blocks'));
 
         $model = $wizard->model;
-        $wgMap = array('swot' => 'thinkSwot', 'pffa' => 'thinkPffa', 'pest' => 'thinkPestel', 'pestel' => 'thinkPestel', '4p' => 'think4p', '4p2' => 'think4p');
+        $wgMap = array('swot' => 'thinkSwot', 'pffa' => 'thinkPffa', 'pest' => 'thinkPestel', 'pestel' => 'thinkPestel', '4p' => 'think4p', '4p2' => 'think4p', '3c' => 'think3c');
         if(!isset($wgMap[$model])) return array();
 
         return createWg($wgMap[$model], array(set::mode($mode), set::blocks($blocks)));

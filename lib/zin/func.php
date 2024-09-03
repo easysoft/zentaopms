@@ -219,6 +219,20 @@ function affected(): affected {return createWg('affected', func_get_args());}
 function thinkPffa(): thinkPffa {return createWg('thinkPffa', func_get_args());}
 function thinkPestel(): thinkPestel {return createWg('thinkPestel', func_get_args());}
 function think4p(): think4p {return createWg('think4p', func_get_args());}
+function think3c(): think3c {return createWg('think3c', func_get_args());}
+function sqlBuilderControl(): sqlBuilderControl {return createWg('sqlBuilderControl', func_get_args());}
+function sqlBuilderPicker(): sqlBuilderPicker {return createWg('sqlBuilderPicker', func_get_args());}
+function sqlBuilderInput(): sqlBuilderInput {return createWg('sqlBuilderInput', func_get_args());}
+function joinCondition(): joinCondition {return createWg('joinCondition', func_get_args());}
+function fieldSelectPanel(): fieldSelectPanel {return createWg('fieldSelectPanel', func_get_args());}
+function sqlBuilderEmptyContent(): sqlBuilderEmptyContent {return createWg('sqlBuilderEmptyContent', func_get_args());}
+function sqlBuilderFuncRow(): sqlBuilderFuncRow {return createWg('sqlBuilderFuncRow', func_get_args());}
+function sqlBuilderWhereGroup(): sqlBuilderWhereGroup {return createWg('sqlBuilderWhereGroup', func_get_args());}
+function sqlBuilderWhereItem(): sqlBuilderWhereItem {return createWg('sqlBuilderWhereItem', func_get_args());}
+function sqlBuilderGroupBy(): sqlBuilderGroupBy {return createWg('sqlBuilderGroupBy', func_get_args());}
+function sqlBuilderQueryFilter(): sqlBuilderQueryFilter {return createWg('sqlBuilderQueryFilter', func_get_args());}
+function sqlBuilderHelpIcon(): sqlBuilderHelpIcon {return createWg('sqlBuilderHelpIcon', func_get_args());}
+function sqlBuilder(): sqlBuilder {return createWg('sqlBuilder', func_get_args());}
 
 if(is_dir(__DIR__ . DS . 'wg' . DS . 'schedule'))
 {
