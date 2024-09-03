@@ -69,6 +69,21 @@ class sqlBuilder extends wg
             $classList[$selectedClass] = $isSelected;
             $classList[$defaultClass]  = !$isSelected;
             $classList['required'] = $required;
+
+            $items[] = btn
+            (
+                setClass('builder-step-btn relative text-md mx-2 bg-inherit ring', $classList),
+                set('data-step', $key),
+                set::type('default'),
+                $text,
+                on::click()->do("switchStep(event, '$selectedClass', '$defaultClass')")
+            );
+
+            if($key != $lastStep) $items[] = icon
+            (
+                setClass('self-center text-gray-500 text-lg leading-3'),
+                'angle-down'
+            );
         }
 
         return div
