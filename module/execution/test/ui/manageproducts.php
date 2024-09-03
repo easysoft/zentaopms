@@ -76,11 +76,10 @@ $execution = array(
     ),
 );
 
-r($tester->manageproducts($execution['0']))           && p('message') && e('关联产品成功');
-r($tester->manageproducts($execution['1']))           && p('message') && e('取消关联产品成功');
-r($tester->checkProductsNev($execution['0'], true))   && p('message') && e('关联产品导航显示正确');
-r($tester->checkProductsNev($execution['1'], true))   && p('message') && e('关联产品导航显示正确');
-r($tester->checkProductsNev($execution['2'], false )) && p('message') && e('关联产品导航显示正确');
-r($tester->checkProductsNev($execution['3'], false )) && p('message') && e('关联产品导航显示正确');
-r($tester->checkProductsNev($execution['4'], false )) && p('message') && e('关联产品导航显示正确');
+r($tester->manageproducts($execution['0']))           && p('message') && e('关联产品成功');         //执行关联产品
+r($tester->manageproducts($execution['1']))           && p('message') && e('取消关联产品成功');     //执行取消关联产品
+r($tester->checkProductsNev($execution['0'], true))   && p('message') && e('关联产品导航显示正确'); //检查有产品有迭代项目下的执行下是否有产品导航
+r($tester->checkProductsNev($execution['2'], false )) && p('message') && e('关联产品导航显示正确'); //检查无产品有迭代项目下的执行下是否有产品导航
+r($tester->checkProductsNev($execution['3'], false )) && p('message') && e('关联产品导航显示正确'); //检查按产品创建的瀑布项目的阶段下是否有产品导航
+r($tester->checkProductsNev($execution['4'], false )) && p('message') && e('关联产品导航显示正确'); //检查按项目创建的瀑布项目的阶段下是否有产品导航
 $tester->closeBrowser();
