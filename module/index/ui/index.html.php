@@ -106,6 +106,7 @@ jsVar('vision',      $config->vision);
 jsVar('navGroup',    $lang->navGroup);
 jsVar('oldPages',    $config->index->oldPages);
 jsVar('appsItems',   $appsItems);
+jsVar('allAppsItems', $allAppsItems);
 jsVar('defaultOpen', !empty($open) ? $open : '');
 jsVar('manualText',  $lang->manual);
 jsVar('manualUrl',   ((!empty($config->isINT)) ? $config->manualUrl['int'] : $config->manualUrl['home']) . '&theme=' . $_COOKIE['theme']);

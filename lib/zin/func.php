@@ -134,6 +134,7 @@ function detailSide(): detailSide {return createWg('detailSide', func_get_args()
 function detailBody(): detailBody {return createWg('detailBody', func_get_args());}
 function detailForm(): detailForm {return createWg('detailForm', func_get_args());}
 function echarts(): echarts {return createWg('echarts', func_get_args());}
+function graph(): graph {return createWg('graph', func_get_args());}
 function popovers(): popovers {return createWg('popovers', func_get_args());}
 function backBtn(): backBtn {return createWg('backBtn', func_get_args());}
 function collapseBtn(): collapseBtn {return createWg('collapseBtn', func_get_args());}

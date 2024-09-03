@@ -605,12 +605,13 @@ class commonModel extends model
      * Get main nav items list
      *
      * @param  string $moduleName
+     * @param  bool   $useDefault 是否使用语言项中的默认值
      *
      * @static
      * @access public
      * @return array
      */
-    public static function getMainNavList(string $moduleName): array
+    public static function getMainNavList(string $moduleName, bool $useDefault = false): array
     {
         global $lang, $app, $config;
 
@@ -619,7 +620,18 @@ class commonModel extends model
         /* Ensure user has latest rights set. */
         $app->user->rights = $app->control->loadModel('user')->authorize($app->user->account);
 
-        $menuOrder = $lang->mainNav->menuOrder;
+        $menuOrder     = array();
+        $hasCustomMenu = false;
+        if(isset($config->customMenu->nav) && !$useDefault)
+        {
+            $items = json_decode($config->customMenu->nav);
+            foreach($items as $item) $menuOrder[$item->order] = $item->name;
+            $hasCustomMenu = true;
+        }
+        else
+        {
+            $menuOrder = $lang->mainNav->menuOrder;
+        }
         ksort($menuOrder);
 
         $items        = array();
@@ -628,18 +640,29 @@ class commonModel extends model
 
         foreach($menuOrder as $key => $group)
         {
+            // 如果有自定义菜单，则直接用自定义后的divider分隔符
+            if($hasCustomMenu && $group == 'divider')
+            {
+                $items[] = 'divider';
+                continue;
+            }
+
             if($group != 'my' && !empty($app->user->rights['acls']['views']) && !isset($app->user->rights['acls']['views'][$group])) continue; // 后台权限分组中没有给导航视图
             if(!isset($lang->mainNav->$group)) continue;
 
             $nav = $lang->mainNav->$group;
             list($title, $currentModule, $currentMethod, $vars) = explode('|', $nav);
 
-            /* When last divider is not used in mainNav, use it next menu. */
-            $printDivider = ($printDivider or ($lastItem != $key) and strpos($lang->dividerMenu, ",{$group},") !== false) ? true : false;
-            if($printDivider and !empty($items))
+            // 没有自定义过菜单，用默认语言项中的divider分隔符
+            if(!$hasCustomMenu)
             {
-                $items[]      = 'divider';
-                $printDivider = false;
+                /* When last divider is not used in mainNav, use it next menu. */
+                $printDivider = ($printDivider or ($lastItem != $key) and strpos($lang->dividerMenu, ",{$group},") !== false) ? true : false;
+                if($printDivider and !empty($items))
+                {
+                    $items[]      = 'divider';
+                    $printDivider = false;
+                }
             }
 
             $display = false;
@@ -707,8 +730,8 @@ class commonModel extends model
             $items[] = $item;
         }
 
-        /* Fix bug 14574. */
-        if(end($items) == 'divider') array_pop($items);
+        // 如果最后一个是分割线，则删除
+        while(!empty($items) && end($items) === 'divider') { array_pop($items); }
         return $items;
     }
 
@@ -2039,9 +2062,9 @@ eof;
      *
      * @static
      * @access public
-     * @return void
+     * @return bool
      */
-    public static function setMainMenu()
+    public static function setMainMenu(): bool
     {
         global $app, $lang;
         $tab = $app->tab;
@@ -2055,12 +2078,12 @@ eof;
         $lang->menu      = isset($lang->$tab->menu) ? $lang->$tab->menu : array();
         $lang->menuOrder = isset($lang->$tab->menuOrder) ? $lang->$tab->menuOrder : array();
 
-        if(!isset($lang->$tab->homeMenu)) return;
+        if(!isset($lang->$tab->homeMenu)) return false;
 
         if($currentModule == $tab and $currentMethod == 'create')
         {
             $lang->menu = $lang->$tab->homeMenu;
-            return;
+            return true;
         }
 
         /* If the method is in homeMenu, display homeMenu. */
@@ -2073,7 +2096,7 @@ eof;
             if($method == $currentMethod)
             {
                 $lang->menu = $lang->$tab->homeMenu;
-                return;
+                return true;
             }
 
             $alias   = isset($menu['alias'])   ? explode(',', strtolower($menu['alias']))   : array();
@@ -2081,15 +2104,17 @@ eof;
             if(in_array($currentMethod, $alias) && !in_array("{$currentModule}-{$currentMethod}", $exclude))
             {
                 $lang->menu = $lang->$tab->homeMenu;
-                return;
+                return true;
             }
 
             if(isset($menu['subModule']) and strpos(",{$menu['subModule']},", ",$currentModule,") !== false)
             {
                 $lang->menu = $lang->$tab->homeMenu;
-                return;
+                return true;
             }
         }
+
+        return false;
     }
 
     /**

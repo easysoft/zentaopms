@@ -401,6 +401,7 @@ $lang->execution->menuOrder[55] = 'build';
 $lang->execution->menuOrder[60] = 'release';
 $lang->execution->menuOrder[65] = 'action';
 $lang->execution->menuOrder[70] = 'settings';
+$lang->execution->menuOrder[75] = 'more';
 
 $lang->execution->menu->view['subMenu']            = new stdclass();
 $lang->execution->menu->view['subMenu']->groupTask = "$lang->groupView|execution|grouptask|executionID=%s";

@@ -111,6 +111,9 @@ class adminModel extends model
         $menuKey = $this->getMenuKey();
         if(empty($menuKey)) return;
 
+        $customKey  = "admin-$menuKey";
+        $customMenu = isset($this->config->customMenu->{$customKey}) ? json_decode($this->config->customMenu->{$customKey}) : array();
+
         $this->setSwitcher($menuKey);
         if(isset($this->lang->admin->menuList->$menuKey))
         {
@@ -144,6 +147,22 @@ class adminModel extends model
 
                     $this->lang->admin->menu->$subMenuKey = $subMenu;
                 }
+            }
+
+            if($customMenu)
+            {
+                $this->lang->admin->menuList->{$menuKey}['menuOrder']   = array();
+                $this->lang->admin->menuList->{$menuKey}['dividerMenu'] = '';
+                $prev = '';
+                foreach($customMenu as $item)
+                {
+                    $this->lang->admin->menuList->{$menuKey}['menuOrder'][$item->order] = $item->name;
+                    if($prev == 'divider') $this->lang->admin->menuList->{$menuKey}['dividerMenu'] .= ',' . $item->name;
+                    $prev = $item->name;
+                }
+
+                if($this->lang->admin->menuList->{$menuKey}['dividerMenu']) $this->lang->admin->menuList->{$menuKey}['dividerMenu'] = ',' . trim($this->lang->admin->menuList->{$menuKey}['dividerMenu']) . ',';
+                ksort($this->lang->admin->menuList->{$menuKey}['menuOrder']);
             }
 
             if(isset($this->lang->admin->menuList->{$menuKey}['menuOrder']))   $this->lang->admin->menuOrder   = $this->lang->admin->menuList->{$menuKey}['menuOrder'];

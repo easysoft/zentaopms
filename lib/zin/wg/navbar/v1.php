@@ -10,6 +10,23 @@ class navbar extends wg
         'items?: array'
     );
 
+    public static function getPageCSS(): ?string
+    {
+        return <<<'CSS'
+        #navbar .nav[z-use-sortable] > li:hover {cursor: grab !important;}
+        #navbar .nav[z-use-sortable] > li > a:hover {cursor: grab !important;}
+        #navbar .nav li.nav-divider.divider {border: none; width: 1px; background: currentColor; margin: 0; padding-left: var(--nav-divider-margin); padding-right: var(--nav-divider-margin); box-sizing: content-box; background-clip: content-box;}
+        CSS;
+    }
+
+    public static function getPageJS(): ?string
+    {
+        global $lang, $app;
+        $app->loadLang('index');
+        jsVar('langData', $lang->index->dock);
+        return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
+    }
+
     protected function getExecutionMoreItem($executionID)
     {
         if(defined('TUTORIAL')) return;
@@ -61,6 +78,7 @@ class navbar extends wg
             'text'    => $lang->more,
             'trigger' => 'hover',
             'id'      => 'navbarMoreMenu',
+            'data-id' => 'more',
             'menu'    => array('style' => array('max-width' => '300px'))
         );
     }
@@ -111,10 +129,18 @@ class navbar extends wg
         if(!empty($items)) return $items;
 
         global $app, $lang, $config;
-        if($app->tab == 'admin') $app->control->loadModel('admin')->setMenu();
+        if($app->tab == 'admin')
+        {
+            $app->control->loadModel('admin')->setMenu();
+            $adminMenuKey = $app->control->loadModel('admin')->getMenuKey();
+            jsVar('adminMenuKey', $adminMenuKey);
+        }
+
         commonModel::replaceMenuLang();
-        commonModel::setMainMenu();
+        $isHomeMenu = commonModel::setMainMenu();
         commonModel::checkMenuVarsReplaced();
+
+        jsVar('isHomeMenu', $isHomeMenu);
 
         $isTutorialMode = commonModel::isTutorialMode();
         $currentModule = $app->rawModule;
@@ -123,15 +149,14 @@ class navbar extends wg
         if($isTutorialMode and defined('WIZARD_MODULE')) $currentModule = WIZARD_MODULE;
         if($isTutorialMode and defined('WIZARD_METHOD')) $currentMethod = WIZARD_METHOD;
 
-        $menu         = \customModel::getMainMenu();
         $tab          = $app->tab;
+        $menu         = \customModel::getMainMenu($isHomeMenu);
         $activeMenu   = '';
         $activeMenuID = data('activeMenuID');
         $items        = array();
         $flows        = $config->edition != 'open' ? $app->control->loadModel('my')->getFlowPairs() : array();
         foreach($menu as $menuItem)
         {
-            if(isset($menuItem->hidden) and $menuItem->hidden and (!isset($menuItem->tutorial) or !$menuItem->tutorial)) continue;
             if(isset($menuItem->class) && strpos($menuItem->class, 'automation-menu'))
             {
                 if($menuItem->divider) $items[] = array('type' => 'divider');
@@ -147,7 +172,7 @@ class navbar extends wg
             }
             if(empty($menuItem->link)) continue;
 
-            if($menuItem->divider) $items[] = array('type' => 'divider');
+            if($menuItem->divider && empty($menuItem->hidden)) $items[] = array('type' => 'divider');
 
             /* Init the these vars. */
             $subModule = isset($menuItem->subModule) ? explode(',', $menuItem->subModule) : array();
@@ -162,6 +187,13 @@ class navbar extends wg
             elseif($subModule and in_array($currentModule, $subModule) and !str_contains(",$exclude,", ",$currentModule-$currentMethod,"))
             {
                 $isActive = true;
+            }
+
+            if($menuItem->link['module'] == 'project' and $menuItem->link['method'] == 'index')
+            {
+                $projectID    = str_replace('project=', '', $menuItem->link['vars']);
+                $projectModel = $app->dbh->query("SELECT `model` FROM " . TABLE_PROJECT . " WHERE `id` = '$projectID'")->fetch();
+                if($projectModel) jsVar('projectModel', $projectModel->model);
             }
 
             if($menuItem->link['module'] == 'execution' and $menuItem->link['method'] == 'more')
@@ -274,7 +306,8 @@ class navbar extends wg
                         'active'   => $isActive,
                         'target'   => $target,
                         'data-id'  => $menuItem->name,
-                        'data-app' => $dataApp
+                        'data-app' => $dataApp,
+                        'hidden'   => (isset($menuItem->hidden) && $menuItem->hidden && (!isset($menuItem->tutorial) || !$menuItem->tutorial))
                     );
                 }
             }
@@ -286,6 +319,9 @@ class navbar extends wg
 
         /* Set active menu to global data, make it accessible to other widgets */
         data('activeMenu', $activeMenu);
+        jsVar('allNavbarItems', $items);
+
+        $items = array_filter($items, function($item) { return empty($item['hidden']); });
 
         return $items;
     }
@@ -297,12 +333,13 @@ class navbar extends wg
      */
     protected function build()
     {
+        $items = $this->getItems();
         return h::nav
         (
             set::id('navbar'),
             new nav
             (
-                set::items($this->getItems()),
+                set::items($items),
                 $this->children()
             )
         );

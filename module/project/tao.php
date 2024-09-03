@@ -976,7 +976,7 @@ class projectTao extends projectModel
      */
     protected function setMenuByModel(string $projectModel): bool
     {
-        global $lang;
+        global $lang, $config;
         $model = 'scrum';
         if(in_array($projectModel, $this->config->project->waterfallList))
         {
@@ -1000,6 +1000,24 @@ class projectTao extends projectModel
 
         if(isset($lang->$model))
         {
+            $key = 'project-' . $model;
+            if(isset($config->customMenu->$key))
+            {
+                $lang->{$model}->menuOrder   = array();
+                $lang->{$model}->dividerMenu = '';
+
+                $items    = json_decode($config->customMenu->$key);
+                $prevItem = '';
+                foreach($items as $item)
+                {
+                    $lang->{$model}->menuOrder[$item->order] = $item->name;
+                    if($prevItem == 'divider') $lang->{$model}->dividerMenu .= $item->name . ',';
+                    $prevItem = $item->name;
+                }
+
+                if($lang->{$model}->dividerMenu) $lang->{$model}->dividerMenu = ',' . trim($lang->{$model}->dividerMenu, ',') . ',';
+            }
+
             $lang->project->menu        = $lang->{$model}->menu;
             $lang->project->menuOrder   = $lang->{$model}->menuOrder;
             $lang->project->dividerMenu = $lang->{$model}->dividerMenu;
