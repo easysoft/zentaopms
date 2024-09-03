@@ -39,7 +39,7 @@ if($currentTask)
 {
     foreach($guides as $guide)
     {
-        if($currentTask === $guide->id || str_starts_with($currentTask, "$guide->id."))
+        if($currentTask === $guide->name || str_starts_with($currentTask, "$guide->name."))
         {
             $currentType = $guide->type;
             break;

@@ -3,6 +3,9 @@ global $lang,$app;
 
 $config->tutorial->guides = array();
 
+/* Starter tutorial. */
+$config->tutorial->guides[$starter->name] = $starter;
+
 /* Basic tutorial. */
 $config->tutorial->guides[$accountManage->name]                 = $accountManage;
 $config->tutorial->guides[$productManage->basic->name]          = $productManage->basic;

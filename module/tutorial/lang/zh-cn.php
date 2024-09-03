@@ -94,6 +94,53 @@ $lang->tutorial->tasks->createBug->title          = '提Bug';
 $lang->tutorial->tasks->createBug->targetPageName = '提Bug';
 $lang->tutorial->tasks->createBug->desc           = "<p>在系统中提交一个Bug：</p><ul><li data-target='nav'>打开 <span class='task-nav'> 测试 <i class='icon icon-angle-right'></i> Bug <i class='icon icon-angle-right'></i> 提Bug</span>；</li><li data-target='form'>在表单中填写Bug信息；</li><li data-target='submit'>保存Bug信息。</li></ul>";
 
+$lang->tutorial->starter = new stdClass();
+$lang->tutorial->starter->title = '快速上手教程';
+
+$lang->tutorial->starter->createAccount = new stdClass();
+$lang->tutorial->starter->createAccount->title = '创建账号';
+
+$lang->tutorial->starter->createAccount->step1 = new stdClass();
+$lang->tutorial->starter->createAccount->step1->name = '点击后台';
+$lang->tutorial->starter->createAccount->step1->desc = '您可以在这里维护管理账号，进行各类配置项的设置。';
+
+$lang->tutorial->starter->createAccount->step2 = new stdClass();
+$lang->tutorial->starter->createAccount->step2->name = '点击人员管理';
+$lang->tutorial->starter->createAccount->step2->desc = '您可以在这里维护部门、添加人员和分组配置权限';
+
+$lang->tutorial->starter->createAccount->step3 = new stdClass();
+$lang->tutorial->starter->createAccount->step3->name = '点击用户';
+$lang->tutorial->starter->createAccount->step3->desc = '您可以在这里维护公司人员';
+
+$lang->tutorial->starter->createAccount->step4 = new stdClass();
+$lang->tutorial->starter->createAccount->step4->name = '点击添加人员按钮';
+$lang->tutorial->starter->createAccount->step4->desc = '点击添加公司人员';
+
+$lang->tutorial->starter->createAccount->step5 = new stdClass();
+$lang->tutorial->starter->createAccount->step5->name = '填写表单';
+
+$lang->tutorial->starter->createAccount->step6 = new stdClass();
+$lang->tutorial->starter->createAccount->step6->name = '保存表单';
+$lang->tutorial->starter->createAccount->step6->desc = '保存后可以在人员列表中查看';
+
+$lang->tutorial->starter->createProgram = new stdClass();
+$lang->tutorial->starter->createProgram->title = '创建项目集';
+
+$lang->tutorial->starter->createProgram->step1 = new stdClass();
+$lang->tutorial->starter->createProgram->step1->name = '点击项目集';
+$lang->tutorial->starter->createProgram->step1->desc = '您可以在这里维护管理项目集';
+
+$lang->tutorial->starter->createProgram->step2 = new stdClass();
+$lang->tutorial->starter->createProgram->step2->name = '点击添加项目集';
+$lang->tutorial->starter->createProgram->step2->desc = '点击添加项目集';
+
+$lang->tutorial->starter->createProgram->step3 = new stdClass();
+$lang->tutorial->starter->createProgram->step3->name = '填写表单';
+
+$lang->tutorial->starter->createProgram->step4 = new stdClass();
+$lang->tutorial->starter->createProgram->step4->name = '保存表单';
+$lang->tutorial->starter->createProgram->step4->desc = '保存后在项目视角和产品视角列表中均可查看';
+
 $lang->tutorial->scrumProjectManage = new stdClass();
 $lang->tutorial->scrumProjectManage->title = 'Scrum项目管理教程';
 
@@ -1392,7 +1439,7 @@ $lang->tutorial->programManage->addProgram->step3->name = '填写表单';
 
 $lang->tutorial->programManage->addProgram->step4 = new stdClass();
 $lang->tutorial->programManage->addProgram->step4->name = '保存表单';
-$lang->tutorial->programManage->addProgram->step4->desc = '保存在项目视角和产品视角列表中均可查看';
+$lang->tutorial->programManage->addProgram->step4->desc = '保存后在项目视角和产品视角列表中均可查看';
 
 $lang->tutorial->programManage->addProgram->step5 = new stdClass();
 $lang->tutorial->programManage->addProgram->step5->name = '点击添加项目';
