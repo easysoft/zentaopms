@@ -2632,6 +2632,8 @@ eof;
      */
     public function checkPrivByObject(string $objectType, int $objectID): bool
     {
+        if(common::isTutorialMode()) return true;
+
         $objectType = strtolower($objectType);
         if(in_array($objectType, array('program', 'project', 'product', 'execution'))) return $this->loadModel($objectType)->checkPriv($objectID);
 

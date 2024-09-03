@@ -887,6 +887,7 @@ class tutorialModel extends model
         $case->caseVersion     = '';
         $case->storyTitle      = '';
         $case->caseStatus      = 'normal';
+        $case->currentVersion  = 1;
 
         $step1 = new stdClass();
         $step1->name   = 1;
