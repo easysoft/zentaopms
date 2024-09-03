@@ -56,4 +56,24 @@ class sqlBuilder extends wg
     {
         return $this->buildStepContent('where');
     }
+
+    protected function buildQueryStep()
+    {
+        return $this->buildStepContent('query');
+    }
+
+    protected function buildGroupStep()
+    {
+        return $this->buildStepContent('group');
+    }
+
+    protected function buildStepContent($step, $contents = array(), $extraHeading = null)
+    {
+        global $lang;
+        list($currStep) = $this->prop(array('currStep'));
+
+        $ucStep = ucfirst($step);
+        $contentTitle    = $lang->bi->{"step{$ucStep}Title"};
+        $contentTitleTip = $lang->bi->{"step{$ucStep}Tip"};
+    }
 }
