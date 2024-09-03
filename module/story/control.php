@@ -1955,6 +1955,17 @@ class story extends control
             $this->config->story->exportFields = str_replace($filterFields, ',', $this->config->story->exportFields);
         }
 
+        /* Append workflow field. */
+        if($this->config->edition != 'open')
+        {
+            $exportFlowFields = $this->loadModel('workflowfield')->getExportFields($storyType);
+            foreach($exportFlowFields as $field => $name)
+            {
+                $this->config->story->exportFields .= ",{$field}";
+                $this->lang->story->{$field} = $name;
+            }
+        }
+
         $this->view->fileName        = $fileName;
         $this->view->allExportFields = $this->config->story->exportFields;
         $this->view->customExport    = true;
