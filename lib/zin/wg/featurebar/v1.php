@@ -15,7 +15,8 @@ class featureBar extends wg
         'method?:string',
         'load?: string="table"',
         'loadID?: string',
-        'app?: string=""'
+        'app?: string=""',
+        'labelCount?: int=-1'
     );
 
     protected static array $defineBlocks = array
@@ -28,6 +29,7 @@ class featureBar extends wg
     protected function getItems()
     {
         $items = $this->prop('items');
+
         if(!empty($items)) return array_values($items);
 
         global $app, $lang;
@@ -35,13 +37,13 @@ class featureBar extends wg
         $currentMethod = $this->prop('method', $app->rawMethod);
 
         \common::sortFeatureMenu($currentModule, $currentMethod);
-
         $rawItems = \customModel::getFeatureMenu($currentModule, $currentMethod);
         if(!is_array($rawItems)) return null;
 
         $current    = $this->prop('current', data('browseType'));
         $pager      = data('pager');
         $recTotal   = $pager ? $pager->recTotal : data('recTotal');
+        $recTotal   = $this->prop('labelCount') >= 0 ? $this->prop('labelCount') : $recTotal;
         $items      = array();
         $loadID     = $this->prop('loadID');
         $load       = $this->prop('load');
