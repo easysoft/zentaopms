@@ -685,7 +685,7 @@ $lang->tutorial->kanbanProjectManage = new stdClass();
 $lang->tutorial->kanbanProjectManage->title = '看板项目管理教程';
 
 $lang->tutorial->kanbanProjectManage->manageProject = new stdClass();
-$lang->tutorial->kanbanProjectManage->manageProject = $lang->tutorial->scrumProjectManage->manageProject;
+$lang->tutorial->kanbanProjectManage->manageProject = clone $lang->tutorial->scrumProjectManage->manageProject;
 
 $lang->tutorial->kanbanProjectManage->manageProject->step3 = new stdClass();
 $lang->tutorial->kanbanProjectManage->manageProject->step3->name = '点击项目看板';
