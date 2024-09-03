@@ -1250,7 +1250,6 @@ class execution extends control
             $this->config->excludeDropmenuList[] = 'execution-batchedit';
         }
 
-        $this->extendRequireFields($executionID);
         if($this->post->name)
         {
             $postData   = fixer::input('post')->get();
