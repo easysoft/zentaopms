@@ -1,0 +1,20 @@
+.h-86 {height: 344px;}
+.h-78 {height: 312px;}
+.h-70 {height: 280px;}
+.items-center-important {align-items: center !important;}
+.justify-start-important {justify-content: start !important;}
+
+.builder-step-btn:hover:before {opacity: 0;}
+.builder-step-btn:hover {color: var(--color-primary-500); --tw-ring-opacity: 1; --tw-ring-color: rgba(var(--color-secondary-500-rgb),var(--tw-ring-opacity));}
+.builder-step-btn.required:after {
+    content: "*";
+    display: inline-block;
+    --tw-translate-y: 0.125rem;
+    --tw-scale-x: 1.25;
+    --tw-scale-y: 1.25;
+    transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+    --tw-text-opacity: 1;
+    color: rgba(var(--color-danger-500-rgb),var(--tw-text-opacity));
+    position: absolute;
+    left: 1.25rem;
+}
