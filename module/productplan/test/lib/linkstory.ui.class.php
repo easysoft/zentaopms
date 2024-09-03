@@ -38,4 +38,20 @@ class linkStoryTester extends tester
         $linkNumAfter = (int) explode(' ', $viewPage->dom->linkNum->getText())[1];//计划移除需求后，关联的需求数
         return ($linkNum -1 ==$linkNumAfter) ? $this->success('移除单个需求成功') : $this->failed('移除单个需求失败');
     }
+    /**
+     * 移除全部需求
+     * unlink allstory
+     *
+     * @param $planID
+     * @return mixed
+     */
+    public function unLinkAllStory($planID)
+    {
+        $form = $this->initForm('productplan', 'view', $planID, 'appIframe-product');
+        $form->wait(1);
+        $form->dom->selectAllLink->click();//全选需求
+        $form->dom->btn($this->lang->productplan->unlinkStoryAB)->click();//点击移除
+        $viewPage = $this->initForm('productplan', 'view', $planID, 'appIframe-product');
+        return ($viewPage->dom->checkInfo === false) ? $this->success('移除全部需求成功') : $this->failed('移除全部需求失败');
+    }
 }
