@@ -497,5 +497,22 @@ class sqlBuilder extends wg
         $ucStep = ucfirst($step);
         $contentTitle    = $lang->bi->{"step{$ucStep}Title"};
         $contentTitleTip = $lang->bi->{"step{$ucStep}Tip"};
+        return panel
+        (
+            setID("builder$step"),
+            setClass('w-full builder-content', array('hidden' => $currStep !== $step)),
+            set::title($contentTitle),
+            set::headingClass('justify-start gap-0'),
+            set::bodyClass('h-86 overflow-auto'),
+            to::heading
+            (
+                sqlBuilderHelpIcon
+                (
+                    set::text($contentTitleTip)
+                ),
+                $extraHeading
+            ),
+            $contents
+        );
     }
 }
