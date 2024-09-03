@@ -467,6 +467,7 @@ class sqlBuilder extends wg
         $stepList = $lang->bi->builderStepList;
         $lastStep = end($steps);
         $items    = array();
+
         foreach($steps as $step)
         {
             if(!isset($stepList[$step])) continue;
@@ -477,6 +478,15 @@ class sqlBuilder extends wg
             $isSelected = $selected == $key;
             $required   = $key == 'table';
         }
+
+        $selectedClass = 'text-primary ring-secondary font-bold selected';
+        $defaultClass  = 'text-gray-900 ring-opacity-0 font-medium';
+
+        return div
+        (
+            setClass('builder-step-bar flex col justify-evenly basis-40 gap-1 bg-primary-50 h-full'),
+            $items
+        );
     }
 
     protected function buildTableStep()
