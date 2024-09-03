@@ -44,4 +44,9 @@ $execution->hasProduct->range('1, 1, 0, 1, 1');
 $execution->begin->range('(-2M)-(-M):1D')->type('timestamp')->format('YY/MM/DD');
 $execution->end->range('(+2M)-(+3M):1D')->type('timestamp')->format('YY/MM/DD');
 $execution->status->range('wait');
-$execution->gen(4);
+$execution->gen(4, false);
+
+$projectproduct = zenData('projectproduct');
+$projectproduct->project->range('1{3}, 2, 3{2}, 4{2}, 5-9, 9');
+$projectproduct->product->range('1-3, 5, 1, 2, 1, 2, 1{2}, 5, 1{2}, 2');
+$projectproduct->gen(14);
