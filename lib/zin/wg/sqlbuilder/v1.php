@@ -60,6 +60,17 @@ class sqlBuilder extends wg
         $selectedClass = 'text-primary ring-secondary font-bold selected';
         $defaultClass  = 'text-gray-900 ring-opacity-0 font-medium';
 
+        foreach($stepList as $key => $text)
+        {
+            $isSelected = $selected == $key;
+            $required   = in_array($key, $requires);
+
+            $classList = array();
+            $classList[$selectedClass] = $isSelected;
+            $classList[$defaultClass]  = !$isSelected;
+            $classList['required'] = $required;
+        }
+
         return div
         (
             setClass('builder-step-bar flex col justify-evenly basis-40 gap-1 bg-primary-50 h-full'),
