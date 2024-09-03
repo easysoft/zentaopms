@@ -133,7 +133,24 @@ class thinkStepBase extends wg
                 if($isRun && $item->origin == $step->options->quoteTitle) $sourceQuestion = $item;
             }
         }
-
+        if($isRun && (!empty($quotedQuestions) || !empty($sourceQuestion)))
+        {
+            $detailTip[] = div
+            (
+                setClass('bg-primary-50 text-gray p-2 mt-3 leading-normal'),
+                !empty($quotedQuestions) ? div
+                (
+                    setClass('flex items-center'),
+                    icon(setClass('font text-warning mr-1'), 'about'),
+                    $lang->thinkrun->tips->quotedTip
+                ) : null,
+                !empty($sourceQuestion) ? div
+                (
+                    setClass('ml-4 pl-0.5'),
+                    sprintf($lang->thinkstep->tips->checkbox, $sourceQuestion->index . '. ' . $sourceQuestion->title)
+                ) : null
+            );
+        }
 
         return $detailTip;
     }
