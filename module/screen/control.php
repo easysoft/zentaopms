@@ -107,6 +107,7 @@ class screen extends control
             $this->loadModel('execution');
             $this->view->executions = $this->screen->getBurnData();
             $this->view->date       = date('Y-m-d H:i:s');
+            $this->view->screen     = $screen;
             $this->display('screen', 'burn');
             return;
         }
