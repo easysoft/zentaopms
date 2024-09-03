@@ -82,7 +82,7 @@ $docManage->tasks['docManage']['steps'][] = array(
 
 $docManage->tasks['docManage']['steps'][] = array(
     'type'   => 'click',
-    'target' => 'div[data-lib="2"]',
+    'target' => 'div[data-lib="2"] nav.toolbar button',
     'page'   => 'doc-tablecontents',
     'url'    => array('doc', 'tablecontents'),
     'title'  => $lang->tutorial->docManage->step10->name
