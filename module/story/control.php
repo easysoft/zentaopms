@@ -586,7 +586,7 @@ class story extends control
         $this->view->users         = $this->user->getPairs('noletter');
         $this->view->executions    = $this->execution->getPairs(0, 'all', 'nocode');
         $this->view->version       = $version;
-        $this->view->preAndNext    = $this->loadModel('common')->getPreAndNextObject('story', $storyID);
+        $this->view->preAndNext    = $this->loadModel('common')->getPreAndNextObject($story->type, $storyID);
         $this->view->builds        = $this->loadModel('build')->getStoryBuilds($storyID);
         $this->view->releases      = $this->loadModel('release')->getStoryReleases($storyID);
         $this->view->story         = $story;
