@@ -151,7 +151,25 @@ class thinkStepBase extends wg
                 ) : null
             );
         }
-
+        if(!$isRun)
+        {
+            $detailTip[] = array
+            (
+                !empty($sourceQuestion) ? div
+                (
+                    setClass('bg-primary-50 leading-normal p-2 mt-3'),
+                    div($lang->thinkstep->tips->sourceofOptions),
+                    a
+                    (
+                        setClass('block text-primary-500 leading-relaxed'),
+                        set::href(createLink('thinkstep', 'view', "marketID=0&&wizardID=$sourceQuestion->wizard&&stepID=$sourceQuestion->id")),
+                        setData('toggle', 'modal'),
+                        setData('size', 'lg'),
+                        $sourceQuestion->index . '. ' . $sourceQuestion->title
+                    )
+                ) : null,
+            );
+        }
         return $detailTip;
     }
 
