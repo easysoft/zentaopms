@@ -291,6 +291,7 @@ class testtaskZen extends testtask
      * @param  object    $produc
      * @param  object    $testtask
      * @param  array     $runs
+     * @param  array     $scenes
      * @param  int       $moduleID
      * @param  string    $browseType
      * @param  int       $param
@@ -299,7 +300,7 @@ class testtaskZen extends testtask
      * @access protected
      * @return void
      */
-    protected function assignForCases(object $product, object $testtask, array $runs, int $moduleID, string $browseType, int $param, string $orderBy, object $pager): void
+    protected function assignForCases(object $product, object $testtask, array $runs, array $scenes, int $moduleID, string $browseType, int $param, string $orderBy, object $pager): void
     {
         $suites = $this->loadModel('testsuite')->getSuitePairs($product->id);
 
@@ -316,9 +317,10 @@ class testtaskZen extends testtask
 
         $this->setDropMenu($product->id, $testtask);
         $showModule = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=testtask&section=cases&key=showModule");
+        $runs = $this->loadModel('testcase')->appendData($runs, 'run');
 
         $this->view->title          = $product->name . $this->lang->hyphen . $this->lang->testtask->cases;
-        $this->view->runs           = $this->loadModel('testcase')->appendData($runs, 'run');
+        $this->view->runs           = array_merge($runs, $scenes);
         $this->view->users          = $this->loadModel('user')->getPairs('noclosed|qafirst|noletter');
         $this->view->moduleTree     = $this->loadModel('tree')->getTreeMenu($product->id, 'case', 0, array('treeModel', 'createTestTaskLink'), (string)$testtask->id, $testtask->branch ? $testtask->branch : '0');
         $this->view->automation     = $this->loadModel('zanode')->getAutomationByProduct($product->id);

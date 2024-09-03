@@ -410,10 +410,10 @@ class testtask extends control
         $runs = $this->testtask->getTaskCases($productID, $browseType, $queryID, $moduleID, $sort, $pager, $testtask);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
 
-        $runs = $this->testtask->getSceneCases($productID, $runs);
+        list($runs, $scenes) = $this->testtask->getSceneCases($productID, $runs);
 
         $this->testtaskZen->setSearchParamsForCases($product, $moduleID, $taskID, $queryID);
-        $this->testtaskZen->assignForCases($product, $testtask, $runs, $moduleID, $browseType, $param, $orderBy, $pager);
+        $this->testtaskZen->assignForCases($product, $testtask, $runs, $scenes, $moduleID, $browseType, $param, $orderBy, $pager);
         $this->display();
     }
 
