@@ -7,8 +7,8 @@ cid=1
  */
 
 chdir(__DIR__);
-#include '../lib/manageproducts.ui.class.php';
-include '/opt/dev/pms/test/lib/ui.php';
+include '../lib/manageproducts.ui.class.php';
+
 $product = zenData('product');
 $product->id->range('1-4');
 $product->name->range('产品1, 产品2, 产品3, 产品4');
@@ -50,3 +50,20 @@ $projectproduct = zenData('projectproduct');
 $projectproduct->project->range('1{3}, 2, 3{2}, 4{2}, 5-9, 9');
 $projectproduct->product->range('1-3, 5, 1, 2, 1, 2, 1{2}, 5, 1{2}, 2');
 $projectproduct->gen(14);
+
+$tester = new manageProductsTester();
+$tester->login();
+
+$execution = array(
+    '0' => array(
+        'id'      => '5',
+        'operate' => 'link',
+    ),
+    '1' => array(
+        'id'      => '6',
+        'operate' => 'unlink',
+    ),
+);
+
+r($tester->manageproducts($execution['0'])) && p('message') && e('关联产品成功');
+r($tester->manageproducts($execution['1'])) && p('message') && e('取消关联产品成功');
