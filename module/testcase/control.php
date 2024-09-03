@@ -1029,6 +1029,7 @@ class testcase extends control
         {
             $task     = $this->loadModel('testtask')->fetchByID($taskID);
             $taskName = $task->name;
+            $this->config->testcase->exportFields = str_replace('pri,', 'pri,assignedTo,', $this->config->testcase->exportFields);
         }
 
         $this->view->fileName        = $product->name . $this->lang->dash . ($taskID ? $taskName . $this->lang->dash : '') . $browseType . $fileName;
