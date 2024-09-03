@@ -1680,9 +1680,6 @@ class execution extends control
         /* Save the recently five executions visited in the cookie. */
         $this->executionZen->setRecentExecutions($execution->id);
 
-        /* Save the recently five executions visited in the cookie. */
-        $this->executionZen->setRecentExecutions($execution->id);
-
         /* Set Session. */
         if(empty($groupBy)) $groupBy = 'default';
         $this->session->set('execGroupBy', $groupBy);
