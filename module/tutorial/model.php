@@ -562,7 +562,7 @@ class tutorialModel extends model
     public function getExecutionStories(): array
     {
         $stories = $this->getStories();
-        $story   = $stories[0];
+        $story   = $stories[2];
         return array($story->id => $story);
     }
 
@@ -734,6 +734,7 @@ class tutorialModel extends model
 
         $doneTask = $this->getTask();
         $doneTask->id         = 2;
+        $doneTask->name       = 'Done task';
         $doneTask->status     = 'done';
         $doneTask->finishedBy = 'test';
 
@@ -1867,5 +1868,128 @@ class tutorialModel extends model
         $noReviewFeedback->status = 'noreview';
 
         return array($waitFeedback->id => $waitFeedback, $noReviewFeedback->id => $noReviewFeedback);
+    }
+
+    /**
+     * 获取新手模式团队空间。
+     * Get team spaces.
+     *
+     * @access public
+     * @return array
+     */
+    public function getTeamSpaces(): array
+    {
+        return array(1 => 'Test Team Space');
+    }
+
+    /**
+     * 获取新手模式文档库。
+     * Get doc lib.
+     *
+     * @access public
+     * @return array
+     */
+    public function getDocLibs(): array
+    {
+        $docLib = new stdClass();
+        $docLib->id         = 2;
+        $docLib->type       = 'custom';
+        $docLib->vision     = 'rnd';
+        $docLib->parent     = 1;
+        $docLib->product    = 0;
+        $docLib->project    = 0;
+        $docLib->execution  = 0;
+        $docLib->name       = 'Test Doc Lib';
+        $docLib->baseUrl    = '';
+        $docLib->acl        = 'open';
+        $docLib->groups     = '';
+        $docLib->users      = '';
+        $docLib->main       = 0;
+        $docLib->collector  = '';
+        $docLib->desc       = '';
+        $docLib->order      = 0;
+        $docLib->addedBy    = $this->app->user->account;
+        $docLib->addedDate  = helper::now();
+        $docLib->deleted    = 0;
+        $docLib->allCount   = 2;
+        return array($docLib->id => $docLib);
+    }
+
+    /**
+     * 获取新手模式文档库树。
+     * Get lib tree.
+     *
+     * @access public
+     * @return array
+     */
+    public function getLibTree(): array
+    {
+        $docLib = new stdClass();
+        $docLib->id         = 2;
+        $docLib->type       = 'docLib';
+        $docLib->name       = 'Test Doc Lib';
+        $docLib->parent     = 1;
+        $docLib->order      = 0;
+        $docLib->main       = 0;
+        $docLib->objectType = 'custom';
+        $docLib->objectID   = 1;
+        $docLib->addedBy    = $this->app->user->account;
+        $docLib->active     = 1;
+        $docLib->children   = array();
+        return array($docLib);
+    }
+
+    /**
+     * 获取新手模式文档。
+     * Get doc.
+     *
+     * @access public
+     * @return array
+     */
+    public function getDocs(): array
+    {
+        $doc = new stdClass();
+        $doc->id           = 1;
+        $doc->vision       = 'rnd';
+        $doc->project      = 0;
+        $doc->product      = 0;
+        $doc->execution    = 0;
+        $doc->lib          = 2;
+        $doc->template     = '';
+        $doc->templateType = '';
+        $doc->chapterType  = '';
+        $doc->module       = 0;
+        $doc->title        = 'Test Doc';
+        $doc->keywords     = '';
+        $doc->type         = 'text';
+        $doc->status       = 'normal';
+        $doc->parent       = 0;
+        $doc->path         = '';
+        $doc->grade        = 0;
+        $doc->order        = 10;
+        $doc->views        = 1;
+        $doc->assetLib     = 0;
+        $doc->assetLibType = '';
+        $doc->from         = 0;
+        $doc->fromVersion  = 1;
+        $doc->draft        = "This is the description of the document.";
+        $doc->collects     = 0;
+        $doc->addedBy      = $this->app->user->account;
+        $doc->addedDate    = helper::now();
+        $doc->assignedTo   = '';
+        $doc->assignedDate = '';
+        $doc->approvedDate = '';
+        $doc->editedBy     = '';
+        $doc->editedDate   = '';
+        $doc->editingDate  = array();
+        $doc->editedList   = ",{$this->app->user->account}";
+        $doc->mailto       = '';
+        $doc->acl          = 'open';
+        $doc->groups       = '';
+        $doc->users        = '';
+        $doc->version      = 2;
+        $doc->deleted      = 0;
+        $doc->collector    = '';
+        return array($doc->id => $doc);
     }
 }

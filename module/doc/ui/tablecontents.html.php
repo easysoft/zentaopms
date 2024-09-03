@@ -22,7 +22,7 @@ $buildCreateLibBtn = function() use($type, $objectID, $libID)
     {
         return btn
         (
-            setClass('secondary'),
+            setClass('secondary createLib-btn'),
             set::icon('plus'),
             set::url($createURL),
             setData('toggle', 'modal'),
@@ -34,7 +34,7 @@ $buildCreateLibBtn = function() use($type, $objectID, $libID)
     if($type != 'custom') return $createLibBtn();
 
     $buttonItems = array();
-    if(common::hasPriv('doc', 'createSpace')) $buttonItems[] = array('text' => $lang->doc->createSpace, 'url' => createLink('doc', 'createSpace'), 'data-toggle' => 'modal', 'data-size' => 'sm');
+    if(common::hasPriv('doc', 'createSpace')) $buttonItems[] = array('text' => $lang->doc->createSpace, 'url' => createLink('doc', 'createSpace'), 'data-toggle' => 'modal', 'data-size' => 'sm', 'class' => 'createSpace-btn');
     if(empty($buttonItems)) return $createLibBtn();
 
     return btngroup
@@ -42,7 +42,7 @@ $buildCreateLibBtn = function() use($type, $objectID, $libID)
         $createLibBtn(),
         dropdown
         (
-            btn(setClass('btn secondary dropdown-toggle'),
+            btn(setClass('btn secondary dropdown-toggle more-btn'),
             setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
             set::placement('bottom-end'),
             set::items($buttonItems)

@@ -623,6 +623,8 @@ class docModel extends model
      */
     public function getDocs(int $libID, int $moduleID, string $browseType, string $orderBy, object $pager = null): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getDocs();
+
         if(empty($libID) && $browseType != 'all') return array();
 
         $docIdList = $this->getPrivDocs($libID ? array($libID) : array(), $moduleID, 'children');
@@ -922,6 +924,8 @@ class docModel extends model
      */
     public function getTeamSpaces(): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getTeamSpaces();
+
         $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)
             ->where('type')->eq('custom')
             ->andWhere('deleted')->eq(0)
@@ -1353,6 +1357,8 @@ class docModel extends model
      */
     public function getLibsByObject(string $type, int $objectID = 0, int $appendLib = 0): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getDocLibs();
+
         if(!in_array($type, array('mine', 'custom', 'product', 'project', 'execution'))) return array();
         if(in_array($type, array('mine', 'custom')))
         {
@@ -2307,6 +2313,8 @@ class docModel extends model
      */
     public function getLibTree(int $libID, array $libs, string $type, int $moduleID, int $objectID = 0, string $browseType = '', int $param = 0, int $docID = 0): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getLibTree();
+
         $type = $this->app->tab == 'doc' && $type == 'execution' ? 'project' : $type;
         list($libTree, $apiLibs, $apiLibIDList) = $this->getObjectTree($libID, $libs, $type, $moduleID, $objectID, strtolower($browseType), $param, $docID);
         $libTree = $this->processObjectTree($libTree, $type, $libID, $objectID, $apiLibs, $apiLibIDList);
