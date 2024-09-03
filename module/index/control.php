@@ -45,6 +45,7 @@ class index extends control
         $this->view->showFeatures      = $this->indexZen->checkShowFeatures();
         $this->view->latestVersionList = $latestVersionList;
         $this->view->appsItems         = commonModel::getMainNavList($this->app->rawModule);
+        $this->view->allAppsItems      = commonModel::getMainNavList($this->app->rawModule, true);
         $this->view->browserMessage    = $this->loadModel('message')->getBrowserMessageConfig();
 
         $this->display();

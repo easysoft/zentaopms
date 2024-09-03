@@ -11,7 +11,7 @@
 #menu {position: fixed; left: 0; top: 0; bottom: 0; background: var(--zt-menu-bg); width: var(--zt-menu-width); color: rgba(var(--color-canvas-rgb), .8); transition: width .1s; user-select: none; z-index: 10;}
 #menu .nav {flex-direction: column; align-items: stretch;}
 #menu .nav > li {display: block; height: var(--zt-menu-height, 38px); padding: 4px 8px; transition: padding .2s;}
-#menu .nav > .divider {background: var(--color-canvas); opacity: .12; height: 1px; padding: 0; margin: 6px 12px; align-self: stretch}
+#menu .nav > .divider {background: var(--color-canvas); opacity: .12; height: 1px; padding: 6px 4px; align-self: stretch; background-clip: content-box; box-sizing: content-box; border: none;}
 #menu .nav > li > a {color: inherit; display: flex; align-items: center; gap: 4px; padding: 0 6px; height: calc(var(--zt-menu-height, 38px) - 8px); transition: color .2s, background-color .2s; border-radius: var(--radius-md);}
 #menu .nav > li > a.active,
 #menu .nav > li > a:hover {background: var(--zt-menu-hover-bg, rgba(var(--color-primary-400-rgb), .4)); color: var(--color-canvas);}
@@ -35,7 +35,7 @@
 
 .hide-menu #menu {width: var(--zt-menu-fold-width)!important;}
 .hide-menu #menu .nav > li {padding: 4px}
-.hide-menu #menu .nav > .divider {padding: 0; margin: 6px}
+.hide-menu #menu .nav > .divider {padding: 6px;}
 .hide-menu #menu .nav > li > a {justify-content: center;}
 .hide-menu #menu .nav > li > a > .text {display: none;}
 .hide-menu #menu #menuMoreNav .nav > li > a > .text {display: flex;}
@@ -83,3 +83,6 @@
 #upgradeContent {display: none; position: absolute; bottom: var(--zt-apps-bar-height); right: 10px; width: 370px; height: 322px; background-color: #fff; padding: 5px 0; border: 1px solid rgba(0,0,0,.15); border-color: rgba(0,0,0,.1); opacity: 1; border-radius: 4px; box-shadow: 0 6px 12px rgba(0,0,0,.12), 0 1px 3px rgba(0,0,0,.1);}
 .version-upgrade {width: 14px; height: 16px; float: left; background-repeat: no-repeat; background-position: center ; background-size: cover; display: block;}
 #latestVersionList {height: 270px; overflow: auto;}
+
+#menuMainNav[z-use-sortable] a[data-app]:hover {cursor: grab;}
+#menuMainNav[z-use-sortable] li.divider:hover {cursor: grab;}

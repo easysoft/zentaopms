@@ -6,9 +6,15 @@ $lang->index->pleaseInput = 'Enter';
 $lang->index->search      = 'Search';
 
 $lang->index->dock = new stdClass();
-$lang->index->dock->open   = 'Open';
-$lang->index->dock->reload = 'Reload';
-$lang->index->dock->close  = 'Close';
+$lang->index->dock->open    = 'Open';
+$lang->index->dock->reload  = 'Reload';
+$lang->index->dock->close   = 'Close';
+$lang->index->dock->sort    = 'Sort';
+$lang->index->dock->save    = 'Exit sort';
+$lang->index->dock->hide    = 'Hide';
+$lang->index->dock->add     = 'Add';
+$lang->index->dock->divider = 'Divider';
+$lang->index->dock->restore = 'Restore defaults';
 
 $lang->index->upgradeVersion = 'Upgradable version';
 $lang->index->upgradeNow     = 'Upgrade now';
