@@ -33,7 +33,6 @@ class thinkRadio extends thinkQuestion
         $detailWg = parent::buildDetail();
         list($step, $mode, $isRun, $quoteQuestions, $isResult) = $this->prop(array('step', 'mode', 'isRun', 'quoteQuestions', 'isResult'));
         if($mode != 'detail') return array();
-        jsVar('citation', !empty($step->options->citation) ? $step->options->citation : 1);
 
         $answer   = $step->answer;
         $result   = isset($answer->result) ? $answer->result : array();
@@ -55,22 +54,6 @@ class thinkRadio extends thinkQuestion
             set::value($step->options->questionType == 'radio' ? ($result[0] ?? '') : $result),
             set::disabled(($isQutoCheckbox && !$isRun)|| $isResult)
         );
-        $quoteItem = $step->options->questionType == 'checkbox' && !empty($step->options->setOption) && $step->options->setOption == 1;
-        $quoteName = '';
-
-        if($quoteItem && !empty($quoteQuestions))
-        {
-            foreach($quoteQuestions as $item)
-            {
-                if(!$isRun && $item->id == $step->options->quoteTitle) $quoteName = $item->index . '. ' . $item->title;
-                if($isRun && $item->origin == $step->options->quoteTitle) $quoteName = $item->index . '. ' . $item->title;
-            }
-            $detailWg[] = div
-            (
-                setClass('mt-3'),
-                sprintf($lang->thinkstep->tips->checkbox, $quoteName)
-            );
-        }
         return $detailWg;
     }
 
@@ -95,6 +78,7 @@ class thinkRadio extends thinkQuestion
             if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);
             $fields = !empty($step->options->fields) ? $step->options->fields :  array('', '', '');
         }
+        jsVar('citation', !empty($step->options->citation) ? $step->options->citation : 1);
 
         $quoteQuestionsItems = array();
         if(!empty($quoteQuestions))
