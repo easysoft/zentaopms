@@ -1675,7 +1675,10 @@ class execution extends control
 
         if($this->config->vision != 'lite') $this->lang->execution->menu = new stdclass();
         $execution = $this->commonAction($executionID);
-        if($execution->type != 'kanban') return $this->locate(inlink('view', "executionID=$executionID"));
+        if($execution->type != 'kanban') return $this->locate(inlink('view', "executionID={$execution->id}"));
+
+        /* Save the recently five executions visited in the cookie. */
+        $this->executionZen->setRecentExecutions($execution->id);
 
         /* Set Session. */
         if(empty($groupBy)) $groupBy = 'default';
