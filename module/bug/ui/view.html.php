@@ -10,6 +10,7 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+global $app;
 
 include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
 
@@ -48,6 +49,7 @@ if(!$isInModal && $canCreateBug)
         'icon' => 'plus',
         'type' => 'primary',
         'text' => $lang->bug->create,
+        'data-app' => $app->tab,
         'url'  => createLink('bug', 'create', "productID={$product->id}&branch={$bug->branch}&extras=moduleID={$bug->module}")
     );
 }
