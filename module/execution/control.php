@@ -1681,7 +1681,7 @@ class execution extends control
         $this->executionZen->setRecentExecutions($execution->id);
 
         /* Save the recently five executions visited in the cookie. */
-        $this->executionZen->setRecentExecutions($executionID);
+        $this->executionZen->setRecentExecutions($execution->id);
 
         /* Set Session. */
         if(empty($groupBy)) $groupBy = 'default';
