@@ -10,21 +10,22 @@ class thinkStep  extends wg
         'addType?: string',
         'isRun?: bool=false',        // 是否是分析活动
         'quoteQuestions?: array',    // 引用题目的下拉选项
+        'quotedQuestions?: array',   // 被引用的题目
     );
 
     protected function buildBody(): wg|array
     {
-        list($item, $action, $addType, $isRun, $quoteQuestions) = $this->prop(array('item', 'action', 'addType', 'isRun', 'quoteQuestions'));
+        list($item, $action, $addType, $isRun, $quoteQuestions, $quotedQuestions) = $this->prop(array('item', 'action', 'addType', 'isRun', 'quoteQuestions', 'quotedQuestions'));
 
         $step         = $addType ? null : $item;
         $questionType = $addType ? $addType : ($item->options->questionType ?? '');
         if($addType === 'node' || !$addType && $item->type === 'node') return thinkNode(set::step($step), set::mode($action), set::isRun($isRun));
         if($addType === 'transition' || !$addType && $item->type === 'transition') return thinkTransition(set::step($step), set::mode($action), set::isRun($isRun));
-        if($questionType === 'input')       return thinkInput(set::step($step), set::questionType('input'), set::mode($action), set::isRun($isRun));
-        if($questionType === 'radio')       return thinkRadio(set::step($step), set::questionType('radio'), set::mode($action), set::isRun($isRun));
-        if($questionType === 'checkbox')    return thinkCheckbox(set::step($step), set::questionType('checkbox'), set::mode($action), set::isRun($isRun), set::quoteQuestions($quoteQuestions));
-        if($questionType === 'tableInput')  return thinkTableInput(set::step($step), set::questionType('tableInput'), set::mode($action), set::isRun($isRun));
-        if($questionType === 'multicolumn') return thinkMulticolumn(set::step($step), set::questionType('multicolumn'), set::mode($action), set::isRun($isRun));
+        if($questionType === 'input')      return thinkInput(set::step($step), set::questionType('input'), set::mode($action), set::isRun($isRun), set::quotedQuestions($quotedQuestions));
+        if($questionType === 'radio')      return thinkRadio(set::step($step), set::questionType('radio'), set::mode($action), set::isRun($isRun), set::quotedQuestions($quotedQuestions));
+        if($questionType === 'checkbox')   return thinkCheckbox(set::step($step), set::questionType('checkbox'), set::mode($action), set::isRun($isRun), set::quoteQuestions($quoteQuestions), set::quotedQuestions($quotedQuestions));
+        if($questionType === 'tableInput') return thinkTableInput(set::step($step), set::questionType('tableInput'), set::mode($action), set::isRun($isRun), set::quotedQuestions($quotedQuestions));
+        if($questionType === 'multicolumn') return thinkMulticolumn(set::step($step), set::questionType('multicolumn'), set::mode($action), set::isRun($isRun), set::quotedQuestions($quotedQuestions));
         return array();
     }
 
