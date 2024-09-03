@@ -13,8 +13,8 @@ namespace zin;
 include 'lefttree.html.php';
 
 $headingActions = array('class' => 'gap-3 pr-1', 'items' => array());
-$headingActions['items'][] = array('type' => 'secondary', 'class' => 'save-draft', 'text' => $lang->doc->saveDraft, 'btnType' => 'submit');
-$headingActions['items'][] = array('type' => 'primary', 'class' => 'btn-wide', 'text' => $lang->doc->release, 'url' => '#modalBasicInfo', 'data-toggle' => 'modal');
+if(!common::isTutorialMode()) $headingActions['items'][] = array('type' => 'secondary', 'class' => 'save-draft', 'text' => $lang->doc->saveDraft, 'btnType' => 'submit');
+$headingActions['items'][] = array('type' => 'primary', 'class' => 'btn-wide release-btn', 'text' => $lang->doc->release, 'url' => '#modalBasicInfo', 'data-toggle' => 'modal');
 
 $basicInfoModal = modal
 (
@@ -143,7 +143,7 @@ $basicInfoModal = modal
         div
         (
             setClass('form-actions form-group no-label'),
-            btn(set::type('primary'), set::btnType('submit'), $lang->doc->release)
+            btn(set::type('primary'), set::btnType('submit'), setClass('saveBasicInfoBtn'), $lang->doc->release)
         )
     )
 );

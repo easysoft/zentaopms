@@ -87,3 +87,131 @@ $docManage->tasks['docManage']['steps'][] = array(
     'url'    => array('doc', 'tablecontents'),
     'title'  => $lang->tutorial->docManage->step10->name
 );
+
+$docManage->tasks['docManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'li.menu-item[z-key="adddirectory"] a',
+    'page'   => 'doc-tablecontents',
+    'url'    => array('doc', 'tablecontents'),
+    'title'  => $lang->tutorial->docManage->step11->name,
+    'desc'   => $lang->tutorial->docManage->step11->desc
+);
+
+$docManage->tasks['docManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'li.tree-item menu.tree',
+    'page'   => 'doc-tablecontents',
+    'url'    => array('doc', 'tablecontents'),
+    'title'  => $lang->tutorial->docManage->step12->name
+);
+
+$docManage->tasks['docManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#actionBar a.doc-create-btn',
+    'page'   => 'doc-tablecontents',
+    'url'    => array('doc', 'tablecontents'),
+    'title'  => $lang->tutorial->docManage->step13->name,
+    'desc'   => $lang->tutorial->docManage->step13->desc
+);
+
+$docManage->tasks['docManage']['steps'][] = array(
+    'type'   => 'form',
+    'target' => '#docForm',
+    'page'   => 'doc-create',
+    'title'  => $lang->tutorial->docManage->step14->name
+);
+
+$docManage->tasks['docManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'div.panel-actions a.release-btn',
+    'page'   => 'doc-create',
+    'title'  => $lang->tutorial->docManage->step15->name
+);
+
+$docManage->tasks['docManage']['steps'][] = array(
+    'type'   => 'form',
+    'target' => '#modalBasicInfo div.modal-body',
+    'page'   => 'doc-create',
+    'title'  => $lang->tutorial->docManage->step16->name
+);
+
+$docManage->tasks['docManage']['steps'][] = array(
+    'type'   => 'saveForm',
+    'target' => '#modalBasicInfo button.saveBasicInfoBtn',
+    'page'   => 'doc-create',
+    'title'  => $lang->tutorial->docManage->step17->name,
+    'desc'   => $lang->tutorial->docManage->step17->desc
+);
+
+$docManage->tasks['docManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'div.dtable div[data-col="title"][data-row="1"] a',
+    'page'   => 'doc-tablecontents',
+    'url'    => array('doc', 'tablecontents'),
+    'title'  => $lang->tutorial->docManage->step18->name,
+    'desc'   => $lang->tutorial->docManage->step18->desc
+);
+
+$docManage->tasks['docManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#docToolbar a.doc-edit-btn',
+    'page'   => 'doc-view',
+    'title'  => $lang->tutorial->docManage->step19->name,
+    'desc'   => $lang->tutorial->docManage->step19->desc
+);
+
+$docManage->tasks['docManage']['steps'][] = array(
+    'type'   => 'form',
+    'target' => '#docForm div.panel-body',
+    'page'   => 'doc-edit',
+    'title'  => $lang->tutorial->docManage->step20->name
+);
+
+$docManage->tasks['docManage']['steps'][] = array(
+    'type'   => 'saveForm',
+    'target' => '#docForm button[type="submit"]',
+    'page'   => 'doc-edit',
+    'title'  => $lang->tutorial->docManage->step21->name,
+    'desc'   => $lang->tutorial->docManage->step21->desc
+);
+
+$docManage->tasks['docManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#docBody #versionDropdown-toggle',
+    'page'   => 'doc-view',
+    'url'    => array('doc', 'view', 'docID=1'),
+    'title'  => $lang->tutorial->docManage->step22->name,
+    'desc'   => $lang->tutorial->docManage->step22->desc
+);
+
+$docManage->tasks['docManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'menu.is-contextmenu div.listitem .toolbar button',
+    'page'   => 'doc-view',
+    'title'  => $lang->tutorial->docManage->step23->name,
+    'desc'   => $lang->tutorial->docManage->step23->desc
+);
+
+$docManage->tasks['docManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'menu.is-contextmenu menu.dropdown-menu li.menu-item[z-key="2"]',
+    'page'   => 'doc-view',
+    'title'  => $lang->tutorial->docManage->step24->name,
+    'desc'   => $lang->tutorial->docManage->step24->desc
+);
+
+$docManage->tasks['docManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'menu.is-contextmenu menu.dropdown-menu li.menu-item[z-key="1"]',
+    'page'   => 'doc-view',
+    'title'  => $lang->tutorial->docManage->step24->name,
+    'desc'   => $lang->tutorial->docManage->step24->desc
+);
+
+$docManage->tasks['docManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'menu.is-contextmenu button[type="button"]',
+    'page'   => 'doc-view',
+    'title'  => $lang->tutorial->docManage->step25->name,
+    'desc'   => $lang->tutorial->docManage->step25->desc
+);

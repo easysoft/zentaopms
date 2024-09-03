@@ -47,7 +47,7 @@ $buildCreateBtn = function($typeID, $libID, $moduleID) use($lib, $docModel)
     return btngroup(
         btn
         (
-            setClass('btn primary ml-2'),
+            setClass('btn primary ml-2 doc-create-btn'),
             set::icon('plus'),
             set::url(createLink('doc', 'create', "objectType={$createType}&objectID={$typeID}&libID={$libID}&moduleID={$moduleID}&type=html")),
             set('data-app', $app->tab),

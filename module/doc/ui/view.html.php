@@ -173,6 +173,7 @@ $docHeader = div
                 set::url(createLink('doc', 'edit', "docID=$doc->id")),
                 $doc->type != 'text' ? setData('toggle', 'modal') : null,
                 setData('app', $app->tab),
+                setClass('doc-edit-btn'),
                 set::icon('edit')
             ) : null,
             dropdown

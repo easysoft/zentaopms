@@ -10,7 +10,7 @@ if(commonModel::isTutorialMode())
     to::head
     (
         h::css(<<<'CSS'
-        .tutorial-hl {position: relative; z-index: 1000!important; opacity: 1!important;}
+        .tutorial-hl {position: relative; z-index: 1000!important;}
         .tutorial-popover .arrow::before {border: 3px solid var(--color-primary-500); width: 10px; height: 10px; border-radius: 50%}
         .tutorial-popover .arrow-top::before {top: calc(-34px - var(--arrow-size))}
         .tutorial-popover .arrow-left::before {left: calc(-34px - var(--arrow-size))}

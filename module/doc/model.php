@@ -50,6 +50,8 @@ class docModel extends model
      */
     public function getLibByID(int $libID): object|bool
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getDocLib();
+
         return $this->dao->findByID($libID)->from(TABLE_DOCLIB)->fetch();
     }
 
@@ -820,6 +822,8 @@ class docModel extends model
      */
     public function getByID(int $docID, int $version = 0, bool $setImgSize = false): object|bool
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getDoc();
+
         $doc = $this->dao->select('*')->from(TABLE_DOC)
             ->where('id')->eq((int)$docID)
             ->andWhere('vision')->eq($this->config->vision)

@@ -1888,9 +1888,9 @@ class tutorialModel extends model
      * Get doc lib.
      *
      * @access public
-     * @return array
+     * @return object
      */
-    public function getDocLibs(): array
+    public function getDocLib(): object
     {
         $docLib = new stdClass();
         $docLib->id         = 2;
@@ -1913,6 +1913,19 @@ class tutorialModel extends model
         $docLib->addedDate  = helper::now();
         $docLib->deleted    = 0;
         $docLib->allCount   = 2;
+        return $docLib;
+    }
+
+    /**
+     * 获取新手模式文档库。
+     * Get doc lib.
+     *
+     * @access public
+     * @return array
+     */
+    public function getDocLibs(): array
+    {
+        $docLib = $this->getDocLib();
         return array($docLib->id => $docLib);
     }
 
@@ -1945,52 +1958,75 @@ class tutorialModel extends model
      * Get doc.
      *
      * @access public
+     * @return object
+     */
+    public function getDoc(): object
+    {
+        $doc = new stdClass();
+        $doc->id             = 1;
+        $doc->vision         = 'rnd';
+        $doc->project        = 0;
+        $doc->product        = 0;
+        $doc->execution      = 0;
+        $doc->lib            = 2;
+        $doc->template       = '';
+        $doc->templateType   = '';
+        $doc->chapterType    = '';
+        $doc->module         = 0;
+        $doc->title          = 'Test Doc';
+        $doc->keywords       = '';
+        $doc->type           = 'text';
+        $doc->status         = 'normal';
+        $doc->parent         = 0;
+        $doc->path           = '';
+        $doc->grade          = 0;
+        $doc->order          = 10;
+        $doc->views          = 1;
+        $doc->assetLib       = 0;
+        $doc->assetLibType   = '';
+        $doc->from           = 0;
+        $doc->fromVersion    = 1;
+        $doc->draft          = "This is the description of the document.";
+        $doc->collects       = 0;
+        $doc->addedBy        = $this->app->user->account;
+        $doc->addedDate      = helper::now();
+        $doc->assignedTo     = '';
+        $doc->assignedDate   = '';
+        $doc->approvedDate   = '';
+        $doc->editedBy       = '';
+        $doc->editedDate     = '';
+        $doc->editingDate    = array();
+        $doc->editedList     = ",{$this->app->user->account}";
+        $doc->mailto         = '';
+        $doc->acl            = 'open';
+        $doc->groups         = '';
+        $doc->users          = '';
+        $doc->version        = 2;
+        $doc->deleted        = 0;
+        $doc->collector      = '';
+        $doc->releasedDate   = '';
+        $doc->releasedBy     = $this->app->user->account;
+        $doc->digest         = helper::now();
+        $doc->content        = "This is the description of the document.";
+        $doc->contentType    = 'html';
+        $doc->contentVersion = 2;
+        $doc->files          = array();
+        $doc->moduleName     = '';
+        $doc->executionName  = '';
+        $doc->productName    = '';
+        return $doc;
+    }
+
+    /**
+     * 获取新手模式文档列表。
+     * Get docs.
+     *
+     * @access public
      * @return array
      */
     public function getDocs(): array
     {
-        $doc = new stdClass();
-        $doc->id           = 1;
-        $doc->vision       = 'rnd';
-        $doc->project      = 0;
-        $doc->product      = 0;
-        $doc->execution    = 0;
-        $doc->lib          = 2;
-        $doc->template     = '';
-        $doc->templateType = '';
-        $doc->chapterType  = '';
-        $doc->module       = 0;
-        $doc->title        = 'Test Doc';
-        $doc->keywords     = '';
-        $doc->type         = 'text';
-        $doc->status       = 'normal';
-        $doc->parent       = 0;
-        $doc->path         = '';
-        $doc->grade        = 0;
-        $doc->order        = 10;
-        $doc->views        = 1;
-        $doc->assetLib     = 0;
-        $doc->assetLibType = '';
-        $doc->from         = 0;
-        $doc->fromVersion  = 1;
-        $doc->draft        = "This is the description of the document.";
-        $doc->collects     = 0;
-        $doc->addedBy      = $this->app->user->account;
-        $doc->addedDate    = helper::now();
-        $doc->assignedTo   = '';
-        $doc->assignedDate = '';
-        $doc->approvedDate = '';
-        $doc->editedBy     = '';
-        $doc->editedDate   = '';
-        $doc->editingDate  = array();
-        $doc->editedList   = ",{$this->app->user->account}";
-        $doc->mailto       = '';
-        $doc->acl          = 'open';
-        $doc->groups       = '';
-        $doc->users        = '';
-        $doc->version      = 2;
-        $doc->deleted      = 0;
-        $doc->collector    = '';
+        $doc = $this->getDoc();
         return array($doc->id => $doc);
     }
 }
