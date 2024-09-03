@@ -55,3 +55,10 @@ $dept->parent->range('0, 0, 1');
 $dept->path->range('`,1,`, `,2,`, `,1,3,`');
 $dept->grade->range('1, 1, 2');
 $dept->gen(3);
+
+$user = zenData('user');
+$user->id->range('1-100');
+$user->dept->range('1{2}, 2{3}, 3{5}');
+$user->account->range('user1, user2, user3, user4, user5, user11, user12, user13, user14, user15');
+$user->realname->range('USER1')
+$user->gen(10);
