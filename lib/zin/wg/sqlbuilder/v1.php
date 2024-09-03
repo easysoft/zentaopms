@@ -459,6 +459,26 @@ class sqlBuilder extends wg
         if(empty($currStep)) $this->setProp('currStep', reset($steps));
     }
 
+    protected function buildStepBar()
+    {
+        global $lang;
+        list($steps, $selected, $requires) = $this->prop(array('steps', 'currStep', 'requiredSteps'));
+
+        $stepList = $lang->bi->builderStepList;
+        $lastStep = end($steps);
+        $items    = array();
+        foreach($steps as $step)
+        {
+            if(!isset($stepList[$step])) continue;
+
+            $key  = $step;
+            $text = $stepList[$key];
+
+            $isSelected = $selected == $key;
+            $required   = $key == 'table';
+        }
+    }
+
     protected function buildTableStep()
     {
         return $this->buildStepContent('table');
