@@ -125,6 +125,16 @@ class thinkStepBase extends wg
             );
         }
 
+        if($quoteItem && !empty($quoteQuestions))
+        {
+            foreach($quoteQuestions as $item)
+            {
+                if(!$isRun && $item->id == $step->options->quoteTitle) $sourceQuestion = $item;
+                if($isRun && $item->origin == $step->options->quoteTitle) $sourceQuestion = $item;
+            }
+        }
+
+
         return $detailTip;
     }
 
