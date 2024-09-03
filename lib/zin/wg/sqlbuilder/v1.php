@@ -515,4 +515,22 @@ class sqlBuilder extends wg
             $contents
         );
     }
+
+    protected function build()
+    {
+        global $lang;
+        $this->setSteps();
+        list($step, $steps) = $this->prop(array('currStep', 'steps'));
+
+        $ucStep = ucfirst($step);
+        $contentTitle    = $lang->bi->{"step{$ucStep}Title"};
+        $contentTitleTip = $lang->bi->{"step{$ucStep}Tip"};
+
+        return panel
+        (
+            setID('builderPanel'),
+            setClass('h-96'),
+            set::bodyClass('p-0 flex h-96'),
+        );
+    }
 }
