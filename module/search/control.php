@@ -305,6 +305,8 @@ class search extends control
     {
         if($mode == 'build')
         {
+            if($this->config->edition != 'open') $this->loadModel('workflow')->appendSearchConfig();
+
             $result = $this->search->buildAllIndex($type, $lastID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 

@@ -1536,6 +1536,8 @@ class actionModel extends model
     public function saveIndex(string $objectType, int $objectID, string $actionType): bool
     {
         $this->loadModel('search');
+        if($this->config->edition != 'open') $this->loadModel('workflow')->appendSearchConfig();
+
         $actionType = strtolower($actionType);
         if(!isset($this->config->search->fields->{$objectType})) return false;
         if(strpos($this->config->search->buildAction, ",{$actionType},") === false && empty($_POST['comment'])) return false;
