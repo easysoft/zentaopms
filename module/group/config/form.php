@@ -15,5 +15,7 @@ $config->group->form->create['developer'] = array('type' => 'string', 'required'
 $config->group->form->edit['name'] = array('type' => 'string', 'required' => true,  'filter' => 'trim');
 $config->group->form->edit['desc'] = array('type' => 'string', 'required' => false, 'filter' => 'trim', 'default' => '');
 
-$config->group->form->copy['name'] = array('type' => 'string', 'required' => true,  'filter' => 'trim');
-$config->group->form->copy['desc'] = array('type' => 'string', 'required' => false, 'filter' => 'trim', 'default' => '');
+$config->group->form->copy['name']    = array('type' => 'string', 'required' => true,  'filter' => 'trim');
+$config->group->form->copy['desc']    = array('type' => 'string', 'required' => false, 'filter' => 'trim', 'default' => '');
+$config->group->form->copy['project'] = array('type' => 'int',    'required' => false, 'default' => 0);
+$config->group->form->copy['vision']  = array('type' => 'string', 'required' => false, 'filter' => 'trim', 'default' => $config->vision);
