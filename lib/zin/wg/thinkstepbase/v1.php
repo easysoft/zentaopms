@@ -19,12 +19,14 @@ namespace zin;
 class thinkStepBase extends wg
 {
     protected static array $defineProps = array(
-        'title?: string',         // 标题
-        'desc?: string',          // 描述
-        'isRun?: bool=false',     // 是否是分析活动
-        'step?: object',          // 整个步骤的对象
-        'mode?: string="detail"', // detail|create|edit
-        'type?: string="node"',   // node|transition/question
+        'title?: string',          // 标题
+        'desc?: string',           // 描述
+        'isRun?: bool=false',      // 是否是分析活动
+        'step?: object',           // 整个步骤的对象
+        'mode?: string="detail"',  // detail|create|edit
+        'type?: string="node"',    // node|transition/question
+        'quoteQuestions?: array'.  // 引用的问题
+        'quotedQuestions?: attay', // 被引用的问题
     );
 
     public static function getPageCSS(): ?string
@@ -37,7 +39,7 @@ class thinkStepBase extends wg
         global $lang, $app;
         $app->loadLang('thinkrun');
         $app->loadLang('thinkstep');
-        list($step, $mode) = $this->prop(array('step', 'mode'));
+        list($step, $mode, $quotedQuestions) = $this->prop(array('step', 'mode', 'quotedQuestions'));
         if($mode != 'detail') return array();
 
         $options = $step->options;
@@ -97,6 +99,19 @@ class thinkStepBase extends wg
                 )
             )
         );
+    }
+    protected function buildDetailTip(): array
+    {
+        global $lang, $app;
+        $app->loadLang('thinkstep');
+        $app->loadLang('thinkrun');
+        list($quoteQuestions, $quotedQuestions, $step, $isRun) = $this->prop(array('quoteQuestions', 'quotedQuestions', 'step', 'isRun'));
+        if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);
+        $isCheckBox  = $step->type == 'question' && $step->options->questionType == 'checkbox';
+        $quoteItem   = $isCheckBox && !empty($step->options->setOption) && $step->options->setOption == 1;
+        $detailTip   = array();
+        $quotedItems = array();
+        return $detailTip;
     }
 
     protected function buildFormItem(): array
@@ -171,9 +186,13 @@ class thinkStepBase extends wg
             (
                 setStyle(array('max-width' => '878px')),
                 setClass('w-full'),
-                $this->buildDetail()
+                $this->buildDetail(),
+                $this->buildDetailTip()
             )
-        ) : $this->buildDetail();
+        ) : div(
+            $this->buildDetail(),
+            $this->buildDetailTip()
+        );
         return $this->prop('mode') == 'detail' ? $content : $this->buildForm();
     }
 }
