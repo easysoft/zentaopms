@@ -10,14 +10,14 @@ chdir(__DIR__);
 include '../lib/managemembers.ui.class.php';
 
 $project = zenData('project');
-project->id->range('1-2');
+$project->id->range('1-2');
 $project->project->range('0');
 $project->model->range('scrum{2}');
 $project->type->range('project');
 $project->parent->range('0');
 $project->auth->range('extend');
 $project->grade->range('1');
-$project->name->range('项目1, 无产品项目2');
+$project->name->range('项目1, 项目2');
 $project->path->range('`,1,`, `,2,`');
 $project->begin->range('(-2M)-(-M):1D')->type('timestamp')->format('YY/MM/DD');
 $project->end->range('(+2M)-(+3M):1D')->type('timestamp')->format('YY/MM/DD');
@@ -48,7 +48,7 @@ $team->days->range('5{3}, 6{3}, 7{3}, 0{3}');
 $team->hours->range('4{3}, 3{3}, 9{3}, 2{3}');
 $team->gen(12);
 
-$dept = zenData('user');
+$dept = zenData('dept');
 $dept->id->range('1-100');
 $dept->name->range('部门1, 部门2, 部门1-1');
 $dept->parent->range('0, 0, 1');
@@ -60,5 +60,5 @@ $user = zenData('user');
 $user->id->range('1-100');
 $user->dept->range('1{2}, 2{3}, 3{5}');
 $user->account->range('user1, user2, user3, user4, user5, user11, user12, user13, user14, user15');
-$user->realname->range('USER1')
+$user->realname->range('USER1, USER2, USER3, USER4, USER5, USER11, USER12, USER13, USER14, USER15');
 $user->gen(10);
