@@ -16,6 +16,7 @@ class viewPage extends page
             'edit'            => "//*[@id='mainContent']/div[3]/div/a[last()-1]",
             'linckedProducta' => "//*[@id='mainContent']/div[2]/div[1]/div/table[1]/tbody/tr[1]",
             'linckedProductb' => "//*[@id='mainContent']/div[2]/div[1]/div/table[1]/tbody/tr[2]",
+            'productsNev'     => "//*[@data-id='products']",
             /* 编辑执行弹窗中元素 */
             'products'    => "//*[@name='products[0]']",
             'productsTip' => "//*[@id='products[0]Tip']",
