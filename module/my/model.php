@@ -486,7 +486,7 @@ class myModel extends model
         $taskIdList = array();
         if($moduleName == 'contributeTask')
         {
-            $tasksAssignedByMe = $this->getAssignedByMe($account, null, $orderBy, 'task');
+            $tasksAssignedByMe = $this->getAssignedByMe($account, null, 'id_desc', 'task');
             $taskIdList        = array_keys($tasksAssignedByMe);
         }
 
@@ -627,7 +627,7 @@ class myModel extends model
 
         if($type == 'contribute')
         {
-            $assignedByMe = $this->getAssignedByMe($this->app->user->account, null, $orderBy, 'risk');
+            $assignedByMe = $this->getAssignedByMe($this->app->user->account, null, 'id_desc', 'risk');
             $risks = $this->dao->select('*')->from(TABLE_RISK)
                 ->where($riskQuery)
                 ->andWhere('deleted')->eq('0')
@@ -866,7 +866,7 @@ class myModel extends model
         $myEpicQuery = $this->session->{$queryName};
         $myEpicQuery = preg_replace('/`(\w+)`/', 't1.`$1`', $myEpicQuery);
 
-        $epicsAssignedByMe = $type == 'contribute' ? $this->getAssignedByMe($this->app->user->account, null, $orderBy, 'epic') : array();
+        $epicsAssignedByMe = $type == 'contribute' ? $this->getAssignedByMe($this->app->user->account, null, 'id_desc', 'epic') : array();
         $epicIdList        = array_keys($epicsAssignedByMe);
 
         return $this->myTao->fetchEpicsBySearch($myEpicQuery, $type, $orderBy, $pager, $epicIdList, 'epic');
@@ -908,7 +908,7 @@ class myModel extends model
         $myRequirementQuery = $this->session->{$queryName};
         $myRequirementQuery = preg_replace('/`(\w+)`/', 't1.`$1`', $myRequirementQuery);
 
-        $requirementsAssignedByMe = $type == 'contribute' ? $this->getAssignedByMe($this->app->user->account, null, $orderBy, 'requirement') : array();
+        $requirementsAssignedByMe = $type == 'contribute' ? $this->getAssignedByMe($this->app->user->account, null, 'id_desc', 'requirement') : array();
         $requirementIdList        = array_keys($requirementsAssignedByMe);
 
         return $this->myTao->fetchRequirementsBySearch($myRequirementQuery, $type, $orderBy, $pager, $requirementIdList, 'requirement');
