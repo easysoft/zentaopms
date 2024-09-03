@@ -17,4 +17,17 @@ class think3c extends thinkModel
 
         return array(h::canvas(setID('canvas')));
     }
+
+    protected function build(): node
+    {
+        $mode  = $this->prop('mode');
+        $style = $mode == 'preview' ? setStyle(array('min-height' => '254px')) : setStyle(array('min-height' => '254px', 'width' => '2156px'));
+
+        return div
+        (
+            setClass('model-3c my-1 flex col flex-wrap justify-between'),
+            $style,
+            $this->buildBody()
+        );
+    }
 }
