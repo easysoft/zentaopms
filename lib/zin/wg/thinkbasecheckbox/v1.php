@@ -75,13 +75,13 @@ class thinkBaseCheckbox extends wg
                     (
                         set(array(
                             'rows'        => 1,
-                            'class'       => isset($item['checked']) && $item['checked'] ? '' : 'hidden',
+                            'class'       => isset($item['checked']) && $item['checked'] ? 'run-other' : 'hidden',
                             'name'        => 'other',
                             'value'       => isset($item['other']) ? $item['other'] : '',
                             'placeholder' => $lang->thinkrun->placeholder->otherOption
                         )),
                         on::input('inputOther'),
-                        on::click('e.stopPropagation()')
+                        on::click("event.stopPropagation(); if($('.run-other-error')) $('.run-other-error').removeClass('run-other-error');")
                     ),
                 ),
                 new checkbox
