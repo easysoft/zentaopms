@@ -458,4 +458,24 @@ class sqlBuilder extends wg
         list($steps, $currStep) = $this->prop(array('steps', 'currStep'));
         if(empty($currStep)) $this->setProp('currStep', reset($steps));
     }
+
+    protected function buildTableStep()
+    {
+        return $this->buildStepContent('table');
+    }
+
+    protected function buildFieldStep()
+    {
+        return $this->buildStepContent('field');
+    }
+
+    protected function buildFuncStep()
+    {
+        return $this->buildStepContent('func');
+    }
+
+    protected function buildWhereStep()
+    {
+        return $this->buildStepContent('where');
+    }
 }
