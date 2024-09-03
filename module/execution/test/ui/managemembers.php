@@ -47,3 +47,11 @@ $team->account->range('user1, user2, user3, user11, user12, user13, user1, user2
 $team->days->range('5{3}, 6{3}, 7{3}, 0{3}');
 $team->hours->range('4{3}, 3{3}, 9{3}, 2{3}');
 $team->gen(12);
+
+$dept = zenData('user');
+$dept->id->range('1-100');
+$dept->name->range('部门1, 部门2, 部门1-1');
+$dept->parent->range('0, 0, 1');
+$dept->path->range('`,1,`, `,2,`, `,1,3,`');
+$dept->grade->range('1, 1, 2');
+$dept->gen(3);
