@@ -88,6 +88,7 @@ $lang->task->storyAB           = 'Story';
 $lang->task->storySpec         = 'Description Story';
 $lang->task->storyVerify       = "Critères d'Acceptance";
 $lang->task->storyVersion      = 'Story Version';
+$lang->task->storyFiles        = 'Story Dateien';
 $lang->task->designVersion     = "Design Version";
 $lang->task->color             = 'Couleur';
 $lang->task->name              = 'Nom';
