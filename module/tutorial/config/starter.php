@@ -93,3 +93,38 @@ $starter->tasks['createProgram']['steps'][] = array(
     'title'  => $lang->tutorial->starter->createProgram->step4->name,
     'desc'   => $lang->tutorial->starter->createProgram->step4->desc
 );
+
+$starter->tasks['createProduct'] = array();
+$starter->tasks['createProduct']['name']     = 'createProduct';
+$starter->tasks['createProduct']['title']    = $lang->tutorial->starter->createProduct->title;
+$starter->tasks['createProduct']['startUrl'] = array('product', 'all');
+$starter->tasks['createProduct']['steps']    = array();
+
+$starter->tasks['createProduct']['steps'][] = array(
+    'type'  => 'openApp',
+    'app'   => 'product',
+    'title' => $lang->tutorial->starter->createProduct->step1->name,
+    'desc'  => $lang->tutorial->starter->createProduct->step1->desc
+);
+
+$starter->tasks['createProduct']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#actionBar a.create-product-btn',
+    'page'   => 'product-all',
+    'app'    => 'product',
+    'title'  => $lang->tutorial->starter->createProduct->step2->name,
+    'desc'   => $lang->tutorial->starter->createProduct->step2->desc
+);
+
+$starter->tasks['createProduct']['steps'][] = array(
+    'type'   => 'form',
+    'page'   => 'product-create',
+    'title'  => $lang->tutorial->starter->createProduct->step3->name
+);
+
+$starter->tasks['createProduct']['steps'][] = array(
+    'type'   => 'saveForm',
+    'page'   => 'product-create',
+    'title'  => $lang->tutorial->starter->createProduct->step4->name,
+    'desc'   => $lang->tutorial->starter->createProduct->step4->desc
+);

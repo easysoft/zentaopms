@@ -141,6 +141,24 @@ $lang->tutorial->starter->createProgram->step4 = new stdClass();
 $lang->tutorial->starter->createProgram->step4->name = '保存表单';
 $lang->tutorial->starter->createProgram->step4->desc = '保存后在项目视角和产品视角列表中均可查看';
 
+$lang->tutorial->starter->createProduct = new stdClass();
+$lang->tutorial->starter->createProduct->title = '创建产品';
+
+$lang->tutorial->starter->createProduct->step1 = new stdClass();
+$lang->tutorial->starter->createProduct->step1->name = '点击产品';
+$lang->tutorial->starter->createProduct->step1->desc = '您可以在这里维护管理产品';
+
+$lang->tutorial->starter->createProduct->step2 = new stdClass();
+$lang->tutorial->starter->createProduct->step2->name = '点击添加产品';
+$lang->tutorial->starter->createProduct->step2->desc = '您可以在这里添加产品';
+
+$lang->tutorial->starter->createProduct->step3 = new stdClass();
+$lang->tutorial->starter->createProduct->step3->name = '填写表单';
+
+$lang->tutorial->starter->createProduct->step4 = new stdClass();
+$lang->tutorial->starter->createProduct->step4->name = '保存表单';
+$lang->tutorial->starter->createProduct->step4->desc = '保存后可以在产品列表中查看';
+
 $lang->tutorial->scrumProjectManage = new stdClass();
 $lang->tutorial->scrumProjectManage->title = 'Scrum项目管理教程';
 
