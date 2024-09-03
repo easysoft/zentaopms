@@ -39,7 +39,7 @@ class thinkStepBase extends wg
         global $lang, $app;
         $app->loadLang('thinkrun');
         $app->loadLang('thinkstep');
-        list($step, $mode, $quotedQuestions) = $this->prop(array('step', 'mode', 'quotedQuestions'));
+        list($step, $mode) = $this->prop(array('step', 'mode'));
         if($mode != 'detail') return array();
 
         $options = $step->options;

@@ -31,7 +31,7 @@ class thinkRadio extends thinkQuestion
     {
         global $lang;
         $detailWg = parent::buildDetail();
-        list($step, $mode, $isRun, $quoteQuestions, $isResult) = $this->prop(array('step', 'mode', 'isRun', 'quoteQuestions', 'isResult'));
+        list($step, $mode, $isRun) = $this->prop(array('step', 'mode', 'isRun'));
         if($mode != 'detail') return array();
 
         $answer   = $step->answer;
