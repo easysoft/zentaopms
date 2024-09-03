@@ -36,7 +36,7 @@ class thinkMulticolumn extends thinkQuestion
             set::label($label),
             set::name("result[col$key]"),
             set::width('110px'),
-            set::required(in_array($key, $requiredCols)),
+            set::required(in_array($key, $requiredCols))
         );
     }
 
@@ -59,11 +59,9 @@ class thinkMulticolumn extends thinkQuestion
         jsVar('addRowsTips', $lang->thinkrun->tips->addRow);
         jsVar('addLang', $lang->thinkrun->add);
 
+        $fields     = array_values((array)$fields);
         $batchItems = array();
-        foreach($fields as $key => $field)
-        {
-            $batchItems[] = $this->buildFormBatchItem($field, (int)$key);
-        }
+        foreach($fields as $key => $field) $batchItems[] = $this->buildFormBatchItem($field, (int)$key);
         $detailWg[] = formBatch
         (
             setClass('think-form-batch'),
@@ -71,7 +69,7 @@ class thinkMulticolumn extends thinkQuestion
             set::actions(array()),
             set::onRenderRow(jsRaw('renderRowData')),
             $isRun ? formHidden('status', '') : null,
-            set::data(array_values($result)),
+            set::data($result),
             $batchItems
         );
         return $detailWg;
