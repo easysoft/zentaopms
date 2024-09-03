@@ -18,14 +18,13 @@ class sqlBuilder extends wg
 
     public static function getPageJS(): ?string
     {
-        $content = file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
-        return $content;
+        return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
     protected function setSteps()
     {
         global $lang;
-        list($steps, $currStep) = $this->prop(array('steps', 'currStep'));
+        list($steps) = $this->prop(array('steps'));
 
         if(empty($steps))
         {
@@ -46,6 +45,9 @@ class sqlBuilder extends wg
         $lastStep = end($steps);
         $items    = array();
 
+        $selectedClass = 'text-primary ring-secondary font-bold selected';
+        $defaultClass  = 'text-gray-900 ring-opacity-0 font-medium';
+
         foreach($steps as $step)
         {
             if(!isset($stepList[$step])) continue;
@@ -53,15 +55,6 @@ class sqlBuilder extends wg
             $key  = $step;
             $text = $stepList[$key];
 
-            $isSelected = $selected == $key;
-            $required   = $key == 'table';
-        }
-
-        $selectedClass = 'text-primary ring-secondary font-bold selected';
-        $defaultClass  = 'text-gray-900 ring-opacity-0 font-medium';
-
-        foreach($stepList as $key => $text)
-        {
             $isSelected = $selected == $key;
             $required   = in_array($key, $requires);
 
@@ -154,11 +147,6 @@ class sqlBuilder extends wg
     {
         global $lang;
         $this->setSteps();
-        list($step, $steps) = $this->prop(array('currStep', 'steps'));
-
-        $ucStep = ucfirst($step);
-        $contentTitle    = $lang->bi->{"step{$ucStep}Title"};
-        $contentTitleTip = $lang->bi->{"step{$ucStep}Tip"};
 
         return panel
         (

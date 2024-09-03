@@ -826,7 +826,6 @@ class sqlBuilder
         $parser->setFrom($parser->getExpression($from));
 
         /* join */
-        $joins = array();
         foreach($this->joins as $join)
         {
             $alias = $join['alias'];
