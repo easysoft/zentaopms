@@ -106,11 +106,25 @@ class thinkStepBase extends wg
         $app->loadLang('thinkstep');
         $app->loadLang('thinkrun');
         list($quoteQuestions, $quotedQuestions, $step, $isRun) = $this->prop(array('quoteQuestions', 'quotedQuestions', 'step', 'isRun'));
+
         if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);
+
         $isCheckBox  = $step->type == 'question' && $step->options->questionType == 'checkbox';
         $quoteItem   = $isCheckBox && !empty($step->options->setOption) && $step->options->setOption == 1;
         $detailTip   = array();
         $quotedItems = array();
+        foreach($quotedQuestions as $item)
+        {
+            $quotedItems[] = a
+           (
+               setClass('block text-primary-500 leading-relaxed'),
+               set::href(createLink('thinkstep', 'view', "marketID=0&&wizardID=$item->wizard&&stepID=$item->id")),
+               setData('toggle', 'modal'),
+               setData('size', 'lg'),
+               $item->index . '. ' . $item->title
+            );
+        }
+
         return $detailTip;
     }
 
