@@ -265,7 +265,7 @@ class searchTao extends searchModel
      * @access public
      * @return string
      */
-    public function setWhere(string $where, string $field, string $operator, string $value, string $andOr, string $control): string
+    public function setWhere(string $where, string $field, string $operator, string $value, string $andOr, string $control = ''): string
     {
         $condition = $this->setCondition($field, $operator, $value);
         if($operator == '=' && preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $value))
