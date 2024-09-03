@@ -632,7 +632,7 @@ $config->group->package->my->subset = 'my';
 $config->group->package->my->privs  = array();
 $config->group->package->my->privs['my-index']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0, 'depend' => array(), 'recommend' => array('my-todo'));
 $config->group->package->my->privs['my-work']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 2, 'depend' => array('my-index'), 'recommend' => array());
-$config->group->package->my->privs['my-contribute'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 3, 'depend' => array('my-index'), 'recommend' => array());
+$config->group->package->my->privs['my-contribute'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 3, 'depend' => array('my-index'), 'recommend' => array());
 $config->group->package->my->privs['my-project']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 4, 'depend' => array('my-index'), 'recommend' => array());
 $config->group->package->my->privs['my-dynamic']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 6, 'depend' => array('my-index'), 'recommend' => array());
 $config->group->package->my->privs['my-score']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 70, 'depend' => array('my-index'), 'recommend' => array());
