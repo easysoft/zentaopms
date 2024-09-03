@@ -2021,7 +2021,7 @@ class storyTao extends storyModel
             {
                 $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $this->lang->story->split, 'icon' => 'split');
             }
-            elseif(!$canBatchCreateStory && $story->status != 'closed' && common::hasPriv($story->type, 'batchcreate'))
+            elseif(!$canBatchCreateStory && common::hasPriv($story->type, 'batchcreate'))
             {
                 $title = $this->lang->story->split;
                 if($story->status == 'active' && $story->stage != 'wait') $title = sprintf($this->lang->story->subDivideTip['notWait'], zget($this->lang->{$story->type}->stageList, $story->stage));
@@ -2029,7 +2029,7 @@ class storyTao extends storyModel
                 if(!empty($taskGroups[$story->id])) $title = sprintf($this->lang->story->subDivideTip['notWait'], $this->lang->story->hasDividedTask);
                 if(!empty($caseGroups[$story->id])) $title = sprintf($this->lang->story->subDivideTip['notWait'], $this->lang->story->hasDividedCase);
                 if($story->grade >= $maxGradeGroup[$story->type]) $title = $this->lang->story->errorMaxGradeSubdivide;
-                if($story->status != 'active') $title = $this->lang->story->subDivideTip['notActive'];
+                if($story->status != 'active' && $story->status != 'changing') $title = $this->lang->story->subDivideTip['notActive'];
                 $actions[] = array('name' => 'batchCreate', 'hint' => $title, 'disabled' => true, 'icon' => 'split');
             }
         }
