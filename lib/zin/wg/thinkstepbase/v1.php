@@ -168,6 +168,12 @@ class thinkStepBase extends wg
                         $sourceQuestion->index . '. ' . $sourceQuestion->title
                     )
                 ) : null,
+                !empty($quotedQuestions) ? div
+                (
+                    setClass('bg-primary-50 leading-normal p-2 mt-3'),
+                    div($lang->thinkstep->tips->optionsAreReferenced),
+                    $quotedItems
+                ) : null
             );
         }
         return $detailTip;
