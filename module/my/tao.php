@@ -34,6 +34,7 @@ class myTao extends myModel
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.id')->in($objectIdList)
             ->beginIF($module == 'story')->andWhere('t1.type')->eq($objectType)->fi()
+            ->beginIF($module == 'story')->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');

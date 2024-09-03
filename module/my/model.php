@@ -324,6 +324,7 @@ class myModel extends model
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.id')->in($objectIdList)
+            ->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
             ->orderBy($orderBy)
             ->page($pager, 't1.id')
             ->fetchAll('id');

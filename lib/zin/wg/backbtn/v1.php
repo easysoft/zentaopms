@@ -76,7 +76,7 @@ class backBtn extends btn
             'execution'      => 'execution-story,execution-team,execution-index,execution->view,project-execution,execution-all,project-index,user-execution,execution-relation',
             'ai'             => 'ai-models',
             'api'            => 'api-index',
-            'demand'         => 'demand-browse,demand-view,my-work,feedback-adminview,feedback-admin,my-index,demandpool-track,product-dynamic',
+            'demand'         => 'demand-browse,demand-view,my-work,my-contribute,feedback-adminview,feedback-admin,my-index,demandpool-track,product-dynamic',
             'issue'          => 'issue-browse,issue-view,my-index,project-dynamic,execution-dynamic,project-view,execution-view',
             'risk'           => 'risk-browse,risk-view,my-index,project-dynamic,execution-dynamic,project-view,execution-view',
             'meeting'        => 'meeting-browse,meeting-view,my-index,project-dynamic,execution-dynamic,project-view,execution-view',
