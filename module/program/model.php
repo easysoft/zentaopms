@@ -65,6 +65,8 @@ class programModel extends model
      */
     public function getPairs($isQueryAll = false, $orderBy = 'id_desc'): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getProgramPairs();
+
         return $this->dao->select('id, name')->from(TABLE_PROGRAM)
             ->where('type')->eq('program')
             ->andWhere('deleted')->eq(0)

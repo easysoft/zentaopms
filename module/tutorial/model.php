@@ -1725,6 +1725,18 @@ class tutorialModel extends model
     }
 
     /**
+     * 获取新手模式项目集键值对。
+     * Get program pairs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getProgramPairs(): array
+    {
+        return array(1 => 'Test program');
+    }
+
+    /**
      * 获取新手模式项目集列表。
      * Get programs.
      *
