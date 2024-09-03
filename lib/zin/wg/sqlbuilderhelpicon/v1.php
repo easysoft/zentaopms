@@ -5,9 +5,9 @@ namespace zin;
 class sqlBuilderHelpIcon extends wg
 {
     protected static array $defineProps = array(
-        "text?: string",
-        "placement?: string",
-        "toggle?: bool=true"
+        'text?: string',
+        'placement?: string="right"',
+        'toggle?: bool=true'
     );
 
     protected function build()
