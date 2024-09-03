@@ -443,4 +443,19 @@ class sqlBuilder extends wg
             $this->buildStepContent()
         );
     }
+
+    protected function setSteps()
+    {
+        global $lang;
+        list($steps, $currStep) = $this->prop(array('steps', 'currStep'));
+
+        if(empty($steps))
+        {
+            $stepList = $lang->bi->builderStepList;
+            if(empty($steps)) $this->setProp('steps', array_keys($stepList));
+        }
+
+        list($steps, $currStep) = $this->prop(array('steps', 'currStep'));
+        if(empty($currStep)) $this->setProp('currStep', reset($steps));
+    }
 }
