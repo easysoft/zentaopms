@@ -88,6 +88,7 @@ $lang->task->storyAB           = $lang->SRCommon;
 $lang->task->storySpec         = "{$lang->SRCommon}描述";
 $lang->task->storyVerify       = '验收标准';
 $lang->task->storyVersion      = "{$lang->SRCommon}版本";
+$lang->task->storyFiles        = '需求附件';
 $lang->task->designVersion     = "设计版本";
 $lang->task->color             = '标题颜色';
 $lang->task->name              = '任务名称';
