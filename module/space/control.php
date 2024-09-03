@@ -102,7 +102,7 @@ class space extends control
         $this->view->apps       = $apps;
         $this->view->defaultApp = $defaultApp;
         $this->view->title      = $this->lang->space->install;
-        $this->view->appID      = $appID;
+        $this->view->appID      = (int)$appID;
         $this->display();
     }
 
