@@ -23,7 +23,7 @@ class manageProductsTester extends tester
             if($form->dom->linckedProductb === false) return $this->failed('关联产品失败');
             return $this->success('关联产品成功');
         }
-        if($form->dom->linckedProducta === true) return $this->failed('取消关联产品失败');
+        if(is_object($form->dom->linckedProducta) === true) return $this->failed('取消关联产品失败');
         return $this->success('取消关联产品成功');
     }
 
