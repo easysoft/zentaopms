@@ -693,6 +693,8 @@ class control extends baseControl
      */
     public function extendRequireFields(int $objectID = 0)
     {
+        if($this->config->edition == 'open') return;
+
         $uiID         = $this->loadModel('workflowlayout')->getUIByDataID($this->moduleName, $this->methodName, $objectID);
         $fields       = $this->loadModel('workflowaction')->getFields($this->moduleName, $this->methodName, true, null, $uiID);
         $layouts      = $this->loadModel('workflowlayout')->getFields($this->moduleName, $this->methodName, $uiID);
