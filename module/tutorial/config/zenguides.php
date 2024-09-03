@@ -19,3 +19,4 @@ $config->tutorial->guides[$scrumProjectManage->advance->name]     = $scrumProjec
 $config->tutorial->guides[$waterfallProjectManage->advance->name] = $waterfallProjectManage->advance;
 $config->tutorial->guides[$kanbanProjectManage->advance->name]    = $kanbanProjectManage->advance;
 if($app->config->edition != 'open') $config->tutorial->guides[$feedbackManage->name] = $feedbackManage;
+$config->tutorial->guides[$docManage->name] = $docManage;

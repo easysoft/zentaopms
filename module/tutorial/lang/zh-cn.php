@@ -1523,3 +1523,80 @@ $lang->tutorial->feedbackManage->feedback->step12->name = '填写表单';
 
 $lang->tutorial->feedbackManage->feedback->step13 = new stdClass();
 $lang->tutorial->feedbackManage->feedback->step13->name = '保存表单';
+
+$lang->tutorial->docManage = new stdClass();
+$lang->tutorial->docManage->title = '文档管理教程';
+
+$lang->tutorial->docManage->step1 = new stdClass();
+$lang->tutorial->docManage->step1->name = '点击文档';
+$lang->tutorial->docManage->step1->desc = '您在这里可以对产品、项目、团队和个人的文档进行管理';
+
+$lang->tutorial->docManage->step2 = new stdClass();
+$lang->tutorial->docManage->step2->name = '点击空间';
+$lang->tutorial->docManage->step2->desc = '产品空间管理各产品下的文档，项目空间管理各项目下的文档，团队空间管理组织团队文档，接口空间专门管理接口文档，请点击团队空间进入。';
+
+$lang->tutorial->docManage->step3 = new stdClass();
+$lang->tutorial->docManage->step3->name = '点击创建库';
+$lang->tutorial->docManage->step3->desc = '点击创建文档库';
+
+$lang->tutorial->docManage->step4 = new stdClass();
+$lang->tutorial->docManage->step4->name = '填写表单';
+
+$lang->tutorial->docManage->step5 = new stdClass();
+$lang->tutorial->docManage->step5->name = '保存表单';
+$lang->tutorial->docManage->step5->desc = '保存后在左侧目录树中查看';
+
+$lang->tutorial->docManage->step6 = new stdClass();
+$lang->tutorial->docManage->step6->name = '点击更多按钮';
+
+$lang->tutorial->docManage->step7 = new stdClass();
+$lang->tutorial->docManage->step7->name = '点击添加目录';
+$lang->tutorial->docManage->step7->desc = '点击给文档库添加目录';
+
+$lang->tutorial->docManage->step8 = new stdClass();
+$lang->tutorial->docManage->step8->name = '填写目录名称';
+
+$lang->tutorial->docManage->step9 = new stdClass();
+$lang->tutorial->docManage->step9->name = '点击创建文档';
+$lang->tutorial->docManage->step9->desc = '点击创建文档';
+
+$lang->tutorial->docManage->step10 = new stdClass();
+$lang->tutorial->docManage->step10->name = '填写表单';
+
+$lang->tutorial->docManage->step11 = new stdClass();
+$lang->tutorial->docManage->step11->name = '点击发布';
+
+$lang->tutorial->docManage->step12 = new stdClass();
+$lang->tutorial->docManage->step12->name = '保存发布';
+$lang->tutorial->docManage->step12->desc = '保存后在文档列表中查看';
+
+$lang->tutorial->docManage->step13 = new stdClass();
+$lang->tutorial->docManage->step13->name = '点击文档标题';
+$lang->tutorial->docManage->step13->desc = '点击查看文档详情，支持收藏、编辑、导出文档，支持查看文档的历史记录、更新信息。';
+
+$lang->tutorial->docManage->step14 = new stdClass();
+$lang->tutorial->docManage->step14->name = '点击编辑按钮';
+$lang->tutorial->docManage->step14->desc = '点击修改文档内容';
+
+$lang->tutorial->docManage->step15 = new stdClass();
+$lang->tutorial->docManage->step15->name = '修改文档';
+
+$lang->tutorial->docManage->step16 = new stdClass();
+$lang->tutorial->docManage->step16->name = '点击发布';
+$lang->tutorial->docManage->step16->desc = '点击保存修改的内容';
+
+$lang->tutorial->docManage->step17 = new stdClass();
+$lang->tutorial->docManage->step17->name = '点击版本';
+$lang->tutorial->docManage->step17->desc = '点击切换文档版本历史版本记录';
+
+$lang->tutorial->docManage->step18 = new stdClass();
+$lang->tutorial->docManage->step18->name = '点击对比';
+$lang->tutorial->docManage->step18->desc = '点击对比按钮可以选择不同的版本进行对比';
+
+$lang->tutorial->docManage->step19 = new stdClass();
+$lang->tutorial->docManage->step19->name = '勾选版本';
+$lang->tutorial->docManage->step19->desc = '选择两个需要比对的版本';
+
+$lang->tutorial->docManage->step20 = new stdClass();
+$lang->tutorial->docManage->step20->name = '点击确认';
+$lang->tutorial->docManage->step20->desc = '点击开始对比';
