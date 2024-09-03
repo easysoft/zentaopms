@@ -6,7 +6,7 @@ class manageProductsTester extends tester
      * 维护执行关联产品。
      * Manage Products.
      *
-     * @param  array $execution
+     * @param  array  $execution
      * @access public
      * @return void
      */
