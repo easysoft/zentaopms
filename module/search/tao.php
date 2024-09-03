@@ -193,7 +193,7 @@ class searchTao extends searchModel
             }
             else
             {
-                $condition = ' LIKE ' . $this->dbh->quote("%$value%");
+                $condition = " LIKE CONCAT('%,', '{$value}', ',%')";
             }
         }
         elseif($operator == "notinclude")
@@ -209,7 +209,7 @@ class searchTao extends searchModel
             }
             else
             {
-                $condition = ' NOT LIKE ' . $this->dbh->quote("%$value%");
+                $condition = " NOT LIKE CONCAT('%,', '{$value}', ',%')";
             }
         }
         elseif($operator == 'belong')
@@ -261,10 +261,11 @@ class searchTao extends searchModel
      * @param  string $operator
      * @param  string $value
      * @param  string $andOr
+     * @param  string $control
      * @access public
      * @return string
      */
-    public function setWhere(string $where, string $field, string $operator, string $value, string $andOr): string
+    public function setWhere(string $where, string $field, string $operator, string $value, string $andOr, string $control): string
     {
         $condition = $this->setCondition($field, $operator, $value);
         if($operator == '=' && preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $value))
@@ -284,6 +285,10 @@ class searchTao extends searchModel
         elseif($operator == '>' and preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $value))
         {
             $where .= " $andOr " . '`' . $field . "` > '$value 23:59:59'";
+        }
+        elseif(in_array($operator, array('include', 'notinclude')) && $control == 'select')
+        {
+            $where .= " $andOr CONCAT(',', `{$field}`, ',') {$condition}";
         }
         elseif($condition)
         {

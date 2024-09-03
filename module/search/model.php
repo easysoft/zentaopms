@@ -74,14 +74,15 @@ class searchModel extends model
             $operatorName = "operator$i";
             $valueName    = "value$i";
 
-            $field = $this->post->$fieldName;
-            $value = $this->post->$valueName;
-            if(isset($fieldParams->$field) and $fieldParams->{$field}->control == 'select' and $this->post->$valueName === 'null') continue;
+            $field        = $this->post->$fieldName;
+            $value        = $this->post->$valueName;
+            $fieldControl = $fieldParams->{$field}->control;
+            if(isset($fieldParams->$field) and $fieldControl == 'select' and $this->post->$valueName === 'null') continue;
             if(empty($field) || $value === '' || $value === false) continue; // false means no exist this post item. '' means no search data. ignore it.
             if(!preg_match('/^[a-zA-Z0-9]+$/', $field)) continue; // Fix sql injection.
 
             /* 如果是输入框，并且输入框的值为'0'，或者 id 的值为'0'，将值设置为zero。*/
-            if(isset($fieldParams->$field) && $fieldParams->$field->control == 'input' && $value === '0') $this->post->set($valueName, 'ZERO');
+            if(isset($fieldParams->$field) && $fieldControl == 'input' && $value === '0') $this->post->set($valueName, 'ZERO');
             if($field == 'id' && $value === '0') $this->post->set($valueName, 'ZERO');
 
             /* set queryForm. */
@@ -89,7 +90,7 @@ class searchModel extends model
             $queryForm[$formIndex] = array('field' => $field, 'andOr' => strtolower($andOr), 'operator' => $operator, 'value' => $value);
 
             /* Set where. */
-            $where = $this->searchTao->setWhere($where, $field, $operator, $value, $andOr);
+            $where = $this->searchTao->setWhere($where, $field, $operator, $value, $andOr, $fieldControl);
 
             $scoreNum += 1;
         }
@@ -168,7 +169,7 @@ class searchModel extends model
                 }
                 else
                 {
-                    $condition = ' LIKE ' . $this->dbh->quote("%$value%");
+                    $condition = " LIKE CONCAT('%,', '{$value}', ',%')";
                 }
             }
             elseif($operator == "notinclude")
@@ -180,7 +181,7 @@ class searchModel extends model
                 }
                 else
                 {
-                    $condition = ' NOT LIKE ' . $this->dbh->quote("%$value%");
+                    $condition = " NOT LIKE CONCAT('%,', '{$value}', ',%')";
                 }
             }
             elseif($operator == 'belong')
@@ -234,6 +235,10 @@ class searchModel extends model
             elseif($operator == '>' and preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $value))
             {
                 $where .= " $andOr " . '`' . $this->post->$fieldName . "` > '$value 23:59:59'";
+            }
+            elseif(in_array($operator, array('include', 'notinclude')) && $control == 'select')
+            {
+                $where .= " $andOr CONCAT(',', `{$this->post->$fieldName}`, ',') {$condition}";
             }
             elseif($condition)
             {
