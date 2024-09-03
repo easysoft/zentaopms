@@ -32,7 +32,7 @@ $project->gen(4);
 
 $execution = zenData('project');
 $execution->id->range('5-9');
-$execution->project->range('1-4');
+$execution->project->range('1, 1-4');
 $execution->type->range('sprint{3}, stage{2}');
 $execution->attribute->range('[]{3}, request{2}');
 $execution->auth->range('extend');
@@ -44,7 +44,7 @@ $execution->hasProduct->range('1, 1, 0, 1, 1');
 $execution->begin->range('(-2M)-(-M):1D')->type('timestamp')->format('YY/MM/DD');
 $execution->end->range('(+2M)-(+3M):1D')->type('timestamp')->format('YY/MM/DD');
 $execution->status->range('wait');
-$execution->gen(4, false);
+$execution->gen(5, false);
 
 $projectproduct = zenData('projectproduct');
 $projectproduct->project->range('1{3}, 2, 3{2}, 4{2}, 5-9, 9');
