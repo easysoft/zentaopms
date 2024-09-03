@@ -38,3 +38,12 @@ $execution->end->range('(+2M)-(+3M):1D')->type('timestamp')->format('YY/MM/DD');
 $execution->acl->range('open');
 $execution->status->range('wait');
 $execution->gen(3, false);
+
+$team = zenData('team');
+$team->id->range('1-100');
+$team->root->range('1{3}, 2{3}, 5{2}, 6{2}, 7{2}');
+$team->type->range('project{6}, execution{6}');
+$team->account->range('user1, user2, user3, user11, user12, user13, user1, user2, user2, user3, user11, user12');
+$team->days->range('5{3}, 6{3}, 7{3}, 0{3}');
+$team->hours->range('4{3}, 3{3}, 9{3}, 2{3}');
+$team->gen(12);
