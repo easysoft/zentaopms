@@ -212,7 +212,7 @@ class transferTao extends transferModel
         /* Get workflow extend fields. */
         if($this->config->edition != 'open')
         {
-            $appendFields = $this->loadModel('workflowaction')->getFields($module, 'showimport', false);
+            $appendFields = $this->loadModel('flow')->getExtendFields($module, 'showimport');
             foreach($appendFields as $appendField)
             {
                 /* 不是内置字段并且在导入确认页面展示。 */
