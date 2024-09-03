@@ -109,6 +109,13 @@ class sqlBuilder extends wg
             setID('builderPanel'),
             setClass('h-96'),
             set::bodyClass('p-0 flex h-96'),
+            $this->buildStepBar(),
+            $this->buildTableStep(),
+            $this->buildFieldStep(),
+            $this->buildFuncStep(),
+            $this->buildWhereStep(),
+            $this->buildQueryStep(),
+            $this->buildGroupStep(),
         );
     }
 }
