@@ -13204,6 +13204,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflow` (
   `css` text NULL,
   `order` smallint(5) unsigned NOT NULL DEFAULT '0',
   `buildin` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `belong` varchar(50) NOT NULL DEFAULT '',
   `administrator` text NULL,
   `desc` text NULL,
   `version` varchar(10) NOT NULL DEFAULT '1.0',
