@@ -1085,7 +1085,7 @@ class testtaskModel extends model
             $scene->isScene = true;
         }
 
-        return array_merge($runs, $scenes);
+        return array($runs, $scenes);
     }
 
     /**
