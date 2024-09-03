@@ -318,8 +318,10 @@ class sqlparser
         }
         else
         {
-            /* 如果tableB不为空，那么columnB就是字段，需要trim。*/
-            if(!empty($tableB)) $columnA = $this->trimExpr($columnA);
+            /* 如果tableB不为空，那么columnB就是字段，需要trim('`')。*/
+            if(!empty($tableB)) $columnB = $this->trimExpr($columnB);
+            /* 如果tableB为空，那么columnB是值，需要trim("'")。*/
+            if(empty($tableB)) $columnB = $this->trimExpr($columnB, "'");
 
             $exprA = empty($tableA) ? "`$columnA`" : "`$tableA`.`$columnA`";
             $exprB = empty($tableB) ? "'$columnB'" : "`$tableB`.`$columnB`";
@@ -456,10 +458,10 @@ class sqlparser
      * @access private
      * @return string
      */
-    private function trimExpr($expr)
+    private function trimExpr($expr, $char = '`')
     {
         if(empty($expr)) return $expr;
-        return trim(trim($expr), '`');
+        return trim(trim($expr), $char);
     }
 
     /**

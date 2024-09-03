@@ -848,11 +848,11 @@ class sqlBuilder
 
         /* where */
         $wheres = $this->buildWheres();
-        if(!empty($wheres)) $parser->addWhere($parser->combineConditions($this->getConditionsFromArray($parser, $wheres)));
+        if(!empty($wheres)) $parser->addWhere($parser->combineConditions($parser->getConditionsFromArray($wheres)));
 
         /* querys */
         $querys = $this->buildQuerys();
-        if(!empty($querys)) $parser->addWhere($parser->combineConditions($this->getConditionsFromArray($parser, $querys)));
+        if(!empty($querys)) $parser->addWhere($parser->combineConditions($parser->getConditionsFromArray($querys)));
 
         /* group by */
         $groups = $this->getGroupBy(true, true);
