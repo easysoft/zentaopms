@@ -5,8 +5,13 @@ class managemembersPage extends page
     {
         parent::__construct($webdriver);
         $xpath = array(
-            'account' => "(//div[@id='teamForm']//input[starts-with(@name, 'account[') and not(@value)])[1]", //团队管理页面第一个为空的用户
-            'user'    => "(//*[@id='table-execution-team']//div[@data-col='realname'])[last()]/div/a",        //团队列表页面最后一个用户
+            /* 维护团队成员页面元素 */
+            'firstAccount'    => "//*[@id='realname0']",                                                              //第一个用户
+            'firstNullAccount'=> "(//div[@id='teamForm']//input[starts-with(@name, 'account[') and not(@value)])[1]", //第一个为空的用户
+            'firstDelBtn'     => "//*[@id='realname0']/../../td[6]/div/button[2]",                                    //第一行的删除按钮
+            /* 团队成员列表页元素 */
+            'firstUser' => "(//*[@id='table-execution-team']//div[@data-col='realname'])[2]/div/a",      //第一个用户
+            'lastUser'  => "(//*[@id='table-execution-team']//div[@data-col='realname'])[last()]/div/a", //最后一个用户
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
