@@ -758,11 +758,11 @@ class chartModel extends model
                 if(isset($filter['from']) and $filter['from'] == 'query')
                 {
                     $default = "'{$filter['default']}'";
-                    $sql     = str_replace('$' . $filter['field'], $default, $sql);
+                    $sql     = str_replace('$' . $filter['field'] . 'Condition', $default, $sql);
                 }
             }
         }
-        if(preg_match_all("/[\$]+[a-zA-Z0-9]+/", $sql, $out))
+        if(preg_match_all("/[\$]+[a-zA-Z0-9]+_[0-9]+Condition/", $sql, $out))
         {
             foreach($out[0] as $match) $sql = str_replace($match, "''", $sql);
         }
