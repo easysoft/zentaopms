@@ -647,6 +647,38 @@ class docModel extends model
     }
 
     /**
+     * 获取文档列表数据。
+     * Get doc list.
+     *
+     * @param  array  $docIdList
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getDocsOfLibs(array $libs)
+    {
+        $docs = $this->dao->select('*')->from(TABLE_DOC)
+            ->where('deleted')->eq(0)
+            ->andWhere('lib')->in($libs)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere('templateType')->eq('')
+            ->andWhere("(status = 'normal' or (status = 'draft' and addedBy='{$this->app->user->account}'))")
+            ->fetchAll('id');
+
+        foreach($docs as &$doc)
+        {
+            $doc->lib    = (int)$doc->lib;
+            $doc->module = (int)$doc->module;
+            $doc->module = boolval($doc->deleted);
+            unset($doc->content);
+            unset($doc->draft);
+        }
+
+        return $this->processCollector($docs);
+    }
+
+    /**
      * 获取我的空间下的文档列表数据。
      * Get mine list.
      *
