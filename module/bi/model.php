@@ -2,6 +2,48 @@
 
 class biModel extends model
 {
+
+    /**
+     * 获得可查看的对象ID列表。
+     * Get viewable object idlist.
+     *
+     * @param  string $objectType dimension|screen|pivot|chart
+     * @access public
+     * @return array
+     */
+    public function getViewableObject($objectType)
+    {
+        if(!in_array($objectType, array('dimension', 'screen', 'pivot', 'chart'))) return array();
+
+        $table = array(
+            'dimension' => TABLE_DIMENSION,
+            'screen'    => TABLE_SCREEN,
+            'pivot'     => TABLE_PIVOT,
+            'chart'     => TABLE_CHART
+        );
+        $objects = $this->dao->select('id,acl,whitelist')->from($table[$objectType])
+            ->where('deleted')->eq('0')
+            ->fetchAll('id');
+
+        if($this->app->user->admin) return array_keys($objects);
+
+        $objectIDList = array();
+        foreach($objects as $objectID => $object)
+        {
+            if($object->acl == 'open')
+            {
+                $objectIDList[] = $objectID;
+            }
+            else
+            {
+                $whitelist = explode(',', $object->whitelist);
+                if(in_array($this->app->user->account, $whitelist)) $objectIDList[] = $objectID;
+            }
+        }
+
+        return $objectIDList;
+    }
+
     /**
      * 解析sql语句。
      * Parse sql to statement.
