@@ -21,10 +21,10 @@ class thinkStep  extends wg
         $questionType = $addType ? $addType : ($item->options->questionType ?? '');
         if($addType === 'node' || !$addType && $item->type === 'node') return thinkNode(set::step($step), set::mode($action), set::isRun($isRun));
         if($addType === 'transition' || !$addType && $item->type === 'transition') return thinkTransition(set::step($step), set::mode($action), set::isRun($isRun));
-        if($questionType === 'input')      return thinkInput(set::step($step), set::questionType('input'), set::mode($action), set::isRun($isRun), set::quotedQuestions($quotedQuestions));
-        if($questionType === 'radio')      return thinkRadio(set::step($step), set::questionType('radio'), set::mode($action), set::isRun($isRun), set::quotedQuestions($quotedQuestions));
-        if($questionType === 'checkbox')   return thinkCheckbox(set::step($step), set::questionType('checkbox'), set::mode($action), set::isRun($isRun), set::quoteQuestions($quoteQuestions), set::quotedQuestions($quotedQuestions));
-        if($questionType === 'tableInput') return thinkTableInput(set::step($step), set::questionType('tableInput'), set::mode($action), set::isRun($isRun), set::quotedQuestions($quotedQuestions));
+        if($questionType === 'input')       return thinkInput(set::step($step), set::questionType('input'), set::mode($action), set::isRun($isRun));
+        if($questionType === 'radio')       return thinkRadio(set::step($step), set::questionType('radio'), set::mode($action), set::isRun($isRun), set::quotedQuestions($quotedQuestions));
+        if($questionType === 'checkbox')    return thinkCheckbox(set::step($step), set::questionType('checkbox'), set::mode($action), set::isRun($isRun), set::quoteQuestions($quoteQuestions), set::quotedQuestions($quotedQuestions));
+        if($questionType === 'tableInput')  return thinkTableInput(set::step($step), set::questionType('tableInput'), set::mode($action), set::isRun($isRun));
         if($questionType === 'multicolumn') return thinkMulticolumn(set::step($step), set::questionType('multicolumn'), set::mode($action), set::isRun($isRun), set::quotedQuestions($quotedQuestions));
         return array();
     }
@@ -34,7 +34,7 @@ class thinkStep  extends wg
         global $lang, $app;
         $app->loadLang('thinkstep');
 
-        list($item, $action, $addType, $isRun) = $this->prop(array('item', 'action', 'addType', 'isRun'));
+        list($item, $action, $addType, $isRun, $quotedQuestions) = $this->prop(array('item', 'action', 'addType', 'isRun', 'quotedQuestions'));
         if(!$item && !$addType) return array();
 
         $marketID  = data('marketID');
@@ -66,7 +66,7 @@ class thinkStep  extends wg
                                 set::icon('edit'),
                                 set::url(createLink('thinkstep', 'edit', "marketID={$marketID}&stepID={$item->id}")),
                             ) : null,
-                            $canDelete ? (!$item->existNotNode ? btn
+                            $canDelete ? (!$item->existNotNode && empty($quotedQuestions) ? btn
                             (
                                 setClass('btn ghost text-gray w-5 h-5 ml-1 ajax-submit'),
                                 set::icon('trash'),
@@ -78,7 +78,7 @@ class thinkStep  extends wg
                                     'class'          => 'ghost w-5 h-5 text-gray opacity-50 ml-1',
                                     'icon'           => 'trash',
                                     'data-toggle'    => 'tooltip',
-                                    'data-title'     => $lang->thinkstep->cannotDeleteNode,
+                                    'data-title'     => $item->existNotNode ? $lang->thinkstep->cannotDeleteNode : $lang->thinkstep->cannotDeleteQuestion,
                                     'data-placement' => 'bottom-start',
                                 ))
                             )) : null

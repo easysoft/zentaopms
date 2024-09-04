@@ -109,23 +109,26 @@ class thinkStepBase extends wg
 
         if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);
 
-        $isCheckBox  = $step->type == 'question' && $step->options->questionType == 'checkbox';
-        $quoteItem   = $isCheckBox && !empty($step->options->setOption) && $step->options->setOption == 1;
+        $isCheckBox  = !empty($step) && $step->type == 'question' && $step->options->questionType == 'checkbox';
+        $isQuoteItem   = $isCheckBox && !empty($step->options->setOption) && $step->options->setOption == 1;
         $detailTip   = array();
         $quotedItems = array();
-        foreach($quotedQuestions as $item)
+        if(!empty($quotedQuestions))
         {
-            $quotedItems[] = a
-           (
-               setClass('block text-primary-500 leading-relaxed'),
-               set::href(createLink('thinkstep', 'view', "marketID=0&&wizardID=$item->wizard&&stepID=$item->id")),
-               setData('toggle', 'modal'),
-               setData('size', 'lg'),
-               $item->index . '. ' . $item->title
-            );
+            foreach($quotedQuestions as $item)
+            {
+                $quotedItems[] = a
+               (
+                   setClass('block text-primary-500 leading-relaxed'),
+                   set::href(createLink('thinkstep', 'view', "marketID=0&&wizardID=$item->wizard&&stepID=$item->id")),
+                   setData('toggle', 'modal'),
+                   setData('size', 'lg'),
+                   $item->index . '. ' . $item->title
+                );
+            }
         }
 
-        if($quoteItem && !empty($quoteQuestions))
+        if($isQuoteItem && !empty($quoteQuestions))
         {
             foreach($quoteQuestions as $item)
             {
