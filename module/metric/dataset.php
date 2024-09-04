@@ -547,7 +547,7 @@ class dataset
      */
     public function getDevStories($fieldList)
     {
-        if(strpos($fieldList, 't3.') === false)
+        if(strpos($fieldList, '`t3`.') === false)
         {
             $stmt = $this->dao->select($fieldList)
                 ->from(TABLE_STORY)->alias('t1')
@@ -1198,7 +1198,7 @@ class dataset
             ->fetch('value');
         if(empty($defaultHours)) $defaultHours = 7;
 
-        if(strpos($fieldList, 't2.') === false)
+        if(strpos($fieldList, '`t2`.') === false)
         {
             $stmt = $this->dao->select("$fieldList, $defaultHours AS defaultHours")
                 ->from(TABLE_PROJECT)->alias('t1')
