@@ -31,7 +31,7 @@ class thinkRadio extends thinkQuestion
     {
         global $lang;
         $detailWg = parent::buildDetail();
-        list($step, $mode, $isRun) = $this->prop(array('step', 'mode', 'isRun'));
+        list($step, $mode, $isRun, $isResult) = $this->prop(array('step', 'mode', 'isRun', 'isResult'));
         if($mode != 'detail') return array();
 
         $answer   = $step->answer;
@@ -52,7 +52,7 @@ class thinkRadio extends thinkQuestion
             set::items($items),
             set::name('result[]'),
             set::value($step->options->questionType == 'radio' ? ($result[0] ?? '') : $result),
-            set::disabled(($isQutoCheckbox && !$isRun)|| $isResult)
+            set::disabled(($isQutoCheckbox && !$isRun) || $isResult)
         );
         return $detailWg;
     }
@@ -63,8 +63,7 @@ class thinkRadio extends thinkQuestion
         $app->loadLang('thinkstep');
 
         $formItems = parent::buildFormItem();
-        list($step, $questionType, $required, $enableOther, $fields, $setOption, $quoteTitle, $quoteQuestions, $citation, $selectColumn) = $this->prop(array('step', 'questionType', 'required', 'enableOther', 'fields', 'setOption', 'quoteTitle', 'quoteQuestions', 'citation', 'selectColumn'));
-
+        list($step, $questionType, $required, $enableOther, $fields, $setOption, $quoteTitle, $quoteQuestions, $citation, $selectColumn, $quotedQuestions) = $this->prop(array('step', 'questionType', 'required', 'enableOther', 'fields', 'setOption', 'quoteTitle', 'quoteQuestions', 'citation', 'selectColumn', 'quotedQuestions'));
         $requiredItems = $lang->thinkstep->requiredList;
         if($step)
         {
@@ -217,13 +216,22 @@ class thinkRadio extends thinkQuestion
             formGroup
             (
                 setStyle(array('display' => 'flex')),
-                set::label($lang->thinkstep->label->required),
+                set::label
+                (
+                    $lang->thinkstep->label->required,
+                    !empty($quotedQuestions) ? array
+                    (
+                        icon('about', setClass('text-warning mr-1 ml-2')),
+                        span(setClass('text-sm'), $lang->thinkstep->tips->required)
+                    ) : null
+                ),
                 radioList
                 (
                     set::name('options[required]'),
                     set::inline(true),
                     set::value($required),
                     set::items($requiredItems),
+                    set::disabled(!empty($quotedQuestions)),
                     $questionType == 'checkbox' ? on::change()->toggleClass('.selectable-rows', 'hidden', 'target.value == 0') : null
                 )
             ),

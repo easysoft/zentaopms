@@ -81,7 +81,7 @@ class thinkMulticolumn extends thinkQuestion
         $app->loadLang('thinkstep');
         $formItems = parent::buildFormItem();
 
-        list($step, $questionType, $required, $fields, $supportAdd, $canAddRows, $requiredCols) = $this->prop(array('step', 'questionType', 'required', 'fields', 'supportAdd', 'canAddRows', 'requiredCols'));
+        list($step, $questionType, $required, $fields, $supportAdd, $canAddRows, $requiredCols, $quotedQuestions) = $this->prop(array('step', 'questionType', 'required', 'fields', 'supportAdd', 'canAddRows', 'requiredCols', 'quotedQuestions'));
         $requiredItems = $lang->thinkstep->requiredList;
 
         $requiredOptions = array();
@@ -113,13 +113,22 @@ class thinkMulticolumn extends thinkQuestion
                 formGroup
                 (
                     set::width('1/2'),
-                    set::label($lang->thinkstep->label->required),
+                    set::label
+                    (
+                        $lang->thinkstep->label->required,
+                        !empty($quotedQuestions) ? array
+                        (
+                            icon('about', setClass('text-warning mr-1 ml-2')),
+                            span(setClass('text-sm'), $lang->thinkstep->tips->required)
+                        ) : null
+                    ),
                     radioList
                     (
                         set::name('options[required]'),
                         set::inline(true),
                         set::value($required),
                         set::items($requiredItems),
+                        set::disabled(!empty($quotedQuestions)),
                         on::change()->toggleClass('.required-options', 'hidden', 'target.value == 0')
                     )
                 ),
