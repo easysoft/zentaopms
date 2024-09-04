@@ -128,3 +128,46 @@ $starter->tasks['createProduct']['steps'][] = array(
     'title'  => $lang->tutorial->starter->createProduct->step4->name,
     'desc'   => $lang->tutorial->starter->createProduct->step4->desc
 );
+
+$starter->tasks['createStory'] = array();
+$starter->tasks['createStory']['name']     = 'createStory';
+$starter->tasks['createStory']['title']    = $lang->tutorial->starter->createStory->title;
+$starter->tasks['createStory']['startUrl'] = array('product', 'all');
+$starter->tasks['createStory']['steps']    = array();
+
+$starter->tasks['createStory']['steps'][] = array(
+    'type'  => 'openApp',
+    'app'   => 'product',
+    'title' => $lang->tutorial->starter->createStory->step1->name,
+    'desc'  => $lang->tutorial->starter->createStory->step1->desc
+);
+
+$starter->tasks['createStory']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#products div.dtable-body div[data-col="name"][data-row="1"] a',
+    'page'   => 'product-all',
+    'title'  => $lang->tutorial->starter->createStory->step2->name,
+    'desc'   => $lang->tutorial->starter->createStory->step2->desc
+);
+
+$starter->tasks['createStory']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#actionBar a.create-story-btn',
+    'page'   => 'product-browse',
+    'url'    => array('product', 'browse', 'productID=1'),
+    'title'  => $lang->tutorial->starter->createStory->step3->name,
+    'desc'   => $lang->tutorial->starter->createStory->step3->desc
+);
+
+$starter->tasks['createStory']['steps'][] = array(
+    'type'   => 'form',
+    'page'   => 'story-create',
+    'title'  => $lang->tutorial->starter->createStory->step4->name
+);
+
+$starter->tasks['createStory']['steps'][] = array(
+    'type'   => 'saveForm',
+    'page'   => 'story-create',
+    'title'  => $lang->tutorial->starter->createStory->step5->name,
+    'desc'   => $lang->tutorial->starter->createStory->step5->desc
+);
