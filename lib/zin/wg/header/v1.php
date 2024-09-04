@@ -138,7 +138,7 @@ class header extends wg
 
             $items[] = array('type' => 'divider');
 
-            if($app->config->vision === 'rnd' && !commonModel::isTutorialMode())
+            if(in_array($app->config->vision, array('rnd', 'or')) && !commonModel::isTutorialMode())
             {
                 $items[] = array
                 (

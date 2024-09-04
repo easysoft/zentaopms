@@ -1847,3 +1847,16 @@ $lang->tutorial->docManage->step24->desc = '选择两个需要比对的版本';
 $lang->tutorial->docManage->step25 = new stdClass();
 $lang->tutorial->docManage->step25->name = '点击确认';
 $lang->tutorial->docManage->step25->desc = '点击开始对比';
+
+$lang->tutorial->orTutorial = new stdClass();
+$lang->tutorial->orTutorial->demandManage = new stdClass();
+$lang->tutorial->orTutorial->demandManage->title = '需求池管理教程';
+
+$lang->tutorial->orTutorial->marketManage = new stdClass();
+$lang->tutorial->orTutorial->marketManage->title = '市场管理教程';
+
+$lang->tutorial->orTutorial->roadmapManage = new stdClass();
+$lang->tutorial->orTutorial->roadmapManage->title = '产品规划管理教程';
+
+$lang->tutorial->orTutorial->charterManage = new stdClass();
+$lang->tutorial->orTutorial->charterManage->title = 'Chart立项教程';
