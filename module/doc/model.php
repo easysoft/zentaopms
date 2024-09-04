@@ -2240,6 +2240,26 @@ class docModel extends model
     }
 
     /**
+     * 获取给定文档库的目录列表。
+     * Get modules from libs.
+     *
+     * @param  array $libs  Lib id list.
+     * @access public
+     * @return array
+     */
+    public function getModulesOfLibs(array $libs)
+    {
+        $modules = $this->dao->select('*')->from(TABLE_MODULE)
+            ->where('root')->in($libs)
+            ->andWhere('type')->eq('doc')
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('grade desc, `order`')
+            ->fetchAll('id');
+
+        return $modules;
+    }
+
+    /**
      * Get module tree.
      *
      * @param  int    $rootID
