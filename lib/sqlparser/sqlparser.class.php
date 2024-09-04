@@ -115,6 +115,21 @@ class sqlparser
     }
 
     /**
+     * Get function.
+     *
+     * @param  string $name
+     * @param  mixed  $args
+     * @access public
+     * @return string
+     */
+    public function getFunction($name, ...$args)
+    {
+        $name = strtoupper($name);
+        $argStr = implode(', ', $args);
+        return "$name($argStr)";
+    }
+
+    /**
      * Match columns with table.
      *
      * @access public
