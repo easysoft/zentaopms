@@ -135,7 +135,6 @@ class thinkStepMenu extends wg
         $canDelete   = common::hasPriv('thinkstep', 'delete');
         $parentID    = $item->type != 'node' ? $item->parent : $item->id;
         $confirmTips = $this->lang->thinkstep->deleteTips[$item->type];
-
         $menus            = array();
         $transitionAction = array();
         if($canCreate)
@@ -162,7 +161,23 @@ class thinkStepMenu extends wg
             );
         }
 
-        $marketID = data('marketID');
+        $marketID      = data('marketID');
+        $itemHasQuoted = empty($item->hasQuoted) || $item->hasQuoted == 0;
+        $deleteItem    = (!$item->existNotNode && $itemHasQuoted) ? array(
+            'key'          => 'deleteNode',
+            'icon'         => 'trash',
+            'text'         => $this->lang->thinkstep->actions['delete'],
+            'innerClass'   => 'ajax-submit',
+            'data-url'     => createLink('thinkstep', 'delete', "marketID={$marketID}&stepID={$item->id}"),
+            'data-confirm' => $confirmTips,
+        ) : array(
+            'key'        => 'deleteNode',
+            'icon'       => 'trash',
+            'text'       => $this->lang->thinkstep->actions['delete'],
+            'innerClass' => 'text-gray opacity-50',
+            'hint'       => $item->existNotNode ? $this->lang->thinkstep->cannotDeleteNode : $this->lang->thinkstep->cannotDeleteQuestion,
+        );
+
         $menus = array_merge($menus, array(
             $canEdit ? array(
                 'key'  => 'editNode',
@@ -170,20 +185,7 @@ class thinkStepMenu extends wg
                 'text' => $this->lang->thinkstep->actions['edit'],
                 'url'  => createLink('thinkstep', 'edit', "marketID={$marketID}&stepID={$item->id}")
             ) : null,
-            $canDelete ? (!$item->existNotNode ? array(
-                'key'          => 'deleteNode',
-                'icon'         => 'trash',
-                'text'         => $this->lang->thinkstep->actions['delete'],
-                'innerClass'   => 'ajax-submit',
-                'data-url'     => createLink('thinkstep', 'delete', "marketID={$marketID}&stepID={$item->id}"),
-                'data-confirm' => $confirmTips,
-            ) : array(
-                'key'        => 'deleteNode',
-                'icon'       => 'trash',
-                'text'       => $this->lang->thinkstep->actions['delete'],
-                'innerClass' => 'text-gray opacity-50',
-                'hint'       => $this->lang->thinkstep->cannotDeleteNode,
-            )) : null
+            $canDelete ? $deleteItem : null
         ), $transitionAction);
 
         if($canCreate && (($showQuestionOfNode && $item->type == 'node') || $item->hasSameQuestion || $item->type == 'question')) $menus = array_merge($menus, array(
