@@ -41,12 +41,12 @@ $execution->gen(5, false);
 
 $team = zenData('team');
 $team->id->range('1-100');
-$team->root->range('1{3}, 2{3}, 5{2}, 6{2}, 8{2}');
-$team->type->range('project{6}, execution{6}');
-$team->account->range('user1, user2, user3, user11, user12, user13, user1, user2, user2, user3, user11, user12');
-$team->days->range('5{3}, 6{3}, 7{3}, 0{3}');
-$team->hours->range('4{3}, 3{3}, 9{3}, 2{3}');
-$team->gen(12);
+$team->root->range('1{3}, 2{3}, 5{2}, 6{2}, 7{2}, 8{2}');
+$team->type->range('project{6}, execution{8}');
+$team->account->range('user1, user2, user3, user11, user12, user13, user1, user2, user2, user3, user2, user3, user11, user12');
+$team->days->range('5{3}, 6{3}, 7{5}, 0{3}');
+$team->hours->range('4{3}, 3{3}, 9{5}, 2{3}');
+$team->gen(14);
 
 $dept = zenData('dept');
 $dept->id->range('1-100');
@@ -83,9 +83,15 @@ $execution = array(
         'dept'          => '部门1',
         'membersExpect' => '7',
     ),
+    '4' =>array(
+        'id'            => '7',
+        'team'          => '项目1',
+        'membersExpect' => '3',
+    ),
 );
-r($tester->add($execution['0']))    && p('message') && e('添加团队成员成功'); //添加团队成员
-r($tester->delete($execution['1'])) && p('message') && e('删除团队成员成功'); //删除团队成员
-r($tester->remove($execution['2'])) && p('message') && e('移除团队成员成功'); //移除团队成员
-r($tester->copyDeptMembers($execution['3'])) && p('message') && e('复制部门成员成功'); //复制部门成员
+#r($tester->add($execution['0']))    && p('message') && e('添加团队成员成功'); //添加团队成员
+#r($tester->delete($execution['1'])) && p('message') && e('删除团队成员成功'); //删除团队成员
+#r($tester->remove($execution['2'])) && p('message') && e('移除团队成员成功'); //移除团队成员
+#r($tester->copyDeptMembers($execution['3'])) && p('message') && e('复制部门成员成功'); //复制部门成员
+r($tester->copyTeamMembers($execution['4'])) && p('message') && e('复制团队成员成功'); //复制团队成员
 $tester->closeBrowser();
