@@ -969,10 +969,13 @@ class project extends control
         $this->project->setMenu($projectID);
         $project = $this->project->getByID($projectID);
 
+        if($type == 'product') $this->session->set('buildProductID', $param);
+        if(!$this->session->buildProductID) $this->session->set('buildProductID', $param);
+
         /* Build the search form. */
         $type     = strtolower($type);
         $products = $this->loadModel('product')->getProducts($projectID, 'all', '', false);
-        $this->project->buildProjectBuildSearchForm($products, $type == 'bysearch' ? (int)$param : 0, $projectID, $param, 'project');
+        $this->project->buildProjectBuildSearchForm($products, $type == 'bysearch' ? (int)$param : 0, $projectID, $this->session->buildProductID, 'project');
 
         /* Build the search form. */
         $this->app->loadClass('pager', true);
@@ -993,7 +996,7 @@ class project extends control
         $this->view->title     = $project->name . $this->lang->hyphen . $this->lang->execution->build;
         $this->view->users     = $this->loadModel('user')->getPairs('noletter');
         $this->view->builds    = $this->projectZen->processBuildListData($builds, $projectID);
-        $this->view->productID = $type == 'product' ? $param : 'all';
+        $this->view->productID = $this->session->buildProductID;
         $this->view->project   = $project;
         $this->view->products  = $products;
         $this->view->type      = $type;
