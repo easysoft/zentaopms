@@ -492,7 +492,7 @@ class pivotState
      */
     public function addVariableToSql()
     {
-        $variable = $this->addQueryFilter['field'];
+        $variable = $this->addQueryFilter['field'] . 'Condition';
 
         $this->sql .= "\$$variable";
     }
@@ -810,7 +810,8 @@ class pivotState
      */
     public function getDefaultQueryFilter()
     {
-        return array('field' => '', 'name' => '', 'type' => 'input', 'typeOption' => '', 'default' => '');
+        $index = count($this->filters) + 1;
+        return array('field' => 'Variable_' . $index, 'relatedField' => '', 'name' => '', 'type' => 'input', 'typeOption' => '', 'default' => '');
     }
 
     /**
