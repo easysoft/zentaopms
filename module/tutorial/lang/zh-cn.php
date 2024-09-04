@@ -181,6 +181,28 @@ $lang->tutorial->starter->createStory->step5 = new stdClass();
 $lang->tutorial->starter->createStory->step5->name = '保存表单';
 $lang->tutorial->starter->createStory->step5->desc = '保存后可以在产品需求列表中查看';
 
+$lang->tutorial->starter->createProject = new stdClass();
+$lang->tutorial->starter->createProject->title = '创建项目';
+
+$lang->tutorial->starter->createProject->step1 = new stdClass();
+$lang->tutorial->starter->createProject->step1->name = '点击项目';
+$lang->tutorial->starter->createProject->step1->desc = '您可以在这里创建项目';
+
+$lang->tutorial->starter->createProject->step2 = new stdClass();
+$lang->tutorial->starter->createProject->step2->name = '点击创建项目';
+$lang->tutorial->starter->createProject->step2->desc = '您可以选择不同项目管理方式来创建不同类型的项目';
+
+$lang->tutorial->starter->createProject->step3 = new stdClass();
+$lang->tutorial->starter->createProject->step3->name = '点击Scrum项目';
+$lang->tutorial->starter->createProject->step3->desc = '请点击Scrum创建Scrum项目';
+
+$lang->tutorial->starter->createProject->step4 = new stdClass();
+$lang->tutorial->starter->createProject->step4->name = '填写表单';
+
+$lang->tutorial->starter->createProject->step5 = new stdClass();
+$lang->tutorial->starter->createProject->step5->name = '保存表单';
+$lang->tutorial->starter->createProject->step5->desc = '保存后会显示在项目列表中';
+
 $lang->tutorial->scrumProjectManage = new stdClass();
 $lang->tutorial->scrumProjectManage->title = 'Scrum项目管理教程';
 

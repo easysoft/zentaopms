@@ -171,3 +171,47 @@ $starter->tasks['createStory']['steps'][] = array(
     'title'  => $lang->tutorial->starter->createStory->step5->name,
     'desc'   => $lang->tutorial->starter->createStory->step5->desc
 );
+
+$starter->tasks['createProject'] = array();
+$starter->tasks['createProject']['name']     = 'createProject';
+$starter->tasks['createProject']['title']    = $lang->tutorial->starter->createProject->title;
+$starter->tasks['createProject']['startUrl'] = array('project', 'browse');
+$starter->tasks['createProject']['steps']    = array();
+
+$starter->tasks['createProject']['steps'][] = array(
+    'type'  => 'openApp',
+    'app'   => 'project',
+    'title' => $lang->tutorial->starter->createProject->step1->name,
+    'desc'  => $lang->tutorial->starter->createProject->step1->desc
+);
+
+$starter->tasks['createProject']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#actionBar .create-project-btn',
+    'page'   => 'project-browse',
+    'title'  => $lang->tutorial->starter->createProject->step2->name,
+    'desc'   => $lang->tutorial->starter->createProject->step2->desc
+);
+
+$starter->tasks['createProject']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#modelList div.scrum div.model-item',
+    'page'   => 'project-browse',
+    'title'  => $lang->tutorial->starter->createProject->step3->name,
+    'desc'   => $lang->tutorial->starter->createProject->step3->desc
+);
+
+$starter->tasks['createProject']['steps'][] = array(
+    'type'   => 'form',
+    'target' => '#form-project-create',
+    'page'   => 'project-create',
+    'title'  => $lang->tutorial->starter->createProject->step4->name
+);
+
+$starter->tasks['createProject']['steps'][] = array(
+    'type'   => 'saveForm',
+    'target' => '#form-project-create .form-actions button[type="submit"]',
+    'page'   => 'project-create',
+    'title'  => $lang->tutorial->starter->createProject->step5->name,
+    'desc'   => $lang->tutorial->starter->createProject->step5->desc
+);
