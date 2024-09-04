@@ -17,6 +17,7 @@ class searchTao extends searchModel
         if($module == 'projectStory' || $module == 'executionStory') $flowModule = 'story';
         if($module == 'projectBuild' || $module == 'executionBuild') $flowModule = 'build';
         if($module == 'projectBug') $flowModule = 'bug';
+        if($module == 'executionCase') $flowModule = 'testcase';
 
         $buildin = false;
         $this->app->loadLang('workflow');
