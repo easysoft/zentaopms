@@ -95,9 +95,9 @@ class storeModel extends model
      * @access public
      * @return object|null
      */
-    public function getAppInfo(int $appID, bool $analysis = false, string $name = '', string $version ='', string $channel = ''): object|null
+    public function getAppInfo(int $appID = 0, bool $analysis = false, string $name = '', string $version = '', string $channel = ''): object|null
     {
-        if(empty($appID)) return null;
+        if(empty($appID) && (empty($name) || empty($channel))) return null;
         $apiParams = array();
         $apiParams['analysis'] = $analysis ? 'true' : 'false' ;
 

@@ -685,7 +685,7 @@ class instanceModel extends model
         $instanceData->logo            = $app->logo;
         $instanceData->desc            = $app->desc;
         $instanceData->introduction    = isset($app->introduction) ? $app->introduction : $app->desc;
-        $instanceData->source          = 'cloud';
+        $instanceData->source          = $this->app->rawModule == 'instance' ? 'cloud' : 'system';
         $instanceData->channel         = $channel;
         $instanceData->chart           = $app->chart;
         $instanceData->appVersion      = $app->app_version;
