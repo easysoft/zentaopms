@@ -68,10 +68,14 @@ $tester = new manageMembersTester();
 $tester->login();
 
 $execution = array(
-    '0'=> array(
+    '0' => array(
         'id'      => '5',
         'account' => 'USER5',
     ),
+    '1' => array(
+        'id' => '6',
+    ),
 );
-r($tester->add($execution['0'])) && p('message') && e('添加团队成员成功');
+r($tester->add($execution['0']))    && p('message') && e('添加团队成员成功'); //添加团队成员
+r($tester->delete($execution['1'])) && p('message') && e('添加团队成员成功'); //删除团队成员
 $tester->closeBrowser();
