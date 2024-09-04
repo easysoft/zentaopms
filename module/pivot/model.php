@@ -759,17 +759,24 @@ class pivotModel extends model
     public function appendWhereFilterToSql(string $sql, array $filters, string $driver): string
     {
         $connectSQL = '';
-        if(!empty($filters) && !isset($filters[0]['from']))
+        if(!isset($filters[0]['from']))
         {
-            $wheres = array();
-            foreach($filters as $field => $filter)
+            if(!empty($filters))
             {
-                $fieldSQL = $this->getFilterFieldSQL($filter, $field, $driver);
-                $wheres[] = "$fieldSQL {$filter['operator']} {$filter['value']}";
-            }
+                $wheres = array();
+                foreach($filters as $field => $filter)
+                {
+                    $fieldSQL = $this->getFilterFieldSQL($filter, $field, $driver);
+                    $wheres[] = "$fieldSQL {$filter['operator']} {$filter['value']}";
+                }
 
-            $whereStr    = implode(' and ', $wheres);
-            $connectSQL .= " where $whereStr";
+                $whereStr    = implode(' and ', $wheres);
+                $connectSQL .= " where $whereStr";
+            }
+            else
+            {
+                $connectSQL .= " where 1=0";
+            }
         }
 
         $sql = "select * from ( $sql ) tt" . $connectSQL;
