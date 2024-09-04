@@ -376,3 +376,51 @@ $starter->tasks['linkStory']['steps'][] = array(
     'title'  => $lang->tutorial->starter->linkStory->step5->name,
     'desc'   => $lang->tutorial->starter->linkStory->step5->desc
 );
+
+$starter->tasks['createTask'] = array();
+$starter->tasks['createTask']['name']     = 'createTask';
+$starter->tasks['createTask']['title']    = $lang->tutorial->starter->createTask->title;
+$starter->tasks['createTask']['startUrl'] = array('execution', 'task', 'executionID=3');
+$starter->tasks['createTask']['steps']    = array();
+
+$starter->tasks['createTask']['steps'][] = array(
+    'type'  => 'openApp',
+    'app'   => 'execution',
+    'title' => $lang->tutorial->starter->createTask->step1->name,
+    'desc'  => $lang->tutorial->starter->createTask->step1->desc
+);
+
+$starter->tasks['createTask']['steps'][] = array(
+    'type'   => 'clickNavbar',
+    'target' => 'story',
+    'page'   => 'execution-task',
+    'url'    => array('execution', 'task', 'executionID=3'),
+    'title'  => $lang->tutorial->starter->createTask->step2->name,
+    'desc'   => $lang->tutorial->starter->createTask->step2->desc
+);
+
+$starter->tasks['createTask']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#table-execution-story a.create-task-btn',
+    'url'    => array('execution', 'story', 'executionID=3'),
+    'page'   => 'execution-story',
+    'app'    => 'execution',
+    'title'  => $lang->tutorial->starter->createTask->step3->name,
+    'desc'   => $lang->tutorial->starter->createTask->step3->desc
+);
+
+$starter->tasks['createTask']['steps'][] = array(
+    'type'   => 'form',
+    'url'    => array('task', 'create', 'executionID=3'),
+    'app'    => 'execution',
+    'page'   => 'task-create',
+    'title'  => $lang->tutorial->starter->createTask->step4->name,
+);
+
+$starter->tasks['createTask']['steps'][] = array(
+    'type'   => 'saveForm',
+    'target' => 'form button[type="submit"]',
+    'page'   => 'task-create',
+    'title'  => $lang->tutorial->starter->createTask->step5->name,
+    'desc'   => $lang->tutorial->starter->createTask->step5->desc
+);

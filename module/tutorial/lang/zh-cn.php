@@ -281,6 +281,28 @@ $lang->tutorial->starter->linkStory->step5 = new stdClass();
 $lang->tutorial->starter->linkStory->step5->name = '点击保存';
 $lang->tutorial->starter->linkStory->step5->desc = '点击保存可以将需求关联到需求列表中，返回到需求列表';
 
+$lang->tutorial->starter->createTask = new stdClass();
+$lang->tutorial->starter->createTask->title = '分解任务';
+
+$lang->tutorial->starter->createTask->step1 = new stdClass();
+$lang->tutorial->starter->createTask->step1->name = '点击迭代';
+$lang->tutorial->starter->createTask->step1->desc = '您可以在这里维护管理迭代';
+
+$lang->tutorial->starter->createTask->step2 = new stdClass();
+$lang->tutorial->starter->createTask->step2->name = '点击需求';
+$lang->tutorial->starter->createTask->step2->desc = '进入需求列表，您可以在这里看到之前关联的需求';
+
+$lang->tutorial->starter->createTask->step3 = new stdClass();
+$lang->tutorial->starter->createTask->step3->name = '分解任务';
+$lang->tutorial->starter->createTask->step3->desc = '您可以在这里将需求分解为任务，支持批量分解';
+
+$lang->tutorial->starter->createTask->step4 = new stdClass();
+$lang->tutorial->starter->createTask->step4->name = '填写表单';
+
+$lang->tutorial->starter->createTask->step5 = new stdClass();
+$lang->tutorial->starter->createTask->step5->name = '保存表单';
+$lang->tutorial->starter->createTask->step5->desc = '保存后可以在任务列表中查看分解的任务';
+
 $lang->tutorial->scrumProjectManage = new stdClass();
 $lang->tutorial->scrumProjectManage->title = 'Scrum项目管理教程';
 
