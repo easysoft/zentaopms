@@ -9,9 +9,6 @@ class managemembersPage extends page
             'firstAccount'    => "//*[@id='realname0']",                                                              //第一个用户
             'firstNullAccount'=> "(//div[@id='teamForm']//input[starts-with(@name, 'account[') and not(@value)])[1]", //第一个为空的用户
             'firstDelBtn'     => "//*[@id='realname0']/../../td[6]/div/button[2]",                                    //第一行的删除按钮
-            /* 团队成员列表页元素 */
-            'firstUser' => "(//*[@id='table-execution-team']//div[@data-col='realname'])[2]/div/a",      //第一个用户
-            'lastUser'  => "(//*[@id='table-execution-team']//div[@data-col='realname'])[last()]/div/a", //最后一个用户
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
