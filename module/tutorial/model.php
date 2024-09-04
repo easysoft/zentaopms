@@ -185,7 +185,7 @@ class tutorialModel extends model
         $project->storyType    = 'story,requirement,epic';
         $project->charter      = 0;
 
-        list($guide, $guideTask, $guideStepIndex) = empty($_SERVER['HTTP_X_ZIN_TUTORIAL']) ? array() : explode('-', $_SERVER['HTTP_X_ZIN_TUTORIAL']);
+        list($guide, $guideTask, $guideStepIndex) = empty($_SERVER['HTTP_X_ZIN_TUTORIAL']) ? array('', '', '') : explode('-', $_SERVER['HTTP_X_ZIN_TUTORIAL']);
         if($guide && strpos($guide, 'scrumProjectManage') !== false)
         {
             $project->name  = 'Scrum Project';
@@ -509,7 +509,7 @@ class tutorialModel extends model
         $execution->openedDate    = helper::now();
         $execution->closedDate    = helper::now();
 
-        list($guide, $guideTask, $guideStepIndex) = empty($_SERVER['HTTP_X_ZIN_TUTORIAL']) ? array() : explode('-', $_SERVER['HTTP_X_ZIN_TUTORIAL']);
+        list($guide, $guideTask, $guideStepIndex) = empty($_SERVER['HTTP_X_ZIN_TUTORIAL']) ? array('', '', '') : explode('-', $_SERVER['HTTP_X_ZIN_TUTORIAL']);
         if($guide && strpos($guide, 'scrumProjectManage') !== false)
         {
             $execution->name = 'Test Sprint';
