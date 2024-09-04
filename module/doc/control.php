@@ -1357,6 +1357,23 @@ class doc extends control
     }
 
     /**
+     * Doc app view.
+     * 文档应用视图。
+     *
+     * @param  string $type
+     * @param  int    $space
+     * @access public
+     * @return void
+     */
+    public function app(string $type = 'mine', int $spaceID = 0)
+    {
+        $this->view->type    = $type;
+        $this->view->spaceID = $spaceID;
+        $this->view->title   = $this->lang->doc->spaceList[$type];
+        $this->display();
+    }
+
+    /**
      * Ajax: Get doc space data.
      * Ajax: 获取文档空间数据。
      *
