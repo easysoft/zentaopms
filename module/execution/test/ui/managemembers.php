@@ -67,4 +67,11 @@ $user->gen(11);
 $tester = new manageMembersTester();
 $tester->login();
 
-r($tester->add()) && p() && e();
+$execution = array(
+    '0'=> array(
+        'id'      => '5',
+        'account' => 'USER5',
+    ),
+);
+r($tester->add($execution['0'])) && p('message') && e('添加团队成员成功');
+$tester->closeBrowser();
