@@ -18,3 +18,15 @@ class batchChangeStatusTester extends tester
         $changeNumDom = $planStatus.'Num';
         $form = $this->initForm('productplan', 'browse', $planurl, 'appIframe-product');
         $form->dom->allTab->click();//进入全部tab
+        $planNum = $form->dom->allNum->getText();//获取计划总数
+        $form->wait(2);
+        $form->dom->selectAllBtn->click();//全选计划
+        $form->dom->batchStatusBtn->click();//点击状态
+        $form->dom->$changeToDom->click();//批量修改为对应的状态
+        $form->wait(1);
+        $form->dom->$statusTabDom->click();//点击对应状态的tab
+        $form->wait(2);
+        $changeNum = $form->dom->$changeNumDom->getText();//获取修改后的计划数
+        return($planNum == $changeNum) ? $this->success("批量变更为{$planStatus}状态成功") : $this->failed("批量变更为{$planStatus}状态失败");
+    }
+}
