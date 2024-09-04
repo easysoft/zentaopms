@@ -23,6 +23,7 @@ class thinkMatrixOptions extends wg
         'deleteColTip?: string',        // 禁用删除提示。
         'addColTip?: string',           // 禁用添加提示。
         'addColText: string',           // 添加列按钮文字。
+        'quotedQuestions?: array',      // 引用当前选项的问题。
     );
 
     public static function getPageJS(): ?string
@@ -39,6 +40,9 @@ class thinkMatrixOptions extends wg
     {
         global $lang, $app;
         $app->loadLang('thinkstep');
+        jsVar('tipQuestion', $lang->thinkstep->tips->question);
+        jsVar('cannotDeleteColumnTip', $lang->thinkstep->tips->cannotDeleteColumn);
+
         $id           = $this->prop('id') ? $this->prop('id') : $this->gid;
         $deleteColTip = $this->prop('deleteColTip', $lang->thinkstep->tips->deleteCol);
         $addColText   = $this->prop('addColText', $lang->thinkstep->addCol);
@@ -49,6 +53,7 @@ class thinkMatrixOptions extends wg
             setID($id),
             setClass('think-multiple w-full'),
             div(setClass('think-multiple-body flex overflow-x-auto overflow-y-hidden')),
+            setData('quotedQuestions', $this->prop('quotedQuestions')),
             zui::thinkMatrixOptions
             (
                 set::_to("#$id"),

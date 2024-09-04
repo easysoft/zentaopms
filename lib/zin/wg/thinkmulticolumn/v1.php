@@ -105,7 +105,7 @@ class thinkMulticolumn extends thinkQuestion
             (
                 set::label($lang->thinkstep->label->columnTitle),
                 setStyle(array('padding-bottom' => 'calc(4 * var(--space))')),
-                thinkMatrixOptions(set::colName('options[fields]'), set::cols($fields))
+                thinkMatrixOptions(set::colName('options[fields]'), set::cols($fields), set::quotedQuestions($quotedQuestions))
             ),
             formRow
             (
