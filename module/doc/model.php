@@ -947,6 +947,39 @@ class docModel extends model
     }
 
     /**
+     * 获取空间列表。
+     * Get spaces.
+     *
+     * @param  string $type
+     * @param  int    $spaceID
+     * @access public
+     * @return array
+     */
+    public function getSpaces($type = 'custom', $spaceID = 0)
+    {
+        if($type === 'mine') return array(array(), -1);
+
+        $pairs = array();
+        if($type == 'custom') $pairs = $this->getTeamSpaces();
+        if($type == 'product')
+        {
+            $pairs   = $this->loadModel('product')->getPairselse('nocode');
+            $spaceID = $this->product->checkAccess($spaceID, $pairs);
+        }
+        if($type == 'project')
+        {
+            $pairs   = $this->loadModel('project')->getPairsByProgram();
+            $spaceID = $this->project->checkAccess($spaceID, $pairs);
+        }
+
+        $spaces = array();
+        foreach($pairs as $id => $name) $spaces[] = array('type' => $type, 'id' => $id, 'name' => $name);
+        if(!$spaceID && $spaces) $spaceID = $spaces[0]['id'];
+
+        return array($spaces, $spaceID);
+    }
+
+    /**
      * 创建独立的文档。
      * Create a seperate docs.
      *
