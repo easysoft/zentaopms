@@ -680,7 +680,7 @@ class pivotModel extends model
             if(isset($filter['from']) && $filter['from'] == 'query')
             {
                 $queryDefault = isset($filter['default']) ? $this->processDateVar($filter['default']) : '';
-                $sql          = str_replace('$' . $filter['field'], "'{$queryDefault}'", $sql);
+                $sql          = str_replace('$' . $filter['field'] . 'Condition', "{$filter['relatedField']}='{$queryDefault}'", $sql);
             }
             else
             {

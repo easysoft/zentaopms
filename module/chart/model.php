@@ -757,8 +757,9 @@ class chartModel extends model
                 if(!isset($filter['default'])) continue;
                 if(isset($filter['from']) and $filter['from'] == 'query')
                 {
-                    $default = "'{$filter['default']}'";
-                    $sql     = str_replace('$' . $filter['field'] . 'Condition', $default, $sql);
+                    $default      = $filter['default'];
+                    $relatedField = $filter['relatedField'];
+                    $sql          = str_replace('$' . $filter['field'] . 'Condition', "{$relatedField}='{$default}'", $sql);
                 }
             }
         }
