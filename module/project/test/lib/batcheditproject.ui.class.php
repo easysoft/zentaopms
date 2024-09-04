@@ -2,6 +2,13 @@
 include dirname(__FILE__, 5) . '/test/lib/ui.php';
 class batchEditProjectTester extends tester
 {
+    /**
+     * Batch edit a project.
+     *
+     * @param  array  $project
+     * @access public
+     * @return object
+     */
     public function batchEditProject(array $project)
     {
         $form = $this->initForm('project', 'browse', 'appIframe-project');
