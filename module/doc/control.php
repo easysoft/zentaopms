@@ -1355,4 +1355,22 @@ class doc extends control
         if(empty($denyUsers)) return print('');
         if(isset($this->lang->doc->whitelistDeny['doc'])) return printf($this->lang->doc->whitelistDeny['doc'], implode('、', $denyUsers));
     }
+
+    /**
+     * Ajax: Get doc data.
+     * Ajax: 获取文档数据。
+     *
+     * @param  int    $docID
+     * @param  int    $version
+     * @access public
+     * @return void
+     */
+    public function ajaxGetDoc(int $docID, int $version = 0)
+    {
+        $doc = $this->doc->getByID($docID, $version);
+        $doc->lib    = (int)$doc->lib;
+        $doc->module = (int)$doc->module;
+
+        $this->send($doc);
+    }
 }
