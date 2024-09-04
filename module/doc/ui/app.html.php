@@ -21,3 +21,21 @@ zui::docApp
     set::width('100%'),
     set::height('100%')
 );
+
+/* Modify navbar. 修改二级导航。 */
+query('#navbar nav')->each(function($node) use ($type)
+{
+    $items     = $node->prop('items');
+    $idTypeMap = array('my' => 'mine', 'team' => 'custom', 'project' => 'project', 'product' => 'product');
+
+    foreach($items as &$item)
+    {
+        if(empty($item['data-id']) || empty($idTypeMap[$item['data-id']])) continue;
+
+        $itemType = $idTypeMap[$item['data-id']];
+        $item['active'] = $type === $itemType;
+        $item['url']    = createLink('doc', 'app', 'type=' . $itemType);
+    }
+
+    $node->setProp('items', $items);
+});
