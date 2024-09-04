@@ -14,7 +14,7 @@ class searchTao extends searchModel
     protected function processBuildinFields(string $module, array $searchConfig): array
     {
         $flowModule = $module;
-        if($module == 'projectStory' || $module == 'executionStory') $flowModule = 'story';
+        if($module == 'projectStory' || $module == 'executionStory' || $module == 'projectstory') $flowModule = 'story';
         if($module == 'projectBuild' || $module == 'executionBuild') $flowModule = 'build';
         if($module == 'projectBug') $flowModule = 'bug';
         if($module == 'executionCase') $flowModule = 'testcase';
