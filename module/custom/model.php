@@ -391,6 +391,14 @@ class customModel extends model
      */
     public static function buildMenuItem(array|string $item, $customMenuMap, string $name = '', string $label = '', string|array $itemLink = '', bool $isTutorialMode = false, array $subMenu = array()): object
     {
+        /* 用例列表featureBar的分割线。 */
+        if($item === '-')
+        {
+            $menuItem = new stdclass();
+            $menuItem->type = 'divider';
+            return $menuItem;
+        }
+
         if(is_array($item) && (isset($item['subMenu']) || isset($item['dropMenu'])))
         {
             foreach(array('subMenu', 'dropMenu') as $key)
