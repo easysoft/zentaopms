@@ -13,6 +13,7 @@ class fileList extends wg
         'showDelete?:bool=true',
         'showEdit?:bool=true',
         'extra?:string=""',
+        'fileTitle?:string=""',
         'object?:object',
         'padding?:bool=true',
         'objectType?:string=""',
@@ -81,11 +82,12 @@ class fileList extends wg
             $this->fileList()
         );
 
+        $fileTitle = $this->prop('fileTitle') ? $this->prop('fileTitle') : $lang->files;
         return $fieldset ? new section
         (
             setClass('files', 'pt-4', 'canvas'),
             $this->prop('padding') ? setClass($px, $pb) : null,
-            set::title($lang->files),
+            set::title($fileTitle),
             set($this->getRestProps()),
             to::actions
             (
