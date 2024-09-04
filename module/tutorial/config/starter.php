@@ -215,3 +215,64 @@ $starter->tasks['createProject']['steps'][] = array(
     'title'  => $lang->tutorial->starter->createProject->step5->name,
     'desc'   => $lang->tutorial->starter->createProject->step5->desc
 );
+
+$starter->tasks['manageTeam'] = array();
+$starter->tasks['manageTeam']['name']     = 'manageTeam';
+$starter->tasks['manageTeam']['title']    = $lang->tutorial->starter->manageTeam->title;
+$starter->tasks['manageTeam']['startUrl'] = array('project', 'browse');
+$starter->tasks['manageTeam']['steps']    = array();
+
+$starter->tasks['manageTeam']['steps'][] = array(
+    'type'  => 'openApp',
+    'app'   => 'project',
+    'title' => $lang->tutorial->starter->manageTeam->step1->name,
+    'desc'  => $lang->tutorial->starter->manageTeam->step1->desc
+);
+
+$starter->tasks['manageTeam']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#table-project-browse .dtable-body div[data-row="2"] a',
+    'page'   => 'project-browse',
+    'url'    => array('project', 'browse'),
+    'title'  => $lang->tutorial->starter->manageTeam->step2->name,
+    'desc'   => $lang->tutorial->starter->manageTeam->step2->desc
+);
+
+$starter->tasks['manageTeam']['steps'][] = array(
+    'type'   => 'clickNavbar',
+    'target' => 'settings',
+    'page'   => 'project-index',
+    'title'  => $lang->tutorial->starter->manageTeam->step3->name,
+    'desc'   => $lang->tutorial->starter->manageTeam->step3->desc
+);
+
+$starter->tasks['manageTeam']['steps'][] = array(
+    'type'   => 'clickMainNavbar',
+    'target' => 'members',
+    'page'   => 'project-view',
+    'title'  => $lang->tutorial->starter->manageTeam->step4->name,
+    'desc'   => $lang->tutorial->starter->manageTeam->step4->desc
+);
+
+$starter->tasks['manageTeam']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#mainContainer #mainMenu #actionBar a',
+    'page'   => 'project-team',
+    'title'  => $lang->tutorial->starter->manageTeam->step5->name,
+    'desc'   => $lang->tutorial->starter->manageTeam->step5->desc
+);
+
+$starter->tasks['manageTeam']['steps'][] = array(
+    'type'   => 'form',
+    'target' => '#teamForm table',
+    'page'   => 'project-manageMembers',
+    'title'  => $lang->tutorial->starter->manageTeam->step6->name
+);
+
+$starter->tasks['manageTeam']['steps'][] = array(
+    'type'   => 'saveForm',
+    'target' => '#teamForm #saveButton',
+    'page'   => 'project-manageMembers',
+    'title'  => $lang->tutorial->starter->manageTeam->step7->name,
+    'desc'   => $lang->tutorial->starter->manageTeam->step7->desc
+);

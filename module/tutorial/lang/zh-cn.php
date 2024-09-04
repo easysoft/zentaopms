@@ -203,6 +203,36 @@ $lang->tutorial->starter->createProject->step5 = new stdClass();
 $lang->tutorial->starter->createProject->step5->name = '保存表单';
 $lang->tutorial->starter->createProject->step5->desc = '保存后会显示在项目列表中';
 
+$lang->tutorial->starter->manageTeam = new stdClass();
+$lang->tutorial->starter->manageTeam->title = '管理项目团队';
+
+$lang->tutorial->starter->manageTeam->step1 = new stdClass();
+$lang->tutorial->starter->manageTeam->step1->name = '点击项目';
+$lang->tutorial->starter->manageTeam->step1->desc = '您可以在这里维护管理项目';
+
+$lang->tutorial->starter->manageTeam->step2 = new stdClass();
+$lang->tutorial->starter->manageTeam->step2->name = '点击项目名称';
+$lang->tutorial->starter->manageTeam->step2->desc = '点击项目名称进入项目';
+
+$lang->tutorial->starter->manageTeam->step3 = new stdClass();
+$lang->tutorial->starter->manageTeam->step3->name = '点击设置';
+$lang->tutorial->starter->manageTeam->step3->desc = '点击设置开始维护团队';
+
+$lang->tutorial->starter->manageTeam->step4 = new stdClass();
+$lang->tutorial->starter->manageTeam->step4->name = '点击团队';
+$lang->tutorial->starter->manageTeam->step4->desc = '点击团队可以查看该项目中的团队成员';
+
+$lang->tutorial->starter->manageTeam->step5 = new stdClass();
+$lang->tutorial->starter->manageTeam->step5->name = '点击团队管理';
+$lang->tutorial->starter->manageTeam->step5->desc = '点击团队管理可以对当前项目的团队成员进行维护';
+
+$lang->tutorial->starter->manageTeam->step6 = new stdClass();
+$lang->tutorial->starter->manageTeam->step6->name = '填写表单';
+
+$lang->tutorial->starter->manageTeam->step7 = new stdClass();
+$lang->tutorial->starter->manageTeam->step7->name = '保存表单';
+$lang->tutorial->starter->manageTeam->step7->desc = '保存后可以在团队中查看团队成员';
+
 $lang->tutorial->scrumProjectManage = new stdClass();
 $lang->tutorial->scrumProjectManage->title = 'Scrum项目管理教程';
 
