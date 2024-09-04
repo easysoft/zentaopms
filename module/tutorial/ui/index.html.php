@@ -15,6 +15,7 @@ set::zui(true);
 
 /* 将所有教程按类型进行分组。Grouped all guides by type. */
 $groupedGuides = array();
+$currentType   = 'starter'; // 当前选中的类型。Current active type.
 foreach($guides as $guideName => $guide)
 {
     $taskIndex = 0;
@@ -31,20 +32,8 @@ foreach($guides as $guideName => $guide)
         $guide->tasks[$tasID] = $task;
     }
     $groupedGuides[$guide->type][$guideName] = $guide;
-}
 
-/* 当前选中的类型。Current active type. */
-$currentType = 'starter';
-if($currentTask)
-{
-    foreach($guides as $guide)
-    {
-        if($currentTask === $guide->name || str_starts_with($currentTask, "$guide->name."))
-        {
-            $currentType = $guide->type;
-            break;
-        }
-    }
+    if($currentTask === $guideName || str_starts_with($currentTask, "$guideName.")) $currentType = $guide->type;
 }
 
 $buildStepItem = function(array $step, int $index)
