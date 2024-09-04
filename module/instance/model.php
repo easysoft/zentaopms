@@ -733,7 +733,7 @@ class instanceModel extends model
         if(strtolower($this->config->CNE->app->domain) == 'demo.haogs.cn') $apiParams->settings_snippets = array('quickon_saas'); // Only for demo environment.
 
         $result = $this->cne->installApp($apiParams);
-        if($result->code != 200)
+        if($result->code != 200 && $instance->source != 'system')
         {
             $this->dao->delete()->from(TABLE_INSTANCE)->where('id')->eq($instance->id)->exec();
             dao::$errors['server'][] = $result->message;
