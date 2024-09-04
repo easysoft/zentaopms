@@ -107,6 +107,8 @@ class projectTao extends projectModel
      */
     protected function doUpdate(int $projectID, object $project): bool
     {
+        $project->id = $projectID;
+
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck('begin,end')
             ->check('end',  'gt', $project->begin)
