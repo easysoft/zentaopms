@@ -20,4 +20,25 @@ class linkBugTester extends tester
         $viewPage = $this->initForm('productplan', 'view', $planID, 'appIframe-product');
         return ($viewPage->dom->checkInfoBug === false) ? $this->failed('关联Bug失败') : $this->success('关联Bug成功');
     }
+    /**
+     * 移除单个Bug
+     * unlink bug
+     *
+     * @param $planID
+     * @return mixed
+     */
+    public function unLinkBug($planID)
+    {
+        $form = $this->initForm('productplan', 'view', $planID, 'appIframe-product');
+        $form->dom->btn($this->lang->productplan->linkedBugs)->click();//进入计划bug列表页
+        $linkNum = (int) explode(' ', $form->dom->bugLinkNum->getText())[1];//计划当前关联的Bug数
+        $form->dom->unlikFirBug->click();//移除第一个Bug
+        $form->wait(1);
+        $form->dom->confirm->click();//弹窗中点确认
+        $form->wait(1);
+        $viewPage = $this->initForm('productplan', 'view', $planID, 'appIframe-product');
+        $viewPage->dom->btn($this->lang->productplan->linkedBugs)->click();//进入计划bug列表页
+        $linkNumAfter = (int) explode(' ', $viewPage->dom->bugLinkNum->getText())[1];//计划移bug后，关联的bug数
+        return ($linkNum -1 == $linkNumAfter) ? $this->success('移除单个bug成功') : $this->failed('移除单个bug失败');
+    }
 }
