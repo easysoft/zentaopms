@@ -77,9 +77,15 @@ $execution = array(
     ),
     '2' => array(
         'id' => '5',
-    )
+    ),
+    '3' => array(
+        'id'            => '8',
+        'dept'          => '部门1',
+        'membersExpect' => '7',
+    ),
 );
 r($tester->add($execution['0']))    && p('message') && e('添加团队成员成功'); //添加团队成员
 r($tester->delete($execution['1'])) && p('message') && e('删除团队成员成功'); //删除团队成员
 r($tester->remove($execution['2'])) && p('message') && e('移除团队成员成功'); //移除团队成员
+r($tester->copyDeptMembers($execution['3'])) && p('message') && e('复制部门成员成功'); //复制部门成员
 $tester->closeBrowser();
