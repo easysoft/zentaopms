@@ -27,6 +27,15 @@ class batchEditProjectTester extends tester
 
         return $this->checkBatchEdit($form, $firstID, $project);
     }
+
+    /**
+     * Check the result after batch edit the project.
+     * 批量编辑项目后检查结果。
+     *
+     * @param  array $project
+     * @access public
+     * @return object
+     */
     public function checkBatchEdit(object $form, string $firstID, array $project)
     {
         if($this->response('method') != 'browse')
