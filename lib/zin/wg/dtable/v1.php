@@ -12,6 +12,8 @@ class dtable extends wg
         'dataModifier?:callable|array',            // 数据处理函数。
         'data?:array',                             // 表格数据源。
         'module?:string',                          // 模块信息，主要是获取语言项。
+        'moduleName?:string',                      // 模块名，不传入则使用$app->moduleName。
+        'methodName?:string',                      // 方法名，不传入则使用$app->methodName。
         'emptyTip?:string',                        // 表格数据源为空时显示的文本。
         'createTip?:string',                       // 表格数据源为空时的创建文本。
         'createLink?:array|string',                // 表格数据源为空时的创建链接。
@@ -100,13 +102,16 @@ class dtable extends wg
      */
     public function initCustomCols()
     {
+        global $app;
+
         $customColsProp = $this->prop('customCols');
+        $moduleName     = $this->prop('moduleName') ? $this->prop('moduleName') : $app->moduleName;
+        $methodName     = $this->prop('methodName') ? $this->prop('methodName') : $app->methodName;
         if($customColsProp)
         {
-            global $app;
             $app->loadLang('datatable');
             $customUrl = is_bool($customColsProp) || empty($customColsProp['url']) ? null : $customColsProp['url'];
-            $customUrl = $customUrl ? $customUrl : createLink('datatable', 'ajaxcustom', "module=$app->moduleName&method=$app->methodName");
+            $customUrl = $customUrl ? $customUrl : createLink('datatable', 'ajaxcustom', "module=$moduleName&method=$methodName");
             $globalUrl = is_bool($customColsProp) || empty($customColsProp['globalUrl']) ? null : $customColsProp['globalUrl'];
             $this->setProp('customCols', array(
                 'custom' => array(
@@ -114,15 +119,15 @@ class dtable extends wg
                     'text' => $app->lang->datatable->custom
                 ),
                 'setGlobal' => array(
-                    'url' => $globalUrl ? $globalUrl : createLink('datatable', 'ajaxsaveglobal', "module={$app->moduleName}&method={$app->methodName}"),
+                    'url' => $globalUrl ? $globalUrl : createLink('datatable', 'ajaxsaveglobal', "module={$moduleName}&method={$methodName}"),
                     'text' => $app->lang->datatable->setGlobal
                 ),
                 'reset' => array(
-                    'url' => createLink('datatable', 'ajaxreset', "module={$app->moduleName}&method={$app->methodName}"),
+                    'url' => createLink('datatable', 'ajaxreset', "module={$moduleName}&method={$methodName}"),
                     'text' => $app->lang->datatable->reset
                 ),
                 'resetGlobal' => array(
-                    'url' => createLink('datatable', 'ajaxreset', "module={$app->moduleName}&method={$app->methodName}&system=1"),
+                    'url' => createLink('datatable', 'ajaxreset', "module={$moduleName}&method={$methodName}&system=1"),
                     'text' => $app->lang->datatable->resetGlobal
                 ),
                 'saveFieldsUrl' => str_replace('ajaxcustom', 'ajaxsavefields', $customUrl)

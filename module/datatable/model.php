@@ -27,7 +27,7 @@ class datatableModel extends model
         /* Load corresponding module. */
         if(!isset($this->config->$module)) $this->loadModel($module);
 
-        $config = $this->config->$module;
+        $config = isset($this->config->$module) ? $this->config->$module : new stdclass();
         if(!empty($method) && isset($config->$method) && isset($config->$method->dtable)) $config = $config->$method;
 
         $fieldList = isset($config->dtable->fieldList) ? $config->dtable->fieldList : array();
@@ -57,12 +57,40 @@ class datatableModel extends model
             }
         }
 
-        /* Logic except open source version .*/
+        /* 加载工作流字段配置。 */
         if($this->config->edition != 'open')
         {
-            $fields            = $this->loadModel('workflowfield')->getList($module);
-            $workflowFieldList = $this->loadModel('flow')->buildDtableCols($fields);
-            $fieldList         = array_merge($fieldList, $workflowFieldList);
+            $flow = $this->loadModel('workflow')->getByModule($module);
+            if($flow->buildin == 1)
+            {
+                $fields            = $this->loadModel('workflowfield')->getList($module);
+                $workflowFieldList = $this->loadModel('flow')->buildDtableCols($fields);
+                $fieldList         = array_merge($fieldList, $workflowFieldList);
+            }
+            else
+            {
+                $fields = $this->loadModel('workflowaction')->getFields($module, 'browse');
+                foreach($fields as $field)
+                {
+                    if(!$field->show) continue;
+
+                    $fieldList[$field->field]['name']  = $field->field;
+                    $fieldList[$field->field]['title'] = $field->name;
+                    $fieldList[$field->field]['show']  = true;
+                    $fieldList[$field->field]['width'] = (empty($field->width) || $field->width == 'auto') ? '120' : $field->width;
+
+                    if($field->field == 'id')
+                    {
+                        $fieldList[$field->field]['fixed']    = 'left';
+                        $fieldList[$field->field]['required'] = true;
+                    }
+                    elseif($field->field == 'actions')
+                    {
+                        $fieldList[$field->field]['fixed']    = 'right';
+                        $fieldList[$field->field]['required'] = true;
+                    }
+                }
+            }
         }
 
         return $fieldList;
@@ -159,11 +187,9 @@ class datatableModel extends model
                     unset($fieldSetting['plan']);
                 }
             }
-
         }
 
         uasort($fieldSetting, array('datatableModel', 'sortCols'));
-
         return $fieldSetting;
     }
 
