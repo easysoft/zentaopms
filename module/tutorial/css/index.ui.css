@@ -24,3 +24,7 @@
 .tutorial-step {position: relative;}
 .tutorial-step.active::before {content: ' '; width: 5px; height: 5px; border-radius: 100%; background: var(--color-primary-500); position: absolute; left: 2px; top: 10px}
 .tutorial-step.active .tutorial-step-title {color: var(--color-fore)}
+
+.is-single-type-mode #tutorialTabs .tabs-header {display: none;}
+.is-single-type-mode #tutorialTabs .tab-content {padding-top: 0;}
+.is-single-type-mode #tutorialTabs .tab-pane {display: block;}

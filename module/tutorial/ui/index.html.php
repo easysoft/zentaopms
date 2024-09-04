@@ -185,7 +185,7 @@ div
     div
     (
         setID('sidebar'), // 侧边栏。Sidebar.
-        setClass('absolute top-0 bottom-0 right-0 border-l'),
+        setClass('absolute top-0 bottom-0 right-0 border-l', count($groupedGuides) === 1 ? 'is-single-type-mode' : ''),
         style::width('--sidebar-width'),
         ($currentGuide && $currentTask) ? on::init()->call('activeTask', $currentGuide, $currentTask) : null,
         h::header
