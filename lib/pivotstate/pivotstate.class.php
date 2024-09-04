@@ -163,6 +163,22 @@ class pivotState
     public $stage;
 
     /**
+     * Pivot state acl.
+     *
+     * @var string
+     * @access public
+     */
+    public $acl;
+
+    /**
+     * Pivot state whitelist.
+     *
+     * @var string
+     * @access public
+     */
+    public $whitelist;
+
+    /**
      * Pivot stage action.
      *
      * @var string
@@ -313,6 +329,8 @@ class pivotState
         $this->sql       = $pivot->sql;
         $this->step      = 'query';
         $this->stage     = $pivot->stage;
+        $this->acl       = $pivot->acl;
+        $this->whitelist = $pivot->whitelist;
 
         $this->drills       = $drills;
         $this->defaultDrill = $this->initDrill();
