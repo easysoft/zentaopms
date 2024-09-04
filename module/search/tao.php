@@ -179,10 +179,11 @@ class searchTao extends searchModel
      * @param  string    $field
      * @param  string    $operator
      * @param  string    $value
+     * @param  string    $control
      * @access protected
      * @return string
      */
-    protected function setCondition(string $field, string $operator, string|int $value): string
+    protected function setCondition(string $field, string $operator, string|int $value, string $control = ''): string
     {
         $condition = '';
         if($operator == 'include')
@@ -194,7 +195,7 @@ class searchTao extends searchModel
             }
             else
             {
-                $condition = " LIKE CONCAT('%,', '{$value}', ',%')";
+                $condition = $control == 'select' ? " LIKE CONCAT('%,', '{$value}', ',%')" : ' LIKE ' . $this->dbh->quote("%$value%");
             }
         }
         elseif($operator == "notinclude")
@@ -210,7 +211,7 @@ class searchTao extends searchModel
             }
             else
             {
-                $condition = " NOT LIKE CONCAT('%,', '{$value}', ',%')";
+                $condition = $control == 'select' ? " NOT LIKE CONCAT('%,', '{$value}', ',%')" : ' NOT LIKE ' . $this->dbh->quote("%$value%");
             }
         }
         elseif($operator == 'belong')
@@ -268,7 +269,7 @@ class searchTao extends searchModel
      */
     public function setWhere(string $where, string $field, string $operator, string $value, string $andOr, string $control = ''): string
     {
-        $condition = $this->setCondition($field, $operator, $value);
+        $condition = $this->setCondition($field, $operator, $value, $control);
         if($operator == '=' && preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $value))
         {
             $condition  = '`' . $field . "` >= '$value' AND `" . $field . "` <= '$value 23:59:59'";

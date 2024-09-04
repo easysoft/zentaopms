@@ -76,8 +76,8 @@ class searchModel extends model
 
             $field        = $this->post->$fieldName;
             $value        = $this->post->$valueName;
-            $fieldControl = $fieldParams->{$field}->control;
-            if(isset($fieldParams->$field) and $fieldControl == 'select' and $this->post->$valueName === 'null') continue;
+            $fieldControl = isset($fieldParams->$field) && isset($fieldParams->{$field}->control) ? $fieldParams->{$field}->control : '';
+            if($fieldControl == 'select' and $this->post->$valueName === 'null') continue;
             if(empty($field) || $value === '' || $value === false) continue; // false means no exist this post item. '' means no search data. ignore it.
             if(!preg_match('/^[a-zA-Z0-9]+$/', $field)) continue; // Fix sql injection.
 
@@ -169,7 +169,7 @@ class searchModel extends model
                 }
                 else
                 {
-                    $condition = " LIKE CONCAT('%,', '{$value}', ',%')";
+                    $condition = $fieldParams->$field->control == 'select' ? " LIKE CONCAT('%,', '{$value}', ',%')" : ' LIKE ' . $this->dbh->quote("%$value%");
                 }
             }
             elseif($operator == "notinclude")
@@ -181,7 +181,7 @@ class searchModel extends model
                 }
                 else
                 {
-                    $condition = " NOT LIKE CONCAT('%,', '{$value}', ',%')";
+                    $condition = $fieldParams->$field->control == 'select' ? " NOT LIKE CONCAT('%,', '{$value}', ',%')" : ' NOT LIKE ' . $this->dbh->quote("%$value%");
                 }
             }
             elseif($operator == 'belong')
