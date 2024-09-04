@@ -98,4 +98,23 @@ class manageMembersTester extends tester
         if($form->dom->num->getText() == $execution['membersExpect']) return $this->success('复制团队成员成功');
         return $this->failed('复制团队成员失败');
     }
+    /**
+     * 移除团队成员。
+     * Remove team members.
+     *
+     * @param  array  $execution
+     * @access public
+     * @return object
+     */
+    public function remove($execution)
+    {
+        $form = $this->initForm('execution', 'team', array('execution' => $execution['id']), 'appIframe-execution');
+        $numBefore = $form->dom->num->getText();
+        $form->dom->firstRemoveBtn->click();
+        $form->dom->alertModal();
+        $form->wait(1);
+        $numAfter = $form->dom->num->getText();
+        if($numBefore == $numAfter + 1) return $this->success('移除团队成员成功');
+        return $this->failed('移除团队成员失败');
+    }
 }
