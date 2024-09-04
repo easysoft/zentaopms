@@ -10,6 +10,22 @@ class dataset
     public $dao;
 
     /**
+     * Config.
+     *
+     * @var object
+     * @access public
+     */
+    public $config;
+
+    /**
+     * User vision.
+     *
+     * @var string
+     * @access public
+     */
+    public $vision;
+
+    /**
      * __construct.
      *
      * @param  DAO    $dao
