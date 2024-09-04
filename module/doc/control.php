@@ -1357,6 +1357,29 @@ class doc extends control
     }
 
     /**
+     * Ajax: Get doc space data.
+     * Ajax: 获取文档空间数据。
+     *
+     * @param  string $type
+     * @param  int    $space
+     * @access public
+     * @return void
+     */
+    public function ajaxGetSpaceData(string $type = 'custom', int $spaceID = 0)
+    {
+        if($type == 'mine') $spaceID = 0; // Ignore the spaceID of mine.
+
+        list($spaces, $spaceID) = $this->doc->getSpaces($type, $spaceID);
+
+        $libs    = $this->doc->getLibsByObject($type, $spaceID);
+        $libIds  = array_keys($libs);
+        $modules = $this->doc->getModulesOfLibs($libIds);
+        $docs    = $this->doc->getDocsOfLibs($libIds);
+
+        $this->send(array('spaceID' => $spaceID, 'spaces' => $spaces, 'libs' => array_values($libs), 'modules' => array_values($modules), 'docs' => array_values($docs)));
+    }
+
+    /**
      * Ajax: Get doc data.
      * Ajax: 获取文档数据。
      *
