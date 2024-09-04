@@ -56,4 +56,10 @@ class batchEditProjectTester extends tester
                 return ($endTipText == $endTip) ? $this->success('批量编辑项目表单页提示信息正确') : $this->failed('批量编辑项目表单页提示信息不正确');
             }
         }
+
+        $browsePage = $this->loadPage('project', 'browse');
+        $browsePage->wait(1);
+        if($browsePage->dom->projectName->getText() != $project['name']) return $this->failed('名称错误');
+        return $this->success();
+    }
 }
