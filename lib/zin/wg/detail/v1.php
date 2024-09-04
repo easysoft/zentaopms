@@ -116,6 +116,7 @@ class detail extends wg
         .detail-side > * + * {margin-top: 8px}
         .detail-side .tabs {padding: 12px 8px 12px 16px}
         .detail-side .tabs-header {position: sticky; top: 0;}
+        .modal-dialog .detail-side .tabs-header {position: relative}
         .detail-side .tab-pane {padding: 0}
         .detail-sections .history-panel > .panel-heading,
         .detail-sections .history-panel > .panel-body {padding: 0.75rem 1.5rem}
