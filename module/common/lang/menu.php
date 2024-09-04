@@ -414,10 +414,10 @@ $lang->execution->menu->qa['subMenu']->testcase   = array('link' => "{$lang->tes
 $lang->execution->menu->qa['subMenu']->testtask   = array('link' => "{$lang->testtask->common}|execution|testtask|executionID=%s", 'subModule' => 'testtask');
 $lang->execution->menu->qa['subMenu']->testreport = array('link' => "{$lang->testreport->common}|execution|testreport|exeutionID=%s", 'subModule' => 'testreport');
 
-$lang->execution->menu->qa['menuOrder'][5]  = 'qa';
-$lang->execution->menu->qa['menuOrder'][10] = 'bug';
-$lang->execution->menu->qa['menuOrder'][15] = 'testcase';
-$lang->execution->menu->qa['menuOrder'][20] = 'testtask';
+$lang->execution->menu->qa['menuOrder'][5]  = 'bug';
+$lang->execution->menu->qa['menuOrder'][10] = 'testcase';
+$lang->execution->menu->qa['menuOrder'][15] = 'testtask';
+$lang->execution->menu->qa['menuOrder'][20] = 'testreport';
 
 $lang->execution->menu->devops['subMenu']         = new stdclass();
 $lang->execution->menu->devops['subMenu']->repo   = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo', 'exclude' => 'repo-review,repo-browsetag,repo-browsebranch,repo-log,repo-diff');
