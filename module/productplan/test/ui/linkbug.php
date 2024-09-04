@@ -1,0 +1,20 @@
+#!/usr/bin/env php
+<?php
+chdir(__DIR__);
+include '../lib/linkbug.ui.class.php';
+
+zendata('product')->loadYaml('product', false, 2)->gen(10);
+zendata('productplan')->loadYaml('productplan', false, 2)->gen(10);
+$bug = zenData('bug');
+$bug->project->range('0');
+$bug->execution->range('0');
+$bug->gen(10);
+
+$tester = new linkBugTester();
+$tester->login();
+$planID['planID'] = '2';
+
+r($tester->linkBug($planID))      && p('message,status') && e('关联Bug成功,SUCCESS');//关联Bug
+r($tester->unlinkBug($planID))    && p('message,status') && e('移除单个Bug成功,SUCCESS');//移除单个Bug
+r($tester->unlinkAllBug($planID)) && p('message,status') && e('移除全部Bug成功,SUCCESS');//移除全部Bug
+$tester->closeBrowser();
