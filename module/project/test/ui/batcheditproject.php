@@ -1,5 +1,13 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=批量编辑项目测试
+timeout=0
+cid=73
+
+*/
 chdir(__DIR__);
 include '../lib/batcheditproject.ui.class.php';
 
