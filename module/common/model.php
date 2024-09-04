@@ -1649,7 +1649,7 @@ eof;
     {
         foreach($items as $item)
         {
-            if(!is_string($items)) return array();
+            if(!is_string($item)) return array();
         }
 
         global $app;

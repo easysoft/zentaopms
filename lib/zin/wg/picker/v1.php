@@ -102,8 +102,8 @@ class picker extends wg
                 if(!is_array($item))           $item = array('text' => $item, 'value' => $key);
                 if(isset($item['value']) && !is_string($item['value'])) $item['value'] = strval($item['value']);
                 if(isset($item['value']) && $item['value'] === '0') $hasZeroValue  = true;
-                if(!is_array($item['text'])) $item['keys'] = zget($pinyinItems, $item['text'], '');
-                if(is_array($item['text']) && isset($item['hint']) && !is_array($item['hint'])) $item['keys'] = zget($pinyinItems, $item['hint'], '');
+                if(!is_array($item['text'])) $item['keys'] = zget($pinyinItems, $item['text'], zget($item, 'keys', ''));
+                if(is_array($item['text']) && isset($item['hint']) && !is_array($item['hint'])) $item['keys'] = zget($pinyinItems, $item['hint'], zget($item, 'keys', ''));
                 $pickerItems[] = $item;
             }
         }
