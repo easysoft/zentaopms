@@ -5,7 +5,8 @@ class managemembersPage extends page
     {
         parent::__construct($webdriver);
         $xpath = array(
-            'account' => "//div[@id='teamForm']//input[@name='account[2]']",
+            /* 团队管理页面第一个为空的用户input */
+            'account' => "(//div[@id='teamForm']//input[starts-with(@name, 'account[') and not(@value)])[1]",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
