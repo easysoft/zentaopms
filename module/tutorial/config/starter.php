@@ -276,3 +276,58 @@ $starter->tasks['manageTeam']['steps'][] = array(
     'title'  => $lang->tutorial->starter->manageTeam->step7->name,
     'desc'   => $lang->tutorial->starter->manageTeam->step7->desc
 );
+
+$starter->tasks['createProjectExecution'] = array();
+$starter->tasks['createProjectExecution']['name']     = 'createProjectExecution';
+$starter->tasks['createProjectExecution']['title']    = $lang->tutorial->starter->createProjectExecution->title;
+$starter->tasks['createProjectExecution']['startUrl'] = array('project', 'browse');
+$starter->tasks['createProjectExecution']['steps']    = array();
+
+$starter->tasks['createProjectExecution']['steps'][] = array(
+    'type'  => 'openApp',
+    'app'   => 'project',
+    'title' => $lang->tutorial->starter->createProjectExecution->step1->name,
+    'desc'  => $lang->tutorial->starter->createProjectExecution->step1->desc
+);
+
+$starter->tasks['createProjectExecution']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#table-project-browse .dtable-body div[data-row="2"] a',
+    'page'   => 'project-browse',
+    'url'    => array('project', 'browse'),
+    'title'  => $lang->tutorial->starter->createProjectExecution->step2->name,
+    'desc'   => $lang->tutorial->starter->createProjectExecution->step2->desc
+);
+
+$starter->tasks['createProjectExecution']['steps'][] = array(
+    'type'   => 'clickNavbar',
+    'target' => 'execution',
+    'page'   => 'project-index',
+    'title'  => $lang->tutorial->starter->createProjectExecution->step3->name,
+    'desc'   => $lang->tutorial->starter->createProjectExecution->step3->desc
+);
+
+$starter->tasks['createProjectExecution']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#mainMenu #actionBar a.create-execution-btn',
+    'page'   => 'project-execution',
+    'url'    => array('project', 'execution', 'status=all&projectID=2'),
+    'title'  => $lang->tutorial->starter->createProjectExecution->step4->name,
+    'desc'   => $lang->tutorial->starter->createProjectExecution->step4->desc
+);
+
+$starter->tasks['createProjectExecution']['steps'][] = array(
+    'type'   => 'form',
+    'target' => '#form-execution-create',
+    'app'    => 'execution',
+    'page'   => 'execution-create',
+    'title'  => $lang->tutorial->starter->createProjectExecution->step5->name
+);
+
+$starter->tasks['createProjectExecution']['steps'][] = array(
+    'type'   => 'saveForm',
+    'target' => '#form-execution-create .form-actions button[type="submit"]',
+    'page'   => 'execution-create',
+    'title'  => $lang->tutorial->starter->createProjectExecution->step6->name,
+    'desc'   => $lang->tutorial->starter->createProjectExecution->step6->desc
+);
