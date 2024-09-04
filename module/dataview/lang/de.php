@@ -64,12 +64,13 @@ $lang->dataview->queryFilterTip = 'Query filter is a way to implement dynamic qu
 $lang->dataview->consumed       = 'Consumed hour';
 
 $lang->dataview->varFilter = new stdclass();
-$lang->dataview->varFilter->varCode     = 'Var Code';
-$lang->dataview->varFilter->varLabel    = 'Var Label';
-$lang->dataview->varFilter->default     = 'Default';
-$lang->dataview->varFilter->requestType = 'Request Type';
+$lang->dataview->varFilter->varCode      = 'Code';
+$lang->dataview->varFilter->varLabel     = 'Filter Name';
+$lang->dataview->varFilter->default      = 'Default';
+$lang->dataview->varFilter->relatedField = 'Related Field';
+$lang->dataview->varFilter->requestType  = 'Request Type';
 
-$lang->dataview->varFilter->noticeVarName     = 'Var name cannot be empty';
+$lang->dataview->varFilter->noticeVarName     = 'Filter name cannot be empty';
 $lang->dataview->varFilter->noticeRequestType = 'Request type cannot be empty';
 $lang->dataview->varFilter->noticeShowName    = 'Show name cannot be empty';
 
@@ -78,12 +79,19 @@ $lang->dataview->varFilter->requestTypeList['date']     = 'Date';
 $lang->dataview->varFilter->requestTypeList['datetime'] = 'Datetime';
 $lang->dataview->varFilter->requestTypeList['select']   = 'Select';
 
-$lang->dataview->varFilter->selectList['user']           = 'User List';
-$lang->dataview->varFilter->selectList['product']        = $lang->productCommon . ' List';
-$lang->dataview->varFilter->selectList['project']        = 'Project';
-$lang->dataview->varFilter->selectList['execution']      = $lang->executionCommon . ' List';
-$lang->dataview->varFilter->selectList['dept']           = 'Dept List';
-$lang->dataview->varFilter->selectList['project.status'] = 'Project List';
+$lang->dataview->varFilter->selectList['product']            = $lang->productCommon . 'List';
+$lang->dataview->varFilter->selectList['product.status']     = $lang->productCommon . 'Status';
+$lang->dataview->varFilter->selectList['product.type']       = $lang->productCommon . 'Type';
+$lang->dataview->varFilter->selectList['productplan.status'] = 'Product Plan Status';
+$lang->dataview->varFilter->selectList['project']            = 'Project List';
+$lang->dataview->varFilter->selectList['project.status']     = 'Project Status';
+$lang->dataview->varFilter->selectList['project.type']       = 'Project Type';
+$lang->dataview->varFilter->selectList['project.model']      = 'Project Model';
+$lang->dataview->varFilter->selectList['execution']          = $lang->executionCommon . 'List';
+$lang->dataview->varFilter->selectList['execution.status']   = $lang->executionCommon . 'Status';
+$lang->dataview->varFilter->selectList['execution.type']     = $lang->executionCommon . 'Type';
+$lang->dataview->varFilter->selectList['user']               = 'User List';
+$lang->dataview->varFilter->selectList['dept']               = 'Department List';
 
 $lang->dataview->objects = array();
 $lang->dataview->objects['product']     = $lang->product->common;

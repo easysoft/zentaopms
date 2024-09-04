@@ -64,12 +64,13 @@ $lang->dataview->queryFilterTip = '查询筛选器是通过在 SQL 中插入变�
 $lang->dataview->consumed       = '消耗工时';
 
 $lang->dataview->varFilter = new stdclass();
-$lang->dataview->varFilter->varCode     = '变量代号';
-$lang->dataview->varFilter->varLabel    = '变量标签';
-$lang->dataview->varFilter->default     = '默认值';
-$lang->dataview->varFilter->requestType = '筛选器类型';
+$lang->dataview->varFilter->varCode      = '代号';
+$lang->dataview->varFilter->varLabel     = '筛选器名称';
+$lang->dataview->varFilter->default      = '默认值';
+$lang->dataview->varFilter->relatedField = '关联字段';
+$lang->dataview->varFilter->requestType  = '筛选器类型';
 
-$lang->dataview->varFilter->noticeVarName     = '变量名称不能为空';
+$lang->dataview->varFilter->noticeVarName     = '名称不能为空';
 $lang->dataview->varFilter->noticeRequestType = '筛选器类型不能为空';
 $lang->dataview->varFilter->noticeShowName    = '显示名称不能为空';
 
@@ -78,12 +79,19 @@ $lang->dataview->varFilter->requestTypeList['date']     = '日期选择';
 $lang->dataview->varFilter->requestTypeList['datetime'] = '时间选择';
 $lang->dataview->varFilter->requestTypeList['select']   = '下拉选择';
 
-$lang->dataview->varFilter->selectList['user']           = '用户列表';
-$lang->dataview->varFilter->selectList['product']        = $lang->productCommon . '列表';
-$lang->dataview->varFilter->selectList['project']        = '项目列表';
-$lang->dataview->varFilter->selectList['execution']      = $lang->executionCommon . '列表';
-$lang->dataview->varFilter->selectList['dept']           = '部门列表';
-$lang->dataview->varFilter->selectList['project.status'] = '项目状态列表';
+$lang->dataview->varFilter->selectList['product']            = $lang->productCommon . '列表';
+$lang->dataview->varFilter->selectList['product.status']     = '产品状态';
+$lang->dataview->varFilter->selectList['product.type']       = '产品类型';
+$lang->dataview->varFilter->selectList['productplan.status'] = '产品计划状态';
+$lang->dataview->varFilter->selectList['project']            = '项目列表';
+$lang->dataview->varFilter->selectList['project.status']     = '项目状态';
+$lang->dataview->varFilter->selectList['project.type']       = '项目类型';
+$lang->dataview->varFilter->selectList['project.model']      = '项目管理方式';
+$lang->dataview->varFilter->selectList['execution']          = $lang->executionCommon . '列表';
+$lang->dataview->varFilter->selectList['execution.status']   = '执行状态';
+$lang->dataview->varFilter->selectList['execution.type']     = '执行类型';
+$lang->dataview->varFilter->selectList['user']               = '用户列表';
+$lang->dataview->varFilter->selectList['dept']               = '部门列表';
 
 $lang->dataview->objects = array();
 $lang->dataview->objects['product']     = $lang->product->common;
