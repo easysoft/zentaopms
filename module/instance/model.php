@@ -528,6 +528,16 @@ class instanceModel extends model
             $settingsMap->ci->enabled = true;
         }
 
+        if($instance->source == 'system')
+        {
+            $users = $this->loadModel('user')->getPairs();
+            if($users)
+            {
+                $settingsMap->auth = new stdclass();
+                $settingsMap->auth->username = key($users);
+            }
+        }
+
         if(empty($customData->dbType) || $customData->dbType == 'unsharedDB' || empty($customData->dbService)) return $settingsMap;
 
         /* Set DB settings. */
