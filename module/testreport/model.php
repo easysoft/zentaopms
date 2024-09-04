@@ -209,7 +209,7 @@ class testreportModel extends model
         $failResults     = 0;
         $runCasesResults = array();
         foreach($results as $result) $runCasesResults[$result->run] = $result->caseResult;
-        foreach($runCasesResults as $lastResult) if($lastResult != 'success') $failResults++;
+        foreach($runCasesResults as $lastResult) if($lastResult != 'pass') $failResults++;
 
         return sprintf($this->lang->testreport->caseSummary, $caseCount, count($runCasesResults), count($results), $failResults);
     }
