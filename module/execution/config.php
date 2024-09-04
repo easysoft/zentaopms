@@ -235,6 +235,7 @@ $config->execution->actions->view = array();
 $config->execution->actions->view['mainActions']   = array('putoff', 'start', 'activate', 'suspend', 'close');
 $config->execution->actions->view['suffixActions'] = array('edit', 'delete');
 
+$app->loadLang('testtask');
 $app->loadModuleConfig('testtask');
 $config->execution->testtaskActionList = array();
 foreach($config->testtask->actionList as $action => $actionConfig)
