@@ -75,7 +75,11 @@ $execution = array(
     '1' => array(
         'id' => '6',
     ),
+    '2' => array(
+        'id' => '5',
+    )
 );
 r($tester->add($execution['0']))    && p('message') && e('添加团队成员成功'); //添加团队成员
-r($tester->delete($execution['1'])) && p('message') && e('添加团队成员成功'); //删除团队成员
+r($tester->delete($execution['1'])) && p('message') && e('删除团队成员成功'); //删除团队成员
+r($tester->remove($execution['2'])) && p('message') && e('移除团队成员成功'); //移除团队成员
 $tester->closeBrowser();
