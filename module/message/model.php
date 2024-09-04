@@ -260,7 +260,7 @@ class messageModel extends model
         {
             $action = $this->loadModel('action')->getById($actionID);
             list($toList, $ccList) = $this->loadModel($objectType)->getToAndCcList($object, $action->action);
-            $toList = $toList . $ccList;
+            $toList = $toList . ',' . $ccList;
         }
 
         if($objectType == 'testtask')
