@@ -307,7 +307,6 @@ $config->execution->linkStory->dtable->fieldList['estimate']['group']    = 10;
 
 $app->loadLang('testcase');
 $app->loadLang('testtask');
-$app->loadModuleConfig('testtask');
 
 $config->execution->testtask = new stdclass();
 $config->execution->testtask->dtable = new stdclass();
@@ -366,5 +365,5 @@ $config->execution->testtask->dtable->fieldList['actions']['title']    = $lang->
 $config->execution->testtask->dtable->fieldList['actions']['type']     = 'actions';
 $config->execution->testtask->dtable->fieldList['actions']['sortType'] = false;
 $config->execution->testtask->dtable->fieldList['actions']['fixed']    = false;
-$config->execution->testtask->dtable->fieldList['actions']['list']     = $config->testtask->actionList;
+$config->execution->testtask->dtable->fieldList['actions']['list']     = $config->execution->testtaskActionList;
 $config->execution->testtask->dtable->fieldList['actions']['menu']     = array('cases', 'linkCase', 'report', 'view', 'edit', 'delete');

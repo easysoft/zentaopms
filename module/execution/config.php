@@ -234,3 +234,11 @@ $config->execution->actions = new stdclass();
 $config->execution->actions->view = array();
 $config->execution->actions->view['mainActions']   = array('putoff', 'start', 'activate', 'suspend', 'close');
 $config->execution->actions->view['suffixActions'] = array('edit', 'delete');
+
+$app->loadModuleConfig('testtask');
+$config->execution->testtaskActionList = array();
+foreach($config->testtask->actionList as $action => $actionConfig)
+{
+    $config->execution->testtaskActionList[$action] = $actionConfig;
+    if($action == 'report') $config->execution->testtaskActionList['report']['url'] = array('module' => 'execution', 'method' => 'testreport', 'params' => 'executionID={execution}&objectType=execution&extra={id}');
+}
