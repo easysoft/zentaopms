@@ -303,6 +303,28 @@ $lang->tutorial->starter->createTask->step5 = new stdClass();
 $lang->tutorial->starter->createTask->step5->name = '保存表单';
 $lang->tutorial->starter->createTask->step5->desc = '保存后可以在任务列表中查看分解的任务';
 
+$lang->tutorial->starter->createBug = new stdClass();
+$lang->tutorial->starter->createBug->title = '提Bug';
+
+$lang->tutorial->starter->createBug->step1 = new stdClass();
+$lang->tutorial->starter->createBug->step1->name = '点击测试';
+$lang->tutorial->starter->createBug->step1->desc = '您可以在这里进行测试管理';
+
+$lang->tutorial->starter->createBug->step2 = new stdClass();
+$lang->tutorial->starter->createBug->step2->name = '点击Bug';
+$lang->tutorial->starter->createBug->step2->desc = '可以在这里进行Bug管理';
+
+$lang->tutorial->starter->createBug->step3 = new stdClass();
+$lang->tutorial->starter->createBug->step3->name = '点击提bug';
+$lang->tutorial->starter->createBug->step3->desc = '可以在这里创建bug';
+
+$lang->tutorial->starter->createBug->step4 = new stdClass();
+$lang->tutorial->starter->createBug->step4->name = '填写表单';
+
+$lang->tutorial->starter->createBug->step5 = new stdClass();
+$lang->tutorial->starter->createBug->step5->name = '保存表单';
+$lang->tutorial->starter->createBug->step5->desc = '保存后进入Bug列表';
+
 $lang->tutorial->scrumProjectManage = new stdClass();
 $lang->tutorial->scrumProjectManage->title = 'Scrum项目管理教程';
 

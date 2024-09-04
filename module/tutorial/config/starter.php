@@ -424,3 +424,45 @@ $starter->tasks['createTask']['steps'][] = array(
     'title'  => $lang->tutorial->starter->createTask->step5->name,
     'desc'   => $lang->tutorial->starter->createTask->step5->desc
 );
+
+$starter->tasks['createBug'] = array();
+$starter->tasks['createBug']['name']     = 'createBug';
+$starter->tasks['createBug']['title']    = $lang->tutorial->starter->createBug->title;
+$starter->tasks['createBug']['startUrl'] = array('qa', 'index');
+$starter->tasks['createBug']['steps']    = array();
+
+$starter->tasks['createBug']['steps'][] = array(
+    'type'  => 'openApp',
+    'app'   => 'qa',
+    'title' => $lang->tutorial->starter->createBug->step1->name,
+    'desc'  => $lang->tutorial->starter->createBug->step1->desc
+);
+
+$starter->tasks['createBug']['steps'][] = array(
+    'type'   => 'clickNavbar',
+    'target' => 'bug',
+    'page'   => 'qa-index',
+    'title'  => $lang->tutorial->starter->createBug->step2->name,
+    'desc'   => $lang->tutorial->starter->createBug->step2->desc
+);
+
+$starter->tasks['createBug']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#actionBar a.create-bug-btn',
+    'page'   => 'bug-browse',
+    'title'  => $lang->tutorial->starter->createBug->step3->name,
+    'desc'   => $lang->tutorial->starter->createBug->step3->desc
+);
+
+$starter->tasks['createBug']['steps'][] = array(
+    'type'   => 'form',
+    'page'   => 'bug-create',
+    'title'  => $lang->tutorial->starter->createBug->step4->name
+);
+
+$starter->tasks['createBug']['steps'][] = array(
+    'type'   => 'saveForm',
+    'page'   => 'bug-create',
+    'title'  => $lang->tutorial->starter->createBug->step5->name,
+    'desc'   => $lang->tutorial->starter->createBug->step5->desc
+);
