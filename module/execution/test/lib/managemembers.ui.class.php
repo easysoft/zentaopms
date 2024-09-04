@@ -63,8 +63,8 @@ class manageMembersTester extends tester
     }
 
     /**
-     * 复制部门成员
-     * Copy department members
+     * 复制部门成员。
+     * Copy department members.
      *
      * @param  array  $execution
      * @access public
@@ -79,5 +79,24 @@ class manageMembersTester extends tester
         $form = $this->loadPage('execution', 'team');
         if($form->dom->num->getText() == $execution['membersExpect']) return $this->success('复制部门成员成功');
         return $this->failed('复制部门成员失败');
+    }
+
+    /**
+     * 复制团队。
+     * Copy team.
+     *
+     * @param  array  $execution
+     * @access public
+     * @return object
+     */
+    public function copyTeamMembers($execution)
+    {
+        $form = $this->initForm('execution', 'managemembers', array('execution' => $execution['id']), 'appIframe-execution');
+        $form->dom->execution->picker($execution['team']);
+        $form->wait(1);
+        $form->dom->btn($this->lang->save)->click();
+        $form = $this->loadPage('execution', 'team');
+        if($form->dom->num->getText() == $execution['membersExpect']) return $this->success('复制团队成功');
+        return $this->failed('复制团队失败');
     }
 }
