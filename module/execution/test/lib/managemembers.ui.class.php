@@ -98,6 +98,7 @@ class manageMembersTester extends tester
         if($form->dom->num->getText() == $execution['membersExpect']) return $this->success('复制团队成员成功');
         return $this->failed('复制团队成员失败');
     }
+
     /**
      * 移除团队成员。
      * Remove team members.
@@ -116,5 +117,24 @@ class manageMembersTester extends tester
         $numAfter = $form->dom->num->getText();
         if($numBefore == $numAfter + 1) return $this->success('移除团队成员成功');
         return $this->failed('移除团队成员失败');
+    }
+
+    /**
+     * 复制部门成员
+     * Copy department members
+     *
+     * @param  array  $execution
+     * @access public
+     * @return object
+     */
+    public function copyDeptMembers($execution)
+    {
+        $form = $this->initForm('execution', 'managemembers', array('execution' => $execution['id']), 'appIframe-execution');
+        $form->dom->dept->picker($execution['dept']);
+        $form->wait(1);
+        $form->dom->btn($this->lang->save)->click();
+        $form = $this->loadPage('execution', 'team');
+        if($form->dom->num->getText() == $execution['membersExpect']) return $this->success('复制部门成员成功');
+        return $this->failed('复制部门成员失败');
     }
 }
