@@ -19,6 +19,7 @@ class linkStoryTester extends tester
         $viewPage = $this->initForm('productplan', 'view', $planID, 'appIframe-product');
         return ($viewPage->dom->checkInfoStory === false) ? $this->failed('关联需求失败') : $this->success('关联需求成功');
     }
+
     /**
      * 移除单个需求
      * unlink story
@@ -38,6 +39,7 @@ class linkStoryTester extends tester
         $linkNumAfter = (int) explode(' ', $viewPage->dom->storyLinkNum->getText())[1];//计划移除需求后，关联的需求数
         return ($linkNum -1 == $linkNumAfter) ? $this->success('移除单个需求成功') : $this->failed('移除单个需求失败');
     }
+
     /**
      * 移除全部需求
      * unlink allstory
