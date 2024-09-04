@@ -215,4 +215,27 @@ div
     )
 );
 
+/**
+ * Check if the tutorial mode is on, show confirm dialog if it is.
+ * 检查是否处于教程模式，如果是则显示确认对话框是否继续。
+ */
+if(common::isTutorialMode())
+{
+    setData('tutorialTip', $lang->index->tutorialTip);
+    to::head
+    (
+        js
+        (<<<'JS'
+            $(function()
+            {
+                if(window.top !== window) return;
+                zui.Modal.confirm($('html').data('tutorialTip')).then(result =>
+                {
+                    window.location = result ? $.createLink('tutorial', 'index') : $.createLink('tutorial', 'quit');
+                });
+            })
+        JS)
+    );
+}
+
 render('pagebase');

@@ -22,6 +22,7 @@ $lang->index->upgrade        = '升级';
 $lang->index->log            = '查看版本更新日志 >';
 $lang->index->detailed       = '详情';
 $lang->index->website        = '请访问官网';
+$lang->index->tutorialTip    = '当前正处于教程模式，是否继续进入教程？';
 
 $lang->index->chat = new stdclass();
 $lang->index->chat->chat = '聊天';

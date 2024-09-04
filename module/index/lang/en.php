@@ -22,6 +22,7 @@ $lang->index->upgrade        = 'Upgrade';
 $lang->index->log            = 'Log';
 $lang->index->detailed       = 'Details';
 $lang->index->website        = 'Visit ZenTao official website';
+$lang->index->tutorialTip    = 'Currently in tutorial mode, do you want to continue to the tutorial?';
 
 $lang->index->chat = new stdclass();
 $lang->index->chat->chat = 'Chat';
