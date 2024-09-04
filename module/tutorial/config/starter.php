@@ -331,3 +331,48 @@ $starter->tasks['createProjectExecution']['steps'][] = array(
     'title'  => $lang->tutorial->starter->createProjectExecution->step6->name,
     'desc'   => $lang->tutorial->starter->createProjectExecution->step6->desc
 );
+
+$starter->tasks['linkStory'] = array();
+$starter->tasks['linkStory']['name']     = 'linkStory';
+$starter->tasks['linkStory']['title']    = $lang->tutorial->starter->linkStory->title;
+$starter->tasks['linkStory']['startUrl'] = array('execution', 'task', 'executionID=3');
+$starter->tasks['linkStory']['steps']    = array();
+
+$starter->tasks['linkStory']['steps'][] = array(
+    'type'  => 'openApp',
+    'app'   => 'execution',
+    'title' => $lang->tutorial->starter->linkStory->step1->name,
+    'desc'  => $lang->tutorial->starter->linkStory->step1->desc
+);
+
+$starter->tasks['linkStory']['steps'][] = array(
+    'type'   => 'clickNavbar',
+    'target' => 'story',
+    'page'   => 'execution-task',
+    'url'    => array('execution', 'task', 'executionID=3'),
+    'title'  => $lang->tutorial->starter->linkStory->step2->name,
+    'desc'   => $lang->tutorial->starter->linkStory->step2->desc
+);
+
+$starter->tasks['linkStory']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#actionBar a.link-story-btn',
+    'page'   => 'execution-story',
+    'title'  => $lang->tutorial->starter->linkStory->step3->name,
+    'desc'   => $lang->tutorial->starter->linkStory->step3->desc
+);
+
+$starter->tasks['linkStory']['steps'][] = array(
+    'type'   => 'selectRow',
+    'target' => 'div.dtable div.dtable-body div[data-col="id"][data-row="3"]',
+    'page'   => 'execution-linkstory',
+    'title'  => $lang->tutorial->starter->linkStory->step4->name
+);
+
+$starter->tasks['linkStory']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'div.dtable .dtable-footer .link-story-btn',
+    'page'   => 'execution-linkstory',
+    'title'  => $lang->tutorial->starter->linkStory->step5->name,
+    'desc'   => $lang->tutorial->starter->linkStory->step5->desc
+);

@@ -259,6 +259,28 @@ $lang->tutorial->starter->createProjectExecution->step6 = new stdClass();
 $lang->tutorial->starter->createProjectExecution->step6->name = '保存表单';
 $lang->tutorial->starter->createProjectExecution->step6->desc = '保存后可以选择设置团队、关联需求、创建任务、返回任务列表和返回执行列表';
 
+$lang->tutorial->starter->linkStory = new stdClass();
+$lang->tutorial->starter->linkStory->title = "关联{$lang->SRCommon}";
+
+$lang->tutorial->starter->linkStory->step1 = new stdClass();
+$lang->tutorial->starter->linkStory->step1->name = '点击迭代';
+$lang->tutorial->starter->linkStory->step1->desc = '您可以在这里维护管理迭代';
+
+$lang->tutorial->starter->linkStory->step2 = new stdClass();
+$lang->tutorial->starter->linkStory->step2->name = '点击需求';
+$lang->tutorial->starter->linkStory->step2->desc = '点击需求查看已关联的需求';
+
+$lang->tutorial->starter->linkStory->step3 = new stdClass();
+$lang->tutorial->starter->linkStory->step3->name = '点击关联需求';
+$lang->tutorial->starter->linkStory->step3->desc = '点击关联需求进入关联需求列表';
+
+$lang->tutorial->starter->linkStory->step4 = new stdClass();
+$lang->tutorial->starter->linkStory->step4->name = '选择需求';
+
+$lang->tutorial->starter->linkStory->step5 = new stdClass();
+$lang->tutorial->starter->linkStory->step5->name = '点击保存';
+$lang->tutorial->starter->linkStory->step5->desc = '点击保存可以将需求关联到需求列表中，返回到需求列表';
+
 $lang->tutorial->scrumProjectManage = new stdClass();
 $lang->tutorial->scrumProjectManage->title = 'Scrum项目管理教程';
 
