@@ -23,6 +23,25 @@ class pivotModel extends model
         parent::__construct();
         $this->loadBIDAO();
         $this->loadModel('bi');
+        $this->viewableObjects = $this->bi->getViewableObject('pivot');
+    }
+
+    /**
+     * 过滤不可见的透视表。
+     * Filter invisible pivot.
+     *
+     * @param  array  $pivots
+     * @access public
+     * @return array
+     */
+    public function filterInvisiblePivot($pivots)
+    {
+        foreach($pivots as $index => $pivot)
+        {
+            if(!in_array($pivot->id, $this->viewableObjects)) unset($pivots[$index]);
+        }
+
+        return array_values($pivots);
     }
 
     /*
