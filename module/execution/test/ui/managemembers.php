@@ -79,13 +79,13 @@ $execution = array(
         'id' => '5',
     ),
     '3' => array(
-        'id'            => '8',
+        'id'            => '7',
         'dept'          => '部门1',
-        'membersExpect' => '7',
+        'membersExpect' => '8',
     ),
     '4' =>array(
-        'id'            => '7',
-        'team'          => '项目1',
+        'id'            => '8',
+        'team'          => '项目2',
         'membersExpect' => '3',
     ),
 );
