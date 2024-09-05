@@ -98,6 +98,8 @@ class thinkMulticolumn extends thinkQuestion
         jsVar('canAddRowsOfMulticol', (int)$canAddRows + 5);
         jsVar('addRowsTips', $lang->thinkrun->tips->addRow);
         jsVar('addLang', $lang->thinkrun->add);
+        jsVar('tipQuestion', $lang->thinkstep->tips->question);
+        jsVar('requiredColTip', $lang->thinkstep->tips->requiredCol);
 
         $formItems[] = array(
             formHidden('options[questionType]', $questionType),
@@ -138,12 +140,15 @@ class thinkMulticolumn extends thinkQuestion
                     set::label($lang->thinkstep->label->requiredCol),
                     set::required(true),
                     setClass('required-options', $required ? '' : 'hidden'),
+                    setData('quotedQuestions', $quotedQuestions),
+                    setData('requiredCols', $requiredCols),
                     picker
                     (
                         set::name('options[requiredCols][]'),
                         set::items($requiredOptions),
                         set::value($requiredCols),
-                        set::multiple(true)
+                        set::multiple(true),
+                        bind::change('changeRequiredCols()')
                     )
                 )
             ),
