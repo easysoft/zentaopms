@@ -13,6 +13,9 @@ class sqlBuilderWhereItem extends wg
         'tables?: array',
         'fields?: array',
         'value?: array',
+        'onChange?: function',
+        'onAdd?: function',
+        'onRemove?: function',
         'tableError?:bool=false',
         'fieldError?:bool=false',
         'valueError?:bool=false'
@@ -21,7 +24,7 @@ class sqlBuilderWhereItem extends wg
     protected function buildTable()
     {
         global $lang;
-        list($index, $items, $value, $error) = $this->prop(array('index', 'tables', 'value', 'tableError'));
+        list($index, $items, $value, $onChange, $error) = $this->prop(array('index', 'tables', 'value', 'onChange', 'tableError'));
 
         $value = $value[0];
         return sqlBuilderPicker
@@ -32,6 +35,7 @@ class sqlBuilderWhereItem extends wg
             set::value($value),
             set::placeholder($lang->bi->selectTableTip),
             set::width('48'),
+            set::onChange($onChange),
             set::error($error)
         );
     }
@@ -39,7 +43,7 @@ class sqlBuilderWhereItem extends wg
     protected function buildField()
     {
         global $lang;
-        list($index, $items, $value, $error) = $this->prop(array('index', 'fields', 'value', 'fieldError'));
+        list($index, $items, $value, $onChange, $error) = $this->prop(array('index', 'fields', 'value', 'onChange', 'fieldError'));
 
         $value = $value[1];
         return sqlBuilderPicker
@@ -49,6 +53,7 @@ class sqlBuilderWhereItem extends wg
             set::value($value),
             set::placeholder($lang->bi->selectFieldTip),
             set::width('48'),
+            set::onChange($onChange),
             set::error($error)
         );
     }
@@ -56,7 +61,7 @@ class sqlBuilderWhereItem extends wg
     protected function buildOperator()
     {
         global $lang;
-        list($index, $value) = $this->prop(array('index', 'value'));
+        list($index, $value, $onChange) = $this->prop(array('index', 'value', 'onChange'));
 
         $value = $value[2];
         return sqlBuilderPicker
@@ -67,13 +72,14 @@ class sqlBuilderWhereItem extends wg
             set::value($value),
             set::required(true),
             set::width('24'),
+            set::onChange($onChange)
         );
     }
 
     protected function buildValue()
     {
         global $lang;
-        list($index, $value, $error) = $this->prop(array('index', 'value', 'valueError'));
+        list($index, $value, $onChange, $error) = $this->prop(array('index', 'value', 'onChange', 'valueError'));
 
         $value = $value[4];
         return sqlBuilderInput
@@ -83,6 +89,7 @@ class sqlBuilderWhereItem extends wg
             set::value($value),
             set::placeholder($lang->bi->selectInputTip),
             set::width('48'),
+            set::onChange($onChange),
             set::error($error)
         );
     }
@@ -90,7 +97,7 @@ class sqlBuilderWhereItem extends wg
     protected function buildConditionOperator()
     {
         global $lang;
-        list($index, $value, $isFirst) = $this->prop(array('index', 'value', 'first'));
+        list($index, $value, $onChange, $isFirst) = $this->prop(array('index', 'value', 'onChange', 'first'));
 
         $value = $value[5];
         return formGroup
@@ -103,14 +110,15 @@ class sqlBuilderWhereItem extends wg
                 set::name("5_$index"),
                 set::value($value),
                 set::items($lang->bi->whereOperatorList),
-                set::required(true)
+                set::required(true),
+                on::change()->do($onChange)
             )
         );
     }
 
     protected function build()
     {
-        list($index) = $this->prop(array('index'));
+        list($index, $onAdd, $onRemove) = $this->prop(array('index', 'onAdd', 'onRemove'));
         return formRow
         (
             $this->buildConditionOperator(),
@@ -125,14 +133,16 @@ class sqlBuilderWhereItem extends wg
                     setClass('add-where-item'),
                     set('data-index', $index),
                     set::type('ghost'),
-                    set::icon('plus')
+                    set::icon('plus'),
+                    on::click()->do($onAdd)
                 ),
                 btn
                 (
                     setClass('remove-where-item'),
                     set('data-index', $index),
                     set::type('ghost'),
-                    set::icon('minus')
+                    set::icon('minus'),
+                    on::click()->do($onRemove)
                 )
             )
         );
