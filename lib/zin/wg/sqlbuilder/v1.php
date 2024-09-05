@@ -10,7 +10,8 @@ class sqlBuilder extends wg
         'requiredSteps?: array=["table"]',
         'data?: object',
         'tableList?: array',
-        'url?: string'
+        'url?: string',
+        'onUpdate?: function'
     );
 
     protected static array $tablesDesc = array();
@@ -430,13 +431,14 @@ class sqlBuilder extends wg
         global $lang;
         $this->setSteps();
 
-        list($tableList, $data, $url) = $this->prop(array('tableList', 'data', 'url'));
+        list($tableList, $data, $url, $onUpdate) = $this->prop(array('tableList', 'data', 'url', 'onUpdate'));
 
         return panel
         (
             setID('builderPanel'),
             set('data-sqlbuilder', $data),
             set('data-url', $url),
+            set('data-onupdate', $onUpdate),
             setClass('h-96 min-w-1300'),
             set::bodyClass('flex h-96'),
             $this->buildStepBar(),

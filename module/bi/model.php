@@ -2125,7 +2125,7 @@ class biModel extends model
 
     public function getSqlBuilder($objectID, $objectType)
     {
-        // $this->app->loadClass('sqlbuilder', true);
+        $this->app->loadClass('sqlbuilder', true);
         $builder = new sqlBuilder();
 
         return $builder;
