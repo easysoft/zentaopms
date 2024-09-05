@@ -54,3 +54,18 @@ class manageMembersTester extends tester
      * Copy team members.
      * 复制部门团队成员
      *
+     * @access public
+     */
+    public function copyDeptMembers()
+    {
+        $form = $this->initForm('project', 'team', array('projectID' => '1'), 'appIframe-project');
+        $form->dom->teamBtn->click();
+        $form->dom->dept->picker('产品部');
+        $form->wait(3);
+        $form->dom->btn($this->lang->save)->click();
+        $form->wait(2);
+        //添加断言，根据保存后的成员数量，判断是否复制团队成员成功
+        if($form->dom->amount->getText() != '5')      return $this->failed('选择部门团队成员失败');
+        return $this->success();
+    }
+}
