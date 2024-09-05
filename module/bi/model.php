@@ -719,6 +719,12 @@ class biModel extends model
         return array($group, $metrics, $aggs, $xLabels, $yStats);
     }
 
+    /**
+     * Get all tables with their fields.
+     *
+     * @access public
+     * @return array
+     */
     public function getTableFields()
     {
         $this->loadModel('dev');
