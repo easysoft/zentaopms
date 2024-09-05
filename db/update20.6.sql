@@ -15,3 +15,12 @@ ALTER TABLE zt_pivot ADD `whitelist` text NULL AFTER `acl`;
 
 ALTER TABLE zt_screen ADD `acl` enum('open','private') NOT NULL DEFAULT 'open' AFTER `desc`;
 ALTER TABLE zt_screen ADD `whitelist` text NULL AFTER `acl`;
+
+CREATE TABLE IF NOT EXISTS `zt_sqlbuilder` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `objectID`   mediumint(8)  NOT NULL,
+  `objectType` varchar(50)   NOT NULL,
+  `sql`        text          NULL,
+  `setting`    text          NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
