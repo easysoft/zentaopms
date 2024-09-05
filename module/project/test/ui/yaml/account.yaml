@@ -17,3 +17,8 @@ fields:
   - field: email
     prefix: user
     range: 1,2,3,4,5
+    postfix: "@cnezsoft.com"
+  - field: password
+    range: "e10adc3949ba59abbe56e057f20f883e"
+  - field: mobile
+    range: "``"
