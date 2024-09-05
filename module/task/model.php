@@ -509,7 +509,7 @@ class taskModel extends model
             if(!$taskID) return false;
 
             /* Update Kanban and story stage. */
-            if($task->story) $this->story->setStage($task->story);
+            if(!empty($task->story)) $this->story->setStage($task->story);
             $this->updateKanbanForBatchCreate($taskID, $executionID, $laneID, (int)$columnID);
 
             $taskIdList[$taskID] = $taskID;
