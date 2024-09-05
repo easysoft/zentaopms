@@ -742,6 +742,12 @@ class biModel extends model
         return $tableFields;
     }
 
+    /**
+     * Get menu of all tables with their fields.
+     *
+     * @access public
+     * @return array
+     */
     public function getTableFieldsMenu()
     {
         $tableFields = $this->getTableFields();
