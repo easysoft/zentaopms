@@ -367,7 +367,7 @@ class testtask extends control
         $testtask = $this->testtask->getByID($taskID);
         if(!$testtask) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->testtask->checkLinked, 'locate' => array('back' => true))));
         if(!$this->loadModel('common')->checkPrivByObject('project', $testtask->project))     return $this->sendError($this->lang->project->accessDenied, inlink('browse'));
-        if(!$this->loadModel('common')->checkPrivByObject('execution', $testtask->execution)) return $this->sendError($this->lang->execution->accessDenied, inlink('browse'));
+        if($testtask->execution && !$this->loadModel('common')->checkPrivByObject('execution', $testtask->execution)) return $this->sendError($this->lang->execution->accessDenied, inlink('browse'));
 
         /* 检查是否有权限访问测试单所属产品。*/
         /* Check if user have permission to access the product to which the testtask belongs. */
