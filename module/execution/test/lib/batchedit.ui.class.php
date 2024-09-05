@@ -123,4 +123,22 @@ class batchEditTester extends tester
         if($endInfo == $endText) return $this->success('执行结束日期小于执行开始日期提示信息正确');
         return $this->failed('执行结束日期小于执行开始日期提示信息错误');
     }
+
+    /**
+     * 成功编辑。
+     * Success edit.
+     *
+     * @param  array  $execution
+     * @access public
+     * @return object
+     */
+    public function batchEdit($execution)
+    {
+        $this->inputFields();
+        $form = $this->loadPage();
+        if($form->dom->firstName->getText() != $execution['name']) return $this->failed('批量编辑后执行名称错误');
+        if($form->dom->firstBegin->getText() != $execution['begin']) return $this->failed('批量编辑后执行开始日期错误');
+        if($form->dom->firstEnd->getText() != $execution['end']) return $this->failed('批量编辑后执行结束日期错误');
+        return $this->success('批量编辑执行成功');
+    }
 }
