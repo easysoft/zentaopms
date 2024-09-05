@@ -66,6 +66,22 @@ class sqlBuilder
     public $sql = '';
 
     /**
+     * step
+     *
+     * @var string
+     * @access public
+     */
+    public $step = 'table';
+
+    /**
+     * error
+     *
+     * @var array
+     * @access public
+     */
+    public $error = array();
+
+    /**
      * __construct method.
      *
      * @param  pivot      object
@@ -74,18 +90,29 @@ class sqlBuilder
      * @access public
      * @return void
      */
-    public function __construct($from, $joins = null, $funcs = null, $wheres = null, $querys = null, $groups = null)
+    public function __construct($from = null, $joins = null, $funcs = null, $wheres = null, $querys = null, $groups = null)
     {
-        if(!is_array($joins)) extract($from);
+        if(!is_array($joins))
+        {
+            if(empty($from)) $from = array('from' => array(), 'joins' => array(), 'funcs' => array(), 'wheres' => array(), 'querys' => array(), 'groups' => false, 'step' => 'table', 'tableDesc' => array());
+            extract($from);
+        }
 
-        $this->from   = $from;
-        $this->joins  = $joins;
-        $this->funcs  = $funcs;
-        $this->wheres = $wheres;
-        $this->querys = $querys;
-        $this->groups = $groups;
+        $this->from      = $from;
+        $this->joins     = $joins;
+        $this->funcs     = $funcs;
+        $this->wheres    = $wheres;
+        $this->querys    = $querys;
+        $this->groups    = $groups;
+        $this->step      = $step;
+        $this->tableDesc = $tableDesc;
 
         if(empty($from) || !isset($from['table'])) $this->setFrom('');
+        $this->processAddJoins();
+        $this->processAddFuncs();
+        $this->processAddWheres();
+        $this->processAddQuerys();
+        if($this->groups === true) $this->enableGroupBy();
     }
 
     /**
@@ -659,6 +686,18 @@ class sqlBuilder
     }
 
     /**
+     * Set error.
+     *
+     * @param  string $key
+     * @access public
+     * @return void
+     */
+    public function setError($key)
+    {
+        $this->error[$key] = true;
+    }
+
+    /**
      * Get Error.
      *
      * @param  string $key
@@ -671,6 +710,22 @@ class sqlBuilder
     {
         return implode('_', array_filter(array($key, $type, $field), function($value) { return $value !== ''; }));
     }
+
+    /**
+     * Has error.
+     *
+     * @param  string $key
+     * @param  string $type
+     * @param  string $field
+     * @access public
+     * @return bool
+     */
+    public function hasError($key, $type = '', $field = '')
+    {
+        $key = $this->getError($key, $type, $field);
+        return isset($this->error[$key]);
+    }
+
 
     /**
      * Process check all.
@@ -749,6 +804,92 @@ class sqlBuilder
                 $fieldList = $this->getTableDescList($table);
                 $this->querys[$index]['name'] = zget($fieldList, $field, $field);
             }
+        }
+    }
+
+    /**
+     * Process add joins.
+     *
+     * @access public
+     * @return void
+     */
+    public function processAddJoins()
+    {
+        $joins = $this->joins;
+        $this->joins = array();
+        foreach($joins as $join)
+        {
+            if($join == 'add')
+            {
+                $alias = $this->getNextTableAlias();
+                $this->addJoin('', $alias);
+                continue;
+            }
+            $this->addJoin($join);
+        }
+    }
+
+    /**
+     * Process add funcs.
+     *
+     * @access public
+     * @return void
+     */
+    public function processAddFuncs()
+    {
+        $funcs = $this->funcs;
+        $this->funcs = array();
+        foreach($funcs as $func)
+        {
+            if($func == 'add')
+            {
+                $this->addFunc('func');
+                continue;
+            }
+
+            $this->addFunc($func);
+        }
+    }
+
+    /**
+     * Process add wheres.
+     *
+     * @access public
+     * @return void
+     */
+    public function processAddWheres()
+    {
+        $wheres = $this->wheres;
+        $this->wheres = array();
+        foreach($wheres as $index => $group)
+        {
+            if($group == 'add') $group = array('items' => array(), 'operator' => 'and');
+
+            $this->addWhereGroup(array('items' => array(), 'operator' => $group['operator']));
+            $items = $group['items'];
+            if(empty($items)) $items[] = 'add';
+            foreach($items as $itemIndex => $item)
+            {
+                if($item == 'add') $this->addWhereItem($index);
+                else               $this->addWhereItem($index, $item);
+            }
+        }
+    }
+
+    /**
+     * Process add querys
+     *
+     * @access public
+     * @return void
+     */
+    public function processAddQuerys()
+    {
+        $querys = $this->querys;
+        $this->querys = array();
+        foreach($querys as $query)
+        {
+            if($query == 'add') $query = '';
+            $this->addQueryFilter($query);
         }
     }
 
