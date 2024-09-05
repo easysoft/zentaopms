@@ -1148,23 +1148,32 @@ class project extends control
             return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'load' => $this->createLink('project', 'team', "projectID=$projectID")));
         }
 
-        $users        = $this->user->getPairs('noclosed|nodeleted|devfirst');
-        $roles        = $this->user->getUserRoles(array_keys($users));
-        $deptUsers    = $dept === '' ? array() : $this->dept->getDeptUserPairs((int)$dept);
+        $users          = $this->user->getPairs('noclosed|nodeleted|devfirst');
+        $roles          = $this->user->getUserRoles(array_keys($users));
+        $deptUsers      = $dept === '' ? array() : $this->dept->getDeptUserPairs((int)$dept);
+        $executions     = $this->project->getExecutionList(array($projectID));
+        $executionTeams = $this->execution->getMembersByIdList(array_keys($executions));
+
+        $executionMembers = array();
+        foreach($executionTeams as $executionID => $executionTeam)
+        {
+            $executionMembers += array_keys($executionTeam);
+        }
 
         $currentMembers = $this->project->getTeamMembers($projectID);
         $members2Import = $this->project->getMembers2Import($copyProjectID, array_keys($currentMembers));
 
-        $this->view->title          = $this->lang->project->manageMembers . $this->lang->hyphen . $project->name;
-        $this->view->project        = $project;
-        $this->view->users          = $users;
-        $this->view->roles          = $roles;
-        $this->view->dept           = $dept;
-        $this->view->depts          = $this->dept->getOptionMenu();
-        $this->view->teams2Import   = $this->loadModel('personnel')->getCopiedObjects($projectID, 'project', true);
-        $this->view->currentMembers = $currentMembers;
-        $this->view->copyProjectID  = $copyProjectID;
-        $this->view->teamMembers    = $this->projectZen->buildMembers($currentMembers, $members2Import, $deptUsers, $project->days);
+        $this->view->title            = $this->lang->project->manageMembers . $this->lang->hyphen . $project->name;
+        $this->view->project          = $project;
+        $this->view->users            = $users;
+        $this->view->roles            = $roles;
+        $this->view->dept             = $dept;
+        $this->view->depts            = $this->dept->getOptionMenu();
+        $this->view->teams2Import     = $this->loadModel('personnel')->getCopiedObjects($projectID, 'project', true);
+        $this->view->currentMembers   = $currentMembers;
+        $this->view->copyProjectID    = $copyProjectID;
+        $this->view->teamMembers      = $this->projectZen->buildMembers($currentMembers, $members2Import, $deptUsers, $project->days);
+        $this->view->executionMembers = $executionMembers;
         $this->display();
     }
 

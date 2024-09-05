@@ -116,7 +116,7 @@ window.changeProjectMembers = function()
 
     oldAccountList.forEach(function(account)
     {
-        if(accountList.indexOf(account.toString()) < 0)
+        if(accountList.indexOf(account.toString()) < 0 && executionMembers.indexOf(account.toString()) !== -1)
         {
             isDeleted = true;
             return false;
