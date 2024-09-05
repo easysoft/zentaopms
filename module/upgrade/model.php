@@ -9869,4 +9869,20 @@ class upgradeModel extends model
         }
         return true;
     }
+
+    public function appendFlowFieldsForBelong()
+    {
+        $flows = $this->dao->select('*')->from(TABLE_WORKFLOW)->where('buildin')->eq('0')->fetchAll('id');
+        if(empty($flows)) return true;
+
+        $flowTables    = $this->dao->query("SHOW tables LIKE 'zt_flow_%'")->fetchAll(PDO::FETCH_COLUMN);
+        $flowTableDesc = array();
+        foreach($flowTables as $flowTable)
+        {
+            $desc = $this->dao->query("DESC $flowTable")->fetchAll(PDO::FETCH_ASSOC);
+            $flowTableDesc[$flowTable] = array_column($desc, NULL, 'Field');
+        }
+
+        return true;
+    }
 }
