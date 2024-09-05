@@ -9,13 +9,16 @@ class sqlBuilderWhereGroup extends wg
     protected static array $defineProps = array(
         'index?: int',
         'operator?: string="and"',
+        'onChange?: function',
+        'onAdd?: function',
+        'onRemove?: function',
         'last?: bool=false'
     );
 
     protected function createGroup()
     {
         global $lang;
-        list($index) = $this->prop(array('index'));
+        list($index, $onAdd, $onRemove) = $this->prop(array('index', 'onAdd', 'onRemove'));
 
         return panel
         (
@@ -33,14 +36,16 @@ class sqlBuilderWhereGroup extends wg
                         setClass('add-where text-primary'),
                         set::type('ghost'),
                         set('data-index', $index),
-                        $lang->bi->addWhereGroup
+                        $lang->bi->addWhereGroup,
+                        on::click()->do($onAdd)
                     ),
                     btn
                     (
                         setClass('remove-where text-primary'),
                         set::type('ghost'),
                         set('data-index', $index),
-                        $lang->bi->removeWhereGroup
+                        $lang->bi->removeWhereGroup,
+                        on::click()->do($onRemove)
                     )
                 )
             ),
@@ -51,7 +56,7 @@ class sqlBuilderWhereGroup extends wg
     protected function build()
     {
         global $lang;
-        list($index, $operator, $isLast) = $this->prop(array('index', 'operator', 'last'));
+        list($index, $operator, $isLast, $onChange) = $this->prop(array('index', 'operator', 'last', 'onChange'));
         return div
         (
             setID("whereGroup$index"),
@@ -67,7 +72,8 @@ class sqlBuilderWhereGroup extends wg
                     set::name("operator_{$index}_"),
                     set::required(true),
                     set::items($lang->bi->whereOperatorList),
-                    set::value($operator)
+                    set::value($operator),
+                    on::change()->do($onChange)
                 )
             )
         );
