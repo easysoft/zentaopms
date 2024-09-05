@@ -58,42 +58,7 @@ class datatableModel extends model
         }
 
         /* 加载工作流字段配置。 */
-        if($this->config->edition != 'open')
-        {
-            $flow = $this->loadModel('workflow')->getByModule($module);
-            if(empty($flow)) return $fieldList;
-
-            if($flow->buildin == 1)
-            {
-                $fields            = $this->loadModel('workflowfield')->getList($module);
-                $workflowFieldList = $this->loadModel('flow')->buildDtableCols($fields);
-                $fieldList         = array_merge($fieldList, $workflowFieldList);
-            }
-            else
-            {
-                $fields = $this->loadModel('workflowaction')->getFields($module, 'browse');
-                foreach($fields as $field)
-                {
-                    if(!$field->show) continue;
-
-                    $fieldList[$field->field]['name']  = $field->field;
-                    $fieldList[$field->field]['title'] = $field->name;
-                    $fieldList[$field->field]['show']  = true;
-                    $fieldList[$field->field]['width'] = (empty($field->width) || $field->width == 'auto') ? '120' : $field->width;
-
-                    if($field->field == 'id')
-                    {
-                        $fieldList[$field->field]['fixed']    = 'left';
-                        $fieldList[$field->field]['required'] = true;
-                    }
-                    elseif($field->field == 'actions')
-                    {
-                        $fieldList[$field->field]['fixed']    = 'right';
-                        $fieldList[$field->field]['required'] = true;
-                    }
-                }
-            }
-        }
+        if($this->config->edition != 'open') $fieldList = $this->appendWorkflowFields($module, $method, $fieldList);
 
         return $fieldList;
     }
@@ -468,5 +433,71 @@ class datatableModel extends model
         if($widths['rightWidth'] <= 0 and $hasRightAuto) $widths['rightWidth'] = 140;
 
         return $widths;
+    }
+
+    /**
+     * 加载工作流字段配置到数据表字段配置中。
+     * Load workflow fields.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @param  array  $fieldList
+     * @access public
+     * @return array
+     */
+    public function appendWorkflowFields(string $module, string $method, array $fieldList): array
+    {
+        $flow = $this->loadModel('workflow')->getByModule($module);
+        if(empty($flow)) return $fieldList;
+
+        if(in_array($module, array('epic', 'story', 'requirement')))
+        {
+            $module = 'product'; // 需求加载product-browse的layout配置。
+        }
+        elseif($module == 'build')
+        {
+            $module = 'execution';
+            $method = 'build'; // 版本加载execution-build的layout配置。
+        }
+        elseif($module == 'task')
+        {
+            $module = 'execution';
+            $method = 'task'; // 任务加载execution-task的layout配置。
+        }
+
+        $fields = $this->loadModel('workflowaction')->getFields($module, $method);
+        if($flow->buildin == 1)
+        {
+            $action = $this->loadModel('workflowaction')->getByModuleAndAction($module, $method);
+            if(!$action || (isset($action->extensionType) && $action->extensionType != 'extend')) return $fieldList; // 不扩展不追加字段。
+
+            $workflowFieldList = $this->loadModel('flow')->buildDtableCols($fields);
+            $fieldList         = array_merge($fieldList, $workflowFieldList);
+        }
+        else
+        {
+            foreach($fields as $field)
+            {
+                if(!$field->show) continue;
+
+                $fieldList[$field->field]['name']  = $field->field;
+                $fieldList[$field->field]['title'] = $field->name;
+                $fieldList[$field->field]['show']  = true;
+                $fieldList[$field->field]['width'] = (empty($field->width) || $field->width == 'auto') ? '120' : $field->width;
+
+                if($field->field == 'id')
+                {
+                    $fieldList[$field->field]['fixed']    = 'left';
+                    $fieldList[$field->field]['required'] = true;
+                }
+                elseif($field->field == 'actions')
+                {
+                    $fieldList[$field->field]['fixed']    = 'right';
+                    $fieldList[$field->field]['required'] = true;
+                }
+            }
+        }
+
+        return $fieldList;
     }
 }

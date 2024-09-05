@@ -169,6 +169,7 @@ $config->upgrade->execFlow['biz5_3_1']     = array('functions' => 'processFeedba
 $config->upgrade->execFlow['biz6_4']       = array('functions' => 'importLiteModules');
 $config->upgrade->execFlow['biz8_12']      = array('functions' => 'AddFeedbackDatasource');
 $config->upgrade->execFlow['biz10_0_0']    = array('functions' => 'importERURModules');
+$config->upgrade->execFlow['biz10_5']      = array('functions' => 'processBuildinBrowseFields');
 
 if(!empty($config->isINT))
 {
