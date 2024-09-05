@@ -14,6 +14,9 @@ class sqlBuilderFuncRow extends wg
         'tables?: array',             // 表名下拉数据。
         'fields?: array',             // 字段名下拉数据。
         'value?: array',              // 值。
+        'onChange?: function',
+        'onAdd?: function',
+        'onRemove?: function',
         'tableError?:bool=false',     // 表名选择是否存在错误。
         'fieldError?:bool=false',     // 字段名选择是否存在错误。
         'functionError?:bool=false',  // 函数名选择是否存在错误。
@@ -24,7 +27,7 @@ class sqlBuilderFuncRow extends wg
     protected function buildTable(): node
     {
         global $lang;
-        list($index, $items, $value, $error) = $this->prop(array('index', 'tables', 'value', 'tableError'));
+        list($index, $items, $value, $onChange, $error) = $this->prop(array('index', 'tables', 'value', 'onChange', 'tableError'));
 
         $value = $value['table'];
         return sqlBuilderPicker
@@ -36,6 +39,7 @@ class sqlBuilderFuncRow extends wg
             set::placeholder($lang->bi->selectTableTip),
             set::width('48'),
             set::labelWidth('30px'),
+            set::onChange($onChange),
             set::error($error)
         );
     }
@@ -43,7 +47,7 @@ class sqlBuilderFuncRow extends wg
     protected function buildField(): node
     {
         global $lang;
-        list($index, $items, $value, $error) = $this->prop(array('index', 'fields', 'value', 'fieldError'));
+        list($index, $items, $value, $onChange, $error) = $this->prop(array('index', 'fields', 'value', 'onChange', 'fieldError'));
 
         $value = $value['field'];
         return sqlBuilderPicker
@@ -53,6 +57,7 @@ class sqlBuilderFuncRow extends wg
             set::value($value),
             set::placeholder($lang->bi->selectFieldTip),
             set::width('40'),
+            set::onChange($onChange),
             set::error($error)
         );
     }
@@ -60,7 +65,7 @@ class sqlBuilderFuncRow extends wg
     protected function buildFunction(): node
     {
         global $lang;
-        list($index, $value, $error) = $this->prop(array('index', 'value', 'functionError'));
+        list($index, $value, $onChange, $error) = $this->prop(array('index', 'value', 'onChange', 'functionError'));
 
         $value = $value['function'];
         return sqlBuilderPicker
@@ -70,6 +75,7 @@ class sqlBuilderFuncRow extends wg
             set::items($lang->bi->funcList),
             set::value($value),
             set::placeholder($lang->bi->selectFuncTip),
+            set::onChange($onChange),
             set::error($error)
         );
     }
@@ -77,7 +83,7 @@ class sqlBuilderFuncRow extends wg
     protected function buildAlias(): node
     {
         global $lang;
-        list($index, $value, $emptyError, $duplicateError) = $this->prop(array('index', 'value', 'aliasError', 'duplicateError'));
+        list($index, $value, $onChange, $emptyError, $duplicateError) = $this->prop(array('index', 'value', 'onChange', 'aliasError', 'duplicateError'));
 
         $value = $value['alias'];
         $errorText = $duplicateError ? $lang->bi->duplicateError : null;
@@ -89,6 +95,7 @@ class sqlBuilderFuncRow extends wg
             set::placeholder($lang->bi->selectInputTip),
             set::width('80'),
             set::labelWidth('160px'),
+            set::onChange($onChange),
             set::error($emptyError || $duplicateError),
             set::errorText($errorText)
         );
@@ -96,7 +103,7 @@ class sqlBuilderFuncRow extends wg
 
     protected function build()
     {
-        list($index) = $this->prop(array('index'));
+        list($index, $onAdd, $onRemove) = $this->prop(array('index', 'onAdd', 'onRemove'));
         return formRow
         (
             setClass('mb-4'),
@@ -111,14 +118,16 @@ class sqlBuilderFuncRow extends wg
                     setClass('add-function'),
                     set('data-index', $index),
                     set::type('ghost'),
-                    set::icon('plus')
+                    set::icon('plus'),
+                    on::click()->do($onAdd)
                 ),
                 btn
                 (
                     setClass('remove-function'),
                     set('data-index', $index),
                     set::type('ghost'),
-                    set::icon('minus')
+                    set::icon('minus'),
+                    on::click()->do($onRemove)
                 )
             )
         );
