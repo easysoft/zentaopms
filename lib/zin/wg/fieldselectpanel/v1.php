@@ -12,7 +12,9 @@ class fieldSelectPanel extends wg
         'alias?: string', // 表别名。
         'fields?: array', // 表字段列表。
         'values?: array', // 选中值。
-        'col?: int'       // 列数。
+        'col?: int',      // 列数。
+        'onChange?: function',
+        'onSelectAll?: function'
     );
 
     public static function getPageCSS(): ?string
@@ -39,7 +41,7 @@ class fieldSelectPanel extends wg
     protected function build()
     {
         global $lang;
-        list($table, $alias, $fields, $values, $col) = $this->prop(array('table', 'alias', 'fields', 'values', 'col'));
+        list($table, $alias, $fields, $values, $col, $onChange, $onSelectAll) = $this->prop(array('table', 'alias', 'fields', 'values', 'col', 'onChange', 'onSelectAll'));
 
         $isCheckedAll = count($fields) == count($values);
         $panelClass   = $col == 1 ? "w-full" : 'w-1/' . min($col, 6) . '-gap-4';
@@ -63,7 +65,8 @@ class fieldSelectPanel extends wg
                         set('data-alias', $alias),
                         set('data-checked', $isCheckedAll),
                         set::type('ghost'),
-                        $isCheckedAll ? $lang->bi->cancelAll : $lang->bi->checkAll
+                        $isCheckedAll ? $lang->bi->cancelAll : $lang->bi->checkAll,
+                        on::click()->do($onSelectAll)
                     )
                 )
             ),
@@ -74,7 +77,8 @@ class fieldSelectPanel extends wg
                 set::inline(true),
                 set::name($alias),
                 set::title('text'),
-                set::items($this->getFieldList())
+                set::items($this->getFieldList()),
+                on::change()->do($onChange)
             )
         );
     }
