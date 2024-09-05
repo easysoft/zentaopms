@@ -1318,47 +1318,6 @@ class biModel extends model
     }
 
     /**
-     * sqlBuilder
-     *
-     * @param  array $selects
-     * @param  array $from
-     * @param  array $joins
-     * @param  array $functions
-     * @param  array $wheres
-     * @param  array $querys
-     * @param  array $groups
-     * @access public
-     * @return object
-     */
-    public function sqlBuilder(array $selects, array $from, array $joins = array(), array $functions = array(), array $wheres = array(), array $querys = array(), array $groups = array()): object
-    {
-        $this->app->loadClass('sqlparser', true);
-        $parser = new sqlparser(null);
-
-        $parser->createStatement();
-
-        foreach($selects as $select) $parser->addSelect($parser->getExpression($select));
-
-        if(!empty($functions)) foreach($functions as $function) $parser->addSelect($parser->getExpression($function));
-
-        $parser->setFrom($parser->getExpression($from));
-
-        foreach($joins as $join)
-        {
-            list($table, $alias, $ons) = $join;
-            $onExprs      = $this->getConditionsFromArray($parser, $ons);
-            $leftJoinExpr = $parser->getLeftJoin($table, $alias, $onExprs);
-            $parser->addJoin($leftJoinExpr);
-        }
-
-        if(!empty($wheres)) $parser->addWhere($parser->combineConditions($this->getConditionsFromArray($parser, $wheres)));
-        if(!empty($querys)) $parser->addWhere($parser->combineConditions($this->getConditionsFromArray($parser, $querys)));
-        if(!empty($groups)) foreach($groups as $group) $parser->addGroup($parser->getGroup($parser->getExpression($group)));
-
-        return $parser->statement;
-    }
-
-    /**
      * Validate sql.
      *
      * @param  string    $sql

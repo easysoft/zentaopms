@@ -257,34 +257,6 @@ class buildZen extends build
     }
 
     /**
-     * 为创建页面构建版本数据。
-     * Build build data for create.
-     *
-     * @access public
-     * @return object
-     */
-    public function buildBuildForCreate()
-    {
-        if($this->post->isIntegrated == 'yes') $this->config->build->create->requiredFields = str_replace(',execution,', ',', ',' . $this->config->build->create->requiredFields . ',');
-        return form::data($this->config->build->form->create)->setDefault('createdBy', $this->app->user->account)->get();
-    }
-
-    /**
-     * 为编辑页面构建版本数据。
-     * Build build data for edit.
-     *
-     * @param  int    $buildID
-     * @access public
-     * @return object
-     */
-    public function buildBuildForEdit($buildID)
-    {
-        $build = $this->build->getById($buildID);
-        if(empty($build->execution)) $this->config->build->edit->requiredFields = str_replace(',execution,', ',', ',' . $this->config->build->edit->requiredFields . ',');
-        return form::data($this->config->build->form->edit, $buildID)->get();
-    }
-
-    /**
      * 获取版本不可关联的需求ID列表。
      * Get the story ID list that cannot be linked to the build.
      *
