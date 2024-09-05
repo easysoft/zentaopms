@@ -47,3 +47,6 @@ $execution = array(
         'name' => '项目1迭代2',
     ),
 );
+
+r($tester->inputFields($execution['0'])) && p() && e();
+$tester->closeBrowser();
