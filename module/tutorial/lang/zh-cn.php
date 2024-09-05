@@ -1887,6 +1887,98 @@ $lang->tutorial->orTutorial->demandpoolManage->demandManage->step10->desc = '您
 $lang->tutorial->orTutorial->marketManage = new stdClass();
 $lang->tutorial->orTutorial->marketManage->title = '市场管理教程';
 
+$lang->tutorial->orTutorial->marketManage->researchManage = new stdClass();
+$lang->tutorial->orTutorial->marketManage->researchManage->title = '需求管理';
+
+$lang->tutorial->orTutorial->marketManage->researchManage->step1 = new stdClass();
+$lang->tutorial->orTutorial->marketManage->researchManage->step1->name = '点击市场';
+$lang->tutorial->orTutorial->marketManage->researchManage->step1->desc = '您在这里可以管理调研活动';
+
+$lang->tutorial->orTutorial->marketManage->researchManage->step2 = new stdClass();
+$lang->tutorial->orTutorial->marketManage->researchManage->step2->name = '点击调研';
+$lang->tutorial->orTutorial->marketManage->researchManage->step2->desc = '您在这里可以管理调研活动';
+
+$lang->tutorial->orTutorial->marketManage->researchManage->step3 = new stdClass();
+$lang->tutorial->orTutorial->marketManage->researchManage->step3->name = '点击发起调研';
+$lang->tutorial->orTutorial->marketManage->researchManage->step3->desc = '点击发起调研活动';
+
+$lang->tutorial->orTutorial->marketManage->researchManage->step4 = new stdClass();
+$lang->tutorial->orTutorial->marketManage->researchManage->step4->name = '填写表单';
+
+$lang->tutorial->orTutorial->marketManage->researchManage->step5 = new stdClass();
+$lang->tutorial->orTutorial->marketManage->researchManage->step5->name = '保存表单';
+$lang->tutorial->orTutorial->marketManage->researchManage->step5->desc = '保存后在调研列表查看';
+
+$lang->tutorial->orTutorial->marketManage->researchManage->step6 = new stdClass();
+$lang->tutorial->orTutorial->marketManage->researchManage->step6->name = '点击调研名称';
+$lang->tutorial->orTutorial->marketManage->researchManage->step6->desc = '点击管理调研活动';
+
+$lang->tutorial->orTutorial->marketManage->researchManage->step7 = new stdClass();
+$lang->tutorial->orTutorial->marketManage->researchManage->step7->name = '点击设置阶段';
+$lang->tutorial->orTutorial->marketManage->researchManage->step7->desc = '点击设置调研活动的阶段';
+
+$lang->tutorial->orTutorial->marketManage->researchManage->step8 = new stdClass();
+$lang->tutorial->orTutorial->marketManage->researchManage->step8->name = '填写表单';
+
+$lang->tutorial->orTutorial->marketManage->researchManage->step9 = new stdClass();
+$lang->tutorial->orTutorial->marketManage->researchManage->step9->name = '保存表单';
+$lang->tutorial->orTutorial->marketManage->researchManage->step9->desc = '保存后在调研任务列表查看';
+
+$lang->tutorial->orTutorial->marketManage->researchManage->step10 = new stdClass();
+$lang->tutorial->orTutorial->marketManage->researchManage->step10->name = '点击建任务';
+$lang->tutorial->orTutorial->marketManage->researchManage->step10->desc = '点击创建调研活动的任务';
+
+$lang->tutorial->orTutorial->marketManage->researchManage->step11 = new stdClass();
+$lang->tutorial->orTutorial->marketManage->researchManage->step11->name = '填写表单';
+
+$lang->tutorial->orTutorial->marketManage->researchManage->step12 = new stdClass();
+$lang->tutorial->orTutorial->marketManage->researchManage->step12->name = '保存表单';
+$lang->tutorial->orTutorial->marketManage->researchManage->step12->desc = '保存后在调研任务列表查看';
+
+$lang->tutorial->orTutorial->marketManage->researchManage->step13 = new stdClass();
+$lang->tutorial->orTutorial->marketManage->researchManage->step13->name = '开始任务';
+$lang->tutorial->orTutorial->marketManage->researchManage->step13->desc = '您可以在这里开始任务，并记录消耗和剩余工时';
+
+$lang->tutorial->orTutorial->marketManage->researchManage->step14 = new stdClass();
+$lang->tutorial->orTutorial->marketManage->researchManage->step14->name = '填写表单';
+
+$lang->tutorial->orTutorial->marketManage->researchManage->step15 = new stdClass();
+$lang->tutorial->orTutorial->marketManage->researchManage->step15->name = '保存表单';
+$lang->tutorial->orTutorial->marketManage->researchManage->step15->desc = '保存后任务状态变为进行中';
+
+$lang->tutorial->orTutorial->marketManage->researchManage->step16 = new stdClass();
+$lang->tutorial->orTutorial->marketManage->researchManage->step16->name = '点击日志';
+$lang->tutorial->orTutorial->marketManage->researchManage->step16->desc = '点击为任务记录工时日志';
+
+$lang->tutorial->orTutorial->marketManage->researchManage->step17 = new stdClass();
+$lang->tutorial->orTutorial->marketManage->researchManage->step17->name = '填写表单';
+
+$lang->tutorial->orTutorial->marketManage->researchManage->step18 = new stdClass();
+$lang->tutorial->orTutorial->marketManage->researchManage->step18->name = '保存表单';
+$lang->tutorial->orTutorial->marketManage->researchManage->step18->desc = '保存后任务工时会根据日志更新';
+
+$lang->tutorial->orTutorial->marketManage->researchManage->step19 = new stdClass();
+$lang->tutorial->orTutorial->marketManage->researchManage->step19->name = '完成任务';
+$lang->tutorial->orTutorial->marketManage->researchManage->step19->desc = '点击完成任务';
+
+$lang->tutorial->orTutorial->marketManage->researchManage->step20 = new stdClass();
+$lang->tutorial->orTutorial->marketManage->researchManage->step20->name = '填写表单';
+
+$lang->tutorial->orTutorial->marketManage->researchManage->step21 = new stdClass();
+$lang->tutorial->orTutorial->marketManage->researchManage->step21->name = '保存表单';
+$lang->tutorial->orTutorial->marketManage->researchManage->step21->desc = '保存后任务状态更改为已完成';
+
+$lang->tutorial->orTutorial->marketManage->researchManage->step22 = new stdClass();
+$lang->tutorial->orTutorial->marketManage->researchManage->step22->name = '关闭任务';
+$lang->tutorial->orTutorial->marketManage->researchManage->step22->desc = '点击将完成的任务关闭';
+
+$lang->tutorial->orTutorial->marketManage->researchManage->step23 = new stdClass();
+$lang->tutorial->orTutorial->marketManage->researchManage->step23->name = '填写表单';
+
+$lang->tutorial->orTutorial->marketManage->researchManage->step24 = new stdClass();
+$lang->tutorial->orTutorial->marketManage->researchManage->step24->name = '保存表单';
+$lang->tutorial->orTutorial->marketManage->researchManage->step24->desc = '保存后任务状态更改为已关闭';
+
 $lang->tutorial->orTutorial->roadmapManage = new stdClass();
 $lang->tutorial->orTutorial->roadmapManage->title = '产品规划管理教程';
 

@@ -7,7 +7,7 @@ $orTutorial->demandpoolManage->name    = 'demandManage';
 $orTutorial->demandpoolManage->title   = $lang->tutorial->orTutorial->demandpoolManage->title;
 $orTutorial->demandpoolManage->icon    = 'bars text-special';
 $orTutorial->demandpoolManage->type    = 'basic';
-$orTutorial->demandpoolManage->modules = 'demandpool,demand';
+$orTutorial->demandpoolManage->modules = 'demandpool,demand,marketresearch';
 $orTutorial->demandpoolManage->app     = 'demandpool';
 $orTutorial->demandpoolManage->tasks   = array();
 
@@ -100,11 +100,176 @@ $orTutorial->marketManage->modules = 'marketreport';
 $orTutorial->marketManage->app     = 'market';
 $orTutorial->marketManage->tasks   = array();
 
-$orTutorial->marketManage->tasks['marketManage'] = array();
-$orTutorial->marketManage->tasks['marketManage']['name']     = 'marketManage';
-$orTutorial->marketManage->tasks['marketManage']['title']    = $lang->tutorial->orTutorial->marketManage->title;
-$orTutorial->marketManage->tasks['marketManage']['startUrl'] = array('marketreport', 'all');
-$orTutorial->marketManage->tasks['marketManage']['steps']    = array();
+$orTutorial->marketManage->tasks['researchManage'] = array();
+$orTutorial->marketManage->tasks['researchManage']['name']     = 'researchManage';
+$orTutorial->marketManage->tasks['researchManage']['title']    = $lang->tutorial->orTutorial->marketManage->researchManage->title;
+$orTutorial->marketManage->tasks['researchManage']['startUrl'] = array('marketresearch', 'all');
+$orTutorial->marketManage->tasks['researchManage']['steps']    = array();
+
+$orTutorial->marketManage->tasks['researchManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#actionBar a',
+    'page'   => 'marketresearch-all',
+    'title'  => $lang->tutorial->orTutorial->marketManage->researchManage->step3->name,
+    'desc'   => $lang->tutorial->orTutorial->marketManage->researchManage->step3->desc
+);
+
+$orTutorial->marketManage->tasks['researchManage']['steps'][] = array(
+    'type'   => 'form',
+    'page'   => 'marketresearch-create',
+    'title'  => $lang->tutorial->orTutorial->marketManage->researchManage->step4->name
+);
+
+$orTutorial->marketManage->tasks['researchManage']['steps'][] = array(
+    'type'   => 'saveForm',
+    'page'   => 'marketresearch-create',
+    'title'  => $lang->tutorial->orTutorial->marketManage->researchManage->step5->name,
+    'desc'   => $lang->tutorial->orTutorial->marketManage->researchManage->step5->desc
+);
+
+$orTutorial->marketManage->tasks['researchManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'div.dtable div[data-col="name"][data-row="2"] a',
+    'page'   => 'marketresearch-all',
+    'url'    => array('marketresearch', 'all'),
+    'title'  => $lang->tutorial->orTutorial->marketManage->researchManage->step6->name,
+    'desc'   => $lang->tutorial->orTutorial->marketManage->researchManage->step6->desc
+);
+
+$orTutorial->marketManage->tasks['researchManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#actionBar a.createStage-btn',
+    'page'   => 'marketresearch-task',
+    'title'  => $lang->tutorial->orTutorial->marketManage->researchManage->step7->name,
+    'desc'   => $lang->tutorial->orTutorial->marketManage->researchManage->step7->desc
+);
+
+$orTutorial->marketManage->tasks['researchManage']['steps'][] = array(
+    'type'   => 'form',
+    'page'   => 'marketresearch-createStage',
+    'title'  => $lang->tutorial->orTutorial->marketManage->researchManage->step8->name
+);
+
+$orTutorial->marketManage->tasks['researchManage']['steps'][] = array(
+    'type'   => 'saveForm',
+    'page'   => 'marketresearch-createStage',
+    'title'  => $lang->tutorial->orTutorial->marketManage->researchManage->step9->name,
+    'desc'   => $lang->tutorial->orTutorial->marketManage->researchManage->step9->desc
+);
+
+$orTutorial->marketManage->tasks['researchManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#actionBar a.researchtask-create-btn',
+    'page'   => 'marketresearch-task',
+    'url'    => array('marketresearch', 'task', 'researchID=1'),
+    'title'  => $lang->tutorial->orTutorial->marketManage->researchManage->step10->name,
+    'desc'   => $lang->tutorial->orTutorial->marketManage->researchManage->step10->desc
+);
+
+$orTutorial->marketManage->tasks['researchManage']['steps'][] = array(
+    'type'   => 'form',
+    'page'   => 'researchtask-create',
+    'title'  => $lang->tutorial->orTutorial->marketManage->researchManage->step11->name
+);
+
+$orTutorial->marketManage->tasks['researchManage']['steps'][] = array(
+    'type'   => 'saveForm',
+    'page'   => 'researchtask-create',
+    'title'  => $lang->tutorial->orTutorial->marketManage->researchManage->step12->name,
+    'desc'   => $lang->tutorial->orTutorial->marketManage->researchManage->step12->desc
+);
+
+$orTutorial->marketManage->tasks['researchManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#table-marketresearch-task div[data-row="1"] a.researchtask-start-btn',
+    'page'   => 'marketresearch-task',
+    'url'    => array('marketresearch', 'task', 'researchID=2'),
+    'title'  => $lang->tutorial->orTutorial->marketManage->researchManage->step13->name,
+    'desc'   => $lang->tutorial->orTutorial->marketManage->researchManage->step13->desc
+);
+
+$orTutorial->marketManage->tasks['researchManage']['steps'][] = array(
+    'type'   => 'form',
+    'page'   => 'marketresearch-task',
+    'title'  => $lang->tutorial->orTutorial->marketManage->researchManage->step14->name,
+);
+
+$orTutorial->marketManage->tasks['researchManage']['steps'][] = array(
+    'type'   => 'saveForm',
+    'page'   => 'form button[type="submit"]',
+    'page'   => 'marketresearch-task',
+    'title'  => $lang->tutorial->orTutorial->marketManage->researchManage->step15->name,
+    'desc'   => $lang->tutorial->orTutorial->marketManage->researchManage->step15->desc
+);
+
+$orTutorial->marketManage->tasks['researchManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#table-marketresearch-task div[data-row="1"] a.researchtask-recordWorkhour-btn',
+    'page'   => 'marketresearch-task',
+    'url'    => array('marketresearch', 'task', 'researchID=2'),
+    'title'  => $lang->tutorial->orTutorial->marketManage->researchManage->step16->name,
+    'desc'   => $lang->tutorial->orTutorial->marketManage->researchManage->step16->desc
+);
+
+$orTutorial->marketManage->tasks['researchManage']['steps'][] = array(
+    'type'   => 'form',
+    'page'   => 'marketresearch-task',
+    'title'  => $lang->tutorial->orTutorial->marketManage->researchManage->step17->name,
+);
+
+$orTutorial->marketManage->tasks['researchManage']['steps'][] = array(
+    'type'   => 'saveForm',
+    'page'   => 'form button[type="submit"]',
+    'page'   => 'marketresearch-task',
+    'title'  => $lang->tutorial->orTutorial->marketManage->researchManage->step18->name,
+    'desc'   => $lang->tutorial->orTutorial->marketManage->researchManage->step18->desc
+);
+
+$orTutorial->marketManage->tasks['researchManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#table-marketresearch-task div[data-row="1"] a.researchtask-finish-btn',
+    'page'   => 'marketresearch-task',
+    'url'    => array('marketresearch', 'task', 'researchID=3'),
+    'title'  => $lang->tutorial->orTutorial->marketManage->researchManage->step19->name,
+    'desc'   => $lang->tutorial->orTutorial->marketManage->researchManage->step19->desc
+);
+
+$orTutorial->marketManage->tasks['researchManage']['steps'][] = array(
+    'type'   => 'form',
+    'page'   => 'marketresearch-task',
+    'title'  => $lang->tutorial->orTutorial->marketManage->researchManage->step20->name,
+);
+
+$orTutorial->marketManage->tasks['researchManage']['steps'][] = array(
+    'type'   => 'saveForm',
+    'target' => 'form button[type="submit"]',
+    'page'   => 'marketresearch-task',
+    'title'  => $lang->tutorial->orTutorial->marketManage->researchManage->step21->name,
+    'desc'   => $lang->tutorial->orTutorial->marketManage->researchManage->step21->desc
+);
+
+$orTutorial->marketManage->tasks['researchManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#table-marketresearch-task div[data-row="2"] a.researchtask-close-btn',
+    'page'   => 'marketresearch-task',
+    'url'    => array('marketresearch', 'task', 'researchID=3'),
+    'title'  => $lang->tutorial->orTutorial->marketManage->researchManage->step22->name,
+    'desc'   => $lang->tutorial->orTutorial->marketManage->researchManage->step22->desc
+);
+
+$orTutorial->marketManage->tasks['researchManage']['steps'][] = array(
+    'type'   => 'form',
+    'page'   => 'marketresearch-task',
+    'title'  => $lang->tutorial->orTutorial->marketManage->researchManage->step23->name,
+);
+
+$orTutorial->marketManage->tasks['researchManage']['steps'][] = array(
+    'type'   => 'saveForm',
+    'target' => 'form button[type="submit"]',
+    'page'   => 'marketresearch-task',
+    'title'  => $lang->tutorial->orTutorial->marketManage->researchManage->step24->name,
+    'desc'   => $lang->tutorial->orTutorial->marketManage->researchManage->step24->desc
+);
 
 $orTutorial->roadmapManage = new stdClass();
 $orTutorial->roadmapManage->name    = 'roadmapManage';

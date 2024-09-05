@@ -184,6 +184,7 @@ class tutorialModel extends model
         $project->left         = 0;
         $project->storyType    = 'story,requirement,epic';
         $project->charter      = 0;
+        $project->market       = 1;
 
         list($guide, $guideTask, $guideStepIndex) = empty($_SERVER['HTTP_X_ZIN_TUTORIAL']) ? array('', '', '') : explode('-', $_SERVER['HTTP_X_ZIN_TUTORIAL']);
         if($guide && strpos($guide, 'scrumProjectManage') !== false)
@@ -206,6 +207,11 @@ class tutorialModel extends model
             $project->name     = 'No multiple Project';
             $project->model    = 'scrum';
             $project->multiple = '0';
+        }
+        if($guide && strpos($guide, 'marketManage') !== false)
+        {
+            $project->name  = 'Test research';
+            $project->model = 'research';
         }
 
         return $project;
@@ -2132,5 +2138,78 @@ class tutorialModel extends model
         $draftDemand->notReview = array($this->app->user->account);
 
         return array($activeDemand->id => $activeDemand, $draftDemand->id => $draftDemand);
+    }
+
+    /**
+     * 获取新手模式调研任务列表。
+     * Get research stage stats.
+     *
+     * @access public
+     * @return array
+     */
+    public function getResearchStageStats(): array
+    {
+        $stage = $this->getExecution();
+        $stage->id            = 'sid_2';
+        $stage->parent        = 'sid_1';
+        $stage->name          = 'Test research stage';
+        $stage->path          = ',1,2,';
+        $stage->project       = 1;
+        $stage->model         = '';
+        $stage->type          = 'stage';
+        $stage->attribute     = 'research';
+        $stage->canCreateTask = true;
+
+        $waitTask = $this->getTask();
+        $waitTask->id        = 1;
+        $waitTask->name      = 'Wait Task';
+        $waitTask->type      = 'research';
+        $waitTask->project   = 1;
+        $waitTask->execution = 2;
+        $waitTask->parent    = 'sid_2';
+        $waitTask->rawParent = 0;
+        $waitTask->isParent  = 1;
+
+        $doneTask = $this->getTask();
+        $doneTask->id         = 2;
+        $doneTask->name       = 'Done task';
+        $doneTask->status     = 'done';
+        $doneTask->finishedBy = 'test';
+        $doneTask->type       = 'research';
+        $doneTask->project    = 1;
+        $doneTask->execution  = 2;
+        $doneTask->parent     = 'sid_2';
+        $doneTask->rawParent  = 0;
+        $doneTask->isParent   = 1;
+
+        return array($stage, $waitTask, $doneTask);
+    }
+
+    /**
+     * 获取新手模式市场。
+     * Get market.
+     *
+     * @access public
+     * @return object
+     */
+    public function getMarket(): object
+    {
+        $market = new stdClass();
+        $market->id             = 1;
+        $market->name           = 'Test Market';
+        $market->industry       = '';
+        $market->scale          = 0.00;
+        $market->maturity       = '';
+        $market->speed          = '';
+        $market->competition    = '';
+        $market->strategy       = '';
+        $market->ppm            = '';
+        $market->desc           = '';
+        $market->openedBy       = $this->app->user->account;
+        $market->openedDate     = helper::now();
+        $market->lastEditedBy   = '';
+        $market->lastEditedDate = '';
+        $market->deleted        = 0;
+        return $market;
     }
 }
