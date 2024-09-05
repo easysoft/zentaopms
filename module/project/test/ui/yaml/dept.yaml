@@ -17,3 +17,8 @@ fields:
     postfix: ","
   - field: grade
     note:  "层级"
+    range: 1
+  - field: position
+    range: ""
+  - field: function
+    range: ""
