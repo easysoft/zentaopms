@@ -468,7 +468,7 @@ class datatableModel extends model
         $fields = $this->loadModel('workflowaction')->getFields($module, $method);
         if($flow->buildin == 1)
         {
-            $action = $this->loadModel('workflowaction')->getByModuleAndAction($module, $method);
+            $action = $this->workflowaction->getByModuleAndAction($module, $method);
             if(!$action || (isset($action->extensionType) && $action->extensionType != 'extend')) return $fieldList; // 不扩展不追加字段。
 
             $workflowFieldList = $this->loadModel('flow')->buildDtableCols($fields);
