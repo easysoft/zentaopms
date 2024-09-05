@@ -318,8 +318,6 @@ class pivotState
 
     public $canChangeMode = true;
 
-    public $builderError = array();
-
     /**
      * __construct method.
      *
