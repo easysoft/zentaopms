@@ -54,27 +54,27 @@ $execution = array(
         'end'   => date('Y-m-d', strtotime('+1 days')),
     ),
     '2' => array(
-        'name'  => '项目1迭代2',
+        'name'  => '项目1迭代1',
         'begin' => '',
         'end'   => date('Y-m-d', strtotime('+1 days')),
     ),
     '3' => array(
-        'name'  => '项目1迭代2',
+        'name'  => '项目1迭代1',
         'begin' => date('Y-m-d', strtotime('-1 years')),
         'end'   => date('Y-m-d', strtotime('+1 days')),
     ),
     '4' => array(
-        'name'  => '项目1迭代2',
+        'name'  => '项目1迭代1',
         'begin' => date('Y-m-d'),
         'end'   => '',
     ),
     '5' => array(
-        'name'  => '项目1迭代2',
+        'name'  => '项目1迭代1',
         'begin' => date('Y-m-d'),
         'end'   => date('Y-m-d', strtotime('+1 years')),
     ),
     '6' => array(
-        'name'  => '项目1迭代2',
+        'name'  => '项目1迭代1',
         'begin' => date('Y-m-d'),
         'end'   => date('Y-m-d', strtotime('-1 days')),
     ),
@@ -85,7 +85,12 @@ $execution = array(
     )
 );
 
-r($tester->checkName($execution['0'])) && p('message') && e('执行名称重复提示信息正确');
-r($tester->checkName($execution['1'])) && p('message') && e('执行名称为空提示信息正确');
-
+r($tester->checkName($execution['0']))          && p('message') && e('执行名称重复提示信息正确');
+r($tester->checkName($execution['1']))          && p('message') && e('执行名称为空提示信息正确');
+r($tester->checkDate($execution['2'], 'begin')) && p('message') && e('执行开始日期为空提示信息正确');
+r($tester->checkDate($execution['3'], 'begin')) && p('message') && e('执行开始日期小于项目开始日期提示信息正确');
+r($tester->checkDate($execution['4'], 'end'))   && p('message') && e('执行结束时间为空提示信息正确');
+r($tester->checkDate($execution['5'], 'end'))   && p('message') && e('执行结束日期大于项目结束日期提示信息正确');
+r($tester->checkDate($execution['6'], 'other')) && p('message') && e('执行结束日期小于执行开始日期提示信息正确');
+r($tester->batchEdit($execution['7']))          && p('message') && e('批量编辑执行成功');
 $tester->closeBrowser();
