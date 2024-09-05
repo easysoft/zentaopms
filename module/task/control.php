@@ -626,7 +626,6 @@ class task extends control
         }
 
         $task         = $this->view->task;
-        $members      = $task->team ? $this->task->getMemberPairs($task) : $this->loadModel('user')->getTeamMemberPairs($task->execution, 'execution', 'nodeleted');
         $task->nextBy = $task->openedBy;
 
         if(!empty($task->team))
@@ -635,9 +634,9 @@ class task extends control
             $task->myConsumed = zget($currentTeam, 'consumed', 0);
         }
 
+        $this->taskZen->buildUsersAndMembersToFrom($task->execution, $taskID);
+
         $this->view->title           = $this->view->execution->name . $this->lang->hyphen .$this->lang->task->finish;
-        $this->view->members         = $members;
-        $this->view->users           = $this->loadModel('user')->getPairs('noletter');
         $this->view->canRecordEffort = $this->task->canOperateEffort($task);
         $this->display();
     }
