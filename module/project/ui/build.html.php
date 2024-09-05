@@ -48,14 +48,14 @@ jsVar('filePathTip', $lang->build->filePath);
 jsVar('integratedTip', $lang->build->integrated);
 jsVar('deletedTip', $lang->build->deleted);
 
-$fieldList = $config->build->dtable->fieldList;
+$fieldList = $this->loadModel('datatable')->getSetting('project', 'build');
 if(($project->model == 'kanban' && $app->rawModule == 'projectbuild') || !$project->multiple)
 {
     unset($fieldList['actions']['list']['createTest']['data-app']);
     $fieldList['actions']['list']['viewBug']['url'] = $config->build->actionList['projectBugList']['url'];
 }
 unset($fieldList['actions']['list'][$app->tab == 'project' ? 'linkStory' : 'linkProjectStory']);
-if(!$project->multiple) unset($fieldList['execution']);
+if(!$project->multiple) unset($fieldList['executionName']);
 $builds = initTableData($builds, $fieldList, $this->build);
 
 dtable
@@ -65,6 +65,7 @@ dtable
     set::data($builds),
     set::plugins(array('cellspan')),
     set::orderBy($orderBy),
+    set::customCols(true),
     set::sortLink(createLink($app->rawModule, $app->rawMethod, "projectID={$project->id}&type={$type}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::getCellSpan(jsRaw('window.getCellSpan')),

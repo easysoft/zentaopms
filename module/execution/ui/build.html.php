@@ -43,7 +43,7 @@ jsVar('scmPathTip', $lang->build->scmPath);
 jsVar('filePathTip', $lang->build->filePath);
 jsVar('confirmDelete', $lang->build->confirmDelete);
 
-$fieldList = $config->build->dtable->fieldList;
+$fieldList = $this->loadModel('datatable')->getSetting('execution', 'build');
 if($execution->type == 'kanban')
 {
     unset($fieldList['actions']['list']['createTest']['data-app']);
@@ -58,6 +58,7 @@ dtable
     set::data($builds),
     set::plugins(array('cellspan')),
     set::userMap($users),
+    set::customCols(true),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::getCellSpan(jsRaw('window.getCellSpan')),
     set::orderBy($orderBy),

@@ -14,30 +14,36 @@ $config->build->dtable->fieldList['name']['link']     = array('module' => 'build
 $config->build->dtable->fieldList['name']['type']     = 'title';
 $config->build->dtable->fieldList['name']['width']    = '300';
 $config->build->dtable->fieldList['name']['sortType'] = false;
+$config->build->dtable->fieldList['name']['show']     = 1;
 
-$config->build->dtable->fieldList['product']['title'] = $lang->build->product;
-$config->build->dtable->fieldList['product']['name']  = 'productName';
-$config->build->dtable->fieldList['product']['type']  = 'desc';
-$config->build->dtable->fieldList['product']['group'] = 1;
+$config->build->dtable->fieldList['productName']['title'] = $lang->build->product;
+$config->build->dtable->fieldList['productName']['name']  = 'productName';
+$config->build->dtable->fieldList['productName']['type']  = 'desc';
+$config->build->dtable->fieldList['productName']['group'] = 1;
+$config->build->dtable->fieldList['productName']['show'] = 1;
 
 $config->build->dtable->fieldList['branch']['title'] = $lang->build->branch;
 $config->build->dtable->fieldList['branch']['name']  = 'branchName';
 $config->build->dtable->fieldList['branch']['type']  = 'desc';
 $config->build->dtable->fieldList['branch']['group'] = 1;
+$config->build->dtable->fieldList['branch']['show'] = 1;
 
-$config->build->dtable->fieldList['execution']['title'] = $lang->build->execution;
-$config->build->dtable->fieldList['execution']['name']  = 'executionName';
-$config->build->dtable->fieldList['execution']['type']  = 'desc';
-$config->build->dtable->fieldList['execution']['group'] = 1;
+$config->build->dtable->fieldList['executionName']['title'] = $lang->build->execution;
+$config->build->dtable->fieldList['executionName']['name']  = 'executionName';
+$config->build->dtable->fieldList['executionName']['type']  = 'desc';
+$config->build->dtable->fieldList['executionName']['group'] = 1;
+$config->build->dtable->fieldList['executionName']['show']  = 1;
 
 $config->build->dtable->fieldList['path']['title'] = $lang->build->url;
 $config->build->dtable->fieldList['path']['name']  = 'path';
 $config->build->dtable->fieldList['path']['type']  = 'desc';
+$config->build->dtable->fieldList['path']['show']  = 1;
 
 $config->build->dtable->fieldList['builder']['title']    = $lang->build->builder;
 $config->build->dtable->fieldList['builder']['name']     = 'builder';
 $config->build->dtable->fieldList['builder']['type']     = 'user';
 $config->build->dtable->fieldList['builder']['sortType'] = false;
+$config->build->dtable->fieldList['builder']['show']     = 1;
 
 $config->build->dtable->fieldList['date']['title']    = $lang->build->date;
 $config->build->dtable->fieldList['date']['name']     = 'date';
@@ -47,6 +53,7 @@ $config->build->dtable->fieldList['date']['sortType'] = true;
 $config->build->dtable->fieldList['actions']['title'] = $lang->actions;
 $config->build->dtable->fieldList['actions']['name']  = 'actions';
 $config->build->dtable->fieldList['actions']['type']  = 'actions';
+$config->build->dtable->fieldList['actions']['width'] = '120px';
 $config->build->dtable->fieldList['actions']['list']  = $config->build->actionList;
 $config->build->dtable->fieldList['actions']['menu']  = array('linkStory', 'createTest', 'viewBug', 'edit', 'delete');
 
