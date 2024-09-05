@@ -13,17 +13,7 @@
 <?php
 if($contactLists)
 {
-    echo html::select('contactListMenu', $contactLists, '', "class='form-control chosen' $attr onchange=\"setMailto('$dropdownName', this.value)\"");
-}
-else
-{
-    $width = isonlybody() ? 'data-width=100%' : '';
-    echo '<span class="input-group-btn">';
-    echo '<a title="' . $lang->user->contacts->manage . '" href="' . $this->createLink('my', 'managecontacts', "listID=0&mode=new", '', true) . "\" target='_blank' data-icon='cog' data-title='{$lang->user->contacts->manage}' class='btn btn-icon iframe' $width><i class='icon icon-cog'></i></a>";
-    echo '</span>';
-    echo '<span class="input-group-btn">';
-    echo '<button type="button" title="' . $lang->refresh . '" class="btn btn-icon"' . "onclick=\"ajaxGetContacts(this, '$dropdownName')\"" . '><i class="icon icon-refresh"></i></button>';
-    echo '</span>';
+    echo html::select('contactListMenu', array('' => '') + $contactLists, '', "class='form-control chosen' $attr onchange=\"setOldMailto('$dropdownName', this.value)\"");
 }
 ?>
 <style>
@@ -33,3 +23,16 @@ td > <?php echo "#" . $dropdownName;?> + .chosen-container .chosen-choices {bord
 td > <?php echo "#" . $dropdownName;?> + .chosen-container + #contactListMenu + .chosen-container > .chosen-single {border-radius: 0 0 2px 2px; border-top-width: 0; padding-top: 6px;}
 #contactListMenu + .chosen-container.chosen-container-active > .chosen-single {border-top-width: 1px !important; padding-top: 5px !important;}
 </style>
+
+<script>
+function setOldMailto(mailto, contactListID)
+{
+    link = createLink('user', 'ajaxGetOldContactUsers', 'listID=' + contactListID + '&dropdownName=' + mailto);
+    $.get(link, function(users)
+    {
+        $('#' + mailto).replaceWith(users);
+        $('#' + mailto + '_chosen').remove();
+        $('#' + mailto).chosen();
+    });
+}
+</script>

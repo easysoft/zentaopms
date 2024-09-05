@@ -41,6 +41,7 @@ class screenModel extends model
         $this->filter->dept    = '';
         $this->filter->account = '';
         $this->filter->charts  = array();
+        $this->viewableObjects = $this->bi->getViewableObject('screen');
     }
 
     /**

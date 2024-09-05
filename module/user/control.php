@@ -1004,6 +1004,26 @@ class user extends control
     }
 
     /**
+     * AJAX: get users from a contact list.
+     *
+     * @param  int    $contactListID
+     * @param  string $dropdownName mailto|whitelist
+     * @access public
+     * @return string
+     */
+    public function ajaxGetOldContactUsers(int $contactListID, string $dropdownName = 'mailto')
+    {
+        $list = $contactListID ? $this->user->getContactListByID($contactListID) : '';
+        $attr = $dropdownName == 'mailto' ? "data-placeholder='{$this->lang->chooseUsersToMail}' data-drop-direction='bottom'" : '';
+
+        $users = $this->user->getPairs('devfirst|nodeleted|noclosed', $list ? $list->userList : '', $this->config->maxCount);
+        if(isset($this->config->user->moreLink)) $this->config->moreLinks[$dropdownName . "[]"] = $this->config->user->moreLink;
+
+        $defaultUsers = empty($contactListID) ? '' : $list->userList;
+        return print(html::select($dropdownName . "[]", $users, $defaultUsers, "class='form-control picker-select' multiple $attr"));
+    }
+
+    /**
      * AJAX: 获取某个联系人列表中包含的用户。
      * AJAX: Get users in a contact list.
      *
