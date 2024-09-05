@@ -9,12 +9,13 @@ class sqlBuilderEmptyContent extends wg
     protected static array $defineProps = array(
         'btnClass?: string',
         'btnText?: string',
-        'emptyText?: string'
+        'emptyText?: string',
+        'onClick?: function'
     );
 
     protected function build()
     {
-        list($btnClass, $btnText, $emptyText) = $this->prop(array('btnClass', 'btnText', 'emptyText'));
+        list($btnClass, $btnText, $emptyText, $onClick) = $this->prop(array('btnClass', 'btnText', 'emptyText', 'onClick'));
         return div
         (
             setClass('h-full flex col items-center justify-center'),
@@ -32,7 +33,8 @@ class sqlBuilderEmptyContent extends wg
                     set::type('secondary'),
                     set::icon('plus'),
                     set('data-index', -1),
-                    $btnText
+                    $btnText,
+                    on::click()->do($onClick)
                 )
             )
         );
