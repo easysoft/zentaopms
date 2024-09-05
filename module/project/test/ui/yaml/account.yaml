@@ -1,0 +1,19 @@
+title: table zt_account
+desc: "账号"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    range: 1-5
+  - field: type
+    range: "inside"
+  - field: account
+    range: admin,user1,user2,user3,user4
+  - field: realname
+    note: "用户1"
+    range: admin,用户1,用户2,用户3,用户4
+  - field: dept
+    range: 1
+  - field: email
+    prefix: user
+    range: 1,2,3,4,5
