@@ -14,6 +14,7 @@ class sqlBuilderInput extends sqlBuilderControl
         'labelWidth?: string="80px"',
         'width?: string="60"',
         "suffix?: string",
+        'onChange?: function',
         "error?: bool=false",
         "errorText?: string"
     );
