@@ -9897,6 +9897,20 @@ class upgradeModel extends model
             foreach($fields as $field => $addSQL)
             {
                 if($flow->vision == 'or' && $field != 'product') continue;
+                if(isset($flowTableDesc[$flow->table][$field]))
+                {
+                    $tableDesc = $flowTableDesc[$flow->table];
+                    if(isset($tableDesc["{$field}_1"])) $this->dao->exec("ALTER TABLE {$flow->table} DROP `{$field}_1`");
+
+                    $fieldDesc  = $tableDesc[$field];
+                    $changeSQL  = "ALTER TABLE {$flow->table} CHANGE `{$field}` `{$field}_1` {$fieldDesc['Type']}";
+                    $changeSQL .= strtolower($fieldDesc['Null']) == 'no' ? " NOT NULL" : " NULL";
+                    $changeSQL .= " DEFAULT '{$fieldDesc['Default']}'";
+                    $this->dao->exec($changeSQL);
+
+                    $this->dao->delete()->from(TABLE_WORKFLOWFIELD)->where('module')->eq($flow->module)->andWhere('field')->eq("{$field}_1")->exec();
+                    $this->dao->update(TABLE_WORKFLOWFIELD)->set('field')->eq("{$field}_1")->where('module')->eq($flow->module)->andWhere('field')->eq($field)->exec();
+                }
 
                 $this->dao->exec(str_replace('%table%', $flow->table, $addSQL));
 
