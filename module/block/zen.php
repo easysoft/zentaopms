@@ -2028,9 +2028,10 @@ class blockZen extends block
         $hasMeeting  = helper::hasFeature('meeting');
         $hasViewPriv = array();
 
-        $count      = array();
-        $params     = $block->params;
-        $limitCount = zget($params, 'count', $this->config->block->params['assigntome']->count['default']);
+        $count          = array();
+        $params         = $block->params;
+        $limitCount     = zget($params, 'count', $this->config->block->params['assigntome']->count['default']);
+        $shadowProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->andWhere('shadow')->eq(1)->fetchPairs();
 
         $this->app->loadClass('pager', true);
         $pager   = new pager(0, $limitCount, 1);
@@ -2039,7 +2040,13 @@ class blockZen extends block
         {
             $hasViewPriv['review'] = true;
             $count['review']       = count($reviews);
-            $this->view->reviews   = $reviews;
+
+            foreach($reviews as $review)
+            {
+                if($review->type == 'story') $review->isShadowProduct = isset($shadowProducts[$review->product]) ? 1 : 0;
+            }
+
+            $this->view->reviews = $reviews;
             if($this->config->edition == 'max' or $this->config->edition == 'ipd')
             {
                 $this->app->loadLang('approval');
@@ -2139,6 +2146,15 @@ class blockZen extends block
                     $task->left     .= 'h';
                 }
                 if($limitCount > 0) $objects = array_slice($objects, 0, $limitCount);
+            }
+
+            if($objectType == 'story')
+            {
+                foreach($objects as $key => $story)
+                {
+                    $story->isShadowProduct = isset($shadowProducts[$story->product]) ? 1 : 0;
+                    $story->storyType       = $story->type;
+                }
             }
 
             if($objectType == 'bug')   $this->app->loadLang('bug');

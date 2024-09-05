@@ -53,9 +53,10 @@ window.renderCell = function(result, info)
 
     if(info.col.name == 'confirmed' && info.row.data.confirmed == 0) result[0] = {html: '<span class="text-gray">' + result[0] + '</span>'};
 
-    if(info.col.name == 'title' && info.row.data.module == 'story')
+    if(info.col.name == 'title' && info.row.data.isShadowProduct !== undefined)
     {
-        result[0] = {html: '<a href="' + $.createLink(info.row.data.storyType, 'view', `id=${info.row.data.id}`) + '">' + info.row.data.title + '</a>'};
+        const openTab = info.row.data.isShadowProduct == '1' ? 'project' : 'product';
+        result[0] = {html: '<a href="' + $.createLink(info.row.data.storyType, 'view', `id=${info.row.data.id}`) + '" data-app="' + openTab + '">' + info.row.data.title + '</a>'};
     }
 
     return result;
