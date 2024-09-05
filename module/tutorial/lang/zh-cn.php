@@ -1834,19 +1834,11 @@ $lang->tutorial->docManage->step21->desc = '点击保存修改的内容';
 
 $lang->tutorial->docManage->step22 = new stdClass();
 $lang->tutorial->docManage->step22->name = '点击版本';
-$lang->tutorial->docManage->step22->desc = '点击切换文档版本历史版本记录';
+$lang->tutorial->docManage->step22->desc = '可以在这里切换文档版本查看历史版本记录';
 
 $lang->tutorial->docManage->step23 = new stdClass();
-$lang->tutorial->docManage->step23->name = '点击对比';
-$lang->tutorial->docManage->step23->desc = '点击对比按钮可以选择不同的版本进行对比';
-
-$lang->tutorial->docManage->step24 = new stdClass();
-$lang->tutorial->docManage->step24->name = '勾选版本';
-$lang->tutorial->docManage->step24->desc = '选择两个需要比对的版本';
-
-$lang->tutorial->docManage->step25 = new stdClass();
-$lang->tutorial->docManage->step25->name = '点击确认';
-$lang->tutorial->docManage->step25->desc = '点击开始对比';
+$lang->tutorial->docManage->step23->name = '点击版本#1';
+$lang->tutorial->docManage->step23->desc = '查看版本#1的文档内容';
 
 $lang->tutorial->orTutorial = new stdClass();
 $lang->tutorial->orTutorial->demandManage = new stdClass();

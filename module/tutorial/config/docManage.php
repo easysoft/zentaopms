@@ -186,32 +186,8 @@ $docManage->tasks['docManage']['steps'][] = array(
 
 $docManage->tasks['docManage']['steps'][] = array(
     'type'   => 'click',
-    'target' => 'menu.is-contextmenu div.listitem .toolbar button',
+    'target' => 'menu.is-contextmenu menu.dropdown-menu li.menu-item[z-key="1"]',
     'page'   => 'doc-view',
     'title'  => $lang->tutorial->docManage->step23->name,
     'desc'   => $lang->tutorial->docManage->step23->desc
-);
-
-$docManage->tasks['docManage']['steps'][] = array(
-    'type'   => 'click',
-    'target' => 'menu.is-contextmenu menu.dropdown-menu li.menu-item[z-key="2"]',
-    'page'   => 'doc-view',
-    'title'  => $lang->tutorial->docManage->step24->name,
-    'desc'   => $lang->tutorial->docManage->step24->desc
-);
-
-$docManage->tasks['docManage']['steps'][] = array(
-    'type'   => 'click',
-    'target' => 'menu.is-contextmenu menu.dropdown-menu li.menu-item[z-key="1"]',
-    'page'   => 'doc-view',
-    'title'  => $lang->tutorial->docManage->step24->name,
-    'desc'   => $lang->tutorial->docManage->step24->desc
-);
-
-$docManage->tasks['docManage']['steps'][] = array(
-    'type'   => 'click',
-    'target' => 'menu.is-contextmenu button[type="button"]',
-    'page'   => 'doc-view',
-    'title'  => $lang->tutorial->docManage->step25->name,
-    'desc'   => $lang->tutorial->docManage->step25->desc
 );
