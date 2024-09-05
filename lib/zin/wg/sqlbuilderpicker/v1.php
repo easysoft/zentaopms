@@ -15,6 +15,8 @@ class sqlBuilderPicker extends sqlBuilderControl
         'labelWidth?: string="80px"',
         'width?: string="60"',
         "suffix?: string",
+        'onChange?: function',
+        'onInit?: function',
         "error?: bool=false",
         "errorText?: string"
     );
