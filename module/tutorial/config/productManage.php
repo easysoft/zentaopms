@@ -110,7 +110,7 @@ $productManage->basic->tasks['storyManage']['steps'][] = array(
 
 $productManage->basic->tasks['storyManage']['steps'][] = array(
     'type'   => 'click',
-    'target' => 'div.dtable div[data-col="actions"][data-row="1"] a.epic-createRequirement-btn',
+    'target' => 'div.dtable div[data-col="actions"][data-row="1"] a.batchCreateStoryBtn',
     'page'   => 'product-browse',
     'url'    => array('product', 'browse', 'productID=1&branch=&browseType=all&param=0&storyType=epic'),
     'title'  => $lang->tutorial->productManage->storyManage->step5->name,
@@ -120,20 +120,20 @@ $productManage->basic->tasks['storyManage']['steps'][] = array(
 $productManage->basic->tasks['storyManage']['steps'][] = array(
     'type'   => 'form',
     'target' => 'div.panel-body div.form-batch-container',
-    'page'   => 'requirement-batchCreate',
+    'page'   => 'story-batchCreate',
     'title'  => $lang->tutorial->productManage->storyManage->step6->name
 );
 
 $productManage->basic->tasks['storyManage']['steps'][] = array(
     'type'   => 'saveForm',
-    'page'   => 'requirement-batchCreate',
+    'page'   => 'story-batchCreate',
     'title'  => $lang->tutorial->productManage->storyManage->step7->name,
     'desc'   => $lang->tutorial->productManage->storyManage->step7->desc
 );
 
 $productManage->basic->tasks['storyManage']['steps'][] = array(
     'type'   => 'click',
-    'target' => 'div.dtable div[data-col="actions"][data-row="2"] a.requirement-createStory-btn',
+    'target' => 'div.dtable div[data-col="actions"][data-row="2"] a.batchCreateStoryBtn',
     'page'   => 'product-browse',
     'url'    => array('product', 'browse', 'productID=1&branch=&browseType=all&param=0&storyType=epic'),
     'title'  => $lang->tutorial->productManage->storyManage->step8->name,

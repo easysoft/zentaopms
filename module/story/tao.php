@@ -2011,15 +2011,15 @@ class storyTao extends storyModel
              */
             if($canBatchCreateStory)
             {
-                $actions[] = array('name' => 'batchCreate', 'url' => $batchCreateStoryLink, 'hint' => $this->lang->story->split, 'icon' => 'split');
+                $actions[] = array('name' => 'batchCreate', 'url' => $batchCreateStoryLink, 'hint' => $this->lang->story->split, 'icon' => 'split', 'class' => 'batchCreateStoryBtn');
             }
             elseif($story->type == 'epic' && common::hasPriv('requirement', 'batchCreate') && $this->isClickable($story, 'batchcreate') && empty($story->hasSameTypeChild) && !($this->config->epic->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['epic']))
             {
-                $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('requirement', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $this->lang->story->split, 'icon' => 'split', 'class' => 'epic-createRequirement-btn');
+                $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('requirement', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $this->lang->story->split, 'icon' => 'split', 'class' => 'batchCreateStoryBtn');
             }
             elseif($story->type == 'requirement' && common::hasPriv('story', 'batchCreate') && $this->isClickable($story, 'batchcreate') && empty($story->hasSameTypeChild) && !($this->config->requirement->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['requirement']))
             {
-                $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $this->lang->story->split, 'icon' => 'split', 'class' => 'requirement-createStory-btn');
+                $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $this->lang->story->split, 'icon' => 'split', 'class' => 'batchCreateStoryBtn');
             }
             elseif(!$canBatchCreateStory && common::hasPriv($story->type, 'batchcreate'))
             {
