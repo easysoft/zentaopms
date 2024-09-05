@@ -21,23 +21,31 @@ class biModel extends model
             'pivot'     => TABLE_PIVOT,
             'chart'     => TABLE_CHART
         );
-        $objects = $this->dao->select('id,acl,whitelist')->from($table[$objectType])
+        $objects = $this->dao->select('id,createdBy,acl,whitelist')->from($table[$objectType])
             ->where('deleted')->eq('0')
             ->fetchAll('id');
 
         if($this->app->user->admin) return array_keys($objects);
 
         $objectIDList = array();
+        $account      = $this->app->user->account;
         foreach($objects as $objectID => $object)
         {
-            if($object->acl == 'open')
+            if($object->createdBy == $account)
             {
                 $objectIDList[] = $objectID;
             }
             else
             {
-                $whitelist = explode(',', $object->whitelist);
-                if(in_array($this->app->user->account, $whitelist)) $objectIDList[] = $objectID;
+                if($object->acl == 'open')
+                {
+                    $objectIDList[] = $objectID;
+                }
+                else
+                {
+                    $whitelist = explode(',', $object->whitelist);
+                    if(in_array($account, $whitelist)) $objectIDList[] = $objectID;
+                }
             }
         }
 
