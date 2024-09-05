@@ -22,6 +22,7 @@ class sqlBuilderControl extends wg
         'labelAlign?: string="center"', // 标签对齐方式。
         'width?: string="60"',          // 控件宽度。
         "suffix?: string",              // 后缀内容。
+        'onChange?: function',
         "error?: bool=false",           // 是否存在错误。
         'errorText?: string'            // 错误提示。
     );
@@ -40,7 +41,7 @@ class sqlBuilderControl extends wg
      */
     protected function buildControl(): node|null
     {
-        list($type, $name, $items, $value, $required, $placeholder, $error) = $this->prop(array('type', 'name', 'items', 'value', 'required', 'placeholder', 'error'));
+        list($type, $name, $items, $value, $required, $placeholder, $onChange, $error) = $this->prop(array('type', 'name', 'items', 'value', 'required', 'placeholder', 'onChange', 'error'));
 
         if($type == 'picker')
         {
@@ -54,6 +55,7 @@ class sqlBuilderControl extends wg
                 set::placeholder($placeholder),
                 set::disabled(empty($items)),
                 set::required($required),
+                on::change()->do($onChange),
                 !empty($value) ? set::value($value) : null
             );
         }
@@ -64,6 +66,7 @@ class sqlBuilderControl extends wg
             setClass('builder-input', array('has-error' => $error)),
             set::name($name),
             set::placeholder($placeholder),
+            on::change()->do($onChange),
             set::value($value)
         );
 
@@ -73,6 +76,7 @@ class sqlBuilderControl extends wg
             setClass('builder-date', array('has-error' => $error)),
             set::name($name),
             set::placeholder($placeholder),
+            on::change()->do($onChange),
             set::value($value)
         );
 
@@ -82,6 +86,7 @@ class sqlBuilderControl extends wg
             setClass('builder-datetime', array('has-error' => $error)),
             set::name($name),
             set::placeholder($placeholder),
+            on::change()->do($onChange),
             set::value($value)
         );
 
