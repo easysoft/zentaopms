@@ -13,7 +13,7 @@ class think3c extends thinkModel
 
     protected function buildBody(): array
     {
-        jsVar('modelImg', 'data/thinmory/thumbnail/model3c.png');
+        jsVar('modelImg', 'data/thinmory/thumbnail/init3c.png');
 
         return array(h::canvas(setID('canvas')));
     }
