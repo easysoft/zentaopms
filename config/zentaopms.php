@@ -592,6 +592,7 @@ define('TABLE_WORKFLOWREPORT',         '`' . $config->db->prefix . 'workflowrepo
 define('TABLE_WORKFLOWRULE',           '`' . $config->db->prefix . 'workflowrule`');
 define('TABLE_WORKFLOWSQL',            '`' . $config->db->prefix . 'workflowsql`');
 define('TABLE_WORKFLOWVERSION',        '`' . $config->db->prefix . 'workflowversion`');
+define('TABLE_WORKFLOWUI',             '`' . $config->db->prefix . 'workflowui`');
 define('TABLE_ZOUTPUT',                '`' . $config->db->prefix . 'zoutput`');
 
 define('TABLE_METRIC',        '`' . $config->db->prefix . 'metric`');

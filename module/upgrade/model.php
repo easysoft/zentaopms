@@ -9870,6 +9870,12 @@ class upgradeModel extends model
         return true;
     }
 
+    /**
+     * Append flow fields for belong.
+     *
+     * @access public
+     * @return void
+     */
     public function appendFlowFieldsForBelong()
     {
         $flows = $this->dao->select('*')->from(TABLE_WORKFLOW)->where('buildin')->eq('0')->fetchAll('id');
