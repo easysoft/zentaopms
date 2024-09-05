@@ -42,7 +42,7 @@ class batchEditTester extends tester
         $form = $this->loadPage();
 
         $text = $form->dom->alertModal('text');
-        if($execution['name'] =='')
+        if(!$execution['name'])
         {
             $info = sprintf($this->lang->error->notempty, $this->lang->execution->name);
             if($text == $info) return $this->success('执行名称为空提示信息正确');
@@ -81,7 +81,7 @@ class batchEditTester extends tester
      */
     public function checkDate($execution, $type)
     {
-        $id = $this->inputFields($execution);
+        $id   = $this->inputFields($execution);
         $form = $this->loadPage();
 
         $beginTipDom = "begin[{$id}]Tip";
@@ -91,7 +91,7 @@ class batchEditTester extends tester
         {
             $beginText = $form->dom->$beginTipDom->getText();
             /* 检查计划开始日期为空报错 */
-            if($execution['begin'] == '')
+            if(!$execution['begin'])
             {
                 $beginInfo = sprintf($this->lang->error->notempty, $this->lang->execution->begin);
                 if($beginText == $beginInfo) return $this->success('执行开始日期为空提示信息正确');
@@ -106,7 +106,7 @@ class batchEditTester extends tester
         {
             $endText = $form->dom->$endTipDom->getText();
             /* 检查计划结束日期为空报错 */
-            if($execution['end'] == '')
+            if(!$execution['end'])
             {
                 $endInfo = sprintf($this->lang->error->notempty, $this->lang->execution->end);
                 if($endText == $endInfo) return $this->success('执行结束日期为空提示信息正确');
