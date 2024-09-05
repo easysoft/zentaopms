@@ -79,7 +79,7 @@ $execution = array(
         'end'   => date('Y-m-d', strtotime('-1 days')),
     ),
     '7' => array(
-        'name'  => '项目1迭代2',
+        'name'  => '项目2迭代2',
         'begin' => date('Y-m-d'),
         'end'   => date('Y-m-d', strtotime('+1 days')),
     )
