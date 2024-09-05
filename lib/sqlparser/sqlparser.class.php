@@ -258,46 +258,6 @@ class sqlparser
         {
             if($column === '*')
             {
-                $table = trim(trim($table), '`');
-                $expression->expr = empty($table) ? '*' : "`$table`.*";
-            }
-            else
-            {
-                $expression->table  = $table;
-                $expression->column = $column;
-            }
-        }
-
-        $expression->alias = $alias;
-
-        return $expression;
-    }
-
-    /**
-     * Get expression.
-     *
-     * @param  string|array $table
-     * @param  string $column
-     * @param  string $alias
-     * @param  string $function
-     * @access public
-     * @return PhpMyAdmin\SqlParser\Components\Expression
-     */
-    public function getExpression($table = null, $column = null, $alias = null, $function = null)
-    {
-        if(is_array($table)) return call_user_func_array(array($this, 'getExpression'), $table);
-
-        $expression = new PhpMyAdmin\SqlParser\Components\Expression();
-
-        if(!empty($function))
-        {
-            $expression->function = $function;
-            $expression->expr     = $this->getFunction($function, $expression->build($this->getExpression($table, $column)));
-        }
-        else
-        {
-            if($column === '*')
-            {
                 $table = $this->trimExpr($table);
                 $expression->expr = empty($table) ? '*' : "`$table`.*";
             }
@@ -311,58 +271,6 @@ class sqlparser
         $expression->alias = $alias;
 
         return $expression;
-    }
-
-    /**
-     * operatorCondition
-     *
-     * @param  string $type
-     * @access public
-     * @return void
-     */
-    public function operatorCondition($type)
-    {
-        $condition = new PhpMyAdmin\SqlParser\Components\Condition();
-        $condition->isOperator = true;
-        $condition->expr       = strtoupper($type);
-
-        return $condition;
-    }
-
-    /**
-     * Get condition.
-     *
-     * @param  mixed    $tableA
-     * @param  mixed    $columnA
-     * @param  string   $operator
-     * @param  mixed    $tableB
-     * @param  mixed    $columnB
-     * @param  mixed    $group
-     * @access public
-     * @return object
-     */
-    public function getCondition($tableA = null, $columnA = null, $operator = '', $tableB = null, $columnB = null, $group = 1)
-    {
-        if(is_array($tableA)) return call_user_func_array(array($this, 'getCondition'), $tableA);
-
-        $condition = new PhpMyAdmin\SqlParser\Components\Condition();
-
-        $tableA  = $this->trimExpr($tableA);
-        $columnA = $this->trimExpr($columnA);
-        $tableB  = $this->trimExpr($tableB);
-
-        /* 如果tableB不为空，那么columnB就是字段，需要trim。*/
-        if(!empty($tableB)) $columnA = $this->trimExpr($columnA);
-
-        $exprA = empty($tableA) ? "`$columnA`" : "`$tableA`.`$columnA`";
-        $exprB = empty($tableB) ? "$columnB" : "`$tableB`.`$columnB`";
-
-        $operator = strtoupper($operator);
-
-        $condition->expr  = "$exprA $operator $exprB";
-        $condition->group = $group;
-
-        return $condition;
     }
 
     /**
@@ -481,52 +389,6 @@ class sqlparser
         $group->expr = $expr;
 
         return $group;
-    }
-
-    /**
-     * Combine conditions.
-     *
-     * @param  array|object $conditions
-     * @access public
-     * @return array
-     */
-    public function combineConditions($conditions, $quote = false)
-    {
-        if(empty($conditions)) return array();
-
-        if($conditions instanceof PhpMyAdmin\SqlParser\Components\Condition === true) return $conditions;
-
-        $first = reset($conditions);
-        $last  = end($conditions);
-
-        if($quote)
-        {
-            $first = $this->addQuote($first, 'left');
-            $last  = $this->addQuote($last, 'right');
-        }
-
-        $quote = true;
-        if(is_array($first)) $first = $this->combineConditions($first, $quote);
-        if(is_array($last))  $last  = $this->combineConditions($last, $quote);
-
-        $conditions[0] = $first;
-        $conditions[count($conditions) - 1] = $last;
-        return $conditions;
-    }
-
-    public function addQuote($conditions, $side)
-    {
-        if($conditions instanceof PhpMyAdmin\SqlParser\Components\Condition === true)
-        {
-            $expr  = $conditions->expr;
-            $conditions->expr = $side == 'left' ? '(' . $expr : $expr . ')';
-            return $conditions;
-        }
-
-        $condition = $side == 'left' ? current($conditions) : end($conditions);
-        $index     = $side == 'left' ? 0 : count($conditions) - 1;
-        $conditions[$index] = $this->addQuote($condition, $side);
-        return $conditions;
     }
 
     /**
