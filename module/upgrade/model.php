@@ -9893,6 +9893,20 @@ class upgradeModel extends model
         {
             if(!isset($flowTableDesc[$flow->table])) continue;
             if($flow->vision == 'lite') continue;
+
+            foreach($fields as $field => $addSQL)
+            {
+                if($flow->vision == 'or' && $field != 'product') continue;
+
+                $this->dao->exec(str_replace('%table%', $flow->table, $addSQL));
+
+                $data = $defaultData;
+                $data['module']   = $flow->module;
+                $data['field']    = $field;
+                $data['name']     = $this->lang->upgrade->flowFields[$field];
+                $data['options']  = $field;
+                $this->dao->replace(TABLE_WORKFLOWFIELD)->data($data)->exec();
+            }
         }
         return true;
     }
