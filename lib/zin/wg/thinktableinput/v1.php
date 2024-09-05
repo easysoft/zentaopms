@@ -213,7 +213,7 @@ class thinkTableInput extends thinkQuestion
                 setClass('mb-3'),
                 formGroup
                 (
-                    setClass('w-1/2'),
+                    setClass('w-1/2 step-required'),
                     set::label($lang->thinkstep->label->required),
                     radioList
                     (

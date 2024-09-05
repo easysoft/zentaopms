@@ -114,6 +114,7 @@ class thinkMulticolumn extends thinkQuestion
                 setClass('mb-3'),
                 formGroup
                 (
+                    setClass('step-required'),
                     set::width('1/2'),
                     set::label
                     (

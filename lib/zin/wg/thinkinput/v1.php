@@ -47,7 +47,7 @@ class thinkInput extends thinkQuestion
             formHidden('options[questionType]', 'input'),
             formGroup
             (
-                setClass('w-1/2'),
+                setClass('w-1/2 step-required'),
                 setStyle(array('display' => 'flex')),
                 set::label($lang->thinkstep->label->required),
                 radioList

@@ -215,6 +215,7 @@ class thinkRadio extends thinkQuestion
             ),
             formGroup
             (
+                setClass('step-required'),
                 setStyle(array('display' => 'flex')),
                 set::label
                 (
