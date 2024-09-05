@@ -8,8 +8,12 @@ class sqlBuilder extends wg
         'class?: string',
         'steps?: array',
         'requiredSteps?: array=["table"]',
-        'currStep?: string'
+        'data?: object',
+        'tableList?: array',
+        'url?: string'
     );
+
+    protected static array $tablesDesc = array();
 
     public static function getPageCSS(): ?string
     {
@@ -31,18 +35,16 @@ class sqlBuilder extends wg
             $stepList = $lang->bi->builderStepList;
             if(empty($steps)) $this->setProp('steps', array_keys($stepList));
         }
-
-        list($steps, $currStep) = $this->prop(array('steps', 'currStep'));
-        if(empty($currStep)) $this->setProp('currStep', reset($steps));
     }
 
     protected function buildStepBar()
     {
         global $lang;
-        list($steps, $selected, $requires) = $this->prop(array('steps', 'currStep', 'requiredSteps'));
+        list($steps, $requires, $builder) = $this->prop(array('steps', 'requiredSteps', 'data'));
 
         $stepList = $lang->bi->builderStepList;
         $lastStep = end($steps);
+        $selected = $builder->step;
         $items    = array();
 
         $selectedClass = 'text-primary ring-secondary font-bold selected';
@@ -69,7 +71,7 @@ class sqlBuilder extends wg
                 set('data-step', $key),
                 set::type('default'),
                 $text,
-                on::click()->do("switchStep(event, '$selectedClass', '$defaultClass')")
+                on::click()->do("switchBuilderStep(event)")
             );
 
             if($key != $lastStep) $items[] = icon
@@ -86,48 +88,310 @@ class sqlBuilder extends wg
         );
     }
 
+    protected function buildJoins()
+    {
+        global $lang;
+        list($builder, $tableList) = $this->prop(array('data', 'tableList'));
+        $joins = $builder->joins;
+        if(empty($joins)) return null;
+
+        $selectTableList = $builder->getSelectTables($tableList);
+
+        $items = array();
+        foreach($joins as $index => $join)
+        {
+            $leftTable = $join['table'];
+            $alias     = $join['alias'];
+            $on        = $join['on'];
+
+            list($columnA, $fieldA, $operator, $columnB, $fieldB) = $on;
+
+            $columnAItems = $builder->getTableDescList($columnA);
+            $columnBItems = $builder->getTableDescList($columnB);
+            $columnB      = \zget($selectTableList, $on[3]);
+
+            $items[] = formRow
+            (
+                setClass('gap-x-4 mt-4'),
+                sqlBuilderPicker
+                (
+                    set::name("left_$alias"),
+                    set::label($lang->bi->leftTable),
+                    set::items($tableList),
+                    set::value($leftTable),
+                    set::placeholder($lang->bi->selectTableTip),
+                    set::suffix($alias),
+                    set::width('52'),
+                    set::labelWidth('60px'),
+                    set::onChange('changeBuilderTable(event)'),
+                    set::error($builder->hasError('join', 'table', $alias))
+                ),
+                joinCondition
+                (
+                    set::index($index),
+                    set::name("join_$alias"),
+                    set::values($on),
+                    set::tables($selectTableList),
+                    set::fieldAList($columnAItems),
+                    set::fieldBList($columnBItems),
+                    set::onChange('changeBuilderTable(event)'),
+                    set::onAdd('addJoinTable(event)'),
+                    set::onRemove('removeJoinTable(event)'),
+                    set::columnAError($builder->hasError('join', 'columnA', $alias)),
+                    set::fieldAError($builder->hasError('join', 'fieldA', $alias)),
+                    set::fieldBError($builder->hasError('join', 'fieldB', $alias))
+                )
+            );
+        }
+
+        return $items;
+    }
+
     protected function buildTableStep()
     {
-        return $this->buildStepContent('table');
+        global $lang;
+        list($builder, $tableList) = $this->prop(array('data', 'tableList'));
+        $from = $builder->from;
+
+        return array
+        (
+            formRow
+            (
+                sqlBuilderPicker
+                (
+                    set::name("from"),
+                    set::label($lang->bi->fromTable),
+                    set::items($tableList),
+                    set::value($from['table']),
+                    set::placeholder($lang->bi->selectTableTip),
+                    set::suffix($from['alias']),
+                    set::width('52'),
+                    set::labelWidth('60px'),
+                    set::onChange('changeBuilderTable(event)'),
+                    set::error($builder->hasError('from', 'table', $from['alias']))
+                ),
+                div
+                (
+                    setClass('flex justify-start items-center'),
+                    btn
+                    (
+                        setID('addJoinTable'),
+                        setClass('p-0 ml-4'),
+                        set('data-index', -1),
+                        set::type('ghost'),
+                        set::icon('plus'),
+                        $lang->bi->leftTable,
+                        on::click()->do('addJoinTable(event)')
+                    ),
+                    sqlBuilderHelpIcon(set::text($lang->bi->leftTableTip))
+                )
+            ),
+            $this->buildJoins()
+        );
     }
 
     protected function buildFieldStep()
     {
-        return $this->buildStepContent('field');
+        global $lang;
+        list($builder, $tableList) = $this->prop(array('data', 'tableList'));
+        $from    = $builder->from;
+        $joins   = $builder->joins;
+
+        $tables = array_merge(array($from), $joins);
+        $panels = array();
+        foreach($tables as $table)
+        {
+            $name   = \zget($tableList, $table['table']);
+            $alias  = $table['alias'];
+            $fields = $builder->getTableDescList($alias);
+            $select = $table['select'];
+
+            $panels[] = fieldSelectPanel
+            (
+                set::table($name),
+                set::alias($alias),
+                set::fields($fields),
+                set::values($select),
+                set::col(count($tables)),
+                set::onChange('handleSelectFieldChange(event)'),
+                set::onSelectAll('checkAllField(event)')
+            );
+        }
+        return div
+        (
+            setClass('flex row gap-4'),
+            $panels
+        );
     }
 
     protected function buildFuncStep()
     {
-        return $this->buildStepContent('func');
+        global $lang;
+        list($builder, $tableList) = $this->prop(array('data', 'tableList'));
+        $funcs = $builder->getFuncs('func');
+        if(empty($funcs)) return sqlBuilderEmptyContent
+        (
+            set::btnClass('add-function'),
+            set::btnText($lang->bi->addFunc),
+            set::emptyText($lang->bi->emptyFuncs),
+            set::onClick('addFunction(event)')
+        );
+
+        $selectTableList = $builder->getSelectTables($tableList);
+        $items = array();
+        foreach($funcs as $index => $func)
+        {
+            $fieldList = $builder->getTableDescList($func['table']);
+            if(!isset($fieldList[$func['field']])) $func['field'] = '';
+            $items[] = sqlBuilderFuncRow
+            (
+                set::index($index),
+                set::tables($selectTableList),
+                set::fields($fieldList),
+                set::value($func),
+                set::onChange('changeBuilderFunc(event)'),
+                set::onAdd('addFunction(event)'),
+                set::onRemove('removeFunction(event)'),
+                set::tableError($builder->hasError('func', 'table', $index)),
+                set::fieldError($builder->hasError('func', 'field', $index)),
+                set::functionError($builder->hasError('func', 'function', $index)),
+                set::aliasError($builder->hasError('func', 'alias', $index)),
+                set::duplicateError($builder->hasError('func', 'duplicate', $index))
+            );
+        }
+
+        return $items;
     }
 
     protected function buildWhereStep()
     {
-        return $this->buildStepContent('where');
+        global $lang;
+        list($builder, $tableList) = $this->prop(array('data', 'tableList'));
+        $wheres = $builder->wheres;
+        if(empty($wheres)) return sqlBuilderEmptyContent
+        (
+            set::btnClass('add-where'),
+            set::btnText($lang->bi->addWhere),
+            set::emptyText($lang->bi->emptyWheres),
+            set::onClick('addWhereGroup(event)')
+        );
+
+        $selectTableList = $builder->getSelectTables($tableList);
+        $groups = array();
+        foreach($wheres as $index => $group)
+        {
+            $items    = $group['items'];
+            $operator = $group['operator'];
+            $isLast   = $index == count($wheres) - 1;
+
+            $groupItems = array();
+            foreach($items as $itemIndex => $item)
+            {
+                $fieldList  = $builder->getTableDescList($item[0]);
+                $groupItems[] = sqlBuilderWhereItem
+                (
+                    set::first($itemIndex === 0),
+                    set::index("{$index}_{$itemIndex}"),
+                    set::tables($selectTableList),
+                    set::fields($fieldList),
+                    set::value($item),
+                    set::onChange('changeBuilderWhere(event)'),
+                    set::onAdd('addWhereItem(event)'),
+                    set::onRemove('removeWhereItem(event)'),
+                    set::tableError($builder->hasError('where', "{$index}_{$itemIndex}_0")),
+                    set::fieldError($builder->hasError('where', "{$index}_{$itemIndex}_1")),
+                    set::valueError($builder->hasError('where', "{$index}_{$itemIndex}_4")),
+                );
+            }
+
+            $groups[] = sqlBuilderWhereGroup
+            (
+                set::index($index),
+                set::operator($operator),
+                set::last($isLast),
+                set::onChange('changeBuilderWhere(event)'),
+                set::onAdd('addWhereGroup(event)'),
+                set::onRemove('removeWhereGroup(event)'),
+                $groupItems
+            );
+        }
+
+        return $groups;
     }
 
     protected function buildQueryStep()
     {
-        return $this->buildStepContent('query');
+        global $lang;
+        list($builder, $tableList) = $this->prop(array('data', 'tableList'));
+        $querys  = $builder->querys;
+        if(empty($querys)) return sqlBuilderEmptyContent
+        (
+            set::btnClass('add-query'),
+            set::btnText($lang->bi->addQuery),
+            set::emptyText($lang->bi->emptyQuerys),
+            set::onClick('addBuilderQueryFilter(event)')
+        );
+
+        $selectTableList = $builder->getSelectTables($tableList);
+        $fields       = array();
+        $defaultItems = array();
+        foreach($querys as $query)
+        {
+            if(!empty($query['table'])) $fields[$query['table']] = $builder->getTableDescList($query['table']);
+
+            $typeOption = $query['typeOption'];
+            // if(!empty($typeOption) && !isset($defaultItems[$typeOption])) $defaultItems[$typeOption] = $this->bi->getScopeOptions($typeOption);
+        }
+        return sqlBuilderQueryFilter
+        (
+            set::querys($querys),
+            set::tables($selectTableList),
+            set::fields($fields),
+            set::defaultItems($defaultItems),
+            set::onChange('changeBuilderQuery(event)'),
+            set::onAdd('addBuilderQueryFilter(event)'),
+            set::onRemove('removeBuilderQueryFilter(event)'),
+            set::error($builder->error)
+        );
     }
 
     protected function buildGroupStep()
     {
-        return $this->buildStepContent('group');
+        global $lang;
+        list($builder) = $this->prop(array('data'));
+        $groups = $builder->groups;
+        $aggs   = $builder->getFuncs('agg');
+        if(empty($groups)) return sqlBuilderEmptyContent
+        (
+            set::btnClass('hidden'),
+            set::emptyText($lang->bi->emptyGroups)
+        );
+        return sqlBuilderGroupBy
+        (
+            set::groups($groups),
+            set::aggs($aggs),
+            // set::onEnable('changeGroupBy(event)'),
+            set::onChangeAgg('changeAgg(event)'),
+            set::onChangeType('switchGroupFieldType(event)'),
+            set::onSort('sortGroupBy(event)')
+        );
     }
 
-    protected function buildStepContent($step, $contents = array(), $extraHeading = null)
+    protected function buildStepContent()
     {
         global $lang;
-        list($currStep) = $this->prop(array('currStep'));
+        list($builder) = $this->prop(array('data'));
+        $step   = $builder->step;
+        $groups = $builder->groups;
 
         $ucStep = ucfirst($step);
         $contentTitle    = $lang->bi->{"step{$ucStep}Title"};
         $contentTitleTip = $lang->bi->{"step{$ucStep}Tip"};
+        $contentFuncName = "build{$ucStep}Step";
         return panel
         (
             setID("builder$step"),
-            setClass('w-full builder-content', array('hidden' => $currStep !== $step)),
+            setClass('w-full builder-content'),
             set::title($contentTitle),
             set::headingClass('justify-start gap-0'),
             set::bodyClass('h-86 overflow-auto'),
@@ -137,9 +401,27 @@ class sqlBuilder extends wg
                 (
                     set::text($contentTitleTip)
                 ),
-                $extraHeading
+                formGroup
+                (
+                    setClass('items-center-important', array('hidden' => $step != 'group')),
+                    set::label($lang->bi->enable),
+                    set::labelClass('p-0'),
+                    set::labelWidth('36px'),
+                    switcher
+                    (
+                        setID('useGroup'),
+                        set::name('useGroup'),
+                        set::checked($groups === false ? false : true),
+                        on::change()->do('changeGroupBy(event)')
+                    )
+                ),
+                span
+                (
+                    setClass('text-danger', array('hidden' => !isset($builder->error['select_field']))),
+                    $lang->bi->emptySelect
+                )
             ),
-            $contents
+            $this->$contentFuncName()
         );
     }
 
@@ -148,18 +430,17 @@ class sqlBuilder extends wg
         global $lang;
         $this->setSteps();
 
+        list($tableList, $data, $url) = $this->prop(array('tableList', 'data', 'url'));
+
         return panel
         (
             setID('builderPanel'),
-            setClass('h-96'),
-            set::bodyClass('p-0 flex h-96'),
+            set('data-sqlbuilder', $data),
+            set('data-url', $url),
+            setClass('h-96 min-w-1300'),
+            set::bodyClass('flex h-96'),
             $this->buildStepBar(),
-            $this->buildTableStep(),
-            $this->buildFieldStep(),
-            $this->buildFuncStep(),
-            $this->buildWhereStep(),
-            $this->buildQueryStep(),
-            $this->buildGroupStep(),
+            $this->buildStepContent()
         );
     }
 }
