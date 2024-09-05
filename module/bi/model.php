@@ -758,8 +758,8 @@ class biModel extends model
             $tableItem         = new stdclass();
             $tableItem->id     = $table;
             $tableItem->parent = 0;
-            $tableItem->name   = $table;
-            $tableItem->url    = '';
+            $tableItem->name   = $table . '(table)';
+            $tableItem->url    = '#';
 
             $treeMenu[] = $tableItem;
 
@@ -768,8 +768,8 @@ class biModel extends model
                 $fieldItem         = new stdclass();
                 $fieldItem->id     = $field;
                 $fieldItem->parent = $tableItem->id;
-                $fieldItem->name   = $field;
-                $fieldItem->url    = '';
+                $fieldItem->name   = $field . '(' . $fieldInfo['type'] . ')';
+                $fieldItem->url    = '#';
 
                 $treeMenu[] = $fieldItem;
             }
