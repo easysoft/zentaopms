@@ -517,4 +517,17 @@ class instance extends control
         $url = '/adminer?' . http_build_query($dbAuth);
         $this->send(array('result' => 'success', 'message' => '', 'data' => array('url' => $url)));
     }
+
+    /**
+     * 定时任务：同步GitFox数据。（改方法用于DevOps解决方案）
+     * Sync GitFox data (for DevOps solution).
+     *
+     * @access public
+     * @return void
+     */
+    public function syncGitFoxData()
+    {
+        if(method_exists($this->instance, 'syncGitFoxData')) $this->instance->syncGitFoxData();
+        return false;
+    }
 }
