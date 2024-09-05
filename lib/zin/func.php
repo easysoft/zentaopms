@@ -233,6 +233,7 @@ function sqlBuilderGroupBy(): sqlBuilderGroupBy {return createWg('sqlBuilderGrou
 function sqlBuilderQueryFilter(): sqlBuilderQueryFilter {return createWg('sqlBuilderQueryFilter', func_get_args());}
 function sqlBuilderHelpIcon(): sqlBuilderHelpIcon {return createWg('sqlBuilderHelpIcon', func_get_args());}
 function sqlBuilder(): sqlBuilder {return createWg('sqlBuilder', func_get_args());}
+function queryBase(): queryBase {return createWg('queryBase', func_get_args());}
 
 if(is_dir(__DIR__ . DS . 'wg' . DS . 'schedule'))
 {
