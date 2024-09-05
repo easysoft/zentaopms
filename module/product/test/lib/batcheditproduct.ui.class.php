@@ -53,5 +53,24 @@ class batchEditProduct extends tester
             {
                 return ($viewPage->dom->type->getText() == $product->type) ? $this->success('产品类型修改成功') : $this->failed('产品类型修改失败');
             }
+            if (isset($product->status))
+            {
+                return ($viewPage->dom->status->getText() == $product->status) ? $this->success('产品状态修改成功') : $this->failed('产品状态修改失败');
+            }
+            if ($product->acl == 'open')
+            {
+                $open = $this->lang->product->abbr->aclList->open;
+                return ($viewPage->dom->acl->getText() == $open) ? $this->success('产品访问控制修改成功') : $this->failed('产品访问控制修改失败');
+            }
+            if ($product->acl == 'private')
+            {
+                $private = $this->lang->product->abbr->aclList->private;
+                return ($viewPage->dom->acl->getText() == $private) ? $this->success('产品访问控制修改成功') : $this->failed('产品访问控制修改失败');
+            }
+        }
+        else
+        {
+            return $this->failed('批量编辑产品失败');
+        }
     }
 }
