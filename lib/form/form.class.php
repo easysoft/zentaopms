@@ -173,6 +173,7 @@ class form extends fixer
         else
         {
             $this->batchConvertField($config);
+            $this->skipRequiredCheck($config);
         }
 
         if(!empty($this->errors))
@@ -287,6 +288,38 @@ class form extends fixer
         }
 
         $this->dataList = $rowDataList;
+    }
+
+    /**
+     * 跳过必填项检查。
+     * Skip the required check.
+     *
+     * @param  array   $fieldConfigs
+     * @access public
+     * @return void
+     */
+    public function skipRequiredCheck(array $fieldConfigs)
+    {
+        foreach($this->dataList as $rowIndex => $rowData)
+        {
+            foreach($fieldConfigs as $field => $config)
+            {
+                if(empty($config['required']) || empty($config['skipRequired']) || !empty($rowData->$field)) continue;
+
+                $skip     = true;
+                $errorKey = isset($config['type']) && $config['type'] == 'array' ? "{$field}[{$rowIndex}][]" : "{$field}[{$rowIndex}]";
+                foreach($config['skipRequired'] as $conditionField => $conditionValue)
+                {
+                    if($rowData->$conditionField != $conditionValue)
+                    {
+                        $skip = false;
+                        break;
+                    }
+                }
+
+                if($skip) unset($this->errors[$errorKey]);
+            }
+        }
     }
 
     /**

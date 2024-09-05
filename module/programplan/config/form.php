@@ -17,8 +17,8 @@ $config->programplan->form->create['attribute']  = array('label' => $lang->progr
 $config->programplan->form->create['point']      = array('label' => $lang->programplan->point,     'type' => 'array',  'control' => 'picker',   'required' => false, 'default' => '',     'options' => array(''), 'multiple' => true);
 $config->programplan->form->create['parallel']   = array('label' => '',                            'type' => 'int',    'control' => 'hidden',   'required' => false, 'default' => 0);
 $config->programplan->form->create['acl']        = array('label' => $lang->programplan->acl,       'type' => 'string', 'control' => 'picker',   'required' => false, 'default' => 'open', 'options' => $lang->execution->aclList);
-$config->programplan->form->create['begin']      = array('label' => $lang->programplan->begin,     'type' => 'date',   'control' => 'date',     'required' => true,  'default' => null);
-$config->programplan->form->create['end']        = array('label' => $lang->programplan->end,       'type' => 'date',   'control' => 'date',     'required' => true,  'default' => null);
+$config->programplan->form->create['begin']      = array('label' => $lang->programplan->begin,     'type' => 'date',   'control' => 'date',     'required' => true,  'default' => null, 'skipRequired' => array('enabled' => 'off'));
+$config->programplan->form->create['end']        = array('label' => $lang->programplan->end,       'type' => 'date',   'control' => 'date',     'required' => true,  'default' => null, 'skipRequired' => array('enabled' => 'off'));
 $config->programplan->form->create['realBegan']  = array('label' => $lang->programplan->realBegan, 'type' => 'date',   'control' => 'date',     'required' => false, 'default' => null);
 $config->programplan->form->create['realEnd']    = array('label' => $lang->programplan->realEnd,   'type' => 'date',   'control' => 'date',     'required' => false, 'default' => null);
 $config->programplan->form->create['milestone']  = array('label' => $lang->programplan->milestone, 'type' => 'int',    'control' => 'radioList','required' => false, 'default' => 0,      'options' => $lang->programplan->milestoneList);
