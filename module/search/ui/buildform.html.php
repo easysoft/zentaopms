@@ -47,15 +47,24 @@ foreach($fieldParams as $name => $param)
 $defaultData = array();
 if(is_array($formSession))
 {
-    $index = 1;
+    $index          = 1;
+    $conditionIndex = 0;
     foreach($formSession as $item)
     {
         if(isset($item['field']))
         {
-            $defaultData['field' . $index] = $item['field'];
-            if(isset($item['operator'])) $defaultData['operator' . $index] = $item['operator'];
-            if(isset($item['andOr']))    $defaultData['andOr' . $index] = $item['andOr'];
-            if(isset($item['value']))    $defaultData['value' . $index] = $item['value'];
+            if(!isset($fields[$item['field']]))
+            {
+                $defaultData['field' . $index] = $conditions[$conditionIndex]->name;
+                $conditionIndex ++;
+            }
+            else
+            {
+                $defaultData['field' . $index] = $item['field'];
+                if(isset($item['operator'])) $defaultData['operator' . $index] = $item['operator'];
+                if(isset($item['andOr']))    $defaultData['andOr' . $index] = $item['andOr'];
+                if(isset($item['value']))    $defaultData['value' . $index] = $item['value'];
+            }
             $index++;
         }
         elseif(isset($item['groupAndOr']))
