@@ -18,3 +18,20 @@ class manageMembersTester extends tester
         if(isset($members['hours']))   $form->dom->hours1->setValue($members['hours']);
 
         $form->dom->btn($this->lang->save)->click();
+        $form->wait(5);
+        //断言检查团队成员列表页姓名、角色、可用工日、可用工时是否正确
+        $teamPage = $this->loadPage('project', 'team');
+        if($teamPage->dom->browseSecAccount->getText() != $members['account'])      return $this->failed('姓名错误');
+        if($teamPage->dom->browseSecRole->getText()    != $members['role'])         return $this->failed('角色错误');
+        if($teamPage->dom->browseSecDay->getText()     != $members['day'].'天')     return $this->failed('可用工日错误');
+        if($teamPage->dom->browseSecHours->getText()   != $members['hours'].'工时') return $this->failed('可用工时错误');
+
+        return $this->success('项目团队成员添加成功');
+    }
+
+    /**
+     * Check delete members.
+     * 删除项目团队成员
+     *
+     * @access public
+     */
