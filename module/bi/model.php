@@ -480,9 +480,12 @@ class biModel extends model
             case 'dept':
                 $options = $this->loadModel('dept')->getOptionMenu(0);
                 break;
-            case 'project.status':
-                $this->app->loadLang('project');
-                $options = $this->lang->project->statusList;
+            case strpos($type, '.') !== false:
+                $params = explode('.', $type);
+                $module   = $params[0];
+                $typeList = $params[1] . 'List';
+                $this->app->loadLang($module);
+                $options = $this->lang->$module->$typeList;
                 break;
         }
 
