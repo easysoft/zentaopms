@@ -519,7 +519,7 @@ class instance extends control
     }
 
     /**
-     * 定时任务：同步GitFox数据。（改方法用于DevOps解决方案）
+     * 定时任务：同步GitFox数据。（方法用于DevOps解决方案）
      * Sync GitFox data (for DevOps solution).
      *
      * @access public
