@@ -742,6 +742,36 @@ class biModel extends model
         return $tableFields;
     }
 
+    public function getTableFieldsMenu()
+    {
+        $tableFields = $this->getTableFields();
+
+        $treeMenu = array();
+        foreach($tableFields as $table => $fields)
+        {
+            $tableItem         = new stdclass();
+            $tableItem->id     = $table;
+            $tableItem->parent = 0;
+            $tableItem->name   = $table;
+            $tableItem->url    = '';
+
+            $treeMenu[] = $tableItem;
+
+            foreach($fields as $field => $fieldInfo)
+            {
+                $fieldItem         = new stdclass();
+                $fieldItem->id     = $field;
+                $fieldItem->parent = $tableItem->id;
+                $fieldItem->name   = $field;
+                $fieldItem->url    = '';
+
+                $treeMenu[] = $fieldItem;
+            }
+        }
+
+        return $treeMenu;
+    }
+
     /**
      * Process rows.
      *
