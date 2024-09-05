@@ -75,7 +75,7 @@ class sqlparser
      */
     public $tables = array();
 
-    public function __construct($query)
+    public function __construct($query = '')
     {
         $query = $this->skipLineBreak($query);
         if(empty($query)) return;
