@@ -12,6 +12,9 @@ class sqlBuilderQueryFilter extends wg
         'tables?: array',
         'fields?: array',
         'defaultItems?: array',
+        'onChange?: function',
+        'onAdd?: function',
+        'onRemove?: function',
         'error?: array'
     );
 
@@ -45,7 +48,7 @@ class sqlBuilderQueryFilter extends wg
     protected function buildFormGroup($index, $name, $rowValue)
     {
         global $lang;
-        list($tables, $fields, $defaultItems, $error) = $this->prop(array('tables', 'fields', 'defaultItems', 'error'));
+        list($tables, $fields, $defaultItems, $onChange, $error) = $this->prop(array('tables', 'fields', 'defaultItems', 'onChange', 'error'));
         $fields     = \zget($fields, $rowValue['table'], array());
         $typeList   = $lang->dataview->varFilter->requestTypeList;
         $selectList = $lang->dataview->varFilter->selectList;
@@ -78,7 +81,8 @@ class sqlBuilderQueryFilter extends wg
                 set::width($width),
                 set::value($value),
                 set::required($name == 'type'),
-                set::error(isset($error[$errorKey]))
+                set::error(isset($error[$errorKey])),
+                set::onChange($onChange)
             ),
             $isSelect ? sqlBuilderPicker
             (
@@ -86,14 +90,15 @@ class sqlBuilderQueryFilter extends wg
                 set::items($selectList),
                 set::width($width),
                 set::value($rowValue['typeOption']),
-                set::required(true)
+                set::required(true),
+                set::onChange($onChange)
             ) : null
         );
     }
 
     protected function buildFormRows()
     {
-        list($querys) = $this->prop(array('querys'));
+        list($querys, $onAdd, $onRemove) = $this->prop(array('querys', 'onAdd', 'onRemove'));
         $formRows = array();
         foreach($querys as $index => $query)
         {
@@ -108,14 +113,16 @@ class sqlBuilderQueryFilter extends wg
                     setClass('add-query'),
                     set('data-index', $index),
                     set::type('ghost'),
-                    set::icon('plus')
+                    set::icon('plus'),
+                    on::click()->do($onAdd)
                 ),
                 btn
                 (
                     setClass('remove-query'),
                     set('data-index', $index),
                     set::type('ghost'),
-                    set::icon('minus')
+                    set::icon('minus'),
+                    on::click()->do($onRemove)
                 )
             );
 
