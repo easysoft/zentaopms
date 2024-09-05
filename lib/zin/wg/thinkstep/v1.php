@@ -51,7 +51,7 @@ class thinkStep  extends wg
             !$isRun ? array(
                 div
                 (
-                    setClass('flex items-center justify-between text-gray-950 h-12'),
+                    setClass('flex items-center justify-between text-gray-950 h-12 step-header'),
                     setStyle(array('padding-left' => '30px', 'padding-right' => '30px')),
                     div(setClass('font-medium'), $title),
                     ($action != 'detail') ? null : div
@@ -87,7 +87,7 @@ class thinkStep  extends wg
                 ),
                 h::hr()
             ) : null,
-            div(setClass('pt-6 pb-2'), setStyle(array('padding-left' => '30px', 'padding-right' => '30px')), $this->buildBody())
+            div(setClass('pt-6 pb-2 question-detail'), setStyle(array('padding-left' => '30px', 'padding-right' => '30px')), $this->buildBody())
         );
     }
 }
