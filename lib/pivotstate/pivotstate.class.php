@@ -316,12 +316,6 @@ class pivotState
      */
     public $checkStepDesign = false;
 
-    public $sqlBuilder = array();
-
-    public $builderStep = 'table';
-
-    public $builderError = array();
-
     public $canChangeMode = true;
 
     /**
@@ -354,9 +348,6 @@ class pivotState
         $this->drills       = $drills;
         $this->defaultDrill = $this->initDrill();
 
-        $this->sqlBuilder  = new sqlBuilder($this->json2Array($pivot->builder));
-        $this->builderStep = 'table';
-
         $this->fields    = $this->json2Array($pivot->fieldSettings);
         $this->langs     = $this->json2Array($pivot->langs);
         $this->vars      = $this->json2Array($pivot->vars);
@@ -372,94 +363,12 @@ class pivotState
     }
 
     /**
-     * Reset builder error.
-     *
-     * @access public
-     * @return void
-     */
-    public function resetBuilderError()
-    {
-        $this->builderError = array();
-    }
-
-    /**
-     * Set builder error.
-     *
-     * @param  string $key
-     * @param  string $type
-     * @param  string $field
-     * @access public
-     * @return bool
-     */
-    public function setBuilderError($key, $type = '', $field = '')
-    {
-        $key = implode('_', array_filter(array($key, $type, $field), function($value) { return $value !== ''; }));
-        $this->builderError[$key] = true;
-
-        return false;
-    }
-
-    /**
-     * Get builder error.
-     *
-     * @param  string $key
-     * @param  string $type
-     * @param  string $field
-     * @access public
-     * @return bool
-     */
-    public function getBuilderError($key, $type = '', $field = '')
-    {
-        $key = implode('_', array_filter(array($key, $type, $field), function($value) { return $value !== ''; }));
-        return isset($this->builderError[$key]);
-    }
-
-    /**
-     * Clear sql builder.
-     *
-     * @access public
-     * @return void
-     */
-    public function clearSqlBuilder()
-    {
-        $this->sqlBuilder->setFrom('');
-        $this->sqlBuilder->joins     = array();
-        $this->sqlBuilder->funcs     = array();
-        $this->sqlBuilder->wheres    = array();
-        $this->sqlBuilder->querys    = array();
-        $this->sqlBuilder->groups    = false;
-        $this->sqlBuilder->tableDesc = array();
-
-        $this->builderStep = 'table';
-        $this->resetBuilderError();
-    }
-
-    /**
-     * Check sql builder.
-     *
-     * @access public
-     * @return bool
-     */
-    public function checkSqlBuilder()
-    {
-        $checkList = array('checkFrom', 'checkJoins', 'checkSelects', 'checkWheres', 'checkQuerys');
-        foreach($checkList as $check)
-        {
-            $result = $this->sqlBuilder->$check();
-            if($result === true) continue;
-
-            $this->builderError[$result] = true;
-            return false;
-        }
-        return true;
-    }
-
-    /**
      * Process query filters.
      *
      * @access public
      * @return void
      */
+    /*
     public function processQueryFilters()
     {
         $querys = $this->sqlBuilder->querys;
@@ -485,6 +394,7 @@ class pivotState
             $this->filters[] = $filter;
         }
     }
+     */
 
     /**
      * Match field setting from builder.
@@ -494,6 +404,7 @@ class pivotState
      * @access public
      * @return array
      */
+    /*
     public function matchFieldSettingFromBuilder($key, $setting)
     {
         $selects = array_merge($this->sqlBuilder->getSelects(), $this->sqlBuilder->getFuncSelects());
@@ -509,6 +420,7 @@ class pivotState
         }
         return $setting;
     }
+     */
 
     /**
      * Clear fieldSettings.
@@ -1116,7 +1028,8 @@ class pivotState
             }
             else
             {
-                $newFieldSettings[$field] = $this->matchFieldSettingFromBuilder($field, $setting);
+                $newFieldSettings[$field] = $setting;
+                // $newFieldSettings[$field] = $this->matchFieldSettingFromBuilder($field, $setting);
             }
         }
 
