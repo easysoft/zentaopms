@@ -757,13 +757,24 @@ class chartModel extends model
                 if(!isset($filter['default'])) continue;
                 if(isset($filter['from']) and $filter['from'] == 'query')
                 {
-                    $default      = $filter['default'];
-                    $relatedField = $filter['relatedField'];
-                    $sql          = str_replace('$' . $filter['field'] . 'Condition', "{$relatedField}='{$default}'", $sql);
+                    $default = $filter['default'];
+                    if(strpos($sql, $filter['field'] . 'Condition') === false)
+                    {
+                        $sql = str_replace('$' . $filter['field'], "'{$default}'", $sql);
+                    }
+                    else
+                    {
+                        $relatedField = $filter['relatedField'];
+                        $sql = str_replace('$' . $filter['field'] . 'Condition', "{$relatedField}='{$default}'", $sql);
+                    }
                 }
             }
         }
-        if(preg_match_all("/[\$]+[a-zA-Z0-9]+_[0-9]+Condition/", $sql, $out))
+
+        $matchRule = "[\$]+[a-zA-Z0-9]+_[0-9]";
+        if(strpos($sql, 'Condition') !== false && strpos($sql, 'Variale_') !== false) $matchRule .= "+Condition";
+
+        if(preg_match_all("/{$matchRule}/", $sql, $out))
         {
             foreach($out[0] as $match) $sql = str_replace($match, "''", $sql);
         }
