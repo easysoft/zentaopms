@@ -58,3 +58,13 @@ $action->actor->range('admin');
 $action->action->range('closed');
 $action->date->range('(-2D)-(-D):60m')->type('timestamp')->format('YY/MM/DD hh:mm:ss');
 $action->extra->range('Done|active, Done|draft');
+$action->gen(2);
+
+$tester = new activateStoryTester();
+$tester->login();
+
+$stutus = array('激活', '草稿');
+r($tester->activateStory(1, $stutus[0])) && p('message') && e('激活需求成功');
+r($tester->activateStory(2, $stutus[1])) && p('message') && e('激活需求成功');
+
+$tester->closeBrowser();
