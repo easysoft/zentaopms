@@ -38,3 +38,23 @@ $story->module->range('0');
 $story->title->range('激活研发需求, 草稿研发需求');
 $story->type->range('story');
 $story->stage->range('closed');
+$story->status->range('closed');
+$story->openedBy->range('admin');
+$story->version->range('1');
+$story->gen(2);
+
+$storyspec = zenData('storyspec');
+$storyspec->story->range('1-2');
+$storyspec->version->range('1');
+$storyspec->title->range('激活研发需求, 草稿研发需求');
+$storyspec->gen(2);
+
+$action = zenData('action');
+$action->id->range('1-2');
+$action->objectType->range('story');
+$action->objectID->range('1-2');
+$action->product->range('`,1`');
+$action->actor->range('admin');
+$action->action->range('closed');
+$action->date->range('(-2D)-(-D):60m')->type('timestamp')->format('YY/MM/DD hh:mm:ss');
+$action->extra->range('Done|active, Done|draft');
