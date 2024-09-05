@@ -16,11 +16,13 @@ class batchEditTester extends tester
         $form->dom->btn($this->lang->edit)->click();
 
         $batchEditForm = $this->loadPage('execution', 'batchEdit');
+        $batchEditForm->wait(3);
         $id = $batchEditForm->dom->id_static_0->getText();
         if(isset($execution['name']))  $batchEditForm->dom->name_0->setValue($execution['name']);
         if(isset($execution['begin'])) $batchEditForm->dom->begin[$id]->datePicker($execution['begin']);
         if(isset($execution['end']))   $batchEditForm->dom->end[$id]->datePicker($execution['end']);
+        $batchEditForm->wait(3);
+        $batchEditForm->dom->btn($this->lang->save)->click();
         $batchEditForm->wait(1);
-        $form->dom->btn($this->lang->save)->click();
     }
 }
