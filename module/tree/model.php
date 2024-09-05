@@ -551,7 +551,7 @@ class treeModel extends model
                 {
                     if(!isset($executionModules[$module->id]) && strpos($extra['extra'], 'allModule') === false) continue;
 
-                    if($module->type == 'story' && $module->root > 0) $module->parent = "product-{$module->root}";
+                    if($module->type == 'story' && $module->root > 0 && $module->parent == 0) $module->parent = "product-{$module->root}";
                     $module->url = helper::createLink('execution', 'task', "executionID={$rootID}&type=byModule&param={$module->id}");
                     $menu[$module->id] = $module;
                 }
