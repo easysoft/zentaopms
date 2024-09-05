@@ -1,0 +1,19 @@
+title: table zt_dept
+desc: "部门"
+author: Li Huifang
+version: "1.0"
+fields:
+  - field: id
+    range: 1
+  - field: name
+    range: 产品部
+  - field: order
+    note:  "排序"
+    range: 1
+  - field: path
+    note:  "路径"
+    range: 1
+    prefix: ","
+    postfix: ","
+  - field: grade
+    note:  "层级"
