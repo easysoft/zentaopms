@@ -17,14 +17,17 @@ class joinCondition extends wg
         'fieldBList?: array',
         'columnAError?: bool=false',
         'fieldAError?: bool=false',
-        'fieldBError?: bool=false'
+        'fieldBError?: bool=false',
+        'onChange?: function',
+        'onAdd?: function',
+        'onRemove?: function'
 
     );
 
     protected function buildColumnA()
     {
         global $lang;
-        list($name, $items, $values, $error) = $this->prop(array('name', 'tables', 'values', 'columnAError'));
+        list($name, $items, $values, $onChange, $error) = $this->prop(array('name', 'tables', 'values', 'onChange', 'columnAError'));
 
         return sqlBuilderPicker
         (
@@ -33,14 +36,15 @@ class joinCondition extends wg
             set::items($items),
             set::value($values[0]),
             set::placeholder($lang->bi->selectTableTip),
-            set::error($error)
+            set::error($error),
+            set::onChange($onChange)
         );
     }
 
     protected function buildFieldA()
     {
         global $lang;
-        list($name, $items, $values, $error) = $this->prop(array('name', 'fieldAList', 'values', 'fieldAError'));
+        list($name, $items, $values, $onChange, $error) = $this->prop(array('name', 'fieldAList', 'values', 'onChange', 'fieldAError'));
 
         return sqlBuilderPicker
         (
@@ -51,14 +55,15 @@ class joinCondition extends wg
             set::placeholder($lang->bi->selectFieldTip),
             set::labelWidth('40px'),
             set::width('50'),
-            set::error($error)
+            set::error($error),
+            set::onChange($onChange)
         );
     }
 
     protected function buildFieldB()
     {
         global $lang;
-        list($name, $tables, $items, $values, $error) = $this->prop(array('name', 'tables', 'fieldBList', 'values', 'fieldBError'));
+        list($name, $tables, $items, $values, $onChange, $error) = $this->prop(array('name', 'tables', 'fieldBList', 'values', 'onChange', 'fieldBError'));
         $columnB = \zget($tables, $values[3]);
 
         return sqlBuilderPicker
@@ -70,13 +75,14 @@ class joinCondition extends wg
             set::placeholder($lang->bi->selectFieldTip),
             set::labelWidth('136px'),
             set::width('72'),
-            set::error($error)
+            set::error($error),
+            set::onChange($onChange)
         );
     }
 
     protected function build()
     {
-        list($index) = $this->prop(array('index'));
+        list($index, $onAdd, $onRemove) = $this->prop(array('index', 'onAdd', 'onRemove'));
         return formGroup
         (
             $this->buildColumnA(),
@@ -94,14 +100,16 @@ class joinCondition extends wg
                     setClass('add-row-join-table'),
                     set('data-index', $index),
                     set::type('ghost'),
-                    set::icon('plus')
+                    set::icon('plus'),
+                    on::click()->do($onAdd)
                 ),
                 btn
                 (
                     setClass('remove-row-join-table'),
                     set('data-index', $index),
                     set::type('ghost'),
-                    set::icon('minus')
+                    set::icon('minus'),
+                    on::click()->do($onRemove)
                 )
             )
         );
