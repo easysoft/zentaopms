@@ -1044,11 +1044,9 @@ class gitlab extends control
             }
         }
 
-        $products = $this->loadModel("product")->getPairs();
-
         $this->view->title           = $this->lang->gitlab->common . $this->lang->hyphen . $this->lang->gitlab->importIssue;
         $this->view->importable      = empty($gitlabIssues) ? false : true;
-        $this->view->products        = $products;
+        $this->view->products        = $this->loadModel('product')->getPairs('', 0, '', 'all');
         $this->view->gitlabID        = $gitlabID;
         $this->view->gitlabProjectID = $projectID;
         $this->view->objectTypes     = $this->config->gitlab->objectTypes;
