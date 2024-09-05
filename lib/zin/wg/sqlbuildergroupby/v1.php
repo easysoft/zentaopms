@@ -9,7 +9,10 @@ class sqlBuilderGroupBy extends wg
 {
     protected static array $defineProps = array(
         'groups?: array',
-        'aggs?: array'
+        'aggs?: array',
+        'onChangeAgg?: function',
+        'onChangeType?: function',
+        'onSort?: function'
     );
 
     public static function getPageCSS(): ?string
@@ -17,28 +20,11 @@ class sqlBuilderGroupBy extends wg
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
-    protected function buildHelpIcon(string $text): node
-    {
-        if(empty($text)) return span
-        (
-            setClass('text-warning'),
-            icon('help'),
-        );
-
-        return btn
-        (
-            setClass('inline ghost'),
-            set::size('sm'),
-            setData(array('title' => $text, 'placement' => 'right', 'className' => 'text-gray border border-light', 'type' => 'white', 'hideOthers' => true)),
-            set('data-toggle', 'tooltip'),
-            icon('help')
-        );
-    }
-
     protected function buildFieldItem(int $index, array $group): node
     {
         global $lang;
         list($name, $type) = array($group['name'], $group['type']);
+        list($onChangeType) = $this->prop(array('onChangeType'));
 
         return div
         (
@@ -58,7 +44,8 @@ class sqlBuilderGroupBy extends wg
                     set::type($type == 'group' ? 'secondary' : 'default'),
                     set('data-index', $index),
                     set('data-type', 'group'),
-                    $lang->bi->groupField
+                    $lang->bi->groupField,
+                    on::click()->do($onChangeType)
                 ),
                 btn
                 (
@@ -67,7 +54,8 @@ class sqlBuilderGroupBy extends wg
                     set::type($type == 'agg' ? 'secondary' : 'default'),
                     set('data-index', $index),
                     set('data-type', 'agg'),
-                    $lang->bi->aggField
+                    $lang->bi->aggField,
+                    on::click()->do($onChangeType)
                 )
             )
         );
@@ -86,6 +74,7 @@ class sqlBuilderGroupBy extends wg
     {
         global $lang;
         list($table, $field, $function, $alias, $name) = array($agg['table'], $agg['field'], $agg['function'], $agg['alias'], $agg['name']);
+        list($onChangeAgg) = $this->prop(array('onChangeAgg'));
         return formRow
         (
             sqlBuilderPicker
@@ -98,7 +87,8 @@ class sqlBuilderGroupBy extends wg
                 set::required(true),
                 set::items($lang->bi->aggList),
                 set::placeholder($lang->bi->selectFuncTip),
-                set::value($function)
+                set::value($function),
+                set::onChange($onChangeAgg)
             ),
             sqlBuilderControl
             (
@@ -123,7 +113,7 @@ class sqlBuilderGroupBy extends wg
 
     protected function buildGroupField()
     {
-        list($groups) = $this->prop(array('groups'));
+        list($groups, $onSort) = $this->prop(array('groups', 'onSort'));
         usort($groups, function($a, $b) {return $a['order'] <= $b['order'] ? -1 : 1;});
         $items = array();
         foreach($groups as $index => $group) if($group['type'] == 'group') $items[] = array('text' => $group['name'], 'data-index' => $index);
@@ -132,7 +122,8 @@ class sqlBuilderGroupBy extends wg
         (
             setClass('group-by-sort'),
             set::items($items),
-            set::itemProps(array('icon' => 'move muted'))
+            set::itemProps(array('icon' => 'move muted')),
+            set::onSort(jsCallback()->do($onSort))
         );
     }
 
@@ -149,7 +140,7 @@ class sqlBuilderGroupBy extends wg
                 set::headingClass('bg-gray-100'),
                 set::bodyClass('h-70 overflow-y-auto flex col gap-y-2'),
                 set::title($lang->bi->allFields),
-                to::heading($this->buildHelpIcon($lang->bi->allFieldsTip)),
+                to::heading(sqlBuilderHelpIcon(set::text($lang->bi->allFieldsTip))),
                 $this->buildAllField()
             ),
             panel
@@ -159,7 +150,7 @@ class sqlBuilderGroupBy extends wg
                 set::headingClass('bg-gray-100'),
                 set::bodyClass('h-70 overflow-y-auto flex col gap-y-2'),
                 set::title($lang->bi->groupField),
-                to::heading($this->buildHelpIcon($lang->bi->groupFieldTip)),
+                to::heading(sqlBuilderHelpIcon(set::text($lang->bi->groupFieldTip))),
                 $this->buildGroupField()
             ),
             panel
@@ -169,7 +160,7 @@ class sqlBuilderGroupBy extends wg
                 set::headingClass('bg-gray-100'),
                 set::bodyClass('h-70 overflow-y-auto flex col gap-y-2'),
                 set::title($lang->bi->aggField),
-                to::heading($this->buildHelpIcon($lang->bi->aggFieldTip)),
+                to::heading(sqlBuilderHelpIcon(set::text($lang->bi->aggFieldTip))),
                 $this->buildAggField()
             )
         );
