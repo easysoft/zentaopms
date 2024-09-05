@@ -36,3 +36,22 @@ class batchEditProduct extends tester
      * Check the result of batch edit product
      *
      * @param  object $product
+     * @param  string $firstID
+     * @return mixed
+     */
+    public function checkBatchEdit($product, $firstID)
+    {
+        if ($this->response('method') == 'all')
+        {
+            $viewUrl['productID'] = $firstID;
+            $viewPage = $this->initForm('product', 'view', $viewUrl, 'appIframe-product');
+            if (isset($product->name))
+            {
+                return ($viewPage->dom->productName->getText() == $product->name) ? $this->success('产品名称修改成功') : $this->failed('产品名称修改失败');
+            }
+            if (isset($product->type))
+            {
+                return ($viewPage->dom->type->getText() == $product->type) ? $this->success('产品类型修改成功') : $this->failed('产品类型修改失败');
+            }
+    }
+}
