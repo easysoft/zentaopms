@@ -44,8 +44,45 @@ $tester->login();
 
 $execution = array(
     '0' => array(
-        'name' => '项目1迭代2',
+        'name'  => '项目1迭代2',
+        'begin' => date('Y-m-d'),
+        'end'   => date('Y-m-d', strtotime('+1 days')),
     ),
+    '1' => array(
+        'name'  => '',
+        'begin' => date('Y-m-d'),
+        'end'   => date('Y-m-d', strtotime('+1 days')),
+    ),
+    '2' => array(
+        'name'  => '项目1迭代2',
+        'begin' => '',
+        'end'   => date('Y-m-d', strtotime('+1 days')),
+    ),
+    '3' => array(
+        'name'  => '项目1迭代2',
+        'begin' => date('Y-m-d', strtotime('-1 years')),
+        'end'   => date('Y-m-d', strtotime('+1 days')),
+    ),
+    '4' => array(
+        'name'  => '项目1迭代2',
+        'begin' => date('Y-m-d'),
+        'end'   => '',
+    ),
+    '5' => array(
+        'name'  => '项目1迭代2',
+        'begin' => date('Y-m-d'),
+        'end'   => date('Y-m-d', strtotime('+1 years')),
+    ),
+    '6' => array(
+        'name'  => '项目1迭代2',
+        'begin' => date('Y-m-d'),
+        'end'   => date('Y-m-d', strtotime('-1 days')),
+    ),
+    '7' => array(
+        'name'  => '项目1迭代2',
+        'begin' => date('Y-m-d'),
+        'end'   => date('Y-m-d', strtotime('+1 days')),
+    )
 );
 
 r($tester->inputFields($execution['0'])) && p() && e();
