@@ -18,3 +18,22 @@ fields:
   - field: model
     range: scrum
   - field: type
+    range: project
+  - field: budget
+    range: 800000-1:100
+  - field: status
+    range: doing
+  - field: begin
+    range: "(-2M)-(+M):1D"
+    type: timestamp
+    format: "YYYY-MM-DD"
+    postfix: "\t"
+  - field: end
+    range: "(+1w)-(+2M):1D"
+    type: timestamp
+    format: "YYYY-MM-DD"
+    postfix: "\t"
+  - field: grade
+    range: 1
+  - field: parent
+    range: 0
