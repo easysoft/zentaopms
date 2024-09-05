@@ -1841,8 +1841,48 @@ $lang->tutorial->docManage->step23->name = '点击版本#1';
 $lang->tutorial->docManage->step23->desc = '查看版本#1的文档内容';
 
 $lang->tutorial->orTutorial = new stdClass();
-$lang->tutorial->orTutorial->demandManage = new stdClass();
-$lang->tutorial->orTutorial->demandManage->title = '需求池管理教程';
+$lang->tutorial->orTutorial->demandpoolManage = new stdClass();
+$lang->tutorial->orTutorial->demandpoolManage->title = '需求池管理教程';
+
+$lang->tutorial->orTutorial->demandpoolManage->demandManage = new stdClass();
+$lang->tutorial->orTutorial->demandpoolManage->demandManage->title = '需求管理';
+
+$lang->tutorial->orTutorial->demandpoolManage->demandManage->step1 = new stdClass();
+$lang->tutorial->orTutorial->demandpoolManage->demandManage->step1->name = '点击创建需求';
+$lang->tutorial->orTutorial->demandpoolManage->demandManage->step1->desc = '点击创建需求';
+
+$lang->tutorial->orTutorial->demandpoolManage->demandManage->step2 = new stdClass();
+$lang->tutorial->orTutorial->demandpoolManage->demandManage->step2->name = '填写表单';
+
+$lang->tutorial->orTutorial->demandpoolManage->demandManage->step3 = new stdClass();
+$lang->tutorial->orTutorial->demandpoolManage->demandManage->step3->name = '保存表单';
+$lang->tutorial->orTutorial->demandpoolManage->demandManage->step3->desc = '保存后在需求列表查看';
+
+$lang->tutorial->orTutorial->demandpoolManage->demandManage->step4 = new stdClass();
+$lang->tutorial->orTutorial->demandpoolManage->demandManage->step4->name = '点击评审按钮';
+$lang->tutorial->orTutorial->demandpoolManage->demandManage->step4->desc = '点击对需求进行评审';
+
+$lang->tutorial->orTutorial->demandpoolManage->demandManage->step5 = new stdClass();
+$lang->tutorial->orTutorial->demandpoolManage->demandManage->step5->name = '填写表单';
+
+$lang->tutorial->orTutorial->demandpoolManage->demandManage->step6 = new stdClass();
+$lang->tutorial->orTutorial->demandpoolManage->demandManage->step6->name = '保存表单';
+$lang->tutorial->orTutorial->demandpoolManage->demandManage->step6->desc = '保存后需求的状态根据评审结果变动';
+
+$lang->tutorial->orTutorial->demandpoolManage->demandManage->step7 = new stdClass();
+$lang->tutorial->orTutorial->demandpoolManage->demandManage->step7->name = '点击变更按钮';
+$lang->tutorial->orTutorial->demandpoolManage->demandManage->step7->desc = '点击对需求进行变更';
+
+$lang->tutorial->orTutorial->demandpoolManage->demandManage->step8 = new stdClass();
+$lang->tutorial->orTutorial->demandpoolManage->demandManage->step8->name = '填写表单';
+
+$lang->tutorial->orTutorial->demandpoolManage->demandManage->step9 = new stdClass();
+$lang->tutorial->orTutorial->demandpoolManage->demandManage->step9->name = '保存表单';
+$lang->tutorial->orTutorial->demandpoolManage->demandManage->step9->desc = '保存后，需求变更完成';
+
+$lang->tutorial->orTutorial->demandpoolManage->demandManage->step10 = new stdClass();
+$lang->tutorial->orTutorial->demandpoolManage->demandManage->step10->name = '点击矩阵';
+$lang->tutorial->orTutorial->demandpoolManage->demandManage->step10->desc = '您可以在这里跟进需求的进展情况';
 
 $lang->tutorial->orTutorial->marketManage = new stdClass();
 $lang->tutorial->orTutorial->marketManage->title = '市场管理教程';

@@ -29,8 +29,8 @@ if($app->config->vision === 'rnd')
 
 if($app->config->vision === 'or')
 {
-    $config->tutorial->guides[$orTutorial->demandManage->name]  = $orTutorial->demandManage;
-    $config->tutorial->guides[$orTutorial->marketManage->name]  = $orTutorial->marketManage;
-    $config->tutorial->guides[$orTutorial->roadmapManage->name] = $orTutorial->roadmapManage;
-    $config->tutorial->guides[$orTutorial->charterManage->name] = $orTutorial->charterManage;
+    $config->tutorial->guides[$orTutorial->demandpoolManage->name] = $orTutorial->demandpoolManage;
+    $config->tutorial->guides[$orTutorial->marketManage->name]     = $orTutorial->marketManage;
+    $config->tutorial->guides[$orTutorial->roadmapManage->name]    = $orTutorial->roadmapManage;
+    $config->tutorial->guides[$orTutorial->charterManage->name]    = $orTutorial->charterManage;
 }

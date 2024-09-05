@@ -2,20 +2,94 @@
 global $lang,$config;
 
 $orTutorial = new stdClass();
-$orTutorial->demandManage = new stdClass();
-$orTutorial->demandManage->name    = 'demandManage';
-$orTutorial->demandManage->title   = $lang->tutorial->orTutorial->demandManage->title;
-$orTutorial->demandManage->icon    = 'bars text-special';
-$orTutorial->demandManage->type    = 'basic';
-$orTutorial->demandManage->modules = 'demandpool';
-$orTutorial->demandManage->app     = 'demandpool';
-$orTutorial->demandManage->tasks   = array();
+$orTutorial->demandpoolManage = new stdClass();
+$orTutorial->demandpoolManage->name    = 'demandManage';
+$orTutorial->demandpoolManage->title   = $lang->tutorial->orTutorial->demandpoolManage->title;
+$orTutorial->demandpoolManage->icon    = 'bars text-special';
+$orTutorial->demandpoolManage->type    = 'basic';
+$orTutorial->demandpoolManage->modules = 'demandpool,demand';
+$orTutorial->demandpoolManage->app     = 'demandpool';
+$orTutorial->demandpoolManage->tasks   = array();
 
-$orTutorial->demandManage->tasks['demandManage'] = array();
-$orTutorial->demandManage->tasks['demandManage']['name']     = 'demandManage';
-$orTutorial->demandManage->tasks['demandManage']['title']    = $lang->tutorial->orTutorial->demandManage->title;
-$orTutorial->demandManage->tasks['demandManage']['startUrl'] = array('demandpool', 'browse');
-$orTutorial->demandManage->tasks['demandManage']['steps']    = array();
+$orTutorial->demandpoolManage->tasks['demandManage'] = array();
+$orTutorial->demandpoolManage->tasks['demandManage']['name']     = 'demandManage';
+$orTutorial->demandpoolManage->tasks['demandManage']['title']    = $lang->tutorial->orTutorial->demandpoolManage->demandManage->title;
+$orTutorial->demandpoolManage->tasks['demandManage']['startUrl'] = array('demand', 'browse', 'poolID=1');
+$orTutorial->demandpoolManage->tasks['demandManage']['steps']    = array();
+
+$orTutorial->demandpoolManage->tasks['demandManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#actionBar a.create-demand-btn',
+    'page'   => 'demand-browse',
+    'title'  => $lang->tutorial->orTutorial->demandpoolManage->demandManage->step1->name,
+    'desc'   => $lang->tutorial->orTutorial->demandpoolManage->demandManage->step1->desc
+);
+
+$orTutorial->demandpoolManage->tasks['demandManage']['steps'][] = array(
+    'type'   => 'form',
+    'page'   => 'demand-create',
+    'title'  => $lang->tutorial->orTutorial->demandpoolManage->demandManage->step2->name
+);
+
+$orTutorial->demandpoolManage->tasks['demandManage']['steps'][] = array(
+    'type'   => 'saveForm',
+    'page'   => 'demand-create',
+    'title'  => $lang->tutorial->orTutorial->demandpoolManage->demandManage->step3->name,
+    'desc'   => $lang->tutorial->orTutorial->demandpoolManage->demandManage->step3->desc
+);
+
+$orTutorial->demandpoolManage->tasks['demandManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'div.dtable div[data-col="actions"][data-row="2"] a.demand-review-btn',
+    'page'   => 'demand-browse',
+    'url'    => array('demand', 'browse', 'poolID=1&browseType=all'),
+    'title'  => $lang->tutorial->orTutorial->demandpoolManage->demandManage->step4->name,
+    'desc'   => $lang->tutorial->orTutorial->demandpoolManage->demandManage->step4->desc
+);
+
+$orTutorial->demandpoolManage->tasks['demandManage']['steps'][] = array(
+    'type'   => 'form',
+    'page'   => 'demand-review',
+    'title'  => $lang->tutorial->orTutorial->demandpoolManage->demandManage->step5->name,
+);
+
+$orTutorial->demandpoolManage->tasks['demandManage']['steps'][] = array(
+    'type'   => 'saveForm',
+    'page'   => 'demand-review',
+    'title'  => $lang->tutorial->orTutorial->demandpoolManage->demandManage->step6->name,
+    'desc'   => $lang->tutorial->orTutorial->demandpoolManage->demandManage->step6->desc
+);
+
+$orTutorial->demandpoolManage->tasks['demandManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'div.dtable div[data-col="actions"][data-row="1"] a.demand-change-btn',
+    'page'   => 'demand-browse',
+    'url'    => array('demand', 'browse', 'poolID=1&browseType=all'),
+    'title'  => $lang->tutorial->orTutorial->demandpoolManage->demandManage->step7->name,
+    'desc'   => $lang->tutorial->orTutorial->demandpoolManage->demandManage->step7->desc
+);
+
+$orTutorial->demandpoolManage->tasks['demandManage']['steps'][] = array(
+    'type'   => 'form',
+    'page'   => 'demand-change',
+    'title'  => $lang->tutorial->orTutorial->demandpoolManage->demandManage->step8->name,
+);
+
+$orTutorial->demandpoolManage->tasks['demandManage']['steps'][] = array(
+    'type'   => 'saveForm',
+    'page'   => 'demand-change',
+    'title'  => $lang->tutorial->orTutorial->demandpoolManage->demandManage->step9->name,
+    'desc'   => $lang->tutorial->orTutorial->demandpoolManage->demandManage->step9->desc
+);
+
+$orTutorial->demandpoolManage->tasks['demandManage']['steps'][] = array(
+    'type'   => 'clickNavbar',
+    'target' => 'track',
+    'page'   => 'demand-browse',
+    'url'    => array('demand', 'browse', 'poolID=1&browseType=all'),
+    'title'  => $lang->tutorial->orTutorial->demandpoolManage->demandManage->step10->name,
+    'desc'   => $lang->tutorial->orTutorial->demandpoolManage->demandManage->step10->desc
+);
 
 $orTutorial->marketManage = new stdClass();
 $orTutorial->marketManage->name    = 'marketManage';

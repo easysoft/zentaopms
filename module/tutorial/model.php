@@ -2029,4 +2029,108 @@ class tutorialModel extends model
         $doc = $this->getDoc();
         return array($doc->id => $doc);
     }
+
+    /**
+     * 获取新手模式需求池。
+     * Get demandpool.
+     *
+     * @access public
+     * @return object
+     */
+    public function getDemandpool(): object
+    {
+        $demandpool = new stdClass();
+        $demandpool->id          = 1;
+        $demandpool->name        = 'Test demandpool';
+        $demandpool->desc        = '';
+        $demandpool->status      = 'normal';
+        $demandpool->products    = '1';
+        $demandpool->createdBy   = $this->app->user->account;
+        $demandpool->createdDate = helper::today();
+        $demandpool->owner       = $this->app->user->account;
+        $demandpool->reviewer    = ",{$this->app->user->account},test";
+        $demandpool->acl         = 'open';
+        $demandpool->deleted     = 0;
+        $demandpool->files       = array();
+        return $demandpool;
+    }
+
+    /**
+     * 获取新手模式需求池需求。
+     * Get demand.
+     *
+     * @access public
+     * @return object
+     */
+    public function getDemand(): object
+    {
+        $demand = new stdClass();
+        $demand->id              = 1;
+        $demand->pool            = 1;
+        $demand->product         = '';
+        $demand->parent          = 0;
+        $demand->pri             = 3;
+        $demand->title           = 'Test Demand';
+        $demand->assignedTo      = '';
+        $demand->status          = 'active';
+        $demand->childDemands    = '';
+        $demand->module          = 0;
+        $demand->category        = 'feature';
+        $demand->source          = '';
+        $demand->sourceNote      = '';
+        $demand->feedbackedBy    = '';
+        $demand->email           = '';
+        $demand->assignedDate    = '';
+        $demand->reviewedBy      = '';
+        $demand->reviewedDate    = '';
+        $demand->stage           = 'wait';
+        $demand->duration        = '';
+        $demand->BSA             = '';
+        $demand->story           = 0;
+        $demand->roadmap         = 0;
+        $demand->createdBy       = $this->app->user->account;
+        $demand->createdDate     = helper::now();
+        $demand->mailto          = '';
+        $demand->duplicateDemand = '';
+        $demand->version         = 1;
+        $demand->parentVersion   = 0;
+        $demand->vision          = 'or';
+        $demand->color           = '';
+        $demand->changedBy       = '';
+        $demand->changedDate     = '';
+        $demand->closedBy        = '';
+        $demand->closedDate      = '';
+        $demand->closedReason    = '';
+        $demand->submitedBy      = '';
+        $demand->lastEditedBy    = '';
+        $demand->lastEditedDate  = '';
+        $demand->activatedDate   = '';
+        $demand->distributedBy   = '';
+        $demand->distributedDate = '';
+        $demand->feedback        = 0;
+        $demand->keywords        = '';
+        $demand->deleted         = 0;
+        $demand->storyType       = 'demand';
+        return $demand;
+    }
+
+    /**
+     * 获取新手模式需求池需求列表。
+     * Get demands.
+     *
+     * @access public
+     * @return array
+     */
+    public function getDemands(): array
+    {
+        $activeDemand = $this->getDemand();
+
+        $draftDemand = $this->getDemand();
+        $draftDemand->id        = 2;
+        $draftDemand->status    = 'reviewing';
+        $draftDemand->title     = 'Test Reviewing Demand';
+        $draftDemand->notReview = array($this->app->user->account);
+
+        return array($activeDemand->id => $activeDemand, $draftDemand->id => $draftDemand);
+    }
 }
