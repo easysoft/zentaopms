@@ -182,3 +182,8 @@ $lang->upgrade->storyStageList['delivering'] = 'Delivering';
 $lang->upgrade->storyStageList['delivered']  = 'Delivered';
 $lang->upgrade->storyStageList['released']   = 'Released';
 $lang->upgrade->storyStageList['closed']     = 'Closed';
+
+$lang->upgrade->flowFields['program']   = 'Program';
+$lang->upgrade->flowFields['product']   = 'Product';
+$lang->upgrade->flowFields['project']   = 'Project';
+$lang->upgrade->flowFields['execution'] = 'Execution';

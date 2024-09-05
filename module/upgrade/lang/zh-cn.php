@@ -182,3 +182,8 @@ $lang->upgrade->storyStageList['delivering'] = '交付中';
 $lang->upgrade->storyStageList['delivered']  = '已交付';
 $lang->upgrade->storyStageList['released']   = '已发布';
 $lang->upgrade->storyStageList['closed']     = '已关闭';
+
+$lang->upgrade->flowFields['program']   = '所属项目集';
+$lang->upgrade->flowFields['product']   = '所属产品';
+$lang->upgrade->flowFields['project']   = '所属项目';
+$lang->upgrade->flowFields['execution'] = '所属执行';
