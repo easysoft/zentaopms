@@ -61,6 +61,8 @@ class datatableModel extends model
         if($this->config->edition != 'open')
         {
             $flow = $this->loadModel('workflow')->getByModule($module);
+            if(empty($flow)) return $fieldList;
+
             if($flow->buildin == 1)
             {
                 $fields            = $this->loadModel('workflowfield')->getList($module);
