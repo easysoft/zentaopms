@@ -85,5 +85,7 @@ $execution = array(
     )
 );
 
-r($tester->inputFields($execution['0'])) && p() && e();
+r($tester->checkName($execution['0'])) && p('message') && e('执行名称重复提示信息正确');
+r($tester->checkName($execution['1'])) && p('message') && e('执行名称为空提示信息正确');
+
 $tester->closeBrowser();
