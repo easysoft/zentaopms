@@ -2842,6 +2842,8 @@ class kanbanModel extends model
      */
     public function refreshCards(array $lane): void
     {
+        if(common::isTutorialMode()) return;
+
         $laneID        = zget($lane, 'id');
         $laneType      = zget($lane, 'type');
         $executionID   = zget($lane, 'execution');
