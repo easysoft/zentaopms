@@ -134,7 +134,7 @@ class batchEditTester extends tester
      */
     public function batchEdit($execution)
     {
-        $this->inputFields();
+        $this->inputFields($execution);
         $form = $this->loadPage();
         if($form->dom->firstName->getText() != $execution['name']) return $this->failed('批量编辑后执行名称错误');
         if($form->dom->firstBegin->getText() != $execution['begin']) return $this->failed('批量编辑后执行开始日期错误');
