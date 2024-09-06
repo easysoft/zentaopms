@@ -20,6 +20,7 @@ $lang->tutorial->currentTask      = 'Aktuelle Aufgabe';
 $lang->tutorial->allTasks         = 'Alle Aufgaben';
 $lang->tutorial->previous         = 'Vorheriger';
 $lang->tutorial->nextTask         = 'Nächster';
+$lang->tutorial->nextGuide        = 'Nächster Guide';
 $lang->tutorial->openTargetPage   = 'Offen <strong class="task-page-name">target</strong>';
 $lang->tutorial->atTargetPage     = 'Auf <strong class="task-page-name">target</strong>';
 $lang->tutorial->reloadTargetPage = 'Neu laden';

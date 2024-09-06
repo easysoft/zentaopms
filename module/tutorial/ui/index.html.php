@@ -16,9 +16,12 @@ set::zui(true);
 /* 将所有教程按类型进行分组。Grouped all guides by type. */
 $groupedGuides = array();
 $currentType   = 'starter'; // 当前选中的类型。Current active type.
+$guideIndex    = 0;
 foreach($guides as $guideName => $guide)
 {
     $taskIndex = 0;
+    $guide->index    = $guideIndex++;
+    $guide->taskList = array();
     foreach($guide->tasks as $tasID => $task)
     {
         $task['index'] = $taskIndex++;
@@ -30,6 +33,7 @@ foreach($guides as $guideName => $guide)
             $task['steps'][$index] = $step;
         }
         $guide->tasks[$tasID] = $task;
+        $guide->taskList[] = $task['name'];
     }
     $groupedGuides[$guide->type][$guideName] = $guide;
 
@@ -157,6 +161,8 @@ $buildTutorialTabPane = function($type) use ($groupedGuides, $lang, $currentType
 jsVar('guides', $guides);
 jsVar('lang', array
 (
+    'colon'            => $lang->colon,
+    'nextGuide'        => $lang->tutorial->nextGuide,
     'nextTask'         => $lang->tutorial->nextTask,
     'nextStep'         => $lang->tutorial->nextStep,
     'clickTipFormat'   => $lang->tutorial->clickTipFormat,

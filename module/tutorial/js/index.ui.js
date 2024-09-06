@@ -398,6 +398,18 @@ function getNextTask(task)
     }
 }
 
+function getNextGuide(guide)
+{
+    const guideNames = Object.keys(guides);
+    if(guideNames.length === guide.index + 1) return;
+    for(let i = 0; i < guideNames.length; ++i)
+    {
+        const name = guideNames[i];
+        const thisGuide = guides[name];
+        if(thisGuide.index === guide.index + 1) return thisGuide;
+    }
+}
+
 function activeNextStep(step)
 {
     step = step || currentStep;
@@ -413,10 +425,16 @@ function activeNextStep(step)
         {
             updateTaskUI(step.task, {status: 'done', active: false});
             const nextTask = getNextTask(step.task);
+            const nextGuide = nextTask ? null : getNextGuide(step.guide);
+            const nextGuideTask = (nextGuide && nextGuide.taskList.length) ? nextGuide.tasks[nextGuide.taskList[0]] : null;
+            const actions = [];
+            if(nextTask) actions.push({type: 'confirm', btnType: 'primary', text: `${lang.nextTask}${lang.colon}${nextTask.title}`, onClick: () => activeTask(step.guide.name, nextTask.name)}, 'cancel');
+            else if(nextGuideTask) actions.push({type: 'confirm', btnType: 'primary', text: `${lang.nextGuide}${lang.colon}${nextGuide.title}`, onClick: () => activeTask(nextGuide.name, nextGuideTask.name)}, 'cancel');
+            else actions.push('confirm');
             zui.Modal.alert(
             {
                 content: lang.congratulateTask.replace('<span class="task-name-current"></span>', step.task.title),
-                actions: nextTask ? [{type: 'confirm', btnType: 'primary', text: lang.nextTask, onClick: () => activeTask(step.guide.name, nextTask.name)}, 'cancel'] : ['confirm']
+                actions: actions
             });
             return;
         }

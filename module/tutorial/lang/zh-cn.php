@@ -21,6 +21,7 @@ $lang->tutorial->currentTask      = '当前任务';
 $lang->tutorial->allTasks         = '所有任务';
 $lang->tutorial->previous         = '上一个';
 $lang->tutorial->nextTask         = '下一个任务';
+$lang->tutorial->nextGuide        = '下一个教程';
 $lang->tutorial->nextStep         = '下一步';
 $lang->tutorial->openTargetPage   = '打开 <strong class="task-page-name">目标</strong> 页面';
 $lang->tutorial->atTargetPage     = '已在 <strong class="task-page-name">目标</strong> 页面';
