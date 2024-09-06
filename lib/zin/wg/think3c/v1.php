@@ -6,6 +6,11 @@ requireWg('thinkModel');
 
 class think3c extends thinkModel
 {
+    public static function getPageCSS(): ?string
+    {
+        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
+    }
+
     public static function getPageJS(): string
     {
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
@@ -15,7 +20,7 @@ class think3c extends thinkModel
     {
         jsVar('modelImg', 'data/thinmory/thumbnail/init3c.png');
 
-        return div(setCLass('relative'), h::canvas(setID('canvas')));
+        return div(setCLass('model-canvas relative'), h::canvas(setID('canvas')));
     }
 
     protected function build(): node
