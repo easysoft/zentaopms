@@ -8,7 +8,7 @@ $tester = new createDocTester();
 $tester->login();
 
 $libName = array();
-$libName['null']    = '';
+$libName['null']     = '';
 $libName['myDocLib'] = '我的文档库1';
 
 r($tester->createDocLib($libName['null']))     && p('message,status') && e('创建文档库表单页提示信息正确,SUCCESS'); // 缺少库名称，创建失败
