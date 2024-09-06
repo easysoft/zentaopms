@@ -4,7 +4,7 @@ global $lang,$config;
 $testManage = new stdClass();
 $testManage->name    = 'testManage';
 $testManage->title   = $lang->tutorial->testManage->title;
-$testManage->icon    = 'sitemap text-special';
+$testManage->icon    = 'sitemap text-important';
 $testManage->type    = 'basic';
 $testManage->modules = 'testcase,testreport,testtask,bug';
 $testManage->app     = 'project';

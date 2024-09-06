@@ -4,7 +4,7 @@ global $lang;
 $programManage = new stdClass();
 $programManage->name    = 'programManage';
 $programManage->title   = $lang->tutorial->programManage->title;
-$programManage->icon    = 'program text-special';
+$programManage->icon    = 'program text-success';
 $programManage->type    = 'advance';
 $programManage->modules = 'program,product,project,personnel';
 $programManage->app     = 'program';

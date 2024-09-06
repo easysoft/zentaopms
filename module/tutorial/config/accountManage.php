@@ -4,7 +4,7 @@ global $lang;
 $accountManage = new stdClass();
 $accountManage->name    = 'accountManage';
 $accountManage->title   = $lang->tutorial->accountManage->title;
-$accountManage->icon    = 'backend text-special';
+$accountManage->icon    = 'backend text-secondary';
 $accountManage->type    = 'basic';
 $accountManage->modules = 'admin,company,dept,group';
 $accountManage->app     = 'admin';
