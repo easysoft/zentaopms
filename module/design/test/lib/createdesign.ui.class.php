@@ -24,6 +24,14 @@ class createDesignTester extends tester
         return $this->checkResult($design);
     }
 
+    /**
+     * Check the result after create the design.
+     * 创建设计后检查结果。
+     *
+     * @param  array $design
+     * @access public
+     * @return object
+     */
     public function checkResult(array $design)
     {
         if($this->response('method') != 'browse')
