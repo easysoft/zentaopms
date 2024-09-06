@@ -64,7 +64,7 @@ class thinkBaseCheckbox extends wg
         {
             return div
             (
-                setClass('item-control has-input w-full py-2 px-3 flex gap-3 items-center justify-between border cursor-pointer ' . $itemClass),
+                setClass('item-control has-input w-full py-2 px-3 flex gap-3 items-center justify-between border cursor-pointer rounded ' . $itemClass),
                 setData('type', $this->prop('type')),
                 !$disabled ? on::click('toggleChecked') : null,
                 div
@@ -98,7 +98,7 @@ class thinkBaseCheckbox extends wg
         (
             setData('type', $this->prop('type')),
             !$disabled ? on::click('toggleChecked') : null,
-            setClass('item-control w-full py-2 px-3 flex gap-3 items-center justify-between border cursor-pointer ' . $itemClass),
+            setClass('item-control w-full py-2 px-3 flex gap-3 items-center justify-between border cursor-pointer rounded ' . $itemClass),
             div(setClass('text-md flex-1 break-all'), $text),
             new checkbox
             (

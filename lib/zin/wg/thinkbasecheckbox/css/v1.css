@@ -9,3 +9,5 @@
 .think-check-list .checkbox-primary.checked>label, .think-check-list .radio-primary>label {font-family: ZentaoIcon !important; padding-left: 14px;}
 .think-check-list .radio-primary>label:before, .think-check-list .radio-primary.checked>label:before, .think-check-list .radio-primary>input[type=radio]:checked+label:before {display: none;}
 .think-check-list .radio-primary>label:after {--tw-content: "\e5ca"; color: var(--color-primary-500); font-size: 14px; background-color: unset; top: -2px; left: 2px; font-weight: 600;}
+.think-check-list[disabled] .item-control {background-color: rgba(var(--color-gray-100-rgb),var(--tw-bg-opacity)); border-color: rgba(var(--color-gray-300-rgb),var(--tw-border-opacity)); --tw-bg-opacity: .6; color: rgba(var(--color-black-rgb),var(--tw-text-opacity));}
+.think-check-list[disabled] .item-control.is-checked {background-color: rgba(var(--color-gray-300-rgb),var(--tw-bg-opacity)); --tw-bg-opacity: .4;}

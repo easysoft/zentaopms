@@ -6,3 +6,4 @@
 .think-form-batch .form-batch-head[data-name="ACTIONS"], .think-form-batch .form-batch-row-actions {width: 3.325rem; position: sticky; right: 0; background: var(--color-canvas);}
 .think-form-batch .form-batch-head[data-name="ACTIONS"] .form-label {display: none;}
 .think-form-batch .form-batch-row-actions .btn {color: var(--color-primary-500);}
+.think-form-batch .form-control[disabled] {background-color: rgba(var(--color-gray-100-rgb),var(--tw-bg-opacity)); --tw-bg-opacity: .4; color:rgba(var(--color-gray-700-rgb),var(--tw-bg-opacity))}
