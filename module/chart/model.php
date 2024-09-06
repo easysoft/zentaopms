@@ -23,6 +23,7 @@ class chartModel extends model
         parent::__construct($appName);
         $this->loadBIDAO();
         $this->loadModel('bi');
+        $this->viewableObjects = $this->bi->getViewableObject('chart');
     }
 
     /**
@@ -168,6 +169,7 @@ class chartModel extends model
                 ->markRight(1)
                 ->andWhere("FIND_IN_SET({$group->id}, `group`)")
                 ->andWhere('stage')->eq('published')
+                ->andWhere('id')->in($this->viewableObjects)
                 ->orderBy($orderBy)
                 ->fetchAll();
         }
