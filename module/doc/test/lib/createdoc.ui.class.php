@@ -26,4 +26,33 @@ class createDocTester extends tester
         $this->openUrl('doc', 'mySpace');
         return $this->success('创建草稿成功。');
     }
+
+    /**
+     * 创建文档。
+     * Create a doc.
+     *
+     * @param  string $docName
+     * @access public
+     * @return void
+     */
+    public function createDoc($docName)
+    {
+        $this->openUrl('doc', 'mySpace', array('objectType' => 'mine'));
+        $form = $this->loadPage('doc', 'mySpace', array('objectType' => 'mine'));
+        $form->dom->createDocBtn->click();
+        $form->wait(1);
+        $form->dom->showTitle->setValue($docName->dcName);
+        $form->dom->saveBtn->click();
+        $form->wait(1);
+        $form->dom->releaseBtn->click();
+
+        $this->openUrl('doc', 'mySpace', array('objectType' => 'mine'));
+        $form = $this->loadPage('doc', 'mySpace', array('objectType' => 'mine'));
+        $form->dom->search(array("文档标题,=,{$draftName->dcName}"));
+        $form->wait(1);
+
+        if($form->dom->fstDocName->getText() != $docName->dcName) return $this->failed('文档创建失败');
+        $this->openUrl('doc', 'mySpace');
+        return $this->success('文档创建成功');
+    }
 }
