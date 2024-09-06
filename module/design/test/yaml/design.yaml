@@ -8,7 +8,7 @@ fields:
     range: 1-100
     prefix: '设计'
   - field: project
-    range: "11{10},60{10},61{10}"
+    range: "60{10},61{10}"
   - field: product
     range: "0{2},1{6},3,7,0{2},2{6},4,8,1,3{8},7"
   - field: story
