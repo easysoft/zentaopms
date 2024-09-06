@@ -2164,12 +2164,10 @@ $config->bi->builtin->pivots[] = array
 select t1.actor,LEFT(t1.`date`,10) as `day` from zt_action t1
 left join zt_user as t2 on t1.actor = t2.account
 where t1.`action`='login'
-and if
-(
-    \$startDate = '' && \$endDate = '' && \$dept = '',
-    1=2,
-    (LEFT(t1.`date`, 10)>=cast(\$startDate as date) and LEFT(t1.`date`, 10)<=cast(\$endDate as date) and t2.`dept` = \$dept)
-)
+and if(\$startDate='',1=1,LEFT(t1.`date`, 10)>=cast(\$startDate as date))
+and if(\$endDate='',1=1,LEFT(t1.`date`, 10)<=cast(\$endDate as date))
+and if(\$dept='',1=1,t2.`dept`=\$dept)
+and if(\$startDate='' && \$endDate='' && \$dept='', 1=2, 1=1)
 order by t1.`date` asc, t1.actor asc
 EOT,
     'settings'  => array
