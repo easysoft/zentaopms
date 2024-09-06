@@ -18,7 +18,10 @@ class think3c extends thinkModel
 
     protected function buildBody(): node
     {
+        global $lang;
+
         jsVar('modelImg', 'data/thinmory/thumbnail/init3c.png');
+        jsVar('blockName', $lang->thinkwizard->placeholder->blockName);
 
         return div(setCLass('model-canvas relative'), h::canvas(setID('canvas')));
     }
