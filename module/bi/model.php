@@ -735,6 +735,9 @@ class biModel extends model
         {
             foreach($groupTables as $table)
             {
+                $tableObj = substr($table, strpos($table, '_') + 1);
+                if(!isset($this->lang->dev->tableList[$tableObj])) continue;
+
                 $tableFields[$table] = $this->dev->getFields($table);
             }
         }
