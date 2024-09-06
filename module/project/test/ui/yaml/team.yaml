@@ -1,0 +1,19 @@
+title: table zt_team
+desc: "团队"
+author: Li Huifang
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 1-5
+    loop: 0
+  - field: root
+    note: "项目"
+    range: 1
+  - field: type
+    note: "项目类型"
+    range: project
+  - field: account
+    note: "用户账号"
+  - field: account
+    range: admin,user1,user2,user3,user4
