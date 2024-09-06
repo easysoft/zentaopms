@@ -1062,6 +1062,20 @@ class user extends control
     }
 
     /**
+     * Ajax get old contact list.
+     *
+     * @param  $dropdownName mailto|whitelist
+     * @access public
+     * @return string
+     */
+    public function ajaxGetOldContactList(string $dropdownName = 'mailto')
+    {
+        $contactList = $this->user->getContactLists();
+        if(empty($contactList)) return false;
+        return print(html::select('contactListMenu', $contactList, '', "class='form-control' onchange=\"setMailto('$dropdownName', this.value)\""));
+    }
+
+    /**
      * AJAX: 获取用户模板。
      * AJAX: get user templates.
      *

@@ -13,7 +13,20 @@
 <?php
 if($contactLists)
 {
-    echo html::select('contactListMenu', array('' => '') + $contactLists, '', "class='form-control chosen' $attr onchange=\"setOldMailto('$dropdownName', this.value)\"");
+    echo html::select('contactListMenu', array('' => '') + $contactLists, '', "class='form-control chosen' $attr onchange=\"setMailto('$dropdownName', this.value)\"");
+}
+else
+{
+    if($showManage == 'yes')
+    {
+        $width = isonlybody() ? 'data-width=100%' : '';
+        echo '<span class="input-group-btn">';
+        echo '<a title="' . $lang->user->contacts->manage . '" href="' . $this->createLink('my', 'managecontacts', "listID=0&mode=old", '', true) . "\" target='_blank' data-icon='cog' data-title='{$lang->user->contacts->manage}' class='btn btn-icon iframe' $width><i class='icon icon-cog'></i></a>";
+        echo '</span>';
+        echo '<span class="input-group-btn">';
+        echo '<button type="button" title="' . $lang->refresh . '" class="btn btn-icon"' . "onclick=\"ajaxGetContacts(this, '$dropdownName')\"" . '><i class="icon icon-refresh"></i></button>';
+        echo '</span>';
+    }
 }
 ?>
 <style>
@@ -25,14 +38,27 @@ td > <?php echo "#" . $dropdownName;?> + .chosen-container + #contactListMenu + 
 </style>
 
 <script>
-function setOldMailto(mailto, contactListID)
+/**
+ * Ajax get contacts.
+ *
+ * @param  object $obj
+ * @param  string $dropdownName mailto|whitelist
+ * @access public
+ * @return void
+ */
+function ajaxGetContacts(obj, dropdownName)
 {
-    link = createLink('user', 'ajaxGetOldContactUsers', 'listID=' + contactListID + '&dropdownName=' + mailto);
-    $.get(link, function(users)
+    if(typeof(dropdownName) == 'undefined') dropdownName = 'mailto';
+
+    link = createLink('user', 'ajaxGetOldContactList', 'dropdownName=' + dropdownName);
+    $.get(link, function(contacts)
     {
-        $('#' + mailto).replaceWith(users);
-        $('#' + mailto + '_chosen').remove();
-        $('#' + mailto).chosen();
+        if(!contacts) return false;
+
+        $inputgroup = $(obj).closest('.input-group');
+        $inputgroup.find('.input-group-btn').remove();
+        $inputgroup.append(contacts);
+        $inputgroup.find('select:last').chosen().fixInputGroup();
     });
 }
 </script>

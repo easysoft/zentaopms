@@ -1324,6 +1324,7 @@ class my extends control
             }
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
             if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "renderContactList"));
             if($this->app->tab == 'project') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
 
@@ -1379,11 +1380,12 @@ class my extends control
      * @access public
      * @return void
      */
-    public function buildContactLists(string $dropdownName = 'mailto', string $attr = '')
+    public function buildContactLists(string $dropdownName = 'mailto', string $attr = '', string $showManage = 'yes')
     {
         $this->view->contactLists = $this->user->getContactLists();
         $this->view->dropdownName = $dropdownName;
         $this->view->attr         = $attr;
+        $this->view->showManage   = $showManage;
         $this->display();
     }
 
