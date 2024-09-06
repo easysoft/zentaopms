@@ -2755,7 +2755,7 @@ class testcaseZen extends testcase
             preg_match('/^((([0-9]+)[.]([0-9]+))[.]([0-9]+))[.、](.*)$/Uu', $step, $out);
             if(!$out) preg_match('/^(([0-9]+)[.]([0-9]+))[.、](.*)$/Uu', $step, $out);
             if(!$out) preg_match('/^([0-9]+)[.、](.*)$/Uu', $step, $out);
-            if($out)
+            if($out && !empty(trim($out[2])))
             {
                 $count  = count($out);
                 $num    = $out[1];
@@ -2764,11 +2764,8 @@ class testcaseZen extends testcase
                 $step   = trim($out[2]);
                 if($count > 4) $step = $count > 6 ? trim($out[6]) : trim($out[4]);
 
-                if(!empty($step))
-                {
-                    $caseSteps[$num]['content'] = $step;
-                    $caseSteps[$num]['number']  = $num;
-                }
+                $caseSteps[$num]['content'] = $step;
+                $caseSteps[$num]['number']  = $num;
 
                 $caseSteps[$num]['type'] = $count > 4 ? 'item' : 'step';
                 if(!empty($parent)) $caseSteps[$parent]['type'] = 'group';

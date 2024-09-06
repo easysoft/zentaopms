@@ -1527,7 +1527,7 @@ class testcaseModel extends model
                         preg_match('/^((([0-9]+)[.]([0-9]+))[.]([0-9]+))[.、](.*)$/Uu', $trimmedStep, $out);
                         if(!$out) preg_match('/^(([0-9]+)[.]([0-9]+))[.、](.*)$/Uu', $trimmedStep, $out);
                         if(!$out) preg_match('/^([0-9]+)[.、](.*)$/Uu', $trimmedStep, $out);
-                        if($out)
+                        if($out && !empty(trim($out[2])))
                         {
                             $count  = count($out);
                             $num    = $out[1];
@@ -1536,11 +1536,8 @@ class testcaseModel extends model
                             $step   = trim($out[2]);
                             if($count > 4) $step = $count > 6 ? trim($out[6]) : trim($out[4]);
 
-                            if(!empty($step))
-                            {
-                                $caseStep[$num]['content'] = $step;
-                                $caseStep[$num]['number']  = $num;
-                            }
+                            $caseStep[$num]['content'] = $step;
+                            $caseStep[$num]['number']  = $num;
 
                             $caseStep[$num]['type'] = $count > 4 ? 'item' : 'step';
                             if(!empty($parent)) $caseStep[$parent]['type'] = 'group';
