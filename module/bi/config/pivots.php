@@ -2167,7 +2167,7 @@ where t1.`action`='login'
 and if(\$startDate='',1=1,LEFT(t1.`date`, 10)>=cast(\$startDate as date))
 and if(\$endDate='',1=1,LEFT(t1.`date`, 10)<=cast(\$endDate as date))
 and if(\$dept='',1=1,t2.`dept`=\$dept)
-and if(\$startDate='' && \$endDate='' && \$dept='', 1=2, 1=1)
+and not (\$startDate='' and \$endDate='' and \$dept='')
 order by t1.`date` asc, t1.actor asc
 EOT,
     'settings'  => array
@@ -2244,7 +2244,7 @@ where t1.`deleted` = '0'
 and (case when \$startDate='' then 1=1 else cast(t1.`date` as date) >= cast(\$startDate as date) end)
 and (case when \$endDate='' then 1=1 else cast(t1.`date` as date) <= cast(\$endDate as date) end)
 and (t3.path like concat((select path from zt_dept where id=\$dept), '%') or \$dept=0)
-and not (\$startDate='' && \$endDate='' && \$dept='')
+and not (\$startDate='' and \$endDate='' and \$dept='')
 order by t1.`date` asc
 EOT,
     'settings'  => array
@@ -2314,7 +2314,18 @@ $config->bi->builtin->pivots[] = array
     'driver'    => 'mysql',
     'group'     => '62',
     'sql'       => <<<EOT
-select t1.day,t2.userlogin,t3.consumed,t4.storyopen,t5.storyclose,t6.taskopen,t7.taskfinish,t8.bugopen,t9.bugresolve,t1.actions from ztv_dayactions as t1 left join ztv_dayuserlogin as t2 on t1.day=t2.day left join ztv_dayeffort as t3 on t1.day=t3.date left join ztv_daystoryopen as t4 on t1.day=t4.day left join ztv_daystoryclose as t5 on t1.day=t5.day left join ztv_daytaskopen as t6 on t1.day=t6.day left join ztv_daytaskfinish as t7 on t1.day=t7.day left join ztv_daybugopen as t8 on t1.day=t8.day left join ztv_daybugresolve as t9 on t1.day=t9.day where if(\$startDate='',1,t1.day>=\$startDate) and if(\$endDate='',1,t1.day<=\$endDate)
+select t1.day,t2.userlogin,t3.consumed,t4.storyopen,t5.storyclose,t6.taskopen,t7.taskfinish,t8.bugopen,t9.bugresolve,t1.actions from ztv_dayactions as t1
+left join ztv_dayuserlogin as t2 on t1.day=t2.day
+left join ztv_dayeffort as t3 on t1.day=t3.date
+left join ztv_daystoryopen as t4 on t1.day=t4.day
+left join ztv_daystoryclose as t5 on t1.day=t5.day
+left join ztv_daytaskopen as t6 on t1.day=t6.day
+left join ztv_daytaskfinish as t7 on t1.day=t7.day
+left join ztv_daybugopen as t8 on t1.day=t8.day
+left join ztv_daybugresolve as t9 on t1.day=t9.day
+where if(\$startDate='',1=1,t1.day>=\$startDate)
+and if(\$endDate='',1=1,t1.day<=\$endDate)
+and not (\$startDate='' and \$endDate='')
 EOT,
     'settings'  => array
     (
