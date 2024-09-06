@@ -7,9 +7,12 @@ include '../lib/createdoc.ui.class.php';
 $tester = new createDocTester();
 $tester->login();
 
-$libName = array();
-$libName['null']    = '';
-$libName['myDocLib'] = '我的文档库1';
+$draftName = new stdClass();
+$draftName->nullName = '';
+$draftName->dftName  = '我的草稿文档1';
 
-r($tester->createDocLib($libName['null']))     && p('message,status') && e('创建文档表单页提示信息正确,SUCCESS'); // 缺少文档名称，创建失败
-r($tester->createDocLib($libName['myDocLib'])) && p('message,status') && e('创建文档表单页提示信息正确,SUCCESS'); // 创建我的文档库，创建成功
+$docName = new stdClass();
+$docName->dcName = '我的文档1';
+
+r($tester->createDraft($draftName)) && p('message,status') && e('创建草稿表单页提示信息正确,SUCCESS');
+r($tester->createDoc($docName))     && p('message,status') && e('创建文档表单页提示信息正确,SUCCESS');

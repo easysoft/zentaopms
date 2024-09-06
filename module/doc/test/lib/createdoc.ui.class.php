@@ -3,32 +3,27 @@ include dirname(__FILE__, 5) . '/test/lib/ui.php';
 class createDocTester extends tester
 {
     /**
-     * 创建我的文档库。
-     * Create a doclib.
+     * 创建草稿文档。
+     * Create a draft.
      *
-     * @param  string $docLibName
+     * @param  string $draftName
      * @access public
      * @return void
      */
-    public function createDocLib($libName)
+    public function createDraft($draftName)
     {
-        /*进入我的空间下创建文档库*/
-        $this->openUrl('doc', 'mySpace', array('type' => 'mine'));
-        $form = $this->loadPage('doc', 'mySpace', array('type' => 'mine'));
-        $form->dom->createLibBtn->click();
+        $this->openUrl('doc', 'myspace', array('objectType' => 'mine'));
+        $form = $this->loadPage('doc', 'myspace', array('objectType' => 'mine'));
+        $form->dom->createDocBtn->click();
+        $form->dom->showTitle->setValue($draftName->dftName);
+        $form->dom->saveDraftBtn->click();
+        $this->openUrl('doc', 'myspace', array('objectType' => 'mine'));
+        $form = $this->loadPage('doc', 'myspace', array('objectType' => 'mine'));
+        $form->dom->search(array("文档标题,=,{$draftName->dftName}"));
         $form->wait(1);
 
-        $form->dom->libName->setValue($libName);
-        $form->dom->btn($this->lang->save)->click();
-        $form->wait(1);
-
-        /*判断名称必填项以及是否保存成功*/
-        if($form->dom->leftListHeader->getText() != $libName)
-        {
-            if($form->dom->nameTip->getText() != '『库名称』不能为空。') return $this->failed('库名称为空校验失败。');
-            $this->openUrl('doc', 'mySpace');
-            return $this->success('库名称非空校验成功。');
-        }
-        return $this->success('创建我的文档库成功');
+        if($form->dom->fstDocLabel->getText() != '草稿') return $this->failed('创建草稿失败。');
+        $this->openUrl('doc', 'mySpace');
+        return $this->success('创建草稿成功。');
     }
 }
