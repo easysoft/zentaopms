@@ -556,7 +556,7 @@ class story extends control
             if(!$project->multiple)
             {
                 $executionID = $param ? $param : $this->session->execution;
-                $this->project->setMenu((int)$project->project);
+                $this->project->setMenu((int)$project->id);
                 $this->view->executionID = $executionID;
                 $this->view->execution   = $this->loadModel('execution')->fetchByID($executionID);
             }
