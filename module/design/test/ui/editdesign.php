@@ -1,5 +1,13 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=编辑设计测试
+timeout=0
+cid=2
+
+*/
 chdir(__DIR__);
 include '../lib/editdesign.ui.class.php';
 
