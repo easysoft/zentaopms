@@ -9889,7 +9889,7 @@ class upgradeModel extends model
             $flowTableDesc[$flowTable] = array_column($desc, NULL, 'Field');
         }
 
-        $defaultData = array('type' => 'mediumint', 'length' => '8', 'control' => 'select', 'readonly' => 1, 'buildin' => 1);
+        $defaultData = array('type' => 'mediumint', 'length' => '8', 'control' => 'select', 'readonly' => 1, 'buildin' => 1, 'role' => 'default');
         $fields      = array();
         $fields['program']   = "ALTER TABLE %table% ADD `program` mediumint(8) unsigned NOT NULL DEFAULT 0 AFTER `id`";
         $fields['product']   = "ALTER TABLE %table% ADD `product` mediumint(8) unsigned NOT NULL DEFAULT 0 AFTER `program`";
@@ -9905,20 +9905,25 @@ class upgradeModel extends model
                 if($flow->vision == 'or' && $field != 'product') continue;
                 if(isset($flowTableDesc[$flow->table][$field]))
                 {
-                    $tableDesc = $flowTableDesc[$flow->table];
-                    if(isset($tableDesc["{$field}_1"]))
+                    $tableDesc    = $flowTableDesc[$flow->table];
+                    $newFieldName = "{$field}_1";
+                    $oldField     = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->where('module')->eq($flow->module)->andWhere('field')->eq($field)->fetch();
+                    if(isset($tableDesc[$newFieldName]) || ($oldField && ($oldField->buildin || $oldField->readonly)))
                     {
                         $this->dao->exec("ALTER TABLE {$flow->table} DROP `{$field}`");
                         $this->dao->delete()->from(TABLE_WORKFLOWFIELD)->where('module')->eq($flow->module)->andWhere('field')->eq("{$field}")->exec();
                     }
-                    else
+                    elseif($oldField)
                     {
-                        $fieldDesc  = $tableDesc[$field];
-                        $changeSQL  = "ALTER TABLE {$flow->table} CHANGE `{$field}` `{$field}_1` {$fieldDesc['Type']}";
-                        $changeSQL .= strtolower($fieldDesc['Null']) == 'no' ? " NOT NULL" : " NULL";
-                        $changeSQL .= " DEFAULT '{$fieldDesc['Default']}'";
-                        $this->dao->exec($changeSQL);
-                        $this->dao->update(TABLE_WORKFLOWFIELD)->set('field')->eq("{$field}_1")->where('module')->eq($flow->module)->andWhere('field')->eq($field)->exec();
+                        $this->dao->update(TABLE_WORKFLOWFIELD)->set('field')->eq("{$newFieldName}")->where('module')->eq($flow->module)->andWhere('field')->eq($field)->exec();
+                        $this->dao->update(TABLE_WORKFLOWSQL)->set('field')->eq("{$newFieldName}")->where('module')->eq($flow->module)->andWhere('field')->eq($field)->exec();
+
+                        $newField = clone $oldField;
+                        $newField->field = $newFieldName;
+
+                        $this->loadModel('workflowfield');
+                        $this->workflowfield->processTable($flow->table, $oldField, $newField);
+                        $this->workflowfield->updateRelated($flow, $oldField, $newFieldName);
                     }
                 }
 
