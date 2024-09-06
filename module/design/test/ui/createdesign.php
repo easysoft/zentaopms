@@ -1,5 +1,13 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=创建设计测试
+timeout=0
+cid=1
+
+*/
 chdir(__DIR__);
 include '../lib/createdesign.ui.class.php';
 
