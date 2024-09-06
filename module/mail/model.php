@@ -367,7 +367,7 @@ class mailModel extends model
     {
         $wwwRoot = $this->app->getWwwRoot();
         $images  = array_filter(array_unique($images));
-        foreach($images as $image) $this->mta->AddEmbeddedImage($wwwRoot . $image, basename($image));
+        foreach($images as $image) $this->mta->AddEmbeddedImage($image, basename($image));
     }
 
     /**

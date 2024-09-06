@@ -112,7 +112,7 @@ class mailTao extends mailModel
             if(!$file) continue;
             if(!in_array($file->extension, $this->config->file->imageExtensions)) continue;
 
-            $images[$matches[1][$key]] = $file->webPath;
+            $images[$matches[1][$key]] = $file->realPath;
         }
         return $images;
     }
