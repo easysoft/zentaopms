@@ -2226,4 +2226,59 @@ class tutorialModel extends model
         $market->deleted        = 0;
         return $market;
     }
+
+    /**
+     * 获取新手模式Charter立项。
+     * Get charter.
+     *
+     * @access public
+     * @return object
+     */
+    public function getCharter(): object
+    {
+        $charter = new stdClass();
+        $charter->id              = 1;
+        $charter->name            = 'Test charter';
+        $charter->level           = 3;
+        $charter->category        = 'IPD';
+        $charter->market          = 'domestic';
+        $charter->check           = 0;
+        $charter->appliedBy       = $this->app->user->account;
+        $charter->appliedDate     = helper::now();
+        $charter->budget          = '';
+        $charter->budgetUnit      = 'CNY';
+        $charter->product         = ',1,';
+        $charter->roadmap         = '';
+        $charter->spec            = '';
+        $charter->status          = 'wait';
+        $charter->createdBy       = $this->app->user->account;
+        $charter->createdDate     = helper::now();
+        $charter->charterFiles    = '';
+        $charter->closedBy        = '';
+        $charter->closedDate      = '';
+        $charter->closedReason    = '';
+        $charter->activatedBy     = '';
+        $charter->activatedDate   = '';
+        $charter->reviewedBy      = '';
+        $charter->reviewedResult  = '';
+        $charter->reviewedDate    = '';
+        $charter->meetingDate     = '';
+        $charter->meetingLocation = '';
+        $charter->meetingMinutes  = '';
+        $charter->deleted         = 0;
+        return $charter;
+    }
+
+    /**
+     * 获取新手模式Charter立项列表。
+     * Get charter list.
+     *
+     * @access public
+     * @return array
+     */
+    public function getCharters(): array
+    {
+        $charter = $this->getCharter();
+        return array($charter->id => $charter);
+    }
 }

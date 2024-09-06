@@ -589,3 +589,75 @@ $orTutorial->charterManage->tasks['charterManage']['name']     = 'charterManage'
 $orTutorial->charterManage->tasks['charterManage']['title']    = $lang->tutorial->orTutorial->charterManage->title;
 $orTutorial->charterManage->tasks['charterManage']['startUrl'] = array('charter', 'browse');
 $orTutorial->charterManage->tasks['charterManage']['steps']    = array();
+
+$orTutorial->charterManage->tasks['charterManage']['steps'][] = array(
+    'type'  => 'openApp',
+    'app'   => 'charter',
+    'title' => $lang->tutorial->orTutorial->charterManage->step1->name,
+    'desc'  => $lang->tutorial->orTutorial->charterManage->step1->desc
+);
+
+$orTutorial->charterManage->tasks['charterManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#actionBar a.charter-create-btn',
+    'page'   => 'charter-browse',
+    'title'  => $lang->tutorial->orTutorial->charterManage->step2->name,
+    'desc'   => $lang->tutorial->orTutorial->charterManage->step2->desc
+);
+
+$orTutorial->charterManage->tasks['charterManage']['steps'][] = array(
+    'type'   => 'form',
+    'page'   => 'charter-create',
+    'title'  => $lang->tutorial->orTutorial->charterManage->step3->name
+);
+
+$orTutorial->charterManage->tasks['charterManage']['steps'][] = array(
+    'type'   => 'saveForm',
+    'page'   => 'charter-create',
+    'title'  => $lang->tutorial->orTutorial->charterManage->step4->name,
+    'desc'   => $lang->tutorial->orTutorial->charterManage->step4->desc
+);
+
+$orTutorial->charterManage->tasks['charterManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'div.dtable div[data-row="1"] a.charter-review-btn',
+    'page'   => 'charter-browse',
+    'url'    => array('charter', 'browse'),
+    'title'  => $lang->tutorial->orTutorial->charterManage->step5->name,
+    'desc'   => $lang->tutorial->orTutorial->charterManage->step5->desc
+);
+
+$orTutorial->charterManage->tasks['charterManage']['steps'][] = array(
+    'type'   => 'form',
+    'page'   => 'charter-browse',
+    'title'  => $lang->tutorial->orTutorial->charterManage->step6->name
+);
+
+$orTutorial->charterManage->tasks['charterManage']['steps'][] = array(
+    'type'   => 'saveForm',
+    'page'   => 'charter-browse',
+    'title'  => $lang->tutorial->orTutorial->charterManage->step7->name,
+    'desc'   => $lang->tutorial->orTutorial->charterManage->step7->desc
+);
+
+$orTutorial->charterManage->tasks['charterManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'div.dtable div[data-row="1"] a.charter-close-btn',
+    'page'   => 'charter-browse',
+    'url'    => array('charter', 'browse'),
+    'title'  => $lang->tutorial->orTutorial->charterManage->step8->name,
+    'desc'   => $lang->tutorial->orTutorial->charterManage->step8->desc
+);
+
+$orTutorial->charterManage->tasks['charterManage']['steps'][] = array(
+    'type'   => 'form',
+    'page'   => 'charter-browse',
+    'title'  => $lang->tutorial->orTutorial->charterManage->step9->name
+);
+
+$orTutorial->charterManage->tasks['charterManage']['steps'][] = array(
+    'type'   => 'saveForm',
+    'page'   => 'charter-browse',
+    'title'  => $lang->tutorial->orTutorial->charterManage->step10->name,
+    'desc'   => $lang->tutorial->orTutorial->charterManage->step10->desc
+);

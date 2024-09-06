@@ -1998,4 +1998,41 @@ $lang->tutorial->orTutorial->roadmapManage->branchManage = new stdClass();
 $lang->tutorial->orTutorial->roadmapManage->branchManage = clone $lang->tutorial->productManage->branchManage;
 
 $lang->tutorial->orTutorial->charterManage = new stdClass();
-$lang->tutorial->orTutorial->charterManage->title = 'Chart立项教程';
+$lang->tutorial->orTutorial->charterManage->title = 'Charter立项教程';
+
+$lang->tutorial->orTutorial->charterManage->step1 = new stdClass();
+$lang->tutorial->orTutorial->charterManage->step1->name = "点击立项";
+$lang->tutorial->orTutorial->charterManage->step1->desc = "您可以在这里管理Charter立项";
+
+$lang->tutorial->orTutorial->charterManage->step2 = new stdClass();
+$lang->tutorial->orTutorial->charterManage->step2->name = "点击提交立项";
+$lang->tutorial->orTutorial->charterManage->step2->desc = "点击提交Charter立项的申请";
+
+$lang->tutorial->orTutorial->charterManage->step3 = new stdClass();
+$lang->tutorial->orTutorial->charterManage->step3->name = "填写表单";
+
+$lang->tutorial->orTutorial->charterManage->step4 = new stdClass();
+$lang->tutorial->orTutorial->charterManage->step4->name = "保存表单";
+$lang->tutorial->orTutorial->charterManage->step4->desc = "保存后在立项列表中跟进申请进度";
+
+$lang->tutorial->orTutorial->charterManage->step5 = new stdClass();
+$lang->tutorial->orTutorial->charterManage->step5->name = "点击评审结果";
+$lang->tutorial->orTutorial->charterManage->step5->desc = "点击评审立项申请";
+
+$lang->tutorial->orTutorial->charterManage->step6 = new stdClass();
+$lang->tutorial->orTutorial->charterManage->step6->name = "填写表单";
+
+$lang->tutorial->orTutorial->charterManage->step7 = new stdClass();
+$lang->tutorial->orTutorial->charterManage->step7->name = "保存表单";
+$lang->tutorial->orTutorial->charterManage->step7->desc = "保存后根据评审结果，立项状态修改";
+
+$lang->tutorial->orTutorial->charterManage->step8 = new stdClass();
+$lang->tutorial->orTutorial->charterManage->step8->name = "点击关闭";
+$lang->tutorial->orTutorial->charterManage->step8->desc = "Charter完成后点击关闭按钮进行关闭";
+
+$lang->tutorial->orTutorial->charterManage->step9 = new stdClass();
+$lang->tutorial->orTutorial->charterManage->step9->name = "填写表单";
+
+$lang->tutorial->orTutorial->charterManage->step10 = new stdClass();
+$lang->tutorial->orTutorial->charterManage->step10->name = "保存表单";
+$lang->tutorial->orTutorial->charterManage->step10->desc = "保存后，立项状态变为已关闭";
