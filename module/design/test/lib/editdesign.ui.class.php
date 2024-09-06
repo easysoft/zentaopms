@@ -38,7 +38,6 @@ class editDesignTester extends tester
         {
             if($this->checkFormTips('design')) return $this->success('编辑设计表单页提示信息正确');
             return $this->failed('编辑设计表单页提示信息不正确');
-
         }
 
         /* 跳转到设计详情页，检查设计字段信息。 */
