@@ -709,7 +709,7 @@ div
 );
 
 $actions = $this->loadModel('common')->buildOperateMenu($execution);
-if($config->systemMode == 'PLM')
+if($config->systemMode == 'PLM' && $config->edition == 'ipd')
 {
     $canStart = $this->execution->checkStageStatus($execution->id, 'start');
     $canClose = $this->execution->checkStageStatus($execution->id, 'close');
