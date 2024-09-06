@@ -1012,11 +1012,8 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
 
     const app   = apps.openedMap[code];
     const items = [{text: langData.open, disabled: app && getLastAppCode() === code, onClick: () => showApp(code)}];
-    if(app)
-    {
-        items.push({text: langData.reload, onClick: () => reloadApp(code)});
-        if(code !== 'my') items.push({text: langData.close, onClick: () => closeApp(code)});
-    }
+
+    if(app) items.push({text: langData.reload, onClick: () => reloadApp(code)});
 
     if($btn.closest('#menuMainNav').length !== 0)
     {
@@ -1083,6 +1080,9 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
                     items: toAddedItems,
                 }
         );
+
+        if(app && code !== 'my') items.push({text: langData.close, onClick: () => closeApp(code)});
+
         items.push(
             {
                 text: langData.restore,
