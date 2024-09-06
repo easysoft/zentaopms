@@ -37,8 +37,16 @@ $execution->path->range('`,1,5,`, `,1,6,`, `,1,7,`, `,2,8,`, `,2,9,`');
 $execution->begin->range('(-3w)-(-2w):1D')->type('timestamp')->format('YY/MM/DD');
 $execution->end->range('(+5w)-(+6w):1D')->type('timestamp')->format('YY/MM/DD');
 $execution->acl->range('open');
-$execution->status->range('wait');
+$execution->status->range('wait{2}, doing, suspended, closed');
 $execution->gen(5, false);
 
 $tester = new allExecutionTester();
 $tester->login();
+
+r($tester->checkTab('all', '5'))       && p('message') && e('all标签下显示条数正确');
+r($tester->checkTab('undone', '4'))    && p('message') && e('undone标签下显示条数正确');
+r($tester->checkTab('wait', '2'))      && p('message') && e('wait标签下显示条数正确');
+r($tester->checkTab('doing', '1'))     && p('message') && e('doing标签下显示条数正确');
+r($tester->checkTab('suspended', '1')) && p('message') && e('suspended标签下显示条数正确');
+r($tester->checkTab('closed', '1'))    && p('message') && e('closed标签下显示条数正确');
+$tester->closeBrowser();
