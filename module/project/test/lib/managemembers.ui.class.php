@@ -37,7 +37,7 @@ class manageMembersTester extends tester
      */
     public function deleteMembers()
     {
-        $browseForm = $this->initForm('project', 'team', array('projectID' => '1'), 'appIframe-project');
+        $browseForm        = $this->initForm('project', 'team', array('projectID' => '1'), 'appIframe-project');
         $browseFirAccount1 = $browseForm->dom->browseFirAccount->getText();
         $browseForm->dom->teamBtn->click();
         $form = $this->initForm('project', 'manageMembers', array('projectID' => '1'), 'appIframe-project');
@@ -46,7 +46,7 @@ class manageMembersTester extends tester
         $form->dom->btn($this->lang->save)->click();
         $form->wait(2);
         //添加断言，判断是否删除成功
-        if($browseForm->dom->browseFirAccount->getText() == $browseFirAccount1)      return $this->failed('项目团队成员删除失败');
+        if($browseForm->dom->browseFirAccount->getText() == $browseFirAccount1) return $this->failed('项目团队成员删除失败');
         return $this->success();
     }
 
@@ -65,7 +65,7 @@ class manageMembersTester extends tester
         $form->dom->btn($this->lang->save)->click();
         $form->wait(2);
         //添加断言，根据保存后的成员数量，判断是否复制团队成员成功
-        if($form->dom->amount->getText() != '5')      return $this->failed('选择部门团队成员失败');
+        if($form->dom->amount->getText() != '5') return $this->failed('选择部门团队成员失败');
         return $this->success();
     }
 }
