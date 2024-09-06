@@ -1096,7 +1096,7 @@ class releaseModel extends model
             if(isset($stages[$story->id])) $stories[$index]->stage = $stages[$story->id];
         }
 
-        return array($stories, $pager);
+        return $stories;
     }
 
     /**

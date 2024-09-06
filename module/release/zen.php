@@ -203,7 +203,7 @@ class releaseZen extends release
         if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
         $sort .= ',buildID_asc';
 
-        list($stories, $storyPager) = $this->release->getStoryList($release->stories, $release->branch, $type == 'story' ? $sort : '', $storyPager);
+        $stories = $this->release->getStoryList($release->stories, $release->branch, $type == 'story' ? $sort : '', $storyPager);
 
         $sort = common::appendOrder($orderBy);
         $bugs = $this->release->getBugList($release->bugs, $type == 'bug' ? $sort : '', $bugPager);
