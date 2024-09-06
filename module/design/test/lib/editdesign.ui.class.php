@@ -2,6 +2,14 @@
 include dirname(__FILE__, 5) . '/test/lib/ui.php';
 class editDesignTester extends tester
 {
+    /**
+     * Edit a design.
+     * 编辑设计输入表单。
+     *
+     * @param  array  $design
+     * @access public
+     * @return object
+     */
     public function editDesign(array $design)
     {
         $form = $this->initForm('design', 'edit', array('designID' => 1), 'appIframe-project');
