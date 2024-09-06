@@ -24,6 +24,14 @@ class editDesignTester extends tester
         return $this->checkResult($design);
     }
 
+    /**
+     * Check the result after edit the design.
+     * 编辑设计后检查结果。
+     *
+     * @param  array $design
+     * @access public
+     * @return object
+     */
     public function checkResult(array $design)
     {
         if($this->response('method') != 'view')
