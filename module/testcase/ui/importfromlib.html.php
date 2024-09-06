@@ -72,6 +72,8 @@ foreach($cases as $case)
 
 $footToolbar = array('items' => array(array('text' => $lang->testcase->import, 'btnType' => 'secondary', 'className' => 'import-btn')));
 
+$sortLink = createLink('testcase', 'importFromLib', "product={$productID}&branch={$branch}&libID={$libID}&orderBy={name}_{sortType}&browseType={$browseType}&queryID={$queryID}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID={$projectID}");
+
 formBase
 (
     setID('importFromLibForm'),
@@ -83,6 +85,7 @@ formBase
         set::data($cases),
         set::onRenderCell(jsRaw('window.renderModuleItem')),
         set::checkable(true),
+        set::sortLink($sortLink),
         set::footToolbar($footToolbar),
         set::footPager(usePager()),
         set::plugins(array('form')),
