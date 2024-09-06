@@ -121,7 +121,7 @@ class thinkStepBase extends wg
                 $quotedItems[] = a
                (
                    setClass('block text-primary-500 leading-relaxed'),
-                   set::href(createLink('thinkstep', 'detail', "marketID=0&&wizardID=$item->wizard&&stepID=$item->id")),
+                   set::href(createLink('thinkstep', 'view', "marketID=0&&wizardID=$item->wizard&&stepID=$item->id&&from=detail")),
                    setData('toggle', 'modal'),
                    setData('dismiss', 'modal'),
                    setData('size', 'sm'),
@@ -167,7 +167,7 @@ class thinkStepBase extends wg
                     a
                     (
                         setClass('block text-primary-500 leading-relaxed'),
-                        set::href(createLink('thinkstep', 'detail', "marketID=0&&wizardID=$sourceQuestion->wizard&&stepID=$sourceQuestion->id")),
+                        set::href(createLink('thinkstep', 'view', "marketID=0&&wizardID=$sourceQuestion->wizard&&stepID=$sourceQuestion->id&&from=detail")),
                         setData('toggle', 'modal'),
                         setData('dismiss', 'modal'),
                         setData('size', 'sm'),
