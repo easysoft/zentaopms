@@ -982,12 +982,12 @@ $(document).on('contextmenu', '#menuMainNav .divider', function(event)
     if(apps.openedMenu) apps.openedMenu.hide();
     apps.openedMenu = zui.ContextMenu.show(
         {
-            hideOthers: true,
             element: $divider[0],
             placement: 'right-start',
             items: items,
             event: event,
-            onClickItem: (info) => info.event.preventDefault()
+            onClickItem: (info) => info.event.preventDefault(),
+            onHide: () => apps.openedMenu = null,
         }
     );
     event.preventDefault();
