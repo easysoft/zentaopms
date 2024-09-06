@@ -1447,9 +1447,12 @@ $config->group->package->manageCaseLib->subset = 'caselib';
 $config->group->package->manageCaseLib->privs  = array();
 $config->group->package->manageCaseLib->privs['caselib-create']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array('caselib-browse'), 'recommend' => array('assetlib-caselibSort', 'caselib-createCase', 'caselib-edit', 'caselib-import'));
 $config->group->package->manageCaseLib->privs['caselib-edit']            = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('caselib-view'), 'recommend' => array('assetlib-caselibSort', 'caselib-create'));
-$config->group->package->manageCaseLib->privs['caselib-createCase']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('caselib-browse'), 'recommend' => array('caselib-batchCreateCase', 'caselib-create', 'caselib-import'));
-$config->group->package->manageCaseLib->privs['caselib-batchCreateCase'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('caselib-browse'), 'recommend' => array('caselib-createCase'));
-$config->group->package->manageCaseLib->privs['assetlib-caselibSort']    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('assetlib-caselib'), 'recommend' => array('caselib-create', 'caselib-edit'));
+$config->group->package->manageCaseLib->privs['caselib-createCase']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('caselib-browse'), 'recommend' => array('caselib-batchCreateCase', 'caselib-create', 'caselib-import'));
+$config->group->package->manageCaseLib->privs['caselib-editCase']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('caselib-browse'), 'recommend' => array('caselib-batchCreateCase', 'caselib-create', 'caselib-import'));
+$config->group->package->manageCaseLib->privs['caselib-viewCase']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('caselib-browse'), 'recommend' => array('caselib-batchCreateCase', 'caselib-create', 'caselib-import'));
+$config->group->package->manageCaseLib->privs['caselib-batchCreateCase'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('caselib-browse'), 'recommend' => array('caselib-createCase'));
+$config->group->package->manageCaseLib->privs['caselib-batchEditCase']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 6, 'depend' => array('caselib-browse'), 'recommend' => array('caselib-createCase', 'caselib-batchCreateCase'));
+$config->group->package->manageCaseLib->privs['assetlib-caselibSort']    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 7, 'depend' => array('assetlib-caselib'), 'recommend' => array('caselib-create', 'caselib-edit'));
 
 $config->group->package->deleteCaseLib = new stdclass();
 $config->group->package->deleteCaseLib->order  = 20;
