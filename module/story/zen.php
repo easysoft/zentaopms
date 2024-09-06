@@ -1111,14 +1111,14 @@ class storyZen extends story
      * 根据配置，删除非必要的表单字段配置。
      * Remove form fields for batch create.
      *
-     * @param  int       $productID
-     * @param  array     $fields
-     * @param  string    $productType
-     * @param  string    $storyType
+     * @param  array      $fields
+     * @param  bool       $hiddenPlan
+     * @param  string     $executionType
+     * @param  int        $executionID
      * @access protected
      * @return array
      */
-    protected function removeFormFieldsForBatchCreate(array $fields, bool $hiddenPlan, string $executionType): array
+    protected function removeFormFieldsForBatchCreate(array $fields, bool $hiddenPlan, string $executionType, int $executionID = 0): array
     {
         if($hiddenPlan) unset($fields['plan']);
 
@@ -1127,7 +1127,21 @@ class storyZen extends story
             unset($fields['region']);
             unset($fields['lane']);
         }
-        if($this->app->tab == 'project' || $this->app->tab == 'execution') $fields['parent']['hidden'] = true;
+
+        if($this->app->tab == 'project' || $this->app->tab == 'execution')
+        {
+            $fields['parent']['hidden'] = true;
+
+            $project = $this->dao->findById((int)$executionID)->from(TABLE_PROJECT)->fetch();
+            if(!empty($project->project)) $project = $this->dao->findById((int)$project->project)->from(TABLE_PROJECT)->fetch();
+
+            if(empty($project->hasProduct))
+            {
+                $teamUsers = $this->project->getTeamMemberPairs($project->id);
+                $fields['reviewer']['options']   = $teamUsers;
+                $fields['assignedTo']['options'] = $teamUsers;
+            }
+        }
 
         return $fields;
     }

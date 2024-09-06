@@ -181,7 +181,7 @@ class story extends control
         $showFields   = $this->storyZen->getShowFields($this->config->{$storyType}->custom->batchCreateFields, $storyType, $product);
 
         $fields = $this->storyZen->getFormFieldsForBatchCreate($productID, $branch, $executionID, $storyType);
-        $fields = $this->storyZen->removeFormFieldsForBatchCreate($fields, $this->view->hiddenPlan, isset($this->view->execution) ? $this->view->execution->type : '');
+        $fields = $this->storyZen->removeFormFieldsForBatchCreate($fields, $this->view->hiddenPlan, isset($this->view->execution) ? $this->view->execution->type : '', $executionID);
 
         if($storyID)
         {
