@@ -233,9 +233,12 @@ class mail extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        $queueList = $this->mail->getQueue('all', $orderBy, $pager, false);
+        foreach($queueList as $queue) $queue->toList .= ',' . $queue->ccList;
+
         $this->view->title      = $this->lang->mail->browse;
 
-        $this->view->queueList = $this->mail->getQueue('all', $orderBy, $pager, false);
+        $this->view->queueList = $queueList;
         $this->view->pager     = $pager;
         $this->view->orderBy   = $orderBy;
         $this->view->users     = $this->loadModel('user')->getPairs('noletter');
