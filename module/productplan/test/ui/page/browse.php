@@ -14,6 +14,7 @@ class browsePage extends page
             'searchBtn'      => "//*[@id='mainContent']/div[1]/div/form/div[2]/button[1]",
             'selectAllBtn'   => "//*[@id='table-productplan-browse']/div[1]/div[1]/div/div[1]/div[1]/div/label",
             'batchEditBtn'   => "//*[@id='table-productplan-browse']/div[3]/nav[1]/button",
+            'batchCloseBtn'  => "//*[@id='table-productplan-browse']/div[3]/nav[1]/button[2]",
             'batchStatusBtn' => "//*[@id='table-productplan-browse']/div[3]/nav[1]/a",
             'waitingStatus'  => "//*[@id='navStatus']/li[1]/a",
             'doingStatus'    => "//*[@id='navStatus']/li[2]/a",
