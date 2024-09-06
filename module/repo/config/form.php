@@ -21,10 +21,10 @@ $config->repo->form->create['desc']           = array('required' => false, 'type
 $config->repo->form->edit = array();
 $config->repo->form->edit['product']        = array('required' => true,  'type' => 'array');
 $config->repo->form->edit['projects']       = array('required' => false, 'type' => 'array', 'default' => array());
-$config->repo->form->edit['SCM']            = array('required' => true,  'type' => 'string', 'filter' => 'trim');
+$config->repo->form->edit['SCM']            = array('required' => true,  'type' => 'string','default' => '', 'filter' => 'trim');
 $config->repo->form->edit['serviceHost']    = array('required' => false, 'type' => 'int');
 $config->repo->form->edit['serviceProject'] = array('required' => false, 'type' => 'string', 'default' => '');
-$config->repo->form->edit['name']           = array('required' => true,  'type' => 'string', 'filter' => 'trim');
+$config->repo->form->edit['name']           = array('required' => true,  'type' => 'string', 'default' => '', 'filter' => 'trim');
 $config->repo->form->edit['path']           = array('required' => false, 'type' => 'string', 'default' => '');
 $config->repo->form->edit['encoding']       = array('required' => false, 'type' => 'string', 'default' => 'utf-8');
 $config->repo->form->edit['client']         = array('required' => false, 'type' => 'string', 'default' => '');

@@ -27,7 +27,7 @@ jsVar('clientSvnTip', $lang->repo->example->client->svn);
 
 formPanel
 (
-    on::change('#serviceHost', 'onHostChange'),
+    on::change('#serviceHost')->call('onHostChange'),
     set::title($lang->repo->createRepoAction),
     formRow
     (
