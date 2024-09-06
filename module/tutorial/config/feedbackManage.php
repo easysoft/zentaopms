@@ -4,7 +4,7 @@ global $lang;
 $feedbackManage = new stdClass();
 $feedbackManage->name    = 'feedbackManage';
 $feedbackManage->title   = $lang->tutorial->feedbackManage->title;
-$feedbackManage->icon    = 'feedback text-danger';
+$feedbackManage->icon    = 'feedback text-danger text-lg';
 $feedbackManage->type    = 'advance';
 $feedbackManage->modules = 'feedback';
 $feedbackManage->app     = 'feedback';

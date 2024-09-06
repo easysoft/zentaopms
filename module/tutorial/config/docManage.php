@@ -4,7 +4,7 @@ global $lang,$app;
 $docManage = new stdClass();
 $docManage->name    = 'docManage';
 $docManage->title   = $lang->tutorial->docManage->title;
-$docManage->icon    = 'doc text-success';
+$docManage->icon    = 'doc text-success text-lg';
 $docManage->type    = 'advance';
 $docManage->modules = 'doc';
 $docManage->app     = 'doc';
