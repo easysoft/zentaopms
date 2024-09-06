@@ -84,8 +84,8 @@
 .version-upgrade {width: 14px; height: 16px; float: left; background-repeat: no-repeat; background-position: center ; background-size: cover; display: block;}
 #latestVersionList {height: 270px; overflow: auto;}
 
-#menuMainNav[z-use-sortable] a[data-app]:hover {cursor: grab;}
-#menuMainNav[z-use-sortable] li.divider:hover {cursor: grab;}
+#menuMainNav[z-use-sortable] a[data-app]:hover {cursor: move;}
+#menuMainNav[z-use-sortable] li.divider:hover {cursor: move;}
 .tutorial-hl {position: relative; z-index: 1000; box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.4);}
 .tutorial-hl {position: relative; z-index: 1000;}
 .tutorial-hl {position: relative; z-index: 1000!important;}
