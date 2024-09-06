@@ -1240,7 +1240,7 @@ class biModel extends model
     /**
      * Process filter variables in sql.
      *
-     * @param  string    $sql
+     * @param  string $sql
      * @param  array  $filters
      * @access public
      * @return string

@@ -689,9 +689,9 @@ class pivotModel extends model
      */
     public function getFilterFormat(string $sql, array $filters): array
     {
-        $filterFormat = array();
-        if(empty($filters)) return array($sql, $filterFormat);
+        if(empty($filters)) return array($sql, false);
 
+        $filterFormat = array();
         foreach($filters as $filter)
         {
             $field = $filter['field'];
@@ -777,16 +777,16 @@ class pivotModel extends model
     /**
      * Append where filter to sql from filters.
      *
-     * @param  string   $sql
-     * @param  array    $filters
-     * @param  array    $driver
+     * @param  string      $sql
+     * @param  array|false $filters
+     * @param  array       $driver
      * @access public
      * @return string
      */
-    public function appendWhereFilterToSql(string $sql, array $filters, string $driver): string
+    public function appendWhereFilterToSql(string $sql, array|false $filters, string $driver): string
     {
         $connectSQL = '';
-        if(!isset($filters[0]['from']))
+        if(!isset($filters[0]['from']) && $filters !== false)
         {
             if(!empty($filters))
             {
@@ -1453,21 +1453,21 @@ class pivotModel extends model
     /**
      * Gen sheet.
      *
-     * @param  array  $fields
-     * @param  array  $settings
-     * @param  string $sql
-     * @param  array  $filters
-     * @param  array  $langs
+     * @param  array       $fields
+     * @param  array       $settings
+     * @param  string      $sql
+     * @param  array|false $filters
+     * @param  array       $langs
      * @access public
      * @return array
      */
-    public function genSheet(array $fields, array $settings, string $sql, array $filters, array $langs = array(), string $driver = 'mysql'): array
+    public function genSheet(array $fields, array $settings, string $sql, array|false $filters, array $langs = array(), string $driver = 'mysql'): array
     {
         $groups = $this->getGroupsFromSettings($settings);
         $cols   = $this->generateTableCols($fields, $groups, $langs);
 
         /* Replace the variable with the default value. */
-        $sql = $this->bi->processVars($sql, $filters);
+        $sql = $this->bi->processVars($sql, (array)$filters);
         $sql = $this->trimSemicolon($sql);
         $sql = $this->appendWhereFilterToSql($sql, $filters, $driver);
 
@@ -1560,17 +1560,17 @@ class pivotModel extends model
     /**
      * Gen sheet by origin sql.
      *
-     * @param  array  $fields
-     * @param  array  $settings
-     * @param  string $sql
-     * @param  array  $filters
-     * @param  array  $langs
+     * @param  array       $fields
+     * @param  array       $settings
+     * @param  string      $sql
+     * @param  array|false $filters
+     * @param  array       $langs
      * @access public
      * @return string
      */
     public function genOriginSheet($fields, $settings, $sql, $filters, $langs = array(), $driver = 'mysql')
     {
-        $sql = $this->bi->processVars($sql, $filters);
+        $sql = $this->bi->processVars($sql, (array)$filters);
         $sql = $this->trimSemicolon($sql);
         $sql = $this->appendWhereFilterToSql($sql, $filters, $driver);
 
