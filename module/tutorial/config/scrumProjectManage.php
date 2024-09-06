@@ -427,67 +427,6 @@ $scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
 );
 
 $scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
-    'type'   => 'click',
-    'target' => 'div.dtable div[data-col="actions"][data-row="1"] a.testtask-runCase-btn',
-    'page'   => 'execution-testcase',
-    'url'    => array('execution', 'testcase', 'executionID=3'),
-    'title'  => $lang->tutorial->scrumProjectManage->manageTest->step6->name,
-    'desc'   => $lang->tutorial->scrumProjectManage->manageTest->step6->desc
-);
-
-$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
-    'type'   => 'form',
-    'page'   => 'execution-testcase',
-    'title'  => $lang->tutorial->scrumProjectManage->manageTest->step7->name
-);
-
-$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
-    'type'   => 'saveForm',
-    'page'   => 'execution-testcase',
-    'title'  => $lang->tutorial->scrumProjectManage->manageTest->step8->name,
-    'desc'   => $lang->tutorial->scrumProjectManage->manageTest->step8->desc
-);
-
-$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
-    'type'   => 'click',
-    'target' => 'div.dtable div[data-col="actions"][data-row="1"] a.testtask-results-btn',
-    'page'   => 'execution-testcase',
-    'url'    => array('execution', 'testcase', 'executionID=3'),
-    'title'  => $lang->tutorial->scrumProjectManage->manageTest->step9->name,
-    'desc'   => $lang->tutorial->scrumProjectManage->manageTest->step9->desc
-);
-
-$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
-    'type'   => 'form',
-    'target' => '.resultSteps div.steps-body',
-    'page'   => 'execution-testcase',
-    'title'  => $lang->tutorial->scrumProjectManage->manageTest->step10->name
-);
-
-$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
-    'type'   => 'saveForm',
-    'target' => 'div.resultSteps button.to-bug-button',
-    'page'   => 'execution-testcase',
-    'title'  => $lang->tutorial->scrumProjectManage->manageTest->step11->name,
-    'desc'   => $lang->tutorial->scrumProjectManage->manageTest->step11->desc
-);
-
-$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
-    'type'   => 'form',
-    'page'   => 'bug-create',
-    'app'    => 'qa',
-    'url'    => array('bug', 'create', 'productID=1'),
-    'title'  => $lang->tutorial->scrumProjectManage->manageTest->step12->name
-);
-
-$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
-    'type'   => 'saveForm',
-    'page'   => 'bug-create',
-    'app'    => 'qa',
-    'title'  => $lang->tutorial->scrumProjectManage->manageTest->step13->name
-);
-
-$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'clickMainNavbar',
     'target' => 'testtask',
     'page'   => 'execution-testcase',
@@ -551,9 +490,69 @@ $scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
 );
 
 $scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'div.dtable div[data-col="actions"][data-row="1"] a.testtask-runCase-btn',
+    'page'   => 'testtask-cases',
+    'url'    => array('testtask', 'cases', 'taskID=1'),
+    'title'  => $lang->tutorial->scrumProjectManage->manageTest->step6->name,
+    'desc'   => $lang->tutorial->scrumProjectManage->manageTest->step6->desc
+);
+
+$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
+    'type'   => 'form',
+    'page'   => 'testtask-cases',
+    'title'  => $lang->tutorial->scrumProjectManage->manageTest->step7->name
+);
+
+$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
+    'type'   => 'saveForm',
+    'page'   => 'testtask-cases',
+    'title'  => $lang->tutorial->scrumProjectManage->manageTest->step8->name,
+    'desc'   => $lang->tutorial->scrumProjectManage->manageTest->step8->desc
+);
+
+$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'div.dtable div[data-col="actions"][data-row="1"] a.testtask-results-btn',
+    'page'   => 'testtask-cases',
+    'url'    => array('testtask', 'cases', 'taskID=1'),
+    'title'  => $lang->tutorial->scrumProjectManage->manageTest->step9->name,
+    'desc'   => $lang->tutorial->scrumProjectManage->manageTest->step9->desc
+);
+
+$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '.resultSteps div.steps-body div[data-id="1"] div.step-id',
+    'page'   => 'testtask-cases',
+    'title'  => $lang->tutorial->scrumProjectManage->manageTest->step10->name
+);
+
+$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
+    'type'   => 'saveForm',
+    'target' => 'div.resultSteps button.to-bug-button',
+    'page'   => 'testtask-cases',
+    'title'  => $lang->tutorial->scrumProjectManage->manageTest->step11->name,
+    'desc'   => $lang->tutorial->scrumProjectManage->manageTest->step11->desc
+);
+
+$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
+    'type'   => 'form',
+    'page'   => 'bug-create',
+    'url'    => array('bug', 'create', 'productID=1'),
+    'title'  => $lang->tutorial->scrumProjectManage->manageTest->step12->name
+);
+
+$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
+    'type'   => 'saveForm',
+    'page'   => 'bug-create',
+    'title'  => $lang->tutorial->scrumProjectManage->manageTest->step13->name
+);
+
+$scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'clickMainNavbar',
     'target' => 'testtask',
     'page'   => 'testtask-cases',
+    'app'    => 'execution',
     'url'    => array('testtask', 'cases', 'taskID=1'),
     'title'  => $lang->tutorial->scrumProjectManage->manageTest->step22->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageTest->step22->desc
@@ -578,7 +577,6 @@ $scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
 $scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'form',
     'page'   => 'testreport-create',
-    'app'    => 'qa',
     'url'    => array('testreport', 'create', 'executionID=3'),
     'title'  => $lang->tutorial->scrumProjectManage->manageTest->step25->name
 );
@@ -586,7 +584,6 @@ $scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
 $scrumProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'saveForm',
     'page'   => 'testreport-create',
-    'app'    => 'qa',
     'title'  => $lang->tutorial->scrumProjectManage->manageTest->step26->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageTest->step26->desc
 );

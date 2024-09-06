@@ -147,8 +147,8 @@ $testManage->tasks['testManage']['steps'][] = array(
 );
 
 $testManage->tasks['testManage']['steps'][] = array(
-    'type'   => 'form',
-    'target' => '.resultSteps div.steps-body',
+    'type'   => 'click',
+    'target' => '.resultSteps div.steps-body div[data-id="1"] div.step-id',
     'page'   => 'testtask-cases',
     'title'  => $lang->tutorial->testManage->step18->name
 );

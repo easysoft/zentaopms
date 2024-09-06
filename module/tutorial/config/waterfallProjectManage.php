@@ -407,67 +407,6 @@ $waterfallProjectManage->basic->tasks['manageTest']['steps'][] = array(
 );
 
 $waterfallProjectManage->basic->tasks['manageTest']['steps'][] = array(
-    'type'   => 'click',
-    'target' => 'div.dtable div[data-col="actions"][data-row="1"] a.testtask-runCase-btn',
-    'page'   => 'execution-testcase',
-    'url'    => array('execution', 'testcase', 'executionID=3'),
-    'title'  => $lang->tutorial->waterfallProjectManage->manageTest->step6->name,
-    'desc'   => $lang->tutorial->waterfallProjectManage->manageTest->step6->desc
-);
-
-$waterfallProjectManage->basic->tasks['manageTest']['steps'][] = array(
-    'type'   => 'form',
-    'page'   => 'execution-testcase',
-    'title'  => $lang->tutorial->waterfallProjectManage->manageTest->step7->name
-);
-
-$waterfallProjectManage->basic->tasks['manageTest']['steps'][] = array(
-    'type'   => 'saveForm',
-    'page'   => 'execution-testcase',
-    'title'  => $lang->tutorial->waterfallProjectManage->manageTest->step8->name,
-    'desc'   => $lang->tutorial->waterfallProjectManage->manageTest->step8->desc
-);
-
-$waterfallProjectManage->basic->tasks['manageTest']['steps'][] = array(
-    'type'   => 'click',
-    'target' => 'div.dtable div[data-col="actions"][data-row="1"] a.testtask-results-btn',
-    'page'   => 'execution-testcase',
-    'url'    => array('execution', 'testcase', 'executionID=3'),
-    'title'  => $lang->tutorial->waterfallProjectManage->manageTest->step9->name,
-    'desc'   => $lang->tutorial->waterfallProjectManage->manageTest->step9->desc
-);
-
-$waterfallProjectManage->basic->tasks['manageTest']['steps'][] = array(
-    'type'   => 'form',
-    'target' => '.resultSteps div.steps-body',
-    'page'   => 'execution-testcase',
-    'title'  => $lang->tutorial->waterfallProjectManage->manageTest->step10->name
-);
-
-$waterfallProjectManage->basic->tasks['manageTest']['steps'][] = array(
-    'type'   => 'saveForm',
-    'target' => 'div.resultSteps button.to-bug-button',
-    'page'   => 'execution-testcase',
-    'title'  => $lang->tutorial->waterfallProjectManage->manageTest->step11->name,
-    'desc'   => $lang->tutorial->waterfallProjectManage->manageTest->step11->desc
-);
-
-$waterfallProjectManage->basic->tasks['manageTest']['steps'][] = array(
-    'type'   => 'form',
-    'page'   => 'bug-create',
-    'app'    => 'qa',
-    'url'    => array('bug', 'create', 'productID=1'),
-    'title'  => $lang->tutorial->waterfallProjectManage->manageTest->step12->name
-);
-
-$waterfallProjectManage->basic->tasks['manageTest']['steps'][] = array(
-    'type'   => 'saveForm',
-    'page'   => 'bug-create',
-    'app'    => 'qa',
-    'title'  => $lang->tutorial->waterfallProjectManage->manageTest->step13->name
-);
-
-$waterfallProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'clickMainNavbar',
     'target' => 'testtask',
     'page'   => 'execution-testcase',
@@ -531,9 +470,69 @@ $waterfallProjectManage->basic->tasks['manageTest']['steps'][] = array(
 );
 
 $waterfallProjectManage->basic->tasks['manageTest']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'div.dtable div[data-col="actions"][data-row="1"] a.testtask-runCase-btn',
+    'page'   => 'testtask-cases',
+    'url'    => array('testtask', 'cases', 'taskID=1'),
+    'title'  => $lang->tutorial->waterfallProjectManage->manageTest->step6->name,
+    'desc'   => $lang->tutorial->waterfallProjectManage->manageTest->step6->desc
+);
+
+$waterfallProjectManage->basic->tasks['manageTest']['steps'][] = array(
+    'type'   => 'form',
+    'page'   => 'testtask-cases',
+    'title'  => $lang->tutorial->waterfallProjectManage->manageTest->step7->name
+);
+
+$waterfallProjectManage->basic->tasks['manageTest']['steps'][] = array(
+    'type'   => 'saveForm',
+    'page'   => 'testtask-cases',
+    'title'  => $lang->tutorial->waterfallProjectManage->manageTest->step8->name,
+    'desc'   => $lang->tutorial->waterfallProjectManage->manageTest->step8->desc
+);
+
+$waterfallProjectManage->basic->tasks['manageTest']['steps'][] = array(
+    'type'   => 'click',
+    'target' => 'div.dtable div[data-col="actions"][data-row="1"] a.testtask-results-btn',
+    'page'   => 'testtask-cases',
+    'url'    => array('testtask', 'cases', 'taskID=1'),
+    'title'  => $lang->tutorial->waterfallProjectManage->manageTest->step9->name,
+    'desc'   => $lang->tutorial->waterfallProjectManage->manageTest->step9->desc
+);
+
+$waterfallProjectManage->basic->tasks['manageTest']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '.resultSteps div.steps-body div[data-id="1"] div.step-id',
+    'page'   => 'testtask-cases',
+    'title'  => $lang->tutorial->waterfallProjectManage->manageTest->step10->name
+);
+
+$waterfallProjectManage->basic->tasks['manageTest']['steps'][] = array(
+    'type'   => 'saveForm',
+    'target' => 'div.resultSteps button.to-bug-button',
+    'page'   => 'testtask-cases',
+    'title'  => $lang->tutorial->waterfallProjectManage->manageTest->step11->name,
+    'desc'   => $lang->tutorial->waterfallProjectManage->manageTest->step11->desc
+);
+
+$waterfallProjectManage->basic->tasks['manageTest']['steps'][] = array(
+    'type'   => 'form',
+    'page'   => 'bug-create',
+    'url'    => array('bug', 'create', 'productID=1'),
+    'title'  => $lang->tutorial->waterfallProjectManage->manageTest->step12->name
+);
+
+$waterfallProjectManage->basic->tasks['manageTest']['steps'][] = array(
+    'type'   => 'saveForm',
+    'page'   => 'bug-create',
+    'title'  => $lang->tutorial->waterfallProjectManage->manageTest->step13->name
+);
+
+$waterfallProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'clickMainNavbar',
     'target' => 'testtask',
     'page'   => 'testtask-cases',
+    'app'    => 'execution',
     'url'    => array('testtask', 'cases', 'taskID=1'),
     'title'  => $lang->tutorial->waterfallProjectManage->manageTest->step22->name,
     'desc'   => $lang->tutorial->waterfallProjectManage->manageTest->step22->desc
@@ -558,7 +557,6 @@ $waterfallProjectManage->basic->tasks['manageTest']['steps'][] = array(
 $waterfallProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'form',
     'page'   => 'testreport-create',
-    'app'    => 'qa',
     'url'    => array('testreport', 'create', 'executionID=3'),
     'title'  => $lang->tutorial->waterfallProjectManage->manageTest->step25->name
 );
@@ -566,7 +564,6 @@ $waterfallProjectManage->basic->tasks['manageTest']['steps'][] = array(
 $waterfallProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'saveForm',
     'page'   => 'testreport-create',
-    'app'    => 'qa',
     'title'  => $lang->tutorial->waterfallProjectManage->manageTest->step26->name,
     'desc'   => $lang->tutorial->waterfallProjectManage->manageTest->step26->desc
 );

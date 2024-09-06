@@ -5123,6 +5123,8 @@ class executionModel extends model
      */
     public function getPairsByList(array $executionIdList, string $type = '', string $orderBy = 'id_asc'): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getExecutionPairs();
+
         return $this->dao->select('id,name')->from(TABLE_EXECUTION)
             ->where('id')->in($executionIdList)
             ->beginIF(!empty($type))->andWhere('type')->in($type)->fi()
