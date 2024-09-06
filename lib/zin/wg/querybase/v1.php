@@ -12,11 +12,8 @@ class queryBase extends wg
         'data?: array',
         'settings?: array',
         'tableOptions?: array',
-        'widgets?: array=[]',
-        'changeModeDisabled?: bool=false',
         'mode?: string=text',
         'error?: string',
-        'onChangeMode?: function',
         'onQuery?: function',
         'onSqlChange?: function'
     );
@@ -30,63 +27,6 @@ class queryBase extends wg
     public static function getPageJS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
-    }
-
-    protected function buildPreviewSql()
-    {
-        global $lang;
-
-        return btn
-        (
-            setID('previewSql'),
-            setClass('ghost'),
-            $lang->bi->previewSql
-        );
-    }
-
-    protected function buildChangeMode()
-    {
-        global $lang;
-        list($mode, $changeModeDisabled, $onChangeMode) = $this->prop(array('mode', 'changeModeDisabled', 'onChangeMode'));
-        $isTextMode = $mode == 'text';
-
-        return btn
-        (
-            setID('changeMode'),
-            setClass('ghost'),
-            set('data-mode', $mode),
-            $changeModeDisabled ? set::hint($lang->bi->modeDisableTip) : null,
-            set::icon('exchange'),
-            set::disabled($changeModeDisabled),
-            $isTextMode ? $lang->bi->toggleSqlBuilder : $lang->bi->toggleSqlText,
-            !$changeModeDisabled ? on::click()->do($onChangeMode) : null
-        );
-    }
-
-    protected function buildDivider()
-    {
-        return span(setClass('divider'));
-    }
-
-    protected function buildHeadingActions()
-    {
-        list($widgets) = $this->prop(array('widgets'));
-        $headingWidgets = array('previewSql', 'changeMode');
-        $actions = array();
-
-        foreach($widgets as $widget) if(in_array($widget, $headingWidgets)) $actions[] = $widget;
-        if(empty($actions)) return null;
-
-        for($i = count($actions) - 1; $i > 0; $i--) array_splice($actions, $i, 0, 'divider');
-
-        $items = array();
-        foreach($actions as $action) $items[] = $this->{"build$action"}();
-
-        return div
-        (
-            setClass('absolute right-4 top-2'),
-            $items
-        );
     }
 
     protected function buildTitleTip()
@@ -105,7 +45,7 @@ class queryBase extends wg
     protected function buildQueryPanel()
     {
         global $lang;
-        list($title, $titleTip, $sql, $onQuery, $onSqlChange, $error) = $this->prop(array('title', 'titleTip', 'sql', 'onQuery', 'onSqlChange', 'error'));
+        list($title, $titleTip, $sql, $mode, $onQuery, $onSqlChange, $error) = $this->prop(array('title', 'titleTip', 'sql', 'mode', 'onQuery', 'onSqlChange', 'error'));
         $headingBlock     = $this->block('heading');
         $formActionsBlock = $this->block('formActions');
         $formFooterBlock  = $this->block('formFooter');
@@ -118,12 +58,12 @@ class queryBase extends wg
             (
                 setClass('relative'),
                 $this->buildTitleTip(),
-                $this->buildHeadingActions(),
                 $headingBlock
             ),
             form
             (
                 setID('sqlForm'),
+                setClass('relative'),
                 set::actionsClass('pull-left'),
                 to::actions
                 (
@@ -139,6 +79,7 @@ class queryBase extends wg
                 formGroup
                 (
                     setID('querySql'),
+                    setClass(array('hidden' => $mode != 'text')),
                     set::control(array('type' => 'textarea', 'rows' => 4)),
                     set::name('sql'),
                     set::value($sql),
