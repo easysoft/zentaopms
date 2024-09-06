@@ -153,6 +153,7 @@ dtable
     set::customData(array('modules' => $modulePairs)),
     set::onRenderCell(jsRaw('window.onRenderCell')),
     set::userMap($users),
+    set::customCols(true),
     set::checkable($canBatchAction),
     set::emptyTip($lang->testcase->noCase),
     set::createTip($lang->testcase->create),
