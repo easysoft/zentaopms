@@ -18,7 +18,7 @@ $canImport            = common::hasPriv('caselib', 'import');
 $canCreateLib         = common::hasPriv('caselib', 'create');
 $canCreateCase        = common::hasPriv('caselib', 'createCase');
 $canBatchCreateCase   = common::hasPriv('caselib', 'batchCreateCase');
-$canBatchEdit         = common::hasPriv('testcase', 'batchEdit');
+$canBatchEdit         = common::hasPriv('caselib', 'batchEditCase');
 $canBatchDelete       = common::hasPriv('testcase', 'batchDelete');
 $canBatchReview       = common::hasPriv('testcase', 'batchReview') and ($config->testcase->needReview or !empty($config->testcase->forceReview));
 $canBatchChangeModule = common::hasPriv('testcase', 'batchChangeModule');
@@ -141,7 +141,7 @@ $footToolbar = $canBatchAction ? array('items' => array
 (
     array('type' => 'btn-group', 'items' => array
     (
-        $canBatchEdit ? array('text' => $lang->edit, 'className' => 'batch-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchEdit', "libID=$libID&branch=0&type=lib")) : null,
+        $canBatchEdit ? array('text' => $lang->edit, 'className' => 'batch-btn not-open-url', 'data-url' => helper::createLink('caselib', 'batchEditCase', "libID=$libID&branch=0&type=lib")) : null,
         !empty($navActions) ? array('caret' => 'up', 'btnType' => 'secondary', 'items' => $navActions, 'data-placement' => 'top-start') : null
     )),
 ), 'btnProps' => array('btnType' => 'secondary')) : null;

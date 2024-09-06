@@ -97,6 +97,19 @@ class caselib extends control
     }
 
     /**
+     * 编辑用例。
+     * Edit a case.
+     *
+     * @param  int    $caseID
+     * @access public
+     * @return void
+     */
+    public function editCase(int $caseID)
+    {
+        echo $this->fetch('testcase', 'edit', "caseID=$caseID");
+    }
+
+    /**
      * 删除一个用例库。
      * Delete a case lib.
      *
@@ -282,6 +295,21 @@ class caselib extends control
     }
 
     /**
+     * 批量编辑用例。
+     * Batch edit case.
+     *
+     * @param  int        $libID
+     * @param  string|int $branch
+     * @param  string     $type
+     * @access public
+     * @return void
+     */
+    public function batchEditCase(int $libID, string|int $branch = '', string $type = '')
+    {
+        echo $this->fetch('testcase', 'batchEdit', "libID=$libID&branch=$branch&type=$type");
+    }
+
+    /**
      * 查看用例库信息。
      * View a library.
      *
@@ -304,6 +332,20 @@ class caselib extends control
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->actions = $this->loadModel('action')->getList('caselib', $libID);
         $this->display();
+    }
+
+    /**
+     * 查看用例。
+     * View a case.
+     *
+     * @param  int    $caseID
+     * @param  int    $version
+     * @access public
+     * @return void
+     */
+    public function viewCase(int $caseID, int $version = 0)
+    {
+        echo $this->fetch('testcase', 'view', "caseID=$caseID&version=$version");
     }
 
     /**

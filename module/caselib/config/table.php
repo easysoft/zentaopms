@@ -16,7 +16,7 @@ if($config->testcase->needReview || !empty($config->testcase->forceReview))
 $config->caselib->testcase->actionList['edit']['icon']  = 'edit';
 $config->caselib->testcase->actionList['edit']['hint']  = $lang->testcase->edit;
 $config->caselib->testcase->actionList['edit']['text']  = $lang->testcase->edit;
-$config->caselib->testcase->actionList['edit']['url']   = array('module' => 'testcase', 'method' => 'edit', 'params' => 'caseID={id}');
+$config->caselib->testcase->actionList['edit']['url']   = array('module' => 'caselib', 'method' => 'editCase', 'params' => 'caseID={id}');
 $config->caselib->testcase->actionList['edit']['order'] = 5;
 
 $config->caselib->testcase->actionList['delete']['icon']         = 'trash';
@@ -39,7 +39,7 @@ $config->caselib->dtable->fieldList['actions']  = $config->testcase->dtable->fie
 
 $config->caselib->dtable->fieldList['id']['name'] = 'id';
 
-$config->caselib->dtable->fieldList['title']['link']         = array('module' => 'testcase', 'method' => 'view', 'params' => "caseID={id}");
+$config->caselib->dtable->fieldList['title']['link']         = array('module' => 'caselib', 'method' => 'viewCase', 'params' => "caseID={id}");
 $config->caselib->dtable->fieldList['title']['nestedToggle'] = false;
 
 $config->caselib->dtable->fieldList['type']['show']   = true;
