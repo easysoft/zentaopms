@@ -306,13 +306,15 @@ class programplanZen extends programplan
 
         foreach(explode(',', $this->config->programplan->list->$customCreateFields) as $field) $customFields[$field] = $this->lang->programplan->{$field};
 
-        $showFields = $this->config->programplan->$custom->$createFields;
+        $createRequiredFields = $this->config->execution->create->requiredFields;
+        $showFields           = $this->config->programplan->$custom->$createFields;
+        $checkCodeIsRequired  = $this->config->setCode && strpos(',' . trim($createRequiredFields, ',') . ',', ',code,') !== false;
+        if($checkCodeIsRequired) $showFields .= ',code';
         foreach(explode(',', $showFields) as $field)
         {
             if($field) $visibleFields[$field] = '';
         }
 
-        $createRequiredFields = $this->config->execution->create->requiredFields;
         if($viewData->project->model == 'ipd' && $viewData->executionType == 'stage' && !$viewData->planID) $createRequiredFields = 'enabled,point,' . trim($createRequiredFields, ',');
         foreach(explode(',', $createRequiredFields) as $field)
         {
@@ -325,6 +327,7 @@ class programplanZen extends programplan
 
         if(empty($this->config->setPercent)) unset($visibleFields['percent'], $requiredFields['percent']);
         if(empty($this->config->setCode)) unset($visibleFields['code'], $requiredFields['code']);
+        if($checkCodeIsRequired) unset($customFields['code']);
 
         return array($visibleFields, $requiredFields, $customFields, $showFields, $defaultFields);
     }
