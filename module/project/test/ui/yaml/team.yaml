@@ -17,3 +17,20 @@ fields:
     note: "用户账号"
   - field: account
     range: admin,user1,user2,user3,user4
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: join
+    note: "加盟日"
+    range: Y-m-d
+    prefix: ""
+    type: timestamp
+    format: "YYYY-MM-DD"
+  - field: order
+    note: "排序"
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
