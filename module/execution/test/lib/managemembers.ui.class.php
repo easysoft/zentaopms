@@ -98,5 +98,4 @@ class manageMembersTester extends tester
         if($form->dom->num->getText() == $execution['membersExpect']) return $this->success('复制团队成员成功');
         return $this->failed('复制团队成员失败');
     }
-
 }
