@@ -289,7 +289,7 @@ class tree extends control
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "renderModulePicker($rootID, '$viewType');"));
             }
 
-            if($oldPage == 'yes') return print(js::reload('parent'));
+            if($oldPage == 'yes') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
             return $this->sendSuccess(array('load' => true));
         }
     }
