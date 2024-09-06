@@ -23,3 +23,22 @@ class createDesignTester extends tester
 
         return $this->checkResult($design);
     }
+
+    public function checkResult(array $design)
+    {
+        if($this->response('method') != 'browse')
+        {
+            if($this->checkFormTips('design')) return $this->success('创建设计表单页提示信息正确');
+            return $this->failed('创建设计表单页提示信息不正确');
+
+        }
+
+        /* 跳转到设计列表，检查设计字段信息。 */
+        $browsePage = $this->loadPage('design', 'browse');
+        if($browsePage->dom->designName->getText()    != $design['name']) return $this->failed('设计名称错误');
+        if($browsePage->dom->linkedProduct->getText() != $design['product']) return $this->failed('所属产品错误');
+        if($browsePage->dom->designType->getText()    != $design['type']) return $this->failed('设计类型错误');
+
+        return $this->success();
+    }
+}
