@@ -760,7 +760,7 @@ class blockZen extends block
         $monthRelease = $this->loadModel('metric')->getResultByCodeWithArray('count_of_monthly_created_release', array('year' => join(',', $years), 'month' => join(',', $months)), 'cron');
 
         /* 获取各个产品的年度(今年)发布次数。 */
-        $products      = $this->loadModel('product')->getOrderedProducts('all');
+        $products      = $this->loadModel('product')->getOrderedProducts('all', 0, 0, 'all');
         $productIdList = array_keys($products);
         $releaseGroup  = $this->metric->getResultByCodeWithArray('count_of_annual_created_release_in_product', array('product' => join(',', $productIdList), 'year' => date('Y')), 'cron');
 
@@ -990,7 +990,7 @@ class blockZen extends block
         /* Obtain a list of products that require statistics. */
         $status         = isset($block->params->type)  ? $block->params->type  : '';
         $count          = isset($block->params->count) ? $block->params->count : '';
-        $products       = $this->loadModel('product')->getOrderedProducts($status, (int)$count);
+        $products       = $this->loadModel('product')->getOrderedProducts($status, (int)$count, 0, 'all');
         $productIdList  = array_keys($products);
 
         $this->loadModel('metric');
@@ -1609,7 +1609,7 @@ class blockZen extends block
         $count  = isset($block->params->count) ? (int)$block->params->count : 0;
 
         /* 测试统计是按产品分组统计的。 */
-        $products      = $this->loadModel('product')->getOrderedProducts($status, $count);
+        $products      = $this->loadModel('product')->getOrderedProducts($status, $count, 0, 'all');
         $productIdList = array_keys($products);
 
         /* 计算昨日和今日可能包含的日期情况。 */
@@ -2427,8 +2427,8 @@ class blockZen extends block
 
         /* Set project status and count. */
         $count         = isset($block->params->count) ? (int)$block->params->count : 15;
-        $products      = $this->loadModel('product')->getOrderedProducts('all');
-        $involveds     = $this->product->getOrderedProducts('involved');
+        $products      = $this->loadModel('product')->getOrderedProducts('all', 0, 0, 'all');
+        $involveds     = $this->product->getOrderedProducts('involved', 0, 0, 'all');
         $productIdList = array_merge(array_keys($products), array_keys($involveds));
 
         $stmt = $this->dao->select('id,product,lib,title,type,addedBy,addedDate,editedDate,status,acl,`groups`,users,deleted')->from(TABLE_DOC)->alias('t1')
@@ -2714,7 +2714,7 @@ class blockZen extends block
         /* Obtain a list of products that require statistics. */
         $status     = isset($block->params->type)  ? $block->params->type  : '';
         $count      = isset($block->params->count) ? $block->params->count : '';
-        $products   = $this->loadModel('product')->getOrderedProducts($status, (int)$count);
+        $products   = $this->loadModel('product')->getOrderedProducts($status, (int)$count, 0, 'all');
         $productID  = !empty($params['active']) ? $params['active'] : key($products);
         if(empty($productID)) $productID = 0;
 
