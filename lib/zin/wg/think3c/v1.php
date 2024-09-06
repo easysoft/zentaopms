@@ -11,11 +11,11 @@ class think3c extends thinkModel
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
-    protected function buildBody(): array
+    protected function buildBody(): node
     {
         jsVar('modelImg', 'data/thinmory/thumbnail/init3c.png');
 
-        return array(h::canvas(setID('canvas')));
+        return div(setCLass('relative'), h::canvas(setID('canvas')));
     }
 
     protected function build(): node
