@@ -507,7 +507,8 @@ class testcase extends control
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $caseID));
             if(isInModal() && $this->app->tab == 'my') return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true));
-            return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => $this->createLink('testcase', 'view', "caseID={$caseID}")));
+            $locate = $oldCase->lib ? $this->createLink('caselib', 'viewCase', "caseID={$caseID}") : $this->createLink('testcase', 'view', "caseID={$caseID}");
+            return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => $locate));
         }
 
         $case = $this->testcaseZen->preProcessForEdit($oldCase);

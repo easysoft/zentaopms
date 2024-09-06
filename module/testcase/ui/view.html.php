@@ -218,6 +218,7 @@ detail
 (
     set::urlFormatter(array('{caseID}' => $case->caseID, '{version}' => $case->version, '{product}' => $case->product, '{branch}' => $case->branch, '{module}' => $case->module, '{id}' => $case->id, '{lib}' => $case->lib, '{confirmeObjectID}' => isset($case->confirmeObjectID) ? $case->confirmeObjectID : 0)),
     set::toolbar($toolbar),
+    set::object($case),
     set::sections($sections),
     set::tabs($tabs),
     set::actions($actions),
