@@ -1,6 +1,4 @@
 <?php
-require dirname(__DIR__) . '/sqlbuilder/sqlbuilder.class.php';
-
 class pivotState
 {
     /**
@@ -1267,7 +1265,6 @@ class pivotState
         $data = json_decode($post['data'], true);
         foreach($data as $key => $value)
         {
-            if($key == 'sqlBuilder') $value = new sqlBuilder($value);
             $this->$key = $value;
         }
 
@@ -1286,10 +1283,7 @@ class pivotState
     public function setCanChangeMode()
     {
         if($this->mode == 'builder') return true;
-
-        $from = $this->sqlBuilder['from'];
-        $table = zget($from, 'table', '');
-        if(empty($table) && empty($this->sql)) return true;
+        if($this->mode == 'text' && empty($this->sql)) return true;
 
         return false;
     }
@@ -1307,7 +1301,6 @@ class pivotState
         foreach($cache as $key => $value)
         {
             if(is_array($value) || is_object($value)) $value = json_decode(json_encode($value), true);
-            if($key == 'sqlBuilder') $value = new sqlBuilder($value);
             $this->$key = $value;
         }
 
