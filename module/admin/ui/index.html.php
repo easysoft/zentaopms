@@ -178,28 +178,24 @@ foreach($zentaoData->dynamics as $dynamic)
 {
     $dynamicItems[] = div
     (
-        setClass('relative flex justify-between border-t px-4 py-3 h-18'),
+        setClass('relative oeverflow-hidden flex justify-between border-t px-4 py-3 h-18'),
         div
         (
-            setClass('overflow-hidden h-12 leading-normal'),
+            setClass('flex-1 overflow-hidden h-11 leading-normal'),
             set::title($dynamic->title),
             icon
             (
                 setClass('text-lg text-primary pr-1'),
                 'horn'
             ),
+            span(substr($dynamic->addedDate, 0, 10)),
             a
             (
-                setClass('text-black'),
+                setClass('text-black ml-1'),
                 set::href($dynamic->link),
                 set::target('_blank'),
                 $dynamic->title
             )
-        ),
-        div
-        (
-            setClass('absolute nowrap right-3 bottom-3 pl-2.5 pr-3'),
-            substr($dynamic->addedDate, 0, 10)
         )
     );
 }
