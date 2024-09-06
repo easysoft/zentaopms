@@ -29,4 +29,19 @@ class batchChangeStatusTester extends tester
         $changeNum = $form->dom->$changeNumDom->getText();//获取修改后的计划数
         return($planNum == $changeNum) ? $this->success("批量变更为{$planStatus}状态成功") : $this->failed("批量变更为{$planStatus}状态失败");
     }
+
+    public function batchClose($planurl)
+    {
+        $form = $this->initForm('productplan', 'browse', $planurl, 'appIframe-product');
+        $form->dom->allTab->click();//进入全部tab
+        $planNum = $form->dom->allNum->getText();//获取计划总数
+        $form->wait(2);
+        $form->dom->selectAllBtn->click();//全选计划
+        $form->dom->batchCloseBtn->click();//点击关闭
+        $form->dom->btn($this->lang->save)->click();//保存
+        $form->dom->closedTab->click();//点击已关闭tab
+        $form->wait(2);
+        $closeNum = $form->dom->closedNum->getText();//获取关闭后的计划数
+        return($planNum == $closeNum) ? $this->success("批量关闭计划成功") : $this->failed("批量关闭计划失败");
+    }
 }
