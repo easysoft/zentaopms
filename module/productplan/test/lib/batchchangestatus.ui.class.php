@@ -30,6 +30,13 @@ class batchChangeStatusTester extends tester
         return($planNum == $changeNum) ? $this->success("批量变更为{$planStatus}状态成功") : $this->failed("批量变更为{$planStatus}状态失败");
     }
 
+    /**
+     * 批量关闭计划
+     * batch close plan
+     *
+     * @param  $planurl 产品ID
+     * @return mixed
+     */
     public function batchClose($planurl)
     {
         $form = $this->initForm('productplan', 'browse', $planurl, 'appIframe-product');
