@@ -1574,6 +1574,12 @@ class executionZen extends execution
 
         if($module == 'execution' && $method == 'create') return '';
 
+        if($this->config->edition != 'open')
+        {
+            $flow = $this->loadModel('workflow')->getByModule($module);
+            if(!empty($flow) && $flow->buildin == '0') return helper::createLink('execution', 'task', "executionID=%s");
+        }
+
         $link = helper::createLink($module, $method, "executionID=%s");
         if($module == 'execution' && ($method == 'index' || $method == 'all'))
         {
