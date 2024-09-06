@@ -2158,6 +2158,7 @@ class biModel extends model
 
         if(!empty($action))
         {
+            $action = str_replace('-', '', $action);
             $funcName = "{$action}Action";
             if(method_exists($this, $funcName)) $this->$funcName($builder);
         }
