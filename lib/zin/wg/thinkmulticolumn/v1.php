@@ -25,7 +25,7 @@ class thinkMulticolumn extends thinkQuestion
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css') . $baseCss;
     }
 
-    protected function buildFormBatchItem(string $label, int $index): wg
+    protected function buildFormBatchItem(string $label, int $index, $isRun, $quotedQuestions, $hasResult): wg
     {
         $step         = $this->prop('step');
         $key          = $index + 1;
@@ -36,6 +36,7 @@ class thinkMulticolumn extends thinkQuestion
             set::label($label),
             set::name("result[col$key]"),
             set::width('110px'),
+            set::disabled($isRun && !empty($quotedQuestions) && $hasResult),
             set::required(in_array($key, $requiredCols))
         );
     }
@@ -44,7 +45,7 @@ class thinkMulticolumn extends thinkQuestion
     {
         global $lang;
         $detailWg = parent::buildDetail();
-        list($step, $fields, $canAddRows, $mode, $isRun) = $this->prop(array('step', 'fields', 'canAddRows', 'mode', 'isRun'));
+        list($step, $fields, $canAddRows, $mode, $isRun, $quotedQuestions) = $this->prop(array('step', 'fields', 'canAddRows', 'mode', 'isRun', 'quotedQuestions'));
         if($mode != 'detail') return array();
 
         $result = array();
@@ -58,10 +59,11 @@ class thinkMulticolumn extends thinkQuestion
         jsVar('canAddRowsOfMulticol', $canAddRows + 5);
         jsVar('addRowsTips', $lang->thinkrun->tips->addRow);
         jsVar('addLang', $lang->thinkrun->add);
+        jsVar('disabled', $isRun && !empty($quotedQuestions) && !empty($result));
 
         $fields     = array_values((array)$fields);
         $batchItems = array();
-        foreach($fields as $key => $field) $batchItems[] = $this->buildFormBatchItem($field, (int)$key);
+        foreach($fields as $key => $field) $batchItems[] = $this->buildFormBatchItem($field, (int)$key, $isRun, $quotedQuestions, !empty($result));
         $detailWg[] = formBatch
         (
             setClass('think-form-batch'),
