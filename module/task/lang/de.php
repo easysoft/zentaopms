@@ -273,6 +273,7 @@ $lang->task->noticeLinkStory           = "No story has been linked. You can for 
 $lang->task->noticeLinkStoryNoProduct  = "No story has been linked.";
 $lang->task->noticeSaveRecord          = 'Ihre Stunden wurden nicht gespeichrt. Bitte erst speichern.';
 $lang->task->noticeManageTeam          = 'Task status is %s, can not manage team.';
+$lang->task->teamNotEmpty              = 'Team can not be empty.';
 $lang->task->commentActions            = '%s. %s, kommentiert von <strong>%s</strong>.';
 $lang->task->deniedNotice              = 'Nur %s kann die Aufgabe %s.';
 $lang->task->deniedStatusNotice        = 'The task status is %s, the effort cannot be maintained.';

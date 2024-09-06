@@ -273,6 +273,7 @@ $lang->task->noticeLinkStory           = "没有可关联的相关{$lang->SRComm
 $lang->task->noticeLinkStoryNoProduct  = "没有可关联的相关{$lang->SRCommon}";
 $lang->task->noticeSaveRecord          = '您有尚未保存的工时记录，请先将其保存。';
 $lang->task->noticeManageTeam          = '任务状态是%s，不能维护团队';
+$lang->task->teamNotEmpty              = '多人任务团队不能为空。';
 $lang->task->commentActions            = '%s. %s, 由 <strong>%s</strong> 添加备注。';
 $lang->task->deniedNotice              = '当前任务只有%s才可以%s。';
 $lang->task->deniedStatusNotice        = '当前任务状态是%s，不能维护日志。';

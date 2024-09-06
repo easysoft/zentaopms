@@ -480,6 +480,13 @@ class taskZen extends task
             ->stripTags($this->config->task->editor->edit['id'], $this->config->allowedTags)
             ->get();
 
+        $team = $this->post->team ? array_filter($this->post->team) : array();
+        if($task->mode && empty($team))
+        {
+            dao::$errors['assignedTo'] = $this->lang->task->teamNotEmpty;
+            return false;
+        }
+
         return $this->loadModel('file')->processImgURL($task, $this->config->task->editor->edit['id'], (string)$this->post->uid);
     }
 
@@ -599,7 +606,7 @@ class taskZen extends task
         $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->create['id'], (string)$this->post->uid);
 
         /* Check if the input post data meets the requirements. */
-        $this->checkCreateTask($task);
+        $this->checkCreateTask($task, $team);
         return $task;
     }
 
@@ -913,15 +920,22 @@ class taskZen extends task
      * Check if the input post meets the requirements.
      *
      * @param  object    $task
+     * @param  array     $team
      * @access protected
      * @return bool
      */
-    protected function checkCreateTask(object $task): bool
+    protected function checkCreateTask(object $task, array $team): bool
     {
         /* Check if the estimate is positive. */
         if($task->estimate < 0)
         {
             dao::$errors['estimate'] = $this->lang->task->error->recordMinus;
+            return false;
+        }
+
+        if($this->post->multiple && empty($team))
+        {
+            dao::$errors['assignedTo'] = $this->lang->task->teamNotEmpty;
             return false;
         }
 
