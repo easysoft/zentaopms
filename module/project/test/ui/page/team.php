@@ -13,6 +13,8 @@ class teamPage extends page
             'browseSecHours'   => "//*[@id='table-project-team']/div[2]/div/div/div[12]/div",
             'amount'           => "//*[@id='featureBar']/menu/li/a/span[2]",
             'teamBtn'          => "//*[@id='actionBar']/a/span",
+            'confirmBtn'       => "//*[@class='modal-footer']/nav/button[1]/span",
+            'unlinkBtn'        => "//*[@id='table-project-team']/div[2]/div[2]/div/div/div/nav/a/i",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
