@@ -38,7 +38,6 @@ class createDesignTester extends tester
         {
             if($this->checkFormTips('design')) return $this->success('创建设计表单页提示信息正确');
             return $this->failed('创建设计表单页提示信息不正确');
-
         }
 
         /* 跳转到设计列表，检查设计字段信息。 */
