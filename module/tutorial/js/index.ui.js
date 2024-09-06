@@ -227,6 +227,7 @@ function isStepFormFilled(step, event)
         step.requiredFields = requiredFields;
     }
     if(typeof requiredFields === 'string') requiredFields = requiredFields.split(',');
+    if(!requiredFields.length) return;
     const formData = new FormData(step.$form[0]);
     for(let i = 0; i < requiredFields.length; i++)
     {
