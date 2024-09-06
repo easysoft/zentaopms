@@ -2161,11 +2161,13 @@ $config->bi->builtin->pivots[] = array
     'driver'    => 'mysql',
     'group'     => '62',
     'sql'       => <<<EOT
-select actor,LEFT(`date`,10) as `day` from zt_action
-where `action`='login'
-and if(\$startDate='',1,LEFT(`date`, 10)>=cast(\$startDate as date))
-and if(\$endDate='',1,LEFT(`date`, 10)<=cast(\$endDate as date))
-order by `date` asc, actor asc
+select t1.actor,LEFT(t1.`date`,10) as `day` from zt_action t1
+left join zt_user as t2 on t1.actor = t2.account
+where t1.`action`='login'
+and LEFT(t1.`date`, 10)>=cast(\$startDate as date)
+and LEFT(t1.`date`, 10)<=cast(\$endDate as date)
+and t2.`dept` = \$dept
+order by t1.`date` asc, t1.actor asc
 EOT,
     'settings'  => array
     (
@@ -2180,7 +2182,8 @@ EOT,
     'filters'   => array
     (
         array('from' => 'query', 'field' => 'startDate', 'name' => '起始时间', 'type' => 'date', 'typeOption' => '', 'default' => '$MONTHBEGIN'),
-        array('from' => 'query', 'field' => 'endDate', 'name' => '结束时间', 'type' => 'date', 'typeOption' => '', 'default' => '$MONTHEND')
+        array('from' => 'query', 'field' => 'endDate', 'name' => '结束时间', 'type' => 'date', 'typeOption' => '', 'default' => '$MONTHEND'),
+        array('from' => 'query', 'field' => 'dept', 'name' => '部门', 'type' => 'select', 'typeOption' => 'dept', 'default' => '')
     ),
     'fields'    => array
     (
