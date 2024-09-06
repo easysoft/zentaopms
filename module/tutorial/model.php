@@ -95,7 +95,7 @@ class tutorialModel extends model
         $product->ticket            = 0;
 
         list($guide, $guideTask, $guideStepIndex) = empty($_SERVER['HTTP_X_ZIN_TUTORIAL']) ? array('', '', '') : explode('-', $_SERVER['HTTP_X_ZIN_TUTORIAL']);
-        if($guide == 'productManageAdvance' && $guideTask == 'branchManage')
+        if($guideTask == 'branchManage')
         {
             $product->type = 'branch';
             $product->name = 'Test branch product';
@@ -404,8 +404,22 @@ class tutorialModel extends model
         $stories = array();
         $stories[] = $this->getEpic();
         $stories[] = $this->getRequirement();
-        $stories[] = $activeStory;
-        $stories[] = $reviewingStory;
+        if($this->app->config->vision == 'rnd')
+        {
+            $stories[] = $activeStory;
+            $stories[] = $reviewingStory;
+        }
+        if($this->app->config->vision == 'or')
+        {
+            $reviewingRequirement = $this->getRequirement();
+            $reviewingRequirement->id        = 5;
+            $reviewingRequirement->status    = 'reviewing';
+            $reviewingRequirement->notReview = array($this->app->user->account);
+            $reviewingRequirement->title     = 'Test reviewing requirement';
+            $reviewingRequirement->path      = ',1,5,';
+            $reviewingRequirement->isParent  = 0;
+            $stories[] = $reviewingRequirement;
+        }
         return $stories;
     }
 

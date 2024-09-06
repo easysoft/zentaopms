@@ -1888,7 +1888,7 @@ $lang->tutorial->orTutorial->marketManage = new stdClass();
 $lang->tutorial->orTutorial->marketManage->title = '市场管理教程';
 
 $lang->tutorial->orTutorial->marketManage->researchManage = new stdClass();
-$lang->tutorial->orTutorial->marketManage->researchManage->title = '需求管理';
+$lang->tutorial->orTutorial->marketManage->researchManage->title = '调研管理';
 
 $lang->tutorial->orTutorial->marketManage->researchManage->step1 = new stdClass();
 $lang->tutorial->orTutorial->marketManage->researchManage->step1->name = '点击市场';
@@ -1981,6 +1981,21 @@ $lang->tutorial->orTutorial->marketManage->researchManage->step24->desc = '保�
 
 $lang->tutorial->orTutorial->roadmapManage = new stdClass();
 $lang->tutorial->orTutorial->roadmapManage->title = '产品规划管理教程';
+
+$lang->tutorial->orTutorial->roadmapManage->lineManage = new stdClass();
+$lang->tutorial->orTutorial->roadmapManage->lineManage = clone $lang->tutorial->productManage->lineManage;
+
+$lang->tutorial->orTutorial->roadmapManage->addProduct = new stdClass();
+$lang->tutorial->orTutorial->roadmapManage->addProduct = clone $lang->tutorial->productManage->addProduct;
+
+$lang->tutorial->orTutorial->roadmapManage->moduleManage = new stdClass();
+$lang->tutorial->orTutorial->roadmapManage->moduleManage = clone $lang->tutorial->productManage->moduleManage;
+
+$lang->tutorial->orTutorial->roadmapManage->storyManage = new stdClass();
+$lang->tutorial->orTutorial->roadmapManage->storyManage = clone $lang->tutorial->productManage->storyManage;
+
+$lang->tutorial->orTutorial->roadmapManage->branchManage = new stdClass();
+$lang->tutorial->orTutorial->roadmapManage->branchManage = clone $lang->tutorial->productManage->branchManage;
 
 $lang->tutorial->orTutorial->charterManage = new stdClass();
 $lang->tutorial->orTutorial->charterManage->title = 'Chart立项教程';
