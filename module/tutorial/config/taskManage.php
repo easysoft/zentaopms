@@ -4,7 +4,7 @@ global $lang;
 $taskManage = new stdClass();
 $taskManage->name    = 'taskManage';
 $taskManage->title   = $lang->tutorial->taskManage->title;
-$taskManage->icon    = 'calendar text-primary';
+$taskManage->icon    = 'calendar text-primary text-lg';
 $taskManage->type    = 'basic';
 $taskManage->modules = 'project,execution,task';
 $taskManage->app     = 'project';
