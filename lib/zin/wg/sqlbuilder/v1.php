@@ -431,7 +431,7 @@ class sqlBuilder extends wg
         global $lang;
         $this->setSteps();
 
-        list($tableList, $data, $url, $onUpdate) = $this->prop(array('tableList', 'data', 'url', 'onUpdate'));
+        list($class, $tableList, $data, $url, $onUpdate) = $this->prop(array('class', 'tableList', 'data', 'url', 'onUpdate'));
 
         return panel
         (
@@ -439,7 +439,7 @@ class sqlBuilder extends wg
             set('data-sqlbuilder', $data),
             set('data-url', $url),
             set('data-onupdate', $onUpdate),
-            setClass('h-96 min-w-1300'),
+            setClass('h-96 min-w-1300', $class),
             set::bodyClass('flex h-96'),
             $this->buildStepBar(),
             $this->buildStepContent()
