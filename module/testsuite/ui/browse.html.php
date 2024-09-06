@@ -17,7 +17,7 @@ $config->testsuite->dtable->fieldList['addedBy']['userMap'] = $users;
 $tableData = initTableData($suites, $config->testsuite->dtable->fieldList, $this->testsuite);
 foreach($tableData as $testsuite) $testsuite->desc = strip_tags($testsuite->desc);
 
-$cols = array_values($config->testsuite->dtable->fieldList);
+$cols = $this->loadModel('datatable')->getSetting('testsuite');
 $data = array_values($tableData);
 
 featureBar
@@ -47,6 +47,7 @@ dtable
     set::cols($cols),
     set::data($data),
     set::orderBy($orderBy),
+    set::customCols(true),
     set::sortLink(createLink('testsuite', 'browse', "productID={$product->id}&type={$type}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::fixedLeftWidth('0.33'),
     set::onRenderCell(jsRaw('window.renderCell')),

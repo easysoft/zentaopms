@@ -26,38 +26,44 @@ $config->testsuite->actionList['delete']['className']    = 'ajax-submit';
 
 $config->testsuite->dtable = new stdclass();
 
-$config->testsuite->dtable->fieldList['id']['name']  = 'id';
-$config->testsuite->dtable->fieldList['id']['title'] = $lang->idAB;
-$config->testsuite->dtable->fieldList['id']['type']  = 'ID';
-$config->testsuite->dtable->fieldList['id']['align'] = 'left';
-$config->testsuite->dtable->fieldList['id']['fixed'] = 'left';
+$config->testsuite->dtable->fieldList['id']['name']     = 'id';
+$config->testsuite->dtable->fieldList['id']['title']    = $lang->idAB;
+$config->testsuite->dtable->fieldList['id']['type']     = 'ID';
+$config->testsuite->dtable->fieldList['id']['align']    = 'left';
+$config->testsuite->dtable->fieldList['id']['fixed']    = 'left';
+$config->testsuite->dtable->fieldList['id']['required'] = true;
 
 $config->testsuite->dtable->fieldList['name']['name']     = 'name';
 $config->testsuite->dtable->fieldList['name']['title']    = $lang->testsuite->name;
 $config->testsuite->dtable->fieldList['name']['type']     = 'title';
 $config->testsuite->dtable->fieldList['name']['minWidth'] = '200';
 $config->testsuite->dtable->fieldList['name']['fixed']    = 'left';
+$config->testsuite->dtable->fieldList['name']['show']     = true;
 
 $config->testsuite->dtable->fieldList['desc']['name']  = 'desc';
 $config->testsuite->dtable->fieldList['desc']['title'] = $lang->testsuite->desc;
 $config->testsuite->dtable->fieldList['desc']['type']  = 'html';
+$config->testsuite->dtable->fieldList['desc']['show']  = true;
 
 $config->testsuite->dtable->fieldList['addedBy']['name']     = 'addedBy';
 $config->testsuite->dtable->fieldList['addedBy']['title']    = $lang->testsuite->addedBy;
 $config->testsuite->dtable->fieldList['addedBy']['type']     = 'user';
 $config->testsuite->dtable->fieldList['addedBy']['sortType'] = true;
 $config->testsuite->dtable->fieldList['addedBy']['align']    = 'left';
+$config->testsuite->dtable->fieldList['addedBy']['show']     = true;
 
 $config->testsuite->dtable->fieldList['addedDate']['name']     = 'addedDate';
 $config->testsuite->dtable->fieldList['addedDate']['title']    = $lang->testsuite->addedDate;
 $config->testsuite->dtable->fieldList['addedDate']['type']     = 'datetime';
 $config->testsuite->dtable->fieldList['addedDate']['sortType'] = true;
+$config->testsuite->dtable->fieldList['addedDate']['show']     = true;
 
 $config->testsuite->dtable->fieldList['actions']['name']     = 'actions';
 $config->testsuite->dtable->fieldList['actions']['title']    = $lang->actions;
 $config->testsuite->dtable->fieldList['actions']['type']     = 'actions';
 $config->testsuite->dtable->fieldList['actions']['fixed']    = 'right';
 $config->testsuite->dtable->fieldList['actions']['sortType'] = false;
+$config->testsuite->dtable->fieldList['actions']['width']    = '80px';
 $config->testsuite->dtable->fieldList['actions']['list']     = $config->testsuite->actionList;
 $config->testsuite->dtable->fieldList['actions']['menu']     = array('linkCase', 'edit', 'delete');
 
