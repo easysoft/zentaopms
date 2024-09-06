@@ -10,7 +10,15 @@
  */
 namespace zin;
 
-$data = array();
+$getKanbanGroup = function(object $kanban): string
+{
+    if($kanban->status == 'closed') return 'closed';
+    if($kanban->owner == $this->app->user->account) return 'my';
+    return 'other';
+};
+
+$data        = array();
+$kanbanGroup = array();
 foreach($spaceList as $spaceID => $space)
 {
     $spaceItem = array();
@@ -18,19 +26,30 @@ foreach($spaceList as $spaceID => $space)
     $spaceItem['text']  = $space;
     $spaceItem['items'] = array();
 
-    $data['other'][$spaceID] = $spaceItem;
-
     $kanbans = zget($kanbanList, $spaceID, array());
     foreach($kanbans as $id => $kanban)
     {
+        $kanbanType = $kanbanGroup[$id] = $getKanbanGroup($kanban);
+
         $item = array();
         $item['id']    = $kanban->id;
         $item['text']  = $kanban->name;
         $item['keys']  = zget(common::convert2Pinyin(array($kanban->name)), $kanban->name, '');
 
-        $data['other'][$spaceID]['items'][] = $item;
+        if(!isset($data[$kanbanType][$spaceID])) $data[$kanbanType][$spaceID] = $spaceItem;
+        $data[$kanbanType][$spaceID]['items'][] = $item;
     }
 }
+
+
+/**
+ * 定义每个分组名称信息，包括可展开的已关闭分组。
+ * Define every group name, include expanded group.
+ */
+$tabs = array();
+$tabs[] = array('name' => 'my',     'text' => $lang->kanban->my, 'active' => zget($kanbanGroup, $kanbanID, '') === 'my');
+$tabs[] = array('name' => 'other',  'text' => $lang->kanban->other, 'active' => zget($kanbanGroup, $kanbanID, '') === 'other');
+$tabs[] = array('name' => 'closed', 'text' => $lang->kanban->closed);
 
 /* 将分组数据转换为索引数组。Format grouped data to indexed array. */
 foreach ($data as $key => $value) $data[$key] = array_values($value);
@@ -41,9 +60,10 @@ foreach ($data as $key => $value) $data[$key] = array_values($value);
  */
 $json = array();
 $json['data']       = $data;
-$json['tabs']       = array(array('name' => 'other'));
+$json['tabs']       = $tabs;
 $json['searchHint'] = $lang->searchAB;
 $json['link']       = array('kanban' => sprintf($link, '{id}'));
+$json['expandName'] = 'closed';
 $json['itemType']   = 'kanban';
 
 /**
