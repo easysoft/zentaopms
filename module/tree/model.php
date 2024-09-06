@@ -1554,6 +1554,8 @@ class treeModel extends model
      */
     public function getSons(int $rootID, int $moduleID, string $type = 'root', string $branch = '0'): array
     {
+        if(common::isTutorialMode()) return array();
+
         $syncConfig = $this->getSyncConfig($type);
 
         if($type  == 'line') $rootID = 0;
@@ -1657,7 +1659,7 @@ class treeModel extends model
      */
     public function getParents(int $moduleID, bool $queryAll = false): array
     {
-        if($moduleID == 0) return array();
+        if($moduleID == 0 || common::isTutorialMode()) return array();
         $path = $this->dao->select('path')->from(TABLE_MODULE)->where('id')->eq((int)$moduleID)->fetch('path');
         $path = trim($path, ',');
         if(!$path) return array();
@@ -2327,6 +2329,8 @@ class treeModel extends model
      */
     public function getProductStructure(int $rootID, string $viewType, string $branchID = 'all', int $currentModuleID = 0): array
     {
+        if(common::isTutorialMode()) return array();
+
         if($viewType == 'line') $rootID = 0;
         $stmt  = $this->app->dbQuery($this->buildMenuQuery($rootID, $viewType, $currentModuleID, $branchID));
         $trees = $this->getDataStructure($stmt, $viewType, $rootID, array(), $branchID);

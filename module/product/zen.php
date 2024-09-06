@@ -835,6 +835,8 @@ class productZen extends product
      */
     protected function getModuleTree(int $projectID, int $productID, string &$branch, int $param, string $storyType, string $browseType): array|string
     {
+        if(common::isTutorialMode()) return array();
+
         /* Set moduleTree. */
         $createModuleLink = 'createStoryLink';
         if($storyType == 'requirement') $createModuleLink = 'createRequirementLink';
@@ -1431,7 +1433,7 @@ class productZen extends product
         $this->view->summary    = $this->product->summary($stories, $storyType);
         $this->view->plans      = $this->loadModel('productplan')->getPairs($productID, isset($projectProducts[$productID]) ? array(BRANCH_MAIN) + $projectProducts[$productID]->branches : (($branch === 'all' || empty($branch)) ? '' : $branch), 'unexpired,noclosed', true);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
-        $this->view->modules    = $this->tree->getOptionMenu($productID, 'story', 0, $branchID);
+        $this->view->modules    = $this->loadModel('tree')->getOptionMenu($productID, 'story', 0, $branchID);
         $this->view->storyTasks = $this->loadModel('task')->getStoryTaskCounts($storyIdList);
         $this->view->storyBugs  = $this->loadModel('bug')->getStoryBugCounts($storyIdList);
         $this->view->storyCases = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
