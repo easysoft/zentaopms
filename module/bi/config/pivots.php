@@ -2241,9 +2241,10 @@ from zt_effort as t1
 left join zt_user as t2 on t1.account = t2.account
 left join zt_dept as t3 on t2.dept = t3.id
 where t1.`deleted` = '0'
-and (case when \$startDate='' then 1 else cast(t1.`date` as date) >= cast(\$startDate as date) end)
-and (case when \$endDate='' then 1 else cast(t1.`date` as date) <= cast(\$endDate as date) end)
+and (case when \$startDate='' then 1=1 else cast(t1.`date` as date) >= cast(\$startDate as date) end)
+and (case when \$endDate='' then 1=1 else cast(t1.`date` as date) <= cast(\$endDate as date) end)
 and (t3.path like concat((select path from zt_dept where id=\$dept), '%') or \$dept=0)
+and not (\$startDate='' && \$endDate='' && \$dept='')
 order by t1.`date` asc
 EOT,
     'settings'  => array
