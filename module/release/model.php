@@ -1085,6 +1085,7 @@ class releaseModel extends model
 
         if(!empty($pager))
         {
+            $pager->recTotal = count($stories);
             $stories = array_chunk($stories, $pager->recPerPage);
             $stories = empty($stories) ? $stories : $stories[$pager->pageID - 1];
         }
@@ -1095,7 +1096,7 @@ class releaseModel extends model
             if(isset($stages[$story->id])) $stories[$index]->stage = $stages[$story->id];
         }
 
-        return $stories;
+        return array($stories, $pager);
     }
 
     /**
