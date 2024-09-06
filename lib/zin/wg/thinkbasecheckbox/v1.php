@@ -75,7 +75,7 @@ class thinkBaseCheckbox extends wg
                     (
                         set(array(
                             'rows'        => 1,
-                            'class'       => isset($item['checked']) && $item['checked'] ? 'run-other' : 'hidden',
+                            'class'       => 'run-other' . (isset($item['checked']) && $item['checked'] ? '' : ' hidden'),
                             'name'        => 'other',
                             'value'       => isset($item['other']) ? $item['other'] : '',
                             'placeholder' => $lang->thinkrun->placeholder->otherOption,
