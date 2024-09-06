@@ -43,10 +43,16 @@ $execution->gen(5, false);
 $tester = new allExecutionTester();
 $tester->login();
 
+/* 检查标签下显示条数 */
 r($tester->checkTab('all', '5'))       && p('message') && e('all标签下显示条数正确');
 r($tester->checkTab('undone', '4'))    && p('message') && e('undone标签下显示条数正确');
 r($tester->checkTab('wait', '2'))      && p('message') && e('wait标签下显示条数正确');
 r($tester->checkTab('doing', '1'))     && p('message') && e('doing标签下显示条数正确');
 r($tester->checkTab('suspended', '1')) && p('message') && e('suspended标签下显示条数正确');
 r($tester->checkTab('closed', '1'))    && p('message') && e('closed标签下显示条数正确');
+/* 批量操作执行状态 */
+r($tester->changeStatus('wait'))      && p('message') && e('批量操作执行状态为wait成功');
+r($tester->changeStatus('doing'))     && p('message') && e('批量操作执行状态为doing成功');
+r($tester->changeStatus('suspended')) && p('message') && e('批量操作执行状态为suspended成功');
+r($tester->changeStatus('closed'))    && p('message') && e('批量操作执行状态为closed成功');
 $tester->closeBrowser();
