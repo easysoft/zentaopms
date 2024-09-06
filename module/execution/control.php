@@ -2118,12 +2118,13 @@ class execution extends control
 
         if(!empty($_POST))
         {
+            $oldProducts = $this->loadModel('product')->getProducts($executionID);
+            $oldProducts = array_keys($oldProducts);
+
             $postData = form::data()->get();
             $this->execution->updateProducts($executionID, $postData);
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            $oldProducts  = $this->loadModel('product')->getProducts($executionID);
-            $oldProducts  = array_keys($oldProducts);
             $newProducts  = $this->product->getProducts($executionID);
             $newProducts  = array_keys($newProducts);
             $diffProducts = array_merge(array_diff($oldProducts, $newProducts), array_diff($newProducts, $oldProducts));
