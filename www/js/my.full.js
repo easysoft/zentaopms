@@ -862,7 +862,7 @@ function adjustMenuWidth()
         delta = Math.ceil(delta / $navbar.children('li').length / 2);
 
         var aTagPadding   = $navbar.find('a:first').css('padding-left').replace('px', '');
-        var dividerMargin = $navbar.find('.divider').css('margin-left').replace('px', '');
+        var dividerMargin = $navbar.find('.divider').css('margin-left')?.replace('px', '') || 0;
 
         var newPadding = aTagPadding - delta;
         var newMargin  = dividerMargin - delta - 1;
