@@ -48,7 +48,7 @@ class thinkStepMenu extends wg
         foreach($items as $setting)
         {
             if(!is_object($setting)) continue;
-            $options     = !empty($setting->options) ? json_decode($setting->options) : array();
+            $options     = !empty($setting->options) && is_string($setting->options) ? json_decode($setting->options) : array();
             $quotedTitle = !empty($options->quoteTitle) ? $options->quoteTitle : null;
             $quotedText  = '';
             /* 给引用其他问题的多选题添加标签。Add tags to multiple-choice questions that reference other questions. */
