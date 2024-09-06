@@ -1093,6 +1093,9 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
                 }
             }
         );
+    } else
+    {
+        if(app && code !== 'my') items.push({text: langData.close, onClick: () => closeApp(code)});
     }
 
     if(apps.openedMenu) apps.openedMenu.hide();
