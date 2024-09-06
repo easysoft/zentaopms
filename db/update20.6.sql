@@ -24,3 +24,5 @@ CREATE TABLE IF NOT EXISTS `zt_sqlbuilder` (
   `setting`    text          NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DELETE FROM `zt_workflowlayout` WHERE `field` IN (SELECT `field` FROM `zt_workflowfield` WHERe `buildin` = '1' AND `role` = 'buildin');
