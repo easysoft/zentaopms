@@ -3,7 +3,3 @@
 #pick-pop-admin-menu .dropmenu-item + .dropmenu-item {margin-top: 4px}
 #pick-pop-admin-menu .dropmenu-item.active {background-color: unset;}
 #pick-pop-admin-menu .dropmenu-item:hover {color: rgba(var(--color-primary-500-rgb),var(--tw-text-opacity)); background-color: rgba(var(--color-primary-50-rgb),var(--tw-bg-opacity));}
-#pick-pop-admin-menu.disabled,
-#pick-pop-admin-menu .disabled *,
-#pick-pop-admin-menu [disabled],
-#pick-pop-admin-menu [disabled] * {opacity: 0.6 !important;}
