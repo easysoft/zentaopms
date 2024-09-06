@@ -194,7 +194,7 @@ div
             h2
             (
                 $lang->tutorial->common,
-                setClass('flex-auto text-lg')
+                setClass('flex-auto text-xl')
             ),
             div
             (
