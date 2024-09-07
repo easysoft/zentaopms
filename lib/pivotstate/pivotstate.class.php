@@ -316,6 +316,8 @@ class pivotState
 
     public $canChangeMode = true;
 
+    public $sqlbuilder = array();
+
     /**
      * __construct method.
      *
@@ -325,7 +327,7 @@ class pivotState
      * @access public
      * @return void
      */
-    public function __construct($pivot, $drills = array(), $clientLang = 'zh-cn')
+    public function __construct($pivot, $drills = array(), $clientLang = 'zh-cn', $sqlbuilder = array())
     {
         $this->id        = $pivot->id;
         $this->dimension = $pivot->dimension;
@@ -345,6 +347,8 @@ class pivotState
 
         $this->drills       = $drills;
         $this->defaultDrill = $this->initDrill();
+
+        $this->sqlbuilder = $sqlbuilder;
 
         $this->fields    = $this->json2Array($pivot->fieldSettings);
         $this->langs     = $this->json2Array($pivot->langs);
