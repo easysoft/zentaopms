@@ -191,6 +191,7 @@ class actionModel extends model
             if($actionName == 'createchildren') $this->actionTao->processCreateChildrenActionExtra($action);
             if($actionName == 'createrequirements') $this->actionTao->processCreateRequirementsActionExtra($action);
             if($actionName == 'deletechildrendemand') $this->actionTao->processActionExtra(TABLE_DEMAND, $action, 'title', 'demand', 'view');
+            if($actionName == 'createchildrendemand') $this->actionTao->processLinkStoryAndBugActionExtra($action, 'demand', 'view');
             if($actionName == 'buildopened') $this->actionTao->processActionExtra(TABLE_BUILD, $action, 'name', 'build', 'view');
             if($actionName == 'fromlib' && $action->objectType == 'case') $this->actionTao->processActionExtra(TABLE_TESTSUITE, $action, 'name', 'caselib', 'browse');
             if($actionName == 'changedbycharter' && $action->objectType == 'story') $this->actionTao->processActionExtra(TABLE_CHARTER, $action, 'name', 'charter', 'view');
