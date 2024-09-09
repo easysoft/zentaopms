@@ -88,7 +88,7 @@ class backBtn extends btn
             'service'        => 'service-browse,service-manage,service-view',
             'domain'         => 'domain-browse,domain-view',
             'researchtask'   => 'marketresearch-task,my-index,product-dynamic,project-dynamic,project-view',
-            'review'         => 'review-browse,my-index,product-dynamic,project-dynamic,project-view,programplan-browse',
+            'review'         => 'review-browse,my-index,product-dynamic,project-dynamic,project-view,programplan-browse,project-execution',
             'charter'        => 'charter-browse',
             'roadmap'        => 'charter-view',
             'approvalflow'   => 'approvalflow-browse'
