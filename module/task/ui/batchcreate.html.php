@@ -140,6 +140,7 @@ if($execution->type == 'kanban')
 
 formBatchPanel
 (
+    set::id('taskBatchCreateForm'),
     set::title($lang->task->batchCreate),
     set::pasteField('name'),
     set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'batchCreateFields')),

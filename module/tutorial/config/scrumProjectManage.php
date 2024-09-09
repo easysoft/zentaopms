@@ -209,7 +209,7 @@ $scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
 
 $scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
     'type'   => 'click',
-    'target' => '#table-execution-story a.create-task-btn',
+    'target' => '#table-execution-story div[data-row="3"] a.batchcreate-task-btn',
     'url'    => array('execution', 'story', 'executionID=3'),
     'page'   => 'execution-story',
     'app'    => 'execution',
@@ -219,16 +219,16 @@ $scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
 
 $scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
     'type'   => 'form',
-    'url'    => array('task', 'create', 'executionID=3'),
+    'target' => '#taskBatchCreateForm',
     'app'    => 'execution',
-    'page'   => 'task-create',
+    'page'   => 'task-batchcreate',
     'title'  => $lang->tutorial->scrumProjectManage->manageTask->step4->name,
 );
 
 $scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
     'type'   => 'saveForm',
-    'target' => 'form button[type="submit"]',
-    'page'   => 'task-create',
+    'target' => '#taskBatchCreateForm form button[type="submit"]',
+    'page'   => 'task-batchcreate',
     'title'  => $lang->tutorial->scrumProjectManage->manageTask->step5->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageTask->step5->desc
 );
