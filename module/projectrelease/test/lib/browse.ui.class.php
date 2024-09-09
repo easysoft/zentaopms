@@ -18,3 +18,23 @@ class browseTester extends tester
         $browsePage->dom->releaseSubmit->click();
         $browsePage->wait(5);
         $browsePage->dom->releasedTab->click();
+        $releaseNameReleased = $browsePage->dom->releaseName->getText();
+
+        //断言检查发布是否发布成功
+        if($releaseNameWait != $releaseNameReleased) return $this->failed('项目发布列表页发布发布失败');
+        return $this->success('发布成功');
+    }
+
+    /**
+     * Check the browse page of terminate a project release .
+     * 项目发布列表停止一个发布
+     *
+     * @param  array $release
+     * @access public
+     */
+    public function terminateRelease()
+    {
+        $browsePage = $this->initForm('projectrelease', 'browse', array('projectID' => 1), 'appIframe-project');
+        $browsePage->dom->releasedTab->click();
+        $releaseNameReleased = $browsePage->dom->releaseName->getText();
+        $browsePage->dom->terminateBtn->click();
