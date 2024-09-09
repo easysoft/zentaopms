@@ -1375,7 +1375,7 @@ class blockZen extends block
         $data          = $this->getProjectsStatisticData($projectIdList);
 
         /* Get base project. */
-        $project = $this->loadModel('project')->fetchById($projectID);
+        $project = $this->loadModel('project')->getByID(common::isTutorialMode() ? 2 : $projectID);
 
         /* Build project statistic data. */
         $this->app->loadClass('pager', true);
