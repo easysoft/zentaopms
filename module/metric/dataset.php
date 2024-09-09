@@ -716,7 +716,6 @@ class dataset
         $stmt = $this->dao->select($fieldList)->from(TABLE_CASESTEP)->alias('t1')
             ->leftJoin(TABLE_PROJECTCASE)->alias('t2')->on('t1.case = t2.case')
             ->leftJoin(TABLE_CASE)->alias('t3')->on('t2.case = t3.id and t1.version = t3.version')
-            ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t3.product = t4.id')
             ->leftJoin(TABLE_PROJECT)->alias('t5')->on('t5.id = t2.project')
             ->leftJoin(TABLE_PROJECT)->alias('t6')->on('t6.id = t5.project')
             ->where('t3.deleted')->eq('0')
@@ -739,7 +738,6 @@ class dataset
     {
         $stmt = $this->dao->select($fieldList)->from(TABLE_PROJECTCASE)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
-            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t4.id = t1.project')
             ->leftJoin(TABLE_PROJECT)->alias('t5')->on('t5.id = t4.project')
             ->where('t4.deleted')->eq('0')
