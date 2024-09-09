@@ -45,6 +45,7 @@ class manageLineTester extends tester
         $form->wait(1);
         $form->dom->confirm->click();
         $form->wait(1);
-        return ($form->dom->newLineName->getText() != $line->name) ? $this->success('删除成功') : $this->failed('删除失败');
+        if ($form->dom->newLineName === false || $form->dom->newLineName->getText() != $line->name) return $this->success('删除成功');
+        return $this->failed('删除失败');
     }
 }
