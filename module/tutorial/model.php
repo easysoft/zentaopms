@@ -304,7 +304,7 @@ class tutorialModel extends model
         $story->branch         = 0;
         $story->parent         = array(2);
         $story->category       = 0;
-        $story->module         = 0;
+        $story->module         = '';
         $story->plan           = '';
         $story->planTitle      = '';
         $story->color          = '';
