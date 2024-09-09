@@ -10,10 +10,10 @@ chdir(__DIR__);
 include '../lib/taskexecution.ui.class.php';
 
 $user = zenData('user');
-$user->id->range('1,2');
-$user->account->range('admin, user1');
+$user->id->range('1-3');
+$user->account->range('admin, user1, user2');
 $user->password->range('77839ef72f7b71a3815a77d038e267e0');
-$user->realname->range('admin, USER1');
+$user->realname->range('admin, USER1, USER2');
 $user->gen(2);
 
 $product = zenData('product');
@@ -88,3 +88,23 @@ $action->actor->range('admin, user1');
 $action->action->range('assigned');
 $action->extra->range('user1');
 $action->gen(2);
+
+$tester = new taskExecutionTester();
+$tester->login();
+
+/* 检查标签下显示条数 */
+r($tester->checkTab('allTab', '11'))         && p('message') && e('allTab下显示条数正确');          //检查全部标签下显示条数
+r($tester->checkTab('unclosedTab', '9'))     && p('message') && e('unclosedTab下显示条数正确');     //检查未关闭标签下显示条数
+r($tester->checkTab('assignedtomeTab', '2')) && p('message') && e('assignedtomeTab下显示条数正确'); //检查指派给我标签下显示条数
+r($tester->checkTab('myInvolvedTab', '4'))   && p('message') && e('myInvolvedTab下显示条数正确');   //检查由我参与标签下显示条数
+r($tester->checkTab('assignedByMeTab', '1')) && p('message') && e('assignedByMeTab下显示条数正确'); //检查由我指派标签下显示条数
+r($tester->checkTab('needConfirmTab', '1'))  && p('message') && e('needConfirmTab下显示条数正确');  //检查研发需求变更标签下显示条数
+r($tester->checkTab('waitingTab', '3'))      && p('message') && e('waitingTab下显示条数正确');      //检查未开始标签下显示条数
+r($tester->checkTab('doingTab', '3'))        && p('message') && e('doingTab下显示条数正确');        //检查进行中标签下显示条数
+r($tester->checkTab('undoneTab', '7'))       && p('message') && e('undoneTab下显示条数正确');        //检查未完成标签下显示条数
+r($tester->checkTab('finushedByMeTab', '2')) && p('message') && e('finushedByMeTab下显示条数正确'); //检查我完成标签下显示条数
+r($tester->checkTab('doneTab', '2'))         && p('message') && e('doneTab下显示条数正确');         //检查已完成标签下显示条数
+r($tester->checkTab('closedTab', '2'))       && p('message') && e('closedTab下显示条数正确');       //检查已关闭标签下显示条数
+r($tester->checkTab('cancelTab', '1'))       && p('message') && e('cancelTab下显示条数正确');       //检查已取消标签下显示条数
+r($tester->checkTab('delayedTab', '1'))      && p('message') && e('delayedTab下显示条数正确');      //检查已延期标签下显示条数
+$tester->closeBrowser();
