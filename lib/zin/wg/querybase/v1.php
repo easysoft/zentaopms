@@ -12,10 +12,12 @@ class queryBase extends wg
         'data?: array',
         'settings?: array',
         'tableOptions?: array',
+        'pager?: array',
         'mode?: string=text',
         'error?: string',
         'onQuery?: function',
-        'onSqlChange?: function'
+        'onSqlChange?: function',
+        'onSaveFields?: function'
     );
 
     protected static array $defineBlocks = array(
@@ -23,6 +25,11 @@ class queryBase extends wg
         'formActions' => array(),
         'formFooter'  => array()
     );
+
+    public static function getPageCSS(): ?string
+    {
+        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
+    }
 
     public static function getPageJS(): ?string
     {
@@ -36,7 +43,7 @@ class queryBase extends wg
 
         return div
         (
-            setClass('sql-help-text'),
+            setClass('sql-help-text pl-2'),
             sqlBuilderHelpIcon('', false),
             span(setClass('text-gray-500'), $titleTip)
         );
@@ -56,7 +63,7 @@ class queryBase extends wg
             set::title($title),
             to::heading
             (
-                setClass('relative'),
+                setClass('relative justify-start-important gap-0-important'),
                 $this->buildTitleTip(),
                 $headingBlock
             ),
@@ -98,7 +105,7 @@ class queryBase extends wg
     protected function buildTablePanel()
     {
         global $lang;
-        list($sql, $cols, $data) = $this->prop(array('sql', 'cols', 'data'));
+        list($sql, $cols, $data, $pager) = $this->prop(array('sql', 'cols', 'data', 'pager'));
 
         return panel
         (
@@ -122,7 +129,7 @@ class queryBase extends wg
                 set::cols($cols),
                 set::data($data),
                 set::height(440),
-                set::footPager(usePager('pager', 'customLink', null, null, 'window.postQueryResult')),
+                set::footPager($pager),
             )
         );
     }
@@ -147,7 +154,7 @@ class queryBase extends wg
     protected function buildFieldSettingsModal()
     {
         global $lang, $app;
-        list($cols, $data, $settings, $tableOptions) = $this->prop(array('cols', 'data', 'settings', 'tableOptions'));
+        list($cols, $data, $settings, $tableOptions, $onSaveFields) = $this->prop(array('cols', 'data', 'settings', 'tableOptions', 'onSaveFields'));
         if(empty($cols)) return null;
 
         $data = array();
@@ -163,6 +170,7 @@ class queryBase extends wg
             setID('fieldSettingsModal'),
             set::title($lang->dataview->fieldSettings),
             setData('backdrop', 'static'),
+            setData('tables', $tableOptions),
             set::size('lg'),
             formBatch
             (
@@ -170,7 +178,9 @@ class queryBase extends wg
                 set::mode('read-only'),
                 set::data($data),
                 set::actions(array()),
-                $app->rawMethod == 'design' ? on::change('[data-name="object"]')->do('clearField(event)') : null,
+                on::change('[data-name="object"]')->do('clearField(event)'),
+                on::change('[name^=object]')->do('loadFields(event)'),
+                on::change('[name^=field]')->do('changeFields(event)'),
                 formBatchItem
                 (
                     set::name('key'),
@@ -212,7 +222,8 @@ class queryBase extends wg
                 (
                     setID('saveFields'),
                     set::type('primary'),
-                    $lang->save
+                    $lang->save,
+                    on::click()->do($onSaveFields)
                 ),
                 btn
                 (
