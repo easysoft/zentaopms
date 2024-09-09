@@ -58,3 +58,14 @@ class browseTester extends tester
     {
         $browsePage = $this->initForm('projectrelease', 'browse', array('projectID' => 1), 'appIframe-project');
         $browsePage->dom->terminatedTab->click();
+        $releaseNameTerminated = $browsePage->dom->releaseName->getText();
+        $browsePage->dom->activeBtn->click();
+        $browsePage->dom->activeConfirm->click();
+        $browsePage->dom->releasedTab->click();
+        $releaseNameReleased = $browsePage->dom->releaseName->getText();
+
+        //断言是否检查激活发布成功
+        if($releaseNameReleased != $releaseNameTerminated) return $this->failed('项目发布列表页激活发布失败');
+        return $this->success('激活发布成功');
+    }
+}
