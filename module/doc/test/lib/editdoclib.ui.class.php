@@ -33,4 +33,23 @@ class createDocTester extends tester
         $this->openUrl('doc', 'mySpace');
         return $this->success('编辑文档库成功。');
     }
+
+    /**
+     * 删除一个文档库。
+     * Delete a docLib.
+     *
+     * @param  string $docLibName
+     * @access public
+     * @return void
+     */
+    public function deleteDocLib($editLibName)
+    {
+        $this->openUrl('doc', 'mySpace', array('type' => 'mine'));
+        $form = $this->loadPage('doc', 'mySpace', array('type' => 'mine'));
+        $form->dom->fstDocLib->click();
+        $form->dom->fstMoreBtn->click();
+        $form->dom->deleteLib->click();
+        $form->wait(1);
+        $form->dom->deleteAccept->click();
+    }
 }
