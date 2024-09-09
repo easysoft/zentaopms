@@ -154,7 +154,8 @@ class thinkRadio extends thinkQuestion
                             'title'       => empty($quoteQuestions) ? $lang->thinkstep->tips->quoteTitle : null,
                             'required'    => true,
                         )),
-                        bind::change('changeQuoteTitle(event)')
+                        on::inited()->call('changeQuoteTitle'),
+                        bind::change('changeQuoteTitle()')
                     )
                 ),
                 formRow
