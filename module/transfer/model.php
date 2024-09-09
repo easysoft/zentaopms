@@ -70,6 +70,7 @@ class transferModel extends model
         if($module)
         {
             if(in_array($module, array('epic', 'requirement'))) $module = 'story';
+            if($module == 'caselib') $module = 'testcase';
 
             $this->loadModel($module);
             $this->moduleConfig     = $this->config->$module;
