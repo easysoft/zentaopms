@@ -508,6 +508,9 @@ left join zt_product as t2 on t1.product=t2.id
 left join zt_project as t3 on t2.program=t3.id
 where t1.deleted='0'
 and t2.deleted='0'
+and (case when \$productStatus='' then 1=1 else t2.status=\$productStatus end)
+and (case when \$productType='' then 1=1 else t2.type=\$productType end)
+and (case when \$product='' then 1=1 else t2.id=\$product end)
 order by t3.`order` asc, t2.line desc, t2.`order` asc
 EOT,
     'settings'  => array
@@ -520,7 +523,12 @@ EOT,
         ),
         'summary'     => 'use'
     ),
-    'filters'   => array(),
+    'filters'   => array
+    (
+        array('from' => 'query', 'field' => 'productStatus', 'name' => '产品状态', 'type' => 'select', 'typeOption' => 'product.status', 'default' => 'normal'),
+        array('from' => 'query', 'field' => 'productType', 'name' => '产品类型', 'type' => 'select', 'typeOption' => 'product.type', 'default' => 'normal'),
+        array('from' => 'query', 'field' => 'product', 'name' => '产品列表', 'type' => 'select', 'typeOption' => 'product', 'default' => '')
+    ),
     'fields'    => array
     (
         'product'          => array('object' => 'product', 'field' => 'name', 'type' => 'object'),
@@ -571,6 +579,9 @@ left join zt_product as t2 on t1.product=t2.id
 left join zt_project as t3 on t2.program=t3.id
 where t1.deleted='0'
 and t2.deleted='0'
+and (case when \$productStatus='' then 1=1 else t2.status=\$productStatus end)
+and (case when \$productType='' then 1=1 else t2.type=\$productType end)
+and (case when \$product='' then 1=1 else t2.id=\$product end)
 order by t3.`order` asc, t2.line desc, t2.`order` asc
 EOT,
     'settings'  => array
@@ -583,7 +594,12 @@ EOT,
         ),
         'columnTotal' => 'sum'
     ),
-    'filters'   => array(),
+    'filters'   => array
+    (
+        array('from' => 'query', 'field' => 'productStatus', 'name' => '产品状态', 'type' => 'select', 'typeOption' => 'product.status', 'default' => 'normal'),
+        array('from' => 'query', 'field' => 'productType', 'name' => '产品类型', 'type' => 'select', 'typeOption' => 'product.type', 'default' => 'normal'),
+        array('from' => 'query', 'field' => 'product', 'name' => '产品列表', 'type' => 'select', 'typeOption' => 'product', 'default' => '')
+    ),
     'fields'    => array
     (
         'product'  => array('object' => 'product', 'field' => 'name', 'type' => 'object'),
@@ -2006,6 +2022,9 @@ left join zt_bug as t2 on t1.id=t2.product
 left join zt_project as t3 on t1.program=t3.id
 where t1.deleted='0'
 and t2.deleted='0'
+and (case when \$productStatus='' then 1=1 else t1.status=\$productStatus end)
+and (case when \$productType='' then 1=1 else t1.type=\$productType end)
+and (case when \$product='' then 1=1 else t1.id=\$product end)
 order by t3.`order` asc, t1.line desc, t1.`order` asc
 EOT,
     'settings'  => array
@@ -2018,7 +2037,12 @@ EOT,
         ),
         'summary'     => 'use'
     ),
-    'filters'   => array(),
+    'filters'   => array
+    (
+        array('from' => 'query', 'field' => 'productStatus', 'name' => '产品状态', 'type' => 'select', 'typeOption' => 'product.status', 'default' => 'normal'),
+        array('from' => 'query', 'field' => 'productType', 'name' => '产品类型', 'type' => 'select', 'typeOption' => 'product.type', 'default' => 'normal'),
+        array('from' => 'query', 'field' => 'product', 'name' => '产品列表', 'type' => 'select', 'typeOption' => 'product', 'default' => '')
+    ),
     'fields'    => array
     (
         'product' => array('object' => 'product', 'field' => 'name', 'type' => 'object'),
@@ -2076,6 +2100,9 @@ left join ztv_productstories as t2 on t1.id=t2.product
 left join ztv_productbugs as t3 on t1.id=t3.product
 left join zt_project as t4 on t1.program=t4.id
 where t1.deleted='0'
+and (case when \$productStatus='' then 1=1 else t1.status=\$productStatus end)
+and (case when \$productType='' then 1=1 else t1.type=\$productType end)
+and (case when \$product='' then 1=1 else t1.id=\$product end)
 order by t4.`order` asc, t1.line desc, t1.`order` asc
 EOT,
     'settings'  => array
@@ -2093,7 +2120,12 @@ EOT,
         ),
         'summary'     => 'use'
     ),
-    'filters'   => array(),
+    'filters'   => array
+    (
+        array('from' => 'query', 'field' => 'productStatus', 'name' => '产品状态', 'type' => 'select', 'typeOption' => 'product.status', 'default' => 'normal'),
+        array('from' => 'query', 'field' => 'productType', 'name' => '产品类型', 'type' => 'select', 'typeOption' => 'product.type', 'default' => 'normal'),
+        array('from' => 'query', 'field' => 'product', 'name' => '产品列表', 'type' => 'select', 'typeOption' => 'product', 'default' => '')
+    ),
     'fields'    => array
     (
         'id'           => array('object' => 'product', 'field' => 'id', 'type' => 'number'),
