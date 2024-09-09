@@ -469,6 +469,7 @@ class blockZen extends block
         {
             $type = 'assignedTo';
             if($field == 'testcase') $type = 'assigntome';
+            if($field == 'ticket')   $type = 'assignedtome';
 
             /* 根据不同的模块生成不同的度量项查询码。 */
             $code = "assigned_{$field}";
