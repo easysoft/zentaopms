@@ -790,6 +790,7 @@ class projectModel extends model
      */
     public function getProjectList(string $status, string $order, int $limit, string $excludedModel): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getProjectStats();
         return $this->projectTao->fetchProjectListByQuery($status, 0, $order, $limit, $excludedModel);
     }
 

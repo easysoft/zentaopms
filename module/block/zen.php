@@ -1206,7 +1206,7 @@ class blockZen extends block
     protected function printWaterfallReportBlock(): void
     {
         $this->app->loadLang('programplan');
-        $project = $this->loadModel('project')->getByID($this->session->project);
+        $project = $this->loadModel('project')->getByID(common::isTutorialMode() ? 2 : $this->session->project);
 
         /* Get metric data. */
         $data    = $this->getProjectsStatisticData(array($project->id));
@@ -1271,7 +1271,7 @@ class blockZen extends block
         {
             if(isset($plans[$metric['execution']])) $plans[$metric['execution']]->taskProgress = ($metric['value'] * 100) . '%';
         }
-        $project = $this->loadModel('project')->fetchByID($this->session->project);
+        $project = $this->loadModel('project')->getByID(common::isTutorialMode() ? 2 : $this->session->project);
 
         $this->view->plans     = $plans ? $plans : array();
         $this->view->products  = $project->hasProduct ? $products : array();

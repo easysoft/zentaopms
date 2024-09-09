@@ -591,6 +591,7 @@ class tutorialModel extends model
         $execution->colWidth      = '200';
         $execution->openedDate    = helper::now();
         $execution->closedDate    = helper::now();
+        $execution->milestone     = 0;
 
         list($guide, $guideTask, $guideStepIndex) = empty($_SERVER['HTTP_X_ZIN_TUTORIAL']) ? array('', '', '') : explode('-', $_SERVER['HTTP_X_ZIN_TUTORIAL']);
         if($guide && strpos($guide, 'scrumProjectManage') !== false)
