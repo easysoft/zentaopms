@@ -61,7 +61,7 @@ class checkList extends wg
             {
                 if(!is_array($item))         $item = array('text' => $item, 'value' => $key);
                 if(!isset($item['checked'])) $item['checked'] = in_array($item['value'], $valueList);
-                if(!empty($title)) $item['title'] = $item[$title];
+                if(!empty($item[$title])) $item['title'] = $item[$title];
                 $items[$key] = $this->onBuildItem($item);
             }
         }
