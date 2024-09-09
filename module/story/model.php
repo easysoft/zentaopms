@@ -5175,6 +5175,8 @@ class storyModel extends model
      */
     public function getGradeList(string $type = 'story'): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getStoryGrade();
+
         return $this->dao->select('*')->from(TABLE_STORYGRADE)
             ->where('1=1')
             ->beginIF($type)->andWhere('type')->eq($type)->fi()
@@ -5204,6 +5206,8 @@ class storyModel extends model
      */
     public function getGradePairs(string $type = 'story', string $status = 'enable', array $appendList = array()): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getGradePairs($type);
+
         return $this->dao->select("grade, name")->from(TABLE_STORYGRADE)
             ->where('type')->eq($type)
             ->beginIF($status == 'enable')->andWhere('status')->eq('enable')->fi()

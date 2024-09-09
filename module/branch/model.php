@@ -126,6 +126,8 @@ class branchModel extends model
      */
     public function getPairs(int $productID, string $params = '', int $executionID = 0, string $mergedBranches = ''): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getBranchPairs();
+
         $executionBranches = array();
         if($executionID)
         {

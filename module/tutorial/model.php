@@ -301,7 +301,7 @@ class tutorialModel extends model
         $story->id             = 3;
         $story->product        = 1;
         $story->branch         = 0;
-        $story->parent         = 2;
+        $story->parent         = array(2);
         $story->category       = 0;
         $story->module         = 0;
         $story->plan           = '';
@@ -340,6 +340,10 @@ class tutorialModel extends model
         $story->roadmap        = 0;
         $story->root           = 1;
         $story->path           = ',1,2,3,';
+        $story->lastEditedBy   = '';
+        $story->lastEditedDate = '';
+        $story->twins          = '';
+        $story->executions     = array();
         return $story;
     }
 
@@ -357,7 +361,7 @@ class tutorialModel extends model
         $epic->title    = 'Test epic';
         $epic->type     = 'epic';
         $epic->isParent = 1;
-        $epic->parent   = 0;
+        $epic->parent   = array(0);
         $epic->root     = 1;
         $epic->path     = ',1,';
         return $epic;
@@ -378,7 +382,7 @@ class tutorialModel extends model
         $requirement->type     = 'requirement';
         $requirement->status   = 'active';
         $requirement->isParent = 1;
-        $requirement->parent   = 1;
+        $requirement->parent   = array(1);
         $requirement->root     = 1;
         $requirement->path     = ',1,2,';
         return $requirement;
@@ -396,6 +400,50 @@ class tutorialModel extends model
         if($storyID == 1) return $this->getEpic();
         if($storyID == 2) return $this->getRequirement();
         return $this->getStory();
+    }
+
+    /**
+     * 获取需求层级。
+     * Get story grade.
+     *
+     * @access public
+     * @return object
+     */
+    public function getStoryGrade(): array
+    {
+        $storyGrade = new stdClass();
+        $storyGrade->type   = 'story';
+        $storyGrade->grade  = 1;
+        $storyGrade->name   = 'SR';
+        $storyGrade->status = 'enable';
+
+        $requirementGrade = new stdClass();
+        $requirementGrade->type   = 'requirement';
+        $requirementGrade->grade  = 1;
+        $requirementGrade->name   = 'UR';
+        $requirementGrade->status = 'enable';
+
+        $epicGrade = new stdClass();
+        $epicGrade->type   = 'epic';
+        $epicGrade->grade  = 1;
+        $epicGrade->name   = 'BR';
+        $epicGrade->status = 'enable';
+
+        return array($storyGrade, $requirementGrade, $epicGrade);
+    }
+
+    /**
+     * 获取需求层级键值对。
+     * Get story grade pairs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getGradePairs(string $type): array
+    {
+        if($type == 'story')       return array(1 => 'SR');
+        if($type == 'requirement') return array(1 => 'UR');
+        if($type == 'epic')        return array(1 => 'BR');
     }
 
     /**
@@ -1791,6 +1839,19 @@ class tutorialModel extends model
         $program->grade   = 1;
 
         return array(1 => $program);
+    }
+
+    /**
+     * 获取新手模式分支键值对。
+     * Get branch pairs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getBranchPairs(): array
+    {
+        $this->loadModel('branch');
+        return array(0 => $this->lang->branch->main, 1 => 'Test branch');
     }
 
     /**

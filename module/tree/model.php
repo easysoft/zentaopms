@@ -249,6 +249,8 @@ class treeModel extends model
      */
     public function getModulePairs(int $rootID, string $viewType = 'story', string $showModule = 'end', string $extra = '')
     {
+        if(common::isTutorialMode()) $modulePairs = $this->loadModel('tutorial')->getModulePairs();
+
         if($viewType == 'task')
         {
             $products = array_keys($this->loadModel('product')->getProductPairsByProject($rootID));

@@ -793,6 +793,8 @@ class programModel extends model
      */
     public function getTopPairs(string $mode = '', bool $isQueryAll = false): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getProgramPairs();
+
         $topPairs = $this->dao->select('id,name')->from(TABLE_PROGRAM)
             ->where('type')->eq('program')
             ->andWhere('grade')->eq(1)

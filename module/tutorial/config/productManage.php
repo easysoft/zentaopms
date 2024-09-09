@@ -98,6 +98,7 @@ $productManage->basic->tasks['storyManage']['steps'][] = array(
     'type'   => 'clickNavbar',
     'target' => 'epic',
     'page'   => 'product-browse',
+    'url'    => array('product', 'browse', 'productID=1'),
     'title'  => $lang->tutorial->productManage->storyManage->step1->name,
     'desc'   => $lang->tutorial->productManage->storyManage->step1->desc
 );
@@ -106,6 +107,7 @@ $productManage->basic->tasks['storyManage']['steps'][] = array(
     'type'   => 'click',
     'target' => '#actionBar a.create-story-btn',
     'page'   => 'product-browse',
+    'url'    => array('product', 'browse', 'productID=1&branch=&browseType=all&param=0&storyType=epic'),
     'title'  => $lang->tutorial->productManage->storyManage->step2->name,
     'desc'   => $lang->tutorial->productManage->storyManage->step2->desc
 );

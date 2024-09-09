@@ -337,7 +337,7 @@ class productplanZen extends productplan
 
         unset($this->config->bug->search['fields']['product']);
 
-        $product = $this->loadModel('product')->fetchByID($plan->product);
+        $product = $this->loadModel('product')->getByID($plan->product);
         if($product->type == 'normal')
         {
             unset($this->config->bug->search['fields']['branch']);
