@@ -464,6 +464,14 @@ class datatableModel extends model
             $module = 'execution';
             $method = 'task'; // 任务加载execution-task的layout配置。
         }
+        elseif($module == 'bug' && $method == 'bug')
+        {
+            $method = 'browse'; // 执行bug列表加载bug-browse的layout配置。
+        }
+        elseif($module == 'testcase' && $method == 'testcase')
+        {
+            $method = 'browse'; // 执行用例列表加载testcase-browse的layout配置。
+        }
 
         $fields = $this->loadModel('workflowaction')->getFields($module, $method);
         if($flow->buildin == 1)

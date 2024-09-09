@@ -60,15 +60,14 @@ foreach($cases as $case)
     if(isset($case->script)) unset($case->script);
 }
 
-$cols = $config->testcase->dtable->fieldList;
-unset($cols['module']);
-unset($cols['branch']);
+$cols = $this->loadModel('datatable')->getSetting('execution', 'testcase');
 
 dtable
 (
     set::userMap($users),
     set::cols($cols),
     set::data($cases),
+    set::customCols(true),
     set::orderBy($orderBy),
     set::sortLink(createLink('execution', 'testcase', "executionID={$executionID}&productID={$productID}&branchID={$branchID}&type={$type}&param=0&moduleID={$moduleID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footPager(
