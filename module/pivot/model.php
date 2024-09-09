@@ -691,12 +691,15 @@ class pivotModel extends model
     {
         if(empty($filters)) return array($sql, false);
 
-        $filterFormat = array();
+        $currentFilter = current($filters);
+        $isQueryFilter = (isset($currentFilter['from']) && $currentFilter['from'] == 'query');
+
+        $filterFormat = $isQueryFilter ? array_values($filters) : array();
         foreach($filters as $filter)
         {
             $field = $filter['field'];
 
-            if(isset($filter['from']) && $filter['from'] == 'query')
+            if($isQueryFilter)
             {
                 $queryDefault = isset($filter['default']) ? $this->processDateVar($filter['default']) : '';
 
