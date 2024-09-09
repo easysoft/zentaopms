@@ -13,7 +13,7 @@ class manageLineTester extends tester
     {
         $form = $this->initForm('product', 'all', array(), 'appIframe-product');
         $form->dom->manageLineBtn->click();
-        if (isset($line->name))    $form->dom->modules_0->setValue($line->name);
+        if (isset($line->name)) $form->dom->modules_0->setValue($line->name);
         $form->dom->btn($this->lang->save)->click();
         $form->wait(2);
         if ($form->dom->lineDialog === false)
@@ -23,9 +23,10 @@ class manageLineTester extends tester
         }
         else
         {
-            $tipDom = 'modules[0]Tip';
+            $tipDom           = 'modules[0]Tip';
             $nameDuplicateTip = sprintf($this->lang->product->nameIsDuplicate, $line->name);
             if ($nameDuplicateTip == $form->dom->$tipDom->getText()) return $this->success('维护产品线表单页提示信息正确');
+            return $this->failed('维护产品线表单页提示信息不正确');
         }
     }
 
