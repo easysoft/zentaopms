@@ -923,25 +923,25 @@ class projectModel extends model
      * 根据项目集和模型获取项目列表(列表索引为项目编号)。
      * Get project pairs by model and project.
      *
-     * @param  string  $model all|scrum|waterfall|kanban
-     * @param  string  $param noclosed
-     * @param  int     $projectID
-     * @param  bool    $pairs
+     * @param  string|array  $model all|scrum|waterfall|kanban
+     * @param  string        $param noclosed
+     * @param  int           $projectID
+     * @param  bool          $pairs
      * @access public
-     * @return array   array(projectID => projectName, ...)
+     * @return array         array(projectID => projectName, ...)
      */
-    public function getPairsByModel(string $model = 'all', string $param = '', int $projectID = 0, bool $pairs = true): array
+    public function getPairsByModel(string|array $model = 'all', string $param = '', int $projectID = 0, bool $pairs = true): array
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getProjectPairs();
 
         /* Get project list. */
         $projects = $this->projectTao->fetchProjectListByQuery(strpos($param, 'noclosed') !== false ? 'unclosed' : 'all', $projectID);
 
-        if($model == 'agileplus')     $model = array('scrum', 'agileplus');
-        if($model == 'waterfallplus') $model = array('waterfall', 'waterfallplus');
+        if(is_string($model) && $model == 'agileplus')     $model = array('scrum', 'agileplus');
+        if(is_string($model) && $model == 'waterfallplus') $model = array('waterfall', 'waterfallplus');
 
         /* Set first program to the project attribute. */
-        $model    = $model == 'all' ? array() : (array)$model;
+        $model    = is_string($model) && $model == 'all' ? array() : (array)$model;
         $multiple = strpos($param, 'multiple') !== false;
         foreach($projects as $projectID => $project)
         {
