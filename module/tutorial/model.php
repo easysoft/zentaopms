@@ -185,6 +185,7 @@ class tutorialModel extends model
         $project->storyType    = 'story,requirement,epic';
         $project->charter      = 0;
         $project->market       = 1;
+        $project->budgetUnit   = 'CNY';
 
         list($guide, $guideTask, $guideStepIndex) = empty($_SERVER['HTTP_X_ZIN_TUTORIAL']) ? array('', '', '') : explode('-', $_SERVER['HTTP_X_ZIN_TUTORIAL']);
         if($guide && strpos($guide, 'scrumProjectManage') !== false)
