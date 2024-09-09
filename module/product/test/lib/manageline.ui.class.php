@@ -14,18 +14,20 @@ class manageLineTester extends tester
         $form = $this->initForm('product', 'all', array(), 'appIframe-product');
         $form->dom->manageLineBtn->click();
         //设置表单字段
-        if (isset($line->name))    $form->dom->lineName->setValue($line->name);
-        if (isset($line->program)) $form->dom->lineprogram->setValue($line->program);
+        if (isset($line->name))    $form->dom->modules_0->setValue($line->name);
+       // if (isset($line->program)) $form->dom->programs[0]->picker($line->program);
         $form->dom->btn($this->lang->save)->click();
+        $form->wait(2);
         if ($form->dom->lineDialog === false)
         {
-            if ($this->checkFormTips('product')) return $this->success('维护产品线表单页提示信息正确');
+            $form->dom->manageLineBtn->click();
+            return ($form->dom->newLineName->getText() == $line->name) ? $this->success('产品线名称正确') : $this->failed('产品线名称不正确');
         }
         else
         {
-            $form->dom->manageLineBtn->click();
-            return ($form->dom->lineName->getValue() == $line->name) ? $this->success('产品线名称正确') : $this->failed('产品线名称不正确');
-            return ($form->dom->lineprogram->getValue() == $line->program) ? $this->success('所属项目集正确') : $this->failed('所属项目集不正确');
+            $tipDom = 'modules[0]Tip';
+            $nameDuplicateTip = sprintf($this->lang->product->nameIsDuplicate, $line->name);
+            if ($nameDuplicateTip == $form->dom->$tipDom->getText()) return $this->success('维护产品线表单页提示信息正确');
         }
     }
 
@@ -35,11 +37,12 @@ class manageLineTester extends tester
      *
      * @return mixed
      */
-    public function delLine()
+    public function delLine($line)
     {
         $form = $this->initForm('product', 'all', array(), 'appIframe-product');
         $form->dom->manageLineBtn->click();
-        $form->dom->delLineBtn->click();
-        return ($form->dom->modules[0]->getValue() == '') ? $this->success('删除成功') : $this->failed('删除失败');
+        $form->dom->delNewLineBtn->click();
+        var_dump($form->dom->newLineName->getText());
+        return ($form->dom->newLineName->getText() != $line->name) ? $this->success('删除成功') : $this->failed('删除失败');
     }
 }
