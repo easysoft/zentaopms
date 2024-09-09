@@ -180,10 +180,7 @@ class testreport extends control
 
             $reportData = $this->testreportZen->assignProjectReportDataForCreate($objectID, $objectType, $extra, $begin, $end, $executionID);
 
-            if(count($reportData['productIdList']) > 1)
-            {
-                return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->testreport->moreProduct, 'confirmed' => $this->createLink('project', 'testtask', "objectID={$objectID}"), 'canceled' => $this->createLink('project', 'testtask', "objectID={$objectID}"))));
-            }
+            if(count($reportData['productIdList']) > 1) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->testreport->moreProduct, 'confirmed' => $this->createLink('project', 'testtask', "objectID={$objectID}"), 'canceled' => $this->createLink('project', 'testtask', "objectID={$objectID}"))));
         }
 
         $this->testreportZen->assignReportData($reportData, 'create');
