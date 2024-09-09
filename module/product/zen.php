@@ -1421,7 +1421,7 @@ class productZen extends product
         $this->view->isProjectStory  = $isProjectStory;
         $this->view->branch          = $branch;
         $this->view->branchID        = $branchID;
-        $this->view->modulePairs     = !empty($showModule) ? $this->tree->getModulePairs($productID, 'story', $showModule) : array();
+        $this->view->modulePairs     = !empty($showModule) ? $this->loadModel('tree')->getModulePairs($productID, 'story', $showModule) : array();
         $this->view->branchOptions   = (empty($product) && $isProjectStory) ? $this->getBranchOptions($projectProducts, $projectID) : array($productID => $branchOpt);
         $this->view->branchTagOption = $branchTagOpt;
         $this->view->projectProducts = $projectProducts;

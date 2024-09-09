@@ -1821,6 +1821,27 @@ class tutorialModel extends model
     }
 
     /**
+     * 获取新手模式项目集。
+     * Get program.
+     *
+     * @access public
+     * @return object
+     */
+    public function getProgram(): object
+    {
+        $program = $this->getProject();
+        $program->id      = 1;
+        $program->name    = 'Test program';
+        $program->project = 0;
+        $program->type    = 'program';
+        $program->parent  = 0;
+        $program->path    = ',1,';
+        $program->grade   = 1;
+
+        return $program;
+    }
+
+    /**
      * 获取新手模式项目集列表。
      * Get programs.
      *

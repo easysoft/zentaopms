@@ -146,6 +146,8 @@ class programModel extends model
      */
     public function getByID(int $programID = 0): object|false
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getProgram();
+
         $program = $this->fetchByID($programID);
         if(!$program) return false;
 
