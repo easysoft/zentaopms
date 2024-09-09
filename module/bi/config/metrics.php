@@ -4494,3 +4494,17 @@ $config->bi->builtin->metrics[] = array
     'desc'       => '按执行统计的执行开发效率是指执行交付研发需求规模数与执行所有任务消耗工时的比率。该度量项反映了执行的开发速度，可以帮助团队识别潜在问题并采取改进措施提高研发效率。',
     'definition' => "复用：按执行统计的任务消耗工时数、按执行统计的执行关闭时已交付的研发需求规模数；\n公式：按执行统计的执行关闭时已交付的研发需求规模数/按执行统计的任务消耗工时数"
 );
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按执行统计的当期Bug转任务的任务消耗工时',
+    'alias'      => '当期Bug转任务的任务消耗工时数',
+    'code'       => 'consumed_of_task_from_current_execution_bug_in_execution',
+    'purpose'    => 'hour',
+    'scope'      => 'execution',
+    'object'     => 'task',
+    'unit'       => 'hour',
+    'dateType'   => 'nodate',
+    'desc'       => '按执行统计的往期Bug转任务的任务消耗工时数是指执行中当期产生的Bug转任务消耗的工时总和。该度量项反映了任务来源为当期Bug的资源使用情况，可以帮助团队识别当期产生的缺陷占用的团队资源以及缺陷管理中存在的问题。',
+    'definition' => "执行中满足以下条件的任务消耗工时数求和，条件是：\n任务来源为当期Bug，过滤已删除的任务，过滤父任务，过滤已删除的执行，过滤已删除的项目。\n当期Bug的定义：Bug的影响版本是执行中创建的版本。"
+);
