@@ -397,11 +397,11 @@ $lang->tutorial->scrumProjectManage->manageExecution->step5->desc = '点击迭�
 
 $lang->tutorial->scrumProjectManage->manageExecution->step6 = new stdClass();
 $lang->tutorial->scrumProjectManage->manageExecution->step6->name = '点击需求';
-$lang->tutorial->scrumProjectManage->manageExecution->step6->desc = '点击需求查看已关联的需求';
+$lang->tutorial->scrumProjectManage->manageExecution->step6->desc = '可以在这里完成需求的维护';
 
 $lang->tutorial->scrumProjectManage->manageExecution->step7 = new stdClass();
 $lang->tutorial->scrumProjectManage->manageExecution->step7->name = '点击关联需求';
-$lang->tutorial->scrumProjectManage->manageExecution->step7->desc = '点击关联需求进入关联需求列表';
+$lang->tutorial->scrumProjectManage->manageExecution->step7->desc = '可以将需求关联进迭代中';
 
 $lang->tutorial->scrumProjectManage->manageExecution->step8 = new stdClass();
 $lang->tutorial->scrumProjectManage->manageExecution->step8->name = '选择需求';
