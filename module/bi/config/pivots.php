@@ -627,11 +627,12 @@ $config->bi->builtin->pivots[] = array
 select
     t1.project,
     t3.name as projectname,
+    t3.status as projectstatus,
     t2.status,
     t1.name as executionname,
+    t1.status as executionstatus,
     t2.execution as execution,
     t2.id as taskID,
-    t1.status as projectstatus,
     (case when cast(t2.deadline as date) < current_date()
          and t2.deadline is not null
          and t2.status != 'closed'
@@ -644,10 +645,13 @@ left join zt_project as t3 on t3.id=t1.project
 where t1.deleted='0'
 and t1.type in ('sprint','stage')
 and t2.deleted='0'
-and (case when \$project='' then 1 else t3.id=\$project end)
-and (case when \$status='' then 1 else t1.status=\$status end)
-and (case when \$beginDate='' then 1 else t1.begin>=cast(\$beginDate as date) end)
-and (case when \$endDate='' then 1 else t1.end<=cast(\$endDate as date) end)
+and (case when \$projectStatus='' then 1=1 else t3.status=\$projectStatus end)
+and (case when \$executionStatus='' then 1=1 else t1.status=\$executionStatus end)
+and (case when \$project='' then 1=1 else t3.id=\$project end)
+and (case when \$execution='' then 1=1 else t1.id=\$execution end)
+and (case when \$beginDate='' then 1=1 else t1.begin>=cast(\$beginDate as date) end)
+and (case when \$endDate='' then 1=1 else t1.end<=cast(\$endDate as date) end)
+and not (\$projectStatus='' and \$executionStatus and \$project='' and \$beginDate='' and \$endDate)
 EOT,
     'settings'  => array
     (
@@ -662,8 +666,10 @@ EOT,
     ),
     'filters'   => array
     (
+        array('from' => 'query', 'field' => 'projectStatus', 'name' => '项目状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => 'doing'),
+        array('from' => 'query', 'field' => 'executionStatus', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'execution.status', 'default' => 'doing'),
         array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
-        array('from' => 'query', 'field' => 'status', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => ''),
+        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => ''),
         array('from' => 'query', 'field' => 'beginDate', 'name' => '执行起始日期', 'type' => 'date', 'typeOption' => '', 'default' => ''),
         array('from' => 'query', 'field' => 'endDate', 'name' => '执行结束日期', 'type' => 'date', 'typeOption' => '', 'default' => '')
     ),
