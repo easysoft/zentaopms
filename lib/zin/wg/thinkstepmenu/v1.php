@@ -34,6 +34,20 @@ class thinkStepMenu extends wg
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
+    private function getQuotedText(array $modules, string $quotedTitle): string
+    {
+        foreach($modules as $item)
+        {
+            if($item->id == $quotedTitle) return sprintf($this->lang->thinkstep->treeLabel, $item->index);
+            if(!empty($item->children))
+            {
+                $childrenResult = $this->getQuotedText($item->children, $quotedTitle);
+                if($childrenResult) return $childrenResult;
+            }
+        }
+        return '';
+    }
+
     private function buildMenuTree(array $items, int $parentID = 0): array
     {
         jsVar('from', data('from') ?? '');
@@ -54,10 +68,7 @@ class thinkStepMenu extends wg
             /* 给引用其他问题的多选题添加标签。Add tags to multiple-choice questions that reference other questions. */
             if($quotedTitle)
             {
-                foreach($items as $item)
-                {
-                    if($quotedTitle == $item->id) $quotedText = sprintf($this->lang->thinkstep->treeLabel, $item->index);
-                }
+                $quotedText = $this->getQuotedText($this->modules, $quotedTitle);
             }
 
             $canView     = common::hasPriv('thinkstep', 'view');
