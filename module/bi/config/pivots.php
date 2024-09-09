@@ -1050,7 +1050,7 @@ select
     t3.stories,
     round(t4.consumed,1) as consumed,
     t4.number,
-    t1.status as projectstatus
+    t1.status as executionstatus
 from zt_project as t1
 left join ztv_projectteams as t2 on t1.id=t2.execution
 left join ztv_projectstories as t3 on t1.id=t3.execution
@@ -1058,10 +1058,12 @@ left join ztv_executionsummary as t4 on t1.id=t4.execution
 left join zt_project as t5 on t1.project=t5.id
 where t1.deleted='0'
 and t1.type in ('sprint','stage')
-and (case when \$project='' then 1 else t5.id=\$project end)
-and (case when \$status='' then 1 else t1.status=\$status end)
-and (case when \$beginDate='' then 1 else t1.begin>=cast(\$beginDate as date) end)
-and (case when \$endDate='' then 1 else t1.end<=cast(\$endDate as date) end)
+and (case when \$projectStatus='' then 1=1 else t5.status=\$projectStatus end)
+and (case when \$executionStatus='' then 1=1 else t1.status=\$executionStatus end)
+and (case when \$project='' then 1=1 else t5.id=\$project end)
+and (case when \$beginDate='' then 1=1 else t1.begin>=cast(\$beginDate as date) end)
+and (case when \$endDate='' then 1=1 else t1.end<=cast(\$endDate as date) end)
+and not (\$projectStatus='' and \$executionStatus and \$project='' and \$beginDate='' and \$endDate='')
 EOT,
     'settings'  => array
     (
@@ -1079,46 +1081,47 @@ EOT,
     ),
     'filters'   => array
     (
+        array('from' => 'query', 'field' => 'projectStatus', 'name' => '项目状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => 'doing'),
+        array('from' => 'query', 'field' => 'executionStatus', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'execution.status', 'default' => 'doing'),
         array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
-        array('from' => 'query', 'field' => 'status', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => ''),
         array('from' => 'query', 'field' => 'beginDate', 'name' => '执行起始日期', 'type' => 'date', 'typeOption' => '', 'default' => '$MONTHBEGIN'),
         array('from' => 'query', 'field' => 'endDate', 'name' => '执行结束日期', 'type' => 'date', 'typeOption' => '', 'default' => '$MONTHEND')
     ),
     'fields'    => array
     (
-        'id'            => array('object' => 'project', 'field' => 'id', 'type' => 'number'),
-        'projectname'   => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
-        'project'       => array('object' => 'project', 'field' => 'id', 'type' => 'number'),
-        'executionname' => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
-        'execution'     => array('object' => 'project', 'field' => 'name', 'type' => 'object'),
-        'timeLimit'     => array('object' => 'project', 'field' => '', 'type' => 'string'),
-        'teams'         => array('object' => 'project', 'field' => '', 'type' => 'string'),
-        'stories'       => array('object' => 'project', 'field' => '', 'type' => 'string'),
-        'consumed'      => array('object' => 'project', 'field' => '', 'type' => 'number'),
-        'number'        => array('object' => 'project', 'field' => '', 'type' => 'string'),
-        'projectstatus' => array('object' => 'project', 'field' => '', 'type' => 'object')
+        'id'              => array('object' => 'project', 'field' => 'id', 'type' => 'number'),
+        'projectname'     => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
+        'project'         => array('object' => 'project', 'field' => 'id', 'type' => 'number'),
+        'executionname'   => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
+        'execution'       => array('object' => 'project', 'field' => 'name', 'type' => 'object'),
+        'timeLimit'       => array('object' => 'project', 'field' => '', 'type' => 'string'),
+        'teams'           => array('object' => 'project', 'field' => '', 'type' => 'string'),
+        'stories'         => array('object' => 'project', 'field' => '', 'type' => 'string'),
+        'consumed'        => array('object' => 'project', 'field' => '', 'type' => 'number'),
+        'number'          => array('object' => 'project', 'field' => '', 'type' => 'string'),
+        'executionstatus' => array('object' => 'project', 'field' => '', 'type' => 'object')
     ),
     'langs'     => array
     (
-        'id'            => array('zh-cn' => 'id', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'projectname'   => array('zh-cn' => '项目名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'project'       => array('zh-cn' => '项目ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'executionname' => array('zh-cn' => '执行名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'execution'     => array('zh-cn' => '执行ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'timeLimit'     => array('zh-cn' => '工期', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'teams'         => array('zh-cn' => '人数', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'stories'       => array('zh-cn' => '需求数', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'consumed'      => array('zh-cn' => '总消耗', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'number'        => array('zh-cn' => '任务数', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'projectstatus' => array('zh-cn' => 'projectstatus', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '')
+        'id'              => array('zh-cn' => 'id', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'projectname'     => array('zh-cn' => '项目名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'project'         => array('zh-cn' => '项目ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'executionname'   => array('zh-cn' => '执行名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'execution'       => array('zh-cn' => '执行ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'timeLimit'       => array('zh-cn' => '工期', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'teams'           => array('zh-cn' => '人数', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'stories'         => array('zh-cn' => '需求数', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'consumed'        => array('zh-cn' => '总消耗', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'number'          => array('zh-cn' => '任务数', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'executionstatus' => array('zh-cn' => 'executionstatus', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '')
     ),
     'vars'      => array
     (
-        'varName'     => array('project', 'status', 'beginDate', 'endDate'),
-        'showName'    => array('项目列表', '执行状态', '执行起始日期', '执行结束日期'),
-        'requestType' => array('select', 'select', 'date', 'date'),
-        'selectList'  => array('project', 'project.status', 'user', 'user'),
-        'default'     => array('', '', '$MONTHBEGIN', '$MONTHEND')
+        'varName'     => array('projectStatus', 'executionStatus', 'project', 'beginDate', 'endDate'),
+        'showName'    => array('项目状态', '执行状态', '项目列表', '执行起始日期', '执行结束日期'),
+        'requestType' => array('select', 'select', 'select', 'date', 'date'),
+        'selectList'  => array('project.status', 'execution.status', 'project', '', ''),
+        'default'     => array('doing', 'doing', '', '$WEEKBEGIN', '$WEEKEND')
     ),
     'drills'    => array
     (
