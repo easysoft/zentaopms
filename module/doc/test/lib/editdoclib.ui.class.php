@@ -30,7 +30,6 @@ class createDocTester extends tester
         $form->dom->name->setValue($editLibName->editName);
         $form->dom->btn($this->lang->save)->click();
         if($form->dom->fstDocLib->getText() != $editLibName->editName) return $this->failed('编辑文档库失败。');
-        $this->openUrl('doc', 'mySpace');
         return $this->success('编辑文档库成功。');
     }
 
