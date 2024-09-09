@@ -51,5 +51,7 @@ class createDocTester extends tester
         $form->dom->deleteLib->click();
         $form->wait(1);
         $form->dom->deleteAccept->click();
+
+        if($form->dom->listHeader->getText() != $editLibName->editName) return $this->success('删除文档库成功。');
     }
 }
