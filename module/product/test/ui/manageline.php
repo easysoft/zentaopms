@@ -1,10 +1,7 @@
 #!/usr/bin/env php
 <?php
-
 chdir(__DIR__);
 include '../lib/manageline.ui.class.php';
-//zendata('project')->loadYaml('program', false, 2)->gen(0);
-//zendata('product')->loadYaml('product', false, 2)->gen(0);
 
 $tester = new manageLineTester();
 $tester->login();

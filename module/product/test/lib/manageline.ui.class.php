@@ -13,7 +13,6 @@ class manageLineTester extends tester
     {
         $form = $this->initForm('product', 'all', array(), 'appIframe-product');
         $form->dom->manageLineBtn->click();
-        //设置表单字段
         if (isset($line->name))    $form->dom->modules_0->setValue($line->name);
         $form->dom->btn($this->lang->save)->click();
         $form->wait(2);
