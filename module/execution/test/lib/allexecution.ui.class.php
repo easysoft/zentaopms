@@ -13,7 +13,7 @@ class allExecutionTester extends tester
      */
     public function checkTab($tab, $expectNum)
     {
-        $form = $this->initForm('execution', 'all', '', 'appIframe-execution');
+        $form        = $this->initForm('execution', 'all', '', 'appIframe-execution');
         $selectedTab = $tab . 'Tab';
         $form->dom->$selectedTab->click();
         $form->wait(1);
