@@ -1327,6 +1327,9 @@ eof;
      */
     public static function hasPriv(string $module, string $method, mixed $object = null, string $vars = '')
     {
+        /* If the user is doing a tutorial, have all privileges. */
+        if(commonModel::isTutorialMode()) return true;
+
         global $app;
         if(empty($app->user->account)) return false;
 
