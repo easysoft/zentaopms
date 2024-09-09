@@ -1089,12 +1089,12 @@ class dom
     {
         $this->waitElement('//button[@data-toggle="searchform"]')->getElement('//button[@data-toggle="searchform"]')->click();
 
-        $searchContainer  = '//div[contains(@class, "search-form-container")]';
-        $searchSquareBtn  = $searchContainer . '/div/div[2]/div//button[contains(@class, "square")]';
-        $leftSearchGroup  = $searchContainer . '/div/div/div/table/tbody';
-        $rightSearchGroup = $searchContainer . '/div/div/div[3]/table/tbody';
-        $searchBtn        = $searchContainer . '/div/div[2]/button';
-        $restBtn          = $searchContainer . '/div/div[2]/button[2]';
+        $searchContainer  = '//div[contains(@class, "search-form-container")]/form';
+        $searchSquareBtn  = $searchContainer . '/div[2]/div//button[contains(@class, "square")]';
+        $leftSearchGroup  = $searchContainer . '/div/div/table/tbody';
+        $rightSearchGroup = $searchContainer . '/div/div[3]/table/tbody';
+        $searchBtn        = $searchContainer . '/div[2]/button';
+        $restBtn          = $searchContainer . '/div[2]/button[2]';
 
         $this->waitElement($searchContainer);
         $this->waitElement($restBtn)->getElement($restBtn)->click();
