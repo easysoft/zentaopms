@@ -627,7 +627,7 @@ class dataset
      * @access public
      * @return PDOStatement
      */
-    public function getDevRequirementsWithProject($fieldList)
+    public function getRequirementsWithProject($fieldList)
     {
         $stmt = $this->dao->select($fieldList)->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
