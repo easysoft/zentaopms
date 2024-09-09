@@ -31,7 +31,7 @@ class allExecutionTester extends tester
      */
     public function changeStatus($status)
     {
-        $form = $this->initForm('execution', 'all', '', 'appIframe-execution');
+        $form    = $this->initForm('execution', 'all', '', 'appIframe-execution');
         $firstId = $form->dom->firstId->getText();
         $form->dom->firstCheckbox->click();
         $form->dom->statusBtn->click();
