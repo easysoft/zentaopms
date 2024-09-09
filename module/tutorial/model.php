@@ -385,6 +385,20 @@ class tutorialModel extends model
     }
 
     /**
+     * 根据需求ID获取需求详情。
+     * Get story by ID.
+     *
+     * @access public
+     * @return object
+     */
+    public function getStoryByID(int $storyID): object
+    {
+        if($storyID == 1) return $this->getEpic();
+        if($storyID == 2) return $this->getRequirement();
+        return $this->getStory();
+    }
+
+    /**
      * 获取新手模式故事点。
      * Get tutorial stories.
      *

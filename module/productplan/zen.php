@@ -281,7 +281,7 @@ class productplanZen extends productplan
         unset($storyStatusList['closed']);
         $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $storyStatusList);
 
-        $product = $this->loadModel('product')->fetchByID($plan->product);
+        $product = $this->loadModel('product')->getByID($plan->product);
         if($product->type == 'normal')
         {
             unset($this->config->product->search['fields']['branch']);

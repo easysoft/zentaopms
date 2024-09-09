@@ -80,9 +80,24 @@ $productManage->basic->tasks['storyManage']['startUrl'] = array('product', 'dash
 $productManage->basic->tasks['storyManage']['steps']    = array();
 
 $productManage->basic->tasks['storyManage']['steps'][] = array(
+    'type'  => 'openApp',
+    'app'   => 'product',
+    'title' => $lang->tutorial->productManage->lineManage->step1->name,
+    'desc'  => $lang->tutorial->productManage->lineManage->step1->desc
+);
+
+$productManage->basic->tasks['storyManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#products div.dtable-body div[data-col="name"][data-row="1"] a',
+    'page'   => 'product-all',
+    'title'  => $lang->tutorial->productManage->moduleManage->step1->name,
+    'desc'   => $lang->tutorial->productManage->moduleManage->step1->desc
+);
+
+$productManage->basic->tasks['storyManage']['steps'][] = array(
     'type'   => 'clickNavbar',
     'target' => 'epic',
-    'page'   => 'product-dashboard',
+    'page'   => 'product-browse',
     'title'  => $lang->tutorial->productManage->storyManage->step1->name,
     'desc'   => $lang->tutorial->productManage->storyManage->step1->desc
 );

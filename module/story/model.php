@@ -23,6 +23,8 @@ class storyModel extends model
      */
     public function getByID(int $storyID, int $version = 0, bool $setImgSize = false): object|false
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getStoryByID($storyID);
+
         $story = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
         if(!$story) return false;
 
