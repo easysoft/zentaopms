@@ -234,6 +234,8 @@ class designModel extends model
      */
     public function getByID(int $designID = 0): object|bool
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getDesign();
+
         $design = $this->dao->select('*')->from(TABLE_DESIGN)->where('id')->eq($designID)->fetch();
         if(!$design) return false;
 
