@@ -87,7 +87,11 @@ const stepPresenters =
         {
             $targetNav = $targetNav.find('a');
         }
-        scope.$.apps.closeApp(step.app);
+        if (!step.closedApp)
+        {
+            scope.$.apps.closeApp(step.app);
+            step.closedApp = true;
+        }
         return highlightStepTarget($targetNav, step, popoverOptions);
     },
     click: function(step)
@@ -251,6 +255,7 @@ function highlightStepTarget($target, step, popoverOptions)
     }
     ensureStepScope(step, (scope) =>
     {
+        if(step !== currentStep) return;
         if(typeof $target === 'function') $target = $target(scope);
         $target = $target.first();
         if(!$target.length) return console.error(`[TUTORIAL] Cannot find target for step "${step.guide.title || step.guide.name} > ${step.task.title || step.task.name} > ${step.title}"`, step);
@@ -455,6 +460,9 @@ function goToNextStep(step)
     else if(step.type === 'saveForm' && step.$form)
     {
         step.$form[0].submit();
+    } else if(step.type === 'openApp')
+    {
+        step.closedApp = false;
     }
 
     setTimeout(() => activeNextStep(step), 200);
