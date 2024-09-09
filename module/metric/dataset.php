@@ -861,6 +861,7 @@ class dataset
             ->andWhere('t1.deleted')->eq('0')
             ->andWhere('t3.deleted')->eq('0')
             ->andWhere('t4.deleted')->eq('0')
+            ->andWhere('t1.parent')->ne('-1')
             ->fetchAll();
 
         return $this->defaultWhere($stmt, 't1');
