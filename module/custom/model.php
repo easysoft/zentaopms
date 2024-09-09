@@ -451,7 +451,7 @@ class customModel extends model
 
         /* 获取自定义过的导航。 */
         $customKey  = $isHomeMenu ? $app->tab . '-home' : ($module == 'main' ? $app->tab : $app->tab . '-' . $module);
-        $customMenu = isset($config->customMenu->{$customKey}) ? $config->customMenu->{$customKey}: array();
+        $customMenu = (isset($config->customMenu->{$customKey}) && !commonModel::isTutorialMode()) ? $config->customMenu->{$customKey}: array();
 
         if(!empty($customMenu) && is_string($customMenu) && substr($customMenu, 0, 1) === '[') $customMenu = json_decode($customMenu);
         if($module == 'my' && empty($config->global->scoreStatus)) unset($allMenu->score);

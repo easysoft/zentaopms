@@ -622,7 +622,7 @@ class commonModel extends model
 
         $menuOrder     = array();
         $hasCustomMenu = false;
-        if(isset($config->customMenu->nav) && !$useDefault)
+        if(isset($config->customMenu->nav) && !$useDefault && !commonModel::isTutorialMode())
         {
             $items = json_decode($config->customMenu->nav);
             foreach($items as $item) $menuOrder[$item->order] = $item->name;
