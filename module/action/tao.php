@@ -532,6 +532,9 @@ class actionTao extends actionModel
             case 'demand':
                 $paramString = "demandID={$action->extra}";
                 break;
+            case 'epic':
+                $paramString = "storyID={$action->extra}";
+                break;
         }
 
         return $paramString;

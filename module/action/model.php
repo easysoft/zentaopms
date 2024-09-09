@@ -198,6 +198,7 @@ class actionModel extends model
             if(($actionName == 'finished' && $objectType == 'todo') || ($actionName == 'closed' && in_array($action->objectType, array('story', 'demand'))) || ($actionName == 'resolved' && $action->objectType == 'bug')) $this->actionTao->processAppendLinkByExtra($action);
             if($actionName == 'distributed' && $objectType == 'story') $this->actionTao->processActionExtra(TABLE_DEMAND, $action, 'title', 'demand', 'view', false, $this->config->vision != 'or' ? false : true);
 
+            if(in_array($actionName, array('retracted', 'restored')) && $action->objectType == 'demand') $this->actionTao->processActionExtra(TABLE_STORY, $action, 'title', 'epic', 'view');
             if(in_array($actionName, array('retracted', 'restored')) && $action->objectType != 'demand') $this->actionTao->processActionExtra(TABLE_STORY, $action, 'title', 'story', 'storyView');
             if(in_array($actionName, array('totask', 'linkchildtask', 'unlinkchildrentask', 'linkparenttask', 'unlinkparenttask', 'deletechildrentask', 'converttotask')) && $action->objectType != 'feedback') $this->actionTao->processActionExtra(TABLE_TASK, $action, 'name', 'task', 'view');;
             if(in_array($actionName, array('linkchildstory', 'unlinkchildrenstory', 'linkparentstory', 'unlinkparentstory', 'deletechildrenstory', 'createchildrenstory'))) $this->actionTao->processActionExtra(TABLE_STORY, $action, 'title', 'story', 'storyView');
