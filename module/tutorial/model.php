@@ -1850,16 +1850,7 @@ class tutorialModel extends model
      */
     public function getPrograms(): array
     {
-        $program = $this->getProject();
-        $program->id      = 1;
-        $program->name    = 'Test program';
-        $program->project = 0;
-        $program->type    = 'program';
-        $program->parent  = 0;
-        $program->path    = ',1,';
-        $program->grade   = 1;
-
-        return array(1 => $program);
+        return array(1 => $this->getProgram());
     }
 
     /**
