@@ -15,7 +15,6 @@ class manageLineTester extends tester
         $form->dom->manageLineBtn->click();
         //设置表单字段
         if (isset($line->name))    $form->dom->modules_0->setValue($line->name);
-       // if (isset($line->program)) $form->dom->programs[0]->picker($line->program);
         $form->dom->btn($this->lang->save)->click();
         $form->wait(2);
         if ($form->dom->lineDialog === false)
@@ -35,14 +34,18 @@ class manageLineTester extends tester
      * 删除产品线
      * delete product line
      *
+     * @param  $line
      * @return mixed
      */
     public function delLine($line)
     {
         $form = $this->initForm('product', 'all', array(), 'appIframe-product');
         $form->dom->manageLineBtn->click();
+        $form->wait(1);
         $form->dom->delNewLineBtn->click();
-        var_dump($form->dom->newLineName->getText());
+        $form->wait(1);
+        $form->dom->confirm->click();
+        $form->wait(1);
         return ($form->dom->newLineName->getText() != $line->name) ? $this->success('删除成功') : $this->failed('删除失败');
     }
 }
