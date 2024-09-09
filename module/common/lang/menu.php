@@ -313,7 +313,6 @@ $lang->waterfall->menuOrder[60] = 'doc';
 $lang->waterfall->menuOrder[65] = 'build';
 $lang->waterfall->menuOrder[70] = 'release';
 $lang->waterfall->menuOrder[80] = 'dynamic';
-$lang->waterfall->menuOrder[90] = 'settings';
 
 $lang->waterfall->menu->programplan['subMenu'] = new stdclass();
 $lang->waterfall->menu->programplan['subMenu']->lists = array('link' => "{$lang->stage->list}|programplan|browse|projectID=%s&productID=0&type=lists", 'alias' => 'create');
