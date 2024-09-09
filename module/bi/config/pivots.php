@@ -627,7 +627,6 @@ $config->bi->builtin->pivots[] = array
 select
     t1.project,
     t3.name as projectname,
-    t3.status as projectstatus,
     t2.status,
     t1.name as executionname,
     t1.status as executionstatus,
@@ -675,33 +674,33 @@ EOT,
     ),
     'fields'    => array
     (
-        'project'       => array('object' => 'project', 'field' => 'id', 'type' => 'number'),
-        'projectname'   => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
-        'status'        => array('object' => 'task', 'field' => 'status', 'type' => 'option'),
-        'executionname' => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
-        'execution'     => array('object' => 'project', 'field' => 'id', 'type' => 'number'),
-        'taskID'        => array('object' => 'task', 'field' => '', 'type' => 'object'),
-        'projectstatus' => array('object' => 'task', 'field' => '', 'type' => 'object'),
-        'timeout'       => array('object' => 'task', 'field' => '', 'type' => 'number')
+        'project'         => array('object' => 'project', 'field' => 'id', 'type' => 'number'),
+        'projectname'     => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
+        'status'          => array('object' => 'task', 'field' => 'status', 'type' => 'option'),
+        'executionname'   => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
+        'execution'       => array('object' => 'project', 'field' => 'id', 'type' => 'number'),
+        'taskID'          => array('object' => 'task', 'field' => '', 'type' => 'object'),
+        'executionstatus' => array('object' => 'task', 'field' => '', 'type' => 'object'),
+        'timeout'         => array('object' => 'task', 'field' => '', 'type' => 'number')
     ),
     'langs'     => array
     (
-        'project'       => array('zh-cn' => '项目ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'projectname'   => array('zh-cn' => '项目名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'status'        => array('zh-cn' => '状态', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'executionname' => array('zh-cn' => '执行名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'execution'     => array('zh-cn' => '执行ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'taskID'        => array('zh-cn' => '不同状态任务', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'projectstatus' => array('zh-cn' => 'projectstatus', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'timeout'       => array('zh-cn' => 'timeout', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '')
+        'project'         => array('zh-cn' => '项目ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'projectname'     => array('zh-cn' => '项目名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'status'          => array('zh-cn' => '任务状态', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'executionname'   => array('zh-cn' => '执行名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'execution'       => array('zh-cn' => '执行ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'taskID'          => array('zh-cn' => '不同状态任务', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'executionstatus' => array('zh-cn' => 'executionstatus', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'timeout'         => array('zh-cn' => 'timeout', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '')
     ),
     'vars'      => array
     (
-        'varName'     => array('project', 'status', 'beginDate', 'endDate'),
-        'showName'    => array('项目列表', '执行状态', '执行起始日期', '执行结束日期'),
-        'requestType' => array('select', 'select', 'date', 'date'),
-        'selectList'  => array('project', 'project.status', 'user', 'user'),
-        'default'     => array('', '', '$MONTHBEGIN', '$MONTHEND')
+        'varName'     => array('projectStatus', 'executionStatus', 'project', 'execution', 'beginDate', 'endDate'),
+        'showName'    => array('项目列表', '执行列表', '项目状态', '执行状态', '执行起始日期', '执行结束日期'),
+        'requestType' => array('select', 'select','select', 'select', 'date', 'date'),
+        'selectList'  => array('project.status', 'execution.status', 'project', 'execution', '', ''),
+        'default'     => array('doing', 'doing', '', '', '$MONTHBEGIN', '$MONTHEND')
     ),
     'drills'    => array
     (
@@ -736,7 +735,6 @@ select
     t1.id,
     t3.name as projectname,
     t3.id as project,
-    t3.status as projectstatus,
     t1.name as executionname,
     t1.status as executionstatus,
     t1.id as execution,
@@ -778,33 +776,33 @@ EOT,
     ),
     'fields'    => array
     (
-        'id'            => array('object' => 'project', 'field' => 'id', 'type' => 'number'),
-        'projectname'   => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
-        'project'       => array('object' => 'project', 'field' => 'id', 'type' => 'number'),
-        'executionname' => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
-        'execution'     => array('object' => 'project', 'field' => 'name', 'type' => 'object'),
-        'type'          => array('object' => 'task', 'field' => 'type', 'type' => 'option'),
-        'taskID'        => array('object' => 'task', 'field' => '', 'type' => 'object'),
-        'projectstatus' => array('object' => 'task', 'field' => '', 'type' => 'object')
+        'id'              => array('object' => 'project', 'field' => 'id', 'type' => 'number'),
+        'projectname'     => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
+        'project'         => array('object' => 'project', 'field' => 'id', 'type' => 'number'),
+        'executionname'   => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
+        'execution'       => array('object' => 'project', 'field' => 'name', 'type' => 'object'),
+        'type'            => array('object' => 'task', 'field' => 'type', 'type' => 'option'),
+        'taskID'          => array('object' => 'task', 'field' => '', 'type' => 'object'),
+        'executionstatus' => array('object' => 'task', 'field' => '', 'type' => 'object')
     ),
     'langs'     => array
     (
-        'id'            => array('zh-cn' => '项目ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'projectname'   => array('zh-cn' => '项目名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'project'       => array('zh-cn' => '项目ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'executionname' => array('zh-cn' => '执行名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'execution'     => array('zh-cn' => '执行ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'type'          => array('zh-cn' => '任务类型', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'taskID'        => array('zh-cn' => '不同类型任务', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'projectstatus' => array('zh-cn' => 'projectstatus', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '')
+        'id'              => array('zh-cn' => '项目ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'projectname'     => array('zh-cn' => '项目名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'project'         => array('zh-cn' => '项目ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'executionname'   => array('zh-cn' => '执行名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'execution'       => array('zh-cn' => '执行ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'type'            => array('zh-cn' => '任务类型', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'taskID'          => array('zh-cn' => '不同类型任务', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'executionstatus' => array('zh-cn' => 'executionstatus', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '')
     ),
     'vars'      => array
     (
-        'varName'     => array('project', 'status', 'beginDate', 'endDate'),
-        'showName'    => array('项目列表', '执行状态', '执行起始日期', '执行结束日期'),
-        'requestType' => array('select', 'select', 'date', 'date'),
-        'selectList'  => array('project', 'project.status', 'user', 'user'),
-        'default'     => array('', '', '$MONTHBEGIN', '$MONTHEND')
+        'varName'     => array('projectStatus', 'executionStatus', 'project', 'execution', 'beginDate', 'endDate'),
+        'showName'    => array('项目状态', '执行状态', '项目列表', '执行列表', '执行起始日期', '执行结束日期'),
+        'requestType' => array('select', 'select', 'select', 'select', 'date', 'date'),
+        'selectList'  => array('project.status', 'execution.status', 'project', 'execution', 'user', 'user'),
+        'default'     => array('doing', 'doing', '', '', '$MONTHBEGIN', '$MONTHEND')
     ),
     'drills'    => array
     (
@@ -881,33 +879,33 @@ EOT,
     ),
     'fields'    => array
     (
-        'id'            => array('object' => 'project', 'field' => 'id', 'type' => 'number'),
-        'projectname'   => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
-        'project'       => array('object' => 'project', 'field' => 'id', 'type' => 'number'),
-        'executionname' => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
-        'execution'     => array('object' => 'project', 'field' => 'name', 'type' => 'object'),
-        'assignedTo'    => array('object' => 'task', 'field' => 'assignedTo', 'type' => 'user'),
-        'taskID'        => array('object' => 'team', 'field' => '', 'type' => 'number'),
-        'projectstatus' => array('object' => 'team', 'field' => '', 'type' => 'string')
+        'id'              => array('object' => 'project', 'field' => 'id', 'type' => 'number'),
+        'projectname'     => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
+        'project'         => array('object' => 'project', 'field' => 'id', 'type' => 'number'),
+        'executionname'   => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
+        'execution'       => array('object' => 'project', 'field' => 'name', 'type' => 'object'),
+        'assignedTo'      => array('object' => 'task', 'field' => 'assignedTo', 'type' => 'user'),
+        'taskID'          => array('object' => 'team', 'field' => '', 'type' => 'number'),
+        'executionstatus' => array('object' => 'project', 'field' => 'status', 'type' => 'option')
     ),
     'langs'     => array
     (
-        'id'            => array('zh-cn' => 'id', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'projectname'   => array('zh-cn' => '项目名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'project'       => array('zh-cn' => '项目ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'executionname' => array('zh-cn' => '执行名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'execution'     => array('zh-cn' => '执行ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'assignedTo'    => array('zh-cn' => '指派给', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'taskID'        => array('zh-cn' => '人员被指派任务', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'projectstatus' => array('zh-cn' => 'projectstatus', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '')
+        'id'              => array('zh-cn' => 'id', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'projectname'     => array('zh-cn' => '项目名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'project'         => array('zh-cn' => '项目ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'executionname'   => array('zh-cn' => '执行名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'execution'       => array('zh-cn' => '执行ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'assignedTo'      => array('zh-cn' => '指派给', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'taskID'          => array('zh-cn' => '人员被指派任务', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'executionstatus' => array('zh-cn' => 'executionstatus', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '')
     ),
     'vars'      => array
     (
-        'varName'     => array('project', 'status', 'beginDate', 'endDate'),
-        'showName'    => array('项目列表', '执行状态', '执行起始日期', '执行结束日期'),
-        'requestType' => array('select', 'select', 'date', 'date'),
-        'selectList'  => array('project', 'project.status', 'user', 'user'),
-        'default'     => array('', '', '$MONTHBEGIN', '$MONTHEND')
+        'varName'     => array('projectStatus', 'executionStatus', 'project', 'execution', 'beginDate', 'endDate'),
+        'showName'    => array('项目状态', '执行状态', '项目列表', '执行列表', '执行起始日期', '执行结束日期'),
+        'requestType' => array('select', 'select', 'select', 'select', 'date', 'date'),
+        'selectList'  => array('project.status', 'execution.status', 'project', 'execution', 'user', 'user'),
+        'default'     => array('doing', 'doing', '', '', '$MONTHBEGIN', '$MONTHEND')
     ),
     'drills'    => array
     (
@@ -946,7 +944,7 @@ select
  t2.execution as execution,
  t2.finishedBy,
  t2.id as taskID,
- t1.status as projectstatus
+ t1.status as executionstatus
 from zt_project as t1
 left join zt_task as t2 on t1.id=t2.execution
 left join zt_project as t3 on t1.project=t3.id
@@ -955,10 +953,13 @@ where t1.deleted='0'
 and t1.type in ('sprint','stage')
 and t2.deleted='0'
 and t2.finishedBy!=''
+and (case when \$projectStatus='' then 1=1 else t3.status=\$projectStatus end)
+and (case when \$executionStatus='' then 1=1 else t1.status=\$executionStatus end)
 and (case when \$project='' then 1 else t3.id=\$project end)
-and (case when \$status='' then 1 else t1.status=\$status end)
+and (case when \$execution='' then 1=1 else t1.id=\$execution end)
 and (case when \$dept='' then 1 else t4.dept=\$dept end)
 and (case when \$user='' then 1 else t2.finishedBy=\$user end)
+and not (\$projectStatus='' and \$executionStatus='' and \$project='' and \$execution='' and \$dept='' and \$user='')
 EOT,
     'settings'  => array
     (
@@ -973,40 +974,42 @@ EOT,
     ),
     'filters'   => array
     (
+        array('from' => 'query', 'field' => 'projectStatus', 'name' => '项目状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => 'doing'),
+        array('from' => 'query', 'field' => 'executionStatus', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'execution.status', 'default' => 'doing'),
         array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
-        array('from' => 'query', 'field' => 'status', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => ''),
-        array('field' => 'dept', 'name' => '完成者所在部门', 'type' => 'select', 'typeOption' => 'dept', 'default' => '', 'from' => 'query'),
-        array('field' => 'user', 'name' => '完成者', 'type' => 'select', 'typeOption' => 'user', 'default' => '', 'from' => 'query')
+        array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => ''),
+        array('from' => 'query', 'field' => 'dept', 'name' => '完成者所在部门', 'type' => 'select', 'typeOption' => 'dept', 'default' => ''),
+        array('from' => 'query', 'field' => 'user', 'name' => '完成者', 'type' => 'select', 'typeOption' => 'user', 'default' => '')
     ),
     'fields'    => array
     (
-        'id'            => array('object' => 'project', 'field' => 'id', 'type' => 'number'),
-        'projectname'   => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
-        'project'       => array('object' => 'project', 'field' => 'id', 'type' => 'number'),
-        'executionname' => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
-        'execution'     => array('object' => 'project', 'field' => 'name', 'type' => 'object'),
-        'finishedBy'    => array('object' => 'task', 'field' => 'finishedBy', 'type' => 'user'),
-        'taskID'        => array('object' => 'task', 'field' => '', 'type' => 'number'),
-        'projectstatus' => array('object' => 'task', 'field' => '', 'type' => 'string')
+        'id'              => array('object' => 'project', 'field' => 'id', 'type' => 'number'),
+        'projectname'     => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
+        'project'         => array('object' => 'project', 'field' => 'id', 'type' => 'number'),
+        'executionname'   => array('object' => 'project', 'field' => 'name', 'type' => 'string'),
+        'execution'       => array('object' => 'project', 'field' => 'name', 'type' => 'object'),
+        'finishedBy'      => array('object' => 'task', 'field' => 'finishedBy', 'type' => 'user'),
+        'taskID'          => array('object' => 'task', 'field' => '', 'type' => 'number'),
+        'executionstatus' => array('object' => 'task', 'field' => '', 'type' => 'string')
     ),
     'langs'     => array
     (
-        'id'            => array('zh-cn' => 'id', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'projectname'   => array('zh-cn' => '项目名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'project'       => array('zh-cn' => '项目ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'executionname' => array('zh-cn' => '执行名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'execution'     => array('zh-cn' => '执行ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'finishedBy'    => array('zh-cn' => '由谁完成', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'taskID'        => array('zh-cn' => '不同完成者完成的任务', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-        'projectstatus' => array('zh-cn' => 'projectstatus', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '')
+        'id'              => array('zh-cn' => 'id', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'projectname'     => array('zh-cn' => '项目名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'project'         => array('zh-cn' => '项目ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'executionname'   => array('zh-cn' => '执行名称', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'execution'       => array('zh-cn' => '执行ID', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'finishedBy'      => array('zh-cn' => '由谁完成', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'taskID'          => array('zh-cn' => '不同完成者完成的任务', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'executionstatus' => array('zh-cn' => 'executionstatus', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '')
     ),
     'vars'      => array
     (
-        'varName'     => array('project', 'status', 'beginDate', 'endDate'),
-        'showName'    => array('项目列表', '执行状态', '执行起始日期', '执行结束日期'),
-        'requestType' => array('select', 'select', 'date', 'date'),
-        'selectList'  => array('project', 'project.status', 'user', 'user'),
-        'default'     => array('', '', '$MONTHBEGIN', '$MONTHEND')
+        'varName'     => array('projectStatus', 'executionStatus', 'project', 'execution', 'beginDate', 'endDate'),
+        'showName'    => array('项目状态', '执行状态', '项目列表', '执行列表', '执行起始日期', '执行结束日期'),
+        'requestType' => array('select', 'select', 'select', 'select', 'date', 'date'),
+        'selectList'  => array('project.status', 'execution.status', 'project', 'execution', 'user', 'user'),
+        'default'     => array('doing', 'doing', '', '', '$MONTHBEGIN', '$MONTHEND')
     ),
     'drills'    => array
     (
