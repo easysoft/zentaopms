@@ -65,6 +65,12 @@ const stepPresenters =
             };
             scope.$(scope).on('resize', checkOpenAppStep);
             scope.$('#menuMoreBtn').on('shown hidden', checkOpenAppStep);
+            $menuNav.append([
+                '<style>',
+                '.tutorial-not-open-app #menuNav .nav > li > a {pointer-events:none!important;}',
+                '.tutorial-not-open-app #menuNav .nav > li > a.active, .tutorial-not-open-app #menuNav .nav > li > a#menuMoreBtn {pointer-events:auto!important;}',
+                '</style>'
+            ].join('\n'));
             $menuNav.data('tutorial.checkOpenAppStep', true);
         }
 
@@ -613,6 +619,8 @@ function presentStep(step)
     const presenter = stepPresenters[step.type];
     if(config.debug) showLog('Present step', step, null, {presenter});
     if(presenter) presenter(step);
+
+    getHomeScope().$('body').toggleClass('tutorial-not-open-app', step.type !== 'openApp');
 }
 
 function activeTaskStep(guideName, taskName, stepIndex)
