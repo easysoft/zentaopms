@@ -1072,7 +1072,7 @@ class user extends control
     {
         $contactList = $this->user->getContactLists();
         if(empty($contactList)) return false;
-        return print(html::select('contactListMenu', $contactList, '', "class='form-control' onchange=\"setMailto('$dropdownName', this.value)\""));
+        return print(html::select('contactListMenu', array('' => '') + $contactList, '', "class='form-control' onchange=\"setMailto('$dropdownName', this.value)\""));
     }
 
     /**
