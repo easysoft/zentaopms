@@ -1700,7 +1700,7 @@ $lang->tutorial->programManage->addStakeholder->step3->name = '填写表单';
 
 $lang->tutorial->programManage->addStakeholder->step4 = new stdClass();
 $lang->tutorial->programManage->addStakeholder->step4->name = '保存表单';
-$lang->tutorial->programManage->addStakeholder->step4->desc = '保存后白名单人员可以查看项目集';
+$lang->tutorial->programManage->addStakeholder->step4->desc = '保存后干系人可以查看项目集';
 
 $lang->tutorial->feedbackManage = new stdClass();
 $lang->tutorial->feedbackManage->title = '反馈管理教程';
