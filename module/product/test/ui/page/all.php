@@ -12,9 +12,8 @@ class allPage extends page
             /*维护产线*/
             'lineDialog'    => "//*[@id='manageLineModal']/div",
             'manageLineBtn' => "//*[@id='actionBar']/button[2]",
-            'lineName'      => "//*[@id='zin_product_manageline_form']/div[2]/div/div/input",
-            'lineprogram'   => "//*[@id='zin_product_manageline_form']/div[2]/div/div[2]/div/div/input",
-            'delLineBtn'    => "//*[@id='treeEditor-product-manageline']/li[1]/div/nav/a",
+            'newLineName'   => "//*[@id='treeEditor-product-manageline']/li[last()]/div/div/div",
+            'delNewLineBtn' => "//*[@id='treeEditor-product-manageline']/li[last()]/div/nav/a",
             'confirm'       => "//button[@z-key='confirm']",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
