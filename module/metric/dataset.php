@@ -850,6 +850,22 @@ class dataset
         return $this->defaultWhere($stmt, 't1');
     }
 
+    public function getTasksWithBuildInfo($fieldList)
+    {
+        $stmt = $this->dao->select($fieldList)->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_BUG)->alias('t2')->on('t1.fromBug = t2.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.execution=t3.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t3.project=t4.id')
+            ->leftJoin(TABLE_BUILD)->alias('t5')->on('t5.execution=t3.id')
+            ->where('t3.type')->in('sprint,stage,kanban')
+            ->andWhere('t1.deleted')->eq('0')
+            ->andWhere('t3.deleted')->eq('0')
+            ->andWhere('t4.deleted')->eq('0')
+            ->fetchAll();
+
+        return $this->defaultWhere($stmt, 't1');
+    }
+
     /**
      * 获取产品线数据。
      * Get product lines.
