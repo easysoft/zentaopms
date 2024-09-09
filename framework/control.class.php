@@ -594,7 +594,7 @@ class control extends baseControl
         if(!empty($this->app->installing) || !empty($this->app->upgrading)) return array();
 
         $moduleName = $moduleName ? $moduleName : $this->app->rawModule;
-        $methodName = $methodName ? $moduleName : $this->app->rawMethod;
+        $methodName = $methodName ? $methodName : $this->app->rawMethod;
 
         $this->loadModel('flow');
         $this->loadModel('workflowfield');

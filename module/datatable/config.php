@@ -1,13 +1,14 @@
 <?php
-$config->datatable->moduleAlias['product-browse']     = 'story';
-$config->datatable->moduleAlias['execution-story']    = 'story';
-$config->datatable->moduleAlias['execution-task']     = 'task';
-$config->datatable->moduleAlias['program-project']    = 'project';
-$config->datatable->moduleAlias['project-bug']        = 'bug';
-$config->datatable->moduleAlias['execution-bug']      = 'bug';
-$config->datatable->moduleAlias['execution-build']    = 'build';
-$config->datatable->moduleAlias['project-build']      = 'build';
-$config->datatable->moduleAlias['execution-testcase'] = 'testcase';
+$config->datatable->moduleAlias['product-browse']        = 'story';
+$config->datatable->moduleAlias['execution-story']       = 'story';
+$config->datatable->moduleAlias['execution-task']        = 'task';
+$config->datatable->moduleAlias['program-project']       = 'project';
+$config->datatable->moduleAlias['project-bug']           = 'bug';
+$config->datatable->moduleAlias['execution-bug']         = 'bug';
+$config->datatable->moduleAlias['execution-build']       = 'build';
+$config->datatable->moduleAlias['project-build']         = 'build';
+$config->datatable->moduleAlias['execution-testcase']    = 'testcase';
+$config->datatable->moduleAlias['projectrelease-browse'] = 'release';
 
 $config->datatable->noProductModule = ',review,';
 

@@ -180,8 +180,26 @@ class formPanel extends panel
         $layout = $this->prop('layout');
         if($layout == 'grid') return null;
 
+        $moduleName = $app->rawModule;
+        $methodName = $app->rawMethod;
+
+        /* 项目发布和项目版本用自己的工作流。 */
+        if($moduleName == 'projectrelease') $moduleName = 'release';
+        if($moduleName == 'projectbuild')
+        {
+            if($methodName == 'browse')
+            {
+                $moduleName = 'execution';
+                $methodName = 'build';
+            }
+            else
+            {
+                $moduleName = 'build';
+            }
+        }
+
         $data      = $this->getData();
-        $fields    = $app->control->appendExtendForm('info', $data);
+        $fields    = $app->control->appendExtendForm('info', $data, $moduleName, $methodName);
         $extraMain = array();
         foreach($fields as $field)
         {

@@ -115,6 +115,10 @@ class form extends fixer
         $moduleName = $moduleName ? $moduleName : $app->rawModule;
         $methodName = $methodName ? $moduleName : $app->rawMethod;
 
+        /* 项目发布和项目版本用自己的工作流。 */
+        if($moduleName == 'projectrelease') $moduleName = 'release';
+        if($moduleName == 'projectbuild')   $moduleName = 'build';
+
         $flow = $app->control->loadModel('workflow')->getByModule($moduleName);
         if(!$flow) return $configObject;
 
