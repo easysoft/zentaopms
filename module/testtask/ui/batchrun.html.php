@@ -68,7 +68,7 @@ foreach($cases as $caseID => $case)
                     (
                         set::className($stepClass),
                         set::hint(true),
-                        $currentID . '、' . $step->desc
+                        $currentID . '、' . htmlspecialchars_decode($step->desc)
                     )
                 ),
                 $step->type != 'group' ? h::td
@@ -78,7 +78,7 @@ foreach($cases as $caseID => $case)
                     span
                     (
                         set::hint(true),
-                        $lang->testcase->stepExpect . ':' . $step->expect
+                        $lang->testcase->stepExpect . ':' . htmlspecialchars_decode($step->expect)
                     )
                 ) : null,
                 $step->type != 'group' ? h::td
