@@ -14,6 +14,8 @@ class caselibTao extends caselibModel
     {
         $line  = 1;
         $cases = array();
+        if($this->config->edition != 'open') $fieldList = $this->loadModel('workflowaction')->getFields('caselib', 'showimport');
+
         foreach($data->lib as $key => $lib)
         {
             $caseData = new stdclass();
@@ -27,6 +29,18 @@ class caselibTao extends caselibModel
             $caseData->keywords     = $data->keywords[$key];
             $caseData->frequency    = 1;
             $caseData->precondition = $data->precondition[$key];
+
+            /* 追加工作流字段，保存到数据库。 */
+            if($this->config->edition != 'open')
+            {
+                foreach($fieldList as $field)
+                {
+                    if(empty($field->show)) continue;
+
+                    $fieldValue = $data->{$field->field}[$key];
+                    $caseData->{$field->field} = $fieldValue;
+                }
+            }
 
             if(isset($this->config->testcase->create->requiredFields))
             {
