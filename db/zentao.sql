@@ -13213,6 +13213,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflow` (
   `module` varchar(30) NOT NULL DEFAULT '',
   `table` varchar(50) NOT NULL DEFAULT '',
   `name` varchar(30) NOT NULL DEFAULT '',
+  `icon` varchar(30) NOT NULL DEFAULT 'flow',
   `titleField` varchar(30) NOT NULL DEFAULT '',
   `contentField` text NULL,
   `flowchart` text NULL,

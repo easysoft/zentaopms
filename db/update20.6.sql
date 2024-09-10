@@ -1,5 +1,8 @@
 ALTER TABLE `zt_workflow` ADD `belong` varchar(50) NOT NULL DEFAULT '' AFTER `buildin`;
 
+ALTER TABLE `zt_workflow` ADD `icon` varchar(30) DEFAULT 'flow' NOT NULL AFTER `name`;
+UPDATE `zt_workflow` SET `icon` = 'flow' WHERE `icon` = '';
+
 ALTER TABLE `zt_pivot` ADD `mode` enum('text', 'builder') not NULL default 'builder' AFTER `driver`;
 UPDATE `zt_pivot` SET `mode` = 'text';
 
