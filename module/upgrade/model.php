@@ -9891,10 +9891,10 @@ class upgradeModel extends model
 
         $defaultData = array('type' => 'mediumint', 'length' => '8', 'control' => 'select', 'readonly' => 1, 'buildin' => 1, 'role' => 'default');
         $fields      = array();
+        $fields['execution'] = "ALTER TABLE %table% ADD `execution` mediumint(8) unsigned NOT NULL DEFAULT 0 AFTER `id`";
+        $fields['project']   = "ALTER TABLE %table% ADD `project` mediumint(8) unsigned NOT NULL DEFAULT 0 AFTER `id`";
+        $fields['product']   = "ALTER TABLE %table% ADD `product` mediumint(8) unsigned NOT NULL DEFAULT 0 AFTER `id`";
         $fields['program']   = "ALTER TABLE %table% ADD `program` mediumint(8) unsigned NOT NULL DEFAULT 0 AFTER `id`";
-        $fields['product']   = "ALTER TABLE %table% ADD `product` mediumint(8) unsigned NOT NULL DEFAULT 0 AFTER `program`";
-        $fields['project']   = "ALTER TABLE %table% ADD `project` mediumint(8) unsigned NOT NULL DEFAULT 0 AFTER `product`";
-        $fields['execution'] = "ALTER TABLE %table% ADD `execution` mediumint(8) unsigned NOT NULL DEFAULT 0 AFTER `project`";
         foreach($flows as $flow)
         {
             if(!isset($flowTableDesc[$flow->table])) continue;
