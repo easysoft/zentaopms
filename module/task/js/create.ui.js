@@ -540,7 +540,7 @@ window.removeTeamMember = function()
         if(!isNaN(estimate) && estimate > 0) totalEstimate += estimate;
     })
 
-    $('#estimate').val(totalEstimate);
+    $("[name='estimate']").val(totalEstimate);
 
     setLineIndex();
 }
