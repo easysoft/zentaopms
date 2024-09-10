@@ -55,4 +55,26 @@ class taskExecutionTester extends tester
         if($this->lang->task->statusList->$status == $statusAfter) return $this->success("批量修改状态为{$status}成功");
         return $this->failed("批量修改状态为{$status}失败");
     }
+
+    /**
+     * 批量指派
+     * Batch assign
+     *
+     * @access public
+     * @return object
+     */
+    public function batchAssign()
+    {
+        $form = $this->initForm('execution', 'task', array('execution' => '2'), 'appIframe-execution');
+        $name = $form->dom->firstName->getText();
+        $form->dom->firstCheckbox->click();
+        $form->dom->assignedToBtn->click();
+        $form->wait(1);
+        $form->dom->users->click();
+        $form->dom->search(array("{$this->lang->task->name},=,{$form->dom->firstName->getText()}"));
+        $form->wait(1);
+        $assignedToAfter = $form->dom->firstAssignedTo->getText();
+        if($assignedToAfter == 'admin') return $this->success('批量指派成功');
+        return $this->failed('批量指派失败');
+    }
 }
