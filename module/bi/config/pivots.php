@@ -2332,7 +2332,7 @@ $config->bi->builtin->pivots[] = array
     'id'        => 1023,
     'name'      => array('zh-cn' => '日志汇总表', 'zh-tw' => '日誌匯總表', 'en' => 'Effort Summary', 'de' => 'Effort Summary', 'fr' => 'Effort Summary'),
     'code'      => 'effortSummary',
-    'desc'      => array('zh-cn' => '查看某个时间段内的日志情况，可以按照部门选择。', 'zh-tw' => '查看某個時間段內的日誌情況，可以按照部門選擇。', 'en' => 'Effort summary of users.', 'de' => 'Effort summary of users', 'fr' => 'Effort summary of users'),
+    'desc'      => array('zh-cn' => '查看某个时间段内的日志情况，可以按照部门选择。', 'zh-tw' => '查看某個時間段內的日誌情況，可以按照部門選擇。', 'en' => 'Effort summary of users within a certain period of time, you can select by department.', 'de' => 'Effort summary of users within a certain period of time, you can select by department.', 'fr' => 'Effort summary of users within a certain period of time, you can select by department.'),
     'dimension' => '1',
     'driver'    => 'mysql',
     'group'     => '62',
