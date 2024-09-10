@@ -355,7 +355,7 @@ class executionZen extends execution
         if($products) $productID = key($products);
         foreach($products as $product) $productNames[$product->id] = $product->name;
 
-        $plans    = $this->execution->getPlans(array_keys($products));
+        $plans    = $this->execution->getPlans(array_keys($products), 'skipParent|withMainPlan|unexpired|noclosed|sortedByDate', $execution->id);
         $allPlans = array();
         if(!empty($plans))
         {
