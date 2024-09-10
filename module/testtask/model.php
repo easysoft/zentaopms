@@ -1038,7 +1038,7 @@ class testtaskModel extends model
     {
         $orderBy = $this->addPrefixToOrderBy($orderBy);
 
-        return $this->dao->select('t2.*, t1.*, t3.title AS storyTitle, t2.status AS caseStatus')->from(TABLE_TESTRUN)->alias('t1')
+        return $this->dao->select('t2.*, t1.*, t3.title AS storyTitle, t2.status AS caseStatus,t2.version AS caseVersion')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
             ->where('t1.task')->eq($taskID)
