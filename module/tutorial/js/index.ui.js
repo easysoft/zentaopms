@@ -675,3 +675,14 @@ window.handleClickTask = function(event)
     const guideName = $task.closest('.tutorial-guide').data('name');
     activeTask(guideName, taskName);
 };
+
+if(!zui.store.session.get('tutorialTipShowed'))
+{
+    $('body').addClass('tutorial-tip-show');
+    $('#sidebar').on('click.tutorial-tip', () =>
+    {
+        $('body').removeClass('tutorial-tip-show');
+        $('#sidebar').off('click.tutorial-tip');
+    });
+    zui.store.session.set('tutorialTipShowed', true);
+}
