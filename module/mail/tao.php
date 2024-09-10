@@ -258,6 +258,7 @@ class mailTao extends mailModel
         if($objectType == 'mr') return '';
 
         $domain     = zget($this->config->mail, 'domain', common::getSysURL());
+        $domain     = rtrim($domain, '/');
         $mailTitle  = strtoupper($objectType) . ' #' . $object->id;
         $modulePath = $this->app->getModulePath('', $objectType);
         if(!file_exists($modulePath)) return '';
@@ -301,6 +302,7 @@ class mailTao extends mailModel
         $this->app->loadLang('mr');
         $title  = $this->getObjectTitle($object, 'mr');
         $domain = zget($this->config->mail, 'domain', common::getSysURL());
+        $domain = rtrim($domain, '/');
         $MRLink = $domain . helper::createLink('mr', 'view', "id={$object->id}");
         if($action == 'compilefail') return sprintf($this->lang->mr->failMessage, $MRLink, $title);
         if($action == 'compilepass')
