@@ -666,16 +666,19 @@ class docModel extends model
             ->andWhere("(status = 'normal' or (status = 'draft' and addedBy='{$this->app->user->account}'))")
             ->fetchAll('id');
 
+        $docs = $this->processCollector($docs);
+
         foreach($docs as &$doc)
         {
-            $doc->lib    = (int)$doc->lib;
-            $doc->module = (int)$doc->module;
-            $doc->module = boolval($doc->deleted);
+            $doc->lib         = (int)$doc->lib;
+            $doc->module      = (int)$doc->module;
+            $doc->deleted     = boolval($doc->deleted);
+            $doc->isCollector = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false;
             unset($doc->content);
             unset($doc->draft);
         }
 
-        return $this->processCollector($docs);
+        return $docs;
     }
 
     /**
