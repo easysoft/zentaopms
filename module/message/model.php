@@ -290,6 +290,16 @@ class messageModel extends model
             $toList = trim($toList, ',');
         }
 
+        /* 非内置工作流使用工作流的toList。 */
+        if($this->config->edition != 'open')
+        {
+            $flow = $this->loadModel('workflow')->getByModule($objectType);
+            if($flow && !$flow->buildin)
+            {
+                $toList = $this->loadModel('flow')->getToList($flow, $object->id);
+            }
+        }
+
         return trim($toList, ',');
     }
 
