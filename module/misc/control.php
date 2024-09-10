@@ -88,7 +88,7 @@ class misc extends control
         $lang   = str_replace('-', '_', $this->app->getClientLang());
         $link   = $website . "/updater-getLatest-{$this->config->version}-$source-$lang-$sn.html";
 
-        $latestVersionList = common::http($link);
+        $latestVersionList = $this->misc->getLatestVersionList($link);
 
         if(!isset($this->config->global->latestVersionList) || $this->config->global->latestVersionList != $latestVersionList)
         {
