@@ -83,7 +83,6 @@ class queryFilterModal extends wg
         $defaultWgList = array('date' => 'datePicker', 'datetime' => 'datetimePicker', 'input' => 'input', 'select' => 'picker');
 
         list($defaultType, $defaultItems, $defaultValue) = array($value['type'], $value['items'], $value['default']);
-        $defaultDisabled = $defaultValue = 'picker' && empty($defaultItems);
 
         $default = $this->buildControl
         (
