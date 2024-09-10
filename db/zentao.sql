@@ -528,6 +528,8 @@ CREATE TABLE IF NOT EXISTS `zt_screen` (
   `dimension` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `name` varchar(255) NOT NULL DEFAULT '',
   `desc` mediumtext NULL,
+  `acl` enum('open','private') NOT NULL DEFAULT 'open',
+  `whitelist` text NULL,
   `cover` mediumtext NULL,
   `scheme` mediumtext NULL,
   `status` enum('draft','published') NOT NULL DEFAULT 'draft',
