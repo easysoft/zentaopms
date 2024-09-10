@@ -35,6 +35,7 @@ $accountManage->tasks['deptManage']['steps'][] = array(
     'type'   => 'clickNavbar',
     'target' => 'dept',
     'page'   => 'company-browse',
+    'url'    => array('company', 'browse'),
     'title'  => $lang->tutorial->accountManage->deptManage->step3->name,
     'desc'   => $lang->tutorial->accountManage->deptManage->step3->desc
 );
