@@ -49,7 +49,6 @@ dtable
     set::orderBy($orderBy),
     set::customCols(true),
     set::sortLink(createLink('testsuite', 'browse', "productID={$product->id}&type={$type}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
-    set::fixedLeftWidth('0.33'),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::footer(jsRaw("function(){return [{html: '{$summary}', className: 'text-dark'}, 'flex', 'pager'];}")),
     set::footPager(usePager()),

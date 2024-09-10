@@ -28,7 +28,7 @@ $config->testsuite->dtable = new stdclass();
 
 $config->testsuite->dtable->fieldList['id']['name']     = 'id';
 $config->testsuite->dtable->fieldList['id']['title']    = $lang->idAB;
-$config->testsuite->dtable->fieldList['id']['type']     = 'ID';
+$config->testsuite->dtable->fieldList['id']['type']     = 'id';
 $config->testsuite->dtable->fieldList['id']['align']    = 'left';
 $config->testsuite->dtable->fieldList['id']['fixed']    = 'left';
 $config->testsuite->dtable->fieldList['id']['required'] = true;
