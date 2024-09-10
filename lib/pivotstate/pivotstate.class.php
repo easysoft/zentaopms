@@ -381,14 +381,13 @@ class pivotState
      * @access public
      * @return void
      */
-    /*
     public function processQueryFilters()
     {
-        $querys = $this->sqlBuilder->querys;
+        $querys = $this->sqlbuilder->querys;
         $this->clearFilters();
         if(empty($querys)) return;
 
-        if($this->sqlBuilder->checkQuerys() !== true)
+        if($this->sqlbuilder->checkQuerys() !== true)
         {
             $this->resetBuilderError();
             return;
@@ -407,7 +406,6 @@ class pivotState
             $this->filters[] = $filter;
         }
     }
-     */
 
     /**
      * Match field setting from builder.
