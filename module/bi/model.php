@@ -21,10 +21,22 @@ class biModel extends model
             'pivot'     => TABLE_PIVOT,
             'chart'     => TABLE_CHART
         );
+
+        /* IF table have not acl or whitelist field */
+        $object = $this->dao->select('*')->from($table[$objectType])->fetch();
+        if(!isset($object->acl) || !isset($object->whitelist))
+        {
+            $objects = $this->dao->select('id')->from($table[$objectType])
+                ->where('deleted')->eq('0')
+                ->fetchAll('id');
+
+            return array_keys($objects);
+        }
+
+        /* IF table have acl and whitelist field */
         $objects = $this->dao->select('id,createdBy,acl,whitelist')->from($table[$objectType])
             ->where('deleted')->eq('0')
             ->fetchAll('id');
-
         if($this->app->user->admin) return array_keys($objects);
 
         $objectIDList = array();
