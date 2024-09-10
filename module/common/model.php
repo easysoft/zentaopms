@@ -637,15 +637,19 @@ class commonModel extends model
         $items        = array();
         $lastItem     = end($menuOrder);
         $printDivider = false;
+        $prev         = '';
 
         foreach($menuOrder as $key => $group)
         {
             // 如果有自定义菜单，则直接用自定义后的divider分隔符
-            if($hasCustomMenu && $group == 'divider')
+            if($hasCustomMenu && $group == 'divider' && $prev != 'divider')
             {
                 $items[] = 'divider';
+                $prev    = 'divider';
                 continue;
             }
+
+            $prev = $group;
 
             if($group != 'my' && !empty($app->user->rights['acls']['views']) && !isset($app->user->rights['acls']['views'][$group])) continue; // 后台权限分组中没有给导航视图
             if(!isset($lang->mainNav->$group)) continue;
