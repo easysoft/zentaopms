@@ -42,7 +42,11 @@ class messageModel extends model
     {
         $this->loadModel('action');
         $objectTypes = array();
-        foreach($this->config->message->objectTypes as $objectType => $actions) $objectTypes[$objectType] = $this->lang->action->objectTypes[$objectType];
+        foreach($this->config->message->objectTypes as $objectType => $actions)
+        {
+            if(!isset($this->lang->action->objectTypes[$objectType])) continue;
+            $objectTypes[$objectType] = $this->lang->action->objectTypes[$objectType];
+        }
         return $objectTypes;
     }
 
@@ -58,7 +62,11 @@ class messageModel extends model
         $objectActions = array();
         foreach($this->config->message->objectTypes as $objectType => $actions)
         {
-            foreach($actions as $action) $objectActions[$objectType][$action] = $this->lang->message->label->{$action};
+            foreach($actions as $action)
+            {
+                if(!isset($this->lang->message->label->{$action})) continue;
+                $objectActions[$objectType][$action] = $this->lang->message->label->{$action};
+            }
         }
         return $objectActions;
     }

@@ -32,6 +32,7 @@ foreach($lang->message->typeList as $type => $typeName)
 $bodyTrs = array();
 foreach($config->message->objectTypes as $objectType => $actions)
 {
+    if(!isset($objectTypes[$objectType])) continue;
     $bodyTr = array();
     $bodyTr[] = h::td
     (
