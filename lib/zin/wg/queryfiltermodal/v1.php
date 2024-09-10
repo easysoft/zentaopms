@@ -7,6 +7,7 @@ class queryFilterModal extends wg
     protected static array $defineProps = array(
         'data?: array',
         'addData?: array',
+        'defaultOptions?: array',
         'onAdd?: function',
         'onRemove?: function',
         'onChange?: function',
@@ -80,13 +81,15 @@ class queryFilterModal extends wg
         );
 
         $defaultWgList = array('date' => 'datePicker', 'datetime' => 'datetimePicker', 'input' => 'input', 'select' => 'picker');
-        $params = array('name' => 'default', 'value' => $value['default']);
-        if($value['type'] == 'select') $params['items'] = array();
+
+        list($defaultType, $defaultItems, $defaultValue) = array($value['type'], $value['items'], $value['default']);
+        $defaultDisabled = $defaultValue = 'picker' && empty($defaultItems);
+
         $default = $this->buildControl
         (
             'default',
             'basis-48',
-            createWg($defaultWgList[$value['type']], set(array('name' => 'default', 'items' => array(), 'value' => $value['default'])))
+            createWg($defaultWgList[$defaultType], set(array('name' => 'default', 'items' => $defaultItems, 'value' => $defaultValue)))
         );
 
         return formRow

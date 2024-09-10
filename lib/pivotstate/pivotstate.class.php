@@ -907,7 +907,7 @@ class pivotState
      */
     public function getDefaultQueryFilter()
     {
-        return array('field' => '', 'name' => '', 'type' => 'input', 'typeOption' => '', 'default' => '');
+        return array('field' => '', 'name' => '', 'type' => 'input', 'typeOption' => '', 'default' => '', 'items' => array());
     }
 
     /**
