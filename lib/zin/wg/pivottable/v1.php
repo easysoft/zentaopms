@@ -56,7 +56,27 @@ class pivotTable extends wg
         list($cols, $data, $cellSpan, $filters, $onRenderCell, $onCellClick) = $this->prop(array('cols', 'data', 'cellSpan', 'filters', 'onRenderCell', 'onCellClick'));
 
         $filterCount = count($filters);
-        if(empty($onRenderCell)) $onRenderCell = jsRaw('renderCell');
+        if(empty($onRenderCell)) $onRenderCell = jsRaw(<<<JS
+        function(result, {row, col})
+        {
+            if(result && col.setting.colspan)
+            {
+                let values = result.shift();
+                if(typeof(values.type) != 'undefined' && values.type == 'a') values = values.props['children'];
+
+                result.push({className: 'gap-0 px-0'});
+                values.forEach((value, index) =>
+                    result.push({
+                        html: value || !Number.isNaN(value) ? `\${value}` : '&nbsp;',
+                        className: 'flex justify-center items-center h-full w-1/2' + (index == 0 ? ' border-r': ''),
+                        style: 'border-color: var(--dtable-border-color)'
+                    })
+                );
+            }
+
+            return result;
+        }
+        JS);
         return dtable
         (
             setID('designTable'),
@@ -70,7 +90,18 @@ class pivotTable extends wg
             set::onCellClick($onCellClick),
             set::rowKey('ROW_ID'),
             set::plugins(array('header-group', $cellSpan ? 'cellspan' : null)),
-            $cellSpan ? set::getCellSpan(jsRaw('getCellSpan')) : null,
+            $cellSpan ? set::getCellSpan(jsRaw(<<<JS
+            function(cell)
+            {
+                const options = this.options.cellSpanOptions[cell.col.name];
+                if(options)
+                {
+                    const rowSpan = cell.row.data[options.rowspan ?? 'rowspan'] ?? 1;
+                    const colSpan = cell.row.data[options.colspan ?? 'colspan'] ?? 1;
+                    return {rowSpan, colSpan};
+                }
+            }
+            JS)) : null,
             $cellSpan ? set::cellSpanOptions($cellSpan) : null
         );
     }
