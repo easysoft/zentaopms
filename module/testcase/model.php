@@ -1537,7 +1537,7 @@ class testcaseModel extends model
                         preg_match('/^((([0-9]+)[.]([0-9]+))[.]([0-9]+))[.、](.*)$/Uu', $trimmedStep, $out);
                         if(!$out) preg_match('/^(([0-9]+)[.]([0-9]+))[.、](.*)$/Uu', $trimmedStep, $out);
                         if(!$out) preg_match('/^([0-9]+)[.、](.*)$/Uu', $trimmedStep, $out);
-                        if($out)
+                        if($out && !empty(trim($out[1])))
                         {
                             $count  = count($out);
                             $num    = $out[1];
@@ -1589,6 +1589,25 @@ class testcaseModel extends model
                 }
             }
         }
+
+        /* Fix bug#52689. */
+        foreach($stepData as $index => $step)
+        {
+            $descCount   = count($step['desc']);
+            $expectCount = count($step['expect']);
+            if($expectCount > $descCount)
+            {
+                foreach($step['expect'] as $num => $expect)
+                {
+                    if($num > $descCount && $expect['content'])
+                    {
+                        $stepData[$index]['expect'][$descCount]['content'] .= "\n{$expect['content']}";
+                        unset($stepData[$index]['expect'][$num]);
+                    }
+                }
+            }
+        }
+
         return $stepData;
     }
 
