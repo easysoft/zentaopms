@@ -52,7 +52,7 @@ class queryBase extends wg
     protected function buildQueryPanel()
     {
         global $lang;
-        list($title, $titleTip, $sql, $mode, $onQuery, $onSqlChange, $error) = $this->prop(array('title', 'titleTip', 'sql', 'mode', 'onQuery', 'onSqlChange', 'error'));
+        list($title, $sql, $mode, $onQuery, $onSqlChange, $error) = $this->prop(array('title', 'sql', 'mode', 'onQuery', 'onSqlChange', 'error'));
         $headingBlock     = $this->block('heading');
         $formActionsBlock = $this->block('formActions');
         $formFooterBlock  = $this->block('formFooter');
@@ -154,7 +154,7 @@ class queryBase extends wg
     protected function buildFieldSettingsModal()
     {
         global $lang, $app;
-        list($cols, $data, $settings, $tableOptions, $onSaveFields) = $this->prop(array('cols', 'data', 'settings', 'tableOptions', 'onSaveFields'));
+        list($cols, $settings, $tableOptions, $onSaveFields) = $this->prop(array('cols', 'settings', 'tableOptions', 'onSaveFields'));
         if(empty($cols)) return null;
 
         $data = array();
