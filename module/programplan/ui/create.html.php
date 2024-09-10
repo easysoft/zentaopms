@@ -87,7 +87,8 @@ $fnGenerateSubPlanManageFields = function() use ($lang, $planID, $project, $exec
         (
             setClass('flex w-1/2 items-center'),
             div(setClass('font-bold'), $lang->programplan->parallel . ':'),
-            $items
+            $items,
+            html($lang->programplan->parallelTip)
         );
     }
 
