@@ -14,7 +14,7 @@ $user->id->range('1-3');
 $user->account->range('admin, user1, user2');
 $user->password->range('77839ef72f7b71a3815a77d038e267e0');
 $user->realname->range('admin, USER1, USER2');
-$user->gen(2);
+$user->gen(3);
 
 $product = zenData('product');
 $product->id->range('1');
@@ -107,4 +107,7 @@ r($tester->checkTab('doneTab', '2'))         && p('message') && e('doneTab下显
 r($tester->checkTab('closedTab', '2'))       && p('message') && e('closedTab下显示条数正确');       //检查已关闭标签下显示条数
 r($tester->checkTab('cancelTab', '1'))       && p('message') && e('cancelTab下显示条数正确');       //检查已取消标签下显示条数
 r($tester->checkTab('delayedTab', '1'))      && p('message') && e('delayedTab下显示条数正确');      //检查已延期标签下显示条数
+/* 批量修改状态 */
+r($tester->batchEditStatus('closed'))        && p('message') && e('批量修改状态为closed成功');
+r($tester->batchEditStatus('cancel'))        && p('message') && e('批量修改状态为cancel成功');
 $tester->closeBrowser();
