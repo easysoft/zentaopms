@@ -452,7 +452,8 @@ class datatableModel extends model
 
         if(in_array($module, array('epic', 'story', 'requirement')))
         {
-            $module = 'product'; // 需求加载product-browse的layout配置。
+            $module = 'product';
+            $method = 'browse'; // 需求加载product-browse的layout配置。
         }
         elseif($module == 'build')
         {
