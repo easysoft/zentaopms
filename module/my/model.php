@@ -1448,4 +1448,54 @@ class myModel extends model
     {
         return $this->dao->select('module,name')->from(TABLE_WORKFLOW)->where('buildin')->eq(0)->fetchPairs();
     }
+
+    /**
+     * 获取我的产品。
+     * Get my charged products.
+     *
+     * @param  string $type undone|ownbyme
+     * @access public
+     * @return object
+     */
+    public function getProducts(string $type = 'undone'): object
+    {
+        $products = $this->dao->select('t1.*, t2.name as programName')->from(TABLE_PRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->beginIF($type == 'undone')->andWhere('t1.status')->eq('normal')->fi()
+            ->beginIF($type == 'ownbyme')->andWhere('t1.PO')->eq($this->app->user->account)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
+            ->orderBy('t1.order_asc')
+            ->fetchAll('id');
+
+        list($summaryStories, $plans, $releases, $executions) = $this->getProductRelatedData(array_keys($products));
+
+        $allCount      = count($products);
+        $unclosedCount = 0;
+        foreach($products as $key => $product)
+        {
+            $product->plans      = isset($plans[$product->id]) ? $plans[$product->id] : 0;
+            $product->releases   = isset($releases[$product->id]) ? $releases[$product->id] : 0;
+            if(isset($executions[$product->id])) $product->executions = $executions[$product->id];
+            $product->storyEstimateCount = isset($summaryStories[$product->id]) ? $summaryStories[$product->id]->estimateCount : 0;
+            $product->storyTotal         = isset($summaryStories[$product->id]) ? $summaryStories[$product->id]->total : 0;
+            $product->storyFinishedTotal = isset($summaryStories[$product->id]) ? $summaryStories[$product->id]->finishedTotal : 0;
+            $product->storyLeftTotal     = isset($summaryStories[$product->id]) ? $summaryStories[$product->id]->leftTotal : 0;
+            $product->storyFinishedRate  = isset($summaryStories[$product->id]) ? $summaryStories[$product->id]->finishedRate : 0;
+            $product->latestExecution    = isset($executions[$product->id])     ? $executions[$product->id] : '';
+            if($product->status != 'closed') $unclosedCount ++;
+            if($product->status == 'closed') unset($products[$key]);
+        }
+
+        /* Sort by storyCount, get 5 records */
+        $products = json_decode(json_encode($products), true);
+        array_multisort(helper::arrayColumn($products, 'storyEstimateCount'), SORT_DESC, $products);
+        $products = array_slice($products, 0, 5);
+
+        $data = new stdClass();
+        $data->allCount      = $allCount;
+        $data->unclosedCount = $unclosedCount;
+        $data->products      = array_values($products);
+        return $data;
+    }
 }
