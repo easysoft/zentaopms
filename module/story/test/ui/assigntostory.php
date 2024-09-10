@@ -18,3 +18,23 @@ $product->shadow->range('0');
 $product->bind->range('0');
 $product->acl->range('open');
 $product->createdBy->range('admin');
+$product->vision->range('rnd');
+$product->gen(1);
+
+$story = zenData('story');
+$story->id->range('1');
+$story->root->range('1');
+$story->path->range('`,1,`');
+$story->grade->range('1');
+$story->product->range('1');
+$story->module->range('0');
+$story->title->range('研发需求');
+$story->type->range('story');
+$story->stage->range('developing');
+$story->status->range('active');
+$story->openedBy->range('admin');
+$story->version->range('1');
+$story->assignedTo->range('[]');
+$story->gen(1);
+
+$storyspec = zenData('storyspec');
