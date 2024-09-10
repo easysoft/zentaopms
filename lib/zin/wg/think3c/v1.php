@@ -20,10 +20,15 @@ class think3c extends thinkModel
     {
         global $lang;
 
-        jsVar('modelImg', 'data/thinmory/thumbnail/init3c.png');
         jsVar('blockName', $lang->thinkwizard->placeholder->blockName);
 
-        return div(setCLass('model-canvas relative flex justify-center'), h::canvas(setID('canvas')));
+        return div
+        (
+            setData('model', '3c'),
+            setClass('model-canvas relative flex justify-center'),
+            h::canvas(setID('canvas')),
+            on::blur('.model-canvas input')->do('$(this).attr("title", $(this).val());')
+        );
     }
 
     protected function build(): node
@@ -35,7 +40,8 @@ class think3c extends thinkModel
         (
             setClass('model-3c my-1 flex col flex-wrap justify-between'),
             $style,
-            $this->buildBody()
+            $this->buildBody(),
+            on::init()->call('initThinkCanvas')
         );
     }
 }
