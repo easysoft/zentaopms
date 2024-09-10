@@ -33,6 +33,12 @@ unset($config->productplan->dtable->fieldList['actions']);
 
 foreach($config->productplan->dtable->fieldList as $id => $field) $config->productplan->dtable->fieldList[$id]['sortType'] = false;
 
+foreach($plans2Imported as $plan)
+{
+    if($plan->begin == $this->config->productplan->future) $plan->begin = $this->lang->productplan->future;
+    if($plan->end   == $this->config->productplan->future) $plan->end   = $this->lang->productplan->future;
+}
+
 formBase
 (
     set::id('linkForm'),

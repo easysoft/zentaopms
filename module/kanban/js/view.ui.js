@@ -295,8 +295,10 @@ window.renderProductplanItem = function(info)
 
     const today     = zui.formatDate(new Date(), 'yyyy-MM-dd');
     const labelType = (info.item.begin <= today && info.item.end >= today) ? 'danger' : 'ghost';
+    info.item.begin = info.item.begin == futureDate ? productplanLang.future : info.item.begin.slice(5);
+    info.item.end   = info.item.end   == futureDate ? productplanLang.future : info.item.end.slice(5);
 
-    const date = '<span class="ml-2 label ' + labelType + '">' + info.item.begin.slice(5) + ' ' + productplanLang.to + ' ' + info.item.end.slice(5) + '</span>';
+    const date = '<span class="ml-2 label ' + labelType + '">' + info.item.begin + ' ' + productplanLang.to + ' ' + info.item.end + '</span>';
     info.item.content      = {html: `<div title='${info.item.originDesc}'>${info.item.desc}</div>`};
     info.item.contentClass = 'text-gray clip mr-2';
     info.item.footer       = {html: statusBox + date}

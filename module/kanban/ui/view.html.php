@@ -54,7 +54,7 @@ foreach($regions as $currentRegionID => $regionName) $regionMenu[] = li(set::cla
 
 $app->loadLang('release');
 $app->loadLang('execution');
-$app->loadLang('productplan');
+$this->loadModel('productplan');
 jsVar('laneCount',  $laneCount);
 jsVar('kanbanLang', $lang->kanban);
 jsVar('columnLang', $lang->kanbancolumn);
@@ -69,6 +69,7 @@ jsVar('kanban', $kanban);
 jsVar('groupCols', $groupCols);
 jsVar('vision', $config->vision);
 jsVar('colorList', $config->kanban->cardColorList);
+jsVar('futureDate', $config->productplan->future);
 jsVar('canMoveCard', common::hasPriv('kanban', 'moveCard'));
 jsVar('canModify', (!empty($this->config->CRKanban) || $kanban->status != 'closed'));
 jsVar('canViewPlan', common::hasPriv('productplan', 'view') && $config->vision != 'lite');
