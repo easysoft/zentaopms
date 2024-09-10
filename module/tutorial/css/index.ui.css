@@ -28,3 +28,4 @@
 .is-single-type-mode #tutorialTabs .tabs-header {display: none;}
 .is-single-type-mode #tutorialTabs .tab-content {padding-top: 0;}
 .is-single-type-mode #tutorialTabs .tab-pane {display: block;}
+.pick-container {z-index: 1780;}

@@ -21,6 +21,7 @@ if(commonModel::isTutorialMode())
         .tutorial-popover .arrow-left::after {height: 2px; left: calc(var(--arrow-size) - 34px); top: 4px}
         .tutorial-popover .arrow-right::after {height: 2px; right: calc(var(--arrow-size) - 34px); top: 4px}
         .tutorial-popover .arrow-bottom::after {width: 2px; bottom: calc(var(--arrow-size) - 34px); left: 4px}
+        .pick-container {z-index: 1780;}
         CSS)
     );
 }
