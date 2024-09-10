@@ -998,7 +998,7 @@ class docModel extends model
         if($type == 'custom') $pairs = $this->getTeamSpaces();
         if($type == 'product')
         {
-            $pairs   = $this->loadModel('product')->getPairselse('nocode');
+            $pairs   = $this->loadModel('product')->getPairs('nocode');
             $spaceID = $this->product->checkAccess($spaceID, $pairs);
         }
         if($type == 'project')
