@@ -984,7 +984,7 @@ class testtask extends control
             $case    = $run->case;
             $results = $this->testtask->getResults($runID, 0, $status, $type);
 
-            $this->view->testtask = $this->testtask->fetchByID($run->task);
+            $this->view->testtask = $this->testtask->getByID($run->task);
         }
         else
         {
