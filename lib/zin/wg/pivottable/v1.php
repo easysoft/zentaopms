@@ -65,7 +65,7 @@ class pivotTable extends wg
             set::cols($cols),
             set::data($data),
             set::emptyTip($lang->pivot->noPivotTip),
-            set::onRenderCell($onRenderCell),
+            set::onRenderCell(jsRaw('renderCell')),
             set::onCellClick($onCellClick),
             set::rowKey('ROW_ID'),
             set::plugins(array('header-group', $cellSpan ? 'cellspan' : null)),
