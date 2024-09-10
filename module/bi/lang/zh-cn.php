@@ -12,6 +12,7 @@ $lang->bi->driverList['mysql'] = 'MySQL';
 
 $lang->bi->sqlQuery   = 'SQL语句查询';
 $lang->bi->sqlBuilder = 'SQL构建器';
+$lang->bi->dictionary = '数据字典';
 
 $lang->bi->toggleSqlText    = '手写SQL语句';
 $lang->bi->toggleSqlBuilder = 'SQL构建器';

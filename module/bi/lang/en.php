@@ -11,6 +11,7 @@ $lang->bi->sqlBuilder = 'SQL builder';
 
 $lang->bi->toggleSqlText    = 'Write SQL statements by hand';
 $lang->bi->toggleSqlBuilder = 'SQL builder';
+$lang->bi->dictionary       = 'Data Dictionary';
 
 $lang->bi->builderStepList = array();
 $lang->bi->builderStepList['table'] = 'Select tables';
