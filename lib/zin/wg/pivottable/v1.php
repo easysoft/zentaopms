@@ -56,6 +56,7 @@ class pivotTable extends wg
         list($cols, $data, $cellSpan, $filters, $onRenderCell, $onCellClick) = $this->prop(array('cols', 'data', 'cellSpan', 'filters', 'onRenderCell', 'onCellClick'));
 
         $filterCount = count($filters);
+        if(empty($onRenderCell)) $onRenderCell = jsRaw('renderCell');
         return dtable
         (
             setID('designTable'),
@@ -65,7 +66,7 @@ class pivotTable extends wg
             set::cols($cols),
             set::data($data),
             set::emptyTip($lang->pivot->noPivotTip),
-            set::onRenderCell(jsRaw('renderCell')),
+            set::onRenderCell($onRenderCell),
             set::onCellClick($onCellClick),
             set::rowKey('ROW_ID'),
             set::plugins(array('header-group', $cellSpan ? 'cellspan' : null)),
