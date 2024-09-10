@@ -1361,15 +1361,24 @@ class doc extends control
      * 文档应用视图。
      *
      * @param  string $type
-     * @param  int    $space
+     * @param  int    $spaceID
+     * @param  int    $libID
+     * @param  int    $moduleID
+     * @param  int    $docID
+     * @param  string $docMode
      * @access public
      * @return void
      */
-    public function app(string $type = 'mine', int $spaceID = 0)
+    public function app(string $type = 'mine', int $spaceID = 0, int $libID = 0, int $moduleID = 0, int $docID = 0, string $docMode = 'view')
     {
-        $this->view->type    = $type;
-        $this->view->spaceID = $spaceID;
-        $this->view->title   = $this->lang->doc->spaceList[$type];
+        $this->view->type     = $type;
+        $this->view->spaceID  = $spaceID;
+        $this->view->libID    = $libID;
+        $this->view->moduleID = $moduleID;
+        $this->view->docID    = $docID;
+        $this->view->docMode  = $docMode;
+        $this->view->users    = $this->loadModel('user')->getPairs('noclosed,noletter');
+        $this->view->title    = $this->lang->doc->spaceList[$type];
         $this->display();
     }
 
