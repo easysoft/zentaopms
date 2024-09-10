@@ -257,6 +257,30 @@ class tutorialModel extends model
     }
 
     /**
+     * 获取新手模式迭代燃尽图数据。
+     * Get execution burn data for tutorial
+     *
+     * @param  array $dateList
+     * @access public
+     * @return array
+     */
+    public function getExecutionBurnData(array $dateList): array
+    {
+        $burnData = array();
+        $left     = 7;
+        $value    = 6;
+        foreach($dateList as $date)
+        {
+            $burn = new stdClass();
+            $burn->name  = $date;
+            $burn->value = $value --;
+            $burn->left  = $left --;
+            $burnData[$date] = $burn;
+        }
+        return $burnData;
+    }
+
+    /**
      * 获取新手模式执行统计数据。
      * Get execution stats for tutorial.
      *

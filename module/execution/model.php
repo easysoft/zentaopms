@@ -3492,6 +3492,8 @@ class executionModel extends model
      */
     public function getBurnDataFlot(int $executionID = 0, string $burnBy = '', bool $showDelay = false, array $dateList = array()): array|null
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getExecutionBurnData($dateList);
+
         /* Get execution and burn counts. */
         $execution = $this->getByID($executionID);
 
