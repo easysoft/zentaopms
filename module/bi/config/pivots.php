@@ -1213,9 +1213,11 @@ left join zt_story as t3 on t1.story=t3.id
 left join zt_project as t4 on t4.id=t2.project
 where t2.deleted='0' and t3.deleted='0'
 and t2.type in('sprint', 'stage')
-and (case when \$project='' then 1 else t4.id=\$project end)
-and (case when \$execution='' then 1 else t2.id=\$execution end)
-and (case when \$status='' then 1 else t2.status=\$status end)
+and (case when \$projectStatus='' then 1=1 else t4.status=\$projectStatus end)
+and (case when \$executionStatus='' then 1=1 else t2.status=\$executionStatus end)
+and (case when \$project='' then 1=1 else t4.id=\$project end)
+and (case when \$execution='' then 1=1 else t2.id=\$execution end)
+and not (\$projectStatus='' and \$executionStatus='' and \$project='' and \$execution='')
 EOT,
     'settings'  => array
     (
@@ -1230,9 +1232,10 @@ EOT,
     ),
     'filters'   => array
     (
+        array('from' => 'query', 'field' => 'projectStatus', 'name' => '项目状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => 'doing')
+        array('from' => 'query', 'field' => 'executionStatus', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'execution.status', 'default' => 'doing')
         array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
         array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => ''),
-        array('from' => 'query', 'field' => 'status', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => '')
     ),
     'fields'    => array
     (
@@ -1254,11 +1257,11 @@ EOT,
     ),
     'vars'      => array
     (
-        'varName'     => array('project', 'execution', 'status'),
-        'showName'    => array('项目列表', '执行列表', '执行状态'),
-        'requestType' => array('select', 'select', 'select'),
-        'selectList'  => array('project', 'execution', 'project.status'),
-        'default'     => array('', '', '')
+        'varName'     => array('projectStatus', 'executionStatus', 'project', 'execution'),
+        'showName'    => array('项目状态', '执行状态', '项目列表', '执行列表'),
+        'requestType' => array('select', 'select', 'select', 'select'),
+        'selectList'  => array('project.status', 'execution.status', 'project', 'execution'),
+        'default'     => array('doing', 'doing', '', '')
     ),
     'drills'    => array
     (
