@@ -15429,7 +15429,6 @@ CREATE TABLE IF NOT EXISTS `zt_pivot`  (
   `acl` enum('open','private') NOT NULL DEFAULT 'open',
   `whitelist` text NULL,
   `sql` mediumtext NULL,
-  `builder` mediumtext NULL,
   `fields` mediumtext NULL,
   `langs` mediumtext NULL,
   `vars` mediumtext NULL,
@@ -15448,6 +15447,16 @@ CREATE TABLE IF NOT EXISTS `zt_pivot`  (
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
 CREATE INDEX `dimension` ON `zt_pivot` (`dimension`);
 CREATE INDEX `group`     ON `zt_pivot` (`group`);
+
+-- DROP TABLE IF EXISTS `zt_sqlbuilder`;
+CREATE TABLE IF NOT EXISTS `zt_sqlbuilder` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `objectID`   mediumint(8)  NOT NULL,
+  `objectType` varchar(50)   NOT NULL,
+  `sql`        text          NULL,
+  `setting`    text          NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_pivotdrill`;
 CREATE TABLE `zt_pivotdrill` (
