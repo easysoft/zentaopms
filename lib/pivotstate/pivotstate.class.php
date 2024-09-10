@@ -387,11 +387,7 @@ class pivotState
         $this->clearFilters();
         if(empty($querys)) return;
 
-        if($this->sqlbuilder->checkQuerys() !== true)
-        {
-            $this->resetBuilderError();
-            return;
-        }
+        if($this->sqlbuilder->checkQuerys() !== true) return;
 
         foreach($querys as $index => $query)
         {
