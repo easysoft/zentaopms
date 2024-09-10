@@ -13,7 +13,7 @@ class taskExecutionTester extends tester
      */
     public function checkTab($tab, $expectNum)
     {
-        $form = $this->initForm('execution', 'task', array('execution' => '2'), 'appIframe-execution');
+        $form   = $this->initForm('execution', 'task', array('execution' => '2'), 'appIframe-execution');
         $params = array('allTab', 'unclosedTab', 'myTab', 'involvedTab','assignedByMeTab', 'changedByMeTab');
         if(!in_array($tab, $params)) $form->dom->MoreTab->click();
         $form->wait(1);
