@@ -41,11 +41,12 @@ class repo extends control
      * Common actions.
      *
      * @param  int    $repoID
-     * @param  int    $objectID  projectID|executionID
+     * @param  int    $objectID   projectID|executionID
+     * @param  string $createLink create|createRepo
      * @access public
      * @return void
      */
-    public function commonAction(int $repoID = 0, int $objectID = 0)
+    public function commonAction(int $repoID = 0, int $objectID = 0, string $createLink = 'create')
     {
         $fromModal = in_array($this->app->rawModule, array('git', 'svn'));
         $tab       = $fromModal ? '' :$this->app->tab;
@@ -78,7 +79,10 @@ class repo extends control
             $this->repo->setMenu($this->repos, $repoID);
         }
 
-        if(empty($this->repos) && !in_array($this->methodName, array('create', 'setrules'))) return $this->locate($this->repo->createLink('create', "objectID=$objectID"));
+        if(empty($this->repos) && !in_array(strtolower($this->methodName), array('create', 'setrules', 'createrepo', 'import')))
+        {
+            return $this->locate(inLink($createLink, "objectID=$objectID"));
+        }
         $this->view->fromModal = $fromModal;
     }
 
