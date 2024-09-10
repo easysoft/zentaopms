@@ -23,7 +23,8 @@ class queryBase extends wg
     protected static array $defineBlocks = array(
         'heading'     => array(),
         'formActions' => array(),
-        'formFooter'  => array()
+        'formFooter'  => array(),
+        'builder'     => array()
     );
 
     public static function getPageCSS(): ?string
@@ -92,6 +93,7 @@ class queryBase extends wg
                     set::value($sql),
                     on::change()->do($onSqlChange)
                 ),
+                $this->block('builder'),
                 !empty($error) ? formGroup
                 (
                     set::tipClass('text-danger'),
