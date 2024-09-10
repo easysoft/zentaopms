@@ -45,6 +45,7 @@ class thinkResult extends wg
         $modelClass   = $mode == 'preview' ? 'w-full' : '';
         return div
         (
+            on::init()->call('initThinkResult'),
             setClass('think-result-content col items-center px-8 py-6 gap-4 mx-auto'),
             div
             (
