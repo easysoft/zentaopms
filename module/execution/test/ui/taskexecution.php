@@ -110,4 +110,6 @@ r($tester->checkTab('delayedTab', '1'))      && p('message') && e('delayedTab下
 /* 批量修改状态 */
 r($tester->batchEditStatus('closed'))        && p('message') && e('批量修改状态为closed成功');
 r($tester->batchEditStatus('cancel'))        && p('message') && e('批量修改状态为cancel成功');
+/* 批量指派 */
+r($tester->batchAssign())                    && p('message') && e('批量指派成功');
 $tester->closeBrowser();
