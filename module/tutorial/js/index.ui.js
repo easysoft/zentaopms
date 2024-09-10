@@ -242,6 +242,7 @@ function highlightStepTarget($target, step, popoverOptions)
             const dropdown = $target.zui('dropdown');
             if(dropdown && dropdown.options.trigger === 'hover') dropdown.destroy();
         }
+        const isLastStep = step.index === step.task.steps.length - 1;
         popoverOptions = $.extend(
         {
             $optionsFromDataset: false,
@@ -272,12 +273,13 @@ function highlightStepTarget($target, step, popoverOptions)
                 component: 'toolbar',
                 props:
                 {
-                    className: 'py-3 px-4 justify-between',
+                    className: 'py-3 px-4 gap-2',
                     items:
                     [
-                        {component: 'span', html: `${step.index + 1}/${step.task.steps.length}`},
-                        {type: 'primary', text: lang.nextStep, onClick: () => goToNextStep(step)},
-                    ]
+                        {component: 'span', children: `${step.index + 1}/${step.task.steps.length}`, className: 'flex-auto'},
+                        isLastStep ? null : {type: 'default', text: lang.exitStep, onClick: () => unactiveTask()},
+                        {type: 'primary', text: isLastStep ? lang.finish : lang.nextStep, onClick: () => goToNextStep(step)},
+                    ].filter(Boolean)
                 }
             },
             onHide: function()
@@ -456,6 +458,7 @@ function toggleActiveTarget(type, name, toggle)
 
 function unactiveTask()
 {
+    if(currentStep) destroyPopover(null, getStepScope(currentStep));
     toggleActiveTarget('task', currentTask, false);
     currentTask = '';
     currentStep = null;

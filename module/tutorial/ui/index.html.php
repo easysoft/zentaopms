@@ -165,6 +165,8 @@ jsVar('lang', array
     'nextGuide'        => $lang->tutorial->nextGuide,
     'nextTask'         => $lang->tutorial->nextTask,
     'nextStep'         => $lang->tutorial->nextStep,
+    'exitStep'         => $lang->tutorial->exitStep,
+    'finish'           => $lang->tutorial->finish,
     'clickTipFormat'   => $lang->tutorial->clickTipFormat,
     'clickAndOpenIt'   => $lang->tutorial->clickAndOpenIt,
     'congratulateTask' => $lang->tutorial->congratulateTask
