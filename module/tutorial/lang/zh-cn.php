@@ -11,7 +11,7 @@
  */
 $lang->tutorial = new stdclass();
 $lang->tutorial->common           = '使用教程';
-$lang->tutorial->desc             = '通过完成一系列任务，快速了解禅道的基本使用方法。这可能会花费你10分钟，你可以随时退出任务。';
+$lang->tutorial->desc             = '通过完成一系列任务，快速了解禅道的基本使用方法，你可以随时退出任务。';
 $lang->tutorial->start            = '开始';
 $lang->tutorial->continue         = '继续';
 $lang->tutorial->exit             = '退出教程';

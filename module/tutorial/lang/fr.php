@@ -11,7 +11,7 @@
  */
 $lang->tutorial = new stdclass();
 $lang->tutorial->common           = 'Tutorial';
-$lang->tutorial->desc             = 'You can know how to use ZenTao by doing tasks. It takes about 10 minutes, and you can quit anytime.';
+$lang->tutorial->desc             = 'You can know how to use ZenTao by doing tasks, and you can quit anytime.';
 $lang->tutorial->start            = "Let's go!";
 $lang->tutorial->exit             = 'Quit';
 $lang->tutorial->exitStep         = 'Quit';

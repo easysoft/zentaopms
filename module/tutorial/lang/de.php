@@ -11,7 +11,7 @@
  */
 $lang->tutorial = new stdclass();
 $lang->tutorial->common           = 'Anleitung';
-$lang->tutorial->desc             = 'Machen Sie sich mit ZenTao vertraut. Es dauert ca. 10 Minuten und Sie können jeder Zeit abbrechen.';
+$lang->tutorial->desc             = 'Machen Sie sich mit ZenTao vertraut. Sie können jeder Zeit abbrechen.';
 $lang->tutorial->start            = "Los geht's!";
 $lang->tutorial->exit             = 'Beenden';
 $lang->tutorial->exitStep         = 'Beenden';
