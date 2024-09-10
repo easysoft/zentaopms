@@ -774,30 +774,28 @@ class biModel extends model
     {
         $tableFields = $this->getTableFields();
 
-        $treeMenu = array();
+        $menu = array();
         foreach($tableFields as $table => $fields)
         {
-            $tableItem         = new stdclass();
-            $tableItem->id     = $table;
-            $tableItem->parent = 0;
-            $tableItem->name   = $table . '(table)';
-            $tableItem->url    = '#';
-
-            $treeMenu[] = $tableItem;
+            $tableItem = array();
+            $tableItem['key']   = $table;
+            $tableItem['text']  = $table . '(table)';
+            $tableItem['items'] = array();
 
             foreach($fields as $field => $fieldInfo)
             {
-                $fieldItem         = new stdclass();
-                $fieldItem->id     = $field;
-                $fieldItem->parent = $tableItem->id;
-                $fieldItem->name   = $field . '(' . $fieldInfo['type'] . ')';
-                $fieldItem->url    = '#';
+                $fieldItem = array();
+                $fieldItem['key']  = $field;
+                $fieldItem['text'] = $field . '(' . $fieldInfo['type'] . ')';
 
-                $treeMenu[] = $fieldItem;
+                $tableItem['items'][] = $fieldItem;
+
             }
+
+            $menu[] = $tableItem;
         }
 
-        return $treeMenu;
+        return $menu;
     }
 
     /**
