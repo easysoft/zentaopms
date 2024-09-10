@@ -26,7 +26,6 @@ class createDocTester extends tester
         if($form->dom->leftListHeader->getText() != $libName)
         {
             if($form->dom->nameTip->getText() != '『库名称』不能为空。') return $this->failed('库名称为空校验失败。');
-            $this->openUrl('doc', 'mySpace');
             return $this->success('库名称非空校验成功。');
         }
         return $this->success('创建我的文档库成功');
