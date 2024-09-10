@@ -72,8 +72,8 @@ window.addItem = function(obj)
  */
 window.deleteItem = function(obj)
 {
-    if($('#teamForm .table tbody tr').length < 3) $('#teamForm .table tbody tr .actions-list .btn-link').eq(3).addClass('hidden');
     $(obj).closest('tr').remove();
+    if($('#teamForm .table tbody tr').length < 2) $('#teamForm .table tbody tr .actions-list .btn-link').eq(1).addClass('hidden');
 }
 
 /**
