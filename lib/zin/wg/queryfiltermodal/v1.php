@@ -80,11 +80,13 @@ class queryFilterModal extends wg
         );
 
         $defaultWgList = array('date' => 'datePicker', 'datetime' => 'datetimePicker', 'input' => 'input', 'select' => 'picker');
+        $params = array('name' => 'default', 'value' => $value['default']);
+        if($value['type'] == 'select') $params['items'] = array();
         $default = $this->buildControl
         (
             'default',
             'basis-48',
-            createWg($defaultWgList[$value['type']], set(array('name' => 'default', 'value' => $value['default'])))
+            createWg($defaultWgList[$value['type']], set($params))
         );
 
         return formRow
