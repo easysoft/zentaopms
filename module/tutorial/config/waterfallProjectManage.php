@@ -807,7 +807,7 @@ if(in_array($config->edition, array('max', 'ipd')))
 
     $waterfallProjectManage->advance->tasks['review']['steps'][] = array(
         'type'   => 'click',
-        'target' => 'div[data-row="1"] a.review-submit-btn',
+        'target' => 'div[data-row="1"] a.review-toaudit-btn',
         'page'   => 'review-browse',
         'url'    => array('review', 'browse', 'projectID=2'),
         'title'  => $lang->tutorial->waterfallProjectManage->review->step6->name,

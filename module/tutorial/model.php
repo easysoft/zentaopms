@@ -1503,7 +1503,7 @@ class tutorialModel extends model
         $review->template        = 0;
         $review->doc             = 0;
         $review->docVersion      = 0;
-        $review->status          = 'draft';
+        $review->status          = 'pass';
         $review->reviewedBy      = '';
         $review->auditedBy       = '';
         $review->createdBy       = '';
