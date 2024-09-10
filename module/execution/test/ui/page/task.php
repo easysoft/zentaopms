@@ -5,6 +5,7 @@ class taskPage extends page
     {
         parent::__construct($webdriver);
         $xpath = array(
+            /* 标签 */
             'allTab'          => "//*[@id='featureBar']/menu/li[1]/a",
             'unclosedTab'     => "//*[@id='featureBar']/menu/li[2]/a",
             'assignedtomeTab' => "//*[@id='featureBar']/menu/li[3]/a",
@@ -21,6 +22,10 @@ class taskPage extends page
             'cancelTab'       => "//*[@id='status']/menu/menu/li[7]/a",
             'delayedTab'      => "//*[@id='status']/menu/menu/li[8]/a",
             'num'             => "//*[@id='table-execution-task']/div[3]/div[2]/strong[1]",
+            /* 列表 */
+            'firstCheckbox' => "//*[@id='table-execution-task']/div[2]/div[1]/div/div[1]/div/div",
+            'firstId'       => "//*[@id='table-execution-task']/div[2]/div[1]/div/div[1]/div",
+            'firstStatus'   => "//*[@id='table-execution-task']/div[2]/div[2]/div/div[2]/div/span",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
