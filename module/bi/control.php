@@ -79,4 +79,16 @@ class bi extends control
         $check = $this->bi->checkDuckdbInstall();
         echo(json_encode($check));
     }
+
+    /**
+     * AJAX: Get menu of table fields.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxGetTableFieldsMenu()
+    {
+        $menu = $this->bi->getTableFieldsMenu();
+        echo json_encode($menu);
+    }
 }
