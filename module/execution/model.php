@@ -2836,7 +2836,7 @@ class executionModel extends model
         $linkedStories    = $this->dao->select('story,`order`')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order_desc')->fetchPairs('story', 'order');
         $lastOrder        = (int)reset($linkedStories);
         $storyList        = $this->dao->select('id, status, branch, product, type')->from(TABLE_STORY)->where('id')->in(array_values($stories))->fetchAll('id');
-        $execution        = $this->fetchByID($executionID);
+        $execution        = $this->getByID($executionID);
         $notAllowedStatus = $this->app->rawMethod == 'batchcreate' ? 'closed' : 'draft,reviewing,closed';
         $laneID           = isset($output['laneID']) ? $output['laneID'] : 0;
 

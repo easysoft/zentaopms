@@ -26,7 +26,6 @@ foreach($config->design->view->operateList['main'] as $operate)
     {
         $config->design->actionList[$operate]['url']      = createLink('repo', 'create', "projectID={$design->project}");
         $config->design->actionList[$operate]['data-app'] = 'project';
-        $config->design->actionList[$operate]['class']    = 'linkCommit-btn';
         unset($config->design->actionList[$operate]['data-toggle']);
     }
     $operateMenus[] = $config->design->actionList[$operate];

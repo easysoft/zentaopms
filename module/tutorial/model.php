@@ -345,6 +345,9 @@ class tutorialModel extends model
         $story->lastEditedDate = '';
         $story->twins          = '';
         $story->executions     = array();
+        $story->spec           = '';
+        $story->verify         = '';
+        $story->files          = array();
         return $story;
     }
 
@@ -1465,6 +1468,8 @@ class tutorialModel extends model
         $design->desc         = 'Design Description';
         $design->version      = 1;
         $design->type         = 'HLDS';
+        $design->files        = array();
+        $design->productName  = 'Test product';
         return $design;
     }
 
