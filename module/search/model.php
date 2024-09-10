@@ -77,7 +77,6 @@ class searchModel extends model
             $field        = $this->post->$fieldName;
             $value        = $this->post->$valueName;
             $fieldControl = isset($fieldParams->$field) && isset($fieldParams->{$field}->control) ? $fieldParams->{$field}->control : '';
-            if($fieldControl == 'select' and $this->post->$valueName === 'null') continue;
             if(empty($field) || $value === '' || $value === false) continue; // false means no exist this post item. '' means no search data. ignore it.
             if(!preg_match('/^[a-zA-Z0-9]+$/', $field)) continue; // Fix sql injection.
 
