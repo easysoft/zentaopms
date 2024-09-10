@@ -348,7 +348,7 @@ class sqlBuilder extends wg
             set::querys($querys),
             set::tables($selectTableList),
             set::fields($fields),
-            set::defaultItems($defaultItems),
+            set::defaultItems($builder->queryFilterSelectOptions),
             set::onChange('changeBuilderQuery(event)'),
             set::onAdd('addBuilderQueryFilter(event)'),
             set::onRemove('removeBuilderQueryFilter(event)'),
@@ -371,7 +371,6 @@ class sqlBuilder extends wg
         (
             set::groups($groups),
             set::aggs($aggs),
-            // set::onEnable('changeGroupBy(event)'),
             set::onChangeAgg('changeAgg(event)'),
             set::onChangeType('switchGroupFieldType(event)'),
             set::onSort('sortGroupBy(event)')
