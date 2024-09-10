@@ -134,6 +134,20 @@ class on extends jsCallback
     }
 
     /**
+     * Set the selector.
+     * 设置选择器。
+     *
+     * @access public
+     * @param  string $selector The selector.
+     * @return self
+     */
+    public function selector(string $selector): self
+    {
+        $this->selector = $selector;
+        return $this;
+    }
+
+    /**
      * Convert to js code.
      * 转换为 js 代码。
      *
