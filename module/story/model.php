@@ -530,11 +530,7 @@ class storyModel extends model
         $extraList   = $this->storyTao->parseExtra($extra);
         $storyFrom   = isset($extraList['fromType']) ? $extraList['fromType'] : '';
         $storyFromID = isset($extraList['fromID']) ? $extraList['fromID'] : '';
-
-        /* Create actions. */
-        $action = $bugID == 0 ? (empty($storyFrom) ? 'Opened' : 'From' . ucfirst($storyFrom)) : 'Frombug';
-        $extra  = $bugID == 0 ? $storyFromID : $bugID;
-        $this->action->create('story', $storyID, $action, '', $extra);
+        $extra       = $bugID == 0 ? $storyFromID : $bugID;
 
         if($executionID) $this->storyTao->linkToExecutionForCreate($executionID, $storyID, $story, $extra);
         if($bugID)       $this->storyTao->closeBugWhenToStory($bugID, $storyID);
@@ -546,11 +542,7 @@ class storyModel extends model
         }
         else
         {
-            $this->dao->update(TABLE_STORY)
-                 ->set('root')->eq($storyID)
-                 ->set('path')->eq(",{$storyID},")
-                 ->where('id')->eq($storyID)
-                 ->exec();
+            $this->dao->update(TABLE_STORY)->set('root')->eq($storyID)->set('path')->eq(",{$storyID},")->where('id')->eq($storyID)->exec();
         }
         if(!empty($story->plan))
         {
@@ -565,7 +557,9 @@ class storyModel extends model
         $this->setStage($storyID);
         $this->loadModel('score')->create('story', 'create',$storyID);
 
-        /* Record submit review action. */
+        /* Create actions. Record submit review action. */
+        $action = $bugID == 0 ? (empty($storyFrom) ? 'Opened' : 'From' . ucfirst($storyFrom)) : 'Frombug';
+        $this->action->create('story', $storyID, $action, '', $extra);
         if($story->status == 'reviewing') $this->action->create('story', $storyID, 'submitReview');
 
         if($todoID > 0)
