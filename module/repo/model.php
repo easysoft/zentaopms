@@ -286,6 +286,7 @@ class repoModel extends model
      */
     public function batchCreate(array $repos, int $serviceHost, string $scm): bool
     {
+        $this->loadModel('instance');
         foreach($repos as $index => $repo)
         {
             if(empty($repo->product)) continue;
@@ -319,6 +320,7 @@ class repoModel extends model
             }
 
             $this->loadModel('action')->create('repo', $repoID, 'created');
+            if(method_exists($this->instance, 'saveWaitSyncData')) $this->instance->saveWaitSyncData('repo', $repoID, 'add', false);
         }
 
         return true;
