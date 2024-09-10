@@ -38,3 +38,13 @@ $story->assignedTo->range('[]');
 $story->gen(1);
 
 $storyspec = zenData('storyspec');
+$storyspec->story->range('1');
+$storyspec->version->range('1');
+$storyspec->title->range('研发需求');
+$storyspec->gen(1);
+
+$tester = new assignToStoryTester();
+$tester->login();
+
+r($tester->assignToStory()) && p('message') && e('指派需求成功');
+$tester->closeBrowser();
