@@ -42,12 +42,12 @@ class programModel extends model
      */
     public function checkAccess(int $programID = 0, array $programs = array()): int
     {
-        if($programID > 0) $this->session->set('program', $programID);
-        if(!$programID && $this->cookie->lastProgram) $this->session->set('program', $this->cookie->lastProgram);
-        if(!$programID && !$this->session->program)   $this->session->set('program', key($programs));
+        if($programID > 0) $this->session->set('program', $programID, $this->app->tab);
+        if(!$programID && $this->cookie->lastProgram) $this->session->set('program', $this->cookie->lastProgram, $this->app->tab);
+        if(!$programID && !$this->session->program)   $this->session->set('program', key($programs), $this->app->tab);
         if(!isset($programs[$this->session->program]))
         {
-            $this->session->set('program', key($programs));
+            $this->session->set('program', key($programs), $this->app->tab);
             if($programID && strpos(",{$this->app->user->view->programs},", ",{$this->session->program},") === false) $this->accessDenied();
         }
 
@@ -1454,8 +1454,9 @@ class programModel extends model
         }
 
         $dropMenuLink = helper::createLink('program', 'ajaxGetDropMenu', "objectID=$programID&module=$currentModule&method=$currentMethod");
-        $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProgramName}'><span class='text'>{$currentProgramName}</span> <span class='caret' style='margin-bottom: -1px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
-        $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>'; $output .= "</div></div>";
+        $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProgramName}'><span class='text'>{$currentProgramName}</span> <span class='caret' style='margin-bottom: -1px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='dropmenu' data-url='$dropMenuLink'>";
+        $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+        $output .= "</div></div>";
 
         return $output;
     }

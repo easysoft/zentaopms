@@ -362,7 +362,7 @@ class programZen extends program
         if($this->config->edition != 'open')
         {
             $flow = $this->loadModel('workflow')->getByModule($moduleName);
-            if(!empty($flow) && $flow->buildin == '0') return helper::createLink('program', 'product', "programID=%s");
+            if(!empty($flow) && $flow->buildin == '0') return helper::createLink('program', 'product', "programID=$programID");
         }
         if($moduleName == 'project')
         {
