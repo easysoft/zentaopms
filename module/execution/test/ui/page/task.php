@@ -32,6 +32,7 @@ class taskPage extends page
             'cancelBtn'       => "(//*[@data-page='execution-task']/div[2]/menu/menu//div[@class='item-title'])[2]",
             'assignedToBtn'   => "//*[@id='table-execution-task']/div[3]/nav[1]/button[2]",
             'users'           => "//*[@data-page='execution-task']/div[2]/menu/menu//div[@class='item-title' and text()='admin']",
+            'modal'           => "//div[contains(@id,'modal')]",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
