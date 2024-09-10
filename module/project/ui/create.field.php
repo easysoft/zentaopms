@@ -8,11 +8,12 @@ $fields = defineFieldList('project.create', 'project');
 $model       = data('model');
 $hasCode     = !empty($config->setCode);
 $copyProject = !empty(data('copyProjectID'));
+$programID   = $copyProject ? data('copyProject.parent') : data('parentProgram.id');
 
 $fields->field('parent')
     ->control('picker', array('className' => $copyProject ? 'has-warning' : '', 'required' => true))
     ->className($copyProject ? 'has-warning' : '')
-    ->value($copyProject ? data('copyProject.parent') : data('parentProgram.id'));
+    ->value($programID);
 
 $fields->field('hasProduct')
     ->disabled($copyProject)
@@ -55,7 +56,7 @@ $fields->field('budget')->foldable();
 
 $fields->field('acl')
        ->foldable()
-       ->control(array('control' => 'aclBox', 'aclItems' => data('programID') ? $lang->project->subAclList : $lang->project->aclList, 'aclValue' => $copyProject ? data('copyProject.acl') : 'open', 'whitelistLabel' => $lang->project->whitelist, 'userValue' => data('copyProjectID') ? data('copyProject.whitelist') : ''));
+       ->control(array('control' => 'aclBox', 'aclItems' => !empty($programID) ? $lang->project->subAclList : $lang->project->aclList, 'aclValue' => $copyProject ? data('copyProject.acl') : 'open', 'whitelistLabel' => $lang->project->whitelist, 'userValue' => data('copyProjectID') ? data('copyProject.whitelist') : ''));
 
 $fields->field('auth')->foldable()->value($copyProject ? data('copyProject.auth') : 'extend');
 
