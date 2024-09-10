@@ -417,23 +417,21 @@ class pivotState
      * @access public
      * @return array
      */
-    /*
     public function matchFieldSettingFromBuilder($key, $setting)
     {
-        $selects = array_merge($this->sqlBuilder->getSelects(), $this->sqlBuilder->getFuncSelects());
+        $selects = array_merge($this->sqlbuilder->getSelects(), $this->sqlbuilder->getFuncSelects());
         foreach($selects as $select)
         {
             list($table, $field, $alias) = $select;
             if($key != $alias) continue;
 
-            $fieldList = $this->sqlBuilder->getTableDescList($table);
+            $fieldList = $this->sqlbuilder->getTableDescList($table);
             $name = zget($fieldList, $field, $field);
             $setting[$this->clientLang] = $name;
             $setting['field']           = $field;
         }
         return $setting;
     }
-     */
 
     /**
      * Clear fieldSettings.
@@ -1037,8 +1035,8 @@ class pivotState
             }
             else
             {
-                $newFieldSettings[$field] = $setting;
-                // $newFieldSettings[$field] = $this->matchFieldSettingFromBuilder($field, $setting);
+                // $newFieldSettings[$field] = $setting;
+                $newFieldSettings[$field] = $this->matchFieldSettingFromBuilder($field, $setting);
             }
         }
 
