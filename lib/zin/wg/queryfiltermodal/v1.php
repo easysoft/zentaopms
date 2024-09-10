@@ -30,7 +30,6 @@ class queryFilterModal extends wg
     {
         global $lang;
         list($onRemove, $onChange) = $this->prop(array('onRemove', 'onChange'));
-        d($onRemove);
         if(empty($value)) return null;
 
         $field = $this->buildControl
