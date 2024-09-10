@@ -1322,6 +1322,7 @@ class pivotState
         $this->formatSettingColumns();
         $this->processFieldSettingsLang();
         $this->completeFiltersDefault();
+        $this->canChangeMode = $this->setCanChangeMode();
     }
 
     /**
