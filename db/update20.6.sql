@@ -28,3 +28,6 @@ CREATE TABLE IF NOT EXISTS `zt_sqlbuilder` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DELETE FROM `zt_workflowlayout` WHERE `field` IN (SELECT `field` FROM `zt_workflowfield` WHERe `buildin` = '1' AND `role` = 'buildin');
+
+ALTER TABLE `zt_dataview` ADD `mode` enum('text', 'builder') not NULL default 'builder' AFTER `code`;
+UPDATE `zt_dataview` SET `mode` = 'text';
