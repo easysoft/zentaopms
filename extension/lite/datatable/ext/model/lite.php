@@ -43,16 +43,7 @@ public function getFieldList(string $module, string $method = ''): array
     }
 
     /* Logic except open source version .*/
-    if($this->config->edition != 'open' and $module != 'story')
-    {
-        $fields = $this->loadModel('workflowfield')->getList($module);
-        foreach($fields as $field)
-        {
-            if($field->buildin) continue;
-            $fieldList[$field->field]['title'] = $field->name;
-            $fieldList[$field->field]['width'] = '120';
-        }
-    }
+    if($this->config->edition != 'open' and $module != 'story') $fieldList = $this->appendWorkflowFields($module, $method, $fieldList);
 
     return $fieldList;
 }
