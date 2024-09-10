@@ -795,6 +795,7 @@ class pivotState
         $this->fields        = array();
         $this->langs         = array();
         $this->fieldSettings = array();
+        $this->relatedObject = array();
     }
 
     /**
