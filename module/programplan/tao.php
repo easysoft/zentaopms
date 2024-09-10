@@ -771,8 +771,8 @@ class programplanTao extends programplanModel
         $data->owner_id     = $task->assignedTo;
         $data->attribute    = '';
         $data->milestone    = '';
-        $data->begin        = $dateLimit['start'];
-        $data->deadline     = $dateLimit['end'];
+        $data->begin        = substr($dateLimit['start'], 0, 10);
+        $data->deadline     = substr($dateLimit['end'], 0, 10);
         $data->realBegan    = $dateLimit['realBegan'] ? substr($dateLimit['realBegan'], 0, 10) : '';
         $data->realEnd      = $dateLimit['realEnd'] ? substr($dateLimit['realEnd'], 0, 10) : '';
         $data->pri          = $task->pri;
