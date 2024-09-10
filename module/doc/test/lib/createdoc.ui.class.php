@@ -23,7 +23,6 @@ class createDocTester extends tester
         $form->wait(1);
 
         if($form->dom->fstDocLabel->getText() != '草稿') return $this->failed('创建草稿失败。');
-        $this->openUrl('doc', 'mySpace');
         return $this->success('创建草稿成功。');
     }
 
@@ -48,11 +47,10 @@ class createDocTester extends tester
 
         $this->openUrl('doc', 'mySpace', array('objectType' => 'mine'));
         $form = $this->loadPage('doc', 'mySpace', array('objectType' => 'mine'));
-        $form->dom->search(array("文档标题,=,{$draftName->dcName}"));
+        $form->dom->search(array("文档标题,=,{$docName->dcName}"));
         $form->wait(1);
 
         if($form->dom->fstDocName->getText() != $docName->dcName) return $this->failed('文档创建失败');
-        $this->openUrl('doc', 'mySpace');
         return $this->success('文档创建成功');
     }
 }
