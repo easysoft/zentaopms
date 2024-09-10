@@ -41,13 +41,7 @@ class taskExecutionTester extends tester
         $form->wait(1);
         $form->dom->$btn->click();
         $form->wait(1);
-        try
-        {
-            $form->dom->alertModal();
-        }
-        catch(Exception $e)
-        {
-        }
+        if(is_object($form->dom->modal)) $form->dom->alertModal();
         $form->wait(1);
         $form->dom->search(array("{$this->lang->task->name},=,{$name}"));
         $form->wait(1);
@@ -71,7 +65,8 @@ class taskExecutionTester extends tester
         $form->dom->assignedToBtn->click();
         $form->wait(1);
         $form->dom->users->click();
-        $form->dom->search(array("{$this->lang->task->name},=,{$form->dom->firstName->getText()}"));
+        $form->wait(1);
+        $form->dom->search(array("{$this->lang->task->name},=,{$name}"));
         $form->wait(1);
         $assignedToAfter = $form->dom->firstAssignedTo->getText();
         if($assignedToAfter == 'admin') return $this->success('批量指派成功');
