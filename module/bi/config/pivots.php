@@ -1414,8 +1414,11 @@ left join zt_project as t3 on t3.id=t1.project
 where t1.deleted='0'
 and t2.deleted='0'
 and t2.resolution!=''
-and (case when \$project='' then 1 else t3.id=\$project end)
-and (case when \$execution='' then 1 else t1.id=\$execution end)
+and (case when \$projectStatus='' then 1=1 else t3.status=\$projectStatus end)
+and (case when \$executionStatus='' then 1=1 else t1.status=\$executionStatus end)
+and (case when \$project='' then 1=1 else t3.id=\$project end)
+and (case when \$execution='' then 1=1 else t1.id=\$execution end)
+and not (\$projectStatus='' and \$executionStatus='' and \$project='' and \$execution='')
 EOT,
     'settings'  => array
     (
@@ -1430,6 +1433,8 @@ EOT,
     ),
     'filters'   => array
     (
+        array('from' => 'query', 'field' => 'projectStatus', 'name' => '项目状态', 'type' => 'select', 'typeOption' => 'project.status', 'default' => 'doing'),
+        array('from' => 'query', 'field' => 'executionStatus', 'name' => '执行状态', 'type' => 'select', 'typeOption' => 'execution.status', 'default' => 'doing'),
         array('from' => 'query', 'field' => 'project', 'name' => '项目列表', 'type' => 'select', 'typeOption' => 'project', 'default' => ''),
         array('from' => 'query', 'field' => 'execution', 'name' => '执行列表', 'type' => 'select', 'typeOption' => 'execution', 'default' => '')
     ),
@@ -1455,11 +1460,11 @@ EOT,
     ),
     'vars'      => array
     (
-        'varName'     => array('project', 'execution'),
-        'showName'    => array('项目列表', '执行列表'),
-        'requestType' => array('select', 'select'),
-        'selectList'  => array('project', 'execution'),
-        'default'     => array('', '')
+        'varName'     => array('projectStatus', 'executionStatus', 'project', 'execution'),
+        'showName'    => array('项目状态', '执行状态', '项目列表', '执行列表'),
+        'requestType' => array('select', 'select', 'select', 'select'),
+        'selectList'  => array('project.status', 'execution.status', 'project', 'execution'),
+        'default'     => array('doing', 'doing', '', '')
     ),
     'drills'    => array
     (
