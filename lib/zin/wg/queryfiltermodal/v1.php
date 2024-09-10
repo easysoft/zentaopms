@@ -86,7 +86,7 @@ class queryFilterModal extends wg
         (
             'default',
             'basis-48',
-            createWg($defaultWgList[$value['type']], set($params))
+            createWg($defaultWgList[$value['type']], set(array('name' => 'default', 'items' => array(), 'value' => $value['default'])))
         );
 
         return formRow
