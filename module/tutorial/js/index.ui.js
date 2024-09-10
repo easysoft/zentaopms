@@ -218,35 +218,6 @@ function destroyPopover(callback, scope)
     popover = null;
 }
 
-function isStepFormFilled(step, event)
-{
-    if(!step.$form || !step.$form.length) return;
-    let requiredFields = step.requiredFields;
-    if(!requiredFields)
-    {
-        requiredFields = [];
-        const scope = getStepScope(step);
-        step.$form.find('.form-group.required').each(function()
-        {
-            if(!scope.zui.dom.isVisible(this, {checkZeroSize:true})) return;
-            const $group = $(this);
-            let name = $group.attr('data-name');
-            if(!name) name = $group.find('[name]').attr('name');
-            if(name) requiredFields.push(name);
-        });
-        step.requiredFields = requiredFields;
-    }
-    if(typeof requiredFields === 'string') requiredFields = requiredFields.split(',');
-    if(!requiredFields.length) return;
-    const formData = new FormData(step.$form[0]);
-    for(let i = 0; i < requiredFields.length; i++)
-    {
-        const fieldName = requiredFields[i];
-        if(!formData.has(fieldName) || !formData.get(fieldName)) return false;
-    }
-    return true;
-}
-
 function highlightStepTarget($target, step, popoverOptions)
 {
     if(config.debug) showLog('Highlight', step, popover ? `${popover.gid}/${popover.options.key}` : 'no popover', {$target, popover, popoverOptions});
@@ -349,14 +320,12 @@ function highlightStepTarget($target, step, popoverOptions)
 
         const $doc = scope.$(scope.document);
         if($doc.data('tutorial.checkBinding')) return;
-        $doc.data('tutorial.checkBinding', true).on('click change', '[zui-tutorial-step]', function(event, info)
+        $doc.data('tutorial.checkBinding', true).on('click', '[zui-tutorial-step]', function(event, info)
         {
             if(!currentStep || currentStep.checkType !== event.type) return;
 
             const stepID = this.getAttribute('zui-tutorial-step');
             if(stepID !== currentStep.id) return;
-
-            if(currentStep.type === 'form' && !isStepFormFilled(currentStep, event)) return;
 
             if(config.debug) showLog(`Step target ${event.type}`, currentStep, null, {stepID, event});
             activeNextStep();
