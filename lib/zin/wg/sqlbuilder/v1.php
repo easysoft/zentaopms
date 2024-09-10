@@ -105,11 +105,10 @@ class sqlBuilder extends wg
             $alias     = $join['alias'];
             $on        = $join['on'];
 
-            list($columnA, $fieldA, $operator, $columnB, $fieldB) = $on;
+            list($columnA, $columnB) = array($on[0], $on[3]);
 
             $columnAItems = $builder->getTableDescList($columnA);
             $columnBItems = $builder->getTableDescList($columnB);
-            $columnB      = \zget($selectTableList, $on[3]);
 
             $items[] = formRow
             (
@@ -335,13 +334,9 @@ class sqlBuilder extends wg
 
         $selectTableList = $builder->getSelectTables($tableList);
         $fields       = array();
-        $defaultItems = array();
         foreach($querys as $query)
         {
             if(!empty($query['table'])) $fields[$query['table']] = $builder->getTableDescList($query['table']);
-
-            $typeOption = $query['typeOption'];
-            // if(!empty($typeOption) && !isset($defaultItems[$typeOption])) $defaultItems[$typeOption] = $this->bi->getScopeOptions($typeOption);
         }
         return sqlBuilderQueryFilter
         (
@@ -430,7 +425,7 @@ class sqlBuilder extends wg
         global $lang;
         $this->setSteps();
 
-        list($class, $tableList, $data, $url, $onUpdate) = $this->prop(array('class', 'tableList', 'data', 'url', 'onUpdate'));
+        list($class, $data, $url, $onUpdate) = $this->prop(array('class', 'data', 'url', 'onUpdate'));
 
         return panel
         (
