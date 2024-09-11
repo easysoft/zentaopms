@@ -308,7 +308,7 @@ class programplanZen extends programplan
 
         $createRequiredFields = $this->config->execution->create->requiredFields;
         $showFields           = $this->config->programplan->$custom->$createFields;
-        $checkCodeIsRequired  = $this->config->setCode && strpos(',' . trim($createRequiredFields, ',') . ',', ',code,') !== false;
+        $checkCodeIsRequired  = !empty($this->config->setCode) && strpos(',' . trim($createRequiredFields, ',') . ',', ',code,') !== false;
         if($checkCodeIsRequired) $showFields .= ',code';
         foreach(explode(',', $showFields) as $field)
         {
