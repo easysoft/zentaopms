@@ -87,46 +87,50 @@ class caselibTao extends caselibModel
         $caseID       = $this->dao->lastInsertID();
         $preGrade     = 0;
         $parentStepID = $grandPaStepID = 0;
-        foreach($data->desc[$key] as $stepKey => $stepDesc)
+
+        if(!empty($data->desc[$key]))
         {
-            /* 跳过步骤描述为空的步骤。 */
-            if(empty($stepDesc)) continue;
-
-            /* 计算步骤类型和层级。 */
-            $stepType = $data->stepType[$key][$stepKey];
-            $grade    = substr_count((string)$stepKey, '.');
-
-            /* 如果当前步骤层级为0，父ID和祖父ID清0。 */
-            if($grade == 0)
+            foreach($data->desc[$key] as $stepKey => $stepDesc)
             {
-                $parentStepID = $grandPaStepID = 0;
+                /* 跳过步骤描述为空的步骤。 */
+                if(empty($stepDesc)) continue;
+
+                /* 计算步骤类型和层级。 */
+                $stepType = $data->stepType[$key][$stepKey];
+                $grade    = substr_count((string)$stepKey, '.');
+
+                /* 如果当前步骤层级为0，父ID和祖父ID清0。 */
+                if($grade == 0)
+                {
+                    $parentStepID = $grandPaStepID = 0;
+                }
+                /* 如果前一个步骤的层级比当前步骤的层级大，将父ID设置为祖父ID，祖父ID清0。 */
+                elseif($preGrade > $grade)
+                {
+                    $parentStepID  = $grandPaStepID;
+                    $grandPaStepID = 0;
+                }
+
+                /* 构建步骤数据，插入步骤。 */
+                $step = new stdClass();
+                $step->type    = $stepType;
+                $step->parent  = $parentStepID;
+                $step->case    = $caseID;
+                $step->version = 1;
+                $step->desc    = rtrim(htmlSpecialString($stepDesc));
+                $step->expect  = $stepType == 'group' ? '' : rtrim(htmlSpecialString(zget($data->expect[$key], $stepKey, '')));
+
+                $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
+
+                /* 如果步骤类型是group，将祖父ID设置为父ID，父ID设置为当前步骤ID。 */
+                if($stepType == 'group')
+                {
+                    $grandPaStepID = $parentStepID;
+                    $parentStepID  = $this->dao->lastInsertID();
+                }
+
+                $preGrade = $grade;
             }
-            /* 如果前一个步骤的层级比当前步骤的层级大，将父ID设置为祖父ID，祖父ID清0。 */
-            elseif($preGrade > $grade)
-            {
-                $parentStepID  = $grandPaStepID;
-                $grandPaStepID = 0;
-            }
-
-            /* 构建步骤数据，插入步骤。 */
-            $step = new stdClass();
-            $step->type    = $stepType;
-            $step->parent  = $parentStepID;
-            $step->case    = $caseID;
-            $step->version = 1;
-            $step->desc    = rtrim(htmlSpecialString($stepDesc));
-            $step->expect  = $stepType == 'group' ? '' : rtrim(htmlSpecialString(zget($data->expect[$key], $stepKey, '')));
-
-            $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
-
-            /* 如果步骤类型是group，将祖父ID设置为父ID，父ID设置为当前步骤ID。 */
-            if($stepType == 'group')
-            {
-                $grandPaStepID = $parentStepID;
-                $parentStepID  = $this->dao->lastInsertID();
-            }
-
-            $preGrade = $grade;
         }
 
         $this->loadModel('action')->create('case', $caseID, 'Opened');
