@@ -1603,6 +1603,37 @@ class biModel extends model
     }
 
     /**
+     * Get table list.
+     *
+     * @access public
+     * @return array
+     */
+    public function getTableList()
+    {
+        $originTableTreeMenu = $this->loadModel('dataview')->getOriginTreeMenu();
+
+        $tableList = array();
+        foreach($originTableTreeMenu as $index => $menu)
+        {
+            if(empty($menu->items)) continue;
+
+            foreach($menu->items as $itemIndex => $item)
+            {
+                if(!is_array($item))
+                {
+                    $text = $item->key == 'story' ? $this->lang->pivot->story : $item->text;
+                    $tableList[$item->key] = $text;
+                    continue;
+                }
+
+                foreach($item->items as $subIndex => $subItem) $tableList[$subItem->key] = $subItem->text;
+            }
+        }
+
+        return $tableList;
+    }
+
+    /**
      * Build table columns from query result.
      *
      * @param  array    $fieldSettings
