@@ -21,8 +21,8 @@ jsVar('inQuickon',      $config->inQuickon);
 
 $instance->appName = strtolower($instance->appName);
 $cpuInfo    = $this->instance->printCpuUsage($instance, (object)$instanceMetric->cpu);
-$memoryInfo = $this->instance->printMemUsage($instance, (object)$instanceMetric->memory);
-$volumeInfo = $this->instance->printVolUsage($instance, (object)$instanceMetric->disk);
+$memoryInfo = $this->instance->printStorageUsage($instance, (object)$instanceMetric->memory);
+$volumeInfo = $this->instance->printStorageUsage($instance, (object)$instanceMetric->disk);
 $actions    = $this->loadModel('common')->buildOperateMenu($instance);
 
 if($type !== 'store')

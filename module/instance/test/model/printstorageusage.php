@@ -6,7 +6,7 @@ zenData('instance')->gen(1);
 
 /**
 
-title=instanceModel->printMemUsage();
+title=instanceModel->printStorageUsage();
 timeout=0
 cid=1
 
@@ -25,7 +25,7 @@ $metrics->rate  = 10;
 $metrics->usage = 10;
 $metrics->limit = 100;
 
-$result = instanceModel::printMemUsage($instance, $metrics);
+$result = instanceModel::printStorageUsage($instance, $metrics);
 
 r(count($result)) && p()        && e('5');              // 查看获取到的数量
 r($result)        && p('color') && e('secondary');      // 查看获取到的颜色

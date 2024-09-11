@@ -995,7 +995,7 @@ class instanceModel extends model
     }
 
     /**
-     * 打印内存使用信息。
+     * 打印存储使用信息。
      * Print memory usage.
      *
      * @param  object $instance
@@ -1004,32 +1004,7 @@ class instanceModel extends model
      * @access public
      * @return array
      */
-    public static function printMemUsage(object $instance, object $metrics): array
-    {
-        if($instance->source === 'user') return array('color' => '', 'tip' => '', 'rate' => '', 'usage' => '', 'limit' => '');
-        $rate = $instance->status == 'stopped' ? 0 : $metrics->rate;
-        $tip  = "{$rate}% = " . helper::formatKB($metrics->usage) . ' / ' . helper::formatKB($metrics->limit);
-
-        if(empty($color) && $rate == 0)               $color = 'gray';
-        if(empty($color) && $rate > 0 && $rate < 50)  $color = 'secondary';
-        if(empty($color) && $rate >= 0 && $rate < 70) $color = 'warning';
-        if(empty($color) && $rate >= 0 && $rate < 90) $color = 'important';
-        if(empty($color) && $rate >= 80)              $color = 'danger';
-
-        return array('color' => $color, 'tip' => $tip, 'rate' => $rate . '%', 'usage' => helper::formatKB($metrics->usage), 'limit' => helper::formatKB($metrics->limit));
-    }
-
-    /**
-     * 打印存储使用信息。
-     * Print the volume usage.
-     *
-     * @param  object $instance
-     * @param  object $metrics
-     * @static
-     * @access public
-     * @return array
-     */
-    public static function printVolUsage(object $instance, object $metrics): array
+    public static function printStorageUsage(object $instance, object $metrics): array
     {
         if($instance->source === 'user') return array('color' => '', 'tip' => '', 'rate' => '', 'usage' => '', 'limit' => '');
         $rate = $instance->status == 'stopped' ? 0 : $metrics->rate;
