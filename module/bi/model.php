@@ -1556,10 +1556,10 @@ class biModel extends model
      * @access public
      * @return object
      */
-    public function query($stateObj, $driver = 'mysql')
+    public function query($stateObj, $driver = 'mysql', $useFilter = true)
     {
         $dbh = $this->app->loadDriver($driver);
-        $sql = $this->processVars($stateObj->sql, $stateObj->getFilters(), true);
+        if($useFilter) $sql = $this->processVars($stateObj->sql, $stateObj->getFilters(), true);
 
         $stateObj->beforeQuerySql();
 
@@ -1569,7 +1569,7 @@ class biModel extends model
         $checked = $this->validateSql($sql, $driver);
         if($checked !== true) return $stateObj->setError($checked);
 
-        $sql = $this->processVars($stateObj->sql, $stateObj->getFilters());
+        if($useFilter) $sql = $this->processVars($stateObj->sql, $stateObj->getFilters());
 
         $recPerPage = $stateObj->pager['recPerPage'];
         $pageID     = $stateObj->pager['pageID'];
