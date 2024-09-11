@@ -36,6 +36,7 @@ class joinCondition extends wg
             set::items($items),
             set::value($values[0]),
             set::placeholder($lang->bi->selectTableTip),
+            set::width('50'),
             set::error($error),
             set::onChange($onChange)
         );
@@ -54,7 +55,7 @@ class joinCondition extends wg
             set::value($values[1]),
             set::placeholder($lang->bi->selectFieldTip),
             set::labelWidth('40px'),
-            set::width('50'),
+            set::width('44'),
             set::error($error),
             set::onChange($onChange)
         );
@@ -74,7 +75,7 @@ class joinCondition extends wg
             set::value($values[4]),
             set::placeholder($lang->bi->selectFieldTip),
             set::labelWidth('136px'),
-            set::width('72'),
+            set::width('64'),
             set::error($error),
             set::onChange($onChange)
         );

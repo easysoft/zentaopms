@@ -3,7 +3,7 @@
 .h-70 {height: 280px;}
 .w-50 {width: 200px;}
 .p-0-important {padding: 0 !important;}
-.min-w-1300 {min-width: 1300px;}
+.max-w-1200 {max-width: 1200px;}
 .items-center-important {align-items: center !important;}
 .justify-start-important {justify-content: start !important;}
 #builderPanel .panel-body,

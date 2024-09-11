@@ -433,7 +433,7 @@ class sqlBuilder extends wg
             set('data-sqlbuilder', $data),
             set('data-url', $url),
             set('data-onupdate', $onUpdate),
-            setClass('h-96 min-w-1300', $class),
+            setClass('h-96 max-w-1200', $class),
             set::bodyClass('flex h-96'),
             $this->buildStepBar(),
             $this->buildStepContent()
