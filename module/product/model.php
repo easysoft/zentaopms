@@ -268,6 +268,8 @@ class productModel extends model
      */
     public function getOrderedProducts(string $status, int $num = 0, int $projectID = 0, int|string $shadow = 0): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getProductStats();
+
         $products = array();
         if($projectID)
         {

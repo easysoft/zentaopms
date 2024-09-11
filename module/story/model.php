@@ -2804,6 +2804,8 @@ class storyModel extends model
      */
     public function getParentStoryPairs(int $productID, string|int $appendedStories = '', string $storyType = 'story', int $storyID = 0): array
     {
+        if(common::isTutorialMode()) return array();
+
         if($storyType == 'story')
         {
             $maxGradeGroup = $this->getMaxGradeGroup();
