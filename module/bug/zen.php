@@ -1091,8 +1091,6 @@ class bugZen extends bug
                 $resultFile->url  = $this->createLink('file', 'download', "fileID={$resultFile->id}");
             }
         }
-        if($this->app->tab == 'execution') $this->loadModel('execution')->setMenu($bug->executionID ? (int)$bug->executionID : $this->session->execution);
-        if($this->app->tab == 'project')   $this->loadModel('project')->setMenu($bug->executionID ? (int)$bug->executionID : $this->session->execution);
 
         $this->view->title                 = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] . $this->lang->hyphen . $this->lang->bug->create : $this->lang->bug->create;
         $this->view->productMembers        = $this->getProductMembersForCreate($bug);
@@ -1104,10 +1102,10 @@ class bugZen extends bug
         $this->view->productID             = $this->session->product;
         $this->view->projects              = commonModel::isTutorialMode() ? $this->loadModel('tutorial')->getProjectPairs() : $bug->projects;
         $this->view->project               = $bug->project;
-        $this->view->projectID             = $this->app->tab == 'qa' || $bug->projectID ? (int)$bug->projectID : $this->session->project;
+        $this->view->projectID             = $bug->projectID;
         $this->view->executions            = commonModel::isTutorialMode() ? $this->loadModel('tutorial')->getExecutionPairs() : $bug->executions;
         $this->view->execution             = $bug->execution;
-        $this->view->executionID           = $this->app->tab == 'qa' || $bug->executionID ? (int)$bug->executionID : $this->session->execution;
+        $this->view->executionID           = $bug->executionID;
         $this->view->branches              = $bug->branches;
         $this->view->builds                = $bug->builds;
         $this->view->moduleOptionMenu      = $bug->modules;

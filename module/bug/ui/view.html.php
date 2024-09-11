@@ -50,7 +50,7 @@ if(!$isInModal && $canCreateBug)
         'type' => 'primary',
         'text' => $lang->bug->create,
         'data-app' => $app->tab,
-        'url'  => createLink('bug', 'create', "productID={$product->id}&branch={$bug->branch}&extras=moduleID={$bug->module}")
+        'url'  => createLink('bug', 'create', "productID={$product->id}&branch={$bug->branch}&extras=projectID={$bug->project},executionID={$bug->execution},moduleID={$bug->module}")
     );
 }
 
