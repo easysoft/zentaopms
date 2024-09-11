@@ -87,7 +87,7 @@ class backBtn extends btn
             'deploy'         => 'deploy-browse,deploy-steps,deploy-scope,deploy-view,deploy-cases',
             'service'        => 'service-browse,service-manage,service-view',
             'domain'         => 'domain-browse,domain-view',
-            'researchtask'   => 'marketresearch-task,my-index,product-dynamic,project-dynamic,project-view',
+            'researchtask'   => 'marketresearch-task,my-index,product-dynamic,project-dynamic,project-view,my-contribute',
             'review'         => 'review-browse,my-index,product-dynamic,project-dynamic,project-view,programplan-browse,project-execution',
             'charter'        => 'charter-browse',
             'roadmap'        => 'charter-view',
