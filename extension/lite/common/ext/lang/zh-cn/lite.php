@@ -25,9 +25,9 @@ if($config->edition != 'open')
     $lang->navIcons['oa']       = "<i class='icon icon-oa'></i>";
     $lang->navIcons['workflow'] = "<i class='icon icon-flow'></i>";
 
-    $lang->mainNav->feedback = $lang->navIcons['feedback'] . '反馈|feedback|browse|browseType=unclosed';
-    $lang->mainNav->oa       = $lang->navIcons['oa'] . '办公|attend|personal|';
-    $lang->mainNav->workflow = $lang->navIcons['workflow'] . '工作流|workflow|browseFlow|';
+    $lang->mainNav->feedback = $lang->navIcons['feedback'] . ' 反馈|feedback|browse|browseType=unclosed';
+    $lang->mainNav->oa       = $lang->navIcons['oa'] . ' 办公|attend|personal|';
+    $lang->mainNav->workflow = $lang->navIcons['workflow'] . ' 工作流|workflow|browseFlow|';
 
     if($config->visions == ',lite,') unset($lang->mainNav->feedback);
 }
