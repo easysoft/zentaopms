@@ -88,6 +88,8 @@ class screen extends control
      */
     public function view(int $screenID, int $year = 0, int $month = 0, int $dept = 0, string $account = '')
     {
+        $this->screen->checkAccess($screenID);
+
         if(empty($year))  $year  = date('Y');
         if(empty($month)) $month = date('m');
 

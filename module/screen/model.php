@@ -45,6 +45,22 @@ class screenModel extends model
     }
 
     /**
+     * 判断是否有权限访问。
+     * Check screen access.
+     *
+     * @param  int    $dimensionID
+     * @access public
+     * @return array
+     */
+    public function checkAccess($screenID)
+    {
+        if(!in_array($screenID, $this->viewableObjects))
+        {
+            return $this->app->control->sendError($this->lang->screen->accessDenied, helper::createLink('screen', 'browse'));
+        }
+    }
+
+    /**
      * 通过维度id获取大屏列表。
      * Get screen list by dimension id.
      *
