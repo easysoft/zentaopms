@@ -97,6 +97,7 @@ blockPanel
     (
         !commonModel::isTutorialMode() && $config->vision == 'rnd' ? btn
         (
+            set::id('tutorial-start-btn'),
             set::url('tutorial', 'start'),
             set::type('warning'),
             toggle::modal(array('class-name' => 'tutorial-start')),
