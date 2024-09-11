@@ -115,6 +115,7 @@ class dao extends baseDAO
         $app->loadLang('workflowfield');
         $app->loadConfig('flow');
         $app->loadConfig('workflowfield');
+        $app->loadConfig('workflowlinkage');
 
         $linkages     = !empty($action->linkages) ? json_decode($action->linkages) : array();
         $hiddenFields = array();
@@ -127,9 +128,8 @@ class dao extends baseDAO
             $source = reset($linkage->sources);
             if(isset($data->{$source->field}))
             {
-                $currentValue = $data->{$source->field};
-                $condition = "'{$currentValue}' {$source->operator} '{$source->value}'";
-                if(eval("return $condition;"))
+                $operator = zget($config->workflowlinkage->operatorList, $source->operator);
+                if(helper::checkCondition($data->{$source->field}, $source->value, $operator))
                 {
                     foreach($targets as $target)
                     {
