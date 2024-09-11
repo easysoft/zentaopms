@@ -186,6 +186,7 @@ class formPanel extends panel
 
         /* 项目发布和项目版本用自己的工作流。 */
         if($moduleName == 'projectrelease') $moduleName = 'release';
+        if($moduleName == 'projectplan')    $moduleName = 'productplan';
         if($moduleName == 'projectbuild')
         {
             if($methodName == 'browse')
