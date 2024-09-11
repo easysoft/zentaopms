@@ -2,6 +2,7 @@ let currentGuide   = '';
 let currentTask    = '';
 let currentStep    = null;
 let popover        = null;
+let inited         = false;
 
 function showLog(name, step, moreTitles, moreInfos)
 {
@@ -598,7 +599,11 @@ function presentStep(step)
     if(config.debug) showLog('Present step', step, null, {presenter});
     if(presenter) presenter(step);
 
-    getHomeScope().$('body').toggleClass('tutorial-not-open-app', step.type !== 'openApp');
+    const homeScope = getHomeScope();
+    homeScope.$('body').toggleClass('tutorial-not-open-app', step.type !== 'openApp');
+    if(inited) return;
+    homeScope.$('#appsBar').css('pointer-events', 'none');
+    inited = true;
 }
 
 function activeTaskStep(guideName, taskName, stepIndex)
