@@ -116,8 +116,33 @@ class dao extends baseDAO
         $app->loadConfig('flow');
         $app->loadConfig('workflowfield');
 
+        $linkages     = !empty($action->linkages) ? json_decode($action->linkages) : array();
+        $hiddenFields = array();
+        foreach($linkages as $key => $linkage)
+        {
+            $sources = zget($linkage, 'sources', array());
+            $targets = zget($linkage, 'targets', array());
+            if(!$linkage or !$sources or !$targets) continue;
+
+            $source = reset($linkage->sources);
+            if(isset($data->{$source->field}))
+            {
+                $currentValue = $data->{$source->field};
+                $condition = "'{$currentValue}' {$source->operator} '{$source->value}'";
+                if(eval("return $condition;"))
+                {
+                    foreach($targets as $target)
+                    {
+                        if($target->status == 'show') continue;
+                        $hiddenFields[] = $target->field;
+                    }
+                }
+            }
+        }
+
         foreach($fields as $field)
         {
+            if(!isset($data->{$field->field}) && in_array($field->field, $hiddenFields)) continue;
             if(isset($data->{$field->field}))
             {
                 if($field->options && is_string($field->options) && str_contains(',user,dept,', ",$field->options,"))
