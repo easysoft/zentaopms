@@ -823,7 +823,7 @@ $lang->tutorial->waterfallProjectManage->setStage->step4->desc = '可以为每�
 
 $lang->tutorial->waterfallProjectManage->setStage->step5 = new stdClass();
 $lang->tutorial->waterfallProjectManage->setStage->step5->name = '切换视图';
-$lang->tutorial->waterfallProjectManage->setStage->step5->desc = '在这里可以切换为甘特图视图查看阶段';
+$lang->tutorial->waterfallProjectManage->setStage->step5->desc = '在这里可以切换为列表视图查看阶段';
 
 $lang->tutorial->waterfallProjectManage->setStage->step6 = new stdClass();
 $lang->tutorial->waterfallProjectManage->setStage->step6->name = '点击开发阶段';
@@ -1735,7 +1735,7 @@ $lang->tutorial->feedbackManage->feedback->step6->name = '填写表单';
 
 $lang->tutorial->feedbackManage->feedback->step7 = new stdClass();
 $lang->tutorial->feedbackManage->feedback->step7->name = '保存表单';
-$lang->tutorial->feedbackManage->feedback->step7->desc = '保存后反馈状态变为待处理';
+$lang->tutorial->feedbackManage->feedback->step7->desc = '保存后反馈状态随之改变';
 
 $lang->tutorial->feedbackManage->feedback->step8 = new stdClass();
 $lang->tutorial->feedbackManage->feedback->step8->name = '点击转Bug';
