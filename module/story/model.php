@@ -3772,8 +3772,8 @@ class storyModel extends model
             foreach($stmt as $row) $shadowProducts[$row->id] = $row->id;
         }
 
-        if($hasShadow && empty($taskGroups[$story->id])) $taskGroups[$story->id] = $app->dbQuery('SELECT id FROM ' . TABLE_TASK . " WHERE story = $story->id")->fetch();
-        if(empty($caseGroups[$story->id])) $caseGroups[$story->id] = $app->dbQuery('SELECT id FROM ' . TABLE_CASE . " WHERE story = $story->id")->fetch();
+        if(empty($taskGroups[$story->id])) $taskGroups[$story->id] = $app->dbQuery('SELECT id FROM ' . TABLE_TASK . " WHERE story = $story->id AND `deleted` = '0' limit 1")->fetch();
+        if(empty($caseGroups[$story->id])) $caseGroups[$story->id] = $app->dbQuery('SELECT id FROM ' . TABLE_CASE . " WHERE story = $story->id AND `deleted` = '0' limit 1")->fetch();
 
         if(isset($story->parent) && $story->parent < 0 && strpos($config->story->list->actionsOperatedParentStory, ",$action,") === false) return false;
 
@@ -3792,7 +3792,8 @@ class storyModel extends model
             if($config->vision == 'lite' && ($story->status == 'active' && in_array($story->stage, array('wait', 'projected')))) return true;
 
             if(!empty($caseGroups[$story->id])) return false;
-            if(isset($shadowProducts[$story->product]) && (!empty($taskGroups[$story->id]))) return false;
+            if(!empty($taskGroups[$story->id])) return false;
+            if(isset($shadowProducts[$story->product])) return false;
             if(!isset($shadowProducts[$story->product]) && !in_array($story->stage, array('wait', 'planned', 'projected')) && $story->type == 'story' && $story->isParent == '0') return false;
         }
 
