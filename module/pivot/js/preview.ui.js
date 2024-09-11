@@ -38,7 +38,11 @@ function loadProductSummary()
     })
     conditions = conditions.substring(0, conditions.length - 1);
 
-    const params = window.btoa('conditions=' + conditions);
+    const productID     = $('#product').find('.pick-value').val();
+    const productStatus = $('#productStatus').find('.pick-value').val();
+    const productType   = $('#productType').find('.pick-value').val();
+
+    const params = window.btoa('conditions=' + conditions + '&productID=' + productID + '&productStatus=' + productStatus + '&productType=' + productType);
     const link   = $.createLink('pivot', 'preview', 'dimensionID=' + dimensionID + '&groupID=' + groupID + '&method=productSummary&params=' + params);
     loadPage(link, '#table-pivot-preview');
 }
