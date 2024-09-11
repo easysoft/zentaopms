@@ -153,7 +153,7 @@ class pivotModel extends model
             if(!empty($pivot->name))
             {
                 $pivotNames   = json_decode($pivot->name, true);
-                $pivot->name  = zget($pivotNames, $this->app->getClientLang(), '') ? : reset(array_filter($pivotNames));
+                $pivot->name  = zget($pivotNames, $this->app->getClientLang(), '') ?? reset(array_filter($pivotNames));
                 $pivot->names = $pivotNames;
             }
 
