@@ -1175,15 +1175,17 @@ class fileModel extends model
         }
 
         /* For the open source version of the file judgment. */
-        $canPreview = false;
+        $canPreview   = false;
+        $officeTypes  = 'doc|docx|xls|xlsx|ppt|pptx|pdf';
+        $isOfficeFile = stripos($officeTypes, $file->extension) !== false;
         if(stripos('txt|jpg|jpeg|gif|png|bmp|mp4', $file->extension) !== false) $canPreview = true;
-        if(isset($this->config->file->libreOfficeTurnon) and $this->config->file->libreOfficeTurnon == 1)
-        {
-            $officeTypes = 'doc|docx|xls|xlsx|ppt|pptx|pdf';
-            if(stripos($officeTypes, $file->extension) !== false) $canPreview = true;
-        }
+        if(isset($this->config->file->libreOfficeTurnon) and $this->config->file->libreOfficeTurnon == 1 && $isOfficeFile) $canPreview = true;
 
-        if($canPreview) $html .= html::a(helper::createLink('file', 'download', "fileID=$file->id&mouse=left"), "<i class='icon icon-eye'></i>", '', "class='fileAction btn btn-link text-primary' title='{$this->lang->file->preview}' data-toggle='modal' data-size='lg'");
+        if($canPreview)
+        {
+            $dataToggle = $isOfficeFile ? '' : " data-toggle='modal' data-size='lg'";
+            $html      .= html::a(helper::createLink('file', 'download', "fileID=$file->id&mouse=left"), "<i class='icon icon-eye'></i>", $isOfficeFile ? '_blank' : '', "class='fileAction btn btn-link text-primary' title='{$this->lang->file->preview}' {$dataToggle}");
+        }
         if(common::hasPriv('file', 'download')) $html .= html::a($downloadLink, "<i class='icon icon-download'></i>", '_blank', "class='fileAction btn btn-link text-primary' title='{$this->lang->file->downloadFile}'");
         if(common::hasPriv($objectType, 'edit', $object))
         {
