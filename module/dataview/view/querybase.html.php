@@ -4,85 +4,101 @@
 <?php js::set('currentTheme', $this->app->cookie->theme);?>
 <?php js::set('recTotalTip', $lang->dataview->recTotalTip);?>
 <?php js::set('recPerPageTip', $lang->dataview->recPerPageTip);?>
-<div class='panel'>
-  <div class='panel-heading'>
-    <div class='btn-active-text'><span class='text ptitle'><?php echo $lang->dataview->sqlQuery;?></span></div>
-  </div>
-  <form method='post' id='dataform' class="form-ajax">
-    <table class='table table-form'>
-      <tr>
-        <th style="width: 0; padding: 0; margin: 0;"></th>
-        <td>
-          <?php echo html::textarea('sql', isset($data) ? $data->sql : '', "placeholder='" . $lang->dataview->sqlPlaceholder . "' class='form-control' rows=6");?>
-        </td>
-      </tr>
-      <tr class="error hidden"><th></th><td></td></tr>
-      <tr>
-        <td></td>
-        <td>
-          <button type="button" class="btn query btn-primary"><?php echo $lang->dataview->query;?></button>
-          <span id='querying' class='hidden query-padding'><?php echo $lang->dataview->querying;?></span>
-        </td>
-      </tr>
-    </table>
-  </form>
+
+<div id='dictionary' class='dictionary panel' style="float: left; width: calc(15% - 15px); max-height: 600px; overflow:auto; margin-right: 15px">
+  <ul id='dictionaryTree' class='tree' data-ride='tree'>
+  <?php $dictionary = $this->loadModel('bi')->getTableFields();?>
+  <?php foreach($dictionary as $table => $fields):?>
+    <li class='table-item' data-dict="<?php echo $table;?>" onclick='handleClickDictTable(event)'><a href='#'><?php echo $table . '(table)';?></a>
+    <?php foreach($fields as $field => $fieldInfo):?>
+      <ul><li class='field-item' data-dict="<?php echo $field;?>" onclick='handleClickDictField(event)'><a href='#'><?php echo $field . '(' . $fieldInfo['type'] . ')';?></a></li></ul>
+    <?php endforeach;?>
+    </li>
+  <?php endforeach;?>
+  </ul>
 </div>
-<div class="panel table-panel" id='queryTable'>
-  <div class="panel-heading titleResult">
-    <div class='btn-active-text'>
-      <span class='text'><?php echo $lang->dataview->result;?></span>
-      <button type="button" class="btn btn-link fieldSettings pull-right"><i class='icon icon-cog-outline'></i> <?php echo $lang->dataview->fieldSettings;?></button>
-      <?php if($this->app->rawModule == 'dataview' and common::hasPriv('dataview', 'export')):?>
-      <button type="button" id='exportDataview' class="btn btn-link hidden dataview-export pull-right"><i class='icon icon-export'></i> <?php echo $lang->dataview->export;?></button>
-      <?php endif;?>
+
+<div style="float: right; width: 85%;">
+  <div class='panel'>
+    <div class='panel-heading'>
+      <div class='btn-active-text'><span class='text ptitle'><?php echo $lang->dataview->sqlQuery;?></span></div>
     </div>
+    <form method='post' id='dataform' class="form-ajax">
+      <table class='table table-form'>
+        <tr>
+          <th style="width: 0; padding: 0; margin: 0;"></th>
+          <td>
+            <?php echo html::textarea('sql', isset($data) ? $data->sql : '', "placeholder='" . $lang->dataview->sqlPlaceholder . "' class='form-control' rows=6");?>
+          </td>
+        </tr>
+        <tr class="error hidden"><th></th><td></td></tr>
+        <tr>
+          <td></td>
+          <td>
+            <button type="button" class="btn query btn-primary"><?php echo $lang->dataview->query;?></button>
+            <span id='querying' class='hidden query-padding'><?php echo $lang->dataview->querying;?></span>
+          </td>
+        </tr>
+      </table>
+    </form>
   </div>
-  <div class="table-empty-tip">
-    <p><span class="text-muted"><?php echo $lang->dataview->noQueryData;?></span></p>
-  </div>
-  <div style="overflow-x: auto; padding: 0px 20px;">
-    <table class="result table table-condensed table-striped table-bordered table-fixed datatable">
-    </table>
-  </div>
-  <div class='table-footer hide'>
-    <ul class="pager">
-      <li><div class="pager-label recTotal"></div></li>
-      <li>
-        <div class="btn-group pager-size-menu dropup">
-          <button type="button" class="btn dropdown-toggle recPerPage" data-toggle="dropdown" style="border-radius: 4px;"></button>
-          <ul class="dropdown-menu">
-            <li><a href="javascript:;" data-size="5">5</a></li>
-            <li><a href="javascript:;" data-size="10">10</a></li>
-            <li><a href="javascript:;" data-size="15">15</a></li>
-            <li><a href="javascript:;" data-size="20">20</a></li>
-            <li><a href="javascript:;" data-size="25">25</a></li>
-            <li><a href="javascript:;" data-size="30">30</a></li>
-            <li><a href="javascript:;" data-size="35">35</a></li>
-            <li><a href="javascript:;" data-size="40">40</a></li>
-            <li><a href="javascript:;" data-size="45">45</a></li>
-            <li><a href="javascript:;" data-size="50">50</a></li>
-            <li><a href="javascript:;" data-size="100">100</a></li>
-            <li><a href="javascript:;" data-size="200">200</a></li>
-            <li><a href="javascript:;" data-size="500">500</a></li>
-            <li><a href="javascript:;" data-size="1000">1000</a></li>
-            <li><a href="javascript:;" data-size="2000">2000</a></li>
-          </ul>
-        </div>
-      </li>
-      <li class='pager-item-left first-page'>
-        <a class='pager-item' data-page='1' href='javascript:;'><i class='icon icon-first-page'></i></a>
-      </li>
-      <li class='pager-item-left left-page'>
-        <a class='pager-item' data-page='1' href='javascript:;'><i class='icon icon-angle-left'></i></a>
-      </li>
-      <li><div class='pager-label page-number'></div></li>
-      <li class='pager-item-right right-page'>
-        <a class='pager-item' data-page='1' href='javascript:;'><i class='icon icon-angle-right'></i></a>
-      </li>
-      <li class='pager-item-right last-page'>
-        <a class='pager-item' data-page='1' href='javascript:;'><i class='icon icon-last-page'></i></a>
-      </li>
-    </ul>
+  <div class="panel table-panel" id='queryTable'>
+    <div class="panel-heading titleResult">
+      <div class='btn-active-text'>
+        <span class='text'><?php echo $lang->dataview->result;?></span>
+        <button type="button" class="btn btn-link fieldSettings pull-right"><i class='icon icon-cog-outline'></i> <?php echo $lang->dataview->fieldSettings;?></button>
+        <?php if($this->app->rawModule == 'dataview' and common::hasPriv('dataview', 'export')):?>
+        <button type="button" id='exportDataview' class="btn btn-link hidden dataview-export pull-right"><i class='icon icon-export'></i> <?php echo $lang->dataview->export;?></button>
+        <?php endif;?>
+      </div>
+    </div>
+    <div class="table-empty-tip">
+      <p><span class="text-muted"><?php echo $lang->dataview->noQueryData;?></span></p>
+    </div>
+    <div style="overflow-x: auto; padding: 0px 20px;">
+      <table class="result table table-condensed table-striped table-bordered table-fixed datatable">
+      </table>
+    </div>
+    <div class='table-footer hide'>
+      <ul class="pager">
+        <li><div class="pager-label recTotal"></div></li>
+        <li>
+          <div class="btn-group pager-size-menu dropup">
+            <button type="button" class="btn dropdown-toggle recPerPage" data-toggle="dropdown" style="border-radius: 4px;"></button>
+            <ul class="dropdown-menu">
+              <li><a href="javascript:;" data-size="5">5</a></li>
+              <li><a href="javascript:;" data-size="10">10</a></li>
+              <li><a href="javascript:;" data-size="15">15</a></li>
+              <li><a href="javascript:;" data-size="20">20</a></li>
+              <li><a href="javascript:;" data-size="25">25</a></li>
+              <li><a href="javascript:;" data-size="30">30</a></li>
+              <li><a href="javascript:;" data-size="35">35</a></li>
+              <li><a href="javascript:;" data-size="40">40</a></li>
+              <li><a href="javascript:;" data-size="45">45</a></li>
+              <li><a href="javascript:;" data-size="50">50</a></li>
+              <li><a href="javascript:;" data-size="100">100</a></li>
+              <li><a href="javascript:;" data-size="200">200</a></li>
+              <li><a href="javascript:;" data-size="500">500</a></li>
+              <li><a href="javascript:;" data-size="1000">1000</a></li>
+              <li><a href="javascript:;" data-size="2000">2000</a></li>
+            </ul>
+          </div>
+        </li>
+        <li class='pager-item-left first-page'>
+          <a class='pager-item' data-page='1' href='javascript:;'><i class='icon icon-first-page'></i></a>
+        </li>
+        <li class='pager-item-left left-page'>
+          <a class='pager-item' data-page='1' href='javascript:;'><i class='icon icon-angle-left'></i></a>
+        </li>
+        <li><div class='pager-label page-number'></div></li>
+        <li class='pager-item-right right-page'>
+          <a class='pager-item' data-page='1' href='javascript:;'><i class='icon icon-angle-right'></i></a>
+        </li>
+        <li class='pager-item-right last-page'>
+          <a class='pager-item' data-page='1' href='javascript:;'><i class='icon icon-last-page'></i></a>
+        </li>
+      </ul>
+    </div>
   </div>
 </div>
 
