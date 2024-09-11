@@ -383,6 +383,8 @@ class pivotState
      */
     public function processQueryFilters()
     {
+        if($this->mode == 'text') return;
+
         $querys = $this->sqlbuilder->querys;
         $this->clearFilters();
         if(empty($querys)) return;
@@ -413,6 +415,7 @@ class pivotState
      */
     public function matchFieldSettingFromBuilder($key, $setting)
     {
+        if($this->mode == 'text') return $setting;
         $selects = array_merge($this->sqlbuilder->getSelects(), $this->sqlbuilder->getFuncSelects());
         foreach($selects as $select)
         {
