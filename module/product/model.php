@@ -21,6 +21,7 @@ class productModel extends model
      */
     public function checkPriv(int $productID): bool
     {
+        if(common::isTutorialMode()) return true;
         return !empty($productID) && ($this->app->user->admin || (strpos(",{$this->app->user->view->products},", ",{$productID},") !== false));
     }
 
