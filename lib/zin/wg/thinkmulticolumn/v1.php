@@ -118,15 +118,8 @@ class thinkMulticolumn extends thinkQuestion
                 (
                     setClass('step-required'),
                     set::width('1/2'),
-                    set::label
-                    (
-                        $lang->thinkstep->label->required,
-                        !empty($quotedQuestions) ? array
-                        (
-                            icon('about', setClass('text-warning mr-1 ml-2')),
-                            span(setClass('text-sm'), $lang->thinkstep->tips->required)
-                        ) : null
-                    ),
+                    set::label($lang->thinkstep->label->required,),
+                    set::labelHint(!empty($quotedQuestions) ? $lang->thinkstep->tips->required : null),
                     radioList
                     (
                         set::name('options[required]'),
