@@ -727,11 +727,11 @@ class transferModel extends model
                 /* 获取字段的控件类型。*/
                 /* Get field control type. */
                 $control = isset($fieldList[$field]['control']) ? $fieldList[$field]['control'] : '';
+                if(isset($control['control'])) $control = $control['control'];
 
                 /* 如果字段是下拉字段并且在excel里不是下拉框的形式时，根据fieldList->value查找value。*/
                 /* If the field is a dropdown field and the value in excel is not a dropdown box, the value is found by fieldList->value. */
-                if(!isset($control['control']) && !in_array($control, array('select', 'multiple', 'picker'))) continue;
-                if(isset($control['control']) && !in_array($control['control'], array('select', 'multiple', 'picker'))) continue;
+                if(!in_array($control, array('select', 'multiple', 'picker'))) continue;
                 $rows[$key]->$field = $this->transferTao->extractElements((string) $cellValue, $field, $fieldList[$field]['items']);
             }
         }
