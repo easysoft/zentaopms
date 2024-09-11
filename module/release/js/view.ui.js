@@ -91,10 +91,13 @@ window.unlinkObject = function(objectType, objectID)
 {
     objectType = objectType.toLowerCase();
 
-    if(window.confirm(eval(`confirmunlink${objectType}`)))
-    {
-        $.ajaxSubmit({url: eval(`unlink${objectType}url`).replace('%s', objectID)});
-    }
+    zui.Modal.confirm(eval(`confirmunlink${objectType}`)).then((res) => {
+        if(res)
+        {
+            $.ajaxSubmit({url: eval(`unlink${objectType}url`).replace('%s', objectID)});
+        }
+    });
+
 }
 
 window.showLink = function(type, params, onlyUpdateTable)
