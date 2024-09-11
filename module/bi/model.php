@@ -1559,7 +1559,8 @@ class biModel extends model
     public function query($stateObj, $driver = 'mysql', $useFilter = true)
     {
         $dbh = $this->app->loadDriver($driver);
-        if($useFilter) $sql = $this->processVars($stateObj->sql, $stateObj->getFilters(), true);
+        $sql = $stateObj->sql;
+        if($useFilter) $sql = $this->processVars($sql, $stateObj->getFilters(), true);
 
         $stateObj->beforeQuerySql();
 
