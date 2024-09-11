@@ -67,17 +67,20 @@ $('#teamTable').on('click', "[data-type='add']", function()
 });
 
 /* 切换串行/并行 展示/隐藏工序图标. */
-$('.form').on('change.team', '[name="mode"]', function()
+$(function()
 {
-    if($(this).val() == 'multi')
+    $('.form').on('change.team', '[name="mode"]', function()
     {
-        $('#teamTable td .icon-angle-down').addClass('hidden');
-    }
-    else
-    {
-        $('#teamTable td .icon-angle-down').removeClass('hidden');
-    }
-});
+        if($(this).val() == 'multi')
+        {
+            $('#teamTable td .icon-angle-down').addClass('hidden');
+        }
+        else
+        {
+            $('#teamTable td .icon-angle-down').removeClass('hidden');
+        }
+    });
+})
 
 /**
  * Set line number.
