@@ -376,6 +376,13 @@ function handleClickDictField(event)
     appendTextToSqlForm(field);
 }
 
+/**
+ * append text to sql form.
+ *
+ * @param  string $text
+ * @access public
+ * @return void
+ */
 function appendTextToSqlForm(text)
 {
     const sqlForm = $('textarea[name="sql"]');
