@@ -2373,6 +2373,7 @@ class testcaseZen extends testcase
      * @param  string    $branch
      * @param  int       $maxImport
      * @param  string    $tmpFile
+     * @param  string    $message
      * @access protected
      * @return void
      */
