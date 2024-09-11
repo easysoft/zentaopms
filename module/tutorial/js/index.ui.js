@@ -169,6 +169,11 @@ const stepPresenters =
     }
 };
 
+function toggleIframeMask(toggle)
+{
+    $('body').toggleClass('tutorial-has-mask', toggle);
+}
+
 function getStepForm(scope, $target)
 {
     let $form   = $target.closest('form');
@@ -273,7 +278,7 @@ function highlightStepTarget($target, step, popoverOptions)
                 component: 'toolbar',
                 props:
                 {
-                    className: 'py-3 px-4 gap-2',
+                    className: 'py-3 px-4 gap-3',
                     items:
                     [
                         {component: 'span', children: `${step.index + 1}/${step.task.steps.length}`, className: 'flex-auto'},
@@ -410,8 +415,8 @@ function activeNextStep(step)
             const nextGuide = nextTask ? null : getNextGuide(step.guide);
             const nextGuideTask = (nextGuide && nextGuide.taskList.length) ? nextGuide.tasks[nextGuide.taskList[0]] : null;
             const actions = [];
-            if(nextTask) actions.push({type: 'confirm', btnType: 'primary', text: `${lang.nextTask}${lang.colon}${nextTask.title}`, onClick: () => activeTask(step.guide.name, nextTask.name)}, 'cancel');
-            else if(nextGuideTask) actions.push({type: 'confirm', btnType: 'primary', text: `${lang.nextGuide}${lang.colon}${nextGuide.title}`, onClick: () => activeTask(nextGuide.name, nextGuideTask.name)}, 'cancel');
+            if(nextTask) actions.push({type: 'confirm', btnType: 'primary', text: `${lang.nextTask}${lang.colon}${nextTask.title}`, onClick: () => activeTask(step.guide.name, nextTask.name)}, {key: 'cancel', onClick: () => unactiveTask()});
+            else if(nextGuideTask) actions.push({type: 'confirm', btnType: 'primary', text: `${lang.nextGuide}${lang.colon}${nextGuide.title}`, onClick: () => activeTask(nextGuide.name, nextGuideTask.name)}, {key: 'cancel', onClick: () => unactiveTask()});
             else actions.push('confirm');
             zui.Modal.alert(
             {
@@ -462,6 +467,7 @@ function unactiveTask()
     toggleActiveTarget('task', currentTask, false);
     currentTask = '';
     currentStep = null;
+    toggleIframeMask(true);
 }
 
 function getHomeScope()
@@ -628,6 +634,7 @@ function activeTask(guideName, taskName, stepIndex)
         toggleActiveTarget('task', currentTask, true);
     }
 
+    toggleIframeMask(false);
     activeTaskStep(guideName, taskName, stepIndex);
 }
 
@@ -676,13 +683,4 @@ window.handleClickTask = function(event)
     activeTask(guideName, taskName);
 };
 
-if(!zui.store.session.get('tutorialTipShowed'))
-{
-    $('body').addClass('tutorial-tip-show');
-    $('#sidebar').on('click.tutorial-tip', () =>
-    {
-        $('body').removeClass('tutorial-tip-show');
-        $('#sidebar').off('click.tutorial-tip');
-    });
-    zui.store.session.set('tutorialTipShowed', true);
-}
+toggleIframeMask(true);
