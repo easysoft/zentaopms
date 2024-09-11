@@ -1013,6 +1013,8 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
     e.preventDefault();
 }).on('contextmenu', '.open-in-app,.show-in-app', function(event)
 {
+    if(isTutorialMode) return;
+
     const $btn  = $(this);
     const code = $btn.data('app');
     if(!code) return;

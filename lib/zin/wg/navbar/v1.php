@@ -323,6 +323,7 @@ class navbar extends wg
         /* Set active menu to global data, make it accessible to other widgets */
         data('activeMenu', $activeMenu);
         jsVar('allNavbarItems', $items);
+        jsVar('isTutorialMode', commonModel::isTutorialMode());
 
         $items = array_filter($items, function($item) { return empty($item['hidden']); });
 

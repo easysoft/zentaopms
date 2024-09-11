@@ -197,6 +197,7 @@ class mainNavbar extends nav
             }
 
             jsVar('allMainNavbarItems', $items);
+            jsVar('isTutorialMode', commonModel::isTutorialMode());
             $items = array_filter($items, function($item) { return empty($item['hidden']); });
 
             $this->setProp('items', $items);
