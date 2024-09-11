@@ -346,6 +346,13 @@ function setRelatedField(obj)
     $relatedField.picker({list: relatedFieldOptions, autoselectfirst: true});
 }
 
+/**
+ * handle click table item in data dictionary
+ *
+ * @param  obj    $event
+ * @access public
+ * @return void
+ */
 function handleClickDictTable(event)
 {
     if(!$(event.target).hasClass('list-toggle') && !$(event.target).closest('li').hasClass('field-item'))
@@ -356,6 +363,13 @@ function handleClickDictTable(event)
     }
 }
 
+/**
+ * handle click field item in data dictionary
+ *
+ * @param  obj    $event
+ * @access public
+ * @return void
+ */
 function handleClickDictField(event)
 {
     const field = $(event.target).closest('li').data('dict');
