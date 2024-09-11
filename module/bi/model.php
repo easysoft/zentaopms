@@ -368,41 +368,7 @@ class biModel extends model
         return $results;
     }
 
-    /**
-     * Try to explain sql.
-     *
-     * @param  string     $sql
-     * @param  string     $limitSql
-     * @param  string     $driver mysql|duckdb
-     * @access public
-     * @return array
-     */
-    public function querySQL($sql, $limitSql, $driver = 'mysql')
-    {
-        $dbh = $this->app->loadDriver($driver);
 
-        try
-        {
-            $stmt = $dbh->query($limitSql);
-            if($stmt === false) return array('result' => 'fail', 'message' => 'Sql error.');
-
-            $rows     = $stmt->fetchAll();
-            $querySQL = "SELECT FOUND_ROWS() as count";
-            if($driver == 'duckdb') $querySQL = "SELECT COUNT(1) as count FROM ( $sql )";
-            if($driver == 'dm')     $querySQL = "SELECT COUNT(1) as count";
-
-            $count     = $dbh->query($querySQL)->fetch();
-            $rowsCount = $count->count;
-        }
-        catch(Exception $e)
-        {
-            $message = preg_replace("/\r|\n|\t/", "", $e->getMessage());
-            $message = strip_tags($message);
-            return array('result' => 'fail', 'message' => $message);
-        }
-
-        return array('result' => 'success', 'rows' => $rows, 'rowsCount' => $rowsCount);
-    }
 
     /**
      * Get sql result columns.
@@ -1526,6 +1492,62 @@ class biModel extends model
     }
 
     /**
+     * Get SQL.
+     *
+     * @param  string $sql
+     * @param  string $driver
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return array
+     */
+    public function getSQL($sql, $driver = 'mysql', $recPerPage = 10, $pageID = 1)
+    {
+        $statement = $this->sql2Statement($sql);
+        $limitSql  = $this->prepareSqlPager($statement, $recPerPage, $pageID, $driver);
+
+        $countSql = "SELECT FOUND_ROWS() AS count";
+        if($driver == 'duckdb') $countSql = "SELECT COUNT(1) AS count FROM ($sql)";
+        if($driver == 'dm')     $countSql = "SELECT COUNT(1) as count";
+
+        return array($limitSql, $countSql);
+    }
+
+    /**
+     * Query sql.
+     *
+     * @param  string     $sql
+     * @param  string     $limitSql
+     * @param  string     $driver mysql|duckdb
+     * @access public
+     * @return array
+     */
+    public function querySQL($sql, $limitSql, $driver = 'mysql')
+    {
+        $dbh = $this->app->loadDriver($driver);
+
+        try
+        {
+            $stmt = $dbh->query($limitSql);
+            if($stmt === false) return array('result' => 'fail', 'message' => 'Sql error.');
+
+            $rows     = $stmt->fetchAll();
+            $countSql = $this->getSQL($sql, $driver)[1];
+
+            $count     = $dbh->query($countSql)->fetch();
+            $rowsCount = $count->count;
+        }
+        catch(Exception $e)
+        {
+            $message = preg_replace("/\r|\n|\t/", "", $e->getMessage());
+            $message = strip_tags($message);
+            return array('result' => 'fail', 'message' => $message);
+        }
+
+        return array('result' => 'success', 'rows' => $rows, 'rowsCount' => $rowsCount);
+    }
+
+    /**
      * Query sql.
      *
      * @param  string    $sql
@@ -1547,20 +1569,16 @@ class biModel extends model
         $checked = $this->validateSql($sql, $driver);
         if($checked !== true) return $stateObj->setError($checked);
 
-        $sql       = $this->processVars($stateObj->sql, $stateObj->getFilters());
-        $statement = $this->sql2Statement($sql);
+        $sql = $this->processVars($stateObj->sql, $stateObj->getFilters());
 
         $recPerPage = $stateObj->pager['recPerPage'];
         $pageID     = $stateObj->pager['pageID'];
-        $limitSql   = $this->prepareSqlPager($statement, $recPerPage, $pageID, $driver);
-
-        $mysqlCountSql  = "SELECT FOUND_ROWS() AS count";
-        $duckdbCountSql = "SELECT COUNT(1) AS count FROM ($sql)";
+        list($limitSql, $countSql) = $this->getSql($sql, $driver, $recPerPage, $pageID);
 
         try
         {
             $stateObj->queryData = $dbh->query($limitSql)->fetchAll();
-            $total               = $dbh->query($driver == 'mysql' ? $mysqlCountSql : $duckdbCountSql)->fetch()->count;
+            $total               = $dbh->query($countSql)->fetch()->count;
 
             list($columns, $relatedObject) = $this->prepareColumns($limitSql, $statement, $driver);
 
