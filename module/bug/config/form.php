@@ -199,3 +199,28 @@ $config->bug->form->confirm['assignedDate']   = array('required' => false, 'type
 $config->bug->form->confirm['lastEditedBy']   = array('required' => false, 'type' => 'string', 'default' => isset($app->user->account) ? $app->user->account : '');
 $config->bug->form->confirm['lastEditedDate'] = array('required' => false, 'type' => 'date',   'default' => helper::now());
 $config->bug->form->confirm['comment']        = array('required' => false, 'type' => 'string', 'default' => '', 'control' => 'editor');
+
+$config->bug->form->showImport = array();
+$config->bug->form->showImport['id']             = array('required' => false, 'type' => 'int',    'base' => true);
+$config->bug->form->showImport['product']        = array('required' => true,  'type' => 'int',    'default' => 0);
+$config->bug->form->showImport['project']        = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->bug->form->showImport['execution']      = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->bug->form->showImport['story']          = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->bug->form->showImport['type']           = array('required' => false, 'type' => 'string', 'default' => '');
+$config->bug->form->showImport['severity']       = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->bug->form->showImport['pri']            = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->bug->form->showImport['title']          = array('required' => true,  'type' => 'string', 'default' => '');
+$config->bug->form->showImport['color']          = array('required' => false, 'type' => 'string', 'default' => '');
+$config->bug->form->showImport['branch']         = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->bug->form->showImport['module']         = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->bug->form->showImport['plan']           = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->bug->form->showImport['assignedTo']     = array('required' => false, 'type' => 'string', 'default' => '');
+$config->bug->form->showImport['deadline']       = array('required' => false, 'type' => 'date',   'default' => null);
+$config->bug->form->showImport['os']             = array('required' => false, 'type' => 'array',  'default' => '', 'filter' => 'join');
+$config->bug->form->showImport['browser']        = array('required' => false, 'type' => 'array',  'default' => '', 'filter' => 'join');
+$config->bug->form->showImport['keywords']       = array('required' => false, 'type' => 'string', 'default' => '');
+$config->bug->form->showImport['resolvedBy']     = array('required' => false, 'type' => 'string', 'default' => '');
+$config->bug->form->showImport['resolution']     = array('required' => false, 'type' => 'string', 'default' => '');
+$config->bug->form->showImport['duplicateBug']   = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->bug->form->showImport['lastEditedBy']   = array('required' => false, 'type' => 'string', 'default' => isset($app->user->account) ? $app->user->account : '');
+$config->bug->form->showImport['lastEditedDate'] = array('required' => false, 'type' => 'date',   'default' => helper::now());
