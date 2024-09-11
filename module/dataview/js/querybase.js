@@ -346,6 +346,22 @@ function setRelatedField(obj)
     $relatedField.picker({list: relatedFieldOptions, autoselectfirst: true});
 }
 
+function handleClickDictTable(event)
+{
+    if(!$(event.target).hasClass('list-toggle') && !$(event.target).closest('li').hasClass('field-item'))
+    {
+        const table = $(event.target).closest('li').data('dict');
+        appendTextToSqlForm(table);
+        event.stopPropagation();
+    }
+}
+
+function handleClickDictField(event)
+{
+    const field = $(event.target).closest('li').data('dict');
+    appendTextToSqlForm(field);
+}
+
 function appendTextToSqlForm(text)
 {
     const sqlForm = $('textarea[name="sql"]');
