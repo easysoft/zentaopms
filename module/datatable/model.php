@@ -447,9 +447,6 @@ class datatableModel extends model
      */
     public function appendWorkflowFields(string $module, string $method, array $fieldList): array
     {
-        $flow = $this->loadModel('workflow')->getByModule($module);
-        if(empty($flow)) return $fieldList;
-
         if(in_array($module, array('epic', 'story', 'requirement')))
         {
             $module = 'product';
@@ -473,6 +470,13 @@ class datatableModel extends model
         {
             $method = 'browse'; // 执行用例列表加载testcase-browse的layout配置。
         }
+        elseif($module == 'projectrelease')
+        {
+            $module = 'release'; // 项目发布加载release-browse的layout配置。
+        }
+
+        $flow = $this->loadModel('workflow')->getByModule($module);
+        if(empty($flow)) return $fieldList;
 
         $fields = $this->loadModel('workflowaction')->getFields($module, $method);
         if($flow->buildin == 1)
