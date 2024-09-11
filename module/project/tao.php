@@ -1050,7 +1050,7 @@ class projectTao extends projectModel
         $projectProduct = (int)$this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetch('product');
         if(isset($lang->project->menu->settings['subMenu']->module['link'])) $lang->project->menu->settings['subMenu']->module['link'] = sprintf($lang->project->menu->settings['subMenu']->module['link'], $projectProduct);
 
-        if(!$hasProduct && in_array($model, $this->config->project->scrumList)) $lang->project->menu->projectplan['link'] = sprintf($lang->project->menu->projectplan['link'], $projectProduct);
+        if(!$hasProduct && in_array($model, $this->config->project->scrumList) && isset($lang->project->menu->projectplan)) $lang->project->menu->projectplan['link'] = sprintf($lang->project->menu->projectplan['link'], $projectProduct);
 
         if(!$hasProduct) unset($lang->project->menu->settings['subMenu']->products);
         if(!in_array($model, $this->config->project->scrumList)) unset($lang->project->menu->projectplan);

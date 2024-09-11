@@ -202,8 +202,11 @@ class navbar extends wg
                 $executionMoreItem = $this->getExecutionMoreItem($executionID);
                 if(!empty($executionMoreItem))
                 {
-                    $items[] = array('type' => 'divider');
                     $items[] = $executionMoreItem;
+                }
+                elseif(isset(end($items)['type']) && end($items)['type'] == 'divider')
+                {
+                    array_pop($items); // 最后一个是分割线，则删除
                 }
             }
             elseif($menuItem->link['module'] == 'app' and $menuItem->link['method'] == 'serverlink')
