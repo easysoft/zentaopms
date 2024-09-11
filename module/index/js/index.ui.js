@@ -1410,5 +1410,6 @@ function canAddDivider($item)
     $item = $item.closest('li');
     if($item.is('.divider'))        return false;
     if($item.next().is('.divider')) return false;
+    if($item.is(':last-child'))     return false;
     return true;
 }
