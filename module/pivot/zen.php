@@ -240,7 +240,7 @@ class pivotZen extends pivot
      * @access public
      * @return void
      */
-    public function productSummary(string $conditions = '', int $productID = 0, string $productStatus = 'normal', string $productType = 'normal'): void
+    public function productSummary(string $conditions = '', int|string $productID = 0, string $productStatus = 'normal', string $productType = 'normal'): void
     {
         $this->app->loadLang('story');
         $this->app->loadLang('product');

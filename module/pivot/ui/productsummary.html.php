@@ -30,7 +30,7 @@ $generateData = function() use ($lang, $title, $cols, $data, $products, $filters
             (
                 on::change('loadProductSummary'),
                 set::inline(true),
-                set::items(array(array('text' => $lang->pivot->closedProduct, 'value' => 'closedProduct'), array('text' => $lang->pivot->overduePlan, 'value' => 'overduePlan')))
+                set::items(array(array('text' => $lang->pivot->overduePlan, 'value' => 'overduePlan')))
             ),
             div
             (
