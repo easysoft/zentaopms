@@ -8,17 +8,25 @@ class pivotTao extends pivotModel
      *
      * @param  string       $conditions
      * @param  array|string $IDList
+     * @param  array        $filters
      * @access public
      * @return array
      */
-    protected function getProductList(string $conditions, array|string $IDList = array()): array
+    protected function getProductList(string $conditions, array|string $IDList = array(), array $filters = array()): array
     {
+        $productID     = isset($filters['productID'])     ? $filters['productID']     : 0;
+        $productStatus = isset($filters['productStatus']) ? $filters['productStatus'] : '';
+        $productType   = isset($filters['productType'])   ? $filters['productType']   : '';
+
         return $this->dao->select('t1.id, t1.code, t1.name, t1.PO')->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.shadow')->eq('0')
             ->beginIF(strpos($conditions, 'closedProduct') === false)->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF(!empty($IDList))->andWhere('t1.id')->in($IDList)->fi()
+            ->beginIF($productID)->andWhere('t1.id')->eq($productID)->fi()
+            ->beginIF($productStatus)->andWhere('t1.status')->eq($productStatus)->fi()
+            ->beginIF($productType)->andWhere('t1.type')->eq($productType)->fi()
             ->orderBy('t2.order_asc, t1.line_desc, t1.order_asc')
             ->fetchAll('id');
     }

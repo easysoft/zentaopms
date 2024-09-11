@@ -302,14 +302,15 @@ class pivotModel extends model
      *
      * @param  string $conditions
      * @param  string $storyType
+     * @param  array  $filters
      * @access public
      * @return array
      */
-    public function getProducts(string $conditions, string $storyType = 'story'): array
+    public function getProducts(string $conditions, string $storyType = 'story', array $filters = array()): array
     {
         $permission = common::hasPriv('pivot', 'showProduct') || $this->app->user->admin;
         $IDList     = !$permission ? $this->app->user->view->products : array();
-        $products   = $this->pivotTao->getProductList($conditions, $IDList);
+        $products   = $this->pivotTao->getProductList($conditions, $IDList, $filters);
 
         /* 为产品生成计划数据和相关的需求数据。 */
         /* Generate plan data and related story data for products. */

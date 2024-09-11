@@ -240,15 +240,17 @@ class pivotZen extends pivot
      * @access public
      * @return void
      */
-    public function productSummary(string $conditions = ''): void
+    public function productSummary(string $conditions = '', int $productID = 0, string $productStatus = 'normal', string $productType = 'normal'): void
     {
         $this->app->loadLang('story');
         $this->app->loadLang('product');
         $this->app->loadLang('productplan');
         $this->session->set('productList', $this->app->getURI(true), 'product');
 
-        $products = $this->pivot->getProducts($conditions);
+        $filters  = array('productID' => $productID, 'productStatus' => $productStatus, 'productType' => $productType);
+        $products = $this->pivot->getProducts($conditions, 'story', $filters);
 
+        $this->view->filters     = $filters;
         $this->view->title       = $this->lang->pivot->productSummary;
         $this->view->pivotName   = $this->lang->pivot->productSummary;
         $this->view->products    = $this->processProductsForProductSummary($products);
