@@ -25,6 +25,11 @@ $lang->pivot->exportType   = '导出格式';
 $lang->pivot->exportRange  = '导出范围';
 $lang->pivot->story        = '需求';
 
+$lang->pivot->otherLang = new stdclass();
+$lang->pivot->otherLang->product       = '产品';
+$lang->pivot->otherLang->productStatus = '产品状态';
+$lang->pivot->otherLang->productType   = '产品类型';
+
 $lang->pivot->cancelAndBack = '取消保存并返回';
 
 $lang->pivot->deleteTip = '您确认要删除吗？';

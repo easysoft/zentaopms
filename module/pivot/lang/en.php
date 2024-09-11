@@ -25,6 +25,11 @@ $lang->pivot->exportType   = 'Export Type';
 $lang->pivot->exportRange  = 'Export Range';
 $lang->pivot->story        = 'Story';
 
+$lang->pivot->otherLang = new stdclass();
+$lang->pivot->otherLang->product       = 'Product';
+$lang->pivot->otherLang->productStatus = 'Product Status';
+$lang->pivot->otherLang->productType   = 'Product type';
+
 $lang->pivot->cancelAndBack = 'Cancel save and back';
 
 $lang->pivot->deleteTip = 'Are you sure you want to delete it ?';
