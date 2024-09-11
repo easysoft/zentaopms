@@ -3793,7 +3793,6 @@ class storyModel extends model
 
             if(!empty($caseGroups[$story->id])) return false;
             if(!empty($taskGroups[$story->id])) return false;
-            if(isset($shadowProducts[$story->product])) return false;
             if(!isset($shadowProducts[$story->product]) && !in_array($story->stage, array('wait', 'planned', 'projected')) && $story->type == 'story' && $story->isParent == '0') return false;
         }
 
