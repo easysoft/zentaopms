@@ -682,7 +682,7 @@ and (case when \$project='' then 1=1 else t3.id=\$project end)
 and (case when \$execution='' then 1=1 else t1.id=\$execution end)
 and (case when \$beginDate='' then 1=1 else t1.begin>=cast(\$beginDate as date) end)
 and (case when \$endDate='' then 1=1 else t1.end<=cast(\$endDate as date) end)
-and not (\$projectStatus='' and \$executionStatus='' and \$project='' and \$beginDate='' and \$endDate)
+and not (\$projectStatus='' and \$executionStatus='' and \$project='' and \$beginDate='' and \$endDate='')
 EOT,
     'settings'  => array
     (
@@ -784,7 +784,7 @@ and (case when \$project='' then 1=1 else t3.id=\$project end)
 and (case when \$execution='' then 1=1 else t1.id=\$execution end)
 and (case when \$beginDate='' then 1=1 else t1.begin>=cast(\$beginDate as date) end)
 and (case when \$endDate='' then 1=1 else t1.end<=cast(\$endDate as date) end)
-and not (\$projectStatus='' and \$executionStatus='' and \$project='' and \$beginDate='' and \$endDate)
+and not (\$projectStatus='' and \$executionStatus='' and \$project='' and \$beginDate='' and \$endDate='')
 EOT,
     'settings'  => array
     (
