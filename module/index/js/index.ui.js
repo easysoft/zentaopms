@@ -120,6 +120,7 @@ function openApp(url, code, options)
         }
         if(!code) return openApp('my');
     }
+
     const app = apps.map[code];
     if(!app)
     {
@@ -719,6 +720,12 @@ function initAppsMenu(items)
             .appendTo($menuMainNav);
 
         if(!apps.defaultCode) apps.defaultCode = item.code;
+    });
+
+    /* 隐藏的App依然可以通过输入URL的形式打开。 */
+    allAppsItems.forEach(function(item)
+    {
+        if(item.code && !apps.map[item.code]) apps.map[item.code] = item;
     });
 
     const lastApp = getLastApp();
