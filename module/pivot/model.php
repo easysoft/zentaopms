@@ -96,7 +96,7 @@ class pivotModel extends model
      */
     public function processDateVar(mixed $var, string $type = 'date'): string
     {
-        if(!is_string($var) || empty($var)) return '';
+        if(!is_string($var) || $var === '') return '';
 
         $format = $type == 'datetime' ? 'Y-m-d H:i:s' : 'Y-m-d';
         switch($var)

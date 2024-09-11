@@ -989,9 +989,8 @@ and (case when \$projectStatus='' then 1=1 else t3.status=\$projectStatus end)
 and (case when \$executionStatus='' then 1=1 else t1.status=\$executionStatus end)
 and (case when \$project='' then 1 else t3.id=\$project end)
 and (case when \$execution='' then 1=1 else t1.id=\$execution end)
-and (case when \$dept='' then 1 else t4.dept=\$dept end)
-and (case when \$user='' then 1 else t2.finishedBy=\$user end)
-and not (\$projectStatus='' and \$executionStatus='' and \$project='' and \$execution='' and \$dept='' and \$user='')
+and (case when \$dept='' then 1=1 else t4.dept=\$dept end)
+and (case when \$user='' then 1=1 else t2.finishedBy=\$user end not (\$projectStatus='' and \$executionStatus='' and \$project='' and \$execution='' and \$dept='' and \$user='')
 EOT,
     'settings'  => array
     (
