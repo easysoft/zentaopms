@@ -2353,6 +2353,8 @@ class executionModel extends model
 
         $this->config->product->search['params']['grade']['values'] = $gradePairs;
 
+        $this->config->product->search['onMenuBar'] = 'yes';
+
         $this->loadModel('search')->setSearchParams($this->config->product->search);
     }
 
