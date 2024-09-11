@@ -16,19 +16,70 @@ $data        = new stdclass();
 $data->cols  = $this->pivot->processDTableCols($cols);
 $data->array = $this->pivot->processDTableData(array_keys($cols), $products);
 
-$generateData = function() use ($lang, $title, $cols, $data, $products)
+$generateData = function() use ($lang, $title, $cols, $data, $products, $filters)
 {
+    $this->loadModel('bi');
+    $this->app->loadLang('product');
     return array
     (
         div
         (
             setID('conditions'),
-            setClass('bg-canvas p-2'),
+            setClass('flex bg-canvas p-2'),
             checkList
             (
                 on::change('loadProductSummary'),
                 set::inline(true),
                 set::items(array(array('text' => $lang->pivot->closedProduct, 'value' => 'closedProduct'), array('text' => $lang->pivot->overduePlan, 'value' => 'overduePlan')))
+            ),
+            div
+            (
+                setStyle('width', '70%'),
+                setClass('ml-4 flex gap-4'),
+                inputGroup
+                (
+                    setID('product'),
+                    setClass('filter w-1/3'),
+                    $lang->pivot->otherLang->product,
+                    picker
+                    (
+                        setClass('flex-auto'),
+                        set::name('product'),
+                        set::value($filters['productID']),
+                        set::items($this->bi->getScopeOptions('product')),
+                        on::change('loadProductSummary')
+                    )
+                ),
+                inputGroup
+                (
+                    setID('productStatus'),
+                    setClass('filter w-1/3'),
+                    $lang->pivot->otherLang->productStatus,
+                    picker
+                    (
+                        setClass('flex-auto'),
+                        set::name('productStatus'),
+                        set::value($filters['productStatus']),
+                        set::required(true),
+                        set::items($lang->product->statusList),
+                        on::change('loadProductSummary')
+                    )
+                ),
+                inputGroup
+                (
+                    setID('productType'),
+                    setClass('filter w-1/3'),
+                    $lang->pivot->otherLang->productType,
+                    picker
+                    (
+                        setClass('flex-auto'),
+                        set::name('productType'),
+                        set::value($filters['productType']),
+                        set::required(true),
+                        set::items($lang->product->typeList),
+                        on::change('loadProductSummary')
+                    )
+                ),
             )
         ),
         panel
