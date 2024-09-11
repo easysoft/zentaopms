@@ -2090,11 +2090,14 @@ class testcaseZen extends testcase
             }
             else
             {
-                $caseID = $this->testcase->create($case);
+                $caseID   = $this->testcase->create($case);
+                $case->id = $caseID;
                 dao::isError() ? $daoErrors = array_merge($daoErrors, dao::getError()) : $this->testcase->syncCase2Project($case, $caseID);
             }
         }
         if(!empty($daoErrors)) dao::$errors = $daoErrors;
+
+        return $cases;
     }
 
     /**
@@ -2373,7 +2376,7 @@ class testcaseZen extends testcase
      * @access protected
      * @return void
      */
-    protected function responseAfterShowImport(int $productID, string $branch = '0', int $maxImport = 0, string $tmpFile = ''): array
+    protected function responseAfterShowImport(int $productID, string $branch = '0', int $maxImport = 0, string $tmpFile = '', string $message = ''): array
     {
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -2387,7 +2390,7 @@ class testcaseZen extends testcase
         {
             $locateLink = inlink('showImport', "productID={$productID}&branch={$branch}&pagerID=" . ((int)$this->post->pagerID + 1) . "&maxImport={$maxImport}&insert=" . zget($_POST, 'insert', ''));
         }
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $locateLink));
+        return $this->send(array('result' => 'success', 'message' => $message ? $message : $this->lang->saveSuccess, 'load' => $locateLink));
     }
 
     /**
