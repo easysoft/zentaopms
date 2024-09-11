@@ -530,11 +530,11 @@ class instanceModel extends model
 
         if($instance->source == 'system')
         {
-            $users = $this->loadModel('user')->getPairs();
-            if($users)
+            $user = $this->dao->select('account')->from(TABLE_USER)->where('deleted')->eq(0)->fetch('account');
+            if($user)
             {
                 $settingsMap->auth = new stdclass();
-                $settingsMap->auth->username = key($users);
+                $settingsMap->auth->username = $user;
             }
         }
 
