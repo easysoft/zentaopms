@@ -128,6 +128,8 @@ class storyModel extends model
     {
         if(empty($storyIdList)) return array();
 
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getStories();
+
         return $this->dao->select('t1.*, t2.spec, t2.verify, t3.name as productTitle, t3.deleted as productDeleted')
             ->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_STORYSPEC)->alias('t2')->on('t1.id=t2.story')
@@ -3107,6 +3109,13 @@ class storyModel extends model
      */
     public function getVersions(string|array $storyIdList): array
     {
+        if(common::isTutorialMode())
+        {
+            $versions = array();
+            $stories  = $this->loadModel('tutorial')->getStories();
+            foreach($stories as $story) $versions[$story->id] = $story->version;
+            return $versions;
+        }
         return $this->dao->select('id, version')->from(TABLE_STORY)->where('id')->in($storyIdList)->fetchPairs('id', 'version');
     }
 

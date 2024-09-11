@@ -1628,10 +1628,10 @@ class tutorialModel extends model
 
     /**
      * 获取新手模式看板列。
-     * Get lane.
+     * Get columns.
      *
      * @access public
-     * @return object
+     * @return array
      */
     public function getColumns(): array
     {
@@ -1660,6 +1660,31 @@ class tutorialModel extends model
             $columns[$key] = $columnList;
         }
         return $columns;
+    }
+
+    /**
+     * 获取新手模式看板列。
+     * Get column.
+     *
+     * @access public
+     * @return object
+     */
+    public function getColumn(): object
+    {
+        $column = new stdClass();
+        $column->id       = 1;
+        $column->parent   = 0;
+        $column->type     = 'backlog';
+        $column->region   = 1;
+        $column->group    = 1;
+        $column->name     = 'Backlog';
+        $column->color    = '#333';
+        $column->limit    = -1;
+        $column->order    = 0;
+        $column->archived = 0;
+        $column->deleted  = 0;
+        $column->laneType = 'story';
+        return $column;
     }
 
     /**

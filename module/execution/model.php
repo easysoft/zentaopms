@@ -2832,15 +2832,16 @@ class executionModel extends model
 
         $this->loadModel('action');
         $this->loadModel('kanban');
-        $versions         = $this->loadModel('story')->getVersions($stories);
+        $this->loadModel('story');
+        $versions         = $this->story->getVersions($stories);
         $linkedStories    = $this->dao->select('story,`order`')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order_desc')->fetchPairs('story', 'order');
         $lastOrder        = (int)reset($linkedStories);
-        $storyList        = $this->dao->select('id, status, branch, product, type')->from(TABLE_STORY)->where('id')->in(array_values($stories))->fetchAll('id');
+        $storyList        = $this->story->getByList(array_values($stories));
         $execution        = $this->getByID($executionID);
         $notAllowedStatus = $this->app->rawMethod == 'batchcreate' ? 'closed' : 'draft,reviewing,closed';
         $laneID           = isset($output['laneID']) ? $output['laneID'] : 0;
 
-        $project = $execution->type == 'project' ? $execution : $this->loadModel('project')->fetchById($execution->project);
+        $project = $execution->type == 'project' ? $execution : $this->loadModel('project')->getByID($execution->project);
 
         foreach($stories as $storyID)
         {
