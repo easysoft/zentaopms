@@ -1621,7 +1621,7 @@ class biModel extends model
             {
                 if(!is_array($item))
                 {
-                    $text = $item->key == 'story' ? $this->lang->pivot->story : $item->text;
+                    $text = $item->key == 'story' ? $this->lang->story->common : $item->text;
                     $tableList[$item->key] = $text;
                     continue;
                 }
