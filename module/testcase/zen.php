@@ -2067,9 +2067,9 @@ class testcaseZen extends testcase
      *
      * @param  array     $cases
      * @access protected
-     * @return void
+     * @return array
      */
-    protected function importCases(array $cases): void
+    protected function importCases(array $cases): array
     {
         $this->loadModel('action');
         $daoErrors = array();
