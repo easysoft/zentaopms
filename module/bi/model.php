@@ -1613,11 +1613,11 @@ class biModel extends model
         $originTableTreeMenu = $this->loadModel('dataview')->getOriginTreeMenu();
 
         $tableList = array();
-        foreach($originTableTreeMenu as $index => $menu)
+        foreach($originTableTreeMenu as $menu)
         {
             if(empty($menu->items)) continue;
 
-            foreach($menu->items as $itemIndex => $item)
+            foreach($menu->items as $item)
             {
                 if(!is_array($item))
                 {
@@ -1626,7 +1626,7 @@ class biModel extends model
                     continue;
                 }
 
-                foreach($item->items as $subIndex => $subItem) $tableList[$subItem->key] = $subItem->text;
+                foreach($item->items as $subItem) $tableList[$subItem->key] = $subItem->text;
             }
         }
 
