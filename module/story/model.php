@@ -988,7 +988,12 @@ class storyModel extends model
         if($parentID <= 0) return true;
 
         $childrenStatus = $this->dao->select('id,status')->from(TABLE_STORY)->where('parent')->eq($parentID)->andWhere('deleted')->eq(0)->fetchPairs('status', 'status');
-        if(empty($childrenStatus)) return true;
+        if(empty($childrenStatus))
+        {
+            $this->dao->update(TABLE_STORY)->set('isParent')->eq('0')->where('id')->eq($parentID)->exec();
+            return true;
+        }
+        $this->dao->update(TABLE_STORY)->set('isParent')->eq('1')->where('id')->eq($parentID)->exec();
 
         $oldParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($parentID)->andWhere('deleted')->eq(0)->fetch();
         if(empty($oldParentStory))

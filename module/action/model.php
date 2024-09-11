@@ -1361,7 +1361,11 @@ class actionModel extends model
 
         /* 还原已删除的需求时重算OR需求和业用研需的阶段。 */
         /* The stage of recalculating OR requirements and industrial research needs when restoring deleted requirements. */
-        if(in_array($action->objectType, array('story', 'epic', 'requirement'))) $this->loadModel('story')->setStage($action->objectID);
+        if(in_array($action->objectType, array('story', 'epic', 'requirement')))
+        {
+            $this->loadModel('story')->setStage($action->objectID);
+            $this->story->updateParentStatus($action->objectID);
+        }
         if($action->objectType == 'demand' && !empty($object->parent)) $this->loadModel('demand')->updateParentDemandStage($object->parent);
 
         /* 在action表中更新action记录。 */
