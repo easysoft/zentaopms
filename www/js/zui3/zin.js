@@ -341,7 +341,7 @@
             $newNav.find('.item').length !== $navbar.find('.item').length
             || $newNav.text().trim() !== $navbar.text().trim()
             || $newNav.find('.nav-item>a').map((_, element) => element.href).get().join(' ') !== $navbar.find('.nav-item>a').map((_, element) => element.href).get().join(' ')
-        ) return $navbar.replaceWith($newNav);
+        ) return $navbar.empty().append($newNav);
 
         activeNav($newNav.find('.nav-item>a.active').data('id'), $navbar);
         layoutNavbar();
