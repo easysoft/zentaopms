@@ -526,6 +526,7 @@ class docZen extends doc
 
         $this->view->objectType = $objectType;
         $this->view->spaceType  = $objectType;
+        $this->view->type       = $objectType;
         $this->view->libID      = $libID;
         $this->view->lib        = $lib;
         $this->view->objectID   = $objectID;

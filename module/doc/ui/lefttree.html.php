@@ -51,7 +51,7 @@ sidebar
         set::moduleID((int)$moduleID),
         set::linkParams($linkParams),
         set::spaceType($spaceType),
-        set::objectType(isset($type) ? $type : ''),
+        set::objectType(isset($type) ? ($type == 'execution' ? 'project' : $type) : ''),
         set::objectID(isset($objectID) ? $objectID : 0),
         set::sortable(array('handle' => '.icon-move')),
         set::onSort(jsRaw('window.updateOrder')),
