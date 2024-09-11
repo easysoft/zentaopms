@@ -417,8 +417,8 @@ class helper extends baseHelper
     /**
      * 检查条件是否成立。
      *
-     * @param  mix    $value1
-     * @param  mix    $value2
+     * @param  mixed  $value1
+     * @param  mixed  $value2
      * @param  string $operator
      * @static
      * @access public
