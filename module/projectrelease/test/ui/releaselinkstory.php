@@ -16,3 +16,10 @@ zendata('storyspec')->loadYaml('storyspec', false, 1)->gen(5);
 zendata('projectproduct')->loadYaml('projectproduct', false, 1)->gen(1);
 
 $tester = new releaseLinkStoryTester();
+$tester->login();
+
+r($tester->linkStory())        && p('status')  && e('SUCCESS');             //项目发布关联研发需求
+r($tester->unlinkStory())      && p('status')  && e('SUCCESS');             //单个移除研发需求
+r($tester->batchUnlinkStory()) && p('message') && e('批量移除需求成功');    //批量移除研发需求
+
+$tester->closeBrowser();
