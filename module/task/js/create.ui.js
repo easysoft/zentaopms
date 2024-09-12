@@ -530,7 +530,7 @@ window.removeTeamMember = function()
 
     /* 删除团队中，已经选中的人. */
     let index = $(this).data('index');
-    $('#teamTable').find('tr').eq(index).remove();
+    $('#teamTable tbody').find('tr').eq(index).remove();
 
     let totalEstimate = 0;
 
