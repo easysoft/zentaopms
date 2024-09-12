@@ -716,6 +716,8 @@ class projectModel extends model
      */
     public function getBranchesByProject(int $projectID): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getBranchesByProject();
+
         return $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)
             ->where('project')->eq($projectID)
             ->fetchGroup('product', 'branch');

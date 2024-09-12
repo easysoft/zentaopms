@@ -1938,6 +1938,25 @@ class tutorialModel extends model
     }
 
     /**
+     * 获取新手模式项目关联分支。
+     * Get branch by project.
+     *
+     * @access public
+     * @return array
+     */
+    public function getBranchesByProject(): array
+    {
+        $branch = new stdClass();
+        $branch->project = 2;
+        $branch->product = 1;
+        $branch->branch  = 0;
+        $branch->plan    = 0;
+        $branch->roadmap = 0;
+
+        return array(1 => array($branch));
+    }
+
+    /**
      * 获取新手模式分支列表。
      * Get branches.
      *
