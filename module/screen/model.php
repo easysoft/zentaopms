@@ -1017,7 +1017,7 @@ class screenModel extends model
                 {
                     if($index == ($count - 1))
                     {
-                        $newData = array('total' => $this->lang->pivot->step2->total);
+                        $newData = array('total' => $this->lang->pivot->stepDesign->total);
                         foreach($options->groups as $field) unset($data[$field]);
                         $newData += $data;
                         $optionsData[$index] = $newData;
