@@ -86,7 +86,7 @@ class thinkRadio extends thinkQuestion
         {
             foreach($quoteQuestions as $item)
             {
-                $quoteQuestionsItems[] = array('text' => $item->title, 'value' => $item->id);
+                $quoteQuestionsItems[] = array('text' => $item->index . '. ' . $item->title, 'value' => $item->id);
             }
         }
 
@@ -99,13 +99,14 @@ class thinkRadio extends thinkQuestion
                     formGroup
                     (
                         setClass('w-66'),
-                        set::label($lang->thinkstep->label->setOption),
+                        set::label( $lang->thinkstep->label->setOption),
                         radioList
                         (
                             set::name('options[setOption]'),
                             set::inline(true),
                             set::value($setOption),
                             set::items($lang->thinkstep->setOptionList),
+                            set::disabled(empty($quoteQuestions)),
                             on::change()
                                 ->const('maxCountPlaceholder', $lang->thinkstep->placeholder->maxCount)
                                 ->const('inputContent', $lang->thinkstep->placeholder->inputContent)
@@ -130,7 +131,7 @@ class thinkRadio extends thinkQuestion
                     icon
                     (
                         setClass('mt-9 text-gray-400 cursor-pointer ml-1 text-base pt-0.5'),
-                        toggle::tooltip(array('placement' => 'top', 'title' => $lang->thinkstep->tips->setOption, 'width' => '220px', 'className' => 'text-gray border border-gray-300', 'type' => 'white')),
+                        toggle::tooltip(array('placement' => 'top', 'title' => empty($quoteQuestions) ? $lang->thinkstep->tips->quoteTitle : $lang->thinkstep->tips->setOption, 'max-width' => '220px', 'className' => 'text-gray border border-gray-300', 'type' => 'white')),
                         'help'
                     )
                 ),
@@ -220,15 +221,8 @@ class thinkRadio extends thinkQuestion
             (
                 setClass('step-required'),
                 setStyle(array('display' => 'flex')),
-                set::label
-                (
-                    $lang->thinkstep->label->required,
-                    !empty($quotedQuestions) ? array
-                    (
-                        icon('about', setClass('text-warning mr-1 ml-2')),
-                        span(setClass('text-sm'), $lang->thinkstep->tips->required)
-                    ) : null
-                ),
+                set::label($lang->thinkstep->label->required),
+                set::labelHint(!empty($quotedQuestions) ? $lang->thinkstep->tips->required : null),
                 radioList
                 (
                     set::name('options[required]'),
