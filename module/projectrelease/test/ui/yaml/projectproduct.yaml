@@ -1,0 +1,13 @@
+title: zt_projectproduct
+author: Li Huifang
+desc: 项目关联产品表
+version: 1.0
+fields:
+  - field: project
+    range: 1
+  - field: product
+    range: 1
+  - field: branch
+    range: 0
+  - field: plan
+    range: 0
