@@ -48,6 +48,7 @@ $lang->bi->allFields     = 'Selected/Function field';
 $lang->bi->addQuery      = 'Add a dynamic query filter';
 $lang->bi->emptyQuerys   = 'Empty dynamic query filter.';
 $lang->bi->emptySelect   = 'Select at least one field.';
+$lang->bi->length        = 'Length';
 
 $lang->bi->allFieldsTip  = 'Selected and function field is already checked.';
 $lang->bi->groupFieldTip = 'Group by the result with group field.';
