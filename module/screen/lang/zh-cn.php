@@ -12,6 +12,10 @@ $lang->screen->bizGuide      = '更多大屏请联系我们';
 $lang->screen->globalFilter  = '全局筛选器';
 $lang->screen->accessDenied  = '您无权访问该大屏';
 
+$lang->screen->acl = '访问控制';
+$lang->screen->aclList['open']    = '公开（有大屏视图权限与所在维度的访问权限即可访问）';
+$lang->screen->aclList['private'] = '私有（仅创建者和白名单用户可访问）';
+
 $lang->screen->belong    = '所属';
 $lang->screen->dateRange = '日期范围';
 

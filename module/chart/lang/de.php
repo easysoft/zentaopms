@@ -3,6 +3,10 @@ $lang->chart->preview   = 'View Chart';
 $lang->chart->query     = 'Query';
 $lang->chart->toDesign  = 'To Design';
 
+$lang->chart->acl = 'Access Control';
+$lang->chart->aclList['open']    = 'Public (with chart view permissions and dimension permissions can access it)';
+$lang->chart->aclList['private'] = 'Private (Only creators and whitelisted users with dimension permissions can access it)';
+
 $lang->chart->group       = 'Group';
 $lang->chart->field       = 'Related Field';
 $lang->chart->agg         = 'Aggregate';

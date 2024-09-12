@@ -4,6 +4,10 @@ $lang->dimension->macro      = 'Macro management';
 $lang->dimension->efficiency = 'Efficiency management';
 $lang->dimension->quality    = 'Quality management';
 
+$lang->dimension->acl = 'Access Control';
+$lang->dimension->aclList['open']    = 'Open (All users with dimension view permissions can access it)';
+$lang->dimension->aclList['private'] = 'Private (Only creators and whitelisted users with dimension permissions can access it)';
+
 $lang->dimension->moduleList['']        = '';
 $lang->dimension->moduleList['product'] = $lang->productCommon;
 $lang->dimension->moduleList['project'] = $lang->projectCommon;

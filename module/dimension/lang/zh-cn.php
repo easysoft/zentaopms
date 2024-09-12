@@ -4,6 +4,10 @@ $lang->dimension->macro      = '宏观管理维度';
 $lang->dimension->efficiency = '效能管理维度';
 $lang->dimension->quality    = '质量管理维度';
 
+$lang->dimension->acl = '访问控制';
+$lang->dimension->aclList['open']    = '公开（所有人均可访问，有维度的视图权限可访问并管理）';
+$lang->dimension->aclList['private'] = '私有（仅创建者和白名单用户可访问）';
+
 $lang->dimension->moduleList['']        = '';
 $lang->dimension->moduleList['product'] = $lang->productCommon;
 $lang->dimension->moduleList['project'] = $lang->projectCommon;

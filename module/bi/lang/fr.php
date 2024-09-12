@@ -2,10 +2,6 @@
 $lang->bi->binNotExists        = 'The DuckDB binary does not exist.';
 $lang->bi->tmpPermissionDenied = 'The DuckDB tmp directory has no permissions, you need to change the permissions for the directory "%s". The <br /> command is: <br />chmod 777 -R %s.';
 
-$lang->bi->acl = 'Access Control';
-$lang->bi->aclList['open']    = 'Open (All users with dimension view permissions can access it)';
-$lang->bi->aclList['private'] = 'Private (Only creators and whitelisted users with dimension permissions can access it)';
-
 $lang->bi->driver = 'Driver';
 $lang->bi->driverList = array();
 $lang->bi->driverList['mysql'] = 'MySQL';

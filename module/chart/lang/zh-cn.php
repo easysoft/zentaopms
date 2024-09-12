@@ -3,6 +3,10 @@ $lang->chart->preview  = '查看图表';
 $lang->chart->query    = '查询';
 $lang->chart->toDesign = '进入设计';
 
+$lang->chart->acl = '访问控制';
+$lang->chart->aclList['open']    = '公开（有图表视图权限与所在维度的访问权限即可访问）';
+$lang->chart->aclList['private'] = '私有（仅创建者和白名单用户可访问）';
+
 $lang->chart->group       = '所属分组';
 $lang->chart->field       = '关联字段';
 $lang->chart->agg         = '汇总';

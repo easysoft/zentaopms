@@ -25,6 +25,10 @@ $lang->pivot->exportType   = 'Export Type';
 $lang->pivot->exportRange  = 'Export Range';
 $lang->pivot->story        = 'Story';
 
+$lang->pivot->acl = 'Access Control';
+$lang->pivot->aclList['open']    = 'Public (with pivot view permissions and dimension permissions can access it)';
+$lang->pivot->aclList['private'] = 'Private (Only creators and whitelisted users with dimension permissions can access it)';
+
 $lang->pivot->otherLang = new stdclass();
 $lang->pivot->otherLang->product       = 'Product';
 $lang->pivot->otherLang->productStatus = 'Product Status';

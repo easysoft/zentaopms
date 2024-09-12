@@ -25,6 +25,10 @@ $lang->pivot->exportType   = '导出格式';
 $lang->pivot->exportRange  = '导出范围';
 $lang->pivot->story        = '需求';
 
+$lang->pivot->acl = '访问控制';
+$lang->pivot->aclList['open']    = '公开（有透视表视图权限与所在维度的访问权限即可访问）';
+$lang->pivot->aclList['private'] = '私有（仅创建者和白名单用户可访问）';
+
 $lang->pivot->otherLang = new stdclass();
 $lang->pivot->otherLang->product       = '产品';
 $lang->pivot->otherLang->productStatus = '产品状态';
