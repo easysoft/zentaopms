@@ -8,7 +8,7 @@ window.getItem = function(info)
     }
 
     const unlinkUrl = $.createLink('execution', 'unlinkStory', `executionID=${executionID}&story=${info.item.id}`);
-    const unlinkBtn = `<a href="${unlinkUrl}" title=${unlinkLang} class="btn item text-primary toolbar-item ajax-submit square size-sm ghost"><i class='icon icon-unlink'></i></a>`;
+    const unlinkBtn = priv.canUnlinkStory ? `<a href="${unlinkUrl}" title=${unlinkLang} class="btn item text-primary toolbar-item ajax-submit square size-sm ghost"><i class='icon icon-unlink'></i></a>` : '';
     const content = `
         <div class='flex items-center'>
           <span class='pri-${info.item.pri}'>${info.item.pri}</span>
