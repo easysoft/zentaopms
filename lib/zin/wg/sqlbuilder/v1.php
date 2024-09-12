@@ -220,7 +220,7 @@ class sqlBuilder extends wg
         }
         return div
         (
-            setClass('flex row gap-4'),
+            setClass('flex row gap-4 h-70'),
             $panels
         );
     }
@@ -433,7 +433,7 @@ class sqlBuilder extends wg
             setID('builderPanel'),
             set('data-url', $url),
             set('data-onupdate', $onUpdate),
-            setClass('h-96 min-w-1200', $class),
+            setClass('h-96', $class),
             set::bodyClass('flex h-96'),
             div
             (
