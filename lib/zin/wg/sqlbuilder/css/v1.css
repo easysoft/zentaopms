@@ -35,7 +35,7 @@
 .checkbox-col-3 .checkbox-primary {width: calc(100% / 3); flex: none;}
 .checkbox-col-2 .checkbox-primary {width: calc(100% / 2); flex: none;}
 .checkbox-col-1 .checkbox-primary {width: 100%; flex: none;}
-.checkbox-col .checkbox-primary>label {width: calc(100% - var(--checkbox-size) - 16px); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.checkbox-col .checkbox-primary>label {width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 
 .max-h-8 {max-height: 2rem;}
 .max-h-16 {max-height: 4rem;}
