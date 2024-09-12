@@ -268,7 +268,7 @@ class docZen extends doc
      * @access protected
      * @return bool|int
      */
-    protected function responseAfterCreateLib(string $type = '', int $objectID = 0, int $libID = 0): bool|int
+    protected function responseAfterCreateLib(string $type = '', int $objectID = 0, int $libID = 0, string $libName = ''): bool|int
     {
         if($type == 'project'   && $this->post->project)   $objectID = $this->post->project;
         if($type == 'product'   && $this->post->product)   $objectID = $this->post->product;
@@ -279,7 +279,8 @@ class docZen extends doc
         $this->action->create('docLib', $libID, 'Created');
 
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $libID));
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('name' => 'locateNewLib', 'params' => array("$type", "$objectID", "$libID"))));
+        $lib = array('id' => $libID, 'name' => $libName, 'space' => $objectID);
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('name' => 'locateNewLib', 'params' => array($type, $objectID, $libID, $libName)), 'docApp' => array(array('update', 'lib', $lib), array('selectLib', $libID, true))));
     }
 
     /**
@@ -379,7 +380,7 @@ class docZen extends doc
 
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
         $params   = "docID=" . $docResult['id'];
-        $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('doc', 'view', $params));
+        $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('doc', 'view', $params), 'id' => $docID, 'doc' => $docResult);
 
         return $this->send($response);
     }
@@ -391,10 +392,12 @@ class docZen extends doc
      * @param  string     $space
      * @param  int        $libID
      * @param  string     $locateLink
+     * @param  int        $docID
+     *
      * @access protected
      * @return bool|int
      */
-    protected function responseAfterMove(string $space, int $libID = 0, string $locateLink = ''): bool|int
+    protected function responseAfterMove(string $space, int $libID = 0, string $locateLink = '', int $docID = 0): bool|int
     {
         if(empty($locateLink))
         {
@@ -403,7 +406,7 @@ class docZen extends doc
             else                       $locateLink = true;
         }
         if($locateLink === 'true') $locateLink = true;
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $locateLink));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'docApp' => $docID ? array('loadDoc', $docID) : array('load', null, null, null, array('noLoading' => true, 'picks' => 'lib'))));
     }
 
     /**

@@ -141,7 +141,7 @@ class doc extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('docspace', $spaceID, 'created');
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('doc', 'teamSpace', "objectID={$spaceID}")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('doc', 'teamSpace', "objectID={$spaceID}"), 'docApp' => array('selectSpace', $spaceID, true)));
         }
 
         $this->display();
@@ -175,7 +175,7 @@ class doc extends control
                 $objectID = $lib->parent;
             }
 
-            return $this->docZen->responseAfterCreateLib($type, $objectID, $libID);
+            return $this->docZen->responseAfterCreateLib($type, $objectID, $libID, $lib->name);
         }
 
         if(in_array($type, array('product', 'project'))) $this->app->loadLang('api');
@@ -243,7 +243,9 @@ class doc extends control
                 $actionID = $this->action->create($object, $libID, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
-            return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'closeModal' => true, 'load' => true));
+
+            $lib = $this->doc->getLibByID($libID);
+            return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'closeModal' => true, 'docApp' => array('update', $lib->parent ? 'lib' : 'space', $lib)));
         }
 
         if(!empty($lib->product)) $this->view->object = $this->product->getByID($lib->product);
@@ -1263,7 +1265,7 @@ class doc extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            return $this->docZen->responseAfterMove($this->post->space, $data->lib, $locate);
+            return $this->docZen->responseAfterMove($this->post->space, $data->lib, $locate, $docID);
         }
 
         if(empty($libID)) $libID = (int)$doc->lib;
@@ -1391,18 +1393,23 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function ajaxGetSpaceData(string $type = 'custom', int $spaceID = 0)
+    public function ajaxGetSpaceData(string $type = 'custom', int $spaceID = 0, string $picks = '')
     {
+        $noPicks = empty($picks);
+        $picks   = $noPicks ? '' : ",$picks,";
+
         if($type == 'mine') $spaceID = 0; // Ignore the spaceID of mine.
-
         list($spaces, $spaceID) = $this->doc->getSpaces($type, $spaceID);
+        $data   = array('spaceID' => $spaceID);
+        $libs   = $this->doc->getLibsOfSpace($type, $spaceID);
+        $libIds = array_keys($libs);
 
-        $libs    = $this->doc->getLibsByObject($type, $spaceID);
-        $libIds  = array_keys($libs);
-        $modules = $this->doc->getModulesOfLibs($libIds);
-        $docs    = $this->doc->getDocsOfLibs($libIds);
+        if($noPicks || strpos($picks, ',space,') !== false)  $data['spaces'] = $spaces;
+        if($noPicks || strpos($picks, ',lib,') !== false)    $data['libs'] = array_values($libs);
+        if($noPicks || strpos($picks, ',module,') !== false) $data['modules'] = array_values($this->doc->getModulesOfLibs($libIds));
+        if($noPicks || strpos($picks, ',doc,') !== false)    $data['docs'] = array_values($this->doc->getDocsOfLibs($libIds));
 
-        $this->send(array('spaceID' => $spaceID, 'spaces' => $spaces, 'libs' => array_values($libs), 'modules' => array_values($modules), 'docs' => array_values($docs)));
+        $this->send($data);
     }
 
     /**

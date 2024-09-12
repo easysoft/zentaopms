@@ -10,20 +10,34 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$libTypes = array();
+if($type === 'project')
+{
+    $libTypes[] = array('type' => 'project',   'name' => $lang->projectCommon,     'icon' => 'project');
+    $libTypes[] = array('type' => 'execution', 'name' => $lang->execution->common, 'icon' => 'run');
+}
+
 zui::docApp
 (
     set::_class('shadow rounded ring canvas'),
     set::_style(array('height' => 'calc(100vh - 72px)')),
+    set::_id('docApp'),
     set::spaceType($type),
     set::spaceID($spaceID),
     set::libID($libID),
+    set::libTypes($libTypes),
     set::moduleID($moduleID),
     set::docID($docID),
     set::docMode($docMode),
-    set::fetcher(createLink('doc', 'ajaxGetSpaceData', 'type={spaceType}&spaceID={spaceID}')),
+    set::fetcher(createLink('doc', 'ajaxGetSpaceData', 'type={spaceType}&spaceID={spaceID}&picks={picks}')),
     set::docFetcher(createLink('doc', 'ajaxGetDoc', 'docID={docID}')),
     set::width('100%'),
-    set::height('100%')
+    set::height('100%'),
+    set::userMap($users),
+    set::hasDocMovePriv(hasPriv('doc', 'movedoc')),
+    set::currentUser($this->app->user->account),
+    set('$options', jsRaw('window.setDocAppOptions')),
+);
 );
 
 /* Modify navbar. 修改二级导航。 */
