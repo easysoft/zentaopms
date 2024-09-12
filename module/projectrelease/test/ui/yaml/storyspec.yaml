@@ -1,0 +1,18 @@
+title: table zt_storyspec
+desc: "需求描述"
+author: Li Huifang
+version: "1.0"
+fields:
+  - field: story
+    note: "需求ID"
+    range: 1-5
+  - field: version
+    note: "版本"
+    range: 1
+  - field: title
+    note: "需求标题"
+    range: 需求001,需求002,需求003,需求004,需求005
+  - field: spec
+    note: "需求描述"
+    range: 1-5
+    prefix: "这是一个软件需求描述"
