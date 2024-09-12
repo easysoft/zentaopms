@@ -1,5 +1,5 @@
 <?php
-global $lang;
+global $lang,$config;
 
 $starter = new stdClass();
 $starter->name    = 'starter';
@@ -59,40 +59,43 @@ $starter->tasks['createAccount']['steps'][] = array(
     'desc'   => $lang->tutorial->starter->createAccount->step6->desc
 );
 
-$starter->tasks['createProgram'] = array();
-$starter->tasks['createProgram']['name']     = 'createProgram';
-$starter->tasks['createProgram']['title']    = $lang->tutorial->starter->createProgram->title;
-$starter->tasks['createProgram']['startUrl'] = array('program', 'browse');
-$starter->tasks['createProgram']['steps']    = array();
+if($config->systemMode != 'light')
+{
+    $starter->tasks['createProgram'] = array();
+    $starter->tasks['createProgram']['name']     = 'createProgram';
+    $starter->tasks['createProgram']['title']    = $lang->tutorial->starter->createProgram->title;
+    $starter->tasks['createProgram']['startUrl'] = array('program', 'browse');
+    $starter->tasks['createProgram']['steps']    = array();
 
-$starter->tasks['createProgram']['steps'][] = array(
-    'type'  => 'openApp',
-    'app'   => 'program',
-    'title' => $lang->tutorial->starter->createProgram->step1->name,
-    'desc'  => $lang->tutorial->starter->createProgram->step1->desc
-);
+    $starter->tasks['createProgram']['steps'][] = array(
+        'type'  => 'openApp',
+        'app'   => 'program',
+        'title' => $lang->tutorial->starter->createProgram->step1->name,
+        'desc'  => $lang->tutorial->starter->createProgram->step1->desc
+    );
 
-$starter->tasks['createProgram']['steps'][] = array(
-    'type'   => 'click',
-    'target' => '#actionBar a.create-program-btn',
-    'page'   => 'program-browse',
-    'app'   => 'program',
-    'title'  => $lang->tutorial->starter->createProgram->step2->name,
-    'desc'   => $lang->tutorial->starter->createProgram->step2->desc
-);
+    $starter->tasks['createProgram']['steps'][] = array(
+        'type'   => 'click',
+        'target' => '#actionBar a.create-program-btn',
+        'page'   => 'program-browse',
+        'app'   => 'program',
+        'title'  => $lang->tutorial->starter->createProgram->step2->name,
+        'desc'   => $lang->tutorial->starter->createProgram->step2->desc
+    );
 
-$starter->tasks['createProgram']['steps'][] = array(
-    'type'   => 'form',
-    'page'   => 'program-create',
-    'title'  => $lang->tutorial->starter->createProgram->step3->name
-);
+    $starter->tasks['createProgram']['steps'][] = array(
+        'type'   => 'form',
+        'page'   => 'program-create',
+        'title'  => $lang->tutorial->starter->createProgram->step3->name
+    );
 
-$starter->tasks['createProgram']['steps'][] = array(
-    'type'   => 'saveForm',
-    'page'   => 'program-create',
-    'title'  => $lang->tutorial->starter->createProgram->step4->name,
-    'desc'   => $lang->tutorial->starter->createProgram->step4->desc
-);
+    $starter->tasks['createProgram']['steps'][] = array(
+        'type'   => 'saveForm',
+        'page'   => 'program-create',
+        'title'  => $lang->tutorial->starter->createProgram->step4->name,
+        'desc'   => $lang->tutorial->starter->createProgram->step4->desc
+    );
+}
 
 $starter->tasks['createProduct'] = array();
 $starter->tasks['createProduct']['name']     = 'createProduct';
@@ -364,7 +367,7 @@ $starter->tasks['linkStory']['steps'][] = array(
 
 $starter->tasks['linkStory']['steps'][] = array(
     'type'   => 'selectRow',
-    'target' => 'div.dtable div.dtable-body div[data-col="id"][data-row="3"]',
+    'target' => 'div.dtable div.dtable-body div[data-col="id"][data-row="4"]',
     'page'   => 'execution-linkstory',
     'title'  => $lang->tutorial->starter->linkStory->step4->name
 );

@@ -708,7 +708,7 @@ $scrumProjectManage->advance = clone $scrumProjectManage->basic;
 $scrumProjectManage->advance->name = 'scrumProjectManageAdvance';
 $scrumProjectManage->advance->type = 'advance';
 
-if(in_array($config->edition, array('max', 'ipd')))
+if(in_array($config->edition, array('max', 'ipd')) && $config->systemMode != 'light')
 {
     $scrumProjectManage->advance->tasks['manageIssue'] = array();
     $scrumProjectManage->advance->tasks['manageIssue']['name']     = 'manageIssue';

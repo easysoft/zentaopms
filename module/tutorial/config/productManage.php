@@ -484,39 +484,42 @@ $productManage->advance->modules = 'product,tree,story,productplan,release';
 $productManage->advance->app     = 'product';
 $productManage->advance->tasks   = array();
 
-$productManage->advance->tasks['lineManage'] = array();
-$productManage->advance->tasks['lineManage']['name']     = 'lineManage';
-$productManage->advance->tasks['lineManage']['title']    = $lang->tutorial->productManage->lineManage->title;
-$productManage->advance->tasks['lineManage']['startUrl'] = array('product', 'all');
-$productManage->advance->tasks['lineManage']['steps']    = array();
+if($config->systemMode != 'light')
+{
+    $productManage->advance->tasks['lineManage'] = array();
+    $productManage->advance->tasks['lineManage']['name']     = 'lineManage';
+    $productManage->advance->tasks['lineManage']['title']    = $lang->tutorial->productManage->lineManage->title;
+    $productManage->advance->tasks['lineManage']['startUrl'] = array('product', 'all');
+    $productManage->advance->tasks['lineManage']['steps']    = array();
 
-$productManage->advance->tasks['lineManage']['steps'][] = array(
-    'type'  => 'openApp',
-    'app'   => 'product',
-    'title' => $lang->tutorial->productManage->lineManage->step1->name,
-    'desc'  => $lang->tutorial->productManage->lineManage->step1->desc
-);
+    $productManage->advance->tasks['lineManage']['steps'][] = array(
+        'type'  => 'openApp',
+        'app'   => 'product',
+        'title' => $lang->tutorial->productManage->lineManage->step1->name,
+        'desc'  => $lang->tutorial->productManage->lineManage->step1->desc
+    );
 
-$productManage->advance->tasks['lineManage']['steps'][] = array(
-    'type'   => 'click',
-    'target' => '#actionBar button[data-id="manageLineModal"]',
-    'page'   => 'product-all',
-    'title'  => $lang->tutorial->productManage->lineManage->step2->name,
-    'desc'   => $lang->tutorial->productManage->lineManage->step2->desc
-);
+    $productManage->advance->tasks['lineManage']['steps'][] = array(
+        'type'   => 'click',
+        'target' => '#actionBar button[data-id="manageLineModal"]',
+        'page'   => 'product-all',
+        'title'  => $lang->tutorial->productManage->lineManage->step2->name,
+        'desc'   => $lang->tutorial->productManage->lineManage->step2->desc
+    );
 
-$productManage->advance->tasks['lineManage']['steps'][] = array(
-    'type'   => 'form',
-    'page'   => 'product-all',
-    'title'  => $lang->tutorial->productManage->lineManage->step3->name
-);
+    $productManage->advance->tasks['lineManage']['steps'][] = array(
+        'type'   => 'form',
+        'page'   => 'product-all',
+        'title'  => $lang->tutorial->productManage->lineManage->step3->name
+    );
 
-$productManage->advance->tasks['lineManage']['steps'][] = array(
-    'type'   => 'saveForm',
-    'page'   => 'product-all',
-    'title'  => $lang->tutorial->productManage->lineManage->step4->name,
-    'desc'   => $lang->tutorial->productManage->lineManage->step4->desc
-);
+    $productManage->advance->tasks['lineManage']['steps'][] = array(
+        'type'   => 'saveForm',
+        'page'   => 'product-all',
+        'title'  => $lang->tutorial->productManage->lineManage->step4->name,
+        'desc'   => $lang->tutorial->productManage->lineManage->step4->desc
+    );
+}
 
 $productManage->advance->tasks['addProduct']    = $productManage->basic->tasks['addProduct'];
 $productManage->advance->tasks['moduleManage']  = $productManage->basic->tasks['moduleManage'];

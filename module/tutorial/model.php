@@ -507,12 +507,12 @@ class tutorialModel extends model
         $reviewingStory->path      = ',1,2,4,';
 
         $stories = array();
-        $stories[] = $this->getEpic();
-        $stories[] = $this->getRequirement();
+        $stories[1] = $this->getEpic();
+        $stories[2] = $this->getRequirement();
         if($this->app->config->vision == 'rnd')
         {
-            $stories[] = $activeStory;
-            $stories[] = $reviewingStory;
+            $stories[3] = $activeStory;
+            $stories[4] = $reviewingStory;
         }
         if($this->app->config->vision == 'or')
         {
@@ -523,7 +523,7 @@ class tutorialModel extends model
             $reviewingRequirement->title     = 'Test reviewing requirement';
             $reviewingRequirement->path      = ',1,5,';
             $reviewingRequirement->isParent  = 0;
-            $stories[] = $reviewingRequirement;
+            $stories[5] = $reviewingRequirement;
         }
         return $stories;
     }

@@ -130,8 +130,12 @@ class storyModel extends model
 
         if(common::isTutorialMode())
         {
-            $story = $this->loadModel('tutorial')->getStory();
-            return array($story->id => $story);
+            $stories = $this->loadModel('tutorial')->getStories();
+            foreach($stories as $story)
+            {
+                if(!in_array($story->id, $storyIdList)) unset($stories[$story->id]);
+            }
+            return $stories;
         }
 
         return $this->dao->select('t1.*, t2.spec, t2.verify, t3.name as productTitle, t3.deleted as productDeleted')
