@@ -256,7 +256,7 @@ class extension extends control
 
         /* 卸载前的钩子加载。 */
         $this->extensionZen->copyHookFiles($extension);
-        $preUninstallHook = $this->extension->getHookFile($extension, 'preuninstall');
+        $preUninstallHook = $this->extensionZen->getHookFile($extension, 'preuninstall');
         if($preUninstallHook && $info->status == 'installed') include $preUninstallHook;
 
         if(file_exists($dbFile)) $this->view->backupFile = $this->extensionZen->backupDB($extension);
@@ -269,7 +269,7 @@ class extension extends control
         $this->view->removeCommands = $this->extension->removePackage($extension);
 
         /* 卸载后的钩子加载。 */
-        $postUninstallHook = $this->extension->getHookFile($extension, 'postuninstall');
+        $postUninstallHook = $this->extensionZen->getHookFile($extension, 'postuninstall');
         if($postUninstallHook && $info->status == 'installed') include $postUninstallHook;
 
         $this->display();
