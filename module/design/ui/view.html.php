@@ -115,6 +115,11 @@ detailBody
                 ),
                 item
                 (
+                    set::name($lang->design->assignedTo),
+                    zget($users, $design->assignedTo)
+                ),
+                item
+                (
                     set::name($lang->design->createdBy),
                     zget($users, $design->createdBy)
                 ),
