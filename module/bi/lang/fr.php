@@ -96,6 +96,7 @@ $lang->bi->whereItemOperatorList['like']  = 'LIKE';
 
 $lang->bi->emptyError     = 'Can not be empty';
 $lang->bi->duplicateError = 'Duplicate';
+$lang->bi->noSql          = 'No SQL.';
 
 $lang->bi->stepFieldTitle = 'Select a field in the lookup table';
 $lang->bi->stepFieldTip   = 'The fields in the select query table are used to get the required data from the selected query table.';

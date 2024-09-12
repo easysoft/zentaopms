@@ -105,6 +105,7 @@ $lang->bi->queryFilterFormHeader['default'] = '默认值';
 
 $lang->bi->emptyError     = '不能为空';
 $lang->bi->duplicateError = '存在重复';
+$lang->bi->noSql          = '暂无SQL。';
 
 $lang->bi->stepFieldTitle = '选择查询表中的字段';
 $lang->bi->stepFieldTip   = '选择查询表中的字段用于从已选择的查询表中获取所需的数据。';
