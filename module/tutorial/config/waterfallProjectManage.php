@@ -518,7 +518,7 @@ $waterfallProjectManage->basic->tasks['manageTest']['steps'][] = array(
 $waterfallProjectManage->basic->tasks['manageTest']['steps'][] = array(
     'type'   => 'form',
     'page'   => 'bug-create',
-    'url'    => array('bug', 'create', 'productID=1'),
+    'url'    => array('bug', 'create', 'productID=1&branch=0&extras=caseID=1,version=1,resultID=1,runID=1,testtask=1,buildID=1,stepList=1'),
     'title'  => $lang->tutorial->waterfallProjectManage->manageTest->step12->name
 );
 
