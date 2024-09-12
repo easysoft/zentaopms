@@ -38,6 +38,15 @@ zui::docApp
     set::currentUser($this->app->user->account),
     set('$options', jsRaw('window.setDocAppOptions')),
 );
+
+btn
+(
+    setClass('absolute right-1.5 bottom-1.5 size-sm z-10'),
+    set::type('special-pale'),
+    set::icon('back'),
+    on::click()->call('goToOldDocPage'),
+    '切换回旧版界面',
+    css('#mainContent {position: relative}')
 );
 
 /* Modify navbar. 修改二级导航。 */
