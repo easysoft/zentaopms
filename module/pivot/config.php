@@ -16,7 +16,7 @@ $config->pivot->edit->requiredFields = 'type,group';
 $config->pivot->design = new stdclass();
 $config->pivot->design->requiredFields = 'group';
 
-$config->pivot->scopeOptionList = array('user', 'product', 'project', 'execution', 'dept', 'product.status', 'product.type', 'productplan.status', 'project.status', 'project.type', 'project.model', 'execution.status', 'execution.type');
+$config->pivot->scopeOptionList = array('user', 'product', 'project', 'execution', 'dept', 'product.status', 'product.type', 'productplan.status', 'project.status', 'project.type', 'project.model', 'project.projectType', 'execution.status', 'execution.type');
 
 $config->pivot->multiColumn = array('cluBarX' => 'yaxis', 'cluBarY' => 'yaxis', 'radar' => 'yaxis', 'line' => 'yaxis', 'stackedBar' => 'yaxis', 'stackedBarY' => 'yaxis');
 
