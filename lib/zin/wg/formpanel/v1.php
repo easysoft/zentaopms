@@ -65,8 +65,7 @@ class formPanel extends panel
         'pinnedItems?: array|string',                  // 固定显示的表单项。
         'customBtn?: array|bool',                      // 是否显示表单自定义按钮。
         'customFields?: array=[]',                     // @deprecated 自定义表单项。
-        'showExtra?: bool=true',                       // 是否显示工作流字段。
-        'submitDisabledValue?: bool=false'             // 是否将disabled的字段传入后端。
+        'showExtra?: bool=true'                        // 是否显示工作流字段。
     );
 
     public static function getPageJS(): ?string
@@ -295,7 +294,6 @@ class formPanel extends panel
         (
             set::id($formID),
             set::className($this->prop('formClass')),
-            set::ajax(array('submitDisabledValue' => $this->prop('submitDisabledValue'))),
             set($this->props->pick($formProps)),
             $this->children(),
             $this->prop('showExtra') && !$fields ? $this->buildExtraMain() : null,
