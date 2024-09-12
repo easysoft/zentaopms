@@ -147,6 +147,7 @@ $scrumProjectManage->basic->tasks['manageExecution']['steps'][] = array(
     'target' => '#table-project-execution .dtable-cell[data-row="pid3"][data-col="nameCol"] a',
     'page'   => 'project-execution',
     'url'    => array('project', 'execution', 'status=all&projectID=2'),
+    'app'    => 'project',
     'title'  => $lang->tutorial->scrumProjectManage->manageExecution->step5->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageExecution->step5->desc
 );
@@ -156,6 +157,7 @@ $scrumProjectManage->basic->tasks['manageExecution']['steps'][] = array(
     'target' => 'story',
     'page'   => 'execution-task',
     'url'    => array('execution', 'task', 'executionID=3'),
+    'app'    => 'execution',
     'title'  => $lang->tutorial->scrumProjectManage->manageExecution->step6->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageExecution->step6->desc
 );
