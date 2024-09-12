@@ -513,7 +513,7 @@ class projectModel extends model
         if($this->config->edition != 'open')
         {
             $flow = $this->loadModel('workflow')->getByModule($module);
-            if(!empty($flow) && $flow->buildin == '0') return helper::createLink('project', 'index', "projectID=%s");
+            if(!empty($flow) && $flow->buildin == '0') return helper::createLink('flow', 'ajaxSwitchBelong', "objectID=%s&moduleName=$module&methodName=$method") . '#app=project';
         }
 
         if(in_array($module, $this->config->waterfallModules)) return helper::createLink($module, 'browse', "projectID=%s");
