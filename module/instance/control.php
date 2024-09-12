@@ -527,7 +527,9 @@ class instance extends control
      */
     public function syncGitFoxData()
     {
-        if(method_exists($this->instance, 'syncGitFoxData')) $this->instance->syncGitFoxData();
-        return false;
+        if(!file_exists($this->app->basePath . 'extension' . DS . 'custom' . DS . 'gitfox' . DS . 'control.php')) return false;
+
+        $this->loadModel('instance')->syncGitFoxData();
+        return true;
     }
 }
