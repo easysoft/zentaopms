@@ -1482,6 +1482,41 @@ class docModel extends model
     }
 
     /**
+     * 获取空间下的文档库。
+     * Get libs of space.
+     *
+     * @param  string $type
+     * @param  int    $spaceID
+     * @access public
+     * @return array
+     */
+    public function getLibsOfSpace(string $type, int $spaceID): array
+    {
+        $libs = $this->getLibsByObject($type, $spaceID);
+
+        if($type == 'project')
+        {
+            $executionIDList = array();
+            foreach($libs as $lib)
+            {
+                if($lib->type != 'execution') continue;
+                $executionIDList[] = $lib->execution;
+            }
+
+            $executionPairs = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in($executionIDList)->fetchPairs();
+
+            foreach($libs as &$lib)
+            {
+                if($lib->type != 'execution') continue;
+                $lib->originName = $lib->name;
+                $lib->name       = $executionPairs[$lib->execution];
+            }
+        }
+
+        return $libs;
+    }
+
+    /**
      * 获取已排序的对象数据。
      * Get ordered objects for doc.
      *
