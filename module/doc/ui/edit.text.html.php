@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('isTutorialMode', common::isTutorialMode());
+
 include 'lefttree.html.php';
 
 $headingActions = array('class' => 'gap-3 pr-1', 'items' => array());
