@@ -36,20 +36,17 @@ foreach($lang->project->modelList as $key => $text)
     $modelMenuItems[] = array('text' => $text, 'selected' => $key == $model, 'url' => createLink('project', 'create', "model=$key"));
 }
 
-if(!common::isTutorialMode())
-{
-    $modeDropdown = dropdown
+$modeDropdown = common::isTutorialMode() ? null : dropdown
+(
+    btn
     (
-        btn
-        (
-            zget($lang->project->modelList, $model),
-            setClass('gray-300-outline size-sm rounded-full ml-2')
-        ),
-        set::arrow(true),
-        set::placement('bottom'),
-        set::items($modelMenuItems)
-    );
-}
+        zget($lang->project->modelList, $model),
+        setClass('gray-300-outline size-sm rounded-full ml-2')
+    ),
+    set::arrow(true),
+    set::placement('bottom'),
+    set::items($modelMenuItems)
+);
 
 $handleLongTimeChange = jsCallback()->do(<<<'JS'
     const endPicker  = $element.find('[name=end]').closest('[data-zui-datepicker]').zui('datePicker');
