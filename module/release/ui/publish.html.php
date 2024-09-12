@@ -23,7 +23,7 @@ formPanel
             set::name('status'),
             set::value('normal'),
             set::items($lang->release->resultList),
-            btn
+            common::isTutorialMode() ? null : btn
             (
                 set::size('sm'),
                 set::icon('help'),
