@@ -1808,7 +1808,7 @@ class repoModel extends model
             $repo->password = $service ? $service->token : '';
             $repo->codePath = isset($project->web_url) ? $project->web_url : $repo->path;
         }
-        elseif(in_array($repo->SCM, $this->config->repo->notSyncSCM))
+        else
         {
             if(!is_dir($repo->path) && !is_writable(dirname($repo->path)))
             {
