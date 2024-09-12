@@ -3245,7 +3245,7 @@ eof;
         {
             if(isset($menuItem->hidden) and $menuItem->hidden and (!isset($menuItem->tutorial) or !$menuItem->tutorial)) continue;
             if(empty($menuItem->link)) continue;
-            if($menuItem->divider) $menuHtml .= "<li class='divider'></li>";
+            if($menuItem->divider && $menuItem->link['method'] != 'more') $menuHtml .= "<li class='divider'></li>";
 
             /* Init the these vars. */
             $alias     = isset($menuItem->alias) ? $menuItem->alias : '';

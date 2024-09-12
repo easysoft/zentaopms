@@ -408,6 +408,9 @@ $lang->execution->menu->view['subMenu']            = new stdclass();
 $lang->execution->menu->view['subMenu']->groupTask = "$lang->groupView|execution|grouptask|executionID=%s";
 $lang->execution->menu->view['subMenu']->tree      = "$lang->treeView|execution|tree|executionID=%s";
 
+$lang->execution->menu->view['menuOrder'][10] = 'groupTask';
+$lang->execution->menu->view['menuOrder'][15] = 'tree';
+
 $lang->execution->menu->qa['subMenu'] = new stdclass();
 //$lang->execution->menu->qa['subMenu']->qa         = array('link' => "$lang->dashboard|execution|qa|executionID=%s");
 $lang->execution->menu->qa['subMenu']->bug        = array('link' => "{$lang->bug->common}|execution|bug|executionID=%s", 'subModule' => 'bug');
