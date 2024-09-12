@@ -357,6 +357,7 @@ class storyZen extends story
         $initStory->category    = $story->category;
         $initStory->feedbackBy  = $story->feedbackBy;
         $initStory->notifyEmail = $story->notifyEmail;
+        $initStory->parent      = $story->parent;
 
         if($this->config->edition != 'open')
         {
