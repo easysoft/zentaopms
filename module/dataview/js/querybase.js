@@ -386,15 +386,7 @@ function handleClickDictField(event)
 function appendTextToSqlForm(text)
 {
     const sqlForm = $('textarea[name="sql"]');
-
-    const startPos = sqlForm.prop('selectionStart');
-    const endPos   = sqlForm.prop('selectionEnd');
-    const sql      = sqlForm.val();
-    const before   = sql.substring(0, startPos);
-    const after    = sql.substring(endPos, sql.length);
-
-    const result = before + text + after;
-    sqlForm.val(result);
+    sqlForm.val(sqlForm.val() + text);
 }
 
 /**
