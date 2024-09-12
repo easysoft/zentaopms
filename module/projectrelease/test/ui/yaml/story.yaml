@@ -17,3 +17,22 @@ fields:
     postfix: ""
     loop: 0
     format: ""
+  - field: type
+    note: "需求类型"
+    range: story
+  - field: pri
+    note: "优先级"
+    range: 1-4
+  - field: status
+    note: "当前状态"
+    range: active
+    prefix: ""
+    postfix: ""
+    loop: 0
+  - field: stage
+    note: "所处阶段"
+    range: "projected,[],developing,[],developed,[],testing,[],tested,[]"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
