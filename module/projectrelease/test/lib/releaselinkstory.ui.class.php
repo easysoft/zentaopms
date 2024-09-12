@@ -38,3 +38,18 @@ class releaseLinkStoryTester extends tester
         $form->dom->alertModal();//模态框中点击确定
         $form->wait(2);
         $linkNumAfter = $form->dom->finishedStoryNum->getText();//记录移除需求后发布关联的需求数量
+        //断言检查单个移除需求是否成功
+        return ($linkNumAfter == $linkNumBefore - 1) ? $this->success('单个移除需求成功') : $this->failed('单个移除需求失败');
+    }
+
+    /**
+     * unlink all story of project release.
+     * 移除全部需求
+     *
+     * @return object
+     */
+    public function batchUnlinkStory()
+    {
+        $form = $this->initForm('projectrelease', 'view', array('releaseID' => 1), 'appIframe-project');
+        $form->wait(1);
+        $form->dom->allFinishedStoryBtn->click();//全选需求
