@@ -34,3 +34,5 @@ WHERE t2.buildin = '1' AND t2.role = 'buildin';
 
 ALTER TABLE `zt_dataview` ADD `mode` enum('text', 'builder') not NULL default 'builder' AFTER `code`;
 UPDATE `zt_dataview` SET `mode` = 'text';
+ALTER TABLE `zt_chart` ADD `mode` enum('text', 'builder') not NULL default 'builder' AFTER `driver`;
+UPDATE `zt_chart` SET `mode` = 'text';
