@@ -40,8 +40,6 @@ class thinkMatrixOptions extends wg
     {
         global $lang, $app;
         $app->loadLang('thinkstep');
-        jsVar('tipQuestion', $lang->thinkstep->tips->question);
-        jsVar('cannotDeleteColumnTip', $lang->thinkstep->tips->cannotDeleteColumn);
 
         $id           = $this->prop('id') ? $this->prop('id') : $this->gid;
         $deleteColTip = $this->prop('deleteColTip', $lang->thinkstep->tips->deleteCol);
@@ -54,6 +52,8 @@ class thinkMatrixOptions extends wg
             setClass('think-multiple w-full'),
             div(setClass('think-multiple-body flex overflow-x-auto overflow-y-hidden')),
             setData('quotedQuestions', $this->prop('quotedQuestions')),
+            setData('tipQuestion', $lang->thinkstep->tips->question),
+            setData('cannotDeleteColumnTip', $lang->thinkstep->tips->cannotDeleteColumn),
             zui::thinkMatrixOptions
             (
                 set::_to("#$id"),
