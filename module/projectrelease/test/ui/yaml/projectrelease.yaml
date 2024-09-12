@@ -1,0 +1,37 @@
+title: table zt_release
+author: Huifang Li
+desc: ""
+version: "1.0"
+fields:
+  - field: id
+    range: 1
+  - field: product
+    range: 1
+  - field: project
+    range: 1
+  - field: name
+    range: 项目发布1
+  - field: build
+    range: ' '
+  - field: date
+    range: "(-1M)-(+1w):60"
+    type: timestamp
+    format: "YYYY-MM-DD"
+  - field: status
+    range: "[wait]"
+  - field: subStatus
+    range: ' '
+  - field: createdBy
+    note: "由谁创建"
+    range: admin
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: createdDate
+    note: "创建日期"
+    range: "(M)-(w)"
+    type: timestamp
+    format: "YY/MM/DD"
+  - field: deleted
+    range: 0
