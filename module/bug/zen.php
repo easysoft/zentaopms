@@ -1020,7 +1020,7 @@ class bugZen extends bug
 
         if($executionID || $projectID)
         {
-            $stories = $this->story->getExecutionStoryPairs($executionID ? $executionID : $projectID, $productID, $branch, '', 'full', 'all', 'story', false);
+            $stories = $this->story->getExecutionStoryPairs($executionID ? $executionID : $projectID, $productID, $branch, $moduleID, 'full', 'all', 'story', false);
         }
         else
         {
