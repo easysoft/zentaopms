@@ -390,7 +390,7 @@ class sqlBuilder extends wg
             setClass('w-full builder-content'),
             set::title($contentTitle),
             set::headingClass('justify-start gap-0'),
-            set::bodyClass('h-86 overflow-auto'),
+            set::bodyClass('h-80 overflow-auto'),
             to::heading
             (
                 sqlBuilderHelpIcon
