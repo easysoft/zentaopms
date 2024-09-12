@@ -342,6 +342,13 @@ function highlightStepTarget($target, step, popoverOptions)
         {
             presentStep();
         });
+        if(scope.zui.Ajax.globalBeforeSends)
+        {
+            scope.zui.Ajax.globalBeforeSends.push(function(options)
+            {
+                options.headers['X-ZIN-Tutorial'] = getCurrentStepID();
+            });
+        }
     });
 }
 
