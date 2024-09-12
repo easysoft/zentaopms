@@ -989,7 +989,7 @@ class testtaskModel extends model
         $orderBy = $this->addPrefixToOrderBy($orderBy);
         $cases   = $this->loadModel('testsuite')->getLinkedCasePairs($suiteID);
 
-        return $this->dao->select('t2.*,t1.*,t3.title as storyTitle,t2.status as caseStatus')->from(TABLE_TESTRUN)->alias('t1')
+        return $this->dao->select('t2.*,t1.*,t3.title as storyTitle,t2.status as caseStatus,t2.version as caseVersion')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
             ->where('t1.task')->eq($taskID)
