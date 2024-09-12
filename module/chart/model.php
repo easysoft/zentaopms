@@ -27,6 +27,22 @@ class chartModel extends model
     }
 
     /**
+     * 判断是否有权限访问。
+     * Check chart access.
+     *
+     * @param  int    $chartID
+     * @access public
+     * @return array
+     */
+    public function checkAccess($chartID, $method = 'preview')
+    {
+        if(!in_array($chartID, $this->viewableObjects))
+        {
+            return $this->app->control->sendError($this->lang->chart->accessDenied, helper::createLink('chart', $method));
+        }
+    }
+
+    /**
      * 获取指定维度下的第一个分组 id。
      * Get the first group id under the specified dimension.
      *
@@ -75,6 +91,7 @@ class chartModel extends model
                 ->markRight(1)
                 ->andWhere("FIND_IN_SET({$groupID}, `group`)")
                 ->andWhere('stage')->eq('published')
+                ->andWhere('id')->in($this->viewableObjects)
                 ->orderBy('id_desc')
                 ->limit(1)
                 ->fetch();

@@ -25,6 +25,7 @@ $lang->pivot->exportType   = 'Export Type';
 $lang->pivot->exportRange  = 'Export Range';
 $lang->pivot->story        = 'Story';
 
+$lang->pivot->accessDenied  = 'You do not have access to this pivot';
 $lang->pivot->acl = 'Access Control';
 $lang->pivot->aclList['open']    = 'Public (with pivot view permissions and dimension permissions can access it)';
 $lang->pivot->aclList['private'] = 'Private (Only creators and whitelisted users with dimension permissions can access it)';

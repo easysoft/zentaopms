@@ -3,6 +3,7 @@ $lang->chart->preview   = 'View Chart';
 $lang->chart->query     = 'Query';
 $lang->chart->toDesign  = 'To Design';
 
+$lang->chart->accessDenied  = 'You do not have access to this chart';
 $lang->chart->acl = 'Access Control';
 $lang->chart->aclList['open']    = 'Public (with chart view permissions and dimension permissions can access it)';
 $lang->chart->aclList['private'] = 'Private (Only creators and whitelisted users with dimension permissions can access it)';

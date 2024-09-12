@@ -27,6 +27,22 @@ class pivotModel extends model
     }
 
     /**
+     * 判断是否有权限访问。
+     * Check pivot access.
+     *
+     * @param  int    $pivotID
+     * @access public
+     * @return array
+     */
+    public function checkAccess($pivotID, $method = 'preview')
+    {
+        if(!in_array($pivotID, $this->viewableObjects))
+        {
+            return $this->app->control->sendError($this->lang->pivot->accessDenied, helper::createLink('pivot', $method));
+        }
+    }
+
+    /**
      * 过滤不可见的透视表。
      * Filter invisible pivot.
      *

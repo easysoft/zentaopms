@@ -3,6 +3,7 @@ $lang->chart->preview  = '查看图表';
 $lang->chart->query    = '查询';
 $lang->chart->toDesign = '进入设计';
 
+$lang->chart->accessDenied  = '您无权访问该图表';
 $lang->chart->acl = '访问控制';
 $lang->chart->aclList['open']    = '公开（有图表视图权限与所在维度的访问权限即可访问）';
 $lang->chart->aclList['private'] = '私有（仅创建者和白名单用户可访问）';

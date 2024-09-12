@@ -153,6 +153,8 @@ class pivotZen extends pivot
      */
     public function show(int $groupID, int $pivotID): void
     {
+        $this->pivot->checkAccess($pivotID, 'preview');
+
         $pivot  = $this->pivot->getByID($pivotID, true);
         $driver = $pivot->driver;
         if(isset($_POST['filterValues']) and $_POST['filterValues'])

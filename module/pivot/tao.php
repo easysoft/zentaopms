@@ -410,6 +410,7 @@ EOT)->from(TABLE_TASK)->alias('t1')
             ->where("FIND_IN_SET({$groupID}, `group`)")
             ->andWhere('stage')->ne('draft')
             ->andWhere('deleted')->eq('0')
+            ->andWhere('id')->in($this->viewableObjects)
             ->orderBy('id_desc')
             ->limit(1)
             ->fetch('id');

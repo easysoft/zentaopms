@@ -1,5 +1,6 @@
 <?php
-global $lang;
+global $lang, $app;
+$app->loadLang('bi');
 $config->dataview->schema = new stdclass();
 $config->dataview->schema->dtable = new stdclass();
 $config->dataview->schema->dtable->fieldList = array();
