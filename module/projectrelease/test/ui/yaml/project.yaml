@@ -1,0 +1,19 @@
+title: project.
+desc: project data.
+author: Li Huifang
+version: "1.0"
+fields:
+  - field: id
+    range: 1
+  - field: name
+    note: "名称"
+    fields:
+    - field: name
+      range: 敏捷项目1
+  - field: project
+    range: 0
+  - field: code
+    prefix: "code"
+    range: 1
+  - field: model
+    range: scrum
