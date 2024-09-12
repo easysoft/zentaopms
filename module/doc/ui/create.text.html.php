@@ -193,17 +193,23 @@ formBase
                 on::init()->do('$element.on("change input", () => {$("#title").val($element.val()).removeClass("has-error");$("#titleTip").remove();})')
             )
         ),
-        pageEditor
+        $docType === 'doc' ? pageEditor
         (
             set::_id('docEditor'),
             set::name('content'),
             set::size('auto'),
             set::resizable(false),
             set::placeholder($lang->noticePasteImg)
+        ) : editor
+        (
+            set::name('content'),
+            set::size('full'),
+            set::resizable(false),
+            set::placeholder($lang->noticePasteImg)
         )
     ),
     formHidden('status', 'normal'),
-    formHidden('contentType', 'doc'),
+    formHidden('contentType', $docType),
     formHidden('type', 'text'),
     $basicInfoModal
 );
