@@ -127,9 +127,4 @@ class space extends control
 
         echo json_encode($cloudApp);
     }
-
-    public function ajaxTest()
-    {
-        $this->loadModel('upgrade')->checkAndInstallGitFox();
-    }
 }
