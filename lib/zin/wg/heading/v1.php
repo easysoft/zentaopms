@@ -103,6 +103,9 @@ class heading extends wg
      */
     protected function build()
     {
+        global $app, $config;
+        if($config->edition != 'open' && $app->isServing()) $app->control->loadModel('common')->mergeFlowMenuLang();
+
         return div
         (
             set::id('heading'),
