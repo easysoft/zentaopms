@@ -1337,6 +1337,20 @@ class screenModel extends model
                     }
                 }
                 break;
+            case strpos($type, '.') !== false:
+                $params = explode('.', $type);
+                if(empty(array_filter($params)))
+                {
+                    $options = array();
+                }
+                else
+                {
+                    $module   = $params[0];
+                    $typeList = $params[1] . 'List';
+                    $this->app->loadLang($module);
+                    $options = $this->lang->$module->$typeList;
+                }
+                break;
             default:
                 if($field and $sql)
                 {
