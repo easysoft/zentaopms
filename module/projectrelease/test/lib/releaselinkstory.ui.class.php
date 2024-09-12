@@ -53,3 +53,9 @@ class releaseLinkStoryTester extends tester
         $form = $this->initForm('projectrelease', 'view', array('releaseID' => 1), 'appIframe-project');
         $form->wait(1);
         $form->dom->allFinishedStoryBtn->click();//全选需求
+        $form->dom->batchUnlinkBtn->click();//点击批量移除按钮
+        $form->wait(2);
+        //断言检查移除全部需求是否成功
+        return ($form->dom->finishedStoryNum === false) ? $this->success('移除全部需求成功') : $this->failed('移除全部需求失败');
+    }
+}
