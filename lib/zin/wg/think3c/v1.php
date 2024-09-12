@@ -18,12 +18,13 @@ class think3c extends thinkModel
 
     protected function buildBody(): node
     {
-        global $lang;
+        global $lang, $app;
 
         jsVar('blockName', $lang->thinkwizard->placeholder->blockName);
 
         return div
         (
+            setData('clientLang', $app->getClientLang()),
             setData('model', '3c'),
             setClass('model-canvas relative flex justify-center'),
             h::canvas(setID('canvas')),
