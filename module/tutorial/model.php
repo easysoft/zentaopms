@@ -314,6 +314,21 @@ class tutorialModel extends model
     }
 
     /**
+     * 获取新手模式研发需求键值对。
+     * Get tutorial story pairs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getStoryPairs(): array
+    {
+        $stories = $this->getStories();
+        $storyPairs = array();
+        foreach($stories as $story) $storyPairs[$story->id] = $story->title;
+        return $storyPairs;
+    }
+
+    /**
      * 获取新手模式研发需求。
      * Get tutorial story.
      *
@@ -687,7 +702,7 @@ class tutorialModel extends model
     public function getExecutionStoryPairs(): array
     {
         $stories = $this->getStories();
-        $story   = $stories[0];
+        $story   = $stories[2];
         return array($story->id => $story->title);
     }
 

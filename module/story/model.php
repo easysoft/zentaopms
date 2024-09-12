@@ -128,7 +128,11 @@ class storyModel extends model
     {
         if(empty($storyIdList)) return array();
 
-        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getStories();
+        if(common::isTutorialMode())
+        {
+            $story = $this->loadModel('tutorial')->getStory();
+            return array($story->id => $story);
+        }
 
         return $this->dao->select('t1.*, t2.spec, t2.verify, t3.name as productTitle, t3.deleted as productDeleted')
             ->from(TABLE_STORY)->alias('t1')
@@ -2281,6 +2285,8 @@ class storyModel extends model
      */
     public function getProductStoryPairs(int|array $productIdList = 0, string|int $branch = 'all', array|string|int $moduleIdList = '', string|array $status = 'all', string $order = 'id_desc', int $limit = 0, string $type = 'full', string $storyType = 'story', bool|string $hasParent = true): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getStoryPairs();
+
         if($hasParent === 'false') $hasParent = false;
 
         $stories = $this->dao->select('t1.id, t1.title, t1.module, t1.pri, t1.estimate, t2.name AS product')
