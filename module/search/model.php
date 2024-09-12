@@ -676,7 +676,7 @@ class searchModel extends model
     public function buildIndexQuery(string $type, bool $testDeleted = true): object
     {
         $table = $this->config->objectTables[$type];
-        if($type == 'story' || $type == 'requirement')
+        if($type == 'story' || $type == 'requirement' || $type == 'epic')
         {
             $query = $this->dao->select('DISTINCT t1.*, t2.spec, t2.verify')->from($table)->alias('t1')
                 ->leftJoin(TABLE_STORYSPEC)->alias('t2')->on('t1.id=t2.story')
