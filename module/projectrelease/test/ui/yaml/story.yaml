@@ -1,0 +1,19 @@
+title: table zt_story
+desc: "需求"
+author: Li Huifang
+version: "1.0"
+fields:
+  - field: product
+    note: "所属产品"
+    range: 1
+  - field: grade
+    note: "需求层级"
+    range: 1
+    format: ""
+  - field: title
+    note: "需求名称"
+  - field: title
+    range: 需求001,需求002,需求003,需求004,需求005
+    postfix: ""
+    loop: 0
+    format: ""
