@@ -398,7 +398,7 @@ class pivotState
             foreach(array_keys($filter) as $key)
             {
                 if($key == 'field') $filter[$key] = $field;
-                else                $filter[$key] = $query[$key];
+                elseif(isset($query[$key])) $filter[$key] = $query[$key];
             }
             $filter['from'] = 'query';
             $this->filters[] = $filter;
