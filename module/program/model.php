@@ -1423,7 +1423,7 @@ class programModel extends model
      * @access public
      * @return void
      */
-    public function setMenu($programID)
+    public function setMenu(int $programID)
     {
         $this->lang->switcherMenu = $this->getSwitcher($programID);
         common::setMenuVars('program', $programID);
@@ -1436,7 +1436,7 @@ class programModel extends model
      * @access private
      * @return string
      */
-    public function getSwitcher($programID = 0)
+    public function getSwitcher(int $programID = 0)
     {
         $currentProgramName = '';
         $currentModule      = $this->app->moduleName;

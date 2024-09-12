@@ -60,6 +60,7 @@ foreach($projectExecutions as $projectID => $executions)
 
         if($execution->type == 'stage') $item['url'] = helper::createLink('execution', 'task', "executionID={$execution->id}");
         if($execution->type == 'kanban') $item['url'] = helper::createLink('execution', 'kanban', "execution={$execution->id}");
+        if(strpos($link, 'ajaxSwitchBelong') !== false) $item['url'] = sprintf($link, $execution->id);
 
         if(!isset($data[$group][$projectID])) $data[$group][$projectID] = $projectItem;
         $data[$group][$projectID]['items'][] = $item;
