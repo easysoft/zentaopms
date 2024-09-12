@@ -688,7 +688,7 @@ class tutorialModel extends model
     public function getExecutionStories(): array
     {
         $stories = $this->getStories();
-        $story   = $stories[2];
+        $story   = $stories[3];
         return array($story->id => $story);
     }
 
