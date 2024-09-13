@@ -85,7 +85,7 @@ class pageEditor extends wg
             (
                 set::_class('w-full h-full'),
                 set::name($name),
-                set::data($value),
+                set::content($value),
                 set::readonly($readonly),
                 set($this->getRestProps())
             ),
