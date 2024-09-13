@@ -51,6 +51,7 @@ featureBar
         )
     ),
     set::param($param),
+    set::searchModule('executionStory'),
     set::current($this->session->storyBrowseType),
     set::link(createLink($app->rawModule, $app->rawMethod, "&executionID=$execution->id&storyType=$storyType&orderBy=$orderBy&type={key}")),
     set::queryMenuLinkCallback(array(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink))),

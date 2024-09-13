@@ -17,6 +17,7 @@ class featureBar extends wg
         'loadID?: string',
         'app?: string=""',
         'param?: int=0',
+        'searchModule?: string=""',
         'labelCount?: int=-1'
     );
 
@@ -41,21 +42,23 @@ class featureBar extends wg
         $rawItems = \customModel::getFeatureMenu($currentModule, $currentMethod);
         if(!is_array($rawItems)) return null;
 
-        $current    = $this->prop('current', data('browseType'));
-        $pager      = data('pager');
-        $recTotal   = $pager ? $pager->recTotal : data('recTotal');
-        $recTotal   = $this->prop('labelCount') >= 0 ? $this->prop('labelCount') : $recTotal;
-        $items      = array();
-        $loadID     = $this->prop('loadID');
-        $load       = $this->prop('load');
-        $tab        = $this->prop('app');
-        $param      = $this->prop('param');
-        $commonLink = $this->prop('link');
-        $itemLink   = $this->prop('itemLink');
+        $current      = $this->prop('current', data('browseType'));
+        $pager        = data('pager');
+        $recTotal     = $pager ? $pager->recTotal : data('recTotal');
+        $recTotal     = $this->prop('labelCount') >= 0 ? $this->prop('labelCount') : $recTotal;
+        $items        = array();
+        $loadID       = $this->prop('loadID');
+        $load         = $this->prop('load');
+        $tab          = $this->prop('app');
+        $param        = $this->prop('param');
+        $searchModule = $this->prop('searchModule');
+        $commonLink   = $this->prop('link');
+        $itemLink     = $this->prop('itemLink');
 
         data('activeFeature', $current);
 
-        if(empty($commonLink)) $commonLink = createLink($app->rawModule, $app->rawMethod, $this->prop('linkParams'));
+        if(empty($commonLink))   $commonLink = createLink($app->rawModule, $app->rawMethod, $this->prop('linkParams'));
+        if(empty($searchModule)) $searchModule = data("config.{$currentModule}.search.module") ? data("config.{$currentModule}.search.module") : $currentModule;
 
         foreach($rawItems as $item)
         {
@@ -83,8 +86,6 @@ class featureBar extends wg
 
                 foreach($moreSelects as $key => $text)
                 {
-                    $searchModule = data("config.{$currentModule}.search.module") ? data("config.{$currentModule}.search.module") : $currentModule;
-
                     $subItem = array();
                     $subItem['text']   = $text;
                     $subItem['active'] = $item->name == 'QUERY' ? $key == $param : $key == $current;
