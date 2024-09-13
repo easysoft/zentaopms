@@ -1,5 +1,23 @@
 window.renderRowCol = function($result, col, row)
 {
+    if(col.name == 'module')
+    {
+        $result.find('.picker-box').on('inited', function(e, info)
+        {
+            const $modulePicker = info[0];
+            $modulePicker.render({items: modules[row.branch != undefined ? row.branch : 0]});
+            $modulePicker.$.setValue(row.module);
+        });
+    }
+    if(col.name == 'story')
+    {
+        $result.find('.picker-box').on('inited', function(e, info)
+        {
+            const $storyPicker = info[0];
+            $storyPicker.render({items: stories[row.module]});
+            $storyPicker.$.setValue(row.story);
+        });
+    }
     if(col.name == 'steps')
     {
         $result.empty();
