@@ -1537,7 +1537,7 @@ class testcaseZen extends testcase
             /* Build inserted case. */
             else
             {
-                $case->product        = $productID;
+                $case->product    = $productID;
                 $case->version    = 1;
                 $case->openedBy   = $this->app->user->account;
                 $case->openedDate = $now;
@@ -1554,6 +1554,14 @@ class testcaseZen extends testcase
         return $cases;
     }
 
+    /**
+     * 根据 xmind 构建导入用例的数据。
+     * Build imported cases by xmind data.
+     *
+     * @param  array     $caseList
+     * @access protected
+     * @return array
+     */
     protected function buildCasesByXmind(array $caseList): array
     {
         $caseIdList     = array_filter(array_map(function($case){return zget($case, 'id', 0);}, $caseList));
