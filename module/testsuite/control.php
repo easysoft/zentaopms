@@ -300,7 +300,7 @@ class testsuite extends control
         {
             $caseData = form::data($this->config->testsuite->form->linkCase)->get();
 
-            $this->testsuite->linkCase($suiteID, $caseData->cases, $caseData->versions);
+            $this->testsuite->linkCase($suiteID, $caseData->cases, $caseData->version);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('view', "suiteID=$suiteID")));
