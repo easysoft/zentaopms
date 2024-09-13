@@ -58,3 +58,8 @@ $tester = new reviewStoryTester();
 $tester->login();
 
 $result = array('确认通过', '有待明确');
+$status = array('激活', '草稿');
+
+r($tester->reviewStory($result[0], $status[0])) && p('message') && e('评审研发需求成功');
+r($tester->reviewStory($result[1], $status[1])) && p('message') && e('评审研发需求成功');
+$tester->closeBrowser();
