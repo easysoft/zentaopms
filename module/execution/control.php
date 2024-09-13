@@ -462,7 +462,7 @@ class execution extends control
 
         /* Build the search form. */
         $products  = $this->product->getProducts($executionID);
-        $actionURL = $this->createLink('execution', 'story', "executionID=$executionID&storyType=$storyType&orderBy=$orderBy&type=bySearch&queryID=0");
+        $actionURL = $this->createLink('execution', 'story', "executionID=$executionID&storyType=$storyType&orderBy=$orderBy&type=bySearch&queryID=myQueryID");
         $this->executionZen->buildStorySearchForm($execution, $productID, $products, $type == 'bysearch' ? $param : 0, $actionURL);
 
         /* Load pager. */
