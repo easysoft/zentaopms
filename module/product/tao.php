@@ -280,8 +280,8 @@ class productTao extends productModel
      */
     protected function computeLocate4DropMenu(): array
     {
-        $currentModule = (string)$this->app->moduleName;
-        $currentMethod = (string)$this->app->methodName;
+        $currentModule = (string)$this->app->rawModule;
+        $currentMethod = (string)$this->app->rawMethod;
 
         /* Init currentModule and currentMethod for report and story. */
         if($currentModule == 'story')
