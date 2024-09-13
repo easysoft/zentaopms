@@ -63,3 +63,14 @@ function importNextPage()
     link = $.createLink('testcase', 'showImport', "productID=" + productID + "&branch=" + branch + "&pageID=1&maxImport=" + $('#maxImport').val());
     loadPage(link);
 }
+
+function changeModule(event)
+{
+    const $target      = $(event.target);
+    const moduleID     = $target.val();
+    const $storyPicker = $target.closest('tr').find('.form-batch-control[data-name="story"] .picker').zui('picker');
+    const oldStory     = $storyPicker.$.value;
+
+    $storyPicker.render({items: stories[moduleID]});
+    $storyPicker.$.setValue(oldStory);
+}
