@@ -41,7 +41,7 @@ window.renderCell = function(result, {col, row})
  */
 window.getCellSpan = function(cell)
 {
-    if(['id', 'branchName', 'name', 'branch', 'status', 'date', 'desc', 'actions'].includes(cell.col.name) && cell.row.data.rowspan)
+    if(['id', 'branchName', 'name', 'branch', 'status', 'date', 'desc', 'releasedDate', 'actions'].includes(cell.col.name) && cell.row.data.rowspan)
     {
         return {rowSpan: cell.row.data.rowspan};
     }
