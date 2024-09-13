@@ -36,7 +36,7 @@ if(common::hasPriv('build', 'create'))
         ->itemEnd();
 }
 
-if(common::hasPriv('release', 'create'))
+if(common::hasPriv('release', 'create') && !common::isTutorialMode())
 {
     $fields->field('openedBuild')
         ->itemBegin()->control(array('control' => 'btn', 'data-toggle' => 'modal', 'data-size' => 'lg','id' => 'createRelease'))
