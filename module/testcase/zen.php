@@ -1576,6 +1576,23 @@ class testcaseZen extends testcase
             $case->version = 1;
 
             $case = $this->testcase->processCaseSteps($case, (object)$caseData);
+
+            $caseID  = (int)zget($caseData, 'id', 0);
+            $oldCase = zget($oldCases, $caseID, false);
+
+            if(empty($oldCase))
+            {
+                $case->type       = 'feature';
+                $case->status     = !$forceNotReview ? 'wait' : 'normal';
+                $case->openedBy   = $account;
+                $case->openedDate = $now;
+            }
+            else
+            {
+                $case->id             = $caseID;
+                $case->lastEditedBy   = $account;
+                $case->lastEditedDate = $now;
+            }
             $cases[] = $case;
         }
 
