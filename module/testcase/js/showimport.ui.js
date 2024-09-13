@@ -74,3 +74,14 @@ function changeModule(event)
     $storyPicker.render({items: stories[moduleID]});
     $storyPicker.$.setValue(oldStory);
 }
+
+function changeBranch(event)
+{
+    const $target       = $(event.target);
+    const branchID      = $target.val();
+    const $modulePicker = $target.closest('tr').find('.form-batch-control[data-name="module"] .picker').zui('picker');
+    const oldModule     = $modulePicker.$.value;
+
+    $modulePicker.render({items: modules[branchID]});
+    $modulePicker.$.setValue(oldModule);
+}
