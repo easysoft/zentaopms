@@ -61,6 +61,7 @@ foreach($cases as $case)
 }
 
 $cols = $this->loadModel('datatable')->getSetting('execution', 'testcase');
+$cols['id']['name'] = $cols['id']['type'] = 'id';
 
 dtable
 (

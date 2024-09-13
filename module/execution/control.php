@@ -622,14 +622,7 @@ class execution extends control
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $idFieldList['title'] = $this->lang->idAB;
-        $idFieldList['name']  = 'id';
-        $idFieldList['type']  = 'id';
-        $idFieldList['group'] = '1';
-        array_unshift($this->config->testcase->dtable->fieldList, $idFieldList);
-
         unset($this->config->testcase->dtable->fieldList['title']['nestedToggle']);
-        unset($this->config->testcase->dtable->fieldList['id']);
         if($productID && $products[$productID]->type == 'normal') unset($this->config->testcase->dtable->fieldList['branch']);
 
         /* Build the search form. */
