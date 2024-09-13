@@ -13,6 +13,7 @@ $lang->tutorial = new stdclass();
 $lang->tutorial->common           = 'Anleitung';
 $lang->tutorial->desc             = 'Machen Sie sich mit ZenTao vertraut. Sie können jeder Zeit abbrechen.';
 $lang->tutorial->start            = "Los geht's!";
+$lang->tutorial->continue         = 'Continue';
 $lang->tutorial->exit             = 'Beenden';
 $lang->tutorial->exitStep         = 'Beenden';
 $lang->tutorial->finish           = 'Finish';
@@ -23,6 +24,7 @@ $lang->tutorial->allTasks         = 'Alle Aufgaben';
 $lang->tutorial->previous         = 'Vorheriger';
 $lang->tutorial->nextTask         = 'Nächster';
 $lang->tutorial->nextGuide        = 'Nächster Guide';
+$lang->tutorial->nextStep         = 'Next Step';
 $lang->tutorial->openTargetPage   = 'Offen <strong class="task-page-name">target</strong>';
 $lang->tutorial->atTargetPage     = 'Auf <strong class="task-page-name">target</strong>';
 $lang->tutorial->reloadTargetPage = 'Neu laden';
@@ -37,6 +39,11 @@ $lang->tutorial->novice           = "Für einen Schnellstart, beginnen Sie mit e
 $lang->tutorial->dataNotSave      = "In der Anleitung erstellte Daten werden nicht gespeichert!";
 $lang->tutorial->clickTipFormat   = "klicken %s";
 $lang->tutorial->clickAndOpenIt   = "Click %s to open %s.";
+
+$lang->tutorial->guideTypes        = array();
+$lang->tutorial->guideTypes['starter'] = 'Getting Started';
+$lang->tutorial->guideTypes['basic']   = 'Basic Tutorial';
+$lang->tutorial->guideTypes['advance'] = 'Advance Tutorial';
 
 $lang->tutorial->tasks = new stdclass();
 $lang->tutorial->tasks->createAccount = new stdclass();
