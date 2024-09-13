@@ -1554,6 +1554,20 @@ class testcaseZen extends testcase
         return $cases;
     }
 
+    protected function buildCasesByXmind(array $caseList): array
+    {
+        $caseIdList     = array_filter(array_map(function($case){return zget($case, 'id', 0);}, $caseList));
+        $now            = helper::now();
+        $forceNotReview = $this->testcase->forceNotReview();
+        $account        = $this->app->user->account;
+        $oldCases       = $this->testcase->getByList($caseIdList);
+        $oldSteps       = $this->testcase->fetchStepsByList($caseIdList);
+
+        $cases = array();
+
+        return $cases;
+    }
+
     /**
      * 构建从用例库导入的数据。
      * Build data for importing from lib.
