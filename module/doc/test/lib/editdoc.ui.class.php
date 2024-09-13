@@ -72,4 +72,20 @@ class createDocTester extends tester
         $this->openUrl('doc', 'mySpace');
         return $this->success('文档移动失败');
     }
+
+    /**
+     * 删除文档
+     * Delete a doc.
+     *
+     * @param  string $editDocName
+     * @access public
+     * @return void
+     */
+    public function deleteDoc()
+    {
+        $this->openUrl('doc', 'mySpace', array('type' => 'mine'));
+        $form = $this->loadPage('doc', 'mySpace', array('type' => 'mine'));
+        $form->dom->fstDocLib->click();
+        $form->wait(1);
+    }
 }
