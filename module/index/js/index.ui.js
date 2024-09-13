@@ -572,7 +572,7 @@ function goBack(target, url, startState)
  */
 function logout(url)
 {
-    if(!url) url = getLastApp().currentUrl;
+    if(!url) url = getLastApp().currentUrl.replace(/^https?:\/\/[^/]+/, '');
     $.get($.createLink('user', 'logout', 'referer=' + btoa(url)), function(data)
     {
         let load = $.createLink('user', 'login');
