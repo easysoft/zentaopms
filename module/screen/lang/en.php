@@ -1,4 +1,5 @@
 <?php
+$lang->screen->edit          = 'Edit';
 $lang->screen->browse        = 'Browse screen';
 $lang->screen->view          = 'View screen';
 $lang->screen->annualData    = 'Annual Summary';

@@ -1,4 +1,5 @@
 <?php
+$lang->screen->edit          = '编辑';
 $lang->screen->browse        = '浏览大屏';
 $lang->screen->view          = '查看大屏';
 $lang->screen->annualData    = '年度总结';
