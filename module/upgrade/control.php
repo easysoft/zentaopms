@@ -174,7 +174,7 @@ class upgrade extends control
         {
             $this->view->result = 'sqlFail';
             $this->view->errors = $this->upgrade->getError();
-            $this->display();
+            return $this->display();
         }
 
         $this->upgradeZen->afterExecuteSql($fromVersion, $rawFromVersion);
