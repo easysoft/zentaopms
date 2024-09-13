@@ -79,7 +79,7 @@ class sqlBuilderGroupBy extends wg
         (
             sqlBuilderPicker
             (
-                set::name("{$table}_{$field}"),
+                set::name("{$table}_{$field}_{$function}"),
                 set::label(sprintf($lang->bi->aggTipA, $name)),
                 set::labelWidth('176px'),
                 set::labelAlign('left'),

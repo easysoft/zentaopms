@@ -104,7 +104,7 @@ class sqlBuilderControl extends wg
             setClass($class),
             set::label($label),
             set::labelWidth($labelWidth),
-            set::labelClass('bg-gray-100 ring ring-border-strong font-bold', "justify-$labelAlign-important px-{$padding}-important" ),
+            set::labelClass('bg-gray-100 ring ring-border-strong', "justify-$labelAlign-important px-{$padding}-important" ),
             set::width($width),
             inputGroup
             (
