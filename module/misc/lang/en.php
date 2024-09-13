@@ -114,7 +114,7 @@ $lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec
 $lang->misc->feature->promptLearnMore   = 'https://www.zentao.net/book/zentaopms/1097.html';
 
 /* Release Date. */
-$lang->misc->releaseDate['20.7']        = '2024-09-13';
+$lang->misc->releaseDate['20.7']        = '2024-09-14';
 $lang->misc->releaseDate['20.6']        = '2024-08-30';
 $lang->misc->releaseDate['20.5']        = '2024-08-16';
 $lang->misc->releaseDate['18.13']       = '2024-08-09';
@@ -236,6 +236,7 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
+$lang->misc->feature->all['20.7'][]        = array('title' => "", 'desc' => '');
 $lang->misc->feature->all['20.6'][]        = array('title' => "The workflow now allows for the configuration of multiple interfaces. The approval workflow can be customized to include conditional logic based on workflow fields. Bug fixes implemented.", 'desc' => '');
 $lang->misc->feature->all['20.5'][]        = array('title' => 'Document optimized; 23 new built-in metric items added.', 'desc' => '');
 $lang->misc->feature->all['18.13'][]       = array('title' => "Enhanced list views for My Work, Story, Task, and Bug, along with improved detail pages for Product and Project. ZenTao now offers compatibility with Dameng database. Copying Stories, Tasks, Bugs, and Test Cases now includes the ability to copy custom fields and values added through workflow customization. Bug fixes implemented.", 'desc' => '');

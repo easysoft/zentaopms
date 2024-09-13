@@ -114,7 +114,7 @@ $lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec
 $lang->misc->feature->promptLearnMore   = 'https://www.zentao.net/book/zentaopms/1097.html';
 
 /* Release Date. */
-$lang->misc->releaseDate['20.7']        = '2024-09-13';
+$lang->misc->releaseDate['20.7']        = '2024-09-14';
 $lang->misc->releaseDate['20.6']        = '2024-08-30';
 $lang->misc->releaseDate['20.5']        = '2024-08-16';
 $lang->misc->releaseDate['18.13']       = '2024-08-09';
@@ -236,7 +236,7 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
-$lang->misc->feature->all['20.7'][]        = array('title' => '新手引导优化；菜单自定义。工作流优化兼容企业版解Bug。', 'desc' => '');
+$lang->misc->feature->all['20.7'][]        = array('title' => '新手引导优化；菜单自定义；工作流优化；OR界面增加贡献模块。', 'desc' => '');
 $lang->misc->feature->all['20.6'][]        = array('title' => '工作流支持配置多界面；审批流支持使用工作流中字段配置条件；修复Bug。', 'desc' => '');
 $lang->misc->feature->all['20.5'][]        = array('title' => '文档优化；新增23个内置度量项。', 'desc' => '');
 $lang->misc->feature->all['18.13'][]       = array('title' => '性能优化：我的待办和需求、任务、Bug列表页面、项目、产品的详情页面。禅道兼容达梦数据库；复制需求、任务、Bug、用例时，可以复制工作流中添加的字段和值；修复Bug。', 'desc' => '');
