@@ -23,7 +23,7 @@ $fnBuildContent = function() use ($fields, $selectedTable)
             h::td($i),
             h::td($key),
             h::td($field['name']),
-            h::td($field['type']),
+            h::td(setClass('break-all'), $field['type']),
             h::td(isset($field['options']['max']) ? $field['options']['max'] : ''),
             h::td($field['null'])
         );
@@ -42,11 +42,11 @@ $fnBuildContent = function() use ($fields, $selectedTable)
                 h::tr
                 (
                     h::th(setClass('w-20'), $lang->dev->fields['id']),
-                    h::th($lang->dev->fields['name']),
-                    h::th($lang->dev->fields['desc']),
+                    h::th(setClass('w-20'), $lang->dev->fields['name']),
+                    h::th(setClass('w-40'), $lang->dev->fields['desc']),
                     h::th($lang->dev->fields['type']),
-                    h::th($lang->dev->fields['length']),
-                    h::th($lang->dev->fields['null'])
+                    h::th(setClass('w-20'), $lang->dev->fields['length']),
+                    h::th(setClass('w-28'), $lang->dev->fields['null'])
                 )
             ),
             h::tbody($trItems)
