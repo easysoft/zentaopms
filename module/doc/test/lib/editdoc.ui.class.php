@@ -4,7 +4,7 @@ class createDocTester extends tester
 {
     /**
      * 编辑文档。
-     * Edit a draft.
+     * Edit a doc.
      *
      * @param  string $editDocName
      * @access public
@@ -39,5 +39,20 @@ class createDocTester extends tester
         if($form->dom->fstDocName->getText() != $editDocName->editName) return $this->failed('文档编辑失败');
         $this->openUrl('doc', 'mySpace');
         return $this->success('文档编辑成功');
+    }
+
+    /**
+     * 移动文档。
+     * Move a doc.
+     *
+     * @param  string $editDocName
+     * @access public
+     * @return void
+     */
+    public function moveDoc($libName)
+    {
+        /*创建一个文档库*/
+        $this->openUrl('doc', 'mySpace', array('type' => 'mine'));
+        $form = $this->loadPage('doc', 'mySpace', array('type' => 'mine'));
     }
 }

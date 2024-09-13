@@ -8,7 +8,6 @@ class myspacePage extends page
             'createLibBtn'   => '/html/body/div[1]/div/div[1]/div[2]/a',
             'leftListHeader' => '/html/body/div[1]/div/div[2]/div[1]/header/span',
             'libName'        => '//*[@id="zin_doc_createlib_form"]/div[1]/div[1]/input',
-            'fstDocLabel'    => '/html/body/div/div/div[2]/div[2]/div/div/div[2]/div[1]/div/div[2]/div/div/div/span',
             'fstDocLib'      => '/html/body/div[1]/div/div[2]/div[2]/div[2]/div/div[2]/div[1]/div/div[2]/div/div/div/a[1]',
             'createDocBtn'   => '/html/body/div/div/div[1]/div[2]/div',
             'fstDocName'     => '/html/body/div/div/div[2]/div[2]/div/div/div[2]/div[1]/div/div[2]/div/div/div/a[1]',
@@ -25,6 +24,7 @@ class myspacePage extends page
             'fstMoveBtn'     => '/html/body/div[1]/div/div[2]/div[2]/div/div/div[2]/div[3]/div/div/div/nav/a[2]/i',
             'fstDeleteBtn'   => '/html/body/div[1]/div/div[2]/div[2]/div/div/div[2]/div[3]/div/div/div/nav/a[3]/i',
             'formText'       => '/html/body/div/div/div[2]/div[2]/div/div/div/div/div',
+            'saveMoveBtn'    => '//*[@class="m-doc-myspace"]/div[2]/div[1]/div[1]/div[3]/div[1]/div[1]/form[1]/div[6]/div[1]/button[1]',
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
