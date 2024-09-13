@@ -1048,6 +1048,7 @@ $lang->tutorial->taskManage->step3->desc = '点击创建一个无迭代的项目
 
 $lang->tutorial->taskManage->step4 = new stdClass();
 $lang->tutorial->taskManage->step4->name = '填写表单';
+$lang->tutorial->taskManage->step4->desc = '“项目类型”选择项目型，“启用迭代”取消勾选，以此来创建无迭代项目';
 
 $lang->tutorial->taskManage->step5 = new stdClass();
 $lang->tutorial->taskManage->step5->name = '保存表单';

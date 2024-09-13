@@ -42,7 +42,8 @@ $taskManage->tasks['taskManage']['steps'][] = array(
 $taskManage->tasks['taskManage']['steps'][] = array(
     'type'   => 'form',
     'page'   => 'project-create',
-    'title'  => $lang->tutorial->taskManage->step4->name
+    'title'  => $lang->tutorial->taskManage->step4->name,
+    'desc'   => $lang->tutorial->taskManage->step4->desc
 );
 
 $taskManage->tasks['taskManage']['steps'][] = array(

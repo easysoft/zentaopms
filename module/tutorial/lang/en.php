@@ -1048,6 +1048,7 @@ $lang->tutorial->taskManage->step3->desc = 'Click to create a project without it
 
 $lang->tutorial->taskManage->step4 = new stdClass();
 $lang->tutorial->taskManage->step4->name = 'Fill out the form';
+$lang->tutorial->taskManage->step4->desc = 'Select Category and uncheck Multi Iteration to create a project without iterations';
 
 $lang->tutorial->taskManage->step5 = new stdClass();
 $lang->tutorial->taskManage->step5->name = 'Save the form';
