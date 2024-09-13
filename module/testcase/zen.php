@@ -580,7 +580,7 @@ class testcaseZen extends testcase
         }
 
         $this->view->productID       = $productID;
-        $this->view->productName     = $this->products[$productID];
+        $this->view->productName     = zget($this->products, $productID, '');
         $this->view->product         = $product;
         $this->view->branch          = (!empty($product) and $product->type != 'normal') ? $branch : 0;
         $this->view->branchOption    = $branchOption;
@@ -607,7 +607,7 @@ class testcaseZen extends testcase
         $showModule = !empty($this->config->testcase->browse->showModule) ? $this->config->testcase->browse->showModule : '';
         $tree       = $moduleID ? $this->tree->getByID($moduleID) : '';
 
-        $this->view->title       = $this->products[$productID] . $this->lang->hyphen . $this->lang->testcase->common;
+        $this->view->title       = zget($this->products, $productID, '') . $this->lang->hyphen . $this->lang->testcase->common;
         $this->view->projectID   = $projectID;
         $this->view->projectType = !empty($projectID) ? $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('model') : '';
         $this->view->browseType  = $browseType;
