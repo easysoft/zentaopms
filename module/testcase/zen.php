@@ -1564,6 +1564,20 @@ class testcaseZen extends testcase
         $oldSteps       = $this->testcase->fetchStepsByList($caseIdList);
 
         $cases = array();
+        foreach($caseList as $caseData)
+        {
+            $case = new stdclass();
+            $case->module  = $caseData['module'];
+            $case->product = $caseData['product'];
+            $case->branch  = $caseData['branch'];
+            $case->title   = $caseData['name'];
+            $case->pri     = $caseData['pri'];
+            $case->tmpPId  = $caseData['tmpPId'];
+            $case->version = 1;
+
+            $case = $this->testcase->processCaseSteps($case, (object)$caseData);
+            $cases[] = $case;
+        }
 
         return $cases;
     }
