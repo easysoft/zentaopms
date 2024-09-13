@@ -10,10 +10,10 @@ $lang->bi->driverList['mysql'] = 'MySQL';
 
 $lang->bi->sqlQuery   = 'SQL statements query';
 $lang->bi->sqlBuilder = 'SQL builder';
+$lang->bi->dictionary = 'Data Dictionary';
 
 $lang->bi->toggleSqlText    = 'Write SQL statements by hand';
 $lang->bi->toggleSqlBuilder = 'SQL builder';
-$lang->bi->dictionary       = 'Data Dictionary';
 
 $lang->bi->builderStepList = array();
 $lang->bi->builderStepList['table'] = 'Select tables';
@@ -95,6 +95,13 @@ $lang->bi->whereItemOperatorList['<=']    = '<=';
 $lang->bi->whereItemOperatorList['in']    = 'IN';
 $lang->bi->whereItemOperatorList['notIn'] = 'NOT IN';
 $lang->bi->whereItemOperatorList['like']  = 'LIKE';
+
+$lang->bi->queryFilterFormHeader = array();
+$lang->bi->queryFilterFormHeader['table']   = 'Select table';
+$lang->bi->queryFilterFormHeader['field']   = 'Select field';
+$lang->bi->queryFilterFormHeader['name']    = 'Filter name';
+$lang->bi->queryFilterFormHeader['type']    = 'Filter type';
+$lang->bi->queryFilterFormHeader['default'] = 'Default value';
 
 $lang->bi->emptyError     = 'Can not be empty';
 $lang->bi->duplicateError = 'Duplicate';
