@@ -425,7 +425,7 @@ function activeNextStep(step)
             const actions = [];
             if(nextTask) actions.push({type: 'confirm', btnType: 'primary', text: `${lang.nextTask}${lang.colon}${nextTask.title}`, onClick: () => activeTask(step.guide.name, nextTask.name)}, {key: 'cancel', onClick: () => unactiveTask()});
             else if(nextGuideTask) actions.push({type: 'confirm', btnType: 'primary', text: `${lang.nextGuide}${lang.colon}${nextGuide.title}`, onClick: () => activeTask(nextGuide.name, nextGuideTask.name)}, {key: 'cancel', onClick: () => unactiveTask()});
-            else actions.push('confirm');
+            else actions.push({type: 'confirm', btnType: 'primary', text: lang.finish, onClick: () => unactiveTask()});
             zui.Modal.alert(
             {
                 content: lang.congratulateTask.replace('<span class="task-name-current"></span>', step.task.title),
