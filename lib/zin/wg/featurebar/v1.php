@@ -16,6 +16,7 @@ class featureBar extends wg
         'load?: string="table"',
         'loadID?: string',
         'app?: string=""',
+        'param?: int=0',
         'labelCount?: int=-1'
     );
 
@@ -48,6 +49,7 @@ class featureBar extends wg
         $loadID     = $this->prop('loadID');
         $load       = $this->prop('load');
         $tab        = $this->prop('app');
+        $param      = $this->prop('param');
         $commonLink = $this->prop('link');
         $itemLink   = $this->prop('itemLink');
 
@@ -85,7 +87,7 @@ class featureBar extends wg
 
                     $subItem = array();
                     $subItem['text']   = $text;
-                    $subItem['active'] = $key == $current;
+                    $subItem['active'] = $item->name == 'QUERY' ? $key == $param : $key == $current;
                     $subItem['url']    = ($callback instanceof \Closure) ? $callback($key, $text) : str_replace('{key}', (string)$key, $link);
                     $subItem['attrs']  = ['data-id' => $key, 'data-load' => $load, 'data-target' => $loadID, 'data-app' => $tab, 'data-success' => "() => zui.updateSearchForm('$searchModule')"];
 

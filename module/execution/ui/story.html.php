@@ -26,6 +26,7 @@ jsVar('hourPointNotEmpty',  sprintf($lang->error->notempty, $lang->story->conver
 jsVar('hourPointNotError',  sprintf($lang->story->float, $lang->story->convertRelations));
 
 /* Show feature bar. */
+$queryMenuLink = createLink($app->rawModule, $app->rawMethod, "&executionID=$execution->id&storyType=$storyType&orderBy=$orderBy&type=bySearch&param={queryID}");
 featureBar
 (
     to::leading
@@ -49,8 +50,10 @@ featureBar
             )
         )
     ),
+    set::param($param),
     set::current($this->session->storyBrowseType),
     set::link(createLink($app->rawModule, $app->rawMethod, "&executionID=$execution->id&storyType=$storyType&orderBy=$orderBy&type={key}")),
+    set::queryMenuLinkCallback(array(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink))),
     li(searchToggle(set::module('executionStory'), set::open($type == 'bysearch')))
 );
 
