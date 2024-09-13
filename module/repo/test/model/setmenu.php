@@ -12,7 +12,7 @@ cid=1
 
 - 正常设置版本库id @2
 - 设置不存在版本库id @1
-- 无权限用户设置版本库id @0
+- 无权限用户设置版本库id @3
 
 */
 
@@ -33,4 +33,4 @@ r($repo->setMenuTest(10001))   && p() && e('1'); //设置不存在版本库id
 
 su('user19');
 $repoID = 3;
-r($repo->setMenuTest($repoID)) && p() && e('0'); //无权限用户设置版本库id
+r($repo->setMenuTest($repoID)) && p() && e('3'); //无权限用户设置版本库id
