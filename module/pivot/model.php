@@ -1492,7 +1492,7 @@ class pivotModel extends model
         $sql = $this->appendWhereFilterToSql($sql, $filters, $driver);
 
         $dbh     = $this->app->loadDriver($driver);
-        $records = $dbh->query($sql)->fetchAll();
+        $records = $this->isFiltersAllEmpty($filters) ? array() : $dbh->query($sql)->fetchAll();
 
         $records = $this->mapRecordValueWithFieldOptions($records, $fields, $sql, $driver);
 
@@ -1560,6 +1560,20 @@ class pivotModel extends model
          * 代表在整个tbody中，位于[0,0]坐标的td rowspan为2，位于[0,1]坐标的td rowspan为1, 位于[2,0]坐标的td rowspan为2
          */
         return array($data, $configs);
+    }
+
+
+    /**
+     * Check is filters all default empty.
+     *
+     * @param  array  $data
+     * @access public
+     * @return void
+     */
+    public function isFiltersAllEmpty($filters)
+    {
+        $allEmpty = !empty($filters) ? empty(array_filter(array_column($filters, 'default'))) : false;
+        return $allEmpty;
     }
 
     /**

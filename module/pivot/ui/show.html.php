@@ -65,6 +65,7 @@ $fnGenerateFilters = function() use($pivot, $showOrigin, $lang)
 $generateData = function() use ($lang, $pivotName, $pivot, $data, $configs, $showOrigin, $fnGenerateFilters)
 {
     $clickable = !$pivot->builtin;
+    $emptyTip  = $this->pivot->isFiltersAllEmpty($pivot->filters) ? $lang->pivot->filterEmptyVal : $lang->error->noData;
     list($cols, $rows, $cellSpan) = $this->loadModel('bi')->convertDataForDtable($data, $configs);
 
     return array
@@ -137,7 +138,7 @@ $generateData = function() use ($lang, $pivotName, $pivot, $data, $configs, $sho
                 set::height(jsRaw('window.getHeight')),
                 set::cols($cols),
                 set::data($rows),
-                set::emptyTip($lang->error->noData),
+                set::emptyTip($emptyTip),
                 set::onRenderCell(jsRaw('renderCell')),
                 set::onCellClick(jsRaw('clickCell')),
                 set::rowKey('ROW_ID'),

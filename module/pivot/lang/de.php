@@ -293,6 +293,7 @@ $lang->pivot->nameEmpty     = '『Name』should not be blank';
 $lang->pivot->notEmpty      = 'Can\'t be empty.';
 
 $lang->pivot->noPivotTip      = 'After you save the Settings, you can display the pivot table';
+$lang->pivot->filterEmptyVal  = 'Use filters to view data';
 $lang->pivot->noQueryTip      = 'No filter.';
 $lang->pivot->noPivot         = 'No Pivot table';
 $lang->pivot->noDrillTip      = 'No Data Drill.';

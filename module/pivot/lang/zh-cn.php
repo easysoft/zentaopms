@@ -293,6 +293,7 @@ $lang->pivot->nameEmpty     = '『名称』不能为空';
 $lang->pivot->notEmpty      = '不能为空。';
 
 $lang->pivot->noPivotTip      = '保存设置后，即可显示透视表';
+$lang->pivot->filterEmptyVal  = '使用筛选器以查看数据';
 $lang->pivot->noQueryTip      = '暂时没有筛选器。';
 $lang->pivot->noPivot         = '暂时没有透视表';
 $lang->pivot->noDrillTip      = '未配置数据下钻。';

@@ -55,7 +55,9 @@ class pivotTable extends wg
         global $lang;
         list($cols, $data, $cellSpan, $filters, $onRenderCell, $onCellClick) = $this->prop(array('cols', 'data', 'cellSpan', 'filters', 'onRenderCell', 'onCellClick'));
 
-        $filterCount = count($filters);
+        $filterCount    = count($filters);
+        $filterAllEmpty = $filterCount ? empty(array_filter(array_column($filters, 'default'))) : false;
+        $emptyTip       = $filterAllEmpty ? $lang->pivot->filterEmptyVal : $lang->pivot->noPivotTip;
         if(empty($onRenderCell)) $onRenderCell = jsRaw(<<<JS
         function(result, {row, col})
         {
@@ -85,7 +87,7 @@ class pivotTable extends wg
             set::height(jsRaw("() => getHeight(800, $filterCount)")),
             set::cols($cols),
             set::data($data),
-            set::emptyTip($lang->pivot->noPivotTip),
+            set::emptyTip($emptyTip),
             set::onRenderCell($onRenderCell),
             set::onCellClick($onCellClick),
             set::rowKey('ROW_ID'),
