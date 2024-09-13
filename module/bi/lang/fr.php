@@ -112,7 +112,7 @@ $lang->bi->stepFieldTip   = 'The fields in the select query table are used to ge
 $lang->bi->leftTableTip   = 'In SQL, a Left join is a table-to-table join that returns all the rows in the left table and the matching rows in the right table. The left join combines data from two tables based on the specified criteria, where the left table is the main table of the query and the right table is the table to be joined. See the specific table query common way: left join.';
 
 $lang->bi->stepFuncTitle = 'New function fields';
-$lang->bi->stepFuncTip   = 'To display the data you expect in the query results. You can set functions on the fields in the query table to add a new column of the data you want to the query result.';
+$lang->bi->stepFuncTip   = 'You can set functions on the fields in the query table to add a new column of the data you want to the query result.';
 
 $lang->bi->stepWhereTitle = 'Add deterministic query conditions';
 $lang->bi->stepWhereTip   = '(1) Query criteria are used to filter the data that does not meet the requirements. You can add query criteria as needed to get the corresponding query results.<br/>(2)Use =,! For =, >, >=, <, <=, and fuzzy matching (like) condition symbols, enter the corresponding condition value in the input box to the right of the symbol.<br/>(3) When using the include (in) condition symbol, please enter one or more condition values in the input box to the right of the symbol, separated by English commas, for example: task type include (in) development, test.';
