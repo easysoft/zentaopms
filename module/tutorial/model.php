@@ -507,8 +507,11 @@ class tutorialModel extends model
         $reviewingStory->path      = ',1,2,4,';
 
         $stories = array();
-        $stories[1] = $this->getEpic();
-        $stories[2] = $this->getRequirement();
+        if($this->app->config->systemMode != 'light')
+        {
+            $stories[1] = $this->getEpic();
+            $stories[2] = $this->getRequirement();
+        }
         if($this->app->config->vision == 'rnd')
         {
             $stories[3] = $activeStory;
@@ -702,7 +705,7 @@ class tutorialModel extends model
     public function getExecutionStoryPairs(): array
     {
         $stories = $this->getStories();
-        $story   = $stories[2];
+        $story   = $stories[3];
         return array($story->id => $story->title);
     }
 
