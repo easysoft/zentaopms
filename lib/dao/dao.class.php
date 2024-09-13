@@ -142,7 +142,12 @@ class dao extends baseDAO
 
         foreach($fields as $field)
         {
-            if(!isset($data->{$field->field}) && in_array($field->field, $hiddenFields)) continue;
+            if(in_array($field->field, $hiddenFields))
+            {
+                unset($data->{$field->field});
+                continue;
+            }
+
             if(isset($data->{$field->field}))
             {
                 if($field->options && is_string($field->options) && str_contains(',user,dept,', ",$field->options,"))
