@@ -43,9 +43,6 @@ class thinkTableInput extends thinkQuestion
             $result       = isset($answer->result) && !empty($answer->result) ? (array) $answer->result : array();
             $customFields = !empty($answer->customFields) ? get_object_vars($answer->customFields) : array();
         }
-        jsVar('canAddRows', (int)$canAddRows);
-        jsVar('fieldsCount', count($fields));
-        jsVar('deleteTip', $lang->thinkrun->tips->delete);
 
         $tableInputItems = array();
         $disabledAdd = !empty($customFields) && (int)$canAddRows <= count($customFields);
@@ -83,6 +80,8 @@ class thinkTableInput extends thinkQuestion
                         'plus',
                         setClass('mr-1 btn-add ml-2 text-sm text-primary add-rows cursor-pointer', $disabledAdd ? 'disabled' : ''),
                         on::click('addRow(event)'),
+                        setData('canAddRows', $canAddRows),
+                        setData('fieldsCount', count($fields)),
                         set::title(sprintf($lang->thinkrun->tips->add, $canAddRows)),
                     ) : null,
                 )
@@ -132,11 +131,16 @@ class thinkTableInput extends thinkQuestion
                             'plus',
                             setClass('mr-1 btn-add ml-2 text-sm text-primary add-rows', $disabledAdd ? 'disabled' : ''),
                             on::click('addRow(event)'),
+                            setData('canAddRows', $canAddRows),
+                            setData('fieldsCount', count($fields)),
                             set::title(sprintf($lang->thinkrun->tips->add, $canAddRows)),
                         ),
                         icon
                         (
                             setClass('btn-delete text-sm text-primary ml-1'),
+                            setData('canAddRows', $canAddRows),
+                            setData('fieldsCount', count($fields)),
+                            setData('deleteTip', $lang->thinkrun->tips->delete),
                             'trash'
                         )
                     )
@@ -175,11 +179,16 @@ class thinkTableInput extends thinkQuestion
                         'plus',
                         setClass('mr-1 btn-add ml-2 text-sm text-primary add-rows cursor-pointer'),
                         on::click('addRow(event)'),
+                        setData('canAddRows', $canAddRows),
+                        setData('fieldsCount', count($fields)),
                         set::title(sprintf($lang->thinkrun->tips->add, $canAddRows)),
                     ),
                     icon
                     (
                         setClass('btn-delete text-sm text-primary ml-1 cursor-pointer'),
+                        setData('canAddRows', $canAddRows),
+                        setData('fieldsCount', count($fields)),
+                        setData('deleteTip', $lang->thinkrun->tips->delete),
                         'trash'
                     )
                 )
@@ -203,7 +212,6 @@ class thinkTableInput extends thinkQuestion
             $requiredRows = $step->options->requiredRows;
             $supportAdd   = $step->options->supportAdd;
             $canAddRows   = $step->options->canAddRows;
-
         }
 
         $formItems[] = array (
