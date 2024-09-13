@@ -18,7 +18,7 @@ $lang->bi->toggleSqlBuilder = 'SQL构建器';
 $lang->bi->builderStepList = array();
 $lang->bi->builderStepList['table'] = '查询数据表';
 $lang->bi->builderStepList['field'] = '选择查询字段';
-$lang->bi->builderStepList['func']  = '新增函数字段';
+$lang->bi->builderStepList['func']  = '新增日期函数字段';
 $lang->bi->builderStepList['where'] = '确定性查询条件';
 $lang->bi->builderStepList['query'] = '动态查询筛选器';
 $lang->bi->builderStepList['group'] = '设置分组并聚合';
@@ -38,7 +38,7 @@ $lang->bi->set           = '进行';
 $lang->bi->funcAs        = '运算，对结果重命名为';
 $lang->bi->enable        = '启用';
 $lang->bi->previewSql    = '预览构建的sql语句';
-$lang->bi->addFunc       = '新增函数字段';
+$lang->bi->addFunc       = '新增日期函数字段';
 $lang->bi->emptyFuncs    = '暂未新增函数字段。';
 $lang->bi->addWhere      = '添加组';
 $lang->bi->emptyWheres   = '暂未添加确定性查询条件。';
@@ -111,11 +111,11 @@ $lang->bi->stepFieldTitle = '选择查询表中的字段';
 $lang->bi->stepFieldTip   = '选择查询表中的字段用于从已选择的查询表中获取所需的数据。';
 $lang->bi->leftTableTip   = '在SQL中，左连接（Left join）是一种表与表之间的关联操作，它返回左表中所有记录以及与右表中匹配的记录。左连接根据指定的条件从两个表中组合数据，其中左表是查询的主表，而右表是要连接的表。具体请看联表查询常用方式：左连接。';
 
-$lang->bi->stepFuncTitle = '新增函数字段';
+$lang->bi->stepFuncTitle = '新增日期函数字段';
 $lang->bi->stepFuncTip   = '以在查询结果中显示您期望数据。您可以对查询表中的字段设置函数，以在查询结果中新增一列您期望的数据。';
 
 $lang->bi->stepWhereTitle = '添加确定性查询条件';
-$lang->bi->stepWhereTip   = '1.查询条件用于过滤不满足要求的数据，您可以按需添加查询条件，以获取相应的查询结果。2.使用=、!=、>、>=、<、<=、和模糊匹配(like)条件符号时，请在符号右侧输入框内输入相应条件值。3.使用包含(in)条件符号时，请在符号右侧输入框内输入一个或多个条件值，并用英文逗号隔开，例如：任务类型 包含(in) 开发,测试。';
+$lang->bi->stepWhereTip   = '1.确定性查询条件用于过滤不满足要求的数据，您可以按需添加查询条件，以获取相应的查询结果。2.使用=、!=、>、>=、<、<=、和模糊匹配(like)条件符号时，请在符号右侧输入框内输入相应条件值。3.使用包含(in)条件符号时，请在符号右侧输入框内输入一个或多个条件值，并用英文逗号隔开，例如：任务类型 包含(in) 开发,测试。';
 
 $lang->bi->stepQueryTitle = '添加动态查询筛选器';
 $lang->bi->stepQueryTip   = '动态查询筛选器是通过在 SQL 中插入变量实现动态查询的筛选方式，第三步配置的结果筛选器是对SQL查询结果进行进一步筛选。';

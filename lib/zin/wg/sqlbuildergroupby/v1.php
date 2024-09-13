@@ -136,7 +136,7 @@ class sqlBuilderGroupBy extends wg
             panel
             (
                 setID('allFieldPanel'),
-                setClass('basis-72 h-78'),
+                setClass('basis-72 h-72'),
                 set::headingClass('bg-gray-100'),
                 set::bodyClass('h-70 overflow-y-auto flex col gap-y-2'),
                 set::title($lang->bi->allFields),
@@ -146,7 +146,7 @@ class sqlBuilderGroupBy extends wg
             panel
             (
                 setID('groupFieldPanel'),
-                setClass('basis-36 h-78'),
+                setClass('basis-36 h-72'),
                 set::headingClass('bg-gray-100'),
                 set::bodyClass('h-70 overflow-y-auto flex col gap-y-2'),
                 set::title($lang->bi->groupField),
@@ -156,9 +156,9 @@ class sqlBuilderGroupBy extends wg
             panel
             (
                 setID('aggFieldPanel'),
-                setClass('flex-1 h-78'),
+                setClass('flex-1 h-72'),
                 set::headingClass('bg-gray-100'),
-                set::bodyClass('h-70 overflow-y-auto flex col gap-y-2'),
+                set::bodyClass('h-64 overflow-y-auto flex col gap-y-2'),
                 set::title($lang->bi->aggField),
                 to::heading(sqlBuilderHelpIcon(set::text($lang->bi->aggFieldTip))),
                 $this->buildAggField()

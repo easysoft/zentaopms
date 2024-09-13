@@ -18,7 +18,7 @@
   </ul>
 </div>
 
-<div style="float: right; width: 85%;">
+<div id='queryPanel' style="float: right; width: 85%;">
   <div class='panel'>
     <div class='panel-heading'>
       <div class='btn-active-text'><span class='text ptitle'><?php echo $lang->dataview->sqlQuery;?></span></div>
