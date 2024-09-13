@@ -1787,7 +1787,8 @@ class testcase extends control
         {
             $sceneList    = json_decode($this->post->sceneList,    true);
             $testcaseList = json_decode($this->post->testcaseList, true);
-            $result = $this->testcase->saveXmindImport($sceneList, $testcaseList);
+            $cases  = $this->testcaseZen->buildCasesByXmind($testcaseList);
+            $result = $this->testcase->saveXmindImport($sceneList, $cases);
             if($result['result'] == 'success') $result['load'] = $this->createLink('testcase', 'browse');
             return $this->send($result);
         }

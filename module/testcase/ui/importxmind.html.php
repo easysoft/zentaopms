@@ -16,7 +16,7 @@ form
 (
     formGroup
     (
-        set::label($lang->testcase->importFile),
+        set::label($lang->testcase->importXmind),
         fileInput()
     ),
     formRowGroup

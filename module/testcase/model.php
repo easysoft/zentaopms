@@ -2127,7 +2127,6 @@ class testcaseModel extends model
 
         foreach($testcases as $testcase)
         {
-            $testcase = (object)$testcase;
             $result   = $this->saveTestcase($testcase, $sceneIDList);
             if($result['result'] == 'fail')
             {
@@ -2156,42 +2155,27 @@ class testcaseModel extends model
         $nodeID = $testcase->tmpPId;
         if(isset($sceneIdList[$nodeID]['id'])) $scene = $sceneIdList[$nodeID]['id'];
 
-        $case = new stdclass();
-        $case->scene   = $scene;
-        $case->module  = $testcase->module;
-        $case->product = $testcase->product;
-        $case->branch  = $testcase->branch;
-        $case->title   = $testcase->name;
-        $case->pri     = $testcase->pri;
-        $case->version = 1;
+        unset($testcase->tmpPId);
+        $testcase->scene = $scene;
 
-        $case = $this->processCaseSteps($case, $testcase);
-
-        $oldCase = false;
-        $caseID  = (int)zget($testcase, 'id', 0);
-        if($caseID) $oldCase = $this->fetchBaseInfo($caseID);
-        if(empty($oldCase))
+        if(empty($testcase->id))
         {
-            $case->type       = 'feature';
-            $case->status     = 'normal';
-            $case->openedBy   = $this->app->user->account;
-            $case->openedDate = helper::now();
-
             $this->create($case);
         }
         else
         {
-            $case->id             = $caseID;
-            $case->version        = $oldCase->version + 1;
-            $case->lastEditedBy   = $this->app->user->account;
-            $case->lastEditedDate = helper::now();
-
-            $this->update($case, $oldCase);
+            $oldCase = $this->getById($testcase->id);
+            $changes = $this->update($testcase, $oldCase);
+            if($changes)
+            {
+                $actionID = $this->loadModel('action')->create('case', $testcase->id, 'edited');
+                $this->action->logHistory($actionID, $changes);
+            }
         }
 
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError(true));
 
-        return array('result' => 'success', 'message' => 1, 'testcaseID' => $caseID);
+        return array('result' => 'success', 'message' => 1, 'testcaseID' => zget($testcase, 'id', 0));
     }
 
     /**
