@@ -1265,7 +1265,7 @@ class bugModel extends model
      */
     public function getBugInfoFromResult(int $resultID, int $caseID = 0, string $stepIdList = ''): array
     {
-        $result = $this->dao->findById($resultID)->from(TABLE_TESTRESULT)->fetch();
+        $result = common::isTutorialMode() ? $this->loadModel('tutorial')->getResult() : $this->dao->findById($resultID)->from(TABLE_TESTRESULT)->fetch();
         if(!$result) return array();
 
         if($caseID > 0)

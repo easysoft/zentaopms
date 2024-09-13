@@ -255,6 +255,8 @@ class buildModel extends model
      */
     public function getBuildPairs(array|int $productIdList, string|int $branch = 'all', string $params = 'noterminate, nodone', int $objectID = 0, string $objectType = 'execution', string $buildIdList = '', bool $replace = true): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getBuildPairs();
+
         $sysBuilds = array();
         if(strpos($params, 'notrunk') === false) $sysBuilds = array('trunk' => $this->lang->trunk);
 

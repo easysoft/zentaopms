@@ -926,6 +926,18 @@ class tutorialModel extends model
     }
 
     /**
+     * 获取新手模式版本键值对。
+     * Get build pairs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getBuildPairs(): array
+    {
+        return array(1 => 'Test build');
+    }
+
+    /**
      * 获取新手模式测试单。
      * Get run.
      *
@@ -1059,15 +1071,14 @@ class tutorialModel extends model
 
     /**
      * 获取新手模式用例执行结果。
-     * Get results.
+     * Get result.
      *
      * @access public
-     * @return array
+     * @return object
      */
-    public function getResults(): array
+    public function getResult(): object
     {
         $result = new stdClass();
-
         $result->id          = 1;
         $result->run         = 0;
         $result->case        = 1;
@@ -1075,6 +1086,31 @@ class tutorialModel extends model
         $result->job         = 0;
         $result->compile     = 0;
         $result->caseResult  = 'fail';
+        $result->stepResults = '';
+        $result->ZTFResult   = '';
+        $result->node        = 0;
+        $result->lastRunner  = $this->app->user->account;
+        $result->date        = helper::now();
+        $result->duration    = 0;
+        $result->xml         = '';
+        $result->deploy      = 0;
+        $result->build       = 0;
+        $result->task        = 0;
+        $result->nodeName    = '';
+        $result->files       = array();
+        return $result;
+    }
+
+    /**
+     * 获取新手模式用例执行结果。
+     * Get results.
+     *
+     * @access public
+     * @return array
+     */
+    public function getResults(): array
+    {
+        $result = $this->getResult();
         $result->stepResults = array(
             1 => array(
                 'id'      => 1,
@@ -1105,19 +1141,7 @@ class tutorialModel extends model
                 'files'   => array()
             )
         );
-
-        $result->ZTFResult   = '';
-        $result->node        = 0;
-        $result->lastRunner  = $this->app->user->account;
-        $result->date        = helper::now();
-        $result->duration    = 0;
-        $result->xml         = '';
-        $result->deploy      = 0;
-        $result->build       = 0;
-        $result->task        = 0;
-        $result->nodeName    = '';
-        $result->files       = array();
-        return array(1 => $result);
+        return array($result->id => $result);
     }
 
     /**
