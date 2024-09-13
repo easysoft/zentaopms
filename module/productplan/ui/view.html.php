@@ -92,6 +92,7 @@ unset($lang->story->reviewResultList[''], $lang->story->reviewResultList['revert
 unset($lang->story->reasonList[''], $lang->story->reasonList['subdivided'], $lang->story->reasonList['duplicate']);
 unset($plans[''], $lang->story->stageList[''], $users['']);
 
+$planItems = $moduleItems = $branchItems = $reviewRejectItems = $stageItems = $assignItems = $reviewResultItems = array();
 foreach($lang->story->reviewResultList as $key => $result) $reviewResultItems[$key] = array('text' => $result,     'class' => 'batch-btn', 'data-type' => 'story', 'data-url' => $this->createLink('story', 'batchReview', "result=$key"));
 foreach($lang->story->reasonList as $key => $reason)       $reviewRejectItems[]     = array('text' => $reason,     'class' => 'batch-btn', 'data-type' => 'story', 'data-url' => $this->createLink('story', 'batchReview', "result=reject&reason=$key"));
 foreach($branchTagOption as $branchID => $branchName)      $branchItems[]           = array('text' => $branchName, 'class' => 'batch-btn', 'data-type' => 'story', 'data-url' => $this->createLink('story', 'batchChangeBranch', "branchID=$branchID"));
