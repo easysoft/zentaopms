@@ -1542,7 +1542,7 @@ class actionModel extends model
 
         $actionType = strtolower($actionType);
         if(!isset($this->config->search->fields->{$objectType})) return false;
-        if(strpos($this->config->search->buildAction, ",{$actionType},") === false && empty($_POST['comment'])) return false;
+        if((strpos($this->config->search->buildAction, ",{$actionType},") === false && $actionType != 'commented'  && empty($_POST['comment'])) || ($actionType == 'commented' && empty($_POST['actioncomment']))) return false;
         if($actionType == 'deleted' || $actionType == 'erased') return $this->search->deleteIndex($objectType, $objectID);
 
         $field = $this->config->search->fields->{$objectType};
