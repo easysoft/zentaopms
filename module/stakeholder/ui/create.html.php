@@ -40,7 +40,7 @@ formPanel
         radioList
         (
             set::name('from'),
-            set::value('team'),
+            set::value(common::isTutorialMode() ? 'outside' : 'team'),
             set::inline(true),
             set::items($fromItems)
         )
