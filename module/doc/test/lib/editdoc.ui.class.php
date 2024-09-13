@@ -54,5 +54,9 @@ class createDocTester extends tester
         /*创建一个文档库*/
         $this->openUrl('doc', 'mySpace', array('type' => 'mine'));
         $form = $this->loadPage('doc', 'mySpace', array('type' => 'mine'));
+        $form->dom->createLibBtn->click();
+        $form->dom->name->setValue($libName->myDocLib);
+        $form->dom->btn($this->lang->save)->click();
+        $form->wait(1);
     }
 }
