@@ -38,3 +38,23 @@ $story->assignedTo->range('[]');
 $story->reviewedBy->range('[]');
 $story->reviewedDate->range('`NULL`');
 $story->closedBy->range('[]');
+$story->closedReason->range('[]');
+$story->gen(2);
+
+$storyspec = zenData('storyspec');
+$storyspec->story->range('1-2');
+$storyspec->version->range('1');
+$storyspec->title->range('激活研发需求,草稿研发需求');
+$storyspec->gen(1);
+
+$storyreview = zenData('storyreview');
+$storyreview->story->range('1-2');
+$storyreview->reviewer->range('admin');
+$storyreview->result->range('[]');
+$storyreview->version->range('1');
+$storyreview->gen(2);
+
+$tester = new reviewStoryTester();
+$tester->login();
+
+$result = array('确认通过', '有待明确');
