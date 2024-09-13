@@ -87,5 +87,12 @@ class createDocTester extends tester
         $form = $this->loadPage('doc', 'mySpace', array('type' => 'mine'));
         $form->dom->fstDocLib->click();
         $form->wait(1);
+        $form->dom->fstDeleteBtn->click();
+        $form->dom->deleteAccept->click();
+        $form->wait(1);
+
+        if($form->dom->formText->getText() != '暂时没有文档。') return $this->failed('删除文档失败');
+        $this->openUrl('doc', 'mySpace');
+        return $this->success('删除文档成功');
     }
 }
