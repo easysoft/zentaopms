@@ -9890,6 +9890,7 @@ class upgradeModel extends model
         }
 
         $defaultData = array('type' => 'mediumint', 'length' => '8', 'control' => 'select', 'readonly' => 1, 'buildin' => 1, 'role' => 'default');
+        $orders      = array('program' => '1', 'product' => '2', 'project' => '3', 'execution' => '4');
         $fields      = array();
         $fields['execution'] = "ALTER TABLE %table% ADD `execution` mediumint(8) unsigned NOT NULL DEFAULT 0 AFTER `id`";
         $fields['project']   = "ALTER TABLE %table% ADD `project` mediumint(8) unsigned NOT NULL DEFAULT 0 AFTER `id`";
@@ -9934,6 +9935,7 @@ class upgradeModel extends model
                 $data['field']    = $field;
                 $data['name']     = $this->lang->upgrade->flowFields[$field];
                 $data['options']  = $field;
+                $data['order']    = $orders[$field];
                 $this->dao->replace(TABLE_WORKFLOWFIELD)->data($data)->exec();
             }
         }
