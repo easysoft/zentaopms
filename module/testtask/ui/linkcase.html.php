@@ -95,6 +95,7 @@ dtable
     set::data(array_values($cases)),
     set::cols($config->testtask->linkcase->dtable->fieldList),
     set::fixedLeftWidth('33%'),
+    set::plugins(array('form')),
     set::checkable(true),
     set::footToolbar($footToolbar),
     set::onRenderCell(jsRaw('window.renderCell')),

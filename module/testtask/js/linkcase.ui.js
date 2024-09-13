@@ -4,12 +4,15 @@ $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
     const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return;
 
-    const url  = $(this).data('url');
-    const form = new FormData();
+    const formData = dtable.$.getFormData();
+    const url      = $(this).data('url');
+    const form     = new FormData();
     checkedList.forEach((id) =>
     {
-        form.append('case[]', id);
-        form.append('version[]', $('#version' + id).val());
+        form.append('case[' + id + ']', id);
+
+        let key = 'version[' + id + ']';
+        form.append(key, formData[key]);
     });
 
     if($(this).hasClass('ajax-btn'))
@@ -47,14 +50,10 @@ window.renderCell = function(result, info)
     }
     if(info.col.name == 'version' && result[0])
     {
-        const testcase = info.row.data;
-        let html = "<select name='version[" + testcase.id + "]' id='version" + testcase.id + "' class='form-control' style='width:60px'>";
-        for(i = testcase.version; i >= 1; i --)
-        {
-            html += "<option value='" + i + "'>#" + i + "</option>";
-        }
-        html += "</select>";
-        result[0] = {html};
+        result[0].children.props.required = true;
+        let versions = [];
+        for(i = 1; i <= info.row.data.version; i++) versions.push({'text': '#' + i, 'value': i});
+        result[0].children.props.items = versions;
     }
     if(info.col.name == 'lastRunDate' && result[0] && result[0].substring(0, 4) == '0000') result.shift();
     return result;

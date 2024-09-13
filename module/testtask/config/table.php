@@ -102,10 +102,11 @@ $config->testtask->linkcase->dtable->fieldList['pri']    = $config->testcase->dt
 $config->testtask->linkcase->dtable->fieldList['type']   = $config->testcase->dtable->fieldList['type'];
 $config->testtask->linkcase->dtable->fieldList['status'] = $config->testcase->dtable->fieldList['status'];
 
-$config->testtask->linkcase->dtable->fieldList['version']['name']  = 'version';
-$config->testtask->linkcase->dtable->fieldList['version']['title'] = $lang->testcase->version;
-$config->testtask->linkcase->dtable->fieldList['version']['type']  = 'text';
-$config->testtask->linkcase->dtable->fieldList['version']['group'] = 'version';
+$config->testtask->linkcase->dtable->fieldList['version']['name']    = 'version';
+$config->testtask->linkcase->dtable->fieldList['version']['title']   = $lang->testcase->version;
+$config->testtask->linkcase->dtable->fieldList['version']['type']    = 'control';
+$config->testtask->linkcase->dtable->fieldList['version']['control'] = 'picker';
+$config->testtask->linkcase->dtable->fieldList['version']['group']   = 'version';
 
 $config->testtask->linkcase->dtable->fieldList['openedBy']      = $config->testcase->dtable->fieldList['openedBy'];
 $config->testtask->linkcase->dtable->fieldList['lastRunner']    = $config->testcase->dtable->fieldList['lastRunner'];
