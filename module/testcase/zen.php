@@ -1589,6 +1589,23 @@ class testcaseZen extends testcase
             }
             else
             {
+                $oldStep     = zget($oldSteps, $caseID, array());
+                $stepChanged = (count($oldStep) != count($case->steps));
+                if(!$stepChanged)
+                {
+                    $desc     = array_values($case->steps);
+                    $expect   = array_values($case->expects);
+                    $stepType = array_values($case->stepType);
+                    foreach($oldStep as $index => $step)
+                    {
+                        if($stepChanged) break;
+                        if(!isset($desc[$index]) || !isset($expect[$index]) || $step->desc != $desc[$index] || $step->expect != $expect[$index] || $step->type != $stepType[$index]) $stepChanged = true;
+                    }
+                }
+                $case->version     = $stepChanged ? (int)$oldCase->version + 1 : (int)$oldCase->version;
+                $case->stepChanged = $stepChanged;
+                if($stepChanged && !$forceNotReview) $case->status = 'wait';
+
                 $case->id             = $caseID;
                 $case->lastEditedBy   = $account;
                 $case->lastEditedDate = $now;
