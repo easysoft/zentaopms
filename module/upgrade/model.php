@@ -6578,7 +6578,6 @@ class upgradeModel extends model
             if(dao::isError()) return false;
 
             $projectID = $this->dao->lastInsertID();
-            $this->action->create('project', $projectID, 'openedbysystem');
             if($project->status == 'closed') $this->action->create('project', $projectID, 'closedbysystem');
 
             if($fromMode == 'classic')
@@ -6586,9 +6585,12 @@ class upgradeModel extends model
                 $this->dao->update(TABLE_PROJECT)->set('multiple')->eq('0')->where('id')->eq($sprint->id)->exec();
                 $this->dao->update(TABLE_DOCLIB)->set('project')->eq($projectID)->set('type')->eq('project')->set('execution')->eq(0)->where('execution')->eq($sprint->id)->andWhere('type')->eq('execution')->exec();
                 $this->dao->update(TABLE_DOC)->set('project')->eq($projectID)->set('execution')->eq(0)->where('execution')->eq($sprint->id)->exec();
+                $this->dao->update(TABLE_ACTION)->set('objectType')->eq('project')->set('objectID')->eq($projectID)->set('project')->eq($projectID)->set('execution')->eq('0')->where('objectID')->eq($sprint->id)->andWhere('objectType')->eq('execution')->exec();
             }
             else
             {
+                $this->action->create('project', $projectID, 'openedbysystem');
+
                 $project->id = $projectID;
                 $this->upgradeTao->createProjectDocLib($project);
             }
