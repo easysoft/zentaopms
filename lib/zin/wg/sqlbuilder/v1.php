@@ -122,7 +122,7 @@ class sqlBuilder extends wg
                     set::value($leftTable),
                     set::placeholder($lang->bi->selectTableTip),
                     set::suffix($alias),
-                    set::width('52'),
+                    set::width('50'),
                     set::labelWidth('60px'),
                     set::onChange('changeBuilderTable(event)'),
                     set::error($builder->hasError('join', 'table', $alias))
@@ -166,7 +166,7 @@ class sqlBuilder extends wg
                     set::value($from['table']),
                     set::placeholder($lang->bi->selectTableTip),
                     set::suffix($from['alias']),
-                    set::width('52'),
+                    set::width('50'),
                     set::labelWidth('60px'),
                     set::onChange('changeBuilderTable(event)'),
                     set::error($builder->hasError('from', 'table', $from['alias']))
