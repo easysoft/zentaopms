@@ -823,6 +823,7 @@ class biModel extends model
         {
             $currentOperate = $operate;
             $chart = (object)$chart;
+            $chart->mode = 'text';
             if(isset($chart->settings)) $chart->settings = $this->jsonEncode($chart->settings);
             if(isset($chart->filters))  $chart->filters  = $this->jsonEncode($chart->filters);
             if(isset($chart->fields))   $chart->fields   = $this->jsonEncode($chart->fields);
@@ -873,6 +874,7 @@ class biModel extends model
             $currentOperate = $operate;
             $pivot = (object)$pivot;
             $pivot->name     = $this->jsonEncode($pivot->name);
+            $pivot->mode     = 'text';
             if(isset($pivot->desc))     $pivot->desc     = $this->jsonEncode($pivot->desc);
             if(isset($pivot->settings)) $pivot->settings = $this->jsonEncode($pivot->settings);
             if(isset($pivot->filters))  $pivot->filters  = $this->jsonEncode($pivot->filters);

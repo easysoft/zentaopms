@@ -3,7 +3,7 @@ $config->bi->builtin->dataviews = array();
 
 $config->bi->builtin->modules->dataviews = array(array('id' => 101, 'root' => 0, 'branch' => 0, 'name' => '内置数据分组', 'parent' => 0, 'path' => ',101,', 'grade' => 1, 'order' => 10, 'type' => 'dataview', 'from' => 0));
 
-$build = array('name' => '版本数据', 'code' => 'build', 'view' => 'ztv_build', 'group' => '101');
+$build = array('name' => '版本数据', 'code' => 'build', 'view' => 'ztv_build', 'group' => '101', 'mode' => 'text');
 $build['sql'] = <<<EOT
 SELECT product.name AS `product_name`,product.id AS `product_id`,project.name AS `project_name`,project.id AS `project_id`,execution.name AS `execution_name`,execution.id AS `execution_id`,build.name AS `name`,build.builder AS `builder`,build.stories AS `stories`,build.bugs AS `bugs`,build.date AS `date`,build.desc AS `desc` FROM zt_build AS `build`  LEFT JOIN zt_product AS `product` ON product.id   = build.product  LEFT JOIN zt_project AS `project` ON project.id   = build.project  LEFT JOIN zt_project AS `execution` ON execution.id = build.execution where `build`.deleted = '0' LIMIT 100
 EOT;
@@ -23,7 +23,7 @@ $buildfields['desc']           = array('name' => '描述', 'field' => 'desc', 'o
 $build['fields'] = $buildfields;
 $config->bi->builtin->dataviews[] = $build;
 
-$product = array('name' => '产品数据', 'code' => 'product', 'view' => 'ztv_product', 'group' => '101');
+$product = array('name' => '产品数据', 'code' => 'product', 'view' => 'ztv_product', 'group' => '101', 'mode' => 'text');
 $product['sql'] = <<<EOT
 SELECT product.id AS `id`,program.name AS `program_name`,program.id AS `program_id`,line.name AS `line_name`,product.name AS `name`,product.code AS `code`,product.type AS `type`,product.status AS `status`,product.desc AS `desc`,product.PO AS `PO`,product.QD AS `QD`,product.RD AS `RD`,product.createdBy AS `createdBy`,product.createdDate AS `createdDate` FROM zt_product AS `product`  LEFT JOIN zt_project AS `program` ON product.program = program.id  LEFT JOIN zt_module AS `line` ON product.line    = line.id where `product`.deleted = '0' LIMIT 100
 EOT;
@@ -45,7 +45,7 @@ $productfields['createdDate']  = array('name' => '创建日期', 'field' => 'cre
 $product['fields'] = $productfields;
 $config->bi->builtin->dataviews[] = $product;
 
-$productplan = array('name' => '产品计划数据', 'code' => 'productplan', 'view' => 'ztv_productplan', 'group' => '101');
+$productplan = array('name' => '产品计划数据', 'code' => 'productplan', 'view' => 'ztv_productplan', 'group' => '101', 'mode' => 'text');
 $productplan['sql'] = <<<EOT
 SELECT product.name AS `product_name`,product.id AS `product_id`,productplan.title AS `title`,productplan.status AS `status`,productplan.desc AS `desc`,productplan.begin AS `begin`,productplan.end AS `end` FROM zt_productplan AS `productplan`  LEFT JOIN zt_product AS `product` ON productplan.product = product.id where `productplan`.deleted = '0' LIMIT 100
 EOT;
@@ -60,7 +60,7 @@ $productplanfields['end']          = array('name' => '结束日期', 'field' => 
 $productplan['fields'] = $productplanfields;
 $config->bi->builtin->dataviews[] = $productplan;
 
-$release = array('name' => '产品发布数据', 'code' => 'release', 'view' => 'ztv_release', 'group' => '101');
+$release = array('name' => '产品发布数据', 'code' => 'release', 'view' => 'ztv_release', 'group' => '101', 'mode' => 'text');
 $release['sql'] = <<<EOT
 SELECT product.name AS `product_name`,product.id AS `product_id`,project.name AS `project_name`,project.id AS `project_id`,build.name AS `build_name`,build.id AS `build_id`,release.name AS `name`,release.status AS `status`,release.desc AS `desc`,release.date AS `date`,release.stories AS `stories`,release.bugs AS `bugs`,release.leftBugs AS `leftBugs` FROM zt_release AS `release`  LEFT JOIN zt_product AS `product` ON release.product = product.id  LEFT JOIN zt_project AS `project` ON release.project = project.id  LEFT JOIN zt_build AS `build` ON release.build   = build.id where `release`.deleted = '0' LIMIT 100
 EOT;
@@ -81,7 +81,7 @@ $releasefields['leftBugs']     = array('name' => '遗留的Bug', 'field' => 'lef
 $release['fields'] = $releasefields;
 $config->bi->builtin->dataviews[] = $release;
 
-$project = array('name' => '项目数据', 'code' => 'project', 'view' => 'ztv_project', 'group' => '101');
+$project = array('name' => '项目数据', 'code' => 'project', 'view' => 'ztv_project', 'group' => '101', 'mode' => 'text');
 $project['sql'] = <<<EOT
 SELECT project.name AS `name`,project.code AS `code`,project.model AS `model`,project.type AS `type`,project.status AS `status`,project.desc AS `desc`,project.begin AS `begin`,project.end AS `end`,project.PO AS `PO`,project.PM AS `PM`,project.QD AS `QD`,project.RD AS `RD`,project.openedBy AS `openedBy`,project.openedDate AS `openedDate` FROM zt_project AS `project`  where `project`.deleted = '0' LIMIT 100
 EOT;
@@ -103,7 +103,7 @@ $projectfields['openedDate'] = array('name' => '创建日期', 'field' => 'opene
 $project['fields'] = $projectfields;
 $config->bi->builtin->dataviews[] = $project;
 
-$execution = array('name' => '执行数据', 'code' => 'execution', 'view' => 'ztv_execution', 'group' => '101');
+$execution = array('name' => '执行数据', 'code' => 'execution', 'view' => 'ztv_execution', 'group' => '101', 'mode' => 'text');
 $execution['sql'] = <<<EOT
 SELECT project.name AS `project_name`,project.id AS `project_id`,execution.name AS `name`,execution.code AS `code`,execution.type AS `type`,execution.status AS `status`,execution.desc AS `desc`,execution.begin AS `begin`,execution.end AS `end`,execution.PO AS `PO`,execution.PM AS `PM`,execution.QD AS `QD`,execution.RD AS `RD`,execution.openedBy AS `openedBy`,execution.openedDate AS `openedDate` FROM zt_project AS `execution`  LEFT JOIN zt_project AS `project` ON execution.project = project.id LIMIT 100
 EOT;
@@ -126,7 +126,7 @@ $executionfields['openedDate']   = array('name' => '创建日期', 'field' => 'o
 $execution['fields'] = $executionfields;
 $config->bi->builtin->dataviews[] = $execution;
 
-$task = array('name' => '任务数据', 'code' => 'task', 'view' => 'ztv_task', 'group' => '101');
+$task = array('name' => '任务数据', 'code' => 'task', 'view' => 'ztv_task', 'group' => '101', 'mode' => 'text');
 $task['sql'] = <<<EOT
 SELECT project.name AS `project_name`,project.id AS `project_id`,execution.name AS `execution_name`,execution.id AS `execution_id`,story.title AS `story_title`,story.id AS `story_id`,taskmodule.name AS `taskmodule_name`,taskmodule.id AS `taskmodule_id`,task.name AS `name`,task.pri AS `pri`,task.type AS `type`,task.status AS `status`,task.desc AS `desc`,task.estimate AS `estimate`,task.consumed AS `consumed`,task.left AS `left`,task.estStarted AS `estStarted`,task.deadline AS `deadline`,task.assignedTo AS `assignedTo`,task.finishedBy AS `finishedBy`,task.closedBy AS `closedBy`,task.openedBy AS `openedBy`,task.openedDate AS `openedDate` FROM zt_task AS `task`  LEFT JOIN zt_project AS `execution` ON task.execution = execution.id  LEFT JOIN zt_project AS `project` ON task.project   = project.id  LEFT JOIN zt_story AS `story` ON task.story     = story.id  LEFT JOIN zt_module AS `taskmodule` ON task.module    = taskmodule.id where `task`.deleted = '0' LIMIT 100
 EOT;
@@ -157,7 +157,7 @@ $taskfields['openedDate']      = array('name' => '创建日期', 'field' => 'ope
 $task['fields'] = $taskfields;
 $config->bi->builtin->dataviews[] = $task;
 
-$bug = array('name' => 'Bug数据', 'code' => 'bug', 'view' => 'ztv_bug', 'group' => '101');
+$bug = array('name' => 'Bug数据', 'code' => 'bug', 'view' => 'ztv_bug', 'group' => '101', 'mode' => 'text');
 $bug['sql'] = <<<EOT
 SELECT bug.id AS `id`,bug.title AS `title`,bug.steps AS `steps`,bug.status AS `status`,bug.confirmed AS `confirmed`,bug.severity AS `severity`,product.name AS `product_name`,product.id AS `product_id`,project.name AS `project_name`,project.id AS `project_id`,bugmodule.name AS `bugmodule_name`,bugmodule.id AS `bugmodule_id`,story.title AS `story_title`,story.id AS `story_id`,bug.pri AS `pri`,bug.openedBy AS `openedBy`,bug.openedDate AS `openedDate`,bug.resolvedBy AS `resolvedBy`,bug.resolution AS `resolution`,bug.resolvedDate AS `resolvedDate` FROM zt_bug AS `bug`  LEFT JOIN zt_product AS `product` ON product.id = bug.product  LEFT JOIN zt_story AS `story` ON story.id = bug.story  LEFT JOIN zt_module AS `productline` ON productline.id = product.line  LEFT JOIN zt_project AS `program` ON program.id = product.program  LEFT JOIN zt_project AS `project` ON project.id = bug.project  LEFT JOIN zt_module AS `bugmodule` ON bugmodule.id = bug.module where `bug`.deleted = '0' LIMIT 100
 EOT;
@@ -185,7 +185,7 @@ $bugfields['resolvedDate']   = array('name' => '解决日期', 'field' => 'resol
 $bug['fields'] = $bugfields;
 $config->bi->builtin->dataviews[] = $bug;
 
-$bugbuild = array('name' => '版本Bug数据', 'code' => 'bugbuild', 'view' => 'ztv_bugbuild', 'group' => '101');
+$bugbuild = array('name' => '版本Bug数据', 'code' => 'bugbuild', 'view' => 'ztv_bugbuild', 'group' => '101', 'mode' => 'text');
 $bugbuild['sql'] = <<<EOT
 SELECT bug.id AS `id`,bug.title AS `title`,bug.steps AS `steps`,bug.status AS `status`,bug.confirmed AS `confirmed`,bug.severity AS `severity`,product.name AS `product_name`,product.id AS `product_id`,project.name AS `project_name`,project.id AS `project_id`,build.name AS `build_name`,build.id AS `build_id`,module.name AS `module_name`,module.id AS `module_id`,testtask.name AS `testtask_name`,testtask.id AS `testtask_id`,bug.pri AS `pri`,bug.openedBy AS `openedBy`,bug.openedDate AS `openedDate`,bug.resolvedBy AS `resolvedBy`,bug.resolution AS `resolution`,bug.resolvedDate AS `resolvedDate`,casemodule.name AS `casemodule_name`,casemodule.id AS `casemodule_id` FROM zt_bug AS `bug`  LEFT JOIN zt_product AS `product` ON product.id = bug.product  LEFT JOIN zt_testtask AS `testtask` ON testtask.id = bug.testtask  LEFT JOIN zt_build AS `build` ON build.id = testtask.build  LEFT JOIN zt_project AS `execution` ON execution.id = build.execution  LEFT JOIN zt_project AS `project` ON project.id = build.project  LEFT JOIN zt_module AS `module` ON module.id = bug.module  LEFT JOIN zt_case AS `testcase` ON testcase.id = bug.case  LEFT JOIN zt_module AS `casemodule` ON casemodule.id = testcase.module LIMIT 100
 EOT;
@@ -217,7 +217,7 @@ $bugbuildfields['casemodule_name'] = array('name' => '模块', 'field' => 'name'
 $bugbuild['fields'] = $bugbuildfields;
 $config->bi->builtin->dataviews[] = $bugbuild;
 
-$story = array('name' => '需求数据', 'code' => 'story', 'view' => 'ztv_story', 'group' => '101');
+$story = array('name' => '需求数据', 'code' => 'story', 'view' => 'ztv_story', 'group' => '101', 'mode' => 'text');
 $story['sql'] = <<<EOT
 SELECT story.id AS `id`,story.title AS `title`,story.status AS `status`,story.stage AS `stage`,story.pri AS `pri`,product.name AS `product_name`,product.id AS `product_id`,storymodule.name AS `storymodule_name`,storymodule.id AS `storymodule_id`,story.closedDate AS `closedDate`,story.closedReason AS `closedReason`,story.openedBy AS `openedBy`,story.openedDate AS `openedDate` FROM zt_story AS `story`  LEFT JOIN zt_product AS `product` ON product.id = story.product  LEFT JOIN zt_module AS `storymodule` ON storymodule.id = story.module where `story`.deleted = '0' LIMIT 100
 EOT;
@@ -238,7 +238,7 @@ $storyfields['openedDate']       = array('name' => '创建日期', 'field' => 'o
 $story['fields'] = $storyfields;
 $config->bi->builtin->dataviews[] = $story;
 
-$testcase = array('name' => '用例数据', 'code' => 'testcase', 'view' => 'ztv_testcase', 'group' => '101');
+$testcase = array('name' => '用例数据', 'code' => 'testcase', 'view' => 'ztv_testcase', 'group' => '101', 'mode' => 'text');
 $testcase['sql'] = <<<EOT
 SELECT testcase.id AS `id`,testcase.title AS `title`,testcase.pri AS `pri`,testcase.type AS `type`,testcase.stage AS `stage`,testcase.status AS `status`,testcase.version AS `version`,product.name AS `product_name`,product.id AS `product_id`,story.title AS `story_title`,story.id AS `story_id`,casemodule.name AS `casemodule_name`,casemodule.id AS `casemodule_id`,testcase.openedBy AS `openedBy`,testcase.openedDate AS `openedDate` FROM zt_case AS `testcase`  LEFT JOIN zt_product AS `product` ON product.id = testcase.product  LEFT JOIN zt_module AS `casemodule` ON casemodule.id = testcase.module  LEFT JOIN zt_story AS `story` ON story.id = testcase.story  LEFT JOIN zt_casestep AS `casestep` ON casestep.case = testcase.id where `testcase`.deleted = '0' LIMIT 100
 EOT;
@@ -261,7 +261,7 @@ $testcasefields['openedDate']      = array('name' => '创建日期', 'field' => 
 $testcase['fields'] = $testcasefields;
 $config->bi->builtin->dataviews[] = $testcase;
 
-$casestep = array('name' => '用例步骤数据', 'code' => 'casestep', 'view' => 'ztv_casestep', 'group' => '101');
+$casestep = array('name' => '用例步骤数据', 'code' => 'casestep', 'view' => 'ztv_casestep', 'group' => '101', 'mode' => 'text');
 $casestep['sql'] = <<<EOT
 SELECT testcase.title AS `testcase_title`,testcase.id AS `testcase_id`,casestep.type AS `type`,casestep.desc AS `desc`,casestep.expect AS `expect`,casestep.version AS `version` FROM zt_casestep AS `casestep`  LEFT JOIN zt_case AS `testcase` ON testcase.id = casestep.`case` LIMIT 100
 EOT;
@@ -275,7 +275,7 @@ $casestepfields['version']        = array('name' => '用例版本', 'field' => '
 $casestep['fields'] = $casestepfields;
 $config->bi->builtin->dataviews[] = $casestep;
 
-$testtask = array('name' => '测试单列表', 'code' => 'testtask', 'view' => 'ztv_testtask', 'group' => '101');
+$testtask = array('name' => '测试单列表', 'code' => 'testtask', 'view' => 'ztv_testtask', 'group' => '101', 'mode' => 'text');
 $testtask['sql'] = <<<EOT
 SELECT product.name AS `product_name`,product.id AS `product_id`,project.name AS `project_name`,project.id AS `project_id`,execution.name AS `execution_name`,execution.id AS `execution_id`,build.name AS `build_name`,build.id AS `build_id`,testtask.id AS `id`,testtask.name AS `name`,testtask.type AS `type`,testtask.owner AS `owner`,testtask.pri AS `pri`,testtask.begin AS `begin`,testtask.end AS `end`,testtask.status AS `status` FROM zt_testtask AS `testtask`  LEFT JOIN zt_product AS `product` ON product.id   = testtask.product  LEFT JOIN zt_project AS `project` ON project.id   = testtask.project  LEFT JOIN zt_project AS `execution` ON execution.id = testtask.execution  LEFT JOIN zt_build AS `build` ON build.id     = testtask.build LIMIT 100
 EOT;
@@ -299,7 +299,7 @@ $testtaskfields['status']         = array('name' => '当前状态', 'field' => '
 $testtask['fields'] = $testtaskfields;
 $config->bi->builtin->dataviews[] = $testtask;
 
-$testrun = array('name' => '测试单用例执行情况', 'code' => 'testrun', 'view' => 'ztv_testrun', 'group' => '101');
+$testrun = array('name' => '测试单用例执行情况', 'code' => 'testrun', 'view' => 'ztv_testrun', 'group' => '101', 'mode' => 'text');
 $testrun['sql'] = <<<EOT
 SELECT testtask.name AS `testtask_name`,testtask.id AS `testtask_id`,testcase.title AS `testcase_title`,testcase.id AS `testcase_id`,testrun.assignedTo AS `assignedTo`,project.name AS `project_name`,project.id AS `project_id`,build.name AS `build_name`,build.id AS `build_id`,execution.name AS `execution_name`,execution.id AS `execution_id`,casemodule.name AS `casemodule_name`,casemodule.id AS `casemodule_id`,testrun.lastRunner AS `lastRunner`,testrun.lastRunDate AS `lastRunDate`,testrun.lastRunResult AS `lastRunResult` FROM zt_testrun AS `testrun`  LEFT JOIN zt_case AS `testcase` ON testcase.id   = testrun.case  LEFT JOIN zt_product AS `product` ON product.id    = testcase.product  LEFT JOIN zt_testtask AS `testtask` ON testtask.id   = testrun.task  LEFT JOIN zt_module AS `casemodule` ON casemodule.id = testcase.module  LEFT JOIN zt_project AS `project` ON project.id    = testtask.project  LEFT JOIN zt_project AS `execution` ON execution.id  = testtask.execution  LEFT JOIN zt_build AS `build` ON build.id      = testtask.build LIMIT 100
 EOT;
@@ -323,7 +323,7 @@ $testrunfields['lastRunResult']   = array('name' => '结果', 'field' => 'lastRu
 $testrun['fields'] = $testrunfields;
 $config->bi->builtin->dataviews[] = $testrun;
 
-$testresult = array('name' => '测试单用例每次执行结果', 'code' => 'testresult', 'view' => 'ztv_testresult', 'group' => '101');
+$testresult = array('name' => '测试单用例每次执行结果', 'code' => 'testresult', 'view' => 'ztv_testresult', 'group' => '101', 'mode' => 'text');
 $testresult['sql'] = <<<EOT
 SELECT testresult.caseResult AS `caseResult`,testresult.stepResults AS `stepResults`,testresult.lastRunner AS `lastRunner`,testresult.date AS `date`,testcase.title AS `testcase_title`,testcase.id AS `testcase_id`,testtask.name AS `testtask_name`,testtask.id AS `testtask_id`,execution.name AS `execution_name`,execution.id AS `execution_id`,project.name AS `project_name`,project.id AS `project_id`,casemodule.name AS `casemodule_name`,casemodule.id AS `casemodule_id`,build.name AS `build_name`,build.id AS `build_id`,caselib.name AS `caselib_name`,caselib.id AS `caselib_id` FROM zt_testresult AS `testresult`  LEFT JOIN zt_case AS `testcase` ON testcase.id   = testresult.case  LEFT JOIN zt_testrun AS `testrun` ON testrun.id    = testresult.run  LEFT JOIN zt_testtask AS `testtask` ON testrun.task  = testtask.id  LEFT JOIN zt_project AS `project` ON project.id    = testtask.project  LEFT JOIN zt_project AS `execution` ON execution.id  = testtask.execution  LEFT JOIN zt_module AS `casemodule` ON casemodule.id = testcase.module  LEFT JOIN zt_build AS `build` ON build.id      = testtask.build  LEFT JOIN zt_testsuite AS `caselib` ON caselib.id    = testcase.lib  LEFT JOIN zt_product AS `product` ON product.id    = testcase.product LIMIT 100
 EOT;
