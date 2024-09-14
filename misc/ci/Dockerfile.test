@@ -10,3 +10,4 @@ ENV MYSQL_INTERNAL="true"
 # Copy ZenTao
 COPY --chown=nobody:nogroup . /apps/zentao/
 RUN mkdir /apps/zentao/tmp && chmod 777 /apps/zentao/tmp
+RUN /bin/rm /bin/sh && ln -s /bin/bash /bin/sh
