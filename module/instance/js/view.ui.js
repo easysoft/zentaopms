@@ -26,14 +26,13 @@ window.loadDBAuthUrl = function(dom)
     );
 }
 
-var timer             = null;
 const postData = new FormData();
 postData.append('idList[]', instanceID);
 window.afterPageUpdate = function()
 {
-    if(inQuickon)
+if(typeof timer !== 'undefined') clearInterval(timer);
+    if(inQuickon && instanceType == 'store')
     {
-        if(timer) clearInterval(timer);
         timer = setInterval(refreshStatus, 5000);
     }
 }

@@ -17,6 +17,7 @@ if(!$canInstall) $config->space->dtable->fieldList['actions']['menu'] = array('v
 foreach($instances as $instance) if('store' === $instance->type) $statusMap[$instance->id] = $instance->status;
 jsVar('statusMap', $statusMap);
 jsVar('idList',    array_keys($statusMap));
+jsVar('inQuickon', $config->inQuickon);
 
 $this->loadModel('instance');
 $instances = initTableData($instances, $config->space->dtable->fieldList, $this->instance);

@@ -34,8 +34,6 @@ window.renderInstanceList = function (result, {col, row, value})
     return result;
 }
 
-var refreshTime = 0;
-var timer       = null;
 const postData  = new FormData();
 if(idList.length > 0)
 {
@@ -43,15 +41,17 @@ if(idList.length > 0)
 }
 window.afterPageUpdate = function()
 {
+    if(typeof timer !== 'undefined') clearInterval(timer);
     if(idList.length === 0) return;
-    refreshStatus();
+    if(inQuickon) timer = setInterval(refreshStatus, 5000);
 }
 
+window.onPageUnmount = function()
+{
+    if(timer) clearInterval(timer);
+}
 function refreshStatus()
 {
-    if(new Date().getTime() - refreshTime < 4000) return;
-    refreshTime = new Date().getTime();
-
     $.ajaxSubmit({
         url: $.createLink('instance', 'ajaxStatus'),
         method: 'POST',
@@ -70,8 +70,6 @@ function refreshStatus()
                     }
                 });
             }
-
-            timer = setTimeout(() => {refreshStatus()}, 5000);
         }
     });
 }
