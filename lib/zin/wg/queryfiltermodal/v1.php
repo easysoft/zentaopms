@@ -68,7 +68,8 @@ class queryFilterModal extends wg
                 (
                     set::name('type'),
                     set::items($lang->dataview->varFilter->requestTypeList),
-                    set::value($value['type'])
+                    set::value($value['type']),
+                    set::required()
                 ),
                 picker
                 (
