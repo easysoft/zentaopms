@@ -15,6 +15,26 @@ setID('stakeholderIssueModal');
 modalHeader
 (
     set::entityText($lang->stakeholder->userIssue), set::entityID(''), set::title(''),
+    to::suffix
+    (
+        toolbar
+        (
+            setClass('ml-auto'),
+            btn
+            (
+                setClass('primary'),
+                setData(array('toggle' => 'modal', 'size' => 'lg')),
+                set::icon('plus'),
+                set::text($lang->issue->create),
+                set::url(createLink('issue', 'create', "projectID={$projectID}&from=stakeholder&owner={$stakeholder->user}"))
+            )
+        )
+    )
 );
 
+dtable
+(
+    set::cols($cols),
+    set::data(array_values($issueList))
+);
 render();
