@@ -30,6 +30,7 @@ detailHeader
             setID('searchForm'),
             setClass('ml-4'),
             set::actions(array()),
+            set::ajax(array('beforeSubmit' => jsRaw('() => {search(); return false;}'))),
             formRow
             (
                 input

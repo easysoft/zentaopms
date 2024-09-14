@@ -59,6 +59,7 @@ featureBar
     (
         set::id('searchForm'),
         set::actions(array()),
+        set::ajax(array('beforeSubmit' => jsRaw('() => {searchUser(); return false;}'))),
         formRow
         (
             input

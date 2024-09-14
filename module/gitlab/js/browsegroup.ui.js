@@ -9,7 +9,7 @@ window.renderCell = function(result, {col, row})
     return result;
 };
 
-function searchGroup()
+window.searchGroup = function()
 {
     loadPage({method:'post', data: {keyword: $('#keyword').val()}, target: '#table-gitlab-browsegroup>*'});
 }

@@ -10,7 +10,7 @@ window.renderCell = function(result, {col, row})
     return result;
 };
 
-function searchProject()
+window.searchProject = function()
 {
     loadPage({method:'post', data: {keyword: $('#keyword').val()}, target: '#table-gitlab-browseproject>*'});
 }
