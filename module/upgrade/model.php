@@ -9946,4 +9946,26 @@ class upgradeModel extends model
         }
         return true;
     }
+
+    /**
+     * Process demand files.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processDemandFiles(): bool
+    {
+        $demandIdList = $this->dao->select('objectID')->from(TABLE_FILE)->where('extra')->eq('')->andWhere('objectType')->eq('demand')->fetchPairs('objectID', 'objectID');
+
+        $latestVersion = $this->dao->select('id,version')->from(TABLE_DEMAND)->where('id')->in($demandIdList)->fetchPairs('id', 'version');
+
+        foreach($demandIdList as $demandID)
+        {
+            if(!isset($latestVersion[$demandID])) continue;
+
+            $this->dao->update(TABLE_FILE)->set('extra')->eq($latestVersion[$demandID])->where('objectID')->eq($demandID)->andWhere('objectType')->eq('demand')->exec();
+        }
+
+        return true;
+    }
 }
