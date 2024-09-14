@@ -32,9 +32,20 @@ modalHeader
     )
 );
 
+$cols = array();
+$cols['title']       = $config->issue->dtable->fieldList['title'];
+$cols['type']        = $config->issue->dtable->fieldList['type'];
+$cols['severity']    = $config->issue->dtable->fieldList['severity'];
+$cols['pri']         = $config->issue->dtable->fieldList['pri'];
+$cols['status']      = $config->issue->dtable->fieldList['status'];
+$cols['createdDate'] = $config->issue->dtable->fieldList['createdDate'];
+$cols['title']['data-toggle'] = 'modal';
+$cols['title']['data-size']   = 'lg';
+
 dtable
 (
     set::cols($cols),
     set::data(array_values($issueList))
 );
+
 render();
