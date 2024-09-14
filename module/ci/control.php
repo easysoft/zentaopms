@@ -105,6 +105,12 @@ class ci extends control
         list($productID, $jobID) = $this->ciZen->getProductIdAndJobID($params, $post);
         if(empty($productID)) return print(json_encode(array('result' => 'fail', 'message' => 'productID is not found')));
 
+        $linkProjects = $this->loadModel('product')->getProjectPairsByProduct($productID);
+        if(empty($linkProjects)) return print(json_encode(array('result' => 'fail', 'message' => sprintf($this->lang->ci->errors->noProject, $productID))));
+
+        $linkExecutions = $this->product->getExecutionPairsByProduct($productID);
+        if(empty($linkExecutions)) return print(json_encode(array('result' => 'fail', 'message' => sprintf($this->lang->ci->errors->noExecution, $productID))));
+
         /* Get testtaskID or create testtask. */
         if(!$taskID) $taskID = $this->ci->saveTestTaskForZtf($testType, $productID, $compileID, $taskID, $post->name);
         $this->ciZen->parseZtfResult($post, $taskID, $productID, $jobID, $compileID);
