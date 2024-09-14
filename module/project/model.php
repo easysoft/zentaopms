@@ -1357,7 +1357,7 @@ class projectModel extends model
 
         $this->file->updateObjectID((string)$this->post->uid, $projectID, 'project'); // 通过uid更新文件id。
 
-        if($oldProject->parent != $project->parent) $this->loadModel('program')->processNode($projectID, $project->parent, $oldProject->path, $oldProject->grade); // 更新项目从属路径。
+        if($oldProject->parent != $project->parent) $this->loadModel('program')->processNode($projectID, (int)$project->parent, $oldProject->path, $oldProject->grade); // 更新项目从属路径。
         if($oldProject->storyType != $project->storyType)
         {
             /* 编辑项目时如果取消关联需求类型，则把对应类型的需求移除。 */
