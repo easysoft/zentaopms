@@ -7607,6 +7607,7 @@ class upgradeModel extends model
         $pivot->createdBy   = $table->createdBy;
         $pivot->createdDate = $table->createdDate;
         $pivot->dataset     = $table->dataset;
+        $pivot->mode        = 'text';
 
         $name = array();
         $name['zh-cn'] = $table->name;
@@ -7748,6 +7749,7 @@ class upgradeModel extends model
             $data->vars        = $report->vars;
             $data->langs       = $report->langs;
             $data->stage       = 'published';
+            $data->mode        = 'text';
             $data->step        = 4;
             $data->desc        = $report->desc;
             $data->createdBy   = $report->addedBy;
