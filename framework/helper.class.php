@@ -543,7 +543,7 @@ function initTableData(array $items, array &$fieldList, object $model = null, st
         }
     }
 
-    global $app;
+    global $app, $lang;
     if(empty($model))
     {
         $module = $app->getModuleName();
@@ -612,7 +612,11 @@ function initTableData(array $items, array &$fieldList, object $model = null, st
         if(count($item->actions) > $maxActionCount) $maxActionCount = count($item->actions);
     }
 
-    if(isset($fieldList['actions'])) $fieldList['actions']['minWidth'] = $maxActionCount * 24 + 24;
+    if(isset($fieldList['actions']))
+    {
+        $fieldList['actions']['minWidth'] = $maxActionCount * 24 + 24;
+        if(empty($fieldList['actions']['title'])) $fieldList['actions']['title'] = $lang->actions;
+    }
     if($fieldList['actions']['minWidth'] < 48) $fieldList['actions']['minWidth'] = 48;
 
     return array_values($items);
