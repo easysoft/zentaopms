@@ -102,10 +102,9 @@ class dbh
      */
     public function sqlError(object $exception)
     {
-        $sql      = $this->sql;
-        $message  = $exception->getMessage();
-        $message .= " ,the sql is: '{$sql}'";
-        throw new PDOException($message);
+        $newException = new PDOException($exception->getMessage() . " ,the sql is: '{$this->sql}'");
+        $newException->errorInfo = $exception->errorInfo;
+        throw $newException;
     }
 
     /**
