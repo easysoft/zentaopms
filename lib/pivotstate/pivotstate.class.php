@@ -179,14 +179,6 @@ class pivotState
     public $acl;
 
     /**
-     * Pivot state used.
-     *
-     * @var string
-     * @access public
-     */
-    public $used;
-
-    /**
      * Pivot state whitelist.
      *
      * @var string
@@ -353,7 +345,6 @@ class pivotState
         $this->step      = 'query';
         $this->stage     = $pivot->stage;
         $this->acl       = $pivot->acl;
-        $this->used      = $pivot->used;
         $this->whitelist = $pivot->whitelist;
 
         $this->drills       = $drills;

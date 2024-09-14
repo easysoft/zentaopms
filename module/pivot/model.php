@@ -81,18 +81,15 @@ class pivotModel extends model
             $pivot->fields        = array_keys(get_object_vars($pivot->fieldSettings));
         }
 
-        $pivotFilters = array();
         if(!empty($pivot->filters))
         {
             $filters = json_decode($pivot->filters, true);
-            $filters = $this->processFilters($filters, $filterStatus);
-
-            $pivotFilters = $this->setFilterDefault($filters, $processDateVar);
+            $pivot->filters = $this->setFilterDefault($filters, $processDateVar);
         }
 
-        $pivot->filters = $pivotFilters;
+        $pivot->settings = json_decode($pivot->settings, true);
+        $this->processNameDesc($pivot);
 
-        $pivot = $this->processPivot($pivot);
         if(isset($pivot->stage) && $pivot->stage == 'published' && $this->app->methodName == 'preview') $this->processFieldSettings($pivot);
 
         return $pivot;
@@ -152,7 +149,7 @@ class pivotModel extends model
      * @access private
      * @return void
      */
-    private function processNameDesc(object $pivot): void
+    public function processNameDesc(object $pivot): void
     {
         if(!empty($pivot->type)) return;
 

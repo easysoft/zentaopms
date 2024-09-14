@@ -268,8 +268,7 @@ class screenModel extends model
         $chart = clone($chart);
         if($type == 'pivot' and $chart)
         {
-            $chart = $this->loadModel('pivot')->processPivot($chart);
-            $chart->settings = json_encode($chart->settings);
+            $this->loadModel('pivot')->processNameDesc($chart);
         }
 
         if(empty($filters) and !empty($chart->filters))
