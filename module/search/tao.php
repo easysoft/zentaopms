@@ -400,16 +400,14 @@ class searchTao extends searchModel
         {
             /* 将 utf-8 字符串拆分为单词，为每个单词计算 unicode. */
             $splitedWords = $spliter->utf8Split($word);
-            $trimmedWord   = trim($splitedWords['words']);
+            $trimmedWord  = trim($splitedWords['words']);
             $against     .= '"' . $trimmedWord . '" ';
             $againstCond .= '(+"' . $trimmedWord . '") ';
 
             if(is_numeric($word) && strpos($word, '.') === false && strlen($word) == 5) $againstCond .= "(-\" $word \") ";
         }
 
-        $likeCondition = '';
-        /* Assisted lookup by like condition when only one word. */
-        if(count($words) == 1 && strpos($words[0], ' ') === false && !is_numeric($words[0])) $likeCondition = "OR title like '%{$trimmedWord}%' OR content like '%{$trimmedWord}%'";
+        $likeCondition = trim($keywords) ? "OR title like '%{$keywords}%' OR content like '%{$keywords}%'" : '';
 
         $words = str_replace('"', '', $against);
         $words = str_pad($words, 5, '_');
