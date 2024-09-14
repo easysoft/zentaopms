@@ -222,7 +222,7 @@ $scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
 
 $scrumProjectManage->basic->tasks['manageTask']['steps'][] = array(
     'type'   => 'form',
-    'target' => '#taskBatchCreateForm',
+    'target' => '#taskBatchCreateForm form .form-batch-container',
     'app'    => 'execution',
     'page'   => 'task-batchcreate',
     'title'  => $lang->tutorial->scrumProjectManage->manageTask->step4->name,

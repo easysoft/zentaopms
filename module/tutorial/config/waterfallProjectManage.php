@@ -200,7 +200,7 @@ $waterfallProjectManage->basic->tasks['manageTask']['steps'][] = array(
 
 $waterfallProjectManage->basic->tasks['manageTask']['steps'][] = array(
     'type'   => 'form',
-    'target' => '#taskBatchCreateForm',
+    'target' => '#taskBatchCreateForm form .form-batch-container',
     'app'    => 'execution',
     'page'   => 'task-batchcreate',
     'title'  => $lang->tutorial->waterfallProjectManage->manageTask->step4->name,
