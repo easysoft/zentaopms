@@ -1153,7 +1153,7 @@ class execution extends control
             $message = $this->executeHooks($executionID);
             if($message) $this->lang->saveSuccess = $message;
 
-            if($_POST['status'] == 'doing') $this->loadModel('common')->syncPPEStatus($executionID);
+            if($formData->status == 'doing') $this->loadModel('common')->syncPPEStatus($executionID);
 
             /* If link from no head then reload. */
             if(isInModal())
