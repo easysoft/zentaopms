@@ -54,6 +54,7 @@ class upgradeTao extends upgradeModel
             $dataview->name = $dataset['name'];
             $dataview->code = $code;
             $dataview->view = 'ztv_' . $code;
+            $dataview->mode = 'text';
 
             $table = $this->dataset->getTableInfo($code);
             $dataview->sql = $this->dataset->getTableData($table->schema, 'id_desc', 100, true);
@@ -120,6 +121,7 @@ class upgradeTao extends upgradeModel
             $dataview->createdBy   = $dataset->createdBy;
             $dataview->createdDate = $dataset->createdDate;
             $dataview->deleted     = $dataset->deleted;
+            $dataview->mode        = 'text';
 
             $this->dao->insert(TABLE_DATAVIEW)->data($dataview)->exec();
             $dataviewID = $this->dao->lastInsertID();
