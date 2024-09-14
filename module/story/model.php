@@ -5290,7 +5290,7 @@ class storyModel extends model
      */
     public function getGradeOptions(object|bool $story, string $storyType, array $appendList = array()): array
     {
-        if(!$story) return $this->getGradePairs($storyType, 'enable', $appendList);
+        if(!$story || common::isTutorialMode()) return $this->getGradePairs($storyType, 'enable', $appendList);
 
         $gradeOptions = array();
         if($storyType != $story->type)
