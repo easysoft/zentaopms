@@ -14,7 +14,7 @@ namespace zin;
 foreach($blocks as $block)
 {
     $block->color = isset($block->params->color) ? $block->params->color : null;
-    $block->fetch = $block->blockLink;
+    $block->fetch = isset($block->params->fetch) ? $block->params->fetch : null;
 }
 
 $blocks = json_decode(json_encode($blocks), true);
