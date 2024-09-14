@@ -1579,7 +1579,7 @@ class pivotModel extends model
      */
     public function isFiltersAllEmpty($filters)
     {
-        return empty($filters) || empty(array_filter(array_column($filters, 'default')));
+        return !empty($filters) && empty(array_filter(array_column($filters, 'default')));
     }
 
     /**
