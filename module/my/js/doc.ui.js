@@ -18,7 +18,7 @@ window.renderCell = function(result, info)
         result.unshift({html});
         if(doc.status == 'draft')
         {
-            html = "<span class='label label-badge draft'>" + draftLabel + '</span>';
+            html = "<span class='label special-pale rounded-full draft'>" + draftLabel + '</span>';
             result.push({html});
         }
         if(canCollect)
@@ -26,6 +26,7 @@ window.renderCell = function(result, info)
             html = "<a href='" + $.createLink('doc', 'collect', 'objectID=' + doc.id + '&objectType=doc') + "' class='btn btn-link ajax-submit star'><img src='static/svg/" + starIcon + ".svg'/></a>";
             result.push({html});
         }
+        if(result[1]['props']) result[1]['props']['class'] = 'text-ellipsis';
     }
     if(info.col.name == 'objectName' && result[0])
     {

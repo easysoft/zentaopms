@@ -123,29 +123,25 @@ window.rendDocCell = function(result, {col, row})
 {
     const dtable = zui.DTable.query('#docTable');
     if(!dtable) return;
-    if(col.name == 'title')
+    if(col.name == 'title' && result[0])
     {
-        let docNameHtml = `<div data-status='${row.data.status}' class='flex w-full doc-title'>`;
-        const docType   = dtable.options.iconList[row.data.type];
-        const docIcon   = `<img src='static/svg/${docType}.svg' class='file-icon mr-1'>`;
-        if(dtable.options.canViewDoc)
+        const doc      = row.data;
+        const starIcon = doc.collector.indexOf(',' + dtable.options.currentAccount + ',') >= 0 ? 'star' : 'star-empty';
+        const docType  = dtable.options.iconList[doc.type];
+        const docIcon  = doc.type == 'text' ? 'wiki-file' : doc.type;
+        let html = "<img src='static/svg/" + docIcon + ".svg' class='file-icon'/>";
+        result.unshift({html});
+        if(doc.status == 'draft')
         {
-            docNameHtml += `<a class="doc-name flex" data-app="${dtable.options.currentTab}" href="` + $.createLink('doc', 'view', 'docID=' + row.data.id) + '">' + docIcon + ' ' + row.data.title + '</a>';
+            html = "<span class='label special-pale rounded-full draft'>" + dtable.options.draftText + '</span>';
+            result.push({html});
         }
-        else
-        {
-            docNameHtml += `<span class='doc-name flex'>${docIcon} ${row.data.title}</span>`;
-        }
-
-        if(row.data.status == 'draft') docNameHtml += `<span class="label special-pale rounded-full ml-1">${dtable.options.draftText}</span>`;
         if(dtable.options.canCollect)
         {
-            const starIcon = row.data.collector.indexOf(',' + dtable.options.currentAccount + ',') >= 0 ? 'star' : 'star-empty';
-
-            docNameHtml += `<a class='ajaxCollect ajax-submit btn ghost size-sm mx-1' href="` + $.createLink('doc', 'collect', `objectID=${row.data.id}&objectType=doc`) + `"><img src='static/svg/${starIcon}.svg' class='${starIcon}'></a>`;
+            html = "<a href='" + $.createLink('doc', 'collect', 'objectID=' + doc.id + '&objectType=doc') + "' class='btn btn-link ajax-submit star'><img src='static/svg/" + starIcon + ".svg'/></a>";
+            result.push({html});
         }
-        docNameHtml +='</div>';
-        result[0] = {html: docNameHtml};
+        if(result[1]['props']) result[1]['props']['class'] = 'text-ellipsis';
         return result;
     }
 

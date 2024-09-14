@@ -1,2 +1,5 @@
 .file-icon {display: inline;}
+.dtable-cell[data-col="title"] .dtable-cell-content{padding-right: 45px;}
 .star {float: right; position: absolute; right: 10px; top: 0px;}
+img.file-icon {max-width: unset;}
+.label.draft {word-break: keep-all;}

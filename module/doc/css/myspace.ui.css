@@ -1,2 +1,5 @@
-.dtable-cells div[data-col=title] .dtable-cell-html {width: inherit;}
-.doc-title[data-status=draft] .doc-name {max-width: calc(100% - 60px); overflow: hidden;}
+.file-icon {display: inline;}
+.dtable-cell[data-col="title"] .dtable-cell-content{padding-right: 45px;}
+.star {float: right; position: absolute; right: 10px; top: 0px;}
+img.file-icon {max-width: unset;}
+.label.draft {word-break: keep-all;}
