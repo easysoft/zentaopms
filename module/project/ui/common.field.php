@@ -13,7 +13,7 @@ $disableStageBy = !empty(data('executions')) || data('app.rawMethod') == 'edit' 
 
 $fields->field('parent')
     ->control('picker', array('required' => true))
-    ->labelHint($lang->program->tips)
+    ->labelHint(common::isTutorialMode() ? null : $lang->program->tips)
     ->hidden(data('globalDisableProgram'))
     ->items(data('programList'));
 
