@@ -1517,7 +1517,7 @@ class bugZen extends bug
         if(empty($bugIdList)) return array();
 
         /* Get bugs and old bugs. */
-        $bugs    = form::batchData($this->config->bug->form->showImport)->get();
+        $bugs    = form::batchData($this->config->bug->form->batchEdit)->get();
         $oldBugs = $this->bug->getByIdList($bugIdList);
         $now     = helper::now();
 
