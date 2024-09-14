@@ -834,8 +834,8 @@ class upgradeTao extends upgradeModel
             $project->multiple   = '0';
             $project->code       = $sprint->code;
             $project->team       = $sprint->team;
-            $project->openedBy   = $sprintf->openedBy;
-            $project->openedDate = $sprintf->openedDate;
+            $project->openedBy   = $sprint->openedBy;
+            $project->openedDate = $sprint->openedDate;
         }
 
         if(helper::isZeroDate($project->realBegan)) unset($project->realBegan);
