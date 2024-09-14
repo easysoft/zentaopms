@@ -727,7 +727,9 @@ class my extends control
         {
             if(!empty($project->PM) && !in_array($project->PM, $accounts)) $accounts[] = $project->PM;
         }
+
         $PMList = $this->user->getListByAccounts($accounts, 'account');
+        foreach($projects as $project) $project->PMUserID = $PMList[$project->PM]->id;
 
         $this->view->title       = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->project;
         $this->view->users       = $this->user->getPairs('noletter');
