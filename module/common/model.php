@@ -2142,6 +2142,8 @@ eof;
      */
     public function getRelations(string $AType = '', int $AID = 0, string $BType = '', int $BID = 0): array
     {
+        if(common::isTutorialMode()) return array();
+
         return $this->dao->select('*')->from(TABLE_RELATION)
             ->where('AType')->eq($AType)
             ->andWhere('AID')->eq($AID)
