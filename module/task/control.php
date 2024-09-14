@@ -568,7 +568,7 @@ class task extends control
         $this->action->logHistory($actionID, $changes);
 
         /* Delete task burn. */
-        if($this->edition != 'open')
+        if($this->config->edition != 'open')
         {
             $this->dao->update(TABLE_BURN)
                  ->set("`consumed` = `consumed` - {$effort->consumed}")
