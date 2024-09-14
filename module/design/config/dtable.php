@@ -18,6 +18,7 @@ $config->design->dtable->fieldList['id']['type']  = 'id';
 $config->design->dtable->fieldList['name']['type'] = 'title';
 $config->design->dtable->fieldList['name']['link'] = array('module' => 'design', 'method' => 'view', 'params' => 'designID={id}');
 
+$config->design->dtable->fieldList['product']['title']    = $lang->design->product;
 $config->design->dtable->fieldList['product']['type']     = 'desc';
 $config->design->dtable->fieldList['product']['sortType'] = true;
 
@@ -43,7 +44,7 @@ $app->loadLang('repo');
 
 $config->design->linkcommit->dtable->fieldList['revision']['title']    = $lang->repo->revisionA;
 $config->design->linkcommit->dtable->fieldList['revision']['type']     = 'title';
-$config->design->linkcommit->dtable->fieldList['revision']['link']     = common::isTutorialMode() ? '' : helper::createLink('repo', 'revision', 'repoID=%s&objectID=%s&revision={revision}');
+$config->design->linkcommit->dtable->fieldList['revision']['link']     = helper::createLink('repo', 'revision', 'repoID=%s&objectID=%s&revision={revision}');
 $config->design->linkcommit->dtable->fieldList['revision']['sortType'] = false;
 $config->design->linkcommit->dtable->fieldList['revision']['checkbox'] = true;
 

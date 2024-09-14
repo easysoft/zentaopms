@@ -164,7 +164,7 @@ class dtable extends wg
             if(is_object($config)) $config = (array)$config;
 
             if(!isset($config['name']))  $config['name']  = $field;
-            if(!isset($config['title'])) $config['title'] = zget($app->lang->{$module}, $config['name'], zget($app->lang, $config['name']));
+            if(!isset($config['title'])) $config['title'] = zget($app->lang->{$module}, $config['name'], $config['name']);
             if(isset($config['link']) && is_array($config['link'])) $config['link'] = $this->getLink($config['link']);
             if(isset($config['assignLink']) && is_array($config['assignLink'])) $config['assignLink'] = $this->getLink($config['assignLink']);
 

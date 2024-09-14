@@ -748,7 +748,7 @@ if(in_array($config->edition, array('max', 'ipd')))
 
     $waterfallProjectManage->advance->tasks['design']['steps'][] = array(
         'type'   => 'selectRow',
-        'target' => '#table-design-linkcommit .dtable-body',
+        'target' => '#table-design-linkcommit .dtable-body .dtable-checkbox',
         'page'   => 'design-view',
         'title'  => $lang->tutorial->waterfallProjectManage->design->step7->name
     );
