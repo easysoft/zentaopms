@@ -1586,7 +1586,7 @@ class testcaseZen extends testcase
             $case = $this->testcase->processCaseSteps($case, (object)$caseData);
 
             $caseID  = (int)zget($caseData, 'id', 0);
-            $oldCase = zget($oldCases, $caseID, false);
+            $oldCase = zget($oldCases, $caseID, null);
 
             if(empty($oldCase))
             {

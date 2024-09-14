@@ -2160,7 +2160,7 @@ class testcaseModel extends model
 
         if(empty($testcase->id))
         {
-            $this->create($case);
+            $this->create($testcase);
         }
         else
         {
