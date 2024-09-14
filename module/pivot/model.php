@@ -146,6 +146,35 @@ class pivotModel extends model
     }
 
     /**
+     * Process name and desc of pivot.
+     *
+     * @param  object $pivot
+     * @access private
+     * @return void
+     */
+    private function processNameDesc(object $pivot): void
+    {
+        if(!empty($pivot->type)) return;
+
+        $pivot->names = array('zh-cn' => '', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '');
+        $pivot->descs = array('zh-cn' => '', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '');
+
+        $clientLang = $this->app->getClientLang();
+
+        if(!empty($pivot->name))
+        {
+            $pivot->names = json_decode($pivot->name, true);
+            $pivot->name  = zget($pivot->names, $clientLang, '') ?? reset(array_filter($pivot->names));
+        }
+
+        if(!empty($pivot->desc))
+        {
+            $pivot->descs = json_decode($pivot->desc, true);
+            $pivot->desc  = zget($pivot->descs, $clientLang, '');
+        }
+    }
+
+    /**
      * 完善透视表。
      * Complete pivot.
      *
@@ -156,29 +185,10 @@ class pivotModel extends model
      */
     private function completePivot(object $pivot, array $screenList): void
     {
-        if(!empty($pivot->sql))      $pivot->sql      = trim(str_replace(';', '', $pivot->sql));
         if(!empty($pivot->settings)) $pivot->settings = json_decode($pivot->settings, true);
 
-        if(empty($pivot->type))
-        {
-            $pivot->names = array('zh-cn' => '', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '');
-            $pivot->descs = array('zh-cn' => '', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '');
-            if(!empty($pivot->name))
-            {
-                $pivotNames   = json_decode($pivot->name, true);
-                $pivot->name  = zget($pivotNames, $this->app->getClientLang(), '') ?? reset(array_filter($pivotNames));
-                $pivot->names = $pivotNames;
-            }
-
-            if(!empty($pivot->desc))
-            {
-                $pivotDescs   = json_decode($pivot->desc, true);
-                $pivot->desc  = zget($pivotDescs, $this->app->getClientLang(), '');
-                $pivot->descs = $pivotDescs;
-            }
-
-            $pivot->used = $this->checkIFChartInUse($pivot->id, 'pivot', $screenList);
-        }
+        $this->processNameDesc($pivot);
+        if(empty($pivot->type)) $pivot->used = $this->checkIFChartInUse($pivot->id, 'pivot', $screenList);
     }
 
     /**
