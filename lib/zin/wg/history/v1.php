@@ -107,7 +107,7 @@ class history extends wg
             set::title($title),
             $canEditComment ? set::editCommentUrl($editCommentUrl) : null,
             $canComment ? set::commentUrl($commentUrl) : null,
-            set::commentBtn($canComment ? $commentBtn : false),
+            set::commentBtn($canComment && !common::isTutorialMode() ? $commentBtn : false),
             set($this->getRestProps())
         );
     }
