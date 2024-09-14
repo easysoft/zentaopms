@@ -3,6 +3,21 @@ declare(strict_types=1);
 class pivotTao extends pivotModel
 {
     /**
+     * 获取透视表。
+     * Fetch pivot by id.
+     *
+     * @param int $id
+     * @access public
+     * @return object|bool
+     */
+    protected function fetchPivot(int $id): object|bool
+    {
+        return $this->dao->select('*')->from(TABLE_PIVOT)
+            ->where('id')->eq($id)
+            ->andWhere('deleted')->eq('0')
+            ->fetch();
+    }
+    /**
      * 获取产品列表。
      * Get product list.
      *

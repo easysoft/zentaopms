@@ -71,10 +71,7 @@ class pivotModel extends model
      */
     public function getByID(int $pivotID, bool $processDateVar = false, string $filterStatus = 'published'): object|bool
     {
-        $pivot = $this->dao->select('*')->from(TABLE_PIVOT)
-            ->where('id')->eq($pivotID)
-            ->andWhere('deleted')->eq('0')
-            ->fetch();
+        $pivot = $this->pivotTao->fetchPivot($pivotID);
         if(!$pivot) return false;
 
         $pivot->fieldSettings = array();
