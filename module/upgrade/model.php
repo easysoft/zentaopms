@@ -1147,7 +1147,7 @@ class upgradeModel extends model
         static $mysqlVersion;
         if($mysqlVersion === null) $mysqlVersion = $this->loadModel('install')->getDatabaseVersion();
 
-        $ignoreCode = '|1050|1054|1060|1091|1061|'; // Get ignore code when execing.
+        $ignoreCode = array('1050', '1054', '1060', '1091', '1061'); // Get ignore code when execing.
         $sqls       = $this->parseToSqls($sqlFile); // Get sqls in the file.
         foreach($sqls as $sql)
         {
@@ -1177,9 +1177,14 @@ class upgradeModel extends model
             }
             catch(PDOException $e)
             {
-                $errorInfo = $e->errorInfo;
-                $errorCode = !empty($errorInfo) ? $errorInfo[1] : '';
-                if(strpos($ignoreCode, "|$errorCode|") === false) static::$errors[] = $e->getMessage();
+                $message  = $e->getMessage();
+                $isIgnore = false;
+                foreach($ignoreCode as $errorCode)
+                {
+                    if($isIgnore) break;
+                    if(strpos($message, $errorCode) !== false) $isIgnore = true;
+                }
+                if(!$isIgnore) static::$errors[] = $message;
             }
         }
         return true;
