@@ -1,0 +1,24 @@
+title: product
+author: Shujie Tian
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100
+  - field: name
+    range: 1-30
+    prefix: '产品'
+  - field: program
+    range: 1
+  - field: type
+    range: 'normal'
+  - field: shadow
+    range: 0{5},1{5}
+  - field: whitelist
+    fields:
+    - field: whitelist1
+      prefix: ",user"
+      range: 11-50
+      postfix: ","
+    - field: whitelist2
+      prefix: test
+      range: "36-50"

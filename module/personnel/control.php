@@ -163,6 +163,12 @@ class personnel extends control
             $this->personnel->updateWhitelist($whitelist, $objectType, $objectID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => $this->getError()));
 
+            if($objectType == 'project')
+            {
+                $shadowProduct = $this->loadModel('product')->getShadowProductByProject($objectID);
+                if($shadowProduct) $this->personnel->updateWhitelist($whitelist, 'product', $shadowProduct->id);
+            }
+
             $this->loadModel('action')->create('whitelist', $objectID, 'managedWhitelist', '', $objectType);
 
             $locateLink = $this->createLink($module, 'whitelist', "objectID=$objectID");
@@ -213,12 +219,8 @@ class personnel extends control
         $acl = $this->dao->select('*')->from(TABLE_ACL)->where('id')->eq($id)->fetch();
         if(empty($acl)) return $this->send(array('result' => 'success', 'load' => true));
 
-        /* Update whitelist and delete acl. */
-        $objectTable  = $acl->objectType == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
-        $whitelist    = $this->dao->select('whitelist')->from($objectTable)->where('id')->eq($acl->objectID)->fetch('whitelist');
-        $newWhitelist = str_replace(',' . $acl->account, '', $whitelist);
-        $this->dao->update($objectTable)->set('whitelist')->eq($newWhitelist)->where('id')->eq($acl->objectID)->exec();
-        $this->dao->delete()->from(TABLE_ACL)->where('id')->eq($id)->exec();
+        $this->personnel->unbindWhitelist($acl);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => $this->getError()));
 
         /* Delete program and project white list. */
         if($acl->objectType == 'product')

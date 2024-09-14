@@ -12,6 +12,8 @@ fields:
     range: "program{10},project{90},[sprint,stage,kanban]{400!}"
   - field: model
     range: "[]{10},[scrum,waterfall,kanban,agileplus,waterfallplus]{18!},[]{1000}"
+  - field: hasProduct
+    range: "1{15},0{5},1{480}"
   - field: whitelist
     fields:
     - field: whitelist1
