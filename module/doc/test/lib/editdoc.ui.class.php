@@ -37,7 +37,6 @@ class createDocTester extends tester
         $form->wait(1);
 
         if($form->dom->fstDocName->getText() != $editDocName->editName) return $this->failed('文档编辑失败');
-        $this->openUrl('doc', 'mySpace');
         return $this->success('文档编辑成功');
     }
 
@@ -65,11 +64,11 @@ class createDocTester extends tester
         $form->dom->fstMoveBtn->click();
         $form->wait(1);
         $form->dom->lib->picker($libName->myDocLib);
-        $form->dom->saveMoveBtn->click();
+        $form->wait(1);
+        $form->dom->btn($this->lang->save)->click();
         $form->wait(1);
 
         if($form->dom->leftListHeader->getText() != $llibName->myDocLib) return $this->failed('文档移动失败');
-        $this->openUrl('doc', 'mySpace');
         return $this->success('文档移动失败');
     }
 
@@ -92,7 +91,6 @@ class createDocTester extends tester
         $form->wait(1);
 
         if($form->dom->formText->getText() != '暂时没有文档。') return $this->failed('删除文档失败');
-        $this->openUrl('doc', 'mySpace');
         return $this->success('删除文档成功');
     }
 }
