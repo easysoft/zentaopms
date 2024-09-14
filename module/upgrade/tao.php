@@ -831,9 +831,11 @@ class upgradeTao extends upgradeModel
         $project->acl            = $sprint->acl == 'open' ? 'open' : 'private';
         if($fromMode == 'classic')
         {
-            $project->multiple = '0';
-            $project->code     = $sprint->code;
-            $project->team     = $sprint->team;
+            $project->multiple   = '0';
+            $project->code       = $sprint->code;
+            $project->team       = $sprint->team;
+            $project->openedBy   = $sprintf->openedBy;
+            $project->openedDate = $sprintf->openedDate;
         }
 
         if(helper::isZeroDate($project->realBegan)) unset($project->realBegan);
