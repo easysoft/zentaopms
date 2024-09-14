@@ -27,7 +27,7 @@ class pivotTao extends pivotModel
      * @access public
      * @return array
      */
-    protected function getProductList(string $conditions, array|string $IdList = array(), array $filters = array()): array
+    protected function getProductList(string $conditions, array|string $idList = array(), array $filters = array()): array
     {
         $productID     = isset($filters['productID'])     ? $filters['productID']     : 0;
         $productStatus = isset($filters['productStatus']) ? $filters['productStatus'] : '';
@@ -37,7 +37,7 @@ class pivotTao extends pivotModel
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.shadow')->eq('0')
-            ->beginIF(!empty($IdList))->andWhere('t1.id')->in($IdList)->fi()
+            ->beginIF(!empty($idList))->andWhere('t1.id')->in($idList)->fi()
             ->beginIF($productID)->andWhere('t1.id')->eq($productID)->fi()
             ->beginIF($productStatus)->andWhere('t1.status')->eq($productStatus)->fi()
             ->beginIF($productType)->andWhere('t1.type')->eq($productType)->fi()
