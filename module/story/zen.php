@@ -1008,6 +1008,7 @@ class storyZen extends story
         $optionMenu = $this->tree->getOptionMenu($productID, 'story', 0, $branch === 'all' ? '0' : (string)$branch, 'nodeleted');
 
         $moduleID = $moduleID ? $moduleID : (int)$this->cookie->lastStoryModule;
+        $moduleID = $moduleID ? $moduleID : $fields['module']['default'];
         $moduleID = isset($optionMenu[$moduleID]) ? $moduleID : 0;
 
         $fields['module']['options']  = $optionMenu;
