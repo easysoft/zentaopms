@@ -2499,6 +2499,46 @@ class tutorialModel extends model
     }
 
     /**
+     * 获取新手模式代码库。
+     * Get repo.
+     *
+     * @access public
+     * @return object
+     */
+    public function getRepo(): object
+    {
+        $repo = new stdClass();
+        $repo->id                 = 1;
+        $repo->product            = 1;
+        $repo->projects           = '1';
+        $repo->name               = 'Test repo';
+        $repo->path               = '';
+        $repo->prefix             = '';
+        $repo->encoding           = 'utf-8';
+        $repo->SCM                = 'Git';
+        $repo->client             = '/usr/bin/git';
+        $repo->serviceHost        = 0;
+        $repo->serviceProject     = '';
+        $repo->commits            = 1;
+        $repo->account            = '';
+        $repo->password           = '';
+        $repo->encrypt            = 'base64';
+        $repo->synced             = 0;
+        $repo->lastSync           = '';
+        $repo->lastCommit         = '';
+        $repo->desc               = '';
+        $repo->extra              = '';
+        $repo->preMerge           = 0;
+        $repo->job                = 0;
+        $repo->fileServerUrl      = '';
+        $repo->fileServerAccount  = '';
+        $repo->fileServerPassword = '';
+        $repo->deleted            = 0;
+        $repo->codePath           = '';
+        return $repo;
+    }
+
+    /**
      * 获取新手模式提交记录。
      * Get git commits.
      *

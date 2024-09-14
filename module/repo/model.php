@@ -664,6 +664,8 @@ class repoModel extends model
      */
     public function getByID(int $repoID): object|false
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getRepo();
+
         if(empty($repoID)) return new stdclass();
         $repo = $this->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
         if(!$repo) return false;
