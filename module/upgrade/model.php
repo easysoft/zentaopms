@@ -6577,7 +6577,7 @@ class upgradeModel extends model
 
             if($fromMode == 'classic')
             {
-                $this->dao->update(TABLE_PROJECT)->set('multiple')->eq('0')->where('id')->eq($sprint->id)->exec();
+                $this->dao->update(TABLE_PROJECT)->set('multiple')->eq('0')->set('openedDate')->eq($sprint->openedDate)->set('openedBy')->eq($sprint->openedBy)->where('id')->eq($sprint->id)->exec();
                 $this->dao->update(TABLE_DOCLIB)->set('project')->eq($projectID)->set('type')->eq('project')->set('execution')->eq(0)->where('execution')->eq($sprint->id)->andWhere('type')->eq('execution')->exec();
                 $this->dao->update(TABLE_DOC)->set('project')->eq($projectID)->set('execution')->eq(0)->where('execution')->eq($sprint->id)->exec();
                 $this->dao->update(TABLE_ACTION)->set('objectType')->eq('project')->set('objectID')->eq($projectID)->set('project')->eq($projectID)->set('execution')->eq('0')->where('objectID')->eq($sprint->id)->andWhere('objectType')->eq('execution')->exec();
