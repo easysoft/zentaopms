@@ -88,7 +88,7 @@ else
     (
         'name'    => 'module',
         'label'   => $lang->testcase->module,
-        'control' => 'picker',
+        'control' => array('control' => 'picker', 'required' => true),
         'items'   => isset($modules[$branch]) ? $modules[$branch] : array(),
         'width'   => '200px',
         'required' => strpos(",$requiredFields,", ',module,') !== false
