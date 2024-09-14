@@ -244,7 +244,8 @@ $starter->tasks['manageTeam']['steps'][] = array(
 $starter->tasks['manageTeam']['steps'][] = array(
     'type'   => 'clickNavbar',
     'target' => 'settings',
-    'page'   => 'project-index',
+    'page'   => 'project-execution',
+    'url'    => array('project', 'execution', 'status=all&projectID=2'),
     'title'  => $lang->tutorial->starter->manageTeam->step3->name,
     'desc'   => $lang->tutorial->starter->manageTeam->step3->desc
 );
@@ -305,7 +306,8 @@ $starter->tasks['createProjectExecution']['steps'][] = array(
 $starter->tasks['createProjectExecution']['steps'][] = array(
     'type'   => 'clickNavbar',
     'target' => 'execution',
-    'page'   => 'project-index',
+    'page'   => 'project-execution',
+    'url'    => array('project', 'execution', 'status=all&projectID=2'),
     'title'  => $lang->tutorial->starter->createProjectExecution->step3->name,
     'desc'   => $lang->tutorial->starter->createProjectExecution->step3->desc
 );

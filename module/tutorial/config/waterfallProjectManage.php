@@ -67,7 +67,8 @@ $waterfallProjectManage->basic->tasks['manageProject']['steps'][] = array(
 $waterfallProjectManage->basic->tasks['manageProject']['steps'][] = array(
     'type'   => 'clickNavbar',
     'target' => 'settings',
-    'page'   => 'project-index',
+    'page'   => 'project-execution',
+    'url'    => array('project', 'execution', 'status=all&projectID=2'),
     'title'  => $lang->tutorial->waterfallProjectManage->manageProject->step7->name,
     'desc'   => $lang->tutorial->waterfallProjectManage->manageProject->step7->desc
 );
@@ -106,13 +107,13 @@ $waterfallProjectManage->basic->tasks['manageProject']['steps'][] = array(
 $waterfallProjectManage->basic->tasks['setStage'] = array();
 $waterfallProjectManage->basic->tasks['setStage']['name']     = 'setStage';
 $waterfallProjectManage->basic->tasks['setStage']['title']    = $lang->tutorial->waterfallProjectManage->setStage->title;
-$waterfallProjectManage->basic->tasks['setStage']['startUrl'] = array('project', 'index', 'project=2');
+$waterfallProjectManage->basic->tasks['setStage']['startUrl'] = array('project', 'execution', 'status=all&projectID=2');
 $waterfallProjectManage->basic->tasks['setStage']['steps']    = array();
 
 $waterfallProjectManage->basic->tasks['setStage']['steps'][] = array(
     'type'   => 'clickNavbar',
     'target' => 'execution',
-    'page'   => 'project-index',
+    'page'   => 'project-execution',
     'title'  => $lang->tutorial->waterfallProjectManage->setStage->step1->name,
     'desc'   => $lang->tutorial->waterfallProjectManage->setStage->step1->desc
 );
@@ -695,14 +696,14 @@ if(in_array($config->edition, array('max', 'ipd')))
     $waterfallProjectManage->advance->tasks['design'] = array();
     $waterfallProjectManage->advance->tasks['design']['name']     = 'design';
     $waterfallProjectManage->advance->tasks['design']['title']    = $lang->tutorial->waterfallProjectManage->design->title;
-    $waterfallProjectManage->advance->tasks['design']['startUrl'] = array('project', 'index', 'project=2');
+    $waterfallProjectManage->advance->tasks['design']['startUrl'] = array('project', 'execution', 'status=all&projectID=2');
     $waterfallProjectManage->advance->tasks['design']['steps']    = array();
 
     $waterfallProjectManage->advance->tasks['design']['steps'][] = array(
         'type'   => 'clickNavbar',
         'target' => 'design',
-        'page'   => 'project-index',
-        'url'    => array('project', 'index', 'projectID=2'),
+        'page'   => 'project-execution',
+        'url'    => array('project', 'execution', 'status=all&projectID=2'),
         'title'  => $lang->tutorial->waterfallProjectManage->design->step1->name,
         'desc'   => $lang->tutorial->waterfallProjectManage->design->step1->desc
     );
@@ -764,14 +765,14 @@ if(in_array($config->edition, array('max', 'ipd')))
     $waterfallProjectManage->advance->tasks['review'] = array();
     $waterfallProjectManage->advance->tasks['review']['name']     = 'review';
     $waterfallProjectManage->advance->tasks['review']['title']    = $lang->tutorial->waterfallProjectManage->review->title;
-    $waterfallProjectManage->advance->tasks['review']['startUrl'] = array('project', 'index', 'project=2');
+    $waterfallProjectManage->advance->tasks['review']['startUrl'] = array('project', 'execution', 'status=all&projectID=2');
     $waterfallProjectManage->advance->tasks['review']['steps']    = array();
 
     $waterfallProjectManage->advance->tasks['review']['steps'][] = array(
         'type'   => 'clickNavbar',
         'target' => 'review',
-        'page'   => 'project-index',
-        'url'    => array('project', 'index', 'projectID=2'),
+        'page'   => 'project-execution',
+        'url'    => array('project', 'execution', 'status=all&projectID=2'),
         'title'  => $lang->tutorial->waterfallProjectManage->review->step1->name,
         'desc'   => $lang->tutorial->waterfallProjectManage->review->step1->desc
     );
@@ -832,20 +833,20 @@ if(in_array($config->edition, array('max', 'ipd')))
     $waterfallProjectManage->advance->tasks['manageIssue'] = array();
     $waterfallProjectManage->advance->tasks['manageIssue']['name']     = 'manageIssue';
     $waterfallProjectManage->advance->tasks['manageIssue']['title']    = $lang->tutorial->waterfallProjectManage->manageIssue->title;
-    $waterfallProjectManage->advance->tasks['manageIssue']['startUrl'] = array('project', 'index', 'projectID=2');
+    $waterfallProjectManage->advance->tasks['manageIssue']['startUrl'] = array('project', 'execution', 'status=all&projectID=2');
     $waterfallProjectManage->advance->tasks['manageIssue']['steps']    = array();
 
     $waterfallProjectManage->advance->tasks['manageIssue']['steps'][] = array(
         'type'   => 'clickNavbar',
         'target' => 'other',
-        'page'   => 'project-index',
+        'page'   => 'project-execution',
         'title'  => $lang->tutorial->waterfallProjectManage->manageIssue->step1->name
     );
 
     $waterfallProjectManage->advance->tasks['manageIssue']['steps'][] = array(
         'type'   => 'click',
         'target' => '#other a[data-id="issue"]',
-        'page'   => 'project-index',
+        'page'   => 'project-execution',
         'title'  => $lang->tutorial->waterfallProjectManage->manageIssue->step2->name,
         'desc'   => $lang->tutorial->waterfallProjectManage->manageIssue->step2->desc
     );
@@ -946,20 +947,20 @@ if(in_array($config->edition, array('max', 'ipd')))
     $waterfallProjectManage->advance->tasks['manageRisk'] = array();
     $waterfallProjectManage->advance->tasks['manageRisk']['name']     = 'manageRisk';
     $waterfallProjectManage->advance->tasks['manageRisk']['title']    = $lang->tutorial->waterfallProjectManage->manageRisk->title;
-    $waterfallProjectManage->advance->tasks['manageRisk']['startUrl'] = array('project', 'index', 'projectID=2');
+    $waterfallProjectManage->advance->tasks['manageRisk']['startUrl'] = array('project', 'execution', 'status=all&projectID=2');
     $waterfallProjectManage->advance->tasks['manageRisk']['steps']    = array();
 
     $waterfallProjectManage->advance->tasks['manageRisk']['steps'][] = array(
         'type'   => 'clickNavbar',
         'target' => 'other',
-        'page'   => 'project-index',
+        'page'   => 'project-execution',
         'title'  => $lang->tutorial->waterfallProjectManage->manageRisk->step1->name
     );
 
     $waterfallProjectManage->advance->tasks['manageRisk']['steps'][] = array(
         'type'   => 'click',
         'target' => '#other a[data-id="risk"]',
-        'page'   => 'project-index',
+        'page'   => 'project-execution',
         'title'  => $lang->tutorial->waterfallProjectManage->manageRisk->step2->name,
         'desc'   => $lang->tutorial->waterfallProjectManage->manageRisk->step2->desc
     );

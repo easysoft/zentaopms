@@ -67,7 +67,8 @@ $scrumProjectManage->basic->tasks['manageProject']['steps'][] = array(
 $scrumProjectManage->basic->tasks['manageProject']['steps'][] = array(
     'type'   => 'clickNavbar',
     'target' => 'settings',
-    'page'   => 'project-index',
+    'page'   => 'project-execution',
+    'url'    => array('project', 'execution', 'status=all&projectID=2'),
     'title'  => $lang->tutorial->scrumProjectManage->manageProject->step7->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageProject->step7->desc
 );
@@ -106,13 +107,13 @@ $scrumProjectManage->basic->tasks['manageProject']['steps'][] = array(
 $scrumProjectManage->basic->tasks['manageExecution'] = array();
 $scrumProjectManage->basic->tasks['manageExecution']['name']     = 'manageExecution';
 $scrumProjectManage->basic->tasks['manageExecution']['title']    = $lang->tutorial->scrumProjectManage->manageExecution->title;
-$scrumProjectManage->basic->tasks['manageExecution']['startUrl'] = array('project', 'index', 'project=2');
+$scrumProjectManage->basic->tasks['manageExecution']['startUrl'] = array('project', 'execution', 'status=all&projectID=2');
 $scrumProjectManage->basic->tasks['manageExecution']['steps']    = array();
 
 $scrumProjectManage->basic->tasks['manageExecution']['steps'][] = array(
     'type'   => 'clickNavbar',
     'target' => 'execution',
-    'page'   => 'project-index',
+    'page'   => 'project-execution',
     'title'  => $lang->tutorial->scrumProjectManage->manageExecution->step1->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageExecution->step1->desc
 );
@@ -713,20 +714,20 @@ if(in_array($config->edition, array('max', 'ipd')) && $config->systemMode != 'li
     $scrumProjectManage->advance->tasks['manageIssue'] = array();
     $scrumProjectManage->advance->tasks['manageIssue']['name']     = 'manageIssue';
     $scrumProjectManage->advance->tasks['manageIssue']['title']    = $lang->tutorial->scrumProjectManage->manageIssue->title;
-    $scrumProjectManage->advance->tasks['manageIssue']['startUrl'] = array('project', 'index', 'projectID=2');
+    $scrumProjectManage->advance->tasks['manageIssue']['startUrl'] = array('project', 'execution', 'status=all&projectID=2');
     $scrumProjectManage->advance->tasks['manageIssue']['steps']    = array();
 
     $scrumProjectManage->advance->tasks['manageIssue']['steps'][] = array(
         'type'   => 'clickNavbar',
         'target' => 'other',
-        'page'   => 'project-index',
+        'page'   => 'project-execution',
         'title'  => $lang->tutorial->scrumProjectManage->manageIssue->step1->name
     );
 
     $scrumProjectManage->advance->tasks['manageIssue']['steps'][] = array(
         'type'   => 'click',
         'target' => '#other a[data-id="issue"]',
-        'page'   => 'project-index',
+        'page'   => 'project-execution',
         'title'  => $lang->tutorial->scrumProjectManage->manageIssue->step2->name,
         'desc'   => $lang->tutorial->scrumProjectManage->manageIssue->step2->desc
     );
@@ -827,20 +828,20 @@ if(in_array($config->edition, array('max', 'ipd')) && $config->systemMode != 'li
     $scrumProjectManage->advance->tasks['manageRisk'] = array();
     $scrumProjectManage->advance->tasks['manageRisk']['name']     = 'manageRisk';
     $scrumProjectManage->advance->tasks['manageRisk']['title']    = $lang->tutorial->scrumProjectManage->manageRisk->title;
-    $scrumProjectManage->advance->tasks['manageRisk']['startUrl'] = array('project', 'index', 'projectID=2');
+    $scrumProjectManage->advance->tasks['manageRisk']['startUrl'] = array('project', 'execution', 'status=all&projectID=2');
     $scrumProjectManage->advance->tasks['manageRisk']['steps']    = array();
 
     $scrumProjectManage->advance->tasks['manageRisk']['steps'][] = array(
         'type'   => 'clickNavbar',
         'target' => 'other',
-        'page'   => 'project-index',
+        'page'   => 'project-execution',
         'title'  => $lang->tutorial->scrumProjectManage->manageRisk->step1->name
     );
 
     $scrumProjectManage->advance->tasks['manageRisk']['steps'][] = array(
         'type'   => 'click',
         'target' => '#other a[data-id="risk"]',
-        'page'   => 'project-index',
+        'page'   => 'project-execution',
         'title'  => $lang->tutorial->scrumProjectManage->manageRisk->step2->name,
         'desc'   => $lang->tutorial->scrumProjectManage->manageRisk->step2->desc
     );
