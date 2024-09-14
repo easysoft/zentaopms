@@ -110,6 +110,7 @@ $generateData = function() use ($lang, $pivotName, $pivot, $data, $configs, $sho
                     'icon'  => 'design',
                     'class' => 'ghost',
                     'url'   => inlink('design', "id=$pivot->id"),
+                    'data-confirm' => $this->pivot->checkIFChartInUse($pivot->id, 'pivot') ? array('message' => $lang->pivot->confirm->design, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x') : null
                 ))) : null,
                 hasPriv('pivot', 'edit') ? item(set(array
                 (
