@@ -552,6 +552,8 @@ class repoModel extends model
      */
     public function getRepoPairs(string $type, int $projectID = 0, bool $showScm = true): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getRepoPairs();
+
         $repos = $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq(0)
             ->fetchAll();
@@ -840,6 +842,8 @@ class repoModel extends model
      */
     public function getCommits(object $repo, string $entry, string $revision = 'HEAD', string $type = 'dir', object|null $pager = null, string $begin = '', string $end = '', object|string|null $query = null): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getCommits();
+
         if(!isset($repo->id)) return array();
         if(in_array($repo->SCM, $this->config->repo->notSyncSCM)) return $this->loadModel('gitlab')->getCommits($repo, $entry, $pager, $begin, $end, $query);
 

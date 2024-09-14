@@ -869,8 +869,7 @@ $lang->tutorial->waterfallProjectManage->design->step6->name = '点击关联提�
 $lang->tutorial->waterfallProjectManage->design->step6->desc = '您可以在这里关联提交';
 
 $lang->tutorial->waterfallProjectManage->design->step7 = new stdClass();
-$lang->tutorial->waterfallProjectManage->design->step7->name = '填写表单';
-$lang->tutorial->waterfallProjectManage->design->step7->desc = '空';
+$lang->tutorial->waterfallProjectManage->design->step7->name = '选择提交';
 
 $lang->tutorial->waterfallProjectManage->design->step8 = new stdClass();
 $lang->tutorial->waterfallProjectManage->design->step8->name = '保存表单';

@@ -869,8 +869,7 @@ $lang->tutorial->waterfallProjectManage->design->step6->name = 'Click to Link Co
 $lang->tutorial->waterfallProjectManage->design->step6->desc = 'You can associate submissions here.';
 
 $lang->tutorial->waterfallProjectManage->design->step7 = new stdClass();
-$lang->tutorial->waterfallProjectManage->design->step7->name = 'Fill out the form';
-$lang->tutorial->waterfallProjectManage->design->step7->desc = 'Empty';
+$lang->tutorial->waterfallProjectManage->design->step7->name = 'Select Commit';
 
 $lang->tutorial->waterfallProjectManage->design->step8 = new stdClass();
 $lang->tutorial->waterfallProjectManage->design->step8->name = 'Save the form';

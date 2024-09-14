@@ -711,7 +711,7 @@ if(in_array($config->edition, array('max', 'ipd')))
         'type'   => 'click',
         'target' => 'a.design-create-btn',
         'page'   => 'design-browse',
-        'url'    => array('design', 'browse', 'projectID=2'),
+        'url'    => array('design', 'browse', 'projectID=2&productID=1'),
         'title'  => $lang->tutorial->waterfallProjectManage->design->step2->name,
         'desc'   => $lang->tutorial->waterfallProjectManage->design->step2->desc
     );
@@ -747,14 +747,16 @@ if(in_array($config->edition, array('max', 'ipd')))
     );
 
     $waterfallProjectManage->advance->tasks['design']['steps'][] = array(
-        'type'   => 'form',
-        'page'   => 'repo-create',
+        'type'   => 'selectRow',
+        'target' => '#table-design-linkcommit .dtable-body',
+        'page'   => 'design-view',
         'title'  => $lang->tutorial->waterfallProjectManage->design->step7->name
     );
 
     $waterfallProjectManage->advance->tasks['design']['steps'][] = array(
-        'type'   => 'saveForm',
-        'page'   => 'repo-create',
+        'type'   => 'click',
+        'target' => '#table-design-linkcommit div.dtable-footer nav.toolbar button',
+        'page'   => 'design-view',
         'title'  => $lang->tutorial->waterfallProjectManage->design->step8->name,
         'desc'   => $lang->tutorial->waterfallProjectManage->design->step8->desc
     );

@@ -1522,8 +1522,8 @@ class tutorialModel extends model
         $design->execution    = 0;
         $design->name         = 'Test Design';
         $design->status       = '';
-        $design->createdBy    = '';
-        $design->createdDate  = '';
+        $design->createdBy    = $this->app->user->account;
+        $design->createdDate  = helper::now();
         $design->editedBy     = '';
         $design->editedDate   = '';
         $design->assignedTo   = '';
@@ -2484,5 +2484,38 @@ class tutorialModel extends model
     {
         $charter = $this->getCharter();
         return array($charter->id => $charter);
+    }
+
+    /**
+     * 获取新手模式代码库键值对。
+     * Get repo pairs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getRepoPairs(): array
+    {
+        return array(1 => '[git] Test repo');
+    }
+
+    /**
+     * 获取新手模式提交记录。
+     * Get git commits.
+     *
+     * @access public
+     * @return array
+     */
+    public function getCommits(): array
+    {
+        $commit = new stdClass();
+        $commit->id              = 1;
+        $commit->repo            = 1;
+        $commit->revision        = 'bedeaaf39ef7084b9a455b9d9dba71e2db357201';
+        $commit->commit          = 1;
+        $commit->comment         = 'Git comment.';
+        $commit->committer       = $this->app->user->account;
+        $commit->time            = helper::now();
+        $commit->originalComment = 'Git comment.';
+        return array($commit->revision => $commit);
     }
 }
