@@ -13752,6 +13752,7 @@ CREATE TABLE IF NOT EXISTS `zt_auditresult` (
   `checkedBy` varchar(30) NOT NULL DEFAULT '',
   `checkedDate` date NULL,
   `comment` text NULL,
+  `severity` char(30) NOT NULL DEFAULT '',
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
   `status` varchar(30) NOT NULL DEFAULT '',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
