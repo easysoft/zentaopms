@@ -161,7 +161,7 @@ class screen extends control
      * @access public
      * @return void
      */
-    public function ajaxGetChart()
+    public function ajaxGetChart(int $year = 0, int $month = 0, int $dept = 0, string $account = '')
     {
         if(!empty($_POST))
         {
@@ -177,6 +177,13 @@ class screen extends control
             $queryType    = isset($_POST['queryType']) ? $this->post->queryType : 'filter';
             $component    = isset($_POST['component']) ? json_decode($this->post->component) : null;
             $filterParams = isset($_POST['filters']) ? json_decode($this->post->filters, true) : array();
+            $selectFilter = isset($_POST['selectFilter']) ? json_decode($this->post->selectFilter, true) : array();
+
+            $this->screen->filter->year    = $year;
+            $this->screen->filter->month   = $month;
+            $this->screen->filter->dept    = $dept;
+            $this->screen->filter->account = $account;
+            $this->screen->setSelectFilter($sourceID, $selectFilter);
 
             $type = $this->screen->getChartType($type);
 
