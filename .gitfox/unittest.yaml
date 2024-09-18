@@ -33,8 +33,6 @@ spec:
           type: run
           when: |
             env.CHANGE_MODULS != "''"
-            and
-            build.target == "main"
           spec:
             container:
               image: hub.zentao.net/ci/docker:24.0.8-cli
@@ -51,8 +49,6 @@ spec:
           type: run
           when: |
             env.CHANGE_MODULS != "''"
-            and
-            build.target == "main"
           spec:
             envs:
               MYSQL_INTERNAL: "true"
