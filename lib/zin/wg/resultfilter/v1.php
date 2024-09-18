@@ -33,7 +33,7 @@ class resultFilter extends filter
                 setClass('w-full'),
                 set::name($name . '_begin'),
                 set::value(zget($value, 'begin', '')),
-                on::change("$onChange(e, '{$name}_begin')")
+                on::change("$onChange(e, '{$name}', 'begin')")
             ),
             $lang->to,
             datePicker
@@ -41,7 +41,7 @@ class resultFilter extends filter
                 setClass('w-full'),
                 set::name($name . '_end'),
                 set::value(zget($value, 'end', '')),
-                on::change("$onChange(e, '{$name}_end')")
+                on::change("$onChange(e, '{$name}', 'end')")
             )
         );
     }
@@ -59,7 +59,7 @@ class resultFilter extends filter
                 setClass('w-full'),
                 set::name($name . '_begin'),
                 set::value(zget($value, 'begin', '')),
-                on::change("$onChange(e, '{$name}_begin')")
+                on::change("$onChange(e, '{$name}', 'begin')")
             ),
             $lang->to,
             datetimePicker
@@ -67,7 +67,7 @@ class resultFilter extends filter
                 setClass('w-full'),
                 set::name($name . '_end'),
                 set::value(zget($value, 'end', '')),
-                on::change("$onChange(e, '{$name}_end')")
+                on::change("$onChange(e, '{$name}', 'end')")
             )
         );
     }
