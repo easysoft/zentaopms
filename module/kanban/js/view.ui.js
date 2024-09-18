@@ -353,7 +353,7 @@ function renderAvatar(avatarList)
     for(let avatar of avatarList)
     {
         if(count > 2) break;
-        assignees += `<div class="avatar rounded-full size-xs ml-1 primary">${avatar}</div>`;
+        assignees += `<div class="avatar rounded-full size-xs ml-1 primary" style="font-size: .5rem">${avatar}</div>`;
         count ++;
     }
 
