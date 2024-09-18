@@ -264,7 +264,7 @@ class screen extends control
                 $fields = json_decode($chart->fields, true);
 
                 $fieldObj = zget($fields, $field);
-                $objectPairs = $this->screen->getSysOptions($fieldObj['type'], $fieldObj['object'], $fieldObj['field'], $chart->sql, $saveAs);
+                $objectPairs = $this->loadModel('pivot')->getSysOptions($fieldObj['type'], $fieldObj['object'], $fieldObj['field'], $chart->sql, $saveAs);
             }
         }
 
