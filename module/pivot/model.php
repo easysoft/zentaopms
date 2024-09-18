@@ -1496,7 +1496,7 @@ class pivotModel extends model
         $sql = $this->appendWhereFilterToSql($sql, $filters, $driver);
 
         $dbh     = $this->app->loadDriver($driver);
-        $records = $this->isFiltersAllEmpty($filters) ? array() : $dbh->query($sql)->fetchAll();
+        $records = $dbh->query($sql)->fetchAll();
 
         $records = $this->mapRecordValueWithFieldOptions($records, $fields, $sql, $driver);
 
