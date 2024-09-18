@@ -15,7 +15,7 @@ include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
 jsVar('objectID',        $objectID);
 jsVar('objectType',      $objectType);
 jsVar('extra',           $extra);
-jsVar('reportID',        $report->id);
+jsVar('reportID',        !empty($report->id) ? $report->id : 0);
 jsVar('goalTip',         $lang->testreport->goalTip);
 jsVar('foundBugTip',     $lang->testreport->foundBugTip);
 jsVar('legacyBugTip',    $lang->testreport->legacyBugTip);
