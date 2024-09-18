@@ -2829,7 +2829,7 @@ class testcaseZen extends testcase
             preg_match('/^((([0-9]+)[.]([0-9]+))[.]([0-9]+))[.、](.*)$/Uu', $step, $out);
             if(!$out) preg_match('/^(([0-9]+)[.]([0-9]+))[.、](.*)$/Uu', $step, $out);
             if(!$out) preg_match('/^([0-9]+)[.、](.*)$/Uu', $step, $out);
-            if($out && !empty(trim($out[2])))
+            if($out)
             {
                 $count  = count($out);
                 $num    = $out[1];
