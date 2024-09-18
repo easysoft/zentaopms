@@ -543,9 +543,10 @@ class weeklyModel extends model
         if(empty($tipsConfig)) return '';
 
         $tipsConfig = json_decode($tipsConfig);
+        $data       = (float)$data;
         foreach($tipsConfig as $tipConfig)
         {
-            if($tipConfig->min <= $data and $tipConfig->max >= $data) return $tipConfig->tip;
+            if((float)$tipConfig->min <= $data and (float)$tipConfig->max >= $data) return $tipConfig->tip;
         }
 
         return '';
