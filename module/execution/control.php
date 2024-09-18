@@ -479,6 +479,7 @@ class execution extends control
         $this->executionZen->assignCountForStory($executionID, $stories, $storyType);
         $this->executionZen->assignRelationForStory($execution, $products, $productID, $type, $storyType, $param, $orderBy, $pager);
 
+        $this->view->productID          = $productID;
         $this->view->project            = $project;
         $this->view->linkedProductCount = count($products);
         $this->display();
