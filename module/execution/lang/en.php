@@ -388,7 +388,8 @@ $lang->execution->copyTeamTitle        = "Choose a {$lang->project->common} or {
 /* Interactive prompts. */
 $lang->execution->confirmDelete                = "Do you want to delete the {$lang->executionCommon}[%s]?";
 $lang->execution->confirmUnlinkMember          = "Do you want to unlink this User from {$lang->executionCommon}?";
-$lang->execution->confirmUnlinkStory           = "After {$lang->SRCommon} is removed, cased linked to {$lang->SRCommon} will be reomoved and tasks linked to {$lang->SRCommon} will be cancelled. Do you want to continue?";
+$lang->execution->confirmUnlinkStory           = "After Story is removed, cased linked to Story will be reomoved and tasks linked to Story will be cancelled. Do you want to continue?";
+$lang->execution->confirmBatchUnlinkStory      = "After Story is removed, cased linked to Story will be reomoved and tasks linked to Story will be cancelled.";
 $lang->execution->confirmSync                  = "After modifying the {$lang->projectCommon}, in order to maintain the consistency of data, the data of {$lang->productCommon}s, {$lang->SRCommon}s, teams and whitelist associated with the implementation will be synchronized to the new {$lang->projectCommon}. Please know.";
 $lang->execution->confirmUnlinkExecutionStory  = "Do you want to unlink this Story from the {$lang->projectCommon}?";
 $lang->execution->notAllowedUnlinkStory        = "This {$lang->SRCommon} is linked to the {$lang->executionCommon} of the {$lang->projectCommon}. Remove it from the {$lang->executionCommon}, then try again.";

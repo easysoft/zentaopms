@@ -2432,7 +2432,8 @@ class execution extends control
             }
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-        return $this->send(array('result' => 'success', 'load' => $this->createLink('execution', 'story', "executionID=$executionID")));
+        $execution = $this->execution->getByID($executionID);
+        return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->execution->confirmBatchUnlinkStory, 'locate' => $this->createLink('execution', 'story', "executionID=$executionID") . ($execution->multiple ? '' : '#app=project'))));
     }
 
     /**
