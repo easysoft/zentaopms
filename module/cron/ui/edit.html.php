@@ -21,7 +21,7 @@ formPanel
 (
     set::actions(array('submit')),
     set::size('md'),
-    set::submitBtnText($lang->cron->create),
+    set::submitBtnText($lang->save),
     formRow
     (
         formGroup
