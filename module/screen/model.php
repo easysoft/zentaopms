@@ -990,13 +990,16 @@ class screenModel extends model
     {
         if($chart->sql)
         {
-            $settings = json_decode($chart->settings, true);
-            $fields   = json_decode($chart->fields, true);
-            $langs    = json_decode($chart->langs, true);
+            $settings     = json_decode($chart->settings, true);
+            $fields       = json_decode($chart->fields, true);
+            $langs        = json_decode($chart->langs, true);
+            $chartFilters = json_decode($chart->filters, true);
 
             if(empty($langs)) $langs = array();
             if(empty($fields)) $fields = array();
             if(!is_array($filters)) $filters = array();
+
+            if(empty($chartFilters)) $filters = false;
 
             if(isset($settings['summary']) and $settings['summary'] == 'notuse')
             {
