@@ -18,8 +18,31 @@ su('admin');
 /**
 
 title=bugModel->resolve();
+timeout=0
 cid=1
-pid=1
+
+- 测试解决原因为设计如此的bug
+ - 属性resolution @bydesign
+ - 属性assignedTo @user99
+- 测试解决原因为重复bug 有重复bugID的bug
+ - 属性resolution @duplicate
+ - 属性assignedTo @user99
+ - 属性duplicateBug @1
+- 测试解决原因为解决 有解决版本的bug
+ - 属性resolution @fixed
+ - 属性assignedTo @user99
+ - 属性resolvedBuild @1
+- 测试解决原因为设计如此的bug 传入output
+ - 属性resolution @bydesign
+ - 属性assignedTo @user99
+- 测试解决原因为重复bug 有重复bugID的bug 传入output @重复Bug不存在。
+- 测试解决原因为解决 有解决版本的bug 传入output
+ - 属性resolution @fixed
+ - 属性assignedTo @user99
+ - 属性resolvedBuild @1
+- 测试解决原因为空的bug @『解决方案』不能为空。
+- 测试解决原因为重复bug 无重复bugID的bug @『重复Bug』不能为空。
+- 测试解决原因为解决 无解决版本的bug @『解决版本』不能为空。
 
 */
 
@@ -42,9 +65,9 @@ r($bug->resolveTest($bugIdList[0], $bydesignBug))  && p('resolution,assignedTo')
 r($bug->resolveTest($bugIdList[1], $duplicateBug)) && p('resolution,assignedTo,duplicateBug')  && e('duplicate,user99,1'); // 测试解决原因为重复bug 有重复bugID的bug
 r($bug->resolveTest($bugIdList[2], $fixedBug))     && p('resolution,assignedTo,resolvedBuild') && e('fixed,user99,1');     // 测试解决原因为解决 有解决版本的bug
 
-r($bug->resolveTest($bugIdList[3], $bydesignBug, $output))  && p('resolution,assignedTo')               && e('bydesign,user99');    // 测试解决原因为设计如此的bug 传入output
-r($bug->resolveTest($bugIdList[4], $duplicateBug, $output)) && p('resolution,assignedTo,duplicateBug')  && e('duplicate,user99,1'); // 测试解决原因为重复bug 有重复bugID的bug 传入output
-r($bug->resolveTest($bugIdList[5], $fixedBug, $output))     && p('resolution,assignedTo,resolvedBuild') && e('fixed,user99,1');     // 测试解决原因为解决 有解决版本的bug 传入output
+r($bug->resolveTest($bugIdList[3], $bydesignBug, $output))  && p('resolution,assignedTo') && e('bydesign,user99'); // 测试解决原因为设计如此的bug 传入output
+r($bug->resolveTest($bugIdList[4], $duplicateBug, $output)) && p('') && e('重复Bug不存在。'); // 测试解决原因为重复bug 有重复bugID的bug 传入output
+r($bug->resolveTest($bugIdList[5], $fixedBug, $output))     && p('resolution,assignedTo,resolvedBuild') && e('fixed,user99,1'); // 测试解决原因为解决 有解决版本的bug 传入output
 
 r($bug->resolveTest($bugIdList[6], $emptyResulution))   && p() && e('『解决方案』不能为空。'); // 测试解决原因为空的bug
 r($bug->resolveTest($bugIdList[6], $empthDuplicateBug)) && p() && e('『重复Bug』不能为空。');  // 测试解决原因为重复bug 无重复bugID的bug
