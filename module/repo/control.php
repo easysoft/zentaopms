@@ -1628,7 +1628,13 @@ class repo extends control
     public function ajaxGetExecutions(int $productID, int $branch = 0)
     {
         $executions = $this->repo->getExecutionPairs($productID, $branch);
-        echo html::select('execution', $executions, '', 'class="form-control chosen"');
+
+        $options = array();
+        foreach($executions as $executionID => $executionName)
+        {
+            $options[] = array('text' => $executionName, 'value' => $executionID);
+        }
+        return print(json_encode($options));
     }
 
     /**
