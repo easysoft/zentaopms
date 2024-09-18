@@ -734,8 +734,11 @@ class GitRepo
                 $pathInfo = array();
                 $pathInfo['action']  = $action;
                 $pathInfo['kind']    = 'file';
-                $pathInfo['oldPath'] = isset($lineList[2]) ? '/' . trim($lineList[2]) : '';
-                $changes[$entry]     = $pathInfo;
+                $pathInfo['oldPath'] = $entry;
+
+                $path = '/' . trim(isset($lineList[2]) ? $lineList[2] : $entry);
+                $path = str_replace('//', '/', $path);
+                $changes[$path] = $pathInfo;
             }
         }
 

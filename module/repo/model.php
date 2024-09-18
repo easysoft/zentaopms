@@ -2039,10 +2039,17 @@ class repoModel extends model
             ->fetchAll('path');
 
         $files = $folders = $fileSort = $dirSort = array();
+        $existsFiles = array();
+        foreach($fileCommits as $fileCommit)
+        {
+            if($fileCommit->action != 'D' && strpos($fileCommit->path, $parent) === 0) $existsFiles[$fileCommit->path] = true;
+            if($fileCommit->action == 'R' && isset($existsFiles[$fileCommit->oldPath])) unset($existsFiles[$fileCommit->oldPath]);
+        }
+
         foreach($fileCommits as $fileCommit)
         {
             /* Filter by parent. */
-            if($fileCommit->action == 'D' || strpos($fileCommit->path, $parent) !== 0) continue;
+            if(!isset($existsFiles[$fileCommit->path])) continue;
 
             $pathList = explode('/', ltrim($fileCommit->path, '/'));
             $file     = new stdclass();
