@@ -1212,6 +1212,8 @@ class testcaseModel extends model
     public function importToLib(array $cases, array $steps, array $files): bool
     {
         $this->loadModel('action');
+        $caseIdList  = array_column($cases, 'id');
+        $oldCaseList = $this->getByList($caseIdList);
         foreach($cases as $case)
         {
             /* 如果用例没有 ID，插入用例。 */
@@ -1230,7 +1232,7 @@ class testcaseModel extends model
             else
             {
                 $caseID  = $case->id;
-                $oldCase = $this->getById($caseID);
+                $oldCase = isset($oldCaseList[$caseID]) ? $oldCaseList[$caseID] : null;
                 $this->testcaseTao->doUpdate($case);
                 $this->action->create('case', $caseID, 'updatetolib', '', $case->fromCaseID);
 
@@ -1247,7 +1249,7 @@ class testcaseModel extends model
                     if(file_exists($filePath)) unlink($filePath);
                 }
 
-                if($oldCase->lib && empty($oldCase->product))
+                if(!empty($oldCase) && $oldCase->lib && empty($oldCase->product))
                 {
                     $fromcaseVersion = $this->dao->select('fromCaseVersion')->from(TABLE_CASE)->where('fromCaseID')->eq($case->id)->fetch('fromCaseVersion');
                     $fromcaseVersion = (int)$fromcaseVersion + 1;
