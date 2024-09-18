@@ -19,17 +19,12 @@ foreach($config->doc->dtable->fieldList as $colName => $col)
 
     $cols[$colName] = $col;
 }
+$cols['title']['data-app'] = $app->tab;
 
 $params         = "objectID={$objectID}&libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&orderBy={$orderBy}&param={$param}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}";
 $tableData      = empty($docs) ? array() : initTableData($docs, $cols);
 $createDocLink  = '';
-$typeID         = empty($lib) ? $objectID : zget($lib, (string)$lib->type, 0);
-if($lib->type == 'custom')
-{
-    $typeID = $lib->parent > 0 ? $lib->parent : $lib->id;
-    if($lib->parent == 0) $libID = $docModel->dao->select('*')->from(TABLE_DOCLIB)->where('parent')->eq($typeID)->andWhere('deleted')->eq('0')->orderBy('id_asc')->limit(1)->fetch('id');
-}
-if($browseType != 'bysearch' && $libID && common::hasPriv('doc', 'create')) $createDocLink = createLink('doc', 'create', "objectType={$lib->type}&objectID={$typeID}&libID={$lib->id}&moduleID={$moduleID}&type=html");
+if($browseType != 'bysearch' && $libID && common::hasPriv('doc', 'create')) $createDocLink = createLink('doc', 'create', "objectType={$type}&objectID={$objectID}&libID={$lib->id}&moduleID={$moduleID}&type=html");
 $docContent = dtable(
     setID('docTable'),
     set::iconList($config->doc->iconList),
