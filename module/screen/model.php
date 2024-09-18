@@ -1610,6 +1610,25 @@ class screenModel extends model
     }
 
     /**
+     * Set select filter.
+     *
+     * @param  string $sourceID
+     * @param  array  $filters
+     * @access public
+     * @return void
+     */
+    public function setSelectFilter($sourceID, $filters)
+    {
+        if(empty($filters)) return;
+
+        foreach($filters as $filter)
+        {
+            if(!isset($this->filter->charts[$sourceID])) $this->filter->charts[$sourceID] = array();
+            $this->filter->charts[$sourceID][$filter['type']] = $filter['field'];
+        }
+    }
+
+    /**
      * Set SQL filter
      *
      * @param object $chart
