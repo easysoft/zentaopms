@@ -12,6 +12,10 @@ namespace zin;
 
 include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
 
+jsVar('objectID',        $objectID);
+jsVar('objectType',      $objectType);
+jsVar('extra',           $extra);
+jsVar('reportID',        $report->id);
 jsVar('goalTip',         $lang->testreport->goalTip);
 jsVar('foundBugTip',     $lang->testreport->foundBugTip);
 jsVar('legacyBugTip',    $lang->testreport->legacyBugTip);
@@ -350,13 +354,15 @@ panel
                     datePicker
                     (
                         set::name('begin'),
-                        set::value($begin)
+                        set::value($begin),
+                        setData(array('on' => 'change', 'call' => 'refreshPage'))
                     ),
                     $lang->testtask->to,
                     datePicker
                     (
                         set::name('end'),
-                        set::value($end)
+                        set::value($end),
+                        setData(array('on' => 'change', 'call' => 'refreshPage'))
                     )
                 ),
                 input
