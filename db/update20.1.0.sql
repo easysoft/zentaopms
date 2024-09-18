@@ -51,7 +51,6 @@ ALTER TABLE `zt_pivot` MODIFY COLUMN `sql`      mediumtext NOT NULL DEFAULT '';
 ALTER TABLE `zt_pivot` MODIFY COLUMN `vars`     mediumtext NULL;
 ALTER TABLE `zt_pivot` MODIFY COLUMN `settings` mediumtext NULL;
 ALTER TABLE `zt_pivot` MODIFY COLUMN `filters`  mediumtext NULL;
-ALTER TABLE `zt_pivot` DROP COLUMN IF EXISTS `dataset`;
 
 ALTER TABLE `zt_project` MODIFY `stageBy` enum('project', 'product') NOT NULL DEFAULT 'product';
 
