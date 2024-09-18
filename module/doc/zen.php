@@ -713,6 +713,11 @@ class docZen extends doc
      */
     protected function assignVarsForView(int $docID, int $version, string $type, int $objectID, int $libID, object $doc, object $object, string $objectType, array $libs, array $objectDropdown): void
     {
+        if($type == 'execution' && $this->app->tab == 'project')
+        {
+            $objectType = 'project';
+            $objectID   = $object->project;
+        }
         $this->view->title          = $this->lang->doc->common . $this->lang->hyphen . $doc->title;
         $this->view->docID          = $docID;
         $this->view->type           = $type;
@@ -727,7 +732,7 @@ class docZen extends doc
         $this->view->canBeChanged   = common::canModify($type, $object); // Determines whether an object is editable.
         $this->view->actions        = $docID ? $this->action->getList('doc', $docID) : array();
         $this->view->users          = $this->loadModel('user')->getPairs('noclosed,noletter');
-        $this->view->libTree        = $this->doc->getLibTree((int)$libID, (array)$libs, $type, (int)$doc->module, (int)$objectID, '', 0, $docID);
+        $this->view->libTree        = $this->doc->getLibTree((int)$libID, (array)$libs, $objectType, (int)$doc->module, (int)$objectID, 'all', 0, $docID);
         $this->view->preAndNext     = $this->loadModel('common')->getPreAndNextObject('doc', $docID);
         $this->view->moduleID       = $doc->module;
         $this->view->objectDropdown = $objectDropdown;

@@ -65,7 +65,7 @@ class docMenu extends wg
         elseif($item->type == 'annex')
         {
             $methodName = 'showFiles';
-            $linkParams = "type={$objectType}&objectID={$item->objectID}";
+            $linkParams = "type={$item->objectType}&objectID={$item->objectID}";
         }
         elseif(in_array($item->type, array('text', 'word','ppt', 'excel', 'attachment')))
         {
