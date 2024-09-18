@@ -1229,7 +1229,8 @@ class testcaseModel extends model
             /* If case id is exist, update it. */
             else
             {
-                $caseID = $case->id;
+                $caseID  = $case->id;
+                $oldCase = $this->getById($caseID);
                 $this->testcaseTao->doUpdate($case);
                 $this->action->create('case', $caseID, 'updatetolib', '', $case->fromCaseID);
 
@@ -1244,6 +1245,13 @@ class testcaseModel extends model
                     $datePath = substr($file->pathname, 0, 6);
                     $filePath = $this->app->getAppRoot() . "www/data/upload/{$this->app->company->id}/" . "{$datePath}/" . $filePath;
                     if(file_exists($filePath)) unlink($filePath);
+                }
+
+                if($oldCase->lib && empty($oldCase->product))
+                {
+                    $fromcaseVersion = $this->dao->select('fromCaseVersion')->from(TABLE_CASE)->where('fromCaseID')->eq($case->id)->fetch('fromCaseVersion');
+                    $fromcaseVersion = (int)$fromcaseVersion + 1;
+                    $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($fromcaseVersion)->where('`fromCaseID`')->eq($case->id)->exec();
                 }
             }
             if(isset($caseID))
