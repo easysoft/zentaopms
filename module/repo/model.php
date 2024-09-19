@@ -675,7 +675,7 @@ class repoModel extends model
         {
             $repo->serviceHost    = $repo->client;
             $repo->serviceProject = $repo->extra;
-            $this->dao->update(TABLE_REPO)->data($repo)->where('id')->eq($repoID)->exec();
+            $this->dao->update(TABLE_REPO)->data(array('serviceHost' => $repo->serviceHost, 'serviceProject' => $repo->serviceProject))->where('id')->eq($repoID)->exec();
 
             /* Add webhook. */
             if($repo->SCM == 'Gitlab') $this->loadModel('gitlab')->updateCodePath((int)$repo->serviceHost, (int)$repo->serviceProject, $repo->id);
