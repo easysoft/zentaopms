@@ -25,6 +25,10 @@ class myspacePage extends page
             'fstDeleteBtn'   => '/html/body/div[1]/div/div[2]/div[2]/div/div/div[2]/div[3]/div/div/div/nav/a[3]/i',
             'formText'       => '/html/body/div/div/div[2]/div[2]/div/div/div/div/div',
             'saveMoveBtn'    => '//*[@class="m-doc-myspace"]/div[2]/div[1]/div[1]/div[3]/div[1]/div[1]/form[1]/div[6]/div[1]/button[1]',
+            'checkFstDoc'    => '/html/body/div[1]/div/div[2]/div[2]/div/div/div[2]/div[1]/div/div[2]/div/a',
+            'fstSaveBtn'     => '/html/body/div[1]/div/div[2]/div[2]/div/div/div[2]/div[1]/div/div[2]/div/div[2]/a/img',
+            'myFavorites'    => '/html/body/div[1]/div/div[2]/div[1]/div[1]/div/main/menu/li[3]/div/div/a',
+            'createBy'       => '/html/body/div[1]/div/div[2]/div[1]/div[1]/div/main/menu/li[4]/div/div/a',
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
