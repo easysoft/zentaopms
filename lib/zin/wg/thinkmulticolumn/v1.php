@@ -57,7 +57,11 @@ class thinkMulticolumn extends thinkQuestion
             }
             $result[$i] = $item;
         }
-        return array_values($result);
+        $filterData = array_filter($result, function($resultItem)
+        {
+            return array_filter((array)$resultItem);
+        });
+        return array_values($filterData);
     }
 
     protected function buildDetail(): array
