@@ -1311,9 +1311,9 @@ $config->delete['20_5'][] = 'module/design/js/browse.ui.js';
 $config->delete['20_6'][] = 'extension/biz/pivot/ext/zen/pivot.php';
 $config->delete['20_6'][] = 'extension/max/pivot/ext/zen/pivot.php';
 $config->delete['20_6'][] = 'extension/ipd/pivot/ext/zen/pivot.php';
-$config->delete['20_6'][] = 'extension/biz/dataview/ext/table';
-$config->delete['20_6'][] = 'extension/max/dataview/ext/table';
-$config->delete['20_6'][] = 'extension/ipd/dataview/ext/table';
+$config->delete['20_6'][] = 'extension/biz/dataview/table';
+$config->delete['20_6'][] = 'extension/max/dataview/table';
+$config->delete['20_6'][] = 'extension/ipd/dataview/table';
 
 $config->delete['20_7'][] = 'extension/biz/user/ext/model/hook/create.bizext.php';
 $config->delete['20_7'][] = 'extension/max/user/ext/model/hook/create.bizext.php';
