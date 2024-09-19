@@ -19,27 +19,17 @@ $tester->login();
 $tabNum = new stdClass();
 
 $planurl['productID'] = 1;
-$tabName = 'all';
-$tabNum  = '7';
-r($tester->switchTab($planurl,$tabName,$tabNum)) && p('message,status') && e('切换成功,SUCCESS');
 
-$tabName = 'undone';
-$tabNum  = '5';
-r($tester->switchTab($planurl,$tabName,$tabNum)) && p('message,status') && e('切换成功,SUCCESS');
-
-$tabName = 'waiting';
-$tabNum  = '3';
-r($tester->switchTab($planurl,$tabName,$tabNum)) && p('message,status') && e('切换成功,SUCCESS');
-
-$tabName = 'doing';
-$tabNum  = '2';
-r($tester->switchTab($planurl,$tabName,$tabNum)) && p('message,status') && e('切换成功,SUCCESS');
-
-$tabName = 'done';
-$tabNum  = '1';
-r($tester->switchTab($planurl,$tabName,$tabNum)) && p('message,status') && e('切换成功,SUCCESS');
-
-$tabName = 'closed';
-$tabNum  = '1';
-r($tester->switchTab($planurl,$tabName,$tabNum)) && p('message,status') && e('切换成功,SUCCESS');
+$tabs = [
+    'all'     => '7',
+    'undone'  => '5',
+    'waiting' => '3',
+    'doing'   => '2',
+    'done'    => '1',
+    'closed'  => '1',
+];
+foreach ($tabs as $tabName => $tabNum)
+{
+    r($tester->switchTab($planurl, $tabName, $tabNum)) && p('message,status') && e('切换成功,SUCCESS');
+}
 $tester->closeBrowser();
