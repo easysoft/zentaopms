@@ -11,6 +11,10 @@ class linkStoryTester extends tester
      */
     public function checkNoProductInfo()
     {
-        $form = $this->initForm('execution', 'story', array('execution' => '3'), 'appIframe-execution);
+        $form = $this->initForm('execution', 'story', array('execution' => '3'), 'appIframe-execution');
+        $form->dom->btn($this->lang->execution->linkStory)->click();
+        $form->wait(1);
+        if($form->dom->alertModal('text') == $this->lang->execution->errorNoLinkedProducts) return $this->success('执行未关联产品时提示正确');
+        return $this->failed('执行未关联产品时提示不正确');
     }
 }
