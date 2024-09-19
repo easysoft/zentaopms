@@ -1,6 +1,6 @@
-let lastAppUrl = '';
+let lastAppUrl            = '';
 let originalDocumentTitle = document.title;
-let documentTitleSuffix = ' - ' + originalDocumentTitle.split(' - ').pop();
+let documentTitleSuffix   = ' - ' + originalDocumentTitle.split(' - ').pop();
 
 function getDocApp()
 {
@@ -41,9 +41,9 @@ zui.AjaxForm.DEFAULT.onResult = function(res)
     }
 };
 
-function handleSwitchView(view, info)
+function handleSwitchView(view, location, info)
 {
-    const url = $.createLink('doc', 'app', `type=${info.spaceType}&spaceID=${info.spaceID}&libID=${info.libID}&moduleID=${info.moduleID}&docID=${info.docID}&docMode=${view}`.replace(`&spaceID=${info.spaceType === 'mine' ? -1 : 0}&libID=0&moduleID=0&docID=0&docMode=list`, ''));
+    const url = $.createLink('doc', 'app', `type=${location.spaceType}&spaceID=${location.spaceID}&libID=${location.libID}&moduleID=${location.moduleID}&docID=${location.docID}&docMode=${view}`.replace(`&spaceID=${location.spaceType === 'mine' ? -1 : 0}&libID=0&moduleID=0&docID=0&docMode=list`, ''));
     if(url === lastAppUrl) return;
     if(lastAppUrl && !$.apps.getAppUrl().endsWith(url)) $.apps.updateAppUrl(url, info.title ? (info.title + documentTitleSuffix) : originalDocumentTitle);
     lastAppUrl = url;
@@ -89,20 +89,21 @@ function handleMoveLib(lib)
 
 function handleCreateModule(module)
 {
-    const url = $.createLink('tree', 'ajaxCreateModule');
-    const data = {
-        name: module.name,
-        libID: module.lib,
-        parentID: module.parent,
-        objectID: module.parent,
+    const url  = $.createLink('tree', 'ajaxCreateModule');
+    const data =
+    {
+        name:       module.name,
+        libID:      module.lib,
+        parentID:   module.parent,
+        objectID:   module.parent,
         moduleType: 'doc',
-        isUpdate: false,
+        isUpdate:   false,
         createType: 'child',
     };
     $.ajaxSubmit(
     {
         load: false,
-        url: url,
+        url:  url,
         data: data,
         onSuccess: (res) =>
         {
@@ -131,23 +132,23 @@ function handleDeleteModule(module)
 function handleCreateDoc(doc, spaceID, libID, moduleID)
 {
     const docApp = getDocApp();
-    const spaceType = docApp.signals.spaceType.value
-    const url = $.createLink('doc', 'create', `objectType=${spaceType}&objectID=${spaceID}&libID=${libID}&moduleID=${moduleID}`);
+    const spaceType = docApp.signals.spaceType.value;
+    const url = $.createLink('doc', 'create', `objectType=${spaceType}&objectID=${Math.max(spaceID, 0)}&libID=${libID}&moduleID=${moduleID}`);
     return new Promise((resolve) =>
     {
         $.post(url,
         {
-            content: doc.content,
-            status: 'normal',
+            content    : doc.content,
+            status     : 'normal',
             contentType: doc.contentType,
-            type: 'text',
-            lib: libID,
-            module: moduleID,
-            title: doc.title,
-            keywords: '',
+            type       : 'text',
+            lib        : libID,
+            module     : moduleID,
+            title      : doc.title,
+            keywords   : '',
             contactList: '',
-            acl: 'private',
-            space: spaceType,
+            acl        : 'private',
+            space      : spaceType,
         }, (res) => {
             const data = JSON.parse(res);
             resolve($.extend(doc, {id: data.id}, data.doc));
@@ -157,24 +158,24 @@ function handleCreateDoc(doc, spaceID, libID, moduleID)
 
 function handleSaveDoc(doc)
 {
-    const docApp = getDocApp();
+    const docApp    = getDocApp();
     const spaceType = docApp.signals.spaceType.value;
-    const libID = docApp.signals.libID.value;
-    const moduleID = docApp.signals.moduleID.value;
-    const url = $.createLink('doc', 'edit', `docID=${doc.id}`);
+    const libID     = docApp.signals.libID.value;
+    const moduleID  = docApp.signals.moduleID.value;
+    const url       = $.createLink('doc', 'edit', `docID=${doc.id}`);
     $.post(url,
     {
-        content: doc.content,
-        status: 'normal',
+        content    : doc.content,
+        status     : 'normal',
         contentType: doc.contentType,
-        type: 'text',
-        lib: libID,
-        module: moduleID,
-        title: doc.title,
-        keywords: '',
+        type       : 'text',
+        lib        : libID,
+        module     : moduleID,
+        title      : doc.title,
+        keywords   : '',
         contactList: '',
-        acl: 'private',
-        space: spaceType,
+        acl        : 'private',
+        space      : spaceType,
     }, (res) => {
         console.log('handleSaveDoc.res', res);
         docApp.update('doc', doc);
@@ -194,7 +195,7 @@ function canMoveDoc(doc)
 {
     const docApp         = getDocApp();
     const spaceType      = docApp.signals.spaceType.value;
-    const hasDocMovePriv = docApp.props.hasDocMovePriv;
+    const hasDocMovePriv = docApp.props.privs.moveDoc;
     const currentUser    = docApp.props.currentUser;
     return hasDocMovePriv && (spaceType === 'custom' || spaceType === 'mine') && doc.addedBy === currentUser;
 }
@@ -216,28 +217,123 @@ function handleCollectDoc(doc)
     });
 }
 
+function deleteDocFile(file, doc)
+{
+    zui.Modal.confirm(getDocApp().props.lang.fileConfirmDelete).then(result =>
+    {
+        if(!result) return;
+
+        $.ajaxSubmit(
+        {
+            url:      $.createLink('doc', 'deleteFile', `docID=${doc.id}&fileID=${file.id}&confirm=yes`),
+            load:     false,
+            callback: null,
+            onSuccess: (res) =>
+            {
+                if(res && typeof res === 'object' && res.result === 'success')
+                {
+                    getDocApp().update('doc', $.extend({}, doc, {files: doc.files.filter(f => f.id !== file.id)}));
+                }
+            }
+        })
+    });
+}
+
+function renameDocFile(file, doc)
+{
+    let fileName = file.title;
+    let extension = file.extension;
+    if(extension && fileName.endsWith(`.${extension}`)) fileName = fileName.substring(0, fileName.length - extension.length - 1);
+    zui.Modal.prompt({message: getDocApp().props.lang.fileRename, defaultValue: fileName, placeholder: fileName}).then(newName =>
+    {
+        if(!newName) return;
+
+        fileName = newName;
+        if(extension && fileName.endsWith(`.${extension}`))
+        {
+            fileName = fileName.substring(0, fileName.length - extension.length - 1);
+        }
+        else if(!extension && fileName.includes('.'))
+        {
+            extension = fileName.split('.').pop();
+            fileName = fileName.substring(0, fileName.length - extension.length - 1);
+        }
+        $.ajaxSubmit(
+        {
+            url:  $.createLink('file', 'edit', `fileID=${file.id}`),
+            data: {fileName: newName, extension : file.extension},
+            load: false,
+            onComplete: (res) =>
+            {
+                if(res && typeof res === 'object')
+                {
+                    const updatedFile = $.extend({}, file, {title: extension ? `${fileName}.${extension}` : fileName, extension}, res.id ? res : {});
+                    getDocApp().update('doc', $.extend({}, doc, {files: doc.files.map(f => f.id === file.id ? updatedFile : f)}));
+                }
+            }
+        });
+    });
+}
+
+function getFileActions(file, doc)
+{
+    const docApp  = getDocApp();
+    const privs   = docApp.props.privs;
+    const lang    = docApp.props.lang;
+    const canEdit = privs.edit && (!doc.privs || doc.privs.edit !== false);
+    return [
+        {'data-toggle': 'modal', 'data-size': 'lg', url: $.createLink('file', 'download', `fileID=${file.id}&mouse=left`), hint: lang.filePreview, icon: 'eye'},
+        {target: '_blank', url: zui.formatString(docApp.props.fileUrl, file), hint: lang.fileDownload, icon: 'download'},
+        canEdit ? {hint: lang.fileRename, icon: 'pencil-alt', onClick: renameDocFile.bind(this, file, doc)} : null,
+        canEdit ? {hint: lang.fileDelete, icon: 'trash', onClick: deleteDocFile.bind(this, file, doc)} : null,
+    ].filter(Boolean);
+}
+
 window.setDocAppOptions = function(_, options)
 {
+    const privs = options.privs;
     const newOptions =
     {
-        onCreateSpace : options.spaceType === 'custom' ? handleCreateSpace: null,
-        onEditSpace   : options.spaceType === 'custom' ? handleEditSpace  : null,
-        onCreateLib   : handleCreateLib,
-        onEditLib     : handleEditLib,
-        onDeleteLib   : handleDeleteLib,
-        onMoveLib     : handleMoveLib,
-        onCreateModule: handleCreateModule,
-        onEditModule  : handleEditModule,
-        onDeleteModule: handleDeleteModule,
-        onCreateDoc   : handleCreateDoc,
-        onSaveDoc     : handleSaveDoc,
-        onMoveDoc     : handleMoveDoc,
+        onCreateSpace : (privs.createSpace && options.spaceType === 'custom') ? handleCreateSpace: null,
+        onEditSpace   : (privs.editSpace && options.spaceType === 'custom') ? handleEditSpace  : null,
+        onCreateLib   : privs.createLib ? handleCreateLib : null,
+        onEditLib     : privs.editLib ? handleEditLib : null,
+        onDeleteLib   : privs.deleteLib ? handleDeleteLib : null,
+        onMoveLib     : privs.moveLib ? handleMoveLib : null,
+        onCreateModule: privs.addModule ? handleCreateModule : null,
+        onEditModule  : privs.editModule ? handleEditModule : null,
+        onDeleteModule: privs.deleteModule ? handleDeleteModule : null,
+        onCreateDoc   : privs.create ? handleCreateDoc : null,
+        onSaveDoc     : privs.edit ? handleSaveDoc : null,
+        onMoveDoc     : privs.moveDoc ? handleMoveDoc : null,
         canMoveDoc    : canMoveDoc,
-        onDeleteDoc   : handleDeleteDoc,
-        onCollectDoc  : handleCollectDoc,
+        onDeleteDoc   : privs.delete ? handleDeleteDoc : null,
+        onCollectDoc  : privs.collect ? handleCollectDoc : null,
         onSwitchView  : handleSwitchView,
+        fileActions   : getFileActions,
     };
     return newOptions;
+};
+
+window.beforeRequestContent = function(options)
+{
+    const url              = $.parseLink(options.url);
+    const vars             = url.vars.map(x => x[1]);
+    const spaceType        = vars[0];
+    const docApp           = getDocApp();
+    const currentSpaceType = docApp.signals.spaceType.value;
+    if(spaceType !== currentSpaceType) return;
+
+    docApp.switchView(
+    {
+        spaceType: spaceType,
+        spaceID  : parseInt(vars[1]),
+        libID    : parseInt(vars[2]),
+        moduleID : parseInt(vars[3]),
+        docID    : parseInt(vars[4]),
+    }, vars[5]);
+
+    return false;
 };
 
 window.goToOldDocPage = function()
@@ -247,7 +343,7 @@ window.goToOldDocPage = function()
 
     zui.store.set('docAppEnabled', false);
     const spaceType = docApp.signals.spaceType.value
-    const map = {mine: 'myspace', custom: 'teamspace', product: 'productspace', project: 'projectspace'};
-    const method = map[spaceType];
+    const map       = {mine: 'myspace', custom: 'teamspace', product: 'productspace', project: 'projectspace'};
+    const method    = map[spaceType];
     $.apps.openUrl($.createLink('doc', method));
 };

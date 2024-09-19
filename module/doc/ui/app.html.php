@@ -17,6 +17,37 @@ if($type === 'project')
     $libTypes[] = array('type' => 'execution', 'name' => $lang->execution->common, 'icon' => 'run');
 }
 
+$privs = array();
+$privs['create']       = hasPriv('doc', 'create');
+$privs['edit']         = hasPriv('doc', 'edit');
+$privs['delete']       = hasPriv('doc', 'delete');
+$privs['moveDoc']      = hasPriv('doc', 'moveDoc');
+$privs['collect']      = hasPriv('doc', 'collect');
+$privs['createLib']    = hasPriv('doc', 'createLib');
+$privs['editLib']      = hasPriv('doc', 'editLib');
+$privs['moveLib']      = hasPriv('doc', 'moveLib');
+$privs['deleteLib']    = hasPriv('doc', 'deleteLib');
+$privs['sortDocLib']   = hasPriv('doc', 'sortDocLib');
+$privs['exportFiles']  = hasPriv('doc', 'exportFiles');
+$privs['createSpace']  = hasPriv('doc', 'createSpace');
+$privs['editSpace']    = hasPriv('doc', 'editLib');
+$privs['addModule']    = hasPriv('doc', 'addCatalog');
+$privs['deleteModule'] = hasPriv('doc', 'deleteCatalog');
+$privs['editModule']   = hasPriv('doc', 'editCatalog');
+$privs['sortModule']   = hasPriv('doc', 'sortCatalog');
+
+$sessionStr = session_name() . '=' . session_id();
+$fileUrl    = createLink('file', 'download', 'fileID={id}');
+$fileUrl   .= strpos($fileUrl, '?') === false ? '?' : '&';
+$fileUrl   .= $sessionStr;
+
+$langData = new stdclass();
+$langData->filePreview           = $lang->file->preview;
+$langData->fileDownload          = $lang->file->download;
+$langData->fileDelete            = $lang->file->delete;
+$langData->fileRename            = $lang->file->edit;
+$langData->fileConfirmDelete     = $lang->file->confirmDelete;
+
 zui::docApp
 (
     set::_class('shadow rounded ring canvas'),
@@ -34,9 +65,13 @@ zui::docApp
     set::width('100%'),
     set::height('100%'),
     set::userMap($users),
-    set::hasDocMovePriv(hasPriv('doc', 'movedoc')),
     set::currentUser($this->app->user->account),
-    set('$options', jsRaw('window.setDocAppOptions')),
+    set::privs($privs),
+    set::fileUrl($fileUrl),
+    set::lang($langData),
+    set::uploadUrl(createLink('file', 'ajaxUpload', 'uid={uid}')),
+    set::sessionStr(session_name() . '=' . session_id()),
+    set('$options', jsRaw('window.setDocAppOptions'))
 );
 
 btn

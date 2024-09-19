@@ -1373,6 +1373,8 @@ class doc extends control
      */
     public function app(string $type = 'mine', int $spaceID = 0, int $libID = 0, int $moduleID = 0, int $docID = 0, string $docMode = 'view')
     {
+        $this->app->loadLang('file');
+
         $this->view->type     = $type;
         $this->view->spaceID  = $spaceID;
         $this->view->libID    = $libID;
