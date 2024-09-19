@@ -426,6 +426,7 @@ $lang->group->package->workflowLabel         = 'Workflow Label';
 $lang->group->package->workflowReport        = 'Workflow Report';
 $lang->group->package->workflowDatasource    = 'Workflow Datasource';
 $lang->group->package->workflowRule          = 'Workflow Rule';
+$lang->group->package->workflowGroup         = 'Workflow Group';
 $lang->group->package->workflow              = 'Workflow';
 $lang->group->package->downloadCode          = 'Download Code';
 $lang->group->package->dev                   = 'Dev';
