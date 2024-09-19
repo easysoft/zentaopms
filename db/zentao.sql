@@ -16557,11 +16557,13 @@ CREATE TABLE IF NOT EXISTS `zt_metriclib` (
   `calcType`   ENUM('cron', 'inference') NOT NULL DEFAULT 'cron',
   `calculatedBy` varchar(30) NOT NULL DEFAULT '',
   `date`       datetime              DEFAULT NULL,
+  `deleted`    ENUM('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE INDEX `metricID` ON `zt_metriclib`(`metricID`);
 CREATE INDEX `metricCode` ON `zt_metriclib`(`metricCode`);
 CREATE INDEX `date` ON zt_metriclib (date);
+CREATE INDEX `deleted` ON `zt_metriclib` (`deleted`);
 
 -- DROP TABLE IF EXISTS `zt_duckdbqueue`;
 CREATE TABLE IF NOT EXISTS `zt_duckdbqueue` (
