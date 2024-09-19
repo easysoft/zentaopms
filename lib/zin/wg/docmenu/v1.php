@@ -498,7 +498,7 @@ class docMenu extends wg
                             set::lines(),
                             set::preserve($preserve),
                             set::selectedKey(implode(':', $this->selectedKey)),
-                            set::afterRender(jsRaw('function(isFirst){debugger; return isFirst && this.toggle(this.props.selectedKey)}')),
+                            set::afterRender(jsRaw('function(isFirst){return isFirst && this.toggle(this.props.selectedKey)}')),
                             set($treeProps)
                         )
                     ),
