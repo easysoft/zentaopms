@@ -21,4 +21,19 @@ class browseTester extends tester
         $num = $browsePage->dom->$tabNumDom->getText();//获取对应tab下计划数量
         return ($num == $tabNum) ? $this->success("切换至{$tabName}Tab成功") : $this->failed("切换至{$tabName}Tab失败");
     }
+
+    public function switchBrowseType($planurl,$browseType)
+    {
+        $browsePage = $this->initForm('productplan', 'browse', $planurl, 'appIframe-product');
+        if ($browseType == 'kanban')
+        {
+            $browsePage->dom->kanbanBtn->click();
+            return ($browsePage->dom->orderByBtn) ? $this->success('成功切换到看板模块') : $this->failed('切换到看板模块失败');
+        }
+        else
+        {
+            $browsePage->dom->listBtn->click();
+            return ($browsePage->dom->allTab) ? $this->success('成功切换到列表模块') : $this->failed('切换到列表模块失败');
+        }
+    }
 }
