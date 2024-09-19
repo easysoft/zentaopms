@@ -61,6 +61,9 @@ class design extends control
         $this->view->switcherText     = zget($products, $productID);
         $this->view->switcherObjectID = $productID;
 
+        $this->lang->design->typeList = $project->model == 'waterfall' ? $this->lang->design->typeList : $this->lang->design->plusTypeList;
+        $this->config->design->dtable->fieldList['type']['statusMap'] = $this->lang->design->typeList;
+
         return $productID;
     }
 
@@ -154,14 +157,13 @@ class design extends control
         $productIdList = $productID ? $productID : array_keys($products);
         $stories       = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active,launched,developing', 'id_desc', 0, 'full', 'full');
 
-        $this->view->title      = $this->lang->design->common . $this->lang->hyphen . $this->lang->design->create;
-        $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
-        $this->view->stories    = $this->story->addGradeLabel($stories);
-        $this->view->productID  = $productID;
-        $this->view->projectID  = $projectID;
-        $this->view->type       = $type;
-        $this->view->project    = $this->loadModel('project')->getByID($projectID);
-
+        $this->view->title     = $this->lang->design->common . $this->lang->hyphen . $this->lang->design->create;
+        $this->view->users     = $this->loadModel('user')->getPairs('noclosed');
+        $this->view->stories   = $this->story->addGradeLabel($stories);
+        $this->view->productID = $productID;
+        $this->view->projectID = $projectID;
+        $this->view->type      = $type;
+        $this->view->project   = $this->loadModel('project')->getByID($projectID);
         $this->display();
     }
 
