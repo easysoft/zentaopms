@@ -422,6 +422,11 @@ $lang->pivot->stepDesign->columnCalc     = 'Summary calculation';
 $lang->pivot->stepDesign->columnTotalTip = 'Add a row to display the summary data for each column.';
 $lang->pivot->stepDesign->total          = 'Total';
 
+$lang->pivot->stepDesign->columnPositionList = array();
+$lang->pivot->stepDesign->columnPositionList['bottom'] = 'Display on table bottom';
+$lang->pivot->stepDesign->columnPositionList['row']    = 'Display on row group';
+$lang->pivot->stepDesign->columnPositionList['all']    = 'Display on row group and table bottom';
+
 $lang->pivot->stepDesign->columnTotalList = array();
 $lang->pivot->stepDesign->columnTotalList['noShow'] = 'No Show';
 $lang->pivot->stepDesign->columnTotalList['sum']    = 'Sum';

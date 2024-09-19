@@ -1500,7 +1500,7 @@ class pivotModel extends model
 
         $records = $this->mapRecordValueWithFieldOptions($records, $fields, $sql, $driver);
 
-        $showColTotal = zget($settings, 'columnTotal', 'noShow');
+        $showColTotal    = zget($settings, 'columnTotal', 'noShow');
 
         $mergeRecords = array();
         $drillRecords = array();

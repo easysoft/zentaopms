@@ -418,9 +418,15 @@ $lang->pivot->stepDesign->groupsTip   = '通过选择分组字段，对SQL查询
 $lang->pivot->stepDesign->columnsTip  = '在透视表中添加1列并对其进行设置。';
 
 $lang->pivot->stepDesign->columnTotal    = '显示列的汇总';
-$lang->pivot->stepDesign->columnCalc     = '汇总计算方式';
+$lang->pivot->stepDesign->columnCalc     = '汇总的计算方式';
+$lang->pivot->stepDesign->columnPosition = '汇总的展示位置';
 $lang->pivot->stepDesign->columnTotalTip = '增加一行显示每一列的汇总数据。';
 $lang->pivot->stepDesign->total          = '总计';
+
+$lang->pivot->stepDesign->columnPositionList = array();
+$lang->pivot->stepDesign->columnPositionList['bottom'] = '仅在整张表下方展示';
+$lang->pivot->stepDesign->columnPositionList['row']    = '仅在每层行分组下方展示';
+$lang->pivot->stepDesign->columnPositionList['all']    = '在整张表与每层行分组下方均展示';
 
 $lang->pivot->stepDesign->columnTotalList = array();
 $lang->pivot->stepDesign->columnTotalList['noShow'] = '不显示';
