@@ -29,6 +29,6 @@ $tabs = [
 ];
 foreach ($tabs as $tabName => $tabNum)
 {
-    r($tester->switchTab($planurl, $tabName, $tabNum)) && p('message,status') && e('切换成功,SUCCESS');
+    r($tester->switchTab($planurl, $tabName, $tabNum)) && p('message,status') && e('切换Tab成功,SUCCESS');//循环遍历切换Tab
 }
 $tester->closeBrowser();

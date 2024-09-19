@@ -12,7 +12,7 @@ class browseTester extends tester
      *
      * @return mixed
      */
-    public function switchTab($planurl,$tabName,$tabNum)
+    public function switchTab($planurl, $tabName, $tabNum)
     {
         $tabDom     = $tabName.'Tab';
         $tabNumDom  = $tabName.'Num';
@@ -31,7 +31,7 @@ class browseTester extends tester
      *
      * @return mixed
      */
-    public function switchBrowseType($planurl,$browseType)
+    public function switchBrowseType($planurl, $browseType)
     {
         $browsePage = $this->initForm('productplan', 'browse', $planurl, 'appIframe-product');
         if ($browseType === 'kanban')
