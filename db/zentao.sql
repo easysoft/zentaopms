@@ -13253,7 +13253,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowgroup` (
   `name` varchar(30) NOT NULL DEFAULT '',
   `desc` text NULL,
   `disabledModules` text NULL,
-  `status` varchar(10) NOT NULL DEFAULT 'draft',
+  `status` varchar(10) NOT NULL DEFAULT 'wait',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
