@@ -580,6 +580,7 @@ define('TABLE_TRAINRECORDS',           '`' . $config->db->prefix . 'trainrecords
 define('TABLE_TRIP',                   '`' . $config->db->prefix . 'trip`');
 define('TABLE_WORKESTIMATION',         '`' . $config->db->prefix . 'workestimation`');
 define('TABLE_WORKFLOW',               '`' . $config->db->prefix . 'workflow`');
+define('TABLE_WORKFLOWGROUP',          '`' . $config->db->prefix . 'workflowgroup`');
 define('TABLE_WORKFLOWACTION',         '`' . $config->db->prefix . 'workflowaction`');
 define('TABLE_WORKFLOWDATASOURCE',     '`' . $config->db->prefix . 'workflowdatasource`');
 define('TABLE_WORKFLOWFIELD',          '`' . $config->db->prefix . 'workflowfield`');

@@ -13244,6 +13244,26 @@ CREATE INDEX `app`    ON `zt_workflow` (`app`);
 CREATE INDEX `module` ON `zt_workflow` (`module`);
 CREATE INDEX `order`  ON `zt_workflow` (`order`);
 
+-- DROP TABLE IF EXISTS `zt_workflowgroup`;
+CREATE TABLE IF NOT EXISTS `zt_workflowgroup` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `type` varchar(10) NOT NULL DEFAULT '',
+  `projectModel` char(30) NOT NULL DEFAULT '',
+  `projectType` tinyint(1) unsigned NOT NULL DEFAULT 1,
+  `name` varchar(30) NOT NULL DEFAULT '',
+  `desc` text NULL,
+  `disabledModules` text NULL,
+  `status` varchar(10) NOT NULL DEFAULT 'draft',
+  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
+  `createdBy` varchar(30) NOT NULL DEFAULT '',
+  `createdDate` datetime NULL,
+  `editedBy` varchar(30) NOT NULL DEFAULT '',
+  `editedDate` datetime NULL,
+  `deleted` enum('0', '1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE INDEX `type` ON `zt_workflowgroup` (`type`);
+
 -- DROP TABLE IF EXISTS `zt_workflowaction`;
 CREATE TABLE IF NOT EXISTS `zt_workflowaction` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
