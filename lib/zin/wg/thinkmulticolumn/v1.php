@@ -41,11 +41,30 @@ class thinkMulticolumn extends thinkQuestion
         );
     }
 
+    protected function processResult(array $data): array
+    {
+        if(empty($data)) return array();
+
+        $result = array();
+        for($i = 1; $i <= count(get_object_vars($data['col1'])); $i++)
+        {
+            $item = new stdClass();
+            foreach($data as $key => $values)
+            {
+                $values = (array)$values;
+                $name   = "result[$key]";
+                $item->$name = isset($values[$i]) ? $values[$i] : '';
+            }
+            $result[$i] = $item;
+        }
+        return array_values($result);
+    }
+
     protected function buildDetail(): array
     {
         global $lang;
         $detailWg = parent::buildDetail();
-        list($step, $fields, $canAddRows, $mode, $isRun, $quotedQuestions) = $this->prop(array('step', 'fields', 'canAddRows', 'mode', 'isRun', 'quotedQuestions'));
+        list($step, $fields, $canAddRows, $mode, $isRun, $quotedQuestions, $isResult) = $this->prop(array('step', 'fields', 'canAddRows', 'mode', 'isRun', 'quotedQuestions', 'isResult'));
         if($mode != 'detail') return array();
 
         $result = array();
