@@ -16,10 +16,9 @@ $productplan->gen(7);
 
 $tester = new browseTester();
 $tester->login();
-$tabNum = new stdClass();
-
 $planurl['productID'] = 1;
 
+//tab名和对应tab下构造的计划数量
 $tabs = [
     'all'     => '7',
     'undone'  => '5',

@@ -8,7 +8,7 @@ class browseTester extends tester
      *
      * @param $planurl 产品ID
      * @param $tabName tab名称
-     * @param $tabNum tab下计划数量
+     * @param $tabNum  tab下计划数量
      *
      * @return mixed
      */
