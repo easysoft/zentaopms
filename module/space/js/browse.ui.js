@@ -50,6 +50,7 @@ window.onPageUnmount = function()
 {
     if(typeof timer !== 'undefined') clearInterval(timer);
 }
+
 function refreshStatus()
 {
     $.ajaxSubmit({
