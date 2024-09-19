@@ -1550,7 +1550,6 @@ class pivotModel extends model
         $data->groups      = $groups;
         $data->cols        = $cols;
         $data->array       = json_decode(json_encode($mergeRecords), true);
-        if($showColTotal == 'sum' && count($data->array)) $this->processLastRow($data->array[count($data->array) - 1]);
         $data->columnTotal = isset($settings['columnTotal']) ? $settings['columnTotal'] : '';
         $data->drills      = $mergeDrillRecords;
 
@@ -1577,21 +1576,6 @@ class pivotModel extends model
     public function isFiltersAllEmpty($filters)
     {
         return !empty($filters) && empty(array_filter(array_column($filters, 'default')));
-    }
-
-    /**
-     * Process last column data.
-     *
-     * @param  array  $data
-     * @access public
-     * @return void
-     */
-    public function processLastRow(array &$data)
-    {
-        foreach($data as $key => $value)
-        {
-            if($value === '$totalGroup$') $data[$key] = $this->lang->pivot->stepDesign->total;
-        }
     }
 
     /**
@@ -2029,7 +2013,7 @@ class pivotModel extends model
             {
                 if(in_array($field, $groups))
                 {
-                    $colTotalRow->$field = '$totalGroup$';
+                    $colTotalRow->$field = $this->lang->pivot->stepDesign->total;
                 }
                 else
                 {

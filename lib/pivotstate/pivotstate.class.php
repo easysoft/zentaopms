@@ -750,6 +750,7 @@ class pivotState
         if(!isset($settings['group1']))  $this->settings['group1'] = '';
         if(!isset($settings['columns'])) $this->addColumn();
         if(!isset($settings['columnTotal'])) $this->settings['columnTotal'] = 'noShow';
+        if(!isset($settings['columnPosition'])) $this->settings['columnPosition'] = 'bottom';
 
         foreach($this->settings['columns'] as $index => $column)
         {
