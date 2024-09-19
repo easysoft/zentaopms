@@ -1104,7 +1104,7 @@ class fileModel extends model
      */
     public function printFile(object $file, string $method, bool $showDelete, bool $showEdit, object|null $object): string
     {
-        if(!common::hasPriv('file', 'download')) return '';
+        if(!common::hasPriv('file', 'download') && !common::hasPriv('file', 'preview')) return '';
 
         $html = '';
 
@@ -1123,10 +1123,11 @@ class fileModel extends model
         $downloadLink  = helper::createLink('file', 'download', "fileID=$file->id");
         $downloadLink .= strpos($downloadLink, '?') === false ? '?' : '&';
         $downloadLink .= $sessionString;
+        $fileTitleLink = common::hasPriv('file', 'download') ? html::a($downloadLink, $fileTitle . " <span class='text-gray'>({$fileSize})</span>", '_blank', "id='fileTitle$file->id'") : "<div id='fileTitle$file->id' style='display: inline-block'>" . $fileTitle . " <span class='text-gray'>({$fileSize})</span></div>";
 
         $objectType = zget($this->config->file->objectType, $file->objectType);
 
-        $html .= "<li class='mb-2 file' title='{$uploadDate}'>" . html::a($downloadLink, $fileTitle . " <span class='text-gray'>({$fileSize})</span>", '_blank', "id='fileTitle$file->id'");
+        $html .= "<li class='mb-2 file' title='{$uploadDate}'>" . $fileTitleLink;
         if(strpos('view,edit', $method) !== false)
         {
             if(common::hasPriv($objectType, 'view', $object)) $html = $this->buildFileActions($html, $downloadLink, $imageWidth, $showEdit, $showDelete, $file, $object);
