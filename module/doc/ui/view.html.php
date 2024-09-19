@@ -226,6 +226,7 @@ $contentDom = div
     ) : null,
     div
     (
+        setID('docEditor'),
         setClass('detail-content article'),
         $doc->contentType === 'doc' ? pageEditor
         (
