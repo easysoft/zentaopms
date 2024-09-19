@@ -173,7 +173,7 @@ class execution extends control
                 $taskTeam = $this->task->getTeamByTask($task->id);
                 foreach($taskTeam as $teamMember)
                 {
-                    if($this->app->user->account == $teamMember->account and $teamMember->status != 'done')
+                    if($this->app->user->account == $teamMember->account && $teamMember->status != 'done')
                     {
                         $task->assignedTo = $this->app->user->account;
                         break;
