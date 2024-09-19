@@ -1426,6 +1426,7 @@ class doc extends control
         $doc = $this->doc->getByID($docID, $version);
         $doc->lib    = (int)$doc->lib;
         $doc->module = (int)$doc->module;
+        $doc->privs  = array('edit' => common::hasPriv('doc', 'edit', $doc));
 
         $this->send($doc);
     }
