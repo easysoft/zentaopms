@@ -22,18 +22,27 @@ class browseTester extends tester
         return ($num == $tabNum) ? $this->success("切换至{$tabName}Tab成功") : $this->failed("切换至{$tabName}Tab失败");
     }
 
+    /**
+     * 切换计划列表/计划看板
+     * switch list/kanban
+     *
+     * @param $planurl    产品ID
+     * @param $browseType 切换类型
+     *
+     * @return mixed
+     */
     public function switchBrowseType($planurl,$browseType)
     {
         $browsePage = $this->initForm('productplan', 'browse', $planurl, 'appIframe-product');
-        if ($browseType == 'kanban')
+        if ($browseType === 'kanban')
         {
             $browsePage->dom->kanbanBtn->click();
-            return ($browsePage->dom->orderByBtn) ? $this->success('成功切换到看板模块') : $this->failed('切换到看板模块失败');
+            return ($browsePage->dom->orderByBtn) ? $this->success('成功切换到看板模式') : $this->failed('切换到看板模块模式');
         }
         else
         {
             $browsePage->dom->listBtn->click();
-            return ($browsePage->dom->allTab) ? $this->success('成功切换到列表模块') : $this->failed('切换到列表模块失败');
+            return ($browsePage->dom->allTab) ? $this->success('成功切换到列表模式') : $this->failed('切换到列表模块模式');
         }
     }
 }
