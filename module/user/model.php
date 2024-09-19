@@ -2588,9 +2588,10 @@ class userModel extends model
         /* 当前产品为公开的则判断为有权限。 */
         if($product->acl == 'open') return true;
 
-        /* 当前用户为产品的PO、QD、RD、创建者、反馈者则判断为有权限。 */
+        /* 当前用户为产品的PO、QD、RD、创建者、反馈负责人、工单负责人则判断为有权限。 */
         if($product->PO == $account || $product->QD == $account || $product->RD == $account || $product->createdBy == $account) return true;
         if(isset($product->feedback) && $product->feedback == $account)                                                         return true;
+        if(isset($product->ticket)   && $product->ticket == $account)                                                           return true;
 
         if(isset($stakeholders[$account])) return true; // 如果该用户是产品的干系人则判断为有权限。
         if(isset($teams[$account]))        return true; // 如果该用户是产品的团队成员则判断为有权限。
@@ -2713,6 +2714,7 @@ class userModel extends model
         $users[$product->RD]        = $product->RD;
         $users[$product->createdBy] = $product->createdBy;
         if(isset($product->feedback)) $users[$product->feedback] = $product->feedback;
+        if(isset($product->ticket))   $users[$product->ticket] = $product->ticket;
 
         foreach(explode(',', trim($this->app->company->admins, ','))    as $admin)   $users[$admin]   = $admin;
         foreach(explode(',', trim(zget($product, 'reviewer', ''), ',')) as $account) $users[$account] = $account;
