@@ -714,6 +714,7 @@ $config->objectTables['market']         = TABLE_MARKET;
 $config->objectTables['marketreport']   = TABLE_MARKETREPORT;
 $config->objectTables['marketresearch'] = TABLE_PROJECT;
 $config->objectTables['researchstage']  = TABLE_PROJECT;
+$config->objectTables['workflowgroup']  = TABLE_WORKFLOWGROUP;
 
 $config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions', 'aiPrompts', 'promptDesign', 'promptExec');
 $config->disabledFeatures = '';
