@@ -28,3 +28,18 @@ $project->hasProduct->range('1');
 $project->status->range('wait');
 $project->acl->range('open');
 $project->gen(3);
+
+$projectProduct = zenData('projectproduct');
+$projectProduct->project->range('1-2');
+$projectProduct->product->range('1');
+$projectProduct->gen(2);
+
+$story = zenData('story');
+$story->id->range('1-7');
+$story->path->range('`,1,`, `,2,`, `,3,`, `,4,`, `,5,`, `,6,`, `,7,`');
+$story->product->range('1');
+$story->title->range('业需1, 用需1, 研需1, 研需2, 研需3, 研需4, 研需5');
+$story->type->range('epic, requirement, story{5}');
+$story->status->range('active{3}, closed, reviewing, draft, changing');
+$story->stage->range('wait{3}, closed, wait{3}');
+$story->gen(7);
