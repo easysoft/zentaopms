@@ -1938,6 +1938,15 @@ class repoZen extends repo
                     $serverPairs[$server->id] = $server->name;
                     continue;
                 }
+
+                foreach($runningApps as $domain)
+                {
+                    if(strpos($server->url, $domain) !== false)
+                    {
+                        $serverPairs[$server->id] = $server->name;
+                        continue 2;
+                    }
+                }
                 continue;
             }
 
