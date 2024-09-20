@@ -1,5 +1,16 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=计划列表切换Tab
+timeout=0
+cid=9
+
+-依次切换计划列表中的Tab 最终测试状态 @SUCCESS
+
+*/
+
 chdir(__DIR__);
 include '../lib/browse.ui.class.php';
 
