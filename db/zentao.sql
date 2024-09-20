@@ -1295,6 +1295,7 @@ CREATE TABLE IF NOT EXISTS `zt_pipeline` (
   `password` varchar(255) NULL,
   `token` varchar(255) NULL,
   `private` char(32) NULL,
+  `instanceID` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
