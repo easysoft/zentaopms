@@ -1606,6 +1606,24 @@ class testcaseModel extends model
             }
         }
 
+        /* Fix bug#52689. */
+        foreach($stepData as $index => $step)
+        {
+            $descCount   = count($step['desc']);
+            $expectCount = count($step['expect']);
+            if($expectCount > $descCount)
+            {
+                foreach($step['expect'] as $num => $expect)
+                {
+                    if($num > $descCount && $expect['content'])
+                    {
+                        $stepData[$index]['expect'][$descCount]['content'] .= "\n{$expect['content']}";
+                        unset($stepData[$index]['expect'][$num]);
+                    }
+                }
+            }
+        }
+
         return $stepData;
     }
 
