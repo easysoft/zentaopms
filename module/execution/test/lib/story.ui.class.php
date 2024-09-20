@@ -39,3 +39,4 @@ class storyTester extends tester
         if($form->dom->firstName === false) return $this->success('需求移除成功');
         return $this->failed('需求移除失败');
     }
+}
