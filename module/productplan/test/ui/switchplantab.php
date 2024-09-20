@@ -7,10 +7,14 @@ title=计划列表切换Tab
 timeout=0
 cid=9
 
--依次切换计划列表中的Tab 最终测试状态 @SUCCESS
+-切换到全部Tab   最终测试状态 @SUCCESS
+-切换到未完成Tab 最终测试状态 @SUCCESS
+-切换到未开始Tab 最终测试状态 @SUCCESS
+-切换到进行中Tab 最终测试状态 @SUCCESS
+-切换到已完成Tab 最终测试状态 @SUCCESS
+-切换到已关闭Tab 最终测试状态 @SUCCESS
 
 */
-
 chdir(__DIR__);
 include '../lib/browse.ui.class.php';
 
@@ -29,17 +33,28 @@ $tester = new browseTester();
 $tester->login();
 $planurl['productID'] = 1;
 
-//tab名和对应tab下构造的计划数量
-$tabs = [
-    'all'     => '7',
-    'undone'  => '5',
-    'waiting' => '3',
-    'doing'   => '2',
-    'done'    => '1',
-    'closed'  => '1',
-];
-foreach ($tabs as $tabName => $tabNum)
-{
-    r($tester->switchTab($planurl, $tabName, $tabNum)) && p('message,status') && e('切换Tab成功,SUCCESS');//循环遍历切换Tab
-}
+$tabName = 'all';
+$tabNum  = '7';
+r($tester->switchTab($planurl, $tabName, $tabNum)) && p('message,status') && e("切换至allTab成功,SUCCESS");//切换至全部Tab
+
+$tabName = 'undone';
+$tabNum  = '5';
+r($tester->switchTab($planurl, $tabName, $tabNum)) && p('message,status') && e("切换至undoneTab成功,SUCCESS");//切换至未完成Tab
+
+$tabName = 'waiting';
+$tabNum  = '3';
+r($tester->switchTab($planurl, $tabName, $tabNum)) && p('message,status') && e("切换至waitingTab成功,SUCCESS");//切换至未开始Tab
+
+$tabName = 'doing';
+$tabNum  = '2';
+r($tester->switchTab($planurl, $tabName, $tabNum)) && p('message,status') && e("切换至doingTab成功,SUCCESS");//切换至进行中Tab
+
+$tabName = 'done';
+$tabNum  = '1';
+r($tester->switchTab($planurl, $tabName, $tabNum)) && p('message,status') && e("切换至doneTab成功,SUCCESS");//切换至已完成Tab
+
+$tabName = 'closed';
+$tabNum  = '1';
+r($tester->switchTab($planurl, $tabName, $tabNum)) && p('message,status') && e("切换至closedTab成功,SUCCESS");//切换至已关闭Tab
+
 $tester->closeBrowser();
