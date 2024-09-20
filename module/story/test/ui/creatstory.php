@@ -23,6 +23,14 @@ chdir(__DIR__);
 include '../lib/createstory.ui.class.php';
 include 'page/create.php';
 
+$story->version->range('1');
+$story->assignedTo->range('[]');
+$story->reviewedBy->range('[]');
+$story->reviewedDate->range('`NULL`');
+$story->closedBy->range('[]');
+$story->closedReason->range('[]');
+$story->gen(3);
+
 $storyspec = zenData('storyspec');
 $storyspec->story->range('1-3');
 $storyspec->version->range('1');
