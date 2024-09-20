@@ -36,3 +36,5 @@ ALTER TABLE `zt_dataview` ADD `mode` enum('text', 'builder') not NULL default 'b
 UPDATE `zt_dataview` SET `mode` = 'text';
 ALTER TABLE `zt_chart` ADD `mode` enum('text', 'builder') not NULL default 'builder' AFTER `driver`;
 UPDATE `zt_chart` SET `mode` = 'text';
+
+ALTER TABLE `zt_extension` CHANGE `zentaoCompatible` `zentaoCompatible` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
