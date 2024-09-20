@@ -45,4 +45,19 @@ class browseTester extends tester
             return ($browsePage->dom->allTab) ? $this->success('成功切换到列表模式') : $this->failed('切换到列表模式失败');
         }
     }
+
+    public function sortInKanban($planurl, $orderBy)
+    {
+        $browsePage = $this->initForm('productplan', 'browse', $planurl, 'appIframe-product');
+        $browsePage->dom->kanbanBtn->click();
+        $browsePage->dom->orderByBtn->click();
+        if ($orderBy === 'begin_desc')
+        {
+            $browsePage->dom->beginDesc->click();
+        }
+        else
+        {
+            $browsePage->dom->beginAsc->click();
+        }
+    }
 }

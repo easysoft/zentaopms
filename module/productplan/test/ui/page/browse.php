@@ -33,7 +33,10 @@ class browsePage extends page
             'closedNum'      => "//*[@id='featureBar']/menu/li[6]/a/span[2]",
             'listBtn'        => "//button[@data-type='list']",
             'kanbanBtn'      => "//button[@data-type='kanban']",
-            'orderByBtn'     => "//*[@id='actionBar']/button",
+            'orderByBtn'     => "//*[@id='actionBar']/button",//看板中的排序按钮
+            'beginDesc'      => "/html/body/div[3]/menu/menu/li[1]",//计划开始时间倒序
+            'beginAsc'       => "/html/body/div[3]/menu/menu/li[2]",//计划开始时间正序
+            'firBeginToEnd'  => "//div[@class='card-footer']/div/div/span[2]",//第一个计划卡片中的开始时间到结束时间
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
