@@ -10,6 +10,7 @@ class thinkStepMenu extends wg
 
     protected static array $defineProps = array(
         'modules: array',
+        'wizard: object',
         'activeKey?: int',
         'hover?: bool=true',
         'showAction?: bool=true',
@@ -142,6 +143,7 @@ class thinkStepMenu extends wg
 
     private function getOperateItems($item): array
     {
+        $wizard             = $this->prop('wizard');
         $canAddChild        = true;
         $showQuestionOfNode = true;
         if(!empty($item->children))
@@ -200,6 +202,23 @@ class thinkStepMenu extends wg
             'innerClass' => 'text-gray opacity-50',
             'hint'       => $item->existNotNode ? $this->lang->thinkstep->cannotDeleteNode : $this->lang->thinkstep->cannotDeleteQuestion,
         );
+        $options  = $item->type === 'question' ? json_decode($item->options) : null;
+        $canLink  = !empty($options) && ($options->questionType == 'checkbox' || $options->questionType === 'radio' || $options->questionType === 'multicolumn');
+        $linkItem = $canLink && $options->required ? array(
+            'key'          => 'linkNode',
+            'icon'         => 'link',
+            'text'         => $this->lang->thinkstep->actions['link'],
+            'data-url'     => createLink('thinkstep', 'link', "marketID={$marketID}&stepID={$item->id}"),
+            'data-toggle'  => 'modal',
+            'data-dismiss' => 'modal',
+            'data-size'    => 'sm'
+        ) : array(
+            'key'          => 'linkNode',
+            'icon'         => 'link',
+            'text'         => $this->lang->thinkstep->actions['link'],
+            'innerClass'   => 'text-gray opacity-50',
+            'hint'         => $this->lang->thinkstep->tips->linkBlocks
+        );
 
         $menus = array_merge($menus, array(
             $canEdit ? array(
@@ -208,7 +227,8 @@ class thinkStepMenu extends wg
                 'text' => $this->lang->thinkstep->actions['edit'],
                 'url'  => createLink('thinkstep', 'edit', "marketID={$marketID}&stepID={$item->id}")
             ) : null,
-            $canDelete ? $deleteItem : null
+            $canDelete ? $deleteItem : null,
+            $wizard-> model === '3c' && $canLink ? $linkItem : null
         ), $transitionAction);
 
         if($canCreate && (($showQuestionOfNode && $item->type == 'node') || $item->hasSameQuestion || $item->type == 'question')) $menus = array_merge($menus, array(
