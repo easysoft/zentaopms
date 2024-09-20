@@ -1918,5 +1918,14 @@ class repoZen extends repo
 
         $this->loadModel('pipeline');
         if($this->config->inQuickon && $this->config->inQuickon !== 'false') return $this->pipeline->getPairs($type);
+
+        $serverList   = $this->pipeline->getList($type);
+        $instanceList = $this->loadModel('space')->getSpaceInstances(0);
+
+        $runningApps = array();
+        foreach($instanceList as $instance)
+        {
+            if($instance->status == 'running' && strpos(",{$type},", ",{$instance->chart},") !== false) $runningApps[$instance->id] = $instance->domain;
+        }
     }
 }
