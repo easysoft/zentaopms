@@ -21,6 +21,7 @@ zendata('productplan')->loadYaml('productplan', false, 2)->gen(10);
 $tester = new browseTester();
 $tester->login();
 $planurl['productID'] = 1;
+
 r($tester->switchBrowseType($planurl, 'kanban')) && p('message,status') && e('成功切换到看板模式,SUCCESS');//切换到看板模式
 r($tester->switchBrowseType($planurl, 'list'))   && p('message,status') && e('成功切换到列表模式,SUCCESS');//切换到列表模式
 $tester->closeBrowser();

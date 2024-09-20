@@ -37,12 +37,12 @@ class browseTester extends tester
         if ($browseType === 'kanban')
         {
             $browsePage->dom->kanbanBtn->click();
-            return ($browsePage->dom->orderByBtn) ? $this->success('成功切换到看板模式') : $this->failed('切换到看板模块模式');
+            return ($browsePage->dom->orderByBtn) ? $this->success('成功切换到看板模式') : $this->failed('切换到看板模式失败');
         }
         else
         {
             $browsePage->dom->listBtn->click();
-            return ($browsePage->dom->allTab) ? $this->success('成功切换到列表模式') : $this->failed('切换到列表模块模式');
+            return ($browsePage->dom->allTab) ? $this->success('成功切换到列表模式') : $this->failed('切换到列表模式失败');
         }
     }
 }
