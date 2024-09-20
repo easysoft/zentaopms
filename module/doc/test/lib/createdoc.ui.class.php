@@ -45,8 +45,8 @@ class createDocTester extends tester
         $form->wait(1);
         $form->dom->releaseBtn->click();
 
-        $this->openUrl('doc', 'mySpace', array('objectType' => 'mine'));
-        $form = $this->loadPage('doc', 'mySpace', array('objectType' => 'mine'));
+        $this->openUrl('doc', 'mySpace', array('objectType' => 'createdby'));
+        $form = $this->loadPage('doc', 'mySpace', array('objectType' => 'createdby'));
         $form->dom->search(array("文档标题,=,{$docName->dcName}"));
         $form->wait(1);
 
