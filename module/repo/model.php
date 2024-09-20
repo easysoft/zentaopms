@@ -689,6 +689,7 @@ class repoModel extends model
         if(empty($repo->acl->acl)) $repo->acl->acl = 'custom';
 
         $repo->serviceHost    = (int)$repo->serviceHost;
+        $repo->gitService     = $repo->serviceHost;
         $repo->serviceProject = $repo->SCM == 'Gitlab' ? (int)$repo->serviceProject : $repo->serviceProject;
         return $repo;
     }
