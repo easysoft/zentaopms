@@ -381,7 +381,7 @@ class repoZen extends repo
         $this->view->groups       = $this->loadModel('group')->getPairs();
         $this->view->users        = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $this->view->products     = $products;
-        $this->view->serviceHosts = $this->loadModel('gitlab')->getPairs();
+        $this->view->serviceHosts = $this->getServerPairs();
         $this->view->objectID     = $objectID;
 
         $this->display();
@@ -411,10 +411,10 @@ class repoZen extends repo
         }
 
         $repoGroups   = array();
-        $serviceHosts = $this->loadModel('gitlab')->getPairs();
+        $serviceHosts = $this->getServerPairs();
         if(!empty($serviceHosts))
         {
-            $serverID   = array_keys($serviceHosts)[0];
+            $serverID   = key($serviceHosts);
             $repoGroups = $this->repo->getGroups($serverID);
         }
 
