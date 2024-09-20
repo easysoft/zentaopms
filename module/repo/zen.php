@@ -381,7 +381,7 @@ class repoZen extends repo
         $this->view->groups       = $this->loadModel('group')->getPairs();
         $this->view->users        = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $this->view->products     = $products;
-        $this->view->serviceHosts = $this->getServerPairs();
+        $this->view->serviceHosts = $this->loadModel('pipeline')->getPairs(implode(',', $this->config->repo->notSyncSCM), true);
         $this->view->objectID     = $objectID;
 
         $this->display();
@@ -411,7 +411,7 @@ class repoZen extends repo
         }
 
         $repoGroups   = array();
-        $serviceHosts = $this->getServerPairs();
+        $serviceHosts = $this->loadModel('pipeline')->getPairs(implode(',', $this->config->repo->notSyncSCM), true);
         if(!empty($serviceHosts))
         {
             $serverID   = key($serviceHosts);
@@ -1902,56 +1902,5 @@ class repoZen extends repo
         }
 
         return $query;
-    }
-
-    /**
-     * 获取可用的服务器列表。
-     * Get available servers.
-     *
-     * @param  string    $type
-     * @access protected
-     * @return array
-     */
-    protected function getServerPairs(string $type = ''): array
-    {
-        if(empty($type)) $type = implode(',', $this->config->repo->notSyncSCM);
-
-        $this->loadModel('pipeline');
-        if($this->config->inQuickon && $this->config->inQuickon !== 'false') return $this->pipeline->getPairs($type);
-
-        $serverList   = $this->pipeline->getList($type);
-        $instanceList = $this->loadModel('space')->getSpaceInstances(0);
-
-        $runningApps = array();
-        foreach($instanceList as $instance)
-        {
-            if($instance->status == 'running' && strpos(",{$type},", ",{$instance->chart},") !== false) $runningApps[$instance->id] = $instance->domain;
-        }
-
-        $serverPairs = array();
-        foreach($serverList as $server)
-        {
-            if($server->createdBy == 'system')
-            {
-                if($server->instanceID && isset($runningApps[$server->instanceID]))
-                {
-                    $serverPairs[$server->id] = $server->name;
-                    continue;
-                }
-
-                foreach($runningApps as $domain)
-                {
-                    if(strpos($server->url, $domain) !== false)
-                    {
-                        $serverPairs[$server->id] = $server->name;
-                        continue 2;
-                    }
-                }
-                continue;
-            }
-
-            $serverPairs[$server->id] = $server->name;
-        }
-        return $serverPairs;
     }
 }

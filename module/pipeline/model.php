@@ -80,16 +80,56 @@ class pipelineModel extends model
      * Get pipeline pairs.
      *
      * @param  string $type
+     * @param  bool   $checkOnline
      * @access public
      * @return array
      */
-    public function getPairs(string $type = ''): array
+    public function getPairs(string $type = '', bool $checkOnline = false): array
     {
         $type = strtolower($type);
-        return $this->dao->select('id,name')->from(TABLE_PIPELINE)
-            ->where('deleted')->eq('0')
-            ->beginIF($type)->AndWhere('type')->in($type)->fi()
-            ->orderBy('id')->fetchPairs('id', 'name');
+        if(($this->config->inQuickon && $this->config->inQuickon !== 'false') || !$checkOnline)
+        {
+            return $this->dao->select('id,name')->from(TABLE_PIPELINE)
+                ->where('deleted')->eq('0')
+                ->beginIF($type)->andWhere('type')->in($type)->fi()
+                ->orderBy('id_desc')
+                ->fetchPairs('id', 'name');
+        }
+
+        $serverList   = $this->getList($type);
+        $instanceList = $this->loadModel('space')->getSpaceInstances(0);
+
+        $runningApps = array();
+        foreach($instanceList as $instance)
+        {
+            if($instance->status == 'running' && strpos(",{$type},", ",{$instance->chart},") !== false) $runningApps[$instance->id] = $instance->domain;
+        }
+
+        $serverPairs = array();
+        foreach($serverList as $server)
+        {
+            if($server->createdBy == 'system')
+            {
+                if($server->instanceID && isset($runningApps[$server->instanceID]))
+                {
+                    $serverPairs[$server->id] = $server->name;
+                    continue;
+                }
+
+                foreach($runningApps as $domain)
+                {
+                    if(strpos($server->url, $domain) !== false)
+                    {
+                        $serverPairs[$server->id] = $server->name;
+                        continue 2;
+                    }
+                }
+                continue;
+            }
+
+            $serverPairs[$server->id] = $server->name;
+        }
+        return $serverPairs;
     }
 
     /**
