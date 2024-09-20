@@ -1903,4 +1903,20 @@ class repoZen extends repo
 
         return $query;
     }
+
+    /**
+     * 获取可用的服务器列表。
+     * Get available servers.
+     *
+     * @param  string    $type
+     * @access protected
+     * @return array
+     */
+    protected function getServerPairs(string $type = ''): array
+    {
+        if(empty($type)) $type = implode(',', $this->config->repo->notSyncSCM);
+
+        $this->loadModel('pipeline');
+        if($this->config->inQuickon && $this->config->inQuickon !== 'false') return $this->pipeline->getPairs($type);
+    }
 }
