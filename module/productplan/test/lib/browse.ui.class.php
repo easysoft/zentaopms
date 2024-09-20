@@ -54,6 +54,11 @@ class browseTester extends tester
         if ($orderBy === 'begin_desc')
         {
             $browsePage->dom->beginDesc->click();
+            $firBeginToEnd = $browsePage->dom->firBeginToEnd->getText();//第一个计划卡片中计划的开始结束时间
+            $firBegin      = substr($firBeginToEnd, 0, strpos($firBeginToEnd, " {$this->lang->productplan->to} "));//第一个计划的开始时间
+            $secBeginToEnd = $browsePage->dom->secBeginToEnd->getText();//第二个计划卡片中计划的开始结束时间
+            $secBegin      = substr($secBeginToEnd, 0, strpos($secBeginToEnd, " {$this->lang->productplan->to} "));//第二个计划的开始时间
+            return ($firBegin > $secBegin) ? $this->success("按计划开始时间倒序排序成功") : $this->failed("按计划开始时间倒序排序失败");
         }
         else
         {
