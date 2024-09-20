@@ -34,7 +34,8 @@ class linkStoryTester extends tester
         $form->wait(1);
 
         $storyView = $this->loadPage('execution', 'story');
-        $storyView->dom->search(array("{$this->lang->execution->storyTitle},=,{$name}"));
+        $storyView->dom->search(array("{$this->lang->story->name},=,{$name}"));
+        $storyView->wait(1);
         if($storyView->dom->firstName->getText() == $name) return $this->success('关联需求成功');
         return $this->failed('关联需求失败');
     }
