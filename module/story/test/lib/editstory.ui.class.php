@@ -22,7 +22,7 @@ class editStoryTester extends tester
     public function editStory($storyFrom)
     {
         $editStoryParam = array(
-            'storyID'     => '2',
+            'storyID'     => '1',
             'kanbanGroup' => 'default',
             'storyType'   => 'story'
         );
@@ -33,7 +33,7 @@ class editStoryTester extends tester
         $form->dom->btn($this->lang->save)->click();
         $form->wait(1);
 
-        $browsePage = $this->loadPage('story', 'view', '2');
+        $browsePage = $this->loadPage('story', 'view', '1');
 
         $viewPafe = $this->loadPage('story', 'view');
         if($viewPafe->dom->storyFrom->getText() != '客户') return $this->failed('需求来源不正确');
