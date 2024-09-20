@@ -25,17 +25,10 @@ class createDocTester extends tester
         /*收藏文档*/
         $this->openUrl('doc', 'mySpace', array('type' => 'mine'));
         $form = $this->loadPage('doc', 'mySpace', array('type' => 'mine'));
-        $form->dom->fstSaveBtn->click();
+        $form->dom->fstCollectBtn->click();
         $form->wait(1);
         $form->dom->myFavorites->click();
 
-        /*检查我创建的列表下是否有该文档*/
-        $form->dom->createdBy->click();
-        $form->wait(1);
-        if($form->dom->checkFstDoc->getText() != $docName->dcName) return $this->failed('我创建的文档校验失败');
-        return $this->success('我创建的文档校验成功');
-
-        /*检查文档是否成功被收藏*/
         if($form->dom->checkFstDoc->getText() != $docName->dcName) return $this->failed('文档收藏失败');
         return $this->success('文档收藏成功');
     }
