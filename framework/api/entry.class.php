@@ -664,6 +664,8 @@ class baseEntry
                     if($val) $userList[] = $val;
                 }
                 return $userList;
+            case 'decodeHtml':
+                return htmlspecialchars_decode((string) $value);
             default:
                 return $value;
         }
