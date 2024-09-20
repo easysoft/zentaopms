@@ -34,6 +34,16 @@ class createStoryTester extends tester
             'extra'     => '',
             'storyType' => $storyType
         );
+        $browseStoryParam = array(
+            'productID'  => '1',
+            'branch'     => '',
+            'browseType' => 'unclosed',
+            'param'      => '0',
+            'storyType'  => $storyType
+        );
+        $form = $this->initForm('product', 'browse', $browseStoryParam, 'appIframe-product');
+        $form = $this->initForm($storyType, 'create', $createStoryParam, 'appIframe-product');
+        $form->dom->title->setValue($storyName);
         $form->dom->assignedTo->picker('admin');
         #$form->dom->reviewer->multiPicker(array('admin'));
         $form->dom->btn($this->lang->save)->click();
