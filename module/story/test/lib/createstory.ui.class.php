@@ -15,23 +15,27 @@ class createStoryTester extends tester
     /**
      * Create a default story.
      *
-     * @param  string $storyName
+     * @param  string $type string $storyName
      * @access public
      * @return object
      */
-    public function createDefault($storyName)
+    public function createDefault($storyType, $storyName)
     {
         /* 提交表单 */
         $createStoryParam = array(
-            'product'  => '4',
-            'branch'   => 'all',
-            'moduleID' => '0',
-            'storyID'  => '0',
-            'project'  => '0'
+            'product'   => '1',
+            'branch'    => 'all',
+            'moduleID'  => '0',
+            'storyID'   => '0',
+            'projectID' => '0',
+            'bugID'     => '0',
+            'planID'    => '0',
+            'todoID'    => '0',
+            'extra'     => '',
+            'storyType' => $storyType
         );
-        $form = $this->initForm('story', 'create', $createStoryParam, 'appIframe-product');
-        $form->dom->title->setValue($storyName);
         $form->dom->assignedTo->picker('admin');
+        #$form->dom->reviewer->multiPicker(array('admin'));
         $form->dom->btn($this->lang->save)->click();
         $form->wait(1);
 
@@ -42,8 +46,22 @@ class createStoryTester extends tester
         }
 
         /* 跳转到需求列表页面搜索创建需求并进入该需求详情页。 */
-        $browsePage = $this->loadPage('product', 'browse');
-        $browsePage->dom->search($searchList = array("研发需求名称, 包含, $storyName"));
+        if($storyName != '研发需求')
+        {
+            $ext = array(
+                'productID'  => '1',
+                'branch'     => '',
+                'brwoseType' => 'unclosed',
+                'param'      => '0',
+                'storyType'  => $storyType
+            );
+            $browsePage = $this->loadPage('product', 'browse', $ext);
+        }
+        else
+        {
+            $browsePage = $this->loadPage('product', 'browse');
+        }
+        $browsePage->dom->search($searchList = array("需求名称,包含,$storyName"));
         $form->wait(1);
         $browsePage->dom->browseStoryName->click();
         $form->wait(1);
@@ -51,8 +69,9 @@ class createStoryTester extends tester
         $viewPage = $this->loadPage('story', 'view');
         if($viewPage->dom->storyName->getText() != $storyName) return $this->failed('需求名称不正确');
         if($viewPage->dom->status->getText() != '激活') return $this->failed('需求状态不正确');
-        if($viewPage->dom->historyOpenedBy->getText() != 'admin') return $this->failed('创建人不正确');
+        $viewPage->dom->btn($this->lang->story->legendLifeTime)->click();
+        if(strpos($viewPage->dom->openedBy->getText() , 'admin') === false) return $this->failed('创建人不正确');
 
-        return $this->success('创建需求成功');
-}
+        return $this->success('创建'.$storyName.'成功');
+    }
 }
