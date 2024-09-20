@@ -34,7 +34,6 @@ class browsePage extends page
             'listBtn'        => "//button[@data-type='list']",
             'kanbanBtn'      => "//button[@data-type='kanban']",
             'orderByBtn'     => "//*[@id='actionBar']/button",
-
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
