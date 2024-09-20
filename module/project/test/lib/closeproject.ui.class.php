@@ -15,19 +15,15 @@ class closeprojectTester extends tester
         $featureBar = (array)$this->lang->project->featureBar;
         $featureBar['browse'] = (array)$featureBar['browse'];
         $form->dom->btn($featureBar['browse']['wait'])->click();
-        $title = $form->dom->projectName->getText();
         $form->dom->moreBtn->click();
         $form->dom->closeBtn->click();
+        $title = $form->dom->title->getText();
         $form->wait(1);
 
         $form->dom->closeProject->click();
         $form->wait(1);
 
         /* 点击已关闭标签进入已关闭列表，搜索关闭的项目*/
-        $featureBar = (array)$this->lang->project->featureBar;
-        $featureBar['browse'] = (array)$featureBar['browse'];
-        $form->dom->btn($featureBar['browse']['more'])->click();
-        $form->dom->closed->click();
         $form->dom->search(array("{$this->lang->project->name},=,{$title}"));
         $form->wait(1);
 
