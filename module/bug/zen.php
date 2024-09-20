@@ -197,7 +197,7 @@ class bugZen extends bug
             }
 
             if(!empty($bug->resolvedBy) && empty($bug->resolution)) dao::$errors["resolution[{$bug->id}]"] = sprintf($this->lang->error->notempty, $this->lang->bug->resolution);
-            if($bug->resolution == 'duplicate' && empty($bug->duplicateBug)) dao::$errors["duplicateBug[{$bug->id}]"] = sprintf($this->lang->error->notempty, $this->lang->bug->duplicateBug);
+            if(!empty($bug->resolution) && $bug->resolution == 'duplicate' && empty($bug->duplicateBug)) dao::$errors["duplicateBug[{$bug->id}]"] = sprintf($this->lang->error->notempty, $this->lang->bug->duplicateBug);
         }
 
         return !dao::isError();

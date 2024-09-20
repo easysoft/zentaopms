@@ -145,7 +145,7 @@ window.renderCell = function(result, info)
     }
     if(info.col.name == 'assignedTo' && result)
     {
-        if(task.mode == 'multi' && !['done,closed'].includes(task.status))
+        if(task.mode == 'multi' && !task.assignedTo && !['done,closed'].includes(task.status))
         {
             result[0]['props']['children'][1]['props']['children'] = teamLang;
         }

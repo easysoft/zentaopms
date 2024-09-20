@@ -38,6 +38,7 @@ else
     $settingText = '';
 }
 
+if($app->rawModule == 'doc' && $app->rawMethod == 'view') $objectID = $docID;
 sidebar
 (
     set::width(200),
@@ -51,7 +52,7 @@ sidebar
         set::moduleID((int)$moduleID),
         set::linkParams($linkParams),
         set::spaceType($spaceType),
-        set::objectType(isset($type) ? ($type == 'execution' ? 'project' : $type) : ''),
+        set::objectType(isset($type) ? $type : ''),
         set::objectID(isset($objectID) ? $objectID : 0),
         set::sortable(array('handle' => '.icon-move')),
         set::onSort(jsRaw('window.updateOrder')),

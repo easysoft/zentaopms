@@ -56,7 +56,7 @@ class story extends control
         /* Set menu. */
         $this->story->replaceURLang($storyType);
         $copyStoryID = $storyID;
-        list($productID, $objectID) = $this->storyZen->setMenuForCreate($productID, $objectID);
+        list($productID, $objectID) = $this->storyZen->setMenuForCreate($productID, $objectID, $extra);
         if($productID == 0 && $objectID == 0) return $this->locate($this->createLink('product', 'create'));
         if($productID == 0 && $objectID != 0) return $this->sendError($this->lang->execution->errorNoLinkedProducts, $this->createLink('execution', 'manageproducts', "executionID=$objectID"));
 

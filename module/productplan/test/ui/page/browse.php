@@ -31,6 +31,9 @@ class browsePage extends page
             'doingNum'       => "//*[@id='featureBar']/menu/li[4]/a/span[2]",
             'doneNum'        => "//*[@id='featureBar']/menu/li[5]/a/span[2]",
             'closedNum'      => "//*[@id='featureBar']/menu/li[6]/a/span[2]",
+            'listBtn'        => "//button[@data-type='list']",
+            'kanbanBtn'      => "//button[@data-type='kanban']",
+            'orderByBtn'     => "//*[@id='actionBar']/button",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }

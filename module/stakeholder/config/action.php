@@ -2,7 +2,7 @@
 global $app, $lang;
 $app->loadLang('stakeholder');
 
-$config->stakeholder->menu       = array('communicate', 'expect', 'edit', 'delete');
+$config->stakeholder->menu       = array('communicate', 'expect', 'userIssue', 'edit', 'delete');
 $config->stakeholder->actionList = array();
 
 $config->stakeholder->actionList['communicate']['icon']        = 'chat-line';
@@ -16,6 +16,13 @@ $config->stakeholder->actionList['expect']['text']        = $lang->stakeholder->
 $config->stakeholder->actionList['expect']['hint']        = $lang->stakeholder->expect;
 $config->stakeholder->actionList['expect']['url']         = array('module' => 'stakeholder', 'method' => 'expect', 'params' => 'id={id}');
 $config->stakeholder->actionList['expect']['data-toggle'] = 'modal';
+
+$config->stakeholder->actionList['userIssue']['icon']        = 'list-alt';
+$config->stakeholder->actionList['userIssue']['text']        = $lang->stakeholder->userIssue;
+$config->stakeholder->actionList['userIssue']['hint']        = $lang->stakeholder->userIssue;
+$config->stakeholder->actionList['userIssue']['url']         = helper::createLink('stakeholder', 'userIssue', 'id={id}');
+$config->stakeholder->actionList['userIssue']['data-toggle'] = 'modal';
+$config->stakeholder->actionList['userIssue']['data-size']   = 'lg';
 
 $config->stakeholder->actionList['edit']['icon'] = 'edit';
 $config->stakeholder->actionList['edit']['text'] = $lang->edit;

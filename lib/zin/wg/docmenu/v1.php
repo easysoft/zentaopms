@@ -8,6 +8,8 @@ class docMenu extends wg
 {
     private array $modules = array();
 
+    private array $selectedKey = array();
+
     private array $mineTypes = array('mine', 'view', 'collect', 'createdby', 'editedby');
 
     protected static array $defineProps = array(
@@ -65,7 +67,7 @@ class docMenu extends wg
         elseif($item->type == 'annex')
         {
             $methodName = 'showFiles';
-            $linkParams = "type={$objectType}&objectID={$item->objectID}";
+            $linkParams = "type={$item->objectType}&objectID={$item->objectID}";
         }
         elseif(in_array($item->type, array('text', 'word','ppt', 'excel', 'attachment')))
         {
@@ -115,8 +117,8 @@ class docMenu extends wg
         if(empty($items)) $items = $this->modules;
         if(empty($items)) return array();
 
-        $activeKey = $this->prop('activeKey');
-        $sortTree  = $this->prop('sortable') || $this->prop('onSort');
+        $activeKey   = $this->prop('activeKey');
+        $sortTree    = $this->prop('sortable') || $this->prop('onSort');
         $parentItems = array();
         foreach($items as $setting)
         {
@@ -128,7 +130,8 @@ class docMenu extends wg
             if(!in_array(strtolower($setting->type), $this->mineTypes)) $itemID = $setting->id ? $setting->id : $parentID;
 
             $moduleName = ($setting->type == 'apiLib' || (isset($setting->objectType) && $setting->objectType == 'api')) ? 'api' : 'doc';
-            $selected   = $itemID && $itemID == $activeKey;
+            $selected   = isset($setting->active) ? $setting->active : ($itemID && $itemID == $activeKey);
+            if($selected) $this->selectedKey[] = $itemID;
 
             $item = array(
                 'key'             => $itemID,
@@ -143,7 +146,7 @@ class docMenu extends wg
                 'data-objectType' => isset($setting->objectType) ? $setting->objectType : '',
                 'data-parent'     => $setting->parentID,
                 'data-module'     => $moduleName,
-                'selected'        => zget($setting, 'active', $selected),
+                'selected'        => $selected,
                 'actions'         => $this->getActions($setting)
             );
 
@@ -494,6 +497,8 @@ class docMenu extends wg
                             set::_tag('menu'),
                             set::lines(),
                             set::preserve($preserve),
+                            set::selectedKey(implode(':', $this->selectedKey)),
+                            set::afterRender(jsRaw('function(isFirst){return isFirst && this.toggle(this.props.selectedKey)}')),
                             set($treeProps)
                         )
                     ),

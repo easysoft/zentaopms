@@ -173,7 +173,7 @@ class execution extends control
                 $taskTeam = $this->task->getTeamByTask($task->id);
                 foreach($taskTeam as $teamMember)
                 {
-                    if($this->app->user->account == $teamMember->account and $teamMember->status != 'done')
+                    if($this->app->user->account == $teamMember->account && $teamMember->status != 'done')
                     {
                         $task->assignedTo = $this->app->user->account;
                         break;
@@ -479,6 +479,7 @@ class execution extends control
         $this->executionZen->assignCountForStory($executionID, $stories, $storyType);
         $this->executionZen->assignRelationForStory($execution, $products, $productID, $type, $storyType, $param, $orderBy, $pager);
 
+        $this->view->productID          = $productID;
         $this->view->project            = $project;
         $this->view->linkedProductCount = count($products);
         $this->display();
@@ -2117,12 +2118,13 @@ class execution extends control
 
         if(!empty($_POST))
         {
+            $oldProducts = $this->loadModel('product')->getProducts($executionID);
+            $oldProducts = array_keys($oldProducts);
+
             $postData = form::data()->get();
             $this->execution->updateProducts($executionID, $postData);
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            $oldProducts  = $this->loadModel('product')->getProducts($executionID);
-            $oldProducts  = array_keys($oldProducts);
             $newProducts  = $this->product->getProducts($executionID);
             $newProducts  = array_keys($newProducts);
             $diffProducts = array_merge(array_diff($oldProducts, $newProducts), array_diff($newProducts, $oldProducts));
@@ -2432,7 +2434,8 @@ class execution extends control
             }
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-        return $this->send(array('result' => 'success', 'load' => $this->createLink('execution', 'story', "executionID=$executionID")));
+        $execution = $this->execution->getByID($executionID);
+        return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->execution->confirmBatchUnlinkStory, 'locate' => $this->createLink('execution', 'story', "executionID=$executionID") . ($execution->multiple ? '' : '#app=project'))));
     }
 
     /**

@@ -359,6 +359,8 @@ class taskZen extends task
         $showFields = $this->config->task->custom->batchCreateFields;
         if(strpos(",$showFields,", ',story,') !== false) $showFields .= ',preview,copyStory';
 
+        $this->config->task->batchcreate->requiredFields = $this->config->task->create->requiredFields;
+
         $this->view->title         = $this->lang->task->batchCreate;
         $this->view->execution     = $execution;
         $this->view->modules       = $modules;

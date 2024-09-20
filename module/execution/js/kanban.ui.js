@@ -347,7 +347,11 @@ window.onDrop = function(changes, dropInfo)
     {
         let sortList = '';
         for(let i = 0; i < dropInfo['data']['list'].length; i++) sortList += dropInfo['data']['list'][i] + ',';
-        url = $.createLink('kanban', 'sortCard', `kanbanID=${kanbanID}&laneID=${toLaneID}&columnID=${toColID}&cards=${sortList}`);
+        url = $.createLink('kanban', 'sortCard', `kanbanID=${executionID}&laneID=${toLane}&columnID=${toCol}&cards=${sortList}`);
+        $.getJSON(url, function(response)
+        {
+            if(response.result == 'success') refreshKanban(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=RD' + '&serachValue=' + rdSearchValue + '&orderBy=' + orderBy));
+        });
     }
     else
     {

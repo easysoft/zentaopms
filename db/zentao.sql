@@ -1295,6 +1295,7 @@ CREATE TABLE IF NOT EXISTS `zt_pipeline` (
   `password` varchar(255) NULL,
   `token` varchar(255) NULL,
   `private` char(32) NULL,
+  `instanceID` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
@@ -13752,6 +13753,7 @@ CREATE TABLE IF NOT EXISTS `zt_auditresult` (
   `checkedBy` varchar(30) NOT NULL DEFAULT '',
   `checkedDate` date NULL,
   `comment` text NULL,
+  `severity` char(30) NOT NULL DEFAULT '',
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
   `status` varchar(30) NOT NULL DEFAULT '',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
@@ -16535,32 +16537,34 @@ CREATE TABLE IF NOT EXISTS `zt_metric` (
 
 -- DROP TABLE IF EXISTS `zt_metriclib`;
 CREATE TABLE IF NOT EXISTS `zt_metriclib` (
-  `id`         bigint unsigned NOT NULL AUTO_INCREMENT,
-  `metricID`   mediumint    NOT NULL DEFAULT 0,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `metricID` mediumint NOT NULL DEFAULT 0,
   `metricCode` varchar(100) NOT NULL DEFAULT '',
-  `system`     char(30)     NOT NULL DEFAULT '0',
-  `program`    char(30)     NOT NULL DEFAULT '',
-  `project`    char(30)     NOT NULL DEFAULT '',
-  `product`    char(30)     NOT NULL DEFAULT '',
-  `execution`  char(30)     NOT NULL DEFAULT '',
-  `code`       char(30)     NOT NULL DEFAULT '',
-  `pipeline`   char(30)     NOT NULL DEFAULT '',
-  `repo`       char(30)     NOT NULL DEFAULT '',
-  `user`       text,
-  `dept`       char(30)     NOT NULL DEFAULT '',
-  `year`       char(4)      NOT NULL DEFAULT '0',
-  `month`      char(2)      NOT NULL DEFAULT '0',
-  `week`       char(2)      NOT NULL DEFAULT '0',
-  `day`        char(2)      NOT NULL DEFAULT '0',
-  `value`      varchar(100) NOT NULL DEFAULT '0',
-  `calcType`   ENUM('cron', 'inference') NOT NULL DEFAULT 'cron',
+  `system` char(30) NOT NULL DEFAULT '0',
+  `program` char(30) NOT NULL DEFAULT '',
+  `project` char(30) NOT NULL DEFAULT '',
+  `product` char(30) NOT NULL DEFAULT '',
+  `execution` char(30) NOT NULL DEFAULT '',
+  `code` char(30) NOT NULL DEFAULT '',
+  `pipeline` char(30) NOT NULL DEFAULT '',
+  `repo` char(30) NOT NULL DEFAULT '',
+  `user` text,
+  `dept` char(30) NOT NULL DEFAULT '',
+  `year` char(4) NOT NULL DEFAULT '0',
+  `month` char(2) NOT NULL DEFAULT '0',
+  `week` char(2) NOT NULL DEFAULT '0',
+  `day` char(2) NOT NULL DEFAULT '0',
+  `value` varchar(100) NOT NULL DEFAULT '0',
+  `calcType` ENUM('cron', 'inference') NOT NULL DEFAULT 'cron',
   `calculatedBy` varchar(30) NOT NULL DEFAULT '',
-  `date`       datetime              DEFAULT NULL,
+  `date` datetime DEFAULT NULL,
+  `deleted` ENUM('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE INDEX `metricID` ON `zt_metriclib`(`metricID`);
 CREATE INDEX `metricCode` ON `zt_metriclib`(`metricCode`);
 CREATE INDEX `date` ON zt_metriclib (date);
+CREATE INDEX `deleted` ON `zt_metriclib` (`deleted`);
 
 -- DROP TABLE IF EXISTS `zt_duckdbqueue`;
 CREATE TABLE IF NOT EXISTS `zt_duckdbqueue` (

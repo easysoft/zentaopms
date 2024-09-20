@@ -21,14 +21,24 @@ class think3c extends thinkModel
         global $lang, $app;
 
         jsVar('blockName', $lang->thinkwizard->placeholder->blockName);
+        list($blocks, $mode) = $this->prop(array('blocks', 'mode'));
 
         return div
         (
             setData('clientLang', $app->getClientLang()),
             setData('model', '3c'),
+            setData('mode', $mode),
+            setData('blocks', $blocks),
             setClass('model-canvas relative flex justify-center'),
             h::canvas(setID('canvas')),
-            on::blur('.model-canvas input')->do('$(this).attr("title", $(this).val());')
+            on::blur('.model-canvas input')->do('
+                const index = $(this).data("index");
+                const block = $(this).data("block");
+                const value = $(this).val() || block;
+                $(this).attr("title", value);
+                $(this).val(value);
+                if($(`.block-title-${index}`).length) $(`.block-title-${index}`).text(value);
+            ')
         );
     }
 

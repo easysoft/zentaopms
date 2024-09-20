@@ -988,7 +988,12 @@ class storyModel extends model
         if($parentID <= 0) return true;
 
         $childrenStatus = $this->dao->select('id,status')->from(TABLE_STORY)->where('parent')->eq($parentID)->andWhere('deleted')->eq(0)->fetchPairs('status', 'status');
-        if(empty($childrenStatus)) return true;
+        if(empty($childrenStatus))
+        {
+            $this->dao->update(TABLE_STORY)->set('isParent')->eq('0')->where('id')->eq($parentID)->exec();
+            return true;
+        }
+        $this->dao->update(TABLE_STORY)->set('isParent')->eq('1')->where('id')->eq($parentID)->exec();
 
         $oldParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($parentID)->andWhere('deleted')->eq(0)->fetch();
         if(empty($oldParentStory))
@@ -3772,8 +3777,8 @@ class storyModel extends model
             foreach($stmt as $row) $shadowProducts[$row->id] = $row->id;
         }
 
-        if($hasShadow && empty($taskGroups[$story->id])) $taskGroups[$story->id] = $app->dbQuery('SELECT id FROM ' . TABLE_TASK . " WHERE story = $story->id")->fetch();
-        if(empty($caseGroups[$story->id])) $caseGroups[$story->id] = $app->dbQuery('SELECT id FROM ' . TABLE_CASE . " WHERE story = $story->id")->fetch();
+        if(empty($taskGroups[$story->id])) $taskGroups[$story->id] = $app->dbQuery('SELECT id FROM ' . TABLE_TASK . " WHERE story = $story->id AND `deleted` = '0' limit 1")->fetch();
+        if(empty($caseGroups[$story->id])) $caseGroups[$story->id] = $app->dbQuery('SELECT id FROM ' . TABLE_CASE . " WHERE story = $story->id AND `deleted` = '0' limit 1")->fetch();
 
         if(isset($story->parent) && $story->parent < 0 && strpos($config->story->list->actionsOperatedParentStory, ",$action,") === false) return false;
 
@@ -3792,7 +3797,7 @@ class storyModel extends model
             if($config->vision == 'lite' && ($story->status == 'active' && in_array($story->stage, array('wait', 'projected')))) return true;
 
             if(!empty($caseGroups[$story->id])) return false;
-            if(isset($shadowProducts[$story->product]) && (!empty($taskGroups[$story->id]))) return false;
+            if(!empty($taskGroups[$story->id])) return false;
             if(!isset($shadowProducts[$story->product]) && !in_array($story->stage, array('wait', 'planned', 'projected')) && $story->type == 'story' && $story->isParent == '0') return false;
         }
 

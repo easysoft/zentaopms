@@ -19,3 +19,11 @@ REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`, `
 ('zh-tw', 'custom', 'relationList', '2', '{\"relation\":\"\\u4f9d\\u8cf4\",\"relativeRelation\":\"\\u88ab\\u4f9d\\u8cf4\"}', '0', 'all'),
 ('zh-tw', 'custom', 'relationList', '3', '{\"relation\":\"\\u91cd\\u8907\",\"relativeRelation\":\"\\u91cd\\u8907\"}', '0', 'all'),
 ('zh-tw', 'custom', 'relationList', '4', '{\"relation\":\"\\u5f15\\u7528\",\"relativeRelation\":\"\\u88ab\\u5f15\\u7528\"}', '0', 'all');
+
+ALTER TABLE `zt_auditresult` ADD `severity` char(30) NOT NULL DEFAULT '' AFTER `comment`;
+
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'file', 'download' FROM `zt_grouppriv` WHERE `module` = 'file' AND `method` = 'preview';
+ALTER TABLE zt_metriclib ADD `deleted` ENUM('0', '1') NOT NULL DEFAULT '0' AFTER `date`;
+CREATE INDEX `deleted` ON `zt_metriclib` (`deleted`);
+
+ALTER TABLE `zt_pipeline` ADD `instanceID` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `private`;

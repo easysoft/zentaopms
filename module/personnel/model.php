@@ -840,4 +840,41 @@ class personnelModel extends model
     {
         return true;
     }
+
+    /**
+     * 从白名单中移除人员。
+     * Removing users from the white list.
+     *
+     * @param  object $acl
+     * @access public
+     * @return bool
+     */
+    public function unbindWhitelist(object $acl): bool
+    {
+        /* Update whitelist and delete acl. */
+        $objectTable  = $acl->objectType == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
+        $whitelist    = $this->dao->select('whitelist')->from($objectTable)->where('id')->eq($acl->objectID)->fetch('whitelist');
+        $newWhitelist = str_replace(',' . $acl->account, '', $whitelist);
+        $this->dao->update($objectTable)->set('whitelist')->eq($newWhitelist)->where('id')->eq($acl->objectID)->exec();
+        $this->dao->delete()->from(TABLE_ACL)->where('id')->eq($acl->id)->exec();
+
+        if($acl->objectType == 'project')
+        {
+            $project = $this->loadModel('project')->getByID($acl->objectID);
+            if(!$project->hasProduct)
+            {
+                $shadowProduct = $this->loadModel('product')->getShadowProductByProject($acl->objectID);
+                if($shadowProduct)
+                {
+                    $this->dao->update(TABLE_PRODUCT)->set('whitelist')->eq($newWhitelist)->where('id')->eq($shadowProduct->id)->exec();
+                    $this->dao->delete()->from(TABLE_ACL)->where('objectType')->eq('product')->andWhere('objectID')->eq($shadowProduct->id)->andWhere('account')->eq($acl->account)->exec();
+
+                    if($shadowProduct->program) $this->deleteProgramWhitelist($shadowProduct->program, $acl->account);
+                    $this->loadModel('user')->updateUserView(array($shadowProduct->id), 'product', array($acl->account));
+                }
+            }
+        }
+
+        return !dao::isError();
+    }
 }

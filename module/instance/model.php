@@ -1112,6 +1112,7 @@ class instanceModel extends model
         $pipeline->createdBy   = 'system';
         $pipeline->createdDate = helper::now();
         $pipeline->url         = $url;
+        $pipeline->instanceID  = $instance->id;
         $pipeline->name        = $this->generatePipelineName($instance);
         $pipeline->token       = zget($tempMappings, 'api_token', '');
         $pipeline->account     = zget($tempMappings, 'z_username', '');

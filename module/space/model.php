@@ -156,10 +156,21 @@ class spaceModel extends model
      */
     public function getExternalAppByApp(object $instance): object|false
     {
-        return $this->dao->select('*')->from(TABLE_PIPELINE)
+        $server = $this->dao->select('*')->from(TABLE_PIPELINE)
+            ->where('deleted')->eq('0')
+            ->andWhere('createdBy')->eq('system')
+            ->andWhere('instanceID')->eq($instance->id)
+            ->fetch();
+        if($server) return $server;
+
+        $server = $this->dao->select('*')->from(TABLE_PIPELINE)
             ->where('deleted')->eq('0')
             ->andWhere('createdBy')->eq('system')
             ->andWhere('url')->like("%{$instance->domain}%")
             ->fetch();
+        if(!$server) return false;
+
+        $this->dao->update(TABLE_PIPELINE)->set('instanceID')->eq($instance->id)->where('id')->eq($server->id)->exec();
+        return $server;
     }
 }

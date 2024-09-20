@@ -413,6 +413,26 @@ class helper extends baseHelper
     {
         return extension_loaded('apcu') && ini_get('apc.enabled') == '1';
     }
+
+    /**
+     * 检查条件是否成立。
+     *
+     * @param  mixed  $value1
+     * @param  mixed  $value2
+     * @param  string $operator
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function checkCondition($value1, $value2, $operator): bool
+    {
+        $operatorList = array('=' => 'equal', '==' => 'equal', '!=' => 'notequal', '>' => 'gt', '>=' => 'ge', '<' => 'lt', '<=' => 'le');
+        if(!isset($operatorList[$operator]) && !in_array($operator, $operatorList)) return false;
+
+        $operator  = isset($operatorList[$operator]) ? zget($operatorList, $operator) : $operator;
+        $checkFunc = 'check' . $operator;
+        return validater::$checkFunc($value1, $value2);
+    }
 }
 
 /**

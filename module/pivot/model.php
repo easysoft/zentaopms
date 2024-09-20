@@ -87,9 +87,7 @@ class pivotModel extends model
             $pivot->filters = $this->setFilterDefault($filters, $processDateVar);
         }
 
-        $pivot->settings = json_decode($pivot->settings, true);
-        $this->processNameDesc($pivot);
-
+        $this->processPivot($pivot);
         if(isset($pivot->stage) && $pivot->stage == 'published' && $this->app->methodName == 'preview') $this->processFieldSettings($pivot);
 
         return $pivot;
@@ -1475,6 +1473,34 @@ class pivotModel extends model
     }
 
     /**
+     * Get show col position.
+     *
+     * @param  array       $settings
+     * @access public
+     * @return string noShow | bottom | row | all
+     */
+    public function getShowColPosition($settings)
+    {
+        $columnTotal    = zget($settings, 'columnTotal', 'noShow');
+        $columnPosition = zget($settings, 'columnPosition', 'bottom');
+
+        if($columnTotal == 'noShow') return 'noShow';
+        return $columnPosition;
+    }
+
+    /**
+     * Check whether showColPosition should show last row.
+     *
+     * @param  string $showColPosition
+     * @access public
+     * @return bool
+     */
+    public function isShowLastRow($showColPosition)
+    {
+        return in_array($showColPosition, array('bottom', 'all'));
+    }
+
+    /**
      * Gen sheet.
      *
      * @param  array       $fields
@@ -1500,7 +1526,7 @@ class pivotModel extends model
 
         $records = $this->mapRecordValueWithFieldOptions($records, $fields, $sql, $driver);
 
-        $showColTotal = zget($settings, 'columnTotal', 'noShow');
+        $showColPosition = $this->getShowColPosition($settings);
 
         $mergeRecords = array();
         $drillRecords = array();
@@ -1520,7 +1546,7 @@ class pivotModel extends model
                 if($columnShowOrigin)
                 {
                     $columnRecords = $this->processColumnOriginal($columnIndex, $columnField, $groups, $records);
-                    if($columnRecords) $columnRecords = $this->processShowData($columnRecords, $groups, $columnSetting, $showColTotal, $columnField . $columnIndex);
+                    if($columnRecords) $columnRecords = $this->processShowData($columnRecords, $groups, $columnSetting, $showColPosition, $columnField . $columnIndex);
 
                     $columnSetting['records'] = $columnRecords;
                     $mergeRecords = $this->mergeOriginRecords(array($columnSetting), $mergeRecords);
@@ -1528,7 +1554,7 @@ class pivotModel extends model
                 elseif(!empty($columnStat))
                 {
                     list($columnRecords, $drillRecords) = $this->processColumnStat($columnIndex, $columnField, $columnSlice, $columnStat, $groups, $records, $drillRecords);
-                    if($columnRecords) $columnRecords = $this->processShowData($columnRecords, $groups, $columnSetting, $showColTotal, $columnField . $columnIndex);
+                    if($columnRecords) $columnRecords = $this->processShowData($columnRecords, $groups, $columnSetting, $showColPosition, $columnField . $columnIndex);
 
                     $columnSetting['records'] = $columnRecords;
                     $mergeRecords = $this->mergeStatRecords(array($columnSetting), $groups, $mergeRecords);
@@ -1550,7 +1576,6 @@ class pivotModel extends model
         $data->groups      = $groups;
         $data->cols        = $cols;
         $data->array       = json_decode(json_encode($mergeRecords), true);
-        if($showColTotal == 'sum' && count($data->array)) $this->processLastRow($data->array[count($data->array) - 1]);
         $data->columnTotal = isset($settings['columnTotal']) ? $settings['columnTotal'] : '';
         $data->drills      = $mergeDrillRecords;
 
@@ -1577,21 +1602,6 @@ class pivotModel extends model
     public function isFiltersAllEmpty($filters)
     {
         return !empty($filters) && empty(array_filter(array_column($filters, 'default')));
-    }
-
-    /**
-     * Process last column data.
-     *
-     * @param  array  $data
-     * @access public
-     * @return void
-     */
-    public function processLastRow(array &$data)
-    {
-        foreach($data as $key => $value)
-        {
-            if($value === '$totalGroup$') $data[$key] = $this->lang->pivot->stepDesign->total;
-        }
     }
 
     /**
@@ -1907,12 +1917,12 @@ class pivotModel extends model
      * @param  array   $columnRows
      * @param  array   $groups
      * @param  array   $column
-     * @param  string  $showColTotal
+     * @param  string  $showColPosition
      * @param  string  $uuName
      * @access public
      * @return array
      */
-    public function processShowData(array $columnRows, array $groups, array $column, string $showColTotal, string $uuName): array
+    public function processShowData(array $columnRows, array $groups, array $column, string $showColPosition, string $uuName): array
     {
         $slice      = zget($column, 'slice', 'noSlice');
         $showMode   = zget($column, 'showMode', 'default');
@@ -2020,7 +2030,7 @@ class pivotModel extends model
             foreach($columnRows as $index => $row) $row->{'sum_' . $uuName} = $rowTotal[$index];
         }
 
-        if($showColTotal == 'sum')
+        if($this->isShowLastRow($showColPosition))
         {
             if(empty($columnRows)) return $columnRows;
 
@@ -2029,7 +2039,7 @@ class pivotModel extends model
             {
                 if(in_array($field, $groups))
                 {
-                    $colTotalRow->$field = '$totalGroup$';
+                    $colTotalRow->$field = $this->lang->pivot->stepDesign->total;
                 }
                 else
                 {

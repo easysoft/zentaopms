@@ -389,6 +389,7 @@ $config->project->dtable->team->fieldList['limited']['map']      = $lang->team->
 $config->project->dtable->team->fieldList['limited']['sortType'] = false;
 
 $config->project->dtable->team->fieldList['actions']['type']       = 'actions';
+$config->project->dtable->team->fieldList['actions']['title']      = $lang->actions;
 $config->project->dtable->team->fieldList['actions']['minWidth']   = 60;
 $config->project->dtable->team->fieldList['actions']['actionsMap'] = $config->project->team->actionList;
 

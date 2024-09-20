@@ -1,0 +1,14 @@
+title: acl
+author: Shujie Tian
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100
+  - field: account
+    range: "user2,test3,user11,test36,user16,test41,user16,test41,user11,test36,user1,test26"
+  - field: objectType
+    range: "program{2},project{4},product{4},sprint{2}"
+  - field: objectID
+    range: "2{2},11{2},16{2},6{2},1{2},101{2}"
+  - field: source
+    range: "add"

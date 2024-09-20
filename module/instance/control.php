@@ -99,7 +99,7 @@ class instance extends control
         if(!empty($_POST))
         {
             $newInstance = fixer::input('post')->trim('name')->get();
-            $memoryKb    = $newInstance->memory_kb;
+            $memoryKb    = $this->post->memory_kb;
 
             if(intval($currentResource->max->memory / 1024) != $memoryKb)
             {
@@ -116,7 +116,7 @@ class instance extends control
                 }
             }
 
-            $cpu = $newInstance->cpu;
+            $cpu = $this->post->cpu;
             if($currentResource->max->cpu != $cpu)
             {
                 $instance->oldValue = $currentResource->max->cpu;
@@ -126,7 +126,7 @@ class instance extends control
                 }
             }
 
-            $disk = $newInstance->disk_gb;
+            $disk = $this->post->disk_gb;
             if(is_numeric($disk) && $disk != $diskSettings->size && $disk != $diskSettings->requestSize)
             {
                 if($disk < $diskSettings->size || $disk > $diskSettings->limit)  return $this->send(array('result' => 'fail', 'message' => $this->lang->instance->errors->invalidDiskSize));

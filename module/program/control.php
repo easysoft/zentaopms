@@ -615,7 +615,7 @@ class program extends control
      */
     public function ajaxGetDropMenu(int $programID, string $module, string $method)
     {
-        $programs = $this->program->getList('all');
+        $programs = $this->program->getList('all', 'order_asc');
         foreach($programs as $programID => $program)
         {
             if($program->type != 'program') unset($programs[$programID]);
