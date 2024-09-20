@@ -309,11 +309,17 @@ class actionModel extends model
 
         /* 按对象类型对已删除的对象进行分组，并获取名称字段。 */
         /* Group trashes by objectType, and get there name field. */
+        $auditplanIdList = array();
         foreach($trashes as $object)
         {
             $object->objectType = str_replace('`', '', $object->objectType);
+            if($object->objectType == 'auditplan') $auditplanIdList[$object->objectID] = $object->objectID;
             $typeTrashes[$object->objectType][] = $object->objectID;
         }
+
+        $auditplanList = $this->dao->select('id,objectID,objectType')->from(TABLE_AUDITPLAN)->where('id')->in($auditplanIdList)->fetchAll('id');
+        foreach($auditplanList as $auditplan) $typeTrashes[$auditplan->objectType][] = $auditplan->objectID;
+
         foreach($typeTrashes as $objectType => $objectIdList)
         {
             if(!isset($this->config->objectTables[$objectType])) continue;
@@ -340,7 +346,16 @@ class actionModel extends model
             if($trash->objectType == 'pipeline' && isset($objectNames['gitlab'][$trash->objectID]))  $trash->objectType = 'gitlab';
             if($trash->objectType == 'pipeline' && isset($objectNames['jenkins'][$trash->objectID])) $trash->objectType = 'jenkins';
 
-            $trash->objectName = isset($objectNames[$trash->objectType][$trash->objectID]) ? $objectNames[$trash->objectType][$trash->objectID] : '';
+            if($trash->objectType == 'auditplan')
+            {
+                $realObjectID      = isset($auditplanList[$trash->objectID]) ? $auditplanList[$trash->objectID]->objectID   : 0;
+                $realObjectType    = isset($auditplanList[$trash->objectID]) ? $auditplanList[$trash->objectID]->objectType : '';
+                $trash->objectName = isset($objectNames[$realObjectType][$realObjectID]) ? $objectNames[$realObjectType][$realObjectID] : '';
+            }
+            else
+            {
+                $trash->objectName = isset($objectNames[$trash->objectType][$trash->objectID]) ? $objectNames[$trash->objectType][$trash->objectID] : '';
+            }
         }
         return $trashes;
     }
