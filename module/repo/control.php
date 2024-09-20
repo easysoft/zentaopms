@@ -1082,7 +1082,7 @@ class repo extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->repo->createLink('maintain')));
         }
 
-        $serverList = $this->loadModel('pipeline')->getPairs('gitlab');
+        $serverList = $this->repoZen->getServerPairs();
         if(!$serverID) $serverID = key($serverList);
 
         $server      = $this->pipeline->getByID($serverID);
@@ -1440,7 +1440,7 @@ class repo extends control
      */
     public function ajaxGetHosts(string $scm)
     {
-        $hosts = $this->loadModel('pipeline')->getPairs($scm);
+        $hosts = $this->repoZen->getServerPairs($scm);
 
         $options = array();
         foreach($hosts as $hostID => $host)
