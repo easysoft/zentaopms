@@ -13,6 +13,7 @@ class browsePage extends page
             'moreBtn'        => "//*[@id='table-project-browse']/div[2]/div[3]/div/div[1]/div/nav/button[1]/span",
             'closeBtn'       => "//*[@class='icon item-icon icon-off']",
             'closeProject'   => "//*[@class='modal modal-async load-indicator modal-trans show in']/div/div/div[3]/div/div/form/div[3]/div/button",
+            'title'          => "//*[@class='modal modal-async load-indicator modal-trans show in']/div/div/div/div/div/span[1]",
             'closed'         => "//*[@id='more']/menu/menu/li[2]/a/div",
             'activeBtn'      => "//*[@id='table-project-browse']/div[2]/div[3]/div/div/div/nav/a[1]/i",
             'activeProject'  => "//*[@class='modal modal-async load-indicator modal-trans show in']/div/div/div[3]/div/div/form/div[3]/div/button",
