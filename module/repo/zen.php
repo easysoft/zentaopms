@@ -1927,5 +1927,22 @@ class repoZen extends repo
         {
             if($instance->status == 'running' && strpos(",{$type},", ",{$instance->chart},") !== false) $runningApps[$instance->id] = $instance->domain;
         }
+
+        $serverPairs = array();
+        foreach($serverList as $server)
+        {
+            if($server->createdBy == 'system')
+            {
+                if($server->instanceID && isset($runningApps[$server->instanceID]))
+                {
+                    $serverPairs[$server->id] = $server->name;
+                    continue;
+                }
+                continue;
+            }
+
+            $serverPairs[$server->id] = $server->name;
+        }
+        return $serverPairs;
     }
 }
