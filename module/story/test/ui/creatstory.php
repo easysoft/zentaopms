@@ -23,6 +23,9 @@ chdir(__DIR__);
 include '../lib/createstory.ui.class.php';
 include 'page/create.php';
 
+$product = zenData('product');
+$product->id->range('1');
+$product->program->range('0');
 $product->name->range('产品1');
 $product->shadow->range('0');
 $product->bind->range('0');
