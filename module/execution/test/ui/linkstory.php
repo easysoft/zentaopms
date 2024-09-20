@@ -60,8 +60,12 @@ $storySpec->title->range('业需1, 用需1, 研需1, 研需2, 研需3, 研需4, 
 $storySpec->spec->range('[]');
 $storySpec->gen(7);
 
+$projectStory = zenData('projectstory');
+$projectStory->gen(0);
+
 $tester = new linkStoryTester();
 $tester->login();
 
-r($tester->checkNoProductInfo()) && p('message') && e('执行未关联产品时提示正确');
+r($tester->checkNoProductInfo()) && p('message') && e('执行未关联产品时提示正确'); //执行未关联产品时点击关联需求
+r($tester->linkstory())          && p('message') && e('关联需求成功');             //正常关联需求
 $tester->closeBrowser();
