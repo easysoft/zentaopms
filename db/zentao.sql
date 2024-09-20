@@ -13208,6 +13208,7 @@ SELECT `module`, `method`, 16 from `zt_grouppriv` where `group` = 9;
 -- DROP TABLE IF EXISTS `zt_workflow`;
 CREATE TABLE IF NOT EXISTS `zt_workflow` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `group` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `parent` varchar(30) NOT NULL DEFAULT '',
   `child` varchar(30) NOT NULL DEFAULT '',
   `type` varchar(10) NOT NULL DEFAULT 'flow',
@@ -13238,7 +13239,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflow` (
   `editedDate` datetime NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE UNIQUE INDEX `unique` ON `zt_workflow`(`app`,`module`,`vision`);
+CREATE UNIQUE INDEX `unique` ON `zt_workflow`(`group`,`app`,`module`,`vision`);
 CREATE INDEX `type`   ON `zt_workflow` (`type`);
 CREATE INDEX `app`    ON `zt_workflow` (`app`);
 CREATE INDEX `module` ON `zt_workflow` (`module`);
@@ -13267,6 +13268,7 @@ CREATE INDEX `type` ON `zt_workflowgroup` (`type`);
 -- DROP TABLE IF EXISTS `zt_workflowaction`;
 CREATE TABLE IF NOT EXISTS `zt_workflowaction` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `group` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `module` varchar(30) NOT NULL DEFAULT '',
   `action` varchar(50) NOT NULL DEFAULT '',
   `method` varchar(50) NOT NULL DEFAULT '',
@@ -13299,7 +13301,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowaction` (
   `editedDate` datetime NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE UNIQUE INDEX `unique` ON `zt_workflowaction`(`module`,`action`,`vision`);
+CREATE UNIQUE INDEX `unique` ON `zt_workflowaction`(`group`,`module`,`action`,`vision`);
 CREATE INDEX `module` ON `zt_workflowaction` (`module`);
 CREATE INDEX `action` ON `zt_workflowaction` (`action`);
 CREATE INDEX `order`  ON `zt_workflowaction` (`order`);
@@ -13362,6 +13364,7 @@ CREATE INDEX `order`  ON `zt_workflowfield` (`order`);
 -- DROP TABLE IF EXISTS `zt_workflowlayout`;
 CREATE TABLE IF NOT EXISTS `zt_workflowlayout` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `group` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `module` varchar(30) NOT NULL DEFAULT '',
   `action` varchar(50) NOT NULL DEFAULT '',
   `ui` mediumint(8) NOT NULL DEFAULT 0,
@@ -13377,7 +13380,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowlayout` (
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE UNIQUE INDEX `unique` ON `zt_workflowlayout`(`module`,`action`,`ui`,`field`,`vision`);
+CREATE UNIQUE INDEX `unique` ON `zt_workflowlayout`(`group`,`module`,`action`,`ui`,`field`,`vision`);
 CREATE INDEX `module` ON `zt_workflowlayout` (`module`);
 CREATE INDEX `action` ON `zt_workflowlayout` (`action`);
 CREATE INDEX `order`  ON `zt_workflowlayout` (`order`);
@@ -13385,6 +13388,7 @@ CREATE INDEX `order`  ON `zt_workflowlayout` (`order`);
 -- DROP TABLE IF EXISTS `zt_workflowlabel`;
 CREATE TABLE IF NOT EXISTS `zt_workflowlabel` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `group` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `module` varchar(30) NOT NULL DEFAULT '',
   `action` varchar(30) NOT NULL DEFAULT 'browse',
   `code` varchar(30) NOT NULL DEFAULT '',
@@ -13497,6 +13501,7 @@ CREATE INDEX `version` ON `zt_workflowversion` (`version`);
 -- DROP TABLE IF EXISTS `zt_workflowui`;
 CREATE TABLE IF NOT EXISTS `zt_workflowui` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `group` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `module` varchar(30) NOT NULL,
   `action` varchar(50) NOT NULL,
   `name` varchar(30) NOT NULL,
