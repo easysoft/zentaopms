@@ -25,9 +25,11 @@ class myspacePage extends page
             'formText'       => '/html/body/div/div/div[2]/div[2]/div/div/div/div/div',
             'saveMoveBtn'    => '//*[@class="m-doc-myspace"]/div[2]/div[1]/div[1]/div[3]/div[1]/div[1]/form[1]/div[6]/div[1]/button[1]',
             'checkFstDoc'    => '/html/body/div[1]/div/div[2]/div[2]/div/div/div[2]/div[1]/div/div[2]/div/a',
-            'fstCollectBtn'     => '/html/body/div[1]/div/div[2]/div[2]/div/div/div[2]/div[1]/div/div[2]/div/div[2]/a/img',
+            'fstCollectBtn'  => '/html/body/div[1]/div/div[2]/div[2]/div/div/div[2]/div[1]/div/div[2]/div/div[2]/a/img',
             'myFavorites'    => '/html/body/div[1]/div/div[2]/div[1]/div[1]/div/main/menu/li[3]/div/div/a',
-            'createdBy'       => '/html/body/div[1]/div/div[2]/div[1]/div[1]/div/main/menu/li[4]/div/div/a',
+            'createdBy'      => '/html/body/div[1]/div/div[2]/div[1]/div[1]/div/main/menu/li[4]/div/div/a',
+            'myLibMoreBtn'   => '/html/body/div[1]/div/div[2]/div[1]/div[1]/div/main/menu/li[1]/menu/li[1]/div/nav/button/i',
+            'addDir'         => '/html/body/div[2]/menu/menu/li[1]/a/div/div',
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
