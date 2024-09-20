@@ -17,4 +17,25 @@ class linkStoryTester extends tester
         if($form->dom->alertModal('text') == $this->lang->execution->errorNoLinkedProducts) return $this->success('执行未关联产品时提示正确');
         return $this->failed('执行未关联产品时提示不正确');
     }
+
+    /**
+     * 关联需求
+     * Link story
+     *
+     * @access public
+     * @return object
+     */
+    public function linkStory()
+    {
+        $form = $this->initForm('execution', 'linkstory', array('execution' => '2'), 'appIframe-execution');
+        $name = $form->dom->firstName->getText();
+        $form->dom->firstCheckbox->click();
+        $form->dom->saveBtn->click();
+        $form->wait(1);
+
+        $storyView = $this->loadPage('execution', 'story');
+        $storyView->dom->search(array("{$this->lang->execution->storyTitle},=,{$name}"));
+        if($storyView->dom->firstName->getText() == $name) return $this->success('关联需求成功');
+        return $this->failed('关联需求失败');
+    }
 }
