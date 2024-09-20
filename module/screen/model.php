@@ -1010,8 +1010,10 @@ class screenModel extends model
                 list($options, $config) = $this->loadModel('pivot')->genSheet($fields, $settings, $chart->sql, $filters, $langs, $chart->driver);
             }
 
-            $colspan = array();
-            if(isset($options->columnTotal) and $options->columnTotal == 'sum' and !empty($options->array))
+            $colspan         = array();
+            $showColPosition = $this->pivot->getShowColPosition($options);
+            $isShowLastRow   = $this->pivot->isShowLastRow($showColPosition);
+            if($isShowLastRow and !empty($options->array))
             {
                 $count = count($options->array);
                 $colspan[$count - 1][0] = count($options->groups);
