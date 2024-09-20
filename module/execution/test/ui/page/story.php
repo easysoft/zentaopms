@@ -13,7 +13,7 @@ class storyPage extends page
             'num'          => "//*[@id='table-execution-story']/div[3]/div[2]/strong[1]",
             /* 列表 */
             'firstName'      => "//*[@id='table-execution-story']/div[2]/div[1]/div/div[2]/div/a",
-            'firstUnlinkBtn' => "//*[@id='table-execution-story']/div[2]/div[3]/div/div/div/nav/a[6]",
+            'firstUnlinkBtn' => "//*[@id='table-execution-story']/div[2]/div[3]/div/div/div/nav/a[5]",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
