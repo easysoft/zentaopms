@@ -87,9 +87,7 @@ class pivotModel extends model
             $pivot->filters = $this->setFilterDefault($filters, $processDateVar);
         }
 
-        $pivot->settings = json_decode($pivot->settings, true);
-        $this->processNameDesc($pivot);
-
+        $this->processPivot($pivot);
         if(isset($pivot->stage) && $pivot->stage == 'published' && $this->app->methodName == 'preview') $this->processFieldSettings($pivot);
 
         return $pivot;
