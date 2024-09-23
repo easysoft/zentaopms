@@ -1139,7 +1139,7 @@ class dom
             }
             else
             {
-                $this->getElement("$valueXpath/div")->picker($value);
+                $this->getElement("$valueXpath//input")->picker($value);
             }
         }
 
