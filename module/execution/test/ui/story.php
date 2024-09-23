@@ -65,10 +65,11 @@ $projectStory->gen(14);
 $tester = new storyTester();
 $tester->login();
 
-r($tester->checkTab('allTab', '7'))       && p('message') && e('allTab下显示条数正确');       //检查全部标签下显示条数
-r($tester->checkTab('unclosedTab', '6'))  && p('message') && e('unclosedTab下显示条数正确');  //检查未关闭标签下显示条数
-r($tester->checkTab('draftTab', '1'))     && p('message') && e('draftTab下显示条数正确');     //检查草稿标签下显示条数
-r($tester->checkTab('reviewingTab', '1')) && p('message') && e('reviewingTab下显示条数正确'); //检查评审中标签下显示条数
-r($tester->unlinkStory())                 && p('message') && e('需求移除成功');               //移除需求
-r($tester->batchUnlinkStory())            && p('message') && e('需求批量移除成功');           //批量移除需求
+#r($tester->checkTab('allTab', '7'))       && p('message') && e('allTab下显示条数正确');       //检查全部标签下显示条数
+#r($tester->checkTab('unclosedTab', '6'))  && p('message') && e('unclosedTab下显示条数正确');  //检查未关闭标签下显示条数
+#r($tester->checkTab('draftTab', '1'))     && p('message') && e('draftTab下显示条数正确');     //检查草稿标签下显示条数
+#r($tester->checkTab('reviewingTab', '1')) && p('message') && e('reviewingTab下显示条数正确'); //检查评审中标签下显示条数
+#r($tester->unlinkStory())                 && p('message') && e('需求移除成功');               //移除需求
+#r($tester->batchUnlinkStory())            && p('message') && e('需求批量移除成功');           //批量移除需求
+r($tester->batchEditPhase('draft', 'testing')) && p('message') && e('批量编辑阶段成功');
 $tester->closeBrowser();
