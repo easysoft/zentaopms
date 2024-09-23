@@ -1,0 +1,20 @@
+title: zt_bug
+desc: "Bug表"
+author: Li Huifang
+version: "1.0"
+fields:
+  - field: id
+    range: 1-5
+  - field: project
+    range: 1
+  - field: product
+    range: 1
+  - field: title
+    fields:
+      - field: title1
+        range: bug
+      - field: title2
+        range: 1-5
+  - field: severity
+    range: 1-4
+  - field: pri
