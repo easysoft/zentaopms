@@ -629,6 +629,7 @@ class programplanTao extends programplanModel
         $data->name          = $plan->name;
         $data->attribute     = zget($this->lang->stage->typeList, $plan->attribute);
         $data->milestone     = zget($this->lang->programplan->milestoneList, $plan->milestone);
+        $data->milestonecode = $plan->milestone;
         $data->owner_id      = $plan->PM;
         $data->status        = $this->processStatus('execution', $plan);
         $data->begin         = $start;
