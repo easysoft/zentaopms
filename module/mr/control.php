@@ -926,33 +926,7 @@ class mr extends control
             }
         }
 
-        foreach($needSyncMRs as $needSyncMR)
-        {
-            $MR = new stdclass();
-            $MR->hostID        = $repo->serviceHost;
-            $MR->mriid         = $needSyncMR->iid;
-            $MR->sourceProject = $needSyncMR->source_project_id;
-            $MR->sourceBranch  = $needSyncMR->source_branch;
-            $MR->targetProject = $needSyncMR->target_project_id;
-            $MR->targetBranch  = $needSyncMR->target_branch;
-            $MR->title         = $needSyncMR->title;
-            $MR->repoID        = $repoID;
-            $MR->createdBy     = $this->app->user->account;
-            $MR->createdDate   = helper::now();
-            $MR->assignee      = $MR->createdBy;
-            $MR->mergeStatus   = $needSyncMR->merge_status ?: '';
-            $MR->status        = $needSyncMR->state ?: '';
-            if($MR->status == 'open') $MR->status = 'opened';
-            $this->dao->insert(TABLE_MR)->data($MR, $this->config->mr->create->skippedFields)
-                ->batchCheck($this->config->mr->create->requiredFields, 'notempty')
-                ->exec();
-            if(!dao::isError())
-            {
-                $mrID = $this->dao->lastInsertID();
-                $this->loadModel('action')->create('mr', $mrID, 'imported');
-            }
-        }
-
+        $this->mrZen->saveMrData($repo, $needSyncMRs);
         foreach($existedMRs as $mrID => $existedMR)
         {
             $MR = $this->mr->fetchByID($mrID);
@@ -964,9 +938,10 @@ class mr extends control
                 $newMR = new stdclass();
                 $newMR->title         = $existedMR->title;
                 $newMR->status        = $status;
+                $newMR->isFlow        = empty($existedMR->flow) ? 0 : 1;
                 $newMR->mergeStatus   = $mergeStatus;
                 $this->dao->update(TABLE_MR)->data($newMR)->where('id')->eq($mrID)->exec();
-                if(!dao::isError()) $this->loadModel('action')->create('mr', $mrID, 'synced');
+                if(!dao::isError()) $this->loadModel('action')->create(empty($existedMR->flow) ? 'mr' : 'pullreq', $mrID, 'synced');
             }
         }
 

@@ -298,4 +298,43 @@ class mrZen extends mr
 
         return false;
     }
+
+    /**
+     * 保存合并请求数据.
+     * Save merge request data.
+     *
+     * @param  object    $repo
+     * @param  array     $rawMRList
+     * @access protected
+     * @return bool
+     */
+    protected function saveMrData(object $repo, array $rawMrList): bool
+    {
+        foreach($rawMrList as $rawMR)
+        {
+            $MR = new stdclass();
+            $MR->hostID        = $repo->serviceHost;
+            $MR->mriid         = $rawMR->iid;
+            $MR->sourceProject = $rawMR->source_project_id;
+            $MR->sourceBranch  = $rawMR->source_branch;
+            $MR->targetProject = $rawMR->target_project_id;
+            $MR->targetBranch  = $rawMR->target_branch;
+            $MR->title         = $rawMR->title;
+            $MR->repoID        = $repo->id;
+            $MR->createdBy     = $this->app->user->account;
+            $MR->createdDate   = helper::now();
+            $MR->assignee      = $MR->createdBy;
+            $MR->mergeStatus   = $rawMR->merge_status ?: '';
+            $MR->status        = $rawMR->state ?: '';
+            $MR->isFlow        = empty($rawMR->flow) ? 0 : 1;
+            if($MR->status == 'open') $MR->status = 'opened';
+
+            $mrID = $this->mr->insertMr($MR);
+            if($mrID) $this->loadModel('action')->create(empty($rawMR->flow) ? 'mr' : 'pullreq', $mrID, 'opened');
+
+            if(dao::isError()) return false;
+        }
+
+        return true;
+    }
 }

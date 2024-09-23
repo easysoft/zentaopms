@@ -53,6 +53,8 @@ class mrModel extends model
             ->beginIF($mode == 'creator' && $param != 'all')->andWhere('createdBy')->eq($param)->fi()
             ->beginIF($filterProjectSql)->andWhere($filterProjectSql)->fi()
             ->beginIF($repoID)->andWhere('repoID')->eq($repoID)->fi()
+            ->beginIF($this->app->rawModule == 'mr')->andWhere('isFlow')->eq('0')->fi()
+            ->beginIF($this->app->rawModule == 'pullreq')->andWhere('isFlow')->eq('1')->fi()
             ->beginIF($objectID)->andWhere('executionID')->in($objectID)->fi()
             ->orderBy($orderBy)
             ->page($pager)
@@ -172,12 +174,10 @@ class mrModel extends model
         $result = $this->checkSameOpened($MR->hostID, $MR->sourceProject, $MR->sourceBranch, $MR->targetProject, $MR->targetBranch);
         if($result['result'] == 'fail') return $result;
 
-        $this->mrTao->insertMr($MR);
+        $MRID = $this->insertMr($MR);
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
-        $MRID = $this->dao->lastInsertID();
         $this->loadModel('action')->create('mr', $MRID, 'opened');
-
         if($MR->needCI && $MR->jobID) $this->execJob($MRID, (int)$MR->jobID);
 
         $rawMR = $this->apiCreateMR($MR->hostID, $MR);
@@ -269,10 +269,9 @@ class mrModel extends model
             return false;
         }
 
-        $this->mrTao->insertMr($MR);
+        $MRID = $this->insertMr($MR);
         if(dao::isError()) return false;
 
-        $MRID = $this->dao->lastInsertID();
         $this->loadModel('action')->create('mr', $MRID, 'opened');
 
         /* Exec Job */
@@ -517,6 +516,7 @@ class mrModel extends model
 
         if($MR)
         {
+            if(!isset($MR->flow)) $MR->flow = 0;
             $MR->gitService = strtolower($repo->SCM);
             if($MR->state == 'open') $MR->state = 'opened';
         }
@@ -1304,5 +1304,24 @@ class mrModel extends model
 
         $this->dao->update(TABLE_MR)->data($newMR)->where('id')->eq($MRID)->autoCheck()->exec();
         return dao::isError();
+    }
+
+    /**
+     * 创建合并请求。
+     * Insert a merge request.
+     *
+     * @param  object $MR
+     * @access public
+     * @return int|false
+     */
+    public function insertMr(object $MR): int|false
+    {
+        $this->dao->insert(TABLE_MR)->data($MR, $this->config->mr->create->skippedFields)
+            ->batchCheck($this->config->mr->create->requiredFields, 'notempty')
+            ->checkIF(!empty($MR->needCI), 'jobID',  'notempty')
+            ->exec();
+        if(dao::isError()) return false;
+
+        return $this->dao->lastInsertID();
     }
 }
