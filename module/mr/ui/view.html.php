@@ -130,6 +130,7 @@ panel
                 h::span
                 (
                     setClass('font-bold mt-2 mb-2 inline-block'),
+                    setID('mrBranches'),
                     $lang->mr->from,
                     h::a
                     (
@@ -152,6 +153,7 @@ panel
                 (
                     item
                     (
+                        set::trClass('mr-status-tr'),
                         set::name($lang->mr->status),
                         (!empty($MR->syncError) && $MR->synced === '0') ? h::span
                         (
@@ -211,6 +213,7 @@ panel
         cell
         (
             setClass('cell'),
+            setID('mrJob'),
             set::width('30%'),
             set::align('baseline'),
             div
