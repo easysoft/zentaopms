@@ -1137,32 +1137,28 @@ class biModel extends model
      */
     public function prepareCopySQL($duckdbTmpPath)
     {
-        $tables    = $this->config->bi->duckdb->tables;
-        $ztvtables = $this->config->bi->duckdb->ztvtables;
-        if(empty($tables)) return '';
+        $duckdbQueue = $this->dao->select('*')->from(TABLE_DUCKDBQUEUE)
+            ->where('updatedTime >= syncTime')
+            ->orWhere('syncTime IS NULL')
+            ->fetchAll('object');
 
-        $tablePrefix = $this->config->db->prefix;
-        $ztvPrefix   = 'ztv_';
+        if(empty($duckdbQueue)) return '';
 
-        $copySQL  = '';
-        foreach($tables as $table => $sql)
+        $tables = array_keys($duckdbQueue);
+
+        $copySQLs = array();
+        foreach($tables as $table)
         {
-            $table = $tablePrefix . $table;
-            $sql   = str_replace('zt_', $tablePrefix, $sql);
-
-            $tablePath = $duckdbTmpPath . $table;
-            $copySQL .= "COPY ($sql) TO '$tablePath.parquet';";
+            $sql = "select * from {$table}";
+            $copySQLs[] = "copy ($sql) to '{$duckdbTmpPath}{$table}.parquet'";
         }
 
-        foreach($ztvtables as $table => $sql)
-        {
-            $table = $ztvPrefix . $table;
+        $this->dao->update(TABLE_DUCKDBQUEUE)
+            ->set('syncTime')->eq(helper::now())
+            ->where('object')->in($tables)
+            ->exec();
 
-            $tablePath = $duckdbTmpPath . $table;
-            $copySQL .= "COPY ($sql) TO '$tablePath.parquet';";
-        }
-
-        return $copySQL;
+        return implode(';', $copySQLs);
     }
 
     /**
@@ -1215,11 +1211,43 @@ class biModel extends model
         if(!$duckdbTmpPath) return sprintf($this->lang->bi->tmpPermissionDenied, $this->getDuckDBTmpDir(true), $this->getDuckDBTmpDir(true));
 
         $copySQL = $this->prepareCopySQL($duckdbTmpPath);
+        if(empty($copySQL)) return true;
+
         $command = $this->prepareSyncCommand($duckdb->bin, $duckdb->extension, $copySQL);
         $output  = shell_exec($command);
+        $this->saveLogs("Sync command: $command");
         if(!empty($output)) return $output;
 
         return true;
+    }
+
+    /**
+     * 获取日志文件路径。
+     * Get log file.
+     *
+     * @access public
+     * @return string
+     */
+    public function getLogFile(): string
+    {
+        return $this->app->getTmpRoot() . 'log/syncparquet.' . date('Ymd') . '.log.php';
+    }
+
+    /**
+     * 存储日志。
+     * Save logs.
+     *
+     * @param  string $log
+     * @access public
+     * @return void
+     */
+    public function saveLogs(string $log): void
+    {
+        $logFile = $this->getLogFile();
+        $log     = date('Y-m-d H:i:s') . ' ' . trim($log) . "\n";
+        if(!file_exists($logFile)) $log = "<?php\ndie();\n?" . ">\n" . $log;
+
+        file_put_contents($logFile, $log, FILE_APPEND);
     }
 
     /**
