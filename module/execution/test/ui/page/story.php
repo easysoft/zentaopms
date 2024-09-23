@@ -22,7 +22,7 @@ class storyPage extends page
             'assignToAdmin'  => "//li//div[text() = 'admin']",
             'phaseBtn'       => "//*[@id='table-execution-story']/div[3]/nav[1]/button[3]",
             'phases'         => "//*[@data-page='execution-story']/div[5]/menu/menu",
-            'aaa' => "//li//div[text() = '未开始']",
+            'aaa' => "//li//div[text() = '未开始']/../../../a",
             /* 需求指派弹窗 */
             'submitBtn' => "//*[@data-name='assignedTo']/../div[3]/div/button",
         );

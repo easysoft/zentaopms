@@ -63,6 +63,22 @@ $projectStory->version->range('1');
 $projectStory->order->range('1{7}, 2{7}');
 $projectStory->gen(14);
 
+$user = zenData('user');
+$user->id->range('1-100');
+$user->dept->range('0');
+$user->account->range('admin, user1, user2');
+$user->realname->range('admin, USER1, USER2');
+$user->password->range('77839ef72f7b71a3815a77d038e267e0');
+$user->gen(3);
+
+$team = zenData('team');
+$team->id->range('1-100');
+$team->root->range('1{3}, 2{2}');
+$team->type->range('project{2}, execution{2}');
+$team->account->range('user1, user2,user1, user2');
+$team->gen(4);
+
+
 $tester = new storyTester();
 $tester->login();
 
@@ -72,7 +88,7 @@ $tester->login();
 #r($tester->checkTab('reviewingTab', '1')) && p('message') && e('reviewingTab下显示条数正确'); //检查评审中标签下显示条数
 #r($tester->unlinkStory())                 && p('message') && e('需求移除成功');               //移除需求
 #r($tester->batchUnlinkStory())            && p('message') && e('需求批量移除成功');           //批量移除需求
-#r($tester->batchEditPhase('draft', 'testing')) && p('message') && e('批量编辑阶段成功');
-#r($tester->assignTo('admin'))  && p('message') && e('指派成功');
-r($tester->batchAssignTo()) && p('message') && e('批量指派成功');
+r($tester->batchEditPhase('draft', 'testing')) && p('message') && e('批量编辑阶段成功');
+#r($tester->assignTo('USER1'))  && p('message') && e('指派成功');                              //单个指派
+#r($tester->batchAssignTo()) && p('message') && e('批量指派成功');                             //批量指派
 $tester->closeBrowser();
