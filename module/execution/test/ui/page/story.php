@@ -18,6 +18,8 @@ class storyPage extends page
             'firstAssignTo'  => "//*[@id='table-execution-story']/div[2]/div[2]/div/div[7]/div/a/span",
             'firstUnlinkBtn' => "//*[@id='table-execution-story']/div[2]/div[3]/div/div/div/nav/a[5]",
             /* 批量操作按钮 */
+            'batchAssignBtn' => "//*[@id='table-execution-story']/div[3]/nav[1]/button[1]",
+            'assignToAdmin'  => "//li//div[text() = 'admin']",
             'phaseBtn'       => "//*[@id='table-execution-story']/div[3]/nav[1]/button[3]",
             'phases'         => "//*[@data-page='execution-story']/div[5]/menu/menu",
             'aaa' => "//li//div[text() = '未开始']",

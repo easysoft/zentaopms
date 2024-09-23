@@ -73,5 +73,6 @@ $tester->login();
 #r($tester->unlinkStory())                 && p('message') && e('需求移除成功');               //移除需求
 #r($tester->batchUnlinkStory())            && p('message') && e('需求批量移除成功');           //批量移除需求
 #r($tester->batchEditPhase('draft', 'testing')) && p('message') && e('批量编辑阶段成功');
-r($tester->assignTo('admin'))  && p('message') && e('指派成功');
+#r($tester->assignTo('admin'))  && p('message') && e('指派成功');
+r($tester->batchAssignTo()) && p('message') && e('批量指派成功');
 $tester->closeBrowser();
