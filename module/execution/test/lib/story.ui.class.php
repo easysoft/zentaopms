@@ -40,4 +40,27 @@ class storyTester extends tester
         if($form->dom->firstName === false) return $this->success('需求移除成功');
         return $this->failed('需求移除失败');
     }
+
+    /**
+     * 批量移除需求。
+     * Batch unlink story.
+     *
+     * @access public
+     * @return object
+     */
+    public function batchUnlinkStory()
+    {
+        $form = $this->initForm('execution', 'story', array('execution' => '2'), 'appIframe-execution');
+        $name = $form->dom->firstName->getText();
+        $form->dom->firstCheckbox->click();
+        $form->dom->btn($this->lang->execution->unlinkStory)->click();
+        $form->wait(1);
+        $form->dom->alertModal();
+        $form->wait(1);
+
+        $form->dom->search(array("{$this->lang->story->name},=,{$name}"));
+        $form->wait(1);
+        if($form->dom->firstName === false) return $this->success('需求批量移除成功');
+        return $this->failed('需求批量移除失败');
+    }
 }
