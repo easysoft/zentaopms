@@ -13,8 +13,9 @@ namespace zin;
 $this->loadModel('release');
 $this->app->loadLang('productplan');
 
+$moduleName = $app->rawModule;
 jsVar('orderBy',  $orderBy);
-jsVar('sortLink', createLink('mr', 'linkBug', "MRID=$MRID&productID=$product->id&browseType=$browseType&param=$param&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
+jsVar('sortLink', createLink($moduleName, 'linkBug', "MRID=$MRID&productID=$product->id&browseType=$browseType&param=$param&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 
 $footToolbar = array(
     'items' => array
@@ -23,7 +24,7 @@ $footToolbar = array(
             'text'      => $lang->productplan->linkBug,
             'className' => 'batch-btn ajax-btn',
             'data-app'  => $app->tab,
-            'data-url'  => helper::createLink('mr', 'linkBug', "MRID=$MRID&productID=$product->id&browseType=$browseType&param=$param&orderBy=$orderBy")
+            'data-url'  => helper::createLink($moduleName, 'linkBug', "MRID=$MRID&productID=$product->id&browseType=$browseType&param=$param&orderBy=$orderBy")
         )
     ),
     'btnProps' => array('size' => 'sm', 'btnType' => 'secondary', 'data-type' => 'bugs'));

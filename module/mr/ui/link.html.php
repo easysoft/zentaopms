@@ -15,7 +15,8 @@ $this->loadModel('release');
 $app->loadLang('productplan');
 $app->loadLang('bug');
 
-$module = $app->tab == 'devops' ? 'repo' : $app->tab;
+$module     = $app->tab == 'devops' ? 'repo' : $app->tab;
+$moduleName = $app->rawModule;
 dropmenu
 (
     set::module($module),
@@ -25,7 +26,7 @@ dropmenu
 
 jsVar('type', $type);
 jsVar('orderBy', $orderBy);
-jsVar('sortLink', createLink('mr', 'link', "MRID={$MR->id}&type={type}&orderBy={orderBy}"));
+jsVar('sortLink', createLink($moduleName, 'link', "MRID={$MR->id}&type={type}&orderBy={orderBy}"));
 
 $actionMenu = array();
 $actionMenu['title'] = $lang->actions;
@@ -44,7 +45,7 @@ $storyCols['title']['nestedToggle'] = false;
 $storyCols['title']['link']         = array('module' => 'story', 'method' => 'view', 'params' => 'storyID={id}');
 
 $storyCols['actions']['list']['unlink']['data-confirm'] = $lang->productplan->confirmUnlinkStory;
-$storyCols['actions']['list']['unlink']['url']          = $this->createLink('mr', 'unlink', "MRID=$MR->id&productID=$product->id&type=story&linkID={id}&confirm=yes");
+$storyCols['actions']['list']['unlink']['url']          = $this->createLink($moduleName, 'unlink', "MRID=$MR->id&productID=$product->id&type=story&linkID={id}&confirm=yes");
 
 $stories = initTableData($stories, $storyCols);
 
@@ -52,7 +53,7 @@ $bugCols = $config->release->dtable->bug->fieldList;
 $bugCols['resolvedBuild']['map'] = $builds;
 $bugCols['actions'] = $actionMenu;
 $bugCols['actions']['list']['unlink']['data-confirm'] = $lang->productplan->confirmUnlinkBug;
-$bugCols['actions']['list']['unlink']['url']          = $this->createLink('mr', 'unlink', "MRID=$MR->id&productID=$product->id&type=bug&linkID={id}&confirm=yes");
+$bugCols['actions']['list']['unlink']['url']          = $this->createLink($moduleName, 'unlink', "MRID=$MR->id&productID=$product->id&type=bug&linkID={id}&confirm=yes");
 
 $bugCols['id']['checkbox']       = false;
 $bugCols['title']['data-toggle'] = 'modal';
@@ -65,41 +66,41 @@ $taskCols['assignedTo']['currentUser'] = $app->user->account;
 
 $taskCols['actions'] = $actionMenu;
 $taskCols['actions']['list']['unlink']['data-confirm'] = $lang->mr->confirmUnlinkTask;
-$taskCols['actions']['list']['unlink']['url']          = $this->createLink('mr', 'unlink', "MRID=$MR->id&productID=$product->id&type=task&linkID={id}&confirm=yes");
+$taskCols['actions']['list']['unlink']['url']          = $this->createLink($moduleName, 'unlink', "MRID=$MR->id&productID=$product->id&type=task&linkID={id}&confirm=yes");
 
 $tasks = initTableData($tasks, $taskCols);
 
 $linkStoryBtn = $linkBugBtn = $linkTaskBtn = null;
-if(common::hasPriv('mr', 'linkStory'))
+if(common::hasPriv($moduleName, 'linkStory'))
 {
     $linkStoryBtn = btn(set(array(
         'text'     => $lang->productplan->linkStory,
         'icon'     => 'link',
-        'data-url' => inlink('linkStory', "MRID={$MR->id}&productID={$product->id}{$param}&orderBy={$orderBy}"),
+        'data-url' => createLink($moduleName, 'linkStory', "MRID={$MR->id}&productID={$product->id}{$param}&orderBy={$orderBy}"),
         'class'    => 'link mr-actions',
         'type'     => 'primary',
         'onclick'  => 'showLink(this)'
     )));
 }
 
-if(common::hasPriv('mr', 'linkBug'))
+if(common::hasPriv($moduleName, 'linkBug'))
 {
     $linkBugBtn = btn(set(array(
         'text'     => $lang->productplan->linkBug,
         'icon'     => 'link',
-        'data-url' => inlink('linkBug', "MRID={$MR->id}&productID={$product->id}{$param}&orderBy={$orderBy}"),
+        'data-url' => createLink($moduleName, 'linkBug', "MRID={$MR->id}&productID={$product->id}{$param}&orderBy={$orderBy}"),
         'class'    => 'link mr-actions',
         'type'     => 'primary',
         'onclick'  => 'showLink(this)'
     )));
 }
 
-if(common::hasPriv('mr', 'linkTask'))
+if(common::hasPriv($moduleName, 'linkTask'))
 {
     $linkTaskBtn = btn(set(array(
         'text'     => $lang->mr->linkTask,
         'icon'     => 'link',
-        'data-url' => inlink('linkTask', "MRID={$MR->id}&productID={$product->id}{$param}&browseType=unclosed&orderBy={$orderBy}"),
+        'data-url' => createLink($moduleName, 'linkTask', "MRID={$MR->id}&productID={$product->id}{$param}&browseType=unclosed&orderBy={$orderBy}"),
         'class'    => 'link mr-actions',
         'type'     => 'primary',
         'onclick'  => 'showLink(this)'

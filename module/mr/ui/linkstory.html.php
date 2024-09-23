@@ -10,8 +10,9 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$moduleName = $app->rawModule;
 jsVar('orderBy',  $orderBy);
-jsVar('sortLink', createLink('mr', 'linkStory', "MRID=$MRID&productID=$product->id&browseType=$browseType&param=$param&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
+jsVar('sortLink', createLink($moduleName, 'linkStory', "MRID=$MRID&productID=$product->id&browseType=$browseType&param=$param&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 
 $this->loadModel('release');
 $app->loadLang('productplan');
@@ -22,7 +23,7 @@ $footToolbar = array(
             'text'      => $lang->mr->linkStory,
             'className' => 'batch-btn ajax-btn',
             'data-app'  => $app->tab,
-            'data-url'  => helper::createLink('mr', 'linkStory', "MRID=$MRID&productID=$product->id&browseType=$browseType&param=$param&orderBy=$orderBy")
+            'data-url'  => createLink($moduleName, 'linkStory', "MRID=$MRID&productID=$product->id&browseType=$browseType&param=$param&orderBy=$orderBy")
         )
     ),
     'btnProps' => array('size' => 'sm', 'btnType' => 'secondary', 'data-type' => 'stories'));
