@@ -63,4 +63,36 @@ class storyTester extends tester
         if($form->dom->firstName === false) return $this->success('需求批量移除成功');
         return $this->failed('需求批量移除失败');
     }
+
+    /**
+     * 批量编辑阶段。
+     * Batch edit phase.
+     *
+     * @param  string $status draft|reviewing|active|changing|closed
+     * @param  string $phase  wait|planned|projected|designing|designed|developing|developed|testing|tested|verified|rejected|delivering|delivered|released|closed
+     * @access public
+     * @return object
+     */
+    public function batchEditPhase($status, $phase)
+    {
+        $form        = $this->initForm('execution', 'story', array('execution' => '2'), 'appIframe-execution');
+        $storyStatus = $this->lang->story->statusList->$status;
+        $storyPhase  = $this->lang->story->stageList->$phase;
+        $phaseXpath  = $form->dom->xpath['phases'] . "//*[text() = '{$storyPhase}']";
+
+        $form->dom->search(array("{$this->lang->story->status},=,{$storyStatus}"));
+        $form->wait(1);
+        $form->dom->firstCheckbox->click();
+        $form->dom->phaseBtn->click();
+        $form->wait(1);
+        $form = $this->loadPage();
+        $form->wait(3);
+        $phaseXpath->click();
+        if($status == 'draft' || $status == 'closed') $form->dom->alertModal();
+        $form->wait(1);
+
+        $afterPhase = $form->dom->firstPhase->getText();
+        if($afterPhase == $storyPhase) return $this->success('批量编辑阶段成功');
+        return $this->failed('批量编辑阶段失败');
+    }
 }
