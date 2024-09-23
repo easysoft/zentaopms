@@ -36,32 +36,32 @@ $projectProduct->product->range('1');
 $projectProduct->gen(5);
 
 $story = zenData('story');
-$story->id->range('1-7');
+$story->id->range('1-100');
 $story->parent->range('0');
 $story->isParent->range('0');
-$story->root->range('1-7');
-$story->path->range('`,1,`, `,2,`, `,3,`, `,4,`, `,5,`, `,6,`, `,7,`');
+$story->root->range('1-9');
+$story->path->range('`,1,`, `,2,`, `,3,`, `,4,`, `,5,`, `,6,`, `,7,`, `,8,`, `,9,`');
 $story->grade->range('1');
 $story->product->range('1');
 $story->module->range('0');
 $story->plan->range('0');
-$story->title->range('研需1, 研需2, 研需3, 研需4, 研需5, 研需6, 研需7');
+$story->title->range('研需1, 研需2, 研需3, 研需4, 研需5, 研需6, 研需7, 研需8, 研需9');
 $story->type->range('story');
 $story->estimate->range('0');
-$story->status->range('active{3}, closed, reviewing, draft, changing');
+$story->status->range('active{3}, closed, reviewing, draft{3}, changing');
 $story->stage->range('projected');
 $story->assignedTo->range('[]');
 $story->version->range('1');
-$story->gen(7);
+$story->gen(9);
 
 $projectStory = zenData('projectstory');
-$projectStory->project->range('1{7}, 2{7}');
+$projectStory->project->range('1{9}, 2{9}');
 $projectStory->product->range('1');
 $projectStory->branch->range('0');
-$projectStory->story->range('1-7, 1-7');
+$projectStory->story->range('1-9, 1-9');
 $projectStory->version->range('1');
-$projectStory->order->range('1{7}, 2{7}');
-$projectStory->gen(14);
+$projectStory->order->range('1{9}, 2{9}');
+$projectStory->gen(18);
 
 $user = zenData('user');
 $user->id->range('1-100');
@@ -83,9 +83,9 @@ $tester = new storyTester();
 $tester->login();
 
 /* 标签统计 */
-r($tester->checkTab('allTab', '7'))       && p('message') && e('allTab下显示条数正确');       //检查全部标签下显示条数
-r($tester->checkTab('unclosedTab', '6'))  && p('message') && e('unclosedTab下显示条数正确');  //检查未关闭标签下显示条数
-r($tester->checkTab('draftTab', '1'))     && p('message') && e('draftTab下显示条数正确');     //检查草稿标签下显示条数
+r($tester->checkTab('allTab', '9'))       && p('message') && e('allTab下显示条数正确');       //检查全部标签下显示条数
+r($tester->checkTab('unclosedTab', '8'))  && p('message') && e('unclosedTab下显示条数正确');  //检查未关闭标签下显示条数
+r($tester->checkTab('draftTab', '3'))     && p('message') && e('draftTab下显示条数正确');     //检查草稿标签下显示条数
 r($tester->checkTab('reviewingTab', '1')) && p('message') && e('reviewingTab下显示条数正确'); //检查评审中标签下显示条数
 /* 移除需求 */
 r($tester->unlinkStory())       && p('message') && e('需求移除成功');     //移除需求
