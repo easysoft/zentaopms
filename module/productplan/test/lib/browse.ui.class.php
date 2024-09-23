@@ -46,23 +46,36 @@ class browseTester extends tester
         }
     }
 
+    /**
+     * 看板中计划排序
+     * sort in kanban
+     * @param $planurl 产品ID
+     * @param $orderBy 排序方式
+     *
+     * @return mixed
+     */
     public function sortInKanban($planurl, $orderBy)
     {
         $browsePage = $this->initForm('productplan', 'browse', $planurl, 'appIframe-product');
-        $browsePage->dom->kanbanBtn->click();
+        $browsePage->dom->kanbanBtn->click();//点击进入看板模式
         $browsePage->dom->orderByBtn->click();
+        $orderButtons = [
+            'begin_desc' => 'beginDesc',
+            'begin_asc'  => 'beginAsc',
+        ];
+        $browsePage->dom->{$orderButtons[$orderBy]}->click();//点击对应的排序方式
+        $browsePage->wait(2);
+        $firBeginToEnd = $browsePage->dom->firBeginToEnd->getText(); // 第一个计划卡片中计划的开始结束时间
+        $secBeginToEnd = $browsePage->dom->secBeginToEnd->getText(); // 第二个计划卡片中计划的开始结束时间
+        $firBegin      = substr($firBeginToEnd, 0, strpos($firBeginToEnd, " {$this->lang->productplan->to} ")); // 第一个计划的开始时间
+        $secBegin      = substr($secBeginToEnd, 0, strpos($secBeginToEnd, " {$this->lang->productplan->to} ")); // 第二个计划的开始时间
         if ($orderBy === 'begin_desc')
         {
-            $browsePage->dom->beginDesc->click();
-            $firBeginToEnd = $browsePage->dom->firBeginToEnd->getText();//第一个计划卡片中计划的开始结束时间
-            $firBegin      = substr($firBeginToEnd, 0, strpos($firBeginToEnd, " {$this->lang->productplan->to} "));//第一个计划的开始时间
-            $secBeginToEnd = $browsePage->dom->secBeginToEnd->getText();//第二个计划卡片中计划的开始结束时间
-            $secBegin      = substr($secBeginToEnd, 0, strpos($secBeginToEnd, " {$this->lang->productplan->to} "));//第二个计划的开始时间
             return ($firBegin > $secBegin) ? $this->success("按计划开始时间倒序排序成功") : $this->failed("按计划开始时间倒序排序失败");
         }
-        else
+        if ($orderBy === 'begin_asc')
         {
-            $browsePage->dom->beginAsc->click();
+            return ($firBegin < $secBegin) ? $this->success("按计划开始时间正序排序成功") : $this->failed("按计划开始时间正序排序失败");
         }
     }
 }
