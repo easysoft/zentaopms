@@ -38,3 +38,23 @@ class releaseLinkBugTester extends tester
         $form->dom->resolvedBugTab->click();
         $form->wait(2);
         $linkNumBefore = $form->dom->resolvedBugNum->getText(); // 记录移除bug前发布关联的bug数量
+        $form->dom->unlinkFirBugBtn->click(); // 点击第一行的单个移除按钮
+        $form->wait(1);
+        $form->dom->alertModal(); // 模态框中点击确定
+        $form->wait(2);
+        $linkNumAfter = $form->dom->resolvedBugNum->getText(); // 记录移除bug后发布关联的bug数量
+        // 断言检查单个移除bug是否成功
+        return ($linkNumAfter == $linkNumBefore - 1) ? $this->success('单个移除bug成功') : $this->failed('单个移除bug失败');
+    }
+
+    /**
+     * unlink all bug of project release.
+     * 移除全部bug
+     *
+     * @return object
+     */
+    public function batchUnlinkBug()
+    {
+        $form = $this->initForm('projectrelease', 'view', array('releaseID' => 1), 'appIframe-project');
+        $form->dom->resolvedBugTab->click();
+        $form->wait(1);
