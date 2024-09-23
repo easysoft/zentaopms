@@ -19,6 +19,7 @@ dropmenu
     set::url(createLink($module, 'ajaxGetDropMenu', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
 );
 
+include 'header.html.php';
 $hasNoChange    = $MR->synced && empty($rawMR->changes_count) ? true : false;
 $hasConflict    = $MR->synced === '1' ? $rawMR->has_conflicts : !$MR->hasNoConflict;
 $sourceDisabled = ($MR->status == 'merged' && $MR->removeSourceBranch == '1') ? 'disabled' : '';
@@ -113,67 +114,7 @@ panel
     div
     (
         set::id('mrMenu'),
-        nav
-        (
-            li
-            (
-                setClass('nav-item'),
-                a($lang->mr->view, setClass('active'))
-            ),
-            li
-            (
-                setClass('nav-item'),
-                a
-                (
-                    $lang->mr->commitLogs,
-                    set::href(inlink('commitlogs', "MRID={$MR->id}")),
-                    set('data-app', $app->tab)
-                )
-            ),
-            li
-            (
-                setClass('nav-item'),
-                a
-                (
-                    $lang->mr->viewDiff,
-                    set::href(inlink('diff', "MRID={$MR->id}")),
-                    set('data-app', $app->tab)
-                )
-            ),
-            li
-            (
-                setClass('nav-item'),
-                a
-                (
-                    icon($lang->icons['story']),
-                    $lang->productplan->linkedStories,
-                    set::href(inlink('link', "MRID={$MR->id}&type=story")),
-                    set('data-app', $app->tab)
-                )
-            ),
-            li
-            (
-                setClass('nav-item'),
-                a
-                (
-                    icon($lang->icons['bug']),
-                    $lang->productplan->linkedBugs,
-                    set::href(inlink('link', "MRID={$MR->id}&type=bug")),
-                    set('data-app', $app->tab)
-                )
-            ),
-            li
-            (
-                setClass('nav-item'),
-                a
-                (
-                    icon('todo'),
-                    $lang->mr->linkedTasks,
-                    set::href(inlink('link', "MRID={$MR->id}&type=task")),
-                    set('data-app', $app->tab)
-                )
-            )
-        )
+        $headers
     ),
     div
     (
