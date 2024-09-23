@@ -18,3 +18,20 @@ fields:
   - field: severity
     range: 1-4
   - field: pri
+    range: 1-4
+  - field: type
+    range: "[codeerror,config,install,security,performance,standard,automation,designdefect,others]"
+  - field: status
+    range: active{50},resolved{30}
+  - field: confirmed
+    range: 0,1
+  - field: openedBy
+    range: admin
+  - field: openedDate
+    range: "(-1M)-(+1w):-1D"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: assignedTo
+    range: admin
+  - field: deleted
+    range: 0
