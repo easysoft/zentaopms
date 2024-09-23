@@ -21,8 +21,7 @@ class storyPage extends page
             'batchAssignBtn' => "//*[@id='table-execution-story']/div[3]/nav[1]/button[1]",
             'assignToAdmin'  => "//li//div[text() = 'admin']",
             'phaseBtn'       => "//*[@id='table-execution-story']/div[3]/nav[1]/button[3]",
-            'phases'         => "//*[@data-page='execution-story']/div[5]/menu/menu",
-            'aaa' => "//li//div[text() = '未开始']/../../../a",
+            'phases'         => "//*[@data-page='execution-story']/div[4]/menu/menu",
             /* 需求指派弹窗 */
             'submitBtn' => "//*[@data-name='assignedTo']/../div[3]/div/button",
         );

@@ -83,16 +83,26 @@ class storyTester extends tester
 
         $form->dom->search(array("{$this->lang->story->status},=,{$storyStatus}"));
         $form->wait(1);
+        $beforePhase = $form->dom->firstPhase->getText();
         $form->dom->firstCheckbox->click();
         $form->dom->phaseBtn->click();
         $form->wait(1);
         $form->dom->stage->click();
+        $form->wait(1);
         if($status == 'draft' || $status == 'closed') $form->dom->alertModal();
         $form->wait(1);
 
         $afterPhase = $form->dom->firstPhase->getText();
-        if($afterPhase == $storyPhase) return $this->success('批量编辑阶段成功');
-        return $this->failed('批量编辑阶段失败');
+        if($status == 'draft' || $status == 'closed')
+        {
+            if($afterPhase == $beforePhase) return $this->success('批量编辑阶段成功');
+            return $this->failed('批量编辑阶段失败');
+        }
+        else
+        {
+            if($afterPhase == $storyPhase) return $this->success('批量编辑阶段成功');
+            return $this->failed('批量编辑阶段失败');
+        }
     }
 
     /**

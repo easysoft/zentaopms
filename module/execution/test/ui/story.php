@@ -82,13 +82,20 @@ $team->gen(4);
 $tester = new storyTester();
 $tester->login();
 
-#r($tester->checkTab('allTab', '7'))       && p('message') && e('allTab下显示条数正确');       //检查全部标签下显示条数
-#r($tester->checkTab('unclosedTab', '6'))  && p('message') && e('unclosedTab下显示条数正确');  //检查未关闭标签下显示条数
-#r($tester->checkTab('draftTab', '1'))     && p('message') && e('draftTab下显示条数正确');     //检查草稿标签下显示条数
-#r($tester->checkTab('reviewingTab', '1')) && p('message') && e('reviewingTab下显示条数正确'); //检查评审中标签下显示条数
-#r($tester->unlinkStory())                 && p('message') && e('需求移除成功');               //移除需求
-#r($tester->batchUnlinkStory())            && p('message') && e('需求批量移除成功');           //批量移除需求
-r($tester->batchEditPhase('draft', 'testing')) && p('message') && e('批量编辑阶段成功');
-#r($tester->assignTo('USER1'))  && p('message') && e('指派成功');                              //单个指派
-#r($tester->batchAssignTo()) && p('message') && e('批量指派成功');                             //批量指派
+/* 标签统计 */
+r($tester->checkTab('allTab', '7'))       && p('message') && e('allTab下显示条数正确');       //检查全部标签下显示条数
+r($tester->checkTab('unclosedTab', '6'))  && p('message') && e('unclosedTab下显示条数正确');  //检查未关闭标签下显示条数
+r($tester->checkTab('draftTab', '1'))     && p('message') && e('draftTab下显示条数正确');     //检查草稿标签下显示条数
+r($tester->checkTab('reviewingTab', '1')) && p('message') && e('reviewingTab下显示条数正确'); //检查评审中标签下显示条数
+/* 移除需求 */
+r($tester->unlinkStory())       && p('message') && e('需求移除成功');     //移除需求
+r($tester->batchUnlinkStory())  && p('message') && e('需求批量移除成功'); //批量移除需求
+/* 批量编辑阶段 */
+r($tester->batchEditPhase('draft', 'testing'))    && p('message') && e('批量编辑阶段成功'); //编辑草稿状态的需求的阶段为测试中
+r($tester->batchEditPhase('reviewing', 'wait'))   && p('message') && e('批量编辑阶段成功'); //编辑评审中状态的需求的阶段为未开始
+r($tester->batchEditPhase('active', 'verified'))  && p('message') && e('批量编辑阶段成功'); //编辑激活状态的需求的阶段为已验收
+r($tester->batchEditPhase('changing', 'planned')) && p('message') && e('批量编辑阶段成功'); //编辑变更中状态的需求的阶段为已计划
+r($tester->batchEditPhase('closed', 'rejected'))  && p('message') && e('批量编辑阶段成功'); //编辑已关闭状态的需求的阶段为验收失败
+r($tester->assignTo('USER1'))  && p('message') && e('指派成功');  //单个指派
+r($tester->batchAssignTo()) && p('message') && e('批量指派成功'); //批量指派
 $tester->closeBrowser();
