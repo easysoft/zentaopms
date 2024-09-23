@@ -118,4 +118,25 @@ class storyTester extends tester
         if($assignedTo == $user) return $this->success('指派成功');
         return $this->failed('指派失败');
     }
+
+    /**
+     * 需求批量指派
+     * Batch assign story
+     *
+     * @access public
+     * @return object
+     */
+    public function batchAssignTo()
+    {
+        $form = $this->initForm('execution', 'story', array('execution' => '2'), 'appIframe-execution');
+        $form->dom->firstCheckbox->click();
+        $form->dom->batchAssignBtn->click();
+        $form->wait(1);
+        $form->dom->assignToAdmin->click();
+        $form->wait(1);
+
+        $assignedTo = $form->dom->firstAssignTo->getText();
+        if($assignedTo == 'admin') return $this->success('批量指派成功');
+        return $this->failed('批量指派失败');
+    }
 }
