@@ -109,7 +109,6 @@ class storyTester extends tester
     {
         $form = $this->initForm('execution', 'story', array('execution' => '2'), 'appIframe-execution');
         $form->dom->firstAssignTo->click();
-        #$form = $this->loadPage();
         $form->dom->assignedTo->picker($user);
         $form->dom->submitBtn->click();
         $form->wait(1);
