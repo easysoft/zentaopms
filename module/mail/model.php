@@ -234,20 +234,21 @@ class mailModel extends model
      * @param  bool    $includeMe
      * @param  array   $emails
      * @param  bool    $forceSync
+     * @param  bool    $processUser
      * @access public
      * @return int|string|bool
      */
-    public function send(string $toList, string $subject, string $body = '', string $ccList = '', bool $includeMe = false, array $emails = array(), bool $forceSync = false): int|string|bool
+    public function send(string $toList, string $subject, string $body = '', string $ccList = '', bool $includeMe = false, array $emails = array(), bool $forceSync = false, bool $processUser = true): int|string|bool
     {
         if(!$this->config->mail->turnon) return false;
-        if(!empty($this->config->mail->async) and !$forceSync) return $this->addQueue($toList, $subject, $body, $ccList, $includeMe);
+        if(!empty($this->config->mail->async) and !$forceSync) return $this->addQueue($toList, $subject, $body, $ccList, $includeMe, $emails = array());
 
         ob_start();
 
         $images = $this->mailTao->getImages($body);
         if($images) $body = $this->mailTao->replaceImageURL($body, $images);
 
-        list($toList, $ccList) = $this->mailTao->processToAndCC($toList, $ccList, $includeMe);
+        if($processUser) list($toList, $ccList) = $this->mailTao->processToAndCC($toList, $ccList, $includeMe);
         /* Get realname and email of users. */
         if(empty($emails)) $emails = $this->loadModel('user')->getRealNameAndEmails($toList . ',' . $ccList);
 

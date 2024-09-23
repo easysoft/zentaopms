@@ -113,9 +113,9 @@ class messageModel extends model
                     include file_exists($configRoot . 'my.php') ? $configRoot . 'my.php' : $configRoot . 'config.php';
                 }
 
-                if($objectType == 'feedback')
+                if($objectType == 'feedback' || $objectType == 'ticket')
                 {
-                    $this->loadModel('feedback')->sendmail($objectID, $actionID);
+                    $this->loadModel($objectType)->sendmail($objectID, $actionID);
                 }
                 else
                 {
@@ -276,6 +276,13 @@ class messageModel extends model
             $toList = array_merge(explode(',', $toList), explode(',', $object->members));
             $toList = array_filter(array_unique($toList));
             $toList = implode(',', $toList);
+        }
+
+        if($objectType == 'ticket')
+        {
+            $action = $this->loadModel('action')->getById($actionID);
+            list($toList, $ccList) = $this->loadModel($objectType)->getToAndCcList($object, $action);
+            $toList = $toList . ',' . $ccList;
         }
 
         if(empty($toList) and $objectType == 'demand' and $this->config->edition == 'ipd')
