@@ -336,7 +336,7 @@ class mrModel extends model
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
         $linkParams = $this->app->tab == 'execution' ? "repoID=0&mode=status&param=opened&objectID={$MR->executionID}" : "repoID={$MR->repoID}";
-        return array('result' => 'success', 'message' => $needExecJob ? $this->lang->mr->triggeredCI : $this->lang->saveSuccess, 'load' => helper::createLink('mr', 'browse', $linkParams));
+        return array('result' => 'success', 'message' => $needExecJob ? $this->lang->mr->triggeredCI : $this->lang->saveSuccess, 'load' => helper::createLink($this->app->rawModule, 'browse', $linkParams));
     }
 
     /**

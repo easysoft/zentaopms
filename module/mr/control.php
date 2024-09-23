@@ -87,10 +87,10 @@ class mr extends control
         $repoList = $this->loadModel('repo')->getListBySCM(implode(',', $this->config->repo->gitServiceTypeList));
         if(empty($repoList)) $this->locate($this->repo->createLink('create'));
 
-        if(!isset($repoList[$repoID])) return $this->locate($this->createLink('repo', 'browse', "repoID=$repoID&objectID=$objectID"));
-
         if(!$repoID) $repoID = key($repoList);
         $repoID = $this->repo->saveState($repoID, $objectID);
+        if(!isset($repoList[$repoID])) return $this->locate($this->createLink('repo', 'browse', "repoID=$repoID&objectID=$objectID"));
+
         $repo   = $repoList[$repoID];
         $this->loadModel('ci')->setMenu($repo->id);
 
@@ -291,7 +291,7 @@ class mr extends control
         $this->mr->deleteByID($MRID);
 
         if(dao::isError()) return $this->sendError(dao::getError());
-        return $this->send(array('result' => 'success', 'load' => true));
+        return $this->send(array('result' => 'success', 'load' => $this->createLink($this->app->rawModule, 'browse')));
     }
 
     /**
