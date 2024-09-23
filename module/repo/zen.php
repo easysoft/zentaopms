@@ -1362,7 +1362,7 @@ class repoZen extends repo
     protected function syncLocalCommit(object $repo): string
     {
         $logFile = realPath($this->app->getTmpRoot() . $this->config->repo->repoSyncLog->logFilePrefix . strtolower($repo->SCM) . ".{$repo->name}.log");
-        if(file_exists($logFile))
+        if($logFile && file_exists($logFile))
         {
             $content  = file($logFile);
             foreach($content as $line)
