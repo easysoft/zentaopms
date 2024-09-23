@@ -63,6 +63,7 @@ class browseTester extends tester
             'begin_desc' => 'beginDesc',
             'begin_asc'  => 'beginAsc',
         ];
+        $browsePage->wait(2);
         $browsePage->dom->{$orderButtons[$orderBy]}->click();//点击对应的排序方式
         $browsePage->wait(2);
         $firBeginToEnd = $browsePage->dom->firBeginToEnd->getText(); // 第一个计划卡片中计划的开始结束时间

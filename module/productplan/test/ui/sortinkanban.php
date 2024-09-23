@@ -2,9 +2,14 @@
 <?php
 
 /**
+
 title=计划看板中排序测试
 timeout=0
 cid=11
+
+-按计划开始时间倒序进行排序 最终测试状态 @SUCCESS
+-按计划开始时间正序进行排序 最终测试状态 @SUCCESS
+
 */
 chdir(__DIR__);
 include '../lib/browse.ui.class.php';
