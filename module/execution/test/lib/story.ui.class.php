@@ -78,17 +78,15 @@ class storyTester extends tester
         $form        = $this->initForm('execution', 'story', array('execution' => '2'), 'appIframe-execution');
         $storyStatus = $this->lang->story->statusList->$status;
         $storyPhase  = $this->lang->story->stageList->$phase;
-        $phaseXpath  = $form->dom->xpath['phases'] . "//*[text() = '{$storyPhase}']";
 
-       # $form->dom->search(array("{$this->lang->story->status},=,{$storyStatus}"));
+        $form->dom->xpath['stage'] = $form->dom->xpath['phases'] . "//*[text() = '{$storyPhase}']";
+
+        $form->dom->search(array("{$this->lang->story->status},=,{$storyStatus}"));
         $form->wait(1);
         $form->dom->firstCheckbox->click();
         $form->dom->phaseBtn->click();
         $form->wait(1);
-        $form = $this->loadPage();
-        $form->wait(3);
-        $form->dom->aaa->click();
-#        $phaseXpath->click();
+        $form->dom->stage->click();
         if($status == 'draft' || $status == 'closed') $form->dom->alertModal();
         $form->wait(1);
 
