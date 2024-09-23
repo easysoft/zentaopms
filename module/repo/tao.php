@@ -76,7 +76,7 @@ class repoTao extends repoModel
      */
     protected function checkName(object $repo)
     {
-        $pattern = "/^[a-zA-Z0-9_\-\.]+$/";
+        $pattern = "/^[a-zA-Z_\-\.]+$/";
         return preg_match($pattern, $repo->name);
     }
 
