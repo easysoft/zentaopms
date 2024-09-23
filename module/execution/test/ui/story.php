@@ -70,4 +70,5 @@ r($tester->checkTab('unclosedTab', '6'))  && p('message') && e('unclosedTab下�
 r($tester->checkTab('draftTab', '1'))     && p('message') && e('draftTab下显示条数正确');     //检查草稿标签下显示条数
 r($tester->checkTab('reviewingTab', '1')) && p('message') && e('reviewingTab下显示条数正确'); //检查评审中标签下显示条数
 r($tester->unlinkStory())                 && p('message') && e('需求移除成功');               //移除需求
+r($tester->batchUnlinkStory())            && p('message') && e('需求批量移除成功');           //批量移除需求
 $tester->closeBrowser();

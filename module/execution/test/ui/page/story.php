@@ -12,6 +12,7 @@ class storyPage extends page
             'reviewingTab' => "//*[@data-page='execution-story']//div[@id='featureBar']/menu/li[3]/a",
             'num'          => "//*[@id='table-execution-story']/div[3]/div[2]/strong[1]",
             /* 列表 */
+            'firstCheckbox'  => "//*[@id='table-execution-story']/div[2]/div[1]/div/div[1]/div/div",
             'firstName'      => "//*[@id='table-execution-story']/div[2]/div[1]/div/div[2]/div/a",
             'firstUnlinkBtn' => "//*[@id='table-execution-story']/div[2]/div[3]/div/div/div/nav/a[5]",
         );
