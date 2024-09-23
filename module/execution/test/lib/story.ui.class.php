@@ -80,19 +80,42 @@ class storyTester extends tester
         $storyPhase  = $this->lang->story->stageList->$phase;
         $phaseXpath  = $form->dom->xpath['phases'] . "//*[text() = '{$storyPhase}']";
 
-        $form->dom->search(array("{$this->lang->story->status},=,{$storyStatus}"));
+       # $form->dom->search(array("{$this->lang->story->status},=,{$storyStatus}"));
         $form->wait(1);
         $form->dom->firstCheckbox->click();
         $form->dom->phaseBtn->click();
         $form->wait(1);
         $form = $this->loadPage();
         $form->wait(3);
-        $phaseXpath->click();
+        $form->dom->aaa->click();
+#        $phaseXpath->click();
         if($status == 'draft' || $status == 'closed') $form->dom->alertModal();
         $form->wait(1);
 
         $afterPhase = $form->dom->firstPhase->getText();
         if($afterPhase == $storyPhase) return $this->success('批量编辑阶段成功');
         return $this->failed('批量编辑阶段失败');
+    }
+
+    /**
+     * 需求指派
+     * Assign story
+     *
+     * @param  string $user
+     * @access public
+     * @return object
+     */
+    public function assignTo($user)
+    {
+        $form = $this->initForm('execution', 'story', array('execution' => '2'), 'appIframe-execution');
+        $form->dom->firstAssignTo->click();
+        #$form = $this->loadPage();
+        $form->dom->assignedTo->picker($user);
+        $form->dom->submitBtn->click();
+        $form->wait(1);
+
+        $assignedTo = $form->dom->firstAssignTo->getText();
+        if($assignedTo == $user) return $this->success('指派成功');
+        return $this->failed('指派失败');
     }
 }
