@@ -310,6 +310,8 @@ class mrZen extends mr
      */
     protected function saveMrData(object $repo, array $rawMrList): bool
     {
+        $now = helper::now();
+        $this->loadModel('action');
         foreach($rawMrList as $rawMR)
         {
             $MR = new stdclass();
@@ -322,7 +324,7 @@ class mrZen extends mr
             $MR->title         = $rawMR->title;
             $MR->repoID        = $repo->id;
             $MR->createdBy     = $this->app->user->account;
-            $MR->createdDate   = helper::now();
+            $MR->createdDate   = $now;
             $MR->assignee      = $MR->createdBy;
             $MR->mergeStatus   = $rawMR->merge_status ?: '';
             $MR->status        = $rawMR->state ?: '';
@@ -330,7 +332,7 @@ class mrZen extends mr
             if($MR->status == 'open') $MR->status = 'opened';
 
             $mrID = $this->mr->insertMr($MR);
-            if($mrID) $this->loadModel('action')->create(empty($rawMR->flow) ? 'mr' : 'pullreq', $mrID, 'opened');
+            if($mrID) $this->action->create(empty($rawMR->flow) ? 'mr' : 'pullreq', $mrID, 'opened');
 
             if(dao::isError()) return false;
         }
