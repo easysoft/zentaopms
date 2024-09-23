@@ -1879,9 +1879,9 @@ class biModel extends model
             $index++;
         }
 
-        $lastRow        = count($data->array) - 1;
-        $hasGroup       = isset($data->groups);
-        $hasColumnTotal = !empty($data->columnTotal) && $data->columnTotal != 'noShow';
+        $lastRow     = count($data->array) - 1;
+        $hasGroup    = isset($data->groups);
+        $showLastRow = $data->showLastRow;
 
         $drills = !empty($data->drills) ? array_values($data->drills) : array();
         foreach($data->array as $rowKey => $rowData)
@@ -1926,7 +1926,7 @@ class biModel extends model
 
                 $isFirstColumnAndLastRow = $i === 0 && $rowKey === $lastRow;
 
-                if($isFirstColumnAndLastRow && $hasGroup && $hasColumnTotal)
+                if($isFirstColumnAndLastRow && $hasGroup && $showLastRow)
                 {
                     $rows[$rowKey][$field . '_colspan'] = count($data->groups);
                     $cellSpan[$field]['colspan'] = $field . '_colspan';
