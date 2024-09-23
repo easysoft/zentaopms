@@ -1,8 +1,8 @@
 CREATE TABLE IF NOT EXISTS `zt_workflowgroup` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `type` varchar(10) NOT NULL DEFAULT '',
-  `projectModel` char(30) NOT NULL DEFAULT '',
-  `projectType` tinyint(1) unsigned NOT NULL DEFAULT 1,
+  `projectModel` varchar(10) NOT NULL DEFAULT '',
+  `projectType` varchar(10) NOT NULL DEFAULT '',
   `name` varchar(30) NOT NULL DEFAULT '',
   `desc` text NULL,
   `disabledModules` text NULL,
