@@ -281,7 +281,7 @@ class programplanTao extends programplanModel
             /* Determines if the object is delay. */
             $data->delay     = $this->lang->programplan->delayList[0];
             $data->delayDays = 0;
-            if($today > $dateLimit['end'] && $plan->status != 'closed')
+            if($today > $dateLimit['end'] && (!$plan || $plan->status != 'closed'))
             {
                 $delayDays = helper::diffDate(($task->status == 'done' || $task->status == 'closed') ? substr($task->finishedDate, 0, 10) : $today, substr($dateLimit['end'], 0, 10));
                 if($delayDays > 0)
