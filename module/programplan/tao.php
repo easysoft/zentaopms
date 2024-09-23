@@ -271,7 +271,8 @@ class programplanTao extends programplanModel
 
         foreach($tasks as $task)
         {
-            $dateLimit    = $this->getTaskDateLimit($task, zget($plans, $task->execution, null));
+            $plan         = zget($plans, $task->execution, null);
+            $dateLimit    = $this->getTaskDateLimit($task, $plan);
             $data         = $this->buildTaskDataForGantt($task, $dateLimit);
             $data->id     = $task->execution . '-' . $task->id;
             $data->parent = $task->parent > 0 ? $task->execution . '-' . $task->parent : $task->execution;
@@ -280,10 +281,14 @@ class programplanTao extends programplanModel
             /* Determines if the object is delay. */
             $data->delay     = $this->lang->programplan->delayList[0];
             $data->delayDays = 0;
-            if($today > $dateLimit['end'])
+            if($today > $dateLimit['end'] && $plan->status != 'closed')
             {
-                $data->delay     = $this->lang->programplan->delayList[1];
-                $data->delayDays = helper::diffDate($today, $dateLimit['end']);
+                $delayDays = helper::diffDate(($task->status == 'done' || $task->status == 'closed') ? substr($task->finishedDate, 0, 10) : $today, substr($dateLimit['end'], 0, 10));
+                if($delayDays > 0)
+                {
+                    $data->delayDays = $delayDays;
+                    $data->delay     = $this->lang->programplan->delayList[1];
+                }
             }
 
             /* If multi task then show the teams. */
