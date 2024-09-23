@@ -50,6 +50,7 @@ $story->type->range('story');
 $story->estimate->range('0');
 $story->status->range('active{3}, closed, reviewing, draft, changing');
 $story->stage->range('projected');
+$story->assignedTo->range('[]');
 $story->version->range('1');
 $story->gen(7);
 
@@ -71,5 +72,6 @@ $tester->login();
 #r($tester->checkTab('reviewingTab', '1')) && p('message') && e('reviewingTab下显示条数正确'); //检查评审中标签下显示条数
 #r($tester->unlinkStory())                 && p('message') && e('需求移除成功');               //移除需求
 #r($tester->batchUnlinkStory())            && p('message') && e('需求批量移除成功');           //批量移除需求
-r($tester->batchEditPhase('draft', 'testing')) && p('message') && e('批量编辑阶段成功');
+#r($tester->batchEditPhase('draft', 'testing')) && p('message') && e('批量编辑阶段成功');
+r($tester->assignTo('admin'))  && p('message') && e('指派成功');
 $tester->closeBrowser();
