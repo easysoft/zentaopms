@@ -97,11 +97,11 @@ r($tester->checkTab('reviewingTab', '3')) && p('message') && e('reviewingTab下�
 r($tester->unlinkStory())       && p('message') && e('需求移除成功');     //移除需求
 r($tester->batchUnlinkStory())  && p('message') && e('需求批量移除成功'); //批量移除需求
 /* 批量编辑阶段 */
-r($tester->batchEditPhase('draft', 'testing'))    && p('message') && e('批量编辑draft状态需求阶段成功');     //编辑草稿状态的需求的阶段为测试中
-r($tester->batchEditPhase('reviewing', 'wait'))   && p('message') && e('批量编辑reviewing状态需求阶段成功'); //编辑评审中状态的需求的阶段为未开始
-r($tester->batchEditPhase('active', 'verified'))  && p('message') && e('批量编辑active状态需求阶段成功');    //编辑激活状态的需求的阶段为已验收
-r($tester->batchEditPhase('changing', 'planned')) && p('message') && e('批量编辑changing状态需求阶段成功');  //编辑变更中状态的需求的阶段为已计划
-r($tester->batchEditPhase('closed', 'rejected'))  && p('message') && e('批量编辑closed状态需求阶段成功');    //编辑已关闭状态的需求的阶段为验收失败
+r($tester->batchEditPhase('draft', 'testing'))    && p('status,message') && e('success,批量编辑draft阶段成功');     //编辑草稿状态的需求的阶段为测试中
+r($tester->batchEditPhase('reviewing', 'wait'))   && p('status,message') && e('success,批量编辑reviewing阶段成功'); //编辑评审中状态的需求的阶段为未开始
+r($tester->batchEditPhase('active', 'verified'))  && p('status,message') && e('success,批量编辑active阶段成功');    //编辑激活状态的需求的阶段为已验收
+r($tester->batchEditPhase('changing', 'planned')) && p('status,message') && e('success,批量编辑changing阶段成功');  //编辑变更中状态的需求的阶段为已计划
+r($tester->batchEditPhase('closed', 'rejected'))  && p('status,message') && e('success,批量编辑closed阶段成功');    //编辑已关闭状态的需求的阶段为验收失败
 /* 指派 */
 r($tester->assignTo('USER1'))  && p('message') && e('指派成功');  //单个指派
 r($tester->batchAssignTo()) && p('message') && e('批量指派成功'); //批量指派
