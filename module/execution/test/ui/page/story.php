@@ -9,7 +9,7 @@ class storyPage extends page
             'allTab'       => "//*[@data-page='execution-story']//div[@id='featureBar']/menu/li[1]/a",
             'unclosedTab'  => "//*[@data-page='execution-story']//div[@id='featureBar']/menu/li[2]/a",
             'draftTab'     => "//*[@data-page='execution-story']//div[@id='featureBar']/menu/li[3]/a",
-            'reviewingTab' => "//*[@data-page='execution-story']//div[@id='featureBar']/menu/li[3]/a",
+            'reviewingTab' => "//*[@data-page='execution-story']//div[@id='featureBar']/menu/li[4]/a",
             'num'          => "//*[@id='table-execution-story']/div[3]/div[2]/strong[1]",
             /* 列表 */
             'firstCheckbox'  => "//*[@id='table-execution-story']/div[2]/div[1]/div/div[1]/div/div",
