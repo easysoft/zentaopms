@@ -917,7 +917,7 @@ class repoModel extends model
 
         $orderBy     = $repo->SCM == 'Subversion' ? 'svnRevision desc' : 't1.time desc';
         $branchID    = (string)$this->cookie->repoBranch;
-        $lastComment = $this->dao->select('t1.*,t1.revision*1 as svnRevision')->from(TABLE_REPOHISTORY)->alias('t1')
+        $lastComment = $this->dao->select('t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
             ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
             ->where('t1.repo')->eq($repoID)
             ->beginIF($repo->SCM != 'Subversion' && $branchID)->andWhere('t2.branch')->eq($branchID)->fi()
@@ -925,6 +925,8 @@ class repoModel extends model
             ->orderBy($orderBy)
             ->fetch();
         if(empty($lastComment)) return false;
+
+        $lastComment->svnRevision = intval($lastComment->revision);
         if(!$checkCount) return $lastComment;
 
         $count = $this->dao->select('count(DISTINCT t1.id) as count')->from(TABLE_REPOHISTORY)->alias('t1')
