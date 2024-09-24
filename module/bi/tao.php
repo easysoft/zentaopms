@@ -46,4 +46,18 @@ class biTao extends biModel
             ->exec();
     }
 
+    /**
+     * Fetch action date.
+     *
+     * @access protected
+     * @return object
+     */
+    protected function fetchActionDate()
+    {
+        return $this->dao->select('min(date) as minDate, max(date) as maxDate')
+            ->from(TABLE_ACTION)
+            ->where('date')->ge('2009-01-01')
+            ->fetch();
+    }
+
 }
