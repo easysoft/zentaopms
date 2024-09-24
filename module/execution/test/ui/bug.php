@@ -47,3 +47,6 @@ $bug->gen(18);
 
 $tester = new bugTester();
 $tester->login();
+
+r($tester->checkTab('allTab', '18'))       && p('message') && e('allTab下显示条数正确');
+r($tester->checkTab('unresolvedTab', '4')) && p('message') && e('unresolvedTab下显示条数正确');

@@ -7,7 +7,7 @@ class bugPage extends page
         $xpath = array(
             /* 标签 */
             'allTab'          => "//*[@id='featureBar']/menu/li[1]/a",
-            'unresolvedab'    => "//*[@id='featureBar']/menu/li[2]/a",
+            'unresolvedTab'   => "//*[@id='featureBar']/menu/li[2]/a",
             'num'             => "//*[@id='table-execution-bug']/div[3]/div[2]/strong[1]",
             /* 列表 */
             'firstCheckbox'   => "//*[@id='table-execution-bug']/div[2]/div[1]/div/div[1]/div/div",
