@@ -72,5 +72,16 @@ class createDocTester extends tester
         $form = $this->initForm('product', 'create');
         $form->dom->name->setValue($productName->secProduct);
         $form->dom->btn($this->lang->save)->click();
+
+        /*创建产品下的文档*/
+        $this->openUrl('doc', 'productSpace');
+        $form = $this->loadPage('doc', 'productSpace');
+        $form->dom->createDocBtn->click();
+        $form->wait(1);
+        $form->dom->showTitle->setValue($docName->dcName);
+        $form->dom->saveBtn->click();
+        $form->wait(1);
+        $form->dom->product->picker($productName->secProduct);
+        $form->dom->releaseBtn->click();
     }
 }
