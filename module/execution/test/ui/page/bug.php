@@ -12,6 +12,9 @@ class bugPage extends page
             /* 列表 */
             'firstCheckbox'   => "//*[@id='table-execution-bug']/div[2]/div[1]/div/div[1]/div/div",
             'firstAssignedTo' => "//*[@id='table-execution-bug']/div[2]/div[2]/div/div[7]/div/a/span",
+            /* 批量操作按钮 */
+            'batchAssignBtn' => "//*[@id='table-execution-bug']/div[3]/nav[1]/button",
+            'assignToAdmin'  => "//li//div[text() = 'admin']",
             /* bug指派弹窗 */
             'submitBtn' => "//*[@id='assignedTo']/../../div[4]/div/button",
         );
