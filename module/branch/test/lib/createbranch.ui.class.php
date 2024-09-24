@@ -34,9 +34,6 @@ class createBranchTester extends tester
             }
             return $this->failed('分支名称必填提示信息不正确');
         }
-        else
-        {
-            return $this->success('创建分支成功');
-        }
+        return $this->success('创建分支成功');
     }
 }
