@@ -840,7 +840,7 @@ class pivotModel extends model
             }
         }
 
-        $sql = "select * from ( $sql ) tt" . $connectSQL;
+        if($connectSQL) $sql = "select * from ( $sql ) tt" . $connectSQL;
 
         return $sql;
     }
