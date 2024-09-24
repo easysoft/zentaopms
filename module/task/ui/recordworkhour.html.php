@@ -72,7 +72,7 @@ if($efforts)
                 h::td($effort->id),
                 h::td($effort->date),
                 h::td(zget($users, $effort->account)),
-                h::td(html($effort->work)),
+                h::td(html($effort->work), setClass('break-all')),
                 h::td("{$effort->consumed} {$lang->task->suffixHour}"),
                 h::td("{$effort->left} {$lang->task->suffixHour}"),
                 h::td
