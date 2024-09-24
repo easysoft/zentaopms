@@ -275,19 +275,7 @@ class projectrelease extends control
      */
     public function export(int $releaseID)
     {
-        if(!empty($_POST))
-        {
-            $release = $this->release->getByID($releaseID);
-            $type    = $this->post->type;
-
-            $html = '';
-            if($type == 'story' || $type == 'all')   $html .= $this->projectreleaseZen->generateStoryHtml($release);
-            if($type == 'bug'   || $type == 'all')   $html .= $this->projectreleaseZen->generateBugHtml($release);
-            if($type == 'leftbug' || $type == 'all') $html .= $this->projectreleaseZen->generateBugHtml($release, 'left');
-            $html = "<html><head><meta charset='utf-8'><title>{$this->post->fileName}</title><style>table, th, td{font-size:12px; border:1px solid gray; border-collapse:collapse;}</style></head><body>$html</body></html>";
-
-            return print($this->fetch('file', 'sendDownHeader', array('fileName' => $this->post->fileName, 'html', $html)));
-        }
+        if(!empty($_POST)) return $this->fetch('release', 'export', "releaseID={$releaseID}");
 
         $this->display('release', 'export');
     }
