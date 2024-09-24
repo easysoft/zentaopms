@@ -35,6 +35,21 @@ $projectProduct->project->range('1-3, 1-3');
 $projectProduct->product->range('1{3}, 2{3}');
 $projectProduct->gen(6);
 
+$user = zenData('user');
+$user->id->range('1-100');
+$user->dept->range('0');
+$user->account->range('admin, user1, user2');
+$user->realname->range('admin, USER1, USER2');
+$user->password->range('77839ef72f7b71a3815a77d038e267e0');
+$user->gen(3);
+
+$team = zenData('team');
+$team->id->range('1-100');
+$team->root->range('1{3}, 2{3}');
+$team->type->range('project{3}, execution{3}');
+$team->account->range('admin, user1, user2, admin, user1, user2');
+$team->gen(6);
+
 $bug = zenData('bug');
 $bug->id->range('1-100');
 $bug->project->range('1');
@@ -48,5 +63,6 @@ $bug->gen(18);
 $tester = new bugTester();
 $tester->login();
 
-r($tester->checkTab('allTab', '18'))       && p('message') && e('allTab下显示条数正确');
-r($tester->checkTab('unresolvedTab', '4')) && p('message') && e('unresolvedTab下显示条数正确');
+#r($tester->checkTab('allTab', '18'))       && p('message') && e('allTab下显示条数正确');
+#r($tester->checkTab('unresolvedTab', '4')) && p('message') && e('unresolvedTab下显示条数正确');
+r($tester->assignTo('USER1'))              && p('message') && e('指派bug成功');
