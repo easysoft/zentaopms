@@ -1,5 +1,15 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=指派设计测试
+timeout=0
+cid=2
+
+- 指派设计最终测试状态 @SUCCESS
+
+*/
 chdir(__DIR__);
 include '../lib/assigndesign.ui.class.php';
 
