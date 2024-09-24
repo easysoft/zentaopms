@@ -1,7 +1,8 @@
 <?php
 global $lang, $app;
 $module = $app->rawModule;
-if($module == 'my') $module = 'mr';
+if($module != 'mr' && $module != 'pullreq') $module = 'mr';
+
 $config->mr = new stdclass();
 
 $config->mr->create = new stdclass();
