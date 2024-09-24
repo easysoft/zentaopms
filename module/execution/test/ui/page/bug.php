@@ -17,6 +17,11 @@ class bugPage extends page
             'assignToAdmin'  => "//li//div[text() = 'admin']",
             /* bug指派弹窗 */
             'submitBtn' => "//*[@id='assignedTo']/../../div[4]/div/button",
+            /*1.5级产品导航 */
+            'productNav'    => "//*[@id='pick-execution-menu']",
+            'firstProduct'  => "(//div[@data-type='product'])[1]",
+            'secondProduct' => "(//div[@data-type='product'])[2]",
+            'thirdProduct'  => "(//div[@data-type='product'])[3]",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
