@@ -36,6 +36,22 @@ class bi extends control
     }
 
     /**
+     * Init parquet.
+     *
+     * @access public
+     * @return void
+     */
+    public function initParquet()
+    {
+        $startTime = microtime(true);
+        $this->bi->initParquet();
+        $endTime   = microtime(true);
+        $runTime   = $endTime - $startTime;
+        echo "$runTime \n";
+        echo 'success';
+    }
+
+    /**
      * Ajax: get object options.
      *
      * @access public
