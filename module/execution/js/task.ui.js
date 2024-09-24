@@ -126,7 +126,7 @@ window.renderCell = function(result, info)
             result.push({html: bugTitle});
         }
     }
-    if(info.col.name == 'deadline' && result[0] && !['closed', 'cancel', 'done'].includes(task.status))
+    if(info.col.name == 'deadline' && result[0])
     {
         const today     = zui.formatDate(zui.createDate(), 'yyyy-MM-dd');
         const yesterday = zui.formatDate(convertStringToDate(today) - 24 * 60 * 60 * 1000, 'yyyy-MM-dd');

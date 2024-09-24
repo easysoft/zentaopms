@@ -2536,9 +2536,9 @@ class taskModel extends model
         $today = helper::today();
 
         /* Delayed or not?. */
-        if(in_array($task->status, $this->config->task->unfinishedStatus) && !empty($task->deadline) && !helper::isZeroDate($task->deadline))
+        if(!empty($task->deadline) && !helper::isZeroDate($task->deadline))
         {
-            $delay = helper::diffDate($today, $task->deadline);
+            $delay = helper::diffDate(($task->status == 'done' || $task->status == 'closed') ? substr($task->finishedDate, 0, 10) : $today, $task->deadline);
             if($delay > 0) $task->delay = $delay;
         }
 
