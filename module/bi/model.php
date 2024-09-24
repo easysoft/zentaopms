@@ -1265,8 +1265,9 @@ class biModel extends model
             if(empty($filter['default'])) continue;
             if(!isset($filter['from']) || $filter['from'] != 'query') continue;
 
-            $filters[$index]['default'] = $this->loadModel('pivot')->processDateVar($filter['default']);
-            if($filters[$index]['type'] == 'datetime') $filters[$index]['default'] .= ':00.000000000';
+            if($filter['type'] == 'date' || $filter['type'] == 'datetime') $filters[$index]['default'] = $this->loadModel('pivot')->processDateVar($filter['default']);
+            if($filter['type'] == 'datetime') $filters[$index]['default'] .= ':00.000000000';
+            if($filter['type'] == 'multipleselect' && is_array($filter['default'])) $filters[$index]['default'] = implode("','", $filter['default']);
 
             if($emptyValue) $filters[$index]['default'] = '';
         }

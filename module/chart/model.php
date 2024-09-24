@@ -771,6 +771,7 @@ class chartModel extends model
     {
         if($filters)
         {
+            a($filters);
             foreach($filters as $filter)
             {
                 if(!isset($filter['default'])) continue;

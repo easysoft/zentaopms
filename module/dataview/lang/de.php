@@ -74,10 +74,11 @@ $lang->dataview->varFilter->noticeVarName     = 'Filter name cannot be empty';
 $lang->dataview->varFilter->noticeRequestType = 'Request type cannot be empty';
 $lang->dataview->varFilter->noticeShowName    = 'Show name cannot be empty';
 
-$lang->dataview->varFilter->requestTypeList['input']    = 'Input';
-$lang->dataview->varFilter->requestTypeList['date']     = 'Date';
-$lang->dataview->varFilter->requestTypeList['datetime'] = 'Datetime';
-$lang->dataview->varFilter->requestTypeList['select']   = 'Select';
+$lang->dataview->varFilter->requestTypeList['input']          = 'Input';
+$lang->dataview->varFilter->requestTypeList['date']           = 'Date';
+$lang->dataview->varFilter->requestTypeList['datetime']       = 'Datetime';
+$lang->dataview->varFilter->requestTypeList['select']         = 'Select';
+$lang->dataview->varFilter->requestTypeList['multipleselect'] = 'Multiple Select';
 
 $lang->dataview->varFilter->selectList['product']             = $lang->productCommon . 'List';
 $lang->dataview->varFilter->selectList['product.status']      = $lang->productCommon . 'Status';

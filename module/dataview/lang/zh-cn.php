@@ -74,10 +74,11 @@ $lang->dataview->varFilter->noticeVarName     = '名称不能为空';
 $lang->dataview->varFilter->noticeRequestType = '筛选器类型不能为空';
 $lang->dataview->varFilter->noticeShowName    = '显示名称不能为空';
 
-$lang->dataview->varFilter->requestTypeList['input']    = '文本框';
-$lang->dataview->varFilter->requestTypeList['date']     = '日期选择';
-$lang->dataview->varFilter->requestTypeList['datetime'] = '时间选择';
-$lang->dataview->varFilter->requestTypeList['select']   = '下拉选择';
+$lang->dataview->varFilter->requestTypeList['input']          = '文本框';
+$lang->dataview->varFilter->requestTypeList['date']           = '日期选择';
+$lang->dataview->varFilter->requestTypeList['datetime']       = '时间选择';
+$lang->dataview->varFilter->requestTypeList['select']         = '下拉选择';
+$lang->dataview->varFilter->requestTypeList['multipleselect'] = '多选下拉';
 
 $lang->dataview->varFilter->selectList['product']             = $lang->productCommon . '列表';
 $lang->dataview->varFilter->selectList['product.status']      = '产品状态';
