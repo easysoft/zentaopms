@@ -554,7 +554,8 @@ class taskZen extends task
             $task->execution    = $execution->id;
             $task->left         = $task->estimate;
             $task->parent       = $taskID;
-            $task->lane         = empty($task->lane) && !empty($output['laneID']) ? (int)$output['laneID'] : $task->lane;
+            $task->lane         = !empty($task->lane)   ? $task->lane   : zget($output, 'laneID',   0);
+            $task->column       = !empty($task->column) ? $task->column : zget($output, 'columnID', 0);
             $task->storyVersion = $task->story ? $this->story->getVersion($task->story) : 1;
         }
 

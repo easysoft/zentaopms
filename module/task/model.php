@@ -501,8 +501,9 @@ class taskModel extends model
         {
             /* Get the lane and column of the current task. */
             $laneID   = $task->lane;
-            $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
+            $columnID = $task->column;
             unset($task->lane);
+            unset($task->column);
 
             /* Create a task. */
             $taskID = $this->create($task);
