@@ -81,7 +81,7 @@ $team = zenData('team');
 $team->id->range('1-100');
 $team->root->range('1{3}, 2{3}');
 $team->type->range('project{3}, execution{3}');
-$team->account->range('admin, user1, user2, admin, ser1, user2');
+$team->account->range('admin, user1, user2, admin, user1, user2');
 $team->gen(6);
 
 
