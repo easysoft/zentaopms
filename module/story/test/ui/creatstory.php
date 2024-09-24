@@ -8,7 +8,7 @@ timeout=0
 cid=80
 
 - 缺少需求名称，创建失败
- -  测试结果 @创建产品表单页提示信息正确
+ -  测试结果 @创建需求表单页提示信息正确
  -  最终测试状态 @SUCCESS
 - 使用默认选项创建研发需求 最终测试状态 @SUCCESS
 - 使用默认选项创建用户需求 最终测试状态 @SUCCESS
@@ -17,11 +17,20 @@ cid=80
  - 属性module @story
  - 属性method @view
 - 创建需求成功 最终测试状态 @SUCCESS
-
+- 批量创建需求缺少需求名称，创建失败
+ -  测试结果 @批量创建需求表单页提示信息正确
+ -  最终测试状态 @SUCCESS
+- 使用默认选项批量创建研发需求 最终测试状态 @SUCCESS
+- 使用默认选项批量创建用户需求 最终测试状态 @SUCCESS
+- 使用默认选项批量创建业务需求 最终测试状态 @SUCCESS
+- 批量创建需求成功后检查创建的需求信息是否正确
+ - 属性module @story
+ - 属性method @view
 */
 chdir(__DIR__);
 include '../lib/createstory.ui.class.php';
 include 'page/create.php';
+include 'page/batchcreate.php';
 
 $product = zenData('product');
 $product->id->range('1');
@@ -64,11 +73,14 @@ $tester = new createStoryTester();
 $tester->login();
 
 $storys = array();
-$storys['null']        = '';
-$storys['story']       = '研发需求';
-$storys['requirement'] = '用户需求';
-$storys['epic']        = '业务需求';
-$storys['childStory']  = '子需求';
+$storys['null']             = '';
+$storys['story']            = '研发需求';
+$storys['requirement']      = '用户需求';
+$storys['epic']             = '业务需求';
+$storys['childStory']       = '子需求';
+$storys['batchstory']       = '批量创建研发需求';
+$storys['batchrequirement'] = '批量创建用户需求';
+$storys['batchepic']        = '批量创建业务需求';
 
 $storyType = array();
 $storyType['epic']        = 'epic';
@@ -79,5 +91,10 @@ r($tester->createDefault($storyType['story'], $storys['null']))              && 
 r($tester->createDefault($storyType['story'], $storys['story']))             && p('message,status') && e('创建研发需求成功,SUCCESS'); // 使用默认选项创建需求,搜索后详情页信息对应
 r($tester->createDefault($storyType['requirement'], $storys['requirement'])) && p('message,status') && e('创建用户需求成功,SUCCESS'); // 使用默认选项创建用户需求，搜索后详情页信息对应
 r($tester->createDefault($storyType['epic'], $storys['epic']))               && p('message,status') && e('创建业务需求成功,SUCCESS'); // 使用默认选项创建业务需求，搜索后详情页信息对应
+
+r($tester->batchCreateDefault($storyType['story'], $storys['null']))                   && p('message,status') && e('批量创建需求页面名称为空提示正确,SUCCESS'); // 缺少需求名称，创建失败
+r($tester->batchcreateDefault($storyType['story'], $storys['batchstory']))             && p('message,status') && e('批量创建研发需求成功,SUCCESS'); // 使用默认选项创建需求,搜索后详情页信息对应
+r($tester->batchcreateDefault($storyType['requirement'], $storys['batchrequirement'])) && p('message,status') && e('批量创建用户需求成功,SUCCESS'); // 使用默认选项创建用户需求，搜索后详情页信息对应
+r($tester->batchcreateDefault($storyType['epic'], $storys['batchepic']))               && p('message,status') && e('批量创建业务需求成功,SUCCESS'); // 使用默认选项创建业务需求，搜索后详情页信息对应
 
 $tester->closeBrowser();
