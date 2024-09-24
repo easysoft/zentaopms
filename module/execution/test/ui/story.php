@@ -81,7 +81,7 @@ $team = zenData('team');
 $team->id->range('1-100');
 $team->root->range('1{3}, 2{2}');
 $team->type->range('project{2}, execution{2}');
-$team->account->range('user1, user2,user1, user2');
+$team->account->range('user1, user2, user1, user2');
 $team->gen(4);
 
 
@@ -103,6 +103,6 @@ r($tester->batchEditPhase('active', 'verified'))  && p('status,message') && e('s
 r($tester->batchEditPhase('changing', 'planned')) && p('status,message') && e('success,批量编辑changing阶段成功');  //编辑变更中状态的需求的阶段为已计划
 r($tester->batchEditPhase('closed', 'rejected'))  && p('status,message') && e('success,批量编辑closed阶段成功');    //编辑已关闭状态的需求的阶段为验收失败
 /* 指派 */
-r($tester->assignTo('USER1'))  && p('message') && e('指派成功');  //单个指派
-r($tester->batchAssignTo()) && p('message') && e('批量指派成功'); //批量指派
+r($tester->assignTo('USER1'))  && p('message') && e('指派成功');     //单个指派
+r($tester->batchAssignTo())    && p('message') && e('批量指派成功'); //批量指派
 $tester->closeBrowser();
