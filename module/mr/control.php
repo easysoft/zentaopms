@@ -589,7 +589,7 @@ class mr extends control
             $this->mr->link($MRID, $productID, 'story', $this->post->stories);
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            $link = inlink('link', "MRID=$MRID&type=story&orderBy=$orderBy");
+            $link = $this->createLink($this->app->rawModule,'link', "MRID=$MRID&type=story&orderBy=$orderBy");
             return $this->send(array('result' => 'success', 'load' => $link, 'closeModal' => true));
         }
 
@@ -649,7 +649,7 @@ class mr extends control
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $link = inlink('link', "MRID=$MRID&type=bug&orderBy=$orderBy");
+            $link = $this->createLink($this->app->rawModule,'link', "MRID=$MRID&type=bug&orderBy=$orderBy");
             return $this->send(array('result' => 'success', 'load' => $link, 'closeModal' => true));
         }
 
@@ -707,7 +707,7 @@ class mr extends control
             $this->mr->link($MRID, $productID, 'task', $this->post->tasks);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $link = inlink('link', "MRID=$MRID&type=task&orderBy=$orderBy");
+            $link = $this->createLink($this->app->rawModule,'link', "MRID=$MRID&type=task&orderBy=$orderBy");
             return $this->send(array('result' => 'success', 'load' => $link, 'closeModal' => true));
         }
 
@@ -773,7 +773,7 @@ class mr extends control
         }
         else
         {
-            $link = inlink('link', "MRID=$MRID&type=$type");
+            $link = $this->createLink($this->app->rawModule, 'link', "MRID=$MRID&type=$type");
             $response['result']  = 'success';
             $response['message'] = '';
             $response['load']    = $link;
