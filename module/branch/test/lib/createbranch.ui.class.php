@@ -7,13 +7,13 @@ class createBranchTester extends tester
      * Create  branch
      *
      * @param $branch    分支数据
-     * @param $branchurl 产品ID
+     * @param $productID 产品ID
      *
      * @return mixed
      */
-    public function createBranch($branch, $branchurl)
+    public function createBranch($branch, $productID)
     {
-        $form = $this->initForm('branch', 'manage', $branchurl, 'appIframe-product');
+        $form = $this->initForm('branch', 'manage', $productID, 'appIframe-product');
         $form->dom->btn($this->lang->branch->createAction)->click();
         $form->waitElement($form->dom->branchName);
         //设置表单字段值
