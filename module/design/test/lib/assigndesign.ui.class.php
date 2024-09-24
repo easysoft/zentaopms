@@ -2,6 +2,14 @@
 include dirname(__FILE__, 5) . '/test/lib/ui.php';
 class assignDesignTester extends tester
 {
+    /**
+     * Assign a design.
+     * 指派设计。
+     *
+     * @param  array $design
+     * @access public
+     * @return object
+     */
     public function assignDesign(array $design)
     {
         $form = $this->initForm('design', 'browse', array('projectID' => 60), 'appIframe-project');
