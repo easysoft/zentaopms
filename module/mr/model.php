@@ -866,8 +866,6 @@ class mrModel extends model
      */
     public function approve(object $MR, string $action = 'approve', string $comment = ''): array
     {
-        $actionID = $this->loadModel('action')->create($this->app->rawModule, $MR->id, $action);
-
         if(isset($MR->status) && $MR->status == 'opened')
         {
             $oldMR = clone $MR;
@@ -877,7 +875,6 @@ class mrModel extends model
             if(isset($MR->approvalStatus) && $rawApprovalStatus != $MR->approvalStatus)
             {
                 $changes = common::createChanges($oldMR, $MR);
-                $this->action->logHistory($actionID, $changes);
 
                 unset($MR->editedDate);
                 $MR->approver = $this->app->user->account;
@@ -899,6 +896,8 @@ class mrModel extends model
                     ->exec();
                 if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
+                $actionID = $this->loadModel('action')->create($this->app->rawModule, $MR->id, $action);
+                $this->action->logHistory($actionID, $changes);
                 return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true);
             }
         }
