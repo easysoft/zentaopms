@@ -279,6 +279,9 @@ window.getDiffs = function(fileName)
         'code': {'new': '', 'old': ''},
         'line': {'new': [], 'old': []}
     };
+
+    const newContent = [];
+    const oldContent = [];
     $.each(diffs, function(i, diff)
     {
         if(diff.fileName == fileName)
@@ -292,17 +295,20 @@ window.getDiffs = function(fileName)
                 {
                     if(code.type == 'all' || code.type == 'new')
                     {
-                        result.code.new += htmlspecialchars_decode(code.line.substring(1)) + "\n";
+                        newContent.push(htmlspecialchars_decode(code.line.substring(1)));
                         result.line.new.push(parseInt(code.newlc));
                     }
 
                     if(code.type == 'all' || code.type == 'old')
                     {
-                        result.code.old += htmlspecialchars_decode(code.line.substring(1)) + "\n";
+                        oldContent.push(htmlspecialchars_decode(code.line.substring(1)));
                         result.line.old.push(parseInt(code.oldlc));
                     }
                 })
             })
+
+            result.code.new = newContent.join('\n');
+            result.code.old = oldContent.join('\n');
             return result;
         }
     });
