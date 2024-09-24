@@ -79,10 +79,10 @@ $user->gen(3);
 
 $team = zenData('team');
 $team->id->range('1-100');
-$team->root->range('1{3}, 2{2}');
-$team->type->range('project{2}, execution{2}');
-$team->account->range('user1, user2, user1, user2');
-$team->gen(4);
+$team->root->range('1{3}, 2{3}');
+$team->type->range('project{3}, execution{3}');
+$team->account->range('admin, user1, user2, admin, ser1, user2');
+$team->gen(6);
 
 
 $tester = new storyTester();
