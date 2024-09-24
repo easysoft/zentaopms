@@ -35,20 +35,21 @@ class projectreleaseZen extends projectrelease
      * 生成关联的需求的 html。
      * Generate story html.
      *
+     * @param  object    $release
      * @access protected
-     * @return void
+     * @return string
      */
-    protected function generateStoryHtml(): string
+    protected function generateStoryHtml(object $release): string
     {
         $this->loadModel('story');
 
         $html = "<h3>{$this->lang->release->stories}</h3>";
-
-        $fields = array('id' => $this->lang->story->id, 'title' => $this->lang->story->title);
+        if(empty($release->stories)) return $html;
 
         /* 生成表头。*/
         /* Generate thead.*/
-        $html .= '<table><tr>';
+        $fields = array('id' => $this->lang->story->id, 'title' => $this->lang->story->title);
+        $html  .= '<table><tr>';
         foreach($fields as $fieldLabel) $html .= "<th><nobr>$fieldLabel</nobr></th>\n";
         $html .= '</tr>';
 
@@ -70,19 +71,22 @@ class projectreleaseZen extends projectrelease
      * 生成 bug 的 html。
      * Generate bug html.
      *
-     * @param  string    $type linked|left
+     * @param  object    $release
+     * @param  string    $type    linked|left
      * @access protected
      * @return string
      */
-    protected function generateBugHtml($type = 'linked'): string
+    protected function generateBugHtml(object $release, string $type = 'linked'): string
     {
         $this->loadModel('bug');
 
         $html = '<h3>' . ($type == 'linked' ? $this->lang->release->bugs : $this->lang->release->generatedBugs) . '</h3>';
 
-        $fields = array('id' => $this->lang->bug->id, 'title' => $this->lang->bug->title);
+        $bugIdList = $type == 'linked' ? $release->bugs : $release->leftBugs;
+        if(empty($bugIdList)) return $html;
 
-        $html .= '<table><tr>';
+        $fields = array('id' => $this->lang->bug->id, 'title' => $this->lang->bug->title);
+        $html  .= '<table><tr>';
         foreach($fields as $fieldLabel) $html .= "<th><nobr>$fieldLabel</nobr></th>\n";
         $html .= '</tr>';
 

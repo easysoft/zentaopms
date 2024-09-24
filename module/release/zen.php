@@ -209,7 +209,7 @@ class releaseZen extends release
         $bugs = $this->release->getBugList($release->bugs, $type == 'bug' ? $sort : '', $bugPager);
 
         if($type == 'leftBug' && strpos($orderBy, 'severity_') !== false) $sort = str_replace('severity_', 'severityOrder_', $sort);
-        $leftBugs = $this->release->getBugList($release->leftBugs, $type == 'leftBug' ? $sort : '', $leftBugPager);
+        $leftBugs = $this->release->getBugList($release->leftBugs, $type == 'leftBug' ? $sort : '', $leftBugPager, 'left');
 
         $product = $this->loadModel('product')->getByID($release->product);
 

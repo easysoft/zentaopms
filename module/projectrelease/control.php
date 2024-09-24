@@ -269,19 +269,21 @@ class projectrelease extends control
      * 导出项目发布到 HTML。
      * Export the stories of release to HTML.
      *
+     * @param  int    $releaseID
      * @access public
      * @return void
      */
-    public function export()
+    public function export(int $releaseID)
     {
         if(!empty($_POST))
         {
-            $type = $this->post->type;
+            $release = $this->release->getByID($releaseID);
+            $type    = $this->post->type;
 
             $html = '';
-            if($type == 'story' || $type == 'all')   $html .= $this->projectreleaseZen->generateStoryHtml();
-            if($type == 'bug'   || $type == 'all')   $html .= $this->projectreleaseZen->generateBugHtml();
-            if($type == 'leftbug' || $type == 'all') $html .= $this->projectreleaseZen->generateBugHtml('left');
+            if($type == 'story' || $type == 'all')   $html .= $this->projectreleaseZen->generateStoryHtml($release);
+            if($type == 'bug'   || $type == 'all')   $html .= $this->projectreleaseZen->generateBugHtml($release);
+            if($type == 'leftbug' || $type == 'all') $html .= $this->projectreleaseZen->generateBugHtml($release, 'left');
             $html = "<html><head><meta charset='utf-8'><title>{$this->post->fileName}</title><style>table, th, td{font-size:12px; border:1px solid gray; border-collapse:collapse;}</style></head><body>$html</body></html>";
 
             return print($this->fetch('file', 'sendDownHeader', array('fileName' => $this->post->fileName, 'html', $html)));
