@@ -14,6 +14,8 @@ $config->bi->conditionList['NOT IN']      = 'NOT IN';
 $config->bi->conditionList['IS NOT NULL'] = 'IS NOT NULL';
 $config->bi->conditionList['IS NULL']     = 'IS NULL';
 
+$config->bi->duckdbExcludeTables = array('metriclib', 'repofiles', 'repohistory', 'queue', 'duckdbqueue', '');
+
 $config->bi->builtin = new stdclass();
 $config->bi->builtin->modules = new stdclass();
 $config->bi->builtin->screens = array(1, 2, 3, 4, 5, 6, 7, 8,1001);

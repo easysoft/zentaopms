@@ -35,10 +35,10 @@ class biTao extends biModel
         foreach($excludes as $index => $table) $excludes[$index] = $prefix . $table;
 
         return $this->dao->select('object')->from(TABLE_DUCKDBQUEUE)
-            ->where('updatedTime >= syncTime', true)
+            ->where('object')->notin($excludes)
+            ->andWhere('updatedTime >= syncTime', true)
             ->orWhere('syncTime IS NULL')
             ->markRight(1)
-            ->andWhere('object')->notin($excludes)
             ->fetchPairs();
     }
 
