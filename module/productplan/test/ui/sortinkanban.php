@@ -29,9 +29,9 @@ $tester = new browseTester();
 $tester->login();
 $planurl['productID'] = 1;
 
-$orderBy  = 'begin_desc';
+$orderBy = 'begin_desc';
 r($tester->sortInKanban($planurl, $orderBy)) && p('message,status') && e('按计划开始时间倒序排序成功,SUCCESS');//按计划开始时间倒序进行排序
 
-$orderBy  = 'begin_asc';
+$orderBy = 'begin_asc';
 r($tester->sortInKanban($planurl, $orderBy)) && p('message,status') && e('按计划开始时间正序排序成功,SUCCESS');//按计划开始时间正序进行排序
 $tester->closeBrowser();
