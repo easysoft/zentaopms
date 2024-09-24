@@ -5471,8 +5471,8 @@ class storyModel extends model
     {
         return $this->dao->select('t1.revision,t3.id AS id,t3.title AS title')
             ->from(TABLE_REPOHISTORY)->alias('t1')
-            ->leftJoin(TABLE_RELATION)->alias('t2')->on('t2.relation="completedin" AND t2.BType="commit" AND t2.BID=t1.id')
-            ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.AType="story" AND t2.AID=t3.id')
+            ->leftJoin(TABLE_RELATION)->alias('t2')->on("t2.relation='completedin' AND t2.BType='commit' AND t2.BID=t1.id")
+            ->leftJoin(TABLE_STORY)->alias('t3')->on("t2.AType='story' AND t2.AID=t3.id")
             ->where('t1.revision')->in($revisions)
             ->andWhere('t1.repo')->eq($repoID)
             ->andWhere('t3.id')->ne('')
