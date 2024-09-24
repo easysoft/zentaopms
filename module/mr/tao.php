@@ -23,7 +23,7 @@ class mrTao extends mrModel
     protected function getLinkedObjectPairs(int $MRID, string $objectType = 'story'): array
     {
         return $this->dao->select('BID')->from(TABLE_RELATION)
-            ->where('AType')->eq('mr')
+            ->where('AType')->eq($this->app->rawModule)
             ->andWhere('BType')->eq($objectType)
             ->andWhere('AID')->eq($MRID)
             ->fetchPairs();

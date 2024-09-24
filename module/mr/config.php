@@ -1,6 +1,7 @@
 <?php
 global $lang, $app;
 $module = $app->rawModule;
+if($module == 'my') $module = 'mr';
 $config->mr = new stdclass();
 
 $config->mr->create = new stdclass();

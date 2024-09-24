@@ -305,7 +305,7 @@ class mr extends control
     public function view(int $MRID)
     {
         $oldMR = $this->mr->fetchByID($MRID);
-        if(!$oldMR) return $this->locate($this->createLink('mr', 'browse'));
+        if(!$oldMR) return $this->locate($this->createLink($this->app->rawModule, 'browse'));
 
         if(isset($oldMR->hostID)) $rawMR = $this->mr->apiGetSingleMR($oldMR->repoID, $oldMR->mriid);
         if($oldMR->synced && (!isset($rawMR->id) || empty($rawMR))) $this->sendError($this->lang->mr->apiError->emptyResponse, true);
@@ -315,7 +315,7 @@ class mr extends control
         $changes = common::createChanges($oldMR, $MR);
         if($changes)
         {
-            $actionID = $this->loadModel('action')->create('mr', $MR->id, 'synced');
+            $actionID = $this->loadModel('action')->create($this->app->rawModule, $MR->id, 'synced');
             $this->action->logHistory($actionID, $changes);
         }
 
@@ -334,7 +334,7 @@ class mr extends control
         $this->view->rawMR         = isset($rawMR) ? $rawMR : false;
         $this->view->repo          = $this->loadModel('repo')->getByID($MR->repoID);
         $this->view->reviewer      = $this->loadModel('user')->getById($MR->assignee);
-        $this->view->actions       = $this->loadModel('action')->getList('mr', $MRID);
+        $this->view->actions       = $this->loadModel('action')->getList($this->app->rawModule, $MRID);
         $this->view->compile       = $compile;
         $this->view->hasNewCommit  = $compile ? $this->mrZen->checkNewCommit($host->type, $MR->hostID, (string)$MR->targetProject, $MR->mriid, $compile->createdDate) : false;
         $this->view->sourceProject = $sourceProject;
@@ -384,7 +384,7 @@ class mr extends control
 
             if(isset($compileStatus) and $compileStatus != 'success')
             {
-                return $this->send(array('result' => 'fail', 'message' => $this->lang->mr->needCI, 'locate' => helper::createLink('mr', 'view', "mr={$MRID}")));
+                return $this->send(array('result' => 'fail', 'message' => $this->lang->mr->needCI, 'locate' => helper::createLink($this->app->rawModule, 'view', "mr={$MRID}")));
             }
         }
 
@@ -392,7 +392,7 @@ class mr extends control
         {
             if($MR->approvalStatus != 'approved')
             {
-                return $this->send(array('result' => 'fail', 'message' => $this->lang->mr->needApproved, 'locate' => helper::createLink('mr', 'view', "mr={$MRID}")));
+                return $this->send(array('result' => 'fail', 'message' => $this->lang->mr->needApproved, 'locate' => helper::createLink($this->app->rawModule, 'view', "mr={$MRID}")));
             }
         }
 
@@ -410,7 +410,7 @@ class mr extends control
             return $this->sendError(sprintf($this->lang->mr->apiError->sudo, $errorMessage));
         }
 
-        return $this->send(array('result' => 'fail', 'message' => $this->lang->mr->mergeFailed, 'locate' => helper::createLink('mr', 'view', "mr={$MRID}")));
+        return $this->send(array('result' => 'fail', 'message' => $this->lang->mr->mergeFailed, 'locate' => helper::createLink($this->app->rawModule, 'view', "mr={$MRID}")));
     }
 
     /**
@@ -484,7 +484,7 @@ class mr extends control
 
         $this->view->MR                = $MR;
         $this->view->action            = $action;
-        $this->view->actions           = $this->loadModel('action')->getList('mr', $MRID);
+        $this->view->actions           = $this->loadModel('action')->getList($this->app->rawModule, $MRID);
         $this->view->users             = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->view->showCompileResult = $showCompileResult;
         $this->display();
