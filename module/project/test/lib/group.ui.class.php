@@ -38,3 +38,13 @@ class groupTester extends tester
         return ($nameTipform == $nameTip) ? $this->success('项目创建分组提示信息正确') : $this->failed('项目创建分组提示信息不正确');
         }
         /*创建项目分组后检查列表页的名称和描述是否正确*/
+        else if($form->dom->nameTip === false)
+        {
+            $groupPage = $this->loadPage('project', 'group');
+            if($groupPage->dom->groupNameList->getText() != $project['groupname']) return $this->failed('分组名称错误');
+            if($groupPage->dom->groupDescList->getText() != $project['groupdesc']) return $this->failed('分组描述错误');
+
+            return $this->success('项目分组创建成功');
+        }
+    }
+}
