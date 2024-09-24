@@ -105,7 +105,7 @@ class mrZen extends mr
 
         $modules = $this->loadModel('tree')->getOptionMenu($product->id, 'story');
         unset($this->config->product->search['fields']['product']);
-        $this->config->product->search['actionURL']                   = $this->createLink('mr', 'linkStory', "MRID={$MRID}&productID={$product->id}&browseType=bySearch&param=myQueryID&orderBy={$orderBy}");
+        $this->config->product->search['actionURL']                   = $this->createLink($this->app->rawModule, 'linkStory', "MRID={$MRID}&productID={$product->id}&browseType=bySearch&param=myQueryID&orderBy={$orderBy}");
         $this->config->product->search['queryID']                     = $queryID;
         $this->config->product->search['style']                       = 'simple';
         $this->config->product->search['params']['product']['values'] = array($product) + array('all' => $this->lang->product->allProductsOfProject);
@@ -143,7 +143,7 @@ class mrZen extends mr
         if(empty($this->product)) $this->loadModel('product');
         $modules = $this->loadModel('tree')->getOptionMenu($product->id, 'bug');
 
-        $this->config->bug->search['actionURL']                         = $this->createLink('mr', 'linkBug', "MRID={$MRID}&productID={$product->id}&browseType=bySearch&param=myQueryID&orderBy={$orderBy}");
+        $this->config->bug->search['actionURL']                         = $this->createLink($this->app->rawModule, 'linkBug', "MRID={$MRID}&productID={$product->id}&browseType=bySearch&param=myQueryID&orderBy={$orderBy}");
         $this->config->bug->search['queryID']                           = $queryID;
         $this->config->bug->search['style']                             = 'simple';
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts(array($product->id => $product->id));
@@ -183,7 +183,7 @@ class mrZen extends mr
     {
         $modules = $this->loadModel('tree')->getOptionMenu($product->id, 'task');
 
-        $this->config->execution->search['actionURL']                     = $this->createLink('mr', 'linkTask', "MRID={$MRID}&productID={$product->id}&browseType=bySearch&param=myQueryID&orderBy={$orderBy}");
+        $this->config->execution->search['actionURL']                     = $this->createLink($this->app->rawModule, 'linkTask', "MRID={$MRID}&productID={$product->id}&browseType=bySearch&param=myQueryID&orderBy={$orderBy}");
         $this->config->execution->search['queryID']                       = $queryID;
         $this->config->execution->search['params']['module']['values']    = $modules;
         $this->config->execution->search['params']['execution']['values'] = array_filter($productExecutions);
@@ -297,5 +297,46 @@ class mrZen extends mr
         }
 
         return false;
+    }
+
+    /**
+     * 保存合并请求数据.
+     * Save merge request data.
+     *
+     * @param  object    $repo
+     * @param  array     $rawMRList
+     * @access protected
+     * @return bool
+     */
+    protected function saveMrData(object $repo, array $rawMrList): bool
+    {
+        $now = helper::now();
+        $this->loadModel('action');
+        foreach($rawMrList as $rawMR)
+        {
+            $MR = new stdclass();
+            $MR->hostID        = $repo->serviceHost;
+            $MR->mriid         = $rawMR->iid;
+            $MR->sourceProject = $rawMR->source_project_id;
+            $MR->sourceBranch  = $rawMR->source_branch;
+            $MR->targetProject = $rawMR->target_project_id;
+            $MR->targetBranch  = $rawMR->target_branch;
+            $MR->title         = $rawMR->title;
+            $MR->repoID        = $repo->id;
+            $MR->createdBy     = $this->app->user->account;
+            $MR->createdDate   = $now;
+            $MR->assignee      = $MR->createdBy;
+            $MR->mergeStatus   = $rawMR->merge_status ?: '';
+            $MR->status        = $rawMR->state ?: '';
+            $MR->isFlow        = empty($rawMR->flow) ? 0 : 1;
+            if($MR->status == 'open') $MR->status = 'opened';
+
+            $mrID = $this->mr->insertMr($MR);
+            if($mrID) $this->action->create(empty($rawMR->flow) ? 'mr' : 'pullreq', $mrID, 'opened');
+
+            if(dao::isError()) return false;
+        }
+
+        return true;
     }
 }

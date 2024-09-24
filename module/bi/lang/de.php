@@ -122,4 +122,4 @@ $lang->bi->stepQueryTip   = 'Adding a dynamic query filter. The dynamic query fi
 
 $lang->bi->stepGroupTitle = 'Set up groups and aggregate';
 $lang->bi->stepGroupTip   = 'Setting grouping is used to group query results according to specified column values, and apply aggregate functions to other grouped data to obtain summary information.';
-$lang->bi->emptyGroups    = 'After enabling "Set group and aggregation", the system will automatically display your selected query field and the newly added function field here; You can set the grouping field in turn, as well as any other fields that need to be aggregated.';
+$lang->bi->emptyGroups    = 'After enabling "Set group and aggregation", the system will automatically display your selected query field and the newly added function field here; <br />You can set the grouping field in turn, as well as any other fields that need to be aggregated.';

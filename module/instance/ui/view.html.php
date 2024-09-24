@@ -19,6 +19,7 @@ jsVar('instanceStatus', $instance->status);
 jsVar('instanceType',   $type);
 jsVar('inQuickon',      $config->inQuickon);
 
+if(empty($instance->externalID)) $instance->externalID = 0;
 $instance->appName = strtolower($instance->appName);
 $cpuInfo    = $this->instance->printCpuUsage($instance, (object)$instanceMetric->cpu);
 $memoryInfo = $this->instance->printStorageUsage($instance, (object)$instanceMetric->memory);

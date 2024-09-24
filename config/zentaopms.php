@@ -614,6 +614,7 @@ define('TABLE_AI_MODEL',            '`' . $config->db->prefix . 'ai_model`');
 define('TABLE_AI_ASSISTANT',        '`' . $config->db->prefix . 'ai_assistant`');
 
 define('TABLE_SQLITE_QUEUE', '`' . $config->db->prefix . 'sqlite_queue`');
+define('TABLE_DUCKDBQUEUE', '`' . $config->db->prefix . 'duckdbqueue`');
 
 if(!defined('TABLE_ROADMAP'))        define('TABLE_ROADMAP',        '`' . $config->db->prefix . 'roadmap`');
 if(!defined('TABLE_ROADMAPSTORY'))   define('TABLE_ROADMAPSTORY',   '`' . $config->db->prefix . 'roadmapstory`');

@@ -646,7 +646,7 @@ class gogsRepo
                 $parsedFile->path     = '/' . trim($path);
                 $parsedFile->oldPath  = isset($file[2]) ? '/' . trim($file[2]) : '';
                 $parsedFile->type     = 'file';
-                $parsedFile->action   = $action;
+                $parsedFile->action   = substr($action, 0, 1);
                 $logs['files'][$hash][]  = $parsedFile;
             }
         }

@@ -86,6 +86,11 @@ class pivotModel extends model
             $filters = json_decode($pivot->filters, true);
             $pivot->filters = $this->setFilterDefault($filters, $processDateVar);
         }
+        else
+        {
+            $pivot->filters = array();
+        }
+
 
         $this->processPivot($pivot);
         if(isset($pivot->stage) && $pivot->stage == 'published' && $this->app->methodName == 'preview') $this->processFieldSettings($pivot);
@@ -1576,7 +1581,7 @@ class pivotModel extends model
         $data->groups      = $groups;
         $data->cols        = $cols;
         $data->array       = json_decode(json_encode($mergeRecords), true);
-        $data->columnTotal = isset($settings['columnTotal']) ? $settings['columnTotal'] : '';
+        $data->showLastRow = $this->isShowLastRow($showColPosition);
         $data->drills      = $mergeDrillRecords;
 
         $configs = $this->calculateMergeCellConfig($groups, $settings['columns'], $mergeRecords);

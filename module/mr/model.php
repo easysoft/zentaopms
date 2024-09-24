@@ -53,6 +53,8 @@ class mrModel extends model
             ->beginIF($mode == 'creator' && $param != 'all')->andWhere('createdBy')->eq($param)->fi()
             ->beginIF($filterProjectSql)->andWhere($filterProjectSql)->fi()
             ->beginIF($repoID)->andWhere('repoID')->eq($repoID)->fi()
+            ->beginIF($this->app->rawModule == 'mr')->andWhere('isFlow')->eq('0')->fi()
+            ->beginIF($this->app->rawModule == 'pullreq')->andWhere('isFlow')->eq('1')->fi()
             ->beginIF($objectID)->andWhere('executionID')->in($objectID)->fi()
             ->orderBy($orderBy)
             ->page($pager)
@@ -172,12 +174,10 @@ class mrModel extends model
         $result = $this->checkSameOpened($MR->hostID, $MR->sourceProject, $MR->sourceBranch, $MR->targetProject, $MR->targetBranch);
         if($result['result'] == 'fail') return $result;
 
-        $this->mrTao->insertMr($MR);
+        $MRID = $this->insertMr($MR);
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
-        $MRID = $this->dao->lastInsertID();
-        $this->loadModel('action')->create('mr', $MRID, 'opened');
-
+        $this->loadModel('action')->create($this->app->rawModule, $MRID, 'opened');
         if($MR->needCI && $MR->jobID) $this->execJob($MRID, (int)$MR->jobID);
 
         $rawMR = $this->apiCreateMR($MR->hostID, $MR);
@@ -217,7 +217,7 @@ class mrModel extends model
 
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
         $linkParams = $this->app->tab == 'execution' || $this->app->tab == 'project' ? "repoID=0&mode=status&param=opened&objectID={$MR->executionID}" : "repoID={$MR->repoID}";
-        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => helper::createLink('mr', 'browse', $linkParams));
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => helper::createLink($this->app->rawModule, 'browse', $linkParams));
     }
 
     /**
@@ -269,11 +269,10 @@ class mrModel extends model
             return false;
         }
 
-        $this->mrTao->insertMr($MR);
+        $MRID = $this->insertMr($MR);
         if(dao::isError()) return false;
 
-        $MRID = $this->dao->lastInsertID();
-        $this->loadModel('action')->create('mr', $MRID, 'opened');
+        $this->loadModel('action')->create($this->app->rawModule, $MRID, 'opened');
 
         /* Exec Job */
         if($MR->hasNoConflict == '0' && $MR->mergeStatus == 'can_be_merged' && $MR->jobID) $this->execJob($MRID, (int)$MR->jobID);
@@ -329,7 +328,7 @@ class mrModel extends model
         $MR = $this->fetchByID($MRID);
         $this->linkObjects($MR);
 
-        $actionID = $this->loadModel('action')->create('mr', $MRID, 'edited');
+        $actionID = $this->loadModel('action')->create($this->app->rawModule, $MRID, 'edited');
         $changes  = common::createChanges($oldMR, $MR);
         if(!empty($changes)) $this->action->logHistory($actionID, $changes);
         $this->createMRLinkedAction($MRID, 'editmr', $MR->editedDate);
@@ -337,7 +336,7 @@ class mrModel extends model
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
         $linkParams = $this->app->tab == 'execution' ? "repoID=0&mode=status&param=opened&objectID={$MR->executionID}" : "repoID={$MR->repoID}";
-        return array('result' => 'success', 'message' => $needExecJob ? $this->lang->mr->triggeredCI : $this->lang->saveSuccess, 'load' => helper::createLink('mr', 'browse', $linkParams));
+        return array('result' => 'success', 'message' => $needExecJob ? $this->lang->mr->triggeredCI : $this->lang->saveSuccess, 'load' => helper::createLink($this->app->rawModule, 'browse', $linkParams));
     }
 
     /**
@@ -354,7 +353,7 @@ class mrModel extends model
     {
         if(empty($actionDate)) $actionDate = helper::now();
 
-        $MRAction = $actionDate . '::' . $this->app->user->account . '::' . helper::createLink('mr', 'view', "mr={$MRID}");
+        $MRAction = $actionDate . '::' . $this->app->user->account . '::' . helper::createLink($this->app->rawModule, 'view', "mr={$MRID}");
 
         $this->loadModel('action');
         foreach(array('story', 'task', 'bug') as $objectType)
@@ -517,6 +516,7 @@ class mrModel extends model
 
         if($MR)
         {
+            if(!isset($MR->flow)) $MR->flow = 0;
             $MR->gitService = strtolower($repo->SCM);
             if($MR->state == 'open') $MR->state = 'opened';
         }
@@ -866,7 +866,7 @@ class mrModel extends model
      */
     public function approve(object $MR, string $action = 'approve', string $comment = ''): array
     {
-        $actionID = $this->loadModel('action')->create('mr', $MR->id, $action);
+        $actionID = $this->loadModel('action')->create($this->app->rawModule, $MR->id, $action);
 
         if(isset($MR->status) && $MR->status == 'opened')
         {
@@ -902,7 +902,7 @@ class mrModel extends model
                 return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true);
             }
         }
-        return array('result' => 'fail', 'message' => $this->lang->mr->repeatedOperation, 'load' => helper::createLink('mr', 'view', "mr={$MR->id}"));
+        return array('result' => 'fail', 'message' => $this->lang->mr->repeatedOperation, 'load' => helper::createLink($this->app->rawModule, 'view', "mr={$MR->id}"));
     }
 
     /**
@@ -915,10 +915,10 @@ class mrModel extends model
      */
     public function close(object $MR): array
     {
-        $link = helper::createLink('mr', 'view', "mr={$MR->id}");
+        $link = helper::createLink($this->app->rawModule, 'view', "mr={$MR->id}");
         if($MR->status == 'closed') return array('result' => 'fail', 'message' => $this->lang->mr->repeatedOperation, 'load' => $link);
 
-        $actionID = $this->loadModel('action')->create('mr', $MR->id, 'closed');
+        $actionID = $this->loadModel('action')->create($this->app->rawModule, $MR->id, 'closed');
         $rawMR    = $this->apiCloseMR($MR->hostID, $MR->targetProject, $MR->mriid);
         $changes  = common::createChanges($MR, $rawMR);
         $this->action->logHistory($actionID, $changes);
@@ -937,10 +937,10 @@ class mrModel extends model
      */
     public function reopen(object $MR): array
     {
-        $link = helper::createLink('mr', 'view', "mr={$MR->id}");
+        $link = helper::createLink($this->app->rawModule, 'view', "mr={$MR->id}");
         if($MR->status == 'opened') return array('result' => 'fail', 'message' => $this->lang->mr->repeatedOperation, 'load' => $link);
 
-        $this->loadModel('action')->create('mr', $MR->id, 'reopen');
+        $this->loadModel('action')->create($this->app->rawModule, $MR->id, 'reopen');
         $rawMR = $this->apiReopenMR($MR->hostID, $MR->targetProject, $MR->mriid);
 
         if(!empty($rawMR) && empty($rawMR->message)) return array('result' => 'success', 'message' => $this->lang->mr->reopenSuccess, 'load' => $link);
@@ -970,7 +970,7 @@ class mrModel extends model
             ->leftJoin(TABLE_RELATION)->alias('t2')->on('t1.id=t2.BID')
             ->where('t2.product')->eq($productID)
             ->andWhere('t2.relation')->eq('interrated')
-            ->andWhere('t2.AType')->eq('mr')
+            ->andWhere('t2.AType')->eq($this->app->rawModule)
             ->andWhere('t2.AID')->eq($MRID)
             ->andWhere('t2.BType')->eq($type)
             ->andWhere('t1.deleted')->eq(0)
@@ -992,7 +992,7 @@ class mrModel extends model
     {
         return $this->dao->select("t2.id,t2.title,t2.status")->from(TABLE_RELATION)->alias('t1')
             ->leftJoin(TABLE_MR)->alias('t2')->on('t1.AID = t2.id')
-            ->where('t1.AType')->eq('mr')
+            ->where('t1.AType')->eq($this->app->rawModule)
             ->andWhere('t1.BType')->eq($objectType)
             ->andWhere('t1.BID')->eq($objectID)
             ->andWhere('t2.id')->ne(0)
@@ -1019,14 +1019,14 @@ class mrModel extends model
 
         /* Set link action text. */
         $user    = $this->loadModel('user')->getRealNameAndEmails($MR->createdBy);
-        $comment = $MR->createdDate . '::' . zget($user, 'realname', $this->app->user->realname) . '::' . helper::createLink('mr', 'view', "mr={$MR->id}");
+        $comment = $MR->createdDate . '::' . zget($user, 'realname', $this->app->user->realname) . '::' . helper::createLink($this->app->rawModule, 'view', "mr={$MR->id}");
 
         $this->loadModel('action');
         foreach($objects as $objectID)
         {
             $relation = new stdclass();
             $relation->product  = $productID;
-            $relation->AType    = 'mr';
+            $relation->AType    = $this->app->rawModule;
             $relation->AID      = $MRID;
             $relation->relation = 'interrated';
             $relation->BType    = $type;
@@ -1074,7 +1074,7 @@ class mrModel extends model
         {
             $relation           = new stdclass();
             $relation->product  = $product ? $product->id : 0;
-            $relation->AType    = 'mr';
+            $relation->AType    = $this->app->rawModule;
             $relation->AID      = $MR->id;
             $relation->relation = 'interrated';
             $relation->BType    = $type;
@@ -1105,13 +1105,13 @@ class mrModel extends model
 
         $this->dao->delete()->from(TABLE_RELATION)
             ->where('product')->eq($productID)
-            ->andWhere('AType')->eq('mr')
+            ->andWhere('AType')->eq($this->app->rawModule)
             ->andWhere('AID')->eq($MRID)
             ->andWhere('BType')->eq($type)
             ->andWhere('BID')->eq($objectID)
             ->exec();
 
-        $this->loadModel('action')->create($type, $objectID, 'deletemr', '', helper::createLink('mr', 'view', "mr={$MRID}"));
+        $this->loadModel('action')->create($type, $objectID, 'deletemr', '', helper::createLink($this->app->rawModule, 'view', "mr={$MRID}"));
         return !dao::isError();
     }
 
@@ -1154,7 +1154,7 @@ class mrModel extends model
      */
     public function logMergedAction(object $MR): bool
     {
-        $this->loadModel('action')->create('mr', $MR->id, 'mergedmr');
+        $this->loadModel('action')->create($this->app->rawModule, $MR->id, 'mergedmr');
 
         $product = $this->getMRProduct($MR);
         foreach(array('story', 'bug', 'task') as $type)
@@ -1162,7 +1162,7 @@ class mrModel extends model
             $objects = $this->getLinkList($MR->id, $product ? $product->id : 0, $type);
             foreach($objects as $object)
             {
-                $this->action->create($type, $object->id, 'mergedmr', '', helper::createLink('mr', 'view', "mr={$MR->id}"));
+                $this->action->create($type, $object->id, 'mergedmr', '', helper::createLink($this->app->rawModule, 'view', "mr={$MR->id}"));
             }
         }
 
@@ -1271,7 +1271,7 @@ class mrModel extends model
 
         $this->dao->delete()->from(TABLE_MR)->where('id')->eq($MRID)->exec();
 
-        $this->loadModel('action')->create('mr', $MRID, 'deleted', '', $MR->title);
+        $this->loadModel('action')->create($this->app->rawModule, $MRID, 'deleted', '', $MR->title);
         $this->createMRLinkedAction($MRID, 'removemr');
         return !dao::isError();
     }
@@ -1300,9 +1300,28 @@ class mrModel extends model
         $newMR->compileStatus = $compile->status;
         if($newMR->compileStatus == 'failure')     $newMR->status = 'closed';
         if($newMR->compileStatus == 'create_fail') $newMR->status = 'closed';
-        $this->loadModel('repo')->saveRelation($MRID, 'mr', $compile->id, 'compile', 'mrjob');
+        $this->loadModel('repo')->saveRelation($MRID, $this->app->rawModule, $compile->id, 'compile', 'mrjob');
 
         $this->dao->update(TABLE_MR)->data($newMR)->where('id')->eq($MRID)->autoCheck()->exec();
         return dao::isError();
+    }
+
+    /**
+     * 创建合并请求。
+     * Insert a merge request.
+     *
+     * @param  object $MR
+     * @access public
+     * @return int|false
+     */
+    public function insertMr(object $MR): int|false
+    {
+        $this->dao->insert(TABLE_MR)->data($MR, $this->config->mr->create->skippedFields)
+            ->batchCheck($this->config->mr->create->requiredFields, 'notempty')
+            ->checkIF(!empty($MR->needCI), 'jobID',  'notempty')
+            ->exec();
+        if(dao::isError()) return false;
+
+        return $this->dao->lastInsertID();
     }
 }

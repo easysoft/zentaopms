@@ -8,6 +8,7 @@ class thinkStep  extends wg
         'item: object',
         'action?: string="detail"',
         'addType?: string',
+        'wizard: object',
         'isRun?: bool=false',        // 是否是分析活动
         'quoteQuestions?: array',    // 引用题目的下拉选项
         'quotedQuestions?: array',   // 被引用的题目
@@ -34,9 +35,8 @@ class thinkStep  extends wg
         global $lang, $app;
         $app->loadLang('thinkstep');
 
-        list($item, $action, $addType, $isRun, $quotedQuestions) = $this->prop(array('item', 'action', 'addType', 'isRun', 'quotedQuestions'));
+        list($item, $action, $wizard, $addType, $isRun, $quotedQuestions) = $this->prop(array('item', 'action', 'wizard', 'addType', 'isRun', 'quotedQuestions'));
         if(!$item && !$addType) return array();
-
         $marketID  = data('marketID');
         $basicType = $item->type ?? '';
         $typeLang  = $action . 'Step';
@@ -44,6 +44,7 @@ class thinkStep  extends wg
         $title     = $action == 'detail' ? sprintf($lang->thinkstep->info, $lang->thinkstep->$basicType) : sprintf($lang->thinkstep->formTitle[$type], $lang->thinkstep->$typeLang);
         $canEdit   = common::hasPriv('thinkstep', 'edit');
         $canDelete = common::hasPriv('thinkstep', 'delete');
+        $canLink   = $wizard->model === '3c' && ($type === 'checkbox' || $type === 'radio' || $type === 'multicolumn');
 
         return div
         (
@@ -60,6 +61,19 @@ class thinkStep  extends wg
                         setStyle(array('min-width' => '48px')),
                         btnGroup
                         (
+                            $canLink ? ($item->options->required ? btn
+                            (
+                                setClass('btn ghost text-gray w-5 h-5 mr-1'),
+                                set::icon('link'),
+                                set::url(createLink('thinkstep', 'link')),
+                                set('data-toggle', 'modal'),
+                                set('data-dismiss', 'modal'),
+                                set('data-size', 'sm'),
+                            ) : icon(
+                                setClass('w-5 h-5 text-gray opacity-50 ml-1 text-md pl-1 mr-1'),
+                                set::title($lang->thinkstep->tips->linkBlocks),
+                                'link'
+                            )): null,
                             $canEdit ? btn
                             (
                                 setClass('btn ghost text-gray w-5 h-5'),
