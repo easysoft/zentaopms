@@ -19,4 +19,24 @@ class bugTester extends tester
         if($form->dom->num->getText() == $expectNum) return $this->success($tab . '下显示条数正确');
         return $this->failed($tab . '下显示条数不正确');
     }
+
+    /**
+     * 单个指派bug。
+     * Assign bug.
+     *
+     * @param  string $user
+     * @access public
+     * @return object
+     */
+    public function assignTo($user)
+    {
+        $form = $this->initForm('execution', 'bug', array('execution' => '2'), 'appIframe-execution');
+        $form->dom->firstAssignedTo->click();
+        $form->dom->assignedTo->picker($user);
+        $form->dom->submitBtn->click();
+        $form->wait(1);
+
+        if($form->dom->firstAssignedTo->getText() == $user) return $this->success('指派bug成功');
+        return $this->failed('指派bug失败');
+    }
 }
