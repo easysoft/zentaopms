@@ -264,6 +264,7 @@ class programplanTao extends programplanModel
     protected function setTask(array $tasks, array $plans, string $selectCustom, array $datas, array $stageIndex): array
     {
         $this->app->loadLang('task');
+        $this->loadModel('holiday');
         $executions = array();
         $today      = helper::today();
         $taskTeams  = $this->dao->select('task,account')->from(TABLE_TASKTEAM)->where('task')->in(array_keys($tasks))->fetchGroup('task', 'account');
@@ -283,7 +284,8 @@ class programplanTao extends programplanModel
             $data->delayDays = 0;
             if($today > $dateLimit['end'] && (!$plan || $plan->status != 'closed'))
             {
-                $delayDays = helper::diffDate(($task->status == 'done' || $task->status == 'closed') ? substr($task->finishedDate, 0, 10) : $today, substr($dateLimit['end'], 0, 10));
+                $actualDays = $this->holiday->getActualWorkingDays(substr($dateLimit['end'], 0, 10), ($task->status == 'done' || $task->status == 'closed') ? substr($task->finishedDate, 0, 10) : $today);
+                $delayDays  = count($actualDays);
                 if($delayDays > 0)
                 {
                     $data->delayDays = $delayDays;
