@@ -95,13 +95,13 @@ class storyTester extends tester
         $afterPhase = $form->dom->firstPhase->getText();
         if($status == 'draft' || $status == 'closed')
         {
-            if($afterPhase == $beforePhase) return $this->success('批量编辑阶段成功');
-            return $this->failed('批量编辑阶段失败');
+            if($afterPhase == $beforePhase) return $this->success('批量编辑' . $status . '阶段成功');
+            return $this->failed('批量编辑' . $status . '阶段失败');
         }
         else
         {
-            if($afterPhase == $storyPhase) return $this->success('批量编辑阶段成功');
-            return $this->failed('批量编辑阶段失败');
+            if($afterPhase == $storyPhase) return $this->success('批量编辑' . $status . '阶段成功');
+            return $this->failed('批量编辑' . $status . '阶段失败');
         }
     }
 
