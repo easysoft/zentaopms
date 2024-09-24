@@ -41,8 +41,8 @@ class bugTester extends tester
     }
 
     /**
-     * 批量指派bug
-     * Batch assign bug
+     * 批量指派bug。
+     * Batch assign bug.
      *
      * @access public
      * @return object
@@ -58,5 +58,25 @@ class bugTester extends tester
 
         if($form->dom->firstAssignedTo->getText() == 'admin') return $this->success('批量指派bug成功');
         return $this->failed('批量指派bug失败');
+    }
+
+    /**
+     * 切换产品查看buig。
+     * Switch product to view bug.
+     *
+     * @param  string $product   firstProduct|secondProduct|thirdProduct
+     * @param  string $expectNum
+     * @access public
+     * @return object
+     */
+    public function switchProduct($product, $expectNum)
+    {
+        $form = $this->initForm('execution', 'bug', array('execution' => '2'), 'appIframe-execution');
+        $form->dom->productNav->click();
+        $form->dom->$product->click();
+        $form->wait(1);
+
+        if($form->dom->num->getText() == $expectNum) return $this->success('切换产品查看bug成功');
+        return $this->failed('切换产品查看bug失败');
     }
 }
