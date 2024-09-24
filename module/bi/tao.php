@@ -31,4 +31,19 @@ class biTao extends biModel
             ->fetchPairs();
     }
 
+    /**
+     * Update sync time.
+     *
+     * @param  array    $tables
+     * @access protected
+     * @return void
+     */
+    protected function updateSyncTime($tables)
+    {
+        $this->dao->update(TABLE_DUCKDBQUEUE)
+            ->set('syncTime')->eq(helper::now())
+            ->where('object')->in($tables)
+            ->exec();
+    }
+
 }
