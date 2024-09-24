@@ -20,7 +20,7 @@ featureBar
 $canCreate    = hasPriv('branch', 'create');
 $canBatchEdit = hasPriv('branch', 'batchEdit');
 $canMerge     = hasPriv('branch', 'mergeBranch');
-if($canCreate) $createItem = array('icon' => 'plus', 'class' => 'primary branch-create-btn', 'text' => $lang->branch->create, 'url' => $this->createLink('branch', 'create', "productID={$product->id}", '', true), 'data-toggle' => 'modal');
+if($canCreate) $createItem = array('icon' => 'plus', 'class' => 'primary branch-create-btn', 'text' => $lang->branch->create, 'url' => $this->createLink('branch', 'create', "productID={$product->id}"), 'data-toggle' => 'modal');
 toolbar
 (
     !empty($createItem) ? item(set($createItem)) : null,
