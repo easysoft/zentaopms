@@ -185,6 +185,9 @@ class searchTao extends searchModel
      */
     protected function setCondition(string $field, string $operator, string|int $value, string $control = ''): string
     {
+        /* 替换特殊字符。 */
+        if(is_string($value)) $value = htmlspecialchars($value, ENT_QUOTES);
+
         $condition = '';
         if($operator == 'include')
         {

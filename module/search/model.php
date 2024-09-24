@@ -304,7 +304,6 @@ class searchModel extends model
 
         /* Decode html encode. */
         $query->form = htmlspecialchars_decode($query->form, ENT_QUOTES);
-        $query->sql  = htmlspecialchars_decode($query->sql, ENT_QUOTES);
 
         /* 如果搜索表单中值有变量，把表单值放到post 表单，重新生成 query。*/
         /* If form has variable, regenerate query. */
