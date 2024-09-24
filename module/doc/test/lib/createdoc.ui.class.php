@@ -53,4 +53,24 @@ class createDocTester extends tester
         if($form->dom->fstDocName->getText() != $docName->dcName) return $this->failed('文档创建失败');
         return $this->success('文档创建成功');
     }
+
+    /*
+     * 创建产品文档。
+     * Create a product doc.
+     *
+     * @param  string $docName
+     * @access public
+     * @return void
+     */
+    public function createProductDoc($productName, $docName)
+    {
+        /*创建两个产品*/
+        $form = $this->initForm('product', 'create');
+        $form->dom->name->setValue($productName->fstProduct);
+        $form->dom->btn($this->lang->save)->click();
+        $form->wait(1);
+        $form = $this->initForm('product', 'create');
+        $form->dom->name->setValue($productName->secProduct);
+        $form->dom->btn($this->lang->save)->click();
+    }
 }
