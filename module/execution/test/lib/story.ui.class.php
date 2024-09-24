@@ -106,8 +106,8 @@ class storyTester extends tester
     }
 
     /**
-     * 需求指派
-     * Assign story
+     * 需求指派。
+     * Assign story.
      *
      * @param  string $user
      * @access public
@@ -127,8 +127,8 @@ class storyTester extends tester
     }
 
     /**
-     * 需求批量指派
-     * Batch assign story
+     * 需求批量指派。
+     * Batch assign story.
      *
      * @access public
      * @return object
