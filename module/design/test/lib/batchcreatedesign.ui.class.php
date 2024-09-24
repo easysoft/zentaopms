@@ -2,6 +2,14 @@
 include dirname(__FILE__, 5) . '/test/lib/ui.php';
 class batchCreateDesignTester extends tester
 {
+    /**
+     * Batch create a design.
+     * 批量创建设计。
+     *
+     * @param  array  $design
+     * @access public
+     * @return object
+     */
     public function batchCreateDesign(array $design)
     {
         $form = $this->initForm('design', 'batchCreate', array('projecID' => 60, 'productID' => 0), 'appIframe-project');
