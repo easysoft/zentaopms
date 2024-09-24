@@ -1199,6 +1199,7 @@ class biModel extends model
         $command = $this->prepareSyncCommand($duckdb->bin, $duckdb->extension, $copySQL);
         $output  = shell_exec($command);
         $this->saveLogs("Sync command: $command");
+        return $output;
     }
 
     /**
