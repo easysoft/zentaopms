@@ -947,7 +947,11 @@ class taskModel extends model
 
         if(dao::isError()) return false;
 
-        if($createAction) $this->loadModel('action')->create('task', $taskID, 'Opened', '');
+        if($createAction)
+        {
+            $this->loadModel('action')->create('task', $taskID, 'Opened', '');
+            if(!empty($task->assignedTo)) $this->action->create('task', $taskID, 'Assigned', '', $task->assignedTo);
+        }
         $this->loadModel('file')->updateObjectID($this->post->uid, $taskID, 'task');
         $this->loadModel('score')->create('task', 'create', $taskID);
         if(dao::isError()) return false;

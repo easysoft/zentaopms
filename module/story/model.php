@@ -573,6 +573,7 @@ class storyModel extends model
         $action = $bugID == 0 ? (empty($storyFrom) ? 'Opened' : 'From' . ucfirst($storyFrom)) : 'Frombug';
         $this->action->create('story', $storyID, $action, '', $extra);
         if($story->status == 'reviewing') $this->action->create('story', $storyID, 'submitReview');
+        if(!empty($story->assignedTo)) $this->action->create('story', $storyID, 'Assigned', '', $story->assignedTo);
 
         if($todoID > 0)
         {
@@ -731,6 +732,7 @@ class storyModel extends model
             $this->executeHooks($storyID);
 
             $this->action->create('story', $storyID, 'Opened', '');
+            if(!empty($story->assignedTo)) $this->action->create('story', $storyID, 'Assigned', '', $story->assignedTo);
             $storyIdList[$i] = $storyID;
         }
 

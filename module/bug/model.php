@@ -38,6 +38,7 @@ class bugModel extends model
 
         $action = $from == 'sonarqube' ? 'fromSonarqube' : 'Opened';
         $this->loadModel('action')->create('bug', $bugID, $action);
+        if(!empty($bug->assignedTo)) $this->action->create('bug', $bugID, 'Assigned', '', $bug->assignedTo);
 
         /* Add score for create. */
         if(!empty($bug->case))
