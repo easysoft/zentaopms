@@ -18,3 +18,23 @@ class groupTester extends tester
 
         $form->dom->btn($this->lang->save)->click();
         $form->wait(2);
+        return $this->checkResult($project,$form);
+    }
+
+    /**
+     * Check the result after creating the project group.
+     *
+     * @param  array $project
+     * @access public
+     * @return object
+     */
+    public function checkResult($project,$form)
+    {
+        /*检查创建分组弹窗中的提示信息是否正确*/
+        if($form->dom->nameTip)
+        {
+        $nameTipform = $form->dom->nameTip->getText();
+        $nameTip     = sprintf($this->lang->error->notempty, $this->lang->group->name);
+        return ($nameTipform == $nameTip) ? $this->success('项目创建分组提示信息正确') : $this->failed('项目创建分组提示信息不正确');
+        }
+        /*创建项目分组后检查列表页的名称和描述是否正确*/
