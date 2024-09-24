@@ -83,5 +83,8 @@ class createDocTester extends tester
         $form->wait(1);
         $form->dom->product->picker($productName->secProduct);
         $form->dom->releaseBtn->click();
+
+        if($form->dom->leftListHeader->getText() != $productName->secProduct) return $this->failed('切换产品创建文档失败');
+        return $this->success('切换产品创建文档成功');
     }
 }
