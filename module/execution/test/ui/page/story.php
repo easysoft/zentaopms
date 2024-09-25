@@ -31,6 +31,7 @@ class storyPage extends page
             'estimateC'    => "//*[@id='storyEstimateTable']/tbody/tr[4]/td[last()]/input",
             'average'      => "//*[@id='storyEstimateTable']/tbody/tr[5]/td[last()]/input",
             'saveBtn'      => "//*[@id='storyEstimateTable']/../div/button",
+            'noTeamInfo'   => "//*[@id='storyEstimateModal']/div/div/div[3]/div/p/span",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }

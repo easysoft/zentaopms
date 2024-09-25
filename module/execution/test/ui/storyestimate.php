@@ -52,7 +52,7 @@ $story->status->range('active{3}, closed{3}, reviewing{3}, draft{3}, changing{3}
 $story->stage->range('projected');
 $story->assignedTo->range('[]');
 $story->version->range('1');
-$story->gen(1);
+$story->gen(2);
 
 $storySpec = zenData('storyspec');
 $storySpec->story->range('1-15');
@@ -61,13 +61,13 @@ $storySpec->title->range('1-15');
 $storySpec->gen(15);
 
 $projectStory = zenData('projectstory');
-$projectStory->project->range('1{15}, 2{15}');
+$projectStory->project->range('1{2}, 2, 3');
 $projectStory->product->range('1');
 $projectStory->branch->range('0');
-$projectStory->story->range('1-15, 1-15');
+$projectStory->story->range('1-2, 1-2');
 $projectStory->version->range('1');
-$projectStory->order->range('1{15}, 2{15}');
-$projectStory->gen(30);
+$projectStory->order->range('1-2, 1{2}');
+$projectStory->gen(4);
 
 $user = zenData('user');
 $user->id->range('1-100');
@@ -101,4 +101,5 @@ r($tester->storyEstimate($estimate[0], '1'))          && p('message') && e('估�
 r($tester->storyEstimate($estimate[1], '2'))          && p('message') && e('估算成功');
 r($tester->checkErrorInfo($estimate[2], 'notNumber')) && p('message') && e('估算值为非数字提示成功');
 r($tester->checkErrorInfo($estimate[3], 'negative'))  && p('message') && e('估算值为负数提示成功');
+r($tester->noTeamInfo())                              && p('message') && e('没有团队成员提示成功');
 $tester->closeBrowser();
