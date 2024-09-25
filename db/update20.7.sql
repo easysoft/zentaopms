@@ -6,3 +6,12 @@ CREATE INDEX `deleted` ON `zt_metriclib` (`deleted`);
 
 ALTER TABLE `zt_pipeline` ADD `instanceID` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `private`;
 ALTER TABLE `zt_mr` ADD `isFlow` ENUM('0', '1') NOT NULL DEFAULT '0' AFTER `squash`;
+
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'task', 'recordWorkhour' FROM `zt_grouppriv` WHERE `module` = 'task' AND `method` = 'recordEstimate';
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'task', 'editEffort' FROM `zt_grouppriv` WHERE `module` = 'task' AND `method` = 'editEstimate';
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'task', 'deleteWorkhour' FROM `zt_grouppriv` WHERE `module` = 'task' AND `method` = 'deleteEstimate';
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'bug', 'confirm' FROM `zt_grouppriv` WHERE `module` = 'bug' AND `method` = 'confirmBug';
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'testcase', 'batchChangeType' FROM `zt_grouppriv` WHERE `module` = 'testcase' AND `method` = 'batchCaseTypeChange';
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'ops', 'provider' FROM `zt_grouppriv` WHERE `module` = 'ops' AND `method` = 'provide';
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'projectstory', 'importToLib' FROM `zt_grouppriv` WHERE `module` = 'story' AND `method` = 'importToLib';
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'projectstory', 'batchImportToLib' FROM `zt_grouppriv` WHERE `module` = 'story' AND `method` = 'batchImportToLib';
