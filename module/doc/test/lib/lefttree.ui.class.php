@@ -29,7 +29,7 @@ class createDocTester extends tester
         $form->wait(1);
         $form->dom->myFavorites->click();
 
-        if($form->dom->checkFstDoc->getText() != $docName->dcName) return $this->failed('文档收藏失败');
-        return $this->success('文档收藏成功');
+        if($form->dom->checkFstDoc->getText() != $docName->dcName) return $this->failed('收藏文档失败');
+        return $this->success('收藏文档成功');
     }
 }
