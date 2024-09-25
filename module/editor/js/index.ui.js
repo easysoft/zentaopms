@@ -1,7 +1,7 @@
 window.initModuleTree = function()
 {
     $('#moduleTree').replaceWith('<ul id="moduleTree"></ul>');
-    $('#extendWin').attr('src', '')
+    $('#extendWin').attr('src', '');
     data = appendClickEvent(moduleTree);
     new zui.Tree("#moduleTree", {items: data});
 };
