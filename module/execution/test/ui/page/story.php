@@ -30,7 +30,7 @@ class storyPage extends page
             'estimateB'    => "//*[@id='storyEstimateTable']/tbody/tr[3]/td[last()]/input",
             'estimateC'    => "//*[@id='storyEstimateTable']/tbody/tr[4]/td[last()]/input",
             'average'      => "//*[@id='storyEstimateTable']/tbody/tr[5]/td[last()]/input",
-            'submitBtn'    => "//*[@id='storyEstimateTable']/../div/button",
+            'saveBtn'      => "//*[@id='storyEstimateTable']/../div/button",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }

@@ -21,7 +21,7 @@ class StoryEstimateTester extends tester
         if(isset($estimate[1])) $form->dom->estimateB->setValue($estimate[1]);
         if(isset($estimate[2])) $form->dom->estimateC->setValue($estimate[2]);
         $form->wait(1);
-        $form->dom->submitBtn->click();
+        $form->dom->saveBtn->click();
     }
 
     /**
