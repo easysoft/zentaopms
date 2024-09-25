@@ -13,10 +13,15 @@ class managePage extends page
             'allTab'      => "//*[@id='featureBar']/menu/li[1]/a",
             'activeTab'   => "//*[@id='featureBar']/menu/li[2]/a",
             'closedTab'   => "//*[@id='featureBar']/menu/li[3]/a",
+            'secName'     => "//*[@id='table-branch-manage']/div[2]/div[1]/div/div[4]/div",
             'secStatus'   => "//*[@id='table-branch-manage']/div[2]/div[2]/div/div[5]/div/span",
             'editBtn'     => "//*[@id='table-branch-manage']/div[2]/div[3]/div/div[2]/div/nav/a[1]",
             'closeBtn'    => "//*[@id='table-branch-manage']/div[2]/div[3]/div/div[2]/div/nav/a[2]",
             'activateBtn' => "//*[@id='table-branch-manage']/div[2]/div[3]/div/div[2]/div/nav/a[2]",
+            /*编辑分支页*/
+            'editName' => "//*[@id='zin_branch_edit_1_form']/div[1]/input",
+            'editDesc' => "//*[@id='zin_branch_edit_1_form']/div[3]/textarea",
+            'editSave' => "//*[@id='zin_branch_edit_1_form']/div[4]/div/button",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
