@@ -206,7 +206,6 @@ class editorModel extends model
         $tree        = new stdclass();
         $fileName    = basename($filePath);
         $tree->id    = md5($filePath);
-        $tree->title = $fileName;
         $tree->actions['items'] = array();
         if(isset($this->lang->editor->translate[$fileName]))
         {
