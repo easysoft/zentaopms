@@ -3,7 +3,7 @@ window.initModuleTree = function()
     $('#moduleTree').replaceWith('<ul id="moduleTree"></ul>');
     $('#extendWin').attr('src', '')
     data = appendClickEvent(moduleTree);
-    tree = new zui.Tree("#moduleTree", {items: data});
+    new zui.Tree("#moduleTree", {items: data});
 };
 
 window.appendClickEvent = function(moduleTree)
