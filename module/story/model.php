@@ -3690,7 +3690,7 @@ class storyModel extends model
             }
         }
 
-        if(strtolower($actionType) == 'changed' or strtolower($actionType) == 'opened')
+        if(in_array(strtolower($actionType), array('changed', 'opened', 'submitreview')))
         {
             $reviewerList = $this->getReviewerPairs($story->id, $story->version);
             unset($reviewerList[$story->assignedTo]);
