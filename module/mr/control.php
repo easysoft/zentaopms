@@ -291,7 +291,7 @@ class mr extends control
         $this->mr->deleteByID($MRID);
 
         if(dao::isError()) return $this->sendError(dao::getError());
-        return $this->send(array('result' => 'success', 'load' => $this->createLink($this->app->rawModule, 'browse')));
+        return $this->sendSuccess(array('load' => $this->createLink($this->app->rawModule, 'browse')));
     }
 
     /**
@@ -384,7 +384,7 @@ class mr extends control
 
             if(isset($compileStatus) and $compileStatus != 'success')
             {
-                return $this->send(array('result' => 'fail', 'message' => $this->lang->mr->needCI, 'locate' => helper::createLink($this->app->rawModule, 'view', "mr={$MRID}")));
+                return $this->sendError($this->lang->mr->needCI);
             }
         }
 
@@ -392,7 +392,7 @@ class mr extends control
         {
             if($MR->approvalStatus != 'approved')
             {
-                return $this->send(array('result' => 'fail', 'message' => $this->lang->mr->needApproved, 'locate' => helper::createLink($this->app->rawModule, 'view', "mr={$MRID}")));
+                return $this->sendError($this->lang->mr->needApproved);
             }
         }
 
@@ -400,7 +400,7 @@ class mr extends control
         if(isset($rawMR->state) and $rawMR->state == 'merged')
         {
             $this->mr->logMergedAction($MR);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->mr->mergeSuccess, 'load' => true));
+            return $this->sendSuccess(array('message' => $this->lang->mr->mergeSuccess, 'load' => true));
         }
 
         /* The type of variable `$rawMR->message` is string. This is different with apiCreateMR. */
@@ -410,7 +410,7 @@ class mr extends control
             return $this->sendError(sprintf($this->lang->mr->apiError->sudo, $errorMessage));
         }
 
-        return $this->send(array('result' => 'fail', 'message' => $this->lang->mr->mergeFailed, 'locate' => helper::createLink($this->app->rawModule, 'view', "mr={$MRID}")));
+        return $this->sendError($this->lang->mr->mergeFailed);
     }
 
     /**
@@ -590,7 +590,7 @@ class mr extends control
             if(dao::isError()) return $this->sendError(dao::getError());
 
             $link = $this->createLink($this->app->rawModule,'link', "MRID=$MRID&type=story&orderBy=$orderBy");
-            return $this->send(array('result' => 'success', 'load' => $link, 'closeModal' => true));
+            return $this->sendSuccess(array('load' => $link, 'closeModal' => true));
         }
 
         $this->loadModel('story');
@@ -647,10 +647,10 @@ class mr extends control
         {
             $this->mr->link($MRID, $productID, 'bug', $this->post->bugs);
 
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->sendError(dao::getError());
 
             $link = $this->createLink($this->app->rawModule,'link', "MRID=$MRID&type=bug&orderBy=$orderBy");
-            return $this->send(array('result' => 'success', 'load' => $link, 'closeModal' => true));
+            return $this->sendSuccess(array('load' => $link, 'closeModal' => true));
         }
 
         $this->loadModel('bug');
@@ -705,10 +705,10 @@ class mr extends control
         if(!empty($_POST['tasks']))
         {
             $this->mr->link($MRID, $productID, 'task', $this->post->tasks);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->sendError(dao::getError());
 
             $link = $this->createLink($this->app->rawModule,'link', "MRID=$MRID&type=task&orderBy=$orderBy");
-            return $this->send(array('result' => 'success', 'load' => $link, 'closeModal' => true));
+            return $this->sendSuccess(array('load' => $link, 'closeModal' => true));
         }
 
         /* Set browse type. */
@@ -766,19 +766,9 @@ class mr extends control
     {
         $this->mr->unlink($MRID, $productID, $type, $linkID);
 
-        if(dao::isError())
-        {
-            $response['result']  = 'fail';
-            $response['message'] = dao::getError();
-        }
-        else
-        {
-            $link = $this->createLink($this->app->rawModule, 'link', "MRID=$MRID&type=$type");
-            $response['result']  = 'success';
-            $response['message'] = '';
-            $response['load']    = $link;
-        }
-        return $this->send($response);
+        if(dao::isError()) return $this->sendError(dao::getError());
+
+        return $this->sendSuccess(array('message' => '', 'load' => $this->createLink($this->app->rawModule, 'link', "MRID=$MRID&type=$type")));
     }
 
     /**

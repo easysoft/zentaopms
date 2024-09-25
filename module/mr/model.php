@@ -914,16 +914,15 @@ class mrModel extends model
      */
     public function close(object $MR): array
     {
-        $link = helper::createLink($this->app->rawModule, 'view', "mr={$MR->id}");
-        if($MR->status == 'closed') return array('result' => 'fail', 'message' => $this->lang->mr->repeatedOperation, 'load' => $link);
+        if($MR->status == 'closed') return array('result' => 'fail', 'message' => $this->lang->mr->repeatedOperation);
 
         $actionID = $this->loadModel('action')->create($this->app->rawModule, $MR->id, 'closed');
         $rawMR    = $this->apiCloseMR($MR->hostID, $MR->targetProject, $MR->mriid);
         $changes  = common::createChanges($MR, $rawMR);
         $this->action->logHistory($actionID, $changes);
 
-        if(isset($rawMR->state) && $rawMR->state == 'closed') return array('result' => 'success', 'message' => $this->lang->mr->closeSuccess, 'load' => $link);
-        return array('result' => 'fail', 'message' => $this->lang->fail, 'load' => $link);
+        if(isset($rawMR->state) && $rawMR->state == 'closed') return array('result' => 'success', 'message' => $this->lang->mr->closeSuccess, 'load' => 'reload');
+        return array('result' => 'fail', 'message' => $this->lang->fail);
     }
 
     /**
@@ -936,14 +935,13 @@ class mrModel extends model
      */
     public function reopen(object $MR): array
     {
-        $link = helper::createLink($this->app->rawModule, 'view', "mr={$MR->id}");
-        if($MR->status == 'opened') return array('result' => 'fail', 'message' => $this->lang->mr->repeatedOperation, 'load' => $link);
+        if($MR->status == 'opened') return array('result' => 'fail', 'message' => $this->lang->mr->repeatedOperation);
 
         $this->loadModel('action')->create($this->app->rawModule, $MR->id, 'reopen');
         $rawMR = $this->apiReopenMR($MR->hostID, $MR->targetProject, $MR->mriid);
 
-        if(!empty($rawMR) && empty($rawMR->message)) return array('result' => 'success', 'message' => $this->lang->mr->reopenSuccess, 'load' => $link);
-        return array('result' => 'fail', 'message' => $this->lang->fail, 'load' => $link);
+        if(!empty($rawMR) && empty($rawMR->message)) return array('result' => 'success', 'message' => $this->lang->mr->reopenSuccess, 'load' => 'reload');
+        return array('result' => 'fail', 'message' => $this->lang->fail);
     }
 
     /**
