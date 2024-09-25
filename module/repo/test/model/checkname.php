@@ -19,9 +19,8 @@ zenData('pipeline')->gen(5);
 
 $repoModel = $tester->loadModel('repo');
 
-$repo = new stdclass();
-$repo->name = 'abc&&';
-r($repoModel->checkName($repo)) && p() && e('0'); //使用不符合规则的名字
+$name = 'abc&&';
+r($repoModel->checkName($name)) && p() && e('0'); //使用不符合规则的名字
 
-$repo->name = 'unitTestProject17';
-r($repoModel->checkName($repo)) && p() && e('1'); //使用符合规则的名字
+$name = 'unitTestProject17';
+r($repoModel->checkName($name)) && p() && e('1'); //使用符合规则的名字

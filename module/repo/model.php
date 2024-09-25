@@ -213,7 +213,7 @@ class repoModel extends model
      */
     public function createRepo(object $repo): int|false
     {
-        $check = $this->checkName($repo);
+        $check = $this->checkName($repo->name);
         if(!$check)
         {
             dao::$errors['name'] = $this->lang->repo->error->repoNameInvalid;
@@ -3124,13 +3124,13 @@ class repoModel extends model
     /**
      * Check repo name.
      *
-     * @param  object $repo
-     * @access protected
+     * @param  string $name
+     * @access public
      * @return bool
      */
-    protected function checkName(object $repo)
+    public function checkName(string $name)
     {
-        $pattern = "/^[a-zA-Z_\-\.]+$/";
-        return preg_match($pattern, $repo->name);
+        $pattern = "/^[a-z_]{1}[a-z0-9_-]+$/i";
+        return preg_match($pattern, $name);
     }
 }
