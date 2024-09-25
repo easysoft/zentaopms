@@ -101,5 +101,25 @@ class createDocTester extends tester
         $form = $this->initForm('project', 'create', array('modal' => 'scrum'));
         $form->dom->hasProduct0->click();
         $form->dom->name->setValue($projectName->fstProject);
+        $form->dom->begin->datePicker($plan->begin);
+        $form->dom->longTime->click();
+        $form->dom->btn($this->lang->save)->click();
+        $form->wait(2);
+
+        /*创建项目下的执行*/
+        $form = $this->initForm('execution', 'create');
+        $form->dom->project->picker($projectName->fstProject);
+        $form->dom->name->setValue($executionName->fstExecution);
+        $form->dom->begin->datePicker($plan->begin);
+        $form->dom->end->datePicker($plan->end);
+        $form->dom->btn($this->lang->save)->click();
+
+        /*创建项目空间下的文档*/
+        $this->openUrl('doc', 'projectSpace');
+        $form = $this->loadPage('doc', 'projectSpace');
+        $form->dom->createDocBtn->click();
+        $form->wait(1);
+        $form->dom->showTitle->setValue($docName->dcName);
+        $form->dom->saveBtn->click();
     }
 }
