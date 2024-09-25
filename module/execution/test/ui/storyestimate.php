@@ -52,7 +52,7 @@ $story->status->range('active{3}, closed{3}, reviewing{3}, draft{3}, changing{3}
 $story->stage->range('projected');
 $story->assignedTo->range('[]');
 $story->version->range('1');
-$story->gen(15);
+$story->gen(1);
 
 $storySpec = zenData('storyspec');
 $storySpec->story->range('1-15');
@@ -84,10 +84,13 @@ $team->type->range('project{3}, execution{3}');
 $team->account->range('admin, user1, user2, admin, user1, user2');
 $team->gen(6);
 
-$estimate = array('1', '2', '3', '4', '', '6', 'avergeA' => '2', 'avergeB' => '5');
+$storyEstimate = zenData('storyestimate');
+$storyEstimate->gen(0);
+
+$estimate = array('1', '2', '3', '4', '0', '6', 'avergeA' => '2', 'avergeB' => '5');
 
 $tester = new storyEstimateTester();
 $tester->login();
 
-r($tester->storyEstimate($estimate)) && p('status') && e('success');
+r($tester->storyEstimate($estimate)) && p('message') && e('估算成功');
 $tester->closeBrowser();
