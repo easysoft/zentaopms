@@ -58,6 +58,7 @@ class createDocTester extends tester
      * 创建产品文档。
      * Create a product doc.
      *
+     * @param  string $productName
      * @param  string $docName
      * @access public
      * @return void
@@ -90,7 +91,11 @@ class createDocTester extends tester
 
     /*
      * 创建项目文档。
+     * Create a project doc.
      *
+     * @param string $projectName
+     * @param string $executionName
+     * @param string $plan
      * @param string $docName
      * @access public
      * @return void
