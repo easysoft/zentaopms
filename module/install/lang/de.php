@@ -160,6 +160,7 @@ $lang->install->errorTableExists    = 'Die Tabellen existieren bereits. Wenn Zen
 $lang->install->errorCreateTable    = 'Erstellung der Tabellen fehlgeschlagen.';
 $lang->install->errorEngineInnodb   = 'Your MySQL does not support InnoDB data table engine. Please modify it to MyISAM and try again.';
 $lang->install->errorImportDemoData = 'Import der Demodaten fehlgeschlagen.';
+$lang->install->errorDBUserPriv     = 'The current database user does not have sufficient permissions! Please switch to the root user or use the following SQL statement to grant the current user permissions:\n';
 
 $lang->install->setConfig          = 'Konfigurationsdatei erstellen';
 $lang->install->key                = 'Eintrag';

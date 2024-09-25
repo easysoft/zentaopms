@@ -854,4 +854,55 @@ class dbh
         $lastAction = $this->pdo->query($sql)->fetch();
         return $lastAction ? (int)$lastAction->id : false;
     }
+
+    /**
+     * 安装时检查数据库用户权限。
+     * Check user privilege.
+     *
+     * @access public
+     * @return string
+     */
+    public function checkUserPriv(): string
+    {
+        if($this->config->driver == 'mysql')
+        {
+            $user = $this->config->user;
+            $host = ($this->config->host == 'localhost' || $this->config->host == '127.0.0.1') ? 'localhost' : '%';
+
+            // 获取当前用户的所有权限
+            $privPairs = array();
+            $privList  = $this->pdo->query("SELECT PRIVILEGE_TYPE FROM information_schema.USER_PRIVILEGES WHERE GRANTEE = \"'$user'@'$host'\";")->fetchAll();
+            foreach($privList as $priv)
+            {
+                $privPairs[$priv->PRIVILEGE_TYPE] = 1;
+            }
+
+            // 禅道所需的权限
+            $requiredPrivs = array('SELECT', 'INSERT', 'UPDATE', 'DELETE', 'DROP', 'CREATE', 'ALTER', 'INDEX', 'CREATE VIEW', 'ALTER ROUTINE', 'CREATE ROUTINE');
+
+            $missingPrivs = array();
+            foreach($requiredPrivs as $priv)
+            {
+                if(!isset($privPairs[$priv])) $missingPrivs[] = $priv;
+            }
+
+            $sql = '';
+            if(!empty($missingPrivs))
+            {
+                $sql .= 'GRANT ';
+                foreach($missingPrivs as $priv)
+                {
+                    $sql .= $priv . ',';
+                }
+
+                $sql  = rtrim($sql, ',');
+                $sql .= " ON *.* TO '$user'@'$host';" . '\n';
+                $sql .= 'FLUSH PRIVILEGES;';
+            }
+
+            return $sql;
+        }
+
+        return '';
+    }
 }
