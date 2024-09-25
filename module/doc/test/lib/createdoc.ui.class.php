@@ -121,5 +121,10 @@ class createDocTester extends tester
         $form->wait(1);
         $form->dom->showTitle->setValue($docName->dcName);
         $form->dom->saveBtn->click();
+        $form->wait(1);
+        $form->dom->project->picker($projectName->fstProject);
+        $form->dom->execution->picker($executionName->fstExecution);
+        $form->wait(1);
+        $form->dom->releaseBtn->click();
     }
 }
