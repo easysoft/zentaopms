@@ -6,7 +6,7 @@ class StoryEstimateTester extends tester
      * 表单内容。
      * Input form.
      *
-     * @param array $estimate
+     * @param  array  $estimate
      * @access public
      * @return void
      */
