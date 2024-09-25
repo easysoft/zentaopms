@@ -39,5 +39,4 @@ $branch->desc = '这是一行分支的描述';
 r($tester->createBranch($branch, $productID)) && p('message,status') && e('创建分支成功,SUCCESS');
 
 r($tester->createBranch($branch, $productID)) && p('message,status') && e('分支已存在提示信息正确,SUCCESS');
-
 $tester->closeBrowser();

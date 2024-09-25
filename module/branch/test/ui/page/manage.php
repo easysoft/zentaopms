@@ -26,4 +26,3 @@ class managePage extends page
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
 }
-

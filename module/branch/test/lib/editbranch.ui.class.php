@@ -4,7 +4,7 @@ class editBranchTester extends tester
 {
     /**
      * 编辑分支
-     * edit  branch
+     * edit branch
      *
      * @param $editBranch 分支数据
      * @param $productID  产品ID
