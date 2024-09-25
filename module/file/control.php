@@ -68,7 +68,7 @@ class file extends control
     {
         $file = $this->file->getUpload($field);
 
-        if(!isset($file[0]) or !in_array($file[0]['extension'], $this->config->file->imageExtensions)) return print(json_encode(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormat)));
+        if(!isset($file[0]) or strpos(",{$this->config->file->allowed},", ",{$file[0]['extension']},") === false) return print(json_encode(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormat)));
 
         $file = $file[0];
         if($file)
