@@ -1,7 +1,9 @@
 window.initModuleTree = function()
 {
+    $('#moduleTree').replaceWith('<ul id="moduleTree"></ul>');
+    $('#extendWin').attr('src', '')
     data = appendClickEvent(moduleTree);
-    zui.create("tree", "#moduleTree", {items: data});
+    tree = new zui.Tree("#moduleTree", {items: data});
 };
 
 window.appendClickEvent = function(moduleTree)
@@ -26,4 +28,4 @@ window.openInExtend = function(event, node)
     $this.closest('li.tree-item.has-nested-menu').addClass('active');
 };
 
-initModuleTree();
+window.waitDom('#moduleTree', initModuleTree);
