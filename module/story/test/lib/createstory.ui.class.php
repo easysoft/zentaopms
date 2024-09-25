@@ -124,4 +124,24 @@ class createStoryTester extends tester
             $form->dom->requirementSave->click();
         }
         else
+        {
+            $form->dom->storySave->click();
+        }
+        $form->dom->btn($this->lang->save)->click();
+        $form->wait(1);
+
+        if($this->response('method') != 'browse')
+        {
+            if($form->dom->alertModal('text') == '已有相同标题的需求或标题为空，请检查输入。') return $this->success('批量创建需求表单页面提示正确');
+            return $this->failed('批量创建需求表单页面提示信息不正确');
+        }
+
+        /* 跳转到需求列表页面搜索创建需求并进入该需求详情页。 */
+        if($storyName != '批量创建研发需求')
+        {
+            $ext = array(
+                'productID'  => '1',
+                'branch'     => '',
+                'brwoseType' => 'unclosed',
+                'param'      => '0',
 }
