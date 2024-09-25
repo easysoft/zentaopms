@@ -26,14 +26,10 @@ class storyPage extends page
             'submitBtn' => "//*[@data-name='assignedTo']/../div[3]/div/button",
             /* 需求估算弹窗 */
             'reestimate'   => "//*[@id='storyEstimateTable']/../../div/button",
-            'estimateA'    => "//*[@id='storyEstimateTable']/tbody/tr[2]/td[2]/input",
-            'estimateB'    => "//*[@id='storyEstimateTable']/tbody/tr[3]/td[2]/input",
-            'estimateC'    => "//*[@id='storyEstimateTable']/tbody/tr[4]/td[2]/input",
-            'average'      => "//*[@id='storyEstimateTable']/tbody/tr[5]/td[2]/input",
-            'newEstimateA' => "//*[@id='storyEstimateTable']/tbody/tr[2]/td[3]/input",
-            'newEstimateB' => "//*[@id='storyEstimateTable']/tbody/tr[3]/td[3]/input",
-            'newEstimateC' => "//*[@id='storyEstimateTable']/tbody/tr[4]/td[3]/input",
-            'newAverage'   => "//*[@id='storyEstimateTable']/tbody/tr[5]/td[3]/input",
+            'estimateA'    => "//*[@id='storyEstimateTable']/tbody/tr[2]/td[last()]/input",
+            'estimateB'    => "//*[@id='storyEstimateTable']/tbody/tr[3]/td[last()]/input",
+            'estimateC'    => "//*[@id='storyEstimateTable']/tbody/tr[4]/td[last()]/input",
+            'average'      => "//*[@id='storyEstimateTable']/tbody/tr[5]/td[last()]/input",
             'submitBtn'    => "//*[@id='storyEstimateTable']/../div/button",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
