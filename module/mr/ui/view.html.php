@@ -206,7 +206,7 @@ panel
                 history
                 (
                     set::objectID($MR->id),
-                    set::commentUrl(createLink('action', 'comment', array('objectType' => 'mr', 'objectID' => $MR->id)))
+                    set::commentUrl(createLink('action', 'comment', array('objectType' => $app->rawModule, 'objectID' => $MR->id)))
                 )
             )
         ),
