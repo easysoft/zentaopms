@@ -45,7 +45,7 @@ $executionName->fstExecution = '执行1';
 
 $plan = new stdClass();
 $plan->begin = '2024-09-01';
-$plan->end = '2024-11-01';
+$plan->end   = '2024-11-01';
 
 r($tester->createDraft($draftName))                  && p('message,status') && e('创建草稿成功,SUCCESS');     //创建草稿文档成功
 r($tester->createDoc($docName))                      && p('message,status') && e('创建文档成功,SUCCESS');     //创建文档成功
