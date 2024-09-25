@@ -36,3 +36,7 @@ $release = array(
 );
 
 r($tester->exportWithNoFilename($release['0'])) && p('message,status') && e('项目发布导出必填提示信息正确,SUCCESS');   // 项目发布导出时文件名必填项检查
+r($tester->releaseExport($release['1']))        && p('message,status') && e('项目发布导出成功,SUCCESS');               // 项目发布导出所有数据
+r($tester->releaseExport($release['2']))        && p('message,status') && e('项目发布导出成功,SUCCESS');               // 项目发布导出指定数据
+
+$tester->closeBrowser();
