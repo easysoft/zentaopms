@@ -87,4 +87,19 @@ class createDocTester extends tester
         if($form->dom->leftListHeader->getText() != $productName->secProduct) return $this->failed('切换产品创建文档失败');
         return $this->success('切换产品创建文档成功');
     }
+
+    /*
+     * 创建项目文档。
+     *
+     * @param string $docName
+     * @access public
+     * @return void
+     */
+    public function createProjectDoc($projectName, $executionName, $plan, $docName)
+    {
+        /*创建项目*/
+        $form = $this->initForm('project', 'create', array('modal' => 'scrum'));
+        $form->dom->hasProduct0->click();
+        $form->dom->name->setValue($projectName->fstProject);
+    }
 }
