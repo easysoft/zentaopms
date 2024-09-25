@@ -78,6 +78,7 @@ class mr extends control
         }
         elseif($this->app->tab == 'project')
         {
+            $this->session->set('project', $objectID);
             $this->loadModel('project')->setMenu($objectID);
         }
 
