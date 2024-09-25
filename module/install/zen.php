@@ -272,8 +272,8 @@ class installZen extends install
         $missingPrivs = $this->install->dbh->checkUserPriv();
         if($missingPrivs)
         {
-            $missingPrivs = $this->lang->install->errorDBUserPriv . $missingPrivs;
-            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert({icon: 'icon-exclamation-sign', size: '600', iconClass: 'text-4xl text-warning', message: '" . str_replace("'", '"', $missingPrivs) . "'})"));
+            $missingPrivs = $this->lang->install->errorDBUserPriv . '<code>' . $missingPrivs . '</code>';
+            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert({icon: 'icon-exclamation-sign', size: '600', iconClass: 'text-4xl text-warning', message: {html:'" . str_replace("'", '"', $missingPrivs) . "'}})"));
         }
 
         /* Get database version. */

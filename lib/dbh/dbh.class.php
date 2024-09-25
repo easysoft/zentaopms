@@ -878,7 +878,7 @@ class dbh
             }
 
             // 禅道所需的权限
-            $requiredPrivs = array('SELECT', 'INSERT', 'UPDATE', 'DELETE', 'DROP', 'CREATE', 'ALTER', 'INDEX', 'CREATE VIEW', 'ALTER ROUTINE', 'CREATE ROUTINE');
+            $requiredPrivs = array('SELECT', 'INSERT', 'UPDATE', 'DELETE', 'DROP', 'CREATE', 'ALTER', 'INDEX', 'CREATE VIEW');
 
             $missingPrivs = array();
             foreach($requiredPrivs as $priv)
