@@ -15,13 +15,13 @@ class createStoryTester extends tester
     /**
      * Create a default story.
      *
-     * @param  string $type string $storyName
+     * @param  string $type
+     * @param  string $storyName
      * @access public
      * @return object
      */
     public function createDefault($storyType, $storyName)
     {
-        /* 提交表单 */
         $createStoryParam = array(
             'product'   => '1',
             'branch'    => 'all',
@@ -41,8 +41,8 @@ class createStoryTester extends tester
             'param'      => '0',
             'storyType'  => $storyType
         );
-        $form = $this->initForm('product', 'browse', $browseStoryParam, 'appIframe-product');
-        $form = $this->initForm($storyType, 'create', $createStoryParam, 'appIframe-product');
+        $form = $this->initForm('product', 'browse', $browseStoryParam, 'appIframe-product');  //由于创建需求后会跳转到记录了session的页面，所以先进入一次对应需求的列表页面
+        $form = $this->initForm($storyType, 'create', $createStoryParam, 'appIframe-product'); //再进入创建需求页面
         $form->dom->title->setValue($storyName);
         $form->dom->assignedTo->picker('admin');
         #$form->dom->reviewer->multiPicker(array('admin'));
@@ -84,4 +84,24 @@ class createStoryTester extends tester
 
         return $this->success('创建'.$storyName.'成功');
     }
+
+    /**
+     * Batchchreate a default storis.
+     *
+     * @param  string $type
+     * @param  string $storyName
+     * @access public
+     * @return object
+     */
+    public function batchCreateDefault($storyType, $storyName)
+    {
+        $browseStoryParam = array(
+            'productID'  => '1',
+            'branch'     => '',
+            'browseType' => 'unclosed',
+            'param'      => '0',
+            'storyType'  => $storyType
+        );
+        $createStoryParam = array(
+            'productID' => '1',
 }
