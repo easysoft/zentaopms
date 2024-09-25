@@ -10,7 +10,7 @@ class StoryEstimateTester extends tester
      * @access public
      * @return void
      */
-    public function InputForm($estimate)
+    public function inputForm($estimate)
     {
         $form = $this->initForm('execution', 'story', array('execution' => '2'), 'appIframe-execution');
 
@@ -35,7 +35,7 @@ class StoryEstimateTester extends tester
      */
     public function storyEstimate($estimate, $time)
     {
-        $this->InputForm($estimate);
+        $this->inputForm($estimate);
         $form  = $this->loadPage();
         $round = sprintf($this->lang->story->estimateRound, $time);
         $form->dom->round->picker($round);
