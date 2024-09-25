@@ -144,4 +144,24 @@ class createStoryTester extends tester
                 'branch'     => '',
                 'brwoseType' => 'unclosed',
                 'param'      => '0',
+                'storyType'  => $storyType
+            );
+            $browsePage = $this->loadPage('product', 'browse', $ext);
+        }
+        else
+        {
+            $browsePage = $this->loadPage('product', 'browse');
+        }
+        $browsePage->dom->search($searchList = array("需求名称,包含,$storyName"));
+        $form->wait(1);
+        $browsePage->dom->browseStoryName->click();
+        $form->wait(1);
+
+        $viewPage = $this->loadPage('story', 'view');
+        if($viewPage->dom->storyName->getText() != $storyName) return $this->failed('需求名称不正确');
+        if($viewPage->dom->status->getText() != '激活') return $this->failed('需求状态不正确');
+        $viewPage->dom->btn($this->lang->story->legendLifeTime)->click();
+        if(strpos($viewPage->dom->openedBy->getText() , 'admin') === false) return $this->failed('创建人不正确');
+
+        return $this->success('批量创建'.$storyName.'成功');
 }
