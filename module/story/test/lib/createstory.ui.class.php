@@ -104,4 +104,24 @@ class createStoryTester extends tester
         );
         $createStoryParam = array(
             'productID' => '1',
+            'branch'    => 'all',
+            'moduleID'  => '0',
+            'storyID'   => '0',
+            'project'   => '0',
+            'plan'    => '0',
+            'storyType' => $storyType
+        );
+        /* 跳转到列表记录session，然后再次进入批量创建需求页面。*/
+        $form = $this->initForm('product', 'browse', $browseStoryParam, 'appIframe-product');
+        $form = $this->initForm($storyType, 'batchCreate', $createStoryParam, 'appIframe-product');
+        $form->dom->name->setValue($storyName);
+        if($storyName == '批量创建业务需求')
+        {
+            $form->dom->epicSave->click();
+        }
+        elseif($storyName == '批量创建用户需求')
+        {
+            $form->dom->requirementSave->click();
+        }
+        else
 }
