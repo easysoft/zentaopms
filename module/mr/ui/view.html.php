@@ -86,7 +86,6 @@ else
 
 detailHeader
 (
-    set::back('mr-browse'),
     to::title
     (
         entityLabel

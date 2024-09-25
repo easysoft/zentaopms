@@ -14,6 +14,7 @@ $headers = nav
         (
             $lang->mr->view,
             set::href(createLink($moduleName, 'view', "MRID={$MR->id}")),
+            set('data-app', $app->tab),
             $methodName == 'view' ? setClass('active') : null
         )
     ),
