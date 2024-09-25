@@ -1,5 +1,16 @@
 #!/usr/bin/env php
 <?php
+
+/**
+title=项目产品管理
+timeout=0
+cid=1
+
+- 校验选择产品不能为空测试结果 @关联其他产品必填提示信息正确
+- 关联产品测试结果 @关联产品成功
+- 取消关联产品测试结果 @取消关联产品成功
+
+ */
 chdir(__DIR__);
 include '../lib/manageproducts.ui.class.php';
 
