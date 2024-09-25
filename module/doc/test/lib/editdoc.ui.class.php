@@ -7,6 +7,7 @@ class createDocTester extends tester
      * Edit a doc.
      *
      * @param  string $editDocName
+     * @param  string $docName
      * @access public
      * @return void
      */
@@ -44,7 +45,7 @@ class createDocTester extends tester
      * 移动文档。
      * Move a doc.
      *
-     * @param  string $editDocName
+     * @param  string $libName
      * @access public
      * @return void
      */
@@ -76,7 +77,6 @@ class createDocTester extends tester
      * 删除文档
      * Delete a doc.
      *
-     * @param  string $editDocName
      * @access public
      * @return void
      */
