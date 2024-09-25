@@ -17,6 +17,7 @@ cid=80
  - 属性module @story
  - 属性method @view
 - 创建需求成功 最终测试状态 @SUCCESS
+
 - 批量创建需求缺少需求名称，创建失败
  -  测试结果 @批量创建需求表单页提示信息正确
  -  最终测试状态 @SUCCESS
@@ -26,6 +27,7 @@ cid=80
 - 批量创建需求成功后检查创建的需求信息是否正确
  - 属性module @story
  - 属性method @view
+- 批量创建需求成功 最终测试状态 @SUCCESS
 */
 chdir(__DIR__);
 include '../lib/createstory.ui.class.php';
@@ -106,8 +108,8 @@ r($tester->createDefault($storyType['requirement'], $storys['requirement'])) && 
 r($tester->createDefault($storyType['epic'], $storys['epic']))               && p('message,status') && e('创建业务需求成功,SUCCESS'); // 使用默认选项创建业务需求，搜索后详情页信息对应
 
 r($tester->batchCreateDefault($storyType['story'], $storys['null']))                   && p('message,status') && e('批量创建需求页面名称为空提示正确,SUCCESS'); // 缺少需求名称，创建失败
-r($tester->batchcreateDefault($storyType['story'], $storys['batchstory']))             && p('message,status') && e('批量创建研发需求成功,SUCCESS'); // 使用默认选项创建需求,搜索后详情页信息对应
-r($tester->batchcreateDefault($storyType['requirement'], $storys['batchrequirement'])) && p('message,status') && e('批量创建用户需求成功,SUCCESS'); // 使用默认选项创建用户需求，搜索后详情页信息对应
-r($tester->batchcreateDefault($storyType['epic'], $storys['batchepic']))               && p('message,status') && e('批量创建业务需求成功,SUCCESS'); // 使用默认选项创建业务需求，搜索后详情页信息对应
+r($tester->batchcreateDefault($storyType['story'], $storys['batchstory']))             && p('message,status') && e('批量创建研发需求成功,SUCCESS'); // 使用默认选项批量创建需求,搜索后详情页信息对应
+r($tester->batchcreateDefault($storyType['requirement'], $storys['batchrequirement'])) && p('message,status') && e('批量创建用户需求成功,SUCCESS'); // 使用默认选项批量创建用户需求，搜索后详情页信息对应
+r($tester->batchcreateDefault($storyType['epic'], $storys['batchepic']))               && p('message,status') && e('批量创建业务需求成功,SUCCESS'); // 使用默认选项批量创建业务需求，搜索后详情页信息对应
 
 $tester->closeBrowser();
