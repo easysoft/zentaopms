@@ -39,7 +39,7 @@ formPanel
     (
         setClass('heading'),
         icon('edit'),
-        $filePath ? span(span(setClass('font-bold'), $lang->editor->filePath), h::code($filePath)) : null
+        $filePath ? span(span(setClass('font-bold pl-2'), $lang->editor->filePath), h::code($filePath)) : null
     ),
     empty($showContent) ? null : div(p(setClass('font-bold'), $lang->editor->sourceFile), div(setID('showContentEditor'))),
     div(div(setID('fileContentEditor')), input(setID('fileContent'), set::name('fileContent'), set::type('hidden'))),
