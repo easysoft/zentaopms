@@ -419,6 +419,7 @@ $lang->pivot->stepDesign->columnsTip  = 'Add 1 column to the pivot table and set
 
 $lang->pivot->stepDesign->columnTotal    = 'Show column totals';
 $lang->pivot->stepDesign->columnCalc     = 'Summary calculation';
+$lang->pivot->stepDesign->columnPosition = 'Summary position';
 $lang->pivot->stepDesign->columnTotalTip = 'Add a row to display the summary data for each column.';
 $lang->pivot->stepDesign->total          = 'Total';
 
