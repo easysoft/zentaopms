@@ -39,4 +39,24 @@ class manageProductsTester extends tester
         if($form->dom->linkedProduct->getText() != $project['otherProducts']['multiPicker']) return $this->failed('关联产品失败');
         return $this->success('关联产品成功');
     }
+    /**
+     * 取消关联产品。
+     * Unlink Product.
+     *
+     * @param  array  $project
+     * @access public
+     * @return void
+     */
+    public function unlinkProducts($project)
+    {
+        $form = $this->initForm('project', 'manageproducts', array('project' => 11), 'appIframe-project');
+        $form->dom->checkbox->click(); //取消勾选已关联产品
+        $form->wait(1);
+        $form->dom->saveBtn->click();
+
+        //跳转到项目概况页检查取消关联产品
+        $form = $this->initForm('project', 'view', array('project' => 11), 'appIframe-project');
+        if($form->dom->linkedProduct === false) return $this->success('取消关联产品成功');
+        return $this->failed('取消关联产品失败');
+    }
 }
