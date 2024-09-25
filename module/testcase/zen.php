@@ -1303,6 +1303,9 @@ class testcaseZen extends testcase
         $case = $this->testcase->appendCaseFails($case, $from, $taskID);
         $case = $this->processStepsForMindMap($case);
 
+        $sceneOptionMenu = $this->testcase->getSceneMenu($case->product, $case->module);
+        if(!isset($sceneOptionMenu[$case->scene])) $sceneOptionMenu += $this->testcase->getScenesName((array)$case->scene);
+
         $this->view->from       = $from;
         $this->view->taskID     = $taskID;
         $this->view->runID      = $from == 'testcase' ? 0 : $run->id;
@@ -1313,6 +1316,7 @@ class testcaseZen extends testcase
         $this->view->preAndNext = !isOnlybody() ? $this->loadModel('common')->getPreAndNextObject('testcase', $case->id) : '';
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->actions    = $this->loadModel('action')->getList('case', $case->id);
+        $this->view->scenes     = $sceneOptionMenu;
     }
 
     /**
