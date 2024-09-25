@@ -87,10 +87,18 @@ $team->gen(6);
 $storyEstimate = zenData('storyestimate');
 $storyEstimate->gen(0);
 
-$estimate = array('1', '2', '3', '4', '0', '6', 'avergeA' => '2', 'avergeB' => '5');
+$estimate = array(
+    array('1', '2', '3', 'averge' => '2'),
+    array('1', '0', '0', 'averge' => '1'),
+    array('a'),
+    array('-1'),
+);
 
 $tester = new storyEstimateTester();
 $tester->login();
 
-r($tester->storyEstimate($estimate)) && p('message') && e('估算成功');
+r($tester->storyEstimate($estimate[0], '1'))          && p('message') && e('估算成功');
+r($tester->storyEstimate($estimate[1], '2'))          && p('message') && e('估算成功');
+r($tester->checkErrorInfo($estimate[2], 'notNumber')) && p('message') && e('估算值为非数字提示成功');
+r($tester->checkErrorInfo($estimate[3], 'negative'))  && p('message') && e('估算值为负数提示成功');
 $tester->closeBrowser();
