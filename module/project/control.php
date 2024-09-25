@@ -826,6 +826,7 @@ class project extends control
         $this->loadModel('search');
 
         $this->project->setMenu($projectID);
+        $this->session->set('bugList', $this->app->getURI(true), 'project');
 
         $projectID = (int)$projectID;
         $product   = $this->product->getById($productID);
