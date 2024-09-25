@@ -1,0 +1,13 @@
+title: projectproduct data
+author:  Airong Hu
+version: 1.0.0
+
+fields:
+  - field: project
+    range: 11{2},60,61,100,101-700
+  - field: product
+    range: 1-2,3-30
+  - field: branch
+    range: 0
+  - field: plan
+    range: 0
