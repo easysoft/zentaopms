@@ -3,8 +3,8 @@ include dirname(__FILE__, 5) . '/test/lib/ui.php';
 class releaseExportTester extends tester
 {
     /**
+     * 项目发布导出。
      * Projectrelease export HTML.
-     * 项目发布导出
      *
      * @param  array $release
      * @access public
@@ -24,8 +24,8 @@ class releaseExportTester extends tester
     }
 
     /**
+     * 项目发布导出时文件名为空时的必填校验检查。
      * Check required tips of projectrelease export.
-     * 项目发布导出时文件名为空时的必填校验检查
      *
      * @access public
      * @return object
