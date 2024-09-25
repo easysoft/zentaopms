@@ -50,8 +50,8 @@ class StoryEstimateTester extends tester
     }
 
     /**
-     * 需求估算值为非数字。
-     * Story estimate value is not a number.
+     * 需求估算值为非数字或负数。
+     * Story estimate value is not a number or negative.
      *
      * @param  array  $estimate
      * @param  string $type     notNumber|negative
@@ -73,5 +73,23 @@ class StoryEstimateTester extends tester
             if($form->dom->estimateTip->getText() == $this->lang->story->estimateMustBePlus) return $this->success('估算值为负数提示成功');
             return $this->failed('估算值为负数提示失败');
         }
+    }
+
+    /**
+     * 执行没有团队成员时需求估算。
+     * Story estimate when no team member.
+     *
+     * @access public
+     * @return void
+     */
+    public function noTeamInfo()
+    {
+        $form = $this->initForm('execution', 'story', array('execution' => '3'), 'appIframe-execution');
+
+        $form->dom->xpath['firstEstimateBtn'] = "//a[@title = '{$this->lang->execution->storyEstimate}']";
+        $form->dom->firstEstimateBtn->click();
+        $form->wait(1);
+        if($form->dom->noTeamInfo->getText() == $this->lang->execution->noTeam) return $this->success('没有团队成员提示成功');
+        return $this->failed('没有团队成员提示失败');
     }
 }
