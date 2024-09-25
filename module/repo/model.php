@@ -213,7 +213,7 @@ class repoModel extends model
      */
     public function createRepo(object $repo): int|false
     {
-        $check = $this->repoTao->checkName($repo);
+        $check = $this->checkName($repo);
         if(!$check)
         {
             dao::$errors['name'] = $this->lang->repo->error->repoNameInvalid;
@@ -3119,5 +3119,18 @@ class repoModel extends model
             if(count((array)$this->lang->{$module}->menu->devops['subMenu']) < 2) unset($this->lang->{$module}->menu->devops['subMenu']);
         }
         return $objectID;
+    }
+
+    /**
+     * Check repo name.
+     *
+     * @param  object $repo
+     * @access protected
+     * @return bool
+     */
+    protected function checkName(object $repo)
+    {
+        $pattern = "/^[a-zA-Z_\-\.]+$/";
+        return preg_match($pattern, $repo->name);
     }
 }
