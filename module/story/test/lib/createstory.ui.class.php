@@ -108,7 +108,7 @@ class createStoryTester extends tester
             'moduleID'  => '0',
             'storyID'   => '0',
             'project'   => '0',
-            'plan'    => '0',
+            'plan'      => '0',
             'storyType' => $storyType
         );
         /* 跳转到列表记录session，然后再次进入批量创建需求页面。*/
@@ -159,9 +159,10 @@ class createStoryTester extends tester
 
         $viewPage = $this->loadPage('story', 'view');
         if($viewPage->dom->storyName->getText() != $storyName) return $this->failed('需求名称不正确');
-        if($viewPage->dom->status->getText() != '激活') return $this->failed('需求状态不正确');
+        if($viewPage->dom->status->getText()    != '激活') return $this->failed('需求状态不正确');
         $viewPage->dom->btn($this->lang->story->legendLifeTime)->click();
         if(strpos($viewPage->dom->openedBy->getText() , 'admin') === false) return $this->failed('创建人不正确');
 
         return $this->success('批量创建'.$storyName.'成功');
+    }
 }
