@@ -35,6 +35,7 @@ $lang->dataview->add            = 'Add ';
 $lang->dataview->sqlQuery       = 'SQL Query';
 $lang->dataview->onlyOne        = 'Only allow one query';
 $lang->dataview->empty          = 'Please enter a query statement';
+$lang->dataview->emptyBuilder   = 'Please configure the builder correctly';
 $lang->dataview->allowSelect    = 'Only SELECT is allowed';
 $lang->dataview->noStar         = "For performance, 'SELECT *' is not allowed";
 $lang->dataview->fieldSettings  = "Field Settings";

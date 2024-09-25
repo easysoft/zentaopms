@@ -1347,12 +1347,16 @@ class biModel extends model
      * @access public
      * @return object
      */
-    public function sql2Statement($sql)
+    public function sql2Statement($sql, $mode = 'text')
     {
         $this->app->loadClass('sqlparser', true);
         $parser = new sqlparser($sql);
 
-        if($parser->statementsCount == 0) return $this->lang->dataview->empty;
+        if($parser->statementsCount == 0)
+        {
+            if($mode == 'builder') return $this->lang->dataview->emptyBuilder;
+            return $this->lang->dataview->empty;
+        }
         if($parser->statementsCount > 1)  return $this->lang->dataview->onlyOne;
 
         if(!$parser->isSelect) return $this->lang->dataview->allowSelect;
@@ -1658,7 +1662,7 @@ class biModel extends model
 
         $stateObj->beforeQuerySql();
 
-        $statement = $this->sql2Statement($sql);
+        $statement = $this->sql2Statement($sql, $stateObj->mode);
         if(is_string($statement)) return $stateObj->setError($statement);
 
         $checked = $this->validateSql($sql, $driver);

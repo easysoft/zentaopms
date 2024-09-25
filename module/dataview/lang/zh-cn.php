@@ -35,6 +35,7 @@ $lang->dataview->add            = '添加';
 $lang->dataview->sqlQuery       = 'SQL语句查询';
 $lang->dataview->onlyOne        = '只能输入一条SQL语句';
 $lang->dataview->empty          = '请输入一条正确的SQL语句';
+$lang->dataview->emptyBuilder   = '请正确配置构建器';
 $lang->dataview->allowSelect    = '只允许SELECT查询';
 $lang->dataview->noStar         = "考虑性能，不允许使用 'SELECT *' 查询";
 $lang->dataview->fieldSettings  = "设置字段标签";
