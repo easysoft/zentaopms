@@ -55,7 +55,7 @@ class mrModel extends model
             ->beginIF($repoID)->andWhere('repoID')->eq($repoID)->fi()
             ->beginIF($this->app->rawModule == 'mr')->andWhere('isFlow')->eq('0')->fi()
             ->beginIF($this->app->rawModule == 'pullreq')->andWhere('isFlow')->eq('1')->fi()
-            ->beginIF($objectID)->andWhere('executionID')->in($objectID)->fi()
+            ->beginIF($objectID && $this->app->rawModule == 'mr')->andWhere('executionID')->in($objectID)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
