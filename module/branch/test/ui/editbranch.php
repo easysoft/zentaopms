@@ -16,7 +16,7 @@ cid=13
  -测试结果 @编辑分支成功$editBranch->name = '分支test编辑';
  -最终测试状态 @SUCCESS
 
- */
+*/
 chdir(__DIR__);
 include '../lib/editbranch.ui.class.php';
 
@@ -36,3 +36,17 @@ $branch->gen(2);
 
 $tester = new editBranchTester();
 $tester->login();
+
+$productID['productID'] = 11;
+$editBranch = new stdClass();
+$editBranch->name = '';
+r($tester->editBranch($editBranch, $productID)) && p('message,status') && e('分支名称必填提示信息正确,SUCCESS');
+
+$editBranch->name = '分支02';
+r($tester->editBranch($editBranch, $productID)) && p('message,status') && e('分支已存在提示信息正确,SUCCESS');
+
+$editBranch->name = '分支test编辑';
+$editBranch->desc = '这是一行分支的描述';
+r($tester->editBranch($editBranch, $productID)) && p('message,status') && e('编辑分支成功,SUCCESS');
+
+$tester->closeBrowser();
