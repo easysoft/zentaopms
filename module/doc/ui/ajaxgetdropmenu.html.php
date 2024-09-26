@@ -53,8 +53,10 @@ $tabs[] = array('name' => 'closed', 'text' => $lang->doc->closed);
  * 定义最终的 JSON 数据。
  * Define the final json data.
  */
-$params = $method == 'showfiles' ||$objectType == 'custom' ? "type=$objectType&objectID=%s" : "objectID=%s";
-$link   = $this->createLink($module, $method, $params);
+$params = "objectID=%s";
+if($method == 'showfiles' || $objectType == 'custom') $params = "type=$objectType&objectID=%s";
+if($method == 'create') $params = "objectType=$objectType&objectID=%s&libID=$libID&moduleID=0";
+$link = $this->createLink($module, $method, $params);
 
 $json = array();
 $json['data']       = $data;
