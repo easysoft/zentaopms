@@ -18,3 +18,20 @@ cid=73
  - 最终测试状态 @SUCCESS
 
 */
+chdir(__DIR__);
+include '../lib/projectexport.ui.class.php';
+
+zendata('project')->loadYaml('project', false, 1)->gen(1);
+zendata('projectproduct')->loadYaml('projectproduct', false, 1)->gen(1);
+
+$tester = new projectExportTester();
+$tester->login();
+
+//设置项目导出数据
+$project = array(
+    array('filename' => ''),
+    array('filename' => '项目导出文件1', 'encoding' => 'GBK', 'data' => '选中记录'),
+    array('filename' => '项目导出文件2', 'format' => 'xml', 'data' => '全部记录'),
+);
+
+r($tester->projectExport($project['0'])) && p('message,status') && e('项目导出成功,SUCCESS');   // 按照默认设置导出项目
