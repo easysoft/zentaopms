@@ -590,4 +590,53 @@ class custom extends control
 
         $this->send(array('result' => 'success'));
     }
+
+    /**
+     * 关联对象。
+     * Relate Object.
+     *
+     * @param  int    $objectID
+     * @param  string $objectType
+     * @param  string $relatedObjectType
+     * @param  string $actionType  link|unlink
+     * @param  int    $relatedObjectID
+     * @param  string $browseType bySearch
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function relateObject(int $objectID, string $objectType = '', $relatedObjectType = '', string $actionType = 'link', int $relatedObjectID = 0, string $browseType = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    {
+        if($_POST)
+        {
+            $this->custom->relateObject($objectID, $objectType, $this->post->relation, $relatedObjectType);
+            if(dao::isError()) return $this->sendError(array('message' => dao::getError()));
+
+            return $this->sendSuccess(array('load' => true));
+        }
+
+        /* Load page. */
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $this->customZen->buildSearchForm($objectID, $objectType, $relatedObjectType);
+
+        $this->view->recTotal          = $recTotal;
+        $this->view->recPerPage        = $recPerPage;
+        $this->view->pageID            = $pageID;
+        $this->view->pager             = $pager;
+        $this->view->orderBy           = $orderBy;
+        $this->view->objectID          = $objectID;
+        $this->view->objectType        = $objectType;
+        $this->view->relatedObjectType = $relatedObjectType;
+        $this->view->browseType        = $browseType;
+        $this->view->users             = $this->loadModel('user')->getPairs('noletter');
+        $this->view->objects           = $this->custom->getObjects($relatedObjectType, $browseType, $orderBy, $pager);
+        $this->view->cols              = $this->custom->getObjectCols($relatedObjectType);
+        $this->view->relationPairs     = $this->custom->getRelationPairs();
+        $this->display();
+    }
 }

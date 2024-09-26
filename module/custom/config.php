@@ -129,3 +129,17 @@ $config->custom->browseStoryConcept->actionList['delete']['data-confirm'] = arra
 
 $config->custom->nonInterface = new stdclass();
 $config->custom->nonInterface->lang = array('epic-stageList', 'requirement-stageList');
+
+$config->custom->relateObjectList = array();
+$config->custom->relateObjectList['epic']        = $lang->ERCommon;
+$config->custom->relateObjectList['requirement'] = $lang->URCommon;
+$config->custom->relateObjectList['story']       = $lang->SRCommon;
+
+$config->custom->objectOwner = array();
+$config->custom->objectOwner['product']   = array('epic', 'requirement', 'story');
+$config->custom->objectOwner['project']   = array();
+$config->custom->objectOwner['execution'] = array();
+
+$config->custom->relateObjectFields['epic']        = array('id', 'pri', 'title', 'relation', 'product', 'module', 'openedBy', 'assignedTo', 'status');
+$config->custom->relateObjectFields['requirement'] = array('id', 'pri', 'title', 'relation', 'product', 'module', 'openedBy', 'assignedTo', 'status');
+$config->custom->relateObjectFields['story']       = array('id', 'pri', 'title', 'relation', 'product', 'module', 'openedBy', 'assignedTo', 'status');

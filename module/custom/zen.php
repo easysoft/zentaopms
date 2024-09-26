@@ -399,4 +399,23 @@ class customZen extends custom
 
         return !dao::isError();
     }
+
+    /**
+     * 构建搜索表单。
+     * Build search form.
+     *
+     * @param  int    $objectID
+     * @param  string $objectType
+     * @param  string $relatedObjectType
+     * @access protected
+     * @return void
+     */
+    protected function buildSearchForm(int $objectID, string $objectType, string $relatedObjectType)
+    {
+        if(in_array($relatedObjectType, array('epic', 'requirement', 'story')))
+        {
+            $actionURL = $this->createLink('custom', 'relateObject', "objectID=$objectID&objectType=$objectType&relatedObjectType=$relatedObjectType&actionType=link&relatedObjectID=0&browseType=bySearch");
+            $this->loadModel('product')->buildSearchForm(0, array(), 0, $actionURL, $relatedObjectType);
+        }
+    }
 }

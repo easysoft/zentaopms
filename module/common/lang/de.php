@@ -147,6 +147,7 @@ $lang->levelExceeded   = 'The level has exceeded the display range. For more inf
 $lang->noticeOkFile    = 'Aus Sicherheitsgrü nden muss Ihr Adminkonto bestätigt werden. \n Bitte melden Sie sich an und erstellen Sie die Datei %s File.\n Hinweis:\n 1. Die Datei ist leer.\n 2. Wenn die Datei bereits existiert, löschen Sie sie und erstellen Sie eine neue Datei.';
 $lang->noticeDrag      = 'Click to add or drag to upload, no more than %s';
 $lang->allProgress     = 'All Progress';
+$lang->relatedObjects  = 'Related Objects';
 
 $lang->fieldDisplaySetting = 'Field Display Setting';
 $lang->fieldSettingTip     = 'The following fields are collapsed by default, click on the "Show more fields" button to expand the view, if you want some fields not to be collapsed by default, you can fix it with a pin.';

@@ -1250,4 +1250,140 @@ class customModel extends model
         $cron = $this->dao->select('id,status')->from(TABLE_CRON)->where('command')->like('%methodName=execCrontabQueue')->fetch();
         if($cron && $cron->status != $cronStatus) $this->cron->changeStatus($cron->id, $cronStatus);
     }
+
+    /**
+     * 获取关联对象列表。
+     * Get objects.
+     *
+     * @param  string $objectType
+     * @param  string $browseType
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getObjects(string $objectType, string $browseType = '', string $orderBy = 'id_desc', object $pager = null): array
+    {
+        $objectTable = zget($this->config->objectTables, $objectType);
+
+        $hasVisionField = $this->dao->select('COUNT(1) AS count')->from('information_schema.COLUMNS')
+            ->where('TABLE_SCHEMA')->eq($this->config->db->name)
+            ->andWhere('TABLE_NAME')->eq($objectTable)
+            ->andWhere('COLUMN_NAME')->eq('vision')
+            ->fetch('count');
+
+        $module      = in_array($objectType, array('epic', 'requirement')) ? 'story' : $objectType;
+        $objectQuery = $module . 'Query';
+        if($browseType == 'bySearch' && $this->session->$objectQuery === false) $this->session->set($objectQuery, ' 1 = 1');
+
+        $query = $this->dao->select('*')->from($objectTable)
+            ->where('deleted')->eq(0)
+            ->beginIF(in_array($objectType, $this->config->custom->objectOwner['product']))->andWhere('product')->in($this->app->user->view->products)->fi()
+            ->beginIF(in_array($objectType, $this->config->custom->objectOwner['project']))->andWhere('project')->in($this->app->user->view->projects)->fi()
+            ->beginIF(in_array($objectType, $this->config->custom->objectOwner['execution']))->andWhere('project')->in($this->app->user->view->sprints)->fi()
+            ->beginIF(in_array($objectType, array('epic', 'requirement', 'story')))->andWhere('type')->eq($objectType)->fi()
+            ->beginIF($browseType == 'bySearch')->andWhere($this->session->$objectQuery)->fi();
+
+        if($hasVisionField)
+        {
+            $query = $query->andWhere("FIND_IN_SET('{$this->config->vision}', vision)", 1);
+            foreach(explode(',', trim($this->app->user->visions, ',')) as $userVision)
+            {
+                if($userVision == $this->config->vision) continue;
+                $query = $query->orWhere("FIND_IN_SET('{$userVision}', vision)");
+            }
+            $query = $query->markRight(1);
+        }
+
+        $objects = $query->orderBy($orderBy)->page($pager)->fetchAll('id');
+        foreach($objects as $object) $object->relation = 1;
+        return $objects;
+    }
+
+    /**
+     * 获取关联对象列。
+     * Get object cols.
+     *
+     * @param  string $objectType
+     * @access public
+     * @return array
+     */
+    public function getObjectCols(string $objectType): array
+    {
+        $this->loadModel('product');
+        $this->loadModel('tree');
+
+        $cols = array();
+        if(isset($this->config->custom->relateObjectFields[$objectType]))
+        {
+            $module = in_array($objectType, array('epic', 'requirement', 'story')) ? 'story' : $objectType;
+            $this->loadModel($module);
+            $fieldList = $this->config->$module->dtable->fieldList;
+            foreach($this->config->custom->relateObjectFields[$objectType] as $fieldKey)
+            {
+                $fieldSetting = isset($fieldList[$fieldKey]) ? $fieldList[$fieldKey] : array();
+
+                $fieldSetting['sortType'] = true;
+                if(isset($fieldSetting['fixed']) && $fieldSetting['fixed']) $fieldSetting['fixed'] = false;
+                if(isset($fieldSetting['type']) && in_array($fieldSetting['type'], array('assign'))) $fieldSetting['type'] = 'user';
+
+                if(in_array($fieldKey, array('product', 'module'))) $fieldSetting['type'] = 'category';
+                if($fieldKey == 'product') $fieldSetting['map'] = $this->product->getPairs();
+                if($fieldKey == 'module')  $fieldSetting['map'] = $this->tree->getAllModulePairs($objectType);
+                if($fieldKey == 'relation') $fieldSetting = array('name' => 'relation', 'title' => $this->lang->custom->relation, 'type' => 'control', 'control' => 'picker', 'sortType' => false);
+
+                $cols[$fieldKey] = $fieldSetting;
+            }
+        }
+
+        return $cols;
+    }
+
+    /**
+     * 获取关联关系键值对。
+     * Get relation paris.
+     *
+     * @access public
+     * @return array
+     */
+    public function getRelationPairs(): array
+    {
+        $relationPairs = array();
+        $relationList  = $this->getRelationList();
+        foreach($relationList as $relation) $relationPairs[$relation->key] = $relation->relation;
+        return $relationPairs;
+    }
+
+    /**
+     * 关联对象。
+     * Relate object.
+     *
+     * @param  int    $objectID
+     * @param  string $objectType
+     * @param  array  $objectRelation
+     * @param  string $relatedObjectType
+     * @access public
+     * @return void
+     */
+    public function relateObject(int $objectID, string $objectType, array $objectRelation, string $relatedObjectType)
+    {
+        $relatedObjectList = $this->dao->select('BID,relation')->from(TABLE_RELATION)
+            ->where('AID')->eq($objectID)
+            ->andWhere('AType')->eq($objectType)
+            ->andWhere('BType')->eq($relatedObjectType)
+            ->fetchGroup('BID', 'relation');
+
+        foreach($objectRelation as $relatedID => $relationID)
+        {
+            if(isset($relatedObjectList[$relatedID][$relationID])) continue;
+
+            $relation = new stdclass();
+            $relation->AID      = $objectID;
+            $relation->AType    = $objectType;
+            $relation->relation = $relationID;
+            $relation->BID      = $relatedID;
+            $relation->BType    = $relatedObjectType;
+            $this->dao->insert(TABLE_RELATION)->data($relation)->exec();
+        }
+    }
 }
