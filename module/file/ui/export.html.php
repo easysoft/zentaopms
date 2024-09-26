@@ -197,12 +197,16 @@ formPanel
         setClass('justify-center'),
         div
         (
-            setClass('form-actions'),
-            btn
+            setClass('form-actions col text-center'),
+            div
             (
-                set::btnType('submit'),
-                set::type('primary'),
-                $lang->export
+                btn
+                (
+                    on::click()->do("$(target).parent().addClass('disabled');$(target).parent().attr('disabled');$(target).closest('.form-actions').append('<span class=\"text-gray\">{$lang->file->waitDownloadTip}</span>');"),
+                    set::btnType('submit'),
+                    set::type('primary'),
+                    $lang->export
+                )
             )
         )
     ),
