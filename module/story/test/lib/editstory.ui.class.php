@@ -14,7 +14,6 @@ class editStoryTester extends tester
 {
     /**
      * Edit a story.
-     *
      * @param   string $storyFrom
      * @access  public
      * @return  object
@@ -35,9 +34,29 @@ class editStoryTester extends tester
 
         $browsePage = $this->loadPage('story', 'view', '1');
 
-        $viewPafe = $this->loadPage('story', 'view');
-        if($viewPafe->dom->storyFrom->getText() != '客户') return $this->failed('需求来源不正确');
+        $viewPage = $this->loadPage('story', 'view');
+        if($viewPage->dom->storyFrom->getText() != '客户') return $this->failed('需求来源不正确');
 
         return $this->success('编辑研发需求成功');
     }
+
+    /**
+     * batch a story.
+     * @param   string $storyFrom
+     * @access  public
+     * @return  object
+     */
+    public function batchEditStory($storyFrom)
+    {
+        $browsePage = $this->initForm('product', 'browse', '1');
+        $browsePage->dom->firstSelect->click();
+        $browsePage->dom->batchEdit->click();
+        sleep(1);
+        $batchEdit = $this->loadPage('story', 'batchEdit');
+        $batchEdit->dom->batchSource->picker($storyFrom);
+        $batchEdit->dom->batchEditSave->click();
+        $batchEdit->wait(1);
+
+        $viewPage = $this->initForm('story', 'view', array('storyID' => '1'), 'appIframe-product');
+        if($viewPage->dom->storyFrom->getText() != '客户') return $this->failed('需求来源不正确');
 }
