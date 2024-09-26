@@ -1285,6 +1285,7 @@ CREATE TABLE IF NOT EXISTS `zt_oauth` (
 CREATE INDEX `account`      ON `zt_oauth` (`account`);
 CREATE INDEX `providerType` ON `zt_oauth` (`providerType`);
 CREATE INDEX `providerID`   ON `zt_oauth` (`providerID`);
+CREATE UNIQUE INDEX `account_openID` ON `zt_oauth`(`account`,`openID`,`providerType`,`providerID`);
 
 -- DROP TABLE IF EXISTS `zt_pipeline`;
 CREATE TABLE IF NOT EXISTS `zt_pipeline` (

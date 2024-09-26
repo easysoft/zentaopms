@@ -15,3 +15,5 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'testc
 REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'ops', 'provider' FROM `zt_grouppriv` WHERE `module` = 'ops' AND `method` = 'provide';
 REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'projectstory', 'importToLib' FROM `zt_grouppriv` WHERE `module` = 'story' AND `method` = 'importToLib';
 REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'projectstory', 'batchImportToLib' FROM `zt_grouppriv` WHERE `module` = 'story' AND `method` = 'batchImportToLib';
+
+CREATE UNIQUE INDEX `account_openID` ON `zt_oauth`(`account`,`openID`,`providerType`,`providerID`);
