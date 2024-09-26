@@ -24,7 +24,7 @@ class createBranchTester extends tester
         if ($form->dom->createBranchForm)
         {
             if ($this->checkFormTips('branch')) return $this->success('分支名称必填提示信息正确');
-            if (isset($branch->name) && ($form->dom->nameTip))
+            if ($branch->name != '' && $form->dom->nameTip)
             {
                 //分支已存在
                 $nameTip = str_replace('@branch@', $this->lang->branch->common, $this->lang->branch->existName);
