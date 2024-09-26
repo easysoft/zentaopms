@@ -1426,9 +1426,10 @@ class doc extends control
     public function ajaxGetDoc(int $docID, int $version = 0)
     {
         $doc = $this->doc->getByID($docID, $version);
-        $doc->lib    = (int)$doc->lib;
-        $doc->module = (int)$doc->module;
-        $doc->privs  = array('edit' => common::hasPriv('doc', 'edit', $doc));
+        $doc->lib     = (int)$doc->lib;
+        $doc->module  = (int)$doc->module;
+        $doc->privs   = array('edit' => common::hasPriv('doc', 'edit', $doc));
+        $doc->editors = $this->doc->getEditors($docID);
 
         $this->send($doc);
     }
