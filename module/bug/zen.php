@@ -118,6 +118,7 @@ class bugZen extends bug
         /* Check required fields of resolving bug. */
         foreach(explode(',', $this->config->bug->resolve->requiredFields) as $requiredField)
         {
+            if($requiredField == 'resolvedBuild') continue;
             if(!isset($bug->{$requiredField}) or strlen(trim($bug->{$requiredField})) == 0)
             {
                 $fieldName = $requiredField;

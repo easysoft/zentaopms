@@ -167,6 +167,7 @@ modal
     (
         on::change('#taskProjects', 'changeTaskProjects'),
         set::actions(''),
+        set::showExtra(false),
         formRow
         (
             formGroup
