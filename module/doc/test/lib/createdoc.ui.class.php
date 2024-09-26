@@ -150,6 +150,17 @@ class createDocTester extends tester
      * @param  string $teamLib
      * @param  string $docName
      * @access public
+     * @return void
      */
+    public function createTeamDoc($teamSpace, $teamLib, $docName)
+    {
+        /*创建团队文档库*/
+        $this->openUrl('doc', 'teamSpace');
+        $form = $this->loadPage('doc', 'teamSpace');
+        $form->dom->createLibBtn->click();
+        $form->wait(1);
+        $form->dom->spaceName->setValue($teamSpace->spaceName);
+        $form->dom->name->setValue($teamLib);
+        $form->dom->btn($this->lang->save)->click();
     }
 }
