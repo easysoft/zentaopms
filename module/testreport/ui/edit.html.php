@@ -9,11 +9,6 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-jsVar('goalTip',         $lang->testreport->goalTip);
-jsVar('foundBugTip',     $lang->testreport->foundBugTip);
-jsVar('legacyBugTip',    $lang->testreport->legacyBugTip);
-jsVar('activatedBugTip', $lang->testreport->activatedBugTip);
-jsVar('fromCaseBugTip',  $lang->testreport->fromCaseBugTip);
 
 $caseCharts = array();
 foreach($charts as $chartType => $chartOption)
@@ -429,9 +424,8 @@ panel
                     icon
                     (
                         'help',
-                        setID('goalTip'),
                         setClass('text-light mr-0.5'),
-                        setData('toggle', 'tooltip'),
+                        setData(array('toggle' => 'tooltip', 'title' => $lang->testreport->goalTip))
                     ),
                     strip_tags($execution->desc)
                 )
