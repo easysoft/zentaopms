@@ -35,3 +35,7 @@ $project = array(
 );
 
 r($tester->projectExport($project['0'])) && p('message,status') && e('项目导出成功,SUCCESS');   // 按照默认设置导出项目
+r($tester->projectExport($project['1'])) && p('message,status') && e('项目导出成功,SUCCESS');   // 项目导出csv-GBK-选中记录
+r($tester->projectExport($project['2'])) && p('message,status') && e('项目导出成功,SUCCESS');   // 项目导出xml-全部记录
+
+$tester->closeBrowser();
