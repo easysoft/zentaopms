@@ -68,7 +68,7 @@ $config->execution->form->edit['RD']        = array('type' => 'string', 'require
 $config->execution->form->edit['desc']      = array('type' => 'string', 'required' => false, 'control' => 'editor', 'default' => '');
 $config->execution->form->edit['acl']       = array('type' => 'string', 'required' => false, 'control' => 'radio',  'default' => '');
 $config->execution->form->edit['whitelist'] = array('type' => 'array',  'required' => false, 'control' => 'select', 'default' => array(), 'filter' => 'join');
-if(!empty($this->config->setCode)) $config->execution->form->edit['code'] = array('type' => 'string', 'required' => false, 'control' => 'text',   'default' => '', 'filter' => 'trim');
+if(!empty($config->setCode)) $config->execution->form->edit['code'] = array('type' => 'string', 'required' => false, 'control' => 'text',   'default' => '', 'filter' => 'trim');
 
 $config->execution->form->importBug['id']         = array('type' => 'int',    'required' => false, 'default' => 0, 'base' => true);
 $config->execution->form->importBug['pri']        = array('type' => 'int',    'required' => false, 'default' => 0);
