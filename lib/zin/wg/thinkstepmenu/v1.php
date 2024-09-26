@@ -11,6 +11,8 @@ class thinkStepMenu extends wg
     protected static array $defineProps = array(
         'modules: array',
         'wizard: object',
+        'marketID?: int',
+        'from?: string',
         'activeKey?: int',
         'hover?: bool=true',
         'showAction?: bool=true',
@@ -51,7 +53,6 @@ class thinkStepMenu extends wg
 
     private function buildMenuTree(array $items, int $parentID = 0): array
     {
-        jsVar('from', data('from') ?? '');
         if(empty($items)) $items = $this->modules;
         if(empty($items)) return array();
 
@@ -186,7 +187,7 @@ class thinkStepMenu extends wg
             );
         }
 
-        $marketID      = data('marketID');
+        $marketID      = $this->prop('marketID');
         $itemHasQuoted = empty($item->hasQuoted) || $item->hasQuoted == 0;
         $deleteItem    = (!$item->existNotNode && $itemHasQuoted) ? array(
             'key'          => 'deleteNode',
@@ -269,12 +270,14 @@ class thinkStepMenu extends wg
         $treeProps   = $this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'checkbox', 'checkOnClick', 'onCheck', 'sortable', 'onSort'));
         $isInSidebar = $this->parent instanceof sidebar;
         $treeType    = (!empty($treeProps['onSort']) || !empty($treeProps['sortable'])) ? 'sortableTree' : 'tree';
+        list($marketID, $from) = $this->prop(array('marketID', 'from'));
 
         return array
         (
             div
             (
                 setClass('think-node-menu rounded bg-white col bg-canvas pb-3 h-full no-morph'),
+                setData(array('marketID' => $marketID, 'from' => $from ?? '')),
                 zui::$treeType
                 (
                     set::_id('thinkNodeMenu'),
