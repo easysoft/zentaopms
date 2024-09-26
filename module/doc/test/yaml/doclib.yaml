@@ -19,6 +19,8 @@ fields:
     range: "11,60,61,0{12},11{2},60,61,11{5},60,0{5}"
   - field: execution
     range: "0{19},101,102,103,104,105,106,0{5}"
+  - field: custom
+    range: "110-115"
   - field: acl
     range: 'default'
   - field: main
