@@ -38,3 +38,17 @@ class batchEditBranchTester extends tester
                 $nameExistTip = str_replace('@branch@', $this->lang->branch->common, $this->lang->branch->existName);
                 return ($nameTip === $nameExistTip)
                     ? $this->success('分支已存在提示信息正确')
+                    : $this->failed('分支已存在提示信息不正确');
+            }
+            return $this->failed('分支名称必填提示信息不正确');
+        }
+        else
+        {
+            $branchName = $form->dom->secName->getText();
+            $branchDesc = $form->dom->secDesc->getText();
+            return ($branchName === $editBranch->name && $branchDesc === $editBranch->desc)
+                ? $this->success('批量编辑分支成功')
+                : $this->failed('批量编辑分支失败');
+        }
+    }
+}
