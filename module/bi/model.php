@@ -1709,6 +1709,7 @@ class biModel extends model
     public function getTableList()
     {
         $originTableTreeMenu = $this->loadModel('dataview')->getOriginTreeMenu();
+        $dataviewTreeMenu    = $this->loadModel('tree')->getGroupTree(0, 'dataview');
 
         $tableList = array();
         foreach($originTableTreeMenu as $menu)
@@ -1720,11 +1721,26 @@ class biModel extends model
                 if(!is_array($item))
                 {
                     $text = $item->key == 'story' ? $this->lang->story->common : $item->text;
-                    $tableList[$item->key] = $text;
+                    $tableList[] = array('value' => $item->key, 'text' => $text, 'prefix' => 'zt_');
                     continue;
                 }
 
-                foreach($item->items as $subItem) $tableList[$subItem->key] = $subItem->text;
+                foreach($item->items as $subItem) $tableList[] = array('value' => $subItem->key, 'text' => $subItem->text, 'prefix' => 'zt_');
+            }
+        }
+        foreach($dataviewTreeMenu as $menu)
+        {
+            if(empty($menu->items)) continue;
+
+            foreach($menu->items as $item)
+            {
+                if(!is_array($item))
+                {
+                    $tableList[] = array('value' => $item->key, 'text' => $item->text, 'prefix' => 'ztv_');
+                    continue;
+                }
+
+                foreach($item->items as $subItem) $tableList[] = array('value' => $subItem->key, 'text' => $subItem->text, 'prefix' => 'ztv_');
             }
         }
 
