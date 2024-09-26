@@ -6,6 +6,10 @@ requireWg('thinkModel');
 
 class think3c extends thinkModel
 {
+    protected static array $defineProps = array
+    (
+        'disabled?=false: bool',
+    );
     public static function getPageCSS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
@@ -21,7 +25,7 @@ class think3c extends thinkModel
         global $lang, $app;
 
         jsVar('blockName', $lang->thinkwizard->placeholder->blockName);
-        list($blocks, $mode) = $this->prop(array('blocks', 'mode'));
+        list($blocks, $mode, $disabled) = $this->prop(array('blocks', 'mode', 'disabled'));
 
         return div
         (
@@ -29,6 +33,7 @@ class think3c extends thinkModel
             setData('model', '3c'),
             setData('mode', $mode),
             setData('blocks', $blocks),
+            setData('disabled', $disabled),
             setClass('model-canvas relative flex justify-center'),
             h::canvas(setID('canvas')),
             on::blur('.model-canvas input')->do('
