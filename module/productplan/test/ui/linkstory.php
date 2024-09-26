@@ -1,5 +1,22 @@
 #!/usr/bin/env php
 <?php
+
+/**
+title=计划关联需求
+timeout=0
+cid=0
+
+- 检查正常关联需求
+ - 测试结果 @关联需求成功
+ - 最终测试状态 @SUCCESS
+- 检查移除单个需求
+ - 测试结果 @移除单个需求成功
+ - 最终测试状态 @SUCCESS
+- 检查移除全部需求
+ - 测试结果 @移除全部需求成功
+ - 最终测试状态 @SUCCESS
+*/
+
 chdir(__DIR__);
 include '../lib/linkstory.ui.class.php';
 
