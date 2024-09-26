@@ -18,3 +18,23 @@ class batchEditBranchTester extends tester
         $form->dom->selectAllBtn->click();//全选分支
         $form->dom->batchEditBtn->click();//点击编辑按钮
         $form->wait(2);
+        $secID   = $form->dom->id_static_1->getText();//获取第二个ID
+        $nameDom = "name[{$secID}]";
+        $descDom = "desc[{$secID}]";
+        $tipDom  = "name[{$secID}]Tip";
+        //设置表单字段
+        if (isset($editBranch->name)) $form->dom->$nameDom->setValue($editBranch->name);
+        if (isset($editBranch->desc)) $form->dom->$descDom->setValue($editBranch->desc);
+        $form->dom->btn($this->lang->save)->click();
+        $form->wait(2);
+        //判断批量编辑结果
+        if ($form->dom->allTab === false)
+        {
+            $nameTip      = $form->dom->$tipDom->getText();
+            $nameEmptyTip = sprintf($this->lang->error->notempty, $this->lang->branch->name);
+            if ($nameTip === $nameEmptyTip) return $this->success('分支名称必填提示信息正确');
+            if ($editBranch->name != '' && $form->dom->$tipDom)
+            {
+                $nameExistTip = str_replace('@branch@', $this->lang->branch->common, $this->lang->branch->existName);
+                return ($nameTip === $nameExistTip)
+                    ? $this->success('分支已存在提示信息正确')
