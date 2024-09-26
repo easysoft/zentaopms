@@ -48,7 +48,7 @@ class createPlanTester extends tester
                 //检查结束日期小于开始日期
                 $endTipform = $form->dom->endTip->getText();
                 $endTip     = sprintf($this->lang->error->ge, $this->lang->productplan->end, $form->dom->begin->getValue());
-                return ($endTipform == $endTip) ? $this->success('创建计划表单页提示信息正确') : $this->failed('创建计划表单页提示信息不正确');
+                return ($endTipform == $endTip) ? $this->success('日期校验正确') : $this->failed('日期校验不正确');
             }
             return $this->failed('创建计划表单页提示信息不正确');
         }

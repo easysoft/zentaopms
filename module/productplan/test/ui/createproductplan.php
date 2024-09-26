@@ -1,6 +1,26 @@
 #!/usr/bin/env php
 <?php
+/**
+title=创建计划
+timeout=0
+cid=0
 
+- 校验计划名称必填
+ - 测试结果 @创建计划表单页提示信息正确
+ - 最终测试状态 @SUCCESS
+- 创建计划
+ - 测试结果 @创建计划成功
+ - 最终测试状态 @SUCCESS
+- 校验结束日期不小于开始日期
+ - 测试结果 @日期校验正确
+ - 最终测试状态 @SUCCESS
+- 创建子计划
+ - 测试结果 @创建子计划成功
+ - 最终测试状态 @SUCCESS
+- 创建待定计划
+ - 测试结果 @创建待定计划成功
+ - 最终测试状态 @SUCCESS
+*/
 chdir(__DIR__);
 include '../lib/createplan.ui.class.php';
 
@@ -24,7 +44,7 @@ r($tester->createDefault($productplan, $planurl)) && p('message,status') && e('�
 
 $productplan->begin = '2024-06-24';
 $productplan->end   = '2024-06-20';
-r($tester->createDefault($productplan, $planurl)) && p('message,status') && e('日期校验正确，SUCCESS'); // 校验结束日期不小于开始日期
+r($tester->createDefault($productplan, $planurl)) && p('message,status') && e('日期校验正确,SUCCESS'); // 校验结束日期不小于开始日期
 
 $productplan->parent = '计划1';
 $productplan->title  = '自动化子计划';
@@ -35,6 +55,6 @@ r($tester->createDefault($productplan, $planurl)) && p('message,status') && e('�
 $waitplan->title  = '一个待定的计划';
 $waitplan->begin  = '2024-06-24';
 $waitplan->future = 'future';
-r($tester->createDefault($waitplan, $planurl)) && p('message,status') && e('待定的计划创建成功,SUCCESS'); // 创建一个待定的计划
+r($tester->createDefault($waitplan, $planurl)) && p('message,status') && e('创建待定计划成功,SUCCESS'); // 创建一个待定的计划
 
 $tester->closeBrowser();
