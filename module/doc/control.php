@@ -245,7 +245,7 @@ class doc extends control
             }
 
             $lib = $this->doc->getLibByID($libID);
-            return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'closeModal' => true, 'docApp' => array('update', $lib->parent ? 'lib' : 'space', $lib)));
+            return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'closeModal' => true, 'docApp' => array('update', ($lib->type == 'custom' && $lib->parent == 0) ? 'space' : 'lib', $lib)));
         }
 
         if(!empty($lib->product)) $this->view->object = $this->product->getByID($lib->product);
