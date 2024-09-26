@@ -44,7 +44,8 @@ class thinkStep  extends wg
         $title     = $action == 'detail' ? sprintf($lang->thinkstep->info, $lang->thinkstep->$basicType) : sprintf($lang->thinkstep->formTitle[$type], $lang->thinkstep->$typeLang);
         $canEdit   = common::hasPriv('thinkstep', 'edit');
         $canDelete = common::hasPriv('thinkstep', 'delete');
-        $canLink   = $wizard->model === '3c' && ($type === 'checkbox' || $type === 'radio' || $type === 'multicolumn');
+        $linkType  = $type === 'checkbox' || $type === 'radio' || $type === 'multicolumn';
+        $canLink   = !$isRun && $wizard->model === '3c' && $linkType;
 
         return div
         (
@@ -65,7 +66,7 @@ class thinkStep  extends wg
                             (
                                 setClass('btn ghost text-gray w-5 h-5 mr-1'),
                                 set::icon('link'),
-                                set::url(createLink('thinkstep', 'link')),
+                                set::url(createLink('thinkstep', 'link', "marketID={$marketID}&stepID={$item->id}")),
                                 set('data-toggle', 'modal'),
                                 set('data-dismiss', 'modal'),
                                 set('data-size', 'sm'),
