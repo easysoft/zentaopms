@@ -478,7 +478,7 @@ class datatableModel extends model
         $flow = $this->loadModel('workflow')->getByModule($module);
         if(empty($flow)) return $fieldList;
 
-        $fields = $this->loadModel('workflowaction')->getFields($module, $method);
+        $fields = $this->loadModel('workflowaction')->getPageFields($module, $method);
         if($flow->buildin == 1)
         {
             $action = $this->workflowaction->getByModuleAndAction($module, $method);

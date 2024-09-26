@@ -534,7 +534,7 @@ class control extends baseControl
         if(!$action || $action->extensionType != 'extend') return $fields;
 
         $uiID      = $this->loadModel('workflowlayout')->getUIByData($flow->module, $action->action, $object);
-        $fieldList = $this->workflowaction->getFields($flow->module, $action->action, true, null, $uiID);
+        $fieldList = $this->workflowaction->getPageFields($flow->module, $action->action, true, null, $uiID);
         return $this->loadModel('flow')->buildFormFields($fields, $fieldList);
     }
 
@@ -563,7 +563,7 @@ class control extends baseControl
         if(!$action || $action->extensionType == 'none') return '';
 
         $uiID      = $this->loadModel('workflowlayout')->getUIByData($flow->module, !empty($action->action) ? $action->action: '', $object);
-        $fieldList = $this->loadModel('workflowaction')->getFields($flow->module, !empty($action->action) ? $action->action: '', true, null, $uiID);
+        $fieldList = $this->loadModel('workflowaction')->getPageFields($flow->module, !empty($action->action) ? $action->action: '', true, null, $uiID);
 
         $html = '';
         if(!empty($flow->css))   $html .= "<style>$flow->css</style>";
@@ -608,7 +608,7 @@ class control extends baseControl
         $uiID = is_object($object) ? $this->loadModel('workflowlayout')->getUIByData($flow->module, $action->action, $object) : 0;
 
         $wrapControl  = array('textarea', 'richtext', 'file');
-        $fieldList    = $this->workflowaction->getFields($flow->module, $action->action, true, $object, $uiID);
+        $fieldList    = $this->workflowaction->getPageFields($flow->module, $action->action, true, $object, $uiID);
         $layouts      = $this->loadModel('workflowlayout')->getFields($moduleName, $methodName, $uiID);
         $notEmptyRule = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
 
@@ -696,7 +696,7 @@ class control extends baseControl
         if($this->config->edition == 'open') return;
 
         $uiID         = $this->loadModel('workflowlayout')->getUIByDataID($this->moduleName, $this->methodName, $objectID);
-        $fields       = $this->loadModel('workflowaction')->getFields($this->moduleName, $this->methodName, true, null, $uiID);
+        $fields       = $this->loadModel('workflowaction')->getPageFields($this->moduleName, $this->methodName, true, null, $uiID);
         $layouts      = $this->loadModel('workflowlayout')->getFields($this->moduleName, $this->methodName, $uiID);
         $notEmptyRule = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
         foreach($fields as $field)

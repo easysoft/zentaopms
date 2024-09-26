@@ -94,7 +94,7 @@ class fixer extends baseFixer
             $action = $app->control->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
             if(!$action || $action->extensionType != 'extend') return parent::get($fields);
 
-            $fieldList = $app->control->workflowaction->getFields($flow->module, $action->action);
+            $fieldList = $app->control->workflowaction->getPageFields($flow->module, $action->action);
             $layouts   = $app->control->loadModel('workflowlayout')->getFields($moduleName, $methodName);
             if($layouts)
             {

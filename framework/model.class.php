@@ -400,7 +400,7 @@ class model extends baseModel
         $this->loadModel('file');
         if($this->post->uid) $this->file->updateObjectID($this->post->uid, $objectID, $moduleName);
         $uiID   = $this->loadModel('workflowlayout')->getUIByDataID($moduleName, $methodName, $objectID);
-        $fields = $this->workflowaction->getFields($moduleName, $action->action, '', null, $uiID);
+        $fields = $this->workflowaction->getPageFields($moduleName, $action->action, '', null, $uiID);
         foreach($fields as $field)
         {
             if($field->control == 'file' && $field->show && !$field->readonly)
