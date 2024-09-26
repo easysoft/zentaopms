@@ -131,5 +131,25 @@ class createDocTester extends tester
         $form->dom->execution->picker($executionName->fstExecution);
         $form->wait(1);
         $form->dom->releaseBtn->click();
+
+        /*搜索文档*/
+        $this->openUrl('doc', 'projectSpace');
+        $form = $this->loadPage('doc', 'projectSpace');
+        $form->dom->search(array("文档标题,=,{$docName->dcName}"));
+        $form->wait(1);
+
+        if($form->dom->fstDocName->getText() != $docName) return $this->failed('创建项目空间文档失败。');
+        return $this->success('创建项目空间文档成功。');
+    }
+
+    /*
+     * 创建团队文档。
+     * Create a team doc.
+     *
+     * @param  string $teamSpace
+     * @param  string $teamLib
+     * @param  string $docName
+     * @access public
+     */
     }
 }
