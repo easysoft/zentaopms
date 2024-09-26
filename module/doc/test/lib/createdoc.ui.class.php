@@ -162,5 +162,14 @@ class createDocTester extends tester
         $form->dom->spaceName->setValue($teamSpace->spaceName);
         $form->dom->name->setValue($teamLib);
         $form->dom->btn($this->lang->save)->click();
+        $form->wait(1);
+
+        /*创建团队文档*/
+        $form->dom->createDocBtn->click();
+        $form->wait(1);
+        $form->dom->showTitle->setValue($docName->dcName);
+        $form->dom->saveBtn->click();
+        $form->wait(1);
+        $form->dom->releaseBtn->click();
     }
 }
