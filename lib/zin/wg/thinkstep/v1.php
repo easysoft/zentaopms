@@ -79,12 +79,14 @@ class thinkStep  extends wg
                             (
                                 setClass('btn ghost text-gray w-5 h-5'),
                                 set::icon('edit'),
+                                set::hint($lang->thinkstep->actions['edit']),
                                 set::url(createLink('thinkstep', 'edit', "marketID={$marketID}&stepID={$item->id}")),
                             ) : null,
                             $canDelete ? ((!$item->existNotNode && empty($quotedQuestions)) ? btn
                             (
                                 setClass('btn ghost text-gray w-5 h-5 ml-1 ajax-submit'),
                                 set::icon('trash'),
+                                set::hint($lang->thinkstep->actions['delete']),
                                 setData('url', createLink('thinkstep', 'delete', "marketID={$marketID}&stepID={$item->id}")),
                                 setData('confirm',  $lang->thinkstep->deleteTips[$basicType])
                             ) : icon
