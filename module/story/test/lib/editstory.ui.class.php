@@ -59,4 +59,7 @@ class editStoryTester extends tester
 
         $viewPage = $this->initForm('story', 'view', array('storyID' => '1'), 'appIframe-product');
         if($viewPage->dom->storyFrom->getText() != '客户') return $this->failed('需求来源不正确');
+
+        return $this->success('批量编辑研发需求成功');
+    }
 }
