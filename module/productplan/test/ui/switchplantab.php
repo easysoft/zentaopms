@@ -5,14 +5,26 @@
 
 title=计划列表切换Tab
 timeout=0
-cid=9
+cid=0
 
--切换到全部Tab   最终测试状态 @SUCCESS
--切换到未完成Tab 最终测试状态 @SUCCESS
--切换到未开始Tab 最终测试状态 @SUCCESS
--切换到进行中Tab 最终测试状态 @SUCCESS
--切换到已完成Tab 最终测试状态 @SUCCESS
--切换到已关闭Tab 最终测试状态 @SUCCESS
+- 切换到全部Tab
+ - 测试结果 @切换至allTab成功
+ - 最终测试状态 @SUCCESS
+-切换到未完成Tab
+ - 测试结果 @切换至undoneTab成功
+ - 最终测试状态 @SUCCESS
+-切换到未开始Tab
+ - 测试结果 @切换至waitingTab成功
+ - 最终测试状态 @SUCCESS
+-切换到进行中Tab
+ - 测试结果 @切换至doingTab成功
+ - 最终测试状态 @SUCCESS
+-切换到已完成Tab
+ - 测试结果 @切换至doneTab成功
+ - 最终测试状态 @SUCCESS
+-切换到已关闭Tab
+ - 测试结果 @切换至closedTab成功
+ - 最终测试状态 @SUCCESS
 
 */
 chdir(__DIR__);
