@@ -976,10 +976,21 @@ class fileModel extends model
         /* Judge the content type. */
         $mimes       = $this->config->file->mimes;
         $contentType = isset($mimes[$fileType]) ? $mimes[$fileType] : $mimes['default'];
-        $fileName    = str_replace('+', ' ', urlencode($fileName));
+
+        /* Safari浏览器下载文件名乱码问题。 */
+        if($fileType != 'zip' && preg_match("/Safari/", $_SERVER["HTTP_USER_AGENT"]))
+        {
+            $fileName   = rawurlencode($fileName);
+            $attachment = 'attachment; filename*=utf-8\'\'' . $fileName;
+        }
+        else
+        {
+            $fileName   = str_replace("+", "%20", urlencode($fileName));
+            $attachment = "attachment; filename=\"{$fileName}\";";
+        }
 
         helper::header('Content-type', $contentType);
-        helper::header('Content-Disposition', "attachment; filename=\"$fileName\"");
+        helper::header('Content-Disposition', $attachment);
         helper::header('Pragma', 'no-cache');
         helper::header('Expires', '0');
         if($type == 'content') helper::end($content);
