@@ -3,14 +3,16 @@ class myMisc extends misc
 {
     /**
      * Ajax get client package size.
-     * 
+     *
+     * @param  string $type
+     * @param  string $fileName
      * @access public
      * @return void
      */
-    public function ajaxGetPackageSize()
+    public function ajaxGetPackageSize($type = 'client', $fileName = 'zentaoclient.zip')
     {
         $account     = $this->app->user->account;
-        $packageFile = $this->app->wwwRoot . 'data/client/' . $account . '/zentaoclient.zip';
+        $packageFile = $this->app->wwwRoot . "data/{$type}/{$account}/{$fileName}";
 
         $size = 0;
         if(file_exists($packageFile))
