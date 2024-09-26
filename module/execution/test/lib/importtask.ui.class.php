@@ -8,21 +8,27 @@ class importTaskTester extends tester
      *
      * @param  string $execution
      * @param  string $expectNum
+     * @param  string $exist
      * @access public
      * @return void
      */
-    public function importTask($execution, $expectNum)
+    public function importTask($execution, $expectNum, $exist = '1')
     {
         $form = $this->initForm('execution', 'task', array('execution' => '3'), 'appIframe-execution');
         $form->dom->btn($this->lang->import)->click();
         $form->dom->btn($this->lang->execution->importTask)->click();
 
         $importForm = $this->loadPage('execution', 'importTask');
-        $importForm->dom->pickInput->click();
-        $form->wait(1);
-        var_dump($form->dom->getItems('execution'));die;
-        $executionList = $form->dom->getElementList($form->dom->executionList);
-        var_dump($executionList);die;
+        $importForm->wait(1);
+
+        $executionList = $importForm->dom->getPickerItems('execution');
+        $executions    = array_column($executionList, 'text');
+        if(!in_array($execution, $executions))
+        {
+            if($exist == '0') return $this->success('执行下拉列表执行显示正确');
+            return $this->falled('执行下拉列表执行显示错误');
+        }
+        if($exist == '0') return $this->failed('执行下拉列表执行显示错误');
 
         $importForm->dom->execution->picker($execution);
         $importForm->wait(1);
