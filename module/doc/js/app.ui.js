@@ -213,7 +213,8 @@ function handleCollectDoc(doc)
     $.post($.createLink('doc', 'collect', `objectID=${doc.id}&objectType=doc`), {}, function(res)
     {
         if(typeof res == 'string') res = JSON.parse(res);
-        getDocApp().update('doc', $.extend(doc, {isCollector: res.status === 'yes'}));
+        const collected = res.status === 'yes';
+        getDocApp().update('doc', $.extend(doc, {isCollector: collected, collects: collected ? doc.collects + 1 : doc.collects - 1}));
     });
 }
 
