@@ -11,11 +11,12 @@ declare(strict_types=1);
 namespace zin;
 modalHeader(set::title($lang->downloadClient));
 
+jsVar('rawMethod', $app->rawMethod);
 formPanel
 (
     set::id('downloadClient'),
     set::actions(false),
-    $action == 'check' ? div(set::className('center p-4'), div($errorInfo), div(a(set::className('btn primary btn-wide'), set::href($this->createLink('misc', 'downloadClient', "action=check")), $lang->refresh))) : null,
+    $action == 'check' ? div(set::className('center p-4'), div($errorInfo), div(a(set::className('btn primary btn-wide'), set::href($this->createLink('misc', $app->rawMethod, "action=check")), $lang->refresh))) : null,
     $action == 'selectPackage' ? formGroup
     (
         set::label($lang->misc->client->version),
@@ -50,5 +51,3 @@ formPanel
     ) : null,
     input(set::className('hidden'), set::name('action'), set::value($action))
 );
-
-render('modalDialog');
