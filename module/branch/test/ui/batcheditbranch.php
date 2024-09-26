@@ -36,3 +36,17 @@ $branch->gen(2);
 
 $tester = new batchEditBranchTester();
 $tester->login();
+
+$productID['productID'] = 11;
+$editBranch = new stdClass();
+$editBranch->name = '';
+r($tester->batchEditBranch($editBranch, $productID)) && p('message,status') && e('分支名称必填提示信息正确,SUCCESS');
+
+$editBranch->name = '分支02';
+r($tester->batchEditBranch($editBranch, $productID)) && p('message,status') && e('分支已存在提示信息正确,SUCCESS');
+
+$editBranch->name = '分支test编辑';
+$editBranch->desc = '这是一行分支的描述';
+r($tester->batchEditBranch($editBranch, $productID)) && p('message,status') && e('批量编辑分支成功,SUCCESS');
+
+$tester->closeBrowser();
