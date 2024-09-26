@@ -1432,4 +1432,35 @@ class doc extends control
 
         $this->send($doc);
     }
+
+    /**
+     * Get files by type and objectID.
+     * 根据类型和对象ID获取文件列表。
+     *
+     * @param  string $type
+     * @param  int    $objectID
+     * @param  string $browseType
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetFiles(string $type, int $objectID, string $browseType = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 9999, int $pageID = 1)
+    {
+        /* Load pager. */
+        $rawMethod = $this->app->rawMethod;
+        $this->app->rawMethod = 'showFiles';
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+        $this->app->rawMethod = $rawMethod;
+
+        $files       = $this->doc->getLibFiles($type, $objectID, $browseType, 0, $orderBy, $pager);
+        $fileIcon    = $this->doc->getFileIcon($files);
+        $sourcePairs = $this->doc->getFileSourcePairs($files);
+        $files       = $this->docZen->processFiles($files, $fileIcon, $sourcePairs);
+
+        echo json_encode(array_values($files)); // $this->send($files); not work.
+    }
 }
