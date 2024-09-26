@@ -1,6 +1,24 @@
 #!/usr/bin/env php
 <?php
+/**
+title=编辑计划
+timeout=0
+cid=0
 
+- 校验计划名称必填
+ - 测试结果 @编辑计划提示信息正确
+ - 最终测试结果 @SUCCESS
+- 检查计划正常编辑
+ - 测试结果 @编辑计划成功
+ - 最终测试结果 @SUCCESS
+- 校验结束日期不小于开始日期
+ - 测试结果 @日期校验正确
+ - 最终测试结果 @SUCCESS
+- 检查编辑计划为待定
+ - 测试结果 @编辑待定计划成功
+ - 最终测试结果 @SUCCESS
+
+*/
 chdir(__DIR__);
 include '../lib/editplan.ui.class.php';
 
@@ -30,6 +48,6 @@ r($tester->editDefault($productplan, $planurl)) && p('message,status') && e('日
 $waitplan->title  = '一个待定的计划';
 $waitplan->begin  = '2024-06-24';
 $waitplan->future = 'future';
-r($tester->editDefault($waitplan, $planurl)) && p('message,status') && e('编辑待定计划成功,SUCCESS'); // 将计划结束日期改为待定
+r($tester->editDefault($waitplan, $planurl)) && p('message,status') && e('编辑为待定计划成功,SUCCESS'); // 将计划结束日期改为待定
 
 $tester->closeBrowser();
