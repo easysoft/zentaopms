@@ -32,7 +32,7 @@ $task->parent->range('0');
 $task->execution->range('10{7}, 2{7}, 3{7}, 4{7}, 5{7}, 6{7}, 7{7}');
 $task->story->range('0');
 $task->designVersion->range('1');
-$task->name->range('已删除, 未开始, 进行中, 已完成, 已暂停,已取消, 已关闭');
+$task->name->range('1-100');
 $task->status->range('wait, wait, doing, done, pause, cancel, closed');
 $task->deleted->range('1, 0{6}');
 $task->gen(49);
@@ -42,3 +42,11 @@ $taskSpec->task->range('1-100');
 $taskSpec->version->range('1');
 $taskSpec->name->range('已删除, 未开始, 进行中, 已完成, 已暂停, 已取消, 已关闭');
 $taskSpec->gen(49);
+
+$tester = new importTaskTester();
+$tester->login();
+
+r($tester->importTask('未开始执行2','4')) && p('message') && e('导入任务成功');
+r($tester->importTask('进行中执行', '4')) && p('message') && e('导入任务成功');
+r($tester->importTask('已挂起执行', '4')) && p('message') && e('导入任务成功');
+$tester->closeBrowser();
