@@ -17,10 +17,10 @@ $product->gen(2);
 
 $project = zenData('project');
 $project->id->range('1-100');
-$project->project->range('0, 1, 1');
-$project->model->range('scrum, []{2}');
-$project->type->range('project, sprint{2}');
-$project->auth->range('extend, []{2}');
+$project->project->range('0, 1{3}');
+$project->model->range('scrum, []{3}');
+$project->type->range('project, sprint{3}');
+$project->auth->range('extend, []{3}');
 $project->storytype->range('`story,epic,requirement`');
 $project->path->range('`,1,`, `,1,2,`, `,1,3,`, `,1,4,`');
 $project->grade->range('1');
@@ -28,11 +28,11 @@ $project->name->range('项目1, 项目1执行1, 项目1执行2, 项目1执行3')
 $project->hasProduct->range('1');
 $project->status->range('wait');
 $project->acl->range('open');
-$project->gen(4);
+$project->gen(5);
 
 $projectProduct = zenData('projectproduct');
 $projectProduct->project->range('1-3');
-$projectProduct->product->range('1{3}, 2{2}');
+$projectProduct->product->range('1{2}, 2{3}');
 $projectProduct->gen(5);
 
 $bug = zenData('bug');
@@ -46,3 +46,11 @@ $bug->title->range('1-100');
 $bug->status->range('active{3}, resolved, closed');
 $bug->deleted->range('1, 0{4}');
 $bug->gen(10);
+
+$tester = new importBugTester();
+$tester->login();
+
+r($tester->importBug('4', '0')) && p('status,message') && e('success','可导入的Bug数目正确');
+r($tester->importBug('3', '2')) && p('status,message') && e('success','导入Bug成功');
+r($tester->importBug('2', '3')) && p('status,message') && e('success','导入Bug成功');
+r($tester->importBug('2', '2')) && p('status,message') && e('success','导入Bug成功');
