@@ -1729,11 +1729,11 @@ class biModel extends model
                 if(!is_array($item))
                 {
                     $text = $item->key == 'story' ? $this->lang->story->common : $item->text;
-                    $tableList[] = array('value' => $item->key, 'text' => $text, 'prefix' => 'zt_');
+                    $tableList[$this->config->db->prefix . $item->key] = $text;
                     continue;
                 }
 
-                foreach($item->items as $subItem) $tableList[] = array('value' => $subItem->key, 'text' => $subItem->text, 'prefix' => 'zt_');
+                foreach($item->items as $subItem) $tableList[$this->config->db->prefix . $subItem->key] = $subItem->text;
             }
         }
         foreach($dataviewTreeMenu as $menu)
@@ -1744,11 +1744,11 @@ class biModel extends model
             {
                 if(!is_array($item))
                 {
-                    $tableList[] = array('value' => $item->key, 'text' => $item->text, 'prefix' => 'ztv_');
+                    $tableList['ztv_' . $item->key] = $item->text;
                     continue;
                 }
 
-                foreach($item->items as $subItem) $tableList[] = array('value' => $subItem->key, 'text' => $subItem->text, 'prefix' => 'ztv_');
+                foreach($item->items as $subItem) $tableList['ztv_' . $subItem->key] = $subItem->text;
             }
         }
 
