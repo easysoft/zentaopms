@@ -871,7 +871,7 @@ class dbh
 
             // 获取当前用户的所有权限
             $privPairs = array();
-            $privList  = $this->pdo->query("SELECT PRIVILEGE_TYPE FROM information_schema.USER_PRIVILEGES WHERE GRANTEE = \"'$user'@'$host'\";")->fetchAll();
+            $privList  = $this->pdo->query("SELECT PRIVILEGE_TYPE FROM information_schema.USER_PRIVILEGES WHERE GRANTEE LIKE '%$user%';")->fetchAll();
             foreach($privList as $priv)
             {
                 $privPairs[$priv->PRIVILEGE_TYPE] = 1;
