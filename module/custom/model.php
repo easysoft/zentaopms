@@ -1413,6 +1413,37 @@ class customModel extends model
     }
 
     /**
+     * 移除关联对象。
+     * Remove objects.
+     *
+     * @param  int    $objectID
+     * @param  string $objectType
+     * @param  string $relationName
+     * @param  int    $relatedObjectID
+     * @param  string $relatedObjectType
+     * @access public
+     * @return bool
+     */
+    public function removeObjects(int $objectID, string $objectType, string $relationName, int $relatedObjectID, string $relatedObjectType): bool
+    {
+        $relationIdList = array();
+        $relationList   = $this->getRelationList();
+        foreach($relationList as $relationID => $relation)
+        {
+            if($relation->relation == $relationName || $relation->relativeRelation == $relationName) $relationIdList[$relationID] = $relationID;
+        }
+
+        $this->dao->delete()->from(TABLE_RELATION)
+            ->where('relation')->in($relationIdList)
+            ->andWhere('AID')->in("$objectID,$relatedObjectID")
+            ->andWhere('BID')->in("$objectID,$relatedObjectID")
+            ->andWhere('AType')->in("$objectType,$relatedObjectType")
+            ->andWhere('BType')->in("$objectType,$relatedObjectType")
+            ->exec();
+        return !dao::isError();
+    }
+
+    /**
      * 获取已关联的对象列表。
      * Get related object list.
      *
@@ -1423,23 +1454,27 @@ class customModel extends model
      */
     public function getRelatedObjectList(int $objectID, string $objectType): array
     {
-        $relationPairs   = $this->getRelationList(true);
-        $relationObjects = $this->dao->select('relation,BID,BType')->from(TABLE_RELATION)
-            ->where('AID')->eq($objectID)
-            ->andWhere('AType')->eq($objectType)
-            ->andWhere('relation')->in(array_keys($relationPairs))
-            ->fetchAll();
+        $relationList = $this->getRelationList();
+        $relationObjects = $this->dao->select('*')->from(TABLE_RELATION)
+            ->where('relation')->in(array_keys($relationList))
+            ->andWhere("( `AID` = $objectID AND `AType` = '$objectType' )", true)
+            ->orWhere("( `BID` = $objectID AND `BType` = '$objectType' ))")
+            ->fetchAll('id');
+        ksort($relationObjects);
 
         $relationObjectList = array();
         foreach($relationObjects as $object)
         {
-            $relationName = $relationPairs[$object->relation];
-            if(!isset($relationObjectList[$relationName])) $relationObjectList[$relationName] = array();
-            if(!isset($relationObjectList[$relationName][$object->BType])) $relationObjectList[$relationName][$object->BType] = array();
 
-            $objectInfo = $this->loadModel($object->BType)->fetchByID($object->BID);
-            $BTitle     = empty($objectInfo->title) ? (empty($objectInfo->name) ? '' : $objectInfo->name) : $objectInfo->title;
-            $relationObjectList[$relationName][$object->BType][$object->BID] = $BTitle;
+            $relationName = $object->AID == $objectID ? $relationList[$object->relation]->relation : $relationList[$object->relation]->relativeRelation;
+            $id   = $object->AID == $objectID ? 'BID' : 'AID';
+            $type = $object->AID == $objectID ? 'BType' : 'AType';
+            if(!isset($relationObjectList[$relationName])) $relationObjectList[$relationName] = array();
+            if(!isset($relationObjectList[$relationName][$object->$type])) $relationObjectList[$relationName][$object->$type] = array();
+
+            $objectInfo = $this->loadModel($object->$type)->fetchByID($object->$id);
+            $title      = empty($objectInfo->title) ? (empty($objectInfo->name) ? '' : $objectInfo->name) : $objectInfo->title;
+            $relationObjectList[$relationName][$object->$type][$object->$id] = $title;
         }
 
         return $relationObjectList;

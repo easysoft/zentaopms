@@ -20,11 +20,12 @@ class relatedObjectList extends relatedList
         {
             const $this = $(e.target).closest('li').find('.removeObject');
             $.get($this.attr('data-url'), function(){$this.closest('li').remove()});
+            loadPage();
         };
         JS;
     }
 
-    protected function getObjectItem(int $relatedObjectID, string $relatedObjectType, string $relatedObjectTitle): object
+    protected function getObjectItem(int $relatedObjectID, string $relatedObjectType, string $relatedObjectTitle, string $relationName): object
     {
         global $config,$lang;
         $objectID   = $this->prop('objectID');
@@ -36,9 +37,9 @@ class relatedObjectList extends relatedList
         $item->type  = $config->custom->relateObjectList[$relatedObjectType];
         $item->url   = hasPriv($relatedObjectType, 'view') ? createLink($relatedObjectType, 'view', "objectID=$relatedObjectID") : false;
 
-        if(hasPriv('custom', 'relateObject'))
+        if(hasPriv('custom', 'removeObjects'))
         {
-            $removeObjectUrl = createLink('custom', 'relateObject', "objectID=$objectID&objectType=$objectType&relatedObjectType=$relatedObjectType&actionType=remove&relatedObjectID=$relatedObjectID");
+            $removeObjectUrl = createLink('custom', 'removeObjects', "objectID=$objectID&objectType=$objectType&relationName=$relationName&relatedObjectID=$relatedObjectID&relatedObjectType=$relatedObjectType");
 
             $btn = array
             (
@@ -87,7 +88,7 @@ class relatedObjectList extends relatedList
             $relatedObjectItems = array();
             foreach($relatedObjectList as $relatedObjectType => $relatedObjectPairs)
             {
-                foreach($relatedObjectPairs as $id => $title) $relatedObjectItems[] = $this->getObjectItem($id, $relatedObjectType, $title);
+                foreach($relatedObjectPairs as $id => $title) $relatedObjectItems[] = $this->getObjectItem($id, $relatedObjectType, $title, $relationName);
             }
 
             $data[$relationName] = array
@@ -108,7 +109,7 @@ class relatedObjectList extends relatedList
 
         $objectID   = $this->prop('objectID');
         $objectType = $this->prop('objectType');
-        $btn = new btn
+        $btn = hasPriv('custom', 'relateObject') ? new btn
         (
             set::url('custom', 'relateObject', "objectID=$objectID&objectType=$objectType&relatedObjectType=$objectType"),
             set::icon('plus'),
@@ -118,7 +119,7 @@ class relatedObjectList extends relatedList
             setData(array('toggle' => 'modal', 'size' => 'lg')),
             setID('linkButton'),
             $lang->relatedObjects
-        );
+        ) : null;
         return array($list, $btn);
     }
 }
