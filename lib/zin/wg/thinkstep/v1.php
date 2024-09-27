@@ -68,6 +68,7 @@ class thinkStep  extends wg
                                 setClass('btn ghost text-gray w-5 h-5 mr-1'),
                                 set::icon('link'),
                                 set::url(createLink('thinkstep', 'link', "marketID={$marketID}&stepID={$item->id}")),
+                                set::hint($lang->thinkstep->actions['link']),
                                 set('data-toggle', 'modal'),
                                 set('data-dismiss', 'modal'),
                                 set('data-size', 'sm'),
