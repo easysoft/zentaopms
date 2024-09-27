@@ -2605,6 +2605,7 @@ and t1.resolution!=''
 and (case when \$startDate='' then 1 else cast(t1.resolvedDate as date)>=cast(\$startDate as date) end)
 and (case when \$endDate='' then 1 else cast(t1.resolvedDate as date)<=cast(\$endDate as date) end)
 and (case when \$product = '' then 1 else t1.product=\$product end)
+and not (\$product='' and \$startDate='' and \$endDate='')
 EOT,
     'settings'  => array
     (
