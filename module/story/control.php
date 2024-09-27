@@ -581,24 +581,25 @@ class story extends control
             $this->product->setMenu($story->product, $story->branch);
         }
 
-        $this->view->title         = "STORY #$story->id $story->title - $product->name";
-        $this->view->branches      = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
-        $this->view->users         = $this->user->getPairs('noletter');
-        $this->view->executions    = $this->execution->getPairs(0, 'all', 'nocode');
-        $this->view->version       = $version;
-        $this->view->preAndNext    = $this->loadModel('common')->getPreAndNextObject($story->type, $storyID);
-        $this->view->builds        = $this->loadModel('build')->getStoryBuilds($storyID);
-        $this->view->releases      = $this->loadModel('release')->getStoryReleases($storyID);
-        $this->view->story         = $story;
-        $this->view->product       = $product;
-        $this->view->maxGradeGroup = $this->story->getMaxGradeGroup();
-        $this->view->gradePairs    = $this->story->getGradePairs($story->type, 'all');
-        $this->view->roadmaps      = $this->config->edition == 'ipd' ? array(0 => '') + $this->loadModel('roadmap')->getPairs() : array();
-        $this->view->demand        = $this->config->edition == 'ipd' ? $this->loadModel('demand')->getByID($story->demand) : new stdclass();
-        $this->view->showGrade     = !empty($this->config->showStoryGrade);
-        $this->view->actions       = $this->action->getList('story', $storyID);
-        $this->view->branch        = $story->branch;
-        $this->view->project       = isset($projectID) ? $this->loadModel('project')->getById($projectID) : null;
+        $this->view->title          = "STORY #$story->id $story->title - $product->name";
+        $this->view->branches       = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
+        $this->view->users          = $this->user->getPairs('noletter');
+        $this->view->executions     = $this->execution->getPairs(0, 'all', 'nocode');
+        $this->view->version        = $version;
+        $this->view->preAndNext     = $this->loadModel('common')->getPreAndNextObject($story->type, $storyID);
+        $this->view->builds         = $this->loadModel('build')->getStoryBuilds($storyID);
+        $this->view->releases       = $this->loadModel('release')->getStoryReleases($storyID);
+        $this->view->story          = $story;
+        $this->view->product        = $product;
+        $this->view->maxGradeGroup  = $this->story->getMaxGradeGroup();
+        $this->view->gradePairs     = $this->story->getGradePairs($story->type, 'all');
+        $this->view->roadmaps       = $this->config->edition == 'ipd' ? array(0 => '') + $this->loadModel('roadmap')->getPairs() : array();
+        $this->view->demand         = $this->config->edition == 'ipd' ? $this->loadModel('demand')->getByID($story->demand) : new stdclass();
+        $this->view->showGrade      = !empty($this->config->showStoryGrade);
+        $this->view->actions        = $this->action->getList('story', $storyID);
+        $this->view->branch         = $story->branch;
+        $this->view->project        = isset($projectID) ? $this->loadModel('project')->getById($projectID) : null;
+        $this->view->relatedObjects = $this->loadModel('custom')->getRelatedObjectList($story->id, $story->type);
 
         $this->display();
     }

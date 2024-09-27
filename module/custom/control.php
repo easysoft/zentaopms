@@ -636,7 +636,7 @@ class custom extends control
         $this->view->users             = $this->loadModel('user')->getPairs('noletter');
         $this->view->objects           = $this->custom->getObjects($relatedObjectType, $browseType, $orderBy, $pager);
         $this->view->cols              = $this->custom->getObjectCols($relatedObjectType);
-        $this->view->relationPairs     = $this->custom->getRelationPairs();
+        $this->view->relationPairs     = $this->custom->getRelationList(true);
         $this->display();
     }
 }

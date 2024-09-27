@@ -1276,7 +1276,7 @@ class customModel extends model
         $objectQuery = $module . 'Query';
         if($browseType == 'bySearch' && $this->session->$objectQuery === false) $this->session->set($objectQuery, ' 1 = 1');
 
-        $query = $this->dao->select('*')->from($objectTable)
+        $query = $this->dao->select('*, 1 as relation')->from($objectTable)
             ->where('deleted')->eq(0)
             ->beginIF(in_array($objectType, $this->config->custom->objectOwner['product']))->andWhere('product')->in($this->app->user->view->products)->fi()
             ->beginIF(in_array($objectType, $this->config->custom->objectOwner['project']))->andWhere('project')->in($this->app->user->view->projects)->fi()
@@ -1296,7 +1296,6 @@ class customModel extends model
         }
 
         $objects = $query->orderBy($orderBy)->page($pager)->fetchAll('id');
-        foreach($objects as $object) $object->relation = 1;
         return $objects;
     }
 
@@ -1340,18 +1339,44 @@ class customModel extends model
     }
 
     /**
-     * 获取关联关系键值对。
-     * Get relation paris.
+     * 获取关联关系列表。
+     * Get relation list.
      *
+     * @param  bool   $getParis
      * @access public
      * @return array
      */
-    public function getRelationPairs(): array
+    public function getRelationList(bool $getParis = false): array
     {
-        $relationPairs = array();
-        $relationList  = $this->getRelationList();
-        foreach($relationList as $relation) $relationPairs[$relation->key] = $relation->relation;
-        return $relationPairs;
+        $this->app->loadLang('custom');
+        $lang = $this->app->getClientLang();
+
+        $relations = $this->dao->select('`key`, `value`, `system`')->from(TABLE_LANG)
+            ->where('lang')->in($lang . ',all')
+            ->andWhere('module')->eq('custom')
+            ->andWhere('section')->eq('relationList')
+            ->fetchAll();
+
+        $relationList = array();
+        foreach($relations as $relation)
+        {
+            $value = json_decode($relation->value);
+            $relationList[$relation->key] = new stdclass();
+            $relationList[$relation->key]->key              = $relation->key;
+            $relationList[$relation->key]->relation         = $value->relation;
+            $relationList[$relation->key]->relativeRelation = $value->relativeRelation;
+            $relationList[$relation->key]->system           = $relation->system;
+        }
+        ksort($relationList);
+
+        if($getParis)
+        {
+            $relationPairs = array();
+            foreach($relationList as $relation) $relationPairs[$relation->key] = $relation->relation;
+            return $relationPairs;
+        }
+
+        return $relationList;
     }
 
     /**
@@ -1385,5 +1410,38 @@ class customModel extends model
             $relation->BType    = $relatedObjectType;
             $this->dao->insert(TABLE_RELATION)->data($relation)->exec();
         }
+    }
+
+    /**
+     * 获取已关联的对象列表。
+     * Get related object list.
+     *
+     * @param  int    $objectID
+     * @param  string $objectType
+     * @access public
+     * @return array
+     */
+    public function getRelatedObjectList(int $objectID, string $objectType): array
+    {
+        $relationPairs   = $this->getRelationList(true);
+        $relationObjects = $this->dao->select('relation,BID,BType')->from(TABLE_RELATION)
+            ->where('AID')->eq($objectID)
+            ->andWhere('AType')->eq($objectType)
+            ->andWhere('relation')->in(array_keys($relationPairs))
+            ->fetchAll();
+
+        $relationObjectList = array();
+        foreach($relationObjects as $object)
+        {
+            $relationName = $relationPairs[$object->relation];
+            if(!isset($relationObjectList[$relationName])) $relationObjectList[$relationName] = array();
+            if(!isset($relationObjectList[$relationName][$object->BType])) $relationObjectList[$relationName][$object->BType] = array();
+
+            $objectInfo = $this->loadModel($object->BType)->fetchByID($object->BID);
+            $BTitle     = empty($objectInfo->title) ? (empty($objectInfo->name) ? '' : $objectInfo->name) : $objectInfo->title;
+            $relationObjectList[$relationName][$object->BType][$object->BID] = $BTitle;
+        }
+
+        return $relationObjectList;
     }
 }

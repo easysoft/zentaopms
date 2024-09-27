@@ -404,9 +404,9 @@ class customZen extends custom
      * 构建搜索表单。
      * Build search form.
      *
-     * @param  int    $objectID
-     * @param  string $objectType
-     * @param  string $relatedObjectType
+     * @param  int       $objectID
+     * @param  string    $objectType
+     * @param  string    $relatedObjectType
      * @access protected
      * @return void
      */

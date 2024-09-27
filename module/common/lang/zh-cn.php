@@ -148,6 +148,7 @@ $lang->noticeOkFile    = '为了安全起见，系统需要确认您的管理员
 $lang->noticeDrag      = '可点击添加或拖拽上传, 不超过 %s';
 $lang->allProgress     = '总进度';
 $lang->relatedObjects  = '关联对象';
+$lang->removeObjects   = '解除关联关系';
 
 $lang->fieldDisplaySetting = '字段显示设置';
 $lang->fieldSettingTip     = '以下字段默认收起，点击「显示更多字段」按钮展开查看，若您希望某些字段默认不收起，通过图钉固定即可。';
