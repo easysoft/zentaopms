@@ -40,6 +40,15 @@ class browsePage extends page
             'encoding'       => "//*[@class='modal-content']/div[3]/div/div/form/div[3]/div/div",
             'data'           => "//*[@class='modal-content']/div[3]/div/div/form/div[4]/div/div/div/span",
             'exportBtnAlert' => "//*[@class='modal-content']/div[3]/div/div/form/div[6]/div/button/span",
+            /*项目列表页标签*/
+            'all'       => "//*[@id='featureBar']/menu/li[1]/a/span[1]",
+            'undone'    => "//*[@id='featureBar']/menu/li[2]/a/span[1]",
+            'wait'      => "//*[@id='featureBar']/menu/li[3]/a/span[1]",
+            'doing'     => "//*[@id='featureBar']/menu/li[4]/a/span[1]",
+            'moreTab'   => "//*[@id='featureBar']/menu/li[5]/a/span[1]",
+            'suspended' => "//*[@id='more']/menu/menu/li[1]/a/div/div",
+            'closed'    => "//*[@id='more']/menu/menu/li[2]/a/div/div",
+            'num'       => "//*[@id='table-project-browse']/div[3]/div[2]/strong"
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
