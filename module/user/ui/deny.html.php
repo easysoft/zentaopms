@@ -45,7 +45,8 @@ panel
     set::title($app->user->account . ' ' . $lang->user->deny),
     set::footerActions
     (array(
-        $referer ? array('url' => helper::safe64Decode($referer), 'text' => $lang->user->goback) : array('back' => 'APP', 'text' => $lang->user->goback),
+        array('text' => $lang->close, 'class' => 'close-app-btn hidden'),
+        $referer ? array('url' => helper::safe64Decode($referer), 'text' => $lang->user->goback) : array('back' => 'APP', 'text' => $lang->user->goback, 'class' => 'go-back-btn'),
         array('data-url' => createLink('user', 'logout', "referer=" . helper::safe64Encode($denyPage)), 'class' => 'primary re-login-btn', 'text' => $lang->user->relogin, 'onclick' => 'locateLogin(this)')
     )),
     set::footerClass('justify-center'),
@@ -54,7 +55,8 @@ panel
         setClass('alert'),
         icon(setClass('icon-3x alert-icon'), set::style(array('opacity' => '0.6')), 'exclamation-sign'),
         div(html($denyContent))
-    )
+    ),
+    on::init()->call('checkGoBackBtn')
 );
 
 render();
