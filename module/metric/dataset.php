@@ -840,8 +840,6 @@ class dataset
         $stmt = $this->dao->select($fieldList)->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution=t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project=t3.id')
-            ->leftJoin(TABLE_USER)->alias('t4')->on('t1.openedBy=t4.account')
-            ->leftJoin(TABLE_TASK)->alias('t5')->on('t1.parent=t5.id')
             ->where('t2.type')->in('sprint,kanban,stage')
             ->andWhere('t1.deleted')->eq('0')
             ->andWhere('t2.deleted')->eq('0')

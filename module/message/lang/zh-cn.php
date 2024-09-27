@@ -52,6 +52,7 @@ $lang->message->label->undeleted    = '还原';
 $lang->message->label->commented    = '备注';
 $lang->message->label->activated    = '激活';
 $lang->message->label->resolved     = '解决';
+$lang->message->label->submitreview = '提交评审';
 $lang->message->label->reviewed     = '评审';
 $lang->message->label->confirmed    = "确认{$lang->SRCommon}";
 $lang->message->label->frombug      = "转{$lang->SRCommon}";

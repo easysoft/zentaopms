@@ -160,6 +160,7 @@ $lang->install->errorTableExists    = '数据表已经存在，您之前应该�
 $lang->install->errorCreateTable    = '创建表失败';
 $lang->install->errorEngineInnodb   = '您当前的数据库不支持使用InnoDB数据表引擎，请修改为MyISAM后重试。';
 $lang->install->errorImportDemoData = '导入demo数据失败';
+$lang->install->errorDBUserPriv     = '当前数据库用户权限不足！\n请切换root用户或使用以下sql语句赋予当前用户权限：\n';
 
 $lang->install->setConfig          = '生成配置文件';
 $lang->install->key                = '配置项';

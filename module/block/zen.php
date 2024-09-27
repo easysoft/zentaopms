@@ -405,35 +405,12 @@ class blockZen extends block
         $welcomeType = '19:00';
         foreach($this->lang->block->welcomeList as $type => $name) $welcomeType = $time >= $type ? $type : $welcomeType;
 
-        /* 获取禅道陪伴当前用户总天数。 */
-        if(!empty($this->config->installedDate))
-        {
-            $firstUseDate = $this->config->global->installedDate;
-        }
-        else
-        {
-            $firstUseDate = $this->dao->select('date')->from(TABLE_ACTION)
-                ->where('date')->gt('1971-01-01')
-                ->andWhere('actor')->eq($this->app->user->account)
-                ->orderBy('date_asc')
-                ->limit('1')
-                ->fetch('date');
-        }
-
-        if($firstUseDate)
-        {
-            $usageDays     = '';
-            $usageDateInfo = helper::getDateInterval($firstUseDate);
-            if(!empty($usageDateInfo->year))  $usageDays .= $usageDateInfo->year . ' ' . $this->lang->year . ' ';
-            if(!empty($usageDateInfo->month)) $usageDays .= $usageDateInfo->month . ' ' . $this->lang->month . ' ';
-            if(!empty($usageDateInfo->day))   $usageDays .= $usageDateInfo->day . ' ' . $this->lang->day . ' ';
-
-            if(!$usageDays) $usageDays .= "0 {$this->lang->day}";
-        }
-        else
-        {
-            $usageDays = ' 1 ' . $this->lang->day; // 最小陪伴天数是一天。
-        }
+        $usageDays = '';
+        $dateUsed  = $this->loadModel('admin')->genDateUsed();
+        if(!empty($dateUsed->year))  $usageDays .= $dateUsed->year  . ' ' . $this->lang->year  . ' ';
+        if(!empty($dateUsed->month)) $usageDays .= $dateUsed->month . ' ' . $this->lang->month . ' ';
+        if(!empty($dateUsed->day))   $usageDays .= $dateUsed->day   . ' ' . $this->lang->day   . ' ';
+        if(!$usageDays) $usageDays = "0 {$this->lang->day}";
         if(strpos($this->app->getClientLang(), 'zh') !== false) $usageDays = str_replace(' ', '', $usageDays);
 
         $yesterday = strtotime("-1 day");

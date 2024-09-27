@@ -86,7 +86,6 @@ else
 
 detailHeader
 (
-    set::back('mr-browse'),
     to::title
     (
         entityLabel
@@ -206,7 +205,7 @@ panel
                 history
                 (
                     set::objectID($MR->id),
-                    set::commentUrl(createLink('action', 'comment', array('objectType' => 'mr', 'objectID' => $MR->id)))
+                    set::commentUrl(createLink('action', 'comment', array('objectType' => $app->rawModule, 'objectID' => $MR->id)))
                 )
             )
         ),

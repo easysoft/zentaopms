@@ -1,5 +1,6 @@
 <?php
 $config->action->objectNameFields['product']      = 'name';
+$config->action->objectNameFields['productline']  = 'name';
 $config->action->objectNameFields['epic']         = 'title';
 $config->action->objectNameFields['story']        = 'title';
 $config->action->objectNameFields['requirement']  = 'title';
@@ -85,7 +86,7 @@ $config->action->majorList['doc']       = array('releaseddoc');
 
 $config->action->needGetProjectType       = 'build,task,bug,case,testcase,caselib,testtask,testsuite,testreport,doc,issue,release,risk,design,opportunity,trainplan,gapanalysis,researchplan,researchreport,';
 $config->action->needGetRelateField       = ',branch,story,epic,requirement,productplan,release,task,build,bug,testcase,case,testtask,testreport,doc,doclib,issue,risk,opportunity,trainplan,gapanalysis,team,whitelist,researchplan,researchreport,meeting,kanbanlane,kanbancolumn,module,review,';
-$config->action->noLinkModules            = ',doclib,module,webhook,gitlab,instance,gitea,gogs,sonarqube,pipeline,jenkins,kanban,kanbanspace,kanbancolumn,kanbanlane,kanbanregion,kanbancard,execution,project,traincategory,apistruct,program,product,user,entry,repo,pivot,scene,boardspace,auditplan,auditresult,';
+$config->action->noLinkModules            = ',doclib,module,webhook,gitlab,instance,gitea,gogs,sonarqube,pipeline,jenkins,kanban,kanbanspace,kanbancolumn,kanbanlane,kanbanregion,kanbancard,execution,project,traincategory,apistruct,program,product,user,entry,repo,pivot,scene,boardspace,auditplan,auditresult,productline,';
 $config->action->ignoreObjectType4Dynamic = 'kanbanregion,kanbanlane,kanbancolumn';
 $config->action->ignoreActions4Dynamic    = 'disconnectxuanxuan,reconnectxuanxuan,loginxuanxuan,logoutxuanxuan,editmr,removemr';
 
@@ -94,7 +95,7 @@ $config->action->latestDateList = array('today', 'yesterday', 'thisWeek', 'lastW
 $config->action->preferredTypeNum = 10;
 
 $config->action->preferredType = new stdclass();
-$config->action->preferredType->ALM   = array('user', 'story', 'task', 'bug', 'case', 'board', 'boardspace', 'doc', 'program', 'product', 'project', 'execution');
+$config->action->preferredType->ALM   = array('user', 'story', 'task', 'bug', 'case', 'board', 'boardspace', 'doc', 'program', 'product', 'productline', 'project', 'execution');
 $config->action->preferredType->light = array('user', 'story', 'task', 'bug', 'case', 'board', 'boardspace', 'doc', 'product', 'project', 'execution');
 
 global $app, $lang;

@@ -187,6 +187,7 @@ $lang->action->objectTypes['metric']           = 'Metric';
 $lang->action->objectTypes['projectbuild']     = 'Build';
 $lang->action->objectTypes['board']            = 'Board';
 $lang->action->objectTypes['boardspace']       = 'Board Space';
+$lang->action->objectTypes['productline']      = 'Product Line';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();

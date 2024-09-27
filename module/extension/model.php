@@ -678,7 +678,7 @@ class extensionModel extends model
                 if(!file_exists($file)) continue;
 
                 /* 如果没有权限或者删除失败则返回提示信息。 */
-                $parentDir = mb_substr($file, 0, strripos($file, '/'));
+                $parentDir = dirname($file);
                 if(!is_writable($file) || !is_writable($parentDir))
                 {
                     $commandTips[] = PHP_OS == 'Linux' ? "sudo rm -fr $file" : "del $file";
@@ -719,7 +719,7 @@ class extensionModel extends model
                 if(!is_dir($path)) continue;
 
                 /* 如果没有权限或者删除失败则返回提示信息。*/
-                $parentDir = mb_substr($path, 0, strripos($path, '/'));
+                $parentDir = dirname($path);
                 if(!is_writable($path) || !is_writable($parentDir))
                 {
                     $commandTips[] = PHP_OS == 'Linux' ? "sudo rm -fr $appRoot$dir" : "rmdir $appRoot$dir /s /q";

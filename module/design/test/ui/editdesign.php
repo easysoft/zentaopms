@@ -19,6 +19,7 @@ cid=2
 chdir(__DIR__);
 include '../lib/editdesign.ui.class.php';
 
+zendata('project')->loadYaml('project', false, 2)->gen(10);
 zendata('design')->loadYaml('design', false, 2)->gen(2);
 zendata('designspec')->loadYaml('designspec', false, 2)->gen(2);
 $tester = new editDesignTester();

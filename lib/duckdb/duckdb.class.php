@@ -195,6 +195,7 @@ class duckdb
         $sql = preg_replace($ztpattern, $replace, $sql);
         $sql = preg_replace($ztvpattern, $replace, $sql);
 
+        $sql = str_replace('zt_action.parquet', 'zt_action_*.parquet', $sql);
         $sql = str_replace('__biPath__', $this->tmpPath, $sql);
         return $sql;
     }

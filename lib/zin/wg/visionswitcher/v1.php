@@ -77,6 +77,11 @@ class visionSwitcher extends wg
         $userVisions   = array_filter(explode(',', $user->visions));
         $configVisions = array_filter(explode(',', trim($config->visions, ',')));
 
+        pageJS(<<<JS
+            window.getUserVisions = () => '{$user->visions}'.split(',');
+            window.getCurrentVision = () => '{$currentVision}';
+        JS);
+
         /* The standalone lite version removes the lite interface button */
         if(trim($config->visions, ',') == 'lite') return;
 
@@ -111,11 +116,6 @@ class visionSwitcher extends wg
             );
         }
 
-        pageJS(<<<JS
-            window.getUserVisions = () => '{$user->visions}'.split(',');
-            window.getCurrentVision = () => '{$currentVision}';
-        JS);
-    
         $dropdown = new dropdown
         (
             new btn

@@ -51,7 +51,7 @@ class zdb
         while($table = $stmt->fetch(PDO::FETCH_ASSOC))
         {
             $tableType = strtolower($table['Table_type']);
-            if($type == 'base' and $tableType != 'base table') continue;
+            if($type == 'base' && $tableType != 'base table' && $tableType != 'table') continue;
 
             $tableName = $table["Tables_in_{$config->db->name}"];
             $allTables[$tableName] = $tableType == 'base table' ? 'table' : $tableType;

@@ -82,6 +82,7 @@ $lang->bug->task             = 'Tâche';
 $lang->bug->relatedBug       = 'Bugs Liés';
 $lang->bug->case             = 'CasTests';
 $lang->bug->linkMR           = 'Related MRs';
+$lang->bug->linkPR           = 'Related PRs';
 $lang->bug->linkCommit       = 'Related Commits';
 $lang->bug->productplan      = $lang->bug->plan;
 $lang->bug->codeBranch       = 'Code branch';

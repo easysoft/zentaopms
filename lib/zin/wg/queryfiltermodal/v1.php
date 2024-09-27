@@ -57,6 +57,8 @@ class queryFilterModal extends wg
             )
         );
 
+        $defaultWgList = array('date' => 'datePicker', 'datetime' => 'datetimePicker', 'input' => 'input', 'select' => 'picker', 'multipleselect' => 'picker');
+
         $type = $this->buildControl
         (
             'type',
@@ -73,7 +75,7 @@ class queryFilterModal extends wg
                 ),
                 picker
                 (
-                    setClass(array('hidden' => $value['type'] !== 'select')),
+                    setClass(array('hidden' => $defaultWgList[$value['type']] !== 'picker')),
                     set::name("typeOption"),
                     set::items($lang->dataview->varFilter->selectList),
                     set::value($value['typeOption'])
@@ -81,15 +83,13 @@ class queryFilterModal extends wg
             )
         );
 
-        $defaultWgList = array('date' => 'datePicker', 'datetime' => 'datetimePicker', 'input' => 'input', 'select' => 'picker');
-
         list($defaultType, $defaultItems, $defaultValue) = array($value['type'], $value['items'], $value['default']);
 
         $default = $this->buildControl
         (
             'default',
             'basis-48',
-            createWg($defaultWgList[$defaultType], set(array('name' => 'default', 'items' => $defaultItems, 'value' => $defaultValue)))
+            createWg($defaultWgList[$defaultType], set(array('name' => 'default', 'items' => $defaultItems, 'value' => $defaultValue, 'multiple' => ($defaultType == 'multipleselect' ? true : false))))
         );
 
         return formRow

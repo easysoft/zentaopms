@@ -1578,6 +1578,8 @@ class productModel extends model
     public function deleteLine(int $lineID): bool
     {
         $this->dao->update(TABLE_MODULE)->set('deleted')->eq(1)->where('id')->eq($lineID)->exec();
+        $this->loadModel('action')->create('productline', $lineID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
+
         $this->dao->update(TABLE_PRODUCT)->set('line')->eq('0')->where('line')->eq($lineID)->exec();
 
         return !dao::isError();

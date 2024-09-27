@@ -6,7 +6,8 @@ class createDocTester extends tester
      * 编辑我的文档库。
      * Edit a doclib.
      *
-     * @param  string $docLibName
+     * @param  string $libName
+     * @param  string $editLibName
      * @access public
      * @return void
      */
@@ -37,7 +38,7 @@ class createDocTester extends tester
      * 删除一个文档库。
      * Delete a docLib.
      *
-     * @param  string $docLibName
+     * @param  string $editLibName
      * @access public
      * @return void
      */

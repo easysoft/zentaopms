@@ -81,7 +81,7 @@ class executionsEntry extends entry
         $useCode = $this->checkCodeUsed();
 
         $fields = 'project,name,begin,end,lifetime,desc,days,percent,parent';
-        if($useCode) $fields .= 'code';
+        if($useCode) $fields .= ',code';
 
         $this->batchSetPost($fields);
 

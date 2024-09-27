@@ -34,7 +34,7 @@ function changeProduct(event)
         loadProductBuilds(productID);
         loadProductPlans(productID);
         loadProductStories(productID, bug.storyID);
-        if(config.currentMethod == 'edit' && edition == 'max') loadIdentify();
+        if(methodName == 'edit' && edition == 'max') loadIdentify();
     }
 }
 
@@ -59,7 +59,7 @@ function changeProject(event)
     loadExecutionLabel(projectID);
     loadExecutions(productID, projectID);
     loadAssignedTo(productID, projectID);
-    if(config.currentMethod == 'edit' && edition == 'max') loadIdentify();
+    if(methodName == 'edit' && edition == 'max') loadIdentify();
 }
 
 function changeExecution(event)
@@ -137,8 +137,8 @@ window.refreshExecutionBuild = function(event)
 
 function loadProductBranches(productID)
 {
-    const branchStatus = config.currentMethod == 'create' ? 'active' : 'all';
-    const oldBranch    = config.currentMethod == 'edit' ? bug.branch : 0;
+    const branchStatus = methodName == 'create' ? 'active' : 'all';
+    const oldBranch    = methodName == 'edit' ? bug.branch : 0;
     let   param        = "productID=" + productID + "&oldBranch=" + oldBranch + "&param=" + branchStatus;
     if(typeof(tab) != 'undefined' && (tab == 'execution' || tab == 'project')) param += "&projectID=" + bug[tab];
     $.getJSON($.createLink('branch', 'ajaxGetBranches', param), function(data)
@@ -155,7 +155,7 @@ function loadProductBranches(productID)
             {
                 $('[name="product"]').closest('.input-group').append($('<div id="branchPicker" class="form-group-wrapper picker-box"></div>').picker({name: 'branch', items: data, defaultValue: data[0].value, required: true}));
             }
-            $('#branchPicker').css('width', config.currentMethod == 'create' ? '120px' : '65px');
+            $('#branchPicker').css('width', methodName == 'create' ? '120px' : '65px');
         }
         else
         {
@@ -167,7 +167,7 @@ function loadProductBranches(productID)
 
 function loadProductModules(productID)
 {
-    if(config.currentMethod == 'edit')
+    if(methodName == 'edit')
     {
         const moduleID = $('[name="module"]').val();
     }
@@ -224,7 +224,7 @@ function loadExecutions(productID, projectID = 0)
 
 function loadExecutionLabel(projectID)
 {
-    if(config.currentMethod == 'create' && projectID > 0)
+    if(methodName == 'create' && projectID > 0)
     {
         const link = $.createLink('bug', 'ajaxGetExecutionLang', 'projectID=' + projectID);
         $.post(link, function(executionLang)
@@ -327,7 +327,7 @@ function loadProjectBuilds(projectID)
     const productID      = $('[name="product"]').val();
     const oldOpenedBuild = $('[name^="openedBuild"]').val() ? $('[name^="openedBuild"]').val().toString() : 0;
 
-    if(config.currentMethod == 'create')
+    if(methodName == 'create')
     {
         const link = $.createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=&branch=' + branch);
         $.getJSON(link, function(data)
@@ -366,7 +366,7 @@ function loadProductBuilds(productID, type = 'normal', buildBox = 'all')
     let branch = $('[name="branch"]').val();
     if(typeof(branch) == 'undefined') branch = 0;
 
-    if(config.currentMethod == 'create')
+    if(methodName == 'create')
     {
         if(buildBox == 'all' || buildBox == 'openedBuild')
         {
@@ -420,7 +420,7 @@ function loadExecutionBuilds(executionID, num)
     if(typeof(branch) == 'undefined')    branch    = 'all';
     if(typeof(productID) == 'undefined') productID = 0;
 
-    if(config.currentMethod == 'create')
+    if(methodName == 'create')
     {
         const link = $.createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + "&branch=" + branch + "&needCreate=true");
         $.getJSON(link, function(data)
@@ -666,7 +666,7 @@ function setBranchRelated(event)
 
 function loadBuildActions()
 {
-    if(config.currentMethod == 'edit') return;
+    if(methodName == 'edit') return;
     $('#createRelease, #createBuild').hide();
     let itemCount = $('[name^=openedBuild]').zui('picker').options.items.length;
     if(itemCount <= 1)

@@ -720,6 +720,7 @@ class user extends control
 
         helper::setcookie('tab', '', time());
         $loginExpired = !(preg_match("/(m=|\/)(index)(&f=|-)(index)(&|-|\.)?/", strtolower($this->referer), $output) || $this->referer == $this->config->webRoot || empty($this->referer) || preg_match("/\/www\/$/", strtolower($this->referer), $output));
+        if($this->cookie->logout) $loginExpired = false;
 
         $this->view->title        = $this->lang->user->login;
         $this->view->plugins      = $this->loadModel('extension')->getExpiringPlugins(true);
@@ -792,6 +793,7 @@ class user extends control
         helper::setcookie('za',  '', time() - 3600);
         helper::setcookie('zp',  '', time() - 3600);
         helper::setcookie('tab', '', time() - 3600);
+        helper::setcookie('logout', '1', 0);
 
         $_SESSION = array();    // Clear session in roadrunner.
         session_destroy();
@@ -830,8 +832,7 @@ class user extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if(!$result) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->resetFail));
 
-            $referer = helper::safe64Encode($this->createLink('index', 'index'));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->user->resetSuccess, 'locate' => inlink('logout', 'referer=' . $referer)));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->user->resetSuccess, 'locate' => inlink('login')));
         }
 
         /* 移除真实路径以确保安全。*/

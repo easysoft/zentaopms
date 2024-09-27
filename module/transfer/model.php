@@ -147,6 +147,7 @@ class transferModel extends model
         $transferFieldList = $this->transferConfig->fieldList; //生成一个完整的fieldList结构。
         if(is_string($this->moduleConfig->dateFields)) $this->moduleConfig->dateFields = explode(',', $this->moduleConfig->dateFields);
         if(is_string($this->moduleConfig->datetimeFields)) $this->moduleConfig->datetimeFields = explode(',', $this->moduleConfig->datetimeFields);
+        if(is_string($this->moduleConfig->textareaFields)) $this->moduleConfig->textareaFields = explode(',', $this->moduleConfig->textareaFields);
 
         $fieldList = array();
         /* build module fieldList. */
@@ -173,6 +174,7 @@ class transferModel extends model
 
             if(in_array($field, $this->moduleConfig->dateFields)) $moduleFieldList['control'] = 'datePicker';
             if(in_array($field, $this->moduleConfig->datetimeFields)) $moduleFieldList['control'] = 'datetimePicker';
+            if(in_array($field, $this->moduleConfig->textareaFields)) $moduleFieldList['control'] = 'textarea';
             $moduleFieldList['multiple'] = $moduleFieldList['control'] == 'multiple';
             if($moduleFieldList['control'] == 'select' || $moduleFieldList['control'] == 'multiple') $moduleFieldList['control'] = 'picker';
 
@@ -444,6 +446,7 @@ class transferModel extends model
         $this->moduleConfig->sysLangFields  = isset($moduleConfig->sysLangFields)  ? $moduleConfig->sysLangFields  : $transferConfig->sysLangFields;
         $this->moduleConfig->sysDataFields  = isset($moduleConfig->sysDataFields)  ? $moduleConfig->sysDataFields  : $transferConfig->sysDataFields;
         $this->moduleConfig->datetimeFields = isset($moduleConfig->datetimeFields) ? $moduleConfig->datetimeFields : $transferConfig->datetimeFields;
+        $this->moduleConfig->textareaFields = isset($moduleConfig->textareaFields) ? $moduleConfig->textareaFields : $transferConfig->textareaFields;
     }
 
     /**

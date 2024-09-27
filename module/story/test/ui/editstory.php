@@ -13,6 +13,8 @@ cid=80
 - 编辑研发需求
 - 成功 最终测试状态 @SUCCESS
 
+- 批量编辑研发需求
+ - 成功 最终测试状态 @SUCCESS
 */
 chdir(__DIR__);
 include '../lib/editstory.ui.class.php';
@@ -35,6 +37,8 @@ $story->path->range('`,1,`, `,2,`, `,3,`');
 $story->grade->range('1');
 $story->product->range('1');
 $story->module->range('0');
+$story->plan->range('0');
+$story->source->range('[]');
 $story->title->range('激活研发需求,激活用户需求,激活业务需求');
 $story->type->range('story,requirement,epic');
 $story->stage->range('wait');
@@ -54,6 +58,19 @@ $storyspec->version->range('1');
 $storyspec->title->range('激活研发需求,激活用户需求,激活业务需求');
 $storyspec->gen(3);
 
+$action = zenData('action');
+$action->id->range('1-4');
+$action->objectType->range('product,story,story,story');
+$action->objectID->range('1,1,2,3');
+$action->product->range('`,1,`');
+$action->project->range('0');
+$action->execution->range('0');
+$action->actor->range('admin');
+$action->action->range('opened');
+$action->read->range('0');
+$action->vision->range('rnd');
+$action->gen(4);
+
 $tester = new editStoryTester();
 $tester->login();
 
@@ -62,4 +79,5 @@ $storyFrom = '客户';
 r($tester->editStory($storyFrom)) && p('module,method')  && e('story,view'); // 编辑需求后跳转页面检查
 r($tester->editStory($storyFrom)) && p('message,status') && e('编辑需求成功,SUCCESS'); // 编辑需求成功
 
+r($tester->batchEditStory($storyFrom)) && p('message,status')  && e('批量编辑研发需求成功,SUCCESS'); // 批量编辑需求成功
 $tester->closeBrowser();

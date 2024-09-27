@@ -17,8 +17,8 @@ dropmenu(set::objectID($repo->id), set::text($repo->name), set::tab('repo'));
 foreach($MRList as $MR)
 {
     /* The user whether has the permission of delete and edit does not require the judge of the permission from the project of the server. */
-    $MR->canDelete = hasPriv('mr', 'delete') ? '' : 'disabled';
-    $MR->canEdit   = hasPriv('mr', 'edit')   ? '' : 'disabled';
+    $MR->canDelete = hasPriv($app->rawModule, 'delete') ? '' : 'disabled';
+    $MR->canEdit   = hasPriv($app->rawModule, 'edit')   ? '' : 'disabled';
 
     if($MR->status == 'merged' || $MR->status == 'closed')
     {
@@ -42,12 +42,12 @@ featureBar
 $linkParams = $app->tab == 'devops' ? "repoID={$repo->id}" : '';
 toolBar
 (
-    hasPriv('mr', 'create') ? item(set(array
+    hasPriv($app->rawModule, 'create') ? item(set(array
     (
         'text'  => $lang->mr->create,
         'icon'  => 'plus',
         'class' => 'btn primary',
-        'url'   => createLink('mr', 'create', $linkParams)
+        'url'   => createLink($app->rawModule, 'create', $linkParams)
     ))) : null
 );
 
@@ -56,7 +56,7 @@ dtable
     set::userMap($users),
     set::cols($config->mr->dtable->fieldList),
     set::data($MRs),
-    set::sortLink(createLink('mr', 'browse', "repoID={$repo->id}&mode={$mode}&param={$param}&objectID={$objectID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
+    set::sortLink(createLink($app->rawModule, 'browse', "repoID={$repo->id}&mode={$mode}&param={$param}&objectID={$objectID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
     set::orderBy($orderBy),
     set::footPager(usePager())
 );

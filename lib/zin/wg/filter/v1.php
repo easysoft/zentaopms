@@ -83,7 +83,7 @@ class filter extends wg
 
     protected function buildControl(string $type): node|array
     {
-        if($type == 'select')   return $this->buildPicker();
+        if($type == 'select' || $type == 'multipleselect') return $this->buildPicker();
         if($type == 'date')     return $this->buildDatePicker();
         if($type == 'datetime') return $this->buildDatetimePicker();
         return $this->buildInput();
