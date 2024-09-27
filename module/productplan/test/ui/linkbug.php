@@ -5,16 +5,6 @@
 title=计划关联bug
 timeout=0
 cid=0
-
-- 检查正常关联bug
- - 测试结果 @关联Bug成功
- - 最终测试状态 @SUCCESS
-- 检查移除单个bug
- - 测试结果 @移除单个Bug成功
- - 最终测试状态 @SUCCESS
-- 检查移除全部bug
- - 测试结果 @移除全部Bug成功
- - 最终测试状态 @SUCCESS
 */
 chdir(__DIR__);
 include '../lib/linkbug.ui.class.php';

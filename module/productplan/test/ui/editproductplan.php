@@ -5,19 +5,6 @@ title=编辑计划
 timeout=0
 cid=0
 
-- 校验计划名称必填
- - 测试结果 @编辑计划提示信息正确
- - 最终测试结果 @SUCCESS
-- 检查计划正常编辑
- - 测试结果 @编辑计划成功
- - 最终测试结果 @SUCCESS
-- 校验结束日期不小于开始日期
- - 测试结果 @日期校验正确
- - 最终测试结果 @SUCCESS
-- 检查编辑计划为待定
- - 测试结果 @编辑待定计划成功
- - 最终测试结果 @SUCCESS
-
 */
 chdir(__DIR__);
 include '../lib/editplan.ui.class.php';
