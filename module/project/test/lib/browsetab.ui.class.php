@@ -17,3 +17,9 @@ class browseTabTester extends tester
         if(!in_array($tab, $tabs)) $form->dom->moreTab->click();
         $form->wait(2);
         $form->dom->$tab->click();
+        $form->wait(2);
+        /*添加断言，判断标签下条数是否符合预期*/
+        if($form->dom->num->getText() == $expectNum) return $this->success($tab . '标签下条数显示正确');
+        return $this->failed($tab . '标签下条数显示不正确');
+    }
+}
