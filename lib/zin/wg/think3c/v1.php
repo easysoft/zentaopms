@@ -31,7 +31,7 @@ class think3c extends thinkModel
 
         return div
         (
-            setData(array('clientLang' => $app->getClientLang(), 'model' => '3c', 'mode' => $mode, 'blocks' => $blocks, 'disabled' => $disabled, 'key' => $key)),
+            setData(array('clientLang' => $app->getClientLang(), 'model' => '3c', 'mode' => $mode, 'blocks' => $blocks, 'disabled' => $disabled)),
             setClass('model-canvas relative flex justify-center', "model-canvas-$key"),
             h::canvas(setID('canvas_' . $key)),
             on::blur('.model-canvas input')->do('
