@@ -51,7 +51,7 @@ dtable
     set::data($objects),
     set::userMap($users),
     set::noNestedCheck(),
-    set::sortLink(inlink('relateObject', "objectID={$objectID}&objectType={$objectType}&relatedObjectType={$relatedObjectType}&actionType=link&relatedObjectID=0&browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
+    set::sortLink(inlink('relateObject', "objectID={$objectID}&objectType={$objectType}&relatedObjectType={$relatedObjectType}&browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
     set::checkable(true),
     set::footToolbar(array('items' => array(array
         (

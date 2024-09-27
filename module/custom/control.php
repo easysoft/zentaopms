@@ -608,7 +608,7 @@ class custom extends control
      * @access public
      * @return void
      */
-    public function relateObject(int $objectID, string $objectType = '', $relatedObjectType = '', string $actionType = 'link', int $relatedObjectID = 0, string $browseType = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function relateObject(int $objectID, string $objectType = '', $relatedObjectType = '', string $browseType = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         if($_POST)
         {

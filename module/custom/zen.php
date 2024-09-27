@@ -414,7 +414,7 @@ class customZen extends custom
     {
         if(in_array($relatedObjectType, array('epic', 'requirement', 'story')))
         {
-            $actionURL = $this->createLink('custom', 'relateObject', "objectID=$objectID&objectType=$objectType&relatedObjectType=$relatedObjectType&actionType=link&relatedObjectID=0&browseType=bySearch");
+            $actionURL = $this->createLink('custom', 'relateObject', "objectID=$objectID&objectType=$objectType&relatedObjectType=$relatedObjectType&browseType=bySearch");
             $this->loadModel('product')->buildSearchForm(0, array(), 0, $actionURL, $relatedObjectType);
         }
     }
