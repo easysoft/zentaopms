@@ -109,6 +109,7 @@ class bugRelatedList extends relatedList
 
         /* Linked MR. */
         $linkMRList  = isset($bug->linkMRTitles) ? $bug->linkMRTitles :array();
+        $linkedPRs   = $this->prop('linkedPRs', data('linkedPRs'));
         if(helper::hasFeature('devops'))
         {
             $data['mr'] = array
