@@ -8,6 +8,7 @@ class think3c extends thinkModel
 {
     protected static array $defineProps = array
     (
+        'key?: string="view"',
         'disabled?=false: bool',
     );
     public static function getPageCSS(): ?string
@@ -24,18 +25,15 @@ class think3c extends thinkModel
     {
         global $lang, $app;
 
+        list($blocks, $mode, $disabled, $key) = $this->prop(array('blocks', 'mode', 'disabled', 'key'));
         jsVar('blockName', $lang->thinkwizard->placeholder->blockName);
-        list($blocks, $mode, $disabled) = $this->prop(array('blocks', 'mode', 'disabled'));
+        jsVar('model3cKey', $key);
 
         return div
         (
-            setData('clientLang', $app->getClientLang()),
-            setData('model', '3c'),
-            setData('mode', $mode),
-            setData('blocks', $blocks),
-            setData('disabled', $disabled),
-            setClass('model-canvas relative flex justify-center'),
-            h::canvas(setID('canvas')),
+            setData(array('clientLang' => $app->getClientLang(), 'model' => '3c', 'mode' => $mode, 'blocks' => $blocks, 'disabled' => $disabled, 'key' => $key)),
+            setClass('model-canvas relative flex justify-center', "model-canvas-$key"),
+            h::canvas(setID('canvas_' . $key)),
             on::blur('.model-canvas input')->do('
                 const index = $(this).data("index");
                 const block = $(this).data("block");
