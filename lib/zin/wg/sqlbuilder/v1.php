@@ -177,7 +177,7 @@ class sqlBuilder extends wg
                     btn
                     (
                         setID('addJoinTable'),
-                        setClass('p-0 ml-4'),
+                        setClass('ml-2 text-primary'),
                         set('data-index', -1),
                         set::type('ghost'),
                         set::icon('plus'),
