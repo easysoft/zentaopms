@@ -1193,6 +1193,11 @@ class biModel extends model
         $copySQLs = array();
         foreach($tables as $table) $copySQLs[] = "copy (select * from {$table}) to '{$duckdbTmpPath}{$table}.parquet'";
 
+        $date = date("Y-m-01 00:00:00");
+        $prefix = $this->config->db->prefix;
+
+        $copySQLs[] = "copy (select * from {$prefix}action where date < TIMESTAMP '$date') to '{$duckdbTmpPath}{$prefix}action_" . date('Y_m', strtotime('-1 month')) . ".parquet'";
+
         $copySQL = implode(';', $copySQLs);
         if(empty($copySQL)) return true;
 
@@ -1218,6 +1223,9 @@ class biModel extends model
 
         $copySQLs  = array();
         foreach($tables as $table) $copySQLs[] = "copy (select * from {$table}) to '{$duckdbTmpPath}{$table}.parquet'";
+
+        $actions = $this->getActionSyncSql();
+        foreach($actions as $table => $sql) $copySQLs[] = "copy ({$sql}) to '{$duckdbTmpPath}{$table}.parquet'";
 
         $this->biTao->updateSyncTime($tables);
 
