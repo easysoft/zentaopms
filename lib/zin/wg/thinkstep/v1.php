@@ -45,7 +45,8 @@ class thinkStep  extends wg
         $canEdit   = common::hasPriv('thinkstep', 'edit');
         $canDelete = common::hasPriv('thinkstep', 'delete');
         $linkType  = $type === 'checkbox' || $type === 'radio' || $type === 'multicolumn';
-        $canLink   = !$isRun && $wizard->model === '3c' && $linkType;
+        $linkmodel = !$isRun && $wizard->model === '3c';
+        $canLink   = common::hasPriv('thinkstep', 'link') && $linkmodel && $linkType;
 
         return div
         (

@@ -159,6 +159,7 @@ class thinkStepMenu extends wg
         $canCreate   = common::hasPriv('thinkstep', 'create');
         $canEdit     = common::hasPriv('thinkstep', 'edit');
         $canDelete   = common::hasPriv('thinkstep', 'delete');
+        $canLink     = common::hasPriv('thinkstep', 'link');
         $parentID    = $item->type != 'node' ? $item->parent : $item->id;
         $confirmTips = $this->lang->thinkstep->deleteTips[$item->type];
         $menus            = array();
@@ -204,8 +205,8 @@ class thinkStepMenu extends wg
             'hint'       => $item->existNotNode ? $this->lang->thinkstep->cannotDeleteNode : $this->lang->thinkstep->cannotDeleteQuestion,
         );
         $options  = $item->type === 'question' ? json_decode($item->options) : null;
-        $canLink  = !empty($options) && ($options->questionType == 'checkbox' || $options->questionType === 'radio' || $options->questionType === 'multicolumn');
-        $linkItem = $canLink && $options->required ? array(
+        $linkType = !empty($options) && ($options->questionType == 'checkbox' || $options->questionType === 'radio' || $options->questionType === 'multicolumn');
+        $linkItem = ($canLink && $linkType && $options->required) ? array(
             'key'          => 'linkNode',
             'icon'         => 'link',
             'text'         => $this->lang->thinkstep->actions['link'],
