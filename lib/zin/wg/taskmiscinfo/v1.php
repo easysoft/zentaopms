@@ -25,6 +25,7 @@ class taskMiscInfo extends relatedList
         {
             $canViewMR  = common::hasPriv('mr', 'view');
             $linkMRList = $this->prop('linkMRTitles', data('linkMRTitles'));
+            $linkedPRs  = $this->prop('linkedPRs', data('linkedPRs'));
             $data['mr'] = array
             (
                 'title'    => $lang->task->linkMR,

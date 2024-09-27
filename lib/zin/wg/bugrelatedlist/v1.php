@@ -133,7 +133,7 @@ class bugRelatedList extends relatedList
             {
                 $data['pr'] = array
                 (
-                    'title' => $lang->task->linkPR,
+                    'title' => $lang->bug->linkPR,
                     'items' => $linkedPRs,
                     'url'   => hasPriv('pullreq', 'view') ? createLink('pullreq', 'view', 'MRID={id}') : false,
                     'props' => array('data-app' => 'devops'),
