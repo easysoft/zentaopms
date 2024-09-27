@@ -66,6 +66,6 @@ class changeStatus extends tester
         $viewPage = $this->initForm('product', 'view', $productID, 'appIframe-product');
         $deleted  = $this->lang->product->deleted;//产品详情页中已删除状态的语言项
         //判断详情页中的状态是否为[已删除]
-        return ($viewPage->dom->status->getText() == $deleted) ? $this->success('删除产品成功') : $this->failed('删除产品失败');
+        return ($viewPage->dom->delStatus->getText() == $deleted) ? $this->success('删除产品成功') : $this->failed('删除产品失败');
     }
 }
