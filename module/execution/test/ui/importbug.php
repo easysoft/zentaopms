@@ -54,3 +54,4 @@ r($tester->importBug('4', '0')) && p('status,message') && e('success','可导入
 r($tester->importBug('3', '2')) && p('status,message') && e('success','导入Bug成功');
 r($tester->importBug('2', '3')) && p('status,message') && e('success','导入Bug成功');
 r($tester->importBug('2', '2')) && p('status,message') && e('success','导入Bug成功');
+$tester->closeBrowser();
