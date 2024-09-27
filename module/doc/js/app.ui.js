@@ -43,7 +43,8 @@ zui.AjaxForm.DEFAULT.onResult = function(res)
 
 function handleSwitchView(view, location, info)
 {
-    const url = $.createLink('doc', 'app', `type=${location.spaceType}&spaceID=${location.spaceID}&libID=${location.libID}&moduleID=${location.moduleID}&docID=${location.docID}&docMode=${view}`.replace(`&spaceID=${location.spaceType === 'mine' ? -1 : 0}&libID=0&moduleID=0&docID=0&docMode=list`, ''));
+    const spaceID = Math.max(0, location.spaceID);
+    const url = $.createLink('doc', 'app', `type=${location.spaceType}&spaceID=${spaceID}&libID=${location.libID}&moduleID=${location.moduleID}&docID=${location.docID}&docMode=${view}`.replace(`&spaceID=${location.spaceType === 'mine' ? -1 : 0}&libID=0&moduleID=0&docID=0&docMode=list`, ''));
     if(url === lastAppUrl) return;
     if(lastAppUrl && !$.apps.getAppUrl().endsWith(url)) $.apps.updateAppUrl(url, info.title ? (info.title + documentTitleSuffix) : originalDocumentTitle);
     lastAppUrl = url;
