@@ -1,5 +1,14 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=批量编辑产品
+timeout=0
+cid=0
+
+*/
+
 chdir(__DIR__);
 include '../lib/batcheditproduct.ui.class.php';
 
@@ -27,6 +36,6 @@ r($tester->batchEditProduct($product3)) && p('message,status') && e('产品状�
 
 $product4 = new stdClass();
 $product4->acl = 'private';
-r($tester->batchEditProduct($product4)) && p('message,status') && e('产品访问控制修改为私有成功,SUCCESS');//批量修改产品访问控制为私有
+r($tester->batchEditProduct($product4)) && p('message,status') && e('产品访问控制修改成功,SUCCESS');//批量修改产品访问控制为私有
 
 $tester->closeBrowser();
