@@ -220,6 +220,7 @@ $lang->story->completeRate     = '完成率';
 $lang->story->reviewed         = '已评审';
 $lang->story->toBeReviewed     = '待评审';
 $lang->story->linkMR           = '相关合并请求';
+$lang->story->linkPR           = '相关推送请求';
 $lang->story->linkCommit       = '相关代码版本';
 $lang->story->URS              = '用户需求';
 $lang->story->estimateUnit     = "（单位：{$lang->story->hour}）";
