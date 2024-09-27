@@ -43,6 +43,26 @@ class taskMiscInfo extends relatedList
                 }
             );
 
+            if($linkedPRs)
+            {
+                $data['pr'] = array
+                (
+                    'title' => $lang->task->linkPR,
+                    'items' => $linkedPRs,
+                    'url'   => hasPriv('pullreq', 'view') ? createLink('pullreq', 'view', 'MRID={id}') : false,
+                    'props' => array('data-app' => 'devops'),
+                    'onRender' => function($item, $mr) use($lang)
+                    {
+                        $item['titleClass'] = 'w-0 flex-1';
+                        $statusClass = $mr->status;
+                        if($mr->status == 'opened') $statusClass = 'draft';
+                        if($mr->status == 'merged') $statusClass = 'done';
+                        $item['content'] = array('html' => "<span class='status-{$statusClass}'>" . zget($lang->mr->statusList, $mr->status) . '</span>');
+                        return $item;
+                    }
+                );
+            }
+
             $linkedCommits = $this->prop('linkCommits', data('linkCommits'));
             $data['linkCommit'] = array
             (
