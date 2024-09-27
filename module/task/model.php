@@ -2309,12 +2309,13 @@ class taskModel extends model
         $minStatus = 'done';
         $teamList  = array_filter($teamData->team);
         $teams     = array();
+        $order     = 1;
         foreach($teamList as $index => $account)
         {
             /* Set member information. */
             $member = new stdclass();
             $member->task     = $task->id;
-            $member->order    = $index;
+            $member->order    = $order ++;
             $member->account  = $account;
             $member->estimate = isset($teamData->teamEstimate) ? (float)zget($teamData->teamEstimate, $index, 0.00) : 0.00;
             $member->consumed = isset($teamData->teamConsumed) ? (float)zget($teamData->teamConsumed, $index, 0.00) : 0.00;
