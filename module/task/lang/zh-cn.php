@@ -202,6 +202,7 @@ $lang->task->noClosed          = '未关闭';
 $lang->task->yesterdayFinished = '昨日完成任务数';
 $lang->task->allTasks          = '总任务';
 $lang->task->linkMR            = '相关合并请求';
+$lang->task->linkPR            = '相关推送请求';
 $lang->task->linkCommit        = '相关代码版本';
 
 $lang->task->statusList['']       = '';

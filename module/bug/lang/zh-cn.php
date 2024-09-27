@@ -82,6 +82,7 @@ $lang->bug->task             = '相关任务';
 $lang->bug->relatedBug       = '相关Bug';
 $lang->bug->case             = '相关用例';
 $lang->bug->linkMR           = '相关合并请求';
+$lang->bug->linkPR           = '相关推送请求';
 $lang->bug->linkCommit       = '相关代码版本';
 $lang->bug->productplan      = $lang->bug->plan;
 $lang->bug->codeBranch       = '代码分支';
