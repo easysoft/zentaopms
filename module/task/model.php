@@ -2315,7 +2315,7 @@ class taskModel extends model
             /* Set member information. */
             $member = new stdclass();
             $member->task     = $task->id;
-            $member->order    = $order ++;
+            $member->order    = $order;
             $member->account  = $account;
             $member->estimate = isset($teamData->teamEstimate) ? (float)zget($teamData->teamEstimate, $index, 0.00) : 0.00;
             $member->consumed = isset($teamData->teamConsumed) ? (float)zget($teamData->teamConsumed, $index, 0.00) : 0.00;
@@ -2345,6 +2345,8 @@ class taskModel extends model
             $this->taskTao->setTeamMember($member, $mode, isset($teams[$account]));
             if(dao::isError()) return false;
             $teams[$account] = $account;
+
+            $order ++;
         }
         return $teams;
     }
