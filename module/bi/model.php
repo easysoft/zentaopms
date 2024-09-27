@@ -1973,7 +1973,7 @@ class biModel extends model
 
         $lastRow     = count($data->array) - 1;
         $hasGroup    = isset($data->groups);
-        $showLastRow = $data->showLastRow;
+        $showLastRow = isset($data->showLastRow) ? $data->showLastRow : false;
 
         $drills = !empty($data->drills) ? array_values($data->drills) : array();
         foreach($data->array as $rowKey => $rowData)
