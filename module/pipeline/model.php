@@ -87,7 +87,7 @@ class pipelineModel extends model
     public function getPairs(string $type = '', bool $checkOnline = false): array
     {
         $type = strtolower($type);
-        if(($this->config->inQuickon && $this->config->inQuickon !== 'false') || !$checkOnline)
+        if(!$this->config->inQuickon || !$checkOnline)
         {
             return $this->dao->select('id,name')->from(TABLE_PIPELINE)
                 ->where('deleted')->eq('0')
