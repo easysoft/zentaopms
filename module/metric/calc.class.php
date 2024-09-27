@@ -695,6 +695,12 @@ class baseCalc
         return $actualDays;
     }
 
+    public function getDevAccountList()
+    {
+        global $dao;
+        return $dao->select('account')->from(TABLE_USER)->where('role')->eq('dev')->andWhere('deleted')->eq('0')->fetchPairs();
+    }
+
     public function getExecutions()
     {
         global $dao;
