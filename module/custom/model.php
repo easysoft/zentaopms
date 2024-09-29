@@ -1465,7 +1465,6 @@ class customModel extends model
         $relationObjectList = array();
         foreach($relationObjects as $object)
         {
-
             $relationName = $object->AID == $objectID ? $relationList[$object->relation]->relation : $relationList[$object->relation]->relativeRelation;
             $id   = $object->AID == $objectID ? 'BID' : 'AID';
             $type = $object->AID == $objectID ? 'BType' : 'AType';
