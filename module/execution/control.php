@@ -192,7 +192,7 @@ class execution extends control
         $actionURL = $this->createLink('execution', 'task', "executionID=$executionID&status=bySearch&param=myQueryID");
         $this->config->execution->search['onMenuBar'] = 'yes';
         if(!$execution->multiple) unset($this->config->execution->search['fields']['execution']);
-        $this->execution->buildTaskSearchForm($executionID, $this->executions, $queryID, $actionURL, $modules);
+        $this->execution->buildTaskSearchForm($executionID, $this->executions, $queryID, $actionURL);
 
         $this->view->title       = $execution->name . $this->lang->hyphen . $this->lang->execution->task;
         $this->view->tasks       = $tasks;

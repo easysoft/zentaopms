@@ -1280,7 +1280,7 @@ class customModel extends model
             ->where('deleted')->eq(0)
             ->beginIF(in_array($objectType, $this->config->custom->objectOwner['product']))->andWhere('product')->in($this->app->user->view->products)->fi()
             ->beginIF(in_array($objectType, $this->config->custom->objectOwner['project']))->andWhere('project')->in($this->app->user->view->projects)->fi()
-            ->beginIF(in_array($objectType, $this->config->custom->objectOwner['execution']))->andWhere('project')->in($this->app->user->view->sprints)->fi()
+            ->beginIF(in_array($objectType, $this->config->custom->objectOwner['execution']))->andWhere('execution')->in($this->app->user->view->sprints)->fi()
             ->beginIF(in_array($objectType, array('epic', 'requirement', 'story')))->andWhere('type')->eq($objectType)->fi()
             ->beginIF($browseType == 'bySearch')->andWhere($this->session->$objectQuery)->fi();
 
@@ -1310,6 +1310,8 @@ class customModel extends model
     public function getObjectCols(string $objectType): array
     {
         $this->loadModel('product');
+        $this->loadModel('project');
+        $this->loadModel('execution');
         $this->loadModel('tree');
 
         $cols = array();
@@ -1326,10 +1328,12 @@ class customModel extends model
                 if(isset($fieldSetting['fixed']) && $fieldSetting['fixed']) $fieldSetting['fixed'] = false;
                 if(isset($fieldSetting['type']) && in_array($fieldSetting['type'], array('assign'))) $fieldSetting['type'] = 'user';
 
-                if(in_array($fieldKey, array('product', 'module'))) $fieldSetting['type'] = 'category';
-                if($fieldKey == 'product') $fieldSetting['map'] = $this->product->getPairs();
-                if($fieldKey == 'module')  $fieldSetting['map'] = $this->tree->getAllModulePairs($objectType);
-                if($fieldKey == 'relation') $fieldSetting = array('name' => 'relation', 'title' => $this->lang->custom->relation, 'type' => 'control', 'control' => 'picker', 'sortType' => false);
+                if(in_array($fieldKey, array('product', 'module', 'project', 'execution'))) $fieldSetting['type'] = 'category';
+                if($fieldKey == 'product')   $fieldSetting['map'] = $this->product->getPairs();
+                if($fieldKey == 'project')   $fieldSetting['map'] = $this->project->getPairs();
+                if($fieldKey == 'execution') $fieldSetting['map'] = $this->execution->getPairs();
+                if($fieldKey == 'module')    $fieldSetting['map'] = $this->tree->getAllModulePairs($objectType);
+                if($fieldKey == 'relation')  $fieldSetting = array('name' => 'relation', 'title' => $this->lang->custom->relation, 'type' => 'control', 'control' => 'picker', 'sortType' => false);
 
                 $cols[$fieldKey] = $fieldSetting;
             }

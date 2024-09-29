@@ -4109,9 +4109,16 @@ class executionModel extends model
      */
     public function buildTaskSearchForm(int $executionID, array $executions, int $queryID, string $actionURL)
     {
+        $showAll = empty($executionID) && empty($executions) ? true : false;
+        if($showAll)
+        {
+            $executions  = $this->getPairs(0, 'all', "nocode,noprefix,multiple");
+            $executionID = current(array_keys($executions));
+        }
+
         $this->config->execution->search['actionURL'] = $actionURL;
         $this->config->execution->search['queryID']   = $queryID;
-        $this->config->execution->search['params']['execution']['values'] = array(''=>'', $executionID => $executions[$executionID], 'all' => $this->lang->execution->allExecutions);
+        $this->config->execution->search['params']['execution']['values'] = $showAll ? $executions : array(''=>'', $executionID => $executions[$executionID], 'all' => $this->lang->execution->allExecutions);
 
         $projects = $this->loadModel('project')->getPairsByProgram();
         $this->config->execution->search['params']['project']['values'] = $projects + array('all' => $this->lang->project->allProjects);

@@ -134,12 +134,14 @@ $config->custom->relateObjectList = array();
 $config->custom->relateObjectList['epic']        = $lang->ERCommon;
 $config->custom->relateObjectList['requirement'] = $lang->URCommon;
 $config->custom->relateObjectList['story']       = $lang->SRCommon;
+$config->custom->relateObjectList['task']        = $lang->task->common;
 
 $config->custom->objectOwner = array();
 $config->custom->objectOwner['product']   = array('epic', 'requirement', 'story');
 $config->custom->objectOwner['project']   = array();
-$config->custom->objectOwner['execution'] = array();
+$config->custom->objectOwner['execution'] = array('task');
 
 $config->custom->relateObjectFields['epic']        = array('id', 'pri', 'title', 'relation', 'product', 'module', 'openedBy', 'assignedTo', 'status');
 $config->custom->relateObjectFields['requirement'] = array('id', 'pri', 'title', 'relation', 'product', 'module', 'openedBy', 'assignedTo', 'status');
 $config->custom->relateObjectFields['story']       = array('id', 'pri', 'title', 'relation', 'product', 'module', 'openedBy', 'assignedTo', 'status');
+$config->custom->relateObjectFields['task']        = array('id', 'pri', 'name', 'relation', 'project', 'execution', 'openedBy', 'assignedTo', 'status');

@@ -164,13 +164,15 @@ $config->task->dtable->fieldList['module']['control']    = 'select';
 $config->task->dtable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getTaskOptionMenu', 'params' => ['rootID' => '$executionID', 'startModule' => (int)0, 'extra' => 'allModule']);
 $config->task->dtable->fieldList['module']['display']    = false;
 
-$config->task->dtable->fieldList['execution']['title']      = 'execution';
+$config->task->dtable->fieldList['execution']['name']       = 'execution';
+$config->task->dtable->fieldList['execution']['title']      = $lang->task->execution;
 $config->task->dtable->fieldList['execution']['control']    = 'hidden';
 $config->task->dtable->fieldList['execution']['type']       = 'html';
 $config->task->dtable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs', 'params' => ['projectID' => 0]);
 $config->task->dtable->fieldList['execution']['display']    = false;
 
-$config->task->dtable->fieldList['project']['title']      = 'project';
+$config->task->dtable->fieldList['project']['name']       = 'project';
+$config->task->dtable->fieldList['project']['title']      = $lang->task->project;
 $config->task->dtable->fieldList['project']['control']    = 'hidden';
 $config->task->dtable->fieldList['project']['type']       = 'html';
 $config->task->dtable->fieldList['project']['dataSource'] = array('module' => 'project', 'method' => 'getPairs');

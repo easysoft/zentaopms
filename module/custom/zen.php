@@ -412,10 +412,9 @@ class customZen extends custom
      */
     protected function buildSearchForm(int $objectID, string $objectType, string $relatedObjectType)
     {
-        if(in_array($relatedObjectType, array('epic', 'requirement', 'story')))
-        {
-            $actionURL = $this->createLink('custom', 'relateObject', "objectID=$objectID&objectType=$objectType&relatedObjectType=$relatedObjectType&browseType=bySearch");
-            $this->loadModel('product')->buildSearchForm(0, array(), 0, $actionURL, $relatedObjectType);
-        }
+        $actionURL = $this->createLink('custom', 'relateObject', "objectID=$objectID&objectType=$objectType&relatedObjectType=$relatedObjectType&browseType=bySearch");
+        if(in_array($relatedObjectType, array('epic', 'requirement', 'story'))) $this->loadModel('product')->buildSearchForm(0, array(), 0, $actionURL, $relatedObjectType);
+
+        if($relatedObjectType == 'task') $this->loadModel('execution')->buildTaskSearchForm(0, array(), 0, $actionURL);
     }
 }
