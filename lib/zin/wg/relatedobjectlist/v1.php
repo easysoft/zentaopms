@@ -71,7 +71,7 @@ class relatedObjectList extends relatedList
             'actions' => isset($item->actions) ? $item->actions : array()
         );
 
-        $props = isset($group['props']) ? $group['props'] : array('data-toggle' => 'modal', 'data-size' => 'lg');
+        $props = isset($group['props']) ? $group['props'] : array('titleAttrs' => array('data-toggle' => 'modal', 'data-size' => 'lg'));
         if($props) $info = array_merge($info, $props);
 
         return $info;
