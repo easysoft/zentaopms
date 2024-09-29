@@ -1489,6 +1489,7 @@ class productModel extends model
     {
         $this->delete(TABLE_PRODUCT, $productID);
         $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(1)->where('product')->eq($productID)->exec();
+        $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('product')->eq($productID)->exec();
         return !dao::isError();
     }
 
