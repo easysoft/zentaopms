@@ -648,43 +648,15 @@ class actionTao extends actionModel
     }
 
     /**
-     * 处理工时相关查询条件。
-     * Process effort related search condition.
-     *
-     * @param  string $condition
-     * @param  string $period
-     * @param  string $begin
-     * @param  string $end
-     * @param  string $beginDate
-     * @access public
-     * @return void
-     */
-    public function processEffortCondition(string &$condition, string $period, string $begin, string $end, string $beginDate): void
-    {
-        $effortSQL = $this->dao->select('id')->from(TABLE_EFFORT)
-            ->where($condition)
-            ->beginIF($period != 'all')
-            ->beginIF($begin)->andWhere('date')->gt($begin)->fi()
-            ->beginIF($end)->andWhere('date')->lt($end)->fi()
-            ->fi()
-            ->beginIF($beginDate)->andWhere('date')->ge($beginDate)->fi()
-            ->get();
-
-        $condition .= " OR (`objectID` IN ({$effortSQL}) AND `objectType` = 'effort')";
-    }
-
-    /**
      * 通过条件获取操作记录列表。
      * Get action list by condition.
      *
      * @param  string     $condition
      * @param  string     $date
-     * @param  string     $period
      * @param  string     $begin
      * @param  string     $end
      * @param  string     $direction
      * @param  string     $account
-     * @param  string     $beginDate
      * @param  string|int $productID
      * @param  string|int $projectID
      * @param  string|int $executionID
@@ -695,7 +667,7 @@ class actionTao extends actionModel
      * @access public
      * @return array|bool
      */
-    public function getActionListByCondition(string $condition, string $date, string $period, string $begin, string $end, string $direction, string $account, string $beginDate, string|int $productID, string|int $projectID, string|int $executionID, array $executions, string $actionCondition, string $orderBy, int $limit = 50): array|bool
+    public function getActionListByCondition(string $condition, string $date, string $begin, string $end, string $direction, string $account, string|int $productID, string|int $projectID, string|int $executionID, array|string $executions, string $actionCondition, string $orderBy, int $limit = 50): array|bool
     {
         $actionTable = in_array($period, $this->config->action->latestDateList) ? TABLE_ACTIONRECENT : TABLE_ACTION;
 
@@ -703,10 +675,10 @@ class actionTao extends actionModel
             ->where('objectType')->notIN($this->config->action->ignoreObjectType4Dynamic)
             ->andWhere('action')->notIN($this->config->action->ignoreActions4Dynamic)
             ->andWhere('vision')->eq($this->config->vision)
-            ->beginIF($period != 'all')->andWhere('date')->gt($begin)->andWhere('date')->lt($end)->fi()
+            ->beginIF($begin != EPOCH_DATE)->andWhere('date')->gt($begin)->fi()
+            ->beginIF($end != FUTURE_DATE)->andWhere('date')->lt($end)->fi()
             ->beginIF($date)->andWhere('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'")->fi()
             ->beginIF($account != 'all')->andWhere('actor')->eq($account)->fi()
-            ->beginIF($beginDate)->andWhere('date')->ge($beginDate)->fi()
             ->beginIF(is_numeric($productID) && $productID)->andWhere('product')->like("%,$productID,%")->fi()
             ->andWhere('1=1', true)
             ->beginIF(is_numeric($projectID) && $projectID)->andWhere('project')->eq($projectID)->fi()
