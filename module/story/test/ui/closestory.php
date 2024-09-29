@@ -35,6 +35,26 @@ $story->root->range('1-6');
 $story->path->range('`,1,`, `,2,`, `,3,`, `,4,`, `,5,`, `,6,`');
 $story->grade->range('1');
 $story->product->range('1');
+$story->module->range('0');
+$story->plan->range('0');
+$story->source->range('[]');
+$story->title->range('激活研发需求1,激活研发需求2,激活用户需求1,激活用户需求2,激活业务需求1,激活业务需求2');
+$story->type->range('story{2},requirement{2},epic{2}');
+$story->stage->range('wait');
+$story->status->range('active');
+$story->openedBy->range('admin');
+$story->version->range('1');
+$story->assignedTo->range('[]');
+$story->reviewedBy->range('[]');
+$story->reviewedDate->range('`NULL`');
+$story->closedBy->range('[]');
+$story->closedReason->range('[]');
+$story->gen(6);
+
+$storyspec = zenData('storyspec');
+$storyspec->story->range('1-6');
+$storyspec->version->range('1');
+$storyspec->title->range('激活研发需求1,激活研发需求2,激活用户需求1,激活用户需求2,激活业务需求1,激活业务需求2');
 $tester = new closeStoryTester();
 $tester->login();
 
