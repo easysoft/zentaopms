@@ -40,7 +40,6 @@ class executionModel extends model
     {
         if(commonModel::isTutorialMode()) return true;
 
-        if(!$this->server->http_referer) return print(js::alert($this->lang->execution->accessDenied) . js::locate($this->createLink('execution', 'all')));
         return $this->app->control->sendError($this->lang->execution->accessDenied, helper::createLink('execution', 'all'));
     }
 
