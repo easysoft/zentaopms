@@ -34,13 +34,19 @@ class think3c extends thinkModel
             setData(array('clientLang' => $app->getClientLang(), 'model' => '3c', 'mode' => $mode, 'blocks' => $blocks, 'disabled' => $disabled)),
             setClass('model-canvas relative flex justify-center', "model-canvas-$key"),
             h::canvas(setID('canvas_' . $key)),
-            on::blur('.model-canvas input')->do('
+            on::blur('.model-canvas input')
+            ->const('blockName', $lang->thinkwizard->block)
+            ->do('
                 const index = $(this).data("index");
                 const block = $(this).data("block");
                 const value = $(this).val() || block;
                 $(this).attr("title", value);
                 $(this).val(value);
-                if($(`.block-title-${index}`).length) $(`.block-title-${index}`).text(value);
+                if($(`.block-title-${index}`).length)
+                {
+                    $(`.block-title-${index}`).text(value);
+                    $(`.block-title-${index}`).closest(".block-title").attr("title", value + blockName);
+                };
             ')
         );
     }
