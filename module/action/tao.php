@@ -655,7 +655,6 @@ class actionTao extends actionModel
      * @param  string     $date
      * @param  string     $begin
      * @param  string     $end
-     * @param  string     $direction
      * @param  string     $account
      * @param  string|int $productID
      * @param  string|int $projectID
@@ -667,7 +666,7 @@ class actionTao extends actionModel
      * @access public
      * @return array|bool
      */
-    public function getActionListByCondition(string $condition, string $date, string $begin, string $end, string $direction, string $account, string|int $productID, string|int $projectID, string|int $executionID, array|string $executions, string $actionCondition, string $orderBy, int $limit = 50): array|bool
+    public function getActionListByCondition(string $condition, string $date, string $begin, string $end, string $account, string|int $productID, string|int $projectID, string|int $executionID, array|string $executions, string $actionCondition, string $orderBy, int $limit = 50): array|bool
     {
         $actionTable = in_array($period, $this->config->action->latestDateList) ? TABLE_ACTIONRECENT : TABLE_ACTION;
 
@@ -675,16 +674,13 @@ class actionTao extends actionModel
             ->where('objectType')->notIN($this->config->action->ignoreObjectType4Dynamic)
             ->andWhere('action')->notIN($this->config->action->ignoreActions4Dynamic)
             ->andWhere('vision')->eq($this->config->vision)
-            ->beginIF($begin != EPOCH_DATE)->andWhere('date')->gt($begin)->fi()
-            ->beginIF($end != FUTURE_DATE)->andWhere('date')->lt($end)->fi()
-            ->beginIF($date)->andWhere('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'")->fi()
+            ->beginIF($begin != EPOCH_DATE)->andWhere('date')->ge($begin)->fi()
+            ->beginIF($end != FUTURE_DATE)->andWhere('date')->le($end)->fi()
             ->beginIF($account != 'all')->andWhere('actor')->eq($account)->fi()
             ->beginIF(is_numeric($productID) && $productID)->andWhere('product')->like("%,$productID,%")->fi()
-            ->andWhere('1=1', true)
             ->beginIF(is_numeric($projectID) && $projectID)->andWhere('project')->eq($projectID)->fi()
             ->beginIF(!empty($executions))->andWhere('execution')->in(array_keys($executions))->fi()
             ->beginIF(is_numeric($executionID) && $executionID)->andWhere('execution')->eq($executionID)->fi()
-            ->markRight(1)
             /* lite模式下需要排除的一些类型。 */
             /* Types excluded from Lite. */
             ->beginIF($this->config->vision == 'lite')->andWhere('objectType')->notin('product')->fi()
