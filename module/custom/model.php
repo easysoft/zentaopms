@@ -1473,7 +1473,15 @@ class customModel extends model
 
             $objectInfo = $this->loadModel($object->$type)->fetchByID($object->$id);
             $title      = empty($objectInfo->title) ? (empty($objectInfo->name) ? '' : $objectInfo->name) : $objectInfo->title;
-            $relationObjectList[$relationName][$object->$type][$object->$id] = $title;
+            $hasPriv    = false;
+            if(common::hasPriv($object->$type, 'view'))
+            {
+                if($this->app->user->admin) $hasPriv = true;
+                if(in_array($object->$type, $this->config->custom->objectOwner['product']) && !empty($objectInfo->product) && strpos(",{$this->app->user->view->products},", ",{$objectInfo->product},") !== false) $hasPriv = true;
+                if(in_array($object->$type, $this->config->custom->objectOwner['project']) && !empty($objectInfo->project) && strpos(",{$this->app->user->view->projects},", ",{$objectInfo->project},") !== false) $hasPriv = true;
+                if(in_array($object->$type, $this->config->custom->objectOwner['execution']) && !empty($objectInfo->execution) && strpos(",{$this->app->user->view->sprints},", ",{$objectInfo->execution},") !== false) $hasPriv = true;
+            }
+            $relationObjectList[$relationName][$object->$type][$object->$id] = array('title' => $title, 'hasPriv' => $hasPriv);
         }
 
         return $relationObjectList;

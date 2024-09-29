@@ -36,17 +36,19 @@ class relatedObjectList extends relatedList
         JS;
     }
 
-    protected function getObjectItem(int $relatedObjectID, string $relatedObjectType, string $relatedObjectTitle, string $relationName): object
+    protected function getObjectItem(int $relatedObjectID, string $relatedObjectType, array $relatedObjectTitle, string $relationName): object
     {
         global $config,$lang;
         $objectID   = $this->prop('objectID');
         $objectType = $this->prop('objectType');
+        $title      = $relatedObjectTitle['title'];
+        $hasPriv    = $relatedObjectTitle['hasPriv'];
 
         $item = new stdClass();
         $item->id    = $relatedObjectID;
-        $item->title = "#$relatedObjectID $relatedObjectTitle";
+        $item->title = "#$relatedObjectID $title";
         $item->type  = $config->custom->relateObjectList[$relatedObjectType];
-        $item->url   = hasPriv($relatedObjectType, 'view') ? createLink($relatedObjectType, 'view', "objectID=$relatedObjectID") : false;
+        $item->url   = $hasPriv ? createLink($relatedObjectType, 'view', "objectID=$relatedObjectID") : null;
 
         if(hasPriv('custom', 'removeObjects'))
         {
