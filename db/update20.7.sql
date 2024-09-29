@@ -17,3 +17,5 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'proje
 REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'projectstory', 'batchImportToLib' FROM `zt_grouppriv` WHERE `module` = 'story' AND `method` = 'batchImportToLib';
 
 CREATE UNIQUE INDEX `account_openID` ON `zt_oauth`(`account`,`openID`,`providerType`,`providerID`);
+
+ALTER TABLE `zt_taskteam` CHANGE `order` `order` int(8) NOT NULL DEFAULT '0';
