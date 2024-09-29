@@ -12,8 +12,7 @@ include dirname(__FILE__, 5) . '/test/lib/ui.php';
 class closeStoryTester extends tester
 {
     /**
-     * check the stuts after close story
-     * check the stuts of the childstory after close parent
+     * Check the stuts and closedReason after close story.
      *
      * @param string closeReason
      * @access public
@@ -39,7 +38,7 @@ class closeStoryTester extends tester
     }
 
     /**
-     * check the stuts and closedReason after batchclose childstory
+     * check the stuts and closedReason after batchclose story.
      *
      * @param string closeReason
      * @access public
