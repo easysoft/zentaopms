@@ -37,7 +37,7 @@ class closeStoryTester extends tester
         return $this->success('关闭需求成功');
     }
     /**
-     * check the stuts after batchclose childstory
+     * check the stuts and closedReason after batchclose childstory
      * @param string closeReason
      * @access public
      * @return object
@@ -56,4 +56,10 @@ class closeStoryTester extends tester
         $batchClose->wait(1);
 
         $viewPage = $this->initForm('story', 'view', array('storyID' => '2'), 'appIframe-product');
+        if($viewPage->dom->status->getText() != '已关闭') return $this->failed('需求状态不正确');
+        $viewPage->dom->btn($this->lang->story->legendLifeTime)->click();
+        if($viewPage->dom->closeReason->getText() != $closeReason) return $this->failed('需求关闭原因不正确');
+
+        return $this->success('批量关闭需求成功');
+    }
 }
