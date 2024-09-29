@@ -422,7 +422,7 @@ $lang->story->action->synctwins             = array('main' => "\$date, 系统判
 $lang->story->action->syncgrade             = array('main' => "\$date, 系统判断由于父需求层级变动，本需求层级同步修改为 <strong>\$extra</strong>。");
 $lang->story->action->linked2roadmap        = array('main' => '$date, 由 <strong>$actor</strong> 关联到路标 <strong>$extra</strong>。');
 $lang->story->action->unlinkedfromroadmap   = array('main' => '$date, 由 <strong>$actor</strong> 从路标 <strong>$extra</strong> 移除。');
-$lang->story->action->changedbycharter      = array('main' => '$date, 由 <strong>$actor</strong> 通过立项申请 <strong>$extra</strong> ，需求状态同步调整为已立项。');
+$lang->story->action->changedbycharter      = array('main' => '$date, 由 <strong>$actor</strong> 通过立项申请 <strong>$extra</strong> ，需求阶段同步调整为Charter立项。');
 
 /* 统计报表。*/
 $lang->story->report = new stdclass();
