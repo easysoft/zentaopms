@@ -58,7 +58,7 @@ class sqlBuilderQueryFilter extends wg
 
         $items    = $type == 'picker' ? $$items : array();
         $value    = $rowValue[$name];
-        $isSelect = $name == 'type' && $value == 'select';
+        $isSelect = $name == 'type' && strpos($value, 'select') !== false;
         $errorKey = "query_{$name}_{$index}";
 
         if($isSelect) $width = (string)(int)$width / 2;
@@ -66,7 +66,7 @@ class sqlBuilderQueryFilter extends wg
         if($name == 'default')
         {
             $type = $rowValue['type'];
-            if($type == 'select') $type = 'picker';
+            if($type == 'select' || $type == 'multipleselect') $type = 'picker';
             $items = \zget($defaultItems, $rowValue['typeOption'], array());
         }
 
@@ -82,7 +82,8 @@ class sqlBuilderQueryFilter extends wg
                 set::value($value),
                 set::required($name == 'type'),
                 set::error(isset($error[$errorKey])),
-                set::onChange($onChange)
+                set::onChange($onChange),
+                set::multiple($name == 'default' && $rowValue['type'] == 'multipleselect')
             ),
             $isSelect ? sqlBuilderPicker
             (
