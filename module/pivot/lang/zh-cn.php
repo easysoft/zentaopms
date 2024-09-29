@@ -425,8 +425,8 @@ $lang->pivot->stepDesign->total          = '总计';
 
 $lang->pivot->stepDesign->columnPositionList = array();
 $lang->pivot->stepDesign->columnPositionList['bottom'] = '仅在整张表下方展示';
-$lang->pivot->stepDesign->columnPositionList['row']    = '仅在每层行分组下方展示';
-$lang->pivot->stepDesign->columnPositionList['all']    = '在整张表与每层行分组下方均展示';
+//$lang->pivot->stepDesign->columnPositionList['row']    = '仅在每层行分组下方展示';
+//$lang->pivot->stepDesign->columnPositionList['all']    = '在整张表与每层行分组下方均展示';
 
 $lang->pivot->stepDesign->columnTotalList = array();
 $lang->pivot->stepDesign->columnTotalList['noShow'] = '不显示';
