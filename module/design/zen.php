@@ -51,6 +51,6 @@ class designZen extends control
             $count ++;
         }
 
-        $this->lang->ipd->menu->design = $this->lang->waterfall->menu->design;
+        if($this->config->edition == 'ipd') $this->lang->ipd->menu->design = $this->lang->waterfall->menu->design;
     }
 }
