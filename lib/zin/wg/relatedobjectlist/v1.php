@@ -21,7 +21,7 @@ class relatedObjectList extends relatedList
         {
             const obj = $(e.target).closest('li').find('.removeObject');
             const ul  = obj.closest('ul');
-            zui.Modal.confirm({message: `{$lang->removeObjectTip}`, icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
+            zui.Modal.confirm({message: `{$lang->custom->removeObjectTip}`, icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
             {
                 if(res)
                 {
@@ -62,7 +62,7 @@ class relatedObjectList extends relatedList
                 'data-url'    => $removeObjectUrl,
                 'data-params' => 'event',
                 'data-call'   => 'removeObject',
-                'hint'        => $lang->removeObjects
+                'hint'        => $lang->custom->removeObjects
             );
             $item->actions = array($btn);
         }
@@ -128,7 +128,7 @@ class relatedObjectList extends relatedList
             setClass('my-2'),
             setData(array('toggle' => 'modal', 'size' => 'lg')),
             setID('linkButton'),
-            $lang->relatedObjects
+            $lang->custom->relateObject
         ) : null;
         return array($list, $btn);
     }

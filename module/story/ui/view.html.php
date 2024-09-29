@@ -178,7 +178,7 @@ if(!in_array($config->vision, array('lite', 'or')))
 {
     $tabs[] = setting()
         ->group('relatives')
-        ->title($lang->relatedObjects)
+        ->title($lang->custom->relateObject)
         ->control('relatedObjectList')
         ->objectID($story->id)
         ->objectType($story->type);

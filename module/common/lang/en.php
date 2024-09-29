@@ -147,9 +147,6 @@ $lang->levelExceeded   = 'The level has exceeded the display range. For more inf
 $lang->noticeOkFile    = 'For security reasons, your Admin account has to be confirmed. \n Please login ZenTao server and create %s File.\n Note:\n 1. File is blank.\n 2. If the file existed, delete it and then create a new one.';
 $lang->noticeDrag      = 'Click to add or drag to upload, no more than %s';
 $lang->allProgress     = 'All Progress';
-$lang->relatedObjects  = 'Related Objects';
-$lang->removeObjects   = 'Remove Objects';
-$lang->removeObjectTip = 'Are you sure to dissolve this relation?';
 
 $lang->fieldDisplaySetting = 'Field Display Setting';
 $lang->fieldSettingTip     = 'The following fields are collapsed by default, click on the "Show more fields" button to expand the view, if you want some fields not to be collapsed by default, you can fix it with a pin.';

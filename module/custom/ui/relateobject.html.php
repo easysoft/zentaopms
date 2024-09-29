@@ -17,14 +17,14 @@ jsVar('relationPairs', $relationPairs);
 jsVar('objectID', $objectID);
 jsVar('objectType', $objectType);
 
-modalHeader(set::title($lang->relatedObjects), set::titleClass('font-bold text-lg'));
+modalHeader(set::title($lang->custom->relateObject), set::titleClass('font-bold text-lg'));
 
 featureBar
 (
     inputGroup
     (
         set::className('mb-4 mr-4'),
-        $lang->relatedObjects,
+        $lang->custom->relateObject,
         picker
         (
             set::name('relatedObjectType'),

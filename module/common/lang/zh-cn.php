@@ -147,9 +147,6 @@ $lang->levelExceeded   = '层级已超过显示范围，更多信息请前往网
 $lang->noticeOkFile    = '为了安全起见，系统需要确认您的管理员身份。\n 请登录禅道所在的服务器，创建%s文件。\n 注意：\n 1. 文件内容为空。\n 2. 如果之前文件存在，删除之后重新创建。';
 $lang->noticeDrag      = '可点击添加或拖拽上传, 不超过 %s';
 $lang->allProgress     = '总进度';
-$lang->relatedObjects  = '关联对象';
-$lang->removeObjects   = '解除关联关系';
-$lang->removeObjectTip = '您确定解除该关联关系吗？';
 
 $lang->fieldDisplaySetting = '字段显示设置';
 $lang->fieldSettingTip     = '以下字段默认收起，点击「显示更多字段」按钮展开查看，若您希望某些字段默认不收起，通过图钉固定即可。';
