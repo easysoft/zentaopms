@@ -160,7 +160,7 @@ class createDocTester extends tester
         $form->dom->createLibBtn->click();
         $form->wait(1);
         $form->dom->spaceName->setValue($teamSpace->spaceName);
-        $form->dom->name->setValue($teamLib);
+        $form->dom->name->setValue($teamLib->libName);
         $form->dom->btn($this->lang->save)->click();
         $form->wait(1);
 
@@ -171,5 +171,11 @@ class createDocTester extends tester
         $form->dom->saveBtn->click();
         $form->wait(1);
         $form->dom->releaseBtn->click();
+
+        $this->openUrl('doc', 'teamSpace');
+        $form->dom->search(array("文档标题,=,{$docName->dcName}"));
+        $form->wait(1);
+        if($form->dom->fstDocName->getText() != $docName->dcName) return $this->failed('创建团队空间文档失败。');
+        return $this->success('创建团队空间文档成功。');
     }
 }
