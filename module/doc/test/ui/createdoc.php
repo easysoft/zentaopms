@@ -59,4 +59,4 @@ r($tester->createDraft($draftName))                  && p('message,status') && e
 r($tester->createDoc($docName))                      && p('message,status') && e('创建文档成功,SUCCESS');     //创建文档成功
 r($tester->createProductDoc($productName, $docName)) && p('message,status') && e('创建产品文档成功,SUCCESS'); //创建产品空间下的文档成功
 r($tester->createProjectDoc($projectName, $executionName, $plan, $docName)) && p('message,status') && e('创建项目文档成功,SUCCESS'); //创建项目空间下的文档成功
-r($tester->createTeamDoc($teamSpace, $teamLib, $docName)) && p('message,status') && e('创建团队文档成功,SUCCESS'); //创建团队空间文档成功
+r($tester->createTeamDoc($teamSpace, $teamLib, $docName))                   && p('message,status') && e('创建团队文档成功,SUCCESS'); //创建团队空间文档成功
