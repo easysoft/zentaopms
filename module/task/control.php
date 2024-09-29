@@ -383,17 +383,18 @@ class task extends control
         /* Execute workflow hooks if edition is not open. */
         if($this->config->edition != 'open') $this->executeHooks($taskID);
 
-        $this->view->title        = "TASK#$task->id $task->name / $execution->name";
-        $this->view->execution    = $execution;
-        $this->view->task         = $task;
-        $this->view->actions      = $this->loadModel('action')->getList('task', $taskID);
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
-        $this->view->preAndNext   = $this->loadModel('common')->getPreAndNextObject('task', $taskID);
-        $this->view->product      = $this->tree->getProduct($task->module);
-        $this->view->modulePath   = $this->tree->getParents($task->module);
-        $this->view->linkMRTitles = $this->loadModel('mr')->getLinkedMRPairs($taskID, 'task');
-        $this->view->linkCommits  = $this->loadModel('repo')->getCommitsByObject($taskID, 'task');
-        $this->view->hasGitRepo   = $this->taskZen->checkGitRepo($execution->id);
+        $this->view->title          = "TASK#$task->id $task->name / $execution->name";
+        $this->view->execution      = $execution;
+        $this->view->task           = $task;
+        $this->view->actions        = $this->loadModel('action')->getList('task', $taskID);
+        $this->view->users          = $this->loadModel('user')->getPairs('noletter');
+        $this->view->preAndNext     = $this->loadModel('common')->getPreAndNextObject('task', $taskID);
+        $this->view->product        = $this->tree->getProduct($task->module);
+        $this->view->modulePath     = $this->tree->getParents($task->module);
+        $this->view->linkMRTitles   = $this->loadModel('mr')->getLinkedMRPairs($taskID, 'task');
+        $this->view->linkCommits    = $this->loadModel('repo')->getCommitsByObject($taskID, 'task');
+        $this->view->hasGitRepo     = $this->taskZen->checkGitRepo($execution->id);
+        $this->view->relatedObjects = $this->loadModel('custom')->getRelatedObjectList($task->id, 'task');
         $this->display();
     }
 
