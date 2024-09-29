@@ -461,6 +461,8 @@ class storyModel extends model
         }
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
+        $this->common->saveQueryCondition($this->dao->get(), 'epic', false);
+        $this->common->saveQueryCondition($this->dao->get(), 'requirement', false);
 
         /* Add parent list for display. */
         foreach($stories as $story)
