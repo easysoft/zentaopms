@@ -80,7 +80,7 @@ class relatedObjectList extends relatedList
             'title'      => $title,
             'hint'       => $title,
             'titleAttrs' => $item->titleAttrs,
-            'leading'    => array('html' => wg(idLabel::create($item->type))->render()),
+            'leading'    => array('html' => wg(idLabel::create($item->type, array('class' => 'text-clip')))->render()),
             'url'        => $item->url,
             'actions'    => isset($item->actions) ? $item->actions : array()
         );
