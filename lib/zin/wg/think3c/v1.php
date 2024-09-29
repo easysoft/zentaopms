@@ -36,18 +36,16 @@ class think3c extends thinkModel
             h::canvas(setID('canvas_' . $key)),
             on::blur('.model-canvas input')
             ->const('blockName', $lang->thinkwizard->block)
-            ->do('
-                const index = $(this).data("index");
-                const block = $(this).data("block");
-                const value = $(this).val() || block;
-                $(this).attr("title", value);
-                $(this).val(value);
-                if($(`.block-title-${index}`).length)
-                {
-                    $(`.block-title-${index}`).text(value);
-                    $(`.block-title-${index}`).closest(".block-title").attr("title", value + blockName);
-                };
-            ')
+            ->do(
+                'const $tatget = $(this);',
+                'const index = $tatget.data("index");',
+                'const block = $tatget.data("block");',
+                'const value = $tatget.val() || block;',
+                'const $blockTitle = $(`.block-title-${index}`);',
+                '$tatget.attr("title", value);',
+                '$tatget.val(value);',
+                'if($blockTitle.length) {$blockTitle.text(value); $blockTitle.closest(".block-title").attr("title", value + blockName);};'
+            )
         );
     }
 
