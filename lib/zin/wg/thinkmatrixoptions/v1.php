@@ -24,6 +24,7 @@ class thinkMatrixOptions extends wg
         'addColTip?: string',           // 禁用添加提示。
         'addColText: string',           // 添加列按钮文字。
         'quotedQuestions?: array',      // 引用当前选项的问题。
+        'linkColumn?: array'            // 关联区块的列
     );
 
     public static function getPageJS(): ?string
@@ -45,6 +46,7 @@ class thinkMatrixOptions extends wg
         $deleteColTip = $this->prop('deleteColTip', $lang->thinkstep->tips->deleteCol);
         $addColText   = $this->prop('addColText', $lang->thinkstep->addCol);
         $addColTip    = $this->prop('addColTip', $lang->thinkstep->tips->addCol);
+        $linkColumn   = $this->prop('linkColumn');
 
         return div
         (
@@ -54,6 +56,8 @@ class thinkMatrixOptions extends wg
             setData('quotedQuestions', $this->prop('quotedQuestions')),
             setData('tipQuestion', $lang->thinkstep->tips->question),
             setData('cannotDeleteColumnTip', $lang->thinkstep->tips->cannotDeleteColumn),
+            setData('linkCannotDeleteTip', $lang->thinkstep->tips->linkCannotDeleteTip),
+            setData('linkColumn', !empty($linkColumn) ? $linkColumn : array()),
             zui::thinkMatrixOptions
             (
                 set::_to("#$id"),
