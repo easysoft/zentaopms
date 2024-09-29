@@ -36,6 +36,7 @@ class closeStoryTester extends tester
 
         return $this->success('关闭需求成功');
     }
+
     /**
      * check the stuts and closedReason after batchclose childstory
      * @param string closeReason
