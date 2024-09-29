@@ -1481,7 +1481,7 @@ class customModel extends model
                 if(in_array($object->$type, $this->config->custom->objectOwner['project']) && !empty($objectInfo->project) && strpos(",{$this->app->user->view->projects},", ",{$objectInfo->project},") !== false) $hasPriv = true;
                 if(in_array($object->$type, $this->config->custom->objectOwner['execution']) && !empty($objectInfo->execution) && strpos(",{$this->app->user->view->sprints},", ",{$objectInfo->execution},") !== false) $hasPriv = true;
             }
-            $relationObjectList[$relationName][$object->$type][$object->$id] = array('title' => $title, 'hasPriv' => $hasPriv);
+            $relationObjectList[$relationName][$object->$type][$object->$id] = array('title' => $title, 'url' => $hasPriv ? helper::createLink($object->$type, 'view', "objectID={$object->id}") : null);
         }
 
         return $relationObjectList;

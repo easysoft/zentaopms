@@ -42,13 +42,13 @@ class relatedObjectList extends relatedList
         $objectID   = $this->prop('objectID');
         $objectType = $this->prop('objectType');
         $title      = $relatedObjectTitle['title'];
-        $hasPriv    = $relatedObjectTitle['hasPriv'];
 
         $item = new stdClass();
-        $item->id    = $relatedObjectID;
-        $item->title = "#$relatedObjectID $title";
-        $item->type  = $config->custom->relateObjectList[$relatedObjectType];
-        $item->url   = $hasPriv ? createLink($relatedObjectType, 'view', "objectID=$relatedObjectID") : null;
+        $item->id         = $relatedObjectID;
+        $item->title      = "#$relatedObjectID $title";
+        $item->type       = $config->custom->relateObjectList[$relatedObjectType];
+        $item->url        = !empty($relatedObjectTitle['url']) ? $relatedObjectTitle['url'] : null;
+        $item->titleAttrs = !empty($relatedObjectTitle['url']) ? array('data-toggle' => 'modal', 'data-size' => 'lg') : null;
 
         if(hasPriv('custom', 'removeObjects'))
         {
@@ -77,16 +77,13 @@ class relatedObjectList extends relatedList
         if(isset($item->name))  $title = $item->name;
         $info = array
         (
-            'title'   => $title,
-            'hint'    => $title,
-            'leading' => array('html' => wg(idLabel::create($item->type))->render()),
-            'url'     => $item->url,
-            'actions' => isset($item->actions) ? $item->actions : array()
+            'title'      => $title,
+            'hint'       => $title,
+            'titleAttrs' => $item->titleAttrs,
+            'leading'    => array('html' => wg(idLabel::create($item->type))->render()),
+            'url'        => $item->url,
+            'actions'    => isset($item->actions) ? $item->actions : array()
         );
-
-        $props = isset($group['props']) ? $group['props'] : array('titleAttrs' => array('data-toggle' => 'modal', 'data-size' => 'lg'));
-        if($props) $info = array_merge($info, $props);
-
         return $info;
     }
 
