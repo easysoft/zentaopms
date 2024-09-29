@@ -14,6 +14,7 @@ class closeStoryTester extends tester
     /**
      * check the stuts after close story
      * check the stuts of the childstory after close parent
+     *
      * @param string closeReason
      * @access public
      * @return object
@@ -39,25 +40,30 @@ class closeStoryTester extends tester
 
     /**
      * check the stuts and closedReason after batchclose childstory
+     *
      * @param string closeReason
      * @access public
      * @return object
      */
     public function batchCloseStory($closeReason)
     {
+        /*列表页面点击批量关闭按钮进入批量关闭页面*/
         $browsePage = $this->initForm('product', 'browse', '1');
         $browsePage->dom->firstSelect->click();
         $browsePage->dom->batchMore->click();
         sleep(1);
         $browsePage->dom->getElement("/html/body/div[2]/menu/menu/li[1]/a/div/div")->click();
         sleep(1);
+
         $batchClose = $this->loadPage('story', 'batchClose');
         $batchClose->dom->batchClosedReason->picker($closeReason);
         $batchClose->dom->batchClosedSave->click();
         $batchClose->wait(1);
 
+        /*检查需求详情页需求状态和关闭原因*/
         $viewPage = $this->initForm('story', 'view', array('storyID' => '2'), 'appIframe-product');
         if($viewPage->dom->status->getText() != '已关闭') return $this->failed('需求状态不正确');
+
         $viewPage->dom->btn($this->lang->story->legendLifeTime)->click();
         if($viewPage->dom->closeReason->getText() != $closeReason) return $this->failed('需求关闭原因不正确');
 
