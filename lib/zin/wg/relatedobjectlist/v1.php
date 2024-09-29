@@ -19,8 +19,18 @@ class relatedObjectList extends relatedList
         window.removeObject = function(e)
         {
             const $this = $(e.target).closest('li').find('.removeObject');
-            $.get($this.attr('data-url'), function(){$this.closest('li').remove()});
-            loadPage();
+            const $ul   = $this.closest('ul');
+            zui.Modal.confirm({message: $ul.parent().closest('ul').data('removeObjectTip'), icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
+            {
+                if(res)
+                {
+                    $.get($this.attr('data-url'), function()
+                    {
+                        $this.closest('li').remove();
+                        if($ul.find('li').length == 0) $ul.closest('li').remove();
+                    });
+                }
+            });
         };
         JS;
     }
@@ -106,6 +116,7 @@ class relatedObjectList extends relatedList
         global $lang;
         $list = parent::build();
         $list->add(set::hoverItemActions());
+        if(hasPriv('custom', 'removeObjects')) $list->add(setData('removeObjectTip', $lang->removeObjectTip));
 
         $objectID   = $this->prop('objectID');
         $objectType = $this->prop('objectType');

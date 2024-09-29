@@ -149,6 +149,7 @@ $lang->noticeDrag      = '可点击添加或拖拽上传, 不超过 %s';
 $lang->allProgress     = '总进度';
 $lang->relatedObjects  = '关联对象';
 $lang->removeObjects   = '解除关联关系';
+$lang->removeObjectTip = '您确定解除该关联关系吗？';
 
 $lang->fieldDisplaySetting = '字段显示设置';
 $lang->fieldSettingTip     = '以下字段默认收起，点击「显示更多字段」按钮展开查看，若您希望某些字段默认不收起，通过图钉固定即可。';
