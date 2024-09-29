@@ -20,8 +20,7 @@ class closeStoryTester extends tester
      */
     public function closeStory($storyID, $closeReason)
     {
-        $form = $this->openURL('story', 'view', array('id' => $storyID), 'appIframe-product');  //进入研发需求详情页
-        $form = $this->loadPage('story', 'view');
+        $form = $this->initForm('story', 'view', array('id' => $storyID), 'appIframe-product');  //进入研发需求详情页
         $form->dom->btn($this->lang->story->close)->click();  //点击关闭需求按钮
 
         $form->wait(1);
@@ -37,4 +36,24 @@ class closeStoryTester extends tester
 
         return $this->success('关闭需求成功');
     }
+    /**
+     * check the stuts after batchclose childstory
+     * @param string closeReason
+     * @access public
+     * @return object
+     */
+    public function batchCloseStory($closeReason)
+    {
+        $browsePage = $this->initForm('product', 'browse', '1');
+        $browsePage->dom->firstSelect->click();
+        $browsePage->dom->batchMore->click();
+        sleep(1);
+        $browsePage->dom->getElement("/html/body/div[2]/menu/menu/li[1]/a/div/div")->click();
+        sleep(1);
+        $batchClose = $this->loadPage('story', 'batchClose');
+        $batchClose->dom->batchClosedReason->picker($closeReason);
+        $batchClose->dom->batchClosedSave->click();
+        $batchClose->wait(1);
+
+        $viewPage = $this->initForm('story', 'view', array('storyID' => '2'), 'appIframe-product');
 }
