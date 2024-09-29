@@ -41,6 +41,7 @@ class todoEntry extends entry
      */
     public function put($todoID)
     {
+        $control = $this->loadController('todo', 'edit');
         $oldTodo = $this->loadModel('todo')->getByID($todoID);
 
         /* Set $_POST variables. */
@@ -52,7 +53,6 @@ class todoEntry extends entry
         $this->setPost('begin', $this->request('begin') ? str_replace(':', '', $this->request('begin')) : $oldTodo->begin);
         $this->setPost('end', $this->request('end') ? str_replace(':', '', $this->request('end')) : $oldTodo->end);
 
-        $control = $this->loadController('todo', 'edit');
         $control->edit($todoID);
 
         $data = $this->getData();

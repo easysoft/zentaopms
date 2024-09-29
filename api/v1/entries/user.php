@@ -385,6 +385,8 @@ class userEntry extends entry
      */
     public function put($userID)
     {
+        $control = $this->loadController('user', 'edit');
+
         if(!is_numeric($userID))
         {
             $user = $this->loadModel('user')->getById($userID, 'account');
@@ -415,7 +417,6 @@ class userEntry extends entry
         $this->setPost('passwordLength', strlen($setPassword));
         $this->setPost('verifyPassword', md5($this->app->user->password . $this->app->session->rand));
 
-        $control = $this->loadController('user', 'edit');
         $control->edit($userID);
 
         $data = $this->getData();

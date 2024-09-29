@@ -57,6 +57,8 @@ class testresultsEntry extends entry
         if(!$caseID) $caseID = $this->param('case');
         if(!$caseID) return $this->sendError(400, 'Need case id.');
 
+        $control = $this->loadController('testtask', 'runCase');
+
         $case    = $this->loadModel('testcase')->getByID($caseID);
         $taskID  = $this->param('testtask', 0);
         $version = $this->param('version', $case->version);
@@ -85,7 +87,6 @@ class testresultsEntry extends entry
             $this->setPost('reals',  $reals);
         }
 
-        $control = $this->loadController('testtask', 'runCase');
         $control->runCase($runID, $caseID, $version);
 
         $data = $this->getData();

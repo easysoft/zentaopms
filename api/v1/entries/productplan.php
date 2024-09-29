@@ -47,6 +47,7 @@ class productplanEntry extends entry
      */
     public function put($planID)
     {
+        $control = $this->loadController('productplan', 'edit');
         $oldPlan = $this->loadModel('productplan')->getByID($planID);
 
         /* Set $_POST variables. */
@@ -55,7 +56,6 @@ class productplanEntry extends entry
         $this->setPost('product', $oldPlan->product);
         $this->setPost('status',  $oldPlan->status);
 
-        $control = $this->loadController('productplan', 'edit');
         $control->edit($planID);
 
         $data = $this->getData();

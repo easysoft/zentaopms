@@ -56,6 +56,7 @@ class testcaseEntry extends entry
      */
     public function put($caseID)
     {
+        $control = $this->loadController('testcase', 'edit');
         $oldCase = $this->loadModel('testcase')->getByID($caseID);
 
         /* Set $_POST variables. */
@@ -88,7 +89,6 @@ class testcaseEntry extends entry
         $this->setPost('expects',  $expects);
         $this->setPost('stepType', $stepType);
 
-        $control = $this->loadController('testcase', 'edit');
         $control->edit($caseID);
 
         $this->getData();

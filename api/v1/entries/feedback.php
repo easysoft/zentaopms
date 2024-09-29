@@ -50,12 +50,12 @@ class feedbackEntry extends entry
      */
     public function put($feedbackID)
     {
+        $control = $this->loadController('feedback', 'edit');
         $oldFeedback = $this->loadModel('feedback')->getById($feedbackID);
 
         $fields = 'module,product,type,title,public,desc,status,feedbackBy,notifyEmail,notify,uid,pri';
         $this->batchSetPost($fields, $oldFeedback);
 
-        $control = $this->loadController('feedback', 'edit');
         $control->edit($feedbackID, '');
 
         $data = $this->getData();

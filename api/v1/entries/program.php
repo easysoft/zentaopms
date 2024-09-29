@@ -35,6 +35,7 @@ class programEntry extends entry
      */
     public function put($programID)
     {
+        $control = $this->loadController('program', 'edit');
         $oldProgram = $this->loadModel('program')->getByID($programID);
 
         /* Set $_POST variables. */
@@ -42,7 +43,6 @@ class programEntry extends entry
         $this->batchSetPost($fields, $oldProgram);
         $this->setPost('parent', $this->request('parent', 0));
 
-        $control = $this->loadController('program', 'edit');
         $control->edit($programID);
 
         $data = $this->getData();

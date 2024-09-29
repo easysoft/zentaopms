@@ -20,12 +20,12 @@ class taskPauseEntry extends entry
      */
     public function post($taskID)
     {
+        $control = $this->loadController('task', 'pause');
         $task = $this->loadModel('task')->getByID($taskID);
 
         $fields = 'comment';
         $this->batchSetPost($fields);
 
-        $control = $this->loadController('task', 'pause');
         $control->pause($taskID);
 
         $data = $this->getData();

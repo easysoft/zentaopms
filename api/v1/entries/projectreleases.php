@@ -54,6 +54,7 @@ class projectReleasesEntry extends entry
      */
     public function post($projectID = 0)
     {
+        $control = $this->loadController('projectrelease', 'create');
         $project = $this->loadModel('project')->getByID($projectID);
         if(!$project) return $this->send404();
 
@@ -62,7 +63,6 @@ class projectReleasesEntry extends entry
 
         $this->setPost('desc', $this->request('desc', ''));
 
-        $control = $this->loadController('projectrelease', 'create');
         $this->requireFields('name,date');
 
         $control->create($projectID);

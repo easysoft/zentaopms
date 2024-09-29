@@ -101,6 +101,7 @@ class taskEntry extends entry
      */
     public function put($taskID)
     {
+        $control = $this->loadController('task', 'edit');
         $oldTask = $this->loadModel('task')->getByID($taskID);
 
         /* Set $_POST variables. */
@@ -113,7 +114,6 @@ class taskEntry extends entry
             if(!empty($oldTask->finishedDate)) $this->setPost('finishedDate', $oldTask->finishedDate);
         }
 
-        $control = $this->loadController('task', 'edit');
         $control->edit($taskID);
 
         $data = $this->getData();

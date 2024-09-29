@@ -55,6 +55,7 @@ class docEntry extends entry
      */
     public function put($storyID)
     {
+        $control = $this->loadController('story', 'edit');
         $oldStory = $this->loadModel('story')->getByID($storyID);
 
         /* Set $_POST variables. */
@@ -62,7 +63,6 @@ class docEntry extends entry
         $this->batchSetPost($fields, $oldStory);
         $this->setPost('parent', 0);
 
-        $control = $this->loadController('story', 'edit');
         $control->edit($storyID);
 
         $this->getData();

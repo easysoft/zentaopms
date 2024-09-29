@@ -20,12 +20,12 @@ class feedbackAssignToEntry extends entry
      */
     public function post($feedbackID)
     {
+        $control = $this->loadController('feedback', 'assignTo');
         $feedback = $this->loadModel('feedback')->getById($feedbackID);
 
         $fields = 'assignedTo,comment,mailto';
         $this->batchSetPost($fields);
 
-        $control = $this->loadController('feedback', 'assignTo');
         $control->assignTo($feedbackID);
 
         $data = $this->getData();

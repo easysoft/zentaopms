@@ -90,6 +90,8 @@ class bugEntry extends entry
      */
     public function put($bugID)
     {
+        $control = $this->loadController('bug', 'edit');
+
         $oldBug = $this->loadModel('bug')->getByID($bugID);
 
         /* Set $_POST variables. */
@@ -97,7 +99,6 @@ class bugEntry extends entry
         $this->batchSetPost($fields, $oldBug);
         $this->setPost('notifyEmail', implode(',', $this->request('notifyEmail', array())));
 
-        $control = $this->loadController('bug', 'edit');
         $control->edit($bugID);
 
         $data = $this->getData();
@@ -118,6 +119,7 @@ class bugEntry extends entry
      */
     public function delete($bugID)
     {
+        $control = $this->loadController('bug', 'delete');
         if(!$this->app->user->admin)
         {
             $bug = $this->loadModel('bug')->getByID($bugID);
@@ -125,7 +127,6 @@ class bugEntry extends entry
             if(!in_array($bug->project, $projects)) return $this->sendError(400, 'No access to the project that the bug belongs to');
         }
 
-        $control = $this->loadController('bug', 'delete');
         $control->delete($bugID, 'yes');
 
         $this->getData();
