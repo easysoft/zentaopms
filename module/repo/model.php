@@ -914,15 +914,13 @@ class repoModel extends model
     public function getLatestCommit(int $repoID, bool $checkCount = true): object|false
     {
         $repo        = $this->fetchByID($repoID);
-
-        $orderBy     = $repo->SCM == 'Subversion' ? 'svnRevision desc' : 't1.time desc';
         $branchID    = (string)$this->cookie->repoBranch;
         $lastComment = $this->dao->select('t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
             ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
             ->where('t1.repo')->eq($repoID)
             ->beginIF($repo->SCM != 'Subversion' && $branchID)->andWhere('t2.branch')->eq($branchID)->fi()
             ->beginIF($repo->SCM == 'Subversion')->andWhere('t1.time')->ne('1970-01-01 08:00:00')->fi()
-            ->orderBy($orderBy)
+            ->orderBy('t1.`time` desc')
             ->fetch();
         if(empty($lastComment)) return false;
 
