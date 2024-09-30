@@ -1595,13 +1595,15 @@ class productModel extends model
      */
     protected function getList(int $programID = 0, string $status = 'all', int $limit = 0, int $line = 0, string|int $shadow = 0, string $fields = '*'): array
     {
-        $fields = explode(',', $fields);
-        $fields = trim(implode(',t1.', $fields), ',');
+        $fields       = explode(',', $fields);
+        $fields       = trim(implode(',t1.', $fields), ',');
+        $programField = $programID ? '' : 't2.order,';
+        $programOrder = $programID ? '' : 't2.order_asc,';
 
-        return $this->dao->select("DISTINCT t1.$fields,t2.order,t1.line,t1.order")->from(TABLE_PRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
-            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t3.product = t1.id')
-            ->leftJoin(TABLE_TEAM)->alias('t4')->on("t4.root = t3.project and t4.type='project'")
+        return $this->dao->select("DISTINCT t1.{$fields},{$programField}t1.line,t1.order")->from(TABLE_PRODUCT)->alias('t1')
+            ->beginIF(!$programID)->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')->fi()    // 如果指定了项目集，则不需要关联项目集表。
+            ->beginIF($status == 'involved')->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t3.product = t1.id')->fi()
+            ->beginIF($status == 'involved')->leftJoin(TABLE_TEAM)->alias('t4')->on("t4.root = t3.project and t4.type='project'")->fi()
             ->where('t1.deleted')->eq(0)
             ->beginIF($shadow !== 'all')->andWhere('t1.shadow')->eq((int)$shadow)->fi()
             ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
@@ -1623,7 +1625,7 @@ class productModel extends model
             ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
             ->andWhere('t1.reviewStatus')->eq('doing')
             ->fi()
-            ->orderBy('t2.order_asc, t1.line_desc, t1.order_asc')
+            ->orderBy("{$programOrder}t1.line_desc, t1.order_asc")
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->fetchAll('id');
     }
