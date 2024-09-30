@@ -46,6 +46,15 @@ formPanel
     ),
     formRow
     (
+        formGroup
+        (
+            set::label($lang->kanbancolumn->name),
+            set::name('column'),
+            set::control(array('control' => 'picker', 'required' => false)),
+            set::items(array()),
+            set::required(true),
+            set::disabled(true)
+        )
     )
 );
 
