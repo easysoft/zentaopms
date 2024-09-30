@@ -3850,6 +3850,15 @@ class kanbanModel extends model
         return array('name' => 'updateKanbanRegion', 'params' => array('region' . $regionID, $kanbanData));
     }
 
+    /**
+     * 获取卡片所在的单元格。
+     * Get card cell.
+     *
+     * @param  int    $cardID
+     * @param  int    $kanbanID
+     * @access public
+     * @return void
+     */
     public function getCellByCard(int $cardID, int $kanbanID)
     {
         $cell = $this->dao->select('id,cards,lane,`column`')->from(TABLE_KANBANCELL)
