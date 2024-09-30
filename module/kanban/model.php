@@ -3857,15 +3857,14 @@ class kanbanModel extends model
      * @param  int    $cardID
      * @param  int    $kanbanID
      * @access public
-     * @return void
+     * @return object
      */
-    public function getCellByCard(int $cardID, int $kanbanID)
+    public function getCellByCard(int $cardID, int $kanbanID): object|false
     {
-        $cell = $this->dao->select('id,cards,lane,`column`')->from(TABLE_KANBANCELL)
+        return $this->dao->select('id,cards,lane,`column`')->from(TABLE_KANBANCELL)
             ->where('kanban')->eq($kanbanID)
             ->andWhere('type')->eq('common')
             ->andWhere('cards')->like("%,$cardID,%")
             ->fetch();
-        return $cell;
     }
 }

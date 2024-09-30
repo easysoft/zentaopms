@@ -1708,7 +1708,7 @@ class kanban extends control
      */
     public function ajaxGetColumns(int $laneID)
     {
-        $lane = $this->kanban->getLaneByID($laneID);
+        $lane    = $this->kanban->getLaneByID($laneID);
         $columns = $this->kanban->getColumnPairsByGroup($lane->group);
 
         $columnList = array();
