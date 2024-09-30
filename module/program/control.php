@@ -762,4 +762,24 @@ class program extends control
 
         $this->render();
     }
+
+    /**
+     * 刷新项目集统计数据。
+     * Refresh program stats.
+     *
+     * @access public
+     * @return void
+     */
+    public function refreshStats()
+    {
+        $this->program->refreshStats();
+
+        if(dao::isError())
+        {
+            echo json_encode(dao::getError());
+            return true;
+        }
+
+        echo 'success';
+    }
 }
