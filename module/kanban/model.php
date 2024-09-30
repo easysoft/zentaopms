@@ -3236,6 +3236,9 @@ class kanbanModel extends model
 
         $toCardList = rtrim($toCellCards, ',') . ",$cardID,";
         $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($toCardList)->where('`column`')->eq($toColID)->andWhere('lane')->eq($toLaneID)->exec();
+
+        $toLane = $this->getLaneById($toLaneID);
+        $this->dao->update(TABLE_KANBANCARD)->set('group')->eq($toLane->group)->where('id')->eq($cardID)->exec();
     }
 
     /**
@@ -3845,5 +3848,15 @@ class kanbanModel extends model
         $kanbanData = $this->getKanbanData($kanbanID, $regionID);
         $kanbanData = reset($kanbanData);
         return array('name' => 'updateKanbanRegion', 'params' => array('region' . $regionID, $kanbanData));
+    }
+
+    public function getCellByCard(int $cardID, int $kanbanID)
+    {
+        $cell = $this->dao->select('id,cards,lane,`column`')->from(TABLE_KANBANCELL)
+            ->where('kanban')->eq($kanbanID)
+            ->andWhere('type')->eq('common')
+            ->andWhere('cards')->like("%,$cardID,%")
+            ->fetch();
+        return $cell;
     }
 }
