@@ -23,10 +23,30 @@ formPanel
     (
         formGroup
         (
+            on::change('changeRegion'),
             set::label($lang->kanbanregion->name),
             set::name('region'),
+            set::control(array('control' => 'picker', 'required' => false)),
+            set::required(true),
             set::items($regions)
         )
     ),
+    formRow
+    (
+        formGroup
+        (
+            on::change('changeLane'),
+            set::label($lang->kanbanlane->name),
+            set::name('lane'),
+            set::control(array('control' => 'picker', 'required' => false)),
+            set::items(array()),
+            set::required(true),
+            set::disabled(true)
+        )
+    ),
+    formRow
+    (
+    )
 );
+
 render();
