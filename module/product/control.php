@@ -1231,4 +1231,24 @@ class product extends control
         $products = $this->product->getList(0, 'all', 1, $lineID);
         return print($products ? json_encode($products) : '');
     }
+
+    /**
+     * 刷新产品统计数据。
+     * Refresh product stats.
+     *
+     * @access public
+     * @return void
+     */
+    public function refreshStats()
+    {
+        $this->product->refreshStats();
+
+        if(dao::isError())
+        {
+            echo json_encode(dao::getError());
+            return true;
+        }
+
+        echo 'success';
+    }
 }
