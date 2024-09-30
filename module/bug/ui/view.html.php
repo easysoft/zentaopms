@@ -141,6 +141,14 @@ $tabs[] = setting()
     ->title($lang->bug->legendMisc)
     ->control('bugRelatedList');
 
+/* 关联对象。Relate object. */
+$tabs[] = setting()
+    ->group('related')
+    ->title($lang->custom->relateObject)
+    ->control('relatedObjectList')
+    ->objectID($bug->id)
+    ->objectType('bug');
+
 detail
 (
     set::urlFormatter(array('{id}' => $bug->id, '{product}' => $bug->product, '{branch}' => $bug->branch, '{project}' => $bug->project, '{execution}' => $bug->execution, '{module}' => $bug->module, '{confirmeObjectID}' => isset($bug->confirmeObjectID) ? $bug->confirmeObjectID : 0)),
