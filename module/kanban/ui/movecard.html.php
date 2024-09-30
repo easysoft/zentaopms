@@ -9,4 +9,24 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+modalHeader
+(
+    set::title($lang->kanban->moveCard),
+    set::entityText($card->name),
+    set::entityID($card->id)
+);
+
+formPanel
+(
+    setID('moveCardForm'),
+    formRow
+    (
+        formGroup
+        (
+            set::label($lang->kanbanregion->name),
+            set::name('region'),
+            set::items($regions)
+        )
+    ),
+);
 render();
