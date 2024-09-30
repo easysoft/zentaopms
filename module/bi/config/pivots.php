@@ -290,7 +290,6 @@ from zt_product as t1
     ) as t10 on t1.id = t10.product
 where t1.deleted = '0'
 and t1.status != 'closed'
-and t1.shadow = '0'
 and t1.vision = 'rnd'
 ORDER BY t1.order;
 EOT,
@@ -373,6 +372,7 @@ left join zt_product as t2 on t1.product=t2.id
 left join zt_project as t3 on t2.program=t3.id
 where t1.deleted='0'
 and t2.deleted='0'
+and t2.shadow='0'
 and (case when \$productStatus='' then 1=1 else t2.status=\$productStatus end)
 and (case when \$productType='' then 1=1 else t2.type=\$productType end)
 and (case when \$product='' then 1=1 else t2.id=\$product end)
@@ -455,6 +455,7 @@ left join zt_product as t2 on t1.product=t2.id
 left join zt_project as t3 on t2.program=t3.id
 where t1.deleted='0'
 and t2.deleted='0'
+and t2.shadow='0'
 and (case when \$productStatus='' then 1=1 else t2.status=\$productStatus end)
 and (case when \$productType='' then 1=1 else t2.type=\$productType end)
 and (case when \$product='' then 1=1 else t2.id=\$product end)
@@ -524,6 +525,7 @@ left join zt_product as t2 on t1.product=t2.id
 left join zt_project as t3 on t2.program=t3.id
 where t1.deleted='0'
 and t2.deleted='0'
+and t2.shadow='0'
 and (case when \$productStatus='' then 1=1 else t2.status=\$productStatus end)
 and (case when \$productType='' then 1=1 else t2.type=\$productType end)
 and (case when \$product='' then 1=1 else t2.id=\$product end)
@@ -595,6 +597,7 @@ left join zt_product as t2 on t1.product=t2.id
 left join zt_project as t3 on t2.program=t3.id
 where t1.deleted='0'
 and t2.deleted='0'
+and t2.shadow='0'
 and (case when \$productStatus='' then 1=1 else t2.status=\$productStatus end)
 and (case when \$productType='' then 1=1 else t2.type=\$productType end)
 and (case when \$product='' then 1=1 else t2.id=\$product end)
@@ -2070,6 +2073,7 @@ from zt_product as t1
 left join zt_bug as t2 on t1.id=t2.product
 left join zt_project as t3 on t1.program=t3.id
 where t1.deleted='0'
+and t1.shadow='0'
 and t2.deleted='0'
 and (case when \$productStatus='' then 1=1 else t1.status=\$productStatus end)
 and (case when \$productType='' then 1=1 else t1.type=\$productType end)
@@ -2149,6 +2153,7 @@ left join ztv_productstories as t2 on t1.id=t2.product
 left join ztv_productbugs as t3 on t1.id=t3.product
 left join zt_project as t4 on t1.program=t4.id
 where t1.deleted='0'
+and t1.shadow='0'
 and (case when \$productStatus='' then 1=1 else t1.status=\$productStatus end)
 and (case when \$productType='' then 1=1 else t1.type=\$productType end)
 and (case when \$product='' then 1=1 else t1.id=\$product end)
@@ -2935,6 +2940,7 @@ select t1.product,t2.name,t1.id as bugID,t1.resolution from zt_bug as t1
 left join zt_product as t2 on t2.id=t1.product
 left join zt_project as t3 on t2.program=t3.id
 where t2.deleted='0' and t1.deleted='0'
+and t2.shadow='0'
 and t1.resolution != ''
 and (case when \$productStatus='' then 1=1 else t2.status=\$productStatus end)
 and (case when \$productType='' then 1=1 else t2.type=\$productType end)
