@@ -2153,12 +2153,15 @@ class productModel extends model
         list($locateModule, $locateMethod) = $this->productTao->computeLocate4DropMenu();
 
         /* 生成异步获取产品下拉菜单的链接。*/
+        $this->loadModel('index');
         $fromModule     = $this->app->tab == 'qa' ? 'qa' : '';
         $dropMenuModule = $this->app->tab == 'qa' ? 'product' : $this->app->tab;
-        $dropMenuLink   = helper::createLink($dropMenuModule, 'ajaxGetDropMenu', "objectID=$productID&module=$locateModule&method=$locateMethod&extra=$extra&from=$fromModule");
+        $dropMenuMethod = in_array("{$this->app->moduleName}-{$this->app->methodName}", $this->config->index->oldPages) ? 'ajaxGetOldDropMenu' : 'ajaxGetDropMenu';
+        $dataRide       = in_array("{$this->app->moduleName}-{$this->app->methodName}", $this->config->index->oldPages) ? 'searchList'         : 'dropmenu' ;
+        $dropMenuLink   = helper::createLink($dropMenuModule, $dropMenuMethod, "objectID=$productID&module=$locateModule&method=$locateMethod&extra=$extra&from=$fromModule");
 
         /* 构建产品1.5级导航数据。*/
-        $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProductName}'><span class='text'>{$currentProductName}</span> <span class='caret' style='margin-bottom: -1px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='dropmenu' data-url='$dropMenuLink'>";
+        $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProductName}'><span class='text'>{$currentProductName}</span> <span class='caret' style='margin-bottom: -1px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='{$dataRide}' data-url='$dropMenuLink'>";
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
         $output .= "</div></div>";
 
