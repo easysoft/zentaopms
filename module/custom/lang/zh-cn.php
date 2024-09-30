@@ -360,6 +360,7 @@ $lang->custom->setDate->fields['hours']   = $lang->custom->setHours;
 $lang->custom->setDate->fields['weekend'] = $lang->custom->setWeekend;
 $lang->custom->setDate->fields['holiday'] = $lang->custom->setHoliday;
 
+$lang->custom->relation        = '关联关系';
 $lang->custom->relateObject    = '关联对象';
 $lang->custom->removeObjects   = '解除关联关系';
 $lang->custom->removeObjectTip = '您确定解除该关联关系吗？';
