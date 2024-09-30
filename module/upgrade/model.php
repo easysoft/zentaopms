@@ -9968,4 +9968,24 @@ class upgradeModel extends model
 
         return true;
     }
+
+    public function processSqlbuilderTables()
+    {
+        $prefix = $this->config->db->prefix;
+        $sqlbuilderSettings = $this->dao->select('id,setting')->from(TABLE_SQLBUILDER)->fetchPairs();
+        foreach($sqlbuilderSettings as $id => $setting)
+        {
+            $setting = json_decode($setting, true);
+
+            if($setting['from']['table'] && strpos($setting['from']['table'], 'zt_') === false) $setting['from']['table'] = $prefix . $setting['from']['table'];
+
+            foreach($setting['joins'] as $index => $join)
+            {
+                if($setting['joins'][$index]['table'] && strpos($setting['joins'][$index]['table'], 'zt_') === false) $setting['joins'][$index]['table'] = $prefix . $join['table'];
+            }
+
+            $this->dao->update(TABLE_SQLBUILDER)->set('setting')->eq(json_encode($setting))->where('id')->eq($id)->exec();
+        }
+        return !dao::isError();
+    }
 }
