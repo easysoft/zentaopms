@@ -1322,11 +1322,11 @@ class customModel extends model
             $fieldList = $this->config->$module->dtable->fieldList;
             foreach($this->config->custom->relateObjectFields[$objectType] as $fieldKey)
             {
-                $fieldSetting = isset($fieldList[$fieldKey]) ? $fieldList[$fieldKey] : array('title' => !empty($this->lang->$fieldKey->common) ? $this->lang->$fieldKey->common : $fieldKey);
+                $fieldSetting = isset($fieldList[$fieldKey]) ? $fieldList[$fieldKey] : array('title' => zget($this->lang->$objectType, $fieldKey, $fieldKey));
 
                 $fieldSetting['sortType'] = true;
                 if(isset($fieldSetting['fixed']) && $fieldSetting['fixed']) $fieldSetting['fixed'] = false;
-                if(isset($fieldSetting['type']) && in_array($fieldSetting['type'], array('assign'))) $fieldSetting['type'] = 'user';
+                if((isset($fieldSetting['type']) && in_array($fieldSetting['type'], array('assign'))) || $fieldKey == 'createdBy') $fieldSetting['type'] = 'user';
 
                 if($fieldKey == 'id') $fieldSetting['type'] = 'checkID';
                 if(in_array($fieldKey, array('product', 'module', 'project', 'execution'))) $fieldSetting['type'] = 'category';

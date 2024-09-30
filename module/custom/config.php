@@ -138,10 +138,11 @@ $config->custom->relateObjectList['task']        = $lang->task->common;
 $config->custom->relateObjectList['bug']         = $lang->bug->common;
 $config->custom->relateObjectList['design']      = $lang->design->common;
 $config->custom->relateObjectList['issue']       = $lang->issue->common;
+$config->custom->relateObjectList['risk']        = $lang->risk->common;
 
 $config->custom->objectOwner = array();
 $config->custom->objectOwner['product']   = array('epic', 'requirement', 'story', 'bug');
-$config->custom->objectOwner['project']   = array('design', 'issue');
+$config->custom->objectOwner['project']   = array('design', 'issue', 'risk');
 $config->custom->objectOwner['execution'] = array('task');
 
 $config->custom->relateObjectFields['epic']        = array('id', 'pri', 'title', 'relation', 'product', 'module', 'openedBy', 'assignedTo', 'status');
@@ -150,4 +151,5 @@ $config->custom->relateObjectFields['story']       = array('id', 'pri', 'title',
 $config->custom->relateObjectFields['task']        = array('id', 'pri', 'name', 'relation', 'project', 'execution', 'openedBy', 'assignedTo', 'status');
 $config->custom->relateObjectFields['bug']         = array('id', 'pri', 'severity', 'title', 'relation', 'product', 'project', 'openedBy', 'assignedTo', 'status');
 $config->custom->relateObjectFields['design']      = array('id', 'name', 'relation', 'product', 'project', 'createdBy', 'assignedTo');
-$config->custom->relateObjectFields['issue']       = array('id', 'pri', 'severity', 'title', 'relation', 'project', 'owner', 'assignedTo', 'status');
+$config->custom->relateObjectFields['issue']       = array('id', 'pri', 'severity', 'title', 'relation', 'project', 'createdBy', 'assignedTo', 'status');
+$config->custom->relateObjectFields['risk']        = array('id', 'pri', 'rate', 'name', 'relation', 'project', 'createdBy', 'assignedTo', 'status');
