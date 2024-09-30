@@ -728,6 +728,7 @@ class pivotModel extends model
                 $queryDefault = '';
                 if(isset($filter['default']))
                 {
+                    $queryDefault = $filter['default'];
                     if($filter['type'] == 'date' || $filter['type'] == 'datetime') $queryDefault = $this->processDateVar($filter['default']);
                     if($filter['type'] == 'datetime') $queryDefault .= ':00.000000000';
                     if($filter['type'] == 'multipleselect' && is_array($filter['default'])) $queryDefault = implode("','", $filter['default']);
