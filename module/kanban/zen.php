@@ -88,4 +88,27 @@ class kanbanZen extends kanban
 
         $this->view->userList = $userList;
     }
+
+    public function moveCardByModal(int $cardID)
+    {
+        $card = $this->kanban->getCardByID($cardID);
+
+        if($_POST)
+        {
+            $this->lang->kanban->region = $this->lang->kanbanregion->name;
+            $this->lang->kanban->lane   = $this->lang->kanbanlane->name;
+            $this->lang->kanban->column = $this->lang->kanbancolumn->common;
+            $formData = form::data($this->config->kanban->form->moveCard)->get();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $cell = $this->kanban->getCellByCard($cardID, $card->kanban);
+            $this->kanban->moveCard($cardID, $cell->column, $formData->column, $cell->lane, $formData->lane, $card->kanban);
+        }
+        else
+        {
+            $this->view->regions = $this->kanban->getRegionPairs($card->kanban);
+            $this->view->card    = $this->kanban->getCardByID($cardID);
+            $this->display();
+        }
+    }
 }

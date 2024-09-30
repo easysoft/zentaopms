@@ -350,6 +350,7 @@ $lang->kanbancolumn->color      = 'Column Color';
 $lang->kanbancolumn->childName  = 'Name';
 $lang->kanbancolumn->childColor = 'Color';
 $lang->kanbancolumn->empty      = 'No Column';
+$lang->kanbancolumn->common     = 'Column';
 
 $lang->kanbancolumn->confirmArchive     = 'Are you sure to archive this column? After archiving the column, the column and all cards in the column will be hidden. You can view the archived columns in the Region - Archived.';
 $lang->kanbancolumn->confirmDelete      = 'Are you sure to delete this column? After deleting the column, all cards in this column will also be deleted.';
