@@ -75,16 +75,15 @@ class userTao extends userModel
     {
         if(!$projectIdList) return array();
 
-        return $this->dao->select('t1.project, count(t3.id) as count, SUM(IFNULL(t3.estimate, 0)) AS estimate')->from(TABLE_PROJECT)->alias('t1')
+        return $this->dao->select('t1.id, count(t3.id) as count, SUM(IFNULL(t3.estimate, 0)) AS estimate')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id = t2.project')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.multiple')->eq('1')
             ->andWhere('t1.vision')->eq($this->config->vision)
-            ->andWhere('t1.type')->in('sprint,stage,kanban')
-            ->andWhere('t1.project')->in($projectIdList)
-            ->groupBy('t1.project')
-            ->fetchAll('project');
+            ->andWhere('t1.id')->in($projectIdList)
+            ->groupBy('t1.id')
+            ->fetchAll('id');
     }
 
     /**
