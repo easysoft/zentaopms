@@ -89,6 +89,14 @@ class kanbanZen extends kanban
         $this->view->userList = $userList;
     }
 
+    /**
+     * 模态框内移动看板。
+     * Move card by modal.
+     *
+     * @param  int $cardID
+     * @access public
+     * @return void
+     */
     public function moveCardByModal(int $cardID)
     {
         $card = $this->kanban->getCardByID($cardID);
