@@ -19,3 +19,7 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'proje
 CREATE UNIQUE INDEX `account_openID` ON `zt_oauth`(`account`,`openID`,`providerType`,`providerID`);
 
 ALTER TABLE `zt_taskteam` CHANGE `order` `order` int(8) NOT NULL DEFAULT '0';
+
+INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES
+('*/5', '*', '*', '*', '*', 'moduleName=program&methodName=refreshStats', '刷新项目集统计数据', 'zentao', 1, 'normal', NULL),
+('*/5', '*', '*', '*', '*', 'moduleName=product&methodName=refreshStats', '刷新产品统计数据',   'zentao', 1, 'normal', NULL);

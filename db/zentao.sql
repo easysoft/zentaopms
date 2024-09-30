@@ -16112,3 +16112,7 @@ UPDATE `zt_pivot` SET `editedBy` = 'system' where `editedBy` = 'admin';
 INSERT INTO `zt_config` ( `vision`, `owner`, `module`, `section`, `key`, `value` ) VALUES ('', 'system', 'common', '', 'closedFeatures', 'otherOA');
 INSERT INTO `zt_config`(`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES ('', 'system', 'common', 'global', 'installedDate', CURDATE());
 CREATE INDEX `idx_repo_deleted` ON `zt_job` (`repo`,`deleted`);
+
+INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES
+('*/5', '*', '*', '*', '*', 'moduleName=program&methodName=refreshStats', '刷新项目集统计数据', 'zentao', 1, 'normal', NULL),
+('*/5', '*', '*', '*', '*', 'moduleName=product&methodName=refreshStats', '刷新产品统计数据',   'zentao', 1, 'normal', NULL);
