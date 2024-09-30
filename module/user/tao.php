@@ -64,18 +64,18 @@ class userTao extends userModel
     }
 
     /**
-     * 获取某个用户参与的项目和项目关联的需求规模数键值对。
-     * Get the projects that the user joined and the story estimate of the project.
+     * 获取某个用户参与的项目和项目关联的需求规模数和需求数。
+     * Get the projects that the user joined and the story estimate and count of the project.
      *
      * @param  array  $projectIdList
      * @access public
      * @return array
      */
-    public function fetchProjectStoryEstimate(array $projectIdList): array
+    public function fetchProjectStoryCountAndEstimate(array $projectIdList): array
     {
         if(!$projectIdList) return array();
 
-        return $this->dao->select('t1.project, SUM(IFNULL(t3.estimate, 0)) AS estimate')->from(TABLE_PROJECT)->alias('t1')
+        return $this->dao->select('t1.project, count(t3.id) as count, SUM(IFNULL(t3.estimate, 0)) AS estimate')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id = t2.project')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
             ->where('t1.deleted')->eq('0')
@@ -84,7 +84,7 @@ class userTao extends userModel
             ->andWhere('t1.type')->in('sprint,stage,kanban')
             ->andWhere('t1.project')->in($projectIdList)
             ->groupBy('t1.project')
-            ->fetchPairs();
+            ->fetchAll('project');
     }
 
     /**
