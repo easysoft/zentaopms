@@ -2140,6 +2140,16 @@ class kanbanModel extends model
      */
     public function createLane(int $kanbanID, int $regionID, object $lane = null, string $mode = 'new'): int|bool
     {
+        $laneType = isset($_POST['laneType']) ? $_POST['laneType'] : 'common';
+        if($laneType == 'common')
+        {
+            $sameNameLane = $this->dao->select('id')->from(TABLE_KANBANLANE)->where('region')->eq($regionID)->andWhere('name')->eq($lane->name)->andWhere('deleted')->eq('0')->limit(1)->fetch();
+            if($sameNameLane)
+            {
+                dao::$errors['name'][] = $this->lang->kanbanlane->error->hasExist;
+                return false;
+            }
+        }
         if($mode == 'new')
         {
             $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANLANE)
@@ -2147,7 +2157,7 @@ class kanbanModel extends model
                 ->fetch('maxOrder');
 
             $lane->order     = $maxOrder ? $maxOrder + 1 : 1;
-            $lane->type      = isset($_POST['laneType']) ? $_POST['laneType'] : 'common';
+            $lane->type      = $laneType;
             $lane->execution = isset($_POST['laneType']) ? $kanbanID : 0;
 
             if($lane->mode == 'sameAsOther')

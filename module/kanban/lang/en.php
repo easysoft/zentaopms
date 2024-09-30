@@ -382,6 +382,7 @@ $lang->kanbancolumn->fluidBoardList['1'] = "Auto Width<i class='radio-text-divid
 
 $lang->kanbanlane->error = new stdclass();
 $lang->kanbanlane->error->mustBeInt = 'No. of cards must be a positive integer from 3 to 100.';
+$lang->kanbanlane->error->hasExist  = 'This lane already exists.';
 
 $lang->kanbanregion = new stdclass();
 $lang->kanbanregion->name    = 'Region Name';

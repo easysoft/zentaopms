@@ -382,6 +382,7 @@ $lang->kanbancolumn->fluidBoardList['1'] = "自适应列宽";
 
 $lang->kanbanlane->error = new stdclass();
 $lang->kanbanlane->error->mustBeInt = '卡片数量必须是 3~100 的正整数。';
+$lang->kanbanlane->error->hasExist  = '该泳道已存在';
 
 $lang->kanbanregion = new stdclass();
 $lang->kanbanregion->name    = '区域名称';
