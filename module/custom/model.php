@@ -1276,7 +1276,8 @@ class customModel extends model
         $objectQuery = $module . 'Query';
         if($browseType == 'bySearch' && $this->session->$objectQuery === false) $this->session->set($objectQuery, ' 1 = 1');
 
-        $query = $this->dao->select('*, 1 as relation')->from($objectTable)
+        $caseID = $objectType == 'testcase' ? ',id as caseID' : '';
+        $query  = $this->dao->select('*, 1 as relation' . $caseID)->from($objectTable)
             ->where('deleted')->eq(0)
             ->beginIF(in_array($objectType, $this->config->custom->objectOwner['product']))->andWhere('product')->in($this->app->user->view->products)->fi()
             ->beginIF(in_array($objectType, $this->config->custom->objectOwner['project']))->andWhere('project')->in($this->app->user->view->projects)->fi()

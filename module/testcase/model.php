@@ -2708,4 +2708,87 @@ class testcaseModel extends model
 
         return $canImportModules;
     }
+
+    /**
+     * Build search form.
+     *
+     * @param  int    $productID
+     * @param  array  $products
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @param  int    $projectID
+     * @param  int    $moduleID
+     * @param  string $branch
+     * @access public
+     * @return void
+     */
+    public function buildSearchForm(int $productID, array $products, int $queryID, string $actionURL, int $projectID = 0, int $moduleID = 0, string $branch = 'all'): void
+    {
+        /* 获取产品列表。Get productList. */
+        if($this->app->tab == 'project' && !$productID)
+        {
+            if($projectID)
+            {
+                $products = $this->loadModel('product')->getProducts($projectID);
+                $productList = array(0 => '');
+                foreach($products as $product) $productList[$product->id] = $product->name;
+                $productList['all'] = $this->lang->product->allProductsOfProject;
+            }
+            else
+            {
+                $productList = $products;
+            }
+            $this->config->testcase->search['params']['story']['values'] = $this->loadModel('story')->getExecutionStoryPairs($projectID, 0, 'all', $moduleID, 'full', 'active');
+        }
+        else
+        {
+            $productList = array(0 => '');
+            $productList['all'] = $this->lang->all;
+            if(isset($products[$productID])) $productList[$productID] = $products[$productID];
+            if(empty($productID) && empty($products))
+            {
+                $products     = $this->loadModel('product')->getPairs('', 0, '', 'all');
+                $productList += $products;
+            }
+            $this->config->testcase->search['params']['story']['values'] = $this->loadModel('story')->getProductStoryPairs($productID, $branch, array(), 'active,reviewing', 'id_desc', 0, '', 'story', false);
+        }
+
+        /* 获取模块列表。*/
+        /* Get moduleList. */
+        if($productID)
+        {
+            $modules = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, $branch);
+        }
+        else
+        {
+            $modules = array();
+            foreach($products as $id => $name) $modules += $this->loadModel('tree')->getOptionMenu($id, 'case', 0);
+        }
+
+        $this->config->testcase->search['params']['product']['values'] = $productList;
+        $this->config->testcase->search['params']['module']['values']  = $modules;
+        $this->config->testcase->search['params']['scene']['values']   = $this->getSceneMenu($productID, $moduleID, $branch, 0, 0, true);
+        $this->config->testcase->search['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();
+
+        $product = $this->loadModel('product')->getByID($productID ? $productID : key($products));
+        if((isset($product->type) && $product->type == 'normal') || $this->app->tab == 'project')
+        {
+            unset($this->config->testcase->search['fields']['branch']);
+            unset($this->config->testcase->search['params']['branch']);
+        }
+        else
+        {
+            $branches = $this->loadModel('branch')->getPairs($productID, '', $projectID);
+            $this->config->testcase->search['fields']['branch']           = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+            $this->config->testcase->search['params']['branch']['values'] = array('' => '', BRANCH_MAIN => $this->lang->branch->main) + $branches + array('all' => $this->lang->branch->all);
+        }
+
+        if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
+
+        $this->config->testcase->search['actionURL'] = $actionURL;
+        $this->config->testcase->search['queryID']   = $queryID;
+        $this->config->testcase->search['module']    = 'testcase';
+
+        $this->loadModel('search')->setSearchParams($this->config->testcase->search);
+    }
 }

@@ -184,7 +184,7 @@ class testcaseZen extends testcase
         $actionURL      = $this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
         $searchProducts = $this->product->getPairs('', 0, '', 'all');
 
-        $this->buildSearchForm($productID, $searchProducts, $queryID, $actionURL, $projectID);
+        $this->testcase->buildSearchForm($productID, $searchProducts, $queryID, $actionURL, $projectID);
     }
 
     /**
@@ -2517,7 +2517,7 @@ class testcaseZen extends testcase
         if($this->app->tab == 'execution') $objectID = $case->execution;
 
         unset($this->config->testcase->search['fields']['product']);
-        $this->buildSearchForm($case->product, $this->products, $queryID, $actionURL, $objectID);
+        $this->testcase->buildSearchForm($case->product, $this->products, $queryID, $actionURL, $objectID);
     }
 
     /**
@@ -2546,84 +2546,6 @@ class testcaseZen extends testcase
         }
 
         $this->loadModel('bug')->buildSearchForm($case->product, $this->products, $queryID, $actionURL, (string)$objectID);
-    }
-
-    /**
-     * Build search form.
-     *
-     * @param  int    $productID
-     * @param  array  $products
-     * @param  int    $queryID
-     * @param  string $actionURL
-     * @param  int    $projectID
-     * @param  int    $moduleID
-     * @param  string $branch
-     * @access public
-     * @return void
-     */
-    private function buildSearchForm(int $productID, array $products, int $queryID, string $actionURL, int $projectID = 0, int $moduleID = 0, string $branch = 'all'): void
-    {
-        /* 获取产品列表。Get productList. */
-        if($this->app->tab == 'project' && !$productID)
-        {
-            if($projectID)
-            {
-                $products = $this->loadModel('product')->getProducts($projectID);
-                $productList = array(0 => '');
-                foreach($products as $product) $productList[$product->id] = $product->name;
-                $productList['all'] = $this->lang->product->allProductsOfProject;
-            }
-            else
-            {
-                $productList = $products;
-            }
-            $this->config->testcase->search['params']['story']['values'] = $this->loadModel('story')->getExecutionStoryPairs($projectID, 0, 'all', $moduleID, 'full', 'active');
-        }
-        else
-        {
-            $productList = array(0 => '');
-            $productList['all'] = $this->lang->all;
-            if(isset($products[$productID])) $productList[$productID] = $products[$productID];
-            $this->config->testcase->search['params']['story']['values'] = $this->loadModel('story')->getProductStoryPairs($productID, $branch, array(), 'active,reviewing', 'id_desc', 0, '', 'story', false);
-        }
-
-        /* 获取模块列表。*/
-        /* Get moduleList. */
-        if($productID)
-        {
-            $modules = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, $branch);
-        }
-        else
-        {
-            $modules = array();
-            foreach($products as $id => $name) $modules += $this->loadModel('tree')->getOptionMenu($id, 'case', 0);
-        }
-
-        $this->config->testcase->search['params']['product']['values'] = $productList;
-        $this->config->testcase->search['params']['module']['values']  = $modules;
-        $this->config->testcase->search['params']['scene']['values']   = $this->testcase->getSceneMenu($productID, $moduleID, $branch, 0, 0, true);
-        $this->config->testcase->search['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();
-
-        $product = $this->loadModel('product')->getByID($productID);
-        if((isset($product->type) && $product->type == 'normal') || $this->app->tab == 'project')
-        {
-            unset($this->config->testcase->search['fields']['branch']);
-            unset($this->config->testcase->search['params']['branch']);
-        }
-        else
-        {
-            $branches = $this->loadModel('branch')->getPairs($productID, '', $projectID);
-            $this->config->testcase->search['fields']['branch']           = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
-            $this->config->testcase->search['params']['branch']['values'] = array('' => '', BRANCH_MAIN => $this->lang->branch->main) + $branches + array('all' => $this->lang->branch->all);
-        }
-
-        if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
-
-        $this->config->testcase->search['actionURL'] = $actionURL;
-        $this->config->testcase->search['queryID']   = $queryID;
-        $this->config->testcase->search['module']    = 'testcase';
-
-        $this->loadModel('search')->setSearchParams($this->config->testcase->search);
     }
 
     /**
