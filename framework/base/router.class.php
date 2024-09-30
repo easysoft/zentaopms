@@ -914,7 +914,7 @@ class baseRouter
 
         $vision = '';
         $sql    = new sql();
-        if($this->config->installed and validater::checkAccount($account))
+        if($this->config->installed and validater::checkAccount($account) and !$this->upgrading)
         {
             $account = $sql->quote($account);
 
