@@ -668,7 +668,9 @@ class actionTao extends actionModel
      */
     public function getActionListByCondition(string $condition, string $date, string $begin, string $end, string $account, string|int $productID, string|int $projectID, string|int $executionID, array|string $executions, string $actionCondition, string $orderBy, int $limit = 50): array|bool
     {
-        $actionTable = in_array($period, $this->config->action->latestDateList) ? TABLE_ACTIONRECENT : TABLE_ACTION;
+        /* 获取最近一个月的动态用actionrecent表。 */
+        $lastMonth   = date('Y-m-d', strtotime('-1 month'));
+        $actionTable = ($begin >= $lastMonth && $end >= $lastMonth) ? TABLE_ACTIONRECENT : TABLE_ACTION;
 
         return $this->dao->select('*')->from($actionTable)
             ->where('objectType')->notIN($this->config->action->ignoreObjectType4Dynamic)
