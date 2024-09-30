@@ -1958,6 +1958,7 @@ class treeModel extends model
 
         if($self)
         {
+            if($type == 'ticket' || $type == 'feedback') $module->root = $self->root;
             if($type == 'host' || !isset($module->root)) $module->root = 0;
             if(strpos($this->config->tree->groupTypes, ",$type,") !== false) $module->root = $self->root;
             if($self->root && !$module->root) $module->root = $self->root;
