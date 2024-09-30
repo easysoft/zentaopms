@@ -214,6 +214,13 @@ $tabs[] = setting()
     ->title($lang->testcase->legendOther)
     ->control('caseRelatedList');
 
+$tabs[] = setting()
+    ->group('relatives')
+    ->title($lang->custom->relateObject)
+    ->control('relatedObjectList')
+    ->objectID($case->id)
+    ->objectType('testcase');
+
 detail
 (
     set::urlFormatter(array('{caseID}' => $case->caseID, '{version}' => $case->version, '{product}' => $case->product, '{branch}' => $case->branch, '{module}' => $case->module, '{id}' => $case->id, '{lib}' => $case->lib, '{confirmeObjectID}' => isset($case->confirmeObjectID) ? $case->confirmeObjectID : 0)),
