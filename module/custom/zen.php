@@ -416,6 +416,7 @@ class customZen extends custom
         if(in_array($relatedObjectType, array('epic', 'requirement', 'story'))) $this->loadModel('product')->buildSearchForm(0, array(), 0, $actionURL, $relatedObjectType);
         if($relatedObjectType == 'task') $this->loadModel('execution')->buildTaskSearchForm(0, array(), 0, $actionURL);
         if($relatedObjectType == 'bug') $this->loadModel('bug')->buildSearchForm(0, array(), 0, $actionURL);
+        if($relatedObjectType == 'issue') $this->loadModel('issue')->buildSearchForm($actionURL, 0);
         if($relatedObjectType == 'design')
         {
             $this->loadModel('design');
