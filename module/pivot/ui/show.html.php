@@ -31,9 +31,9 @@ $fnGenerateFilters = function() use($pivot, $showOrigin, $lang)
         if($from == 'query')
         {
             $typeOption = $filter['typeOption'];
-            if($type == 'select' && !isset($options[$typeOption])) $options[$typeOption] = $this->pivot->getSysOptions($typeOption);
+            if(strpos($type, 'select') !== false && !isset($options[$typeOption])) $options[$typeOption] = $this->pivot->getSysOptions($typeOption);
 
-            $filters[] = filter(set(array('title' => $name, 'type' => $type, 'name' => $field, 'value' => $value, 'items' => zget($options, $typeOption, array()))));
+            $filters[] = filter(set(array('title' => $name, 'type' => $type, 'name' => $field, 'value' => $value, 'items' => zget($options, $typeOption, array()), 'multiple' => $type == 'multipleselect' ? true : false)));
         }
         else
         {
