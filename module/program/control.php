@@ -43,8 +43,6 @@ class program extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->program->refreshStats(); // Refresh stats fields of projects.
-
         $programs = $this->programZen->getProgramsByType($status, $orderBy, (int)$param, $pager);
         $PMList   = $this->programZen->getPMListByPrograms($programs);
 
@@ -119,8 +117,6 @@ class program extends control
 
             $this->view->program = $program;
         }
-
-        $this->loadModel('product')->refreshStats();
 
         /* Load pager. */
         $this->app->loadClass('pager', true);
@@ -716,8 +712,6 @@ class program extends control
         $this->loadModel('product');
         $this->loadModel('user');
         $this->session->set('productList', $this->app->getURI(true), 'program');
-
-        $this->product->refreshStats(); // Refresh stats fields of products.
 
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
