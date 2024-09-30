@@ -992,7 +992,7 @@ class docModel extends model
      */
     public function getSpaces($type = 'custom', $spaceID = 0)
     {
-        if($type === 'mine') return array(array(), -1);
+        if($type === 'mine') return array(array(array('id' => 1, 'type' => 'mine', 'name' => $this->lang->doc->spaceList['mine'])), 1);
 
         $pairs = array();
         if($type == 'custom') $pairs = $this->getTeamSpaces();
