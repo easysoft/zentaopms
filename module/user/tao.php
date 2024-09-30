@@ -79,7 +79,6 @@ class userTao extends userModel
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id = t2.project')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
             ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.multiple')->eq('1')
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.id')->in($projectIdList)
             ->groupBy('t1.id')
