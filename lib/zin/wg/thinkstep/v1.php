@@ -90,7 +90,7 @@ class thinkStep  extends wg
                                 set::icon('trash'),
                                 set::hint($lang->thinkstep->actions['delete']),
                                 setData('url', createLink('thinkstep', 'delete', "marketID={$marketID}&stepID={$item->id}")),
-                                setData('confirm',  $lang->thinkstep->deleteTips[$basicType])
+                                setData('confirm',  empty($item->link) ? $lang->thinkstep->deleteTips[$basicType] : array('message' => $lang->thinkstep->tips->deleteLinkStep, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x', 'size' => 'sm'))
                             ) : icon
                             (
                                 setClass('w-5 h-5 text-gray opacity-50 ml-1 text-md pl-1'),

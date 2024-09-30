@@ -155,13 +155,12 @@ class thinkStepMenu extends wg
                 if($showQuestionOfNode && $child->type == 'node') $showQuestionOfNode = false;
             }
         }
-
         $canCreate   = common::hasPriv('thinkstep', 'create');
         $canEdit     = common::hasPriv('thinkstep', 'edit');
         $canDelete   = common::hasPriv('thinkstep', 'delete');
         $canLink     = common::hasPriv('thinkstep', 'link');
         $parentID    = $item->type != 'node' ? $item->parent : $item->id;
-        $confirmTips = $this->lang->thinkstep->deleteTips[$item->type];
+        $confirmTips = empty($item->link) ? $this->lang->thinkstep->deleteTips[$item->type] : array('message' => $this->lang->thinkstep->tips->deleteLinkStep, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x', 'size' => 'sm');
         $menus            = array();
         $transitionAction = array();
         if($canCreate)
