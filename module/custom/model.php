@@ -1322,16 +1322,17 @@ class customModel extends model
             $fieldList = $this->config->$module->dtable->fieldList;
             foreach($this->config->custom->relateObjectFields[$objectType] as $fieldKey)
             {
-                $fieldSetting = isset($fieldList[$fieldKey]) ? $fieldList[$fieldKey] : array();
+                $fieldSetting = isset($fieldList[$fieldKey]) ? $fieldList[$fieldKey] : array('title' => !empty($this->lang->$fieldKey->common) ? $this->lang->$fieldKey->common : $fieldKey);
 
                 $fieldSetting['sortType'] = true;
                 if(isset($fieldSetting['fixed']) && $fieldSetting['fixed']) $fieldSetting['fixed'] = false;
                 if(isset($fieldSetting['type']) && in_array($fieldSetting['type'], array('assign'))) $fieldSetting['type'] = 'user';
 
+                if($fieldKey == 'id') $fieldSetting['type'] = 'checkID';
                 if(in_array($fieldKey, array('product', 'module', 'project', 'execution'))) $fieldSetting['type'] = 'category';
-                if($fieldKey == 'product')   $fieldSetting['map'] = $this->product->getPairs();
+                if($fieldKey == 'product')   $fieldSetting['map'] = array(0 => '') + $this->product->getPairs();
                 if($fieldKey == 'project')   $fieldSetting['map'] = array(0 => '') + $this->project->getPairs();
-                if($fieldKey == 'execution') $fieldSetting['map'] = $this->execution->getPairs();
+                if($fieldKey == 'execution') $fieldSetting['map'] = array(0 => '') + $this->execution->getPairs();
                 if($fieldKey == 'module')    $fieldSetting['map'] = $this->tree->getAllModulePairs($objectType);
                 if($fieldKey == 'relation')  $fieldSetting = array('name' => 'relation', 'title' => $this->lang->custom->relation, 'type' => 'control', 'control' => 'picker', 'sortType' => false);
 
