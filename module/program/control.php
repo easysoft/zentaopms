@@ -122,7 +122,7 @@ class program extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $products = $this->product->getList($programID, $browseType);
+        $products = $this->loadModel('product')->getList($programID, $browseType);
         $this->view->products = $this->product->getStats(array_keys($products), $orderBy, $pager, 'story',  $programID);
 
         $this->view->title         = $this->lang->program->product;

@@ -324,7 +324,7 @@ class project extends control
         $this->project->buildSearchForm($queryID, $actionURL);
 
         $programTitle = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=project&key=programTitle");
-        $projectStats = $this->program->getProjectStats($programID, $browseType, $queryID, $orderBy, $programTitle, false, $pager);
+        $projectStats = $this->loadModel('program')->getProjectStats($programID, $browseType, $queryID, $orderBy, $programTitle, false, $pager);
 
         $this->view->title         = $this->lang->project->browse;
         $this->view->projectStats  = $this->projectZen->processProjectListData($projectStats);
