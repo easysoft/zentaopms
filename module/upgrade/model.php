@@ -9969,6 +9969,12 @@ class upgradeModel extends model
         return true;
     }
 
+    /**
+     * Process tables of sql builder.
+     *
+     * @access public
+     * @return void
+     */
     public function processSqlbuilderTables()
     {
         $prefix = $this->config->db->prefix;
