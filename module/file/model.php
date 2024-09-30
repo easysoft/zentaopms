@@ -97,6 +97,29 @@ class fileModel extends model
     }
 
     /**
+     * Get file by object.
+     *
+     * @param  string    $objectType
+     * @param  int       $objectID
+     * @param  string    $title
+     * @param  string    $extra
+     * @access public
+     * @return object|false
+     */
+    public function query(string $objectType, int $objectID = 0, string $title = '', string $extra = ''): object|false
+    {
+        $file = $this->dao->select('*')->from(TABLE_FILE)
+            ->where('objectType')->eq($objectType)
+            ->beginIF($objectID)->andWhere('objectID')->eq($objectID)->fi()
+            ->beginIF($title)->andWhere('title')->eq($title)->fi()
+            ->beginIF($extra)->andWhere('extra')->eq($extra)->fi()
+            ->fetch();
+        if(empty($file)) return false;
+
+        return $file;
+    }
+
+    /**
      * Get files by ID list.
      *
      * @param  string|array $fileIdList
