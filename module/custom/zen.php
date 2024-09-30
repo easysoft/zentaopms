@@ -419,6 +419,7 @@ class customZen extends custom
         if($relatedObjectType == 'issue')    $this->loadModel('issue')->buildSearchForm($actionURL, 0);
         if($relatedObjectType == 'risk')     $this->loadModel('risk')->buildSearchForm(0, $actionURL);
         if($relatedObjectType == 'feedback') $this->loadModel('feedback')->buildSearchForm($actionURL);
+        if($relatedObjectType == 'ticket')   $this->loadModel('ticket')->buildSearchForm(0, $actionURL, 'all');
         if($relatedObjectType == 'design')
         {
             $this->loadModel('design');
