@@ -1960,7 +1960,7 @@ class treeModel extends model
         {
             if($type == 'host' || !isset($module->root)) $module->root = 0;
             if(strpos($this->config->tree->groupTypes, ",$type,") !== false) $module->root = $self->root;
-            if($self->root && !isset($module->root)) $module->root = $self->root;
+            if($self->root && !$module->root) $module->root = $self->root;
             if($self->parent != $module->parent || $self->root != $module->root)
             {
                 $maxOrder = $this->dao->select('MAX(`order`) AS `order`')->from(TABLE_MODULE)->where('parent')->eq($module->parent)->andWhere('root')->eq($module->root)->fetch('order');
