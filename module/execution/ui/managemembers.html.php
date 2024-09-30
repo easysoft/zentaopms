@@ -92,7 +92,7 @@ foreach($teamMembers as $member)
                     set::name("account[$i]"),
                     set::value($member->account),
                     set::items($users),
-                    set('data-max-list-count', $config->maxCount),
+                    set::maxItemsCount($config->maxCount),
                     set('onchange', "setRole('{$i}')")
                 )
             ),
@@ -165,7 +165,7 @@ h::table
                 set::id("account{$i}"),
                 set::name("account[$i]"),
                 set::items($users),
-                set('data-max-list-count', $config->maxCount),
+                set::maxItemsCount($config->maxCount),
                 set('onchange', "setRole('{$i}')")
             )
         ),
