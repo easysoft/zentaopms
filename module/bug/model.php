@@ -691,6 +691,9 @@ class bugModel extends model
     public function buildSearchForm(int $productID, array $products, int $queryID, string $actionURL, string $branch = '0'): void
     {
         if(commonModel::isTutorialMode()) return;
+
+        if(empty($productID) && empty($products)) $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
+
         $projectID = $this->lang->navGroup->bug == 'qa' ? 0 : $this->session->project;
 
         /* Get product params. */
@@ -721,7 +724,7 @@ class bugModel extends model
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs(array($productID), 'all', 'withbranch|releasetag');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
 
-        $product = $this->loadModel('product')->fetchByID($productID);
+        $product = $this->loadModel('product')->fetchByID(empty($productID) ? key($products) : $productID);
         if($product->type == 'normal')
         {
             unset($this->config->bug->search['fields']['branch']);

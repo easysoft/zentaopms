@@ -10,6 +10,7 @@ $config->bug->dtable->fieldList['id']['sortType'] = true;
 $config->bug->dtable->fieldList['id']['required'] = true;
 $config->bug->dtable->fieldList['id']['group']    = 1;
 
+$config->bug->dtable->fieldList['product']['title']      = $lang->bug->product;
 $config->bug->dtable->fieldList['product']['display']    = false;
 $config->bug->dtable->fieldList['product']['dataSource'] = array('module' => 'product', 'method' => 'getPairs', 'params' => ['mode' => '', 'programID' => 0, 'append' => '', 'shadow' => 'all']);
 

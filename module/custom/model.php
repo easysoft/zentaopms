@@ -1330,7 +1330,7 @@ class customModel extends model
 
                 if(in_array($fieldKey, array('product', 'module', 'project', 'execution'))) $fieldSetting['type'] = 'category';
                 if($fieldKey == 'product')   $fieldSetting['map'] = $this->product->getPairs();
-                if($fieldKey == 'project')   $fieldSetting['map'] = $this->project->getPairs();
+                if($fieldKey == 'project')   $fieldSetting['map'] = array(0 => '') + $this->project->getPairs();
                 if($fieldKey == 'execution') $fieldSetting['map'] = $this->execution->getPairs();
                 if($fieldKey == 'module')    $fieldSetting['map'] = $this->tree->getAllModulePairs($objectType);
                 if($fieldKey == 'relation')  $fieldSetting = array('name' => 'relation', 'title' => $this->lang->custom->relation, 'type' => 'control', 'control' => 'picker', 'sortType' => false);
@@ -1485,7 +1485,7 @@ class customModel extends model
                 if(in_array($object->$type, $this->config->custom->objectOwner['project']) && !empty($objectInfo->project) && strpos(",{$this->app->user->view->projects},", ",{$objectInfo->project},") !== false) $hasPriv = true;
                 if(in_array($object->$type, $this->config->custom->objectOwner['execution']) && !empty($objectInfo->execution) && strpos(",{$this->app->user->view->sprints},", ",{$objectInfo->execution},") !== false) $hasPriv = true;
             }
-            $relationObjectList[$relationName][$object->$type][$object->$id] = array('title' => $title, 'url' => $hasPriv ? helper::createLink($object->$type, 'view', "objectID={$object->id}") : null);
+            $relationObjectList[$relationName][$object->$type][$object->$id] = array('title' => $title, 'url' => $hasPriv ? helper::createLink($object->$type, 'view', "objectID={$object->$id}") : null);
         }
 
         return $relationObjectList;
