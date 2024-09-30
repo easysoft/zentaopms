@@ -927,10 +927,10 @@ class baseRouter
                 $vision = $this->dao->select("value")->from(TABLE_CONFIG)->where('owner')->eq($account)->andWhere('`key`')->eq('vision')->limit(1)->fetch('value');
             }
 
-            $userVisions = $this->dao->select('visions')->from(TABLE_USER)->where('account')->eq($account)->andWhere('deleted')->eq('0')->limit(1)->fetch('visions');
-            if(!empty($userVisions))
+            $user = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($account)->andWhere('deleted')->eq('0')->limit(1)->fetch();
+            if(!empty($user->visions))
             {
-                $userVisions = explode(',', $userVisions);
+                $userVisions = explode(',', $user->visions);
                 if(!in_array($vision, $userVisions)) $vision = '';
                 if(empty($vision)) [$vision] = $userVisions;
             }
