@@ -27,5 +27,21 @@ function changeRegion(event)
 function changeLane(event)
 {
     const laneID = $(event.target).val();
+    if(!laneID)
+    {
+        const $columnPicker = $('#moveCardForm').find('[name=column]').zui('picker');
+        $columnPicker.render({items: [], disabled: true});
+        return;
+    }
+
     const columnLink = $.createLink('kanban', 'ajaxGetColumns', 'laneID=' + laneID);
+    $.getJSON(columnLink, function(data)
+    {
+        if(!data) return;
+
+        const $columnPicker = $('#moveCardForm').find('[name=column]').zui('picker');
+        const oldColumn     = $('#moveCardForm').find('[name=column]').val();
+        $columnPicker.render({items: data, disabled: false});
+        if(oldColumn) $columnPicker.$.setValue(oldColumn);
+    });
 }
