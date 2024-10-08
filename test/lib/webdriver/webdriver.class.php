@@ -892,7 +892,6 @@ class dom
         }
     }
 
-
     /**
      * Get element's coordinate on page.
      *
@@ -1139,7 +1138,7 @@ class dom
             }
             else
             {
-                $this->getElement("$valueXpath/div")->picker($value);
+                $this->getElement("$valueXpath//input")->picker($value);
             }
         }
 
@@ -1161,5 +1160,18 @@ class dom
         if(strpos($name, '[') !== false) $name = '"' . $name . '"';
         $this->driver->executeScript("return $('[name={$name}]').zui('datePicker').$.setValue('$value')");
         return $this;
+    }
+
+    /**
+     * 获取picker控件的选项
+     * Get picker items.
+     *
+     * @param  string  $pickerName
+     * @access public
+     * @return void
+     */
+    public function getPickerItems($pickerName)
+    {
+        return $this->driver->executeScript('return $("[name=' . $pickerName . ']").zui("picker").options.items;');
     }
 }

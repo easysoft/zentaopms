@@ -36,7 +36,7 @@ class thinkPffa extends thinkModel
             setClass('w-full h-full p-2.5 outline overflow-auto col justify-between gap-2 bg-' . $blockColor . '-100', $blockColor . '-outline'),
             div
             (
-                setClass('col items-center gap-2'),
+                setClass('block-content col items-center gap-2'),
                 div
                 (
                     setClass('item-step-title text-clip', 'text-' . $blockColor),

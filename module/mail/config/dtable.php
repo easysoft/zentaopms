@@ -13,12 +13,13 @@ $config->mail->browse->dtable->fieldList['id']['sortType'] = true;
 $config->mail->browse->dtable->fieldList['id']['required'] = true;
 $config->mail->browse->dtable->fieldList['id']['group']    = 1;
 
-$config->mail->browse->dtable->fieldList['toList']['name']     = 'toList';
-$config->mail->browse->dtable->fieldList['toList']['title']    = $lang->mail->toList;
-$config->mail->browse->dtable->fieldList['toList']['type']     = 'user';
-$config->mail->browse->dtable->fieldList['toList']['sortType'] = true;
-$config->mail->browse->dtable->fieldList['toList']['required'] = true;
-$config->mail->browse->dtable->fieldList['toList']['group']    = 2;
+$config->mail->browse->dtable->fieldList['toList']['name']      = 'toList';
+$config->mail->browse->dtable->fieldList['toList']['title']     = $lang->mail->toList;
+$config->mail->browse->dtable->fieldList['toList']['type']      = 'text';
+$config->mail->browse->dtable->fieldList['toList']['sortType']  = true;
+$config->mail->browse->dtable->fieldList['toList']['required']  = true;
+$config->mail->browse->dtable->fieldList['toList']['delimiter'] = ',';
+$config->mail->browse->dtable->fieldList['toList']['group']     = 2;
 
 $config->mail->browse->dtable->fieldList['subject']['name']     = 'subject';
 $config->mail->browse->dtable->fieldList['subject']['title']    = $lang->mail->subject;

@@ -15,7 +15,7 @@ $viewPrivs   = array();
 foreach(array_keys($lang->my->featureBar['audit']) as $type)
 {
     $priv     = hasPriv($type, 'review');
-    $viewPriv = hasPriv($type, 'view');
+    $viewPriv = $type == 'feedback' ? hasPriv($type, 'adminView') : hasPriv($type, 'view');
     if(!in_array($type, $config->my->noFlowAuditModules)) $priv = hasPriv($type, 'approvalreview');
     $reviewPrivs[$type] = $priv;
     $viewPrivs[$type]   = $viewPriv;

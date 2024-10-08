@@ -44,13 +44,13 @@ class issueEntry extends entry
      */
     public function put($issueID)
     {
+        $control = $this->loadController('issue', 'edit');
         $oldIssue = $this->loadModel('issue')->getByID($issueID);
 
         /* Set $_POST variables. */
         $fields = 'type,title,severity,pri,assignedTo,deadline,desc';
         $this->batchSetPost($fields, $oldIssue);
 
-        $control = $this->loadController('issue', 'edit');
         $control->edit($issueID);
 
         $data = $this->getData();

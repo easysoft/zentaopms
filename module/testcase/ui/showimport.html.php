@@ -11,6 +11,8 @@ declare(strict_types=1);
 namespace zin;
 jsVar('productID', $productID);
 jsVar('branch', $branch);
+jsVar('modules', $modules);
+jsVar('stories', $stories);
 
 if(!empty($suhosinInfo))
 {
@@ -65,6 +67,15 @@ else
         'width' => '32px'
     );
 
+    $items[] = $product->type != 'normal' ? array
+    (
+        'name'  => 'branch',
+        'label' => $lang->product->branch,
+        'control' => array('control' => 'picker', 'required' => true),
+        'items'   => $branches,
+        'width' => '120px'
+    ) : array();
+
     $items[] = array
     (
         'name'  => 'title',
@@ -73,13 +84,12 @@ else
         'required' => strpos(",$requiredFields,", ',title,') !== false
     );
 
-    $caseModules = $branch && isset($modules[$branch]) ? $modules[BRANCH_MAIN] + $modules[$branch] : $modules[BRANCH_MAIN];
     $items[] = array
     (
         'name'    => 'module',
         'label'   => $lang->testcase->module,
-        'control' => 'picker',
-        'items'   => $caseModules,
+        'control' => array('control' => 'picker', 'required' => true),
+        'items'   => isset($modules[$branch]) ? $modules[$branch] : array(),
         'width'   => '200px',
         'required' => strpos(",$requiredFields,", ',module,') !== false
     );
@@ -89,7 +99,7 @@ else
         'name'    => 'story',
         'label'   => $lang->testcase->story,
         'control' => 'picker',
-        'items'   => $stories,
+        'items'   => isset($stories[0]) ? $stories[0] : array(),
         'width'   => '240px',
         'required' => strpos(",$requiredFields,", ',story,') !== false
     );
@@ -181,6 +191,8 @@ else
         set::data($caseData),
         set::actionsText(false),
         set::onRenderRowCol(jsRaw('renderRowCol')),
+        on::change('[data-name="branch"]', 'changeBranch'),
+        on::change('[data-name="module"]', 'changeModule'),
         input(set::className('hidden'), set::name('isEndPage'), set::value($isEndPage ? '1' : '0')),
         input(set::className('hidden'), set::name('pagerID'), set::value($pagerID)),
         input(set::className('hidden'), set::name('insert'), set::value($dataInsert)),

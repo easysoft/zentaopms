@@ -202,6 +202,7 @@ $lang->task->noClosed          = 'Unclosed';
 $lang->task->yesterdayFinished = 'Task Finished Yesterday';
 $lang->task->allTasks          = 'Task';
 $lang->task->linkMR            = 'Related MRs';
+$lang->task->linkPR            = 'Related PRs';
 $lang->task->linkCommit        = 'Related Commits';
 
 $lang->task->statusList['']        = '';

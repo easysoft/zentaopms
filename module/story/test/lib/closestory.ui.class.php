@@ -12,16 +12,15 @@ include dirname(__FILE__, 5) . '/test/lib/ui.php';
 class closeStoryTester extends tester
 {
     /**
-     * check the stuts after close story
-     * check the stuts of the childstory after close parent
+     * Check the stuts and closedReason after close story.
+     *
      * @param string closeReason
      * @access public
      * @return object
      */
     public function closeStory($storyID, $closeReason)
     {
-        $form = $this->openURL('story', 'view', array('id' => $storyID), 'appIframe-product');  //进入研发需求详情页
-        $form = $this->loadPage('story', 'view');
+        $form = $this->initForm('story', 'view', array('id' => $storyID), 'appIframe-product');  //进入研发需求详情页
         $form->dom->btn($this->lang->story->close)->click();  //点击关闭需求按钮
 
         $form->wait(1);
@@ -36,5 +35,37 @@ class closeStoryTester extends tester
         if($viewPage->dom->closeReason->getText() != $closeReason) return $this->failed('需求关闭原因不正确');
 
         return $this->success('关闭需求成功');
+    }
+
+    /**
+     * check the stuts and closedReason after batchclose story.
+     *
+     * @param string closeReason
+     * @access public
+     * @return object
+     */
+    public function batchCloseStory($closeReason)
+    {
+        /*列表页面点击批量关闭按钮进入批量关闭页面*/
+        $browsePage = $this->initForm('product', 'browse', '1');
+        $browsePage->dom->firstSelect->click();
+        $browsePage->dom->batchMore->click();
+        sleep(1);
+        $browsePage->dom->getElement("/html/body/div[2]/menu/menu/li[1]/a/div/div")->click();
+        sleep(1);
+
+        $batchClose = $this->loadPage('story', 'batchClose');
+        $batchClose->dom->batchClosedReason->picker($closeReason);
+        $batchClose->dom->batchClosedSave->click();
+        $batchClose->wait(1);
+
+        /*检查需求详情页需求状态和关闭原因*/
+        $viewPage = $this->initForm('story', 'view', array('storyID' => '2'), 'appIframe-product');
+        if($viewPage->dom->status->getText() != '已关闭') return $this->failed('需求状态不正确');
+
+        $viewPage->dom->btn($this->lang->story->legendLifeTime)->click();
+        if($viewPage->dom->closeReason->getText() != $closeReason) return $this->failed('需求关闭原因不正确');
+
+        return $this->success('批量关闭需求成功');
     }
 }

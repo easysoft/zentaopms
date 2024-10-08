@@ -1,9 +1,9 @@
 <?php
 $config->message->objectTypes = array();
 $config->message->objectTypes['product']     = array('opened', 'edited', 'closed', 'undeleted');
-if($config->enableER) $config->message->objectTypes['epic']        = array('opened', 'edited', 'commented', 'changed', 'reviewed', 'closed', 'activated', 'assigned');
-if($config->URAndSR)  $config->message->objectTypes['requirement'] = array('opened', 'edited', 'commented', 'changed', 'reviewed', 'closed', 'activated', 'assigned');
-$config->message->objectTypes['story']       = array('opened', 'edited', 'commented', 'frombug', 'changed', 'reviewed', 'closed', 'activated', 'assigned');
+if($config->enableER) $config->message->objectTypes['epic']        = array('opened', 'edited', 'commented', 'changed', 'submitreview', 'reviewed', 'closed', 'activated', 'assigned');
+if($config->URAndSR)  $config->message->objectTypes['requirement'] = array('opened', 'edited', 'commented', 'changed', 'submitreview', 'reviewed', 'closed', 'activated', 'assigned');
+$config->message->objectTypes['story']       = array('opened', 'edited', 'commented', 'frombug', 'changed', 'submitreview', 'reviewed', 'closed', 'activated', 'assigned');
 $config->message->objectTypes['productplan'] = array('opened', 'edited');
 $config->message->objectTypes['release']     = array('opened', 'edited', 'published', 'changestatus');
 $config->message->objectTypes['project']     = array('opened', 'edited', 'started', 'delayed', 'suspended', 'closed', 'activated', 'undeleted');

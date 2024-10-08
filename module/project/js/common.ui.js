@@ -203,7 +203,7 @@ function checkBudget()
     checkProjectInfo();
 }
 
-function checkProjectInfo()
+window.checkProjectInfo = function()
 {
     const programID = $('[name=parent]').val();
     if(programID == 0)
@@ -222,8 +222,9 @@ function checkProjectInfo()
     $.getJSON($.createLink('project', 'ajaxGetProjectFormInfo', 'objectType=project&objectID=' + currentProject + "&selectedProgramID=" + programID), function(data)
     {
         let dateTip = '';
+        let projectEnd = $('[name=longTime]').prop('checked') ? LONG_TIME : $('[name=end]').val();
         if(typeof(data.selectedProgramBegin) != 'undefined' && $('[name=begin]').val() != '' && $('[name=begin]').val() < data.selectedProgramBegin) dateTip += beginLessThanParent.replace('%s', data.selectedProgramBegin);
-        if(typeof(data.selectedProgramEnd) != 'undefined' && $('[name=end]').val() != '' && $('[name=end]').val() > data.selectedProgramEnd) dateTip += endGreatThanParent.replace('%s', data.selectedProgramEnd);
+        if(typeof(data.selectedProgramEnd) != 'undefined' && projectEnd != '' && projectEnd > data.selectedProgramEnd) dateTip += endGreatThanParent.replace('%s', data.selectedProgramEnd);
         if(dateTip != '')
         {
             $('#dateTip').html(dateTip);

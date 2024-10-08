@@ -16,6 +16,7 @@ include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
 jsVar('bug',                   $bug);
 jsVar('confirmChangeProduct',  $lang->bug->notice->confirmChangeProduct);
 jsVar('moduleID',              $bug->module);
+jsVar('methodName',            $app->methodName);
 jsVar('tab',                   $this->app->tab);
 jsVar('released',              $lang->build->released);
 jsVar('confirmUnlinkBuild',    sprintf($lang->bug->notice->confirmUnlinkBuild, zget($resolvedBuildPairs, $bug->resolvedBuild)));

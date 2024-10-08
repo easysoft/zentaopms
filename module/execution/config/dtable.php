@@ -171,6 +171,7 @@ $config->execution->team->dtable->fieldList['limited']['map']      = $lang->team
 $config->execution->team->dtable->fieldList['limited']['sortType'] = false;
 
 $config->execution->team->dtable->fieldList['actions']['type']       = 'actions';
+$config->execution->team->dtable->fieldList['actions']['title']      = $lang->actions;
 $config->execution->team->dtable->fieldList['actions']['minWidth']   = 60;
 $config->execution->team->dtable->fieldList['actions']['actionsMap'] = $config->execution->team->actionList;
 

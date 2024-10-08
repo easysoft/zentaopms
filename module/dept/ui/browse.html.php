@@ -41,7 +41,7 @@ foreach($parentDepts as $dept)
         a
         (
             set::title($dept->name,),
-            set::href(createLink('dept', 'browse', "deptID={$dept->id}")),
+            set::href(common::isTutorialMode() ? null : createLink('dept', 'browse', "deptID={$dept->id}")),
             $dept->name
         ),
         icon
@@ -118,7 +118,7 @@ panel
                     a
                     (
                         set::title($this->app->company->name,),
-                        set::href(createLink('dept', 'browse')),
+                        set::href(common::isTutorialMode() ? null : createLink('dept', 'browse')),
                         $this->app->company->name
                     ),
                     icon('angle-right')

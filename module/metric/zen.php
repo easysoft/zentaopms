@@ -188,16 +188,23 @@ class metricZen extends metric
      */
     protected function calculateMetric($classifiedCalcGroup)
     {
+        set_time_limit(0);
         foreach($classifiedCalcGroup as $calcGroup)
         {
             try
             {
+                $beginTime = microtime(true);
                 $statement = $this->prepareDataset($calcGroup);
+                $sql = $statement ? $statement->get() : '';
 
                 $this->calcMetric($statement, $calcGroup->calcList);
 
                 $recordWithCode = $this->prepareMetricRecord($calcGroup->calcList);
                 $this->metric->insertMetricLib($recordWithCode);
+                $endTime = microtime(true);
+                $executeTime = $endTime - $beginTime;
+                $codes = implode(',', array_keys($calcGroup->calcList));
+                $this->metric->saveLogs("Calculate consumed time: {$executeTime} seconds, the sql: $sql, the codes: $codes");
             }
             catch(Exception $e)
             {
@@ -209,9 +216,13 @@ class metricZen extends metric
             }
         }
 
+        $beginTime = microtime(true);
         $metrics = $this->metric->getExecutableMetric();
         foreach($metrics as $code) $this->metric->deduplication($code);
         $this->metric->rebuildPrimaryKey();
+        $endTime = microtime(true);
+        $executeTime = $endTime - $beginTime;
+        $this->metric->saveLogs("Deduplicate consumed time: {$executeTime} seconds");
     }
 
     /**

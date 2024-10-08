@@ -99,6 +99,8 @@ class projectEntry extends entry
      */
     public function put($projectID)
     {
+        $control = $this->loadController('project', 'edit');
+
         $oldProject     = $this->loadModel('project')->getByID($projectID);
         $linkedProducts = $this->loadModel('product')->getProducts($projectID);
 
@@ -118,7 +120,6 @@ class projectEntry extends entry
         $this->setPost('products', $products);
         $this->setPost('plans', $plans);
 
-        $control = $this->loadController('project', 'edit');
         $control->edit($projectID);
 
         $data = $this->getData();

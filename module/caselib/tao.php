@@ -28,7 +28,7 @@ class caselibTao extends caselibModel
             $caseData->stage        = join(',', $data->stage[$key]);
             $caseData->keywords     = $data->keywords[$key];
             $caseData->frequency    = 1;
-            $caseData->precondition = $data->precondition[$key];
+            $caseData->precondition = nl2br($data->precondition[$key]);
 
             /* 追加工作流字段，保存到数据库。 */
             if($this->config->edition != 'open')

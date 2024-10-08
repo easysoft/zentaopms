@@ -140,7 +140,7 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
                 set::text($createBtnTitle),
                 set::url($createBtnLink)
             ),
-            dropdown
+            empty($items) ? null : dropdown
             (
                 btn(setClass('dropdown-toggle'), setClass($app->tab != 'product' ? 'secondary' : 'primary'), setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
                 set::placement('bottom-end'),

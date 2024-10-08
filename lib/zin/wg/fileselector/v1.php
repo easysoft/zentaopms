@@ -50,13 +50,13 @@ class fileSelector extends wg
 
     protected function created()
     {
-        if(!$this->hasProp('maxFileSize'))
+        if(!$this->hasProp('totalFileSize'))
         {
             $maxFileSize  = ini_get('upload_max_filesize');
             $lastChar     = substr($maxFileSize, -1);
             $fileSizeUnit = array('K', 'M', 'G', 'T');
             if(in_array($lastChar, $fileSizeUnit)) $maxFileSize .= 'B';
-            $this->setProp('maxFileSize', $maxFileSize);
+            $this->setProp('totalFileSize', $maxFileSize);
         }
         if(!$this->hasProp('tip'))
         {
@@ -69,12 +69,12 @@ class fileSelector extends wg
             $app->loadLang('file');
             $this->setProp('exceededCountHint', sprintf($lang->file->errorFileCount, '{maxCount}'));
         }
-        if(!$this->hasProp('exceededSizeTip'))
+        if(!$this->hasProp('exceededTotalSizeTip'))
         {
             global $app, $lang;
             $app->loadLang('file');
             $maxUploadSize = strtoupper(ini_get('upload_max_filesize'));
-            $this->setProp('exceededSizeTip', sprintf($lang->file->errorFileSize, $maxUploadSize));
+            $this->setProp('exceededTotalSizeTip', sprintf($lang->file->errorFileSize, $maxUploadSize));
         }
 
         /* Auto prepend suffix "[]" to multiple mode. */

@@ -74,7 +74,7 @@ window.initWaterfallGanttBlock = function()
     $.each(plans, function(index, plan)
     {
         var $plan = $('<div class="gantt-plan"></div>');
-        $plan.append('<div class="strong" title="' + plan.name + '">' + plan.text + '</div>');
+        $plan.append('<div class="strong flex" title="' + plan.name + '"><div class="text-ellipsis">' + plan.name + '</div>' + (plan.milestonecode == '1' ? '<icon class="icon icon-flag icon-sm red center"></icon>' : '') + '</div>');
         $plans.append($plan);
 
         var $bar = $('<div class="gantt-bar"></div>');

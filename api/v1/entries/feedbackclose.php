@@ -20,6 +20,7 @@ class feedbackCloseEntry extends entry
      */
     public function post($feedbackID)
     {
+        $control = $this->loadController('feedback', 'close');
         $feedback = $this->loadModel('feedback')->getById($feedbackID);
 
         $fields = 'closedReason,comment';
@@ -27,7 +28,6 @@ class feedbackCloseEntry extends entry
 
         if(empty($_POST)) $this->setPost('status', 'closed');
 
-        $control = $this->loadController('feedback', 'close');
         $control->close($feedbackID);
 
         $data = $this->getData();

@@ -344,7 +344,7 @@ class baseEntry
         {
             $this->app->loadModuleConfig($moduleName, $appName);
             $this->app->loadLang($moduleName, $appName);
-            $this->dao = new dao();
+            $this->dao = new dao($this->dao);
             return false;
         }
 
@@ -664,6 +664,8 @@ class baseEntry
                     if($val) $userList[] = $val;
                 }
                 return $userList;
+            case 'decodeHtml':
+                return htmlspecialchars_decode((string) $value);
             default:
                 return $value;
         }

@@ -1072,6 +1072,9 @@ class repo extends control
     {
         if($this->viewType !== 'json') $this->commonAction();
 
+        $serverList = $this->loadModel('pipeline')->getPairs(implode(',', $this->config->repo->notSyncSCM), true);
+        if(!$serverID) $serverID = key($serverList);
+
         if($_POST)
         {
             $repos = form::batchData($this->config->repo->form->import)->get();
@@ -1081,9 +1084,6 @@ class repo extends control
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->repo->createLink('maintain')));
         }
-
-        $serverList = $this->loadModel('pipeline')->getPairs('gitlab');
-        if(!$serverID) $serverID = key($serverList);
 
         $server      = $this->pipeline->getByID($serverID);
         $hiddenRepos = $this->loadModel('setting')->getItem('owner=system&module=repo&section=hiddenRepo&key=' . $serverID);
@@ -1440,7 +1440,7 @@ class repo extends control
      */
     public function ajaxGetHosts(string $scm)
     {
-        $hosts = $this->loadModel('pipeline')->getPairs($scm);
+        $hosts = $this->loadModel('pipeline')->getPairs($scm, true);
 
         $options = array();
         foreach($hosts as $hostID => $host)

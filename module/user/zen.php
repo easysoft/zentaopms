@@ -163,6 +163,7 @@ class userZen extends user
 
         /* 获取用户所属权限组、权限和视图，记录日志并发放登录积分。*/
         /* Get user's group, priv and view, save log and give login score. */
+        helper::setcookie('logout', false, 0);
         $user = $this->user->login($user, true, $this->post->keepLogin);
 
         /* 以 json 格式返回用户数据。*/
@@ -334,6 +335,8 @@ class userZen extends user
      */
     public function responseForLogon(string $referer, string $viewType, string $loginLink, string $denyLink, string $locateReferer, string $locateWebRoot): array
     {
+        helper::setcookie('logout', false, 0);
+
         /* 以 json 格式返回用户数据。*/
         /* Return user data in json format. */
         if($viewType == 'json') return array('status' => 'success', 'user' => $this->getUserForJSON($this->app->user));

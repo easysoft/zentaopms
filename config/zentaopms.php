@@ -615,6 +615,7 @@ define('TABLE_AI_MODEL',            '`' . $config->db->prefix . 'ai_model`');
 define('TABLE_AI_ASSISTANT',        '`' . $config->db->prefix . 'ai_assistant`');
 
 define('TABLE_SQLITE_QUEUE', '`' . $config->db->prefix . 'sqlite_queue`');
+define('TABLE_DUCKDBQUEUE', '`' . $config->db->prefix . 'duckdbqueue`');
 
 if(!defined('TABLE_ROADMAP'))        define('TABLE_ROADMAP',        '`' . $config->db->prefix . 'roadmap`');
 if(!defined('TABLE_ROADMAPSTORY'))   define('TABLE_ROADMAPSTORY',   '`' . $config->db->prefix . 'roadmapstory`');
@@ -715,6 +716,7 @@ $config->objectTables['marketreport']   = TABLE_MARKETREPORT;
 $config->objectTables['marketresearch'] = TABLE_PROJECT;
 $config->objectTables['researchstage']  = TABLE_PROJECT;
 $config->objectTables['workflowgroup']  = TABLE_WORKFLOWGROUP;
+$config->objectTables['productline']    = TABLE_MODULE;
 
 $config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions', 'aiPrompts', 'promptDesign', 'promptExec');
 $config->disabledFeatures = '';

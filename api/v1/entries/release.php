@@ -41,13 +41,13 @@ class releaseEntry extends entry
      */
     public function put($releaseID)
     {
+        $control = $this->loadController('release', 'edit');
         $oldRelease = $this->loadModel('release')->getByID($releaseID);
 
         /* Set $_POST variables. */
         $fields = 'name,build,status,desc';
         $this->batchSetPost($fields, $oldRelease);
 
-        $control = $this->loadController('release', 'edit');
         $control->edit($releaseID);
 
         $data = $this->getData();

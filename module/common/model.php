@@ -1769,7 +1769,11 @@ eof;
         $this->loadModel('action')->create('user', $user->id, 'login');
         $this->loadModel('score')->create('user', 'login');
 
-        if($isFreepasswd) header("Location: {$this->config->webRoot}");
+        if($isFreepasswd)
+        {
+            header("Location: {$this->config->webRoot}");
+            helper::end();
+        }
 
         $this->session->set('ENTRY_CODE', $this->get->code);
         $this->session->set('VALID_ENTRY', md5(md5($this->get->code) . helper::getRemoteIp()));

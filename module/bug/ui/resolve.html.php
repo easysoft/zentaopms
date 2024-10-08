@@ -78,7 +78,7 @@ formPanel
             set::width('1/3'),
             setID('newBuildExecutionBox'),
             setClass('hidden'),
-            set::label(!empty($execution) && $execution->type == 'kanban' ? $lang->bug->kanban : $lang->build->execution),
+            set::label(!empty($execution) && $execution->type == 'kanban' ? $lang->bug->kanban : $lang->build->executionAB),
             set::required(true),
             picker
             (

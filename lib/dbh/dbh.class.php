@@ -437,10 +437,10 @@ class dbh
                 }
                 elseif(stripos($sql, 'CREATE UNIQUE INDEX') === 0 || stripos($sql, 'CREATE INDEX') === 0)
                 {
-                    preg_match('/ON\s+[^.`\s]+\.`([^\s`]+)`/', $sql, $matches);
+                    preg_match('/ON\s+([^.`\s]+\.)?`([^\s`]+)`/', $sql, $matches);
 
-                    $tableName = str_replace($this->config->prefix, '', $matches);
-                    $sql       = preg_replace('/INDEX\ +\`/', 'INDEX `' . strtolower($tableName[1]) . '_', $sql);
+                    $tableName = isset($matches[2]) ? str_replace($this->config->prefix, '', $matches[2]) : '';
+                    $sql       = preg_replace('/INDEX\ +\`/', 'INDEX `' . strtolower($tableName) . '_', $sql);
                 }
             case 'ALTER':
                 $sql = $this->formatField($sql);
@@ -451,10 +451,10 @@ class dbh
             case 'USE':
                 return '';
             case 'DESC';
-                $tableName = str_replace(array('DESC ', '`'), '', $sql);
+                $tableName = str_ireplace(array('DESC ', '`'), '', $sql);
                 $tableName = trim($tableName);
-                if(strpos($sql, ' ') !== false) list($tableName, $columnName) = explode(' ', $tableName);
-                $sql = "select COLUMN_NAME as Field from all_tab_columns where Table_Name='$tableName'";
+                if(strpos($tableName, ' ') !== false) list($tableName, $columnName) = explode(' ', $tableName);
+                $sql = "select COLUMN_NAME as Field, DATA_TYPE as `Type`, DATA_LENGTH as Length, DATA_DEFAULT as `Default`, NULLABLE as `Null` from all_tab_columns where Table_Name='$tableName'";
                 if(!empty($columnName)) $sql .= " and COLUMN_NAME='$columnName'";
                 return $sql;
             case 'DROP':
@@ -853,5 +853,56 @@ class dbh
 
         $lastAction = $this->pdo->query($sql)->fetch();
         return $lastAction ? (int)$lastAction->id : false;
+    }
+
+    /**
+     * 安装时检查数据库用户权限。
+     * Check user privilege.
+     *
+     * @access public
+     * @return string
+     */
+    public function checkUserPriv(): string
+    {
+        if($this->config->driver == 'mysql')
+        {
+            $user = $this->config->user;
+            $host = ($this->config->host == 'localhost' || $this->config->host == '127.0.0.1') ? 'localhost' : '%';
+
+            // 获取当前用户的所有权限
+            $privPairs = array();
+            $privList  = $this->pdo->query("SELECT PRIVILEGE_TYPE FROM information_schema.USER_PRIVILEGES WHERE GRANTEE LIKE '%$user%';")->fetchAll();
+            foreach($privList as $priv)
+            {
+                $privPairs[$priv->PRIVILEGE_TYPE] = 1;
+            }
+
+            // 禅道所需的权限
+            $requiredPrivs = array('SELECT', 'INSERT', 'UPDATE', 'DELETE', 'DROP', 'CREATE', 'ALTER', 'INDEX', 'CREATE VIEW');
+
+            $missingPrivs = array();
+            foreach($requiredPrivs as $priv)
+            {
+                if(!isset($privPairs[$priv])) $missingPrivs[] = $priv;
+            }
+
+            $sql = '';
+            if(!empty($missingPrivs))
+            {
+                $sql .= 'GRANT ';
+                foreach($missingPrivs as $priv)
+                {
+                    $sql .= $priv . ',';
+                }
+
+                $sql  = rtrim($sql, ',');
+                $sql .= " ON *.* TO '$user'@'$host';" . '\n';
+                $sql .= 'FLUSH PRIVILEGES;';
+            }
+
+            return $sql;
+        }
+
+        return '';
     }
 }

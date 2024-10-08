@@ -41,13 +41,13 @@ class buildEntry extends entry
      */
     public function put($buildID)
     {
+        $control = $this->loadController('build', 'edit');
         $oldBuild = $this->loadModel('build')->getByID($buildID);
 
         /* Set $_POST variables. */
         $fields = 'execution,product,name,builder,date,scmPath,filePath,desc';
         $this->batchSetPost($fields, $oldBuild);
 
-        $control = $this->loadController('build', 'edit');
         $control->edit($buildID);
 
         $data = $this->getData();

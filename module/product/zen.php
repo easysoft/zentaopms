@@ -299,7 +299,7 @@ class productZen extends product
         if($programID and strpos(",{$hasPrivPrograms},", ",{$programID},") === false) $fields['program']['control'] = 'hidden';
         if(isset($fields['program']) and !isset($fields['program']['options'][$programID]) and $programID)
         {
-            $program = $this->program->getByID($programID);
+            $program = $this->loadModel('program')->getByID($programID);
             $fields['program']['options'] += array($programID => $program->name);
         }
 

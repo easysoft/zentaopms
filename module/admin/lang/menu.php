@@ -62,7 +62,7 @@ $lang->admin->menuList->system['menuOrder']['35'] = 'cache';
 $lang->admin->menuList->system['menuOrder']['40'] = 'cron';
 $lang->admin->menuList->system['menuOrder']['45'] = 'timezone';
 $lang->admin->menuList->system['menuOrder']['50'] = 'buildindex';
-$lang->admin->menuList->system['menuOrder']['55'] = 'tableengine';
+$lang->admin->menuList->system['menuOrder']['65'] = 'tableengine';  // The order 51-64 is reserved for extension.
 
 $lang->admin->menuList->system['dividerMenu'] = ',safe,';
 

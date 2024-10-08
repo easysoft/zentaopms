@@ -187,6 +187,7 @@ $lang->action->objectTypes['metric']           = '度量';
 $lang->action->objectTypes['projectbuild']     = '版本';
 $lang->action->objectTypes['board']            = '白板';
 $lang->action->objectTypes['boardspace']       = '白板空间';
+$lang->action->objectTypes['productline']      = '产品线';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();

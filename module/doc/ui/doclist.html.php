@@ -19,6 +19,7 @@ foreach($config->doc->dtable->fieldList as $colName => $col)
 
     $cols[$colName] = $col;
 }
+$cols['title']['data-app'] = $app->tab;
 
 $params         = "objectID={$objectID}&libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&orderBy={$orderBy}&param={$param}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}";
 $tableData      = empty($docs) ? array() : initTableData($docs, $cols);

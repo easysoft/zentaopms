@@ -29,6 +29,7 @@ if(!$product->shadow) $fields->fullModeOrders('module,project,execution');
 
 jsVar('bug',                   $bug);
 jsVar('moduleID',              $bug->moduleID);
+jsVar('methodName',            $app->methodName);
 jsVar('tab',                   $this->app->tab);
 jsVar('createRelease',         $lang->release->create);
 jsVar('refresh',               $lang->refreshIcon);

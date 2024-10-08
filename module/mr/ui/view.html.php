@@ -19,6 +19,7 @@ dropmenu
     set::url(createLink($module, 'ajaxGetDropMenu', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
 );
 
+include 'header.html.php';
 $hasNoChange    = $MR->synced && empty($rawMR->changes_count) ? true : false;
 $hasConflict    = $MR->synced === '1' ? $rawMR->has_conflicts : !$MR->hasNoConflict;
 $sourceDisabled = ($MR->status == 'merged' && $MR->removeSourceBranch == '1') ? 'disabled' : '';
@@ -85,7 +86,6 @@ else
 
 detailHeader
 (
-    set::back('mr-browse'),
     to::title
     (
         entityLabel
@@ -113,67 +113,7 @@ panel
     div
     (
         set::id('mrMenu'),
-        nav
-        (
-            li
-            (
-                setClass('nav-item'),
-                a($lang->mr->view, setClass('active'))
-            ),
-            li
-            (
-                setClass('nav-item'),
-                a
-                (
-                    $lang->mr->commitLogs,
-                    set::href(inlink('commitlogs', "MRID={$MR->id}")),
-                    set('data-app', $app->tab)
-                )
-            ),
-            li
-            (
-                setClass('nav-item'),
-                a
-                (
-                    $lang->mr->viewDiff,
-                    set::href(inlink('diff', "MRID={$MR->id}")),
-                    set('data-app', $app->tab)
-                )
-            ),
-            li
-            (
-                setClass('nav-item'),
-                a
-                (
-                    icon($lang->icons['story']),
-                    $lang->productplan->linkedStories,
-                    set::href(inlink('link', "MRID={$MR->id}&type=story")),
-                    set('data-app', $app->tab)
-                )
-            ),
-            li
-            (
-                setClass('nav-item'),
-                a
-                (
-                    icon($lang->icons['bug']),
-                    $lang->productplan->linkedBugs,
-                    set::href(inlink('link', "MRID={$MR->id}&type=bug")),
-                    set('data-app', $app->tab)
-                )
-            ),
-            li
-            (
-                setClass('nav-item'),
-                a
-                (
-                    icon('todo'),
-                    $lang->mr->linkedTasks,
-                    set::href(inlink('link', "MRID={$MR->id}&type=task")),
-                    set('data-app', $app->tab)
-                )
-            )
-        )
+        $headers
     ),
     div
     (
@@ -189,6 +129,7 @@ panel
                 h::span
                 (
                     setClass('font-bold mt-2 mb-2 inline-block'),
+                    setID('mrBranches'),
                     $lang->mr->from,
                     h::a
                     (
@@ -211,6 +152,7 @@ panel
                 (
                     item
                     (
+                        set::trClass('mr-status-tr'),
                         set::name($lang->mr->status),
                         (!empty($MR->syncError) && $MR->synced === '0') ? h::span
                         (
@@ -263,13 +205,14 @@ panel
                 history
                 (
                     set::objectID($MR->id),
-                    set::commentUrl(createLink('action', 'comment', array('objectType' => 'mr', 'objectID' => $MR->id)))
+                    set::commentUrl(createLink('action', 'comment', array('objectType' => $app->rawModule, 'objectID' => $MR->id)))
                 )
             )
         ),
         cell
         (
             setClass('cell'),
+            setID('mrJob'),
             set::width('30%'),
             set::align('baseline'),
             div

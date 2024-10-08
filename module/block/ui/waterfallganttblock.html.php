@@ -19,7 +19,7 @@ $productItems = array();
 foreach($products as $id => $productName)
 {
     $url = createLink('block', 'printBlock', "blockID={$block->id}&params=" . helper::safe64Encode("module={$block->module}&productID={$id}"));
-    $productItems[] = array('text' => $productName, 'data-url' => $url, 'data-on' => 'click', 'data-do' => "loadBlock('$block->id', options.url)");
+    $productItems[] = array('text' => $productName, 'data-url' => $url, 'active' => $productID == $id, 'data-on' => 'click', 'data-do' => "loadBlock('$block->id', options.url)");
 }
 panel
 (

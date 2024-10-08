@@ -117,12 +117,13 @@ class executionEntry extends entry
      */
     public function put($executionID)
     {
+        $control = $this->loadController('execution', 'edit');
         $oldExecution = $this->loadModel('execution')->getByID($executionID);
 
         $useCode = $this->checkCodeUsed();
         /* Set $_POST variables. */
         $fields = 'project,name,begin,end,lifetime,desc,days,acl,status,PO,PM,QD,RD';
-        if($useCode) $fields .= 'code';
+        if($useCode) $fields .= ',code';
         $this->batchSetPost($fields, $oldExecution);
 
         $this->setPost('whitelist', $this->request('whitelist', explode(',', $oldExecution->whitelist)));
@@ -130,7 +131,6 @@ class executionEntry extends entry
         $products = $this->loadModel('product')->getProducts($executionID);
         $this->setPost('products', $this->request('products', array_keys($products)));
 
-        $control = $this->loadController('execution', 'edit');
         $control->edit($executionID);
 
         $data = $this->getData();

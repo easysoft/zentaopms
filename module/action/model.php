@@ -309,11 +309,17 @@ class actionModel extends model
 
         /* 按对象类型对已删除的对象进行分组，并获取名称字段。 */
         /* Group trashes by objectType, and get there name field. */
+        $auditplanIdList = array();
         foreach($trashes as $object)
         {
             $object->objectType = str_replace('`', '', $object->objectType);
+            if($object->objectType == 'auditplan') $auditplanIdList[$object->objectID] = $object->objectID;
             $typeTrashes[$object->objectType][] = $object->objectID;
         }
+
+        $auditplanList = $this->dao->select('id,objectID,objectType')->from(TABLE_AUDITPLAN)->where('id')->in($auditplanIdList)->fetchAll('id');
+        foreach($auditplanList as $auditplan) $typeTrashes[$auditplan->objectType][] = $auditplan->objectID;
+
         foreach($typeTrashes as $objectType => $objectIdList)
         {
             if(!isset($this->config->objectTables[$objectType])) continue;
@@ -340,7 +346,16 @@ class actionModel extends model
             if($trash->objectType == 'pipeline' && isset($objectNames['gitlab'][$trash->objectID]))  $trash->objectType = 'gitlab';
             if($trash->objectType == 'pipeline' && isset($objectNames['jenkins'][$trash->objectID])) $trash->objectType = 'jenkins';
 
-            $trash->objectName = isset($objectNames[$trash->objectType][$trash->objectID]) ? $objectNames[$trash->objectType][$trash->objectID] : '';
+            if($trash->objectType == 'auditplan')
+            {
+                $realObjectID      = isset($auditplanList[$trash->objectID]) ? $auditplanList[$trash->objectID]->objectID   : 0;
+                $realObjectType    = isset($auditplanList[$trash->objectID]) ? $auditplanList[$trash->objectID]->objectType : '';
+                $trash->objectName = isset($objectNames[$realObjectType][$realObjectID]) ? $objectNames[$realObjectType][$realObjectID] : '';
+            }
+            else
+            {
+                $trash->objectName = isset($objectNames[$trash->objectType][$trash->objectID]) ? $objectNames[$trash->objectType][$trash->objectID] : '';
+            }
         }
         return $trashes;
     }
@@ -819,8 +834,7 @@ class actionModel extends model
     {
         /* 计算时间段的开始和结束时间。 */
         /* Computer the begin and end date of a period. */
-        $beginAndEnd = $this->computeBeginAndEnd($period);
-        extract($beginAndEnd);
+        $beginAndEnd = $this->computeBeginAndEnd($period, $date, $direction);
 
         /* 构建权限搜索条件。 */
         /* Build has priv search condition. */
@@ -835,35 +849,12 @@ class actionModel extends model
         $programCondition = empty($this->app->user->view->programs) ? '0' : $this->app->user->view->programs;
         $condition .= " OR (`objectID` in ($programCondition) AND `objectType` = 'program')";
 
-        /* 用户不传入时间的情况下，限定只能查询今年的数据。 */
-        /* If the user does not enter the time, only this year's data can be queried. */
-        $beginDate = '';
-        if($period == 'all')
-        {
-            $year = date('Y');
-
-            /* 查询所有动态时最多查询最后两年的数据。 */
-            /* When query all dynamic then query the data of the last two years at most. */
-            if($this->app->getMethodName() == 'dynamic') $year = $year - 1;
-            $beginDate = $year . '-01-01';
-        }
-
-        /* 查询项目动态时，只查项目创建日期之后的动态。 */
-        /* When you query project actions, only the actions after the date the project was created. */
-        if(is_numeric($projectID))
-        {
-            $openedDate = $this->dao->select('openedDate')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('openedDate');
-            $beginDate  = $openedDate > $beginDate ? $openedDate : $beginDate;
-        }
-
-        $this->actionTao->processEffortCondition($condition, $period, $begin, $end, $beginDate);
-
         $noMultipleExecutions = $this->dao->select('id')->from(TABLE_PROJECT)->where('multiple')->eq(0)->andWhere('type')->in('sprint,kanban')->fetchPairs();
         if($noMultipleExecutions) $condition = count($noMultipleExecutions) > 1 ? "({$condition}) AND (`objectType` != 'execution' || (`objectID` NOT " . helper::dbIN($noMultipleExecutions) . " AND `objectType` = 'execution'))" : "({$condition}) AND (`objectType` != 'execution' || (`objectID` !" . helper::dbIN($noMultipleExecutions) . " AND `objectType` = 'execution'))";
 
         $condition = "({$condition})";
 
-        $actions = $this->actionTao->getActionListByCondition($condition, $date, $period, $begin, $end, $direction, $account, $beginDate, $productID, $projectID, $executionID, $executions, $actionCondition, $orderBy, $limit);
+        $actions = $this->actionTao->getActionListByCondition($condition, $date, $beginAndEnd['begin'], $beginAndEnd['end'], $account, $productID, $projectID, $executionID, $executions, $actionCondition, $orderBy, $limit);
         if(!$actions) return array();
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
@@ -1200,11 +1191,38 @@ class actionModel extends model
      * Compute the begin date and end date of a period.
      *
      * @param  string $period   all|today|yesterday|twodaysago|latest2days|thisweek|lastweek|thismonth|lastmonth
+     * @param  string $date
+     * @param  string $direction pre|next
      * @access public
      * @return array
      */
-    public function computeBeginAndEnd(string $period): array
+    public function computeBeginAndEnd(string $period, string $date, string $direction): array
     {
+        /* 1. 确切的日期。 */
+        /* 1. The exact date. */
+        if($date)
+        {
+            if($direction == 'next') return array('begin' => $date,  'end' => FUTURE_DATE);
+            if($direction == 'pre')  return array('begin' => EPOCH_DATE,  'end' => $date);
+            return array('begin' => $date, 'end' => $date);
+        }
+
+        /* 2. 所有时间。 */
+        /* 2. All time. */
+        if($period == 'all')
+        {
+            $beginDate = '';
+            $year = date('Y');
+
+            /* 查询所有动态时最多查询最后两年的数据。 */
+            /* When query all dynamic then query the data of the last two years at most. */
+            if($this->app->getMethodName() == 'dynamic') $year = $year - 1;
+            $beginDate = $year . '-01-01';
+            return array('begin' => $beginDate, 'end' => FUTURE_DATE);
+        }
+
+        /* 3. 时间段。 */
+        /* 3. Period. */
         $period = strtolower($period);
         if($period == 'all') return array('begin' => EPOCH_DATE,  'end' => FUTURE_DATE);
 
@@ -1361,7 +1379,11 @@ class actionModel extends model
 
         /* 还原已删除的需求时重算OR需求和业用研需的阶段。 */
         /* The stage of recalculating OR requirements and industrial research needs when restoring deleted requirements. */
-        if(in_array($action->objectType, array('story', 'epic', 'requirement'))) $this->loadModel('story')->setStage($action->objectID);
+        if(in_array($action->objectType, array('story', 'epic', 'requirement')))
+        {
+            $this->loadModel('story')->setStage($action->objectID);
+            $this->story->updateParentStatus($action->objectID);
+        }
         if($action->objectType == 'demand' && !empty($object->parent)) $this->loadModel('demand')->updateParentDemandStage($object->parent);
 
         /* 在action表中更新action记录。 */

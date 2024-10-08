@@ -51,7 +51,7 @@ class zdb
         while($table = $stmt->fetch(PDO::FETCH_ASSOC))
         {
             $tableType = strtolower($table['Table_type']);
-            if($type == 'base' and $tableType != 'base table') continue;
+            if($type == 'base' && $tableType != 'base table' && $tableType != 'table') continue;
 
             $tableName = $table["Tables_in_{$config->db->name}"];
             $allTables[$tableName] = $tableType == 'base table' ? 'table' : $tableType;
@@ -239,6 +239,8 @@ class zdb
 
             /* Create sql code. */
             $backupSql  = "DROP " . strtoupper($tableType) . " IF EXISTS `$table`;\n";
+            $desc       = $this->dbh->query("desc `$table`")->fetchAll();
+            if(empty($desc)) continue;
 
             $schemaSQL = $this->getSchemaSQL($table, $tableType);
             if($schemaSQL->result) $backupSql .= $schemaSQL->sql;
@@ -246,9 +248,8 @@ class zdb
             fwrite($fp, $backupSql);
             if($tableType != 'table') continue;
 
-            $desc       = $this->dbh->query("desc `$table`")->fetchAll();
             $nullFields = array();
-            foreach($desc as $field) $nullFields[$field->Field] = $field->Null == 'YES';
+            foreach($desc as $field) $nullFields[$field->Field] = ($field->Null == 'YES' ||  $field->Null == 'Y');
 
             /* Create key sql for insert. */
             $fields   = "`" . join('`,`', array_map('addslashes', array_keys($nullFields))) . "`";
@@ -264,7 +265,7 @@ class zdb
                 {
                     $length     = strlen($fieldValue);
                     $fieldValue = "'{$fieldValue}'";
-                    if($length == 0 and $nullFields[$fieldName]) $fieldValue = 'null';
+                    if($length == 0 and isset($nullFields[$fieldName])) $fieldValue = 'null';
 
                     $value[] = $fieldValue;
                 }

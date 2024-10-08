@@ -582,7 +582,7 @@ $lang->bi->dividerMenu = ',metric,';
 $lang->bi->menuOrder[5]  = 'screen';
 $lang->bi->menuOrder[10] = 'pivot';
 $lang->bi->menuOrder[15] = 'chart';
-$lang->bi->menuOrder[50] = 'metric';
+$lang->bi->menuOrder[20] = 'metric';
 
 /* Company menu.*/
 $lang->company->menu              = new stdclass();

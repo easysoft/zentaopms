@@ -213,7 +213,7 @@ class repoModel extends model
      */
     public function createRepo(object $repo): int|false
     {
-        $check = $this->repoTao->checkName($repo);
+        $check = $this->checkName($repo->name);
         if(!$check)
         {
             dao::$errors['name'] = $this->lang->repo->error->repoNameInvalid;
@@ -675,7 +675,7 @@ class repoModel extends model
         {
             $repo->serviceHost    = $repo->client;
             $repo->serviceProject = $repo->extra;
-            $this->dao->update(TABLE_REPO)->data($repo)->where('id')->eq($repoID)->exec();
+            $this->dao->update(TABLE_REPO)->data(array('serviceHost' => $repo->serviceHost, 'serviceProject' => $repo->serviceProject))->where('id')->eq($repoID)->exec();
 
             /* Add webhook. */
             if($repo->SCM == 'Gitlab') $this->loadModel('gitlab')->updateCodePath((int)$repo->serviceHost, (int)$repo->serviceProject, $repo->id);
@@ -689,6 +689,7 @@ class repoModel extends model
         if(empty($repo->acl->acl)) $repo->acl->acl = 'custom';
 
         $repo->serviceHost    = (int)$repo->serviceHost;
+        $repo->gitService     = $repo->serviceHost;
         $repo->serviceProject = $repo->SCM == 'Gitlab' ? (int)$repo->serviceProject : $repo->serviceProject;
         return $repo;
     }
@@ -913,17 +914,17 @@ class repoModel extends model
     public function getLatestCommit(int $repoID, bool $checkCount = true): object|false
     {
         $repo        = $this->fetchByID($repoID);
-
-        $orderBy     = $repo->SCM == 'Subversion' ? 'svnRevision desc' : 't1.time desc';
         $branchID    = (string)$this->cookie->repoBranch;
-        $lastComment = $this->dao->select('t1.*,t1.revision*1 as svnRevision')->from(TABLE_REPOHISTORY)->alias('t1')
+        $lastComment = $this->dao->select('t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
             ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
             ->where('t1.repo')->eq($repoID)
             ->beginIF($repo->SCM != 'Subversion' && $branchID)->andWhere('t2.branch')->eq($branchID)->fi()
             ->beginIF($repo->SCM == 'Subversion')->andWhere('t1.time')->ne('1970-01-01 08:00:00')->fi()
-            ->orderBy($orderBy)
+            ->orderBy('t1.`time` desc')
             ->fetch();
         if(empty($lastComment)) return false;
+
+        $lastComment->svnRevision = intval($lastComment->revision);
         if(!$checkCount) return $lastComment;
 
         $count = $this->dao->select('count(DISTINCT t1.id) as count')->from(TABLE_REPOHISTORY)->alias('t1')
@@ -3116,5 +3117,18 @@ class repoModel extends model
             if(count((array)$this->lang->{$module}->menu->devops['subMenu']) < 2) unset($this->lang->{$module}->menu->devops['subMenu']);
         }
         return $objectID;
+    }
+
+    /**
+     * Check repo name.
+     *
+     * @param  string $name
+     * @access public
+     * @return bool
+     */
+    public function checkName(string $name)
+    {
+        $pattern = "/^[a-z_]{1}[a-z0-9_-]+$/i";
+        return preg_match($pattern, $name);
     }
 }

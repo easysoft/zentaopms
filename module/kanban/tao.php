@@ -511,11 +511,32 @@ class kanbanTao extends kanbanModel
             foreach($assignedToList as $account)
             {
                 if(!$account) continue;
+                $maxTextLen = 2;
+                $realname   = zget($users, $account, '');
+                $mbLength   = mb_strlen($realname, 'utf-8');
+                $strLength  = strlen($realname);
+
+                $displayText = '';
+                if($strLength === $mbLength)
+                {
+                    /* Pure alphabet or numbers 纯英文情况 */
+                    $displayText = strtoupper($realname[0]);
+                }
+                else if($strLength % $mbLength == 0 && $strLength % 3 == 0)
+                {
+                    /* Pure chinese characters 纯中文的情况 */
+                    $displayText = $mbLength <= $maxTextLen ? $realname : mb_substr($realname, $mbLength - $maxTextLen, $mbLength, 'utf-8');
+                }
+                else
+                {
+                    /* Mix of Chinese and English 中英文混合的情况 */
+                    $displayText = $mbLength <= $maxTextLen ? $realname : mb_substr($realname, 0, $maxTextLen, 'utf-8');
+                }
 
                 $userAvatar = zget($avatarPairs, $account, '');
-                $userAvatar = $userAvatar ? "<img src='$userAvatar'/>" : strtoupper(mb_substr($account, 0, 1, 'utf-8'));
+                $userAvatar = $userAvatar ? "<img src='$userAvatar'/>" : $displayText;
                 $item['avatarList'][]  = $userAvatar;
-                $item['realnames']    .= zget($users, $account, '') . ' ';
+                $item['realnames']    .= $realname . ' ';
             }
         }
 

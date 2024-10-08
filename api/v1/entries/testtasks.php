@@ -76,6 +76,8 @@ class testtasksEntry extends entry
      */
     public function post($projectID = 0)
     {
+        $control = $this->loadController('testtask', 'create');
+
         if(!$projectID) $projectID = $this->param('project', 0);
         $productID   = $this->request('product', 0);
         $executionID = $this->request('execution', 0);
@@ -94,7 +96,6 @@ class testtasksEntry extends entry
         $fields = 'product,execution,build,name,begin,end,owner,type,pri,status,desc';
         $this->batchSetPost($fields);
 
-        $control = $this->loadController('testtask', 'create');
         $this->requireFields('name,begin,end');
         $control->create($productID, $executionID, $build, $projectID);
 

@@ -147,18 +147,18 @@ class baseModel
      */
     public function __construct(string $appName = '')
     {
-        global $app, $config, $lang, $dbh;
+        global $app, $config, $lang, $dbh, $dao;
         $this->app     = $app;
         $this->config  = $config;
         $this->lang    = $lang;
         $this->dbh     = $dbh;
+        $this->dao     = $dao;
         $this->appName = empty($appName) ? $this->app->getAppName() : $appName;
 
         $moduleName = $this->getModuleName();
         if($this->config->framework->multiLanguage) $this->app->loadLang($moduleName, $this->appName);
         if($moduleName != 'common') $this->app->loadModuleConfig($moduleName, $this->appName);
 
-        $this->loadDAO();
         $this->setSuperVars();
         if($this->config->cache->enable) $this->loadCache();
 
@@ -308,30 +308,6 @@ class baseModel
         if($type == 'model') $extensionClass = str_replace(ucfirst($type), '', $extensionClass);
         $this->$extensionClass = $extensionObject;
         return $extensionObject;
-    }
-
-    /**
-     * 加载DAO。
-     * Load DAO.
-     *
-     * @access public
-     * @return void
-     */
-    public function loadDAO()
-    {
-        global $config, $dao;
-        if(is_object($dao)) return $this->dao = $dao;
-
-        $driver = $config->db->driver;
-
-        if(!class_exists($driver))
-        {
-            $classFile = $this->app->coreLibRoot . 'dao' . DS . $driver . '.class.php';
-            include($classFile);
-        }
-
-        $dao = new $driver();
-        $this->dao = $dao;
     }
 
     /**

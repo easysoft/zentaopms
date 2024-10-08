@@ -49,10 +49,10 @@ class issuesEntry extends entry
      */
     private function getProjectIssues($projectID)
     {
+        $control = $this->loadController('issue', 'browse');
         $project = $this->loadModel('project')->getByID($projectID);
         if(!$project) return $this->send404();
 
-        $control = $this->loadController('issue', 'browse');
         $control->browse($projectID, $this->param('type', 'all'), 0, $this->param('order', ''), $this->param('total', 0), $this->param('limit', 20), $this->param('page', 1));
         $data = $this->getData();
 
@@ -78,13 +78,13 @@ class issuesEntry extends entry
      */
     public function post($projectID = 0)
     {
+        $control = $this->loadController('issue', 'create');
         $project = $this->loadModel('project')->getByID($projectID);
         if(!$project) return $this->send404();
 
         $fields = 'type,title,severity,pri,assignedTo,deadline,desc';
         $this->batchSetPost($fields);
 
-        $control = $this->loadController('issue', 'create');
         $this->requireFields('type,title,severity');
 
         $control->create($projectID);

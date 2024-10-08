@@ -39,7 +39,7 @@ if($hasCode)
 }
 
 $fields->field('begin')
-    ->tip($copyProject ? $lang->project->copyProject->endTips : null)
+    ->tip($copyProject ? $lang->project->copyProject->endTips : ' ')
     ->tipClass('text-warning');
 if(!$copyProject || data('copyProject.multiple') != '0') $fields->field('begin')->checkbox(array('text' => $lang->project->longTime, 'name' => 'longTime', 'checked' => false));
 

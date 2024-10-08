@@ -1004,10 +1004,13 @@ class doc extends control
     {
         list($myObjects, $normalObjects, $closedObjects) = $this->doc->getOrderedObjects($objectType, 'nomerge', $objectID);
 
+        $libData = $this->doc->setMenuByType($objectType, $objectID, 0);
+
         $this->view->objectType    = $objectType;
         $this->view->objectID      = $objectID;
+        $this->view->libID         = !empty($libData[1]) ? $libData[1] : 0;
         $this->view->module        = $module;
-        $this->view->method        = $method =='view' ? $objectType.'space' : $method;
+        $this->view->method        = $method == 'view' ? $objectType.'space' : $method;
         $this->view->normalObjects = $myObjects + $normalObjects;
         $this->view->closedObjects = $closedObjects;
         $this->view->objectsPinYin = common::convert2Pinyin($myObjects + $normalObjects + $closedObjects);

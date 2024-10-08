@@ -166,7 +166,8 @@ class caseBasicInfo extends wg
         $case = $this->prop('case', data('case'));
         if(!$case) return array();
 
-        $isLibCase   = $this->prop('isLibCase',  data('isLibCase'));
+        $isLibCase = $this->prop('isLibCase',  data('isLibCase'));
+        $scenes    = $this->prop('scenes',     data('scenes'));
 
         $items = array();
         if($isLibCase)
@@ -184,6 +185,7 @@ class caseBasicInfo extends wg
             if($case->product && !$product->shadow) $items[$lang->testcase->product] = hasPriv('product', 'view') ? array('control' => 'link', 'url' => createLink('product', 'view', "productID={$case->product}"), 'text' => $product->name) : $product->name;
             if($case->branch && $product->type != 'normal') $items[$branchLabel] = hasPriv('testcase', 'browse') ? array('control' => 'link', 'url' => createLink('testcase', 'browse', "productID={$case->product}&branch={$case->branch}"), 'text' => $branchName) : $branchName;
             $items[$lang->testcase->module] = array('children' => wg($this->getModule($case)));
+            $items[$lang->testcase->scene]  = array('control' => 'text', 'text' => zget($scenes, $case->scene, ''));
             $items[$lang->testcase->story]  = array('children' => wg($this->getStory($case)));
         }
 

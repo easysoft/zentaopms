@@ -888,6 +888,7 @@ class testcase extends control
             ->set('fromCaseVersion')->eq($version)
             ->set('precondition')->eq($libCase->precondition)
             ->set('title')->eq($libCase->title)
+            ->set('keywords')->eq($libCase->keywords)
             ->where('id')->eq($caseID)
             ->exec();
 

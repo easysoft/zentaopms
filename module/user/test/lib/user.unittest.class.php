@@ -133,16 +133,16 @@ class userTest
     }
 
     /**
-     * 测试获取某个用户参与的项目和项目包含的需求规模数键值对。
-     * Test fetch project story estimate.
+     * 测试获取某个用户参与的项目和项目包含的需求规模数和需求数。
+     * Test fetch project story estimate and count.
      *
      * @param  array  $projectIdList
      * @access public
      * @return array
      */
-    public function fetchProjectStoryEstimateTest(array $projectIdList): array
+    public function fetchProjectStoryCountAndEstimateTest(array $projectIdList): array
     {
-        return $this->objectTao->fetchProjectStoryEstimate($projectIdList);
+        return $this->objectTao->fetchProjectStoryCountAndEstimate($projectIdList);
     }
 
     /**

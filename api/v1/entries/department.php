@@ -35,6 +35,7 @@ class departmentEntry extends entry
      */
     public function put($departmentID)
     {
+        $control = $this->loadController('dept', 'edit');
         $oldDept = $this->loadModel('dept')->getByID($departmentID);
 
         /* Set $_POST variables. */
@@ -42,7 +43,6 @@ class departmentEntry extends entry
         $this->batchSetPost($fields, $oldDept);
 
         $this->requireFields('name');
-        $control = $this->loadController('dept', 'edit');
         $control->edit($departmentID);
 
         $this->getData();

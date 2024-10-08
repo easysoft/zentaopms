@@ -316,7 +316,11 @@ class branchModel extends model
                     ->where('id')->eq($branchID)
                     ->exec();
 
-                if(dao::isError()) dao::$errors[] = 'branch#' . ($index + 1) . dao::getError(true);
+                if(dao::isError())
+                {
+                    dao::$errors["name[$index]"] = dao::getError(true);
+                    return false;
+                }
 
                 $changes[$branchID] = common::createChanges($oldBranchList[$branchID], $branch);
             }

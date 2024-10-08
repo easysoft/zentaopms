@@ -8,7 +8,7 @@ window.renderRowData = function($row, index, plan)
 
     if($branch.length > 0)
     {
-        let branchOptions = {name: 'branch', 'multiple': true, defaultValue: plan.branch, onChange: function(){getConflictStories(index)}, 'items': branchPickerItems};
+        let branchOptions = {name: 'branch[' + plan.id + ']', 'multiple': true, defaultValue: plan.branch, onChange: function(){getConflictStories(index)}, 'items': branchPickerItems};
         if(plan.parent > 0 && typeof parentBranches[plan.parent] != 'undefined') branchOptions = $.extend({}, branchOptions, {items: parentBranches[plan.parent]});
         $row.find('[data-name="branch"]').find('.picker-box').on('inited', function(e, info)
         {

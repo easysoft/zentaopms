@@ -78,6 +78,7 @@ class mr extends control
         }
         elseif($this->app->tab == 'project')
         {
+            $this->session->set('project', $objectID);
             $this->loadModel('project')->setMenu($objectID);
         }
 
@@ -87,10 +88,10 @@ class mr extends control
         $repoList = $this->loadModel('repo')->getListBySCM(implode(',', $this->config->repo->gitServiceTypeList));
         if(empty($repoList)) $this->locate($this->repo->createLink('create'));
 
-        if(!isset($repoList[$repoID])) return $this->locate($this->createLink('repo', 'browse', "repoID=$repoID&objectID=$objectID"));
-
         if(!$repoID) $repoID = key($repoList);
         $repoID = $this->repo->saveState($repoID, $objectID);
+        if(!isset($repoList[$repoID])) return $this->locate($this->createLink('repo', 'browse', "repoID=$repoID&objectID=$objectID"));
+
         $repo   = $repoList[$repoID];
         $this->loadModel('ci')->setMenu($repo->id);
 
@@ -291,7 +292,7 @@ class mr extends control
         $this->mr->deleteByID($MRID);
 
         if(dao::isError()) return $this->sendError(dao::getError());
-        return $this->send(array('result' => 'success', 'load' => true));
+        return $this->sendSuccess(array('load' => $this->createLink($this->app->rawModule, 'browse')));
     }
 
     /**
@@ -305,7 +306,7 @@ class mr extends control
     public function view(int $MRID)
     {
         $oldMR = $this->mr->fetchByID($MRID);
-        if(!$oldMR) return $this->locate($this->createLink('mr', 'browse'));
+        if(!$oldMR) return $this->locate($this->createLink($this->app->rawModule, 'browse'));
 
         if(isset($oldMR->hostID)) $rawMR = $this->mr->apiGetSingleMR($oldMR->repoID, $oldMR->mriid);
         if($oldMR->synced && (!isset($rawMR->id) || empty($rawMR))) $this->sendError($this->lang->mr->apiError->emptyResponse, true);
@@ -315,7 +316,7 @@ class mr extends control
         $changes = common::createChanges($oldMR, $MR);
         if($changes)
         {
-            $actionID = $this->loadModel('action')->create('mr', $MR->id, 'synced');
+            $actionID = $this->loadModel('action')->create($this->app->rawModule, $MR->id, 'synced');
             $this->action->logHistory($actionID, $changes);
         }
 
@@ -334,7 +335,7 @@ class mr extends control
         $this->view->rawMR         = isset($rawMR) ? $rawMR : false;
         $this->view->repo          = $this->loadModel('repo')->getByID($MR->repoID);
         $this->view->reviewer      = $this->loadModel('user')->getById($MR->assignee);
-        $this->view->actions       = $this->loadModel('action')->getList('mr', $MRID);
+        $this->view->actions       = $this->loadModel('action')->getList($this->app->rawModule, $MRID);
         $this->view->compile       = $compile;
         $this->view->hasNewCommit  = $compile ? $this->mrZen->checkNewCommit($host->type, $MR->hostID, (string)$MR->targetProject, $MR->mriid, $compile->createdDate) : false;
         $this->view->sourceProject = $sourceProject;
@@ -384,7 +385,7 @@ class mr extends control
 
             if(isset($compileStatus) and $compileStatus != 'success')
             {
-                return $this->send(array('result' => 'fail', 'message' => $this->lang->mr->needCI, 'locate' => helper::createLink('mr', 'view', "mr={$MRID}")));
+                return $this->sendError($this->lang->mr->needCI);
             }
         }
 
@@ -392,7 +393,7 @@ class mr extends control
         {
             if($MR->approvalStatus != 'approved')
             {
-                return $this->send(array('result' => 'fail', 'message' => $this->lang->mr->needApproved, 'locate' => helper::createLink('mr', 'view', "mr={$MRID}")));
+                return $this->sendError($this->lang->mr->needApproved);
             }
         }
 
@@ -400,7 +401,7 @@ class mr extends control
         if(isset($rawMR->state) and $rawMR->state == 'merged')
         {
             $this->mr->logMergedAction($MR);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->mr->mergeSuccess, 'load' => true));
+            return $this->sendSuccess(array('message' => $this->lang->mr->mergeSuccess, 'load' => true));
         }
 
         /* The type of variable `$rawMR->message` is string. This is different with apiCreateMR. */
@@ -410,7 +411,7 @@ class mr extends control
             return $this->sendError(sprintf($this->lang->mr->apiError->sudo, $errorMessage));
         }
 
-        return $this->send(array('result' => 'fail', 'message' => $this->lang->mr->mergeFailed, 'locate' => helper::createLink('mr', 'view', "mr={$MRID}")));
+        return $this->sendError($this->lang->mr->mergeFailed);
     }
 
     /**
@@ -484,7 +485,7 @@ class mr extends control
 
         $this->view->MR                = $MR;
         $this->view->action            = $action;
-        $this->view->actions           = $this->loadModel('action')->getList('mr', $MRID);
+        $this->view->actions           = $this->loadModel('action')->getList($this->app->rawModule, $MRID);
         $this->view->users             = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->view->showCompileResult = $showCompileResult;
         $this->display();
@@ -589,8 +590,8 @@ class mr extends control
             $this->mr->link($MRID, $productID, 'story', $this->post->stories);
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            $link = inlink('link', "MRID=$MRID&type=story&orderBy=$orderBy");
-            return $this->send(array('result' => 'success', 'load' => $link, 'closeModal' => true));
+            $link = $this->createLink($this->app->rawModule,'link', "MRID=$MRID&type=story&orderBy=$orderBy");
+            return $this->sendSuccess(array('load' => $link, 'closeModal' => true));
         }
 
         $this->loadModel('story');
@@ -647,10 +648,10 @@ class mr extends control
         {
             $this->mr->link($MRID, $productID, 'bug', $this->post->bugs);
 
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->sendError(dao::getError());
 
-            $link = inlink('link', "MRID=$MRID&type=bug&orderBy=$orderBy");
-            return $this->send(array('result' => 'success', 'load' => $link, 'closeModal' => true));
+            $link = $this->createLink($this->app->rawModule,'link', "MRID=$MRID&type=bug&orderBy=$orderBy");
+            return $this->sendSuccess(array('load' => $link, 'closeModal' => true));
         }
 
         $this->loadModel('bug');
@@ -705,10 +706,10 @@ class mr extends control
         if(!empty($_POST['tasks']))
         {
             $this->mr->link($MRID, $productID, 'task', $this->post->tasks);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->sendError(dao::getError());
 
-            $link = inlink('link', "MRID=$MRID&type=task&orderBy=$orderBy");
-            return $this->send(array('result' => 'success', 'load' => $link, 'closeModal' => true));
+            $link = $this->createLink($this->app->rawModule,'link', "MRID=$MRID&type=task&orderBy=$orderBy");
+            return $this->sendSuccess(array('load' => $link, 'closeModal' => true));
         }
 
         /* Set browse type. */
@@ -766,19 +767,9 @@ class mr extends control
     {
         $this->mr->unlink($MRID, $productID, $type, $linkID);
 
-        if(dao::isError())
-        {
-            $response['result']  = 'fail';
-            $response['message'] = dao::getError();
-        }
-        else
-        {
-            $link = inlink('link', "MRID=$MRID&type=$type");
-            $response['result']  = 'success';
-            $response['message'] = '';
-            $response['load']    = $link;
-        }
-        return $this->send($response);
+        if(dao::isError()) return $this->sendError(dao::getError());
+
+        return $this->sendSuccess(array('message' => '', 'load' => $this->createLink($this->app->rawModule, 'link', "MRID=$MRID&type=$type")));
     }
 
     /**
@@ -926,33 +917,7 @@ class mr extends control
             }
         }
 
-        foreach($needSyncMRs as $needSyncMR)
-        {
-            $MR = new stdclass();
-            $MR->hostID        = $repo->serviceHost;
-            $MR->mriid         = $needSyncMR->iid;
-            $MR->sourceProject = $needSyncMR->source_project_id;
-            $MR->sourceBranch  = $needSyncMR->source_branch;
-            $MR->targetProject = $needSyncMR->target_project_id;
-            $MR->targetBranch  = $needSyncMR->target_branch;
-            $MR->title         = $needSyncMR->title;
-            $MR->repoID        = $repoID;
-            $MR->createdBy     = $this->app->user->account;
-            $MR->createdDate   = helper::now();
-            $MR->assignee      = $MR->createdBy;
-            $MR->mergeStatus   = $needSyncMR->merge_status ?: '';
-            $MR->status        = $needSyncMR->state ?: '';
-            if($MR->status == 'open') $MR->status = 'opened';
-            $this->dao->insert(TABLE_MR)->data($MR, $this->config->mr->create->skippedFields)
-                ->batchCheck($this->config->mr->create->requiredFields, 'notempty')
-                ->exec();
-            if(!dao::isError())
-            {
-                $mrID = $this->dao->lastInsertID();
-                $this->loadModel('action')->create('mr', $mrID, 'imported');
-            }
-        }
-
+        $this->mrZen->saveMrData($repo, $needSyncMRs);
         foreach($existedMRs as $mrID => $existedMR)
         {
             $MR = $this->mr->fetchByID($mrID);
@@ -964,9 +929,10 @@ class mr extends control
                 $newMR = new stdclass();
                 $newMR->title         = $existedMR->title;
                 $newMR->status        = $status;
+                $newMR->isFlow        = empty($existedMR->flow) ? 0 : 1;
                 $newMR->mergeStatus   = $mergeStatus;
                 $this->dao->update(TABLE_MR)->data($newMR)->where('id')->eq($mrID)->exec();
-                if(!dao::isError()) $this->loadModel('action')->create('mr', $mrID, 'synced');
+                if(!dao::isError()) $this->loadModel('action')->create(empty($existedMR->flow) ? 'mr' : 'pullreq', $mrID, 'synced');
             }
         }
 

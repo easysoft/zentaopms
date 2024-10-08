@@ -466,4 +466,24 @@ class personnelTest
         if(dao::isError()) return dao::getError();
         return $isClickable ? 1 : 0;
     }
+
+    /**
+     * 测试解绑白名单。
+     * Test unbind whitelist.
+     *
+     * @param  int          $id
+     * @access public
+     * @return false|string
+     */
+    public function unbindWhitelistTest(int $id): false|string
+    {
+        $acl = $this->objectModel->dao->select('*')->from(TABLE_ACL)->where('id')->eq($id)->fetch();
+        if(!$acl) return false;
+
+        $this->objectModel->unbindWhitelist($acl);
+        if(dao::isError()) return false;
+
+        $objectTable  = $acl->objectType == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
+        return $this->objectModel->dao->select('whitelist')->from($objectTable)->where('id')->eq($acl->objectID)->fetch('whitelist');
+    }
 }

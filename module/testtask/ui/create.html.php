@@ -59,7 +59,7 @@ formPanel
                 set::items($builds),
                 set::value($build)
             ),
-            span
+            hasPriv('build', 'create') ? span
             (
                 set::className('input-group-addon', !empty($buildExecutionID) && empty($builds) ? '' : 'hidden'),
                 a
@@ -69,8 +69,8 @@ formPanel
                     set('data-toggle', 'modal'),
                     $lang->build->create
                 )
-            ),
-            span
+            ) : null,
+            hasPriv('build', 'create') ? span
             (
                 set::className('input-group-addon', !empty($buildExecutionID) && empty($builds) ? '' : 'hidden'),
                 a
@@ -80,7 +80,7 @@ formPanel
                     on::click("loadExecutionBuilds($buildExecutionID)"),
                     $lang->refresh
                 )
-            )
+            ) : null
         )
     ),
     formGroup

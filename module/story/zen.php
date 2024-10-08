@@ -18,10 +18,11 @@ class storyZen extends story
      *
      * @param  int       $productID
      * @param  int       $objectID
+     * @param  string    $extra
      * @access protected
      * @return int[]
      */
-    protected function setMenuForCreate(int $productID, int $objectID): array
+    protected function setMenuForCreate(int $productID, int $objectID, string $extra = ''): array
     {
         /* Get product id according to the project id when lite vision todo transfer story */
         if($this->config->vision == 'lite' && $productID == 0)
@@ -38,7 +39,23 @@ class storyZen extends story
         }
 
         /* Set menu by tab. */
-        if($this->app->tab == 'product')   $this->product->setMenu($productID);
+        if($this->app->tab == 'product')
+        {
+            $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+            parse_str($extra, $output);
+
+            if(!empty($output['from']) && $output['from'] == 'global')
+            {
+                $product = $this->product->getById($productID);
+                if(!$product || $product->deleted || $product->shadow)
+                {
+                    $newProduct = $this->product->getOrderedProducts('noclosed');
+                    if(!empty($newProduct)) $productID = (int) key($newProduct);
+                }
+            }
+
+            $this->product->setMenu($productID);
+        }
         if($this->app->tab == 'execution')
         {
             $this->execution->setMenu($objectID);

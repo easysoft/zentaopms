@@ -25,7 +25,7 @@ class sqlBuilderEmptyContent extends wg
                 span
                 (
                     setClass('text-gray-500'),
-                    $emptyText
+                    html($emptyText)
                 ),
                 btn
                 (

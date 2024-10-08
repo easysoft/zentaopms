@@ -2746,12 +2746,13 @@ class kanbanModel extends model
             $this->dao->insert(TABLE_KANBANCOLUMN)->data($data)->exec();
             if(dao::isError()) return false;
 
-            if($type == 'design')    $designColumnID    = $this->dao->lastInsertId();
-            if($type == 'develop')   $devColumnID       = $this->dao->lastInsertId();
-            if($type == 'test')      $testColumnID      = $this->dao->lastInsertId();
-            if($type == 'resolving') $resolvingColumnID = $this->dao->lastInsertId();
+            $columnID = $this->dao->lastInsertId();
+            if($type == 'design')    $designColumnID    = $columnID;
+            if($type == 'develop')   $devColumnID       = $columnID;
+            if($type == 'test')      $testColumnID      = $columnID;
+            if($type == 'resolving') $resolvingColumnID = $columnID;
 
-            $this->addKanbanCell($executionID, $laneID, $this->dao->lastInsertId(), $laneType);
+            $this->addKanbanCell($executionID, $laneID, $columnID, $laneType);
         }
 
         return true;

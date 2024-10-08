@@ -593,6 +593,7 @@ class mailModel extends model
         $title      = $this->mailTao->getObjectTitle($object, $objectType);
         $subject    = $this->mailTao->getSubject($objectType, $object, $title, $action->action);
         $domain     = zget($this->config->mail, 'domain', common::getSysURL());
+        $domain     = rtrim($domain, '/');
 
         if($objectType == 'review' and empty($object->auditedBy)) return;
 
