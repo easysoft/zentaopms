@@ -42,9 +42,11 @@ toolbar
 jsVar('confirmDelete',    $lang->job->confirmDelete);
 jsVar('canBrowseProject', common::hasPriv('job', 'browseProject'));
 
+$cols = $this->loadModel('datatable')->getSetting('job');
 dtable
 (
-    set::cols($config->job->dtable->fieldList),
+    set::customCols(true),
+    set::cols($cols),
     set::data($tableData),
     set::sortLink(createLink('job', 'browse', "repoID={$repoID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::orderBy($orderBy),
