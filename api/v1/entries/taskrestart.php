@@ -20,6 +20,7 @@ class taskRestartEntry extends entry
      */
     public function post($taskID)
     {
+        $control = $this->loadController('task', 'restart');
         $task = $this->loadModel('task')->getByID($taskID);
 
         $fields = 'assignedTo,realStarted';
@@ -28,7 +29,6 @@ class taskRestartEntry extends entry
         $fields = 'consumed,left,comment';
         $this->batchSetPost($fields);
 
-        $control = $this->loadController('task', 'restart');
         $this->requireFields('consumed,left');
         $control->restart($taskID);
 

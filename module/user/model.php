@@ -1293,8 +1293,8 @@ class userModel extends model
         $projects = $this->userTao->fetchProjects($account, $status, $orderBy, $pager);
         if(!$projects) return array();
 
-        $projectStoryEstimate  = $this->userTao->fetchProjectStoryEstimate(array_keys($projects));
-        $projectExecutionCount = $this->userTao->fetchProjectExecutionCount(array_keys($projects));
+        $projectStoryCountAndEstimate = $this->userTao->fetchProjectStoryCountAndEstimate(array_keys($projects));
+        $projectExecutionCount        = $this->userTao->fetchProjectExecutionCount(array_keys($projects));
 
         foreach($projects as $project)
         {
@@ -1305,7 +1305,9 @@ class userModel extends model
                 if($delay > 0) $project->delay = $delay;
             }
 
-            $project->storyCount     = round(zget($projectStoryEstimate, $project->id, 0), 1);
+            $projectStory = zget($projectStoryCountAndEstimate, $project->id, '');
+            $project->storyPoints    = $projectStory ? round($projectStory->estimate, 1) : 0;
+            $project->storyCount     = $projectStory ? $projectStory->count : 0;
             $project->executionCount = zget($projectExecutionCount, $project->id, 0);
         }
 

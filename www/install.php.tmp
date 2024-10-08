@@ -29,9 +29,6 @@ $config->set('requestType', 'GET');
 $config->set('default.module', 'install');
 $app->setDebug();
 
-/* During the installation, if the database params is setted, auto connect the db. */
-if(isset($config->installed) and $config->installed) $app->connectDB();
-
 try
 {
     $app->parseRequest();

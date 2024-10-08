@@ -20,6 +20,7 @@ class taskStartEntry extends entry
      */
     public function post($taskID)
     {
+        $control = $this->loadController('task', 'start');
         $task = $this->loadModel('task')->getByID($taskID);
 
         $fields = 'assignedTo,consumed,left,comment';
@@ -27,7 +28,6 @@ class taskStartEntry extends entry
 
         $this->setPost('realStarted', $this->request('realStarted', helper::now()));
 
-        $control = $this->loadController('task', 'start');
         $control->start($taskID);
 
         $data = $this->getData();

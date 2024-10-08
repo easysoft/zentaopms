@@ -36,22 +36,20 @@ class dao extends baseDAO
      */
     public function data($data, $skipFields = '')
     {
-        global $app, $config;
-
         if(!is_object($data)) $data = (object)$data;
 
         if(get_class($data) == 'form') $data = $data->data;
 
-        if(isset($config->bizVersion))
+        if(isset($this->config->bizVersion))
         {
-            $app->loadLang('workflow');
-            $app->loadConfig('workflow');
+            $this->app->loadLang('workflow');
+            $this->app->loadConfig('workflow');
 
             /* Check current module is buildin workflow. */
-            if(isset($config->workflow->buildin->modules))
+            if(isset($this->config->workflow->buildin->modules))
             {
-                $currentModule = $app->fetchModule ?: $app->rawModule;
-                foreach($config->workflow->buildin->modules as $appModules)
+                $currentModule = $this->app->fetchModule ?: $this->app->rawModule;
+                foreach($this->config->workflow->buildin->modules as $appModules)
                 {
                     if(!empty($appModules->$currentModule))
                     {
@@ -98,24 +96,22 @@ class dao extends baseDAO
      */
     public function processData($data)
     {
-        global $app, $config;
+        if(!isset($this->config->bizVersion)) return $this;
 
-        if(!isset($config->bizVersion)) return $this;
+        $module = $this->app->getModuleName();
+        $method = $this->app->getMethodName();
 
-        $module = $app->getModuleName();
-        $method = $app->getMethodName();
-
-        $action = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOWACTION . " WHERE `module` = '{$module}' AND `action` = '{$method}' AND `buildin` = '1' AND `vision` = '{$config->vision}' AND `extensionType` = 'extend'")->fetch(PDO::FETCH_OBJ);
+        $action = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOWACTION . " WHERE `module` = '{$module}' AND `action` = '{$method}' AND `buildin` = '1' AND `vision` = '{$this->config->vision}' AND `extensionType` = 'extend'")->fetch(PDO::FETCH_OBJ);
         if(!$action) return $data;
 
-        $fields = $this->dbh->query("SELECT t2.name,t2.rules,t2.control,t2.field,t2.type,t2.options,t1.layoutRules FROM " . TABLE_WORKFLOWLAYOUT . " AS t1 LEFT JOIN " . TABLE_WORKFLOWFIELD . " AS t2 ON t1.module = t2.module WHERE t1.field = t2.field AND t1.module = '{$module}' AND t1.action = '{$method}' AND `vision` = '{$config->vision}' AND t1.readonly = '0'")->fetchAll();
+        $fields = $this->dbh->query("SELECT t2.name,t2.rules,t2.control,t2.field,t2.type,t2.options,t1.layoutRules FROM " . TABLE_WORKFLOWLAYOUT . " AS t1 LEFT JOIN " . TABLE_WORKFLOWFIELD . " AS t2 ON t1.module = t2.module WHERE t1.field = t2.field AND t1.module = '{$module}' AND t1.action = '{$method}' AND `vision` = '{$this->config->vision}' AND t1.readonly = '0'")->fetchAll();
         if(!$fields) return $data;
 
-        $app->loadLang('flow');
-        $app->loadLang('workflowfield');
-        $app->loadConfig('flow');
-        $app->loadConfig('workflowfield');
-        $app->loadConfig('workflowlinkage');
+        $this->app->loadLang('flow');
+        $this->app->loadLang('workflowfield');
+        $this->app->loadConfig('flow');
+        $this->app->loadConfig('workflowfield');
+        $this->app->loadConfig('workflowlinkage');
 
         $linkages     = !empty($action->linkages) ? json_decode($action->linkages) : array();
         $hiddenFields = array();
@@ -128,7 +124,7 @@ class dao extends baseDAO
             $source = reset($linkage->sources);
             if(isset($data->{$source->field}))
             {
-                $operator = zget($config->workflowlinkage->operatorList, $source->operator);
+                $operator = zget($this->config->workflowlinkage->operatorList, $source->operator);
                 if(helper::checkCondition($data->{$source->field}, $source->value, $operator))
                 {
                     foreach($targets as $target)
@@ -175,7 +171,7 @@ class dao extends baseDAO
 
         foreach($data as $field => $value)
         {
-            if(in_array($value, $config->flow->variables)) $data->$field = $this->getParamRealValue($value);
+            if(in_array($value, $this->config->flow->variables)) $data->$field = $this->getParamRealValue($value);
         }
 
         return $data;
@@ -190,11 +186,9 @@ class dao extends baseDAO
      */
     public function getParamRealValue($param)
     {
-        global $app;
-
         if(empty($this->deptManager))
         {
-            $dept    = zget($app->user, 'dept', '');
+            $dept    = zget($this->app->user, 'dept', '');
             $manager = $this->dbh->query("SELECT manager FROM " . TABLE_DEPT . " WHERE `id` = '{$dept}'")->fetch(PDO::FETCH_OBJ);
             $this->deptManager = $manager ? trim((string) $manager->manager, ',') : '';
         }
@@ -202,8 +196,8 @@ class dao extends baseDAO
         return match ((string)$param) {
             'today' => date('Y-m-d'),
             'now', 'currentTime' => date('Y-m-d H:i:s'),
-            'actor', 'currentUser' => $app->user->account,
-            'currentDept' => $app->user->dept ?: $param,
+            'actor', 'currentUser' => $this->app->user->account,
+            'currentDept' => $this->app->user->dept ?: $param,
             'deptManager' => $this->deptManager ?: $param,
             default => $param,
         };
@@ -217,17 +211,15 @@ class dao extends baseDAO
      */
     public function checkFlow()
     {
-        global $app, $config, $lang;
+        if(!isset($this->config->bizVersion)) return $this;
 
-        if(!isset($config->bizVersion)) return $this;
+        $module = $this->app->getModuleName();
+        $method = $this->app->getMethodName();
 
-        $module = $app->getModuleName();
-        $method = $app->getMethodName();
-
-        $flowAction = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOWACTION . " WHERE `module` = '{$module}' AND `action` = '{$method}' AND `buildin` = '1' AND `extensionType` = 'extend' AND `vision` = '{$config->vision}'")->fetch(PDO::FETCH_OBJ);
+        $flowAction = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOWACTION . " WHERE `module` = '{$module}' AND `action` = '{$method}' AND `buildin` = '1' AND `extensionType` = 'extend' AND `vision` = '{$this->config->vision}'")->fetch(PDO::FETCH_OBJ);
         if(!$flowAction) return $this;
 
-        $flowFields = $this->dbh->query("SELECT t2.name,t2.rules,t2.control,t2.field,t1.layoutRules FROM " . TABLE_WORKFLOWLAYOUT . " AS t1 LEFT JOIN " . TABLE_WORKFLOWFIELD . " AS t2 ON t1.module = t2.module AND t1.field = t2.field WHERE t1.module = '{$module}' AND t1.action = '{$method}' AND t1.readonly = '0' AND t1.vision = '{$config->vision}'")->fetchAll();
+        $flowFields = $this->dbh->query("SELECT t2.name,t2.rules,t2.control,t2.field,t1.layoutRules FROM " . TABLE_WORKFLOWLAYOUT . " AS t1 LEFT JOIN " . TABLE_WORKFLOWFIELD . " AS t2 ON t1.module = t2.module AND t1.field = t2.field WHERE t1.module = '{$module}' AND t1.action = '{$method}' AND t1.readonly = '0' AND t1.vision = '{$this->config->vision}'")->fetchAll();
         if(!$flowFields) return $this;
 
         $rules    = array();
@@ -270,8 +262,6 @@ class dao extends baseDAO
      */
     public function checkExtend($fields)
     {
-        global $lang;
-
         if(!$fields) return $this;
         foreach($fields as $field)
         {
@@ -286,7 +276,7 @@ class dao extends baseDAO
                     if($rule->type != 'system' || $rule->rule != 'notempty') continue;
 
                     $files = !empty($_FILES[$field->field]) ? $_FILES[$field->field] : '';
-                    if(empty($files['size'][0])) dao::$errors[$field->field][] = sprintf($lang->error->notempty, $field->name);
+                    if(empty($files['size'][0])) dao::$errors[$field->field][] = sprintf($this->lang->error->notempty, $field->name);
                     break;
                 }
                 continue;

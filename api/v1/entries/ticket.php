@@ -46,12 +46,12 @@ class ticketEntry extends entry
      */
     public function put($ticketID)
     {
+        $control = $this->loadController('ticket', 'edit');
         $oldTicket = $this->loadModel('ticket')->getById($ticketID);
 
         $fields = 'module,product,type,openedBuild,assignedTo,deadline,title,desc,status,notify,uid';
         $this->batchSetPost($fields, $oldTicket);
 
-        $control = $this->loadController('ticket', 'edit');
         $control->edit($ticketID);
 
         $data = $this->getData();

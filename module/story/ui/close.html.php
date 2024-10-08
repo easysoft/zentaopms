@@ -40,7 +40,8 @@ formPanel
         picker
         (
             set::name('duplicateStory'),
-            set::items($productStories)
+            set::items(createLink('story', 'ajaxGetDuplicatedStories', "storyID=$story->id&productID=$story->product")),
+            set::maxItemsCount(100)
         )
     ),
     formGroup

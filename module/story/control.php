@@ -932,20 +932,12 @@ class story extends control
         if($story->status == 'draft') unset($reasonList['cancel']);
         unset($reasonList['subdivided']);
 
-        $storyBranch    = $story->branch > 0 ? $story->branch : '0';
-        $branch         = $product->type == 'branch' ? $storyBranch : 'all';
-        $productStories = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '', $storyType);
-        $children       = $this->story->getAllChildId($storyID);
-        $productStories = array_diff_key($productStories, array_flip($children));
-        if(isset($productStories[$storyID])) unset($productStories[$storyID]);
-
-        $this->view->title          = $this->lang->story->close . "STORY" . $this->lang->hyphen . $story->title;
-        $this->view->product        = $product;
-        $this->view->story          = $story;
-        $this->view->productStories = $productStories;
-        $this->view->actions        = $this->action->getList('story', $storyID);
-        $this->view->users          = $this->loadModel('user')->getPairs();
-        $this->view->reasonList     = $reasonList;
+        $this->view->title      = $this->lang->story->close . "STORY" . $this->lang->hyphen . $story->title;
+        $this->view->product    = $product;
+        $this->view->story      = $story;
+        $this->view->actions    = $this->action->getList('story', $storyID);
+        $this->view->users      = $this->loadModel('user')->getPairs();
+        $this->view->reasonList = $reasonList;
         $this->display();
     }
 
@@ -1658,6 +1650,33 @@ class story extends control
         if($resultCount < 1) $result['info'] = $this->lang->noResultsMatch;
 
         echo json_encode($result);
+    }
+
+    /**
+     * 获取关闭需求页面重复需求的下拉列表。
+     * AJAX: get the duplicated stories of a story.
+     *
+     * @param  int    $storyID
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetDuplicatedStories(int $storyID, int $productID)
+    {
+        $product     = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fields('name, id, `type`')->fetch();
+        $story       = $this->story->fetchByID($storyID);
+        $storyBranch = $story->branch > 0 ? $story->branch : '0';
+        $branch      = $product->type == 'branch' ? $storyBranch : 'all';
+
+        $productStories = $this->story->getProductStoryPairs($story->product, $branch, 0, 'all', 'id_desc', 0, '', $story->type);
+        $children       = $this->story->getAllChildId($storyID);
+        $productStories = array_diff_key($productStories, array_flip($children));
+        if(isset($productStories[$storyID])) unset($productStories[$storyID]);
+
+        $items = array();
+        foreach($productStories as $storyID => $storyName) $items[] = array('text' => $storyName, 'value' => $storyID);
+
+        return print(json_encode($items));
     }
 
     /**

@@ -777,6 +777,8 @@ class chartModel extends model
                 if(isset($filter['from']) and $filter['from'] == 'query')
                 {
                     $default = $filter['default'];
+                    if($filter['type'] == 'multipleselect' && is_array($default)) $default = implode("','", $default);
+
                     if(strpos($sql, $filter['field'] . 'Condition') === false)
                     {
                         $sql = str_replace('$' . $filter['field'], "'{$default}'", $sql);

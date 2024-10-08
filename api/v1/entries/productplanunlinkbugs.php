@@ -20,6 +20,7 @@ class productplanUnlinkBugsEntry extends entry
      */
     public function post($planID)
     {
+        $control = $this->loadController('productplan', 'view');
         $productplan = $this->loadModel('productplan');
         foreach($this->request('bugs', array()) as $bugID)
         {
@@ -27,7 +28,6 @@ class productplanUnlinkBugsEntry extends entry
             if(dao::isError()) return $this->sendError('error');
         }
 
-        $control = $this->loadController('productplan', 'view');
         $control->view($planID);
 
         $data = $this->getData();

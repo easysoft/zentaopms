@@ -117,6 +117,7 @@ class executionEntry extends entry
      */
     public function put($executionID)
     {
+        $control = $this->loadController('execution', 'edit');
         $oldExecution = $this->loadModel('execution')->getByID($executionID);
 
         $useCode = $this->checkCodeUsed();
@@ -130,7 +131,6 @@ class executionEntry extends entry
         $products = $this->loadModel('product')->getProducts($executionID);
         $this->setPost('products', $this->request('products', array_keys($products)));
 
-        $control = $this->loadController('execution', 'edit');
         $control->edit($executionID);
 
         $data = $this->getData();

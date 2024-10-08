@@ -203,11 +203,11 @@ class form extends fixer
     {
         global $app, $config;
 
-        $module = $app->getModuleName() == 'story' ? $app->rawModule : $app->getModuleName();
+        $module = $app->getModuleName();
         $method = $app->getMethodName();
-        if($module == 'feedback' && $app->rawMethod == 'tostory')     $module = 'story';
-        if($module == 'feedback' && $app->rawMethod == 'touserstory') $module = 'requirement';
-        if($module == 'feedback' && $app->rawMethod == 'toepic')      $module = 'epic';
+
+        if($app->rawMethod == 'requirement' && $module == 'story') $module = 'requirement';
+        if($app->rawMethod == 'epic'        && $module == 'story') $module = 'epic';
 
         if($method == 'batchcreate') $method = 'create';
         if($method == 'batchedit')   $method = 'edit';

@@ -131,5 +131,51 @@ class createDocTester extends tester
         $form->dom->execution->picker($executionName->fstExecution);
         $form->wait(1);
         $form->dom->releaseBtn->click();
+
+        /*搜索文档*/
+        $this->openUrl('doc', 'projectSpace');
+        $form = $this->loadPage('doc', 'projectSpace');
+        $form->dom->search(array("文档标题,=,{$docName->dcName}"));
+        $form->wait(1);
+
+        if($form->dom->fstDocName->getText() != $docName) return $this->failed('创建项目空间文档失败。');
+        return $this->success('创建项目空间文档成功。');
+    }
+
+    /*
+     * 创建团队文档。
+     * Create a team doc.
+     *
+     * @param  string $teamSpace
+     * @param  string $teamLib
+     * @param  string $docName
+     * @access public
+     * @return void
+     */
+    public function createTeamDoc($teamSpace, $teamLib, $docName)
+    {
+        /*创建团队文档库*/
+        $this->openUrl('doc', 'teamSpace');
+        $form = $this->loadPage('doc', 'teamSpace');
+        $form->dom->createLibBtn->click();
+        $form->wait(1);
+        $form->dom->spaceName->setValue($teamSpace->spaceName);
+        $form->dom->name->setValue($teamLib->libName);
+        $form->dom->btn($this->lang->save)->click();
+        $form->wait(1);
+
+        /*创建团队文档*/
+        $form->dom->createDocBtn->click();
+        $form->wait(1);
+        $form->dom->showTitle->setValue($docName->dcName);
+        $form->dom->saveBtn->click();
+        $form->wait(1);
+        $form->dom->releaseBtn->click();
+
+        $this->openUrl('doc', 'teamSpace');
+        $form->dom->search(array("文档标题,=,{$docName->dcName}"));
+        $form->wait(1);
+        if($form->dom->fstDocName->getText() != $docName->dcName) return $this->failed('创建团队空间文档失败。');
+        return $this->success('创建团队空间文档成功。');
     }
 }

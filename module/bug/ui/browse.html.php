@@ -144,6 +144,7 @@ foreach($modules as $moduleID => $module)
 $assignedToItems = array();
 foreach ($memberPairs as $key => $value)
 {
+    $key = base64_encode((string)$key); // 编码用户名中的特殊字符
     $assignedToItems[] = array('text' => $value, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('bug', 'batchAssignTo', "assignedTo=$key&productID={$product->id}&type=product"));
 }
 

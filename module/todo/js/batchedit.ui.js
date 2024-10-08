@@ -15,7 +15,7 @@ window.renderRowData = function($row, index, row)
             let $nameBox = $row.find('td[data-name="name"]');
             $nameBox.html("<div class='picker-box' id='name'></div>");
             data = {};
-            data.name     = row.type;
+            data.name     = `${row.type}[${row.id}]`;
             data.multiple = false;
             data.items    = nameItems[row.type];
             $nameBox.find('#name').picker(data);

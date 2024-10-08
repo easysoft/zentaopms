@@ -318,7 +318,7 @@ class baseControl
         {
             $this->app->loadModuleConfig($moduleName, $appName);
             $this->app->loadLang($moduleName, $appName);
-            $this->dao = new dao();
+            $this->dao = new dao($this->app);
             return false;
         }
 

@@ -20,6 +20,7 @@ class taskFinishEntry extends entry
      */
     public function post($taskID)
     {
+        $control = $this->loadController('task', 'finish');
         $task = $this->loadModel('task')->getByID($taskID);
 
         $fields = 'assignedTo,realStarted';
@@ -33,7 +34,6 @@ class taskFinishEntry extends entry
         $this->setPost('currentConsumed', $this->request('currentConsumed', 0));
         $this->setPost('consumed', $this->request('currentConsumed', 0) + $task->consumed);
 
-        $control = $this->loadController('task', 'finish');
         $this->requireFields('currentConsumed,realStarted,finishedDate');
         $control->finish($taskID);
 

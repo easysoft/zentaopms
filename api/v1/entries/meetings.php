@@ -23,11 +23,11 @@ class meetingsEntry extends entry
         if(empty($projectID)) $projectID = $this->param('project', 0);
         if(empty($projectID)) return $this->sendError(400, 'Need project id.');
 
+        $control = $this->loadController('meeting', 'browse');
         $project = $this->loadModel('project')->getByID($projectID);
         if(!$project) return $this->send404();
 
         /* Get meetings by project. */
-        $control = $this->loadController('meeting', 'browse');
         $control->browse($projectID, $this->param('status', 'all'), '', $this->param('order', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
         $data = $this->getData();
 
@@ -53,6 +53,7 @@ class meetingsEntry extends entry
      */
     public function post($projectID = 0)
     {
+        $control = $this->loadController('risk', 'create');
         $project = $this->loadModel('project')->getByID($projectID);
         if(!$project) return $this->send404();
 
@@ -64,7 +65,6 @@ class meetingsEntry extends entry
         $this->setPost('rate', $this->request('rate', 9));
         $this->setPost('pri', 'middle');
 
-        $control = $this->loadController('risk', 'create');
         $this->requireFields('name');
 
         $control->create($projectID);

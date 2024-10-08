@@ -12,6 +12,7 @@ class thinkMulticolumn extends thinkQuestion
         'requiredCols?: array', // 必填列
         'supportAdd?: int=1',   // 是否支持用户添加行
         'canAddRows: int',      // 可添加行数
+        'linkColumn?: array',   // 关联区块的列
     );
 
     public static function getPageJS(): string
@@ -109,8 +110,9 @@ class thinkMulticolumn extends thinkQuestion
         $app->loadLang('thinkstep');
         $formItems = parent::buildFormItem();
 
-        list($step, $questionType, $required, $fields, $supportAdd, $canAddRows, $requiredCols, $quotedQuestions) = $this->prop(array('step', 'questionType', 'required', 'fields', 'supportAdd', 'canAddRows', 'requiredCols', 'quotedQuestions'));
+        list($step, $questionType, $required, $fields, $supportAdd, $canAddRows, $requiredCols, $quotedQuestions, $linkColumn) = $this->prop(array('step', 'questionType', 'required', 'fields', 'supportAdd', 'canAddRows', 'requiredCols', 'quotedQuestions', 'linkColumn'));
         $requiredItems = $lang->thinkstep->requiredList;
+        $linkColumn    = !empty($linkColumn) ? $linkColumn : array();
 
         $requiredOptions = array();
         if($step)
@@ -121,6 +123,7 @@ class thinkMulticolumn extends thinkQuestion
             $requiredCols = $required && isset($step->options->requiredCols) ? $step->options->requiredCols : '';
             $supportAdd   = $step->options->supportAdd;
             $canAddRows   = $supportAdd && isset($step->options->canAddRows) ? $step->options->canAddRows : '';
+            $linkColumn   = !empty($step->link) ? json_decode($step->link)->column : array();
             foreach($fields as $key => $field) $requiredOptions[] = array('value' => $key + 1, 'text' => $field);
         }
         jsVar('canAddRowsOfMulticol', (int)$canAddRows + 5);
@@ -135,7 +138,7 @@ class thinkMulticolumn extends thinkQuestion
             (
                 set::label($lang->thinkstep->label->columnTitle),
                 setStyle(array('padding-bottom' => 'calc(4 * var(--space))')),
-                thinkMatrixOptions(set::colName('options[fields]'), set::cols($fields), set::quotedQuestions($quotedQuestions))
+                thinkMatrixOptions(set::colName('options[fields]'), set::cols($fields), set::quotedQuestions($quotedQuestions), set::linkColumn($linkColumn))
             ),
             formRow
             (

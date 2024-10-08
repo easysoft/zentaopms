@@ -422,7 +422,7 @@ $lang->story->action->synctwins             = array('main' => "\$date, the syste
 $lang->story->action->syncgrade             = array('main' => "\$date, the system judges that this story's parent grade changed，this story grade synchronously changed to <strong>\$extra</strong>.");
 $lang->story->action->linked2roadmap        = array('main' => '$date, linked by <strong>$actor</strong> to Roadmap <strong>$extra</strong>');
 $lang->story->action->unlinkedfromroadmap   = array('main' => '$date, unlinked by <strong>$actor</strong> from Roadmap <strong>$extra</strong>.');
-$lang->story->action->changedbycharter      = array('main' => '$date, launched by <strong>$actor</strong> for charter <strong>$extra</strong>, Synchronously adjust the story status to launched.');
+$lang->story->action->changedbycharter      = array('main' => '$date, launched by <strong>$actor</strong> for charter <strong>$extra</strong>, Synchronously adjust the story stage to In Charter.');
 
 /* Statistical statement. */
 $lang->story->report = new stdclass();

@@ -20,6 +20,7 @@ class taskComponentEntry extends entry
      */
     public function post($taskID)
     {
+        $control = $this->loadController('task', 'batchCreate');
         $fields = 'name,color,type,assignedTo,parent,estimate,story,module,pri,desc,estStarted,deadline';
         $this->batchSetPost($fields);
 
@@ -27,7 +28,6 @@ class taskComponentEntry extends entry
         foreach($fields as $field) $this->setArrayPost($field);
         $task = $this->loadModel('task')->getById($taskID);
 
-        $control = $this->loadController('task', 'batchCreate');
         $control->batchCreate($task->execution, 0, 0, $taskID);
 
         $data = $this->getData();

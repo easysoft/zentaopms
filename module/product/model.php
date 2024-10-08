@@ -1495,6 +1495,7 @@ class productModel extends model
     {
         $this->delete(TABLE_PRODUCT, $productID);
         $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(1)->where('product')->eq($productID)->exec();
+        $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('product')->eq($productID)->exec();
         return !dao::isError();
     }
 
@@ -1600,13 +1601,15 @@ class productModel extends model
      */
     protected function getList(int $programID = 0, string $status = 'all', int $limit = 0, int $line = 0, string|int $shadow = 0, string $fields = '*'): array
     {
-        $fields = explode(',', $fields);
-        $fields = trim(implode(',t1.', $fields), ',');
+        $fields       = explode(',', $fields);
+        $fields       = trim(implode(',t1.', $fields), ',');
+        $programField = $programID ? '' : 't2.order,';
+        $programOrder = $programID ? '' : 't2.order_asc,';
 
-        return $this->dao->select("DISTINCT t1.$fields,t2.order,t1.line,t1.order")->from(TABLE_PRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
-            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t3.product = t1.id')
-            ->leftJoin(TABLE_TEAM)->alias('t4')->on("t4.root = t3.project and t4.type='project'")
+        return $this->dao->select("DISTINCT t1.{$fields},{$programField}t1.line,t1.order")->from(TABLE_PRODUCT)->alias('t1')
+            ->beginIF(!$programID)->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')->fi()    // 如果指定了项目集，则不需要关联项目集表。
+            ->beginIF($status == 'involved')->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t3.product = t1.id')->fi()
+            ->beginIF($status == 'involved')->leftJoin(TABLE_TEAM)->alias('t4')->on("t4.root = t3.project and t4.type='project'")->fi()
             ->where('t1.deleted')->eq(0)
             ->beginIF($shadow !== 'all')->andWhere('t1.shadow')->eq((int)$shadow)->fi()
             ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
@@ -1628,7 +1631,7 @@ class productModel extends model
             ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
             ->andWhere('t1.reviewStatus')->eq('doing')
             ->fi()
-            ->orderBy('t2.order_asc, t1.line_desc, t1.order_asc')
+            ->orderBy("{$programOrder}t1.line_desc, t1.order_asc")
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->fetchAll('id');
     }
@@ -2036,14 +2039,14 @@ class productModel extends model
             if(!empty($flow) && $flow->buildin == '0') return helper::createLink('flow', 'ajaxSwitchBelong', "objectID=%s&moduleName=$module") . '#app=product';
         }
 
-        if($module == 'execution'  && in_array($method, array('bug', 'testcase')))        return helper::createLink($module,    $method,  "executionID={$params[0]}&productID=%s{$branchParam}");
-        if($module == 'product'    && in_array($method, array('doc', 'view')))            return helper::createLink($module,    $method,  "productID=%s");
-        if($module == 'product'    && in_array($method, array('create', 'showimport')))   return helper::createLink($module,    'browse', "productID=%s&type=$extra");
-        if($module == 'bug'        && in_array($method, array('edit', 'view')))           return helper::createLink($module,    'browse', "productID=%s");
-        if($module == 'testcase'   && in_array($method, array('edit', 'view')))           return helper::createLink($module,    'browse', "productID=%s");
-        if($module == 'ticket'     && in_array($method, array('browse', 'view', 'edit'))) return helper::createLink('ticket',   'browse', "browseType=byProduct&productID=%s");
-        if($module == 'testreport' && in_array($method, array('edit', 'browse')))         return helper::createLink($module,    'browse', "objectID=%s");
-        if($module == 'feedback'   && $this->config->vision == 'lite')                    return helper::createLink('feedback', 'browse', "browseType=byProduct&productID=%s");
+        if($module == 'execution'  && in_array($method, array('bug', 'testcase')))                       return helper::createLink($module,    $method,  "executionID={$params[0]}&productID=%s{$branchParam}");
+        if($module == 'product'    && in_array($method, array('doc', 'view')))                           return helper::createLink($module,    $method,  "productID=%s");
+        if($module == 'product'    && in_array($method, array('create', 'showimport')))                  return helper::createLink($module,    'browse', "productID=%s&type=$extra");
+        if($module == 'bug'        && in_array($method, array('edit', 'view')))                          return helper::createLink($module,    'browse', "productID=%s");
+        if($module == 'testcase'   && in_array($method, array('edit', 'view')))                          return helper::createLink($module,    'browse', "productID=%s");
+        if($module == 'ticket'     && in_array($method, array('browse', 'view', 'edit', 'createstory'))) return helper::createLink('ticket',   'browse', "browseType=byProduct&productID=%s");
+        if($module == 'testreport' && in_array($method, array('edit', 'browse')))                        return helper::createLink($module,    'browse', "objectID=%s");
+        if($module == 'feedback'   && $this->config->vision == 'lite')                                   return helper::createLink('feedback', 'browse', "browseType=byProduct&productID=%s");
 
         if($module == 'tree' && !empty($extra)) return helper::createLink('tree', $method, "productID=%s&view={$extra}&currentModuleID=0{$branchParam}");
 
@@ -2156,12 +2159,15 @@ class productModel extends model
         list($locateModule, $locateMethod) = $this->productTao->computeLocate4DropMenu();
 
         /* 生成异步获取产品下拉菜单的链接。*/
+        $this->loadModel('index');
         $fromModule     = $this->app->tab == 'qa' ? 'qa' : '';
         $dropMenuModule = $this->app->tab == 'qa' ? 'product' : $this->app->tab;
-        $dropMenuLink   = helper::createLink($dropMenuModule, 'ajaxGetDropMenu', "objectID=$productID&module=$locateModule&method=$locateMethod&extra=$extra&from=$fromModule");
+        $dropMenuMethod = in_array("{$this->app->moduleName}-{$this->app->methodName}", $this->config->index->oldPages) ? 'ajaxGetOldDropMenu' : 'ajaxGetDropMenu';
+        $dataRide       = in_array("{$this->app->moduleName}-{$this->app->methodName}", $this->config->index->oldPages) ? 'searchList'         : 'dropmenu' ;
+        $dropMenuLink   = helper::createLink($dropMenuModule, $dropMenuMethod, "objectID=$productID&module=$locateModule&method=$locateMethod&extra=$extra&from=$fromModule");
 
         /* 构建产品1.5级导航数据。*/
-        $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProductName}'><span class='text'>{$currentProductName}</span> <span class='caret' style='margin-bottom: -1px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='dropmenu' data-url='$dropMenuLink'>";
+        $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProductName}'><span class='text'>{$currentProductName}</span> <span class='caret' style='margin-bottom: -1px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='{$dataRide}' data-url='$dropMenuLink'>";
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
         $output .= "</div></div>";
 

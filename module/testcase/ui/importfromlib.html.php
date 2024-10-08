@@ -67,7 +67,14 @@ foreach($cases as $case)
 
     $case->branchItems = $caseBranches;
     $case->branch      = $caseBranch;
-    if($case->id != key($cases)) $case->module = 'ditto';
+    if($case->id != key($cases))
+    {
+        $case->module = 'ditto';
+    }
+    else
+    {
+        $case->module = 0;
+    }
 }
 
 $footToolbar = array('items' => array(array('text' => $lang->testcase->import, 'btnType' => 'secondary', 'className' => 'import-btn')));

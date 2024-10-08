@@ -444,6 +444,11 @@ class productplanZen extends productplan
 
         /* 对需求重新按照父子关系排序，保证进入需求详情后上一页下一页的URL符合预期。 */
         $objectList = $this->loadModel('story')->reorderStories($stories);
-        if($objectList) $this->session->set('storyBrowseList', array('sql' => $sql, 'idkey' => 'id', 'objectList' => $objectList), $this->app->tab);
+        if($objectList)
+        {
+            $this->session->set('storyBrowseList', array('sql' => $sql, 'idkey' => 'id', 'objectList' => $objectList), $this->app->tab);
+            $this->session->set('epicBrowseList', array('sql' => $sql, 'idkey' => 'id', 'objectList' => $objectList), $this->app->tab);
+            $this->session->set('requirementBrowseList', array('sql' => $sql, 'idkey' => 'id', 'objectList' => $objectList), $this->app->tab);
+        }
     }
 }

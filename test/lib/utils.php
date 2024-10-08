@@ -122,7 +122,7 @@ function getCaseModelDir()
  */
 function zdRun($isDev = false)
 {
-    global $config, $dao;
+    global $config, $dao, $app;
 
     include LIB_ROOT . 'spyc.php';
 
@@ -144,7 +144,7 @@ function zdRun($isDev = false)
         include $configRoot . 'processor.php';
 
         /* Connect to MySQL. */
-        $dao = new dao();
+        $dao = new dao($app);
         echo 'MySQL connect success' . PHP_EOL;
 
         /* Copy common to tmp. */

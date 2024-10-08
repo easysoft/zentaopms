@@ -437,10 +437,10 @@ class dbh
                 }
                 elseif(stripos($sql, 'CREATE UNIQUE INDEX') === 0 || stripos($sql, 'CREATE INDEX') === 0)
                 {
-                    preg_match('/ON\s+[^.`\s]+\.`([^\s`]+)`/', $sql, $matches);
+                    preg_match('/ON\s+([^.`\s]+\.)?`([^\s`]+)`/', $sql, $matches);
 
-                    $tableName = str_replace($this->config->prefix, '', $matches);
-                    $sql       = preg_replace('/INDEX\ +\`/', 'INDEX `' . strtolower($tableName[1]) . '_', $sql);
+                    $tableName = isset($matches[2]) ? str_replace($this->config->prefix, '', $matches[2]) : '';
+                    $sql       = preg_replace('/INDEX\ +\`/', 'INDEX `' . strtolower($tableName) . '_', $sql);
                 }
             case 'ALTER':
                 $sql = $this->formatField($sql);
@@ -451,10 +451,10 @@ class dbh
             case 'USE':
                 return '';
             case 'DESC';
-                $tableName = str_replace(array('DESC ', '`'), '', $sql);
+                $tableName = str_ireplace(array('DESC ', '`'), '', $sql);
                 $tableName = trim($tableName);
-                if(strpos($sql, ' ') !== false) list($tableName, $columnName) = explode(' ', $tableName);
-                $sql = "select COLUMN_NAME as Field from all_tab_columns where Table_Name='$tableName'";
+                if(strpos($tableName, ' ') !== false) list($tableName, $columnName) = explode(' ', $tableName);
+                $sql = "select COLUMN_NAME as Field, DATA_TYPE as `Type`, DATA_LENGTH as Length, DATA_DEFAULT as `Default`, NULLABLE as `Null` from all_tab_columns where Table_Name='$tableName'";
                 if(!empty($columnName)) $sql .= " and COLUMN_NAME='$columnName'";
                 return $sql;
             case 'DROP':

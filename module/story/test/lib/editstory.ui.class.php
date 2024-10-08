@@ -41,7 +41,7 @@ class editStoryTester extends tester
     }
 
     /**
-     * batch a story.
+     * batch edit a story.
      * @param   string $storyFrom
      * @access  public
      * @return  object

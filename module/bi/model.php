@@ -1711,13 +1711,17 @@ class biModel extends model
     /**
      * Get table list.
      *
+     * @param  bool    $hasDataview
+     * @param  bool    $withPrefix
      * @access public
      * @return array
      */
-    public function getTableList()
+    public function getTableList($hasDataview = true, $withPrefix = true)
     {
         $originTableTreeMenu = $this->loadModel('dataview')->getOriginTreeMenu();
         $dataviewTreeMenu    = $this->loadModel('tree')->getGroupTree(0, 'dataview');
+
+        $originTablePrefix = $withPrefix ? $this->config->db->prefix : '';
 
         $tableList = array();
         foreach($originTableTreeMenu as $menu)
@@ -1729,13 +1733,17 @@ class biModel extends model
                 if(!is_array($item))
                 {
                     $text = $item->key == 'story' ? $this->lang->story->common : $item->text;
-                    $tableList[$this->config->db->prefix . $item->key] = $text;
+                    $tableList[$originTablePrefix . $item->key] = $text;
                     continue;
                 }
 
-                foreach($item->items as $subItem) $tableList[$this->config->db->prefix . $subItem->key] = $subItem->text;
+                foreach($item->items as $subItem) $tableList[$originTablePrefix . $subItem->key] = $subItem->text;
             }
         }
+
+        if(!$hasDataview) return $tableList;
+
+        $dataviewPrefix = $withPrefix ? 'ztv_' : '';
         foreach($dataviewTreeMenu as $menu)
         {
             if(empty($menu->items)) continue;
@@ -1744,11 +1752,11 @@ class biModel extends model
             {
                 if(!is_array($item))
                 {
-                    $tableList['ztv_' . $item->key] = $item->text;
+                    $tableList[$dataviewPrefix . $item->key] = $item->text;
                     continue;
                 }
 
-                foreach($item->items as $subItem) $tableList['ztv_' . $subItem->key] = $subItem->text;
+                foreach($item->items as $subItem) $tableList[$dataviewPrefix . $subItem->key] = $subItem->text;
             }
         }
 

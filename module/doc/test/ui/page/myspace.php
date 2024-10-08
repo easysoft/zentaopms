@@ -29,7 +29,7 @@ class myspacePage extends page
             'myFavorites'    => '/html/body/div[1]/div/div[2]/div[1]/div[1]/div/main/menu/li[3]/div/div/a',
             'createdBy'      => '/html/body/div[1]/div/div[2]/div[1]/div[1]/div/main/menu/li[4]/div/div/a',
             'myLibMoreBtn'   => '/html/body/div[1]/div/div[2]/div[1]/div[1]/div/main/menu/li[1]/menu/li[1]/div/nav/button/i',
-            'addDir'         => '/html/body/div[2]/menu/menu/li[1]/a/div/div',
+            'addDir'         => '/html/body/div[2]/menu/menu/li[1]/a/div/div'
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }

@@ -2032,7 +2032,7 @@ CREATE TABLE `zt_taskteam` (
   `left` decimal(12,2) NOT NULL DEFAULT '0.00',
   `transfer` char(30) NOT NULL DEFAULT '',
   `status` enum('wait','doing','done') NOT NULL DEFAULT 'wait',
-  `order` tinyint(3) NOT NULL DEFAULT '0',
+  `order` int(8) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE INDEX `task` ON `zt_taskteam` (`task`);
@@ -16112,6 +16112,10 @@ UPDATE `zt_pivot` SET `editedBy` = 'system' where `editedBy` = 'admin';
 INSERT INTO `zt_config` ( `vision`, `owner`, `module`, `section`, `key`, `value` ) VALUES ('', 'system', 'common', '', 'closedFeatures', 'otherOA');
 INSERT INTO `zt_config`(`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES ('', 'system', 'common', 'global', 'installedDate', CURDATE());
 CREATE INDEX `idx_repo_deleted` ON `zt_job` (`repo`,`deleted`);
+
+INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES
+('*/5', '*', '*', '*', '*', 'moduleName=program&methodName=refreshStats', '刷新项目集统计数据', 'zentao', 1, 'normal', NULL),
+('*/5', '*', '*', '*', '*', 'moduleName=product&methodName=refreshStats', '刷新产品统计数据',   'zentao', 1, 'normal', NULL);
 
 REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`, `vision`) VALUES
 ('zh-cn', 'custom', 'relationList', '1', '{\"relation\":\"\\u76f8\\u5173\",\"relativeRelation\":\"\\u76f8\\u5173\"}', '0', 'all'),
