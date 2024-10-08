@@ -51,7 +51,7 @@ class think3c extends thinkModel
                 'inputs.each((index, ele) => {values.push($(ele).val());});',
                 'if(value != currentValue && new Set(values).size != values.length)
                 {
-                    zui.Modal.confirm({message: repeatTips, actions: [{text: confirmLang, type: "primary", class: "w-20"}]}).then(() => {
+                    return zui.Modal.confirm({message: repeatTips, actions: [{text: confirmLang, type: "primary", class: "w-20"}]}).then(() => {
                         $tatget.val(currentValue);
                         $tatget.attr("title", currentValue);
                         if($blockTitle.length)
@@ -60,7 +60,6 @@ class think3c extends thinkModel
                             $blockTitle.closest(".block-title").attr("title", currentValue + blockName);
                         }
                     });
-                    return;
                 }',
                 '$tatget.attr("title", value);',
                 '$tatget.val(value);',
