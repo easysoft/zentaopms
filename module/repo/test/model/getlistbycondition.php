@@ -22,6 +22,8 @@ zenData('repo')->loadYaml('repo')->gen(5);
 $repo = $tester->loadModel('repo');
 $repo->app->moduleName = 'repo';
 $repo->app->methodName = 'browse';
+$repo->app->rawModule  = 'repo';
+$repo->app->rawMethod  = 'browse';
 
 $repoQuery = "path like '%123%'";
 $orderBy   = 'id_asc';

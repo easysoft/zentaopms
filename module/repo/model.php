@@ -526,7 +526,7 @@ class repoModel extends model
     {
         if(session_id()) session_write_close();
 
-        session_start();
+        if(!defined('RUN_MODE') || RUN_MODE != 'test') session_start();
         if($repoID > 0) $this->session->set('repoID', (int)$repoID);
 
         $repos = $this->getRepoPairs($this->app->tab, $objectID);
@@ -1669,7 +1669,7 @@ class repoModel extends model
             ->andWhere('objectID')->eq($action->objectID)
             ->andWhere('extra')->eq($action->extra)
             ->andWhere('action')->eq($action->action)
-            ->andWhere('comment')->eq($action->comment)
+            ->beginIf(!empty($action->comment))->andWhere('comment')->eq(zget($action, 'comment', ''))->fi()
             ->fetch();
         if($record)
         {
