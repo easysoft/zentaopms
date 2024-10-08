@@ -1,6 +1,6 @@
 <?php
 $lang->mr = new stdclass;
-$lang->mr->common       = "Merge Request";
+$lang->mr->common       = 'Merge Requests';
 $lang->mr->server       = "Server";
 $lang->mr->hostID       = "Server";
 $lang->mr->view         = "Survey";
