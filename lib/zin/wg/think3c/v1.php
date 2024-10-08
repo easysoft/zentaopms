@@ -32,19 +32,39 @@ class think3c extends thinkModel
         return div
         (
             setData(array('clientLang' => $app->getClientLang(), 'model' => '3c', 'mode' => $mode, 'blocks' => $blocks, 'disabled' => $disabled)),
-            setClass('model-canvas relative flex justify-center', "model-canvas-$key"),
+            setClass('model-canvas relative', "model-canvas-$key", $mode == 'view' ? '' : 'flex justify-center'),
             h::canvas(setID('canvas_' . $key)),
             on::blur('.model-canvas input')
             ->const('blockName', $lang->thinkwizard->block)
+            ->const('blocksData', $blocks)
+            ->const('repeatTips', $lang->thinkwizard->error->blockRepeat)
+            ->const('confirmLang', $lang->thinkwizard->actions->confirm)
             ->do(
                 'const $tatget = $(this);',
                 'const index = $tatget.data("index");',
                 'const block = $tatget.data("block");',
                 'const value = $tatget.val() || block;',
                 'const $blockTitle = $(`.block-title-${index}`);',
+                'const currentValue = blocksData[index];',
+                'const values = [];',
+                'const inputs = $(`input[name="blocks[]"]`);',
+                'inputs.each((index, ele) => {values.push($(ele).val());});',
+                'if(value != currentValue && new Set(values).size != values.length)
+                {
+                    zui.Modal.confirm({message: repeatTips, actions: [{text: confirmLang, type: "primary", class: "w-20"}]}).then(() => {
+                        $tatget.val(currentValue);
+                        $tatget.attr("title", currentValue);
+                        if($blockTitle.length)
+                        {
+                            $blockTitle.text(currentValue);
+                            $blockTitle.closest(".block-title").attr("title", currentValue + blockName);
+                        }
+                    });
+                    return;
+                }',
                 '$tatget.attr("title", value);',
                 '$tatget.val(value);',
-                'if($blockTitle.length) {$blockTitle.text(value); $blockTitle.closest(".block-title").attr("title", value + blockName);};'
+                'if($blockTitle.length) {$blockTitle.text(value); $blockTitle.closest(".block-title").attr("title", value + blockName);}'
             )
         );
     }
