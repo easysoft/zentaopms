@@ -88,7 +88,7 @@ class relatedList extends wg
                 $title    = isset($lang->$moduleName->$langName) ? $lang->$moduleName->$langName : $type;
             }
 
-            $groupItems = $this->getGroupItems($type, $group);
+            $groupItems = $this->getGroupItems((string)$type, $group);
 
             $items[] = array
             (

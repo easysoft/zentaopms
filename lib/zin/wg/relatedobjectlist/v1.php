@@ -98,7 +98,7 @@ class relatedObjectList extends relatedList
             $relatedObjectItems = array();
             foreach($relatedObjectList as $relatedObjectType => $relatedObjectPairs)
             {
-                foreach($relatedObjectPairs as $id => $title) $relatedObjectItems[] = $this->getObjectItem($id, $relatedObjectType, $title, $relationName);
+                foreach($relatedObjectPairs as $id => $title) $relatedObjectItems[] = $this->getObjectItem($id, $relatedObjectType, $title, (string)$relationName);
             }
 
             $data[$relationName] = array
