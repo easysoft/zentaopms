@@ -4,27 +4,29 @@ author: zhouxin
 version: "1.0"
 fields:
 - field: id
-  range: 1-160
+  range: 1-40
 - field: metricID
   range: 107{10},188{10}
 - field: metricCode
-  range: count_of_bug{10},count_of_case_in_product{10}
+  range: count_of_bug{10},count_of_annual_created_project{10},count_of_release_in_product{10},count_of_monthly_finished_story_in_product{10}
 - field: system
   range: 1{20},0{20}
 - field: product
-  range: "[]{20},1{10},2{10}"
+  range: "[]{20},1,3,5,7,9,1,3,5,7,9,1,3,5,7,9,1,3,5,7,9"
 - field: year
-  range: "[]{10},2021{10}[]{10},2021{10}"
+  range: "[]{10},2012-2016{2},[]{10},2021{10}"
 - field: month
-  range: "[]{20},11{10},[]{10}"
+  range: "[]{30},01,02,03,04,05,01,02,06,07,08"
 - field: week
-  range: "[]{20},44{5},45{5},[]{10}"
+  range: "[]{40}"
 - field: day
   range: "[]{40}"
 - field: value
   range: 1
 - field: date
-  range: "20220101 000000-20230101 000000:10D{2}"
+  range: "20220101 000000-20220110 000000:1D,20220109 060000-20220109 060001:1,20220101 000000-20220101 000005:1,20220102 000000-20220102 000005:1,20220103 000000-20220103 000005:1,20220104 000000-20220104 000005:1,20220104 000000-20220104 000010:10"
   type: timestamp
   format: YYYY-MM-DD hh:mm:ss
+- field: deleted
+  range: "0"
 ...

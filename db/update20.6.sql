@@ -30,7 +30,8 @@ CREATE TABLE IF NOT EXISTS `zt_sqlbuilder` (
 DELETE t1
 FROM `zt_workflowlayout` t1
 LEFT JOIN `zt_workflowfield` t2 ON t1.field = t2.field AND t1.module = t2.module
-WHERE t2.buildin = '1' AND t2.role = 'buildin';
+LEFT JOIN `zt_workflowaction` t3 ON t1.module = t3.module AND t1.action = t3.action
+WHERE t2.buildin = '1' AND t2.role = 'buildin' AND t3.buildin = '1';
 
 ALTER TABLE `zt_dataview` ADD `mode` enum('text', 'builder') not NULL default 'builder' AFTER `code`;
 UPDATE `zt_dataview` SET `mode` = 'text';

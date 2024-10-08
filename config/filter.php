@@ -398,6 +398,7 @@ $filter->testcase->browse->cookie['onlyScene']     = 'code';
 $filter->todo->export->cookie['checkedItem'] = 'reg::checked';
 
 $filter->user->login->cookie['keepLogin']    = 'equal::on';
+$filter->user->login->cookie['logout']       = 'equal::1';
 $filter->user->export->cookie['checkedItem'] = 'reg::any';
 
 $filter->block->default->get['hash']    = 'reg::md5';

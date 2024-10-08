@@ -1234,6 +1234,11 @@ class projectZen extends project
             }
         }
 
+        foreach($linkedProducts as $product)
+        {
+            if($product->deleted == '1') $product->name = $product->name . ' (' . $this->lang->product->deleted . ')';
+        }
+
         $this->view->currentProducts = $currentProducts;
         $this->view->otherProducts   = $otherProducts;
         $this->view->branchGroups    = $branchGroups;

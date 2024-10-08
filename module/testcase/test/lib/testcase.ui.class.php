@@ -1,5 +1,6 @@
-#!/usr/bin/env php
 <?php
+use Facebook\WebDriver\WebDriverBy;
+
 include dirname(__FILE__, 5) . '/test/lib/ui.php';
 class testcase extends tester
 {
@@ -20,24 +21,35 @@ class testcase extends tester
                 $parentGroup++;
                 if(!is_array($parentExpects))
                 {
-                    $form->dom->{"steps[$parentGroup]"}->scrollToElement();
                     $form->dom->{"steps[$parentGroup]"}->setValue($parentSteps);
                     $form->dom->{"expects[$parentGroup]"}->setValue($parentExpects);
                 }
                 else
                 {
                     $group = 0;
+                    $form->dom->{"steps[$parentGroup]"}->setValue($parentSteps);
                     $subButton = "//textarea[@name = 'steps[$parentGroup]']/../..//button[@data-action='sub']/i";
-                    $this->page->scrollToElement($subButton);
-                    $this->page->click($subButton);
+                    $subButtonXpath = $this->page->webdriver->driver->findElement(WebDriverBy::xpath($subButton));
+                    $this->page->webdriver->driver->executeScript("arguments[0].click();", [$subButtonXpath]);
                     foreach($parentExpects as $steps => $expects)
                     {
                         $group++;
+                        $this->webdriver->wait(1);
+                        $sibButton = "//textarea[@name = 'steps[$parentGroup.$group]']/../..//button[@data-action='sib']/i";
+                        $sibButtonXpath = $this->page->webdriver->driver->findElement(WebDriverBy::xpath($sibButton));
                         if(!is_array($expects))
                         {
-                            $form->dom->{"steps[$parentGroup.$group]"}->scrollToElement();
                             $form->dom->{"steps[$parentGroup.$group]"}->setValue($steps);
                             $form->dom->{"expects[$parentGroup.$group]"}->setValue($expects);
+                            $this->page->webdriver->driver->executeScript("arguments[0].click();", [$sibButtonXpath]);
+                        }
+                        else
+                        {
+                            $sonGroup = 0;
+                            $form->dom->{"steps[$parentGroup.$group]"}->setValue($steps);
+                            $sonSubButton = "//textarea[@name = 'steps[$parentGroup.$group]']/../..//button[@data-action='sub']/i";
+                            $sonSubButtonXpath = $this->page->webdriver->driver->findElement(WebDriverBy::xpath($sonSubButton));
+                            $this->page->webdriver->driver->executeScript("arguments[0].click();", [$sonSubButtonXpath]);
                         }
                     }
                 }

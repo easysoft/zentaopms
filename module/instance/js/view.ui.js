@@ -30,16 +30,13 @@ const postData = new FormData();
 postData.append('idList[]', instanceID);
 window.afterPageUpdate = function()
 {
-if(typeof timer !== 'undefined') clearInterval(timer);
-    if(inQuickon && instanceType == 'store')
-    {
-        timer = setInterval(refreshStatus, 5000);
-    }
+    if(typeof timer !== 'undefined') clearInterval(timer);
+    if(inQuickon && instanceType == 'store') timer = setInterval(refreshStatus, 5000);
 }
 
 window.onPageUnmount = function()
 {
-    if(timer) clearInterval(timer);
+    if(typeof timer !== 'undefined') clearInterval(timer);
 }
 
 function refreshStatus()

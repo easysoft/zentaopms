@@ -52,7 +52,7 @@ $fields->field('steps')
 
 $fields->field('files')
     ->width('full')
-    ->control('fileSelector', array('defaultFiles' => $resultFiles));
+    ->control('fileSelector', array('defaultFiles' => (data('bug.files') ? data('bug.files') : $resultFiles)));
 
 $fields->field('story')->foldable();
 

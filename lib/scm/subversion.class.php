@@ -638,7 +638,7 @@ class subversionRepo
                     $parsedFile->revision = $parsedLog->revision;
                     $parsedFile->path     = (string)$file;
                     $parsedFile->type     = (string)$file['kind'];
-                    $parsedFile->action   = (string)$file['action'];
+                    $parsedFile->action   = substr((string)$file['action'], 0, 1);
                     if(isset($file['copyfrom-path'])) $parsedFile->copyfromPath = (string)$file['copyfrom-path'];
                     if(isset($file['copyfrom-rev']))  $parsedFile->copyfromRev = (string)$file['copyfrom-rev'];
 

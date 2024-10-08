@@ -11,6 +11,7 @@ declare(strict_types=1);
 */
 namespace zin;
 
+$config->mail->browse->dtable->fieldList['toList']['map'] = $users;
 $canBatchDelete = hasPriv('mail', 'batchDelete');
 $queueList      = initTableData($queueList, $config->mail->browse->dtable->fieldList);
 

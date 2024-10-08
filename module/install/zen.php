@@ -268,6 +268,14 @@ class installZen extends install
             return $return;
         }
 
+        /* 检查数据库用户是否缺少权限。 */
+        $missingPrivs = $this->install->dbh->checkUserPriv();
+        if($missingPrivs)
+        {
+            $missingPrivs = $this->lang->install->errorDBUserPriv . '<code>' . $missingPrivs . '</code>';
+            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert({icon: 'icon-exclamation-sign', size: '600', iconClass: 'text-4xl text-warning', message: {html:'" . str_replace("'", '"', $missingPrivs) . "'}})"));
+        }
+
         /* Get database version. */
         $version = $this->install->getDatabaseVersion();
 

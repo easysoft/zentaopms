@@ -246,26 +246,29 @@ class myZen extends my
 
         if($isMax || $isIPD)
         {
-            /* Get the number of issues assigned to me. */
-            $this->loadModel('issue')->getUserIssues('assignedTo', 0, $this->app->user->account, 'id_desc', $pager);
-            $count['issue'] = $pager->recTotal;
+            if($this->config->vision != 'or')
+            {
+                /* Get the number of issues assigned to me. */
+                $this->loadModel('issue')->getUserIssues('assignedTo', 0, $this->app->user->account, 'id_desc', $pager);
+                $count['issue'] = $pager->recTotal;
 
-            /* Get the number of risks assigned to me. */
-            $this->loadModel('risk')->getUserRisks('assignedTo', $this->app->user->account, 'id_desc', $pager);
-            $count['risk'] = $pager->recTotal;
+                /* Get the number of risks assigned to me. */
+                $this->loadModel('risk')->getUserRisks('assignedTo', $this->app->user->account, 'id_desc', $pager);
+                $count['risk'] = $pager->recTotal;
 
-            /* Get the number of nc assigned to me. */
-            $this->my->getNcList('assignedToMe', 'id_desc', $pager, 'active');
-            $ncCount = $pager->recTotal;
+                /* Get the number of nc assigned to me. */
+                $this->my->getNcList('assignedToMe', 'id_desc', $pager, 'active');
+                $ncCount = $pager->recTotal;
 
-            /* Get the number of nc assigned to me. */
-            $this->loadModel('auditplan')->getList(0, 'mychecking', '', 'id_desc', $pager);
-            $auditplanCount = $pager->recTotal;
-            $count['qa']    = $ncCount + $auditplanCount;
+                /* Get the number of nc assigned to me. */
+                $this->loadModel('auditplan')->getList(0, 'mychecking', '', 'id_desc', $pager);
+                $auditplanCount = $pager->recTotal;
+                $count['qa']    = $ncCount + $auditplanCount;
 
-            /* Get the number of meetings assigned to me. */
-            $this->loadModel('meeting')->getListByUser('futureMeeting', 'id_desc', 0, $pager);
-            $count['meeting'] = $pager->recTotal;
+                /* Get the number of meetings assigned to me. */
+                $this->loadModel('meeting')->getListByUser('futureMeeting', 'id_desc', 0, $pager);
+                $count['meeting'] = $pager->recTotal;
+            }
 
             if($isIPD && $this->config->vision == 'or')
             {

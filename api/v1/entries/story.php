@@ -81,7 +81,7 @@ class storyEntry extends entry
         $story->preAndNext['pre']  = $preAndNext->pre  ? $preAndNext->pre->id : '';
         $story->preAndNext['next'] = $preAndNext->next ? $preAndNext->next->id : '';
 
-        return $this->send(200, $this->format($story, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
+        return $this->send(200, $this->format($story, 'title:decodeHtml,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
     }
 
     /**
@@ -93,13 +93,13 @@ class storyEntry extends entry
      */
     public function put($storyID)
     {
+        $control = $this->loadController('story', 'edit');
         $oldStory = $this->loadModel('story')->getByID($storyID);
 
         /* Set $_POST variables. */
         $fields = 'title,product,parent,reviewer,type,plan,module,source,sourceNote,category,pri,estimate,mailto,keywords,uid,stage,notifyEmail,status';
         $this->batchSetPost($fields, $oldStory);
 
-        $control = $this->loadController('story', 'edit');
         $control->edit($storyID);
 
         $data = $this->getData();

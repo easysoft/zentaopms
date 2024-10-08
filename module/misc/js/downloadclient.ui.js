@@ -1,10 +1,10 @@
 window.clickSubmit = () =>
 {
     const os = $('#os').zui('picker').$.state.value;
-    loadPage({url : $.createLink('misc', 'downloadClient', "action=getPackage&os=" + os), selector : '#downloadClient', success: getClient});
+    loadPage({url : $.createLink('misc', rawMethod, "action=getPackage&os=" + os), selector : '#downloadClient', success: getClient});
 };
 
-function getClient()
+window.getClient = function()
 {
     const os = $('#os').val();
     const link = $.createLink('misc', 'ajaxGetClientPackage', 'os=' + os);
@@ -24,7 +24,7 @@ function getClient()
                 if(res.result == 'success')
                 {
                     $('#setted').removeClass('hidden');
-                    const link = $.createLink('misc', 'downloadClient', "action=downloadPackage" + '&os=' + os);
+                    const link = $.createLink('misc', rawMethod, "action=downloadPackage" + '&os=' + os);
                     zui.Modal.hide();
                     open(link, '_blank');
                 }
@@ -52,8 +52,7 @@ function getClient()
 
 window.showPackageSize = () =>
 {
-    const os = $('#os').val();
-    const link = $.createLink('misc', 'ajaxGetPackageSize', 'os=' + os);
+    const link = $.createLink('misc', 'ajaxGetPackageSize');
     $.getJSON(link, res =>
     {
         if(res.result == 'success')

@@ -1128,6 +1128,86 @@ class biModel extends model
     }
 
     /**
+     * Get sql by month.
+     *
+     * @param  string $month
+     * @access public
+     * @return array
+     */
+    public function getSqlByMonth($year = 'Y', $month = 'm')
+    {
+        $sqls   = array();
+        $prefix = $this->config->db->prefix;
+        $year   = date($year);
+        $month  = date($month);
+
+        $begin  = date("{$year}-{$month}-01 00:00:00");
+        $end    = date("{$year}-{$month}-t 23:59:59", strtotime("$year-$month-01"));
+        $sqls[$prefix . "action_{$year}_{$month}"] = "select * from zt_action where date >= TIMESTAMP '$begin' and date <= TIMESTAMP '$end'";
+
+        return $sqls;
+    }
+
+    /**
+     * Get action sync sql.
+     *
+     * @param  string $range
+     * @access public
+     * @return array
+     */
+    public function getActionSyncSql($range = 'current')
+    {
+        if($range == 'current') return $this->getSqlByMonth();
+
+        $actionDate = $this->biTao->fetchActionDate();
+        $begin      = new DateTime($actionDate->minDate);
+        $end        = new DateTime($actionDate->maxDate);
+
+        $sqls = array();
+        while($begin <= $end)
+        {
+            $year  = $begin->format('Y');
+            $month = $begin->format('m');
+            $sqls  += $this->getSqlByMonth($year, $month);
+            $begin->modify('+1 month');
+        }
+
+        return $sqls;
+    }
+
+    /**
+     * Init parquet.
+     *
+     * @access public
+     * @return void
+     */
+    public function initParquet()
+    {
+        $duckdb = $this->getDuckDBPath();
+        if(!$duckdb) return $this->lang->bi->binNotExists;
+
+        $duckdbTmpPath = $this->getDuckDBTmpDir();
+        if(!$duckdbTmpPath) return sprintf($this->lang->bi->tmpPermissionDenied, $this->getDuckDBTmpDir(true), $this->getDuckDBTmpDir(true));
+
+        $tables = $this->biTao->fetchAllTables();
+        $copySQLs = array();
+        foreach($tables as $table) $copySQLs[] = "copy (select * from {$table}) to '{$duckdbTmpPath}{$table}.parquet'";
+
+        $date = date("Y-m-01 00:00:00");
+        $prefix = $this->config->db->prefix;
+
+        $copySQLs[] = "copy (select * from {$prefix}action where date < TIMESTAMP '$date') to '{$duckdbTmpPath}{$prefix}action_" . date('Y_m', strtotime('-1 month')) . ".parquet'";
+
+        $copySQL = implode(';', $copySQLs);
+        if(empty($copySQL)) return true;
+
+        $command = $this->prepareSyncCommand($duckdb->bin, $duckdb->extension, $copySQL);
+        $output  = shell_exec($command);
+        $this->saveLogs("Sync command: $command");
+        return $output;
+    }
+
+    /**
      * 准备同步数据库所需的复制SQL。
      * Prepare copy SQL for sync.
      *
@@ -1137,32 +1217,19 @@ class biModel extends model
      */
     public function prepareCopySQL($duckdbTmpPath)
     {
-        $tables    = $this->config->bi->duckdb->tables;
-        $ztvtables = $this->config->bi->duckdb->ztvtables;
+        $tables = $this->biTao->fetchTableQueue();
+
         if(empty($tables)) return '';
 
-        $tablePrefix = $this->config->db->prefix;
-        $ztvPrefix   = 'ztv_';
+        $copySQLs  = array();
+        foreach($tables as $table) $copySQLs[] = "copy (select * from {$table}) to '{$duckdbTmpPath}{$table}.parquet'";
 
-        $copySQL  = '';
-        foreach($tables as $table => $sql)
-        {
-            $table = $tablePrefix . $table;
-            $sql   = str_replace('zt_', $tablePrefix, $sql);
+        $actions = $this->getActionSyncSql();
+        foreach($actions as $table => $sql) $copySQLs[] = "copy ({$sql}) to '{$duckdbTmpPath}{$table}.parquet'";
 
-            $tablePath = $duckdbTmpPath . $table;
-            $copySQL .= "COPY ($sql) TO '$tablePath.parquet';";
-        }
+        $this->biTao->updateSyncTime($tables);
 
-        foreach($ztvtables as $table => $sql)
-        {
-            $table = $ztvPrefix . $table;
-
-            $tablePath = $duckdbTmpPath . $table;
-            $copySQL .= "COPY ($sql) TO '$tablePath.parquet';";
-        }
-
-        return $copySQL;
+        return implode(';', $copySQLs);
     }
 
     /**
@@ -1215,11 +1282,43 @@ class biModel extends model
         if(!$duckdbTmpPath) return sprintf($this->lang->bi->tmpPermissionDenied, $this->getDuckDBTmpDir(true), $this->getDuckDBTmpDir(true));
 
         $copySQL = $this->prepareCopySQL($duckdbTmpPath);
+        if(empty($copySQL)) return true;
+
         $command = $this->prepareSyncCommand($duckdb->bin, $duckdb->extension, $copySQL);
         $output  = shell_exec($command);
+        $this->saveLogs("Sync command: $command");
         if(!empty($output)) return $output;
 
         return true;
+    }
+
+    /**
+     * 获取日志文件路径。
+     * Get log file.
+     *
+     * @access public
+     * @return string
+     */
+    public function getLogFile(): string
+    {
+        return $this->app->getTmpRoot() . 'log/syncparquet.' . date('Ymd') . '.log.php';
+    }
+
+    /**
+     * 存储日志。
+     * Save logs.
+     *
+     * @param  string $log
+     * @access public
+     * @return void
+     */
+    public function saveLogs(string $log): void
+    {
+        $logFile = $this->getLogFile();
+        $log     = date('Y-m-d H:i:s') . ' ' . trim($log) . "\n";
+        if(!file_exists($logFile)) $log = "<?php\ndie();\n?" . ">\n" . $log;
+
+        file_put_contents($logFile, $log, FILE_APPEND);
     }
 
     /**
@@ -1237,8 +1336,9 @@ class biModel extends model
             if(empty($filter['default'])) continue;
             if(!isset($filter['from']) || $filter['from'] != 'query') continue;
 
-            $filters[$index]['default'] = $this->loadModel('pivot')->processDateVar($filter['default']);
-            if($filters[$index]['type'] == 'datetime') $filters[$index]['default'] .= ':00.000000000';
+            if($filter['type'] == 'date' || $filter['type'] == 'datetime') $filters[$index]['default'] = $this->loadModel('pivot')->processDateVar($filter['default']);
+            if($filter['type'] == 'datetime') $filters[$index]['default'] .= ':00.000000000';
+            if($filter['type'] == 'multipleselect' && is_array($filter['default'])) $filters[$index]['default'] = implode("','", $filter['default']);
 
             if($emptyValue) $filters[$index]['default'] = '';
         }
@@ -1255,12 +1355,16 @@ class biModel extends model
      * @access public
      * @return object
      */
-    public function sql2Statement($sql)
+    public function sql2Statement($sql, $mode = 'text')
     {
         $this->app->loadClass('sqlparser', true);
         $parser = new sqlparser($sql);
 
-        if($parser->statementsCount == 0) return $this->lang->dataview->empty;
+        if($parser->statementsCount == 0)
+        {
+            if($mode == 'builder') return $this->lang->dataview->emptyBuilder;
+            return $this->lang->dataview->empty;
+        }
         if($parser->statementsCount > 1)  return $this->lang->dataview->onlyOne;
 
         if(!$parser->isSelect) return $this->lang->dataview->allowSelect;
@@ -1566,7 +1670,7 @@ class biModel extends model
 
         $stateObj->beforeQuerySql();
 
-        $statement = $this->sql2Statement($sql);
+        $statement = $this->sql2Statement($sql, $stateObj->mode);
         if(is_string($statement)) return $stateObj->setError($statement);
 
         $checked = $this->validateSql($sql, $driver);
@@ -1607,12 +1711,17 @@ class biModel extends model
     /**
      * Get table list.
      *
+     * @param  bool    $hasDataview
+     * @param  bool    $withPrefix
      * @access public
      * @return array
      */
-    public function getTableList()
+    public function getTableList($hasDataview = true, $withPrefix = true)
     {
         $originTableTreeMenu = $this->loadModel('dataview')->getOriginTreeMenu();
+        $dataviewTreeMenu    = $this->loadModel('tree')->getGroupTree(0, 'dataview');
+
+        $originTablePrefix = $withPrefix ? $this->config->db->prefix : '';
 
         $tableList = array();
         foreach($originTableTreeMenu as $menu)
@@ -1624,11 +1733,30 @@ class biModel extends model
                 if(!is_array($item))
                 {
                     $text = $item->key == 'story' ? $this->lang->story->common : $item->text;
-                    $tableList[$item->key] = $text;
+                    $tableList[$originTablePrefix . $item->key] = $text;
                     continue;
                 }
 
-                foreach($item->items as $subItem) $tableList[$subItem->key] = $subItem->text;
+                foreach($item->items as $subItem) $tableList[$originTablePrefix . $subItem->key] = $subItem->text;
+            }
+        }
+
+        if(!$hasDataview) return $tableList;
+
+        $dataviewPrefix = $withPrefix ? 'ztv_' : '';
+        foreach($dataviewTreeMenu as $menu)
+        {
+            if(empty($menu->items)) continue;
+
+            foreach($menu->items as $item)
+            {
+                if(!is_array($item))
+                {
+                    $tableList[$dataviewPrefix . $item->key] = $item->text;
+                    continue;
+                }
+
+                foreach($item->items as $subItem) $tableList[$dataviewPrefix . $subItem->key] = $subItem->text;
             }
         }
 
@@ -1851,9 +1979,9 @@ class biModel extends model
             $index++;
         }
 
-        $lastRow        = count($data->array) - 1;
-        $hasGroup       = isset($data->groups);
-        $hasColumnTotal = !empty($data->columnTotal) && $data->columnTotal != 'noShow';
+        $lastRow     = count($data->array) - 1;
+        $hasGroup    = isset($data->groups);
+        $showLastRow = isset($data->showLastRow) ? $data->showLastRow : false;
 
         $drills = !empty($data->drills) ? array_values($data->drills) : array();
         foreach($data->array as $rowKey => $rowData)
@@ -1898,7 +2026,7 @@ class biModel extends model
 
                 $isFirstColumnAndLastRow = $i === 0 && $rowKey === $lastRow;
 
-                if($isFirstColumnAndLastRow && $hasGroup && $hasColumnTotal)
+                if($isFirstColumnAndLastRow && $hasGroup && $showLastRow)
                 {
                     $rows[$rowKey][$field . '_colspan'] = count($data->groups);
                     $cellSpan[$field]['colspan'] = $field . '_colspan';

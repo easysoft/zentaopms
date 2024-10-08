@@ -19,7 +19,7 @@ function loadBugCreate()
     const execution = $('#conditions').find('[name=execution]').val();
     const params    = window.btoa('begin=' + begin + '&end=' + end + '&product=' + +product + '&execution=' + +execution);
     const link      = $.createLink('pivot', 'preview', 'dimensionID=' + dimensionID + '&groupID=' + groupID + '&method=bugCreate&params=' + params);
-    loadPage(link, '#table-pivot-preview');
+    loadPage(link, '#pivotPanel');
 }
 
 /**
@@ -44,7 +44,7 @@ function loadProductSummary()
 
     const params = window.btoa('conditions=' + conditions + '&productID=' + productID + '&productStatus=' + productStatus + '&productType=' + productType);
     const link   = $.createLink('pivot', 'preview', 'dimensionID=' + dimensionID + '&groupID=' + groupID + '&method=productSummary&params=' + params);
-    loadPage(link, '#table-pivot-preview');
+    loadPage(link, '#pivotPanel');
 }
 
 /**
@@ -60,7 +60,7 @@ function loadProjectDeviation()
     const end    = $('#conditions').find('[name="end"]').val().replaceAll('-', '');
     const params = window.btoa('begin=' + begin + '&end=' + end);
     const link   = $.createLink('pivot', 'preview', 'dimensionID=' + dimensionID + '&groupID=' + groupID + '&method=projectdeviation&params=' + params);
-    loadPage(link, '#table-pivot-preview,#pivotChart');
+    loadPage(link, '#pivotPanel,#pivotChart');
 }
 
 /**
@@ -83,7 +83,7 @@ function loadWorkload()
 
     const params = window.btoa('begin=' + begin.replaceAll('-', '') + '&end=' + end.replaceAll('-', '') + '&days=' + days + '&workhour=' + +workhour + '&dept=' + dept + '&assign=' + assign);
     const link   = $.createLink('pivot', 'preview', 'dimensionID=' + dimensionID + '&groupID=' + groupID + '&method=workload&params=' + params);
-    loadPage(link, '#table-pivot-preview');
+    loadPage(link, '#pivotPanel');
 }
 
 function toggleShowMode(showMode = 'group')

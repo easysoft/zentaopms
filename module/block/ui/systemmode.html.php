@@ -36,7 +36,7 @@ function printSystemMode()
                     div
                     (
                         set('class', 'px-4 pb-2'),
-                        div(set('class', 'pb-2'), span(set('class', 'font-bold'), $modeName)),
+                        div(set('class', 'pb-2'), span(set('class', 'font-bold text-black'), $modeName)),
                         span(set('class', 'text-sm text-gray'), $lang->block->customModeTip->{$mode})
                     )
                 ),

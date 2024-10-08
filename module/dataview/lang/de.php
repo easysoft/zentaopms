@@ -35,6 +35,7 @@ $lang->dataview->add            = 'Add ';
 $lang->dataview->sqlQuery       = 'SQL Query';
 $lang->dataview->onlyOne        = 'Only allow one query';
 $lang->dataview->empty          = 'Please enter a query statement';
+$lang->dataview->emptyBuilder   = 'Please configure the builder correctly';
 $lang->dataview->allowSelect    = 'Only SELECT is allowed';
 $lang->dataview->noStar         = "For performance, 'SELECT *' is not allowed";
 $lang->dataview->fieldSettings  = "Field Settings";
@@ -74,10 +75,11 @@ $lang->dataview->varFilter->noticeVarName     = 'Filter name cannot be empty';
 $lang->dataview->varFilter->noticeRequestType = 'Request type cannot be empty';
 $lang->dataview->varFilter->noticeShowName    = 'Show name cannot be empty';
 
-$lang->dataview->varFilter->requestTypeList['input']    = 'Input';
-$lang->dataview->varFilter->requestTypeList['date']     = 'Date';
-$lang->dataview->varFilter->requestTypeList['datetime'] = 'Datetime';
-$lang->dataview->varFilter->requestTypeList['select']   = 'Select';
+$lang->dataview->varFilter->requestTypeList['input']          = 'Input';
+$lang->dataview->varFilter->requestTypeList['date']           = 'Date';
+$lang->dataview->varFilter->requestTypeList['datetime']       = 'Datetime';
+$lang->dataview->varFilter->requestTypeList['select']         = 'Select';
+$lang->dataview->varFilter->requestTypeList['multipleselect'] = 'Multiple Select';
 
 $lang->dataview->varFilter->selectList['product']             = $lang->productCommon . 'List';
 $lang->dataview->varFilter->selectList['product.status']      = $lang->productCommon . 'Status';

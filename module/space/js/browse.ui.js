@@ -48,8 +48,9 @@ window.afterPageUpdate = function()
 
 window.onPageUnmount = function()
 {
-    if(timer) clearInterval(timer);
+    if(typeof timer !== 'undefined') clearInterval(timer);
 }
+
 function refreshStatus()
 {
     $.ajaxSubmit({
@@ -72,12 +73,6 @@ function refreshStatus()
             }
         }
     });
-}
-
-window.onPageUnmount = function()
-{
-    if(!timer) return;
-    clearTimeout(timer);
 }
 
 window.bindUser = function(externalID, appName)

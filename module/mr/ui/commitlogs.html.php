@@ -19,6 +19,7 @@ dropmenu
     set::url(createLink($module, 'ajaxGetDropMenu', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
 );
 
+include 'header.html.php';
 detailHeader
 (
     to::title
@@ -47,72 +48,7 @@ panel
     div
     (
         set::id('mrMenu'),
-        nav
-        (
-            li
-            (
-                setClass('nav-item'),
-                a
-                (
-                    $lang->mr->view,
-                    set::href(inlink('view', "MRID={$MR->id}")),
-                    set('data-app', $app->tab)
-                )
-            ),
-            li
-            (
-                setClass('nav-item'),
-                a
-                (
-                    $lang->mr->commitLogs,
-                    setClass('active'),
-                    set('data-app', $app->tab)
-                )
-            ),
-            li
-            (
-                setClass('nav-item'),
-                a
-                (
-                    $lang->mr->viewDiff,
-                    set::href(inlink('diff', "MRID={$MR->id}")),
-                    set('data-app', $app->tab)
-                )
-            ),
-            li
-            (
-                setClass('nav-item story'),
-                a
-                (
-                    icon($lang->icons['story']),
-                    $lang->productplan->linkedStories,
-                    set::href(inlink('link', "MRID={$MR->id}&type=story")),
-                    set('data-app', $app->tab)
-                )
-            ),
-            li
-            (
-                setClass('nav-item bug'),
-                a
-                (
-                    icon($lang->icons['bug']),
-                    $lang->productplan->linkedBugs,
-                    set::href(inlink('link', "MRID={$MR->id}&type=bug")),
-                    set('data-app', $app->tab)
-                )
-            ),
-            li
-            (
-                setClass('nav-item task'),
-                a
-                (
-                    icon('todo'),
-                    $lang->mr->linkedTasks,
-                    set::href(inlink('link', "MRID={$MR->id}&type=task")),
-                    set('data-app', $app->tab)
-                )
-            )
-        )
+        $headers
     ),
     empty($commitLogs) ? p(setClass('detail-content'), in_array(strtolower($repo->SCM), array('gogs')) ? $lang->mr->unsupportedFeature : $lang->mr->noChanges) : div(
         setClass('pt-3'),

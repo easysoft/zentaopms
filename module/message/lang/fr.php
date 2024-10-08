@@ -52,6 +52,7 @@ $lang->message->label->undeleted    = 'restore';
 $lang->message->label->commented    = 'comment';
 $lang->message->label->activated    = 'activate';
 $lang->message->label->resolved     = 'resolve';
+$lang->message->label->submitreview = 'Submit Review';
 $lang->message->label->reviewed     = 'review';
 $lang->message->label->confirmed    = 'confirm Story';
 $lang->message->label->frombug      = 'convert from Bug';

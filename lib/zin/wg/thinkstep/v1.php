@@ -8,6 +8,7 @@ class thinkStep  extends wg
         'item: object',
         'action?: string="detail"',
         'addType?: string',
+        'wizard: object',
         'isRun?: bool=false',        // 是否是分析活动
         'quoteQuestions?: array',    // 引用题目的下拉选项
         'quotedQuestions?: array',   // 被引用的题目
@@ -34,9 +35,8 @@ class thinkStep  extends wg
         global $lang, $app;
         $app->loadLang('thinkstep');
 
-        list($item, $action, $addType, $isRun, $quotedQuestions) = $this->prop(array('item', 'action', 'addType', 'isRun', 'quotedQuestions'));
+        list($item, $action, $wizard, $addType, $isRun, $quotedQuestions) = $this->prop(array('item', 'action', 'wizard', 'addType', 'isRun', 'quotedQuestions'));
         if(!$item && !$addType) return array();
-
         $marketID  = data('marketID');
         $basicType = $item->type ?? '';
         $typeLang  = $action . 'Step';
@@ -44,6 +44,9 @@ class thinkStep  extends wg
         $title     = $action == 'detail' ? sprintf($lang->thinkstep->info, $lang->thinkstep->$basicType) : sprintf($lang->thinkstep->formTitle[$type], $lang->thinkstep->$typeLang);
         $canEdit   = common::hasPriv('thinkstep', 'edit');
         $canDelete = common::hasPriv('thinkstep', 'delete');
+        $linkType  = $type === 'checkbox' || $type === 'radio' || $type === 'multicolumn';
+        $linkmodel = !$isRun && $wizard->model === '3c';
+        $canLink   = common::hasPriv('thinkstep', 'link') && $linkmodel && $linkType;
 
         return div
         (
@@ -60,18 +63,34 @@ class thinkStep  extends wg
                         setStyle(array('min-width' => '48px')),
                         btnGroup
                         (
+                            $canLink ? ($item->options->required ? btn
+                            (
+                                setClass('btn ghost text-gray w-5 h-5 mr-1'),
+                                set::icon('link'),
+                                set::url(createLink('thinkstep', 'link', "marketID={$marketID}&stepID={$item->id}")),
+                                set::hint($lang->thinkstep->actions['link']),
+                                set('data-toggle', 'modal'),
+                                set('data-dismiss', 'modal'),
+                                set('data-size', 'sm'),
+                            ) : icon(
+                                setClass('w-5 h-5 text-gray opacity-50 ml-1 text-md pl-1 mr-1'),
+                                set::title($lang->thinkstep->tips->linkBlocks),
+                                'link'
+                            )): null,
                             $canEdit ? btn
                             (
                                 setClass('btn ghost text-gray w-5 h-5'),
                                 set::icon('edit'),
+                                set::hint($lang->thinkstep->actions['edit']),
                                 set::url(createLink('thinkstep', 'edit', "marketID={$marketID}&stepID={$item->id}")),
                             ) : null,
                             $canDelete ? ((!$item->existNotNode && empty($quotedQuestions)) ? btn
                             (
                                 setClass('btn ghost text-gray w-5 h-5 ml-1 ajax-submit'),
                                 set::icon('trash'),
+                                set::hint($lang->thinkstep->actions['delete']),
                                 setData('url', createLink('thinkstep', 'delete', "marketID={$marketID}&stepID={$item->id}")),
-                                setData('confirm',  $lang->thinkstep->deleteTips[$basicType])
+                                setData('confirm',  empty($item->link) ? $lang->thinkstep->deleteTips[$basicType] : array('message' => $lang->thinkstep->tips->deleteLinkStep, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x', 'size' => 'sm'))
                             ) : icon
                             (
                                 setClass('w-5 h-5 text-gray opacity-50 ml-1 text-md pl-1'),

@@ -596,8 +596,12 @@ class stakeholderModel extends model
         $canChange = common::canBeChanged('stakeholder', $stakeholder);
         if(!$canChange) return false;
 
+        global $config;
+        $action = strtolower($action);
+
         /* Special action can be set its own condition. */
-        if($action == 'notExists') return false;
+        if($action == 'notexists') return false;
+        if($action == 'userissue' && !in_array($config->edition, array('max', 'ipd'))) return false;
 
         /* The action is clickable by default. */
         return true;

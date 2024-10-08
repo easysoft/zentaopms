@@ -173,6 +173,10 @@ class metric extends control
         // 开启调试模式
         $this->config->debug = 2;
 
+        $this->metric->saveLogs('----------------------------------');
+        $this->metric->saveLogs('| The new task: updateMetricLib. |');
+        $this->metric->saveLogs('----------------------------------');
+
         $calcList = $this->metric->getCalcInstanceList();
         $classifiedCalcGroup = $this->metric->classifyCalc($calcList);
         $this->metricZen->calculateMetric($classifiedCalcGroup);
@@ -195,6 +199,10 @@ class metric extends control
 
         // 开启调试模式
         $this->config->debug = 2;
+
+        $this->metric->saveLogs('-------------------------------------------');
+        $this->metric->saveLogs('| The new task: updateDashboardMetricLib. |');
+        $this->metric->saveLogs('-------------------------------------------');
 
         $dashboards = array_keys($this->config->metric->dashboard);
 

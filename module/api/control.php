@@ -69,6 +69,7 @@ class api extends control
             $libs       = $this->doc->getApiLibs($libID, 'nolink');
         }
 
+        if($libID && !isset($libs[$libID])) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->doc->accessDenied, 'locate' => $this->createLink('api', 'index'))));
         $lib        = $libID ? zget($libs, $libID) : current($libs);
         $libID      = !empty($lib->id)      ? $lib->id : 0;
         $objectType = !empty($lib->product) ? 'product'     : (!empty($lib->project) ? 'project' : 'nolink');
@@ -126,6 +127,8 @@ class api extends control
         $libID     = $api->lib;
         $lib       = zget($libs, $libID);
         $api->desc = htmlspecialchars_decode($api->desc);
+
+        if($libID && !isset($libs[$libID])) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->doc->accessDenied, 'locate' => $this->createLink('api', 'index'))));
 
         /* 生成一些必要的参数。 */
         $type       = $lib->product ? 'product' : ($lib->project ? 'project' : 'nolink');

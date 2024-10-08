@@ -20,12 +20,12 @@ class taskAssignToEntry extends entry
      */
     public function post($taskID)
     {
+        $control = $this->loadController('task', 'assignTo');
         $task = $this->loadModel('task')->getByID($taskID);
 
         $fields = 'assignedTo,comment,left';
         $this->batchSetPost($fields);
 
-        $control = $this->loadController('task', 'assignTo');
         $this->requireFields('assignedTo');
 
         $control->assignTo($task->execution, $taskID);

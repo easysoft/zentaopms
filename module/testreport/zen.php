@@ -156,7 +156,7 @@ class testreportZen extends testreport
         $tasks     = array($task->id => $task);
         $owner     = $task->owner;
         $stories   = empty($build->stories) ? array() : $this->story->getByList($build->stories);
-        $execution = $this->execution->getById($task->execution);
+        $execution = $this->execution->getById($task->execution ? $task->execution : $task->project);
 
         $this->setChartDatas($objectID);
 

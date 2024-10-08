@@ -7,6 +7,17 @@ title=批量编辑项目测试
 timeout=0
 cid=73
 
+- 校验项目名称不能为空
+ - 测试结果 @批量编辑项目表单页提示信息正确
+ - 最终测试状态 @SUCCESS
+- 校验计划开始不能为空
+ - 测试结果 @批量编辑项目表单页提示信息正确
+ - 最终测试状态 @SUCCESS
+- 校验计划完成不能为空
+ - 测试结果 @批量编辑项目表单页提示信息正确
+ - 最终测试状态 @SUCCESS
+- 批量编辑项目最终测试状态 @SUCCESS
+
 */
 chdir(__DIR__);
 include '../lib/batcheditproject.ui.class.php';
@@ -22,9 +33,9 @@ $project = array(
     array('name' => '编辑敏捷项目1', 'begin' => '2020-11-02', 'end' => '2022-01-31'),
 );
 
-r($tester->batchEditProject($project['0'])) && p('message,status') && e('批量编辑项目表单页提示信息正确，success'); //校验项目名称不能为空
-r($tester->batchEditProject($project['1'])) && p('message,status') && e('批量编辑项目表单页提示信息正确，success'); //校验计划开始不能为空
-r($tester->batchEditProject($project['2'])) && p('message,status') && e('批量编辑项目表单页提示信息正确，success'); //校验计划完成不能为空
-r($tester->batchEditProject($project['3'])) && p('status') && e('success'); //批量编辑项目
+r($tester->batchEditProject($project['0'])) && p('message,status') && e('批量编辑项目表单页提示信息正确, SUCCESS'); //校验项目名称不能为空
+r($tester->batchEditProject($project['1'])) && p('message,status') && e('批量编辑项目表单页提示信息正确, SUCCESS'); //校验计划开始不能为空
+r($tester->batchEditProject($project['2'])) && p('message,status') && e('批量编辑项目表单页提示信息正确, SUCCESS'); //校验计划完成不能为空
+r($tester->batchEditProject($project['3'])) && p('status') && e('SUCCESS'); //批量编辑项目
 
 $tester->closeBrowser();

@@ -12,24 +12,6 @@ declare(strict_types=1);
 class mrTao extends mrModel
 {
     /**
-     * 创建合并请求。
-     * Insert a merge request.
-     *
-     * @param  object    $MR
-     * @access protected
-     * @return bool
-     */
-    protected function insertMr(object $MR): bool
-    {
-        $this->dao->insert(TABLE_MR)->data($MR, $this->config->mr->create->skippedFields)
-            ->batchCheck($this->config->mr->create->requiredFields, 'notempty')
-            ->checkIF($MR->needCI, 'jobID',  'notempty')
-            ->exec();
-
-        return !dao::isError();
-    }
-
-    /**
      * 根据合并请求获取关联对象信息。
      * Get story,task,bug pairs which linked MR.
      *
@@ -41,7 +23,7 @@ class mrTao extends mrModel
     protected function getLinkedObjectPairs(int $MRID, string $objectType = 'story'): array
     {
         return $this->dao->select('BID')->from(TABLE_RELATION)
-            ->where('AType')->eq('mr')
+            ->where('AType')->eq($this->app->rawModule)
             ->andWhere('BType')->eq($objectType)
             ->andWhere('AID')->eq($MRID)
             ->fetchPairs();

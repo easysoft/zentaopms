@@ -26,7 +26,7 @@ class testtaskTao extends testtaskModel
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->leftJoin(TABLE_EXECUTION)->alias('t3')->on('t1.execution = t3.id')
             ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
-            ->leftJoin(TABLE_PROJECT)->alias('t5')->on('t3.project = t5.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t5')->on('t1.project = t5.id')
             ->where('t1.deleted')->eq(0)
             ->beginIF($unit == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
             ->beginIF($unit != 'unit')->andWhere('t1.auto')->ne('unit')->fi()

@@ -20,11 +20,5 @@ window.renderCell = function(result, {col, row})
         return result;
     }
 
-    if(col.name == 'branch')
-    {
-        result[0] = row.data.branchName
-        return result;
-    }
-
     return result;
 }

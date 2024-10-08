@@ -16,6 +16,13 @@ $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
     {
         postAndLoadPage(url, form);
     }
+}).off('click', '#actionBar .export-btn').on('click', '#actionBar export-btn', function()
+{
+    const dtable = zui.DTable.query($('#table-bug-browse'));
+    const checkedList = dtable ? dtable.$.getChecks() : [];
+    if(!checkedList.length) return;
+
+    $.cookie.set('checkedItem', checkedList, {expires:config.cookieLife, path:config.webRoot});
 });
 
 /**

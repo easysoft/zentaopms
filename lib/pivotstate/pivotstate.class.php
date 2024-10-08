@@ -179,6 +179,14 @@ class pivotState
     public $acl;
 
     /**
+     * Pivot state used.
+     *
+     * @var string
+     * @access public
+     */
+    public $used;
+
+    /**
      * Pivot state whitelist.
      *
      * @var string
@@ -345,6 +353,7 @@ class pivotState
         $this->step      = 'query';
         $this->stage     = $pivot->stage;
         $this->acl       = $pivot->acl;
+        $this->used      = $pivot->used;
         $this->whitelist = $pivot->whitelist;
 
         $this->drills       = $drills;
@@ -750,6 +759,7 @@ class pivotState
         if(!isset($settings['group1']))  $this->settings['group1'] = '';
         if(!isset($settings['columns'])) $this->addColumn();
         if(!isset($settings['columnTotal'])) $this->settings['columnTotal'] = 'noShow';
+        if(!isset($settings['columnPosition'])) $this->settings['columnPosition'] = 'bottom';
 
         foreach($this->settings['columns'] as $index => $column)
         {

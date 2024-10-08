@@ -1104,7 +1104,7 @@ class fileModel extends model
      */
     public function printFile(object $file, string $method, bool $showDelete, bool $showEdit, object|null $object): string
     {
-        if(!common::hasPriv('file', 'download')) return '';
+        if(!common::hasPriv('file', 'download') && !common::hasPriv('file', 'preview')) return '';
 
         $html = '';
 
@@ -1123,10 +1123,11 @@ class fileModel extends model
         $downloadLink  = helper::createLink('file', 'download', "fileID=$file->id");
         $downloadLink .= strpos($downloadLink, '?') === false ? '?' : '&';
         $downloadLink .= $sessionString;
+        $fileTitleLink = common::hasPriv('file', 'download') ? html::a($downloadLink, $fileTitle . " <span class='text-gray'>({$fileSize})</span>", '_blank', "id='fileTitle$file->id'") : "<div id='fileTitle$file->id' style='display: inline-block'>" . $fileTitle . " <span class='text-gray'>({$fileSize})</span></div>";
 
         $objectType = zget($this->config->file->objectType, $file->objectType);
 
-        $html .= "<li class='mb-2 file' title='{$uploadDate}'>" . html::a($downloadLink, $fileTitle . " <span class='text-gray'>({$fileSize})</span>", '_blank', "id='fileTitle$file->id'");
+        $html .= "<li class='mb-2 file' title='{$uploadDate}'>" . $fileTitleLink;
         if(strpos('view,edit', $method) !== false)
         {
             if(common::hasPriv($objectType, 'view', $object)) $html = $this->buildFileActions($html, $downloadLink, $imageWidth, $showEdit, $showDelete, $file, $object);
@@ -1174,15 +1175,17 @@ class fileModel extends model
         }
 
         /* For the open source version of the file judgment. */
-        $canPreview = false;
+        $canPreview   = false;
+        $officeTypes  = 'doc|docx|xls|xlsx|ppt|pptx|pdf';
+        $isOfficeFile = stripos($officeTypes, $file->extension) !== false;
         if(stripos('txt|jpg|jpeg|gif|png|bmp|mp4', $file->extension) !== false) $canPreview = true;
-        if(isset($this->config->file->libreOfficeTurnon) and $this->config->file->libreOfficeTurnon == 1)
-        {
-            $officeTypes = 'doc|docx|xls|xlsx|ppt|pptx|pdf';
-            if(stripos($officeTypes, $file->extension) !== false) $canPreview = true;
-        }
+        if(isset($this->config->file->libreOfficeTurnon) and $this->config->file->libreOfficeTurnon == 1 && $isOfficeFile) $canPreview = true;
 
-        if($canPreview) $html .= html::a(helper::createLink('file', 'download', "fileID=$file->id&mouse=left"), "<i class='icon icon-eye'></i>", '', "class='fileAction btn btn-link text-primary' title='{$this->lang->file->preview}' data-toggle='modal' data-size='lg'");
+        if($canPreview)
+        {
+            $dataToggle = $isOfficeFile ? '' : " data-toggle='modal' data-size='lg'";
+            $html      .= html::a(helper::createLink('file', 'download', "fileID=$file->id&mouse=left"), "<i class='icon icon-eye'></i>", $isOfficeFile ? '_blank' : '', "class='fileAction btn btn-link text-primary' title='{$this->lang->file->preview}' {$dataToggle}");
+        }
         if(common::hasPriv('file', 'download')) $html .= html::a($downloadLink, "<i class='icon icon-download'></i>", '_blank', "class='fileAction btn btn-link text-primary' title='{$this->lang->file->downloadFile}'");
         if(common::hasPriv($objectType, 'edit', $object))
         {

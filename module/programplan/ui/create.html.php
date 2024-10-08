@@ -234,7 +234,7 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
         $points = !empty($enabledPoints->{$plan->attribute}) ? $enabledPoints->{$plan->attribute} : array();
 
         $item               = new stdClass();
-        $item->disabled     = !isset($plan->setMilestone);
+        $item->disabled     = $plan->type != 'stage';
         $item->enabled      = $plan->enabled;
         $item->id           = $plan->id;
         $item->type         = $plan->type;

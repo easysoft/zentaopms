@@ -1106,10 +1106,11 @@ class releaseModel extends model
      * @param  string $bugIdList
      * @param  string $orderBy
      * @param  object $pager
+     * @param  string $type      linked|left
      * @access public
      * @return array
      */
-    public function getBugList(string $bugIdList,  string $orderBy = '', object $pager = null): array
+    public function getBugList(string $bugIdList,  string $orderBy = '', object $pager = null, string $type = 'linked'): array
     {
         $bugs = array();
 
@@ -1122,7 +1123,7 @@ class releaseModel extends model
                 ->page($pager)
                 ->fetchAll();
 
-            $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'leftBugs');
+            $this->loadModel('common')->saveQueryCondition($this->dao->get(), $type == 'linked' ? 'linkedBug' : 'leftBugs');
         }
 
         return $bugs;

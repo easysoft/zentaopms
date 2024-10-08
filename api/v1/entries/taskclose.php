@@ -20,12 +20,12 @@ class taskCloseEntry extends entry
      */
     public function post($taskID)
     {
+        $control = $this->loadController('task', 'close');
         $task = $this->loadModel('task')->getByID($taskID);
 
         $fields = 'comment';
         $this->batchSetPost($fields);
 
-        $control = $this->loadController('task', 'close');
         $control->close($taskID);
 
         $data = $this->getData();

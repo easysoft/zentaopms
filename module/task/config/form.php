@@ -125,6 +125,7 @@ $config->task->form->batchcreate['deadline']      = array('type' => 'date',     
 $config->task->form->batchcreate['desc']          = array('type' => 'string',   'required' => false, 'default' => '');
 $config->task->form->batchcreate['pri']           = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->task->form->batchcreate['lane']          = array('type' => 'int',      'required' => false, 'default' => 0);
+$config->task->form->batchcreate['column']        = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->task->form->batchcreate['openedBy']      = array('type' => 'string',   'required' => false, 'default' => $account);
 $config->task->form->batchcreate['openedDate']    = array('type' => 'datetime', 'required' => false, 'default' => $now);
 $config->task->form->batchcreate['vision']        = array('type' => 'string',   'required' => false, 'default' => $config->vision);

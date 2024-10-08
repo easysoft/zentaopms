@@ -60,6 +60,7 @@ class risksEntry extends entry
      */
     public function post($projectID = 0)
     {
+        $control = $this->loadController('risk', 'create');
         $project = $this->loadModel('project')->getByID($projectID);
         if(!$project) return $this->send404();
 
@@ -71,7 +72,6 @@ class risksEntry extends entry
         $this->setPost('rate', $this->request('rate', 9));
         $this->setPost('pri', 'middle');
 
-        $control = $this->loadController('risk', 'create');
         $this->requireFields('name');
 
         $control->create($projectID);

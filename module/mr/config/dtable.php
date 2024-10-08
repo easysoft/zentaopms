@@ -11,7 +11,7 @@ $config->mr->dtable->fieldList['title']['name']     = 'title';
 $config->mr->dtable->fieldList['title']['title']    = $lang->mr->title;
 $config->mr->dtable->fieldList['title']['type']     = 'title';
 $config->mr->dtable->fieldList['title']['data-app'] = $app->tab;
-$config->mr->dtable->fieldList['title']['link']     = helper::createLink('mr', 'view', "MRID={id}");
+$config->mr->dtable->fieldList['title']['link']     = helper::createLink($app->rawModule, 'view', "MRID={id}");
 $config->mr->dtable->fieldList['title']['sortType'] = true;
 $config->mr->dtable->fieldList['title']['width']    = 0.3;
 

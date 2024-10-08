@@ -359,6 +359,8 @@ class taskZen extends task
         $showFields = $this->config->task->custom->batchCreateFields;
         if(strpos(",$showFields,", ',story,') !== false) $showFields .= ',preview,copyStory';
 
+        $this->config->task->batchcreate->requiredFields = $this->config->task->create->requiredFields;
+
         $this->view->title         = $this->lang->task->batchCreate;
         $this->view->execution     = $execution;
         $this->view->modules       = $modules;
@@ -552,7 +554,8 @@ class taskZen extends task
             $task->execution    = $execution->id;
             $task->left         = $task->estimate;
             $task->parent       = $taskID;
-            $task->lane         = empty($task->lane) && !empty($output['laneID']) ? (int)$output['laneID'] : $task->lane;
+            $task->lane         = !empty($task->lane)   ? $task->lane   : zget($output, 'laneID',   0);
+            $task->column       = !empty($task->column) ? $task->column : zget($output, 'columnID', 0);
             $task->storyVersion = $task->story ? $this->story->getVersion($task->story) : 1;
         }
 

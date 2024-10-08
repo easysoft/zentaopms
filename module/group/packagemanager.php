@@ -1912,7 +1912,7 @@ $config->group->package->manageCase->privs['testcase-batchChangeBranch']       =
 $config->group->package->manageCase->privs['testcase-linkCases']               = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 12, 'depend' => array('testcase-view'), 'recommend' => array('testcase-create', 'testcase-edit', 'testcase-linkBugs'));
 $config->group->package->manageCase->privs['testcase-linkBugs']                = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 13, 'depend' => array('testcase-view'), 'recommend' => array('testcase-create', 'testcase-edit', 'testcase-linkCases'));
 $config->group->package->manageCase->privs['testcase-batchConfirmStoryChange'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 8, 'depend' => array(), 'recommend' => array());
-$config->group->package->manageCase->privs['testcase-batchCaseTypeChange']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 11, 'depend' => array(), 'recommend' => array('testcase-edit'));
+$config->group->package->manageCase->privs['testcase-batchChangeType']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 11, 'depend' => array(), 'recommend' => array('testcase-edit'));
 $config->group->package->manageCase->privs['testcase-confirmLibcaseChange']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 14, 'depend' => array('testcase-view'), 'recommend' => array('testcase-confirmChange', 'testcase-confirmStoryChange', 'testcase-create', 'testcase-edit', 'testcase-ignoreLibcaseChange'));
 $config->group->package->manageCase->privs['testcase-ignoreLibcaseChange']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('testcase-view'), 'recommend' => array('testcase-confirmChange', 'testcase-confirmLibcaseChange', 'testcase-confirmStoryChange', 'testcase-create', 'testcase-edit'));
 $config->group->package->manageCase->privs['testcase-submit']                  = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('testcase-view'), 'recommend' => array('testcase-confirmChange', 'testcase-confirmLibcaseChange', 'testcase-confirmStoryChange', 'testcase-create', 'testcase-edit', 'testcase-ignoreLibcaseChange', 'testcase-linkBugs', 'testcase-linkCases'));
@@ -2957,7 +2957,7 @@ $config->group->package->file->privs['file-edit']         = array('edition' => '
 $config->group->package->file->privs['file-delete']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 2, 'depend' => array(), 'recommend' => array('file-edit'));
 $config->group->package->file->privs['file-uploadImages'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 3, 'depend' => array(), 'recommend' => array());
 $config->group->package->file->privs['file-setPublic']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 25, 'depend' => array(), 'recommend' => array());
-$config->group->package->file->privs['file-preview']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 26, 'depend' => array(), 'recommend' => array());
+$config->group->package->file->privs['file-preview']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 26, 'depend' => array('file-download'), 'recommend' => array());
 
 $config->group->package->commonEffort = new stdclass();
 $config->group->package->commonEffort->order  = 5;
@@ -4235,7 +4235,7 @@ $config->group->package->manageThinkWizard->subset = 'thinkwizard';
 $config->group->package->manageThinkWizard->privs  = array();
 $config->group->package->manageThinkWizard->privs['thinkwizard-create']  = array('edition' => 'ipd', 'vision' => 'or', 'order' => 5,  'depend' => array('thinkwizard-browse'));
 $config->group->package->manageThinkWizard->privs['thinkwizard-edit']    = array('edition' => 'ipd', 'vision' => 'or', 'order' => 10, 'depend' => array('thinkwizard-browse'));
-$config->group->package->manageThinkWizard->privs['thinkwizard-design']  = array('edition' => 'ipd', 'vision' => 'or', 'order' => 15, 'depend' => array('thinkwizard-browse', 'thinkwizard-result', 'thinkstep-create', 'thinkstep-edit', 'thinkstep-view', 'thinkstep-delete'));
+$config->group->package->manageThinkWizard->privs['thinkwizard-design']  = array('edition' => 'ipd', 'vision' => 'or', 'order' => 15, 'depend' => array('thinkwizard-browse', 'thinkwizard-result', 'thinkstep-create', 'thinkstep-edit', 'thinkstep-view', 'thinkstep-delete', 'thinkstep-link', 'thinkstep-cancelLink'));
 $config->group->package->manageThinkWizard->privs['thinkwizard-publish'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 20, 'depend' => array('thinkwizard-browse'));
 $config->group->package->manageThinkWizard->privs['thinkwizard-offline'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 25, 'depend' => array('thinkwizard-browse'));
 $config->group->package->manageThinkWizard->privs['thinkwizard-admin']   = array('edition' => 'ipd', 'vision' => 'or', 'order' => 25, 'depend' => array('thinkwizard-browse'));

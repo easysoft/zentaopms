@@ -991,12 +991,40 @@ class metricModel extends model
 
         if(empty($fields)) return false;
 
-        $this->metricTao->createDistinctTempTable();
-        $this->metricTao->insertDistinctId2TempTable($code, $fields);
-        $this->metricTao->deleteDuplicationRecord($code);
-        $this->metricTao->dropDistinctTempTable();
+        $this->metricTao->setDeleted($code, 1);
+        $this->metricTao->keepLatestRecords($code, $fields);
+        $this->metricTao->executeDelete($code);
 
         return dao::isError();
+    }
+
+    /**
+     * 获取日志文件路径。
+     * Get log file.
+     *
+     * @access public
+     * @return string
+     */
+    public function getLogFile(): string
+    {
+        return $this->app->getTmpRoot() . 'log/metriclib.' . date('Ymd') . '.log.php';
+    }
+
+    /**
+     * 存储日志。
+     * Save logs.
+     *
+     * @param  string $log
+     * @access public
+     * @return void
+     */
+    public function saveLogs(string $log): void
+    {
+        $logFile = $this->getLogFile();
+        $log     = date('Y-m-d H:i:s') . ' ' . trim($log) . "\n";
+        if(!file_exists($logFile)) $log = "<?php\ndie();\n?" . ">\n" . $log;
+
+        file_put_contents($logFile, $log, FILE_APPEND);
     }
 
     /**

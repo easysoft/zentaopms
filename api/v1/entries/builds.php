@@ -48,6 +48,7 @@ class buildsEntry extends entry
      */
     public function post($projectID = 0)
     {
+        $control = $this->loadController('build', 'create');
         if(!$projectID) $projectID = $this->param('project', 0);
 
         $project = $this->loadModel('project')->getByID($projectID);
@@ -57,7 +58,6 @@ class buildsEntry extends entry
         $fields = 'execution,product,name,builder,date,scmPath,filePath,desc,branch';
         $this->batchSetPost($fields);
 
-        $control = $this->loadController('build', 'create');
         $this->requireFields('execution,product,name,builder,date');
 
         $executionID = isset($_POST['execution']) ? $_POST['execution'] : 0;

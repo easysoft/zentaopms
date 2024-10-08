@@ -102,7 +102,7 @@ $config->upgrade->execFlow['20_1_1']      = array('functions' => 'syncActivityAn
 $config->upgrade->execFlow['20_3_0']      = array('functions' => 'importBuildinWorkflow,addFlowFields,processProjectRoadmapsByCharter', 'params' => array('importBuildinWorkflow' => array('or'), 'addFlowFields' => array('biz10.2')));
 $config->upgrade->execFlow['20_4']        = array('functions' => 'createDefaultDoclibSpace,updateStoryVerifiedDate,xuanNotifyJitsiConference', 'xxsqls' => "$appRoot/db/upgradexuanxuan7.3.sql,$appRoot/db/upgradexuanxuan9.0.sql");
 $config->upgrade->execFlow['20_5']        = array('functions' => 'fixWorkflowFieldOptions');
-$config->upgrade->execFlow['20_6']        = array('functions' => 'processDemandFiles');
+$config->upgrade->execFlow['20_6']        = array('functions' => 'processDemandFiles,processSqlbuilderTables');
 
 if(!empty($config->isINT))
 {

@@ -17,6 +17,7 @@ class sqlBuilderControl extends wg
         "items?: array",                // 控件下拉选项，仅type=picker时有效。
         "value?: string",               // 控件值。
         'required?: bool=false',        // 控件是否可清空，仅type=picker时有效。
+        'multiple?: bool=false',        // 控件是否多选，仅type=picker时有效。
         "placeholder?: string",         // 提示文本。
         'labelWidth?: string="80px"',   // 标签宽度。
         'labelAlign?: string="center"', // 标签对齐方式。
@@ -41,11 +42,19 @@ class sqlBuilderControl extends wg
      */
     protected function buildControl(): node|null
     {
-        list($type, $name, $items, $value, $required, $placeholder, $onChange, $error) = $this->prop(array('type', 'name', 'items', 'value', 'required', 'placeholder', 'onChange', 'error'));
+        list($type, $name, $items, $value, $required, $multiple, $placeholder, $onChange, $error) = $this->prop(array('type', 'name', 'items', 'value', 'required', 'multiple', 'placeholder', 'onChange', 'error'));
 
         if($type == 'picker')
         {
-            if(!isset($items[$value])) $value = null;
+            if(is_string($value) && !isset($items[$value])) $value = null;
+            if(is_array($value))
+            {
+                foreach($value as $currentIndex => $currentValue)
+                {
+                    if(!isset($items[$currentValue])) unset($value[$currentIndex]);
+                }
+            }
+
             return picker
             (
                 setID("builderPicker_$name"),
@@ -55,6 +64,7 @@ class sqlBuilderControl extends wg
                 set::placeholder($placeholder),
                 set::disabled(empty($items)),
                 set::required($required),
+                set::multiple($multiple),
                 on::change()->do($onChange),
                 !empty($value) ? set::value($value) : null
             );

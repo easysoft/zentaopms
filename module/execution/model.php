@@ -5045,7 +5045,9 @@ class executionModel extends model
         }
         elseif($status == 'closed')
         {
-            $execution->closedBy = $this->app->user->account;
+            $execution->closedBy   = $this->app->user->account;
+            $execution->realEnd    = helper::today();
+            $execution->closedDate = helper::now();
         }
 
         return $execution;

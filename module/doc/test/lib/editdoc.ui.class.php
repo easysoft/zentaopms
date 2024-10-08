@@ -7,6 +7,7 @@ class createDocTester extends tester
      * Edit a doc.
      *
      * @param  string $editDocName
+     * @param  string $docName
      * @access public
      * @return void
      */
@@ -31,8 +32,8 @@ class createDocTester extends tester
         $form->dom->saveDraftBtn->click();
         $form->wait(1);
 
-        $this->openUrl('doc', 'mySpace', array('objectType' => 'mine'));
-        $form = $this->loadPage('doc', 'mySpace', array('objectType' => 'mine'));
+        $this->openUrl('doc', 'mySpace', array('objectType' => 'editedby'));
+        $form = $this->loadPage('doc', 'mySpace', array('objectType' => 'editedby'));
         $form->dom->search(array("文档标题,=,{$editDocName->editName}"));
         $form->wait(1);
 
@@ -44,7 +45,7 @@ class createDocTester extends tester
      * 移动文档。
      * Move a doc.
      *
-     * @param  string $editDocName
+     * @param  string $libName
      * @access public
      * @return void
      */
@@ -69,14 +70,13 @@ class createDocTester extends tester
         $form->wait(1);
 
         if($form->dom->leftListHeader->getText() != $llibName->myDocLib) return $this->failed('文档移动失败');
-        return $this->success('文档移动失败');
+        return $this->success('文档移动成功');
     }
 
     /**
      * 删除文档
      * Delete a doc.
      *
-     * @param  string $editDocName
      * @access public
      * @return void
      */

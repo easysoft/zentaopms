@@ -381,7 +381,7 @@ class repoZen extends repo
         $this->view->groups       = $this->loadModel('group')->getPairs();
         $this->view->users        = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $this->view->products     = $products;
-        $this->view->serviceHosts = $this->loadModel('gitlab')->getPairs();
+        $this->view->serviceHosts = $this->loadModel('pipeline')->getPairs(implode(',', $this->config->repo->notSyncSCM), true);
         $this->view->objectID     = $objectID;
 
         $this->display();
@@ -411,10 +411,10 @@ class repoZen extends repo
         }
 
         $repoGroups   = array();
-        $serviceHosts = $this->loadModel('gitlab')->getPairs();
+        $serviceHosts = $this->loadModel('pipeline')->getPairs(implode(',', $this->config->repo->notSyncSCM), true);
         if(!empty($serviceHosts))
         {
-            $serverID   = array_keys($serviceHosts)[0];
+            $serverID   = key($serviceHosts);
             $repoGroups = $this->repo->getGroups($serverID);
         }
 
@@ -1362,7 +1362,7 @@ class repoZen extends repo
     protected function syncLocalCommit(object $repo): string
     {
         $logFile = realPath($this->app->getTmpRoot() . $this->config->repo->repoSyncLog->logFilePrefix . strtolower($repo->SCM) . ".{$repo->name}.log");
-        if(file_exists($logFile))
+        if($logFile && file_exists($logFile))
         {
             $content  = file($logFile);
             foreach($content as $line)

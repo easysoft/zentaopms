@@ -10,6 +10,9 @@ class thinkStepMenu extends wg
 
     protected static array $defineProps = array(
         'modules: array',
+        'wizard: object',
+        'marketID?: int',
+        'from?: string',
         'activeKey?: int',
         'hover?: bool=true',
         'showAction?: bool=true',
@@ -50,7 +53,6 @@ class thinkStepMenu extends wg
 
     private function buildMenuTree(array $items, int $parentID = 0): array
     {
-        jsVar('from', data('from') ?? '');
         if(empty($items)) $items = $this->modules;
         if(empty($items)) return array();
 
@@ -142,6 +144,7 @@ class thinkStepMenu extends wg
 
     private function getOperateItems($item): array
     {
+        $wizard             = $this->prop('wizard');
         $canAddChild        = true;
         $showQuestionOfNode = true;
         if(!empty($item->children))
@@ -152,12 +155,12 @@ class thinkStepMenu extends wg
                 if($showQuestionOfNode && $child->type == 'node') $showQuestionOfNode = false;
             }
         }
-
         $canCreate   = common::hasPriv('thinkstep', 'create');
         $canEdit     = common::hasPriv('thinkstep', 'edit');
         $canDelete   = common::hasPriv('thinkstep', 'delete');
+        $canLink     = common::hasPriv('thinkstep', 'link');
         $parentID    = $item->type != 'node' ? $item->parent : $item->id;
-        $confirmTips = $this->lang->thinkstep->deleteTips[$item->type];
+        $confirmTips = empty($item->link) ? $this->lang->thinkstep->deleteTips[$item->type] : array('message' => $this->lang->thinkstep->tips->deleteLinkStep, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x', 'size' => 'sm');
         $menus            = array();
         $transitionAction = array();
         if($canCreate)
@@ -184,7 +187,7 @@ class thinkStepMenu extends wg
             );
         }
 
-        $marketID      = data('marketID');
+        $marketID      = $this->prop('marketID');
         $itemHasQuoted = empty($item->hasQuoted) || $item->hasQuoted == 0;
         $deleteItem    = (!$item->existNotNode && $itemHasQuoted) ? array(
             'key'          => 'deleteNode',
@@ -200,6 +203,23 @@ class thinkStepMenu extends wg
             'innerClass' => 'text-gray opacity-50',
             'hint'       => $item->existNotNode ? $this->lang->thinkstep->cannotDeleteNode : $this->lang->thinkstep->cannotDeleteQuestion,
         );
+        $options  = $item->type === 'question' ? json_decode($item->options) : null;
+        $linkType = !empty($options) && ($options->questionType == 'checkbox' || $options->questionType === 'radio' || $options->questionType === 'multicolumn');
+        $linkItem = ($canLink && $linkType && $options->required) ? array(
+            'key'          => 'linkNode',
+            'icon'         => 'link',
+            'text'         => $this->lang->thinkstep->actions['link'],
+            'data-url'     => createLink('thinkstep', 'link', "marketID={$marketID}&stepID={$item->id}"),
+            'data-toggle'  => 'modal',
+            'data-dismiss' => 'modal',
+            'data-size'    => 'sm'
+        ) : array(
+            'key'          => 'linkNode',
+            'icon'         => 'link',
+            'text'         => $this->lang->thinkstep->actions['link'],
+            'innerClass'   => 'text-gray opacity-50',
+            'hint'         => $this->lang->thinkstep->tips->linkBlocks
+        );
 
         $menus = array_merge($menus, array(
             $canEdit ? array(
@@ -208,7 +228,8 @@ class thinkStepMenu extends wg
                 'text' => $this->lang->thinkstep->actions['edit'],
                 'url'  => createLink('thinkstep', 'edit', "marketID={$marketID}&stepID={$item->id}")
             ) : null,
-            $canDelete ? $deleteItem : null
+            $canDelete ? $deleteItem : null,
+            $wizard->model === '3c' && $item->type == 'question' && $canLink ? $linkItem : null
         ), $transitionAction);
 
         if($canCreate && (($showQuestionOfNode && $item->type == 'node') || $item->hasSameQuestion || $item->type == 'question')) $menus = array_merge($menus, array(
@@ -249,12 +270,14 @@ class thinkStepMenu extends wg
         $treeProps   = $this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'checkbox', 'checkOnClick', 'onCheck', 'sortable', 'onSort'));
         $isInSidebar = $this->parent instanceof sidebar;
         $treeType    = (!empty($treeProps['onSort']) || !empty($treeProps['sortable'])) ? 'sortableTree' : 'tree';
+        list($marketID, $from) = $this->prop(array('marketID', 'from'));
 
         return array
         (
             div
             (
                 setClass('think-node-menu rounded bg-white col bg-canvas pb-3 h-full no-morph'),
+                setData(array('marketID' => $marketID, 'from' => $from ?? '')),
                 zui::$treeType
                 (
                     set::_id('thinkNodeMenu'),

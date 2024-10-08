@@ -1032,6 +1032,7 @@ class bug extends control
      */
     public function batchAssignTo(string $assignedTo, int $objectID, string $type = 'execution')
     {
+        $assignedTo = base64_decode($assignedTo);
         if($this->post->bugIdList)
         {
             /* 获取指派给的 bug id 列表。 */

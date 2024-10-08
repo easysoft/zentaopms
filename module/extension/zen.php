@@ -431,15 +431,16 @@ class extensionZen extends extension
             else
             {
                 /* 检查插件包里的代码文件的父目录对应禅道目录是否可写。 */
-                $parentDir = mb_substr($path, 0, strripos($path, '/'));
-                if(is_dir($parentDir) && !is_writable($parentDir))
+                $parentDir = dirname($path);
+                while(!file_exists($parentDir)) $parentDir = dirname($parentDir);
+                if(!is_writable($parentDir))
                 {
                     $checkResult->errors        .= sprintf($this->lang->extension->errorTargetPathNotWritable, $path) . '<br />';
                     $checkResult->chmodCommands .= "sudo chmod -R 777 $path<br />";
                     $checkResult->errors        .= sprintf($this->lang->extension->errorTargetPathNotExists, $path) . '<br />';
                     $checkResult->mkdirCommands .= "sudo mkdir -p $path<br />";
                 }
-                else if(!mkdir($path, 0777, true))
+                elseif(!mkdir($path, 0777, true))
                 {
                     /* 如果目录不存在并且创建目录失败。 */
                     $checkResult->errors        .= sprintf($this->lang->extension->errorTargetPathNotExists, $path) . '<br />';

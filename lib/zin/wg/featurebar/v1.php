@@ -50,7 +50,7 @@ class featureBar extends wg
         $loadID       = $this->prop('loadID');
         $load         = $this->prop('load');
         $tab          = $this->prop('app');
-        $param        = $this->prop('param');
+        $param        = $this->prop('param') ? $this->prop('param') : data('param');
         $searchModule = $this->prop('searchModule');
         $commonLink   = $this->prop('link');
         $itemLink     = $this->prop('itemLink');
@@ -104,7 +104,7 @@ class featureBar extends wg
 
                     $subItems[] = $subItem;
 
-                    if($key === $current)
+                    if($key === $current || ($current == 'bysearch' && $key == $param))
                     {
                         $isActive   = true;
                         $activeText = $text;

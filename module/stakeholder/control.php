@@ -414,7 +414,7 @@ class stakeholder extends control
     */
     public function userIssue(int $stakeholderID)
     {
-        $this->app->loadLang('issue');
+        $this->loadModel('issue');
         $stakeholder = $this->stakeholder->getByID($stakeholderID);
 
         $this->view->title       = $this->lang->stakeholder->common . $this->lang->hyphen . $this->lang->stakeholder->communicate;

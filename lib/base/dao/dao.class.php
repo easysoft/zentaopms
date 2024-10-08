@@ -155,6 +155,15 @@ class baseDAO
     public $autoLang;
 
     /**
+	 * 上一次插入的数据id。
+	 * Last insert id.
+     *
+     * @var int
+     * @access private
+     */
+    private $_lastInsertID;
+
+    /**
      * 执行的请求，所有的查询都保存在该数组。
      * The queries executed. Every query will be saved in this array.
      *
@@ -195,12 +204,13 @@ class baseDAO
      * 构造方法。
      * The construct method.
      *
+     * @param  object $app
      * @access public
      * @return void
      */
-    public function __construct()
+    public function __construct($app)
     {
-        global $app, $config, $lang, $dbh, $slaveDBH;
+        global $config, $lang, $dbh, $slaveDBH;
         $this->app       = $app;
         $this->config    = $config;
         $this->lang      = $lang;
@@ -209,7 +219,7 @@ class baseDAO
 
         if($config->cache->dao->enable)
         {
-            $app->loadClass('cache', true);
+            $this->app->loadClass('cache', true);
             try
             {
                 $this->cache = new cache($config->cache->dao->driver, $config->db->name . '-dao-', $config->cache->dao->lifetime);
@@ -1034,30 +1044,33 @@ class baseDAO
         /* Assign the $sql to $this->sqlobj, so sqlError() can print the full sql statement if any exception occurs. */
         $this->sqlobj->sql = $sql;
 
-        if($this->config->enableDuckdb)
-        {
-            $now   = helper::now();
-            $table = trim($this->table, '`');
-            if(!empty($table))
-            {
-                $sql .= ";UPDATE zt_duckdbqueue SET updatedTime = '$now' WHERE object = '$table'";
-                $sql .= ";INSERT INTO zt_duckdbqueue (object, updatedTime, syncTime) SELECT '$table', '$now', NULL WHERE NOT EXISTS (SELECT 1 FROM zt_duckdbqueue WHERE object = '$table' );";
-            }
-        }
-
         try
         {
             /* Real-time save log. */
             if(dao::$realTimeLog && dao::$realTimeFile) file_put_contents(dao::$realTimeFile, $sql . "\n", FILE_APPEND);
 
+            $table = trim($this->table, '`');
             $this->reset();
 
             /* Force to query from master db, if db has been changed. */
             $this->slaveDBH = false;
 
             $result = $this->dbh->exec($sql);
+            /* See: https://www.php.net/manual/en/pdo.lastinsertid.php .*/
+            $this->_lastInsertID = $this->dbh->lastInsertID();
 
             $this->setTableCache($sql);
+
+            if($this->config->enableDuckdb)
+            {
+                $now        = helper::now();
+                $queueTable = trim(TABLE_DUCKDBQUEUE, '`');
+                if(!empty($table) && $table != $queueTable)
+                {
+                    $this->dbh->exec("UPDATE {$queueTable} SET updatedTime = '$now' WHERE object = '$table'");
+                    $this->dbh->exec("INSERT INTO {$queueTable} (object, updatedTime, syncTime) SELECT '$table', '$now', NULL WHERE NOT EXISTS (SELECT 1 FROM {$queueTable} WHERE object = '$table' );");
+                }
+            }
 
             return $result;
         }
@@ -1211,9 +1224,9 @@ class baseDAO
      */
     public function lastInsertID()
     {
-        /* See: https://www.php.net/manual/en/pdo.lastinsertid.php .*/
-        $lastInsertID = $this->dbh->lastInsertID();
-        return $lastInsertID !== false ? (int)$lastInsertID : false;
+        $lastInsertID = $this->_lastInsertID !== false ? (int)$this->_lastInsertID : false;
+        $this->_lastInsertID = false;
+        return $lastInsertID;
     }
 
     //-------------------- 魔术方法(Magic methods) --------------------//
@@ -1315,7 +1328,7 @@ class baseDAO
 
         /* 设置字段值。 */
         /* Set the field label and value. */
-        global $lang, $config, $app;
+        global $lang, $config;
         if(isset($config->db->prefix))
         {
             $table = strtolower(str_replace(array($config->db->prefix, '`'), '', $this->table));

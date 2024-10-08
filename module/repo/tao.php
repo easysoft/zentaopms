@@ -68,19 +68,6 @@ class repoTao extends repoModel
     }
 
     /**
-     * Check repo name.
-     *
-     * @param  object $repo
-     * @access protected
-     * @return bool
-     */
-    protected function checkName(object $repo)
-    {
-        $pattern = "/^[a-zA-Z0-9_\-\.]+$/";
-        return preg_match($pattern, $repo->name);
-    }
-
-    /**
      * 获取代码库分支的最后提交时间。
      * Get the last commit time of repo branch.
      *

@@ -599,8 +599,6 @@ class product extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->product->refreshStats(); // Refresh stats fields of products.
-
         $productStatList = $this->productZen->getExportData($programID, $browseType, $orderBy, $param, $pager);
 
         /* Generate root program list. */
@@ -1156,6 +1154,39 @@ class product extends control
     }
 
     /**
+     * 获取产品下1.5级下拉数据。
+     * Get 1.5 level drop-down data under product.
+     *
+     * @param  int    $productID
+     * @param  string $module
+     * @param  string $method
+     * @param  string $extra
+     * @param  string $from
+     * @access public
+     * @return void
+     */
+    public function ajaxGetOldDropMenu(int $productID, string $module, string $method, string $extra = '', string $from = '')
+    {
+        $shadow = '0';
+        if($this->app->tab == 'qa' || $from == 'qa') $shadow = 'all';
+
+        $products        = $this->productZen->getProducts4DropMenu($shadow);
+        $programProducts = array();
+        foreach($products as $product) $programProducts[$product->program][] = $product;
+
+        $this->view->link      = $this->product->getProductLink($module, $method, $extra);
+        $this->view->productID = $productID;
+        $this->view->module    = $module;
+        $this->view->method    = $method;
+        $this->view->extra     = $extra;
+        $this->view->products  = $programProducts;
+        $this->view->projectID = $this->app->tab == 'project' ? $this->session->project : 0;
+        $this->view->programs  = $this->loadModel('program')->getPairs(true);
+        $this->view->lines     = $this->product->getLinePairs();
+        $this->display();
+    }
+
+    /**
      * 保存产品ID到session中。
      * Save the product ID to the session.
      *
@@ -1197,5 +1228,25 @@ class product extends control
     {
         $products = $this->product->getList(0, 'all', 1, $lineID);
         return print($products ? json_encode($products) : '');
+    }
+
+    /**
+     * 刷新产品统计数据。
+     * Refresh product stats.
+     *
+     * @access public
+     * @return void
+     */
+    public function refreshStats()
+    {
+        $this->product->refreshStats();
+
+        if(dao::isError())
+        {
+            echo json_encode(dao::getError());
+            return true;
+        }
+
+        echo 'success';
     }
 }

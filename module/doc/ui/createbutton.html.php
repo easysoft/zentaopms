@@ -11,10 +11,9 @@ declare(strict_types=1);
 namespace zin;
 
 $createButton = $emptyCreateBtn = null;
-$typeID       = empty($lib) ? $objectID : zget($lib, (string)$lib->type, 0);
 
 $docModel = $this->doc;
-$buildCreateBtn = function($typeID, $libID, $moduleID) use($lib, $docModel)
+$buildCreateBtn = function($typeID, $libID, $moduleID) use($lib, $docModel, $type)
 {
     global $app, $config, $lang;
     if($lib->type == 'custom')
@@ -24,13 +23,12 @@ $buildCreateBtn = function($typeID, $libID, $moduleID) use($lib, $docModel)
     }
 
     $buttonItems = array();
-    $createType  = empty($lib) ? '' : $lib->type;
     foreach($lang->doc->createList as $typeKey => $typeName)
     {
         $method  = 'create';
         $docType = zget($config->doc->iconList, $typeKey);
-        $params  = "objectType={$createType}&objectID={$typeID}&libID={$libID}&moduleID={$moduleID}&type={$typeKey}";
-        if($typeKey == 'template' && $config->edition == 'max') $params = "objectType={$createType}&objectID={$typeID}&libID={$libID}&moduleID={$moduleID}&type=html";
+        $params  = "objectType={$type}&objectID={$typeID}&libID={$libID}&moduleID={$moduleID}&type={$typeKey}";
+        if($typeKey == 'template' && $config->edition == 'max') $params = "objectType={$type}&objectID={$typeID}&libID={$libID}&moduleID={$moduleID}&type=html";
         if($typeKey == 'attachment') $method = 'uploadDocs';
 
         $buttonItems[] = array
@@ -44,12 +42,13 @@ $buildCreateBtn = function($typeID, $libID, $moduleID) use($lib, $docModel)
         if($typeKey == 'template') $buttonItems[] = array('type' => 'divider');
     }
 
-    return btngroup(
+    return btngroup
+    (
         btn
         (
             setClass('btn primary ml-2 doc-create-btn'),
             set::icon('plus'),
-            set::url(createLink('doc', 'create', "objectType={$createType}&objectID={$typeID}&libID={$libID}&moduleID={$moduleID}&type=html")),
+            set::url(createLink('doc', 'create', "objectType={$type}&objectID={$typeID}&libID={$libID}&moduleID={$moduleID}&type=html")),
             set('data-app', $app->tab),
             $lang->doc->create
         ),
@@ -63,4 +62,4 @@ $buildCreateBtn = function($typeID, $libID, $moduleID) use($lib, $docModel)
     );
 };
 
-$createButton = $buildCreateBtn($typeID, $libID, $moduleID);
+$createButton = $buildCreateBtn($objectID, $libID, $moduleID);

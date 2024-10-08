@@ -32,7 +32,7 @@ class designZen extends control
 
         /* Show custom design types. */
         $this->lang->waterfall->menu->design['subMenu'] = new stdclass();
-        $this->lang->waterfall->menu->design['subMenu']->all = array('link' => "{$this->lang->all}|design|browse|projectID=%s&productID={$productID}&browseType=all", 'exclude' => $type == 'all' ? '' : 'design');
+        $this->lang->waterfall->menu->design['subMenu']->all = array('link' => "{$this->lang->all}|design|browse|projectID=%s&productID={$productID}&browseType=all", 'exclude' => $type == 'all' ? '' : 'design', 'alias' => $type == 'all' ? $this->app->rawMethod : '');
         $count = 1;
         foreach(array_filter($this->lang->design->{$typeList}) as $key => $value)
         {
@@ -50,5 +50,7 @@ class designZen extends control
 
             $count ++;
         }
+
+        if($this->config->edition == 'ipd') $this->lang->ipd->menu->design = $this->lang->waterfall->menu->design;
     }
 }

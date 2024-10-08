@@ -48,7 +48,7 @@ $basicInfoModal = modal
         set::width('1/2'),
         set::label($lang->doc->execution),
         set::required(true),
-        set::control(array('control' => 'picker', 'name' => 'execution', 'items' => $objects, 'required' => true, 'value' => $objectID))
+        set::control(array('control' => 'picker', 'name' => 'execution', 'items' => $objects, 'required' => true, 'value' => $lib->execution))
     ) : null,
     ($lib->type == 'product') ? formGroup
     (

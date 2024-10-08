@@ -132,14 +132,17 @@ if(in_array($execution->attribute, array('mix', 'request', 'design')) || !$execu
     if($canOpreate['batchCreateEpic'])        $batchItems[]  = array('text' => $lang->ERCommon, 'url' => $batchCreateEpicLink);
 }
 
-if(count($batchItems) > 1)
+if($productID > 0)
 {
-    $createItems[] = array('text' => $lang->story->batchCreate, 'items' => $batchItems);
-}
-else
-{
-    $batchItems[0]['text'] = $lang->story->batchCreate;
-    $createItems = array_merge($createItems, $batchItems);
+    if(count($batchItems) > 1)
+    {
+        $createItems[] = array('text' => $lang->story->batchCreate, 'items' => $batchItems);
+    }
+    else
+    {
+        $batchItems[0]['text'] = $lang->story->batchCreate;
+        $createItems = array_merge($createItems, $batchItems);
+    }
 }
 
 $canLinkStory     = ($execution->hasProduct || $app->tab == 'execution') && $canModifyProduct && $canModifyExecution && hasPriv('execution', 'linkStory');
@@ -168,7 +171,7 @@ if($canOpreate['create'])
             set::url($createLink),
             $lang->story->create
         ),
-        dropdown
+        empty($createItems) ? null : dropdown
         (
             btn(setClass('btn secondary dropdown-toggle'),
             setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),

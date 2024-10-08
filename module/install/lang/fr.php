@@ -160,6 +160,7 @@ $lang->install->errorTableExists    = "La base existe. Si ZenTao a été install
 $lang->install->errorCreateTable    = 'Echec en création de la base.';
 $lang->install->errorEngineInnodb   = 'Your MySQL does not support InnoDB data table engine. Please modify it to MyISAM and try again.';
 $lang->install->errorImportDemoData = "Echec de l'importation des données de démo.";
+$lang->install->errorDBUserPriv     = 'The current database user does not have sufficient permissions! Please switch to the root user or use the following SQL statement to grant the current user permissions:\n';
 
 $lang->install->setConfig          = 'Créer fichier de configuration';
 $lang->install->key                = 'Objet';

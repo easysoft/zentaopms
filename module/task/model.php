@@ -501,8 +501,9 @@ class taskModel extends model
         {
             /* Get the lane and column of the current task. */
             $laneID   = $task->lane;
-            $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
+            $columnID = $task->column;
             unset($task->lane);
+            unset($task->column);
 
             /* Create a task. */
             $taskID = $this->create($task);
@@ -2170,8 +2171,8 @@ class taskModel extends model
         /* 如果是转任务，直接返回 true。 */
         if($action == 'totask') return true;
 
-        /* 父任务只能编辑和创建子任务。 Parent task only can edit task and create children. */
-        if((!empty($task->isParent) || $task->parent < 0) && !in_array($action, array('edit', 'batchcreate', 'cancel'))) return false;
+        /* 父任务只能编辑、创建子任务和指派。 Parent task only can edit task, create children and assign to somebody. */
+        if((!empty($task->isParent) || $task->parent < 0) && !in_array($action, array('edit', 'batchcreate', 'cancel', 'assignto'))) return false;
 
         /* 子任务和多人任务不能创建子任务。Multi task and child task cannot create children. */
         if($action == 'batchcreate' && (!empty($task->team) || $task->parent > 0)) return false;
@@ -3335,8 +3336,8 @@ class taskModel extends model
     {
         return $this->dao->select('t1.revision,t3.id AS id,t3.name AS name')
             ->from(TABLE_REPOHISTORY)->alias('t1')
-            ->leftJoin(TABLE_RELATION)->alias('t2')->on('t2.relation="completedin" AND t2.BType="commit" AND t2.BID=t1.id')
-            ->leftJoin(TABLE_TASK)->alias('t3')->on('t2.AType="task" AND t2.AID=t3.id')
+            ->leftJoin(TABLE_RELATION)->alias('t2')->on("t2.relation='completedin' AND t2.BType='commit' AND t2.BID=t1.id")
+            ->leftJoin(TABLE_TASK)->alias('t3')->on("t2.AType='task' AND t2.AID=t3.id")
             ->where('t1.revision')->in($revisions)
             ->andWhere('t1.repo')->eq($repoID)
             ->andWhere('t3.id')->ne('')

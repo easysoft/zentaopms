@@ -20,6 +20,7 @@ class storyChangeEntry extends entry
      */
     public function post($storyID)
     {
+        $control = $this->loadController('story', 'change');
         $oldStory = $this->loadModel('story')->getByID($storyID);
 
         $fields = 'reviewer,comment,executions,bugs,cases,tasks,reviewedBy,uid';
@@ -36,7 +37,6 @@ class storyChangeEntry extends entry
             $this->setPost('needNotReview', 1);
         }
 
-        $control = $this->loadController('story', 'change');
         $this->requireFields('title');
 
         $control->change($storyID, '', $oldStory->type);

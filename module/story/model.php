@@ -461,6 +461,8 @@ class storyModel extends model
         }
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
+        $this->common->saveQueryCondition($this->dao->get(), 'epic', false);
+        $this->common->saveQueryCondition($this->dao->get(), 'requirement', false);
 
         /* Add parent list for display. */
         foreach($stories as $story)
@@ -988,7 +990,12 @@ class storyModel extends model
         if($parentID <= 0) return true;
 
         $childrenStatus = $this->dao->select('id,status')->from(TABLE_STORY)->where('parent')->eq($parentID)->andWhere('deleted')->eq(0)->fetchPairs('status', 'status');
-        if(empty($childrenStatus)) return true;
+        if(empty($childrenStatus))
+        {
+            $this->dao->update(TABLE_STORY)->set('isParent')->eq('0')->where('id')->eq($parentID)->exec();
+            return true;
+        }
+        $this->dao->update(TABLE_STORY)->set('isParent')->eq('1')->where('id')->eq($parentID)->exec();
 
         $oldParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($parentID)->andWhere('deleted')->eq(0)->fetch();
         if(empty($oldParentStory))
@@ -3685,7 +3692,7 @@ class storyModel extends model
             }
         }
 
-        if(strtolower($actionType) == 'changed' or strtolower($actionType) == 'opened')
+        if(in_array(strtolower($actionType), array('changed', 'opened', 'submitreview')))
         {
             $reviewerList = $this->getReviewerPairs($story->id, $story->version);
             unset($reviewerList[$story->assignedTo]);
@@ -3772,8 +3779,8 @@ class storyModel extends model
             foreach($stmt as $row) $shadowProducts[$row->id] = $row->id;
         }
 
-        if($hasShadow && empty($taskGroups[$story->id])) $taskGroups[$story->id] = $app->dbQuery('SELECT id FROM ' . TABLE_TASK . " WHERE story = $story->id")->fetch();
-        if(empty($caseGroups[$story->id])) $caseGroups[$story->id] = $app->dbQuery('SELECT id FROM ' . TABLE_CASE . " WHERE story = $story->id")->fetch();
+        if(empty($taskGroups[$story->id])) $taskGroups[$story->id] = $app->dbQuery('SELECT id FROM ' . TABLE_TASK . " WHERE story = $story->id AND `deleted` = '0' limit 1")->fetch();
+        if(empty($caseGroups[$story->id])) $caseGroups[$story->id] = $app->dbQuery('SELECT id FROM ' . TABLE_CASE . " WHERE story = $story->id AND `deleted` = '0' limit 1")->fetch();
 
         if(isset($story->parent) && $story->parent < 0 && strpos($config->story->list->actionsOperatedParentStory, ",$action,") === false) return false;
 
@@ -3792,7 +3799,7 @@ class storyModel extends model
             if($config->vision == 'lite' && ($story->status == 'active' && in_array($story->stage, array('wait', 'projected')))) return true;
 
             if(!empty($caseGroups[$story->id])) return false;
-            if(isset($shadowProducts[$story->product]) && (!empty($taskGroups[$story->id]))) return false;
+            if(!empty($taskGroups[$story->id])) return false;
             if(!isset($shadowProducts[$story->product]) && !in_array($story->stage, array('wait', 'planned', 'projected')) && $story->type == 'story' && $story->isParent == '0') return false;
         }
 
@@ -5466,8 +5473,8 @@ class storyModel extends model
     {
         return $this->dao->select('t1.revision,t3.id AS id,t3.title AS title')
             ->from(TABLE_REPOHISTORY)->alias('t1')
-            ->leftJoin(TABLE_RELATION)->alias('t2')->on('t2.relation="completedin" AND t2.BType="commit" AND t2.BID=t1.id')
-            ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.AType="story" AND t2.AID=t3.id')
+            ->leftJoin(TABLE_RELATION)->alias('t2')->on("t2.relation='completedin' AND t2.BType='commit' AND t2.BID=t1.id")
+            ->leftJoin(TABLE_STORY)->alias('t3')->on("t2.AType='story' AND t2.AID=t3.id")
             ->where('t1.revision')->in($revisions)
             ->andWhere('t1.repo')->eq($repoID)
             ->andWhere('t3.id')->ne('')

@@ -40,6 +40,7 @@ class riskEntry extends entry
      */
     public function put($riskID)
     {
+        $control = $this->loadController('risk', 'edit');
         $oldRisk = $this->loadModel('risk')->getByID($riskID);
         if(!$oldRisk) return $this->send404();
 
@@ -47,7 +48,6 @@ class riskEntry extends entry
         $fields = 'source,name,category,strategy,status,impact,probability,rate,identifiedDate,plannedClosedDate,actualClosedDate,resolvedBy,assignedTo,prevention,remedy,resolution';
         $this->batchSetPost($fields, $oldRisk);
 
-        $control = $this->loadController('risk', 'edit');
         $control->edit($riskID);
 
         $data = $this->getData();
