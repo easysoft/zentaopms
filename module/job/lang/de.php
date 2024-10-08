@@ -1,7 +1,7 @@
 <?php
 $lang->job->common        = 'Job';
 $lang->job->browse        = 'Browse Pipeline';
-$lang->job->create        = 'Create Pipeline';
+$lang->job->create        = 'Import Pipeline';
 $lang->job->edit          = 'Edit Pipeline';
 $lang->job->exec          = 'Execute Pipeline';
 $lang->job->runPipeline   = 'Run pipeline';

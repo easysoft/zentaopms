@@ -1,7 +1,7 @@
 <?php
 $lang->job->common        = '构建任务';
 $lang->job->browse        = '浏览构建任务';
-$lang->job->create        = '添加流水线';
+$lang->job->create        = '导入流水线';
 $lang->job->edit          = '编辑流水线';
 $lang->job->exec          = '执行流水线';
 $lang->job->runPipeline   = '运行流水线';
