@@ -295,11 +295,12 @@ function getFileActions(file, doc)
 
 window.setDocAppOptions = function(_, options)
 {
-    const privs = options.privs;
-    const newOptions =
+    const privs          = options.privs;
+    const canCustomSpace = options.spaceType === 'custom' || options.spaceType === 'mine';
+    const newOptions     =
     {
-        onCreateSpace : (privs.createSpace && options.spaceType === 'custom') ? handleCreateSpace: null,
-        onEditSpace   : (privs.editSpace && options.spaceType === 'custom') ? handleEditSpace  : null,
+        onCreateSpace : (privs.createSpace && canCustomSpace) ? handleCreateSpace: null,
+        onEditSpace   : (privs.editSpace && canCustomSpace) ? handleEditSpace  : null,
         onCreateLib   : privs.createLib ? handleCreateLib : null,
         onEditLib     : privs.editLib ? handleEditLib : null,
         onDeleteLib   : privs.deleteLib ? handleDeleteLib : null,
