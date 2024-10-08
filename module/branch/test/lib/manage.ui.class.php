@@ -2,6 +2,16 @@
 include dirname(__FILE__, 5) . '/test/lib/ui.php';
 class manageTester extends tester
 {
+    /**
+     * 切换tab
+     * switch tab
+     *
+     * @param $productID 产品ID
+     * @param $tabName   tab名称
+     * @param $tabNum    tab下分支数
+     *
+     * @return mixed
+     */
     public function switchTab($productID, $tabName, $tabNum)
     {
         $tabDom    = $tabName . 'Tab';
