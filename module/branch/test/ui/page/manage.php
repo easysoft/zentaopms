@@ -24,6 +24,7 @@ class managePage extends page
             'editBtn'      => "//*[@id='table-branch-manage']/div[2]/div[3]/div/div[2]/div/nav/a[1]",
             'closeBtn'     => "//*[@id='table-branch-manage']/div[2]/div[3]/div/div[2]/div/nav/a[2]",
             'activateBtn'  => "//*[@id='table-branch-manage']/div[2]/div[3]/div/div[2]/div/nav/a[2]",
+            'confirmBtn'   => "//button[@z-key='confirm']",
             /*编辑分支页*/
             'editName' => "//*[@id='zin_branch_edit_1_form']/div[1]/input",
             'editDesc' => "//*[@id='zin_branch_edit_1_form']/div[3]/textarea",
