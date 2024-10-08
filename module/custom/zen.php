@@ -431,11 +431,15 @@ class customZen extends custom
         if($relatedObjectType == 'doc')
         {
             $this->loadModel('doc');
+            $products   = $this->loadModel('product')->getPairs();
+            $projects   = $this->loadModel('project')->getPairs();
+            $executions = $this->loadModel('execution')->getPairs();
             $this->config->doc->search['module']    = 'doc';
             $this->config->doc->search['actionURL'] = $actionURL;
             $this->config->doc->search['queryID']   = 0;
-            unset($this->config->doc->search['fields']['execution']);
-            unset($this->config->doc->search['fields']['lib']);
+            $this->config->doc->search['params']['product']['values']   = $products;
+            $this->config->doc->search['params']['execution']['values'] = $executions;
+            $this->config->doc->search['params']['lib']['values']       = $this->doc->getLibPairs('all', '', 0, '', $products, $projects, $executions);
             $this->loadModel('search')->setSearchParams($this->config->doc->search);
         }
     }

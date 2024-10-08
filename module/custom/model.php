@@ -1279,12 +1279,15 @@ class customModel extends model
         $caseID = $objectType == 'testcase' ? ',id as caseID' : '';
         $query  = $this->dao->select('*, 1 as relation' . $caseID)->from($objectTable)
             ->where('deleted')->eq(0)
-            ->beginIF(in_array($objectType, $this->config->custom->objectOwner['product']))->andWhere('product')->in($this->app->user->view->products)->fi()
-            ->beginIF(in_array($objectType, $this->config->custom->objectOwner['project']))->andWhere('project')->in($this->app->user->view->projects)->fi()
-            ->beginIF(in_array($objectType, $this->config->custom->objectOwner['execution']))->andWhere('execution')->in($this->app->user->view->sprints)->fi()
             ->beginIF(in_array($objectType, array('epic', 'requirement', 'story')))->andWhere('type')->eq($objectType)->fi()
-            ->beginIF($objectType == 'doc')->andWhere('acl')->eq('open')->fi()
+            ->beginIF($objectType == 'doc')->andWhere('acl')->eq('open')->andWhere('status')->eq('normal')->fi()
             ->beginIF($browseType == 'bySearch')->andWhere($this->session->$objectQuery)->fi();
+
+        $userView = '';
+        if(in_array($objectType, $this->config->custom->objectOwner['product'])) $userView .= '`product` IN (' . trim($this->app->user->view->products, ',') . ')';
+        if(in_array($objectType, $this->config->custom->objectOwner['project'])) $userView .= (empty($userView) ? '' : ' OR ') . '`project` IN (' . trim($this->app->user->view->projects, ',') . ')';
+        if(in_array($objectType, $this->config->custom->objectOwner['execution'])) $userView .= (empty($userView) ? '' : ' OR ') . '`execution` IN (' . trim($this->app->user->view->sprints, ',') . ')';
+        $query = $query->beginIF(!empty($userView))->andWhere("($userView)")->fi();
 
         if($hasVisionField)
         {

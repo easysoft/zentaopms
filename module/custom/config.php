@@ -141,9 +141,9 @@ $config->custom->relateObjectList['doc']         = $lang->doc->common;
 $config->custom->relateObjectList['design']      = $lang->design->common;
 
 $config->custom->objectOwner = array();
-$config->custom->objectOwner['product']   = array('epic', 'requirement', 'story', 'bug', 'testcase');
-$config->custom->objectOwner['project']   = array('design');
-$config->custom->objectOwner['execution'] = array('task');
+$config->custom->objectOwner['product']   = array('epic', 'requirement', 'story', 'bug', 'testcase', 'doc');
+$config->custom->objectOwner['project']   = array('design', 'doc');
+$config->custom->objectOwner['execution'] = array('task', 'doc');
 
 $config->custom->relateObjectFields['epic']        = array('id', 'pri', 'title', 'relation', 'product', 'module', 'openedBy', 'assignedTo', 'status');
 $config->custom->relateObjectFields['requirement'] = array('id', 'pri', 'title', 'relation', 'product', 'module', 'openedBy', 'assignedTo', 'status');
