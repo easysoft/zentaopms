@@ -16,6 +16,6 @@ $tester->login();
 
 $realBegan = array(date('Y-m-d', strtotime('+20 days')), date('Y-m-d'));
 
-r($tester->startWithGreaterDate($realBegan[0])) && p('message') && e('开始执行表单页提示信息正确');
-r($tester->start($realBegan[1]))                && p('message') && e('开始执行成功');
+r($tester->startWithGreaterDate($realBegan[0])) && p('status,message') && e('SUCCESS,开始执行表单页提示信息正确');
+r($tester->start($realBegan[1]))                && p('status,message') && e('SUCCESS,开始执行成功');
 $tester->closeBrowser();

@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 
 /**
@@ -47,11 +48,14 @@ $bug->status->range('active{3}, resolved, closed');
 $bug->deleted->range('1, 0{4}');
 $bug->gen(10);
 
+$task = zenData('task');
+$task->gen(0);
+
 $tester = new importBugTester();
 $tester->login();
 
-r($tester->importBug('4', '0')) && p('status,message') && e('success','可导入的Bug数目正确');
-r($tester->importBug('3', '2')) && p('status,message') && e('success','导入Bug成功');
-r($tester->importBug('2', '3')) && p('status,message') && e('success','导入Bug成功');
-r($tester->importBug('2', '2')) && p('status,message') && e('success','导入Bug成功');
+r($tester->importBug('4', '0')) && p('status,message') && e('SUCCESS,可导入的Bug数目正确');
+r($tester->importBug('3', '2')) && p('status,message') && e('SUCCESS,导入Bug成功');
+r($tester->importBug('2', '3')) && p('status,message') && e('SUCCESS,导入Bug成功');
+r($tester->importBug('2', '2')) && p('status,message') && e('SUCCESS,导入Bug成功');
 $tester->closeBrowser();

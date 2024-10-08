@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 
 /**
@@ -66,6 +67,6 @@ $projectStory->gen(0);
 $tester = new linkStoryTester();
 $tester->login();
 
-r($tester->checkNoProductInfo()) && p('message') && e('执行未关联产品时提示正确'); //执行未关联产品时点击关联需求
-r($tester->linkstory())          && p('message') && e('关联需求成功');             //正常关联需求
+r($tester->checkNoProductInfo()) && p('status,message') && e('SUCCESS,执行未关联产品时提示正确'); //执行未关联产品时点击关联需求
+r($tester->linkstory())          && p('status,message') && e('SUCCESS,关联需求成功');             //正常关联需求
 $tester->closeBrowser();

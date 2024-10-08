@@ -89,15 +89,15 @@ $execution = array(
     ),
 );
 
-r($tester->create($execution['0']))                         && p('message') && e('创建执行成功');               //创建执行成功
-r($tester->create($execution['1'], 'kanban'))               && p('message') && e('创建执行成功');               //创建看板成功
-r($tester->create($execution['2']))                         && p('message') && e('创建执行表单页提示信息正确'); //执行名称为空，创建失败
-r($tester->create($execution['3']))                         && p('message') && e('创建执行表单页提示信息正确'); //计划开始时间为空，创建失败
-r($tester->create($execution['4']))                         && p('message') && e('创建执行表单页提示信息正确'); //计划结束时间为空，创建失败
-r($tester->create($execution['5'], 'kanban'))               && p('message') && e('创建执行成功');               //不同项目下同名执行，创建成功
-r($tester->createWithRepeatName($execution['6']))           && p('message') && e('创建执行表单页提示信息正确'); //执行名称重复，创建失败
-r($tester->createWithRepeatName($execution['7'], 'kanban')) && p('message') && e('创建执行表单页提示信息正确'); //看板名称重复，创建失败
-r($tester->createWithNoProducts($execution['8']))           && p('message') && e('创建执行表单页提示信息正确'); //创建阶段关联产品为空，创建失败
-r($tester->createWithDateError($execution['9'], 'begin'))   && p('message') && e('创建执行表单页提示信息正确'); //执行的计划开始时间早于项目的计划开始时间，创建失败
-r($tester->createWithDateError($execution['10'], 'end'))    && p('message') && e('创建执行表单页提示信息正确'); //执行的计划结束时间晚于项目的计划结束时间，创建失败
+r($tester->create($execution['0']))                         && p('status,message') && e('SUCCESS,创建执行成功');               //创建执行成功
+r($tester->create($execution['1'], 'kanban'))               && p('status,message') && e('SUCCESS,创建执行成功');               //创建看板成功
+r($tester->create($execution['2']))                         && p('status,message') && e('SUCCESS,创建执行表单页提示信息正确'); //执行名称为空，创建失败
+r($tester->create($execution['3']))                         && p('status,message') && e('SUCCESS,创建执行表单页提示信息正确'); //计划开始时间为空，创建失败
+r($tester->create($execution['4']))                         && p('status,message') && e('SUCCESS,创建执行表单页提示信息正确'); //计划结束时间为空，创建失败
+r($tester->create($execution['5'], 'kanban'))               && p('status,message') && e('SUCCESS,创建执行成功');               //不同项目下同名执行，创建成功
+r($tester->createWithRepeatName($execution['6']))           && p('status,message') && e('SUCCESS,创建执行表单页提示信息正确'); //执行名称重复，创建失败
+r($tester->createWithRepeatName($execution['7'], 'kanban')) && p('status,message') && e('SUCCESS,创建执行表单页提示信息正确'); //看板名称重复，创建失败
+r($tester->createWithNoProducts($execution['8']))           && p('status,message') && e('SUCCESS,创建执行表单页提示信息正确'); //创建阶段关联产品为空，创建失败
+r($tester->createWithDateError($execution['9'], 'begin'))   && p('status,message') && e('SUCCESS,创建执行表单页提示信息正确'); //执行的计划开始时间早于项目的计划开始时间，创建失败
+r($tester->createWithDateError($execution['10'], 'end'))    && p('status,message') && e('SUCCESS,创建执行表单页提示信息正确'); //执行的计划结束时间晚于项目的计划结束时间，创建失败
 $tester->closeBrowser();

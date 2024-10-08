@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 
 /*
@@ -93,23 +94,23 @@ $tester = new taskExecutionTester();
 $tester->login();
 
 /* 检查标签下显示条数 */
-r($tester->checkTab('allTab', '11'))         && p('message') && e('allTab下显示条数正确');          //检查全部标签下显示条数
-r($tester->checkTab('unclosedTab', '9'))     && p('message') && e('unclosedTab下显示条数正确');     //检查未关闭标签下显示条数
-r($tester->checkTab('assignedtomeTab', '2')) && p('message') && e('assignedtomeTab下显示条数正确'); //检查指派给我标签下显示条数
-r($tester->checkTab('myInvolvedTab', '4'))   && p('message') && e('myInvolvedTab下显示条数正确');   //检查由我参与标签下显示条数
-r($tester->checkTab('assignedByMeTab', '1')) && p('message') && e('assignedByMeTab下显示条数正确'); //检查由我指派标签下显示条数
-r($tester->checkTab('needConfirmTab', '1'))  && p('message') && e('needConfirmTab下显示条数正确');  //检查研发需求变更标签下显示条数
-r($tester->checkTab('waitingTab', '3'))      && p('message') && e('waitingTab下显示条数正确');      //检查未开始标签下显示条数
-r($tester->checkTab('doingTab', '3'))        && p('message') && e('doingTab下显示条数正确');        //检查进行中标签下显示条数
-r($tester->checkTab('undoneTab', '7'))       && p('message') && e('undoneTab下显示条数正确');        //检查未完成标签下显示条数
-r($tester->checkTab('finushedByMeTab', '2')) && p('message') && e('finushedByMeTab下显示条数正确'); //检查我完成标签下显示条数
-r($tester->checkTab('doneTab', '2'))         && p('message') && e('doneTab下显示条数正确');         //检查已完成标签下显示条数
-r($tester->checkTab('closedTab', '2'))       && p('message') && e('closedTab下显示条数正确');       //检查已关闭标签下显示条数
-r($tester->checkTab('cancelTab', '1'))       && p('message') && e('cancelTab下显示条数正确');       //检查已取消标签下显示条数
-r($tester->checkTab('delayedTab', '1'))      && p('message') && e('delayedTab下显示条数正确');      //检查已延期标签下显示条数
+r($tester->checkTab('allTab', '11'))         && p('status,message') && e('SUCCESS,allTab下显示条数正确');          //检查全部标签下显示条数
+r($tester->checkTab('unclosedTab', '9'))     && p('status,message') && e('SUCCESS,unclosedTab下显示条数正确');     //检查未关闭标签下显示条数
+r($tester->checkTab('assignedtomeTab', '2')) && p('status,message') && e('SUCCESS,assignedtomeTab下显示条数正确'); //检查指派给我标签下显示条数
+r($tester->checkTab('myInvolvedTab', '4'))   && p('status,message') && e('SUCCESS,myInvolvedTab下显示条数正确');   //检查由我参与标签下显示条数
+r($tester->checkTab('assignedByMeTab', '1')) && p('status,message') && e('SUCCESS,assignedByMeTab下显示条数正确'); //检查由我指派标签下显示条数
+r($tester->checkTab('needConfirmTab', '1'))  && p('status,message') && e('SUCCESS,needConfirmTab下显示条数正确');  //检查研发需求变更标签下显示条数
+r($tester->checkTab('waitingTab', '3'))      && p('status,message') && e('SUCCESS,waitingTab下显示条数正确');      //检查未开始标签下显示条数
+r($tester->checkTab('doingTab', '3'))        && p('status,message') && e('SUCCESS,doingTab下显示条数正确');        //检查进行中标签下显示条数
+r($tester->checkTab('undoneTab', '7'))       && p('status,message') && e('SUCCESS,undoneTab下显示条数正确');        //检查未完成标签下显示条数
+r($tester->checkTab('finushedByMeTab', '2')) && p('status,message') && e('SUCCESS,finushedByMeTab下显示条数正确'); //检查我完成标签下显示条数
+r($tester->checkTab('doneTab', '2'))         && p('status,message') && e('SUCCESS,doneTab下显示条数正确');         //检查已完成标签下显示条数
+r($tester->checkTab('closedTab', '2'))       && p('status,message') && e('SUCCESS,closedTab下显示条数正确');       //检查已关闭标签下显示条数
+r($tester->checkTab('cancelTab', '1'))       && p('status,message') && e('SUCCESS,cancelTab下显示条数正确');       //检查已取消标签下显示条数
+r($tester->checkTab('delayedTab', '1'))      && p('status,message') && e('SUCCESS,delayedTab下显示条数正确');      //检查已延期标签下显示条数
 /* 批量修改状态 */
-r($tester->batchEditStatus('closed'))        && p('message') && e('批量修改状态为closed成功');
-r($tester->batchEditStatus('cancel'))        && p('message') && e('批量修改状态为cancel成功');
+r($tester->batchEditStatus('closed'))        && p('status,message') && e('SUCCESS,批量修改状态为closed成功');
+r($tester->batchEditStatus('cancel'))        && p('status,message') && e('SUCCESS,批量修改状态为cancel成功');
 /* 批量指派 */
-r($tester->batchAssign())                    && p('message') && e('批量指派成功');
+r($tester->batchAssign())                    && p('status,message') && e('SUCCESS,批量指派成功');
 $tester->closeBrowser();

@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 
 /**
@@ -97,9 +98,9 @@ $estimate = array(
 $tester = new storyEstimateTester();
 $tester->login();
 
-r($tester->storyEstimate($estimate[0], '1'))          && p('message') && e('估算成功');
-r($tester->storyEstimate($estimate[1], '2'))          && p('message') && e('估算成功');
-r($tester->checkErrorInfo($estimate[2], 'notNumber')) && p('message') && e('估算值为非数字提示成功');
-r($tester->checkErrorInfo($estimate[3], 'negative'))  && p('message') && e('估算值为负数提示成功');
-r($tester->noTeamInfo())                              && p('message') && e('没有团队成员提示成功');
+r($tester->storyEstimate($estimate[0], '1'))          && p('status,message') && e('SUCCESS,估算成功');
+r($tester->storyEstimate($estimate[1], '2'))          && p('status,message') && e('SUCCESS,估算成功');
+r($tester->checkErrorInfo($estimate[2], 'notNumber')) && p('status,message') && e('SUCCESS,估算值为非数字提示成功');
+r($tester->checkErrorInfo($estimate[3], 'negative'))  && p('status,message') && e('SUCCESS,估算值为负数提示成功');
+r($tester->noTeamInfo())                              && p('status,message') && e('SUCCESS,没有团队成员提示成功');
 $tester->closeBrowser();
