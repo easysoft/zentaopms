@@ -431,7 +431,11 @@ class customZen extends custom
         if($relatedObjectType == 'doc')
         {
             $this->loadModel('doc');
+            $this->config->doc->search['module']    = 'doc';
             $this->config->doc->search['actionURL'] = $actionURL;
+            $this->config->doc->search['queryID']   = 0;
+            unset($this->config->doc->search['fields']['execution']);
+            unset($this->config->doc->search['fields']['lib']);
             $this->loadModel('search')->setSearchParams($this->config->doc->search);
         }
     }

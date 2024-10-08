@@ -1283,6 +1283,7 @@ class customModel extends model
             ->beginIF(in_array($objectType, $this->config->custom->objectOwner['project']))->andWhere('project')->in($this->app->user->view->projects)->fi()
             ->beginIF(in_array($objectType, $this->config->custom->objectOwner['execution']))->andWhere('execution')->in($this->app->user->view->sprints)->fi()
             ->beginIF(in_array($objectType, array('epic', 'requirement', 'story')))->andWhere('type')->eq($objectType)->fi()
+            ->beginIF($objectType == 'doc')->andWhere('acl')->eq('open')->fi()
             ->beginIF($browseType == 'bySearch')->andWhere($this->session->$objectQuery)->fi();
 
         if($hasVisionField)
@@ -1331,9 +1332,9 @@ class customModel extends model
 
                 if($fieldKey == 'id') $fieldSetting['type'] = 'checkID';
                 if(in_array($fieldKey, array('product', 'module', 'project', 'execution'))) $fieldSetting['type'] = 'category';
-                if($fieldKey == 'product')   $fieldSetting['map'] = array(0 => '') + $this->product->getPairs();
+                if($fieldKey == 'product')   $fieldSetting['map'] = array(0 => '') + $this->product->getPairs('all', 0, '', 'all');
                 if($fieldKey == 'project')   $fieldSetting['map'] = array(0 => '') + $this->project->getPairs();
-                if($fieldKey == 'execution') $fieldSetting['map'] = array(0 => '') + $this->execution->getPairs();
+                if($fieldKey == 'execution') $fieldSetting['map'] = array(0 => '') + $this->execution->getPairs(0, 'all', 'all');
                 if($fieldKey == 'module')    $fieldSetting['map'] = $this->tree->getAllModulePairs($objectType);
                 if($fieldKey == 'relation')  $fieldSetting = array('name' => 'relation', 'title' => $this->lang->custom->relation, 'type' => 'control', 'control' => 'picker', 'sortType' => false);
 
