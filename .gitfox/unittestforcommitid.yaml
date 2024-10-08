@@ -1,0 +1,49 @@
+version: 1
+kind: pipeline
+spec:
+  stages:
+    - name: 单元测试
+      type: ci
+      spec:
+        clone:
+          depth: 100
+        vars:
+        - type: stage
+          name: prepare
+        steps:
+        - name: 构建测试镜像
+          type: run
+          spec:
+            container:
+              image: hub.zentao.net/ci/docker:24.0.8-cli
+            script:
+              - |
+                docker buildx create \
+                   --name=kube \
+                   --driver=kubernetes \
+                   --driver-opt=namespace=quickon-ci,replicas=5,nodeselector="node-role.kubernetes.io/ci=true",rootless=true,image=hub.zentao.net/ci/moby-buildkit:buildx-stable-1-rootless,qemu.install=true,qemu.image=hub.zentao.net/ci/binfmt:qemu-v8.1.5
+              - docker buildx use kube
+              - docker buildx build --pull --push --platform linux/amd64 --build-arg VERSION=${ZENTAO_VERSION} --build-arg MIRROR=true -t hub.qc.oop.cc/zentao-ztf:${GITFOX_BUILD_NUMBER}-${GITFOX_COMMIT} -f misc/ci/Dockerfile.test .
+        - name: unit test
+          type: run
+          when: |
+            build.target == "main"
+          spec:
+            envs:
+              MYSQL_INTERNAL: "true"
+            container:
+              image: hub.qc.oop.cc/zentao-ztf:${{ build.number }}-${{ build.after }}
+            script:
+              - ls -a
+              - echo $HOME
+              - env
+              - git rev-parse origin/main
+              - git rev-parse HEAD
+              - git rev-list $(git rev-parse origin/main )..$(git rev-parse HEAD)
+              - git rev-list $(git rev-parse origin/main )..${GITFOX_COMMIT}
+              - sh -c 'nohup /usr/bin/entrypoint.sh >/dev/null 2>&1 &'
+              - . /etc/s6/s6-init/envs
+              - sleep 5
+              - s6-svwait -u -t 30000 /etc/s6/s6-available/mysql
+              - initdb.php > /apps/zentao/unittestdb
+              - rununittestbycommitid.php ${{ secrets.get("zentao_user") }} ${{ secrets.get("zentao_password") }}
