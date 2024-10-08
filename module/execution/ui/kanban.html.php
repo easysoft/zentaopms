@@ -98,6 +98,7 @@ if($canImportBug)  $createMenu[] = array('text' => $lang->execution->importBug, 
 if($canImportTask) $createMenu[] = array('text' => $lang->execution->importTask, 'url' => helper::createLink('execution', 'importTask', "execution=$execution->id"));
 if($canBatchCreateTask) $createMenu[] = array('text' => $lang->execution->batchCreateTask, 'url' => helper::createLink('task', 'batchCreate', "execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg');
 
+jsVar('taskToOpen', $taskToOpen);
 jsVar('laneCount', $laneCount);
 jsVar('kanbanLang', $lang->kanban);
 jsVar('storyLang', $lang->story);
