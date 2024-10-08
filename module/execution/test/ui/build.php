@@ -46,3 +46,11 @@ $build->scmPath->range('[]');
 $build->filePath->range('[]');
 $build->deleted->range('1, 0{100}');
 $build->gen(6);
+
+$tester = new buildTester();
+$tester->login();
+
+r($tester->switchProduct('产品1', '2')) && p('message') && e('版本显示正确'); //产品下有删除的版本
+r($tester->switchProduct('产品2', '3')) && p('message') && e('版本显示正确'); //产品下没有删除的版本
+r($tester->switchProduct('', '5'))      && p('message') && e('版本显示正确'); //不切换产品
+$tester->closeBrowser();
