@@ -10,7 +10,7 @@ title=测试 repoModel::createRepo();
 timeout=0
 cid=1
 
-- 使用不符合规则的名字创建repo属性name @名称应该只包含字母数字，破折号，下划线和点。
+- 使用不符合规则的名字创建repo属性name @名称必须以字母或 _ 开头，只包含字母数字，破折号，下划线和点。
 - 通过正确数据创建版本库 @1
 
 */
@@ -32,7 +32,7 @@ $repo->acl          = '{"acl":"open","groups":[""],"users":[""]}';
 
 $_SERVER['REQUEST_URI'] = 'http://unittest/';
 
-r($repoTest->createRepoTest($repo)) && p('name') && e('名称应该只包含字母数字，破折号，下划线和点。'); //使用不符合规则的名字创建repo
+r($repoTest->createRepoTest($repo)) && p('name') && e('名称必须以字母或 _ 开头，只包含字母数字，破折号，下划线和点。'); //使用不符合规则的名字创建repo
 
 $repo->name = 'unitTestProject17';
 $result = $repoTest->createRepoTest($repo);
