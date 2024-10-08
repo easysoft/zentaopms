@@ -4113,7 +4113,7 @@ class executionModel extends model
         if($showAll)
         {
             $executions  = $this->getPairs(0, 'all', "nocode,noprefix,multiple");
-            $executionID = current(array_keys($executions));
+            $executionID = empty($executions) ? 0 : current(array_keys($executions));
         }
 
         $this->config->execution->search['actionURL'] = $actionURL;
