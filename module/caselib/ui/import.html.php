@@ -25,7 +25,7 @@ formPanel
         formGroup
         (
             set::label($lang->caselib->selectFile),
-            fileInput()
+            fileInput(set::accept('.csv'))
         )
     ),
     formRow
