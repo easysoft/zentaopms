@@ -42,13 +42,6 @@ toolBar
         'data-id'         => 'installProgress',
         'data-toggle'     => 'modal'
     ))) : null,
-    $config->inQuickon && $canInstall ? item(set(array
-    (
-        'text'  => $lang->store->cloudStore,
-        'icon'  => 'program',
-        'class' => 'btn ghost',
-        'url'   => createLink('store', 'browse')
-    ))) : null,
     $canInstall ? item(set(array
     (
         'text'  => $lang->space->install,

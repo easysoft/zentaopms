@@ -522,7 +522,8 @@ $lang->devops->homeMenu = new stdclass();
 $lang->devops->homeMenu->repos        = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit,import,createrepo');
 $lang->devops->homeMenu->compile      = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
 if($config->edition != 'open') $lang->devops->homeMenu->deploy = array('link' => "{$lang->devops->deploy}|deploy|browse", 'alias' => 'steps,managestep,create,edit,browse,view,scope,cases', 'subModule' => 'ops,deploy');
-$lang->devops->homeMenu->apps = array('link' => "{$lang->app->common}|space|browse", 'subModule' => 'instance,store,gitlab,gitea,gogs,jenkins,sonarqube', 'alias' => 'createapplication,binduser,edit');
+$lang->devops->homeMenu->apps  = array('link' => "{$lang->app->common}|space|browse", 'subModule' => 'instance,gitlab,gitea,gogs,jenkins,sonarqube', 'alias' => 'createapplication,binduser,edit');
+if($config->inQuickon) $lang->devops->homeMenu->store = array('link' => "{$lang->app->store}|store|browse", 'subModule' => 'store');
 
 $lang->devops->menu = new stdclass();
 $lang->devops->menu->code    = array('link' => "{$lang->repocode->common}|repo|browse|repoID=%s", 'subModule' => 'repo', 'exclude' => 'repo-review,repo-browsetag,repo-browsebranch,repo-log,repo-diff,repo-revision');
@@ -531,7 +532,6 @@ $lang->devops->menu->branch  = array('link' => "{$lang->repo->branch}|repo|brows
 $lang->devops->menu->tag     = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=%s");
 $lang->devops->menu->mr      = array('link' => "{$lang->devops->mr}|mr|browse|repoID=%s");
 $lang->devops->menu->compile = array('link' => "{$lang->devops->compile}|job|browse|repoID=%s", 'subModule' => 'compile,job');
-
 
 /* The menu order $lang->devops->menuOrder[30] is a reserved position for 'artifactrepo'. */
 $lang->devops->menuOrder[10] = 'repos';
@@ -543,7 +543,7 @@ $lang->devops->menuOrder[40] = 'mr';
 $lang->devops->menuOrder[45] = 'compile';
 $lang->devops->menuOrder[50] = 'deploy';
 $lang->devops->menuOrder[55] = 'apps';
-
+$lang->devops->menuOrder[70] = 'store';
 
 $lang->devops->dividerMenu = ',apps,';
 
