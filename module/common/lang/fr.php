@@ -411,7 +411,7 @@ $lang->testcase->testsuite = 'Test Suite';
 $lang->testcase->caselib   = 'Case Library';
 
 $lang->devops->compile      = 'Pipelines';
-$lang->devops->mr           = 'Merge Request';
+$lang->devops->mr           = 'Merge Requests';
 $lang->devops->repo         = 'Repo';
 $lang->devops->rules        = 'Rule';
 $lang->devops->settings     = 'Setting Merge Request';
