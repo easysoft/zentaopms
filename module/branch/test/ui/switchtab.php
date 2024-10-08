@@ -31,3 +31,13 @@ $productID['productID'] = 11;
 $tabName = 'all';
 $tabNum  = '3';
 r($tester->switchTab($productID, $tabName, $tabNum)) && p('message,status') && e('切换至allTab成功,SUCCESS');//切换至全部tab
+
+$tabName = 'active';
+$tabNum  = '2';
+r($tester->switchTab($productID, $tabName, $tabNum)) && p('message,status') && e('切换至activeTab成功,SUCCESS');//切换至激活tab
+
+$tabName = 'closed';
+$tabNum  = '1';
+r($tester->switchTab($productID, $tabName, $tabNum)) && p('message,status') && e('切换至closedTab成功,SUCCESS');//切换至已关闭tab
+
+$tester->closeBrowser();
