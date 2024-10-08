@@ -4857,8 +4857,13 @@ class executionModel extends model
 
         if($status == 'wait')
         {
-            $execution->closedBy   = '';
-            $execution->canceledBy = '';
+            $execution->closedBy      = '';
+            $execution->canceledBy    = '';
+            $execution->closedDate    = null;
+            $execution->canceledDate  = null;
+            $execution->realBegan     = null;
+            $execution->realEnd       = null;
+            $execution->suspendedDate = null;
         }
         elseif($status == 'doing')
         {
@@ -4870,6 +4875,8 @@ class executionModel extends model
         {
             $execution->suspendedDate = helper::now();
             $execution->closedBy      = '';
+            $execution->closedDate    = null;
+            $execution->realEnd       = null;
         }
         elseif($status == 'closed')
         {
