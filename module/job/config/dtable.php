@@ -90,6 +90,11 @@ $config->job->actionList['compile']['text'] = $lang->compile->browse;
 $config->job->actionList['compile']['hint'] = $lang->compile->browse;
 $config->job->actionList['compile']['url']  = array('module' => 'compile', 'method' => 'browse', 'params' => "repoID={repo}&jobID={id}");
 
+$config->job->actionList['trigger']['icon'] = 'trigger';
+$config->job->actionList['trigger']['text'] = $lang->job->trigger;
+$config->job->actionList['trigger']['hint'] = $lang->job->trigger;
+$config->job->actionList['trigger']['url']  = helper::createLink('job', 'trigger',"jobID={id}");
+
 $config->job->actionList['edit']['icon'] = 'edit';
 $config->job->actionList['edit']['text'] = $lang->job->edit;
 $config->job->actionList['edit']['hint'] = $lang->job->edit;
@@ -107,11 +112,9 @@ $config->job->actionList['delete']['hint']       = $lang->job->delete;
 $config->job->actionList['delete']['ajaxSubmit'] = true;
 $config->job->actionList['delete']['url']        = helper::createLink('job', 'delete',"jobID={id}");
 
-$config->job->dtable->fieldList['actions']['name']     = 'actions';
-$config->job->dtable->fieldList['actions']['title']    = $lang->actions;
-$config->job->dtable->fieldList['actions']['type']     = 'actions';
-$config->job->dtable->fieldList['actions']['width']    = '130';
-$config->job->dtable->fieldList['actions']['sortType'] = false;
-$config->job->dtable->fieldList['actions']['fixed']    = 'right';
-$config->job->dtable->fieldList['actions']['menu']     = array('compile', 'edit', 'exec', 'delete');
-$config->job->dtable->fieldList['actions']['list']     = $config->job->actionList;
+$config->job->dtable->fieldList['actions']['name']  = 'actions';
+$config->job->dtable->fieldList['actions']['title'] = $lang->actions;
+$config->job->dtable->fieldList['actions']['width'] = 150;
+$config->job->dtable->fieldList['actions']['type']  = 'actions';
+$config->job->dtable->fieldList['actions']['menu']  = array('compile', 'trigger', 'edit', 'exec', 'delete');
+$config->job->dtable->fieldList['actions']['list']  = $config->job->actionList;
