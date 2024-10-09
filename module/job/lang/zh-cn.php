@@ -11,6 +11,7 @@ $lang->job->confirmDelete = '确认删除该流水线';
 $lang->job->dirChange     = '目录改动';
 $lang->job->buildTag      = '打标签';
 $lang->job->execSuccess   = '执行成功';
+$lang->job->trigger       = '触发器';
 
 $lang->job->browseAction = '流水线列表';
 

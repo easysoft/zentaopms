@@ -11,6 +11,7 @@ $lang->job->confirmDelete = 'Do you want to delete this pipeline?';
 $lang->job->dirChange     = 'Directory Changed';
 $lang->job->buildTag      = 'Build Tag';
 $lang->job->execSuccess   = 'Build success';
+$lang->job->trigger       = 'Trigger';
 
 $lang->job->browseAction = 'Pipeline List';
 

@@ -11,6 +11,7 @@ $lang->job->confirmDelete = 'Voullez-vous supprimer ce job ?';
 $lang->job->dirChange     = 'Directory Changed';
 $lang->job->buildTag      = 'Build Tag';
 $lang->job->execSuccess   = 'Build success';
+$lang->job->trigger       = 'Trigger';
 
 $lang->job->browseAction = 'Pipeline List';
 

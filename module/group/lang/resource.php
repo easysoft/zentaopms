@@ -1451,18 +1451,21 @@ $lang->compile->methodOrder[10] = 'logs';
 $lang->compile->methodOrder[15] = 'syncCompile';
 
 $lang->resource->job = new stdclass();
-$lang->resource->job->browse = 'browseAction';
-$lang->resource->job->create = 'create';
-$lang->resource->job->edit   = 'edit';
-$lang->resource->job->delete = 'delete';
-$lang->resource->job->exec   = 'exec';
-$lang->resource->job->view   = 'view';
+$lang->resource->job->browse  = 'browseAction';
+$lang->resource->job->create  = 'create';
+$lang->resource->job->edit    = 'edit';
+$lang->resource->job->delete  = 'delete';
+$lang->resource->job->exec    = 'exec';
+$lang->resource->job->view    = 'view';
+$lang->resource->job->trigger = 'trigger';
 
 $lang->job->methodOrder[5]  = 'browse';
 $lang->job->methodOrder[10] = 'create';
 $lang->job->methodOrder[15] = 'edit';
 $lang->job->methodOrder[20] = 'delete';
 $lang->job->methodOrder[25] = 'exec';
+$lang->job->methodOrder[30] = 'view';
+$lang->job->methodOrder[35] = 'trigger';
 
 $lang->resource->account = new stdclass();
 $lang->resource->account->browse = 'browse';

@@ -2790,7 +2790,8 @@ $config->group->package->manageJob->privs['compile-logs']        = array('editio
 $config->group->package->manageJob->privs['compile-syncCompile'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('job-browse'), 'recommend' => array());
 $config->group->package->manageJob->privs['job-create']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('job-browse'), 'recommend' => array('job-edit'));
 $config->group->package->manageJob->privs['job-edit']            = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('job-browse'), 'recommend' => array('job-create'));
-$config->group->package->manageJob->privs['job-exec']            = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('job-browse'), 'recommend' => array('compile-browse', 'compile-logs', 'job-view'));
+$config->group->package->manageJob->privs['job-trigger']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('job-browse'), 'recommend' => array('job-create', 'job-edit', 'compile-browse', 'compile-logs', 'job-view'));
+$config->group->package->manageJob->privs['job-exec']            = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('job-browse'), 'recommend' => array('compile-browse', 'compile-logs', 'job-view'));
 
 $config->group->package->deleteJob = new stdclass();
 $config->group->package->deleteJob->order  = 2720;
