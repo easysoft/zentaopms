@@ -1718,25 +1718,6 @@ class kanban extends control
     }
 
     /**
-     * 获取泳道的列。
-     * Ajax get columns by lane id.
-     *
-     * @param  int    $laneID
-     * @access public
-     * @return string
-     */
-    public function ajaxGetColumns(int $laneID)
-    {
-        $lane    = $this->kanban->getLaneByID($laneID);
-        $columns = $this->kanban->getColumnPairsByGroup($lane->group);
-
-        $columnList = array();
-        foreach($columns as $columnID => $columnName) $columnList[] = array('value' => $columnID, 'text' => $columnName);
-
-        return print(json_encode($columnList));
-    }
-
-    /**
      * Ajax load space users.
      *
      * @param  int    $spaceID
