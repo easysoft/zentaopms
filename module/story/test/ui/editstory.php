@@ -77,7 +77,7 @@ $tester->login();
 $storyFrom = '客户';
 
 r($tester->editStory($storyFrom)) && p('module,method')  && e('story,view'); // 编辑需求后跳转页面检查
-r($tester->editStory($storyFrom)) && p('message,status') && e('编辑需求成功,SUCCESS'); // 编辑需求成功
+r($tester->editStory($storyFrom)) && p('message,status') && e('编辑研发需求成功,SUCCESS'); // 编辑需求成功
 
 r($tester->batchEditStory($storyFrom)) && p('message,status')  && e('批量编辑研发需求成功,SUCCESS'); // 批量编辑需求成功
 $tester->closeBrowser();

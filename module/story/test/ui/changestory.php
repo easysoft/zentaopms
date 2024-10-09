@@ -23,7 +23,7 @@ $storys = array();
 $storys['null']    = '';
 $storys['default'] = '变更后需求';
 
-r($tester->changeStory($storys['null']))    && p('message,status')  && e('创建需求页面名称为空提示正确,SUCCESS'); // 缺少需求名称，变更失败
-r($tester->changeStory($storys['default'])) && p('message, status') && e('变更需求成功,SUCCESS');                 // 使用默认选项变更需求,详情页信息对应
+r($tester->changeStory($storys['null']))    && p('message,status')  && e('变更需求表单页面提示信息正确,SUCCESS'); // 缺少需求名称，变更失败
+r($tester->changeStory($storys['default'])) && p('message,status') && e('变更需求成功,SUCCESS');                 // 使用默认选项变更需求,详情页信息对应
 
 $tester->closeBrowser();

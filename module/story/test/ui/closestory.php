@@ -75,8 +75,8 @@ $tester->login();
 
 $closeReason = array('已完成', '不做');
 
-r($tester->closeStory(1, $closeReason[0])) && p('message,status') && e('关闭需求成功，SUCCESS');
+r($tester->closeStory(1, $closeReason[0])) && p('message,status') && e('关闭需求成功,SUCCESS');
 
-r($tester->batchCloseStory($closeReason[1])) && p('message,status') && e('批量关闭需求成功，SUCCESS');
+r($tester->batchCloseStory($closeReason[1])) && p('message,status') && e('批量关闭需求成功,SUCCESS');
 
 $tester->closeBrowser();

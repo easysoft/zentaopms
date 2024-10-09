@@ -34,6 +34,6 @@ class reviewStoryTester extends tester
         $viewPage->dom->btn($this->lang->story->legendLifeTime)->click();
         if($viewPage->dom->reviewer->getText() != 'admin') return $this->fail('需求评审人错误');
 
-        return $this->success('评审需求成功');
+        return $this->success('评审研发需求成功');
     }
 }

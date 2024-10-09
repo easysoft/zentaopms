@@ -51,7 +51,7 @@ class createStoryTester extends tester
 
         if($this->response('method') != 'browse')
         {
-            if($this->checkFormTips('story')) return $this->success('创建需求表单页面提示正确');
+            if($this->checkFormTips('story')) return $this->success('创建需求页面名称为空提示正确');
             return $this->failed('创建需求表单页面提示信息不正确');
         }
 
@@ -86,7 +86,7 @@ class createStoryTester extends tester
     }
 
     /**
-     * Batchchreate a default storis.
+     * Batchchreate a default story.
      *
      * @param  string $type
      * @param  string $storyName
@@ -132,7 +132,7 @@ class createStoryTester extends tester
 
         if($this->response('method') != 'browse')
         {
-            if($form->dom->alertModal('text') == '已有相同标题的需求或标题为空，请检查输入。') return $this->success('批量创建需求表单页面提示正确');
+            if($form->dom->alertModal('text') == '已有相同标题的需求或标题为空，请检查输入。') return $this->success('批量创建需求页面名称为空提示正确');
             return $this->failed('批量创建需求表单页面提示信息不正确');
         }
 
@@ -163,6 +163,6 @@ class createStoryTester extends tester
         $viewPage->dom->btn($this->lang->story->legendLifeTime)->click();
         if(strpos($viewPage->dom->openedBy->getText() , 'admin') === false) return $this->failed('创建人不正确');
 
-        return $this->success('批量创建'.$storyName.'成功');
+        return $this->success($storyName.'成功');
     }
 }
