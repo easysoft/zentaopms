@@ -89,8 +89,8 @@ r($tester->putoff($execution['0'], '101'))                       && p('status,me
 r($tester->putoff($execution['0'], '103'))                       && p('status,message') && e('SUCCESS,延期执行成功');               //进行中的执行，延期弹窗直接点击保存
 r($tester->putoff($execution['1'], '101'))                       && p('status,message') && e('SUCCESS,延期执行成功');               //未开始的执行，延期弹窗中修改正确的起止日期后点击保存
 r($tester->putoff($execution['1'], '103'))                       && p('status,message') && e('SUCCESS,延期执行成功');               //进行中的执行，延期弹窗中修改正确的起止日期后点击保存
+r($tester->putoff($execution['3'], '103'))                       && p('status,message') && e('SUCCESS,延期执行成功');               //计划结束日期为空，可用工日不为空
 r($tester->putoffWithWrongDate($execution['2'], '101', 'begin')) && p('status,message') && e('SUCCESS,延期执行表单页提示信息正确'); //计划开始日期为空
-r($tester->putoffWithWrongDate($execution['3'], '103', 'end'))   && p('status,message') && e('SUCCESS,延期执行表单页提示信息正确'); //计划结束日期为空
 r($tester->putoffWithWrongDate($execution['4'], '103', 'begin')) && p('status,message') && e('SUCCESS,延期执行表单页提示信息正确'); //计划开始日期小于项目计划开始日期
 r($tester->putoffWithWrongDate($execution['5'], '101', 'end'))   && p('status,message') && e('SUCCESS,延期执行表单页提示信息正确'); //计划结束日期大于项目计划完成日期
 r($tester->putoffWithWrongDays($execution['6'], '101'))          && p('status,message') && e('SUCCESS,延期执行表单页提示信息正确'); //可用工日为空
