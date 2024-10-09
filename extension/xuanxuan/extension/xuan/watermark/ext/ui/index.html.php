@@ -1,10 +1,10 @@
 <?php
 /**
- * The admin view file of conference module of XXB.
+ * The admin view file of watermark module of XXB.
  *
  * @copyright   Copyright 2009-2024 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd., www.zentao.net)
  * @license     ZOSL (https://zpl.pub/page/zoslv1.html)
- * @package     conference
+ * @package     watermark
  * @version     $Id$
  * @link        https://xuanim.com
  */
@@ -21,9 +21,9 @@ if($type == 'edit')
                 set::name('enabled'),
                 set::items($lang->watermark->switchList),
                 set::value($enabled),
-                set::inline(true),
-            ),
-        ),
+                set::inline(true)
+            )
+        )
     );
 }
 else
