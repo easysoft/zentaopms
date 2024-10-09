@@ -31,3 +31,13 @@ ALTER TABLE `zt_workflowlayout` DROP INDEX `unique`;
 CREATE UNIQUE INDEX `unique` ON `zt_workflowlayout`(`group`,`module`,`action`,`ui`,`field`,`vision`);
 
 ALTER TABLE `zt_product` ADD `workflowGroup` int(8) NOT NULL DEFAULT '0' AFTER `ticket`;
+ALTER TABLE `zt_workflowgroup` ADD `main` enum('0','1') NOT NULL DEFAULT '0' AFTER `vision`;
+ALTER TABLE `zt_workflowgroup` ADD `code` varchar(30) NOT NULL DEFAULT '' AFTER `name`;
+
+DELETE FROM `zt_workflowgroup` WHERE `main` = '1';
+INSERT INTO `zt_workflowgroup` (`type`, `projectModel`, `projectType`, `name`, `code`, `status`, `vision`, `main`) VALUES
+('product',	'',          'project',	'默认流程',            'productproject',	'normal', 'rnd', '1'),
+('project',	'scrum',     'product',	'敏捷-产品型默认流程', 'scrumproduct',	    'normal', 'rnd', '1'),
+('project',	'scrum',     'project',	'敏捷-项目型默认流程', 'scrumproject',	    'normal', 'rnd', '1'),
+('project',	'waterfall', 'product',	'瀑布-产品型默认流程', 'waterfallproduct',	'normal', 'rnd', '1'),
+('project',	'waterfall', 'project',	'瀑布-项目型默认流程', 'waterfallproject',	'normal', 'rnd', '1');
