@@ -16,3 +16,8 @@ $tester->login();
 
 $apiDoc = new stdClass();
 $apiDoc->docA = 'apiDocA';
+
+$apiPath = new stdClass();
+$apiPath->pathA = 'apipathA';
+
+r($tester->createApiDoc($apiLib, $apiDoc, $apiPath)) && p('message,status') && e('创建接口文档成功,SUCCESS'); //创建接口文档成功
