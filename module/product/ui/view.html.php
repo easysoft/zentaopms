@@ -180,17 +180,24 @@ div
                     setClass('flex mt-4'),
                     in_array($this->config->systemMode, array('ALM', 'PLM')) && $product->program ? div
                     (
-                        setClass('clip w-1/2'),
+                        setClass('clip w-1/3'),
                         set::title($lang->product->program),
                         icon('program', setClass('pr-1')),
                         $product->programName
                     ) : null,
                     $product->line ? div
                     (
-                        setClass('clip w-1/2'),
+                        setClass('clip w-1/3'),
                         set::title($lang->product->line),
                         icon('lane', setClass('pr-1')),
                         $product->lineName
+                    ) : null,
+                    $product->workflowGroup && $config->edition != 'open' ? div
+                    (
+                        setClass('clip w-1/3'),
+                        set::title($lang->product->workflowGroup),
+                        icon('flow', setClass('pr-1')),
+                        zget($workflowGroups, $product->workflowGroup)
                     ) : null
                 ),
                 div
