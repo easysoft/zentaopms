@@ -16,6 +16,25 @@ cid=80
 chdir(__DIR__);
 include '../lib/changestory.ui.class.php';
 
+$product = zenData('product');
+$product->id->range('1');
+$product->program->range('0');
+$product->name->range('产品1');
+$product->shadow->range('0');
+$product->bind->range('0');
+$product->acl->range('open');
+$product->createdBy->range('admin');
+$product->vision->range('rnd');
+$product->gen(1);
+
+$story = zenData('story');
+$story->id->range('1-3');
+$story->root->range('1-3');
+$story->path->range('`,1,`, `,2,`, `,3,`');
+$story->grade->range('1');
+$story->product->range('1');
+$story->module->range('0');
+$story->plan->range('0');
 $tester = new changeStoryTester();
 $tester->login();
 
