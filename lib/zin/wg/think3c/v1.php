@@ -38,6 +38,18 @@ class think3c extends thinkModel
         return $content;
     }
 
+    protected function buildMulticolumnContent(object $step, int $blockID): array
+    {
+        $title   = '';
+        $content = array();
+
+        return empty($content) ? array() : array
+        (
+            div(setClass('text-lg'), $title),
+            $content
+        );
+    }
+
     protected function buildBody(): node
     {
         global $lang, $app;
