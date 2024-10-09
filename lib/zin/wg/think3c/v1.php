@@ -21,6 +21,23 @@ class think3c extends thinkModel
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
+    protected function buildOptionsContent(object $step, int $blockID): array|null
+    {
+        global $lang;
+
+        $unselectedOptions = array_diff($step->options->fields, $step->answer['result']);
+        $showOptions       = !empty($step->link['selectedBlock']) && $step->link['selectedBlock'] == $blockID ? $step->answer['result'] :  $unselectedOptions;
+
+        $content = array();
+        foreach($showOptions as $option)
+        {
+            if($option == 'other') $option = $step->answer['other'] ? $step->answer['other'] : $lang->other;
+            if(!empty($option)) $content[] = div(setClass('mt-0.5'), $option);
+        }
+
+        return $content;
+    }
+
     protected function buildBody(): node
     {
         global $lang, $app;
