@@ -1227,7 +1227,7 @@ class mrModel extends model
             if(strpos($errorMsg, '/') === 0)
             {
                 $result = preg_match($errorMsg, $message, $matches);
-                if($result) $errorMessage = sprintf(zget($this->lang->mr->errorLang, $key), $matches[1]);
+                if($result) $errorMessage = sprintf(zget($this->lang->mr->errorLang, $key), zget($matches, 1, $matches[0]));
             }
             elseif($message == $errorMsg)
             {
