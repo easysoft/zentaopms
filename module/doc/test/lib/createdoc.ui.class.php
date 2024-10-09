@@ -22,8 +22,8 @@ class createDocTester extends tester
         $form->dom->search(array("文档标题,=,{$draftName->dftName}"));
         $form->wait(1);
 
-        if($form->dom->fstDocLabel->getText() != '草稿') return $this->failed('创建草稿失败。');
-        return $this->success('创建草稿成功。');
+        if($form->dom->fstDocLabel->getText() != '草稿') return $this->failed('创建草稿失败');
+        return $this->success('创建草稿成功');
     }
 
     /**
@@ -50,8 +50,8 @@ class createDocTester extends tester
         $form->dom->search(array("文档标题,=,{$docName->dcName}"));
         $form->wait(1);
 
-        if($form->dom->fstDocName->getText() != $docName->dcName) return $this->failed('文档创建失败');
-        return $this->success('文档创建成功');
+        if($form->dom->fstDocName->getText() != $docName->dcName) return $this->failed('创建文档失败');
+        return $this->success('创建文档成功');
     }
 
     /*
@@ -85,8 +85,8 @@ class createDocTester extends tester
         $form->dom->product->picker($productName->secProduct);
         $form->dom->releaseBtn->click();
 
-        if($form->dom->leftListHeader->getText() != $productName->secProduct) return $this->failed('切换产品创建文档失败');
-        return $this->success('切换产品创建文档成功');
+        if($form->dom->leftListHeader->getText() != $productName->secProduct) return $this->failed('创建产品文档失败');
+        return $this->success('创建产品文档成功');
     }
 
     /*
@@ -138,8 +138,8 @@ class createDocTester extends tester
         $form->dom->search(array("文档标题,=,{$docName->dcName}"));
         $form->wait(1);
 
-        if($form->dom->fstDocName->getText() != $docName) return $this->failed('创建项目空间文档失败。');
-        return $this->success('创建项目空间文档成功。');
+        if($form->dom->fstDocName->getText() != $docName->dcName) return $this->failed('创建项目文档失败');
+        return $this->success('创建项目文档成功');
     }
 
     /*
@@ -175,7 +175,25 @@ class createDocTester extends tester
         $this->openUrl('doc', 'teamSpace');
         $form->dom->search(array("文档标题,=,{$docName->dcName}"));
         $form->wait(1);
-        if($form->dom->fstDocName->getText() != $docName->dcName) return $this->failed('创建团队空间文档失败。');
-        return $this->success('创建团队空间文档成功。');
+        if($form->dom->fstDocName->getText() != $docName->dcName) return $this->failed('创建团队文档失败');
+        return $this->success('创建团队文档成功');
+    }
+
+    /*
+     * 创建接口文档。
+     * Create a api.
+     *
+     * @param  string $apiLib
+     * @param  string $apiDoc
+     * @param  string $apiPath
+     * @access public
+     * @return void
+     */
+    public function createApiDoc($apiLib, $apiDoc, $apiPath)
+    {
+        /*进入接口空间创建独立接口库*/
+        $this->openUrl('api', 'index');
+        $form = $this->loadPage('api', 'index');
+        $form->dom->createLibBtn->click();
     }
 }
