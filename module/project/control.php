@@ -600,6 +600,8 @@ class project extends control
         $this->executeHooks($projectID);
         list($userPairs, $userList) = $this->projectZen->buildUsers();
 
+        if($this->config->edition != 'open') $this->view->workflowGroups = $this->loadModel('workflowgroup')->getPairs('project', $project->model, $project->hasProduct);
+
         $this->view->title        = $this->lang->project->view;
         $this->view->projectID    = $projectID;
         $this->view->project      = $project;
@@ -1681,8 +1683,7 @@ class project extends control
     {
         if($this->config->edition == 'open') return false;
 
-        $projectType    = $hasProduct == 1 ? 'product' : 'project';
-        $workflowGroups = $this->loadModel('workflowgroup')->getPairs('project', $model, $projectType);
+        $workflowGroups = $this->loadModel('workflowgroup')->getPairs('project', $model, $hasProduct);
 
         $items = array();
         foreach($workflowGroups as $id => $name) $items[] = array('text' => $name, 'value' => $id);
