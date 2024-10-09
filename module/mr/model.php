@@ -339,7 +339,7 @@ class mrModel extends model
         $actionID = $this->loadModel('action')->create($this->moduleName, $MRID, 'edited');
         $changes  = common::createChanges($oldMR, $MR);
         if(!empty($changes)) $this->action->logHistory($actionID, $changes);
-        $this->createMRLinkedAction($MRID, 'editmr', $MR->editedDate);
+        $this->createMRLinkedAction($MRID, 'editmr' . $this->moduleName, $MR->editedDate);
 
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
@@ -1041,7 +1041,7 @@ class mrModel extends model
             $relation->BID      = $objectID;
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
 
-            $this->action->create($type, (int)$objectID, 'createmr', '', $comment);
+            $this->action->create($type, (int)$objectID, 'create' . $this->moduleName, '', $comment);
         }
 
         return !dao::isError();
@@ -1090,7 +1090,7 @@ class mrModel extends model
             {
                 $relation->BID = $objectID;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
-                $this->action->create($type, (int)$objectID, 'createmr', '', $MRCreateAction);
+                $this->action->create($type, (int)$objectID, 'create' . $this->moduleName, '', $MRCreateAction);
             }
         }
         return !dao::isError();
@@ -1162,7 +1162,7 @@ class mrModel extends model
      */
     public function logMergedAction(object $MR): bool
     {
-        $this->loadModel('action')->create($this->moduleName, $MR->id, 'mergedmr');
+        $this->loadModel('action')->create($this->moduleName, $MR->id, 'merged' . $this->moduleName);
 
         $product = $this->getMRProduct($MR);
         foreach(array('story', 'bug', 'task') as $type)
@@ -1170,7 +1170,7 @@ class mrModel extends model
             $objects = $this->getLinkList($MR->id, $product ? $product->id : 0, $type);
             foreach($objects as $object)
             {
-                $this->action->create($type, $object->id, 'mergedmr', '', helper::createLink($this->moduleName, 'view', "mr={$MR->id}"));
+                $this->action->create($type, $object->id, 'merged' . $this->moduleName, '', helper::createLink($this->moduleName, 'view', "mr={$MR->id}"));
             }
         }
 
@@ -1280,7 +1280,7 @@ class mrModel extends model
         $this->dao->delete()->from(TABLE_MR)->where('id')->eq($MRID)->exec();
 
         $this->loadModel('action')->create($this->moduleName, $MRID, 'deleted', '', $MR->title);
-        $this->createMRLinkedAction($MRID, 'removemr');
+        $this->createMRLinkedAction($MRID, 'remove' . $this->moduleName);
         return !dao::isError();
     }
 
