@@ -17,12 +17,14 @@ class docZen extends doc
      * @param  array     $files
      * @param  array     $fileIcon
      * @param  array     $sourcePairs
+     * @param  bool      $skipImageWidth
      * @access protected
-     * @return arary
+     * @return array
      */
-    protected function processFiles(array $files, array $fileIcon, array $sourcePairs): array
+    protected function processFiles(array $files, array $fileIcon, array $sourcePairs, bool $skipImageWidth = false): array
     {
-        $this->loadModel('file');
+        if(!$skipImageWidth) $this->loadModel('file');
+
         foreach($files as $fileID => $file)
         {
             if(empty($file->pathname))
@@ -36,8 +38,12 @@ class docZen extends doc
             $file->sourceName = isset($sourcePairs[$file->objectType][$file->objectID]) ? $sourcePairs[$file->objectType][$file->objectID] : '';
             $file->sizeText   = number_format($file->size / 1024, 1) . 'K';
 
-            $imageSize = $this->file->getImageSize($file);
-            $file->imageWidth = isset($imageSize[0]) ? $imageSize[0] : 0;
+            if(!$skipImageWidth)
+            {
+                $imageSize = $this->file->getImageSize($file);
+                $file->imageWidth = isset($imageSize[0]) ? $imageSize[0] : 0;
+            }
+
             if($file->objectType == 'requirement')
             {
                 $file->objectName = $this->lang->URCommon . ' : ';

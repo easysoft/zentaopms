@@ -1458,9 +1458,8 @@ class doc extends control
         $this->app->rawMethod = $rawMethod;
 
         $files       = $this->doc->getLibFiles($type, $objectID, $browseType, 0, $orderBy, $pager);
-        $fileIcon    = $this->doc->getFileIcon($files);
         $sourcePairs = $this->doc->getFileSourcePairs($files);
-        $files       = $this->docZen->processFiles($files, $fileIcon, $sourcePairs);
+        $files       = $this->docZen->processFiles($files, array(), $sourcePairs, true);
 
         echo json_encode(array_values($files)); // $this->send($files); not work.
     }
