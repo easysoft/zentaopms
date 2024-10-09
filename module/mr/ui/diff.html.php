@@ -126,6 +126,9 @@ panel
                 set::onClickItem(jsRaw('window.treeClick'))
             )
         ),
+        on::click('.inline-appose')->call('inlineAppose'),
+        on::click('#monacoTabs .monaco-close')->call('closeTab', jsRaw('this')),
+        on::click('#monacoTabs .menu-item a')->call('changeDiffType', jsRaw('this')),
         a(set::className('iframe'), setData('size', '1200px'), setData('toggle', 'modal'), set::id('linkObject'))
     )
 );
