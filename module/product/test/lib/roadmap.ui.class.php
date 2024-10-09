@@ -2,7 +2,16 @@
 include dirname(__FILE__, 5) . '/test/lib/ui.php';
 class roadmapTester extends tester
 {
-    public function getIterationCount($productID, $num)
+    /**
+     * 检查迭代次数
+     * check the count of iteration
+     *
+     * @param $productID 产品ID
+     * @param $num       迭代次数
+     *
+     * @return mixed
+     */
+    public function checkIterationCount($productID, $num)
     {
         $form = $this->initForm('product', 'roadmap', $productID, 'appIframe-product');
         $iterationInfo  = $form->dom->iterationInfo->getText();
