@@ -115,7 +115,7 @@ r($tester->checkTab('closedTab', '2'))       && p('status,message') && e('SUCCES
 r($tester->checkTab('cancelTab', '1'))       && p('status,message') && e('SUCCESS,cancelTab下显示条数正确');       //检查已取消标签下显示条数
 r($tester->checkTab('delayedTab', '1'))      && p('status,message') && e('SUCCESS,delayedTab下显示条数正确');      //检查已延期标签下显示条数
 /* 批量修改状态 */
-#r($tester->batchEditStatus('closed'))        && p('status,message') && e('SUCCESS,批量修改状态为closed成功');
+r($tester->batchEditStatus('closed'))        && p('status,message') && e('SUCCESS,批量修改状态为closed成功');
 r($tester->batchEditStatus('cancel'))        && p('status,message') && e('SUCCESS,批量修改状态为cancel成功');
 /* 批量指派 */
 r($tester->batchAssign())                    && p('status,message') && e('SUCCESS,批量指派成功');
