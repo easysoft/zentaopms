@@ -37,6 +37,7 @@ $lang->design->createdDate   = '創建時間';
 $lang->design->basicInfo     = '基本信息';
 $lang->design->noAssigned    = '未指派';
 $lang->design->comment       = '註釋';
+$lang->design->project       = '所属项目';
 
 /* 動作列表. */
 $lang->design->common       = '設計';
