@@ -40,8 +40,22 @@ class think3c extends thinkModel
 
     protected function buildMulticolumnContent(object $step, int $blockID): array
     {
-        $title   = '';
+        $title  = '';
+        $colKey = $step->link['column'][0];
+        if(isset($step->options->fields[$colKey - 1])) $title = $step->options->fields[$colKey - 1];
+
+        $result = array();
+        foreach($step->answer['result'] as $col => $answer)
+        {
+            $answerKey = 'col' . $colKey;
+            if($col == $answerKey) $result = $answer;
+        }
+
         $content = array();
+        foreach($result as $item)
+        {
+            if(!empty($item)) $content[] = div(setClass('mt-0.5'), $item);
+        }
 
         return empty($content) ? array() : array
         (
