@@ -70,7 +70,7 @@ zui::docApp
     set::privs($privs),
     set::fileUrl($fileUrl),
     set::lang($langData),
-    set::uploadUrl(createLink('file', 'ajaxUpload', 'uid={uid}&objectType={objectType}&objectID={objectID}&extra={extra}&field={field}&api={api}')),
+    set::uploadUrl(createLink('file', 'ajaxUpload', 'uid={uid}&objectType={objectType}&objectID={objectID}&extra={extra}&field={field}&api={api}&onlyImage=0')),
     set::downloadUrl(createLink('file', 'ajaxQuery', 'fileID={id}&objectType={objectType}&objectID={objectID}&title={title}&extra={extra}&stream=0')),
     set::sessionStr(session_name() . '=' . session_id()),
     set('$options', jsRaw('window.setDocAppOptions'))
