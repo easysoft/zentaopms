@@ -542,7 +542,7 @@ class biModel extends model
             $useField = in_array($useField, $fieldList) ? $useField : 'id';
             $options = $this->dao->select("id, {$useField}")->from($table)->fetchPairs();
             // htmlspecialchars values
-            foreach($options as $key => $value) $options[$key] = htmlspecialchars($value);
+            foreach($options as $key => $value) $options[$key] = str_replace('"', '', htmlspecialchars_decode($value));
         }
 
         return $options;
