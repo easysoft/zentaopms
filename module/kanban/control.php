@@ -1698,6 +1698,14 @@ class kanban extends control
         return print(json_encode(array('items' => $laneList, 'name' => $field)));
     }
 
+    /**
+     * 获取泳道的列。
+     * Ajax get columns by lane id.
+     *
+     * @param  int    $laneID
+     * @access public
+     * @return string
+     */
     public function ajaxGetColumns(int $laneID)
     {
         $lane = $this->kanban->getLaneByID($laneID);
