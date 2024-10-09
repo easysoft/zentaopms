@@ -64,6 +64,25 @@ class think3c extends thinkModel
         );
     }
 
+    protected function buildResultCard(array $steps, int $key): array
+    {
+        $questionList = array();
+        foreach($steps as $step)
+        {
+            if(is_string($step->link))    $step->link = json_decode($step->link, true);
+            if(is_string($step->answer))  $step->answer = json_decode($step->answer, true);
+            if(is_string($step->options)) $step->options = json_decode($step->options);
+
+            $resultCard = array();
+            if($step->link['showMethod'] == 2)
+            {
+                $resultCard = $this->buildQuestionItem($step);
+            }
+            if(!empty($resultCard)) $questionList[] = div(setClass('w-64 bg-canvas overflow-y-auto scrollbar-thin p-2 shadow card hidden absolute', "in_area-{$key}", "card-{$step->options->questionType}"), $resultCard);
+        }
+        return $questionList;
+    }
+
     protected function buildBody(): node
     {
         global $lang, $app;
