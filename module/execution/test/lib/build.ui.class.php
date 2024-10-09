@@ -13,7 +13,7 @@ class buildTester extends tester
      */
     public function switchProduct($product, $expectNum)
     {
-        $form = $this->initForm('execution', 'build', array('execution' => $executionId), 'appIframe-execution');
+        $form = $this->initForm('execution', 'build', array('execution' => '2' ), 'appIframe-execution');
         if($product != '') $form->dom->product->picker($product);
         $form->wait(1);
         $num = explode(' ', $form->dom->num->getText())[1];
