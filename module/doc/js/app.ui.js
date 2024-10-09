@@ -132,28 +132,30 @@ function handleDeleteModule(module)
 
 function handleCreateDoc(doc, spaceID, libID, moduleID)
 {
-    const docApp = getDocApp();
+    const docApp    = getDocApp();
     const spaceType = docApp.signals.spaceType.value;
-    const url = $.createLink('doc', 'create', `objectType=${spaceType}&objectID=${Math.max(spaceID, 0)}&libID=${libID}&moduleID=${moduleID}`);
+    const url       = $.createLink('doc', 'create', `objectType=${spaceType}&objectID=${Math.max(spaceID, 0)}&libID=${libID}&moduleID=${moduleID}`);
+    const docData   =
+    {
+        content    : doc.content,
+        status     : doc.status || 'normal',
+        contentType: doc.contentType,
+        type       : 'text',
+        lib        : libID,
+        module     : moduleID,
+        title      : doc.title,
+        keywords   : doc.keywords,
+        contactList: '',
+        acl        : 'private',
+        space      : spaceType,
+        uid        : doc.uid || `doc${doc.id}`,
+    };
     return new Promise((resolve) =>
     {
-        $.post(url,
+        $.post(url, docData, (res) =>
         {
-            content    : doc.content,
-            status     : 'normal',
-            contentType: doc.contentType,
-            type       : 'text',
-            lib        : libID,
-            module     : moduleID,
-            title      : doc.title,
-            keywords   : doc.keywords,
-            contactList: '',
-            acl        : 'private',
-            space      : spaceType,
-            uid        : doc.uid || `doc-${doc.id}`,
-        }, (res) => {
             const data = JSON.parse(res);
-            resolve($.extend(doc, {id: data.id}, data.doc));
+            resolve($.extend(doc, {id: data.id}, data.doc, {status: doc.status || data.status}));
         });
     });
 }
@@ -168,7 +170,7 @@ function handleSaveDoc(doc)
     $.post(url,
     {
         content    : doc.content,
-        status     : 'normal',
+        status     : doc.status || 'normal',
         contentType: doc.contentType,
         type       : 'text',
         lib        : libID,
@@ -178,7 +180,7 @@ function handleSaveDoc(doc)
         contactList: '',
         acl        : 'private',
         space      : spaceType,
-        uid        : doc.uid || `doc-${doc.id}`,
+        uid        : doc.uid || `doc${doc.id}`,
     }, (res) => {
         console.log('handleSaveDoc.res', res);
         docApp.update('doc', doc);
