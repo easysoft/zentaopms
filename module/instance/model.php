@@ -384,9 +384,9 @@ class instanceModel extends model
      * @param  int          $id
      * @param  object|array $newInstance
      * @access public
-     * @return int
+     * @return bool
      */
-    public function updateByID(int $id, object|array $newInstance)
+    public function updateByID(int $id, object|array $newInstance): bool
     {
         $this->dao->update(TABLE_INSTANCE)->data($newInstance, 'memory_kb,cpu,disk_gb')
             ->autoCheck()
