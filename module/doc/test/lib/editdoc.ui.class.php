@@ -37,8 +37,8 @@ class createDocTester extends tester
         $form->dom->search(array("文档标题,=,{$editDocName->editName}"));
         $form->wait(1);
 
-        if($form->dom->fstDocName->getText() != $editDocName->editName) return $this->failed('文档编辑失败');
-        return $this->success('文档编辑成功');
+        if($form->dom->fstDocName->getText() != $editDocName->editName) return $this->failed('编辑文档失败');
+        return $this->success('编辑文档成功');
     }
 
     /**
@@ -67,10 +67,10 @@ class createDocTester extends tester
         $form->dom->lib->picker($libName->myDocLib);
         $form->wait(1);
         $form->dom->btn($this->lang->save)->click();
-        $form->wait(1);
+        $form->wait(2);
 
-        if($form->dom->leftListHeader->getText() != $llibName->myDocLib) return $this->failed('文档移动失败');
-        return $this->success('文档移动成功');
+        if($form->dom->leftListHeader->getText() != $libName->myDocLib) return $this->failed('移动文档失败');
+        return $this->success('移动文档成功');
     }
 
     /**
