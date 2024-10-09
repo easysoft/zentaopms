@@ -3,3 +3,4 @@
 .as-subtitle {opacity: 0.5; text-wrap: nowrap; font-weight: 700;}
 .is-collapsed .icon-angle-top:before { content: "\e313"; }
 .card.selected .child-item .icon {color: var(--color-primary-500)}
+#kanbanList .avatar.size-xs {font-size: 0.5rem;}
