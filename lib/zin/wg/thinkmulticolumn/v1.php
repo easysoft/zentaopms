@@ -148,14 +148,14 @@ class thinkMulticolumn extends thinkQuestion
                     setClass('step-required'),
                     set::width('1/2'),
                     set::label($lang->thinkstep->label->required,),
-                    set::labelHint(!empty($quotedQuestions) ? $lang->thinkstep->tips->required : null),
+                    set::labelHint(!empty($quotedQuestions) ? $lang->thinkstep->tips->required : (!empty($step->link) ? $lang->thinkstep->tips->requiredOfLink : null)),
                     radioList
                     (
                         set::name('options[required]'),
                         set::inline(true),
                         set::value($required),
                         set::items($requiredItems),
-                        set::disabled(!empty($quotedQuestions)),
+                        set::disabled(!empty($quotedQuestions) || !empty($step->link)),
                         on::change()->toggleClass('.required-options', 'hidden', 'target.value == 0')
                     )
                 ),
