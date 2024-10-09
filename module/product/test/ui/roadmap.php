@@ -27,13 +27,12 @@ $productplan->begin->range('`2024-09-19`,`2024-09-20`,`2024-09-21`,`2024-09-22`,
 $productplan->end->range('`2024-10-19`,`2024-10-20`,`2024-10-21`,`2024-10-22`,`2024-10-23`,`2024-10-24`,`2024-10-25`');
 $productplan->status->range('wait{3},doing{2},done{1},closed{1}');
 $productplan->gen(7);
-
 zendata('release')->loadYaml('release', false, 2)->gen(10);
 
 $tester = new roadmapTester();
 $tester->login();
 $productID['productID'] = 1;
-$num = 8;
-r($tester->checkIterationCount($productID, $num)) && p('message,status') && e('迭代次数正确,SUCCESS');
+$num = 8;//迭代次数
+r($tester->checkIterationCount($productID, $num)) && p('message,status') && e('迭代次数正确,SUCCESS');//检查产品迭代次数
 
 $tester->closeBrowser();
