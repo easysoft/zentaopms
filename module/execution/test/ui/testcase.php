@@ -54,4 +54,7 @@ $projectCase->gen(12);
 $tester = new testcaseTester();
 $tester->login();
 
+r($tester->switchProduct('firstProduct', '9'))  && p('status,message') && e('SUCCESS,切换产品查看用例成功');
+r($tester->switchProduct('secondProduct', '5')) && p('status,message') && e('SUCCESS,切换产品查看用例成功');
+r($tester->switchProduct('thirdProduct', '4'))  && p('status,message') && e('SUCCESS,切换产品查看用例成功');
 $tester->closeBrowser();
