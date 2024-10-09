@@ -970,6 +970,7 @@ CREATE TABLE IF NOT EXISTS `zt_job` (
   `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `frame` varchar(20) NOT NULL DEFAULT '',
   `engine` varchar(20) NOT NULL DEFAULT '',
+  `autoRun` enum('0','1') NOT NULL DEFAULT '1',
   `server` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `pipeline` varchar(500) NOT NULL DEFAULT '',
   `triggerType` varchar(255) NOT NULL DEFAULT '',

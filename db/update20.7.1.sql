@@ -7,3 +7,8 @@ CREATE OR REPLACE VIEW `ztv_daytaskfinish` AS select COUNT(1) AS `taskfinish`,CA
 CREATE OR REPLACE VIEW `ztv_daybugopen` AS select COUNT(1) AS `bugopen`,CAST(`zt_action`.`date` AS DATE) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'bug') and (`zt_action`.`action` = 'opened')) group by CAST(`zt_action`.`date` AS DATE);
 CREATE OR REPLACE VIEW `ztv_daybugresolve` AS select COUNT(1) AS `bugresolve`,CAST(`zt_action`.`date` AS DATE) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'bug') and (`zt_action`.`action` = 'resolved')) group by CAST(`zt_action`.`date` AS DATE);
 CREATE OR REPLACE VIEW `ztv_dayactions` AS select COUNT(1) AS `actions`,CAST(`zt_action`.`date` AS DATE) AS `day` from `zt_action` group by CAST(`zt_action`.`date` AS DATE);
+
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'job', 'trigger' FROM `zt_grouppriv` WHERE `module` = 'job' AND `method` = 'create';
+
+ALTER TABLE `zt_job` ADD `autoRun` enum('0', '1') NOT NULL DEFAULT '1' AFTER `engine`;
+UPDATE `zt_job` SET `autoRun` = '0' WHERE `triggerType` != '';
