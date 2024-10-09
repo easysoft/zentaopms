@@ -1377,6 +1377,7 @@ CREATE TABLE IF NOT EXISTS `zt_product` (
   `RD` varchar(30) NOT NULL DEFAULT '',
   `feedback` varchar(30) NOT NULL DEFAULT '',
   `ticket` varchar(30) NOT NULL DEFAULT '',
+  `workflowGroup` int(8) NOT NULL DEFAULT '0',
   `acl` enum('open','private','custom') NOT NULL DEFAULT 'open',
   `groups` text NULL,
   `whitelist` text NULL,
