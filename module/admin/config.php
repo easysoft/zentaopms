@@ -5,7 +5,7 @@ $config->admin->log->saveDays = 30;
 if(!isset($config->safe))       $config->safe = new stdclass();
 if(!isset($config->safe->weak)) $config->safe->weak = '123456,password,12345,12345678,qwerty,123456789,1234,1234567,abc123,111111,123123';
 
-$config->admin->menuGroup['system']    = array('custom|mode', 'backup', 'cron', 'action|trash', 'admin|xuanxuan', 'setting|xuanxuan', 'admin|license', 'admin|checkweak', 'admin|resetpwdsetting', 'admin|safe', 'admin|cache', 'custom|timezone', 'search|buildindex', 'admin|tableengine', 'ldap', 'custom|libreoffice', 'conference', 'client', 'system|browsebackup', 'system|restorebackup');
+$config->admin->menuGroup['system']    = array('custom|mode', 'backup', 'cron', 'action|trash', 'admin|xuanxuan', 'setting|xuanxuan', 'admin|license', 'admin|checkweak', 'admin|resetpwdsetting', 'admin|safe', 'admin|cache', 'custom|timezone', 'search|buildindex', 'admin|tableengine', 'ldap', 'custom|libreoffice', 'conference', 'watermark', 'client', 'system|browsebackup', 'system|restorebackup');
 $config->admin->menuGroup['company']   = array('dept', 'company', 'user', 'group', 'tutorial');
 $config->admin->menuGroup['switch']    = array('admin|setmodule');
 $config->admin->menuGroup['model']     = array('auditcl', 'stage', 'design', 'cmcl', 'reviewcl', 'custom|required', 'custom|set', 'custom|flow', 'custom|code', 'custom|percent','custom|estimate', 'custom|hours', 'subject', 'process', 'activity', 'zoutput', 'classify', 'holiday', 'reviewsetting');
