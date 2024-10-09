@@ -55,6 +55,19 @@ $storyspec->version->range('1');
 $storyspec->title->range('激活研发需求,激活用户需求,激活业务需求');
 $storyspec->gen(3);
 
+$action = zenData('action');
+$action->id->range('1-4');
+$action->objectType->range('product,story,story,story');
+$action->objectID->range('1,1,2,3');
+$action->product->range('`,1,`');
+$action->project->range('0');
+$action->execution->range('0');
+$action->actor->range('admin');
+$action->action->range('opened');
+$action->read->range('0');
+$action->vision->range('rnd');
+$action->gen(4);
+
 $tester = new changeStoryTester();
 $tester->login();
 
