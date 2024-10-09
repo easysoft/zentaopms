@@ -29,3 +29,5 @@ ALTER TABLE `zt_workflowaction` DROP INDEX `unique`;
 CREATE UNIQUE INDEX `unique` ON `zt_workflowaction`(`group`,`module`,`action`,`vision`);
 ALTER TABLE `zt_workflowlayout` DROP INDEX `unique`;
 CREATE UNIQUE INDEX `unique` ON `zt_workflowlayout`(`group`,`module`,`action`,`ui`,`field`,`vision`);
+
+ALTER TABLE `zt_product` ADD `workflowGroup` int(8) NOT NULL DEFAULT '0' AFTER `ticket`;

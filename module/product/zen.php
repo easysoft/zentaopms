@@ -253,6 +253,11 @@ class productZen extends product
         if(isset($fields['program'])) $fields['program']['options'] = $this->loadModel('program')->getTopPairs('noclosed');
         if(isset($fields['line']))    $fields['line']['options'] = $this->product->getLinePairs($programID, true);
 
+        if($this->config->edition != 'open')
+        {
+            $fields['workflowGroup']['options'] = $this->loadModel('workflowGroup')->getPairs();
+        }
+
         return $fields;
     }
 
