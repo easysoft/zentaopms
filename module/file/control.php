@@ -553,6 +553,7 @@ class file extends control
     {
         if($fileID) return $this->fetch('file', 'read', "fileID=$fileID&stream=$stream");
 
+        if(!empty($title)) $title = base64_decode($title);
         $file = $this->file->query($objectType, $objectID, $title, $extra);
         if(empty($file)) return $this->send(array('result' => 'fail', 'message' => $this->lang->file->fileNotFound, 'load' => helper::createLink('my', 'index'), 'closeModal' => true));
         $fileID = $file->id;
