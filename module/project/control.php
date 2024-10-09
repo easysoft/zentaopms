@@ -1668,4 +1668,25 @@ class project extends control
         $this->view->currentMethod = $currentMethod;
         $this->display();
     }
+
+    /**
+     * Ajax get workflow group items.
+     *
+     * @param  string $model
+     * @param  int    $hasProduct
+     * @access public
+     * @return void
+     */
+    public function ajaxGetWorkflowGroups(string $model, int $hasProduct)
+    {
+        if($this->config->edition == 'open') return false;
+
+        $projectType    = $hasProduct == 1 ? 'product' : 'project';
+        $workflowGroups = $this->loadModel('workflowgroup')->getPairs('project', $model, $projectType);
+
+        $items = array();
+        foreach($workflowGroups as $id => $name) $items[] = array('text' => $name, 'value' => $id);
+
+        return $this->send(array('items' => array_values($items), 'defaultValue' => key($workflowGroups)));
+    }
 }

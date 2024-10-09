@@ -31,6 +31,7 @@ ALTER TABLE `zt_workflowlayout` DROP INDEX `unique`;
 CREATE UNIQUE INDEX `unique` ON `zt_workflowlayout`(`group`,`module`,`action`,`ui`,`field`,`vision`);
 
 ALTER TABLE `zt_product` ADD `workflowGroup` int(8) NOT NULL DEFAULT '0' AFTER `ticket`;
+ALTER TABLE `zt_project` ADD `workflowGroup` int(8) NOT NULL DEFAULT '0' AFTER `hasProduct`;
 ALTER TABLE `zt_workflowgroup` ADD `main` enum('0','1') NOT NULL DEFAULT '0' AFTER `vision`;
 ALTER TABLE `zt_workflowgroup` ADD `code` varchar(30) NOT NULL DEFAULT '' AFTER `name`;
 

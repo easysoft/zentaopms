@@ -327,6 +327,8 @@ class projectZen extends project
             }
         }
 
+        if($this->config->edition != 'open') $this->view->workflowGroups = $this->loadModel('workflowgroup')->getPairs('project', $model);
+
         /* Get copy projects. */
         $copyProjects     = $this->project->getPairsByModel($model, '', 0, false);
         $copyProjectPairs = !commonModel::isTutorialMode() ? array_combine(array_keys($copyProjects), array_column($copyProjects, 'name')) : $copyProjects;

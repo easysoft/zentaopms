@@ -1468,6 +1468,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `name` varchar(90) NOT NULL DEFAULT '',
   `code` varchar(45) NOT NULL DEFAULT '',
   `hasProduct` tinyint(1) unsigned NOT NULL DEFAULT 1,
+  `workflowGroup` int(8) NOT NULL DEFAULT '0',
   `begin` date NULL,
   `end` date NULL,
   `firstEnd` date DEFAULT NULL,

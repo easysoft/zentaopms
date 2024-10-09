@@ -192,7 +192,7 @@ div
                         icon('lane', setClass('pr-1')),
                         $product->lineName
                     ) : null,
-                    $product->workflowGroup && $config->edition != 'open' ? div
+                    $config->edition != 'open' && $product->workflowGroup ? div
                     (
                         setClass('clip w-1/3'),
                         set::title($lang->product->workflowGroup),
