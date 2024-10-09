@@ -195,5 +195,14 @@ class createDocTester extends tester
         $this->openUrl('api', 'index');
         $form = $this->loadPage('api', 'index');
         $form->dom->createLibBtn->click();
+        $form->wait(1);
+        $form->dom->name->setValue($apiLib);
+        $form->dom->btn($this->lang->save)->click();
+        /*创建接口文档*/
+        $form->dom->createApiBtn->click();
+        $form->dom->title->setValue($apiDoc->docA);
+        $form->dom->path->setValue($apiPath->pathA);
+        $form->dom->btn($this->lang->save)->click();
+        $form->wait(1);
     }
 }
