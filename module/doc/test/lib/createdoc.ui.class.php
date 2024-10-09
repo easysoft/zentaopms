@@ -204,5 +204,10 @@ class createDocTester extends tester
         $form->dom->path->setValue($apiPath->pathA);
         $form->dom->btn($this->lang->save)->click();
         $form->wait(1);
+        $this->openUrl('api', 'index');
+        $form->dom->search(array("接口名称,=,{$apiDoc->docA}"));
+        $form->wait(1);
+        if($form->dom->fstDocPath->getText() != $apiPath->pathA) return $this->failed('创建接口文档失败。');
+        return $this->success('创建接口文档成功。');
     }
 }
