@@ -55,9 +55,9 @@ $testtask->product->range('1, 2');
 $testtask->name->range('1-100');
 $testtask->execution->range('2{4}, 3{2}');
 $testtask->build->range('1-6');
-$testtask->status->range('wait{4}, doing{4}, done{1}, blocked{3}');
+$testtask->status->range('wait{5}, doing{5}, done{3}, blocked{2}');
 $testtask->deleted->range('1, 0{100}');
-$testtask->gen(12);
+$testtask->gen(15);
 
 $tester = new testtaskTester();
 $tester->login();
