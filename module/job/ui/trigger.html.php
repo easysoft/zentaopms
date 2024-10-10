@@ -44,3 +44,37 @@ jsVar('commentField', formRow
         html($lang->job->commitEx)
     )
 )->render());
+jsVar('scheduleField', div
+(
+    setClass('linkage-fields'),
+    formRow
+    (
+        setClass('custom-fields hidden mt-2'),
+        formGroup
+        (
+            set::label(''),
+            set::name('atDay[]'),
+            set::control('checkListInline'),
+            set::items($lang->datepicker->dayNames),
+            set::value($job->atDay)
+        )
+    ),
+    formRow
+    (
+        setClass('custom-fields hidden'),
+        formGroup
+        (
+            set::label(''),
+            set::width('1/2'),
+            inputGroup
+            (
+                $lang->job->atTime,
+                timePicker
+                (
+                    set::name('atTime'),
+                    set::value($job->atTime)
+                )
+            )
+        )
+    )
+)->render());
