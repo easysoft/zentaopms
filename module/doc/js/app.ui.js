@@ -8,6 +8,12 @@ function getDocApp()
     return docApp ? docApp.$ : null;
 }
 
+function getLang(key)
+{
+    const docApp = getDocApp();
+    return docApp ? docApp.props.lang[key] : '';
+}
+
 function processDocAppAction(action, docApp)
 {
     docApp = docApp || getDocApp();
@@ -303,7 +309,7 @@ function getFileActions(file, doc)
 function getDocListActions(info)
 {
     return [{
-        text: 'Batch Move',
+        text: getLang('moveTo'),
         onClick: function()
         {
             /* Get all selected doc id list. */

@@ -42,12 +42,17 @@ $fileUrl    = createLink('file', 'download', 'fileID={id}');
 $fileUrl   .= strpos($fileUrl, '?') === false ? '?' : '&';
 $fileUrl   .= $sessionStr;
 
+/**
+ * Setting language data for frontend. Use getLang('xxx') in js/app.ui.js.
+ * 设置前端语言数据。 在 js/app.ui.js 中使用 getLang('xxx') 来访问语言数据。
+ */
 $langData = new stdclass();
 $langData->filePreview           = $lang->file->preview;
 $langData->fileDownload          = $lang->file->download;
 $langData->fileDelete            = $lang->file->delete;
 $langData->fileRename            = $lang->file->edit;
 $langData->fileConfirmDelete     = $lang->file->confirmDelete;
+$langData->moveTo                = $lang->doc->moveTo;
 
 zui::docApp
 (
