@@ -58,7 +58,8 @@ function handleSwitchView(view, location, info)
 
 function handleCreateSpace()
 {
-    const params = type == 'mine' ? 'type=mine' : '';
+    const docApp = getDocApp();
+    const params = docApp.spaceType == 'mine' ? 'type=mine' : '';
     const url    = $.createLink('doc', 'createSpace', params);
     zui.Modal.open({size: 'sm', url: url});
 }

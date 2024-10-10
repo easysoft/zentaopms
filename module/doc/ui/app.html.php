@@ -10,7 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('type', $type);
 $libTypes = array();
 if($type === 'project')
 {
