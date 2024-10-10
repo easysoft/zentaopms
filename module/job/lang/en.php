@@ -12,6 +12,8 @@ $lang->job->dirChange     = 'Directory Changed';
 $lang->job->buildTag      = 'Build Tag';
 $lang->job->execSuccess   = 'Build success';
 $lang->job->trigger       = 'Trigger';
+$lang->job->autoRun       = 'Is it triggered';
+$lang->job->addTrigger    = 'Add Trigger';
 
 $lang->job->browseAction = 'Pipeline List';
 
@@ -69,9 +71,6 @@ $lang->job->selectPipeline = 'Please select a pipeline';
 $lang->job->buildTypeList['build']          = 'Only Build';
 $lang->job->buildTypeList['buildAndDeploy'] = 'Build And Deploy';
 $lang->job->buildTypeList['buildAndTest']   = 'Build And Test';
-
-$lang->job->zentaoTrigger['1'] = 'Yes';
-$lang->job->zentaoTrigger['0'] = 'No';
 
 $lang->job->triggerTypeList['tag']      = 'Tag';
 $lang->job->triggerTypeList['commit']   = 'Code Commit';

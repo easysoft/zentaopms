@@ -12,6 +12,8 @@ $lang->job->dirChange     = '目录改动';
 $lang->job->buildTag      = '打标签';
 $lang->job->execSuccess   = '执行成功';
 $lang->job->trigger       = '触发器';
+$lang->job->autoRun       = '是否触发';
+$lang->job->addTrigger    = '添加触发方式';
 
 $lang->job->browseAction = '流水线列表';
 
@@ -69,9 +71,6 @@ $lang->job->selectPipeline = '请选择流水线';
 $lang->job->buildTypeList['build']          = '仅构建';
 $lang->job->buildTypeList['buildAndDeploy'] = '构建部署';
 $lang->job->buildTypeList['buildAndTest']   = '构建测试';
-
-$lang->job->zentaoTrigger['1'] = '是';
-$lang->job->zentaoTrigger['0'] = '否';
 
 $lang->job->triggerTypeList['tag']      = '打标签';
 $lang->job->triggerTypeList['commit']   = '提交注释包含关键字';
