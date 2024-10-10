@@ -296,6 +296,34 @@ function getFileActions(file, doc)
     ].filter(Boolean);
 }
 
+/**
+ * Get actions of foot toolbar in doc table.
+ * 获取文档列表页底部工具栏的操作项。
+ */
+function getDocListActions(info)
+{
+    return [{
+        text: 'Batch Move',
+        onClick: function()
+        {
+            /* Get all selected doc id list. */
+            const selections = info.dtable.getChecks();
+            console.log('Batch move doc', selections, info);
+        },
+    }];
+}
+
+const actionsMap =
+{
+    'doc-list': getDocListActions
+};
+
+function getActions(type, info)
+{
+    const builder = actionsMap[type];
+    if(builder) return builder.call(this, info);
+}
+
 window.setDocAppOptions = function(_, options)
 {
     const privs          = options.privs;
@@ -319,6 +347,7 @@ window.setDocAppOptions = function(_, options)
         onCollectDoc  : privs.collect ? handleCollectDoc : null,
         onSwitchView  : handleSwitchView,
         fileActions   : getFileActions,
+        getActions    : getActions,
     };
     return newOptions;
 };
