@@ -14401,6 +14401,7 @@ CREATE TABLE IF NOT EXISTS `zt_opportunity` (
   `actualClosedDate` date NULL,
   `lib` mediumint(8) unsigned NOT NULL default 0,
   `from` mediumint(8) unsigned NOT NULL default 0,
+  `desc` mediumtext NULL,
   `version` smallint(6) NOT NULL default 1,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
