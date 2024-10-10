@@ -931,8 +931,8 @@ class docZen extends doc
      */
     public function getAllSpaces(string $extra = ''): array
     {
-        if(strpos($extra, 'nomine') !== false) return $this->doc->getSubSpaces('custom');
-        if(strpos($extra, 'onlymine') !== false) return array('mine' => $this->lang->doc->spaceList['mine']);
-        return array('mine' => $this->lang->doc->spaceList['mine']) + $this->doc->getSubSpaces('custom');
+        if(strpos($extra, 'nomine') !== false)   return $this->doc->getSubSpaces('custom');
+        if(strpos($extra, 'onlymine') !== false) return $this->doc->getSubSpaces('mine');
+        return $this->doc->getSubSpaces('mine') + $this->doc->getSubSpaces('custom');
     }
 }
