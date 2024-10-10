@@ -47,3 +47,22 @@ window.setValueInput = function(event)
         $(obj).closest('.input-group').find('select').removeAttr('disabled');
     }
 }
+
+window.changeCustomField = function(event)
+{
+    let paramValue = $(event.target).val();
+    paramValue = paramValue.substr(1).toUpperCase();
+    $(event.target).prevAll('input').val(paramValue);
+}
+
+window.changeTriggerType = function(event)
+{
+    const $parentDom = $(event.target).closest('.trigger-box');
+    if($parentDom.find('.linkage-fields').length) $parentDom.find('.linkage-fields').remove();
+
+    const type = $(event.target).val();
+    if(type == 'tag' && repo.SCM == 'Subversion') $parentDom.append(svnField);
+    if(type == 'commit')   $parentDom.append(commentField);
+    if(type == 'schedule') $parentDom.append(scheduleField);
+    $parentDom.find('.hidden').removeClass('hidden');
+}
