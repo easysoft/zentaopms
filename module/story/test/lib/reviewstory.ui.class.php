@@ -49,7 +49,7 @@ class reviewStoryTester extends tester
         $form->dom->btn($this->lang->story->submitReview)->click();
         $form->wait(1);
 
-        //$form = $this->subReviewer->multiPicker(array('reviewer' => 'admin'));
+        $form->dom->subReviewer->multiPicker(array('reviewer' => 'admin'));
         $form->dom->submitReviewSave->click();
         $form->wait(1);
 

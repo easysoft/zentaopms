@@ -15,7 +15,8 @@ class viewPage extends page
             'closeReason'      => "/html/body/div[1]/div/div/div/div[2]/div[2]/div[1]/div[2]/div[2]/div/div[6]/div[2]",
             'activate'         => "//*[@type='submit']",
             'assignToBtn'      => "//*[@type='submit']",
-            'submitReviewSave' => "//*[@type='submit']"
+            'submitReviewSave' => "//*[@type='submit']",
+            'subReviewer'      => "//*[@id='reviewer']"
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }

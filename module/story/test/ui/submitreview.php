@@ -45,7 +45,7 @@ $story->gen(1);
 $storyspec = zenData('storyspec');
 $storyspec->story->range('1');
 $storyspec->version->range('1');
-$storyspec->title->range('激活研发需求,草稿研发需求');
+$storyspec->title->range('草稿研发需求');
 $storyspec->gen(1);
 
 $action = zenData('action');
