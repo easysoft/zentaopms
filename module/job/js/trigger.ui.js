@@ -66,3 +66,44 @@ window.changeTriggerType = function(event)
     if(type == 'schedule') $parentDom.append(scheduleField);
     $parentDom.find('.hidden').removeClass('hidden');
 }
+
+window.toggleAutoRun = function(event)
+{
+    if($(event.target).prop('checked'))
+    {
+        $('input[name=autoRun]').val('0');
+    }
+    else
+    {
+        $('input[name=autoRun]').val('1');
+    }
+}
+
+window.addTrigger = function()
+{
+    if($('#triggerForm .trigger-box').length >= Object.keys(triggerTypeList).length) return;
+
+    $('#triggerForm .trigger-box').last().after(triggerField.replace(/%s/g, window.triggerCount));
+    $('#triggerForm .trigger-box').removeClass('hidden');
+
+    $('#triggerPicker' + window.triggerCount).addClass('form-group-wrapper picker-box');
+    const options = Object.keys(triggerTypeList).map((type) => {
+        return {value: type, text: triggerTypeList[type]}
+    });
+    new zui.Picker('#triggerPicker' + window.triggerCount, {
+        items:         options,
+        name:         `triggerType${window.triggerCount}`,
+        required:     true,
+        defaultValue: options.length ? options[0].value : ''
+    });
+
+    window.triggerCount ++;
+    if($('#triggerForm .trigger-box').length > 1) $('.delete-trigger').removeClass('hidden');
+    if($('#triggerForm .trigger-box').length >= Object.keys(triggerTypeList).length) $('.add-trigger-btn').addClass('hidden');
+}
+
+window.deleteTrigger = function(event)
+{
+    $(event.target).closest('.trigger-box').remove();
+    if($('#triggerForm .trigger-box').length <= 1) $('.delete-trigger').addClass('hidden');
+}
