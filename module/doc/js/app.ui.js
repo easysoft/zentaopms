@@ -52,7 +52,8 @@ function handleSwitchView(view, location, info)
 
 function handleCreateSpace()
 {
-    const url = $.createLink('doc', 'createSpace');
+    const params = type == 'mine' ? 'type=mine' : '';
+    const url    = $.createLink('doc', 'createSpace', params);
     zui.Modal.open({size: 'sm', url: url});
 }
 

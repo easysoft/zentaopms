@@ -129,12 +129,14 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function createSpace()
+    public function createSpace(string $type = '')
     {
         if(!empty($_POST))
         {
             $this->lang->doc->name = $this->lang->doclib->spaceName;
             $space = form::data()->setDefault('addedBy', $this->app->user->account)->get();
+            if($type) $space->type = $type;
+
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $spaceID = $this->doc->doInsertLib($space);
