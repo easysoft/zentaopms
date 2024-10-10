@@ -18,3 +18,13 @@ include '../lib/editcompany.ui.class.php';
 
 $tester = new editCompanyTester();
 $tester->login();
+
+$company = new stdClass();
+$company->name    = '禅道软件';
+$company->phone   = '0532-86893032';
+$company->address = '青铁广场18楼';
+$company->zipcode = '266520';
+
+r($tester->editCompany($company)) && p('message') && e('编辑公司信息成功');   //编辑修改公司信息
+
+$tester->closeBrowser();
