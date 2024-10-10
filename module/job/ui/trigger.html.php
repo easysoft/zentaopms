@@ -278,4 +278,17 @@ formPanel
             on::change('toggleAutoRun')
         )
     ),
+    $triggers,
+    formRow
+    (
+        setClass('add-trigger-btn', count($triggers) >= count($lang->job->triggerTypeList) ? 'hidden' : null),
+        btn
+        (
+            set::icon('plus'),
+            setClass('primary-pale bd-primary'),
+            set::text($lang->job->addTrigger),
+            on::click('addTrigger')
+        )
+    ),
+    formHidden('autoRun', zget($job, 'autoRun', 1))
 );
