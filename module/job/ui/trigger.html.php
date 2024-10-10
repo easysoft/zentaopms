@@ -178,3 +178,79 @@ foreach(explode(',', $job->triggerType) as $index => $trigger)
         ) : null,
     );
 }
+
+if($job->customParam)
+{
+    $i           = 1;
+    $customParam = array();
+    foreach(json_decode($job->customParam) as $paramName => $paramValue)
+    {
+        $isCustom      = zget($lang->job->paramValueList, $paramValue, '') ? false : true;
+        $customParam[] = inputGroup
+        (
+            $lang->job->paramName,
+            input
+            (
+                setStyle('width', '50%'),
+                setClass('form-control'),
+                set::id("paramName{$i}"),
+                set::name('paramName[]'),
+                set::value($paramName)
+            ),
+            $lang->job->paramValue,
+            select
+            (
+                setStyle('width', '25%'),
+                setClass('paramValue ' . ($isCustom ? 'hidden' : '')),
+                set::id("paramValue{$i}"),
+                set::name('paramValue[]'),
+                !$isCustom ? set::value($paramValue) : null,
+                set::items($lang->job->paramValueList),
+                $isCustom ? set::disabled(true) : null
+            ),
+            input
+            (
+                setStyle('width', '25%'),
+                setClass('form-control paramValue ' . (!$isCustom ? 'hidden' : '')),
+                set::id("paramValueInput{$i}"),
+                set::name('paramValue[]'),
+                $isCustom ? set::value($paramValue) : null,
+                !$isCustom ? set::disabled(true) : null
+            ),
+            span
+            (
+                setClass('input-group-addon'),
+                checkbox
+                (
+                    setClass('custom'),
+                    set::id("custom{$i}"),
+                    set::name('custom'),
+                    set::text($lang->job->custom),
+                    set::checked($isCustom)
+                )
+            ),
+            span
+            (
+                setClass('input-group-addon'),
+                h::a
+                (
+                    setClass('add-param'),
+                    set::href('javascript:void(0)'),
+                    icon('plus')
+                )
+            ),
+            span
+            (
+                setClass('input-group-addon'),
+                a
+                (
+                    setClass('delete-param'),
+                    set::href('javascript:void(0)'),
+                    icon('close')
+                )
+            )
+        );
+
+        $i ++;
+    }
+}
