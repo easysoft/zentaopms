@@ -1,5 +1,15 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=设计详情页检查测试
+timeout=0
+cid=6
+
+- 检查设计详情页字段信息测试结果 @设计详情页信息正确
+
+*/
 chdir(__DIR__);
 include '../lib/view.ui.class.php';
 
