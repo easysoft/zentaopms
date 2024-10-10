@@ -14,14 +14,13 @@ class createDocTester extends tester
      */
     public function createApiDoc($apiLib, $apiDoc, $apiPath)
     {
-        /*进入接口空间创建独立接口库*/
+        /*进入接口空间创建接口文档*/
         $form = $this->initForm('api', 'index', array(), 'appIframe-doc');
-        $form->wait(1);
         $form->dom->createLibBtn->click();
         $form->wait(1);
         $form->dom->name->setValue($apiLib->name);
         $form->dom->btn($this->lang->save)->click();
-        /*创建接口文档*/
+        $form->wait(1);
         $form->dom->createApiBtn->click();
         $form->dom->title->setValue($apiDoc->docA);
         $form->dom->path->setValue($apiPath->pathA);
