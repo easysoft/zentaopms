@@ -11,7 +11,8 @@ class testtaskPage extends page
             'waiting'       => "//*[@id='taskTable']/div[3]/div[2]/strong[2]",
             'doing'         => "//*[@id='taskTable']/div[3]/div[2]/strong[3]",
             'blocked'       => "//*[@id='taskTable']/div[3]/div[2]/strong[4]",
-            'done'          => "//*[@id='taskTable']/div[3]/div[2]/strong[5]"
+            'done'          => "//*[@id='taskTable']/div[3]/div[2]/strong[5]",
+            'modalInfo'     => "//div[@class='modal-body']/div"
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
