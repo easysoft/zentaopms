@@ -19,7 +19,7 @@ class createDocTester extends tester
         $form->wait(1);
         $form->dom->createLibBtn->click();
         $form->wait(1);
-        $form->dom->name->setValue($apiLib);
+        $form->dom->name->setValue($apiLib->name);
         $form->dom->btn($this->lang->save)->click();
         /*创建接口文档*/
         $form->dom->createApiBtn->click();
@@ -27,7 +27,8 @@ class createDocTester extends tester
         $form->dom->path->setValue($apiPath->pathA);
         $form->dom->btn($this->lang->save)->click();
         $form->wait(1);
-        $this->openUrl('api', 'index');
+
+        $form = $this->initForm('api', 'index', array(), 'appIframe-doc');
         $form->dom->search(array("接口名称,=,{$apiDoc->docA}"));
         $form->wait(1);
         if($form->dom->fstDocPath->getText() != $apiPath->pathA) return $this->failed('创建接口文档失败');
