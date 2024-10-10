@@ -2,6 +2,14 @@
 include dirname(__FILE__, 5) . '/test/lib/ui.php';
 class viewTester extends tester
 {
+    /**
+     * Check the design view page.
+     * 检查设计详情页。
+     *
+     * @param  array  $design
+     * @access public
+     * @return object
+     */
     public function view(array $design)
     {
         $form = $this->initForm('design', 'browse', array('projectID' => 60), 'appIframe-project');
