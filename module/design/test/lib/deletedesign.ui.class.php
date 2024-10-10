@@ -2,6 +2,14 @@
 include dirname(__FILE__, 5) . '/test/lib/ui.php';
 class deleteDesignTester extends tester
 {
+    /**
+     * Check delete the design.
+     * 检查删除设计。
+     *
+     * @param  array  $design
+     * @access public
+     * @return object
+     */
     public function deleteDesign(array $design)
     {
         $form = $this->initForm('design', 'view', array('designID' => 2), 'appIframe-project');
