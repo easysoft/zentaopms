@@ -55,7 +55,7 @@ foreach($projectExecutions as $projectID => $executions)
         $item['id']       = $execution->id;
         $item['text']     = $execution->name;
         $item['keys']     = zget(common::convert2Pinyin(array($execution->name)), $execution->name, '');
-        $item['data-app'] = $app->tab;
+        $item['data-app'] = 'execution';
         $item['url']      = sprintf($link, $execution->id);
 
         if($execution->type == 'stage') $item['url'] = helper::createLink('execution', 'task', "executionID={$execution->id}");
