@@ -536,7 +536,7 @@ class control extends baseControl
 
         $uiID      = $this->loadModel('workflowlayout')->getUIByData($flow->module, $action->action, $object);
         $fieldList = $this->workflowaction->getPageFields($flow->module, $action->action, true, null, $uiID, $groupID);
-        return $this->loadModel('flow')->buildFormFields($fields, $fieldList);
+        return $this->loadModel('flow')->buildFormFields($fields, $fieldList, array(), $object);
     }
 
     /**
