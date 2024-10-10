@@ -25,14 +25,14 @@ class think3c extends thinkModel
     {
         global $lang;
 
-        $unselectedOptions = array_diff($step->options->fields, $step->answer['result']);
-        $showOptions       = !empty($step->link['selectedBlock']) && $step->link['selectedBlock'] == $blockID ? $step->answer['result'] :  $unselectedOptions;
+        $unselectedOptions = array_diff($step->options->fields, $step->answer->result);
+        $showOptions       = !empty($step->link['selectedBlock']) && $step->link['selectedBlock'] == $blockID ? $step->answer->result :  $unselectedOptions;
 
         $content = array();
         foreach($showOptions as $option)
         {
-            if($option == 'other') $option = $step->answer['other'] ? $step->answer['other'] : $lang->other;
-            if(!empty($option)) $content[] = div(setClass('mt-0.5'), $option);
+            if($option == 'other') $option = $step->answer->other ? $step->answer->other : $lang->other;
+            if(!empty($option)) $content[] = div(setClass('mt-1'), $option);
         }
 
         return $content;
@@ -45,7 +45,7 @@ class think3c extends thinkModel
         if(isset($step->options->fields[$colKey - 1])) $title = $step->options->fields[$colKey - 1];
 
         $result = array();
-        foreach($step->answer['result'] as $col => $answer)
+        foreach($step->answer->result as $col => $answer)
         {
             $answerKey = 'col' . $colKey;
             if($col == $answerKey) $result = $answer;
@@ -54,7 +54,7 @@ class think3c extends thinkModel
         $content = array();
         foreach($result as $item)
         {
-            if(!empty($item)) $content[] = div(setClass('mt-0.5'), $item);
+            if(!empty($item)) $content[] = div(setClass('mt-1'), $item);
         }
 
         return empty($content) ? array() : array
@@ -70,15 +70,17 @@ class think3c extends thinkModel
         foreach($steps as $step)
         {
             if(is_string($step->link))    $step->link = json_decode($step->link, true);
-            if(is_string($step->answer))  $step->answer = json_decode($step->answer, true);
+            if(is_string($step->answer))  $step->answer = json_decode($step->answer);
             if(is_string($step->options)) $step->options = json_decode($step->options);
 
             $resultCard = array();
+            $className  = '';
             if($step->link['showMethod'] == 2)
             {
+                $className  = "card-{$step->options->questionType}";
                 $resultCard = $this->buildQuestionItem($step);
             }
-            if(!empty($resultCard)) $questionList[] = div(setClass('w-64 bg-canvas overflow-y-auto scrollbar-thin p-2 shadow card hidden absolute', "in_area-{$key}", "card-{$step->options->questionType}"), $resultCard);
+            if(!empty($resultCard)) $questionList[] = div(setClass('w-64 bg-canvas overflow-y-auto scrollbar-thin p-2 shadow card hidden absolute', "in_area-{$key}", $className), $resultCard);
         }
         return $questionList;
     }
