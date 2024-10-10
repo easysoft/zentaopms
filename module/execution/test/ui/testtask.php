@@ -62,4 +62,6 @@ $testtask->gen(15);
 $tester = new testtaskTester();
 $tester->login();
 
+r($tester->checkNum(false, array(10, 3, 4, 2, 1))) && p('status,message') && e('SUCCESS,测试单统计数据正确');
+r($tester->checkNum(true, array(10, 3, 4, 2, 1)))  && p('status,message') && e('SUCCESS,测试单统计数据正确');
 $tester->closeBrowser();
