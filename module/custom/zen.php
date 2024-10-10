@@ -442,5 +442,22 @@ class customZen extends custom
             $this->config->doc->search['params']['lib']['values']       = $this->doc->getLibPairs('all', '', 0, '', $products, $projects, $executions);
             $this->loadModel('search')->setSearchParams($this->config->doc->search);
         }
+        if($relatedObjectType == 'repocommit')
+        {
+            $this->loadModel('repo');
+            $this->config->repo->repocommitSearch = array();
+            $this->config->repo->repocommitSearch['module']    = 'repocommit';
+            $this->config->repo->repocommitSearch['actionURL'] = $actionURL;
+            $this->config->repo->repocommitSearch['queryID']   = 0;
+            $this->config->repo->repocommitSearch['fields']    = array();
+            $this->config->repo->repocommitSearch['params']    = array();
+            $this->config->repo->repocommitSearch['fields']['commit']    = $this->lang->repo->revisionA;
+            $this->config->repo->repocommitSearch['fields']['time']      = $this->lang->repo->time;
+            $this->config->repo->repocommitSearch['fields']['committer'] = $this->lang->repo->committer;
+            $this->config->repo->repocommitSearch['params']['commit']    = array('operator' => 'include', 'control' => 'input', 'values' => '');
+            $this->config->repo->repocommitSearch['params']['time']      = array('operator' => '=',       'control' => 'date',  'values' => '');
+            $this->config->repo->repocommitSearch['params']['committer'] = array('operator' => 'include', 'control' => 'input', 'values' => '');
+            $this->loadModel('search')->setSearchParams($this->config->repo->repocommitSearch);
+        }
     }
 }

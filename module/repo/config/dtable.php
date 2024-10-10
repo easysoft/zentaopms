@@ -132,11 +132,13 @@ $config->repo->commentDtable->fieldList['commit']['hint']    = true;
 
 $config->repo->commentDtable->fieldList['time']         = $config->repo->repoDtable->fieldList['time'];
 $config->repo->commentDtable->fieldList['time']['name'] = 'time';
-$config->repo->commentDtable->fieldList['committer']    = $config->repo->repoDtable->fieldList['committer'];
-$config->repo->commentDtable->fieldList['comment']      = $config->repo->repoDtable->fieldList['comment'];
+$config->repo->commentDtable->fieldList['time']['type'] = 'datetime';
 
-$config->repo->commentDtable->fieldList['comment']['name']   = 'originalComment';
+$config->repo->commentDtable->fieldList['committer']         = $config->repo->repoDtable->fieldList['committer'];
 $config->repo->commentDtable->fieldList['committer']['name'] = 'committer';
+
+$config->repo->commentDtable->fieldList['comment']         = $config->repo->repoDtable->fieldList['comment'];
+$config->repo->commentDtable->fieldList['comment']['name'] = 'originalComment';
 
 $config->repo->logDtable = new stdclass();
 

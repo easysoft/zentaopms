@@ -1278,7 +1278,8 @@ class customModel extends model
 
         $caseID = $objectType == 'testcase' ? ',id as caseID' : '';
         $query  = $this->dao->select('*, 1 as relation' . $caseID)->from($objectTable)
-            ->where('deleted')->eq(0)
+            ->where('1=1')
+            ->beginIF($objectType != 'repocommit')->andWhere('deleted')->eq(0)->fi()
             ->beginIF(in_array($objectType, array('epic', 'requirement', 'story')))->andWhere('type')->eq($objectType)->fi()
             ->beginIF($objectType == 'doc')->andWhere('acl')->eq('open')->andWhere('status')->eq('normal')->fi()
             ->beginIF($browseType == 'bySearch')->andWhere($this->session->$objectQuery)->fi();
@@ -1318,27 +1319,37 @@ class customModel extends model
         $this->loadModel('project');
         $this->loadModel('execution');
         $this->loadModel('tree');
+        $this->loadModel('repo');
 
         $cols = array();
         if(isset($this->config->custom->relateObjectFields[$objectType]))
         {
-            $module = in_array($objectType, array('epic', 'requirement', 'story')) ? 'story' : $objectType;
+            $module = in_array($objectType, array('epic', 'requirement', 'story')) ? 'story' : ($objectType == 'repocommit' ? 'repo' : $objectType);
             $this->loadModel($module);
             $fieldList = $this->config->$module->dtable->fieldList;
+            if($module == 'repo') $fieldList = $this->config->repo->commentDtable->fieldList;
             foreach($this->config->custom->relateObjectFields[$objectType] as $fieldKey)
             {
-                $fieldSetting = isset($fieldList[$fieldKey]) ? $fieldList[$fieldKey] : array('title' => zget($this->lang->$objectType, $fieldKey, $fieldKey));
+                $fieldSetting = isset($fieldList[$fieldKey]) ? $fieldList[$fieldKey] : array();
 
                 $fieldSetting['sortType'] = true;
+                if(!isset($fieldSetting['title'])) $fieldSetting['title'] = zget($this->lang->$module, $fieldKey, $fieldKey);
                 if(isset($fieldSetting['fixed']) && $fieldSetting['fixed']) $fieldSetting['fixed'] = false;
                 if((isset($fieldSetting['type']) && in_array($fieldSetting['type'], array('assign'))) || $fieldKey == 'createdBy') $fieldSetting['type'] = 'user';
+                if(isset($fieldSetting['hidden'])) unset($fieldSetting['hidden']);
 
-                if($fieldKey == 'id') $fieldSetting['type'] = 'checkID';
+                if($fieldKey == 'id')
+                {
+                    $fieldSetting['title'] = 'ID';
+                    $fieldSetting['name']  = 'id';
+                    $fieldSetting['type']  = 'checkID';
+                }
                 if(in_array($fieldKey, array('product', 'module', 'project', 'execution'))) $fieldSetting['type'] = 'category';
                 if($fieldKey == 'product')   $fieldSetting['map'] = array(0 => '') + $this->product->getPairs('all', 0, '', 'all');
                 if($fieldKey == 'project')   $fieldSetting['map'] = array(0 => '') + $this->project->getPairs();
                 if($fieldKey == 'execution') $fieldSetting['map'] = array(0 => '') + $this->execution->getPairs(0, 'all', 'all');
                 if($fieldKey == 'module')    $fieldSetting['map'] = $this->tree->getAllModulePairs($objectType);
+                if($fieldKey == 'repo')      $fieldSetting['map'] = $this->repo->getRepoPairs('');
                 if($fieldKey == 'relation')  $fieldSetting = array('name' => 'relation', 'title' => $this->lang->custom->relation, 'type' => 'control', 'control' => 'picker', 'sortType' => false);
 
                 $cols[$fieldKey] = $fieldSetting;
@@ -1481,9 +1492,20 @@ class customModel extends model
             if(!isset($relationObjectList[$relationName])) $relationObjectList[$relationName] = array();
             if(!isset($relationObjectList[$relationName][$object->$type])) $relationObjectList[$relationName][$object->$type] = array();
 
-            $objectInfo = $this->loadModel($object->$type)->fetchByID($object->$id);
-            $title      = empty($objectInfo->title) ? (empty($objectInfo->name) ? '' : $objectInfo->name) : $objectInfo->title;
-            $hasPriv    = false;
+            if($object->$type == 'repocommit')
+            {
+                $objectInfo = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('id')->eq($object->$id)->fetch();
+                $title      = $objectInfo->revision;
+                $url        = helper::createLink('repo', 'revision', "repo={$objectInfo->repo}&objectID=0&revision={$objectInfo->revision}");
+            }
+            else
+            {
+                $objectInfo = $this->loadModel($object->$type)->fetchByID($object->$id);
+                $title      = empty($objectInfo->title) ? (empty($objectInfo->name) ? '' : $objectInfo->name) : $objectInfo->title;
+                $url        = helper::createLink($object->$type, 'view', "objectID={$object->$id}");
+            }
+
+            $hasPriv = false;
             if(common::hasPriv($object->$type, 'view'))
             {
                 if($this->app->user->admin) $hasPriv = true;
@@ -1491,7 +1513,8 @@ class customModel extends model
                 if(in_array($object->$type, $this->config->custom->objectOwner['project']) && !empty($objectInfo->project) && strpos(",{$this->app->user->view->projects},", ",{$objectInfo->project},") !== false) $hasPriv = true;
                 if(in_array($object->$type, $this->config->custom->objectOwner['execution']) && !empty($objectInfo->execution) && strpos(",{$this->app->user->view->sprints},", ",{$objectInfo->execution},") !== false) $hasPriv = true;
             }
-            $relationObjectList[$relationName][$object->$type][$object->$id] = array('title' => $title, 'url' => $hasPriv ? helper::createLink($object->$type, 'view', "objectID={$object->$id}") : null);
+
+            $relationObjectList[$relationName][$object->$type][$object->$id] = array('title' => $title, 'url' => $hasPriv ? $url : null);
         }
 
         return $relationObjectList;

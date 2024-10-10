@@ -138,6 +138,7 @@ $config->custom->relateObjectList['task']        = $lang->task->common;
 $config->custom->relateObjectList['bug']         = $lang->bug->common;
 $config->custom->relateObjectList['testcase']    = $lang->testcase->common;
 $config->custom->relateObjectList['doc']         = $lang->doc->common;
+$config->custom->relateObjectList['repocommit']  = $lang->repo->commit;
 $config->custom->relateObjectList['design']      = $lang->design->common;
 
 $config->custom->objectOwner = array();
@@ -152,4 +153,5 @@ $config->custom->relateObjectFields['task']        = array('id', 'pri', 'name', 
 $config->custom->relateObjectFields['bug']         = array('id', 'pri', 'severity', 'title', 'relation', 'product', 'project', 'openedBy', 'assignedTo', 'status');
 $config->custom->relateObjectFields['testcase']    = array('id', 'pri', 'title', 'relation', 'product', 'openedBy', 'assignedTo', 'status');
 $config->custom->relateObjectFields['doc']         = array('id', 'title', 'relation', 'addedBy', 'addedDate', 'editedBy', 'editedDate');
+$config->custom->relateObjectFields['repocommit']  = array('id', 'relation', 'repo', 'committer', 'time');
 $config->custom->relateObjectFields['design']      = array('id', 'name', 'relation', 'product', 'project', 'createdBy', 'assignedTo');
