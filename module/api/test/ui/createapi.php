@@ -11,8 +11,18 @@ cid=0
 chdir(__DIR__);
 include '../lib/createapi.ui.class.php';
 
+$doclib = zenData('doclib');
+$doclib->id->range('1-5');
+$doclib->type->range('api');
+$doclib->name->range('独立接口库1,独立接口库2,独立接口库3,独立接口库4,独立接口库5');
+$doclib->acl->range('open');
+$doclib->gen(5);
+
 $tester = new createDocTester();
 $tester->login();
+
+$apiLib = new stdClass();
+$apiLib->name = '接口库A';
 
 $apiDoc = new stdClass();
 $apiDoc->docA = 'apiDocA';
