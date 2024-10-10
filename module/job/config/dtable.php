@@ -41,20 +41,18 @@ $config->job->dtable->fieldList['buildSpec']['minWidth'] = '120';
 $config->job->dtable->fieldList['buildSpec']['hint']     = true;
 $config->job->dtable->fieldList['buildSpec']['show']     = true;
 
-$config->job->dtable->fieldList['product']['title']    = $lang->job->product;
-$config->job->dtable->fieldList['product']['name']     = 'productName';
-$config->job->dtable->fieldList['product']['type']     = 'text';
-$config->job->dtable->fieldList['product']['sortType'] = false;
-$config->job->dtable->fieldList['product']['minWidth'] = '120';
-$config->job->dtable->fieldList['product']['hint']     = true;
-$config->job->dtable->fieldList['product']['show']     = true;
+$config->job->dtable->fieldList['productName']['title']    = $lang->job->product;
+$config->job->dtable->fieldList['productName']['type']     = 'text';
+$config->job->dtable->fieldList['productName']['sortType'] = false;
+$config->job->dtable->fieldList['productName']['minWidth'] = '120';
+$config->job->dtable->fieldList['productName']['hint']     = true;
+$config->job->dtable->fieldList['productName']['show']     = true;
 
-$config->job->dtable->fieldList['repo']['title']    = $lang->job->repo;
-$config->job->dtable->fieldList['repo']['name']     = 'repoName';
-$config->job->dtable->fieldList['repo']['sortType'] = true;
-$config->job->dtable->fieldList['repo']['width']    = '100';
-$config->job->dtable->fieldList['repo']['hint']     = true;
-$config->job->dtable->fieldList['repo']['show']     = true;
+$config->job->dtable->fieldList['repoName']['title']    = $lang->job->repo;
+$config->job->dtable->fieldList['repoName']['sortType'] = true;
+$config->job->dtable->fieldList['repoName']['width']    = '100';
+$config->job->dtable->fieldList['repoName']['hint']     = true;
+$config->job->dtable->fieldList['repoName']['show']     = true;
 
 $config->job->dtable->fieldList['engine']['title']    = $lang->job->engine;
 $config->job->dtable->fieldList['engine']['name']     = 'engine';

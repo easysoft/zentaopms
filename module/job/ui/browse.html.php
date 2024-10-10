@@ -32,7 +32,8 @@ featureBar
 $canCreate  = hasPriv('job', 'create');
 $createItem = array('text' => $lang->job->create, 'url' => inLink('create', "repoID={$repoID}"), 'class' => 'primary', 'icon' => 'plus');
 
-$tableData = initTableData($jobList, $config->job->dtable->fieldList, $this->job);
+$cols = $this->loadModel('datatable')->getSetting('job');
+$tableData = initTableData($jobList, $cols, $this->job);
 
 toolbar
 (
@@ -42,7 +43,6 @@ toolbar
 jsVar('confirmDelete',    $lang->job->confirmDelete);
 jsVar('canBrowseProject', common::hasPriv('job', 'browseProject'));
 
-$cols = $this->loadModel('datatable')->getSetting('job');
 dtable
 (
     set::customCols(true),
