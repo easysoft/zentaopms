@@ -93,6 +93,19 @@ class think3c extends thinkModel
         return $questionList;
     }
 
+    protected function buildAreaCard(): array
+    {
+        global $app;
+
+        $blocks = $this->prop('blocks');
+        $area   = array();
+        foreach($blocks as $key => $block)
+        {
+            if(!empty($block->steps)) $area[] = $this->buildResultCard($block->steps, $block->id);
+        }
+        return $area;
+    }
+
     protected function buildBody(): node
     {
         global $lang, $app;
