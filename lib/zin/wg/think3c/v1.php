@@ -80,6 +80,14 @@ class think3c extends thinkModel
                 $className  = "card-{$step->options->questionType}";
                 $resultCard = $this->buildQuestionItem($step);
             }
+            elseif($step->link['showMethod'] == '1')
+            {
+                $resultCard = $this->buildMulticolumnContent($step, $key);
+            }
+            else
+            {
+                $resultCard = $this->buildOptionsContent($step, $key);
+            }
             if(!empty($resultCard)) $questionList[] = div(setClass('w-64 bg-canvas overflow-y-auto scrollbar-thin p-2 shadow card hidden absolute', "in_area-{$key}", $className), $resultCard);
         }
         return $questionList;
