@@ -14,3 +14,16 @@ jsVar('dirs', !empty($dirs) ? $dirs : '');
 jsVar('buildTag', $lang->job->buildTag);
 jsVar('dirChange', $lang->job->dirChange);
 jsVar('triggerTypeList', $lang->job->triggerTypeList);
+
+jsVar('svnField', formRow
+(
+    setClass('svn-fields linkage-fields hidden'),
+    formGroup
+    (
+        set::name('svnDir[]'),
+        set::width('1/2'),
+        set::label($lang->job->svnDir),
+        set::items(!empty($dirs) ? $dirs : array()),
+        set::value($job->svnDir)
+    )
+)->render());
