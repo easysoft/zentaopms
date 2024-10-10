@@ -1348,9 +1348,15 @@ class customModel extends model
                 if($fieldKey == 'product')   $fieldSetting['map'] = array(0 => '') + $this->product->getPairs('all', 0, '', 'all');
                 if($fieldKey == 'project')   $fieldSetting['map'] = array(0 => '') + $this->project->getPairs();
                 if($fieldKey == 'execution') $fieldSetting['map'] = array(0 => '') + $this->execution->getPairs(0, 'all', 'all');
+                if($fieldKey == 'pool')      $fieldSetting['map'] = array(0 => '') + $this->dao->select('id,name')->from(TABLE_DEMANDPOOL)->fetchPairs();
                 if($fieldKey == 'module')    $fieldSetting['map'] = $this->tree->getAllModulePairs($objectType);
                 if($fieldKey == 'repo')      $fieldSetting['map'] = $this->repo->getRepoPairs('');
                 if($fieldKey == 'relation')  $fieldSetting = array('name' => 'relation', 'title' => $this->lang->custom->relation, 'type' => 'control', 'control' => 'picker', 'sortType' => false);
+                if($fieldKey == 'title' || $fieldKey == 'name')
+                {
+                    $fieldSetting['data-toggle'] = 'modal';
+                    $fieldSetting['data-size']   = 'lg';
+                }
 
                 $cols[$fieldKey] = $fieldSetting;
             }

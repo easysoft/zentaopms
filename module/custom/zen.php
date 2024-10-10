@@ -459,5 +459,15 @@ class customZen extends custom
             $this->config->repo->repocommitSearch['params']['committer'] = array('operator' => 'include', 'control' => 'input', 'values' => '');
             $this->loadModel('search')->setSearchParams($this->config->repo->repocommitSearch);
         }
+        if($relatedObjectType == 'demand')
+        {
+            $this->loadModel('demand');
+            $this->config->demand->search['module']    = 'demand';
+            $this->config->demand->search['actionURL'] = $actionURL;
+            $this->config->demand->search['queryID']   = 0;
+            $this->config->demand->search['params']['product']['values'] = array('' => '') + $this->loadModel('product')->getPairs();
+            $this->config->demand->search['params']['pool']['values']    = array('' => '') + $this->dao->select('id,name')->from(TABLE_DEMANDPOOL)->where('deleted')->eq(0)->fetchPairs();
+            $this->loadModel('search')->setSearchParams($this->config->demand->search);
+        }
     }
 }
