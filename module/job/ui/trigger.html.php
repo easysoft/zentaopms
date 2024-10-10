@@ -27,3 +27,20 @@ jsVar('svnField', formRow
         set::value($job->svnDir)
     )
 )->render());
+jsVar('commentField', formRow
+(
+    setClass('comment-fields linkage-fields hidden mt-4'),
+    formGroup
+    (
+        set::name('comment'),
+        set::label($lang->job->comment),
+        set::value($job->comment),
+        set::width('1/2'),
+        set::required(true)
+    ),
+    h::span
+    (
+        setClass('leading-8 ml-2'),
+        html($lang->job->commitEx)
+    )
+)->render());
