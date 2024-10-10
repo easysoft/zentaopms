@@ -527,14 +527,15 @@ class control extends baseControl
         $moduleName = $moduleName ? $moduleName : $this->app->rawModule;
         $methodName = $methodName ? $moduleName : $this->app->rawMethod;
 
-        $flow = $this->loadModel('workflow')->getByModule($moduleName);
+        $flow    = $this->loadModel('workflow')->getByModule($moduleName);
         if(!$flow) return $fields;
 
-        $action = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
+        $groupID = $this->loadModel('workflowgroup')->getGroupIDByData($moduleName, $object);
+        $action  = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName, $groupID);
         if(!$action || $action->extensionType != 'extend') return $fields;
 
         $uiID      = $this->loadModel('workflowlayout')->getUIByData($flow->module, $action->action, $object);
-        $fieldList = $this->workflowaction->getPageFields($flow->module, $action->action, true, null, $uiID);
+        $fieldList = $this->workflowaction->getPageFields($flow->module, $action->action, true, null, $uiID, $groupID);
         return $this->loadModel('flow')->buildFormFields($fields, $fieldList);
     }
 
