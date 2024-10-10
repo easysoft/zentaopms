@@ -36,4 +36,24 @@ class reviewStoryTester extends tester
 
         return $this->success('评审研发需求成功');
     }
+
+    /**
+     * check the story status after submitreview.
+     * @access public
+     * @return object
+     */
+    public function submitReview()
+    {
+        /*进入需求详情页点击提交评审按钮*/
+        $form = $this->initForm('story', 'view', array('id' => 1), 'appIframe-product');
+        $form->dom->btn($this->lang->story->submitReview)->click();
+        $form->wait(1);
+
+        //$form = $this->subReviewer->multiPicker(array('reviewer' => 'admin'));
+        $form->dom->submitReviewSave->click();
+        $form->wait(1);
+
+        /*需求详情页检查需求状态*/
+        $viewPage = $this->loadPage('story', 'view');
+
 }
