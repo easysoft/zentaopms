@@ -5,10 +5,10 @@ class editCompanyTester extends tester
     /**
      * Check the page of edit the company information.
      *
-     *
-     * @param  string    $name
+     * @param  string    $company
      * @access public
      * @return object
+     *
      */
     public function editCompany($company)
     {
