@@ -201,10 +201,10 @@ class doc extends control
             if($execution->type == 'stage') $this->lang->doc->execution = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doc->execution);
         }
 
-        if($type == 'custom')
+        if($type == 'custom' || $type == 'mine')
         {
             $lib = $this->doc->getLibByID($libID);
-            $this->view->spaces  = $this->doc->getTeamSpaces();
+            $this->view->spaces  = $this->doc->getSubSpaces($type);
             $this->view->spaceID = !empty($lib->parent) ? $lib->parent : $objectID;
         }
 
@@ -1402,7 +1402,6 @@ class doc extends control
         $noPicks = empty($picks);
         $picks   = $noPicks ? '' : ",$picks,";
 
-        if($type == 'mine') $spaceID = 0; // Ignore the spaceID of mine.
         list($spaces, $spaceID) = $this->doc->getSpaces($type, $spaceID);
         $data   = array('spaceID' => $spaceID);
         $libs   = $this->doc->getLibsOfSpace($type, $spaceID);

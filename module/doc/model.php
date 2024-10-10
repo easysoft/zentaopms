@@ -955,18 +955,19 @@ class docModel extends model
     }
 
     /**
-     * 获取团队空间下的空间。
-     * Get team spaces.
+     * 获取团队空间或我的空间下的空间。
+     * Get team spaces or my spaces.
      *
+     * @param  string $type
      * @access public
      * @return array
      */
-    public function getTeamSpaces(): array
+    public function getSubSpaces(string $type = 'custom'): array
     {
-        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getTeamSpaces();
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getSubSpaces($type);
 
         $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)
-            ->where('type')->eq('custom')
+            ->where('type')->eq($type)
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
@@ -992,10 +993,9 @@ class docModel extends model
      */
     public function getSpaces($type = 'custom', $spaceID = 0)
     {
-        if($type === 'mine') return array(array(array('id' => 1, 'type' => 'mine', 'name' => $this->lang->doc->spaceList['mine'])), 1);
 
         $pairs = array();
-        if($type == 'custom') $pairs = $this->getTeamSpaces();
+        if($type == 'mine' || $type == 'custom') $pairs = $this->getSubSpaces($type);
         if($type == 'product')
         {
             $pairs   = $this->loadModel('product')->getPairs('nocode');
@@ -1438,8 +1438,7 @@ class docModel extends model
                 ->where('deleted')->eq(0)
                 ->andWhere('vision')->eq($this->config->vision)
                 ->andWhere('type')->eq($type)
-                ->beginIF($type == 'custom')->andWhere('parent')->eq($objectID)->fi()
-                ->beginIF($type == 'mine')->andWhere('addedBy')->eq($this->app->user->account)->fi()
+                ->andWhere('parent')->eq($objectID)
                 ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
                 ->orderBy('`order` asc, id_asc')
                 ->fetchAll('id');
@@ -2275,7 +2274,7 @@ class docModel extends model
         {
             if($type == 'custom')
             {
-                $spaces = $this->getTeamSpaces();
+                $spaces = $this->getSubSpaces('custom');
                 if(empty($objectID)) $objectID = (int)key($spaces);
                 if(!isset($spaces[$objectID])) $objectID = (int)key($spaces);
             }
