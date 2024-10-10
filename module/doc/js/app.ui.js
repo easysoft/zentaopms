@@ -149,7 +149,7 @@ function handleCreateDoc(doc, spaceID, libID, moduleID)
         contactList: '',
         acl        : 'private',
         space      : spaceType,
-        uid        : doc.uid || `doc${doc.id}`,
+        uid        : doc.contentType === 'doc' ? '' : (doc.uid || `doc${doc.id}`),
     };
     return new Promise((resolve) =>
     {
@@ -181,7 +181,7 @@ function handleSaveDoc(doc)
         contactList: '',
         acl        : 'private',
         space      : spaceType,
-        uid        : doc.uid || `doc${doc.id}`,
+        uid        : doc.contentType === 'doc' ? '' : (doc.uid || `doc${doc.id}`),
     }, (res) => {
         console.log('handleSaveDoc.res', res);
         docApp.update('doc', doc);
