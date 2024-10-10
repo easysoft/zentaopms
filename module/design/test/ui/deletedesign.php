@@ -1,5 +1,15 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=删除设计检查测试
+timeout=0
+cid=7
+
+- 检查删除设计成功测试结果 @删除设计成功
+
+*/
 chdir(__DIR__);
 include '../lib/deletedesign.ui.class.php';
 
