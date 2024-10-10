@@ -107,7 +107,7 @@ class job extends control
                 ->get();
 
             $jobID = $this->job->create($job);
-            if(!dao::isError()) $this->loadModel('action')->create('job', $jobID, 'created');
+            if(!dao::isError()) $this->loadModel('action')->create('job', $jobID, 'imported');
 
             return $this->send($this->jobZen->reponseAfterCreateEdit());
         }
@@ -429,5 +429,18 @@ class job extends control
     {
         if($this->job->import($repoID)) $this->sendSuccess();
         $this->sendError(dao::isError() ? dao::getError() : 'fail');
+    }
+
+    /**
+     * 流水线触发器。
+     * Pipeline trigger.
+     *
+     * @param  int    $jobID
+     * @access public
+     * @return void
+     */
+    public function trigger(int $jobID)
+    {
+        $this->edit($jobID);
     }
 }
