@@ -254,3 +254,28 @@ if($job->customParam)
         $i ++;
     }
 }
+
+formPanel
+(
+    setID('triggerForm'),
+    set::formClass('gap-2'),
+    set::title($lang->job->trigger),
+    set::actionsClass('w-2/3'),
+    on::click('.add-param', 'addItem'),
+    on::click('.delete-param', 'deleteItem'),
+    on::click('.custom', 'setValueInput'),
+    on::click('select.paramValue', 'changeCustomField'),
+    on::click('.delete-trigger', 'deleteTrigger'),
+    on::change('input[name^=triggerType]', 'changeTriggerType'),
+    set::headingActionsClass('flex-auto justify-start w-11/12'),
+    to::headingActions
+    (
+        checkbox
+        (
+            setID('autoRun'),
+            set::text($lang->job->autoRun),
+            set::checked(!$job->autoRun),
+            on::change('toggleAutoRun')
+        )
+    ),
+);
