@@ -78,3 +78,17 @@ jsVar('scheduleField', div
         )
     )
 )->render());
+jsVar('triggerField', div
+(
+    setClass('trigger-box border py-4 hidden bg-gray-100'),
+    icon('trash pull-right mr-4 delete-trigger cursor-pointer'),
+    formGroup
+    (
+        set::name("triggerType[%s]"),
+        set::width('1/2'),
+        set::required(true),
+        set::label($lang->job->triggerType),
+        set::control('static'),
+        div(setID('triggerPicker%s'))
+    )
+)->render());
