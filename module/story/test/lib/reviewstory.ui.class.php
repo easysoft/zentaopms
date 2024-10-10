@@ -55,5 +55,11 @@ class reviewStoryTester extends tester
 
         /*需求详情页检查需求状态*/
         $viewPage = $this->loadPage('story', 'view');
+        $viewPage->wait(1);
+
+        if($viewPage->dom->status->getText() != '激活') return $this->fail('需求状态错误');
+
+        return $this->success('提交评审成功');
+    }
 
 }
