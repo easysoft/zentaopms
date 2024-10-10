@@ -9,6 +9,7 @@ class browsePage extends page
             'designName'    => "//*[@id='table-design-browse']/div[2]/div[1]/div/div[2]/div/a",
             'linkedProduct' => "//*[@id='mainContent']/div[2]/div[2]/div/div[2]/table/tbody/tr[2]/td",
             'designType'    => "//*[@id='table-design-browse']/div[2]/div[2]/div/div[2]/div/span",
+            'product'       => "//*[@id='table-design-browse']/div[2]/div[2]/div/div[1]/div",
             'assignedTo'    => "//*[@name='assignedTo']",
             'assignedToBtn' => "//*[@class='form load-indicator form-ajax no-morph form-horz']/div[3]/div/button/span",
             'assigned'      => "//*[@id='table-design-browse']/div[2]/div[2]/div/div[3]/div/a/span",
