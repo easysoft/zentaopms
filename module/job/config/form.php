@@ -15,7 +15,7 @@ $config->job->form->create['product']         = array('type' => 'int',    'requi
 $config->job->form->create['sonarqubeServer'] = array('type' => 'int',    'required' => false, 'default' => 0);
 $config->job->form->create['projectKey']      = array('type' => 'string', 'required' => false, 'default' => '');
 $config->job->form->create['comment']         = array('type' => 'string', 'required' => false, 'default' => '');
-$config->job->form->create['atDay']           = array('type' => 'array',  'required' => false, 'default' => '');
+$config->job->form->create['atDay']           = array('type' => 'string', 'required' => false, 'default' => '');
 $config->job->form->create['atTime']          = array('type' => 'string', 'required' => false, 'default' => '');
 $config->job->form->create['jkServer']        = array('type' => 'int',    'required' => false, 'default' => 0);
 $config->job->form->create['jkTask']          = array('type' => 'string', 'required' => false, 'default' => '');
@@ -35,7 +35,7 @@ $config->job->form->edit['product']         = array('type' => 'int',    'require
 $config->job->form->edit['sonarqubeServer'] = array('type' => 'int',    'required' => false, 'default' => 0);
 $config->job->form->edit['projectKey']      = array('type' => 'string', 'required' => false, 'default' => '');
 $config->job->form->edit['comment']         = array('type' => 'string', 'required' => false, 'default' => '');
-$config->job->form->edit['atDay']           = array('type' => 'array',  'required' => false, 'default' => '', 'filter' => 'join');
+$config->job->form->edit['atDay']           = array('type' => 'array',  'required' => false, 'default' => array(), 'filter' => 'join');
 $config->job->form->edit['atTime']          = array('type' => 'string', 'required' => false, 'default' => '');
 $config->job->form->edit['jkServer']        = array('type' => 'int',    'required' => false, 'default' => 0);
 $config->job->form->edit['jkTask']          = array('type' => 'string', 'required' => false, 'default' => '');
