@@ -14,7 +14,7 @@ jsVar('dirs', !empty($dirs) ? $dirs : '');
 jsVar('triggerRepeat', $lang->job->triggerRepeat);
 jsVar('triggerTypeList', $lang->job->triggerTypeList);
 
-jsVar('svnField', formRow
+jsVar('tagField', formRow
 (
     setClass('svn-fields linkage-fields hidden mt-4'),
     formGroup
@@ -26,7 +26,7 @@ jsVar('svnField', formRow
         div(setID('dirPicker%s'))
     )
 )->render());
-jsVar('commentField', formRow
+jsVar('commitField', formRow
 (
     setClass('comment-fields linkage-fields hidden mt-4'),
     formGroup

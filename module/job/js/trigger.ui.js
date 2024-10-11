@@ -85,30 +85,9 @@ window.changeTriggerType = function(event)
         return;
     }
 
-    if(type == 'tag' && repo.SCM == 'Subversion')
-    {
-        $parentDom.append(svnField.replace(/%s/g, window.triggerCount));
-        $('#dirPicker' + window.triggerCount).addClass('form-group-wrapper picker-box');
+    if(type != 'tag' || repo.SCM == 'Subversion') $parentDom.append(eval(`${type}Field`).replace(/%s/g, window.triggerCount));
+    if(type != 'commit') eval(`window.init${type}Block`);
 
-        const options = Object.keys(dirs).map((dir) => {
-            return {value: dir, text: dirs[dir]};
-        });
-        new zui.Picker('#dirPicker' + window.triggerCount, {
-            items:         options,
-            name:         `svnDir[]`,
-            required:     true,
-            defaultValue: options.length ? options[0].value : ''
-        });
-    }
-    if(type == 'commit')   $parentDom.append(commentField);
-    if(type == 'schedule')
-    {
-        $parentDom.append(scheduleField.replace(/%s/g, window.triggerCount));
-        $('#scheduleTime' + window.triggerCount).addClass('form-group-wrapper picker-box');
-        new zui.TimePicker('#scheduleTime' + window.triggerCount, {
-            name: 'atTime'
-        })
-    }
     $parentDom.find('.hidden').removeClass('hidden');
 }
 
@@ -161,4 +140,29 @@ window.deleteTrigger = function(event)
 {
     $(event.target).closest('.trigger-box').remove();
     if($('#triggerForm .trigger-box').length <= 1) $('.delete-trigger').addClass('hidden');
+}
+
+window.initTagBlock = function()
+{
+    if(repo.SCM != 'Subversion') return;
+
+    $('#dirPicker' + window.triggerCount).addClass('form-group-wrapper picker-box');
+
+    const options = Object.keys(dirs).map((dir) => {
+        return {value: dir, text: dirs[dir]};
+    });
+    new zui.Picker('#dirPicker' + window.triggerCount, {
+        items:         options,
+        name:         `svnDir[]`,
+        required:     true,
+        defaultValue: options.length ? options[0].value : ''
+    });
+}
+
+window.initScheduleBlock = function()
+{
+    $('#scheduleTime' + window.triggerCount).addClass('form-group-wrapper picker-box');
+    new zui.TimePicker('#scheduleTime' + window.triggerCount, {
+        name: 'atTime'
+    })
 }
