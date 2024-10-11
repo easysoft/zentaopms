@@ -67,6 +67,7 @@ $lang->job->projectExists  = 'This SonarQube Project has a build task associated
 $lang->job->mustUseJenkins = 'SonarQube frame is only used if the build engine is JenKins.';
 $lang->job->jobIsDeleted   = 'This repository is associated with a build task, please view the data from the recycle bin';
 $lang->job->selectPipeline = 'Please select a pipeline';
+$lang->job->triggerRepeat  = 'Trigger cannot be repeat';
 
 $lang->job->buildTypeList['build']          = 'Seulement Build';
 $lang->job->buildTypeList['buildAndDeploy'] = 'Build et D閜loiement';
