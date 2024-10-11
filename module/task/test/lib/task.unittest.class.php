@@ -2230,7 +2230,6 @@ class taskTest
                 }
             }
         }
-        $return = rtrim($return, ';');
-        return $return;
+        return rtrim($return, ';');
     }
 }

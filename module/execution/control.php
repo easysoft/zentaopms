@@ -3342,9 +3342,10 @@ class execution extends control
     }
 
     /**
+     * AJAX: 获取有未关闭任务的执行。
      * AJAX: get executions that have unclosed tasks.
      *
-     * @param  int    $executionID
+     * @param  string $executionIdList
      * @access public
      * @return string
      */
