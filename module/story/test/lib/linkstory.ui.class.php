@@ -18,3 +18,23 @@ class linkStoryTester extends tester
      */
     public function linkStory($storyID)
     {
+        /*进入需求详情页点击关联需求*/
+        $form = $this->initForm('story', 'view', array('id' => $storyID), 'appIframe-product');  //进入研发需求详情页
+        $form->dom->btn($this->lang->story->linkStory)->click();  //点击关联需求按钮
+        $form->wait(1);
+
+        /*关联需求页面选择关联的需求*/
+        $form->dom->searchBox->click();
+        $form->wait(1);
+        $form->dom->selectAll->click();
+        $form->dom->btn($this->lang->save)->click();
+        $form->wait(1);
+
+        /*查看关联的需求*/
+        $viewpage = $this->loadPage('story', 'view');
+        if($viewpage->dom->firLinkStories->getText()!= '激活业务需求') return $this->success('关联的需求不正确');
+        if($viewpage->dom->secLinkStories->getText()!= '激活用户需求') return $this->success('关联的需求不正确');
+
+        return $this->success('关联需求成功');
+    }
+}
