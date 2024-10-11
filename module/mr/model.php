@@ -1300,7 +1300,7 @@ class mrModel extends model
         $MR = $this->fetchByID($MRID);
         if(!$MR) return false;
 
-        $compile = $this->loadModel('job')->exec($jobID, array('sourceBranch' => $MR->sourceBranch, 'targetBranch' => $MR->targetBranch));
+        $compile = $this->loadModel('job')->exec($jobID, array('sourceBranch' => $MR->sourceBranch, 'targetBranch' => $MR->targetBranch), 'commit');
         if(!$compile) return false;
 
         $newMR = new stdclass();

@@ -161,7 +161,7 @@ class gitModel extends model
                 {
                     if(strpos($log->msg, $comment) !== false)
                     {
-                        $this->loadModel('job')->exec($job->id);
+                        $this->loadModel('job')->exec($job->id, array(), 'commit');
                         continue 2;
                     }
                 }
