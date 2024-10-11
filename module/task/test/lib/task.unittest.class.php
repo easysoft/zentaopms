@@ -2201,4 +2201,24 @@ class taskTest
 
         return $this->objectModel->getListByCondition($condition, $orderBy);
     }
+
+    /**
+     * 获取执行未关闭的任务。
+     * Get unclosed tasks by execution.
+     *
+     * @param  array|int    $executionID
+     * @access public
+     * @return string|false
+     */
+    public function getUnclosedTasksByExecutionTest(array|int $executionID): string|false
+    {
+        $tasks = $this->objectModel->getUnclosedTasksByExecution($executionID);
+        if(!$tasks) return false;
+
+        if(is_array($tasks))
+        {
+        }
+        $return = rtrim($return, ';');
+        return $return;
+    }
 }
