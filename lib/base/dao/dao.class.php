@@ -921,8 +921,6 @@ class baseDAO
      */
     public function query($sql = '')
     {
-        if(!empty(dao::$errors)) return $this;
-
         if($sql)
         {
             $sql       = $this->dbh->formatSQL($sql);
@@ -1030,7 +1028,7 @@ class baseDAO
      */
     public function exec($sql = '')
     {
-        if(!empty(dao::$errors)) return $this;
+        if(!empty(dao::$errors)) return 0;
 
         if($sql)
         {
