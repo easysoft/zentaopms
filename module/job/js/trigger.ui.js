@@ -85,11 +85,26 @@ window.changeTriggerType = function(event)
         return;
     }
 
-    if(type == 'tag' && repo.SCM == 'Subversion') $parentDom.append(svnField);
+    if(type == 'tag' && repo.SCM == 'Subversion')
+    {
+        $parentDom.append(svnField.replace(/%s/g, window.triggerCount));
+        $('#dirPicker' + window.triggerCount).addClass('form-group-wrapper picker-box');
+
+        const options = Object.keys(dirs).map((dir) => {
+            return {value: dir, text: dirs[dir]};
+        });
+        new zui.Picker('#dirPicker' + window.triggerCount, {
+            items:         options,
+            name:         `svnDir[]`,
+            required:     true,
+            defaultValue: options.length ? options[0].value : ''
+        });
+    }
     if(type == 'commit')   $parentDom.append(commentField);
     if(type == 'schedule')
     {
         $parentDom.append(scheduleField.replace(/%s/g, window.triggerCount));
+        $('#scheduleTime' + window.triggerCount).addClass('form-group-wrapper picker-box');
         new zui.TimePicker('#scheduleTime' + window.triggerCount, {
             name: 'atTime'
         })
@@ -117,16 +132,20 @@ window.addTrigger = function()
     $('#triggerForm .trigger-box').removeClass('hidden');
 
     $('#triggerPicker' + window.triggerCount).addClass('form-group-wrapper picker-box');
+
+    const triggers = [];
+    $('input[name^=triggerType]').each(function(){triggers.push($(this).val());});
+
+    let trigger = '';
     const options = Object.keys(triggerTypeList).map((type) => {
+        if(!trigger && !triggers.includes(type)) trigger = type;
         return {value: type, text: triggerTypeList[type]}
     });
     new zui.Picker('#triggerPicker' + window.triggerCount, {
-        items:         options,
-        name:         `triggerType[${window.triggerCount}]`,
-        required:     true,
-        defaultValue: options.length ? options[0].value : ''
+        items:     options,
+        name:     `triggerType[${window.triggerCount}]`,
+        required: true
     });
-
     window.triggerCount ++;
     if($('#triggerForm .trigger-box').length > 1) $('.delete-trigger').removeClass('hidden');
     if($('#triggerForm .trigger-box').length >= Object.keys(triggerTypeList).length) $('.add-trigger-btn').addClass('hidden');
