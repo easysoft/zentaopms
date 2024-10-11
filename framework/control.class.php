@@ -560,11 +560,12 @@ class control extends baseControl
         $flow = $this->loadModel('workflow')->getByModule($moduleName);
         if(!$flow) return '';
 
-        $action = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
+        $groupID = $this->loadModel('workflowgroup')->getGroupIDByData($moduleName, $object);
+        $action  = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName, $groupID);
         if(!$action || $action->extensionType == 'none') return '';
 
         $uiID      = $this->loadModel('workflowlayout')->getUIByData($flow->module, !empty($action->action) ? $action->action: '', $object);
-        $fieldList = $this->loadModel('workflowaction')->getPageFields($flow->module, !empty($action->action) ? $action->action: '', true, null, $uiID);
+        $fieldList = $this->loadModel('workflowaction')->getPageFields($flow->module, !empty($action->action) ? $action->action: '', true, null, $uiID, $groupID);
 
         $html = '';
         if(!empty($flow->css))   $html .= "<style>$flow->css</style>";
@@ -606,11 +607,12 @@ class control extends baseControl
         $action = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
         if(!$action || $action->extensionType != 'extend') return array();
 
-        $uiID = is_object($object) ? $this->loadModel('workflowlayout')->getUIByData($flow->module, $action->action, $object) : 0;
+        $groupID = $this->loadModel('workflowgroup')->getGroupIDByData($moduleName, $object);
+        $uiID    = is_object($object) ? $this->loadModel('workflowlayout')->getUIByData($flow->module, $action->action, $object) : 0;
 
         $wrapControl  = array('textarea', 'richtext', 'file');
-        $fieldList    = $this->workflowaction->getPageFields($flow->module, $action->action, true, $object, $uiID);
-        $layouts      = $this->loadModel('workflowlayout')->getFields($moduleName, $methodName, $uiID);
+        $fieldList    = $this->workflowaction->getPageFields($flow->module, $action->action, true, $object, $uiID, $groupID);
+        $layouts      = $this->loadModel('workflowlayout')->getFields($moduleName, $methodName, $uiID, $groupID);
         $notEmptyRule = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
 
         if($layouts)
@@ -696,9 +698,10 @@ class control extends baseControl
     {
         if($this->config->edition == 'open') return;
 
+        $groupID      = $this->loadModel('workflowgroup')->getGroupIDByDataID($this->moduleName, $objectID);
         $uiID         = $this->loadModel('workflowlayout')->getUIByDataID($this->moduleName, $this->methodName, $objectID);
-        $fields       = $this->loadModel('workflowaction')->getPageFields($this->moduleName, $this->methodName, true, null, $uiID);
-        $layouts      = $this->loadModel('workflowlayout')->getFields($this->moduleName, $this->methodName, $uiID);
+        $fields       = $this->loadModel('workflowaction')->getPageFields($this->moduleName, $this->methodName, true, null, $uiID, $groupID);
+        $layouts      = $this->loadModel('workflowlayout')->getFields($this->moduleName, $this->methodName, $uiID, $groupID);
         $notEmptyRule = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
         foreach($fields as $field)
         {
