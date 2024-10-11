@@ -1002,13 +1002,17 @@ class docModel extends model
             ->where('deleted')->eq(0)
             ->andWhere('parent')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
+            ->beginIF($type == 'all')->andWhere('type')->in('mine,custom')->fi()
             ->beginIF($type != 'all')->andWhere('type')->eq($type)->fi()
             ->fetchAll();
 
         $pairs = array();
         foreach($objectLibs as $lib)
         {
-            if($this->checkPrivLib($lib)) $pairs[$lib->id] = $lib->name;
+            if($this->checkPrivLib($lib))
+            {
+                $pairs[$lib->id] = $type == 'all' ? $this->lang->doc->spaceList[$lib->type] . '/' . $lib->name : $lib->name;
+            }
         }
 
         return $pairs;

@@ -1283,7 +1283,7 @@ class doc extends control
         $this->view->libID      = $libID;
         $this->view->space      = $space;
         $this->view->doc        = $doc;
-        $this->view->spaces     = $this->docZen->getAllSpaces();
+        $this->view->spaces     = $this->doc->getSubSpaces('all');
         $this->view->libPairs   = $libPairs;
         $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
         $this->view->groups     = $this->loadModel('group')->getPairs();
