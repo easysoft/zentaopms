@@ -11,8 +11,7 @@ declare(strict_types=1);
 namespace zin;
 jsVar('repo', $repo);
 jsVar('dirs', !empty($dirs) ? $dirs : '');
-jsVar('buildTag', $lang->job->buildTag);
-jsVar('dirChange', $lang->job->dirChange);
+jsVar('triggerRepeat', $lang->job->triggerRepeat);
 jsVar('triggerTypeList', $lang->job->triggerTypeList);
 
 jsVar('svnField', formRow
@@ -109,7 +108,7 @@ foreach(explode(',', $job->triggerType) as $index => $trigger)
         ),
         $trigger == 'tag' && $repo->SCM == 'Subversion' ? formRow
         (
-            setClass('svn-fields'),
+            setClass('svn-fields linkage-fields'),
             formGroup
             (
                 set::name('svnDir[]'),
@@ -121,7 +120,7 @@ foreach(explode(',', $job->triggerType) as $index => $trigger)
         ) : null,
         $trigger == 'commit' ? formRow
         (
-            setClass('comment-fields mt-4'),
+            setClass('comment-fields mt-4 linkage-fields'),
             formGroup
             (
                 set::name('comment'),
@@ -138,6 +137,7 @@ foreach(explode(',', $job->triggerType) as $index => $trigger)
         ) : null,
         $trigger == 'schedule' ? div
         (
+            setClass('linkage-fields'),
             formRow
             (
                 setClass('custom-fields mt-2'),
