@@ -307,7 +307,7 @@ function getFileActions(file, doc)
  * Get actions of foot toolbar in doc table.
  * 获取文档列表页底部工具栏的操作项。
  */
-function getDocListActions(info)
+function getDocTableActions(info)
 {
     return [{
         text: getLang('moveTo'),
@@ -322,7 +322,7 @@ function getDocListActions(info)
 
 const actionsMap =
 {
-    'doc-list': getDocListActions
+    'doc-table': getDocTableActions
 };
 
 function getActions(type, info)
