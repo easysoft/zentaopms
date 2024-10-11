@@ -2215,8 +2215,20 @@ class taskTest
         $tasks = $this->objectModel->getUnclosedTasksByExecution($executionID);
         if(!$tasks) return false;
 
+        $return = '';
         if(is_array($tasks))
         {
+            foreach($tasks as $task)
+            {
+                if(is_array($task))
+                {
+                    foreach($task as $key => $value) $return .= $value->id . ',' . $value->execution . ';';
+                }
+                else
+                {
+                    $return .= $task . ';';
+                }
+            }
         }
         $return = rtrim($return, ';');
         return $return;
