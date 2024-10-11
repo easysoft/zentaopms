@@ -1203,14 +1203,14 @@ class doc extends control
      * Move Lib.
      *
      * @param  int    $libID
-     * @param  string $targetSpace  mine|[int]
+     * @param  string $targetSpace
      * @access public
      * @return void
      */
     public function moveLib(int $libID, string $targetSpace = '')
     {
         $lib = $this->doc->getLibByID($libID);
-        if(empty($targetSpace)) $targetSpace = $lib->type == 'mine' ? 'mine' : $lib->parent;
+        if(empty($targetSpace)) $targetSpace = $lib->parent;
         if(!empty($lib->main)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorEditSystemDoc));
 
         if(!empty($_POST))
@@ -1227,12 +1227,14 @@ class doc extends control
             return $this->docZen->responseAfterMove($this->post->space, $libID);
         }
 
-        $this->docZen->setAclForCreateLib(is_numeric($targetSpace) ? 'custom' : 'mine');
+        $spaceInfo = $this->doc->getLibByID((int)$targetSpace);
+        $this->docZen->setAclForCreateLib($spaceInfo->type);
 
         $this->view->title        = $this->lang->doc->moveLibAction;
         $this->view->spaces       = $this->doc->getSubSpaces('all');
         $this->view->lib          = $lib;
         $this->view->targetSpace  = $targetSpace;
+        $this->view->libType      = $spaceInfo->type;
         $this->view->hasOthersDoc = $this->doc->hasOthersDoc($lib);
         $this->view->groups       = $this->loadModel('group')->getPairs();
         $this->view->users        = $this->loadModel('user')->getPairs('nocode|noclosed');
