@@ -123,7 +123,6 @@ class think3c extends thinkModel
             ->const('blockName', $lang->thinkwizard->block)
             ->const('blocksData', $blocks)
             ->const('repeatTips', $lang->thinkwizard->error->blockRepeat)
-            ->const('confirmLang', $lang->thinkwizard->actions->confirm)
             ->do(
                 'const $tatget = $(this);',
                 'const index = $tatget.data("index");',
@@ -136,7 +135,7 @@ class think3c extends thinkModel
                 'inputs.each((index, ele) => {values.push($(ele).val());});',
                 'if(value != currentValue && new Set(values).size != values.length)
                 {
-                    return zui.Modal.confirm({message: repeatTips, actions: [{text: confirmLang, type: "primary", class: "w-20"}]}).then(() => {
+                    return zui.Modal.alert({message: repeatTips, icon: "icon-exclamation-sign", iconClass: "warning-pale rounded-full icon-2x"}).then(() => {
                         $tatget.val(currentValue);
                         $tatget.attr("title", currentValue);
                         if($blockTitle.length)
