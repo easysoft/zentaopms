@@ -76,5 +76,5 @@ $relation->gen(0);
 $tester = new linkStoryTester();
 $tester->login();
 
-r($tester->linkStory(1)) && p('message,status') && e('关联需求成功,SUCCESS'); // 使用默认选项批量创建业务需求，搜索后详情页信息对应
+r($tester->linkStory(1)) && p('message,status') && e('关联需求成功,SUCCESS'); // 关联需求后查看需求详情页关联的需求是否正确
 $tester->closeBrowser();
