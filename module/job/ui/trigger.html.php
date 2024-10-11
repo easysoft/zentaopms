@@ -23,8 +23,7 @@ jsVar('svnField', formRow
         set::name('svnDir[]'),
         set::width('1/2'),
         set::label($lang->job->svnDir),
-        set::items(!empty($dirs) ? $dirs : array()),
-        set::value($job->svnDir)
+        set::items(!empty($dirs) ? $dirs : array())
     )
 )->render());
 jsVar('commentField', formRow
@@ -34,7 +33,6 @@ jsVar('commentField', formRow
     (
         set::name('comment'),
         set::label($lang->job->comment),
-        set::value($job->comment),
         set::width('1/2'),
         set::required(true)
     ),
@@ -55,8 +53,7 @@ jsVar('scheduleField', div
             set::label(''),
             set::name('atDay[]'),
             set::control('checkListInline'),
-            set::items($lang->datepicker->dayNames),
-            set::value($job->atDay)
+            set::items($lang->datepicker->dayNames)
         )
     ),
     formRow
@@ -69,11 +66,7 @@ jsVar('scheduleField', div
             inputGroup
             (
                 $lang->job->atTime,
-                timePicker
-                (
-                    set::name('atTime'),
-                    set::value($job->atTime)
-                )
+                div(setID('scheduleTime%s'))
             )
         )
     )
@@ -116,7 +109,7 @@ foreach(explode(',', $job->triggerType) as $index => $trigger)
         ),
         $trigger == 'tag' && $repo->SCM == 'Subversion' ? formRow
         (
-            setClass('svn-fields hidden'),
+            setClass('svn-fields'),
             formGroup
             (
                 set::name('svnDir[]'),
@@ -128,7 +121,7 @@ foreach(explode(',', $job->triggerType) as $index => $trigger)
         ) : null,
         $trigger == 'commit' ? formRow
         (
-            setClass('comment-fields hidden mt-4'),
+            setClass('comment-fields mt-4'),
             formGroup
             (
                 set::name('comment'),
@@ -147,7 +140,7 @@ foreach(explode(',', $job->triggerType) as $index => $trigger)
         (
             formRow
             (
-                setClass('custom-fields hidden mt-2'),
+                setClass('custom-fields mt-2'),
                 formGroup
                 (
                     set::label(''),
@@ -159,7 +152,7 @@ foreach(explode(',', $job->triggerType) as $index => $trigger)
             ),
             formRow
             (
-                setClass('custom-fields hidden'),
+                setClass('custom-fields'),
                 formGroup
                 (
                     set::label(''),
