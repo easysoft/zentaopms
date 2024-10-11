@@ -13,6 +13,10 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
             if(!exeuctions) return;
 
             const confirmCloseTip = confirmBatchCloseExecution.replace('%s', exeuctions.join(', '));
+            zui.Modal.confirm(confirmCloseTip).then((res) =>
+            {
+                if(res) postBatchBtn($target, checkedList);
+            });
         });
     }
     else
