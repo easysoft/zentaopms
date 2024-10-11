@@ -64,7 +64,27 @@ window.changeTriggerType = function(event)
     const $parentDom = $(event.target).closest('.trigger-box');
     if($parentDom.find('.linkage-fields').length) $parentDom.find('.linkage-fields').remove();
 
+    const triggers = [];
+    $('input[name^=triggerType]').each(function()
+    {
+        if($(this).attr('id') != $(event.target).attr('id')) triggers.push($(this).val());
+    });
+
     const type = $(event.target).val();
+    if(triggers.includes(type))
+    {
+        zui.Modal.alert(triggerRepeat).then(() =>
+        {
+            let triggerList = {};
+            $.extend(true, triggerList, triggerTypeList);
+            triggers.forEach((trigger) => {
+                if(triggerList[trigger]) delete triggerList[trigger];
+            });
+            $(event.target).zui('picker').$.setValue(triggerList ? Object.keys(triggerList)[0] : '');
+        });
+        return;
+    }
+
     if(type == 'tag' && repo.SCM == 'Subversion') $parentDom.append(svnField);
     if(type == 'commit')   $parentDom.append(commentField);
     if(type == 'schedule')
