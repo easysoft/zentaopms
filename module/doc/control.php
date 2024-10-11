@@ -171,7 +171,7 @@ class doc extends control
             $libID = $this->doc->createLib($lib, (string)$this->post->type, (string)$this->post->libType);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if($type == 'custom')
+            if($type == 'custom' || $type == 'mine')
             {
                 $lib      = $this->doc->getLibByID($libID);
                 $objectID = $lib->parent;
@@ -201,10 +201,10 @@ class doc extends control
             if($execution->type == 'stage') $this->lang->doc->execution = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doc->execution);
         }
 
-        if($type == 'custom')
+        if($type == 'custom' || $type == 'mine')
         {
             $lib = $this->doc->getLibByID($libID);
-            $this->view->spaces  = $this->doc->getTeamSpaces();
+            $this->view->spaces  = $this->doc->getSubSpaces($type);
             $this->view->spaceID = !empty($lib->parent) ? $lib->parent : $objectID;
         }
 
