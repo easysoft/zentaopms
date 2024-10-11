@@ -3,9 +3,16 @@
 
 /**
 
-title=编辑文档测试
+title=编辑接口测试
 timeout=0
 cid=0
+
+- 编辑接口库成功
+ - 测试结果 @编辑接口库成功
+ - 最终测试状态 @SUCCESS
+- 编辑接口文档成功
+ - 测试结果 @编辑接口文档成功
+ - 最终测试状态 @SUCCESS
 
 */
 chdir(__DIR__);
@@ -32,4 +39,4 @@ $apiDoc->docB = 'apiDocB';
 $apiPath = new stdClass();
 $apiPath->pathB = 'apipathB';
 
-r($tester->editApiLib($editLib, $apiDoc, $apiPath)) && p('message,status') && e('编辑接口文档成功,SUCCESS'); //编辑接口文档成功
+r($tester->editApiLib($editLib)) && p('message,status') && e('编辑接口库成功,SUCCESS'); //编辑接口库成功
