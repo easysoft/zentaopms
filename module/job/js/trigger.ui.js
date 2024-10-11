@@ -146,6 +146,12 @@ window.addTrigger = function()
         name:     `triggerType[${window.triggerCount}]`,
         required: true
     });
+
+    setTimeout(() =>
+    {
+        $('#triggerPicker' + (window.triggerCount - 1)).zui('picker').$.setValue(trigger);
+    }, 50)
+
     window.triggerCount ++;
     if($('#triggerForm .trigger-box').length > 1) $('.delete-trigger').removeClass('hidden');
     if($('#triggerForm .trigger-box').length >= Object.keys(triggerTypeList).length) $('.add-trigger-btn').addClass('hidden');
