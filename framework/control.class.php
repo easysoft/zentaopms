@@ -557,7 +557,8 @@ class control extends baseControl
         $moduleName = $moduleName ? $moduleName : $this->app->rawModule;
         $methodName = $methodName ? $methodName : $this->app->rawMethod;
 
-        $flow = $this->loadModel('workflow')->getByModule($moduleName);
+        $groupID = $this->loadModel('workflowgroup')->getGroupIDByData($moduleName, $object);
+        $flow    = $this->loadModel('workflow')->getByModule($moduleName, false, $groupID);
         if(!$flow) return '';
 
         $groupID = $this->loadModel('workflowgroup')->getGroupIDByData($moduleName, $object);
