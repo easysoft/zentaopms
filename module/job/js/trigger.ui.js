@@ -1,8 +1,12 @@
 $(function()
 {
+    $('.linkage-fields.hidden').remove();
+    $('.custom-fields.hidden').parent().remove();
+
     window.customCount  = $('#paramDiv .input-group').length;
     window.triggerCount = $('#triggerForm .trigger-box').length;
 });
+
 window.addItem = function(event)
 {
     const obj        = $(event.target);
@@ -63,7 +67,13 @@ window.changeTriggerType = function(event)
     const type = $(event.target).val();
     if(type == 'tag' && repo.SCM == 'Subversion') $parentDom.append(svnField);
     if(type == 'commit')   $parentDom.append(commentField);
-    if(type == 'schedule') $parentDom.append(scheduleField);
+    if(type == 'schedule')
+    {
+        $parentDom.append(scheduleField.replace(/%s/g, window.triggerCount));
+        new zui.TimePicker('#scheduleTime' + window.triggerCount, {
+            name: 'atTime'
+        })
+    }
     $parentDom.find('.hidden').removeClass('hidden');
 }
 
@@ -92,7 +102,7 @@ window.addTrigger = function()
     });
     new zui.Picker('#triggerPicker' + window.triggerCount, {
         items:         options,
-        name:         `triggerType${window.triggerCount}`,
+        name:         `triggerType[${window.triggerCount}]`,
         required:     true,
         defaultValue: options.length ? options[0].value : ''
     });
