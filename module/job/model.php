@@ -287,12 +287,12 @@ class jobModel extends model
      */
     public function exec(int $id, array $extraParam = array(), string $triggerType = ''): object|false
     {
-        $job = $this->dao->select('t1.id,t1.name,t1.product,t1.repo,t1.server,t1.pipeline,t1.triggerType,t1.atTime,t1.customParam,t1.engine,t1.svnDir,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password')
+        $job = $this->dao->select('t1.*,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password')
             ->from(TABLE_JOB)->alias('t1')
             ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.server=t2.id')
             ->where('t1.id')->eq($id)
             ->fetch();
-        if(!$job) return false;
+        if(!$job || empty($job->autoRun)) return false;
 
         $repo = $this->loadModel('repo')->getByID($job->repo);
         if(!$repo) return false;
@@ -300,14 +300,13 @@ class jobModel extends model
         $method = 'exec' . ucfirst($job->engine) . 'Pipeline';
         if(!method_exists($this, $method)) return false;
 
+        $compileID = 0;
         if(in_array($triggerType, array('', 'schedule')) && strpos($job->triggerType, 'schedule') !== false)
         {
             $compileID = $this->loadModel('compile')->createByJob($job->id, $job->atTime, 'atTime');
-            $compile   = $this->$method($job, $repo, $compileID, $extraParam);
-            $this->dao->update(TABLE_COMPILE)->data($compile)->where('id')->eq($compileID)->exec();
         }
 
-        if(in_array($triggerType, array('', 'tag')) && strpos($job->triggerType, 'tag') !== false)
+        if(!$compileID && in_array($triggerType, array('', 'tag')) && strpos($job->triggerType, 'tag') !== false)
         {
             $job->lastTag = $this->getLastTagByRepo($repo, $job);
 
@@ -319,16 +318,15 @@ class jobModel extends model
             }
 
             $compileID = $this->loadModel('compile')->createByJob($job->id, $tag, 'tag');
-            $compile   = $this->$method($job, $repo, $compileID, $extraParam);
-            $this->dao->update(TABLE_COMPILE)->data($compile)->where('id')->eq($compileID)->exec();
         }
 
-        if(in_array($triggerType, array('', 'commit')) && strpos($job->triggerType, 'commit') !== false)
+        if(!$compileID && in_array($triggerType, array('', 'commit')) && strpos($job->triggerType, 'commit') !== false)
         {
             $compileID = $this->loadModel('compile')->createByJob($job->id);
-            $compile   = $this->$method($job, $repo, $compileID, $extraParam);
-            $this->dao->update(TABLE_COMPILE)->data($compile)->where('id')->eq($compileID)->exec();
         }
+
+        $compile = $this->$method($job, $repo, $compileID, $extraParam);
+        $this->dao->update(TABLE_COMPILE)->data($compile)->where('id')->eq($compileID)->exec();
 
         $this->dao->update(TABLE_JOB)
             ->set('lastExec')->eq(helper::now())
