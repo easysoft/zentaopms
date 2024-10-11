@@ -16,13 +16,14 @@ jsVar('triggerTypeList', $lang->job->triggerTypeList);
 
 jsVar('svnField', formRow
 (
-    setClass('svn-fields linkage-fields hidden'),
+    setClass('svn-fields linkage-fields hidden mt-4'),
     formGroup
     (
         set::name('svnDir[]'),
         set::width('1/2'),
         set::label($lang->job->svnDir),
-        set::items(!empty($dirs) ? $dirs : array())
+        set::control('static'),
+        div(setID('dirPicker%s'))
     )
 )->render());
 jsVar('commentField', formRow
@@ -108,7 +109,7 @@ foreach(explode(',', $job->triggerType) as $index => $trigger)
         ),
         $trigger == 'tag' && $repo->SCM == 'Subversion' ? formRow
         (
-            setClass('svn-fields linkage-fields'),
+            setClass('svn-fields mt-4 linkage-fields'),
             formGroup
             (
                 set::name('svnDir[]'),
