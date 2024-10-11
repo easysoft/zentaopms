@@ -86,7 +86,7 @@ window.changeTriggerType = function(event)
     }
 
     if(type != 'tag' || repo.SCM == 'Subversion') $parentDom.append(eval(`${type}Field`).replace(/%s/g, window.triggerCount));
-    if(type != 'commit') eval(`window.init${type}Block`);
+    if(type != 'commit') eval(`window.${type}BlockInit()`);
 
     $parentDom.find('.hidden').removeClass('hidden');
 }
@@ -142,7 +142,7 @@ window.deleteTrigger = function(event)
     if($('#triggerForm .trigger-box').length <= 1) $('.delete-trigger').addClass('hidden');
 }
 
-window.initTagBlock = function()
+window.tagBlockInit = function()
 {
     if(repo.SCM != 'Subversion') return;
 
@@ -159,7 +159,7 @@ window.initTagBlock = function()
     });
 }
 
-window.initScheduleBlock = function()
+window.scheduleBlockInit = function()
 {
     $('#scheduleTime' + window.triggerCount).addClass('form-group-wrapper picker-box');
     new zui.TimePicker('#scheduleTime' + window.triggerCount, {
