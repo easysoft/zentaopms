@@ -12,6 +12,10 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
     {
         $.ajaxSubmit({url, data: form});
     }
+    else if($(this).hasClass('ajax-cancel-btn'))
+    {
+        $.ajaxSubmit({url, data: form}).then();
+    }
     else
     {
         postAndLoadPage(url, form);
