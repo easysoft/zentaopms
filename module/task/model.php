@@ -3352,4 +3352,18 @@ class taskModel extends model
             ->andWhere('t3.id')->ne('')
             ->fetchGroup('revision', 'id');
     }
+
+    /**
+     * 获取执行未关闭的任务
+     * Get unclosed tasks by execution
+     *
+     * @param  string|int   $execution
+     * @access public
+     * @return array|false
+     */
+    public function getUnclosedTasksByExecution(array|int $execution): array|false
+    {
+        if(is_array($execution)) return $this->dao->select('id,execution')->from(TABLE_TASK)->where('execution')->in($execution)->andWhere('status')->ne('closed')->andWhere('deleted')->eq('0')->fetchGroup('execution');
+        return $this->dao->select('id,name')->from(TABLE_TASK)->where('execution')->eq($execution)->andWhere('status')->ne('closed')->andWhere('deleted')->eq('0')->fetchPairs();
+    }
 }
