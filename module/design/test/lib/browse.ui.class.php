@@ -2,6 +2,15 @@
 include dirname(__FILE__, 5) . '/test/lib/ui.php';
 class browseTester extends tester
 {
+    /**
+     * 检查各个菜单下的数据。
+     * Check the data of different menu.
+     *
+     * @param  string $menu all|hlds|dds|dbds|ads
+     * @param  string $expectNum
+     * @access public
+     * @return object
+     */
     public function checkMenu($menu, $expectNum)
     {
         $form         = $this->initForm('design', 'browse', array('projecID' => 1), 'appIframe-project');
