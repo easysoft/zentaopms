@@ -99,7 +99,7 @@ class think3c extends thinkModel
 
         $blocks = $this->prop('blocks');
         $area   = array();
-        foreach($blocks as $key => $block)
+        foreach($blocks as $block)
         {
             if(!empty($block->steps)) $area[] = $this->buildResultCard($block->steps, $block->id);
         }
