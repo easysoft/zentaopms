@@ -990,19 +990,19 @@ class docModel extends model
      * 获取团队空间或我的空间下的空间。
      * Get team spaces or my spaces.
      *
-     * @param  string $type
+     * @param  string $type all|mine|custom
      * @access public
      * @return array
      */
-    public function getSubSpaces(string $type = 'custom'): array
+    public function getSubSpaces(string $type = 'all'): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getSubSpaces($type);
 
         $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)
-            ->where('type')->eq($type)
-            ->andWhere('deleted')->eq(0)
+            ->where('deleted')->eq(0)
             ->andWhere('parent')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
+            ->beginIF($type != 'all')->andWhere('type')->eq($type)->fi()
             ->fetchAll();
 
         $pairs = array();
@@ -3161,16 +3161,13 @@ class docModel extends model
     public function moveLib(int $libID, object $data): bool
     {
         if(empty($libID) || empty($data->space)) return false;
+
         if(is_numeric($data->space))
         {
-            $data->type   = 'custom';
+            $space = $this->getLibByID((int)$data->space);
+
+            $data->type   = $space->type;
             $data->parent = $data->space;
-        }
-        elseif($data->space == 'mine')
-        {
-            $data->type    = 'mine';
-            $data->parent  = 0;
-            $data->addedBy = $this->app->user->account;
         }
         else
         {

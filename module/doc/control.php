@@ -1230,7 +1230,7 @@ class doc extends control
         $this->docZen->setAclForCreateLib(is_numeric($targetSpace) ? 'custom' : 'mine');
 
         $this->view->title        = $this->lang->doc->moveLibAction;
-        $this->view->spaces       = $this->docZen->getAllSpaces();
+        $this->view->spaces       = $this->doc->getSubSpaces('all');
         $this->view->lib          = $lib;
         $this->view->targetSpace  = $targetSpace;
         $this->view->hasOthersDoc = $this->doc->hasOthersDoc($lib);
