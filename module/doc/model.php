@@ -955,6 +955,33 @@ class docModel extends model
     }
 
     /**
+     * 获取团队空间下的空间。
+     * Get team spaces.
+     *
+     * @access public
+     * @return array
+     */
+    public function getTeamSpaces(): array
+    {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getSubSpaces('custom');
+
+        $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)
+            ->where('type')->eq('custom')
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('parent')->eq(0)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->fetchAll();
+
+        $pairs = array();
+        foreach($objectLibs as $lib)
+        {
+            if($this->checkPrivLib($lib)) $pairs[$lib->id] = $lib->name;
+        }
+
+        return $pairs;
+    }
+
+    /**
      * 获取团队空间或我的空间下的空间。
      * Get team spaces or my spaces.
      *
@@ -2274,7 +2301,7 @@ class docModel extends model
         {
             if($type == 'custom')
             {
-                $spaces = $this->getSubSpaces('custom');
+                $spaces = $this->getTeamSpaces();
                 if(empty($objectID)) $objectID = (int)key($spaces);
                 if(!isset($spaces[$objectID])) $objectID = (int)key($spaces);
             }
