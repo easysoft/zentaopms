@@ -21,7 +21,7 @@ class think3c extends thinkModel
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
-    protected function buildOptionsContent(object $step, int $blockID): array|null
+    protected function buildOptionsContent(object $step, int $blockID): array
     {
         global $lang;
 
@@ -32,14 +32,20 @@ class think3c extends thinkModel
         foreach($showOptions as $option)
         {
             if($option == 'other') $option = $step->answer->other ? $step->answer->other : $lang->other;
-            if(!empty($option)) $content[] = div(setClass('mt-1'), $option);
+            if(!empty($option)) $content[] = div(setClass('mt-1 border p-1.5'), $option);
         }
 
-        return $content;
+        return empty($content) ? array() : array
+        (
+            div(setClass('text-lg mb-0.5'), $lang->thinkstep->label->option),
+            $content
+        );
     }
 
     protected function buildMulticolumnContent(object $step, int $blockID): array
     {
+        global $lang;
+
         $title  = '';
         $colKey = $step->link['column'][0];
         if(isset($step->options->fields[$colKey - 1])) $title = $step->options->fields[$colKey - 1];
@@ -54,12 +60,12 @@ class think3c extends thinkModel
         $content = array();
         foreach($result as $item)
         {
-            if(!empty($item)) $content[] = div(setClass('mt-1'), $item);
+            if(!empty($item)) $content[] = div(setClass('mt-1 border p-1.5'), $item);
         }
 
         return empty($content) ? array() : array
         (
-            div(setClass('text-lg'), $title),
+            div(setClass('text-lg mb-0.5'), $lang->thinkstep->label->columnTitle . ': ' . $title),
             $content
         );
     }
@@ -148,7 +154,8 @@ class think3c extends thinkModel
                 '$tatget.attr("title", value);',
                 '$tatget.val(value);',
                 'if($blockTitle.length) {$blockTitle.text(value); $blockTitle.closest(".block-title").attr("title", value + blockName);}'
-            )
+            ),
+            $mode == 'view' ? $this->buildAreaCard() : null
         );
     }
 
