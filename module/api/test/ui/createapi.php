@@ -7,6 +7,10 @@ title=创建文档测试
 timeout=0
 cid=0
 
+- 创建接口文档成功
+ - 测试结果 @创建接口文档成功
+ - 最终测试状态 @SUCCESS
+
 */
 chdir(__DIR__);
 include '../lib/createapi.ui.class.php';
