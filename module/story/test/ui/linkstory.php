@@ -58,3 +58,23 @@ $action->action->range('opened');
 $action->read->range('0');
 $action->vision->range('rnd');
 $action->gen(4);
+
+$relation = zenData('relation');
+$relation->id->range('[]');
+$relation->product->range('[]');
+$relation->project->range('[]');
+$relation->execution->range('[]');
+$relation->AType->range('[]');
+$relation->AID->range('[]');
+$relation->AVersion->range('[]');
+$relation->relation->range('[]');
+$relation->BType->range('[]');
+$relation->BID->range('[]');
+$relation->BVersion->range('[]');
+$relation->gen(0);
+
+$tester = new linkStoryTester();
+$tester->login();
+
+r($tester->linkStory(1)) && p('message,status') && e('关联需求成功,SUCCESS'); // 使用默认选项批量创建业务需求，搜索后详情页信息对应
+$tester->closeBrowser();
