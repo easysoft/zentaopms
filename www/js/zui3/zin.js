@@ -160,7 +160,7 @@
         if($bar.length) return;
 
         $bar = $('<div id="zinbar"></div>').insertAfter('body');
-        zinbar = new zui.Zinbar($bar[0]);
+        zinbar = new zui.Zinbar($bar[0], typeof window.zin.zinTool === 'object' ? window.zin.zinTool : {});
     }
 
     function registerTimer(callback, time, type)
