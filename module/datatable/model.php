@@ -478,7 +478,8 @@ class datatableModel extends model
         $flow = $this->loadModel('workflow')->getByModule($module);
         if(empty($flow)) return $fieldList;
 
-        $fields = $this->loadModel('workflowaction')->getPageFields($module, $method);
+        $groupID = $this->loadModel('workflowgroup')->getGroupIDBySession($module);
+        $fields  = $this->loadModel('workflowaction')->getPageFields($module, $method, true, array(), 0, $groupID);
         if($flow->buildin == 1)
         {
             $action = $this->workflowaction->getByModuleAndAction($module, $method);
