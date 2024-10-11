@@ -3184,78 +3184,7 @@ class docModel extends model
         $actionID = $this->loadModel('action')->create('docLib', $libID, 'Moved', '', json_encode(array('from' => $lib->type == 'mine' ? 'mine' : $lib->parent, 'to' => $data->type == 'mine' ? 'mine' : $data->parent)));
         $this->action->logHistory($actionID, $changes);
 
-        /* 从团队空间移动到我的空间，需要保留其他人创建的文档在团队空间。 */
-        if($data->type == 'mine') $this->reserveOthersDoc($lib);
-
         return true;
-    }
-
-    /**
-     * 迁移文档库时保留其他人创建的文档。
-     * Reserve other people's documents when migrating document libraries.
-     *
-     * @param  object $lib
-     * @access public
-     * @return void
-     */
-    public function reserveOthersDoc(object $lib)
-    {
-        $othersDocList = $this->dao->select('id, module')->from(TABLE_DOC)
-            ->where('lib')->eq($lib->id)
-            ->andWhere('addedBy')->ne($this->app->user->account)
-            ->andWhere('deleted')->eq('0')
-            ->fetchPairs();
-
-        if($othersDocList)
-        {
-            unset($lib->id);
-            $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
-            $newLibID = $this->dao->lastInsertID();
-
-            $this->dao->update(TABLE_DOC)->set('lib')->eq($newLibID)->where('id')->in(array_keys($othersDocList))->exec();
-
-            $modulePairs  = $this->dao->select('id, path')->from(TABLE_MODULE)->where('id')->in($othersDocList)->andWhere('deleted')->eq('0')->fetchPairs();
-            $moduleIdList = array();
-            foreach($modulePairs as $path)
-            {
-                $paths = explode(',', trim($path, ','));
-                foreach($paths as $id)
-                {
-                    if($id > 0) $moduleIdList[$id] = $id;
-                }
-            }
-
-            $mapList = array();
-            $idMap   = array();
-            $modules = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->in($moduleIdList)->andWhere('deleted')->eq('0')->fetchAll('id');
-            foreach($modules as $module)
-            {
-                $oldID = $module->id;
-                unset($module->id);
-                $module->root = $newLibID;
-                $this->dao->insert(TABLE_MODULE)->data($module)->exec();
-
-                $newID = $this->dao->lastInsertID();
-
-                $module->id    = $newID;
-                $mapList[]     = $module;
-                $idMap[$oldID] = $newID;
-
-                $this->dao->update(TABLE_DOC)->set('module')->eq($newID)->where('module')->eq($oldID)->andWhere('lib')->eq($newLibID)->exec();
-            }
-
-            foreach($mapList as $module)
-            {
-                $parent = $module->parent ? $idMap[$module->parent] : 0;
-                $paths  = explode(',', trim($module->path, ','));
-                foreach($paths as $key => $path)
-                {
-                    if($path) $paths[$key] = $idMap[$path];
-                }
-                $path = implode(',', $paths);
-                $this->dao->update(TABLE_MODULE)->set('parent')->eq($parent)->set('path')->eq($path)->where('id')->eq($module->id)->exec();
-            }
-        }
     }
 
     /**
