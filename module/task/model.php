@@ -357,7 +357,7 @@ class taskModel extends model
         /* Multi-task change to normal task. */
         if($task->mode == 'single') $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->exec();
 
-        if(isset($task->version) && $task->version > $oldTask->version) $this->taskTao->recordTaskVersion($task);
+        if(isset($task->version) && $task->version > $oldTask->version) $this->recordTaskVersion($task);
 
         /* Compute task's story stage. */
         $this->loadModel('story')->setStage($task->story);
