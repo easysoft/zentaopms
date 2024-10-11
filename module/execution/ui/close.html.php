@@ -10,11 +10,28 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$confirmTip   = !empty($unclosedTasks) ? sprintf($this->lang->execution->confirmCloseExecution, implode($this->lang->comma, $unclosedTasks)) : '';
+$confirmURL   = $this->createLink('execution', 'close', "executionID={$executionID}&from={$from}");
+$beforeSubmit = jsRaw("() =>
+{
+    zui.Modal.confirm('{$confirmTip}').then((res) =>
+    {
+        if(res)
+        {
+            const formData = new FormData($('#zin_execution_close_{$executionID}_form')[0]);
+            $.ajaxSubmit({url: '{$confirmURL}', data: formData});
+        }
+    });
+    return false;
+}");
+
 $space = common::checkNotCN() ? ' ' : '';
 modalHeader(set::title($lang->execution->close . $space . $lang->executionCommon));
 formPanel
 (
+    set::formID('zin_execution_close_' . $executionID . '_form'),
     set::submitBtnText($lang->execution->close . $space . $lang->executionCommon),
+    !empty($unclosedTasks) ? set::ajax(array('beforeSubmit' => $beforeSubmit)) : null,
     formGroup
     (
         set::width('1/2'),
