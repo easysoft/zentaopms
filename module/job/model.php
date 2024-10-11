@@ -221,28 +221,30 @@ class jobModel extends model
     public function update(int $id, object $job): bool
     {
         $repo = $this->loadModel('repo')->getByID($job->repo);
+        if($this->app->rawMethod != 'trigger')
+        {
+            $result = $this->jobTao->getServerAndPipeline($job, $repo);
+            if(!$result) return false;
 
-        $result = $this->jobTao->getServerAndPipeline($job, $repo);
-        if(!$result) return false;
+            $result = $this->jobTao->checkIframe($job, $id);
+            if(!$result) return false;
+        }
+        else
+        {
+            $this->jobTao->getSvnDir($job, $repo);
+            $result = $this->jobTao->getCustomParam($job);
+            if(!$result) return false;
+        }
 
-        if($job->triggerType == 'schedule') $job->atDay = empty($_POST['atDay']) ? '' : implode(',', $this->post->atDay);
-
-        $result = $this->jobTao->checkIframe($job, $id);
-        if(!$result) return false;
-
-        $this->jobTao->getSvnDir($job, $repo);
-
-        $result = $this->jobTao->getCustomParam($job);
-        if(!$result) return false;
-
-        $this->dao->update(TABLE_JOB)->data($job)
-            ->batchCheck($this->config->job->edit->requiredFields, 'notempty')
-            ->batchCheckIF($job->triggerType === 'schedule' and $job->atDay !== '0', "atDay", 'notempty')
-            ->batchCheckIF($job->triggerType === 'schedule', "atTime", 'notempty')
-            ->batchCheckIF($job->triggerType === 'commit', "comment", 'notempty')
-            ->batchCheckIF(($repo->SCM == 'Subversion' and $job->triggerType == 'tag'), "svnDir", 'notempty')
+        $skipFields = 'triggerType,svnDir,comment,atDay,atTime,paramName,paramValue,autoRun';
+        if($this->app->rawMethod == 'trigger') $skipFields = 'name,engine,repo,reference,frame,product,sonarqubeServer,projectKey,jkServer,jkTask,gitfoxpipeline';
+        $this->dao->update(TABLE_JOB)->data($job, $skipFields)
+            ->batchCheckIF($this->app->rawMethod != 'trigger', $this->config->job->edit->requiredFields, 'notempty')
+            ->batchCheckIF(strpos($job->triggerType, 'schedule') !== false && $job->atDay !== '0', "atDay", 'notempty')
+            ->batchCheckIF(strpos($job->triggerType, 'schedule') !== false, "atTime", 'notempty')
+            ->batchCheckIF(strpos($job->triggerType, 'commit') !== false, "comment", 'notempty')
+            ->batchCheckIF(($repo->SCM == 'Subversion' && strpos($job->triggerType, 'tag') !== false), "svnDir", 'notempty')
             ->batchCheckIF($job->frame === 'sonarqube', "sonarqubeServer,projectKey", 'notempty')
-            ->autoCheck()
             ->where('id')->eq($id)
             ->exec();
         if(dao::isError()) return false;
