@@ -4,17 +4,20 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
     const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return;
 
-    const url  = $(this).data('url');
-    const form = new FormData();
-    checkedList.forEach((id) => form.append('executionIDList[]', id.replace("pid", '')));
-
-    if($(this).hasClass('ajax-btn'))
+    const $target = $(this);
+    if($target.hasClass('batch-close-btn'))
     {
-        $.ajaxSubmit({url, data: form});
+        const getNonClosableLink = $.createLink('execution', 'ajaxGetNonClosableExecutions', 'executionID=' + checkedList.join(','));
+        $.getJSON(getNonClosableLink, function(exeuctions)
+        {
+            if(!exeuctions) return;
+
+            const confirmCloseTip = confirmBatchCloseExecution.replace('%s', exeuctions.join(', '));
+        });
     }
     else
     {
-        postAndLoadPage(url, form);
+        postBatchBtn($target, checkedList);
     }
 });
 
@@ -38,4 +41,20 @@ window.onRenderCell = function(result, {col, row})
     if(['estimate', 'consumed','left'].includes(col.name) && result) result[0] = {html: result[0] + ' h'};
 
     return result;
+}
+
+function postBatchBtn($target, checkedList)
+{
+    const url  = $target.data('url');
+    const form = new FormData();
+    checkedList.forEach((id) => form.append('executionIDList[]', id.replace("pid", '')));
+
+    if($target.hasClass('ajax-btn'))
+    {
+        $.ajaxSubmit({url, data: form});
+    }
+    else
+    {
+        postAndLoadPage(url, form);
+    }
 }

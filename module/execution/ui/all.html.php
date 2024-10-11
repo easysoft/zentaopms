@@ -14,6 +14,7 @@ namespace zin;
 
 jsVar('typeList', $lang->execution->typeList);
 jsVar('delayed', $lang->execution->delayed);
+jsVar('confirmBatchCloseExecution', $lang->execution->confirmBatchCloseExecution);
 
 $footToolbar = array();
 $canBatchEdit         = common::hasPriv('execution', 'batchEdit');
@@ -36,7 +37,7 @@ if($canBatchAction)
         $statusList = array();
         foreach($lang->execution->statusList as $key => $value)
         {
-            $statusList[] = array('text' => $value, 'innerClass' => 'batch-btn ajax-btn', 'data-url' => createLink('execution', 'batchChangeStatus', "status=$key"));
+            $statusList[] = array('text' => $value, 'innerClass' => 'batch-btn ajax-btn' . ($key == 'closed' ? ' batch-close-btn' : ''), 'data-url' => createLink('execution', 'batchChangeStatus', "status=$key"));
         }
 
         $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->statusAB, 'className' => 'btn btn-caret size-sm', 'btnType' => 'secondary', 'items' => $statusList, 'type' => 'dropdown');
