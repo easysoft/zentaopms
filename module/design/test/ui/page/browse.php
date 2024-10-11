@@ -19,6 +19,9 @@ class browsePage extends page
             'dbdsMenu'      => "//*[@id='mainNavbar']/div/menu/li[4]/a/span",
             'adsMenu'       => "//*[@id='mainNavbar']/div/menu/li[5]/a/span",
             'designNum'     => "//*[@id='table-design-browse']/div[3]/nav/div[1]",
+            'dropMenu'      => "//*[@id='pick-design-menu']",
+            'firstProduct'  => "//*[@id='pick-pop-design-menu']/div[2]/div/div/menu/li[2]/div/div/div",
+            'secondProduct' => "//*[@id='pick-pop-design-menu']/div[2]/div/div/menu/li[3]/div/div/div",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
