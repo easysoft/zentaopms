@@ -1032,12 +1032,13 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function ajaxGetSpaceMenu(int $libID, string $module, string $method)
+    public function ajaxGetSpaceMenu(int $libID, string $module, string $method, string $extra = 'nomine')
     {
         $this->view->libID  = $libID;
         $this->view->module = $module;
         $this->view->method = $method;
-        $this->view->spaces = $this->docZen->getAllSpaces('nomine');
+        $this->view->extra  = $extra;
+        $this->view->spaces = $this->docZen->getAllSpaces($extra);
 
         $this->display();
     }

@@ -969,8 +969,8 @@ class docModel extends model
     }
 
     /**
-     * 获取团队空间下的空间。
-     * Get team spaces.
+     * 获取文档模板中的空间。
+     * Get doctemplate spaces.
      *
      * @access public
      * @return array
@@ -979,11 +979,51 @@ class docModel extends model
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getTeamSpaces();
 
+        $spaces = $this->getSpacePairs('doctemplate');
+        if(empty($spaces)) $this->initDocTemplateSpaces();
+
         return $this->getSpacePairs('doctemplate');
     }
 
+    /**
+     * 初始化文档模板空间。
+     * Init doctemplate spaces.
+     *
+     * @access public
+     * @return array
+     */
     public function initDocTemplateSpaces()
     {
+        $this->loadModel('doctempalte');
+        $defaultSpaces = $this->config->doctemplate->defaultSpaces;
+
+        foreach($defaultSpaces as $code => $childs)
+        {
+            $spaceID = $this->doInsertLib($this->initDocDefaultSpaces($code));
+
+            foreach($childs as $childCode) $this->doInsertLib($this->initDocDefaultSpaces($childCode, $spaceID));
+        }
+    }
+
+    /**
+     * 初始化文档模板空间。
+     * Init doctemplate spaces.
+     *
+     * @access public
+     * @return array
+     */
+    public function initDocDefaultSpaces($code, $parent = 0)
+    {
+        $space = new stdclass();
+        $space->type      = 'doctemplate';
+        $space->vision    = 'rnd';
+        $space->parent    = $parent;
+        $space->name      = $this->lang->doctemplate->$code;
+        $space->acl       = 'open';
+        $space->addedBy   = 'system';
+        $space->addedDate = helper::now();
+
+        return $space;
     }
 
     /**
@@ -1467,8 +1507,8 @@ class docModel extends model
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getDocLibs();
 
-        if(!in_array($type, array('mine', 'custom', 'product', 'project', 'execution'))) return array();
-        if(in_array($type, array('mine', 'custom')))
+        if(!in_array($type, array('mine', 'custom', 'product', 'project', 'execution', 'doctemplate'))) return array();
+        if(in_array($type, array('mine', 'custom', 'doctemplate')))
         {
             $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('deleted')->eq(0)
@@ -2319,14 +2359,14 @@ class docModel extends model
             $libs = $this->getLibsByObject($type, $objectID, $appendLib);
             if(($libID == 0 || !isset($libs[$libID])) && !empty($libs)) $libID = reset($libs)->id;
             if(isset($libs[$libID])) $objectDropdown['text'] = zget($libs[$libID], 'name', '');
-            if($type == 'custom')
+            if($type == 'custom' || $type == 'doctemplate')
             {
+                $spaceExtra = $type == 'custom' ? 'nomine' : 'doctemplate';
                 $objectDropdown['text'] = zget($spaces, $objectID, '');
-                $objectDropdown['link'] = helper::createLink('doc', 'ajaxGetSpaceMenu', "libID={$objectID}&module={$this->app->rawModule}&method={$this->app->rawMethod}");
+                $objectDropdown['link'] = helper::createLink('doc', 'ajaxGetSpaceMenu', "libID={$objectID}&module={$this->app->rawModule}&method={$this->app->rawMethod}&extra={$spaceExtra}");
             }
 
-            $object     = new stdclass();
-            $object->id = 0;
+            $object = $this->dao->select('id,name,deleted')->from(TABLE_DOCLIB)->where('id')->eq($objectID)->fetch();
         }
 
         $tab = strpos(',my,doc,product,project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'doc';
