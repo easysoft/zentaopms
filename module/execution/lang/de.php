@@ -439,6 +439,8 @@ $lang->execution->hasSuspendedOrClosedChildren = "The sub-stages under stage %s 
 $lang->execution->hasNotClosedChildren         = "The sub-stages under stage %s are not all closed, cannot be modified, and have been filtered.";
 $lang->execution->hasStartedTask               = "The task under %s %s has already started, cannot be modified, and has been filtered.";
 $lang->execution->cannotManageProducts         = 'The ' . strtolower($lang->project->common). ' model of this ' . strtolower($lang->execution->common) . " is %s and this " . strtolower($lang->execution->common) . " cannot be associated with {$lang->productCommon}.";
+$lang->execution->confirmCloseExecution        = "There are unclosed tasks under this execution: %s, are you sure you want to close the execution?";
+$lang->execution->confirmBatchCloseExecution   = "There are unclosed tasks in %s, are you sure you want to close the executions";
 
 /* Statistics. */
 $lang->execution->charts = new stdclass();
