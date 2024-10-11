@@ -2110,6 +2110,18 @@ class tutorialModel extends model
     }
 
     /**
+     * 获取新手模式团队空间。
+     * Get team spaces.
+     *
+     * @access public
+     * @return array
+     */
+    public function getDocTemplateSpaces(): array
+    {
+        return array(1 => 'Doc Template Space');
+    }
+
+    /**
      * 获取新手模式文档库。
      * Get doc lib.
      *

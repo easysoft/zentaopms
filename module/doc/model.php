@@ -965,20 +965,25 @@ class docModel extends model
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getSubSpaces('custom');
 
-        $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)
-            ->where('type')->eq('custom')
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('parent')->eq(0)
-            ->andWhere('vision')->eq($this->config->vision)
-            ->fetchAll();
+        return $this->getSpacePairs('custom');
+    }
 
-        $pairs = array();
-        foreach($objectLibs as $lib)
-        {
-            if($this->checkPrivLib($lib)) $pairs[$lib->id] = $lib->name;
-        }
+    /**
+     * 获取团队空间下的空间。
+     * Get team spaces.
+     *
+     * @access public
+     * @return array
+     */
+    public function getDocTemplateSpaces()
+    {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getTeamSpaces();
 
-        return $pairs;
+        return $this->getSpacePairs('doctemplate');
+    }
+
+    public function initDocTemplateSpaces()
+    {
     }
 
     /**
@@ -2299,12 +2304,14 @@ class docModel extends model
         }
         else
         {
-            if($type == 'custom')
+            if($type == 'custom' || $type == 'doctemplate')
             {
-                $spaces = $this->getTeamSpaces();
+                $spaces = $type == 'custom' ? $this->getTeamSpaces() : $this->getDocTemplateSpaces();
+
                 if(empty($objectID)) $objectID = (int)key($spaces);
                 if(!isset($spaces[$objectID])) $objectID = (int)key($spaces);
             }
+
             $libs = $this->getLibsByObject($type, $objectID, $appendLib);
             if(($libID == 0 || !isset($libs[$libID])) && !empty($libs)) $libID = reset($libs)->id;
             if(isset($libs[$libID])) $objectDropdown['text'] = zget($libs[$libID], 'name', '');

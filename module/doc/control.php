@@ -807,7 +807,7 @@ class doc extends control
      * 产品/项目/执行/团队空间。
      * ProductSpace/ProjectSpace/ExecutionSpace/TeamSpace.
      *
-     * @param  string $type        custom|product|project|execution
+     * @param  string $type        custom|product|project|execution|doctemplate
      * @param  int    $objectID
      * @param  int    $libID
      * @param  int    $moduleID
