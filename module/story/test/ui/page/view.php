@@ -16,7 +16,12 @@ class viewPage extends page
             'activate'         => "//*[@type='submit']",
             'assignToBtn'      => "//*[@type='submit']",
             'submitReviewSave' => "//*[@type='submit']",
-            'subReviewer'      => "//*[@id='reviewer']"
+            'subReviewer'      => "//*[@id='reviewer']",
+            'firLinkStories'   => "//*[@id='mainContainer']/div/div/div[2]/div[2]/div[2]/div[2]/div/ul/li[2]/div/div",
+            'secLinkStories'   => "//*[@id='mainContainer']/div/div/div[2]/div[2]/div[2]/div[2]/div/ul/li[4]/div/div",
+            /*关联需求页面*/
+            'searchBox'        => "//*[@type='submit']",
+            'selectAll'        => "//*[@id='linkStories']/div[3]/div[1]/div"
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
