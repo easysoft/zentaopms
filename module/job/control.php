@@ -94,13 +94,7 @@ class job extends control
     {
         if($_POST)
         {
-            if($this->post->useZentao == '1')   $this->config->job->form->create['triggerType']['required']    = true;
             $job = form::data($this->config->job->form->create)
-                ->setIF($this->post->useZentao != '1', 'triggerType', '')
-                ->setIF($this->post->useZentao != '1' || $this->post->triggerType != 'commit', 'comment', '')
-                ->setIF($this->post->useZentao != '1' || $this->post->triggerType != 'schedule', 'atDay', '')
-                ->setIF($this->post->useZentao != '1' || $this->post->triggerType != 'schedule', 'atTime', '')
-                ->setIF($this->post->useZentao != '1' || $this->post->triggerType != 'tag', 'lastTag', '')
                 ->setIF($this->post->frame != 'sonarqube', 'sonarqubeServer', 0)
                 ->setIF($this->post->frame != 'sonarqube', 'projectKey', '')
                 ->add('createdBy', $this->app->user->account)
@@ -137,19 +131,18 @@ class job extends control
         $job = $this->job->getByID($jobID);
         if($_POST)
         {
-            if($this->post->useZentao == '1') $this->config->job->form->edit['triggerType']['required']    = true;
-            $job = form::data($this->config->job->form->edit)
-                ->setIF($this->post->useZentao != '1', 'triggerType', '')
-                ->setIF($this->post->useZentao != '1' || $this->post->triggerType != 'commit', 'comment', '')
-                ->setIF($this->post->useZentao != '1' || $this->post->triggerType != 'schedule', 'atDay', '')
-                ->setIF($this->post->useZentao != '1' || $this->post->triggerType != 'schedule', 'atTime', '')
-                ->setIF($this->post->useZentao != '1' || $this->post->triggerType != 'tag', 'lastTag', '')
+            $newJob = form::data($this->config->job->form->edit)
+                ->setIF(!$this->post->repo, 'repo', $job->repo)
+                ->setIF($this->post->triggerType && !in_array('commit',   $this->post->triggerType), 'comment', '')
+                ->setIF($this->post->triggerType && !in_array('schedule', $this->post->triggerType), 'atDay', '')
+                ->setIF($this->post->triggerType && !in_array('schedule', $this->post->triggerType), 'atTime', '')
+                ->setIF($this->post->triggerType && !in_array('tag',      $this->post->triggerType), 'lastTag', '')
                 ->setIF($this->post->frame != 'sonarqube', 'sonarqubeServer', 0)
                 ->setIF($this->post->frame != 'sonarqube', 'projectKey', '')
                 ->add('editedBy', $this->app->user->account)
                 ->get();
 
-            $this->job->update($jobID, $job);
+            $this->job->update($jobID, $newJob);
             if(!dao::isError()) $this->loadModel('action')->create('job', $jobID, 'edited');
 
             return $this->send($this->jobZen->reponseAfterCreateEdit($job->repo));
@@ -441,6 +434,7 @@ class job extends control
      */
     public function trigger(int $jobID)
     {
+        $this->lang->job->edit = $this->lang->job->trigger;
         $this->edit($jobID);
     }
 }
