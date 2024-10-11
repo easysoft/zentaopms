@@ -106,20 +106,19 @@ class jobZen extends job
      * Get subversion dir.
      *
      * @param  object    $repo
-     * @param  string    $triggerType
      * @access protected
      * @return void
      */
-    protected function getSubversionDir(object $repo, string $triggerType): void
+    protected function getSubversionDir(object $repo): void
     {
-        if($repo->SCM == 'Subversion' && $triggerType == 'tag')
+        if($repo->SCM == 'Subversion')
         {
             $dirs = array();
-            $path = empty($repo->prefix) ? '/' : $this->repo->decodePath('');
+            $path = empty($repo->prefix) ? '/' : $this->loadModel('repo')->decodePath('');
             $tags = $this->loadModel('svn')->getRepoTags($repo, $path);
             if($tags)
             {
-                $dirs['/'] = $path;
+                $dirs['/'] = $path ? $path : '/';
                 foreach($tags as $dirPath => $dirName) $dirs[$dirPath] = $dirPath;
             }
             $this->view->dirs = $dirs;

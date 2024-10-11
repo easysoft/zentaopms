@@ -152,7 +152,7 @@ class job extends control
 
         if($repo->SCM == 'Gitlab') $this->view->refList = $this->loadModel('gitlab')->getReferenceOptions($repo->gitService, $repo->project);
         if($repo->SCM != 'Gitlab') $this->view->refList = $this->repo->getBranches($repo, true);
-        $this->jobZen->getSubversionDir($repo, $job->triggerType);
+        $this->jobZen->getSubversionDir($repo);
 
         $products = $this->repo->getProductsByRepo($job->repo);
         if(!isset($products[$job->product]))
