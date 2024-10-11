@@ -30,7 +30,7 @@ $config->job->form->edit['repo']            = array('type' => 'int',    'require
 $config->job->form->edit['reference']       = array('type' => 'string', 'required' => false, 'default' => '');
 $config->job->form->edit['frame']           = array('type' => 'string', 'required' => false, 'default' => '');
 $config->job->form->edit['triggerType']     = array('type' => 'array',  'required' => false, 'default' => array(), 'filter' => 'join');
-$config->job->form->edit['svnDir']          = array('type' => 'array',  'required' => false, 'default' => array());
+$config->job->form->edit['svnDir']          = array('type' => 'array',  'required' => false, 'default' => array(), 'filter' => 'join');
 $config->job->form->edit['product']         = array('type' => 'int',    'required' => false, 'default' => 0);
 $config->job->form->edit['sonarqubeServer'] = array('type' => 'int',    'required' => false, 'default' => 0);
 $config->job->form->edit['projectKey']      = array('type' => 'string', 'required' => false, 'default' => '');
