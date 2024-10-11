@@ -16,6 +16,6 @@ class allTester extends tester
         $allPage   = $this->initForm('product', 'all', array(), 'appIframe-product');
         $allPage->dom->$tabDom->click();//点击对应的tab
         $num = $allPage->dom->$tabNumDom->getText();//获取对应tab下产品数量
-        return ($num == $tabNum) ? $this->success("切换至{$tabName}Tab成功") : $this->failed("切换至{$tabName}Tab失败");
+        return($num == $tabNum) ? $this->success("切换至{$tabName}Tab成功") : $this->failed("切换至{$tabName}Tab失败");
     }
 }
