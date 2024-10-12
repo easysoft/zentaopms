@@ -14,11 +14,10 @@ namespace zin;
 
 modalHeader(set::title($lang->doc->moveDocAction));
 
-$libType    = $space == 'mine' ? 'mine' : 'custom';
 $defaultAcl = $doc->acl;
-if($libType == 'mine') $defaultAcl = 'private';
-if($libType == 'mine') $this->lang->doc->aclList = $this->lang->doclib->mySpaceAclList;
-if($libType == 'custom' && $doc->lib != $libID) $defaultAcl = 'open';
+if($spaceType == 'mine') $defaultAcl = 'private';
+if($spaceType == 'mine') $this->lang->doc->aclList = $this->lang->doclib->mySpaceAclList;
+if($spaceType == 'custom' && $doc->lib != $libID) $defaultAcl = 'open';
 
 jsVar('spaceType', $spaceType);
 jsVar('space', $space);
@@ -66,7 +65,7 @@ formPanel
     formRow
     (
         setID('whiteListBox'),
-        setClass(($libID == $doc->lib && $libType != 'mine' && $defaultAcl == 'private') ? '' : 'hidden'),
+        setClass(($libID == $doc->lib && $spaceType != 'mine' && $defaultAcl == 'private') ? '' : 'hidden'),
         formGroup
         (
             set::label($lang->doc->whiteList),
