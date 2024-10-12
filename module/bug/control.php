@@ -184,23 +184,22 @@ class bug extends control
         $this->session->set('projectList', $this->app->getURI(true) . "#app={$this->app->tab}", 'project');
 
         if($this->app->tab == 'repo') $this->view->repoID = $bug->repo;
-        $this->view->title          = "BUG #$bug->id $bug->title - " . $product->name;
-        $this->view->branchID       = $bug->branch;
-        $this->view->product        = $product;
-        $this->view->project        = $this->loadModel('project')->getByID($bug->project);
-        $this->view->projects       = $projects;
-        $this->view->executions     = $this->product->getExecutionPairsByProduct($bug->product, (string)$bug->branch, (int)$projectID, 'noclosed');
-        $this->view->bug            = $bug;
-        $this->view->bugModule      = empty($bug->module) ? '' : $this->tree->getByID($bug->module);
-        $this->view->modulePath     = $this->loadModel('tree')->getParents($bug->module);
-        $this->view->users          = $this->loadModel('user')->getPairs('noletter');
-        $this->view->branches       = $branches;
-        $this->view->branchName     = $product->type == 'normal' ? '' : zget($branches, $bug->branch, '');
-        $this->view->builds         = $this->loadModel('build')->getBuildPairs(array($bug->product), 'all', 'noterminate,nodone,hasdeleted');
-        $this->view->linkCommits    = $this->loadModel('repo')->getCommitsByObject($bug->id, 'bug');
-        $this->view->actions        = $this->loadModel('action')->getList('bug', $bug->id);
-        $this->view->preAndNext     = $this->loadModel('common')->getPreAndNextObject('bug', $bugID);
-        $this->view->relatedObjects = $this->loadModel('custom')->getRelatedObjectList($bug->id, 'bug');
+        $this->view->title       = "BUG #$bug->id $bug->title - " . $product->name;
+        $this->view->branchID    = $bug->branch;
+        $this->view->product     = $product;
+        $this->view->project     = $this->loadModel('project')->getByID($bug->project);
+        $this->view->projects    = $projects;
+        $this->view->executions  = $this->product->getExecutionPairsByProduct($bug->product, (string)$bug->branch, (int)$projectID, 'noclosed');
+        $this->view->bug         = $bug;
+        $this->view->bugModule   = empty($bug->module) ? '' : $this->tree->getByID($bug->module);
+        $this->view->modulePath  = $this->loadModel('tree')->getParents($bug->module);
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->branches    = $branches;
+        $this->view->branchName  = $product->type == 'normal' ? '' : zget($branches, $bug->branch, '');
+        $this->view->builds      = $this->loadModel('build')->getBuildPairs(array($bug->product), 'all', 'noterminate,nodone,hasdeleted');
+        $this->view->linkCommits = $this->loadModel('repo')->getCommitsByObject($bug->id, 'bug');
+        $this->view->actions     = $this->loadModel('action')->getList('bug', $bug->id);
+        $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('bug', $bugID);
 
         $this->display();
     }
