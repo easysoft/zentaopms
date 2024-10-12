@@ -18,6 +18,14 @@ jsVar('teams', $teams);
 jsVar('currentUser', $app->user->account);
 jsVar('moduleGroup', $moduleGroup);
 
+$beforeSubmit       = null;
+$childTasks         = json_encode($childTasks);
+$nonStoryChildTasks = json_encode($nonStoryChildTasks);
+$tasksJsVar         = json_encode($tasks);
+if(!empty($nonStoryChildTasks))
+{
+}
+
 /* ====== Define the page structure with zin widgets ====== */
 formBatchPanel
 (
@@ -26,6 +34,8 @@ formBatchPanel
     set::data(array_values($tasks)),
     set::onRenderRow(jsRaw('renderRowData')),
     set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'batchEditFields')),
+    !empty($nonStoryChildTasks) ? set::ajax(array('beforeSubmit' => $beforeSubmit)) : null,
+    set::formID('taskBatchEditForm' . $executionID),
     formBatchItem
     (
         set::name('id'),
@@ -53,6 +63,16 @@ formBatchPanel
         set::label($lang->task->module),
         set::control('picker'),
         set::items($modules),
+        set::width('200px'),
+        set::ditto(true),
+        set::defaultDitto('off')
+    ),
+    formBatchItem
+    (
+        set::name('story'),
+        set::label($lang->task->story),
+        set::control('picker'),
+        set::items($stories),
         set::width('200px'),
         set::ditto(true),
         set::defaultDitto('off')
