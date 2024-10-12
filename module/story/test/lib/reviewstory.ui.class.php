@@ -49,7 +49,8 @@ class reviewStoryTester extends tester
         $form->dom->btn($this->lang->story->submitReview)->click();
         $form->wait(1);
 
-        //$form->dom->subReviewer->multiPicker(array('reviewer' => 'admin'));
+        $form->dom->subReviewerBtn->click();
+        $form->dom->subReviewer->clickByMouse();
         $form->dom->submitReviewSave->click();
         $form->wait(1);
 
@@ -57,7 +58,7 @@ class reviewStoryTester extends tester
         $viewPage = $this->loadPage('story', 'view');
         $viewPage->wait(1);
 
-        if($viewPage->dom->status->getText() != '激活') return $this->fail('需求状态错误');
+        if($viewPage->dom->status->getText() != '评审中') return $this->fail('需求状态错误');
 
         return $this->success('提交评审成功');
     }

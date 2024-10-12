@@ -16,7 +16,8 @@ class viewPage extends page
             'activate'         => "//*[@type='submit']",
             'assignToBtn'      => "//*[@type='submit']",
             'submitReviewSave' => "//*[@type='submit']",
-            'subReviewer'      => "//*[@id='reviewer']",
+            'subReviewerBtn'   => "//*[@id='reviewer']",
+            'subReviewer'      => "/html/body/div[3]/div/menu/menu/li[2]/a/div",
             'firLinkStories'   => "//*[@id='mainContainer']/div/div/div[2]/div[2]/div[2]/div[2]/div/ul/li[2]/div/div",
             'secLinkStories'   => "//*[@id='mainContainer']/div/div/div[2]/div[2]/div[2]/div[2]/div/ul/li[4]/div/div",
             /*关联需求页面*/
