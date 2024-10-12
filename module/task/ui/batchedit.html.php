@@ -39,9 +39,29 @@ if(!empty($nonStoryChildTasks))
             const \$currentTr = $(\$taskBatchFormTrs[i]);
             const taskID      = \$currentTr.find('.form-batch-control[data-name=id]').find('input[name^=id]').val();
             const storyID     = \$currentTr.find('.form-batch-control[data-name=story]').find('input[name^=story]').val();
+
             if(tasks[taskID].story == storyID) continue;
             if(!storyID && tasks[taskID].parent <= 0) continue;
+            if(tasks[taskID].parent > 0)
+            {
+                if(storyID) confirmID = confirmID.replace('ID' + taskID + ', ', '');
+                continue;
+            }
+            if(typeof childTasks[taskID] != 'object' || typeof nonStoryChildTasks[taskID] != 'object') continue;
+
+            const nonStoryChildTaskIdList = Object.keys(nonStoryChildTasks[taskID]);
+            if(nonStoryChildTaskIdList.length == 0) continue;
+
+            if(tipAll) tipAll = Object.keys(childTasks[taskID]).length == nonStoryChildTaskIdList.length;
+
+            for(let j = 0; j < nonStoryChildTaskIdList.length; j++) confirmID += 'ID' + nonStoryChildTaskIdList[j].toString() + ', ';
         }
+        if(confirmID.length == 0) return true;
+
+        if(confirmID.endsWith(', ')) confirmID = confirmID.slice(0, -2);
+
+        let confirmTip = tipAll ? '{$lang->task->syncStoryToAllChildrenTip}' : '{$lang->task->syncStoryToChildrenTip}';
+        confirmTip     = confirmTip.replace('%s', confirmID);
         return false;
     }");
 }
