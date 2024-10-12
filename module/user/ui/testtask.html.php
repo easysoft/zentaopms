@@ -20,7 +20,7 @@ $cols = array();
 foreach($config->user->defaultFields['testtask'] as $field) $cols[$field] = $config->testtask->dtable->fieldList[$field];
 
 $statusKey            = 'status';
-$titleKey             = 'title';
+$titleKey             = 'pri';
 $statusValue          = $cols[$statusKey];
 $statusValue['title'] = $lang->testtask->statusAB;
 unset($cols[$statusKey]);

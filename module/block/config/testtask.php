@@ -7,6 +7,7 @@ $config->block->testtask->dtable = new stdclass();
 $config->block->testtask->dtable->fieldList = array();
 $config->block->testtask->dtable->fieldList['id']      = array('name' => 'id',             'title' => $lang->idAB,                                           'type' => 'id' ,   'sort' => 'number');
 $config->block->testtask->dtable->fieldList['name']    = array('name' => 'name',           'title' => $lang->testtask->name,                                 'type' => 'title', 'sort' => true,  'flex' => 1, 'link' => array('module' => 'testtask', 'method' => 'view', 'params' => 'testtaskID={id}'));
+$config->block->testtask->dtable->fieldList['pri']     = array('name' => 'pri',            'title' => $lang->priAB,                                          'type' => 'pri',   'sort' => true);
 $config->block->testtask->dtable->fieldList['product'] = array('name' => 'productName',    'title' => $lang->testtask->product,                              'type' => 'text',  'sort' => true,  'link' => array('module' => 'product', 'method' => 'browse', 'params' => 'productID={product}'));
 $config->block->testtask->dtable->fieldList['build']   = array('name' => 'executionBuild', 'title' => "{$lang->testtask->execution}/{$lang->build->common}", 'type' => 'text',  'sort' => true,  'link' => array('module' => 'build', 'method' => 'view', 'params' => 'buildID={build}'));
 $config->block->testtask->dtable->fieldList['begin']   = array('name' => 'begin',          'title' => $lang->testtask->begin,                                'type' => 'date',  'sort' => 'date');
