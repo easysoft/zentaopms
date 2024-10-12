@@ -3366,4 +3366,19 @@ class taskModel extends model
         if(is_array($execution)) return $this->dao->select('id,execution')->from(TABLE_TASK)->where('execution')->in($execution)->andWhere('status')->ne('closed')->andWhere('deleted')->eq('0')->fetchGroup('execution');
         return $this->dao->select('id,name')->from(TABLE_TASK)->where('execution')->eq($execution)->andWhere('status')->ne('closed')->andWhere('deleted')->eq('0')->fetchPairs();
     }
+
+    /**
+     * 获取子任务
+     * Get child tasks
+     *
+     * @param  array $taskIdList
+     * @access public
+     * @return array|false
+     */
+    public function getChildTasksByList(array $taskIdList): array|false
+    {
+        $childTasks         = $this->dao->select('id,parent')->from(TABLE_TASK)->where('parent')->in($taskIdList)->andWhere('deleted')->eq('0')->fetchGroup('parent', 'id');
+        $nonStoryChildTasks = $this->dao->select('id,parent')->from(TABLE_TASK)->where('parent')->in($taskIdList)->andWhere('story')->eq('0')->andWhere('deleted')->eq('0')->fetchGroup('parent', 'id');
+        return array($childTasks, $nonStoryChildTasks);
+    }
 }
