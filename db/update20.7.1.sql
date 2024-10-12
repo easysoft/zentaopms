@@ -11,6 +11,7 @@ CREATE OR REPLACE VIEW `ztv_dayactions` AS select COUNT(1) AS `actions`,CAST(`zt
 REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'job', 'trigger' FROM `zt_grouppriv` WHERE `module` = 'job' AND `method` = 'create';
 
 ALTER TABLE `zt_job` ADD `autoRun` enum('0', '1') NOT NULL DEFAULT '1' AFTER `engine`;
+ALTER TABLE `zt_job` ADD `triggerActions` varchar(255) NOT NULL DEFAULT '' AFTER `comment`;
 UPDATE `zt_job` SET `autoRun` = '0' WHERE `triggerType` != '';
 
 UPDATE `zt_action` SET `action` = 'imported' WHERE `objectType` = 'job' AND `action` = 'created';

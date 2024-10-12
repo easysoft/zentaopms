@@ -981,6 +981,7 @@ CREATE TABLE IF NOT EXISTS `zt_job` (
   `atTime` varchar(10) NOT NULL DEFAULT '',
   `customParam` text NULL,
   `comment` varchar(255) NOT NULL DEFAULT '',
+  `triggerActions` varchar(255) NOT NULL DEFAULT '',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
