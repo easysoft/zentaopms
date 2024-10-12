@@ -47,7 +47,7 @@ class doc extends control
      * 我的空间。
      * My space.
      *
-     * @param  string $type       mine|view|collect|createdBy
+     * @param  int    $objectID
      * @param  int    $libID
      * @param  int    $moduleID
      * @param  string $browseType all|draft|bysearch
@@ -59,67 +59,16 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function mySpace(string $type = 'mine', int $libID = 0, int $moduleID = 0, string $browseType = 'all', int $param = 0, string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function mySpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', int $param = 0, string $orderBy = 'order_asc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = 'list', int $docID = 0, string $search = '')
     {
-        $browseType = strtolower($browseType);
-        $type       = strtolower($type);
-
-        if(empty($orderBy) && $type == 'mine') $orderBy = 'order_asc';
-        if(empty($orderBy) && ($type == 'view' || $type == 'collect')) $orderBy = 'status,date_desc';
-        if(empty($orderBy) && ($type == 'createdby')) $orderBy = 'status,addedDate_desc';
-        if(empty($orderBy) && ($type == 'editedby')) $orderBy = 'status,editedDate_desc';
-
-        /* Save session, load module. */
-        $uri = $this->app->getURI(true);
-        $this->session->set('docList', $uri, 'doc');
-        $this->session->set('productList', $uri, 'product');
-        $this->session->set('executionList', $uri, 'execution');
-        $this->session->set('projectList', $uri, 'project');
-        $this->session->set('spaceType', 'mine', 'doc');
-        $this->loadModel('search');
-
-        if(empty($libID)) $this->docZen->initLibForMySpace();
-        if($moduleID) $libID = $this->tree->getById($moduleID)->root;
-        list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType('mine', 0, $libID);
-
-        $titleList   = array('mine' => 'myLib', 'view' => 'myView', 'collect' => 'myCollection', 'createdby' => 'myCreation', 'editedby' => 'myEdited');
-        $objectTitle = $this->lang->doc->{$titleList[$type]};
-        if($type == 'mine') $objectTitle = $objectDropdown['text'];
-
-        /* Build the search form. */
-        $queryID    = $browseType == 'bysearch' ? $param : 0;
-        $params     = "libID={$libID}&moduleID={$moduleID}&browseType=bySearch&param=myQueryID&orderBy={$orderBy}";
-        if($this->app->rawMethod == 'myspace') $params = "type={$type}&{$params}";
-        $actionURL  = $this->createLink('doc', $this->app->rawMethod, $params);
-        $this->doc->buildSearchForm($libID, $libs, $queryID, $actionURL, $type);
-
-        /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-
-        /* Append id for second sort. */
-        $sort = common::appendOrder($orderBy);
-
-        /* Get doc list data. */
-        $docs = array();
-        if($type == 'mine')
+        if(empty($objectID))
         {
-            if($browseType != 'bysearch' && !$libID)
-            {
-                $docs = array();
-            }
-            else
-            {
-                $docs = $browseType == 'bysearch' ? $this->doc->getDocsBySearch('mine', 0, $libID, $queryID, $orderBy, $pager) : $this->doc->getDocs($libID, $moduleID, $browseType, $orderBy, $pager);
-            }
-        }
-        elseif(in_array($type, array('view', 'collect', 'createdby', 'editedby')))
-        {
-            $docs = $this->doc->getMineList($type, $browseType, $queryID, $orderBy, $pager);
+            $this->docZen->initLibForMySpace();
+            $spaces = $this->doc->getSubSpacesByType('mine');
+            $objectID = array_pop(array_keys($spaces));
         }
 
-        $this->docZen->assignVarsForMySpace($type, $objectID, $libID, $moduleID, $browseType, $param, $orderBy, $docs, $pager, $libs, $objectTitle);
-        $this->display();
+        echo $this->fetch('doc', 'app', "type=mine&spaceID=$objectID&libID=$libID&moduleID=$moduleID&docID=$docID&mode=$mode&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&filterType=$browseType&search=$search&param=$param");
     }
 
     /**
@@ -782,25 +731,12 @@ class doc extends control
         $objectType = isset($lib->type) ? $lib->type : 'custom';
         $objectID   = zget($doc, $objectType, 0);
         if($objectType == 'custom') $objectID = $lib->parent;
-        list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($objectType, $objectID, (int)$doc->lib, (int)$appendLib);
 
         /* Get doc. */
-        if($docID)
-        {
-            $this->doc->createAction($docID, 'view');
-            $this->doc->removeEditing($doc);
-            if($doc->keywords)
-            {
-                $doc->keywords = str_replace("，", ',', $doc->keywords);
-                $doc->keywords = explode(',', $doc->keywords);
-            }
-        }
+        if($docID) $this->doc->createAction($docID, 'view');
 
-        if(isset($doc) && $doc->type == 'text') $doc = $this->docZen->processOutline($doc);
-        if($this->app->tab != 'execution' && !empty($doc->execution)) $object = $this->execution->getByID($doc->execution);
-
-        $this->docZen->assignVarsForView($docID, $version, $objectType, $objectID, $libID, $doc, $object, $objectType, $libs, $objectDropdown);
-        $this->display();
+        $this->view->title = $doc->title;
+        echo $this->fetch('doc', 'app', "type=$objectType&spaceID=$objectID&libID=$lib->id&moduleID=$doc->module&docID=$docID&mode=view");
     }
 
     /**
@@ -894,12 +830,9 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function productSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'order_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function productSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'order_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = 'list', int $docID = 0, string $search = '')
     {
-        $products = $this->product->getPairs('nocode');
-        $objectID = $this->product->checkAccess($objectID, $products);
-
-        echo $this->fetch('doc', 'tableContents', "type=product&objectID={$objectID}&libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&orderBy={$orderBy}&param={$param}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+        echo $this->fetch('doc', 'app', "type=product&spaceID=$objectID&libID=$libID&moduleID=$moduleID&docID=$docID&mode=$mode&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&filterType=$browseType&search=$search&param=$param");
     }
 
     /**
@@ -918,12 +851,9 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function projectSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'order_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function projectSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'order_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = 'list', int $docID = 0, string $search = '')
     {
-        $projects = $this->project->getPairsByProgram();
-        $objectID = $this->project->checkAccess($objectID, $projects);
-
-        echo $this->fetch('doc', 'tableContents', "type=project&objectID={$objectID}&libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&orderBy={$orderBy}&param={$param}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+        echo $this->fetch('doc', 'app', "type=project&spaceID=$objectID&libID=$libID&moduleID=$moduleID&docID=$docID&mode=$mode&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&filterType=$browseType&search=$search&param=$param");
     }
 
     /**
@@ -942,9 +872,9 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function teamSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'order_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function teamSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'order_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = 'list', int $docID = 0, string $search = '')
     {
-        echo $this->fetch('doc', 'tableContents', "type=custom&objectID={$objectID}&libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&orderBy={$orderBy}&param={$param}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+        echo $this->fetch('doc', 'app', "type=custom&spaceID=$objectID&libID=$libID&moduleID=$moduleID&docID=$docID&mode=$mode&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&filterType=$browseType&search=$search&param=$param");
     }
 
     /**

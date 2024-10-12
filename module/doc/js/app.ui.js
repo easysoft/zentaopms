@@ -54,10 +54,29 @@ zui.AjaxForm.DEFAULT.onResult = function(res)
     }
 };
 
-function handleSwitchView(view, location, info)
+function handleSwitchView(mode, location, info)
 {
-    const spaceID = Math.max(0, location.spaceID);
-    const url     = $.createLink('doc', 'app', `type=${location.spaceType}&spaceID=${spaceID}&libID=${location.libID}&moduleID=${location.moduleID}&docID=${location.docID}&mode=${view}`.replace(`&spaceID=${location.spaceType === 'mine' ? -1 : 0}&libID=0&moduleID=0&docID=0&mode=list`, ''));
+    const rawModule = config.rawModule.toLowerCase();
+    const rawMethod = config.rawMethod.toLowerCase();
+    if(rawModule === 'doc' && rawMethod === 'view' && mode === 'view' && !lastAppUrl)
+    {
+        top.document.title = info.title ? (info.title + documentTitleSuffix) : originalDocumentTitle;
+        return;
+    }
+
+    let url;
+    const pager      = location.pager || {recTotal: 0, recPerPage: 20, pageID: 1};
+    const search     = encodeURIComponent(location.search || '');
+    const params     = encodeURIComponent(location.params || '');
+    const filterType = encodeURIComponent(location.filterType || '');
+    if(rawModule === 'doc' && ['myspace', 'teamspace', 'productspace', 'projectspace'].includes(rawMethod))
+    {
+        url = $.createLink('doc', config.rawMethod, `objectID=${location.spaceID}&libID=${location.libID}&moduleID=${location.moduleID}&browseType=${filterType}&param=${params}&orderBy=${location.orderBy}&recTotal=${pager.recTotal}&recPerPage=${pager.recPerPage}&pageID=${pager.pageID}&mode=${mode}&docID=${location.docID}&search=${search}`).replace('&libID=0&moduleID=0&browseType=all&param=&orderBy=&recTotal=0&recPerPage=20&pageID=1&mode=list&docID=0&search=', '');
+    }
+    else
+    {
+        url = $.createLink('doc', 'app', `type=${location.spaceType}&spaceID=${spaceID}&libID=${location.libID}&moduleID=${location.moduleID}&docID=${location.docID}&mode=${mode}&orderBy=${location.orderBy}&recTotal=${pager.recTotal}&recPerPage=${pager.recPerPage}&pageID=${pager.pageID}&filterType=${filterType}&search=${search}&params=${params}`).replace('&libID=0&moduleID=0&docID=0&mode=list&orderBy=id_desc&recTotal=0&recPerPage=0&pageID=1&filterType=&search=&params=', '');
+    }
     if(url === lastAppUrl) return;
     if(lastAppUrl && !$.apps.getAppUrl().endsWith(url)) $.apps.updateAppUrl(url, info.title ? (info.title + documentTitleSuffix) : originalDocumentTitle);
     lastAppUrl = url;
