@@ -1,5 +1,16 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=查看设计页数据检查测试
+timeout=0
+cid=8
+
+- 执行tester模块的viewCommit方法，参数是'1' 测试结果 @查看提交页显示数据正确
+
+*/
+
 chdir(__DIR__);
 include '../lib/viewcommit.ui.class.php';
 
