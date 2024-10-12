@@ -175,6 +175,8 @@ class taskModel extends model
                 $feedbacks[$oldTask->feedback] = $oldTask->feedback;
                 $this->feedback->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
             }
+
+            if(!empty($task->story) && !empty($task->parent) && $task->parent == '-1' && $this->post->syncChildren) $this->syncStoryToChildren($task);
         }
 
         return !dao::isError();
@@ -397,6 +399,8 @@ class taskModel extends model
         if(!empty($task->parent)) $this->updateParent($task, $isParentChanged);
         if($this->config->edition != 'open' && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
         if(!empty($oldTask->mode) && empty($task->mode)) $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->exec();
+
+        if(!empty($task->story) && $this->post->syncChildren) $this->syncStoryToChildren($task);
     }
 
     /**
@@ -3365,6 +3369,21 @@ class taskModel extends model
     {
         if(is_array($execution)) return $this->dao->select('id,execution')->from(TABLE_TASK)->where('execution')->in($execution)->andWhere('status')->ne('closed')->andWhere('deleted')->eq('0')->fetchGroup('execution');
         return $this->dao->select('id,name')->from(TABLE_TASK)->where('execution')->eq($execution)->andWhere('status')->ne('closed')->andWhere('deleted')->eq('0')->fetchPairs();
+    }
+
+    public function syncStoryToChildren(object $task): bool
+    {
+        $nonStoryTasks = $this->dao->select('id,story')->from(TABLE_TASK)->where('parent')->eq($task->id)->andWhere('deleted')->eq('0')->andWhere('story')->eq(0)->fetchPairs();
+        $taskStory     = $this->loadModel('story')->fetchByID($task->story);
+        $this->loadModel('action');
+        foreach($nonStoryTasks as $id => $story)
+        {
+            $this->dao->update(TABLE_TASK)->set('story')->eq($task->story)->set('storyVersion')->eq($taskStory->version)->where('id')->eq($id)->exec();
+
+            $changes  = array(array('field' => 'story', 'old' => $story, 'new' => $task->story, 'diff' => ''));
+            $actionID = $this->action->create('task', $id, 'syncStoryByParentTask');
+            $this->action->logHistory($actionID, $changes);
+        }
     }
 
     /**
