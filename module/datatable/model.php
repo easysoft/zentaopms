@@ -477,6 +477,27 @@ class datatableModel extends model
         $flow = $this->loadModel('workflow')->getByModule($module);
         if(empty($flow)) return [];
 
+        $this->loadModel('workflowgroup');
+        $this->loadModel('workflowaction');
+        if($this->app->tab == 'project' && in_array($module, $this->config->workflowgroup->modules['product']))
+        {
+            $groupIdList = array();
+            $fields      = array();
+            $projectID   = (int)$this->session->project;
+            $products    = $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
+                ->where('t1.project')->eq($projectID)
+                ->fetchAll('id');
+
+            foreach($products as $product) $groupIdList[] = $this->workflowgroup->getGroupIDByData($module, $product);
+            foreach(array_unique($groupIdList) as $groupID) $fields += $this->workflowaction->getPageFields($module, $method, true, array(), 0, $groupID);
+        }
+        else
+        {
+            $groupID = $this->workflowgroup->getGroupIDBySession($module);
+            $fields  = $this->workflowaction->getPageFields($module, $method, true, array(), 0, $groupID);
+        }
+
         if($flow->buildin)
         {
             $action = $this->loadModel('workflowaction')->getByModuleAndAction($module, $method);
