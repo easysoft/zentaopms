@@ -618,11 +618,13 @@ class custom extends control
             return $this->sendSuccess(array('load' => true));
         }
 
+        if($this->config->edition != 'open') $this->custom->setConfig4Workflow();
+
+        $this->customZen->buildSearchForm($objectID, $objectType, $relatedObjectType);
+
         /* Load page. */
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
-
-        $this->customZen->buildSearchForm($objectID, $objectType, $relatedObjectType);
 
         $objects = $this->custom->getObjects($relatedObjectType, $browseType, $orderBy, $pager);
         if($relatedObjectType == $objectType && isset($objects[$objectID])) unset($objects[$objectID]);

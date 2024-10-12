@@ -1272,14 +1272,21 @@ class customModel extends model
             ->andWhere('COLUMN_NAME')->eq('vision')
             ->fetch('count');
 
+        $hasDeletedField = $this->dao->select('COUNT(1) AS count')->from('information_schema.COLUMNS')
+            ->where('TABLE_SCHEMA')->eq($this->config->db->name)
+            ->andWhere('TABLE_NAME')->eq($objectTable)
+            ->andWhere('COLUMN_NAME')->eq('deleted')
+            ->fetch('count');
+
         $module      = in_array($objectType, array('epic', 'requirement')) ? 'story' : $objectType;
         $objectQuery = $module . 'Query';
         if($browseType == 'bySearch' && $this->session->$objectQuery === false) $this->session->set($objectQuery, ' 1 = 1');
 
-        $caseID = $objectType == 'testcase' ? ',id as caseID' : '';
-        $query  = $this->dao->select('*, 1 as relation' . $caseID)->from($objectTable)
+        $caseID   = $objectType == 'testcase' ? ',id as caseID' : '';
+        $flowName = strpos($objectType, 'workflow_') !== false ? ",CONCAT('{$this->lang->workflow->common}', id) as flowName" : '';
+        $query    = $this->dao->select('*, 1 as relation' . $caseID . $flowName)->from($objectTable)
             ->where('1=1')
-            ->beginIF($objectType != 'repocommit')->andWhere('deleted')->eq(0)->fi()
+            ->beginIF($hasDeletedField)->andWhere('deleted')->eq(0)->fi()
             ->beginIF(in_array($objectType, array('epic', 'requirement', 'story')))->andWhere('type')->eq($objectType)->fi()
             ->beginIF($objectType == 'doc')->andWhere('acl')->eq('open')->andWhere('status')->eq('normal')->fi()
             ->beginIF($browseType == 'bySearch')->andWhere($this->session->$objectQuery)->fi();
@@ -1360,6 +1367,21 @@ class customModel extends model
 
                 $cols[$fieldKey] = $fieldSetting;
             }
+        }
+
+        if(strpos($objectType, 'workflow_') !== false)
+        {
+            $this->app->loadLang('workflowfield');
+            $flowModule = substr($objectType, 9);
+            $cols['id']         = array('name' => 'id', 'title' => 'ID', 'type' => 'checkID');
+            $cols['flowName']   = array('name' => 'flowName', 'title' => $this->lang->workflowfield->name, 'type' => 'title', 'link' => array('module' => $flowModule, 'method' => 'view', 'params' => "id={id}"));
+            $cols['relation']   = array('name' => 'relation', 'title' => $this->lang->custom->relation, 'type' => 'control', 'control' => 'picker', 'sortType' => false);
+            $cols['createdBy']  = array('name' => 'createdBy', 'title' => $this->lang->workflowfield->default->fields['createdBy'], 'type' => 'user');
+            $cols['assignedTo'] = array('name' => 'assignedTo', 'title' => $this->lang->workflowfield->default->fields['assignedTo'], 'type' => 'user');
+            $cols['status']     = array('name' => 'status', 'title' => $this->lang->workflowfield->default->fields['status'], 'sortType' => true);
+
+            $statusList = $this->dao->select('options')->from(TABLE_WORKFLOWFIELD)->where('module')->eq(substr($flowModule, 9))->andWhere('field')->eq('status')->fetch('options');
+            $cols['status']['map'] = json_decode($statusList);
         }
 
         return $cols;
@@ -1504,6 +1526,14 @@ class customModel extends model
                 $title      = $objectInfo->revision;
                 $url        = helper::createLink('repo', 'revision', "repo={$objectInfo->repo}&objectID=0&revision={$objectInfo->revision}");
             }
+            elseif(strpos($object->$type, 'workflow_') !== false)
+            {
+                $table      = zget($this->config->objectTables, substr($object->$type, 9));
+                $objectInfo = $this->dao->select('*')->from($table)->where('id')->eq($object->$id)->fetch();
+                $title      = $this->lang->workflow->common . $object->$id;
+                $url        = helper::createLink(substr($object->$type, 9), 'view', "objectID={$object->$id}");
+
+            }
             else
             {
                 $objectInfo = $this->loadModel($object->$type)->fetchByID($object->$id);
@@ -1524,5 +1554,22 @@ class customModel extends model
         }
 
         return $relationObjectList;
+    }
+
+    /**
+     * 将工作流添加到配置中。
+     * Add work flow to config.
+     *
+     * @access public
+     * @return void
+     */
+    public function setConfig4Workflow()
+    {
+        $workflowList = $this->dao->select('module,name,`table`')->from(TABLE_WORKFLOW)->where('buildin')->eq(0)->andWhere('status')->eq('normal')->fetchAll();
+        foreach($workflowList as $workflow)
+        {
+            $this->config->custom->relateObjectList['workflow_' . $workflow->module] = $workflow->name;
+            $this->config->objectTables['workflow_' . $workflow->module] = "`{$workflow->table}`";
+        }
     }
 }

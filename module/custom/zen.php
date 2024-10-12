@@ -469,5 +469,24 @@ class customZen extends custom
             $this->config->demand->search['params']['pool']['values']    = array('' => '') + $this->dao->select('id,name')->from(TABLE_DEMANDPOOL)->where('deleted')->eq(0)->fetchPairs();
             $this->loadModel('search')->setSearchParams($this->config->demand->search);
         }
+        if(strpos($relatedObjectType, 'workflow_') !== false)
+        {
+            $this->app->loadLang('workflowfield');
+            $statusList = $this->dao->select('options')->from(TABLE_WORKFLOWFIELD)->where('module')->eq(substr($objectType, 9))->andWhere('field')->eq('status')->fetch('options');
+
+            $workflowSearch = array();
+            $workflowSearch['module']    = $relatedObjectType;
+            $workflowSearch['actionURL'] = $actionURL;
+            $workflowSearch['queryID']   = 0;
+            $workflowSearch['fields']['id']         = 'ID';
+            $workflowSearch['fields']['createdBy']  = $this->lang->workflowfield->default->fields['createdBy'];
+            $workflowSearch['fields']['assignedTo'] = $this->lang->workflowfield->default->fields['assignedTo'];
+            $workflowSearch['fields']['status']     = $this->lang->workflowfield->default->fields['status'];
+            $workflowSearch['params']['id']         = array('operator' => '=', 'control' => 'input',  'values' => '');
+            $workflowSearch['params']['createdBy']  = array('operator' => '=', 'control' => 'select', 'values' => 'users');
+            $workflowSearch['params']['assignedTo'] = array('operator' => '=', 'control' => 'select', 'values' => 'users');
+            $workflowSearch['params']['status']     = array('operator' => '=', 'control' => 'select', 'values' => json_decode($statusList));
+            $this->loadModel('search')->setSearchParams($workflowSearch);
+        }
     }
 }

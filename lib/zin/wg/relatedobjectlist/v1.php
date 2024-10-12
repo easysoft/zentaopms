@@ -38,10 +38,12 @@ class relatedObjectList extends relatedList
 
     protected function getObjectItem(int $relatedObjectID, string $relatedObjectType, array $relatedObjectTitle, string $relationName): object
     {
-        global $config,$lang;
+        global $config,$lang,$app;
         $objectID   = $this->prop('objectID');
         $objectType = $this->prop('objectType');
         $title      = $relatedObjectTitle['title'];
+
+        $app->control->loadModel('custom')->setConfig4Workflow();
 
         $item = new stdClass();
         $item->id         = $relatedObjectID;
