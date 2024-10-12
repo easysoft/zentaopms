@@ -2232,4 +2232,24 @@ class taskTest
         }
         return rtrim($return, ';');
     }
+
+    /**
+     * 获取子任务。
+     * Get child tasks
+     *
+     * @param  array       $taskIdList
+     * @access public
+     * @return array|false
+     */
+    public function getChildTasksByListTest(array $taskIdList): array|false
+    {
+        list($childTasks, $nonStoryChildTasks) = $this->objectModel->getChildTasksByList($taskIdList);
+
+        $return = array();
+        if(!empty($nonStoryChildTasks))
+        {
+            foreach($nonStoryChildTasks as $parentID => $parentChildTasks) $return[$parentID] .= 'nonStoryChildTasks: ' . implode(',', array_keys($parentChildTasks)) . '; ';
+        }
+        return $return;
+    }
 }
