@@ -285,12 +285,13 @@ $lang->action->desc->unlinkrepobranch     = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->changedprogram       = '$date, 由 <strong>$actor</strong> 调整了所属项目集。' . "\n";
 
 /* 用来描述和父子任务相关的操作历史记录。*/
-$lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";
-$lang->action->desc->linkchildtask      = '$date, 由 <strong>$actor</strong> 关联子任务 <strong>$extra</strong>。' . "\n";
-$lang->action->desc->unlinkchildrentask = '$date, 由 <strong>$actor</strong> 移除子任务 <strong>$extra</strong>。' . "\n";
-$lang->action->desc->linkparenttask     = '$date, 由 <strong>$actor</strong> 关联到父任务 <strong>$extra</strong>。' . "\n";
-$lang->action->desc->unlinkparenttask   = '$date, 由 <strong>$actor</strong> 从父任务<strong>$extra</strong>取消关联。' . "\n";
-$lang->action->desc->deletechildrentask = '$date, 由 <strong>$actor</strong> 删除子任务<strong>$extra</strong>。' . "\n";
+$lang->action->desc->createchildren        = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->linkchildtask         = '$date, 由 <strong>$actor</strong> 关联子任务 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->unlinkchildrentask    = '$date, 由 <strong>$actor</strong> 移除子任务 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->linkparenttask        = '$date, 由 <strong>$actor</strong> 关联到父任务 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->unlinkparenttask      = '$date, 由 <strong>$actor</strong> 从父任务<strong>$extra</strong>取消关联。' . "\n";
+$lang->action->desc->deletechildrentask    = '$date, 由 <strong>$actor</strong> 删除子任务<strong>$extra</strong>。' . "\n";
+$lang->action->desc->syncstorybyparenttask = "\$date, 由于父任务更新了相关需求，子任务同步更新。\n";
 
 /* 用来描述和父子需求相关的操作历史记录。*/
 $lang->action->desc->createchildrenstory = '$date, 由 <strong>$actor</strong> 创建子需求 <strong>$extra</strong>。' . "\n";

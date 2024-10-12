@@ -286,6 +286,8 @@ $lang->task->cannotDeleteParent        = 'Impossible de supprimer la tâche pare
 $lang->task->addChildTask              = 'Because the task has already consumed consumption, to ensure data consistency, we will help you create a subtask with the same name to record the consumption.';
 $lang->task->selectTestStoryTip        = "The following {$lang->SRCommon} will be subtasks of this task";
 $lang->task->effortOperateTips         = 'Only the project manager, the executive supervisor, and the department head have the authority to %s logs belonging to others.';
+$lang->task->syncStoryToAllChildrenTip = "Will be {$lang->SRCommon} synchronised with all child tasks?";
+$lang->task->syncStoryToChildrenTip    = "Child tasks of %s do not have {$lang->SRCommon}, will {$lang->SRCommon} be synchronised with these child tasks?";
 
 $lang->task->error = new stdclass();
 $lang->task->error->totalNumber       = '"Coût Total" doit être numérique.';

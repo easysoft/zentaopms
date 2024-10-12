@@ -95,6 +95,7 @@ $config->task->form->team->edit = $config->task->form->team->create;
 $config->task->form->batchedit = array();
 $config->task->form->batchedit['id']             = array('type' => 'int',      'required' => false, 'default' => 0, 'base' => true);
 $config->task->form->batchedit['module']         = array('type' => 'int',      'required' => false, 'default' => 0);
+$config->task->form->batchedit['story']          = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->task->form->batchedit['name']           = array('type' => 'string',   'required' => true,  'default' => '');
 $config->task->form->batchedit['color']          = array('type' => 'string',   'required' => false, 'default' => '');
 $config->task->form->batchedit['type']           = array('type' => 'string',   'required' => true,  'default' => '');
