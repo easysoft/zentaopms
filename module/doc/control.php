@@ -204,7 +204,7 @@ class doc extends control
         if($type == 'custom' || $type == 'mine' || $type == 'doctemplate')
         {
             $lib = $this->doc->getLibByID($libID);
-            $this->view->spaces  = $this->doc->getSubSpaces($type);
+            $this->view->spaces  = $this->doc->getSubSpacesByType($type);
             $this->view->spaceID = !empty($lib->parent) ? $lib->parent : $objectID;
         }
 
@@ -1233,7 +1233,7 @@ class doc extends control
         $this->docZen->setAclForCreateLib($spaceType);
 
         $this->view->title        = $this->lang->doc->moveLibAction;
-        $this->view->spaces       = $this->doc->getSubSpaces('all');
+        $this->view->spaces       = $this->doc->getSubSpacesByType('all');
         $this->view->lib          = $lib;
         $this->view->targetSpace  = $targetSpace;
         $this->view->libType      = $spaceType;
@@ -1286,7 +1286,7 @@ class doc extends control
         $this->view->libID      = $libID;
         $this->view->space      = $space;
         $this->view->doc        = $doc;
-        $this->view->spaces     = $this->doc->getSubSpaces('all');
+        $this->view->spaces     = $this->doc->getSubSpacesByType('all');
         $this->view->libPairs   = $libPairs;
         $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
         $this->view->groups     = $this->loadModel('group')->getPairs();

@@ -1047,7 +1047,7 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getSubSpaces(string $type = 'all'): array
+    public function getSubSpacesByType(string $type = 'all'): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getSubSpaces($type);
 
@@ -1084,7 +1084,7 @@ class docModel extends model
     {
 
         $pairs = array();
-        if($type == 'mine' || $type == 'custom') $pairs = $this->getSubSpaces($type);
+        if($type == 'mine' || $type == 'custom') $pairs = $this->getSubSpacesByType($type);
         if($type == 'product')
         {
             $pairs   = $this->loadModel('product')->getPairs('nocode');
