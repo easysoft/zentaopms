@@ -65,7 +65,7 @@ class doc extends control
         {
             $this->docZen->initLibForMySpace();
             $spaces = $this->doc->getSubSpacesByType('mine');
-            $objectID = array_pop(array_keys($spaces));
+            $objectID = key($spaces);
         }
 
         echo $this->fetch('doc', 'app', "type=mine&spaceID=$objectID&libID=$libID&moduleID=$moduleID&docID=$docID&mode=$mode&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&filterType=$browseType&search=$search&param=$param");
