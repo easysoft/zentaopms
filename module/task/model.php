@@ -615,11 +615,13 @@ class taskModel extends model
 
             if($task->status == 'done')   $this->score->create('task', 'finish', $taskID);
             if($task->status == 'closed') $this->score->create('task', 'close', $taskID);
-            $actionID = $this->action->create('task', $taskID, 'Edited');
             $changes  = common::createChanges($oldTask, $task);
-            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
-
-            $allChanges[$taskID] = $changes;
+            if(!empty($changes))
+            {
+                $actionID = $this->action->create('task', $taskID, 'Edited');
+                $this->action->logHistory($actionID, $changes);
+                $allChanges[$taskID] = $changes;
+            }
         }
         $this->score->create('ajax', 'batchEdit');
         return $allChanges;
@@ -3371,6 +3373,14 @@ class taskModel extends model
         return $this->dao->select('id,name')->from(TABLE_TASK)->where('execution')->eq($execution)->andWhere('status')->ne('closed')->andWhere('deleted')->eq('0')->fetchPairs();
     }
 
+    /**
+     * 同步父任务的需求到子任务
+     * Sync parent story to children
+     *
+     * @param  object $task
+     * @access public
+     * @return bool
+     */
     public function syncStoryToChildren(object $task): bool
     {
         $nonStoryTasks = $this->dao->select('id,story')->from(TABLE_TASK)->where('parent')->eq($task->id)->andWhere('deleted')->eq('0')->andWhere('story')->eq(0)->fetchPairs();
@@ -3384,6 +3394,8 @@ class taskModel extends model
             $actionID = $this->action->create('task', $id, 'syncStoryByParentTask');
             $this->action->logHistory($actionID, $changes);
         }
+
+        return !dao::isError();
     }
 
     /**
