@@ -55,3 +55,23 @@ $execution->begin->range('(-3w)-(-2w):1D')->type('timestamp')->format('YY/MM/DD'
 $execution->end->range('(+5w)-(+6w):1D')->type('timestamp')->format('YY/MM/DD');
 $execution->acl->range('open');
 $execution->status->range('wait');
+$execution->gen(2, false);
+
+$projectProduct = zenData('projectproduct');
+$projectProduct->project->range('1,2,3');
+$projectProduct->product->range('1');
+$projectProduct->gen(3);
+
+$tester = new createProjectBuildTester();
+$tester->login();
+
+//设置项目版本数据
+$build = array(
+    array('name' => ''),
+    array('execution' => '项目1迭代2', 'name' => '版本1' . time()),
+);
+
+r($tester->checkNoNameInfo($build['0']))    && p('message,status') && e('创建项目版本表单页提示信息正确,SUCCESS'); // 版本名称置空，检查提示信息
+r($tester->createProjectBuild($build['1'])) && p('message,status') && e('项目版本创建成功,SUCCESS');               // 创建项目版本
+
+$tester->closeBrowser();
