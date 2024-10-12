@@ -96,9 +96,29 @@ detailHeader
     )
 );
 
+$beforeSubmit = null;
+if(!empty($syncChildren) && !empty($task->children))
+{
+    $confirmTip = count($syncChildren) == count($task->children) ? $lang->task->syncStoryToAllChildrenTip : sprintf($lang->task->syncStoryToChildrenTip, 'ID' . implode(', ID', $syncChildren));
+    $beforeSubmit = jsRaw("() =>
+    {
+        if($('[name=story]').length == 0 || $('[name=story]').val() == '0' || $('[name=story]').val() == '{$task->story}') return true;
+
+        zui.Modal.confirm('{$confirmTip}').then((res) =>
+        {
+            const \$taskForm = $('[formid=taskEditForm{$task->id}]');
+            \$taskForm.find('[name=syncChildren]').remove();
+            \$taskForm.append('<input type=\"hidden\" name=\"syncChildren\" value=\"' + (res ? '1' : '0') + '\" />');
+        });
+        return false;
+    }");
+}
+
 detailBody
 (
     set::isForm(true),
+    set::formID("taskEditForm{$task->id}"),
+    !empty($syncChildren) && !empty($task->children) ? set::ajax(array('beforeSubmit' => $beforeSubmit)) : null,
     sectionList
     (
         section
