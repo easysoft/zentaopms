@@ -24,6 +24,26 @@ $nonStoryChildTasks = json_encode($nonStoryChildTasks);
 $tasksJsVar         = json_encode($tasks);
 if(!empty($nonStoryChildTasks))
 {
+    $beforeSubmit = jsRaw("() =>
+    {
+        const \$taskBatchForm    = $('#taskBatchEditForm{$executionID}');
+        const childTasks         = $childTasks;
+        const nonStoryChildTasks = $nonStoryChildTasks;
+        const \$taskBatchFormTrs = \$taskBatchForm.find('tbody tr');
+        const tasks              = $tasksJsVar;
+
+        var confirmID = '';
+        var tipAll    = true;
+        for(let i = 0; i < \$taskBatchFormTrs.length; i++)
+        {
+            const \$currentTr = $(\$taskBatchFormTrs[i]);
+            const taskID      = \$currentTr.find('.form-batch-control[data-name=id]').find('input[name^=id]').val();
+            const storyID     = \$currentTr.find('.form-batch-control[data-name=story]').find('input[name^=story]').val();
+            if(tasks[taskID].story == storyID) continue;
+            if(!storyID && tasks[taskID].parent <= 0) continue;
+        }
+        return false;
+    }");
 }
 
 /* ====== Define the page structure with zin widgets ====== */
