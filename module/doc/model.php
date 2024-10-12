@@ -1062,13 +1062,40 @@ class docModel extends model
         $pairs = array();
         foreach($objectLibs as $lib)
         {
-            if($this->checkPrivLib($lib))
-            {
-                $pairs[$lib->id] = $type == 'all' ? $this->lang->doc->spaceList[$lib->type] . '/' . $lib->name : $lib->name;
-            }
+            if($this->checkPrivLib($lib)) $pairs[$lib->id] = $type == 'all' ? $this->lang->doc->spaceList[$lib->type] . '/' . $lib->name : $lib->name;
         }
 
         return $pairs;
+    }
+
+    /**
+     * 获取所有子空间。
+     * Get all sub spaces.
+     *
+     * @access public
+     * @return array
+     */
+    public function getAllSubSpaces()
+    {
+        $productList = $this->loadModel('product')->getPairs('nocode');
+        $projectList = $this->loadModel('project')->getPairsByProgram();
+
+        $spaceList = $this->dao->select('*')->from(TABLE_DOCLIB)
+            ->where('deleted')->eq(0)
+            ->andWhere('parent')->eq(0)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere('type')->in('mine,custom')
+            ->fetchAll();
+
+        $productPairs = $projectPairs = $spacePairs = array();
+        foreach($productList as $productID => $productName) $productPairs["product-{$productID}"] = $this->lang->doc->spaceList['product'] . '/' . $productName;
+        foreach($projectList as $projectID => $projectName) $projectPairs["project-{$projectID}"] = $this->lang->doc->spaceList['project'] . '/' . $projectName;
+        foreach($spaceList as $space)
+        {
+            if($this->checkPrivLib($space)) $spacePairs[$space->id] = $this->lang->doc->spaceList[$space->type] . '/' . $space->name;
+        }
+
+        return array_merge($productPairs, $projectPairs, $spacePairs);
     }
 
     /**
