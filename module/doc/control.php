@@ -201,7 +201,7 @@ class doc extends control
             if($execution->type == 'stage') $this->lang->doc->execution = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doc->execution);
         }
 
-        if($type == 'custom' || $type == 'mine')
+        if($type == 'custom' || $type == 'mine' || $type == 'doctemplate')
         {
             $lib = $this->doc->getLibByID($libID);
             $this->view->spaces  = $this->doc->getSubSpaces($type);
