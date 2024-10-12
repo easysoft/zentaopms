@@ -1372,11 +1372,11 @@ class doc extends control
      * @param  int    $libID
      * @param  int    $moduleID
      * @param  int    $docID
-     * @param  string $docMode
+     * @param  string $mode
      * @access public
      * @return void
      */
-    public function app(string $type = 'mine', int $spaceID = 0, int $libID = 0, int $moduleID = 0, int $docID = 0, string $docMode = 'view')
+    public function app(string $type = 'mine', int $spaceID = 0, int $libID = 0, int $moduleID = 0, int $docID = 0, string $mode = 'view')
     {
         $this->app->loadLang('file');
 
@@ -1385,7 +1385,7 @@ class doc extends control
         $this->view->libID    = $libID;
         $this->view->moduleID = $moduleID;
         $this->view->docID    = $docID;
-        $this->view->docMode  = $docMode;
+        $this->view->mode     = $mode;
         $this->view->users    = $this->loadModel('user')->getPairs('noclosed,noletter');
         $this->view->title    = $this->lang->doc->spaceList[$type];
         $this->display();

@@ -91,7 +91,7 @@ zui::docApp
     set::libTypes($libTypes),
     set::moduleID($moduleID),
     set::docID($docID),
-    set::docMode($docMode),
+    set::mode($mode),
     set::fetcher(createLink('doc', 'ajaxGetSpaceData', 'type={spaceType}&spaceID={spaceID}&picks={picks}')),
     set::docFetcher(createLink('doc', 'ajaxGetDoc', 'docID={docID}&version={version}')),
     set::filesFetcher(createLink('doc', 'ajaxGetFiles', 'type={objectType}&objectID={objectID}')),
