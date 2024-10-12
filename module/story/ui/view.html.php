@@ -173,17 +173,6 @@ if($config->vision != 'lite')
         ->control('storyRelatedList');
 }
 
-/* 关联对象。Link Objects. */
-if(!in_array($config->vision, array('lite', 'or')))
-{
-    $tabs[] = setting()
-        ->group('relatives')
-        ->title($lang->custom->relateObject)
-        ->control('relatedObjectList')
-        ->objectID($story->id)
-        ->objectType($story->type);
-}
-
 $parentTitle = $story->parent > 0 ? set::parentTitle($story->parentName) : null;
 $parentUrl   = $story->parent > 0 ? set::parentUrl(createLink($story->parentType, 'view', "storyID={$story->parent}&version=0&param=0&storyType=$story->type")) : null;
 
