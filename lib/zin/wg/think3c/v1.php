@@ -32,7 +32,7 @@ class think3c extends thinkModel
         foreach($showOptions as $option)
         {
             if($option == 'other') $option = $step->answer->other ? $step->answer->other : $lang->other;
-            if(!empty($option)) $content[] = div(setClass('mt-1 border p-1.5'), $option);
+            if(!empty($option)) $content[] = div(setClass('mt-1 border p-1.5 break-all'), $option);
         }
 
         return empty($content) ? array() : array
@@ -60,7 +60,7 @@ class think3c extends thinkModel
         $content = array();
         foreach($result as $item)
         {
-            if(!empty($item)) $content[] = div(setClass('mt-1 border p-1.5'), $item);
+            if(!empty($item)) $content[] = div(setClass('mt-1 border p-1.5 break-all'), $item);
         }
 
         return empty($content) ? array() : array
@@ -162,7 +162,7 @@ class think3c extends thinkModel
     protected function build(): node
     {
         $mode  = $this->prop('mode');
-        $style = $mode == 'preview' ? setStyle(array('min-height' => '254px')) : setStyle(array('min-height' => '254px', 'width' => '2156px'));
+        $style = $mode == 'preview' ? setStyle(array('min-height' => '254px')) : setStyle(array('min-height' => '254px', 'width' => '2400px'));
 
         return div
         (
