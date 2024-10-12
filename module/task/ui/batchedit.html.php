@@ -62,6 +62,15 @@ if(!empty($nonStoryChildTasks))
 
         let confirmTip = tipAll ? '{$lang->task->syncStoryToAllChildrenTip}' : '{$lang->task->syncStoryToChildrenTip}';
         confirmTip     = confirmTip.replace('%s', confirmID);
+        zui.Modal.confirm(confirmTip).then((res) =>
+        {
+            \$taskBatchForm.find('[name=syncChildren]').remove();
+            \$taskBatchForm.append('<input type=\"hidden\" name=\"syncChildren\" value=\"' + (res ? '1' : '0') + '\" />');
+
+            const formData   = new FormData(\$taskBatchForm[0]);
+            const confirmURL = \$taskBatchForm.attr('action');
+            $.ajaxSubmit({url: confirmURL, data: formData});
+        });
         return false;
     }");
 }
