@@ -107,8 +107,13 @@ if(!empty($syncChildren) && !empty($task->children))
         zui.Modal.confirm('{$confirmTip}').then((res) =>
         {
             const \$taskForm = $('[formid=taskEditForm{$task->id}]');
+
             \$taskForm.find('[name=syncChildren]').remove();
             \$taskForm.append('<input type=\"hidden\" name=\"syncChildren\" value=\"' + (res ? '1' : '0') + '\" />');
+
+            const formData   = new FormData(\$taskForm[0]);
+            const confirmURL = \$taskForm.attr('action');
+            $.ajaxSubmit({url: confirmURL, data: formData});
         });
         return false;
     }");
