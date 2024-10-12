@@ -6,6 +6,11 @@
 title=taskModel->syncStoryToChildren();
 cid=0
 
+- 同步任务 id 1 的需求 2 到其未关联需求的子任务 @6:1;7:2
+- 同步任务 id 2 的需求 3 到其未关联需求的子任务 @8:2;9:2
+- 同步任务 id 3 的需求 4 到其未关联需求的子任务 @10:2
+- 同步任务 id 11 的需求 25 到其未关联需求的子任务 @0
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
