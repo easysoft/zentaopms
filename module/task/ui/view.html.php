@@ -172,17 +172,6 @@ $tabs[] = setting()
     ->title($lang->task->legendMisc)
     ->control('taskMiscInfo');
 
-/* 关联对象。Link Objects. */
-if($config->vision == 'rnd' && $config->edition !== 'open')
-{
-    $tabs[] = setting()
-        ->group('related')
-        ->title($lang->custom->relateObject)
-        ->control('relatedObjectList')
-        ->objectID($task->id)
-        ->objectType('task');
-}
-
 detail
 (
     $task->parent > 0 ? array
