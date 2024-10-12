@@ -234,7 +234,6 @@ class design extends control
         $this->view->repos    = $this->loadModel('repo')->getRepoPairs('project', $design->project);
         $this->view->project  = $project;
         $this->view->typeList = $project->model == 'waterfall' ? $this->lang->design->typeList : $this->lang->design->plusTypeList;
-        $this->view->relatedObjects = $this->loadModel('custom')->getRelatedObjectList($designID, 'design');
 
         $this->display();
     }

@@ -84,6 +84,7 @@ detailBody
     (
         tabs
         (
+            set::id('detailTabs'),
             tabPane
             (
                 set::title($lang->design->basicInfo),
@@ -125,16 +126,6 @@ detailBody
                         substr($design->createdDate, 0, 11)
                     )
                 )
-            ),
-            tabPane
-            (
-                set::title($lang->custom->relateObject),
-                relatedObjectList
-                (
-                    set::objectID($design->id),
-                    set::objectType('design')
-                )
-
             )
         )
     )
