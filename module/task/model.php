@@ -2106,7 +2106,7 @@ class taskModel extends model
      */
     public function getUserTasks(string $account, string $type = 'assignedTo', int $limit = 0, object $pager = null, string $orderBy = 'id_desc', int $projectID = 0): array
     {
-        if(!$this->loadModel('common')->checkField(TABLE_TASK, $type)) return array();
+        if($type != 'myInvolved' && !$this->loadModel('common')->checkField(TABLE_TASK, $type)) return array();
 
         $tasks = $this->taskTao->fetchUserTasksByType($account, $type, $orderBy, $projectID, $limit, $pager);
 
