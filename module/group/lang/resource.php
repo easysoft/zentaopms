@@ -1615,8 +1615,6 @@ $lang->resource->custom->code               = 'code';
 $lang->resource->custom->hours              = 'hours';
 $lang->resource->custom->percent            = 'percent';
 $lang->resource->custom->limitTaskDate      = 'limitTaskDateAction';
-$lang->resource->custom->relateObject       = 'relateObject';
-$lang->resource->custom->removeObjects      = 'removeObjects';
 
 $lang->custom->methodOrder[10]  = 'set';
 $lang->custom->methodOrder[15]  = 'product';
@@ -1635,8 +1633,6 @@ $lang->custom->methodOrder[95]  = 'code';
 $lang->custom->methodOrder[100] = 'hours';
 $lang->custom->methodOrder[105] = 'percent';
 $lang->custom->methodOrder[110] = 'limitTaskDate';
-$lang->custom->methodOrder[115] = 'relateObject';
-$lang->custom->methodOrder[120] = 'removeObjects';
 
 $lang->resource->datatable = new stdclass();
 $lang->resource->datatable->setGlobal = 'setGlobal';
