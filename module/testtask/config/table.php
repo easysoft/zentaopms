@@ -14,6 +14,11 @@ $config->testtask->dtable->fieldList['title']['type']  = 'title';
 $config->testtask->dtable->fieldList['title']['link']  = array('module' => 'testtask', 'method' => 'cases', 'params' => 'taskID={id}');
 $config->testtask->dtable->fieldList['title']['fixed'] = 'left';
 
+$config->testtask->dtable->fieldList['pri']['name']  = 'pri';
+$config->testtask->dtable->fieldList['pri']['title'] = $lang->priAB;
+$config->testtask->dtable->fieldList['pri']['type']  = 'pri';
+$config->testtask->dtable->fieldList['pri']['show']  = true;
+
 $config->testtask->dtable->fieldList['build']['name']     = 'buildName';
 $config->testtask->dtable->fieldList['build']['title']    = $lang->testtask->build;
 $config->testtask->dtable->fieldList['build']['type']     = 'text';

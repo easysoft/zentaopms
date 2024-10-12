@@ -897,6 +897,11 @@ $config->my->testtask->dtable->fieldList['title']['fixed']    = 'left';
 $config->my->testtask->dtable->fieldList['title']['sortType'] = true;
 $config->my->testtask->dtable->fieldList['title']['data-app'] = 'qa';
 
+$config->my->testtask->dtable->fieldList['pri']['name']  = 'pri';
+$config->my->testtask->dtable->fieldList['pri']['title'] = $lang->priAB;
+$config->my->testtask->dtable->fieldList['pri']['type']  = 'pri';
+$config->my->testtask->dtable->fieldList['pri']['show']  = true;
+
 $config->my->testtask->dtable->fieldList['build']['name']     = 'buildName';
 $config->my->testtask->dtable->fieldList['build']['title']    = $lang->testtask->build;
 $config->my->testtask->dtable->fieldList['build']['type']     = 'text';
