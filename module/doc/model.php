@@ -1057,11 +1057,17 @@ class docModel extends model
             ->andWhere('vision')->eq($this->config->vision)
             ->beginIF($type == 'all')->andWhere('type')->in('mine,custom')->fi()
             ->beginIF($type != 'all')->andWhere('type')->eq($type)->fi()
+            ->beginIF($type == 'mine')->andWhere('addedBy')->eq($this->app->user->account)->fi()
             ->fetchAll();
 
         $pairs = array();
-        foreach($objectLibs as $lib)
+        foreach($objectLibs as $key => $lib)
         {
+            if($lib->type === 'mine' && $lib->addedBy != $this->app->user->account)
+            {
+                unset($objectLibs[$key]);
+                continue;
+            }
             if($this->checkPrivLib($lib)) $pairs[$lib->id] = $type == 'all' ? $this->lang->doc->spaceList[$lib->type] . '/' . $lib->name : $lib->name;
         }
 
