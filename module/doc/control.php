@@ -1248,7 +1248,7 @@ class doc extends control
      *
      * @param  int    $docID
      * @param  int    $libID
-     * @param  string $space  mine|[int]
+     * @param  string $space [int]
      * @access public
      * @return void
      */
@@ -1275,9 +1275,10 @@ class doc extends control
 
         if(empty($libID)) $libID = (int)$doc->lib;
         $lib = $this->doc->getLibByID($libID);
-        if(empty($space)) $space = $lib->type == 'mine' ? 'mine' : $lib->parent;
+        if(empty($space)) $space = $lib->parent;
 
-        $libPairs = $this->doc->getLibPairs($space == 'mine' ? 'mine' : 'custom', '', (int)$space);
+        $spaceType = $this->doc->getSpaceType((int)$space);
+        $libPairs = $this->doc->getLibPairs($spaceType, '', (int)$space);
         if(!isset($libPairs[$libID])) $libID = (int)key($libPairs);
 
         $this->view->docID      = $docID;

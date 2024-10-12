@@ -56,6 +56,19 @@ class docModel extends model
     }
 
     /**
+     * 通过ID获取空间类型
+     * Get space type by id.
+     *
+     * @param  int    $spaceID
+     * @access public
+     * @return string
+     */
+    public function getSpaceType(int $spaceID): string
+    {
+        return $this->dao->findByID($spaceID)->from(TABLE_DOCLIB)->fetch('type');
+    }
+
+    /**
      * 获取api文档库。
      * Get api libraries.
      *
@@ -161,8 +174,8 @@ class docModel extends model
                 ->beginIF($type)->andWhere('type')->eq($type)->fi()
                 ->beginIF(!$type)->andWhere('type')->ne('api')->fi()
                 ->beginIF($objectID && strpos(',product,project,execution,', ",$type,") !== false)->andWhere($type)->eq($objectID)->fi()
-                ->beginIF($type == 'custom' && !$objectID)->andWhere('parent')->ne(0)->fi()
-                ->beginIF($type == 'custom' && $objectID)->andWhere('parent')->eq($objectID)->fi()
+                ->beginIF(($type == 'custom' || $type == 'mine') && !$objectID)->andWhere('parent')->ne(0)->fi()
+                ->beginIF(($type == 'custom' || $type == 'mine') && $objectID)->andWhere('parent')->eq($objectID)->fi()
                 ->orderBy('id_asc')
                 ->query();
         }
