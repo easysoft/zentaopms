@@ -503,7 +503,7 @@ class docZen extends doc
             $link = true;
         }
 
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link, 'closeModal' => true, 'docApp' => array('load', null, null, null, array('noLoading' => true, 'picks' => 'doc'))));
     }
 
     /**
