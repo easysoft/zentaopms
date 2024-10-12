@@ -1375,21 +1375,41 @@ class doc extends control
      * @param  int    $moduleID
      * @param  int    $docID
      * @param  string $mode
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @param  string $filterType
+     * @param  string $search
+     * @param  string $param
+     * @access public
      * @access public
      * @return void
      */
-    public function app(string $type = 'mine', int $spaceID = 0, int $libID = 0, int $moduleID = 0, int $docID = 0, string $mode = 'view')
+    public function app(string $type = 'mine', int $spaceID = 0, int $libID = 0, int $moduleID = 0, int $docID = 0, string $mode = 'list', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $filterType = '', string $search = '', string $params = '')
     {
         $this->app->loadLang('file');
 
-        $this->view->type     = $type;
-        $this->view->spaceID  = $spaceID;
-        $this->view->libID    = $libID;
-        $this->view->moduleID = $moduleID;
-        $this->view->docID    = $docID;
-        $this->view->mode     = $mode;
-        $this->view->users    = $this->loadModel('user')->getPairs('noclosed,noletter');
-        $this->view->title    = $this->lang->doc->spaceList[$type];
+        $menuType = $type == 'mine' ? 'my' : ($type == 'custom' ? 'team' : $type);
+        $this->lang->doc->menu->{$menuType}['alias'] .= ',' . $this->app->rawMethod;
+
+        $this->view->type         = $type;
+        $this->view->spaceID      = $spaceID;
+        $this->view->libID        = $libID;
+        $this->view->moduleID     = $moduleID;
+        $this->view->docID        = $docID;
+        $this->view->mode         = $mode;
+        $this->view->filterType   = $filterType;
+        $this->view->search       = $search;
+        $this->view->recTotal     = $recTotal;
+        $this->view->recPerPage   = $recPerPage;
+        $this->view->pageID       = $pageID;
+        $this->view->orderBy      = $orderBy;
+        $this->view->params       = $params;
+        $this->view->users        = $this->loadModel('user')->getPairs('noclosed,noletter');
+        $this->view->activeMenuID = $menuType;
+
+        if(empty($this->view->title)) $this->view->title = $this->lang->doc->spaceList[$type];
         $this->display();
     }
 
