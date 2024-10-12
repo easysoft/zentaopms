@@ -337,11 +337,11 @@ class doc extends control
     {
         if(!empty($_POST))
         {
+            $libID    = (int)$this->post->lib;
             $doclib   = $this->loadModel('doc')->getLibByID($libID);
             $canVisit = $this->docZen->checkPrivForCreate($doclib, $objectType);
             if(!$canVisit) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->accessDenied));
 
-            $libID    = $this->post->lib;
             $moduleID = $this->post->module;
             helper::setcookie('lastDocModule', $moduleID);
 
