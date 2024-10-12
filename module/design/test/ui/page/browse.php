@@ -22,6 +22,9 @@ class browsePage extends page
             'dropMenu'      => "//*[@id='pick-design-menu']",
             'firstProduct'  => "//*[@id='pick-pop-design-menu']/div[2]/div/div/menu/li[2]/div/div/div",
             'secondProduct' => "//*[@id='pick-pop-design-menu']/div[2]/div/div/menu/li[3]/div/div/div",
+            'viewCommitBtn' => "//*[@id='table-design-browse']/div[2]/div[3]/div/div[4]/div/nav/a[2]",
+            'commitNum'     => "//*[@id='table-design-viewcommit']/div[3]/nav/div[1]",
+            'closeBtn'      => "//*[@id='viewCommitModal']/div/div/div[2]/button",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
