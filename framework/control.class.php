@@ -527,11 +527,11 @@ class control extends baseControl
         $moduleName = $moduleName ? $moduleName : $this->app->rawModule;
         $methodName = $methodName ? $moduleName : $this->app->rawMethod;
 
-        $flow    = $this->loadModel('workflow')->getByModule($moduleName);
+        $groupID = $this->loadModel('workflowgroup')->getGroupIDByData($moduleName, $object);
+        $flow    = $this->loadModel('workflow')->getByModule($moduleName, false, $groupID);
         if(!$flow) return $fields;
 
-        $groupID = $this->loadModel('workflowgroup')->getGroupIDByData($moduleName, $object);
-        $action  = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName, $groupID);
+        $action = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName, $groupID);
         if(!$action || $action->extensionType != 'extend') return $fields;
 
         $uiID      = $this->loadModel('workflowlayout')->getUIByData($flow->module, $action->action, $object);
@@ -561,7 +561,6 @@ class control extends baseControl
         $flow    = $this->loadModel('workflow')->getByModule($moduleName, false, $groupID);
         if(!$flow) return '';
 
-        $groupID = $this->loadModel('workflowgroup')->getGroupIDByData($moduleName, $object);
         $action  = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName, $groupID);
         if(!$action || $action->extensionType == 'none') return '';
 
@@ -602,14 +601,14 @@ class control extends baseControl
         $this->loadModel('flow');
         $this->loadModel('workflowfield');
 
-        $flow = $this->loadModel('workflow')->getByModule($moduleName);
+        $groupID = $this->loadModel('workflowgroup')->getGroupIDByData($moduleName, $object);
+        $flow    = $this->loadModel('workflow')->getByModule($moduleName, false, $groupID);
         if(!$flow) return array();
 
-        $action = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
+        $action = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName, $groupID);
         if(!$action || $action->extensionType != 'extend') return array();
 
-        $groupID = $this->loadModel('workflowgroup')->getGroupIDByData($moduleName, $object);
-        $uiID    = is_object($object) ? $this->loadModel('workflowlayout')->getUIByData($flow->module, $action->action, $object) : 0;
+        $uiID = is_object($object) ? $this->loadModel('workflowlayout')->getUIByData($flow->module, $action->action, $object) : 0;
 
         $wrapControl  = array('textarea', 'richtext', 'file');
         $fieldList    = $this->workflowaction->getPageFields($flow->module, $action->action, true, $object, $uiID, $groupID);

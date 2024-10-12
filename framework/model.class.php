@@ -410,7 +410,7 @@ class model extends baseModel
             }
         }
 
-        $flow = $this->loadModel('workflow')->getByModule($moduleName);
+        $flow = $this->loadModel('workflow')->getByModule($moduleName, false, $groupID);
         if($flow && $action) return $this->loadModel('workflowhook')->execute($flow, $action, $objectID);
     }
 
