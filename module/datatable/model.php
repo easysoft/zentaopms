@@ -58,7 +58,7 @@ class datatableModel extends model
         }
 
         /* 加载工作流字段配置。 */
-        if($this->config->edition != 'open') $fieldList = $this->appendWorkflowFields($module, $method, $fieldList);
+        if($this->config->edition != 'open') $fieldList += $this->appendWorkflowFields($module, $method);
 
         return $fieldList;
     }
@@ -441,11 +441,10 @@ class datatableModel extends model
      *
      * @param  string $module
      * @param  string $method
-     * @param  array  $fieldList
      * @access public
      * @return array
      */
-    public function appendWorkflowFields(string $module, string $method, array $fieldList): array
+    public function appendWorkflowFields(string $module, string $method): array
     {
         if(in_array($module, array('epic', 'story', 'requirement')))
         {
@@ -476,42 +475,17 @@ class datatableModel extends model
         }
 
         $flow = $this->loadModel('workflow')->getByModule($module);
-        if(empty($flow)) return $fieldList;
+        if(empty($flow)) return [];
+
+        if($flow->buildin)
+        {
+            $action = $this->loadModel('workflowaction')->getByModuleAndAction($module, $method);
+            if(!$action || (isset($action->extensionType) && $action->extensionType != 'extend')) return []; // 不扩展不追加字段。
+        }
 
         $groupID = $this->loadModel('workflowgroup')->getGroupIDBySession($module);
         $fields  = $this->loadModel('workflowaction')->getPageFields($module, $method, true, array(), 0, $groupID);
-        if($flow->buildin == 1)
-        {
-            $action = $this->workflowaction->getByModuleAndAction($module, $method);
-            if(!$action || (isset($action->extensionType) && $action->extensionType != 'extend')) return $fieldList; // 不扩展不追加字段。
 
-            $workflowFieldList = $this->loadModel('flow')->buildDtableCols($fields);
-            $fieldList         = array_merge($fieldList, $workflowFieldList);
-        }
-        else
-        {
-            foreach($fields as $field)
-            {
-                if(!$field->show) continue;
-
-                $fieldList[$field->field]['name']  = $field->field;
-                $fieldList[$field->field]['title'] = $field->name;
-                $fieldList[$field->field]['show']  = true;
-                $fieldList[$field->field]['width'] = (empty($field->width) || $field->width == 'auto') ? '120' : $field->width;
-
-                if($field->field == 'id')
-                {
-                    $fieldList[$field->field]['fixed']    = 'left';
-                    $fieldList[$field->field]['required'] = true;
-                }
-                elseif($field->field == 'actions')
-                {
-                    $fieldList[$field->field]['fixed']    = 'right';
-                    $fieldList[$field->field]['required'] = true;
-                }
-            }
-        }
-
-        return $fieldList;
+        return $this->loadModel('flow')->buildDtableCols($fields, [], [], !$flow->buildin);
     }
 }
