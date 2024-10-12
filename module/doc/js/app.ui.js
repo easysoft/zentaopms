@@ -123,10 +123,9 @@ function handleSaveDoc(doc)
 function canMoveDoc(doc)
 {
     const docApp         = getDocApp();
-    const spaceType      = docApp.signals.spaceType.value;
     const hasDocMovePriv = docApp.props.privs.moveDoc;
 
-    return hasDocMovePriv && (spaceType !== 'api');
+    return hasDocMovePriv;
 }
 
 function deleteDocFile(file, doc)
