@@ -2246,10 +2246,28 @@ class taskTest
         list($childTasks, $nonStoryChildTasks) = $this->objectModel->getChildTasksByList($taskIdList);
 
         $return = array();
+        if(!empty($childTasks))
+        {
+            foreach($childTasks as $parentID => $parentChildTasks)
+            {
+                if(!isset($return[$parentID])) $return[$parentID] = 'childTasks: ';
+                $return[$parentID] .= implode(',', array_keys($parentChildTasks)) . '; ';
+            }
+        }
         if(!empty($nonStoryChildTasks))
         {
             foreach($nonStoryChildTasks as $parentID => $parentChildTasks) $return[$parentID] .= 'nonStoryChildTasks: ' . implode(',', array_keys($parentChildTasks)) . '; ';
         }
         return $return;
+    }
+
+    public function syncStoryToChildrenTest(object $task): string|false
+    {
+        $this->objectModel->syncStoryToChildren($task);
+
+        $return     = '';
+        $childTasks = $this->objectModel->dao->select('id,story')->from(TABLE_TASK)->where('parent')->eq($task->id)->andWhere('deleted')->eq('0')->fetchPairs();
+        foreach($childTasks as $key => $value) $return .= $key . ':' . $value . ';';
+        return rtrim($return, ';');
     }
 }
