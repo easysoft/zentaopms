@@ -19,8 +19,7 @@ class reviewStoryTester extends tester
      */
     public function reviewStory($result, $status)
     {
-        $form = $this->openURL('story', 'review', array('id' => 1), 'appIframe-product');  //进入研发评审页面
-        $form = $this->loadPage('story', 'review');
+        $form = $this->initForm('story', 'review', array('id' => 1), 'appIframe-product');  //进入研发评审页面
 
         $form->dom->result->picker($result); //选择研发评审结果
         $form->dom->assignedTo->picker('admin'); //指派人选择admin
