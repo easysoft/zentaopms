@@ -54,3 +54,20 @@ $repo->encrypt->range('base64');
 $repo->synced->range('1');
 $repo->extra->range('952');
 $repo->gen(1);
+
+$repohistory = zendata('repohistory');
+$repohistory->id->range('1');
+$repohistory->repo->range('1');
+$repohistory->revision->range('b59be0c9604497ae26c621cc848a738cca73fc85');
+$repohistory->commit->range('31');
+$repohistory->gen(1);
+
+$design = zendata('design');
+$design->id->range('1-4');
+$design->project->range('1{4}');
+$design->product->range('1{2}, 2{2}');
+$design->commit->range('1, []{3}');
+$design->commitedBy->range('admin');
+$design->name->range('概要设计1, 详细设计1, 数据库设计1, 接口设计1');
+$design->type->range('HLDS, DDS, DBDS, ADS');
+$design->gen(4);
