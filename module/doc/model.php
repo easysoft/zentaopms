@@ -1075,6 +1075,42 @@ class docModel extends model
     }
 
     /**
+     * 获取lib的targetSpace，返回的是type.id。
+     *
+     * @access public
+     * @return string
+     */
+    public function getLibTargetSpace($lib)
+    {
+        if(in_array($lib->type, array('product', 'project')))
+        {
+            $targetSpace = "{$lib->type}.{$lib->$type}";
+        }
+        else
+        {
+            $targetSpace = "{$lib->type}.{$lib->parent}";
+        }
+
+        return $targetSpace;
+    }
+
+    /**
+     * 解析targetSpace。
+     *
+     * @param  string $targetSpace
+     * @param  string $paramType type|id
+     * @access public
+     * @return array
+     */
+    public function getParamFromTargetSpace($targetSpace, $paramType = 'type')
+    {
+        $params = explode('.', $targetSpace);
+
+        if($paramType == 'type') return $params[0];
+        if($paramType == 'id')   return $params[1];
+    }
+
+    /**
      * 获取所有子空间。
      * Get all sub spaces.
      *
@@ -3252,9 +3288,10 @@ class docModel extends model
     {
         if(empty($libID) || empty($data->space)) return false;
 
-        if(is_numeric($data->space))
+        $spaceID = $this->doc->getParamFromTargetSpace($data->space, 'id');
+        if(is_numeric($spaceID))
         {
-            $space = $this->getLibByID((int)$data->space);
+            $space = $this->getLibByID((int)$spaceID);
 
             $data->type   = $space->type;
             $data->parent = $data->space;

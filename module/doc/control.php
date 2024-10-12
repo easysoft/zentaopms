@@ -1141,7 +1141,7 @@ class doc extends control
     public function moveLib(int $libID, string $targetSpace = '')
     {
         $lib = $this->doc->getLibByID($libID);
-        if(empty($targetSpace)) $targetSpace = $lib->parent;
+        if(empty($targetSpace)) $targetSpace = $this->doc->getLibTargetSpace($lib);
 
         if(!empty($lib->main)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorEditSystemDoc));
 
@@ -1159,11 +1159,11 @@ class doc extends control
             return $this->docZen->responseAfterMove($this->post->space, $libID);
         }
 
-        $spaceType = $this->doc->getSpaceType((int)$targetSpace);
+        $spaceType = $this->doc->getParamFromTargetSpace($targetSpace, 'type');
         $this->docZen->setAclForCreateLib($spaceType);
 
         $this->view->title        = $this->lang->doc->moveLibAction;
-        $this->view->spaces       = $this->doc->getSubSpacesByType('all');
+        $this->view->spaces       = $this->doc->getAllSubSpaces('all');
         $this->view->lib          = $lib;
         $this->view->targetSpace  = $targetSpace;
         $this->view->libType      = $spaceType;
