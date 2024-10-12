@@ -194,6 +194,7 @@ $lang->my->featureBar['work']['bug']   = $lang->my->featureBar['work']['task'];
 
 $lang->my->featureBar['contribute']['task']['openedBy']   = 'CreatedByMe';
 $lang->my->featureBar['contribute']['task']['finishedBy'] = 'FinishedByMe';
+$lang->my->featureBar['contribute']['task']['myInvolved'] = 'InvolvedByMe';
 $lang->my->featureBar['contribute']['task']['closedBy']   = 'ClosedByMe';
 $lang->my->featureBar['contribute']['task']['canceledBy'] = 'CancelledByMe';
 $lang->my->featureBar['contribute']['task']['assignedBy'] = 'AssignedByMe';
