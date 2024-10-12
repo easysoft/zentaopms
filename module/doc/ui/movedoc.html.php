@@ -20,6 +20,7 @@ if($libType == 'mine') $defaultAcl = 'private';
 if($libType == 'mine') $this->lang->doc->aclList = $this->lang->doclib->mySpaceAclList;
 if($libType == 'custom' && $doc->lib != $libID) $defaultAcl = 'open';
 
+jsVar('spaceType', $spaceType);
 jsVar('space', $space);
 jsVar('libID', $libID);
 jsVar('docID', $docID);
@@ -32,7 +33,7 @@ formPanel
         set::width('5/6'),
         set::label($lang->doc->space),
         set::required(true),
-        set::control(array('control' => "picker", 'name' => 'space', 'items' => $spaces, 'value' => $space))
+        set::control(array('control' => "picker", 'name' => 'space', 'items' => $spaces, 'value' => "{$spaceType}.{$space}"))
     ),
     formGroup
     (

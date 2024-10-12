@@ -1179,11 +1179,12 @@ class doc extends control
      *
      * @param  int    $docID
      * @param  int    $libID
-     * @param  string $space [int]
+     * @param  string $spaceType
+     * @param  string $space
      * @access public
      * @return void
      */
-    public function moveDoc(int $docID, int $libID = 0, string $space = '', string $locate = '')
+    public function moveDoc(int $docID, int $libID = 0, string $spaceType = '', string $space = '', string $locate = '')
     {
         $doc = $this->doc->getByID($docID);
         if(!empty($_POST))
@@ -1208,15 +1209,16 @@ class doc extends control
         $lib = $this->doc->getLibByID($libID);
         if(empty($space)) $space = $lib->parent;
 
-        $spaceType = $this->doc->getSpaceType((int)$space);
-        $libPairs = $this->doc->getLibPairs($spaceType, '', (int)$space);
+        if(empty($spaceType)) $spaceType = $this->doc->getSpaceType($space);
+        $libPairs = $this->doc->getLibPairs($spaceType, '', (int)$space, '', $spaceType == 'product' ? array((int)$space => $space) : array(), $spaceType == 'project' ? array((int)$space => $space) : array());
         if(!isset($libPairs[$libID])) $libID = (int)key($libPairs);
 
         $this->view->docID      = $docID;
         $this->view->libID      = $libID;
+        $this->view->spaceType  = $spaceType;
         $this->view->space      = $space;
         $this->view->doc        = $doc;
-        $this->view->spaces     = $this->doc->getSubSpacesByType('all');
+        $this->view->spaces     = $this->doc->getAllSubSpaces();
         $this->view->libPairs   = $libPairs;
         $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
         $this->view->groups     = $this->loadModel('group')->getPairs();

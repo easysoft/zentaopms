@@ -515,11 +515,12 @@ const commands =
     },
     moveDoc: function(_, args)
     {
-        const docApp  = getDocApp();
-        const docID   = args[0] || docApp.docID;
-        const libID   = docApp.libID;
-        const spaceID = docApp.spaceID;
-        const url     = $.createLink('doc', 'moveDoc', `docID=${docID}&libID=${libID}&space=${spaceID > 0 ? spaceID : 'mine'}`);
+        const docApp    = getDocApp();
+        const docID     = args[0] || docApp.docID;
+        const libID     = docApp.libID;
+        const spaceType = docApp.spaceType;
+        const spaceID   = docApp.spaceID;
+        const url       = $.createLink('doc', 'moveDoc', `docID=${docID}&libID=${libID}&spaceType=${spaceType}&space=${spaceID}`);
         zui.Modal.open({size: 'sm', url: url});
     },
     deleteDoc: function(_, args)

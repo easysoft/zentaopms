@@ -59,13 +59,13 @@ class docModel extends model
      * 通过ID获取空间类型
      * Get space type by id.
      *
-     * @param  int    $spaceID
+     * @param  int|string $spaceID
      * @access public
      * @return string
      */
-    public function getSpaceType(int $spaceID): string
+    public function getSpaceType(int|string $spaceID): string
     {
-        return $this->dao->findByID($spaceID)->from(TABLE_DOCLIB)->fetch('type');
+        return $this->dao->findByID((int)$spaceID)->from(TABLE_DOCLIB)->fetch('type');
     }
 
     /**
@@ -1094,11 +1094,11 @@ class docModel extends model
             ->fetchAll();
 
         $productPairs = $projectPairs = $spacePairs = array();
-        foreach($productList as $productID => $productName) $productPairs["product-{$productID}"] = $this->lang->doc->spaceList['product'] . '/' . $productName;
-        foreach($projectList as $projectID => $projectName) $projectPairs["project-{$projectID}"] = $this->lang->doc->spaceList['project'] . '/' . $projectName;
+        foreach($productList as $productID => $productName) $productPairs["product.{$productID}"] = $this->lang->doc->spaceList['product'] . '/' . $productName;
+        foreach($projectList as $projectID => $projectName) $projectPairs["project.{$projectID}"] = $this->lang->doc->spaceList['project'] . '/' . $projectName;
         foreach($spaceList as $space)
         {
-            if($this->checkPrivLib($space)) $spacePairs[$space->id] = $this->lang->doc->spaceList[$space->type] . '/' . $space->name;
+            if($this->checkPrivLib($space)) $spacePairs["{$space->type}.{$space->id}"] = $this->lang->doc->spaceList[$space->type] . '/' . $space->name;
         }
 
         return array_merge($productPairs, $projectPairs, $spacePairs);
