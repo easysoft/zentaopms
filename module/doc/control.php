@@ -1204,7 +1204,7 @@ class doc extends control
      * Move Lib.
      *
      * @param  int    $libID
-     * @param  string $targetSpace
+     * @param  string $targetSpace [int]
      * @access public
      * @return void
      */
@@ -1212,6 +1212,7 @@ class doc extends control
     {
         $lib = $this->doc->getLibByID($libID);
         if(empty($targetSpace)) $targetSpace = $lib->parent;
+
         if(!empty($lib->main)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorEditSystemDoc));
 
         if(!empty($_POST))
@@ -1228,14 +1229,14 @@ class doc extends control
             return $this->docZen->responseAfterMove($this->post->space, $libID);
         }
 
-        $spaceInfo = $this->doc->getLibByID((int)$targetSpace);
-        $this->docZen->setAclForCreateLib($spaceInfo->type);
+        $spaceType = $this->doc->getSpaceType((int)$targetSpace);
+        $this->docZen->setAclForCreateLib($spaceType);
 
         $this->view->title        = $this->lang->doc->moveLibAction;
         $this->view->spaces       = $this->doc->getSubSpaces('all');
         $this->view->lib          = $lib;
         $this->view->targetSpace  = $targetSpace;
-        $this->view->libType      = $spaceInfo->type;
+        $this->view->libType      = $spaceType;
         $this->view->hasOthersDoc = $this->doc->hasOthersDoc($lib);
         $this->view->groups       = $this->loadModel('group')->getPairs();
         $this->view->users        = $this->loadModel('user')->getPairs('nocode|noclosed');
