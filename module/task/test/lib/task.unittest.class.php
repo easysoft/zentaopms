@@ -2261,6 +2261,14 @@ class taskTest
         return $return;
     }
 
+    /**
+     * 同步父任务的需求到子任务。
+     * Sync parent story to children
+     *
+     * @param  object       $task
+     * @access public
+     * @return string|false
+     */
     public function syncStoryToChildrenTest(object $task): string|false
     {
         $this->objectModel->syncStoryToChildren($task);
