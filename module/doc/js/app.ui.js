@@ -125,10 +125,8 @@ function canMoveDoc(doc)
     const docApp         = getDocApp();
     const spaceType      = docApp.signals.spaceType.value;
     const hasDocMovePriv = docApp.props.privs.moveDoc;
-    const currentUser    = docApp.props.currentUser;
 
-    if(typeof doc === 'number') doc = docApp.getDoc(doc);
-    return hasDocMovePriv && (spaceType === 'custom' || spaceType === 'mine') && doc.addedBy === currentUser;
+    return hasDocMovePriv && (spaceType !== 'api');
 }
 
 function deleteDocFile(file, doc)
