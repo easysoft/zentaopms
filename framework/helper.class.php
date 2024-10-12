@@ -779,7 +779,8 @@ function initItemActions(object &$item, string $actionMenu, array $actionList, o
     /* Check flow conditions for this object. */
     if($model->config->edition != 'open')
     {
-        $flowActions = $model->loadModel('workflowaction')->getList($module);
+        static $flowActions = [];
+        if(empty($flowActions)) $flowActions = $model->loadModel('workflowaction')->getList($module);
 
         $model->loadModel('flow');
         foreach($flowActions as $flowAction)
