@@ -1416,7 +1416,6 @@ class doc extends control
         if($noPicks || strpos($picks, ',lib,') !== false)    $data['libs'] = array_values($libs);
         if($noPicks || strpos($picks, ',module,') !== false) $data['modules'] = array_values($this->doc->getModulesOfLibs($libIds));
         if($noPicks || strpos($picks, ',doc,') !== false)    $data['docs'] = array_values($this->doc->getDocsOfLibs($libIds + array($spaceID)));
-        $data['$libIds'] = $libIds;
 
         $this->send($data);
     }
