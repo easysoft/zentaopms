@@ -71,3 +71,11 @@ $design->commitedBy->range('admin');
 $design->name->range('概要设计1, 详细设计1, 数据库设计1, 接口设计1');
 $design->type->range('HLDS, DDS, DBDS, ADS');
 $design->gen(4);
+
+$tester = new viewCommitTester();
+$tester->login();
+
+/* 检查查看提交页数据 */
+r($tester->viewCommit('1')) && p('message') && e('查看提交页显示数据正确');
+
+$tester->closeBrowser();
