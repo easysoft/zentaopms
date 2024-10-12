@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+jsVar('job', $job);
 jsVar('repo', $repo);
 jsVar('dirs', !empty($dirs) ? $dirs : '');
 jsVar('triggerRepeat', $lang->job->triggerRepeat);
@@ -53,7 +54,8 @@ jsVar('scheduleField', div
             set::label(''),
             set::name('atDay[]'),
             set::control('checkListInline'),
-            set::items($lang->datepicker->dayNames)
+            set::items($lang->datepicker->dayNames),
+            set::value($job->atDay)
         )
     ),
     formRow

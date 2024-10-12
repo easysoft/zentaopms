@@ -86,7 +86,7 @@ window.changeTriggerType = function(event)
     }
 
     if(type != 'tag' || repo.SCM == 'Subversion') $parentDom.append(eval(`${type}Field`).replace(/%s/g, window.triggerCount));
-    if(type != 'commit') eval(`window.${type}BlockInit()`);
+    if(window[`${type}BlockInit`]) eval(`window.${type}BlockInit()`);
 
     $parentDom.find('.hidden').removeClass('hidden');
 }
@@ -155,7 +155,7 @@ window.tagBlockInit = function()
         items:         options,
         name:         `svnDir[]`,
         required:     true,
-        defaultValue: options.length ? options[0].value : ''
+        defaultValue: job.svnDir
     });
 }
 
@@ -163,6 +163,7 @@ window.scheduleBlockInit = function()
 {
     $('#scheduleTime' + window.triggerCount).addClass('form-group-wrapper picker-box');
     new zui.TimePicker('#scheduleTime' + window.triggerCount, {
-        name: 'atTime'
+        name:         'atTime',
+        defaultValue: job.atTime
     })
 }
