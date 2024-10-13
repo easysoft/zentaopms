@@ -82,29 +82,12 @@ const localThemeMode = localStorage.getItem('themeMode');
 if(localThemeMode === 'dark') $('#themeMode').trigger('click');
 else if(localThemeMode !== 'light' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) $('#themeMode').trigger('click');
 
+window.userMap          = null;
 let table               = null;
 let autoRefreshTimer    = 0;
 let autoRefreshInterval = 10000;
 const $table            = $('#table');
 const metricsLevelNames = ['', 'BLOCK', 'WARN', 'NORMAL'];
-const cols =
-[
-    {name: 'metricsLevel', title: 'LEVEL', hint: true, width: 60, fixed: 'left', cellClass: 'font-mono text-sm select-all', map: metricsLevelNames, hint: info => info.row.data.requestId, flex: 0, align: 'center', sort: true},
-    {name: 'requestId', title: 'RID', hint: true, width: 80, fixed: 'left', cellClass: 'font-mono text-sm select-all', hint: info => info.row.data.requestId, flex: 0, align: 'left'},
-    {name: 'identifier', title: 'User', fixed: 'left', flex: 0, width: 80, sort: true},
-    {name: 'path', type: 'title', title: 'Path', hint: (info) => info.row.data.request.url, link: (info) => ({url: info.row.data.request.url, target: '_blank'}), flex: 1, fixed: 'left', maxWidth: 1000, sort: true},
-    {name: 'metrics.frontend.renderTime', title: 'Render Time', sort: true, format: '{0}ms'},
-    {name: 'metrics.backend.totalTime', title: 'Back Time', sort: true, type: 'number', digits: 2, format: '{0}ms', digits: 3 },
-    {name: 'metrics.backend.sqlTime', title: 'SQL Time', sort: true, format: '{0}ms', digits: 3},
-    {name: 'metrics.backend.sqlCount', title: 'SQLs', sort: true, width: 48, link: '#', hint: 'Click to check details'},
-    {name: 'metrics.backend.requestMemory', title: 'Memory', sort: true, format: (value) => value ? zui.formatBytes(value) : ''},
-    {name: 'metrics.backend.phpFileLoaded', title: 'Files', sort: true, align: 'center'},
-    {name: 'metrics.frontend.downloadSize', title: 'Load Size', sort: true, format: (value) => value ? zui.formatBytes(value) : ''},
-    {name: 'userEnv.browser', title: 'Browser', sort: true, align: 'left'},
-    {name: 'userEnv.system', title: 'Platform', sort: true, align: 'center'},
-    {name: 'request.xhprof', title: 'Xhprof', link: (info) => ({url: info.row.data.request.xhprof || '#', target: '_blank'}), format: (value) => (value ? 'Open' : ''), hint: true, width: 40},
-    {name: 'timestamp', title: 'Date', type: 'datetime', hint: (info) => zui.formatDate(info.row.data.timestamp, 'yyyy-MM-dd hh:mm:ss'), width: 120, sort: true, fixed: 'right'},
-];
 
 function getQueryUrl()
 {
@@ -142,6 +125,25 @@ function getTimeClass(time, danger = 400, warning = 100)
 
 function initTable(data)
 {
+    const cols =
+    [
+        {name: 'metricsLevel', title: 'LEVEL', hint: true, width: 60, fixed: 'left', cellClass: 'font-mono text-sm select-all', map: metricsLevelNames, hint: info => info.row.data.requestId, flex: 0, align: 'center', sort: true},
+        {name: 'requestId', title: 'RID', hint: true, width: 80, fixed: 'left', cellClass: 'font-mono text-sm select-all', hint: info => info.row.data.requestId, flex: 0, align: 'left'},
+        {name: 'identifier', type: Object.keys(window.userMap || {}).length ? 'avatarName' : '', title: 'User', fixed: 'left', flex: 0, width: 80, sort: true, avatarKey: 'identifier_avatar', avatarCodeKey: 'identifier_avatar_code', avatarNameKey: 'identifier_name'},
+        {name: 'path', type: 'title', title: 'Path', hint: (info) => info.row.data.request.url, link: (info) => ({url: info.row.data.request.url, target: '_blank'}), flex: 1, fixed: 'left', maxWidth: 1000, sort: true},
+        {name: 'metrics.frontend.renderTime', title: 'Render Time', sort: true, format: '{0}ms'},
+        {name: 'metrics.backend.totalTime', title: 'Back Time', sort: true, type: 'number', digits: 2, format: '{0}ms', digits: 3 },
+        {name: 'metrics.backend.sqlTime', title: 'SQL Time', sort: true, format: '{0}ms', digits: 3},
+        {name: 'metrics.backend.sqlCount', title: 'SQLs', sort: true, width: 48, link: '#', hint: 'Click to check details'},
+        {name: 'metrics.backend.requestMemory', title: 'Memory', sort: true, format: (value) => value ? zui.formatBytes(value) : ''},
+        {name: 'metrics.backend.phpFileLoaded', title: 'Files', sort: true, align: 'center'},
+        {name: 'metrics.frontend.downloadSize', title: 'Load Size', sort: true, format: (value) => value ? zui.formatBytes(value) : ''},
+        {name: 'userEnv.browser', title: 'Browser', sort: true, align: 'left'},
+        {name: 'userEnv.system', title: 'Platform', sort: true, align: 'center'},
+        {name: 'request.xhprof', title: 'Xhprof', link: (info) => ({url: info.row.data.request.xhprof || '#', target: '_blank'}), format: (value) => (value ? 'Open' : ''), hint: true, width: 40},
+        {name: 'timestamp', title: 'Date', type: 'datetime', hint: (info) => zui.formatDate(info.row.data.timestamp, 'yyyy-MM-dd hh:mm:ss'), width: 120, sort: true, fixed: 'right'},
+    ];
+
     table = new zui.DTable('#table',
     {
         className: 'ring ring-gray shadow rounded',
@@ -187,6 +189,17 @@ function initTable(data)
             row.metricsClass = classList.includes('danger') ? 'danger' : (classList.includes('warning') ? 'warning' : '');
             row.metricsLevel = classList.includes('danger') ? 1 : (classList.includes('warning') ? 2 : 3);
 
+            if(window.userMap)
+            {
+                const user = window.userMap[row.identifier];
+                if(user)
+                {
+                    row.identifier_avatar      = user.avatar;
+                    row.identifier_avatar_code = user.id;
+                    row.identifier_name        = user.realname || user.account;
+                }
+            }
+
             if(row.metricsClass)
             {
                 if(!this.metricsStats) this.metricsStats = {warning: 0, danger: 0};
@@ -196,10 +209,6 @@ function initTable(data)
         },
         cols: cols,
         data: data,
-        afterRender: function()
-        {
-            this.metricsStats = {warning: 0, danger: 0};
-        },
         onRenderCell: function(result, info)
         {
             const colName = info.col.name;
@@ -257,7 +266,11 @@ function queryData()
     loadData().then(data =>
     {
         $table.removeClass('loading');
-        if(table) return table.render({data});
+        if(table)
+        {
+            table.$.metricsStats = {warning: 0, danger: 0};
+            return table.render({data});
+        }
         initTable(data);
     }).catch(error => {
         $table.removeClass('loading');
@@ -272,7 +285,8 @@ function getAPI()
     if(window.guardApi) return Promise.resolve(window.guardApi);
     return fetch('./dev.json').then(response => response.json()).then(json => {
         window.guardApi = json.api;
-        if(json.user) window.guardUser = json.user;
+        if(json.user)    window.guardUser = json.user;
+        if(json.userMap) window.userMap = json.userMap;
         return json.api;
     });
 }
