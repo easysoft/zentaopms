@@ -86,8 +86,10 @@ let table               = null;
 let autoRefreshTimer    = 0;
 let autoRefreshInterval = 10000;
 const $table            = $('#table');
+const metricsLevelNames = ['', 'BLOCK', 'WARN', 'NORMAL'];
 const cols =
 [
+    {name: 'metricsLevel', title: 'LEVEL', hint: true, width: 60, fixed: 'left', cellClass: 'font-mono text-sm select-all', map: metricsLevelNames, hint: info => info.row.data.requestId, flex: 0, align: 'center', sort: true},
     {name: 'requestId', title: 'RID', hint: true, width: 80, fixed: 'left', cellClass: 'font-mono text-sm select-all', hint: info => info.row.data.requestId, flex: 0, align: 'left'},
     {name: 'identifier', title: 'User', fixed: 'left', flex: 0, width: 80, sort: true},
     {name: 'path', type: 'title', title: 'Path', hint: (info) => info.row.data.request.url, link: (info) => ({url: info.row.data.request.url, target: '_blank'}), flex: 1, fixed: 'left', maxWidth: 1000, sort: true},
@@ -100,7 +102,8 @@ const cols =
     {name: 'metrics.frontend.downloadSize', title: 'Load Size', sort: true, format: (value) => value ? zui.formatBytes(value) : ''},
     {name: 'userEnv.browser', title: 'Browser', sort: true, align: 'left'},
     {name: 'userEnv.system', title: 'Platform', sort: true, align: 'center'},
-    {name: 'timestamp', title: 'Date', type: 'datetime', width: 120, sort: true, fixed: 'right'},
+    {name: 'request.xhprof', title: 'Xhprof', link: (info) => ({url: info.row.data.request.xhprof || '#', target: '_blank'}), format: (value) => (value ? 'Open' : ''), hint: true, width: 40},
+    {name: 'timestamp', title: 'Date', type: 'datetime', hint: (info) => zui.formatDate(info.row.data.timestamp, 'yyyy-MM-dd hh:mm:ss'), width: 120, sort: true, fixed: 'right'},
 ];
 
 function getQueryUrl()
@@ -145,7 +148,7 @@ function initTable(data)
         plugins: ['sort', 'sort-col', 'zentao', 'resize', 'customCols'],
         width: '100%',
         height: '100%',
-        fixedLeftWidth: 300,
+        fixedLeftWidth: 360,
         minColWidth: 40,
         hoverCol: true,
         sort: true,
@@ -172,15 +175,17 @@ function initTable(data)
             row['metrics.frontend.downloadSize']    = row.metrics.frontend.downloadSize;
             row['userEnv.browser']                  = row.userEnv.browser;
             row['userEnv.system']                   = row.userEnv.system;
+            row['request.xhprof']                   = row.request.xhprof;
 
-            const totalTimeClass  = getTimeClass(row.metrics.backend.totalTime, 500, 300);
-            const sqlTimeClass    = getTimeClass(row.metrics.backend.sqlTime, 300, 200);
-            const renderTimeClass = getTimeClass(row.metrics.frontend.renderTime, 100, 60);
+            const totalTimeClass  = getTimeClass(row.metrics.backend.totalTime || 0, 500, 300);
+            const sqlTimeClass    = getTimeClass(row.metrics.backend.sqlTime || 0, 300, 200);
+            const renderTimeClass = getTimeClass(row.metrics.frontend.renderTime || 0, 100, 60);
             const classList       = [totalTimeClass, sqlTimeClass, renderTimeClass];
             row['metrics.backend.totalTimeClass']   = totalTimeClass;
             row['metrics.backend.sqlTimeClass']     = sqlTimeClass;
             row['metrics.frontend.renderTimeClass'] = renderTimeClass;
             row.metricsClass = classList.includes('danger') ? 'danger' : (classList.includes('warning') ? 'warning' : '');
+            row.metricsLevel = classList.includes('danger') ? 1 : (classList.includes('warning') ? 2 : 3);
 
             if(row.metricsClass)
             {
@@ -202,6 +207,7 @@ function initTable(data)
             if(colName === 'metrics.backend.totalTime') result.push({root: true, className: `text-${rowData['metrics.backend.totalTimeClass']}`});
             else if(colName === 'metrics.backend.sqlTime') result.push({root: true, className: `text-${rowData['metrics.backend.sqlTimeClass']}`});
             else if(colName === 'metrics.frontend.renderTime') result.push({root: true, className: `text-${rowData['metrics.frontend.renderTimeClass']}`});
+            else if(colName === 'metricsLevel' && rowData.metricsLevel < 3) result.push({root: true, className: `font-bold text-${rowData.metricsClass} bg-opacity-${rowData.metricsClass === 'danger' ? 50 : 20}`});
             if(rowData.metricsClass) result.push({root: true, className: `bg-${rowData.metricsClass} bg-opacity-${rowData.metricsClass === 'danger' ? 40 : 10}`});
             return result;
         },
@@ -239,6 +245,7 @@ function initTable(data)
                 });
                 return;
             }
+            console.log('> clicked', info.rowInfo.data);
         }
     });
     console.log('> table', table);
