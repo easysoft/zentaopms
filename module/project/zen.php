@@ -1568,10 +1568,17 @@ class projectZen extends project
     {
         $this->loadModel('product');
 
-        $projects = $this->project->getList($status, $orderBy);
-        $users    = $this->loadModel('user')->getPairs('noletter');
+        $projects        = $this->project->getList($status, $orderBy);
+        $users           = $this->loadModel('user')->getPairs('noletter');
+        $canViewProjects = $this->app->user->view->projects;
         foreach($projects as $i => $project)
         {
+            if(strpos(",{$canViewProjects},", ",{$project->id},") === false)
+            {
+                unset($projects[$i]);
+                continue;
+            }
+
             $projectBudget = $project->budget === '' ? '0' : $project->budget;
 
             $project->PM     = zget($users, $project->PM);
