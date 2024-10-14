@@ -65,6 +65,7 @@ class docModel extends model
      */
     public function getSpaceType(int|string $spaceID): string
     {
+        if(is_string($spaceID) && strpos($spaceID, '.') != false) return explode('.', $spaceID)[0];
         return $this->dao->findByID((int)$spaceID)->from(TABLE_DOCLIB)->fetch('type');
     }
 
@@ -99,7 +100,7 @@ class docModel extends model
      * 获取文档库。
      * Get libraries.
      *
-     * @param  string $type        all|includeDeleted|hasApi|product|project|execution|custom|mine
+     * @param  string     $type        all|includeDeleted|hasApi|product|project|execution|custom|mine
      * @param  string     $extra       withObject|notdoc
      * @param  int|string $appendLibs
      * @param  int        $objectID
@@ -669,7 +670,7 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getDocsOfLibs(array $libs)
+    public function getDocsOfLibs(array $libs): array
     {
         $docs = $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq(0)
