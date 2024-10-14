@@ -215,6 +215,12 @@ function getDocCreateActions() {
 
 const actionsMap =
 {
+    home: function(info)
+    {
+        return [
+            hasPriv('createSpace') ? {icon: 'cube', btnType: 'primary', text: getLang('createSpace'), command: 'createSpace'} : null,
+        ];
+    },
     space: function(info)
     {
         const lang  = getLang();
