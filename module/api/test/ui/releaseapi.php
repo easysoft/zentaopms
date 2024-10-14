@@ -56,3 +56,6 @@ $tester->login();
 
 $apiVersion = new stdClass();
 $apiVersion->fstVersion = '版本1';
+$apiVersion->secVersion = '版本2';
+
+r($tester->releaseApi($apiVersion)) && p('message,status') && e('发布接口成功,SUCCESS'); //发布接口成功
