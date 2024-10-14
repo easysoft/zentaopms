@@ -119,6 +119,7 @@ class think3c extends thinkModel
         list($blocks, $mode, $disabled, $key) = $this->prop(array('blocks', 'mode', 'disabled', 'key'));
         jsVar('blockName', $lang->thinkwizard->placeholder->blockName);
         jsVar('model3cKey', $key);
+        jsVar('loadGraphTip', $lang->thinkrun->tips->loadGraph);
 
         return div
         (
