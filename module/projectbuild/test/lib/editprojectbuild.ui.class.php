@@ -36,3 +36,17 @@ class editProjectBuildTester extends tester
         $form = $this->initForm('projectbuild', 'edit', array('projectID' => 1), 'appIframe-project');
 
         if(isset($build['name'])) $form->dom->name->setValue($build['name']);
+        $form->dom->btn($this->lang->save)->click();
+        $form->wait(2);
+
+        /* 跳转到版本概况页面，点击基本信息标签，查看信息是否正确 */
+        $viewPage = $this->loadPage('projectbuild', 'view');
+        $viewPage->dom->basic->click();
+        $viewPage->wait(5);
+
+        /* 断言检查版本名称、所属执行是否正确 */
+        if($viewPage->dom->basicBuildName->getText() != $build['name']) return $this->failed('项目版本名称错误');
+
+        return $this->success('项目版本编辑成功');
+    }
+}
