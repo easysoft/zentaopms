@@ -36,6 +36,7 @@ function processDocAppAction(action, docApp)
         action = {call: action[0], args: action.slice(1)};
     }
 
+    if(action.mode && action.mode !== docApp.mode) return;
     const method = zui.deepGet(docApp, action.call);
     if(typeof method === 'function') method.apply(docApp, action.args);
     if(config.debug) console.log('DocApp.action', {action, method, docApp});

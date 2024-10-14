@@ -92,7 +92,7 @@ class doc extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('docspace', $spaceID, 'created');
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('doc', 'teamSpace', "objectID={$spaceID}"), 'docApp' => array('selectSpace', $spaceID, true)));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('doc', 'teamSpace', "objectID={$spaceID}"), 'docApp' => array('mode' => 'list', 'call' => 'selectSpace', 'args' => array($spaceID, true))));
         }
 
         $this->display();
