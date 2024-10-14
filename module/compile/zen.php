@@ -23,5 +23,20 @@ class compileZen extends compile
      */
     protected function buildSearchForm(int $repoID = 0, int $jobID = 0, int $queryID = 0)
     {
+        $actionURL = $this->createLink('compile', 'browse', "repoID={$repoID}&jobID={$jobID}&browseType=bySearch&param=myQueryID");
+        if($repoID || $jobID)
+        {
+            unset($this->config->compile->search['fields']['repo']);
+            unset($this->config->compile->search['params']['repo']);
+        }
+        else
+        {
+            $this->config->compile->search['params']['repo']['values'] = $this->loadModel('repo')->getRepoPairs('', 0, false);
+        }
+
+        $this->config->compile->search['actionURL'] = $actionURL;
+        $this->config->compile->search['queryID']   = $queryID;
+
+        $this->loadModel('search')->setSearchParams($this->config->compile->search);
     }
 }
