@@ -65,7 +65,7 @@ pipeline {
               zentaopms.setupEnvAfterCheckout()
 
               zCheckout([
-                [name: "xuansrc", subDir: true, url: "https://${env.GIT_HOST}/easycorp/xuanxuan.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.xuanxuan_version}", "${env.XUANVERSION}"] ],
+                [name: "xuansrc", subDir: true, url: "https://${env.GITFOX_HOST}/git/xuan/xuanxuan.git", credentialsId: "gitfox-zcorp-cc-ci-robot", branchs: ["${params.xuanxuan_version}", "${env.XUANVERSION}"] ],
                 [name: "zentaoext", subDir: true, url: "https://${env.GITFOX_HOST}/git/${env.ZENTAOEXT_GIT_REPO}.git", credentialsId: "gitfox-zcorp-cc-ci-robot", branchs: ["${params.zentaoext_version}", "${env.ZENTAOEXT_VERSION}", "${env.GIT_BRANCH}"] ],
                 [name: "zentaomax", subDir: true, url: "https://${env.GITFOX_HOST}/git/zentao/zentaomax.git", credentialsId: "gitfox-zcorp-cc-ci-robot", branchs: ["${env.GIT_BRANCH}"] ],
                 [name: "zentaoipd", subDir: true, url: "https://${env.GITFOX_HOST}/git/zentao/zentaoipd.git", credentialsId: "gitfox-zcorp-cc-ci-robot", branchs: ["${env.GIT_BRANCH}"] ],
