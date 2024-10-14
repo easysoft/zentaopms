@@ -1685,6 +1685,55 @@ class docModel extends model
     }
 
     /**
+     * 获取制定类型各个子空间文档库概要信息。
+     * Get doclib summary of each sub space.
+     *
+     * @param  string $type
+     * @param  array  $libIDList
+     * @param  int    $limit
+     * @access public
+     * @return array
+     */
+    public function getLibsOfSpaces(string $type, string|array $spaceList, $limit = 5)
+    {
+        if(is_string($spaceList)) $spaceList = explode(',', $spaceList);
+        if(empty($spaceList)) return array();
+
+        $map       = array();
+        $libIDList = array();
+        foreach($spaceList as $spaceID)
+        {
+            $libs       = $this->getLibsByObject($type, (int)$spaceID, 0, $limit);
+            $libIDList += array_keys($libs);
+            $map[$spaceID] = array_values($libs);
+        }
+
+        $docCounts = array();
+        $docs = $this->dao->select("`id`,`addedBy`,`type`,`lib`,`acl`,`users`,`groups`,`status`")->from(TABLE_DOC)
+            ->where('lib')->in($libIDList)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('module')->eq(0)
+            ->fetchAll();
+        foreach($docs as $doc)
+        {
+            if(!$this->checkPrivDoc($doc)) continue;
+
+            if(!isset($docCounts[$doc->lib])) $docCounts[$doc->lib] = 0;
+            $docCounts[$doc->lib] ++;
+        }
+
+        foreach($map as $spaceID => &$libs)
+        {
+            foreach($libs as &$lib)
+            {
+                $lib->docs = isset($docCounts[$lib->id]) ? $docCounts[$lib->id] : 0;
+            }
+        }
+
+        return $map;
+    }
+
+    /**
      * 获取空间下的文档库。
      * Get libs of space.
      *
