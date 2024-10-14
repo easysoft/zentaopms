@@ -396,6 +396,7 @@ class docZen extends doc
      * Return after move lib or doc.
      *
      * @param  string     $space
+     * @param  string     $spaceType
      * @param  int        $libID
      * @param  string     $locateLink
      * @param  int        $docID
@@ -403,13 +404,13 @@ class docZen extends doc
      * @access protected
      * @return bool|int
      */
-    protected function responseAfterMove(string $space, int $libID = 0, string $locateLink = '', int $docID = 0): bool|int
+    protected function responseAfterMove(string $space, string $spaceType = 'mine', int $libID = 0, string $locateLink = '', int $docID = 0): bool|int
     {
         if(empty($locateLink))
         {
-            if($space == 'mine')       $locateLink = $this->createLink('doc', 'mySpace', "type=mine&libID={$libID}");
-            elseif(is_numeric($space)) $locateLink = $this->createLink('doc', 'teamSpace', "objectID={$space}&libID={$libID}");
-            else                       $locateLink = true;
+            if($spaceType == 'mine')       $locateLink = $this->createLink('doc', 'mySpace', "type=mine&libID={$libID}");
+            elseif($spaceType == 'custom') $locateLink = $this->createLink('doc', 'teamSpace', "objectID={$space}&libID={$libID}");
+            else                           $locateLink = true;
         }
         if($locateLink === 'true') $locateLink = true;
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'docApp' => $docID ? array('loadDoc', $docID) : array('load', null, null, null, array('noLoading' => true, 'picks' => 'lib'))));
