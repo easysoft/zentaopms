@@ -327,7 +327,8 @@ class projectZen extends project
             }
         }
 
-        if($this->config->edition != 'open') $this->view->workflowGroups = $this->loadModel('workflowgroup')->getPairs('project', $model);
+        $hasProduct = isset($copyProject->hasProduct) ? $copyProject->hasProduct : 1;
+        if($this->config->edition != 'open') $this->view->workflowGroups = $this->loadModel('workflowgroup')->getPairs('project', $model, $hasProduct);
 
         /* Get copy projects. */
         $copyProjects     = $this->project->getPairsByModel($model, '', 0, false);
