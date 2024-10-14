@@ -75,6 +75,7 @@ class doc extends control
      * 创建一个空间。
      * Create a space.
      *
+     * @param  string $type
      * @access public
      * @return void
      */
@@ -85,8 +86,6 @@ class doc extends control
             $this->lang->doc->name = $this->lang->doclib->spaceName;
             $space = form::data()->setDefault('addedBy', $this->app->user->account)->get();
             if($type) $space->type = $type;
-
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $spaceID = $this->doc->doInsertLib($space);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -128,8 +127,6 @@ class doc extends control
 
             return $this->docZen->responseAfterCreateLib($type, $objectID, $libID, $lib->name);
         }
-
-        if(in_array($type, array('product', 'project'))) $this->app->loadLang('api');
 
         $objects = array();
         if($type == 'product') $objects = $this->product->getPairs();
@@ -387,9 +384,9 @@ class doc extends control
      * 编辑一个文档。
      * Edit a doc.
      *
-     * @param  int     $docID
-     * @param  bool    $comment
-     * @param  int     $appendLib
+     * @param  int    $docID
+     * @param  bool   $comment
+     * @param  int    $appendLib
      * @access public
      * @return void
      */
