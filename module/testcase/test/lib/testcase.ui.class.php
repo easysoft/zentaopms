@@ -19,6 +19,13 @@ class testcase extends tester
             foreach($testcase['steps'] as $parentSteps => $parentExpects)
             {
                 $parentGroup++;
+                if($parentGroup >= 3)
+                {
+                    $parentSibButton = "//textarea[@name = 'steps[$parentGroup]']/../..//button[@data-action='sib']/i";
+                    $parentSibButtonXpath = $this->page->webdriver->driver->findElement(WebDriverBy::xpath($parentSibButton));
+                    $this->page->webdriver->driver->executeScript("arguments[0].scrollIntoView();", [$parentSibButtonXpath]);
+                    $this->page->webdriver->driver->executeScript("arguments[0].click();", [$parentSibButtonXpath]);
+                }
                 if(!is_array($parentExpects))
                 {
                     $form->dom->{"steps[$parentGroup]"}->setValue($parentSteps);
@@ -30,6 +37,7 @@ class testcase extends tester
                     $form->dom->{"steps[$parentGroup]"}->setValue($parentSteps);
                     $subButton = "//textarea[@name = 'steps[$parentGroup]']/../..//button[@data-action='sub']/i";
                     $subButtonXpath = $this->page->webdriver->driver->findElement(WebDriverBy::xpath($subButton));
+                    $this->page->webdriver->driver->executeScript("arguments[0].scrollIntoView();", [$subButtonXpath]);
                     $this->page->webdriver->driver->executeScript("arguments[0].click();", [$subButtonXpath]);
                     foreach($parentExpects as $steps => $expects)
                     {
@@ -41,6 +49,7 @@ class testcase extends tester
                         {
                             $form->dom->{"steps[$parentGroup.$group]"}->setValue($steps);
                             $form->dom->{"expects[$parentGroup.$group]"}->setValue($expects);
+                            $this->page->webdriver->driver->executeScript("arguments[0].scrollIntoView();", [$sibButtonXpath]);
                             $this->page->webdriver->driver->executeScript("arguments[0].click();", [$sibButtonXpath]);
                         }
                         else
@@ -49,13 +58,14 @@ class testcase extends tester
                             $form->dom->{"steps[$parentGroup.$group]"}->setValue($steps);
                             $sonSubButton = "//textarea[@name = 'steps[$parentGroup.$group]']/../..//button[@data-action='sub']/i";
                             $sonSubButtonXpath = $this->page->webdriver->driver->findElement(WebDriverBy::xpath($sonSubButton));
+                            $this->page->webdriver->driver->executeScript("arguments[0].scrollIntoView();", [$sonSubButtonXpath]);
                             $this->page->webdriver->driver->executeScript("arguments[0].click();", [$sonSubButtonXpath]);
                         }
                     }
                 }
             }
         }
-        $form->dom->btn($this->lang->save)->click();
+        $form->dom->saveButton->click();
         $this->webdriver->wait(1);
 
         $caseLists = $form->dom->caseName->getElementList($form->dom->page->xpath['caseNameList']);
