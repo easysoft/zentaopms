@@ -224,7 +224,7 @@ const actionsMap =
         if(hasPriv('deleteSpace')) items.push({text: lang.actions.deleteSpace, command: `deleteSpace/${space.id}`});
         if(!items.length) return;
         return [
-            {type: 'dropdown', icon: 'cog-outline', square: true, caret: false, placement: 'top-end', items: items},
+            {type: 'dropdown', icon: 'cog-outline', square: true, caret: false, placement: info.ui === 'space-card' ? 'bottom-end' : 'top-end', items: items},
         ];
     },
     doc: function(info)
