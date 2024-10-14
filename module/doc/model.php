@@ -1127,7 +1127,9 @@ class docModel extends model
             ->where('deleted')->eq(0)
             ->andWhere('parent')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
-            ->andWhere('type')->in('mine,custom')
+            ->andWhere('type', true)->eq('custom')
+            ->orWhere('(type')->eq('mine')->andWhere('addedBy')->eq($this->app->user->account)
+            ->markRight(2)
             ->fetchAll();
 
         $productPairs = $projectPairs = $spacePairs = array();
