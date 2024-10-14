@@ -18,10 +18,54 @@ if($type == 'edit')
         formGroup(
             set::label($lang->watermark->switch),
             radioList(
+                on::change()->call('window.watermarkIndex.toggleWatermarkTr'),
                 set::name('enabled'),
                 set::items($lang->watermark->switchList),
                 set::value($enabled),
                 set::inline(true)
+            )
+        ),
+        formGroup(
+            setID('watermark-tr'),
+            set::label($lang->watermark->content),
+            textarea(
+                set::name('content'),
+                set::value($content)
+            )
+        ),
+        formGroup(
+            setID('watermark-tip-tr'),
+            set::label(''),
+            div(
+                p(
+                    icon(
+                        set::name('exclamation-sign'),
+                        setClass('text-warning mr-1 mb-2')
+                    ),
+                    $lang->watermark->varTip
+                ),
+                tableData(
+                    item(
+                        set::name('displayName:'),
+                        $lang->watermark->displayName
+                    ),
+                    item(
+                        set::name('account:'),
+                        $lang->watermark->account
+                    ),
+                    item(
+                        set::name('email:'),
+                        $lang->watermark->email
+                    ),
+                    item(
+                        set::name('phone:'),
+                        $lang->watermark->phone
+                    ),
+                    item(
+                        set::name('date:'),
+                        $lang->watermark->date
+                    )
+                )
             )
         )
     );
@@ -36,6 +80,12 @@ else
                 set::name($lang->watermark->switch),
                 $lang->watermark->switchList[$enabled]
             ),
+            $enabled == 1
+                ? item(
+                    set::name($lang->watermark->content),
+                    html("<pre>$content</pre>")
+                )
+                : null,
             item(
                 a(
                     setClass('btn primary'),
