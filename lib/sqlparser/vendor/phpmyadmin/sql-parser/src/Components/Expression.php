@@ -275,7 +275,7 @@ class Expression extends Component
                     $isExpr = true;
                 } elseif (
                     $brackets === 0 && strlen((string) $ret->expr) > 0 && ! $alias
-                    && ($ret->table === null || $ret->table === '')
+                    && (($ret->table === null || $ret->table === '') || $token->keyword === 'END')
                 ) {
                     /* End of expression */
                     break;
