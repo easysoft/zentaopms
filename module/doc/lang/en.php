@@ -217,6 +217,7 @@ $lang->doc->editLibAction     = 'Edit Library/Space';
 $lang->doc->deleteLibAction   = 'Delete Library/Space';
 $lang->doc->moveLibAction     = 'Move Library';
 $lang->doc->moveDocAction     = 'Move Document';
+$lang->doc->batchMove         = 'Batch Move';
 $lang->doc->fixedMenu         = 'Fix to Menu';
 $lang->doc->removeMenu        = 'Remove from Menu';
 $lang->doc->search            = 'Search';

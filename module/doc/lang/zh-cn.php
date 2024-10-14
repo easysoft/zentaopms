@@ -217,6 +217,7 @@ $lang->doc->editLibAction     = '编辑空间/库';
 $lang->doc->deleteLibAction   = '删除空间/库';
 $lang->doc->moveLibAction     = '移动库';
 $lang->doc->moveDocAction     = '移动文档';
+$lang->doc->batchMove         = '批量移动';
 $lang->doc->fixedMenu         = '固定到菜单栏';
 $lang->doc->removeMenu        = '从菜单栏移除';
 $lang->doc->search            = '搜索';
