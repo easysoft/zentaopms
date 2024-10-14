@@ -910,7 +910,7 @@ class docZen extends doc
         $mineLib = new stdclass();
         $mineLib->type      = 'mine';
         $mineLib->vision    = $this->config->vision;
-        $mineLib->name      = $this->lang->doclib->defaultMyLib;
+        $mineLib->name      = $this->lang->doclib->defaultSpace;
         $mineLib->main      = '1';
         $mineLib->acl       = 'private';
         $mineLib->addedBy   = $this->app->user->account;

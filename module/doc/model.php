@@ -1154,7 +1154,6 @@ class docModel extends model
      */
     public function getSpaces($type = 'custom', $spaceID = 0)
     {
-
         $pairs = array();
         if($type == 'mine' || $type == 'custom') $pairs = $this->getSubSpacesByType($type);
         if($type == 'product')
