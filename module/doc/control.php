@@ -222,8 +222,8 @@ class doc extends control
 
         if(($lib->type == 'custom' && $lib->parent > 0) || ($lib->type == 'mine' && $lib->main == 0))
         {
-            $this->view->spaces      = $this->docZen->getAllSpaces();
-            $this->view->targetSpace = $targetSpace ? $targetSpace : ($lib->type == 'mine' ? 'mine' : $lib->parent);
+            $this->view->spaces      = $this->doc->getSubSpacesByType($lib->type);
+            $this->view->targetSpace = $targetSpace ? $targetSpace : $lib->parent;
         }
 
         $this->view->lib         = $lib;

@@ -16,7 +16,7 @@ if(!empty($lib->main) && $lib->type != 'mine') $defaultAcl = 'default';
 if(!empty($targetSpace))
 {
     jsVar('space', $targetSpace);
-    $libType = $targetSpace == 'mine' ? 'mine' : 'custom';
+    $libType = $this->doc->getSpaceType($lib->id);
 
     if($lib->type == 'custom') unset($spaces['mine']);
     if($libType == 'mine') $defaultAcl = 'private';
@@ -51,7 +51,6 @@ formPanel
         set::control('picker'),
         set::value($targetSpace),
         set::items($spaces),
-        set::disabled($libType == 'mine'),
         set::required(true),
         on::change('changeSpace')
     ) : null,
