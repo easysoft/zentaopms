@@ -14,8 +14,20 @@ namespace zin;
 
 modalHeader(set::title($lang->doc->batchMove));
 
+jsVar('encodeDocIdList', $encodeDocIdList);
+jsVar('spaceID',         $spaceID);
+jsVar('type',            $type);
+
+$aclItems = array();
+foreach($lang->doc->aclList as $aclKey => $aclLabel)
+{
+    $aclItems[] = array('value' => $aclKey, 'text' => $aclLabel, 'disabled' => ($type == 'mine' && $aclKey == 'private'));
+}
+
 formPanel
 (
+    on::change('[name=space]', 'changeSpace'),
+    on::change('[name=lib]', 'changeLib'),
     formGroup
     (
         set::width('5/6'),
@@ -47,6 +59,7 @@ formPanel
                 set::name('acl'),
                 set::items($aclItems),
                 set::value($type == 'mine' ? 'private' : 'open'),
+                on::change("toggleDocAcl")
             )
         )
     ),
