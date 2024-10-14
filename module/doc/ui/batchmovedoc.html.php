@@ -36,4 +36,18 @@ formPanel
         set::label($lang->doc->module),
         set::control(array('control' => 'picker', 'name' => 'module', 'items' => $optionMenu, 'value' => $moduleID, 'required' => true))
     ),
+    formRow
+    (
+        setID('aclBox'),
+        formGroup
+        (
+            set::label($lang->doclib->control),
+            radioList
+            (
+                set::name('acl'),
+                set::items($aclItems),
+                set::value($type == 'mine' ? 'private' : 'open'),
+            )
+        )
+    ),
 );
