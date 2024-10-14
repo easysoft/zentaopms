@@ -3334,6 +3334,21 @@ class docModel extends model
     }
 
     /**
+     * Batch move document.
+     *
+     * @param  object $data
+     * @param  array  $docIdList
+     * @access public
+     * @return bool
+     */
+    public function batchMoveDoc(object $data, array $docIdList): bool
+    {
+        $this->dao->update(TABLE_DOC)->data($data)->where('id')->in($docIdList)->exec();
+
+        return !dao::isError();
+    }
+
+    /**
      * 判断文档库下是否有其他人创建的文档。
      * Check if there are other documents created under the document library.
      *
