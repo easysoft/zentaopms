@@ -38,15 +38,15 @@
       <input id="request_method" type="text" class="form-control text-special" placeholder="name">
       <label for="request_method" class="input-control-prefix">Method</label>
     </div>
-    <div class="input-control has-prefix w-40" style="--input-control-prefix: 48px">
+    <div class="input-control has-prefix" style="--input-control-prefix: 48px; width: 150px">
       <input id="timestamp__gt" type="date" class="form-control text-special" placeholder="">
       <label for="timestamp__gt" class="input-control-prefix">Begin</label>
     </div>
-    <div class="input-control has-prefix w-36" style="--input-control-prefix: 40px">
+    <div class="input-control has-prefix" style="--input-control-prefix: 40px; width: 142px">
       <input id="timestamp__lt" type="date" class="form-control text-special" placeholder="">
       <label for="timestamp__lt" class="input-control-prefix">End</label>
     </div>
-    <div class="input-control has-prefix w-32" style="--input-control-prefix: 40px">
+    <div class="input-control has-prefix" style="--input-control-prefix: 40px; width: 116px">
       <input id="requestId" type="text" class="form-control text-special" placeholder="Request ID">
       <label for="requestId" class="input-control-prefix">RID</label>
     </div>
@@ -54,7 +54,7 @@
       <input id="params" type="text" class="form-control text-special" placeholder="e.g. metrics.backend.totalTime__gt=300&__limit=100">
       <label for="params" class="input-control-prefix">Params</label>
     </div>
-    <button type="button" class="btn special" onclick="queryData()"><i class="icon icon-search"></i> Query <kbd class="code light-outline text-canvas text-sm opacity-50 shadow">Enter</kbd></button>
+    <button type="button" class="btn special" onclick="queryData()"><i class="icon icon-search"></i> Query <kbd class="code light-outline text-canvas text-sm opacity-50 shadow">↵</kbd></button>
   </div>
   <div class="load-indicator loading" id="table" style="height: calc(100vh - 116px);"></div>
 </div>
