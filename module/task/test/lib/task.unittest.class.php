@@ -2215,22 +2215,22 @@ class taskTest
         $tasks = $this->objectModel->getUnclosedTasksByExecution($executionID);
         if(!$tasks) return false;
 
-        $return = '';
+        $result = '';
         if(is_array($tasks))
         {
             foreach($tasks as $task)
             {
                 if(is_array($task))
                 {
-                    foreach($task as $key => $value) $return .= $value->id . ',' . $value->execution . ';';
+                    foreach($task as $key => $value) $result .= $value->id . ',' . $value->execution . ';';
                 }
                 else
                 {
-                    $return .= $task . ';';
+                    $result .= $task . ';';
                 }
             }
         }
-        return rtrim($return, ';');
+        return rtrim($result, ';');
     }
 
     /**
@@ -2245,20 +2245,20 @@ class taskTest
     {
         list($childTasks, $nonStoryChildTasks) = $this->objectModel->getChildTasksByList($taskIdList);
 
-        $return = array();
+        $result = array();
         if(!empty($childTasks))
         {
             foreach($childTasks as $parentID => $parentChildTasks)
             {
-                if(!isset($return[$parentID])) $return[$parentID] = 'childTasks: ';
-                $return[$parentID] .= implode(',', array_keys($parentChildTasks)) . '; ';
+                if(!isset($result[$parentID])) $result[$parentID] = 'childTasks: ';
+                $result[$parentID] .= implode(',', array_keys($parentChildTasks)) . '; ';
             }
         }
         if(!empty($nonStoryChildTasks))
         {
-            foreach($nonStoryChildTasks as $parentID => $parentChildTasks) $return[$parentID] .= 'nonStoryChildTasks: ' . implode(',', array_keys($parentChildTasks)) . '; ';
+            foreach($nonStoryChildTasks as $parentID => $parentChildTasks) $result[$parentID] .= 'nonStoryChildTasks: ' . implode(',', array_keys($parentChildTasks)) . '; ';
         }
-        return $return;
+        return $result;
     }
 
     /**
@@ -2273,9 +2273,9 @@ class taskTest
     {
         $this->objectModel->syncStoryToChildren($task);
 
-        $return     = '';
+        $result     = '';
         $childTasks = $this->objectModel->dao->select('id,story')->from(TABLE_TASK)->where('parent')->eq($task->id)->andWhere('deleted')->eq('0')->fetchPairs();
-        foreach($childTasks as $key => $value) $return .= $key . ':' . $value . ';';
-        return rtrim($return, ';');
+        foreach($childTasks as $key => $value) $result .= $key . ':' . $value . ';';
+        return rtrim($result, ';');
     }
 }
