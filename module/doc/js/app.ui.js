@@ -599,15 +599,3 @@ window.beforeRequestContent = function(options)
 
     return false;
 };
-
-window.goToOldDocPage = function()
-{
-    const docApp = getDocApp();
-    if(!docApp) return;
-
-    zui.store.set('docAppEnabled', false);
-    const spaceType = docApp.signals.spaceType.value
-    const map       = {mine: 'myspace', custom: 'teamspace', product: 'productspace', project: 'projectspace'};
-    const method    = map[spaceType];
-    $.apps.openUrl($.createLink('doc', method));
-};
