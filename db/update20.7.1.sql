@@ -16,3 +16,5 @@ UPDATE `zt_job` SET `autoRun` = '0' WHERE `triggerType` != '';
 
 UPDATE `zt_action` SET `action` = 'imported' WHERE `objectType` = 'job' AND `action` = 'created';
 UPDATE `zt_actionrecent` SET `action` = 'imported' WHERE `objectType` = 'job' AND `action` = 'created';
+
+ALTER TABLE `zt_compile` MODIFY COLUMN `logs` longtext NULL;

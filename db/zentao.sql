@@ -583,7 +583,7 @@ CREATE TABLE IF NOT EXISTS `zt_compile` (
   `job` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `queue` mediumint(8) NOT NULL DEFAULT '0',
   `status` varchar(255) NOT NULL DEFAULT '',
-  `logs` text NULL,
+  `logs` longtext NULL,
   `atTime` varchar(10) NOT NULL DEFAULT '',
   `testtask` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `tag` varchar(255) NOT NULL DEFAULT '',
