@@ -20,12 +20,7 @@ class ciModel extends model
      */
     public function setMenu(int $repoID = 0)
     {
-        if($repoID)
-        {
-            if(!session_id()) session_start();
-            $this->session->set('repoID', $repoID);
-            session_write_close();
-        }
+        if($repoID) $this->session->set('repoID', $repoID);
 
         $homeMenuModule = array('gitlab', 'gogs', 'gitea', 'jenkins', 'sonarqube');
         if(!in_array("{$this->app->moduleName}", $homeMenuModule)) common::setMenuVars('devops', (int)$this->session->repoID);
