@@ -354,8 +354,3 @@ $lang->custom->reviewRules['halfpass'] = 'More than half passed';
 
 $lang->custom->limitTaskDate['0'] = 'Unlimited';
 $lang->custom->limitTaskDate['1'] = 'Limited to the execution begin and end date range';
-
-$lang->custom->relation        = 'Relation';
-$lang->custom->relateObject    = 'Related Objects';
-$lang->custom->removeObjects   = 'Remove Objects';
-$lang->custom->removeObjectTip = 'Are you sure to dissolve this relation?';
