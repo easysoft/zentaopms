@@ -2166,4 +2166,22 @@ class bugModel extends model
             ->andWhere('t3.id')->ne('')
             ->fetchGroup('revision', 'id');
     }
+
+    /**
+     * 通过任务ID获取相关的Bug
+     * @param  int         $taskID
+     *
+     * @access public
+     * @return array|false
+     */
+    public function getLinkedBugsByTaskID(int $taskID): array|false
+    {
+        return $this->dao->select('t1.id,t1.title')
+            ->from(TABLE_BUG)->alias('t1')
+            ->leftJoin(TABLE_TASK)->alias('t2')->on('t1.task=t2.id')
+            ->where('t2.id')->eq($taskID)
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->fetchAll('id');
+    }
 }
