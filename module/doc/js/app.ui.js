@@ -414,7 +414,7 @@ const commands =
     {
         const docApp  = getDocApp();
         const spaceID = args[0] || docApp.spaceID;
-        const url     = $.createLink('doc', 'createLib', spaceID ? `type=${docApp.spaceType}&objectID=${spaceID}` : 'type=mine');
+        const url     = $.createLink('doc', 'createLib', spaceID ? `type=${docApp.spaceType}&objectID=${spaceID}` : `type=${docApp.spaceType}`);
         zui.Modal.open({size: 'sm', url: url});
     },
     moveLib: function(_, args)

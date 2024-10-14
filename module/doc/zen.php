@@ -919,6 +919,31 @@ class docZen extends doc
     }
 
     /**
+     * 初始化团队空间的文档库。
+     * Init Lib for teamSpace.
+     *
+     * @access public
+     * @return void
+     */
+    public function initLibForTeamSpace()
+    {
+        $customLibCount = $this->dao->select('count(1) as count')->from(TABLE_DOCLIB)
+            ->where('type')->eq('custom')
+            ->andWhere('vision')->eq($this->config->vision)
+            ->fetch('count');
+        if(!empty($customLibCount)) return;
+
+        $teamLib = new stdclass();
+        $teamLib->type      = 'custom';
+        $teamLib->vision    = $this->config->vision;
+        $teamLib->name      = $this->lang->doc->spaceList['custom'];
+        $teamLib->acl       = 'open';
+        $teamLib->addedBy   = $this->app->user->account;
+        $teamLib->addedDate = helper::now();
+        $this->dao->insert(TABLE_DOCLIB)->data($teamLib)->exec();
+    }
+
+    /**
      * 获取所有空间。
      * Get all spaces.
      *
