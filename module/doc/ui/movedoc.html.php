@@ -15,9 +15,11 @@ namespace zin;
 modalHeader(set::title($lang->doc->moveDocAction));
 
 $defaultAcl = $doc->acl;
-if($spaceType == 'mine') $defaultAcl = 'private';
-if($spaceType == 'mine') $this->lang->doc->aclList = $this->lang->doclib->mySpaceAclList;
-if($spaceType == 'custom' && $doc->lib != $libID) $defaultAcl = 'open';
+if($spaceType == 'mine')
+{
+    $defaultAcl = 'private';
+    $this->lang->doc->aclList = $this->lang->doclib->mySpaceAclList;
+}
 
 jsVar('spaceType', $spaceType);
 jsVar('space', $space);
