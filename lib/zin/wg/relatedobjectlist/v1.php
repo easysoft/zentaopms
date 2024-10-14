@@ -19,8 +19,9 @@ class relatedObjectList extends relatedList
         return <<<JS
         window.removeObject = function(e)
         {
-            const obj = $(e.target).closest('li').find('.removeObject');
-            const ul  = obj.closest('ul');
+            const obj   = $(e.target).closest('li').find('.removeObject');
+            const ul    = obj.closest('ul');
+            const count = ul.closest('li').find('.listitem .item-content span').text();
             zui.Modal.confirm({message: `{$lang->custom->removeObjectTip}`, icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
             {
                 if(res)
@@ -28,6 +29,7 @@ class relatedObjectList extends relatedList
                     $.get(obj.attr('data-url'), function()
                     {
                         obj.closest('li').remove();
+                        ul.closest('li').find('.listitem .item-content span').text(count - 1);
                         if(ul.find('li').length == 0) ul.closest('li').remove();
                     });
                 }
