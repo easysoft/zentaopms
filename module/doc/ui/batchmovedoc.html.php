@@ -50,4 +50,16 @@ formPanel
             )
         )
     ),
+    formRow
+    (
+        setID('whiteListBox'),
+        setClass('hidden'),
+        formGroup
+        (
+            set::label($lang->doc->whiteList),
+            div
+            (
+            )
+        )
+    )
 );
