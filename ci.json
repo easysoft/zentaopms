@@ -11,10 +11,10 @@
       "gitRepo": "zentao/devops"
     },
     "downgrade": {
-      "gitRepo": "devops/zentaopms-downgrade"
+      "gitRepo": "ci/zentaopms-downgrade"
     },
     "downgradeExt": {
-      "gitRepo": "devops/zentaoext-downgrade"
+      "gitRepo": "ci/zentaoext-downgrade"
     }
   },
   "image": {
