@@ -1082,13 +1082,14 @@ class docModel extends model
      */
     public function getLibTargetSpace($lib)
     {
-        if(in_array($lib->type, array('product', 'project')))
+        $type = $lib->type;
+        if(in_array($type, array('product', 'project')))
         {
-            $targetSpace = "{$lib->type}.{$lib->$type}";
+            $targetSpace = "{$type}.{$lib->$type}";
         }
         else
         {
-            $targetSpace = "{$lib->type}.{$lib->parent}";
+            $targetSpace = "{$type}.{$lib->parent}";
         }
 
         return $targetSpace;
@@ -3287,28 +3288,44 @@ class docModel extends model
     public function moveLib(int $libID, object $data): bool
     {
         if(empty($libID) || empty($data->space)) return false;
+        $lib = $this->getLibByID($libID);
 
-        $spaceID = $this->doc->getParamFromTargetSpace($data->space, 'id');
+        $spaceType = $this->getParamFromTargetSpace($data->space, 'type');
+        $spaceID   = $this->getParamFromTargetSpace($data->space, 'id');
         if(is_numeric($spaceID))
         {
-            $space = $this->getLibByID((int)$spaceID);
+            $data->type = $spaceType;
 
-            $data->type   = $space->type;
-            $data->parent = $data->space;
+            /* 如果是项目空间(project)和产品空间(product)，修改doclib对应的project和product字段，并将parent置为0
+             * 如果不是，则是我的空间(mine)和团队空间(custom),直接修改parent，并将project和product字段置为0
+             */
+            if(in_array($spaceType, array('project', 'product')))
+            {
+                $data->$spaceType = $spaceID;
+                if($lib->parent) $data->parent = 0;
+            }
+            else
+            {
+                $data->parent = $spaceID;
+                if($lib->product) $data->product = 0;
+                if($lib->project) $data->project = 0;
+            }
         }
         else
         {
             return false;
         }
 
-        $lib     = $this->getLibByID($libID);
         $changes = common::createChanges($lib, $data);
         if(empty($changes)) return false;
 
         unset($data->space);
         $this->dao->update(TABLE_DOCLIB)->data($data)->where('id')->eq($libID)->exec();
 
-        $actionID = $this->loadModel('action')->create('docLib', $libID, 'Moved', '', json_encode(array('from' => $lib->type == 'mine' ? 'mine' : $lib->parent, 'to' => $data->type == 'mine' ? 'mine' : $data->parent)));
+        $from = in_array($lib->type, array('project', 'product'))  ? ($lib->project ? "{$lib->type}.{$lib->project}" : "{$lib->type}.{$lib->product}")     : "{$lib->type}.{$lib->parent}";
+        $to   = in_array($data->type, array('project', 'product')) ? ($data->project ? "{$data->type}.{$data->project}" : "{$data->type}.{$lib->product}") : "{$data->type}.{$data->parent}";
+
+        $actionID = $this->loadModel('action')->create('docLib', $libID, 'Moved', '', json_encode(array('from' => $from, 'to' => $to)));
         $this->action->logHistory($actionID, $changes);
 
         return true;

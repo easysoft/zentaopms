@@ -228,20 +228,19 @@ class docZen extends doc
             $acl = 'private';
             $this->lang->doclib->aclList = $this->lang->doclib->mySpaceAclList;
         }
-        $this->view->acl = $acl;
-
-        if($type != 'custom' && $type != 'mine')
+        elseif($type == 'api')
+        {
+            $this->app->loadLang('api');
+            $this->lang->api->aclList['default'] = sprintf($this->lang->api->aclList['default'], $this->lang->{$type}->common);
+        }
+        elseif(in_array($type, array('product', 'project', 'execution')))
         {
             $this->lang->doclib->aclList['default'] = sprintf($this->lang->doclib->aclList['default'], $this->lang->{$type}->common);
             $this->lang->doclib->aclList['private'] = sprintf($this->lang->doclib->privateACL, $this->lang->{$type}->common);
             unset($this->lang->doclib->aclList['open']);
         }
 
-        if($type != 'mine')
-        {
-            $this->app->loadLang('api');
-            $this->lang->api->aclList['default'] = sprintf($this->lang->api->aclList['default'], $this->lang->{$type}->common);
-        }
+        $this->view->acl = $acl;
     }
 
     /**
