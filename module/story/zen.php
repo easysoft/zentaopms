@@ -467,6 +467,7 @@ class storyZen extends story
             if($product->type != 'normal')      $branches = $this->loadModel('branch')->getPairs($productID, 'active');
         }
 
+        $this->product->checkAccess($productID, $products);
         return array($products, $branches);
     }
 

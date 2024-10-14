@@ -38,8 +38,8 @@ window.loadProduct = function(e)
     const productID = $this.val();
     const $modal    = $this.closest('.modal');
     const inModal   = $modal.length > 0;
-    if(inModal)  loadModal($.createLink('story', 'create', 'productID=' + productID + '&' + createParams), $modal.attr('id'));
-    if(!inModal) loadPage($.createLink('story', 'create', 'productID=' + productID + '&' + createParams));
+    if(inModal)  loadModal($.createLink(storyType, 'create', 'productID=' + productID + '&' + createParams), $modal.attr('id'));
+    if(!inModal) loadPage($.createLink(storyType, 'create', 'productID=' + productID + '&' + createParams));
 };
 
 window.setLane = function(e)
