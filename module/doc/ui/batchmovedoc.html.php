@@ -16,4 +16,24 @@ modalHeader(set::title($lang->doc->batchMove));
 
 formPanel
 (
+    formGroup
+    (
+        set::width('5/6'),
+        set::label($lang->doc->space),
+        set::required(true),
+        set::control(array('control' => 'picker', 'name' => 'space', 'items' => $spaces, 'value' => "{$type}.{$spaceID}"))
+    ),
+    formGroup
+    (
+        set::width('5/6'),
+        set::label($lang->doc->lib),
+        set::required(true),
+        set::control(array('control' => 'picker', 'name' => 'lib', 'items' => $libPairs, 'value' => $libID))
+    ),
+    formGroup
+    (
+        set::width('5/6'),
+        set::label($lang->doc->module),
+        set::control(array('control' => 'picker', 'name' => 'module', 'items' => $optionMenu, 'value' => $moduleID, 'required' => true))
+    ),
 );
