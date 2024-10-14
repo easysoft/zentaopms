@@ -99,7 +99,6 @@ function getQueryUrl()
         {
             if(key === 'timestamp__gt') val = zui.createDate(zui.formatDate(val, 'yyyy-MM-dd 00:00:00')).getTime();
             else if(key === 'timestamp__lt') val = zui.createDate(zui.formatDate(val, 'yyyy-MM-dd 23:59:59')).getTime();
-            else
             search.set(key, val);
         }
     });
