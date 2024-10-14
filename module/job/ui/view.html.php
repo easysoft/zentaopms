@@ -64,6 +64,7 @@ detailBody
                 set::active(!$hasResult && !$hasLog),
                 tableData
                 (
+                    setClass('jobBaseTable'),
                     item
                     (
                         set::name($lang->job->engine),
