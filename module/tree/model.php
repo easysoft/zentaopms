@@ -39,6 +39,8 @@ class treeModel extends model
             ->beginIF($type == 'task')->orWhere('type')->eq('task')->fi()
             ->beginIF($type == 'bug')->orWhere('type')->eq('bug')->fi()
             ->beginIF($type == 'case')->orWhere('type')->eq('case')->fi()
+            ->beginIF($type == 'ticket')->orWhere('type')->eq('ticket')->fi()
+            ->beginIF($type == 'feedback')->orWhere('type')->eq('feedback')->fi()
             ->markRight(1)
             ->andWhere('deleted')->eq('0')
             ->orderBy('grade asc')
