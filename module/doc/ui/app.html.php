@@ -102,6 +102,7 @@ zui::docApp
     set::search($search),
     set::orderBy($orderBy),
     set::params($params),
+    set::homeName($lang->doc->spaceList[$type]),
     set::pager(array('recTotal' => $recTotal, 'recPerPage' => $recPerPage, 'pageID' => $pageID)),
     set::fetcher(createLink('doc', 'ajaxGetSpaceData', 'type={spaceType}&spaceID={spaceID}&picks={picks}')),
     set::docFetcher(createLink('doc', 'ajaxGetDoc', 'docID={docID}&version={version}')),
