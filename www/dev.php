@@ -8,7 +8,7 @@
 <script id="zuiJS" src="./js/zui3/zui.zentao.js"></script>
 <style>
 .dark {--zt-page-bg: var(--color-gray-50)}
-.dtable {--dtable-header-bg: var(--color-special-50)}
+.dtable {--dtable-header-bg: var(--color-special-50); --dtable-border-color: rgba(var(--color-fore-rgb), .1)}
 </style>
 </head>
 <body>
@@ -51,7 +51,7 @@
       <label for="requestId" class="input-control-prefix">RID</label>
     </div>
     <div class="input-control has-prefix flex-auto" style="--input-control-prefix: 60px">
-      <input id="params" type="text" class="form-control text-special" placeholder="e.g. metrics.backend.totalTime__gt=300&__limit=1">
+      <input id="params" type="text" class="form-control text-special" placeholder="e.g. metrics.backend.totalTime__gt=300&__limit=100">
       <label for="params" class="input-control-prefix">Params</label>
     </div>
     <button type="button" class="btn special" onclick="queryData()"><i class="icon icon-search"></i> Query <kbd class="code light-outline text-canvas text-sm opacity-50 shadow">Enter</kbd></button>
@@ -87,7 +87,7 @@ let table               = null;
 let autoRefreshTimer    = 0;
 let autoRefreshInterval = 10000;
 const $table            = $('#table');
-const metricsLevelNames = ['', 'BLOCK', 'WARN', 'NORMAL'];
+const metricsLevelNames = ['', 'BLOCK', 'WARN', 'PASS'];
 
 function getQueryUrl()
 {
@@ -103,7 +103,7 @@ function getQueryUrl()
         }
     });
     if(!search.has('__sort')) search.set('__sort', '-timestamp');
-    if(!search.has('__limit')) search.set('__limit', 1000);
+    if(!search.has('__limit')) search.set('__limit', 200);
 
     const searchString = search.toString();
     history.pushState(null, null, `${location.origin}${location.pathname}?${searchString}`);
@@ -126,30 +126,30 @@ function initTable(data)
 {
     const cols =
     [
-        {name: 'metricsLevel', title: 'LEVEL', hint: true, width: 60, fixed: 'left', cellClass: 'font-mono text-sm select-all', map: metricsLevelNames, hint: info => info.row.data.requestId, flex: 0, align: 'center', sort: true},
-        {name: 'requestId', title: 'RID', hint: true, width: 80, fixed: 'left', cellClass: 'font-mono text-sm select-all', hint: info => info.row.data.requestId, flex: 0, align: 'left'},
+        {name: 'metricsLevel', title: 'LEVEL', hint: true, width: 60, fixed: 'left', cellClass: 'font-mono text-sm select-all', map: metricsLevelNames, hint: info => info.row.data.requestId, flex: 0, align: 'center', sort: 'number', border: 'right'},
         {name: 'identifier', type: Object.keys(window.userMap || {}).length ? 'avatarName' : '', title: 'User', fixed: 'left', flex: 0, width: 80, sort: true, avatarKey: 'identifier_avatar', avatarCodeKey: 'identifier_avatar_code', avatarNameKey: 'identifier_name'},
-        {name: 'path', type: 'title', title: 'Path', hint: (info) => info.row.data.request.url, link: (info) => ({url: info.row.data.request.url, target: '_blank'}), flex: 1, fixed: 'left', maxWidth: 1000, sort: true},
-        {name: 'metrics.frontend.renderTime', title: 'Render Time', sort: true, format: '{0}ms'},
-        {name: 'metrics.backend.totalTime', title: 'Back Time', sort: true, type: 'number', digits: 2, format: '{0}ms', digits: 3 },
-        {name: 'metrics.backend.sqlTime', title: 'SQL Time', sort: true, format: '{0}ms', digits: 3},
-        {name: 'metrics.backend.sqlCount', title: 'SQLs', sort: true, width: 48, link: '#', hint: 'Click to check details'},
-        {name: 'metrics.backend.requestMemory', title: 'Memory', sort: true, format: (value) => value ? zui.formatBytes(value) : ''},
-        {name: 'metrics.backend.phpFileLoaded', title: 'Files', sort: true, align: 'center'},
-        {name: 'metrics.frontend.downloadSize', title: 'Load Size', sort: true, format: (value) => value ? zui.formatBytes(value) : ''},
-        {name: 'userEnv.browser', title: 'Browser', sort: true, align: 'left'},
-        {name: 'userEnv.system', title: 'Platform', sort: true, align: 'center'},
+        {name: 'path', type: 'title', title: 'Page', hint: (info) => info.row.data.request.url, link: (info) => ({url: info.row.data.request.url, target: '_blank'}), flex: 1, fixed: 'left', maxWidth: 1000, sort: true},
+        {name: 'metrics.backend.totalTime', title: 'Back Time', sort: 'number', type: 'number', digits: 2, format: '{0}ms', digits: 3, headerGroup: 'Backend'},
+        {name: 'metrics.backend.sqlTime', title: 'SQL Time', sort: 'number', format: '{0}ms', digits: 3, headerGroup: 'Backend'},
+        {name: 'metrics.backend.sqlCount', title: 'SQLs', sort: 'number', width: 48, link: '#', hint: 'Click to check details', headerGroup: 'Backend'},
+        {name: 'metrics.backend.requestMemory', title: 'Memory', sort: 'number', format: (value) => value ? zui.formatBytes(value) : '', headerGroup: 'Backend'},
+        {name: 'metrics.backend.phpFileLoaded', title: 'PHP Files', width: 50, sort: 'number', align: 'center', headerGroup: 'Backend'},
+        {name: 'metrics.frontend.downloadSize', title: 'Transfer Size', sort: 'number', format: (value) => value ? zui.formatBytes(value) : '', headerGroup: 'Frontend'},
+        {name: 'metrics.frontend.renderTime', title: 'Front Time', sort: 'number', format: '{0}ms', headerGroup: 'Frontend', border: 'left'},
+        {name: 'userEnv.browser', title: 'Client Browser', sort: true, align: 'left', headerGroup: 'Frontend'},
+        {name: 'userEnv.system', title: 'Client OS', sort: true, align: 'center', headerGroup: 'Frontend'},
         {name: 'request.xhprof', title: 'Xhprof', link: (info) => ({url: info.row.data.request.xhprof || '#', target: '_blank'}), format: (value) => (value ? 'Open' : ''), hint: true, width: 40},
-        {name: 'timestamp', title: 'Date', type: 'datetime', hint: (info) => zui.formatDate(info.row.data.timestamp, 'yyyy-MM-dd hh:mm:ss'), width: 120, sort: true, fixed: 'right'},
+        {name: 'requestId', title: 'RID', hint: true, width: 80, cellClass: 'font-mono text-sm select-all', hint: info => info.row.data.requestId, flex: 0, align: 'left', fixed: 'right'},
+        {name: 'timestamp', title: 'Date', type: 'datetime', hint: (info) => zui.formatDate(info.row.data.timestamp, 'yyyy-MM-dd hh:mm:ss'), width: 120, sort: 'number', fixed: 'right'},
     ];
 
     table = new zui.DTable('#table',
     {
         className: 'ring ring-gray shadow rounded',
-        plugins: ['sort', 'sort-col', 'zentao', 'resize', 'customCols'],
+        plugins: ['sort', 'sort-col', 'zentao', 'resize'],
         width: '100%',
         height: '100%',
-        fixedLeftWidth: 360,
+        fixedLeftWidth: 300,
         minColWidth: 40,
         hoverCol: true,
         sort: true,
@@ -160,8 +160,8 @@ function initTable(data)
             const metricsStats = this.metricsStats || {};
             return [
                 {html: `Total <strong>${layout.allRows.length}</strong>`, className: 'text-gray mr-4'},
-                metricsStats.danger ? {html: `DANGER <strong>${metricsStats.danger}</strong>`, className: 'text-danger mr-4'} : null,
-                metricsStats.warning ? {html: `WARN <strong>${metricsStats.warning}</strong>`, className: 'text-warning mr-4'} : null,
+                metricsStats.danger ? {html: `<div class="font-bold row items-center gap-2 rounded-full px-2 danger" data-toggle="tooltip" data-type="danger" data-title="Black Time &lt; 500ms or SQL time &lt; 300ms or Client time &lt; 100ms" data-placement="top-start"><i class="icon icon-alert"></i>BLOCK <strong>${metricsStats.danger}</strong> </div>`, className: 'text-danger mr-4'} : null,
+                metricsStats.warning ? {html: `<div class="font-bold row items-center gap-2 rounded-full px-2 warning-pale" data-toggle="tooltip" data-type="warning" data-title="Black Time &lt; 300ms or SQL time &lt; 200ms or Client time &lt; 60ms" data-placement="top-start"><i class="icon icon-alert"></i>BLOCK <strong>${metricsStats.warning}</strong> </div>`, className: 'text-warning mr-4'} : null,
             ];
         }],
         rowConverter: function(row)
@@ -212,10 +212,10 @@ function initTable(data)
         {
             const colName = info.col.name;
             const rowData = info.row.data;
-            if(colName === 'metrics.backend.totalTime') result.push({root: true, className: `text-${rowData['metrics.backend.totalTimeClass']}`});
-            else if(colName === 'metrics.backend.sqlTime') result.push({root: true, className: `text-${rowData['metrics.backend.sqlTimeClass']}`});
-            else if(colName === 'metrics.frontend.renderTime') result.push({root: true, className: `text-${rowData['metrics.frontend.renderTimeClass']}`});
-            else if(colName === 'metricsLevel' && rowData.metricsLevel < 3) result.push({root: true, className: `font-bold text-${rowData.metricsClass} bg-opacity-${rowData.metricsClass === 'danger' ? 50 : 20}`});
+            if(colName === 'metrics.backend.totalTime' && rowData['metrics.backend.totalTimeClass']) result.push({root: true, className: `text-${rowData['metrics.backend.totalTimeClass']}${rowData['metrics.backend.totalTimeClass'] === 'danger' ? ' font-bold bg-danger': ''}`});
+            if(colName === 'metrics.backend.sqlTime' && rowData['metrics.backend.sqlTimeClass']) result.push({root: true, className: `text-${rowData['metrics.backend.sqlTimeClass']}${rowData['metrics.backend.sqlTimeClass'] === 'danger' ? ' font-bold bg-danger': ''}`});
+            if(colName === 'metrics.frontend.renderTime' && rowData['metrics.frontend.renderTimeClass']) result.push({root: true, className: `text-${rowData['metrics.frontend.renderTimeClass']}${rowData['metrics.frontend.renderTimeClass'] === 'danger' ? ' font-bold bg-danger': ''}`});
+            else if(colName === 'metricsLevel' && rowData.metricsLevel < 3) result.push({root: true, className: rowData.metricsClass === 'danger' ? 'font-bold bg-danger bg-opacity-100 text-canvas' : 'font-bold bg-warning text-warning bg-opacity-20'});
             if(rowData.metricsClass) result.push({root: true, className: `bg-${rowData.metricsClass} bg-opacity-${rowData.metricsClass === 'danger' ? 40 : 10}`});
             return result;
         },
