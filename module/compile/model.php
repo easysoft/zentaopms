@@ -52,6 +52,13 @@ class compileModel extends model
             {
                 $this->session->set('compileQuery', ' 1 = 1');
             }
+
+            $compileQuery = $this->session->compileQuery;
+            $compileQuery = preg_replace('/`(\w+)`/', 't1.`$1`', $compileQuery);
+            $compileQuery = preg_replace('/t1.`(engine|repo|triggerType)`/', 't2.`$1`', $compileQuery);
+
+            $this->session->set('compileQueryCondition', $compileQuery, $this->app->tab);
+            $this->session->set('compileOnlyCondition', true, $this->app->tab);
         }
 
         return $this->dao->select('t1.id, t1.name, t1.job, t1.status, t1.createdDate, t1.testtask, t2.pipeline, t2.triggerType, t2.comment, t2.atDay, t2.atTime, t2.engine, t3.name as repoName, t4.name as jenkinsName')->from(TABLE_COMPILE)->alias('t1')
