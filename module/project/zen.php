@@ -1573,7 +1573,7 @@ class projectZen extends project
         $canViewProjects = $this->app->user->view->projects;
         foreach($projects as $i => $project)
         {
-            if(strpos(",{$canViewProjects},", ",{$project->id},") === false)
+            if(!$this->app->user->admin && strpos(",{$canViewProjects},", ",{$project->id},") === false)
             {
                 unset($projects[$i]);
                 continue;
