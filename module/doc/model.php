@@ -3389,6 +3389,7 @@ class docModel extends model
         if(is_numeric($spaceID))
         {
             $data->type = $spaceType;
+            if($spaceType == 'mine') $data->addedBy = $this->app->user->account;
 
             /* 如果是项目空间(project)和产品空间(product)，修改doclib对应的project和product字段，并将parent置为0
              * 如果不是，则是我的空间(mine)和团队空间(custom),直接修改parent，并将project和product字段置为0
