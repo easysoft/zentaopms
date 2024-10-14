@@ -256,6 +256,7 @@ formPanel
     setID('triggerForm'),
     set::formClass('gap-2'),
     set::title($lang->job->trigger),
+    set::labelWidth('10em'),
     set::actionsClass('w-2/3'),
     on::click('.add-param', 'addItem'),
     on::click('.delete-param', 'deleteItem'),

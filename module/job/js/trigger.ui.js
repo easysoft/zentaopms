@@ -139,7 +139,7 @@ window.addTrigger = function()
 window.deleteTrigger = function(event)
 {
     $(event.target).closest('.trigger-box').remove();
-    if($('#triggerForm .trigger-box').length <= 1) $('.delete-trigger').addClass('hidden');
+    if($('#triggerForm .trigger-box').length <= 1) $('.delete-trigger').removeClass('hidden');
 }
 
 window.tagBlockInit = function()
