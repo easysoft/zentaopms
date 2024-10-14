@@ -1222,11 +1222,30 @@ class doc extends control
         $this->display();
     }
 
+    /**
+     * Batch move document.
+     *
+     * @param  string $encodeDocIdList
+     * @param  int    $spaceID
+     * @param  int    $libID
+     * @param  int    $moduleID
+     * @access public
+     * @return void
+     */
     public function batchMoveDoc(string $encodeDocIdList, int $spaceID, int $libID = 0, int $moduleID = 0)
     {
         $docIdList = json_decode(base64_decode($encodeDocIdList), true);
         $space = $this->doc->getLibByID($spaceID);
         if(!$docIdList) $this->locate($this->createLink('doc', 'app', "type={$space->type}&spaceID={$spaceID}&libID={$libID}&moduleID={$moduleID}"));
+
+        if($_POST)
+        {
+            $data = form::data()->setIF($type == 'mine' || $this->post->acl == 'open', 'groups', '')->setIF($type == 'mine' || $this->post->acl == 'open', 'users', '')->get();
+            $this->doc->batchMoveDoc($data, $docIdList);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('doc', 'app', "type={$type}&spaceID={$spaceID}&libID={$libID}&moduleID={$moduleID}")));
+        }
 
         $this->view->title           = $this->lang->doc->batchMove;
         $this->view->encodeDocIdList = $encodeDocIdList;
