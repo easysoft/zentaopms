@@ -145,6 +145,7 @@ $lang->user->dynamic   = 'Dynamics';
 $lang->user->openedBy    = 'CreatedBy%s';
 $lang->user->assignedTo  = 'AssignedTo%s';
 $lang->user->finishedBy  = 'FinishedBy%s';
+$lang->user->involved    = 'Involved By %s';
 $lang->user->resolvedBy  = 'ResolvedBy%s';
 $lang->user->closedBy    = 'ClosedBy%s';
 $lang->user->reviewedBy  = 'ReviewedBy%s';

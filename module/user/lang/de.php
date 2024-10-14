@@ -145,6 +145,7 @@ $lang->user->dynamic   = 'Verlauf';
 $lang->user->openedBy    = 'Geöffnet';
 $lang->user->assignedTo  = 'Zugeordnet';
 $lang->user->finishedBy  = 'Abgeschlossen';
+$lang->user->involved    = 'Involved By %s';
 $lang->user->resolvedBy  = 'Gelöst';
 $lang->user->closedBy    = 'Geschlossen';
 $lang->user->reviewedBy  = 'Überprüft';
