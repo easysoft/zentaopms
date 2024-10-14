@@ -3323,7 +3323,7 @@ class docModel extends model
         $this->dao->update(TABLE_DOCLIB)->data($data)->where('id')->eq($libID)->exec();
 
         $from = in_array($lib->type, array('project', 'product'))  ? ($lib->project ? "{$lib->type}.{$lib->project}" : "{$lib->type}.{$lib->product}")     : "{$lib->type}.{$lib->parent}";
-        $to   = in_array($data->type, array('project', 'product')) ? ($data->project ? "{$data->type}.{$data->project}" : "{$data->type}.{$lib->product}") : "{$data->type}.{$data->parent}";
+        $to   = in_array($data->type, array('project', 'product')) ? (isset($data->project) ? "{$data->type}.{$data->project}" : "{$data->type}.{$lib->product}") : "{$data->type}.{$data->parent}";
 
         $actionID = $this->loadModel('action')->create('docLib', $libID, 'Moved', '', json_encode(array('from' => $from, 'to' => $to)));
         $this->action->logHistory($actionID, $changes);

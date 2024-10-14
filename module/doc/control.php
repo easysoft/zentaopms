@@ -1142,6 +1142,7 @@ class doc extends control
     {
         $lib = $this->doc->getLibByID($libID);
         if(empty($targetSpace)) $targetSpace = $this->doc->getLibTargetSpace($lib);
+        $spaceType = $this->doc->getParamFromTargetSpace($targetSpace, 'type');
 
         if(!empty($lib->main)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorEditSystemDoc));
 
@@ -1156,10 +1157,9 @@ class doc extends control
             $this->doc->moveLib($libID, $data);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            return $this->docZen->responseAfterMove($this->post->space, $libID);
+            return $this->docZen->responseAfterMove($this->post->space, $spaceType, $libID);
         }
 
-        $spaceType = $this->doc->getParamFromTargetSpace($targetSpace, 'type');
         $this->docZen->setAclForCreateLib($spaceType);
 
         $this->view->title        = $this->lang->doc->moveLibAction;
