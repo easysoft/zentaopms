@@ -681,6 +681,7 @@ class docModel extends model
             ->fetchAll('id');
 
         $docs = $this->processCollector($docs);
+        $docs = $this->filterPrivDocs($docs);
 
         foreach($docs as &$doc)
         {
@@ -693,6 +694,42 @@ class docModel extends model
         }
 
         return $docs;
+    }
+
+    /**
+     * 过滤出有权限的文档列表。
+     * Filter docs which has privilege.
+     *
+     * @param  array  $docs
+     * @access public
+     * @return array
+     */
+    public function filterPrivDocs(array $docs): array
+    {
+        $currentAccount = $this->app->user->account;
+        $userGroups     = $this->app->user->groups;
+
+        $privDocs = array();
+        foreach($docs as $index => $doc)
+        {
+            if($doc->acl == 'open' || ($doc->acl == 'private' && $doc->addedBy == $currentAccount) || strpos(",$doc->users,", ",$currentAccount,") !== false)
+            {
+                $privDocs[$index] = $doc;
+            }
+            elseif(!empty($doc->groups))
+            {
+                foreach($userGroups as $groupID)
+                {
+                    if(strpos(",$doc->groups,", ",$groupID,") !== false)
+                    {
+                        $privDocs[$index] = $doc;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $privDocs;
     }
 
     /**
