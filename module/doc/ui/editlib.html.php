@@ -13,15 +13,6 @@ namespace zin;
 $libType    = $lib->type;
 $defaultAcl = $lib->acl;
 if(!empty($lib->main) && $lib->type != 'mine') $defaultAcl = 'default';
-if(!empty($targetSpace))
-{
-    jsVar('space', $targetSpace);
-    $libType = $this->doc->getSpaceType($lib->id);
-
-    if($lib->type == 'custom') unset($spaces['mine']);
-    if($libType == 'mine') $defaultAcl = 'private';
-    if($libType == 'custom' && ($lib->type == 'mine' || $lib->parent != $targetSpace)) $defaultAcl = 'open';
-}
 
 jsVar('doclibID', $lib->id);
 jsVar('libType', $libType);
@@ -44,16 +35,6 @@ formPanel
     formHidden('product',   $lib->product),
     formHidden('project',   $lib->project),
     formHidden('execution', $lib->execution),
-    isset($spaces) ? formGroup
-    (
-        set::name('space'),
-        set::label($lang->doc->space),
-        set::control('picker'),
-        set::value($targetSpace),
-        set::items($spaces),
-        set::required(true),
-        on::change('changeSpace')
-    ) : null,
     formGroup
     (
         set::label($lib->type == 'custom' && $lib->parent == 0 ? $lang->doclib->spaceName : $lang->doc->libName),

@@ -172,11 +172,10 @@ class doc extends control
      * Edit a library.
      *
      * @param  int    $libID
-     * @param  string $targetSpace
      * @access public
      * @return void
      */
-    public function editLib(int $libID, string $targetSpace = '')
+    public function editLib(int $libID)
     {
         $lib = $this->doc->getLibByID($libID);
         if(!empty($_POST))
@@ -218,13 +217,7 @@ class doc extends control
             $this->view->object = $execution;
         }
 
-        $this->docZen->setAclForEditLib($lib, $targetSpace);
-
-        if(($lib->type == 'custom' && $lib->parent > 0) || ($lib->type == 'mine' && $lib->main == 0))
-        {
-            $this->view->spaces      = $this->doc->getSubSpacesByType($lib->type);
-            $this->view->targetSpace = $targetSpace ? $targetSpace : $lib->parent;
-        }
+        $this->docZen->setAclForEditLib($lib);
 
         $this->view->lib         = $lib;
         $this->view->groups      = $this->loadModel('group')->getPairs();

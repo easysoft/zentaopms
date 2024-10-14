@@ -293,15 +293,12 @@ class docZen extends doc
      * Handle the access control of editing document library.
      *
      * @param  object    $lib
-     * @param  string    $targetSpace
      * @access protected
      * @return void
      */
-    protected function setAclForEditLib(object $lib, string $targetSpace = ''): void
+    protected function setAclForEditLib(object $lib): void
     {
         $libType = $lib->type;
-        if($targetSpace == 'mine')   $libType = 'mine';
-        if(is_numeric($targetSpace)) $libType = 'custom';
 
         if($libType == 'custom')
         {
