@@ -44,7 +44,7 @@ class editProjectBuildTester extends tester
         $viewPage->dom->basic->click();
         $viewPage->wait(5);
 
-        /* 断言检查版本名称、所属执行是否正确 */
+        /* 断言检查版本名称是否正确 */
         if($viewPage->dom->basicBuildName->getText() != $build['name']) return $this->failed('项目版本名称错误');
 
         return $this->success('项目版本编辑成功');
