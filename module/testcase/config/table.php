@@ -148,7 +148,8 @@ $config->testcase->dtable->fieldList['lastEditedDate']['type']     = 'date';
 $config->testcase->dtable->fieldList['lastEditedDate']['group']    = 6;
 $config->testcase->dtable->fieldList['lastEditedDate']['sortType'] = true;
 
-$config->testcase->dtable->fieldList['product']['title']      = 'product';
+$config->testcase->dtable->fieldList['product']['title']      = $lang->testcase->product;
+$config->testcase->dtable->fieldList['product']['name']       = 'product';
 $config->testcase->dtable->fieldList['product']['control']    = 'hidden';
 $config->testcase->dtable->fieldList['product']['dataSource'] = array('module' => 'product', 'method' => 'getPairs', 'params' => ['mode' => '', 'programID' => 0, 'append' => '', 'shadow' => 'all']);
 $config->testcase->dtable->fieldList['product']['display']    = false;
