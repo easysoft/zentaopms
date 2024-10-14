@@ -1222,6 +1222,26 @@ class doc extends control
         $this->display();
     }
 
+    public function batchMoveDoc(string $encodeDocIdList, int $spaceID, int $libID = 0, int $moduleID = 0)
+    {
+        $docIdList = json_decode(base64_decode($encodeDocIdList), true);
+        $space = $this->doc->getLibByID($spaceID);
+        if(!$docIdList) $this->locate($this->createLink('doc', 'app', "type={$space->type}&spaceID={$spaceID}&libID={$libID}&moduleID={$moduleID}"));
+
+        $this->view->title           = $this->lang->doc->batchMove;
+        $this->view->encodeDocIdList = $encodeDocIdList;
+        $this->view->type            = $space->type;
+        $this->view->spaceID         = $spaceID;
+        $this->view->libID           = $libID;
+        $this->view->moduleID        = $moduleID;
+        $this->view->spaces          = $this->doc->getAllSubSpaces();
+        $this->view->libPairs        = $this->doc->getLibPairs($space->type == 'mine' ? 'mine' : 'custom', '', $libID);
+        $this->view->optionMenu      = $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
+        $this->view->groups          = $this->loadModel('group')->getPairs();
+        $this->view->users           = $this->loadModel('user')->getPairs('nocode|noclosed');
+        $this->display();
+    }
+
     /**
      * Ajax: 检查对象权限。
      * Ajax check object priv.
