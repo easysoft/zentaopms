@@ -220,6 +220,7 @@ class thinkStepMenu extends wg
             'innerClass'   => 'text-gray opacity-50',
             'hint'         => $this->lang->thinkstep->tips->linkBlocks
         );
+        $linkType = !empty($item->type == 'question') && ($options->questionType == 'checkbox' || $options->questionType === 'radio' || $options->questionType === 'multicolumn');
 
         $menus = array_merge($menus, array(
             $canEdit ? array(
@@ -229,7 +230,7 @@ class thinkStepMenu extends wg
                 'url'  => createLink('thinkstep', 'edit', "marketID={$marketID}&stepID={$item->id}")
             ) : null,
             $canDelete ? $deleteItem : null,
-            $wizard->model === '3c' && $item->type == 'question' && $canLink ? $linkItem : null
+            $wizard->model === '3c' && $linkType && $canLink ? $linkItem : null
         ), $transitionAction);
 
         if($canCreate && (($showQuestionOfNode && $item->type == 'node') || $item->hasSameQuestion || $item->type == 'question')) $menus = array_merge($menus, array(
