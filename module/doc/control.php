@@ -59,7 +59,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function mySpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', int $param = 0, string $orderBy = 'order_asc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = 'list', int $docID = 0, string $search = '')
+    public function mySpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', int $param = 0, string $orderBy = 'order_asc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = 'home', int $docID = 0, string $search = '')
     {
         if(empty($objectID))
         {
@@ -823,7 +823,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function productSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'order_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = 'list', int $docID = 0, string $search = '')
+    public function productSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'order_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = 'home', int $docID = 0, string $search = '')
     {
         echo $this->fetch('doc', 'app', "type=product&spaceID=$objectID&libID=$libID&moduleID=$moduleID&docID=$docID&mode=$mode&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&filterType=$browseType&search=$search&param=$param");
     }
@@ -844,7 +844,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function projectSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'order_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = 'list', int $docID = 0, string $search = '')
+    public function projectSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'order_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = 'home', int $docID = 0, string $search = '')
     {
         echo $this->fetch('doc', 'app', "type=project&spaceID=$objectID&libID=$libID&moduleID=$moduleID&docID=$docID&mode=$mode&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&filterType=$browseType&search=$search&param=$param");
     }
@@ -865,7 +865,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function teamSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'order_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = 'list', int $docID = 0, string $search = '')
+    public function teamSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'order_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = 'home', int $docID = 0, string $search = '')
     {
         if(empty($objectID))
         {
