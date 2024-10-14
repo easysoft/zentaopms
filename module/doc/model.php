@@ -1624,10 +1624,11 @@ class docModel extends model
      * @param  string $type
      * @param  int    $objectID
      * @param  int    $appendLib
+     * @param  int    $limit
      * @access public
      * @return array
      */
-    public function getLibsByObject(string $type, int $objectID = 0, int $appendLib = 0): array
+    public function getLibsByObject(string $type, int $objectID = 0, int $appendLib = 0, int $limit = 0): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getDocLibs();
 
@@ -1641,6 +1642,7 @@ class docModel extends model
                 ->andWhere('parent')->eq($objectID)
                 ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
                 ->orderBy('`order` asc, id_asc')
+                ->limit($limit)
                 ->fetchAll('id');
         }
         else
@@ -1652,6 +1654,7 @@ class docModel extends model
                 ->beginIF($type == 'project')->andWhere('type')->in('api,project')->fi()
                 ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
                 ->orderBy('`order` asc, id_asc')
+                ->limit($limit)
                 ->fetchAll('id');
 
             $executionIDList = array();
@@ -1665,6 +1668,7 @@ class docModel extends model
                     ->andWhere('type')->eq('execution')
                     ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
                     ->orderBy('`order` asc, id_asc')
+                    ->limit($limit)
                     ->fetchAll('id');
             }
         }
