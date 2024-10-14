@@ -129,13 +129,28 @@ function initTable(data)
         {name: 'metricsLevel', title: 'LEVEL', hint: true, width: 60, fixed: 'left', cellClass: 'font-mono text-sm select-all', map: metricsLevelNames, hint: info => info.row.data.requestId, flex: 0, align: 'center', sort: 'number', border: 'right'},
         {name: 'identifier', type: Object.keys(window.userMap || {}).length ? 'avatarName' : '', title: 'User', fixed: 'left', flex: 0, width: 80, sort: true, avatarKey: 'identifier_avatar', avatarCodeKey: 'identifier_avatar_code', avatarNameKey: 'identifier_name'},
         {name: 'path', type: 'title', title: 'Page', hint: (info) => info.row.data.request.url, link: (info) => ({url: info.row.data.request.url, target: '_blank'}), flex: 1, fixed: 'left', maxWidth: 1000, sort: true},
-        {name: 'metrics.backend.totalTime', title: 'Back Time', sort: 'number', type: 'number', digits: 2, format: '{0}ms', digits: 3, headerGroup: 'Backend'},
-        {name: 'metrics.backend.sqlTime', title: 'SQL Time', sort: 'number', format: '{0}ms', digits: 3, headerGroup: 'Backend'},
+        {name: 'metrics.backend.totalTime', title: 'Back Time', sort: 'number', type: 'number', digits: 2, format: '{0}ms', digits: 3, headerGroup: 'Backend', hint: info =>
+        {
+            const timeClass = info.row.data['metrics.backend.totalTimeClass'];
+            if(timeClass === 'danger') return `BLOCK: > 500ms`;
+            if(timeClass === 'warning') return `WARN: > 300ms`;
+        }},
+        {name: 'metrics.backend.sqlTime', title: 'SQL Time', sort: 'number', format: '{0}ms', digits: 3, headerGroup: 'Backend', hint: info =>
+        {
+            const timeClass = info.row.data['metrics.backend.sqlTimeClass'];
+            if(timeClass === 'danger') return `BLOCK: > 300ms`;
+            if(timeClass === 'warning') return `WARN: > 200ms`;
+        }},
         {name: 'metrics.backend.sqlCount', title: 'SQLs', sort: 'number', width: 48, link: '#', hint: 'Click to check details', headerGroup: 'Backend'},
         {name: 'metrics.backend.requestMemory', title: 'Memory', sort: 'number', format: (value) => value ? zui.formatBytes(value) : '', headerGroup: 'Backend'},
         {name: 'metrics.backend.phpFileLoaded', title: 'PHP Files', width: 50, sort: 'number', align: 'center', headerGroup: 'Backend'},
         {name: 'metrics.frontend.downloadSize', title: 'Transfer Size', sort: 'number', format: (value) => value ? zui.formatBytes(value) : '', headerGroup: 'Frontend'},
-        {name: 'metrics.frontend.renderTime', title: 'Front Time', sort: 'number', format: '{0}ms', headerGroup: 'Frontend', border: 'left'},
+        {name: 'metrics.frontend.renderTime', title: 'Front Time', sort: 'number', format: '{0}ms', headerGroup: 'Frontend', border: 'left', hint: info =>
+        {
+            const timeClass = info.row.data['metrics.frontend.renderTimeClass'];
+            if(timeClass === 'danger') return `BLOCK: > 100ms`;
+            if(timeClass === 'warning') return `WARN: > 60ms`;
+        }},
         {name: 'userEnv.browser', title: 'Client Browser', sort: true, align: 'left', headerGroup: 'Frontend'},
         {name: 'userEnv.system', title: 'Client OS', sort: true, align: 'center', headerGroup: 'Frontend'},
         {name: 'request.xhprof', title: 'Xhprof', link: (info) => ({url: info.row.data.request.xhprof || '#', target: '_blank'}), format: (value) => (value ? 'Open' : ''), hint: true, width: 40},
@@ -160,8 +175,8 @@ function initTable(data)
             const metricsStats = this.metricsStats || {};
             return [
                 {html: `Total <strong>${layout.allRows.length}</strong>`, className: 'text-gray mr-4'},
-                metricsStats.danger ? {html: `<div class="font-bold row items-center gap-2 rounded-full px-2 danger" data-toggle="tooltip" data-type="danger" data-title="Black Time &lt; 500ms or SQL time &lt; 300ms or Client time &lt; 100ms" data-placement="top-start"><i class="icon icon-alert"></i>BLOCK <strong>${metricsStats.danger}</strong> </div>`, className: 'text-danger mr-4'} : null,
-                metricsStats.warning ? {html: `<div class="font-bold row items-center gap-2 rounded-full px-2 warning-pale" data-toggle="tooltip" data-type="warning" data-title="Black Time &lt; 300ms or SQL time &lt; 200ms or Client time &lt; 60ms" data-placement="top-start"><i class="icon icon-alert"></i>BLOCK <strong>${metricsStats.warning}</strong> </div>`, className: 'text-warning mr-4'} : null,
+                metricsStats.danger ? {html: `<div class="font-bold row items-center gap-2 rounded-full px-2 danger" data-toggle="tooltip" data-type="danger" data-title="Black Time &gt; 500ms or SQL time &gt; 300ms or Client time &gt; 100ms" data-placement="top-start"><i class="icon icon-alert"></i>BLOCK <strong>${metricsStats.danger}</strong> </div>`, className: 'text-danger mr-4'} : null,
+                metricsStats.warning ? {html: `<div class="font-bold row items-center gap-2 rounded-full px-2 warning-pale" data-toggle="tooltip" data-type="warning" data-title="Black Time &gt; 300ms or SQL time &gt; 200ms or Client time &gt; 60ms" data-placement="top-start"><i class="icon icon-alert"></i>WARN <strong>${metricsStats.warning}</strong> </div>`, className: 'text-warning mr-4'} : null,
             ];
         }],
         rowConverter: function(row)
