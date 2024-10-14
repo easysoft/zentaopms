@@ -36,3 +36,23 @@ $api->method->range('GET');
 $api->status->range('done');
 $api->version->range('1');
 $api->desc->range('');
+$api->gen(3);
+
+$apiSpec = zenData('apispec');
+$apiSpec->id->range('1-3');
+$apiSpec->doc->range('1-3');
+$apiSpec->module->range('0');
+$apiSpec->title->range('apidocA,apidocB,apidocC');
+$apiSpec->path->range('apipathA,apipathB,apipathC');
+$apiSpec->protocol->range('HTTP');
+$apiSpec->method->range('GET');
+$apiSpec->status->range('done');
+$apiSpec->version->range('1');
+$apiSpec->desc->range('');
+$apiSpec->gen(3);
+
+$tester = new createDocTester();
+$tester->login();
+
+$apiVersion = new stdClass();
+$apiVersion->fstVersion = '版本1';
