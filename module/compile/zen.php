@@ -11,4 +11,17 @@ declare(strict_types=1);
  */
 class compileZen extends compile
 {
+    /**
+     * 构造搜索表单数据。
+     * Build search form data.
+     *
+     * @param  int       $repoID
+     * @param  int       $jobID
+     * @param  int       $queryID
+     * @access protected
+     * @return void
+     */
+    protected function buildSearchForm(int $repoID = 0, int $jobID = 0, int $queryID = 0)
+    {
+    }
 }
