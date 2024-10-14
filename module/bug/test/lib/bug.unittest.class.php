@@ -1421,4 +1421,23 @@ class bugTest
         if(dao::isError()) return dao::getError();
         return implode(',', array_column($bugs, 'id'));
     }
+
+    /**
+     * 测试通过任务 id 获取相关 Bug.
+     * Test get linked bug by task id.
+     *
+     * @param  int                $taskID
+     * @access public
+     * @return array|string|false
+     */
+    public function getLinkedBugsByTaskIDTest(int $taskID): array|string|false
+    {
+        $bugs  = $this->objectModel->getLinkedBugsByTaskID($taskID);
+
+        $result = '';
+        foreach($bugs as $bug) $result .= "{$bug->id}:{$bug->title},";
+        $result = trim($result, ',');
+
+        return dao::isError() ? dao::getError() : $result;
+    }
 }
