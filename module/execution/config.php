@@ -64,6 +64,7 @@ $config->execution->search['fields']['estimate']       = $lang->task->estimate;
 $config->execution->search['fields']['left']           = $lang->task->left;
 $config->execution->search['fields']['consumed']       = $lang->task->consumed;
 $config->execution->search['fields']['type']           = $lang->task->type;
+$config->execution->search['fields']['story']          = $lang->task->story;
 if($config->vision != 'lite') $config->execution->search['fields']['fromBug'] = $lang->task->fromBugID;
 $config->execution->search['fields']['closedReason']   = $lang->task->closedReason;
 
@@ -99,6 +100,7 @@ $config->execution->search['params']['estimate']       = array('operator' => '='
 $config->execution->search['params']['left']           = array('operator' => '=',       'control' => 'input',  'values' => '');
 $config->execution->search['params']['consumed']       = array('operator' => '=',       'control' => 'input',  'values' => '');
 $config->execution->search['params']['type']           = array('operator' => '=',       'control' => 'select', 'values' => $lang->task->typeList);
+$config->execution->search['params']['story']          = array('operator' => '=',       'control' => 'select', 'values' => '');
 $config->execution->search['params']['fromBug']        = array('operator' => '=',       'control' => 'input',  'values' => $lang->task->typeList);
 $config->execution->search['params']['closedReason']   = array('operator' => '=',       'control' => 'select', 'values' => $lang->task->reasonList);
 
