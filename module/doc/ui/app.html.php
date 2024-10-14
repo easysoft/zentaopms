@@ -10,6 +10,11 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('type',     $type);
+jsVar('spaceID',  $spaceID);
+jsVar('libID',    $libID);
+jsVar('moduleID', $moduleID);
+
 $libTypes = array();
 if($type === 'project')
 {
@@ -79,6 +84,7 @@ $langData->moveLib               = $lang->doc->moveLibAction;
 $langData->moduleName            = $lang->doc->catalogName;
 $langData->saveDraft             = $lang->doc->saveDraft;
 $langData->release               = $lang->doc->release;
+$langData->batchMove             = $lang->doc->batchMove;
 
 zui::docApp
 (
