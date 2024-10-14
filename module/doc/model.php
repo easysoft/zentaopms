@@ -1058,6 +1058,7 @@ class docModel extends model
             ->beginIF($type == 'all')->andWhere('type')->in('mine,custom')->fi()
             ->beginIF($type != 'all')->andWhere('type')->eq($type)->fi()
             ->beginIF($type == 'mine')->andWhere('addedBy')->eq($this->app->user->account)->fi()
+            ->orderBy('type_desc')
             ->fetchAll();
 
         $pairs = array();
@@ -1130,6 +1131,7 @@ class docModel extends model
             ->andWhere('type', true)->eq('custom')
             ->orWhere('(type')->eq('mine')->andWhere('addedBy')->eq($this->app->user->account)
             ->markRight(2)
+            ->orderBy('type_desc')
             ->fetchAll();
 
         $productPairs = $projectPairs = $spacePairs = array();
@@ -1140,7 +1142,7 @@ class docModel extends model
             if($this->checkPrivLib($space)) $spacePairs["{$space->type}.{$space->id}"] = $this->lang->doc->spaceList[$space->type] . '/' . $space->name;
         }
 
-        return array_merge($productPairs, $projectPairs, $spacePairs);
+        return array_merge($spacePairs, $productPairs, $projectPairs);
     }
 
     /**
