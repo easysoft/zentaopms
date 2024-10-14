@@ -74,3 +74,19 @@ $build->bugs->range('[]');
 $build->scmPath->range('[]');
 $build->filePath->range('[]');
 $build->desc->range('描述111');
+$build->deleted->range('0');
+$build->gen(1);
+
+$tester = new editProjectBuildTester();
+$tester->login();
+
+// 设置项目版本数据
+$build = array(
+    array('name' => ''),
+    array('name' => '编辑版本1'),
+);
+
+r($tester->editNoNameInfo($build['0']))   && p('message,status') && e('编辑项目版本表单页提示信息正确,SUCCESS'); // 版本名称置空，检查提示信息
+r($tester->editProjectBuild($build['1'])) && p('message,status') && e('项目版本编辑成功,SUCCESS');               // 编辑项目版本
+
+$tester->closeBrowser();
