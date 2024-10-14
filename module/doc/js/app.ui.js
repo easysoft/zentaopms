@@ -285,13 +285,18 @@ const actionsMap =
     'doc-table': function(info)
     {
         return [{
-            text: getLang('moveTo'),
+            text: getLang('batchMove'),
             onClick: function()
             {
                 /* Get all selected doc id list. */
                 const selections = info.dtable.getChecks();
-                console.log('Batch move doc', selections, info);
-            },
+                if(!selections.length) return;
+
+                const docIdList = window.btoa(JSON.stringify(selections));
+                const url = $.createLink('doc', 'batchMoveDoc', 'docIdList=' + docIdList + '&spaceID=' + spaceID + '&libID=' + libID + '&moduleID=' + moduleID);
+
+                zui.Modal.open({size: 'sm', url: url});
+            }
         }];
     },
     'doc-list': function()
