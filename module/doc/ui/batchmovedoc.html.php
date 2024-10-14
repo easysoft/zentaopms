@@ -59,6 +59,21 @@ formPanel
             set::label($lang->doc->whiteList),
             div
             (
+                setClass('w-full check-list'),
+                div
+                (
+                    setClass('w-full'),
+                    inputGroup
+                    (
+                        $lang->doclib->group,
+                        picker(set::name('groups[]'), set::items($groups), set::multiple(true))
+                    )
+                ),
+                div
+                (
+                    setClass('w-full'),
+                    userPicker(set::label($lang->doclib->user), set::items($users), set::contactList(false))
+                )
             )
         )
     )
