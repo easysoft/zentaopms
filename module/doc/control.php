@@ -1463,4 +1463,18 @@ class doc extends control
 
         echo json_encode(array_values($files)); // $this->send($files); not work.
     }
+
+    /**
+     * Get lib summaries by space type and space list.
+     *
+     * @param  string $spaceType
+     * @param  string $spaceList
+     * @access public
+     * @return void
+     */
+    public function ajaxGetLibSummaries(string $spaceType, string $spaceList)
+    {
+        $libsMap = $this->doc->getLibsOfSpaces($spaceType, $spaceList);
+        echo json_encode($libsMap);
+    }
 }

@@ -107,6 +107,7 @@ zui::docApp
     set::fetcher(createLink('doc', 'ajaxGetSpaceData', 'type={spaceType}&spaceID={spaceID}&picks={picks}')),
     set::docFetcher(createLink('doc', 'ajaxGetDoc', 'docID={docID}&version={version}')),
     set::filesFetcher(createLink('doc', 'ajaxGetFiles', 'type={objectType}&objectID={objectID}')),
+    set::libSummariesFetcher(createLink('doc', 'ajaxGetLibSummaries', 'spaceType={spaceType}&spaceList={spaceList}')),
     set::width('100%'),
     set::height('100%'),
     set::userMap($users),
