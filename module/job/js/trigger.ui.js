@@ -139,11 +139,8 @@ window.addTrigger = function()
 window.deleteTrigger = function(event)
 {
     $(event.target).closest('.trigger-box').remove();
-    if($('#triggerForm .trigger-box').length <= 1)
-    {
-        $('.delete-trigger').addClass('hidden');
-        $('.add-trigger-btn').removeClass('hidden');
-    }
+    if($('#triggerForm .trigger-box').length <= 1) $('.delete-trigger').addClass('hidden');
+    if($('#triggerForm .trigger-box').length < Object.keys(triggerTypeList).length)$('.add-trigger-btn').removeClass('hidden');
 }
 
 window.tagBlockInit = function()
