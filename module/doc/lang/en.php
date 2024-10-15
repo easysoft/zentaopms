@@ -333,7 +333,7 @@ $lang->doc->mail->edit->title   = "%s edited document #%s:%s";
 
 $lang->doc->confirmDelete        = "Do you want to delete this document?";
 $lang->doc->confirmDeleteLib     = "Do you want to delete this document library?";
-$lang->doc->confirmDeleteSpace   = "Do you want to delete this space?";
+$lang->doc->confirmDeleteSpace   = "After deleting the space, the libraries, directories and documents in the space will be deleted simultaneously. Are you sure you want to delete this space?";
 $lang->doc->confirmDeleteBook    = "Do you want to delete this book?";
 $lang->doc->confirmDeleteChapter = "Do you want to delete this chapter?";
 $lang->doc->confirmDeleteModule  = "Do you want to delete this module?";
