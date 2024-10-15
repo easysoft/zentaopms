@@ -91,9 +91,8 @@ class pivotModel extends model
             $pivot->filters = array();
         }
 
-
         $this->processPivot($pivot);
-        if(isset($pivot->stage) && $pivot->stage == 'published' && $this->app->methodName == 'preview') $this->processFieldSettings($pivot);
+        // if(isset($pivot->stage) && $pivot->stage == 'published' && $this->app->methodName == 'preview') $this->processFieldSettings($pivot);
 
         return $pivot;
     }
@@ -956,535 +955,6 @@ class pivotModel extends model
     }
 
     /**
-     * Process column original.
-     *
-     * @param  int      $index
-     * @param  string   $field
-     * @param  array    $groups
-     * @param  array    $records
-     * @access public
-     * @return array
-     */
-    public function processColumnOriginal(int $index, string $field, array $groups, array $records): array
-    {
-        $columnRecords = array();
-        foreach($records as $record)
-        {
-            $columnRecord = new stdclass();
-            foreach($groups as $group) $columnRecord->$group = $record->$group;
-            $columnRecord->{$field . $index} = $record->$field;
-
-            $columnRecords[] = $columnRecord;
-        }
-        return $columnRecords;
-    }
-
-    /**
-     * Get slice field key of record.
-     *
-     * @param  int     $index
-     * @param  string  $slice
-     * @param  string  $field
-     * @param  object  $record
-     * @access public
-     * @return string
-     */
-    public function getSliceFieldKey(int $index, string $slice, string $field, object $record): string
-    {
-        if($slice == 'noSlice') return $field . $index;
-        return $record->$slice . '_slice_' . $field . $index;
-    }
-
-    /**
-     * Init statistic column with slice.
-     *
-     * @param  int     $index
-     * @param  string  $field
-     * @param  string  $slice
-     * @param  array   $groups
-     * @param  array   $records
-     * @access public
-     * @return array
-     */
-    public function initSliceColumnRecords(int $index, string $field, string $slice, array $groups, array $records): array
-    {
-        $columnRecords = array();
-        $groupUnique   = array();
-        $sliceUnique   = array();
-        foreach($records as $record)
-        {
-            $groupUnionKey = $this->getGroupsKey($groups, $record);
-            $fieldKey  = $this->getSliceFieldKey($index, $slice, $field, $record);
-
-            $sliceUnique[$fieldKey]  = 1;
-            $groupUnique[$groupUnionKey] = $record;
-        }
-
-        $sliceKeys = array_keys($sliceUnique);
-        $groupUnionKeys = array_keys($groupUnique);
-
-        foreach($groupUnionKeys as $groupUnionKey)
-        {
-            $columnRecord = new stdclass();
-            foreach($groups as $group) $columnRecord->$group = $groupUnique[$groupUnionKey]->$group;
-
-            foreach($sliceKeys as $sliceKey) $columnRecord->$sliceKey = array('count' => 0, 'distinct' => array(), 'sum' => 0, 'avg' => array(), 'max' => array(), 'min' => array(), 'rows' => array(), 'drillFields' => array());
-
-            $columnRecords[$groupUnionKey] = $columnRecord;
-        }
-
-        return $columnRecords;
-    }
-
-    /**
-     * 添加下钻所需数据。
-     * Add drill data.
-     *
-     * @param  array  $sliceRecord
-     * @param  object $record
-     * @param  string $field
-     * @param  string $slice
-     * @param  array  $groups
-     * @access public
-     * @return array
-     */
-    public function addDrillData(array $sliceRecord, object $record, string $slice, array $groups): array
-    {
-        $drills = $sliceRecord['drillFields'];
-        if($slice != 'noSlice') $groups[] = $slice;
-
-        /* 添加下钻所需字段值。*/
-        /* add dirll field value. */
-        foreach($groups as $drillField) $drills[$drillField] = $record->{$drillField . '_origin'};
-
-        $sliceRecord['drillFields'] = $drills;
-        return $sliceRecord;
-    }
-
-    /**
-     * Process column stat with slice.
-     *
-     * @param  int       $index
-     * @param  string    $field
-     * @param  string    $slice
-     * @param  string    $stat
-     * @param  array     $groups
-     * @param  array     $records
-     * @access public
-     * @return array
-     */
-    public function processColumnStat(int $index, string $field, string $slice, string $stat, array $groups, array $records, array $drillRecords): array
-    {
-        $sliceRecords = $this->initSliceColumnRecords($index, $field, $slice, $groups, $records);
-        foreach($records as $record)
-        {
-            $groupUnionKey = $this->getGroupsKey($groups, $record);
-            $fieldKey  = $this->getSliceFieldKey($index, $slice, $field, $record);
-
-            $sliceGroupRecord = $sliceRecords[$groupUnionKey];
-            $value            = $record->$field;
-            $floatValue       = is_numeric($value) ? (float)$value : 0;
-
-            $sliceGroupRecord->{$fieldKey} = $this->addDrillData($sliceGroupRecord->{$fieldKey}, $record, $slice, $groups);
-
-            switch($stat)
-            {
-                case 'sum':
-                    $sliceGroupRecord->{$fieldKey}[$stat] += $floatValue;
-                    break;
-                case 'avg':
-                case 'max':
-                case 'min':
-                    $sliceGroupRecord->{$fieldKey}[$stat][] = $floatValue;
-                    break;
-                case 'count':
-                    $sliceGroupRecord->{$fieldKey}[$stat] += 1;
-                    break;
-                case 'distinct':
-                    $sliceGroupRecord->{$fieldKey}[$stat][] = $value;
-                    break;
-            }
-        }
-
-        foreach($sliceRecords as $groupUnionKey => $sliceRecord)
-        {
-            $drillFields = array();
-
-            $sliceFields = array_keys((array)$sliceRecord);
-            foreach($sliceFields as $sliceField)
-            {
-                /* 分组字段直接跳过。*/
-                /* Skip the group field directly. */
-                if(in_array($sliceField, $groups)) continue;
-
-                $drillFields[$sliceField] = $sliceRecord->{$sliceField}['drillFields'];
-
-                $sliceStat = $sliceRecord->{$sliceField}[$stat];
-                switch($stat)
-                {
-                    case 'sum':
-                        $sliceRecord->$sliceField = round($sliceStat, 2);
-                        break;
-                    case 'avg':
-                        $sum   = array_sum($sliceStat);
-                        $count = count($sliceStat);
-                        $sliceRecord->$sliceField = $count == 0 ? 0 : round($sum / $count, 2);
-                        break;
-                    case 'max':
-                        $sliceRecord->$sliceField = $sliceStat ? round(max($sliceStat), 2) : 0;
-                        break;
-                    case 'min':
-                        $sliceRecord->$sliceField = $sliceStat ? round(min($sliceStat), 2) : 0;
-                        break;
-                    case 'count':
-                        $sliceRecord->$sliceField = $sliceStat;
-                        break;
-                    case 'distinct':
-                        $sliceRecord->$sliceField = count(array_unique($sliceStat));
-                        break;
-                }
-            }
-
-            if(!isset($drillRecords[$groupUnionKey])) $drillRecords[$groupUnionKey] = array('drillFields' => $drillFields);
-            if(!empty($drillFields)) $drillRecords[$groupUnionKey]['drillFields'] += $drillFields;
-        }
-
-        return array($sliceRecords, $drillRecords);
-    }
-
-    /**
-     * Merge origin records.
-     *
-     * @param  array  $originColumns
-     * @param  array  $mergeRecords
-     * @access public
-     * @return array
-     */
-    public function mergeOriginRecords(array $originColumns, array $mergeRecords): array
-    {
-        if(empty($originColumns)) return $mergeRecords;
-
-        $originColumns = $this->sortWithItemLength($originColumns);
-
-        foreach($originColumns as $columnIndex => $columnSetting)
-        {
-            if(empty($mergeRecords))
-            {
-                $mergeRecords = $columnSetting['records'];
-                continue;
-            }
-
-            $columnRecords = $columnSetting['records'];
-            foreach($mergeRecords as $index => $mergeRecord)
-            {
-                $mergeRecords[$index] = (object)array_merge((array)$mergeRecord, (array)$columnRecords[$index]);
-            }
-        }
-
-        return $mergeRecords;
-    }
-
-    /**
-     * Merge statistic records.
-     *
-     * @param  array    $statColumns
-     * @param  array    $groups
-     * @param  array    $mergeRecords
-     * @access public
-     * @return array
-     */
-    public function mergeStatRecords(array $statColumns, array $groups, array $mergeRecords): array
-    {
-        if(empty($statColumns)) return $mergeRecords;
-
-        $statColumns = $this->sortWithItemLength($statColumns);
-
-        foreach($statColumns as $columnIndex => $columnSetting)
-        {
-            if(empty($mergeRecords))
-            {
-                $mergeRecords = $columnSetting['records'];
-                continue;
-            }
-
-            $columnRecords = $columnSetting['records'];
-            foreach($mergeRecords as $key => $mergeRecord)
-            {
-                $groupUnionKey = $this->getGroupsKey($groups, $mergeRecord);
-                $mergeRecords[$key] = (object)array_merge((array)$mergeRecord, (array)$columnRecords[$groupUnionKey]);
-            }
-        }
-
-        return $mergeRecords;
-    }
-
-    /**
-     * Sort array with item length.
-     *
-     * @param  array    $array
-     * @access public
-     * @return array
-     */
-    public function sortWithItemLength(array $array): array
-    {
-        usort($array, function($a, $b) {
-            $lengthA = count($a);
-            $lengthB = count($b);
-
-            if ($lengthA == $lengthB) {
-                return 0;
-            }
-
-            return ($lengthA > $lengthB) ? -1 : 1;
-        });
-
-        return $array;
-    }
-
-    /**
-     * Sort merge records with group field.
-     *
-     * @param  array    $records
-     * @param  array    $mergeRecords
-     * @param  array    $groups
-     * @access public
-     * @return array
-     */
-    public function orderByRecordsGroups(array $records, array $mergeRecords, array $groups): array
-    {
-        $groupTree = $this->generateGroupTree($groups, $records);
-        $groupRecords = $this->flattenGroupTree($groups, $groupTree);
-
-        foreach($mergeRecords as $mergeRecord)
-        {
-            $groupUnionKey = $this->getGroupsKey($groups, $mergeRecord);
-            $groupRecords[$groupUnionKey][] = $mergeRecord;
-        }
-
-        $orderRecords = array();
-        foreach($groupRecords as $groupRecord)
-        {
-            $orderRecords = array_merge($orderRecords, $groupRecord);
-        }
-
-        return $orderRecords;
-    }
-
-    /**
-     * Generate group tree.
-     *
-     * @param  array    $groups
-     * @param  array    $records
-     * @access public
-     * @return array
-     */
-    public function generateGroupTree(array $groups, array $records): array
-    {
-        $groupTree = array();
-        foreach($records as $record)
-        {
-            $currentGroupTree = &$groupTree;
-            foreach($groups as $group)
-            {
-                $groupValue = $record->$group;
-                if(!isset($currentGroupTree[$groupValue])) $currentGroupTree[$groupValue] = array();
-
-                $currentGroupTree = &$currentGroupTree[$groupValue];
-            }
-        }
-
-        return $groupTree;
-    }
-
-    /**
-     * Flatten group tree.
-     *
-     * @param  array  $groups
-     * @param  array  $groupTree
-     * @access public
-     * @return void
-     */
-    public function flattenGroupTree($groups, $groupTree)
-    {
-        $flattenGroup = array_map(function($key, $value) {
-            return array($key, $value);
-        }, array_keys($groupTree), $groupTree);
-
-        $groupLevels           = count($groups);
-        $currentLevel          = 1;
-        $flattenGroupRecords   = array();
-        while($currentLevel < count($groups))
-        {
-            $nextFlatten = array();
-            foreach($flattenGroup as $flatten)
-            {
-                $lastValue = array_pop($flatten);
-                foreach($lastValue as $key => $value)
-                {
-                    /* 如果value为空，那么说明到了最后一级，直接构建分组键值的数组。*/
-                    /* If the value is empty, it means that the last level has been reached, and the array of the group key value is constructed directly. */
-                    if(empty($value))
-                    {
-                        $unionKey = implode('_', $flatten) . '_' . $key;
-                        $flattenGroupRecords[$unionKey] = array();
-                        continue;
-                    }
-                    $nextFlatten[] = array_merge($flatten, array($key, $value));
-                }
-            }
-            $flattenGroup = $nextFlatten;
-            $currentLevel ++;
-        }
-
-        return $flattenGroupRecords;
-    }
-
-    /**
-     * Get show origin from columns.
-     *
-     * @param  array $columns
-     * @access public
-     * @return array
-     */
-    public function getShowOriginsFromColumns(array $columns): array
-    {
-        $showOrigins = array();
-        foreach($columns as $index => $column)
-        {
-            $field      = $column['field'];
-            $showOrigin = (int)zget($column, 'showOrigin', 0);
-            $showOrigins[$field . $index] = $showOrigin;
-        }
-
-        return $showOrigins;
-    }
-
-    /**
-     * Get show origin with record.
-     *
-     * @param  array|object $record
-     * @param  int    $showOrigins
-     * @access public
-     * @return array
-     */
-    public function getShowOriginsWithRecord(array|object $record, $showOrigins): array
-    {
-        $columns = array();
-        foreach(array_keys((array)$record) as $index => $field)
-        {
-            foreach($showOrigins as $shortField => $showOrigin)
-            {
-                if(strpos(strrev($field), strrev($shortField)) !== 0) continue;
-                $columns[$index] = $showOrigin;
-            }
-        }
-
-        return $columns;
-    }
-
-    /**
-     * Calculate group merge cell config.
-     *
-     * @param  array $groups
-     * @param  array $records
-     * @access public
-     * @return array
-     */
-    public function calculateGroupMergeCellConfig(array $groups, array $records): array
-    {
-        $getGroupValue = function($groups, $groupIndex, $record)
-        {
-            $values = array();
-            foreach($groups as $index => $group)
-            {
-                if($index > $groupIndex) break;
-                $values[] = $record->$group;
-            }
-
-            return implode('-', $values);
-        };
-
-        $setConfig = function($configs, $lastConfig, $groupIndex)
-        {
-            extract($lastConfig);
-            if(!isset($configs[$startIndex])) $configs[$startIndex] = array();
-            $configs[$startIndex][$groupIndex] = $lineCount;
-            return $configs;
-        };
-
-        $configs = array();
-        foreach($groups as $groupIndex => $group)
-        {
-            $lastGroup  = null;
-            $lastConfig = array();
-            foreach($records as $rowIndex => $record)
-            {
-                $groupValue = $getGroupValue($groups, $groupIndex, $record);
-                /* 上一个分组的值与当前分组的值不一致。*/
-                if($lastGroup !== $groupValue)
-                {
-                    /* 如果不是首行，那么需要记录config。*/
-                    if($rowIndex != 0) $configs = $setConfig($configs, $lastConfig, $groupIndex);
-
-                    $lastGroup  = $groupValue;
-                    $lastConfig = array('startIndex' => $rowIndex, 'lineCount' => 1);
-                }
-                elseif($rowIndex != 0)
-                {
-                    $lastConfig['lineCount'] += 1;
-                }
-            }
-
-            $configs = $setConfig($configs, $lastConfig, $groupIndex);
-        }
-
-        return $configs;
-    }
-
-    /**
-     * Calculate column merge cell config.
-     *
-     * @param  array $configs
-     * @param  array $showOrigins
-     * @access public
-     * @return array
-     */
-    public function calculateColumnMergeCellConfig(array $configs, array $showOrigins): array
-    {
-        foreach($configs as $rowIndex => $config)
-        {
-            $lineCount = end($config);
-            foreach($showOrigins as $colIndex => $showOrigin)
-            {
-                if($showOrigin === 1) continue;
-                $config[$colIndex] = $lineCount;
-            }
-            $configs[$rowIndex] = $config;
-        }
-
-        return $configs;
-    }
-
-    /**
-     * Calculate merge cell config.
-     *
-     * @param  array    $groups
-     * @param  array    $records
-     * @access public
-     * @return array
-     */
-    public function calculateMergeCellConfig(array $groups, array $columns, array $records)
-    {
-        if(empty($records)) return array();
-
-        $showOrigins = $this->getShowOriginsFromColumns($columns);
-        $showOrigins = $this->getShowOriginsWithRecord($records[0], $showOrigins);
-
-        $configs = $this->calculateGroupMergeCellConfig($groups, $records);
-        return $this->calculateColumnMergeCellConfig($configs, $showOrigins);
-    }
-
-    /**
      * Get show col position.
      *
      * @param  array       $settings
@@ -1513,6 +983,700 @@ class pivotModel extends model
     }
 
     /**
+     * 计算列的统计值。
+     * Calculate column statistics.
+     *
+     * @param  array $records
+     * @param  string $statistic
+     * @param  string $field
+     * @access public
+     * @return mixed
+     */
+    public function columnStatistics(array $records, string $statistic, string $field): mixed
+    {
+        $values = array_column($records, $field);
+        $numericValues = array_map(function($value) {
+            return is_numeric($value) ? floatval($value) : 0;
+        }, $values);
+
+        if($statistic == 'count')    return count($numericValues);
+        if($statistic == 'sum')      return array_sum($numericValues);
+        if($statistic == 'avg')      return array_sum($numericValues) / count($numericValues);
+        if($statistic == 'min')      return min($numericValues);
+        if($statistic == 'max')      return max($numericValues);
+        if($statistic == 'distinct') return count(array_unique($values));
+    }
+
+    /**
+     * 行数据转树。
+     * Convert row data to tree.
+     *
+     * @param  array $data
+     * @access public
+     * @return void
+     */
+    public function getGroupTreeWithKey(array $data)
+    {
+        $first = reset($data);
+        if(!isset($first['groups'])) return $first['groupKey'];
+
+        $tree = array();
+        foreach($data as $value)
+        {
+            $groups = $value['groups'];
+            $parentKey = array_shift($groups);
+            if(!isset($tree[$parentKey])) $tree[$parentKey] = array();
+            $value['groups'] = $groups;
+            if(count($groups) == 0) unset($value['groups']);
+            $tree[$parentKey][] = $value;
+        }
+
+        foreach($tree as $key => $value) $tree[$key] = $this->getGroupTreeWithKey($value);
+
+        return $tree;
+    }
+
+    /**
+     * 获取单元格数据。
+     * Get cell data.
+     *
+     * @param  string $key
+     * @param  array $data
+     * @access public
+     * @return array
+     */
+    public function formatCellData(string $key, array $data): array
+    {
+        if(!isset($data[$key])) return array();
+
+        $cellData = $data[$key];
+        foreach($cellData as $colKey => $colValue)
+        {
+            if(is_scalar($colValue))
+            {
+                $cellData[$colKey] = array('value' => $colValue);
+            }
+            else
+            {
+                $value = $colValue['value'];
+                $colValue['value'] = is_scalar($value) ? $value : '/';
+                $cellData[$colKey] = $colValue;
+            }
+        }
+
+        return $cellData;
+    }
+
+    /**
+     * 计算列的总计值。
+     * Calculate column total.
+     *
+     * @param  array $data
+     * @access public
+     * @return array
+     */
+    public function getColumnSummary(array $data, string $totalKey): array
+    {
+        $summary = array();
+        foreach($data as $columns)
+        {
+            foreach($columns as $colKey => $colValue)
+            {
+                if(!isset($summary[$colKey]))
+                {
+                    $summary[$colKey] = $colValue;
+                }
+                else
+                {
+                    if(is_numeric($colValue['value'])) $summary[$colKey]['value'] += $colValue['value'];
+                }
+            }
+        }
+
+        $summary[$totalKey] = array('value' => '$total$');
+
+        return $summary;
+    }
+
+    /**
+     * 添加行总计到树数据中。
+     * Add row summary to tree data.
+     *
+     * @param  array $groupTree
+     * @param  array $data
+     * @access public
+     * @return array
+     */
+    public function addRowSummary(array $groupTree, array $data, array $groups, $currentGroup = 0): array
+    {
+        $first = reset($groupTree);
+        if(is_string($first))
+        {
+            $groupData = array();
+            $rows      = array();
+            foreach($groupTree as $groupKey)
+            {
+                $groupData[$groupKey] = $this->formatCellData($groupKey, $data);
+                $rows[$groupKey]      = $data[$groupKey];
+            }
+            return array('rows' => $rows, 'summary' => $this->getColumnSummary($groupData, $groups[$currentGroup]));
+        }
+
+        $rows = array();
+        foreach($groupTree as $key => $children) $rows[$key] = $this->addRowSummary($children, $data, $groups, $currentGroup + 1);
+        $groupData = array_column($rows, 'summary');
+
+        return array('rows' => $rows, 'summary' => $this->getColumnSummary($groupData, $groups[$currentGroup]));
+    }
+
+    /**
+     * 去除数据中的额外信息，只保留单元格数据。
+     * Remove extra info from data, only keep cell data.
+     *
+     * @param  array $records
+     * @access public
+     * @return array
+     */
+    public function pureCrystalData(array $records): array
+    {
+        $pureData = array();
+        foreach($records as $key => $record)
+        {
+            $columns = $record['columns'];
+            $groups  = $record['groups'];
+            $pureData[$key] = $groups;
+            foreach($columns as $colKey => $colValue)
+            {
+                $cellData = $colValue['cellData'];
+                if(isset($colValue['rowTotal'])) $cellData['total'] = $colValue['rowTotal'];
+                if(isset($cellData['value']))
+                {
+                    $pureData[$key][$colKey] = $cellData;
+                }
+                else
+                {
+                    foreach($cellData as $sliceKey => $sliceValue) $pureData[$key][$colKey . '_' . $sliceKey] = $sliceValue;
+                }
+            }
+        }
+
+        return $pureData;
+    }
+
+    /**
+     * 拍平切片列数据。
+     * Flatten slice column data.
+     *
+     * @param  array $row
+     * @access public
+     * @return array
+     */
+    public function flattenRow(array $row): array
+    {
+        $record  = array();
+        foreach($row as $colKey => $cell)
+        {
+            if(is_scalar($cell))
+            {
+                $record[$colKey] = array('value' => $cell);
+            }
+            elseif(isset($cell['value']))
+            {
+                $record[$colKey] = $cell;
+            }
+        }
+
+        return $record;
+    }
+
+    /**
+     * 拍平透视表树结构数据。
+     * Flatten pivot table tree structure data.
+     *
+     * @param  array $crystalData
+     * @access public
+     * @return array
+     */
+    public function flattenCrystalData(array $crystalData, bool $withGroupSummary = false): array
+    {
+        $first = reset($crystalData);
+        if(!isset($first['rows']))
+        {
+            $records = array();
+            foreach($crystalData as $row) $records[] = $this->flattenRow($row);
+            return $records;
+        }
+
+        $records = array();
+        foreach($crystalData as $value)
+        {
+            $groupRecords = $this->flattenCrystalData($value['rows']);
+            if($withGroupSummary && isset($value['summary'])) $groupRecords[] = $this->flattenRow($value['summary']);
+            $records = array_merge($records, $groupRecords);
+        }
+
+        return $records;
+    }
+
+    /**
+     * 处理行合并单元格。
+     * Process row span cell.
+     *
+     * @param  array $records
+     * @param  array $groups
+     * @access public
+     * @return array
+     */
+    public function processRowSpan(array $records, array $groups): array
+    {
+        $lastGroupValue = array();
+        foreach($groups as $group) $lastGroupValue[$group] = '';
+
+        $groupsRowSpan = array();
+        foreach($records as $index => $record)
+        {
+            $rowSpan = 1;
+            foreach($record as $colKey => $cell)
+            {
+                if(!isset($cell['value']) || !is_array($cell['value'])) continue;
+                $rowSpan = max(count($cell['value']), $rowSpan);
+            }
+
+            foreach($record as $colKey => $cell)
+            {
+                $record[$colKey]['rowSpan'] = is_scalar($cell['value']) ? $rowSpan : 1;
+            }
+            $records[$index] = $record;
+
+            foreach($groups as $group)
+            {
+                $groupValue = $record[$group]['value'];
+                if($groupValue != '$total$' && $groupValue == $lastGroupValue[$group])
+                {
+                    $groupRowSpan = array_pop($groupsRowSpan[$group]);
+                    $groupRowSpan['index'][] = $index;
+                    $groupRowSpan['rowSpan'] += $rowSpan;
+                    $groupsRowSpan[$group][] = $groupRowSpan;
+                }
+                else
+                {
+                    $groupsRowSpan[$group][] = array('index' => array($index), 'rowSpan' => $rowSpan);
+                }
+                $lastGroupValue[$group] = $groupValue;
+            }
+        }
+
+        foreach($groupsRowSpan as $group => $groupRowSpans)
+        {
+            foreach($groupRowSpans as $groupRowSpan)
+            {
+                $indexes = $groupRowSpan['index'];
+                foreach($indexes as $index)
+                {
+                    $records[$index][$group]['rowSpan'] = $groupRowSpan['rowSpan'];
+                }
+            }
+        }
+
+        return $records;
+    }
+
+    /**
+     * 计算行汇总值。
+     * Calculate row total.
+     *
+     * @param  array $row
+     * @access public
+     * @return array
+     */
+    public function getRowTotal(array $row): array
+    {
+        $rowTotal = array();
+        foreach($row as $cell)
+        {
+            if(!isset($cell['percentage'])) continue;
+            list(,,$showMode,, $columnKey) = $cell['percentage'];
+            if(!isset($rowTotal[$columnKey])) $rowTotal[$columnKey] = 0;
+            $rowTotal[$columnKey] += $cell['value'];
+        }
+
+        return $rowTotal;
+    }
+
+    /**
+     * 计算百分比值。
+     * Calculate percentage.
+     *
+     * @param  array $row
+     * @param  array $rowTotal
+     * @param  array $columnTotal
+     * @access public
+     * @return array
+     */
+    public function setPercentage(array $row, array $rowTotal, array $columnTotal): array
+    {
+        foreach($row as $key => $cell)
+        {
+            if(!isset($cell['percentage'])) continue;
+            list(,,$showMode,, $columnKey) = $cell['percentage'];
+            if($showMode == 'row')    $cell['percentage'][1] = $rowTotal[$columnKey];
+            if($showMode == 'column') $cell['percentage'][1] = $columnTotal[$key]['value'];
+            if($showMode == 'total')
+            {
+                $total = 0;
+                foreach($columnTotal as $column)
+                {
+                    if(!isset($column['percentage'])) continue;
+                    $percentage = $column['percentage'];
+                    if($percentage[4] == $columnKey) $total += $column['value'];
+                }
+                $cell['percentage'][1] = $total;
+            }
+
+            $cell['percentage'][0] = $cell['value'];
+            $row[$key] = $cell;
+        }
+
+        return $row;
+    }
+
+    /**
+     * 处理百分比值。
+     * Process percentage.
+     *
+     * @param  array $crystalData
+     * @param  array $allSummary
+     * @access public
+     * @return array
+     */
+    public function processPercentage(array $crystalData, array $allSummary): array
+    {
+        $rows    = $crystalData['rows'];
+        $summary = $crystalData['summary'];
+
+        foreach($rows as $key => $row)
+        {
+            if(isset($row['rows']))
+            {
+                $rows[$key] = $this->processPercentage($row, $allSummary);
+            }
+            else
+            {
+                $rowTotal = $this->getRowTotal($row);
+                $rows[$key] = $this->setPercentage($row, $rowTotal, $allSummary);
+            }
+        }
+
+        $rowTotal = $this->getRowTotal($summary);
+        $summary = $this->setPercentage($summary, $rowTotal, $allSummary);
+
+        return array('rows' => $rows, 'summary' => $summary);
+    }
+
+    /**
+     * 对数据进行分组。
+     * Group records.
+     *
+     * @param  array $records
+     * @param  array $groups
+     * @access public
+     * @return array
+     */
+    public function groupRecords(array $records, array $groups): array
+    {
+        $groupsData = array();
+        foreach($records as $record)
+        {
+            $key = $this->getGroupsKey($groups, $record);
+            if(!isset($groupsData[$key])) $groupsData[$key] = array();
+            $groupsData[$key][] = $record;
+        }
+
+        return $groupsData;
+    }
+
+    /**
+     * 设置切片列去重后的值。
+     * Set unique slices.
+     *
+     * @param  array $records
+     * @param  array $setting
+     * @access public
+     * @return array
+     */
+    public function setUniqueSlices(array $records, array $setting): array
+    {
+        static $slices = array();
+
+        $slice = zget($setting, 'slice', 'noSlice');
+        if($slice == 'noSlice') return $setting;
+        if(isset($slices[$slice]))
+        {
+            $setting['uniqueSlices'] = $slices[$slice];
+            return $setting;
+        }
+
+        $uniqueSlices = array();
+        foreach($records as $record)
+        {
+            if(!isset($uniqueSlices[$record->$slice])) $uniqueSlices[$record->$slice] = $record;
+        }
+        $slices[$slice] = $uniqueSlices;
+        $setting['uniqueSlices'] = $uniqueSlices;
+        return $setting;
+    }
+
+    /**
+     * 根据字段的值过滤记录。
+     * Filter records by field value.
+     *
+     * @param  array $records
+     * @param  string $field
+     * @param  string $value
+     * @access public
+     * @return array
+     */
+    public function filterRecords(array $records, string $field, string $value): array
+    {
+        return array_filter($records, function($record) use ($field, $value) {
+            return $record->$field == $value;
+        });
+    }
+
+    /**
+     * 计算单元格数据。
+     * Calculate cell data.
+     *
+     * @param  string $columnKey
+     * @param  array $records
+     * @param  array $setting
+     * @access public
+     * @return array
+     */
+    public function getCellData(string $columnKey, array $records, array $setting): array
+    {
+        $field      = zget($setting, 'field', '');
+        $showOrigin = zget($setting, 'showOrigin', 0);
+
+        if($showOrigin) return array('value' => array_column($records, $field));
+
+        $stat       = zget($setting, 'stat', 'count');
+        $slice      = zget($setting, 'slice', 'noSlice');
+        $showMode   = zget($setting, 'showMode', 'default');
+        $showTotal  = zget($setting, 'showTotal', 'noShow');
+        $monopolize = zget($setting, 'monopolize', 0);
+        $isSlice    = $slice != 'noSlice';
+
+        if(!$isSlice)
+        {
+            $value = $this->columnStatistics($records, $stat, $field);
+            if($showMode == 'default') return array('value' => $value);
+
+            return array('value' => $value, 'percentage' => array($value, 1, $showMode, $monopolize, $columnKey));
+        }
+
+        /* 处理切片列的情况。 */
+        /* Handle the slice column situation. */
+        $uniqueSlices = zget($setting, 'uniqueSlices', array());
+        $cell         = array();
+        foreach($uniqueSlices as $sliceRecord)
+        {
+            $sliceValue   = $sliceRecord->$slice;
+            $sliceKey     = "{$slice}_{$sliceValue}";
+            $sliceRecords = $this->filterRecords($records, $slice, $sliceValue);
+
+            $value = $this->columnStatistics($sliceRecords, $stat, $field);
+
+            $sliceCell = array('value' => $value, 'drillFields' => array($slice => $sliceRecord->{$slice . '_origin'}));
+            if($showMode != 'default') $sliceCell['percentage'] = array($value, 1, $showMode, $monopolize, $columnKey);
+
+            $cell[$sliceKey] = $sliceCell;
+        }
+
+        if($showTotal != 'noShow')
+        {
+            $value = array_sum(array_column($cell, 'value'));
+            $totalCell = array('value' => $value);
+            if($showMode != 'default') $totalCell['percentage'] = array($value, 1, $showMode, $monopolize, "rowTotal_{$columnKey}");
+            $cell['total'] = $totalCell;
+        }
+
+        return $cell;
+    }
+
+    /**
+     * 添加下钻字段信息。
+     * Add drill fields information.
+     *
+     * @param  array $cell
+     * @param  array $drillFields
+     * @access public
+     * @return array
+     */
+    public function addDrillFields(array $cell, array $drillFields): array
+    {
+        if(isset($cell['value']))
+        {
+            if(!isset($cell['drillFields'])) $cell['drillFields'] = array();
+            $cell['drillFields'] = array_merge($cell['drillFields'], $drillFields);
+            return $cell;
+        }
+
+        foreach($cell as $sliceKey => $sliceCell)
+        {
+            if($sliceKey == 'total') continue;
+            $cell[$sliceKey] = $this->addDrillFields($sliceCell, $drillFields);
+        }
+
+        return $cell;
+    }
+
+    /**
+     * 根据列配置，计算透视表数据。
+     * Calculate pivot table data.
+     *
+     * @param  array $groups
+     * @param  array $records
+     * @param  array $settings
+     * @access public
+     * @return array
+     */
+    public function processCrystalData(array $groups,array $records, array $settings): array
+    {
+        $crystalData    = array();
+        $columnSettings = $settings['columns'];
+        $groupRecords   = $this->groupRecords($records, $groups);
+        foreach($groupRecords as $key => $data)
+        {
+            $record              = reset($data);
+            $groupValues         = array();
+            $groupOriginalValues = array();
+            foreach($groups as $group)
+            {
+                $groupValues[$group] = $record->$group;
+                $groupOriginalValues[$group] = $record->{$group . '_origin'};
+            }
+
+            $columns = array();
+            foreach($columnSettings as $colIndex => $setting)
+            {
+                $setting   = $this->setUniqueSlices($records, $setting);
+                $field     = zget($setting, 'field', '');
+                $columnKey = "{$field}{$colIndex}";
+
+                $cellData = $this->getCellData($columnKey, $data, $setting);
+                $cellData = $this->addDrillFields($cellData, $groupOriginalValues);
+
+                $columns[$columnKey] = array('setting' => $setting, 'cellData' => $cellData);
+            }
+
+            $crystalData[$key] = array('groups' => $groupValues, 'groupKey' => $key, 'columns' => $columns);
+        }
+
+        return $crystalData;
+    }
+
+    /**
+     * 处理透视表数据为可以显示的格式。
+     * Process pivot table data for display.
+     *
+     * @param  array $records
+     * @access public
+     * @return array
+     */
+    public function processRecordsForDisplay(array $records): array
+    {
+        $values  = array();
+        foreach($records as $record)
+        {
+            $row        = array();
+            $arrayValue = false;
+            foreach($record as $colKey => $cell)
+            {
+                $cellValue = $cell['value'] == '$total$' ? $this->lang->pivot->total : $cell['value'];
+                if(is_array($cellValue)) $arrayValue = $cellValue;
+
+                $row[$colKey] = $cellValue;
+                if(isset($cell['percentage']))
+                {
+                    list($number, $total,, $monopolize) = $cell['percentage'];
+                    if($monopolize) $colKey .= '_percentage';
+                    $row[$colKey] = round($number / $total * 100, 2) . '%';
+                }
+            }
+
+            if(is_array($arrayValue))
+            {
+                foreach(array_keys($arrayValue) as $index)
+                {
+                    $flattenValue = array();
+                    foreach($row as $key => $value)
+                    {
+                        $flattenValue[$key] = is_scalar($value) ? $value : $value[$index];
+                    }
+                    $values[] = $flattenValue;
+                }
+            }
+            else
+            {
+                $values[] = $row;
+            }
+        }
+
+        return $values;
+    }
+
+    /**
+     * 获取合并单元格配置。
+     * Get row span config.
+     *
+     * @param  array $records
+     * @access public
+     * @return array
+     */
+    public function getRowSpanConfig(array $records): array
+    {
+        $configs = array();
+        foreach($records as $record)
+        {
+            $arrayValue = false;
+            foreach($record as $colKey => $cell)
+            {
+                if(is_array($cell['value'])) $arrayValue = $cell['value'];
+            }
+
+            if(!is_array($arrayValue)) $arrayValue = array(1);
+            $configs = array_merge($configs, array_fill(0, count($arrayValue), array_column($record, 'rowSpan')));
+        }
+        return $configs;
+    }
+
+    /**
+     * 获取下钻字段配置。
+     * Get drill fields config.
+     *
+     * @param  array $records
+     * @param  array $groups
+     * @access public
+     * @return array
+     */
+    public function getDrillsFromRecords(array $records, array $groups): array
+    {
+        $drills = array();
+        foreach($records as $record)
+        {
+            $groupKey = $this->getGroupsKey($groups, (object)$record);
+            if(!isset($drills[$groupKey])) $drills[$groupKey] = array('drillFields' => array());
+            foreach($record as $colKey => $cell)
+            {
+                if(isset($cell['drillFields'])) $drills[$groupKey]['drillFields'][$colKey] = $cell['drillFields'];
+            }
+        }
+
+        return $drills;
+    }
+
+    /**
      * Gen sheet.
      *
      * @param  array       $fields
@@ -1528,6 +1692,14 @@ class pivotModel extends model
         $groups = $this->getGroupsFromSettings($settings);
         $cols   = $this->generateTableCols($fields, $groups, $langs);
 
+        $data         = new stdclass();
+        $data->groups = $groups;
+        $data->cols   = $cols;
+        $data->array  = array();
+        $data->drills = array();
+
+        if(!isset($settings['columns'])) return array(data, array());
+
         /* Replace the variable with the default value. */
         $sql = $this->bi->processVars($sql, (array)$filters);
         $sql = $this->trimSemicolon($sql);
@@ -1535,63 +1707,57 @@ class pivotModel extends model
 
         $dbh     = $this->app->loadDriver($driver);
         $records = $dbh->query($sql)->fetchAll();
-
         $records = $this->mapRecordValueWithFieldOptions($records, $fields, $sql, $driver);
 
-        $showColPosition = $this->getShowColPosition($settings);
+        if(empty($records)) return array($data, array());
 
-        $mergeRecords = array();
-        $drillRecords = array();
-
-        if(isset($settings['columns']))
+        foreach($settings['columns'] as $columnIndex => $columnSetting)
         {
-            $columnSettings = $settings['columns'];
-            foreach($columnSettings as $columnIndex => $columnSetting)
-            {
-                $columnShowOrigin = isset($columnSetting['showOrigin']) ? $columnSetting['showOrigin'] : false;
-                $columnStat       = $columnSetting['stat'];
-                $columnField      = $columnSetting['field'];
-                $columnSlice      = zget($columnSetting, 'slice', 'noSlice');
+            $columnShowOrigin = (bool)zget($columnSetting, 'showOrigin', 0);
+            $columnStat       = $columnSetting['stat'];
+            $columnField      = $columnSetting['field'];
+            $columnSlice      = zget($columnSetting, 'slice', 'noSlice');
 
-                $cols = $this->getTableHeader($records, $columnSetting, $fields, $cols, $sql, $langs, $columnShowOrigin, $driver);
-
-                if($columnShowOrigin)
-                {
-                    $columnRecords = $this->processColumnOriginal($columnIndex, $columnField, $groups, $records);
-                    if($columnRecords) $columnRecords = $this->processShowData($columnRecords, $groups, $columnSetting, $showColPosition, $columnField . $columnIndex);
-
-                    $columnSetting['records'] = $columnRecords;
-                    $mergeRecords = $this->mergeOriginRecords(array($columnSetting), $mergeRecords);
-                }
-                elseif(!empty($columnStat))
-                {
-                    list($columnRecords, $drillRecords) = $this->processColumnStat($columnIndex, $columnField, $columnSlice, $columnStat, $groups, $records, $drillRecords);
-                    if($columnRecords) $columnRecords = $this->processShowData($columnRecords, $groups, $columnSetting, $showColPosition, $columnField . $columnIndex);
-
-                    $columnSetting['records'] = $columnRecords;
-                    $mergeRecords = $this->mergeStatRecords(array($columnSetting), $groups, $mergeRecords);
-                }
-            }
+            $cols = $this->getTableHeader($records, $columnSetting, $fields, $cols, $sql, $langs, $driver);
         }
 
-        $mergeRecords = $mergeRecords ? array_values($mergeRecords) : array();
-        $mergeRecords = $this->orderByRecordsGroups($records, $mergeRecords, $groups);
+        /* 根据列配置和分组配置，计算透视表数据。*/
+        /* Calculate crystal data based on column settings and group settings. */
+        $crystalData = $this->processCrystalData($groups, $records, $settings);
 
-        $mergeDrillRecords = array();
-        foreach($mergeRecords as $lineRecord)
-        {
-            $lineGroupKey = $this->getGroupsKey($groups, $lineRecord);
-            $mergeDrillRecords[$lineGroupKey] = isset($drillRecords[$lineGroupKey]) ? $drillRecords[$lineGroupKey] : array();
-        }
+        /* 将扁平的透视表数据转换成树形结构。*/
+        /* Convert flattened pivot table data to tree structure. */
+        $groupTree = $this->getGroupTreeWithKey($crystalData);
 
-        $data              = new stdclass();
-        $data->groups      = $groups;
-        $data->cols        = $cols;
-        $data->array       = json_decode(json_encode($mergeRecords), true);
-        $data->showLastRow = $this->isShowLastRow($showColPosition);
-        $data->drills      = $mergeDrillRecords;
+        /* 净化处理透视表数据中的额外信息，只留下与单元格数据相关的信息。*/
+        /* Clean up the extra information in pivot table data. */
+        $crystalData = $this->pureCrystalData($crystalData);
 
-        $configs = $this->calculateMergeCellConfig($groups, $settings['columns'], $mergeRecords);
+        /* 基于各级分组，计算每个分组的总计数据行。*/
+        /* Calculate total data rows based on each group. */
+        $crystalData = $this->addRowSummary($groupTree, $crystalData, $groups);
+
+        /* 计算百分比的值。*/
+        /* Calculate percentage values. */
+        $crystalData = $this->processPercentage($crystalData, $crystalData['summary']);
+
+        /* 将树形结构转换成扁平的透视表数据。*/
+        /* Convert tree structure to flattened pivot table data. */
+        $columnPosition = $this->getShowColPosition($settings);
+        $showGroupTotal = in_array($columnPosition, array('row', 'all'));
+        $showAllTotal   = in_array($columnPosition, array('bottom', 'all'));
+        $records = $this->flattenCrystalData($crystalData['rows'], $showGroupTotal);
+        if($showAllTotal) $records[] = $this->flattenRow($crystalData['summary']);
+
+        /* 计算行合并单元格的配置。*/
+        /* Calculate row span config. */
+        $records = $this->processRowSpan($records, $groups);
+
+        $data->cols   = $cols;
+        $data->array  = $this->processRecordsForDisplay($records);
+        $data->drills = $this->getDrillsFromRecords($records, $groups);
+
+        $configs = $this->getRowSpanConfig($records);
 
         /* $data->groups  array 代表分组，最多三个
          * $data->cols    array thead数据，其中对象有三个属性：name：分组，label：列的名字，isGroup：标识是不是分组
@@ -1602,7 +1768,6 @@ class pivotModel extends model
          */
         return array($data, $configs);
     }
-
 
     /**
      * Check is filters all default empty.
@@ -1828,11 +1993,12 @@ class pivotModel extends model
      * @access public
      * @return array
      */
-    public function getTableHeader($columnRows, $column, $fields, $cols, $sql, $langs = array(), $showOrigin = false, $driver = 'mysql')
+    public function getTableHeader($columnRows, $column, $fields, $cols, $sql, $langs = array(), $driver = 'mysql')
     {
         $stat       = zget($column, 'stat', '');
         $showMode   = zget($column, 'showMode', 'default');
         $monopolize = $showMode == 'default' ? '' : zget($column, 'monopolize', '');
+        $showOrigin = (bool)zget($column, 'showOrigin', 0);
 
         $isDrilling = isset($column['drill']) && zget($column['drill'], 'condition', '');
         $drillField = $isDrilling ? zget($column['drill'], 'field', '') : '';
@@ -1911,189 +2077,6 @@ class pivotModel extends model
     }
 
     /**
-     * Get ratio.
-     *
-     * @param  float    $value
-     * @param  float    $total
-     * @access public
-     * @return float
-     */
-    public function getRatio($value, $total)
-    {
-        return $total == 0 ? '0%' : round((float)$value / (float)$total * 100, 2) . '%';
-    }
-
-    /**
-     * Process column show mode.
-     *
-     * @param  array   $columnRows
-     * @param  array   $groups
-     * @param  array   $column
-     * @param  string  $showColPosition
-     * @param  string  $uuName
-     * @access public
-     * @return array
-     */
-    public function processShowData(array $columnRows, array $groups, array $column, string $showColPosition, string $uuName): array
-    {
-        $slice      = zget($column, 'slice', 'noSlice');
-        $showMode   = zget($column, 'showMode', 'default');
-        $showTotal  = $slice == 'noSlice' ? 'noShow' : zget($column, 'showTotal', 'noShow');
-        $monopolize = $showMode == 'default' ? '' : zget($column, 'monopolize', '');
-
-        $colTotal = array();
-        $rowTotal = array();
-        $allTotal = 0;
-        foreach($columnRows as $index => $row)
-        {
-            if(!isset($rowTotal[$index])) $rowTotal[$index] = 0;
-
-            foreach($row as $field => $value)
-            {
-                if(in_array($field, $groups)) continue;
-                if(!isset($colTotal[$field])) $colTotal[$field] = 0;
-
-                if($monopolize)
-                {
-                    if(!isset($colTotal["self_$field"])) $colTotal["self_$field"] = 0;
-                    $colTotal["self_$field"] += (float)$value;
-                }
-
-                $colTotal[$field] += (float)$value;
-                $rowTotal[$index] += (float)$value;
-                $allTotal += (float)$value;
-            }
-        }
-
-        if($showMode == 'total')
-        {
-            foreach($columnRows as $index => $row)
-            {
-                $columnRow = new stdclass();
-                foreach($row as $field => $value)
-                {
-                    if(in_array($field, $groups))
-                    {
-                        $columnRow->$field = $value;
-                        continue;
-                    }
-                    if($monopolize) $columnRow->{"self_$field"} = $value;
-                    $columnRow->{$field} = $this->getRatio($value, $allTotal);
-                }
-                if($showTotal == 'sum')
-                {
-                    if($monopolize) $columnRow->{"sum_self_$uuName"} = (float)$rowTotal[$index];
-                    $columnRow->{"sum_$uuName"} = $this->getRatio($rowTotal[$index], $allTotal);
-                }
-                $columnRows[$index] = $columnRow;
-            }
-        }
-
-        if($showMode == 'row')
-        {
-            foreach($columnRows as $index => $row)
-            {
-                $columnRow = new stdclass();
-                foreach($row as $field => $value)
-                {
-                    if(in_array($field, $groups))
-                    {
-                        $columnRow->$field = $value;
-                        continue;
-                    }
-                    if($monopolize) $columnRow->{"self_$field"} = $value;
-                    $columnRow->{$field} = $this->getRatio($value, $rowTotal[$index]);
-                }
-                if($showTotal == 'sum')
-                {
-                    if($monopolize) $columnRow->{"sum_self_$uuName"} = (float)$rowTotal[$index];
-                    $columnRow->{'sum_' . $uuName} = $this->getRatio($rowTotal[$index], $rowTotal[$index]);
-                }
-                $columnRows[$index] = $columnRow;
-            }
-        }
-
-        if($showMode == 'column')
-        {
-            foreach($columnRows as $index => $row)
-            {
-                $columnRow = new stdclass();
-                foreach($row as $field => $value)
-                {
-                    if(in_array($field, $groups))
-                    {
-                        $columnRow->$field = $value;
-                        continue;
-                    }
-                    if($monopolize) $columnRow->{"self_$field"} = $value;
-                    $columnRow->{$field} = $this->getRatio($value, $colTotal[$field]);
-                }
-                if($showTotal == 'sum')
-                {
-                    if($monopolize) $columnRow->{"sum_self_$uuName"} = (float)$rowTotal[$index];
-                    $columnRow->{'sum_' . $uuName} = $this->getRatio($rowTotal[$index], $allTotal);
-                }
-                $columnRows[$index] = $columnRow;
-            }
-        }
-
-        if($showMode == 'default' and $showTotal == 'sum')
-        {
-            foreach($columnRows as $index => $row) $row->{'sum_' . $uuName} = $rowTotal[$index];
-        }
-
-        if($this->isShowLastRow($showColPosition))
-        {
-            if(empty($columnRows)) return $columnRows;
-
-            $colTotalRow = new stdClass();
-            foreach(reset($columnRows) as $field => $value)
-            {
-                if(in_array($field, $groups))
-                {
-                    $colTotalRow->$field = $this->lang->pivot->stepDesign->total;
-                }
-                else
-                {
-                    if($showTotal == 'sum' and $field == "sum_$uuName")
-                    {
-                        if($showMode == 'default')
-                        {
-                            $colTotalRow->{$field} = $allTotal;
-                        }
-                        else
-                        {
-                            $colTotalRow->{$field} = $this->getRatio($allTotal, $allTotal);
-                        }
-                        continue;
-                    }
-
-                    if(strpos($field, 'sum_self_') !== false)
-                    {
-                        $colTotalRow->{$field} = $allTotal;
-                        continue;
-                    }
-
-                    if(strpos($field, 'self_') !== false)
-                    {
-                        $colTotalRow->{$field} = $colTotal[$field];
-                        continue;
-                    }
-
-                    if($showMode == 'default') $colTotalRow->$field = $colTotal[$field];
-                    if($showMode == 'column')  $colTotalRow->$field = $this->getRatio($colTotal[$field], $colTotal[$field]);
-                    if(strpos(',total,row,', ",$showMode,") !== false) $colTotalRow->$field = $this->getRatio($colTotal[$field], $allTotal);
-                }
-            }
-
-            $groupKey = $this->getGroupsKey($groups, $colTotalRow);
-            $columnRows[$groupKey] = $colTotalRow;
-        }
-
-        return $columnRows;
-    }
-
-    /**
      * Implode group keys of record.
      *
      * @param  array  $groups
@@ -2104,75 +2087,9 @@ class pivotModel extends model
     public function getGroupsKey(array $groups, object $record): string
     {
         $groupsKey = array();
-        foreach($groups as $group) $groupsKey[] = $record->$group;
+        foreach($groups as $group) $groupsKey[] = is_scalar($record->$group) ? $record->$group : $record->$group['value'];
 
         return implode('_', $groupsKey);
-    }
-
-    /**
-     * 处理表格的切片数据。
-     * Process data as slice table data.
-     *
-     * @param  array  $columnRows
-     * @param  array  $groups
-     * @param  string $slice
-     * @param  string $uuName
-     * @access public
-     * @return array
-     */
-    public function processSliceData(array $columnRows, array $groups, string $slice, string $uuName): array
-    {
-        $sliceList = array();
-        foreach($columnRows as $rows) $sliceList[$rows->{$slice}] = $rows->{$slice};
-
-        $index     = 0;
-        $sliceRows = array();
-        foreach($columnRows as $key => $columnRow)
-        {
-            $field = $columnRow->{$slice} . '_slice_' . $uuName;
-            $columnRow->{$field} = $columnRow->{$uuName};
-            if(!in_array($slice, $groups)) unset($columnRow->{$slice});
-            unset($columnRow->{$uuName});
-
-            if($key == 0)
-            {
-                $index             = $key;
-                $sliceRows[$index] = $columnRow;
-                continue;
-            }
-
-            $sliceFlag = true;
-            foreach($groups as $group)
-            {
-                if($columnRow->{$group} != $sliceRows[$index]->{$group}) $sliceFlag = false;
-            }
-            if(!$sliceFlag)
-            {
-                $index ++;
-                $sliceRows[$index] = $columnRow;
-            }
-            else
-            {
-                $sliceRows[$index]->{$field} = $columnRow->{$field};
-            }
-        }
-
-        foreach($sliceRows as $key => $row)
-        {
-            $sliceRow = array();
-            foreach($row as $field => $value)
-            {
-                if(strpos($field, '_slice_' . $uuName) === false) $sliceRow[$field] = $value;
-            }
-            foreach($sliceList as $field)
-            {
-                $field = $field . '_slice_' . $uuName;
-                $sliceRow[$field] = !empty($row->{$field}) ? $row->{$field} : '';
-            }
-            $sliceRows[$key] = (object)$sliceRow;
-        }
-
-        return $sliceRows;
     }
 
     /**
