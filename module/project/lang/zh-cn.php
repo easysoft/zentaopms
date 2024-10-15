@@ -448,6 +448,7 @@ $lang->project->endGreatEqualExecution  = "{$lang->projectCommon}的完成日期
 $lang->project->childLongTime        = "子{$lang->projectCommon}中有长期{$lang->projectCommon}，父{$lang->projectCommon}也应该是长期{$lang->projectCommon}";
 $lang->project->confirmUnlinkMember  = "您确定从该{$lang->projectCommon}中移除该用户吗？";
 $lang->project->stageByTips          = "按{$lang->projectCommon}创建为单套阶段，阶段关联所有{$lang->productCommon}；按{$lang->productCommon}创建为多套阶段，每套阶段关联一个{$lang->productCommon}。";
+$lang->project->confirmCloseProject  = "该{$lang->projectCommon}下还有未关闭的{$lang->executionCommon}：%s，您确定要关闭{$lang->projectCommon}吗？";
 
 $lang->project->action = new stdclass();
 $lang->project->action->managed = '$date, 由 <strong>$actor</strong> 维护。$extra' . "\n";

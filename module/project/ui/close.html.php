@@ -10,9 +10,25 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$beforeSubmit = jsRaw("() =>
+{
+    zui.Modal.confirm('{$confirmTip}').then((res) =>
+    {
+        if(res)
+        {
+            const formData = new FormData($('#zin_project_close_{$project->id}_form')[0]);
+            const url      = $('#zin_project_close_{$project->id}_form').attr('action');
+            $.ajaxSubmit({url: url, data: formData});
+        }
+    });
+    return false;
+}");
+
 modalHeader();
 formPanel
 (
+    set::formID("zin_project_close_{$project->id}_form"),
+    !empty($confirmTip) ? set::ajax(array('beforeSubmit' => $beforeSubmit)) : null,
     formGroup
     (
         set::width('1/2'),
