@@ -936,7 +936,7 @@ class docZen extends doc
         $teamLib = new stdclass();
         $teamLib->type      = 'custom';
         $teamLib->vision    = $this->config->vision;
-        $teamLib->name      = $this->lang->doc->spaceList['custom'];
+        $teamLib->name      = $this->lang->doclib->defaultSpace;
         $teamLib->acl       = 'open';
         $teamLib->addedBy   = $this->app->user->account;
         $teamLib->addedDate = helper::now();
