@@ -138,6 +138,9 @@ $libSummariesFetcher = createLink('doc', 'ajaxGetLibSummaries', 'spaceType={spac
 $uploadUrl           = createLink('file', 'ajaxUpload', 'uid={uid}&objectType={objectType}&objectID={objectID}&extra={extra}&field={field}&api={api}&onlyImage=0');
 $downloadUrl         = createLink('file', 'ajaxQuery', 'fileID={id}&objectType={objectType}&objectID={objectID}&title={title}&extra={extra}&stream=0');
 
+$homeName = false;
+if($app->moduleName == 'doc' && isset($lang->doc->spaceList[$type])) $homeName = $lang->doc->spaceList[$type];
+
 zui::docApp
 (
     set::_class('shadow rounded ring canvas'),
@@ -153,8 +156,8 @@ zui::docApp
     set::filterType($filterType),
     set::search($search),
     set::orderBy($orderBy),
-    set::homeName($lang->doc->spaceList[$type]),
     set::noSpace($noSpace),
+    set::homeName($homeName),
     set::pager(array('recTotal' => $recTotal, 'recPerPage' => $recPerPage, 'pageID' => $pageID)),
     set::fetcher($fetcher),
     set::docFetcher($docFetcher),
