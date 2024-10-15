@@ -114,6 +114,7 @@ window.changeEngine = function(event)
         if(engine == 'jenkins' || frame != 'sonarqube') items.push({'text': frameList[frame], 'value': frame});
     }
     zui.Picker.query('[name=frame]').render({items: items});
+    $('[name=frame]').zui('picker').$.setValue('');
 }
 
 window.changeRepo = function()
