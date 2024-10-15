@@ -9994,4 +9994,40 @@ class upgradeModel extends model
         }
         return !dao::isError();
     }
+
+    /**
+     * Upgrade demand files.
+     *
+     * @access public
+     * @return bool
+     */
+    public function upgradeMyDocSpace()
+    {
+        $this->loadModel('doc');
+        $this->app->loadLang('doclib');
+
+        $spacesGroup = $this->dao->select('*')->from(TABLE_DOCLIB)
+            ->where('deleted')->eq(0)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere('type')->eq('mine')
+            ->orderBy('`order` asc, id_asc')
+            ->fetchGroup('addedBy', 'id');
+
+        foreach($spacesGroup as $account => $spaces)
+        {
+            $space = new stdclass();
+            $space->type      = 'mine';
+            $space->vision    = 'rnd';
+            $space->parent    = 0;
+            $space->name      = $this->lang->doclib->defaultSpace;
+            $space->main      = '1';
+            $space->acl       = 'private';
+            $space->addedBy   = $account;
+            $space->addedDate = helper::now();
+            $spaceID = $this->doc->doInsertLib($space);
+
+            $this->dao->update(TABLE_DOCLIB)->set('parent')->eq($spaceID)->where('id')->in(array_keys($spaces))->exec();
+            $this->dao->update(TABLE_DOCLIB)->set('main')->eq(0)->where('id')->in(array_keys($spaces))->exec();
+        }
+    }
 }
