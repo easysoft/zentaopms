@@ -150,30 +150,33 @@ window.showDocBasicModal = showDocBasicModal;
  */
 function handleCreateDoc(doc, spaceID, libID, moduleID)
 {
-    const docApp    = getDocApp();
-    const spaceType = docApp.signals.spaceType.value;
-    const url       = $.createLink('doc', 'create', `objectType=${spaceType}&objectID=${Math.max(spaceID, 0)}&libID=${libID}&moduleID=${moduleID}`);
-    const docData   =
-    {
-        content    : doc.content,
-        status     : doc.status || 'normal',
-        contentType: doc.contentType,
-        type       : 'text',
-        lib        : libID,
-        module     : moduleID,
-        title      : doc.title,
-        keywords   : doc.keywords,
-        contactList: '',
-        acl        : 'private',
-        space      : spaceType,
-        uid        : doc.contentType === 'doc' ? '' : (doc.uid || `doc${doc.id}`),
-    };
-    return new Promise((resolve) =>
-    {
-        $.post(url, docData, (res) =>
+    return showDocBasicModal(0, doc.contentType).then((formData) => {
+        const docApp    = getDocApp();
+        const spaceType = docApp.signals.spaceType.value;
+        const url       = $.createLink('doc', 'create', `objectType=${spaceType}&objectID=${Math.max(spaceID, 0)}&libID=${libID}&moduleID=${moduleID}`);
+        formData = zui.createFormData(
+            zui.createFormData({
+                content    : doc.content,
+                status     : doc.status || 'normal',
+                contentType: doc.contentType,
+                type       : 'text',
+                lib        : libID,
+                module     : moduleID,
+                title      : doc.title,
+                keywords   : doc.keywords,
+                acl        : 'private',
+                space      : spaceType,
+                uid        : doc.contentType === 'doc' ? '' : (doc.uid || `doc${doc.id}`),
+            }),
+            formData
+        );
+        return new Promise((resolve) =>
         {
-            const data = JSON.parse(res);
-            resolve($.extend(doc, {id: data.id}, data.doc, {status: doc.status || data.status}));
+            $.post(url, formData, (res) =>
+            {
+                const data = JSON.parse(res);
+                resolve($.extend(doc, {id: data.id}, data.doc, {status: doc.status || data.status}));
+            });
         });
     });
 }
@@ -189,8 +192,7 @@ function handleSaveDoc(doc)
     const libID     = docApp.signals.libID.value;
     const moduleID  = docApp.signals.moduleID.value;
     const url       = $.createLink('doc', 'edit', `docID=${doc.id}`);
-    $.post(url,
-    {
+    let formData    = zui.createFormData({
         content    : doc.content,
         status     : doc.status || 'normal',
         contentType: doc.contentType,
@@ -202,8 +204,9 @@ function handleSaveDoc(doc)
         acl        : 'private',
         space      : spaceType,
         uid        : doc.contentType === 'doc' ? '' : (doc.uid || `doc${doc.id}`),
-    }, (res) => {
-        console.log('handleSaveDoc.res', res);
+    });
+    if(savingDocData[doc.id]) formData = zui.createFormData(savingDocData[doc.id], formData);
+    $.post(url, formData, (res) => {
         docApp.update('doc', doc);
     });
 }
