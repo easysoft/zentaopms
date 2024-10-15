@@ -1377,14 +1377,10 @@ class doc extends control
 
         $this->app->loadLang('file');
 
-        $this->docZen->setSpacePageStorage($type, 'all', $spaceID, $libID, $moduleID, 0);
-        $libData = $this->doc->setMenuByType($type, $spaceID, $libID);
-        if(is_string($libData)) return $this->locate($libData);
-        list($libs, $libID, $object, $objectID, $objectDropdown) = $libData;
-
         /* For product drop menu. */
-        if(in_array($type, array('product', 'project', 'execution')))
+        if($isNotDocTab && in_array($type, array('product', 'project', 'execution')))
         {
+            $this->doc->setMenuByType($type, $spaceID, $libID);
             $objectKey = $type . 'ID';
             $this->view->$objectKey = $spaceID;
         }
@@ -1404,9 +1400,8 @@ class doc extends control
         $this->view->objectType     = $type;
         $this->view->noSpace        = $noSpace;
         $this->view->objectID       = $spaceID;
-        $this->view->object         = $object;
         $this->view->users          = $this->loadModel('user')->getPairs('noclosed,noletter');
-        $this->view->title          = $type == 'custom' ? $this->lang->doc->tableContents : $object->name . $this->lang->hyphen . $this->lang->doc->tableContents;
+        $this->view->title          = isset($lang->doc->spaceList[$type]) ? $lang->doc->spaceList[$type] : $this->lang->doc->common;
         $this->display();
     }
 
