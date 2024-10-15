@@ -201,7 +201,8 @@ $lang->upgrade->fromVersions['20_4']        = '20.4';
 $lang->upgrade->fromVersions['20_5']        = '20.5';
 $lang->upgrade->fromVersions['20_6']        = '20.6';
 $lang->upgrade->fromVersions['20_7']        = '20.7';
-$lang->upgrade->fromVersions['20_7_1']      = '20.7.1'; // pms insert position.
+$lang->upgrade->fromVersions['20_7_1']      = '20.7.1';
+$lang->upgrade->fromVersions['20_8']        = '20.8'; // pms insert position.
 
 global $config;
 /* Lite. */
@@ -403,7 +404,8 @@ $lang->upgrade->fromVersions['biz10_3']         = 'Biz10.3';
 $lang->upgrade->fromVersions['biz10_4']         = 'Biz10.4';
 $lang->upgrade->fromVersions['biz10_5']         = 'Biz10.5';
 $lang->upgrade->fromVersions['biz10_6']         = 'Biz10.6';
-$lang->upgrade->fromVersions['biz10_6_1']       = 'Biz10.6.1'; // biz insert position.
+$lang->upgrade->fromVersions['biz10_6_1']       = 'Biz10.6.1';
+$lang->upgrade->fromVersions['biz10_7']         = 'Biz10.7'; // biz insert position.
 
 /* Max. */
 $lang->upgrade->fromVersions['max2_0_beta4']   = 'Max2.0.beta4';
@@ -463,7 +465,8 @@ $lang->upgrade->fromVersions['max5_3']         = 'Max5.3';
 $lang->upgrade->fromVersions['max5_4']         = 'Max5.4';
 $lang->upgrade->fromVersions['max5_5']         = 'Max5.5';
 $lang->upgrade->fromVersions['max5_6']         = 'Max5.6';
-$lang->upgrade->fromVersions['max5_6_1']       = 'Max5.6.1'; // max insert position.
+$lang->upgrade->fromVersions['max5_6_1']       = 'Max5.6.1';
+$lang->upgrade->fromVersions['max5_7']         = 'Max5.7'; // max insert position.
 
 /* Ipd */
 $lang->upgrade->fromVersions['ipd1_0_beta1']   = 'Ipd1.0.beta1';
@@ -484,4 +487,5 @@ $lang->upgrade->fromVersions['ipd2_2_0']       = 'Ipd2.2.0';
 $lang->upgrade->fromVersions['ipd2_3']         = 'Ipd2.3';
 $lang->upgrade->fromVersions['ipd2_4']         = 'Ipd2.4';
 $lang->upgrade->fromVersions['ipd2_5']         = 'Ipd2.5';
-$lang->upgrade->fromVersions['ipd2_6']         = 'Ipd2.6'; // ipd insert position.
+$lang->upgrade->fromVersions['ipd2_6']         = 'Ipd2.6';
+$lang->upgrade->fromVersions['ipd2_6_1']       = 'Ipd2.6.1'; // ipd insert position.
