@@ -98,3 +98,20 @@ $story->assignedTo->range('[]');
 $story->reviewedBy->range('[]');
 $story->reviewedDate->range('`NULL`');
 $story->closedBy->range('[]');
+$story->closedReason->range('[]');
+$story->gen(5);
+
+$storyspec = zenData('storyspec');
+$storyspec->story->range('1-5');
+$storyspec->version->range('1');
+$storyspec->title->range('需求001,需求002,需求003,需求004,需求005');
+$storyspec->gen(5);
+
+$tester = new buildLinkStoryTester();
+$tester->login();
+
+r($tester->linkStory())        && p('message,status') && e('版本关联需求成功,SUCCESS');  // 项目版本关联研发需求
+r($tester->unlinkStory())      && p('message,status') && e('单个移除需求成功,SUCCESS');  // 单个移除研发需求
+r($tester->batchUnlinkStory()) && p('message,status') && e('移除全部需求成功,SUCCESS');  // 批量移除研发需求
+
+$tester->closeBrowser();
