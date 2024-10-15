@@ -58,3 +58,4 @@ class buildLinkStoryTester extends tester
         // 断言检查移除全部需求是否成功
         return ($form->dom->finishedStoryNum === false) ? $this->success('移除全部需求成功') : $this->failed('移除全部需求失败');
     }
+}
