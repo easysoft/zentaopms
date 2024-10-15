@@ -678,6 +678,7 @@ class docModel extends model
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('templateType')->eq('')
             ->andWhere("(status = 'normal' or (status = 'draft' and addedBy='{$this->app->user->account}'))")
+            ->orderBy('`order` asc, id_asc')
             ->fetchAll('id');
 
         $docs = $this->processCollector($docs);
