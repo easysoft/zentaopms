@@ -33,7 +33,6 @@ if($type === 'project')
  * 定义文档界面上的权限。
  * Define the privs of doc app.
  */
-d($type);
 $hasCustomSpace = $type == 'mine' || $type == 'custom';
 $privs = array();
 $privs['create']       = hasPriv('doc', 'create');
