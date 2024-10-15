@@ -291,7 +291,8 @@ class jobModel extends model
             ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.server=t2.id')
             ->where('t1.id')->eq($id)
             ->fetch();
-        if(!$job || empty($job->autoRun)) return false;
+        if(!$job) return false;
+        if(($this->app->rawModule != 'job' || $this->app->rawMethod != 'exec') && !empty($job->autoRun)) return false;
 
         $repo = $this->loadModel('repo')->getByID($job->repo);
         if(!$repo) return false;
