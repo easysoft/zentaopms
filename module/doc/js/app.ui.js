@@ -2,12 +2,24 @@ let lastAppUrl            = '';
 let originalDocumentTitle = document.title;
 let documentTitleSuffix   = ' - ' + originalDocumentTitle.split(' - ').pop();
 
+/**
+ * Get doc app instance.
+ * 获取文档应用组件实例。
+ *
+ * @returns {object}
+ */
 function getDocApp()
 {
     const docApp = $('#docApp').data('zui.DocApp');
     return docApp ? docApp.$ : null;
 }
 
+/**
+ * 获取语言项，如果没有设置 key，则获取整个语言项对象，语言项定义在 module/doc/ui/app.html.php 的 $langData 中。
+ * Get language item, if key is not set, return the whole language object, language items are defined in $langData in module/doc/ui/app.html.php.
+ *
+ * @param {string} key
+ */
 function getLang(key)
 {
     const docApp = getDocApp();
@@ -15,12 +27,24 @@ function getLang(key)
     return typeof key === 'string' ? lang[key] : lang;
 }
 
+/**
+ * 检查是否有指定的权限，权限定义在 module/doc/ui/app.html.php 的 $privs 中。
+ * Check if the specified privilege exists, privileges are defined in $privs in module/doc/ui/app.html.php.
+ * @param {string} priv
+ */
 function hasPriv(priv)
 {
     const docApp = getDocApp();
     return docApp ? !!docApp.props.privs[priv] : false;
 }
 
+/**
+ * 处理对话框的操作，执行文档应用实例上的方法。
+ * Process dialog actions, execute methods on the doc app instance.
+ *
+ * @param {string|array|object} action
+ * @param {object} docApp
+ */
 function processDocAppAction(action, docApp)
 {
     docApp = docApp || getDocApp();
@@ -42,11 +66,16 @@ function processDocAppAction(action, docApp)
     if(config.debug) console.log('DocApp.action', {action, method, docApp});
 }
 
+/*
+ * 修改 Ajax 表单提交后的默认处理方法，改为处理文档应用的操作。
+ * Modify the default processing method after Ajax form submission to process the actions of the doc app.
+ */
 zui.AjaxForm.DEFAULT.onResult = function(res)
 {
     const docApp = getDocApp();
     if(docApp && res.docApp)
     {
+        /* 请求响应对象中的 docApp 属性定义了如何进行后续操作。 */
         processDocAppAction(res.docApp, docApp);
 
         delete res.docApp;
@@ -55,6 +84,15 @@ zui.AjaxForm.DEFAULT.onResult = function(res)
     }
 };
 
+/**
+ * 处理文档应用界面切换事件，修改浏览器地址栏 URL 和标题。
+ * Handle the doc app view switch event, modify the browser address bar URL and title.
+ *
+ * @param {string} mode     Doc App ui mode.
+ * @param {object} location Doc App location info.
+ * @param {object} info     Doc App view info.
+ * @returns
+ */
 function handleSwitchView(mode, location, info)
 {
     const rawModule = config.rawModule.toLowerCase();
@@ -83,6 +121,10 @@ function handleSwitchView(mode, location, info)
     lastAppUrl = url;
 }
 
+/**
+ * 处理创建文档的操作请求，向服务器发送请求并返回创建的文档对象。
+ * Handle the create doc operation request, send a request to the server and return the created doc object.
+ */
 function handleCreateDoc(doc, spaceID, libID, moduleID)
 {
     const docApp    = getDocApp();
@@ -113,6 +155,10 @@ function handleCreateDoc(doc, spaceID, libID, moduleID)
     });
 }
 
+/**
+ * 处理保存文档的操作请求，向服务器发送请求并返回保存的文档对象。
+ * Handle the save doc operation request, send a request to the server and return the saved doc object.
+ */
 function handleSaveDoc(doc)
 {
     const docApp    = getDocApp();
@@ -140,14 +186,21 @@ function handleSaveDoc(doc)
     });
 }
 
+/**
+ * 检查给定的文档是否可以进行移动操作。
+ * Check if the given doc can be moved.
+ */
 function canMoveDoc(doc)
 {
-    const docApp         = getDocApp();
-    const hasDocMovePriv = docApp.props.privs.moveDoc;
-
-    return hasDocMovePriv;
+    return getDocApp().props.privs.moveDoc;
 }
 
+/**
+ * 处理删除文档文件的请求。
+ * Handle the request to delete the doc file.
+ * @param {object} file File info object.
+ * @param {object} doc  Doc info object.
+ */
 function deleteDocFile(file, doc)
 {
     zui.Modal.confirm(getDocApp().props.lang.fileConfirmDelete).then(result =>
@@ -170,6 +223,13 @@ function deleteDocFile(file, doc)
     });
 }
 
+/**
+ * 处理重命名文件的请求。
+ * Handle the request to rename the file.
+ *
+ * @param {object} file
+ * @param {object} doc
+ */
 function renameDocFile(file, doc)
 {
     let fileName = file.title;
@@ -204,27 +264,34 @@ function renameDocFile(file, doc)
     });
 }
 
-function getDocCreateActions() {
-    return [
-        {text: '存为草稿', size: 'md', className: 'btn-wide', type: 'secondary', command: 'saveNewDoc/draft'},
-        {text: '发布', size: 'md', className: 'btn-wide', type: 'primary', command: 'saveNewDoc'},
-        {text: '取消', size: 'md', className: 'btn-wide', type: 'primary-outline', command: 'cancelCreateDoc'},
-    ];
-}
-
+/**
+ * 定义文档各个试图和 UI 元素的上的操作方法。
+ * Define the operation methods on the views and UI elements of the doc.
+ */
 const actionsMap =
 {
+    /**
+     * 定义首页的操作按钮。
+     * Define the actions on the home page.
+     *
+     * @returns {array}
+     */
     home: function()
     {
         return [
             hasPriv('createSpace') ? {icon: 'plus', btnType: 'primary', text: getLang('createSpace'), command: 'createSpace'} : null,
         ];
     },
+
+    /**
+     * 定义空间的操作按钮。
+     * Define the actions of space.
+     */
     space: function(info)
     {
         const lang  = getLang();
         const items = [];
-        const space = info.data;
+        const space = info.data; // Space info object.
         if(hasPriv('editSpace'))   items.push({text: lang.actions.editSpace, command: `editSpace/${space.id}`});
         if(hasPriv('deleteSpace')) items.push({text: lang.actions.deleteSpace, command: `deleteSpace/${space.id}`});
         if(!items.length) return;
@@ -232,11 +299,17 @@ const actionsMap =
             {type: 'dropdown', icon: 'cog-outline', square: true, caret: false, placement: info.ui === 'space-card' ? 'bottom-end' : 'top-end', items: items},
         ];
     },
+
+    /**
+     * 定义文档的操作按钮。
+     * Define the actions of doc.
+     */
     doc: function(info)
     {
         const lang = getLang();
         const doc  = info.data;
 
+        /* 侧边栏上的文档操作按钮。Doc actions in sidebar. */
         if(info.ui === 'sidebar')
         {
             return [
@@ -257,6 +330,11 @@ const actionsMap =
             moreItems.length ? {icon: 'icon-ellipsis-v', type: 'dropdown', rounded: 'lg', placement: 'bottom-end', caret: false, items: moreItems} : null,
         ];
     },
+
+    /**
+     * 定义文档库的操作按钮。
+     * Define the actions of modules.
+     */
     lib: function(info)
     {
         const lang  = getLang();
@@ -275,6 +353,11 @@ const actionsMap =
             {type: 'dropdown', icon: 'cog-outline', square: true, caret: false, placement: 'top-end', items: items},
         ];
     },
+
+    /**
+     * 定义目录的操作按钮。
+     * Define the actions on the lib page.
+     */
     module: function(info)
     {
         const lang   = getLang();
@@ -287,6 +370,11 @@ const actionsMap =
 
         return items;
     },
+
+    /**
+     * 定义文档表格操作栏的操作按钮。
+     * Define the actions on the doc table footer.
+     */
     'doc-table': function(info)
     {
         return [{
@@ -304,6 +392,11 @@ const actionsMap =
             }
         }];
     },
+
+    /**
+     * 定义文档列表的操作按钮。
+     * Define the actions on the doc list.
+     */
     'doc-list': function()
     {
         const lang           = getLang();
@@ -329,6 +422,11 @@ const actionsMap =
             items.length ? {icon: 'plus', type: 'dropdown', btnType: 'primary',  size: 'md', text: lang.create, items: items} : null,
         ];
     },
+
+    /**
+     * 定义文档编辑时的操作按钮。
+     * Define the actions on toolbar of the doc editing page.
+     */
     'doc-edit': function(info)
     {
         const doc = info.data;
@@ -339,6 +437,11 @@ const actionsMap =
             {text: lang.cancel, size: 'md', className: 'btn-wide', type: 'primary-outline', command: 'cancelEditDoc'},
         ];
     },
+
+    /**
+     * 定义文档创建时的操作按钮。
+     * Define the actions on toolbar of the doc creating page.
+     */
     'doc-create': function()
     {
         const lang = getLang();
@@ -348,6 +451,11 @@ const actionsMap =
             {text: lang.cancel, size: 'md', className: 'btn-wide', type: 'primary-outline', command: 'cancelCreateDoc'},
         ];
     },
+
+    /**
+     * 定义文件的操作按钮。
+     * Define the actions of file.
+     */
     file: function(info)
     {
         const doc     = info.doc;
@@ -371,14 +479,20 @@ function getActions(type, info)
     if(builder) return builder.call(this, info);
 }
 
+/**
+ * 定义界面操作命令。文档中的大部分操作按钮都会调用这里定义的命令。
+ * Define the UI commands. Most of the action buttons in the doc will call the commands defined here.
+ */
 const commands =
 {
+    /** 上传文档。Upload Doc. */
     uploadDoc: function()
     {
         const docApp = getDocApp();
         const url = $.createLink('doc', 'uploadDocs', `objectType=${docApp.spaceType}&objectID=${docApp.spaceID}&libID=${docApp.libID}&moduleID=${docApp.moduleID}&type=attachment`);
         zui.Modal.open({url: url});
     },
+    /** 创建 Office 文件。 Start create office file. */
     startCreateOffice: function(_, args)
     {
         const type = args[0];
@@ -568,6 +682,14 @@ const commands =
     }
 };
 
+/**
+ * 获取文档界面上的表格初始化选项。
+ * Get the table initialization options on the doc UI.
+ *
+ * @param {object} options
+ * @param {object} info
+ * @returns {object}
+ */
 function getTableOptions(options, info)
 {
     if(info.type === 'doc-list')
@@ -590,12 +712,25 @@ function getTableOptions(options, info)
     return options;
 }
 
+/**
+ * 获取文档界面上的列表筛选菜单。
+ * Get the filter menu on the doc UI.
+ *
+ * @param {string} type
+ * @returns {[key: string, text: string][]}
+ */
 function getFilterTypes(type)
 {
     if(type === 'list')  return getLang('filterTypes');
     if(type === 'files') return getLang('fileFilterTypes');
 }
 
+/**
+ * 检查文档是否符合筛选条件。
+ * Check if the doc matches the filter condition.
+ *
+ * @param {string} type
+ */
 function isMatchFilter(type, filterType, item)
 {
     if(type === 'doc')
@@ -616,6 +751,10 @@ function isMatchFilter(type, filterType, item)
     return true;
 }
 
+/**
+ * 设置文档应用组件选项。
+ * Set the doc app options.
+ */
 window.setDocAppOptions = function(_, options)
 {
     const privs      = options.privs;

@@ -10,12 +10,17 @@ declare(strict_types=1);
  */
 namespace zin;
 
+/* Define js vars. */
 jsVar('type',        $type);
 jsVar('spaceID',     $spaceID);
 jsVar('libID',       $libID);
 jsVar('moduleID',    $moduleID);
 jsVar('currentUser', $this->app->user->account);
 
+/*
+ * 定义库类型名称和图标。
+ * Define the lib types and icons.
+ */
 $libTypes = array();
 if($type === 'project')
 {
@@ -23,6 +28,10 @@ if($type === 'project')
     $libTypes[] = array('type' => 'execution', 'name' => $lang->execution->common, 'icon' => 'run');
 }
 
+/**
+ * 定义文档界面上的权限。
+ * Define the privs of doc app.
+ */
 $hasCustomSpace = $type == 'mine' || $type == 'custom';
 $privs = array();
 $privs['create']       = hasPriv('doc', 'create');
@@ -45,6 +54,10 @@ $privs['deleteModule'] = hasPriv('doc', 'deleteCatalog');
 $privs['editModule']   = hasPriv('doc', 'editCatalog');
 $privs['sortModule']   = hasPriv('doc', 'sortCatalog');
 
+/**
+ * 定义文档界面上的文件下载链接。
+ * Define the file download link for doc app.
+ */
 $sessionStr = session_name() . '=' . session_id();
 $fileUrl    = createLink('file', 'download', 'fileID={id}');
 $fileUrl   .= strpos($fileUrl, '?') === false ? '?' : '&';
@@ -90,6 +103,10 @@ $langData->batchMove             = $lang->doc->batchMove;
 $langData->filterTypes           = $lang->doc->filterTypes;
 $langData->fileFilterTypes       = $lang->doc->fileFilterTypes;
 
+/**
+ * 通过语言项定义文档表格列显示名称。
+ * Define the table columns for doc app.
+ */
 $langData->tableCols = array();
 $langData->tableCols['id']         = $lang->doc->id;
 $langData->tableCols['title']      = $lang->doc->title;
@@ -100,6 +117,17 @@ $langData->tableCols['addedDate']  = $lang->doc->addedDate;
 $langData->tableCols['editedBy']   = $lang->doc->editedBy;
 $langData->tableCols['editedDate'] = $lang->doc->editedDate;
 $langData->tableCols['actions']    = $lang->actions;
+
+/**
+ * 定义文档应用接口链接。
+ * Define the fetcher links for doc app.
+ */
+$fetcher             = createLink('doc', 'ajaxGetSpaceData', 'type={spaceType}&spaceID={spaceID}&picks={picks}');
+$docFetcher          = createLink('doc', 'ajaxGetDoc', 'docID={docID}&version={version}');
+$filesFetcher        = createLink('doc', 'ajaxGetFiles', 'type={objectType}&objectID={objectID}');
+$libSummariesFetcher = createLink('doc', 'ajaxGetLibSummaries', 'spaceType={spaceType}&spaceList={spaceList}');
+$uploadUrl           = createLink('file', 'ajaxUpload', 'uid={uid}&objectType={objectType}&objectID={objectID}&extra={extra}&field={field}&api={api}&onlyImage=0');
+$downloadUrl         = createLink('file', 'ajaxQuery', 'fileID={id}&objectType={objectType}&objectID={objectID}&title={title}&extra={extra}&stream=0');
 
 zui::docApp
 (
@@ -119,10 +147,10 @@ zui::docApp
     set::params($params),
     set::homeName($lang->doc->spaceList[$type]),
     set::pager(array('recTotal' => $recTotal, 'recPerPage' => $recPerPage, 'pageID' => $pageID)),
-    set::fetcher(createLink('doc', 'ajaxGetSpaceData', 'type={spaceType}&spaceID={spaceID}&picks={picks}')),
-    set::docFetcher(createLink('doc', 'ajaxGetDoc', 'docID={docID}&version={version}')),
-    set::filesFetcher(createLink('doc', 'ajaxGetFiles', 'type={objectType}&objectID={objectID}')),
-    set::libSummariesFetcher(createLink('doc', 'ajaxGetLibSummaries', 'spaceType={spaceType}&spaceList={spaceList}')),
+    set::fetcher($fetcher),
+    set::docFetcher($docFetcher),
+    set::filesFetcher($filesFetcher),
+    set::libSummariesFetcher($libSummariesFetcher),
     set::width('100%'),
     set::height('100%'),
     set::userMap($users),
@@ -130,8 +158,8 @@ zui::docApp
     set::privs($privs),
     set::fileUrl($fileUrl),
     set::lang($langData),
-    set::uploadUrl(createLink('file', 'ajaxUpload', 'uid={uid}&objectType={objectType}&objectID={objectID}&extra={extra}&field={field}&api={api}&onlyImage=0')),
-    set::downloadUrl(createLink('file', 'ajaxQuery', 'fileID={id}&objectType={objectType}&objectID={objectID}&title={title}&extra={extra}&stream=0')),
+    set::uploadUrl($uploadUrl),
+    set::downloadUrl($downloadUrl),
     set::sessionStr(session_name() . '=' . session_id()),
     set('$options', jsRaw('window.setDocAppOptions'))
 );
