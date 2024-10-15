@@ -16,9 +16,11 @@ if(!empty($lib->main) && $lib->type != 'mine') $defaultAcl = 'default';
 
 jsVar('doclibID', $lib->id);
 jsVar('libType', $libType);
+
+$isSpace = ($lib->type == 'custom' || $lib->type == 'mine') && $lib->parent == 0;
 modalHeader
 (
-    set::title($lib->type == 'custom' && $lib->parent == 0 ? $lang->doclib->editSpace : $lang->doc->editLib),
+    set::title($isSpace ? $lang->doclib->editSpace : $lang->doc->editLib),
     set::entityID($lib->id),
     set::entityText($lib->name),
 );
@@ -37,7 +39,7 @@ formPanel
     formHidden('execution', $lib->execution),
     formGroup
     (
-        set::label($lib->type == 'custom' && $lib->parent == 0 ? $lang->doclib->spaceName : $lang->doc->libName),
+        set::label($isSpace ? $lang->doclib->spaceName : $lang->doc->libName),
         set::name('name'),
         set::value($lib->name),
         radioList
@@ -50,7 +52,7 @@ formPanel
     ),
     formRow
     (
-        ($lib->type == 'custom' && $lib->parent == 0) ? setClass('hidden') : null,
+        $isSpace ? setClass('hidden') : null,
         setID('aclBox'),
         formGroup
         (
