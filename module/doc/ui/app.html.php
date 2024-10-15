@@ -22,6 +22,7 @@ if($type === 'project')
     $libTypes[] = array('type' => 'execution', 'name' => $lang->execution->common, 'icon' => 'run');
 }
 
+$hasCustomSpace = $type == 'mine' || $type == 'custom';
 $privs = array();
 $privs['create']       = hasPriv('doc', 'create');
 $privs['edit']         = hasPriv('doc', 'edit');
@@ -35,9 +36,9 @@ $privs['moveLib']      = hasPriv('doc', 'moveLib');
 $privs['deleteLib']    = hasPriv('doc', 'deleteLib');
 $privs['sortDocLib']   = hasPriv('doc', 'sortDocLib');
 $privs['exportFiles']  = hasPriv('doc', 'exportFiles');
-$privs['createSpace']  = ($type == 'mine' || $type == 'custom') && hasPriv('doc', 'createSpace');
-$privs['deleteSpace']  = hasPriv('doc', 'deleteSpace');
-$privs['editSpace']    = hasPriv('doc', 'editLib');
+$privs['createSpace']  = $hasCustomSpace && hasPriv('doc', 'createSpace');
+$privs['deleteSpace']  = $hasCustomSpace && hasPriv('doc', 'deleteSpace');
+$privs['editSpace']    = $hasCustomSpace && hasPriv('doc', 'editLib');
 $privs['addModule']    = hasPriv('doc', 'addCatalog');
 $privs['deleteModule'] = hasPriv('doc', 'deleteCatalog');
 $privs['editModule']   = hasPriv('doc', 'editCatalog');
