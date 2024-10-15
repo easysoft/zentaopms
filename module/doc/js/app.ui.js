@@ -196,11 +196,9 @@ function renameDocFile(file, doc)
             load: false,
             onComplete: (res) =>
             {
-                if(res && typeof res === 'object')
-                {
-                    const updatedFile = $.extend({}, file, {title: extension ? `${fileName}.${extension}` : fileName, extension}, res.id ? res : {});
-                    getDocApp().update('doc', $.extend({}, doc, {files: doc.files.map(f => f.id === file.id ? updatedFile : f)}));
-                }
+                if(!res || typeof res !== 'object') return;
+                const updatedFile = $.extend({}, file, {title: extension ? `${fileName}.${extension}` : fileName, extension}, res.id ? res : {});
+                getDocApp().update('doc', $.extend({}, doc, {files: doc.files.map(f => f.id === file.id ? updatedFile : f)}));
             }
         });
     });
@@ -216,10 +214,10 @@ function getDocCreateActions() {
 
 const actionsMap =
 {
-    home: function(info)
+    home: function()
     {
         return [
-            hasPriv('createSpace') ? {icon: 'cube', btnType: 'primary', text: getLang('createSpace'), command: 'createSpace'} : null,
+            hasPriv('createSpace') ? {icon: 'plus', btnType: 'primary', text: getLang('createSpace'), command: 'createSpace'} : null,
         ];
     },
     space: function(info)
@@ -227,7 +225,7 @@ const actionsMap =
         const lang  = getLang();
         const items = [];
         const space = info.data;
-        if(hasPriv('editSpace')) items.push({text: lang.actions.editSpace, command: `editSpace/${space.id}`});
+        if(hasPriv('editSpace'))   items.push({text: lang.actions.editSpace, command: `editSpace/${space.id}`});
         if(hasPriv('deleteSpace')) items.push({text: lang.actions.deleteSpace, command: `deleteSpace/${space.id}`});
         if(!items.length) return;
         return [
@@ -236,8 +234,8 @@ const actionsMap =
     },
     doc: function(info)
     {
-        const lang      = getLang();
-        const doc       = info.data;
+        const lang = getLang();
+        const doc  = info.data;
 
         if(info.ui === 'sidebar')
         {
