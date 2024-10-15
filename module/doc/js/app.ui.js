@@ -502,7 +502,7 @@ const commands =
         $.ajaxSubmit(
         {
             confirm: getLang('confirmDeleteModule'),
-            url:     $.createLink('doc', 'editCatalog', `moduleID=${moduleID}&type=doc`),
+            url:     $.createLink('doc', 'deleteCatalog', `moduleID=${moduleID}`),
             load:    false,
             onSuccess: function()
             {
