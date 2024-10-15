@@ -397,6 +397,8 @@ class projectTao extends projectModel
         $product->createdVersion = $this->config->version;
         $product->vision         = zget($project, 'vision', 'rnd');
 
+        if($this->config->edition != 'open') $product->workflowGroup = $this->dao->select('id')->from(TABLE_WORKFLOWGROUP)->where('code')->eq('productproject')->fetch('id');
+
         $this->app->loadLang('product');
         $this->dao->insert(TABLE_PRODUCT)->data($product)
             ->check('name', 'notempty')
