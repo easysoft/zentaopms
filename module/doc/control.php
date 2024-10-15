@@ -1429,6 +1429,8 @@ class doc extends control
         $doc->privs   = array('edit' => common::hasPriv('doc', 'edit', $doc));
         $doc->editors = $this->doc->getEditors($docID);
 
+        if($docID) $this->doc->createAction($docID, 'view');
+
         $this->send($doc);
     }
 
