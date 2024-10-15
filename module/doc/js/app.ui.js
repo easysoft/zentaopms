@@ -596,19 +596,40 @@ function getFilterTypes(type)
     if(type === 'files') return getLang('fileFilterTypes');
 }
 
+function isMatchFilter(type, filterType, item)
+{
+    if(type === 'doc')
+    {
+        if (filterType === 'createdByMe') {
+            return item.addedBy === currentUser;
+        }
+        if (filterType === 'editedByMe') {
+            return item.editedBy === currentUser;
+        }
+        if (filterType === 'draft') {
+            return item.status === 'draft';
+        }
+        if (filterType === 'collected') {
+            return item.isCollector;
+        }
+    }
+    return true;
+}
+
 window.setDocAppOptions = function(_, options)
 {
     const privs      = options.privs;
     const newOptions =
     {
-        commands       : commands,
-        onCreateDoc    : privs.create ? handleCreateDoc: null,
-        onSaveDoc      : privs.edit ? handleSaveDoc    : null,
-        canMoveDoc     : canMoveDoc,
-        onSwitchView   : handleSwitchView,
-        getActions     : getActions,
-        getTableOptions: getTableOptions,
-        getFilterTypes : getFilterTypes,
+        commands        : commands,
+        onCreateDoc     : privs.create ? handleCreateDoc: null,
+        onSaveDoc       : privs.edit ? handleSaveDoc    : null,
+        canMoveDoc      : canMoveDoc,
+        onSwitchView    : handleSwitchView,
+        getActions      : getActions,
+        getTableOptions : getTableOptions,
+        getFilterTypes  : getFilterTypes,
+        isMatchFilter   : isMatchFilter,
     };
     return newOptions;
 };

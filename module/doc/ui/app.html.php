@@ -10,10 +10,11 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('type',     $type);
-jsVar('spaceID',  $spaceID);
-jsVar('libID',    $libID);
-jsVar('moduleID', $moduleID);
+jsVar('type',        $type);
+jsVar('spaceID',     $spaceID);
+jsVar('libID',       $libID);
+jsVar('moduleID',    $moduleID);
+jsVar('currentUser', $this->app->user->account);
 
 $libTypes = array();
 if($type === 'project')
