@@ -38,3 +38,23 @@ class buildLinkStoryTester extends tester
         $form->dom->alertModal(); // 模态框中点击确定
         $form->wait(2);
         $linkNumAfter = $form->dom->finishedStoryNum->getText(); // 记录移除需求后版本关联的需求数量
+        // 断言检查单个移除需求是否成功
+        return ($linkNumAfter == $linkNumBefore - 1) ? $this->success('单个移除需求成功') : $this->failed('单个移除需求失败');
+    }
+
+    /**
+     * unlink all story of project build.
+     * 移除全部需求
+     *
+     * @return object
+     */
+    public function batchUnlinkStory()
+    {
+        $form = $this->initForm('projectbuild', 'view', array('buildID' => 1), 'appIframe-project');
+        $form->wait(1);
+        $form->dom->allFinishedStoryBtn->click(); // 全选需求
+        $form->dom->batchUnlinkBtn->click(); // 点击批量移除按钮
+        $form->wait(2);
+        // 断言检查移除全部需求是否成功
+        return ($form->dom->finishedStoryNum === false) ? $this->success('移除全部需求成功') : $this->failed('移除全部需求失败');
+    }
