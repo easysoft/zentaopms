@@ -349,6 +349,7 @@ class doc extends control
                 ->setDefault('editedBy', $this->app->user->account)
                 ->get();
 
+            $docData->acl = $objectType == 'mine' ? 'private' : 'open';
             $docResult = $this->doc->create($docData, $this->post->labels);
             if(!$docResult || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->docZen->responseAfterCreate($docData->lib, $docResult);
