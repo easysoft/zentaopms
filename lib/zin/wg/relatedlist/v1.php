@@ -93,6 +93,7 @@ class relatedList extends wg
             $items[] = array
             (
                 'title'   => $title,
+                'hint'    => $title,
                 'items'   => $groupItems,
                 'content' => $showCount ? array('html' => '<span class="label gray-pale rounded-full size-sm">' . count($groupItems) . '</span>') : null
             );
