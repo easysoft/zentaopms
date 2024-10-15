@@ -61,11 +61,10 @@ class file extends control
      * @param string $extra
      * @param string $field
      * @param bool   $api
-     * @param bool   $onlyImage
      * @access public
      * @return void
      */
-    public function ajaxUpload(string $uid = '', string $objectType = '', int $objectID = 0, string $extra = '', string $field = 'imgFile', bool $api = false, bool $onlyImage = true)
+    public function ajaxUpload(string $uid = '', string $objectType = '', int $objectID = 0, string $extra = '', string $field = 'imgFile', bool $api = false)
     {
         $file = $this->file->getUpload($field);
 
