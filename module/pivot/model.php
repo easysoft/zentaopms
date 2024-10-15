@@ -995,7 +995,8 @@ class pivotModel extends model
     public function columnStatistics(array $records, string $statistic, string $field): mixed
     {
         $values = array_column($records, $field);
-        $numericValues = array_map(function($value) {
+        $numericValues = array_map(function($value)
+        {
             return is_numeric($value) ? floatval($value) : 0;
         }, $values);
 
@@ -1295,7 +1296,7 @@ class pivotModel extends model
         foreach($row as $cell)
         {
             if(!isset($cell['percentage'])) continue;
-            list(,,$showMode,, $columnKey) = $cell['percentage'];
+            list(,,,, $columnKey) = $cell['percentage'];
             if(!isset($rowTotal[$columnKey])) $rowTotal[$columnKey] = 0;
             $rowTotal[$columnKey] += $cell['value'];
         }
@@ -1438,7 +1439,8 @@ class pivotModel extends model
      */
     public function filterRecords(array $records, string $field, string $value): array
     {
-        return array_filter($records, function($record) use ($field, $value) {
+        return array_filter($records, function($record) use ($field, $value)
+        {
             return $record->$field == $value;
         });
     }
@@ -1640,7 +1642,7 @@ class pivotModel extends model
         foreach($records as $record)
         {
             $arrayValue = false;
-            foreach($record as $colKey => $cell)
+            foreach($record as $cell)
             {
                 if(is_array($cell['value'])) $arrayValue = $cell['value'];
             }
@@ -1711,13 +1713,8 @@ class pivotModel extends model
 
         if(empty($records)) return array($data, array());
 
-        foreach($settings['columns'] as $columnIndex => $columnSetting)
+        foreach($settings['columns'] as $columnSetting)
         {
-            $columnShowOrigin = (bool)zget($columnSetting, 'showOrigin', 0);
-            $columnStat       = $columnSetting['stat'];
-            $columnField      = $columnSetting['field'];
-            $columnSlice      = zget($columnSetting, 'slice', 'noSlice');
-
             $cols = $this->getTableHeader($records, $columnSetting, $fields, $cols, $sql, $langs, $driver);
         }
 
