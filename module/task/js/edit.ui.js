@@ -350,8 +350,25 @@ window.statusChange = function(target)
     let assignedToItems = JSON.parse(JSON.stringify($assignedToPicker.options.items));
     if(status == 'closed')
     {
+        for(let i = 0; i < assignedToItems.length; i++)
+        {
+            if(assignedToItems[i].value == 'closed') hasClosed = true;
+        }
+        if(!hasClosed) assignedToItems.push({key: "closed", keys: "closed c", text : "Closed", value : 'closed'});
+        $assignedToPicker.render({items: assignedToItems, disabled: true});
+        $assignedToPicker.$.setValue('closed');
     }
     else
     {
+        for(let i = 0; i < assignedToItems.length; i++)
+        {
+            if(assignedToItems[i].value == 'closed')
+            {
+                assignedToItems.splice(i, 1);
+
+                $assignedToPicker.render({items: assignedToItems, disabled: false});
+                $assignedToPicker.$.setValue('');
+            }
+        }
     }
 }
