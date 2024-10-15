@@ -25,6 +25,7 @@ class think3c extends thinkModel
     {
         global $lang;
 
+        if($step->options->enableOther == 'on') array_push($step->options->fields, 'other');
         $unselectedOptions = array_diff($step->options->fields, $step->answer->result);
         $showOptions       = !empty($step->link['selectedBlock']) && $step->link['selectedBlock'] == $blockID ? $step->answer->result :  $unselectedOptions;
 
@@ -42,7 +43,7 @@ class think3c extends thinkModel
         );
     }
 
-    protected function buildMulticolumnContent(object $step, int $blockID): array
+    protected function buildMulticolumnContent(object $step): array
     {
         global $lang;
 
@@ -88,13 +89,14 @@ class think3c extends thinkModel
             }
             elseif($step->link['showMethod'] == '1')
             {
-                $resultCard = $this->buildMulticolumnContent($step, $key);
+                $resultCard = $this->buildMulticolumnContent($step);
             }
             else
             {
                 $resultCard = $this->buildOptionsContent($step, $key);
             }
-            if(!empty($resultCard)) $questionList[] = div(setClass('w-64 bg-canvas overflow-y-auto scrollbar-thin p-2 shadow card hidden absolute', "in_area-{$key}", $className), $resultCard);
+            $blockIndex = $key - 1;
+            if(!empty($resultCard)) $questionList[] = div(setClass('w-64 bg-canvas overflow-y-auto scrollbar-thin p-2 shadow card hidden absolute', "in_area-{$blockIndex}", $className), $resultCard);
         }
         return $questionList;
     }
@@ -107,7 +109,7 @@ class think3c extends thinkModel
         $area   = array();
         foreach($blocks as $block)
         {
-            if(!empty($block->steps)) $area[] = $this->buildResultCard($block->steps, $block->id);
+            if(!empty($block->steps)) $area[] = $this->buildResultCard($block->steps, $block->id + 1);
         }
         return $area;
     }
@@ -115,6 +117,7 @@ class think3c extends thinkModel
     protected function buildBody(): node
     {
         global $lang, $app;
+        $app->loadLang('thinkrun');
 
         list($blocks, $mode, $disabled, $key) = $this->prop(array('blocks', 'mode', 'disabled', 'key'));
         jsVar('blockName', $lang->thinkwizard->placeholder->blockName);
