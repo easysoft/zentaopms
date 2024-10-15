@@ -13,6 +13,9 @@ namespace zin;
 
 include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
 
+$params = $app->getParams();
+array_shift($params);
+jsVar('createParams', http_build_query($params));
 jsVar('tab', $this->app->tab);
 if($app->tab == 'execution') jsVar('objectID', $executionID);
 if($app->tab == 'project')   jsVar('objectID', $projectID);
@@ -34,5 +37,6 @@ formGridPanel
     set::loadUrl(helper::createLink('testcase', 'create', "productID={product}&branch={branch}&moduleID={module}")),
     !empty($gobackLink) ? set::backUrl($gobackLink) : null,
     on::change('#story', 'changeStory'),
+    on::change('[name=product]', 'loadProduct'),
     on::click('#auto', 'checkScript'),
 );
