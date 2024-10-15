@@ -1366,30 +1366,40 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function app(string $type = 'mine', int $spaceID = 0, int $libID = 0, int $moduleID = 0, int $docID = 0, string $mode = 'list', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $filterType = '', string $search = '', string $params = '')
+    public function app(string $type = 'mine', int $spaceID = 0, int $libID = 0, int $moduleID = 0, int $docID = 0, string $mode = 'list', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $filterType = '', string $search = '', bool $noSpace = false)
     {
         $this->app->loadLang('file');
 
-        $menuType = $type == 'mine' ? 'my' : ($type == 'custom' ? 'team' : $type);
-        $this->lang->doc->menu->{$menuType}['alias'] .= ',' . $this->app->rawMethod;
+        $this->docZen->setSpacePageStorage($type, 'all', $spaceID, $libID, $moduleID, 0);
+        $libData = $this->doc->setMenuByType($type, $spaceID, $libID);
+        if(is_string($libData)) return $this->locate($libData);
+        list($libs, $libID, $object, $objectID, $objectDropdown) = $libData;
 
-        $this->view->type         = $type;
-        $this->view->spaceID      = $spaceID;
-        $this->view->libID        = $libID;
-        $this->view->moduleID     = $moduleID;
-        $this->view->docID        = $docID;
-        $this->view->mode         = $mode;
-        $this->view->filterType   = $filterType;
-        $this->view->search       = $search;
-        $this->view->recTotal     = $recTotal;
-        $this->view->recPerPage   = $recPerPage;
-        $this->view->pageID       = $pageID;
-        $this->view->orderBy      = $orderBy;
-        $this->view->params       = $params;
-        $this->view->users        = $this->loadModel('user')->getPairs('noclosed,noletter');
-        $this->view->activeMenuID = $menuType;
+        /* For product drop menu. */
+        if(in_array($type, array('product', 'project', 'execution')))
+        {
+            $objectKey = $type . 'ID';
+            $this->view->$objectKey = $spaceID;
+        }
 
-        if(empty($this->view->title)) $this->view->title = $this->lang->doc->spaceList[$type];
+        $this->view->type           = $type;
+        $this->view->spaceID        = $spaceID;
+        $this->view->libID          = $libID;
+        $this->view->moduleID       = $moduleID;
+        $this->view->docID          = $docID;
+        $this->view->mode           = $mode;
+        $this->view->filterType     = $filterType;
+        $this->view->search         = $search;
+        $this->view->recTotal       = $recTotal;
+        $this->view->recPerPage     = $recPerPage;
+        $this->view->pageID         = $pageID;
+        $this->view->orderBy        = $orderBy;
+        $this->view->objectType     = $type;
+        $this->view->noSpace        = $noSpace;
+        $this->view->objectID       = $spaceID;
+        $this->view->object         = $object;
+        $this->view->users          = $this->loadModel('user')->getPairs('noclosed,noletter');
+        $this->view->title          = $type == 'custom' ? $this->lang->doc->tableContents : $object->name . $this->lang->hyphen . $this->lang->doc->tableContents;
         $this->display();
     }
 
