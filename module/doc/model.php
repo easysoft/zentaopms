@@ -1082,10 +1082,11 @@ class docModel extends model
      * Get team spaces or my spaces.
      *
      * @param  string $type all|mine|custom
+     * @param  bool   $withType
      * @access public
      * @return array
      */
-    public function getSubSpacesByType(string $type = 'all'): array
+    public function getSubSpacesByType(string $type = 'all', bool $withType = false): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getSubSpaces($type);
 
@@ -1107,7 +1108,12 @@ class docModel extends model
                 unset($objectLibs[$key]);
                 continue;
             }
-            if($this->checkPrivLib($lib)) $pairs[$lib->id] = $type == 'all' ? $this->lang->doc->spaceList[$lib->type] . '/' . $lib->name : $lib->name;
+
+            if($this->checkPrivLib($lib))
+            {
+                $key = $withType ? "{$lib->type}.{$lib->id}" : $lib->id;
+                $pairs[$key] = $type == 'all' ? $this->lang->doc->spaceList[$lib->type] . '/' . $lib->name : $lib->name;
+            }
         }
 
         return $pairs;
