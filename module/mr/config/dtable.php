@@ -1,5 +1,6 @@
 <?php
 global $lang, $app;
+if(empty($app->rawModule)) $app->rawModule = 'mr';
 
 $config->mr->dtable = new stdclass();
 
