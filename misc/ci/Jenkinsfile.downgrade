@@ -91,7 +91,7 @@ pipeline {
                   sh 'mkdir -pv ${ZENTAO_RELEASE_PATH} && chown 1000:1000 ${ZENTAO_RELEASE_PATH}'
                   sh 'make ciCommon'
                   
-                  withCredentials([gitUsernamePassword(credentialsId: 'git-zcorp-cc-jenkins-bot-http', gitToolName: 'Default')]) {
+                  withCredentials([gitUsernamePassword(credentialsId: 'gitfox-zcorp-cc-ci-robot', gitToolName: 'Default')]) {
                     sh '${ZENTAO_BUILD_PATH}/script/downgrade/fullDowngrade_v2.sh -c $PWD/misc -r $PWD/zentaopms -b ${GIT_BRANCH} -d downRepo -i -s -g $GIT_COMMIT -o "$ZENTAO_RELEASE_PATH" -p "$DOWNGRADE_VERSIONS" api extension framework lib module/*'
                   }
                   sh 'ls -l $ZENTAO_RELEASE_PATH'
@@ -137,7 +137,7 @@ pipeline {
                   sh 'git config --global --add safe.directory $SRC_ZENTAOEXT_PATH/zentaoipd'
                   sh 'cd $SRC_ZENTAOEXT_PATH;make build'
                   
-                  withCredentials([gitUsernamePassword(credentialsId: 'git-zcorp-cc-jenkins-bot-http', gitToolName: 'Default')]) {
+                  withCredentials([gitUsernamePassword(credentialsId: 'gitfox-zcorp-cc-ci-robot', gitToolName: 'Default')]) {
                     sh '${ZENTAO_BUILD_PATH}/script/downgrade/fullDowngrade_v2.sh -c $PWD/misc -r $ZENTAO_BUILD_PATH/zentaoext -b ${GIT_BRANCH} -d downRepoExt -i -s -g $GIT_COMMIT -o "$ZENTAO_RELEASE_PATH" -p "$DOWNGRADE_VERSIONS" bizext biz max ipd'
                   }
                   sh 'ls -l $ZENTAO_RELEASE_PATH'
