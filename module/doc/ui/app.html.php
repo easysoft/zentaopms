@@ -71,6 +71,7 @@ $fileUrl   .= $sessionStr;
 $langData = new stdclass();
 $langData->cancel                = $lang->cancel;
 $langData->export                = $lang->export;
+$langData->settings              = $lang->settings;
 $langData->filePreview           = $lang->file->preview;
 $langData->fileDownload          = $lang->file->download;
 $langData->fileDelete            = $lang->file->delete;

@@ -1,6 +1,7 @@
 let lastAppUrl            = '';
 let originalDocumentTitle = document.title;
 let documentTitleSuffix   = ' - ' + originalDocumentTitle.split(' - ').pop();
+const savingDocData       = {};
 
 /**
  * Get doc app instance.
@@ -154,20 +155,21 @@ function handleCreateDoc(doc, spaceID, libID, moduleID)
         const spaceType = docApp.signals.spaceType.value;
         const url       = $.createLink('doc', 'create', `objectType=${spaceType}&objectID=${Math.max(spaceID, 0)}&libID=${libID}&moduleID=${moduleID}`);
         formData = zui.createFormData(
-        {
-            content    : doc.content,
-            status     : doc.status || 'normal',
-            contentType: doc.contentType,
-            type       : 'text',
-            lib        : libID,
-            module     : moduleID,
-            title      : doc.title,
-            keywords   : doc.keywords,
-            contactList: '',
-            acl        : 'private',
-            space      : spaceType,
-            uid        : doc.contentType === 'doc' ? '' : (doc.uid || `doc${doc.id}`),
-        }, formData);
+            zui.createFormData({
+                content    : doc.content,
+                status     : doc.status || 'normal',
+                contentType: doc.contentType,
+                type       : 'text',
+                lib        : libID,
+                module     : moduleID,
+                title      : doc.title,
+                keywords   : doc.keywords,
+                acl        : 'private',
+                space      : spaceType,
+                uid        : doc.contentType === 'doc' ? '' : (doc.uid || `doc${doc.id}`),
+            }),
+            formData
+        );
         return new Promise((resolve) =>
         {
             $.post(url, formData, (res) =>
@@ -190,8 +192,7 @@ function handleSaveDoc(doc)
     const libID     = docApp.signals.libID.value;
     const moduleID  = docApp.signals.moduleID.value;
     const url       = $.createLink('doc', 'edit', `docID=${doc.id}`);
-    formData = zui.createFormData(
-    {
+    let formData    = zui.createFormData({
         content    : doc.content,
         status     : doc.status || 'normal',
         contentType: doc.contentType,
@@ -200,11 +201,11 @@ function handleSaveDoc(doc)
         module     : moduleID,
         title      : doc.title,
         keywords   : doc.keywords,
-        contactList: '',
         acl        : 'private',
         space      : spaceType,
         uid        : doc.contentType === 'doc' ? '' : (doc.uid || `doc${doc.id}`),
-    }, formData);
+    });
+    if(savingDocData[doc.id]) formData = zui.createFormData(savingDocData[doc.id], formData);
     $.post(url, formData, (res) => {
         docApp.update('doc', doc);
     });
@@ -454,11 +455,14 @@ const actionsMap =
     'doc-edit': function(info)
     {
         const doc = info.data;
+        if(!doc) return;
+
         const lang = getLang();
         return [
             doc.status === 'draft' ? {text: lang.saveDraft, size: 'md', className: 'btn-wide', type: 'secondary', command: 'saveDoc/draft'} : null,
             {text: lang.release, size: 'md', className: 'btn-wide', type: 'primary', command: 'saveDoc'},
             {text: lang.cancel, size: 'md', className: 'btn-wide', type: 'primary-outline', command: 'cancelEditDoc'},
+            {text: lang.settings, size: 'md', type: 'ghost', command: `showDocSettingModal/${doc.id}/${doc.contentType}`, icon: 'cog-outline'},
         ];
     },
 
@@ -703,6 +707,16 @@ const commands =
         }
 
         zui.Modal.open({url: url, size: 'sm'});
+    },
+    showDocSettingModal: function(_, args)
+    {
+        const docApp   = getDocApp();
+        const doc      = docApp.doc;
+        const docID    = args[0] || doc.id;
+        const docType  = args[1] || doc.contentType;
+        showDocBasicModal(docID, docType).then(formData => {
+            savingDocData[docID] = formData;
+        });
     }
 };
 
