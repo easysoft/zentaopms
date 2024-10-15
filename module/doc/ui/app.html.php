@@ -56,6 +56,7 @@ $privs['addModule']    = hasPriv('doc', 'addCatalog');
 $privs['deleteModule'] = hasPriv('doc', 'deleteCatalog');
 $privs['editModule']   = hasPriv('doc', 'editCatalog');
 $privs['sortModule']   = hasPriv('doc', 'sortCatalog');
+$privs['sortDoc']      = hasPriv('doc', 'sortDoc');
 
 /**
  * 定义文档界面上的文件下载链接。
@@ -107,6 +108,7 @@ $langData->release               = $lang->doc->release;
 $langData->batchMove             = $lang->doc->batchMove;
 $langData->filterTypes           = $lang->doc->filterTypes;
 $langData->fileFilterTypes       = $lang->doc->fileFilterTypes;
+$langData->sortDoc               = $lang->doc->sortDoc;
 
 /**
  * 通过语言项定义文档表格列显示名称。

@@ -791,6 +791,83 @@ function isMatchFilter(type, filterType, item)
 }
 
 /**
+ * 将 [key, ...] 形式的顺序列表转换为 {key: order, ...} 形式。
+ * Convert the order list in the form of [key, ...] to {key: order, ...}.
+ *
+ * @param {number[]} orders
+ * @returns {object}
+ */
+function formatOrders(orders)
+{
+    const orderedKeys = Array.from(orders).sort();
+    return orders.reduce((map, key, index) =>
+    {
+        map[key] = orderedKeys[index];
+        return map;
+    }, {});
+}
+
+/**
+ * 对文档条目进行排序。
+ * Sort the doc items.
+ *
+ * @param {string}       type   'doc' | 'module' | 'lib' | 'space'
+ * @param {object|array} orders {key: order, ...} | [key, ...]
+ */
+function sortItems(type, orders)
+{
+    if(Array.isArray(orders)) orders = formatOrders(orders);
+
+    const sortMethods = {doc: 'sortDoc', module: 'sortCatalog'};
+    if(!sortMethods[type]) return console.error(`[DocApp] Invalid sort type: ${type}`);
+
+    const url = $.createLink('doc', sortMethods[type]);
+    return $.ajaxSubmit({url, data: {orders: JSON.stringify(orders)}});
+}
+
+/**
+ * 获取界面上条目排序选项。
+ * Get the sortable options on the doc UI.
+ *
+ * @param {string} type 'doc' | 'doc-module' | 'module' | 'lib' | 'space'
+ */
+function getSortableOptions(type)
+{
+    if(type === 'doc-module' && (hasPriv('sortDocLib') || hasPriv('sortDoc')))
+    {
+        return {
+            sortable: {handle: '.sort-handler'},
+            canSortTo: function(event)
+            {
+                let fromKey = event.dragged.getAttribute('z-key-path');
+                let toKey = event.related.getAttribute('z-key-path');
+                if(!fromKey || !toKey) return false;
+                fromKey = fromKey.split(':').pop();
+                toKey = toKey.split(':').pop();
+                const fromType = fromKey[0] === 'm' ? 'module' : 'doc';
+                const toType = toKey[0] === 'm' ? 'module' : 'doc';
+                if (fromType !== toType) return false;
+                return true;
+            },
+            onSort: function(event, orders)
+            {
+                const fromKey = event.item.getAttribute('z-key-path');
+                if(!fromKey || !orders.length) return;
+                const fromType = fromKey[0] === 'm' ? 'module' : 'doc';
+                const orderedList = [];
+                orders.forEach((key, index) => {
+                    const keyType = key[0] === 'm' ? 'module' : 'doc';
+                    if(keyType !== fromType) return;
+                    if(fromType === 'module') key = key.substring(1);
+                    orderedList.push(+key);
+                });
+                sortItems(fromType, orderedList);
+            }
+        }
+    }
+}
+
+/**
  * 设置文档应用组件选项。
  * Set the doc app options.
  */
@@ -799,15 +876,16 @@ window.setDocAppOptions = function(_, options)
     const privs      = options.privs;
     const newOptions =
     {
-        commands        : commands,
-        onCreateDoc     : privs.create ? handleCreateDoc: null,
-        onSaveDoc       : privs.edit ? handleSaveDoc    : null,
-        canMoveDoc      : canMoveDoc,
-        onSwitchView    : handleSwitchView,
-        getActions      : getActions,
-        getTableOptions : getTableOptions,
-        getFilterTypes  : getFilterTypes,
-        isMatchFilter   : isMatchFilter,
+        commands          : commands,
+        onCreateDoc       : privs.create ? handleCreateDoc: null,
+        onSaveDoc         : privs.edit ? handleSaveDoc    : null,
+        canMoveDoc        : canMoveDoc,
+        onSwitchView      : handleSwitchView,
+        getActions        : getActions,
+        getTableOptions   : getTableOptions,
+        getFilterTypes    : getFilterTypes,
+        isMatchFilter     : isMatchFilter,
+        getSortableOptions: getSortableOptions,
     };
     return newOptions;
 };
