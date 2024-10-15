@@ -357,14 +357,17 @@ class jobModel extends model
         if(strpos($job->triggerType, 'tag') !== false) $pipeline->PARAM_TAG = $job->lastTag;
 
         /* Add custom parameters to the data. */
-        foreach(json_decode($job->customParam) as $paramName => $paramValue)
+        if(!empty($job->customParam))
         {
-            $paramValue = str_replace('$zentao_version',  $this->config->version, $paramValue);
-            $paramValue = str_replace('$zentao_account',  $this->app->user->account, $paramValue);
-            $paramValue = str_replace('$zentao_product',  (string)$job->product, $paramValue);
-            $paramValue = str_replace('$zentao_repopath', $repo->path, $paramValue);
+            foreach(json_decode($job->customParam) as $paramName => $paramValue)
+            {
+                $paramValue = str_replace('$zentao_version',  $this->config->version, $paramValue);
+                $paramValue = str_replace('$zentao_account',  $this->app->user->account, $paramValue);
+                $paramValue = str_replace('$zentao_product',  (string)$job->product, $paramValue);
+                $paramValue = str_replace('$zentao_repopath', $repo->path, $paramValue);
 
-            $pipeline->$paramName = $paramValue;
+                $pipeline->$paramName = $paramValue;
+            }
         }
 
         foreach($extraParam as $paramName => $paramValue)
