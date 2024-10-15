@@ -9994,4 +9994,79 @@ class upgradeModel extends model
         }
         return !dao::isError();
     }
+
+    /**
+     * Process object relations.
+     * 将系统内原有关联关系合并到relation表中：需求关联需求、bug关联bug、用例关联用例、问题关联风险、风险关联问题.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processObjectRelation()
+    {
+        /* Process story link story. */
+        $linkedtoStories = $this->dao->select('*')->from(TABLE_RELATION)
+            ->where('AType')->in('story,requirement,epic')
+            ->andWhere('relation')->eq('linkedto')
+            ->andWhere('BType')->in('story,requirement,epic')
+            ->fetchAll('id');
+        foreach($linkedtoStories as $story)
+        {
+            $relation = new stdClass();
+            $relation->AType    = $story->AType;
+            $relation->AID      = $story->AID;
+            $relation->relation = 1;
+            $relation->BType    = $story->BType;
+            $relation->BID      = $story->BID;
+            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+        }
+
+        /* Process bug link bug. */
+        $linkedBugs = $this->dao->select('id,relatedBug')->from(TABLE_BUG)->where('relatedBug')->ne('')->fetchPairs();
+        foreach($linkedBugs as $bugID => $relatedBugs)
+        {
+            foreach(explode(',', ",{$relatedBugs},") as $relatedBugID)
+            {
+                if(empty($relatedBugID)) continue;
+                $relation = new stdClass();
+                $relation->AType    = 'bug';
+                $relation->AID      = $bugID;
+                $relation->relation = 1;
+                $relation->BType    = 'bug';
+                $relation->BID      = $relatedBugID;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
+        }
+
+        /* Process case link case. */
+        $linkedCases = $this->dao->select('id,linkCase')->from(TABLE_CASE)->where('linkCase')->ne('')->fetchPairs();
+        foreach($linkedCases as $caseID => $relatedCases)
+        {
+            foreach(explode(',', ",{$relatedCases},") as $relatedCaseID)
+            {
+                if(empty($relatedCaseID)) continue;
+                $relation = new stdClass();
+                $relation->AType    = 'testcase';
+                $relation->AID      = $caseID;
+                $relation->relation = 1;
+                $relation->BType    = 'testcase';
+                $relation->BID      = $relatedCaseID;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
+        }
+
+        /* Process issue link risk. */
+        $riskIssues = $this->dao->select('*')->from(TABLE_RISKISSUE)->fetchAll();
+        foreach($riskIssues as $riskIssueList)
+        {
+            $relation = new stdClass();
+            $relation->AType    = 'issue';
+            $relation->AID      = $riskIssueList->issue;
+            $relation->relation = 1;
+            $relation->BType    = 'risk';
+            $relation->BID      = $riskIssueList->risk;
+            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+        }
+        return true;
+    }
 }

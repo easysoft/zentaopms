@@ -147,7 +147,7 @@ if($twins)
 
 if(!in_array($config->vision, array('lite', 'or')))
 {
-    $tabs[] = setting()
+    $tabs['linkStories'] = setting()
         ->group('relatives')
         ->title($lang->story->linkStories)
         ->control('linkedStoryList')
