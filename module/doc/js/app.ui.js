@@ -23,7 +23,7 @@ function getDocApp()
 function getLang(key)
 {
     const docApp = getDocApp();
-    const lang = docApp ? docApp.props.lang : {};
+    const lang = docApp ? docApp.props.langData : {};
     return typeof key === 'string' ? lang[key] : lang;
 }
 
@@ -203,7 +203,7 @@ function canMoveDoc(doc)
  */
 function deleteDocFile(file, doc)
 {
-    zui.Modal.confirm(getDocApp().props.lang.fileConfirmDelete).then(result =>
+    zui.Modal.confirm(getLang('fileConfirmDelete')).then(result =>
     {
         if(!result) return;
 
@@ -235,7 +235,7 @@ function renameDocFile(file, doc)
     let fileName = file.title;
     let extension = file.extension;
     if(extension && fileName.endsWith(`.${extension}`)) fileName = fileName.substring(0, fileName.length - extension.length - 1);
-    zui.Modal.prompt({message: getDocApp().props.lang.fileRename, defaultValue: fileName, placeholder: fileName}).then(newName =>
+    zui.Modal.prompt({message: getLang('fileRename'), defaultValue: fileName, placeholder: fileName}).then(newName =>
     {
         if(!newName) return;
 
@@ -462,7 +462,7 @@ const actionsMap =
         const file    = info.data;
         const docApp  = getDocApp();
         const privs   = docApp.props.privs;
-        const lang    = docApp.props.lang;
+        const lang    = getLang();
         const canEdit = privs.edit && (!doc.privs || doc.privs.edit !== false);
         return [
             {'data-toggle': 'modal', 'data-size': 'lg', url: $.createLink('file', 'download', `fileID=${file.id}&mouse=left`), hint: lang.filePreview, icon: 'eye'},

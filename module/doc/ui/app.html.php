@@ -157,7 +157,7 @@ zui::docApp
     set::currentUser($this->app->user->account),
     set::privs($privs),
     set::fileUrl($fileUrl),
-    set::lang($langData),
+    set::langData($langData),
     set::uploadUrl($uploadUrl),
     set::downloadUrl($downloadUrl),
     set::sessionStr(session_name() . '=' . session_id()),
