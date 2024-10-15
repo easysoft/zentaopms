@@ -121,36 +121,60 @@ function handleSwitchView(mode, location, info)
     lastAppUrl = url;
 }
 
+function showDocBasicModal(docID, docType)
+{
+    const spaceType = getDocApp().spaceType;
+    const spaceID   = getDocApp().spaceID;
+    const libID     = getDocApp().libID;
+    const moduleID  = getDocApp().moduleID;
+    const url       = $.createLink('doc', 'setDocBasic', `objectType=${spaceType}&objectID=${spaceID}&libID=${libID}&moduleID=${moduleID}&docID=${docID || 0}&docType=${docType || 'doc'}`);
+    zui.Modal.open({url: url});
+    return new Promise((resolve) => {
+        window.docBasicModalResolver = resolve;
+    });
+}
+
+window.beforeSetDocBasicInfo = function(_, form)
+{
+    if (window.docBasicModalResolver) window.docBasicModalResolver(new FormData(form));
+    zui.Modal.query('#setDocBasicForm').hide();
+    return false;
+};
+
+window.showDocBasicModal = showDocBasicModal;
+
 /**
  * 处理创建文档的操作请求，向服务器发送请求并返回创建的文档对象。
  * Handle the create doc operation request, send a request to the server and return the created doc object.
  */
 function handleCreateDoc(doc, spaceID, libID, moduleID)
 {
-    const docApp    = getDocApp();
-    const spaceType = docApp.signals.spaceType.value;
-    const url       = $.createLink('doc', 'create', `objectType=${spaceType}&objectID=${Math.max(spaceID, 0)}&libID=${libID}&moduleID=${moduleID}`);
-    const docData   =
-    {
-        content    : doc.content,
-        status     : doc.status || 'normal',
-        contentType: doc.contentType,
-        type       : 'text',
-        lib        : libID,
-        module     : moduleID,
-        title      : doc.title,
-        keywords   : doc.keywords,
-        contactList: '',
-        acl        : 'private',
-        space      : spaceType,
-        uid        : doc.contentType === 'doc' ? '' : (doc.uid || `doc${doc.id}`),
-    };
-    return new Promise((resolve) =>
-    {
-        $.post(url, docData, (res) =>
+    return showDocBasicModal(0, doc.contentType).then((formData) => {
+        const docApp    = getDocApp();
+        const spaceType = docApp.signals.spaceType.value;
+        const url       = $.createLink('doc', 'create', `objectType=${spaceType}&objectID=${Math.max(spaceID, 0)}&libID=${libID}&moduleID=${moduleID}`);
+        formData = zui.createFormData(
         {
-            const data = JSON.parse(res);
-            resolve($.extend(doc, {id: data.id}, data.doc, {status: doc.status || data.status}));
+            content    : doc.content,
+            status     : doc.status || 'normal',
+            contentType: doc.contentType,
+            type       : 'text',
+            lib        : libID,
+            module     : moduleID,
+            title      : doc.title,
+            keywords   : doc.keywords,
+            contactList: '',
+            acl        : 'private',
+            space      : spaceType,
+            uid        : doc.contentType === 'doc' ? '' : (doc.uid || `doc${doc.id}`),
+        }, formData);
+        return new Promise((resolve) =>
+        {
+            $.post(url, formData, (res) =>
+            {
+                const data = JSON.parse(res);
+                resolve($.extend(doc, {id: data.id}, data.doc, {status: doc.status || data.status}));
+            });
         });
     });
 }
@@ -166,7 +190,7 @@ function handleSaveDoc(doc)
     const libID     = docApp.signals.libID.value;
     const moduleID  = docApp.signals.moduleID.value;
     const url       = $.createLink('doc', 'edit', `docID=${doc.id}`);
-    $.post(url,
+    formData = zui.createFormData(
     {
         content    : doc.content,
         status     : doc.status || 'normal',
@@ -180,8 +204,8 @@ function handleSaveDoc(doc)
         acl        : 'private',
         space      : spaceType,
         uid        : doc.contentType === 'doc' ? '' : (doc.uid || `doc${doc.id}`),
-    }, (res) => {
-        console.log('handleSaveDoc.res', res);
+    }, formData);
+    $.post(url, formData, (res) => {
         docApp.update('doc', doc);
     });
 }
@@ -800,3 +824,30 @@ window.beforeRequestContent = function(options)
 
     return false;
 };
+
+window.loadExecutions = function(e)
+{
+    const projectElement   = officeTypes.includes(docType) ? '.projectBox input[name="project"]': '#modalBasicInfo input[name="project"]';
+    const executionElement = officeTypes.includes(docType) ? '.executionBox input[name="execution"]': '#modalBasicInfo input[name="execution"]';
+    const projectID        = $(projectElement).val();
+    if($(executionElement))
+    {
+        const executionID = $(executionElement).val();
+        const link        = $.createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&mode=multiple,leaf,noprefix");
+        $.getJSON(link, function(data)
+        {
+            let $picker = $(executionElement).zui('picker');
+            $picker.render({items: data.items, disabled: !data.multiple});
+            $picker.$.setValue(executionID);
+        });
+    }
+
+    const link = $.createLink('doc', 'ajaxGetModules', 'objectType=project&objectID=' + projectID + '&type=doc');
+    $.getJSON(link, function(data)
+    {
+        const moduleElement = officeTypes.includes(docType) ? '.moduleBox input[name="module"]': '#modalBasicInfo input[name="module"]';
+        const $picker = $(moduleElement).zui('picker');
+        $picker.render({items: data});
+        $picker.$.setValue('');
+    });
+}

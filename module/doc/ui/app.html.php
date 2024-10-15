@@ -16,6 +16,7 @@ jsVar('spaceID',     $spaceID);
 jsVar('libID',       $libID);
 jsVar('moduleID',    $moduleID);
 jsVar('currentUser', $this->app->user->account);
+jsVar('officeTypes', $this->config->doc->officeTypes);
 
 /*
  * 定义库类型名称和图标。
