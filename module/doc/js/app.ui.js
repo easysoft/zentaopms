@@ -782,18 +782,10 @@ function isMatchFilter(type, filterType, item)
 {
     if(type === 'doc')
     {
-        if (filterType === 'createdByMe') {
-            return item.addedBy === currentUser;
-        }
-        if (filterType === 'editedByMe') {
-            return item.editedBy === currentUser;
-        }
-        if (filterType === 'draft') {
-            return item.status === 'draft';
-        }
-        if (filterType === 'collected') {
-            return item.isCollector;
-        }
+        if(filterType === 'createdByMe') return item.addedBy === currentUser;
+        if(filterType === 'editedByMe')  return item.editedBy === currentUser;
+        if(filterType === 'draft')       return item.status === 'draft';
+        if(filterType === 'collect')     return item.isCollector;
     }
     return true;
 }
