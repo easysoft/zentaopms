@@ -56,6 +56,7 @@ $privs['addModule']    = hasPriv('doc', 'addCatalog');
 $privs['deleteModule'] = hasPriv('doc', 'deleteCatalog');
 $privs['editModule']   = hasPriv('doc', 'editCatalog');
 $privs['sortModule']   = hasPriv('doc', 'sortCatalog');
+$privs['sortDoclib']   = hasPriv('doc', 'sortDoclib');
 $privs['sortDoc']      = hasPriv('doc', 'sortDoc');
 
 /**
@@ -109,6 +110,7 @@ $langData->batchMove             = $lang->doc->batchMove;
 $langData->filterTypes           = $lang->doc->filterTypes;
 $langData->fileFilterTypes       = $lang->doc->fileFilterTypes;
 $langData->sortCatalog           = $lang->doc->sortCatalog;
+$langData->sortDoclib            = $lang->doc->sortDoclib;
 $langData->sortDoc               = $lang->doc->sortDoc;
 
 /**

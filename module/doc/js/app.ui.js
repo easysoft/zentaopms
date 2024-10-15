@@ -378,7 +378,13 @@ const actionsMap =
         if(hasPriv('deleteLib')) items.push({text: lang.actions.deleteLib, command: `deleteLib/${lib.id}`});
 
         if(!items.length) return;
-        if(info.ui === 'sidebar') return items;
+        if(info.ui === 'sidebar')
+        {
+            return [
+                hasPriv('sortDoclib') ? {icon: 'move cursor-move', className: 'sort-handler', hint: lang.sortDoclib, size: 'xs'} : null,
+                items.length ? {icon: 'ellipsis-v', caret: false, placement: 'bottom-end', size: 'xs', items: items} : null,
+            ];
+        }
 
         return [
             {type: 'dropdown', icon: info.ui === 'space-card' ? 'ellipsis-v' : 'cog-outline', square: true, caret: false, placement: info.ui === 'space-card' ? 'bottom-end' : 'top-end', items: items},
@@ -810,12 +816,12 @@ function isMatchFilter(type, filterType, item)
  * @param {number[]} orders
  * @returns {object}
  */
-function formatOrders(orders)
+function formatOrders(orders, useIndex)
 {
-    const orderedKeys = Array.from(orders).sort();
+    const orderedKeys = useIndex ? [] : Array.from(orders).sort();
     return orders.reduce((map, key, index) =>
     {
-        map[key] = orderedKeys[index];
+        map[key] = useIndex ? index : orderedKeys[index];
         return map;
     }, {});
 }
@@ -829,9 +835,9 @@ function formatOrders(orders)
  */
 function sortItems(type, orders)
 {
-    if(Array.isArray(orders)) orders = formatOrders(orders);
+    if(Array.isArray(orders)) orders = formatOrders(orders, type === 'lib');
 
-    const sortMethods = {doc: 'sortDoc', module: 'sortCatalog'};
+    const sortMethods = {doc: 'sortDoc', module: 'sortCatalog', lib: 'sortDoclib'};
     if(!sortMethods[type]) return console.error(`[DocApp] Invalid sort type: ${type}`);
 
     const url = $.createLink('doc', sortMethods[type]);
@@ -846,32 +852,33 @@ function sortItems(type, orders)
  */
 function getSortableOptions(type)
 {
-    if(type === 'doc-module' && (hasPriv('sortDocLib') || hasPriv('sortDoc')))
+    const canSortDocModule = hasPriv('sortModule') || hasPriv('sortDoc');
+    if((type === 'doc-module' && canSortDocModule) || (type === 'lib' && hasPriv('sortDoclib')))
     {
+        const getItemType = (key) => key[0] === 'm' ? 'module' : (key[0] === 'l' ? 'lib' : 'doc');
         return {
             sortable: {handle: '.sort-handler'},
             canSortTo: function(event)
             {
-                let fromKey = event.dragged.getAttribute('z-key-path');
-                let toKey = event.related.getAttribute('z-key-path');
+                let fromKey = event.dragged.getAttribute('z-key');
+                let toKey = event.related.getAttribute('z-key');
                 if(!fromKey || !toKey) return false;
-                fromKey = fromKey.split(':').pop();
-                toKey = toKey.split(':').pop();
-                const fromType = fromKey[0] === 'm' ? 'module' : 'doc';
-                const toType = toKey[0] === 'm' ? 'module' : 'doc';
+                const fromType = getItemType(fromKey);
+                const toType = getItemType(toKey);
+                console.log(fromType, toType);
                 if (fromType !== toType) return false;
                 return true;
             },
             onSort: function(event, orders)
             {
-                const fromKey = event.item.getAttribute('z-key-path');
+                const fromKey = event.item.getAttribute('z-key');
                 if(!fromKey || !orders.length) return;
-                const fromType = fromKey[0] === 'm' ? 'module' : 'doc';
+                const fromType = getItemType(fromKey);
                 const orderedList = [];
                 orders.forEach((key, index) => {
-                    const keyType = key[0] === 'm' ? 'module' : 'doc';
+                    const keyType = getItemType(key);
                     if(keyType !== fromType) return;
-                    if(fromType === 'module') key = key.substring(1);
+                    if(fromType !== 'doc') key = key.substring(1);
                     orderedList.push(+key);
                 });
                 sortItems(fromType, orderedList);

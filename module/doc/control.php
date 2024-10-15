@@ -1051,10 +1051,13 @@ class doc extends control
     {
         if($_POST)
         {
-            foreach($_POST['orders'] as $id => $order) $this->doc->updateDoclibOrder($id, (int)$order);
+            $orders = $_POST['orders'];
+            if(is_string($orders)) $orders = json_decode($orders, true);
+
+            foreach($orders as $id => $order) $this->doc->updateDoclibOrder($id, (int)$order);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success'));
+            return $this->send(array('result' => 'success', 'orders' => $orders));
         }
     }
 
