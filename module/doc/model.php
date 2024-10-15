@@ -1213,6 +1213,11 @@ class docModel extends model
             $pairs   = $this->loadModel('project')->getPairsByProgram();
             $spaceID = $this->project->checkAccess($spaceID, $pairs);
         }
+        if($type === 'execution' && $spaceID)
+        {
+            $execution = $this->loadModel('execution')->getByID($spaceID);
+            $pairs     = array($execution->id => $execution->name);
+        }
 
         $spaces = array();
         foreach($pairs as $id => $name) $spaces[] = array('type' => $type, 'id' => $id, 'name' => $name);
