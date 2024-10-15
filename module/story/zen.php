@@ -1196,8 +1196,7 @@ class storyZen extends story
      */
     protected function buildStoryForCreate(int $executionID, int $bugID, string $storyType = 'story'): object|false
     {
-        $fields       = $this->config->story->form->create;
-        $editorFields = array_keys(array_filter(array_map(function($config){return $config['control'] == 'editor';}, $fields)));
+        $fields = $this->config->story->form->create;
         foreach(explode(',', trim($this->config->{$storyType}->create->requiredFields, ',')) as $field) $fields[$field]['required'] = true;
         if(!isset($_POST['plan'])) $this->config->story->create->requiredFields = str_replace(',plan,', ',', ",{$this->config->story->create->requiredFields},");
         if(!empty($_POST['modules']) && !empty($fields['module']['required']))
@@ -1231,7 +1230,7 @@ class storyZen extends story
         /* Need and force review, then set status to reviewing. */
         if($storyData->status != 'draft' and $this->story->checkForceReview($storyType) and !$this->post->needNotReview) $storyData->status = 'reviewing';
 
-        return $this->loadModel('file')->processImgURL($storyData, $editorFields, $this->post->uid);
+        return $this->loadModel('file')->processImgURL($storyData, $this->config->story->editor->create['id'], $this->post->uid);
     }
 
     /**
@@ -1271,10 +1270,8 @@ class storyZen extends story
             ->fetch('hasProduct');
         $_POST['product'] = (!empty($hasProduct) && !$hasProduct) ? $oldStory->product : $this->post->product;
 
-        $now          = helper::now();
-        $fields       = $this->config->story->form->edit;
-        $editorFields = array_keys(array_filter(array_map(function($config){return $config['control'] == 'editor';}, $fields)));
-
+        $now       = helper::now();
+        $fields    = $this->config->story->form->edit;
         $storyData = form::data($fields, $storyID)
             ->add('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)
@@ -1312,7 +1309,7 @@ class storyZen extends story
             $storyData->module = 0;
         }
 
-        return $this->loadModel('file')->processImgURL($storyData, $editorFields, $this->post->uid);
+        return $this->loadModel('file')->processImgURL($storyData, $this->config->story->editor->edit['id'], $this->post->uid);
     }
 
     /**
@@ -1335,10 +1332,9 @@ class storyZen extends story
         if(!$this->post->needNotReview and empty($_POST['reviewer'])) dao::$errors['reviewer'] = $this->lang->story->errorEmptyReviewedBy;
         if(dao::isError()) return false;
 
-        $now          = helper::now();
-        $fields       = $this->config->story->form->change;
-        $editorFields = array_keys(array_filter(array_map(function($config){return $config['control'] == 'editor';}, $fields)));
-        $story        = form::data($fields, $storyID)
+        $now    = helper::now();
+        $fields = $this->config->story->form->change;
+        $story  = form::data($fields, $storyID)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('deleteFiles', array())
             ->setDefault('lastEditedDate', $now)
@@ -1369,7 +1365,7 @@ class storyZen extends story
         }
 
         if(!isset($_POST['relievedTwins'])) unset($story->relievedTwins);
-        return $this->loadModel('file')->processImgURL($story, $editorFields, $this->post->uid);
+        return $this->loadModel('file')->processImgURL($story, $this->config->story->editor->change['id'], $this->post->uid);
     }
 
     /**
@@ -1486,7 +1482,6 @@ class storyZen extends story
             return false;
         }
 
-        $editorFields = array_keys(array_filter(array_map(function($config){return $config['control'] == 'editor';}, $fields)));
         $result       = $this->post->result;
         $closedReason = $this->post->closedReason;
         $storyData    = form::data($fields, $storyID)
@@ -1503,7 +1498,7 @@ class storyZen extends story
         if($result == 'reject' && $closedReason == 'duplicate' && empty($storyData->duplicateStory)) dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->story->duplicateStory);
         if(dao::isError()) return false;
 
-        return $this->loadModel('file')->processImgURL($storyData, $editorFields, $this->post->uid);
+        return $this->loadModel('file')->processImgURL($storyData, $this->config->story->editor->review['id'], $this->post->uid);
     }
 
     /**

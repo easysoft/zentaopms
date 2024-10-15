@@ -907,6 +907,7 @@ class fileModel extends model
     {
         $moduleName = $this->app->getModuleName();
         $methodName = $this->app->getMethodName();
+        if($moduleName == 'story' && isset($data->type)) $moduleName = $data->type;
         if(is_string($fields)) $fields = explode(',', str_replace(' ', '', $fields));
 
         $textareaFields = $this->dao->select('id,field')->from(TABLE_WORKFLOWFIELD)->where('module')->eq($moduleName)->andWhere('control')->eq('richtext')->andWhere('buildin')->eq('0')->fetchPairs();

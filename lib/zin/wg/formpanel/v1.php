@@ -78,6 +78,7 @@ class formPanel extends panel
         global $app;
         $moduleName = $app->getModuleName();
         if($moduleName == 'caselib') $moduleName = 'lib';
+        if($moduleName == 'productplan') $moduleName = 'plan';
         if($moduleName == 'flow') return data('data');
         return data($moduleName);
     }

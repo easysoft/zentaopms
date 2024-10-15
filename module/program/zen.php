@@ -39,7 +39,6 @@ class programZen extends program
         $fields = $this->config->program->form->create;
         if($this->post->longTime) $fields['end']['skipRequired'] = true;
 
-        $editorFields = array_keys(array_filter(array_map(function($config){return $config['control'] == 'editor';}, $fields)));
         foreach(explode(',', trim($this->config->program->create->requiredFields, ',')) as $field)
         {
             if($field == 'end') continue;
@@ -57,7 +56,7 @@ class programZen extends program
             ->join('whitelist', ',')
             ->get();
 
-        return $this->loadModel('file')->processImgURL($program, $editorFields, $this->post->uid);
+        return $this->loadModel('file')->processImgURL($program, $this->config->program->editor->create['id'], $this->post->uid);
     }
 
     /**
@@ -74,7 +73,6 @@ class programZen extends program
         $fields     = $this->config->program->form->edit;
         if($this->post->longTime) $fields['end']['skipRequired'] = true;
 
-        $editorFields = array_keys(array_filter(array_map(function($config){return $config['control'] == 'editor';}, $fields)));
         foreach(explode(',', trim($this->config->program->edit->requiredFields, ',')) as $field)
         {
             if($field == 'end') continue;
@@ -94,7 +92,7 @@ class programZen extends program
             ->join('whitelist', ',')
             ->get();
 
-        return $this->loadModel('file')->processImgURL($program, $editorFields, $this->post->uid);
+        return $this->loadModel('file')->processImgURL($program, $this->config->program->editor->edit['id'], $this->post->uid);
     }
 
     protected function removeSubjectToCurrent(array $parents, int $programID): array
