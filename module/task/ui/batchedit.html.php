@@ -33,6 +33,7 @@ formBatchPanel
     set::onRenderRow(jsRaw('renderRowData')),
     set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'batchEditFields')),
     set::ajax(array('beforeSubmit' =>  jsRaw('clickSubmit'))),
+    on::change('[data-name="status"]', 'statusChange'),
     set::formID('taskBatchEditForm' . $executionID),
     formBatchItem
     (

@@ -30,6 +30,7 @@ window.renderRowData = function($row, index, row)
     {
         disabled = true;
     }
+    if(row.status == 'closed') disabled = true;
 
     if(row.assignedTo && taskMembers[row.assignedTo] == undefined) taskMembers[row.assignedTo] = users[row.assignedTo];
     for(let account in taskMembers) taskUsers.push({value: account, text: taskMembers[account]});
@@ -106,3 +107,19 @@ window.clickSubmit = async function(e)
     });
     return false;
 };
+
+window.statusChange = function(event)
+{
+    const $currentTr        = $(event.target).closest('tr');
+    const status            = $(event.target).val();
+    const $assignedToPicker = $currentTr.find('[name^=assignedTo]').zui('picker');
+
+    let hasClosed       = false;
+    let assignedToItems = JSON.parse(JSON.stringify($assignedToPicker.options.items));
+    if(status == 'closed')
+    {
+    }
+    else
+    {
+    }
+}
