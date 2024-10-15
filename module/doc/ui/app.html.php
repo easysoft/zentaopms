@@ -108,6 +108,7 @@ $langData->release               = $lang->doc->release;
 $langData->batchMove             = $lang->doc->batchMove;
 $langData->filterTypes           = $lang->doc->filterTypes;
 $langData->fileFilterTypes       = $lang->doc->fileFilterTypes;
+$langData->sortCatalog           = $lang->doc->sortCatalog;
 $langData->sortDoc               = $lang->doc->sortDoc;
 
 /**

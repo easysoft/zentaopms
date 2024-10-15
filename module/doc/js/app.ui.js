@@ -394,6 +394,14 @@ const actionsMap =
         if(hasPriv('editModule')) items.push({text: lang.actions.editModule, command: `editModule/${module.id}`});
         if(hasPriv('deleteModule')) items.push({text: lang.actions.delModule, command: `deleteModule/${module.id}`});
 
+        if(info.ui === 'sidebar')
+        {
+            return [
+                hasPriv('sortModule') ? {icon: 'move cursor-move', className: 'sort-handler', hint: lang.sortLib, size: 'xs'} : null,
+                items.length ? {icon: 'ellipsis-v', caret: false, placement: 'bottom-end', size: 'xs', items: items} : null,
+            ];
+        }
+
         return items;
     },
 
