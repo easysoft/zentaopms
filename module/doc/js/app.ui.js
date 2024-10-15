@@ -341,7 +341,7 @@ const actionsMap =
         const items = [];
         const lib   = info.data;
 
-        if(hasPriv('addModule')) items.push({text: lang.actions.addModule, command: `addModule/${lib.id}/0/${lib.id}/child`});
+        if(hasPriv('addModule') && info.ui !== 'space-card') items.push({text: lang.actions.addModule, command: `addModule/${lib.id}/0/${lib.id}/child`});
         if(hasPriv('editLib'))   items.push({text: lang.actions.editLib, command: `editLib/${lib.id}`});
         if(hasPriv('moveLib'))   items.push({text: lang.moveTo, command: `moveLib/${lib.id}`});
         if(hasPriv('deleteLib')) items.push({text: lang.actions.deleteLib, command: `deleteLib/${lib.id}`});
@@ -350,7 +350,7 @@ const actionsMap =
         if(info.ui === 'sidebar') return items;
 
         return [
-            {type: 'dropdown', icon: 'cog-outline', square: true, caret: false, placement: 'top-end', items: items},
+            {type: 'dropdown', icon: info.ui === 'space-card' ? 'ellipsis-v' : 'cog-outline', square: true, caret: false, placement: info.ui === 'space-card' ? 'bottom-end' : 'top-end', items: items},
         ];
     },
 
