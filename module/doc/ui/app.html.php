@@ -139,7 +139,7 @@ $uploadUrl           = createLink('file', 'ajaxUpload', 'uid={uid}&objectType={o
 $downloadUrl         = createLink('file', 'ajaxQuery', 'fileID={id}&objectType={objectType}&objectID={objectID}&title={title}&extra={extra}&stream=0');
 
 $homeName = false;
-if($app->moduleName == 'doc' && isset($lang->doc->spaceList[$type])) $homeName = $lang->doc->spaceList[$type];
+if($app->moduleName == 'doc' && isset($lang->doc->spaceList[$type]) && !$noSpace) $homeName = $lang->doc->spaceList[$type];
 
 zui::docApp
 (
