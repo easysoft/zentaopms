@@ -568,22 +568,51 @@ const commands =
     }
 };
 
+function getTableOptions(options, info)
+{
+    if(info.type === 'doc-list')
+    {
+        const lang      = getLang();
+        const tableCols = lang.tableCols;
+        options.cols.forEach(col =>
+        {
+            if(typeof tableCols[col.name] === 'string') col.title = tableCols[col.name];
+            if(col.name === 'actions' && col.actionsMap)
+            {
+                const actionHints = {edit: lang.editDoc, move: lang.moveDoc, delete: lang.deleteDoc};
+                $.each(col.actionsMap, (key, value) =>
+                {
+                    if(typeof actionHints[key] === 'string') value.hint = actionHints[key];
+                });
+            }
+        });
+    }
+    return options;
+}
+
 window.setDocAppOptions = function(_, options)
 {
-    const privs          = options.privs;
-    const canCustomSpace = options.spaceType === 'custom' || options.spaceType === 'mine';
-    const newOptions     =
+    const privs      = options.privs;
+    const newOptions =
     {
-        commands      : commands,
-        onCreateDoc   : privs.create ? handleCreateDoc : null,
-        onSaveDoc     : privs.edit ? handleSaveDoc : null,
-        canMoveDoc    : canMoveDoc,
-        onSwitchView  : handleSwitchView,
-        getActions    : getActions,
+        commands       : commands,
+        onCreateDoc    : privs.create ? handleCreateDoc: null,
+        onSaveDoc      : privs.edit ? handleSaveDoc    : null,
+        canMoveDoc     : canMoveDoc,
+        onSwitchView   : handleSwitchView,
+        getActions     : getActions,
+        getTableOptions: getTableOptions
     };
     return newOptions;
 };
 
+/**
+ * 拦截 ZIN 请求，直接切换到对应的视图。
+ * Intercept ZIN request and switch directly to the target view.
+ *
+ * @param {{url: string}} options
+ * @returns {boolean}
+ */
 window.beforeRequestContent = function(options)
 {
     const url              = $.parseLink(options.url);

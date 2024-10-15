@@ -87,6 +87,17 @@ $langData->saveDraft             = $lang->doc->saveDraft;
 $langData->release               = $lang->doc->release;
 $langData->batchMove             = $lang->doc->batchMove;
 
+$langData->tableCols = array();
+$langData->tableCols['id']         = $lang->doc->id;
+$langData->tableCols['title']      = $lang->doc->title;
+$langData->tableCols['collects']   = $lang->doc->docCollects;
+$langData->tableCols['views']      = $lang->doc->views;
+$langData->tableCols['addedBy']    = $lang->doc->addedBy;
+$langData->tableCols['addedDate']  = $lang->doc->addedDate;
+$langData->tableCols['editedBy']   = $lang->doc->editedBy;
+$langData->tableCols['editedDate'] = $lang->doc->editedDate;
+$langData->tableCols['actions']    = $lang->actions;
+
 zui::docApp
 (
     set::_class('shadow rounded ring canvas'),
