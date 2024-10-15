@@ -18,8 +18,12 @@ class viewPage extends page
             'submitReviewSave' => "//*[@type='submit']",
             'subReviewerBtn'   => "//*[@id='reviewer']",
             'subReviewer'      => "/html/body/div[3]/div/menu/menu/li[2]/a/div",
+            /*关联的业需和用需*/
             'firLinkStories'   => "//*[@id='mainContainer']/div/div/div[2]/div[2]/div[2]/div[2]/div/ul/li[2]/div/div",
             'secLinkStories'   => "//*[@id='mainContainer']/div/div/div[2]/div[2]/div[2]/div[2]/div/ul/li[4]/div/div",
+            /*变更父需求后后子需求确认变更按钮*/
+            'okBtn'            => "//*[@id='table-story-children']/div[2]/div[3]/div/div//nav/a",
+            'childStatus'      => "//*[@id='table-story-children']/div[2]/div[2]/div/div[3]/div/span",
             /*关联需求页面*/
             'searchBox'        => "//*[@type='submit']",
             'selectAll'        => "//*[@id='linkStories']/div[3]/div[1]/div"

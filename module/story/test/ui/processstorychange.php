@@ -58,3 +58,16 @@ $action->product->range('`,1,`');
 $action->project->range('0');
 $action->execution->range('0');
 $action->actor->range('admin');
+$action->action->range('opened');
+$action->read->range('0');
+$action->vision->range('rnd');
+$action->gen(3);
+
+$action = zenData('storyreview');
+$action->gen(0);
+
+$tester = new processStoryChangeTester();
+$tester->login();
+
+r($tester->processStoryChange('变更父需求')) && p('message,status') && e('确认需求变更成功,SUCCESS');
+$tester->closeBrowser();
