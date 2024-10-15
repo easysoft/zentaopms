@@ -1685,7 +1685,7 @@ class docModel extends model
     }
 
     /**
-     * 获取制定类型各个子空间文档库概要信息。
+     * 获取指定类型各个子空间文档库概要信息。
      * Get doclib summary of each sub space.
      *
      * @param  string $type
@@ -1712,8 +1712,8 @@ class docModel extends model
         $docs = $this->dao->select("`id`,`addedBy`,`type`,`lib`,`acl`,`users`,`groups`,`status`")->from(TABLE_DOC)
             ->where('lib')->in($libIDList)
             ->andWhere('deleted')->eq(0)
-            ->andWhere('module')->eq(0)
             ->fetchAll();
+
         foreach($docs as $doc)
         {
             if(!$this->checkPrivDoc($doc)) continue;
