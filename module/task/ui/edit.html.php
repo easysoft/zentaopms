@@ -283,7 +283,8 @@ detailBody
                             set::value($task->assignedTo),
                             set::items($assignedToOptions),
                             !empty($task->team) ? set::required(true) : null,
-                            !empty($task->team) && $task->mode == 'linear' && !in_array($task->status, array('done', 'closed')) ? set::disabled(true) : null
+                            !empty($task->team) && $task->mode == 'linear' && !in_array($task->status, array('done', 'closed')) ? set::disabled(true) : null,
+                            $task->status == 'closed' ? set::disabled(true) : null,
                         )
                     ),
                     div
@@ -315,6 +316,7 @@ detailBody
                 set::name($lang->task->status),
                 picker
                 (
+                    on::change()->do('statusChange(target)'),
                     set::name('status'),
                     set::value($task->status),
                     set::items($statusOptions),

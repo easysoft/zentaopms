@@ -340,3 +340,18 @@ window.clickSubmit = async function(e)
     });
     return false;
 };
+
+window.statusChange = function(target)
+{
+    const status            = $(target).val();
+    const $assignedToPicker = $('[name=assignedTo]').zui('picker');
+
+    let hasClosed       = false;
+    let assignedToItems = JSON.parse(JSON.stringify($assignedToPicker.options.items));
+    if(status == 'closed')
+    {
+    }
+    else
+    {
+    }
+}
