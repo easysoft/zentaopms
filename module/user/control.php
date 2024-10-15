@@ -716,7 +716,14 @@ class user extends control
         /* 处理登录逻辑。*/
         /* Process login. */
         $result = $this->userZen->login($this->referer, $viewType, $loginLink, $denyLink, $locateReferer, $locateWebRoot);
-        if($result) return $this->send($result);
+        if($result)
+        {
+            /* Clean output buffer. Remove error message. Ensure that JSON can be parsed. */
+            $obLevel = ob_get_level();
+            for($i = 0; $i < $obLevel; $i++) ob_end_clean();
+
+            return $this->send($result);
+        }
 
         helper::setcookie('tab', '', time());
         $loginExpired = !(preg_match("/(m=|\/)(index)(&f=|-)(index)(&|-|\.)?/", strtolower($this->referer), $output) || $this->referer == $this->config->webRoot || empty($this->referer) || preg_match("/\/www\/$/", strtolower($this->referer), $output));
