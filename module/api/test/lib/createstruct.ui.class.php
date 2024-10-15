@@ -16,5 +16,8 @@ class createDocTester extends tester
         $form->dom->createStructBtn->click();
         $form->wait(1);
         $form->dom->name->setValue($dataStruct->name);
+        $form->dom->btn($this->lang->save)->click();
+        if($form->dom->fstStructName->getText() != $dataStruct->name) return $this->failed('创建数据结构失败');
+        return $this->success('创建数据结构成功');
     }
 }
