@@ -7,59 +7,70 @@ $config->testtask->dtable = new stdclass();
 $config->testtask->dtable->fieldList['id']['name']  = 'id';
 $config->testtask->dtable->fieldList['id']['title'] = $lang->idAB;
 $config->testtask->dtable->fieldList['id']['type']  = 'id';
+$config->testtask->dtable->fieldList['id']['show']  = true;
 
-$config->testtask->dtable->fieldList['title']['name']  = 'name';
-$config->testtask->dtable->fieldList['title']['title'] = $lang->testtask->name;
-$config->testtask->dtable->fieldList['title']['type']  = 'title';
-$config->testtask->dtable->fieldList['title']['link']  = array('module' => 'testtask', 'method' => 'cases', 'params' => 'taskID={id}');
-$config->testtask->dtable->fieldList['title']['fixed'] = 'left';
+$config->testtask->dtable->fieldList['name']['name']  = 'name';
+$config->testtask->dtable->fieldList['name']['title'] = $lang->testtask->name;
+$config->testtask->dtable->fieldList['name']['type']  = 'title';
+$config->testtask->dtable->fieldList['name']['link']  = array('module' => 'testtask', 'method' => 'cases', 'params' => 'taskID={id}');
+$config->testtask->dtable->fieldList['name']['fixed'] = 'left';
+$config->testtask->dtable->fieldList['name']['show']  = true;
 
-$config->testtask->dtable->fieldList['build']['name']     = 'buildName';
-$config->testtask->dtable->fieldList['build']['title']    = $lang->testtask->build;
-$config->testtask->dtable->fieldList['build']['type']     = 'text';
-$config->testtask->dtable->fieldList['build']['link']     = array('module' => 'build', 'method' => 'view', 'params' => 'buildID={build}');
-$config->testtask->dtable->fieldList['build']['data-app'] = 'execution';
-$config->testtask->dtable->fieldList['build']['group']    = 'text';
+$config->testtask->dtable->fieldList['buildName']['name']     = 'buildName';
+$config->testtask->dtable->fieldList['buildName']['title']    = $lang->testtask->build;
+$config->testtask->dtable->fieldList['buildName']['type']     = 'text';
+$config->testtask->dtable->fieldList['buildName']['link']     = array('module' => 'build', 'method' => 'view', 'params' => 'buildID={build}');
+$config->testtask->dtable->fieldList['buildName']['data-app'] = 'execution';
+$config->testtask->dtable->fieldList['buildName']['group']    = 'text';
+$config->testtask->dtable->fieldList['buildName']['show']     = true;
 
-$config->testtask->dtable->fieldList['product']['name']  = 'productName';
-$config->testtask->dtable->fieldList['product']['title'] = $lang->testtask->product;
-$config->testtask->dtable->fieldList['product']['type']  = 'text';
-$config->testtask->dtable->fieldList['product']['group'] = 'text';
+$config->testtask->dtable->fieldList['productName']['name']  = 'productName';
+$config->testtask->dtable->fieldList['productName']['title'] = $lang->testtask->product;
+$config->testtask->dtable->fieldList['productName']['type']  = 'text';
+$config->testtask->dtable->fieldList['productName']['group'] = 'text';
+$config->testtask->dtable->fieldList['productName']['show']  = true;
 
-$config->testtask->dtable->fieldList['execution']['name']  = 'executionName';
-$config->testtask->dtable->fieldList['execution']['title'] = $lang->testtask->execution;
-$config->testtask->dtable->fieldList['execution']['type']  = 'text';
-$config->testtask->dtable->fieldList['execution']['group'] = 'text';
+$config->testtask->dtable->fieldList['executionName']['name']  = 'executionName';
+$config->testtask->dtable->fieldList['executionName']['title'] = $lang->testtask->execution;
+$config->testtask->dtable->fieldList['executionName']['type']  = 'text';
+$config->testtask->dtable->fieldList['executionName']['group'] = 'text';
+$config->testtask->dtable->fieldList['executionName']['show']  = true;
 
 $config->testtask->dtable->fieldList['owner']['name']    = 'owner';
 $config->testtask->dtable->fieldList['owner']['title']   = $lang->testtask->owner;
 $config->testtask->dtable->fieldList['owner']['type']    = 'user';
 $config->testtask->dtable->fieldList['owner']['group']   = 'user';
+$config->testtask->dtable->fieldList['owner']['show']    = true;
 
 $config->testtask->dtable->fieldList['members']['name']  = 'members';
 $config->testtask->dtable->fieldList['members']['title'] = $lang->testtask->members;
 $config->testtask->dtable->fieldList['members']['type']  = 'text';
 $config->testtask->dtable->fieldList['members']['group'] = 'user';
+$config->testtask->dtable->fieldList['members']['show']  = true;
 
 $config->testtask->dtable->fieldList['begin']['name']  = 'begin';
 $config->testtask->dtable->fieldList['begin']['title'] = $lang->testtask->begin;
 $config->testtask->dtable->fieldList['begin']['type']  = 'date';
 $config->testtask->dtable->fieldList['begin']['group'] = 'user';
+$config->testtask->dtable->fieldList['begin']['show']  = true;
 
 $config->testtask->dtable->fieldList['end']['name']  = 'end';
 $config->testtask->dtable->fieldList['end']['title'] = $lang->testtask->end;
 $config->testtask->dtable->fieldList['end']['type']  = 'date';
 $config->testtask->dtable->fieldList['end']['group'] = 'user';
+$config->testtask->dtable->fieldList['end']['show']  = true;
 
 $config->testtask->dtable->fieldList['status']['name']      = 'status';
 $config->testtask->dtable->fieldList['status']['title']     = $lang->testtask->status;
 $config->testtask->dtable->fieldList['status']['type']      = 'status';
 $config->testtask->dtable->fieldList['status']['statusMap'] = $lang->testtask->statusList;
+$config->testtask->dtable->fieldList['status']['group']     = 'status';
 
 $config->testtask->dtable->fieldList['actions']['name']     = 'actions';
 $config->testtask->dtable->fieldList['actions']['title']    = $lang->actions;
 $config->testtask->dtable->fieldList['actions']['type']     = 'actions';
 $config->testtask->dtable->fieldList['actions']['sortType'] = false;
+$config->testtask->dtable->fieldList['actions']['width']    = '120px';
 $config->testtask->dtable->fieldList['actions']['list']     = $config->testtask->actionList;
 $config->testtask->dtable->fieldList['actions']['menu']     = array('cases', 'linkCase', 'report', 'view', 'edit', 'delete');
 
@@ -118,12 +129,12 @@ $config->testtask->browseUnits = new stdclass();
 $config->testtask->browseUnits->dtable = new stdclass();
 $config->testtask->browseUnits->dtable->fieldList['id']    = $config->testtask->dtable->fieldList['id'];
 
-$config->testtask->browseUnits->dtable->fieldList['title'] = $config->testtask->dtable->fieldList['title'];
-$config->testtask->browseUnits->dtable->fieldList['title']['title'] = $lang->testtask->unitName;
-$config->testtask->browseUnits->dtable->fieldList['title']['link']  = array('module' => 'testtask', 'method' => 'unitCases', 'params' => 'taskID={id}');
+$config->testtask->browseUnits->dtable->fieldList['name'] = $config->testtask->dtable->fieldList['name'];
+$config->testtask->browseUnits->dtable->fieldList['name']['title'] = $lang->testtask->unitName;
+$config->testtask->browseUnits->dtable->fieldList['name']['link']  = array('module' => 'testtask', 'method' => 'unitCases', 'params' => 'taskID={id}');
 
-$config->testtask->browseUnits->dtable->fieldList['execution'] = $config->testtask->dtable->fieldList['execution'];
-$config->testtask->browseUnits->dtable->fieldList['build']     = $config->testtask->dtable->fieldList['build'];
+$config->testtask->browseUnits->dtable->fieldList['executionName'] = $config->testtask->dtable->fieldList['executionName'];
+$config->testtask->browseUnits->dtable->fieldList['buildName']     = $config->testtask->dtable->fieldList['buildName'];
 
 $config->testtask->browseUnits->dtable->fieldList['owner'] = $config->testtask->dtable->fieldList['owner'];
 $config->testtask->browseUnits->dtable->fieldList['begin']['name']  = 'begin';

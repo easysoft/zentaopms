@@ -55,8 +55,6 @@ featureBar
     )
 );
 
-if($product->shadow) unset($config->testtask->dtable->fieldList['product']);
-
 $canCreate = common::canModify('product', $product) && common::hasPriv('testtask', 'create');
 
 toolbar
@@ -70,18 +68,20 @@ toolbar
     ) : null
 );
 
-$tasks      = initTableData($tasks, $config->testtask->dtable->fieldList, $this->testtask);
-$cols       = array_values($config->testtask->dtable->fieldList);
+$cols       = $this->loadModel('datatable')->getSetting('testtask');
+$tasks      = initTableData($tasks, $cols, $this->testtask);
 $data       = array_values($tasks);
 $footerHTML = strtolower($status) == 'totalstatus' ? $allSummary : $pageSummary;
 $beginTime  = str_replace('-', '', $beginTime);
 $endTime    = str_replace('-', '', $endTime);
+
+if($product->shadow) unset($cols['product']);
 dtable
 (
     set::cols($cols),
     set::data($data),
     set::userMap($users),
-    set::fixedLeftWidth('20%'),
+    set::customCols(true),
     set::orderBy($orderBy),
     set::sortLink(createLink('testtask', 'browse', "productID={$product->id}&branch={$branch}&type={$type}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&beginTime={$beginTime}&endTime={$endTime}")),
     set::onRenderCell(jsRaw('window.onRenderCell')),
