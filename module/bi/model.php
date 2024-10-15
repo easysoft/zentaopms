@@ -1974,7 +1974,7 @@ class biModel extends model
 
             $columnMaxLen[$field] = mb_strlen($column->label);
 
-            if(isset($column->colspan) && $column->isSlice) $columns[$field]['colspan'] = $column->colspan;
+            if(isset($column->colspan) && $column->colspan > 1) $columns[$field]['colspan'] = $column->colspan;
 
             // if(isset($data->groups[$index])) $columns[$field]['fixed'] = 'left';
 
