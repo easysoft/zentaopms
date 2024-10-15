@@ -536,29 +536,6 @@ class file extends control
         }
     }
 
-    /**
-     * Query the file.
-     *
-     * @param  int    $fileID
-     * @param  string $objectType
-     * @param  int    $objectID
-     * @param  string $title
-     * @param  string $extra
-     * @param  int    $stream
-     * @access public
-     * @return void
-     */
-    public function ajaxQuery(int $fileID, string $objectType = '', int $objectID = 0, string $title = '', string $extra = '', int $stream = 0)
-    {
-        if($fileID) return $this->fetch('file', 'read', "fileID=$fileID&stream=$stream");
-
-        if(!empty($title)) $title = base64_decode($title);
-        $file = $this->file->query($objectType, $objectID, $title, $extra);
-        if(empty($file)) return $this->send(array('result' => 'fail', 'message' => $this->lang->file->fileNotFound, 'load' => helper::createLink('my', 'index'), 'closeModal' => true));
-        $fileID = $file->id;
-        return $this->fetch('file', 'read', "fileID=$fileID&stream=$stream");
-    }
-
 
     /**
      * 关闭升级到企业版提示。
