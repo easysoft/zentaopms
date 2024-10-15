@@ -38,3 +38,23 @@ $story->openedBy->range('admin');
 $story->version->range('1');
 $story->parentVersion->range('0,1');
 $story->assignedTo->range('[]');
+$story->reviewedBy->range('[]');
+$story->reviewedDate->range('`NULL`');
+$story->closedBy->range('[]');
+$story->closedReason->range('[]');
+$story->gen(2);
+
+$storyspec = zenData('storyspec');
+$storyspec->story->range('1-2');
+$storyspec->version->range('1');
+$storyspec->title->range('父研发需求,子研发需求');
+$storyspec->gen(2);
+
+$action = zenData('action');
+$action->id->range('1-3');
+$action->objectType->range('product,story{2}');
+$action->objectID->range('1');
+$action->product->range('`,1,`');
+$action->project->range('0');
+$action->execution->range('0');
+$action->actor->range('admin');
