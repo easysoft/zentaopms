@@ -563,7 +563,7 @@ class docZen extends doc
 
         $this->view->title    = empty($lib) ? '' : zget($lib, 'name', '', $lib->name . $this->lang->hyphen) . $this->lang->doc->uploadDoc;
         $this->view->linkType = $objectType;
-        $this->view->spaces   = $this->getAllSpaces($objectType == 'custom' ? 'nomine' : 'onlymine');
+        $this->view->spaces   = ($objectType == 'mine' || $objectType == 'custom') ? $this->doc->getSubSpacesByType($objectType) : array();
     }
 
     /**
