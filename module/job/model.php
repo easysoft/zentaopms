@@ -190,7 +190,6 @@ class jobModel extends model
         $this->dao->insert(TABLE_JOB)->data($job)
             ->batchCheck($this->config->job->create->requiredFields, 'notempty')
             ->batchCheckIF($job->frame === 'sonarqube', "sonarqubeServer,projectKey", 'notempty')
-            ->autoCheck()
             ->exec();
         if(dao::isError()) return false;
 
