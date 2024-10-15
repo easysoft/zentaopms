@@ -1477,4 +1477,64 @@ class doc extends control
         $libsMap = $this->doc->getLibsOfSpaces($spaceType, $spaceList);
         echo json_encode($libsMap);
     }
+
+    /**
+     * Ajax modal for setting doc basic info.
+     * 设置文档基本信息的模态框。
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  int    $libID
+     * @param  int    $moduleID
+     * @param  int    $docID
+     * @param  string $docType
+     * @access public
+     */
+    public function setDocBasic(string $objectType, int $objectID, int $libID = 0, int $moduleID = 0, int $docID = 0, string $docType = 'doc')
+    {
+        $lib = $libID ? $this->doc->getLibByID($libID) : '';
+        if(empty($docID))
+        {
+            if(empty($objectID) && $lib) $objectID = (int)zget($lib, $lib->type, 0);
+            if(empty($objectID) && $lib && $lib->type == 'custom') $objectID = (int)$lib->parent;
+
+            $unclosed = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
+            $libPairs = $this->doc->getLibs($objectType, "{$unclosed}", $libID, $objectID);
+            $moduleID = $moduleID ? (int)$moduleID : (int)$this->cookie->lastDocModule;
+            if(!$libID && !empty($libPairs)) $libID = key($libPairs);
+            if(empty($lib) && $libID) $lib = $this->doc->getLibByID($libID);
+
+            if($lib->type == 'custom' || $lib->type == 'mine') $this->view->spaces = $this->docZen->getAllSpaces($lib->type == 'mine' ? 'onlymine' : 'nomine');
+            $this->setObjectsForCreate(empty($lib->type) ? '' : $lib->type, empty($lib) ? null : $lib, $unclosed, $objectID);
+            $this->view->optionMenu = empty($libID) ? array() : $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
+        }
+        else
+        {
+            $doc        = $this->doc->getByID($docID);
+            $moduleID   = (int)$doc->module;
+            $libID      = (int)$doc->lib;
+            $lib        = $this->doc->getLibByID($libID);
+            $objectType = isset($lib->type) ? $lib->type : 'custom';
+            $objectID   = (int)zget($lib, $lib->type, 0);
+            if($lib->type == 'custom') $objectID = $lib->parent;
+            $libPairs = $this->doc->getLibs($lib->type, '', $doc->lib, $objectID);
+            if($lib->type == 'custom' || $lib->type == 'mine') $this->view->spaces = $this->docZen->getAllSpaces($lib->type == 'mine' ? 'onlymine' : 'nomine');
+            $this->docZen->setObjectsForEdit($lib->type, $objectID);
+
+            $this->view->optionMenu     = $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
+        }
+
+        $this->view->users      = $this->user->getPairs('nocode|noclosed|nodeleted');
+        $this->view->groups     = $this->loadModel('group')->getPairs();
+        $this->view->libID      = $libID;
+        $this->view->libID      = $libID;
+        $this->view->moduleID   = $moduleID;
+        $this->view->docType    = $docType;
+        $this->view->objectID   = $objectID;
+        $this->view->objectType = $objectType;
+        $this->view->lib        = $lib;
+        $this->view->libs       = $libPairs;
+        $this->view->title      = $this->lang->doc->release;
+        $this->display();
+    }
 }
