@@ -331,16 +331,21 @@ const actionsMap =
      */
     doc: function(info)
     {
-        const lang = getLang();
-        const doc  = info.data;
+        const lang       = getLang();
+        const doc        = info.data;
+        const canEditDoc = hasPriv('edit');
 
         /* 侧边栏上的文档操作按钮。Doc actions in sidebar. */
         if(info.ui === 'sidebar')
         {
-            return [
-                hasPriv('edit') ? {icon: 'edit', text: lang.edit, command: `startEditDoc/${doc.id}`} : null,
+            const moreItems =
+            [
                 canMoveDoc(doc) ? {icon: 'folder-move', text: lang.moveDoc, command: `moveDoc/${doc.id}`} : null,
                 hasPriv('delete') ? {icon: 'trash', text: lang.delete, command: `deleteDoc/${doc.id}`} : null,
+            ];
+            return [
+                hasPriv('sortDoc') ? {icon: 'move cursor-move', className: 'sort-handler', hint: lang.sortDoc, size: 'xs'} : null,
+                moreItems.length ? {icon: 'ellipsis-v', caret: false, placement: 'bottom-end', size: 'xs', items: moreItems} : null,
             ];
         }
 
@@ -352,7 +357,7 @@ const actionsMap =
 
         return [
             {icon: doc.isCollector ? 'star text-warning' : 'star-empty', text: doc.collects || null, hint: doc.isCollector ? lang.cancelCollection : lang.collect, rounded: 'lg', textClass: 'text-gray', type: 'ghost', command: hasPriv('collect') ? `collectDoc/${doc.id}` : null},
-            hasPriv('edit') ? {icon: 'edit', type: 'ghost text-primary', hint: lang.edit, rounded: 'lg', command: 'startEditDoc'} : null,
+            canEditDoc ? {icon: 'edit', type: 'ghost text-primary', hint: lang.edit, rounded: 'lg', command: 'startEditDoc'} : null,
             moreItems.length ? {icon: 'icon-ellipsis-v', type: 'dropdown', rounded: 'lg', placement: 'bottom-end', caret: false, items: moreItems} : null,
         ];
     },
