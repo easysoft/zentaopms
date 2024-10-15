@@ -58,3 +58,51 @@ window.renderRowData = function($row, index, row)
         });
     }
 }
+
+window.clickSubmit = async function(e)
+{
+    if(!nonStoryChildTasks) return true;
+    const $taskBatchForm    = $('#taskBatchEditForm' + executionID);
+    const $taskBatchFormTrs = $taskBatchForm.find('tbody tr');
+
+    var confirmID = '';
+    var tipAll    = true;
+    for(let i = 0; i < $taskBatchFormTrs.length; i++)
+    {
+        const $currentTr = $($taskBatchFormTrs[i]);
+        const taskID      = $currentTr.find('.form-batch-control[data-name=id]').find('input[name^=id]').val();
+        const storyID     = $currentTr.find('.form-batch-control[data-name=story]').find('input[name^=story]').val();
+
+        if(tasks[taskID].story == storyID) continue;
+        if(!storyID && tasks[taskID].parent <= 0) continue;
+        if(tasks[taskID].parent > 0)
+        {
+            if(storyID) confirmID = confirmID.replace('ID' + taskID + ', ', '');
+            continue;
+        }
+        if(typeof childTasks[taskID] != 'object' || typeof nonStoryChildTasks[taskID] != 'object') continue;
+
+        const nonStoryChildTaskIdList = Object.keys(nonStoryChildTasks[taskID]);
+        if(nonStoryChildTaskIdList.length == 0) continue;
+
+        if(tipAll) tipAll = Object.keys(childTasks[taskID]).length == nonStoryChildTaskIdList.length;
+
+        for(let j = 0; j < nonStoryChildTaskIdList.length; j++) confirmID += 'ID' + nonStoryChildTaskIdList[j].toString() + ', ';
+    }
+    if(confirmID.length == 0) return true;
+
+    if(confirmID.endsWith(', ')) confirmID = confirmID.slice(0, -2);
+
+    let confirmTip = tipAll ? syncStoryToAllChildrenTip : syncStoryToChildrenTip;
+    confirmTip     = confirmTip.replace('%s', confirmID);
+    zui.Modal.confirm(confirmTip).then((res) =>
+    {
+        $taskBatchForm.find('[name=syncChildren]').remove();
+        $taskBatchForm.append('<input type="hidden" name="syncChildren" value="' + (res ? '1' : '0') + '" />');
+
+        const formData   = new FormData($taskBatchForm[0]);
+        const confirmURL = $taskBatchForm.attr('action');
+        $.ajaxSubmit({url: confirmURL, data: formData});
+    });
+    return false;
+};
