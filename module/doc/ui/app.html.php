@@ -33,6 +33,7 @@ if($type === 'project')
  * 定义文档界面上的权限。
  * Define the privs of doc app.
  */
+d($type);
 $hasCustomSpace = $type == 'mine' || $type == 'custom';
 $privs = array();
 $privs['create']       = hasPriv('doc', 'create');
@@ -47,8 +48,8 @@ $privs['moveLib']      = hasPriv('doc', 'moveLib');
 $privs['deleteLib']    = hasPriv('doc', 'deleteLib');
 $privs['sortDocLib']   = hasPriv('doc', 'sortDocLib');
 $privs['exportFiles']  = hasPriv('doc', 'exportFiles');
-$privs['createSpace']  = $hasCustomSpace && hasPriv('doc', 'createSpace');
-$privs['deleteSpace']  = $hasCustomSpace && hasPriv('doc', 'deleteSpace');
+$privs['createSpace']  = $hasCustomSpace && hasPriv('doc', 'createLib');
+$privs['deleteSpace']  = $hasCustomSpace && hasPriv('doc', 'deleteLib');
 $privs['editSpace']    = $hasCustomSpace && hasPriv('doc', 'editLib');
 $privs['addModule']    = hasPriv('doc', 'addCatalog');
 $privs['deleteModule'] = hasPriv('doc', 'deleteCatalog');
