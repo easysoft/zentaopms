@@ -13,7 +13,7 @@ class indexPage extends page
             'fstLibTitle'   => '/html/body/div[1]/div/div[2]/div[1]/div[1]/div[2]/main/menu/li[1]/div/div/a',
             'publishBtn'    => '/html/body/div[1]/div/div[1]/div[2]/a[3]',
             'fstVersion'    => '//*[@id="table-api-releases"]/div[2]/div[1]/div[1]/div[2]/div[1]',
-            'releaseBtn'    => '/html/body/div/div/div[1]/div[2]/a[2]'
+            'releaseBtn'    => '/html/body/div/div/div[1]/div[2]/a[2]',
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
