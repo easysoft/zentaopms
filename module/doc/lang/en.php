@@ -415,3 +415,12 @@ $lang->doc->whitelistDeny['product']   = "<i class='icon pr-1 text-important ico
 $lang->doc->whitelistDeny['project']   = "<i class='icon pr-1 text-important icon-exclamation'></i>Whitelist user <span class='px-1 text-important'>%s</span> currently has no project access permission, therefore cannot access the document. To access, please maintain project access control permissions.";
 $lang->doc->whitelistDeny['execution'] = "<i class='icon pr-1 text-important icon-exclamation'></i>Whitelist user <span class='px-1 text-important'>%s</span> currently has no execution access permission, therefore cannot access the document. To access, please maintain execution access control permissions.";
 $lang->doc->whitelistDeny['doc']       = "<i class='icon pr-1 text-important icon-exclamation'></i>Whitelist user <span class='px-1 text-important'>%s</span> currently has no library access permission, therefore cannot access the document. To access, please maintain library access control permissions.";
+
+$lang->doc->filterTypes[] = array('all', 'All');
+$lang->doc->filterTypes[] = array('draft', 'Draft');
+$lang->doc->filterTypes[] = array('collect', 'Collected');
+$lang->doc->filterTypes[] = array('createdByMe', 'Created by me');
+$lang->doc->filterTypes[] = array('editedByMe', 'Edited by me');
+
+$lang->doc->fileFilterTypes[] = array('all', 'All');
+$lang->doc->fileFilterTypes[] = array('addedByMe', 'Add by me');

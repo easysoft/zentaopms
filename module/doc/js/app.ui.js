@@ -590,6 +590,12 @@ function getTableOptions(options, info)
     return options;
 }
 
+function getFilterTypes(type)
+{
+    if(type === 'list')  return getLang('filterTypes');
+    if(type === 'files') return getLang('fileFilterTypes');
+}
+
 window.setDocAppOptions = function(_, options)
 {
     const privs      = options.privs;
@@ -601,7 +607,8 @@ window.setDocAppOptions = function(_, options)
         canMoveDoc     : canMoveDoc,
         onSwitchView   : handleSwitchView,
         getActions     : getActions,
-        getTableOptions: getTableOptions
+        getTableOptions: getTableOptions,
+        getFilterTypes : getFilterTypes,
     };
     return newOptions;
 };

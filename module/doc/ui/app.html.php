@@ -86,6 +86,8 @@ $langData->moduleName            = $lang->doc->catalogName;
 $langData->saveDraft             = $lang->doc->saveDraft;
 $langData->release               = $lang->doc->release;
 $langData->batchMove             = $lang->doc->batchMove;
+$langData->filterTypes           = $lang->doc->filterTypes;
+$langData->fileFilterTypes       = $lang->doc->fileFilterTypes;
 
 $langData->tableCols = array();
 $langData->tableCols['id']         = $lang->doc->id;

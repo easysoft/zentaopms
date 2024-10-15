@@ -415,3 +415,12 @@ $lang->doc->whitelistDeny['product']   = "<i class='icon pr-1 text-important ico
 $lang->doc->whitelistDeny['project']   = "<i class='icon pr-1 text-important icon-exclamation'></i>白名单用户<span class='px-1 text-important'>%s</span>暂无项目访问权限，因此无法访问文档。如需访问，请维护项目访问控制权限。";
 $lang->doc->whitelistDeny['execution'] = "<i class='icon pr-1 text-important icon-exclamation'></i>白名单用户<span class='px-1 text-important'>%s</span>暂无执行访问权限，因此无法访问文档。如需访问，请维护执行访问控制权限。";
 $lang->doc->whitelistDeny['doc']       = "<i class='icon pr-1 text-important icon-exclamation'></i>白名单用户<span class='px-1 text-important'>%s</span>暂无所在库访问权限，因此无法访问文档。如需访问，请维护所在库的访问控制权限。";
+
+$lang->doc->filterTypes[] = array('all', '全部');
+$lang->doc->filterTypes[] = array('draft', '草稿');
+$lang->doc->filterTypes[] = array('collect', '已收藏');
+$lang->doc->filterTypes[] = array('createdByMe', '我创建');
+$lang->doc->filterTypes[] = array('editedByMe', '我编辑');
+
+$lang->doc->fileFilterTypes[] = array('all', '全部');
+$lang->doc->fileFilterTypes[] = array('addedByMe', '我添加');
