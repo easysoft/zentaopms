@@ -347,6 +347,7 @@ const actionsMap =
         const moreItems = [];
         if(canMoveDoc(doc))      moreItems.push({icon: 'folder-move', text: lang.moveDoc, command: `moveDoc/${doc.id}`});
         if(hasPriv('delete'))    moreItems.push({icon: 'trash', text: lang.delete, command: `deleteDoc/${doc.id}`});
+        if(hasPriv('effort'))    moreItems.push({icon: 'time', text: lang.effort, command: `effortDoc/${doc.id}`});
         if(hasPriv('exportDoc')) moreItems.push({icon: 'export', text: lang.export, command: 'exportDoc'});
 
         return [
@@ -690,6 +691,14 @@ const commands =
                 getDocApp().delete('doc', docID);
             }
         });
+    },
+    effortDoc: function(_,args)
+    {
+        const docApp = getDocApp();
+        const docID  = args[0] || docApp.docID;
+        const url = $.createLink('effort', 'createForObject', `objectType=doc&objectID=${docID}`);
+
+        zui.Modal.open({url: url, size: 'sm'});
     },
     exportDoc: function(_, args)
     {
