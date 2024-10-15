@@ -1075,6 +1075,9 @@ class doc extends control
 
             /* Sort by sorted id list. */
             $this->doc->updateDocOrder($orders);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success'));
         }
     }
 
