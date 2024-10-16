@@ -14,10 +14,6 @@ namespace zin;
 
 modalHeader(set::titleClass('text-root font-bold'), set::title($lang->doc->moveLibAction));
 
-$defaultAcl = $lib->acl;
-if($libType == 'mine') $defaultAcl = 'private';
-if($libType == 'custom' && ($lib->type == 'mine' || $lib->parent != $targetSpace)) $defaultAcl = 'open';
-
 jsVar('targetSpace', $targetSpace);
 jsVar('libID', $lib->id);
 jsVar('errorOthersCreated', $lang->doc->errorOthersCreated);
@@ -45,7 +41,7 @@ formPanel
             (
                 set::name('acl'),
                 set::items($lang->doclib->aclList),
-                set::value($defaultAcl),
+                set::value($lib->acl),
                 on::change("toggleLibAcl")
             )
         )
@@ -53,7 +49,7 @@ formPanel
     formRow
     (
         setID('whiteListBox'),
-        setClass(($libType != 'mine' && $defaultAcl == 'private') ? '' : 'hidden'),
+        setClass(($libType != 'mine' && $lib->acl == 'private') ? '' : 'hidden'),
         formGroup
         (
             set::label($lang->doc->whiteList),
