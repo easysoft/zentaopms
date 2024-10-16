@@ -10119,6 +10119,19 @@ class upgradeModel extends model
             $relation->BID      = $bugID;
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
         }
+
+        /* Process feedback transferred to task. */
+        $feedbackTransferredToTask = $this->dao->select('id,feedback')->from(TABLE_TASK)->where('feedback')->ne(0)->fetchPairs('id');
+        foreach($feedbackTransferredToTask as $taskID => $feedbackID)
+        {
+            $relation = new stdClass();
+            $relation->AType    = 'feedback';
+            $relation->AID      = $feedbackID;
+            $relation->relation = 'transferredto';
+            $relation->BType    = 'task';
+            $relation->BID      = $taskID;
+            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+        }
         return true;
     }
 }
