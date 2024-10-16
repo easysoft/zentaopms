@@ -961,7 +961,7 @@ class pivotModel extends model
      * @access public
      * @return string noShow | bottom | row | all
      */
-    public function getShowColPosition($settings)
+    public function getShowColPosition(array $settings): string
     {
         $columnTotal    = zget($settings, 'columnTotal', 'noShow');
         $columnPosition = zget($settings, 'columnPosition', 'bottom');
@@ -977,7 +977,7 @@ class pivotModel extends model
      * @access public
      * @return bool
      */
-    public function isShowLastRow($showColPosition)
+    public function isShowLastRow(string $showColPosition): bool
     {
         return in_array($showColPosition, array('bottom', 'all'));
     }
@@ -1014,9 +1014,9 @@ class pivotModel extends model
      *
      * @param  array $data
      * @access public
-     * @return void
+     * @return array
      */
-    public function getGroupTreeWithKey(array $data)
+    public function getGroupTreeWithKey(array $data): array
     {
         $first = reset($data);
         if(!isset($first['groups'])) return $first['groupKey'];
@@ -1105,10 +1105,12 @@ class pivotModel extends model
      *
      * @param  array $groupTree
      * @param  array $data
+     * @param  array $groups
+     * @param  int   $currentGroup
      * @access public
      * @return array
      */
-    public function addRowSummary(array $groupTree, array $data, array $groups, $currentGroup = 0): array
+    public function addRowSummary(array $groupTree, array $data, array $groups, int $currentGroup = 0): array
     {
         $first = reset($groupTree);
         if(is_string($first))
@@ -1168,13 +1170,13 @@ class pivotModel extends model
      * 拍平切片列数据。
      * Flatten slice column data.
      *
-     * @param  array $row
+     * @param  array  $row
      * @access public
      * @return array
      */
     public function flattenRow(array $row): array
     {
-        $record  = array();
+        $record = array();
         foreach($row as $colKey => $cell)
         {
             if(is_scalar($cell))
@@ -1194,7 +1196,8 @@ class pivotModel extends model
      * 拍平透视表树结构数据。
      * Flatten pivot table tree structure data.
      *
-     * @param  array $crystalData
+     * @param  array  $crystalData
+     * @param  bool   $withGroupSummary
      * @access public
      * @return array
      */
