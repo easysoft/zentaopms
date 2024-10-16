@@ -3538,6 +3538,8 @@ class baseRouter
             }
 
             if(!$redis->ping()) return false;
+
+            $this->loadToRedis($redis);
         }
         catch(RedisException $e)
         {
@@ -3545,6 +3547,40 @@ class baseRouter
         }
 
         if($redis) return $redis;
+    }
+
+    /**
+     * 把数据载入 redis。
+     * Load data to redis.
+     *
+     * @param  Redis $redis
+     * @access public
+     * @return void
+     */
+    public function loadToRedis($redis)
+    {
+        $redis->flushDB();
+        foreach($this->config->redis->tables as $table => $setting)
+        {
+            foreach($setting->caches as $cache)
+            {
+                $cache     = (object)$cache;
+                $condition = isset($cache->condition) ? $cache->condition : '';
+                $objects   = $this->dao->select('*')->from($table)->beginIF($condition)->where($condition)->fi()->fetchAll();
+                if($cache->type == 'raw')
+                {
+                    $pairs = [];
+                    foreach($objects as $object) $pairs[$cache->type . ':' . $cache->name . ':' . $object->{$setting->key}] = json_encode($object);
+                    $redis->mset($pairs);
+                }
+                if($cache->type == 'set')
+                {
+                    $members = [];
+                    foreach($objects as $object) $members[] = $object->{$setting->key};
+                    $redis->sadd($cache->type . ':' . $cache->name, $members);
+                }
+            }
+        }
     }
 }
 
