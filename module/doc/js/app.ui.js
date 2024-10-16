@@ -426,7 +426,7 @@ const actionsMap =
      */
     'doc-table': function(info)
     {
-        return [{
+        return [hasPriv('batchMoveDoc') ? {
             text: getLang('batchMove'),
             onClick: function()
             {
@@ -439,7 +439,7 @@ const actionsMap =
 
                 zui.Modal.open({size: 'sm', url: url});
             }
-        }];
+        } : null];
     },
 
     /**

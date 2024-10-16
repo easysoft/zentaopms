@@ -57,6 +57,7 @@ $privs['editModule']   = hasPriv('doc', 'editCatalog');
 $privs['sortModule']   = hasPriv('doc', 'sortCatalog');
 $privs['sortDoclib']   = hasPriv('doc', 'sortDoclib');
 $privs['sortDoc']      = hasPriv('doc', 'sortDoc');
+$privs['batchMoveDoc'] = hasPriv('doc', 'batchMoveDoc');
 
 /**
  * 定义文档界面上的文件下载链接。
