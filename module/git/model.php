@@ -425,4 +425,17 @@ class gitModel extends model
     {
         echo helper::now() . " $log\n";
     }
+
+    /**
+     * Code Association of design through annotations.
+     *
+     * @param  array    $designs
+     * @param  int      $repoID
+     * @param  object   $log
+     * @access public
+     * @return void
+     */
+    public function linkCommit($designs, $repoID, $log)
+    {
+    }
 }
