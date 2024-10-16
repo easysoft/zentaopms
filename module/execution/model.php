@@ -1873,9 +1873,14 @@ class executionModel extends model
 
             /* Limit current execution when no execution. */
             if(strpos($taskQuery, "`execution` =") === false && strpos($taskQuery, "`project` =") === false) $taskQuery .= " AND `execution` = $executionID";
-            $executionQuery = "`execution` " . helper::dbIN(array_keys($executions));
-            $taskQuery      = str_replace("`execution` = 'all'", $executionQuery, $taskQuery); // Search all execution.
+            if(strpos($taskQuery, "`execution` = 'all'") !== false)
+            {
+                $executions     = $this->loadModel('execution')->getPairs(0, 'all', "nocode,noprefix");
+                $executionQuery = "`execution` " . helper::dbIN(array_keys($executions));
+                $taskQuery      = str_replace("`execution` = 'all'", $executionQuery, $taskQuery); // Search all execution.
+            }
             if(strpos($taskQuery, "`execution`") === false) $taskQuery .= " AND `execution` " . helper::dbIN(array_keys($executions));
+
             /* Process all project query. */
             if(strpos($taskQuery, "`project` = 'all'") !== false)
             {

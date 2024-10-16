@@ -1373,9 +1373,10 @@ class taskZen extends task
     protected function processExportData(array $tasks, int $projectID): array
     {
         /* Get users and executions. */
-        $users      = $this->loadModel('user')->getPairs('noletter');
-        $projects   = $this->loadModel('project')->getPairs();
-        $executions = $this->loadModel('execution')->fetchPairs(0, 'all', true, true);
+        $users         = $this->loadModel('user')->getPairs('noletter');
+        $projects      = $this->loadModel('project')->getPairs();
+        $executions    = $this->loadModel('execution')->fetchPairs(0, 'all', true, true);
+        $allExecutions = $this->loadModel('execution')->fetchPairs(0, 'all', false, true);
 
         /* Get related objects id lists. */
         $relatedStoryIdList = array();
@@ -1398,6 +1399,7 @@ class taskZen extends task
             $task->fromBug = empty($task->fromBug) ? '' : "#$task->fromBug " . $bugs[$task->fromBug]->title;
 
             if(isset($relatedModules[$task->module])) $task->module = $relatedModules[$task->module] . "(#$task->module)";
+            if(isset($allExecutions[$task->execution]) && !isset($executions[$task->execution])) $task->execution = '';
 
             /* Convert username to real name. */
             if(!empty($task->mailto))
