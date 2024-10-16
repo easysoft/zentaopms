@@ -38,7 +38,7 @@ $privs = array();
 $privs['create']       = hasPriv('doc', 'create');
 $privs['edit']         = hasPriv('doc', 'edit');
 $privs['delete']       = hasPriv('doc', 'delete');
-$privs['effort']       = hasPriv('effort', 'createForObject');
+$privs['effort']       = $this->config->edition != 'open' && hasPriv('effort', 'createForObject');
 $privs['exportDoc']    = $this->config->edition != 'open' && hasPriv('doc', $type . '2export');
 $privs['moveDoc']      = hasPriv('doc', 'moveDoc');
 $privs['collect']      = hasPriv('doc', 'collect');
