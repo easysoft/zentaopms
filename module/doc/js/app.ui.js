@@ -64,7 +64,6 @@ function processDocAppAction(action, docApp)
     if(action.mode && action.mode !== docApp.mode) return;
     const method = zui.deepGet(docApp, action.call);
     if(typeof method === 'function') method.apply(docApp, action.args);
-    if(config.debug) console.log('DocApp.action', {action, method, docApp});
 }
 
 /*
@@ -898,7 +897,6 @@ function getSortableOptions(type)
                 if(!fromKey || !toKey) return false;
                 const fromType = getItemType(fromKey);
                 const toType = getItemType(toKey);
-                console.log(fromType, toType);
                 if (fromType !== toType) return false;
                 return true;
             },
@@ -908,7 +906,8 @@ function getSortableOptions(type)
                 if(!fromKey || !orders.length) return;
                 const fromType = getItemType(fromKey);
                 const orderedList = [];
-                orders.forEach((key, index) => {
+                orders.forEach((key, index) =>
+                {
                     const keyType = getItemType(key);
                     if(keyType !== fromType) return;
                     if(fromType !== 'doc') key = key.substring(1);
