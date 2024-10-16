@@ -3576,7 +3576,7 @@ class baseRouter
                 {
                     $members = [];
                     foreach($objects as $object) $members[] = $object->{$setting->key};
-                    $redis->sadd($cache->type . ':' . $cache->name, $members);
+                    $redis->sadd($cache->type . ':' . $cache->name, ...$members);
                 }
             }
         }
