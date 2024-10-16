@@ -194,7 +194,7 @@
         if(window.onPageUnmount) window.onPageUnmount();
         $(document).trigger('pageunmount.app');
 
-        ['beforePageLoad', 'beforeRequestContent', 'onPageUnmount', 'beforePageUpdate', 'afterPageUpdate', 'onPageRender'].forEach(key =>
+        ['beforePageLoad', 'beforeRequestContent', 'onPageUnmount', 'beforePageUpdate', 'afterPageUpdate', 'onPageRender', 'afterPageRender'].forEach(key =>
         {
             if(window[key]) delete window[key];
         });
@@ -488,6 +488,7 @@
             updatePageLayout();
             $('html').enableScroll();
         }
+        if(window.afterPageRender) window.afterPageRender(list, options);
         if(!options.partial)
         {
             const newState = $.apps.updateApp(currentCode, currentAppUrl, document.title);

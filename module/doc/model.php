@@ -56,6 +56,20 @@ class docModel extends model
     }
 
     /**
+     * 通过ID获取空间类型
+     * Get space type by id.
+     *
+     * @param  int|string $spaceID
+     * @access public
+     * @return string
+     */
+    public function getSpaceType(int|string $spaceID): string
+    {
+        if(is_string($spaceID) && strpos($spaceID, '.') != false) return explode('.', $spaceID)[0];
+        return $this->dao->findByID((int)$spaceID)->from(TABLE_DOCLIB)->fetch('type');
+    }
+
+    /**
      * 获取api文档库。
      * Get api libraries.
      *
@@ -86,7 +100,7 @@ class docModel extends model
      * 获取文档库。
      * Get libraries.
      *
-     * @param  string $type        all|includeDeleted|hasApi|product|project|execution|custom|mine
+     * @param  string     $type        all|includeDeleted|hasApi|product|project|execution|custom|mine
      * @param  string     $extra       withObject|notdoc
      * @param  int|string $appendLibs
      * @param  int        $objectID
@@ -161,8 +175,8 @@ class docModel extends model
                 ->beginIF($type)->andWhere('type')->eq($type)->fi()
                 ->beginIF(!$type)->andWhere('type')->ne('api')->fi()
                 ->beginIF($objectID && strpos(',product,project,execution,', ",$type,") !== false)->andWhere($type)->eq($objectID)->fi()
-                ->beginIF($type == 'custom' && !$objectID)->andWhere('parent')->ne(0)->fi()
-                ->beginIF($type == 'custom' && $objectID)->andWhere('parent')->eq($objectID)->fi()
+                ->beginIF(($type == 'custom' || $type == 'mine') && !$objectID)->andWhere('parent')->ne(0)->fi()
+                ->beginIF(($type == 'custom' || $type == 'mine') && $objectID)->andWhere('parent')->eq($objectID)->fi()
                 ->orderBy('id_asc')
                 ->query();
         }
@@ -647,6 +661,78 @@ class docModel extends model
     }
 
     /**
+     * 获取文档列表数据。
+     * Get doc list.
+     *
+     * @param  array  $docIdList
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getDocsOfLibs(array $libs): array
+    {
+        $docs = $this->dao->select('*')->from(TABLE_DOC)
+            ->where('deleted')->eq(0)
+            ->andWhere('lib')->in($libs)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere('templateType')->eq('')
+            ->andWhere("(status = 'normal' or (status = 'draft' and addedBy='{$this->app->user->account}'))")
+            ->fetchAll('id');
+
+        $docs = $this->processCollector($docs);
+        $docs = $this->filterPrivDocs($docs);
+
+        foreach($docs as &$doc)
+        {
+            $doc->lib         = (int)$doc->lib;
+            $doc->module      = (int)$doc->module;
+            $doc->deleted     = boolval($doc->deleted);
+            $doc->isCollector = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false;
+            unset($doc->content);
+            unset($doc->draft);
+        }
+
+        return $docs;
+    }
+
+    /**
+     * 过滤出有权限的文档列表。
+     * Filter docs which has privilege.
+     *
+     * @param  array  $docs
+     * @access public
+     * @return array
+     */
+    public function filterPrivDocs(array $docs): array
+    {
+        $currentAccount = $this->app->user->account;
+        $userGroups     = $this->app->user->groups;
+
+        $privDocs = array();
+        foreach($docs as $index => $doc)
+        {
+            if($doc->acl == 'open' || ($doc->acl == 'private' && $doc->addedBy == $currentAccount) || strpos(",$doc->users,", ",$currentAccount,") !== false)
+            {
+                $privDocs[$index] = $doc;
+            }
+            elseif(!empty($doc->groups))
+            {
+                foreach($userGroups as $groupID)
+                {
+                    if(strpos(",$doc->groups,", ",$groupID,") !== false)
+                    {
+                        $privDocs[$index] = $doc;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $privDocs;
+    }
+
+    /**
      * 获取我的空间下的文档列表数据。
      * Get mine list.
      *
@@ -889,7 +975,7 @@ class docModel extends model
         $doc->content        = isset($docContent->content) ? $docContent->content : '';
         $doc->contentType    = isset($docContent->type) ? $docContent->type : '';
         $doc->contentVersion = isset($docContent->version) ? $docContent->version : $version;
-        if($doc->type != 'url' && $doc->contentType != 'markdown') $doc = $this->loadModel('file')->replaceImgURL($doc, 'content,draft');
+        if($doc->type != 'url' && $doc->contentType != 'markdown' && $doc->contentType != 'doc') $doc = $this->loadModel('file')->replaceImgURL($doc, 'content,draft');
         if($setImgSize) $doc->content = $this->file->setImgSize($doc->content);
         $doc->files = $docFiles;
 
@@ -928,22 +1014,210 @@ class docModel extends model
      */
     public function getTeamSpaces(): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getSubSpaces('custom');
+
+        return $this->getSpacePairs('custom');
+    }
+
+    /**
+     * 获取文档模板中的空间。
+     * Get doctemplate spaces.
+     *
+     * @access public
+     * @return array
+     */
+    public function getDocTemplateSpaces()
+    {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getTeamSpaces();
 
+        $spaces = $this->getSpacePairs('doctemplate');
+        if(empty($spaces)) $this->initDocTemplateSpaces();
+
+        return $this->getSpacePairs('doctemplate');
+    }
+
+    /**
+     * 初始化文档模板空间。
+     * Init doctemplate spaces.
+     *
+     * @access public
+     * @return array
+     */
+    public function initDocTemplateSpaces()
+    {
+        $this->loadModel('doctempalte');
+        $defaultSpaces = $this->config->doctemplate->defaultSpaces;
+
+        foreach($defaultSpaces as $code => $childs)
+        {
+            $spaceID = $this->doInsertLib($this->initDocDefaultSpaces($code));
+
+            foreach($childs as $childCode) $this->doInsertLib($this->initDocDefaultSpaces($childCode, $spaceID));
+        }
+    }
+
+    /**
+     * 初始化文档模板空间。
+     * Init doctemplate spaces.
+     *
+     * @access public
+     * @return array
+     */
+    public function initDocDefaultSpaces($code, $parent = 0)
+    {
+        $space = new stdclass();
+        $space->type      = 'doctemplate';
+        $space->vision    = 'rnd';
+        $space->parent    = $parent;
+        $space->name      = $this->lang->doctemplate->$code;
+        $space->acl       = 'open';
+        $space->addedBy   = 'system';
+        $space->addedDate = helper::now();
+
+        return $space;
+    }
+
+    /**
+     * 获取团队空间或我的空间下的空间。
+     * Get team spaces or my spaces.
+     *
+     * @param  string $type all|mine|custom
+     * @param  bool   $withType
+     * @access public
+     * @return array
+     */
+    public function getSubSpacesByType(string $type = 'all', bool $withType = false): array
+    {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getSubSpaces($type);
+
         $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)
-            ->where('type')->eq('custom')
-            ->andWhere('deleted')->eq(0)
+            ->where('deleted')->eq(0)
             ->andWhere('parent')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
+            ->beginIF($type == 'all')->andWhere('type')->in('mine,custom')->fi()
+            ->beginIF($type != 'all')->andWhere('type')->eq($type)->fi()
+            ->beginIF($type == 'mine')->andWhere('addedBy')->eq($this->app->user->account)->fi()
+            ->orderBy('type_desc')
             ->fetchAll();
 
         $pairs = array();
-        foreach($objectLibs as $lib)
+        foreach($objectLibs as $key => $lib)
         {
-            if($this->checkPrivLib($lib)) $pairs[$lib->id] = $lib->name;
+            if($lib->type === 'mine' && $lib->addedBy != $this->app->user->account)
+            {
+                unset($objectLibs[$key]);
+                continue;
+            }
+
+            if($this->checkPrivLib($lib))
+            {
+                $key = $withType ? "{$lib->type}.{$lib->id}" : $lib->id;
+                $pairs[$key] = $type == 'all' ? $this->lang->doc->spaceList[$lib->type] . '/' . $lib->name : $lib->name;
+            }
         }
 
         return $pairs;
+    }
+
+    /**
+     * 获取lib的targetSpace，返回的是type.id。
+     *
+     * @access public
+     * @return string
+     */
+    public function getLibTargetSpace($lib)
+    {
+        $type = $lib->type;
+        if(in_array($type, array('product', 'project')))
+        {
+            $targetSpace = "{$type}.{$lib->$type}";
+        }
+        else
+        {
+            $targetSpace = "{$type}.{$lib->parent}";
+        }
+
+        return $targetSpace;
+    }
+
+    /**
+     * 解析targetSpace。
+     *
+     * @param  string $targetSpace
+     * @param  string $paramType type|id
+     * @access public
+     * @return array
+     */
+    public function getParamFromTargetSpace($targetSpace, $paramType = 'type')
+    {
+        $params = explode('.', $targetSpace);
+
+        if($paramType == 'type') return $params[0];
+        if($paramType == 'id')   return $params[1];
+    }
+
+    /**
+     * 获取所有子空间。
+     * Get all sub spaces.
+     *
+     * @access public
+     * @return array
+     */
+    public function getAllSubSpaces()
+    {
+        $productList = $this->loadModel('product')->getPairs('nocode');
+        $projectList = $this->loadModel('project')->getPairsByProgram();
+
+        $spaceList = $this->dao->select('*')->from(TABLE_DOCLIB)
+            ->where('deleted')->eq(0)
+            ->andWhere('parent')->eq(0)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere('type', true)->eq('custom')
+            ->orWhere('(type')->eq('mine')->andWhere('addedBy')->eq($this->app->user->account)
+            ->markRight(2)
+            ->orderBy('type_desc')
+            ->fetchAll();
+
+        $productPairs = $projectPairs = $spacePairs = array();
+        foreach($productList as $productID => $productName) $productPairs["product.{$productID}"] = $this->lang->doc->spaceList['product'] . '/' . $productName;
+        foreach($projectList as $projectID => $projectName) $projectPairs["project.{$projectID}"] = $this->lang->doc->spaceList['project'] . '/' . $projectName;
+        foreach($spaceList as $space)
+        {
+            if($this->checkPrivLib($space)) $spacePairs["{$space->type}.{$space->id}"] = $this->lang->doc->spaceList[$space->type] . '/' . $space->name;
+        }
+
+        return array_merge($spacePairs, $productPairs, $projectPairs);
+    }
+
+    /**
+     * 获取空间列表。
+     * Get spaces.
+     *
+     * @param  string $type
+     * @param  int    $spaceID
+     * @access public
+     * @return array
+     */
+    public function getSpaces($type = 'custom', $spaceID = 0)
+    {
+        $pairs = array();
+        if($type == 'mine' || $type == 'custom') $pairs = $this->getSubSpacesByType($type);
+        if($type == 'product')
+        {
+            $pairs   = $this->loadModel('product')->getPairs('nocode');
+            $spaceID = $this->product->checkAccess($spaceID, $pairs);
+        }
+        if($type == 'project')
+        {
+            $pairs   = $this->loadModel('project')->getPairsByProgram();
+            $spaceID = $this->project->checkAccess($spaceID, $pairs);
+        }
+
+        $spaces = array();
+        foreach($pairs as $id => $name) $spaces[] = array('type' => $type, 'id' => $id, 'name' => $name);
+        if(!$spaceID && $spaces) $spaceID = $spaces[0]['id'];
+
+        return array($spaces, $spaceID);
     }
 
     /**
@@ -1356,24 +1630,25 @@ class docModel extends model
      * @param  string $type
      * @param  int    $objectID
      * @param  int    $appendLib
+     * @param  int    $limit
      * @access public
      * @return array
      */
-    public function getLibsByObject(string $type, int $objectID = 0, int $appendLib = 0): array
+    public function getLibsByObject(string $type, int $objectID = 0, int $appendLib = 0, int $limit = 0): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getDocLibs();
 
-        if(!in_array($type, array('mine', 'custom', 'product', 'project', 'execution'))) return array();
-        if(in_array($type, array('mine', 'custom')))
+        if(!in_array($type, array('mine', 'custom', 'product', 'project', 'execution', 'doctemplate'))) return array();
+        if(in_array($type, array('mine', 'custom', 'doctemplate')))
         {
             $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('deleted')->eq(0)
                 ->andWhere('vision')->eq($this->config->vision)
                 ->andWhere('type')->eq($type)
-                ->beginIF($type == 'custom')->andWhere('parent')->eq($objectID)->fi()
-                ->beginIF($type == 'mine')->andWhere('addedBy')->eq($this->app->user->account)->fi()
+                ->andWhere('parent')->eq($objectID)
                 ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
                 ->orderBy('`order` asc, id_asc')
+                ->limit($limit)
                 ->fetchAll('id');
         }
         else
@@ -1385,6 +1660,7 @@ class docModel extends model
                 ->beginIF($type == 'project')->andWhere('type')->in('api,project')->fi()
                 ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
                 ->orderBy('`order` asc, id_asc')
+                ->limit($limit)
                 ->fetchAll('id');
 
             $executionIDList = array();
@@ -1398,6 +1674,7 @@ class docModel extends model
                     ->andWhere('type')->eq('execution')
                     ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
                     ->orderBy('`order` asc, id_asc')
+                    ->limit($limit)
                     ->fetchAll('id');
             }
         }
@@ -1410,6 +1687,90 @@ class docModel extends model
 
         $itemCounts = $this->statLibCounts(array_keys($libs));
         foreach($libs as $libID => $lib) $libs[$libID]->allCount = $itemCounts[$libID];
+        return $libs;
+    }
+
+    /**
+     * 获取指定类型各个子空间文档库概要信息。
+     * Get doclib summary of each sub space.
+     *
+     * @param  string $type
+     * @param  array  $libIDList
+     * @param  int    $limit
+     * @access public
+     * @return array
+     */
+    public function getLibsOfSpaces(string $type, string|array $spaceList, $limit = 5)
+    {
+        if(is_string($spaceList)) $spaceList = explode(',', $spaceList);
+        if(empty($spaceList)) return array();
+
+        $map       = array();
+        $libIDList = array();
+        foreach($spaceList as $spaceID)
+        {
+            $libs       = $this->getLibsByObject($type, (int)$spaceID, 0, $limit);
+            $libIDList += array_keys($libs);
+            $map[$spaceID] = array_values($libs);
+        }
+
+        $docCounts = array();
+        $docs = $this->dao->select("`id`,`addedBy`,`type`,`lib`,`acl`,`users`,`groups`,`status`")->from(TABLE_DOC)
+            ->where('lib')->in($libIDList)
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll();
+
+        foreach($docs as $doc)
+        {
+            if(!$this->checkPrivDoc($doc)) continue;
+
+            if(!isset($docCounts[$doc->lib])) $docCounts[$doc->lib] = 0;
+            $docCounts[$doc->lib] ++;
+        }
+
+        foreach($map as $spaceID => &$libs)
+        {
+            foreach($libs as &$lib)
+            {
+                $lib->docs = isset($docCounts[$lib->id]) ? $docCounts[$lib->id] : 0;
+            }
+        }
+
+        return $map;
+    }
+
+    /**
+     * 获取空间下的文档库。
+     * Get libs of space.
+     *
+     * @param  string $type
+     * @param  int    $spaceID
+     * @access public
+     * @return array
+     */
+    public function getLibsOfSpace(string $type, int $spaceID): array
+    {
+        $libs = $this->getLibsByObject($type, $spaceID);
+
+        if($type == 'project')
+        {
+            $executionIDList = array();
+            foreach($libs as $lib)
+            {
+                if($lib->type != 'execution') continue;
+                $executionIDList[] = $lib->execution;
+            }
+
+            $executionPairs = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in($executionIDList)->fetchPairs();
+
+            foreach($libs as &$lib)
+            {
+                if($lib->type != 'execution') continue;
+                $lib->originName = $lib->name;
+                $lib->name       = $executionPairs[$lib->execution];
+            }
+        }
+
         return $libs;
     }
 
@@ -2170,23 +2531,25 @@ class docModel extends model
         }
         else
         {
-            if($type == 'custom')
+            if($type == 'custom' || $type == 'doctemplate')
             {
-                $spaces = $this->getTeamSpaces();
+                $spaces = $type == 'custom' ? $this->getTeamSpaces() : $this->getDocTemplateSpaces();
+
                 if(empty($objectID)) $objectID = (int)key($spaces);
                 if(!isset($spaces[$objectID])) $objectID = (int)key($spaces);
             }
+
             $libs = $this->getLibsByObject($type, $objectID, $appendLib);
             if(($libID == 0 || !isset($libs[$libID])) && !empty($libs)) $libID = reset($libs)->id;
             if(isset($libs[$libID])) $objectDropdown['text'] = zget($libs[$libID], 'name', '');
-            if($type == 'custom')
+            if($type == 'custom' || $type == 'doctemplate')
             {
+                $spaceExtra = $type == 'custom' ? 'nomine' : 'doctemplate';
                 $objectDropdown['text'] = zget($spaces, $objectID, '');
-                $objectDropdown['link'] = helper::createLink('doc', 'ajaxGetSpaceMenu', "libID={$objectID}&module={$this->app->rawModule}&method={$this->app->rawMethod}");
+                $objectDropdown['link'] = helper::createLink('doc', 'ajaxGetSpaceMenu', "libID={$objectID}&module={$this->app->rawModule}&method={$this->app->rawMethod}&extra={$spaceExtra}");
             }
 
-            $object     = new stdclass();
-            $object->id = 0;
+            $object = $this->dao->select('id,name,deleted')->from(TABLE_DOCLIB)->where('id')->eq($objectID)->fetch();
         }
 
         $tab = strpos(',my,doc,product,project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'doc';
@@ -2237,6 +2600,26 @@ class docModel extends model
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'doc', true);
 
         return $this->processCollector($docs);
+    }
+
+    /**
+     * 获取给定文档库的目录列表。
+     * Get modules from libs.
+     *
+     * @param  array $libs  Lib id list.
+     * @access public
+     * @return array
+     */
+    public function getModulesOfLibs(array $libs)
+    {
+        $modules = $this->dao->select('*')->from(TABLE_MODULE)
+            ->where('root')->in($libs)
+            ->andWhere('type')->eq('doc')
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('grade desc, `order`')
+            ->fetchAll('id');
+
+        return $modules;
     }
 
     /**
@@ -3005,104 +3388,63 @@ class docModel extends model
     public function moveLib(int $libID, object $data): bool
     {
         if(empty($libID) || empty($data->space)) return false;
-        if(is_numeric($data->space))
+        $lib = $this->getLibByID($libID);
+
+        $spaceType = $this->getParamFromTargetSpace($data->space, 'type');
+        $spaceID   = $this->getParamFromTargetSpace($data->space, 'id');
+        if(is_numeric($spaceID))
         {
-            $data->type   = 'custom';
-            $data->parent = $data->space;
-        }
-        elseif($data->space == 'mine')
-        {
-            $data->type    = 'mine';
-            $data->parent  = 0;
-            $data->addedBy = $this->app->user->account;
+            $data->type = $spaceType;
+            if($spaceType == 'mine') $data->addedBy = $this->app->user->account;
+
+            /* 如果是项目空间(project)和产品空间(product)，修改doclib对应的project和product字段，并将parent置为0
+             * 如果不是，则是我的空间(mine)和团队空间(custom),直接修改parent，并将project和product字段置为0
+             */
+            if(in_array($spaceType, array('project', 'product')))
+            {
+                $data->$spaceType = $spaceID;
+                if($lib->parent) $data->parent = 0;
+            }
+            else
+            {
+                $data->parent = $spaceID;
+                if($lib->product) $data->product = 0;
+                if($lib->project) $data->project = 0;
+            }
         }
         else
         {
             return false;
         }
 
-        $lib     = $this->getLibByID($libID);
         $changes = common::createChanges($lib, $data);
         if(empty($changes)) return false;
 
         unset($data->space);
         $this->dao->update(TABLE_DOCLIB)->data($data)->where('id')->eq($libID)->exec();
 
-        $actionID = $this->loadModel('action')->create('docLib', $libID, 'Moved', '', json_encode(array('from' => $lib->type == 'mine' ? 'mine' : $lib->parent, 'to' => $data->type == 'mine' ? 'mine' : $data->parent)));
-        $this->action->logHistory($actionID, $changes);
+        $from = in_array($lib->type, array('project', 'product'))  ? ($lib->project ? "{$lib->type}.{$lib->project}" : "{$lib->type}.{$lib->product}")     : "{$lib->type}.{$lib->parent}";
+        $to   = in_array($data->type, array('project', 'product')) ? (isset($data->project) ? "{$data->type}.{$data->project}" : "{$data->type}.{$lib->product}") : "{$data->type}.{$data->parent}";
 
-        /* 从团队空间移动到我的空间，需要保留其他人创建的文档在团队空间。 */
-        if($data->type == 'mine') $this->reserveOthersDoc($lib);
+        $actionID = $this->loadModel('action')->create('docLib', $libID, 'Moved', '', json_encode(array('from' => $from, 'to' => $to)));
+        $this->action->logHistory($actionID, $changes);
 
         return true;
     }
 
     /**
-     * 迁移文档库时保留其他人创建的文档。
-     * Reserve other people's documents when migrating document libraries.
+     * Batch move document.
      *
-     * @param  object $lib
+     * @param  object $data
+     * @param  array  $docIdList
      * @access public
-     * @return void
+     * @return bool
      */
-    public function reserveOthersDoc(object $lib)
+    public function batchMoveDoc(object $data, array $docIdList): bool
     {
-        $othersDocList = $this->dao->select('id, module')->from(TABLE_DOC)
-            ->where('lib')->eq($lib->id)
-            ->andWhere('addedBy')->ne($this->app->user->account)
-            ->andWhere('deleted')->eq('0')
-            ->fetchPairs();
+        $this->dao->update(TABLE_DOC)->data($data)->where('id')->in($docIdList)->exec();
 
-        if($othersDocList)
-        {
-            unset($lib->id);
-            $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
-            $newLibID = $this->dao->lastInsertID();
-
-            $this->dao->update(TABLE_DOC)->set('lib')->eq($newLibID)->where('id')->in(array_keys($othersDocList))->exec();
-
-            $modulePairs  = $this->dao->select('id, path')->from(TABLE_MODULE)->where('id')->in($othersDocList)->andWhere('deleted')->eq('0')->fetchPairs();
-            $moduleIdList = array();
-            foreach($modulePairs as $path)
-            {
-                $paths = explode(',', trim($path, ','));
-                foreach($paths as $id)
-                {
-                    if($id > 0) $moduleIdList[$id] = $id;
-                }
-            }
-
-            $mapList = array();
-            $idMap   = array();
-            $modules = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->in($moduleIdList)->andWhere('deleted')->eq('0')->fetchAll('id');
-            foreach($modules as $module)
-            {
-                $oldID = $module->id;
-                unset($module->id);
-                $module->root = $newLibID;
-                $this->dao->insert(TABLE_MODULE)->data($module)->exec();
-
-                $newID = $this->dao->lastInsertID();
-
-                $module->id    = $newID;
-                $mapList[]     = $module;
-                $idMap[$oldID] = $newID;
-
-                $this->dao->update(TABLE_DOC)->set('module')->eq($newID)->where('module')->eq($oldID)->andWhere('lib')->eq($newLibID)->exec();
-            }
-
-            foreach($mapList as $module)
-            {
-                $parent = $module->parent ? $idMap[$module->parent] : 0;
-                $paths  = explode(',', trim($module->path, ','));
-                foreach($paths as $key => $path)
-                {
-                    if($path) $paths[$key] = $idMap[$path];
-                }
-                $path = implode(',', $paths);
-                $this->dao->update(TABLE_MODULE)->set('parent')->eq($parent)->set('path')->eq($path)->where('id')->eq($module->id)->exec();
-            }
-        }
+        return !dao::isError();
     }
 
     /**

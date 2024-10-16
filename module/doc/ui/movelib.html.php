@@ -14,7 +14,6 @@ namespace zin;
 
 modalHeader(set::titleClass('text-root font-bold'), set::title($lang->doc->moveLibAction));
 
-$libType    = $targetSpace == 'mine' ? 'mine' : 'custom';
 $defaultAcl = $lib->acl;
 if($libType == 'mine') $defaultAcl = 'private';
 if($libType == 'custom' && ($lib->type == 'mine' || $lib->parent != $targetSpace)) $defaultAcl = 'open';

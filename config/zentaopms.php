@@ -239,6 +239,7 @@ $config->logonMethods[] = 'custom.index';
 $config->logonMethods[] = 'doc.createbasicinfo';
 $config->logonMethods[] = 'doc.selectlibtype';
 $config->logonMethods[] = 'doc.uploaddocs';
+$config->logonMethods[] = 'doc.setdocbasic';
 $config->logonMethods[] = 'execution.browse';
 $config->logonMethods[] = 'feedback.mergeproductmodule';
 $config->logonMethods[] = 'file.buildoldform';

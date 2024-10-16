@@ -1,30 +1,29 @@
 <?php
 declare(strict_types=1);
 /**
- * The moveDoc view file of doc module of ZenTaoPMS.
+ * The batchMoveDoc view file of doc module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
- * @author      Yidong Wang <yidong@chandao.com>
+ * @author      Tingting Dai <daitingting@xirangit.com>
  * @package     doc
  * @version     $Id$
  * @link        http://www.zentao.net
  */
 namespace zin;
 
-modalHeader(set::title($lang->doc->moveDocAction));
+modalHeader(set::title($lang->doc->batchMove));
 
-$defaultAcl = $doc->acl;
-if($spaceType == 'mine')
+jsVar('encodeDocIdList', $encodeDocIdList);
+jsVar('spaceID',         $spaceID);
+jsVar('type',            $type);
+
+$aclItems = array();
+foreach($lang->doc->aclList as $aclKey => $aclLabel)
 {
-    $defaultAcl = 'private';
-    $this->lang->doc->aclList = $this->lang->doclib->mySpaceAclList;
+    $aclItems[] = array('value' => $aclKey, 'text' => $aclLabel, 'disabled' => ($type == 'mine' && $aclKey == 'private'));
 }
 
-jsVar('spaceType', $spaceType);
-jsVar('space', $space);
-jsVar('libID', $libID);
-jsVar('docID', $docID);
 formPanel
 (
     on::change('[name=space]', 'changeSpace'),
@@ -34,20 +33,20 @@ formPanel
         set::width('5/6'),
         set::label($lang->doc->space),
         set::required(true),
-        set::control(array('control' => "picker", 'name' => 'space', 'items' => $spaces, 'value' => "{$spaceType}.{$space}"))
+        set::control(array('control' => 'picker', 'name' => 'space', 'items' => $spaces, 'value' => "{$type}.{$spaceID}"))
     ),
     formGroup
     (
         set::width('5/6'),
         set::label($lang->doc->lib),
         set::required(true),
-        set::control(array('control' => "picker", 'name' => 'lib', 'items' => $libPairs, 'value' => $libID))
+        set::control(array('control' => 'picker', 'name' => 'lib', 'items' => $libPairs, 'value' => $libID))
     ),
     formGroup
     (
         set::width('5/6'),
         set::label($lang->doc->module),
-        set::control(array('control' => "picker", 'name' => 'module', 'items' => $optionMenu, 'value' => $doc->module, 'required' => true))
+        set::control(array('control' => 'picker', 'name' => 'module', 'items' => $optionMenu, 'value' => $moduleID, 'required' => true))
     ),
     formRow
     (
@@ -58,8 +57,8 @@ formPanel
             radioList
             (
                 set::name('acl'),
-                set::items($lang->doc->aclList),
-                set::value($defaultAcl),
+                set::items($aclItems),
+                set::value($type == 'mine' ? 'private' : 'open'),
                 on::change("toggleDocAcl")
             )
         )
@@ -67,7 +66,7 @@ formPanel
     formRow
     (
         setID('whiteListBox'),
-        setClass(($libID == $doc->lib && $spaceType != 'mine' && $defaultAcl == 'private') ? '' : 'hidden'),
+        setClass('hidden'),
         formGroup
         (
             set::label($lang->doc->whiteList),
@@ -86,7 +85,7 @@ formPanel
                 div
                 (
                     setClass('w-full'),
-                    userPicker(set::label($lang->doclib->user), set::items($users))
+                    userPicker(set::label($lang->doclib->user), set::items($users), set::contactList(false))
                 )
             )
         )

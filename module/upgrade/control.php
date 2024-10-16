@@ -11,6 +11,10 @@
  */
 class upgrade extends control
 {
+    public function ajaxUpgradeDocSpace()
+    {
+        $this->upgrade->upgradeMyDocSpace();
+    }
     /**
      * The index page.
      *

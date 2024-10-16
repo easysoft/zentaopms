@@ -166,7 +166,7 @@ class tree extends control
             $this->tree->update($moduleID, $type);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->sendSuccess(array('clodeModal' => true, 'load' => true));
+            return $this->sendSuccess(array('closeModal' => true, 'load' => true, 'docApp' => array('load', null, null, null, array('noLoading' => true, 'picks' => 'module'))));
         }
 
         $module = $this->tree->getById($moduleID);
@@ -511,6 +511,6 @@ class tree extends control
         $module = $this->tree->createModule();
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => implode('\n', dao::getError())));
 
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'module' => $module));
     }
 }

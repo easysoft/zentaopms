@@ -221,6 +221,32 @@ class docTao extends docModel
     }
 
     /**
+     * 获取空间。
+     * Get space pairs.
+     *
+     * @param  string     $type
+     * @access protected
+     * @return array
+     */
+    protected function getSpacePairs(string $type): array
+    {
+        $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)
+            ->where('type')->eq($type)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('parent')->eq(0)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->fetchAll();
+
+        $pairs = array();
+        foreach($objectLibs as $lib)
+        {
+            if($this->checkPrivLib($lib)) $pairs[$lib->id] = $lib->name;
+        }
+
+        return $pairs;
+    }
+
+    /**
      * 更新文档。
      * Update document.
      *

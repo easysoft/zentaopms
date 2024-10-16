@@ -161,36 +161,46 @@ $handleSubmitForm = <<<'JS'
             return false;
         }
         $(e.target).removeClass('has-changed').find('input[name=status]').val(isDraft ? 'draft' : 'normal');
+
+        const pageEditor = $('#docEditor').zui('pageEditor');
+        if(pageEditor) return pageEditor.syncData().then(() => true);
     }
     JS;
 
 formBase
 (
     setID('docForm'),
+    setData('unsavedConfirm', $lang->doc->confirmLeaveOnEdit),
     set::actions(false),
     set::ajax(array('beforeSubmit' => jsRaw($handleSubmitForm), 'onFail' => jsRaw('() => $("#docForm").addClass("has-changed")'))),
     set::morph(),
-    setData('unsavedConfirm', $lang->doc->confirmLeaveOnEdit),
     on::change('#showTitle,zen-editor')->once()->do('$element.addClass("has-changed")'),
     panel
     (
         setClass('doc-form preserve-on-morph'),
+        set::headingActions($headingActions),
+        set::headingClass('py-3'),
+        set::bodyClass('p-0 border-t'),
         to::heading
         (
             input
             (
-                setClass('ring-0 text-xl font-bold px-0'),
                 setID('showTitle'),
+                setClass('ring-0 text-xl font-bold px-0'),
+                setData('title-hint', sprintf($lang->error->notempty, $lang->doc->title)),
                 set::maxlength(100),
                 set::placeholder($lang->doc->titlePlaceholder),
-                setData('title-hint', sprintf($lang->error->notempty, $lang->doc->title)),
                 on::init()->do('$element.on("change input", () => {$("#title").val($element.val()).removeClass("has-error");$("#titleTip").remove();})')
             )
         ),
-        set::headingActions($headingActions),
-        set::headingClass('py-3'),
-        set::bodyClass('p-0 border-t'),
-        editor
+        $docType === 'doc' ? pageEditor
+        (
+            set::_id('docEditor'),
+            set::name('content'),
+            set::size('auto'),
+            set::resizable(false),
+            set::placeholder($lang->noticePasteImg)
+        ) : editor
         (
             set::name('content'),
             set::size('full'),
@@ -199,7 +209,7 @@ formBase
         )
     ),
     formHidden('status', 'normal'),
-    formHidden('contentType', 'html'),
+    formHidden('contentType', $docType),
     formHidden('type', 'text'),
     $basicInfoModal
 );

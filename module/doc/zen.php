@@ -17,12 +17,14 @@ class docZen extends doc
      * @param  array     $files
      * @param  array     $fileIcon
      * @param  array     $sourcePairs
+     * @param  bool      $skipImageWidth
      * @access protected
-     * @return arary
+     * @return array
      */
-    protected function processFiles(array $files, array $fileIcon, array $sourcePairs): array
+    protected function processFiles(array $files, array $fileIcon, array $sourcePairs, bool $skipImageWidth = false): array
     {
-        $this->loadModel('file');
+        if(!$skipImageWidth) $this->loadModel('file');
+
         foreach($files as $fileID => $file)
         {
             if(empty($file->pathname))
@@ -36,8 +38,12 @@ class docZen extends doc
             $file->sourceName = isset($sourcePairs[$file->objectType][$file->objectID]) ? $sourcePairs[$file->objectType][$file->objectID] : '';
             $file->sizeText   = number_format($file->size / 1024, 1) . 'K';
 
-            $imageSize = $this->file->getImageSize($file);
-            $file->imageWidth = isset($imageSize[0]) ? $imageSize[0] : 0;
+            if(!$skipImageWidth)
+            {
+                $imageSize = $this->file->getImageSize($file);
+                $file->imageWidth = isset($imageSize[0]) ? $imageSize[0] : 0;
+            }
+
             if($file->objectType == 'requirement')
             {
                 $file->objectName = $this->lang->URCommon . ' : ';
@@ -222,20 +228,19 @@ class docZen extends doc
             $acl = 'private';
             $this->lang->doclib->aclList = $this->lang->doclib->mySpaceAclList;
         }
-        $this->view->acl = $acl;
-
-        if($type != 'custom' && $type != 'mine')
+        elseif($type == 'api')
+        {
+            $this->app->loadLang('api');
+            $this->lang->api->aclList['default'] = sprintf($this->lang->api->aclList['default'], $this->lang->{$type}->common);
+        }
+        elseif(in_array($type, array('product', 'project', 'execution')))
         {
             $this->lang->doclib->aclList['default'] = sprintf($this->lang->doclib->aclList['default'], $this->lang->{$type}->common);
             $this->lang->doclib->aclList['private'] = sprintf($this->lang->doclib->privateACL, $this->lang->{$type}->common);
             unset($this->lang->doclib->aclList['open']);
         }
 
-        if($type != 'mine')
-        {
-            $this->app->loadLang('api');
-            $this->lang->api->aclList['default'] = sprintf($this->lang->api->aclList['default'], $this->lang->{$type}->common);
-        }
+        $this->view->acl = $acl;
     }
 
     /**
@@ -268,7 +273,7 @@ class docZen extends doc
      * @access protected
      * @return bool|int
      */
-    protected function responseAfterCreateLib(string $type = '', int $objectID = 0, int $libID = 0): bool|int
+    protected function responseAfterCreateLib(string $type = '', int $objectID = 0, int $libID = 0, string $libName = ''): bool|int
     {
         if($type == 'project'   && $this->post->project)   $objectID = $this->post->project;
         if($type == 'product'   && $this->post->product)   $objectID = $this->post->product;
@@ -279,7 +284,8 @@ class docZen extends doc
         $this->action->create('docLib', $libID, 'Created');
 
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $libID));
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('name' => 'locateNewLib', 'params' => array("$type", "$objectID", "$libID"))));
+        $lib = array('id' => $libID, 'name' => $libName, 'space' => $objectID);
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('name' => 'locateNewLib', 'params' => array($type, $objectID, $libID, $libName)), 'docApp' => array(array('update', 'lib', $lib), array('selectLib', $libID, true))));
     }
 
     /**
@@ -287,15 +293,12 @@ class docZen extends doc
      * Handle the access control of editing document library.
      *
      * @param  object    $lib
-     * @param  string    $targetSpace
      * @access protected
      * @return void
      */
-    protected function setAclForEditLib(object $lib, string $targetSpace = ''): void
+    protected function setAclForEditLib(object $lib): void
     {
         $libType = $lib->type;
-        if($targetSpace == 'mine')   $libType = 'mine';
-        if(is_numeric($targetSpace)) $libType = 'custom';
 
         if($libType == 'custom')
         {
@@ -379,7 +382,7 @@ class docZen extends doc
 
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
         $params   = "docID=" . $docResult['id'];
-        $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('doc', 'view', $params));
+        $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('doc', 'view', $params), 'id' => $docID, 'doc' => $docResult);
 
         return $this->send($response);
     }
@@ -389,21 +392,24 @@ class docZen extends doc
      * Return after move lib or doc.
      *
      * @param  string     $space
+     * @param  string     $spaceType
      * @param  int        $libID
      * @param  string     $locateLink
+     * @param  int        $docID
+     *
      * @access protected
      * @return bool|int
      */
-    protected function responseAfterMove(string $space, int $libID = 0, string $locateLink = ''): bool|int
+    protected function responseAfterMove(string $space, string $spaceType = 'mine', int $libID = 0, string $locateLink = '', int $docID = 0): bool|int
     {
         if(empty($locateLink))
         {
-            if($space == 'mine')       $locateLink = $this->createLink('doc', 'mySpace', "type=mine&libID={$libID}");
-            elseif(is_numeric($space)) $locateLink = $this->createLink('doc', 'teamSpace', "objectID={$space}&libID={$libID}");
-            else                       $locateLink = true;
+            if($spaceType == 'mine')       $locateLink = $this->createLink('doc', 'mySpace', "type=mine&libID={$libID}");
+            elseif($spaceType == 'custom') $locateLink = $this->createLink('doc', 'teamSpace', "objectID={$space}&libID={$libID}");
+            else                           $locateLink = true;
         }
         if($locateLink === 'true') $locateLink = true;
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $locateLink));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'docApp' => $docID ? array('loadDoc', $docID) : array('load', null, null, null, array('noLoading' => true, 'picks' => 'lib'))));
     }
 
     /**
@@ -494,7 +500,7 @@ class docZen extends doc
             $link = true;
         }
 
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link, 'closeModal' => true, 'docApp' => array('load', null, null, null, array('noLoading' => true, 'picks' => 'doc'))));
     }
 
     /**
@@ -557,7 +563,7 @@ class docZen extends doc
 
         $this->view->title    = empty($lib) ? '' : zget($lib, 'name', '', $lib->name . $this->lang->hyphen) . $this->lang->doc->uploadDoc;
         $this->view->linkType = $objectType;
-        $this->view->spaces   = $this->getAllSpaces($objectType == 'custom' ? 'nomine' : 'onlymine');
+        $this->view->spaces   = ($objectType == 'mine' || $objectType == 'custom') ? $this->doc->getSubSpacesByType($objectType, true) : array();
     }
 
     /**
@@ -904,12 +910,37 @@ class docZen extends doc
         $mineLib = new stdclass();
         $mineLib->type      = 'mine';
         $mineLib->vision    = $this->config->vision;
-        $mineLib->name      = $this->lang->doclib->defaultMyLib;
+        $mineLib->name      = $this->lang->doclib->defaultSpace;
         $mineLib->main      = '1';
         $mineLib->acl       = 'private';
         $mineLib->addedBy   = $this->app->user->account;
         $mineLib->addedDate = helper::now();
         $this->dao->insert(TABLE_DOCLIB)->data($mineLib)->exec();
+    }
+
+    /**
+     * 初始化团队空间的文档库。
+     * Init Lib for teamSpace.
+     *
+     * @access public
+     * @return void
+     */
+    public function initLibForTeamSpace()
+    {
+        $customLibCount = $this->dao->select('count(1) as count')->from(TABLE_DOCLIB)
+            ->where('type')->eq('custom')
+            ->andWhere('vision')->eq($this->config->vision)
+            ->fetch('count');
+        if(!empty($customLibCount)) return;
+
+        $teamLib = new stdclass();
+        $teamLib->type      = 'custom';
+        $teamLib->vision    = $this->config->vision;
+        $teamLib->name      = $this->lang->doclib->defaultSpace;
+        $teamLib->acl       = 'open';
+        $teamLib->addedBy   = $this->app->user->account;
+        $teamLib->addedDate = helper::now();
+        $this->dao->insert(TABLE_DOCLIB)->data($teamLib)->exec();
     }
 
     /**
@@ -922,7 +953,8 @@ class docZen extends doc
      */
     public function getAllSpaces(string $extra = ''): array
     {
-        if(strpos($extra, 'nomine') !== false) return $this->doc->getTeamSpaces();
+        if(strpos($extra, 'doctemplate') !== false) return $this->doc->getDocTemplateSpaces();
+        if(strpos($extra, 'nomine') !== false)   return $this->doc->getTeamSpaces();
         if(strpos($extra, 'onlymine') !== false) return array('mine' => $this->lang->doc->spaceList['mine']);
         return array('mine' => $this->lang->doc->spaceList['mine']) + $this->doc->getTeamSpaces();
     }

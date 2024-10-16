@@ -63,7 +63,6 @@ formPanel
         set::items($spaces),
         set::value($objectID),
         on::change('loadObjectModules'),
-        set::disabled($objectType == 'mine'),
         set::required(true)
     ) : null,
     formGroup

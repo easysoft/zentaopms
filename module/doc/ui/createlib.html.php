@@ -72,7 +72,7 @@ formPanel
             )
         )
     ) : null,
-    $type == 'custom' ? formRow
+    $type == 'custom' || $type == 'mine' ? formRow
     (
         formGroup
         (
