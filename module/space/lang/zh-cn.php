@@ -1,16 +1,16 @@
 <?php
 global $config;
 
-$lang->space->common          = '应用';
-$lang->space->browse          = '应用列表';
-$lang->space->getStoreAppInfo = '获取应用信息';
+$lang->space->common          = '服务';
+$lang->space->browse          = '服务列表';
+$lang->space->getStoreAppInfo = '获取服务信息';
 $lang->space->status          = '状态';
 $lang->space->noApps          = '暂无服务';
 $lang->space->defaultSpace    = '默认空间';
 $lang->space->systemSpace     = '系统空间';
 $lang->space->searchInstance  = '搜索服务';
 $lang->space->upgrade         = '升级';
-$lang->space->install         = '添加应用';
+$lang->space->install         = '添加服务';
 $lang->space->createdBy       = '创建者';
 $lang->space->createdAt       = '创建时间';
 $lang->space->handConfig      = '手工配置';

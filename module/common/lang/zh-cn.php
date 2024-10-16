@@ -278,7 +278,7 @@ $lang->dimension->common    = '维度';
 $lang->contact->common      = '联系人';
 $lang->space->common        = '服务管理';
 $lang->store->common        = '应用市场';
-$lang->instance->common     = '应用';
+$lang->instance->common     = '服务';
 $lang->ai->common           = 'AI';
 $lang->aiapp->common        = 'AI';
 
