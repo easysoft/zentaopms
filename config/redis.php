@@ -17,9 +17,9 @@ $config->redis->tables[TABLE_PROJECT]->caches[] = ['type' => 'set', 'name' => 'e
 $config->redis->tables[TABLE_PRODUCT] = new stdClass();
 $config->redis->tables[TABLE_PRODUCT]->key = 'id';
 $config->redis->tables[TABLE_PRODUCT]->caches[] = ['type' => 'raw', 'name' => 'product'];
-$config->redis->tables[TABLE_PRODUCT]->caches[] = ['type' => 'raw', 'name' => 'productIdList'];
+$config->redis->tables[TABLE_PRODUCT]->caches[] = ['type' => 'set', 'name' => 'productIdList'];
 
 $config->redis->tables[TABLE_USER] = new stdClass();
 $config->redis->tables[TABLE_USER]->key = 'account';
 $config->redis->tables[TABLE_USER]->caches[] = ['type' => 'raw', 'name' => 'user'];
-$config->redis->tables[TABLE_USER]->caches[] = ['type' => 'raw', 'name' => 'userAccountList'];
+$config->redis->tables[TABLE_USER]->caches[] = ['type' => 'set', 'name' => 'userAccountList'];
