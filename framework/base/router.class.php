@@ -3559,7 +3559,6 @@ class baseRouter
      */
     public function loadToRedis($redis)
     {
-        $redis->flushDB();
         foreach($this->config->redis->tables as $table => $setting)
         {
             foreach($setting->caches as $cache)
