@@ -18,11 +18,7 @@ jsVar('encodeDocIdList', $encodeDocIdList);
 jsVar('spaceID',         $spaceID);
 jsVar('type',            $type);
 
-$aclItems = array();
-foreach($lang->doc->aclList as $aclKey => $aclLabel)
-{
-    $aclItems[] = array('value' => $aclKey, 'text' => $aclLabel, 'disabled' => ($type == 'mine' && $aclKey == 'private'));
-}
+$aclItems = $type == 'mine' ? $lang->doclib->mySpaceAclList : $lang->doc->aclList;
 
 formPanel
 (
