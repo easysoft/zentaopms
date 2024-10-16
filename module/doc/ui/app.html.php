@@ -160,7 +160,7 @@ zui::docApp
     set::orderBy($orderBy),
     set::noSpace($noSpace),
     set::homeName($homeName),
-    set::pager(array('recTotal' => $recTotal, 'recPerPage' => $recPerPage, 'pageID' => $pageID)),
+    set::pager(array('recTotal' => $recTotal, 'recPerPage' => $recPerPage, 'page' => $pageID)),
     set::fetcher($fetcher),
     set::docFetcher($docFetcher),
     set::filesFetcher($filesFetcher),

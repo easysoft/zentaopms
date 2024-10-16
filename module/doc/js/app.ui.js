@@ -105,17 +105,17 @@ function handleSwitchView(mode, location, info)
     }
 
     let url;
-    const pager      = $.extend({recTotal: 0, recPerPage: 20, pageID: 1}, location.pager);
+    const pager      = $.extend({recTotal: 0, recPerPage: 20, page: 1}, location.pager);
     const search     = encodeURIComponent(location.search || '');
     const noSpace    = location.noSpace || 0;
     const filterType = encodeURIComponent(location.filterType || '');
     if (rawModule === 'doc' && rawMethod === 'app')
     {
-        url = $.createLink('doc', 'app', `type=${location.spaceType}&spaceID=${spaceID}&libID=${location.libID}&moduleID=${location.moduleID}&docID=${location.docID}&mode=${mode}&orderBy=${location.orderBy}&recTotal=${pager.recTotal}&recPerPage=${pager.recPerPage}&pageID=${pager.pageID}&filterType=${filterType}&search=${search}&noSpace=${noSpace}`).replace('&libID=0&moduleID=0&docID=0&mode=home&orderBy=id_desc&recTotal=0&recPerPage=0&pageID=1&filterType=&search=&noSpace=false', '');
+        url = $.createLink('doc', 'app', `type=${location.spaceType}&spaceID=${spaceID}&libID=${location.libID}&moduleID=${location.moduleID}&docID=${location.docID}&mode=${mode}&orderBy=${location.orderBy}&recTotal=${pager.recTotal}&recPerPage=${pager.recPerPage}&pageID=${pager.page}&filterType=${filterType}&search=${search}&noSpace=${noSpace}`).replace('&libID=0&moduleID=0&docID=0&mode=home&orderBy=id_desc&recTotal=0&recPerPage=0&pageID=1&filterType=&search=&noSpace=false', '');
     }
     else
     {
-        url = $.createLink(config.rawModule, config.rawMethod, `objectID=${location.spaceID}&libID=${location.libID}&moduleID=${location.moduleID}&browseType=${filterType}&param=0&orderBy=${location.orderBy}&recTotal=${pager.recTotal}&recPerPage=${pager.recPerPage}&pageID=${pager.pageID}&mode=${mode}&docID=${location.docID}&search=${search}`).replace('&libID=0&moduleID=0&browseType=all&param=&orderBy=&recTotal=0&recPerPage=20&pageID=1&mode=home&docID=0&search=', '');
+        url = $.createLink(config.rawModule, config.rawMethod, `objectID=${location.spaceID}&libID=${location.libID}&moduleID=${location.moduleID}&browseType=${filterType}&param=0&orderBy=${location.orderBy}&recTotal=${pager.recTotal}&recPerPage=${pager.recPerPage}&pageID=${pager.page}&mode=${mode}&docID=${location.docID}&search=${search}`).replace('&libID=0&moduleID=0&browseType=all&param=&orderBy=&recTotal=0&recPerPage=20&pageID=1&mode=home&docID=0&search=', '');
     }
     if(url === lastAppUrl) return;
     if(lastAppUrl && !$.apps.getAppUrl().endsWith(url)) $.apps.updateAppUrl(url, info.title ? (info.title + documentTitleSuffix) : originalDocumentTitle);
