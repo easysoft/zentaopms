@@ -782,13 +782,19 @@ function getTableOptions(options, info)
  * 获取文档界面上的列表筛选菜单。
  * Get the filter menu on the doc UI.
  *
- * @param {string} type
+ * @param {string} mode
  * @returns {[key: string, text: string][]}
  */
-function getFilterTypes(type)
+function getFilterTypes(mode)
 {
-    if(type === 'list')  return getLang('filterTypes');
-    if(type === 'files') return getLang('fileFilterTypes');
+    if(mode === 'home')
+    {
+        if(type === 'project') return getLang('projectFilterTypes');
+        if(type === 'product') return getLang('productFilterTypes');
+        return;
+    }
+    if(mode === 'list')    return getLang('filterTypes');
+    if(mode === 'files')   return getLang('fileFilterTypes');
 }
 
 /**
@@ -805,6 +811,10 @@ function isMatchFilter(type, filterType, item)
         if(filterType === 'editedByMe')  return item.editedBy === currentUser;
         if(filterType === 'draft')       return item.status === 'draft';
         if(filterType === 'collect')     return item.isCollector;
+    }
+    if(type === 'project' || type === 'product')
+    {
+        return filterType !== 'mine' || item.isMine;
     }
     return true;
 }

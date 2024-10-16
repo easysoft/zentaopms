@@ -425,3 +425,9 @@ $lang->doc->filterTypes[] = array('editedByMe', '我编辑');
 
 $lang->doc->fileFilterTypes[] = array('all', '全部');
 $lang->doc->fileFilterTypes[] = array('addedByMe', '我添加');
+
+$lang->doc->productFilterTypes[] = array('all',  '全部');
+$lang->doc->productFilterTypes[] = array('mine', '我负责的');
+
+$lang->doc->projectFilterTypes[] = array('all', '全部');
+$lang->doc->projectFilterTypes[] = array('mine', '我参与的');

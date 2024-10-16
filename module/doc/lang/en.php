@@ -425,3 +425,9 @@ $lang->doc->filterTypes[] = array('editedByMe', 'Edited by me');
 
 $lang->doc->fileFilterTypes[] = array('all', 'All');
 $lang->doc->fileFilterTypes[] = array('addedByMe', 'Add by me');
+
+$lang->doc->productFilterTypes[] = array('all',  'All');
+$lang->doc->productFilterTypes[] = array('mine', 'Mine');
+
+$lang->doc->projectFilterTypes[] = array('all', 'All');
+$lang->doc->projectFilterTypes[] = array('mine', 'Involved');
