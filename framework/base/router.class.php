@@ -487,7 +487,11 @@ class baseRouter
 
         if($this->config->framework->autoConnectDB) $this->connectDB();
 
-        if($this->config->redis) $this->redis = $this->connectToRedis();
+        if($this->config->redis->enable)
+        {
+            $this->loadClass('zredis', true);
+            $this->redis = new zredis($this->dao);
+        }
 
         $this->setupProfiling();
         $this->setupXhprof();
@@ -3508,78 +3512,6 @@ class baseRouter
         if(!isset($_SESSION['installing']) && !$installed && !empty($this->installing)) $_SESSION['installing'] = true;
 
         return $installed;
-    }
-
-    /**
-     * Connect to Redis Server.
-     * @link https://pecl.php.net/package/redis
-     * @link https://github.com/phpredis/phpredis/
-     * @return Redis|object|false
-     */
-    public function connectToRedis()
-    {
-        if(!extension_loaded('redis')) return false;
-
-        if(empty($this->config->redis)) return false;
-
-        try
-        {
-            $redis = new Redis();
-
-            $version = phpversion('redis');
-            if(version_compare($version, '5.3.0', 'ge'))
-            {
-                $redis->connect($this->config->redis->host , $this->config->redis->port, $this->config->redis->timeout, '', 0, 0, ['auth' => [$this->config->redis->username, $this->config->redis->password]]);
-            }
-            else
-            {
-                $redis->connect($this->config->redis->host , $this->config->redis->port, $this->config->redis->timeout, '', 0, 0);
-                $redis->auth(['pass' => $this->config->redis->password]);
-            }
-
-            if(!$redis->ping()) return false;
-
-            $this->loadToRedis($redis);
-        }
-        catch(RedisException $e)
-        {
-            $this->triggerError($e->getMessage(), __FILE__, __LINE__, true);
-        }
-
-        if($redis) return $redis;
-    }
-
-    /**
-     * 把数据载入 redis。
-     * Load data to redis.
-     *
-     * @param  Redis $redis
-     * @access public
-     * @return void
-     */
-    public function loadToRedis($redis)
-    {
-        foreach($this->config->redis->tables as $table => $setting)
-        {
-            foreach($setting->caches as $cache)
-            {
-                $cache     = (object)$cache;
-                $condition = isset($cache->condition) ? $cache->condition : '';
-                $objects   = $this->dao->select('*')->from($table)->beginIF($condition)->where($condition)->fi()->fetchAll();
-                if($cache->type == 'raw')
-                {
-                    $pairs = [];
-                    foreach($objects as $object) $pairs[$cache->type . ':' . $cache->name . ':' . $object->{$setting->key}] = json_encode($object);
-                    $redis->mset($pairs);
-                }
-                if($cache->type == 'set')
-                {
-                    $members = [];
-                    foreach($objects as $object) $members[] = $object->{$setting->key};
-                    $redis->sadd($cache->type . ':' . $cache->name, ...$members);
-                }
-            }
-        }
     }
 }
 
