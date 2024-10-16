@@ -1259,6 +1259,7 @@ class doc extends control
     /**
      * Batch move document.
      *
+     * @param  string $type
      * @param  string $encodeDocIdList
      * @param  int    $spaceID
      * @param  int    $libID
@@ -1266,11 +1267,10 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function batchMoveDoc(string $encodeDocIdList, int $spaceID, int $libID = 0, int $moduleID = 0)
+    public function batchMoveDoc(string $type, string $encodeDocIdList, int $spaceID, int $libID = 0, int $moduleID = 0)
     {
         $docIdList = json_decode(base64_decode($encodeDocIdList), true);
-        $space = $this->doc->getLibByID($spaceID);
-        if(!$docIdList) $this->locate($this->createLink('doc', 'app', "type={$space->type}&spaceID={$spaceID}&libID={$libID}&moduleID={$moduleID}"));
+        if(!$docIdList) $this->locate($this->createLink('doc', 'app', "type={$type}&spaceID={$spaceID}&libID={$libID}&moduleID={$moduleID}"));
 
         if($_POST)
         {
@@ -1281,14 +1281,14 @@ class doc extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('doc', 'app', "type={$type}&spaceID={$spaceID}&libID={$libID}&moduleID={$moduleID}")));
         }
 
-        $products = $space->type == 'product' ? array($spaceID => $spaceID) : array();
-        $projects = $space->type == 'project' ? array($spaceID => $spaceID) : array();
-        $libPairs = $this->doc->getLibPairs($space->type, '', $spaceID, '', $products, $projects);
+        $products = $type == 'product' ? array($spaceID => $spaceID) : array();
+        $projects = $type == 'project' ? array($spaceID => $spaceID) : array();
+        $libPairs = $this->doc->getLibPairs($type, '', $spaceID, '', $products, $projects);
         if(!isset($libPairs[$libID])) $libID = (int)key($libPairs);
 
         $this->view->title           = $this->lang->doc->batchMove;
         $this->view->encodeDocIdList = $encodeDocIdList;
-        $this->view->type            = $space->type;
+        $this->view->type            = $type;
         $this->view->spaceID         = $spaceID;
         $this->view->libID           = $libID;
         $this->view->moduleID        = $moduleID;

@@ -448,7 +448,11 @@ const actionsMap =
                 if(!selections.length) return;
 
                 const docIdList = window.btoa(JSON.stringify(selections));
-                const url = $.createLink('doc', 'batchMoveDoc', 'docIdList=' + docIdList + '&spaceID=' + spaceID + '&libID=' + libID + '&moduleID=' + moduleID);
+                const spaceType = getDocApp().spaceType;
+                const spaceID   = getDocApp().spaceID;
+                const libID     = getDocApp().libID;
+                const moduleID  = getDocApp().moduleID;
+                const url = $.createLink('doc', 'batchMoveDoc', 'type=' + spaceType + '&docIdList=' + docIdList + '&spaceID=' + spaceID + '&libID=' + libID + '&moduleID=' + moduleID);
 
                 zui.Modal.open({size: 'sm', url: url});
             }
