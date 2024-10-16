@@ -252,7 +252,7 @@ class taskZen extends task
      */
     protected function buildEditForm(int $taskID): void
     {
-        $task  = $this->view->task;
+        $task = $this->view->task;
 
         /* Get the task parent id,name pairs. */
         $tasks = $this->task->getParentTaskPairs($this->view->execution->id, strVal($task->parent));
@@ -280,8 +280,17 @@ class taskZen extends task
             $taskMembers = $this->view->members;
         }
 
+        /* Get execution stories. */
+        $moduleID = $task->module;
+        if($moduleID)
+        {
+            $moduleID = $this->loadModel('tree')->getStoryModule($moduleID);
+            $moduleID = $this->tree->getAllChildID($moduleID);
+        }
+        $stories = $this->story->getExecutionStoryPairs($this->view->execution->id, 0, 'all', $moduleID, 'full', 'active', 'story', false);
+
         $this->view->title         = $this->lang->task->edit . 'TASK' . $this->lang->hyphen . $this->view->task->name;
-        $this->view->stories       = $this->story->getExecutionStoryPairs($this->view->execution->id, 0, 'all', '', 'full', 'active', 'story', false);
+        $this->view->stories       = $this->story->addGradeLabel($stories);
         $this->view->tasks         = $tasks;
         $this->view->taskMembers   = $taskMembers;
         $this->view->users         = $this->loadModel('user')->getPairs('nodeleted|noclosed', "{$task->openedBy},{$task->canceledBy},{$task->closedBy}");
