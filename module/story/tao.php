@@ -981,6 +981,17 @@ class storyTao extends storyModel
         $changes  = common::createChanges($oldBug, $bug, 'bug');
         $this->action->logHistory($actionID, $changes);
 
+        if($this->config->edition != 'open')
+        {
+            $relation = new stdClass();
+            $relation->AID      = $bugID;
+            $relation->AType    = 'bug';
+            $relation->relation = 'transferredto';
+            $relation->BID      = $storyID;
+            $relation->BType    = 'story';
+            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+        }
+
         /* add files to story from bug. */
         $files = $this->dao->select('*')->from(TABLE_FILE)->where('objectType')->eq('bug')->andWhere('objectID')->eq($bugID)->fetchAll();
         if(empty($files)) return;
