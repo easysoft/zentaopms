@@ -132,7 +132,7 @@ class gitModel extends model
 
             if($objects)
             {
-                if($printLog) $this->printLog('extract' . ' story:' . join(' ', $objects['stories']) . ' task:' . join(' ', $objects['tasks']) . ' bug:' . join(',', $objects['bugs']));
+                if($printLog) $this->printLog('extract' . ' story:' . join(' ', $objects['stories']) . ' task:' . join(' ', $objects['tasks']) . ' bug:' . join(',', $objects['bugs']) . ' design:' . join(',', $objects['designs']));
                 if($lastVersion != $version)
                 {
                     $this->repo->saveAction2PMS($objects, $log, $this->repoRoot, $repo->encoding, 'git', $accountPairs);
@@ -147,6 +147,7 @@ class gitModel extends model
                         $this->repo->link($repo->id, $log->revision, $objectTypeMap[$objectType], 'commit');
                     }
                 }
+                $this->linkCommit($objects['designs'], $repo->id, $log);
             }
             elseif($printLog)
             {
