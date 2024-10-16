@@ -2563,6 +2563,7 @@ eof;
         }
         else
         {
+            if($action == 'importToLib' && in_array($moduleName, array('epic', 'requirement'))) $moduleName = 'story';
             if(!common::hasPriv($moduleName, $action, $data)) return false;
         }
 
