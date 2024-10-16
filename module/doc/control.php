@@ -1542,6 +1542,7 @@ class doc extends control
         {
             if(empty($objectID) && $lib) $objectID = (int)zget($lib, $lib->type, 0);
             if(empty($objectID) && $lib && $lib->type == 'custom') $objectID = (int)$lib->parent;
+            if($lib) $objectType = $lib->type;
 
             $unclosed = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
             $libPairs = $this->doc->getLibs($objectType, "{$unclosed}", $libID, $objectID);
@@ -1549,9 +1550,8 @@ class doc extends control
             if(!$libID && !empty($libPairs)) $libID = key($libPairs);
             if(empty($lib) && $libID) $lib = $this->doc->getLibByID($libID);
 
-            if(is_object($lib) && ($objectType == 'custom' || $objectType == 'mine')) $this->view->spaces = $this->docZen->getAllSpaces($lib->type == 'mine' ? 'onlymine' : 'nomine');
-            $this->docZen->setObjectsForCreate(empty($lib->type) ? $objectType : $lib->type, empty($lib) ? null : $lib, $unclosed, $objectID);
-            if($lib->type) $objectType = $lib->type;
+            if($objectType == 'custom' || $objectType == 'mine') $this->view->spaces = $this->docZen->getAllSpaces($lib->type == 'mine' ? 'onlymine' : 'nomine');
+            $this->docZen->setObjectsForCreate($objectType, empty($lib) ? null : $lib, $unclosed, $objectID);
             $this->view->optionMenu = empty($libID) ? array() : $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
         }
         else
