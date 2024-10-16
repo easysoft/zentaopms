@@ -16,28 +16,34 @@ $data['normal'][] = array('id' => 0, 'text' => $lang->api->noLinked, 'active' =>
 /* 处理分组数据。Process grouped data. */
 foreach(array('product', 'project') as $moduleType)
 {
-    foreach($normalObjects[$moduleType] as $normalObjectID => $normalObjectName)
+    if(isset($normalObjects[$moduleType]))
     {
-        $item = array();
-        $item['id']     = $normalObjectID;
-        $item['text']   = $normalObjectName;
-        $item['active'] = $normalObjectID == $objectID;
-        $item['type']   = $moduleType;
-        $item['keys']   = zget(common::convert2Pinyin(array($normalObjectName)), $normalObjectName, '');
+        foreach($normalObjects[$moduleType] as $normalObjectID => $normalObjectName)
+        {
+            $item = array();
+            $item['id']     = $normalObjectID;
+            $item['text']   = $normalObjectName;
+            $item['active'] = $normalObjectID == $objectID;
+            $item['type']   = $moduleType;
+            $item['keys']   = zget(common::convert2Pinyin(array($normalObjectName)), $normalObjectName, '');
 
-        $data['normal'][] = $item;
+            $data['normal'][] = $item;
+        }
     }
 
-    foreach($closedObjects[$moduleType] as $closedObjectID => $closedObjectName)
+    if(isset($closedObjects[$moduleType]))
     {
-        $item = array();
-        $item['id']     = $closedObjectID;
-        $item['text']   = $closedObjectName;
-        $item['active'] = $closedObjectID == $objectID;
-        $item['type']   = $moduleType;
-        $item['keys']   = zget(common::convert2Pinyin(array($closedObjectName)), $closedObjectName, '');
+        foreach($closedObjects[$moduleType] as $closedObjectID => $closedObjectName)
+        {
+            $item = array();
+            $item['id']     = $closedObjectID;
+            $item['text']   = $closedObjectName;
+            $item['active'] = $closedObjectID == $objectID;
+            $item['type']   = $moduleType;
+            $item['keys']   = zget(common::convert2Pinyin(array($closedObjectName)), $closedObjectName, '');
 
-        $data['closed'][] = $item;
+            $data['closed'][] = $item;
+        }
     }
 }
 
