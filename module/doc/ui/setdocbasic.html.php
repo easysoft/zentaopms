@@ -83,7 +83,7 @@ formPanel
         (
             set::name('acl'),
             set::items($lang->doc->aclList),
-            set::value($objectType == 'mine' ? 'private' : 'open'),
+            set::value(isset($doc) ? $doc->acl : 'private'),
             on::change('toggleWhiteList')
         )
     ),

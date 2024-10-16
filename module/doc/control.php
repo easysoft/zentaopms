@@ -1546,12 +1546,12 @@ class doc extends control
             if($lib->type == 'custom' || $lib->type == 'mine') $this->view->spaces = $this->docZen->getAllSpaces($lib->type == 'mine' ? 'onlymine' : 'nomine');
             $this->docZen->setObjectsForEdit($lib->type, $objectID);
 
-            $this->view->optionMenu     = $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
+            $this->view->doc        = $doc;
+            $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
         }
 
         $this->view->users      = $this->user->getPairs('nocode|noclosed|nodeleted');
         $this->view->groups     = $this->loadModel('group')->getPairs();
-        $this->view->libID      = $libID;
         $this->view->libID      = $libID;
         $this->view->moduleID   = $moduleID;
         $this->view->docType    = $docType;
