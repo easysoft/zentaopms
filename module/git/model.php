@@ -437,5 +437,22 @@ class gitModel extends model
      */
     public function linkCommit($designs, $repoID, $log)
     {
+        $this->loadModel('repo');
+        foreach($designs as $designID)
+        {
+
+            $data = new stdclass();
+            $data->program  = $program->project;
+            $data->product  = $program->product;
+            $data->AType    = 'design';
+            $data->AID      = $designID;
+            $data->BType    = 'commit';
+            $data->BID      = $revisionID;
+            $data->relation = 'completedin';
+            $data->extra    = $repoID;
+            $this->dao->replace(TABLE_RELATION)->data($data)->autoCheck()->exec();
+
+            $this->repo->saveRelation($designID, 'design', $revisionID, 'commit', 'completedfrom');
+        }
     }
 }
