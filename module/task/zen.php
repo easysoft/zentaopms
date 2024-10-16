@@ -138,7 +138,7 @@ class taskZen extends task
         }
         $this->view->testStories     = $testStories;
         $this->view->testStoryIdList = $testStoryIdList;
-        $this->view->stories         = $stories;
+        $this->view->stories         = $this->story->addGradeLabel($stories);
     }
 
     /**
