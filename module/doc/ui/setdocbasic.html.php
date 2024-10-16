@@ -81,10 +81,11 @@ formPanel
         set::label($lang->doclib->control),
         radioList
         (
+            setClass($objectType == 'mine' ? 'pointer-events-none' : ''),
             set::name('acl'),
             set::items($lang->doc->aclList),
             set::value(isset($doc) ? $doc->acl : 'private'),
-            on::change('toggleWhiteList')
+            $objectType == 'mine' ? on::change('toggleWhiteList') : null
         )
     ),
     formGroup
