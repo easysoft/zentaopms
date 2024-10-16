@@ -10067,6 +10067,19 @@ class upgradeModel extends model
             $relation->BID      = $riskIssueList->risk;
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
         }
+
+        /* Process bug transferred to task. */
+        $bugTransferredToTask = $this->dao->select('id,fromBug')->from(TABLE_TASK)->where('fromBug')->ne(0)->fetchPairs('id');
+        foreach($bugTransferredToTask as $taskID => $bugID)
+        {
+            $relation = new stdClass();
+            $relation->AType    = 'bug';
+            $relation->AID      = $bugID;
+            $relation->relation = 'transferredto';
+            $relation->BType    = 'task';
+            $relation->BID      = $taskID;
+            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+        }
         return true;
     }
 }
