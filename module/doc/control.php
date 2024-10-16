@@ -1264,6 +1264,11 @@ class doc extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('doc', 'app', "type={$type}&spaceID={$spaceID}&libID={$libID}&moduleID={$moduleID}")));
         }
 
+        $products = $space->type == 'product' ? array($spaceID => $spaceID) : array();
+        $projects = $space->type == 'project' ? array($spaceID => $spaceID) : array();
+        $libPairs = $this->doc->getLibPairs($space->type, '', $spaceID, '', $products, $projects);
+        if(!isset($libPairs[$libID])) $libID = (int)key($libPairs);
+
         $this->view->title           = $this->lang->doc->batchMove;
         $this->view->encodeDocIdList = $encodeDocIdList;
         $this->view->type            = $space->type;
@@ -1271,7 +1276,7 @@ class doc extends control
         $this->view->libID           = $libID;
         $this->view->moduleID        = $moduleID;
         $this->view->spaces          = $this->doc->getAllSubSpaces();
-        $this->view->libPairs        = $this->doc->getLibPairs($space->type == 'mine' ? 'mine' : 'custom', '', $libID);
+        $this->view->libPairs        = $libPairs;
         $this->view->optionMenu      = $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
         $this->view->groups          = $this->loadModel('group')->getPairs();
         $this->view->users           = $this->loadModel('user')->getPairs('nocode|noclosed');
