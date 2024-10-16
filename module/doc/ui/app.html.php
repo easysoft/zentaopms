@@ -114,6 +114,7 @@ $langData->projectFilterTypes    = $lang->doc->projectFilterTypes;
 $langData->sortCatalog           = $lang->doc->sortCatalog;
 $langData->sortDoclib            = $lang->doc->sortDoclib;
 $langData->sortDoc               = $lang->doc->sortDoc;
+$langData->errorOccurred         = $lang->doc->errorOccurred;
 
 /**
  * 通过语言项定义文档表格列显示名称。

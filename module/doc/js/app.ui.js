@@ -158,36 +158,67 @@ function mergeDocFormData(doc, formData)
 }
 
 /**
+ * 向服务器提交新文档。
+ * Submit new doc to server.
+ *
+ * @param {object}   doc
+ * @param {number}   spaceID
+ * @param {number}   libID
+ * @param {number}   moduleID
+ * @param {FormData} formData
+ * @returns
+ */
+function submitNewDoc(doc, spaceID, libID, moduleID, formData)
+{
+    const docApp    = getDocApp();
+    const spaceType = docApp.signals.spaceType.value;
+    const url       = $.createLink('doc', 'create', `objectType=${spaceType}&objectID=${Math.max(spaceID, 0)}&libID=${libID}&moduleID=${moduleID}`);
+    const docData   =
+    {
+        content    : doc.content,
+        status     : doc.status || 'normal',
+        contentType: doc.contentType,
+        type       : 'text',
+        lib        : libID,
+        module     : moduleID,
+        title      : doc.title,
+        keywords   : doc.keywords,
+        acl        : 'private',
+        space      : spaceType,
+        uid        : doc.contentType === 'doc' ? '' : (doc.uid || `doc${doc.id}`),
+    };
+    if(formData) mergeDocFormData(docData, formData);
+    return new Promise((resolve, reject) =>
+    {
+        $.post(url, docData, (res) =>
+        {
+            try
+            {
+                const data = JSON.parse(res);
+                if(typeof data !== 'object' || data.result === 'fail')
+                {
+                    throw new Error(data.message || data.error || getLang('errorOccurred'));
+                }
+                resolve($.extend(doc, {id: data.id}, docData, data.doc, {status: doc.status || data.status}));
+            }
+            catch (error)
+            {
+                zui.Modal.alert(error.message);
+                reject(error);
+            }
+        });
+    });
+}
+
+/**
  * 处理创建文档的操作请求，向服务器发送请求并返回创建的文档对象。
  * Handle the create doc operation request, send a request to the server and return the created doc object.
  */
 function handleCreateDoc(doc, spaceID, libID, moduleID)
 {
+    if(doc.status === 'draft') return submitNewDoc(doc, spaceID, libID, moduleID);
     return showDocBasicModal(0, doc.contentType).then((formData) => {
-        const docApp    = getDocApp();
-        const spaceType = docApp.signals.spaceType.value;
-        const url       = $.createLink('doc', 'create', `objectType=${spaceType}&objectID=${Math.max(spaceID, 0)}&libID=${libID}&moduleID=${moduleID}`);
-        const docData   = mergeDocFormData({
-            content    : doc.content,
-            status     : doc.status || 'normal',
-            contentType: doc.contentType,
-            type       : 'text',
-            lib        : libID,
-            module     : moduleID,
-            title      : doc.title,
-            keywords   : doc.keywords,
-            acl        : 'private',
-            space      : spaceType,
-            uid        : doc.contentType === 'doc' ? '' : (doc.uid || `doc${doc.id}`),
-        }, formData);
-        return new Promise((resolve) =>
-        {
-            $.post(url, docData, (res) =>
-            {
-                const data = JSON.parse(res);
-                resolve($.extend(doc, {id: data.id}, docData, data.doc, {status: doc.status || data.status}));
-        });
-        });
+        submitNewDoc(doc, spaceID, libID, moduleID, formData);
     });
 }
 
@@ -221,9 +252,22 @@ function handleSaveDoc(doc)
         mergeDocFormData(docData, savingDocData[doc.id]);
         delete savingDocData[doc.id];
     }
+
     $.post(url, docData, (res) =>
     {
-        docApp.update('doc', $.extend({}, doc, docData));
+        try
+        {
+            const data = JSON.parse(res);
+            if(typeof data !== 'object' || data.result === 'fail')
+            {
+                throw new Error(data.message || data.error || getLang('errorOccurred'));
+            }
+            docApp.update('doc', $.extend({}, doc, docData));
+        }
+        catch (error)
+        {
+            zui.Modal.alert(error.message);
+        }
     });
 }
 
