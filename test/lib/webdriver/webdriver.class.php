@@ -973,7 +973,7 @@ class dom
      * @access public
      * @return object
      */
-    public function picker($value)
+    public function picker($value, $selectNumber = 0)
     {
         $picker = $this->element->findElement(WebDriverBy::xpath('parent::div'));
         $picker->click();
@@ -1000,16 +1000,18 @@ class dom
                 {
                     try
                     {
-                        $this->driver->findElement(WebDriverBy::xpath("//*[@id='pick-pop-$pickerID']//span[@class='is-match-keys']"))->click();
+                        $selectXpath = "//*[@id='pick-pop-{$pickerID}']//li[not(contains(@class, 'is-not-match'))]";
+                        if($selectNumber) $selectXpath .= "[{$selectNumber}]";
+                        $this->driver->findElement(WebDriverBy::xpath("{$selectXpath}//a"))->click();
                     }
                     catch(Exception $xpathException)
                     {
-                        $this->driver->findElement(WebDriverBy::xpath("//a[@title='$value']"))->click();
+                        $this->driver->findElement(WebDriverBy::xpath("//a[@title='{$value}']"))->click();
                     }
                 }
                 else
                 {
-                    $this->driver->findElement(WebDriverBy::xpath("//button[@data-pick-value=$value]"))->click();
+                    $this->driver->findElement(WebDriverBy::xpath("//button[@data-pick-value={$value}]"))->click();
                 }
                 break;
             }
