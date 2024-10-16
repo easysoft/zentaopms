@@ -69,7 +69,7 @@ foreach($projects as $programID => $programProjects)
 
         if(empty($project->multiple) || $project->type == 'kanban' || $project->model == 'kanban') $item['url'] = helper::createLink('project', 'index', "projectID={$project->id}");
 
-        if(empty($activeGroup) && $projectID == $project->id) $activeGroup = $group;　
+        if(empty($activeGroup) && $projectID == $project->id) $activeGroup = $group;
 
         if($config->systemMode == 'light' || $config->vision == 'lite')
         {

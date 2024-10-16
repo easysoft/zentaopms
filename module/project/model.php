@@ -22,7 +22,7 @@ class projectModel extends model
     }
 
     /**
-     * 获取当前登录用户有权限查看的项目列表.
+     * 获取当前登录用户参与的项目列表.
      * Get project list by current user.
      *
      * @param  string    $fields
