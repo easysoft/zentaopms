@@ -386,7 +386,7 @@ class compileModel extends model
         $this->dao->update(TABLE_COMPILE)->data($result)->where('id')->eq($compileID)->exec();
         $this->dao->update(TABLE_JOB)
             ->set('lastStatus')->eq($result->status)
-            ->set('lastExec')->eq($compile->updateDate)
+            ->set('lastExec')->eq($compile->updateDate ? $compile->updateDate : helper::now())
             ->where('id')->eq($job->id)
             ->exec();
 
