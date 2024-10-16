@@ -115,7 +115,11 @@
             if(DEBUG) showLog('Update', [code, title], {state, code, url, title});
             return state;
         },
-        updateAppUrl:      function(url, title){return $.apps.updateApp(currentCode, url, title)},
+        updateAppUrl: function(url, title)
+        {
+            currentAppUrl = url;
+            return $.apps.updateApp(currentCode, url, title);
+        },
         isOldPage:         () => false,
         reloadApp:         function(_code, url){loadPage(url);},
         openApp:           function(url, options){loadPage(url, options);},
