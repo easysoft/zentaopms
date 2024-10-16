@@ -1550,7 +1550,7 @@ class doc extends control
             if(!$libID && !empty($libPairs)) $libID = key($libPairs);
             if(empty($lib) && $libID) $lib = $this->doc->getLibByID($libID);
 
-            if($objectType == 'custom' || $objectType == 'mine') $this->view->spaces = $this->docZen->getAllSpaces($lib->type == 'mine' ? 'onlymine' : 'nomine');
+            if($objectType == 'custom' || $objectType == 'mine') $this->view->spaces = $this->doc->getSubSpacesByType($objectType, true);
             $this->docZen->setObjectsForCreate($objectType, empty($lib) ? null : $lib, $unclosed, $objectID);
             $this->view->optionMenu = empty($libID) ? array() : $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
         }
@@ -1560,12 +1560,13 @@ class doc extends control
             $moduleID   = (int)$doc->module;
             $libID      = (int)$doc->lib;
             $lib        = $this->doc->getLibByID($libID);
-            $objectType = $doc->type;
+            $objectType = $lib->type;
             $objectID   = (int)zget($lib, $lib->type, 0);
-            if($lib->type == 'custom') $objectID = $lib->parent;
-            $libPairs = $this->doc->getLibs($lib->type, '', $doc->lib, $objectID);
-            if($lib->type == 'custom' || $lib->type == 'mine') $this->view->spaces = $this->docZen->getAllSpaces($lib->type == 'mine' ? 'onlymine' : 'nomine');
-            $this->docZen->setObjectsForEdit($lib->type, $objectID);
+            if($objectType == 'custom') $objectID = $lib->parent;
+
+            $libPairs = $this->doc->getLibs($objectType, '', $doc->lib, $objectID);
+            if($objectType == 'custom' || $objectType == 'mine') $this->view->spaces = $this->doc->getSubSpacesByType($objectType, true);
+            $this->docZen->setObjectsForEdit($objectType, $objectID);
 
             $this->view->doc        = $doc;
             $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);

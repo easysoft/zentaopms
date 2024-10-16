@@ -56,7 +56,7 @@ formPanel
         set::width('1/2'),
         set::label($lang->doc->space),
         set::required(true),
-        set::control(array('control' => 'picker', 'name' => 'space', 'items' => $spaces, 'required' => true, 'value' => $objectID, 'disabled' => $lib->type == 'mine'))
+        set::control(array('control' => 'picker', 'name' => 'space', 'items' => $spaces, 'required' => true, 'value' => $objectID))
     ) : null,
     formGroup
     (
