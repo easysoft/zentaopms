@@ -10107,43 +10107,20 @@ class upgradeModel extends model
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
         }
 
-        /* Process feedback transferred to bug. */
-        $feedbackTransferredToBug = $this->dao->select('id,feedback')->from(TABLE_BUG)->where('feedback')->ne(0)->fetchPairs('id');
-        foreach($feedbackTransferredToBug as $bugID => $feedbackID)
+        /* Process feedback transferredto to bug, task, ticket, demand. */
+        foreach(array('bug', 'task', 'ticket', 'demand') as $feedbackTransferredToType)
         {
-            $relation = new stdClass();
-            $relation->AType    = 'feedback';
-            $relation->AID      = $feedbackID;
-            $relation->relation = 'transferredto';
-            $relation->BType    = 'bug';
-            $relation->BID      = $bugID;
-            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
-        }
-
-        /* Process feedback transferred to task. */
-        $feedbackTransferredToTask = $this->dao->select('id,feedback')->from(TABLE_TASK)->where('feedback')->ne(0)->fetchPairs('id');
-        foreach($feedbackTransferredToTask as $taskID => $feedbackID)
-        {
-            $relation = new stdClass();
-            $relation->AType    = 'feedback';
-            $relation->AID      = $feedbackID;
-            $relation->relation = 'transferredto';
-            $relation->BType    = 'task';
-            $relation->BID      = $taskID;
-            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
-        }
-
-        /* Process feedback transferred to ticket. */
-        $feedbackTransferredToTicket = $this->dao->select('id,feedback')->from(TABLE_TICKET)->where('feedback')->ne(0)->fetchPairs('id');
-        foreach($feedbackTransferredToTicket as $ticketID => $feedbackID)
-        {
-            $relation = new stdClass();
-            $relation->AType    = 'feedback';
-            $relation->AID      = $feedbackID;
-            $relation->relation = 'transferredto';
-            $relation->BType    = 'ticket';
-            $relation->BID      = $ticketID;
-            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            $feedbackTransferredTo = $this->dao->select('id,feedback')->from($this->config->objectTables[$feedbackTransferredToType])->where('feedback')->ne(0)->fetchPairs('id');
+            foreach($feedbackTransferredTo as $id => $feedbackID)
+            {
+                $relation = new stdClass();
+                $relation->AType    = 'feedback';
+                $relation->AID      = $feedbackID;
+                $relation->relation = 'transferredto';
+                $relation->BType    = $feedbackTransferredToType;
+                $relation->BID      = $id;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
         }
         return true;
     }
