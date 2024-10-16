@@ -405,7 +405,7 @@ const actionsMap =
         const items  = [];
         const module = info.data;
 
-        if(hasPriv('addModule')) items.push({text: lang.actions.addSameModule, command: `addModule/${module.lib}/${module.parent || module.lib}/${module.id}/same`}, {text: lang.actions.addModule, command: `addModule/${module.lib}/${module.id}/${module.id}/child`});
+        if(hasPriv('addModule')) items.push({text: lang.actions.addSameModule, command: `addModule/${module.lib}/${module.parent || module.lib}/${module.id}/same`}, {text: lang.actions.addSubModule, command: `addModule/${module.lib}/${module.id}/${module.id}/child`});
         if(hasPriv('editModule')) items.push({text: lang.actions.editModule, command: `editModule/${module.id}`});
         if(hasPriv('deleteModule')) items.push({text: lang.actions.delModule, command: `deleteModule/${module.id}`});
 
