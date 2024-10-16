@@ -490,7 +490,7 @@ class baseRouter
         if($this->config->redis->enable)
         {
             $this->loadClass('zredis', true);
-            $this->redis = new zredis($this->dao);
+            $this->redis = new zredis($this);
         }
 
         $this->setupProfiling();
