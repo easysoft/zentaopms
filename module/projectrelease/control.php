@@ -99,7 +99,7 @@ class projectrelease extends control
      * @access public
      * @return void
      */
-    public function create(int $projectID)
+    public function create(int $projectID, int $productID = 0)
     {
         /* Set create config. */
         $this->config->projectrelease->create = $this->config->release->create;
@@ -136,7 +136,7 @@ class projectrelease extends control
 
         /* Set menu. */
         $this->project->setMenu($projectID);
-        $this->projectreleaseZen->commonAction($projectID);
+        $this->projectreleaseZen->commonAction($projectID, $productID);
 
         unset($this->lang->release->statusList['fail']);
         unset($this->lang->release->statusList['terminate']);
