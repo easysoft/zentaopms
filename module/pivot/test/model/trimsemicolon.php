@@ -26,8 +26,6 @@ include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
 
 $pivot = new pivotTest();
 
-$sql = 'select id,name from zt_user;;;;;;;;;;;;';
-
 r($pivot->trimSemicolon('select id,name from zt_project;'))    && p() && e('select id,name from zt_project'); // 测试末尾存在分号。
 r($pivot->trimSemicolon('select id,name from zt_project '))    && p() && e('select id,name from zt_project'); // 测试末尾存在空格。
 r($pivot->trimSemicolon('select id,name from zt_project;;;'))  && p() && e('select id,name from zt_project'); // 测试末尾存在多个分号。
