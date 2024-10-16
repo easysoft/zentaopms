@@ -1201,27 +1201,44 @@ class docModel extends model
      */
     public function getSpaces($type = 'custom', $spaceID = 0)
     {
-        $pairs = array();
-        if($type == 'mine' || $type == 'custom') $pairs = $this->getSubSpacesByType($type);
+        if($type == 'mine' || $type == 'custom')
+
+        $spaces = array();
+        if($type == 'mine' || $type == 'custom')
+        {
+            $pairs = $this->getSubSpacesByType($type);
+            foreach($pairs as $key => $value) $spaces[] = array('id' => $key, 'name' => $value, 'type' => $type);
+        }
         if($type == 'product')
         {
-            $pairs   = $this->loadModel('product')->getPairs('nocode');
-            $spaceID = $this->product->checkAccess($spaceID, $pairs);
+            $account  = $this->app->user->account;
+            $products = $this->loadModel('product')->getList();
+            $spaceID  = $this->product->checkAccess($spaceID, $products);
+            foreach($products as $product)
+            {
+                $isMine  = $product->status == 'normal' and $product->PO == $account;
+                $spaces[] = array('id' => $product->id, 'name' => $product->name, 'isMine' => $isMine, 'type' => $type);
+            }
         }
         if($type == 'project')
         {
-            $pairs   = $this->loadModel('project')->getPairsByProgram();
-            $spaceID = $this->project->checkAccess($spaceID, $pairs);
+            $account  = $this->app->user->account;
+            $projects = $this->loadModel('project')->getListByCurrentUser();
+            $spaceID  = $this->project->checkAccess($spaceID, $projects);
+
+            foreach($projects as $project)
+            {
+                $isMine   = $project->status != 'done' and $project->status != 'closed' and $project->PM == $account;
+                $spaces[] = array('id' => $project->id, 'name' => $project->name, 'isMine' => $isMine, 'type' => $type);
+            }
         }
         if($type === 'execution' && $spaceID)
         {
             $execution = $this->loadModel('execution')->getByID($spaceID);
-            $pairs     = array($execution->id => $execution->name);
+            $spaces[]  = array('id' => $execution->id, 'name' => $execution->name);
         }
 
-        $spaces = array();
-        foreach($pairs as $id => $name) $spaces[] = array('type' => $type, 'id' => $id, 'name' => $name);
-        if(!$spaceID && $spaces) $spaceID = $spaces[0]['id'];
+        if(!$spaceID && !empty($spaces)) $spaceID = $spaces[0]['id'];
 
         return array($spaces, $spaceID);
     }
