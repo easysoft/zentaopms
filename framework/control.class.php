@@ -610,7 +610,6 @@ class control extends baseControl
 
         $uiID = is_object($object) ? $this->loadModel('workflowlayout')->getUIByData($flow->module, $action->action, $object) : 0;
 
-        $wrapControl  = array('textarea', 'richtext', 'file');
         $fieldList    = $this->workflowaction->getPageFields($flow->module, $action->action, true, $object, $uiID, $groupID);
         $layouts      = $this->loadModel('workflowlayout')->getFields($moduleName, $methodName, $uiID, $groupID);
         $notEmptyRule = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
@@ -634,8 +633,10 @@ class control extends baseControl
                 $field->required = $field->readonly || ($notEmptyRule && strpos(",$field->rules,", ",{$notEmptyRule->id},") !== false);
                 $field->control  = $this->flow->buildFormControl($field);
                 $field->items    = $field->options ? array_filter($field->options) : null;
-                $field->value    = !empty($object) ? zget($object, $field->field, '') : '';
+                $field->value    = !empty($object->{$field->field}) ? zget($object, $field->field, '') : '';
                 $field->width    = $field->width != 'auto' ? $field->width : 'full';
+
+                if(!$field->value && $field->defaultValue) $field->value = $field->defaultValue;
             }
 
             return $fieldList;
