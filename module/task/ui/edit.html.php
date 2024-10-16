@@ -149,7 +149,8 @@ detailBody
                     set::type('picker'),
                     set::name('story'),
                     set::value($task->story),
-                    set::items($storyOptions)
+                    set::items($storyOptions),
+                    on::change('setStoryModule')
                 )
             )
         ) : null,

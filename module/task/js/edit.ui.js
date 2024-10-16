@@ -309,3 +309,16 @@ window.loadStories = function()
         $storyPicker.$.setValue(storyID);
     });
 }
+
+window.setStoryModule = function()
+{
+    var storyID = $('input[name=story]').val();
+    if(storyID)
+    {
+        var link = $.createLink('story', 'ajaxGetInfo', 'storyID=' + storyID);
+        $.getJSON(link, function(storyInfo)
+        {
+            if(storyInfo) $('input[name=module]').zui('picker').$.setValue(storyInfo.moduleID);
+        });
+    }
+}
