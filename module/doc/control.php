@@ -718,9 +718,26 @@ class doc extends control
         if(!empty($lib) && $lib->deleted == '1') $appendLib = $doc->lib;
         if($this->app->tab == 'doc' && !empty($lib) && $lib->type == 'execution') $appendLib = $doc->lib;
 
-        $objectType = isset($lib->type) ? $lib->type : 'custom';
-        $objectID   = zget($doc, $objectType, 0);
-        if($objectType == 'custom') $objectID = $lib->parent;
+        if(!empty($lib->type))
+        {
+            $objectType = $lib->type;
+            $objectID   = zget($doc, $objectType, 0);
+        }
+        elseif(!empty($lib->product))
+        {
+            $objectType = 'product';
+            $objectID   = $lib->product;
+        }
+        elseif(!empty($lib->project))
+        {
+            $objectType = 'project';
+            $objectID   = $lib->project;
+        }
+        else
+        {
+            $objectType = 'custom';
+        }
+        if($objectType == 'custom' && empty($objectID)) $objectID = $lib->parent;
 
         /* Get doc. */
         if($docID) $this->doc->createAction($docID, 'view');
@@ -1389,6 +1406,9 @@ class doc extends control
             $objectKey = $type . 'ID';
             $this->view->$objectKey = $spaceID;
         }
+
+        $menuType = $type == 'mine' ? 'my' : ($type == 'custom' ? 'team' : $type);
+        $this->lang->doc->menu->{$menuType}['alias'] .= ',' . $this->app->rawMethod;
 
         $this->view->type           = $type;
         $this->view->spaceID        = $spaceID;
