@@ -13,28 +13,6 @@ declare(strict_types=1);
 class transferZen extends transfer
 {
     /**
-     * 获取工作流字段.
-     * Get workflow fields by module.
-     *
-     * @param  string    $module
-     * @access protected
-     * @return array
-     */
-    protected function getWorkflowFieldsByModule(string $module): array
-    {
-        $this->app->loadConfig('workflowaction');
-        $relatedModule = isset($this->config->workflowaction->buildin->relatedModules[$module]['exporttemplate']) ? $this->config->workflowaction->buildin->relatedModules[$module]['exporttemplate'] : '';
-        return $this->dao->select('t2.*')->from(TABLE_WORKFLOWLAYOUT)->alias('t1')
-            ->beginIF(!$relatedModule)->leftJoin(TABLE_WORKFLOWFIELD)->alias('t2')->on('t1.module=t2.module AND t1.field=t2.field')->fi()
-            ->beginIF($relatedModule)->leftJoin(TABLE_WORKFLOWFIELD)->alias('t2')->on("t2.module='$relatedModule' AND t1.field=t2.field")->fi()
-            ->where('t1.module')->eq($module)
-            ->andWhere('t1.action')->eq('exporttemplate')
-            ->andWhere('t2.buildin')->eq(0)
-            ->orderBy('t1.order')
-            ->fetchAll();
-    }
-
-    /**
      * 将参数转成变量存到SESSION中。
      * Set SESSION by params.
      *
