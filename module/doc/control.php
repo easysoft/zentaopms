@@ -1582,7 +1582,8 @@ class doc extends control
         $this->view->objectType = $objectType;
         $this->view->lib        = $lib;
         $this->view->libs       = $libPairs;
-        $this->view->title      = $this->lang->doc->release;
+        $this->view->docID      = $docID;
+        $this->view->title      = empty($docID) ? $this->lang->doc->release : $this->lang->settings;
         $this->display();
     }
 }
