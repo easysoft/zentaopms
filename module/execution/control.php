@@ -1250,6 +1250,7 @@ class execution extends control
             $allChanges = $this->execution->batchUpdate($postData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            $this->executeHooks(key($this->post->id));
             if(!empty($allChanges))
             {
                 foreach($allChanges as $executionID => $changes)
