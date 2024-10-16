@@ -30,7 +30,7 @@ formPanel
             set::required(true),
             set::control(array('control' => 'picker', 'name' => 'project', 'items' => $objects, 'required' => true, 'value' => isset($execution) ? $execution->project : $objectID))
         ),
-        ($this->app->tab == 'doc' and $config->vision == 'rnd') ? formGroup
+        ($mode == 'create' && $this->app->tab == 'doc' and $config->vision == 'rnd') ? formGroup
         (
             setClass('w-1/2'),
             set::label($lang->doc->execution),

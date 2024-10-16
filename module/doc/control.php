@@ -1551,6 +1551,7 @@ class doc extends control
 
             if(is_object($lib) && ($objectType == 'custom' || $objectType == 'mine')) $this->view->spaces = $this->docZen->getAllSpaces($lib->type == 'mine' ? 'onlymine' : 'nomine');
             $this->docZen->setObjectsForCreate(empty($lib->type) ? $objectType : $lib->type, empty($lib) ? null : $lib, $unclosed, $objectID);
+            if($lib->type) $objectType = $lib->type;
             $this->view->optionMenu = empty($libID) ? array() : $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
         }
         else
@@ -1559,7 +1560,7 @@ class doc extends control
             $moduleID   = (int)$doc->module;
             $libID      = (int)$doc->lib;
             $lib        = $this->doc->getLibByID($libID);
-            $objectType = isset($lib->type) ? $lib->type : 'custom';
+            $objectType = $doc->type;
             $objectID   = (int)zget($lib, $lib->type, 0);
             if($lib->type == 'custom') $objectID = $lib->parent;
             $libPairs = $this->doc->getLibs($lib->type, '', $doc->lib, $objectID);
@@ -1570,6 +1571,7 @@ class doc extends control
             $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
         }
 
+        $this->view->mode       = empty($docID) ? 'create' : 'edit';
         $this->view->users      = $this->user->getPairs('nocode|noclosed|nodeleted');
         $this->view->groups     = $this->loadModel('group')->getPairs();
         $this->view->libID      = $libID;
