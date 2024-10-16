@@ -251,6 +251,12 @@ if($job->customParam)
     }
 }
 
+if($this->session->repoID)
+{
+    $repoName = $this->dao->select('name')->from(TABLE_REPO)->where('id')->eq($this->session->repoID)->fetch('name');
+    dropmenu(set::objectID($this->session->repoID), set::text($repoName), set::tab('repo'));
+}
+
 formPanel
 (
     setID('triggerForm'),

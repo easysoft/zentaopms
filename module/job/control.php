@@ -27,7 +27,7 @@ class job extends control
     {
         parent::__construct($moduleName, $methodName);
 
-        if(in_array($this->app->methodName, array('create', 'edit')))
+        if(in_array($this->app->methodName, array('create', 'edit', 'trigger')))
         {
             if($this->session->repoID) $this->loadModel('ci')->setMenu();
         }
