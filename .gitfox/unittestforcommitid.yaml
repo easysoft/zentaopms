@@ -34,13 +34,7 @@ spec:
             container:
               image: hub.qc.oop.cc/zentao-ztf:${{ build.number }}-${{ build.after }}
             script:
-              - ls -a
-              - echo $HOME
-              - env
-              - git rev-parse origin/main
-              - git rev-parse HEAD
               - git rev-list $(git rev-parse origin/main )..$(git rev-parse HEAD)
-              - git rev-list $(git rev-parse origin/main )..${GITFOX_COMMIT}
               - sh -c 'nohup /usr/bin/entrypoint.sh >/dev/null 2>&1 &'
               - . /etc/s6/s6-init/envs
               - sleep 5
