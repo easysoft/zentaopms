@@ -1047,15 +1047,20 @@ class baseDAO
             /* Real-time save log. */
             if(dao::$realTimeLog && dao::$realTimeFile) file_put_contents(dao::$realTimeFile, $sql . "\n", FILE_APPEND);
 
-            $table = trim($this->table, '`');
+            $table  = trim($this->table, '`');
+            $method = $this->method;
             $this->reset();
 
             /* Force to query from master db, if db has been changed. */
             $this->slaveDBH = false;
 
+            $this->app->redis->prepareSync($table, $method, $sql);
+
             $result = $this->dbh->exec($sql);
             /* See: https://www.php.net/manual/en/pdo.lastinsertid.php .*/
             $this->_lastInsertID = $this->dbh->lastInsertId();
+
+            if($result) $this->app->redis->sync();
 
             $this->setTableCache($sql);
 
