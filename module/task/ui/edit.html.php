@@ -208,7 +208,8 @@ detailBody
                                 set::value($task->module),
                                 set::items($moduleOptions),
                                 set::width(2/3),
-                                set::required(true)
+                                set::required(true),
+                                on::change('loadStories')
                             )
                         ),
                         div
