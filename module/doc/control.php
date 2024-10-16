@@ -1561,10 +1561,10 @@ class doc extends control
             $libID      = (int)$doc->lib;
             $lib        = $this->doc->getLibByID($libID);
             $objectType = $lib->type;
-            $objectID   = (int)zget($lib, $lib->type, 0);
+            $objectID   = (int)zget($lib, $objectType, 0);
             if($objectType == 'custom') $objectID = $lib->parent;
 
-            $libPairs = $this->doc->getLibs($objectType, '', $doc->lib, $objectID);
+            $libPairs = $this->doc->getLibs($objectType, '', $libID, $objectID);
             if($objectType == 'custom' || $objectType == 'mine') $this->view->spaces = $this->doc->getSubSpacesByType($objectType, true);
             $this->docZen->setObjectsForEdit($objectType, $objectID);
 
