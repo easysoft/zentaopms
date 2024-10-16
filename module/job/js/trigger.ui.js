@@ -88,7 +88,7 @@ window.changeTriggerType = function(event)
     if(type != 'tag' || repo.SCM == 'Subversion') $parentDom.append(eval(`${type}Field`).replace(/%s/g, window.triggerCount));
     if(window[`${type}BlockInit`]) eval(`window.${type}BlockInit()`);
 
-    $parentDom.find('.hidden').removeClass('hidden');
+    $parentDom.find('.hidden:not(.delete-trigger)').removeClass('hidden');
 }
 
 window.toggleAutoRun = function(event)
