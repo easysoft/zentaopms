@@ -3520,9 +3520,7 @@ class baseRouter
     {
         if(!extension_loaded('redis')) return false;
 
-        global $config;
-
-        if(empty($config->redis)) return false;
+        if(empty($this->config->redis)) return false;
 
         try
         {
@@ -3531,12 +3529,12 @@ class baseRouter
             $version = phpversion('redis');
             if(version_compare($version, '5.3.0', 'ge'))
             {
-                $redis->connect($config->redis->host , $config->redis->port, $config->redis->timeout, '', 0, 0, ['auth' => [$config->redis->username, $config->redis->password]]);
+                $redis->connect($this->config->redis->host , $this->config->redis->port, $this->config->redis->timeout, '', 0, 0, ['auth' => [$this->config->redis->username, $this->config->redis->password]]);
             }
             else
             {
-                $redis->connect($config->redis->host , $config->redis->port, $config->redis->timeout, '', 0, 0);
-                $redis->auth(['pass' => $config->redis->password]);
+                $redis->connect($this->config->redis->host , $this->config->redis->port, $this->config->redis->timeout, '', 0, 0);
+                $redis->auth(['pass' => $this->config->redis->password]);
             }
 
             if(!$redis->ping()) return false;
