@@ -487,7 +487,7 @@ class datatableModel extends model
                 ->where('t1.project')->eq($projectID)
                 ->fetchAll('id');
 
-            foreach($products as $product) $groupIdList[] = $this->workflowgroup->getGroupIDByData($module, $product);
+            foreach($products as $product) $groupIdList[] = $product->workflowGroup;
             foreach(array_unique($groupIdList) as $groupID)
             {
                 $flow = $this->workflow->getByModule($module, false, $groupID);
