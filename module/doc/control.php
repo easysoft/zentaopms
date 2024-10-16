@@ -1529,8 +1529,8 @@ class doc extends control
             if(!$libID && !empty($libPairs)) $libID = key($libPairs);
             if(empty($lib) && $libID) $lib = $this->doc->getLibByID($libID);
 
-            if($lib->type == 'custom' || $lib->type == 'mine') $this->view->spaces = $this->docZen->getAllSpaces($lib->type == 'mine' ? 'onlymine' : 'nomine');
-            $this->setObjectsForCreate(empty($lib->type) ? '' : $lib->type, empty($lib) ? null : $lib, $unclosed, $objectID);
+            if(is_object($lib) && ($objectType == 'custom' || $objectType == 'mine')) $this->view->spaces = $this->docZen->getAllSpaces($lib->type == 'mine' ? 'onlymine' : 'nomine');
+            $this->docZen->setObjectsForCreate(empty($lib->type) ? $objectType : $lib->type, empty($lib) ? null : $lib, $unclosed, $objectID);
             $this->view->optionMenu = empty($libID) ? array() : $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
         }
         else

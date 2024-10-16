@@ -431,7 +431,7 @@ class docZen extends doc
             $objects = $this->project->getPairsByProgram(0, 'all', false, 'order_asc');
 
             $this->view->executions = $this->execution->getPairs($objectID, 'all', 'multiple,leaf,noprefix');
-            if($lib->type == 'execution')
+            if(!empty($lib) && $lib->type == 'execution')
             {
                 $execution = $this->loadModel('execution')->getByID($lib->execution);
                 $objectID  = $execution->project;
