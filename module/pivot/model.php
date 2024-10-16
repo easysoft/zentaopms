@@ -804,7 +804,7 @@ class pivotModel extends model
      */
     public function trimSemicolon(string $sql): string
     {
-        return str_replace(';', '', $sql);
+        return trim($sql, " ;");
     }
 
     /**
