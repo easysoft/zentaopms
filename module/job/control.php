@@ -100,6 +100,13 @@ class job extends control
                 ->add('createdBy', $this->app->user->account)
                 ->get();
 
+            if($job->engine == 'gitlab' && $job->repo)
+            {
+                $repo    = $this->loadModel('repo')->fetchByID($job->repo);
+                $project = $this->loadModel('gitlab')->apiGetSingleProject($repo->serviceHost, (int)$job->repo, false);
+                $job->reference = zget($project, 'default_branch', 'master');
+            }
+
             $jobID = $this->job->create($job);
             if(!dao::isError()) $this->loadModel('action')->create('job', $jobID, 'imported');
 
