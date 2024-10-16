@@ -1014,9 +1014,9 @@ class pivotModel extends model
      *
      * @param  array $data
      * @access public
-     * @return array
+     * @return array|string
      */
-    public function getGroupTreeWithKey(array $data): array
+    public function getGroupTreeWithKey(array $data): array|string
     {
         $first = reset($data);
         if(!isset($first['groups'])) return $first['groupKey'];
@@ -1089,7 +1089,9 @@ class pivotModel extends model
                 }
                 else
                 {
-                    if(is_numeric($colValue['value'])) $summary[$colKey]['value'] += $colValue['value'];
+                    $isGroup = zget($colValue, 'isGroup', 1);
+                    if($isGroup) $summary[$colKey]['value']  = $colValue['value'];
+                    else         $summary[$colKey]['value'] += $colValue['value'];
                 }
             }
         }
@@ -1214,7 +1216,7 @@ class pivotModel extends model
         $records = array();
         foreach($crystalData as $value)
         {
-            $groupRecords = $this->flattenCrystalData($value['rows']);
+            $groupRecords = $this->flattenCrystalData($value['rows'], $withGroupSummary);
             if($withGroupSummary && isset($value['summary'])) $groupRecords[] = $this->flattenRow($value['summary']);
             $records = array_merge($records, $groupRecords);
         }
@@ -1236,6 +1238,21 @@ class pivotModel extends model
         $lastGroupValue = array();
         foreach($groups as $group) $lastGroupValue[$group] = '';
 
+        /* 定义内部函数：获取当前行数据的分组值。*/
+        /* Define internal function: get current row data's group value. */
+        $getGroupValue = function($record, $key, $index) use ($groups)
+        {
+            $value = array($record[$key]['value']);
+            $index -= 1;
+            while($index >= 0)
+            {
+                $value[] = $record[$groups[$index]]['value'];
+                $index -= 1;
+            }
+
+            return $value;
+        };
+
         $groupsRowSpan = array();
         foreach($records as $index => $record)
         {
@@ -1252,10 +1269,12 @@ class pivotModel extends model
             }
             $records[$index] = $record;
 
-            foreach($groups as $group)
+            foreach($groups as $groupIndex => $group)
             {
-                $groupValue = $record[$group]['value'];
-                if($groupValue != '$total$' && $groupValue == $lastGroupValue[$group])
+                $groupValue    = $getGroupValue($record, $group, $groupIndex);
+                $groupValueStr = implode('_', $groupValue);
+
+                if($groupValue[0] != '$total$' && $groupValueStr == $lastGroupValue[$group])
                 {
                     $groupRowSpan = array_pop($groupsRowSpan[$group]);
                     $groupRowSpan['index'][] = $index;
@@ -1266,7 +1285,7 @@ class pivotModel extends model
                 {
                     $groupsRowSpan[$group][] = array('index' => array($index), 'rowSpan' => $rowSpan);
                 }
-                $lastGroupValue[$group] = $groupValue;
+                $lastGroupValue[$group] = $groupValueStr;
             }
         }
 
@@ -1463,7 +1482,7 @@ class pivotModel extends model
         $field      = zget($setting, 'field', '');
         $showOrigin = zget($setting, 'showOrigin', 0);
 
-        if($showOrigin) return array('value' => array_column($records, $field));
+        if($showOrigin) return array('value' => array_column($records, $field), 'isGroup' => false);
 
         $stat       = zget($setting, 'stat', 'count');
         $slice      = zget($setting, 'slice', 'noSlice');
@@ -1477,7 +1496,7 @@ class pivotModel extends model
             $value = $this->columnStatistics($records, $stat, $field);
             if($showMode == 'default') return array('value' => $value);
 
-            return array('value' => $value, 'percentage' => array($value, 1, $showMode, $monopolize, $columnKey));
+            return array('value' => $value, 'percentage' => array($value, 1, $showMode, $monopolize, $columnKey), 'isGroup' => false);
         }
 
         /* 处理切片列的情况。 */
@@ -1492,7 +1511,7 @@ class pivotModel extends model
 
             $value = $this->columnStatistics($sliceRecords, $stat, $field);
 
-            $sliceCell = array('value' => $value, 'drillFields' => array($slice => $sliceRecord->{$slice . '_origin'}));
+            $sliceCell = array('value' => $value, 'drillFields' => array($slice => $sliceRecord->{$slice . '_origin'}), 'isGroup' => false);
             if($showMode != 'default') $sliceCell['percentage'] = array($value, 1, $showMode, $monopolize, $columnKey);
 
             $cell[$sliceKey] = $sliceCell;
@@ -1501,7 +1520,7 @@ class pivotModel extends model
         if($showTotal != 'noShow')
         {
             $value = array_sum(array_column($cell, 'value'));
-            $totalCell = array('value' => $value);
+            $totalCell = array('value' => $value, 'isGroup' => false);
             if($showMode != 'default') $totalCell['percentage'] = array($value, 1, $showMode, $monopolize, "rowTotal_{$columnKey}");
             $cell['total'] = $totalCell;
         }

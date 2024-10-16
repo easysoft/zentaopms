@@ -1981,9 +1981,8 @@ class biModel extends model
             $index++;
         }
 
-        $lastRow     = count($data->array) - 1;
-        $hasGroup    = isset($data->groups);
-        $showLastRow = isset($data->showLastRow) ? $data->showLastRow : false;
+        $lastRow  = count($data->array) - 1;
+        $hasGroup = isset($data->groups);
 
         $drills = !empty($data->drills) ? array_values($data->drills) : array();
         foreach($data->array as $rowKey => $rowData)
@@ -1993,6 +1992,11 @@ class biModel extends model
             $rowData         = array_values($rowData);
             $drillConditions = array();
             $isDrill         = array();
+
+            $totalLang    = $this->lang->pivot->total;
+            $totalColspan = 0;
+
+            foreach($rowData as $value) if($value == $totalLang) $totalColspan++;
 
             for($i = 0; $i < count($rowData); $i++)
             {
@@ -2026,11 +2030,9 @@ class biModel extends model
                     $cellSpan[$field]['rowspan'] = $field . '_rowspan';
                 }
 
-                $isFirstColumnAndLastRow = $i === 0 && $rowKey === $lastRow;
-
-                if($isFirstColumnAndLastRow && $hasGroup && $showLastRow)
+                if($value == $totalLang)
                 {
-                    $rows[$rowKey][$field . '_colspan'] = count($data->groups);
+                    $rows[$rowKey][$field . '_colspan'] = $totalColspan;
                     $cellSpan[$field]['colspan'] = $field . '_colspan';
                 }
 
