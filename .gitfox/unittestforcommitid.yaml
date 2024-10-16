@@ -46,4 +46,4 @@ spec:
               - sleep 5
               - s6-svwait -u -t 30000 /etc/s6/s6-available/mysql
               - initdb.php > /apps/zentao/unittestdb
-              - rununittestbycommitid.php ${{ secrets.get("zentao_user") }} ${{ secrets.get("zentao_password") }}
+              - rununittestbycommitid.php zentaopms ${{ secrets.get("zentao_user") }} ${{ secrets.get("zentao_password") }}
