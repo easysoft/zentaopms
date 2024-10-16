@@ -246,6 +246,10 @@ if(file_exists($actionsMapConfig)) include $actionsMapConfig;
 $routesConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'routes.php';
 if(file_exists($routesConfig)) include $routesConfig;
 
+/* 引用 Redis 的配置。 Include the redis config file. */
+$redisConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'redis.php';
+if(file_exists($redisConfig)) include $redisConfig;
+
 /* Include extension config files. */
 $extConfigFiles = glob(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ext/*.php');
 if($extConfigFiles) foreach($extConfigFiles as $extConfigFile) include $extConfigFile;
