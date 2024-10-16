@@ -23,12 +23,12 @@ if(in_array("{$module}-{$method}", $config->index->oldPages))
  * @param object $project
  * @return string
  */
-$getProjectGroup = function($project): string
+$getProjectGroup = function($project) use($involvedProjects): string
 {
     global $app;
-    if($project->status != 'done' and $project->status != 'closed' and $project->PM == $app->user->account) return 'my';
-    if($project->status != 'done' and $project->status != 'closed' and $project->PM != $app->user->account) return 'other';
-    return 'closed';
+    if(isset($involvedProjects[$project->id])) return 'my';
+    if($project->status == 'closed') return 'closed';
+    return 'other';
 };
 
 /**
@@ -69,7 +69,7 @@ foreach($projects as $programID => $programProjects)
 
         if(empty($project->multiple) || $project->type == 'kanban' || $project->model == 'kanban') $item['url'] = helper::createLink('project', 'index', "projectID={$project->id}");
 
-        if(empty($activeGroup) && $projectID == $project->id) $activeGroup = $group;
+        if(empty($activeGroup) && $projectID == $project->id) $activeGroup = $group;　
 
         if($config->systemMode == 'light' || $config->vision == 'lite')
         {
@@ -91,8 +91,8 @@ foreach($data as $key => $value) $data[$key] = array_values($value);
  * Define every group name, include expanded group.
  */
 $tabs = array();
-if(!empty($data['my']))    $tabs[] = array('name' => 'my',     'text' => $lang->project->myProject, 'active' => $activeGroup === 'my');
-if(!empty($data['other'])) $tabs[] = array('name' => 'other',  'text' => $lang->project->other, 'active' => $activeGroup === 'other');
+$tabs[] = array('name' => 'my',     'text' => $lang->project->mine, 'active' => $activeGroup === 'my');
+$tabs[] = array('name' => 'other',  'text' => $lang->project->other, 'active' => $activeGroup === 'other');
 $tabs[] = array('name' => 'closed', 'text' => $lang->project->closedProject);
 
 /**

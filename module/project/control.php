@@ -101,8 +101,9 @@ class project extends control
         $_COOKIE['showClosed'] = 1;
 
         /* Query user's project and program. */
-        $projects = $this->project->getListByCurrentUser();
-        $programs = $this->loadModel('program')->getPairs(true);
+        $projects         = $this->project->getListByCurrentUser();
+        $involvedProjects = $this->project->getInvolvedListByCurrentUser();
+        $programs         = $this->loadModel('program')->getPairs(true);
 
         /* Generate project tree. */
         $orderedProjects = array();
@@ -116,10 +117,12 @@ class project extends control
 
         $this->view->link      = $this->project->getProjectLink($module, $method, $projectID, $extra); // Create the link from module,method.
         $this->view->projectID = $projectID;
-        $this->view->projects  = $orderedProjects;
         $this->view->module    = $module;
         $this->view->method    = $method;
         $this->view->programs  = $programs;
+
+        $this->view->projects         = $orderedProjects;
+        $this->view->involvedProjects = $involvedProjects;
 
         $this->display();
     }
