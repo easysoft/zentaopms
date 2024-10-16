@@ -873,7 +873,15 @@ function sortItems(type, orders)
     if(!sortMethods[type]) return console.error(`[DocApp] Invalid sort type: ${type}`);
 
     const url = $.createLink('doc', sortMethods[type]);
-    return $.ajaxSubmit({url, data: {orders: JSON.stringify(orders)}});
+    return $.ajaxSubmit({
+        url,
+        data: {orders: JSON.stringify(orders)},
+        onSuccess: function()
+        {
+            const items = Object.keys(orders).map(id => ({id: +id, order: orders[id]}));
+            getDocApp().update(type, items);
+        }
+    });
 }
 
 /**
