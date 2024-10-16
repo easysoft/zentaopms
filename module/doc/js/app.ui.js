@@ -144,6 +144,20 @@ window.beforeSetDocBasicInfo = function(_, form)
 
 window.showDocBasicModal = showDocBasicModal;
 
+function mergeDocFormData(doc, formData)
+{
+    if(!doc || !formData) return;
+    const keys = new Set(formData.keys());
+    for(const key of keys)
+    {
+        const values = formData.getAll(key);
+        if(!values.length) continue;
+        if(key === 'module' || key === 'lib') doc[key] = +values[0];
+        else doc[key] = values.length > 1 ? values : values[0];
+    }
+    return doc;
+}
+
 /**
  * 处理创建文档的操作请求，向服务器发送请求并返回创建的文档对象。
  * Handle the create doc operation request, send a request to the server and return the created doc object.
@@ -154,33 +168,26 @@ function handleCreateDoc(doc, spaceID, libID, moduleID)
         const docApp    = getDocApp();
         const spaceType = docApp.signals.spaceType.value;
         const url       = $.createLink('doc', 'create', `objectType=${spaceType}&objectID=${Math.max(spaceID, 0)}&libID=${libID}&moduleID=${moduleID}`);
-        formData = zui.createFormData(
-            zui.createFormData({
-                content    : doc.content,
-                status     : doc.status || 'normal',
-                contentType: doc.contentType,
-                type       : 'text',
-                lib        : formData.get('lib') || libID,
-                module     : formData.get('module') || moduleID,
-                title      : doc.title,
-                keywords   : doc.keywords,
-                acl        : formData.get('acl') || 'private',
-                mailto     : formData.getAll('mailto'),
-                groups     : formData.getAll('groups'),
-                users      : formData.getAll('users'),
-                contactList: formData.getAll('contactList'),
-                space      : spaceType,
-                uid        : doc.contentType === 'doc' ? '' : (doc.uid || `doc${doc.id}`),
-            }),
-            formData
-        );
+        const docData   = mergeDocFormData({
+            content    : doc.content,
+            status     : doc.status || 'normal',
+            contentType: doc.contentType,
+            type       : 'text',
+            lib        : libID,
+            module     : moduleID,
+            title      : doc.title,
+            keywords   : doc.keywords,
+            acl        : 'private',
+            space      : spaceType,
+            uid        : doc.contentType === 'doc' ? '' : (doc.uid || `doc${doc.id}`),
+        }, formData);
         return new Promise((resolve) =>
         {
-            $.post(url, formData, (res) =>
+            $.post(url, docData, (res) =>
             {
                 const data = JSON.parse(res);
-                resolve($.extend(doc, {id: data.id}, data.doc, {status: doc.status || data.status}));
-            });
+                resolve($.extend(doc, {id: data.id}, docData, data.doc, {status: doc.status || data.status}));
+        });
         });
     });
 }
@@ -196,7 +203,7 @@ function handleSaveDoc(doc)
     const libID     = docApp.signals.libID.value;
     const moduleID  = docApp.signals.moduleID.value;
     const url       = $.createLink('doc', 'edit', `docID=${doc.id}`);
-    let formData    = zui.createFormData({
+    const docData   = {
         content    : doc.content,
         status     : doc.status || 'normal',
         contentType: doc.contentType,
@@ -205,13 +212,19 @@ function handleSaveDoc(doc)
         module     : moduleID,
         title      : doc.title,
         keywords   : doc.keywords,
-        acl        : 'private',
+        acl        : doc.acl,
         space      : spaceType,
         uid        : doc.contentType === 'doc' ? '' : (doc.uid || `doc${doc.id}`),
-    });
-    if(savingDocData[doc.id]) formData = zui.createFormData(savingDocData[doc.id], formData);
-    $.post(url, formData, (res) => {
-        docApp.update('doc', doc);
+    };
+
+    if(savingDocData[doc.id])
+    {
+        mergeDocFormData(docData, savingDocData[doc.id]);
+        delete savingDocData[doc.id];
+    }
+    $.post(url, docData, (res) =>
+    {
+        docApp.update('doc', $.extend({}, doc, docData));
     });
 }
 
@@ -648,7 +661,9 @@ const commands =
                     if(!res.module) return;
                     const docApp = getDocApp();
                     docApp.update('module', res.module);
-                    docApp.selectModule(res.module.id);
+                    if (!docApp.hasEditingDoc) {
+                        docApp.selectModule(res.module.id);
+                    }
                 }
             })
         });
