@@ -440,6 +440,12 @@ class gitModel extends model
         $this->loadModel('repo');
         foreach($designs as $designID)
         {
+            if(empty($designID)) continue;
+            $this->dao->delete()->from(TABLE_RELATION)->where('AType')->eq('design')->andWhere('AID')->eq($designID)->andWhere('BType')->eq('commit')->andWhere('relation')->eq('completedin')->exec();
+            $this->dao->delete()->from(TABLE_RELATION)->where('AType')->eq('commit')->andWhere('BID')->eq($designID)->andWhere('BType')->eq('design')->andWhere('relation')->eq('completedfrom')->exec();
+
+            $revisionID = $this->dao->select('id')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->andWhere('revision')->eq($log->revision)->fetch('id');
+            $program    = $this->dao->select('id,project,product')->from(TABLE_DESIGN)->where('id')->eq($designID)->fetch();
 
             $data = new stdclass();
             $data->program  = $program->project;
