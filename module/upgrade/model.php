@@ -10122,6 +10122,19 @@ class upgradeModel extends model
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
             }
         }
+
+        /* Process ticket transferred to story and bug. */
+        $ticketTransferred = $this->dao->select('*')->from(TABLE_TICKETRELATION)->fetchAll('id');
+        foreach($ticketTransferred as $transferredObject)
+        {
+                $relation = new stdClass();
+                $relation->AType    = 'ticket';
+                $relation->AID      = $transferredObject->ticketId;
+                $relation->relation = 'transferredto';
+                $relation->BType    = $transferredObject->objectType;
+                $relation->BID      = $transferredObject->objectId;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+        }
         return true;
     }
 }
