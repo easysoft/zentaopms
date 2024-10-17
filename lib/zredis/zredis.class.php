@@ -2,6 +2,24 @@
 class zredis
 {
     /**
+     * 初始化标识。
+     * Initialization flag.
+     *
+     * @var string
+     * @access public
+     */
+    const INITIALIZED  = 'sys:initialized';
+
+    /**
+     * 同步标识。
+     * Synchronization flag.
+     *
+     * @var string
+     * @access public
+     */
+    const SYNCHRONIZED = 'sys:synchronized';
+
+    /**
      * 全局对象 $app。
      * The global $app object.
      *
@@ -107,7 +125,7 @@ class zredis
 
             if(!$this->redis->ping()) helper::end('Can not connect to Redis server.');
 
-            if(!$this->redis->exists('inited')) $this->init();
+            if(!$this->redis->exists(zredis::INITIALIZED)) $this->init();
 
             return $this;
         }
@@ -137,7 +155,7 @@ class zredis
             $this->update();
         }
 
-        $this->redis->set('initialized', date('Y-m-d H:i:s'));
+        $this->redis->set(zredis::INITIALIZED, date('Y-m-d H:i:s'));
 
         $this->redis->exec();
     }
