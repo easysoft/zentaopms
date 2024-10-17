@@ -871,6 +871,12 @@ class pivotModel extends model
      */
     public function mapRecordValueWithFieldOptions(array $records, array $fields, string $sql, string $driver): array
     {
+        $removeQuote = function($value)
+        {
+            if(is_string($value)) return str_replace('"', '', htmlspecialchars_decode($value));
+            return $value;
+        };
+
         $this->app->loadConfig('dataview');
         $records      = json_decode(json_encode($records), true);
         $fieldOptions = $this->getFieldsOptions($fields, $sql, $driver);
@@ -878,6 +884,7 @@ class pivotModel extends model
         {
             foreach($record as $field => $value)
             {
+                $value = $removeQuote($value);
                 $record["{$field}_origin"] = $value;
                 $tableField = !isset($fields[$field]) ? '' : $fields[$field]['object'] . '-' . $fields[$field]['field'];
                 $withComma  = in_array($tableField, $this->config->dataview->multipleMappingFields);
@@ -900,6 +907,7 @@ class pivotModel extends model
                     $valueKey       = "$value";
                     $record[$field] = isset($optionList[$valueKey]) ? $optionList[$valueKey] : $value;
                 }
+                $record[$field] = $removeQuote($record[$field]);
             }
 
             $records[$index] = (object)$record;
@@ -1636,12 +1644,6 @@ class pivotModel extends model
             return number_format($number, 2, '.', '');
         };
 
-        $removeQuote = function($value)
-        {
-            if(is_string($value)) return str_replace('"', '', htmlspecialchars_decode($value));
-            return $value;
-        };
-
         $values = array();
         foreach($records as $record)
         {
@@ -1653,7 +1655,6 @@ class pivotModel extends model
                 if(is_array($cellValue)) $arrayValue = $cellValue;
 
                 $cellValue = $roundIfMoreThanTwoDecimals($cellValue);
-                $cellValue = $removeQuote($cellValue);
                 $row[$colKey] = $cellValue;
                 if(isset($cell['percentage']))
                 {
@@ -1671,7 +1672,6 @@ class pivotModel extends model
                     foreach($row as $key => $value)
                     {
                         $value = is_scalar($value) ? $value : $value[$index];
-                        $value = $removeQuote($value);
                         $flattenValue[$key] = $value;
                     }
                     $values[] = $flattenValue;
