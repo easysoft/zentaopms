@@ -145,7 +145,7 @@ formPanel
             (
                 set::name('acl'),
                 set::items($lang->doclib->aclList),
-                set::value($acl),
+                set::value(isset($acl) ? $acl : ''),
                 on::change("toggleAcl('lib')")
             )
         )
