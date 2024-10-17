@@ -50,7 +50,11 @@ function processDocAppAction(action, docApp)
 {
     docApp = docApp || getDocApp();
 
-    if(typeof action === 'string') action = {call: action};
+    if(typeof action === 'string')
+    {
+
+        action = {call: action};
+    }
     if(Array.isArray(action))
     {
         if(typeof action[0] !== 'string')
@@ -61,6 +65,12 @@ function processDocAppAction(action, docApp)
         action = {call: action[0], args: action.slice(1)};
     }
 
+    if(!action.mode && action.call.includes(':'))
+    {
+        const parts = action.call.split(':');
+        action.mode = parts[0];
+        action.call = parts[1];
+    }
     if(action.mode && action.mode !== docApp.mode) return;
     const method = zui.deepGet(docApp, action.call);
     if(typeof method === 'function') method.apply(docApp, action.args);
