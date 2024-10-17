@@ -233,9 +233,9 @@ class taskTest
      * @param  int    $taskID
      * @param  array  $param
      * @access public
-     * @return array
+     * @return array|string
      */
-    public function startTest(int $taskID, array $param = array()): array
+    public function startTest(int $taskID, array $param = array()): array|string
     {
         $task        = new stdclass();
         $startFields = array('id' => $taskID, 'status' => 'doing', 'assignedTo' => '', 'realstarted' => helper::now(), 'left' => 0, 'consumed' => 0);
