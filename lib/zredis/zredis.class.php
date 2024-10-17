@@ -419,6 +419,6 @@ class zredis
     {
         if(empty($this->redis)) helper::end('Redis is not initialized.');
 
-        $this->redis->$method(...$args);
+        return $this->redis->$method(...$args);
     }
 }
