@@ -10152,6 +10152,44 @@ class upgradeModel extends model
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
             }
         }
+
+        /* Process child story. */
+        $parentStories = array();
+        $childStories  = $this->dao->select('id,type,parent,demand')->from(TABLE_STORY)->where('parent')->gt(0)->orWhere('demand')->gt(0)->fetchAll('id');
+        foreach($childStories as $childStory) $parentStories[$childStory->parent] = $childStory->parent;
+        $parentStoryType = $this->dao->select('id,type')->from(TABLE_STORY)->where('id')->in($parentStories)->fetchPairs('id');
+        foreach($childStories as $childStory)
+        {
+            $relation = new stdClass();
+            $relation->relation = 'subdivideinto';
+            $relation->BType    = $childStory->type;
+            $relation->BID      = $childStory->id;
+            if(!empty($childStory->parent))
+            {
+                $relation->AType = $parentStoryType[$childStory->parent];
+                $relation->AID   = $childStory->parent;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
+            if(!empty($childStory->demand))
+            {
+                $relation->AType = 'demand';
+                $relation->AID   = $childStory->demand;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
+        }
+
+        /* Process child demand. */
+        $childDemands = $this->dao->select('id,parent')->from(TABLE_DEMAND)->where('parent')->gt(0)->fetchPairs('id');
+        foreach($childDemands as $childDemandID => $parentDemandID)
+        {
+            $relation = new stdClass();
+            $relation->AType    = 'demand';
+            $relation->AID      = $parentDemandID;
+            $relation->relation = 'subdivideinto';
+            $relation->BType    = 'demand';
+            $relation->BID      = $childDemandID;
+            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+        }
         return true;
     }
 }
