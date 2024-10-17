@@ -88,6 +88,7 @@ class compileTao extends compileModel
         $data->updateDate = $data->createdDate ?? date('Y-m-d H:i:s');
 
         $this->dao->insert(TABLE_COMPILE)->data($data)->exec();
+        $this->dao->update(TABLE_JOB)->set('lastExec')->eq($data->createdDate)->set('lastStatus')->eq($data->status)->where('id')->eq($jobID)->exec();
         return !dao::isError();
     }
 }
