@@ -1732,8 +1732,8 @@ class docModel extends model
         $libIDList = array();
         foreach($spaceList as $spaceID)
         {
-            $libs       = $this->getLibsByObject($type, (int)$spaceID, 0, $limit);
-            $libIDList += array_keys($libs);
+            $libs      = $this->getLibsByObject($type, (int)$spaceID, 0, $limit);
+            $libIDList = array_merge($libIDList, array_keys($libs));
             $map[$spaceID] = array_values($libs);
         }
 
