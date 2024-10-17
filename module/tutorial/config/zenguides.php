@@ -24,7 +24,7 @@ if($app->config->vision === 'rnd')
     if($config->systemMode != 'light') $config->tutorial->guides[$waterfallProjectManage->advance->name] = $waterfallProjectManage->advance;
     $config->tutorial->guides[$kanbanProjectManage->advance->name] = $kanbanProjectManage->advance;
     if($app->config->edition != 'open') $config->tutorial->guides[$feedbackManage->name] = $feedbackManage;
-    $config->tutorial->guides[$docManage->name] = $docManage;
+    //$config->tutorial->guides[$docManage->name] = $docManage;
 }
 
 if($app->config->vision === 'or')
