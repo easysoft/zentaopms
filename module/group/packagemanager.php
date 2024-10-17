@@ -2137,7 +2137,7 @@ $config->group->package->companyEffort->order  = 5;
 $config->group->package->companyEffort->subset = 'systemeffort';
 $config->group->package->companyEffort->privs  = array();
 $config->group->package->companyEffort->privs['company-calendar'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 10, 'depend' => array('company-effort', 'my-team'), 'recommend' => array());
-$config->group->package->companyEffort->privs['company-effort']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 45, 'depend' => array('my-team'), 'recommend' => array('company-calendar'));
+$config->group->package->companyEffort->privs['company-effort']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 45, 'depend' => array('my-team', 'company-calendar'), 'recommend' => array());
 
 $config->group->package->companyDynamic = new stdclass();
 $config->group->package->companyDynamic->order  = 5;
