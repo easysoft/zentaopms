@@ -1265,10 +1265,14 @@ class doc extends control
 
         if($_POST)
         {
+            $oldDocList = $this->doc->getDocsByIdList($docIdList);
+
             $data = form::data()->setIF($type == 'mine' || $this->post->acl == 'open', 'groups', '')->setIF($type == 'mine' || $this->post->acl == 'open', 'users', '')->get();
             $this->doc->batchMoveDoc($data, $docIdList);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->docZen->recordBatchMoveActions($oldDocList, $data);
 
             $locate = true;
             if($type == 'mine')    $locate = inlink('mySpace', "objectID={$spaceID}&libID={$libID}&moduleID={$moduleID}");
