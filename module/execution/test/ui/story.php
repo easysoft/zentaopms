@@ -9,6 +9,7 @@ cid=1
 
 chdir(__DIR__);
 include '../lib/story.ui.class.php';
+global $config;
 
 $product = zenData('product');
 $product->id->range('1');
@@ -75,7 +76,7 @@ $user->id->range('1-100');
 $user->dept->range('0');
 $user->account->range('admin, user1, user2');
 $user->realname->range('admin, USER1, USER2');
-$user->password->range('77839ef72f7b71a3815a77d038e267e0');
+$user->password->range($config->uitest->defaultPassword)->format('md5');
 $user->gen(3);
 
 $team = zenData('team');

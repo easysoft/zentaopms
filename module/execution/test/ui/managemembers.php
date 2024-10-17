@@ -9,6 +9,7 @@ cid=1
 
 chdir(__DIR__);
 include '../lib/managemembers.ui.class.php';
+global $config;
 
 $project = zenData('project');
 $project->id->range('1-2');
@@ -63,7 +64,7 @@ $user->id->range('1-100');
 $user->dept->range('0, 1{2}, 2{3}, 3{5}');
 $user->account->range('admin, user1, user2, user3, user4, user5, user11, user12, user13, user14, user15');
 $user->realname->range('admin, USER1, USER2, USER3, USER4, USER5, USER11, USER12, USER13, USER14, USER15');
-$user->password->range('77839ef72f7b71a3815a77d038e267e0');
+$user->password->range($config->uitest->defaultPassword)->format('md5');
 $user->gen(11);
 
 $tester = new manageMembersTester();
