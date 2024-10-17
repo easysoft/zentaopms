@@ -635,9 +635,12 @@ const commands =
             confirm: getLang('confirmDeleteSpace'),
             url:     $.createLink('doc', 'deleteLib', `libID=${spaceID}`),
             load:    false,
-            onSuccess: function()
+            onSuccess: function(res)
             {
-                getDocApp().delete('space', spaceID);
+                if(res && res.result === 'success')
+                {
+                    getDocApp().delete('space', spaceID);
+                }
             }
         });
     },
