@@ -525,7 +525,7 @@ class control extends baseControl
         if(!empty($this->app->installing) || !empty($this->app->upgrading)) return $fields;
 
         $moduleName = $moduleName ? $moduleName : $this->app->rawModule;
-        $methodName = $methodName ? $moduleName : $this->app->rawMethod;
+        $methodName = $methodName ? $methodName : $this->app->rawMethod;
 
         $groupID = $this->loadModel('workflowgroup')->getGroupIDByData($moduleName, $object);
         $flow    = $this->loadModel('workflow')->getByModule($moduleName, false, $groupID);
