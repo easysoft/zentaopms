@@ -1408,7 +1408,7 @@ class doc extends control
         }
 
         $menuType = $type == 'mine' ? 'my' : ($type == 'custom' ? 'team' : $type);
-        $this->lang->doc->menu->{$menuType}['alias'] .= ',' . $this->app->rawMethod;
+        if(isset($this->lang->doc->menu->{$menuType})) $this->lang->doc->menu->{$menuType}['alias'] .= ',' . $this->app->rawMethod;
 
         $this->view->type           = $type;
         $this->view->spaceID        = $spaceID;
