@@ -656,7 +656,17 @@ const commands =
             {
                 if(res && res.result === 'success')
                 {
-                    getDocApp().delete('space', spaceID);
+                    const docApp = getDocApp();
+                    if(spaceID === docApp.spaceID && docApp.mode !== 'home')
+                    {
+                        const spaceList = docApp.spaceList;
+                        if(spaceList.length)
+                        {
+                            docApp.selectSpace(spaceList[0].id);
+                            return;
+                        }
+                    }
+                    docApp.delete('space', spaceID);
                 }
             }
         });
