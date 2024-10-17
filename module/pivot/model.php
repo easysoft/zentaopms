@@ -1505,9 +1505,12 @@ class pivotModel extends model
         if(!$isSlice)
         {
             $value = $this->columnStatistics($records, $stat, $field);
-            if($showMode == 'default') return array('value' => $value);
+            $cell  = array('value' => $value, 'isGroup' => false);
 
-            return array('value' => $value, 'percentage' => array($value, 1, $showMode, $monopolize, $columnKey), 'isGroup' => false);
+            if($showMode == 'default') return $cell;
+            $cell['percentage'] = array($value, 1, $showMode, $monopolize, $columnKey);
+
+            return $cell;
         }
 
         /* 处理切片列的情况。 */
