@@ -324,7 +324,7 @@ class zredis
      */
     private function delete()
     {
-        if(empty($this->keyList)) return $this->log('Failed to fetch id list to delete.');
+        if(empty($this->keyList)) return $this->log('Failed to fetch key list to delete.');
 
         foreach($this->config->redis->tables[$this->table]->caches as $cache)
         {
