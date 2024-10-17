@@ -104,13 +104,19 @@ formPanel
                 (
                     set::name('groups[]'),
                     set::items($groups),
+                    set::value($doc->groups),
                     set::multiple(true)
                 )
             ),
             div
             (
                 setClass('w-full'),
-                userPicker(set::label($lang->doc->users), set::items($users))
+                userPicker
+                (
+                    set::label($lang->doc->users),
+                    set::items($users),
+                    set::value($doc->users)
+                )
             )
         )
     )
