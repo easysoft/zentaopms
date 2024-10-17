@@ -85,13 +85,13 @@ formPanel
             set::name('acl'),
             set::items($lang->doc->aclList),
             set::value(isset($doc) ? $doc->acl : 'private'),
-            $objectType == 'mine' ? on::change('toggleWhiteList') : null
+            $objectType != 'mine' ? on::change('toggleWhiteList') : null
         )
     ),
     formGroup
     (
         setID('whiteListBox'),
-        setClass('hidden'),
+        setClass(($libID == $doc->lib && $objectType != 'mine' && $doc->acl == 'private') ? '' : 'hidden'),
         set::label($lang->doc->whiteList),
         div
         (
