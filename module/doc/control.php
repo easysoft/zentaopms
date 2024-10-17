@@ -1238,7 +1238,6 @@ class doc extends control
         }
 
         if(empty($libID)) $libID = (int)$doc->lib;
-        $lib = $this->doc->getLibByID($libID);
 
         $libPairs = $this->doc->getLibPairs($spaceType, '', (int)$space, '', $spaceType == 'product' ? array((int)$space => $space) : array(), $spaceType == 'project' ? array((int)$space => $space) : array());
         if(!isset($libPairs[$libID])) $libID = (int)key($libPairs);
@@ -1250,7 +1249,7 @@ class doc extends control
         $this->view->doc        = $doc;
         $this->view->spaces     = $this->doc->getAllSubSpaces();
         $this->view->libPairs   = $libPairs;
-        $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
+        $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
         $this->view->groups     = $this->loadModel('group')->getPairs();
         $this->view->users      = $this->loadModel('user')->getPairs('nocode|noclosed');
         $this->display();
@@ -1426,7 +1425,7 @@ class doc extends control
         $this->view->noSpace        = $noSpace;
         $this->view->objectID       = $spaceID;
         $this->view->users          = $this->loadModel('user')->getPairs('noclosed,noletter');
-        $this->view->title          = isset($lang->doc->spaceList[$type]) ? $lang->doc->spaceList[$type] : $this->lang->doc->common;
+        $this->view->title          = isset($this->lang->doc->spaceList[$type]) ? $this->lang->doc->spaceList[$type] : $this->lang->doc->common;
         $this->display();
     }
 
@@ -1498,7 +1497,7 @@ class doc extends control
         /* Load pager. */
         $rawMethod = $this->app->rawMethod;
         $this->app->rawMethod = 'showFiles';
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $this->app->rawMethod = $rawMethod;
 
@@ -1552,7 +1551,7 @@ class doc extends control
 
             if($objectType == 'custom' || $objectType == 'mine') $this->view->spaces = $this->doc->getSubSpacesByType($objectType, true);
             $this->docZen->setObjectsForCreate($objectType, empty($lib) ? null : $lib, $unclosed, $objectID);
-            $this->view->optionMenu = empty($libID) ? array() : $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
+            $this->view->optionMenu = empty($libID) ? array() : $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
         }
         else
         {
