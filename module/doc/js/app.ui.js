@@ -686,7 +686,9 @@ const commands =
             load:    false,
             onSuccess: function()
             {
-                getDocApp().delete('lib', libID);
+                const docApp = getDocApp();
+                docApp.delete('lib', libID);
+                if(docApp.mode === 'home') docApp.loadHomeLibs();
             }
         });
     },
