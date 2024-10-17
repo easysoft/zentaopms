@@ -1047,7 +1047,7 @@ class baseDAO
             /* Real-time save log. */
             if(dao::$realTimeLog && dao::$realTimeFile) file_put_contents(dao::$realTimeFile, $sql . "\n", FILE_APPEND);
 
-            $table  = trim($this->table, '`');
+            $table  = $this->table;
             $method = $this->method;
             $this->reset();
 
@@ -1066,12 +1066,13 @@ class baseDAO
 
             if($this->config->enableDuckdb)
             {
-                $now        = helper::now();
-                $queueTable = trim(TABLE_DUCKDBQUEUE, '`');
+                $queueTable = TABLE_DUCKDBQUEUE;
                 if(!empty($table) && $table != $queueTable)
                 {
-                    $this->dbh->exec("UPDATE {$queueTable} SET updatedTime = '$now' WHERE object = '$table'");
-                    $this->dbh->exec("INSERT INTO {$queueTable} (object, updatedTime, syncTime) SELECT '$table', '$now', NULL WHERE NOT EXISTS (SELECT 1 FROM {$queueTable} WHERE object = '$table' );");
+                    $now    = helper::now();
+                    $object = trim($table, '`');
+                    $this->dbh->exec("UPDATE {$queueTable} SET updatedTime = '$now' WHERE object = '$object'");
+                    $this->dbh->exec("INSERT INTO {$queueTable} (`object`, `updatedTime`, `syncTime`) SELECT '$object', '$now', NULL WHERE NOT EXISTS (SELECT 1 FROM {$queueTable} WHERE `object` = '$object' );");
                 }
             }
 
