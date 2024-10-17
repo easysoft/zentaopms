@@ -721,26 +721,15 @@ class doc extends control
         if(!empty($lib) && $lib->deleted == '1') $appendLib = $doc->lib;
         if($this->app->tab == 'doc' && !empty($lib) && $lib->type == 'execution') $appendLib = $doc->lib;
 
-        if(!empty($lib->type))
+        $objectType = $lib->type;
+        if(in_array($lib->type, array('product', 'project', 'execution')))
         {
-            $objectType = $lib->type;
-            $objectID   = zget($doc, $objectType, 0);
-        }
-        elseif(!empty($lib->product))
-        {
-            $objectType = 'product';
-            $objectID   = $lib->product;
-        }
-        elseif(!empty($lib->project))
-        {
-            $objectType = 'project';
-            $objectID   = $lib->project;
+            $objectID = zget($doc, $objectType, 0);
         }
         else
         {
-            $objectType = 'custom';
+            $objectID = $lib->parent;
         }
-        if($objectType == 'custom' && empty($objectID)) $objectID = $lib->parent;
 
         /* Get doc. */
         if($docID) $this->doc->createAction($docID, 'view');
