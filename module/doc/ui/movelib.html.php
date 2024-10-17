@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace zin;
 
 $defaultAcl = $lib->acl;
+if($libType == 'mine') $defaultAcl = 'private';
 if(($libType == 'product' || $libType == 'project') && $lib->parent !== 0) $defaultAcl = 'default';
 
 modalHeader(set::titleClass('text-root font-bold'), set::title($lang->doc->moveLibAction));

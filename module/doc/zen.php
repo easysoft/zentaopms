@@ -217,15 +217,12 @@ class docZen extends doc
      */
     protected function setAclForCreateLib(string $type): void
     {
-        $acl = 'default';
         if($type == 'custom')
         {
-            $acl = 'open';
             unset($this->lang->doclib->aclList['default']);
         }
         elseif($type == 'mine')
         {
-            $acl = 'private';
             $this->lang->doclib->aclList = $this->lang->doclib->mySpaceAclList;
         }
         elseif($type == 'api')
@@ -239,8 +236,6 @@ class docZen extends doc
             $this->lang->doclib->aclList['private'] = sprintf($this->lang->doclib->privateACL, $this->lang->{$type}->common);
             unset($this->lang->doclib->aclList['open']);
         }
-
-        $this->view->acl = $acl;
     }
 
     /**
