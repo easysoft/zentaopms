@@ -65,7 +65,7 @@ class docModel extends model
      */
     public function getSpaceType(int|string $spaceID): string
     {
-        if(is_string($spaceID) && strpos($spaceID, '.') != false) return explode('.', $spaceID)[0];
+        if(is_string($spaceID) && strpos($spaceID, '.') !== false) return explode('.', $spaceID)[0];
         return $this->dao->findByID((int)$spaceID)->from(TABLE_DOCLIB)->fetch('type');
     }
 
@@ -1201,8 +1201,6 @@ class docModel extends model
      */
     public function getSpaces($type = 'custom', $spaceID = 0)
     {
-        if($type == 'mine' || $type == 'custom')
-
         $spaces = array();
         if($type == 'mine' || $type == 'custom')
         {
@@ -2136,8 +2134,8 @@ class docModel extends model
             ->fetchPairs('id');
         if(!empty($buildPairs)) $buildIdList = implode(',', $buildPairs);
 
-        $executionIdList = $executionIdList ? join(',', $executionIdList) : 0;
-        $storyIdList     = $storyIdList ? join(',', $storyIdList) : 0;
+        $executionIdList = $executionIdList ? implode(',', $executionIdList) : 0;
+        $storyIdList     = $storyIdList ? implode(',', $storyIdList) : 0;
         return array($storyIdList, $issueIdList, $meetingIdList, $reviewIdList, $designIdList, $executionIdList, $taskIdList, $buildIdList);
     }
 
@@ -2635,14 +2633,12 @@ class docModel extends model
      */
     public function getModulesOfLibs(array $libs)
     {
-        $modules = $this->dao->select('*')->from(TABLE_MODULE)
+        return $this->dao->select('*')->from(TABLE_MODULE)
             ->where('root')->in($libs)
             ->andWhere('type')->eq('doc')
             ->andWhere('deleted')->eq(0)
             ->orderBy('grade desc, `order`')
             ->fetchAll('id');
-
-        return $modules;
     }
 
     /**
@@ -2871,7 +2867,9 @@ class docModel extends model
 
         $showDoc = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=doc&key=showDoc');
         $showDoc = $showDoc === '0' ? 0 : 1;
-        if($this->app->rawMethod == 'view' && $lib->type != 'apiLib' && $showDoc && !($lib->type == 'custom' && $lib->parent == 0))
+        $showDocWithNotAPI = $showDoc && $lib->type != 'api';
+        $isSpace = $lib->type == 'custom' && $lib->parent == 0;
+        if($this->app->rawMethod == 'view' && $showDocWithNotAPI && !$isSpace)
         {
             $docIDList = $this->getPrivDocs(array($lib->id));
             $docs      = $this->dao->select('*, title as name')->from(TABLE_DOC)
@@ -3446,8 +3444,15 @@ class docModel extends model
         unset($data->space);
         $this->dao->update(TABLE_DOCLIB)->data($data)->where('id')->eq($libID)->exec();
 
-        $from = in_array($lib->type, array('project', 'product'))  ? ($lib->project ? "{$lib->type}.{$lib->project}" : "{$lib->type}.{$lib->product}")     : "{$lib->type}.{$lib->parent}";
-        $to   = in_array($data->type, array('project', 'product')) ? (isset($data->project) ? "{$data->type}.{$data->project}" : "{$data->type}.{$lib->product}") : "{$data->type}.{$data->parent}";
+        $getFromTo = function ($obj)
+        {
+            if(!in_array($obj->type, array('project', 'product'))) return "{$obj->type}.{$obj->parent}";
+            if(isset($obj->project)) return "{$obj->type}.{$obj->project}";
+            return "{$obj->type}.{$obj->product}";
+        };
+
+        $from = $getFromTo($lib);
+        $to   = $getFromTo($data);
 
         $actionID = $this->loadModel('action')->create('docLib', $libID, 'Moved', '', json_encode(array('from' => $from, 'to' => $to)));
         $this->action->logHistory($actionID, $changes);
