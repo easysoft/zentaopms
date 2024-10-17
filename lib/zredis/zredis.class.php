@@ -224,7 +224,7 @@ class zredis
         }
 
         $this->condition = $condition;
-        $this->keyList   = $keyList;
+        $this->keyList   = array_values($keyList);
     }
 
     /**
@@ -328,15 +328,16 @@ class zredis
 
         foreach($this->config->redis->tables[$this->table]->caches as $cache)
         {
+            $cache = (object)$cache;
             if($cache->type == 'raw')
             {
                 $keys = [];
-                foreach($keyList as $key) $keys[] = "raw:{$cache->name}:{$key}";
+                foreach($this->keyList as $key) $keys[] = "raw:{$cache->name}:{$key}";
                 $this->redis->del($keys);
             }
             if($cache->type == 'set')
             {
-                $this->redis->srem("set:{$cache->name}", ...$keyList);
+                $this->redis->srem("set:{$cache->name}", ...$this->keyList);
             }
         }
     }
