@@ -102,7 +102,7 @@ class ciModel extends model
             $jenkinsServer = strpos($compile->pipeline, '/job/') === 0 ? $jenkinsServer . $compile->pipeline : $jenkinsServer . '/job/' . $compile->pipeline;
             $infoUrl       = sprintf("%s/api/xml?tree=builds[id,number,result,queueId]&xpath=//build[queueId=%s]", $jenkinsServer, $compile->queue);
             $response      = common::http($infoUrl, '', array(CURLOPT_USERPWD => $userPWD));
-            if($response)
+            if($response && strpos($response, "<") === 0)
             {
                 $buildInfo = simplexml_load_string($response);
                 if(empty($buildInfo)) return false;

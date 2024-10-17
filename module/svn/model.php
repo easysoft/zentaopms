@@ -147,7 +147,7 @@ class svnModel extends model
                 {
                     if(strpos($log->msg, $comment) !== false)
                     {
-                        $this->loadModel('compile')->createByJob($job->id);
+                        $this->loadModel('job')->exec($job->id, array(), 'commit');
                         continue 2;
                     }
                 }
