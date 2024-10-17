@@ -177,13 +177,20 @@ class zredis
             $splitPOS  = $orderPOS  ? $orderPOS  : $limitPOS;
             $splitPOS  = $havingPOS ? $havingPOS : $splitPOS;
             $splitPOS  = $groupPOS  ? $groupPOS  : $splitPOS;
-            $condition = substr($sql, $wherePOS + $whereLen, $splitPOS - $wherePOS - $whereLen);
+            if($splitPOS)
+            {
+                $condition = substr($sql, $wherePOS + $whereLen, $splitPOS - $wherePOS - $whereLen);
+            }
+            else
+            {
+                $condition = substr($sql, $wherePOS + $whereLen);
+            }
 
             if($event == 'delete')
             {
                 /* 执行删除操作后数据已经被删除，所以需要提前获取 ID 列表。*/
                 $field   = $this->config->redis->tables[$table]->key;
-                $keyList = $this->dao->select($field)->from($table)->where($condition)->fetchPairs();
+                $keyList = $this->dao->select($field)->from($table)->beginIF($condition)->where($condition)->fi()->fetchPairs();
             }
         }
 
