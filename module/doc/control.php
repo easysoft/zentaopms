@@ -432,7 +432,7 @@ class doc extends control
 
         $this->view->title          = $lib->name . $this->lang->hyphen . $this->lang->doc->edit;
         $this->view->doc            = $doc;
-        $this->view->optionMenu     = $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
+        $this->view->optionMenu     = $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
         $this->view->type           = $lib->type;
         $this->view->libs           = $libPairs;
         $this->view->lib            = $lib;
@@ -534,7 +534,7 @@ class doc extends control
         $libID       = key($libPairs);
         if($libID)
         {
-            $optionMenu  = $this->loadModel('tree')->getOptionMenu($libID, $docType, $startModuleID = 0);
+            $optionMenu  = $this->loadModel('tree')->getOptionMenu($libID, $docType, 0);
             foreach($optionMenu as $id => $name) $moduleItems[] = array('text' => $name, 'value' => $id, 'keys' => $name);
         }
 
@@ -572,7 +572,7 @@ class doc extends control
         $libID       = key($libPairs);
         if($libID)
         {
-            $optionMenu  = $this->loadModel('tree')->getOptionMenu($libID, $docType, $startModuleID = 0);
+            $optionMenu  = $this->loadModel('tree')->getOptionMenu($libID, $docType, 0);
             foreach($optionMenu as $id => $name) $moduleItems[] = array('text' => $name, 'value' => $id, 'keys' => $name);
         }
 
