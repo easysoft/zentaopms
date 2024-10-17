@@ -17,7 +17,7 @@ class zredis
      * @var string
      * @access public
      */
-    const INITIALIZED  = 'sys:initialized';
+    const INITIALIZED = 'sys:initialized';
 
     /**
      * 同步标识。
