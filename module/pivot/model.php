@@ -1089,9 +1089,11 @@ class pivotModel extends model
                 }
                 else
                 {
-                    $isGroup = zget($colValue, 'isGroup', 1);
-                    if($isGroup) $summary[$colKey]['value']  = $colValue['value'];
-                    else         $summary[$colKey]['value'] += $colValue['value'];
+                    $isGroup   = zget($colValue, 'isGroup', 1);
+                    $value     = zget($colValue, 'value', '');
+                    $isNumeric = is_numeric($value);
+
+                    $summary[$colKey]['value'] = !$isGroup && $isNumeric ? $summary[$colKey]['value'] + $value : $value;
                 }
             }
         }
