@@ -764,10 +764,33 @@ const commands =
             confirm: getLang('confirmDeleteModule'),
             url:     $.createLink('doc', 'deleteCatalog', `moduleID=${moduleID}`),
             load:    false,
-            onSuccess: function()
+            onSuccess: function(res)
             {
-                getDocApp().delete('lib', libID);
-                getDocApp().delete('module', moduleID);
+                if(!res) return;
+                if(res.result === 'success')
+                {
+                    const docApp = getDocApp();
+                    const moduleInfo = docApp.treeMap.modules.get(+moduleID);
+                    if(moduleInfo)
+                    {
+                        const parent = moduleInfo.parent;
+                        docApp.changeState(parent.type === 'lib' ? {libID: parent.id, moduleID: 0} : {moduleID: parent.id, libID: parent.data.lib});
+                        docApp.changeState(
+                        {
+                            libID: parent.type === 'lib' ? parent.id : docApp.libID,
+                            module: parent.type === 'lib' ? 0 : parent.id,
+                        })
+                    }
+                    else if(docApp.mode === 'list')
+                    {
+                        docApp.selectLib(docApp.libID, 0);
+                    }
+                    docApp.delete('module', moduleID);
+                }
+                else if(res.message)
+                {
+                    zui.Modal.alert(res.message);
+                }
             }
         });
     },
