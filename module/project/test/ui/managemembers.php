@@ -9,9 +9,17 @@ cid=1
 
 chdir(__DIR__);
 include '../lib/managemembers.ui.class.php';
+global $config;
+
+$user = zenData('user');
+$user->id->range('1-5');
+$user->dept->range('1');
+$user->account->range('admin, user1, user2, user3, user4');
+$user->realname->range('admin, 用户1, 用户2, 用户3, 用户4');
+$user->password->range($config->uitest->defaultPassword)->format('md5');
+$user->gen(5);
 
 zendata('project')->loadYaml('project', false, 1)->gen(1);
-zendata('user')->loadYaml('account', false, 1)->gen(5);
 zendata('dept')->loadYaml('dept', false, 1)->gen(1);
 $tester = new manageMembersTester();
 $tester->login();
