@@ -236,7 +236,7 @@ class zredis
         if($this->event == 'update') $this->update();
         if($this->event == 'delete') $this->delete();
 
-        $this->redis->set('synchronized', date('Y-m-d H:i:s'));
+        $this->redis->set(zredis::SYNCHRONIZED, date('Y-m-d H:i:s'));
 
         $this->redis->exec();
 
