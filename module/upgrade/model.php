@@ -10135,6 +10135,23 @@ class upgradeModel extends model
                 $relation->BID      = $transferredObject->objectId;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
         }
+
+        /* Process twins. */
+        $twins = $this->dao->select('id,twins')->from(TABLE_STORY)->where('twins')->ne('')->fetchPairs('id');
+        foreach($twins as $storyID => $twinsID)
+        {
+            foreach(explode(',', trim($twinsID, ',')) as $twinID)
+            {
+                if(empty($twinID)) continue;
+                $relation = new stdClass();
+                $relation->AType    = 'story';
+                $relation->AID      = $storyID;
+                $relation->relation = 'twin';
+                $relation->BType    = 'story';
+                $relation->BID      = $twinID;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
+        }
         return true;
     }
 }
