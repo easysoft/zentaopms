@@ -661,6 +661,18 @@ class docModel extends model
     }
 
     /**
+     * Get docs by id list.
+     *
+     * @param  array  $docIdList
+     * @access public
+     * @return array
+     */
+    public function getDocsByIdList(array $docIdList): array
+    {
+        return $this->dao->select('*')->from(TABLE_DOC)->where('id')->in($docIdList)->fetchAll('id');
+    }
+
+    /**
      * 获取文档列表数据。
      * Get doc list.
      *
