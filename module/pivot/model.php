@@ -1610,7 +1610,18 @@ class pivotModel extends model
      */
     public function processRecordsForDisplay(array $records): array
     {
-        $values  = array();
+        $roundIfMoreThanTwoDecimals = function($number) {
+            if(!is_numeric($number)) return $number;
+
+            $number = (float)$number;
+            if(floor($number) == $number) return $number;
+
+            $decimalPart = explode('.', strval($number));
+            if(isset($decimalPart[1]) && strlen($decimalPart[1]) > 2) return number_format(round($number, 2), 2, '.', '');
+            return number_format($number, 2, '.', '');
+        };
+
+        $values = array();
         foreach($records as $record)
         {
             $row        = array();
@@ -1620,6 +1631,7 @@ class pivotModel extends model
                 $cellValue = $cell['value'] == '$total$' ? $this->lang->pivot->total : $cell['value'];
                 if(is_array($cellValue)) $arrayValue = $cellValue;
 
+                $cellValue = $roundIfMoreThanTwoDecimals($cellValue);
                 $row[$colKey] = $cellValue;
                 if(isset($cell['percentage']))
                 {
