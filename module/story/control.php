@@ -2098,7 +2098,7 @@ class story extends control
 
         if(empty($story->twins)) return $this->send(array('result' => 'fail'));
 
-        $this->story->relieveTwins($story->product, $twinID);
+        $this->story->relieveTwins($story->product, (int)$twinID);
 
         if(!dao::isError()) $this->loadModel('action')->create('story', (int)$twinID, 'relieved');
         return $this->send(array('result' => 'success', 'twinsCount' => count($twins)-1));
