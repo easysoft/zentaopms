@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The zredis library of zentaopms.
  *
@@ -106,6 +107,7 @@ class zredis
      *
      * @param  dao    $dao
      * @access public
+     * @return void
      */
     public function __construct($app)
     {
@@ -151,7 +153,7 @@ class zredis
      * @access public
      * @return void
      */
-    public function init()
+    public function init(): void
     {
         if(empty($this->redis)) helper::end('Redis is not initialized.');
 
@@ -179,7 +181,7 @@ class zredis
      * @access public
      * @return void
      */
-    public function prepare($table, $event, $sql)
+    public function prepare(string $table, string $event, string $sql)
     {
         if(empty($this->redis))                                 return $this->log('Redis is not initialized.');
         if(empty($table))                                       return $this->log('Table name is required.');
@@ -259,7 +261,7 @@ class zredis
      * @access private
      * @return void
      */
-    private function check()
+    private function check(): void
     {
         if(empty($this->table))                                       helper::end('Table name is required.');
         if(empty($this->redis))                                       helper::end('Redis is not initialized.');
@@ -292,7 +294,7 @@ class zredis
      * @access private
      * @return void
      */
-    private function update()
+    private function update(): void
     {
         $this->check();
 
@@ -366,7 +368,7 @@ class zredis
      * @access public
      * @return void
      */
-    public function reset()
+    public function reset(): void
     {
         $this->table     = '';
         $this->event     = '';
@@ -383,7 +385,7 @@ class zredis
      * @access private
      * @return void
      */
-    private function log($log, $sql = '')
+    private function log(string $log, string $sql = ''): void
     {
         $runMode = PHP_SAPI == 'cli' ? '_cli' : '';
         $logFile = $this->app->getLogRoot() . 'redis' . $runMode . '.' . date('Ymd') . '.log.php';
@@ -432,7 +434,7 @@ class zredis
      * @access public
      * @return void
      */
-    public function __call($method, $args)
+    public function __call(string $method, array $args)
     {
         if(empty($this->redis)) helper::end('Redis is not initialized.');
 
