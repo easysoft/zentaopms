@@ -3418,19 +3418,18 @@ class docModel extends model
             $data->type = $spaceType;
             if($spaceType == 'mine') $data->addedBy = $this->app->user->account;
 
-            /* 如果是项目空间(project)和产品空间(product)，修改doclib对应的project和product字段，并将parent置为0
-             * 如果不是，则是我的空间(mine)和团队空间(custom),直接修改parent，并将project和product字段置为0
-             */
-            if(in_array($spaceType, array('project', 'product')))
+            /* 先清空所有标志性字段，如果是项目空间、执行空间、产品空间，则直接改对应字段，否则就是我的空间和团队空间 */
+            if($lib->product)   $data->product   = 0;
+            if($lib->project)   $data->project   = 0;
+            if($lib->execution) $data->execution = 0;
+            if($lib->parent)    $data->parent    = 0;
+            if(in_array($spaceType, array('project', 'product', 'execution')))
             {
                 $data->$spaceType = $spaceID;
-                if($lib->parent) $data->parent = 0;
             }
             else
             {
                 $data->parent = $spaceID;
-                if($lib->product) $data->product = 0;
-                if($lib->project) $data->project = 0;
             }
         }
         else
