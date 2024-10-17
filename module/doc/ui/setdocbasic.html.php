@@ -14,7 +14,7 @@ formPanel
 (
     setID('setDocBasicForm'),
     set::title($title),
-    set::submitBtnText(empty($docID) ? $lang->doc->release : $lang->save),
+    set::submitBtnText($isDraft ? $lang->doc->saveDraft : (empty($docID) ? $lang->doc->release : $lang->save)),
     on::change('[name=space],[name=product],[name=execution]')->call('loadObjectModules', jsRaw('event')),
     on::change('[name=lib]')->call('loadLibModules', jsRaw('event')),
     on::change('[name=project]')->call('loadExecutions', jsRaw('event')),

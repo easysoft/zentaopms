@@ -130,13 +130,13 @@ function handleSwitchView(mode, location, info)
     lastAppUrl = url;
 }
 
-function showDocBasicModal(docID, docType)
+function showDocBasicModal(docID, isDraft)
 {
     const spaceType = getDocApp().spaceType;
     const spaceID   = getDocApp().spaceID;
     const libID     = getDocApp().libID;
     const moduleID  = getDocApp().moduleID;
-    const url       = $.createLink('doc', 'setDocBasic', `objectType=${spaceType}&objectID=${spaceID}&libID=${libID}&moduleID=${moduleID}&docID=${docID || 0}&docType=${docType || 'doc'}`);
+    const url       = $.createLink('doc', 'setDocBasic', `objectType=${spaceType}&objectID=${spaceID}&libID=${libID}&moduleID=${moduleID}&docID=${docID || 0}&isDraft=${isDraft ? 'yes' : 'no'}`);
     zui.Modal.open({url: url});
     return new Promise((resolve) => {
         window.docBasicModalResolver = resolve;
@@ -149,8 +149,6 @@ window.beforeSetDocBasicInfo = function(_, form)
     zui.Modal.query('#setDocBasicForm').hide();
     return false;
 };
-
-window.showDocBasicModal = showDocBasicModal;
 
 function mergeDocFormData(doc, formData)
 {
@@ -225,8 +223,7 @@ function submitNewDoc(doc, spaceID, libID, moduleID, formData)
  */
 function handleCreateDoc(doc, spaceID, libID, moduleID)
 {
-    if(doc.status === 'draft') return submitNewDoc(doc, spaceID, libID, moduleID);
-    return showDocBasicModal(0, doc.contentType).then((formData) => {
+    return showDocBasicModal(0, doc.status === 'draft').then((formData) => {
         return submitNewDoc(doc, spaceID, libID, moduleID, formData);
     });
 }
@@ -611,7 +608,6 @@ const commands =
     {
         const docApp = getDocApp();
         if(!docApp.libList.length) return zui.Modal.alert(getLang('createLibFirst'));
-        if(!docApp.libID)          return zui.Modal.alert(getLang('selectLibFirst'));
         docApp.startCreateDoc();
     },
     /** 上传文档。Upload Doc. */
@@ -740,9 +736,7 @@ const commands =
                     if(!res.module) return;
                     const docApp = getDocApp();
                     docApp.update('module', res.module);
-                    if (!docApp.hasEditingDoc) {
-                        docApp.selectModule(res.module.id);
-                    }
+                    if(!docApp.hasEditingDoc) docApp.selectModule(res.module.id);
                 }
             })
         });
