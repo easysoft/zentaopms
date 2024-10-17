@@ -1510,7 +1510,7 @@ class taskZen extends task
         case 'closed':
             $task->closedBy   = $oldTask->status == 'closed' ? $oldTask->closedBy : $currentAccount;
             $task->closedDate = $oldTask->status == 'closed' ? $oldTask->closedDate : $now;
-            if($task->closedReason == 'cancel' and helper::isZeroDate($task->finishedDate)) $task->finishedDate = null;
+            if(isset($task->closedReason) && $task->closedReason == 'cancel' && helper::isZeroDate($task->finishedDate)) $task->finishedDate = null;
             break;
         case 'wait':
             if($task->consumed > 0 and $task->left > 0) $task->status = 'doing';
