@@ -2154,7 +2154,7 @@ class docModel extends model
         $project     = $execution ? $this->loadModel('project')->getByID((int)$execution->project) : '';
 
         if($project && !$project->hasProduct) $storyIdList = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->fetchPairs('story', 'story');
-        $storyIdList = $storyIdList ? join(',', $storyIdList) : '';
+        $storyIdList = $storyIdList ? implode(',', $storyIdList) : '';
 
         $taskPairs = $this->dao->select('id')->from(TABLE_TASK)
             ->where('execution')->eq($executionID)
