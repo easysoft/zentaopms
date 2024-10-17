@@ -3141,7 +3141,7 @@ class repoModel extends model
      */
     public function checkName(string $name)
     {
-        $pattern = "/^[a-z_]{1}[a-z0-9_\-\.]+$/i";
+        $pattern = "/^[a-z_]{1}[a-z0-9_\-\.]*$/i";
         return preg_match($pattern, $name);
     }
 }
