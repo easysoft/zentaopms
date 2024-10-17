@@ -280,7 +280,12 @@ class docZen extends doc
 
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $libID));
         $lib = array('id' => $libID, 'name' => $libName, 'space' => (int)$objectID);
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('name' => 'locateNewLib', 'params' => array($type, $objectID, $libID, $libName)), 'docApp' => array(array('update', 'lib', $lib), array('selectLib', $libID, true))));
+
+        $docAppActions = array();
+        $docAppActions[] = array('update', 'lib', $lib);
+        $docAppActions[] = array('list:selectLib', $libID, true);
+        $docAppActions[] = array('home:loadHomeLibs');
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('name' => 'locateNewLib', 'params' => array($type, $objectID, $libID, $libName)), 'docApp' => $docAppActions));
     }
 
     /**
