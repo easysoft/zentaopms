@@ -1099,6 +1099,15 @@ class pivotModel extends model
         }
 
         $summary[$totalKey] = array('value' => '$total$');
+        /* 删除汇总行的下钻配置。*/
+        /* Delete drilldown config of summary row. */
+        foreach($summary as $key => $value)
+        {
+            if(isset($value['drillFields']))
+            {
+                unset($summary[$key]['drillFields']);
+            }
+        }
 
         return $summary;
     }
@@ -1624,6 +1633,12 @@ class pivotModel extends model
             return number_format($number, 2, '.', '');
         };
 
+        $removeQuote = function($value)
+        {
+            if(is_string($value)) return str_replace('"', '', htmlspecialchars_decode($value));
+            return $value;
+        };
+
         $values = array();
         foreach($records as $record)
         {
@@ -1635,6 +1650,7 @@ class pivotModel extends model
                 if(is_array($cellValue)) $arrayValue = $cellValue;
 
                 $cellValue = $roundIfMoreThanTwoDecimals($cellValue);
+                $cellValue = $removeQuote($cellValue);
                 $row[$colKey] = $cellValue;
                 if(isset($cell['percentage']))
                 {
@@ -1651,7 +1667,9 @@ class pivotModel extends model
                     $flattenValue = array();
                     foreach($row as $key => $value)
                     {
-                        $flattenValue[$key] = is_scalar($value) ? $value : $value[$index];
+                        $value = is_scalar($value) ? $value : $value[$index];
+                        $value = $removeQuote($value);
+                        $flattenValue[$key] = $value;
                     }
                     $values[] = $flattenValue;
                 }
