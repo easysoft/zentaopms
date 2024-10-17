@@ -553,7 +553,7 @@ $lang->kanban->menu = new stdclass();
 /* Doc menu. */
 $lang->doc->menu = new stdclass();
 $lang->doc->menu->dashboard = array('link' => "{$lang->dashboard}|doc|index");
-$lang->doc->menu->my        = array('link' => "{$lang->doc->mySpace}|doc|mySpace|type=mine", 'alias' => 'myspace');
+$lang->doc->menu->my        = array('link' => "{$lang->doc->mySpace}|doc|mySpace|", 'alias' => 'myspace');
 $lang->doc->menu->product   = array('link' => "{$lang->doc->productSpace}|doc|productSpace|", 'alias' => 'productspace');
 $lang->doc->menu->project   = array('link' => "{$lang->doc->projectSpace}|doc|projectSpace|", 'alias' => 'projectspace');
 $lang->doc->menu->api       = array('link' => "{$lang->doc->apiSpace}|api|index", 'alias' => '', 'exclude' => 'index');
