@@ -1009,34 +1009,6 @@ window.setDocAppOptions = function(_, options)
     return newOptions;
 };
 
-/**
- * 拦截 ZIN 请求，直接切换到对应的视图。
- * Intercept ZIN request and switch directly to the target view.
- *
- * @param {{url: string}} options
- * @returns {boolean}
- */
-window.beforeRequestContent = function(options)
-{
-    const url              = $.parseLink(options.url);
-    const vars             = url.vars.map(x => x[1]);
-    const spaceType        = vars[0];
-    const docApp           = getDocApp();
-    const currentSpaceType = docApp.signals.spaceType.value;
-    if(spaceType !== currentSpaceType) return;
-
-    docApp.switchView(
-    {
-        spaceType: spaceType,
-        spaceID  : parseInt(vars[1]),
-        libID    : parseInt(vars[2]),
-        moduleID : parseInt(vars[3]),
-        docID    : parseInt(vars[4]),
-    }, vars[5]);
-
-    return false;
-};
-
 window.loadExecutions = function(e)
 {
     const projectElement   = officeTypes.includes(docType) ? '.projectBox input[name="project"]': '#modalBasicInfo input[name="project"]';
