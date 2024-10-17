@@ -11,6 +11,7 @@ $config->redis->tables = [];
 $config->redis->tables[TABLE_PROJECT] = new stdClass();
 $config->redis->tables[TABLE_PROJECT]->key = 'id';
 $config->redis->tables[TABLE_PROJECT]->caches[] = ['type' => 'raw', 'name' => 'execution'];
+$config->redis->tables[TABLE_PROJECT]->caches[] = ['type' => 'set', 'name' => 'dbProjectIdList'];
 $config->redis->tables[TABLE_PROJECT]->caches[] = ['type' => 'set', 'name' => 'programIdList',   'condition' => "`type` = 'program'"];
 $config->redis->tables[TABLE_PROJECT]->caches[] = ['type' => 'set', 'name' => 'projectIdList',   'condition' => "`type` = 'project'"];
 $config->redis->tables[TABLE_PROJECT]->caches[] = ['type' => 'set', 'name' => 'executionIdList', 'condition' => "`type` IN ('sprint', 'stage', 'kanban')"];
@@ -24,3 +25,7 @@ $config->redis->tables[TABLE_USER] = new stdClass();
 $config->redis->tables[TABLE_USER]->key = 'account';
 $config->redis->tables[TABLE_USER]->caches[] = ['type' => 'raw', 'name' => 'user'];
 $config->redis->tables[TABLE_USER]->caches[] = ['type' => 'set', 'name' => 'userAccountList'];
+
+$config->redis->tables[TABLE_CONFIG] = new stdClass();
+$config->redis->tables[TABLE_CONFIG]->key = 'id';
+$config->redis->tables[TABLE_CONFIG]->caches[] = ['type' => 'raw', 'name' => 'config'];
