@@ -449,6 +449,7 @@ class execution extends control
         /* Process the order by field. */
         if(!$orderBy) $orderBy = $this->cookie->executionStoryOrder ? $this->cookie->executionStoryOrder : 'pri';
 
+        $param     = (int)$param;
         $type      = strtolower($type);
         $productID = $this->executionZen->setStorageForStory((string)$executionID, $type, (string)$param, $orderBy);
 
