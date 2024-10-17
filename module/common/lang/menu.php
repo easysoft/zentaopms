@@ -688,7 +688,7 @@ $lang->navGroup->kanbancard   = 'kanban';
 $lang->navGroup->doc         = 'doc';
 $lang->navGroup->doclib      = 'doc';
 $lang->navGroup->api         = 'doc';
-$lang->navGroup->doctemplate = 'doc';
+//$lang->navGroup->doctemplate = 'doc';
 
 $lang->navGroup->screen   = 'bi';
 $lang->navGroup->pivot    = 'bi';
@@ -771,7 +771,7 @@ $lang->navGroup->systemsetting = 'admin';
 $lang->navGroup->staffmanage   = 'admin';
 $lang->navGroup->modelconfig   = 'admin';
 $lang->navGroup->featureconfig = 'admin';
-//$lang->navGroup->doctemplate   = 'admin';
+$lang->navGroup->doctemplate   = 'admin';
 $lang->navGroup->notifysetting = 'admin';
 $lang->navGroup->holidayseason = 'admin';
 $lang->navGroup->system        = 'admin';
