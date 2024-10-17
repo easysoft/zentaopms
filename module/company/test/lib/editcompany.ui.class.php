@@ -26,4 +26,16 @@ class editCompanyTester extends tester
 
         return $this->success('编辑公司信息成功');
     }
+
+    public function initPrimary($company)
+    {
+        $this->openURL('company', 'view',array(),'appIframe-system');
+        $form = $this->loadPage('company', 'edit');
+        $form->dom->editbtn->click();
+        $form->dom->primary0->click();
+        $form->wait(1);
+        $form->dom->savebtn->click();
+
+        return $this->success('匿名登录修改为不允许');
+    }
 }
