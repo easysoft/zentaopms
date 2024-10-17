@@ -228,7 +228,7 @@ function handleCreateDoc(doc, spaceID, libID, moduleID)
 {
     if(doc.status === 'draft') return submitNewDoc(doc, spaceID, libID, moduleID);
     return showDocBasicModal(0, doc.contentType).then((formData) => {
-        submitNewDoc(doc, spaceID, libID, moduleID, formData);
+        return submitNewDoc(doc, spaceID, libID, moduleID, formData);
     });
 }
 
