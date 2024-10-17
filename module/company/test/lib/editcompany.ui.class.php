@@ -29,7 +29,7 @@ class editCompanyTester extends tester
 
     public function initPrimary($company)
     {
-        $this->openURL('company', 'view',array(),'appIframe-system');
+        $this->openURL('company','view', array() ,'appIframe-system');
         $form = $this->loadPage('company', 'edit');
         $form->dom->editbtn->click();
         $form->dom->primary0->click();
