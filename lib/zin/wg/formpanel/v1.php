@@ -122,6 +122,11 @@ class formPanel extends panel
                 $moduleName = 'epic';
                 $methodName = 'create';
             }
+            elseif($methodName == 'toticket')
+            {
+                $moduleName = 'ticket';
+                $methodName = 'create';
+            }
         }
 
         return array($moduleName, $methodName);
