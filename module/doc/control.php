@@ -1277,7 +1277,14 @@ class doc extends control
             $this->doc->batchMoveDoc($data, $docIdList);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('doc', 'app', "type={$type}&spaceID={$spaceID}&libID={$libID}&moduleID={$moduleID}")));
+
+            $locate = true;
+            if($type == 'mine')    $locate = inlink('mySpace', "objectID={$spaceID}&libID={$libID}&moduleID={$moduleID}");
+            if($type == 'custom')  $locate = inlink('teamSpace', "objectID={$spaceID}&libID={$libID}&moduleID={$moduleID}");
+            if($type == 'product') $locate = inlink('productSpace', "objectID={$spaceID}&libID={$libID}&moduleID={$moduleID}");
+            if($type == 'project') $locate = inlink('projectSpace', "objectID={$spaceID}&libID={$libID}&moduleID={$moduleID}");
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $locate));
         }
 
         $products = $type == 'product' ? array($spaceID => $spaceID) : array();
