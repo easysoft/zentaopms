@@ -104,6 +104,26 @@ class formPanel extends panel
             }
         }
 
+        /* 反馈转化。 */
+        if($moduleName == 'feedback')
+        {
+            if($methodName == 'tostory')
+            {
+                $moduleName = 'story';
+                $methodName = 'create';
+            }
+            elseif($methodName == 'touserstory')
+            {
+                $moduleName = 'requirement';
+                $methodName = 'create';
+            }
+            elseif($methodName == 'toepic')
+            {
+                $moduleName = 'epic';
+                $methodName = 'create';
+            }
+        }
+
         return array($moduleName, $methodName);
     }
 
