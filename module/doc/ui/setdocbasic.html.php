@@ -84,14 +84,14 @@ formPanel
             setClass($objectType == 'mine' ? 'pointer-events-none' : ''),
             set::name('acl'),
             set::items($lang->doc->aclList),
-            set::value(isset($doc) ? $doc->acl : 'private'),
+            set::value(isset($doc) ? $doc->acl : ($objectType == 'mine' ? 'private' : 'open')),
             $objectType != 'mine' ? on::change('toggleWhiteList') : null
         )
     ),
     formGroup
     (
         setID('whiteListBox'),
-        setClass(($libID == $doc->lib && $objectType != 'mine' && $doc->acl == 'private') ? '' : 'hidden'),
+        setClass((isset($doc) && $libID == $doc->lib && $objectType != 'mine' && $doc->acl == 'private') ? '' : 'hidden'),
         set::label($lang->doc->whiteList),
         div
         (
@@ -104,7 +104,7 @@ formPanel
                 (
                     set::name('groups[]'),
                     set::items($groups),
-                    set::value($doc->groups),
+                    set::value(isset($doc) ? $doc->groups : null),
                     set::multiple(true)
                 )
             ),
@@ -115,7 +115,7 @@ formPanel
                 (
                     set::label($lang->doc->users),
                     set::items($users),
-                    set::value($doc->users)
+                    set::value(isset($doc) ? $doc->users : null)
                 )
             )
         )
