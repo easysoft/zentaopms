@@ -1215,6 +1215,8 @@ class doc extends control
     public function moveDoc(int $docID, int $libID = 0, string $spaceType = '', string $space = '', string $locate = '')
     {
         $doc = $this->doc->getByID($docID);
+        if(empty($libID)) $libID = (int)$doc->lib;
+        $lib = $this->doc->getLibByID($libID);
 
         if(empty($space))     $space = $lib->parent;
         if(empty($spaceType)) $spaceType = $this->doc->getSpaceType($space);
@@ -1236,8 +1238,6 @@ class doc extends control
 
             return $this->docZen->responseAfterMove($this->post->space, $spaceType, $data->lib, $locate, $docID);
         }
-
-        if(empty($libID)) $libID = (int)$doc->lib;
 
         $libPairs = $this->doc->getLibPairs($spaceType, '', (int)$space, '', $spaceType == 'product' ? array((int)$space => $space) : array(), $spaceType == 'project' ? array((int)$space => $space) : array());
         if(!isset($libPairs[$libID])) $libID = (int)key($libPairs);
@@ -1406,7 +1406,8 @@ class doc extends control
             $this->view->$objectKey = $spaceID;
         }
 
-        $menuType = $type == 'mine' ? 'my' : ($type == 'custom' ? 'team' : $type);
+        if($type == 'mine') $menuType = 'my';
+        else $menuType = $type == 'custom' ? 'team' : $type;
         if(isset($this->lang->doc->menu->{$menuType})) $this->lang->doc->menu->{$menuType}['alias'] .= ',' . $this->app->rawMethod;
 
         $this->view->type           = $type;
@@ -1568,7 +1569,7 @@ class doc extends control
             $this->docZen->setObjectsForEdit($objectType, $objectID);
 
             $this->view->doc        = $doc;
-            $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
+            $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
         }
 
         $this->view->mode       = empty($docID) ? 'create' : 'edit';
