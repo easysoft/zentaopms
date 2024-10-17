@@ -355,11 +355,38 @@ class zredis
         $logFile = $this->app->getLogRoot() . 'redis' . $runMode . '.' . date('Ymd') . '.log.php';
         if(!file_exists($logFile)) file_put_contents($logFile, '<?php die(); ?' . ">\n");
 
-        $content = date('Ymd H:i:s') . ': ' . $this->app->getURI() . "\n{$log}\n";
+        $content = date('Ymd H:i:s') . ': ' . $this->getURI() . "\n{$log}\n";
 
         if($sql) $content .= "The sql is: {$sql}\n";
 
         file_put_contents($logFile, $content, FILE_APPEND);
+    }
+
+    /**
+     * 获取 URI。
+     * Get URI.
+     *
+     * @access private
+     * @return string
+     */
+    private function getURI(): string
+    {
+        $uri = $this->app->getURI();
+        if($uri) return $uri;
+
+        if($this->config->requestType == 'GET') return $_SERVER['REQUEST_URI'];
+
+        if($this->config->requestType == 'PATH_INFO' || $this->config->requestType == 'PATH_INFO2')
+        {
+            $pathInfo = $this->app->getPathInfo();
+            if(empty($pathInfo)) return '';
+
+            $dotPos = strrpos($pathInfo, '.');
+            if($dotPos) return substr($pathInfo, 0, $dotPos);
+            return $pathInfo;
+        }
+
+        return '';
     }
 
     /**
