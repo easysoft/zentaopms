@@ -166,7 +166,7 @@ class zredis
             $this->update();
         }
 
-        $this->redis->set(zredis::INITIALIZED, date('Y-m-d H:i:s'));
+        $this->redis->setnx(zredis::INITIALIZED, date('Y-m-d H:i:s'));
 
         $this->redis->exec();
     }
