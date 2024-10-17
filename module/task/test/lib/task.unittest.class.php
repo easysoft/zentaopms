@@ -471,7 +471,7 @@ class taskTest
 
         $oldTask = $this->objectModel->getByID($taskID);
         $result  = $this->objectModel->finish($oldTask, $task);
-        return $result;
+        return dao::isError() ? dao::getError() : $result;
     }
 
     /**
