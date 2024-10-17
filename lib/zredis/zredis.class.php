@@ -6,72 +6,72 @@ class zredis
      * The global $app object.
      *
      * @var object
-     * @access public
+     * @access private
      */
-    public $app;
+    private $app;
 
     /**
      * 全局 $config 对象。
      * The global $config object.
      *
      * @var object
-     * @access public
+     * @access private
      */
-    public $config;
+    private $config;
 
     /**
      * $dao 对象，用于访问或者更新数据库。
      * The $dao object, used to access or update database.
      *
      * @var dao
-     * @access public
+     * @access private
      */
-    public $dao;
+    private $dao;
 
     /**
      * $redis 对象，用于访问或者更新 Redis。
      * The $redis object, used to access or update database.
      *
      * @var redis
-     * @access public
+     * @access private
      */
-    public $redis = null;
+    private $redis = null;
 
     /**
      * 触发缓存更新的表名。
      * The table name to trigger cache update.
      *
      * @var string
-     * @access public
+     * @access private
      */
-    public $table = '';
+    private $table = '';
 
     /**
      * 触发缓存更新的事件类型，包括 insert, update, delete。
      * The event type to trigger cache update, including insert, update, delete.
      *
      * @var string
-     * @access public
+     * @access private
      */
-    public $event = '';
+    private $event = '';
 
     /**
      * 触发缓存更新的条件。
      * The condition to trigger cache update.
      *
      * @var string
-     * @access public
+     * @access private
      */
-    public $condition = '';
+    private $condition = '';
 
     /**
      * 触发缓存删除的键列表。实际存储的值是根据缓存的 key 字段来决定的。
      * The ID list to trigger cache delete. The actual stored value is determined by the key field of the cache.
      *
      * @var array
-     * @access public
+     * @access private
      */
-    public $keyList = [];
+    private $keyList = [];
 
     /**
      * 连接 Redis 服务器并初始化缓存。
@@ -239,7 +239,7 @@ class zredis
      * @access private
      * @return void
      */
-    public function create()
+    private function create()
     {
         $this->check();
 
@@ -258,7 +258,7 @@ class zredis
      * @access private
      * @return void
      */
-    public function update()
+    private function update()
     {
         $this->check();
 
@@ -301,10 +301,10 @@ class zredis
      * 删除缓存。
      * Delete cache.
      *
-     * @access public
+     * @access private
      * @return void
      */
-    public function delete()
+    private function delete()
     {
         $this->check();
 
