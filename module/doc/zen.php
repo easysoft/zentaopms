@@ -284,7 +284,7 @@ class docZen extends doc
         $docAppActions = array();
         $docAppActions[] = array('update', 'lib', $lib);
         $docAppActions[] = array('list:selectLib', $libID, true);
-        $docAppActions[] = array('home:loadHomeLibs');
+        $docAppActions[] = array('home:selectSpace', $objectID, $libID);
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('name' => 'locateNewLib', 'params' => array($type, $objectID, $libID, $libName)), 'docApp' => $docAppActions));
     }
 
