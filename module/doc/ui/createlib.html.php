@@ -11,6 +11,10 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('libType', $type);
+$acl = 'default';
+if($type == 'mine')   $acl = 'private';
+if($type == 'custom') $acl = 'open';
+
 formPanel
 (
     set::title($lang->doc->createLib),
