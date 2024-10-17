@@ -236,6 +236,7 @@ $lang->doc->uploadDoc          = 'Import Document';
 $lang->doc->uploadFormat       = 'Upload Format';
 $lang->doc->editedList         = 'File editor';
 $lang->doc->moveTo             = 'Move to';
+$lang->doc->notSupportExport   = 'This document does not support export';
 
 $lang->doc->uploadFormatList = array();
 $lang->doc->uploadFormatList['separateDocs'] = 'Save files as different document';

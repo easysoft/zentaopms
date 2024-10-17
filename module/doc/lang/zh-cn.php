@@ -236,6 +236,7 @@ $lang->doc->uploadDoc          = '导入';
 $lang->doc->uploadFormat       = '上传格式';
 $lang->doc->editedList         = '文档编辑者';
 $lang->doc->moveTo             = '移动至';
+$lang->doc->notSupportExport   = '（此文档暂不支持导出）';
 
 $lang->doc->uploadFormatList = array();
 $lang->doc->uploadFormatList['separateDocs'] = '每个文件存为不同文档';
