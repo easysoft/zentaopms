@@ -792,11 +792,15 @@ class metricModel extends model
     {
         if($type == 'cron')
         {
-            $metric     = $this->metricTao->fetchMetricByCode($code);
-            $dataFields = $this->getMetricRecordDateField($metric);
-            $options    = $this->setDefaultOptions($options, $dataFields);
+            $metric = $this->metricTao->fetchMetricByCode($code);
+            if(!empty($metric))
+            {
+                $dataFields = $this->getMetricRecordDateField($metric);
+                $options    = $this->setDefaultOptions($options, $dataFields);
 
-            return $this->metricTao->fetchMetricRecords($code, $dataFields, $options, $pager);
+                return $this->metricTao->fetchMetricRecords($code, $dataFields, $options, $pager);
+            }
+
         }
 
         $metric = $this->metricTao->fetchMetricByCode($code);
