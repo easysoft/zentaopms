@@ -1295,6 +1295,9 @@ class doc extends control
         $libPairs = $this->doc->getLibPairs($type, '', $spaceID, '', $products, $projects);
         if(!isset($libPairs[$libID])) $libID = (int)key($libPairs);
 
+        $docList = $this->doc->getByIdList($docIdList);
+        $docAclList = array_column($docList, 'acl');
+
         $this->view->title           = $this->lang->doc->batchMove;
         $this->view->encodeDocIdList = $encodeDocIdList;
         $this->view->type            = $type;
@@ -1306,6 +1309,7 @@ class doc extends control
         $this->view->optionMenu      = $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
         $this->view->groups          = $this->loadModel('group')->getPairs();
         $this->view->users           = $this->loadModel('user')->getPairs('nocode|noclosed');
+        $this->view->hasOpenDoc      = in_array('open', $docAclList);
         $this->display();
     }
 

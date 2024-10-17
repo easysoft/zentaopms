@@ -54,7 +54,7 @@ formPanel
             (
                 set::name('acl'),
                 set::items($aclItems),
-                set::value($type == 'mine' ? 'private' : 'open'),
+                set::value(($type == 'mine' || !$hasOpenDoc) ? 'private' : 'open'),
                 on::change("toggleDocAcl")
             )
         )
