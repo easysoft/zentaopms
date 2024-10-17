@@ -284,8 +284,9 @@ class programplanTao extends programplanModel
             $data->delayDays = 0;
             if($today > $dateLimit['end'] && (!$plan || $plan->status != 'closed'))
             {
-                $actualDays = $this->holiday->getActualWorkingDays(substr($dateLimit['end'], 0, 10), ($task->status == 'done' || $task->status == 'closed') ? substr($task->finishedDate, 0, 10) : $today);
-                $delayDays  = count($actualDays);
+                $finishedDate = ($task->status == 'done' || $task->status == 'closed') && $task->finishedDate ? substr($task->finishedDate, 0, 10) : $today;
+                $actualDays   = $this->holiday->getActualWorkingDays(substr($dateLimit['end'], 0, 10), $finishedDate);
+                $delayDays    = count($actualDays);
                 if($delayDays > 0)
                 {
                     $data->delayDays = $delayDays;
