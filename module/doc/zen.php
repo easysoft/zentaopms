@@ -537,7 +537,7 @@ class docZen extends doc
         $this->view->docType    = $docType;
         $this->view->groups     = $this->loadModel('group')->getPairs();
         $this->view->users      = $this->user->getPairs('nocode|noclosed|nodeleted');
-        $this->view->optionMenu = empty($libID) ? array() : $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
+        $this->view->optionMenu = empty($libID) ? array() : $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
     }
 
     /**
