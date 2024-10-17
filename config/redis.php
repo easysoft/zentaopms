@@ -21,6 +21,21 @@ $config->redis->tables[TABLE_PRODUCT]->key = 'id';
 $config->redis->tables[TABLE_PRODUCT]->caches[] = ['type' => 'raw', 'name' => 'product'];
 $config->redis->tables[TABLE_PRODUCT]->caches[] = ['type' => 'set', 'name' => 'productIdList'];
 
+$config->redis->tables[TABLE_BUILD] = new stdClass();
+$config->redis->tables[TABLE_BUILD]->key = 'id';
+$config->redis->tables[TABLE_BUILD]->caches[] = ['type' => 'raw', 'name' => 'build'];
+$config->redis->tables[TABLE_BUILD]->caches[] = ['type' => 'set', 'name' => 'buildIdList'];
+
+$config->redis->tables[TABLE_RELEASE] = new stdClass();
+$config->redis->tables[TABLE_RELEASE]->key = 'id';
+$config->redis->tables[TABLE_RELEASE]->caches[] = ['type' => 'raw', 'name' => 'release'];
+$config->redis->tables[TABLE_RELEASE]->caches[] = ['type' => 'set', 'name' => 'releaseIdList'];
+
+$config->redis->tables[TABLE_MODULE] = new stdClass();
+$config->redis->tables[TABLE_MODULE]->key = 'id';
+$config->redis->tables[TABLE_MODULE]->caches[] = ['type' => 'raw', 'name' => 'module'];
+$config->redis->tables[TABLE_MODULE]->caches[] = ['type' => 'set', 'name' => 'moduleIdList'];
+
 $config->redis->tables[TABLE_USER] = new stdClass();
 $config->redis->tables[TABLE_USER]->key = 'account';
 $config->redis->tables[TABLE_USER]->caches[] = ['type' => 'raw', 'name' => 'user'];
