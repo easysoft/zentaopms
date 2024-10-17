@@ -1610,7 +1610,8 @@ class pivotModel extends model
      */
     public function processRecordsForDisplay(array $records): array
     {
-        $roundIfMoreThanTwoDecimals = function($number) {
+        $roundIfMoreThanTwoDecimals = function($number)
+        {
             if(!is_numeric($number)) return $number;
 
             $number = (float)$number;
