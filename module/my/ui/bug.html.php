@@ -74,6 +74,7 @@ $assignedToItems = array();
 foreach ($memberPairs as $key => $value)
 {
     if(!$key) continue;
+    $key = base64_encode((string)$key); // 编码用户名中的特殊字符
     $assignedToItems[] = array('text' => $value, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => createLink('bug', 'batchAssignTo', "assignedTo=$key&productID=0&type=my"));
 }
 
