@@ -958,4 +958,24 @@ class docZen extends doc
         if(strpos($extra, 'onlymine') !== false) return array('mine' => $this->lang->doc->spaceList['mine']);
         return array('mine' => $this->lang->doc->spaceList['mine']) + $this->doc->getTeamSpaces();
     }
+
+    /**
+     * Record batch move actions.
+     *
+     * @param  array  $oldDocList
+     * @param  object $data
+     * @access public
+     * @return void
+     */
+    public function recordBatchMoveActions(array $oldDocList, object $data)
+    {
+        $this->loadModel('action');
+        foreach($oldDocList as $oldDoc)
+        {
+            $actionID = $this->action->create('doc', $oldDoc->id, 'Moved', '', json_encode(array('from' => $oldDoc->lib, 'to' => $data->lib)));
+
+            $changes = common::createChanges($oldDoc, $data);
+            $this->action->logHistory($actionID, $changes);
+        }
+    }
 }
