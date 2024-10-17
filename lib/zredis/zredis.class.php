@@ -255,20 +255,6 @@ class zredis
     }
 
     /**
-     * 检查参数。
-     * Check parameters.
-     *
-     * @access private
-     * @return void
-     */
-    private function check(): void
-    {
-        if(empty($this->table))                                       helper::end('Table name is required.');
-        if(empty($this->redis))                                       helper::end('Redis is not initialized.');
-        if(empty($this->config->redis->tables[$this->table]->caches)) helper::end('No cache settings for table ' . $this->table);
-    }
-
-    /**
      * 创建缓存。
      * Create cache.
      *
@@ -277,8 +263,6 @@ class zredis
      */
     private function create()
     {
-        $this->check();
-
         $objectID = $this->dao->lastInsertID();
         if(!$objectID) return $this->log('Failed to fetch last insert id.');
 
@@ -296,8 +280,6 @@ class zredis
      */
     private function update(): void
     {
-        $this->check();
-
         $setting = $this->config->redis->tables[$this->table];
 
         foreach($setting->caches as $cache)
@@ -342,8 +324,6 @@ class zredis
      */
     private function delete()
     {
-        $this->check();
-
         if(empty($this->keyList)) return $this->log('Failed to fetch id list to delete.');
 
         foreach($this->config->redis->tables[$this->table]->caches as $cache)
