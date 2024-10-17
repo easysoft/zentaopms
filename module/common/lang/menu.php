@@ -542,7 +542,7 @@ $lang->devops->menuOrder[35] = 'tag';
 $lang->devops->menuOrder[40] = 'mr';
 $lang->devops->menuOrder[45] = 'compile';
 $lang->devops->menuOrder[55] = 'deploy';
-$lang->devops->menuOrder[60] = 'apps';
+$lang->devops->menuOrder[70] = 'apps';
 $lang->devops->menuOrder[75] = 'store';
 
 $lang->devops->dividerMenu = ',apps,';
