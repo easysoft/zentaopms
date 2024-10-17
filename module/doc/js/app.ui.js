@@ -52,7 +52,6 @@ function processDocAppAction(action, docApp)
 
     if(typeof action === 'string')
     {
-
         action = {call: action};
     }
     if(Array.isArray(action))
@@ -607,6 +606,14 @@ function getActions(type, info)
  */
 const commands =
 {
+    /* 创建文档。 Create doc. */
+    startCreateDoc: function()
+    {
+        const docApp = getDocApp();
+        if(!docApp.libList.length) return zui.Modal.alert(getLang('createLibFirst'));
+        if(!docApp.libID)          return zui.Modal.alert(getLang('selectLibFirst'));
+        docApp.startCreateDoc();
+    },
     /** 上传文档。Upload Doc. */
     uploadDoc: function()
     {

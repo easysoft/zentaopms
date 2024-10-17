@@ -367,6 +367,8 @@ $lang->doc->errorParentChapter   = 'The parent chapter cannot be its own chapter
 $lang->doc->errorOthersCreated   = 'There are documents created by others in this library. You cannot move it.';
 $lang->doc->confirmLeaveOnEdit   = 'Check that you have unsaved document content, do you want to continue?';
 $lang->doc->errorOccurred        = 'An error occurred. Please try again later.';
+$lang->doc->selectLibFirst       = 'Please select a lib first.';
+$lang->doc->createLibFirst       = 'Please create a lib first.';
 
 $lang->doc->noticeAcl['lib']['product']['default']   = "Users who can access the selected {$lang->productCommon} can access it.";
 $lang->doc->noticeAcl['lib']['product']['custom']    = "Users who can access the selected {$lang->productCommon} or users in the whiltelist can access it.";
