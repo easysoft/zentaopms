@@ -164,7 +164,7 @@ class docModel extends model
                 ->beginIF($type == 'all')->andWhere('deleted')->eq(0)->fi()
                 ->beginIF($type != 'hasApi')->andWhere('type')->ne('api')->fi()
                 ->beginIF($excludeType)->andWhere('type')->notin($excludeType)->fi()
-                ->orderBy('id_asc')
+                ->orderBy('`order`_asc')
                 ->query();
         }
         else
@@ -177,7 +177,7 @@ class docModel extends model
                 ->beginIF($objectID && strpos(',product,project,execution,', ",$type,") !== false)->andWhere($type)->eq($objectID)->fi()
                 ->beginIF(($type == 'custom' || $type == 'mine') && !$objectID)->andWhere('parent')->ne(0)->fi()
                 ->beginIF(($type == 'custom' || $type == 'mine') && $objectID)->andWhere('parent')->eq($objectID)->fi()
-                ->orderBy('id_asc')
+                ->orderBy('`order`_asc')
                 ->query();
         }
 
