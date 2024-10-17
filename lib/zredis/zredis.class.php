@@ -301,7 +301,7 @@ class zredis
             if($cache->type == 'raw')
             {
                 $pairs = [];
-                foreach($objects as $object) $pairs["raw:{$cache->name}:{$object->{$setting->key}}"] = json_encode($object);
+                foreach($objects as $object) $pairs["raw:{$cache->name}:{$object->{$setting->key}}"] = json_encode($object, JSON_UNESCAPED_UNICODE);
                 $this->redis->mset($pairs);
                 continue;
             }
