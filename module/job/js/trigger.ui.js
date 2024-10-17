@@ -121,9 +121,8 @@ window.addTrigger = function()
         return {value: type, text: triggerTypeList[type]}
     });
     new zui.Picker('#triggerPicker' + window.triggerCount, {
-        items:     options,
-        name:     `triggerType[${window.triggerCount}]`,
-        required: true
+        items: options,
+        name:  `triggerType[${window.triggerCount}]`
     });
 
     setTimeout(() =>
