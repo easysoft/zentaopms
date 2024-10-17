@@ -175,6 +175,7 @@ class actionModel extends model
         $histories = $this->getHistory(array_keys($actions));
         if($objectType == 'project') $actions = $this->processProjectActions($actions);
 
+        $this->loadModel('file');
         foreach($actions as $actionID => $action)
         {
             $actionName = strtolower($action->action);
@@ -218,9 +219,10 @@ class actionModel extends model
                 {
                     $history->diff = str_replace(array("class='iframe'", '+'), array("data-size='{\"width\": 800, \"height\": 500}' data-toggle='modal'", '%2B'), $history->diff);
                 }
+                $history = $this->file->replaceImgURL($history, 'old,new');
             }
 
-            $action->comment = $this->loadModel('file')->setImgSize($action->comment, $this->config->action->commonImgSize);
+            $action->comment = $this->file->setImgSize($action->comment, $this->config->action->commonImgSize);
             $actions[$actionID] = $action;
         }
         return $actions;
