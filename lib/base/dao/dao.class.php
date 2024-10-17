@@ -1057,8 +1057,9 @@ class baseDAO
             $this->app->redis->prepare($table, $method, $sql);
 
             $result = $this->dbh->exec($sql);
+
             /* See: https://www.php.net/manual/en/pdo.lastinsertid.php .*/
-            $this->_lastInsertID = $this->dbh->lastInsertId();
+            if($method == 'insert') $this->_lastInsertID = $this->dbh->lastInsertID();
 
             $result ? $this->app->redis->sync() : $this->app->redis->reset();
 
