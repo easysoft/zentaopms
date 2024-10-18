@@ -44,3 +44,4 @@ $config->redis->tables[TABLE_USER]->caches[] = ['type' => 'set', 'name' => 'user
 $config->redis->tables[TABLE_CONFIG] = new stdClass();
 $config->redis->tables[TABLE_CONFIG]->key = 'id';
 $config->redis->tables[TABLE_CONFIG]->caches[] = ['type' => 'raw', 'name' => 'config'];
+$config->redis->tables[TABLE_CONFIG]->caches[] = ['type' => 'set', 'name' => 'configIdList'];
