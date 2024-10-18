@@ -220,7 +220,7 @@ class thinkStepMenu extends wg
             'innerClass'   => 'text-gray opacity-50',
             'hint'         => $this->lang->thinkstep->tips->linkBlocks
         );
-        $linkType = !empty($item->type == 'question') && isset($options->questionType) && ($options->questionType == 'checkbox' || $options->questionType === 'radio' || $options->questionType === 'multicolumn');
+        $linkType = !empty($item->type == 'question') && isset($options->questionType) && in_array($options->questionType, array('checkbox', 'radio', 'multicolumn'));
 
         $menus = array_merge($menus, array(
             $canEdit ? array(
