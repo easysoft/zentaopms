@@ -409,7 +409,7 @@ class docZen extends doc
             else                           $locateLink = true;
         }
         if($locateLink === 'true') $locateLink = true;
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'docApp' => $docID ? array('loadDoc', $docID) : array('load', null, null, null, array('noLoading' => true, 'picks' => 'lib'))));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'docApp' => $docID ? array('executeCommand', 'handleMovedDoc', array($docID, $space, $libID)) : array('load', null, null, null, array('noLoading' => true, 'picks' => 'lib'))));
     }
 
     /**

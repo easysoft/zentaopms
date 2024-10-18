@@ -810,6 +810,23 @@ const commands =
         const url       = $.createLink('doc', 'moveDoc', `docID=${docID}&libID=${libID}&spaceType=${spaceType}&space=${spaceID}`);
         zui.Modal.open({size: 'sm', url: url});
     },
+    handleMovedDoc(_, args)
+    {
+        const docID   = +args[0];
+        const space   = args[1];
+        const spaceID = +(space.includes('.') ? space.split('.').pop() : space);
+        const docApp  = getDocApp();
+        if(docApp.mode === 'view')
+        {
+            if(spaceID === docApp.spaceID) docApp.loadDoc(docID).then(() => docApp.selectDoc(docID));
+            else if(space.startsWith(docApp.spaceType)) docApp.loadDoc(docID).then(() => docApp.selectLib(docApp.libID));
+            else loadPage($.createLink('doc', 'view', `docID=${docID}`));
+        }
+        else
+        {
+            docApp.load(null, null, null, {noLoading: true, picks: 'doc'});
+        }
+    },
     deleteDoc: function(_, args)
     {
         const docApp  = getDocApp();
