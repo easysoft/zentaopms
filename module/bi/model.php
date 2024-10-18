@@ -1981,9 +1981,6 @@ class biModel extends model
             $index++;
         }
 
-        $lastRow  = count($data->array) - 1;
-        $hasGroup = isset($data->groups);
-
         $drills = !empty($data->drills) ? array_values($data->drills) : array();
         foreach($data->array as $rowKey => $rowData)
         {
