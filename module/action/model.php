@@ -93,7 +93,7 @@ class actionModel extends model
         }
         if($hasRecentTable) $this->dao->insert(TABLE_ACTIONRECENT)->data($action)->autoCheck()->exec();
 
-        foreach($uid as $value) $this->file->updateObjectID($value, $objectID, $objectType);
+        $this->file->updateObjectID($uid, $objectID, $objectType);
 
         $this->loadModel('message')->send(strtolower($objectType), $objectID, $actionType, $actionID, $actor, $extra);
 
