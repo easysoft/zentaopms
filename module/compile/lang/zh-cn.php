@@ -33,6 +33,7 @@ $lang->compile->statusList['create_fail'] = '创建失败';
 $lang->compile->statusList['timeout']     = '执行超时';
 $lang->compile->statusList['canceled']    = '已取消';
 $lang->compile->statusList['failed']      = '构建失败';
+$lang->compile->statusList['error']       = '失败';
 
 $lang->compile->featureBar['browse']['job']     = '列表';
 $lang->compile->featureBar['browse']['compile'] = '执行历史';
