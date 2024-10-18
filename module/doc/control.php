@@ -165,6 +165,20 @@ class doc extends control
     }
 
     /**
+     * 编辑一个文档空间。
+     * Edit a doc space.
+     *
+     * @param  int    $libID
+     * @access public
+     * @return void
+     */
+    public function editSpace(int $libID)
+    {
+        $this->commonEditAction($libID);
+        $this->display();
+    }
+
+    /**
      * 编辑一个文档库。
      * Edit a library.
      *
@@ -174,11 +188,26 @@ class doc extends control
      */
     public function editLib(int $libID)
     {
+        $this->commonEditAction($libID);
+        $this->display();
+    }
+
+    /**
+     * 编辑空间和编辑库的公用方法。
+     * Edit a lib or space.
+     *
+     * @param  int    $libID
+     * @access public
+     * @return void
+     */
+    public function commonEditAction($libID)
+    {
+        if(!common::hasPriv('doc', 'editSpace') && !common::hasPriv('doc', 'editLib')) return;
         $lib = $this->doc->getLibByID($libID);
         if(!empty($_POST))
         {
             $this->lang->doc->name = $this->lang->nameAB;
-            $libData = form::data()->get();
+            $libData = form::data($this->config->doc->form->editlib)->get();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $changes = $this->doc->updateLib($libID, $libData);
@@ -223,12 +252,23 @@ class doc extends control
         $this->view->groups      = $this->loadModel('group')->getPairs();
         $this->view->users       = $this->user->getPairs('noletter|noclosed', $lib->users);
         $this->view->libID       = $libID;
-
-        $this->display();
     }
 
     /**
-     * 删除一个数据库。
+     * 删除一个文档空间。
+     * Delete a doc space.
+     *
+     * @param  int    $libID
+     * @access public
+     * @return void
+     */
+    public function deleteSpace(int $libID)
+    {
+        $this->commonDeleteAction($libID);
+    }
+
+    /**
+     * 删除一个文档库。
      * Delete a library.
      *
      * @param  int    $libID
@@ -236,6 +276,19 @@ class doc extends control
      * @return void
      */
     public function deleteLib(int $libID)
+    {
+        $this->commonDeleteAction($libID);
+    }
+
+    /**
+     * 删除空间和删除库的公用方法。
+     * Delete a lib or space.
+     *
+     * @param  int    $libID
+     * @access public
+     * @return void
+     */
+    public function commonDeleteAction(int $libID)
     {
         if(in_array($libID, array('product', 'execution'))) return;
 

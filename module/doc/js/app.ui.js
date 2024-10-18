@@ -636,7 +636,7 @@ const commands =
     {
         const docApp  = getDocApp();
         const spaceID = args[0] || docApp.spaceID;
-        const url = $.createLink('doc', 'editLib', `libID=${spaceID}`);
+        const url = $.createLink('doc', 'editSpace', `libID=${spaceID}`);
         zui.Modal.open({size: 'sm', url: url});
     },
     deleteSpace: function(_, args)
@@ -646,7 +646,7 @@ const commands =
         $.ajaxSubmit(
         {
             confirm: getLang('confirmDeleteSpace'),
-            url:     $.createLink('doc', 'deleteLib', `libID=${spaceID}`),
+            url:     $.createLink('doc', 'deleteSpace', `libID=${spaceID}`),
             load:    false,
             onSuccess: function(res)
             {
