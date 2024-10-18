@@ -684,15 +684,29 @@ class docModel extends model
      */
     public function getDocsOfLibs(array $libs): array
     {
-        $docs = $this->dao->select('*')->from(TABLE_DOC)
+        $docs = $this->dao->select('t1.*')->from(TABLE_DOC)->alias('t1')
+            ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t1.lib')->in($libs)
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->andWhere('t1.templateType')->eq('')
+            ->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")
+            ->andWhere('t2.type')->eq('doc')
+            ->andWhere('t2.deleted')->eq('0')
+            ->orderBy('t1.`order` asc, t1.id asc')
+            ->fetchAll('id');
+
+        $rootDocs = $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq(0)
             ->andWhere('lib')->in($libs)
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('templateType')->eq('')
             ->andWhere("(status = 'normal' or (status = 'draft' and addedBy='{$this->app->user->account}'))")
+            ->andWhere('module')->eq(0)
             ->orderBy('`order` asc, id_asc')
             ->fetchAll('id');
 
+        $docs = $docs + $rootDocs;
         $docs = $this->processCollector($docs);
         $docs = $this->filterPrivDocs($docs);
 

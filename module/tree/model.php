@@ -2182,9 +2182,6 @@ class treeModel extends model
                 $this->dao->update(TABLE_TICKET)->set('module')->eq($module->parent)->where('module')->in($childs)->exec();
                 $cookieName = 'ticketModule';
                 break;
-            case 'doc':
-                $this->dao->update(TABLE_DOC)->set('`module`')->eq($module->parent)->where('`module`')->in($childs)->exec();
-                break;
         }
         $sessionValue = $this->session->{$module->type . 'List'};
         if($sessionValue && strpos($sessionValue, 'param=' . $moduleID)) $this->session->set($module->type . 'List', str_replace('param=' . $moduleID, 'param=0', $sessionValue));
