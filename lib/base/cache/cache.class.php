@@ -83,6 +83,24 @@ class baseCache
     public $condition;
 
     /**
+     * 是否在判断条件成立。
+     * Checking condition.
+     *
+     * @var bool
+     * @access public
+     */
+    public $isConditionChecking;
+
+    /**
+     * 条件是否成立。
+     * Condition is true.
+     *
+     * @var bool
+     * @access public
+     */
+    public $conditionIsTrue;
+
+    /**
      * 构造方法。
      * The construct method.
      *
@@ -231,6 +249,44 @@ class baseCache
     }
 
     /**
+     * 开始条件判断。
+     * Begin condition judge.
+     *
+     * @param  bool $condition
+     * @access public
+     * @return static|sql the sql object.
+     */
+    public function beginIF($conditionResult)
+    {
+        $this->isConditionChecking = true;
+        $this->conditionIsTrue     = $conditionResult;
+        return $this;
+    }
+
+    /**
+     * 结束条件判断。
+     * End the condition judge.
+     *
+     * @access public
+     * @return static|sql the sql object.
+     */
+    public function fi()
+    {
+        $this->isConditionChecking = false;
+
+        if(!$this->conditionIsTrue)
+        {
+            $this->resetCondition();
+            return $this;
+        }
+
+        $this->addCondition();
+        $this->resetCondition();
+
+        return $this;
+    }
+
+    /**
      * 创建WHERE部分。
      * Create the where part.
      *
@@ -272,7 +328,12 @@ class baseCache
     {
         $this->condition['operator'] = 'eq';
         $this->condition['value']    = $value;
-        $this->addCondition();
+
+        if(!$this->isConditionChecking)
+        {
+            $this->addCondition();
+            $this->resetCondition();
+        }
 
         return $this;
     }
@@ -289,7 +350,12 @@ class baseCache
     {
         $this->condition['operator'] = 'ne';
         $this->condition['value']    = $value;
-        $this->addCondition();
+
+        if(!$this->isConditionChecking)
+        {
+            $this->addCondition();
+            $this->resetCondition();
+        }
 
         return $this;
     }
@@ -306,7 +372,12 @@ class baseCache
     {
         $this->condition['operator'] = 'in';
         $this->condition['value']    = is_string($value) ? explode(',', str_replace(' ', '', $value)) : $value;
-        $this->addCondition();
+
+        if(!$this->isConditionChecking)
+        {
+            $this->addCondition();
+            $this->resetCondition();
+        }
 
         return $this;
     }
@@ -323,8 +394,39 @@ class baseCache
     {
         $this->condition['operator'] = 'notin';
         $this->condition['value']    = is_string($value) ? explode(',', str_replace(' ', '', $value)) : $value;
-        $this->addCondition();
 
+        if(!$this->isConditionChecking)
+        {
+            $this->addCondition();
+            $this->resetCondition();
+        }
+
+        return $this;
+    }
+
+    /**
+     * 创建ORDER BY部分。
+     * Create the order by part.
+     *
+     * @param  string $order
+     * @access public
+     * @return static|sql the sql object.
+     */
+    public function orderBy($order)
+    {
+        return $this;
+    }
+
+    /**
+     * 创建LIMIT部分。
+     * Create the limit part.
+     *
+     * @param  string $limit
+     * @access public
+     * @return static|sql the sql object.
+     */
+    public function limit($limit)
+    {
         return $this;
     }
 
@@ -348,7 +450,7 @@ class baseCache
             {
                 if($condition['value'] !== $value) return false;
             }
-            elseif($condition['operator'] == 'eq')
+            elseif($condition['operator'] == 'ne')
             {
                 if($condition['value'] === $value) return false;
             }
@@ -416,7 +518,7 @@ class baseCache
      * @access public
      * @return array the records
      */
-    public function fetchAll()
+    public function fetchAll($keyField = 0)
     {
         $cacheTable = $this->config->redis->tables[$this->table]->caches[1]['name'];
         $keyIdList = $this->app->redis->smembers("set:$cacheTable");
@@ -451,7 +553,14 @@ class baseCache
                 $data->$field = $object->$field;
             }
 
-            $result[] = $data;
+            if($keyField)
+            {
+                $result[$object->$keyField] = $data;
+            }
+            else
+            {
+                $result[] = $data;
+            }
         }
 
         return $result;
