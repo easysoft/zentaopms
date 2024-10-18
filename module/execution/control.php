@@ -2118,7 +2118,7 @@ class execution extends control
         if(!$project->hasProduct) return $this->sendError($this->lang->project->cannotManageProducts, true);
         if($project->model == 'waterfall' || $project->model == 'waterfallplus') return $this->sendError(sprintf($this->lang->execution->cannotManageProducts, zget($this->lang->project->modelList, $project->model)), true);
 
-        if(!empty($_POST))
+        if($_SERVER['REQUEST_METHOD'] == 'POST')
         {
             $oldProducts = $this->loadModel('product')->getProducts($executionID);
             $oldProducts = array_keys($oldProducts);
