@@ -545,3 +545,6 @@ $lang->doc->docLang->collapse                  = 'Collapse';
 $lang->doc->docLang->draft                     = $lang->doc->statusList['draft'];
 $lang->doc->docLang->released                  = $lang->doc->statusList['normal'];
 $lang->doc->docLang->attachment                = $lang->doc->files;
+$lang->doc->docLang->docTitleRequired          = 'Please enter the document title。';
+$lang->doc->docLang->docTitlePlaceholder       = 'Enter the document title';
+$lang->doc->docLang->noDataYet                 = 'No data yet';
