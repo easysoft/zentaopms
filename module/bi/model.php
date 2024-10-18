@@ -2014,7 +2014,7 @@ class biModel extends model
                 $rows[$rowKey][$field]   = $value;
                 $drillFields             = $this->getDrillFields($rowKey, $columnKey, $drills);
                 $drillConditions[$field] = $this->processDrills($field, $drillFields, $columns);
-                $isDrill[$field]         = isset($columns[$field]['link']);
+                $isDrill[$field]         = isset($columns[$field]['link']) && $totalColspan === 0;
 
                 if(is_string($value)) $columnMaxLen[$field] = max($columnMaxLen[$field], mb_strlen($value));
 

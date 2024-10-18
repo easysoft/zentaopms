@@ -14,6 +14,7 @@ window.clickCell = function(col, {colName, rowInfo})
     let status       = 'published';
 
     if(Array.isArray(value)) value = value[0];
+    value = (value + '').replace('%', '');
 
     if(Array.isArray(drillConditions) && drillConditions.length)
     {
