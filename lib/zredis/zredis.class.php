@@ -256,6 +256,112 @@ class zredis
     }
 
     /**
+     * 根据表名和键获取对象。
+     * Get object by table name and key.
+     *
+     * @param  string $table
+     * @param  int|string $key
+     * @access public
+     * @return object
+     */
+    public function getObject(string $table, int|string $key)
+    {
+        if(empty($this->redis))                                 return $this->log('Redis is not initialized.');
+        if(empty($table))                                       return $this->log('Table name is required.');
+        if(empty($key))                                         return $this->log('Key is required.');
+        if(empty($this->config->redis->tables[$table]->caches)) return $this->log('No cache settings for table ' . $table);
+
+        foreach($this->config->redis->tables[$table]->caches as $cache)
+        {
+            $cache = (object)$cache;
+            if($cache->type == 'raw')
+            {
+                $object = $this->redis->get("raw:{$cache->name}:{$key}");
+                if($object) $object = json_decode($object);
+
+                return $object;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * 根据表名获取对象列表。
+     * Get object list by table name.
+     *
+     * @param  string $table
+     * @param  array  $keyList
+     * @access public
+     * @return array
+     */
+    public function getObjects(string $table, array $keyList = [])
+    {
+        if(empty($this->redis))                                 return $this->log('Redis is not initialized.');
+        if(empty($table))                                       return $this->log('Table name is required.');
+        if(empty($this->config->redis->tables[$table]->caches)) return $this->log('No cache settings for table ' . $table);
+
+        if(!$keyList)
+        {
+            foreach($this->config->redis->tables[$table]->caches as $cache)
+            {
+                $cache = (object)$cache;
+                if($cache->type == 'set' && empty($cache->condition)))
+                {
+                    $keyList = $this->redis->smembers("set:{$cache->name}");
+                    break;
+                }
+            }
+        }
+        foreach($this->config->redis->tables[$table]->caches as $cache)
+        {
+            $cache = (object)$cache;
+            if($cache->type == 'raw')
+            {
+                $keys = [];
+                foreach($keyList as $key) $keys[] = "raw:{$cache->name}:{$key}";
+
+                $objects = $this->redis->mget(...$keyList);
+                foreach($objects as $key => $object)
+                {
+                    if($object) $objects[$key] = json_decode($object);
+                }
+
+                return $objects;
+            }
+        }
+
+        return [];
+    }
+
+    /**
+     * 根据表名和键获取键值对。
+     * Get key-value pairs by table name and key.
+     *
+     * @param  string $table
+     * @param  string $key
+     * @param  string $value
+     * @param  array  $keyList
+     * @access public
+     * @return array
+     */
+    public function getPairs(string $table, string $key, string $value, array $keyList = [])
+    {
+        if(empty($this->redis))                                 return $this->log('Redis is not initialized.');
+        if(empty($table))                                       return $this->log('Table name is required.');
+        if(empty($key))                                         return $this->log('Key is required.');
+        if(empty($value))                                       return $this->log('Value is required.');
+        if(empty($this->config->redis->tables[$table]->caches)) return $this->log('No cache settings for table ' . $table);
+
+        $objects = $this->getObjects($table, $keyList);
+        if(!$objects) return [];
+
+        $paris = [];
+        foreach($objects as $object) $pairs[$object->{$key}] = $object->{$value};
+        return $pairs;
+    }
+
+    /**
      * 创建缓存。
      * Create cache.
      *
