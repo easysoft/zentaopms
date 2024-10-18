@@ -2716,6 +2716,7 @@ class storyModel extends model
             {
                 $storyQuery .= " AND `status` NOT IN ('draft', 'reviewing', 'changing', 'closed')";
             }
+            $storyQuery .= " AND t2.`project` = $executionID";
         }
         elseif(strpos($storyQuery, $allBranch) !== false)
         {
