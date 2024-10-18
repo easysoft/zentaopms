@@ -51,29 +51,13 @@ foreach($fields as $field => $attr)
         )
     );
 }
-$extendFields = $config->edition != 'open' ? $app->control->loadModel('flow')->getExtendFields($story->type, 'review') : array();
-foreach($extendFields as $field)
-{
-    $formItems[$field->field] = formRow
-    (
-        formGroup
-        (
-            set::name($field->field),
-            set::label($field->name),
-            set::control($field->control),
-            set::value(zget($story, $field->field, $field->defaultValue)),
-            set::options($field->options),
-            set::required($field->required)
-        )
-    );
-}
 if(strpos('or,lite', $this->config->vision) === false) $formItems['affected'] = $getAffectedTabs($story, $users);
 
 modalHeader();
-panel
+div
 (
     setClass('panel-form mx-auto'),
-    form($formItems),
+    formPanel($formItems),
     h::hr(setClass('mt-6 mb-6')),
     history(set::objectID($story->id))
 );
