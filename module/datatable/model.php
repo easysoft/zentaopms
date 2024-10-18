@@ -477,14 +477,14 @@ class datatableModel extends model
         $this->loadModel('workflow');
         $this->loadModel('workflowgroup');
         $this->loadModel('workflowaction');
-        if($this->app->tab == 'project' && in_array($module, $this->config->workflowgroup->modules['product']))
+        if(($this->app->tab == 'project' || $this->app->tab == 'execution') && in_array($module, $this->config->workflowgroup->modules['product']))
         {
             $groupIdList = array();
             $fields      = array();
-            $projectID   = (int)$this->session->project;
+            $projectID   = $this->app->tab == 'execution' ? $this->session->execution : $this->session->project;
             $products    = $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
-                ->where('t1.project')->eq($projectID)
+                ->where('t1.project')->eq((int)$projectID)
                 ->fetchAll('id');
 
             foreach($products as $product) $groupIdList[] = $product->workflowGroup;
