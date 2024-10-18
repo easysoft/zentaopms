@@ -228,6 +228,7 @@ class jobModel extends model
             ->batchCheckIF(strpos($job->triggerType, 'schedule') !== false && $job->atDay !== '0', "atDay", 'notempty')
             ->batchCheckIF(strpos($job->triggerType, 'schedule') !== false, "atTime", 'notempty')
             ->batchCheckIF(strpos($job->triggerType, 'commit') !== false, "comment", 'notempty')
+            ->batchCheckIF(strpos($job->triggerType, 'action') !== false, "triggerActions", 'notempty')
             ->batchCheckIF(($repo->SCM == 'Subversion' && strpos($job->triggerType, 'tag') !== false), "svnDir", 'notempty')
             ->batchCheckIF($job->frame === 'sonarqube', "sonarqubeServer,projectKey", 'notempty')
             ->where('id')->eq($id)
