@@ -62,10 +62,14 @@ class actionModel extends model
         if(empty($comment)) $comment = '';
         $action->comment = fixer::stripDataTags($comment);
 
-        if($this->post->uid)
+        $uid = $this->post->uid;
+        if(is_string($uid)) $uid = array($uid);
+        if(!is_array($uid)) $uid = array();
+        $this->loadModel('file');
+        foreach($uid as $value)
         {
-            $action = $this->loadModel('file')->processImgURL($action, 'comment', $this->post->uid);
-            if($autoDelete) $this->file->autoDelete($this->post->uid);
+            $action = $this->file->processImgURL($action, 'comment', $value);
+            if($autoDelete) $this->file->autoDelete($value);
         }
 
         /* 获取对象的产品项目以及执行。 */
@@ -89,7 +93,7 @@ class actionModel extends model
         }
         if($hasRecentTable) $this->dao->insert(TABLE_ACTIONRECENT)->data($action)->autoCheck()->exec();
 
-        if($this->post->uid) $this->file->updateObjectID($this->post->uid, $objectID, $objectType);
+        foreach($uid as $value) $this->file->updateObjectID($value, $objectID, $objectType);
 
         $this->loadModel('message')->send(strtolower($objectType), $objectID, $actionType, $actionID, $actor, $extra);
 
