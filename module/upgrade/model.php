@@ -10052,10 +10052,10 @@ class upgradeModel extends model
         }
 
         /* Process case link case. */
-        $linkedCases = $this->dao->select('id,linkCase')->from(TABLE_CASE)->where('linkCase')->ne('')->fetchPairs();
-        foreach($linkedCases as $caseID => $relatedCases)
+        $caseList = $this->dao->select('id,story,linkCase')->from(TABLE_CASE)->where('linkCase')->ne('')->orWhere('story')->ne(0)->fetchAll('id');
+        foreach($caseList as $caseID => $case)
         {
-            foreach(explode(',', ",{$relatedCases},") as $relatedCaseID)
+            foreach(explode(',', ",{$case->linkCase},") as $relatedCaseID)
             {
                 if(empty($relatedCaseID)) continue;
                 $relation = new stdClass();
@@ -10064,6 +10064,16 @@ class upgradeModel extends model
                 $relation->relation = 1;
                 $relation->BType    = 'testcase';
                 $relation->BID      = $relatedCaseID;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
+            if(!empty($case->story))
+            {
+                $relation = new stdClass();
+                $relation->AType    = 'story';
+                $relation->AID      = $case->story;
+                $relation->relation = 'generated';
+                $relation->BType    = 'testcase';
+                $relation->BID      = $caseID;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
             }
         }
