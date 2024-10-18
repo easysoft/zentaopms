@@ -184,7 +184,7 @@ function initTable(data)
             row.path                                = `${row.request.module}-${row.request.method}`;
             row['metrics.backend.totalTime']        = row.metrics.backend.totalTime;
             row['metrics.backend.sqlCount']         = row.metrics.backend.sqlCount;
-            row['metrics.backend.sqlTime']          = row.metrics.backend.sqlTime;
+            row['metrics.backend.sqlTime']          = row.metrics.backend.sqlTime * ((!row.dataVer || row.dataVer < 2) ? 1000 : 1);
             row['metrics.backend.requestMemory']    = row.metrics.backend.requestMemory;
             row['metrics.backend.phpFileLoaded']    = row.metrics.backend.phpFileLoaded;
             row['metrics.frontend.renderTime']      = row.metrics.frontend.renderTime;
@@ -239,6 +239,7 @@ function initTable(data)
             if(info.colName === 'metrics.backend.sqlCount')
             {
                 const sqlDetails = info.rowInfo.data.metrics.backend.sqlDetails;
+                const oldVersion = !info.rowInfo.data.dataVer || info.rowInfo.data.dataVer < 2;
                 if(!sqlDetails || !sqlDetails.length) return;
                 zui.Modal.showError({
                     title: `SQL Details (${sqlDetails.length})`,
@@ -258,7 +259,7 @@ function initTable(data)
                           sqlDetails.map(detail => [
                               '<tr>',
                                 `<td>${detail.Query_ID}</td>`,
-                                `<td class="text-${getTimeClass(detail.Duration, 200, 100)}">${detail.Duration}</td>`,
+                                `<td class="text-${getTimeClass(detail.Duration, 200, 100)}">${detail.Duration * (oldVersion ? 1000 : 1)}</td>`,
                                 `<td class="font-mono text-sm select-all">${detail.Query}</td>`,
                               '</tr>',
                             ].join('\n')).join('\n'),
