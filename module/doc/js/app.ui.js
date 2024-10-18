@@ -445,7 +445,7 @@ const actionsMap =
         const items = [];
         const lib   = info.data;
 
-        if(hasPriv('addModule') && info.ui !== 'space-card') items.push({text: lang.actions.addModule, command: `addModule/${lib.id}/0/${lib.id}/child`});
+        if(hasPriv('addModule') && info.ui !== 'space-card' && info.ui !== 'sidebar') items.push({text: lang.actions.addModule, command: `addModule/${lib.id}/0/${lib.id}/child`});
         if(hasPriv('editLib'))   items.push({text: lang.actions.editLib, command: `editLib/${lib.id}`});
         if(hasPriv('moveLib') && info.ui !== 'space-card')   items.push({text: lang.moveTo, command: `moveLib/${lib.id}`});
         if(hasPriv('deleteLib')) items.push({text: lang.actions.deleteLib, command: `deleteLib/${lib.id}`});
