@@ -2010,7 +2010,6 @@ class biModel extends model
                     $value   = array_slice($rowData, $i, $colspan);
 
                     $i += $colspan - 1;
-                    $columnKey = $columnKeys[$i];
                 }
 
                 /* 定义数据表格的行数据。*/
