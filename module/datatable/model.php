@@ -478,36 +478,33 @@ class datatableModel extends model
         $flow = $this->loadModel('workflow')->getByModule($module);
         if(empty($flow)) return $fieldList;
 
-        $fields = $this->loadModel('workflowaction')->getFields($module, $method);
         if($flow->buildin == 1)
         {
-            $action = $this->workflowaction->getByModuleAndAction($module, $method);
+            $action = $this->loadModel('workflowaction')->getByModuleAndAction($module, $method);
             if(!$action || (isset($action->extensionType) && $action->extensionType != 'extend')) return $fieldList; // 不扩展不追加字段。
-
-            $workflowFieldList = $this->loadModel('flow')->buildDtableCols($fields);
-            $fieldList         = array_merge($fieldList, $workflowFieldList);
         }
-        else
+
+        $fields = $this->loadModel('workflowaction')->getFields($module, $method);
+        if($flow->buildin == 1) return array_merge($fieldList, $this->loadModel('flow')->buildDtableCols($fields));
+
+        foreach($fields as $field)
         {
-            foreach($fields as $field)
+            if(!$field->show) continue;
+
+            $fieldList[$field->field]['name']  = $field->field;
+            $fieldList[$field->field]['title'] = $field->name;
+            $fieldList[$field->field]['show']  = true;
+            $fieldList[$field->field]['width'] = (empty($field->width) || $field->width == 'auto') ? '120' : $field->width;
+
+            if($field->field == 'id')
             {
-                if(!$field->show) continue;
-
-                $fieldList[$field->field]['name']  = $field->field;
-                $fieldList[$field->field]['title'] = $field->name;
-                $fieldList[$field->field]['show']  = true;
-                $fieldList[$field->field]['width'] = (empty($field->width) || $field->width == 'auto') ? '120' : $field->width;
-
-                if($field->field == 'id')
-                {
-                    $fieldList[$field->field]['fixed']    = 'left';
-                    $fieldList[$field->field]['required'] = true;
-                }
-                elseif($field->field == 'actions')
-                {
-                    $fieldList[$field->field]['fixed']    = 'right';
-                    $fieldList[$field->field]['required'] = true;
-                }
+                $fieldList[$field->field]['fixed']    = 'left';
+                $fieldList[$field->field]['required'] = true;
+            }
+            elseif($field->field == 'actions')
+            {
+                $fieldList[$field->field]['fixed']    = 'right';
+                $fieldList[$field->field]['required'] = true;
             }
         }
 
