@@ -33,7 +33,7 @@ jsVar('urlParams', "repoID=$repoID&objectID=$objectID&entry=%s&oldRevision=$oldR
 $dropMenus = array();
 if(!$inModal)
 {
-    if(common::hasPriv('repo', 'download')) $dropMenus[] = array('text' => $this->lang->repo->downloadDiff, 'icon' => 'download', 'data-link' => $this->repo->createLink('download', "repoID=$repoID&path={path}&fromRevision=$oldRevision&toRevision=$newRevision&type=path"), 'id' => 'repoDownloadCode');
+    if(common::hasPriv('repo', 'download')) $dropMenus[] = array('text' => $this->lang->repo->downloadDiff, 'icon' => 'download', 'data-link' => $this->repo->createLink('download', "repoID=$repoID&path={path}&fromRevision=$oldRevision&toRevision=$newRevision&type=path"), 'className' => 'repoDownload-code');
 
     $dropMenus[] = array('text' => $this->lang->repo->viewDiffList['inline'], 'icon' => 'snap-house', 'id' => 'inline', 'class' => 'inline-appose');
     $dropMenus[] = array('text' => $this->lang->repo->viewDiffList['appose'], 'icon' => 'col-archive', 'id' => 'appose', 'class' => 'inline-appose');
@@ -46,6 +46,8 @@ div(
         set::id('monacoTabs'),
         set::className('relative'),
         on::click('.monaco-close')->call('closeTab', jsRaw('this')),
+        on::click('.repoDownload-code')->call('downloadCode'),
+        on::click('.inline-appose')->call('inlineAppose'),
         div(setStyle(array('position' => 'absolute', 'width' => '100%', 'height' => '35px', 'background' => '#efefef', 'top' => '0px'))),
         tabPane
         (
@@ -66,8 +68,6 @@ div(
         (
             set::arrow(false),
             set::staticMenu(true),
-            on::click('#repoDownloadCode')->call('downloadCode'),
-            on::click('.inline-appose')->call('inlineAppose'),
             btn
             (
                 setClass('ghost text-black pull-right absolute top-0 right-0 z-10 monaco-dropmenu'),
