@@ -1452,7 +1452,7 @@ class doc extends control
         $picks   = $noPicks ? '' : ",$picks,";
 
         list($spaces, $spaceID) = $this->doc->getSpaces($type, $spaceID);
-        $data   = array('spaceID' => $spaceID);
+        $data   = array('spaceID' => (int)$spaceID);
         $libs   = $this->doc->getLibsOfSpace($type, $spaceID);
         $libIds = array_keys($libs);
 
