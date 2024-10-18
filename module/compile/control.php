@@ -43,11 +43,11 @@ class compile extends control
     public function browse(int $repoID = 0, int $jobID = 0, string $browseType = '', int $param = 0, string $orderBy = 'createdDate_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->loadModel('ci');
-        $this->app->loadLang('job');
+        $this->loadModel('job');
 
         if($jobID)
         {
-            $job    = $this->loadModel('job')->getById($jobID);
+            $job    = $this->job->getByID($jobID);
             $repoID = $job->repo;
 
             $this->view->job = $job;
@@ -70,7 +70,7 @@ class compile extends control
         $this->compileZen->buildSearchForm($repoID, $jobID, (int)$param);
         $buildList = $this->compile->getList($repoID, $jobID, $browseType, (int)$param, $orderBy, $pager);
 
-        foreach($buildList as $build) $build->triggerType = $this->loadModel('job')->getTriggerConfig($build);
+        foreach($buildList as $build) $build->triggerType = $this->job->getTriggerConfig($build);
 
         $this->view->title      = $this->lang->ci->job . $this->lang->hyphen . $this->lang->compile->browse;
         $this->view->repoID     = $repoID;
