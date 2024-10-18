@@ -71,12 +71,12 @@ formPanel
         set::label($lang->doc->module),
         picker(set::name('module'), set::items($optionMenu), set::value($moduleID), set::required(true))
     ),
-    formGroup
+    $isDraft ? null : formGroup
     (
         set::label($lang->doc->mailto),
         mailto(set::items($users))
     ),
-    formGroup
+    $isDraft ? null : formGroup
     (
         set::label($lang->doclib->control),
         radioList
@@ -88,7 +88,7 @@ formPanel
             $objectType != 'mine' ? on::change('toggleWhiteList') : null
         )
     ),
-    formGroup
+    $isDraft ? null : formGroup
     (
         setID('whiteListBox'),
         setClass((isset($doc) && $libID == $doc->lib && $objectType != 'mine' && $doc->acl == 'private') ? '' : 'hidden'),
