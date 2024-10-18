@@ -26,7 +26,7 @@ if(in_array("{$module}-{$method}", $config->index->oldPages))
 $getProjectGroup = function($project) use($involvedProjects): string
 {
     global $app;
-    if(isset($involvedProjects[$project->id])) return 'my';
+    if(isset($involvedProjects[$project->id]) && $project->status != 'closed') return 'my';
     if($project->status == 'closed') return 'closed';
     return 'other';
 };
