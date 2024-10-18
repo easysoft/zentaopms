@@ -1568,8 +1568,7 @@ class doc extends control
             $libID      = (int)$doc->lib;
             $lib        = $this->doc->getLibByID($libID);
             $objectType = $lib->type;
-            $objectID   = (int)zget($lib, $objectType, 0);
-            if($objectType == 'custom') $objectID = $lib->parent;
+            $objectID = $objectType == 'custom' || $objectType == 'mine' ? $lib->parent : (int)zget($lib, $objectType, 0);
 
             $libPairs = $this->doc->getLibs($objectType, '', $libID, $objectID);
             if($objectType == 'custom' || $objectType == 'mine') $this->view->spaces = $this->doc->getSubSpacesByType($objectType, true);
