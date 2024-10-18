@@ -9146,7 +9146,7 @@ class upgradeModel extends model
                 $this->saveLogs($sql);
 
                 $sql = str_replace('zt_', $this->config->db->prefix, $sql);
-                $this->dbh->query($sql);
+                $this->dbh->exec($sql);
                 if(dao::isError()) return false;
             }
         }
