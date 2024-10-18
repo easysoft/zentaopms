@@ -10223,6 +10223,20 @@ class upgradeModel extends model
             $relation->BID      = $childDemandID;
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
         }
+
+        /* Process story generated design. */
+        $designStories = $this->dao->select('id,story')->from(TABLE_DESIGN)->where('story')->ne(0)->fetchPairs('id');
+        $storyTypeList = $this->dao->select('id,type')->from(TABLE_STORY)->where('id')->in(array_values($designStories))->fetchPairs('id');
+        foreach($designStories as $designID => $storyID)
+        {
+            $relation = new stdClass();
+            $relation->AType    = $storyTypeList[$storyID];
+            $relation->AID      = $storyID;
+            $relation->relation = 'generated';
+            $relation->BType    = 'design';
+            $relation->BID      = $designID;
+            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+        }
         return true;
     }
 }
