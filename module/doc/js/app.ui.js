@@ -881,7 +881,7 @@ const commands =
         const doc      = docApp.doc;
         const docID    = args[0] || doc.id;
         const docType  = args[1] || doc.contentType;
-        showDocBasicModal(docID, docType).then(formData => {
+        showDocBasicModal(docID).then(formData => {
             savingDocData[docID] = formData;
         });
     }
