@@ -188,7 +188,6 @@ class fileModel extends model
     {
         $now = helper::today();
 
-        if($file['size'] == 0) return false;
         if(!move_uploaded_file($file['tmpname'], $this->savePath . $this->getSaveName($file['pathname']))) return false;
 
         $file = $this->compressImage($file);
