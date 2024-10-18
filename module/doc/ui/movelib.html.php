@@ -66,13 +66,13 @@ formPanel
                     inputGroup
                     (
                         $lang->doclib->group,
-                        picker(set::name('groups[]'), set::items($groups), set::multiple(true))
+                        picker(set::name('groups[]'), set::items($groups), set::multiple(true), set::value($lib->groups))
                     )
                 ),
                 div
                 (
                     setClass('w-full'),
-                    userPicker(set::label($lang->doclib->user), set::items($users))
+                    userPicker(set::label($lang->doclib->user), set::items($users), set::value($lib->users))
                 )
             )
         )
