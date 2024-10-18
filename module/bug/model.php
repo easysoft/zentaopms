@@ -337,6 +337,30 @@ class bugModel extends model
             if($changes) $this->action->logHistory($actionID, $changes);
         }
 
+        if($this->config->edition != 'open')
+        {
+            if($oldBug->story > 0)
+            {
+                $this->dao->delete()->from(TABLE_RELATION)
+                    ->where('relation')->eq('generated')
+                    ->andWhere('AID')->eq($oldBug->story)
+                    ->andWhere('AType')->eq('story')
+                    ->andWhere('BID')->eq($oldBug->id)
+                    ->andWhere('BType')->eq('bug')
+                    ->exec();
+            }
+            if($bug->story > 0)
+            {
+                $relation = new stdClass();
+                $relation->AID      = $bug->story;
+                $relation->AType    = 'story';
+                $relation->relation = 'generated';
+                $relation->BID      = $bug->id;
+                $relation->BType    = 'bug';
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
+        }
+
         if(dao::isError()) return false;
 
         return $changes;
