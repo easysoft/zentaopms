@@ -157,6 +157,7 @@ class zredis
     {
         if(empty($this->redis)) helper::end('Redis is not initialized.');
 
+        $this->redis->watch(zredis::INITIALIZED);
         $this->redis->multi();
 
         foreach(array_keys($this->config->redis->tables) as $table)
@@ -166,9 +167,9 @@ class zredis
             $this->update();
         }
 
-        $this->redis->setnx(zredis::INITIALIZED, date('Y-m-d H:i:s'));
+        $this->redis->set(zredis::INITIALIZED, date('Y-m-d H:i:s'));
 
-        $this->redis->exec();
+        $this->redis->exec() ? $this->log('Redis cache initialization succeeded.') : $this->log('Redis cache initialization failed.');
     }
 
     /**
