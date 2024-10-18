@@ -457,6 +457,9 @@ class doc extends control
                 $docData = form::data()
                     ->setDefault('editedBy', $this->app->user->account)
                     ->setIF(strpos(",$doc->editedList,", ",{$this->app->user->account},") === false, 'editedList', $doc->editedList . ",{$this->app->user->account}")
+                    ->removeIF($this->post->project === false, 'project')
+                    ->removeIF($this->post->product === false, 'product')
+                    ->removeIF($this->post->execution === false, 'execution')
                     ->get();
                 $result  = $this->doc->update($docID, $docData);
                 if(dao::isError())
@@ -1268,7 +1271,11 @@ class doc extends control
 
         if(!empty($_POST))
         {
-            $data = form::data()->setIF($this->post->acl == 'open', 'groups', '')->setIF($this->post->acl == 'open', 'users', '')->get();
+            $data = form::data()
+                ->setIF($this->post->acl == 'open', 'groups', '')
+                ->setIF($this->post->acl == 'open', 'users', '')
+                ->setIF(in_array($spaceType, array('project', 'product')), $spaceType, $space)
+                ->get();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $changes = common::createChanges($doc, $data);
@@ -1320,7 +1327,11 @@ class doc extends control
         {
             $oldDocList = $this->doc->getDocsByIdList($docIdList);
 
-            $data = form::data()->setIF($type == 'mine' || $this->post->acl == 'open', 'groups', '')->setIF($type == 'mine' || $this->post->acl == 'open', 'users', '')->get();
+            $data = form::data()
+                ->setIF($type == 'mine' || $this->post->acl == 'open', 'groups', '')
+                ->setIF($type == 'mine' || $this->post->acl == 'open', 'users', '')
+                ->setIF(in_array($type, array('project', 'product')), $type, $spaceID)
+                ->get();
             $this->doc->batchMoveDoc($data, $docIdList);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
