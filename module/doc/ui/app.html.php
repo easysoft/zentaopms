@@ -72,51 +72,12 @@ $fileUrl   .= $sessionStr;
  * Setting language data for frontend. Use getLang('xxx') in js/app.ui.js.
  * 设置前端语言数据。 在 js/app.ui.js 中使用 getLang('xxx') 来访问语言数据。
  */
-$langData = new stdclass();
-$langData->cancel                = $lang->cancel;
-$langData->export                = $lang->export;
-$langData->settings              = $lang->settings;
+$langData = $lang->doc->docLang;
 $langData->filePreview           = $lang->file->preview;
 $langData->fileDownload          = $lang->file->download;
 $langData->fileDelete            = $lang->file->delete;
 $langData->fileRename            = $lang->file->edit;
 $langData->fileConfirmDelete     = $lang->file->confirmDelete;
-$langData->createSpace           = $lang->doc->createSpace;
-$langData->createLib             = $lang->doc->createLib;
-$langData->actions               = $lang->doc->libDropdown;
-$langData->moveTo                = $lang->doc->moveTo;
-$langData->create                = $lang->doc->createAB;
-$langData->createDoc             = $lang->doc->create;
-$langData->editDoc               = $lang->doc->edit;
-$langData->effort                = $lang->doc->effort;
-$langData->deleteDoc             = $lang->doc->delete;
-$langData->uploadDoc             = $lang->doc->uploadDoc;
-$langData->createList            = $lang->doc->createList;
-$langData->confirmDelete         = $lang->doc->confirmDelete;
-$langData->confirmDeleteLib      = $lang->doc->confirmDeleteLib;
-$langData->confirmDeleteSpace    = $lang->doc->confirmDeleteSpace;
-$langData->confirmDeleteModule   = $lang->doc->confirmDeleteModule;
-$langData->collect               = $lang->doc->collect;
-$langData->edit                  = $lang->doc->edit;
-$langData->delete                = $lang->doc->delete;
-$langData->cancelCollection      = $lang->doc->cancelCollection;
-$langData->moveDoc               = $lang->doc->moveDocAction;
-$langData->moveTo                = $lang->doc->moveTo;
-$langData->moveLib               = $lang->doc->moveLibAction;
-$langData->moduleName            = $lang->doc->catalogName;
-$langData->saveDraft             = $lang->doc->saveDraft;
-$langData->release               = $lang->doc->release;
-$langData->batchMove             = $lang->doc->batchMove;
-$langData->filterTypes           = $lang->doc->filterTypes;
-$langData->fileFilterTypes       = $lang->doc->fileFilterTypes;
-$langData->productFilterTypes    = $lang->doc->productFilterTypes;
-$langData->projectFilterTypes    = $lang->doc->projectFilterTypes;
-$langData->sortCatalog           = $lang->doc->sortCatalog;
-$langData->sortDoclib            = $lang->doc->sortDoclib;
-$langData->sortDoc               = $lang->doc->sortDoc;
-$langData->errorOccurred         = $lang->doc->errorOccurred;
-$langData->selectLibFirst        = $lang->doc->selectLibFirst;
-$langData->createLibFirst        = $lang->doc->createLibFirst;
 
 /**
  * 通过语言项定义文档表格列显示名称。
