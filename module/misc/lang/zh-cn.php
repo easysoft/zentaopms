@@ -238,7 +238,7 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
-$lang->misc->feature->all['20.8'][]        = array('title' => '', 'desc' => '');
+$lang->misc->feature->all['20.8'][]        = array('title' => '文档优化：优化任务关系，修复Bug。', 'desc' => '');
 $lang->misc->feature->all['20.7.1'][]      = array('title' => '修复已知Bug。', 'desc' => '');
 $lang->misc->feature->all['20.7'][]        = array('title' => '新手引导优化；菜单自定义；工作流优化；OR界面增加贡献模块。', 'desc' => '');
 $lang->misc->feature->all['20.6'][]        = array('title' => '工作流支持配置多界面；审批流支持使用工作流中字段配置条件；修复Bug。', 'desc' => '');
