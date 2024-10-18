@@ -274,9 +274,10 @@ function initTable(data)
     console.log('> table', table);
 }
 
-function queryData()
+function queryData(options)
 {
-    $table.addClass('loading');
+    options = options || {};
+    if(!options.noLoading) $table.addClass('loading');
     loadData().then(data =>
     {
         $table.removeClass('loading');
@@ -290,7 +291,6 @@ function queryData()
         $table.removeClass('loading');
         zui.Modal.showError({error: error});
         console.error(error);
-        $table.removeClass('loading');
     });
 }
 
@@ -317,7 +317,7 @@ function setAutoRefreshTimer()
         const interval = autoRefreshInterval || 10000;
         const tryLoad = () => {
             if($table.hasClass('loading')) return;
-            queryData();
+            queryData({noLoading: true});
         };
         autoRefreshTimer = setInterval(tryLoad, interval);
         tryLoad();
