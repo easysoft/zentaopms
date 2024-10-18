@@ -210,9 +210,11 @@ class queryBase extends wg
                 formBatchItem
                 (
                     set::name('type'),
-                    set::control('input'),
+                    set::label($lang->dataview->type),
+                    set::control('picker'),
                     set::width('120px'),
-                    set::hidden(true)
+                    set::items($lang->bi->fieldTypeList),
+                    set::required(true)
                 ),
                 $this->buildFormBatchItem(),
                 set::onRenderRow(jsRaw('renderRow')),
