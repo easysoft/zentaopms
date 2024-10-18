@@ -16,6 +16,10 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'ops',
 REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'projectstory', 'importToLib' FROM `zt_grouppriv` WHERE `module` = 'story' AND `method` = 'importToLib';
 REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'projectstory', 'batchImportToLib' FROM `zt_grouppriv` WHERE `module` = 'story' AND `method` = 'batchImportToLib';
 
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'doc', 'createSpace' FROM `zt_grouppriv` WHERE `module` = 'doc' AND `method` = 'createLib';
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'doc', 'editSpace' FROM `zt_grouppriv` WHERE `module` = 'doc' AND `method` = 'editLib';
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'doc', 'deleteSpace' FROM `zt_grouppriv` WHERE `module` = 'doc' AND `method` = 'deleteLib';
+
 CREATE UNIQUE INDEX `account_openID` ON `zt_oauth`(`account`,`openID`,`providerType`,`providerID`);
 
 ALTER TABLE `zt_taskteam` CHANGE `order` `order` int(8) NOT NULL DEFAULT '0';
