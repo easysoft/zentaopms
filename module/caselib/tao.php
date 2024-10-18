@@ -18,6 +18,7 @@ class caselibTao extends caselibModel
 
         foreach($data->lib as $key => $lib)
         {
+            $key = (int)$key;
             $caseData = new stdclass();
 
             $caseData->lib          = $lib;
@@ -36,6 +37,7 @@ class caselibTao extends caselibModel
                 foreach($fieldList as $field)
                 {
                     if(empty($field->show)) continue;
+                    if(!isset($data->{$field->field}[$key])) continue;
 
                     $fieldValue = $data->{$field->field}[$key];
                     $caseData->{$field->field} = $fieldValue;

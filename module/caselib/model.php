@@ -296,6 +296,7 @@ class caselibModel extends model
         $this->dao->begin();
         foreach($cases as $key => $caseData)
         {
+            $key = (int)$key;
             if(!empty($data->id[$key]) && !$this->post->insert)
             {
                 $this->caselibTao->updateImportedCase($key, $caseData, $data, $forceNotReview);
