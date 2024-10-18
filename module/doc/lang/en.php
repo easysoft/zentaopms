@@ -426,7 +426,7 @@ $lang->doc->whitelistDeny['doc']       = "<i class='icon pr-1 text-important ico
 
 $lang->doc->filterTypes[] = array('all', 'All');
 $lang->doc->filterTypes[] = array('draft', 'Draft');
-$lang->doc->filterTypes[] = array('collect', 'Collected');
+$lang->doc->filterTypes[] = array('collect', 'Collected by me');
 $lang->doc->filterTypes[] = array('createdByMe', 'Created by me');
 $lang->doc->filterTypes[] = array('editedByMe', 'Edited by me');
 

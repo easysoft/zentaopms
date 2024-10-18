@@ -426,9 +426,9 @@ $lang->doc->whitelistDeny['doc']       = "<i class='icon pr-1 text-important ico
 
 $lang->doc->filterTypes[] = array('all', '全部');
 $lang->doc->filterTypes[] = array('draft', '草稿');
-$lang->doc->filterTypes[] = array('collect', '已收藏');
-$lang->doc->filterTypes[] = array('createdByMe', '我创建');
-$lang->doc->filterTypes[] = array('editedByMe', '我编辑');
+$lang->doc->filterTypes[] = array('collect', '我收藏的');
+$lang->doc->filterTypes[] = array('createdByMe', '我创建的');
+$lang->doc->filterTypes[] = array('editedByMe', '我编辑的');
 
 $lang->doc->fileFilterTypes[] = array('all', '全部');
 $lang->doc->fileFilterTypes[] = array('addedByMe', '我添加');
