@@ -714,6 +714,7 @@ class pivotModel extends model
     {
         if(empty($filters)) return array($sql, false);
 
+        $filters = $this->processQueryFilterDefaults($filters);
         $currentFilter = current($filters);
         $isQueryFilter = (isset($currentFilter['from']) && $currentFilter['from'] == 'query');
 
@@ -1737,6 +1738,33 @@ class pivotModel extends model
     }
 
     /**
+     * 处理查询过滤器的默认值。
+     * Process query filter defaults.
+     *
+     * @param  array|false $filters
+     * @access public
+     * @return array
+     */
+    public function processQueryFilterDefaults(array|false $filters): array|false
+    {
+        if(!is_array($filters)) return $filters;
+        $options = array();
+        foreach($filters as $index => $filter)
+        {
+            if(empty($filter['default'])) continue;
+            if(!isset($filter['from']) || $filter['from'] != 'query') continue;
+            if($filter['type'] !== 'multipleselect') continue;
+
+            $type       = $filter['type'];
+            $typeOption = $filter['typeOption'];
+            if(strpos($type, 'select') !== false && !isset($options[$typeOption])) $options[$typeOption] = $this->getSysOptions($typeOption);
+            $filters[$index]['default'] = array_intersect($filter['default'], array_keys($options[$typeOption]));
+        }
+
+        return $filters;
+    }
+
+    /**
      * Gen sheet.
      *
      * @param  array       $fields
@@ -1760,6 +1788,7 @@ class pivotModel extends model
 
         if(!isset($settings['columns'])) return array(data, array());
 
+        $filters = $this->processQueryFilterDefaults($filters);
         /* Replace the variable with the default value. */
         $sql = $this->bi->processVars($sql, (array)$filters);
         $sql = $this->trimSemicolon($sql);
