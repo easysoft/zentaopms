@@ -259,21 +259,28 @@ function handleSaveDoc(doc)
         delete savingDocData[doc.id];
     }
 
-    $.post(url, docData, (res) =>
-    {
-        try
+    return new Promise((resolve) => {
+        $.post(url, docData, (res) =>
         {
-            const data = JSON.parse(res);
-            if(typeof data !== 'object' || data.result === 'fail')
+            try
             {
-                throw new Error(data.message || data.error || getLang('errorOccurred'));
+                const data = JSON.parse(res);
+                if(typeof data !== 'object' || data.result === 'fail')
+                {
+                    let message = data.message || data.error || getLang('errorOccurred');
+                    if(typeof message === 'object') message = Object.values(message).map(x => Array.isArray(x) ? x.join('\n') : x).join('\n');
+                    throw new Error(message);
+                }
+                docApp.update('doc', $.extend({}, doc, docData));
+                resolve(true);
             }
-            docApp.update('doc', $.extend({}, doc, docData));
-        }
-        catch (error)
-        {
-            zui.Modal.alert(error.message);
-        }
+            catch (error)
+            {
+                resolve(false);
+                if(!error.message) return;
+                zui.Modal.alert(error.message);
+            }
+        });
     });
 }
 
