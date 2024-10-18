@@ -510,7 +510,21 @@ class taskModel extends model
             if(!$taskID) return false;
 
             /* Update Kanban and story stage. */
-            if(!empty($task->story)) $this->story->setStage($task->story);
+            if(!empty($task->story))
+            {
+                $this->story->setStage($task->story);
+
+                if($this->config->edition != 'open')
+                {
+                    $relation = new stdClass();
+                    $relation->relation = 'generated';
+                    $relation->AID      = $task->story;
+                    $relation->AType    = 'story';
+                    $relation->BID      = $taskID;
+                    $relation->BType    = 'task';
+                    $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+                }
+            }
             $this->updateKanbanForBatchCreate($taskID, $executionID, $laneID, (int)$columnID);
 
             $taskIdList[$taskID] = $taskID;

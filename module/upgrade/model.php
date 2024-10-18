@@ -10069,16 +10069,26 @@ class upgradeModel extends model
         }
 
         /* Process bug transferred to task. */
-        $bugTransferredToTask = $this->dao->select('id,fromBug')->from(TABLE_TASK)->where('fromBug')->ne(0)->fetchPairs('id');
-        foreach($bugTransferredToTask as $taskID => $bugID)
+        $taskList = $this->dao->select('id,story,fromBug')->from(TABLE_TASK)->where('fromBug')->ne(0)->orWhere('story')->ne(0)->fetchAll('id');
+        foreach($taskList as $taskID => $task)
         {
             $relation = new stdClass();
-            $relation->AType    = 'bug';
-            $relation->AID      = $bugID;
-            $relation->relation = 'transferredto';
             $relation->BType    = 'task';
             $relation->BID      = $taskID;
-            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            if(!empty($task->fromBug))
+            {
+                $relation->relation = 'transferredto';
+                $relation->AType    = 'bug';
+                $relation->AID      = $task->fromBug;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
+            if(!empty($task->story))
+            {
+                $relation->relation = 'generated';
+                $relation->AType    = 'story';
+                $relation->AID      = $task->story;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
         }
 
         /* Process bug transferred to story. */
