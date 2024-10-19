@@ -271,7 +271,7 @@ function handleSaveDoc(doc)
                     if(typeof message === 'object') message = Object.values(message).map(x => Array.isArray(x) ? x.join('\n') : x).join('\n');
                     throw new Error(message);
                 }
-                docApp.update('doc', $.extend({}, doc, docData));
+                docApp.update('doc', $.extend({}, doc, docData, data.doc));
                 resolve(true);
             }
             catch (error)

@@ -649,7 +649,7 @@ class docZen extends doc
         }
 
         if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link, 'doc' => $doc));
     }
 
     /**
