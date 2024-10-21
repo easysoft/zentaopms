@@ -339,10 +339,12 @@ class bugModel extends model
 
         if($this->config->edition != 'open')
         {
-            if($oldBug->story > 0 || $oldBug->task > 0)
+            if($oldBug->story > 0 || $oldBug->task > 0 || $oldBug->case > 0)
             {
-                $AID   = $oldBug->story > 0 ? ($oldBug->task > 0 ? "{$oldBug->story},{$oldBug->task}" : $oldBug->story) : $oldBug->task;
-                $AType = $oldBug->story > 0 ? ($oldBug->task > 0 ? 'story,task' : 'story') : 'task';
+                $AID    = $oldBug->story > 0 ? ($oldBug->task > 0 ? "{$oldBug->story},{$oldBug->task}" : $oldBug->story) : $oldBug->task;
+                $AID   .= $oldBug->case  > 0 ? ",{$oldBug->case}" : '';
+                $AType  = $oldBug->story > 0 ? ($oldBug->task > 0 ? 'story,task' : 'story') : 'task';
+                $AType .= $oldBug->case  > 0 ? ",testcase" : '';
                 $this->dao->delete()->from(TABLE_RELATION)
                     ->where('relation')->eq('generated')
                     ->andWhere('AID')->in($AID)
@@ -351,7 +353,7 @@ class bugModel extends model
                     ->andWhere('BType')->eq('bug')
                     ->exec();
             }
-            if($bug->story > 0 || $bug->task > 0)
+            if($bug->story > 0 || $bug->task > 0 || $bug->case > 0)
             {
                 $relation = new stdClass();
                 $relation->relation = 'generated';
@@ -367,6 +369,12 @@ class bugModel extends model
                 {
                     $relation->AID   = $bug->task;
                     $relation->AType = 'task';
+                    $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+                }
+                if($bug->case > 0)
+                {
+                    $relation->AID   = $bug->case;
+                    $relation->AType = 'testcase';
                     $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
                 }
             }
