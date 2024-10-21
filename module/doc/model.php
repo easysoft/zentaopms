@@ -1282,7 +1282,7 @@ class docModel extends model
             $spaceID  = $this->product->checkAccess($spaceID, $products);
             foreach($products as $product)
             {
-                $isMine  = $product->status == 'normal' and $product->PO == $account;
+                $isMine  = $product->status == 'normal' && $product->PO == $account;
                 $spaces[] = array('id' => $product->id, 'name' => $product->name, 'isMine' => $isMine, 'type' => $type);
             }
         }
@@ -1294,7 +1294,7 @@ class docModel extends model
 
             foreach($projects as $project)
             {
-                $isMine   = $project->status != 'done' and $project->status != 'closed' and $project->PM == $account;
+                $isMine   = $project->status != 'done' && $project->status != 'closed' && $project->PM == $account;
                 $spaces[] = array('id' => $project->id, 'name' => $project->name, 'isMine' => $isMine, 'type' => $type);
             }
         }
