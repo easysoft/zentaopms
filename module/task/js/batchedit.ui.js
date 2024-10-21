@@ -170,4 +170,20 @@ function checkBatchEstStartedAndDeadline(event)
             }
         }
     }
+
+    if(field == 'deadline')
+    {
+        let parentDeadline = typeof tasks[parentID] == 'undefined' || $(event.target).closest('tbody').find('[name="deadline[' + parentID + ']"]').length == 0 ? parentTask.deadline : $(event.target).closest('tbody').find('[name="deadline[' + parentID + ']"]').val();
+        if(deadline.length > 0 && deadline > parentDeadline)
+        {
+            const $deadlineTd = $currentRow.find('td[data-name=deadline]');
+            if($deadlineTd.find('.date-tip').length == 0)
+            {
+                let $datetip = $('<div class="date-tip"></div>');
+                $datetip.append('<div class="form-tip text-warning">' + overParentDeadlineLang.replace('%s', parentDeadline) + '<span class="ignore-date underline">' + ignoreLang + '</div>');
+                $datetip.off('click', '.ignore-date').on('click', '.ignore-date', function(e){ignoreTip(e)});
+                $deadlineTd.append($datetip);
+            }
+        }
+    }
 }
