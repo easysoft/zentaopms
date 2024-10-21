@@ -446,7 +446,7 @@ class docZen extends doc
             $execution = $this->loadModel('execution')->getById($lib->execution);
             $objects   = $this->execution->getPairs($execution->project, 'all', "multiple,leaf,noprefix");
         }
-        elseif($linkType == 'product')
+        elseif($linkType == 'product' || $linkType == 'api')
         {
             $objects = $this->loadModel('product')->getPairs();
         }
