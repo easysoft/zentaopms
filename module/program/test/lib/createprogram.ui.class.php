@@ -84,16 +84,27 @@ class createProgramTester extends tester
      * @access public
      * @return void
      */
-    public function addChildProgram()
+    public function addChildProgram($programName, $childProgram)
     {
+        $browsePage = $this->initForm('program', 'browse');
+        $browsePage->dom->search(array("项目集名称,=,{$programName}"));
+        $browsePage->wait(1);
+        $browsePage->dom->addChildBtn->click();
+        $browsePage->wait(1);
+        $browsePage->dom->name->setValue($childProgram->name);
+        $browsePage->dom->longTime->click();
+        $browsePage->wait(1);
+        $browsePage->dom->btn($this->lang->save)->click();
+        $browsePage->wait(1);
+
         $this->openUrl('program', 'browse');
-        $form = $this->loadPage('program', 'browse');
-        $form->dom->addChildBtn->click();
-        $form->wait(1);
-        $form->dom->name->setValue('子项目集');
-        $form->dom->longTime->click();
-        $form->wait(1);
-        $form->dom->btn($this->lang->save)->click();
+        $browsePage = $this->loadPage('program', 'browse');
+        $browsePage->dom->search(array("项目集名称,=,{$childProgram->name}"));
+        $browsePage->wait(1);
+        $browsePage->dom->fstEditBtn->click();
+        $browsePage->wait(1);
+        if($browsePage->dom->parent->getText() != $programName) return $this->failed('创建子项目集失败');
+        return $this->success('创建子项目集成功');
     }
 
     /**
