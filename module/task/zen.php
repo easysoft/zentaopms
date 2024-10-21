@@ -201,7 +201,12 @@ class taskZen extends task
 
         /* Check if the request data size exceeds the PHP limit. */
         $tasks = $this->task->getByIdList($this->post->taskIdList);
-        foreach($tasks as $taskID => $task) $tasks[$taskID]->consumed = 0;
+        $parentTaskIdList = array();
+        foreach($tasks as $taskID => $task)
+        {
+            $tasks[$taskID]->consumed = 0;
+            $parentTaskIdList[$task->parent] = $task->parent;
+        }
         $countInputVars  = count($tasks) * (count(explode(',', $this->config->task->custom->batchEditFields)) + 3);
         $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
@@ -243,6 +248,7 @@ class taskZen extends task
         $this->view->childTasks         = $childTasks;
         $this->view->nonStoryChildTasks = $nonStoryChildTasks;
         $this->view->stories            = $this->story->getExecutionStoryPairs($executionID, 0, 'all', '', 'full', 'active', 'story', false);
+        $this->view->parentTasks        = $this->task->getByIdList($parentTaskIdList);
 
         $this->display();
     }
@@ -312,6 +318,7 @@ class taskZen extends task
         $this->view->modules       = $this->tree->getTaskOptionMenu($task->execution, 0, $this->view->showAllModule ? 'allModule' : '');
         $this->view->executions    = $executions;
         $this->view->syncChildren  = $syncChildren;
+        $this->view->parentTask    = !empty($task->parent) ? $this->task->getById($task->parent) : null;
         $this->display();
     }
 
@@ -369,6 +376,7 @@ class taskZen extends task
             $task = $this->dao->findById($taskID)->from(TABLE_TASK)->fetch();
             $this->view->parentTitle  = $task->name;
             $this->view->parentPri    = $task->pri;
+            $this->view->parentTask   = $task;
         }
 
         /* 获取模块和需求下拉数据。 Get module and story dropdown data. */
