@@ -915,6 +915,11 @@ function getTableOptions(options, info)
                 });
             }
         });
+        options.onCheckChange = function(changes)
+        {
+            const checkedList = this.getChecks();
+            $.cookie.set('checkedItem', checkedList, {expires:config.cookieLife, path:config.webRoot});
+        }
     }
     return options;
 }
