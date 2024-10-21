@@ -1,0 +1,19 @@
+title: table zt_product
+desc: "产品"
+author: Huifang Li
+version: "1.0"
+fields:
+  - field: id
+    range: 1
+  - field: name
+    range: "产品1"
+  - field: code
+    note: "产品代号"
+    fields:
+    range: code
+  - field: shadow
+    note: "影子产品"
+    range: 0
+  - field: type
+    note: "产品类型"
+    range: normal
