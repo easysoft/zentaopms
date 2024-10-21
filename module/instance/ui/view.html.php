@@ -217,7 +217,7 @@ div
                             $type !== 'store' ? null : h::td
                             (
                                 setID('statusTD'),
-                                set('data-status', $instance->status),
+                                setData('status', $instance->status),
                                 setData('reload', in_array($instance->status, array('creating', 'initializing', 'pulling', 'startup', 'starting', 'suspending', 'installing', 'uninstalling', 'stopping', 'destroying', 'upgrading'))),
                                 span
                                 (
