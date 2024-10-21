@@ -415,3 +415,6 @@ $lang->taskestimate->consumed = '工时';
 
 $lang->task->overEsStartDate = '已超出%s计划开始时间，请先修改%s计划开始时间';
 $lang->task->overEsEndDate   = '已超出%s计划结束时间，请先修改%s计划结束时间';
+
+$lang->task->overParentEsStarted = '任务开始日期小于父任务开始日期：%s';
+$lang->task->overParentDeadline  = '任务结束日期大于父任务结束日期：%s';
