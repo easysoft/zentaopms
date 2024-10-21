@@ -49,8 +49,8 @@ class editProjectReleaseTester extends tester
         //断言检查发布名称、状态、计划发布日期、实际发布日期是否正确
         if($viewPage->dom->basicreleasename->getText() != $release['name'])        return $this->failed('项目发布名称错误');
         if($viewPage->dom->basicstatus->getText()      != $release['status'])      return $this->failed('项目发布状态错误');
-        if($viewPage->dom->basicstatus->getText()      != $release['plandate'])    return $this->failed('计划发布日期错误');
-        if($viewPage->dom->basicstatus->getText()      != $release['releasedate']) return $this->failed('实际发布日期错误');
+        if($viewPage->dom->basicplandate->getText()    != $release['plandate'])    return $this->failed('计划发布日期错误');
+        if($viewPage->dom->basicreleasedate->getText() != $release['releasedate']) return $this->failed('实际发布日期错误');
 
         return $this->success();
     }
