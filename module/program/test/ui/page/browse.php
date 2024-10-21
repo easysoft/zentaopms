@@ -26,6 +26,7 @@ class browsePage extends page
             'deleteConfirm'   => '//*[@class="modal modal-async load-indicator modal-alert modal-trans show in"]/div/div[1]/div[3]/nav/button[1]',
             'undeleteConfirm' => '//*[@class="modal-content"]/div[3]/nav/button',
             'formText'        => '//*[@id="projectviews"]/div/div/div',
+            'fstEditBtn'      => '/html/body/div[1]/div/div[2]/div[2]/div/div[2]/div[3]/div/div/div/nav/a[2]/i'
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
