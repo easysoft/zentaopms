@@ -123,7 +123,7 @@ function handleSwitchView(mode, location, info)
     }
     else
     {
-        url = $.createLink(config.rawModule, config.rawMethod, `objectID=${location.spaceID}&libID=${location.libID}&moduleID=${location.moduleID}&browseType=${filterType}&param=0&orderBy=${location.orderBy}&recTotal=${pager.recTotal}&recPerPage=${pager.recPerPage}&pageID=${pager.page}&mode=${mode}&docID=${location.docID}&search=${search}`).replace('&libID=0&moduleID=0&browseType=all&param=&orderBy=&recTotal=0&recPerPage=20&pageID=1&mode=home&docID=0&search=', '');
+        url = $.createLink(config.rawModule, config.rawMethod, `objectID=${location.spaceID}&libID=${location.libID}&moduleID=${location.moduleID}&browseType=${filterType}&orderBy=${location.orderBy}&param=0&recTotal=${pager.recTotal}&recPerPage=${pager.recPerPage}&pageID=${pager.page}&mode=${mode}&docID=${location.docID}&search=${search}`).replace('&libID=0&moduleID=0&browseType=all&param=&orderBy=&recTotal=0&recPerPage=20&pageID=1&mode=home&docID=0&search=', '');
     }
     if(url === lastAppUrl) return;
     if(lastAppUrl && !$.apps.getAppUrl().endsWith(url)) $.apps.updateAppUrl(url, info.title ? (info.title + documentTitleSuffix) : originalDocumentTitle);
