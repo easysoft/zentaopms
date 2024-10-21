@@ -48,12 +48,12 @@ class thinkStepBase extends wg
             $questionType = $options->questionType;
             $tips         = $lang->thinkstep->$questionType;
             $setOption    = empty($options->setOption) || $options->setOption == 0;
-            if($options->required && $questionType == 'checkbox' && $setOption)
+            if(!empty($options->required) && $questionType == 'checkbox' && $setOption)
             {
                 $tips = $lang->thinkrun->requiredTitle[$questionType];
                 $tips = str_replace(array('%min%', '%max%'), array($options->minCount, $options->maxCount), $tips);
             }
-            if($options->required && $questionType == 'tableInput')
+            if(!empty($options->required) && $questionType == 'tableInput')
             {
                 if($options->supportAdd)  $tips = sprintf($lang->thinkrun->tableInputTitle->notSupportAdd, count($options->fields), $options->requiredRows);
                 if(!$options->supportAdd) $tips = sprintf($lang->thinkrun->tableInputTitle->supportAdd, $options->requiredRows);
