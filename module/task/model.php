@@ -1273,9 +1273,6 @@ class taskModel extends model
         $task->closedDate     = !empty($task->closedDate)     ? substr($task->closedDate, 0, 19)     : null;
         $task->lastEditedDate = !empty($task->lastEditedDate) ? substr($task->lastEditedDate, 0, 19) : null;
         $task->realStarted    = !empty($task->realStarted)    ? substr($task->realStarted, 0, 19)    : null;
-        $task->estimate       = helper::formatHours($task->estimate);
-        $task->left           = helper::formatHours($task->left);
-        $task->consumed       = helper::formatHours($task->consumed);
 
         /* Get the child tasks of the parent task. */
         $children = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('deleted')->eq(0)->fetchAll('id');
@@ -2587,6 +2584,11 @@ class taskModel extends model
                 ->fetchPairs();
             $task->teamMembers = implode(',', array_keys($teamMembers));
         }
+
+        /* Format task hours. */
+        $task->estimate = helper::formatHours($task->estimate);
+        $task->consumed = helper::formatHours($task->consumed);
+        $task->left     = helper::formatHours($task->left);
 
         foreach($task as $field => $value)
         {

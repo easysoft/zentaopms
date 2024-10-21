@@ -237,6 +237,14 @@ class taskZen extends task
         }
 
         list($childTasks, $nonStoryChildTasks) = $this->task->getChildTasksByList(array_keys($tasks));
+        $storyPairs = $this->story->getExecutionStoryPairs($executionID, 0, 'all', '', 'full', 'active', 'story', false);;
+        $storyList  = $this->story->getByList(array_keys($storyPairs));
+        $stories    = array();
+        foreach($storyList as $story)
+        {
+            $stories[0][] = array('value' => $story->id, 'text' => $storyPairs[$story->id]);
+            if($story->module) $stories[$story->module][] = array('value' => $story->id, 'text' => $storyPairs[$story->id]);
+        }
 
         /* Assign. */
         $this->view->executionID        = $executionID;
@@ -247,7 +255,7 @@ class taskZen extends task
         $this->view->moduleGroup        = $moduleGroup;
         $this->view->childTasks         = $childTasks;
         $this->view->nonStoryChildTasks = $nonStoryChildTasks;
-        $this->view->stories            = $this->story->getExecutionStoryPairs($executionID, 0, 'all', '', 'full', 'active', 'story', false);
+        $this->view->stories            = $stories;
         $this->view->parentTasks        = $this->task->getByIdList($parentTaskIdList);
 
         $this->display();

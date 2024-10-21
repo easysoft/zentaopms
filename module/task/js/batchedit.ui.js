@@ -58,6 +58,14 @@ window.renderRowData = function($row, index, row)
             $module.$.setValue(row.module);
         });
     }
+
+    $row.find('[data-name="story"]').find('.picker-box').on('inited', function(e, info)
+    {
+        const storyItems   = stories[row.module] != undefined ? stories[row.module] : [];
+        const $storyPicker = info[0];
+        $storyPicker.render({items: storyItems});
+        $storyPicker.$.setValue(row.story);
+    });
 }
 
 window.clickSubmit = async function(e)
@@ -189,5 +197,66 @@ function checkBatchEstStartedAndDeadline(event)
                 $deadlineTd.append($datetip);
             }
         }
+    }
+}
+
+/**
+ * Get select of stories.
+ *
+ * @access public
+ * @return void
+ */
+function setStories(event)
+{
+    const $module      = $(event.target);
+    const $currentRow  = $module.closest('tr');
+    const moduleID     = $module.val();
+    const getStoryLink = $.createLink('task', 'ajaxGetStories', 'executionID=' + executionID + '&moduleID=' + moduleID);
+
+    let $row = $currentRow;
+    while($row.length)
+    {
+        const $storyPicker = $row.find('[name^=story]').zui('picker');
+        const storyID      = $row.find('[name^=story]').val();
+        $.getJSON(getStoryLink, function(stories)
+        {
+            $storyPicker.render({items: stories})
+            $storyPicker.$.setValue(storyID);
+        });
+
+        $row = $row.next('tr');
+        if(!$row.find('td[data-name="module"][data-ditto="on"]').length) break;
+    }
+}
+
+/**
+ * Set preview.
+ *
+ * @access public
+ * @return void
+ */
+function setStoryRelated(event)
+{
+    let $story      = $(event.target).closest('td').find('input[name^=story]');
+    let $currentRow = $(event.target).closest('tr');
+    let storyID     = $story.val();
+    let link        = $.createLink('story', 'ajaxGetInfo', 'storyID=' + storyID + '&pageType=batch');
+    let $row        = $currentRow;
+
+    while($row.length)
+    {
+        const $module = $row.find('input[name^="module"]');
+
+        if(storyID > 0)
+        {
+            $.getJSON(link, function(data)
+            {
+                const storyInfo = data['storyInfo'];
+                $module.zui('picker').$.setValue(parseInt(storyInfo.moduleID), true);
+            });
+        }
+
+        $row = $row.next('tr');
+        if(!$row.find('td[data-name="story"][data-ditto="on"]').length) break;
     }
 }

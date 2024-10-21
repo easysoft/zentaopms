@@ -21,6 +21,7 @@ jsVar('executionID', $executionID);
 jsVar('childTasks', $childTasks);
 jsVar('nonStoryChildTasks', $nonStoryChildTasks);
 jsVar('tasks', $tasks);
+jsVar('stories', $stories);
 jsVar('syncStoryToAllChildrenTip', $lang->task->syncStoryToAllChildrenTip);
 jsVar('syncStoryToChildrenTip', $lang->task->syncStoryToChildrenTip);
 jsVar('parentTasks', $parentTasks);
@@ -39,6 +40,9 @@ formBatchPanel
     set::ajax(array('beforeSubmit' =>  jsRaw('clickSubmit'))),
     on::change('[data-name="status"]', 'statusChange'),
     on::change('[data-name="estStarted"], [data-name="deadline"]', 'checkBatchEstStartedAndDeadline'),
+    on::change('[data-name="module"]', 'setStories'),
+    on::change('input[name^=story]', 'setStoryRelated'),
+    on::click('[data-name=story] [data-type=ditto]', 'setStoryRelated'),
     set::formID('taskBatchEditForm' . $executionID),
     formBatchItem
     (
@@ -76,7 +80,7 @@ formBatchPanel
         set::name('story'),
         set::label($lang->task->story),
         set::control('picker'),
-        set::items($stories),
+        set::items(array()),
         set::width('200px'),
         set::ditto(true),
         set::defaultDitto('off')
