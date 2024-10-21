@@ -437,6 +437,14 @@ class baseRouter
     public $clientCacheTime = 0;
 
     /**
+     * 缓存Model。
+     * The cache model.
+     *
+     * @var object
+     */
+    public $cacheModel;
+
+    /**
      * 构造方法, 设置路径，类，超级变量等。注意：
      * 1.应该使用createApp()方法实例化router类；
      * 2.如果$appRoot为空，框架会根据$appName计算应用路径。
@@ -499,8 +507,6 @@ class baseRouter
         $this->setEdition();
 
         $this->setClient();
-
-        $this->loadCacheConfig();
     }
 
     /**
@@ -1583,6 +1589,26 @@ class baseRouter
     //-------------------- 模块及扩展设置(Module and extension) --------------------//
 
     /**
+     * 加载cache模块。
+     * Load the cache module
+     *
+     * @access public
+     * @return void.
+     */
+    public function loadCache(): void
+    {
+        if(!$this->checkInstalled()) return;
+
+        $this->setModuleName('cache');
+        $cacheModelFile = $this->setModelFile('cache');
+        if(!file_exists($cacheModelFile)) return;
+
+        helper::import($cacheModelFile);
+
+        $this->cacheModel = new cacheModel();
+    }
+
+    /**
      * 加载common模块。
      *
      *  common模块比较特别，它会执行几乎每次请求都需要执行的操作，例如：
@@ -1600,6 +1626,8 @@ class baseRouter
      */
     public function loadCommon(): object|bool
     {
+        $this->loadCache();
+
         $this->setModuleName('common');
         $commonModelFile = $this->setModelFile('common');
         if(!file_exists($commonModelFile)) return false;
@@ -1627,6 +1655,8 @@ class baseRouter
         $common->setUserConfig();
 
         $this->setDebug();
+
+        $common->cache = $this->cacheModel;
 
         return $common;
     }
@@ -2803,29 +2833,6 @@ class baseRouter
     }
 
     /**
-     * 从数据库加载缓存配置。
-     * Load the cache config from the database.
-     *
-     * @access public
-     * @return void
-     */
-    public function loadCacheConfig()
-    {
-        if(!$this->checkInstalled()) return false;
-
-        $globalCache = $this->dao->select('`value`')->from(TABLE_CONFIG)->where('`module`')->eq('common')->andWhere('`section`')->eq('global')->andWhere('`key`')->eq('cache')->limit(1)->fetch('value');
-        if(!$globalCache) return false;
-
-        $caches = json_decode($globalCache);
-        foreach($caches as $cacheKey => $cache)
-        {
-            if(!isset($this->config->cache->$cacheKey)) $this->config->cache->$cacheKey = new stdClass();
-
-            foreach($cache as $key => $value) $this->config->cache->$cacheKey->$key = $value;
-        }
-    }
-
-    /**
      * 当multiSite功能打开的时候，加载额外的配置文件。
      * When multiSite feature enabled, load extra config file.
      *
@@ -3072,7 +3079,6 @@ class baseRouter
         }
 
         $this->loadDAO();
-        $this->loadCache();
     }
 
     /**
@@ -3093,22 +3099,6 @@ class baseRouter
 
         $dao = new $driver($this);
         $this->dao = $dao;
-    }
-
-    /**
-     * 加载cache。
-     * Load cache.
-     *
-     * @access public
-     * @return void
-     */
-    public function loadCache()
-    {
-        $classFile = $this->coreLibRoot . 'cache' . DS . 'cache.class.php';
-        include($classFile);
-
-        $cache = new cache($this);
-        $this->cache = $cache;
     }
 
     /**

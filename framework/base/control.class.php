@@ -324,7 +324,6 @@ class baseControl
 
         $this->{$moduleName} = $model;
         $this->dao           = $model->dao;
-        $this->cache         = $model->cache;
         return $model;
     }
 
