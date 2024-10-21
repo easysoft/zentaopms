@@ -10022,7 +10022,7 @@ class upgradeModel extends model
         }
 
         /* Process bug link bug. */
-        $bugList = $this->dao->select('id,story,relatedBug')->from(TABLE_BUG)->where('relatedBug')->ne('')->orWhere('story')->ne('0')->fetchAll('id');
+        $bugList = $this->dao->select('id,story,relatedBug,task')->from(TABLE_BUG)->where('relatedBug')->ne('')->orWhere('story')->ne(0)->orWhere('task')->ne(0)->fetchAll('id');
         foreach($bugList as $bugID => $bug)
         {
             if(!empty($bug->relatedBug))
@@ -10044,6 +10044,16 @@ class upgradeModel extends model
                 $relation = new stdClass();
                 $relation->AType    = 'story';
                 $relation->AID      = $bug->story;
+                $relation->relation = 'generated';
+                $relation->BType    = 'bug';
+                $relation->BID      = $bugID;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
+            if(!empty($bug->task))
+            {
+                $relation = new stdClass();
+                $relation->AType    = 'task';
+                $relation->AID      = $bug->task;
                 $relation->relation = 'generated';
                 $relation->BType    = 'bug';
                 $relation->BID      = $bugID;

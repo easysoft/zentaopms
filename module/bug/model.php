@@ -339,25 +339,36 @@ class bugModel extends model
 
         if($this->config->edition != 'open')
         {
-            if($oldBug->story > 0)
+            if($oldBug->story > 0 || $oldBug->task > 0)
             {
+                $AID   = $oldBug->story > 0 ? ($oldBug->task > 0 ? "{$oldBug->story},{$oldBug->task}" : $oldBug->story) : $oldBug->task;
+                $AType = $oldBug->story > 0 ? ($oldBug->task > 0 ? 'story,task' : 'story') : 'task';
                 $this->dao->delete()->from(TABLE_RELATION)
                     ->where('relation')->eq('generated')
-                    ->andWhere('AID')->eq($oldBug->story)
-                    ->andWhere('AType')->eq('story')
+                    ->andWhere('AID')->in($AID)
+                    ->andWhere('AType')->in($AType)
                     ->andWhere('BID')->eq($oldBug->id)
                     ->andWhere('BType')->eq('bug')
                     ->exec();
             }
-            if($bug->story > 0)
+            if($bug->story > 0 || $bug->task > 0)
             {
                 $relation = new stdClass();
-                $relation->AID      = $bug->story;
-                $relation->AType    = 'story';
                 $relation->relation = 'generated';
                 $relation->BID      = $bug->id;
                 $relation->BType    = 'bug';
-                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+                if($bug->story > 0)
+                {
+                    $relation->AID   = $bug->story;
+                    $relation->AType = 'story';
+                    $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+                }
+                if($bug->task > 0)
+                {
+                    $relation->AID   = $bug->task;
+                    $relation->AType = 'task';
+                    $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+                }
             }
         }
 
