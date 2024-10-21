@@ -1775,11 +1775,25 @@ class docModel extends model
             $docCounts[$doc->lib] ++;
         }
 
+        $executionLibs = array();
         foreach($map as $spaceID => &$libs)
         {
             foreach($libs as &$lib)
             {
                 $lib->docs = isset($docCounts[$lib->id]) ? $docCounts[$lib->id] : 0;
+                if($lib->type != 'execution') continue;
+                $executionLibs[$lib->execution] = $lib;
+            }
+        }
+
+        if(!empty($executionLibs))
+        {
+            $executionPairs = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(array_keys($executionLibs))->fetchPairs();
+
+            foreach($executionLibs as &$lib)
+            {
+                $lib->originName = $lib->name;
+                $lib->name       = $executionPairs[$lib->execution];
             }
         }
 
