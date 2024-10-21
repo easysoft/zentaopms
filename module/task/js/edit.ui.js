@@ -410,5 +410,25 @@ function checkEstStartedAndDeadline(event)
 
     if(field == 'estStarted' && estStarted.length > 0 && estStarted < parentEstStarted)
     {
+        const $estStartedDiv = $estStarted.closest('.form-group');
+        if($estStartedDiv.find('.date-tip').length == 0)
+        {
+            let $datetip = $('<div class="date-tip"></div>');
+            $datetip.append('<div class="form-tip text-warning">' + overParentEstStartedLang + '<span class="ignore-date underline">' + ignoreLang + '</div>');
+            $datetip.off('click', '.ignore-date').on('click', '.ignore-date', function(e){ignoreTip(e)});
+            $estStartedDiv.append($datetip);
+        }
+    }
+
+    if(field == 'deadline' && deadline.length > 0 && deadline > parentDeadline)
+    {
+        const $deadlineDiv = $deadline.closest('.form-group');
+        if($deadlineDiv.find('.date-tip').length == 0)
+        {
+            let $datetip = $('<div class="date-tip"></div>');
+            $datetip.append('<div class="form-tip text-warning">' + overParentDeadlineLang + '<span class="ignore-date underline">' + ignoreLang + '</div>');
+            $datetip.off('click', '.ignore-date').on('click', '.ignore-date', function(e){ignoreTip(e)});
+            $deadlineDiv.append($datetip);
+        }
     }
 }
