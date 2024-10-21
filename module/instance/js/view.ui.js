@@ -51,6 +51,7 @@ function refreshStatus()
             if(res.result === 'success')
             {
                 if(res.data.length == 0) return false;
+                if(res.data[0].status == $('#statusTD').data('status')) return false;
 
                 loadPage($.createLink('instance', 'view', `instanceID=${instanceID}`), '#setting,#statusTD,#dbStatusTD,#systemLoad,.float-toolbar');
             }
