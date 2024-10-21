@@ -1055,7 +1055,7 @@ class baseDAO
 
             $result = $this->dbh->exec($sql);
             /* See: https://www.php.net/manual/en/pdo.lastinsertid.php .*/
-            $this->_lastInsertID = $this->dbh->lastInsertID();
+            $this->_lastInsertID = $this->dbh->lastInsertId();
 
             $this->setTableCache($sql);
 
