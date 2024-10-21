@@ -26,6 +26,7 @@ window.onRenderCell = function(result, {row, col})
     }
     if(result && col.name == 'title')
     {
+        if(!noFlowAuditModules.includes(row.data.module)) result[0].props['data-app'] = row.data.app;
         if(row.data.module == 'review' || !noFlowAuditModules.includes(row.data.module)) result[0].props['data-toggle'] = '';
         if(!viewPrivs[row.data.module])
         {

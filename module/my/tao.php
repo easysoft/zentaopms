@@ -314,6 +314,7 @@ class myTao extends myModel
                 $data->type   = $objectType;
                 $data->time   = $object->{$openedDateField};
                 $data->status = 'doing';
+                $data->app    = $flows[$objectType]->app;
                 $approvalList[] = $data;
             }
         }
