@@ -78,7 +78,7 @@ detailBody
                     item
                     (
                         set::name($lang->job->product),
-                        $product->name
+                        $product ? $product->name : ''
                     ),
                     item
                     (
