@@ -196,7 +196,7 @@ function showCommitInfo()
  */
 
 /* 初始化数据 */
-window.afterPageUpdate = function initPage()
+function initPage()
 {
     codeHeight = $.cookie.get('codeContainerHeight');
     $('#codeContainer').css('height', $.cookie.get('codeContainerHeight'));
@@ -238,6 +238,13 @@ window.afterPageUpdate = function initPage()
     /* Get file commits. */
     showCommitInfo();
 }
+
+$(function()
+{
+    setTimeout(() => {
+        initPage();
+    }, 200);
+});
 
 window.downloadCode = function()
 {
