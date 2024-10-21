@@ -1222,9 +1222,7 @@ class baseDAO
      */
     public function lastInsertID()
     {
-        $lastInsertID = $this->_lastInsertID !== false ? (int)$this->_lastInsertID : false;
-        $this->_lastInsertID = false;
-        return $lastInsertID;
+        return $this->_lastInsertID !== false ? (int)$this->_lastInsertID : false;
     }
 
     //-------------------- 魔术方法(Magic methods) --------------------//
