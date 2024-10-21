@@ -306,7 +306,7 @@ class zredis
             foreach($this->config->redis->tables[$table]->caches as $cache)
             {
                 $cache = (object)$cache;
-                if($cache->type == 'set' && empty($cache->condition)))
+                if($cache->type == 'set' && empty($cache->condition))
                 {
                     $keyList = $this->redis->smembers("set:{$cache->name}");
                     break;
