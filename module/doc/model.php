@@ -1821,8 +1821,9 @@ class docModel extends model
             {
                 foreach($libList as &$lib)
                 {
-                    $lib->originName = $lib->name;
-                    $lib->name       = $executionPairs[$executionID] . '/' . $lib->name;
+                    $lib->originName    = $lib->name;
+                    $lib->executionName = $executionPairs[$executionID];
+                    $lib->name          = $lib->executionName . '/' . $lib->name;
                 }
             }
         }
