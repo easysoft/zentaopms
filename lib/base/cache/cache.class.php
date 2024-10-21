@@ -481,28 +481,14 @@ class baseCache
      */
     public function fetch($field = '')
     {
-        $cacheTable = $this->config->redis->tables[$this->table]->caches[1]['name'];
-        $keyIdList = $this->app->redis->smembers("set:$cacheTable");
-
-        if(empty($keyIdList)) return [];
-
-        $keyPrefix = $this->config->redis->tables[$this->table]->caches[0]['name'];
-        $keyList = [];
-        foreach($keyIdList as $keyId)
-        {
-            $keyList[] = "raw:$keyPrefix:$keyId";
-        }
-        $rawResult = $this->app->redis->mget($keyList);
-
+        $rawResult = $this->app->redis->getObjects($this->table);
         if(empty($rawResult)) return '';
 
         foreach($rawResult as $row)
         {
-            $object = json_decode($row);
+            if(!$this->isConditionMatched($row, $this->conditions)) continue;
 
-            if(!$this->isConditionMatched($object, $this->conditions)) continue;
-
-            return $field ? $object->$field : $object;
+            return $field ? $row->$field : $row;
         }
 
         return '';
@@ -519,42 +505,28 @@ class baseCache
      */
     public function fetchAll($keyField = 0)
     {
-        $cacheTable = $this->config->redis->tables[$this->table]->caches[1]['name'];
-        $keyIdList = $this->app->redis->smembers("set:$cacheTable");
-
-        if(empty($keyIdList)) return [];
-
-        $keyPrefix = $this->config->redis->tables[$this->table]->caches[0]['name'];
-        $keyList = [];
-        foreach($keyIdList as $keyId)
-        {
-            $keyList[] = "raw:$keyPrefix:$keyId";
-        }
-        $rawResult = $this->app->redis->mget($keyList);
-
+        $rawResult = $this->app->redis->getObjects($this->table);
         if(empty($rawResult)) return [];
 
         $result = [];
         foreach($rawResult as $row)
         {
-            $object = json_decode($row);
-
-            if(!$this->isConditionMatched($object, $this->conditions)) continue;
+            if(!$this->isConditionMatched($row, $this->conditions)) continue;
 
             $data = new stdclass();
             foreach($this->fields as $field)
             {
                 if($field == '*')
                 {
-                    $data = $object;
+                    $data = $row;
                     break;
                 }
-                $data->$field = $object->$field;
+                $data->$field = $row->$field;
             }
 
             if($keyField)
             {
-                $result[$object->$keyField] = $data;
+                $result[$row->$keyField] = $data;
             }
             else
             {
