@@ -154,4 +154,20 @@ function checkBatchEstStartedAndDeadline(event)
     const field       = $(event.target).closest('.form-batch-control').data('name');
     const estStarted  = $currentRow.find('[name^=estStarted]').val();
     const deadline    = $currentRow.find('[name^=deadline]').val();
+
+    if(field == 'estStarted')
+    {
+        let parentEstStarted = typeof tasks[parentID] == 'undefined' || $(event.target).closest('tbody').find('[name="estStarted[' + parentID + ']"]').length == 0 ? parentTask.estStarted : $(event.target).closest('tbody').find('[name="estStarted[' + parentID + ']"]').val();
+        if(estStarted.length > 0 && estStarted < parentEstStarted)
+        {
+            const $estStartedTd = $currentRow.find('td[data-name=estStarted]');
+            if($estStartedTd.find('.date-tip').length == 0)
+            {
+                let $datetip = $('<div class="date-tip"></div>');
+                $datetip.append('<div class="form-tip text-warning">' + overParentEstStartedLang.replace('%s', parentEstStarted) + '<span class="ignore-date underline">' + ignoreLang + '</div>');
+                $datetip.off('click', '.ignore-date').on('click', '.ignore-date', function(e){ignoreTip(e)});
+                $estStartedTd.append($datetip);
+            }
+        }
+    }
 }
