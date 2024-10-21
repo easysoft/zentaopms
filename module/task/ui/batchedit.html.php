@@ -23,6 +23,10 @@ jsVar('nonStoryChildTasks', $nonStoryChildTasks);
 jsVar('tasks', $tasks);
 jsVar('syncStoryToAllChildrenTip', $lang->task->syncStoryToAllChildrenTip);
 jsVar('syncStoryToChildrenTip', $lang->task->syncStoryToChildrenTip);
+jsVar('parentTasks', $parentTasks);
+jsVar('ignoreLang', $lang->project->ignore);
+jsVar('overParentEstStartedLang', $lang->task->overParentEsStarted);
+jsVar('overParentDeadlineLang', $lang->task->overParentDeadline);
 
 /* ====== Define the page structure with zin widgets ====== */
 formBatchPanel
@@ -34,6 +38,7 @@ formBatchPanel
     set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'batchEditFields')),
     set::ajax(array('beforeSubmit' =>  jsRaw('clickSubmit'))),
     on::change('[data-name="status"]', 'statusChange'),
+    on::change('[data-name="estStarted"], [data-name="deadline"]', 'checkBatchEstStartedAndDeadline'),
     set::formID('taskBatchEditForm' . $executionID),
     formBatchItem
     (

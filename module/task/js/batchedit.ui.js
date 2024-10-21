@@ -140,3 +140,18 @@ window.statusChange = function(event)
         }
     }
 }
+
+function checkBatchEstStartedAndDeadline(event)
+{
+    if(parentTasks.length == 0) return true;
+
+    const $currentRow = $(event.target).closest('tr');
+    const taskID      = $currentRow.find('[name^=id]').val();
+    const parentID    = tasks[taskID].parent;
+    if(typeof parentTasks[parentID] == 'undefined' || !parentTasks[parentID]) return true;
+
+    const parentTask  = parentTasks[parentID];
+    const field       = $(event.target).closest('.form-batch-control').data('name');
+    const estStarted  = $currentRow.find('[name^=estStarted]').val();
+    const deadline    = $currentRow.find('[name^=deadline]').val();
+}
