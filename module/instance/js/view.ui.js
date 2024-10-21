@@ -26,13 +26,11 @@ window.loadDBAuthUrl = function(dom)
     );
 }
 
-const postData = new FormData();
-postData.append('idList[]', instanceID);
-window.afterPageUpdate = function()
+$(function()
 {
     if(typeof timer !== 'undefined') clearInterval(timer);
     if(inQuickon && instanceType == 'store') timer = setInterval(refreshStatus, 5000);
-}
+})
 
 window.onPageUnmount = function()
 {
@@ -41,10 +39,13 @@ window.onPageUnmount = function()
 
 function refreshStatus()
 {
+    const postData = new FormData();
+    postData.append('idList[]', instanceID);
+
     $.ajaxSubmit({
         url: $.createLink('instance', 'ajaxStatus'),
         method: 'POST',
-        data:postData,
+        data: postData,
         onComplete: function(res)
         {
             if(res.result === 'success')
