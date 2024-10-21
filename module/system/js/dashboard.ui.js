@@ -75,10 +75,9 @@ function refreshStatus()
             {
                 $.each(res.data, function(index, instance)
                 {
-                    if(statusMap[instance.id] != instance.status)
+                    if($("#instance-status-" + instance.id).data('status') != instance.status)
                     {
                         loadTable();
-                        statusMap[instance.id] = instance.status;
                         return;
                     }
                 });
