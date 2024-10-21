@@ -1348,7 +1348,7 @@ class my extends control
         }
 
         $userParams = empty($this->config->user->showDeleted) ? 'noletter|noempty|noclosed|noclosed|nodeleted' : 'noletter|noempty|noclosed|noclosed';
-        $users      = $this->user->getPairs($userParams, $mode == 'new' ? '' : $userList, $this->config->maxCount);
+        $users      = $this->user->getPairs($userParams, $mode == 'new' ? '' : $userList);
 
         $this->view->title = $this->lang->my->common . $this->lang->hyphen . $label;
         $this->view->lists = $this->user->getContactLists($this->app->user->account, 'list');

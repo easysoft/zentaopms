@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 
 /**
@@ -8,6 +9,7 @@ cid=1
 
 chdir(__DIR__);
 include '../lib/bug.ui.class.php';
+global $config;
 
 $product = zenData('product');
 $product->id->range('1-100');
@@ -40,7 +42,7 @@ $user->id->range('1-100');
 $user->dept->range('0');
 $user->account->range('admin, user1, user2');
 $user->realname->range('admin, USER1, USER2');
-$user->password->range('77839ef72f7b71a3815a77d038e267e0');
+$user->password->range($config->uitest->defaultPassword)->format('md5');
 $user->gen(3);
 
 $team = zenData('team');
@@ -64,13 +66,13 @@ $tester = new bugTester();
 $tester->login();
 
 /* 检查标签下统计数据 */
-r($tester->checkTab('allTab', '18'))       && p('message') && e('allTab下显示条数正确');
-r($tester->checkTab('unresolvedTab', '4')) && p('message') && e('unresolvedTab下显示条数正确');
+r($tester->checkTab('allTab', '18'))       && p('status,message') && e('SUCCESS,allTab下显示条数正确');
+r($tester->checkTab('unresolvedTab', '4')) && p('status,message') && e('SUCCESS,unresolvedTab下显示条数正确');
 /* 指派bug */
-r($tester->assignTo('USER1')) && p('message') && e('指派bug成功');
-r($tester->batchAssignTo())   && p('message') && e('批量指派bug成功');
+r($tester->assignTo('USER1')) && p('status,message') && e('SUCCESS,指派bug成功');
+r($tester->batchAssignTo())   && p('status,message') && e('SUCCESS,批量指派bug成功');
 /* 切换产品 */
-r($tester->switchProduct('firstProduct', '18')) && p('message') && e('切换产品查看bug成功');
-r($tester->switchProduct('secondProduct', '9')) && p('message') && e('切换产品查看bug成功');
-r($tester->switchProduct('thirdProduct', '9'))  && p('message') && e('切换产品查看bug成功');
+r($tester->switchProduct('firstProduct', '18')) && p('status,message') && e('SUCCESS,切换产品查看bug成功');
+r($tester->switchProduct('secondProduct', '9')) && p('status,message') && e('SUCCESS,切换产品查看bug成功');
+r($tester->switchProduct('thirdProduct', '9'))  && p('status,message') && e('SUCCESS,切换产品查看bug成功');
 $tester->closeBrowser();

@@ -15,6 +15,7 @@ $status = zget($cneMetrics, 'status', 'unknown');
 $cpuInfo['tip']    = trim(substr($cpuInfo['tip'], strpos($cpuInfo['tip'], '=') + 1));
 $memoryInfo['tip'] = trim(substr($memoryInfo['tip'], strpos($memoryInfo['tip'], '=') + 1));
 
+jsVar('inQuickon',      $config->inQuickon);
 jsVar('cpuInfo',        $cpuInfo);
 jsVar('memoryInfo',     $memoryInfo);
 jsVar('instanceIdList', helper::arrayColumn($instances, 'id'));

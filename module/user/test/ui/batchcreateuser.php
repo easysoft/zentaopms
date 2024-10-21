@@ -7,6 +7,15 @@ title=批量创建用户
 timeout=0
 cid=1
 
+- 批量创建正常用户
+ - 测试结果 @批量创建用户成功
+- 批量创建空用户名的用户
+ - 测试结果 @批量创建用户失败
+- 批量创建空姓名的用户
+ - 测试结果 @姓名不能为空
+- 批量创建空密码的用户
+ - 测试结果 @密码不能为空
+
 */
 chdir(__DIR__);
 include '../lib/batchcreateuser.ui.class.php';
@@ -39,9 +48,9 @@ $user3->realname        = '李娟2';
 $user3->password        = '';
 $user3->verifyPassword  = $config->uitest->defaultPassword;
 
-r($tester->batchCreateNormalUser($user))         && p('message')  && e('批量建用户成功');          // 创建用户后的跳转链接检查
-r($tester->batchCreateEmptyAccountUser($user1))  && p('message')  && e('批量创建用户失败');        // 创建用户后的跳转链接检查
-r($tester->batchCreateEmptyRealnameUser($user2)) && p('message')  && e('姓名不能为空');            // 创建用户后的跳转链接检查
-r($tester->batchCreateEmptyPasswordUser($user3)) && p('message')  && e('密码不能为空');            // 创建用户后的跳转链接检查
+r($tester->batchCreateNormalUser($user))         && p('message')  && e('批量建用户成功');          // 批量创建正常用户
+r($tester->batchCreateEmptyAccountUser($user1))  && p('message')  && e('批量创建用户失败');        // 批量创建用户名为空的用户
+r($tester->batchCreateEmptyRealnameUser($user2)) && p('message')  && e('姓名不能为空');            // 批量创建创建姓名为空的用户
+r($tester->batchCreateEmptyPasswordUser($user3)) && p('message')  && e('密码不能为空');            // 批量创建密码为空的用户
 
 $tester->closeBrowser();

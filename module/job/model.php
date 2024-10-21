@@ -118,7 +118,7 @@ class jobModel extends model
     {
         return $this->dao->select('*')->from(TABLE_JOB)
             ->where('deleted')->eq('0')
-            ->andWhere('triggerType')->eq($triggerType)
+            ->andWhere('triggerType')->like('%' . $triggerType . '%')
             ->beginIF($repoIdList)->andWhere('repo')->in($repoIdList)->fi()
             ->fetchAll('id');
     }
@@ -132,26 +132,26 @@ class jobModel extends model
      */
     public function getTriggerConfig(object $job): string
     {
-          $triggerType = zget($this->lang->job->triggerTypeList, $job->triggerType);
-          if($job->triggerType == 'tag')
-          {
-              if(empty($job->svnDir)) return $triggerType;
+        $triggerList = array();
+        if(strpos($job->triggerType, 'tag') !== false)
+        {
+            $triggerType = $this->lang->job->triggerTypeList['tag'];
+            if(!empty($job->svnDir)) $triggerType = $this->lang->job->dirChange . "({$job->svnDir})";
 
-              $triggerType = $this->lang->job->dirChange;
-              return "{$triggerType}({$job->svnDir})";
-          }
+            $triggerList[] = $triggerType;
+        }
 
-          if($job->triggerType == 'commit') return "{$triggerType}({$job->comment})";
+        if(strpos($job->triggerType, 'commit') !== false) $triggerList[] = "{$this->lang->job->triggerTypeList['commit']}({$job->comment})";
 
-          if($job->triggerType == 'schedule')
-          {
-              $atDay = '';
-              foreach(explode(',', $job->atDay) as $day) $atDay .= zget($this->lang->datepicker->dayNames, trim($day), '') . ',';
-              $atDay = trim($atDay, ',');
-              return "{$triggerType}({$atDay}, {$job->atTime})";
-          }
+        if(strpos($job->triggerType, 'schedule') !== false)
+        {
+            $atDay = '';
+            foreach(explode(',', $job->atDay) as $day) $atDay .= zget($this->lang->datepicker->dayNames, trim($day), '') . ',';
+            $atDay = trim($atDay, ',');
+            $triggerList[] = "{$this->lang->job->triggerTypeList['schedule']}({$atDay}, {$job->atTime})";
+        }
 
-          return $this->lang->job->auto;
+        return implode('; ', $triggerList);
     }
 
     /**
@@ -180,35 +180,20 @@ class jobModel extends model
      */
     public function create(object $job): int|bool
     {
-        $repo = $this->loadModel('repo')->getByID($job->repo);
-
+        $repo   = $this->loadModel('repo')->getByID($job->repo);
         $result = $this->jobTao->getServerAndPipeline($job, $repo);
         if(!$result) return false;
 
         $result = $this->jobTao->checkIframe($job);
         if(!$result) return false;
 
-        if($job->triggerType == 'schedule') $job->atDay = empty($_POST['atDay']) ? '' : implode(',', $this->post->atDay);
-
-        $this->jobTao->getSvnDir($job, $repo);
-
-        $result = $this->jobTao->getCustomParam($job);
-        if(!$result) return false;
-
         $this->dao->insert(TABLE_JOB)->data($job)
             ->batchCheck($this->config->job->create->requiredFields, 'notempty')
-            ->batchCheckIF($job->triggerType === 'schedule' and $job->atDay !== '0', "atDay", 'notempty')
-            ->batchCheckIF($job->triggerType === 'schedule', "atTime", 'notempty')
-            ->batchCheckIF($job->triggerType === 'commit', "comment", 'notempty')
-            ->batchCheckIF(($repo->SCM == 'Subversion' and $job->triggerType == 'tag'), "svnDir", 'notempty')
             ->batchCheckIF($job->frame === 'sonarqube', "sonarqubeServer,projectKey", 'notempty')
-            ->autoCheck()
             ->exec();
         if(dao::isError()) return false;
 
-        $id = $this->dao->lastInsertId();
-        if(strtolower($job->engine) == 'jenkins') $this->initJob($id, $job);
-        return $id;
+        return $this->dao->lastInsertId();
     }
 
     /**
@@ -221,28 +206,31 @@ class jobModel extends model
     public function update(int $id, object $job): bool
     {
         $repo = $this->loadModel('repo')->getByID($job->repo);
+        if($this->app->rawMethod != 'trigger')
+        {
+            $result = $this->jobTao->getServerAndPipeline($job, $repo);
+            if(!$result) return false;
 
-        $result = $this->jobTao->getServerAndPipeline($job, $repo);
-        if(!$result) return false;
+            $result = $this->jobTao->checkIframe($job, $id);
+            if(!$result) return false;
+        }
+        else
+        {
+            $this->jobTao->getSvnDir($job, $repo);
+            $result = $this->jobTao->getCustomParam($job);
+            if(!$result) return false;
+        }
 
-        if($job->triggerType == 'schedule') $job->atDay = empty($_POST['atDay']) ? '' : implode(',', $this->post->atDay);
-
-        $result = $this->jobTao->checkIframe($job, $id);
-        if(!$result) return false;
-
-        $this->jobTao->getSvnDir($job, $repo);
-
-        $result = $this->jobTao->getCustomParam($job);
-        if(!$result) return false;
-
-        $this->dao->update(TABLE_JOB)->data($job)
-            ->batchCheck($this->config->job->edit->requiredFields, 'notempty')
-            ->batchCheckIF($job->triggerType === 'schedule' and $job->atDay !== '0', "atDay", 'notempty')
-            ->batchCheckIF($job->triggerType === 'schedule', "atTime", 'notempty')
-            ->batchCheckIF($job->triggerType === 'commit', "comment", 'notempty')
-            ->batchCheckIF(($repo->SCM == 'Subversion' and $job->triggerType == 'tag'), "svnDir", 'notempty')
+        $skipFields = 'triggerType,svnDir,comment,atDay,atTime,paramName,paramValue,autoRun';
+        if($this->app->rawMethod == 'trigger') $skipFields = 'name,engine,repo,reference,frame,product,sonarqubeServer,projectKey,jkServer,jkTask,gitfoxpipeline';
+        $this->dao->update(TABLE_JOB)->data($job, $skipFields)
+            ->batchCheckIF($this->app->rawMethod != 'trigger', $this->config->job->edit->requiredFields, 'notempty')
+            ->batchCheckIF(strpos($job->triggerType, 'schedule') !== false && $job->atDay !== '0', "atDay", 'notempty')
+            ->batchCheckIF(strpos($job->triggerType, 'schedule') !== false, "atTime", 'notempty')
+            ->batchCheckIF(strpos($job->triggerType, 'commit') !== false, "comment", 'notempty')
+            ->batchCheckIF(strpos($job->triggerType, 'action') !== false, "triggerActions", 'notempty')
+            ->batchCheckIF(($repo->SCM == 'Subversion' && strpos($job->triggerType, 'tag') !== false), "svnDir", 'notempty')
             ->batchCheckIF($job->frame === 'sonarqube', "sonarqubeServer,projectKey", 'notempty')
-            ->autoCheck()
             ->where('id')->eq($id)
             ->exec();
         if(dao::isError()) return false;
@@ -262,8 +250,9 @@ class jobModel extends model
      */
     public function initJob(int $id, object $job): bool
     {
-        if(empty($id)) return false;
-        if($job->triggerType == 'schedule' and strpos($job->atDay, date('w')) !== false)
+        if(empty($id) || empty($job->triggerType)) return false;
+
+        if(strpos($job->triggerType, 'schedule') !== false && strpos($job->atDay, date('w')) !== false)
         {
             $compiles = $this->dao->select('*')->from(TABLE_COMPILE)->where('job')->eq($id)->andWhere('LEFT(createdDate, 10)')->eq(date('Y-m-d'))->fetchAll();
             foreach($compiles as $compile)
@@ -274,7 +263,7 @@ class jobModel extends model
             $this->loadModel('compile')->createByJob($id, $job->atTime, 'atTime');
         }
 
-        if($job->triggerType == 'tag')
+        if(strpos($job->triggerType, 'tag') !== false)
         {
             $repo = $this->loadModel('repo')->getByID($job->repo);
             if(!$repo) return false;
@@ -292,27 +281,33 @@ class jobModel extends model
      *
      * @param  int    $id
      * @param  array  $extraParam
+     * @param  string $triggerType  commit|tag|schedule
      * @access public
      * @return object|false
      */
-    public function exec(int $id, array $extraParam = array()): object|false
+    public function exec(int $id, array $extraParam = array(), string $triggerType = ''): object|false
     {
-        $job = $this->dao->select('t1.id,t1.name,t1.product,t1.repo,t1.server,t1.pipeline,t1.triggerType,t1.atTime,t1.customParam,t1.engine,t1.svnDir,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password')
+        $job = $this->dao->select('t1.*,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password')
             ->from(TABLE_JOB)->alias('t1')
             ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.server=t2.id')
             ->where('t1.id')->eq($id)
             ->fetch();
-
         if(!$job) return false;
+        if(($this->app->rawModule != 'job' || $this->app->rawMethod != 'exec') && !empty($job->autoRun)) return false;
 
         $repo = $this->loadModel('repo')->getByID($job->repo);
         if(!$repo) return false;
 
-        if($job->triggerType == 'schedule')
+        $method = 'exec' . ucfirst($job->engine) . 'Pipeline';
+        if(!method_exists($this, $method)) return false;
+
+        $compileID = 0;
+        if(in_array($triggerType, array('', 'schedule')) && strpos($job->triggerType, 'schedule') !== false)
         {
             $compileID = $this->loadModel('compile')->createByJob($job->id, $job->atTime, 'atTime');
         }
-        elseif($job->triggerType == 'tag')
+
+        if(!$compileID && in_array($triggerType, array('', 'tag')) && strpos($job->triggerType, 'tag') !== false)
         {
             $job->lastTag = $this->getLastTagByRepo($repo, $job);
 
@@ -325,15 +320,13 @@ class jobModel extends model
 
             $compileID = $this->loadModel('compile')->createByJob($job->id, $tag, 'tag');
         }
-        else
+
+        if(!$compileID && in_array($triggerType, array('', 'commit')) && strpos($job->triggerType, 'commit') !== false)
         {
             $compileID = $this->loadModel('compile')->createByJob($job->id);
         }
 
-        $method = 'exec' . ucfirst($job->engine) . 'Pipeline';
-        if(!method_exists($this, $method)) return false;
         $compile = $this->$method($job, $repo, $compileID, $extraParam);
-
         $this->dao->update(TABLE_COMPILE)->data($compile)->where('id')->eq($compileID)->exec();
 
         $this->dao->update(TABLE_JOB)
@@ -362,17 +355,20 @@ class jobModel extends model
         $pipeline = new stdclass();
         $pipeline->PARAM_TAG   = '';
         $pipeline->ZENTAO_DATA = "compile={$compileID}";
-        if($job->triggerType == 'tag') $pipeline->PARAM_TAG = $job->lastTag;
+        if(strpos($job->triggerType, 'tag') !== false) $pipeline->PARAM_TAG = $job->lastTag;
 
         /* Add custom parameters to the data. */
-        foreach(json_decode($job->customParam) as $paramName => $paramValue)
+        if(!empty($job->customParam))
         {
-            $paramValue = str_replace('$zentao_version',  $this->config->version, $paramValue);
-            $paramValue = str_replace('$zentao_account',  $this->app->user->account, $paramValue);
-            $paramValue = str_replace('$zentao_product',  (string)$job->product, $paramValue);
-            $paramValue = str_replace('$zentao_repopath', $repo->path, $paramValue);
+            foreach(json_decode($job->customParam) as $paramName => $paramValue)
+            {
+                $paramValue = str_replace('$zentao_version',  $this->config->version, $paramValue);
+                $paramValue = str_replace('$zentao_account',  $this->app->user->account, $paramValue);
+                $paramValue = str_replace('$zentao_product',  (string)$job->product, $paramValue);
+                $paramValue = str_replace('$zentao_repopath', $repo->path, $paramValue);
 
-            $pipeline->$paramName = $paramValue;
+                $pipeline->$paramName = $paramValue;
+            }
         }
 
         foreach($extraParam as $paramName => $paramValue)

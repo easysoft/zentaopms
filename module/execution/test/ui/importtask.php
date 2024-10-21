@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 
 /**
@@ -46,11 +47,11 @@ $taskSpec->gen(49);
 $tester = new importTaskTester();
 $tester->login();
 
-r($tester->importTask('项目1 / 已删除执行','4', '0'))  && p('message') && e('执行下拉列表执行显示正确');
-r($tester->importTask('项目1 / 未开始执行2','4'))      && p('message') && e('导入任务成功');
-r($tester->importTask('项目1 / 进行中执行', '4'))      && p('message') && e('导入任务成功');
-r($tester->importTask('项目1 / 已挂起执行', '4'))      && p('message') && e('导入任务成功');
-r($tester->importTask('项目1 / 已关闭执行', '4', '0')) && p('message') && e('执行下拉列表执行显示正确');
-r($tester->importTask('项目1 / 无任务执行', '4', '0')) && p('message') && e('执行下拉列表执行显示正确');
-r($tester->importTask('项目2 / 项目2执行', '4', '0'))  && p('message') && e('执行下拉列表执行显示正确');
+r($tester->importTask('项目1 / 已删除执行','4', '0'))  && p('status,message') && e('SUCCESS,执行下拉列表执行显示正确');
+r($tester->importTask('项目1 / 未开始执行2','4'))      && p('status,message') && e('SUCCESS,导入任务成功');
+r($tester->importTask('项目1 / 进行中执行', '4'))      && p('status,message') && e('SUCCESS,导入任务成功');
+r($tester->importTask('项目1 / 已挂起执行', '4'))      && p('status,message') && e('SUCCESS,导入任务成功');
+r($tester->importTask('项目1 / 已关闭执行', '4', '0')) && p('status,message') && e('SUCCESS,执行下拉列表执行显示正确');
+r($tester->importTask('项目1 / 无任务执行', '4', '0')) && p('status,message') && e('SUCCESS,执行下拉列表执行显示正确');
+r($tester->importTask('项目2 / 项目2执行', '4', '0'))  && p('status,message') && e('SUCCESS,执行下拉列表执行显示正确');
 $tester->closeBrowser();

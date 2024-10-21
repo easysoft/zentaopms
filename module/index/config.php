@@ -38,3 +38,4 @@ $config->index->oldPages[] = 'weekly-index';
 $config->index->oldPages[] = 'kanban-importticket';
 $config->index->oldPages[] = 'message-ajaxgetdropmenuforold';
 $config->index->oldPages[] = 'product-ajaxgetolddropmenu';
+$config->index->oldPages[] = 'project-ajaxgetolddropmenu';

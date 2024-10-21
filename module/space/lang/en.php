@@ -1,16 +1,16 @@
 <?php
 global $config;
 
-$lang->space->common          = 'Applications';
-$lang->space->browse          = 'Application List';
-$lang->space->getStoreAppInfo = 'Get application information';
+$lang->space->common          = 'Services';
+$lang->space->browse          = 'Service List';
+$lang->space->getStoreAppInfo = 'Get service information';
 $lang->space->status          = 'Status';
 $lang->space->noApps          = 'No service';
 $lang->space->defaultSpace    = 'Default space';
 $lang->space->systemSpace     = 'System space';
 $lang->space->searchInstance  = 'Search Services';
 $lang->space->upgrade         = 'Upgrade';
-$lang->space->install         = 'Add an application';
+$lang->space->install         = 'Add service';
 $lang->space->createdBy       = 'Creator';
 $lang->space->createdAt       = 'Creation time';
 $lang->space->handConfig      = 'Manual configuration';

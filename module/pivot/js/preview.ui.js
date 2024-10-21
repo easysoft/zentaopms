@@ -185,27 +185,28 @@ function diffDate(date1, date2)
  */
 renderCell = function(result, {row, col})
 {
-    if(result && col.setting.colspan)
+    if(result)
     {
         let values  = result.shift();
-        let isDrill = false;
-        if(typeof(values.type) != 'undefined' && values.type == 'a')
+        let isDrill = row.data.isDrill[col.name];
+        if(col.setting.colspan && typeof(values.type) != 'undefined' && values.type == 'a')
         {
             values = values.props['children'];
-            if(typeof(row.data['field0_colspan']) == 'undefined') isDrill = true;
+            result.push({className: 'gap-0 p-1'});
+            values.forEach((value, index) =>
+              result.push({
+                html: value || !Number.isNaN(value) ? (isDrill && index == 0 ? "<a href='#'>" + `${value}` + '</a>' : `${value}`) : '&nbsp;',
+                className: 'flex justify-center items-center h-full w-1/2' + (index == 0 ? ' border-r': ''),
+                style: 'border-color: var(--dtable-border-color)'
+              })
+            );
         }
-
-        result.push({className: 'gap-0 px-0'});
-        values.forEach((value, index) =>
-          result.push({
-            html: value || !Number.isNaN(value) ? (isDrill && index == 0 ? "<a href='#'>" + `${value}` + '</a>' : `${value}`) : '&nbsp;',
-            className: 'flex justify-center items-center h-full w-1/2' + (index == 0 ? ' border-r': ''),
-            style: 'border-color: var(--dtable-border-color)'
-          })
-        );
+        else
+        {
+            if(!isDrill && values?.type == 'a') values = values.props.children;
+            result.push(values);
+        }
     }
-
-    if(typeof(row.data['field0_colspan']) != 'undefined' && !Array.isArray(row.data[col.name])) result[0] = row.data[col.name];
 
     return result;
 }

@@ -34,17 +34,12 @@ window.renderInstanceList = function (result, {col, row, value})
     return result;
 }
 
-const postData  = new FormData();
-if(idList.length > 0)
-{
-    idList.forEach(function(id){postData.append('idList[]', id)});
-}
-window.afterPageUpdate = function()
+$(function()
 {
     if(typeof timer !== 'undefined') clearInterval(timer);
     if(idList.length === 0) return;
     if(inQuickon) timer = setInterval(refreshStatus, 5000);
-}
+});
 
 window.onPageUnmount = function()
 {
@@ -53,10 +48,16 @@ window.onPageUnmount = function()
 
 function refreshStatus()
 {
+    const postData  = new FormData();
+    if(idList.length > 0)
+    {
+        idList.forEach(function(id){postData.append('idList[]', id)});
+    }
+
     $.ajaxSubmit({
         url: $.createLink('instance', 'ajaxStatus'),
         method: 'POST',
-        data:postData,
+        data: postData,
         onComplete: function(res)
         {
             if(res.result === 'success')

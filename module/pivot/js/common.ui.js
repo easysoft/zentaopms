@@ -14,6 +14,7 @@ window.clickCell = function(col, {colName, rowInfo})
     let status       = 'published';
 
     if(Array.isArray(value)) value = value[0];
+    value = (value + '').replace('%', '');
 
     if(Array.isArray(drillConditions) && drillConditions.length)
     {
@@ -57,7 +58,7 @@ window.getFilterValues = function()
             filterValues[
                 index] = $filter.find('input').val();
         }
-        else if($filter.hasClass('filter-select'))
+        else if($filter.hasClass('filter-select') || $filter.hasClass('filter-multipleselect'))
         {
             const value = $filter.find('.pick-value').val();
             filterValues[index] = Array.isArray(value) ? value.reduce((obj, value, index) => ({...obj,[index]: value}), {}) : value;

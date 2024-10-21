@@ -32,7 +32,8 @@ featureBar
 $canCreate  = hasPriv('job', 'create');
 $createItem = array('text' => $lang->job->create, 'url' => inLink('create', "repoID={$repoID}"), 'class' => 'primary', 'icon' => 'plus');
 
-$tableData = initTableData($jobList, $config->job->dtable->fieldList, $this->job);
+$cols = $this->loadModel('datatable')->getSetting('job');
+$tableData = initTableData($jobList, $cols, $this->job);
 
 toolbar
 (
@@ -44,7 +45,8 @@ jsVar('canBrowseProject', common::hasPriv('job', 'browseProject'));
 
 dtable
 (
-    set::cols($config->job->dtable->fieldList),
+    set::customCols(true),
+    set::cols($cols),
     set::data($tableData),
     set::sortLink(createLink('job', 'browse', "repoID={$repoID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::orderBy($orderBy),

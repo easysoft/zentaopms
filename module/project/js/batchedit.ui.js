@@ -7,7 +7,7 @@ let batchIgnoreTips = [];
  * @access public
  * @return void
  */
-function batchComputeWorkDays()
+window.batchComputeWorkDays = function()
 {
     const $tr = $(this).closest('tr');
     if($tr.find('div[data-longtime="1"]').length > 0) return false;

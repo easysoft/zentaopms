@@ -152,6 +152,24 @@ class tester extends result
         $this->webdriver  = new webdriver($config->uitest->chrome);
         $this->page       = new page($this->webdriver);
         $this->cookieFile = '/tmp/cookie';
+
+        // 设置异常处理函数
+        set_exception_handler(array($this, 'exceptionHandler'));
+    }
+
+    /**
+     * Exception handler.
+     *
+     * @param  int    $e
+     * @access public
+     * @return void
+     */
+    public function exceptionHandler($e)
+    {
+        print("异常信息: \n");
+        print($e->getMessage() . "\n");
+
+        if($this->config->uitest->exitBrowserOnException) $this->closeBrowser();
     }
 
     /**

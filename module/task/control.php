@@ -232,6 +232,7 @@ class task extends control
             $this->locate($url);
         }
 
+        $this->taskZen->setMenu($executionID);
         $this->taskZen->assignBatchEditVars($executionID);
     }
 

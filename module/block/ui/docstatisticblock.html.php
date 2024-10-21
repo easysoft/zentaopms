@@ -26,18 +26,10 @@ namespace zin;
   </div>
   <div class='flex flex-column created'>
     <div class='flex'>
-      <?php if(common::hasPriv('doc', 'mySpace')):?>
-      <a class="tile" href="<?php echo $this->createLink('doc', 'mySpace', 'type=createdBy');?>">
-      <?php else:?>
       <div class="tile">
-      <?php endif;?>
         <div class="tile-amount"><?php echo (int)$statistic->myDocs;?></div>
         <div class="tile-title"><?php echo $lang->doc->docCreated;?></div>
-      <?php if(common::hasPriv('doc', 'mySpace')):?>
-      </a>
-      <?php else:?>
       </div>
-      <?php endif;?>
       <div class="tile">
         <div class="tile-amount"><?php echo (int)$statistic->myDoc->docViews;?></div>
         <div class="tile-title"><?php echo $lang->doc->docViews;?></div>

@@ -45,42 +45,43 @@ window.renderInstanceList = function (result, {col, row, value})
     return result;
 }
 
-var timer = null;
-window.afterPageUpdate = function()
+$(function()
 {
-    if(timer) return;
-    const postData = new FormData();
+    if(typeof timer !== 'undefined') clearInterval(timer);
     if(instanceIdList.length === 0) return;
-    instanceIdList.forEach(function(id)
+    if(inQuickon) timer = setInterval(refreshStatus, 5000);
+});
+
+window.onPageUnmount = function()
+{
+    if(typeof timer !== 'undefined') clearInterval(timer);
+}
+
+function refreshStatus()
+{
+    const postData  = new FormData();
+    if(instanceIdList.length > 0)
     {
-        postData.append('idList[]', id)
-    });
-    timer = setInterval(function()
-    {
-        $.ajaxSubmit({
-            url: $.createLink('instance', 'ajaxStatus'),
-            method: 'POST',
-            data:postData,
-            onComplete: function(res)
+        instanceIdList.forEach(function(id){postData.append('idList[]', id)});
+    }
+
+    $.ajaxSubmit({
+        url: $.createLink('instance', 'ajaxStatus'),
+        method: 'POST',
+        data: postData,
+        onComplete: function(res)
+        {
+            if(res.result === 'success')
             {
-                if(res.result != 'success') return;
-                if(res.data.length == 0) clearInterval(timer);
                 $.each(res.data, function(index, instance)
                 {
                     if($("#instance-status-" + instance.id).data('status') != instance.status)
                     {
-                        clearInterval(timer);
                         loadTable();
+                        return;
                     }
                 });
             }
-        });
-    }, 10000);
-}
-
-window.onPageUnmount = function()
-{
-    if(timer == null) return;
-    timer = null;
-    clearInterval(timer);
+        }
+    });
 }

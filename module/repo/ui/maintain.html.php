@@ -86,7 +86,7 @@ foreach($repos as $repo)
 \zin\featureBar
 (
     set::current('all'),
-    set::queryMenuLinkCallback(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink)),
+    set::queryMenuLinkCallback(array(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink))),
     li(searchToggle(set::module('repo'), set::open($type == 'bySearch')))
 );
 

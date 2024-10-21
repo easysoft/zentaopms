@@ -82,7 +82,7 @@ panel
         ),
         toolbar
         (
-            btn
+            hasPriv('holiday', 'create') ? btn
             (
                 setClass('btn primary'),
                 set::icon('plus'),
@@ -90,7 +90,7 @@ panel
                 set('data-toggle', 'modal'),
                 set('data-size', 'sm'),
                 $lang->holiday->create
-            )
+            ) : null
         )
     ),
     dtable

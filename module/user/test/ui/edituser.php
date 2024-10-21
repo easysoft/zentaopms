@@ -7,6 +7,10 @@ title=编辑用户
 timeout=0
 cid=2
 
+- 编辑用户成功
+ -属性module@company
+ -属性method@browse
+
 */
 chdir(__DIR__);
 include '../lib/edituser.ui.class.php';
@@ -21,6 +25,6 @@ $user->confirmPassword = '123456';
 $user->realname        = '李娟娟';
 $user->verifyPassword  = $config->uitest->defaultPassword;
 
-r($tester->checkLocating($user)) && p('module,method')  && e('company,browse');                     //编辑用户后的跳转链接检查
+r($tester->checkLocating($user)) && p('module,method')  && e('company,browse');                     //编辑用户成功
 
 $tester->closeBrowser();

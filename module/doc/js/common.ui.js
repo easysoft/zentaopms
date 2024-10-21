@@ -188,8 +188,9 @@ window.loadObjectModules = function(e)
 
     if(objectType == 'space')
     {
-        objectType = objectID == 'mine' ? 'mine' : 'custom';
-        if(objectID == 'mine') objectID = 0;;
+        let targetSpace = objectID.split('.');
+        objectType = targetSpace[0];
+        objectID   = targetSpace[1];
     }
 
     if(objectType == 'execution' && objectID == 0)

@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 
 /**
@@ -8,6 +9,7 @@ cid=1
 
 chdir(__DIR__);
 include '../lib/storyestimate.ui.class.php';
+global $config;
 
 $product = zenData('product');
 $product->id->range('1');
@@ -74,7 +76,7 @@ $user->id->range('1-100');
 $user->dept->range('0');
 $user->account->range('admin, user1, user2');
 $user->realname->range('admin, USER1, USER2');
-$user->password->range('77839ef72f7b71a3815a77d038e267e0');
+$user->password->range($config->uitest->defaultPassword)->format('md5');
 $user->gen(3);
 
 $team = zenData('team');
@@ -97,9 +99,9 @@ $estimate = array(
 $tester = new storyEstimateTester();
 $tester->login();
 
-r($tester->storyEstimate($estimate[0], '1'))          && p('message') && e('估算成功');
-r($tester->storyEstimate($estimate[1], '2'))          && p('message') && e('估算成功');
-r($tester->checkErrorInfo($estimate[2], 'notNumber')) && p('message') && e('估算值为非数字提示成功');
-r($tester->checkErrorInfo($estimate[3], 'negative'))  && p('message') && e('估算值为负数提示成功');
-r($tester->noTeamInfo())                              && p('message') && e('没有团队成员提示成功');
+r($tester->storyEstimate($estimate[0], '1'))          && p('status,message') && e('SUCCESS,估算成功');
+r($tester->storyEstimate($estimate[1], '2'))          && p('status,message') && e('SUCCESS,估算成功');
+r($tester->checkErrorInfo($estimate[2], 'notNumber')) && p('status,message') && e('SUCCESS,估算值为非数字提示成功');
+r($tester->checkErrorInfo($estimate[3], 'negative'))  && p('status,message') && e('SUCCESS,估算值为负数提示成功');
+r($tester->noTeamInfo())                              && p('status,message') && e('SUCCESS,没有团队成员提示成功');
 $tester->closeBrowser();

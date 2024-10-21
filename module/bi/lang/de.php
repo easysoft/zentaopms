@@ -59,6 +59,13 @@ $lang->bi->aggFieldTip   = 'The aggregation function operation is configured for
 $lang->bi->aggTipA = 'For %s';
 $lang->bi->aggTipB = 'calculate, Rename to %s';
 
+$lang->bi->fieldTypeList = array();
+$lang->bi->fieldTypeList['string'] = 'String';
+$lang->bi->fieldTypeList['number'] = 'Number';
+$lang->bi->fieldTypeList['date']   = 'Date';
+$lang->bi->fieldTypeList['option'] = 'Option';
+$lang->bi->fieldTypeList['object'] = 'Object';
+
 $lang->bi->aggList = array();
 $lang->bi->aggList['count']         = 'Count';
 $lang->bi->aggList['countdistinct'] = 'Count Distinct';

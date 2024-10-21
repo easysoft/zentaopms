@@ -205,7 +205,7 @@ class thinkStepMenu extends wg
         );
         $options  = $item->type === 'question' ? json_decode($item->options) : null;
         $linkType = !empty($options) && ($options->questionType == 'checkbox' || $options->questionType === 'radio' || $options->questionType === 'multicolumn');
-        $linkItem = ($canLink && $linkType && $options->required) ? array(
+        $linkItem = ($canLink && $linkType && !empty($options->required)) ? array(
             'key'          => 'linkNode',
             'icon'         => 'link',
             'text'         => $this->lang->thinkstep->actions['link'],
@@ -220,6 +220,7 @@ class thinkStepMenu extends wg
             'innerClass'   => 'text-gray opacity-50',
             'hint'         => $this->lang->thinkstep->tips->linkBlocks
         );
+        $linkType = !empty($item->type == 'question') && isset($options->questionType) && in_array($options->questionType, array('checkbox', 'radio', 'multicolumn'));
 
         $menus = array_merge($menus, array(
             $canEdit ? array(
@@ -229,7 +230,7 @@ class thinkStepMenu extends wg
                 'url'  => createLink('thinkstep', 'edit', "marketID={$marketID}&stepID={$item->id}")
             ) : null,
             $canDelete ? $deleteItem : null,
-            $wizard->model === '3c' && $item->type == 'question' && $canLink ? $linkItem : null
+            $wizard->model === '3c' && $linkType && $canLink ? $linkItem : null
         ), $transitionAction);
 
         if($canCreate && (($showQuestionOfNode && $item->type == 'node') || $item->hasSameQuestion || $item->type == 'question')) $menus = array_merge($menus, array(

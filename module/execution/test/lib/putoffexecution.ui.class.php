@@ -39,9 +39,16 @@ class putoffExecutionTester extends tester
         $form = $this->loadPage();
 
         if($form->dom->putoffSubmit === true) return $this->failed('延期失败');
-        if($form->dom->status->getText() != $status) return $this->failed('执行状态错误');
+        if(strtotime($form->dom->plannedEnd->getText()) >= strtotime(date("Y-m-d")))
+        {
+            if($form->dom->status->getText() != $status) return $this->failed('执行状态错误');
+        }
+        else
+        {
+            if($form->dom->status->getText() != $this->lang->execution->statusSelects->delayed) return $this->failed('执行状态错误');
+        }
         if(isset($execution['begin']) && $form->dom->plannedBegin->getText() != $execution['begin']) return $this->failed('计划开始时间错误');
-        if(isset($execution['end']) && $form->dom->plannedEnd->getText() != $execution['end']) return $this->failed('计划完成时间错误');
+        if(isset($execution['end']) && $execution['end'] != '' && $form->dom->plannedEnd->getText() != $execution['end']) return $this->failed('计划完成时间错误');
         return $this->success('延期执行成功');
     }
 

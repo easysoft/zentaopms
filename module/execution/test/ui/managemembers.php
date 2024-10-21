@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 
 /**
@@ -8,6 +9,7 @@ cid=1
 
 chdir(__DIR__);
 include '../lib/managemembers.ui.class.php';
+global $config;
 
 $project = zenData('project');
 $project->id->range('1-2');
@@ -62,7 +64,7 @@ $user->id->range('1-100');
 $user->dept->range('0, 1{2}, 2{3}, 3{5}');
 $user->account->range('admin, user1, user2, user3, user4, user5, user11, user12, user13, user14, user15');
 $user->realname->range('admin, USER1, USER2, USER3, USER4, USER5, USER11, USER12, USER13, USER14, USER15');
-$user->password->range('77839ef72f7b71a3815a77d038e267e0');
+$user->password->range($config->uitest->defaultPassword)->format('md5');
 $user->gen(11);
 
 $tester = new manageMembersTester();
@@ -90,9 +92,9 @@ $execution = array(
         'membersExpect' => '3',
     ),
 );
-r($tester->add($execution['0']))    && p('message') && e('添加团队成员成功'); //添加团队成员
-r($tester->delete($execution['1'])) && p('message') && e('删除团队成员成功'); //删除团队成员
-r($tester->remove($execution['2'])) && p('message') && e('移除团队成员成功'); //移除团队成员
-r($tester->copyDeptMembers($execution['3'])) && p('message') && e('复制部门成员成功'); //复制部门成员
-r($tester->copyTeamMembers($execution['4'])) && p('message') && e('复制团队成员成功'); //复制团队成员
+r($tester->add($execution['0']))             && p('status,message') && e('SUCCESS,添加团队成员成功'); //添加团队成员
+r($tester->delete($execution['1']))          && p('status,message') && e('SUCCESS,删除团队成员成功'); //删除团队成员
+r($tester->remove($execution['2']))          && p('status,message') && e('SUCCESS,移除团队成员成功'); //移除团队成员
+r($tester->copyDeptMembers($execution['3'])) && p('status,message') && e('SUCCESS,复制部门成员成功'); //复制部门成员
+r($tester->copyTeamMembers($execution['4'])) && p('status,message') && e('SUCCESS,复制团队成员成功'); //复制团队成员
 $tester->closeBrowser();

@@ -106,7 +106,7 @@ class jobTao extends jobModel
     protected function getSvnDir(object &$job, object $repo): void
     {
         $job->svnDir = '';
-        if($job->triggerType == 'tag' and $repo->SCM == 'Subversion')
+        if(strpos($job->triggerType, 'tag') !== false && $repo->SCM == 'Subversion')
         {
             $job->svnDir = array_pop($_POST['svnDir']);
             if($job->svnDir == '/' and $_POST['svnDir']) $job->svnDir = array_pop($_POST['svnDir']);

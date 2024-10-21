@@ -1,10 +1,7 @@
 window.changeSpace = function(e)
 {
     let selectedSpace = $(e.target).val();
-    if((selectedSpace == 'mine' && targetSpace != 'mine') || (selectedSpace != 'mine' && targetSpace == 'mine'))
-    {
-        loadModal($.createLink('doc', 'moveLib', "libID=" + libID + "&targetSpace=" + selectedSpace));
-    }
+    loadModal($.createLink('doc', 'moveLib', "libID=" + libID + "&targetSpace=" + selectedSpace));
 };
 
 window.toggleLibAcl = function(e)

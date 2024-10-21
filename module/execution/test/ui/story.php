@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 
 /**
@@ -8,6 +9,7 @@ cid=1
 
 chdir(__DIR__);
 include '../lib/story.ui.class.php';
+global $config;
 
 $product = zenData('product');
 $product->id->range('1');
@@ -74,7 +76,7 @@ $user->id->range('1-100');
 $user->dept->range('0');
 $user->account->range('admin, user1, user2');
 $user->realname->range('admin, USER1, USER2');
-$user->password->range('77839ef72f7b71a3815a77d038e267e0');
+$user->password->range($config->uitest->defaultPassword)->format('md5');
 $user->gen(3);
 
 $team = zenData('team');
@@ -89,20 +91,20 @@ $tester = new storyTester();
 $tester->login();
 
 /* 标签统计 */
-r($tester->checkTab('allTab', '15'))      && p('message') && e('allTab下显示条数正确');       //检查全部标签下显示条数
-r($tester->checkTab('unclosedTab', '12')) && p('message') && e('unclosedTab下显示条数正确');  //检查未关闭标签下显示条数
-r($tester->checkTab('draftTab', '3'))     && p('message') && e('draftTab下显示条数正确');     //检查草稿标签下显示条数
-r($tester->checkTab('reviewingTab', '3')) && p('message') && e('reviewingTab下显示条数正确'); //检查评审中标签下显示条数
+r($tester->checkTab('allTab', '15'))      && p('status,message') && e('SUCCESS,allTab下显示条数正确');       //检查全部标签下显示条数
+r($tester->checkTab('unclosedTab', '12')) && p('status,message') && e('SUCCESS,unclosedTab下显示条数正确');  //检查未关闭标签下显示条数
+r($tester->checkTab('draftTab', '3'))     && p('status,message') && e('SUCCESS,draftTab下显示条数正确');     //检查草稿标签下显示条数
+r($tester->checkTab('reviewingTab', '3')) && p('status,message') && e('SUCCESS,reviewingTab下显示条数正确'); //检查评审中标签下显示条数
 /* 移除需求 */
-r($tester->unlinkStory())       && p('message') && e('需求移除成功');     //移除需求
-r($tester->batchUnlinkStory())  && p('message') && e('需求批量移除成功'); //批量移除需求
+r($tester->unlinkStory())       && p('status,message') && e('SUCCESS,需求移除成功');     //移除需求
+r($tester->batchUnlinkStory())  && p('status,message') && e('SUCCESS,需求批量移除成功'); //批量移除需求
 /* 批量编辑阶段 */
-r($tester->batchEditPhase('draft', 'testing'))    && p('status,message') && e('success,批量编辑draft阶段成功');     //编辑草稿状态的需求的阶段为测试中
-r($tester->batchEditPhase('reviewing', 'wait'))   && p('status,message') && e('success,批量编辑reviewing阶段成功'); //编辑评审中状态的需求的阶段为未开始
-r($tester->batchEditPhase('active', 'verified'))  && p('status,message') && e('success,批量编辑active阶段成功');    //编辑激活状态的需求的阶段为已验收
-r($tester->batchEditPhase('changing', 'planned')) && p('status,message') && e('success,批量编辑changing阶段成功');  //编辑变更中状态的需求的阶段为已计划
-r($tester->batchEditPhase('closed', 'rejected'))  && p('status,message') && e('success,批量编辑closed阶段成功');    //编辑已关闭状态的需求的阶段为验收失败
+r($tester->batchEditPhase('draft', 'testing'))    && p('status,message') && e('SUCCESS,批量编辑draft阶段成功');     //编辑草稿状态的需求的阶段为测试中
+r($tester->batchEditPhase('reviewing', 'wait'))   && p('status,message') && e('SUCCESS,批量编辑reviewing阶段成功'); //编辑评审中状态的需求的阶段为未开始
+r($tester->batchEditPhase('active', 'verified'))  && p('status,message') && e('SUCCESS,批量编辑active阶段成功');    //编辑激活状态的需求的阶段为已验收
+r($tester->batchEditPhase('changing', 'planned')) && p('status,message') && e('SUCCESS,批量编辑changing阶段成功');  //编辑变更中状态的需求的阶段为已计划
+r($tester->batchEditPhase('closed', 'rejected'))  && p('status,message') && e('SUCCESS,批量编辑closed阶段成功');    //编辑已关闭状态的需求的阶段为验收失败
 /* 指派 */
-r($tester->assignTo('USER1'))  && p('message') && e('指派成功');     //单个指派
-r($tester->batchAssignTo())    && p('message') && e('批量指派成功'); //批量指派
+r($tester->assignTo('USER1'))  && p('status,message') && e('SUCCESS,指派成功');     //单个指派
+r($tester->batchAssignTo())    && p('status,message') && e('SUCCESS,批量指派成功'); //批量指派
 $tester->closeBrowser();

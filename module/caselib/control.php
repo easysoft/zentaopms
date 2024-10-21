@@ -414,6 +414,8 @@ class caselib extends control
             $file = $this->loadModel('file')->getUpload('file');
             $file = $file[0];
 
+            if(!$file || (isset($file['extension']) && $file['extension'] != 'csv')) return $this->send(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormat));
+
             $fileName = $this->file->savePath . $this->file->getSaveName($file['pathname']);
             move_uploaded_file($file['tmpname'], $fileName);
 

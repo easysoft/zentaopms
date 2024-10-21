@@ -20,12 +20,7 @@ class ciModel extends model
      */
     public function setMenu(int $repoID = 0)
     {
-        if($repoID)
-        {
-            if(!session_id()) session_start();
-            $this->session->set('repoID', $repoID);
-            session_write_close();
-        }
+        if($repoID) $this->session->set('repoID', $repoID);
 
         $homeMenuModule = array('gitlab', 'gogs', 'gitea', 'jenkins', 'sonarqube');
         if(!in_array("{$this->app->moduleName}", $homeMenuModule)) common::setMenuVars('devops', (int)$this->session->repoID);
@@ -107,7 +102,7 @@ class ciModel extends model
             $jenkinsServer = strpos($compile->pipeline, '/job/') === 0 ? $jenkinsServer . $compile->pipeline : $jenkinsServer . '/job/' . $compile->pipeline;
             $infoUrl       = sprintf("%s/api/xml?tree=builds[id,number,result,queueId]&xpath=//build[queueId=%s]", $jenkinsServer, $compile->queue);
             $response      = common::http($infoUrl, '', array(CURLOPT_USERPWD => $userPWD));
-            if($response)
+            if($response && strpos($response, "<") === 0)
             {
                 $buildInfo = simplexml_load_string($response);
                 if(empty($buildInfo)) return false;

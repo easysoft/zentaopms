@@ -357,7 +357,7 @@ class taskModel extends model
         /* Multi-task change to normal task. */
         if($task->mode == 'single') $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->exec();
 
-        if(isset($task->version) && $task->version > $oldTask->version) $this->taskTao->recordTaskVersion($task);
+        if(isset($task->version) && $task->version > $oldTask->version) $this->recordTaskVersion($task);
 
         /* Compute task's story stage. */
         $this->loadModel('story')->setStage($task->story);
@@ -961,7 +961,11 @@ class taskModel extends model
 
         if(dao::isError()) return false;
 
-        if($createAction) $this->loadModel('action')->create('task', $taskID, 'Opened', '');
+        if($createAction)
+        {
+            $this->loadModel('action')->create('task', $taskID, 'Opened', '');
+            if(!empty($task->assignedTo)) $this->action->create('task', $taskID, 'Assigned', '', $task->assignedTo);
+        }
         $this->loadModel('file')->updateObjectID($this->post->uid, $taskID, 'task');
         $this->loadModel('score')->create('task', 'create', $taskID);
         if(dao::isError()) return false;
@@ -2319,12 +2323,13 @@ class taskModel extends model
         $minStatus = 'done';
         $teamList  = array_filter($teamData->team);
         $teams     = array();
+        $order     = 1;
         foreach($teamList as $index => $account)
         {
             /* Set member information. */
             $member = new stdclass();
             $member->task     = $task->id;
-            $member->order    = $index;
+            $member->order    = $order;
             $member->account  = $account;
             $member->estimate = isset($teamData->teamEstimate) ? (float)zget($teamData->teamEstimate, $index, 0.00) : 0.00;
             $member->consumed = isset($teamData->teamConsumed) ? (float)zget($teamData->teamConsumed, $index, 0.00) : 0.00;
@@ -2354,6 +2359,8 @@ class taskModel extends model
             $this->taskTao->setTeamMember($member, $mode, isset($teams[$account]));
             if(dao::isError()) return false;
             $teams[$account] = $account;
+
+            $order ++;
         }
         return $teams;
     }
@@ -2546,9 +2553,11 @@ class taskModel extends model
         $today = helper::today();
 
         /* Delayed or not?. */
-        if(in_array($task->status, $this->config->task->unfinishedStatus) && !empty($task->deadline) && !helper::isZeroDate($task->deadline))
+        if(!empty($task->deadline) && !helper::isZeroDate($task->deadline))
         {
-            $delay = helper::diffDate($today, $task->deadline);
+            $finishedDate = ($task->status == 'done' || $task->status == 'closed') && $task->finishedDate ? substr($task->finishedDate, 0, 10) : $today;
+            $actualDays   = $this->loadModel('holiday')->getActualWorkingDays($task->deadline, $finishedDate);
+            $delay        = count($actualDays);
             if($delay > 0) $task->delay = $delay;
         }
 

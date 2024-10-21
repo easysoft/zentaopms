@@ -1687,7 +1687,7 @@ class baseRouter
             $controlFile = $this->controlFile;
             spl_autoload_register(function($class) use ($moduleName, $controlFile)
             {
-                if($class == $moduleName) include $controlFile;
+                if($class == $moduleName) helper::import($controlFile);
             });
         }
 

@@ -31,7 +31,7 @@ $tester->login();
 
 $realEnd = array(date('Y-m-d', strtotime('+20 days')), date('Y-m-d'), date('Y-m-d', strtotime('-4 days')));
 
-r($tester->closeWithGreaterDate($realEnd[0])) && p('message') && e('关闭执行表单页提示信息正确');
-r($tester->close($realEnd[1]))                && p('message') && e('关闭执行成功');
-r($tester->closeWithLessDate($realEnd[2]))    && p('message') && e('关闭执行表单页提示信息正确');
+r($tester->closeWithGreaterDate($realEnd[0])) && p('status,message') && e('SUCCESS,关闭执行表单页提示信息正确');
+r($tester->close($realEnd[1]))                && p('status,message') && e('SUCCESS,关闭执行成功');
+r($tester->closeWithLessDate($realEnd[2]))    && p('status,message') && e('SUCCESS,关闭执行表单页提示信息正确');
 $tester->closeBrowser();

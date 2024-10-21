@@ -32,14 +32,21 @@ foreach($spaces as $id => $name)
  * 定义每个分组名称信息，包括可展开的已关闭分组。
  * Define every group name, include expanded group.
  */
-$tabs = array();
+$tabs   = array();
 $tabs[] = array('name' => 'normal', 'text' => '');
 
 /**
  * 定义最终的 JSON 数据。
  * Define the final json data.
  */
-$link = $this->createLink('doc', 'teamSpace', "objectID=%s");
+if($extra == 'doctemplate')
+{
+    $link = $this->createLink('doctemplate', 'browse', "objectID=%s");
+}
+else
+{
+    $link = $this->createLink('doc', 'teamSpace', "objectID=%s");
+}
 
 $json = array();
 $json['data']       = $data;

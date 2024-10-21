@@ -1186,12 +1186,12 @@ class myModel extends model
 
         $this->loadModel('flow');
         $this->loadModel('workflowaction');
-        $flows       = $this->dao->select('module,`table`,name,titleField')->from(TABLE_WORKFLOW)->where('module')->in(array_keys($objectIdList))->andWhere('buildin')->eq(0)->fetchAll('module');
+        $flows       = $this->dao->select('module,`table`,name,titleField')->from(TABLE_WORKFLOW)->where('module')->in(array_keys($objectIdList))->fetchAll('module');
         $objectGroup = array();
         foreach($objectIdList as $objectType => $idList)
         {
-            $table = zget($this->config->objectTables, $objectType, '');
-            if(empty($table) && isset($flows[$objectType])) $table = $flows[$objectType]->table;
+            if(!isset($flows[$objectType])) continue;
+            $table = zget($this->config->objectTables, $objectType, $flows[$objectType]->table);
             if(empty($table)) continue;
 
             $objectGroup[$objectType] = $this->dao->select('*')->from($table)->where('id')->in($idList)->fetchAll('id');

@@ -50,7 +50,7 @@ class bugZen extends bug
             {
                 $locate    = array('load' => true);
                 $loginLink = $this->createLink('user', 'login');
-                if($this->server->http_referer && strpos($this->server->http_referer, $loginLink) !== false) $locate = $this->createLink('bug', 'index');
+                if($this->server->http_referer && (strpos($this->server->http_referer, $loginLink) !== false || strpos($this->server->http_referer, 'index'))) $locate = $this->createLink('bug', 'browse');
                 return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->bug->notice->executionAccessDenied, 'locate' => $locate)));
             }
         }
@@ -118,6 +118,7 @@ class bugZen extends bug
         /* Check required fields of resolving bug. */
         foreach(explode(',', $this->config->bug->resolve->requiredFields) as $requiredField)
         {
+            if($requiredField == 'resolvedBuild') continue;
             if(!isset($bug->{$requiredField}) or strlen(trim($bug->{$requiredField})) == 0)
             {
                 $fieldName = $requiredField;

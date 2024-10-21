@@ -1,0 +1,59 @@
+version: 1
+kind: pipeline
+spec:
+  stages:
+    - name: 全量UI自动化测试
+      type: ci
+      spec:
+        clone:
+          depth: 2
+        vars:
+        - type: stage
+          name: prepare
+        steps:
+        - name: 构建测试镜像
+          type: run
+          spec:
+            container:
+              image: hub.zentao.net/ci/docker:24.0.8-cli
+            script:
+              - |
+                docker buildx create \
+                   --name=kube \
+                   --driver=kubernetes \
+                   --driver-opt=namespace=quickon-ci,replicas=5,nodeselector="node-role.kubernetes.io/ci=true",rootless=true,image=hub.zentao.net/ci/moby-buildkit:buildx-stable-1-rootless,qemu.install=true,qemu.image=hub.zentao.net/ci/binfmt:qemu-v8.1.5
+              - docker buildx use kube
+              - docker buildx build --pull --push --platform linux/amd64 --build-arg VERSION=${ZENTAO_VERSION} --build-arg MIRROR=true -t hub.qc.oop.cc/zentao-ztf-ui:${GITFOX_BUILD_NUMBER}-${GITFOX_COMMIT} -f misc/ci/Dockerfile.uitest .
+        - name: ui test
+          type: run
+          spec:
+            envs:
+              MYSQL_INTERNAL: "true"
+            container:
+              image: hub.qc.oop.cc/zentao-ztf-ui:${{ build.number }}-${{ build.after }}
+            script:
+              - sh -c 'nohup /usr/bin/entrypoint.sh >/dev/null 2>&1 &'
+              - sh -c 'nohup chromedriver --whitelisted-ips --port=9515 > /tmp/chromedriver.$$.log &'
+              - . /etc/s6/s6-init/envs
+              - sleep 5
+              - s6-svwait -u -t 30000 /etc/s6/s6-available/mysql
+              - init_ui.php
+              - cd /apps/zentao/test/lib/webdriver/ ; composer install
+              - runalluitest.php
+        - name: 消息通知
+          type: plugin
+          when: failure()
+          spec:
+            inputs:
+              debug: true
+              custom: true
+              token: ${{ secrets.get("xuan_token") }}
+              caller: zenci
+              api: https://gw.easycorp.cn
+              title: UI自动化测试
+              content: "UI自动化测试失败"
+              url: ${GITFOX_BUILD_LINK}
+              users:
+                "0": "liyang"
+                "1": "{{.GITFOX_COMMIT_AUTHOR_NAME}}"
+            name: gitfox-xuanim-plugin

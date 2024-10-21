@@ -115,7 +115,11 @@
             if(DEBUG) showLog('Update', [code, title], {state, code, url, title});
             return state;
         },
-        updateAppUrl:      function(url, title){return $.apps.updateApp(currentCode, url, title)},
+        updateAppUrl: function(url, title)
+        {
+            currentAppUrl = url;
+            return $.apps.updateApp(currentCode, url, title);
+        },
         isOldPage:         () => false,
         reloadApp:         function(_code, url){loadPage(url);},
         openApp:           function(url, options){loadPage(url, options);},
@@ -160,7 +164,7 @@
         if($bar.length) return;
 
         $bar = $('<div id="zinbar"></div>').insertAfter('body');
-        zinbar = new zui.Zinbar($bar[0]);
+        zinbar = new zui.Zinbar($bar[0], typeof window.zin.zinTool === 'object' ? window.zin.zinTool : {});
     }
 
     function registerTimer(callback, time, type)
@@ -194,7 +198,7 @@
         if(window.onPageUnmount) window.onPageUnmount();
         $(document).trigger('pageunmount.app');
 
-        ['beforePageLoad', 'beforeRequestContent', 'onPageUnmount', 'beforePageUpdate', 'afterPageUpdate', 'onPageRender'].forEach(key =>
+        ['beforePageLoad', 'beforeRequestContent', 'onPageUnmount', 'beforePageUpdate', 'afterPageUpdate', 'onPageRender', 'afterPageRender'].forEach(key =>
         {
             if(window[key]) delete window[key];
         });
@@ -488,6 +492,7 @@
             updatePageLayout();
             $('html').enableScroll();
         }
+        if(window.afterPageRender) window.afterPageRender(list, options);
         if(!options.partial)
         {
             const newState = $.apps.updateApp(currentCode, currentAppUrl, document.title);

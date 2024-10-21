@@ -1,7 +1,7 @@
 <?php
 $lang->job->common        = 'Job';
 $lang->job->browse        = 'Browse Pipeline';
-$lang->job->create        = 'Create Pipeline';
+$lang->job->create        = 'Import Pipeline';
 $lang->job->edit          = 'Edit Pipeline';
 $lang->job->exec          = 'Execute Pipeline';
 $lang->job->runPipeline   = 'Run pipeline';
@@ -11,6 +11,9 @@ $lang->job->confirmDelete = 'Do you want to delete this pipeline?';
 $lang->job->dirChange     = 'Directory Changed';
 $lang->job->buildTag      = 'Build Tag';
 $lang->job->execSuccess   = 'Build success';
+$lang->job->trigger       = 'Trigger';
+$lang->job->autoRun       = 'Is it triggered';
+$lang->job->addTrigger    = 'Add Trigger';
 
 $lang->job->browseAction = 'Pipeline List';
 
@@ -64,13 +67,11 @@ $lang->job->projectExists  = 'This SonarQube Project has a build task associated
 $lang->job->mustUseJenkins = 'SonarQube frame is only used if the build engine is JenKins.';
 $lang->job->jobIsDeleted   = 'This repository is associated with a build task, please view the data from the recycle bin';
 $lang->job->selectPipeline = 'Please select a pipeline';
+$lang->job->triggerRepeat  = 'Trigger cannot be repeat';
 
 $lang->job->buildTypeList['build']          = 'Only Build';
 $lang->job->buildTypeList['buildAndDeploy'] = 'Build And Deploy';
 $lang->job->buildTypeList['buildAndTest']   = 'Build And Test';
-
-$lang->job->zentaoTrigger['1'] = 'Yes';
-$lang->job->zentaoTrigger['0'] = 'No';
 
 $lang->job->triggerTypeList['tag']      = 'Tag';
 $lang->job->triggerTypeList['commit']   = 'Code Commit';

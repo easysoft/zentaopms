@@ -1,0 +1,45 @@
+title: table zt_product
+desc: "产品"
+author: Huifang Li
+version: "1.0"
+fields:
+  - field: id
+    range: 1
+  - field: name
+    range: "产品1"
+  - field: code
+    note: "产品代号"
+    fields:
+    range: code
+  - field: shadow
+    note: "影子产品"
+    range: 0
+  - field: type
+    note: "产品类型"
+    range: normal
+  - field: status
+    note: "状态"
+    range: normal
+  - field: subStatus
+    note: "子状态"
+    range: ''
+  - field: PMT
+    note: "产品管理团队"
+    range: ''
+  - field: PO
+    note: "产品负责人"
+    range: admin
+  - field: acl
+    note: "访问控制"
+    range: open
+  - field: createdBy
+    note: "创建者"
+    range: admin
+  - field: createdDate
+    note: "创建日期"
+    range: "-:60"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: deleted
+    note: "是否删除"
+    range: 0

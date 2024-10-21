@@ -973,11 +973,13 @@ class dom
      * @access public
      * @return object
      */
-    public function picker($value)
+    public function picker($value, $selectNumber = 0)
     {
         $picker = $this->element->findElement(WebDriverBy::xpath('parent::div'));
         $picker->click();
         sleep(1);
+
+        $pickerID = substr($picker->getAttribute('id'), 5);
 
         $pickerList = array(
             'search' => '//*[@class="picker-search"]/input',
@@ -991,25 +993,33 @@ class dom
             {
                 $pickerInput = $picker->findElement(WebDriverBy::xpath($xpathValue));
                 $pickerInput->click();
-                $pickerInput->sendKeys(trim($value));
+                if(!is_numeric($value)) $pickerInput->sendKeys(trim($value));
                 sleep(1);
-
-                $pickerID = substr($picker->getAttribute('id'), 5);
 
                 if($xpath != 'form')
                 {
                     try
                     {
-                        $this->driver->findElement(WebDriverBy::xpath("//*[@id='pick-pop-$pickerID']//span[@class='is-match-keys']"))->click();
+                        if(is_numeric($value))
+                        {
+                            $selectXpath = "//*[@id='pick-pop-{$pickerID}']//li[{$value}]";
+                        }
+                        else
+                        {
+                            $selectXpath = "//*[@id='pick-pop-{$pickerID}']//li[not(contains(@class, 'is-not-match'))]";
+                        }
+
+                        if($selectNumber) $selectXpath .= "[{$selectNumber}]";
+                        $this->driver->findElement(WebDriverBy::xpath("{$selectXpath}//a"))->click();
                     }
                     catch(Exception $xpathException)
                     {
-                        $this->driver->findElement(WebDriverBy::xpath("//a[@title='$value']"))->click();
+                        $this->driver->findElement(WebDriverBy::xpath("//a[@title='{$value}']"))->click();
                     }
                 }
                 else
                 {
-                    $this->driver->findElement(WebDriverBy::xpath("//button[@data-pick-value=$value]"))->click();
+                    $this->driver->findElement(WebDriverBy::xpath("//button[@data-pick-value={$value}]"))->click();
                 }
                 break;
             }
@@ -1035,6 +1045,12 @@ class dom
         $picker->click();
         sleep(1);
 
+        $pickerID = substr($picker->getAttribute('id'), 5);
+        if(!$pickerID)
+        {
+            $pickerID = $picker->findElement(WebDriverBy::xpath('//div[contains(@class,"picker-select-multi")]'))->getAttribute('id');
+            $pickerID = substr($pickerID, 5);
+        }
         foreach($values as $value)
         {
             $pickerInput = $picker->findElement(WebDriverBy::xpath('//*[@class="picker-multi-selections"]//input'));
@@ -1042,7 +1058,6 @@ class dom
             $pickerInput->sendKeys(trim($value));
             sleep(1);
 
-            $pickerID = substr($picker->getAttribute('id'), 5);
             $this->driver->findElement(WebDriverBy::xpath("//*[@id='pick-pop-$pickerID']//span[@class='is-match-keys']"))->click();
             $pickerInput->clear();
         }

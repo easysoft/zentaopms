@@ -37,8 +37,8 @@ class manageMembersTester extends tester
         $form->dom->btn($this->lang->save)->click();
 
         $form = $this->loadPage('execution', 'team');
-        if($form->dom->firstUser->getText() != $firstAccount) return $this->failed('删除团队成员成功');
-        return $this->success('删除团队成员失败');
+        if($form->dom->firstUser->getText() != $firstAccount) return $this->success('删除团队成员成功');
+        return $this->failed('删除团队成员失败');
     }
 
     /**

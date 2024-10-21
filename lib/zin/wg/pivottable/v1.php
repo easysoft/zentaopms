@@ -61,19 +61,27 @@ class pivotTable extends wg
         if(empty($onRenderCell)) $onRenderCell = jsRaw(<<<JS
         function(result, {row, col})
         {
-            if(result && col.setting.colspan)
+            if(result)
             {
-                let values = result.shift();
-                if(typeof(values.type) != 'undefined' && values.type == 'a') values = values.props['children'];
-
-                result.push({className: 'gap-0 px-0'});
-                values.forEach((value, index) =>
-                    result.push({
-                        html: value || !Number.isNaN(value) ? `\${value}` : '&nbsp;',
+                let values  = result.shift();
+                let isDrill = row.data.isDrill[col.name];
+                if(col.setting.colspan && typeof(values.type) != 'undefined' && values.type == 'a')
+                {
+                    values = values.props['children'];
+                    result.push({className: 'gap-0 p-1'});
+                    values.forEach((value, index) =>
+                      result.push({
+                        html: value || !Number.isNaN(value) ? (isDrill && index == 0 ? "<a href='#'>" + `\${value}` + '</a>' : `\${value}`) : '&nbsp;',
                         className: 'flex justify-center items-center h-full w-1/2' + (index == 0 ? ' border-r': ''),
                         style: 'border-color: var(--dtable-border-color)'
-                    })
-                );
+                      })
+                    );
+                }
+                else
+                {
+                    if(!isDrill && values?.type == 'a') values = values.props.children;
+                    result.push(values);
+                }
             }
 
             return result;

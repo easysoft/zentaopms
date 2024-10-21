@@ -131,3 +131,7 @@ $config->kanban->form->setLane['color'] = array('type' => 'string',  'required' 
 
 $config->kanban->form->setColumn['name']  = array('type' => 'string',  'required' => true,  'default' => '');
 $config->kanban->form->setColumn['color'] = array('type' => 'string',  'required' => false, 'default' => '');
+
+$config->kanban->form->moveCard['region'] = array('type' => 'int',  'required' => true, 'default' => 0);
+$config->kanban->form->moveCard['lane']   = array('type' => 'int',  'required' => true, 'default' => 0);
+$config->kanban->form->moveCard['column'] = array('type' => 'int',  'required' => true, 'default' => 0);

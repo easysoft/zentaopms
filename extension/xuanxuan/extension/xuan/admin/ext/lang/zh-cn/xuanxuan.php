@@ -22,7 +22,7 @@ $lang->admin->sizeType['K'] = 1024;
 $lang->admin->sizeType['M'] = 1024 * 1024;
 $lang->admin->sizeType['G'] = 1024 * 1024 * 1024;
 
-$lang->admin->menuList->system['subMenu']['xuanxuan'] = array('link' => '聊天|admin|xuanxuan|', 'subModule' => 'client,setting,conference');
+$lang->admin->menuList->system['subMenu']['xuanxuan'] = array('link' => '聊天|admin|xuanxuan|', 'subModule' => 'client,setting,conference,watermark');
 $lang->admin->menuList->system['menuOrder']['20'] = 'xuanxuan';
 
 $lang->admin->menuList->system['tabMenu']['xuanxuan']['index']   = array('link' => '首页|admin|xuanxuan|');
@@ -32,6 +32,6 @@ global $config;
 if($config->edition != 'open')
 {
     $lang->admin->menuList->system['tabMenu']['xuanxuan']['conference'] = array('link' => '音视频|conference|admin|');
-    $lang->navGroup->conference = 'admin';
+    $lang->admin->menuList->system['tabMenu']['xuanxuan']['watermark']  = array('link' => '水印|watermark|index|');
 }
 $lang->admin->menuList->system['tabMenu']['xuanxuan']['update'] = array('link' => '更新|client|browse|', 'subModule' => 'client');

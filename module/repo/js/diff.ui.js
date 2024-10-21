@@ -53,7 +53,7 @@ $(function()
 
 window.downloadCode = function()
 {
-    var url            = $(this).data('link');
+    var url            = $(event.target).closest('.repoDownload-code').data('link');
     var activeFilePath = $('#monacoTabs .nav-item .active').attr('href').substring(5).replace(/-/g, '=');
     window.open(url.replace('{path}', activeFilePath), '_self');
     return;

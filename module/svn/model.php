@@ -115,6 +115,7 @@ class svnModel extends model
     public function saveCommits(object $repo, array $logs, object $lastInDB, array $commentGroup, bool $printLog): bool
     {
         $this->loadModel('repo');
+        $this->loadModel('git');
         $version = (int)$lastInDB->commit + 1;
         foreach($logs as $log)
         {
@@ -127,8 +128,11 @@ class svnModel extends model
                 if($printLog) $this->printLog('extract' .
                     ' story:' . join(' ', $objects['stories']) .
                     ' task:' . join(' ', $objects['tasks']) .
-                    ' bug:'  . join(',', $objects['bugs']));
+                    ' bug:'  . join(',', $objects['bugs']) .
+                    ' design:' . join(',', $objects['designs'])
+                );
                 $this->repo->saveAction2PMS($objects, $log, $this->repoRoot, $repo->encoding, 'svn');
+                $this->git->linkCommit($objects['designs'], $repo->id, $log);
             }
             else
             {
@@ -143,7 +147,7 @@ class svnModel extends model
                 {
                     if(strpos($log->msg, $comment) !== false)
                     {
-                        $this->loadModel('compile')->createByJob($job->id);
+                        $this->loadModel('job')->exec($job->id, array(), 'commit');
                         continue 2;
                     }
                 }

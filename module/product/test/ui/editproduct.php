@@ -1,5 +1,13 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=编辑产品
+timeout=0
+cid=0
+
+*/
 chdir(__DIR__);
 include '../lib/editproduct.ui.class.php';
 
@@ -16,9 +24,9 @@ $tester->login();
 $productID['productID'] = 1;
 $product = new stdClass();
 $product->name = '';
-r($tester->editProduct($productID, $product)) && p('message,status') && e('编辑产品必填提示信息正确,SUCCESS'); // 产品名称必填校验
+r($tester->editProduct($productID, $product)) && p('message,status') && e('编辑产品表单提示信息正确,SUCCESS');//产品名称必填校验
 
 $product->name = '产品1_编辑';
-r($tester->editProduct($productID, $product)) && p('message,status') && e('产品编辑成功,SUCCESS'); // 编辑产品
+r($tester->editProduct($productID, $product)) && p('message,status') && e('产品编辑成功,SUCCESS');//编辑产品
 
 $tester->closeBrowser();

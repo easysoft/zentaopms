@@ -295,3 +295,30 @@ window.renderRowData = function($row, index, row)
 
     setLineIndex();
 }
+
+window.loadStories = function()
+{
+    const executionID = $('[name=execution]').val();
+    const storyID     = $('[name=story]').val();
+    const moduleID    = $('[name=module]').val();
+    const link        = $.createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=0&branch=all&moduleID=' + moduleID + '&storyID=' + storyID + '&pageType=&type=full&status=active');
+    $.getJSON(link, function(storyItems)
+    {
+        let $storyPicker = $('[name=story]').zui('picker');
+        $storyPicker.render({items: storyItems});
+        $storyPicker.$.setValue(storyID);
+    });
+}
+
+window.setStoryModule = function()
+{
+    var storyID = $('input[name=story]').val();
+    if(storyID)
+    {
+        var link = $.createLink('story', 'ajaxGetInfo', 'storyID=' + storyID);
+        $.getJSON(link, function(storyInfo)
+        {
+            if(storyInfo) $('input[name=module]').zui('picker').$.setValue(storyInfo.moduleID);
+        });
+    }
+}

@@ -14,8 +14,6 @@ jsVar('frameList', $lang->job->frameList);
 jsVar('triggerList', $lang->job->triggerTypeList);
 jsVar('repoList', $repoList);
 jsVar('pageRepoID', $repoID);
-jsVar('dirChange', $lang->job->dirChange);
-jsVar('buildTag', $lang->job->buildTag);
 
 $engine = key($lang->job->engineList);
 if($repo)
@@ -140,37 +138,6 @@ formPanel
             )
         )
     ),
-    formGroup
-    (
-        set::name('useZentao'),
-        set::label($lang->job->useZentao),
-        set::control('radioListInline'),
-        set::items($lang->job->zentaoTrigger),
-        set::value('0'),
-        set::width('1/2'),
-        on::change('window.changeTrigger')
-    ),
-    formGroup
-    (
-        set::name('triggerType'),
-        set::width('1/2'),
-        setStyle('display', 'none'),
-        set::required(true),
-        set::label($lang->job->triggerType),
-        set::items($lang->job->triggerTypeList),
-        on::change('window.changeTriggerType')
-    ),
-    formRow
-    (
-        setClass('svn-fields hidden'),
-        formGroup
-        (
-            set::name('svnDir[]'),
-            set::width('1/2'),
-            set::label($lang->job->svnDir),
-            set::items(array())
-        )
-    ),
     formRow
     (
         setClass('sonarqube hidden'),
@@ -195,117 +162,5 @@ formPanel
             set::items(array()),
             set::required(true)
         )
-    ),
-    formRow
-    (
-        setClass('comment-fields hidden'),
-        formGroup
-        (
-            set::name('comment'),
-            set::width('1/2'),
-            set::label($lang->job->comment),
-            set::required(true)
-        ),
-        h::span
-        (
-            setClass('leading-8 ml-2'),
-            html($lang->job->commitEx)
-        )
-    ),
-    formRow
-    (
-        setClass('custom-fields hidden'),
-        formGroup
-        (
-            set::label(''),
-            set::name('atDay[]'),
-            set::control('checkListInline'),
-            set::items($lang->datepicker->dayNames)
-        )
-    ),
-    formRow
-    (
-        setClass('custom-fields hidden'),
-        formGroup
-        (
-            set::label(''),
-            set::width('1/2'),
-            inputGroup
-            (
-                $lang->job->atTime,
-                timePicker
-                (
-                    set::name('atTime')
-                )
-            )
-        )
-    ),
-    formRow
-    (
-        set::id('paramDiv'),
-        setStyle('display', 'none'),
-        formGroup
-        (
-            set::label($lang->job->customParam),
-            set::width('2/3'),
-            inputGroup
-            (
-                $lang->job->paramName,
-                input
-                (
-                    setStyle('width', '50%'),
-                    setClass('form-control paramName'),
-                    set::name('paramName[]')
-                ),
-                $lang->job->paramValue,
-                select
-                (
-                    setStyle('width', '25%'),
-                    setClass('paramValue'),
-                    set::name('paramValue[]'),
-                    set::items($lang->job->paramValueList)
-                ),
-                input
-                (
-                    setStyle('width', '25%'),
-                    setClass('form-control hidden paramValue'),
-                    set::name('paramValue[]'),
-                    set::disabled(true)
-                ),
-                span
-                (
-                    setClass('input-group-addon'),
-                    checkbox
-                    (
-                        setClass('custom'),
-                        set::name('custom'),
-                        set::text($lang->job->custom)
-                    )
-                ),
-                span
-                (
-                    setClass('input-group-addon'),
-                    h::a
-                    (
-                        setClass('add-param'),
-                        set::href('javascript:void(0)'),
-                        icon('plus')
-                    )
-                ),
-                span
-                (
-                    setClass('input-group-addon'),
-                    a
-                    (
-                        setClass('delete-param'),
-                        set::href('javascript:void(0)'),
-                        icon('close')
-                    )
-                )
-            )
-        )
     )
 );
-
-render();
-

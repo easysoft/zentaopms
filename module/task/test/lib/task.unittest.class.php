@@ -233,9 +233,9 @@ class taskTest
      * @param  int    $taskID
      * @param  array  $param
      * @access public
-     * @return array
+     * @return array|string
      */
-    public function startTest(int $taskID, array $param = array()): array
+    public function startTest(int $taskID, array $param = array()): array|string
     {
         $task        = new stdclass();
         $startFields = array('id' => $taskID, 'status' => 'doing', 'assignedTo' => '', 'realstarted' => helper::now(), 'left' => 0, 'consumed' => 0);
@@ -244,7 +244,7 @@ class taskTest
 
         $oldTask = $this->objectModel->getByID($taskID);
         $result  = $this->objectModel->start($oldTask, $task);
-        return $result;
+        return dao::isError() ? dao::getError() : $result;
     }
 
     /**
@@ -471,7 +471,7 @@ class taskTest
 
         $oldTask = $this->objectModel->getByID($taskID);
         $result  = $this->objectModel->finish($oldTask, $task);
-        return $result;
+        return dao::isError() ? dao::getError() : $result;
     }
 
     /**

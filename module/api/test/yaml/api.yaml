@@ -3,10 +3,25 @@ title: zt_api
 author: Yuting Wang
 version: "1.0"
 fields:
+  - field: id
+    range: 1-10
   - field: module
-    note: "所属模块"
-    range: 1{1}, 0{99}
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: "0{10}"
+  - field: product
+    range: "0{10}"
+  - field: lib
+    range: "7{10}"
+  - field: title
+    note: "名称"
+    fields:
+      - field: title1
+        range: "apidoc{10}"
+      - field: title2
+        range: 1-10
+  - field: path
+    note: "路径"
+    fields:
+      - field: path1
+        range: "apipath{10}"
+        field: path2
+        range: 1-10

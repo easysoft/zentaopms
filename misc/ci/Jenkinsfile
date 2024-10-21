@@ -92,12 +92,12 @@ pipeline {
               zentaopms.setupEnvAfterCheckout()
 
               zCheckout([
-                [name: "xuansrc", subDir: true, url: "https://${env.GIT_HOST}/easycorp/xuanxuan.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.xuanxuan_version}", j.getReplaySHA("xuanxuan"), "${env.XUANVERSION}"] ],
+                [name: "xuansrc", subDir: true, url: "https://${env.GITFOX_HOST}/git/xuan/xuanxuan.git", credentialsId: "gitfox-zcorp-cc-ci-robot", branchs: ["${params.xuanxuan_version}", j.getReplaySHA("xuanxuan"), "${env.XUANVERSION}"] ],
                 [name: "zentaoext", subDir: true, url: "https://${env.GITFOX_HOST}/git/${env.ZENTAOEXT_GIT_REPO}.git", credentialsId: "gitfox-zcorp-cc-ci-robot", branchs: ["${params.zentaoext_version}", j.getReplaySHA("zentaoext"), "${env.ZENTAOEXT_VERSION}", "${env.GIT_BRANCH}"] ],
                 [name: "zentaomax", subDir: true, url: "https://${env.GITFOX_HOST}/git/zentao/zentaomax.git", credentialsId: "gitfox-zcorp-cc-ci-robot", branchs: ["${env.GIT_BRANCH}"] ],
                 [name: "zentaoipd", subDir: true, url: "https://${env.GITFOX_HOST}/git/zentao/zentaoipd.git", credentialsId: "gitfox-zcorp-cc-ci-robot", branchs: ["${env.GIT_BRANCH}"] ],
-                [name: "downRepo", subDir: true, url: "https://${env.GIT_HOST}/${env.DOWNGRADE_GIT_REPO}.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.fulldown_pms_version}", j.getReplaySHA("${env.DOWNGRADE_GIT_REPO}"), "downgrade/${env.GIT_BRANCH}/src"] ],
-                [name: "downRepoExt", subDir: true, url: "https://${env.GIT_HOST}/${env.DOWNGRADE_EXT_GIT_REPO}.git", credentialsId: "git-jenkins-bot-http", branchs: ["${params.fulldown_ext_version}", j.getReplaySHA("${env.DOWNGRADE_EXT_GIT_REPO}"), "downgrade/${env.GIT_BRANCH}/src"] ]
+                [name: "downRepo", subDir: true, url: "https://${env.GITFOX_HOST}/git/${env.DOWNGRADE_GIT_REPO}.git", credentialsId: "gitfox-zcorp-cc-ci-robot", branchs: ["${params.fulldown_pms_version}", j.getReplaySHA("${env.DOWNGRADE_GIT_REPO}"), "downgrade/${env.GIT_BRANCH}/src"] ],
+                [name: "downRepoExt", subDir: true, url: "https://${env.GITFOX_HOST}/git/${env.DOWNGRADE_EXT_GIT_REPO}.git", credentialsId: "gitfox-zcorp-cc-ci-robot", branchs: ["${params.fulldown_ext_version}", j.getReplaySHA("${env.DOWNGRADE_EXT_GIT_REPO}"), "downgrade/${env.GIT_BRANCH}/src"] ]
               ])
 
               zentaopms.setupEnvAfterCheckoutExt()
@@ -367,9 +367,9 @@ pipeline {
         stage("Notice ZIP") {
           when { expression { return params.source_build } }
           steps {
-            checkout scmGit(branches: [[name: "master"]],
+            checkout scmGit(branches: [[name: "main"]],
               extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
-              userRemoteConfigs: [[credentialsId: 'git-jenkins-bot-http', url: "https://${env.GIT_HOST}/devops/zentao-package.git"]]
+              userRemoteConfigs: [[credentialsId: 'gitfox-zcorp-cc-ci-robot', url: "https://${env.GITFOX_HOST}/git/ci/zentao-package.git"]]
             )
             container('xuanimbot') {
               sh './gen_build_report.sh > success.md'
@@ -609,9 +609,9 @@ pipeline {
         stage("Push Version") {
           when { environment name:'BUILD_KIND', value:'release' }
           steps {
-            checkout scmGit(branches: [[name: "master"]],
+            checkout scmGit(branches: [[name: "main"]],
               extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
-              userRemoteConfigs: [[credentialsId: 'git-jenkins-bot-http', url: "https://${env.GIT_HOST}/devops/zentao-package.git"]]
+              userRemoteConfigs: [[credentialsId: 'gitfox-zcorp-cc-ci-robot', url: "https://${env.GITFOX_HOST}/git/ci/zentao-package.git"]]
             )
             container('xuanimbot') {
               sh './script/push_zentao_version.sh'

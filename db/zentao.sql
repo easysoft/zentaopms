@@ -583,7 +583,7 @@ CREATE TABLE IF NOT EXISTS `zt_compile` (
   `job` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `queue` mediumint(8) NOT NULL DEFAULT '0',
   `status` varchar(255) NOT NULL DEFAULT '',
-  `logs` text NULL,
+  `logs` longtext NULL,
   `atTime` varchar(10) NOT NULL DEFAULT '',
   `testtask` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `tag` varchar(255) NOT NULL DEFAULT '',
@@ -970,6 +970,7 @@ CREATE TABLE IF NOT EXISTS `zt_job` (
   `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `frame` varchar(20) NOT NULL DEFAULT '',
   `engine` varchar(20) NOT NULL DEFAULT '',
+  `autoRun` enum('0','1') NOT NULL DEFAULT '1',
   `server` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `pipeline` varchar(500) NOT NULL DEFAULT '',
   `triggerType` varchar(255) NOT NULL DEFAULT '',
@@ -980,6 +981,7 @@ CREATE TABLE IF NOT EXISTS `zt_job` (
   `atTime` varchar(10) NOT NULL DEFAULT '',
   `customParam` text NULL,
   `comment` varchar(255) NOT NULL DEFAULT '',
+  `triggerActions` varchar(255) NOT NULL DEFAULT '',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
@@ -2498,23 +2500,23 @@ CREATE OR REPLACE VIEW `ztv_productbugs` AS select `zt_bug`.`product` AS `produc
 -- DROP VIEW IF EXISTS `ztv_productstories`;
 CREATE OR REPLACE VIEW `ztv_productstories` AS select `zt_story`.`product` AS `product`,COUNT(1) AS `stories`,sum(if((`zt_story`.`status` = 'closed'),0,1)) AS `undone` from `zt_story` where (`zt_story`.`deleted` = '0') group by `zt_story`.`product`;
 -- DROP VIEW IF EXISTS `ztv_dayuserlogin`;
-CREATE OR REPLACE VIEW `ztv_dayuserlogin` AS select COUNT(1) AS `userlogin`,left(`zt_action`.`date`,10) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'user') and (`zt_action`.`action` = 'login')) group by left(`zt_action`.`date`,10);
+CREATE OR REPLACE VIEW `ztv_dayuserlogin` AS select COUNT(1) AS `userlogin`,CAST(`zt_action`.`date` AS DATE) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'user') and (`zt_action`.`action` = 'login')) group by CAST(`zt_action`.`date` AS DATE);
 -- DROP VIEW IF EXISTS `ztv_dayeffort`;
 CREATE OR REPLACE VIEW `ztv_dayeffort` AS select round(sum(`zt_effort`.`consumed`),1) AS `consumed`,`zt_effort`.`date` AS `date` from `zt_effort` group by `zt_effort`.`date`;
 -- DROP VIEW IF EXISTS `ztv_daystoryopen`;
-CREATE OR REPLACE VIEW `ztv_daystoryopen` AS select COUNT(1) AS `storyopen`,left(`zt_action`.`date`,10) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'story') and (`zt_action`.`action` = 'opened')) group by left(`zt_action`.`date`,10);
+CREATE OR REPLACE VIEW `ztv_daystoryopen` AS select COUNT(1) AS `storyopen`,CAST(`zt_action`.`date` AS DATE) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'story') and (`zt_action`.`action` = 'opened')) group by CAST(`zt_action`.`date` AS DATE);
 -- DROP VIEW IF EXISTS `ztv_daystoryclose`;
-CREATE OR REPLACE VIEW `ztv_daystoryclose` AS select COUNT(1) AS `storyclose`,left(`zt_action`.`date`,10) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'story') and (`zt_action`.`action` = 'closed')) group by left(`zt_action`.`date`,10);
+CREATE OR REPLACE VIEW `ztv_daystoryclose` AS select COUNT(1) AS `storyclose`,CAST(`zt_action`.`date` AS DATE) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'story') and (`zt_action`.`action` = 'closed')) group by CAST(`zt_action`.`date` AS DATE);
 -- DROP VIEW IF EXISTS `ztv_daytaskopen`;
-CREATE OR REPLACE VIEW `ztv_daytaskopen` AS select COUNT(1) AS `taskopen`,left(`zt_action`.`date`,10) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'task') and (`zt_action`.`action` = 'opened')) group by left(`zt_action`.`date`,10);
+CREATE OR REPLACE VIEW `ztv_daytaskopen` AS select COUNT(1) AS `taskopen`,CAST(`zt_action`.`date` AS DATE) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'task') and (`zt_action`.`action` = 'opened')) group by CAST(`zt_action`.`date` AS DATE);
 -- DROP VIEW IF EXISTS `ztv_daytaskfinish`;
-CREATE OR REPLACE VIEW `ztv_daytaskfinish` AS select COUNT(1) AS `taskfinish`,left(`zt_action`.`date`,10) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'task') and (`zt_action`.`action` = 'finished')) group by left(`zt_action`.`date`,10);
+CREATE OR REPLACE VIEW `ztv_daytaskfinish` AS select COUNT(1) AS `taskfinish`,CAST(`zt_action`.`date` AS DATE) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'task') and (`zt_action`.`action` = 'finished')) group by CAST(`zt_action`.`date` AS DATE);
 -- DROP VIEW IF EXISTS `ztv_daybugopen`;
-CREATE OR REPLACE VIEW `ztv_daybugopen` AS select COUNT(1) AS `bugopen`,left(`zt_action`.`date`,10) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'bug') and (`zt_action`.`action` = 'opened')) group by left(`zt_action`.`date`,10);
+CREATE OR REPLACE VIEW `ztv_daybugopen` AS select COUNT(1) AS `bugopen`,CAST(`zt_action`.`date` AS DATE) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'bug') and (`zt_action`.`action` = 'opened')) group by CAST(`zt_action`.`date` AS DATE);
 -- DROP VIEW IF EXISTS `ztv_daybugresolve`;
-CREATE OR REPLACE VIEW `ztv_daybugresolve` AS select COUNT(1) AS `bugresolve`,left(`zt_action`.`date`,10) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'bug') and (`zt_action`.`action` = 'resolved')) group by left(`zt_action`.`date`,10);
+CREATE OR REPLACE VIEW `ztv_daybugresolve` AS select COUNT(1) AS `bugresolve`,CAST(`zt_action`.`date` AS DATE) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'bug') and (`zt_action`.`action` = 'resolved')) group by CAST(`zt_action`.`date` AS DATE);
 -- DROP VIEW IF EXISTS `ztv_dayactions`;
-CREATE OR REPLACE VIEW `ztv_dayactions` AS select COUNT(1) AS `actions`,left(`zt_action`.`date`,10) AS `day` from `zt_action` group by left(`zt_action`.`date`,10);
+CREATE OR REPLACE VIEW `ztv_dayactions` AS select COUNT(1) AS `actions`,CAST(`zt_action`.`date` AS DATE) AS `day` from `zt_action` group by CAST(`zt_action`.`date` AS DATE);
 -- DROP VIEW IF EXISTS `ztv_normalproduct`;
 CREATE OR REPLACE VIEW `ztv_normalproduct` AS SELECT * FROM `zt_product` WHERE `shadow` = 0;
 

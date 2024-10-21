@@ -59,7 +59,7 @@ $lang->mainNav->devops    = "{$lang->navIcons['devops']} DevOps|repo|maintain|";
 $lang->mainNav->aiapp     = "{$lang->navIcons['aiapp']} {$lang->aiapp->common}|aiapp|square|";
 $lang->mainNav->bi        = "{$lang->navIcons['bi']} {$lang->bi->common}|screen|browse|";
 $lang->mainNav->kanban    = "{$lang->navIcons['kanban']} {$lang->kanban->common}|kanban|space|";
-$lang->mainNav->doc       = "{$lang->navIcons['doc']} {$lang->doc->common}|doc|mySpace|type=mine";
+$lang->mainNav->doc       = "{$lang->navIcons['doc']} {$lang->doc->common}|doc|mySpace|";
 $lang->mainNav->system    = "{$lang->navIcons['system']} {$lang->system->common}|my|team|";
 $lang->mainNav->admin     = "{$lang->navIcons['admin']} {$lang->admin->common}|admin|index|";
 
@@ -522,7 +522,8 @@ $lang->devops->homeMenu = new stdclass();
 $lang->devops->homeMenu->repos        = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit,import,createrepo');
 $lang->devops->homeMenu->compile      = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
 if($config->edition != 'open') $lang->devops->homeMenu->deploy = array('link' => "{$lang->devops->deploy}|deploy|browse", 'alias' => 'steps,managestep,create,edit,browse,view,scope,cases', 'subModule' => 'ops,deploy');
-$lang->devops->homeMenu->apps = array('link' => "{$lang->app->common}|space|browse", 'subModule' => 'instance,store,gitlab,gitea,gogs,jenkins,sonarqube', 'alias' => 'createapplication,binduser,edit');
+$lang->devops->homeMenu->apps  = array('link' => "{$lang->app->common}|space|browse", 'subModule' => 'instance,gitlab,gitea,gogs,jenkins,sonarqube', 'alias' => 'createapplication,binduser,edit');
+if($config->inQuickon) $lang->devops->homeMenu->store = array('link' => "{$lang->app->store}|store|browse", 'subModule' => 'store');
 
 $lang->devops->menu = new stdclass();
 $lang->devops->menu->code    = array('link' => "{$lang->repocode->common}|repo|browse|repoID=%s", 'subModule' => 'repo', 'exclude' => 'repo-review,repo-browsetag,repo-browsebranch,repo-log,repo-diff,repo-revision');
@@ -532,7 +533,6 @@ $lang->devops->menu->tag     = array('link' => "{$lang->repo->tag}|repo|browseta
 $lang->devops->menu->mr      = array('link' => "{$lang->devops->mr}|mr|browse|repoID=%s");
 $lang->devops->menu->compile = array('link' => "{$lang->devops->compile}|job|browse|repoID=%s", 'subModule' => 'compile,job');
 
-
 /* The menu order $lang->devops->menuOrder[30] is a reserved position for 'artifactrepo'. */
 $lang->devops->menuOrder[10] = 'repos';
 $lang->devops->menuOrder[15] = 'code';
@@ -541,9 +541,9 @@ $lang->devops->menuOrder[25] = 'branch';
 $lang->devops->menuOrder[35] = 'tag';
 $lang->devops->menuOrder[40] = 'mr';
 $lang->devops->menuOrder[45] = 'compile';
-$lang->devops->menuOrder[50] = 'deploy';
-$lang->devops->menuOrder[55] = 'apps';
-
+$lang->devops->menuOrder[55] = 'deploy';
+$lang->devops->menuOrder[70] = 'apps';
+$lang->devops->menuOrder[75] = 'store';
 
 $lang->devops->dividerMenu = ',apps,';
 
@@ -553,7 +553,7 @@ $lang->kanban->menu = new stdclass();
 /* Doc menu. */
 $lang->doc->menu = new stdclass();
 $lang->doc->menu->dashboard = array('link' => "{$lang->dashboard}|doc|index");
-$lang->doc->menu->my        = array('link' => "{$lang->doc->mySpace}|doc|mySpace|type=mine", 'alias' => 'myspace');
+$lang->doc->menu->my        = array('link' => "{$lang->doc->mySpace}|doc|mySpace|", 'alias' => 'myspace');
 $lang->doc->menu->product   = array('link' => "{$lang->doc->productSpace}|doc|productSpace|", 'alias' => 'productspace');
 $lang->doc->menu->project   = array('link' => "{$lang->doc->projectSpace}|doc|projectSpace|", 'alias' => 'projectspace');
 $lang->doc->menu->api       = array('link' => "{$lang->doc->apiSpace}|api|index", 'alias' => '', 'exclude' => 'index');
@@ -685,9 +685,10 @@ $lang->navGroup->kanbanlane   = 'kanban';
 $lang->navGroup->kanbancolumn = 'kanban';
 $lang->navGroup->kanbancard   = 'kanban';
 
-$lang->navGroup->doc    = 'doc';
-$lang->navGroup->doclib = 'doc';
-$lang->navGroup->api    = 'doc';
+$lang->navGroup->doc         = 'doc';
+$lang->navGroup->doclib      = 'doc';
+$lang->navGroup->api         = 'doc';
+//$lang->navGroup->doctemplate = 'doc';
 
 $lang->navGroup->screen   = 'bi';
 $lang->navGroup->pivot    = 'bi';

@@ -16,9 +16,19 @@ class testcase extends tester
         if(isset($testcase['steps']))
         {
             $parentGroup = 0;
+            /* 遍历$testcase['steps']数组，将该数组内的键值对，作为用例的步骤和预期 */
             foreach($testcase['steps'] as $parentSteps => $parentExpects)
             {
                 $parentGroup++;
+                /* 判断如果遍历次数>=3时，点击一下创建步骤按钮 */
+                if($parentGroup >= 3)
+                {
+                    $parentSibButton = "//textarea[@name = 'steps[$parentGroup]']/../..//button[@data-action='sib']/i";
+                    $parentSibButtonXpath = $this->page->webdriver->driver->findElement(WebDriverBy::xpath($parentSibButton));
+                    $this->page->webdriver->driver->executeScript("arguments[0].scrollIntoView();", [$parentSibButtonXpath]);
+                    $this->page->webdriver->driver->executeScript("arguments[0].click();", [$parentSibButtonXpath]);
+                }
+                /* 如果$parentExpects不是数组，则视将该键值对视为一级步骤预期 */
                 if(!is_array($parentExpects))
                 {
                     $form->dom->{"steps[$parentGroup]"}->setValue($parentSteps);
@@ -30,35 +40,52 @@ class testcase extends tester
                     $form->dom->{"steps[$parentGroup]"}->setValue($parentSteps);
                     $subButton = "//textarea[@name = 'steps[$parentGroup]']/../..//button[@data-action='sub']/i";
                     $subButtonXpath = $this->page->webdriver->driver->findElement(WebDriverBy::xpath($subButton));
+                    $this->page->webdriver->driver->executeScript("arguments[0].scrollIntoView();", [$subButtonXpath]);
                     $this->page->webdriver->driver->executeScript("arguments[0].click();", [$subButtonXpath]);
+                    /* 如果$parentExpexts是数组，则继续遍历该数组，并将遍历的键值对作为二级预期步骤 */
                     foreach($parentExpects as $steps => $expects)
                     {
                         $group++;
                         $this->webdriver->wait(1);
                         $sibButton = "//textarea[@name = 'steps[$parentGroup.$group]']/../..//button[@data-action='sib']/i";
                         $sibButtonXpath = $this->page->webdriver->driver->findElement(WebDriverBy::xpath($sibButton));
+                        $this->page->webdriver->driver->executeScript("arguments[0].scrollIntoView();", [$sibButtonXpath]);
+                        $this->page->webdriver->driver->executeScript("arguments[0].click();", [$sibButtonXpath]);
+                        /* 如果$expects不是数组，则视将该键值对视为二级步骤预期 */
                         if(!is_array($expects))
                         {
                             $form->dom->{"steps[$parentGroup.$group]"}->setValue($steps);
                             $form->dom->{"expects[$parentGroup.$group]"}->setValue($expects);
-                            $this->page->webdriver->driver->executeScript("arguments[0].click();", [$sibButtonXpath]);
                         }
                         else
                         {
                             $sonGroup = 0;
                             $form->dom->{"steps[$parentGroup.$group]"}->setValue($steps);
-                            $sonSubButton = "//textarea[@name = 'steps[$parentGroup.$group]']/../..//button[@data-action='sub']/i";
-                            $sonSubButtonXpath = $this->page->webdriver->driver->findElement(WebDriverBy::xpath($sonSubButton));
-                            $this->page->webdriver->driver->executeScript("arguments[0].click();", [$sonSubButtonXpath]);
+                            $subButton = "//textarea[@name = 'steps[$parentGroup.$group]']/../..//button[@data-action='sub']/i";
+                            $subButtonXpath = $this->page->webdriver->driver->findElement(WebDriverBy::xpath($subButton));
+                            $this->page->webdriver->driver->executeScript("arguments[0].scrollIntoView();", [$subButtonXpath]);
+                            $this->page->webdriver->driver->executeScript("arguments[0].click();", [$subButtonXpath]);
+                            /* 如果$expexts是数组，则继续遍历该数组，并将遍历的键值对作为三级预期步骤 */
+                            foreach($expects as $sonSteps => $sonExpects)
+                            {
+                                $sonGroup++;
+                                $sonSibButton = "//textarea[@name = 'steps[$parentGroup.$group.$sonGroup]']/../..//button[@data-action='sib']/i";
+                                $sonSibButtonXpath = $this->page->webdriver->driver->findElement(WebDriverBy::xpath($sonSibButton));
+                                $form->dom->{"steps[$parentGroup.$group.$sonGroup]"}->setValue($sonSteps);
+                                $form->dom->{"expects[$parentGroup.$group.$sonGroup]"}->setValue($sonExpects);
+                                $this->page->webdriver->driver->executeScript("arguments[0].scrollIntoView()", [$sonSibButtonXpath]);
+                                $this->page->webdriver->driver->executeScript("arguments[0].click()", [$sonSibButtonXpath]);
+                                $this->webdriver->wait(1);
+                            }
                         }
                     }
                 }
             }
         }
-        $form->dom->btn($this->lang->save)->click();
+        $form->dom->saveButton->click();
         $this->webdriver->wait(1);
 
-        $caseLists = $form->dom->caseName->getElementList($form->dom->page->xpath['caseNameList']);
+        $caseLists = $form->dom->getElementList($form->dom->xpath['caseNameList']);
         $caseList  = array_map(function($element){return $element->getText();}, $caseLists->element);
         if(in_array($testcase['caseName'], $caseList)) return $this->success('创建测试用例成功');
         return $this->failed('创建测试用例失败');

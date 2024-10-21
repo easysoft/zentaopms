@@ -19,6 +19,7 @@ class myspacePage extends page
             'fstMoreBtn'     => '//*[@class="tree-item item is-nested is-nested-show"]/menu[1]/li[2]/div[1]/nav[1]/button[1]',
             'fstDocLib'      => '/html/body/div[1]/div/div[2]/div[1]/div[1]/div/main/menu/li[1]/menu/li[2]/div/div/a',
             'editLib'        => '//*[@class="popover show fade dropdown in"]/menu[1]/menu[1]/li[3]/a[1]',
+            'deleteLib'      => '//*[@class="popover show fade dropdown in"]/menu/menu/li[4]',
             'deleteAccept'   => '/html/body/div[3]/div/div/div[3]/nav/button[1]',
             'fstMoveBtn'     => '/html/body/div[1]/div/div[2]/div[2]/div/div/div[2]/div[3]/div/div/div/nav/a[2]/i',
             'fstDeleteBtn'   => '/html/body/div[1]/div/div[2]/div[2]/div/div/div[2]/div[3]/div/div/div/nav/a[3]/i',

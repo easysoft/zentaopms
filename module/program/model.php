@@ -510,7 +510,7 @@ class programModel extends model
         }
 
         $stmt = $this->dao->select('DISTINCT t1.*, CAST(t1.budget AS DECIMAL) AS budget')->from(TABLE_PROJECT)->alias('t1');
-        if($this->cookie->involved) $stmt->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id=t2.root')->leftJoin(TABLE_STAKEHOLDER)->alias('t3')->on('t1.id=t3.objectID');
+        if($this->cookie->involved) $stmt = $this->loadModel('project')->leftJoinInvolvedTable($stmt);
         $stmt->where('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->beginIF($browseType == 'bysearch' && $query)->andWhere($query)->fi()
@@ -524,18 +524,7 @@ class programModel extends model
             ->beginIF($path)->andWhere('t1.path')->like($path . '%')->fi()
             ->beginIF(!$queryAll && !$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi();
 
-        if($this->cookie->involved)
-        {
-            $stmt->andWhere('t2.type')->eq('project')
-                ->andWhere('t1.openedBy', true)->eq($this->app->user->account)
-                ->orWhere('t1.PM')->eq($this->app->user->account)
-                ->orWhere('t2.account')->eq($this->app->user->account)
-                ->orWhere('(t3.user')->eq($this->app->user->account)
-                ->andWhere('t3.deleted')->eq(0)
-                ->markRight(1)
-                ->orWhere("CONCAT(',', t1.whitelist, ',')")->like("%,{$this->app->user->account},%")
-                ->markRight(1);
-        }
+        if($this->cookie->involved) $stmt = $this->project->appendInvolvedCondition($stmt);
         $projectList = $stmt->orderBy($orderBy)->page($pager, 't1.id')->fetchAll('id');
 
         /* Determine how to display the name of the program. */

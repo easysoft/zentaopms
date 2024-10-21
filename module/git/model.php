@@ -132,7 +132,7 @@ class gitModel extends model
 
             if($objects)
             {
-                if($printLog) $this->printLog('extract' . ' story:' . join(' ', $objects['stories']) . ' task:' . join(' ', $objects['tasks']) . ' bug:' . join(',', $objects['bugs']));
+                if($printLog) $this->printLog('extract' . ' story:' . join(' ', $objects['stories']) . ' task:' . join(' ', $objects['tasks']) . ' bug:' . join(',', $objects['bugs']) . ' design:' . join(',', $objects['designs']));
                 if($lastVersion != $version)
                 {
                     $this->repo->saveAction2PMS($objects, $log, $this->repoRoot, $repo->encoding, 'git', $accountPairs);
@@ -147,6 +147,7 @@ class gitModel extends model
                         $this->repo->link($repo->id, $log->revision, $objectTypeMap[$objectType], 'commit');
                     }
                 }
+                $this->linkCommit($objects['designs'], $repo->id, $log);
             }
             elseif($printLog)
             {
@@ -161,7 +162,7 @@ class gitModel extends model
                 {
                     if(strpos($log->msg, $comment) !== false)
                     {
-                        $this->loadModel('job')->exec($job->id);
+                        $this->loadModel('job')->exec($job->id, array(), 'commit');
                         continue 2;
                     }
                 }
@@ -423,5 +424,41 @@ class gitModel extends model
     public function printLog(string $log)
     {
         echo helper::now() . " $log\n";
+    }
+
+    /**
+     * Code Association of design through annotations.
+     *
+     * @param  array    $designs
+     * @param  int      $repoID
+     * @param  object   $log
+     * @access public
+     * @return void
+     */
+    public function linkCommit($designs, $repoID, $log)
+    {
+        $this->loadModel('repo');
+        foreach($designs as $designID)
+        {
+            if(empty($designID)) continue;
+            $this->dao->delete()->from(TABLE_RELATION)->where('AType')->eq('design')->andWhere('AID')->eq($designID)->andWhere('BType')->eq('commit')->andWhere('relation')->eq('completedin')->exec();
+            $this->dao->delete()->from(TABLE_RELATION)->where('AType')->eq('commit')->andWhere('BID')->eq($designID)->andWhere('BType')->eq('design')->andWhere('relation')->eq('completedfrom')->exec();
+
+            $revisionID = $this->dao->select('id')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->andWhere('revision')->eq($log->revision)->fetch('id');
+            $program    = $this->dao->select('id,project,product')->from(TABLE_DESIGN)->where('id')->eq($designID)->fetch();
+
+            $data = new stdclass();
+            $data->program  = $program->project;
+            $data->product  = $program->product;
+            $data->AType    = 'design';
+            $data->AID      = $designID;
+            $data->BType    = 'commit';
+            $data->BID      = $revisionID;
+            $data->relation = 'completedin';
+            $data->extra    = $repoID;
+            $this->dao->replace(TABLE_RELATION)->data($data)->autoCheck()->exec();
+
+            $this->repo->saveRelation($designID, 'design', $revisionID, 'commit', 'completedfrom');
+        }
     }
 }

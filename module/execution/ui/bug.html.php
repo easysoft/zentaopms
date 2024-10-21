@@ -64,6 +64,7 @@ if($canBatchAssignTo)
     foreach ($users as $account => $name)
     {
         if(empty($account)) continue;
+        $account = base64_encode((string)$account); // 编码用户名中的特殊字符
         if($account != 'closed') $assignedToItems[] = array('text' => $name, 'innerClass' => 'batch-btn ajax-btn', 'data-url' => createLink('bug', 'batchAssignTo', "assignedTo={$account}&objectID={$execution->id}"));
     }
 

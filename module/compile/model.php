@@ -30,14 +30,38 @@ class compileModel extends model
      *
      * @param  int    $repoID
      * @param  int    $jobID
+     * @param  string $browseType
+     * @param  int    $queryID
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getList(int $repoID, int $jobID, string $orderBy = 'id_desc', object $pager = null): array
+    public function getList(int $repoID, int $jobID, string $browseType = '', int $queryID = 0, string $orderBy = 'id_desc', object $pager = null): array
     {
-        return $this->dao->select('t1.id, t1.name, t1.job, t1.status, t1.createdDate, t1.testtask, t2.pipeline, t2.triggerType, t2.comment, t2.atDay, t2.atTime, t2.engine, t3.name as repoName, t4.name as jenkinsName')->from(TABLE_COMPILE)->alias('t1')
+        $compileQuery = '';
+        if($browseType == 'bySearch')
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set('compileQuery', $query->sql);
+                $this->session->set('compileForm', $query->form);
+            }
+            elseif(!$this->session->compileQuery)
+            {
+                $this->session->set('compileQuery', ' 1 = 1');
+            }
+
+            $compileQuery = $this->session->compileQuery;
+            $compileQuery = preg_replace('/`(\w+)`/', 't1.`$1`', $compileQuery);
+            $compileQuery = preg_replace('/t1.`(engine|repo|triggerType)`/', 't2.`$1`', $compileQuery);
+
+            $this->session->set('compileQueryCondition', $compileQuery, $this->app->tab);
+            $this->session->set('compileOnlyCondition', true, $this->app->tab);
+        }
+
+        return $this->dao->select('t1.id, t1.name, t1.job, t1.status, t1.createdDate, t1.testtask, t2.pipeline, t2.triggerType, t2.svnDir, t2.comment, t2.atDay, t2.atTime, t2.engine, t2.triggerActions, t3.name as repoName, t4.name as jenkinsName')->from(TABLE_COMPILE)->alias('t1')
             ->leftJoin(TABLE_JOB)->alias('t2')->on('t1.job=t2.id')
             ->leftJoin(TABLE_REPO)->alias('t3')->on('t2.repo=t3.id')
             ->leftJoin(TABLE_PIPELINE)->alias('t4')->on('t2.server=t4.id')
@@ -45,6 +69,7 @@ class compileModel extends model
             ->andWhere('t1.job')->ne('0')
             ->beginIF(!empty($repoID))->andWhere('t3.id')->eq($repoID)->fi()
             ->beginIF(!empty($jobID))->andWhere('t1.job')->eq($jobID)->fi()
+            ->beginIF($compileQuery)->andWhere($compileQuery)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -341,7 +366,7 @@ class compileModel extends model
         $repo      = $this->loadModel('repo')->getByID($job->repo);
 
         $this->loadModel('job');
-        if($job->triggerType == 'tag')
+        if(strpos($job->triggerType, 'tag') !== false)
         {
             $lastTag = $this->job->getLastTagByRepo($repo, $job);
             if($lastTag)
@@ -361,7 +386,7 @@ class compileModel extends model
         $this->dao->update(TABLE_COMPILE)->data($result)->where('id')->eq($compileID)->exec();
         $this->dao->update(TABLE_JOB)
             ->set('lastStatus')->eq($result->status)
-            ->set('lastExec')->eq($compile->updateDate)
+            ->set('lastExec')->eq($compile->updateDate ? $compile->updateDate : helper::now())
             ->where('id')->eq($job->id)
             ->exec();
 

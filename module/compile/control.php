@@ -31,6 +31,8 @@ class compile extends control
      *
      * @param  int    $repoID
      * @param  int    $jobID
+     * @param  string $browseType
+     * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -38,14 +40,14 @@ class compile extends control
      * @access public
      * @return void
      */
-    public function browse(int $repoID = 0, int $jobID = 0, string $orderBy = 'createdDate_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function browse(int $repoID = 0, int $jobID = 0, string $browseType = '', int $param = 0, string $orderBy = 'createdDate_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->loadModel('ci');
-        $this->app->loadLang('job');
+        $this->loadModel('job');
 
         if($jobID)
         {
-            $job    = $this->loadModel('job')->getById($jobID);
+            $job    = $this->job->getByID($jobID);
             $repoID = $job->repo;
 
             $this->view->job = $job;
@@ -65,16 +67,19 @@ class compile extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $buildList = $this->compile->getList($repoID, $jobID, $orderBy, $pager);
+        $this->compileZen->buildSearchForm($repoID, $jobID, (int)$param);
+        $buildList = $this->compile->getList($repoID, $jobID, $browseType, (int)$param, $orderBy, $pager);
 
-        foreach($buildList as $build) $build->triggerType = $this->loadModel('job')->getTriggerConfig($build);
+        foreach($buildList as $build) $build->triggerType = $this->job->getTriggerConfig($build);
 
-        $this->view->title     = $this->lang->ci->job . $this->lang->hyphen . $this->lang->compile->browse;
-        $this->view->repoID    = $repoID;
-        $this->view->jobID     = $jobID;
-        $this->view->buildList = $buildList;
-        $this->view->orderBy   = $orderBy;
-        $this->view->pager     = $pager;
+        $this->view->title      = $this->lang->ci->job . $this->lang->hyphen . $this->lang->compile->browse;
+        $this->view->repoID     = $repoID;
+        $this->view->jobID      = $jobID;
+        $this->view->buildList  = $buildList;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
+        $this->view->browseType = $browseType;
+        $this->view->param      = $param;
         $this->display();
     }
 

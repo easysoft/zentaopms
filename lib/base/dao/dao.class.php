@@ -161,7 +161,7 @@ class baseDAO
      * @var int
      * @access private
      */
-    private $_lastInsertID;
+    protected $_lastInsertID = false;
 
     /**
      * 执行的请求，所有的查询都保存在该数组。
@@ -921,8 +921,6 @@ class baseDAO
      */
     public function query($sql = '')
     {
-        if(!empty(dao::$errors)) return $this;
-
         if($sql)
         {
             $sql       = $this->dbh->formatSQL($sql);
@@ -1030,7 +1028,7 @@ class baseDAO
      */
     public function exec($sql = '')
     {
-        if(!empty(dao::$errors)) return $this;
+        if(!empty(dao::$errors)) return 0;
 
         if($sql)
         {
@@ -1057,7 +1055,7 @@ class baseDAO
 
             $result = $this->dbh->exec($sql);
             /* See: https://www.php.net/manual/en/pdo.lastinsertid.php .*/
-            $this->_lastInsertID = $this->dbh->lastInsertID();
+            $this->_lastInsertID = $this->dbh->lastInsertId();
 
             $this->setTableCache($sql);
 
@@ -1224,9 +1222,7 @@ class baseDAO
      */
     public function lastInsertID()
     {
-        $lastInsertID = $this->_lastInsertID !== false ? (int)$this->_lastInsertID : false;
-        $this->_lastInsertID = false;
-        return $lastInsertID;
+        return $this->_lastInsertID !== false ? (int)$this->_lastInsertID : false;
     }
 
     //-------------------- 魔术方法(Magic methods) --------------------//

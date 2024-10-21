@@ -101,8 +101,9 @@ class project extends control
         $_COOKIE['showClosed'] = 1;
 
         /* Query user's project and program. */
-        $projects = $this->project->getListByCurrentUser();
-        $programs = $this->loadModel('program')->getPairs(true);
+        $projects         = $this->project->getListByCurrentUser();
+        $involvedProjects = $this->project->getInvolvedListByCurrentUser();
+        $programs         = $this->loadModel('program')->getPairs(true);
 
         /* Generate project tree. */
         $orderedProjects = array();
@@ -116,10 +117,54 @@ class project extends control
 
         $this->view->link      = $this->project->getProjectLink($module, $method, $projectID, $extra); // Create the link from module,method.
         $this->view->projectID = $projectID;
-        $this->view->projects  = $orderedProjects;
         $this->view->module    = $module;
         $this->view->method    = $method;
         $this->view->programs  = $programs;
+
+        $this->view->projects         = $orderedProjects;
+        $this->view->involvedProjects = $involvedProjects;
+
+        $this->display();
+    }
+
+    /**
+     * 旧页面：设置1.5级项目下拉菜单。
+     * Ajax get project drop menu.
+     *
+     * @param  int    $projectID
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return void
+     */
+    public function ajaxGetOldDropMenu(int $projectID, string $module, string $method, string $extra = '')
+    {
+        /* Set cookie for show all project. */
+        $_COOKIE['showClosed'] = 1;
+
+        /* Query user's project and program. */
+        $projects         = $this->project->getListByCurrentUser();
+        $involvedProjects = $this->project->getInvolvedListByCurrentUser();
+        $programs         = $this->loadModel('program')->getPairs(true);
+
+        /* Generate project tree. */
+        $orderedProjects = array();
+        foreach($projects as $project)
+        {
+            $project->parent = $this->program->getTopByID($project->parent);
+            $project->parent = isset($programs[$project->parent]) ? $project->parent : $project->id;
+
+            $orderedProjects[$project->parent][] = $project;
+        }
+
+        $this->view->link      = $this->project->getProjectLink($module, $method, $projectID, $extra); // Create the link from module,method.
+        $this->view->projectID = $projectID;
+        $this->view->module    = $module;
+        $this->view->method    = $method;
+        $this->view->programs  = $programs;
+
+        $this->view->projects         = $orderedProjects;
+        $this->view->involvedProjects = $involvedProjects;
 
         $this->display();
     }
@@ -826,6 +871,7 @@ class project extends control
         $this->loadModel('search');
 
         $this->project->setMenu($projectID);
+        $this->session->set('bugList', $this->app->getURI(true), 'project');
 
         $projectID = (int)$projectID;
         $product   = $this->product->getById($productID);

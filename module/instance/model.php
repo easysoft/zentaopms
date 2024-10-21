@@ -384,16 +384,24 @@ class instanceModel extends model
      * @param  int          $id
      * @param  object|array $newInstance
      * @access public
-     * @return int
+     * @return bool
      */
-    public function updateByID(int $id, object|array $newInstance)
+    public function updateByID(int $id, object|array $newInstance): bool
     {
-        return $this->dao->update(TABLE_INSTANCE)->data($newInstance, 'memory_kb,cpu,disk_gb')
+        $this->dao->update(TABLE_INSTANCE)->data($newInstance, 'memory_kb,cpu,disk_gb')
             ->autoCheck()
             ->checkIF(isset($newInstance->name), 'name', 'notempty')
             ->checkIF(isset($newInstance->status), 'status', 'in', array_keys($this->lang->instance->statusList))
             ->where('id')->eq($id)
             ->exec();
+
+        if(!empty($newInstance->name))
+        {
+            $instance = $this->fetchByID($id);
+            $server   = $this->loadModel('space')->getExternalAppByApp($instance);
+            if($server) $this->dao->update(TABLE_PIPELINE)->set('name')->eq($newInstance->name)->where('id')->eq($server->id)->exec();
+        }
+        return dao::isError();
     }
 
     /**

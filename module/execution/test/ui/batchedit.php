@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 
 /**
@@ -85,12 +86,12 @@ $execution = array(
     )
 );
 
-r($tester->checkName($execution['0']))          && p('message') && e('执行名称重复提示信息正确');
-r($tester->checkName($execution['1']))          && p('message') && e('执行名称为空提示信息正确');
-r($tester->checkDate($execution['2'], 'begin')) && p('message') && e('执行开始日期为空提示信息正确');
-r($tester->checkDate($execution['3'], 'begin')) && p('message') && e('执行开始日期小于项目开始日期提示信息正确');
-r($tester->checkDate($execution['4'], 'end'))   && p('message') && e('执行结束时间为空提示信息正确');
-r($tester->checkDate($execution['5'], 'end'))   && p('message') && e('执行结束日期大于项目结束日期提示信息正确');
-r($tester->checkDate($execution['6'], 'other')) && p('message') && e('执行结束日期小于执行开始日期提示信息正确');
-r($tester->batchEdit($execution['7']))          && p('message') && e('批量编辑执行成功');
+r($tester->checkName($execution['0']))          && p('status,message') && e('SUCCESS,执行名称重复提示信息正确');
+r($tester->checkName($execution['1']))          && p('status,message') && e('SUCCESS,执行名称为空提示信息正确');
+r($tester->checkDate($execution['2'], 'begin')) && p('status,message') && e('SUCCESS,执行开始日期为空提示信息正确');
+r($tester->checkDate($execution['3'], 'begin')) && p('status,message') && e('SUCCESS,执行开始日期小于项目开始日期提示信息正确');
+r($tester->checkDate($execution['4'], 'end'))   && p('status,message') && e('SUCCESS,执行结束日期为空提示信息正确');
+r($tester->checkDate($execution['5'], 'end'))   && p('status,message') && e('SUCCESS,执行结束日期大于项目结束日期提示信息正确');
+r($tester->checkDate($execution['6'], 'other')) && p('status,message') && e('SUCCESS,执行结束日期小于执行开始日期提示信息正确');
+r($tester->batchEdit($execution['7']))          && p('status,message') && e('SUCCESS,批量编辑执行成功');
 $tester->closeBrowser();

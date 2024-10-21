@@ -1,6 +1,10 @@
 #!/usr/bin/env php
 <?php
-
+/**
+title=批量编辑计划
+timeout=0
+cid=0
+*/
 chdir(__DIR__);
 include '../lib/batcheditplan.ui.class.php';
 

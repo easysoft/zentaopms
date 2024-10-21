@@ -50,30 +50,6 @@ jsVar('typeDesc', $lang->execution->typeDesc);
 
 $showExecutionExec = !empty($from) and ($from == 'execution' || $from == 'doc');
 
-$handleBeginEndChange = jsCallback()
-    ->const('weekend', $config->execution->weekend)
-    ->do(<<<'JS'
-    const $picker   = $this.closest('.date-range-picker');
-    const begin     = $picker.find('[name=begin]').val();
-    const end       = $picker.find('[name=end]').val();
-    if(!zui.isValidDate(begin) || !zui.isValidDate(end)) return;
-    const $days     = $element.find('[name=days]');
-    const beginDate = zui.createDate(begin);
-    const endDate   = zui.createDate(end);
-    const totalDays = 1 + Math.ceil((endDate.getTime() - beginDate.getTime()) / zui.TIME_DAY);
-    if(totalDays <= 0) return $days.val(0);
-    let workDays  = 0;
-    for(i = 0; i < totalDays; i++)
-    {
-        const date = new Date(beginDate.getTime());
-        date.setDate(date.getDate() + i);
-
-        if((weekend == 2 && date.getDay() == 6) || date.getDay() == 0) continue;
-        workDays++;
-    }
-    $days.val(workDays);
-    JS);
-
 formGridPanel
 (
     set::title($showExecutionExec ? $lang->execution->createExec : $lang->execution->create),
@@ -90,7 +66,7 @@ formGridPanel
     ),
     on::change('[name=project]', 'refreshPage'),
     on::change('[name=type]', 'setType'),
-    on::change('[name=begin],[name=end]', $handleBeginEndChange),
+    on::change('[name=begin],[name=end]', 'computeWorkDays'),
     on::change('[name=teams]', 'loadMembers'),
     on::change('#copyTeam', 'toggleCopyTeam'),
     on::click('[name=lifetime]', 'toggleOpsTip'),

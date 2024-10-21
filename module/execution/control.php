@@ -449,6 +449,7 @@ class execution extends control
         /* Process the order by field. */
         if(!$orderBy) $orderBy = $this->cookie->executionStoryOrder ? $this->cookie->executionStoryOrder : 'pri';
 
+        $param     = (int)$param;
         $type      = strtolower($type);
         $productID = $this->executionZen->setStorageForStory((string)$executionID, $type, (string)$param, $orderBy);
 
@@ -531,6 +532,7 @@ class execution extends control
         $project     = $this->loadModel('project')->getByID($execution->project);
         $executionID = $execution->id;
         $products    = $this->product->getProducts($execution->id);
+        $param       = (int)$param;
 
         if(count($products) === 1) $productID = current($products)->id;
 
@@ -2116,7 +2118,7 @@ class execution extends control
         if(!$project->hasProduct) return $this->sendError($this->lang->project->cannotManageProducts, true);
         if($project->model == 'waterfall' || $project->model == 'waterfallplus') return $this->sendError(sprintf($this->lang->execution->cannotManageProducts, zget($this->lang->project->modelList, $project->model)), true);
 
-        if(!empty($_POST))
+        if($_SERVER['REQUEST_METHOD'] == 'POST')
         {
             $oldProducts = $this->loadModel('product')->getProducts($executionID);
             $oldProducts = array_keys($oldProducts);
@@ -2986,9 +2988,9 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function doc($executionID, $libID = 0, $moduleID = 0, $browseType = 'all', $orderBy = 'order_asc', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function doc(int $executionID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'order_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = 'list', int $docID = 0, string $search = '')
     {
-        echo $this->fetch('doc', 'tableContents', "type=execution&objectID=$executionID&libID=$libID&moduleID=$moduleID&browseType=$browseType&orderBy=$orderBy&param=$param&recTotal=$recTotal&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        echo $this->fetch('doc', 'app', "type=execution&spaceID=$executionID&libID=$libID&moduleID=$moduleID&docID=$docID&mode=$mode&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&filterType=$browseType&search=$search&noSpace=true");
     }
 
     /**

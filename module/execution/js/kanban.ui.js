@@ -1,3 +1,14 @@
+$(function()
+{
+    if(taskToOpen)
+    {
+        window.waitDom('.card-list-item[z-key="' + taskToOpen + '"] .icon-checked + a', function()
+        {
+            $('.card-list-item[z-key="' + taskToOpen + '"] .icon-checked + a').trigger('click');
+        });
+    }
+})
+
 searchValue = '';
 window.getLane = function(lane)
 {

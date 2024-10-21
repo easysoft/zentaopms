@@ -2096,15 +2096,29 @@ class tutorialModel extends model
     }
 
     /**
+     * 获取新手模式团队空间或我的空间。
+     * Get team spaces.
+     *
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function getSubSpaces($type = 'custom'): array
+    {
+        if($type == 'custom') return array(1 => 'Test Team Space');
+        if($type == 'mine')   return array(1 => 'Test My Space');
+    }
+
+    /**
      * 获取新手模式团队空间。
      * Get team spaces.
      *
      * @access public
      * @return array
      */
-    public function getTeamSpaces(): array
+    public function getDocTemplateSpaces(): array
     {
-        return array(1 => 'Test Team Space');
+        return array(1 => 'Doc Template Space');
     }
 
     /**

@@ -350,6 +350,7 @@ $lang->kanbancolumn->color      = '看板列颜色';
 $lang->kanbancolumn->childName  = '子列名称';
 $lang->kanbancolumn->childColor = '子状态颜色';
 $lang->kanbancolumn->empty      = '暂时没有看板列';
+$lang->kanbancolumn->common     = '看板列';
 
 $lang->kanbancolumn->confirmArchive     = '您确认归档该列吗？归档列后，该列及列上的卡片将被隐藏，您可以在区域-已归档中查看已归档的列。';
 $lang->kanbancolumn->confirmDelete      = '您确认删除该列吗？删除列后不可恢复，列上的卡片也会消失。';
@@ -382,6 +383,7 @@ $lang->kanbancolumn->fluidBoardList['1'] = "自适应列宽";
 
 $lang->kanbanlane->error = new stdclass();
 $lang->kanbanlane->error->mustBeInt = '卡片数量必须是 3~100 的正整数。';
+$lang->kanbanlane->error->hasExist  = '该泳道已存在';
 
 $lang->kanbanregion = new stdclass();
 $lang->kanbanregion->name    = '区域名称';

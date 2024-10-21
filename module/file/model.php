@@ -97,6 +97,29 @@ class fileModel extends model
     }
 
     /**
+     * Get file by object.
+     *
+     * @param  string    $objectType
+     * @param  int       $objectID
+     * @param  string    $title
+     * @param  string    $extra
+     * @access public
+     * @return object|false
+     */
+    public function query(string $objectType, int $objectID = 0, string $title = '', string $extra = ''): object|false
+    {
+        $file = $this->dao->select('*')->from(TABLE_FILE)
+            ->where('objectType')->eq($objectType)
+            ->beginIF($objectID)->andWhere('objectID')->eq($objectID)->fi()
+            ->beginIF($title)->andWhere('title')->eq($title)->fi()
+            ->beginIF($extra)->andWhere('extra')->eq($extra)->fi()
+            ->fetch();
+        if(empty($file)) return false;
+
+        return $file;
+    }
+
+    /**
      * Get files by ID list.
      *
      * @param  string|array $fileIdList
@@ -165,7 +188,6 @@ class fileModel extends model
     {
         $now = helper::today();
 
-        if($file['size'] == 0) return false;
         if(!move_uploaded_file($file['tmpname'], $this->savePath . $this->getSaveName($file['pathname']))) return false;
 
         $file = $this->compressImage($file);
@@ -971,15 +993,26 @@ class fileModel extends model
 
         /* Append the extension name auto. */
         $extension = $fileType ? ('.' . $fileType) : '';
-        if(strpos($fileName, $extension) === false) $fileName .= $extension;
+        if($extension && strpos($fileName, $extension) === false) $fileName .= $extension;
 
         /* Judge the content type. */
         $mimes       = $this->config->file->mimes;
         $contentType = isset($mimes[$fileType]) ? $mimes[$fileType] : $mimes['default'];
-        $fileName    = str_replace('+', ' ', urlencode($fileName));
+
+        /* Safari浏览器下载文件名乱码问题。 */
+        if($fileType != 'zip' && preg_match("/Safari/", $_SERVER["HTTP_USER_AGENT"]))
+        {
+            $fileName   = rawurlencode($fileName);
+            $attachment = 'attachment; filename*=utf-8\'\'' . $fileName;
+        }
+        else
+        {
+            $fileName   = str_replace("+", "%20", urlencode($fileName));
+            $attachment = "attachment; filename=\"{$fileName}\";";
+        }
 
         helper::header('Content-type', $contentType);
-        helper::header('Content-Disposition', "attachment; filename=\"$fileName\"");
+        helper::header('Content-Disposition', $attachment);
         helper::header('Pragma', 'no-cache');
         helper::header('Expires', '0');
         if($type == 'content') helper::end($content);

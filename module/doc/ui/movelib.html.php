@@ -12,12 +12,10 @@ declare(strict_types=1);
  */
 namespace zin;
 
-modalHeader(set::titleClass('text-root font-bold'), set::title($lang->doc->moveLibAction));
-
-$libType    = $targetSpace == 'mine' ? 'mine' : 'custom';
 $defaultAcl = $lib->acl;
-if($libType == 'mine') $defaultAcl = 'private';
-if($libType == 'custom' && ($lib->type == 'mine' || $lib->parent != $targetSpace)) $defaultAcl = 'open';
+if(!isset($lang->doclib->aclList[$defaultAcl])) $defaultAcl = key($lang->doclib->aclList);
+
+modalHeader(set::titleClass('text-root font-bold'), set::title($lang->doc->moveLibAction));
 
 jsVar('targetSpace', $targetSpace);
 jsVar('libID', $lib->id);
@@ -68,13 +66,13 @@ formPanel
                     inputGroup
                     (
                         $lang->doclib->group,
-                        picker(set::name('groups[]'), set::items($groups), set::multiple(true))
+                        picker(set::name('groups[]'), set::items($groups), set::multiple(true), set::value($lib->groups))
                     )
                 ),
                 div
                 (
                     setClass('w-full'),
-                    userPicker(set::label($lang->doclib->user), set::items($users))
+                    userPicker(set::label($lang->doclib->user), set::items($users), set::value($lib->users))
                 )
             )
         )

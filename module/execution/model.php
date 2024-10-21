@@ -40,7 +40,6 @@ class executionModel extends model
     {
         if(commonModel::isTutorialMode()) return true;
 
-        if(!$this->server->http_referer) return print(js::alert($this->lang->execution->accessDenied) . js::locate($this->createLink('execution', 'all')));
         return $this->app->control->sendError($this->lang->execution->accessDenied, helper::createLink('execution', 'all'));
     }
 
@@ -441,180 +440,9 @@ class executionModel extends model
         $this->loadModel('project');
         $this->app->loadLang('programplan');
 
-        $executions    = array();
         $allChanges    = array();
         $oldExecutions = $this->getByIdList($postData->id);
-        $nameList      = array();
-        $codeList      = array();
-
-        $parents = array();
-        foreach($oldExecutions as $oldExecution) $parents[$oldExecution->id] = $oldExecution->parent;
-
-        /* Replace required language. */
-        if($this->app->tab == 'project')
-        {
-            $projectModel = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($this->session->project)->fetch('model');
-            if(empty($this->session->project) || $projectModel == 'scrum')
-            {
-                $this->lang->project->name = $this->lang->execution->name;
-                $this->lang->project->code = $this->lang->execution->code;
-            }
-            else
-            {
-                $this->lang->project->name = str_replace($this->lang->project->common, $this->lang->project->stage, $this->lang->project->name);
-                $this->lang->project->code = str_replace($this->lang->project->common, $this->lang->project->stage, $this->lang->project->code);
-            }
-        }
-        else
-        {
-            $this->lang->project->name = $this->lang->execution->name;
-            $this->lang->project->code = $this->lang->execution->code;
-        }
-
-        $this->lang->error->unique = $this->lang->error->repeat;
-        $extendFields = $this->getFlowExtendFields();
-        foreach($postData->id as $executionID)
-        {
-            $executionName = $postData->name[$executionID];
-            if(isset($postData->code)) $executionCode = $postData->code[$executionID];
-
-            $executionID = (int)$executionID;
-            $executions[$executionID] = new stdClass();
-            $executions[$executionID]->id             = $executionID;
-            $executions[$executionID]->name           = $executionName;
-            $executions[$executionID]->PM             = $postData->PM[$executionID];
-            $executions[$executionID]->PO             = $postData->PO[$executionID];
-            $executions[$executionID]->QD             = $postData->QD[$executionID];
-            $executions[$executionID]->RD             = $postData->RD[$executionID];
-            $executions[$executionID]->begin          = $postData->begin[$executionID];
-            $executions[$executionID]->end            = $postData->end[$executionID];
-            $executions[$executionID]->team           = $postData->team[$executionID];
-            $executions[$executionID]->desc           = htmlspecialchars_decode($postData->desc[$executionID]);
-            $executions[$executionID]->days           = $postData->days[$executionID];
-            $executions[$executionID]->lastEditedBy   = $this->app->user->account;
-            $executions[$executionID]->lastEditedDate = helper::now();
-
-            if(isset($postData->code))    $executions[$executionID]->code    = $executionCode;
-            if(isset($postData->project)) $executions[$executionID]->project = zget($postData->project, $executionID, 0);
-            if(isset($postData->attribute[$executionID])) $executions[$executionID]->attribute = zget($postData->attribute, $executionID, '');
-            if(isset($postData->lifetime[$executionID]))  $executions[$executionID]->lifetime  = $postData->lifetime[$executionID];
-
-            $oldExecution = $oldExecutions[$executionID];
-            $projectID    = isset($executions[$executionID]->project) ? (int)$executions[$executionID]->project : (int)$oldExecution->project;
-            $project      = dao::isError() ? '' : $this->project->getByID($projectID);
-
-            /* Check unique code for edited executions. */
-            if(isset($postData->code) && empty($executionCode) && strpos(",{$this->config->execution->edit->requiredFields},", ',code,') !== false)
-            {
-                dao::$errors["code[$executionID]"] = sprintf($this->lang->error->notempty, $this->lang->execution->execCode);
-            }
-            elseif(isset($postData->code) and $executionCode)
-            {
-                if(isset($codeList[$executionCode]))
-                {
-                    dao::$errors["code[$executionID]"] = sprintf($this->lang->error->unique, $this->lang->execution->execCode, $executionCode);
-                }
-                $codeList[$executionCode] = $executionCode;
-            }
-
-            /* Name check. */
-            $parentID = $parents[$executionID];
-            if(isset($nameList[$executionName]) && !empty($executionName))
-            {
-                foreach($nameList[$executionName] as $repeatID)
-                {
-                    if($parentID == $parents[$repeatID])
-                    {
-                        $type = $oldExecution->type == 'stage' ? 'stage' : 'agileplus';
-                        $repeatTip = $parentID == $projectID ? $this->lang->programplan->error->sameName : sprintf($this->lang->execution->errorNameRepeat, strtolower(zget($this->lang->programplan->typeList, $type)));
-                        dao::$errors["name[$executionID]"] = $repeatTip;
-                    }
-                }
-            }
-
-            $nameList[$executionName][] = $executionID;
-
-            /* Attribute check. */
-            if(isset($postData->attribute) && isset($project->model) && in_array($project->model, array('waterfall', 'waterfallplus')))
-            {
-                $this->app->loadLang('stage');
-                $attribute = isset($executions[$executionID]->attribute) ? $executions[$executionID]->attribute : $oldExecution->attribute;
-
-                if(isset($attributeList[$parentID]))
-                {
-                    $parentAttr = $attributeList[$parentID];
-                }
-                else
-                {
-                    $parentAttr = dao::isError() ? $attribute : $this->dao->select('attribute')->from(TABLE_PROJECT)->where('id')->eq($parentID)->fetch('attribute');
-                }
-
-                if($parentAttr && $parentAttr != $attribute && $parentAttr != 'mix')
-                {
-                    $parentAttr = zget($this->lang->stage->typeList, $parentAttr);
-                    dao::$errors["attribute[$executionID]"] = sprintf($this->lang->execution->errorAttrMatch, $parentAttr);
-                }
-
-                $attributeList[$executionID] = $attribute;
-            }
-
-            /* Judge workdays is legitimate. */
-            $workdays = helper::diffDate($postData->end[$executionID], $postData->begin[$executionID]) + 1;
-            if(isset($postData->days[$executionID]) and $postData->days[$executionID] > $workdays)
-            {
-                $this->app->loadLang('project');
-                dao::$errors["days[{$executionID}]"] = sprintf($this->lang->project->workdaysExceed, $workdays);
-            }
-
-            /* Parent stage begin and end check. */
-            if(isset($executions[$parentID]))
-            {
-                $begin       = $executions[$executionID]->begin;
-                $end         = $executions[$executionID]->end;
-                $parentBegin = $executions[$parentID]->begin;
-                $parentEnd   = $executions[$parentID]->end;
-
-                if($begin < $parentBegin)
-                {
-                    dao::$errors["begin[$executionID]"] = sprintf($this->lang->execution->errorLesserParent, $parentBegin);
-                }
-
-                if($end > $parentEnd)
-                {
-                    dao::$errors["end[$executionID]"] = sprintf($this->lang->execution->errorGreaterParent, $parentEnd);
-                }
-            }
-
-            foreach($extendFields as $extendField)
-            {
-                $executions[$executionID]->{$extendField->field} = $postData->{$extendField->field}[$executionID];
-                if(is_array($executions[$executionID]->{$extendField->field})) $executions[$executionID]->{$extendField->field} = implode(',', $executions[$executionID]->{$extendField->field});
-
-                $executions[$executionID]->{$extendField->field} = htmlSpecialString($executions[$executionID]->{$extendField->field});
-            }
-
-            if(empty($executions[$executionID]->begin)) dao::$errors["begin[{$executionID}]"] = sprintf($this->lang->error->notempty, $this->lang->execution->begin);
-            if(empty($executions[$executionID]->end))   dao::$errors["end[{$executionID}]"]   = sprintf($this->lang->error->notempty, $this->lang->execution->end);
-
-            /* Project begin and end check. */
-            if(!empty($executions[$executionID]->begin) and !empty($executions[$executionID]->end))
-            {
-                if($executions[$executionID]->begin > $executions[$executionID]->end)
-                {
-                    dao::$errors["end[{$executionID}]"] = sprintf($this->lang->execution->errorLesserPlan, $executions[$executionID]->end, $executions[$executionID]->begin);
-                }
-
-                if($project and $executions[$executionID]->begin < $project->begin)
-                {
-                    dao::$errors["begin[{$executionID}]"] = sprintf($this->lang->execution->errorLesserProject, $project->begin);
-                }
-                if($project and $executions[$executionID]->end > $project->end)
-                {
-                    dao::$errors["end[{$executionID}]"] = sprintf($this->lang->execution->errorGreaterProject, $project->end);
-                }
-            }
-        }
-
+        $executions    = $this->buildBatchUpdateExecutions($postData, $oldExecutions);
         if(dao::isError()) return false;
 
         /* Update burn before close execution. */
@@ -628,7 +456,7 @@ class executionModel extends model
         foreach($executions as $executionID => $execution)
         {
             $oldExecution = $oldExecutions[$executionID];
-            $team         = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution');
+            $team         = $this->user->getTeamMemberPairs($executionID, 'execution');
             $projectID    = isset($execution->project) ? (int)$execution->project : (int)$oldExecution->project;
 
             if(isset($execution->project))
@@ -671,7 +499,7 @@ class executionModel extends model
             {
                 $execution->parent = $execution->project;
                 $execution->path   = ",{$execution->project},{$executionID},";
-                $this->changeProject($execution->project, $oldExecution->project, $executionID, isset($postData->syncStories[$executionID]) ? $postData->syncStories[$executionID] : 'no');
+                $this->changeProject((int)$execution->project, $oldExecution->project, $executionID, isset($postData->syncStories[$executionID]) ? $postData->syncStories[$executionID] : 'no');
             }
 
             if(!empty($execution->attribute) && $oldExecution->attribute != $execution->attribute && $execution->attribute != 'mix')
@@ -5036,8 +4864,13 @@ class executionModel extends model
 
         if($status == 'wait')
         {
-            $execution->closedBy   = '';
-            $execution->canceledBy = '';
+            $execution->closedBy      = '';
+            $execution->canceledBy    = '';
+            $execution->closedDate    = null;
+            $execution->canceledDate  = null;
+            $execution->realBegan     = null;
+            $execution->realEnd       = null;
+            $execution->suspendedDate = null;
         }
         elseif($status == 'doing')
         {
@@ -5049,6 +4882,8 @@ class executionModel extends model
         {
             $execution->suspendedDate = helper::now();
             $execution->closedBy      = '';
+            $execution->closedDate    = null;
+            $execution->realEnd       = null;
         }
         elseif($status == 'closed')
         {

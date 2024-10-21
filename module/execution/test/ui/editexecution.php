@@ -25,5 +25,5 @@ $execution = array(
     ),
 );
 
-r($tester->edit($execution['0'])) && p('message') && e('编辑执行成功');               //创建执行成功
+r($tester->edit($execution['0'])) && p('status,message') && e('SUCCESS,编辑执行成功');               //创建执行成功
 $tester->closeBrowser();

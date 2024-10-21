@@ -36,7 +36,7 @@ function arrowTabs(domID, shift, hideRightBtn)
     {
         $leftBtn.hide();
         $rightBtn.hide();
-        $('#' + domID + ' > .nav-tabs')[0].style.transform = 'translateX(0px)';
+        if($('#' + domID + ' > .nav-tabs').length) $('#' + domID + ' > .nav-tabs')[0].style.transform = 'translateX(0px)';
         return;
     }
 
@@ -181,18 +181,18 @@ function expandTree()
 }
 
 /* Close tab. */
-$('#monacoTabs').on('click', '.monaco-close', function()
+window.closeTab = function(obj)
 {
-    var eleId    = $(this).parent().attr('href');
-    var tabsEle  = $(this).parent().parent().parent();
-    var isActive = $(this).parent().hasClass('active');
+    var eleId    = $(obj).parent().attr('href');
+    var tabsEle  = $(obj).parent().parent().parent();
+    var isActive = $(obj).parent().hasClass('active');
 
-    $(this).parent().parent().remove();
+    $(obj).parent().parent().remove();
     $(eleId).remove();
     $('#' + eleId.substring(5)).parent().removeClass('selected');
     if(isActive) tabsEle.children().last().find('a').trigger('click');
     if(!tabsEle.children().length) $('.monaco-dropmenu').addClass('hidden');
-});
+}
 
 
 window.afterPageUpdate = function()
@@ -349,7 +349,7 @@ function openTab(entry, name)
     }, 100);
 }
 
-function updateEditorInline(eleId)
+window.updateEditorInline = function(eleId)
 {
     $.cookie.set('renderSideBySide', diffAppose, {expires:config.cookieLife, path:config.webRoot});
     if(typeof  $(eleId + ' iframe')[0].contentWindow.updateEditorInline == 'function')
@@ -358,11 +358,11 @@ function updateEditorInline(eleId)
     }
 }
 
-$('#monacoTabs .nav-item a').on('click', function()
+window.changeDiffType = function(obj)
 {
-    var eleId = $(this).attr('href');
-    $(eleId + ' iframe')[0].contentWindow.updateEditorInline(diffAppose);
-});
+    const eleId = $(obj).attr('href');
+    if(eleId) $(eleId + ' iframe')[0].contentWindow.updateEditorInline(diffAppose);
+}
 
 $(document).ready(function()
 {
@@ -381,7 +381,7 @@ $(document).ready(function()
     $('.btn-right').on('click', function() {arrowTabs('monacoTabs', -2);});
 });
 
-$('.inline-appose').on('click', function()
+window.inlineAppose = function()
 {
     $('.inline-appose').hide();
     diffAppose = !diffAppose;
@@ -396,14 +396,7 @@ $('.inline-appose').on('click', function()
     var tabID = $('#monacoTabs .nav-item .active').attr('href');
     updateEditorInline(tabID);
     return;
-});
-
-$(".label-exchange").on('click', function()
-{
-    var newDiffLink = diffLink.replace('{oldRevision}', newRevision);
-    newDiffLink     = newDiffLink.replace('{newRevision}', oldRevision);
-    openUrl(newDiffLink);
-});
+}
 
 /**
  * 在当前页面用modal加载链接。

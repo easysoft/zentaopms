@@ -11,6 +11,10 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('libType', $type);
+$acl = 'default';
+if($type == 'mine')   $acl = 'private';
+if($type == 'custom') $acl = 'open';
+
 formPanel
 (
     set::title($lang->doc->createLib),
@@ -72,7 +76,7 @@ formPanel
             )
         )
     ) : null,
-    $type == 'custom' ? formRow
+    $type == 'custom' || $type == 'mine' ? formRow
     (
         formGroup
         (
@@ -141,7 +145,7 @@ formPanel
             (
                 set::name('acl'),
                 set::items($lang->doclib->aclList),
-                set::value($acl),
+                set::value(isset($acl) ? $acl : ''),
                 on::change("toggleAcl('lib')")
             )
         )

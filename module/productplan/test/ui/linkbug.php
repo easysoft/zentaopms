@@ -1,5 +1,11 @@
 #!/usr/bin/env php
 <?php
+
+/**
+title=计划关联bug
+timeout=0
+cid=0
+*/
 chdir(__DIR__);
 include '../lib/linkbug.ui.class.php';
 

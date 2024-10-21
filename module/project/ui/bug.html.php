@@ -77,6 +77,7 @@ if($canBatchAssignTo)
     $assignedToItems = array();
     foreach ($memberPairs as $key => $value)
     {
+        $key = base64_encode((string)$key); // 编码用户名中的特殊字符
         if(!empty($key)) $assignedToItems[] = array('text' => $value, 'innerClass' => 'batch-btn ajax-btn', 'data-url' => createLink('bug', 'batchAssignTo', "assignedTo=$key&projectID={$project->id}&type=project"));
     }
 

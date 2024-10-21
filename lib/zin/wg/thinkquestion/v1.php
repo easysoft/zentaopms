@@ -24,6 +24,7 @@ class thinkQuestion extends thinkStepBase
         'required?: int=1',      // 是否必填
         'questionType?: string', // 问题类型
         'value?: string',        // 问题的答案
+        'isResult?: bool=false', // 是否是结果页
     );
 
     protected static array $defaultProps = array

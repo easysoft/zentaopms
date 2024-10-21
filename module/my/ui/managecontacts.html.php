@@ -125,6 +125,7 @@ div
                             set::multiple(true),
                             set::name('userList[]'),
                             set::items($users),
+                            set::maxItemsCount($config->maxCount),
                             set::value(!empty($list->userList) ? $list->userList : '')
                         )
                     )

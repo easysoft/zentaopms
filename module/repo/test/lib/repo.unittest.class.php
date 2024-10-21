@@ -902,6 +902,7 @@ class repoTest
     {
         $this->objectModel->app->tab = $tab;
         $this->objectModel->setHideMenu($objectID);
+        if(!isset($this->objectModel->lang->{$tab}->menu)) return false;
         return $this->objectModel->lang->{$tab}->menu->devops['subMenu'];
     }
 }

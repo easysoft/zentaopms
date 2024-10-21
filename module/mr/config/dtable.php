@@ -1,5 +1,6 @@
 <?php
 global $lang, $app;
+if(empty($app->rawModule)) $app->rawModule = 'mr';
 
 $config->mr->dtable = new stdclass();
 
@@ -79,7 +80,7 @@ $config->mr->taskDtable->fieldList['pri']['type']     = 'pri';
 $config->mr->taskDtable->fieldList['pri']['sortType'] = true;
 $config->mr->taskDtable->fieldList['pri']['show']     = true;
 
-$config->mr->taskDtable->fieldList['assignedTo']['type']        = 'desc';
+$config->mr->taskDtable->fieldList['assignedTo']['type']        = 'user';
 $config->mr->taskDtable->fieldList['assignedTo']['title']       = $lang->task->assignedTo;
 $config->mr->taskDtable->fieldList['assignedTo']['currentUser'] = '';
 $config->mr->taskDtable->fieldList['assignedTo']['sortType']    = true;

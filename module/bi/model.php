@@ -541,6 +541,8 @@ class biModel extends model
 
             $useField = in_array($useField, $fieldList) ? $useField : 'id';
             $options = $this->dao->select("id, {$useField}")->from($table)->fetchPairs();
+            // htmlspecialchars values
+            foreach($options as $key => $value) $options[$key] = str_replace('"', '', htmlspecialchars_decode($value));
         }
 
         return $options;
@@ -1972,16 +1974,12 @@ class biModel extends model
 
             $columnMaxLen[$field] = mb_strlen($column->label);
 
-            if(isset($column->colspan) && $column->isSlice) $columns[$field]['colspan'] = $column->colspan;
+            if(isset($column->colspan) && $column->colspan > 1) $columns[$field]['colspan'] = $column->colspan;
 
             // if(isset($data->groups[$index])) $columns[$field]['fixed'] = 'left';
 
             $index++;
         }
-
-        $lastRow     = count($data->array) - 1;
-        $hasGroup    = isset($data->groups);
-        $showLastRow = isset($data->showLastRow) ? $data->showLastRow : false;
 
         $drills = !empty($data->drills) ? array_values($data->drills) : array();
         foreach($data->array as $rowKey => $rowData)
@@ -1991,6 +1989,11 @@ class biModel extends model
             $rowData         = array_values($rowData);
             $drillConditions = array();
             $isDrill         = array();
+
+            $totalLang    = $this->lang->pivot->total;
+            $totalColspan = 0;
+
+            foreach($rowData as $value) if($value == $totalLang) $totalColspan++;
 
             for($i = 0; $i < count($rowData); $i++)
             {
@@ -2004,7 +2007,6 @@ class biModel extends model
                     $value   = array_slice($rowData, $i, $colspan);
 
                     $i += $colspan - 1;
-                    $columnKey = $columnKeys[$i];
                 }
 
                 /* 定义数据表格的行数据。*/
@@ -2012,7 +2014,7 @@ class biModel extends model
                 $rows[$rowKey][$field]   = $value;
                 $drillFields             = $this->getDrillFields($rowKey, $columnKey, $drills);
                 $drillConditions[$field] = $this->processDrills($field, $drillFields, $columns);
-                $isDrill[$field]         = isset($columns[$field]['link']);
+                $isDrill[$field]         = isset($columns[$field]['link']) && $totalColspan === 0;
 
                 if(is_string($value)) $columnMaxLen[$field] = max($columnMaxLen[$field], mb_strlen($value));
 
@@ -2024,11 +2026,9 @@ class biModel extends model
                     $cellSpan[$field]['rowspan'] = $field . '_rowspan';
                 }
 
-                $isFirstColumnAndLastRow = $i === 0 && $rowKey === $lastRow;
-
-                if($isFirstColumnAndLastRow && $hasGroup && $showLastRow)
+                if($value == $totalLang)
                 {
-                    $rows[$rowKey][$field . '_colspan'] = count($data->groups);
+                    $rows[$rowKey][$field . '_colspan'] = $totalColspan;
                     $cellSpan[$field]['colspan'] = $field . '_colspan';
                 }
 

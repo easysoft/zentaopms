@@ -141,6 +141,10 @@ class form extends fixer
                 {
                     $configObject[$field->field] = array('required' => $required, 'type' => 'array', 'default' => array(''), 'filter' => 'join');
                 }
+                elseif($field->control == 'date' || $field->control == 'datetime')
+                {
+                    $configObject[$field->field] = array('required' => $required, 'type' => $field->control, 'default' => null);
+                }
                 else
                 {
                     $type = $field->type == 'int' ? 'int' : 'string';

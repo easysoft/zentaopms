@@ -269,7 +269,7 @@ $lang->repo->error->noCloneAddr       = '该项目克隆地址未找到';
 $lang->repo->error->differentVersions = '基准和对比不能一样';
 $lang->repo->error->needTwoVersion    = '必须选择两个分支/标签';
 $lang->repo->error->projectUnique     = $lang->repo->serviceProject . '已经有这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。';
-$lang->repo->error->repoNameInvalid   = '名称应该只包含字母数字，破折号，下划线和点。';
+$lang->repo->error->repoNameInvalid   = '名称必须以字母或 _ 开头，只包含字母数字，破折号，下划线和点。';
 $lang->repo->error->createdFail       = '创建失败';
 $lang->repo->error->noProduct         = '在开始导入代码库之前，请先关联产品。';
 

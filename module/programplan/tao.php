@@ -264,6 +264,7 @@ class programplanTao extends programplanModel
     protected function setTask(array $tasks, array $plans, string $selectCustom, array $datas, array $stageIndex): array
     {
         $this->app->loadLang('task');
+        $this->loadModel('holiday');
         $executions = array();
         $today      = helper::today();
         $taskTeams  = $this->dao->select('task,account')->from(TABLE_TASKTEAM)->where('task')->in(array_keys($tasks))->fetchGroup('task', 'account');
@@ -271,7 +272,8 @@ class programplanTao extends programplanModel
 
         foreach($tasks as $task)
         {
-            $dateLimit    = $this->getTaskDateLimit($task, zget($plans, $task->execution, null));
+            $plan         = zget($plans, $task->execution, null);
+            $dateLimit    = $this->getTaskDateLimit($task, $plan);
             $data         = $this->buildTaskDataForGantt($task, $dateLimit);
             $data->id     = $task->execution . '-' . $task->id;
             $data->parent = $task->parent > 0 ? $task->execution . '-' . $task->parent : $task->execution;
@@ -280,10 +282,16 @@ class programplanTao extends programplanModel
             /* Determines if the object is delay. */
             $data->delay     = $this->lang->programplan->delayList[0];
             $data->delayDays = 0;
-            if($today > $dateLimit['end'])
+            if($today > $dateLimit['end'] && (!$plan || $plan->status != 'closed'))
             {
-                $data->delay     = $this->lang->programplan->delayList[1];
-                $data->delayDays = helper::diffDate($today, $dateLimit['end']);
+                $finishedDate = ($task->status == 'done' || $task->status == 'closed') && $task->finishedDate ? substr($task->finishedDate, 0, 10) : $today;
+                $actualDays   = $this->holiday->getActualWorkingDays(substr($dateLimit['end'], 0, 10), $finishedDate);
+                $delayDays    = count($actualDays);
+                if($delayDays > 0)
+                {
+                    $data->delayDays = $delayDays;
+                    $data->delay     = $this->lang->programplan->delayList[1];
+                }
             }
 
             /* If multi task then show the teams. */

@@ -686,7 +686,6 @@ class transferModel extends model
             /* Add table alias to field. */
             preg_match_all('/[`"]' . $this->config->db->prefix . $module .'[`"] AS ([\w]+) /', $queryCondition, $matches);
             if(isset($matches[1][0])) $selectKey = "{$matches[1][0]}.id";
-            if($module == 'case' && !empty($_SESSION['testcaseTransferParams']['taskID'])) $selectKey = 't1.id';
 
             $stmt = $this->dbh->query($queryCondition . ($this->post->exportType == 'selected' ? " AND $selectKey IN(" . ($checkedItem ? $checkedItem : '0') . ")" : ''));
             while($row = $stmt->fetch())
@@ -886,6 +885,7 @@ class transferModel extends model
             $tmpArray = new stdClass();
             foreach($row as $currentColumn => $cellValue)
             {
+                $cellValue = trim($cellValue);
                 /* 第一行是标题字段。*/
                 /* First row is title field. */
                 if($currentRow == 1)

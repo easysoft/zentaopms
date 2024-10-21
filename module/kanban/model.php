@@ -2140,6 +2140,16 @@ class kanbanModel extends model
      */
     public function createLane(int $kanbanID, int $regionID, object $lane = null, string $mode = 'new'): int|bool
     {
+        $laneType = isset($_POST['laneType']) ? $_POST['laneType'] : 'common';
+        if($laneType == 'common')
+        {
+            $sameNameLane = $this->dao->select('id')->from(TABLE_KANBANLANE)->where('region')->eq($regionID)->andWhere('name')->eq($lane->name)->andWhere('deleted')->eq('0')->limit(1)->fetch();
+            if($sameNameLane)
+            {
+                dao::$errors['name'][] = $this->lang->kanbanlane->error->hasExist;
+                return false;
+            }
+        }
         if($mode == 'new')
         {
             $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANLANE)
@@ -2147,7 +2157,7 @@ class kanbanModel extends model
                 ->fetch('maxOrder');
 
             $lane->order     = $maxOrder ? $maxOrder + 1 : 1;
-            $lane->type      = isset($_POST['laneType']) ? $_POST['laneType'] : 'common';
+            $lane->type      = $laneType;
             $lane->execution = isset($_POST['laneType']) ? $kanbanID : 0;
 
             if($lane->mode == 'sameAsOther')
@@ -3226,6 +3236,9 @@ class kanbanModel extends model
 
         $toCardList = rtrim($toCellCards, ',') . ",$cardID,";
         $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($toCardList)->where('`column`')->eq($toColID)->andWhere('lane')->eq($toLaneID)->exec();
+
+        $toLane = $this->getLaneById($toLaneID);
+        $this->dao->update(TABLE_KANBANCARD)->set('group')->eq($toLane->group)->where('id')->eq($cardID)->exec();
     }
 
     /**
@@ -3835,5 +3848,23 @@ class kanbanModel extends model
         $kanbanData = $this->getKanbanData($kanbanID, $regionID);
         $kanbanData = reset($kanbanData);
         return array('name' => 'updateKanbanRegion', 'params' => array('region' . $regionID, $kanbanData));
+    }
+
+    /**
+     * 获取卡片所在的单元格。
+     * Get card cell.
+     *
+     * @param  int    $cardID
+     * @param  int    $kanbanID
+     * @access public
+     * @return object
+     */
+    public function getCellByCard(int $cardID, int $kanbanID): object|false
+    {
+        return $this->dao->select('id,cards,lane,`column`')->from(TABLE_KANBANCELL)
+            ->where('kanban')->eq($kanbanID)
+            ->andWhere('type')->eq('common')
+            ->andWhere('cards')->like("%,$cardID,%")
+            ->fetch();
     }
 }

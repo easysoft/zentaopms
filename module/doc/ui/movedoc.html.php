@@ -14,12 +14,14 @@ namespace zin;
 
 modalHeader(set::title($lang->doc->moveDocAction));
 
-$libType    = $space == 'mine' ? 'mine' : 'custom';
 $defaultAcl = $doc->acl;
-if($libType == 'mine') $defaultAcl = 'private';
-if($libType == 'mine') $this->lang->doc->aclList = $this->lang->doclib->mySpaceAclList;
-if($libType == 'custom' && $doc->lib != $libID) $defaultAcl = 'open';
+if($spaceType == 'mine')
+{
+    $defaultAcl = 'private';
+    $this->lang->doc->aclList = $this->lang->doclib->mySpaceAclList;
+}
 
+jsVar('spaceType', $spaceType);
 jsVar('space', $space);
 jsVar('libID', $libID);
 jsVar('docID', $docID);
@@ -32,7 +34,7 @@ formPanel
         set::width('5/6'),
         set::label($lang->doc->space),
         set::required(true),
-        set::control(array('control' => "picker", 'name' => 'space', 'items' => $spaces, 'value' => $space))
+        set::control(array('control' => "picker", 'name' => 'space', 'items' => $spaces, 'value' => "{$spaceType}.{$space}"))
     ),
     formGroup
     (
@@ -65,7 +67,7 @@ formPanel
     formRow
     (
         setID('whiteListBox'),
-        setClass(($libID == $doc->lib && $libType != 'mine' && $defaultAcl == 'private') ? '' : 'hidden'),
+        setClass(($libID == $doc->lib && $spaceType != 'mine' && $defaultAcl == 'private') ? '' : 'hidden'),
         formGroup
         (
             set::label($lang->doc->whiteList),

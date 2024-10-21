@@ -91,6 +91,7 @@ class customModel extends model
         {
             $item->vision = $this->config->vision;
             if(in_array("{$item->module}-{$item->section}", $this->config->custom->nonInterface->lang)) $item->vision = 'all';
+            if($item->module == 'feedback') $item->vision = 'all';
         }
         $this->dao->replace(TABLE_LANG)->data($item)->exec();
 

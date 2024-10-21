@@ -948,19 +948,28 @@ class kanban extends control
      * @param  int    $fromLaneID
      * @param  int    $toLaneID
      * @param  int    $kanbanID
+     * @param  bool   $showModal
      * @access public
      * @return void
      */
-    public function moveCard(int $cardID, int $fromColID, int $toColID, int $fromLaneID, int $toLaneID, int $kanbanID = 0)
+    public function moveCard(int $cardID, int $fromColID, int $toColID, int $fromLaneID, int $toLaneID, int $kanbanID = 0, bool $showModal = false)
     {
-        $this->kanban->moveCard($cardID, $fromColID, $toColID, $fromLaneID, $toLaneID, $kanbanID);
+        if($showModal)
+        {
+            $this->kanbanZen->moveCardByModal($cardID);
+            if(!$_POST) return;
+        }
+        else
+        {
+            $this->kanban->moveCard($cardID, $fromColID, $toColID, $fromLaneID, $toLaneID, $kanbanID);
+        }
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $this->loadModel('action')->create('kanbanCard', $cardID, 'moved');
 
         $card     = $this->kanban->getCardByID($cardID);
         $callback = $this->kanban->getKanbanCallback($card->kanban, $card->region);
-        return $this->send(array('result' => 'success', 'callback' => $callback));
+        return $this->send(array('result' => 'success', 'callback' => $callback, 'closeModal' => true));
     }
 
     /**
@@ -1687,6 +1696,25 @@ class kanban extends control
 
         if($pageType == 'batch') return $this->send($laneList);
         return print(json_encode(array('items' => $laneList, 'name' => $field)));
+    }
+
+    /**
+     * 获取泳道的列。
+     * Ajax get columns by lane id.
+     *
+     * @param  int    $laneID
+     * @access public
+     * @return string
+     */
+    public function ajaxGetColumns(int $laneID)
+    {
+        $lane    = $this->kanban->getLaneByID($laneID);
+        $columns = $this->kanban->getColumnPairsByGroup($lane->group);
+
+        $columnList = array();
+        foreach($columns as $columnID => $columnName) $columnList[] = array('value' => $columnID, 'text' => $columnName);
+
+        return print(json_encode($columnList));
     }
 
     /**

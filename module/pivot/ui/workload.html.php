@@ -26,7 +26,6 @@ $generateData = function() use ($lang, $title, $cols, $data, $workload, $depts, 
         (
             setID('conditions'),
             setClass('flex gap-2 bg-canvas p-2'),
-            on::change('loadWorkload'),
             inputGroup
             (
                 setClass('w-1/6'),

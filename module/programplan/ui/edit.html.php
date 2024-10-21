@@ -123,6 +123,7 @@ formPanel
         set::required(true),
         inputGroup
         (
+            setID('dateBox'),
             datepicker(set::name('begin'), set::value($plan->begin)),
             $lang->project->to,
             datepicker(set::name('end'), set::value($plan->end))

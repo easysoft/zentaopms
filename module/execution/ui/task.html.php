@@ -155,10 +155,11 @@ if($canBatchAction)
 {
     if($canBatchClose || $canBatchCancel)
     {
+        $batchCancelClass = $config->edition == 'open' ? 'ajax-btn' : 'ajax-cancel-btn';
         $batchItems = array
         (
             array('text' => $lang->close,        'innerClass' => 'batch-btn ajax-btn not-open-url', 'disabled' => !$canBatchClose, 'data-url' => createLink('task', 'batchClose')),
-            array('text' => $lang->task->cancel, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'disabled' => !$canBatchCancel, 'data-url' => createLink('task', 'batchCancel'))
+            array('text' => $lang->task->cancel, 'innerClass' => "batch-btn $batchCancelClass not-open-url", 'disabled' => !$canBatchCancel, 'data-url' => createLink('task', 'batchCancel'))
         );
     }
 

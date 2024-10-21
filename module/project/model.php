@@ -22,6 +22,64 @@ class projectModel extends model
     }
 
     /**
+     * 获取当前登录用户参与的项目列表.
+     * Get project list by current user.
+     *
+     * @param  string    $fields
+     * @access public
+     * @return array
+     */
+    public function getInvolvedListByCurrentUser(string $fields = 't1.*') :array
+    {
+        $stmt = $this->dao->select($fields)->from(TABLE_PROJECT)->alias('t1');
+        $stmt = $this->leftJoinInvolvedTable($stmt);
+
+        $stmt->where('t1.type')->eq('project')
+            ->beginIF($this->config->vision)->andWhere('t1.vision')->eq($this->config->vision)->fi()
+            ->andWhere('t1.deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi();
+        $stmt = $this->appendInvolvedCondition($stmt);
+
+        return $stmt->orderBy('order_asc,id_desc')
+            ->fetchAll('id');
+    }
+
+    /**
+     * 左链接 "我参与的" 条件需要的表，传入的$stmt t1应为 TABLE_PROJECT 表
+     * LeftJoin "I participate" condition required table.
+     *
+     * @param  object $stmt
+     * @access public
+     * @return object
+     */
+    public function leftJoinInvolvedTable($stmt)
+    {
+        return $stmt->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id = t2.root')
+            ->leftJoin(TABLE_STAKEHOLDER)->alias('t3')->on('t1.id=t3.objectID');
+    }
+
+    /**
+     * 添加 "我参与的" 条件所需的查询条件，项目的PM、项目的成员、项目的干系人、项目的白名单
+     * Add the query condition for the "I Participate".
+     *
+     * @param  object $stmt
+     * @access public
+     * @return object
+     */
+    public function appendInvolvedCondition($stmt)
+    {
+        return $stmt->andWhere('t2.type')->eq('project')
+            ->andWhere('t1.openedBy', true)->eq($this->app->user->account)
+            ->orWhere('t1.PM')->eq($this->app->user->account)
+            ->orWhere('t2.account')->eq($this->app->user->account)
+            ->orWhere('(t3.user')->eq($this->app->user->account)
+            ->andWhere('t3.deleted')->eq(0)
+            ->markRight(1)
+            ->orWhere("CONCAT(',', t1.whitelist, ',')")->like("%,{$this->app->user->account},%")
+            ->markRight(1);
+    }
+
+    /**
      * 查找项目执行下关联的产品
      * Get linked products with execution under the project.
      *
@@ -2589,8 +2647,11 @@ class projectModel extends model
             return $output;
         }
 
-        $dropMenuLink = helper::createLink('project', 'ajaxGetDropMenu', "objectID=$projectID&module=$currentModule&method=$currentMethod");
-        $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProjectName}'><span class='text'>{$currentProjectName}</span> <span class='caret' style='margin-bottom: -1px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='dropmenu' data-url='$dropMenuLink'>";
+        $this->app->loadConfig('index');
+        $dropMenuMethod = in_array("{$this->app->moduleName}-{$this->app->methodName}", $this->config->index->oldPages) ? 'ajaxGetOldDropMenu' : 'ajaxGetDropMenu';
+        $dataRide       = in_array("{$this->app->moduleName}-{$this->app->methodName}", $this->config->index->oldPages) ? 'searchList'         : 'dropmenu' ;
+        $dropMenuLink   = helper::createLink('project', $dropMenuMethod, "objectID=$projectID&module=$currentModule&method=$currentMethod");
+        $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProjectName}'><span class='text'>{$currentProjectName}</span> <span class='caret' style='margin-bottom: -1px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='{$dataRide}' data-url='$dropMenuLink'>";
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
         $output .= "</div></div>";
 

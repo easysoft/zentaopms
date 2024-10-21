@@ -138,7 +138,7 @@ class taskZen extends task
         }
         $this->view->testStories     = $testStories;
         $this->view->testStoryIdList = $testStoryIdList;
-        $this->view->stories         = $stories;
+        $this->view->stories         = $this->story->addGradeLabel($stories);
     }
 
     /**
@@ -252,7 +252,7 @@ class taskZen extends task
      */
     protected function buildEditForm(int $taskID): void
     {
-        $task  = $this->view->task;
+        $task = $this->view->task;
 
         /* Get the task parent id,name pairs. */
         $tasks = $this->task->getParentTaskPairs($this->view->execution->id, strVal($task->parent));
@@ -280,8 +280,17 @@ class taskZen extends task
             $taskMembers = $this->view->members;
         }
 
+        /* Get execution stories. */
+        $moduleID = $task->module;
+        if($moduleID)
+        {
+            $moduleID = $this->loadModel('tree')->getStoryModule($moduleID);
+            $moduleID = $this->tree->getAllChildID($moduleID);
+        }
+        $stories = $this->story->getExecutionStoryPairs($this->view->execution->id, 0, 'all', $moduleID, 'full', 'active', 'story', false);
+
         $this->view->title         = $this->lang->task->edit . 'TASK' . $this->lang->hyphen . $this->view->task->name;
-        $this->view->stories       = $this->story->getExecutionStoryPairs($this->view->execution->id, 0, 'all', '', 'full', 'active', 'story', false);
+        $this->view->stories       = $this->story->addGradeLabel($stories);
         $this->view->tasks         = $tasks;
         $this->view->taskMembers   = $taskMembers;
         $this->view->users         = $this->loadModel('user')->getPairs('nodeleted|noclosed', "{$task->openedBy},{$task->canceledBy},{$task->closedBy}");
@@ -557,6 +566,8 @@ class taskZen extends task
             $task->lane         = !empty($task->lane)   ? $task->lane   : zget($output, 'laneID',   0);
             $task->column       = !empty($task->column) ? $task->column : zget($output, 'columnID', 0);
             $task->storyVersion = $task->story ? $this->story->getVersion($task->story) : 1;
+
+            if($task->assignedTo) $task->assignedDate = helper::now();
         }
 
         /* Remove data with the same task name. */
@@ -1499,7 +1510,7 @@ class taskZen extends task
         case 'closed':
             $task->closedBy   = $oldTask->status == 'closed' ? $oldTask->closedBy : $currentAccount;
             $task->closedDate = $oldTask->status == 'closed' ? $oldTask->closedDate : $now;
-            if($task->closedReason == 'cancel' and helper::isZeroDate($task->finishedDate)) $task->finishedDate = null;
+            if(isset($task->closedReason) && $task->closedReason == 'cancel' && helper::isZeroDate($task->finishedDate)) $task->finishedDate = null;
             break;
         case 'wait':
             if($task->consumed > 0 and $task->left > 0) $task->status = 'doing';

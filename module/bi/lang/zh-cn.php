@@ -59,6 +59,13 @@ $lang->bi->aggFieldTip   = '对聚合字段配置聚合函数运算，从而得�
 $lang->bi->aggTipA = '对 %s 进行';
 $lang->bi->aggTipB = '运算，对结果重命名为 %s';
 
+$lang->bi->fieldTypeList = array();
+$lang->bi->fieldTypeList['string'] = '字符串';
+$lang->bi->fieldTypeList['number'] = '数值';
+$lang->bi->fieldTypeList['date']   = '日期';
+$lang->bi->fieldTypeList['option'] = '选项';
+$lang->bi->fieldTypeList['object'] = '对象';
+
 $lang->bi->aggList = array();
 $lang->bi->aggList['count']         = '计数';
 $lang->bi->aggList['countdistinct'] = '去重后计数';

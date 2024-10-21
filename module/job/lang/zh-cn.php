@@ -1,7 +1,7 @@
 <?php
 $lang->job->common        = '构建任务';
 $lang->job->browse        = '浏览构建任务';
-$lang->job->create        = '添加流水线';
+$lang->job->create        = '导入流水线';
 $lang->job->edit          = '编辑流水线';
 $lang->job->exec          = '执行流水线';
 $lang->job->runPipeline   = '运行流水线';
@@ -11,6 +11,9 @@ $lang->job->confirmDelete = '确认删除该流水线';
 $lang->job->dirChange     = '目录改动';
 $lang->job->buildTag      = '打标签';
 $lang->job->execSuccess   = '执行成功';
+$lang->job->trigger       = '触发器';
+$lang->job->autoRun       = '是否触发';
+$lang->job->addTrigger    = '添加触发方式';
 
 $lang->job->browseAction = '流水线列表';
 
@@ -64,13 +67,11 @@ $lang->job->projectExists  = '此SonarQube项目已关联构建任务『%s』';
 $lang->job->mustUseJenkins = 'SonarQube工具/框架仅在构建引擎为JenKins的情况下使用';
 $lang->job->jobIsDeleted   = '此版本库已关联构建任务,请从回收站查看数据';
 $lang->job->selectPipeline = '请选择流水线';
+$lang->job->triggerRepeat  = '触发方式不能重复';
 
 $lang->job->buildTypeList['build']          = '仅构建';
 $lang->job->buildTypeList['buildAndDeploy'] = '构建部署';
 $lang->job->buildTypeList['buildAndTest']   = '构建测试';
-
-$lang->job->zentaoTrigger['1'] = '是';
-$lang->job->zentaoTrigger['0'] = '否';
 
 $lang->job->triggerTypeList['tag']      = '打标签';
 $lang->job->triggerTypeList['commit']   = '提交注释包含关键字';

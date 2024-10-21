@@ -526,7 +526,7 @@ class repoModel extends model
     {
         if(session_id()) session_write_close();
 
-        session_start();
+        if(!defined('RUN_MODE') || RUN_MODE != 'test') session_start();
         if($repoID > 0) $this->session->set('repoID', (int)$repoID);
 
         $repos = $this->getRepoPairs($this->app->tab, $objectID);
@@ -666,7 +666,7 @@ class repoModel extends model
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getRepo();
 
-        if(empty($repoID)) return new stdclass();
+        if(empty($repoID)) return false;
         $repo = $this->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
         if(!$repo) return false;
 
@@ -1472,6 +1472,7 @@ class repoModel extends model
         $rules   = $this->processRules();
         $stories = array();
         $actions = array();
+        $designs = array();
 
         $tasks = $this->repoTao->parseTaskComment($comment, $rules, $actions);
         $bugs  = $this->repoTao->parseBugComment($comment, $rules, $actions);
@@ -1506,7 +1507,14 @@ class repoModel extends model
             }
         }
 
-        return array('stories' => $stories, 'tasks' => $tasks, 'bugs' => $bugs, 'actions' => $actions);
+        preg_match_all("/{$rules['designReg']}/i", $comment, $matches);
+        if($matches[0])
+        {
+            $designs = join(' ', $matches[1]);
+            if($designs) $designs = array_unique(explode(' ', str_replace(',', ' ', $designs)));
+        }
+
+        return array('stories' => $stories, 'tasks' => $tasks, 'bugs' => $bugs, 'actions' => $actions, 'designs' => $designs);
     }
 
     /**
@@ -1585,6 +1593,7 @@ class repoModel extends model
         $reg['effortTaskReg'] = $effortTaskReg;
         $reg['finishTaskReg'] = $finishTaskReg;
         $reg['resolveBugReg'] = $resolveBugReg;
+        $reg['designReg']     = 'design(?:\s){0,}(?:#|:|：){0,}([0-9, ]{1,})';
         return $reg;
     }
 
@@ -1603,8 +1612,8 @@ class repoModel extends model
      */
     public function saveAction2PMS(array $objects, object $log, string $repoRoot = '', string $encodings = 'utf-8', string $scm = 'svn', array $gitlabAccountPairs = array()): bool
     {
-        $commiters   = $this->loadModel('user')->getCommiters('account');
-        $log->author = zget($gitlabAccountPairs, $log->author, zget($commiters, $log->author));
+        $committers  = $this->loadModel('user')->getCommiters('account');
+        $log->author = zget($gitlabAccountPairs, $log->author, zget($committers, $log->author));
 
         if(isset($this->app->user))
         {
@@ -1669,7 +1678,7 @@ class repoModel extends model
             ->andWhere('objectID')->eq($action->objectID)
             ->andWhere('extra')->eq($action->extra)
             ->andWhere('action')->eq($action->action)
-            ->andWhere('comment')->eq($action->comment)
+            ->beginIf(!empty($action->comment))->andWhere('comment')->eq(zget($action, 'comment', ''))->fi()
             ->fetch();
         if($record)
         {
@@ -1899,7 +1908,7 @@ class repoModel extends model
                 {
                     if(strpos($log->msg, $comment) !== false)
                     {
-                        $this->loadModel('job')->exec($job->id);
+                        $this->loadModel('job')->exec($job->id, array(), 'commit');
                         continue 2;
                     }
                 }
@@ -2879,8 +2888,8 @@ class repoModel extends model
      */
     public function saveObjectToPms(array $objects, object $action, array $changes): bool
     {
-        $singular = array('stories' => 'story', 'tasks' => 'task', 'bugs' => 'bug');
-        foreach(array('stories', 'tasks', 'bugs') as $objectType)
+        $singular = array('stories' => 'story', 'tasks' => 'task', 'bugs' => 'bug', 'designs' => 'design');
+        foreach(array_keys($objects) as $objectType)
         {
             if($objects[$objectType])
             {
@@ -2889,7 +2898,7 @@ class repoModel extends model
                 {
                     $objectList = $this->loadModel('story')->getByList($objects[$objectType]);
                 }
-                else
+                elseif($objectType != 'designs')
                 {
                     $objectList = $this->getTaskProductsAndExecutions($objects[$objectType]);
                 }
@@ -2901,8 +2910,12 @@ class repoModel extends model
 
                     $action->objectType = $singular[$objectType];
                     $action->objectID   = $objectID;
-                    $action->product    = $objectType == 'stories' ? $objectList[$objectID]->product : $objectList[$objectID]['product'];
-                    $action->execution  = $objectType == 'stories' ? 0 : $objectList[$objectID]['execution'];
+
+                    if($objectType != 'designs')
+                    {
+                        $action->product    = $objectType == 'stories' ? $objectList[$objectID]->product : $objectList[$objectID]['product'];
+                        $action->execution  = $objectType == 'stories' ? 0 : $objectList[$objectID]['execution'];
+                    }
 
                     $this->saveRecord($action, $changes);
                 }
@@ -3128,7 +3141,7 @@ class repoModel extends model
      */
     public function checkName(string $name)
     {
-        $pattern = "/^[a-z_]{1}[a-z0-9_-]+$/i";
+        $pattern = "/^[a-z_]{1}[a-z0-9_\-\.]*$/i";
         return preg_match($pattern, $name);
     }
 }

@@ -1113,12 +1113,12 @@ class devModel extends model
             $module->children = array();
             foreach($objects[$moduleKey] as $objectKey => $objectName)
             {
-                if($type == 'table' and !isset($this->lang->dev->tableList[$objectKey])) continue;
+                $defaultValue   = $type == 'module' ? $objectName : $this->config->db->prefix . $objectKey;
 
                 $object         = new stdclass();
                 $object->id     = $objectName;
                 $object->key    = $objectName;
-                $object->name   = zget($this->lang->dev->tableList, $objectKey, $objectName);
+                $object->name   = zget($this->lang->dev->tableList, $objectKey, $defaultValue);
                 $object->url    = helper::createLink($currentModule, $currentMethod, "{$currentParamName}={$objectName}");
                 $object->active = $objectName == $currentObject ? 1 : 0;
                 if($object->active) $module->active = 1;

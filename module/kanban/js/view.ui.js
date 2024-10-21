@@ -410,19 +410,8 @@ window.buildCardActions = function(item)
 
     if((performable || basicActions) && otherActions) actions.push({type: 'divider'});
 
-    if(item.actionList.includes('moveCard'))
-    {
-        moveColumns = groupCols[item.group] || {};
-        let moveCardItems = [];
+    if(item.actionList.includes('moveCard')) actions.push({text: kanbanLang.moveCard, url: $.createLink('kanban', 'moveCard', `cardID=${item.id}&fromColID=0&toColID=0&fromLaneID=0&toLaneID=0&kanbanID=${kanbanID}&showModal=true`), 'data-toggle': 'modal', 'icon': 'move', 'data-size': 'sm'});
 
-        for(const toColID in moveColumns)
-        {
-            if(toColID == item.column) continue;
-            moveCardItems.push({text: moveColumns[toColID], url: $.createLink('kanban', 'moveCard', `cardID=${item.id}&fromColID=${item.column}&toColID=${toColID}&fromLaneID=${item.lane}&toLaneID=${item.lane}&kanbanID=${kanbanID}`), 'innerClass': 'ajax-submit'});
-        }
-
-        actions.push({text: kanbanLang.moveCard, icon: 'move', items: moveCardItems});
-    }
     if(item.actionList.includes('setCardColor'))
     {
         actions.push({text: kanbanLang.cardColor, 'icon': 'color', items: buildColorItems(item)});

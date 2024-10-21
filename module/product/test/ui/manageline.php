@@ -1,5 +1,13 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=管理产品线
+timeout=0
+cid=0
+
+*/
 chdir(__DIR__);
 include '../lib/manageline.ui.class.php';
 

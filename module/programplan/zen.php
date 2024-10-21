@@ -67,8 +67,10 @@ class programplanZen extends programplan
             $plan->parent     = $parentID ? $parentID : $projectID;
             $plan->order      = (int)array_shift($orders);
             $plan->hasProduct = $project->hasProduct;
-            if(!empty($parentID) and !empty($parentStage) and $parentStage->attribute != 'mix') $plan->attribute = $parentStage->attribute;;
-            if(!empty($parentID) and !empty($parentStage)) $plan->acl = $parentStage->acl;
+
+            if(empty($plan->days)) $plan->days = helper::diffDate($plan->end, $plan->begin) + 1;
+            if(!empty($parentID) && !empty($parentStage) && $parentStage->attribute != 'mix') $plan->attribute = $parentStage->attribute;;
+            if(!empty($parentID) && !empty($parentStage)) $plan->acl = $parentStage->acl;
 
             if(in_array($this->config->edition, array('max', 'ipd')) && !dao::isError())
             {

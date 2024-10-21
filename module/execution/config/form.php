@@ -50,7 +50,6 @@ $config->execution->form->create['vision']        = array('type' => 'string', 'r
 
 $config->execution->form->edit['project']   = array('type' => 'int',    'required' => false, 'control' => 'select', 'default' => 0);
 $config->execution->form->edit['name']      = array('type' => 'string', 'required' => true,  'control' => 'text',   'default' => '', 'filter' => 'trim');
-$config->execution->form->edit['code']      = array('type' => 'string', 'required' => false, 'control' => 'text',   'default' => '', 'filter' => 'trim');
 $config->execution->form->edit['begin']     = array('type' => 'date',   'required' => true,  'control' => 'date',   'default' => null);
 $config->execution->form->edit['end']       = array('type' => 'date',   'required' => true,  'control' => 'date',   'default' => null);
 $config->execution->form->edit['days']      = array('type' => 'int',    'required' => false, 'control' => 'text',   'default' => 0);
@@ -69,6 +68,7 @@ $config->execution->form->edit['RD']        = array('type' => 'string', 'require
 $config->execution->form->edit['desc']      = array('type' => 'string', 'required' => false, 'control' => 'editor', 'default' => '');
 $config->execution->form->edit['acl']       = array('type' => 'string', 'required' => false, 'control' => 'radio',  'default' => '');
 $config->execution->form->edit['whitelist'] = array('type' => 'array',  'required' => false, 'control' => 'select', 'default' => array(), 'filter' => 'join');
+if(!empty($config->setCode)) $config->execution->form->edit['code'] = array('type' => 'string', 'required' => false, 'control' => 'text',   'default' => '', 'filter' => 'trim');
 
 $config->execution->form->importBug['id']         = array('type' => 'int',    'required' => false, 'default' => 0, 'base' => true);
 $config->execution->form->importBug['pri']        = array('type' => 'int',    'required' => false, 'default' => 0);

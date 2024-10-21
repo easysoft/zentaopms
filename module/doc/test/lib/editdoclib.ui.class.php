@@ -30,8 +30,9 @@ class createDocTester extends tester
         $form->wait(1);
         $form->dom->name->setValue($editLibName->editName);
         $form->dom->btn($this->lang->save)->click();
-        if($form->dom->fstDocLib->getText() != $editLibName->editName) return $this->failed('编辑文档库失败。');
-        return $this->success('编辑文档库成功。');
+        $form->wait(1);
+        if($form->dom->fstDocLib->getText() != $editLibName->editName) return $this->failed('编辑文档库失败');
+        return $this->success('编辑文档库成功');
     }
 
     /**
@@ -47,11 +48,14 @@ class createDocTester extends tester
         $this->openUrl('doc', 'mySpace', array('type' => 'mine'));
         $form = $this->loadPage('doc', 'mySpace', array('type' => 'mine'));
         $form->dom->fstDocLib->click();
-        $form->dom->fstMoreBtn->click();
-        $form->dom->deleteLib->click();
         $form->wait(1);
+        $form->dom->fstMoreBtn->click();
+        $form->wait(1);
+        $form->dom->deleteLib->click();
         $form->dom->deleteAccept->click();
+        $form->wait(1);
 
-        if($form->dom->listHeader->getText() != $editLibName->editName) return $this->success('删除文档库成功。');
+        if($form->dom->leftListHeader->getText() != $editLibName->editName) return $this->success('删除文档库成功');
+        return $this->failed('删除文档库失败');
     }
 }

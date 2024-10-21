@@ -64,6 +64,7 @@ detailBody
                 set::active(!$hasResult && !$hasLog),
                 tableData
                 (
+                    setClass('jobBaseTable'),
                     item
                     (
                         set::name($lang->job->engine),
@@ -77,7 +78,7 @@ detailBody
                     item
                     (
                         set::name($lang->job->product),
-                        $product->name
+                        $product ? $product->name : ''
                     ),
                     item
                     (

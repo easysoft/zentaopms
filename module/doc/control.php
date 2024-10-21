@@ -47,7 +47,7 @@ class doc extends control
      * 我的空间。
      * My space.
      *
-     * @param  string $type       mine|view|collect|createdBy
+     * @param  int    $objectID
      * @param  int    $libID
      * @param  int    $moduleID
      * @param  string $browseType all|draft|bysearch
@@ -59,89 +59,39 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function mySpace(string $type = 'mine', int $libID = 0, int $moduleID = 0, string $browseType = 'all', int $param = 0, string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function mySpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', int $param = 0, string $orderBy = 'order_asc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = 'home', int $docID = 0, string $search = '')
     {
-        $browseType = strtolower($browseType);
-        $type       = strtolower($type);
-
-        if(empty($orderBy) && $type == 'mine') $orderBy = 'order_asc';
-        if(empty($orderBy) && ($type == 'view' || $type == 'collect')) $orderBy = 'status,date_desc';
-        if(empty($orderBy) && ($type == 'createdby')) $orderBy = 'status,addedDate_desc';
-        if(empty($orderBy) && ($type == 'editedby')) $orderBy = 'status,editedDate_desc';
-
-        /* Save session, load module. */
-        $uri = $this->app->getURI(true);
-        $this->session->set('docList', $uri, 'doc');
-        $this->session->set('productList', $uri, 'product');
-        $this->session->set('executionList', $uri, 'execution');
-        $this->session->set('projectList', $uri, 'project');
-        $this->session->set('spaceType', 'mine', 'doc');
-        $this->loadModel('search');
-
-        if(empty($libID)) $this->docZen->initLibForMySpace();
-        if($moduleID) $libID = $this->tree->getById($moduleID)->root;
-        list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType('mine', 0, $libID);
-
-        $titleList   = array('mine' => 'myLib', 'view' => 'myView', 'collect' => 'myCollection', 'createdby' => 'myCreation', 'editedby' => 'myEdited');
-        $objectTitle = $this->lang->doc->{$titleList[$type]};
-        if($type == 'mine') $objectTitle = $objectDropdown['text'];
-
-        /* Build the search form. */
-        $queryID    = $browseType == 'bysearch' ? $param : 0;
-        $params     = "libID={$libID}&moduleID={$moduleID}&browseType=bySearch&param=myQueryID&orderBy={$orderBy}";
-        if($this->app->rawMethod == 'myspace') $params = "type={$type}&{$params}";
-        $actionURL  = $this->createLink('doc', $this->app->rawMethod, $params);
-        $this->doc->buildSearchForm($libID, $libs, $queryID, $actionURL, $type);
-
-        /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-
-        /* Append id for second sort. */
-        $sort = common::appendOrder($orderBy);
-
-        /* Get doc list data. */
-        $docs = array();
-        if($type == 'mine')
+        if(empty($objectID))
         {
-            if($browseType != 'bysearch' && !$libID)
-            {
-                $docs = array();
-            }
-            else
-            {
-                $docs = $browseType == 'bysearch' ? $this->doc->getDocsBySearch('mine', 0, $libID, $queryID, $orderBy, $pager) : $this->doc->getDocs($libID, $moduleID, $browseType, $orderBy, $pager);
-            }
-        }
-        elseif(in_array($type, array('view', 'collect', 'createdby', 'editedby')))
-        {
-            $docs = $this->doc->getMineList($type, $browseType, $queryID, $orderBy, $pager);
+            $this->docZen->initLibForMySpace();
+            $spaces = $this->doc->getSubSpacesByType('mine');
+            $objectID = key($spaces);
         }
 
-        $this->docZen->assignVarsForMySpace($type, $objectID, $libID, $moduleID, $browseType, $param, $orderBy, $docs, $pager, $libs, $objectTitle);
-        $this->display();
+        echo $this->fetch('doc', 'app', "type=mine&spaceID=$objectID&libID=$libID&moduleID=$moduleID&docID=$docID&mode=$mode&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&filterType=$browseType&search=$search");
     }
 
     /**
      * 创建一个空间。
      * Create a space.
      *
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function createSpace()
+    public function createSpace(string $type = '')
     {
         if(!empty($_POST))
         {
             $this->lang->doc->name = $this->lang->doclib->spaceName;
             $space = form::data()->setDefault('addedBy', $this->app->user->account)->get();
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if($type) $space->type = $type;
 
             $spaceID = $this->doc->doInsertLib($space);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('docspace', $spaceID, 'created');
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('doc', 'teamSpace', "objectID={$spaceID}")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('doc', 'teamSpace', "objectID={$spaceID}"), 'docApp' => array('call' => 'selectSpace', 'args' => array($spaceID, true))));
         }
 
         $this->display();
@@ -169,16 +119,14 @@ class doc extends control
             $libID = $this->doc->createLib($lib, (string)$this->post->type, (string)$this->post->libType);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if($type == 'custom')
+            if($type == 'custom' || $type == 'mine')
             {
                 $lib      = $this->doc->getLibByID($libID);
                 $objectID = $lib->parent;
             }
 
-            return $this->docZen->responseAfterCreateLib($type, $objectID, $libID);
+            return $this->docZen->responseAfterCreateLib($type, $objectID, $libID, $lib->name);
         }
-
-        if(in_array($type, array('product', 'project'))) $this->app->loadLang('api');
 
         $objects = array();
         if($type == 'product') $objects = $this->product->getPairs();
@@ -199,10 +147,10 @@ class doc extends control
             if($execution->type == 'stage') $this->lang->doc->execution = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doc->execution);
         }
 
-        if($type == 'custom')
+        if($type == 'custom' || $type == 'mine' || $type == 'doctemplate')
         {
             $lib = $this->doc->getLibByID($libID);
-            $this->view->spaces  = $this->doc->getTeamSpaces();
+            $this->view->spaces  = $this->doc->getSubSpacesByType($type);
             $this->view->spaceID = !empty($lib->parent) ? $lib->parent : $objectID;
         }
 
@@ -217,21 +165,49 @@ class doc extends control
     }
 
     /**
+     * 编辑一个文档空间。
+     * Edit a doc space.
+     *
+     * @param  int    $libID
+     * @access public
+     * @return void
+     */
+    public function editSpace(int $libID)
+    {
+        $this->commonEditAction($libID);
+        $this->display();
+    }
+
+    /**
      * 编辑一个文档库。
      * Edit a library.
      *
      * @param  int    $libID
-     * @param  string $targetSpace
      * @access public
      * @return void
      */
-    public function editLib(int $libID, string $targetSpace = '')
+    public function editLib(int $libID)
     {
+        $this->commonEditAction($libID);
+        $this->display();
+    }
+
+    /**
+     * 编辑空间和编辑库的公用方法。
+     * Edit a lib or space.
+     *
+     * @param  int    $libID
+     * @access public
+     * @return void
+     */
+    public function commonEditAction($libID)
+    {
+        if(!common::hasPriv('doc', 'editSpace') && !common::hasPriv('doc', 'editLib')) return;
         $lib = $this->doc->getLibByID($libID);
         if(!empty($_POST))
         {
             $this->lang->doc->name = $this->lang->nameAB;
-            $libData = form::data()->get();
+            $libData = form::data($this->config->doc->form->editlib)->get();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $changes = $this->doc->updateLib($libID, $libData);
@@ -243,7 +219,12 @@ class doc extends control
                 $actionID = $this->action->create($object, $libID, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
-            return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'closeModal' => true, 'load' => true));
+
+            $lib = $this->doc->getLibByID($libID);
+            $docAppActions = array();
+            $docAppActions[] = array('update', ($lib->parent == 0) ? 'space' : 'lib', $lib);
+            $docAppActions[] = array('home:loadHomeLibs');
+            return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'closeModal' => true, 'docApp' => $docAppActions));
         }
 
         if(!empty($lib->product)) $this->view->object = $this->product->getByID($lib->product);
@@ -265,24 +246,29 @@ class doc extends control
             $this->view->object = $execution;
         }
 
-        $this->docZen->setAclForEditLib($lib, $targetSpace);
-
-        if(($lib->type == 'custom' && $lib->parent > 0) || ($lib->type == 'mine' && $lib->main == 0))
-        {
-            $this->view->spaces      = $this->docZen->getAllSpaces();
-            $this->view->targetSpace = $targetSpace ? $targetSpace : ($lib->type == 'mine' ? 'mine' : $lib->parent);
-        }
+        $this->docZen->setAclForEditLib($lib);
 
         $this->view->lib         = $lib;
         $this->view->groups      = $this->loadModel('group')->getPairs();
         $this->view->users       = $this->user->getPairs('noletter|noclosed', $lib->users);
         $this->view->libID       = $libID;
-
-        $this->display();
     }
 
     /**
-     * 删除一个数据库。
+     * 删除一个文档空间。
+     * Delete a doc space.
+     *
+     * @param  int    $libID
+     * @access public
+     * @return void
+     */
+    public function deleteSpace(int $libID)
+    {
+        $this->commonDeleteAction($libID);
+    }
+
+    /**
+     * 删除一个文档库。
      * Delete a library.
      *
      * @param  int    $libID
@@ -290,6 +276,19 @@ class doc extends control
      * @return void
      */
     public function deleteLib(int $libID)
+    {
+        $this->commonDeleteAction($libID);
+    }
+
+    /**
+     * 删除空间和删除库的公用方法。
+     * Delete a lib or space.
+     *
+     * @param  int    $libID
+     * @access public
+     * @return void
+     */
+    public function commonDeleteAction(int $libID)
     {
         if(in_array($libID, array('product', 'execution'))) return;
 
@@ -333,11 +332,11 @@ class doc extends control
     {
         if(!empty($_POST))
         {
+            $libID    = (int)$this->post->lib;
             $doclib   = $this->loadModel('doc')->getLibByID($libID);
             $canVisit = $this->docZen->checkPrivForCreate($doclib, $objectType);
             if(!$canVisit) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->accessDenied));
 
-            $libID    = $this->post->lib;
             $moduleID = $this->post->module;
             helper::setcookie('lastDocModule', $moduleID);
 
@@ -441,9 +440,9 @@ class doc extends control
      * 编辑一个文档。
      * Edit a doc.
      *
-     * @param  int     $docID
-     * @param  bool    $comment
-     * @param  int     $appendLib
+     * @param  int    $docID
+     * @param  bool   $comment
+     * @param  int    $appendLib
      * @access public
      * @return void
      */
@@ -458,6 +457,9 @@ class doc extends control
                 $docData = form::data()
                     ->setDefault('editedBy', $this->app->user->account)
                     ->setIF(strpos(",$doc->editedList,", ",{$this->app->user->account},") === false, 'editedList', $doc->editedList . ",{$this->app->user->account}")
+                    ->removeIF($this->post->project === false, 'project')
+                    ->removeIF($this->post->product === false, 'product')
+                    ->removeIF($this->post->execution === false, 'execution')
                     ->get();
                 $result  = $this->doc->update($docID, $docData);
                 if(dao::isError())
@@ -489,7 +491,7 @@ class doc extends control
 
         $this->view->title          = $lib->name . $this->lang->hyphen . $this->lang->doc->edit;
         $this->view->doc            = $doc;
-        $this->view->optionMenu     = $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
+        $this->view->optionMenu     = $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
         $this->view->type           = $lib->type;
         $this->view->libs           = $libPairs;
         $this->view->lib            = $lib;
@@ -591,7 +593,7 @@ class doc extends control
         $libID       = key($libPairs);
         if($libID)
         {
-            $optionMenu  = $this->loadModel('tree')->getOptionMenu($libID, $docType, $startModuleID = 0);
+            $optionMenu  = $this->loadModel('tree')->getOptionMenu($libID, $docType, 0);
             foreach($optionMenu as $id => $name) $moduleItems[] = array('text' => $name, 'value' => $id, 'keys' => $name);
         }
 
@@ -629,7 +631,7 @@ class doc extends control
         $libID       = key($libPairs);
         if($libID)
         {
-            $optionMenu  = $this->loadModel('tree')->getOptionMenu($libID, $docType, $startModuleID = 0);
+            $optionMenu  = $this->loadModel('tree')->getOptionMenu($libID, $docType, 0);
             foreach($optionMenu as $id => $name) $moduleItems[] = array('text' => $name, 'value' => $id, 'keys' => $name);
         }
 
@@ -775,35 +777,28 @@ class doc extends control
         if(!empty($lib) && $lib->deleted == '1') $appendLib = $doc->lib;
         if($this->app->tab == 'doc' && !empty($lib) && $lib->type == 'execution') $appendLib = $doc->lib;
 
-        $objectType = isset($lib->type) ? $lib->type : 'custom';
-        $objectID   = zget($doc, $objectType, 0);
-        if($objectType == 'custom') $objectID = $lib->parent;
-        list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($objectType, $objectID, (int)$doc->lib, (int)$appendLib);
-
-        /* Get doc. */
-        if($docID)
+        $objectType = $lib->type;
+        if(in_array($lib->type, array('product', 'project', 'execution')))
         {
-            $this->doc->createAction($docID, 'view');
-            $this->doc->removeEditing($doc);
-            if($doc->keywords)
-            {
-                $doc->keywords = str_replace("，", ',', $doc->keywords);
-                $doc->keywords = explode(',', $doc->keywords);
-            }
+            $objectID = zget($doc, $objectType, 0);
+        }
+        else
+        {
+            $objectID = $lib->parent;
         }
 
-        if(isset($doc) && $doc->type == 'text') $doc = $this->docZen->processOutline($doc);
-        if($this->app->tab != 'execution' && !empty($doc->execution)) $object = $this->execution->getByID($doc->execution);
+        /* Get doc. */
+        if($docID) $this->doc->createAction($docID, 'view');
 
-        $this->docZen->assignVarsForView($docID, $version, $objectType, $objectID, $libID, $doc, $object, $objectType, $libs, $objectDropdown);
-        $this->display();
+        $this->view->title = $doc->title;
+        echo $this->fetch('doc', 'app', "type=$objectType&spaceID=$objectID&libID=$lib->id&moduleID=$doc->module&docID=$docID&mode=view");
     }
 
     /**
      * 产品/项目/执行/团队空间。
      * ProductSpace/ProjectSpace/ExecutionSpace/TeamSpace.
      *
-     * @param  string $type        custom|product|project|execution
+     * @param  string $type        custom|product|project|execution|doctemplate
      * @param  int    $objectID
      * @param  int    $libID
      * @param  int    $moduleID
@@ -890,12 +885,11 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function productSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'order_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function productSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'order_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = '', int $docID = 0, string $search = '')
     {
-        $products = $this->product->getPairs('nocode');
-        $objectID = $this->product->checkAccess($objectID, $products);
-
-        echo $this->fetch('doc', 'tableContents', "type=product&objectID={$objectID}&libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&orderBy={$orderBy}&param={$param}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+        $noSpace = $this->app->tab != 'doc';
+        $mode    = $noSpace ? 'list' : 'home';
+        echo $this->fetch('doc', 'app', "type=product&spaceID=$objectID&libID=$libID&moduleID=$moduleID&docID=$docID&mode=$mode&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&filterType=$browseType&search=$search&noSpace=$noSpace");
     }
 
     /**
@@ -914,12 +908,11 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function projectSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'order_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function projectSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'order_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = '', int $docID = 0, string $search = '')
     {
-        $projects = $this->project->getPairsByProgram();
-        $objectID = $this->project->checkAccess($objectID, $projects);
-
-        echo $this->fetch('doc', 'tableContents', "type=project&objectID={$objectID}&libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&orderBy={$orderBy}&param={$param}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+        $noSpace = $this->app->tab != 'doc';
+        $mode    = $noSpace ? 'list' : 'home';
+        echo $this->fetch('doc', 'app', "type=project&spaceID=$objectID&libID=$libID&moduleID=$moduleID&docID=$docID&mode=$mode&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&filterType=$browseType&search=$search&noSpace=$noSpace");
     }
 
     /**
@@ -938,9 +931,16 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function teamSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'order_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function teamSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'order_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = '', int $docID = 0, string $search = '')
     {
-        echo $this->fetch('doc', 'tableContents', "type=custom&objectID={$objectID}&libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&orderBy={$orderBy}&param={$param}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+        if(empty($objectID))
+        {
+            $this->docZen->initLibForTeamSpace();
+            $spaces = $this->doc->getSubSpacesByType('custom');
+            $objectID = key($spaces);
+        }
+
+        echo $this->fetch('doc', 'app', "type=custom&spaceID=$objectID&libID=$libID&moduleID=$moduleID&docID=$docID&mode=$mode&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&filterType=$browseType&search=$search");
     }
 
     /**
@@ -1028,12 +1028,13 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function ajaxGetSpaceMenu(int $libID, string $module, string $method)
+    public function ajaxGetSpaceMenu(int $libID, string $module, string $method, string $extra = 'nomine')
     {
         $this->view->libID  = $libID;
         $this->view->module = $module;
         $this->view->method = $method;
-        $this->view->spaces = $this->docZen->getAllSpaces('nomine');
+        $this->view->extra  = $extra;
+        $this->view->spaces = $this->docZen->getAllSpaces($extra);
 
         $this->display();
     }
@@ -1119,10 +1120,13 @@ class doc extends control
     {
         if($_POST)
         {
-            foreach($_POST['orders'] as $id => $order) $this->doc->updateDoclibOrder($id, (int)$order);
+            $orders = $_POST['orders'];
+            if(is_string($orders)) $orders = json_decode($orders, true);
+
+            foreach($orders as $id => $order) $this->doc->updateDoclibOrder($id, (int)$order);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success'));
+            return $this->send(array('result' => 'success', 'orders' => $orders));
         }
     }
 
@@ -1143,6 +1147,9 @@ class doc extends control
 
             /* Sort by sorted id list. */
             $this->doc->updateDocOrder($orders);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success'));
         }
     }
 
@@ -1157,7 +1164,10 @@ class doc extends control
     {
         if($_POST)
         {
-            foreach($_POST['orders'] as $id => $order) $this->doc->updateOrder($id, (int)$order, $_POST['type']);
+            $orders = $_POST['orders'];
+            $type   = isset($_POST['type']) ? $_POST['type'] : 'doc';
+            if(is_string($orders)) $orders = json_decode($orders, true);
+            foreach($orders as $id => $order) $this->doc->updateOrder($id, (int)$order, $type);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success'));
@@ -1199,14 +1209,16 @@ class doc extends control
      * Move Lib.
      *
      * @param  int    $libID
-     * @param  string $targetSpace  mine|[int]
+     * @param  string $targetSpace [int]
      * @access public
      * @return void
      */
     public function moveLib(int $libID, string $targetSpace = '')
     {
         $lib = $this->doc->getLibByID($libID);
-        if(empty($targetSpace)) $targetSpace = $lib->type == 'mine' ? 'mine' : $lib->parent;
+        if(empty($targetSpace)) $targetSpace = $this->doc->getLibTargetSpace($lib);
+        $spaceType = $this->doc->getParamFromTargetSpace($targetSpace, 'type');
+
         if(!empty($lib->main)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorEditSystemDoc));
 
         if(!empty($_POST))
@@ -1220,15 +1232,16 @@ class doc extends control
             $this->doc->moveLib($libID, $data);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            return $this->docZen->responseAfterMove($this->post->space, $libID);
+            return $this->docZen->responseAfterMove($this->post->space, $spaceType, $libID);
         }
 
-        $this->docZen->setAclForCreateLib(is_numeric($targetSpace) ? 'custom' : 'mine');
+        $this->docZen->setAclForCreateLib($spaceType);
 
         $this->view->title        = $this->lang->doc->moveLibAction;
-        $this->view->spaces       = $this->docZen->getAllSpaces();
+        $this->view->spaces       = $this->doc->getAllSubSpaces('all');
         $this->view->lib          = $lib;
         $this->view->targetSpace  = $targetSpace;
+        $this->view->libType      = $spaceType;
         $this->view->hasOthersDoc = $this->doc->hasOthersDoc($lib);
         $this->view->groups       = $this->loadModel('group')->getPairs();
         $this->view->users        = $this->loadModel('user')->getPairs('nocode|noclosed');
@@ -1241,16 +1254,28 @@ class doc extends control
      *
      * @param  int    $docID
      * @param  int    $libID
-     * @param  string $space  mine|[int]
+     * @param  string $spaceType
+     * @param  string $space
+     * @param  string $locate
      * @access public
      * @return void
      */
-    public function moveDoc(int $docID, int $libID = 0, string $space = '', string $locate = '')
+    public function moveDoc(int $docID, int $libID = 0, string $spaceType = '', string $space = '', string $locate = '')
     {
         $doc = $this->doc->getByID($docID);
+        if(empty($libID)) $libID = (int)$doc->lib;
+        $lib = $this->doc->getLibByID($libID);
+
+        if(empty($space))     $space = $lib->parent;
+        if(empty($spaceType)) $spaceType = $this->doc->getSpaceType($space);
+
         if(!empty($_POST))
         {
-            $data = form::data()->setIF($this->post->acl == 'open', 'groups', '')->setIF($this->post->acl == 'open', 'users', '')->get();
+            $data = form::data()
+                ->setIF($this->post->acl == 'open', 'groups', '')
+                ->setIF($this->post->acl == 'open', 'users', '')
+                ->setIF(in_array($spaceType, array('project', 'product')), $spaceType, $space)
+                ->get();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $changes = common::createChanges($doc, $data);
@@ -1263,25 +1288,81 @@ class doc extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            return $this->docZen->responseAfterMove($this->post->space, $data->lib, $locate);
+            return $this->docZen->responseAfterMove($this->post->space, $spaceType, $data->lib, $locate, $docID);
         }
 
-        if(empty($libID)) $libID = (int)$doc->lib;
-        $lib = $this->doc->getLibByID($libID);
-        if(empty($space)) $space = $lib->type == 'mine' ? 'mine' : $lib->parent;
+        $libPairs = $this->doc->getLibPairs($spaceType, '', (int)$space, '', $spaceType == 'product' ? array((int)$space => $space) : array(), $spaceType == 'project' ? array((int)$space => $space) : array());
+        if($spaceType == 'project') $libPairs += $this->doc->getExecutionLibPairsByProject((int)$space);
 
-        $libPairs = $this->doc->getLibPairs($space == 'mine' ? 'mine' : 'custom', '', (int)$space);
         if(!isset($libPairs[$libID])) $libID = (int)key($libPairs);
 
         $this->view->docID      = $docID;
         $this->view->libID      = $libID;
+        $this->view->spaceType  = $spaceType;
         $this->view->space      = $space;
         $this->view->doc        = $doc;
-        $this->view->spaces     = $this->docZen->getAllSpaces();
+        $this->view->spaces     = $this->doc->getAllSubSpaces();
         $this->view->libPairs   = $libPairs;
-        $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
+        $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
         $this->view->groups     = $this->loadModel('group')->getPairs();
         $this->view->users      = $this->loadModel('user')->getPairs('nocode|noclosed');
+        $this->display();
+    }
+
+    /**
+     * Batch move document.
+     *
+     * @param  string $type
+     * @param  string $encodeDocIdList
+     * @param  int    $spaceID
+     * @param  int    $libID
+     * @param  int    $moduleID
+     * @access public
+     * @return void
+     */
+    public function batchMoveDoc(string $type, string $encodeDocIdList, int $spaceID, int $libID = 0, int $moduleID = 0)
+    {
+        $docIdList = json_decode(base64_decode($encodeDocIdList), true);
+        if(!$docIdList) $this->locate($this->createLink('doc', 'app', "type={$type}&spaceID={$spaceID}&libID={$libID}&moduleID={$moduleID}"));
+
+        if($_POST)
+        {
+            $oldDocList = $this->doc->getDocsByIdList($docIdList);
+
+            $data = form::data()
+                ->setIF($type == 'mine' || $this->post->acl == 'open', 'groups', '')
+                ->setIF($type == 'mine' || $this->post->acl == 'open', 'users', '')
+                ->setIF(in_array($type, array('project', 'product')), $type, $spaceID)
+                ->get();
+            $this->doc->batchMoveDoc($data, $docIdList);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->docZen->recordBatchMoveActions($oldDocList, $data);
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'docApp' => array('load', null, null, null, array('noLoading' => true, 'picks' => 'doc'))));
+        }
+
+        $products = $type == 'product' ? array($spaceID => $spaceID) : array();
+        $projects = $type == 'project' ? array($spaceID => $spaceID) : array();
+        $libPairs = $this->doc->getLibPairs($type, '', $spaceID, '', $products, $projects);
+        if(!isset($libPairs[$libID])) $libID = (int)key($libPairs);
+
+        $docList = $this->doc->getByIdList($docIdList);
+        $docAclList = array_column($docList, 'acl');
+
+        $this->view->title           = $this->lang->doc->batchMove;
+        $this->view->encodeDocIdList = $encodeDocIdList;
+        $this->view->type            = $type;
+        $this->view->spaceID         = $spaceID;
+        $this->view->libID           = $libID;
+        $this->view->moduleID        = $moduleID;
+        $this->view->spaces          = $this->doc->getAllSubSpaces();
+        $this->view->libPairs        = $libPairs;
+        $this->view->optionMenu      = $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
+        $this->view->groups          = $this->loadModel('group')->getPairs();
+        $this->view->users           = $this->loadModel('user')->getPairs('nocode|noclosed');
+        $this->view->hasOpenDoc      = in_array('open', $docAclList);
         $this->display();
     }
 
@@ -1354,5 +1435,221 @@ class doc extends control
 
         if(empty($denyUsers)) return print('');
         if(isset($this->lang->doc->whitelistDeny['doc'])) return printf($this->lang->doc->whitelistDeny['doc'], implode('、', $denyUsers));
+    }
+
+    /**
+     * Doc app view.
+     * 文档应用视图。
+     *
+     * @param  string $type
+     * @param  int    $spaceID
+     * @param  int    $libID
+     * @param  int    $moduleID
+     * @param  int    $docID
+     * @param  string $mode
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @param  string $filterType
+     * @param  string $search
+     * @param  string $param
+     * @access public
+     * @access public
+     * @return void
+     */
+    public function app(string $type = 'mine', int $spaceID = 0, int $libID = 0, int $moduleID = 0, int $docID = 0, string $mode = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $filterType = '', string $search = '', bool $noSpace = false)
+    {
+        $isNotDocTab = $this->app->tab != 'doc';
+        if(empty($mode)) $mode = ($isNotDocTab || $type == 'execution' || $noSpace) ? 'list' : 'home';
+
+        $this->app->loadLang('file');
+
+        /* For product drop menu. */
+        if($isNotDocTab && in_array($type, array('product', 'project', 'execution')))
+        {
+            $this->doc->setMenuByType($type, $spaceID, $libID);
+            $objectKey = $type . 'ID';
+            $this->view->$objectKey = $spaceID;
+        }
+
+        if($type == 'mine') $menuType = 'my';
+        else $menuType = $type == 'custom' ? 'team' : $type;
+        if(isset($this->lang->doc->menu->{$menuType})) $this->lang->doc->menu->{$menuType}['alias'] .= ',' . $this->app->rawMethod;
+
+        $this->view->type           = $type;
+        $this->view->spaceID        = $spaceID;
+        $this->view->libID          = $libID;
+        $this->view->moduleID       = $moduleID;
+        $this->view->docID          = $docID;
+        $this->view->mode           = $mode;
+        $this->view->filterType     = $filterType;
+        $this->view->search         = $search;
+        $this->view->recTotal       = $recTotal;
+        $this->view->recPerPage     = $recPerPage;
+        $this->view->pageID         = $pageID;
+        $this->view->orderBy        = $orderBy;
+        $this->view->objectType     = $type;
+        $this->view->noSpace        = $noSpace;
+        $this->view->objectID       = $spaceID;
+        $this->view->users          = $this->loadModel('user')->getPairs('noclosed,noletter');
+        $this->view->title          = isset($this->lang->doc->spaceList[$type]) ? $this->lang->doc->spaceList[$type] : $this->lang->doc->common;
+        $this->display();
+    }
+
+    /**
+     * Ajax: Get doc space data.
+     * Ajax: 获取文档空间数据。
+     *
+     * @param  string $type
+     * @param  int    $space
+     * @access public
+     * @return void
+     */
+    public function ajaxGetSpaceData(string $type = 'custom', int $spaceID = 0, string $picks = '')
+    {
+        $noPicks = empty($picks);
+        $picks   = $noPicks ? '' : ",$picks,";
+
+        list($spaces, $spaceID) = $this->doc->getSpaces($type, $spaceID);
+        $data   = array('spaceID' => (int)$spaceID);
+        $libs   = $this->doc->getLibsOfSpace($type, $spaceID);
+        $libIds = array_keys($libs);
+
+        if($noPicks || strpos($picks, ',space,') !== false)  $data['spaces'] = $spaces;
+        if($noPicks || strpos($picks, ',lib,') !== false)    $data['libs'] = array_values($libs);
+        if($noPicks || strpos($picks, ',module,') !== false) $data['modules'] = array_values($this->doc->getModulesOfLibs($libIds));
+        if($noPicks || strpos($picks, ',doc,') !== false)    $data['docs'] = array_values($this->doc->getDocsOfLibs($libIds + array($spaceID)));
+
+        $this->send($data);
+    }
+
+    /**
+     * Ajax: Get doc data.
+     * Ajax: 获取文档数据。
+     *
+     * @param  int    $docID
+     * @param  int    $version
+     * @access public
+     * @return void
+     */
+    public function ajaxGetDoc(int $docID, int $version = 0)
+    {
+        $doc = $this->doc->getByID($docID, $version);
+        $doc->lib     = (int)$doc->lib;
+        $doc->module  = (int)$doc->module;
+        $doc->privs   = array('edit' => common::hasPriv('doc', 'edit', $doc));
+        $doc->editors = $this->doc->getEditors($docID);
+
+        if($docID) $this->doc->createAction($docID, 'view');
+
+        $this->send($doc);
+    }
+
+    /**
+     * Get files by type and objectID.
+     * 根据类型和对象ID获取文件列表。
+     *
+     * @param  string $type
+     * @param  int    $objectID
+     * @param  string $browseType
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetFiles(string $type, int $objectID, string $browseType = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 9999, int $pageID = 1)
+    {
+        /* Load pager. */
+        $rawMethod = $this->app->rawMethod;
+        $this->app->rawMethod = 'showFiles';
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+        $this->app->rawMethod = $rawMethod;
+
+        $files       = $this->doc->getLibFiles($type, $objectID, $browseType, 0, $orderBy, $pager);
+        $sourcePairs = $this->doc->getFileSourcePairs($files);
+        $files       = $this->docZen->processFiles($files, array(), $sourcePairs, true);
+
+        echo json_encode(array_values($files)); // $this->send($files); not work.
+    }
+
+    /**
+     * Get lib summaries by space type and space list.
+     *
+     * @param  string $spaceType
+     * @param  string $spaceList
+     * @access public
+     * @return void
+     */
+    public function ajaxGetLibSummaries(string $spaceType, string $spaceList)
+    {
+        $libsMap = $this->doc->getLibsOfSpaces($spaceType, $spaceList);
+        echo json_encode($libsMap);
+    }
+
+    /**
+     * Ajax modal for setting doc basic info.
+     * 设置文档基本信息的模态框。
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  int    $libID
+     * @param  int    $moduleID
+     * @param  int    $docID
+     * @param  string $isDraft
+     * @access public
+     */
+    public function setDocBasic(string $objectType, int $objectID, int $libID = 0, int $moduleID = 0, int $docID = 0, string $isDraft = 'no')
+    {
+        $lib = $libID ? $this->doc->getLibByID($libID) : '';
+        if(empty($docID))
+        {
+            if(empty($objectID) && $lib) $objectID = (int)zget($lib, $lib->type, 0);
+            if(empty($objectID) && $lib && $lib->type == 'custom') $objectID = (int)$lib->parent;
+            if($lib) $objectType = $lib->type;
+
+            $unclosed = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
+            $libPairs = $this->doc->getLibs($objectType, "{$unclosed}", $libID, $objectID);
+            $moduleID = $moduleID ? (int)$moduleID : (int)$this->cookie->lastDocModule;
+            if(!$libID && !empty($libPairs)) $libID = key($libPairs);
+            if(empty($lib) && $libID) $lib = $this->doc->getLibByID($libID);
+
+            if($objectType == 'custom' || $objectType == 'mine') $this->view->spaces = $this->doc->getSubSpacesByType($objectType, true);
+            $this->docZen->setObjectsForCreate($objectType, empty($lib) ? null : $lib, $unclosed, $objectID);
+            $this->view->optionMenu = empty($libID) ? array() : $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
+        }
+        else
+        {
+            $doc        = $this->doc->getByID($docID);
+            $moduleID   = (int)$doc->module;
+            $libID      = (int)$doc->lib;
+            $lib        = $this->doc->getLibByID($libID);
+            $objectType = $lib->type;
+            $objectID = $objectType == 'custom' || $objectType == 'mine' ? $lib->parent : (int)zget($lib, $objectType, 0);
+
+            $libPairs = $this->doc->getLibs($objectType, '', $libID, $objectID);
+            if($objectType == 'custom' || $objectType == 'mine') $this->view->spaces = $this->doc->getSubSpacesByType($objectType, true);
+            $this->docZen->setObjectsForEdit($objectType, $objectID);
+
+            $this->view->doc        = $doc;
+            $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
+        }
+
+        $this->view->mode       = empty($docID) ? 'create' : 'edit';
+        $this->view->users      = $this->user->getPairs('nocode|noclosed|nodeleted');
+        $this->view->groups     = $this->loadModel('group')->getPairs();
+        $this->view->libID      = $libID;
+        $this->view->moduleID   = $moduleID;
+        $this->view->objectID   = $objectID;
+        $this->view->objectType = $objectType;
+        $this->view->lib        = $lib;
+        $this->view->libs       = $libPairs;
+        $this->view->docID      = $docID;
+        $this->view->isDraft    = $isDraft == 'yes';
+        $this->view->title      = $isDraft == 'yes' ? ($this->lang->doc->saveDraft) : (empty($docID) ? $this->lang->doc->release : $this->lang->settings);
+        $this->display();
     }
 }

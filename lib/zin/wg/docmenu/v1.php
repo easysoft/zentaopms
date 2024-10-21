@@ -79,6 +79,11 @@ class docMenu extends wg
             $moduleName = 'execution';
             $methodName = 'doc';
         }
+        elseif($objectType == 'doctemplate')
+        {
+            $moduleName = 'doctemplate';
+            $methodName = 'browse';
+        }
         else
         {
             $methodName = empty($this->spaceMethod[$objectType]) ? 'teamSpace' : $this->spaceMethod[$objectType];

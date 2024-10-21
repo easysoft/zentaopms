@@ -1,5 +1,13 @@
 #!/usr/bin/env php
 <?php
+
+/**
+title=计划关联需求
+timeout=0
+cid=0
+
+*/
+
 chdir(__DIR__);
 include '../lib/linkstory.ui.class.php';
 

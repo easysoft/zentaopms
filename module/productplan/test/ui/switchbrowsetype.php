@@ -5,10 +5,7 @@
 
 title=测试切换看板/列表模式
 timeout=0
-cid=10
-
--切换到看板模式 最终测试状态 @SUCCESS
--切换到列表模式 最终测试状态 @SUCCESS
+cid=0
 
 */
 

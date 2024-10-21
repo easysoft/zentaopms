@@ -370,6 +370,7 @@ class userEntry extends entry
                     $info->rights = array();
                     $info->rights['admin']  = (!empty($inAdminGroup) or $this->app->user->admin);
                     $info->rights['rights'] = $this->app->user->rights['rights'];
+                    if(isset($info->rights['rights']['task']['recordworkhour'])) $info->rights['rights']['task']['recordestimate'] = 1;
             }
         }
 
