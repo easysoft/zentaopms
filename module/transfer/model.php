@@ -885,7 +885,7 @@ class transferModel extends model
             $tmpArray = new stdClass();
             foreach($row as $currentColumn => $cellValue)
             {
-                $cellValue = trim($cellValue);
+                $cellValue = trim((string)$cellValue);
                 /* 第一行是标题字段。*/
                 /* First row is title field. */
                 if($currentRow == 1)

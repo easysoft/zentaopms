@@ -411,8 +411,10 @@ function checkEstStartedAndDeadline(event)
     if(field == 'estStarted' && estStarted.length > 0 && estStarted < parentEstStarted)
     {
         const $estStartedDiv = $estStarted.closest('.form-group');
-        if($estStartedDiv.find('.date-tip').length == 0)
+        if($estStartedDiv.find('.date-tip').length == 0 || $estStartedDiv.find('.date-tip .form-tip').length > 0)
         {
+            $estStartedDiv.find('.date-tip').remove();
+
             let $datetip = $('<div class="date-tip"></div>');
             $datetip.append('<div class="form-tip text-warning">' + overParentEstStartedLang + '<span class="ignore-date underline">' + ignoreLang + '</div>');
             $datetip.off('click', '.ignore-date').on('click', '.ignore-date', function(e){ignoreTip(e)});
@@ -423,8 +425,10 @@ function checkEstStartedAndDeadline(event)
     if(field == 'deadline' && deadline.length > 0 && deadline > parentDeadline)
     {
         const $deadlineDiv = $deadline.closest('.form-group');
-        if($deadlineDiv.find('.date-tip').length == 0)
+        if($deadlineDiv.find('.date-tip').length == 0 || $deadlineDiv.find('.date-tip .form-tip').length > 0)
         {
+            $deadlineDiv.find('.date-tip').remove();
+
             let $datetip = $('<div class="date-tip"></div>');
             $datetip.append('<div class="form-tip text-warning">' + overParentDeadlineLang + '<span class="ignore-date underline">' + ignoreLang + '</div>');
             $datetip.off('click', '.ignore-date').on('click', '.ignore-date', function(e){ignoreTip(e)});

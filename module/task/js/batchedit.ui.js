@@ -161,8 +161,10 @@ function checkBatchEstStartedAndDeadline(event)
         if(estStarted.length > 0 && estStarted < parentEstStarted)
         {
             const $estStartedTd = $currentRow.find('td[data-name=estStarted]');
-            if($estStartedTd.find('.date-tip').length == 0)
+            if($estStartedTd.find('.date-tip').length == 0 || $estStartedTd.find('.date-tip .form-tip').length > 0)
             {
+                $estStartedTd.find('.date-tip').remove();
+
                 let $datetip = $('<div class="date-tip"></div>');
                 $datetip.append('<div class="form-tip text-warning">' + overParentEstStartedLang.replace('%s', parentEstStarted) + '<span class="ignore-date underline">' + ignoreLang + '</div>');
                 $datetip.off('click', '.ignore-date').on('click', '.ignore-date', function(e){ignoreTip(e)});
@@ -177,8 +179,10 @@ function checkBatchEstStartedAndDeadline(event)
         if(deadline.length > 0 && deadline > parentDeadline)
         {
             const $deadlineTd = $currentRow.find('td[data-name=deadline]');
-            if($deadlineTd.find('.date-tip').length == 0)
+            if($deadlineTd.find('.date-tip').length == 0 || $deadlineTd.find('.date-tip .form-tip').length > 0)
             {
+                $deadlineTd.find('.date-tip').remove();
+
                 let $datetip = $('<div class="date-tip"></div>');
                 $datetip.append('<div class="form-tip text-warning">' + overParentDeadlineLang.replace('%s', parentDeadline) + '<span class="ignore-date underline">' + ignoreLang + '</div>');
                 $datetip.off('click', '.ignore-date').on('click', '.ignore-date', function(e){ignoreTip(e)});
