@@ -1860,7 +1860,7 @@ class docModel extends model
                 if($lib->type != 'execution') continue;
                 $lib->originName    = $lib->name;
                 $lib->executionName = $executionPairs[$lib->execution];
-                $lib->name          = $lib->executionName;
+                $lib->name          = $lib->executionName . '/' . $lib->name;
             }
         }
 
