@@ -91,6 +91,7 @@ class storyModel extends model
         $story->reviewedDate   = helper::isZeroDate($story->reviewedDate)   ? '' : substr($story->reviewedDate,   0, 19);
         $story->closedDate     = helper::isZeroDate($story->closedDate)     ? '' : substr($story->closedDate,     0, 19);
         $story->lastEditedDate = helper::isZeroDate($story->lastEditedDate) ? '' : substr($story->lastEditedDate, 0, 19);
+        $story->estimate       = helper::formatHours($story->estimate);
 
         return $story;
     }

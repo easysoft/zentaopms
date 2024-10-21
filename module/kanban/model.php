@@ -1661,7 +1661,7 @@ class kanbanModel extends model
         $cardData['group']      = $laneType;
         $cardData['parent']     = zget($object, 'originParent', 0);
         $cardData['status']     = zget($object, 'status', '');
-        $cardData['estimate']   = zget($object, 'estimate', 0);
+        $cardData['estimate']   = helper::formatHours(zget($object, 'estimate', 0));
         $cardData['assignedTo'] = $object->assignedTo;
         $cardData['deadline']   = zget($object, 'deadline', '');
         $cardData['severity']   = zget($object, 'severity', 0);
@@ -1672,7 +1672,7 @@ class kanbanModel extends model
         {
             $cardData['title']      = $object->name;
             $cardData['status']     = $object->status;
-            $cardData['left']       = $object->left;
+            $cardData['left']       = helper::formatHours($object->left);
             $cardData['estStarted'] = $object->estStarted;
             $cardData['mode']       = $object->mode;
             if($object->mode == 'multi') $cardData['teamMembers'] = $object->teamMembers;

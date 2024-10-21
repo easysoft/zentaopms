@@ -1641,8 +1641,8 @@ class pivotModel extends model
             if(floor($number) == $number) return $number;
 
             $decimalPart = explode('.', strval($number));
-            if(isset($decimalPart[1]) && strlen($decimalPart[1]) > 2) return number_format(round($number, 2), 2, '.', '');
-            return number_format($number, 2, '.', '');
+            if(isset($decimalPart[1]) && strlen($decimalPart[1]) > 2) return helper::formatHours($number);
+            return helper::formatHours($number);
         };
 
         $values = array();

@@ -566,9 +566,9 @@ class weeklyModel extends model
         $data = new stdclass();
 
         $PVEV     = $this->getPVEV($projectID, $date);
-        $data->pv = $PVEV['PV'];
-        $data->ev = $PVEV['EV'];
-        $data->ac = $this->getAC($projectID, $date);
+        $data->pv = helper::formatHours($PVEV['PV']);
+        $data->ev = helper::formatHours($PVEV['EV']);
+        $data->ac = helper::formatHours($this->getAC($projectID, $date));
         $data->sv = $this->getSV($data->ev, $data->pv);
         $data->cv = $this->getCV($data->ev, $data->ac);
 

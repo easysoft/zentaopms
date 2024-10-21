@@ -1483,6 +1483,9 @@ class executionModel extends model
         $parentExecutions = $this->dao->select('parent,parent')->from(TABLE_EXECUTION)->where('parent')->ne(0)->andWhere('deleted')->eq(0)->fetchPairs();
         foreach($executions as $execution)
         {
+            $execution->estimate    = helper::formatHours($execution->estimate);
+            $execution->consumed    = helper::formatHours($execution->consumed);
+            $execution->left        = helper::formatHours($execution->left);
             $execution->productName = isset($productList[$execution->id]) ? trim($productList[$execution->id]->productName, ',') : '';
             $execution->product     = $productID;
             $execution->productID   = $productID;
