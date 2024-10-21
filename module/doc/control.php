@@ -1346,6 +1346,8 @@ class doc extends control
         $products = $type == 'product' ? array($spaceID => $spaceID) : array();
         $projects = $type == 'project' ? array($spaceID => $spaceID) : array();
         $libPairs = $this->doc->getLibPairs($type, '', $spaceID, '', $products, $projects);
+        if($type == 'project') $libPairs += $this->doc->getExecutionLibPairsByProject($spaceID);
+
         if(!isset($libPairs[$libID])) $libID = (int)key($libPairs);
 
         $docList = $this->doc->getByIdList($docIdList);
