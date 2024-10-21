@@ -162,3 +162,15 @@ $('#formSettingBtn').on('click', '.checkbox-primary [value=story]', function()
 {
     $('#formSettingBtn .checkbox-primary [value=preview], #formSettingBtn .checkbox-primary [value=copyStory]').prop('checked', $('#formSettingBtn .checkbox-primary [value=story]').prop('checked'));
 })
+
+function checkBatchEstStartedAndDeadline(event)
+{
+    const $currentRow = $(event.target).closest('tr');
+    const field       = $(event.target).closest('.form-batch-control').data('name');
+    const estStarted  = $currentRow.find('[name^=estStarted]').val();
+    const deadline    = $currentRow.find('[name^=deadline]').val();
+
+    if(field == 'estStarted' && estStarted.length > 0 && estStarted < parentEstStarted)
+    {
+    }
+}
