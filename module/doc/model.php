@@ -1819,7 +1819,7 @@ class docModel extends model
             foreach($executionLibs as &$lib)
             {
                 $lib->originName = $lib->name;
-                $lib->name       = $executionPairs[$lib->execution];
+                $lib->name       = $executionPairs[$lib->execution] . '/' . $lib->name;
             }
         }
 
