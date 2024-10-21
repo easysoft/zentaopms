@@ -51,7 +51,7 @@ class docModel extends model
     public function getObjectIDByLib($lib, $libType = '')
     {
         if(empty($libType)) $libType = $lib->type;
-        $objectID = ($libType == 'custom' || $libType == 'mine') ? $lib->parent : (int)zget($lib, $libType, 0);
+        $objectID = ($libType == 'custom' || $libType == 'mine') ? $lib->parent : zget($lib, $libType, 0);
 
         return (int)$objectID;
     }
