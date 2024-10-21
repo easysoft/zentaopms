@@ -146,7 +146,7 @@ formPanel
     ) : null,
     formRow
     (
-        setClass('sonarqube hidden'),
+        setClass('sonarqube', $job->frame == 'sonarqube' ? '' : 'hidden'),
         formGroup
         (
             set::name('sonarqubeServer'),
