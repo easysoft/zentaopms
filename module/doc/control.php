@@ -1292,6 +1292,8 @@ class doc extends control
         }
 
         $libPairs = $this->doc->getLibPairs($spaceType, '', (int)$space, '', $spaceType == 'product' ? array((int)$space => $space) : array(), $spaceType == 'project' ? array((int)$space => $space) : array());
+        if($spaceType == 'project') $libPairs += $this->doc->getExecutionLibPairsByProject((int)$space);
+
         if(!isset($libPairs[$libID])) $libID = (int)key($libPairs);
 
         $this->view->docID      = $docID;

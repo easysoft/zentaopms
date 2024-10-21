@@ -214,6 +214,24 @@ class docModel extends model
     }
 
     /**
+     * 获取一个项目下的执行库。
+     * Get execution libraries by project.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getExecutionLibPairsByProject($projectID)
+    {
+        return $this->dao->select('id, name')->from(TABLE_DOCLIB)
+            ->where('deleted')->eq(0)
+            ->andWhere('type')->eq('execution')
+            ->andWhere('project')->eq($projectID)
+            ->beginIF($this->config->vision != 'or')->andWhere('vision')->eq($this->config->vision)->fi()
+            ->fetchPairs();
+    }
+
+    /**
      * 获取有权限访问的文档库。
      * Get grant libs by doc.
      *
