@@ -559,7 +559,7 @@ const actionsMap =
             doc.status === 'draft' ? {text: lang.saveDraft, size: 'md', className: 'btn-wide', type: 'secondary', command: 'saveDoc/draft'} : null,
             {text: lang.release, size: 'md', className: 'btn-wide', type: 'primary', command: 'saveDoc'},
             {text: lang.cancel, size: 'md', className: 'btn-wide', type: 'primary-outline', command: 'cancelEditDoc'},
-            {text: lang.settings, size: 'md', type: 'ghost', command: `showDocSettingModal/${doc.id}/${doc.contentType}`, icon: 'cog-outline'},
+            {text: lang.settings, size: 'md', type: 'ghost', command: `showDocSettingModal/${doc.id}/${doc.contentType}/1`, icon: 'cog-outline'},
         ];
     },
 
@@ -880,12 +880,31 @@ const commands =
     },
     showDocSettingModal: function(_, args)
     {
-        const docApp   = getDocApp();
-        const doc      = docApp.doc;
-        const docID    = args[0] || doc.id;
-        const docType  = args[1] || doc.contentType;
+        const docApp     = getDocApp();
+        const doc        = docApp.doc;
+        const docID      = args[0] || doc.id;
+        const docType    = args[1] || doc.contentType;
+        const saveEdited = args[2] || 0;
         showDocBasicModal(docID).then(formData => {
             savingDocData[docID] = formData;
+            if(saveEdited == 1)
+            {
+                const docData = {
+                    content    : doc.data.content,
+                    status     : doc.data.status,
+                    contentType: doc.data.contentType,
+                    type       : doc.data.type,
+                    lib        : doc.data.lib,
+                    module     : doc.data.module,
+                    title      : doc.data.title,
+                    keywords   : doc.data.keywords,
+                    acl        : doc.data.acl,
+                    space      : doc.data.space,
+                    uid        : doc.data.uid,
+                };
+                mergeDocFormData(docData, formData);
+                $.post($.createLink('doc', 'edit', `docID=${docID}`), docData);
+            }
         });
     }
 };
