@@ -1581,7 +1581,7 @@ class testcaseZen extends testcase
             $case = new stdclass();
             $case->module  = $caseData['module'];
             $case->product = $caseData['product'];
-            $case->branch  = $caseData['branch'] ? $caseData['branch'] : 0;
+            $case->branch  = zget($caseData, 'branch', 0);
             $case->title   = $caseData['name'];
             $case->pri     = $caseData['pri'];
             $case->tmpPId  = $caseData['tmpPId'];
