@@ -104,13 +104,12 @@ class baseCache
      * 构造方法。
      * The construct method.
      *
-     * @param  object $app
      * @access public
      * @return void
      */
-    public function __construct($app)
+    public function __construct()
     {
-        global $config;
+        global $config, $app;
         $this->app    = $app;
         $this->config = $config;
 

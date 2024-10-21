@@ -244,12 +244,7 @@ class settingModel extends model
      */
     public function getSysAndPersonalConfig(string $account = ''): array
     {
-        $owner   = 'system,' . ($account ? $account : '');
-        $records = $this->dao->select('*')->from(TABLE_CONFIG)
-            ->where('owner')->in($owner)
-            ->beginIF(!$this->app->upgrading)->andWhere('vision')->in(array('', $this->config->vision))->fi()
-            ->orderBy('id')
-            ->fetchAll('id');
+        $records = $this->cache->setting->getSysAndPersonalConfig($account);
         if(!$records) return array();
 
         $vision = $this->config->vision;
