@@ -2247,7 +2247,9 @@ class testcaseModel extends model
             {
                 if(isset($stepList[$step->tmpPId]))
                 {
-                    $parentStep  = $stepList[$step->tmpPId];
+                    $parentStep = $stepList[$step->tmpPId];
+                    $parentStep->children = isset($parentStep->children) ? $parentStep->children : array();
+
                     $step->index = $parentStep->index . '.' . (count($parentStep->children) + 1);
                     $parentStep->children[] = $step;
                 }
