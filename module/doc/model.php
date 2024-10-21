@@ -1288,13 +1288,14 @@ class docModel extends model
         }
         if($type == 'project')
         {
-            $account  = $this->app->user->account;
-            $projects = $this->loadModel('project')->getListByCurrentUser();
-            $spaceID  = $this->project->checkAccess($spaceID, $projects);
+            $account          = $this->app->user->account;
+            $projects         = $this->loadModel('project')->getListByCurrentUser();
+            $involvedProjects = $this->project->getInvolvedListByCurrentUser();
+            $spaceID          = $this->project->checkAccess($spaceID, $projects);
 
             foreach($projects as $project)
             {
-                $isMine   = $project->status != 'done' && $project->status != 'closed' && $project->PM == $account;
+                $isMine   = $project->status != 'closed' && isset($involvedProjects[$project->id]);
                 $spaces[] = array('id' => $project->id, 'name' => $project->name, 'isMine' => $isMine, 'type' => $type);
             }
         }
