@@ -623,7 +623,8 @@ const commands =
     uploadDoc: function()
     {
         const docApp = getDocApp();
-        const url = $.createLink('doc', 'uploadDocs', `objectType=${docApp.spaceType}&objectID=${docApp.spaceID}&libID=${docApp.libID}&moduleID=${docApp.moduleID}&type=attachment`);
+        const type   = docApp.lib ? docApp.lib.data.type : docApp.spaceType;
+        const url = $.createLink('doc', 'uploadDocs', `objectType=${type}&objectID=${docApp.spaceID}&libID=${docApp.libID}&moduleID=${docApp.moduleID}&type=attachment`);
         zui.Modal.open({url: url});
     },
     /** 创建 Office 文件。 Start create office file. */

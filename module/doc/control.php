@@ -367,6 +367,12 @@ class doc extends control
             return $this->docZen->responseAfterUploadDocs($docResult);
         }
 
+        if($objectType == 'execution' && $libID) // 此时传入的objectID是projectID，用lib的信息更改回executionID
+        {
+            $lib = $this->doc->getLibByID($libID);
+            $objectID = $this->doc->getObjectIDByLib($lib);
+        }
+
         $this->docZen->assignVarsForUploadDocs($objectType, $objectID, $libID, $moduleID, $docType);
         $this->display();
     }
@@ -1609,8 +1615,7 @@ class doc extends control
         $lib = $libID ? $this->doc->getLibByID($libID) : '';
         if(empty($docID))
         {
-            if(empty($objectID) && $lib) $objectID = (int)zget($lib, $lib->type, 0);
-            if(empty($objectID) && $lib && $lib->type == 'custom') $objectID = (int)$lib->parent;
+            if(empty($objectID) && $lib) $objectID = $this->doc->getObjectIDByLib($lib);
             if($lib) $objectType = $lib->type;
 
             $unclosed = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
@@ -1630,7 +1635,7 @@ class doc extends control
             $libID      = (int)$doc->lib;
             $lib        = $this->doc->getLibByID($libID);
             $objectType = $lib->type;
-            $objectID = $objectType == 'custom' || $objectType == 'mine' ? $lib->parent : (int)zget($lib, $objectType, 0);
+            $objectID   = $this->doc->getObjectIDByLib($lib);
 
             $libPairs = $this->doc->getLibs($objectType, '', $libID, $objectID);
             if($objectType == 'custom' || $objectType == 'mine') $this->view->spaces = $this->doc->getSubSpacesByType($objectType, true);

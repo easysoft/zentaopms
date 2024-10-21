@@ -41,6 +41,22 @@ class docModel extends model
     }
 
     /**
+     * Get objectID by Lib.
+     *
+     * @param  object $lib
+     * @param  string $libType
+     * @access public
+     * @return int
+     */
+    public function getObjectIDByLib($lib, $libType = '')
+    {
+        if(empty($libType)) $libType = $lib->type;
+        $objectID = ($libType == 'custom' || $libType == 'mine') ? $lib->parent : (int)zget($lib, $libType, 0);
+
+        return (int)$objectID;
+    }
+
+    /**
      * 通过ID获取文档库信息。
      * Get library by id.
      *
