@@ -353,7 +353,7 @@ class datatable extends control
             return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message: '{$tip}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) $.ajaxSubmit({url: '$confirmURL'});});"));
         }
 
-        $account = !$system ? $this->app->user->account : 'system';
+        $account = !$system ? $this->app->user->account : "system,{$this->app->user->account}";
         $target  = $module . ucfirst($method);
 
         $this->loadModel('setting')->deleteItems("owner={$account}&module=datatable&section={$target}&key=cols");
