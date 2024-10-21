@@ -161,7 +161,7 @@ class baseDAO
      * @var int
      * @access private
      */
-    protected $_lastInsertID;
+    protected $_lastInsertID = false;
 
     /**
      * 执行的请求，所有的查询都保存在该数组。
