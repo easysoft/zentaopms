@@ -205,7 +205,7 @@ class thinkStepMenu extends wg
         );
         $options  = $item->type === 'question' ? json_decode($item->options) : null;
         $linkType = !empty($options) && ($options->questionType == 'checkbox' || $options->questionType === 'radio' || $options->questionType === 'multicolumn');
-        $linkItem = ($canLink && $linkType && $options->required) ? array(
+        $linkItem = ($canLink && $linkType && !empty($options->required)) ? array(
             'key'          => 'linkNode',
             'icon'         => 'link',
             'text'         => $this->lang->thinkstep->actions['link'],
