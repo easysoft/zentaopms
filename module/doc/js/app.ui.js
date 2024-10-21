@@ -583,14 +583,16 @@ const actionsMap =
      */
     file: function(info)
     {
-        const doc     = info.doc;
-        const file    = info.data;
-        const docApp  = getDocApp();
-        const privs   = docApp.props.privs;
-        const lang    = getLang();
-        const canEdit = privs.edit && (!doc.privs || doc.privs.edit !== false);
+        const doc          = info.doc;
+        const file         = info.data;
+        const docApp       = getDocApp();
+        const privs        = docApp.props.privs;
+        const lang         = getLang();
+        const canEdit      = privs.edit && (!doc.privs || doc.privs.edit !== false);
+        const hasExtension = file.title.lastIndexOf('.' + file.extension) == (file.title.length - file.extension.length - 1);
+        const canPreview   = hasExtension && 'txt,jpg,jpeg,gif,png,bmp'.split(',').includes(file.extension);
         return [
-            {'data-toggle': 'modal', 'data-size': 'lg', url: $.createLink('file', 'download', `fileID=${file.id}&mouse=left`), hint: lang.filePreview, icon: 'eye'},
+            canPreview ? {'data-toggle': 'modal', 'data-size': 'lg', url: $.createLink('file', 'download', `fileID=${file.id}&mouse=left`), hint: lang.filePreview, icon: 'eye'} : {target: '_blank', url: $.createLink('file', 'download', `fileID=${file.id}&mouse=left`), hint: lang.filePreview, icon: 'eye'},
             {target: '_blank', url: zui.formatString(docApp.props.fileUrl, file), hint: lang.fileDownload, icon: 'download'},
             canEdit ? {hint: lang.fileRename, icon: 'pencil-alt', onClick: renameDocFile.bind(this, file, doc)} : null,
             canEdit ? {hint: lang.fileDelete, icon: 'trash', onClick: deleteDocFile.bind(this, file, doc)} : null,
