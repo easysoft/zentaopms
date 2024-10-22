@@ -241,6 +241,11 @@ class docModel extends model
     {
         $libs = $this->dao->select('*')->from(TABLE_DOCLIB)
             ->where('deleted')->eq(0)
+            ->andWhere('type')->eq('execution')
+            ->andWhere('project')->eq($projectID)
+            ->beginIF($this->config->vision != 'or')->andWhere('vision')->eq($this->config->vision)->fi()
+            ->fetchAll();
+
         $libPairs = array();
         foreach($libs as $lib)
         {
@@ -254,6 +259,8 @@ class docModel extends model
                 $libPairs[$lib->id] = $lib->name;
             }
         }
+
+        return $libPairs;
     }
 
     /**
