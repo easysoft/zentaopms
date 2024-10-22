@@ -1929,8 +1929,22 @@ eof;
         if(empty($object)) return true;
 
         /* Judge that if the closed object(product|execution) is readonly from config table. The default is can modify. */
-        if($type == 'product'   and empty($config->CRProduct)   and $object->status == 'closed') return false;
-        if($type == 'execution' and empty($config->CRExecution) and $object->status == 'closed') return false;
+        if($type == 'product'   and empty($config->CRProduct) and $object->status == 'closed') return false;
+        if($type == 'project'   and empty($config->CRProject) and $object->status == 'closed') return false;
+        if($type == 'execution' and empty($config->CRExecution))
+        {
+            if($object->status == 'closed') return false;
+            if(!isset($object->project)) return true;
+
+            static $projectsStatus = array();
+            $commonModel = new commonModel();
+            if(!isset($projectsStatus[$object->project]))
+            {
+                $project = $commonModel->loadModel('project')->getByID((int)$object->project);
+                $projectsStatus[$object->project] = $project ? $project->status : '';
+            }
+            if($projectsStatus[$object->project] == 'closed') return false;
+        }
 
         return true;
     }
