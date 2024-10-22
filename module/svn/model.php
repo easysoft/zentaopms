@@ -77,6 +77,8 @@ class svnModel extends model
             $jobs = zget($tagGroup, $repoID, array());
             foreach($jobs as $job)
             {
+                $job->lastTag = trim(str_replace(rtrim($repo->path, '/') . $job->svnDir, '', $job->lastTag), '/');
+
                 $dirs    = $this->getRepoTags($repo, $job->svnDir);
                 $isNew   = empty($job->lastTag) ? true : false;
                 $lastTag = '';
