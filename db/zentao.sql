@@ -13231,6 +13231,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflow` (
   `css` text NULL,
   `order` smallint(5) unsigned NOT NULL DEFAULT '0',
   `buildin` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `role` varchar(10) NOT NULL DEFAULT 'custom',
   `belong` varchar(50) NOT NULL DEFAULT '',
   `administrator` text NULL,
   `desc` text NULL,
@@ -13336,6 +13337,7 @@ CREATE INDEX `type` ON `zt_workflowdatasource` (`type`);
 -- DROP TABLE IF EXISTS `zt_workflowfield`;
 CREATE TABLE IF NOT EXISTS `zt_workflowfield` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `group` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `module` varchar(30) NOT NULL DEFAULT '',
   `field`  varchar(50) NOT NULL DEFAULT '',
   `type` varchar(20) NOT NULL DEFAULT 'varchar',
@@ -13363,7 +13365,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowfield` (
   `editedDate` datetime NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE UNIQUE INDEX `unique` ON `zt_workflowfield`(`module`, `field`);
+CREATE UNIQUE INDEX `unique` ON `zt_workflowfield`(`group`, `module`, `field`);
 CREATE INDEX `module` ON `zt_workflowfield` (`module`);
 CREATE INDEX `field`  ON `zt_workflowfield` (`field`);
 CREATE INDEX `order`  ON `zt_workflowfield` (`order`);

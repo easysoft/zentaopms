@@ -18,13 +18,19 @@ CREATE TABLE IF NOT EXISTS `zt_workflowgroup` (
 CREATE INDEX `type` ON `zt_workflowgroup` (`type`);
 
 ALTER TABLE `zt_workflow` ADD `group` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `id`;
+ALTER TABLE `zt_workflow` ADD `role` varchar(10) NOT NULL DEFAULT 'custom' AFTER `buildin`;
+ALTER TABLE `zt_workflowfield` ADD `group` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `id`;
 ALTER TABLE `zt_workflowaction` ADD `group` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `id`;
 ALTER TABLE `zt_workflowlabel` ADD `group` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `id`;
 ALTER TABLE `zt_workflowlayout` ADD `group` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `id`;
 ALTER TABLE `zt_workflowui` ADD `group` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `id`;
 
+UPDATE `zt_workflow` SET `role` = 'buildin' WHERE `buildin` = '1';
+
 ALTER TABLE `zt_workflow` DROP INDEX `unique`;
 CREATE UNIQUE INDEX `unique` ON `zt_workflow`(`group`,`app`,`module`,`vision`);
+ALTER TABLE `zt_workflowfield` DROP INDEX `unique`;
+CREATE UNIQUE INDEX `unique` ON `zt_workflowfield`(`group`,`module`,`field`);
 ALTER TABLE `zt_workflowaction` DROP INDEX `unique`;
 CREATE UNIQUE INDEX `unique` ON `zt_workflowaction`(`group`,`module`,`action`,`vision`);
 ALTER TABLE `zt_workflowlayout` DROP INDEX `unique`;
