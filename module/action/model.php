@@ -248,6 +248,38 @@ class actionModel extends model
 
             if(!isset($objectTypeList[$action->objectType])) $this->app->loadLang($action->objectType);
             $objectTypeList[$action->objectType] = $action->objectType;
+
+            foreach($action->history as $history)
+            {
+                if(isset($this->config->action->multipleObjectFields[$action->objectType][$history->field]))
+                {
+                    $fieldListVar = $this->config->action->multipleObjectFields[$action->objectType][$history->field];
+                    $fieldList    = isset($this->lang->{$action->objectType}->{$fieldListVar}) ? $this->lang->{$action->objectType}->{$fieldListVar} : array();
+                    if(!empty($history->old))
+                    {
+                        $oldValues = explode(',', $history->old);
+                        $history->old = '';
+                        foreach($oldValues as $key => $value) $history->old .= zget($fieldList, $value) . ',';
+                        $history->old = trim($history->old, ',');
+                    }
+
+                    if(!empty($history->new))
+                    {
+                        $newValues = explode(',', $history->new);
+                        $history->new = '';
+                        foreach($newValues as $key => $value) $history->new .= zget($fieldList, $value) . ',';
+                        $history->new = trim($history->new, ',');
+                    }
+                }
+                else
+                {
+                    $fieldListVar = isset($this->config->action->objectFields[$action->objectType][$history->field]) ? $this->config->action->objectFields[$action->objectType][$history->field] : $history->field . 'List';
+                    $fieldList    = isset($this->lang->{$action->objectType}->{$fieldListVar}) ? $this->lang->{$action->objectType}->{$fieldListVar} : array();
+
+                    $history->old = zget($fieldList, $history->old);
+                    $history->new = zget($fieldList, $history->new);
+                }
+            }
         }
         return $actions;
     }
