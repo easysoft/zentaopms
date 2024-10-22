@@ -23,27 +23,23 @@ $fnGenerateFilters = function() use($pivot, $showOrigin, $lang)
     $options = array();
     foreach($pivot->filters as $filter)
     {
-        $type  = $filter['type'];
-        $name  = $filter['name'];
-        $field = $filter['field'];
-        $value = zget($filter, 'default', '');
-        $from  = zget($filter, 'from');
+        $type   = $filter['type'];
+        $name   = $filter['name'];
+        $field  = $filter['field'];
+        $value  = zget($filter, 'default', '');
+        $from   = zget($filter, 'from');
+        $values = is_array($value) ? implode(',', $value) : $value;
         if($from == 'query')
         {
             $typeOption = $filter['typeOption'];
-            if(strpos($type, 'select') !== false && !isset($options[$typeOption])) $options[$typeOption] = $this->pivot->getSysOptions($typeOption);
-
-            $filters[] = filter(set(array('title' => $name, 'type' => $type, 'name' => $field, 'value' => $value, 'items' => zget($options, $typeOption, array()), 'multiple' => $type == 'multipleselect' ? true : false)));
+            $optionUrl  = createLink('pivot', 'ajaxGetSysOptions', "typeOption=$typeOption&field=&saveAs=&values=$values&search={search}");
+            $filters[]  = filter(set(array('title' => $name, 'type' => $type, 'name' => $field, 'value' => $value, 'items' => $optionUrl, 'multiple' => $type == 'multipleselect' ? true : false)));
         }
         else
         {
-            if($type == 'select' && !isset($options[$field]))
-            {
-                $fieldSetting = $pivot->fieldSettings->$field;
-                $options[$field] = $this->pivot->getSysOptions($fieldSetting->type, $fieldSetting->object, $fieldSetting->field, $pivot->sql, zget($filter, 'saveAs', ''));
-            }
-
-            $filters[] = resultFilter(set(array('title' => $name, 'type' => $type, 'name' => $field, 'value' => $value, 'items' => zget($options, $field, array()))));
+            $saveAs    = zget($filter, 'saveAs', $field);
+            $optionUrl = createLink('pivot', 'ajaxGetSysOptions', "pivotID=$pivot->id&field=$field&saveAs=$saveAs&values=$values&search={search}");
+            $filters[] = resultFilter(set(array('title' => $name, 'type' => $type, 'name' => $field, 'value' => $value, 'items' => $optionUrl)));
         }
     }
 

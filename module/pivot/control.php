@@ -107,4 +107,68 @@ class pivot extends control
         $this->view->users = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
+
+    /**
+     * AJAX: 获取系统数据下拉选项。
+     * AJAX: get sys options.
+     *
+     * @param  int $pivotID
+     * @param  string $field
+     * @param  string $saveAs
+     * @param  string $values
+     * @param  string $search
+     * @param  int $limit
+     * @access public
+     * @return void
+     */
+    public function ajaxGetSysOptions(int|string $pivotID, string $field = '', string $saveAs = '', string $values = '', string $search = '', int $limit = 100)
+    {
+        if(!empty($field))
+        {
+            $pivot        = $this->pivot->getByID($pivotID);
+            $fieldSetting = $pivot->fieldSettings->$field;
+            $options      = $this->pivot->getSysOptions($fieldSetting->type, $fieldSetting->object, $fieldSetting->field, $pivot->sql, $saveAs);
+        }
+        else
+        {
+            $typeOption = $pivotID;
+            $options = $this->pivot->getSysOptions($typeOption);
+        }
+
+        /* 根据关键字过滤选项。*/
+        /* Filter options by keywords. */
+        $limitOptions = $options;
+        if(!empty($search))
+        {
+            foreach($limitOptions as $key => $text)
+            {
+                if(strpos($text, $search) === false) unset($limitOptions[$key]);
+            }
+        }
+
+        /* 根据限制数量过滤选项。*/
+        /* Filter options by limit. */
+        $limitOptions = array_slice($limitOptions, 0, $limit, true);
+
+        /* 添加默认值到选项列表。*/
+        /* Add default value to options. */
+        if(!empty($values))
+        {
+            $values = explode(',', $values);
+            foreach($values as $value)
+            {
+                if(!isset($limitOptions[$value])) $limitOptions[$value] = $options[$value];
+            }
+        }
+
+        /* 转换为value text格式。*/
+        /* Convert to value text format. */
+        $valueTextList = array();
+        foreach($limitOptions as $value => $text)
+        {
+            $valueTextList[] = array('value' => $value, 'text' => $text);
+        }
+
+        echo json_encode($valueTextList);
+    }
 }
