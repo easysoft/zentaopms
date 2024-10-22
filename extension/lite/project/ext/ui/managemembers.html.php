@@ -16,6 +16,7 @@ jsVar('projectID', $project->id);
 jsVar('copyProjectID', $copyProjectID);
 jsVar('oldAccountList', array_keys($currentMembers));
 jsVar('unlinkExecutionMembers', $lang->project->unlinkExecutionMembers);
+jsVar('executionMembers', $executionMembers);
 
 /* zin: Define the set::module('team') feature bar on main menu. */
 $copyTeamBox = '';
