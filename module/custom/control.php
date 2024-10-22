@@ -254,6 +254,26 @@ class custom extends control
     }
 
     /**
+     * 项目关闭设置。
+     * Set whether the closed project is read-only.
+     *
+     * @access public
+     * @return void
+     */
+    public function project()
+    {
+        if($_POST)
+        {
+            $this->loadModel('setting')->setItem("system.common.CRProject@{$this->config->vision}", $this->post->project);
+            return $this->sendSuccess(array('load' => true));
+        }
+
+        $this->view->title  = $this->lang->projectCommon;
+        $this->view->module = 'project';
+        $this->display();
+    }
+
+    /**
      * 执行关闭设置。
      * Set whether the closed execution is read-only.
      *
