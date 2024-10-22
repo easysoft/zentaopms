@@ -1884,6 +1884,8 @@ class storyTao extends storyModel
         global $lang;
         $actions = array();
 
+        if(!empty($execution) && !common::canModify('execution', $execution)) return $actions;
+
         $tutorialMode = commonModel::isTutorialMode();
         if($this->config->edition == 'ipd' && $storyType == 'story')
         {

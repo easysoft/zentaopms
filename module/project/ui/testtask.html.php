@@ -27,7 +27,8 @@ featureBar
     )
 );
 
-$canCreate = common::canModify('project', $project) && common::hasPriv('testtask', 'create');
+$canModify = common::canModify('project', $project);
+$canCreate = $canModify && common::hasPriv('testtask', 'create');
 toolbar
 (
     $canCreate ? btn
@@ -41,6 +42,7 @@ toolbar
 );
 
 $config->project->dtable->testtask->fieldList['actions']['list']['report']['url']['params'] = "objectID={project}&objectType=project&extra={id}";
+if(!$canModify) unset($config->project->dtable->testtask->fieldList['actions']['list']);
 $tasks   = initTableData($tasks, $config->project->dtable->testtask->fieldList);
 $summary = sprintf($lang->testtask->allSummary, count($tasks), $waitCount, $testingCount, $blockedCount, $doneCount);
 

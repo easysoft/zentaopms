@@ -121,6 +121,7 @@ class design extends control
         $this->view->orderBy   = $orderBy;
         $this->view->pager     = $pager;
         $this->view->users     = $this->loadModel('user')->getPairs('noletter');
+        $this->view->project   = $project;
 
         $this->display();
     }
