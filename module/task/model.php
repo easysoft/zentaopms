@@ -2585,11 +2585,6 @@ class taskModel extends model
             $task->teamMembers = implode(',', array_keys($teamMembers));
         }
 
-        /* Format task hours. */
-        $task->estimate = helper::formatHours($task->estimate);
-        $task->consumed = helper::formatHours($task->consumed);
-        $task->left     = helper::formatHours($task->left);
-
         foreach($task as $field => $value)
         {
             if(in_array($field, $this->config->task->dateFields) && helper::isZeroDate($value)) $task->$field = '';
