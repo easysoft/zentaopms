@@ -28,12 +28,27 @@ div
         ),
         formGroup
         (
+            set::width('2/3'),
             setClass('closed-project-box'),
             set::label($lang->custom->closedProject),
             radioList
             (
+                set::name('project'),
+                set::items($lang->custom->CRProject),
+                set::value(isset($config->CRProject) ? $config->CRProject : 0),
+                set::inline(true)
             )
         ),
+        formGroup
+        (
+            set::label(''),
+            span
+            (
+                setClass('row'),
+                icon('info text-warning mr-1 mt-0.5'),
+                span(html($lang->custom->notice->readOnlyOfProject))
+            )
+        )
     )
 );
 
