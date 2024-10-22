@@ -1,0 +1,15 @@
+title: zt_history
+desc: "系统日志"
+author: Shujie Tian
+version: "1.0"
+fields:
+  - field: id
+    range: 1-1000
+  - field: action
+    range: 1{5},2{3},3{2},5{3},6{3},7,8{4},9{2},10{2}
+  - field: field
+    range: PO,QD,RD,feedback,PMT,mailto,reviewedBy,status{2},closedReason,PM,whitelist,acl,type,closedBy,closedReason,builder,os,browser,resolution,resolvedBy,reviewedBy,type,lastRunner,stage
+  - field: old
+    range: "[]{6},admin,draft,wait,[]{3},open,design,[]{8},unit,[],unittest"
+  - field: new
+    range: user1{5},`user1,user2`,user3,changing,closed,done,user4,`user5,user6`,private,devel,user7,done,user8,`windows,win11`,`chrome,firefox`,fixed,user9,user1,interface,user2,feature

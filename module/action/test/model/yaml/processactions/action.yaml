@@ -1,0 +1,9 @@
+title: zt_action
+desc: "系统日志"
+author: Shujie Tian
+version: "1.0"
+fields:
+  - field: id
+    range: 1-1000
+  - field: action
+    range: edited

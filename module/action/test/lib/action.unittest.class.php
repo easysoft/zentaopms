@@ -794,4 +794,20 @@ class actionTest
     {
         return call_user_func_array(array($this->objectModel, $method), $args);
     }
+
+    /**
+     * 将类型、状态等键值转换为具体的值。
+     * Process object type, status and etc.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @access public
+     * @return array
+     */
+    public function processActionsTest(string $objectType, int $objectID): array
+    {
+        $actions = $this->objectModel->getList($objectType, $objectID);
+        $action  = current($actions);
+        return empty($action->history) ? array() : $action->history;
+    }
 }
