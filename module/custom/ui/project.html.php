@@ -15,6 +15,26 @@ div
 (
     setClass('flex'),
     $sidebarMenu,
+    formPanel
+    (
+        setID('closedProjectForm'),
+        set::actions(array('submit')),
+        set::actionsClass('w-2/3'),
+        setClass('flex-auto'),
+        span
+        (
+            setClass('text-md font-bold'),
+            $lang->custom->closeSetting
+        ),
+        formGroup
+        (
+            setClass('closed-project-box'),
+            set::label($lang->custom->closedProject),
+            radioList
+            (
+            )
+        ),
+    )
 );
 
 render();
