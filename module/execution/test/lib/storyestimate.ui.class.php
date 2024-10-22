@@ -37,7 +37,8 @@ class StoryEstimateTester extends tester
     {
         $this->inputForm($estimate);
         $form  = $this->loadPage();
-        $round = sprintf($this->lang->story->estimateRound, $time);
+        $round = sprintf($this->lang->story->storyRound, $time);
+        $form->wait(1);
         $form->dom->round->picker($round);
         $form->wait(1);
         $a   = $form->dom->estimateA->getValue();
