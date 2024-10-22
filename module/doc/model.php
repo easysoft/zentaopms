@@ -937,7 +937,7 @@ class docModel extends model
         if(count($libIdList) == 1)
         {
             $libID = current($libIdList);
-            $lib   = $this->getLibByID($libID);
+            $lib   = $this->getLibByID((int)$libID);
             if($lib->type == 'custom' && $lib->parent == 0)
             {
                 $libs = $this->dao->select('*')->from(TABLE_DOCLIB)->where('parent')->eq($libID)->andWhere('deleted')->eq('0')->fetchAll();
