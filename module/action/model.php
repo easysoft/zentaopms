@@ -271,6 +271,29 @@ class actionModel extends model
                         $history->new = trim($history->new, ',');
                     }
                 }
+                elseif(strpos(",{$this->config->action->userFields},", ",{$history->field},") !== false)
+                {
+                    $history->old = zget($users, $history->old);
+                    $history->new = zget($users, $history->new);
+                }
+                elseif(strpos(",{$this->config->action->multipleUserFields},", ",{$history->field},") !== false)
+                {
+                    if(!empty($history->old))
+                    {
+                        $oldValues = explode(',', $history->old);
+                        $history->old = '';
+                        foreach($oldValues as $key => $value) $history->old .= zget($users, $value) . ',';
+                        $history->old = trim($history->old, ',');
+                    }
+
+                    if(!empty($history->new))
+                    {
+                        $newValues = explode(',', $history->new);
+                        $history->new = '';
+                        foreach($newValues as $key => $value) $history->new .= zget($users, $value) . ',';
+                        $history->new = trim($history->new, ',');
+                    }
+                }
                 else
                 {
                     $fieldListVar = isset($this->config->action->objectFields[$action->objectType][$history->field]) ? $this->config->action->objectFields[$action->objectType][$history->field] : $history->field . 'List';
