@@ -89,13 +89,14 @@ class relatedList extends wg
             }
 
             $groupItems = $this->getGroupItems((string)$type, $group);
+            $content    = zget($group, 'content', '');
 
             $items[] = array
             (
-                'title'   => $title,
-                'hint'    => $title,
-                'items'   => $groupItems,
-                'content' => $showCount ? array('html' => '<span class="label gray-pale rounded-full size-sm">' . count($groupItems) . '</span>') : null
+                'title'      => $title,
+                'titleAttrs' => array('title' => $title),
+                'items'      => $groupItems,
+                'content'    => $showCount ? array('html' => '<span class="label gray-pale rounded-full size-sm">' . count($groupItems) . '</span>' . $content) : null
             );
         }
 

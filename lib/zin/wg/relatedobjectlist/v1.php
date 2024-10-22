@@ -38,7 +38,7 @@ class relatedObjectList extends relatedList
         JS;
     }
 
-    protected function getObjectItem(int $relatedObjectID, string $relatedObjectType, array $relatedObjectTitle, string $relationName): object
+    protected function getObjectItem(int $relatedObjectID, string $relatedObjectType, array $relatedObjectTitle, string $relationName, string $relationType): object
     {
         global $config,$lang,$app;
         $objectID   = $this->prop('objectID');
@@ -54,7 +54,7 @@ class relatedObjectList extends relatedList
         $item->url        = !empty($relatedObjectTitle['url']) ? $relatedObjectTitle['url'] : null;
         $item->titleAttrs = !empty($relatedObjectTitle['url']) ? array('data-toggle' => 'modal', 'data-size' => 'lg') : null;
 
-        if(hasPriv('custom', 'removeObjects'))
+        if(hasPriv('custom', 'removeObjects') && $relationType != 'default')
         {
             $removeObjectUrl = createLink('custom', 'removeObjects', "objectID=$objectID&objectType=$objectType&relationName=$relationName&relatedObjectID=$relatedObjectID&relatedObjectType=$relatedObjectType");
 
@@ -96,19 +96,25 @@ class relatedObjectList extends relatedList
         $relatedObjects = $this->prop('relatedObjects', data('relatedObjects'));
         if(!$relatedObjects) return;
 
+        global $lang;
         $data = array();
-        foreach($relatedObjects as $relationName => $relatedObjectList)
+        foreach($relatedObjects as $key => $relatedObjectList)
         {
+            $explodeName  = explode('_', $key, 2);
+            $relationType = $explodeName[0]; //default是内置关系，custom是用户自定义关系
+            $relationName = $explodeName[1];
+
             $relatedObjectItems = array();
             foreach($relatedObjectList as $relatedObjectType => $relatedObjectPairs)
             {
-                foreach($relatedObjectPairs as $id => $title) $relatedObjectItems[] = $this->getObjectItem($id, $relatedObjectType, $title, (string)$relationName);
+                foreach($relatedObjectPairs as $id => $title) $relatedObjectItems[] = $this->getObjectItem($id, $relatedObjectType, $title, (string)$relationName, $relationType);
             }
 
-            $data[$relationName] = array
+            $data[$key] = array
             (
-                'title' => $relationName,
-                'items' => $relatedObjectItems
+                'title'   => $relationName,
+                'items'   => $relatedObjectItems,
+                'content' => $relationType == 'default' ? "<i class='icon icon-help ml-2 mt-2 text-gray' data-title='{$lang->custom->defaultRelation}' data-toggle='tooltip' data-placement='right' data-type='white' data-class-name='text-gray border border-light'></i>" : ''
             );
         }
 
