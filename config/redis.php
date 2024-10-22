@@ -7,7 +7,7 @@ $config->redis->timeout  = 10;
 $config->redis->username = null;
 $config->redis->password = null;
 
-// Format : $config->redis->caches[TABLE_NAME]  = 'KEY_FIELD';
+// Format : $config->redis->caches[TABLE_NAME] = 'KEY_FIELD';
 // The TABLE_NAME is the name of the table in the database.
 // The KEY_FIELD is the field of the table which is used to generate the key of the cache. It must be unique in the table.
 
