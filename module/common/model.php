@@ -1855,6 +1855,7 @@ eof;
 
         global $config;
         static $productsStatus   = array();
+        static $projectsStatus   = array();
         static $executionsStatus = array();
 
         $commonModel = new commonModel();
@@ -1878,6 +1879,18 @@ eof;
             if(!empty($productStatus['closed']) and count($productStatus) == 1) return false;
         }
 
+        /* Check the project is closed. */
+        $productModuleList = array('story', 'bug', 'testtask', 'release');
+        if(!in_array($module, $productModuleList) and !empty($object->project) and is_numeric($object->project) and empty($config->CRProject))
+        {
+            if(!isset($projectsStatus[$object->project]))
+            {
+                $project = $commonModel->loadModel('project')->getByID((int)$object->project);
+                $projectsStatus[$object->project] = $project ? $project->status : '';
+            }
+            if($projectsStatus[$object->project] == 'closed') return false;
+        }
+
         /* Check the execution is closed. */
         $productModuleList = array('story', 'bug', 'testtask');
         if(!in_array($module, $productModuleList) and !empty($object->execution) and is_numeric($object->execution) and empty($config->CRExecution))
@@ -1888,6 +1901,13 @@ eof;
                 $executionsStatus[$object->execution] = $execution ? $execution->status : '';
             }
             if($executionsStatus[$object->execution] == 'closed') return false;
+
+            if(isset($object->project) && !isset($projectsStatus[$object->project]))
+            {
+                $project = $commonModel->loadModel('project')->getByID((int)$object->project);
+                $projectsStatus[$object->project] = $project ? $project->status : '';
+            }
+            if($projectsStatus[$object->project] == 'closed') return false;
         }
 
         return true;
