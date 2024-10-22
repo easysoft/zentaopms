@@ -225,6 +225,30 @@ class actionModel extends model
             $action->comment = $this->file->setImgSize($action->comment, $this->config->action->commonImgSize);
             $actions[$actionID] = $action;
         }
+        return $this->processActions($actions);
+    }
+
+    /**
+     * 将类型、状态等键值转换为具体的值。
+     * Process object type, status and etc.
+     *
+     * @param  array  $actions
+     * @access public
+     * @return array
+     */
+    public function processActions(array $actions = array()): array
+    {
+        if(empty($actions)) return $actions;
+
+        $users          = $this->loadModel('user')->getPairs('noletter');
+        $objectTypeList = array();
+        foreach($actions as $action)
+        {
+            if(empty($action->history)) continue;
+
+            if(!isset($objectTypeList[$action->objectType])) $this->app->loadLang($action->objectType);
+            $objectTypeList[$action->objectType] = $action->objectType;
+        }
         return $actions;
     }
 

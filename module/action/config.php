@@ -115,3 +115,11 @@ $config->trash->search['params']['date']       = array('operator' => '=', 'contr
 
 $config->action->newPageModule  = array('repo', 'mr', 'host', 'account', 'serverroom', 'instance', 'store', 'space', 'domain', 'service', 'gitlab', 'gitea', 'gogs', 'sonarqube', 'jenkins', 'nexus', 'board');
 $config->action->latestDateList = array('today', 'yesterday', 'thisWeek', 'lastWeek', 'thisMonth');
+
+$config->action->userFields         = 'openedBy,addedBy,createdBy,editedBy,assignedTo,finishedBy,canceledBy,closedBy,activatedBy,resolvedBy,lastEditedBy,builder,owner,reviewedBy,forwardBy,scriptedBy,manager,commitedBy,archivedBy,PO,QD,RD,feedback,PM,account,changedBy,submitedBy,retractedBy,lastRunner,assignedBy,processedBy';
+$config->action->multipleUserFields = 'mailto,whitelist,reviewer,users,assignee,approver,PMT,committer,backReviewers,contributor';
+
+$config->action->objectFields['task']['closedReason'] = 'reasonList';
+
+$config->action->multipleObjectFields['bug']['os']      = 'osList';
+$config->action->multipleObjectFields['bug']['browser'] = 'browserList';
