@@ -97,12 +97,13 @@ class pipelineModel extends model
         }
 
         $serverList   = $this->getList($type);
-        $instanceList = $this->loadModel('space')->getSpaceInstances(0);
-
-        $runningApps = array();
+        $instanceList = $this->loadModel('instance')->getList();
+        $statusList   = $this->cne->batchQueryStatus($instanceList);
+        $runningApps  = array();
         foreach($instanceList as $instance)
         {
-            if($instance->status == 'running' && strpos(",{$type},", ",{$instance->chart},") !== false) $runningApps[$instance->id] = $instance->domain;
+            $statusData = zget($statusList, $instance->k8name, '');
+            if($statusData->status == 'running') $runningApps[$instance->id] = $instance->domain;
         }
 
         $serverPairs = array();
