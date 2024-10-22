@@ -36,6 +36,10 @@ class taskModel extends model
         $oldTask = $this->getById($taskID);
         if($oldTask->parent == '-1') $this->config->task->activate->requiredFields = '';
 
+        $this->dao->update(TABLE_TASKTEAM)->set('status')->eq('wait')->where('task')->eq($task->id)->andWhere('consumed')->eq(0)->andWhere('left')->gt('0')->exec();
+        $this->dao->update(TABLE_TASKTEAM)->set('status')->eq('doing')->where('task')->eq($task->id)->andWhere('consumed')->gt(0)->andWhere('left')->gt(0)->exec();
+        $this->dao->update(TABLE_TASKTEAM)->set('status')->eq('done')->where('task')->eq($task->id)->andWhere('consumed')->gt(0)->andWhere('left')->eq('0')->exec();
+
         if(!empty($oldTask->team))
         {
             /* When activate and assigned to a team member, then update his left data in teamData. */
@@ -44,7 +48,7 @@ class taskModel extends model
 
             $this->manageTaskTeam($oldTask->mode, $task, $teamData);
             $task = $this->computeMultipleHours($oldTask, $task);
-            if($task->assignedTo == 'closed') $task->assignedTo = '';
+            if(!empty($task->assignedTo) && $task->assignedTo == 'closed') $task->assignedTo = '';
         }
 
         $this->dao->update(TABLE_TASK)->data($task)
@@ -659,6 +663,7 @@ class taskModel extends model
         parse_str($extra, $output);
 
         $this->updateKanbanCell($oldTask->id, $output, $oldTask->execution);
+        if(!empty($oldTask->mode)) $this->dao->update(TABLE_TASKTEAM)->set('status')->eq($task->status)->where('task')->eq($task->id)->exec();
 
         $changes = common::createChanges($oldTask, $task);
         if($changes || $this->post->comment != '')
@@ -750,6 +755,8 @@ class taskModel extends model
     {
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()->where('id')->eq((int)$oldTask->id)->exec();
         if(dao::isError()) return false;
+
+        if(!empty($oldTask->mode)) $this->dao->update(TABLE_TASKTEAM)->set('`status`')->eq($task->status)->where('task')->eq($task->id)->exec();
 
         $changes = common::createChanges($oldTask, $task);
         $this->afterChangeStatus($oldTask, $changes, 'Closed', $output);
