@@ -26,7 +26,7 @@ window.changeSpace = function()
     if(space == 'project' && docType) loadExecutions();
     if(space == 'product' && docType) loadObjectModulesForSelect('product');
     if(space == 'custom'  && docType) loadObjectModulesForSelect('custom');
-    if(space == 'mine'    && docType) loadDocLibs(space, docType);
+    if(space == 'mine'    && docType) loadDocLibs(space, docType, 'withObject');
     if(space == 'api') changeApiType();
 
     if(!docType && space != 'api')
@@ -81,9 +81,9 @@ window.changeApiType = function()
  * @param  string  type
  * @return void
  */
-window.loadDocLibs = function(space, type)
+window.loadDocLibs = function(space, type, extra = '')
 {
-    const link = $.createLink('doc', 'ajaxGetLibsByType', `space=${space}&type=${type}`);
+    const link = $.createLink('doc', 'ajaxGetLibsByType', `space=${space}&type=${type}&extra=${extra}`);
     $.getJSON(link, function(data)
     {
         const $libPicker = $('#selectLibTypeForm [name=lib]').zui('picker');

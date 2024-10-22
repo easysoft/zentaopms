@@ -615,12 +615,13 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function ajaxGetLibsByType(string $type, string $docType = 'doc')
+    public function ajaxGetLibsByType(string $type, string $docType = 'doc', string $extra = '')
     {
         $libPairs = array();
         if($docType == 'doc')
         {
             $unclosed = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
+            if($extra) $unclosed .= ",$extra";
             $libPairs = $this->doc->getLibs($type, $unclosed);
         }
         elseif($docType == 'api')

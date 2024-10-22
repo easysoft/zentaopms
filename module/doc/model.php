@@ -216,11 +216,11 @@ class docModel extends model
                         $lib->name = trim($lib->name, '/');
                     }
                     if($lib->project != 0)     $lib->name = zget($projects, $lib->project, '') . ' / ' . $lib->name;
-                    if($lib->type == 'mine')   $lib->name = $this->lang->doc->person . ' / ' . $lib->name;
-                    if($lib->type == 'custom')
+                    if($lib->type == 'mine' || $lib->type == 'custom')
                     {
                         if($lib->parent == 0) continue;
-                        $lib->name = $this->lang->doc->team . ' / ' . $lib->name;
+                        $parentLib = $this->getLibByID($lib->parent);
+                        $lib->name = $parentLib->name . ' / ' . $lib->name;
                     }
                 }
                 $libPairs[$lib->id] = $lib->name;
