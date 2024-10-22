@@ -11,7 +11,7 @@ class sqlBuilderQueryFilter extends wg
         'querys?: array',
         'tables?: array',
         'fields?: array',
-        'defaultItems?: array',
+        'defaultItems?: array|string',
         'onChange?: function',
         'onAdd?: function',
         'onRemove?: function',
