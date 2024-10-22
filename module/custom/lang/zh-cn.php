@@ -96,6 +96,7 @@ $lang->custom->saveTips            = '点击保存后，则以当前%s为默认�
 $lang->custom->numberError = '区间必须大于零';
 $lang->custom->hoursError  = '可用工时必须在0到24之间！';
 
+$lang->custom->closedProject   = '已关闭' . $lang->projectCommon;
 $lang->custom->closedExecution = '已关闭' . $lang->custom->executionCommon;
 $lang->custom->closedKanban    = '已关闭' . $lang->custom->kanban;
 $lang->custom->closedProduct   = '已关闭' . $lang->productCommon;
@@ -110,6 +111,7 @@ $lang->custom->project = new stdClass();
 $lang->custom->project->currencySetting    = '货币设置';
 $lang->custom->project->defaultCurrency    = '默认货币';
 $lang->custom->project->fields['required'] = $lang->custom->required;
+$lang->custom->project->fields['project']  = '关闭设置';
 $lang->custom->project->fields['unitList'] = '预算单位';
 
 $lang->custom->execution = new stdClass();
@@ -207,6 +209,11 @@ $lang->custom->notice->required            = '页面提交时，选中的字段�
 $lang->custom->notice->conceptResult       = '我们已经根据您的选择为您设置了<b> %s-%s </b>模式，使用<b>%s</b> + <b> %s</b>。';
 $lang->custom->notice->conceptPath         = '您可以在：后台 -> 自定义 -> 流程页面修改。';
 $lang->custom->notice->readOnlyOfProduct   = '禁止修改后，已关闭' . $lang->productCommon . '下的' . $lang->SRCommon . '、Bug、用例、日志、发布、计划、版本都禁止修改。';
+$lang->custom->notice->readOnlyOfProject   = "禁止修改后，已关闭{$lang->projectCommon}下的数据将禁止修改：<br/>
+1. 产品型{$lang->projectCommon}启用{$lang->custom->executionCommon}：已关闭项目下的{$lang->custom->executionCommon}、{$lang->SRCommon}、设计、评审、评审问题、基线、文档、版本、发布、日志、测试单、测试报告、过程裁剪、调研、估算、问题、风险、机会、会议、质量保证计划、不符合项等禁止修改。<br/>
+2. 产品型{$lang->projectCommon}不启用{$lang->custom->executionCommon}：已关闭项目下的任务、{$lang->SRCommon}、版本、发布、日志、测试单、测试报告、文档等禁止修改。<br/>
+3. 项目型{$lang->projectCommon}启用{$lang->custom->executionCommon}：已关闭项目下的执行、{$lang->SRCommon}、设计、评审、评审问题、基线、Bug、用例、测试单、测试报告、文档、版本、发布、日志、过程裁剪、调研、估算、问题、风险、机会、会议、质量保证计划、不符合项等禁止修改。<br/>
+4. 项目型{$lang->projectCommon}不启用{$lang->custom->executionCommon}：已关闭项目下的任务、{$lang->SRCommon}、Bug、用例、测试单、测试报告、文档、版本、发布、日志等禁止修改。";
 if(in_array($config->edition, array('open', 'biz')))
 {
     $lang->custom->notice->readOnlyOfExecution = "禁止修改后，已关闭{$lang->custom->executionCommon}下的任务、日志、版本、测试单、测试报告、文档以及关联需求等都禁止修改。";
@@ -317,6 +324,9 @@ $lang->custom->scoreStatus[0] = '关闭';
 
 $lang->custom->CRProduct[1] = '允许修改';
 $lang->custom->CRProduct[0] = '禁止修改';
+
+$lang->custom->CRProject[1] = '允许修改';
+$lang->custom->CRProject[0] = '禁止修改';
 
 $lang->custom->CRExecution[1] = '允许修改';
 $lang->custom->CRExecution[0] = '禁止修改';
