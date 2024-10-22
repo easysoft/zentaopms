@@ -237,22 +237,23 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionLibPairsByProject($projectID)
+    public function getExecutionLibPairsByProject($projectID, $extra = '', $executions = array())
     {
         $libs = $this->dao->select('*')->from(TABLE_DOCLIB)
             ->where('deleted')->eq(0)
-            ->andWhere('type')->eq('execution')
-            ->andWhere('project')->eq($projectID)
-            ->beginIF($this->config->vision != 'or')->andWhere('vision')->eq($this->config->vision)->fi()
-            ->fetchAll();
-
         $libPairs = array();
         foreach($libs as $lib)
         {
-            if($this->checkPrivLib($lib)) $libPairs[$lib->id] = $lib->name;
+            if($this->checkPrivLib($lib))
+            {
+                if(strpos($extra, 'withObject') !== false)
+                {
+                    $lib->name = zget($executions, $lib->execution, '') . ' / ' . $lib->name;
+                    $lib->name = ltrim($lib->name, '/');
+                }
+                $libPairs[$lib->id] = $lib->name;
+            }
         }
-
-        return $libPairs;
     }
 
     /**

@@ -1298,8 +1298,12 @@ class doc extends control
             return $this->docZen->responseAfterMove($this->post->space, $spaceType, $data->lib, $locate, $docID);
         }
 
-        $libPairs = $this->doc->getLibPairs($spaceType, '', (int)$space, '', $spaceType == 'product' ? array((int)$space => $space) : array(), $spaceType == 'project' ? array((int)$space => $space) : array());
-        if($spaceType == 'project') $libPairs += $this->doc->getExecutionLibPairsByProject((int)$space);
+        $projects   = $this->loadModel('project')->getPairsByProgram(0, 'all', false, 'order_asc');
+        $products   = $this->loadModel('product')->getPairs();
+        $executions = $this->loadModel('execution')->getPairs(0, 'all', 'multiple,leaf');
+
+        $libPairs = $this->doc->getLibPairs($spaceType, 'withObject', (int)$space, '', $products, $projects, $executions);
+        if($spaceType == 'project') $libPairs += $this->doc->getExecutionLibPairsByProject((int)$space, 'withObject', $executions);
 
         if(!isset($libPairs[$libID])) $libID = (int)key($libPairs);
 
@@ -1350,10 +1354,12 @@ class doc extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'docApp' => array('load', null, null, null, array('noLoading' => true, 'picks' => 'doc'))));
         }
 
-        $products = $type == 'product' ? array($spaceID => $spaceID) : array();
-        $projects = $type == 'project' ? array($spaceID => $spaceID) : array();
-        $libPairs = $this->doc->getLibPairs($type, '', $spaceID, '', $products, $projects);
-        if($type == 'project') $libPairs += $this->doc->getExecutionLibPairsByProject($spaceID);
+        $projects   = $this->loadModel('project')->getPairsByProgram(0, 'all', false, 'order_asc');
+        $products   = $this->loadModel('product')->getPairs();
+        $executions = $this->loadModel('execution')->getPairs(0, 'all', 'multiple,leaf');
+
+        $libPairs = $this->doc->getLibPairs($type, 'withObject', $spaceID, '', $products, $projects, $executions);
+        if($type == 'project') $libPairs += $this->doc->getExecutionLibPairsByProject($spaceID, 'withObject', $executions);
 
         if(!isset($libPairs[$libID])) $libID = (int)key($libPairs);
 
