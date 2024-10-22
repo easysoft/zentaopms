@@ -35,11 +35,11 @@ class browsePage extends page
             'waterfallplus' => "//*[@class='modal-content']/div[2]/div[2]/div[5]/div",
             /*导出项目*/
             'exportBtn'      => "//*[@id='mainMenu']/div[2]/a/span",
-            'fileName'       => "//*[@class='modal-content']/div[3]/div/div/form/div/input",
+            'fileName'       => "//*[@class='modal-content']/div[3]/div/div/form/div[1]/input",
             'format'         => "//*[@class='modal-content']/div[3]/div/div/form/div[2]/div",
             'encoding'       => "//*[@class='modal-content']/div[3]/div/div/form/div[3]/div/div",
             'data'           => "//*[@class='modal-content']/div[3]/div/div/form/div[4]/div/div/div/span",
-            'exportBtnAlert' => "//*[@class='modal-content']/div[3]/div/div/form/div[6]/div/button/span",
+            'exportBtnAlert' => "//*[@class='modal-content']/div[3]/div/div/form/div[6]/div/div/button",
             /*项目列表页标签*/
             'all'       => "//*[@id='featureBar']/menu/li[1]/a/span[1]",
             'undone'    => "//*[@id='featureBar']/menu/li[2]/a/span[1]",
