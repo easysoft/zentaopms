@@ -47,10 +47,11 @@ class relatedObjectList extends relatedList
 
         $app->control->loadModel('custom')->setConfig4Workflow();
 
+        $type = $relatedObjectType == 'commit' ? 'repocommit' : $relatedObjectType;
         $item = new stdClass();
         $item->id         = $relatedObjectID;
         $item->title      = "#$relatedObjectID $title";
-        $item->type       = $config->custom->relateObjectList[$relatedObjectType];
+        $item->type       = $config->custom->relateObjectList[$type];
         $item->url        = !empty($relatedObjectTitle['url']) ? $relatedObjectTitle['url'] : null;
         $item->titleAttrs = !empty($relatedObjectTitle['url']) ? array('data-toggle' => 'modal', 'data-size' => 'lg') : null;
 
