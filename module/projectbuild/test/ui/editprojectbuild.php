@@ -3,7 +3,7 @@
 
 /**
 
-title=编辑项目发布
+title=编辑项目版本
 timeout=0
 cid=73
 
