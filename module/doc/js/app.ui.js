@@ -539,7 +539,7 @@ const actionsMap =
         ].filter(Boolean);
         return [
             (canExportDoc || canCreateDoc) ? {type: 'divider', style: {margin: '6px 0'}} : null,
-            canExportDoc ? {icon: 'export', text: lang.export, command: 'exportDoc'} : null,
+            canExportDoc && getDocApp().libID > 0 ? {icon: 'export', text: lang.export, command: 'exportDoc'} : null, // 不在库中，无法导出
             canCreateDoc ? {icon: 'import', text: lang.uploadDoc, command: 'uploadDoc'} : null,
             items.length ? {icon: 'plus', type: 'dropdown', btnType: 'primary',  size: 'md', text: lang.create, items: items} : null,
         ];
