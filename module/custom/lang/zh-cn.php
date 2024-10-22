@@ -210,10 +210,10 @@ $lang->custom->notice->conceptResult       = '我们已经根据您的选择为�
 $lang->custom->notice->conceptPath         = '您可以在：后台 -> 自定义 -> 流程页面修改。';
 $lang->custom->notice->readOnlyOfProduct   = '禁止修改后，已关闭' . $lang->productCommon . '下的' . $lang->SRCommon . '、Bug、用例、日志、发布、计划、版本都禁止修改。';
 $lang->custom->notice->readOnlyOfProject   = "禁止修改后，已关闭{$lang->projectCommon}下的数据将禁止修改：<br/>
-1. 产品型{$lang->projectCommon}启用{$lang->custom->executionCommon}：已关闭项目下的{$lang->custom->executionCommon}、{$lang->SRCommon}、设计、评审、评审问题、基线、文档、版本、发布、日志、测试单、测试报告、过程裁剪、调研、估算、问题、风险、机会、会议、质量保证计划、不符合项等禁止修改。<br/>
-2. 产品型{$lang->projectCommon}不启用{$lang->custom->executionCommon}：已关闭项目下的任务、{$lang->SRCommon}、版本、发布、日志、测试单、测试报告、文档等禁止修改。<br/>
-3. 项目型{$lang->projectCommon}启用{$lang->custom->executionCommon}：已关闭项目下的执行、{$lang->SRCommon}、设计、评审、评审问题、基线、Bug、用例、测试单、测试报告、文档、版本、发布、日志、过程裁剪、调研、估算、问题、风险、机会、会议、质量保证计划、不符合项等禁止修改。<br/>
-4. 项目型{$lang->projectCommon}不启用{$lang->custom->executionCommon}：已关闭项目下的任务、{$lang->SRCommon}、Bug、用例、测试单、测试报告、文档、版本、发布、日志等禁止修改。";
+1. 产品型{$lang->projectCommon}启用{$lang->custom->executionCommon}：已关闭项目下的{$lang->custom->executionCommon}、需求、设计、评审、评审问题、基线、文档、版本、发布、日志、测试单、测试报告、过程裁剪、调研、估算、问题、风险、机会、会议、质量保证计划、不符合项等禁止修改。<br/>
+2. 产品型{$lang->projectCommon}不启用{$lang->custom->executionCommon}：已关闭项目下的任务、需求、版本、发布、日志、测试单、测试报告、文档等禁止修改。<br/>
+3. 项目型{$lang->projectCommon}启用{$lang->custom->executionCommon}：已关闭项目下的执行、需求、设计、评审、评审问题、基线、Bug、用例、测试单、测试报告、文档、版本、发布、日志、过程裁剪、调研、估算、问题、风险、机会、会议、质量保证计划、不符合项等禁止修改。<br/>
+4. 项目型{$lang->projectCommon}不启用{$lang->custom->executionCommon}：已关闭项目下的任务、需求、Bug、用例、测试单、测试报告、文档、版本、发布、日志等禁止修改。";
 if(in_array($config->edition, array('open', 'biz')))
 {
     $lang->custom->notice->readOnlyOfExecution = "禁止修改后，已关闭{$lang->custom->executionCommon}下的任务、日志、版本、测试单、测试报告、文档以及关联需求等都禁止修改。";

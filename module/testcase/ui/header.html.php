@@ -26,8 +26,9 @@ $rawMethod     = $app->rawMethod;
 $load          = $rawMethod !== 'browse' ? null : 'table';
 $product       = is_bool($product) ? new stdclass() : $product;
 
-$canModify           = common::canModify('product', $product);
+$canModify = common::canModify('product', $product);
 if(!empty($project)) $canModify = $canModify && common::canModify('project', $project);
+
 $canSwitchCaseType   = $this->app->tab == 'qa';
 $canDisplaySuite     = $this->app->tab == 'qa' && $rawMethod != 'browseunits';
 $canManageModule     = $canModify && hasPriv('tree', 'browse') && !empty($productID) && (!isset($project) || $project->hasProduct);
