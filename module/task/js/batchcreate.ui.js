@@ -179,7 +179,7 @@ function checkBatchEstStartedAndDeadline(event)
 
             let $datetip = $('<div class="date-tip"></div>');
             $datetip.append('<div class="form-tip text-warning">' + overParentEstStartedLang + '<span class="ignore-date underline">' + ignoreLang + '</div>');
-            $dateTip.off('click', '.ignore-date').on('click', '.ignore-date', function(e){ignoreTip(e)});
+            $datetip.off('click', '.ignore-date').on('click', '.ignore-date', function(e){ignoreTip(e)});
             $estStartedTd.append($datetip);
         }
     }
@@ -193,7 +193,7 @@ function checkBatchEstStartedAndDeadline(event)
 
             let $datetip = $('<div class="date-tip"></div>');
             $datetip.append('<div class="form-tip text-warning">' + overParentDeadlineLang + '<span class="ignore-date underline">' + ignoreLang + '</div>');
-            $dateTip.off('click', '.ignore-date').on('click', '.ignore-date', function(e){ignoreTip(e)});
+            $datetip.off('click', '.ignore-date').on('click', '.ignore-date', function(e){ignoreTip(e)});
             $deadlineTd.append($datetip);
         }
     }
