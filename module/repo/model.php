@@ -1838,7 +1838,6 @@ class repoModel extends model
         }
 
         $repo->gitService = (int)$repo->serviceHost;
-        $repo->project    = $repo->SCM == 'Gitlab' ? (int)$repo->serviceProject : $repo->serviceProject;
         return $repo;
     }
 
@@ -1986,7 +1985,7 @@ class repoModel extends model
         }
         elseif($repo->SCM == 'Gitlab')
         {
-            $project = $this->loadModel('gitlab')->apiGetSingleProject($repo->gitService, $repo->project);
+            $project = $this->loadModel('gitlab')->apiGetSingleProject($repo->gitService, (int)$repo->serviceProject);
             if(isset($project->id))
             {
                 $url->http = $project->http_url_to_repo ?? '';
@@ -1995,7 +1994,7 @@ class repoModel extends model
         }
         elseif($repo->SCM == 'Gitea')
         {
-            $project = $this->loadModel('gitea')->apiGetSingleProject($repo->gitService, (string)$repo->project);
+            $project = $this->loadModel('gitea')->apiGetSingleProject($repo->gitService, (string)$repo->serviceProject);
             if(isset($project->id))
             {
                 $url->http = $project->clone_url;
@@ -2004,7 +2003,7 @@ class repoModel extends model
         }
         elseif($repo->SCM == 'Gogs')
         {
-            $project = $this->loadModel('gogs')->apiGetSingleProject($repo->gitService, (string)$repo->project);
+            $project = $this->loadModel('gogs')->apiGetSingleProject($repo->gitService, (string)$repo->serviceProject);
             if(isset($project->id))
             {
                 $url->http = $project->clone_url;
