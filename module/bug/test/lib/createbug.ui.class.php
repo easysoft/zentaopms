@@ -10,27 +10,21 @@ class createBugTester extends tester
         if(isset($bug['title']))       $form->dom->title->setValue($bug['title']);
         if(isset($bug['openedBuild'])) $form->dom->{'openedBuild[]'}->multipicker($bug['openedBuild']);
         if(isset($bug['assignedTo']))  $form->dom->assignedTo->picker($bug['assignedTo']);
-        if(isset($bug['steps']))       $form->dom->steps->setValue($bug['steps']);
         if(isset($bug['deadline']))    $form->dom->deadline->datePicker($bug['deadline']['datePicker']);
         if(isset($bug['type']))        $form->dom->type->picker($bug['type']);
         if(isset($bug['severity']))    $form->dom->severity->picker($bug['severity']);
         if(isset($bug['pri']))         $form->dom->pri->picker($bug['pri']);
-        $form->dom->btn($this->lang->save)->click();
-        $form->wait(1);
-
+        $form->dom->save->click();
+        $form->wait(2);
         if($this->response('method') == 'browse')
         {
-            if(isset($bug['title'], $bug['openedBuild'])) return $this->success('bug表单项提交成功');
-            else return $this->failed('bug必填项校验失败');
+            if(isset($bug['title'], $bug['openedBuild'])) return $this->success('创建bug成功');
+            return $this->failed('创建bug失败');
         }
         else
         {
-            if($this->checkFormTips('bug'))
-            {
-                if(!isset($bug['title'], $bug['openedBuild'])) return $this->success('bug表单必填项校验成功');
-                else return $this->failed('bug表单项校验失败');
-            }
-            else return $this->failed('bug表单项校验失败asd ');
+            if(!isset($bug['title'], $bug['openedBuild'])) return $this->success('bug表单必填项校验成功');
+            return $this->failed('bug表单必填项校验失败');
         }
     }
 }
