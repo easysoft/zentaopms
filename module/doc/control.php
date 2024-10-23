@@ -963,13 +963,30 @@ class doc extends control
         {
             $response = array();
 
-            $libID    = (int)$this->post->lib;
-            $moduleID = (int)$this->post->module;
+            $libID     = $_POST['lib'];
+            $moduleID  = $_POST['module'];
+            $rootSpace = $_POST['rootSpace'];
+            $docType   = isset($_POST['type']) ? $_POST['type'] : 'doc';
             if(empty($libID)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->error->notempty, $this->lang->doc->lib)));
+
+            if(in_array($rootSpace, array('mine', 'custom', 'product', 'project')))
+            {
+                $methodList = array('mine' => 'mySpace', 'custom' => 'teamSpace', 'product' => 'productSpace', 'project' => 'projectSpace');
+                $spaceID    = $_POST[$rootSpace];
+                $method     = $methodList[$rootSpace];
+
+                if($docType == 'doc') $url = $this->createLink('doc', $method, "objectID=$spaceID&libID=$libID&moduleID=$moduleID&browseType=all&params=0&orderBy=&recTotal=0&recPerPage=20&pageID=1&mode=create");
+                else $url = helper::createLink('api', 'create', "libID=$libID&moduleID=$moduleID&space=$rootSpace");
+
+            }
+            elseif($rootSpace == 'api')
+            {
+                $url = helper::createLink('api', 'create', "libID=$libID&moduleID=$moduleID&space=$rootSpace");
+            }
 
             $response['result']     = 'success';
             $response['closeModal'] = true;
-            $response['callback']   = "redirectParentWindow(\"{$this->post->rootSpace}\", {$libID}, {$moduleID}, \"{$this->post->type}\")";
+            $response['callback']   = "redirectParentWindow(\"{$url}\")";
             return $this->send($response);
         }
 

@@ -121,16 +121,7 @@ window.reloadApi = function()
  * @access public
  * @return void
  */
-window.redirectParentWindow = function(objectType, libID, moduleID, docType)
+window.redirectParentWindow = function(link)
 {
-    let link = '';
-    if(docType == 'api')
-    {
-        link = $.createLink('api', 'create', 'libID=' + libID + '&moduleID=' + moduleID + '&space=' + objectType);
-    }
-    else
-    {
-        link = $.createLink('doc', 'create', 'objectType=' + objectType + '&objectID=0&libID=' + libID + '&moduleID=' + moduleID + '&docType=' + docType) + '#app=doc';
-    }
     openUrl(link, 'doc');
 }
