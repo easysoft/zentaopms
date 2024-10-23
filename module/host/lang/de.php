@@ -12,6 +12,7 @@ $lang->host->changeStatus = 'Online/Offline';
 $lang->host->byQuery      = 'Search';
 $lang->host->reason       = 'Reason';
 
+$lang->host->CD           = 'CD';
 $lang->host->name         = 'Name';
 $lang->host->type         = 'Type';
 $lang->host->hardwareType = 'Hardware Type';
@@ -174,3 +175,7 @@ $lang->host->notice->cpuNumber = 'CPU number should be numbers！';
 $lang->host->notice->cpuCores  = 'CPU cores should be numbers！';
 $lang->host->notice->int       = '『%s』should be a positive integer!';
 $lang->host->notice->ip        = '『%s』incorrect format!';
+
+$lang->host->CDlist = array();
+$lang->host->CDlist['manual'] = 'Manual';
+$lang->host->CDlist['spug']   = 'Spug';

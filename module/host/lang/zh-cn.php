@@ -12,6 +12,7 @@ $lang->host->changeStatus = '上架/下架';
 $lang->host->byQuery      = '搜索';
 $lang->host->reason       = '原因';
 
+$lang->host->CD           = 'CD平台';
 $lang->host->name         = '名称';
 $lang->host->type         = '类型';
 $lang->host->hardwareType = '硬件类型';
@@ -174,3 +175,7 @@ $lang->host->notice->cpuNumber = 'CPU数量只能为数字！';
 $lang->host->notice->cpuCores  = 'CPU核心数只能为数字！';
 $lang->host->notice->int       = '『%s』应当是正整数！';
 $lang->host->notice->ip        = '『%s』格式不正确！';
+
+$lang->host->CDlist = array();
+$lang->host->CDlist['manual'] = '手工';
+$lang->host->CDlist['spug']   = 'Spug';
