@@ -15,6 +15,15 @@ include '../lib/assigndesign.ui.class.php';
 
 zendata('project')->loadYaml('project', false, 2)->gen(10);
 zendata('design')->loadYaml('design', false, 2)->gen(2);
+
+$team = zendata('team');
+$team->id->range('1');
+$team->root->range('60');
+$team->type->range('project');
+$team->account->range('admin');
+$team->join->range('(-2M)-(-M):1D')->type('timestamp')->format('YY/MM/DD');
+$team->gen(1);
+
 $tester = new assignDesignTester();
 $tester->login();
 
