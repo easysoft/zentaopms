@@ -31,7 +31,8 @@ class batchEditBranchTester extends tester
         if ($form->dom->allTab === false)
         {
             $nameTip      = $form->dom->$tipDom->getText();
-            $nameEmptyTip = sprintf($this->lang->error->notempty, $this->lang->branch->name);
+            $branchName   = sprintf($this->lang->branch->name, $this->lang->branch->common);
+            $nameEmptyTip = sprintf($this->lang->error->notempty, $branchName);
             if ($nameTip === $nameEmptyTip) return $this->success('分支名称必填提示信息正确');
             if ($editBranch->name != '' && $form->dom->$tipDom)
             {
