@@ -1198,7 +1198,7 @@ class dom
      * @access public
      * @return void
      */
-    public function setValueInZeneditor($value)
+    public function setValueInZenEditor($value)
     {
         $value = json_encode($value);
         return $this->driver->executeScript("arguments[0].setHTML($value);", array($this->element));
