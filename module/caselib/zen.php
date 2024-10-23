@@ -597,6 +597,7 @@ class caselibZen extends caselib
             $this->processStepForExport($case, $relatedSteps);
             $this->processStageForExport($case);
             $this->processFileForExport($case, $relatedFiles);
+            if($case->linkCase) $this->processLinkCaseForExport($case);
         }
 
         return $cases;
@@ -694,5 +695,25 @@ class caselibZen extends caselib
                 $case->files .= html::a($fileURL, $file->title, '_blank') . '<br />';
             }
         }
+    }
+
+    /**
+     * 处理导出用例的相关用例。
+     * Process link case of the case for export.
+     *
+     * @param  object    $case
+     * @access protected
+     * @return void
+     */
+    protected function processLinkCaseForExport(object $case): void
+    {
+        $tmpLinkCases   = array();
+        $linkCaseIdList = explode(',', $case->linkCase);
+        foreach($linkCaseIdList as $linkCaseID)
+        {
+            $linkCaseID = trim($linkCaseID);
+            $tmpLinkCases[] = isset($relatedCases[$linkCaseID]) ? $relatedCases[$linkCaseID] . "(#$linkCaseID)" : $linkCaseID;
+        }
+        $case->linkCase = join("; \n", $tmpLinkCases);
     }
 }
