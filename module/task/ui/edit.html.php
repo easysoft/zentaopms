@@ -32,6 +32,15 @@ jsVar('estimateNotEmpty', sprintf($lang->error->gt, $lang->task->estimate, '0'))
 jsVar('leftNotEmpty', sprintf($lang->error->gt, $lang->task->left, '0'));
 jsVar('requiredFields', $config->task->edit->requiredFields);
 
+$confirmSyncTip = '';
+if(!empty($syncChildren) && !empty($task->children))
+{
+    $confirmSyncTip = count($syncChildren) == count($task->children) ? $lang->task->syncStoryToAllChildrenTip : sprintf($lang->task->syncStoryToChildrenTip, 'ID' . implode(', ID', $syncChildren));
+}
+jsVar('confirmSyncTip', $confirmSyncTip);
+jsVar('taskID', $task->id);
+jsVar('taskStory', $task->story);
+
 /* zin: Set variables to define picker options for form */
 $formTitle        = $task->name;
 $executionOptions = $executions;
@@ -96,34 +105,11 @@ detailHeader
     )
 );
 
-$beforeSubmit = null;
-if(!empty($syncChildren) && !empty($task->children))
-{
-    $confirmTip = count($syncChildren) == count($task->children) ? $lang->task->syncStoryToAllChildrenTip : sprintf($lang->task->syncStoryToChildrenTip, 'ID' . implode(', ID', $syncChildren));
-    $beforeSubmit = jsRaw("() =>
-    {
-        if($('[name=story]').length == 0 || $('[name=story]').val() == '0' || $('[name=story]').val() == '{$task->story}') return true;
-
-        zui.Modal.confirm('{$confirmTip}').then((res) =>
-        {
-            const \$taskForm = $('[formid=taskEditForm{$task->id}]');
-
-            \$taskForm.find('[name=syncChildren]').remove();
-            \$taskForm.append('<input type=\"hidden\" name=\"syncChildren\" value=\"' + (res ? '1' : '0') + '\" />');
-
-            const formData   = new FormData(\$taskForm[0]);
-            const confirmURL = \$taskForm.attr('action');
-            $.ajaxSubmit({url: confirmURL, data: formData});
-        });
-        return false;
-    }");
-}
-
 detailBody
 (
     set::isForm(true),
     set::formID("taskEditForm{$task->id}"),
-    !empty($syncChildren) && !empty($task->children) ? set::ajax(array('beforeSubmit' => $beforeSubmit)) : null,
+    set::ajax(array('beforeSubmit' => jsRaw('clickSubmit'))),
     sectionList
     (
         section
