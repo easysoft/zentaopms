@@ -957,7 +957,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function selectLibType()
+    public function selectLibType($objectType = 'mine', $params = '')
     {
         if($_POST)
         {
@@ -987,11 +987,15 @@ class doc extends control
         $products = $this->loadModel('product')->getPairs();
         $projects = $this->project->getPairsByProgram(0, 'all', false, 'order_asc');
 
+        $params = helper::safe64Decode($params);
+        parse_str($params, $params);
+        $this->view->params    = $params;
+
+        $this->view->objectType = $objectType;
         $this->view->spaceList = $spaceList;
         $this->view->typeList  = $typeList;
         $this->view->products  = $products;
         $this->view->projects  = $projects;
-        $this->view->spaces    = $this->docZen->getAllSpaces('nomine');
 
         $this->display();
     }
