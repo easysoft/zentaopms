@@ -125,6 +125,7 @@ $lang->story->activateSyncTip  = "Twin stories are activated synchronously";
 $lang->story->relievedTwinsTip = "After {$lang->productCommon} adjustment, the twin relationship of this story will be automatically removed, and the story will no longer be synchronized. Do you want to save?";
 $lang->story->batchEditTip     = "{$lang->SRCommon} %sis twin stories, and this operation has been filtered.";
 $lang->story->planTip          = "{$lang->SRCommon} only supports single selection plan, other requirements can select multiple plans.";
+$lang->story->batchEditError   = "All selected {$lang->SRCommon} can not be edited.";
 
 $lang->story->id               = 'ID';
 $lang->story->parent           = 'Parent';

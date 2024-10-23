@@ -15,7 +15,8 @@ const ignoreTips = {
  */
 function changeType()
 {
-    if($(this).val() == 0)
+    const hasProduct = $(this).val();
+    if(hasProduct == 0)
     {
         if(!$('[name=charter]').length || ($('[name=charter]').length && !parseInt($('[name=charter]').val()))) $('.productsBox').addClass('hidden');
         $('.stageByBox').addClass('hidden');
@@ -24,6 +25,17 @@ function changeType()
     {
         $('.productsBox').removeClass('hidden');
     }
+
+    const link = $.createLink('project', 'ajaxGetWorkflowGroups', `model=${model}&hasProduct=${hasProduct}`);
+    $.getJSON(link, function(data)
+    {
+        if(data.items)
+        {
+            const $workflowGroup = $('[name=workflowGroup]').zui('picker');
+            $workflowGroup.render({items: data.items});
+            $workflowGroup.$.setValue(data.defaultValue);
+        }
+    })
 }
 
 /**

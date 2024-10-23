@@ -389,6 +389,8 @@ class product extends control
         /* Execute hooks. */
         $this->executeHooks($productID);
 
+        if($this->config->edition != 'open') $this->view->workflowGroups = $this->loadModel('workflowgroup')->getPairs('product');
+
         $this->view->title     = $product->name . $this->lang->hyphen . $this->lang->product->view;
         $this->view->product   = $product;
         $this->view->actions   = $this->loadModel('action')->getList('product', $productID);

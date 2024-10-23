@@ -22,6 +22,7 @@ class projectreleaseZen extends projectrelease
         /* 获取当前的产品。*/
         /*  Get current product. */
         if(!$productID) $productID = key($this->products);
+        $this->loadModel('product')->checkAccess($productID, $this->products);
         $product = $this->product->getByID($productID);
 
         $this->view->products = $this->products;

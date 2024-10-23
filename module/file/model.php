@@ -875,23 +875,30 @@ class fileModel extends model
     /**
      * Update objectID.
      *
-     * @param  string $uid
-     * @param  int    $objectID
-     * @param  string $objectType
+     * @param  array|string|bool $uid
+     * @param  int               $objectID
+     * @param  string            $objectType
      * @access public
      * @return bool
      */
-    public function updateObjectID(string|bool $uid, int $objectID, string $objectType): bool
+    public function updateObjectID(array|string|bool $uid, int $objectID, string $objectType): bool
     {
         if(empty($uid)) return true;
-        if(empty($_SESSION['album']['used'][$uid])) return true;
 
-        $data = new stdclass();
-        $data->objectID   = $objectID;
-        $data->objectType = $objectType;
-        if(!defined('RUN_MODE') || RUN_MODE != 'api') $data->extra = 'editor';
+        if(is_string($uid)) $uid = array($uid);
+        if(!is_array($uid)) return true;
 
-        $this->dao->update(TABLE_FILE)->data($data)->where('id')->in($_SESSION['album']['used'][$uid])->exec();
+        foreach($uid as $value)
+        {
+            if(empty($_SESSION['album']['used'][$value])) continue;
+
+            $data = new stdclass();
+            $data->objectID   = $objectID;
+            $data->objectType = $objectType;
+            if(!defined('RUN_MODE') || RUN_MODE != 'api') $data->extra = 'editor';
+
+            $this->dao->update(TABLE_FILE)->data($data)->where('id')->in($_SESSION['album']['used'][$value])->exec();
+        }
         return !dao::isError();
     }
 

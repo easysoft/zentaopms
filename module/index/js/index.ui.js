@@ -836,14 +836,15 @@ function getMenuNavData()
     const data = [];
     const $nav = $('#menuMainNav');
     $nav.children().each(function(index, element) {
-        const $elm = $(element);
-        data.push(
-            {
-                name:  $elm.is('.divider') ? 'divider' : $elm.data('app'),
-                order: index * 5
-            }
-        );
+        const $elm     = $(element);
+        const menuItem = {};
+        menuItem.name  = $elm.is('.divider') ? 'divider' : $elm.data('app');
+        menuItem.order = index * 5;
+        if(typeof $elm.data('hidden') != 'undefined') menuItem.hidden = true;
+
+        data.push(menuItem);
     });
+
     return data;
 }
 
@@ -864,6 +865,7 @@ function restoreMenuNavToServer()
 {
     const url = $.createLink('custom', 'ajaxRestoreMenu');
     $.ajaxSubmit({url, data: {menu: 'nav'}});
+    top.location.reload();
 }
 
 /**
@@ -979,8 +981,6 @@ $(document).on('contextmenu', '#menuMainNav .divider', function(event)
         {
             text: langData.restore,
             onClick: () => {
-                initAppsMenu(allAppsItems);
-                refreshMenu();
                 restoreMenuNavToServer();
             }
         }
@@ -1070,7 +1070,7 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
                     : () => {
                         closeApp(code);
                         const $li = $btn.closest('li');
-                        $li.remove();
+                        $li.hide().attr('data-hidden', '1');
                         refreshMenu();
                         saveMenuNavToServer();
                     },
@@ -1096,8 +1096,6 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
             {
                 text: langData.restore,
                 onClick: () => {
-                    initAppsMenu(allAppsItems);
-                    refreshMenu();
                     restoreMenuNavToServer();
                 }
             }
