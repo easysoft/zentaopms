@@ -43,7 +43,7 @@ class createDesignTester extends tester
         /* 跳转到设计列表，检查设计字段信息。 */
         $browsePage = $this->loadPage('design', 'browse');
         if($browsePage->dom->designName->getText()    != $design['name']) return $this->failed('设计名称错误');
-        if($browsePage->dom->linkedProduct->getText() != $design['product']) return $this->failed('所属产品错误');
+        if($browsePage->dom->browseProduct->getText() != $design['product']) return $this->failed('所属产品错误');
         if($browsePage->dom->designType->getText()    != $design['type']) return $this->failed('设计类型错误');
 
         return $this->success();
