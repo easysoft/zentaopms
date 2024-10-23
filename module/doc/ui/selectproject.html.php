@@ -4,14 +4,14 @@ declare(strict_types=1);
  * The selectlibtype view file of doc module of ZenTaoPMS.
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
- * @author      Shujie Tian<tianshujie@easycorp.ltd>
+ * @author      Chenxuan Song<songchenxuan@easycorp.ltd>
  * @package     doc
  * @link        https://www.zentao.net
  */
 namespace zin;
 
 // In this page, $objectType = project
-// $params may have three key: objectID|executionID|docType|libID
+// $params may have four key: objectID|executionID|docType|libID
 
 $projects    = $this->loadModel('project')->getPairsByProgram(0, 'all', false, 'order_asc');
 $objectID    = isset($params['objectID']) ? (int)$params['objectID'] : key($projects);

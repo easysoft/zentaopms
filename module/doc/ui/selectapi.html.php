@@ -4,64 +4,85 @@ declare(strict_types=1);
  * The selectlibtype view file of doc module of ZenTaoPMS.
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
- * @author      Shujie Tian<tianshujie@easycorp.ltd>
+ * @author      Chenxuan Song<songchenxuan@easycorp.ltd>
  * @package     doc
  * @link        https://www.zentao.net
  */
 namespace zin;
+
+// In this page, $objectType = api
+// $params may have four key: apiType|objectID|executionID|libID
+
+$apiType  = isset($params['apiType'])  ? $params['apiType']  : 'product';
+$products = $this->loadModel('product')->getPairs();
+$projects = $this->loadModel('project')->getPairsByProgram(0, 'all', false, 'order_asc');
+
+if($apiType == 'product')
+{
+    $useType  = $apiType;
+    $objectID = isset($params['objectID']) ? (int)$params['objectID'] : key($products);
+    $libPairs = $this->doc->getLibs($useType, '', '', (int)$objectID);
+}
+elseif($apiType == 'project')
+{
+    $objectID   = isset($params['objectID']) ? (int)$params['objectID'] : key($projects);
+    $executions = $this->loadModel('execution')->getPairs($objectID, 'all', 'multiple,leaf,noprefix');
+    $executionID = (isset($params['executionID']) && isset($executions[$params['executionID']])) ? $params['executionID'] : '';
+
+    $useType  = $executionID ? 'execution' : 'project';
+    $useID    = $executionID ? $executionID : $objectID;
+    $libPairs = $this->doc->getLibs($useType, '', '', (int)$useID);
+}
+elseif($apiType == 'nolink')
+{
+    $libs     = $this->doc->getApiLibs(0, 'nolink');
+    $libPairs = array();
+    foreach($libs as $libID => $lib) $libPairs[$libID] = $lib->name;
+}
+
+$libID = isset($params['libID']) && isset($libPairs[$params['libID']]) ? $params['libID'] : key($libPairs);
+
+$modules  = $this->loadModel('tree')->getOptionMenu((int)$libID, 'doc', 0);
+$moduleID = key($modules);
 
 form
 (
     setID('selectLibTypeForm'),
     set::submitBtnText($lang->doc->nextStep),
     on::change('[name=rootSpace]', "changeSpace"),
-    on::change('[name=type]',      "changeDocType"),
-    on::change('[name=apiType]',   "changeApiType"),
-    on::change('[name=project]',   "loadExecutions"),
-    on::change('[name=execution]', "loadObjectModulesForSelect('execution')"),
-    on::change('[name=product]',   "loadObjectModulesForSelect('product')"),
-    on::change('[name=custom]',    "loadObjectModulesForSelect('custom')"),
-    on::change('[name=lib]',       "loadLibModulesForSelect"),
+    on::change('[name=apiType]',   "reloadApiByApiType"),
+    on::change('[name=project]',   "reloadApi"),
+    on::change('[name=execution]', "reloadApi"),
+    on::change('[name=product]',   "reloadApi"),
+    on::change('[name=lib]',       "reloadApi"),
     formGroup
     (
         set::label($lang->doc->selectSpace),
-        radioList(set::name('rootSpace'), set::items($spaceList), set::value(key($spaceList)), set::inline(true))
+        radioList(set::name('rootSpace'), set::items($spaceList), set::value($objectType), set::inline(true))
     ),
     formRow
     (
-        setID('docType'),
-        formGroup
-        (
-            set::label($lang->doc->type),
-            radioList(set::name('type'), set::items($typeList), set::value('doc'), set::inline(true))
-        )
-    ),
-    formRow
-    (
-        setClass('apiTypeTR hidden'),
         formGroup
         (
             set::width('2/5'),
             set::label($lang->doc->apiType),
-            set::control(array('control' => 'picker', 'name' => 'apiType', 'items' => $lang->doc->apiTypeList, 'value' => '', 'required' => true))
+            set::control(array('control' => 'picker', 'name' => 'apiType', 'items' => $lang->doc->apiTypeList, 'value' => $apiType, 'required' => true))
         )
     ),
-    formRow
+    $apiType == 'project' ? formRow
     (
-        setClass('projectTR hidden'),
         formGroup
         (
             set::label($lang->doc->project),
             set::width('2/5'),
-            set::control(array('control' => 'picker', 'name' => 'project', 'items' => $projects, 'value' => key($projects), 'required' => true))
+            set::control(array('control' => 'picker', 'name' => 'project', 'items' => $projects, 'value' => $objectID, 'required' => true))
         ),
         formGroup
         (
-            setID('executionBox'),
             set::width('2/5'),
             set::label($lang->doc->execution),
             set::labelClass('executionTH'),
-            set::control(array('control' => 'picker', 'name' => 'execution', 'items' => array(), 'value' => ''))
+            set::control(array('control' => 'picker', 'name' => 'execution', 'items' => $executions, 'value' => $executionID))
         ),
         formGroup
         (
@@ -77,35 +98,23 @@ form
                 setClass('ml-2 mt-2 text-gray')
             )
         )
-    ),
-    formRow
+    ) : null,
+    $apiType == 'product' ? formRow
     (
-        setClass('productTR hidden'),
         formGroup
         (
             set::width('4/5'),
             set::label($lang->doc->product),
             set::required(true),
-            set::control(array('control' => 'picker', 'name' => 'product', 'items' => $products, 'value' => key($products), 'required' => true))
+            set::control(array('control' => 'picker', 'name' => 'product', 'items' => $products, 'value' => $objectID, 'required' => true))
         )
-    ),
-    formRow
-    (
-        setClass('customTR hidden'),
-        formGroup
-        (
-            set::width('4/5'),
-            set::label($lang->doc->space),
-            set::required(true),
-            set::control(array('control' => 'picker', 'name' => 'custom', 'items' => $spaces, 'value' => key($spaces), 'required' => true))
-        )
-    ),
+    ) : null,
     formGroup
     (
         set::width('4/5'),
         set::label($lang->doc->lib),
         set::required(true),
-        set::control(array('control' => 'picker', 'name' => 'lib', 'items' => array(), 'value' => '', 'required' => true))
+        set::control(array('control' => 'picker', 'name' => 'lib', 'items' => $libPairs, 'value' => $libID, 'required' => true))
     ),
     formGroup
     (
@@ -113,9 +122,6 @@ form
         set::width('4/5'),
         set::label($lang->doc->module),
         set::required(true),
-        set::control(array('control' => 'picker', 'name' => 'module', 'items' => array(), 'value' => '', 'required' => true))
+        set::control(array('control' => 'picker', 'name' => 'module', 'items' => $modules, 'value' => $moduleID, 'required' => true))
     )
 );
-
-/* ====== Render page ====== */
-render();
