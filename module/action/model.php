@@ -255,7 +255,15 @@ class actionModel extends model
 
             foreach($action->history as $history)
             {
-                if(isset($this->config->action->multipleObjectFields[$action->objectType][$history->field]))
+                if(isset($this->config->action->approvalFields[$history->field]))
+                {
+                    $fieldListVar = $this->config->action->approvalFields[$history->field];
+                    $fieldList    = isset($this->lang->action->{$fieldListVar}) ? $this->lang->action->{$fieldListVar} : array();
+
+                    $history->old = zget($fieldList, $history->old);
+                    $history->new = zget($fieldList, $history->new);
+                }
+                elseif(isset($this->config->action->multipleObjectFields[$action->objectType][$history->field]))
                 {
                     $fieldListVar = $this->config->action->multipleObjectFields[$action->objectType][$history->field];
                     $fieldList    = isset($this->lang->{$action->objectType}->{$fieldListVar}) ? $this->lang->{$action->objectType}->{$fieldListVar} : array();

@@ -1102,3 +1102,12 @@ $lang->action->desc->approve                      = '$date, <strong>$actor</stro
 $lang->action->desc->reject                       = '$date, <strong>$actor</strong> rejected.';
 $lang->action->desc->linkedrepo                   = '$date, <strong>$actor</strong> linked repo $extra';
 $lang->action->desc->unlinkedrepo                 = '$date, <strong>$actor</strong> unlinked repo $extra';
+
+$lang->action->reviewStatusList['wait']      = 'Pending approval';
+$lang->action->reviewStatusList['doing']     = 'Reviewing';
+$lang->action->reviewStatusList['pass']      = 'Pass';
+$lang->action->reviewStatusList['reject']    = 'Reject';
+$lang->action->reviewStatusList['reverting'] = 'Reverting';
+
+$lang->action->reviewResultList['pass']   = 'Pass';
+$lang->action->reviewResultList['reject'] = 'Reject';

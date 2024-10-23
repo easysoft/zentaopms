@@ -1102,3 +1102,12 @@ $lang->action->desc->approve                      = '$date, 由 <strong>$actor</
 $lang->action->desc->reject                       = '$date, 由 <strong>$actor</strong> 拒绝。';
 $lang->action->desc->linkedrepo                   = '$date, 由 <strong>$actor</strong> 关联代码库 $extra';
 $lang->action->desc->unlinkedrepo                 = '$date, 由 <strong>$actor</strong> 取消了' . $lang->projectCommon . '与代码库 $extra 的关联';
+
+$lang->action->reviewStatusList['wait']      = '待审批';
+$lang->action->reviewStatusList['doing']     = '审批中';
+$lang->action->reviewStatusList['pass']      = '通过';
+$lang->action->reviewStatusList['reject']    = '不通过';
+$lang->action->reviewStatusList['reverting'] = '回退中';
+
+$lang->action->reviewResultList['pass']   = '通过';
+$lang->action->reviewResultList['reject'] = '不通过';
