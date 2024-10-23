@@ -1,7 +1,20 @@
 #!/usr/bin/env php
 <?php
 chdir(__DIR__);
+
+/**
+
+title=创建测试用例
+timeout=0
+cid=1
+
+- 验证创建多层级测试用例
+ - 测试结果 @创建多层级测试用例成功
+ - 最终测试状态 @SUCCESS
+
+*/
 include '../lib/testcase.ui.class.php';
+zenData('product')->loadYaml('product')->gen(1);
 $tester = new testcase();
 
 $testcase = array(
@@ -32,4 +45,4 @@ $project  = array(
     'extra'     => 'moduleID=0'
 );
 
-r($tester->createTestCase($project, $testcase)) && p('message,status') && e('创建测试用例成功,SUCCESS'); //验证bug表单页必填项校验
+r($tester->createTestCase($project, $testcase)) && p('message,status') && e('创建多层级测试用例成功,SUCCESS'); //验证创建多层级测试用例
