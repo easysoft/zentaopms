@@ -278,10 +278,10 @@ $lang->doc->aclList['private'] = "私有（仅创建者和白名单用户可访�
 $lang->doc->selectSpace = '选择空间';
 $lang->doc->space       = '所属空间';
 $lang->doc->spaceList['mine']    = '我的空间';
+$lang->doc->spaceList['custom']  = '团队空间';
 $lang->doc->spaceList['product'] = $lang->productCommon . '空间';
 $lang->doc->spaceList['project'] = $lang->projectCommon . '空间';
 $lang->doc->spaceList['api']     = '接口空间';
-$lang->doc->spaceList['custom']  = '团队空间';
 
 $lang->doc->apiType = '接口类型';
 $lang->doc->apiTypeList['product'] = $lang->productCommon . '接口';

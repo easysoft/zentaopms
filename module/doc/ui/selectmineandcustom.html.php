@@ -27,9 +27,9 @@ form
     setID('selectLibTypeForm'),
     set::submitBtnText($lang->doc->nextStep),
     on::change('[name=rootSpace]', "changeSpace"),
-    on::change('[name=mine]',      "reloadmineandcustom"),
-    on::change('[name=custom]',    "reloadmineandcustom"),
-    on::change('[name=lib]',       "reloadmineandcustom"),
+    on::change('[name=mine]',      "reloadMineAndCustom"),
+    on::change('[name=custom]',    "reloadMineAndCustom"),
+    on::change('[name=lib]',       "reloadMineAndCustom"),
     formGroup
     (
         set::label($lang->doc->selectSpace),

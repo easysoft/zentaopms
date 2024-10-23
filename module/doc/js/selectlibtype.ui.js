@@ -1,22 +1,25 @@
-window.initData = function()
-{
-    const spaceType = $('.modal-body [name=rootSpace]:checked').val();
-    if(spaceType == 'custom' || spaceType == 'mine') loadObjectModulesForSelect(spaceType);
-    if(spaceType == 'project') loadExecutions();
-    if(spaceType == 'api') changeApiType();
-}
-
 window.getSpaceType = function()
 {
     return $('.modal-body [name=rootSpace]:checked').val();
 }
 
-window.reloadmineandcustom = function()
+window.reloadMineAndCustom = function()
 {
     const objectType = getSpaceType();
-    const objectID  = $(`.modal-body input[name=${objectType}]`).val();
-    const libID     = $('.modal-body input[name=lib]').val();
-    const params    = window.btoa('objectID=' + objectID + '&libID=' + libID);
+    const objectID   = $(`.modal-body input[name=${objectType}]`).val();
+    const libID      = $('.modal-body input[name=lib]').val();
+    const params     = window.btoa('objectID=' + objectID + '&libID=' + libID);
+
+    loadModal($.createLink('doc', 'selectLibType', `objectType=${objectType}&params=${params}`));
+}
+
+window.reloadProduct = function()
+{
+    const objectType = getSpaceType();
+    const docType    = $('.modal-body input[name=type]:checked').val();
+    const objectID   = $('.modal-body input[name=product]').val();
+    const libID      = $('.modal-body input[name=lib]').val();
+    const params     = window.btoa('docType=' + docType + '&objectID=' + objectID + '&libID=' + libID);
 
     loadModal($.createLink('doc', 'selectLibType', `objectType=${objectType}&params=${params}`));
 }
@@ -31,31 +34,6 @@ window.changeSpace = function()
 {
     const objectType = getSpaceType();
     if(objectType) loadModal($.createLink('doc', 'selectLibType', `objectType=${objectType}`));
-
-    /*const space = $('.modal-body [name=rootSpace]:checked').val();
-    $('.apiTypeTR').toggleClass('hidden', space != 'api');
-    $('.projectTR').toggleClass('hidden', space != 'project');
-    $('.productTR').toggleClass('hidden', space != 'product');
-    $('.customTR').toggleClass('hidden', space != 'custom');
-    $('#typedoc').toggleClass('hidden', space == 'api');
-    $('#typeapi').toggleClass('hidden', space == 'mine' || space == 'custom');
-    $('#typedoc').closest('.radio-primary').toggleClass('hidden', space == 'api');
-    $('#typeapi').closest('.radio-primary').toggleClass('hidden', space == 'mine' || space == 'custom');
-    $('#docType').toggleClass('hidden', $('#docType [name=type]:not(.hidden)').length == 1);
-
-    const docType = $('.modal-body .radio-primary [name=type]:not(.hidden):checked').val();
-    if(space == 'project' && docType) loadExecutions();
-    if(space == 'product' && docType) loadObjectModulesForSelect('product');
-    if(space == 'custom'  && docType) loadObjectModulesForSelect('custom');
-    if(space == 'mine'    && docType) loadDocLibs(space, docType, 'withObject');
-    if(space == 'api') changeApiType();
-
-    if(!docType && space != 'api')
-    {
-        $('[name=type]:not(.hidden)').first().prop('checked', true);
-        changeDocType();
-    }
-    */
 }
 
 /**

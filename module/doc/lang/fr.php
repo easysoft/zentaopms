@@ -278,10 +278,10 @@ $lang->doc->aclList['private'] = "Private (Only creators and whitelist users can
 $lang->doc->selectSpace = 'Select Space';
 $lang->doc->space       = 'Space';
 $lang->doc->spaceList['mine']    = 'My Space';
+$lang->doc->spaceList['custom']  = 'Team Space';
 $lang->doc->spaceList['product'] = $lang->productCommon . ' Space';
 $lang->doc->spaceList['project'] = $lang->projectCommon . ' Space';
 $lang->doc->spaceList['api']     = 'API Space';
-$lang->doc->spaceList['custom']  = 'Team Space';
 
 $lang->doc->apiType = 'API Type';
 $lang->doc->apiTypeList['product'] = $lang->productCommon . ' API';

@@ -14,10 +14,20 @@ namespace zin;
 // $params may have three key: objectID|docType|libID
 
 $products = $this->loadModel('product')->getPairs();
-$objectID = isset($params['objectID']) ? $params['objectID'] : key($products);
+$objectID = isset($params['objectID']) ? (int)$params['objectID'] : key($products);
+$docType  = isset($params['docType'])  ? $params['docType']  : 'doc';
 
-$libs     = $this->doc->getLibs($objectType, '', '', (int)$objectID);
-$libID    = isset($params['libID']) && isset($libs[$params['libID']]) ? $params['libID'] : key($libs);
+if($docType == 'doc')
+{
+    $libPairs = $this->doc->getLibs($objectType, '', '', (int)$objectID);
+}
+else
+{
+    $libs     = $this->doc->getApiLibs(0, $objectType, (int)$objectID);
+    $libPairs = array();
+    foreach($libs as $libID => $lib) $libPairs[$libID] = $lib->name;
+}
+$libID = isset($params['libID']) && isset($libPairs[$params['libID']]) ? $params['libID'] : key($libPairs);
 
 $modules  = $this->loadModel('tree')->getOptionMenu((int)$libID, 'doc', 0);
 $moduleID = key($modules);
@@ -27,13 +37,13 @@ form
     setID('selectLibTypeForm'),
     set::submitBtnText($lang->doc->nextStep),
     on::change('[name=rootSpace]', "changeSpace"),
-    on::change('[name=type]',      "changeDocType"),
-    on::change('[name=product]',   "loadObjectModulesForSelect('product')"),
-    on::change('[name=lib]',       "loadLibModulesForSelect"),
+    on::change('[name=type]',      "reloadProduct"),
+    on::change('[name=product]',   "reloadProduct"),
+    on::change('[name=lib]',       "reloadProduct"),
     formGroup
     (
         set::label($lang->doc->selectSpace),
-        radioList(set::name('rootSpace'), set::items($spaceList), set::value(key($spaceList)), set::inline(true))
+        radioList(set::name('rootSpace'), set::items($spaceList), set::value($objectType), set::inline(true))
     ),
     formRow
     (
@@ -41,7 +51,7 @@ form
         formGroup
         (
             set::label($lang->doc->type),
-            radioList(set::name('type'), set::items($typeList), set::value('doc'), set::inline(true))
+            radioList(set::name('type'), set::items($typeList), set::value($docType), set::inline(true))
         )
     ),
     formRow
@@ -59,7 +69,7 @@ form
         set::width('4/5'),
         set::label($lang->doc->lib),
         set::required(true),
-        set::control(array('control' => 'picker', 'name' => 'lib', 'items' => $libs, 'value' => $libID, 'required' => true))
+        set::control(array('control' => 'picker', 'name' => 'lib', 'items' => $libPairs, 'value' => $libID, 'required' => true))
     ),
     formGroup
     (
