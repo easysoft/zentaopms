@@ -1296,6 +1296,8 @@ class pivotState
             }
         }
 
+        if($removeUnused) $this->completeSettings();
+
         return $isChanged;
     }
 
