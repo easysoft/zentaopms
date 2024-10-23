@@ -8,11 +8,16 @@ class thinkMulticolumn extends thinkQuestion
 {
     protected static array $defineProps = array
     (
-        'fields?: array',       // 列标题
-        'requiredCols?: array', // 必填列
-        'supportAdd?: int=1',   // 是否支持用户添加行
-        'canAddRows: int',      // 可添加行数
-        'linkColumn?: array',   // 关联区块的列
+        'fields?: array',          // 列标题
+        'requiredCols?: array',    // 必填列
+        'supportAdd?: int=1',      // 是否支持用户添加行
+        'canAddRows: int',         // 可添加行数
+        'linkColumn?: array',      // 关联区块的列
+        'setOption?: bool=false',  // 选项配置方式
+        'quoteTitle?: string',     // 列标题
+        'quoteQuestions?: array',  // 引用问题
+        'citation?: int=1',        // 引用方式
+        'selectColumn?: string',   // 选择列
     );
 
     public static function getPageJS(): string
@@ -38,7 +43,7 @@ class thinkMulticolumn extends thinkQuestion
             set::name("result[col$key]"),
             set::width('110px'),
             set::disabled($isRun && !empty($quotedQuestions) && $hasResult),
-            set::required(in_array($key, $requiredCols))
+            set::required(!empty($step->options->required) && empty($step->options->fields) ? true : in_array($key, $requiredCols))
         );
     }
 
@@ -85,8 +90,11 @@ class thinkMulticolumn extends thinkQuestion
         jsVar('addLang', $lang->thinkrun->add);
         jsVar('disabled', $isRun && !empty($quotedQuestions) && !empty($result));
 
-        $fields     = array_values((array)$fields);
-        $batchItems = array();
+        $fields       = array_values((array)$fields);
+        $batchItems   = array();
+        $defalutField = $lang->thinkstep->columnReference;
+
+        if(empty($fields)) $fields = array($defalutField, $defalutField, $defalutField, $defalutField);
         foreach($fields as $key => $field) $batchItems[] = $this->buildFormBatchItem($field, (int)$key, $isRun, $quotedQuestions, !empty($result));
 
         if($isResult || $isRun) $result = $this->processResult($result);
@@ -110,7 +118,7 @@ class thinkMulticolumn extends thinkQuestion
         $app->loadLang('thinkstep');
         $formItems = parent::buildFormItem();
 
-        list($step, $questionType, $required, $fields, $supportAdd, $canAddRows, $requiredCols, $quotedQuestions, $linkColumn) = $this->prop(array('step', 'questionType', 'required', 'fields', 'supportAdd', 'canAddRows', 'requiredCols', 'quotedQuestions', 'linkColumn'));
+        list($step, $questionType, $required, $fields, $supportAdd, $canAddRows, $requiredCols, $quotedQuestions, $linkColumn, $setOption, $quoteTitle, $quoteQuestions, $citation, $selectColumn, $quotedQuestions) = $this->prop(array('step', 'questionType', 'required', 'fields', 'supportAdd', 'canAddRows', 'requiredCols', 'quotedQuestions', 'linkColumn', 'setOption', 'quoteTitle', 'quoteQuestions', 'citation', 'selectColumn', 'quotedQuestions'));
         $requiredItems = $lang->thinkstep->requiredList;
         $linkColumn    = !empty($linkColumn) ? $linkColumn : array();
 
@@ -124,7 +132,13 @@ class thinkMulticolumn extends thinkQuestion
             $supportAdd   = $step->options->supportAdd;
             $canAddRows   = $supportAdd && isset($step->options->canAddRows) ? $step->options->canAddRows : '';
             $linkColumn   = !empty($step->link) ? json_decode($step->link)->column : array();
+            $setOption    = isset($step->options->setOption) ? $step->options->setOption : false;
+            $defaultQuote = !empty($quoteQuestions) ? $quoteQuestions[0]->id : null;
+            $quoteTitle   = isset($step->options->quoteTitle) ? $step->options->quoteTitle : $defaultQuote;
+            $citation     = isset($step->options->citation) ? $step->options->citation : 1;
+            $selectColumn = isset($step->options->selectColumn) ? $step->options->selectColumn : null;
             foreach($fields as $key => $field) $requiredOptions[] = array('value' => $key + 1, 'text' => $field);
+            $fields = !empty($step->options->fields) ? $step->options->fields :  array('', '', '', '');
         }
         jsVar('canAddRowsOfMulticol', (int)$canAddRows + 5);
         jsVar('addRowsTips', $lang->thinkrun->tips->addRow);
@@ -147,16 +161,17 @@ class thinkMulticolumn extends thinkQuestion
                 (
                     setClass('step-required'),
                     set::width('1/2'),
-                    set::label($lang->thinkstep->label->required,),
-                    set::labelHint(!empty($quotedQuestions) ? $lang->thinkstep->tips->required : (!empty($step->link) ? $lang->thinkstep->tips->requiredOfLink : null)),
+                    set::label($lang->thinkstep->label->required),
+                    set::labelClass('required-tip'),
+                    set::labelHint($requiredTip),
                     radioList
                     (
                         set::name('options[required]'),
                         set::inline(true),
                         set::value($required),
                         set::items($requiredItems),
-                        set::disabled(!empty($quotedQuestions) || !empty($step->link)),
-                        on::change()->toggleClass('.required-options', 'hidden', 'target.value == 0')
+                        set::disabled(!empty($quotedQuestions)),
+                        on::change()->do("hiddenRequiredCols()")
                     )
                 ),
                 formGroup
@@ -164,7 +179,7 @@ class thinkMulticolumn extends thinkQuestion
                     set::width('1/2'),
                     set::label($lang->thinkstep->label->requiredCol),
                     set::required(true),
-                    setClass('required-options', $required ? '' : 'hidden'),
+                    setClass('required-options', $required && empty($setOption)? '' : 'hidden'),
                     setData('quotedQuestions', $quotedQuestions),
                     setData('requiredCols', $requiredCols),
                     picker
