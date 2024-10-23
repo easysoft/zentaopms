@@ -161,7 +161,20 @@ class thinkMulticolumn extends thinkQuestion
 
         $formItems[] = array(
             formHidden('options[questionType]', $questionType),
-
+            formRow
+            (
+                formGroup
+                (
+                    setClass('w-66'),
+                    set::label( $lang->thinkstep->label->setOption),
+                ),
+                icon
+                (
+                    setClass('mt-9 text-gray-400 cursor-pointer ml-1 text-base pt-0.5'),
+                    toggle::tooltip(array('placement' => 'top', 'title' => empty($quoteQuestions) ? $lang->thinkstep->tips->quoteTitle : $lang->thinkstep->tips->setOption, 'max-width' => '220px', 'className' => 'text-gray border border-gray-300', 'type' => 'white')),
+                    'help'
+                )
+            ),
             formGroup
             (
                 set::label($lang->thinkstep->label->columnTitle),
