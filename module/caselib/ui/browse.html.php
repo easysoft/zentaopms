@@ -11,9 +11,9 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('confirmBatchDelete', $lang->testcase->confirmBatchDelete);
-
 $canView              = common::hasPriv('caselib', 'view');
-$canExport            = common::hasPriv('caselib', 'exportTemplate');
+$canExport            = common::hasPriv('caselib', 'exportCase');
+$canExportTemplate    = common::hasPriv('caselib', 'exportTemplate');
 $canImport            = common::hasPriv('caselib', 'import');
 $canCreateLib         = common::hasPriv('caselib', 'create');
 $canCreateCase        = common::hasPriv('caselib', 'createCase');
@@ -36,6 +36,19 @@ featureBar
 
 $createCaseItem      = array('text' => $lang->testcase->create, 'url' => helper::createLink('caselib', 'createCase', "libID=$libID&moduleID=" . (isset($moduleID) ? $moduleID : 0)));
 $batchCreateCaseItem = array('text' => $lang->testcase->batchCreate, 'url' => helper::createLink('caselib', 'batchCreateCase', "libID=$libID&moduleID=" . (isset($moduleID) ? $moduleID : 0)));
+
+$exportItems = array();
+if($canExport)
+{
+    $link = $this->createLink('caselib', 'exportCase', "libID={$libID}&orderBy={$orderBy}&browseType={$browseType}");
+    $exportItems[] = array('text' => $lang->caselib->exportCase, 'url' => $link, 'data-toggle' => 'modal');
+}
+if($canExportTemplate)
+{
+    $link = $this->createLink('caselib', 'exportTemplate', "libID={$libID}");
+    $exportItems[] = array('text' => $lang->caselib->exportTemplate, 'url' => $link, 'data-toggle' => 'modal', 'data-size' => 'sm');
+}
+
 toolbar
 (
     $canView ? a
@@ -47,17 +60,18 @@ toolbar
         icon('list-alt'),
         $lang->caselib->view
     ) : '',
-    $canExport || $canImport ? btngroup
+    !empty($exportItems) || $canImport ? btngroup
     (
-        $canExport ? a
+        $exportItems ? dropdown
         (
-            setClass('toolbar-item ghost btn btn-default'),
-            set::href(createLink('caselib', 'exportTemplate', "libID={$libID}")),
-            set('data-toggle', 'modal'),
-            set('data-size', 'sm'),
-            icon('export'),
-            $lang->caselib->exportTemplate
-        ) : '',
+            btn
+            (
+                setClass('btn ghost square'),
+                set::icon('export'),
+            ),
+            set::items($exportItems),
+            set::placement('bottom-end')
+        ) : null,
         $canImport ? a
         (
             setClass('toolbar-item ghost btn btn-default'),
