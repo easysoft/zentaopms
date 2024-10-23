@@ -1235,6 +1235,25 @@ class pivotState
         return !empty($this->sql) && !$this->isError() && !empty($this->queryCols);
     }
 
+    public function checkFieldsWithSetting($removeUnused = false)
+    {
+        $settings = $this->settings;
+        $fields   = $this->fieldSettings;
+
+        $isChanged = false;
+        $filters = $this->filters;
+        foreach($filters as $index => $filter)
+        {
+            if(!isset($fields[$filter['field']]))
+            {
+                $isChanged = true;
+                if($removeUnused) unset($this->filters[$index]);
+            }
+        }
+
+        return $isChanged;
+    }
+
     /**
      * Check settings.
      *
