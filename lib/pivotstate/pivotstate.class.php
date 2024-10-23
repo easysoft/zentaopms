@@ -1241,6 +1241,26 @@ class pivotState
         $fields   = $this->fieldSettings;
 
         $isChanged = false;
+        foreach($settings as $key => $value)
+        {
+            if(strpos($key, 'group') === 0 && !isset($fields[$value]))
+            {
+                $isChanged = true;
+                if($removeUnused) unset($this->settings[$key]);
+            }
+            if($key === 'columns')
+            {
+                foreach($value as $index => $column)
+                {
+                    if(!isset($fields[$column['field']]) || !isset($fields[$column['slice']]))
+                    {
+                        $isChanged = true;
+                        if($removeUnused) unset($this->settings['columns'][$index]);
+                    }
+                }
+            }
+        }
+
         $filters = $this->filters;
         foreach($filters as $index => $filter)
         {
