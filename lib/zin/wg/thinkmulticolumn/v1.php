@@ -194,6 +194,19 @@ class thinkMulticolumn extends thinkQuestion
             ),
             formGroup
             (
+                setClass('think-quote', $setOption == 0 ? 'hidden' : ''),
+                set::label($lang->thinkstep->label->quoteTitle),
+                set::labelClass('required'),
+                picker
+                (
+                    setdata('quote-questions', $quoteQuestions),
+                    setdata('selectColumn', $selectColumn),
+                    on::inited()->call('changeQuoteTitle'),
+                    bind::change('changeQuoteTitle()')
+                )
+            ),
+            formGroup
+            (
                 set::label($lang->thinkstep->label->columnTitle),
                 setClass('think-options-field', $setOption == 1 ? 'hidden' : ''),
                 setStyle(array('padding-bottom' => 'calc(4 * var(--space))')),
