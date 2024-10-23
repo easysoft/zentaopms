@@ -1,4 +1,4 @@
 body {height: 100vh;}
 header {display: none;}
-#main, #mainContainer, #mainContent {height: 100%;}
-#mainContainer {padding: 0 !important; width: 100% !important; max-width: 100% !important;}
+#main, #mainContainer, #mainContent {height: 100%; padding: 0 !important; margin: 0 !important;}
+#mainContainer {max-width: 100% !important;}
