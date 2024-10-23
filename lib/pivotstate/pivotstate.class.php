@@ -1251,6 +1251,24 @@ class pivotState
             }
         }
 
+        $drills = $this->drills;
+        foreach($drills as $index => $drill)
+        {
+            if(!isset($fields[$drill['field']]))
+            {
+                $isChanged = true;
+                if($removeUnused) unset($this->drills[$index]);
+            }
+            foreach($drill['conditions'] as $conditionIndex => $condition)
+            {
+                if(!isset($fields[$condition['queryField']]))
+                {
+                    $isChanged = true;
+                    if($removeUnused) unset($this->drills[$index]['conditions'][$conditionIndex]);
+                }
+            }
+        }
+
         return $isChanged;
     }
 
