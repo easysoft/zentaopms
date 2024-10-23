@@ -1510,7 +1510,7 @@ class repoModel extends model
         preg_match_all("/{$rules['designReg']}/i", $comment, $matches);
         if($matches[0])
         {
-            $designs = join(' ', $matches[1]);
+            $designs = implode(' ', $matches[1]);
             if($designs) $designs = array_unique(explode(' ', str_replace(',', ' ', $designs)));
         }
 

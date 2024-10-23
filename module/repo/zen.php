@@ -1309,13 +1309,11 @@ class repoZen extends repo
         $oldRevision = isset($this->post->revision[1]) ? $this->post->revision[1] : '';
         $newRevision = isset($this->post->revision[0]) ? $this->post->revision[0] : '';
 
-        if($this->post->arrange)
-        {
-            $arrange = $this->post->arrange;
-            helper::setcookie('arrange', $arrange);
-        }
         if($this->post->encoding)      $encoding      = $this->post->encoding;
         if($this->post->isBranchOrTag) $isBranchOrTag = (int)$this->post->isBranchOrTag;
+
+        if($this->post->arrange) $arrange = $this->post->arrange;
+        helper::setcookie('arrange', $arrange);
 
         return $this->locate($this->repo->createLink('diff', "repoID={$repoID}&objectID={$objectID}&entry={$file}&oldrevision={$oldRevision}&newRevision={$newRevision}&showBug=0&encoding={$encoding}&isBranchOrTag={$isBranchOrTag}"));
     }
