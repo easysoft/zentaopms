@@ -561,4 +561,35 @@ class caselibZen extends caselib
 
         return $fields;
     }
+
+    /**
+     * 处理导出的用例数据。
+     * Process export cases.
+     *
+     * @param  array     $cases
+     * @param  int       $libID
+     * @access protected
+     * @return array
+     */
+    protected function processCasesForExport(array $cases, int $libID): array
+    {
+        $users          = $this->loadModel('user')->getPairs('noletter');
+        $relatedModules = $this->loadModel('tree')->getModulePairs($libID, 'caselib');
+        $relatedCases   = $this->loadModel('testcase')->getRelatedCases($cases);
+        $relatedSteps   = $this->loadModel('testcase')->getRelatedSteps(array_keys($cases));
+        $relatedFiles   = $this->loadModel('testcase')->getRelatedFiles(array_keys($cases));
+
+        $cases = $this->testcase->appendData($cases);
+        foreach($cases as $case)
+        {
+            $case->stepDesc       = '';
+            $case->stepExpect     = '';
+            $case->openedDate     = !helper::isZeroDate($case->openedDate)     ? substr($case->openedDate, 0, 10)     : '';
+            $case->lastRunDate    = !helper::isZeroDate($case->lastRunDate)    ? $case->lastRunDate                   : '';
+            $case->module         = isset($relatedModules[$case->module])? $relatedModules[$case->module] . "(#$case->module)" : '';
+        }
+
+        return $cases;
+    }
+
 }
