@@ -31,6 +31,11 @@ jsVar('confirmRecord', $lang->task->confirmRecord);
 jsVar('estimateNotEmpty', sprintf($lang->error->gt, $lang->task->estimate, '0'));
 jsVar('leftNotEmpty', sprintf($lang->error->gt, $lang->task->left, '0'));
 jsVar('requiredFields', $config->task->edit->requiredFields);
+jsVar('parentEstStarted', !empty($parentTask) ? $parentTask->estStarted : '');
+jsVar('parentDeadline', !empty($parentTask) ? $parentTask->deadline : '');
+jsVar('ignoreLang', $lang->project->ignore);
+jsVar('overParentEstStartedLang', isset($parentTask) ? sprintf($lang->task->overParentEsStarted, $parentTask->estStarted) : '');
+jsVar('overParentDeadlineLang', isset($parentTask) ? sprintf($lang->task->overParentDeadline, $parentTask->deadline) : '');
 
 $confirmSyncTip = '';
 if(!empty($syncChildren) && !empty($task->children))
@@ -454,6 +459,7 @@ detailBody
                     datePicker
                     (
                         set::name('estStarted'),
+                        on::change('checkEstStartedAndDeadline'),
                         helper::isZeroDate($task->estStarted) ? null : set::value($task->estStarted)
                     )
                 )
@@ -467,6 +473,7 @@ detailBody
                     datePicker
                     (
                         set::name('deadline'),
+                        on::change('checkEstStartedAndDeadline'),
                         helper::isZeroDate($task->deadline) ? null : set::value($task->deadline)
                     )
                 )

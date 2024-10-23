@@ -372,3 +372,43 @@ window.statusChange = function(target)
         }
     }
 }
+
+window.loadStories = function()
+{
+    const executionID = $('[name=execution]').val();
+    const storyID     = $('[name=story]').val();
+    const moduleID    = $('[name=module]').val();
+    const link        = $.createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=0&branch=all&moduleID=' + moduleID + '&storyID=' + storyID + '&pageType=&type=full&status=active');
+    $.getJSON(link, function(storyItems)
+    {
+        let $storyPicker = $('[name=story]').zui('picker');
+        $storyPicker.render({items: storyItems});
+        $storyPicker.$.setValue(storyID);
+    });
+}
+
+window.setStoryModule = function()
+{
+    var storyID = $('input[name=story]').val();
+    if(storyID)
+    {
+        var link = $.createLink('story', 'ajaxGetInfo', 'storyID=' + storyID);
+        $.getJSON(link, function(storyInfo)
+        {
+            if(storyInfo) $('input[name=module]').zui('picker').$.setValue(storyInfo.moduleID);
+        });
+    }
+}
+function checkEstStartedAndDeadline(event)
+{
+    const $form       = $(event.target).closest('form');
+    const field       = $(event.target).attr('name')
+    const $estStarted = $form.find('[name=estStarted]');
+    const estStarted  = $estStarted.val();
+    const $deadline   = $form.find('[name=deadline]');
+    const deadline    = $deadline.val();
+
+    if(field == 'estStarted' && estStarted.length > 0 && estStarted < parentEstStarted)
+    {
+    }
+}
