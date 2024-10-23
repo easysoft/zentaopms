@@ -30,6 +30,17 @@ $project->end->range('(+72w)-(+73w):1D')->type('timestamp')->format('YY/MM/DD');
 $project->acl->range('open');
 $project->gen(1);
 
+$product = zenData('product');
+$product->id->range('1-2');
+$product->name->range('产品1, 产品2');
+$product->type->range('normal');
+$product->gen(2);
+
+$projectProduct = zenData('projectproduct');
+$projectProduct->project->range('1');
+$projectProduct->product->range('1{1}, 2{1}');
+$projectProduct->gen(2);
+
 $tester = new editProjectTester();
 $tester->login();
 
