@@ -301,7 +301,7 @@ $lang->doc->createList['ppt']        = 'PPT';
 $lang->doc->createList['excel']      = 'Excel';
 $lang->doc->createList['attachment'] = $lang->doc->uploadDoc;
 
-$lang->doc->types['doc'] = 'Wiki';
+$lang->doc->types['doc'] = 'Doc';
 $lang->doc->types['api'] = 'API';
 
 $lang->doc->contentTypeList['html']     = 'HTML';
