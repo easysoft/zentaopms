@@ -587,9 +587,43 @@ class caselibZen extends caselib
             $case->openedDate     = !helper::isZeroDate($case->openedDate)     ? substr($case->openedDate, 0, 10)     : '';
             $case->lastRunDate    = !helper::isZeroDate($case->lastRunDate)    ? $case->lastRunDate                   : '';
             $case->module         = isset($relatedModules[$case->module])? $relatedModules[$case->module] . "(#$case->module)" : '';
+
+            $case->pri           = zget($this->lang->testcase->priList, $case->pri);
+            $case->type          = zget($this->lang->testcase->typeList, $case->type);
+            $case->status        = $this->processStatus('testcase', $case);
+            $case->openedBy      = zget($users, $case->openedBy);
+            $case->lastEditedBy  = zget($users, $case->lastEditedBy);
+
+            $this->processStepForExport($case, $relatedSteps);
         }
 
         return $cases;
     }
 
+    /**
+     * 处理导出的用例的步骤。
+     * Process step of case for export.
+     *
+     * @param  object    $case
+     * @param  array     $relatedSteps
+     * @access protected
+     * @return void
+     */
+    protected function processStepForExport(object $case, array $relatedSteps): void
+    {
+        if(isset($relatedSteps[$case->id]))
+        {
+            $preGrade      = 1;
+            $parentSteps   = array();
+            $key           = array(0, 0, 0);
+        }
+        $case->stepDesc   = trim($case->stepDesc);
+        $case->stepExpect = trim($case->stepExpect);
+
+        if($this->post->fileType == 'csv')
+        {
+            $case->stepDesc   = str_replace('"', '""', $case->stepDesc);
+            $case->stepExpect = str_replace('"', '""', $case->stepExpect);
+        }
+    }
 }
