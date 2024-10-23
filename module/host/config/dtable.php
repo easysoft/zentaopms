@@ -8,6 +8,15 @@ $config->host->dtable->fieldList['id']['title'] = 'ID';
 $config->host->dtable->fieldList['id']['name']  = 'id';
 $config->host->dtable->fieldList['id']['type']  = 'id';
 
+$config->host->dtable->fieldList['CD']['title']    = $lang->host->CD;
+$config->host->dtable->fieldList['CD']['name']     = 'CD';
+$config->host->dtable->fieldList['CD']['type']     = 'text';
+$config->host->dtable->fieldList['CD']['sortType'] = true;
+$config->host->dtable->fieldList['CD']['minWidth'] = '50';
+$config->host->dtable->fieldList['CD']['map']      = $lang->host->CDlist;
+$config->host->dtable->fieldList['CD']['required'] = true;
+$config->host->dtable->fieldList['CD']['show']     = true;
+
 $config->host->dtable->fieldList['group']['title']    = $lang->host->group;
 $config->host->dtable->fieldList['group']['name']     = 'group';
 $config->host->dtable->fieldList['group']['type']     = 'text';
