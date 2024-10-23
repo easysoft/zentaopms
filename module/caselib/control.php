@@ -525,6 +525,7 @@ class caselib extends control
         if($_POST)
         {
             $fields = $this->caselibZen->getExportCasesFields();
+            $cases  = $this->caselib->getCasesToExport($this->post->exportType, $orderBy, (int)$this->post->limit);
         }
 
         $fileName   = $this->lang->testcase->common;

@@ -335,4 +335,40 @@ class caselibModel extends model
         if($action == 'createcase') return !empty($object->lib) && empty($object->product);
         return common::hasPriv('caselib', $action);
     }
+
+    /**
+     * 获取导出的用例。
+     * Get cases to export.
+     *
+     * @param  string   $exportType
+     * @param  string   $orderBy
+     * @param  int      $limit
+     * @access public
+     * @return array
+     */
+    public function getCasesToExport(string $exportType, string $orderBy, int $limit): array
+    {
+        $queryCondition = $this->session->testcaseQueryCondition;
+        if($this->session->testcaseOnlyCondition)
+        {
+            return $this->dao->select('*')->from(TABLE_CASE)->where($queryCondition)
+                ->beginIF($exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
+                ->orderBy($orderBy)
+                ->beginIF($limit)->limit($limit)->fi()
+                ->fetchAll('id');
+        }
+
+        $cases   = array();
+        $orderBy = " ORDER BY " . str_replace(array('|', '^A', '_'), ' ', $orderBy);
+        $stmt    = $this->dao->query($queryCondition . $orderBy . ($limit ? ' LIMIT ' . $limit : ''));
+        while($row = $stmt->fetch())
+        {
+            $caseID = $row->id;
+            if($exportType == 'selected' && strpos(",{$this->cookie->checkedItem},", ",$caseID,") === false) continue;
+
+            $cases[$caseID] = $row;
+        }
+
+        return $cases;
+    }
 }
