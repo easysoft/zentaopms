@@ -201,6 +201,17 @@ class thinkMulticolumn extends thinkQuestion
                 (
                     setdata('quote-questions', $quoteQuestions),
                     setdata('selectColumn', $selectColumn),
+                    set(array
+                    (
+                        'class'       => 'options-quote-title',
+                        'name'        => 'options[quoteTitle]',
+                        'placeholder' => $lang->thinkstep->placeholder->quoteTitle,
+                        'items'       => $quoteQuestionsItems,
+                        'value'       => !empty($quoteTitle) && !empty($quoteQuestionsItems) ? $quoteTitle : '',
+                        'disabled'    => empty($quoteQuestions),
+                        'title'       => empty($quoteQuestions) ? $lang->thinkstep->tips->quoteTitle : null,
+                        'required'    => true,
+                    )),
                     on::inited()->call('changeQuoteTitle'),
                     bind::change('changeQuoteTitle()')
                 )
