@@ -22,6 +22,7 @@ class batchChangeStatusTester extends tester
         $form->wait(2);
         $form->dom->selectAllBtn->click();//全选计划
         $form->dom->batchStatusBtn->click();//点击状态
+        $form->wait(1);
         $form->dom->$changeToDom->click();//批量修改为对应的状态
         $form->wait(1);
         $form->dom->$statusTabDom->click();//点击对应状态的tab

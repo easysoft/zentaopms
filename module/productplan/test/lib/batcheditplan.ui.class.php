@@ -13,8 +13,9 @@ class batchEditPlanTester extends tester
     public function batchEditPlan($productplan, $planurl)
     {
         $form = $this->initForm('productplan', 'browse', $planurl, 'appIframe-product');
-        $form->wait(2);
+        $form->wait(1);
         $form->dom->selectAllBtn->click();//全选计划
+        $form->wait(1);
         $form->dom->batchEditBtn->click();//点击编辑按钮
         $firstID = $form->dom->idIndex_static_0->getText();//获取第一个ID
         $beginInputDom = "begin[{$firstID}]";
@@ -23,6 +24,7 @@ class batchEditPlanTester extends tester
         if (isset($productplan->title))  $form->dom->title_0->setValue($productplan->title);
         if (isset($productplan->begin))  $form->dom->$beginInputDom->datePicker($productplan->begin);
         if (isset($productplan->end))    $form->dom->$endInputDom->datePicker($productplan->end);
+        $form->wait(1);
         $form->dom->btn($this->lang->save)->click();//保存
         $form->wait(2);
         return $this->checkBatchEdit($productplan, $form, $firstID);
@@ -59,6 +61,7 @@ class batchEditPlanTester extends tester
             $viewPage = $this->initForm('productplan', 'view', $viewUrl, 'appIframe-product');
             $viewPage->waitElement($this->lang->productplan->view);
             $viewPage->dom->btn($this->lang->productplan->view)->click();//进入计划详情页
+            $viewPage->wait(1);
             return ($viewPage->dom->planTitle->getText() == $productplan->title) ? $this->success('编辑计划成功') : $this->failed('编辑计划失败');
         }
     }
