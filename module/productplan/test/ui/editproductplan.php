@@ -14,7 +14,7 @@ zendata('productplan')->loadYaml('productplan', false, 2)->gen(10);
 $tester = new editPlanTester();
 $tester->login();
 
-$planurl['planID'] = 6;
+$planurl['planID'] = 3;
 
 $productplan        = new stdClass();
 $waitplan           = new stdClass();

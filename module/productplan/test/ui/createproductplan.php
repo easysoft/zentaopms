@@ -9,9 +9,15 @@ cid=0
 */
 chdir(__DIR__);
 include '../lib/createplan.ui.class.php';
+$product = zenData('product');
+$product->id->range('1');
+$product->name->range('产品01');
+$product->status->range('normal');
+$product->type->range('normal');
+$product->gen(1);
 
-zendata('product')->loadYaml('product', false, 2)->gen(10);
 zendata('productplan')->loadYaml('productplan', false, 2)->gen(10);
+
 $tester = new createPlanTester();
 $tester->login();
 

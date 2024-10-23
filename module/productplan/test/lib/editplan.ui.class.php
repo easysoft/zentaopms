@@ -56,7 +56,7 @@ class editPlanTester extends tester
             $viewPage->waitElement($this->lang->productplan->view);
             $viewPage->dom->btn($this->lang->productplan->view)->click();
             // 检查是否编辑为待定计划
-            if ($productplan->future == 'future')
+            if (isset($productplan->future))
             {
                 $planBegin = $viewPage->dom->begin->getText();
                 return ($planBegin == $this->lang->productplan->future) ? $this->success('编辑为待定计划成功') : $this->failed('编辑为待定计划失败');
