@@ -232,6 +232,7 @@ class caselibTest
      * 测试获取导出的用例库用例。
      * Test get cases to export.
      *
+     * @param  string       $browseType
      * @param  string       $exportType
      * @param  string       $orderBy
      * @param  int          $limit
