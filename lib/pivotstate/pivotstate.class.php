@@ -1235,6 +1235,13 @@ class pivotState
         return !empty($this->sql) && !$this->isError() && !empty($this->queryCols);
     }
 
+    /**
+     * Check fields with setting.
+     *
+     * @param  bool    $removeUnused
+     * @access public
+     * @return bool
+     */
     public function checkFieldsWithSetting($removeUnused = false)
     {
         $settings = $this->settings;
