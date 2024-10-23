@@ -111,14 +111,11 @@ class thinkMulticolumn extends thinkQuestion
         );
         return $detailWg;
     }
-
-    protected function buildFormItem(): array
+    protected function buildQuotedSettingForm(): array
     {
         global $lang, $app;
         $app->loadLang('thinkstep');
-        $formItems = parent::buildFormItem();
-
-        list($step, $questionType, $required, $fields, $supportAdd, $canAddRows, $requiredCols, $quotedQuestions, $linkColumn, $setOption, $quoteTitle, $quoteQuestions, $citation, $selectColumn, $quotedQuestions) = $this->prop(array('step', 'questionType', 'required', 'fields', 'supportAdd', 'canAddRows', 'requiredCols', 'quotedQuestions', 'linkColumn', 'setOption', 'quoteTitle', 'quoteQuestions', 'citation', 'selectColumn', 'quotedQuestions'));
+        list($step, $questionType, $required, $fields, $requiredCols, $quotedQuestions, $linkColumn, $setOption, $quoteTitle, $quoteQuestions, $citation, $selectColumn, $quotedQuestions) = $this->prop(array('step', 'questionType', 'required', 'fields', 'requiredCols', 'quotedQuestions', 'linkColumn', 'setOption', 'quoteTitle', 'quoteQuestions', 'citation', 'selectColumn', 'quotedQuestions'));
         $requiredItems   = $lang->thinkstep->requiredList;
         $linkColumn      = !empty($linkColumn) ? $linkColumn : array();
         $requiredOptions = array();
@@ -128,8 +125,6 @@ class thinkMulticolumn extends thinkQuestion
             if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);
             $fields       = $step->options->fields;
             $requiredCols = $required && isset($step->options->requiredCols) ? $step->options->requiredCols : '';
-            $supportAdd   = $step->options->supportAdd;
-            $canAddRows   = $supportAdd && isset($step->options->canAddRows) ? $step->options->canAddRows : '';
             $linkColumn   = !empty($step->link) ? json_decode($step->link)->column : array();
             $setOption    = isset($step->options->setOption) ? $step->options->setOption : false;
             $defaultQuote = !empty($quoteQuestions) ? $quoteQuestions[0]->id : null;
@@ -139,8 +134,8 @@ class thinkMulticolumn extends thinkQuestion
             foreach($fields as $key => $field) $requiredOptions[] = array('value' => $key + 1, 'text' => $field);
             $fields = !empty($step->options->fields) ? $step->options->fields :  array('', '', '', '');
         }
-
         $quoteQuestionsItems = array();
+
         if(!empty($quoteQuestions))
         {
             foreach($quoteQuestions as $item)
@@ -153,14 +148,8 @@ class thinkMulticolumn extends thinkQuestion
         if(!empty($setOption))       $requiredTip = $lang->thinkstep->tips->multicolumnRequired;
         if(!empty($quotedQuestions)) $requiredTip = $lang->thinkstep->tips->required;
 
-        jsVar('canAddRowsOfMulticol', (int)$canAddRows + 5);
-        jsVar('addRowsTips', $lang->thinkrun->tips->addRow);
-        jsVar('addLang', $lang->thinkrun->add);
-        jsVar('tipQuestion', $lang->thinkstep->tips->question);
-        jsVar('requiredColTip', $lang->thinkstep->tips->requiredCol);
-
-        $formItems[] = array(
-            formHidden('options[questionType]', $questionType),
+        return array
+        (
             formRow
             (
                 formGroup
@@ -308,6 +297,30 @@ class thinkMulticolumn extends thinkQuestion
                     )
                 )
             ),
+        );
+    }
+
+    protected function buildFormItem(): array
+    {
+        global $lang, $app;
+        $app->loadLang('thinkstep');
+        $formItems = parent::buildFormItem();
+        list($step, $questionType, $supportAdd, $canAddRows) = $this->prop(array('step', 'questionType', 'supportAdd', 'canAddRows'));
+        if($step)
+        {
+            $supportAdd = $step->options->supportAdd;
+            $canAddRows = $supportAdd && isset($step->options->canAddRows) ? $step->options->canAddRows : '';
+        }
+
+        jsVar('canAddRowsOfMulticol', (int)$canAddRows + 5);
+        jsVar('addRowsTips', $lang->thinkrun->tips->addRow);
+        jsVar('addLang', $lang->thinkrun->add);
+        jsVar('tipQuestion', $lang->thinkstep->tips->question);
+        jsVar('requiredColTip', $lang->thinkstep->tips->requiredCol);
+
+        $formItems[] = array(
+            formHidden('options[questionType]', $questionType),
+            $this->buildQuotedSettingForm(),
             formRow
             (
                 setClass('mb-3'),
