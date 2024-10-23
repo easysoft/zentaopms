@@ -595,6 +595,7 @@ class caselibZen extends caselib
             $case->lastEditedBy  = zget($users, $case->lastEditedBy);
 
             $this->processStepForExport($case, $relatedSteps);
+            $this->processStageForExport($case);
         }
 
         return $cases;
@@ -655,5 +656,20 @@ class caselibZen extends caselib
             $case->stepDesc   = str_replace('"', '""', $case->stepDesc);
             $case->stepExpect = str_replace('"', '""', $case->stepExpect);
         }
+    }
+
+    /**
+     * 处理导出的用例的适用阶段。
+     * Process stage of case for export.
+     *
+     * @param  object    $case
+     * @access protected
+     * @return void
+     */
+    protected function processStageForExport(object $case): void
+    {
+        $case->stage = explode(',', $case->stage);
+        foreach($case->stage as $key => $stage) $case->stage[$key] = isset($this->lang->testcase->stageList[$stage]) ? $this->lang->testcase->stageList[$stage] : $stage;
+        $case->stage = join("\n", $case->stage);
     }
 }
