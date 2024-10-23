@@ -104,6 +104,7 @@ $config->upgrade->execFlow['20_4']        = array('functions' => 'createDefaultD
 $config->upgrade->execFlow['20_5']        = array('functions' => 'fixWorkflowFieldOptions');
 $config->upgrade->execFlow['20_6']        = array('functions' => 'processDemandFiles,processSqlbuilderTables');
 $config->upgrade->execFlow['20_7']        = array('functions' => 'upgradeMyDocSpace');
+$config->upgrade->execFlow['20_8']        = array('functions' => 'processWorkflowGroups');
 
 if(!empty($config->isINT))
 {

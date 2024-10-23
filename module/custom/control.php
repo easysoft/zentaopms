@@ -586,6 +586,24 @@ class custom extends control
             $menu    = $this->post->menu;  // 导航类型，nav(左侧主导航)|$app(顶部一级导航)|$app-home(项目集、项目的首页导航)|$app-$subMenu（顶部二级导航）|admin-$menuKey(后台导航)
             $items   = $this->post->items; // 导航项
             $account = $this->app->user->account;
+            $oldMenu = isset($this->config->customMenu->{$menu}) ? $this->config->customMenu->{$menu} : '';
+
+            /* 之前隐藏的导航若没开启继续保持隐藏。 */
+            if($oldMenu)
+            {
+                $oldMenus = json_decode($oldMenu);
+                $menus    = json_decode($items);
+
+                $menuNames = array();
+                foreach($menus as $key => $item) $menuNames[] = $item->name;
+
+                foreach($oldMenus as $key => $item)
+                {
+                    if(!empty($item->hidden) && !in_array($item->name, $menuNames)) $menus[] = $item;
+                }
+
+                $items = json_encode($menus);
+            }
 
             if($menu && $items) $this->loadModel('setting')->setItem("$account.common.customMenu.$menu@{$this->config->vision}", $items);
         }

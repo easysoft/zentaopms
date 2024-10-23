@@ -10030,4 +10030,34 @@ class upgradeModel extends model
             $this->dao->update(TABLE_DOCLIB)->set('main')->eq(0)->where('id')->in(array_keys($spaces))->exec();
         }
     }
+
+    /**
+     * 历史产品、项目绑定默认工作流模板。
+     *
+     * @access public
+     * @return void
+     */
+    public function processWorkflowGroups()
+    {
+        $workflowGroups = $this->dao->select('code, id')->from(TABLE_WORKFLOWGROUP)->where('main')->eq('1')->fetchPairs();
+
+        foreach($workflowGroups as $code => $groupID)
+        {
+            if($code == 'productproject')
+            {
+                $this->dao->update(TABLE_PRODUCT)->set('workflowGroup')->eq($groupID)->exec();
+            }
+            else
+            {
+                $this->dao->update(TABLE_PROJECT)
+                     ->set('workflowGroup')->eq($groupID)
+                     ->where('type')->eq('project')
+                     ->beginIF($code == 'scrumproduct')->andWhere('model')->eq('scrum')->andWhere('hasProduct')->eq('1')->fi()
+                     ->beginIF($code == 'scrumproject')->andWhere('model')->eq('scrum')->andWhere('hasProduct')->eq('0')->fi()
+                     ->beginIF($code == 'waterfallproduct')->andWhere('model')->eq('waterfall')->andWhere('hasProduct')->eq('1')->fi()
+                     ->beginIF($code == 'waterfallproject')->andWhere('model')->eq('waterfall')->andWhere('hasProduct')->eq('0')->fi()
+                     ->exec();
+            }
+        }
+    }
 }

@@ -47,11 +47,17 @@ class transfer extends control
             /* Get workflow fields by module. */
             if($this->config->edition != 'open')
             {
-                $appendFields = $this->transferZen->getWorkflowFieldsByModule($module);
-                foreach($appendFields as $appendField)
+                $groupID = $this->loadModel('workflowgroup')->getGroupIDByData($module, null);
+                $action  = $this->loadModel('workflowaction')->getByModuleAndAction($module, 'exportTemplate', $groupID);
+
+                if(!empty($action->extensionType) && $action->extensionType == 'extend')
                 {
-                    $this->lang->$module->{$appendField->field} = $appendField->name;
-                    $this->config->$module->templateFields .= ',' . $appendField->field;
+                    $appendFields = $this->loadModel('workflowaction')->getPageFields($module, 'exportTemplate', true, null, 0, $groupID);
+                    foreach($appendFields as $appendField)
+                    {
+                        $this->lang->$module->{$appendField->field} = $appendField->name;
+                        $this->config->$module->templateFields .= ',' . $appendField->field;
+                    }
                 }
             }
 

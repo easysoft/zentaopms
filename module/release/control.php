@@ -25,8 +25,11 @@ class release extends control
     {
         $this->loadModel('product')->setMenu($productID, $branch);
 
-        $product = $this->product->getById($productID);
+        $product  = $this->product->getById($productID);
+        $products = $this->product->getPairs('all', 0, '', 'all');
         if(empty($product)) $this->locate($this->createLink('product', 'create'));
+
+        $this->product->checkAccess($productID, $products);
 
         $this->view->product  = $product;
         $this->view->branch   = $branch;

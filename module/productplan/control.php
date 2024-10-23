@@ -23,8 +23,11 @@ class productplan extends control
      */
     public function commonAction(int $productID, int $branch = 0)
     {
-        $product = $this->loadModel('product')->getById($productID);
+        $product  = $this->loadModel('product')->getById($productID);
+        $products = $this->product->getPairs('all', 0, '', 'all');
         if(empty($product)) $this->locate($this->createLink('product', 'create'));
+
+        $this->product->checkAccess($productID, $products);
 
         $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
 

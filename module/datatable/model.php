@@ -58,7 +58,7 @@ class datatableModel extends model
         }
 
         /* 加载工作流字段配置。 */
-        if($this->config->edition != 'open') $fieldList = $this->appendWorkflowFields($module, $method, $fieldList);
+        if($this->config->edition != 'open') $fieldList += $this->appendWorkflowFields($module, $method);
 
         return $fieldList;
     }
@@ -441,11 +441,10 @@ class datatableModel extends model
      *
      * @param  string $module
      * @param  string $method
-     * @param  array  $fieldList
      * @access public
      * @return array
      */
-    public function appendWorkflowFields(string $module, string $method, array $fieldList): array
+    public function appendWorkflowFields(string $module, string $method): array
     {
         if(in_array($module, array('epic', 'story', 'requirement')))
         {
@@ -475,39 +474,48 @@ class datatableModel extends model
             $module = 'release'; // 项目发布加载release-browse的layout配置。
         }
 
-        $flow = $this->loadModel('workflow')->getByModule($module);
-        if(empty($flow)) return $fieldList;
-
-        if($flow->buildin == 1)
+        $this->loadModel('workflow');
+        $this->loadModel('workflowgroup');
+        $this->loadModel('workflowaction');
+        if(($this->app->tab == 'project' || $this->app->tab == 'execution') && in_array($module, $this->config->workflowgroup->modules['product']))
         {
-            $action = $this->loadModel('workflowaction')->getByModuleAndAction($module, $method);
-            if(!$action || (isset($action->extensionType) && $action->extensionType != 'extend')) return $fieldList; // 不扩展不追加字段。
-        }
+            $groupIdList = array();
+            $fields      = array();
+            $projectID   = $this->app->tab == 'execution' ? $this->session->execution : $this->session->project;
+            $products    = $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
+                ->where('t1.project')->eq((int)$projectID)
+                ->fetchAll('id');
 
-        $fields = $this->loadModel('workflowaction')->getFields($module, $method);
-        if($flow->buildin == 1) return array_merge($fieldList, $this->loadModel('flow')->buildDtableCols($fields));
-
-        foreach($fields as $field)
-        {
-            if(!$field->show) continue;
-
-            $fieldList[$field->field]['name']  = $field->field;
-            $fieldList[$field->field]['title'] = $field->name;
-            $fieldList[$field->field]['show']  = true;
-            $fieldList[$field->field]['width'] = (empty($field->width) || $field->width == 'auto') ? '120' : $field->width;
-
-            if($field->field == 'id')
+            foreach($products as $product) $groupIdList[] = $product->workflowGroup;
+            foreach(array_unique($groupIdList) as $groupID)
             {
-                $fieldList[$field->field]['fixed']    = 'left';
-                $fieldList[$field->field]['required'] = true;
-            }
-            elseif($field->field == 'actions')
-            {
-                $fieldList[$field->field]['fixed']    = 'right';
-                $fieldList[$field->field]['required'] = true;
+                $flow = $this->workflow->getByModule($module, false, $groupID);
+                if(empty($flow)) countinue;
+
+                if($flow->buildin)
+                {
+                    $action = $this->workflowaction->getByModuleAndAction($module, $method, $groupID);
+                    if(!$action || (isset($action->extensionType) && $action->extensionType != 'extend')) continue; // 不扩展不追加字段。
+                }
+                $fields += $this->workflowaction->getPageFields($module, $method, true, array(), 0, $groupID);
             }
         }
+        else
+        {
+            $groupID = $this->workflowgroup->getGroupIDBySession($module);
+            $flow    = $this->workflow->getByModule($module, false, $groupID);
+            if(empty($flow)) return [];
 
-        return $fieldList;
+            if($flow->buildin)
+            {
+                $action = $this->workflowaction->getByModuleAndAction($module, $method, $groupID);
+                if(!$action || (isset($action->extensionType) && $action->extensionType != 'extend')) return []; // 不扩展不追加字段。
+            }
+
+            $fields = $this->workflowaction->getPageFields($module, $method, true, array(), 0, $groupID);
+        }
+
+        return $this->loadModel('flow')->buildDtableCols($fields, [], [], !$flow->buildin);
     }
 }

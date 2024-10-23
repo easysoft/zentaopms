@@ -77,10 +77,59 @@ class formPanel extends panel
     {
         global $app;
         $moduleName = $app->getModuleName();
-        if($moduleName == 'caselib') $moduleName = 'lib';
-        if($moduleName == 'productplan') $moduleName = 'plan';
-        if($moduleName == 'flow') return data('data');
+        if($moduleName == 'caselib')        return data('lib');
+        if($moduleName == 'flow')           return data('data');
+        if($moduleName == 'productplan')    return data('plan');
+        if($moduleName == 'projectrelease') return data('release');
+        if($moduleName == 'projectbuild')   return data('build');
         return data($moduleName);
+    }
+
+    protected function getModuleAndMethodForExtend()
+    {
+        global $app;
+        $moduleName = $app->rawModule;
+        $methodName = $app->rawMethod;
+
+        /* 项目发布和项目版本用自己的工作流。 */
+        if($moduleName == 'projectrelease') $moduleName = 'release';
+        if($moduleName == 'projectplan')    $moduleName = 'productplan';
+        if($moduleName == 'projectbuild')
+        {
+            $moduleName = 'build';
+            if($methodName == 'browse')
+            {
+                $moduleName = 'execution';
+                $methodName = 'build';
+            }
+        }
+
+        /* 反馈转化。 */
+        if($moduleName == 'feedback')
+        {
+            if($methodName == 'tostory')
+            {
+                $moduleName = 'story';
+                $methodName = 'create';
+            }
+            elseif($methodName == 'touserstory')
+            {
+                $moduleName = 'requirement';
+                $methodName = 'create';
+            }
+            elseif($methodName == 'toepic')
+            {
+                $moduleName = 'epic';
+                $methodName = 'create';
+            }
+            elseif($methodName == 'toticket')
+            {
+                $moduleName = 'ticket';
+                $methodName = 'create';
+            }
+        }
+
+        return array($moduleName, $methodName);
     }
 
     protected function created()
@@ -89,7 +138,8 @@ class formPanel extends panel
         if(is_object($fields))
         {
             global $app;
-            $fields = $app->control->appendExtendFields($fields, '', '', $this->getData());
+            list($moduleName, $methodName) = $this->getModuleAndMethodForExtend();
+            $fields = $app->control->appendExtendFields($fields, $moduleName, $methodName, $this->getData());
             $this->setProp('fields', $fields);
         }
 
@@ -181,24 +231,7 @@ class formPanel extends panel
         $layout = $this->prop('layout');
         if($layout == 'grid') return null;
 
-        $moduleName = $app->rawModule;
-        $methodName = $app->rawMethod;
-
-        /* 项目发布和项目版本用自己的工作流。 */
-        if($moduleName == 'projectrelease') $moduleName = 'release';
-        if($moduleName == 'projectplan')    $moduleName = 'productplan';
-        if($moduleName == 'projectbuild')
-        {
-            if($methodName == 'browse')
-            {
-                $moduleName = 'execution';
-                $methodName = 'build';
-            }
-            else
-            {
-                $moduleName = 'build';
-            }
-        }
+        list($moduleName, $methodName) = $this->getModuleAndMethodForExtend();
 
         $data      = $this->getData();
         $fields    = $app->control->appendExtendForm('info', $data, $moduleName, $methodName);
@@ -233,8 +266,9 @@ class formPanel extends panel
     {
         global $app;
 
+        list($moduleName, $methodName) = $this->getModuleAndMethodForExtend();
         $data   = $this->getData();
-        $fields = $app->control->appendExtendForm('info', $data);
+        $fields = $app->control->appendExtendForm('info', $data, $moduleName, $methodName);
 
         $formBatchItem = array();
         foreach($fields as $field)
@@ -331,12 +365,13 @@ class formPanel extends panel
     {
         global $app;
 
+        list($moduleName, $methodName) = $this->getModuleAndMethodForExtend();
         return div
         (
             setClass('panel-body ' . $this->prop('bodyClass')),
             set($this->prop('bodyProps')),
             $this->buildContainer($this->buildForm()),
-            html($app->control->appendExtendCssAndJS('', '', $this->getData()))
+            html($app->control->appendExtendCssAndJS($moduleName, $methodName, $this->getData()))
         );
     }
 }

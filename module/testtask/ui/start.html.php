@@ -12,7 +12,7 @@ namespace zin;
 
 modalHeader();
 
-form
+formPanel
 (
     setClass('testtask-start-form'),
     formGroup

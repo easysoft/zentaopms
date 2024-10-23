@@ -64,3 +64,13 @@ window.readScriptContent = function(object)
     reader.readAsText(object.file, 'UTF-8');
     reader.onload = function(evt){$('[name=script]').val(evt.target.result);}
 }
+
+window.loadProduct = function(e)
+{
+    const $this     = $(e.target);
+    const productID = $this.val();
+    const $modal    = $this.closest('.modal');
+    const inModal   = $modal.length > 0;
+    if(inModal)  loadModal($.createLink('testcase', 'create', 'productID=' + productID + '&' + createParams), $modal.attr('id'));
+    if(!inModal) loadPage($.createLink('testcase', 'create', 'productID=' + productID + '&' + createParams));
+};

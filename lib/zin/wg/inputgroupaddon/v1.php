@@ -22,6 +22,7 @@ class inputGroupAddon extends wg
 {
     protected function build()
     {
-        return h::span(setClass('input-group-addon'), set($this->props), $this->children());
+        $class = $this->prop('class');
+        return h::span(setClass("input-group-addon {$class}"), set($this->props), $this->children());
     }
 }

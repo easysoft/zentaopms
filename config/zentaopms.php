@@ -583,6 +583,7 @@ define('TABLE_TRAINRECORDS',           '`' . $config->db->prefix . 'trainrecords
 define('TABLE_TRIP',                   '`' . $config->db->prefix . 'trip`');
 define('TABLE_WORKESTIMATION',         '`' . $config->db->prefix . 'workestimation`');
 define('TABLE_WORKFLOW',               '`' . $config->db->prefix . 'workflow`');
+define('TABLE_WORKFLOWGROUP',          '`' . $config->db->prefix . 'workflowgroup`');
 define('TABLE_WORKFLOWACTION',         '`' . $config->db->prefix . 'workflowaction`');
 define('TABLE_WORKFLOWDATASOURCE',     '`' . $config->db->prefix . 'workflowdatasource`');
 define('TABLE_WORKFLOWFIELD',          '`' . $config->db->prefix . 'workflowfield`');
@@ -717,6 +718,7 @@ $config->objectTables['market']         = TABLE_MARKET;
 $config->objectTables['marketreport']   = TABLE_MARKETREPORT;
 $config->objectTables['marketresearch'] = TABLE_PROJECT;
 $config->objectTables['researchstage']  = TABLE_PROJECT;
+$config->objectTables['workflowgroup']  = TABLE_WORKFLOWGROUP;
 $config->objectTables['productline']    = TABLE_MODULE;
 
 $config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions', 'aiPrompts', 'promptDesign', 'promptExec');

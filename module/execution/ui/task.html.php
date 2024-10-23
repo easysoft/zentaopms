@@ -56,15 +56,12 @@ $cols = $this->loadModel('datatable')->getSetting('execution');
 if($execution->type != 'stage') unset($cols['design']);
 
 $tableData = initTableData($tasks, $cols, $this->task);
-$tableData = array_map(
-    function($task)
-    {
-        if(helper::isZeroDate($task->deadline))   $task->deadline   = '';
-        if(helper::isZeroDate($task->estStarted)) $task->estStarted = '';
-        return $task;
-    },
-    $tableData
-);
+foreach($tableData as $task)
+{
+    $task->status = $this->processStatus('task', $task);
+    if(helper::isZeroDate($task->deadline))   $task->deadline   = '';
+    if(helper::isZeroDate($task->estStarted)) $task->estStarted = '';
+}
 
 if($config->edition == 'ipd')
 {

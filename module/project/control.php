@@ -645,6 +645,8 @@ class project extends control
         $this->executeHooks($projectID);
         list($userPairs, $userList) = $this->projectZen->buildUsers();
 
+        if($this->config->edition != 'open') $this->view->workflowGroups = $this->loadModel('workflowgroup')->getPairs('project', $project->model, $project->hasProduct);
+
         $this->view->title        = $this->lang->project->view;
         $this->view->projectID    = $projectID;
         $this->view->project      = $project;
@@ -1713,5 +1715,25 @@ class project extends control
         $this->view->projectID     = $projectID;
         $this->view->currentMethod = $currentMethod;
         $this->display();
+    }
+
+    /**
+     * Ajax get workflow group items.
+     *
+     * @param  string $model
+     * @param  int    $hasProduct
+     * @access public
+     * @return void
+     */
+    public function ajaxGetWorkflowGroups(string $model, int $hasProduct)
+    {
+        if($this->config->edition == 'open') return false;
+
+        $workflowGroups = $this->loadModel('workflowgroup')->getPairs('project', $model, $hasProduct);
+
+        $items = array();
+        foreach($workflowGroups as $id => $name) $items[] = array('text' => $name, 'value' => $id);
+
+        return $this->send(array('items' => array_values($items), 'defaultValue' => key($workflowGroups)));
     }
 }

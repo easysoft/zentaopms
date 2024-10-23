@@ -122,12 +122,13 @@ class form extends fixer
         $flow = $app->control->loadModel('workflow')->getByModule($moduleName);
         if(!$flow) return $configObject;
 
-        $action = $app->control->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName);
+        $groupID = $app->control->loadModel('workflowgroup')->getGroupIDByDataID($flow->module, $objectID);
+        $action  = $app->control->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName, $groupID);
         if(!$action || $action->extensionType != 'extend') return $configObject;
 
         $uiID         = $app->control->loadModel('workflowlayout')->getUIByDataID($flow->module, $action->action, $objectID);
-        $fieldList    = $app->control->workflowaction->getFields($flow->module, $action->action, true, null, $uiID);
-        $layouts      = $app->control->workflowlayout->getFields($moduleName, $methodName, $uiID);
+        $fieldList    = $app->control->workflowaction->getPageFields($flow->module, $action->action, true, null, $uiID, $groupID);
+        $layouts      = $app->control->workflowlayout->getFields($moduleName, $methodName, $uiID, $groupID);
         $notEmptyRule = $app->control->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
         if($layouts)
         {

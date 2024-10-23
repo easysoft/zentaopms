@@ -182,7 +182,7 @@ class tree extends control
 
         if($type == 'doc')
         {
-            $docLib   = $this->loadModel('doc')->getLibById($module->root);
+            $docLib   = $this->loadModel('doc')->getLibById((int)$module->root);
             $objectID = isset($docLib->{$docLib->type}) ? $docLib->{$docLib->type} : 0;
             $this->view->libs = $this->doc->getLibs($docLib->type, '', '', $objectID, 'book');
         }

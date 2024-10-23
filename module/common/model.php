@@ -621,18 +621,37 @@ class commonModel extends model
         /* Ensure user has latest rights set. */
         $app->user->rights = $app->control->loadModel('user')->authorize($app->user->account);
 
-        $menuOrder     = array();
+        $menuOrder     = $lang->mainNav->menuOrder;
         $hasCustomMenu = false;
         if(isset($config->customMenu->nav) && !$useDefault && !commonModel::isTutorialMode())
         {
-            $items = json_decode($config->customMenu->nav);
-            foreach($items as $item) $menuOrder[$item->order] = $item->name;
+            $customMenuOrder = array();
+            $items           = json_decode($config->customMenu->nav);
+            $hiddenItems     = array();
+            foreach($items as $item)
+            {
+                if(!empty($item->hidden))
+                {
+                    $hiddenItems[] = $item->name;
+                    continue;
+                }
+
+                $customMenuOrder[$item->order] = $item->name;
+            }
+
+            $customMenuItems = array_values($customMenuOrder);
+            foreach($menuOrder as $order => $name)
+            {
+                if(in_array($name, $customMenuItems) || in_array($name, $hiddenItems)) continue;
+
+                while(isset($customMenuOrder[$order])) $order ++;
+                $customMenuOrder[$order] = $name;
+            }
+
+            $menuOrder     = $customMenuOrder;
             $hasCustomMenu = true;
         }
-        else
-        {
-            $menuOrder = $lang->mainNav->menuOrder;
-        }
+
         ksort($menuOrder);
 
         $items        = array();

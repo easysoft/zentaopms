@@ -1006,6 +1006,7 @@ class execution extends control
         if($executionID) return $this->executionZen->displayAfterCreated($projectID, $executionID, $planID, $confirm);
 
         $allProjects = $this->project->getPairsByModel('all', 'noclosed,multiple');
+        $this->loadModel('project')->checkAccess($projectID, $allProjects);
         if(empty($projectID)) $projectID = key($allProjects) ? key($allProjects) : 0;
 
         $project = empty($projectID) ? null : $this->loadModel('project')->fetchByID($projectID);
@@ -1253,6 +1254,7 @@ class execution extends control
             $allChanges = $this->execution->batchUpdate($postData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            $this->executeHooks(key($this->post->id));
             if(!empty($allChanges))
             {
                 foreach($allChanges as $executionID => $changes)
