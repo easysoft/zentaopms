@@ -984,9 +984,6 @@ class doc extends control
         if(!common::hasPriv('api', 'create'))       unset($spaceList['api'], $typeList['api']);
         if($this->config->vision == 'lite')         unset($spaceList['api'], $spaceList['product'], $typeList['api']);
 
-        $products = $this->loadModel('product')->getPairs();
-        $projects = $this->project->getPairsByProgram(0, 'all', false, 'order_asc');
-
         $params = helper::safe64Decode($params);
         parse_str($params, $params);
         $this->view->params    = $params;
@@ -994,8 +991,6 @@ class doc extends control
         $this->view->objectType = $objectType;
         $this->view->spaceList = $spaceList;
         $this->view->typeList  = $typeList;
-        $this->view->products  = $products;
-        $this->view->projects  = $projects;
 
         $this->display();
     }

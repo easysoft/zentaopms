@@ -3,6 +3,24 @@ window.getSpaceType = function()
     return $('.modal-body [name=rootSpace]:checked').val();
 }
 
+/**
+ * Change space.
+ *
+ * @access public
+ * @return void
+ */
+window.changeSpace = function()
+{
+    const objectType = getSpaceType();
+    if(objectType) loadModal($.createLink('doc', 'selectLibType', `objectType=${objectType}`));
+}
+
+/**
+ * Reload select mineandcustom page.
+ *
+ * @access public
+ * @return void
+ */
 window.reloadMineAndCustom = function()
 {
     const objectType = getSpaceType();
@@ -13,6 +31,12 @@ window.reloadMineAndCustom = function()
     loadModal($.createLink('doc', 'selectLibType', `objectType=${objectType}&params=${params}`));
 }
 
+/**
+ * Reload select product page.
+ *
+ * @access public
+ * @return void
+ */
 window.reloadProduct = function()
 {
     const objectType = getSpaceType();
@@ -24,6 +48,12 @@ window.reloadProduct = function()
     loadModal($.createLink('doc', 'selectLibType', `objectType=${objectType}&params=${params}`));
 }
 
+/**
+ * Reload select project page.
+ *
+ * @access public
+ * @return void
+ */
 window.reloadProject = function()
 {
     const objectType  = getSpaceType();
@@ -36,6 +66,12 @@ window.reloadProject = function()
     loadModal($.createLink('doc', 'selectLibType', `objectType=${objectType}&params=${params}`));
 }
 
+/**
+ * Reload select api page by apiType.
+ *
+ * @access public
+ * @return void
+ */
 window.reloadApiByApiType = function()
 {
     const objectType  = getSpaceType();
@@ -44,6 +80,12 @@ window.reloadApiByApiType = function()
     loadModal($.createLink('doc', 'selectLibType', `objectType=${objectType}&params=${params}`));
 }
 
+/**
+ * Reload select api page.
+ *
+ * @access public
+ * @return void
+ */
 window.reloadApi = function()
 {
     const objectType  = getSpaceType();
@@ -68,18 +110,6 @@ window.reloadApi = function()
     }
 
     loadModal($.createLink('doc', 'selectLibType', `objectType=${objectType}&params=${params}`));
-}
-
-/**
- * Change space.
- *
- * @access public
- * @return void
- */
-window.changeSpace = function()
-{
-    const objectType = getSpaceType();
-    if(objectType) loadModal($.createLink('doc', 'selectLibType', `objectType=${objectType}`));
 }
 
 /**
