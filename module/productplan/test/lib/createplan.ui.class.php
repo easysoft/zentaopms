@@ -77,7 +77,7 @@ class createPlanTester extends tester
                 return strpos($planname, $productplan->parent) !== false ? $this->success('创建子计划成功') : $this->failed('创建子计划失败');
             }
             // 检查是否成功创建待定计划
-            if ($productplan->future == 'future')
+            if (isset($productplan->future))
             {
                 $planBegin = $viewPage->dom->begin->getText();
                 return ($planBegin == $this->lang->productplan->future) ? $this->success('创建待定计划成功') : $this->failed('创建待定计划失败');
