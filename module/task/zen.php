@@ -231,13 +231,18 @@ class taskZen extends task
             }
         }
 
+        list($childTasks, $nonStoryChildTasks) = $this->task->getChildTasksByList(array_keys($tasks));
+
         /* Assign. */
-        $this->view->executionID    = $executionID;
-        $this->view->tasks          = $tasks;
-        $this->view->teams          = $this->task->getTeamMembersByIdList($this->post->taskIdList);
-        $this->view->executionTeams = $executionTeams;
-        $this->view->users          = $this->loadModel('user')->getPairs('nodeleted');
-        $this->view->moduleGroup    = $moduleGroup;
+        $this->view->executionID        = $executionID;
+        $this->view->tasks              = $tasks;
+        $this->view->teams              = $this->task->getTeamMembersByIdList($this->post->taskIdList);
+        $this->view->executionTeams     = $executionTeams;
+        $this->view->users              = $this->loadModel('user')->getPairs('nodeleted');
+        $this->view->moduleGroup        = $moduleGroup;
+        $this->view->childTasks         = $childTasks;
+        $this->view->nonStoryChildTasks = $nonStoryChildTasks;
+        $this->view->stories            = $this->story->getExecutionStoryPairs($executionID, 0, 'all', '', 'full', 'active', 'story', false);
 
         $this->display();
     }
@@ -289,6 +294,15 @@ class taskZen extends task
         }
         $stories = $this->story->getExecutionStoryPairs($this->view->execution->id, 0, 'all', $moduleID, 'full', 'active', 'story', false);
 
+        $syncChildren = array();
+        if(!empty($task->children))
+        {
+            foreach($task->children as $child)
+            {
+                if(empty($child->story)) $syncChildren[] = $child->id;
+            }
+        }
+
         $this->view->title         = $this->lang->task->edit . 'TASK' . $this->lang->hyphen . $this->view->task->name;
         $this->view->stories       = $this->story->addGradeLabel($stories);
         $this->view->tasks         = $tasks;
@@ -297,6 +311,7 @@ class taskZen extends task
         $this->view->showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $this->view->modules       = $this->tree->getTaskOptionMenu($task->execution, 0, $this->view->showAllModule ? 'allModule' : '');
         $this->view->executions    = $executions;
+        $this->view->syncChildren  = $syncChildren;
         $this->display();
     }
 
