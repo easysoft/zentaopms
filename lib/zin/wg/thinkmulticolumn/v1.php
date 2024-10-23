@@ -119,9 +119,8 @@ class thinkMulticolumn extends thinkQuestion
         $formItems = parent::buildFormItem();
 
         list($step, $questionType, $required, $fields, $supportAdd, $canAddRows, $requiredCols, $quotedQuestions, $linkColumn, $setOption, $quoteTitle, $quoteQuestions, $citation, $selectColumn, $quotedQuestions) = $this->prop(array('step', 'questionType', 'required', 'fields', 'supportAdd', 'canAddRows', 'requiredCols', 'quotedQuestions', 'linkColumn', 'setOption', 'quoteTitle', 'quoteQuestions', 'citation', 'selectColumn', 'quotedQuestions'));
-        $requiredItems = $lang->thinkstep->requiredList;
-        $linkColumn    = !empty($linkColumn) ? $linkColumn : array();
-
+        $requiredItems   = $lang->thinkstep->requiredList;
+        $linkColumn      = !empty($linkColumn) ? $linkColumn : array();
         $requiredOptions = array();
         if($step)
         {
@@ -140,6 +139,20 @@ class thinkMulticolumn extends thinkQuestion
             foreach($fields as $key => $field) $requiredOptions[] = array('value' => $key + 1, 'text' => $field);
             $fields = !empty($step->options->fields) ? $step->options->fields :  array('', '', '', '');
         }
+
+        $quoteQuestionsItems = array();
+        if(!empty($quoteQuestions))
+        {
+            foreach($quoteQuestions as $item)
+            {
+                $quoteQuestionsItems[] = array('text' => $item->index . '. ' . $item->title, 'value' => $item->id);
+            }
+        }
+
+        $requiredTip = '';
+        if(!empty($setOption))       $requiredTip = $lang->thinkstep->tips->multicolumnRequired;
+        if(!empty($quotedQuestions)) $requiredTip = $lang->thinkstep->tips->required;
+
         jsVar('canAddRowsOfMulticol', (int)$canAddRows + 5);
         jsVar('addRowsTips', $lang->thinkrun->tips->addRow);
         jsVar('addLang', $lang->thinkrun->add);
@@ -148,9 +161,11 @@ class thinkMulticolumn extends thinkQuestion
 
         $formItems[] = array(
             formHidden('options[questionType]', $questionType),
+
             formGroup
             (
                 set::label($lang->thinkstep->label->columnTitle),
+                setClass('think-options-field', $setOption == 1 ? 'hidden' : ''),
                 setStyle(array('padding-bottom' => 'calc(4 * var(--space))')),
                 thinkMatrixOptions(set::colName('options[fields]'), set::cols($fields), set::quotedQuestions($quotedQuestions), set::linkColumn($linkColumn))
             ),
