@@ -24,6 +24,18 @@ window.reloadProduct = function()
     loadModal($.createLink('doc', 'selectLibType', `objectType=${objectType}&params=${params}`));
 }
 
+window.reloadProject = function()
+{
+    const objectType  = getSpaceType();
+    const docType     = $('.modal-body input[name=type]:checked').val();
+    const objectID    = $('.modal-body input[name=project]').val();
+    const executionID = $('.modal-body input[name=execution]').val();
+    const libID       = $('.modal-body input[name=lib]').val();
+    const params      = window.btoa('docType=' + docType + '&objectID=' + objectID + '&executionID=' + executionID + '&libID=' + libID);
+
+    loadModal($.createLink('doc', 'selectLibType', `objectType=${objectType}&params=${params}`));
+}
+
 /**
  * Change space.
  *

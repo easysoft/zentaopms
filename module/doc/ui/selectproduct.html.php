@@ -80,6 +80,3 @@ form
         set::control(array('control' => 'picker', 'name' => 'module', 'items' => $modules, 'value' => $moduleID, 'required' => true))
     )
 );
-
-/* ====== Render page ====== */
-render();

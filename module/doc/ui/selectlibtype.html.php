@@ -21,6 +21,7 @@ to::header
 
 if(in_array($objectType, array('mine', 'custom'))) include './selectmineandcustom.html.php';
 if($objectType == 'product') include './selectproduct.html.php';
+if($objectType == 'project') include './selectproject.html.php';
 
 /* ====== Render page ====== */
 render();
