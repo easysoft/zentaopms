@@ -522,6 +522,11 @@ class caselib extends control
     {
         $lib = $this->caselib->getById($libID);
 
+        if($_POST)
+        {
+            $fields = $this->caselibZen->getExportCasesFields();
+        }
+
         $fileName   = $this->lang->testcase->common;
         $browseType = isset($this->lang->caselib->featureBar['browse'][$browseType]) ? $this->lang->caselib->featureBar['browse'][$browseType] : '';
 

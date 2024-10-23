@@ -538,4 +538,27 @@ class caselibZen extends caselib
 
         return true;
     }
+
+    /**
+     * 获取导出的字段列表。
+     * Get the export fields.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function getExportCasesFields(): array
+    {
+        $this->app->loadLang('testcase');
+
+        $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $this->config->caselib->exportFields);
+        foreach($fields as $key => $fieldName)
+        {
+            $fieldName = trim($fieldName);
+            $fields[$fieldName] = zget($this->lang->testcase, $fieldName);
+
+            unset($fields[$key]);
+        }
+
+        return $fields;
+    }
 }
