@@ -596,6 +596,7 @@ class caselibZen extends caselib
 
             $this->processStepForExport($case, $relatedSteps);
             $this->processStageForExport($case);
+            $this->processFileForExport($case, $relatedFiles);
         }
 
         return $cases;
@@ -671,5 +672,27 @@ class caselibZen extends caselib
         $case->stage = explode(',', $case->stage);
         foreach($case->stage as $key => $stage) $case->stage[$key] = isset($this->lang->testcase->stageList[$stage]) ? $this->lang->testcase->stageList[$stage] : $stage;
         $case->stage = join("\n", $case->stage);
+    }
+
+    /**
+     * 处理导出用例的附件。
+     * Process file of case for export.
+     *
+     * @param  object    $case
+     * @param  array     $relatedFiles
+     * @access protected
+     * @return void
+     */
+    protected function processFileForExport(object $case, array $relatedFiles): void
+    {
+        $case->files = '';
+        if(isset($relatedFiles[$case->id]))
+        {
+            foreach($relatedFiles[$case->id] as $file)
+            {
+                $fileURL = common::getSysURL() . $this->createLink('file', 'download', "fileID={$file->id}");
+                $case->files .= html::a($fileURL, $file->title, '_blank') . '<br />';
+            }
+        }
     }
 }
