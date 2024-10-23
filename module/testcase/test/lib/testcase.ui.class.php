@@ -83,11 +83,12 @@ class testcase extends tester
             }
         }
         $form->dom->saveButton->click();
-        $this->webdriver->wait(1);
+        $this->webdriver->wait(2);
 
         $caseLists = $form->dom->getElementList($form->dom->xpath['caseNameList']);
         $caseList  = array_map(function($element){return $element->getText();}, $caseLists->element);
-        if(in_array($testcase['caseName'], $caseList)) return $this->success('创建测试用例成功');
-        return $this->failed('创建测试用例失败');
+        $this->closeBrowser();
+        if(in_array($testcase['caseName'], $caseList)) return $this->success('创建多层级测试用例成功');
+        return $this->failed('创建多层级测试用例失败');
     }
 }
