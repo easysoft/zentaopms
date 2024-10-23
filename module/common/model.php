@@ -1919,8 +1919,9 @@ eof;
                 $execution = $commonModel->loadModel('execution')->getByID($object->execution);
                 $executionsStatus[$object->execution] = $execution ? $execution->status : '';
             }
-            if($executionsStatus[$object->execution] == 'closed') return false;
+            if($executionsStatus[$object->execution] == 'closed'  || !empty($config->CRProject)) return false;
 
+            /* Check the execution's project is closed. */
             if(isset($object->project) && !isset($projectsStatus[$object->project]))
             {
                 $project = $commonModel->loadModel('project')->getByID((int)$object->project);
@@ -1947,14 +1948,15 @@ eof;
 
         if(empty($object)) return true;
 
-        /* Judge that if the closed object(product|execution) is readonly from config table. The default is can modify. */
+        /* Judge that if the closed object(product|project|execution) is readonly from config table. The default is can modify. */
         if($type == 'product'   and empty($config->CRProduct) and $object->status == 'closed') return false;
         if($type == 'project'   and empty($config->CRProject) and $object->status == 'closed') return false;
         if($type == 'execution' and empty($config->CRExecution))
         {
             if($object->status == 'closed') return false;
-            if(!isset($object->project)) return true;
+            if(!isset($object->project) || !empty($config->CRProject)) return true;
 
+            /* Check the execution's project is closed. */
             static $projectsStatus = array();
             $commonModel = new commonModel();
             if(!isset($projectsStatus[$object->project]))

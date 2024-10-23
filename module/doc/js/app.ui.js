@@ -406,11 +406,13 @@ const actionsMap =
     {
         const lang       = getLang();
         const doc        = info.data;
-        const canEditDoc = hasPriv('edit');
+        const canModify  = getDocApp().space.canModify;
+        const canEditDoc = canModify && hasPriv('edit');
 
         /* 侧边栏上的文档操作按钮。Doc actions in sidebar. */
         if(info.ui === 'sidebar')
         {
+            if(!canModify) return [];
             const moreItems =
             [
                 canMoveDoc(doc) ? {icon: 'folder-move', text: lang.moveDoc, command: `moveDoc/${doc.id}`} : null,
@@ -423,9 +425,9 @@ const actionsMap =
         }
 
         const moreItems = [];
-        if(canMoveDoc(doc))      moreItems.push({icon: 'folder-move', text: lang.moveDoc, command: `moveDoc/${doc.id}`});
-        if(hasPriv('delete'))    moreItems.push({icon: 'trash', text: lang.delete, command: `deleteDoc/${doc.id}`});
-        if(hasPriv('effort'))    moreItems.push({icon: 'time', text: lang.effort, command: `effortDoc/${doc.id}`});
+        if(canModify && canMoveDoc(doc))   moreItems.push({icon: 'folder-move', text: lang.moveDoc, command: `moveDoc/${doc.id}`});
+        if(canModify && hasPriv('delete')) moreItems.push({icon: 'trash', text: lang.delete, command: `deleteDoc/${doc.id}`});
+        if(canModify && hasPriv('effort')) moreItems.push({icon: 'time', text: lang.effort, command: `effortDoc/${doc.id}`});
         if(hasPriv('exportDoc')) moreItems.push({icon: 'export', text: lang.export, command: 'exportDoc'});
 
         return [
@@ -441,14 +443,15 @@ const actionsMap =
      */
     lib: function(info)
     {
-        const lang  = getLang();
-        const items = [];
-        const lib   = info.data;
+        const lang      = getLang();
+        const items     = [];
+        const lib       = info.data;
+        const canModify = getDocApp().space.canModify;
 
-        if(hasPriv('addModule') && info.ui !== 'space-card' && info.ui !== 'sidebar') items.push({text: lang.actions.addModule, command: `addModule/${lib.id}/0/${lib.id}/child`});
-        if(hasPriv('editLib'))   items.push({text: lang.actions.editLib, command: `editLib/${lib.id}`});
-        if(hasPriv('moveLib') && info.ui !== 'space-card')   items.push({text: lang.moveTo, command: `moveLib/${lib.id}`});
-        if(hasPriv('deleteLib')) items.push({text: lang.actions.deleteLib, command: `deleteLib/${lib.id}`});
+        if(canModify && hasPriv('addModule') && info.ui !== 'space-card' && info.ui !== 'sidebar') items.push({text: lang.actions.addModule, command: `addModule/${lib.id}/0/${lib.id}/child`});
+        if(canModify && hasPriv('editLib'))   items.push({text: lang.actions.editLib, command: `editLib/${lib.id}`});
+        if(canModify && hasPriv('moveLib') && info.ui !== 'space-card')   items.push({text: lang.moveTo, command: `moveLib/${lib.id}`});
+        if(canModify && hasPriv('deleteLib')) items.push({text: lang.actions.deleteLib, command: `deleteLib/${lib.id}`});
 
         if(!items.length) return;
         if(info.ui === 'sidebar')
@@ -522,24 +525,26 @@ const actionsMap =
     'doc-list': function()
     {
         const lang           = getLang();
-        const canCreateDoc   = hasPriv('create');
-        const canCreateLib   = hasPriv('createLib');
-        const canCreateSpace = hasPriv('createSpace');
+        const docApp         = getDocApp();
+        const canModify      = docApp.space.canModify;
+        const canCreateDoc   = canModify && hasPriv('create');
+        const canCreateLib   = canModify && hasPriv('createLib');
+        const canCreateSpace = canModify && hasPriv('createSpace');
         const canExportDoc   = hasPriv('exportDoc');
-        const items =
+        const items = canModify ?
         [
             canCreateDoc ? {icon: 'plus', text: lang.createDoc, command: 'startCreateDoc'} : null,
             canCreateDoc ? {type: 'divider'} : null,
-            {icon: 'file-word', text: lang.createList.word, command: 'startCreateOffice/word'},
-            {icon: 'file-powerpoint', text: lang.createList.ppt, command: 'startCreateOffice/ppt'},
-            {icon: 'file-excel', text: lang.createList.excel, command: 'startCreateOffice/excel'},
+            canModify    ? {icon: 'file-word', text: lang.createList.word, command: 'startCreateOffice/word'} : {},
+            canModify    ? {icon: 'file-powerpoint', text: lang.createList.ppt, command: 'startCreateOffice/ppt'} : {},
+            canModify    ? {icon: 'file-excel', text: lang.createList.excel, command: 'startCreateOffice/excel'} : {},
             (canCreateLib || canCreateSpace) ? {type: 'divider'} : null,
             canCreateSpace ? {icon: 'cube', text: lang.createSpace, command: 'createSpace'} : null,
             canCreateLib ? {icon: 'wiki-lib', text: lang.createLib, command: 'createLib'} : null,
-        ].filter(Boolean);
+        ].filter(Boolean) : [];
         return [
-            (canExportDoc || canCreateDoc) ? {type: 'divider', style: {margin: '6px 0'}} : null,
-            canExportDoc && getDocApp().libID > 0 ? {icon: 'export', text: lang.export, command: 'exportDoc'} : null, // 不在库中，无法导出
+            ((canExportDoc && docApp.libID > 0 ) || canCreateDoc) ? {type: 'divider', style: {margin: '6px 0'}} : null,
+            canExportDoc && docApp.libID > 0 ? {icon: 'export', text: lang.export, command: 'exportDoc'} : null, // 不在库中，无法导出
             canCreateDoc ? {icon: 'import', text: lang.uploadDoc, command: 'uploadDoc'} : null,
             items.length ? {icon: 'plus', type: 'dropdown', btnType: 'primary',  size: 'md', text: lang.create, items: items} : null,
         ];
@@ -923,11 +928,13 @@ function getTableOptions(options, info)
     {
         const lang      = getLang();
         const tableCols = lang.tableCols;
+        const canModify = getDocApp().space.canModify;
         options.cols.forEach(col =>
         {
             if(typeof tableCols[col.name] === 'string') col.title = tableCols[col.name];
             if(col.name === 'actions' && col.actionsMap)
             {
+                if(!canModify) col.actions = [];
                 const actionHints = {edit: lang.editDoc, move: lang.moveDoc, delete: lang.deleteDoc};
                 $.each(col.actionsMap, (key, value) =>
                 {
