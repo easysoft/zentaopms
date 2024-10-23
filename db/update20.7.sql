@@ -29,18 +29,12 @@ CREATE INDEX `deleted` ON `zt_metriclib` (`deleted`);
 ALTER TABLE `zt_pipeline` ADD `instanceID` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `private`;
 ALTER TABLE `zt_mr` ADD `isFlow` ENUM('0', '1') NOT NULL DEFAULT '0' AFTER `squash`;
 
-REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'task', 'recordWorkhour' FROM `zt_grouppriv` WHERE `module` = 'task' AND `method` = 'recordEstimate';
-REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'task', 'editEffort' FROM `zt_grouppriv` WHERE `module` = 'task' AND `method` = 'editEstimate';
-REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'task', 'deleteWorkhour' FROM `zt_grouppriv` WHERE `module` = 'task' AND `method` = 'deleteEstimate';
-REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'bug', 'confirm' FROM `zt_grouppriv` WHERE `module` = 'bug' AND `method` = 'confirmBug';
-REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'testcase', 'batchChangeType' FROM `zt_grouppriv` WHERE `module` = 'testcase' AND `method` = 'batchCaseTypeChange';
-REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'ops', 'provider' FROM `zt_grouppriv` WHERE `module` = 'ops' AND `method` = 'provide';
-REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'projectstory', 'importToLib' FROM `zt_grouppriv` WHERE `module` = 'story' AND `method` = 'importToLib';
-REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'projectstory', 'batchImportToLib' FROM `zt_grouppriv` WHERE `module` = 'story' AND `method` = 'batchImportToLib';
-
-REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'doc', 'createSpace' FROM `zt_grouppriv` WHERE `module` = 'doc' AND `method` = 'createLib';
-REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'doc', 'editSpace' FROM `zt_grouppriv` WHERE `module` = 'doc' AND `method` = 'editLib';
-REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'doc', 'deleteSpace' FROM `zt_grouppriv` WHERE `module` = 'doc' AND `method` = 'deleteLib';
+UPDATE `zt_grouppriv` SET `method` = 'recordWorkhour' WHERE `module` = 'task' AND `method` = 'recordEstimate';
+UPDATE `zt_grouppriv` SET `method` = 'editEffort' WHERE `module` = 'task' AND `method` = 'editEstimate';
+UPDATE `zt_grouppriv` SET `method` = 'deleteWorkhour' WHERE `module` = 'task' AND `method` = 'deleteEstimate';
+UPDATE `zt_grouppriv` SET `method` = 'confirm' WHERE `module` = 'bug' AND `method` = 'confirmBug';
+UPDATE `zt_grouppriv` SET `method` = 'batchChangeType' WHERE `module` = 'testcase' AND `method` = 'batchCaseTypeChange';
+UPDATE `zt_grouppriv` SET `method` = 'provider' WHERE `module` = 'ops' AND `method` = 'provide';
 
 CREATE UNIQUE INDEX `account_openID` ON `zt_oauth`(`account`,`openID`,`providerType`,`providerID`);
 

@@ -367,6 +367,12 @@ class doc extends control
             return $this->docZen->responseAfterUploadDocs($docResult);
         }
 
+        if($objectType == 'execution' && $libID) // 此时传入的objectID是projectID，用lib的信息更改回executionID
+        {
+            $lib = $this->doc->getLibByID($libID);
+            $objectID = $this->doc->getObjectIDByLib($lib);
+        }
+
         $this->docZen->assignVarsForUploadDocs($objectType, $objectID, $libID, $moduleID, $docType);
         $this->display();
     }
@@ -609,12 +615,13 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function ajaxGetLibsByType(string $type, string $docType = 'doc')
+    public function ajaxGetLibsByType(string $type, string $docType = 'doc', string $extra = '')
     {
         $libPairs = array();
         if($docType == 'doc')
         {
             $unclosed = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
+            if($extra) $unclosed .= ",$extra";
             $libPairs = $this->doc->getLibs($type, $unclosed);
         }
         elseif($docType == 'api')
@@ -888,7 +895,7 @@ class doc extends control
     public function productSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'order_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = '', int $docID = 0, string $search = '')
     {
         $noSpace = $this->app->tab != 'doc';
-        $mode    = $noSpace ? 'list' : 'home';
+        $mode    = $noSpace ? 'list' : $mode;
         echo $this->fetch('doc', 'app', "type=product&spaceID=$objectID&libID=$libID&moduleID=$moduleID&docID=$docID&mode=$mode&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&filterType=$browseType&search=$search&noSpace=$noSpace");
     }
 
@@ -911,7 +918,7 @@ class doc extends control
     public function projectSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'order_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = '', int $docID = 0, string $search = '')
     {
         $noSpace = $this->app->tab != 'doc';
-        $mode    = $noSpace ? 'list' : 'home';
+        $mode    = $noSpace ? 'list' : $mode;
         echo $this->fetch('doc', 'app', "type=project&spaceID=$objectID&libID=$libID&moduleID=$moduleID&docID=$docID&mode=$mode&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&filterType=$browseType&search=$search&noSpace=$noSpace");
     }
 
@@ -1291,8 +1298,12 @@ class doc extends control
             return $this->docZen->responseAfterMove($this->post->space, $spaceType, $data->lib, $locate, $docID);
         }
 
-        $libPairs = $this->doc->getLibPairs($spaceType, '', (int)$space, '', $spaceType == 'product' ? array((int)$space => $space) : array(), $spaceType == 'project' ? array((int)$space => $space) : array());
-        if($spaceType == 'project') $libPairs += $this->doc->getExecutionLibPairsByProject((int)$space);
+        $projects   = $this->loadModel('project')->getPairsByProgram(0, 'all', false, 'order_asc');
+        $products   = $this->loadModel('product')->getPairs();
+        $executions = $this->loadModel('execution')->getPairs(0, 'all', 'multiple,leaf');
+
+        $libPairs = $this->doc->getLibPairs($spaceType, 'withObject', (int)$space, '', $products, $projects, $executions);
+        if($spaceType == 'project') $libPairs += $this->doc->getExecutionLibPairsByProject((int)$space, 'withObject', $executions);
 
         if(!isset($libPairs[$libID])) $libID = (int)key($libPairs);
 
@@ -1343,9 +1354,13 @@ class doc extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'docApp' => array('load', null, null, null, array('noLoading' => true, 'picks' => 'doc'))));
         }
 
-        $products = $type == 'product' ? array($spaceID => $spaceID) : array();
-        $projects = $type == 'project' ? array($spaceID => $spaceID) : array();
-        $libPairs = $this->doc->getLibPairs($type, '', $spaceID, '', $products, $projects);
+        $projects   = $this->loadModel('project')->getPairsByProgram(0, 'all', false, 'order_asc');
+        $products   = $this->loadModel('product')->getPairs();
+        $executions = $this->loadModel('execution')->getPairs(0, 'all', 'multiple,leaf');
+
+        $libPairs = $this->doc->getLibPairs($type, 'withObject', $spaceID, '', $products, $projects, $executions);
+        if($type == 'project') $libPairs += $this->doc->getExecutionLibPairsByProject($spaceID, 'withObject', $executions);
+
         if(!isset($libPairs[$libID])) $libID = (int)key($libPairs);
 
         $docList = $this->doc->getByIdList($docIdList);
@@ -1607,8 +1622,7 @@ class doc extends control
         $lib = $libID ? $this->doc->getLibByID($libID) : '';
         if(empty($docID))
         {
-            if(empty($objectID) && $lib) $objectID = (int)zget($lib, $lib->type, 0);
-            if(empty($objectID) && $lib && $lib->type == 'custom') $objectID = (int)$lib->parent;
+            if(empty($objectID) && $lib) $objectID = $this->doc->getObjectIDByLib($lib);
             if($lib) $objectType = $lib->type;
 
             $unclosed = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
@@ -1628,7 +1642,7 @@ class doc extends control
             $libID      = (int)$doc->lib;
             $lib        = $this->doc->getLibByID($libID);
             $objectType = $lib->type;
-            $objectID = $objectType == 'custom' || $objectType == 'mine' ? $lib->parent : (int)zget($lib, $objectType, 0);
+            $objectID   = $this->doc->getObjectIDByLib($lib);
 
             $libPairs = $this->doc->getLibs($objectType, '', $libID, $objectID);
             if($objectType == 'custom' || $objectType == 'mine') $this->view->spaces = $this->doc->getSubSpacesByType($objectType, true);

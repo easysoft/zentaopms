@@ -1203,12 +1203,33 @@ ztmindmap.Wraper.prototype.singleTestCaseToJson = function(data)
                     tmpPId: nextChild.parent
                 };
 
-                //如果后续只有一个子元素，作为期望的结果来处理，超过一个子元素，丢掉后面的子元素
+                obj.stepList.push(subStep);
+
+                //如果后续只有一个子元素，作为期望的结果来处理。
                 var nextNextChild = nextChild.children || [];
                 if(nextNextChild.length == 1)
                     subStep.expect = nextNextChild[0].text;
 
-                obj.stepList.push(subStep);
+                if(nextNextChild.length > 1)
+                {
+                    subStep.type = "group";
+                    for(var thirdLevelNode of nextNextChild)
+                    {
+                        var thirdLevelStep = {
+                            type: "item",
+                            desc: thirdLevelNode.text,
+                            tmpId: thirdLevelNode.id,
+                            tmpPId: thirdLevelNode.parent
+                        };
+
+                        //如果后续只有一个子元素，作为期望的结果来处理，超过一个子元素，丢掉后面的子元素
+                        var forthLevelNode = thirdLevelNode.children || [];
+                        if(forthLevelNode.length == 1)
+                            thirdLevelStep.expect = forthLevelNode[0].text;
+
+                        obj.stepList.push(thirdLevelStep);
+                    }
+                }
             }
         }
     }

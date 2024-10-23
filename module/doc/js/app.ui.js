@@ -123,7 +123,7 @@ function handleSwitchView(mode, location, info)
     }
     else
     {
-        url = $.createLink(config.rawModule, config.rawMethod, `objectID=${location.spaceID}&libID=${location.libID}&moduleID=${location.moduleID}&browseType=${filterType}&param=0&orderBy=${location.orderBy}&recTotal=${pager.recTotal}&recPerPage=${pager.recPerPage}&pageID=${pager.page}&mode=${mode}&docID=${location.docID}&search=${search}`).replace('&libID=0&moduleID=0&browseType=all&param=&orderBy=&recTotal=0&recPerPage=20&pageID=1&mode=home&docID=0&search=', '');
+        url = $.createLink(config.rawModule, config.rawMethod, `objectID=${location.spaceID}&libID=${location.libID}&moduleID=${location.moduleID}&browseType=${filterType}&orderBy=${location.orderBy}&param=0&recTotal=${pager.recTotal}&recPerPage=${pager.recPerPage}&pageID=${pager.page}&mode=${mode}&docID=${location.docID}&search=${search}`).replace('&libID=0&moduleID=0&browseType=all&param=&orderBy=&recTotal=0&recPerPage=20&pageID=1&mode=home&docID=0&search=', '');
     }
     if(url === lastAppUrl) return;
     if(lastAppUrl && !$.apps.getAppUrl().endsWith(url)) $.apps.updateAppUrl(url, info.title ? (info.title + documentTitleSuffix) : originalDocumentTitle);
@@ -539,7 +539,7 @@ const actionsMap =
         ].filter(Boolean);
         return [
             (canExportDoc || canCreateDoc) ? {type: 'divider', style: {margin: '6px 0'}} : null,
-            canExportDoc ? {icon: 'export', text: lang.export, command: 'exportDoc'} : null,
+            canExportDoc && getDocApp().libID > 0 ? {icon: 'export', text: lang.export, command: 'exportDoc'} : null, // 不在库中，无法导出
             canCreateDoc ? {icon: 'import', text: lang.uploadDoc, command: 'uploadDoc'} : null,
             items.length ? {icon: 'plus', type: 'dropdown', btnType: 'primary',  size: 'md', text: lang.create, items: items} : null,
         ];
@@ -559,7 +559,7 @@ const actionsMap =
             doc.status === 'draft' ? {text: lang.saveDraft, size: 'md', className: 'btn-wide', type: 'secondary', command: 'saveDoc/draft'} : null,
             {text: lang.release, size: 'md', className: 'btn-wide', type: 'primary', command: 'saveDoc'},
             {text: lang.cancel, size: 'md', className: 'btn-wide', type: 'primary-outline', command: 'cancelEditDoc'},
-            {text: lang.settings, size: 'md', type: 'ghost', command: `showDocSettingModal/${doc.id}/${doc.contentType}`, icon: 'cog-outline'},
+            {text: lang.settings, size: 'md', type: 'ghost', command: `showDocSettingModal/${doc.id}/${doc.contentType}/1`, icon: 'cog-outline'},
         ];
     },
 
@@ -623,7 +623,8 @@ const commands =
     uploadDoc: function()
     {
         const docApp = getDocApp();
-        const url = $.createLink('doc', 'uploadDocs', `objectType=${docApp.spaceType}&objectID=${docApp.spaceID}&libID=${docApp.libID}&moduleID=${docApp.moduleID}&type=attachment`);
+        const type   = docApp.lib ? docApp.lib.data.type : docApp.spaceType;
+        const url = $.createLink('doc', 'uploadDocs', `objectType=${type}&objectID=${docApp.spaceID}&libID=${docApp.libID}&moduleID=${docApp.moduleID}&type=attachment`);
         zui.Modal.open({url: url});
     },
     /** 创建 Office 文件。 Start create office file. */
@@ -879,12 +880,31 @@ const commands =
     },
     showDocSettingModal: function(_, args)
     {
-        const docApp   = getDocApp();
-        const doc      = docApp.doc;
-        const docID    = args[0] || doc.id;
-        const docType  = args[1] || doc.contentType;
+        const docApp     = getDocApp();
+        const doc        = docApp.doc;
+        const docID      = args[0] || doc.id;
+        const docType    = args[1] || doc.contentType;
+        const saveEdited = args[2] || 0;
         showDocBasicModal(docID).then(formData => {
             savingDocData[docID] = formData;
+            if(saveEdited == 1)
+            {
+                const docData = {
+                    content    : doc.data.content,
+                    status     : doc.data.status,
+                    contentType: doc.data.contentType,
+                    type       : doc.data.type,
+                    lib        : doc.data.lib,
+                    module     : doc.data.module,
+                    title      : doc.data.title,
+                    keywords   : doc.data.keywords,
+                    acl        : doc.data.acl,
+                    space      : doc.data.space,
+                    uid        : doc.data.uid,
+                };
+                mergeDocFormData(docData, formData);
+                $.post($.createLink('doc', 'edit', `docID=${docID}`), docData);
+            }
         });
     }
 };
@@ -915,6 +935,11 @@ function getTableOptions(options, info)
                 });
             }
         });
+        options.onCheckChange = function(changes)
+        {
+            const checkedList = this.getChecks();
+            $.cookie.set('checkedItem', checkedList, {expires:config.cookieLife, path:config.webRoot});
+        }
     }
     return options;
 }

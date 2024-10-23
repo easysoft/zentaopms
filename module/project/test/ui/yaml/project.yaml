@@ -22,7 +22,7 @@ fields:
   - field: budget
     range: 800000-1:100
   - field: status
-    range: doing
+    range: wait
   - field: begin
     range: "(-2M)-(+M):1D"
     type: timestamp

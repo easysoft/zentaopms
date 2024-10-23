@@ -33,7 +33,7 @@ formPanel
             setClass('executionBox'),
             set::label($lang->doc->execution),
             set::name('execution'),
-            set::items($executions),
+            set::items(isset($executions) ? $executions : null),
             set::placeholder($lang->doc->placeholder->execution),
             on::change('loadObjectModules')
         ) : null

@@ -201,7 +201,7 @@ class dataviewModel extends model
                 if($existField) continue;
             }
 
-            foreach($moduleNames as $table => $moduleName)
+            foreach($moduleNames as $moduleName)
             {
                 list($mergeFields[$field], $relatedObject[$field], $workflowFields) = $this->processMergeFields($moduleName, $field, $fieldName, $workflowFields);
             }
@@ -237,7 +237,12 @@ class dataviewModel extends model
 
         $mergeField = isset($this->lang->$moduleName->$fieldName) ? $this->lang->$moduleName->$fieldName : $field;
 
-        if(!isset($workflowFields[$moduleName]) && $this->config->edition != 'open') $workflowFields[$moduleName] = $this->loadModel('workflowfield')->getFieldPairs($moduleName, '0');
+        if(!isset($workflowFields[$moduleName]) && $this->config->edition != 'open')
+        {
+            static $buildInModules;
+            if(empty($buildInModules)) $buildInModules = $this->loadModel('workflow')->getBuildinModules();
+            $workflowFields[$moduleName] = $this->loadModel('workflowfield')->getFieldPairs($moduleName, $buildInModules[$moduleName] ? '0' : 'all');
+        }
         if(isset($workflowFields[$moduleName][$fieldName])) $mergeField = $workflowFields[$moduleName][$fieldName];
 
         return array($mergeField, $moduleName, $workflowFields);

@@ -225,16 +225,17 @@ class docZen extends doc
         {
             $this->lang->doclib->aclList = $this->lang->doclib->mySpaceAclList;
         }
-        elseif($type == 'api')
-        {
-            $this->app->loadLang('api');
-            $this->lang->api->aclList['default'] = sprintf($this->lang->api->aclList['default'], $this->lang->{$type}->common);
-        }
         elseif(in_array($type, array('product', 'project', 'execution')))
         {
             $this->lang->doclib->aclList['default'] = sprintf($this->lang->doclib->aclList['default'], $this->lang->{$type}->common);
             $this->lang->doclib->aclList['private'] = sprintf($this->lang->doclib->privateACL, $this->lang->{$type}->common);
             unset($this->lang->doclib->aclList['open']);
+        }
+
+        if($type != 'mine')
+        {
+            $this->app->loadLang('api');
+            $this->lang->api->aclList['default'] = sprintf($this->lang->api->aclList['default'], $this->lang->{$type}->common);
         }
     }
 
@@ -445,7 +446,7 @@ class docZen extends doc
             $execution = $this->loadModel('execution')->getById($lib->execution);
             $objects   = $this->execution->getPairs($execution->project, 'all', "multiple,leaf,noprefix");
         }
-        elseif($linkType == 'product')
+        elseif($linkType == 'product' || $linkType == 'api')
         {
             $objects = $this->loadModel('product')->getPairs();
         }

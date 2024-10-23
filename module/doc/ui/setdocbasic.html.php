@@ -74,7 +74,10 @@ formPanel
     $isDraft ? null : formGroup
     (
         set::label($lang->doc->mailto),
-        mailto(set::items($users))
+        mailto(
+            set::items($users),
+            set::value(isset($doc) ? $doc->mailto : null)
+        )
     ),
     $isDraft ? null : formGroup
     (

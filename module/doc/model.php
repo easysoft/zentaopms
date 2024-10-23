@@ -41,6 +41,22 @@ class docModel extends model
     }
 
     /**
+     * Get objectID by Lib.
+     *
+     * @param  object $lib
+     * @param  string $libType
+     * @access public
+     * @return int
+     */
+    public function getObjectIDByLib($lib, $libType = '')
+    {
+        if(empty($libType)) $libType = $lib->type;
+        $objectID = ($libType == 'custom' || $libType == 'mine') ? $lib->parent : zget($lib, $libType, 0);
+
+        return (int)$objectID;
+    }
+
+    /**
      * 通过ID获取文档库信息。
      * Get library by id.
      *
@@ -200,11 +216,11 @@ class docModel extends model
                         $lib->name = trim($lib->name, '/');
                     }
                     if($lib->project != 0)     $lib->name = zget($projects, $lib->project, '') . ' / ' . $lib->name;
-                    if($lib->type == 'mine')   $lib->name = $this->lang->doc->person . ' / ' . $lib->name;
-                    if($lib->type == 'custom')
+                    if($lib->type == 'mine' || $lib->type == 'custom')
                     {
                         if($lib->parent == 0) continue;
-                        $lib->name = $this->lang->doc->team . ' / ' . $lib->name;
+                        $parentLib = $this->getLibByID($lib->parent);
+                        $lib->name = $parentLib->name . ' / ' . $lib->name;
                     }
                 }
                 $libPairs[$lib->id] = $lib->name;
@@ -221,7 +237,7 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionLibPairsByProject($projectID)
+    public function getExecutionLibPairsByProject($projectID, $extra = '', $executions = array())
     {
         $libs = $this->dao->select('*')->from(TABLE_DOCLIB)
             ->where('deleted')->eq(0)
@@ -233,7 +249,15 @@ class docModel extends model
         $libPairs = array();
         foreach($libs as $lib)
         {
-            if($this->checkPrivLib($lib)) $libPairs[$lib->id] = $lib->name;
+            if($this->checkPrivLib($lib))
+            {
+                if(strpos($extra, 'withObject') !== false)
+                {
+                    $lib->name = zget($executions, $lib->execution, '') . ' / ' . $lib->name;
+                    $lib->name = ltrim($lib->name, '/');
+                }
+                $libPairs[$lib->id] = $lib->name;
+            }
         }
 
         return $libPairs;
@@ -921,7 +945,7 @@ class docModel extends model
         if(count($libIdList) == 1)
         {
             $libID = current($libIdList);
-            $lib   = $this->getLibByID($libID);
+            $lib   = $this->getLibByID((int)$libID);
             if($lib->type == 'custom' && $lib->parent == 0)
             {
                 $libs = $this->dao->select('*')->from(TABLE_DOCLIB)->where('parent')->eq($libID)->andWhere('deleted')->eq('0')->fetchAll();
@@ -1266,19 +1290,20 @@ class docModel extends model
             $spaceID  = $this->product->checkAccess($spaceID, $products);
             foreach($products as $product)
             {
-                $isMine  = $product->status == 'normal' and $product->PO == $account;
+                $isMine  = $product->status == 'normal' && $product->PO == $account;
                 $spaces[] = array('id' => $product->id, 'name' => $product->name, 'isMine' => $isMine, 'type' => $type);
             }
         }
         if($type == 'project')
         {
-            $account  = $this->app->user->account;
-            $projects = $this->loadModel('project')->getListByCurrentUser();
-            $spaceID  = $this->project->checkAccess($spaceID, $projects);
+            $account          = $this->app->user->account;
+            $projects         = $this->loadModel('project')->getListByCurrentUser();
+            $involvedProjects = $this->project->getInvolvedListByCurrentUser();
+            $spaceID          = $this->project->checkAccess($spaceID, $projects);
 
             foreach($projects as $project)
             {
-                $isMine   = $project->status != 'done' and $project->status != 'closed' and $project->PM == $account;
+                $isMine   = $project->status != 'closed' && isset($involvedProjects[$project->id]);
                 $spaces[] = array('id' => $project->id, 'name' => $project->name, 'isMine' => $isMine, 'type' => $type);
             }
         }
@@ -1808,7 +1833,8 @@ class docModel extends model
             {
                 $lib->docs = isset($docCounts[$lib->id]) ? $docCounts[$lib->id] : 0;
                 if($lib->type != 'execution') continue;
-                $executionLibs[$lib->execution] = $lib;
+                if(!isset($executionLibs[$lib->execution])) $executionLibs[$lib->execution] = array();
+                $executionLibs[$lib->execution][] = $lib;
             }
         }
 
@@ -1816,10 +1842,14 @@ class docModel extends model
         {
             $executionPairs = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(array_keys($executionLibs))->fetchPairs();
 
-            foreach($executionLibs as &$lib)
+            foreach($executionLibs as $executionID => &$libList)
             {
-                $lib->originName = $lib->name;
-                $lib->name       = $executionPairs[$lib->execution] . '/' . $lib->name;
+                foreach($libList as &$lib)
+                {
+                    $lib->originName    = $lib->name;
+                    $lib->executionName = $executionPairs[$executionID];
+                    $lib->name          = $lib->executionName . '/' . $lib->name;
+                }
             }
         }
 
@@ -1853,8 +1883,9 @@ class docModel extends model
             foreach($libs as &$lib)
             {
                 if($lib->type != 'execution') continue;
-                $lib->originName = $lib->name;
-                $lib->name       = $executionPairs[$lib->execution];
+                $lib->originName    = $lib->name;
+                $lib->executionName = $executionPairs[$lib->execution];
+                $lib->name          = $lib->executionName . '/' . $lib->name;
             }
         }
 

@@ -46,12 +46,15 @@ class sqlBuilderControl extends wg
 
         if($type == 'picker')
         {
-            if(is_string($value) && !isset($items[$value])) $value = null;
-            if(is_array($value))
+            if(is_array($items))
             {
-                foreach($value as $currentIndex => $currentValue)
+                if(is_string($value) && !isset($items[$value])) $value = null;
+                if(is_array($value))
                 {
-                    if(!isset($items[$currentValue])) unset($value[$currentIndex]);
+                    foreach($value as $currentIndex => $currentValue)
+                    {
+                        if(!isset($items[$currentValue])) unset($value[$currentIndex]);
+                    }
                 }
             }
 

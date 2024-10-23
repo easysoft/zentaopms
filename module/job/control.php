@@ -103,7 +103,7 @@ class job extends control
             if($job->engine == 'gitlab' && $job->repo)
             {
                 $repo    = $this->loadModel('repo')->fetchByID($job->repo);
-                $project = $this->loadModel('gitlab')->apiGetSingleProject($repo->serviceHost, (int)$job->repo, false);
+                $project = $this->loadModel('gitlab')->apiGetSingleProject((int)$repo->serviceHost, (int)$job->repo, false);
                 $job->reference = zget($project, 'default_branch', 'master');
             }
 

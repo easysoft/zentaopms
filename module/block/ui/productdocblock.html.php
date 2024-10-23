@@ -57,7 +57,7 @@ statisticBlock
         set::bordered(false),
         set::horzScrollbarPos('inside'),
         set::cols(array_values($config->block->doc->dtable->fieldList)),
-        set::data(!empty($docGroup) && isset($docGroup[$product->id]) && !empty($docGroup[$product->id]) ? array_values($docGroup[$product->id]) : array()),
+        set::data(!empty($docGroup) && $product && !empty($docGroup[$product->id]) ? array_values($docGroup[$product->id]) : array()),
         set::userMap($users)
     )
 );

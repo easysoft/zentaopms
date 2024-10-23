@@ -79,7 +79,6 @@ class thinkRadio extends thinkQuestion
             if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);
             $fields = !empty($step->options->fields) ? $step->options->fields :  array('', '', '');
         }
-        jsVar('citation', !empty($step->options->citation) ? $step->options->citation : 1);
 
         $quoteQuestionsItems = array();
         if(!empty($quoteQuestions))
@@ -162,6 +161,7 @@ class thinkRadio extends thinkQuestion
                 formRow
                 (
                     setClass('think-quote quote-citation', $setOption == 0 ? 'hidden' : ''),
+                    setdata('citation', $citation),
                     formGroup
                     (
                         setClass('citation'),

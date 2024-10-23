@@ -970,7 +970,7 @@ class pivotModel extends model
      * @access public
      * @return string noShow | bottom | row | all
      */
-    public function getShowColPosition(array $settings): string
+    public function getShowColPosition(array|object $settings): string
     {
         $columnTotal    = zget($settings, 'columnTotal', 'noShow');
         $columnPosition = zget($settings, 'columnPosition', 'bottom');
