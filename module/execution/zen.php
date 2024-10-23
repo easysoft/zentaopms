@@ -1577,7 +1577,7 @@ class executionZen extends execution
         if($this->config->edition != 'open')
         {
             $flow = $this->loadModel('workflow')->getByModule($module);
-            if(!empty($flow) && $flow->buildin == '0') return helper::createLink('flow', 'ajaxSwitchBelong', "objectID=%s&moduleName=$module") . '#app=execution';
+            if(!empty($flow) && $flow->buildin == '0') return helper::createLink('flow', 'ajaxSwitchBelong', "objectID=%s&moduleName=$module") . "#app=$flow->app";
         }
 
         $link = helper::createLink($module, $method, "executionID=%s");
