@@ -355,7 +355,7 @@ class header extends wg
             switch($objectType)
             {
                 case 'doc':
-                    $params              = "objectType=&objectID=0&libID=0";
+                    $params              = '';
                     $createMethod        = 'selectLibType';
                     $item['innerClass']  = $modalClass;
                     $item['data-toggle'] = 'modal';
