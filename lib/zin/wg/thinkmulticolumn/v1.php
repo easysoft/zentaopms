@@ -115,7 +115,7 @@ class thinkMulticolumn extends thinkQuestion
     {
         global $lang, $app;
         $app->loadLang('thinkstep');
-        list($step, $questionType, $required, $fields, $requiredCols, $quotedQuestions, $linkColumn, $setOption, $quoteTitle, $quoteQuestions, $citation, $selectColumn, $quotedQuestions) = $this->prop(array('step', 'questionType', 'required', 'fields', 'requiredCols', 'quotedQuestions', 'linkColumn', 'setOption', 'quoteTitle', 'quoteQuestions', 'citation', 'selectColumn', 'quotedQuestions'));
+        list($step, $required, $fields, $requiredCols, $quotedQuestions, $linkColumn, $setOption, $quoteTitle, $quoteQuestions, $citation, $selectColumn, $quotedQuestions) = $this->prop(array('step', 'required', 'fields', 'requiredCols', 'quotedQuestions', 'linkColumn', 'setOption', 'quoteTitle', 'quoteQuestions', 'citation', 'selectColumn', 'quotedQuestions'));
         $requiredItems   = $lang->thinkstep->requiredList;
         $linkColumn      = !empty($linkColumn) ? $linkColumn : array();
         $requiredOptions = array();
