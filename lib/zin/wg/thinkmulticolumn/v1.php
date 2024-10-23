@@ -246,6 +246,22 @@ class thinkMulticolumn extends thinkQuestion
                         set::items($lang->thinkstep->multiCitationList)
                     )
                 ),
+                formGroup
+                (
+                    setClass('select-column', $citation != 3 ? 'hidden' : ''),
+                    set::label($lang->thinkstep->label->selectColumn),
+                    set::labelClass('required'),
+                    set::labelHint($lang->thinkstep->tips->selectColumn),
+                    picker(
+                        set(array(
+                            'name'        => 'options[selectColumn]',
+                            'placeholder' => $lang->thinkstep->placeholder->quoteTitle,
+                            'required'    => true,
+                            'items'       => array(),
+                            'value'       => $selectColumn
+                        ))
+                    )
+                )
             ),
             formGroup
             (
