@@ -58,6 +58,7 @@ class browseTester extends tester
     {
         $browsePage = $this->initForm('productplan', 'browse', $planurl, 'appIframe-product');
         $browsePage->dom->kanbanBtn->click();//点击进入看板模式
+        $browsePage->wait(1);
         $browsePage->dom->orderByBtn->click();
         $orderButtons = [
             'begin_desc' => 'beginDesc',
