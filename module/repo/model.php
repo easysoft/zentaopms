@@ -35,7 +35,7 @@ class repoModel extends model
         {
             $userProducts = explode(',', $this->app->user->view->products);
             $repoProducts = explode(',', $repo->product);
-            if(!array_intersect($userProducts, $repoProducts)) return true;
+            if(array_intersect($userProducts, $repoProducts)) return true;
         }
 
         if(!empty($repo->acl->groups))
