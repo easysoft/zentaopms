@@ -167,6 +167,23 @@ class thinkMulticolumn extends thinkQuestion
                 (
                     setClass('w-66'),
                     set::label( $lang->thinkstep->label->setOption),
+                    radioList
+                    (
+                        set::name('options[setOption]'),
+                        set::inline(true),
+                        set::value($setOption),
+                        set::items($lang->thinkstep->setOptionList),
+                        set::disabled(empty($quoteQuestions)),
+                        on::change()
+                            ->do("
+                                $('.think-options-field').toggleClass('hidden', target.value == 1);
+                                $('.think-quote').toggleClass('hidden', target.value == 0);
+                                hiddenRequiredCols();
+                                $('.text-danger').remove();
+                                $('.has-error').removeClass('has-error');
+                                $('.required-tip button').toggleClass('hidden', target.value == 0);
+                            ")
+                    )
                 ),
                 icon
                 (
