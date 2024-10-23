@@ -1464,9 +1464,10 @@ $config->group->package->importCaseLib = new stdclass();
 $config->group->package->importCaseLib->order  = 15;
 $config->group->package->importCaseLib->subset = 'caselib';
 $config->group->package->importCaseLib->privs  = array();
-$config->group->package->importCaseLib->privs['caselib-exportTemplate'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 45, 'depend' => array('caselib-browse', 'caselib-import'), 'recommend' => array());
-$config->group->package->importCaseLib->privs['caselib-import']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 50, 'depend' => array('caselib-browse', 'caselib-exportTemplate', 'caselib-showImport'), 'recommend' => array());
-$config->group->package->importCaseLib->privs['caselib-showImport']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 55, 'depend' => array('caselib-import'), 'recommend' => array());
+$config->group->package->importCaseLib->privs['caselib-exportCase']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 45, 'depend' => array('caselib-browse', 'caselib-import'), 'recommend' => array());
+$config->group->package->importCaseLib->privs['caselib-exportTemplate'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 50, 'depend' => array('caselib-browse', 'caselib-import'), 'recommend' => array());
+$config->group->package->importCaseLib->privs['caselib-import']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 55, 'depend' => array('caselib-browse', 'caselib->exportTemplate', 'caselib-exportTemplate', 'caselib-showImport'), 'recommend' => array());
+$config->group->package->importCaseLib->privs['caselib-showImport']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 60, 'depend' => array('caselib-import'), 'recommend' => array());
 
 $config->group->package->officeApproval = new stdclass();
 $config->group->package->officeApproval->order  = 5;
