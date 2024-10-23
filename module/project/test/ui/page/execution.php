@@ -6,8 +6,8 @@ class executionPage extends page
         parent::__construct($webdriver);
         $xpath = array(
             'name'       => "//*[@id='table-project-execution']/div[2]/div[1]/div/div[2]/div/div/div/a",
-            'begin'      => "//*[@id='table-project-execution']/div[2]/div[2]/div/div[3]/div",
-            'end'        => "//*[@id='table-project-execution']/div[2]/div[2]/div/div[4]/div",
+            'begin'      => "//*[@id='table-project-execution']/div[2]/div[2]/div/div[4]/div",
+            'end'        => "//*[@id='table-project-execution']/div[2]/div[2]/div/div[5]/div",
             'subName'    => "//*[@id='table-project-execution']/div[2]/div[1]/div/div[4]/div/div[2]/div/a",
             'subBegin'   => "//*[@id='table-project-execution']/div[2]/div[2]/div/div[14]/div",
             'subEnd'     => "//*[@id='table-project-execution']/div[2]/div[2]/div/div[15]/div",
