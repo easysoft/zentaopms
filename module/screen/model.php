@@ -990,12 +990,10 @@ class screenModel extends model
     {
         if($chart->sql)
         {
-            $settings = json_decode($chart->settings, true);
-            if(isset($settings['columns']))
-            {
-                foreach($settings['columns'] as $index => $column) $settings['columns'][$index]['drill'] = $this->loadModel('pivot')->fetchPivotDrill($chart->id, $column['field']);
-            }
+            $chart->settings = json_decode($chart->settings, true);
+            $this->loadModel('pivot')->addDrills($chart);
 
+            $settings     = $chart->settings;
             $fields       = json_decode($chart->fields, true);
             $langs        = json_decode($chart->langs, true);
             $chartFilters = json_decode($chart->filters, true);

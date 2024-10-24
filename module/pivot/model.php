@@ -195,10 +195,10 @@ class pivotModel extends model
      * Add drills to pivot.
      *
      * @param  object $pivot
-     * @access private
+     * @access public
      * @return void
      */
-    private function addDrills(object $pivot): void
+    public function addDrills(object $pivot): void
     {
         $settings = $pivot->settings;
         if(!is_array($settings) || !isset($settings['columns'])) return;
