@@ -25,6 +25,7 @@ formPanel
             set::name('CD'),
             set::label($lang->host->CD),
             set::control('picker'),
+            set::required(true),
             set::items($lang->host->CDlist)
         ),
         formGroup
@@ -53,16 +54,13 @@ formPanel
             set::items($rooms)
         )
     ),
-    formRow
+    formGroup
     (
-        formGroup
-        (
-            set::width('1/3'),
-            set::label($lang->host->admin),
-            set::control('picker'),
-            set::name('admin'),
-            set::items($accounts)
-        ),
+        set::width('1/3'),
+        set::label($lang->host->admin),
+        set::control('picker'),
+        set::name('admin'),
+        set::items($accounts)
     ),
     formRow
     (
@@ -73,12 +71,14 @@ formPanel
             set::width('1/3'),
             set::label($lang->host->password),
             set::name('password'),
+            set::required(true),
             set::control('password')
         ),
         formGroup
         (
             set::width('1/3'),
             set::label($lang->host->sshPort),
+            set::required(true),
             set::name('sshPort')
         )
     ),
