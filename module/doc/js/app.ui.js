@@ -473,9 +473,9 @@ const actionsMap =
             return [{text: lang.actions.addModule, command: `addModule/${lib.id}/0/${lib.id}/child`}];
         }
 
-        if(canAddModule && info.ui !== 'space-card' && info.ui !== 'sidebar') items.push({text: lang.actions.addModule, command: `addModule/${lib.id}/0/${lib.id}/child`});
+        if(canAddModule && info.ui !== 'space-card' && info.ui !== 'sidebar' && info.ui !== 'sidebar-toolbar') items.push({text: lang.actions.addModule, command: `addModule/${lib.id}/0/${lib.id}/child`});
         if(canModify && hasPriv('editLib'))   items.push({text: lang.actions.editLib, command: `editLib/${lib.id}`});
-        if(canModify && hasPriv('moveLib') && info.ui !== 'space-card')   items.push({text: lang.moveTo, command: `moveLib/${lib.id}`});
+        if(canModify && hasPriv('moveLib') && info.ui !== 'space-card' && info.ui !== 'sidebar-toolbar') items.push({text: lang.moveTo, command: `moveLib/${lib.id}`});
         if(canModify && hasPriv('deleteLib')) items.push({text: lang.actions.deleteLib, command: `deleteLib/${lib.id}`});
 
         if(!items.length) return;
