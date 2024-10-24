@@ -1271,6 +1271,8 @@ class pivotState
         $filters = $this->filters;
         foreach($filters as $index => $filter)
         {
+            $from = zget($filter, 'from', 'result');
+            if($from == 'query') continue;
             if(!isset($fields[$filter['field']]))
             {
                 $isChanged = true;
