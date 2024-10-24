@@ -76,8 +76,6 @@ class thinkRadio extends thinkQuestion
             $fields      = !empty($step->options->fields) ? $step->options->fields :  array('', '', '');
         }
 
-        $quoteQuestionsItems = array();
-
         jsVar('maxCountPlaceholder', $lang->thinkstep->placeholder->maxCount);
         jsVar('inputContent', $lang->thinkstep->placeholder->inputContent);
 

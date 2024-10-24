@@ -4,8 +4,6 @@ namespace zin;
 
 class thinkStepQuote extends wg
 {
-    private array $modules = array();
-
     protected static array $defineProps = array
     (
         'step?: object',           // 整个步骤的对象
@@ -29,7 +27,6 @@ class thinkStepQuote extends wg
         list($step, $setOption, $quoteTitle, $quoteQuestions, $citation, $selectColumn, $questionType) = $this->prop(array('step', 'setOption', 'quoteTitle', 'quoteQuestions', 'citation', 'selectColumn', 'questionType'));
         if($step)
         {
-            $enableOther  = $step->options->enableOther ?? 0;
             $setOption    = isset($step->options->setOption) ? $step->options->setOption : false;
             $defaultQuote = !empty($quoteQuestions) ? $quoteQuestions[0]->id : null;
             $quoteTitle   = isset($step->options->quoteTitle) ? $step->options->quoteTitle : $defaultQuote;
