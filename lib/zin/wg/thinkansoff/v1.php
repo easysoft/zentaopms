@@ -24,4 +24,16 @@ class thinkAnsoff extends thinkModel
             div(setClass('item-step-title text-center', "text-$blockColor"), $lang->thinkwizard->ansoff->blocks[$order])
         );
     }
+
+    protected function buildRow(int $key, bool $showTitle = false): node
+    {
+        global $app, $lang;
+        $app->loadLang('thinkwizard');
+
+        list($blocks, $mode) = $this->prop(array('blocks', 'mode'));
+        $titleKey   = $key == 0 ? 2 : 3;
+        $rowContent = null;
+
+        return div();
+    }
 }
