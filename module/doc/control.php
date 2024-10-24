@@ -892,7 +892,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function productSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'order_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = '', int $docID = 0, string $search = '')
+    public function productSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = '', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = '', int $docID = 0, string $search = '')
     {
         $noSpace = $this->app->tab != 'doc';
         $mode    = $noSpace ? 'list' : $mode;
@@ -915,7 +915,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function projectSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'order_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = '', int $docID = 0, string $search = '')
+    public function projectSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = '', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = '', int $docID = 0, string $search = '')
     {
         $noSpace = $this->app->tab != 'doc';
         $mode    = $noSpace ? 'list' : $mode;
@@ -938,7 +938,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function teamSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'order_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = '', int $docID = 0, string $search = '')
+    public function teamSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = '', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = '', int $docID = 0, string $search = '')
     {
         if(empty($objectID))
         {
@@ -957,19 +957,36 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function selectLibType()
+    public function selectLibType($objectType = 'mine', $params = '')
     {
         if($_POST)
         {
             $response = array();
 
-            $libID    = (int)$this->post->lib;
-            $moduleID = (int)$this->post->module;
+            $libID     = $_POST['lib'];
+            $moduleID  = $_POST['module'];
+            $rootSpace = $_POST['rootSpace'];
+            $docType   = isset($_POST['type']) ? $_POST['type'] : 'doc';
             if(empty($libID)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->error->notempty, $this->lang->doc->lib)));
+
+            if(in_array($rootSpace, array('mine', 'custom', 'product', 'project')))
+            {
+                $methodList = array('mine' => 'mySpace', 'custom' => 'teamSpace', 'product' => 'productSpace', 'project' => 'projectSpace');
+                $spaceID    = $_POST[$rootSpace];
+                $method     = $methodList[$rootSpace];
+
+                if($docType == 'doc') $url = $this->createLink('doc', $method, "objectID=$spaceID&libID=$libID&moduleID=$moduleID&browseType=all&params=0&orderBy=&recTotal=0&recPerPage=20&pageID=1&mode=create");
+                else $url = helper::createLink('api', 'create', "libID=$libID&moduleID=$moduleID&space=$rootSpace");
+
+            }
+            elseif($rootSpace == 'api')
+            {
+                $url = helper::createLink('api', 'create', "libID=$libID&moduleID=$moduleID&space=$rootSpace");
+            }
 
             $response['result']     = 'success';
             $response['closeModal'] = true;
-            $response['callback']   = "redirectParentWindow(\"{$this->post->rootSpace}\", {$libID}, {$moduleID}, \"{$this->post->type}\")";
+            $response['callback']   = "redirectParentWindow(\"{$url}\")";
             return $this->send($response);
         }
 
@@ -984,14 +1001,13 @@ class doc extends control
         if(!common::hasPriv('api', 'create'))       unset($spaceList['api'], $typeList['api']);
         if($this->config->vision == 'lite')         unset($spaceList['api'], $spaceList['product'], $typeList['api']);
 
-        $products = $this->loadModel('product')->getPairs();
-        $projects = $this->project->getPairsByProgram(0, 'all', false, 'order_asc');
+        $params = helper::safe64Decode($params);
+        parse_str($params, $params);
+        $this->view->params    = $params;
 
+        $this->view->objectType = $objectType;
         $this->view->spaceList = $spaceList;
         $this->view->typeList  = $typeList;
-        $this->view->products  = $products;
-        $this->view->projects  = $projects;
-        $this->view->spaces    = $this->docZen->getAllSpaces('nomine');
 
         $this->display();
     }
@@ -1473,7 +1489,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function app(string $type = 'mine', int $spaceID = 0, int $libID = 0, int $moduleID = 0, int $docID = 0, string $mode = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $filterType = '', string $search = '', bool $noSpace = false)
+    public function app(string $type = 'mine', int $spaceID = 0, int $libID = 0, int $moduleID = 0, int $docID = 0, string $mode = '', string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $filterType = '', string $search = '', bool $noSpace = false)
     {
         $isNotDocTab = $this->app->tab != 'doc';
         if(empty($mode)) $mode = ($isNotDocTab || $type == 'execution' || $noSpace) ? 'list' : 'home';
@@ -1491,6 +1507,12 @@ class doc extends control
         if($type == 'mine') $menuType = 'my';
         else $menuType = $type == 'custom' ? 'team' : $type;
         if(isset($this->lang->doc->menu->{$menuType})) $this->lang->doc->menu->{$menuType}['alias'] .= ',' . $this->app->rawMethod;
+
+        if(empty($orderBy))
+        {
+            $lib = $this->doc->getLibByID($libID);
+            if(!empty($lib)) $orderBy = $lib->orderBy;
+        }
 
         $this->view->type           = $type;
         $this->view->spaceID        = $spaceID;

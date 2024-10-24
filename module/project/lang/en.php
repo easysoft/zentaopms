@@ -448,6 +448,7 @@ $lang->project->endGreatEqualExecution  = "The finish date of the {$lang->projec
 $lang->project->childLongTime        = "There are long-term {$lang->projectCommon}s in the child {$lang->projectCommon}, and the parent {$lang->projectCommon} should also be a long-term {$lang->projectCommon}.";
 $lang->project->confirmUnlinkMember  = "Do you want to remove this user from {$lang->projectCommon}?";
 $lang->project->stageByTips          = "Created by {$lang->projectCommon} as a single set of stages, and the stage is associated with all {$lang->productCommon}s; created by {$lang->productCommon} as multiple sets of stages, each set of stages is associated with a {$lang->productCommon}";
+$lang->project->confirmCloseProject  = "There are unclosed {$lang->executionCommon}s under this {$lang->projectCommon}: %s, are you sure you want to close the {$lang->projectCommon}?";
 
 $lang->project->action = new stdclass();
 $lang->project->action->managed = '$date, managed by <strong>$actor</strong>. $extra' . "\n";

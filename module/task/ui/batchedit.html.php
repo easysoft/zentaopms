@@ -17,6 +17,17 @@ jsVar('users', $users);
 jsVar('teams', $teams);
 jsVar('currentUser', $app->user->account);
 jsVar('moduleGroup', $moduleGroup);
+jsVar('executionID', $executionID);
+jsVar('childTasks', $childTasks);
+jsVar('nonStoryChildTasks', $nonStoryChildTasks);
+jsVar('tasks', $tasks);
+jsVar('stories', $stories);
+jsVar('syncStoryToAllChildrenTip', $lang->task->syncStoryToAllChildrenTip);
+jsVar('syncStoryToChildrenTip', $lang->task->syncStoryToChildrenTip);
+jsVar('parentTasks', $parentTasks);
+jsVar('ignoreLang', $lang->project->ignore);
+jsVar('overParentEstStartedLang', $lang->task->overParentEsStarted);
+jsVar('overParentDeadlineLang', $lang->task->overParentDeadline);
 
 /* ====== Define the page structure with zin widgets ====== */
 formBatchPanel
@@ -26,6 +37,13 @@ formBatchPanel
     set::data(array_values($tasks)),
     set::onRenderRow(jsRaw('renderRowData')),
     set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'batchEditFields')),
+    set::ajax(array('beforeSubmit' =>  jsRaw('clickSubmit'))),
+    on::change('[data-name="status"]', 'statusChange'),
+    on::change('[data-name="estStarted"], [data-name="deadline"]', 'checkBatchEstStartedAndDeadline'),
+    on::change('[data-name="module"]', 'setStories'),
+    on::change('input[name^=story]', 'setStoryRelated'),
+    on::click('[data-name=story] [data-type=ditto]', 'setStoryRelated'),
+    set::formID('taskBatchEditForm' . $executionID),
     formBatchItem
     (
         set::name('id'),
@@ -53,6 +71,16 @@ formBatchPanel
         set::label($lang->task->module),
         set::control('picker'),
         set::items($modules),
+        set::width('200px'),
+        set::ditto(true),
+        set::defaultDitto('off')
+    ),
+    formBatchItem
+    (
+        set::name('story'),
+        set::label($lang->task->story),
+        set::control('picker'),
+        set::items(array()),
         set::width('200px'),
         set::ditto(true),
         set::defaultDitto('off')

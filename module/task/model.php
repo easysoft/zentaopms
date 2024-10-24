@@ -36,6 +36,10 @@ class taskModel extends model
         $oldTask = $this->getById($taskID);
         if($oldTask->parent == '-1') $this->config->task->activate->requiredFields = '';
 
+        $this->dao->update(TABLE_TASKTEAM)->set('status')->eq('wait')->where('task')->eq($task->id)->andWhere('consumed')->eq(0)->andWhere('left')->gt('0')->exec();
+        $this->dao->update(TABLE_TASKTEAM)->set('status')->eq('doing')->where('task')->eq($task->id)->andWhere('consumed')->gt(0)->andWhere('left')->gt(0)->exec();
+        $this->dao->update(TABLE_TASKTEAM)->set('status')->eq('done')->where('task')->eq($task->id)->andWhere('consumed')->gt(0)->andWhere('left')->eq('0')->exec();
+
         if(!empty($oldTask->team))
         {
             /* When activate and assigned to a team member, then update his left data in teamData. */
@@ -44,7 +48,7 @@ class taskModel extends model
 
             $this->manageTaskTeam($oldTask->mode, $task, $teamData);
             $task = $this->computeMultipleHours($oldTask, $task);
-            if($task->assignedTo == 'closed') $task->assignedTo = '';
+            if(!empty($task->assignedTo) && $task->assignedTo == 'closed') $task->assignedTo = '';
         }
 
         $this->dao->update(TABLE_TASK)->data($task)
@@ -175,6 +179,8 @@ class taskModel extends model
                 $feedbacks[$oldTask->feedback] = $oldTask->feedback;
                 $this->feedback->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
             }
+
+            if(!empty($task->story) && !empty($task->parent) && $task->parent == '-1' && $this->post->syncChildren) $this->syncStoryToChildren($task);
         }
 
         return !dao::isError();
@@ -397,6 +403,8 @@ class taskModel extends model
         if(!empty($task->parent)) $this->updateParent($task, $isParentChanged);
         if($this->config->edition != 'open' && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
         if(!empty($oldTask->mode) && empty($task->mode)) $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->exec();
+
+        if(!empty($task->story) && $this->post->syncChildren) $this->syncStoryToChildren($task);
     }
 
     /**
@@ -625,11 +633,13 @@ class taskModel extends model
 
             if($task->status == 'done')   $this->score->create('task', 'finish', $taskID);
             if($task->status == 'closed') $this->score->create('task', 'close', $taskID);
-            $actionID = $this->action->create('task', $taskID, 'Edited');
             $changes  = common::createChanges($oldTask, $task);
-            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
-
-            $allChanges[$taskID] = $changes;
+            if(!empty($changes))
+            {
+                $actionID = $this->action->create('task', $taskID, 'Edited');
+                $this->action->logHistory($actionID, $changes);
+                $allChanges[$taskID] = $changes;
+            }
         }
         $this->score->create('ajax', 'batchEdit');
         return $allChanges;
@@ -667,6 +677,7 @@ class taskModel extends model
         parse_str($extra, $output);
 
         $this->updateKanbanCell($oldTask->id, $output, $oldTask->execution);
+        if(!empty($oldTask->mode)) $this->dao->update(TABLE_TASKTEAM)->set('status')->eq($task->status)->where('task')->eq($task->id)->exec();
 
         $changes = common::createChanges($oldTask, $task);
         if($changes || $this->post->comment != '')
@@ -758,6 +769,8 @@ class taskModel extends model
     {
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()->where('id')->eq((int)$oldTask->id)->exec();
         if(dao::isError()) return false;
+
+        if(!empty($oldTask->mode)) $this->dao->update(TABLE_TASKTEAM)->set('`status`')->eq($task->status)->where('task')->eq($task->id)->exec();
 
         $changes = common::createChanges($oldTask, $task);
         $this->afterChangeStatus($oldTask, $changes, 'Closed', $output);
@@ -2120,7 +2133,7 @@ class taskModel extends model
      */
     public function getUserTasks(string $account, string $type = 'assignedTo', int $limit = 0, object $pager = null, string $orderBy = 'id_desc', int $projectID = 0): array
     {
-        if(!$this->loadModel('common')->checkField(TABLE_TASK, $type)) return array();
+        if($type != 'myInvolved' && !$this->loadModel('common')->checkField(TABLE_TASK, $type)) return array();
 
         $tasks = $this->taskTao->fetchUserTasksByType($account, $type, $orderBy, $projectID, $limit, $pager);
 
@@ -3365,5 +3378,59 @@ class taskModel extends model
             ->andWhere('t1.repo')->eq($repoID)
             ->andWhere('t3.id')->ne('')
             ->fetchGroup('revision', 'id');
+    }
+
+    /**
+     * 获取执行未关闭的任务
+     * Get unclosed tasks by execution
+     *
+     * @param  string|int   $execution
+     * @access public
+     * @return array|false
+     */
+    public function getUnclosedTasksByExecution(array|int $execution): array|false
+    {
+        if(is_array($execution)) return $this->dao->select('id,execution')->from(TABLE_TASK)->where('execution')->in($execution)->andWhere('status')->ne('closed')->andWhere('deleted')->eq('0')->fetchGroup('execution');
+        return $this->dao->select('id,name')->from(TABLE_TASK)->where('execution')->eq($execution)->andWhere('status')->ne('closed')->andWhere('deleted')->eq('0')->fetchPairs();
+    }
+
+    /**
+     * 同步父任务的需求到子任务
+     * Sync parent story to children
+     *
+     * @param  object $task
+     * @access public
+     * @return bool
+     */
+    public function syncStoryToChildren(object $task): bool
+    {
+        $nonStoryTasks = $this->dao->select('id,story')->from(TABLE_TASK)->where('parent')->eq($task->id)->andWhere('deleted')->eq('0')->andWhere('story')->eq(0)->fetchPairs();
+        $taskStory     = $this->loadModel('story')->fetchByID($task->story);
+        $this->loadModel('action');
+        foreach($nonStoryTasks as $id => $story)
+        {
+            $this->dao->update(TABLE_TASK)->set('story')->eq($task->story)->set('storyVersion')->eq($taskStory->version)->where('id')->eq($id)->exec();
+
+            $changes  = array(array('field' => 'story', 'old' => $story, 'new' => $task->story, 'diff' => ''));
+            $actionID = $this->action->create('task', $id, 'syncStoryByParentTask');
+            $this->action->logHistory($actionID, $changes);
+        }
+
+        return !dao::isError();
+    }
+
+    /**
+     * 获取子任务
+     * Get child tasks
+     *
+     * @param  array $taskIdList
+     * @access public
+     * @return array|false
+     */
+    public function getChildTasksByList(array $taskIdList): array|false
+    {
+        $childTasks         = $this->dao->select('id,parent')->from(TABLE_TASK)->where('parent')->in($taskIdList)->andWhere('deleted')->eq('0')->fetchGroup('parent', 'id');
+        $nonStoryChildTasks = $this->dao->select('id,parent')->from(TABLE_TASK)->where('parent')->in($taskIdList)->andWhere('story')->eq('0')->andWhere('deleted')->eq('0')->fetchGroup('parent', 'id');
+        return array($childTasks, $nonStoryChildTasks);
     }
 }

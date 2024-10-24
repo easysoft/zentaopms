@@ -23,6 +23,7 @@ $lang->caselib->delete          = "删除";
 $lang->caselib->linkVersion     = "版本";
 $lang->caselib->deleted         = '已删除';
 $lang->caselib->exportTemplate  = '导出模板';
+$lang->caselib->exportCase      = '导出用例';
 $lang->caselib->batchCreateCase = '批量创建用例';
 $lang->caselib->batchEditCase   = '批量编辑用例';
 $lang->caselib->import          = '导入';

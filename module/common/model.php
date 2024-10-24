@@ -621,18 +621,37 @@ class commonModel extends model
         /* Ensure user has latest rights set. */
         $app->user->rights = $app->control->loadModel('user')->authorize($app->user->account);
 
-        $menuOrder     = array();
+        $menuOrder     = $lang->mainNav->menuOrder;
         $hasCustomMenu = false;
         if(isset($config->customMenu->nav) && !$useDefault && !commonModel::isTutorialMode())
         {
-            $items = json_decode($config->customMenu->nav);
-            foreach($items as $item) $menuOrder[$item->order] = $item->name;
+            $customMenuOrder = array();
+            $items           = json_decode($config->customMenu->nav);
+            $hiddenItems     = array();
+            foreach($items as $item)
+            {
+                if(!empty($item->hidden))
+                {
+                    $hiddenItems[] = $item->name;
+                    continue;
+                }
+
+                $customMenuOrder[$item->order] = $item->name;
+            }
+
+            $customMenuItems = array_values($customMenuOrder);
+            foreach($menuOrder as $order => $name)
+            {
+                if(in_array($name, $customMenuItems) || in_array($name, $hiddenItems)) continue;
+
+                while(isset($customMenuOrder[$order])) $order ++;
+                $customMenuOrder[$order] = $name;
+            }
+
+            $menuOrder     = $customMenuOrder;
             $hasCustomMenu = true;
         }
-        else
-        {
-            $menuOrder = $lang->mainNav->menuOrder;
-        }
+
         ksort($menuOrder);
 
         $items        = array();
@@ -1855,6 +1874,7 @@ eof;
 
         global $config;
         static $productsStatus   = array();
+        static $projectsStatus   = array();
         static $executionsStatus = array();
 
         $commonModel = new commonModel();
@@ -1878,6 +1898,18 @@ eof;
             if(!empty($productStatus['closed']) and count($productStatus) == 1) return false;
         }
 
+        /* Check the project is closed. */
+        $productModuleList = array('story', 'bug', 'testtask', 'release');
+        if(!in_array($module, $productModuleList) and !empty($object->project) and is_numeric($object->project) and empty($config->CRProject))
+        {
+            if(!isset($projectsStatus[$object->project]))
+            {
+                $project = $commonModel->loadModel('project')->getByID((int)$object->project);
+                $projectsStatus[$object->project] = $project ? $project->status : '';
+            }
+            if($projectsStatus[$object->project] == 'closed') return false;
+        }
+
         /* Check the execution is closed. */
         $productModuleList = array('story', 'bug', 'testtask');
         if(!in_array($module, $productModuleList) and !empty($object->execution) and is_numeric($object->execution) and empty($config->CRExecution))
@@ -1887,7 +1919,15 @@ eof;
                 $execution = $commonModel->loadModel('execution')->getByID($object->execution);
                 $executionsStatus[$object->execution] = $execution ? $execution->status : '';
             }
-            if($executionsStatus[$object->execution] == 'closed') return false;
+            if($executionsStatus[$object->execution] == 'closed'  || !empty($config->CRProject)) return false;
+
+            /* Check the execution's project is closed. */
+            if(isset($object->project) && !isset($projectsStatus[$object->project]))
+            {
+                $project = $commonModel->loadModel('project')->getByID((int)$object->project);
+                $projectsStatus[$object->project] = $project ? $project->status : '';
+            }
+            if($projectsStatus[$object->project] == 'closed') return false;
         }
 
         return true;
@@ -1908,9 +1948,24 @@ eof;
 
         if(empty($object)) return true;
 
-        /* Judge that if the closed object(product|execution) is readonly from config table. The default is can modify. */
-        if($type == 'product'   and empty($config->CRProduct)   and $object->status == 'closed') return false;
-        if($type == 'execution' and empty($config->CRExecution) and $object->status == 'closed') return false;
+        /* Judge that if the closed object(product|project|execution) is readonly from config table. The default is can modify. */
+        if($type == 'product'   and empty($config->CRProduct) and $object->status == 'closed') return false;
+        if($type == 'project'   and empty($config->CRProject) and $object->status == 'closed') return false;
+        if($type == 'execution' and empty($config->CRExecution))
+        {
+            if($object->status == 'closed') return false;
+            if(!isset($object->project) || !empty($config->CRProject)) return true;
+
+            /* Check the execution's project is closed. */
+            static $projectsStatus = array();
+            $commonModel = new commonModel();
+            if(!isset($projectsStatus[$object->project]))
+            {
+                $project = $commonModel->loadModel('project')->getByID((int)$object->project);
+                $projectsStatus[$object->project] = $project ? $project->status : '';
+            }
+            if($projectsStatus[$object->project] == 'closed') return false;
+        }
 
         return true;
     }

@@ -26,6 +26,7 @@ $lang->doclib->spaceName    = 'Space Name';
 $lang->doclib->createSpace  = 'Create Space';
 $lang->doclib->editSpace    = 'Edit Space';
 $lang->doclib->privateACL   = "Private (Only creators and whitelisted users with %s permissions can access it)";
+$lang->doclib->defaultOrder = 'Document default order';
 
 $lang->doclib->tip = new stdclass();
 $lang->doclib->tip->selectExecution = "When execution is empty, the library created is the {$lang->projectCommon} library";
@@ -47,6 +48,10 @@ $lang->doclib->aclList = array();
 $lang->doclib->aclList['open']    = "Public (Users who can access doccan access it)";
 $lang->doclib->aclList['default'] = "Default (Users who can access the selected %s or users in the whiltelist can access it)";
 $lang->doclib->aclList['private'] = "Private (Only the one who created it or users in the whiltelist can access it)";
+
+$lang->doclib->idOrder = array();
+$lang->doclib->idOrder['id_asc']  = 'ID ascending order';
+$lang->doclib->idOrder['id_desc'] = 'ID descending order' ;
 
 $lang->doclib->create['product']   = 'Créer ' . $lang->productCommon . ' Library';
 $lang->doclib->create['execution'] = 'Créer ' . 'Bibliothèque ' . $lang->executionCommon;
@@ -278,10 +283,10 @@ $lang->doc->aclList['private'] = "Private (Only creators and whitelist users can
 $lang->doc->selectSpace = 'Select Space';
 $lang->doc->space       = 'Space';
 $lang->doc->spaceList['mine']    = 'My Space';
+$lang->doc->spaceList['custom']  = 'Team Space';
 $lang->doc->spaceList['product'] = $lang->productCommon . ' Space';
 $lang->doc->spaceList['project'] = $lang->projectCommon . ' Space';
 $lang->doc->spaceList['api']     = 'API Space';
-$lang->doc->spaceList['custom']  = 'Team Space';
 
 $lang->doc->apiType = 'API Type';
 $lang->doc->apiTypeList['product'] = $lang->productCommon . ' API';
@@ -301,7 +306,7 @@ $lang->doc->createList['ppt']        = 'PPT';
 $lang->doc->createList['excel']      = 'Excel';
 $lang->doc->createList['attachment'] = $lang->doc->uploadDoc;
 
-$lang->doc->types['doc'] = 'Wiki';
+$lang->doc->types['doc'] = 'Doc';
 $lang->doc->types['api'] = 'API';
 
 $lang->doc->contentTypeList['html']     = 'HTML';

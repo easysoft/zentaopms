@@ -1464,9 +1464,10 @@ $config->group->package->importCaseLib = new stdclass();
 $config->group->package->importCaseLib->order  = 15;
 $config->group->package->importCaseLib->subset = 'caselib';
 $config->group->package->importCaseLib->privs  = array();
-$config->group->package->importCaseLib->privs['caselib-exportTemplate'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 45, 'depend' => array('caselib-browse', 'caselib-import'), 'recommend' => array());
-$config->group->package->importCaseLib->privs['caselib-import']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 50, 'depend' => array('caselib-browse', 'caselib-exportTemplate', 'caselib-showImport'), 'recommend' => array());
-$config->group->package->importCaseLib->privs['caselib-showImport']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 55, 'depend' => array('caselib-import'), 'recommend' => array());
+$config->group->package->importCaseLib->privs['caselib-exportCase']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 45, 'depend' => array('caselib-browse', 'caselib-import'), 'recommend' => array());
+$config->group->package->importCaseLib->privs['caselib-exportTemplate'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 50, 'depend' => array('caselib-browse', 'caselib-import'), 'recommend' => array());
+$config->group->package->importCaseLib->privs['caselib-import']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 55, 'depend' => array('caselib-browse', 'caselib->exportTemplate', 'caselib-exportTemplate', 'caselib-showImport'), 'recommend' => array());
+$config->group->package->importCaseLib->privs['caselib-showImport']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 60, 'depend' => array('caselib-import'), 'recommend' => array());
 
 $config->group->package->officeApproval = new stdclass();
 $config->group->package->officeApproval->order  = 5;
@@ -2605,6 +2606,23 @@ $config->group->package->workflowRule->privs['workflowrule-create'] = array('edi
 $config->group->package->workflowRule->privs['workflowrule-edit']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 15, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflowRule->privs['workflowrule-view']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 20, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflowRule->privs['workflowrule-delete'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 25, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
+
+$config->group->package->workflowGroup = new stdclass();
+$config->group->package->workflowGroup->order  = 65;
+$config->group->package->workflowGroup->subset = 'workflow';
+$config->group->package->workflowGroup->privs  = array();
+$config->group->package->workflowGroup->privs['workflowgroup-product']        = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 5, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
+$config->group->package->workflowGroup->privs['workflowgroup-project']        = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 10, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
+$config->group->package->workflowGroup->privs['workflowgroup-create']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 15, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
+$config->group->package->workflowGroup->privs['workflowgroup-edit']           = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 20, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
+$config->group->package->workflowGroup->privs['workflowgroup-view']           = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 25, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
+$config->group->package->workflowGroup->privs['workflowgroup-delete']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 30, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
+$config->group->package->workflowGroup->privs['workflowgroup-design']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 35, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
+$config->group->package->workflowGroup->privs['workflowgroup-release']        = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 40, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
+$config->group->package->workflowGroup->privs['workflowgroup-deactivate']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 45, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
+$config->group->package->workflowGroup->privs['workflowgroup-setExclusive']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 50, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
+$config->group->package->workflowGroup->privs['workflowgroup-activateFlow']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 55, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
+$config->group->package->workflowGroup->privs['workflowgroup-deactivateFlow'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 60, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 
 $config->group->package->workflow = new stdclass();
 $config->group->package->workflow->order  = 5;

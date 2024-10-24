@@ -152,6 +152,22 @@ formPanel
     ),
     formRow
     (
+        setID('orderBox'),
+        formGroup
+        (
+            set::label($lang->doclib->defaultOrder),
+            set::width('5/6'),
+            radioList
+            (
+                set::name('orderBy'),
+                set::items($lang->doclib->idOrder),
+                set::value('id_asc'),
+                set::inline(true)
+            )
+        )
+    ),
+    formRow
+    (
         setID('whiteListBox'),
         setClass('hidden'),
         formGroup

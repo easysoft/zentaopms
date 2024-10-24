@@ -80,6 +80,13 @@ class taskMiscInfo extends relatedList
                 }
             );
         }
+        $linkedBugs = $this->prop('linkedBugs', data('linkedBugs'));
+        $data['bug'] = array
+        (
+            'title' => $lang->bug->relatedBug,
+            'items' => $linkedBugs,
+            'url'   => hasPriv('bug', 'view') ? createLink('bug', 'view', 'bugID={id}') : false
+        );
 
         $this->setProp('data', $data);
     }

@@ -507,4 +507,39 @@ class caselib extends control
         $this->view->dataInsert  = $insert;
         $this->display();
     }
+
+    /**
+     * 导出用例。
+     * Export case.
+     *
+     * @param  int    $libID
+     * @param  string $orderBy
+     * @param  string $browseType
+     * @access public
+     * @return void
+     */
+    public function exportCase(int $libID, string $orderBy = 'id_desc', string $browseType = 'all')
+    {
+        $lib = $this->caselib->getById($libID);
+
+        if($_POST)
+        {
+            $fields = $this->caselibZen->getExportCasesFields();
+            $cases  = $this->caselib->getCasesToExport($this->post->exportType, $orderBy, (int)$this->post->limit);
+            $cases  = $this->caselibZen->processCasesForExport($cases, $libID);
+
+            $this->post->set('fields', $fields);
+            $this->post->set('rows', $cases);
+            $this->post->set('kind', 'testcase');
+            $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
+        }
+
+        $fileName   = $this->lang->testcase->common;
+        $browseType = isset($this->lang->caselib->featureBar['browse'][$browseType]) ? $this->lang->caselib->featureBar['browse'][$browseType] : '';
+
+        $this->view->fileName        = $lib->name . $this->lang->dash . $browseType . $fileName;
+        $this->view->allExportFields = $this->config->caselib->exportFields;
+        $this->view->customExport    = true;
+        $this->display();
+    }
 }

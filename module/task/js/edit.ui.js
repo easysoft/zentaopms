@@ -322,3 +322,117 @@ window.setStoryModule = function()
         });
     }
 }
+
+window.clickSubmit = async function(e)
+{
+    if(confirmSyncTip.length == 0 || $('[name=story]').length == 0 || $('[name=story]').val() == '' || $('[name=story]').val() == '0' || $('[name=story]').val() == taskStory) return true;
+
+    zui.Modal.confirm(confirmSyncTip).then((res) =>
+    {
+        const $taskForm = $('[formid=taskEditForm' + taskID + ']');
+
+        $taskForm.find('[name=syncChildren]').remove();
+        $taskForm.append('<input type="hidden" name="syncChildren" value="' + (res ? '1' : '0') + '" />');
+
+        const formData   = new FormData($taskForm[0]);
+        const confirmURL = $taskForm.attr('action');
+        $.ajaxSubmit({url: confirmURL, data: formData});
+    });
+    return false;
+};
+
+window.statusChange = function(target)
+{
+    const status            = $(target).val();
+    const $assignedToPicker = $('[name=assignedTo]').zui('picker');
+
+    let hasClosed       = false;
+    let assignedToItems = JSON.parse(JSON.stringify($assignedToPicker.options.items));
+    if(status == 'closed')
+    {
+        for(let i = 0; i < assignedToItems.length; i++)
+        {
+            if(assignedToItems[i].value == 'closed') hasClosed = true;
+        }
+        if(!hasClosed) assignedToItems.push({key: "closed", keys: "closed c", text : "Closed", value : 'closed'});
+        $assignedToPicker.render({items: assignedToItems, disabled: true});
+        $assignedToPicker.$.setValue('closed');
+    }
+    else
+    {
+        for(let i = 0; i < assignedToItems.length; i++)
+        {
+            if(assignedToItems[i].value == 'closed')
+            {
+                assignedToItems.splice(i, 1);
+
+                $assignedToPicker.render({items: assignedToItems, disabled: false});
+                $assignedToPicker.$.setValue('');
+            }
+        }
+    }
+}
+
+window.loadStories = function()
+{
+    const executionID = $('[name=execution]').val();
+    const storyID     = $('[name=story]').val();
+    const moduleID    = $('[name=module]').val();
+    const link        = $.createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=0&branch=all&moduleID=' + moduleID + '&storyID=' + storyID + '&pageType=&type=full&status=active');
+    $.getJSON(link, function(storyItems)
+    {
+        let $storyPicker = $('[name=story]').zui('picker');
+        $storyPicker.render({items: storyItems});
+        $storyPicker.$.setValue(storyID);
+    });
+}
+
+window.setStoryModule = function()
+{
+    var storyID = $('input[name=story]').val();
+    if(storyID)
+    {
+        var link = $.createLink('story', 'ajaxGetInfo', 'storyID=' + storyID);
+        $.getJSON(link, function(storyInfo)
+        {
+            if(storyInfo) $('input[name=module]').zui('picker').$.setValue(storyInfo.moduleID);
+        });
+    }
+}
+function checkEstStartedAndDeadline(event)
+{
+    const $form       = $(event.target).closest('form');
+    const field       = $(event.target).attr('name')
+    const $estStarted = $form.find('[name=estStarted]');
+    const estStarted  = $estStarted.val();
+    const $deadline   = $form.find('[name=deadline]');
+    const deadline    = $deadline.val();
+
+    if(field == 'estStarted' && estStarted.length > 0 && estStarted < parentEstStarted)
+    {
+        const $estStartedDiv = $estStarted.closest('.form-group');
+        if($estStartedDiv.find('.date-tip').length == 0 || $estStartedDiv.find('.date-tip .form-tip').length > 0)
+        {
+            $estStartedDiv.find('.date-tip').remove();
+
+            let $datetip = $('<div class="date-tip"></div>');
+            $datetip.append('<div class="form-tip text-warning">' + overParentEstStartedLang + '<span class="ignore-date underline">' + ignoreLang + '</div>');
+            $datetip.off('click', '.ignore-date').on('click', '.ignore-date', function(e){ignoreTip(e)});
+            $estStartedDiv.append($datetip);
+        }
+    }
+
+    if(field == 'deadline' && deadline.length > 0 && deadline > parentDeadline)
+    {
+        const $deadlineDiv = $deadline.closest('.form-group');
+        if($deadlineDiv.find('.date-tip').length == 0 || $deadlineDiv.find('.date-tip .form-tip').length > 0)
+        {
+            $deadlineDiv.find('.date-tip').remove();
+
+            let $datetip = $('<div class="date-tip"></div>');
+            $datetip.append('<div class="form-tip text-warning">' + overParentDeadlineLang + '<span class="ignore-date underline">' + ignoreLang + '</div>');
+            $datetip.off('click', '.ignore-date').on('click', '.ignore-date', function(e){ignoreTip(e)});
+            $deadlineDiv.append($datetip);
+        }
+    }
+}

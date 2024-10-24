@@ -254,7 +254,7 @@ dtable
     set::afterRender(jsRaw('window.afterRender')),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::canRowCheckable(jsRaw('function(rowID){return false;}')),
-    set::footPager()
+    set::footPager(false)
 );
 
 /* zin: Define the sidebar in main content. */

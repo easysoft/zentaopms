@@ -31,6 +31,20 @@ jsVar('confirmRecord', $lang->task->confirmRecord);
 jsVar('estimateNotEmpty', sprintf($lang->error->gt, $lang->task->estimate, '0'));
 jsVar('leftNotEmpty', sprintf($lang->error->gt, $lang->task->left, '0'));
 jsVar('requiredFields', $config->task->edit->requiredFields);
+jsVar('parentEstStarted', !empty($parentTask) ? $parentTask->estStarted : '');
+jsVar('parentDeadline', !empty($parentTask) ? $parentTask->deadline : '');
+jsVar('ignoreLang', $lang->project->ignore);
+jsVar('overParentEstStartedLang', isset($parentTask) ? sprintf($lang->task->overParentEsStarted, $parentTask->estStarted) : '');
+jsVar('overParentDeadlineLang', isset($parentTask) ? sprintf($lang->task->overParentDeadline, $parentTask->deadline) : '');
+
+$confirmSyncTip = '';
+if(!empty($syncChildren) && !empty($task->children))
+{
+    $confirmSyncTip = count($syncChildren) == count($task->children) ? $lang->task->syncStoryToAllChildrenTip : sprintf($lang->task->syncStoryToChildrenTip, 'ID' . implode(', ID', $syncChildren));
+}
+jsVar('confirmSyncTip', $confirmSyncTip);
+jsVar('taskID', $task->id);
+jsVar('taskStory', $task->story);
 
 /* zin: Set variables to define picker options for form */
 $formTitle        = $task->name;
@@ -99,6 +113,8 @@ detailHeader
 detailBody
 (
     set::isForm(true),
+    set::formID("taskEditForm{$task->id}"),
+    set::ajax(array('beforeSubmit' => jsRaw('clickSubmit'))),
     sectionList
     (
         section
@@ -272,7 +288,8 @@ detailBody
                             set::value($task->assignedTo),
                             set::items($assignedToOptions),
                             !empty($task->team) ? set::required(true) : null,
-                            !empty($task->team) && $task->mode == 'linear' && !in_array($task->status, array('done', 'closed')) ? set::disabled(true) : null
+                            !empty($task->team) && $task->mode == 'linear' && !in_array($task->status, array('done', 'closed')) ? set::disabled(true) : null,
+                            $task->status == 'closed' ? set::disabled(true) : null,
                         )
                     ),
                     div
@@ -304,6 +321,7 @@ detailBody
                 set::name($lang->task->status),
                 picker
                 (
+                    on::change()->do('statusChange(target)'),
                     set::name('status'),
                     set::value($task->status),
                     set::items($statusOptions),
@@ -441,6 +459,7 @@ detailBody
                     datePicker
                     (
                         set::name('estStarted'),
+                        on::change('checkEstStartedAndDeadline'),
                         helper::isZeroDate($task->estStarted) ? null : set::value($task->estStarted)
                     )
                 )
@@ -454,6 +473,7 @@ detailBody
                     datePicker
                     (
                         set::name('deadline'),
+                        on::change('checkEstStartedAndDeadline'),
                         helper::isZeroDate($task->deadline) ? null : set::value($task->deadline)
                     )
                 )

@@ -23,8 +23,11 @@ class editBranchTester extends tester
         $form->wait(2);
         if ($form->dom->zin_branch_edit_1_form)
         {
-            if ($this->checkFormTips('branch')) return $this->success('分支名称必填提示信息正确');
-            if (isset($editBranch->name) && ($form->dom->nameTip))
+            $nameTip      = $form->dom->nameTip->getText();
+            $branchName   = sprintf($this->lang->branch->name, $this->lang->branch->common);
+            $nameEmptyTip = sprintf($this->lang->error->notempty, $branchName);
+            if ($nameTip == $nameEmptyTip) return $this->success('分支名称必填提示信息正确');
+            if ($editBranch->name != '' && $form->dom->nameTip)
             {
                 //分支已存在
                 $nameTip = str_replace('@branch@', $this->lang->branch->common, $this->lang->branch->existName);

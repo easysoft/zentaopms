@@ -32,7 +32,7 @@ if($isCustomExport)
     $hasDefaultField  = isset($selectedFields);
     $selectedFields   = $hasDefaultField ? explode(',', $selectedFields) : array();
     $moduleName       = $this->moduleName;
-    $moduleLang       = $lang->$moduleName;
+    $moduleLang       = $moduleName == 'caselib' ? $lang->testcase : $lang->$moduleName;
 
     $exportFieldPairs = array();
     foreach($allExportFields as $key => $field)
@@ -366,7 +366,7 @@ if($('.dtable .dtable-header .has-checkbox').length > 0)
         if(window.config.currentModule == 'testcase') checkedList.forEach(function(item, index){ checkedList[index] = item.replace('case_', '');});
         if(window.config.currentModule == 'product') checkedList.forEach(function(item, index){if(item.indexOf('-')) checkedList[index] = item.substr(item.indexOf('-') + 1);});
 
-        $('#exportType').val('selected');
+        waitDom('#exportPanel [name=exportType]', function(){ $('#exportPanel [name=exportType]').zui('picker').$.setValue('selected');});
         $.cookie.set('checkedItem', checkedList.join(','), {expires:config.cookieLife, path:config.webRoot});
     }
 }

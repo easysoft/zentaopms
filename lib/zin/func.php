@@ -238,6 +238,7 @@ function queryBase(): queryBase {return createWg('queryBase', func_get_args());}
 function queryFilterModal(): queryFilterModal {return createWg('queryFilterModal', func_get_args());}
 function pivotTable(): pivotTable {return createWg('pivotTable', func_get_args());}
 function pivotConfig(): pivotConfig {return createWg('pivotConfig', func_get_args());}
+function iconPicker(): iconPicker {return createWg('iconPicker', func_get_args());}
 function relatedObjectList(): relatedObjectList {return createWg('relatedObjectList', func_get_args());}
 
 if(is_dir(__DIR__ . DS . 'wg' . DS . 'schedule'))

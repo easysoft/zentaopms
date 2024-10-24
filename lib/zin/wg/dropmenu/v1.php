@@ -76,13 +76,22 @@ class dropmenu extends wg
     {
         list($url, $text, $objectID, $cache, $tab, $module, $method, $extra, $id, $data, $menuID) = $this->prop(array('url', 'text', 'objectID', 'cache', 'tab', 'module', 'method', 'extra', 'id', 'data', 'menuID'));
 
-        $app  = data('app');
-        $lang = data('lang');
+        $app    = data('app');
+        $lang   = data('lang');
+        $config = data('config');
 
-        if(empty($menuID))   $menuID   = $id . '-menu';
         if(empty($tab))      $tab      = $app->tab;
         if(empty($module))   $module   = $app->rawModule;
         if(empty($method))   $method   = $app->rawMethod;
+
+        /* 打印工作流1.5级导航. */
+        if($config->edition != 'open')
+        {
+            $flow = $app->control->loadModel('workflow')->getByModule($module);
+            if($flow && $flow->buildin == '0' && $flow->belong) $tab = $flow->belong;
+        }
+
+        if(empty($menuID))   $menuID   = $id . '-menu';
         if(empty($extra))    $extra    = '';
         if(empty($objectID)) $objectID = data($tab . 'ID');
         if(empty($objectID))

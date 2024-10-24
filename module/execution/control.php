@@ -1006,6 +1006,7 @@ class execution extends control
         if($executionID) return $this->executionZen->displayAfterCreated($projectID, $executionID, $planID, $confirm);
 
         $allProjects = $this->project->getPairsByModel('all', 'noclosed,multiple');
+        $this->loadModel('project')->checkAccess($projectID, $allProjects);
         if(empty($projectID)) $projectID = key($allProjects) ? key($allProjects) : 0;
 
         $project = empty($projectID) ? null : $this->loadModel('project')->fetchByID($projectID);
@@ -1216,6 +1217,7 @@ class execution extends control
         $this->view->allProjects          = $this->project->getPairsByModel($project->model, 'noclosed|multiple', $project->id);
         $this->view->parentStageList      = isset($parentStageList) ? $parentStageList : array();
         $this->view->isStage              = isset($project->model) && in_array($project->model, array('waterfall', 'waterfallplus'));
+        $this->view->unclosedTasks        = $this->loadModel('task')->getUnclosedTasksByExecution($executionID);
         $this->display();
     }
 
@@ -1252,6 +1254,7 @@ class execution extends control
             $allChanges = $this->execution->batchUpdate($postData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            $this->executeHooks(key($this->post->id));
             if(!empty($allChanges))
             {
                 foreach($allChanges as $executionID => $changes)
@@ -1591,9 +1594,10 @@ class execution extends control
             return $this->sendSuccess($response);
         }
 
-        $this->view->title   = $this->view->execution->name . $this->lang->hyphen .$this->lang->execution->close;
-        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions = $this->loadModel('action')->getList($this->objectType, $executionID);
+        $this->view->title         = $this->view->execution->name . $this->lang->hyphen .$this->lang->execution->close;
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
+        $this->view->actions       = $this->loadModel('action')->getList($this->objectType, $executionID);
+        $this->view->unclosedTasks = $this->loadModel('task')->getUnclosedTasksByExecution($executionID);
         $this->display();
     }
 
@@ -3337,5 +3341,23 @@ class execution extends control
         }
 
         return $result;
+    }
+
+    /**
+     * AJAX: 获取有未关闭任务的执行。
+     * AJAX: get executions that have unclosed tasks.
+     *
+     * @param  string $executionIdList
+     * @access public
+     * @return string
+     */
+    public function ajaxGetNonClosableExecutions(string $executionIdList)
+    {
+        $executionIdList = str_replace('pid', '', $executionIdList);
+        $tasks           = $this->loadModel('task')->getUnclosedTasksByExecution(explode(',', $executionIdList));
+        $tasks           = array_filter($tasks);
+        $executions      = !empty($tasks) ? $this->execution->getPairsByList(array_keys($tasks)) : array();
+
+        return print(json_encode(array_values($executions)));
     }
 }

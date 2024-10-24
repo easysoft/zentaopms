@@ -16,16 +16,16 @@ jsVar('confirmBatchDeleteSceneCase', $lang->testcase->confirmBatchDeleteSceneCas
 
 $topSceneCount = count(array_filter(array_map(function($case){return $case->isScene && $case->grade == 1;}, $cases)));
 
-$canBatchRun                = hasPriv('testtask', 'batchRun') && !$isOnlyScene;
-$canBatchEdit               = hasPriv('testcase', 'batchEdit') && !$isOnlyScene;
-$canBatchReview             = hasPriv('testcase', 'batchReview') && !$isOnlyScene && ($config->testcase->needReview || !empty($config->testcase->forceReview));
-$canBatchDelete             = hasPriv('testcase', 'batchDelete') && !$isOnlyScene;
-$canBatchChangeType         = hasPriv('testcase', 'batchChangeType') && !$isOnlyScene;
-$canBatchConfirmStoryChange = hasPriv('testcase', 'batchConfirmStoryChange') && !$isOnlyScene;
-$canBatchChangeBranch       = hasPriv('testcase', 'batchChangeBranch') && !$isOnlyScene && isset($product->type) && $product->type != 'normal';
-$canBatchChangeModule       = hasPriv('testcase', 'batchChangeModule') && !empty($productID) && ((isset($product->type) && $product->type == 'normal') || $branch !== 'all');
-$canBatchChangeScene        = hasPriv('testcase', 'batchChangeScene') && !$isOnlyScene;
-$canImportToLib             = hasPriv('testcase', 'importToLib') && !$isOnlyScene;
+$canBatchRun                = $canModify && hasPriv('testtask', 'batchRun') && !$isOnlyScene;
+$canBatchEdit               = $canModify && hasPriv('testcase', 'batchEdit') && !$isOnlyScene;
+$canBatchReview             = $canModify && hasPriv('testcase', 'batchReview') && !$isOnlyScene && ($config->testcase->needReview || !empty($config->testcase->forceReview));
+$canBatchDelete             = $canModify && hasPriv('testcase', 'batchDelete') && !$isOnlyScene;
+$canBatchChangeType         = $canModify && hasPriv('testcase', 'batchChangeType') && !$isOnlyScene;
+$canBatchConfirmStoryChange = $canModify && hasPriv('testcase', 'batchConfirmStoryChange') && !$isOnlyScene;
+$canBatchChangeBranch       = $canModify && hasPriv('testcase', 'batchChangeBranch') && !$isOnlyScene && isset($product->type) && $product->type != 'normal';
+$canBatchChangeModule       = $canModify && hasPriv('testcase', 'batchChangeModule') && !empty($productID) && ((isset($product->type) && $product->type == 'normal') || $branch !== 'all');
+$canBatchChangeScene        = $canModify && hasPriv('testcase', 'batchChangeScene') && !$isOnlyScene;
+$canImportToLib             = $canModify && hasPriv('testcase', 'importToLib') && !$isOnlyScene;
 $canGroupBatch              = ($canBatchRun || $canBatchEdit || $canBatchReview || $canBatchDelete || $canBatchChangeType || $canBatchConfirmStoryChange);
 $canBatchAction             = ($canGroupBatch || $canBatchChangeBranch || $canBatchChangeModule || $canBatchChangeScene || $canImportToLib);
 
@@ -128,6 +128,7 @@ foreach($cases as $case)
     $case->stage      = implode(',', array_filter($stages));
     $case->browseType = $browseType;
     initTableData(array($case), $cols, $this->testcase);
+    if(!$canModify) unset($case->actions);
 }
 
 $linkParams = '';

@@ -162,3 +162,39 @@ $('#formSettingBtn').on('click', '.checkbox-primary [value=story]', function()
 {
     $('#formSettingBtn .checkbox-primary [value=preview], #formSettingBtn .checkbox-primary [value=copyStory]').prop('checked', $('#formSettingBtn .checkbox-primary [value=story]').prop('checked'));
 })
+
+function checkBatchEstStartedAndDeadline(event)
+{
+    const $currentRow = $(event.target).closest('tr');
+    const field       = $(event.target).closest('.form-batch-control').data('name');
+    const estStarted  = $currentRow.find('[name^=estStarted]').val();
+    const deadline    = $currentRow.find('[name^=deadline]').val();
+
+    if(field == 'estStarted' && estStarted.length > 0 && estStarted < parentEstStarted)
+    {
+        const $estStartedTd = $currentRow.find('td[data-name=estStarted]');
+        if($estStartedTd.find('.date-tip').length == 0 || $estStartedTd.find('.date-tip .form-tip').length > 0)
+        {
+            $estStartedTd.find('.date-tip').remove();
+
+            let $datetip = $('<div class="date-tip"></div>');
+            $datetip.append('<div class="form-tip text-warning">' + overParentEstStartedLang + '<span class="ignore-date underline">' + ignoreLang + '</div>');
+            $datetip.off('click', '.ignore-date').on('click', '.ignore-date', function(e){ignoreTip(e)});
+            $estStartedTd.append($datetip);
+        }
+    }
+
+    if(field == 'deadline' && deadline.length > 0 && deadline > parentDeadline)
+    {
+        const $deadlineTd = $currentRow.find('td[data-name=deadline]');
+        if($deadlineTd.find('.date-tip').length == 0 || $deadlineTd.find('.date-tip .form-tip').length > 0)
+        {
+            $deadlineTd.find('.date-tip').remove();
+
+            let $datetip = $('<div class="date-tip"></div>');
+            $datetip.append('<div class="form-tip text-warning">' + overParentDeadlineLang + '<span class="ignore-date underline">' + ignoreLang + '</div>');
+            $datetip.off('click', '.ignore-date').on('click', '.ignore-date', function(e){ignoreTip(e)});
+            $deadlineTd.append($datetip);
+        }
+    }
+}

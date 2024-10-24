@@ -157,7 +157,7 @@ class job extends control
 
         $repo = $this->loadModel('repo')->getByID($job->repo);
 
-        if($repo->SCM == 'Gitlab') $this->view->refList = $this->loadModel('gitlab')->getReferenceOptions($repo->gitService, $repo->project);
+        if($repo->SCM == 'Gitlab') $this->view->refList = $this->loadModel('gitlab')->getReferenceOptions($repo->gitService, (int)$repo->serviceProject);
         if($repo->SCM != 'Gitlab') $this->view->refList = $this->repo->getBranches($repo, true);
         $this->jobZen->getSubversionDir($repo);
 
@@ -317,7 +317,7 @@ class job extends control
     public function ajaxGetRefList(int $repoID)
     {
         $repo = $this->loadModel('repo')->getByID($repoID);
-        if($repo->SCM == 'Gitlab') $refList = $this->loadModel('gitlab')->getReferenceOptions($repo->gitService, $repo->project);
+        if($repo->SCM == 'Gitlab') $refList = $this->loadModel('gitlab')->getReferenceOptions($repo->gitService, (int)$repo->serviceProject);
         if($repo->SCM != 'Gitlab') $refList = $this->repo->getBranches($repo, true);
 
         $options = array();

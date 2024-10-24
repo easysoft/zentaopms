@@ -21,8 +21,9 @@ featureBar
 );
 
 /* zin: Define the toolbar on main menu. */
-$canCreate       = hasPriv('design', 'create');
-$canBatchCreate  = hasPriv('design', 'batchCreate');
+$canBeChanged    = common::canModify('project', $project);
+$canCreate       = $canBeChanged && hasPriv('design', 'create');
+$canBatchCreate  = $canBeChanged && hasPriv('design', 'batchCreate');
 $createItem      = array('text' => $lang->design->create,      'url' => helper::createLink('design', 'create', "projectID={$projectID}&productID={$productID}&type={$type}"));
 $batchCreateItem = array('text' => $lang->design->batchCreate, 'url' => helper::createLink('design', 'batchCreate', "projectID={$projectID}&productID={$productID}&type={$type}"));
 toolbar

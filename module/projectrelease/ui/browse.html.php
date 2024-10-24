@@ -18,7 +18,7 @@ featureBar
 
 toolbar
 (
-    hasPriv('projectrelease', 'create') ? item(set
+    common::canModify('project', $project) && hasPriv('projectrelease', 'create') ? item(set
     ([
         'text'  => $lang->release->create,
         'icon'  => 'plus',

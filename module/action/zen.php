@@ -126,7 +126,6 @@ class actionZen extends action
                 $tab     = '';
                 $canView = common::hasPriv($module, $methodName);
                 if($trash->objectType == 'meeting') $tab = $trash->project ? "data-app='project'" : "data-app='my'";
-                if($module == 'requirement') $module = 'story';
                 $trash->objectName = $canView ? html::a($this->createLink($module, $methodName, $params), $trash->objectName, '_self', "title='{$trash->objectName}' $tab") : "<span title='$trash->objectName'>$trash->objectName</span>";
             }
         }

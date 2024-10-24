@@ -145,6 +145,7 @@ $lang->user->dynamic   = 'Historique';
 $lang->user->openedBy    = 'Créé par %s';
 $lang->user->assignedTo  = 'Assigné à %s';
 $lang->user->finishedBy  = 'Terminé par %s';
+$lang->user->involved    = 'Involved By %s';
 $lang->user->resolvedBy  = 'Résolu par %s';
 $lang->user->closedBy    = 'Fermé par %s';
 $lang->user->reviewedBy  = 'Validé par %s';

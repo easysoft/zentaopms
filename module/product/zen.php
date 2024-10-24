@@ -253,6 +253,11 @@ class productZen extends product
         if(isset($fields['program'])) $fields['program']['options'] = $this->loadModel('program')->getTopPairs('noclosed');
         if(isset($fields['line']))    $fields['line']['options'] = $this->product->getLinePairs($programID, true);
 
+        if($this->config->edition != 'open' && isset($fields['workflowGroup']))
+        {
+            $fields['workflowGroup']['options'] = $this->loadModel('workflowGroup')->getPairs();
+        }
+
         return $fields;
     }
 
@@ -553,14 +558,13 @@ class productZen extends product
      */
     protected function buildProductForCreate(): object
     {
-        $editorFields = array_keys(array_filter(array_map(function($config){return (!empty($config['control']) && $config['control'] == 'editor');}, $this->config->product->form->create)));
-        $productData  = form::data($this->config->product->form->create)
+        $productData = form::data($this->config->product->form->create)
             ->setIF($this->config->systemMode == 'light', 'program', (int)zget($this->config->global, 'defaultProgram', 0))
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->setDefault('vision', $this->config->vision)
             ->get();
 
-        return $this->loadModel('file')->processImgURL($productData, $editorFields, $this->post->uid);
+        return $this->loadModel('file')->processImgURL($productData, $this->config->product->editor->create['id'], $this->post->uid);
     }
 
     /**
@@ -573,12 +577,11 @@ class productZen extends product
      */
     protected function buildProductForEdit(int $productID): object
     {
-        $editorFields = array_keys(array_filter(array_map(function($config){return (!empty($config['control']) && $config['control'] == 'editor');}, $this->config->product->form->edit)));
-        $productData  = form::data($this->config->product->form->edit, $productID)
+        $productData = form::data($this->config->product->form->edit, $productID)
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->get();
 
-        return $this->loadModel('file')->processImgURL($productData, $editorFields, $this->post->uid);
+        return $this->loadModel('file')->processImgURL($productData, $this->config->product->editor->edit['id'], $this->post->uid);
     }
 
     /**

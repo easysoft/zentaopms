@@ -1,14 +1,7 @@
-function loadBuilds(event)
+function changeProduct(event)
 {
     let productID = $(event.target).val();
-    $.get($.createLink('projectrelease', 'ajaxLoadBuilds', "projectID=" + projectID + "&productID=" + productID), function(data)
-    {
-        if(data)
-        {
-            data = JSON.parse(data);
-            $('[name*="build"]').zui('picker').render({items: data});
-        }
-    });
+    loadPage($.createLink('projectrelease', 'create', 'projectID=' + projectID + '&' + 'productID=' + productID));
 }
 
 window.changeStatus = function(e)

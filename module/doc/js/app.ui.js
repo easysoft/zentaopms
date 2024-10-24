@@ -20,12 +20,22 @@ function getDocApp()
  * Get language item, if key is not set, return the whole language object, language items are defined in $langData in module/doc/ui/app.html.php.
  *
  * @param {string} key
+ * @param {array|string|object}  args
  */
-function getLang(key)
+function getLang(key, args)
 {
     const docApp = getDocApp();
     const lang = docApp ? docApp.props.langData : {};
-    return typeof key === 'string' ? lang[key] : lang;
+    if(typeof key !== 'string') return lang;
+    const value = lang[key];
+    if(value === undefined) return key;
+    if(args)
+    {
+        args = Array.isArray(args) ? args : [args];
+        args.unshift(value);
+        return zui.formatString.apply(null, args);
+    }
+    return value;
 }
 
 /**
@@ -387,9 +397,17 @@ const actionsMap =
      */
     space: function(info)
     {
-        const lang  = getLang();
-        const items = [];
-        const space = info.data; // Space info object.
+        const lang      = getLang();
+        const items     = [];
+        const space     = info.data; // Space info object.
+
+        /* 获取侧边栏没有文档库时的操作按钮。 Get actions when sidebar no lib. */
+        if(info.ui === 'sidebar-no-lib')
+        {
+            if(!space.canModify || !hasPriv('createLib')) return null;
+            return [{icon: 'plus', text: lang.createLib, command: 'createLib', btnType: 'primary-pale'}];
+        }
+
         if(hasPriv('editSpace'))   items.push({text: lang.actions.editSpace, command: `editSpace/${space.id}`});
         if(hasPriv('deleteSpace')) items.push({text: lang.actions.deleteSpace, command: `deleteSpace/${space.id}`});
         if(!items.length) return;
@@ -406,11 +424,13 @@ const actionsMap =
     {
         const lang       = getLang();
         const doc        = info.data;
-        const canEditDoc = hasPriv('edit');
+        const canModify  = getDocApp().space.canModify;
+        const canEditDoc = canModify && hasPriv('edit');
 
         /* 侧边栏上的文档操作按钮。Doc actions in sidebar. */
         if(info.ui === 'sidebar')
         {
+            if(!canModify) return [];
             const moreItems =
             [
                 canMoveDoc(doc) ? {icon: 'folder-move', text: lang.moveDoc, command: `moveDoc/${doc.id}`} : null,
@@ -423,9 +443,9 @@ const actionsMap =
         }
 
         const moreItems = [];
-        if(canMoveDoc(doc))      moreItems.push({icon: 'folder-move', text: lang.moveDoc, command: `moveDoc/${doc.id}`});
-        if(hasPriv('delete'))    moreItems.push({icon: 'trash', text: lang.delete, command: `deleteDoc/${doc.id}`});
-        if(hasPriv('effort'))    moreItems.push({icon: 'time', text: lang.effort, command: `effortDoc/${doc.id}`});
+        if(canModify && canMoveDoc(doc))   moreItems.push({icon: 'folder-move', text: lang.moveDoc, command: `moveDoc/${doc.id}`});
+        if(canModify && hasPriv('delete')) moreItems.push({icon: 'trash', text: lang.delete, command: `deleteDoc/${doc.id}`});
+        if(canModify && hasPriv('effort')) moreItems.push({icon: 'time', text: lang.effort, command: `effortDoc/${doc.id}`});
         if(hasPriv('exportDoc')) moreItems.push({icon: 'export', text: lang.export, command: 'exportDoc'});
 
         return [
@@ -441,14 +461,22 @@ const actionsMap =
      */
     lib: function(info)
     {
-        const lang  = getLang();
-        const items = [];
-        const lib   = info.data;
+        const lang      = getLang();
+        const items     = [];
+        const lib       = info.data;
+        const canModify = getDocApp().space.canModify;
+        const canAddModule = canModify && hasPriv('addModule');
 
-        if(hasPriv('addModule') && info.ui !== 'space-card' && info.ui !== 'sidebar') items.push({text: lang.actions.addModule, command: `addModule/${lib.id}/0/${lib.id}/child`});
-        if(hasPriv('editLib'))   items.push({text: lang.actions.editLib, command: `editLib/${lib.id}`});
-        if(hasPriv('moveLib') && info.ui !== 'space-card')   items.push({text: lang.moveTo, command: `moveLib/${lib.id}`});
-        if(hasPriv('deleteLib')) items.push({text: lang.actions.deleteLib, command: `deleteLib/${lib.id}`});
+        /* 获取侧边栏没有模块时的操作按钮。 Get actions when sidebar no module. */
+        if(canAddModule && info.ui === 'sidebar-no-module')
+        {
+            return [{text: lang.actions.addModule, command: `addModule/${lib.id}/0/${lib.id}/child`}];
+        }
+
+        if(canAddModule && info.ui !== 'space-card' && info.ui !== 'sidebar' && info.ui !== 'sidebar-toolbar') items.push({text: lang.actions.addModule, command: `addModule/${lib.id}/0/${lib.id}/child`});
+        if(canModify && hasPriv('editLib'))   items.push({text: lang.actions.editLib, command: `editLib/${lib.id}`});
+        if(canModify && hasPriv('moveLib') && info.ui !== 'space-card' && info.ui !== 'sidebar-toolbar') items.push({text: lang.moveTo, command: `moveLib/${lib.id}`});
+        if(canModify && hasPriv('deleteLib')) items.push({text: lang.actions.deleteLib, command: `deleteLib/${lib.id}`});
 
         if(!items.length) return;
         if(info.ui === 'sidebar')
@@ -519,27 +547,36 @@ const actionsMap =
      * 定义文档列表的操作按钮。
      * Define the actions on the doc list.
      */
-    'doc-list': function()
+    'doc-list': function(info)
     {
         const lang           = getLang();
-        const canCreateDoc   = hasPriv('create');
-        const canCreateLib   = hasPriv('createLib');
-        const canCreateSpace = hasPriv('createSpace');
+        const docApp         = getDocApp();
+        const canModify      = docApp.space.canModify;
+        const canCreateDoc   = canModify && hasPriv('create');
+        const canCreateLib   = canModify && hasPriv('createLib');
+        const canCreateSpace = canModify && hasPriv('createSpace');
         const canExportDoc   = hasPriv('exportDoc');
-        const items =
+
+        /* 文档列表没有文档时的按钮。Actions for empty doc list. */
+        if(info.ui === 'doc-list-empty')
+        {
+            return canCreateDoc ? [{icon: 'plus', text: lang.createDoc, command: 'startCreateDoc'}] : null;
+        }
+
+        const items = canModify ?
         [
             canCreateDoc ? {icon: 'plus', text: lang.createDoc, command: 'startCreateDoc'} : null,
             canCreateDoc ? {type: 'divider'} : null,
-            {icon: 'file-word', text: lang.createList.word, command: 'startCreateOffice/word'},
-            {icon: 'file-powerpoint', text: lang.createList.ppt, command: 'startCreateOffice/ppt'},
-            {icon: 'file-excel', text: lang.createList.excel, command: 'startCreateOffice/excel'},
+            canModify    ? {icon: 'file-word', text: lang.createList.word, command: 'startCreateOffice/word'} : {},
+            canModify    ? {icon: 'file-powerpoint', text: lang.createList.ppt, command: 'startCreateOffice/ppt'} : {},
+            canModify    ? {icon: 'file-excel', text: lang.createList.excel, command: 'startCreateOffice/excel'} : {},
             (canCreateLib || canCreateSpace) ? {type: 'divider'} : null,
             canCreateSpace ? {icon: 'cube', text: lang.createSpace, command: 'createSpace'} : null,
             canCreateLib ? {icon: 'wiki-lib', text: lang.createLib, command: 'createLib'} : null,
-        ].filter(Boolean);
+        ].filter(Boolean) : [];
         return [
-            (canExportDoc || canCreateDoc) ? {type: 'divider', style: {margin: '6px 0'}} : null,
-            canExportDoc && getDocApp().libID > 0 ? {icon: 'export', text: lang.export, command: 'exportDoc'} : null, // 不在库中，无法导出
+            ((canExportDoc && docApp.libID > 0 ) || canCreateDoc) ? {type: 'divider', style: {margin: '6px 0'}} : null,
+            canExportDoc && docApp.libID > 0 ? {icon: 'export', text: lang.export, command: 'exportDoc'} : null, // 不在库中，无法导出
             canCreateDoc ? {icon: 'import', text: lang.uploadDoc, command: 'uploadDoc'} : null,
             items.length ? {icon: 'plus', type: 'dropdown', btnType: 'primary',  size: 'md', text: lang.create, items: items} : null,
         ];
@@ -923,11 +960,13 @@ function getTableOptions(options, info)
     {
         const lang      = getLang();
         const tableCols = lang.tableCols;
+        const canModify = getDocApp().space.canModify;
         options.cols.forEach(col =>
         {
             if(typeof tableCols[col.name] === 'string') col.title = tableCols[col.name];
             if(col.name === 'actions' && col.actionsMap)
             {
+                if(!canModify) col.actions = [];
                 const actionHints = {edit: lang.editDoc, move: lang.moveDoc, delete: lang.deleteDoc};
                 $.each(col.actionsMap, (key, value) =>
                 {
@@ -1072,6 +1111,48 @@ function getSortableOptions(type)
 }
 
 /**
+ * 获取文档详情侧边栏标签页定义。
+ * Get the doc view sidebar tabs.
+ *
+ * @param {object} doc
+ */
+function getDocViewSidebarTabs(doc, info)
+{
+    if(info.isNewDoc) return [{key: 'outline', icon: 'list-box', title: getLang('docOutline')}];
+    return [
+        {key: 'info',    icon: 'info',     title: getLang('docInfo')},
+        {key: 'outline', icon: 'list-box', title: getLang('docOutline')},
+        {key: 'history', icon: 'history',  title: getLang('history')},
+        {
+            key   : 'editors',
+            icon  : 'format-list-numbers',
+            title : getLang('updateHistory'),
+            render: function(doc)
+            {
+                const docApp  = getDocApp();
+                const editors = doc.editors || [];
+                const html =
+                [
+                    '<div class="col gap-2">',
+                        `<div class="font-bold px-1">${getLang('updateHistory')}</div>`,
+                        editors.length ? [
+                            '<ul class="space-y-1">',
+                                editors.map(({account, date}) =>
+                                {
+                                    const user = docApp.getUserInfo(account);
+                                    return `<li>${getLang('updateInfoFormat', [{name: user ? user.realname : account, time: zui.formatDate(date, 'yyyy-M-d')}])}</li>`;
+                                }).join(''),
+                            '</ul>'
+                        ].join('\n') : `<div class="text-gray p-1">${getLang('noUpdateInfo')}</div>`,
+                    '</div>'
+                ].join('\n');
+                return {html: html};
+            }
+        }
+    ]
+}
+
+/**
  * 设置文档应用组件选项。
  * Set the doc app options.
  */
@@ -1080,16 +1161,17 @@ window.setDocAppOptions = function(_, options)
     const privs      = options.privs;
     const newOptions =
     {
-        commands          : commands,
-        onCreateDoc       : privs.create ? handleCreateDoc: null,
-        onSaveDoc         : privs.edit ? handleSaveDoc    : null,
-        canMoveDoc        : canMoveDoc,
-        onSwitchView      : handleSwitchView,
-        getActions        : getActions,
-        getTableOptions   : getTableOptions,
-        getFilterTypes    : getFilterTypes,
-        isMatchFilter     : isMatchFilter,
-        getSortableOptions: getSortableOptions,
+        commands             : commands,
+        onCreateDoc          : privs.create ? handleCreateDoc: null,
+        onSaveDoc            : privs.edit ? handleSaveDoc    : null,
+        canMoveDoc           : canMoveDoc,
+        onSwitchView         : handleSwitchView,
+        getActions           : getActions,
+        getTableOptions      : getTableOptions,
+        getFilterTypes       : getFilterTypes,
+        isMatchFilter        : isMatchFilter,
+        getSortableOptions   : getSortableOptions,
+        getDocViewSidebarTabs: getDocViewSidebarTabs,
     };
     return newOptions;
 };

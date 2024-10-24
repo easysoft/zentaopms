@@ -928,8 +928,7 @@ class executionZen extends execution
         $type    = 'sprint';
         if($project) $type = zget($this->config->execution->modelList, $project->model, 'sprint');
 
-        $fields       = $this->config->execution->form->create;
-        $editorFields = array_keys(array_filter(array_map(function($config){return $config['control'] == 'editor';}, $fields)));
+        $fields = $this->config->execution->form->create;
         foreach(explode(',', trim($this->config->execution->create->requiredFields, ',')) as $field) $fields[$field]['required'] = true;
         if(!isset($_POST['code'])) $fields['code']['required'] = false;
         if(!isset($_POST['percent'])) $fields['percent']['required'] = false;
@@ -961,7 +960,7 @@ class executionZen extends execution
             if(!empty($execution->realBegan) && !empty($execution->realEnd)) $execution->realDuration = $this->programplan->getDuration($execution->realBegan, $execution->realEnd);
         }
 
-        return $this->loadModel('file')->processImgURL($execution, $editorFields, $this->post->uid);
+        return $this->loadModel('file')->processImgURL($execution, $this->config->execution->editor->create['id'], $this->post->uid);
     }
 
     /**
@@ -1577,7 +1576,7 @@ class executionZen extends execution
         if($this->config->edition != 'open')
         {
             $flow = $this->loadModel('workflow')->getByModule($module);
-            if(!empty($flow) && $flow->buildin == '0') return helper::createLink('flow', 'ajaxSwitchBelong', "objectID=%s&moduleName=$module") . '#app=execution';
+            if(!empty($flow) && $flow->buildin == '0') return helper::createLink('flow', 'ajaxSwitchBelong', "objectID=%s&moduleName=$module") . "#app=$flow->app";
         }
 
         $link = helper::createLink($module, $method, "executionID=%s");

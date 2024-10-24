@@ -285,12 +285,13 @@ $lang->action->desc->unlinkrepobranch     = '$date, <strong>$actor</strong> unli
 $lang->action->desc->changedprogram       = '$date, <strong>$actor</strong> adjust the program <strong>$extra</strong>.' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
-$lang->action->desc->createchildren     = '$date, <strong>$actor</strong> a créé un sous-tâche <strong>$extra</strong>。' . "\n";
-$lang->action->desc->linkchildtask      = '$date, <strong>$actor</strong> a raccroché une sous-tâche <strong>$extra</strong>。' . "\n";
-$lang->action->desc->unlinkchildrentask = '$date, <strong>$actor</strong> a décroché une sous-tâche <strong>$extra</strong>。' . "\n";
-$lang->action->desc->linkparenttask     = '$date, <strong>$actor</strong> a accroché une tâche parent <strong>$extra</strong>。' . "\n";
-$lang->action->desc->unlinkparenttask   = '$date, <strong>$actor</strong> a décroché une tâche parent <strong>$extra</strong>。' . "\n";
-$lang->action->desc->deletechildrentask = '$date, <strong>$actor</strong> a supprimé une sous-tâche <strong>$extra</strong>。' . "\n";
+$lang->action->desc->createchildren        = '$date, <strong>$actor</strong> a créé un sous-tâche <strong>$extra</strong>。' . "\n";
+$lang->action->desc->linkchildtask         = '$date, <strong>$actor</strong> a raccroché une sous-tâche <strong>$extra</strong>。' . "\n";
+$lang->action->desc->unlinkchildrentask    = '$date, <strong>$actor</strong> a décroché une sous-tâche <strong>$extra</strong>。' . "\n";
+$lang->action->desc->linkparenttask        = '$date, <strong>$actor</strong> a accroché une tâche parent <strong>$extra</strong>。' . "\n";
+$lang->action->desc->unlinkparenttask      = '$date, <strong>$actor</strong> a décroché une tâche parent <strong>$extra</strong>。' . "\n";
+$lang->action->desc->deletechildrentask    = '$date, <strong>$actor</strong> a supprimé une sous-tâche <strong>$extra</strong>。' . "\n";
+$lang->action->desc->syncstorybyparenttask = "\$date, as the parent task updates its {$lang->SRCommon}, the child tasks are updated simultaneously.\n";
 
 /* Used to describe the history of operations related to parent-child requirements. */
 $lang->action->desc->createchildrenstory = '$date, <strong>$actor</strong> a créé une sous-tory <strong>$extra</strong>。' . "\n";
@@ -1101,3 +1102,12 @@ $lang->action->desc->approve                      = '$date, <strong>$actor</stro
 $lang->action->desc->reject                       = '$date, <strong>$actor</strong> rejected.';
 $lang->action->desc->linkedrepo                   = '$date, <strong>$actor</strong> linked repo $extra';
 $lang->action->desc->unlinkedrepo                 = '$date, <strong>$actor</strong> unlinked repo $extra';
+
+$lang->action->reviewStatusList['wait']      = 'Pending approval';
+$lang->action->reviewStatusList['doing']     = 'Reviewing';
+$lang->action->reviewStatusList['pass']      = 'Pass';
+$lang->action->reviewStatusList['reject']    = 'Reject';
+$lang->action->reviewStatusList['reverting'] = 'Reverting';
+
+$lang->action->reviewResultList['pass']   = 'Pass';
+$lang->action->reviewResultList['reject'] = 'Reject';

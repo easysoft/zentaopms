@@ -15,6 +15,11 @@ include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
 /* ====== Preparing and processing page data ====== */
 jsVar('executionID', $execution->id);
 jsVar('storyTasks', $storyTasks);
+jsVar('parentEstStarted', isset($parentTask) ? $parentTask->estStarted : '');
+jsVar('parentDeadline', isset($parentTask) ? $parentTask->deadline : '');
+jsVar('ignoreLang', $lang->project->ignore);
+jsVar('overParentEstStartedLang', isset($parentTask) ? sprintf($lang->task->overParentEsStarted, $parentTask->estStarted) : '');
+jsVar('overParentDeadlineLang', isset($parentTask) ? sprintf($lang->task->overParentDeadline, $parentTask->deadline) : '');
 
 /* zin: Set variables to define picker options for form. */
 $storyItem         = '';
@@ -257,7 +262,8 @@ formBatchPanel
     on::change('input[name^=story]', 'setStoryRelated'),
     on::click('[data-name=story] [data-type=ditto]', 'setStoryRelated'),
     on::click('[data-name="copyStory"]', 'copyStoryTitle'),
-    on::change('[data-name="region"]', 'loadLanes')
+    on::change('[data-name="region"]', 'loadLanes'),
+    on::change('[data-name="estStarted"], [data-name="deadline"]', 'checkBatchEstStartedAndDeadline')
 );
 
 /* ====== Render page ====== */

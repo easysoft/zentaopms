@@ -259,7 +259,7 @@ class taskTao extends taskModel
      */
     protected function computeTaskProgress(object $task): float
     {
-        if($task->left > 0) return round($task->consumed / ($task->consumed + (float)$task->left), 2) * 100;
+        if($task->left > 0) return round($task->consumed / ((float)$task->consumed + (float)$task->left), 2) * 100;
         if($task->consumed == 0) return 0;
         return 100;
     }
@@ -580,9 +580,12 @@ class taskTao extends taskModel
             ->markRight(1)
             ->fi()
             ->beginIF($type == 'assignedTo' && ($this->app->rawModule == 'my' || $this->app->rawModule == 'block'))->andWhere('t2.status', true)->ne('suspended')->orWhere('t4.status')->ne('suspended')->markRight(1)->fi()
-            ->beginIF($type != 'all' && $type != 'finishedBy' && $type != 'assignedTo')->andWhere("t1.`$type`")->eq($account)->fi()
+            ->beginIF(!in_array($type, array('all', 'finishedBy', 'assignedTo', 'myInvolved')))->andWhere("t1.`$type`")->eq($account)->fi()
             ->beginIF($type == 'assignedTo')->andWhere("(t1.assignedTo = '{$account}' or (t1.mode = 'multi' and t5.`account` = '{$account}' and t1.status != 'closed' and t5.status != 'done') )")->fi()
             ->beginIF($type == 'assignedTo' && $this->app->rawModule == 'my' && $this->app->rawMethod == 'work')->andWhere('t1.status')->notin('closed,cancel')->fi()
+            ->beginIF($type == 'myInvolved')
+            ->andWhere("((t5.`account` = '{$this->app->user->account}') OR t1.`assignedTo` = '{$this->app->user->account}' OR t1.`finishedby` = '{$this->app->user->account}')")
+            ->fi()
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->page($pager, 't1.id')

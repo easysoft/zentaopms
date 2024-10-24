@@ -125,7 +125,8 @@ featureBar
 );
 
 /* zin: Define the toolbar on main menu. */
-$createLink = $isStage ? createLink('programplan', 'create', "projectID={$projectID}&productID={$productID}") : createLink('execution', 'create', "projectID={$projectID}");
+$createLink       = $isStage ? createLink('programplan', 'create', "projectID={$projectID}&productID={$productID}") : createLink('execution', 'create', "projectID={$projectID}");
+$canModifyProject = common::canModify('project', $project);
 toolbar
 (
     in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')) && in_array($this->config->edition, array('max', 'ipd')) ? btnGroup
@@ -141,21 +142,21 @@ toolbar
         'data-toggle' => "modal",
         'url'         => createLink('execution', 'export', "status={$status}&productID={$productID}&orderBy={$orderBy}&from=project")
     ))) : null,
-    common::hasPriv('programplan', 'create') && $isStage && empty($product->deleted) ? item(set(array
+    $canModifyProject && common::hasPriv('programplan', 'create') && $isStage && empty($product->deleted) ? item(set(array
     (
         'icon'  => 'plus',
         'text'  => $lang->programplan->create,
         'class' => "primary create-execution-btn",
         'url'   => $createLink
     ))) : null,
-    hasPriv('execution', 'create') && !$isStage && $project->model != 'agileplus' ? item(set(array
+    $canModifyProject && hasPriv('execution', 'create') && !$isStage && $project->model != 'agileplus' ? item(set(array
     (
         'icon'  => 'plus',
         'text'  => $isStage ? $lang->programplan->create : $lang->execution->create,
         'class' => "primary create-execution-btn",
         'url'   => $createLink
     ))) : null,
-    hasPriv('execution', 'create') && !$isStage && $project->model == 'agileplus' ?  btngroup(
+    $canModifyProject && hasPriv('execution', 'create') && !$isStage && $project->model == 'agileplus' ?  btngroup(
         setClass('create-execution-btn'),
         btn(setClass('btn primary'), set::icon('plus'), set::url($createLink), $lang->execution->create),
         dropdown
@@ -172,7 +173,7 @@ toolbar
     ) : null
 );
 
-$canCreateExecution = $isStage ? common::hasPriv('programplan', 'create') : common::hasPriv('execution', 'create');
+$canCreateExecution = $canModifyProject &&  $isStage ? common::hasPriv('programplan', 'create') : common::hasPriv('execution', 'create');
 dtable
 (
     set::userMap($users),

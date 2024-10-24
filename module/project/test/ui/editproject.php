@@ -13,6 +13,34 @@ cid=73
 chdir(__DIR__);
 include '../lib/editproject.ui.class.php';
 
+$project = zenData('project');
+$project->id->range('1');
+$project->project->range('0');
+$project->model->range('waterfall');
+$project->type->range('project');
+$project->auth->range('extend');
+$project->storytype->range('`story,epic,requirement`');
+$project->path->range('`,1,`');
+$project->grade->range('1');
+$project->name->range('瀑布项目1');
+$project->hasProduct->range('1');
+$project->status->range('wait');
+$project->begin->range('(-72w)-(-71w):1D')->type('timestamp')->format('YY/MM/DD');
+$project->end->range('(+72w)-(+73w):1D')->type('timestamp')->format('YY/MM/DD');
+$project->acl->range('open');
+$project->gen(1);
+
+$product = zenData('product');
+$product->id->range('1-2');
+$product->name->range('产品1, 产品2');
+$product->type->range('normal');
+$product->gen(2);
+
+$projectProduct = zenData('projectproduct');
+$projectProduct->project->range('1');
+$projectProduct->product->range('1{1}, 2{1}');
+$projectProduct->gen(2);
+
 $tester = new editProjectTester();
 $tester->login();
 

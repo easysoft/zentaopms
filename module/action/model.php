@@ -62,10 +62,14 @@ class actionModel extends model
         if(empty($comment)) $comment = '';
         $action->comment = fixer::stripDataTags($comment);
 
-        if($this->post->uid)
+        $uid = $this->post->uid;
+        if(is_string($uid)) $uid = array($uid);
+        if(!is_array($uid)) $uid = array();
+        $this->loadModel('file');
+        foreach($uid as $value)
         {
-            $action = $this->loadModel('file')->processImgURL($action, 'comment', $this->post->uid);
-            if($autoDelete) $this->file->autoDelete($this->post->uid);
+            $action = $this->file->processImgURL($action, 'comment', $value);
+            if($autoDelete) $this->file->autoDelete($value);
         }
 
         /* 获取对象的产品项目以及执行。 */
@@ -89,7 +93,7 @@ class actionModel extends model
         }
         if($hasRecentTable) $this->dao->insert(TABLE_ACTIONRECENT)->data($action)->autoCheck()->exec();
 
-        if($this->post->uid) $this->file->updateObjectID($this->post->uid, $objectID, $objectType);
+        $this->file->updateObjectID($uid, $objectID, $objectType);
 
         $this->loadModel('message')->send(strtolower($objectType), $objectID, $actionType, $actionID, $actor, $extra);
 
@@ -175,6 +179,7 @@ class actionModel extends model
         $histories = $this->getHistory(array_keys($actions));
         if($objectType == 'project') $actions = $this->processProjectActions($actions);
 
+        $this->loadModel('file');
         foreach($actions as $actionID => $action)
         {
             $actionName = strtolower($action->action);
@@ -218,10 +223,98 @@ class actionModel extends model
                 {
                     $history->diff = str_replace(array("class='iframe'", '+'), array("data-size='{\"width\": 800, \"height\": 500}' data-toggle='modal'", '%2B'), $history->diff);
                 }
+                $history = $this->file->replaceImgURL($history, 'old,new');
             }
 
-            $action->comment = $this->loadModel('file')->setImgSize($action->comment, $this->config->action->commonImgSize);
+            $action->comment = $this->file->setImgSize($action->comment, $this->config->action->commonImgSize);
             $actions[$actionID] = $action;
+        }
+        return $this->processActions($actions);
+    }
+
+    /**
+     * 将类型、状态等键值转换为具体的值。
+     * Process object type, status and etc.
+     *
+     * @param  array  $actions
+     * @access public
+     * @return array
+     */
+    public function processActions(array $actions = array()): array
+    {
+        if(empty($actions)) return $actions;
+
+        $users          = $this->loadModel('user')->getPairs('noletter');
+        $objectTypeList = array();
+        foreach($actions as $action)
+        {
+            if(empty($action->history)) continue;
+
+            if(!isset($objectTypeList[$action->objectType])) $this->app->loadLang($action->objectType);
+            $objectTypeList[$action->objectType] = $action->objectType;
+
+            foreach($action->history as $history)
+            {
+                if(isset($this->config->action->approvalFields[$history->field]))
+                {
+                    $fieldListVar = $this->config->action->approvalFields[$history->field];
+                    $fieldList    = isset($this->lang->action->{$fieldListVar}) ? $this->lang->action->{$fieldListVar} : array();
+
+                    $history->old = zget($fieldList, $history->old);
+                    $history->new = zget($fieldList, $history->new);
+                }
+                elseif(isset($this->config->action->multipleObjectFields[$action->objectType][$history->field]))
+                {
+                    $fieldListVar = $this->config->action->multipleObjectFields[$action->objectType][$history->field];
+                    $fieldList    = isset($this->lang->{$action->objectType}->{$fieldListVar}) ? $this->lang->{$action->objectType}->{$fieldListVar} : array();
+                    if(!empty($history->old))
+                    {
+                        $oldValues = explode(',', $history->old);
+                        $history->old = '';
+                        foreach($oldValues as $key => $value) $history->old .= zget($fieldList, $value) . ',';
+                        $history->old = trim($history->old, ',');
+                    }
+
+                    if(!empty($history->new))
+                    {
+                        $newValues = explode(',', $history->new);
+                        $history->new = '';
+                        foreach($newValues as $key => $value) $history->new .= zget($fieldList, $value) . ',';
+                        $history->new = trim($history->new, ',');
+                    }
+                }
+                elseif(strpos(",{$this->config->action->userFields},", ",{$history->field},") !== false)
+                {
+                    $history->old = zget($users, $history->old);
+                    $history->new = zget($users, $history->new);
+                }
+                elseif(strpos(",{$this->config->action->multipleUserFields},", ",{$history->field},") !== false)
+                {
+                    if(!empty($history->old))
+                    {
+                        $oldValues = explode(',', $history->old);
+                        $history->old = '';
+                        foreach($oldValues as $key => $value) $history->old .= zget($users, $value) . ',';
+                        $history->old = trim($history->old, ',');
+                    }
+
+                    if(!empty($history->new))
+                    {
+                        $newValues = explode(',', $history->new);
+                        $history->new = '';
+                        foreach($newValues as $key => $value) $history->new .= zget($users, $value) . ',';
+                        $history->new = trim($history->new, ',');
+                    }
+                }
+                else
+                {
+                    $fieldListVar = isset($this->config->action->objectFields[$action->objectType][$history->field]) ? $this->config->action->objectFields[$action->objectType][$history->field] : $history->field . 'List';
+                    $fieldList    = isset($this->lang->{$action->objectType}->{$fieldListVar}) ? $this->lang->{$action->objectType}->{$fieldListVar} : array();
+
+                    $history->old = zget($fieldList, $history->old);
+                    $history->new = zget($fieldList, $history->new);
+                }
+            }
         }
         return $actions;
     }

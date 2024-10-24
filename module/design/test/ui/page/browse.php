@@ -7,6 +7,7 @@ class browsePage extends page
 
         $xpath = array(
             'designName'    => "//*[@id='table-design-browse']/div[2]/div[1]/div/div[2]/div/a",
+            'browseProduct' => "//*[@id='table-design-browse']/div[2]/div[2]/div/div[1]/div",
             'linkedProduct' => "//*[@id='mainContent']/div[2]/div[2]/div/div[2]/table/tbody/tr[2]/td",
             'designType'    => "//*[@id='table-design-browse']/div[2]/div[2]/div/div[2]/div/span",
             'product'       => "//*[@id='table-design-browse']/div[2]/div[2]/div/div[1]/div",

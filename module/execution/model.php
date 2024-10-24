@@ -1483,6 +1483,9 @@ class executionModel extends model
         $parentExecutions = $this->dao->select('parent,parent')->from(TABLE_EXECUTION)->where('parent')->ne(0)->andWhere('deleted')->eq(0)->fetchPairs();
         foreach($executions as $execution)
         {
+            $execution->estimate    = helper::formatHours($execution->estimate);
+            $execution->consumed    = helper::formatHours($execution->consumed);
+            $execution->left        = helper::formatHours($execution->left);
             $execution->productName = isset($productList[$execution->id]) ? trim($productList[$execution->id]->productName, ',') : '';
             $execution->product     = $productID;
             $execution->productID   = $productID;
@@ -1873,9 +1876,14 @@ class executionModel extends model
 
             /* Limit current execution when no execution. */
             if(strpos($taskQuery, "`execution` =") === false && strpos($taskQuery, "`project` =") === false) $taskQuery .= " AND `execution` = $executionID";
-            $executionQuery = "`execution` " . helper::dbIN(array_keys($executions));
-            $taskQuery      = str_replace("`execution` = 'all'", $executionQuery, $taskQuery); // Search all execution.
+            if(strpos($taskQuery, "`execution` = 'all'") !== false)
+            {
+                $executions     = $this->loadModel('execution')->getPairs(0, 'all', "nocode,noprefix");
+                $executionQuery = "`execution` " . helper::dbIN(array_keys($executions));
+                $taskQuery      = str_replace("`execution` = 'all'", $executionQuery, $taskQuery); // Search all execution.
+            }
             if(strpos($taskQuery, "`execution`") === false) $taskQuery .= " AND `execution` " . helper::dbIN(array_keys($executions));
+
             /* Process all project query. */
             if(strpos($taskQuery, "`project` = 'all'") !== false)
             {
@@ -3947,6 +3955,7 @@ class executionModel extends model
         $this->config->execution->search['actionURL'] = $actionURL;
         $this->config->execution->search['queryID']   = $queryID;
         $this->config->execution->search['params']['execution']['values'] = $showAll ? $executions : array(''=>'', $executionID => $executions[$executionID], 'all' => $this->lang->execution->allExecutions);
+        $this->config->execution->search['params']['story']['values']     = $this->loadModel('story')->getExecutionStoryPairs($executionID, 0, 'all', '', 'full', 'unclosed', 'story', false);
 
         $projects = $this->loadModel('project')->getPairsByProgram();
         $this->config->execution->search['params']['project']['values'] = $projects + array('all' => $this->lang->project->allProjects);

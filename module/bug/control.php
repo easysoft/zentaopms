@@ -196,7 +196,7 @@ class bug extends control
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->view->branches    = $branches;
         $this->view->branchName  = $product->type == 'normal' ? '' : zget($branches, $bug->branch, '');
-        $this->view->builds      = $this->loadModel('build')->getBuildPairs(array($bug->product), 'all', 'noterminate,nodone,hasdeleted');
+        $this->view->builds      = $this->loadModel('build')->getBuildPairs(array($bug->product), 'all', 'hasdeleted');
         $this->view->linkCommits = $this->loadModel('repo')->getCommitsByObject($bug->id, 'bug');
         $this->view->actions     = $this->loadModel('action')->getList('bug', $bug->id);
         $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('bug', $bugID);

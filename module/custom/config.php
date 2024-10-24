@@ -91,7 +91,7 @@ if(!empty($config->setCode))
     $config->custom->fieldList['execution']['edit']   .= ',code';
 }
 
-$config->custom->notSetMethods = array('required', 'browsestoryconcept', 'product', 'role', 'execution', 'limitTaskDate', 'hours');
+$config->custom->notSetMethods = array('required', 'browsestoryconcept', 'product', 'role', 'execution', 'limitTaskDate', 'hours', 'project');
 
 $config->custom->customFields = array();
 $config->custom->customFields['common']      = array('global' => array('hideVisionTips'));

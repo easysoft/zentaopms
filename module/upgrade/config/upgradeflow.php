@@ -103,7 +103,8 @@ $config->upgrade->execFlow['20_3_0']      = array('functions' => 'importBuildinW
 $config->upgrade->execFlow['20_4']        = array('functions' => 'createDefaultDoclibSpace,updateStoryVerifiedDate,xuanNotifyJitsiConference', 'xxsqls' => "$appRoot/db/upgradexuanxuan7.3.sql,$appRoot/db/upgradexuanxuan9.0.sql");
 $config->upgrade->execFlow['20_5']        = array('functions' => 'fixWorkflowFieldOptions');
 $config->upgrade->execFlow['20_6']        = array('functions' => 'processDemandFiles,processSqlbuilderTables');
-$config->upgrade->execFlow['20_7']        = array('functions' => 'upgradeMyDocSpace,processObjectRelation');
+$config->upgrade->execFlow['20_7']        = array('functions' => 'upgradeMyDocSpace');
+$config->upgrade->execFlow['20_8']        = array('functions' => 'processWorkflowGroups,processObjectRelation');
 
 if(!empty($config->isINT))
 {

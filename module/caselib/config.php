@@ -35,5 +35,10 @@ $config->caselib->actionList['delete']['data-confirm'] = array('message' => $lan
 
 $config->caselib->exportTemplateFields = array('module', 'title', 'precondition', 'stepDesc', 'stepExpect', 'keywords', 'pri', 'type', 'stage');
 
+$config->caselib->exportFields = '
+    id, module, title, precondition, stepDesc, stepExpect, keywords,
+    pri, type, stage, status, stepNumber, openedBy, openedDate,
+    lastEditedBy, lastEditedDate, version, linkCase, files';
+
 $config->caselib->actions = new stdclass();
 $config->caselib->actions->view['mainActions'] = array('edit', 'delete');

@@ -227,4 +227,29 @@ class caselibTest
         global $tester;
         return $tester->loadModel('testcase')->getByID($caseID);
     }
+
+    /**
+     * 测试获取导出的用例库用例。
+     * Test get cases to export.
+     *
+     * @param  string       $browseType
+     * @param  string       $exportType
+     * @param  string       $orderBy
+     * @param  int          $limit
+     * @access public
+     * @return array|string
+     */
+    public function getCasesToExportTest(string $browseType, string $exportType, string $orderBy, string $checkedItem = '', int $limit = 0): array|string
+    {
+        $moduleID = $browseType == 'bymodule' ? 101 : 0;
+        $this->objectModel->getLibCases(201, $browseType, 0, $moduleID, $orderBy);
+        $this->objectModel->loadModel('common')->saveQueryCondition($this->objectModel->dao->get(), 'testcase', true);
+
+        if($exportType == 'selected') $_COOKIE['checkedItem']= $checkedItem;
+        $objects = $this->objectModel->getCasesToExport($exportType, $orderBy, $limit);
+
+        if(dao::isError()) return dao::getError();
+
+        return implode(';', array_keys($objects));
+    }
 }

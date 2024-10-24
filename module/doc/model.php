@@ -1290,8 +1290,9 @@ class docModel extends model
             $spaceID  = $this->product->checkAccess($spaceID, $products);
             foreach($products as $product)
             {
-                $isMine  = $product->status == 'normal' && $product->PO == $account;
-                $spaces[] = array('id' => $product->id, 'name' => $product->name, 'isMine' => $isMine, 'type' => $type);
+                $isMine    = $product->status == 'normal' && $product->PO == $account;
+                $canModify = common::canModify('product', $product);
+                $spaces[]  = array('id' => $product->id, 'name' => $product->name, 'isMine' => $isMine, 'type' => $type, 'canModify' => $canModify);
             }
         }
         if($type == 'project')
@@ -1303,14 +1304,16 @@ class docModel extends model
 
             foreach($projects as $project)
             {
-                $isMine   = $project->status != 'closed' && isset($involvedProjects[$project->id]);
-                $spaces[] = array('id' => $project->id, 'name' => $project->name, 'isMine' => $isMine, 'type' => $type);
+                $isMine    = $project->status != 'closed' && isset($involvedProjects[$project->id]);
+                $canModify = common::canModify('project', $project);
+                $spaces[]  = array('id' => $project->id, 'name' => $project->name, 'isMine' => $isMine, 'type' => $type, 'canModify' => $canModify);
             }
         }
         if($type === 'execution' && $spaceID)
         {
             $execution = $this->loadModel('execution')->getByID($spaceID);
-            $spaces[]  = array('id' => $execution->id, 'name' => $execution->name);
+            $canModify = common::canModify('execution', $execution);
+            $spaces[]  = array('id' => $execution->id, 'name' => $execution->name, 'canModify' => $canModify);
         }
 
         if(!$spaceID && !empty($spaces)) $spaceID = $spaces[0]['id'];

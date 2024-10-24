@@ -242,3 +242,8 @@ window.confirmBug = function(confirmTip, taskID, bugID)
         }
     });
 }
+
+function ignoreTip(event)
+{
+    $(event.target).closest('.date-tip').empty();
+}

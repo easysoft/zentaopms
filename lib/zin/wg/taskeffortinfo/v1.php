@@ -23,7 +23,7 @@ class taskEffortInfo extends wg
         $items[$lang->task->estimate] =
             $task->estimate . ' ' . $lang->task->suffixHour;
         $items[$lang->task->consumed] =
-            round($task->consumed, 2) . ' ' . $lang->task->suffixHour;
+            $task->consumed . ' ' . $lang->task->suffixHour;
         $items[$lang->task->left] =
             $task->left . ' ' . $lang->task->suffixHour;
         $items[$lang->task->estStarted] = array('content' => helper::isZeroDate($task->estStarted) ? '' : $task->estStarted, 'contentClass' => 'estStarted-text');

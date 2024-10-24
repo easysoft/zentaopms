@@ -1977,7 +1977,8 @@ class treeModel extends model
         if($repeatName)
         {
             $tips = in_array($self->type, array('doc', 'api')) ? $this->lang->tree->repeatDirName : $this->lang->tree->repeatName;
-            helper::end(js::alert(sprintf($tips, $repeatName)));
+            dao::$errors['name'] = sprintf($tips, $repeatName);
+            return false;
         }
 
         if((empty($module->root) || empty($module->name)) && in_array($self->type, array('doc', 'api')))

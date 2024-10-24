@@ -125,6 +125,7 @@ $lang->story->activateSyncTip  = "孪生需求均同步激活";
 $lang->story->relievedTwinsTip = "{$lang->productCommon}调整后，本需求自动解除孪生关系，需求不再同步，是否保存？";
 $lang->story->batchEditTip     = "{$lang->SRCommon} %s为孪生需求，本次操作已被过滤。";
 $lang->story->planTip          = "{$lang->SRCommon}只能单选计划，其他需求可多选计划。";
+$lang->story->batchEditError   = "所选需求皆不可编辑，本次操作已被过滤。";
 
 $lang->story->id               = '编号';
 $lang->story->parent           = '父需求';

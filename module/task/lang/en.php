@@ -286,6 +286,8 @@ $lang->task->cannotDeleteParent        = 'Cannot delete parent task';
 $lang->task->addChildTask              = 'Because the task has cost hours, ZenTao will create a child task with the same name to record the cost housrs to ensure data consistency.';
 $lang->task->selectTestStoryTip        = "The following {$lang->SRCommon} will be subtasks of this task";
 $lang->task->effortOperateTips         = 'Only the project manager, the executive supervisor, and the department head have the authority to %s logs belonging to others.';
+$lang->task->syncStoryToAllChildrenTip = "Will be {$lang->SRCommon} synchronised with all child tasks?";
+$lang->task->syncStoryToChildrenTip    = "Child tasks of %s do not have {$lang->SRCommon}, will {$lang->SRCommon} be synchronised with these child tasks?";
 
 $lang->task->error = new stdclass();
 $lang->task->error->totalNumber       = '"Total Cost" must be numbers.';
@@ -413,3 +415,6 @@ $lang->taskestimate->consumed = 'Estimates';
 
 $lang->task->overEsStartDate = 'The %s schedule start time has exceeded, please modify the %s schedule start time first';
 $lang->task->overEsEndDate   = 'The %s schedule end time has exceeded, please modify the %s schedule end time first';
+
+$lang->task->overParentEsStarted = 'StartDate is less than the parent task\'s startDate: %s';
+$lang->task->overParentDeadline  = 'Deadline is greater than the parent task\'s deadline: %s';

@@ -2036,7 +2036,7 @@ class productModel extends model
         if($this->config->edition != 'open')
         {
             $flow = $this->loadModel('workflow')->getByModule($module);
-            if(!empty($flow) && $flow->buildin == '0') return helper::createLink('flow', 'ajaxSwitchBelong', "objectID=%s&moduleName=$module") . '#app=product';
+            if(!empty($flow) && $flow->buildin == '0') return helper::createLink('flow', 'ajaxSwitchBelong', "objectID=%s&moduleName=$module") . "app=$flow->app";
         }
 
         if($module == 'execution'  && in_array($method, array('bug', 'testcase')))                       return helper::createLink($module,    $method,  "executionID={$params[0]}&productID=%s{$branchParam}");

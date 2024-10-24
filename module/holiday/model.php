@@ -310,7 +310,7 @@ class holidayModel extends model
             ->andWhere('end')->ne(LONG_TIME)
             ->andWhere('begin', true)->between($beginDate, $endDate)
             ->orWhere('end')->between($beginDate, $endDate)
-            ->orWhere("(begin < '{$beginDate}' AND end > '{$endDate}')")
+            ->orWhere("(`begin` < '{$beginDate}' AND `end` > '{$endDate}')")
             ->markRight(1)
             ->fetchAll();
 
@@ -340,7 +340,7 @@ class holidayModel extends model
             ->andWhere('type')->ne('program')
             ->andwhere('realBegan', true)->between($beginDate, $endDate)
             ->orWhere('realEnd')->between($beginDate, $endDate)
-            ->orWhere("(realBegan < '{$beginDate}' AND realEnd > '{$endDate}')")
+            ->orWhere("(`realBegan` < '{$beginDate}' AND `realEnd` > '{$endDate}')")
             ->markRight(1)
             ->fetchAll();
 
@@ -368,7 +368,7 @@ class holidayModel extends model
             ->from(TABLE_TASK)
             ->where('estStarted')->between($beginDate, $endDate)
             ->orWhere('deadline')->between($beginDate, $endDate)
-            ->orWhere("(estStarted < '{$beginDate}' AND deadline > '{$endDate}')")
+            ->orWhere("(`estStarted` < '{$beginDate}' AND `deadline` > '{$endDate}')")
             ->andWhere('status') ->ne('done')
             ->fetchAll();
 
@@ -395,8 +395,8 @@ class holidayModel extends model
         $updateTaskList = $this->dao->select('id, realStarted, finishedDate')
             ->from(TABLE_TASK)
             ->where('realStarted')->between($beginDate, $endDate)
-            ->orWhere("date_format(finishedDate,'%Y-%m-%d')")->between($beginDate, $endDate)
-            ->orWhere("(realStarted < '$beginDate' AND date_format(finishedDate,'%Y-%m-%d') > '$endDate')")
+            ->orWhere("date_format(`finishedDate`,'%Y-%m-%d')")->between($beginDate, $endDate)
+            ->orWhere("(`realStarted` < '$beginDate' AND date_format(`finishedDate`,'%Y-%m-%d') > '$endDate')")
             ->andWhere('status')->ne('done')
             ->fetchAll();
 

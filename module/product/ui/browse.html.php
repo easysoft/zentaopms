@@ -68,6 +68,7 @@ $fnGenerateSideBar = function() use ($moduleTree, $moduleID, $productID, $branch
 $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $storyType, $productID, $branch, $moduleID, $projectID, $project, $projectProducts)
 {
     if(!common::canModify('product', $product)) return null;
+    if(!empty($project) && !common::canModify('project', $project)) return null;
 
     global $app, $config;
     $currentProductID = empty($productID) ? current(array_keys($projectProducts)) : $productID;
@@ -162,6 +163,7 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
 $fnBuildLinkStoryButton = function() use($lang, $app, $product, $projectHasProduct, $project, $storyType)
 {
     if(!common::canModify('product', $product)) return null;
+    if(!empty($project) && !common::canModify('project', $project)) return null;
 
     if(!$projectHasProduct) return null;
 
@@ -236,13 +238,14 @@ $fnGenerateFootToolbar = function() use ($lang, $app, $product, $productID, $pro
 {
     /* Flag variables of permissions. */
     $canBeChanged = common::canModify('product', $product);
+    if(!empty($project)) $canBeChanged = $canBeChanged && common::canModify('project', $project);
     if($isProjectStory && $config->vision == 'rnd')
     {
-        $canBatchClose      = hasPriv('projectstory', 'batchClose') && strtolower($browseType) != 'closedbyme';
-        $canBatchEdit       = hasPriv('projectstory', 'batchEdit');
-        $canBatchReview     = hasPriv('projectstory', 'batchReview');
-        $canBatchAssignTo   = hasPriv('projectstory', 'batchAssignTo');
-        $canBatchChangePlan = hasPriv('projectstory', 'batchChangePlan') && $productID && $product;
+        $canBatchClose      = $canBeChanged && hasPriv('projectstory', 'batchClose') && strtolower($browseType) != 'closedbyme';
+        $canBatchEdit       = $canBeChanged && hasPriv('projectstory', 'batchEdit');
+        $canBatchReview     = $canBeChanged && hasPriv('projectstory', 'batchReview');
+        $canBatchAssignTo   = $canBeChanged && hasPriv('projectstory', 'batchAssignTo');
+        $canBatchChangePlan = $canBeChanged && hasPriv('projectstory', 'batchChangePlan') && $productID && $product;
     }
     else
     {

@@ -35,7 +35,7 @@ class repoModel extends model
         {
             $userProducts = explode(',', $this->app->user->view->products);
             $repoProducts = explode(',', $repo->product);
-            if(!array_intersect($userProducts, $repoProducts)) return true;
+            if(array_intersect($userProducts, $repoProducts)) return true;
         }
 
         if(!empty($repo->acl->groups))
@@ -1510,7 +1510,7 @@ class repoModel extends model
         preg_match_all("/{$rules['designReg']}/i", $comment, $matches);
         if($matches[0])
         {
-            $designs = join(' ', $matches[1]);
+            $designs = implode(' ', $matches[1]);
             if($designs) $designs = array_unique(explode(' ', str_replace(',', ' ', $designs)));
         }
 
@@ -1838,7 +1838,6 @@ class repoModel extends model
         }
 
         $repo->gitService = (int)$repo->serviceHost;
-        $repo->project    = $repo->SCM == 'Gitlab' ? (int)$repo->serviceProject : $repo->serviceProject;
         return $repo;
     }
 
@@ -1986,7 +1985,7 @@ class repoModel extends model
         }
         elseif($repo->SCM == 'Gitlab')
         {
-            $project = $this->loadModel('gitlab')->apiGetSingleProject($repo->gitService, $repo->project);
+            $project = $this->loadModel('gitlab')->apiGetSingleProject($repo->gitService, (int)$repo->serviceProject);
             if(isset($project->id))
             {
                 $url->http = $project->http_url_to_repo ?? '';
@@ -1995,7 +1994,7 @@ class repoModel extends model
         }
         elseif($repo->SCM == 'Gitea')
         {
-            $project = $this->loadModel('gitea')->apiGetSingleProject($repo->gitService, (string)$repo->project);
+            $project = $this->loadModel('gitea')->apiGetSingleProject($repo->gitService, (string)$repo->serviceProject);
             if(isset($project->id))
             {
                 $url->http = $project->clone_url;
@@ -2004,7 +2003,7 @@ class repoModel extends model
         }
         elseif($repo->SCM == 'Gogs')
         {
-            $project = $this->loadModel('gogs')->apiGetSingleProject($repo->gitService, (string)$repo->project);
+            $project = $this->loadModel('gogs')->apiGetSingleProject($repo->gitService, (string)$repo->serviceProject);
             if(isset($project->id))
             {
                 $url->http = $project->clone_url;

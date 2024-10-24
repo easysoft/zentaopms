@@ -37,7 +37,8 @@ featureBar
 );
 
 /* zin: Define the toolbar on main menu. */
-$canCreateBuild = hasPriv('projectbuild', 'create') && common::canModify('project', $project);
+$canModify      = common::canModify('project', $project);
+$canCreateBuild = hasPriv('projectbuild', 'create') && $canModify;
 
 if($canCreateBuild) toolbar(item(set(array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->build->create, 'url' => createLink('projectbuild', 'create', "projectID={$project->id}")))));
 
@@ -56,6 +57,7 @@ if(($project->model == 'kanban' && $app->rawModule == 'projectbuild') || !$proje
 }
 unset($fieldList['actions']['list'][$app->tab == 'project' ? 'linkStory' : 'linkProjectStory']);
 if(!$project->multiple) unset($fieldList['executionName']);
+if(!$canModify) unset($fieldList['actions']['list']);
 $builds = initTableData($builds, $fieldList, $this->build);
 
 dtable

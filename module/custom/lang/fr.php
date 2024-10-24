@@ -96,6 +96,7 @@ $lang->custom->saveTips            = 'After clicking save, the current %s will b
 $lang->custom->numberError = 'The interval must be greater than zero!';
 $lang->custom->hoursError  = 'The working hours must be between 0 and 24!';
 
+$lang->custom->closedProject   = 'Closed ' . $lang->projectCommon;
 $lang->custom->closedExecution = 'Closed ' . $lang->executionCommon;
 $lang->custom->closedKanban    = 'Closed ' . $lang->custom->kanban;
 $lang->custom->closedProduct   = 'Closed ' . $lang->productCommon;
@@ -110,6 +111,7 @@ $lang->custom->project = new stdClass();
 $lang->custom->project->currencySetting    = 'Currency Setting';
 $lang->custom->project->defaultCurrency    = 'Default Currency';
 $lang->custom->project->fields['required'] = $lang->custom->required;
+$lang->custom->project->fields['project']  = 'Close Setting';
 $lang->custom->project->fields['unitList'] = 'Unit List';
 
 $lang->custom->execution = new stdClass();
@@ -207,6 +209,11 @@ $lang->custom->notice->required            = 'Le champ sélectionné est obligat
 $lang->custom->notice->conceptResult       = 'Selon votre préférence, <b> %s-%s </b> peut être fixé pour vous. Utilisez <b>%s</b> + <b> %s</b>。';
 $lang->custom->notice->conceptPath         = 'Allez à Admin -> Custom -> Concept pour le paramétrer.';
 $lang->custom->notice->readOnlyOfProduct   = 'If Change Forbidden, any change on stories, bugs, cases, efforts, releases, plans and builds of the closed product is also forbidden.';
+$lang->custom->notice->readOnlyOfProject   = "If Change Forbidden, any change on {$lang->projectCommon}s is also forbidden:<br/>
+1. For {$lang->productCommon}-based {$lang->projectCommon}s with {$lang->custom->executionCommon}: The following will not be editable under closed {$lang->projectCommon}s: {$lang->custom->executionCommon}, stories, design, reviews, review issues, baselines, documents, versions, releases, logs, testrequest, testreports, process trimming, research, estimation, issues, risks, opportunities, meetings, quality assurance plans, non-conformities, etc.<br/>
+2. For {$lang->productCommon}-based {$lang->projectCommon}s without {$lang->custom->executionCommon}: The following will not be editable under closed {$lang->projectCommon}s: tasks, stories, versions, releases, logs, testrequest, testreports, documents, etc.<br/>
+3. For non-{$lang->productCommon}-based {$lang->projectCommon}s with {$lang->custom->executionCommon} enabled: The following will not be editable under closed {$lang->projectCommon}s: {$lang->custom->executionCommon}, stories, design, reviews, review issues, baselines, bugs, testcases, testrequest, testreports, documents, versions, releases, logs, process trimming, research, estimation, issues, risks, opportunities, meetings, quality assurance plans, non-conformities, etc.<br/>
+4. For non-{$lang->productCommon}-based {$lang->projectCommon}s without {$lang->custom->executionCommon} enabled: The following will not be editable under closed {$lang->projectCommon}s: tasks, stories, bugs, testcases, testrequest, testreports, documents, versions, releases, logs, etc.";
 if(in_array($config->edition, array('open', 'biz')))
 {
     $lang->custom->notice->readOnlyOfExecution = "If Change Forbidden, any change on tasks, builds, efforts, test tasks, test reports, documents and stories of the closed {$lang->executionCommon} is also forbidden.";
@@ -317,6 +324,9 @@ $lang->custom->scoreStatus[0] = 'Off';
 
 $lang->custom->CRProduct[1] = 'Change Allowed';
 $lang->custom->CRProduct[0] = 'Change Forbidden';
+
+$lang->custom->CRProject[1] = 'Change Allowed';
+$lang->custom->CRProject[0] = 'Change Forbidden';
 
 $lang->custom->CRExecution[1] = 'Change Allowed';
 $lang->custom->CRExecution[0] = 'Change Forbidden';

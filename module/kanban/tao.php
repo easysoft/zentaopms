@@ -497,7 +497,7 @@ class kanbanTao extends kanbanModel
         $item['objectStatus'] = !empty($card->objectStatus) ? $card->objectStatus : '';
         $item['deleted']      = !empty($card->deleted) ? $card->deleted : 0;
         $item['date']         = !empty($card->date) ? $card->date : '';
-        $item['estimate']     = !empty($card->estimate) ? $card->estimate : 0;
+        $item['estimate']     = !empty($card->estimate) ? helper::formatHours($card->estimate) : 0;
         $item['deadline']     = !empty($card->deadline) ? $card->deadline : '';
         $item['severity']     = !empty($card->severity) ? $card->severity : '';
         $item['cardType']     = $cell->type;
@@ -542,7 +542,7 @@ class kanbanTao extends kanbanModel
 
         if($cell->type == 'task')
         {
-            $item['left']       = $card->left;
+            $item['left']       = helper::formatHours($card->left);
             $item['estStarted'] = $card->estStarted;
             $item['mode']       = $card->mode;
         }

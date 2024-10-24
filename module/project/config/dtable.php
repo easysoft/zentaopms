@@ -418,6 +418,11 @@ $config->project->dtable->testtask->fieldList['title']['fixed']    = false;
 $config->project->dtable->testtask->fieldList['title']['width']    = '356';
 $config->project->dtable->testtask->fieldList['title']['data-app'] = 'project';
 
+$config->project->dtable->testtask->fieldList['pri']['name']  = 'pri';
+$config->project->dtable->testtask->fieldList['pri']['title'] = $lang->priAB;
+$config->project->dtable->testtask->fieldList['pri']['type']  = 'pri';
+$config->project->dtable->testtask->fieldList['pri']['show']  = true;
+
 $config->project->dtable->testtask->fieldList['build']['name']  = 'buildName';
 $config->project->dtable->testtask->fieldList['build']['title'] = $lang->testtask->build;
 $config->project->dtable->testtask->fieldList['build']['type']  = 'text';

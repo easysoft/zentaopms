@@ -15,7 +15,7 @@ jsVar('projectID', isset($projectID) ? $projectID : 0);
 $productRow = array();
 if(!empty($projectID))
 {
-    $productRow[] = on::change('#product', 'loadBuilds');
+    $productRow[] = on::change('#product', 'changeProduct');
     $productRow[] = formRow
     (
         setClass($product->shadow ? 'hidden' : ''),

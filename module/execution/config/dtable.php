@@ -333,6 +333,11 @@ $config->execution->testtask->dtable->fieldList['title']['fixed']    = false;
 $config->execution->testtask->dtable->fieldList['title']['width']    = '356';
 $config->execution->testtask->dtable->fieldList['title']['data-app'] = 'execution';
 
+$config->execution->testtask->dtable->fieldList['pri']['name']  = 'pri';
+$config->execution->testtask->dtable->fieldList['pri']['title'] = $lang->priAB;
+$config->execution->testtask->dtable->fieldList['pri']['type']  = 'pri';
+$config->execution->testtask->dtable->fieldList['pri']['show']  = true;
+
 $config->execution->testtask->dtable->fieldList['build']['name']  = 'buildName';
 $config->execution->testtask->dtable->fieldList['build']['title'] = $lang->testtask->build;
 $config->execution->testtask->dtable->fieldList['build']['type']  = 'text';

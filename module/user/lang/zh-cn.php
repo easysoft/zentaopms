@@ -145,6 +145,7 @@ $lang->user->dynamic   = '动态';
 $lang->user->openedBy    = '由%s创建';
 $lang->user->assignedTo  = '指派给%s';
 $lang->user->finishedBy  = '由%s完成';
+$lang->user->involved    = '由%s参与';
 $lang->user->resolvedBy  = '由%s解决';
 $lang->user->closedBy    = '由%s关闭';
 $lang->user->reviewedBy  = '由%s评审';

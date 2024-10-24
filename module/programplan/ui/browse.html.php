@@ -20,7 +20,7 @@ if(empty($plans))
     (
         setClass('table-empty-tip'),
         span(setClass('muted'), $lang->programplan->noData),
-        common::hasPriv('programplan', 'create') ? btn(setClass('info'), set::url($this->createLink('programplan', 'create', "projectID=$projectID&productID=$productID")), icon('plus'), $lang->programplan->create) : null
+        common::canModify('project', $project) && common::hasPriv('programplan', 'create') ? btn(setClass('info'), set::url($this->createLink('programplan', 'create', "projectID=$projectID&productID=$productID")), icon('plus'), $lang->programplan->create) : null
     );
 }
 else

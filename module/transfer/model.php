@@ -215,21 +215,19 @@ class transferModel extends model
 
         $moduleName = $this->app->rawModule;
         $methodName = $this->app->rawMethod;
-        $action     = $this->dao->select('*')->from(TABLE_WORKFLOWACTION)->where('module')->eq($moduleName)->andWhere('action')->eq($methodName)->fetch();
+        $groupID    = $this->loadModel('workflowgroup')->getGroupIDByData($moduleName, null);
+        $action     = $this->loadModel('workflowaction')->getByModuleAndAction($moduleName, $methodName, $groupID);
 
         if(empty($action)) return $fieldList;
         if($action->extensionType == 'none' and $action->buildin == 1) return $fieldList;
 
-        $layouts      = $this->loadModel('workflowlayout')->getFields($moduleName, $methodName);
-        $notEmptyRule = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
-
-        $workflowFields = $this->loadModel('workflowaction')->getFields($moduleName, $methodName);
+        $notEmptyRule   = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
+        $workflowFields = $this->workflowaction->getPageFields($moduleName, $methodName, true, null, 0, $groupID);
         foreach($workflowFields as $field)
         {
             if(empty($fieldList[$field->field])) continue;
             if(!empty($field->buildin)) continue;
             if(empty($field->show)) continue;
-            if(!isset($layouts[$field->field])) continue;
             if($field->control == 'file')
             {
                 unset($fieldList[$field->field]);
@@ -885,7 +883,7 @@ class transferModel extends model
             $tmpArray = new stdClass();
             foreach($row as $currentColumn => $cellValue)
             {
-                $cellValue = trim($cellValue);
+                $cellValue = trim((string)$cellValue);
                 /* 第一行是标题字段。*/
                 /* First row is title field. */
                 if($currentRow == 1)

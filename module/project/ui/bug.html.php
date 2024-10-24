@@ -17,7 +17,8 @@ featureBar
     li(searchToggle(set::module('projectBug'), set::open($type == 'bysearch')))
 );
 
-$canCreate = (common::canModify('project', $project) && hasPriv('bug', 'create'));
+$canModify = common::canModify('project', $project);
+$canCreate = ($canModify && hasPriv('bug', 'create'));
 toolbar
 (
     hasPriv('bug', 'export') ? item(set(array
@@ -70,7 +71,6 @@ foreach($config->bug->dtable->fieldList as $fieldCode => $fieldInfo)
 
 if(!$canBatchAssignTo) $config->bug->dtable->fieldList['id']['type'] = 'id';
 
-foreach($bugs as $bug) $bug->canBeChanged = common::canBeChanged('bug', $bug);
 $footToolbar = array();
 if($canBatchAssignTo)
 {
@@ -86,6 +86,7 @@ if($canBatchAssignTo)
 
 $cols = $this->loadModel('datatable')->getSetting('project');
 $bugs = initTableData($bugs, $cols, $this->bug);
+if(!$canModify) foreach($bugs as $bug) $bug->actions = array();
 
 dtable
 (

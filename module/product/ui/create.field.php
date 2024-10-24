@@ -25,6 +25,6 @@ if($config->systemMode != 'light')
 
 if(!empty($config->setCode))
 {
-    $fields->field('code')->width('1/4');
+    $fields->field('code')->width('1/2');
     $fields->field('type')->width('1/4');
 }

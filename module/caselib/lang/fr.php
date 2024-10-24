@@ -23,6 +23,7 @@ $lang->caselib->delete          = "Supprimer Suite";
 $lang->caselib->linkVersion     = "Version";
 $lang->caselib->deleted         = 'Supprimé';
 $lang->caselib->exportTemplate  = 'Exporter Modèle';
+$lang->caselib->exportCase      = 'Export Case';
 $lang->caselib->batchCreateCase = 'Créer par lot';
 $lang->caselib->batchEditCase   = 'Batch Edit Case';
 $lang->caselib->import          = 'Importer';

@@ -1236,6 +1236,74 @@ class pivotState
     }
 
     /**
+     * Check fields with setting.
+     *
+     * @param  bool    $removeUnused
+     * @access public
+     * @return bool
+     */
+    public function checkFieldsWithSetting($removeUnused = false)
+    {
+        $settings = $this->settings;
+        $fields   = $this->fieldSettings;
+
+        $isChanged = false;
+        foreach($settings as $key => $value)
+        {
+            if(strpos($key, 'group') === 0 && !isset($fields[$value]))
+            {
+                $isChanged = true;
+                if($removeUnused) unset($this->settings[$key]);
+            }
+            if($key === 'columns')
+            {
+                foreach($value as $index => $column)
+                {
+                    if(!isset($fields[$column['field']]) || !isset($fields[$column['slice']]))
+                    {
+                        $isChanged = true;
+                        if($removeUnused) unset($this->settings['columns'][$index]);
+                    }
+                }
+            }
+        }
+
+        $filters = $this->filters;
+        foreach($filters as $index => $filter)
+        {
+            $from = zget($filter, 'from', 'result');
+            if($from == 'query') continue;
+            if(!isset($fields[$filter['field']]))
+            {
+                $isChanged = true;
+                if($removeUnused) unset($this->filters[$index]);
+            }
+        }
+
+        $drills = $this->drills;
+        foreach($drills as $index => $drill)
+        {
+            if(!isset($fields[$drill['field']]))
+            {
+                $isChanged = true;
+                if($removeUnused) unset($this->drills[$index]);
+            }
+            foreach($drill['conditions'] as $conditionIndex => $condition)
+            {
+                if(!isset($fields[$condition['queryField']]))
+                {
+                    $isChanged = true;
+                    if($removeUnused) unset($this->drills[$index]['conditions'][$conditionIndex]);
+                }
+            }
+        }
+
+        if($removeUnused) $this->completeSettings();
+
+        return $isChanged;
+    }
+
+    /**
      * Check settings.
      *
      * @access public

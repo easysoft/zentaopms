@@ -23,10 +23,12 @@ class createBranchTester extends tester
         $form->wait(2);
         if ($form->dom->createBranchForm)
         {
-            if ($this->checkFormTips('branch')) return $this->success('分支名称必填提示信息正确');
+            $nameTip      = $form->dom->nameTip->getText();
+            $branchName   = sprintf($this->lang->branch->name, $this->lang->branch->common);
+            $nameEmptyTip = sprintf($this->lang->error->notempty, $branchName);
+            if ($nameTip == $nameEmptyTip) return $this->success('分支名称必填提示信息正确');
             if ($branch->name != '' && $form->dom->nameTip)
             {
-                //分支已存在
                 $nameTip = str_replace('@branch@', $this->lang->branch->common, $this->lang->branch->existName);
                 return ($form->dom->nameTip->getText() == $nameTip)
                     ? $this->success('分支已存在提示信息正确')

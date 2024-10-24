@@ -426,6 +426,7 @@ $lang->group->package->workflowLabel         = '工作流标签';
 $lang->group->package->workflowReport        = '工作流报表';
 $lang->group->package->workflowDatasource    = '工作流数据源';
 $lang->group->package->workflowRule          = '工作流验证规则';
+$lang->group->package->workflowGroup         = '工作流流程模板';
 $lang->group->package->workflow              = '工作流';
 $lang->group->package->downloadCode          = '下载代码';
 $lang->group->package->dev                   = '二次开发';

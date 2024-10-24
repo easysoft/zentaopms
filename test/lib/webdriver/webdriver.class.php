@@ -1189,4 +1189,18 @@ class dom
     {
         return $this->driver->executeScript('return $("[name=' . $pickerName . ']").zui("picker").options.items;');
     }
+
+    /**
+     * 在Zeneditor中输入内容
+     * set value in Zeneditor.
+     *
+     * @param  string  $value
+     * @access public
+     * @return void
+     */
+    public function setValueInZenEditor($value)
+    {
+        $value = json_encode($value);
+        return $this->driver->executeScript("arguments[0].setHTML($value);", array($this->element));
+    }
 }
