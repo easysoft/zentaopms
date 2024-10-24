@@ -21,6 +21,7 @@ class thinkStepQuote extends wg
     {
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
+
     protected function build(): array
     {
         global $lang, $app;
@@ -35,5 +36,17 @@ class thinkStepQuote extends wg
             $citation     = isset($step->options->citation) ? $step->options->citation : 1;
             $selectColumn = isset($step->options->selectColumn) ? $step->options->selectColumn : null;
         }
+        $quoteQuestionsItems = array();
+        if(!empty($quoteQuestions))
+        {
+            foreach($quoteQuestions as $item)
+            {
+                $quoteQuestionsItems[] = array('text' => $item->index . '. ' . $item->title, 'value' => $item->id);
+            }
+        }
+
+        return array
+        (
+        );
     }
 }
