@@ -95,7 +95,7 @@ else
         set::footToolbar($footToolbar),
         set::checkInfo(jsRaw('function(checkedIDList){return \'\';}')),
         set::rowKey('revision'),
-        set::footPager(usePager())
+        set::footPager(usePager('pager', 'noTotalCount'))
     );
 }
 

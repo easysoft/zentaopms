@@ -297,7 +297,7 @@ class design extends control
      * @access public
      * @return void
      */
-    public function linkCommit(int $designID = 0, int $repoID = 0, string $begin = '', string $end = '', int $recTotal = 0, int $recPerPage = 50, int $pageID = 1)
+    public function linkCommit(int $designID = 0, int $repoID = 0, string $begin = '', string $end = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         if($_POST)
         {
@@ -317,7 +317,11 @@ class design extends control
         $repos     = $this->loadModel('repo')->getRepoPairs('project', $design->project);
         $repoID    = $repoID ? $repoID : key($repos);
         $repo      = $this->loadModel('repo')->getByID((int)$repoID);
-        $revisions = $this->repo->getCommits($repo, '', 'HEAD', 'dir', null, $begin, date('Y-m-d 23:59:59', strtotime($end)));
+
+        /* Init pager. */
+        $this->app->loadClass('pager', true);
+        $pager     = new pager(0, $recPerPage, $pageID);
+        $revisions = $this->repo->getCommits($repo, '', 'HEAD', 'dir', $pager, $begin, date('Y-m-d 23:59:59', strtotime($end)));
 
         $this->session->set('designRevisions', $revisions);
 
@@ -331,11 +335,6 @@ class design extends control
             if(isset($linkedRevisions[$commit->id])) unset($revisions[$id]);
         }
 
-        /* Init pager. */
-        $this->app->loadClass('pager', true);
-        $pager          = new pager(count($revisions), $recPerPage, $pageID);
-        $chunkRevisions = array_chunk($revisions, $pager->recPerPage);
-
         $this->config->design->linkcommit->dtable->fieldList['revision']['link'] = sprintf($this->config->design->linkcommit->dtable->fieldList['revision']['link'], $repoID, $design->project);
         if(empty($repo->SCM) || $repo->SCM != 'Git') unset($this->config->design->linkcommit->dtable->fieldList['commit']);
 
@@ -343,7 +342,7 @@ class design extends control
         $this->view->repos     = $repos;
         $this->view->repoID    = $repoID;
         $this->view->repo      = $repo;
-        $this->view->revisions = empty($chunkRevisions) ? $chunkRevisions : $chunkRevisions[$pageID - 1];
+        $this->view->revisions = $revisions;
         $this->view->designID  = $designID;
         $this->view->begin     = $begin;
         $this->view->end       = $end;
