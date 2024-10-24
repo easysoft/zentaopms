@@ -275,6 +275,14 @@ class pivotState
     public $pager;
 
     /**
+     * sqlChanged
+     *
+     * @var bool
+     * @access public
+     */
+    public $sqlChanged = false;
+
+    /**
      * filterChanged.
      *
      * @var bool
@@ -757,7 +765,7 @@ class pivotState
         $settings = $this->settings;
         if(!isset($settings['summary']) || $settings['summary'] !== 'notuse') $this->settings['summary'] = 'use';
         if(!isset($settings['group1']))  $this->settings['group1'] = '';
-        if(!isset($settings['columns'])) $this->addColumn();
+        if(!isset($settings['columns']) || empty($settings['columns'])) $this->addColumn();
         if(!isset($settings['columnTotal'])) $this->settings['columnTotal'] = 'noShow';
         if(!isset($settings['columnPosition'])) $this->settings['columnPosition'] = 'bottom';
 
@@ -1288,12 +1296,12 @@ class pivotState
                 $isChanged = true;
                 if($removeUnused) unset($this->drills[$index]);
             }
-            foreach($drill['conditions'] as $conditionIndex => $condition)
+            foreach($drill['condition'] as $conditionIndex => $condition)
             {
                 if(!isset($fields[$condition['queryField']]))
                 {
                     $isChanged = true;
-                    if($removeUnused) unset($this->drills[$index]['conditions'][$conditionIndex]);
+                    if($removeUnused) unset($this->drills[$index]['condition'][$conditionIndex]);
                 }
             }
         }
