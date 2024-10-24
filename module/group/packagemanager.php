@@ -369,6 +369,10 @@ $config->group->subset->repo = new stdclass();
 $config->group->subset->repo->order = 2400;
 $config->group->subset->repo->nav   = 'devops';
 
+$config->group->subset->deployment = new stdclass();
+$config->group->subset->deployment->order = 2400;
+$config->group->subset->deployment->nav   = 'devops';
+
 $config->group->subset->search = new stdclass();
 $config->group->subset->search->order = 1570;
 
@@ -452,10 +456,6 @@ $config->group->subset->officeexport->nav   = 'oa';
 $config->group->subset->ops = new stdclass();
 $config->group->subset->ops->order = 1920;
 $config->group->subset->ops->nav   = 'admin';
-
-$config->group->subset->deploy = new stdclass();
-$config->group->subset->deploy->order = 3020;
-$config->group->subset->deploy->nav   = 'devops';
 
 $config->group->subset->traincourse = new stdclass();
 $config->group->subset->traincourse->order = 2000;
@@ -1739,7 +1739,7 @@ $config->group->package->system->privs['system-ossview']      = array('edition' 
 
 $config->group->package->host = new stdclass();
 $config->group->package->host->order  = 2220;
-$config->group->package->host->subset = 'ops';
+$config->group->package->host->subset = 'deployment';
 $config->group->package->host->privs  = array();
 $config->group->package->host->privs['host-browse']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('admin-index'), 'recommend' => array('host-create', 'host-edit', 'host-treemap', 'host-view'));
 $config->group->package->host->privs['host-create']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('host-browse'), 'recommend' => array('host-changeStatus', 'host-edit'));
@@ -1789,49 +1789,6 @@ $config->group->package->service->privs['service-edit']   = array('edition' => '
 $config->group->package->service->privs['service-delete'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('service-browse'), 'recommend' => array('service-create', 'service-edit', 'service-manage'));
 $config->group->package->service->privs['service-view']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('service-browse'), 'recommend' => array('service-create', 'service-edit', 'service-manage'));
 $config->group->package->service->privs['service-manage'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('service-browse'), 'recommend' => array('service-create', 'service-edit'));
-
-$config->group->package->deployPlan = new stdclass();
-$config->group->package->deployPlan->order  = 5;
-$config->group->package->deployPlan->subset = 'deploy';
-$config->group->package->deployPlan->privs  = array();
-$config->group->package->deployPlan->privs['deploy-browse']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array('ops-stage', 'repo-maintain'), 'recommend' => array('deploy-activate', 'deploy-create', 'deploy-edit', 'deploy-finish', 'deploy-view'));
-$config->group->package->deployPlan->privs['deploy-create']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('deploy-browse'), 'recommend' => array('deploy-activate', 'deploy-edit', 'deploy-finish'));
-$config->group->package->deployPlan->privs['deploy-edit']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('deploy-browse'), 'recommend' => array('deploy-activate', 'deploy-create', 'deploy-finish'));
-$config->group->package->deployPlan->privs['deploy-delete']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 6, 'depend' => array('deploy-browse'), 'recommend' => array('deploy-create', 'deploy-edit'));
-$config->group->package->deployPlan->privs['deploy-activate'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('deploy-browse'), 'recommend' => array('deploy-create', 'deploy-edit', 'deploy-finish'));
-$config->group->package->deployPlan->privs['deploy-finish']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('deploy-browse'), 'recommend' => array('deploy-activate', 'deploy-create', 'deploy-edit'));
-$config->group->package->deployPlan->privs['deploy-view']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('deploy-browse'), 'recommend' => array('deploy-activate', 'deploy-create', 'deploy-edit', 'deploy-finish'));
-$config->group->package->deployPlan->privs['ops-stage']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(), 'recommend' => array());
-
-$config->group->package->deployScope = new stdclass();
-$config->group->package->deployScope->order  = 10;
-$config->group->package->deployScope->subset = 'deploy';
-$config->group->package->deployScope->privs  = array();
-$config->group->package->deployScope->privs['deploy-scope']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('deploy-browse'), 'recommend' => array('deploy-manageScope'));
-$config->group->package->deployScope->privs['deploy-manageScope'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('deploy-browse', 'deploy-scope'), 'recommend' => array());
-
-$config->group->package->deployStep = new stdclass();
-$config->group->package->deployStep->order  = 15;
-$config->group->package->deployStep->subset = 'deploy';
-$config->group->package->deployStep->privs  = array();
-$config->group->package->deployStep->privs['testtask-runDeployCase']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 6, 'depend' => array('deploy-browse', 'deploy-steps'), 'recommend' => array('deploy-assignTo', 'deploy-editStep', 'deploy-finishStep', 'deploy-manageStep', 'testtask-deployCaseResults'));
-$config->group->package->deployStep->privs['testtask-deployCaseResults'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 7, 'depend' => array('deploy-browse', 'deploy-steps'), 'recommend' => array('deploy-assignTo', 'deploy-editStep', 'deploy-finishStep', 'deploy-manageStep', 'testtask-runDeployCase'));
-$config->group->package->deployStep->privs['deploy-steps']               = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array('deploy-browse'), 'recommend' => array('deploy-assignTo', 'deploy-editStep', 'deploy-finishStep', 'deploy-manageStep', 'deploy-viewStep', 'testtask-deployCaseResults', 'testtask-runDeployCase'));
-$config->group->package->deployStep->privs['deploy-manageStep']          = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('deploy-browse', 'deploy-steps'), 'recommend' => array('deploy-assignTo', 'deploy-editStep', 'deploy-finishStep', 'testtask-deployCaseResults', 'testtask-runDeployCase'));
-$config->group->package->deployStep->privs['deploy-finishStep']          = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('deploy-browse', 'deploy-steps'), 'recommend' => array('deploy-assignTo', 'deploy-editStep', 'deploy-manageStep', 'testtask-deployCaseResults', 'testtask-runDeployCase'));
-$config->group->package->deployStep->privs['deploy-assignTo']            = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('deploy-browse', 'deploy-steps'), 'recommend' => array('deploy-editStep', 'deploy-finishStep', 'deploy-manageStep', 'testtask-deployCaseResults', 'testtask-runDeployCase'));
-$config->group->package->deployStep->privs['deploy-viewStep']            = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('deploy-browse', 'deploy-steps'), 'recommend' => array('deploy-assignTo', 'deploy-editStep', 'deploy-finishStep', 'deploy-manageStep', 'testtask-deployCaseResults', 'testtask-runDeployCase'));
-$config->group->package->deployStep->privs['deploy-editStep']            = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('deploy-browse', 'deploy-steps'), 'recommend' => array('deploy-assignTo', 'deploy-finishStep', 'deploy-manageStep', 'testtask-deployCaseResults', 'testtask-runDeployCase'));
-$config->group->package->deployStep->privs['deploy-deleteStep']          = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 8, 'depend' => array('deploy-browse', 'deploy-steps'), 'recommend' => array('deploy-assignTo', 'deploy-editStep', 'deploy-finishStep', 'deploy-manageStep', 'testtask-deployCaseResults', 'testtask-runDeployCase'));
-
-$config->group->package->deployCase = new stdclass();
-$config->group->package->deployCase->order  = 20;
-$config->group->package->deployCase->subset = 'deploy';
-$config->group->package->deployCase->privs  = array();
-$config->group->package->deployCase->privs['deploy-cases']            = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 50, 'depend' => array('deploy-browse'), 'recommend' => array('deploy-linkCases', 'deploy-unlinkCase'));
-$config->group->package->deployCase->privs['deploy-linkCases']        = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 55, 'depend' => array('deploy-browse', 'deploy-cases'), 'recommend' => array('deploy-unlinkCase'));
-$config->group->package->deployCase->privs['deploy-unlinkCase']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 60, 'depend' => array('deploy-browse', 'deploy-cases'), 'recommend' => array('deploy-batchUnlinkCases', 'deploy-linkCases'));
-$config->group->package->deployCase->privs['deploy-batchUnlinkCases'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 65, 'depend' => array('deploy-browse', 'deploy-cases'), 'recommend' => array('deploy-unlinkCase'));
 
 $config->group->package->qaIndex = new stdclass();
 $config->group->package->qaIndex->order  = 5;

@@ -103,7 +103,7 @@ $lang->account     = new stdclass();
 $lang->ops         = new stdclass();
 $lang->domain      = new stdclass();
 $lang->service     = new stdclass();
-$lang->deploy      = new stdclass();
+$lang->deployment  = new stdclass();
 $lang->metric      = new stdclass();
 
 $lang->ai          = new stdclass();
