@@ -1589,26 +1589,6 @@ class baseRouter
     //-------------------- 模块及扩展设置(Module and extension) --------------------//
 
     /**
-     * 加载cache模块。
-     * Load the cache module
-     *
-     * @access public
-     * @return void.
-     */
-    public function loadCache(): void
-    {
-        if(!$this->checkInstalled()) return;
-
-        $this->setModuleName('cache');
-        $cacheModelFile = $this->setModelFile('cache');
-        if(!file_exists($cacheModelFile)) return;
-
-        helper::import($cacheModelFile);
-
-        $this->cacheModel = new cacheModel();
-    }
-
-    /**
      * 加载common模块。
      *
      *  common模块比较特别，它会执行几乎每次请求都需要执行的操作，例如：
@@ -1626,8 +1606,6 @@ class baseRouter
      */
     public function loadCommon(): object|bool
     {
-        $this->loadCache();
-
         $this->setModuleName('common');
         $commonModelFile = $this->setModelFile('common');
         if(!file_exists($commonModelFile)) return false;
@@ -1655,8 +1633,6 @@ class baseRouter
         $common->setUserConfig();
 
         $this->setDebug();
-
-        $common->cache = $this->cacheModel;
 
         return $common;
     }
@@ -3099,6 +3075,9 @@ class baseRouter
 
         $dao = new $driver($this);
         $this->dao = $dao;
+
+        $this->loadClass('mao', true);
+        $this->mao = new mao($this);
     }
 
     /**

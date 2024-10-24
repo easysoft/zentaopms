@@ -124,13 +124,13 @@ class baseModel
     public $global;
 
     /**
-     * $cache对象，用于访问缓存。
-     * The $cache object, used to access the cache.
+     * $mao对象，用于访问缓存。
+     * The $mao object, used to access the cache.
      *
      * @var object
      * @access public
      */
-    public $cache;
+    public $mao;
 
     /**
      * 构造方法。
@@ -153,7 +153,7 @@ class baseModel
         $this->lang    = $lang;
         $this->dbh     = $dbh;
         $this->dao     = $dao;
-        $this->cache   = $app->cacheModel;
+        $this->mao     = $app->mao;
         $this->appName = empty($appName) ? $this->app->getAppName() : $appName;
 
         $moduleName = $this->getModuleName();

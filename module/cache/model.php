@@ -67,7 +67,6 @@ class cacheModel extends model
     {
         parent::__construct();
 
-        $this->cache = $this->app->loadClass('cache');
     }
 
     /**

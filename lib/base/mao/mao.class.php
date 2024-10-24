@@ -1,7 +1,7 @@
 <?php
 /**
- * ZenTaoPHP的cache类。
- * The cache class file of ZenTaoPHP framework.
+ * ZenTaoPHP的mao类。
+ * The mao class file of ZenTaoPHP framework.
  *
  * The author disclaims copyright to this source code.  In place of
  * a legal notice, here is a blessing:
@@ -12,12 +12,12 @@
  */
 
 /**
- * Cache类。
- * Cache class.
+ * Mao类。
+ * Mao class.
  *
  * @package framework
  */
-class baseCache
+class baseMao
 {
     /**
      * 全局对象$app
@@ -125,9 +125,9 @@ class baseCache
      * @access public
      * @return void
      */
-    public function __construct()
+    public function __construct($app)
     {
-        global $config, $app;
+        global $config;
         $this->app    = $app;
         $this->config = $config;
 

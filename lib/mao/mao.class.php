@@ -9,8 +9,8 @@
  * @link        https://www.zentao.net
  */
 
-helper::import(dirname(__FILE__, 2) . '/base/cache/cache.class.php');
+helper::import(dirname(__FILE__, 2) . '/base/mao/mao.class.php');
 
-class cache extends baseCache
+class mao extends baseMao
 {
 }
