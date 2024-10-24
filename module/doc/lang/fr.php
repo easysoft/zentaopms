@@ -26,6 +26,7 @@ $lang->doclib->spaceName    = 'Space Name';
 $lang->doclib->createSpace  = 'Create Space';
 $lang->doclib->editSpace    = 'Edit Space';
 $lang->doclib->privateACL   = "Private (Only creators and whitelisted users with %s permissions can access it)";
+$lang->doclib->defaultOrder = 'Document default order';
 
 $lang->doclib->tip = new stdclass();
 $lang->doclib->tip->selectExecution = "When execution is empty, the library created is the {$lang->projectCommon} library";
@@ -47,6 +48,10 @@ $lang->doclib->aclList = array();
 $lang->doclib->aclList['open']    = "Public (Users who can access doccan access it)";
 $lang->doclib->aclList['default'] = "Default (Users who can access the selected %s or users in the whiltelist can access it)";
 $lang->doclib->aclList['private'] = "Private (Only the one who created it or users in the whiltelist can access it)";
+
+$lang->doclib->idOrder = array();
+$lang->doclib->idOrder['id_asc']  = 'ID ascending order';
+$lang->doclib->idOrder['id_desc'] = 'ID descending order' ;
 
 $lang->doclib->create['product']   = 'Créer ' . $lang->productCommon . ' Library';
 $lang->doclib->create['execution'] = 'Créer ' . 'Bibliothèque ' . $lang->executionCommon;

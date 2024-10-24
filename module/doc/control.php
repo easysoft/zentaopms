@@ -892,7 +892,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function productSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'order_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = '', int $docID = 0, string $search = '')
+    public function productSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = '', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = '', int $docID = 0, string $search = '')
     {
         $noSpace = $this->app->tab != 'doc';
         $mode    = $noSpace ? 'list' : $mode;
@@ -915,7 +915,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function projectSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'order_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = '', int $docID = 0, string $search = '')
+    public function projectSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = '', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = '', int $docID = 0, string $search = '')
     {
         $noSpace = $this->app->tab != 'doc';
         $mode    = $noSpace ? 'list' : $mode;
@@ -938,7 +938,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function teamSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'order_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = '', int $docID = 0, string $search = '')
+    public function teamSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = '', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = '', int $docID = 0, string $search = '')
     {
         if(empty($objectID))
         {
@@ -1489,7 +1489,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function app(string $type = 'mine', int $spaceID = 0, int $libID = 0, int $moduleID = 0, int $docID = 0, string $mode = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $filterType = '', string $search = '', bool $noSpace = false)
+    public function app(string $type = 'mine', int $spaceID = 0, int $libID = 0, int $moduleID = 0, int $docID = 0, string $mode = '', string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $filterType = '', string $search = '', bool $noSpace = false)
     {
         $isNotDocTab = $this->app->tab != 'doc';
         if(empty($mode)) $mode = ($isNotDocTab || $type == 'execution' || $noSpace) ? 'list' : 'home';
@@ -1507,6 +1507,12 @@ class doc extends control
         if($type == 'mine') $menuType = 'my';
         else $menuType = $type == 'custom' ? 'team' : $type;
         if(isset($this->lang->doc->menu->{$menuType})) $this->lang->doc->menu->{$menuType}['alias'] .= ',' . $this->app->rawMethod;
+
+        if(empty($orderBy))
+        {
+            $lib = $this->doc->getLibByID($libID);
+            if(!empty($lib)) $orderBy = $lib->orderBy;
+        }
 
         $this->view->type           = $type;
         $this->view->spaceID        = $spaceID;

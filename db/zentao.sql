@@ -824,6 +824,7 @@ CREATE TABLE IF NOT EXISTS `zt_doclib` (
   `addedBy` varchar(30) NOT NULL DEFAULT '',
   `addedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `orderBy` varchar(30) NOT NULL DEFAULT 'id_asc',
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE INDEX `product` ON `zt_doclib`(`product`);

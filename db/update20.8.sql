@@ -51,3 +51,5 @@ INSERT INTO `zt_workflowgroup` (`type`, `projectModel`, `projectType`, `name`, `
 ('project', 'scrum',     'project',    '敏捷-项目型默认流程', 'scrumproject',     'normal', 'rnd', '1'),
 ('project', 'waterfall', 'product',    '瀑布-产品型默认流程', 'waterfallproduct', 'normal', 'rnd', '1'),
 ('project', 'waterfall', 'project',    '瀑布-项目型默认流程', 'waterfallproject', 'normal', 'rnd', '1');
+
+ALTER TABLE `zt_doclib` ADD `orderBy` varchar(30) NOT NULL DEFAULT 'id_asc' AFTER `deleted`;

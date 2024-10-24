@@ -26,12 +26,14 @@ $config->doc->form->createlib['users']     = array('type' => 'array',    'requir
 $config->doc->form->createlib['vision']    = array('type' => 'string',   'required' => false, 'default' => $config->vision);
 $config->doc->form->createlib['addedBy']   = array('type' => 'string',   'required' => false, 'default' => '');
 $config->doc->form->createlib['addedDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);
+$config->doc->form->createlib['orderBy']   = array('type' => 'string',   'required' => false, 'default' => 'id_asc');
 
-$config->doc->form->editlib['space']  = array('type' => 'string',   'required' => true,  'default' => '');
-$config->doc->form->editlib['name']   = array('type' => 'string',   'required' => true,  'default' => '', 'filter' => 'trim');
-$config->doc->form->editlib['acl']    = array('type' => 'string',   'required' => false, 'default' => '');
-$config->doc->form->editlib['groups'] = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
-$config->doc->form->editlib['users']  = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
+$config->doc->form->editlib['space']   = array('type' => 'string',   'required' => true,  'default' => '');
+$config->doc->form->editlib['name']    = array('type' => 'string',   'required' => true,  'default' => '', 'filter' => 'trim');
+$config->doc->form->editlib['acl']     = array('type' => 'string',   'required' => false, 'default' => '');
+$config->doc->form->editlib['groups']  = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
+$config->doc->form->editlib['users']   = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
+$config->doc->form->editlib['orderBy'] = array('type' => 'string',   'required' => false, 'default' => 'id_asc');
 
 $config->doc->form->create['title']        = array('type' => 'string',   'required' => true,  'default' => '', 'filter' => 'trim');
 $config->doc->form->create['version']      = array('type' => 'int',      'required' => false, 'default' => 1);

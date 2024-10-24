@@ -26,6 +26,7 @@ $lang->doclib->spaceName    = '空间名称';
 $lang->doclib->createSpace  = '新建空间';
 $lang->doclib->editSpace    = '编辑空间';
 $lang->doclib->privateACL   = "私有 （仅创建者和有%s权限的白名单用户可访问）";
+$lang->doclib->defaultOrder = '文档默认排序';
 
 $lang->doclib->tip = new stdclass();
 $lang->doclib->tip->selectExecution = "执行为空时，创建的库为{$lang->projectCommon}库";
@@ -47,6 +48,10 @@ $lang->doclib->aclList = array();
 $lang->doclib->aclList['open']    = "公开 （有文档视图权限即可访问）";
 $lang->doclib->aclList['default'] = "默认 （有所选%s访问权限用户可以访问）";
 $lang->doclib->aclList['private'] = "私有 （仅创建者和白名单用户可访问）";
+
+$lang->doclib->idOrder = array();
+$lang->doclib->idOrder['id_asc']  = 'ID 正序';
+$lang->doclib->idOrder['id_desc'] = 'ID 倒序';
 
 $lang->doclib->create['product']   = '创建' . $lang->productCommon . '文档库';
 $lang->doclib->create['execution'] = '创建' . $lang->executionCommon . '文档库';
