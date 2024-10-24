@@ -387,9 +387,17 @@ const actionsMap =
      */
     space: function(info)
     {
-        const lang  = getLang();
-        const items = [];
-        const space = info.data; // Space info object.
+        const lang      = getLang();
+        const items     = [];
+        const space     = info.data; // Space info object.
+
+        /* 获取侧边栏没有文档库时的操作按钮。 Get actions when sidebar no lib. */
+        if(info.ui === 'sidebar-no-lib')
+        {
+            if(!space.canModify || !hasPriv('createLib')) return null;
+            return [{icon: 'plus', text: lang.createLib, command: 'createLib', btnType: 'primary-pale'}];
+        }
+
         if(hasPriv('editSpace'))   items.push({text: lang.actions.editSpace, command: `editSpace/${space.id}`});
         if(hasPriv('deleteSpace')) items.push({text: lang.actions.deleteSpace, command: `deleteSpace/${space.id}`});
         if(!items.length) return;
@@ -447,8 +455,15 @@ const actionsMap =
         const items     = [];
         const lib       = info.data;
         const canModify = getDocApp().space.canModify;
+        const canAddModule = canModify && hasPriv('addModule');
 
-        if(canModify && hasPriv('addModule') && info.ui !== 'space-card' && info.ui !== 'sidebar') items.push({text: lang.actions.addModule, command: `addModule/${lib.id}/0/${lib.id}/child`});
+        /* 获取侧边栏没有模块时的操作按钮。 Get actions when sidebar no module. */
+        if(canAddModule && info.ui === 'sidebar-no-module')
+        {
+            return [{text: lang.actions.addModule, command: `addModule/${lib.id}/0/${lib.id}/child`}];
+        }
+
+        if(canAddModule && info.ui !== 'space-card' && info.ui !== 'sidebar') items.push({text: lang.actions.addModule, command: `addModule/${lib.id}/0/${lib.id}/child`});
         if(canModify && hasPriv('editLib'))   items.push({text: lang.actions.editLib, command: `editLib/${lib.id}`});
         if(canModify && hasPriv('moveLib') && info.ui !== 'space-card')   items.push({text: lang.moveTo, command: `moveLib/${lib.id}`});
         if(canModify && hasPriv('deleteLib')) items.push({text: lang.actions.deleteLib, command: `deleteLib/${lib.id}`});
@@ -522,7 +537,7 @@ const actionsMap =
      * 定义文档列表的操作按钮。
      * Define the actions on the doc list.
      */
-    'doc-list': function()
+    'doc-list': function(info)
     {
         const lang           = getLang();
         const docApp         = getDocApp();
@@ -531,6 +546,13 @@ const actionsMap =
         const canCreateLib   = canModify && hasPriv('createLib');
         const canCreateSpace = canModify && hasPriv('createSpace');
         const canExportDoc   = hasPriv('exportDoc');
+
+        /* 文档列表没有文档时的按钮。Actions for empty doc list. */
+        if(info.ui === 'doc-list-empty')
+        {
+            return canCreateDoc ? [{icon: 'plus', text: lang.createDoc, command: 'startCreateDoc'}] : null;
+        }
+
         const items = canModify ?
         [
             canCreateDoc ? {icon: 'plus', text: lang.createDoc, command: 'startCreateDoc'} : null,
