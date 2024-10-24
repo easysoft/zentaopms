@@ -20,12 +20,22 @@ function getDocApp()
  * Get language item, if key is not set, return the whole language object, language items are defined in $langData in module/doc/ui/app.html.php.
  *
  * @param {string} key
+ * @param {array|string|object}  args
  */
-function getLang(key)
+function getLang(key, args)
 {
     const docApp = getDocApp();
     const lang = docApp ? docApp.props.langData : {};
-    return typeof key === 'string' ? lang[key] : lang;
+    if(typeof key !== 'string') return lang;
+    const value = lang[key];
+    if(value === undefined) return key;
+    if(args)
+    {
+        args = Array.isArray(args) ? args : [args];
+        args.unshift(value);
+        return zui.formatString.apply(null, args);
+    }
+    return value;
 }
 
 /**
