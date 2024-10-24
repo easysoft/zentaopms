@@ -28,7 +28,7 @@ function getLang(key, args)
     const lang = docApp ? docApp.props.langData : {};
     if(typeof key !== 'string') return lang;
     const value = lang[key];
-    if(value === undefined) return key;
+    if(value === undefined) return;
     if(args)
     {
         args = Array.isArray(args) ? args : [args];
@@ -996,7 +996,7 @@ function getFilterTypes(mode)
     {
         if(type === 'project') return getLang('projectFilterTypes');
         if(type === 'product') return getLang('productFilterTypes');
-        return;
+        return [];
     }
     if(mode === 'list')    return getLang('filterTypes');
     if(mode === 'files')   return getLang('fileFilterTypes');
