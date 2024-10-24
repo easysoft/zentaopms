@@ -121,6 +121,10 @@ class detail extends wg
         .detail-sections .history-panel > .panel-heading,
         .detail-sections .history-panel > .panel-body {padding: 0.75rem 1.5rem}
         .detail-sections .history-panel-header > .listitem {padding: 0}
+        .important-w-0 {width: 0!important;}
+        .no-width {padding: 0!important; width: 0!important; overflow: hidden!important;}
+        .detail-toggle {margin: 0!important;}
+        .detail-toggle:hover {background-color: rgba(var(--color-border-rgb), var(--tw-bg-opacity)); transition-duration: .15s; transition-property: background-color; transition-timing-function: cubic-bezier(.4,0,.2,1);}
 CSS;
     }
 
@@ -441,11 +445,28 @@ CSS;
     {
         return div
         (
-            setClass('detail-side flex-none'),
+            setClass('detail-side flex-none relative'),
             setStyle('width', $this->prop('sideWidth') . 'px'),
             setKey('side'),
             $this->buildTabsList(),
-            $this->block('side')
+            $this->block('side'),
+            div(
+                setClass('detail-toggle h-full w-2 absolute top-0 flex justify-center items-center'),
+                setStyle('left', '-.5rem'),
+                btn(
+                    setClass('w-4 rounded-lg'),
+                    set::icon('chevron-right'),
+                    set::iconClass('text-sm text-gray'),
+                    on::click()
+                        ->do(<<<'JS'
+                            $('.detail-side').toggleClass('important-w-0');
+                            $('.tabs').toggleClass('no-width');
+                            $element.find('.icon')
+                                .toggleClass('icon-chevron-right')
+                                .toggleClass('icon-chevron-left');
+                        JS)
+                )
+            )
         );
     }
 
