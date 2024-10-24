@@ -103,14 +103,14 @@ class thinkStepBase extends wg
     }
     protected function buildDetailTip(): array
     {
-        global $lang, $app;
+        global $lang, $app, $config;
         $app->loadLang('thinkstep');
         $app->loadLang('thinkrun');
         list($quoteQuestions, $quotedQuestions, $step, $isRun) = $this->prop(array('quoteQuestions', 'quotedQuestions', 'step', 'isRun'));
 
         if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);
 
-        $isCheckBox  = !empty($step) && $step->type == 'question' && $step->options->questionType == 'checkbox';
+        $isCheckBox  = !empty($step) && $step->type == 'question' && in_array($step->options->questionType, $config->thinkstep->quoteQuestionType);
         $isQuoteItem   = $isCheckBox && !empty($step->options->setOption) && $step->options->setOption == 1;
         $detailTip   = array();
         $quotedItems = array();
