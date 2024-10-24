@@ -1200,7 +1200,6 @@ class dom
      */
     public function setValueInZenEditor($value)
     {
-        $value = json_encode($value);
-        return $this->driver->executeScript("arguments[0].setHTML($value);", array($this->element));
+        return $this->driver->executeScript("arguments[0].setHTML('$value');", array($this->element));
     }
 }
