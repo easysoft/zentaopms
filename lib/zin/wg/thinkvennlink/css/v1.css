@@ -1,0 +1,13 @@
+.think-venn-link .bg-think-blue-100 {background-color: #cfe7fe;}
+.think-venn-link .text-think-blue {color: #2294FB;}
+.think-venn-link .bg-think-yellow-100 {background-color: #FFF2D9;}
+.think-venn-link .text-think-yellow {color: #FAAE1A;}
+.think-venn-link .think-blue-outline {--skin-ring: #2294FB;}
+.think-venn-link .special-outline {--skin-text: unset; --skin-bg: var(--color-special-100);}
+.think-venn-link .success-outline {--skin-text: unset; --skin-bg: var(--color-success-100);}
+.think-venn-link .warning-outline {--skin-text: unset; --skin-bg: var(--color-warning-100);}
+.think-venn-link .important-outline {--skin-text: unset; --skin-bg: var(--color-important-100);}
+.think-venn-link .bg-success-100 {background-color: var(--color-success-100);}
+.think-venn-link .bg-special-100 {background-color: var(--color-special-100);}
+.think-venn-link .bg-important-100 {background-color: var(--color-important-100);}
+.think-venn-link .bg-warning-100 {background-color: var(--color-warning-100);}
