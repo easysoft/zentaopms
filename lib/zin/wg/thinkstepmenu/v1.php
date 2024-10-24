@@ -204,9 +204,7 @@ class thinkStepMenu extends wg
             'innerClass' => 'text-gray opacity-50',
             'hint'       => $item->existNotNode ? $this->lang->thinkstep->cannotDeleteNode : $this->lang->thinkstep->cannotDeleteQuestion,
         );
-        $options  = $item->type === 'question' ? json_decode($item->options) : null;
-        $linkType = !empty($options) && ($options->questionType == 'checkbox' || $options->questionType === 'radio' || $options->questionType === 'multicolumn');
-        $linkItem = ($canLink && $linkType) ? array(
+        $linkItem = ($canLink && $item->type === 'question') ? array(
             'key'          => 'linkNode',
             'icon'         => 'link',
             'text'         => $this->lang->thinkstep->actions['link'],

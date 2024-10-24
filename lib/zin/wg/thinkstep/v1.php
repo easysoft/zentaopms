@@ -45,7 +45,7 @@ class thinkStep  extends wg
         $canEdit   = common::hasPriv('thinkstep', 'edit');
         $canDelete = common::hasPriv('thinkstep', 'delete');
         $linkmodel = !$isRun && in_array($wizard->model, $config->thinkwizard->venn);
-        $canLink   = common::hasPriv('thinkstep', 'link') && $linkmodel;
+        $canLink   = common::hasPriv('thinkstep', 'link') && $linkmodel && $basicType == 'question';
 
         return div
         (
