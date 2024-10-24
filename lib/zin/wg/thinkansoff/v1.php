@@ -32,7 +32,22 @@ class thinkAnsoff extends thinkModel
 
         list($blocks, $mode) = $this->prop(array('blocks', 'mode'));
         $titleKey   = $key == 0 ? 2 : 3;
-        $rowContent = null;
+        $rowContent = div
+        (
+            setClass('col items-center mt-1.5'),
+            div
+            (
+                setClass('w-full flex items-stretch gap-1.5'),
+                div
+                (
+                    setClass('pr-2.5 flex items-center justify-center text-gray-400 font-medium'),
+                    setStyle(array('writing-mode' => 'vertical-rl')),
+                    $lang->thinkwizard->ansoff->titles[$titleKey]
+                ),
+                $this->buildItem($key, $blocks[$key]),
+                $this->buildItem($key + 1, $blocks[$key + 1])
+            )
+        );
 
         return $showTitle ? div
         (
