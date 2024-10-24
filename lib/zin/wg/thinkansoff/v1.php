@@ -30,7 +30,7 @@ class thinkAnsoff extends thinkModel
         global $app, $lang;
         $app->loadLang('thinkwizard');
 
-        list($blocks, $mode) = $this->prop(array('blocks', 'mode'));
+        $blocks     = $this->prop('blocks');
         $titleKey   = $key == 0 ? 2 : 3;
         $rowContent = div
         (
