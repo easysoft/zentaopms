@@ -481,7 +481,7 @@ class baseCache
      */
     public function fetch($field = '')
     {
-        $rawResult = $this->app->redis->getObjects($this->table);
+        $rawResult = $this->app->redis->fetchAll($this->table);
         if(empty($rawResult)) return '';
 
         foreach($rawResult as $row)
@@ -505,7 +505,7 @@ class baseCache
      */
     public function fetchAll($keyField = 0)
     {
-        $rawResult = $this->app->redis->getObjects($this->table);
+        $rawResult = $this->app->redis->fetchAll($this->table);
         if(empty($rawResult)) return [];
 
         $result = [];

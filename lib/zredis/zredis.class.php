@@ -264,7 +264,7 @@ class zredis
      * @access public
      * @return object
      */
-    public function getObject(string $table, int|string $key)
+    public function fetch(string $table, int|string $key)
     {
         if(empty($this->redis))                         return $this->log('Redis is not initialized.');
         if(empty($table))                               return $this->log('Table name is required.');
@@ -287,7 +287,7 @@ class zredis
      * @access public
      * @return array
      */
-    public function getObjects(string $table, array $keyList = [])
+    public function fetchAll(string $table, array $keyList = [])
     {
         if(empty($this->redis))                         return $this->log('Redis is not initialized.');
         if(empty($table))                               return $this->log('Table name is required.');
@@ -318,7 +318,7 @@ class zredis
      * @access public
      * @return array
      */
-    public function getPairs(string $table, string $key, string $value, array $keyList = [])
+    public function fetchPairs(string $table, string $key, string $value, array $keyList = [])
     {
         if(empty($this->redis))                         return $this->log('Redis is not initialized.');
         if(empty($table))                               return $this->log('Table name is required.');
@@ -326,7 +326,7 @@ class zredis
         if(empty($value))                               return $this->log('Value is required.');
         if(empty($this->config->redis->caches[$table])) return $this->log('No cache settings for table ' . $table);
 
-        $objects = $this->getObjects($table, $keyList);
+        $objects = $this->fetchAll($table, $keyList);
         if(!$objects) return [];
 
         $paris = [];
