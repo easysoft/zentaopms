@@ -34,6 +34,16 @@ class thinkAnsoff extends thinkModel
         $titleKey   = $key == 0 ? 2 : 3;
         $rowContent = null;
 
-        return div();
+        return $showTitle ? div
+        (
+            div
+            (
+                setClass('w-full flex mb-4'),
+                setStyle(array('padding-left' => '46px')),
+                div(setClass('flex-1 flex items-center justify-center text-gray-400 font-medium'), $lang->thinkwizard->ansoff->titles[0]),
+                div(setClass('flex-1 flex items-center justify-center text-gray-400 font-medium'), $lang->thinkwizard->ansoff->titles[1]),
+            ),
+            $rowContent
+        ) : $rowContent;
     }
 }
