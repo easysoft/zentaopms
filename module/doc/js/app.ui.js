@@ -1111,6 +1111,48 @@ function getSortableOptions(type)
 }
 
 /**
+ * 获取文档详情侧边栏标签页定义。
+ * Get the doc view sidebar tabs.
+ *
+ * @param {object} doc
+ */
+function getDocViewSidebarTabs(doc, info)
+{
+    if(info.isNewDoc) return [{key: 'outline', icon: 'list-box', title: getLang('docOutline')}];
+    return [
+        {key: 'info',    icon: 'info',     title: getLang('docInfo')},
+        {key: 'outline', icon: 'list-box', title: getLang('docOutline')},
+        {key: 'history', icon: 'history',  title: getLang('history')},
+        {
+            key   : 'editors',
+            icon  : 'format-list-numbers',
+            title : getLang('updateHistory'),
+            render: function(doc)
+            {
+                const docApp  = getDocApp();
+                const editors = doc.editors || [];
+                const html =
+                [
+                    '<div class="col gap-2">',
+                        `<div class="font-bold px-1">${getLang('updateHistory')}</div>`,
+                        editors.length ? [
+                            '<ul class="space-y-1">',
+                                editors.map(({account, date}) =>
+                                {
+                                    const user = docApp.getUserInfo(account);
+                                    return `<li>${getLang('updateInfoFormat', [{name: user ? user.realname : account, time: zui.formatDate(date, 'yyyy-M-d')}])}</li>`;
+                                }).join(''),
+                            '</ul>'
+                        ].join('\n') : `<div class="text-gray p-1">${getLang('noUpdateInfo')}</div>`,
+                    '</div>'
+                ].join('\n');
+                return {html: html};
+            }
+        }
+    ]
+}
+
+/**
  * 设置文档应用组件选项。
  * Set the doc app options.
  */
@@ -1119,16 +1161,17 @@ window.setDocAppOptions = function(_, options)
     const privs      = options.privs;
     const newOptions =
     {
-        commands          : commands,
-        onCreateDoc       : privs.create ? handleCreateDoc: null,
-        onSaveDoc         : privs.edit ? handleSaveDoc    : null,
-        canMoveDoc        : canMoveDoc,
-        onSwitchView      : handleSwitchView,
-        getActions        : getActions,
-        getTableOptions   : getTableOptions,
-        getFilterTypes    : getFilterTypes,
-        isMatchFilter     : isMatchFilter,
-        getSortableOptions: getSortableOptions,
+        commands             : commands,
+        onCreateDoc          : privs.create ? handleCreateDoc: null,
+        onSaveDoc            : privs.edit ? handleSaveDoc    : null,
+        canMoveDoc           : canMoveDoc,
+        onSwitchView         : handleSwitchView,
+        getActions           : getActions,
+        getTableOptions      : getTableOptions,
+        getFilterTypes       : getFilterTypes,
+        isMatchFilter        : isMatchFilter,
+        getSortableOptions   : getSortableOptions,
+        getDocViewSidebarTabs: getDocViewSidebarTabs,
     };
     return newOptions;
 };
