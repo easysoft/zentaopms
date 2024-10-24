@@ -27,7 +27,7 @@ class cacheModel extends model
      * @access private
      * @var    string
      */
-    private $method = ''
+    private $method = '';
 
     /**
      * 缓存的键。
@@ -63,7 +63,7 @@ class cacheModel extends model
      * @access public
      * @return void
      */
-    public function __construct(): void
+    public function __construct()
     {
         parent::__construct();
 
@@ -104,17 +104,17 @@ class cacheModel extends model
      * @access public
      * @return cacheModel
      */
-    public function __call(string $method, array $args)
+    public function __call($method, $args)
     {
         $this->setMethod($method);
 
         $key = "res:{$this->module}:{$method}";
         $this->setKey($key);
 
-        if(empty($this->$module)) return $this;
-        if(!method_exists($this->$module, $method)) return $this->log("The method {$method} is not exist.");
+        if(empty($this->{$this->module})) return $this;
+        if(!method_exists($this->{$this->module}, $method)) return $this->log("The method {$method} is not exist.");
 
-        $key = call_user_func_array([$this->$module, $method], $args);
+        $key = call_user_func_array([$this->{$this->module}, $method], $args);
         $this->setKey($key);
 
         return $this;
