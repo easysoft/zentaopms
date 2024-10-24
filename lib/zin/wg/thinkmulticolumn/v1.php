@@ -111,147 +111,43 @@ class thinkMulticolumn extends thinkQuestion
         );
         return $detailWg;
     }
-    protected function buildQuotedSettingForm(): array
+
+    protected function buildFormItem(): array
     {
         global $lang, $app;
         $app->loadLang('thinkstep');
-        list($step, $required, $fields, $requiredCols, $quotedQuestions, $linkColumn, $setOption, $quoteTitle, $quoteQuestions, $citation, $selectColumn, $quotedQuestions) = $this->prop(array('step', 'required', 'fields', 'requiredCols', 'quotedQuestions', 'linkColumn', 'setOption', 'quoteTitle', 'quoteQuestions', 'citation', 'selectColumn', 'quotedQuestions'));
-        $requiredItems   = $lang->thinkstep->requiredList;
-        $linkColumn      = !empty($linkColumn) ? $linkColumn : array();
+        $formItems = parent::buildFormItem();
+        list($step, $questionType, $required, $fields, $supportAdd, $canAddRows, $quotedQuestions, $linkColumn, $setOption, $requiredCols, $quoteQuestions) = $this->prop(array('step', 'questionType', 'required', 'fields', 'supportAdd', 'canAddRows', 'quotedQuestions', 'linkColumn','setOption', 'requiredCols', 'quoteQuestions'));
         $requiredOptions = array();
+        $linkColumn      = !empty($linkColumn) ? $linkColumn : array();
+
         if($step)
         {
             $required = isset($step->options->required) ? $step->options->required : 1;
             if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);
             $fields       = $step->options->fields;
-            $requiredCols = $required && isset($step->options->requiredCols) ? $step->options->requiredCols : '';
             $linkColumn   = !empty($step->link) ? json_decode($step->link)->column : array();
+            $requiredCols = $required && isset($step->options->requiredCols) ? $step->options->requiredCols : '';
             $setOption    = isset($step->options->setOption) ? $step->options->setOption : false;
-            $defaultQuote = !empty($quoteQuestions) ? $quoteQuestions[0]->id : null;
-            $quoteTitle   = isset($step->options->quoteTitle) ? $step->options->quoteTitle : $defaultQuote;
-            $citation     = isset($step->options->citation) ? $step->options->citation : 1;
-            $selectColumn = isset($step->options->selectColumn) ? $step->options->selectColumn : null;
+            $supportAdd   = $step->options->supportAdd;
+            $canAddRows   = $supportAdd && isset($step->options->canAddRows) ? $step->options->canAddRows : '';
             foreach($fields as $key => $field) $requiredOptions[] = array('value' => $key + 1, 'text' => $field);
             $fields = !empty($step->options->fields) ? $step->options->fields :  array('', '', '', '');
-        }
-        $quoteQuestionsItems = array();
-
-        if(!empty($quoteQuestions))
-        {
-            foreach($quoteQuestions as $item)
-            {
-                $quoteQuestionsItems[] = array('text' => $item->index . '. ' . $item->title, 'value' => $item->id);
-            }
         }
 
         $requiredTip = '';
         if(!empty($setOption))       $requiredTip = $lang->thinkstep->tips->multicolumnRequired;
         if(!empty($quotedQuestions)) $requiredTip = $lang->thinkstep->tips->required;
 
-        return array
-        (
-            formRow
-            (
-                formGroup
-                (
-                    setClass('w-66'),
-                    set::label( $lang->thinkstep->label->setOption),
-                    radioList
-                    (
-                        set::name('options[setOption]'),
-                        set::inline(true),
-                        set::value($setOption),
-                        set::items($lang->thinkstep->setOptionList),
-                        set::disabled(empty($quoteQuestions)),
-                        on::change()
-                            ->do("
-                                $('.think-options-field').toggleClass('hidden', target.value == 1);
-                                $('.think-quote').toggleClass('hidden', target.value == 0);
-                                hiddenRequiredCols();
-                                $('.text-danger').remove();
-                                $('.has-error').removeClass('has-error');
-                                $('.required-tip button').toggleClass('hidden', target.value == 0);
-                            ")
-                    )
-                ),
-                icon
-                (
-                    setClass('mt-9 text-gray-400 cursor-pointer ml-1 text-base pt-0.5'),
-                    toggle::tooltip(array('placement' => 'top', 'title' => empty($quoteQuestions) ? $lang->thinkstep->tips->quoteTitle : $lang->thinkstep->tips->setOption, 'max-width' => '220px', 'className' => 'text-gray border border-gray-300', 'type' => 'white')),
-                    'help'
-                )
-            ),
-            formGroup
-            (
-                setClass('think-quote', $setOption == 0 ? 'hidden' : ''),
-                set::label($lang->thinkstep->label->quoteTitle),
-                set::labelClass('required'),
-                picker
-                (
-                    setdata('quote-questions', $quoteQuestions),
-                    setdata('selectColumn', $selectColumn),
-                    set(array
-                    (
-                        'class'       => 'options-quote-title',
-                        'name'        => 'options[quoteTitle]',
-                        'placeholder' => $lang->thinkstep->placeholder->quoteTitle,
-                        'items'       => $quoteQuestionsItems,
-                        'value'       => !empty($quoteTitle) && !empty($quoteQuestionsItems) ? $quoteTitle : '',
-                        'disabled'    => empty($quoteQuestions),
-                        'title'       => empty($quoteQuestions) ? $lang->thinkstep->tips->quoteTitle : null,
-                        'required'    => true,
-                    )),
-                    on::inited()->call('changeQuoteTitle'),
-                    bind::change('changeQuoteTitle()')
-                )
-            ),
-            formRow
-            (
-                setClass('think-quote quote-citation gap-0', $setOption == 0 ? 'hidden' : ''),
-                setdata('citation', $citation),
-                formGroup
-                (
-                    setClass('citation'),
-                    set::label($lang->thinkstep->label->citation),
-                    set::labelClass('required'),
-                    radioList
-                    (
-                        set::name('options[citation]'),
-                        set::inline(true),
-                        set::value($citation),
-                        set::items($lang->thinkstep->citationList)
-                    )
-                ),
-                formGroup
-                (
-                    setClass('multicolumn-citation w-1/2', $citation != 3 ? 'hidden' : ''),
-                    set::label($lang->thinkstep->label->citation),
-                    set::labelClass('required'),
-                    radioList
-                    (
-                        set::name('options[citation]'),
-                        set::inline(true),
-                        set::value($citation),
-                        set::items($lang->thinkstep->multiCitationList)
-                    )
-                ),
-                formGroup
-                (
-                    setClass('select-column', $citation != 3 ? 'hidden' : ''),
-                    set::label($lang->thinkstep->label->selectColumn),
-                    set::labelClass('required'),
-                    set::labelHint($lang->thinkstep->tips->selectColumn),
-                    picker(
-                        set(array(
-                            'name'        => 'options[selectColumn]',
-                            'placeholder' => $lang->thinkstep->placeholder->quoteTitle,
-                            'required'    => true,
-                            'items'       => array(),
-                            'value'       => $selectColumn
-                        ))
-                    )
-                )
-            ),
+        jsVar('canAddRowsOfMulticol', (int)$canAddRows + 5);
+        jsVar('addRowsTips', $lang->thinkrun->tips->addRow);
+        jsVar('addLang', $lang->thinkrun->add);
+        jsVar('tipQuestion', $lang->thinkstep->tips->question);
+        jsVar('requiredColTip', $lang->thinkstep->tips->requiredCol);
+
+        $formItems[] = array(
+            formHidden('options[questionType]', $questionType),
+            thinkStepQuote(set::step($step), set::questionType($questionType), set::quoteQuestions($quoteQuestions)),
             formGroup
             (
                 set::label($lang->thinkstep->label->columnTitle),
@@ -274,7 +170,7 @@ class thinkMulticolumn extends thinkQuestion
                         set::name('options[required]'),
                         set::inline(true),
                         set::value($required),
-                        set::items($requiredItems),
+                        set::items($lang->thinkstep->requiredList),
                         set::disabled(!empty($quotedQuestions)),
                         on::change()->do("hiddenRequiredCols()")
                     )
@@ -297,30 +193,6 @@ class thinkMulticolumn extends thinkQuestion
                     )
                 )
             ),
-        );
-    }
-
-    protected function buildFormItem(): array
-    {
-        global $lang, $app;
-        $app->loadLang('thinkstep');
-        $formItems = parent::buildFormItem();
-        list($step, $questionType, $supportAdd, $canAddRows) = $this->prop(array('step', 'questionType', 'supportAdd', 'canAddRows'));
-        if($step)
-        {
-            $supportAdd = $step->options->supportAdd;
-            $canAddRows = $supportAdd && isset($step->options->canAddRows) ? $step->options->canAddRows : '';
-        }
-
-        jsVar('canAddRowsOfMulticol', (int)$canAddRows + 5);
-        jsVar('addRowsTips', $lang->thinkrun->tips->addRow);
-        jsVar('addLang', $lang->thinkrun->add);
-        jsVar('tipQuestion', $lang->thinkstep->tips->question);
-        jsVar('requiredColTip', $lang->thinkstep->tips->requiredCol);
-
-        $formItems[] = array(
-            formHidden('options[questionType]', $questionType),
-            $this->buildQuotedSettingForm(),
             formRow
             (
                 setClass('mb-3'),
