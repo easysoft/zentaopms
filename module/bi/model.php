@@ -368,8 +368,6 @@ class biModel extends model
         return $results;
     }
 
-
-
     /**
      * Get sql result columns.
      *
