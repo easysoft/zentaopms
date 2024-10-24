@@ -98,6 +98,19 @@ class thinkStepQuote extends wg
             (
                 setClass('think-quote quote-citation gap-0', $setOption == 0 ? 'hidden' : ''),
                 setdata('citation', $citation),
+                formGroup
+                (
+                    setClass('citation'),
+                    set::label($lang->thinkstep->label->citation),
+                    set::labelClass('required'),
+                    radioList
+                    (
+                        set::name('options[citation]'),
+                        set::inline(true),
+                        set::value($citation),
+                        set::items($lang->thinkstep->citationList)
+                    )
+                ),
             )
         );
     }
