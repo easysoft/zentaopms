@@ -990,7 +990,12 @@ class screenModel extends model
     {
         if($chart->sql)
         {
-            $settings     = json_decode($chart->settings, true);
+            $settings = json_decode($chart->settings, true);
+            if(isset($settings['columns']))
+            {
+                foreach($settings['columns'] as $index => $column) $settings['columns'][$index]['drill'] = $this->loadModel('pivot')->fetchPivotDrill($chart->id, $column['field']);
+            }
+
             $fields       = json_decode($chart->fields, true);
             $langs        = json_decode($chart->langs, true);
             $chartFilters = json_decode($chart->filters, true);
@@ -1033,9 +1038,9 @@ class screenModel extends model
                 }
             }
 
-            $align       = array();
-            $headers     = array();
-            $groupCount  = 0;
+            $align        = array();
+            $headers      = array();
+            $groupCount   = 0;
             $drillConfigs = array();
             foreach($options->cols as $cols)
             {
