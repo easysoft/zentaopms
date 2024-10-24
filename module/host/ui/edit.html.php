@@ -78,7 +78,7 @@ formPanel
             set::label($lang->host->password),
             set::name('password'),
             set::control('password'),
-            set::value(zget($host, 'password', ''))
+            set::value($lang->host->defaultPWD)
         ),
         formGroup
         (

@@ -19,6 +19,7 @@ $lang->host->hardwareType = 'Hardware Type';
 $lang->host->group        = 'Host Group';
 $lang->host->admin        = 'Admin';
 $lang->host->password     = 'Password';
+$lang->host->defaultPWD   = '******';
 $lang->host->sshPort      = 'SSH Port';
 $lang->host->cabinet      = 'Cabinet';
 $lang->host->intranet     = 'Intranet IP';

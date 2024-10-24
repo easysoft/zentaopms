@@ -133,7 +133,7 @@ class host extends control
         $this->view->rooms      = $this->loadModel('serverroom')->getPairs();
         $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu(0, 'host');
         $this->view->actions    = $this->loadModel('action')->getList('host', $id);
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->accounts   = $this->loadModel('account')->getPairs();
         $this->display();
     }
 

@@ -32,10 +32,10 @@ detailBody
             setClass('table table-fixed canvas host-view-table'),
             h::tr
             (
+                h::th($lang->host->CD),
+                h::td($host->CD),
                 h::th($lang->host->name),
-                h::td($host->name),
-                h::th(),
-                h::td()
+                h::td($host->name)
             ),
             h::tr
             (
@@ -46,24 +46,21 @@ detailBody
             ),
             h::tr
             (
-                h::th($lang->host->serverModel),
-                h::td($host->serverModel),
-                h::th($lang->host->hostType),
-                h::td(zget($lang->host->hostTypeList, $host->hostType, ""))
+                h::th($lang->host->admin),
+                h::td(zget($host, 'admin', '') ? $accounts[$host->admin] : ''),
             ),
+            $host->CD == 'spug'?
             h::tr
             (
-                h::th($lang->host->cpuBrand),
-                h::td($host->cpuBrand),
-                h::th($lang->host->cpuModel),
-                h::td($host->cpuModel)
-            ),
+                h::th($lang->host->password),
+                h::td($lang->host->defaultPWD),
+                h::th($lang->host->sshPort),
+                h::td($host->sshPort)
+            ) : null,
             h::tr
             (
                 h::th($lang->host->cpuNumber),
                 h::td($host->cpuNumber),
-                h::th($lang->host->cpuCores),
-                h::td($host->cpuCores)
             ),
             h::tr
             (
