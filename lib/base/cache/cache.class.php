@@ -101,6 +101,24 @@ class baseCache
     public $conditionIsTrue;
 
     /**
+     * 待处理的数据。
+     * The data to be processed.
+     *
+     * @var array
+     * @access public
+     */
+    public $data;
+
+    /**
+     * 待处理数据的column，作为缓存的key。
+     * The column as key.
+     *
+     * @var string
+     * @access public
+     */
+    public $dataColumn;
+
+    /**
      * 构造方法。
      * The construct method.
      *
@@ -428,6 +446,74 @@ class baseCache
     {
         return $this;
     }
+
+    /**
+     * 选择处理的数据和column最为缓存的key。
+     * Load data and select column as key.
+     *
+     * @param  array  $data
+     * @param  string $field
+     * @access public
+     * @return static|cache.
+     */
+    public function use($data, $column)
+    {
+        $this->data       = $data;
+        $this->dataColumn = $column;
+
+        return $this;
+    }
+
+    /**
+     * data追加字段。
+     * Append field to data.
+     *
+     * @param  string $tableName
+     * @param  string $fields
+     * @access public
+     * @return static|cache.
+     */
+    public function append($tableName, $fields)
+    {
+        $fields = explode(',', $fields);
+
+        $alias = [];
+        foreach($fields as $field)
+        {
+            $fieldInfo = explode(' ', trim($field));
+            if(count($fieldInfo) == 1)
+            {
+                $alias[$fieldInfo[0]] = $fieldInfo[0];
+            }
+            elseif(count($fieldInfo) == 2)
+            {
+                $alias[$fieldInfo[0]] = $fieldInfo[1];
+            }
+            else
+            {
+                $alias[$fieldInfo[0]] = $fieldInfo[2];
+            }
+        }
+
+        $cacheKeys = [];
+        $key = $this->dataColumn;
+        foreach($this->data as $row)
+        {
+            if(!in_array($row->$key, $cacheKeys)) $cacheKeys[] = $row->$key;
+        }
+        $objects = $this->app->redis->fetchAll($tableName, $cacheKeys);
+        foreach($this->data as $row)
+        {
+            $object = $objects[$row->$key];
+            foreach($alias as $aliasKey => $aliasValue)
+            {
+                $row->$aliasValue = $object->$aliasKey;
+            }
+        }
+
+        return $this;
+    }
+
 
     //-------------------- Fetch相关方法(Fetch related methods) -------------------//
 

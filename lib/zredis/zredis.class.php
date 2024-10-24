@@ -261,13 +261,17 @@ class zredis
         if(!$keyList) $keyList = $this->redis->smembers("set:{$code}List");
         foreach($keyList as $key) $keys[] = "raw:{$code}:{$key}";
 
-        $objects = $this->redis->mget($keys);
-        foreach($objects as $key => $object)
+        $objects  = $this->redis->mget($keys);
+        $cacheKey = $this->config->redis->caches[$table];
+
+        $result = [];
+        foreach($objects as $object)
         {
-            if($object) $objects[$key] = json_decode($object);
+            $object = json_decode($object);
+            if($object) $result[$object->$cacheKey] = $object;
         }
 
-        return $objects;
+        return $result;
     }
 
     /**

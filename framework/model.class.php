@@ -413,7 +413,7 @@ class model extends baseModel
      * @access public
      * @return mixed
      */
-    public function __call($method, $arguments)
+    public function __call(string $method, array $arguments)
     {
         $moduleName = $this->getModuleName();
         $taoClass   = $moduleName . 'Tao';
