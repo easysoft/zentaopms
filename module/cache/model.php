@@ -82,8 +82,6 @@ class cacheModel extends model
     {
         $this->reset();
 
-        if(!isset($this->config->cache->keys[$module])) return $this->log("The cache configuration of the module {$module} is not exist.");
-
         $this->setModule($module);
 
         if(isset($this->$module)) return $this;
@@ -108,8 +106,6 @@ class cacheModel extends model
      */
     public function __call(string $method, array $args)
     {
-        if(!isset($this->config->cache->keys[$this->module])) return $this->log('The module is not exist.');
-
         $this->setMethod($method);
 
         $key = "res:{$this->module}:{$method}";
@@ -215,25 +211,7 @@ class cacheModel extends model
      */
     public function value(int|string|object|array $value): cacheModel
     {
-        if(empty($this->config->cache->keys[$this->module][$this->method]['type'])) return $this->log("The cache configuration of [{$this->module}][{$this->method}] is not exist.");
-
-        $config = $this->config->cache->keys[$this->module][$this->method];
-        $type   = $config['type'];
-        $filter = isset($config['filter']) ? $config['filter'] : '';
-
-        if($type == 'int'    && !is_int($value))    return $this->log('The value must be int.');
-        if($type == 'string' && !is_string($value)) return $this->log('The value must be string.');
-        if($type == 'object' && !is_object($value)) return $this->log('The value must be object.');
-        if($type == 'array')
-        {
-            if(!is_array($value)) return $this->log('The value must be array.');
-            if($filter != 'encode' && !$this->isIndexedArray($array)) return $this->log('The value must be indexed array.');
-        }
-
-        if($type == 'object' || ($type == 'array' && $filter == 'encode')) $value = json_encode($value);
-
-        $this->setValue($value);
-
+        $this->setValue(json_encode($value));
         return $this;
     }
 
@@ -263,26 +241,9 @@ class cacheModel extends model
      */
     public function fetch(): bool|int|string|object|array
     {
-        if(empty($this->config->cache->keys[$this->module][$this->method]['type']))
-        {
-            $this->log("The cache configuration of [{$this->module}][{$this->method}] is not exist.");
-            return false;
-        }
-
-        $config = $this->config->cache->keys[$this->module][$this->method];
-        $type   = $config['type'];
-        $filter = isset($config['filter']) ? $config['filter'] : '';
-
-        if($type == 'int')    return (int)$this->app->redis->get($this->key);
-        if($type == 'string') return $this->app->redis->get($this->key);
-        if($type == 'object') return json_decode($this->app->redis->get($this->key));
-        if($type == 'array')
-        {
-            if($filter == 'encode') return json_decode($this->app->redis->get($this->key));
-
-            return $this->app->redis->smembers($this->key);
-        }
-        return false;
+        $result = $this->app->redis->get($this->key);
+        if($result) return json_decode($result);
+        return $result;
     }
 
     /**
@@ -297,43 +258,14 @@ class cacheModel extends model
         if(empty($this->value))
         {
             $this->log('The value is empty.');
-            return $this->result(false);
-        }
-        if(empty($this->config->cache->keys[$this->module][$this->method]['type']))
-        {
-            $this->log("The cache configuration of [{$this->module}][{$this->method}] is not exist.");
-            return $this->result(false);
+            $this->reset();
+            return false;
         }
 
-        $config = $this->config->cache->keys[$this->module][$this->method];
-        $type   = $config['type'];
-        $filter = isset($config['filter']) ? $config['filter'] : '';
-
-        if($type == 'int')    return $this->result($this->app->redis->set($this->key, $this->value));
-        if($type == 'string') return $this->result($this->app->redis->set($this->key, $this->value));
-        if($type == 'object') return $this->result($this->app->redis->set($this->key, $this->value));
-        if($type == 'array')
-        {
-            if($filter == 'encode') return $this->result($this->app->redis->set($this->key, $this->value));
-
-            return return $this->result($this->app->redis->sadd($this->key, ...$this->value));
-        }
-        return $this->result(false);
-    }
-
-    /**
-     * 返回结果。
-     * Return the result.
-     *
-     * @param  bool|int|string|object|array $result
-     * @access private
-     * @return bool|int|string|object|array
-     */
-    private function result(bool|int|string|object|array $result): bool|int|string|object|array
-    {
-        if($result) $this->updateRelated();
+        $this->app->redis->set($this->key, $this->value);
+        $this->updateRelatedKeys();
         $this->reset();
-        return $result;
+        return true;
     }
 
     /**
