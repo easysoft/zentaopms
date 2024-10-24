@@ -12,4 +12,14 @@ class thinkVennLink extends wg
     {
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
+
+    protected function build(): node|array
+    {
+        $wizard = $this->prop('wizard');
+        $model  = $wizard->model;
+        $wgMap  = array('3c' => 'think3c', 'ansoff' => 'thinkAnsoff');
+        if(!isset($wgMap[$model])) return array();
+
+        return div(setClass('think-venn-link'), createWg($wgMap[$model], array(set::key('link'), set::mode('preview'), set::blocks($wizard->blocks), set::disabled(true))));
+    }
 }
