@@ -32,7 +32,7 @@ class thinkStep  extends wg
 
     protected function build(): wg|node|array
     {
-        global $lang, $app;
+        global $lang, $app, $config;
         $app->loadLang('thinkstep');
 
         list($item, $action, $wizard, $addType, $isRun, $quotedQuestions) = $this->prop(array('item', 'action', 'wizard', 'addType', 'isRun', 'quotedQuestions'));
@@ -44,9 +44,8 @@ class thinkStep  extends wg
         $title     = $action == 'detail' ? sprintf($lang->thinkstep->info, $lang->thinkstep->$basicType) : sprintf($lang->thinkstep->formTitle[$type], $lang->thinkstep->$typeLang);
         $canEdit   = common::hasPriv('thinkstep', 'edit');
         $canDelete = common::hasPriv('thinkstep', 'delete');
-        $linkType  = $type === 'checkbox' || $type === 'radio' || $type === 'multicolumn';
-        $linkmodel = !$isRun && $wizard->model === '3c';
-        $canLink   = common::hasPriv('thinkstep', 'link') && $linkmodel && $linkType;
+        $linkmodel = !$isRun && in_array($wizard->model, $config->thinkwizard->venn);
+        $canLink   = common::hasPriv('thinkstep', 'link') && $linkmodel;
 
         return div
         (
@@ -63,7 +62,7 @@ class thinkStep  extends wg
                         setStyle(array('min-width' => '48px')),
                         btnGroup
                         (
-                            $canLink ? ($item->options->required ? btn
+                            $canLink ? btn
                             (
                                 setClass('btn ghost text-gray w-5 h-5 mr-1'),
                                 set::icon('link'),
@@ -72,11 +71,7 @@ class thinkStep  extends wg
                                 set('data-toggle', 'modal'),
                                 set('data-dismiss', 'modal'),
                                 set('data-size', 'sm'),
-                            ) : icon(
-                                setClass('w-5 h-5 text-gray opacity-50 ml-1 text-md pl-1 mr-1'),
-                                set::title($lang->thinkstep->tips->linkBlocks),
-                                'link'
-                            )): null,
+                            ): null,
                             $canEdit ? btn
                             (
                                 setClass('btn ghost text-gray w-5 h-5'),
