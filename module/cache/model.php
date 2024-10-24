@@ -106,7 +106,7 @@ class cacheModel extends model
      * @access public
      * @return cacheModel
      */
-    public function __call(string $method, array $args): cacheModel
+    public function __call(string $method, array $args)
     {
         if(!isset($this->config->cache->keys[$this->module])) return $this->log('The module is not exist.');
 
