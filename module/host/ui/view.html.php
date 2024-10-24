@@ -60,7 +60,7 @@ detailBody
             h::tr
             (
                 h::th($lang->host->cpuNumber),
-                h::td($host->cpuNumber),
+                h::td($host->cpuNumber ? $host->cpuNumber : ''),
             ),
             h::tr
             (
