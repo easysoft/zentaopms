@@ -18,6 +18,8 @@ $lang->host->type         = 'Type';
 $lang->host->hardwareType = 'Hardware Type';
 $lang->host->group        = 'Host Group';
 $lang->host->admin        = 'Admin';
+$lang->host->password     = 'Password';
+$lang->host->sshPort      = 'SSH Port';
 $lang->host->cabinet      = 'Cabinet';
 $lang->host->intranet     = 'Intranet IP';
 $lang->host->extranet     = 'Extranet IP';
@@ -29,6 +31,7 @@ $lang->host->cpuCores     = 'CPU Cores';
 $lang->host->cpuRate      = 'CPU Rate';
 $lang->host->memory       = 'Memory Size';
 $lang->host->serverRoom   = 'IDC';
+$lang->host->desc         = 'Description';
 
 $lang->host->createdBy   = 'CreatedBy';
 $lang->host->createdDate = 'CreatedDate';
@@ -178,4 +181,3 @@ $lang->host->notice->ip        = '『%s』incorrect format!';
 
 $lang->host->CDlist = array();
 $lang->host->CDlist['manual'] = 'Manual';
-$lang->host->CDlist['spug']   = 'Spug';

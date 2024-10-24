@@ -18,6 +18,8 @@ $lang->host->type         = '类型';
 $lang->host->hardwareType = '硬件类型';
 $lang->host->group        = '主机分组';
 $lang->host->admin        = '管理账号';
+$lang->host->password     = '密码';
+$lang->host->sshPort      = 'SSH端口';
 $lang->host->cabinet      = '机柜';
 $lang->host->intranet     = '内网IP';
 $lang->host->extranet     = '外网IP';
@@ -29,6 +31,7 @@ $lang->host->cpuCores     = '单CPU核心数';
 $lang->host->cpuRate      = 'CPU频率';
 $lang->host->memory       = '内存大小';
 $lang->host->serverRoom   = '机房';
+$lang->host->desc         = '描述';
 
 $lang->host->createdBy   = '由谁创建';
 $lang->host->createdDate = '创建时间';
@@ -178,4 +181,3 @@ $lang->host->notice->ip        = '『%s』格式不正确！';
 
 $lang->host->CDlist = array();
 $lang->host->CDlist['manual'] = '手工';
-$lang->host->CDlist['spug']   = 'Spug';

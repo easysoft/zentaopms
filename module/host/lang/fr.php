@@ -1,46 +1,49 @@
 <?php
-$lang->host->common       = 'Serveurs';
-$lang->host->browse       = 'Liste Serveurs';
-$lang->host->create       = 'Ajouter Serveur';
-$lang->host->view         = 'Détail Serveur';
-$lang->host->edit         = 'Editer';
-$lang->host->editAction   = 'Editer Serveur';
-$lang->host->delete       = 'Supprimer';
-$lang->host->deleteAction = 'Supprimer Serveur';
-$lang->host->treemap      = 'Topologie Serveur';
+$lang->host->common       = 'Host';
+$lang->host->browse       = 'Host List';
+$lang->host->create       = 'Add Host';
+$lang->host->view         = 'Host View';
+$lang->host->edit         = 'Edit';
+$lang->host->editAction   = 'Edit Host';
+$lang->host->delete       = 'Delete';
+$lang->host->deleteAction = 'Delete Host';
+$lang->host->treemap      = 'Host Topology';
 $lang->host->changeStatus = 'Online/Offline';
-$lang->host->byQuery      = 'Recherche';
-$lang->host->reason       = 'Raison';
+$lang->host->byQuery      = 'Search';
+$lang->host->reason       = 'Reason';
 
 $lang->host->CD           = 'CD';
-$lang->host->name         = 'Nom';
+$lang->host->name         = 'Name';
 $lang->host->type         = 'Type';
-$lang->host->hardwareType = 'Type Hardware';
-$lang->host->group        = 'Groupe Serveur';
+$lang->host->hardwareType = 'Hardware Type';
+$lang->host->group        = 'Host Group';
 $lang->host->admin        = 'Admin';
-$lang->host->cabinet      = 'Local';
-$lang->host->intranet     = 'IP Privée';
+$lang->host->password     = 'Password';
+$lang->host->sshPort      = 'SSH Port';
+$lang->host->cabinet      = 'Cabinet';
+$lang->host->intranet     = 'Intranet IP';
 $lang->host->extranet     = 'Extranet IP';
 $lang->host->mac          = 'MAC';
-$lang->host->cpuBrand     = 'CPU Marque';
-$lang->host->cpuModel     = 'CPU Modèle';
-$lang->host->cpuNumber    = 'CPU Numéro';
+$lang->host->cpuBrand     = 'CPU Brand';
+$lang->host->cpuModel     = 'CPU Model';
+$lang->host->cpuNumber    = 'CPU Number';
 $lang->host->cpuCores     = 'CPU Cores';
-$lang->host->cpuRate      = 'CPU Freq.';
-$lang->host->memory       = 'Capacité Mémoire';
+$lang->host->cpuRate      = 'CPU Rate';
+$lang->host->memory       = 'Memory Size';
 $lang->host->serverRoom   = 'IDC';
+$lang->host->desc         = 'Description';
 
-$lang->host->createdBy   = 'Créé par';
-$lang->host->createdDate = 'Créé le';
-$lang->host->editedBy    = 'Edité par';
-$lang->host->editedDate  = 'Edité le';
-$lang->host->all         = 'Tous Serveurs';
+$lang->host->createdBy   = 'CreatedBy';
+$lang->host->createdDate = 'CreatedDate';
+$lang->host->editedBy    = 'EditedBy';
+$lang->host->editedDate  = 'EditedDate';
+$lang->host->all         = 'All Hosts';
 
 $lang->host->empty = 'No Host';
 
-$lang->host->groupMaintenance = 'Gérer Groupes';
+$lang->host->groupMaintenance = 'Manage Group';
 
-$lang->host->status = 'Statut';
+$lang->host->status = 'Status';
 $lang->host->statusList['online']  = 'Online';
 $lang->host->statusList['busy']    = 'Overloaded';
 $lang->host->statusList['offline'] = 'Offline';
@@ -49,8 +52,8 @@ $lang->host->online  = 'On';
 $lang->host->busy    = 'Overload';
 $lang->host->offline = 'Off';
 
-$lang->host->onlineReason  = 'Raison Online';
-$lang->host->offlineReason = 'Raison Offline';
+$lang->host->onlineReason  = 'Online Reason';
+$lang->host->offlineReason = 'Offline Reason';
 
 $lang->host->unitList['GB'] = 'GB';
 $lang->host->unitList['TB'] = 'TB';
@@ -72,7 +75,7 @@ $lang->host->databaseList['mongodb34']    = 'MongoDB 3.4';
 $lang->host->databaseList['postgresql95'] = 'PostgreSQL 9.5';
 $lang->host->databaseList['postgresql96'] = 'PostgreSQL 9.6';
 
-$lang->host->webserver = 'Serveur Web';
+$lang->host->webserver = 'Web Server';
 $lang->host->webserverList['']           = '';
 $lang->host->webserverList['apache2425'] = 'Apache 2.4.25';
 $lang->host->webserverList['apache2426'] = 'Apache 2.4.26';
@@ -85,7 +88,7 @@ $lang->host->webserverList['iis7']       = 'IIS 7';
 $lang->host->webserverList['iis8']       = 'IIS 8';
 $lang->host->webserverList['iis10']      = 'IIS 10';
 
-$lang->host->language = 'Langage';
+$lang->host->language = 'Language';
 $lang->host->languageList['']   = '';
 $lang->host->languageList['php56'] = 'PHP 5.6';
 $lang->host->languageList['php70'] = 'PHP 7.0';
@@ -98,10 +101,10 @@ $lang->host->featureBar['browse']['all']        = $lang->host->all;
 $lang->host->featureBar['browse']['serverroom'] = 'Physical Topology';
 $lang->host->featureBar['browse']['group']      = 'Logical Topology';
 
-$lang->host->serverModel              = 'Modèle Serveur';
-$lang->host->hostType                 = 'Type Serveur';
-$lang->host->hostTypeList['physical'] = 'Physique';
-$lang->host->hostTypeList['virtual']  = 'Virtuel';
+$lang->host->serverModel              = 'Server Model';
+$lang->host->hostType                 = 'Host Type';
+$lang->host->hostTypeList['physical'] = 'Physical';
+$lang->host->hostTypeList['virtual']  = 'Virtual';
 
 $lang->host->osVersion             = 'OS Version';
 $lang->host->osName                = 'OS Name';
@@ -117,7 +120,7 @@ $lang->host->osNameList['windows'] = 'Microsoft Windows';
 $lang->host->osNameList['solaris'] = 'Solaris';
 $lang->host->osNameList['netware'] = 'Novell NetWare';
 $lang->host->osNameList['esx']     = 'VMware ESX';
-$lang->host->osNameList['other']   = 'Autres';
+$lang->host->osNameList['other']   = 'Others';
 
 $lang->host->tagsList['vm']     = 'VM';
 $lang->host->tagsList['native'] = 'Native';
@@ -128,7 +131,7 @@ $lang->host->windows = 'Microsoft Windows';
 $lang->host->solaris = 'Solaris';
 $lang->host->netware = 'Novell NetWare';
 $lang->host->esx     = 'VMware ESX';
-$lang->host->other   = 'Autres';
+$lang->host->other   = 'Others';
 
 $lang->host->linuxList['']   = '';
 $lang->host->linuxList['centos65'] = 'CentOS 6.5';
@@ -161,21 +164,20 @@ $lang->host->otherList['']   = '';
 $lang->host->otherList['freebsd']   = 'FreeBSD';
 $lang->host->otherList['freebsdx64']   = 'FreeBSD X64';
 
-$lang->host->diskSize   = 'Taille Disque';
-$lang->host->diskType   = 'Type Disque';
+$lang->host->diskSize   = 'Disk Size';
+$lang->host->diskType   = 'Disk Type';
 $lang->host->diskTypeList['hdd'] = 'HDD';
 $lang->host->diskTypeList['ssd'] = 'SSD';
 
-$lang->host->confirmDelete = 'Voulez-vous supprimer ce serveur ?';
+$lang->host->confirmDelete = 'Do you want to delete this host?';
 
 $lang->host->notice = new stdclass();
-$lang->host->notice->memory    = 'La capacité mémoire doit être numérique !';
-$lang->host->notice->diskSize  = 'La capacité du disque doit être numérique !';
-$lang->host->notice->cpuNumber = 'CPU number doit être numérique !';
-$lang->host->notice->cpuCores  = 'CPU cores doit être numérique !';
+$lang->host->notice->memory    = 'Memory size should be numbers！';
+$lang->host->notice->diskSize  = 'Disk size should be numbers！';
+$lang->host->notice->cpuNumber = 'CPU number should be numbers！';
+$lang->host->notice->cpuCores  = 'CPU cores should be numbers！';
 $lang->host->notice->int       = '『%s』should be a positive integer!';
 $lang->host->notice->ip        = '『%s』incorrect format!';
 
 $lang->host->CDlist = array();
 $lang->host->CDlist['manual'] = 'Manual';
-$lang->host->CDlist['spug']   = 'Spug';
