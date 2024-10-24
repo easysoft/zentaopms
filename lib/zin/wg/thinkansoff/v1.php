@@ -61,4 +61,15 @@ class thinkAnsoff extends thinkModel
             $rowContent
         ) : $rowContent;
     }
+
+    protected function buildBody(): array
+    {
+        $blocks     = $this->prop('blocks');
+        $modelItems = array();
+        foreach($blocks as $key => $block)
+        {
+            if($key % 2 == 0) $modelItems[] = $this->buildRow($key, $key == 0);
+        }
+        return $modelItems;
+    }
 }
