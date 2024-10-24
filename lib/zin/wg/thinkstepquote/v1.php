@@ -47,6 +47,23 @@ class thinkStepQuote extends wg
 
         return array
         (
+            formRow
+            (
+                formGroup
+                (
+                    setClass('w-66'),
+                    set::label( $lang->thinkstep->label->setOption),
+                    radioList
+                    (
+                        set::name('options[setOption]'),
+                        set::inline(true),
+                        set::value($setOption),
+                        set::items($lang->thinkstep->setOptionList),
+                        set::disabled(empty($quoteQuestions)),
+                        on::change()->do("changeSetOption(target)")
+                    )
+                ),
+            ),
         );
     }
 }
