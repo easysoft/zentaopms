@@ -12,15 +12,6 @@ declare(strict_types=1);
 class zredis
 {
     /**
-     * 初始化标识。
-     * Initialization flag.
-     *
-     * @var string
-     * @access public
-     */
-    const INITIALIZED = 'sys:initialized';
-
-    /**
      * 同步标识。
      * Synchronization flag.
      *
@@ -136,40 +127,12 @@ class zredis
 
             if(!$this->redis->ping()) helper::end('Can not connect to Redis server.');
 
-            if(!$this->redis->exists(zredis::INITIALIZED)) $this->init();
-
             return $this;
         }
         catch(RedisException $e)
         {
             $this->triggerError($e->getMessage(), __FILE__, __LINE__, true);
         }
-    }
-
-    /**
-     * 初始化缓存。
-     * Initialize cache.
-     *
-     * @access public
-     * @return void
-     */
-    public function init(): void
-    {
-        if(empty($this->redis)) helper::end('Redis is not initialized.');
-
-        $this->redis->watch(zredis::INITIALIZED);
-        $this->redis->multi();
-
-        foreach(array_keys($this->config->redis->caches) as $table)
-        {
-            $this->table     = $table;
-            $this->condition = '';
-            $this->update();
-        }
-
-        $this->redis->set(zredis::INITIALIZED, date('Y-m-d H:i:s'));
-
-        $this->redis->exec() ? $this->log('Redis cache initialization succeeded.') : $this->log('Redis cache initialization failed.');
     }
 
     /**
