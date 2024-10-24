@@ -63,6 +63,25 @@ class thinkStepQuote extends wg
                         on::change()->do("changeSetOption(target)")
                     )
                 ),
+                icon
+                (
+                    setClass('mt-9 text-gray-400 cursor-pointer ml-1 text-base pt-0.5'),
+                    toggle::tooltip(array('placement' => 'top', 'title' => empty($quoteQuestions) ? $lang->thinkstep->tips->quoteTitle : $lang->thinkstep->tips->setOption, 'max-width' => '220px', 'className' => 'text-gray border border-gray-300', 'type' => 'white')),
+                    'help'
+                )
+            ),
+            formGroup
+            (
+                setClass('think-quote', $setOption == 0 ? 'hidden' : ''),
+                set::label($lang->thinkstep->label->quoteTitle),
+                set::labelClass('required'),
+                picker
+                (
+                    setdata('quote-questions', $quoteQuestions),
+                    setdata('selectColumn', $selectColumn),
+                    on::inited()->call('changeQuoteTitle'),
+                    bind::change('changeQuoteTitle()')
+                )
             ),
         );
     }
