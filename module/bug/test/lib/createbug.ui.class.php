@@ -14,6 +14,7 @@ class createBugTester extends tester
         if(isset($bug['type']))        $form->dom->type->picker($bug['type']);
         if(isset($bug['severity']))    $form->dom->severity->picker($bug['severity']);
         if(isset($bug['pri']))         $form->dom->pri->picker($bug['pri']);
+        if(isset($bug['steps']))       $form->dom->steps->setValueInZenEditor($bug['steps']);
         $form->dom->save->click();
         $form->wait(2);
         if($this->response('method') == 'browse')
