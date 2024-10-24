@@ -1294,7 +1294,7 @@ class pivotModel extends model
                 $groupValue    = $getGroupValue($record, $group, $groupIndex);
                 $groupValueStr = implode('_', $groupValue);
 
-                if($groupValue[0] != '$total$' && $groupValueStr == $lastGroupValue[$group])
+                if($groupValue[0] != '$total$' && $groupValueStr == $lastGroupValue[$group] && isset($groupsRowSpan[$group]))
                 {
                     $groupRowSpan = array_pop($groupsRowSpan[$group]);
                     $groupRowSpan['index'][] = $index;
