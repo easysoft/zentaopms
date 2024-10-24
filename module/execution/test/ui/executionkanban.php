@@ -59,3 +59,9 @@ $team->root->range('1-2, 4-7, 10-18');
 $team->type->range('project{2}, execution{100}');
 $team->account->range('admin');
 $team->gen(15);
+
+$tester = new executionkanbanTester();
+$tester->login();
+
+r($tester->checkNums(array(6, 4, 6, 5))) && p('status,message') && e('SUCCESS,执行看板各列数据统计正确');
+$tester->closeBrowser();
