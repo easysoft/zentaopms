@@ -24,6 +24,8 @@ $lang->pivot->designAB     = '设计';
 $lang->pivot->exportType   = '导出格式';
 $lang->pivot->exportRange  = '导出范围';
 $lang->pivot->story        = '需求';
+$lang->pivot->clear        = '清空';
+$lang->pivot->keep         = '保留设计';
 
 $lang->pivot->accessDenied  = '您无权访问该透视表';
 $lang->pivot->acl = '访问控制';
