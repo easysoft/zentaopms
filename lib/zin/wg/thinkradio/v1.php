@@ -65,146 +65,25 @@ class thinkRadio extends thinkQuestion
         $app->loadLang('thinkstep');
 
         $formItems = parent::buildFormItem();
-        list($step, $questionType, $required, $enableOther, $fields, $setOption, $quoteTitle, $quoteQuestions, $citation, $selectColumn, $quotedQuestions) = $this->prop(array('step', 'questionType', 'required', 'enableOther', 'fields', 'setOption', 'quoteTitle', 'quoteQuestions', 'citation', 'selectColumn', 'quotedQuestions'));
+        list($step, $questionType, $required, $enableOther, $fields, $setOption, $quoteQuestions, $quotedQuestions) = $this->prop(array('step', 'questionType', 'required', 'enableOther', 'fields', 'setOption', 'quoteQuestions', 'quotedQuestions'));
         $requiredItems = $lang->thinkstep->requiredList;
         if($step)
         {
-            $enableOther  = $step->options->enableOther ?? 0;
-            $required     = $step->options->required;
-            $setOption    = isset($step->options->setOption) ? $step->options->setOption : false;
-            $defaultQuote = !empty($quoteQuestions) ? $quoteQuestions[0]->id : null;
-            $quoteTitle   = isset($step->options->quoteTitle) ? $step->options->quoteTitle : $defaultQuote;
-            $citation     = isset($step->options->citation) ? $step->options->citation : 1;
-            $selectColumn = isset($step->options->selectColumn) ? $step->options->selectColumn : null;
             if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);
-            $fields = !empty($step->options->fields) ? $step->options->fields :  array('', '', '');
+            $enableOther = $step->options->enableOther ?? 0;
+            $required    = $step->options->required;
+            $setOption   = isset($step->options->setOption) ? $step->options->setOption : false;
+            $fields      = !empty($step->options->fields) ? $step->options->fields :  array('', '', '');
         }
 
         $quoteQuestionsItems = array();
-        if(!empty($quoteQuestions))
-        {
-            foreach($quoteQuestions as $item)
-            {
-                $quoteQuestionsItems[] = array('text' => $item->index . '. ' . $item->title, 'value' => $item->id);
-            }
-        }
+
+        jsVar('maxCountPlaceholder', $lang->thinkstep->placeholder->maxCount);
+        jsVar('inputContent', $lang->thinkstep->placeholder->inputContent);
 
         $formItems[] = array(
             formHidden('options[questionType]', $questionType),
-            $questionType == 'checkbox' ? array
-            (
-                formRow
-                (
-                    formGroup
-                    (
-                        setClass('w-66'),
-                        set::label( $lang->thinkstep->label->setOption),
-                        radioList
-                        (
-                            set::name('options[setOption]'),
-                            set::inline(true),
-                            set::value($setOption),
-                            set::items($lang->thinkstep->setOptionList),
-                            set::disabled(empty($quoteQuestions)),
-                            on::change()
-                                ->const('maxCountPlaceholder', $lang->thinkstep->placeholder->maxCount)
-                                ->const('inputContent', $lang->thinkstep->placeholder->inputContent)
-                                ->do("
-                                    $('.think-options-field').toggleClass('hidden', target.value == 1);
-                                    $('.think-quote').toggleClass('hidden', target.value == 0);
-                                    if(target.value == 1)
-                                    {
-                                        $('.min-count input').val(1).attr('disabled', 'disabled');
-                                        $('.max-count input').val('').attr('placeholder', maxCountPlaceholder).attr('disabled', 'disabled');
-                                    }
-                                    else
-                                    {
-                                        $('.min-count input').val('').removeAttr('disabled');
-                                        $('.max-count input').attr('placeholder', inputContent).removeAttr('disabled');
-                                    }
-                                    $('.text-danger').remove();
-                                    $('.has-error').removeClass('has-error');
-                                ")
-                        )
-                    ),
-                    icon
-                    (
-                        setClass('mt-9 text-gray-400 cursor-pointer ml-1 text-base pt-0.5'),
-                        toggle::tooltip(array('placement' => 'top', 'title' => empty($quoteQuestions) ? $lang->thinkstep->tips->quoteTitle : $lang->thinkstep->tips->setOption, 'max-width' => '220px', 'className' => 'text-gray border border-gray-300', 'type' => 'white')),
-                        'help'
-                    )
-                ),
-                formGroup
-                (
-                    setClass('think-quote', $setOption == 0 ? 'hidden' : ''),
-                    set::label($lang->thinkstep->label->quoteTitle),
-                    set::labelClass('required'),
-                    picker
-                    (
-                        setdata('quote-questions', $quoteQuestions),
-                        setdata('selectColumn', $selectColumn),
-                        set(array
-                        (
-                            'class'       => 'options-quote-title',
-                            'name'        => 'options[quoteTitle]',
-                            'placeholder' => $lang->thinkstep->placeholder->quoteTitle,
-                            'items'       => $quoteQuestionsItems,
-                            'value'       => !empty($quoteTitle) && !empty($quoteQuestionsItems) ? $quoteTitle : '',
-                            'disabled'    => empty($quoteQuestions),
-                            'title'       => empty($quoteQuestions) ? $lang->thinkstep->tips->quoteTitle : null,
-                            'required'    => true,
-                        )),
-                        on::inited()->call('changeQuoteTitle'),
-                        bind::change('changeQuoteTitle()')
-                    )
-                ),
-                formRow
-                (
-                    setClass('think-quote quote-citation', $setOption == 0 ? 'hidden' : ''),
-                    setdata('citation', $citation),
-                    formGroup
-                    (
-                        setClass('citation'),
-                        set::label($lang->thinkstep->label->citation),
-                        set::labelClass('required'),
-                        radioList
-                        (
-                            set::name('options[citation]'),
-                            set::inline(true),
-                            set::value($citation),
-                            set::items($lang->thinkstep->citationList)
-                        )
-                    ),
-                    formGroup
-                    (
-                        setClass('multicolumn-citation w-1/2', $citation != 3 ? 'hidden' : ''),
-                        set::label($lang->thinkstep->label->citation),
-                        set::labelClass('required'),
-                        radioList
-                        (
-                            set::name('options[citation]'),
-                            set::inline(true),
-                            set::value($citation),
-                            set::items($lang->thinkstep->multiCitationList)
-                        )
-                    ),
-                    formGroup
-                    (
-                        setClass('select-column', $citation != 3 ? 'hidden' : ''),
-                        set::label($lang->thinkstep->label->selectColumn),
-                        set::labelClass('required'),
-                        picker(
-                            set(array(
-                                'name'        => 'options[selectColumn]',
-                                'placeholder' => $lang->thinkstep->placeholder->quoteTitle,
-                                'required'    => true,
-                                'items'       => array(),
-                                'value'       => $selectColumn
-                            ))
-                        )
-                    )
-                )
-            ) : null,
+            $questionType == 'checkbox' ? thinkStepQuote(set::step($step), set::questionType($questionType), set::quoteQuestions($quoteQuestions)) : null,
             formGroup
             (
                 setClass('think-options-field', ($questionType === 'checkbox' && $setOption == 1) ? 'hidden' : ''),
@@ -222,7 +101,7 @@ class thinkRadio extends thinkQuestion
                 setClass('step-required'),
                 setStyle(array('display' => 'flex')),
                 set::label($lang->thinkstep->label->required),
-                set::labelHint(!empty($quotedQuestions) ? $lang->thinkstep->tips->required : (!empty($step->link) ? $lang->thinkstep->tips->requiredOfLink : null)),
+                set::labelHint(!empty($quotedQuestions) ? $lang->thinkstep->tips->required : null),
                 radioList
                 (
                     set::name('options[required]'),
