@@ -16,80 +16,22 @@ formPanel
 (
     set::id('hostCreateForm'),
     set::title($lang->host->create),
+    on::change('[name="CD"]')->call('showSpugConfig', jsRaw('this')),
     formRow
     (
+        formGroup
+        (
+            set::width('1/3'),
+            set::name('CD'),
+            set::label($lang->host->CD),
+            set::control('picker'),
+            set::items($lang->host->CDlist)
+        ),
         formGroup
         (
             set::width('1/3'),
             set::name('name'),
             set::label($lang->host->name)
-        ),
-        formGroup
-        (
-            set::width('1/3'),
-            set::label($lang->host->admin),
-            set::control('picker'),
-            set::name('admin'),
-            set::items($accounts)
-        )
-    ),
-    formRow
-    (
-        formGroup
-        (
-            set::width('1/3'),
-            set::label($lang->host->cpuBrand),
-            set::control('picker'),
-            set::name('cpuBrand'),
-            set::items($lang->host->cpuBrandList)
-        ),
-        formGroup
-        (
-            set::width('1/3'),
-            set::name('cpuModel'),
-            set::label($lang->host->cpuModel)
-        )
-    ),
-    formRow
-    (
-        formGroup
-        (
-            set::width('1/3'),
-            set::name('cpuNumber'),
-            set::label($lang->host->cpuNumber)
-        ),
-        formGroup
-        (
-            set::width('1/3'),
-            set::name('cpuCores'),
-            set::label($lang->host->cpuCores)
-        )
-    ),
-    formRow
-    (
-        formGroup
-        (
-            set::width('1/3'),
-            set::name('memory'),
-            set::label($lang->host->memory),
-            set::control(array
-            (
-                'type'        => 'inputControl',
-                'suffix'      => 'GB',
-                'suffixWidth' => 40
-            ))
-        ),
-        formGroup
-        (
-            set::width('1/3'),
-            set::name('diskSize'),
-            set::label($lang->host->diskSize),
-            set::control(array
-            (
-                'type'        => 'inputControl',
-                'suffix'      => 'GB',
-                'suffixWidth' => 40
-            ))
         )
     ),
     formRow
@@ -116,17 +58,28 @@ formPanel
         formGroup
         (
             set::width('1/3'),
-            set::name('serverModel'),
-            set::label($lang->host->serverModel)
+            set::label($lang->host->admin),
+            set::control('picker'),
+            set::name('admin'),
+            set::items($accounts)
+        ),
+    ),
+    formRow
+    (
+        setID('spugConfig'),
+        setClass('hidden'),
+        formGroup
+        (
+            set::width('1/3'),
+            set::label($lang->host->password),
+            set::name('password'),
+            set::control('password')
         ),
         formGroup
         (
             set::width('1/3'),
-            set::label($lang->host->hostType),
-            set::control('picker'),
-            set::name('hostType'),
-            set::items($lang->host->hostTypeList),
-            set::value('virtual')
+            set::label($lang->host->sshPort),
+            set::name('sshPort')
         )
     ),
     formRow
@@ -155,25 +108,6 @@ formPanel
         formGroup
         (
             set::width('1/3'),
-            set::name('zap'),
-            set::label($lang->host->zap),
-            set::value(8086)
-        ),
-        formGroup
-        (
-            set::width('1/3'),
-            set::label($lang->host->tags),
-            set::control('picker'),
-            set::name('vsoft'),
-            set::items($lang->host->tagsList),
-            set::value('vm')
-        )
-    ),
-    formRow
-    (
-        formGroup
-        (
-            set::width('1/3'),
             set::name('intranet'),
             set::label($lang->host->intranet)
         ),
@@ -189,20 +123,50 @@ formPanel
         formGroup
         (
             set::width('1/3'),
-            set::label($lang->host->provider),
-            set::control('picker'),
-            set::name('provider'),
-            set::items($lang->host->providerList)
+            set::name('cpuNumber'),
+            set::label($lang->host->cpuNumber),
+            set::control(array('type' => 'number', 'min' => 1))
         ),
         formGroup
         (
             set::width('1/3'),
-            set::name('status'),
-            set::control('radioList'),
-            set::label($lang->host->status),
-            set::value('online'),
-            set::inline(true),
-            set::items($lang->host->statusList)
+            set::name('memory'),
+            set::label($lang->host->memory),
+            set::control(array
+            (
+                'type'        => 'inputControl',
+                'suffix'      => 'GB',
+                'suffixWidth' => 40
+            ))
         )
+    ),
+    formGroup
+    (
+        set::width('1/3'),
+        set::name('diskSize'),
+        set::label($lang->host->diskSize),
+        set::control(array
+        (
+            'type'        => 'inputControl',
+            'suffix'      => 'GB',
+            'suffixWidth' => 40
+        ))
+    ),
+    formGroup
+    (
+        set::width('2/3'),
+        set::name('desc'),
+        set::label($lang->host->desc),
+        set::control(array('type' => 'textarea', 'rows' => 3))
+    ),
+    formGroup
+    (
+        set::width('1/3'),
+        set::name('status'),
+        set::control('radioList'),
+        set::label($lang->host->status),
+        set::value('online'),
+        set::inline(true),
+        set::items($lang->host->statusList)
     )
 );

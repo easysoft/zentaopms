@@ -21,19 +21,11 @@ class hostZen extends host
      */
     protected function checkFormData(object $formData): bool
     {
-        $intFields = explode(',', $this->config->host->create->intFields);
-        foreach($intFields as $field)
-        {
-            if(!preg_match("/^-?\d+$/", (string)$formData->{$field}))
-            {
-                dao::$errors[$field] = sprintf($this->lang->host->notice->int, $this->lang->host->{$field});
-            }
-        }
-
         $ipFields = explode(',', $this->config->host->create->ipFields);
         foreach($ipFields as $field)
         {
-            if(!preg_match('/((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}/', (string)$formData->{$field}))
+            $address = str_replace(array('https://', 'http://'), '', $formData->{$field});
+            if(!filter_var($address, FILTER_VALIDATE_IP) && !filter_var(gethostbyname($address), FILTER_VALIDATE_IP))
             {
                 dao::$errors[$field] = sprintf($this->lang->host->notice->ip, $this->lang->host->{$field});
             }
