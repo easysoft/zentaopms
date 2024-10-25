@@ -112,28 +112,20 @@ class pivot extends control
      * AJAX: 获取系统数据下拉选项。
      * AJAX: get sys options.
      *
-     * @param  int $pivotID
-     * @param  string $field
-     * @param  string $saveAs
-     * @param  string $values
      * @param  string $search
      * @param  int $limit
      * @access public
      * @return void
      */
-    public function ajaxGetSysOptions(int|string $pivotID, string $field = '', string $saveAs = '', string $values = '', string $search = '', int $limit = 100)
+    public function ajaxGetSysOptions(string $search = '', int $limit = 100)
     {
-        if(!empty($field))
-        {
-            $pivot        = $this->pivot->getByID($pivotID);
-            $fieldSetting = $pivot->fieldSettings->$field;
-            $options      = $this->pivot->getSysOptions($fieldSetting->type, $fieldSetting->object, $fieldSetting->field, $pivot->sql, $saveAs);
-        }
-        else
-        {
-            $typeOption = $pivotID;
-            $options = $this->pivot->getSysOptions($typeOption);
-        }
+        $type   = zget($_POST, 'type', '');
+        $object = zget($_POST, 'object', '');
+        $field  = zget($_POST, 'field', '');
+        $saveAs = zget($_POST, 'saveAs', '');
+        $sql    = zget($_POST, 'sql', '');
+
+        $options = $this->pivot->getSysOptions($type, $object, $field, $sql, $saveAs);
 
         /* 根据关键字过滤选项。*/
         /* Filter options by keywords. */
@@ -152,6 +144,7 @@ class pivot extends control
 
         /* 添加默认值到选项列表。*/
         /* Add default value to options. */
+        $values = zget($_POST, 'values', '');
         if(!empty($values))
         {
             $values = explode(',', $values);
