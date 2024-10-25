@@ -67,4 +67,10 @@ class thinkModel extends wg
             $content
         );
     }
+
+    protected function buildResultCard(array $steps, int $key, bool $isPosition = false): array
+    {
+        $questionList = array();
+        return $questionList;
+    }
 }
