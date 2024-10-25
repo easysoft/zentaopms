@@ -235,6 +235,20 @@ class zredis
     }
 
     /**
+     * 设置缓存。
+     * Set cache.
+     *
+     * @param  string $key
+     * @param  mixed  $value
+     * @access public
+     * @return void
+     */
+    public function set(string $key, $value)
+    {
+        $this->redis->set($key, json_encode($value, JSON_UNESCAPED_UNICODE));
+    }
+
+    /**
      * 根据表名和键获取对象。
      * Get object by table name and key.
      *
