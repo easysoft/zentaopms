@@ -38,7 +38,7 @@ class git extends control
 
         $this->loadModel('repo');
         $path        = helper::safe64Decode($path);
-        $repos       = $this->repo->getListBySCM(implode(',', $this->config->repo->gitServiceTypeList), 'haspriv');
+        $repos       = $this->repo->getListBySCM(implode(',', $this->config->repo->gitTypeList), 'haspriv');
         $currentRepo = null;
         foreach($repos as $repo)
         {
@@ -80,7 +80,7 @@ class git extends control
 
         $this->loadModel('repo');
         $path        = helper::safe64Decode($path);
-        $repos       = $this->repo->getListBySCM(implode(',', $this->config->repo->gitServiceTypeList), 'haspriv');
+        $repos       = $this->repo->getListBySCM(implode(',', $this->config->repo->gitTypeList), 'haspriv');
         $currentRepo = null;
         foreach($repos as $repo)
         {
