@@ -108,47 +108,6 @@ class createProgramTester extends tester
     }
 
     /**
-     * 编辑项目集。
-     *
-     * @param  string $programName
-     * @param  array  $whitelist
-     * @access public
-     * @return void
-     */
-    public function editProgram()
-    {
-        /*编辑列表第一个项目集*/
-        $this->openUrl('program', 'browse');
-        $form = $this->loadPage('program', 'browse');
-        $form->dom->editBtn->click();
-        $form->dom->name->setValue($programName);
-        $form->wait(1);
-        $form->dom->btn($this->lang->save)->click();
-        $form->wait(1);
-        if($this->response('method') != 'browse')
-        {
-            if($this->checkFormTips('program')) return $this->success('编辑项目集表单提示信息正确');
-            return $this->failed('编辑项目集表单页提示信息不正确');
-        }
-    }
-
-    /**
-     * 开始项目集。
-     *
-     * @param  string $programName
-     * @param  array  $whitelist
-     * @access public
-     * @return void
-     */
-    public function startProgram()
-    {
-        /*开始列表第一个项目集*/
-        $this->openUrl('program', 'browse');
-        $form = $this->loadpage('program', 'browse');
-        $form->dom->startBtn->click();
-    }
-
-    /**
      * 关闭项目集。
      *
      * @param  string $programName
