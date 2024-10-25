@@ -46,6 +46,7 @@ $fnGenerateFilters = function() use($pivot, $showOrigin, $lang)
             $data['object'] = $fieldSetting->object;
             $data['field']  = $fieldSetting->field;
             $data['saveAs'] = zget($filter, 'saveAs', $field);
+            $data['sql']    = $pivot->sql;
 
             $items = (object)array('url' => $url, 'method' => 'post', 'data' => $data);
             $filters[] = resultFilter(set(array('title' => $name, 'type' => $type, 'name' => $field, 'value' => $value, 'items' => $items)));
