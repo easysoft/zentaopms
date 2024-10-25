@@ -88,6 +88,14 @@ class thinkModel extends wg
             {
                 $resultCard = $this->buildMulticolumnContent($step);
             }
+            else
+            {
+                $resultCard = $this->buildOptionsContent($step, $key);
+            }
+
+            $blockIndex = $key - 1;
+            if($isPosition) $className .= ' overflow-y-auto hidden absolute ' . "in_area-{$blockIndex}";
+            if(!empty($resultCard)) $questionList[] = div(setClass('w-64 bg-canvas scrollbar-thin p-2 shadow card ', $className), $resultCard);
         }
         return $questionList;
     }
