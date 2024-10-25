@@ -688,9 +688,9 @@ class baseMao
      *
      * @param  string $key
      * @access public
-     * @return object
+     * @return mixed
      */
-    public function getByKey(string $key): object
+    public function getByKey(string $key)
     {
         $this->currentKey = $key;
         $this->labels[$this->currentLabel] = $key;
