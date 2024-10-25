@@ -150,7 +150,7 @@ class pivot extends control
             $values = explode(',', $values);
             foreach($values as $value)
             {
-                if(!isset($limitOptions[$value])) $limitOptions[$value] = $options[$value];
+                if(!isset($limitOptions[$value]) && isset($options[$value])) $limitOptions[$value] = $options[$value];
             }
         }
 
