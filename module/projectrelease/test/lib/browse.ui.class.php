@@ -14,6 +14,7 @@ class browseTester extends tester
         $browsePage = $this->initForm('projectrelease', 'browse', array('projectID' => 1), 'appIframe-project');
         $browsePage->dom->waitTab->click();
         $releaseNameWait = $browsePage->dom->releaseName->getText();
+        $browsePage->wait(2);
         $browsePage->dom->releaseBtn->click();
         $browsePage->dom->releaseSubmit->click();
         $browsePage->wait(5);
