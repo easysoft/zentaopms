@@ -13,7 +13,7 @@ class thinkAnsoff extends thinkModel
         $app->loadConfig('thinkbackground');
 
         $mode       = $this->prop('mode');
-        $blockStyle = $mod = 'preview' ? array('min-height' => '200px', 'width' => '50%') : array('min-height' => '200px', 'width' => '1078px');
+        $blockStyle = $mode == 'preview' ? array('min-height' => '200px', 'width' => '50%') : array('min-height' => '200px', 'width' => '1078px');
         $blockColor = $config->thinkbackground->blockColor[$order];
         $blockName  = is_string($block) ? $block : $block->text;
 
