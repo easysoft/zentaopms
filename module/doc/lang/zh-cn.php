@@ -444,6 +444,8 @@ $lang->doc->productFilterTypes[] = array('mine', '我负责的');
 $lang->doc->projectFilterTypes[] = array('all', '全部');
 $lang->doc->projectFilterTypes[] = array('mine', '我参与的');
 
+$lang->doc->spaceFilterTypes[] = array('all', '全部');
+
 $lang->doc->docLang = new stdClass();
 $lang->doc->docLang->cancel                      = $lang->cancel;
 $lang->doc->docLang->export                      = $lang->export;
@@ -478,6 +480,7 @@ $lang->doc->docLang->filterTypes                 = $lang->doc->filterTypes;
 $lang->doc->docLang->fileFilterTypes             = $lang->doc->fileFilterTypes;
 $lang->doc->docLang->productFilterTypes          = $lang->doc->productFilterTypes;
 $lang->doc->docLang->projectFilterTypes          = $lang->doc->projectFilterTypes;
+$lang->doc->docLang->spaceFilterTypes            = $lang->doc->spaceFilterTypes;
 $lang->doc->docLang->sortCatalog                 = $lang->doc->sortCatalog;
 $lang->doc->docLang->sortDoclib                  = $lang->doc->sortDoclib;
 $lang->doc->docLang->sortDoc                     = $lang->doc->sortDoc;

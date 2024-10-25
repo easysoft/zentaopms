@@ -444,6 +444,8 @@ $lang->doc->productFilterTypes[] = array('mine', 'Mine');
 $lang->doc->projectFilterTypes[] = array('all', 'All');
 $lang->doc->projectFilterTypes[] = array('mine', 'Involved');
 
+$lang->doc->spaceFilterTypes[] = array('all', 'All');
+
 $lang->doc->docLang                              = new stdClass();
 $lang->doc->docLang->cancel                      = $lang->cancel;
 $lang->doc->docLang->export                      = $lang->export;

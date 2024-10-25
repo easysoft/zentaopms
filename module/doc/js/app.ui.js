@@ -1009,7 +1009,7 @@ function getFilterTypes(mode)
     {
         if(type === 'project') return getLang('projectFilterTypes');
         if(type === 'product') return getLang('productFilterTypes');
-        return [];
+        return getLang('spaceFilterTypes');
     }
     if(mode === 'list')    return getLang('filterTypes');
     if(mode === 'files')   return getLang('fileFilterTypes');
