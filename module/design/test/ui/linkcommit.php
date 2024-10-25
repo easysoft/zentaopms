@@ -28,3 +28,23 @@ $project->begin->range('(-2M)-(-M):1D')->type('timestamp')->format('YY/MM/DD');
 $project->end->range('(+2M)-(+3M):1D')->type('timestamp')->format('YY/MM/DD');
 $project->acl->range('open');
 $project->gen(1);
+
+$product = zenData('product');
+$product->id->range('1-2');
+$product->name->range('产品1, 产品2');
+$product->type->range('normal');
+$product->gen(2);
+
+$projectProduct = zenData('projectproduct');
+$projectProduct->project->range('1');
+$projectProduct->product->range('1{1}, 2{1}');
+$projectProduct->gen(2);
+
+$pipeline = zendata('pipeline');
+$pipeline->id->range('1');
+$pipeline->type->range('gitlab');
+$pipeline->name->range('gitlab');
+$pipeline->url->range('https://gitlab.axb.oop.cc/');
+$pipeline->token->range('y2UBqwPPzaLxsniy8R6A');
+$pipeline->private->range('6708ece75bde4');
+$pipeline->gen(1);
