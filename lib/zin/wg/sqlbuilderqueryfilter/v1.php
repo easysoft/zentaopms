@@ -48,7 +48,7 @@ class sqlBuilderQueryFilter extends wg
     protected function buildFormGroup($index, $name, $rowValue)
     {
         global $lang;
-        list(, $fields, $defaultItems, $onChange, $error) = $this->prop(array('tables', 'fields', 'defaultItems', 'onChange', 'error'));
+        list($tables, $fields, $defaultItems, $onChange, $error) = $this->prop(array('tables', 'fields', 'defaultItems', 'onChange', 'error'));
         $fields     = \zget($fields, $rowValue['table'], array());
         $typeList   = $lang->dataview->varFilter->requestTypeList;
         $selectList = $lang->dataview->varFilter->selectList;
