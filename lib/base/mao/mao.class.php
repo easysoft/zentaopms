@@ -734,34 +734,33 @@ class baseMao
     }
 
     /**
-     * 根据 key 设置缓存。
+     * 给指定 key 设置值。
      * Set cache by key.
      *
-     * @param  mixed  $value
      * @param  string $key
+     * @param  mixed  $value
      * @access public
      * @return void
      */
-    public function setByKey($value, string $key = '')
+    public function setByKey(string $key, $value)
     {
-        if(empty($key)) $key = $this->currentKey;
         if(empty($key)) return false;
 
         $this->app->redis->set($key, $value);
     }
 
     /**
-     * 根据 label 设置缓存。
+     * 给指定 label 设置值。
      * Set cache by label.
      *
-     * @param  mixed  $value
      * @param  string $label
+     * @param  mixed  $value
      * @access public
      * @return void
      */
-    public function setByLabel($value, string $label = '')
+    public function setByLabel(string $label, $value)
     {
-        if(empty($label)) $label = $this->currentLabel;
+        if(empty($label)) return false;
         if(empty($this->labels[$label])) return false;
 
         $this->app->redis->set($this->labels[$label], $value);
