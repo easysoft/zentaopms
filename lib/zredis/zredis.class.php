@@ -224,9 +224,9 @@ class zredis
      *
      * @param  string $key
      * @access public
-     * @return object
+     * @return mixed
      */
-    public function get(string $key): object
+    public function get(string $key)
     {
         $value = $this->redis->get($key);
         if(!$value) return $value;
