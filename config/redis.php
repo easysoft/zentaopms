@@ -7,15 +7,16 @@ $config->redis->timeout  = 10;
 $config->redis->username = null;
 $config->redis->password = null;
 
-// Format : $config->redis->caches[TABLE_NAME] = 'KEY_FIELD';
+// Format : $config->redis->cache->raw[TABLE_NAME] = 'KEY_FIELD';
 // The TABLE_NAME is the name of the table in the database.
 // The KEY_FIELD is the field of the table which is used to generate the key of the cache. It must be unique in the table.
 
-$config->redis->caches = [];
-$config->redis->caches[TABLE_CONFIG]  = 'id';
-$config->redis->caches[TABLE_BUILD]   = 'id';
-$config->redis->caches[TABLE_MODULE]  = 'id';
-$config->redis->caches[TABLE_PRODUCT] = 'id';
-$config->redis->caches[TABLE_PROJECT] = 'id';
-$config->redis->caches[TABLE_RELEASE] = 'id';
-$config->redis->caches[TABLE_USER]    = 'account';
+$config->redis->cache = new stdClass();
+$config->redis->cache->raw = [];
+$config->redis->cache->raw[TABLE_CONFIG]  = 'id';
+$config->redis->cache->raw[TABLE_BUILD]   = 'id';
+$config->redis->cache->raw[TABLE_MODULE]  = 'id';
+$config->redis->cache->raw[TABLE_PRODUCT] = 'id';
+$config->redis->cache->raw[TABLE_PROJECT] = 'id';
+$config->redis->cache->raw[TABLE_RELEASE] = 'id';
+$config->redis->cache->raw[TABLE_USER]    = 'account';

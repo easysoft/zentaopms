@@ -147,11 +147,11 @@ class zredis
      */
     public function prepare(string $table, string $event, string $sql)
     {
-        if(empty($this->redis))                         return $this->log('Redis is not initialized.');
-        if(empty($table))                               return $this->log('Table name is required.');
-        if(empty($event))                               return $this->log('Event type is required.');
-        if(empty($sql))                                 return $this->log('SQL is required.');
-        if(empty($this->config->redis->caches[$table])) return $this->log('No cache settings for table ' . $table);
+        if(empty($this->redis))                             return $this->log('Redis is not initialized.');
+        if(empty($table))                                   return $this->log('Table name is required.');
+        if(empty($event))                                   return $this->log('Event type is required.');
+        if(empty($sql))                                     return $this->log('SQL is required.');
+        if(empty($this->config->redis->cache->raw[$table])) return $this->log('No cache settings for table ' . $table);
 
         $this->table = $table;
         $this->event = $event;
@@ -182,7 +182,7 @@ class zredis
             if($event == 'delete')
             {
                 /* 执行删除操作后数据已经被删除，所以需要提前获取 ID 列表。*/
-                $field   = $this->config->redis->caches[$table];
+                $field   = $this->config->redis->cache->raw[$table];
                 $keyList = $this->dao->select($field)->from($table)->beginIF($condition)->where($condition)->fi()->fetchPairs();
             }
         }
@@ -200,10 +200,10 @@ class zredis
      */
     public function sync()
     {
-        if(empty($this->redis))                               return $this->log('Redis is not initialized.');
-        if(empty($this->table))                               return $this->log('Table name is required.');
-        if(empty($this->event))                               return $this->log('Event type is required.');
-        if(empty($this->config->redis->caches[$this->table])) return $this->log('No cache settings for table ' . $this->table);
+        if(empty($this->redis))                                   return $this->log('Redis is not initialized.');
+        if(empty($this->table))                                   return $this->log('Table name is required.');
+        if(empty($this->event))                                   return $this->log('Event type is required.');
+        if(empty($this->config->redis->cache->raw[$this->table])) return $this->log('No cache settings for table ' . $this->table);
 
         $this->redis->multi();
 
@@ -259,10 +259,10 @@ class zredis
      */
     public function fetch(string $table, int|string $key)
     {
-        if(empty($this->redis))                         return $this->log('Redis is not initialized.');
-        if(empty($table))                               return $this->log('Table name is required.');
-        if(empty($key))                                 return $this->log('Key is required.');
-        if(empty($this->config->redis->caches[$table])) return $this->log('No cache settings for table ' . $table);
+        if(empty($this->redis))                             return $this->log('Redis is not initialized.');
+        if(empty($table))                                   return $this->log('Table name is required.');
+        if(empty($key))                                     return $this->log('Key is required.');
+        if(empty($this->config->redis->cache->raw[$table])) return $this->log('No cache settings for table ' . $table);
 
         $code = str_replace(['`', $this->config->db->prefix], '', $table);
         return $this->get("raw:{$code}:{$key}");
@@ -279,9 +279,9 @@ class zredis
      */
     public function fetchAll(string $table, array $keyList = [])
     {
-        if(empty($this->redis))                         return $this->log('Redis is not initialized.');
-        if(empty($table))                               return $this->log('Table name is required.');
-        if(empty($this->config->redis->caches[$table])) return $this->log('No cache settings for table ' . $table);
+        if(empty($this->redis))                             return $this->log('Redis is not initialized.');
+        if(empty($table))                                   return $this->log('Table name is required.');
+        if(empty($this->config->redis->cache->raw[$table])) return $this->log('No cache settings for table ' . $table);
 
         $keys = [];
         $code = str_replace(['`', $this->config->db->prefix], '', $table);
@@ -289,7 +289,7 @@ class zredis
         foreach($keyList as $key) $keys[] = "raw:{$code}:{$key}";
 
         $objects  = $this->redis->mget($keys);
-        $cacheKey = $this->config->redis->caches[$table];
+        $cacheKey = $this->config->redis->cache->raw[$table];
 
         $result = [];
         foreach($objects as $object)
@@ -314,11 +314,11 @@ class zredis
      */
     public function fetchPairs(string $table, string $key, string $value, array $keyList = [])
     {
-        if(empty($this->redis))                         return $this->log('Redis is not initialized.');
-        if(empty($table))                               return $this->log('Table name is required.');
-        if(empty($key))                                 return $this->log('Key is required.');
-        if(empty($value))                               return $this->log('Value is required.');
-        if(empty($this->config->redis->caches[$table])) return $this->log('No cache settings for table ' . $table);
+        if(empty($this->redis))                             return $this->log('Redis is not initialized.');
+        if(empty($table))                                   return $this->log('Table name is required.');
+        if(empty($key))                                     return $this->log('Key is required.');
+        if(empty($value))                                   return $this->log('Value is required.');
+        if(empty($this->config->redis->cache->raw[$table])) return $this->log('No cache settings for table ' . $table);
 
         $objects = $this->fetchAll($table, $keyList);
         if(!$objects) return [];
@@ -360,7 +360,7 @@ class zredis
         if(!$objects) return $this->log("Failed to fetch objects to update table {$this->table}.", $this->dao->get());
 
         $code = str_replace(['`', $this->config->db->prefix], '', $this->table);
-        $key  = $this->config->redis->caches[$this->table];
+        $key  = $this->config->redis->cache->raw[$this->table];
 
         $pairs = [];
         foreach($objects as $object) $pairs["raw:{$code}:{$object->$key}"] = json_encode($object, JSON_UNESCAPED_UNICODE);
