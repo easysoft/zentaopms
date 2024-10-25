@@ -682,9 +682,23 @@ class baseMao
     }
 
     /**
+     * 设置label.
+     * Set label.
+     *
+     * @param  string $key
+     * @access public
+     * @return object
+     */
+    public function label(string $label)
+    {
+        $this->currentLabel = $label;
+
+        return $this;
+    }
+
+    /**
      * 通过Key获取值
      * Get value by key.
-     *
      *
      * @param  string $key
      * @param  mixed  ...$arguments
@@ -703,21 +717,6 @@ class baseMao
         $this->lastLabel = '';
 
         return $this->app->redis->get($key);
-    }
-
-    /**
-     * 设置label.
-     * Set label.
-     *
-     * @param  string $key
-     * @access public
-     * @return object
-     */
-    public function label(string $label)
-    {
-        $this->currentLabel = $label;
-
-        return $this;
     }
 
     /**
