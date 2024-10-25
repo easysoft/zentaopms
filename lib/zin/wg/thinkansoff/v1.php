@@ -6,7 +6,7 @@ requireWg('thinkModel');
 
 class thinkAnsoff extends thinkModel
 {
-    protected function buildItem(int $order, string $block): node
+    protected function buildItem(int $order, string|object $block): node
     {
         global $app, $lang, $config;
         $app->loadLang('thinkwizard');
@@ -20,7 +20,7 @@ class thinkAnsoff extends thinkModel
         (
             setClass('relative col justify-between py-2 px-2.5 bg-canvas model-block', "bg-$blockColor-100", "block-$order"),
             setStyle($blockStyle),
-            div(setClass('h-full')),
+            div(setClass('h-full flex flex-wrap gap-2.5')),
             div(setClass('item-step-title text-center', "text-$blockColor"), $lang->thinkwizard->ansoff->blocks[$order])
         );
     }
@@ -30,17 +30,17 @@ class thinkAnsoff extends thinkModel
         global $app, $lang;
         $app->loadLang('thinkwizard');
 
-        $blocks     = $this->prop('blocks');
+        list($blocks, $mode) = $this->prop(array('blocks', 'mode'));
         $titleKey   = $key == 0 ? 2 : 3;
         $rowContent = div
         (
-            setClass('col items-center mt-1.5'),
+            setClass('col items-center mt-4'),
             div
             (
-                setClass('w-full flex items-stretch gap-1.5'),
+                setClass('w-full flex items-stretch gap-4'),
                 div
                 (
-                    setClass('pr-2.5 flex items-center justify-center text-gray-400 font-medium'),
+                    setClass('flex items-center justify-center text-gray-400 font-medium item-step-title'),
                     setStyle(array('writing-mode' => 'vertical-rl')),
                     $lang->thinkwizard->ansoff->titles[$titleKey]
                 ),
@@ -48,15 +48,16 @@ class thinkAnsoff extends thinkModel
                 $this->buildItem($key + 1, $blocks[$key + 1])
             )
         );
+        $paddingLeft = $mode == 'preview' ? '36px' : '60px';
 
         return $showTitle ? div
         (
             div
             (
-                setClass('w-full flex mb-4'),
-                setStyle(array('padding-left' => '46px')),
-                div(setClass('flex-1 flex items-center justify-center text-gray-400 font-medium'), $lang->thinkwizard->ansoff->titles[0]),
-                div(setClass('flex-1 flex items-center justify-center text-gray-400 font-medium'), $lang->thinkwizard->ansoff->titles[1]),
+                setClass('w-full flex mb-4 gap-4'),
+                setStyle(array('padding-left' => $paddingLeft)),
+                div(setClass('flex-1 flex items-center justify-center text-gray-400 font-medium item-step-title'), $lang->thinkwizard->ansoff->titles[0]),
+                div(setClass('flex-1 flex items-center justify-center text-gray-400 font-medium item-step-title'), $lang->thinkwizard->ansoff->titles[1]),
             ),
             $rowContent
         ) : $rowContent;
