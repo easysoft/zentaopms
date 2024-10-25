@@ -21,5 +21,22 @@ class thinkModel extends wg
     protected function buildOptionsContent(object $step, int $blockID): array
     {
         global $lang;
+
+        if(isset($step->options->enableOther) && $step->options->enableOther == 'on') array_push($step->options->fields, 'other');
+        $unselectedOptions = array_unique(array_diff($step->options->fields, $step->answer->result));
+        $showOptions       = !empty($step->link['selectedBlock']) && $step->link['selectedBlock'] == $blockID ? $step->answer->result :  $unselectedOptions;
+
+        $content = array();
+        foreach($showOptions as $option)
+        {
+            if($option == 'other') $option = $step->answer->other ? $step->answer->other : $lang->other;
+            if(!empty($option)) $content[] = div(setClass('mt-1 border p-1.5 break-all'), $option);
+        }
+
+        return empty($content) ? array() : array
+        (
+            div(setClass('text-lg mb-0.5'), $lang->thinkstep->label->option),
+            $content
+        );
     }
 }
