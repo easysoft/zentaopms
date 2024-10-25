@@ -48,3 +48,27 @@ $pipeline->url->range('https://gitlab.axb.oop.cc/');
 $pipeline->token->range('y2UBqwPPzaLxsniy8R6A');
 $pipeline->private->range('6708ece75bde4');
 $pipeline->gen(1);
+
+$repo = zendata('repo');
+$repo->id->range('1');
+$repo->product->range('1');
+$repo->name->range('Lproject 01');
+$repo->path->range('http://gitlab.axb.oop.cc/liutao/lproject-01');
+$repo->encoding->range('utf-8');
+$repo->SCM->range('Gitlab');
+$repo->serviceHost->range('1');
+$repo->serviceProject->range('952');
+$repo->commits->range('31');
+$repo->account->range('[]');
+$repo->password->range('6708d3ae5d71a');
+$repo->encrypt->range('base64');
+$repo->synced->range('1');
+$repo->extra->range('952');
+$repo->gen(1);
+
+$repohistory = zendata('repohistory');
+$repohistory->id->range('1');
+$repohistory->repo->range('1');
+$repohistory->revision->range('b59be0c9604497ae26c621cc848a738cca73fc85');
+$repohistory->commit->range('31');
+$repohistory->gen(1);
