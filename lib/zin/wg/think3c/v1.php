@@ -21,87 +21,6 @@ class think3c extends thinkModel
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
-    protected function buildOptionsContent(object $step, int $blockID): array
-    {
-        global $lang;
-
-        if(isset($step->options->enableOther) && $step->options->enableOther == 'on') array_push($step->options->fields, 'other');
-        if(empty($step->answer->result)) $step->answer->result = array();
-        $unselectedOptions = array_unique(array_diff($step->options->fields, $step->answer->result));
-        $showOptions       = !empty($step->link['selectedBlock']) && $step->link['selectedBlock'] == $blockID ? $step->answer->result :  $unselectedOptions;
-
-        $content = array();
-        foreach($showOptions as $option)
-        {
-            if($option == 'other') $option = $step->answer->other ? $step->answer->other : $lang->other;
-            if(!empty($option)) $content[] = div(setClass('mt-1 border p-1.5 break-all'), $option);
-        }
-
-        return empty($content) ? array() : array
-        (
-            div(setClass('text-lg mb-0.5'), $lang->thinkstep->label->option),
-            $content
-        );
-    }
-
-    protected function buildMulticolumnContent(object $step): array
-    {
-        global $lang;
-
-        $title  = '';
-        $colKey = $step->link['column'][0];
-        if(isset($step->options->fields[$colKey - 1])) $title = $step->options->fields[$colKey - 1];
-
-        $result = array();
-        foreach($step->answer->result as $col => $answer)
-        {
-            $answerKey = 'col' . $colKey;
-            if($col == $answerKey) $result = $answer;
-        }
-
-        $content = array();
-        foreach($result as $item)
-        {
-            if(!empty($item)) $content[] = div(setClass('mt-1 border p-1.5 break-all'), $item);
-        }
-
-        return empty($content) ? array() : array
-        (
-            div(setClass('text-lg mb-0.5'), $lang->thinkstep->label->columnTitle . ': ' . $title),
-            $content
-        );
-    }
-
-    protected function buildResultCard(array $steps, int $key): array
-    {
-        $questionList = array();
-        foreach($steps as $step)
-        {
-            if(is_string($step->link))    $step->link = json_decode($step->link, true);
-            if(is_string($step->answer))  $step->answer = json_decode($step->answer);
-            if(is_string($step->options)) $step->options = json_decode($step->options);
-
-            $resultCard = array();
-            $className  = '';
-            if($step->link['showMethod'] == 2)
-            {
-                $className  = "card-{$step->options->questionType}";
-                $resultCard = $this->buildQuestionItem($step);
-            }
-            elseif($step->link['showMethod'] == '1')
-            {
-                $resultCard = $this->buildMulticolumnContent($step);
-            }
-            else
-            {
-                $resultCard = $this->buildOptionsContent($step, $key);
-            }
-            $blockIndex = $key - 1;
-            if(!empty($resultCard)) $questionList[] = div(setClass('w-64 bg-canvas overflow-y-auto scrollbar-thin p-2 shadow card hidden absolute', "in_area-{$blockIndex}", $className), $resultCard);
-        }
-        return $questionList;
-    }
-
     protected function buildAreaCard(): array
     {
         global $app;
@@ -110,7 +29,7 @@ class think3c extends thinkModel
         $area   = array();
         foreach($blocks as $block)
         {
-            if(!empty($block->steps)) $area[] = $this->buildResultCard($block->steps, $block->id + 1);
+            if(!empty($block->steps)) $area[] = $this->buildResultCard($block->steps, $block->id + 1, true);
         }
         return $area;
     }
