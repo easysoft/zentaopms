@@ -2,6 +2,15 @@
 include dirname(__FILE__, 5) . '/test/lib/ui.php';
 class linkCommitTester extends tester
 {
+    /**
+     * 检查关联提交。
+     * Check link commit.
+     *
+     * @param  string
+     * @param  string $expectNum
+     * @access public
+     * @return object
+     */
     public function linkCommit($expectNum)
     {
         $form = $this->initForm('design', 'browse', array('projecID' => 1), 'appIframe-project');
