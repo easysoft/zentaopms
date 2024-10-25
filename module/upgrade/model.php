@@ -10052,10 +10052,10 @@ class upgradeModel extends model
                 $this->dao->update(TABLE_PROJECT)
                      ->set('workflowGroup')->eq($groupID)
                      ->where('type')->eq('project')
-                     ->beginIF($code == 'scrumproduct')->andWhere('model')->eq('scrum')->andWhere('hasProduct')->eq('1')->fi()
-                     ->beginIF($code == 'scrumproject')->andWhere('model')->eq('scrum')->andWhere('hasProduct')->eq('0')->fi()
-                     ->beginIF($code == 'waterfallproduct')->andWhere('model')->eq('waterfall')->andWhere('hasProduct')->eq('1')->fi()
-                     ->beginIF($code == 'waterfallproject')->andWhere('model')->eq('waterfall')->andWhere('hasProduct')->eq('0')->fi()
+                     ->beginIF($code == 'scrumproduct')->andWhere('model')->in('scrum,agileplus')->andWhere('hasProduct')->eq('1')->fi()
+                     ->beginIF($code == 'scrumproject')->andWhere('model')->in('scrum,agileplus')->andWhere('hasProduct')->eq('0')->fi()
+                     ->beginIF($code == 'waterfallproduct')->andWhere('model')->in('waterfall,waterfallplus,ipd')->andWhere('hasProduct')->eq('1')->fi()
+                     ->beginIF($code == 'waterfallproject')->andWhere('model')->in('waterfall,waterfallplus,ipd')->andWhere('hasProduct')->eq('0')->fi()
                      ->exec();
             }
         }

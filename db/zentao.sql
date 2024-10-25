@@ -13263,7 +13263,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowgroup` (
   `name` varchar(30) NOT NULL DEFAULT '',
   `code` varchar(30) NOT NULL DEFAULT '',
   `desc` text NULL,
-  `disabledModules` text NULL,
+  `disabledModules` text NULL DEFAULT '',
   `status` varchar(10) NOT NULL DEFAULT 'wait',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `main` enum('0','1') NOT NULL DEFAULT '0',
