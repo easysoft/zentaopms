@@ -85,6 +85,19 @@ function processDocAppAction(action, docApp)
     if(typeof method === 'function') method.apply(docApp, action.args);
 }
 
+/**
+ * 检查空间是否可以进行修改操作，如果不指定空间则判断当前空间。
+ * Check if the space can be modified, if the space is not specified, check the current space.
+ *
+ * @param {object|number} space
+ */
+function canModifySpace(space)
+{
+    const docApp = getDocApp();
+    space = typeof space !== 'object' ? docApp.getSpace(space) : space;
+    return space && space.canModify !== false;
+}
+
 /*
  * 修改 Ajax 表单提交后的默认处理方法，改为处理文档应用的操作。
  * Modify the default processing method after Ajax form submission to process the actions of the doc app.
@@ -404,7 +417,7 @@ const actionsMap =
         /* 获取侧边栏没有文档库时的操作按钮。 Get actions when sidebar no lib. */
         if(info.ui === 'sidebar-no-lib')
         {
-            if(!space.canModify || !hasPriv('createLib')) return null;
+            if(!canModifySpace(space) || !hasPriv('createLib')) return null;
             return [{icon: 'plus', text: lang.createLib, command: 'createLib', btnType: 'primary-pale'}];
         }
 
@@ -424,7 +437,7 @@ const actionsMap =
     {
         const lang       = getLang();
         const doc        = info.data;
-        const canModify  = getDocApp().space.canModify;
+        const canModify  = canModifySpace();
         const canEditDoc = canModify && hasPriv('edit');
 
         /* 侧边栏上的文档操作按钮。Doc actions in sidebar. */
@@ -464,7 +477,7 @@ const actionsMap =
         const lang      = getLang();
         const items     = [];
         const lib       = info.data;
-        const canModify = getDocApp().space.canModify;
+        const canModify = canModifySpace();
         const canAddModule = canModify && hasPriv('addModule');
 
         /* 获取侧边栏没有模块时的操作按钮。 Get actions when sidebar no module. */
@@ -551,7 +564,7 @@ const actionsMap =
     {
         const lang           = getLang();
         const docApp         = getDocApp();
-        const canModify      = docApp.space.canModify;
+        const canModify      = canModifySpace();
         const canCreateDoc   = canModify && hasPriv('create');
         const canCreateLib   = canModify && hasPriv('createLib');
         const canCreateSpace = canModify && hasPriv('createSpace');
@@ -627,7 +640,7 @@ const actionsMap =
         const lang         = getLang();
         const canEdit      = privs.edit && (!doc.privs || doc.privs.edit !== false);
         const hasExtension = file.title.lastIndexOf('.' + file.extension) == (file.title.length - file.extension.length - 1);
-        const canPreview   = hasExtension && 'txt,jpg,jpeg,gif,png,bmp'.split(',').includes(file.extension);
+        const canPreview   = hasExtension && 'mp4,txt,jpg,jpeg,gif,png,bmp'.split(',').includes(file.extension);
         return [
             canPreview ? {'data-toggle': 'modal', 'data-size': 'lg', url: $.createLink('file', 'download', `fileID=${file.id}&mouse=left`), hint: lang.filePreview, icon: 'eye'} : {target: '_blank', url: $.createLink('file', 'download', `fileID=${file.id}&mouse=left`), hint: lang.filePreview, icon: 'eye'},
             {target: '_blank', url: zui.formatString(docApp.props.fileUrl, file), hint: lang.fileDownload, icon: 'download'},
@@ -960,7 +973,7 @@ function getTableOptions(options, info)
     {
         const lang      = getLang();
         const tableCols = lang.tableCols;
-        const canModify = getDocApp().space.canModify;
+        const canModify = canModifySpace();
         options.cols.forEach(col =>
         {
             if(typeof tableCols[col.name] === 'string') col.title = tableCols[col.name];
