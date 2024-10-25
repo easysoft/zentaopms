@@ -110,8 +110,8 @@ class baseMao
     public $data;
 
     /**
-     * 待处理数据的column，作为缓存的key。
-     * The column as key.
+     * 待处理数据的column。
+     * The column of data.
      *
      * @var string
      * @access public
@@ -119,13 +119,32 @@ class baseMao
     public $dataColumn;
 
     /**
+     * The labels to get or set。
+     * The labels to get or set.
+     *
+     * @var array
+     * @access public
+     */
+    public $labels;
+
+    /**
+     * 当前设置的label。
+     * Current label.
+     *
+     * @var string
+     * @access public
+     */
+    public $currentLabel;
+
+    /**
      * 构造方法。
      * The construct method.
      *
      * @access public
+     * @param  object $app
      * @return void
      */
-    public function __construct($app)
+    public function __construct(object $app)
     {
         global $config;
         $this->app    = $app;
@@ -142,7 +161,7 @@ class baseMao
      * @access public
      * @return void
      */
-    public function setTable($table)
+    public function setTable(string $table)
     {
         $this->table = $table;
     }
@@ -155,7 +174,7 @@ class baseMao
      * @access public
      * @return void
      */
-    public function setFields($fields)
+    public function setFields(string $fields)
     {
         $this->fields = $fields;
     }
@@ -164,11 +183,11 @@ class baseMao
      * 设置条件。
      * Set the $conditions property.
      *
-     * @param  string $conditions
+     * @param  array $conditions
      * @access public
      * @return void
      */
-    public function setConditions($conditions)
+    public function setConditions(array $conditions)
     {
         $this->conditions = $conditions;
         $this->resetCondition();
@@ -245,7 +264,7 @@ class baseMao
      * @access public
      * @return static|sql|baseDAO the dao object self.
      */
-    public function select($fields = '*')
+    public function select(string $fields = '*')
     {
         $this->setFields(explode(',', str_replace(' ', '', $fields)));
         return $this;
@@ -255,13 +274,13 @@ class baseMao
      * 设置要操作的表。
      * Set the from table.
      *
-     * @param  string $table
+     * @param  string $tableName
      * @access public
      * @return static|sql the dao object self.
      */
-    public function from($table)
+    public function from(string $tableName)
     {
-        $this->setTable($table);
+        $this->setTable($tableName);
         return $this;
     }
 
@@ -273,7 +292,7 @@ class baseMao
      * @access public
      * @return static|sql the sql object.
      */
-    public function beginIF($conditionResult)
+    public function beginIF(bool $conditionResult)
     {
         $this->isConditionChecking = true;
         $this->conditionIsTrue     = $conditionResult;
@@ -311,7 +330,7 @@ class baseMao
      * @access public
      * @return static the dao object.
      */
-    public function where($field)
+    public function where(string $field)
     {
         $this->resetCondition();
         $this->condition['field'] = $field;
@@ -326,7 +345,7 @@ class baseMao
      * @access public
      * @return static the dao object.
      */
-    public function andWhere($field)
+    public function andWhere(string $field)
     {
         $this->resetCondition();
         $this->condition['field'] = $field;
@@ -341,7 +360,7 @@ class baseMao
      * @access public
      * @return static the dao object.
      */
-    public function eq($value)
+    public function eq(string $value)
     {
         $this->condition['operator'] = 'eq';
         $this->condition['value']    = $value;
@@ -363,7 +382,7 @@ class baseMao
      * @access public
      * @return static the dao object.
      */
-    public function ne($value)
+    public function ne(string $value)
     {
         $this->condition['operator'] = 'ne';
         $this->condition['value']    = $value;
@@ -381,11 +400,11 @@ class baseMao
      * 创建in部分。
      * Create the in part.
      *
-     * @param  string $value
+     * @param  string|array $value
      * @access public
      * @return static the dao object.
      */
-    public function in($value)
+    public function in(string|array $value)
     {
         $this->condition['operator'] = 'in';
         $this->condition['value']    = is_string($value) ? explode(',', str_replace(' ', '', $value)) : $value;
@@ -403,11 +422,11 @@ class baseMao
      * 创建notin部分。
      * Create the in part.
      *
-     * @param  string $value
+     * @param  string|array $value
      * @access public
      * @return static the dao object.
      */
-    public function notin($value)
+    public function notin(string|array $value)
     {
         $this->condition['operator'] = 'notin';
         $this->condition['value']    = is_string($value) ? explode(',', str_replace(' ', '', $value)) : $value;
@@ -429,7 +448,7 @@ class baseMao
      * @access public
      * @return static|sql the sql object.
      */
-    public function orderBy($order)
+    public function orderBy(string $order)
     {
         return $this;
     }
@@ -438,11 +457,11 @@ class baseMao
      * 创建LIMIT部分。
      * Create the limit part.
      *
-     * @param  string $limit
+     * @param  int    $limit
      * @access public
      * @return static|sql the sql object.
      */
-    public function limit($limit)
+    public function limit(int $limit)
     {
         return $this;
     }
@@ -456,7 +475,7 @@ class baseMao
      * @access public
      * @return static|cache.
      */
-    public function use($data, $column)
+    public function use(array $data, string $column)
     {
         $this->data       = $data;
         $this->dataColumn = $column;
@@ -473,7 +492,7 @@ class baseMao
      * @access public
      * @return static|cache.
      */
-    public function append($tableName, $fields)
+    public function append(string $tableName, string $fields)
     {
         $fields = explode(',', $fields);
 
@@ -526,7 +545,7 @@ class baseMao
      * @access public
      * @return bool
      */
-    private function isConditionMatched($object, $conditions)
+    private function isConditionMatched(object $object, array $conditions)
     {
         foreach($conditions as $condition)
         {
@@ -565,7 +584,7 @@ class baseMao
      * @access public
      * @return object|mixed
      */
-    public function fetch($field = '')
+    public function fetch(string $field = '')
     {
         $rawResult = $this->app->redis->fetchAll($this->table);
         if(empty($rawResult)) return '';
@@ -589,7 +608,7 @@ class baseMao
      * @access public
      * @return array the records
      */
-    public function fetchAll($keyField = 0)
+    public function fetchAll(string $keyField = '')
     {
         $rawResult = $this->app->redis->fetchAll($this->table);
         if(empty($rawResult)) return [];
@@ -635,7 +654,7 @@ class baseMao
      * @access public
      * @return array
      */
-    public function fetchPairs($keyField = '', $valueField = '')
+    public function fetchPairs(string $keyField = '', string $valueField = '')
     {
         $pairs = [];
 
@@ -651,5 +670,38 @@ class baseMao
         }
 
         return $pairs;
+    }
+
+    /**
+     * 通过Key获取值
+     * Get value by key.
+     *
+     *
+     * @param  string $key
+     * @access public
+     * @return object
+     */
+    public function getByKey(string $key): object
+    {
+        $this->labels[$this->currentLabel] = $key;
+        $this->lastLabel = '';
+
+        return $this->app->redis->get($key);
+    }
+
+    /**
+     * 设置label.
+     * Set label.
+     *
+     *
+     * @param  string $key
+     * @access public
+     * @return object
+     */
+    public function label(string $label)
+    {
+        $this->currentLabel = $label;
+
+        return $this;
     }
 }

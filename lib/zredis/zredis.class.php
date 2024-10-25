@@ -96,11 +96,11 @@ class zredis
      * 连接 Redis 服务器并初始化缓存。
      * Connect to Redis server and initialize cache.
      *
-     * @param  dao    $dao
+     * @param  object $dao
      * @access public
      * @return void
      */
-    public function __construct($app)
+    public function __construct(object $app)
     {
         global $config;
 
@@ -219,6 +219,22 @@ class zredis
     }
 
     /**
+     * 根据key获取值。
+     * Get value by key.
+     *
+     * @param  string $key
+     * @access public
+     * @return object
+     */
+    public function get(string $key): object
+    {
+        $value = $this->redis->get($key);
+        if(!$value) return $value;
+
+        return json_decode($value);
+    }
+
+    /**
      * 根据表名和键获取对象。
      * Get object by table name and key.
      *
@@ -234,11 +250,8 @@ class zredis
         if(empty($key))                                 return $this->log('Key is required.');
         if(empty($this->config->redis->caches[$table])) return $this->log('No cache settings for table ' . $table);
 
-        $code   = str_replace(['`', $this->config->db->prefix], '', $table);
-        $object = $this->redis->get("raw:{$code}:{$key}");
-        if(!$object) return $object;
-
-        return json_decode($object);
+        $code = str_replace(['`', $this->config->db->prefix], '', $table);
+        return $this->get("raw:{$code}:{$key}");
     }
 
     /**
