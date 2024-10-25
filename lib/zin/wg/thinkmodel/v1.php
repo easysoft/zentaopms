@@ -71,6 +71,24 @@ class thinkModel extends wg
     protected function buildResultCard(array $steps, int $key, bool $isPosition = false): array
     {
         $questionList = array();
+        foreach($steps as $step)
+        {
+            if(is_string($step->link))    $step->link = json_decode($step->link, true);
+            if(is_string($step->answer))  $step->answer = json_decode($step->answer);
+            if(is_string($step->options)) $step->options = json_decode($step->options);
+
+            $resultCard = array();
+            $className  = '';
+            if($step->link['showMethod'] == 2)
+            {
+                $className  = "card-{$step->options->questionType}";
+                $resultCard = $this->buildQuestionItem($step);
+            }
+            elseif($step->link['showMethod'] == '1')
+            {
+                $resultCard = $this->buildMulticolumnContent($step);
+            }
+        }
         return $questionList;
     }
 }
