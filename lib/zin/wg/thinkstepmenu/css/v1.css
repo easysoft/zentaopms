@@ -36,3 +36,5 @@
 .has-sidebar .sidebar.is-expanded {--sidebar-left-width: 455px !important;}
 .has-sidebar .sidebar.is-collapsed {--sidebar-left-width: 0 !important;}
 .sidebar-left.is-expanded > .think-node-menu ~ .sidebar-gutter {margin-left: 8px}
+
+.dropdown-menu .menu-item[z-key="tableInput"] .icon {transform: scaleX(-1) rotate(90deg);}
