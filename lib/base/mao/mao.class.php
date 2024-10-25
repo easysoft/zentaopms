@@ -687,11 +687,17 @@ class baseMao
      *
      *
      * @param  string $key
+     * @param  mixed  ...$arguments
      * @access public
      * @return mixed
      */
-    public function getByKey(string $key)
+    public function getByKey(string $key, ...$arguments)
     {
+        if(!defined($key)) return false;
+
+        $key = constant($key);
+        foreach($arguments as $argument) $key .= ':' . $argument;
+
         $this->currentKey = $key;
         $this->labels[$this->currentLabel] = $key;
         $this->lastLabel = '';
@@ -702,7 +708,6 @@ class baseMao
     /**
      * 设置label.
      * Set label.
-     *
      *
      * @param  string $key
      * @access public
@@ -728,6 +733,7 @@ class baseMao
     {
         if(empty($key)) $key = $this->currentKey;
         if(empty($key)) return false;
+
         $this->app->redis->set($key, $value);
     }
 
