@@ -16,5 +16,12 @@ class createProgramTester extends tester
         $form->dom->name->setValue($editName->name);
         $form->dom->btn($this->lang->save)->click();
         $form->wait(1);
+
+        $this->openUrl('program', 'browse');
+        $browsePage = $this->loadPage('program', 'browse');
+        $browsePage->dom->search(array("项目集名称,=,{$editName->name}"));
+        $browsePage->wait(1);
+        if($browsePage->dom->fstProgramName->getText() != $editName->name) return $this->failed('编辑项目集失败');
+        return $this->success('编辑项目集成功');
     }
 }
