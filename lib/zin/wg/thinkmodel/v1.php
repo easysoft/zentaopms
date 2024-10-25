@@ -17,4 +17,9 @@ class thinkModel extends wg
 
         return createWg($wgMap[$questionType], array(set::step($step), set::questionType($questionType), set::mode('detail'), set::isResult(true)));
     }
+
+    protected function buildOptionsContent(object $step, int $blockID): array
+    {
+        global $lang;
+    }
 }
