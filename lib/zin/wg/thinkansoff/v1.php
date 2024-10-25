@@ -12,16 +12,17 @@ class thinkAnsoff extends thinkModel
         $app->loadLang('thinkwizard');
         $app->loadConfig('thinkbackground');
 
-        $mode         = $this->prop('mode');
-        $blockStyle   = $mode == 'preview' ? array('min-height' => '200px', 'width' => '50%') : array('min-height' => '200px', 'width' => '1078px');
-        $blockColor   = $config->thinkbackground->blockColor[$order];
+        $mode       = $this->prop('mode');
+        $blockStyle = $mod = 'preview' ? array('min-height' => '200px', 'width' => '50%') : array('min-height' => '200px', 'width' => '1078px');
+        $blockColor = $config->thinkbackground->blockColor[$order];
+        $blockName  = is_string($block) ? $block : $block->test;
 
         return div
         (
             setClass('relative col justify-between py-2 px-2.5 bg-canvas model-block', "bg-$blockColor-100", "block-$order"),
             setStyle($blockStyle),
             div(setClass('h-full flex flex-wrap gap-2.5')),
-            div(setClass('item-step-title text-center', "text-$blockColor"), $lang->thinkwizard->ansoff->blocks[$order])
+            div(setClass('item-step-title text-center', "text-$blockColor"), $blockName)
         );
     }
 
