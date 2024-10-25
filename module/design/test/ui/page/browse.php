@@ -26,6 +26,9 @@ class browsePage extends page
             'viewCommitBtn' => "//*[@id='table-design-browse']/div[2]/div[3]/div/div[4]/div/nav/a[2]",
             'commitNum'     => "//*[@id='table-design-viewcommit']/div[3]/nav/div[1]",
             'closeBtn'      => "//*[@id='viewCommitModal']/div/div/div[2]/button",
+            'linkCommitBtn' => "//*[@id='viewCommitModal']/div/div/div[3]/div[1]/a/span",
+            'selectAllBtn'  => "//*[@id='table-design-linkcommit']/div[3]/div[1]/div/label",
+            'saveBtn'       => "//*[@id='table-design-linkcommit']/div[3]/nav[1]/button/span",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
