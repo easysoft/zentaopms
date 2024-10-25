@@ -864,14 +864,26 @@ class productZen extends product
         $project = $projectID ? $this->loadModel('project')->getByID($projectID) : null;
         if(!empty($projectID) && !empty($project->hasProduct) && $this->app->rawModule == 'projectstory')
         {
-            return $this->tree->getProjectStoryTreeMenu($projectID, 0, array('treeModel', $createModuleLink), array('storyType' => $storyType));
+            $moduleTree = $this->app->mao->label('projectModuleTree')->getByKey('CACHE_MODULE_TREE', 'project', $projectID, $storyType);
+            if(!$moduleTree)
+            {
+                $moduleTree = $this->tree->getProjectStoryTreeMenu($projectID, 0, array('treeModel', $createModuleLink), array('storyType' => $storyType));
+                $this->app->mao->setByLabel($moduleTree, 'projectModuleTree');
+            }
+            return $moduleTree;
         }
 
         /* Pre generate parameters. */
         $userFunc = array('treeModel', $createModuleLink);
         $extra    = array('projectID' => $projectID, 'productID' => $productID);
 
-        return $this->tree->getTreeMenu($productID, 'story', 0, $userFunc, $extra, $branch, "&param=$param&storyType=$storyType");
+        $moduleTree = $this->app->mao->label('productModuleTree')->getByKey('CACHE_MODULE_TREE', 'product', $productID, $branch, $storyType, $param);
+        if(!$moduleTree)
+        {
+            $moduleTree = $this->tree->getTreeMenu($productID, 'story', 0, $userFunc, $extra, $branch, "&param=$param&storyType=$storyType");
+            $this->app->mao->setByLabel($moduleTree, 'productModuleTree');
+        }
+        return $moduleTree;
     }
 
     /**
@@ -1440,10 +1452,20 @@ class productZen extends product
         $module = $this->app->tab == 'product' ? $storyType : $this->app->tab;
         $this->view->showGrades = !empty($this->config->{$module}->showGrades) ? $this->config->{$module}->showGrades : $this->story->getDefaultShowGrades($this->view->gradeMenu);
 
+        $users = $this->app->mao->getByKey('CACHE_USER_PAIRS');
+        if($users)
+        {
+            $users = (array)$users;
+        }
+        else
+        {
+            $users = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
+            $this->app->mao->setByKey($users);
+        }
         $storyType = $isProjectStory ? 'all' : $storyType;
         $this->view->summary    = $this->product->summary($stories, $storyType);
         $this->view->plans      = $this->loadModel('productplan')->getPairs($productID, isset($projectProducts[$productID]) ? array(BRANCH_MAIN) + $projectProducts[$productID]->branches : (($branch === 'all' || empty($branch)) ? '' : $branch), 'unexpired,noclosed', true);
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
+        $this->view->users      = $users;
         $this->view->modules    = $this->loadModel('tree')->getOptionMenu($productID, 'story', 0, $branchID);
         $this->view->storyTasks = $this->loadModel('task')->getStoryTaskCounts($storyIdList);
         $this->view->storyBugs  = $this->loadModel('bug')->getStoryBugCounts($storyIdList);
