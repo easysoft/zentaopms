@@ -95,6 +95,20 @@ $langData->tableCols['editedDate'] = $lang->doc->editedDate;
 $langData->tableCols['actions']    = $lang->actions;
 
 /**
+ * 通过语言项定义附件表格列显示名称。
+ * Define the files table columns for doc app.
+ */
+$langData->fileTableCols = array();
+$langData->fileTableCols['id']         = $lang->idAB;
+$langData->fileTableCols['title']      = $lang->doc->fileTitle;
+$langData->fileTableCols['objectName'] = $lang->doc->source;
+$langData->fileTableCols['extension']  = $lang->doc->extension;
+$langData->fileTableCols['size']       = $lang->doc->size;
+$langData->fileTableCols['addedBy']    = $lang->doc->addedBy;
+$langData->fileTableCols['addedDate']  = $lang->doc->addedDate;
+$langData->fileTableCols['actions']    = $lang->actions;
+
+/**
  * 定义文档应用接口链接。
  * Define the fetcher links for doc app.
  */

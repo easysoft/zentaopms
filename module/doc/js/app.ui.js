@@ -969,9 +969,9 @@ const commands =
  */
 function getTableOptions(options, info)
 {
+    const lang = getLang();
     if(info.type === 'doc-list')
     {
-        const lang      = getLang();
         const tableCols = lang.tableCols;
         const canModify = canModifySpace();
         options.cols.forEach(col =>
@@ -992,6 +992,14 @@ function getTableOptions(options, info)
             const checkedList = this.getChecks();
             $.cookie.set('checkedItem', checkedList, {expires:config.cookieLife, path:config.webRoot});
         }
+    }
+    if(info.type === 'file-list')
+    {
+        const tableCols = lang.fileTableCols;
+        options.cols.forEach(col =>
+        {
+            if(typeof tableCols[col.name] === 'string') col.title = tableCols[col.name];
+        });
     }
     return options;
 }
