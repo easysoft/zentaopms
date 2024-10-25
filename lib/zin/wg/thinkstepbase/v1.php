@@ -27,6 +27,7 @@ class thinkStepBase extends wg
         'type?: string="node"',    // node|transition/question
         'quoteQuestions?: array'.  // 引用的问题
         'quotedQuestions?: attay', // 被引用的问题
+        'isResult?: bool=false',   // 是否是结果页
     );
 
     public static function getPageCSS(): ?string
@@ -250,7 +251,11 @@ class thinkStepBase extends wg
 
     protected function build(): wg|node|array
     {
-        $content = $this->prop('isRun') ? div
+        list($isResult, $step, $isRun) = $this->prop(array('isResult', 'step', 'isRun'));
+        $questionType = '';
+        if($isResult && isset($step->options->questionType)) $questionType = $step->options->questionType;
+
+        $content = $isRun ? div
         (
             setClass('w-full col bg-white items-center pt-4 pb-10 px-8 mb-4'),
             div
@@ -260,7 +265,9 @@ class thinkStepBase extends wg
                 $this->buildDetail(),
                 $this->buildDetailTip()
             )
-        ) : div(
+        ) : div
+        (
+            $questionType == 'tableInput' ? setStyle(array('min-width' => '220px')) : null,
             $this->buildDetail(),
             $this->buildDetailTip()
         );
