@@ -2,9 +2,15 @@
 <?php
 
 /**
+
 title=项目团队管理
 timeout=0
 cid=1
+
+- 添加项目团队成员测试结果 @项目团队成员添加成功
+- 删除项目已有的团队成员最终测试状态 @SUCCESS
+- 复制部门成员最终测试状态 @SUCCESS
+
  */
 
 chdir(__DIR__);
@@ -19,7 +25,18 @@ $user->realname->range('admin, 用户1, 用户2, 用户3, 用户4');
 $user->password->range($config->uitest->defaultPassword)->format('md5');
 $user->gen(5);
 
+$team = zenData('team');
+$team->id->range('1');
+$team->root->range('1');
+$team->type->range('project');
+$team->account->range('admin');
+$team->days->range('7');
+$team->hours->range('4');
+$team->gen(1);
+
 zendata('project')->loadYaml('project', false, 1)->gen(1);
+zendata('product')->loadYaml('product', false, 1)->gen(1);
+zendata('projectproduct')->loadYaml('projectproduct', false, 1)->gen(1);
 zendata('dept')->loadYaml('dept', false, 1)->gen(1);
 $tester = new manageMembersTester();
 $tester->login();
