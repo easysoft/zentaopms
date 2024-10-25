@@ -137,6 +137,15 @@ class baseMao
     public $currentLabel;
 
     /**
+     * 当前设置的 key。
+     * Current key.
+     *
+     * @var string
+     * @access private
+     */
+    private $currentKey;
+
+    /**
      * 构造方法。
      * The construct method.
      *
@@ -683,6 +692,7 @@ class baseMao
      */
     public function getByKey(string $key): object
     {
+        $this->currentKey = $key;
         $this->labels[$this->currentLabel] = $key;
         $this->lastLabel = '';
 
@@ -703,5 +713,38 @@ class baseMao
         $this->currentLabel = $label;
 
         return $this;
+    }
+
+    /**
+     * 根据 key 设置缓存。
+     * Set cache by key.
+     *
+     * @param  mixed  $value
+     * @param  string $key
+     * @access public
+     * @return void
+     */
+    public function setByKey($value, string $key = '')
+    {
+        if(empty($key)) $key = $this->currentKey;
+        if(empty($key)) return false;
+        $this->app->redis->set($key, $value);
+    }
+
+    /**
+     * 根据 label 设置缓存。
+     * Set cache by label.
+     *
+     * @param  mixed  $value
+     * @param  string $label
+     * @access public
+     * @return void
+     */
+    public function setByLabel($value, string $label = '')
+    {
+        if(empty($label)) $label = $this->currentLabel;
+        if(empty($this->labels[$label])) return false;
+
+        $this->app->redis->set($this->labels[$label], $value);
     }
 }
