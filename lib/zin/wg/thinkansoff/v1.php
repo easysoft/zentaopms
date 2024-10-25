@@ -15,7 +15,7 @@ class thinkAnsoff extends thinkModel
         $mode       = $this->prop('mode');
         $blockStyle = $mod = 'preview' ? array('min-height' => '200px', 'width' => '50%') : array('min-height' => '200px', 'width' => '1078px');
         $blockColor = $config->thinkbackground->blockColor[$order];
-        $blockName  = is_string($block) ? $block : $block->test;
+        $blockName  = is_string($block) ? $block : $block->text;
 
         return div
         (
@@ -82,7 +82,7 @@ class thinkAnsoff extends thinkModel
 
         return div
         (
-            setClass('model-ansoff my-1 flex col flex-wrap justify-between'),
+            setClass('model-ansoff my-1'),
             $style,
             $this->buildBody()
         );
