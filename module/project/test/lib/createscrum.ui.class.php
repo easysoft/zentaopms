@@ -54,10 +54,12 @@ class createScrumTester extends tester
         /* 跳转到项目列表页面，按照项目名称进行搜索 */
         $browsePage = $this->loadPage('project', 'browse');
         $browsePage->dom->search($searchList = array("项目名称,包含, {$scrum['name']}"));
+        $browsePage->wait(2);
         $browsePage->dom->scrumName->click();
         //进入项目概况页面
         $browsePage->dom->settings->click();
         $viewPage = $this->loadPage('project', 'view');
+        $viewPage->wait(2);
 
         //断言检查名称、项目类型是否正确
         if($viewPage->dom->projectName->getText() != $scrum['name']) return $this->failed('名称错误');
