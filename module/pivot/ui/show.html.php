@@ -29,17 +29,26 @@ $fnGenerateFilters = function() use($pivot, $showOrigin, $lang)
         $value  = zget($filter, 'default', '');
         $from   = zget($filter, 'from');
         $values = is_array($value) ? implode(',', $value) : $value;
+
+        $url  = createLink('pivot', 'ajaxGetSysOptions', "search={search}");
+        $data = array();
+        $data['values'] = $values;
         if($from == 'query')
         {
-            $typeOption = $filter['typeOption'];
-            $optionUrl  = createLink('pivot', 'ajaxGetSysOptions', "typeOption=$typeOption&field=&saveAs=&values=$values&search={search}");
-            $filters[]  = filter(set(array('title' => $name, 'type' => $type, 'name' => $field, 'value' => $value, 'items' => $optionUrl, 'multiple' => $type == 'multipleselect' ? true : false)));
+            $data['type']   = $filter['typeOption'];
+            $items = (object)array('url' => $url, 'method' => 'post', 'data' => $data);
+            $filters[]  = filter(set(array('title' => $name, 'type' => $type, 'name' => $field, 'value' => $value, 'items' => $items, 'multiple' => $type == 'multipleselect' ? true : false)));
         }
         else
         {
-            $saveAs    = zget($filter, 'saveAs', $field);
-            $optionUrl = createLink('pivot', 'ajaxGetSysOptions', "pivotID=$pivot->id&field=$field&saveAs=$saveAs&values=$values&search={search}");
-            $filters[] = resultFilter(set(array('title' => $name, 'type' => $type, 'name' => $field, 'value' => $value, 'items' => $optionUrl)));
+            $fieldSetting   = $pivot->fieldSettings->$field;
+            $data['type']   = $fieldSetting->type;
+            $data['object'] = $fieldSetting->object;
+            $data['field']  = $fieldSetting->field;
+            $data['saveAs'] = zget($filter, 'saveAs', $field);
+
+            $items = (object)array('url' => $url, 'method' => 'post', 'data' => $data);
+            $filters[] = resultFilter(set(array('title' => $name, 'type' => $type, 'name' => $field, 'value' => $value, 'items' => $items)));
         }
     }
 

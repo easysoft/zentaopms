@@ -90,6 +90,7 @@ class picker extends wg
     {
         list($pickerProps, $restProps) = $this->props->split(array_keys(static::definedPropsList()));
         $items = empty($pickerProps['items']) ? array() : $pickerProps['items'];
+        if(is_array($items) && isset($items['url']) && isset($items['method'])) $items = (object)$items;
         $pickerItems  = is_array($items) ? array() : $items;
         $hasZeroValue = false;
         $defaultValue = isset($pickerProps['value']) ? $pickerProps['value'] : (isset($pickerProps['defaultValue']) ? $pickerProps['defaultValue'] : '');
