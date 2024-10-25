@@ -20,3 +20,18 @@ $config->redis->cache->raw[TABLE_PRODUCT] = 'id';
 $config->redis->cache->raw[TABLE_PROJECT] = 'id';
 $config->redis->cache->raw[TABLE_RELEASE] = 'id';
 $config->redis->cache->raw[TABLE_USER]    = 'account';
+
+$config->redis->cache->res = [];
+$config->redis->cache->res['module'][] = ['key' => 'CACHE_MODULE_TREE', 'params' => ['type', 'root', 'branch']];
+
+$config->redis->cache->res['user'][] = ['key' => 'CACHE_USER_PAIRS'];
+
+foreach($config->redis->cache->res as $module => $caches)
+{
+    foreach($caches as $cache)
+    {
+        $key   = $cache['key'];
+        $value = str_replace('_', ':', strtolower($cache['key']));
+        define($key, $value);
+    }
+}
