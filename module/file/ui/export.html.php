@@ -360,17 +360,31 @@ setExportTPL();
 if($('.dtable .dtable-header .has-checkbox').length > 0)
 {
     const dtable = zui.DTable.query($('.dtable .dtable-header .has-checkbox').closest('.dtable')[0]);
-    const checkedList = dtable ? dtable.$.getChecks() : [];
+    let checkedList = dtable ? dtable.$.getChecks() : [];
     if(checkedList.length)
     {
         if(window.config.currentModule == 'testcase') checkedList.forEach(function(item, index){ checkedList[index] = item.replace('case_', '');});
         if(window.config.currentModule == 'product') checkedList.forEach(function(item, index){if(item.indexOf('-')) checkedList[index] = item.substr(item.indexOf('-') + 1);});
+        if(window.config.currentModule == 'testtask' && window.config.currentMethod == 'cases')
+        {
+            let caseIDList = [];
+            checkedList.forEach(function(item, index) {
+                let testrun = dtable.options.data.find(obj => obj.id == item);
+                let caseID  = testrun ? testrun.case : null;
+
+                if(caseID) caseIDList.push(caseID);
+            });
+            checkedList = caseIDList;
+        }
 
         waitDom('#exportPanel [name=exportType]', function(){ $('#exportPanel [name=exportType]').zui('picker').$.setValue('selected');});
         $.cookie.set('checkedItem', checkedList.join(','), {expires:config.cookieLife, path:config.webRoot});
     }
+    else
+    {
+        $.cookie.set('checkedItem', '', {expires:config.cookieLife, path:config.webRoot});
+    }
 }
-
 
 /**
  * 关闭升级到企业版提示。
