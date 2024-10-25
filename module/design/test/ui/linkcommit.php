@@ -72,3 +72,21 @@ $repohistory->repo->range('1');
 $repohistory->revision->range('b59be0c9604497ae26c621cc848a738cca73fc85');
 $repohistory->commit->range('31');
 $repohistory->gen(1);
+
+$design = zendata('design');
+$design->id->range('1-4');
+$design->project->range('1{4}');
+$design->product->range('1{2}, 2{2}');
+$design->commit->range('1, []{3}');
+$design->commitedBy->range('admin');
+$design->name->range('概要设计1, 详细设计1, 数据库设计1, 接口设计1');
+$design->type->range('HLDS, DDS, DBDS, ADS');
+$design->gen(4);
+
+$tester = new linkCommitTester();
+$tester->login();
+
+/* 检查关联提交 */
+r($tester->linkCommit('3')) && p('message') && e('关联提交成功');
+
+$tester->closeBrowser();
