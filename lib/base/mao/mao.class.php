@@ -720,6 +720,20 @@ class baseMao
     }
 
     /**
+     * 给当前 key 设置值。
+     * Set value to current key.
+     *
+     * @param  mixed $value
+     * @access public
+     * @return void
+     */
+    public function set($value)
+    {
+        if(empty($this->currentKey)) return false;
+        $this->app->redis->set($this->currentKey, $value);
+    }
+
+    /**
      * 根据 key 设置缓存。
      * Set cache by key.
      *
