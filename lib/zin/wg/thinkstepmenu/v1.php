@@ -236,7 +236,7 @@ class thinkStepMenu extends wg
             $this->buildMenuItem('radio', 'radio', $this->lang->thinkstep->createStep . $this->lang->thinkstep->actions['radio'], $item, $parentID, 'radio'),
             $this->buildMenuItem('checkbox', 'checkbox', $this->lang->thinkstep->createStep . $this->lang->thinkstep->actions['checkbox'], $item, $parentID, 'checkbox'),
             $this->buildMenuItem('input', 'input', $this->lang->thinkstep->createStep . $this->lang->thinkstep->actions['input'], $item, $parentID, 'input'),
-            $this->buildMenuItem('tableInput', 'cell-input', $this->lang->thinkstep->createStep . $this->lang->thinkstep->actions['tableInput'], $item, $parentID, 'tableInput'),
+            $this->buildMenuItem('tableInput', 'multi-input', $this->lang->thinkstep->createStep . $this->lang->thinkstep->actions['tableInput'], $item, $parentID, 'tableInput'),
             $this->buildMenuItem('multicolumn', 'multi-input', $this->lang->thinkstep->createStep . $this->lang->thinkstep->actions['multicolumn'], $item, $parentID, 'multicolumn'),
         ));
         return $menus;
