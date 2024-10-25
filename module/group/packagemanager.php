@@ -2515,6 +2515,7 @@ $config->group->package->workflowField->privs['workflowfield-exportTemplate'] = 
 $config->group->package->workflowField->privs['workflowfield-setValue']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 45, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflowField->privs['workflowfield-setExport']      = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 50, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflowField->privs['workflowfield-setSearch']      = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 55, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
+$config->group->package->workflowField->privs['workflowfield-quote']          = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 55, 'depend' => array('workflowfield-browse'), 'recommend' => array());
 
 $config->group->package->workflowAction = new stdclass();
 $config->group->package->workflowAction->order  = 15;
