@@ -39,4 +39,13 @@ class thinkModel extends wg
             $content
         );
     }
+
+    protected function buildMulticolumnContent(object $step): array
+    {
+        global $lang;
+
+        $title  = '';
+        $colKey = $step->link['column'][0];
+        if(isset($step->options->fields[$colKey - 1])) $title = $step->options->fields[$colKey - 1];
+    }
 }
