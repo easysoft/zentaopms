@@ -57,3 +57,12 @@ class buildLinkBugTester extends tester
     public function batchUnlinkBug()
     {
         $form = $this->initForm('projectbuild', 'view', array('buildID' => 1), 'appIframe-project');
+        $form->dom->resolvedBugTab->click();
+        $form->wait(1);
+        $form->dom->allResolvedBugBtn->click(); // 全选bug
+        $form->dom->batchUnlinkBugBtn->click(); // 点击批量移除按钮
+        $form->wait(2);
+        // 断言检查移除全部bug是否成功
+        return ($form->dom->resolvedBugNum === false) ? $this->success('移除全部bug成功') : $this->failed('移除全部bug失败');
+    }
+}
