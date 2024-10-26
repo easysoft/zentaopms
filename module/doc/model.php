@@ -1281,7 +1281,7 @@ class docModel extends model
         if($type == 'mine' || $type == 'custom')
         {
             $pairs = $this->getSubSpacesByType($type);
-            foreach($pairs as $key => $value) $spaces[] = array('id' => $key, 'name' => $value, 'type' => $type);
+            foreach($pairs as $key => $value) $spaces[] = array('id' => $key, 'name' => $value, 'type' => $type, 'canModify' => true);
         }
         if($type == 'product')
         {
