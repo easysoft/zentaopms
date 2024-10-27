@@ -553,6 +553,7 @@ $lang->kanban->menu = new stdclass();
 /* Doc menu. */
 $lang->doc->menu = new stdclass();
 $lang->doc->menu->dashboard = array('link' => "{$lang->dashboard}|doc|index");
+$lang->doc->menu->quick     = array('link' => "{$lang->doc->quick}|doc|quick");
 $lang->doc->menu->my        = array('link' => "{$lang->doc->mySpace}|doc|mySpace|", 'alias' => 'myspace');
 $lang->doc->menu->product   = array('link' => "{$lang->doc->productSpace}|doc|productSpace|", 'alias' => 'productspace');
 $lang->doc->menu->project   = array('link' => "{$lang->doc->projectSpace}|doc|projectSpace|", 'alias' => 'projectspace');
@@ -563,6 +564,7 @@ $lang->doc->dividerMenu = ',product,';
 
 /* Doc menu order. */
 $lang->doc->menuOrder[5]  = 'dashboard';
+$lang->doc->menuOrder[7]  = 'quick';
 $lang->doc->menuOrder[10] = 'my';
 $lang->doc->menuOrder[15] = 'team';
 $lang->doc->menuOrder[20] = 'product';
