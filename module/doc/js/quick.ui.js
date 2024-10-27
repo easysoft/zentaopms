@@ -31,3 +31,41 @@ window.setDocAppOptions = function(_, options)
         }
     });
 };
+
+function getObjectBrowseUrl(object, objectType, libID)
+{
+    const browsePath =
+    {
+        execution: ['execution', 'browse'],
+        project: ['doc', 'projectSpace'],
+        product: ['doc', 'productSpace'],
+        mine: ['doc', 'mySpace'],
+        custom: ['doc', 'teamSpace'],
+    };
+    const path = browsePath[objectType];
+    return path ? $.createLink(path[0], path[1], `objectID=${object.id}&libID=${libID || 0}`) : null;
+}
+
+const buildDocActions = window.docAppActions.doc;
+window.docAppActions.doc = function(info)
+{
+    const actions = buildDocActions(info);
+    if(info.ui === 'toolbar')
+    {
+        const doc       = info.data;
+        const object    = doc.object;
+        const lib       = doc.libInfo;
+        const objectUrl = object ? getObjectBrowseUrl(object, doc.objectType) : null;
+        actions.unshift(
+        {
+            type: 'custom',
+            component: 'div',
+            className: 'order-first mr-2',
+            html: `<span class="text-gray">${getDocAppLang('position')}${getDocAppLang('colon')} </span>` + [
+                objectUrl ? `<a href="${objectUrl}">${object.name || object.title}</a>` : null,
+                lib ? `<a href="${$.createLink('doc', 'view', `docID=${doc.id}`)}">${lib.name}</a> ` : null,
+            ].filter(Boolean).join(' <span class="text-gray">/</span> '),
+        });
+    }
+    return actions;
+};
