@@ -392,6 +392,7 @@ $lang->doc->custom        = 'Custom';
 $lang->doc->wiki          = 'Wiki';
 $lang->doc->apiDoc        = 'API Docuemnt';
 $lang->doc->apiStruct     = 'Data Structure';
+$lang->doc->quick         = 'Quick Start';
 $lang->doc->mySpace       = 'My Space';
 $lang->doc->productSpace  = "{$lang->productCommon} Space";
 $lang->doc->projectSpace  = "{$lang->projectCommon} Space";

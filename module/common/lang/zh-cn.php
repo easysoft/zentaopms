@@ -392,6 +392,7 @@ $lang->doc->custom        = '自定义库';
 $lang->doc->wiki          = 'Wiki';
 $lang->doc->apiDoc        = '文档';
 $lang->doc->apiStruct     = '数据结构';
+$lang->doc->quick         = '快捷访问';
 $lang->doc->mySpace       = '我的空间';
 $lang->doc->productSpace  = "{$lang->productCommon}空间";
 $lang->doc->projectSpace  = "{$lang->projectCommon}空间";
