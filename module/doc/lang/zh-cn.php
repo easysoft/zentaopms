@@ -557,3 +557,4 @@ $lang->doc->docLang->attachment                  = $lang->doc->files;
 $lang->doc->docLang->docTitleRequired            = '文档标题不能为空。';
 $lang->doc->docLang->docTitlePlaceholder         = '请输入文档标题';
 $lang->doc->docLang->noDataYet                   = '暂无数据';
+$lang->doc->docLang->position                    = $lang->doc->position;
