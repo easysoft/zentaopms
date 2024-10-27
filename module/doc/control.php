@@ -1565,13 +1565,25 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function ajaxGetDoc(int $docID, int $version = 0)
+    public function ajaxGetDoc(int $docID, int $version = 0, $details = 'no')
     {
         $doc = $this->doc->getByID($docID, $version);
         $doc->lib     = (int)$doc->lib;
         $doc->module  = (int)$doc->module;
         $doc->privs   = array('edit' => common::hasPriv('doc', 'edit', $doc));
         $doc->editors = $this->doc->getEditors($docID);
+
+        if($details == 'yes')
+        {
+            $lib        = $this->doc->getLibByID((int)$doc->lib);
+            $objectType = empty($lib->type) ? ($lib->execution ? 'execution' : ($lib->project ? 'project' : 'product')) : $lib->type;
+            $objectID   = $this->doc->getObjectIDByLib($lib, $objectType);
+            $object     = in_array($objectType, array('product', 'project', 'execution')) ? $this->doc->getObjectByID($objectType, $objectID) : $this->doc->getLibByID((int)$objectID);;
+
+            $doc->libInfo    = $lib;
+            $doc->objectType = $objectType;
+            $doc->object     = $object;
+        }
 
         if($docID) $this->doc->createAction($docID, 'view');
 
