@@ -1530,6 +1530,45 @@ class doc extends control
     }
 
     /**
+     * Doc quick access page.
+     * 快捷访问页面。
+     *
+     * @param  string $type        'view'|'collect'|'createdby'|'editedby'
+     * @param  int    $docID
+     * @param  string $orderBy
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function quick(string $type = 'view', int $docID = 0, string $orderBy = '', int $recPerPage = 20, int $pageID = 1)
+    {
+        if(!isset($this->config->doc->quickMenu[$type])) $type = 'view';
+        $menu = $this->config->doc->quickMenu[$type];
+
+        $currentUser = $this->app->user->account;
+        $docs        = $this->doc->getMineList($type, 'all', 0, $orderBy);
+        foreach($docs as $doc)
+        {
+            unset($doc->draft);
+            $doc->originLIb   = $doc->lib;
+            $doc->lib         = $menu['id'];
+            $doc->isCollector = strpos($doc->collector, ',' . $currentUser . ',') !== false;
+        }
+
+        $this->view->docs       = $docs;
+        $this->view->menu       = $menu;
+        $this->view->type       = $type;
+        $this->view->docID      = $docID;
+        $this->view->orderBy    = $orderBy;
+        $this->view->recPerPage = $recPerPage;
+        $this->view->pageID     = $pageID;
+        $this->view->users      = $this->loadModel('user')->getPairs('noclosed,noletter');
+        $this->view->title      = $this->lang->doc->quick;
+        $this->display();
+    }
+
+    /**
      * Ajax: Get doc space data.
      * Ajax: 获取文档空间数据。
      *
