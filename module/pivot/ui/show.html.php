@@ -140,12 +140,13 @@ $generateData = function() use ($lang, $pivotName, $pivot, $data, $configs, $sho
             $fnGenerateFilters(),
             dtable
             (
-                set::striped(true),
                 set::bordered(true),
                 set::height(jsRaw('window.getHeight')),
                 set::cols($cols),
                 set::data($rows),
                 set::emptyTip($emptyTip),
+                set::rowHover(false),
+                set::colHover(false),
                 set::onRenderCell(jsRaw('renderCell')),
                 set::onCellClick(jsRaw('clickCell')),
                 set::rowKey('ROW_ID'),

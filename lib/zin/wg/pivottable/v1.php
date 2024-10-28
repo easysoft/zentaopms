@@ -90,12 +90,13 @@ class pivotTable extends wg
         return dtable
         (
             setID('designTable'),
-            set::striped(true),
             set::bordered(true),
             set::height(jsRaw("() => getHeight(800, $filterCount)")),
             set::cols($cols),
             set::data($data),
             set::emptyTip($emptyTip),
+            set::rowHover(false),
+            set::colHover(false),
             set::onRenderCell($onRenderCell),
             set::onCellClick($onCellClick),
             set::rowKey('ROW_ID'),
