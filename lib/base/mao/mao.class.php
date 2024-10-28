@@ -59,7 +59,7 @@ class baseMao
      * 查询的字段。
      * The fields will be returned.
      *
-     * @var string
+     * @var array
      * @access public
      */
     public $fields;
@@ -179,11 +179,11 @@ class baseMao
      * 设置$fields属性。
      * Set the $fields property.
      *
-     * @param  string $fields
+     * @param  array $fields
      * @access public
      * @return void
      */
-    public function setFields(string $fields)
+    public function setFields(array $fields)
     {
         $this->fields = $fields;
     }
@@ -236,7 +236,7 @@ class baseMao
      */
     public function reset()
     {
-        $this->setFields('');
+        $this->setFields(array());
         $this->setTable('');
         $this->setConditions([]);
     }
