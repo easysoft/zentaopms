@@ -41,11 +41,25 @@ class thinkSwot extends thinkModel
         );
     }
 
+    protected function buildRow(int $key): node
+    {
+        $blocks = $this->prop('blocks');
+        return div
+        (
+            setClass('w-full flex items-stretch'),
+            $this->buildItem($key, $blocks[$key]),
+            $this->buildItem($key + 1, $blocks[$key + 1])
+        );
+    }
+
     protected function buildBody(): array
     {
         $blocks     = $this->prop('blocks');
         $modelItems = array();
-        foreach($blocks as $key => $block) $modelItems[] = $this->buildItem($key, $block);
+        foreach($blocks as $key => $block)
+        {
+            if($key % 2 == 0) $modelItems[] = $this->buildRow($key);
+        }
         return $modelItems;
     }
 
@@ -55,7 +69,7 @@ class thinkSwot extends thinkModel
         $app->loadLang('thinkwizard');
 
         $mode  = $this->prop('mode');
-        $style = $mode == 'preview' ? setStyle(array('min-height' => '254px')) : setStyle(array('min-height' => '254px', 'width' => '2156px'));
+        $style = $mode == 'preview' ? setStyle(array('min-height' => '254px')) : setStyle(array('min-height' => '254px', 'min-width' => '2156px'));
         $model = array(
             div
             (
