@@ -6264,7 +6264,7 @@ LEFT JOIN (
     ROUND(IF(SUM(t22.consumed) + SUM(IF(t22.status != 'closed' && t22.status != 'cancel', t22.`left`, 0)) > 0, SUM(t22.consumed) / (SUM(t22.consumed) + SUM(IF(t22.status != 'closed' && t22.status != 'cancel', t22.`left`, 0))), 0) * 100, 2) AS prograss
     FROM zt_project AS t21
     LEFT JOIN zt_task AS t22 ON t21.id = t22.execution
-    WHERE t21.deleted = '0' AND t21.type IN ('sprint', 'kanban')
+    WHERE t21.deleted = '0' AND t21.type IN ('sprint', 'kanban', 'stage')
     AND t22.deleted = '0' AND t22.parent < 1
     GROUP BY t22.project
     UNION
