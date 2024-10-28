@@ -1991,7 +1991,7 @@ class biModel extends model
             $totalLang    = $this->lang->pivot->total;
             $totalColspan = 0;
 
-            foreach($rowData as $value) if($value == $totalLang) $totalColspan++;
+            foreach($rowData as $value) if($value === $totalLang) $totalColspan++;
 
             for($i = 0; $i < count($rowData); $i++)
             {
