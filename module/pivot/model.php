@@ -1294,7 +1294,7 @@ class pivotModel extends model
                 $groupValue    = $getGroupValue($record, $group, $groupIndex);
                 $groupValueStr = implode('_', $groupValue);
 
-                if($groupValue[0] != '$total$' && $groupValueStr == $lastGroupValue[$group] && isset($groupsRowSpan[$group]))
+                if($groupValue[0] !== '$total$' && $groupValueStr === $lastGroupValue[$group] && isset($groupsRowSpan[$group]))
                 {
                     $groupRowSpan = array_pop($groupsRowSpan[$group]);
                     $groupRowSpan['index'][] = $index;
@@ -1371,7 +1371,7 @@ class pivotModel extends model
                 {
                     if(!isset($column['percentage'])) continue;
                     $percentage = $column['percentage'];
-                    if($percentage[4] == $columnKey) $total += $column['value'];
+                    if($percentage[4] === $columnKey) $total += $column['value'];
                 }
                 $cell['percentage'][1] = $total;
             }
@@ -1483,7 +1483,7 @@ class pivotModel extends model
     {
         return array_filter($records, function($record) use ($field, $value)
         {
-            return $record->$field == $value;
+            return $record->$field === $value;
         });
     }
 
@@ -1638,7 +1638,7 @@ class pivotModel extends model
             if(!is_numeric($number)) return $number;
 
             $number = (float)$number;
-            if(floor($number) == $number) return $number;
+            if(floor($number) === $number) return $number;
 
             $decimalPart = explode('.', strval($number));
             if(isset($decimalPart[1]) && strlen($decimalPart[1]) > 2) return helper::formatHours($number);
@@ -1652,7 +1652,7 @@ class pivotModel extends model
             $arrayValue = false;
             foreach($record as $colKey => $cell)
             {
-                $cellValue = $cell['value'] == '$total$' ? $this->lang->pivot->total : $cell['value'];
+                $cellValue = $cell['value'] === '$total$' ? $this->lang->pivot->total : $cell['value'];
                 if(is_array($cellValue)) $arrayValue = $cellValue;
 
                 $cellValue = $roundIfMoreThanTwoDecimals($cellValue);
