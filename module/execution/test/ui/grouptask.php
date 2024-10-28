@@ -88,7 +88,7 @@ $task->execution->range('2');
 $task->story->range('1{5}, 0{99}');
 $task->storyVersion->range('1');
 $task->name->range('1-100');
-$task->type->range('devel');
+$task->type->range('devel, study, affair{100}');
 $task->estimate->range('1');
 $task->consumed->range('0{3}, 1-100');
 $task->left->range('1{3}, 2{3}, 0{2}, 2{100}');
