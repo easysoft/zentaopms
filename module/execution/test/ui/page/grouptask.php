@@ -15,7 +15,8 @@ class managemembersPage extends page
             'closedBy'    => "//*[@data-id='execution-grouptask']/../div[3]//li[6]",
             'type'        => "//*[@data-id='execution-grouptask']/../div[3]//li[7]"
             /* 全部展开时左侧区块统计 */
-            'tasks'     => "//div[@id='tasksTable']//tbody/tr[1]/td/div/div/div/strong",
+            'group'     => "//*[@id='tasksTable']/table/tbody/tr[1]/td[1]/div/a",
+            'tasks'     => "//*[@id='tasksTable']/table/tbody/tr[1]/td[1]/div/div/div[1]/strong",
             'waiting'   => "//*[@id='tasksTable']/table/tbody/tr[1]/td[1]/div/div/div[1]/text()[2]",
             'doing'     => "//*[@id='tasksTable']/table/tbody/tr[1]/td[1]/div/div/div[1]/text()[3]",
             'estimates' => "//*[@id='tasksTable']/table/tbody/tr[1]/td[1]/div/div/div[2]/strong",
