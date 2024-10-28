@@ -7,7 +7,7 @@ class testcase extends tester
     public function createTestCase($project = array(), $testcase = array())
     {
         $this->login();
-        $form = $this->initForm('testcase', 'create',$project, 'appIframe-qa');
+        $form = $this->initForm('testcase', 'create', $project, 'appIframe-qa');
         if(isset($testcase['caseName']))   $form->dom->title->setValue($testcase['caseName']);
         if(isset($testcase['type']))       $form->dom->type->picker($testcase['type']);
         if(isset($testcase['stage']))      $form->dom->{'stage[]'}->multiPicker($testcase['stage']);
@@ -87,7 +87,6 @@ class testcase extends tester
 
         $caseLists = $form->dom->getElementList($form->dom->xpath['caseNameList']);
         $caseList  = array_map(function($element){return $element->getText();}, $caseLists->element);
-        $this->closeBrowser();
         if(in_array($testcase['caseName'], $caseList)) return $this->success('创建多层级测试用例成功');
         return $this->failed('创建多层级测试用例失败');
     }
