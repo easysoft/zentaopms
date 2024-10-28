@@ -29,7 +29,7 @@ class thinkPestel extends thinkModel
         list($blocks, $mode) = $this->prop(array('blocks', 'mode'));
         $modelItems   = array();
         $defaultTitle = $mode === 'preview' ? $lang->thinkwizard->unAssociated : '';
-        $style        = $mode === 'preview' ? null : setStyle(array('width' => '544px'));
+        $style        = $mode === 'preview' ? null : setStyle(array('min-width' => '544px'));
 
         foreach($blocks as $blockIndex => $block)
         {
