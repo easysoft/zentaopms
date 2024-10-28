@@ -101,7 +101,14 @@ class thinkModel extends wg
             if($step->link['showMethod'] == 2)
             {
                 $className  = "card-{$step->options->questionType}";
-                $resultCard = $this->buildQuestionItem($step);
+                if($step->options->questionType == 'multicolumn' && $this->checkEmptyOfMulticolumn($step->answer->result))
+                {
+                    $resultCard = array();
+                }
+                else
+                {
+                    $resultCard = $this->buildQuestionItem($step);
+                }
             }
             elseif($step->link['showMethod'] == '1')
             {
