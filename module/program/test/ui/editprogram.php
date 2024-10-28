@@ -3,7 +3,7 @@
 
 /**
 
-title=创建项目集测试
+title=编辑项目集测试
 timeout=0
 
 - 编辑项目集名称，编辑成功
@@ -28,4 +28,4 @@ $tester->login();
 $editName = new stdClass();
 $editName->name = '编辑过的项目集';
 
-r($tester->editProgram($editName)) && p('message,status') && e ('编辑项目集成功，SUCCESS');
+r($tester->editProgram($editName)) && p('message,status') && e ('编辑项目集成功，SUCCESS'); //编辑项目集成功
