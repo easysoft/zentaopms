@@ -52,7 +52,9 @@ class thinkStepQuote extends wg
                         set::value($setOption),
                         set::items($lang->thinkstep->setOptionList),
                         set::disabled(empty($quoteQuestions)),
-                        on::change()->do("changeSetOption(target)")
+                        on::change()
+                            ->const('questionType', $questionType)
+                            ->do("questionType == 'checkbox' ? changeCheckboxSetOption(target) : changeMulticolumnSetOption(target)")
                     )
                 ),
                 icon
