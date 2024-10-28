@@ -2035,6 +2035,7 @@ class biModel extends model
 
             $rows[$rowKey]['conditions'] = $drillConditions;
             $rows[$rowKey]['isDrill']    = $isDrill;
+            $rows[$rowKey]['isTotal']    = $totalColspan > 0;
             $rows[$rowKey]['ROW_ID']     = $rowKey;
         }
 
