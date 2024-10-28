@@ -189,21 +189,31 @@ renderCell = function(result, {row, col})
     {
         let values  = result.shift();
         let isDrill = row.data.isDrill[col.name];
+        let isTotal = row.data.isTotal;
         if(col.setting.colspan && typeof(values.type) != 'undefined' && values.type == 'a')
         {
             values = values.props['children'];
-            result.push({className: 'gap-0 p-1'});
+            result.push({className: 'gap-0 p-0.5'});
             values.forEach((value, index) =>
               result.push({
                 html: value || !Number.isNaN(value) ? (isDrill && index == 0 ? "<a href='#'>" + `${value}` + '</a>' : `${value}`) : '&nbsp;',
                 className: 'flex justify-center items-center h-full w-1/2' + (index == 0 ? ' border-r': ''),
-                style: 'border-color: var(--dtable-border-color)'
+                style: 'border-color: var(--dtable-border-color)' + (isTotal ? '; background-color: var(--color-surface-light);' : '')
               })
             );
         }
         else
         {
             if(!isDrill && values?.type == 'a') values = values.props.children;
+            if(isTotal)
+            {
+                result.push({className: 'gap-0 p-0.5'});
+                values = {
+                    html: values,
+                    className: 'flex justify-center items-center h-full w-full',
+                    style: 'border-color: var(--dtable-border-color)' + (isTotal ? '; background-color: var(--color-surface-light);' : '')
+                };
+            }
             result.push(values);
         }
     }
