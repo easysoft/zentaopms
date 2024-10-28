@@ -29,6 +29,7 @@ class docApp extends wg
         'libID'                 => '?number',              // 库 ID。
         'moduleID'              => '?number',              // 模块 ID。
         'docID'                 => '?number',              // 文档 ID。
+        'docVersion'            => '?number',              // 文档版本。
         'mode'                  => '?string',              // 应用默认界面模式，包括 home、list、edit、create、files。
         'spaceIcon'             => '?string',              // 空间图标。
         'libIcon'               => '?string',              // 库图标。
@@ -181,6 +182,7 @@ class docApp extends wg
             set::libID(data('libID')),
             set::moduleID(data('moduleID')),
             set::docID(data('docID')),
+            set::docVersion(data('docVersion')),
             set::mode('list'),
             set::filterType(data('filterType')),
             set::search(data('search')),
