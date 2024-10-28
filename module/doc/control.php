@@ -219,6 +219,7 @@ class doc extends control
             $docAppActions = array();
             $docAppActions[] = array('update', ($lib->parent == 0) ? 'space' : 'lib', $lib);
             $docAppActions[] = array('home:loadHomeLibs');
+            $docAppActions[] = array('list:load');
             return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'closeModal' => true, 'docApp' => $docAppActions));
         }
 
@@ -1502,12 +1503,6 @@ class doc extends control
         if($type == 'mine') $menuType = 'my';
         else $menuType = $type == 'custom' ? 'team' : $type;
         if(isset($this->lang->doc->menu->{$menuType})) $this->lang->doc->menu->{$menuType}['alias'] .= ',' . $this->app->rawMethod;
-
-        if(empty($orderBy))
-        {
-            $lib = $this->doc->getLibByID($libID);
-            if(!empty($lib)) $orderBy = $lib->orderBy;
-        }
 
         $this->view->type           = $type;
         $this->view->spaceID        = $spaceID;
