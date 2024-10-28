@@ -109,6 +109,7 @@ class docApp extends wg
          * Setting language data for frontend. Use getLang('xxx') in js/app.ui.js.
          * 设置前端语言数据。 在 js/app.ui.js 中使用 getLang('xxx') 来访问语言数据。
          */
+        $app->loadLang('file');
         $langData = $lang->doc->docLang;
         $langData->filePreview           = $lang->file->preview;
         $langData->fileDownload          = $lang->file->download;
