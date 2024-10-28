@@ -17,4 +17,4 @@
 .bg-important-100 {background-color: var(--color-important-100);}
 .bg-warning-100 {background-color: var(--color-warning-100);}
 .px-12 {padding-left: 3rem; padding-right: 3rem;}
-.think-result-content .is-view .item-step-title {font-size: 1.75rem;}
+.think-result-content .is-view .item-step-title {font-size: 1.75rem; min-height: 60px;}
