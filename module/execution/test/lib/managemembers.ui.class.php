@@ -54,6 +54,7 @@ class manageMembersTester extends tester
         $form = $this->initForm('execution', 'team', array('execution' => $execution['id']), 'appIframe-execution');
         $numBefore = $form->dom->num->getText();
         $form->dom->firstRemoveBtn->click();
+        $form->wait(1);
         $form->dom->alertModal();
         $form->wait(1);
         $numAfter = $form->dom->num->getText();
