@@ -117,7 +117,9 @@ class storyTester extends tester
     {
         $form = $this->initForm('execution', 'story', array('execution' => '2'), 'appIframe-execution');
         $form->dom->firstAssignTo->click();
+        $form->wait(1);
         $form->dom->assignedTo->picker($user);
+        $form->wait(1);
         $form->dom->submitBtn->click();
         $form->wait(1);
 
@@ -137,6 +139,7 @@ class storyTester extends tester
     {
         $form = $this->initForm('execution', 'story', array('execution' => '2'), 'appIframe-execution');
         $form->dom->firstCheckbox->click();
+        $form->wait(1);
         $form->dom->batchAssignBtn->click();
         $form->wait(1);
         $form->dom->assignToAdmin->click();
