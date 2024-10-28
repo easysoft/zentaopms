@@ -781,14 +781,7 @@ class doc extends control
         if($this->app->tab == 'doc' && !empty($lib) && $lib->type == 'execution') $appendLib = $doc->lib;
 
         $objectType = $lib->type;
-        if(in_array($lib->type, array('product', 'project', 'execution')))
-        {
-            $objectID = zget($doc, $objectType, 0);
-        }
-        else
-        {
-            $objectID = $lib->parent;
-        }
+        $objectID   = $this->doc->getObjectIDByLib($lib, $objectType);
 
         /* Get doc. */
         if($docID) $this->doc->createAction($docID, 'view');
