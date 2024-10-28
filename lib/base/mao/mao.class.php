@@ -697,6 +697,55 @@ class baseMao
     }
 
     /**
+     * 把数组转换成字符串。
+     * Convert array to string.
+     *
+     * @param  array $args
+     * @access private
+     * @return string
+     */
+    private function recrusiveArgs(array $args): string
+    {
+        $result = [];
+        foreach($args as $key => $arg)
+        {
+            if(is_object($arg)) $arg = (array)$arg;
+            if(is_array($arg))
+            {
+                if(array_values($arg) === $arg)
+                {
+                    sort($arg);
+                }
+                else
+                {
+                    ksort($arg);
+                }
+                $result[] = $key . '=' . $this->recrusiveArgs($arg);
+            }
+            else
+            {
+                $result[] = $key . '=' . $arg;
+            }
+        }
+
+        return implode('&', $result);
+    }
+
+    /**
+     * 创建缓存的key。
+     * Create cache key.
+     *
+     * @param  mixed ...$args
+     * @access public
+     * @return string
+     */
+    public function createKey(...$args)
+    {
+        $args = $this->recrusiveArgs($args);
+        return substr(sha1($args), 0, 7);
+    }
+
+    /**
      * 通过Key获取值
      * Get value by key.
      *
