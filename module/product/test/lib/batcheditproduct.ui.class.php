@@ -13,8 +13,9 @@ class batchEditProduct extends tester
     {
         $form = $this->initForm('product', 'all', array(), 'appIframe-product');
         $form->dom->allTab->click();
-        $form->wait(2);
+        $form->wait(1);
         $form->dom->selectAllBtn->click();//全选产品
+        $form->wait(1);
         $form->dom->batchEditBtn->click();//点击编辑按钮
         $firstID = $form->dom->id_static_0->getText();//获取第一个ID
         $nameInputDom  = "name[{$firstID}]";
@@ -24,8 +25,17 @@ class batchEditProduct extends tester
         if (isset($product->name))      $form->dom->$nameInputDom->setValue($product->name);
         if (isset($product->type))      $form->dom->$typePickDom->picker($product->type);
         if (isset($product->status))    $form->dom->$statusPickDom->picker($product->status);
-        if ($product->acl == 'open')    $form->dom->aclopen_0_0->click();
-        if ($product->acl == 'private') $form->dom->aclprivate_0_0->click();
+        if (isset($product->acl))
+        {
+            if ($product->acl == 'open')
+            {
+                $form->dom->aclopen_0_0->click();
+            }
+            else if ($product->acl == 'private')
+            {
+                $form->dom->aclprivate_0_0->click();
+            }
+        }
         $form->dom->saveBtn->click();
         $form->wait(1);
         return $this->checkBatchEdit($product, $firstID);

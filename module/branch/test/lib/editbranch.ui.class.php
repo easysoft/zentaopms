@@ -15,12 +15,14 @@ class editBranchTester extends tester
     {
         $form = $this->initForm('branch', 'manage', $productID, 'appIframe-product');
         $form->dom->allTab->click();
+        $form->wait(1);
         $form->dom->editBtn->click();
         //设置表单字段值
         if (isset($editBranch->name)) $form->dom->editName->setValue($editBranch->name);
         if (isset($editBranch->desc)) $form->dom->editDesc->setValue($editBranch->desc);
+        $form->wait(1);
         $form->dom->editSave->click();
-        $form->wait(2);
+        $form->wait(1);
         if ($form->dom->zin_branch_edit_1_form)
         {
             $nameTip      = $form->dom->nameTip->getText();
