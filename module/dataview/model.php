@@ -241,7 +241,7 @@ class dataviewModel extends model
         {
             static $buildInModules;
             if(empty($buildInModules)) $buildInModules = $this->loadModel('workflow')->getBuildinModules();
-            $workflowFields[$moduleName] = $this->loadModel('workflowfield')->getFieldPairs($moduleName, $buildInModules[$moduleName] ? '0' : 'all');
+            $workflowFields[$moduleName] = $this->loadModel('workflowfield')->getFieldPairs($moduleName, isset($buildInModules[$moduleName]) ? '0' : 'all');
         }
         if(isset($workflowFields[$moduleName][$fieldName])) $mergeField = $workflowFields[$moduleName][$fieldName];
 
