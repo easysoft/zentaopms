@@ -11,7 +11,7 @@ class activeprojectTester extends tester
      */
     public function activeProject(array $project)
     {
-        $form       = $this->initForm('project', 'browse', 'appIframe-project');
+        $form       = $this->initForm('project', 'browse', '', 'appIframe-project');
         $featureBar = (array)$this->lang->project->featureBar;
         $featureBar['browse'] = (array)$featureBar['browse'];
         $form->dom->btn($featureBar['browse']['more'])->click();
