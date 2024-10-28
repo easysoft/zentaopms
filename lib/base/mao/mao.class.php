@@ -727,7 +727,7 @@ class baseMao
      * @access public
      * @return void
      */
-    public function set($value)
+    public function save($value)
     {
         if(empty($this->currentKey)) return false;
         $this->app->redis->set($this->currentKey, $value);
