@@ -53,7 +53,7 @@ class startExecutionTester extends tester
         $form  = $this->loadPage();
         $field = $form->dom->realBeganField->getText();
         $text  = $form->dom->realBeganTip->getText();
-        $info  = sprintf($lang->error->le, $field, $realBegan);
+        $info  = sprintf($this->lang->error->le, $field, $realBegan);
         if($text != $info) return $this->success('开始执行表单页提示信息正确');
         return $this->failed('开始执行表单页提示信息不正确');
     }
