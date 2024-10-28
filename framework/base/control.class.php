@@ -169,6 +169,15 @@ class baseControl
     public $devicePrefix;
 
     /**
+     * $mao对象，用于访问缓存。
+     * The $mao object, used to access the cache.
+     *
+     * @var object
+     * @access public
+     */
+    public $mao;
+
+    /**
      * 构造方法。
      *
      * 1. 将全局变量设为baseControl类的成员变量，方便baseControl的派生类调用；
@@ -198,6 +207,7 @@ class baseControl
         $this->config   = $config;
         $this->lang     = $lang;
         $this->dbh      = $dbh;
+        $this->mao      = $app->mao;
         $this->viewType = $this->app->getViewType();
         $this->appName  = $appName ?: $this->app->getAppName();
 
