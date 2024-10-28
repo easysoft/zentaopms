@@ -161,20 +161,23 @@ class thinkStepBase extends wg
         {
             $detailTip[] = array
             (
-                !empty($sourceQuestion) ? div
-                (
-                    setClass('bg-primary-50 leading-normal p-2 mt-3'),
-                    div($lang->thinkstep->tips->sourceofOptions),
-                    a
+                !empty($sourceQuestion) ? array(
+                    div
                     (
-                        setClass('block text-primary-500 leading-relaxed'),
-                        set::href(createLink('thinkstep', 'view', "marketID=0&&wizardID=$sourceQuestion->wizard&&stepID=$sourceQuestion->id&&from=detail")),
-                        setData('toggle', 'modal'),
-                        setData('dismiss', 'modal'),
-                        setData('size', 'sm'),
-                        $sourceQuestion->index . '. ' . $sourceQuestion->title
-                    )
-                ) : null,
+                        setClass('bg-primary-50 leading-normal p-2 mt-3'),
+                        div($lang->thinkstep->tips->sourceofOptions),
+                        a
+                        (
+                            setClass('block text-primary-500 leading-relaxed'),
+                            set::href(createLink('thinkstep', 'view', "marketID=0&&wizardID=$sourceQuestion->wizard&&stepID=$sourceQuestion->id&&from=detail")),
+                            setData('toggle', 'modal'),
+                            setData('dismiss', 'modal'),
+                            setData('size', 'sm'),
+                            $sourceQuestion->index . '. ' . $sourceQuestion->title
+                        )
+                    ),
+                    (!empty($step->options->questionType) && $step->options->questionType == 'multicolumn') ? div(setClass('text-sm text-gray-400 leading-tight mt-2'), $lang->thinkstep->tips->multicolumn) : null
+                ): null,
                 !empty($quotedQuestions) ? div
                 (
                     setClass('bg-primary-50 leading-normal p-2 mt-3'),
