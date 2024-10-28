@@ -78,6 +78,15 @@ class thinkModel extends wg
         return true;
     }
 
+    protected function checkEmptyOfMulticolumn(object $data): bool
+    {
+        foreach($data as $key => $item)
+        {
+            if(!$this->existEmptyCol($item)) return false;
+        }
+        return true;
+    }
+
     protected function buildResultCard(array $steps, int $key, bool $isPosition = false): array
     {
         $questionList = array();
