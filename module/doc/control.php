@@ -794,7 +794,8 @@ class doc extends control
         if($docID) $this->doc->createAction($docID, 'view');
 
         $this->view->title = $doc->title;
-        echo $this->fetch('doc', 'app', "type=$objectType&spaceID=$objectID&libID=$lib->id&moduleID=$doc->module&docID=$docID&mode=view");
+        $docParam = $version ? ($docID . '_' . $version) : $docID;
+        echo $this->fetch('doc', 'app', "type=$objectType&spaceID=$objectID&libID=$lib->id&moduleID=$doc->module&docID=$docParam&mode=view");
     }
 
     /**
@@ -1472,7 +1473,7 @@ class doc extends control
      * @param  int    $spaceID
      * @param  int    $libID
      * @param  int    $moduleID
-     * @param  int    $docID
+     * @param  mixed  $docID
      * @param  string $mode
      * @param  string $orderBy
      * @param  int    $recTotal
@@ -1485,7 +1486,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function app(string $type = 'mine', int $spaceID = 0, int $libID = 0, int $moduleID = 0, int $docID = 0, string $mode = '', string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $filterType = '', string $search = '', bool $noSpace = false)
+    public function app(string $type = 'mine', int $spaceID = 0, int $libID = 0, int $moduleID = 0, mixed $docID = 0, string $mode = '', string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $filterType = '', string $search = '', bool $noSpace = false)
     {
         $isNotDocTab = $this->app->tab != 'doc';
         if(empty($mode)) $mode = ($isNotDocTab || $type == 'execution' || $noSpace || !empty($spaceID)) ? 'list' : 'home';
@@ -1504,11 +1505,15 @@ class doc extends control
         else $menuType = $type == 'custom' ? 'team' : $type;
         if(isset($this->lang->doc->menu->{$menuType})) $this->lang->doc->menu->{$menuType}['alias'] .= ',' . $this->app->rawMethod;
 
+        $docVersion = 0;
+        if(is_string($docID) && strpos($docID, '_') !== false) list($docID, $docVersion) = explode('_', $docID);
+
         $this->view->type           = $type;
         $this->view->spaceID        = $spaceID;
         $this->view->libID          = $libID;
         $this->view->moduleID       = $moduleID;
-        $this->view->docID          = $docID;
+        $this->view->docID          = (int)$docID;
+        $this->view->docVersion     = (int)$docVersion;
         $this->view->mode           = $mode;
         $this->view->filterType     = $filterType;
         $this->view->search         = $search;
