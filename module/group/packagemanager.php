@@ -2647,6 +2647,7 @@ $config->group->package->workflow->privs['workflow-setApproval']       = array('
 $config->group->package->workflow->privs['workflow-setFulltextSearch'] = array('edition' => 'max,ipd',     'vision' => 'rnd,lite',    'order' => 80, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflow->privs['workflow-setJS']             = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 85, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflow->privs['workflow-setCSS']            = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 90, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
+$config->group->package->workflow->privs['workflow-quoteDB']           = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 95, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 
 $config->group->package->downloadCode = new stdclass();
 $config->group->package->downloadCode->order  = 10;
