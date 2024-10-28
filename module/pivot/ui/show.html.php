@@ -149,9 +149,9 @@ $generateData = function() use ($lang, $pivotName, $pivot, $data, $configs, $sho
                 set::onRenderCell(jsRaw('renderCell')),
                 set::onCellClick(jsRaw('clickCell')),
                 set::rowKey('ROW_ID'),
-                set::plugins(array('header-group', $cellSpan ? 'cellspan' : null)),
-                $cellSpan ? set::getCellSpan(jsRaw('getCellSpan')) : null,
-                $cellSpan ? set::cellSpanOptions($cellSpan) : null
+                set::plugins(array('header-group', 'cellspan')),
+                set::getCellSpan(jsRaw('getCellSpan')),
+                set::cellSpanOptions($cellSpan)
             ),
             div
             (
