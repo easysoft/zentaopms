@@ -37,6 +37,7 @@ else
     );
 }
 
-blockPanel(setClass('dynamic-block'), $content, set::moreLink(createLink('company', 'dynamic')));
+$moreLink = $config->vision == 'or' ? createLink('my', 'dynamic') : createLink('company', 'dynamic');
+blockPanel(setClass('dynamic-block'), $content, set::moreLink($moreLink));
 
 render();
