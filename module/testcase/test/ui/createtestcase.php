@@ -42,7 +42,7 @@ $testcase = array(
 $project  = array(
     'productID' => 1,
     'branch'    => 0,
-    'moduleID'     => 0
+    'moduleID'  => 0
 );
 
 r($tester->createTestCase($project, $testcase)) && p('message,status') && e('创建多层级测试用例成功,SUCCESS'); //验证创建多层级测试用例
