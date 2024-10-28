@@ -141,6 +141,12 @@ class thinkStepBase extends wg
         }
         if($isRun && (!empty($quotedQuestions) || !empty($sourceQuestion)))
         {
+            $tipType = $lang->thinkstep->label->option;
+            if(!empty($sourceQuestion))
+            {
+                $sourceQuestionType = is_string($sourceQuestion->options) ? json_decode($sourceQuestion->options)->questionType : $sourceQuestion->options->questionType;
+                if($sourceQuestionType == 'multicolumn') $tipType = $lang->thinkstep->entry;
+            }
             $detailTip[] = div
             (
                 setClass('bg-primary-50 text-gray p-2 mt-3 leading-normal'),
@@ -153,7 +159,7 @@ class thinkStepBase extends wg
                 !empty($sourceQuestion) ? div
                 (
                     setClass('ml-4 pl-0.5'),
-                    sprintf($lang->thinkstep->tips->checkbox, $sourceQuestion->index . '. ' . $sourceQuestion->title)
+                    sprintf($lang->thinkstep->tips->checkbox, $lang->thinkstep->tips->options[$step->options->questionType], ($sourceQuestion->index . '. ' . $sourceQuestion->title), $tipType)
                 ) : null
             );
         }
@@ -176,7 +182,7 @@ class thinkStepBase extends wg
                             $sourceQuestion->index . '. ' . $sourceQuestion->title
                         )
                     ),
-                    (!empty($step->options->questionType) && $step->options->questionType == 'multicolumn') ? div(setClass('text-sm text-gray-400 leading-tight mt-2'), $lang->thinkstep->tips->multicolumn) : null
+                    (!empty($step->options->questionType) && $step->options->questionType == 'multicolumn') ? div(setClass('text-sm text-gray-400 leading-loose mt-2'), $lang->thinkstep->tips->multicolumn) : null
                 ): null,
                 !empty($quotedQuestions) ? div
                 (
