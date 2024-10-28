@@ -11,7 +11,7 @@ class batchEditProjectTester extends tester
      */
     public function batchEditProject(array $project)
     {
-        $form = $this->initForm('project', 'browse', 'appIframe-project');
+        $form = $this->initForm('project', 'browse', '', 'appIframe-project');
         $form->dom->selectBtn->click();
         $form->dom->batchEditBtn->click();
         $firstID = $form->dom->id_static_0->getText(); //获取第一行的项目id
