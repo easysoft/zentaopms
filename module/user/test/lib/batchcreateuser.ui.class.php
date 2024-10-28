@@ -11,7 +11,7 @@ class batchCreateUserTester extends tester
      */
     public function batchCreateNormalUser($user)
     {
-        $form = $this->initForm('user', 'batchCreate', array() , 'appIframe-admin');
+        $form = $this->initForm('user', 'batchCreate', array(), 'appIframe-admin');
         $form->dom->account->setValue($user->account);
         $form->dom->realname->setValue($user->realname);
         $form->dom->passwordfield->setValue($user->passwordfield);
@@ -81,5 +81,4 @@ class batchCreateUserTester extends tester
 
         return $this->failed('密码不能为空');
     }
-
-
+}
