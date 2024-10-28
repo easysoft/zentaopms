@@ -1590,8 +1590,8 @@ class biModel extends model
 
         foreach($fieldPairs as $field => $name)
         {
-            // 只保留中文、英文和下划线的字符
-            $fieldPairs[$field] = preg_replace('/[^\x{4e00}-\x{9fa5}a-zA-Z_]/u', '', $name);
+            // 只保留数字、中文、英文和下划线的字符
+            $fieldPairs[$field] = preg_replace('/[^\x{4e00}-\x{9fa5}0-9a-zA-Z_]/u', '', $name);
         }
 
         return array($moduleNames, $aliasNames, $fieldPairs, $relatedObjects);
