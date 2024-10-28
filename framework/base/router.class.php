@@ -838,7 +838,11 @@ class baseRouter
      */
     protected function setupProfiling(): void
     {
-        if(!empty($this->config->debug) && $this->config->debug >= 3 && $this->config->installed) $this->dbh->exec('SET profiling = 1');
+        if(!empty($this->config->debug) && $this->config->debug >= 3 && $this->config->installed)
+        {
+            $this->dbh->exec('SET profiling_history_size = 200');
+            $this->dbh->exec('SET profiling = 1');
+        }
     }
 
     /**
