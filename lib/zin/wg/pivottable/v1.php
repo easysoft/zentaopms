@@ -99,8 +99,8 @@ class pivotTable extends wg
             set::onRenderCell($onRenderCell),
             set::onCellClick($onCellClick),
             set::rowKey('ROW_ID'),
-            set::plugins(array('header-group', $cellSpan ? 'cellspan' : null)),
-            $cellSpan ? set::getCellSpan(jsRaw(<<<JS
+            set::plugins(array('header-group', 'cellspan')),
+            set::getCellSpan(jsRaw(<<<JS
             function(cell)
             {
                 const options = this.options.cellSpanOptions[cell.col.name];
@@ -110,9 +110,10 @@ class pivotTable extends wg
                     const colSpan = cell.row.data[options.colspan ?? 'colspan'] ?? 1;
                     return {rowSpan, colSpan};
                 }
+                console.log(options);
             }
-            JS)) : null,
-            $cellSpan ? set::cellSpanOptions($cellSpan) : null
+            JS)),
+            set::cellSpanOptions($cellSpan)
         );
     }
 
