@@ -5,6 +5,7 @@ class managemembersPage extends page
     {
         parent::__construct($webdriver);
         $xpath = array(
+            'taskLinkedStoryBtn' => "//*[@id='featureBar']/menu/li[4]/a/span",
             /* 分组 */
             'dropdownBtn' => "//*[@id='tasksTable']/table/thead/tr/th[1]/button",
             'story'       => "//*[@data-id='execution-grouptask']/../div[3]//li[1]",
