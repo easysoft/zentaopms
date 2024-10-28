@@ -71,7 +71,7 @@ class thinkModel extends wg
 
     protected function existEmptyCol(object $data): bool
     {
-        foreach($data as $key => $value)
+        foreach($data as $value)
         {
             if(!empty($value)) return false;
         }
@@ -80,7 +80,7 @@ class thinkModel extends wg
 
     protected function checkEmptyOfMulticolumn(object $data): bool
     {
-        foreach($data as $key => $item)
+        foreach($data as $item)
         {
             if(!$this->existEmptyCol($item)) return false;
         }
