@@ -44,7 +44,7 @@ class thinkStepQuote extends wg
                 formGroup
                 (
                     setClass('w-66'),
-                    set::label( $lang->thinkstep->label->setOption),
+                    set::label($questionType == 'checkbox' ? $lang->thinkstep->label->setOption : $lang->thinkstep->label->columnSetOption),
                     radioList
                     (
                         set::name('options[setOption]'),
