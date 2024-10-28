@@ -1139,7 +1139,7 @@ class product extends control
         $shadow = '0';
         if($this->app->tab == 'qa' || $from == 'qa') $shadow = 'all';
 
-        $products        = $this->productZen->getProducts4DropMenu($shadow);
+        $products        = $this->productZen->getProducts4DropMenu($shadow, $module);
         $programProducts = array();
         foreach($products as $product) $programProducts[$product->program][] = $product;
 

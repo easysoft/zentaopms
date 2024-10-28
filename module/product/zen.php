@@ -457,12 +457,19 @@ class productZen extends product
      * 获取在ajaxGetDropMenu方法中使用的产品。
      * Get products for ajaxGetDropMenu method.
      *
-     * @param  string $shadow  0|all
+     * @param  string    $shadow  0|all
+     * @param  string    $module
      * @access protected
      * @return array
      */
-    protected function getProducts4DropMenu(string $shadow = '0'): array
+    protected function getProducts4DropMenu(string $shadow = '0', string $module = ''): array
     {
+        if($this->config->edition != 'open')
+        {
+            $flow = $this->loadModel('workflow')->getByModule($module);
+            if($flow && $flow->belong == 'product') return $this->product->getList(0, 'all', 0, 0, $shadow);
+        }
+
         if($this->app->tab == 'project')  return $this->product->getProducts($this->session->project);
         if($this->app->tab == 'feedback') return $this->loadModel('feedback')->getGrantProducts(false);
         return $this->product->getList(0, 'all', 0, 0, $shadow);
