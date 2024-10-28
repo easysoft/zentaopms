@@ -32,7 +32,7 @@ class thinkAnsoff extends thinkModel
         (
             setClass('relative col justify-between py-2 px-2.5 bg-canvas model-block', "bg-$blockColor-100", "block-$order"),
             setStyle($blockStyle),
-            div(setClass('h-full flex flex-wrap gap-2.5'), $mode == 'view' ? $this->buildAreaCard($order) : null),
+            div(setClass('flex flex-wrap gap-2.5'), $mode == 'view' ? $this->buildAreaCard($order) : null),
             div(setClass('item-step-title text-center', "text-$blockColor"), $blockName)
         );
     }
