@@ -38,11 +38,11 @@
       <input id="request_method" type="text" class="form-control text-special" placeholder="name">
       <label for="request_method" class="input-control-prefix">Method</label>
     </div>
-    <div class="input-control has-prefix" style="--input-control-prefix: 48px; width: 150px">
+    <div class="input-control has-prefix" style="--input-control-prefix: 48px; width: 160px">
       <input id="timestamp__gt" type="date" class="form-control text-special" placeholder="">
       <label for="timestamp__gt" class="input-control-prefix">Begin</label>
     </div>
-    <div class="input-control has-prefix" style="--input-control-prefix: 40px; width: 142px">
+    <div class="input-control has-prefix" style="--input-control-prefix: 40px; width: 152px">
       <input id="timestamp__lt" type="date" class="form-control text-special" placeholder="">
       <label for="timestamp__lt" class="input-control-prefix">End</label>
     </div>
