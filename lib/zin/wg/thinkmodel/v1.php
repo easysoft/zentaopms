@@ -69,6 +69,15 @@ class thinkModel extends wg
         );
     }
 
+    protected function existEmptyCol(object $data): bool
+    {
+        foreach($data as $key => $value)
+        {
+            if(!empty($value)) return false;
+        }
+        return true;
+    }
+
     protected function buildResultCard(array $steps, int $key, bool $isPosition = false): array
     {
         $questionList = array();
