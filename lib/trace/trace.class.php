@@ -46,7 +46,8 @@ class trace
             'querys'   => count(dao::$querys),
             'caches'   => 0,
             'files'    => count(get_included_files()),
-            'session'  => session_id()
+            'session'  => session_id(),
+            'php'      => phpversion()
         );
     }
 

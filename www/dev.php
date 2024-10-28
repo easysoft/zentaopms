@@ -153,6 +153,7 @@ function initTable(data)
         }},
         {name: 'userEnv.browser', title: 'Client Browser', sort: true, align: 'left', headerGroup: 'Frontend'},
         {name: 'userEnv.system', title: 'Client OS', sort: true, align: 'center', headerGroup: 'Frontend'},
+        {name: 'request.php', title: 'PHP', hint: true, width: 40},
         {name: 'request.xhprof', title: 'Xhprof', link: (info) => ({url: info.row.data.request.xhprof || '#', target: '_blank'}), format: (value) => (value ? 'Open' : ''), hint: true, width: 40},
         {name: 'requestId', title: 'RID', hint: true, width: 80, cellClass: 'font-mono text-sm select-all', hint: info => info.row.data.requestId, flex: 0, align: 'left', fixed: 'right'},
         {name: 'timestamp', title: 'Date', type: 'datetime', hint: (info) => zui.formatDate(info.row.data.timestamp, 'yyyy-MM-dd hh:mm:ss'), width: 120, sort: 'number', fixed: 'right'},
@@ -192,6 +193,7 @@ function initTable(data)
             row['userEnv.browser']                  = row.userEnv.browser;
             row['userEnv.system']                   = row.userEnv.system;
             row['request.xhprof']                   = row.request.xhprof;
+            row['request.php']                      = row.request.php;
 
             const totalTimeClass  = getTimeClass(row.metrics.backend.totalTime || 0, 500, 300);
             const sqlTimeClass    = getTimeClass(row.metrics.backend.sqlTime || 0, 300, 200);
