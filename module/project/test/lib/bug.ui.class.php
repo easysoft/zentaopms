@@ -19,6 +19,16 @@ class bugTester extends tester
         if($form->dom->bugNum->getText() == $expectNum) return $this->success($tab . '下显示条数正确');
         return $this->failed($tab . '下显示条数不正确');
     }
+
+    /**
+     * 切换产品查看数据。
+     * Switch product to view data.
+     *
+     * @param  string $product firstProduct|secondProduct
+     * @param  string $expectNum
+     * @access public
+     * @return object
+     */
     public function switchProduct($product, $expectNum)
     {
         $form = $this->initForm('project', 'bug', array('project' => 1), 'appIframe-project');
