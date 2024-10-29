@@ -78,6 +78,15 @@ class tree extends control
         /* 获取产品的分支。 Get branches of product. */
         $branches = ($root->rootType == 'product' && $root->type != 'normal') ? $this->loadModel('branch')->getPairs($root->id, 'withClosed') : array();
 
+        $isFlowModule = false;
+        if($this->config->edition != 'open')
+        {
+            $flow         = $this->loadModel('workflow')->getByModule($from);
+            $isFlowModule = !empty($flow);
+        }
+
+        if($isFlowModule) $this->config->excludeDropmenuList[] = "{$from}-browse";
+
         $this->view->title           = $viewType == 'host' ? $this->lang->host->groupMaintenance : $this->lang->tree->manage;
         $this->view->rootID          = $root->id;
         $this->view->root            = $root;
@@ -93,6 +102,7 @@ class tree extends control
         $this->view->from            = $from;
         $this->view->tree            = $this->tree->getProductStructure($rootID, $viewType, $branch);
         $this->view->canBeChanged    = common::canModify($root->rootType, $root);
+        $this->view->isFlowModule    = $isFlowModule;
         $this->display();
     }
 
