@@ -97,7 +97,6 @@ dtable
     set::severityList($lang->bug->severityList),
     set::customCols(true),
     set::checkable($canBatchAssignTo),
-    set::canRowCheckable(jsRaw('function(rowID){return this.getRowInfo(rowID).data.canBeChanged;}')),
     set::orderBy($orderBy),
     set::sortLink(createLink('project', 'bug', "projectID={$project->id}&productID={$productID}&branchID={$branchID}&orderBy={name}_{sortType}&build={$buildID}&type={$type}&param={$param}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footToolbar($footToolbar),
