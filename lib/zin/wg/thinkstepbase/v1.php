@@ -111,10 +111,11 @@ class thinkStepBase extends wg
 
         if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);
 
-        $isCheckBox  = !empty($step) && $step->type == 'question' && in_array($step->options->questionType, $config->thinkstep->quoteQuestionType);
-        $isQuoteItem   = $isCheckBox && !empty($step->options->setOption) && $step->options->setOption == 1;
-        $detailTip   = array();
-        $quotedItems = array();
+        $questionType = !empty($step) && !empty($step->options) ? $step->options->questionType : '';
+        $isCheckBox   = !empty($step) && $step->type == 'question' && in_array($questionType, $config->thinkstep->quoteQuestionType);
+        $isQuoteItem  = $isCheckBox && !empty($step->options->setOption) && $step->options->setOption == 1;
+        $detailTip    = array();
+        $quotedItems  = array();
         if(!empty($quotedQuestions))
         {
             foreach($quotedQuestions as $item)
@@ -145,7 +146,7 @@ class thinkStepBase extends wg
             if(!empty($sourceQuestion))
             {
                 $sourceQuestionType = is_string($sourceQuestion->options) ? json_decode($sourceQuestion->options)->questionType : $sourceQuestion->options->questionType;
-                if($sourceQuestionType == 'multicolumn') $tipType = $lang->thinkstep->entry;
+                if($sourceQuestionType == 'multicolumn') $tipType = sprintf($lang->thinkstep->entry, $step->options->selectColumn);
             }
             $detailTip[] = div
             (
@@ -159,7 +160,8 @@ class thinkStepBase extends wg
                 !empty($sourceQuestion) ? div
                 (
                     setClass('ml-4 pl-0.5'),
-                    sprintf($lang->thinkstep->tips->checkbox, $lang->thinkstep->tips->options[$step->options->questionType], ($sourceQuestion->index . '. ' . $sourceQuestion->title), $tipType)
+                    sprintf($lang->thinkstep->tips->checkbox, $lang->thinkstep->tips->options[$questionType], ($sourceQuestion->index . '. ' . $sourceQuestion->title)),
+                    $tipType
                 ) : null
             );
         }
@@ -171,7 +173,7 @@ class thinkStepBase extends wg
                     div
                     (
                         setClass('bg-primary-50 leading-normal p-2 mt-3'),
-                        div($lang->thinkstep->tips->sourceofOptions),
+                        div(sprintf($lang->thinkstep->tips->sourceofOptions, $lang->thinkstep->tips->options[$questionType])),
                         a
                         (
                             setClass('block text-primary-500 leading-relaxed'),
@@ -182,7 +184,7 @@ class thinkStepBase extends wg
                             $sourceQuestion->index . '. ' . $sourceQuestion->title
                         )
                     ),
-                    (!empty($step->options->questionType) && $step->options->questionType == 'multicolumn') ? div(setClass('text-sm text-gray-400 leading-loose mt-2'), $lang->thinkstep->tips->multicolumn) : null
+                    (!empty($questionType) && $questionType == 'multicolumn') ? div(setClass('text-sm text-gray-400 leading-loose mt-2'), $lang->thinkstep->tips->multicolumn) : null
                 ): null,
                 !empty($quotedQuestions) ? div
                 (
