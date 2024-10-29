@@ -42,9 +42,9 @@ $childProgram->name = '子项目集A';
 
 $whitelist = array('admin');
 
-r($tester->createDefault($programs['null']))                && p('message,status') && e('创建项目集表单页提示信息正确,SUCCESS'); // 缺少项目集名称，创建失败
-r($tester->createDefault($programs['repeat']))              && p('message,status') && e('创建项目集表单页提示信息正确,SUCCESS'); // 缺少项目集名称，创建失败
-r($tester->createDefault($programs['open']))                && p('message,status') && e('创建项目集成功,SUCCESS');               // 创建一个公开项目集，创建成功
-r($tester->createPrivate($programs['private'], $whitelist)) && p('message,status') && e('创建私有项目集成功,SUCCESS');           // 创建一个私有项目集，创建成功
+r($tester->createDefault($programs['null']))                  && p('message,status') && e('创建项目集表单页提示信息正确,SUCCESS'); // 缺少项目集名称，创建失败
+r($tester->createDefault($programs['repeat']))                && p('message,status') && e('创建项目集表单页提示信息正确,SUCCESS'); // 缺少项目集名称，创建失败
+r($tester->createDefault($programs['open']))                  && p('message,status') && e('创建项目集成功,SUCCESS');               // 创建一个公开项目集，创建成功
+r($tester->createPrivate($programs['private'], $whitelist))   && p('message,status') && e('创建私有项目集成功,SUCCESS');           // 创建一个私有项目集，创建成功
 
-r($tester->addChildProgram($programs['open'], $childProgram))                && p('message,status') && e('添加子项目集成功，SUCCESS');   //添加子项目集，添加成功
+r($tester->addChildProgram($programs['open'], $childProgram)) && p('message,status') && e('添加子项目集成功，SUCCESS');   //添加子项目集，添加成功

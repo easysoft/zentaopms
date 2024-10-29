@@ -80,7 +80,7 @@ class createProgramTester extends tester
      * 添加子项目集。
      *
      * @param  string $programName
-     * @param  array  $whitelist
+     * @param  string childProgram
      * @access public
      * @return void
      */
