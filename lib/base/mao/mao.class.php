@@ -275,6 +275,8 @@ class baseMao
      */
     public function select(string $fields = '*')
     {
+        $this->conditions = [];
+
         $this->setFields(explode(',', str_replace(' ', '', $fields)));
         return $this;
     }
@@ -297,14 +299,14 @@ class baseMao
      * 开始条件判断。
      * Begin condition judge.
      *
-     * @param  bool $condition
+     * @param  bool|string $condition
      * @access public
      * @return static|sql the sql object.
      */
-    public function beginIF(bool $conditionResult)
+    public function beginIF(bool|string $conditionResult)
     {
         $this->isConditionChecking = true;
-        $this->conditionIsTrue     = $conditionResult;
+        $this->conditionIsTrue     = (bool)$conditionResult;
         return $this;
     }
 
