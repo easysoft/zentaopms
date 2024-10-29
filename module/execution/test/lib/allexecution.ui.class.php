@@ -37,6 +37,9 @@ class allExecutionTester extends tester
         $form->dom->statusBtn->click();
         $form->wait(1);
         $form->dom->$status->click();
+        $form->wait(1);
+        if(is_object($form->dom->modalBtn)) $form->dom->modalBtn->click();
+        $form->wait(1);
 
         $viewForm = $this->initForm('execution', 'view', array('execution' => $firstId), 'appIframe-execution');
         if($viewForm->dom->status->getText() == $this->lang->execution->statusList->$status) return $this->success("批量操作执行状态为{$status}成功");
