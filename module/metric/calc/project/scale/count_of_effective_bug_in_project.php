@@ -18,3 +18,22 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
+class count_of_effective_bug_in_project extends baseCalc
+{
+    public $dataset = 'getBugs';
+
+    public $fieldList = array('t1.project', 't1.status', 't1.resolution');
+
+    public $result = array();
+
+    public function calculate($data)
+    {
+        $project = $data->project;
+        if(!isset($this->result[$project])) $this->result[$project] = 0;
+
+        $resolution = $data->resolution;
+        $status     = $data->status;
+
+        if($status == 'active' or $resolution == 'fixed' or $resolution == 'postponed') $this->result[$project] += 1;
+    }
+}
