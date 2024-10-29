@@ -1,0 +1,8 @@
+.model-ansoff .model-block.block-0 {background-color: #cfe7fe;}
+.model-ansoff .model-block.block-1 {background-color: var(--color-warning-100);}
+.model-ansoff .model-block.block-2 {background-color: var(--color-special-100);}
+.model-ansoff .model-block.block-3 {background-color: var(--color-success-100);}
+.model-ansoff .model-block.block-0 .item-step-title {color: #2294FB;}
+.model-ansoff .model-block.block-1 .item-step-title {color: var(--color-warning-400);}
+.model-ansoff .model-block.block-2 .item-step-title {color: var(--color-special-400);}
+.model-ansoff .model-block.block-3 .item-step-title {color: var(--color-success-400);}
