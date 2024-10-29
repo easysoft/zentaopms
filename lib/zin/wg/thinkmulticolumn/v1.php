@@ -135,9 +135,7 @@ class thinkMulticolumn extends thinkQuestion
             $fields = !empty($step->options->fields) ? $step->options->fields :  array('', '', '', '');
         }
 
-        $requiredTip = '';
-        if(!empty($setOption))       $requiredTip = $lang->thinkstep->tips->multicolumnRequired;
-        if(!empty($quotedQuestions)) $requiredTip = $lang->thinkstep->tips->required;
+        $requiredTip = !empty($quotedQuestions) ? $lang->thinkstep->tips->required : $lang->thinkstep->tips->multicolumnRequired;
 
         jsVar('canAddRowsOfMulticol', (int)$canAddRows + 5);
         jsVar('addRowsTips', $lang->thinkrun->tips->addRow);
@@ -147,7 +145,7 @@ class thinkMulticolumn extends thinkQuestion
 
         $formItems[] = array(
             formHidden('options[questionType]', $questionType),
-            thinkStepQuote(set::step($step), set::questionType($questionType), set::quoteQuestions($quoteQuestions)),
+            thinkStepQuote(set::step($step), set::questionType($questionType), set::quoteQuestions($quoteQuestions), set::quotedQuestions($quotedQuestions)),
             formGroup
             (
                 set::label($lang->thinkstep->label->columnTitle),
@@ -157,7 +155,6 @@ class thinkMulticolumn extends thinkQuestion
             ),
             formRow
             (
-                setClass('mb-3'),
                 formGroup
                 (
                     setClass('step-required'),
@@ -165,6 +162,7 @@ class thinkMulticolumn extends thinkQuestion
                     set::label($lang->thinkstep->label->required),
                     set::labelClass('required-tip'),
                     set::labelHint($requiredTip),
+                    set::labelHintClass(empty($setOption) ? 'hidden' : ''),
                     radioList
                     (
                         set::name('options[required]'),
@@ -195,7 +193,6 @@ class thinkMulticolumn extends thinkQuestion
             ),
             formRow
             (
-                setClass('mb-3'),
                 formGroup
                 (
                     setClass('w-1/2'),
