@@ -248,8 +248,10 @@ class dataset
         $stmt = $this->dao->select("$fieldList, $longlife as longlife")
             ->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project=t3.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t3.deleted')->eq(0)
             ->andWhere('t2.shadow')->eq(0);
 
         return $this->defaultWhere($stmt, 't2');
