@@ -20,7 +20,8 @@ class thinkModel extends wg
 
     protected function buildOptionsContent(object $step, int $blockID): array
     {
-        global $lang;
+        global $app, $lang;
+        $app->loadLang('thinkstep');
 
         if(isset($step->options->enableOther) && $step->options->enableOther == 'on') array_push($step->options->fields, 'other');
         if(empty($step->answer->result)) $step->answer->result = array();
@@ -43,7 +44,8 @@ class thinkModel extends wg
 
     protected function buildMulticolumnContent(object $step): array
     {
-        global $lang;
+        global $app, $lang;
+        $app->loadLang('thinkstep');
 
         $title  = '';
         $colKey = $step->link['column'][0];
