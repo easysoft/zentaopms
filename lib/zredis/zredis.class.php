@@ -286,6 +286,8 @@ class zredis
         $keys = [];
         $code = str_replace(['`', $this->config->db->prefix], '', $table);
         if(!$keyList) $keyList = $this->redis->smembers("set:{$code}List");
+        if(!$keyList) return [];
+
         foreach($keyList as $key) $keys[] = "raw:{$code}:{$key}";
 
         $objects  = $this->redis->mget($keys);
