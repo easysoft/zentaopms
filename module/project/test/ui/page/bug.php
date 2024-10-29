@@ -20,6 +20,12 @@ class bugPage extends page
             'assignToAdmin'  => "//*[@class='popover show fade dropdown in']/menu/menu/li[1]/a/div/div",
             'confirmBtn'     => "//*[@id='table-project-bug']/div[2]/div[3]/div/div[1]/div/nav/a[1]",
             'firstConfirm'   => "//*[@id='table-project-bug']/div[2]/div[2]/div/div[6]/div",
+            /* 指派页面 */
+            'assignTo'       => "//*[@id='assignedTo']/div/input",
+            'submitBtn'      => "//*[@class='form load-indicator form-ajax no-morph form-horz']/div[4]/div/button/span",
+            /* 确认页面 */
+            'confirmAssignTo' => "//*[@name='assignedTo']",
+            'confirm'         => "//*[@class='form load-indicator form-ajax no-morph form-horz']/div[8]/div/button/span",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
