@@ -3160,12 +3160,16 @@ class screenModel extends model
      */
     public function getThumbnail($screens)
     {
+        $screenIds = array_column($screens, 'id');
+        $images = $this->loadModel('file')->getByObject('screen', $screenIds);
         foreach($screens as $screen)
         {
-            $images = $this->loadModel('file')->getByObject('screen', $screen->id);
-            if(empty($images)) continue;
+            $currentImages = array_filter($images, function($image) use ($screen) {
+                return $image->objectID == $screen->id;
+            });
+            if(empty($currentImages)) continue;
 
-            $image = end($images);
+            $image = end($currentImages);
             $screen->cover = helper::createLink('file', 'read', "fileID={$image->id}", 'png');
         }
 
