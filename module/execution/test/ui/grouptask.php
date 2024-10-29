@@ -95,7 +95,7 @@ $task->left->range('1{3}, 2{3}, 0{2}, 2{100}');
 $task->deadline->range(' (-5D)-(-4D):1D, []{11}')->type('timestamp')->format('YY/MM/DD');
 $task->status->range('wait{3}, doing{3}, done{2}, cancel, closed{3}');
 $task->openedBy->range('admin{6}, user1{6}');
-$task->assignedTo->range('[]{3}, user1{4}, admin{2}, closed{3}');
+$task->assignedTo->range('[]{2}, user1{5}, admin{2}, closed{3}');
 $task->finishedBy->range('[]{6}, admin, user1, [], admin, user1{2}');
 $task->canceledBy->range('[]{8}, admin, []{3}');
 $task->closedBy->range('[]{9}, admin{2}, user1');
@@ -107,3 +107,91 @@ $taskSpec->task->range('1-100');
 $taskSpec->version->range('0');
 $taskSpec->name->range('1-100');
 $taskSpec->gen(12);
+
+$tester = new grouptaskTester();
+$tester->login();
+
+$nums = array(
+    'story' => array(
+        'tasks'     => '6',
+        'waiting'   => '0',
+        'doing'     => '1',
+        'estimates' => '6',
+        'cost'      => '33',
+        'left'      => '2',
+    ),
+    'status' => array(
+        'tasks'     => '3',
+        'waiting'   => '3',
+        'doing'     => '0',
+        'estimates' => '3',
+        'cost'      => '0',
+        'left'      => '3',
+    ),
+    'pri' => array(
+        'tasks'     => '3',
+        'waiting'   => '1',
+        'doing'     => '1',
+        'estimates' => '3',
+        'cost'      => '8',
+        'left'      => '3',
+    ),
+    'assignedTo' => array(
+        'tasks'     => '2',
+        'waiting'   => '2',
+        'doing'     => '0',
+        'estimates' => '2',
+        'cost'      => '0',
+        'left'      => '2',
+    ),
+    'finishedBy' => array(
+        'tasks'     => '7',
+        'waiting'   => '3',
+        'doing'     => '3',
+        'estimates' => '7',
+        'cost'      => '12',
+        'left'      => '9',
+    ),
+    'closedBy' => array(
+        'tasks'     => '9',
+        'waiting'   => '3',
+        'doing'     => '3',
+        'estimates' => '9',
+        'cost'      => '21',
+        'left'      => '9',
+    ),
+    'type' => array(
+        'tasks'     => '9',
+        'waiting'   => '1',
+        'doing'     => '3',
+        'estimates' => '9',
+        'cost'      => '36',
+        'left'      => '7',
+    ),
+    'linked' => array(
+        'tasks'     => '5',
+        'waiting'   => '3',
+        'doing'     => '2',
+        'estimates' => '5',
+        'cost'      => '3',
+        'left'      => '7',
+    ),
+    'collapse' => array(
+        'tasks'     => '6',
+        'waiting'   => '0',
+        'doing'     => '1',
+        'estimates' => '6',
+        'cost'      => '33',
+        'left'      => '2',
+    )
+);
+
+#r($tester->checkGroupData('story',$nums['story'])) && p('status,message') && e('SUCCESS,数据正确');
+#r($tester->checkGroupData('status',$nums['status'])) && p('status,message') && e('SUCCESS,数据正确');
+#r($tester->checkGroupData('pri',$nums['pri'])) && p('status,message') && e('SUCCESS,数据正确');
+#r($tester->checkGroupData('assignedTo',$nums['assignedTo'])) && p('status,message') && e('SUCCESS,数据正确');
+#r($tester->checkGroupData('finishedBy',$nums['finishedBy'])) && p('status,message') && e('SUCCESS,数据正确');
+#r($tester->checkGroupData('closedBy',$nums['closedBy'])) && p('status,message') && e('SUCCESS,数据正确');
+#r($tester->checkGroupData('type',$nums['type'])) && p('status,message') && e('SUCCESS,数据正确');
+#r($tester->checkTaskLinkedStory($nums['linked'])) && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkCollapse($nums['collapse'])) && p('status,message') && e('SUCCESS,数据正确');
