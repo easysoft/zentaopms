@@ -506,6 +506,7 @@ $lang->doc->docLang->createModule                = $lang->doc->addCatalog;
 $lang->doc->docLang->leaveEditingConfirm         = '文档编辑中，确定要离开吗？';
 $lang->doc->docLang->saveDocFailed               = '文档保存失败，请稍后重试';
 $lang->doc->docLang->loadingDocsData             = '正在加载文档数据...';
+$lang->doc->docLang->loadDataFailed              = '加载数据失败';
 $lang->doc->docLang->noSpaceTip                  = '这里什么也没有，先创建一个空间再使用吧！';
 $lang->doc->docLang->searchModulePlaceholder     = '搜索目录';
 $lang->doc->docLang->searchDocPlaceholder        = '搜索文档';
