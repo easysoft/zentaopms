@@ -114,6 +114,7 @@ $lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec
 $lang->misc->feature->promptLearnMore   = 'https://www.zentao.net/book/zentaopms/1097.html';
 
 /* Release Date. */
+$lang->misc->releaseDate['20.9']        = '2024-11-01';
 $lang->misc->releaseDate['20.8']        = '2024-10-21';
 $lang->misc->releaseDate['20.7.1']      = '2024-09-30';
 $lang->misc->releaseDate['20.7']        = '2024-09-14';
@@ -238,6 +239,7 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
+$lang->misc->feature->all['20.9'][]        = array('title' => '', 'desc' => '');
 $lang->misc->feature->all['20.8'][]        = array('title' => '文档优化：优化任务关系，修复Bug。', 'desc' => '');
 $lang->misc->feature->all['20.7.1'][]      = array('title' => '修复已知Bug。', 'desc' => '');
 $lang->misc->feature->all['20.7'][]        = array('title' => '新手引导优化；菜单自定义；工作流优化；OR界面增加贡献模块。', 'desc' => '');
