@@ -4494,3 +4494,17 @@ $config->bi->builtin->metrics[] = array
     'desc'       => '按执行统计的执行开发效率是指执行交付研发需求规模数与执行所有任务消耗工时的比率。该度量项反映了执行的开发速度，可以帮助团队识别潜在问题并采取改进措施提高研发效率。',
     'definition' => "复用：按执行统计的任务消耗工时数、按执行统计的执行关闭时已交付的研发需求规模数；\n公式：按执行统计的执行关闭时已交付的研发需求规模数/按执行统计的任务消耗工时数"
 );
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按项目统计的有效Bug数',
+    'alias'      => '有效Bug数',
+    'code'       => 'count_of_effective_bug_in_project',
+    'purpose'    => 'scale',
+    'scope'      => 'project',
+    'object'     => 'bug',
+    'unit'       => 'count',
+    'dateType'   => 'nodate',
+    'desc'       => '按项目统计的有效Bug数是指项目中真正具有影响和价值的Bug数量。有效Bug通常是指导致项目不正常运行或影响用户体验的Bug。统计有效Bug数可以帮助评估项目的稳定性和质量，也可以评估测试人员之间的协作或对项目的了解程度。',
+    'definition' => "项目中所有Bug个数求和,解决方案为已解决、延期处理或状态为激活;\n 过滤已删除的Bug\n 过滤已删除的项目\n"
+);
