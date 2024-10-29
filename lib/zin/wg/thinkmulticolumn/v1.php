@@ -18,6 +18,7 @@ class thinkMulticolumn extends thinkQuestion
         'quoteQuestions?: array',  // 引用问题
         'citation?: int=1',        // 引用方式
         'selectColumn?: string',   // 选择列
+        'modeClass?: string',      // 弹窗样式名称
     );
 
     public static function getPageJS(): string
@@ -74,7 +75,7 @@ class thinkMulticolumn extends thinkQuestion
     {
         global $lang;
         $detailWg = parent::buildDetail();
-        list($step, $fields, $canAddRows, $mode, $isRun, $quotedQuestions, $isResult) = $this->prop(array('step', 'fields', 'canAddRows', 'mode', 'isRun', 'quotedQuestions', 'isResult'));
+        list($step, $fields, $canAddRows, $mode, $isRun, $quotedQuestions, $isResult, $modeClass) = $this->prop(array('step', 'fields', 'canAddRows', 'mode', 'isRun', 'quotedQuestions', 'isResult', 'modeClass'));
         if($mode != 'detail') return array();
 
         $result = array();
@@ -89,6 +90,7 @@ class thinkMulticolumn extends thinkQuestion
         jsVar('addRowsTips', $lang->thinkrun->tips->addRow);
         jsVar('addLang', $lang->thinkrun->add);
         jsVar('disabled', $isRun && !empty($quotedQuestions) && !empty($result));
+        jsVar('modeClass', !empty($modeClass) ? '.' . $modeClass : '');
 
         $fields       = array_values((array)$fields);
         $batchItems   = array();
