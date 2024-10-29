@@ -60,3 +60,23 @@ $bug->title->range('Bug1, Bug2, Bug3, Bug4, Bug5, Bug6, Bug7, Bug8, Bug9, Bug10'
 $bug->status->range('active{2}, resolved{2}, closed{1}, active{2}, resolved{2}, closed{1}');
 $bug->assignedTo->range('[]');
 $bug->gen(10);
+
+$team = zendata('team');
+$team->id->range('1');
+$team->root->range('1');
+$team->type->range('project');
+$team->account->range('admin');
+$team->join->range('(-2M)-(-M):1D')->type('timestamp')->format('YY/MM/DD');
+$team->gen(1);
+
+$tester = new bugTester();
+$tester->login();
+
+/* 检查标签下统计数据 */
+r($tester->checkTab('allTab', '10'))       && p('status,message') && e('SUCCESS,allTab下显示条数正确');
+r($tester->checkTab('unresolvedTab', '4')) && p('status,message') && e('SUCCESS,unresolvedTab下显示条数正确');
+/* 切换1.5级导航产品 */
+r($tester->switchProduct('firstProduct', '5')) && p('status,message') && e('SUCCESS,切换firstProduct查看数据成功');
+r($tester->switchProduct('secondProduct', '5')) && p('status,message') && e('SUCCESS,切换secondProduct查看数据成功');
+
+$tester->closeBrowser();
