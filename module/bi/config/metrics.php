@@ -4508,3 +4508,17 @@ $config->bi->builtin->metrics[] = array
     'desc'       => '按项目统计的有效Bug数是指项目中真正具有影响和价值的Bug数量。有效Bug通常是指导致项目不正常运行或影响用户体验的Bug。统计有效Bug数可以帮助评估项目的稳定性和质量，也可以评估测试人员之间的协作或对项目的了解程度。',
     'definition' => "项目中所有Bug个数求和,解决方案为已解决、延期处理或状态为激活;\n 过滤已删除的Bug\n 过滤已删除的项目\n"
 );
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按项目统计的已修复Bug数',
+    'alias'      => '已修复Bug数',
+    'code'       => 'count_of_fixed_bug_in_project',
+    'purpose'    => 'scale',
+    'scope'      => 'project',
+    'object'     => 'bug',
+    'unit'       => 'count',
+    'dateType'   => 'nodate',
+    'desc'       => '按项目统计的已修复Bug数是指解决方案为已解决并且状态为已关闭的Bug数量。这个度量项反映了项目解决的问题数量。已修复Bug数的可以评估开发团队在Bug解决方面的工作效率。',
+    'definition' => "项目中Bug的个数求和\n 解决方案为已解决\n 状态为已关闭\n 过滤已删除的Bug\n 过滤已删除的项目\n"
+);
