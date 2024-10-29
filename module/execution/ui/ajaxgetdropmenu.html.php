@@ -52,11 +52,10 @@ foreach($projectExecutions as $projectID => $executions)
         $group = $executionGroup[$execution->id] = $getExecutionGroup($execution);
 
         $item = array();
-        $item['id']       = $execution->id;
-        $item['text']     = $execution->name;
-        $item['keys']     = zget(common::convert2Pinyin(array($execution->name)), $execution->name, '');
-        $item['data-app'] = 'execution';
-        $item['url']      = sprintf($link, $execution->id);
+        $item['id']   = $execution->id;
+        $item['text'] = $execution->name;
+        $item['keys'] = zget(common::convert2Pinyin(array($execution->name)), $execution->name, '');
+        $item['url']  = sprintf($link, $execution->id);
 
         if($execution->type == 'stage') $item['url'] = helper::createLink('execution', 'task', "executionID={$execution->id}");
         if($execution->type == 'kanban') $item['url'] = helper::createLink('execution', 'kanban', "execution={$execution->id}");
