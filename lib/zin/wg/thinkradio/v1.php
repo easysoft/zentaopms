@@ -76,9 +76,6 @@ class thinkRadio extends thinkQuestion
             $fields      = !empty($step->options->fields) ? $step->options->fields :  array('', '', '');
         }
 
-        jsVar('maxCountPlaceholder', $lang->thinkstep->placeholder->maxCount);
-        jsVar('inputContent', $lang->thinkstep->placeholder->inputContent);
-
         $formItems[] = array(
             formHidden('options[questionType]', $questionType),
             $questionType == 'checkbox' ? thinkStepQuote(set::step($step), set::questionType($questionType), set::quoteQuestions($quoteQuestions), set::quotedQuestions($quotedQuestions)) : null,
@@ -98,6 +95,8 @@ class thinkRadio extends thinkQuestion
             (
                 setClass('step-required'),
                 setStyle(array('display' => 'flex')),
+                setData('maxCountPlaceholder', $lang->thinkstep->placeholder->maxCount),
+                setData('inputContent', $lang->thinkstep->placeholder->inputContent),
                 set::label($lang->thinkstep->label->required),
                 set::labelHint(!empty($quotedQuestions) ? $lang->thinkstep->tips->required : null),
                 radioList
