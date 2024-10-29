@@ -505,6 +505,7 @@ $lang->doc->docLang->createModule                = $lang->doc->addCatalog;
 $lang->doc->docLang->leaveEditingConfirm         = 'The document is currently being edited. Do you want to leave the editing page?';
 $lang->doc->docLang->saveDocFailed               = 'Failed to save the document';
 $lang->doc->docLang->loadingDocsData             = 'Loading document data...';
+$lang->doc->docLang->loadDataFailed              = 'Load data failed.';
 $lang->doc->docLang->noSpaceTip                  = 'No space, please create one.';
 $lang->doc->docLang->searchModulePlaceholder     = 'Search directory';
 $lang->doc->docLang->searchDocPlaceholder        = 'Search document';
