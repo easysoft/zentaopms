@@ -81,7 +81,7 @@ class thinkRadio extends thinkQuestion
 
         $formItems[] = array(
             formHidden('options[questionType]', $questionType),
-            $questionType == 'checkbox' ? thinkStepQuote(set::step($step), set::questionType($questionType), set::quoteQuestions($quoteQuestions)) : null,
+            $questionType == 'checkbox' ? thinkStepQuote(set::step($step), set::questionType($questionType), set::quoteQuestions($quoteQuestions), set::quotedQuestions($quotedQuestions)) : null,
             formGroup
             (
                 setClass('think-options-field', ($questionType === 'checkbox' && $setOption == 1) ? 'hidden' : ''),
