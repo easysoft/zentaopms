@@ -1259,7 +1259,20 @@ class actionModel extends model
                 elseif($action->objectType == 'story')
                 {
                     $story = $this->loadModel('story')->getByID($action->objectID);
-                    if(!empty($story) && isset($shadowProducts[$story->product])) $moduleName = 'projectstory';
+                    if(!empty($story) && isset($shadowProducts[$story->product]))
+                    {
+                        $moduleName = 'projectstory';
+                        $methodName = 'view';
+                    }
+                    if(!empty($action->project) && !$project)
+                    {
+                        $project = $this->loadModel('project')->getById($action->project);
+                        if(empty($project->multiple))
+                        {
+                            $moduleName = 'execution';
+                            $methodName = 'storyView';
+                        }
+                    }
                 }
                 $action->objectLink = helper::createLink($moduleName, $methodName, $params);
             }
