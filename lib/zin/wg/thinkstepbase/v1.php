@@ -189,7 +189,7 @@ class thinkStepBase extends wg
                 !empty($quotedQuestions) ? div
                 (
                     setClass('bg-primary-50 leading-normal p-2 mt-3'),
-                    div($lang->thinkstep->tips->optionsAreReferenced),
+                    div(sprintf($lang->thinkstep->tips->optionsAreReferenced, $questionType == 'multicolumn' ? $lang->thinkstep->inputItem : $lang->thinkstep->label->option)),
                     $quotedItems
                 ) : null
             );
