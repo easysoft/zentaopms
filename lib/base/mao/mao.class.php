@@ -758,7 +758,8 @@ class baseMao
      */
     public function getByKey(string $key, ...$arguments)
     {
-        if(!defined($key)) return false;
+        if(empty($this->config->cache->keys[$key])) return $this->app->triggerError("The {$key} key is not defined", __FILE__, __LINE__, true);
+
         $cache = $this->config->cache->keys[$key];
         if(!empty($cache->fields) && !empty($arguments))
         {
@@ -797,7 +798,7 @@ class baseMao
      */
     public function save($value)
     {
-        if(empty($this->currentKey)) return false;
+        if(empty($this->currentKey)) return $this->app->triggerError('The current key is empty', __FILE__, __LINE__, true);
         $this->app->redis->set($this->currentKey, $value);
     }
 
@@ -812,7 +813,7 @@ class baseMao
      */
     public function setByKey(string $key, $value)
     {
-        if(empty($key)) return false;
+        if(empty($key)) return $this->app->triggerError('The key is empty', __FILE__, __LINE__, true);
 
         $this->app->redis->set($key, $value);
     }
@@ -828,8 +829,8 @@ class baseMao
      */
     public function setByLabel(string $label, $value)
     {
-        if(empty($label)) return false;
-        if(empty($this->labels[$label])) return false;
+        if(empty($label)) return $this->app->triggerError('The label is empty', __FILE__, __LINE__, true);
+        if(empty($this->labels[$label])) return $this->app->triggerError("The {$label} label is not set", __FILE__, __LINE__, true);
 
         $this->app->redis->set($this->labels[$label], $value);
     }
