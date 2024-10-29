@@ -4495,7 +4495,8 @@ class storyModel extends model
         {
             /* When the review result of the changed story is clarify, the status should be changing. */
             $isChanged = $oldStory->changedBy ? true : false;
-            $story->status = $isChanged ? 'changing' : 'draft';
+            $story->status     = $isChanged ? 'changing' : 'draft';
+            $story->reviewedBy = '';
         }
 
         if($result == 'revert')
