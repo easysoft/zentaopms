@@ -1,35 +1,31 @@
 <?php
-class managemembersPage extends page
+class grouptaskPage extends page
 {
     public function __construct($webdriver)
     {
         parent::__construct($webdriver);
         $xpath = array(
-            'taskLinkedStoryBtn' => "//*[@id='featureBar']/menu/li[4]/a/span",
+            'taskLinkedStoryBtn' => "//*[@id='featureBar']/menu/li[4]/a/span", //已关联研发需求的任务按钮
+            'collapseBtn'        => "//*[@id='featureBar']/menu/li[1]/a/span", //全部折叠按钮
             /* 分组 */
             'dropdownBtn' => "//*[@id='tasksTable']/table/thead/tr/th[1]/button",
-            'story'       => "//*[@data-id='execution-grouptask']/../div[3]//li[1]",
-            'status'      => "//*[@data-id='execution-grouptask']/../div[3]//li[2]",
-            'priority'    => "//*[@data-id='execution-grouptask']/../div[3]//li[3]",
-            'assignedTo'  => "//*[@data-id='execution-grouptask']/../div[3]//li[4]",
-            'finishedBy'  => "//*[@data-id='execution-grouptask']/../div[3]//li[5]",
-            'closedBy'    => "//*[@data-id='execution-grouptask']/../div[3]//li[6]",
-            'type'        => "//*[@data-id='execution-grouptask']/../div[3]//li[7]"
+            'story'       => "//*[@data-id='execution-grouptask']/../div[3]//li[1]/a",
+            'status'      => "//*[@data-id='execution-grouptask']/../div[3]//li[2]/a",
+            'priority'    => "//*[@data-id='execution-grouptask']/../div[3]//li[3]/a",
+            'assignedTo'  => "//*[@data-id='execution-grouptask']/../div[3]//li[4]/a",
+            'finishedBy'  => "//*[@data-id='execution-grouptask']/../div[3]//li[5]/a",
+            'closedBy'    => "//*[@data-id='execution-grouptask']/../div[3]//li[6]/a",
+            'type'        => "//*[@data-id='execution-grouptask']/../div[3]//li[7]/a",
             /* 全部展开时左侧区块统计 */
-            'group'     => "//*[@id='tasksTable']/table/tbody/tr[1]/td[1]/div/a",
-            'tasks'     => "//*[@id='tasksTable']/table/tbody/tr[1]/td[1]/div/div/div[1]/strong",
-            'waiting'   => "//*[@id='tasksTable']/table/tbody/tr[1]/td[1]/div/div/div[1]/text()[2]",
-            'doing'     => "//*[@id='tasksTable']/table/tbody/tr[1]/td[1]/div/div/div[1]/text()[3]",
-            'estimates' => "//*[@id='tasksTable']/table/tbody/tr[1]/td[1]/div/div/div[2]/strong",
-            'cost'      => "//*[@id='tasksTable']/table/tbody/tr[1]/td[1]/div/div/div[1]/text()[2]",
-            'left'      => "//*[@id='tasksTable']/table/tbody/tr[1]/td[1]/div/div/div[2]/text()[3]"
+            'task'  => "//*[@id='tasksTable']/table/tbody/tr[1]/td[1]/div/div/div[1]",
+            'time'  => "//*[@id='tasksTable']/table/tbody/tr[1]/td[1]/div/div/div[2]",
             /* 全部收起时右侧区块统计 */
-            'rtasks'     => "//tr[@class='group-summary group-toggle']/td[2]/div[1]/div[1]/div[1]/div[1]/div[2]",
-            'rdoing'     => "//tr[@class='group-summary group-toggle']/td[2]/div[1]/div[1]/div[1]/div[2]/div[2]/span",
-            'rwaiting'   => "//tr[@class='group-summary group-toggle']/td[2]/div[1]/div[1]/div[1]/div[3]/div[2]/span",
-            'restimates' => "//tr[@class='group-summary group-toggle']/td[2]/div[1]/div[2]/div[1]/div[1]/div[2]",
-            'rcost'      => "//tr[@class='group-summary group-toggle']/td[2]/div[1]/div[2]/div[1]/div[2]/div[2]",
-            'rleft'      => "//tr[@class='group-summary group-toggle']/td[2]/div[1]/div[2]/div[1]/div[3]/div[2]"
+            'rtask'      => "//*[@id='tasksTable']/table/tbody/tr[7]/td[2]/div/div[1]/div/div[1]/div[2]",
+            'rdoing'     => "//*[@id='tasksTable']/table/tbody/tr[7]/td[2]/div/div[1]/div/div[2]/div[2]",
+            'rwaiting'   => "//*[@id='tasksTable']/table/tbody/tr[7]/td[2]/div/div[1]/div/div[3]/div[2]",
+            'restimates' => "//*[@id='tasksTable']/table/tbody/tr[7]/td[2]/div/div[2]/div/div[1]/div[2]",
+            'rcost'      => "//*[@id='tasksTable']/table/tbody/tr[7]/td[2]/div/div[2]/div/div[2]/div[2]",
+            'rleft'      => "//*[@id='tasksTable']/table/tbody/tr[7]/td[2]/div/div[2]/div/div[3]/div[2]"
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
