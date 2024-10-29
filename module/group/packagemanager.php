@@ -463,7 +463,7 @@ $config->group->subset->traincourse->nav   = 'traincourse';
 
 $config->group->subset->charter = new stdclass();
 $config->group->subset->charter->order = 165;
-$config->group->subset->charter->nav   = 'charter';
+$config->group->subset->charter->nav   = $config->vision == 'or' ? 'charter' : 'program';
 
 $config->group->subset->demandpool = new stdclass();
 $config->group->subset->demandpool->order = 55;
@@ -3746,9 +3746,9 @@ $config->group->package->browseCharter = new stdclass();
 $config->group->package->browseCharter->order  = 5;
 $config->group->package->browseCharter->subset = 'charter';
 $config->group->package->browseCharter->privs  = array();
-$config->group->package->browseCharter->privs['charter-browse']             = array('edition' => 'ipd', 'vision' => 'or', 'order' => 10, 'depend' => array(), 'recommend' => array());
-$config->group->package->browseCharter->privs['charter-view']               = array('edition' => 'ipd', 'vision' => 'or', 'order' => 40, 'depend' => array('charter-browse'), 'recommend' => array());
-$config->group->package->browseCharter->privs['charter-loadRoadmapStories'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 70, 'depend' => array('charter-browse', 'charter-view'), 'recommend' => array());
+$config->group->package->browseCharter->privs['charter-browse']             = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd', 'order' => 10, 'depend' => array(), 'recommend' => array());
+$config->group->package->browseCharter->privs['charter-view']               = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd', 'order' => 40, 'depend' => array('charter-browse'), 'recommend' => array());
+$config->group->package->browseCharter->privs['charter-loadRoadmapStories'] = array('edition' => 'ipd',         'vision' => 'or', 'order' => 70, 'depend' => array('charter-browse', 'charter-view'), 'recommend' => array());
 
 $config->group->package->manageDemandPool = new stdclass();
 $config->group->package->manageDemandPool->order  = 5;
@@ -3763,17 +3763,17 @@ $config->group->package->manageCharter = new stdclass();
 $config->group->package->manageCharter->order  = 5;
 $config->group->package->manageCharter->subset = 'charter';
 $config->group->package->manageCharter->privs  = array();
-$config->group->package->manageCharter->privs['charter-create']   = array('edition' => 'ipd', 'vision' => 'or', 'order' => 20, 'depend' => array('charter-browse'), 'recommend' => array('charter-delete', 'charter-edit'));
-$config->group->package->manageCharter->privs['charter-edit']     = array('edition' => 'ipd', 'vision' => 'or', 'order' => 30, 'depend' => array('charter-browse', 'charter-loadRoadmapStories', 'charter-view'), 'recommend' => array('charter-create', 'charter-delete'));
-$config->group->package->manageCharter->privs['charter-delete']   = array('edition' => 'ipd', 'vision' => 'or', 'order' => 50, 'depend' => array('charter-browse', 'charter-view'), 'recommend' => array());
-$config->group->package->manageCharter->privs['charter-close']    = array('edition' => 'ipd', 'vision' => 'or', 'order' => 80, 'depend' => array('charter-browse', 'charter-view'), 'recommend' => array('charter-activate', 'charter-create', 'charter-edit'));
-$config->group->package->manageCharter->privs['charter-activate'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 90, 'depend' => array('charter-browse', 'charter-view'), 'recommend' => array('charter-close', 'charter-create', 'charter-edit'));
+$config->group->package->manageCharter->privs['charter-create']   = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd', 'order' => 20, 'depend' => array('charter-browse'), 'recommend' => array('charter-delete', 'charter-edit'));
+$config->group->package->manageCharter->privs['charter-edit']     = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd', 'order' => 30, 'depend' => array('charter-browse', 'charter-loadRoadmapStories', 'charter-view'), 'recommend' => array('charter-create', 'charter-delete'));
+$config->group->package->manageCharter->privs['charter-delete']   = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd', 'order' => 50, 'depend' => array('charter-browse', 'charter-view'), 'recommend' => array());
+$config->group->package->manageCharter->privs['charter-close']    = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd', 'order' => 80, 'depend' => array('charter-browse', 'charter-view'), 'recommend' => array('charter-activate', 'charter-create', 'charter-edit'));
+$config->group->package->manageCharter->privs['charter-activate'] = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd', 'order' => 90, 'depend' => array('charter-browse', 'charter-view'), 'recommend' => array('charter-close', 'charter-create', 'charter-edit'));
 
 $config->group->package->reviewCharter = new stdclass();
 $config->group->package->reviewCharter->order  = 5;
 $config->group->package->reviewCharter->subset = 'charter';
 $config->group->package->reviewCharter->privs  = array();
-$config->group->package->reviewCharter->privs['charter-review'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 60, 'depend' => array('charter-browse', 'charter-loadRoadmapStories', 'charter-view'), 'recommend' => array());
+$config->group->package->reviewCharter->privs['charter-review'] = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd', 'order' => 60, 'depend' => array('charter-browse', 'charter-loadRoadmapStories', 'charter-view'), 'recommend' => array());
 
 $config->group->package->browseDemand = new stdclass();
 $config->group->package->browseDemand->order  = 5;
