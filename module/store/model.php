@@ -325,4 +325,43 @@ class storeModel extends model
 
         return $result->data;
     }
+
+    /**
+     * 设置应用最新版本。
+     * Set app latest version.
+     *
+     * @param  array  $appList
+     * @access public
+     * @return array
+     */
+    public function batchSetLatestVersions(array $appList): array
+    {
+        $channel = $this->config->cloud->api->channel;
+        $apiUrl  = $this->config->cloud->api->host;
+        $apiUrl .= '/api/market/applist/version/upgradable';
+
+        $data = array();
+        foreach($appList as $app)
+        {
+            $data[] = array(
+                'version'    => $app->version,
+                'channel'    => $channel,
+                'id'         => $app->appID,
+                'instanceID' => $app->id
+            );
+        }
+
+        $result = json_decode(common::http($apiUrl, $data, array(), $this->config->cloud->api->headers, 'json'));
+        if(!isset($result->code) || $result->code != 200) return array();
+
+        $versionList = array();
+        foreach($result->data as $app)
+        {
+            $latestVersion = $this->pickHighestVersion($app->versions);
+            $versionList[$app->id] = empty($latestVersion) ? '' : $latestVersion->version;
+        }
+
+        foreach($appList as $app) $app->latestVersion = $versionList[$app->appID];
+        return $appList;
+    }
 }
