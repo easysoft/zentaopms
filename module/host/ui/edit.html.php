@@ -18,20 +18,12 @@ formPanel
 (
     set::id('hostCreateForm'),
     set::title($lang->host->edit),
+    on::change('[name="CD"]')->call('showSpugConfig', jsRaw('this')),
     formRow
     (
         formGroup
         (
-            set::width('1/3'),
-            set::name('CD'),
-            set::label($lang->host->CD),
-            set::control('picker'),
-            set::items($lang->host->CDlist),
-            set::required(true),
-            set::value($host->CD)
-        ),
-        formGroup
-        (
+            setID('name'),
             set::width('1/3'),
             set::name('name'),
             set::label($lang->host->name),
@@ -61,6 +53,7 @@ formPanel
     ),
     formGroup
     (
+        setID('admin'),
         set::width('1/3'),
         set::label($lang->host->admin),
         set::control('picker'),
@@ -78,6 +71,7 @@ formPanel
             set::label($lang->host->password),
             set::name('password'),
             set::control('password'),
+            set::required(true),
             set::value($lang->host->defaultPWD)
         ),
         formGroup
@@ -85,6 +79,7 @@ formPanel
             set::width('1/3'),
             set::label($lang->host->sshPort),
             set::name('sshPort'),
+            set::required(true),
             set::value(zget($host, 'sshPort', ''))
         )
     ),
@@ -134,14 +129,14 @@ formPanel
             set::width('1/3'),
             set::name('cpuNumber'),
             set::label($lang->host->cpuNumber),
-            set::value($host->cpuNumber)
+            set::value(zget($host, 'cpuNumber', '') ? $host->cpuNumber : '')
         ),
         formGroup
         (
             set::width('1/3'),
             set::name('memory'),
             set::label($lang->host->memory),
-            set::value($host->memory),
+            set::value(zget($host, 'memory', '') ? $host->memory : ''),
             set::control(array
             (
                 'type'        => 'inputControl',
@@ -155,7 +150,7 @@ formPanel
         set::width('1/3'),
         set::name('diskSize'),
         set::label($lang->host->diskSize),
-        set::value($host->diskSize),
+        set::value(zget($host, 'diskSize', '') ? $host->diskSize : ''),
         set::control(array
         (
             'type'        => 'inputControl',

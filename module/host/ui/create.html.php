@@ -21,15 +21,7 @@ formPanel
     (
         formGroup
         (
-            set::width('1/3'),
-            set::name('CD'),
-            set::label($lang->host->CD),
-            set::control('picker'),
-            set::required(true),
-            set::items($lang->host->CDlist)
-        ),
-        formGroup
-        (
+            setID('name'),
             set::width('1/3'),
             set::name('name'),
             set::label($lang->host->name)
@@ -56,6 +48,7 @@ formPanel
     ),
     formGroup
     (
+        setID('admin'),
         set::width('1/3'),
         set::label($lang->host->admin),
         set::control('picker'),
