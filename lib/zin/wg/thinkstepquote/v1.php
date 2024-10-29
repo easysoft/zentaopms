@@ -13,13 +13,14 @@ class thinkStepQuote extends wg
         'quoteTitle?: string',     // 列标题
         'citation?: int=1',        // 引用方式
         'selectColumn?: string',   // 选择列
+        'quotedQuestions?: array'  // 引用当前问题的步骤
     );
 
     protected function build(): array
     {
         global $lang, $app;
         $app->loadLang('thinkstep');
-        list($step, $setOption, $quoteTitle, $quoteQuestions, $citation, $selectColumn, $questionType) = $this->prop(array('step', 'setOption', 'quoteTitle', 'quoteQuestions', 'citation', 'selectColumn', 'questionType'));
+        list($step, $setOption, $quoteTitle, $quoteQuestions, $citation, $selectColumn, $questionType, $quotedQuestions) = $this->prop(array('step', 'setOption', 'quoteTitle', 'quoteQuestions', 'citation', 'selectColumn', 'questionType', 'quotedQuestions'));
         if($step)
         {
             $setOption    = isset($step->options->setOption) ? $step->options->setOption : false;
@@ -37,6 +38,10 @@ class thinkStepQuote extends wg
             }
         }
 
+        $setOptionTip = sprintf($lang->thinkstep->tips->setOption, $lang->thinkstep->tips->options[$questionType], $lang->thinkstep->tips->options[$questionType]);
+        if(empty($quoteQuestions)) $setOptionTip = sprintf($lang->thinkstep->tips->quoteTitle, $lang->thinkstep->tips->options[$questionType]);
+        if($questionType == 'multicolumn' && !empty($quotedQuestions)) $setOptionTip = $lang->thinkstep->tips->disabledSetOption;
+
         return array
         (
             formRow
@@ -51,16 +56,16 @@ class thinkStepQuote extends wg
                         set::inline(true),
                         set::value($setOption),
                         set::items($lang->thinkstep->setOptionList),
-                        set::disabled(empty($quoteQuestions)),
+                        set::disabled(empty($quoteQuestions) || ($questionType == 'multicolumn' && !empty($quotedQuestions))),
                         on::change()
                             ->const('questionType', $questionType)
-                            ->do("questionType == 'checkbox' ? changeCheckboxSetOption(target) : changeMulticolumnSetOption(target)")
+                            ->do("questionType == 'checkbox' ? changeCheckboxSetOption(target) : changeMulticolumnSetOption(target)"),
                     )
                 ),
                 icon
                 (
                     setClass('mt-9 text-gray-400 cursor-pointer ml-1 text-base pt-0.5'),
-                    toggle::tooltip(array('placement' => 'top', 'title' => empty($quoteQuestions) ? $lang->thinkstep->tips->quoteTitle : $lang->thinkstep->tips->setOption, 'max-width' => '220px', 'className' => 'text-gray border border-gray-300', 'type' => 'white')),
+                    toggle::tooltip(array('placement' => 'top', 'title' => $setOptionTip, 'max-width' => '220px', 'className' => 'text-gray border border-gray-300', 'type' => 'white')),
                     'help'
                 )
             ),
