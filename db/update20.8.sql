@@ -53,3 +53,5 @@ INSERT INTO `zt_workflowgroup` (`type`, `projectModel`, `projectType`, `name`, `
 ('project', 'waterfall', 'project',    '瀑布-项目型默认流程', 'waterfallproject', 'normal', 'rnd', '1');
 
 ALTER TABLE `zt_doclib` ADD `orderBy` varchar(30) NOT NULL DEFAULT 'id_asc' AFTER `deleted`;
+
+UPDATE `zt_grouppriv` SET `method` = 'quick' WHERE `module` = 'doc' AND `method` = 'myView';
