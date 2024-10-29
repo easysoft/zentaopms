@@ -36,4 +36,15 @@ class count_of_effective_bug_in_project extends baseCalc
 
         if($status == 'active' or $resolution == 'fixed' or $resolution == 'postponed') $this->result[$project] += 1;
     }
+
+    public function getResult($options = null)
+    {
+        $records = array();
+        foreach($this->result as $project => $value)
+        {
+            $records[] = array('project' => $project, 'value' => $value);
+        }
+
+        return $this->filterByOptions($records, $options);
+    }
 }
