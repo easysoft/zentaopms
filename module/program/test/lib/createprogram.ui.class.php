@@ -103,7 +103,7 @@ class createProgramTester extends tester
         $browsePage->wait(1);
         $browsePage->dom->fstEditBtn->click();
         $browsePage->wait(1);
-        if($browsePage->dom->parent->getText() != $programName) return $this->failed('创建子项目集失败');
-        return $this->success('创建子项目集成功');
+        if($browsePage->dom->parent->getText() != $programName) return $this->failed('添加子项目集失败');
+        return $this->success('添加子项目集成功');
     }
 }
