@@ -759,8 +759,25 @@ class baseMao
     public function getByKey(string $key, ...$arguments)
     {
         if(!defined($key)) return false;
+        $cache = $this->config->cache->keys[$key];
+        if(!empty($cache->fields) && !empty($arguments))
+        {
+            $tableFields = $this->app->dao->descTable($cache->table);
+            foreach($cache->fields as $index => $field)
+            {
+                if(!isset($tableFields[$field])) return $this->app->triggerError("The {$field} field does not exist in table {$cache->table}", __FILE__, __LINE__, true);
+                if(!isset($arguments[$index])) continue;
+
+                $tableField = $tableFields[$field];
+                if(stripos($tableField->type, 'int')     !== false) $arguments[$index] = (int)  $arguments[$index];
+                if(stripos($tableField->type, 'float')   !== false) $arguments[$index] = (float)$arguments[$index];
+                if(stripos($tableField->type, 'decimal') !== false) $arguments[$index] = (float)$arguments[$index];
+                if(stripos($tableField->type, 'double')  !== false) $arguments[$index] = (float)$arguments[$index];
+            }
+        }
 
         $key = constant($key);
+        $key = str_replace(['cache', '_'], ['res', ':'], strtolower($key));
         foreach($arguments as $argument) $key .= ':' . $argument;
 
         $this->currentKey = $key;
