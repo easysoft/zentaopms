@@ -19,11 +19,10 @@ class browsePage extends page
             'startProgramBtn' => '//*[@class="panel-body"]/form/div[3]/div/button',
             'addChildBtn'     => '//*[@id="projectviews"]/div[2]/div[3]/div/div[1]/div/nav/a[3]',
             'fstdeleteBtn'    => '//*[@id="projectviews"]/div[2]/div[3]/div/div[1]/div/nav/a[4]',
-            'thrdeleteBtn'    => '//*[@id="projectviews"]/div[2]/div[3]/div/div[3]/div/nav/a[4]',
             'checkoutPrompt'  => '//*[@class="modal-dialog"]/div/div[2]/div[2]',
             'deleteCancel'    => '//*[@class="modal modal-async load-indicator modal-alert modal-trans show in"]/div/div[1]/div[3]/nav/button[2]',
             'deleteConfirm'   => '//*[@class="modal modal-async load-indicator modal-alert modal-trans show in"]/div/div[1]/div[3]/nav/button[1]',
-            'undeleteConfirm' => '//*[@class="modal-content"]/div[3]/nav/button',
+            'undeleteConfirm' => '//*[@class="modal-content"]/div[3]/nav/button[2]',
             'formText'        => '//*[@id="projectviews"]/div/div/div',
             'fstProgramName'  => '/html/body/div[1]/div/div[2]/div[2]/div/div[2]/div[1]/div/div/div/a'
         );
