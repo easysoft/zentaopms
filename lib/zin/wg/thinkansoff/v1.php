@@ -6,6 +6,11 @@ requireWg('thinkModel');
 
 class thinkAnsoff extends thinkModel
 {
+    public static function getPageCSS(): ?string
+    {
+        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
+    }
+
     protected function buildAreaCard(int $order): array
     {
         $blocks = $this->prop('blocks');
@@ -19,21 +24,16 @@ class thinkAnsoff extends thinkModel
 
     protected function buildItem(int $order, string|object $block): node
     {
-        global $app, $lang, $config;
-        $app->loadLang('thinkwizard');
-        $app->loadConfig('thinkbackground');
-
         $mode       = $this->prop('mode');
         $blockStyle = $mode == 'preview' ? array('min-height' => '200px', 'width' => '50%') : array('min-height' => '200px', 'width' => '1078px');
-        $blockColor = $config->thinkbackground->blockColor[$order];
         $blockName  = is_string($block) ? $block : $block->text;
 
         return div
         (
-            setClass('relative col justify-between py-2 px-2.5 bg-canvas model-block', "bg-$blockColor-100", "block-$order"),
+            setClass('relative col justify-between py-2 px-2.5 bg-canvas model-block', "block-$order"),
             setStyle($blockStyle),
             div(setClass('flex flex-wrap gap-2.5'), $mode == 'view' ? $this->buildAreaCard($order) : null),
-            div(setClass('item-step-title text-center', "text-$blockColor"), $blockName)
+            div(setClass('item-step-title text-center'), $blockName)
         );
     }
 
