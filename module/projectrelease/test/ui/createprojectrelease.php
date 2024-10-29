@@ -15,6 +15,10 @@ cid=73
 chdir(__DIR__);
 include '../lib/createprojectrelease.ui.class.php';
 
+zendata('project')->loadYaml('project', false, 1)->gen(1);
+zendata('product')->loadYaml('product', false, 1)->gen(1);
+zendata('projectproduct')->loadYaml('projectproduct', false, 1)->gen(1);
+
 $tester = new createProjectReleaseTester();
 $tester->login();
 
