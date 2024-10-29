@@ -24,6 +24,7 @@ class allPage extends page
             'doing'     => "//*[@data-page='execution-all']/div[2]/menu/menu/li[2]/a",
             'suspended' => "//*[@data-page='execution-all']/div[2]/menu/menu/li[3]/a",
             'closed'    => "//*[@data-page='execution-all']/div[2]/menu/menu/li[4]/a",
+            'modalBtn'  => "//div[@class='modal-footer']/nav/button[1]",
             /* 列表底部统计数据 */
             'num' => "//*[@id='table-execution-all']/div[3]/div[2]/strong",
 
