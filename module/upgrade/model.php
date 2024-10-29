@@ -9909,20 +9909,30 @@ class upgradeModel extends model
             foreach($fields as $field => $addSQL)
             {
                 if($flow->vision == 'or' && $field != 'product') continue;
-                if(isset($flowTableDesc[$flow->table][$field]))
+
+                $searchedField = '';
+                foreach(array_keys($flowTableDesc[$flow->table]) as $existField)
+                {
+                    if($field == strtolower($existField))
+                    {
+                        $searchedField = $existField;
+                        break;
+                    }
+                }
+                if($searchedField)
                 {
                     $tableDesc    = $flowTableDesc[$flow->table];
-                    $newFieldName = "{$field}_1";
-                    $oldField     = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->where('module')->eq($flow->module)->andWhere('field')->eq($field)->fetch();
+                    $newFieldName = "{$searchedField}_1";
+                    $oldField     = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->where('module')->eq($flow->module)->andWhere('field')->eq($searchedField)->fetch();
                     if(isset($tableDesc[$newFieldName]) || ($oldField && ($oldField->buildin || $oldField->readonly)))
                     {
-                        $this->dao->exec("ALTER TABLE {$flow->table} DROP `{$field}`");
-                        $this->dao->delete()->from(TABLE_WORKFLOWFIELD)->where('module')->eq($flow->module)->andWhere('field')->eq("{$field}")->exec();
+                        $this->dao->exec("ALTER TABLE {$flow->table} DROP `{$searchedField}`");
+                        $this->dao->delete()->from(TABLE_WORKFLOWFIELD)->where('module')->eq($flow->module)->andWhere('field')->eq("{$searchedField}")->exec();
                     }
                     elseif($oldField)
                     {
-                        $this->dao->update(TABLE_WORKFLOWFIELD)->set('field')->eq("{$newFieldName}")->where('module')->eq($flow->module)->andWhere('field')->eq($field)->exec();
-                        $this->dao->update(TABLE_WORKFLOWSQL)->set('field')->eq("{$newFieldName}")->where('module')->eq($flow->module)->andWhere('field')->eq($field)->exec();
+                        $this->dao->update(TABLE_WORKFLOWFIELD)->set('field')->eq("{$newFieldName}")->where('module')->eq($flow->module)->andWhere('field')->eq($searchedField)->exec();
+                        $this->dao->update(TABLE_WORKFLOWSQL)->set('field')->eq("{$newFieldName}")->where('module')->eq($flow->module)->andWhere('field')->eq($searchedField)->exec();
 
                         $newField = clone $oldField;
                         $newField->field = $newFieldName;
