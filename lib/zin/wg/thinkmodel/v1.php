@@ -112,10 +112,12 @@ class thinkModel extends wg
             }
             elseif($step->link['showMethod'] == '1')
             {
+                $className  = 'card-options';
                 $resultCard = $this->buildMulticolumnContent($step);
             }
             else
             {
+                $className  = 'card-options';
                 $resultCard = $this->buildOptionsContent($step, $key);
             }
 
