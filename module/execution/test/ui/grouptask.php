@@ -180,18 +180,19 @@ $nums = array(
         'tasks'     => '6',
         'waiting'   => '0',
         'doing'     => '1',
-        'estimates' => '6',
-        'cost'      => '33',
-        'left'      => '2',
+        'estimates' => '6h',
+        'cost'      => '33h',
+        'left'      => '2h',
     )
 );
 
-#r($tester->checkGroupData('story',$nums['story'])) && p('status,message') && e('SUCCESS,数据正确');
-#r($tester->checkGroupData('status',$nums['status'])) && p('status,message') && e('SUCCESS,数据正确');
-#r($tester->checkGroupData('pri',$nums['pri'])) && p('status,message') && e('SUCCESS,数据正确');
-#r($tester->checkGroupData('assignedTo',$nums['assignedTo'])) && p('status,message') && e('SUCCESS,数据正确');
-#r($tester->checkGroupData('finishedBy',$nums['finishedBy'])) && p('status,message') && e('SUCCESS,数据正确');
-#r($tester->checkGroupData('closedBy',$nums['closedBy'])) && p('status,message') && e('SUCCESS,数据正确');
-#r($tester->checkGroupData('type',$nums['type'])) && p('status,message') && e('SUCCESS,数据正确');
-#r($tester->checkTaskLinkedStory($nums['linked'])) && p('status,message') && e('SUCCESS,数据正确');
-r($tester->checkCollapse($nums['collapse'])) && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkGroupData('story',$nums['story']))           && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkGroupData('status',$nums['status']))         && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkGroupData('pri',$nums['pri']))               && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkGroupData('assignedTo',$nums['assignedTo'])) && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkGroupData('finishedBy',$nums['finishedBy'])) && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkGroupData('closedBy',$nums['closedBy']))     && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkGroupData('type',$nums['type']))             && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkTaskLinkedStory($nums['linked']))            && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkCollapse($nums['collapse']))                 && p('status,message') && e('SUCCESS,数据正确');
+$tester->closeBrowser();
