@@ -51,7 +51,8 @@ sidebar
         'settingText' => $lang->host->groupMaintenance,
         'showDisplay' => false,
         'settingLink' => $this->createLink('tree', 'browse', "productID=0&view=host"),
-        'closeLink'   => $this->createLink('host', 'browse')
+        'closeLink'   => $this->createLink('host', 'browse'),
+        'settingApp'  => 'devops',
     )))
 );
 $cols = $this->loadModel('datatable')->getSetting('host');
