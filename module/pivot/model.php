@@ -134,10 +134,9 @@ class pivotModel extends model
     {
         if($isObject) $pivots = array($pivots);
 
-        $screenList = $this->dao->select('scheme')->from(TABLE_SCREEN)->where('deleted')->eq(0)->andWhere('status')->eq('published')->fetchAll();
         foreach($pivots as $pivot)
         {
-            $this->completePivot($pivot, $screenList);
+            $this->completePivot($pivot);
             if($isObject) $this->addDrills($pivot);
         }
 
@@ -178,11 +177,10 @@ class pivotModel extends model
      * Complete pivot.
      *
      * @param  object $pivot
-     * @param  array  $screenList
      * @access public
      * @return void
      */
-    private function completePivot(object $pivot, array $screenList): void
+    private function completePivot(object $pivot): void
     {
         if(!empty($pivot->settings)) $pivot->settings = json_decode($pivot->settings, true);
 
