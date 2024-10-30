@@ -121,9 +121,9 @@ class ciModel extends model
         }
         else
         {
-            $queueInfo = json_decode($response);
+            $queueInfo = @json_decode($response);
             $buildInfo = null;
-            if(!empty($queueInfo->executable))
+            if($queueInfo && !empty($queueInfo->executable))
             {
                 $buildUrl  = $queueInfo->executable->url . 'api/json?pretty=true';
                 $response  = common::http($buildUrl, '', array(CURLOPT_USERPWD => $userPWD));
@@ -131,9 +131,9 @@ class ciModel extends model
             }
             elseif(stripos($response, 'not found') !== false)
             {
-                $job = strpos($compile->pipeline, '/job/') !== false ? $compile->pipeline : '/job/' . $compile->pipeline;
-                $buildUrl  = "{$compile->url}{$job}/api/json?depth=1";
-                $response  = json_decode(common::http($buildUrl, '', array(CURLOPT_USERPWD => $userPWD)));
+                $job      = strpos($compile->pipeline, '/job/') !== false ? $compile->pipeline : '/job/' . $compile->pipeline;
+                $buildUrl = "{$compile->url}{$job}/api/json?depth=1";
+                $response = json_decode(common::http($buildUrl, '', array(CURLOPT_USERPWD => $userPWD)));
                 if($response)
                 {
                     foreach($response->builds as $build)
@@ -146,6 +146,7 @@ class ciModel extends model
                     }
                 }
             }
+
             if($buildInfo)
             {
                 if(!empty($buildInfo->building))
