@@ -10070,4 +10070,43 @@ class upgradeModel extends model
             }
         }
     }
+
+    /**
+     * 创建内置立项审批流。
+     * Add default charter approval flow.
+     *
+     * @access public
+     * @return bool
+     */
+    public function addCharterApprovalFlow()
+    {
+        $this->app->loadLang('charter');
+
+        $approvalflow = new stdclass();
+        $approvalflow->name        = $this->lang->charter->defaultApprovalFlow->title;
+        $approvalflow->code        = 'charter';
+        $approvalflow->desc        = $this->lang->charter->defaultApprovalFlow->desc;
+        $approvalflow->version     = 1;
+        $approvalflow->createdBy   = 'system';
+        $approvalflow->createdDate = helper::now();
+        $approvalflow->workflow    = '';
+        $approvalflow->deleted     = 0;
+        $this->dao->insert(TABLE_APPROVALFLOW)->data($approvalflow)->exec();
+
+        if(dao::isError()) return false;
+
+        $approvalflowID = $this->dao->lastInsertId();
+
+        $approvalflowSpec = new stdclass();
+        $approvalflowSpec->flow        = $approvalflowID;
+        $approvalflowSpec->version     = 1;
+        $approvalflowSpec->nodes       = '[{"type":"start","ccs":[]},{"id":"6284isggmhj","type":"branch","branchType":"condition","branches":[{"id":"n81udmvr75","conditions":[{"conditionField":"approvalType","conditionOperator":"equal","conditionValue":"projectApproval"}],"nodes":[{"id":"8s3k6sabm23","type":"approval","reviewers":[{"type":"select"}]}]},{"id":"k95j4i13j2n","conditions":[{"conditionField":"approvalType","conditionOperator":"equal","conditionValue":"completionApproval"}],"nodes":[{"id":"g5y1qssvvt4","reviewType":"manual","type":"approval","reviewers":[{"type":"select"}]}]},{"id":"rynphmliq48","conditions":[{"conditionField":"approvalType","conditionOperator":"equal","conditionValue":"cancelCharter"}],"nodes":[{"id":"mnv6la77nhe","reviewType":"manual","type":"approval","reviewers":[{"type":"select"}]}]},{"id":"jhsx8bvndk","conditions":[{"conditionField":"approvalType","conditionOperator":"equal","conditionValue":"activateCharter"}],"nodes":[{"id":"348i3unk88d","reviewType":"manual","type":"approval","reviewers":[{"type":"select"}]}]}],"default":{"id":"k5rrandywo","nodes":[{"id":"mh62tl0pa7r","type":"approval","reviewers":[{"type":"select"}]}]}},{"id":"3ewcj92p55e","type":"approval","reviewType":"manual","reviewers":[{"type":"select"}]},{"type":"end","ccs":[]}]';
+        $approvalflowSpec->createdBy   = 'system';
+        $approvalflowSpec->createdDate = helper::now();
+        $this->dao->insert(TABLE_APPROVALFLOWSPEC)->data($approvalflowSpec)->exec();
+
+        if(dao::isError()) return false;
+
+        return true;
+    }
 }

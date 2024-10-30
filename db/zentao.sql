@@ -14477,10 +14477,12 @@ CREATE TABLE `zt_scene` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 REPLACE INTO `zt_approvalflow` (`id`, `name`, `code`, `desc`, `version`, `createdBy`, `createdDate`, `workflow`, `deleted`) VALUES
-(1, '最简审批', 'simple', '', 1, 'admin', '2022-04-29 08:46:40', '', 0);
+(1, '最简审批', 'simple', '', 1, 'admin', '2022-04-29 08:46:40', '', 0),
+(2, '立项审批流', 'charter', '用于立项、结项、取消立项和激活立项的专属审批流。', 1, 'system', NOW(), '', 0);
 
 REPLACE INTO `zt_approvalflowspec` (`id`, `flow`, `version`, `nodes`, `createdBy`, `createdDate`) VALUES
-(1, 1, 1, '[{\"type\":\"start\",\"ccs\":[]},{\"id\":\"3ewcj92p55e\",\"type\":\"approval\",\"title\":\"审批\",\"reviewType\":\"manual\",\"multiple\":\"and\",\"agentType\":\"pass\",\"reviewers\":[{\"type\":\"select\"}],\"ccs\":[]},{\"type\":\"end\",\"ccs\":[]}]', 'admin', '2022-04-29 08:46:40');
+(1, 1, 1, '[{\"type\":\"start\",\"ccs\":[]},{\"id\":\"3ewcj92p55e\",\"type\":\"approval\",\"title\":\"审批\",\"reviewType\":\"manual\",\"multiple\":\"and\",\"agentType\":\"pass\",\"reviewers\":[{\"type\":\"select\"}],\"ccs\":[]},{\"type\":\"end\",\"ccs\":[]}]', 'admin', '2022-04-29 08:46:40'),
+(2, 2, 1, '[{"type":"start","ccs":[]},{"id":"6284isggmhj","type":"branch","branchType":"condition","branches":[{"id":"n81udmvr75","conditions":[{"conditionField":"approvalType","conditionOperator":"equal","conditionValue":"projectApproval"}],"nodes":[{"id":"8s3k6sabm23","type":"approval","reviewers":[{"type":"select"}]}]},{"id":"k95j4i13j2n","conditions":[{"conditionField":"approvalType","conditionOperator":"equal","conditionValue":"completionApproval"}],"nodes":[{"id":"g5y1qssvvt4","reviewType":"manual","type":"approval","reviewers":[{"type":"select"}]}]},{"id":"rynphmliq48","conditions":[{"conditionField":"approvalType","conditionOperator":"equal","conditionValue":"cancelCharter"}],"nodes":[{"id":"mnv6la77nhe","reviewType":"manual","type":"approval","reviewers":[{"type":"select"}]}]},{"id":"jhsx8bvndk","conditions":[{"conditionField":"approvalType","conditionOperator":"equal","conditionValue":"activateCharter"}],"nodes":[{"id":"348i3unk88d","reviewType":"manual","type":"approval","reviewers":[{"type":"select"}]}]}],"default":{"id":"k5rrandywo","nodes":[{"id":"mh62tl0pa7r","type":"approval","reviewers":[{"type":"select"}]}]}},{"id":"3ewcj92p55e","type":"approval","reviewType":"manual","reviewers":[{"type":"select"}]},{"type":"end","ccs":[]}]', 'system', NOW());
 
 REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`) VALUES
 ('all', 'process', 'classify', 'support', '支持过程', '1'),
