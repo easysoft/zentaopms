@@ -863,16 +863,36 @@ class pivotModel extends model
         return $fieldSql;
     }
 
+    public function filterFieldsWithSettings(array $fields, array $groups, array $columns)
+    {
+        $filteredFields = array();
+        $settingFields  = $groups;
+
+        foreach($columns as $column)
+        {
+            $slice = zget($column, 'slice', 'noSlice');
+            $settingFields[] = $column['field'];
+            if($slice != 'noSlice') $settingFields[] = $slice;
+        }
+
+        $settingFields = array_unique($settingFields);
+        foreach($settingFields as $field)
+        {
+            if(!isset($filteredFields[$field]) && isset($fields[$field])) $filteredFields[$field] = $fields[$field];
+        }
+
+        return $filteredFields;
+    }
+
     /**
      * Map record value with field options.
      *
      * @param  array    $records
      * @param  array    $fields
-     * @param  string   $sql
      * @access public
      * @return array
      */
-    public function mapRecordValueWithFieldOptions(array $records, array $fields, string $sql, string $driver): array
+    public function mapRecordValueWithFieldOptions(array $records, array $fields, string $driver): array
     {
         $removeQuote = function($value)
         {
@@ -1799,7 +1819,8 @@ class pivotModel extends model
 
         $dbh     = $this->app->loadDriver($driver);
         $records = $dbh->query($sql)->fetchAll();
-        $records = $this->mapRecordValueWithFieldOptions($records, $fields, $sql, $driver);
+        $settingFields = $this->filterFieldsWithSettings($fields, $groups, $settings['columns']);
+        $records = $this->mapRecordValueWithFieldOptions($records, $settingFields, $driver);
 
         if(empty($records)) return array($data, array());
 
@@ -2209,7 +2230,9 @@ class pivotModel extends model
                 {
                     if($this->config->edition != 'open')
                     {
-                        $fieldObject = $this->loadModel('workflowfield')->getByField($object, $field);
+                        static $workflowFields = array();
+                        if(!isset($workflowFields[$object])) $workflowFields[$object] = $this->loadModel('workflowfield')->getList($object);
+                        $fieldObject = zget($workflowFields[$object], $field, null);
                         if($fieldObject) $options = $this->workflowfield->getFieldOptions($fieldObject);
                         if(!empty(array_filter($options))) break;
                     }
