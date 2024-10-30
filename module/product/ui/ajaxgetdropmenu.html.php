@@ -90,7 +90,7 @@ foreach($data as $key => $value) $data[$key] = array_values($value);
 $tabs = array();
 $tabs[] = array('name' => 'my',     'text' => $lang->product->mine, 'active' => zget($productGroup, $productID, '') === 'my');
 $tabs[] = array('name' => 'other',  'text' => $lang->product->other, 'active' => zget($productGroup, $productID, '') === 'other');
-$tabs[] = array('name' => 'closed', 'text' => $lang->product->closedProduct);
+$tabs[] = array('name' => 'closed', 'text' => $lang->product->closedProducts);
 
 /**
  * 定义最终的 JSON 数据。
