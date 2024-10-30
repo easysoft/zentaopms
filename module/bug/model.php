@@ -537,6 +537,7 @@ class bugModel extends model
     public function activate(object $bug, array $kanbanParams = array()): bool
     {
         $oldBug = parent::fetchByID($bug->id);
+        $bug    = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->activate['id'], $this->post->uid);
 
         $this->dao->update(TABLE_BUG)->data($bug, 'comment')->check('openedBuild', 'notempty')->autoCheck()->checkFlow()->where('id')->eq($bug->id)->exec();
         if(dao::isError()) return false;
@@ -581,6 +582,7 @@ class bugModel extends model
     public function close(object $bug, array $output = array()): bool
     {
         $oldBug = $this->getById($bug->id);
+        $bug    = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->close['id'], $this->post->uid);
 
         $this->dao->update(TABLE_BUG)->data($bug, 'comment')->autoCheck()->checkFlow()->where('id')->eq($bug->id)->exec();
         if(dao::isError()) return false;
