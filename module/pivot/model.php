@@ -2211,7 +2211,7 @@ class pivotModel extends model
                     {
                         $fieldObject = $this->loadModel('workflowfield')->getByField($object, $field);
                         if($fieldObject) $options = $this->workflowfield->getFieldOptions($fieldObject);
-                        if(!empty($options)) break;
+                        if(!empty(array_filter($options))) break;
                     }
 
                     $options = array();
