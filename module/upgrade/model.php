@@ -6039,6 +6039,7 @@ class upgradeModel extends model
             foreach($upgradeConfig[$module] as $code => $config) $this->config->workflowaction->upgrade->$code = $config;
 
             $flow = $this->dao->select('*')->from(TABLE_WORKFLOW)->where('module')->eq($module)->fetch();
+            if(!$flow) continue;
             $this->workflow->createActions($flow, 'upgrade');
 
             $this->dao->update(TABLE_WORKFLOWACTION)->set('extensionType')->eq('none')->set('role')->eq('buildin')->where('module')->eq($module)->andWhere('action')->in(array_keys($labels))->exec();
