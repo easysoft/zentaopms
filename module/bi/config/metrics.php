@@ -4564,3 +4564,17 @@ $config->bi->builtin->metrics[] = array
     'desc'       => '按项目统计的每日关闭Bug数是指每天在项目中每日关闭的Bug的数量。该度量项可以帮助我们了解开发团队对已解决的Bug进行确认与关闭的速度和效率，通过对比不同时间段的关闭Bug数，可以评估开发团队的协作和问题处理能力。',
     'definition' => "项目中Bug数求和\n 关闭时间为某日\n 过滤已删除的Bug\n 过滤已删除的项目\n"
 );
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按项目统计的Bug修复率',
+    'alias'      => 'Bug修复率',
+    'code'       => 'rate_of_fixed_bug_in_project',
+    'purpose'    => 'rate',
+    'scope'      => 'project',
+    'object'     => 'bug',
+    'unit'       => 'percentage',
+    'dateType'   => 'nodate',
+    'desc'       => '按项目统计的Bug修复率是指按项目统计的修复Bug数相对于按项目统计的有效Bug数的比例。该度量项可以帮助我们了解开发团队对Bug修复的效率和质量，高的修复率可能说明Bug得到及时解决，项目质量得到有效保障。',
+    'definition' => "复用：按项目统计的修复Bug数、按项目统计的有效Bug数\n 公式：按项目统计的Bug修复率=按项目统计的修复Bug数/按项目统计的有效Bug数\n"
+);
