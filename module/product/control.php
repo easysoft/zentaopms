@@ -952,7 +952,7 @@ class product extends control
     {
         $projects = $this->product->getProjectPairsByProduct($productID, $branch);
         if($this->app->getViewType() == 'json') return print(json_encode($projects));
-        if($pageType == 'old') return print(html::select('project', array(0 => '') + $projects, $projectID, "class='form-control' onchange='loadProductExecutions({$productID}, this.value)'"));;
+        if($pageType == 'old') return print(html::select('project', array(0 => '') + $projects, $projectID, "class='form-control' onchange='loadProductExecutions({$productID}, this.value)'"));
 
         $items = array();
         foreach($projects as $projectID => $projectName) $items[] = array('text' => $projectName, 'value' => $projectID, 'keys' => $projectName);
@@ -1134,7 +1134,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu(int $productID, string $module, string $method, string $extra = '', string $from = '')
+    public function ajaxGetDropMenu(int $productID, string $module, string $method, string $extra = '', string $from = '', int $useLink = 1)
     {
         $shadow = '0';
         if($this->app->tab == 'qa' || $from == 'qa') $shadow = 'all';
@@ -1143,7 +1143,7 @@ class product extends control
         $programProducts = array();
         foreach($products as $product) $programProducts[$product->program][] = $product;
 
-        $this->view->link      = $this->product->getProductLink($module, $method, $extra);
+        $this->view->link      = $useLink == 1 ? $this->product->getProductLink($module, $method, $extra) : '#';
         $this->view->productID = $productID;
         $this->view->module    = $module;
         $this->view->method    = $method;
