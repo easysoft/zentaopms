@@ -269,7 +269,7 @@ class docZen extends doc
      * @access protected
      * @return bool|int
      */
-    protected function responseAfterCreateLib(string $type = '', int $objectID = 0, int $libID = 0, string $libName = ''): bool|int
+    protected function responseAfterCreateLib(string $type = '', int $objectID = 0, int $libID = 0, string $libName = '', string $orderBy = '')
     {
         if($type == 'project'   && $this->post->project)   $objectID = $this->post->project;
         if($type == 'product'   && $this->post->product)   $objectID = $this->post->product;
@@ -280,12 +280,13 @@ class docZen extends doc
         $this->action->create('docLib', $libID, 'Created');
 
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $libID));
-        $lib = array('id' => $libID, 'name' => $libName, 'space' => (int)$objectID);
+        $lib = array('id' => $libID, 'name' => $libName, 'space' => (int)$objectID, 'orderBy' => $orderBy);
 
         $docAppActions = array();
         $docAppActions[] = array('update', 'lib', $lib);
         $docAppActions[] = array('list:selectLib', $libID);
         $docAppActions[] = array('home:selectSpace', $objectID, $libID);
+        $docAppActions[] = array('load', null, null, null, array('picks' => 'lib'));
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('name' => 'locateNewLib', 'params' => array($type, $objectID, $libID, $libName)), 'docApp' => $docAppActions));
     }
 

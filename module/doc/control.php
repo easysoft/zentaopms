@@ -120,7 +120,7 @@ class doc extends control
                 $objectID = $lib->parent;
             }
 
-            return $this->docZen->responseAfterCreateLib($type, $objectID, $libID, $lib->name);
+            return $this->docZen->responseAfterCreateLib($type, $objectID, $libID, $lib->name, $lib->orderBy);
         }
 
         $objects = array();
