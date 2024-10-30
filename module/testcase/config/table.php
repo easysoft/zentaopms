@@ -131,6 +131,20 @@ $config->testcase->dtable->fieldList['stepNumber']['type']     = 'number';
 $config->testcase->dtable->fieldList['stepNumber']['group']    = 5;
 $config->testcase->dtable->fieldList['stepNumber']['sortType'] = false;
 
+if($config->edition != 'open')
+{
+    $config->testcase->dtable->fieldList['relatedObject']['name']        = 'relatedObject';
+    $config->testcase->dtable->fieldList['relatedObject']['title']       = $lang->custom->relateObject;
+    $config->testcase->dtable->fieldList['relatedObject']['sortType']    = false;
+    $config->testcase->dtable->fieldList['relatedObject']['width']       = '70';
+    $config->testcase->dtable->fieldList['relatedObject']['type']        = 'text';
+    $config->testcase->dtable->fieldList['relatedObject']['link']        = common::hasPriv('custom', 'showRelationGraph') ? "RAWJS<function(info){ if(info.row.data.relatedObject == 0) return 0; else return '" . helper::createLink('custom', 'showRelationGraph', 'objectID={caseID}&objectType=testcase') . "'; }>RAWJS" : null;
+    $config->testcase->dtable->fieldList['relatedObject']['data-toggle'] = 'modal';
+    $config->testcase->dtable->fieldList['relatedObject']['data-size']   = 'lg';
+    $config->testcase->dtable->fieldList['relatedObject']['show']        = true;
+    $config->testcase->dtable->fieldList['relatedObject']['group']       = 5;
+}
+
 $config->testcase->dtable->fieldList['version']['title']    = $lang->testcase->version;
 $config->testcase->dtable->fieldList['version']['type']     = 'text';
 $config->testcase->dtable->fieldList['version']['group']    = 5;

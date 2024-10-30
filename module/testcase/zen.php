@@ -517,6 +517,11 @@ class testcaseZen extends testcase
         $scenes = $this->preProcessScenesForBrowse($scenes);
         $cases  = $this->preProcessCasesForBrowse($cases);
 
+        if($this->config->edition != 'open')
+        {
+            foreach($cases as $caseID => $case) $case->relatedObject = $this->loadModel('custom')->getRelatedObjectList($caseID, 'testcase', true);
+        }
+
         $this->view->cases   = array_merge($scenes, $cases);
         $this->view->orderBy = $orderBy;
         $this->view->pager   = $pager;
