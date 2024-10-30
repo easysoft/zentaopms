@@ -266,7 +266,7 @@ class pivotModel extends model
 
         /* 检测sql是否有效。 */
         /* Check if the sql is valid. */
-        $querySQL = $this->loadModel('chart')->parseSqlVars($sql, $filters);
+        $querySQL = $this->loadModel('bi')->parseSqlVars($sql, $filters);
         $this->dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
         $stmt = $this->dbh->query($querySQL);
         if(!$stmt) return;
