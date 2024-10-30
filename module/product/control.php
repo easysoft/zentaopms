@@ -389,7 +389,7 @@ class product extends control
         /* Execute hooks. */
         $this->executeHooks($productID);
 
-        if($this->config->edition != 'open') $this->view->workflowGroups = $this->loadModel('workflowgroup')->getPairs('product');
+        if($this->config->edition != 'open') $this->view->workflowGroups = $this->loadModel('workflowgroup')->getPairs('product', 'scrum', 1, 'all');
 
         $this->view->title     = $product->name . $this->lang->hyphen . $this->lang->product->view;
         $this->view->product   = $product;
