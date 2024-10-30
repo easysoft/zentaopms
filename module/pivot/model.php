@@ -863,7 +863,16 @@ class pivotModel extends model
         return $fieldSql;
     }
 
-    public function filterFieldsWithSettings(array $fields, array $groups, array $columns)
+    /**
+     * Filter fields with settings.
+     *
+     * @param  array $fields
+     * @param  array $groups
+     * @param  array $columns
+     * @access public
+     * @return array
+     */
+    public function filterFieldsWithSettings(array $fields, array $groups, array $columns): array
     {
         $filteredFields = array();
         $settingFields  = $groups;
