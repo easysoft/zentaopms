@@ -18,3 +18,17 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
+class count_of_daily_created_bug_in_project extends baseCalc
+{
+    public $dataset = 'getBugs';
+
+    public $fieldList = array('t1.project', 't1.openedDate');
+
+    public $result = array();
+
+    public function getResult($options = array())
+    {
+        $records = $this->getRecords(array('project', 'year', 'month', 'day', 'value'));
+        return $this->filterByOptions($records, $options);
+    }
+}
