@@ -53,7 +53,7 @@ foreach($products as $product)
  * Define every group name, include expanded group.
  */
 $tabs   = array();
-$tabs[] = array('name' => 'closed', 'text' => $lang->product->closedProduct);
+$tabs[] = array('name' => 'closed', 'text' => $lang->product->closedProducts);
 $tabs[] = array('name' => 'normal', 'text' => '');
 
 $json = array();
