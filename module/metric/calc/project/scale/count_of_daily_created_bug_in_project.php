@@ -20,7 +20,7 @@
  */
 class count_of_daily_created_bug_in_project extends baseCalc
 {
-    public $dataset = 'getBugs';
+    public $dataset = 'getProjectBugs';
 
     public $fieldList = array('t1.project', 't1.openedDate');
 
