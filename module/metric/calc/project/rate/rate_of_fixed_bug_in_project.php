@@ -18,3 +18,19 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
+class rate_of_fixed_bug_in_project extends baseCalc
+{
+    public $dataset = 'getProjectBugs';
+
+    public $fieldList = array('t1.project', 't1.resolution', 't1.status');
+
+    public $result = array();
+
+    public function calculate($row)
+    {
+        if(!isset($this->result[$row->project])) $this->result[$row->project] = array('fixed' => 0, 'valid' => 0);
+
+        if($row->resolution == 'fixed' and $row->status == 'closed') $this->result[$row->project]['fixed'] ++;
+        if($row->resolution == 'fixed' or $row->resolution == 'postponed' or $row->status == 'active') $this->result[$row->project]['valid'] ++;
+    }
+}
