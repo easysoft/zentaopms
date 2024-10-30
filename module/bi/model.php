@@ -1322,6 +1322,48 @@ class biModel extends model
     }
 
     /**
+     * 在sql中将变量解析为空字符串。
+     * Parse variables to null string in sql.
+     *
+     * @param  string $sql
+     * @param  array  $filters
+     * @access public
+     * @return string
+     */
+    public function parseSqlVars(string $sql, array $filters): string
+    {
+        if($filters)
+        {
+            foreach($filters as $filter)
+            {
+                if(!isset($filter['default']) || !isset($filter['from']) || $filter['from'] !== 'query') continue;
+                $default = $filter['default'];
+                if($filter['type'] == 'multipleselect' && is_array($default)) $default = implode("','", $default);
+
+                if(strpos($sql, $filter['field'] . 'Condition') === false)
+                {
+                    $sql = str_replace('$' . $filter['field'], "'{$default}'", $sql);
+                }
+                else
+                {
+                    $relatedField = $filter['relatedField'];
+                    $sql = str_replace('$' . $filter['field'] . 'Condition', "{$relatedField}='{$default}'", $sql);
+                }
+            }
+        }
+
+        $matchRule = "[\$]+[a-zA-Z0-9]+_[0-9]";
+        if(strpos($sql, 'Condition') !== false && strpos($sql, 'Variale_') !== false) $matchRule .= "+Condition";
+
+        if(preg_match_all("/{$matchRule}/", $sql, $out))
+        {
+            foreach($out[0] as $match) $sql = str_replace($match, "''", $sql);
+        }
+
+        return $sql;
+    }
+
+    /**
      * Process filter variables in sql.
      *
      * @param  string $sql
@@ -1342,7 +1384,7 @@ class biModel extends model
 
             if($emptyValue) $filters[$index]['default'] = '';
         }
-        $sql = $this->loadModel('chart')->parseSqlVars($sql, $filters);
+        $sql = $this->parseSqlVars($sql, $filters);
         $sql = trim($sql, ';');
 
         return $sql;

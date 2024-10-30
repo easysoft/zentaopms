@@ -8059,6 +8059,7 @@ class upgradeModel extends model
         $this->loadModel('pivot');
         $this->loadModel('chart');
         $this->loadModel('dataview');
+        $this->loadModel('bi');
 
         $pivotList = $this->dao->select('*')->from(TABLE_PIVOT)->where('deleted')->eq(0)->fetchAll('id');
         foreach($pivotList as $pivotID => $pivot)
@@ -8068,7 +8069,7 @@ class upgradeModel extends model
             $filters = json_decode($pivot->filters, true);
             $filters = $this->pivot->setFilterDefault(empty($filters) ? array() : $filters);
             $sql     = trim(str_replace(';', '', $pivot->sql));
-            $sql     = $this->chart->parseSqlVars($sql, $filters);
+            $sql     = $this->bi->parseSqlVars($sql, $filters);
 
             $this->dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
             $stmt = $this->dbh->query($sql);
