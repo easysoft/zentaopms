@@ -39,6 +39,22 @@ $config->design->dtable->fieldList['createdBy']['sortType'] = true;
 
 $config->design->dtable->fieldList['createdDate']['type'] = 'date';
 
+if($config->edition != 'open')
+{
+    $config->design->dtable->fieldList['relatedObject']['name']        = 'relatedObject';
+    $config->design->dtable->fieldList['relatedObject']['title']       = $lang->custom->relateObject;
+    $config->design->dtable->fieldList['relatedObject']['sortType']    = false;
+    $config->design->dtable->fieldList['relatedObject']['width']       = '70';
+    $config->design->dtable->fieldList['relatedObject']['type']        = 'text';
+    $config->design->dtable->fieldList['relatedObject']['link']        = common::hasPriv('custom', 'showRelationGraph') ? "RAWJS<function(info){ if(info.row.data.relatedObject == 0) return 0; else return '" . helper::createLink('custom', 'showRelationGraph', 'objectID={id}&objectType=design') . "'; }>RAWJS" : null;
+    $config->design->dtable->fieldList['relatedObject']['data-toggle'] = 'modal';
+    $config->design->dtable->fieldList['relatedObject']['data-size']   = 'lg';
+    $config->design->dtable->fieldList['relatedObject']['show']        = true;
+    $config->design->dtable->fieldList['relatedObject']['group']       = 2;
+    $config->design->dtable->fieldList['relatedObject']['flex']        = false;
+    $config->design->dtable->fieldList['relatedObject']['align']       = 'center';
+}
+
 $config->design->dtable->fieldList['actions']['type'] = 'actions';
 $config->design->dtable->fieldList['actions']['menu'] = array('edit', 'viewCommit', 'delete');
 $config->design->dtable->fieldList['actions']['list'] = $config->design->actionList;

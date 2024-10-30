@@ -194,6 +194,8 @@ if($config->edition != 'open')
     $config->bug->dtable->fieldList['relatedObject']['data-size']   = 'lg';
     $config->bug->dtable->fieldList['relatedObject']['show']        = true;
     $config->bug->dtable->fieldList['relatedObject']['group']       = 8;
+    $config->bug->dtable->fieldList['relatedObject']['flex']        = false;
+    $config->bug->dtable->fieldList['relatedObject']['align']       = 'center';
 }
 
 $config->bug->dtable->fieldList['activatedDate']['title']    = $lang->bug->activatedDate;

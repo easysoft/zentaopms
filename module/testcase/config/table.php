@@ -143,6 +143,8 @@ if($config->edition != 'open')
     $config->testcase->dtable->fieldList['relatedObject']['data-size']   = 'lg';
     $config->testcase->dtable->fieldList['relatedObject']['show']        = true;
     $config->testcase->dtable->fieldList['relatedObject']['group']       = 5;
+    $config->testcase->dtable->fieldList['relatedObject']['flex']        = false;
+    $config->testcase->dtable->fieldList['relatedObject']['align']       = 'center';
 }
 
 $config->testcase->dtable->fieldList['version']['title']    = $lang->testcase->version;

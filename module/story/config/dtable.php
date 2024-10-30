@@ -219,6 +219,8 @@ if($config->edition != 'open')
     $config->story->dtable->fieldList['relatedObject']['data-size']   = 'lg';
     $config->story->dtable->fieldList['relatedObject']['show']        = true;
     $config->story->dtable->fieldList['relatedObject']['group']       = 7;
+    $config->story->dtable->fieldList['relatedObject']['flex']        = false;
+    $config->story->dtable->fieldList['relatedObject']['align']       = 'center';
 }
 
 $config->story->dtable->fieldList['childItem']['name']     = 'childItem';

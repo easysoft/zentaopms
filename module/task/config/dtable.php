@@ -127,6 +127,8 @@ if($config->edition != 'open')
     $config->task->dtable->fieldList['relatedObject']['data-size']   = 'lg';
     $config->task->dtable->fieldList['relatedObject']['show']        = true;
     $config->task->dtable->fieldList['relatedObject']['group']       = 5;
+    $config->task->dtable->fieldList['relatedObject']['flex']        = false;
+    $config->task->dtable->fieldList['relatedObject']['align']       = 'center';
 }
 
 $config->task->dtable->fieldList['closedBy']['type']     = 'user';
