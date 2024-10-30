@@ -124,7 +124,7 @@ class relatedObjectList extends relatedList
 
     protected function build()
     {
-        global $lang;
+        global $lang,$app;
         $list = parent::build();
         $list->add(set::hoverItemActions());
 
@@ -136,11 +136,22 @@ class relatedObjectList extends relatedList
             set::icon('plus'),
             set::size('sm'),
             set::type('secondary'),
-            setClass('my-2'),
+            setClass('m-2'),
             setData(array('toggle' => 'modal', 'size' => 'lg')),
             setID('linkButton'),
             $lang->custom->relateObject
         ) : null;
-        return array($list, $btn);
+        $graphBtn = hasPriv('custom', 'showRelationGraph') ? new btn
+        (
+            set::url('custom', 'showRelationGraph', "objectID=$objectID&objectType=$objectType"),
+            set::icon('treemap'),
+            set::size('sm'),
+            set::type('secondary'),
+            setClass('m-2 pull-right'),
+            setData(array('toggle' => 'modal', 'size' => 'lg')),
+            setID('graphButton'),
+            $app->loadLang('custom')->custom->relationGraph
+        ) : null;
+        return array($btn, $graphBtn, $list);
     }
 }
