@@ -187,7 +187,6 @@ class pivotModel extends model
         if(!empty($pivot->settings)) $pivot->settings = json_decode($pivot->settings, true);
 
         $this->processNameDesc($pivot);
-        if(empty($pivot->type)) $pivot->used = $this->checkIFChartInUse($pivot->id, 'pivot', $screenList);
     }
 
     /**

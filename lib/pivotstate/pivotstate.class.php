@@ -361,7 +361,6 @@ class pivotState
         $this->step      = 'query';
         $this->stage     = $pivot->stage;
         $this->acl       = $pivot->acl;
-        $this->used      = $pivot->used;
         $this->whitelist = $pivot->whitelist;
 
         $this->drills       = $drills;
