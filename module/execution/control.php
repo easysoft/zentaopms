@@ -182,6 +182,7 @@ class execution extends control
             }
             if(isset($branchGroups[$task->product][$task->branch])) $task->branch = $branchGroups[$task->product][$task->branch];
             if($task->needConfirm) $task->status = 'changed';
+            if($this->config->edition != 'open') $task->relatedObject = $this->loadModel('custom')->getRelatedObjectList($task->id, 'task', true);
         }
 
         $showAllModule = empty($this->config->execution->task->allModule) ? '' : 'allModule';

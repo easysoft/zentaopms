@@ -115,6 +115,20 @@ $config->task->dtable->fieldList['progress']['show']     = true;
 $config->task->dtable->fieldList['progress']['sortType'] = false;
 $config->task->dtable->fieldList['progress']['group']    = 5;
 
+if($config->edition != 'open')
+{
+    $config->task->dtable->fieldList['relatedObject']['name']        = 'relatedObject';
+    $config->task->dtable->fieldList['relatedObject']['title']       = $lang->custom->relateObject;
+    $config->task->dtable->fieldList['relatedObject']['sortType']    = false;
+    $config->task->dtable->fieldList['relatedObject']['width']       = '70';
+    $config->task->dtable->fieldList['relatedObject']['type']        = 'text';
+    $config->task->dtable->fieldList['relatedObject']['link']        = common::hasPriv('custom', 'showRelationGraph') ? "RAWJS<function(info){ if(info.row.data.relatedObject == 0) return 0; else return '" . helper::createLink('custom', 'showRelationGraph', 'objectID={id}&objectType=task') . "'; }>RAWJS" : null;
+    $config->task->dtable->fieldList['relatedObject']['data-toggle'] = 'modal';
+    $config->task->dtable->fieldList['relatedObject']['data-size']   = 'lg';
+    $config->task->dtable->fieldList['relatedObject']['show']        = true;
+    $config->task->dtable->fieldList['relatedObject']['group']       = 5;
+}
+
 $config->task->dtable->fieldList['closedBy']['type']     = 'user';
 $config->task->dtable->fieldList['closedBy']['sortType'] = true;
 $config->task->dtable->fieldList['closedBy']['group']    = 6;

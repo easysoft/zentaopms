@@ -216,6 +216,7 @@ if($config->edition != 'open')
     $config->story->dtable->fieldList['relatedObject']['type']        = 'text';
     $config->story->dtable->fieldList['relatedObject']['link']        = common::hasPriv('custom', 'showRelationGraph') ? "RAWJS<function(info){ if(info.row.data.relatedObject == 0) return 0; else return '" . helper::createLink('custom', 'showRelationGraph', 'objectID={id}&objectType={type}') . "'; }>RAWJS" : null;
     $config->story->dtable->fieldList['relatedObject']['data-toggle'] = 'modal';
+    $config->story->dtable->fieldList['relatedObject']['data-size']   = 'lg';
     $config->story->dtable->fieldList['relatedObject']['show']        = true;
     $config->story->dtable->fieldList['relatedObject']['group']       = 7;
 }
