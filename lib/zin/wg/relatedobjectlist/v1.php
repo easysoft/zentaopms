@@ -128,8 +128,9 @@ class relatedObjectList extends relatedList
         $list = parent::build();
         $list->add(set::hoverItemActions());
 
-        $objectID   = $this->prop('objectID');
-        $objectType = $this->prop('objectType');
+        $objectID       = $this->prop('objectID');
+        $objectType     = $this->prop('objectType');
+        $relatedObjects = $this->prop('relatedObjects', data('relatedObjects'));
         $btn = hasPriv('custom', 'relateObject') ? new btn
         (
             set::url('custom', 'relateObject', "objectID=$objectID&objectType=$objectType&relatedObjectType=$objectType"),
@@ -141,7 +142,7 @@ class relatedObjectList extends relatedList
             setID('linkButton'),
             $lang->custom->relateObject
         ) : null;
-        $graphBtn = hasPriv('custom', 'showRelationGraph') ? new btn
+        $graphBtn = hasPriv('custom', 'showRelationGraph') && !empty($relatedObjects) ? new btn
         (
             set::url('custom', 'showRelationGraph', "objectID=$objectID&objectType=$objectType"),
             set::icon('treemap'),
