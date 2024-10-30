@@ -134,7 +134,7 @@ class jobTao extends jobModel
                 return false;
             }
 
-            if(!empty($paramName) and !validater::checkREG($paramName, '/^[A-Za-z_0-9]+$/'))
+            if(!empty($paramName) and !validater::checkREG($paramName, '/^\w+$/'))
             {
                 dao::$errors['paramName'][] = $this->lang->job->invalidName;
                 return false;
