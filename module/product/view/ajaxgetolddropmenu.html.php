@@ -152,7 +152,7 @@ $closedProductsHtml .= '</ul>';
     </div>
   </div>
   <div id="gray-line" hidden></div>
-  <div id="closed" hidden><?php echo $lang->product->closedProduct?></div>
+  <div id="closed" hidden><?php echo $lang->product->closedProducts; ?></div>
   <div class="table-col col-right productTree">
    <div class='list-group products'><?php echo $closedProductsHtml;?></div>
   </div>
