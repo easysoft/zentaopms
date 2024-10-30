@@ -122,12 +122,32 @@ class ciModel extends model
         else
         {
             $queueInfo = json_decode($response);
+            $buildInfo = null;
             if(!empty($queueInfo->executable))
             {
                 $buildUrl  = $queueInfo->executable->url . 'api/json?pretty=true';
                 $response  = common::http($buildUrl, '', array(CURLOPT_USERPWD => $userPWD));
                 $buildInfo = json_decode($response);
-
+            }
+            elseif(stripos($response, 'not found') !== false)
+            {
+                $job = strpos($compile->pipeline, '/job/') !== false ? $compile->pipeline : '/job/' . $compile->pipeline;
+                $buildUrl  = "{$compile->url}{$job}/api/json?depth=1";
+                $response  = json_decode(common::http($buildUrl, '', array(CURLOPT_USERPWD => $userPWD)));
+                if($response)
+                {
+                    foreach($response->builds as $build)
+                    {
+                        if($build->queueId == $compile->queue)
+                        {
+                            $buildInfo = $build;
+                            break;
+                        }
+                    }
+                }
+            }
+            if($buildInfo)
+            {
                 if(!empty($buildInfo->building))
                 {
                     $this->updateBuildStatus($compile, 'building');
@@ -160,8 +180,8 @@ class ciModel extends model
      */
     public function syncCompileStatus(object $compile, int $MRID = 0): bool
     {
-        /* Max retry times is: 3. */
-        if($compile->times >= 3)
+        /* Max retry times is: 5. */
+        if($compile->times >= 5)
         {
             $this->updateBuildStatus($compile, 'failure');
 
