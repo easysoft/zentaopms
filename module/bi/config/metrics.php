@@ -4550,3 +4550,17 @@ $config->bi->builtin->metrics[] = array
     'desc'       => '按项目统计的每日解决Bug数是指项目每日解决的Bug的数量。该度量项可以帮助我们了解开发团队解决Bug的速度和效率。',
     'definition' => "项目中Bug数求和\n 解决日期为某日\n 过滤已删除的Bug\n 过滤已删除的项目\n"
 );
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按项目统计的每日关闭Bug数',
+    'alias'      => '关闭Bug数',
+    'code'       => 'count_of_daily_closed_bug_in_project',
+    'purpose'    => 'scale',
+    'scope'      => 'project',
+    'object'     => 'bug',
+    'unit'       => 'count',
+    'dateType'   => 'day',
+    'desc'       => '按项目统计的每日关闭Bug数是指每天在项目中每日关闭的Bug的数量。该度量项可以帮助我们了解开发团队对已解决的Bug进行确认与关闭的速度和效率，通过对比不同时间段的关闭Bug数，可以评估开发团队的协作和问题处理能力。',
+    'definition' => "项目中Bug数求和\n 关闭时间为某日\n 过滤已删除的Bug\n 过滤已删除的项目\n"
+);
