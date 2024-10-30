@@ -82,6 +82,7 @@ class project extends control
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
+        $this->view->fileName = zget($this->lang->project->featureBar['index'], $status, '') . '.' . $this->lang->projectCommon;
         $this->display();
     }
 
