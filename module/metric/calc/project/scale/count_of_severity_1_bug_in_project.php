@@ -35,4 +35,15 @@ class count_of_severity_1_bug_in_project extends baseCalc
 
         if($severity == '1') $this->result[$project] += 1;
     }
+
+    public function getResult($options = array())
+    {
+        $records = array();
+        foreach($this->result as $project => $value)
+        {
+            $records[] = array('project' => $project, 'value' => $value);
+        }
+
+        return $this->filterByOptions($records, $options);
+    }
 }
