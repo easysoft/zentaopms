@@ -1106,7 +1106,7 @@ class bugZen extends bug
         $this->view->projectID             = $bug->projectID;
         $this->view->executions            = commonModel::isTutorialMode() ? $this->loadModel('tutorial')->getExecutionPairs() : $bug->executions;
         $this->view->execution             = $bug->execution;
-        $this->view->executionID           = $bug->executionID;
+        $this->view->executionID           = !empty($executionID) ? $executionID : $bug->executionID;
         $this->view->branches              = $bug->branches;
         $this->view->builds                = $bug->builds;
         $this->view->moduleOptionMenu      = $bug->modules;
