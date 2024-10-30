@@ -248,32 +248,11 @@ class dataset
         $stmt = $this->dao->select("$fieldList, $longlife as longlife")
             ->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
-            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project=t3.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t3.deleted')->eq(0)
             ->andWhere('t2.shadow')->eq(0);
 
         return $this->defaultWhere($stmt, 't2');
-    }
-
-    /**
-     * 获取项目bug数据。
-     * Get project bug list.
-     *
-     * @param  string       $fieldList
-     * @access public
-     * @return PDOStatement
-     */
-    public function getProjectBugs($fieldList)
-    {
-        $longlife = $this->dao->select('value')
-            ->from(TABLE_CONFIG)
-            ->where('module')->eq('bug')
-            ->andWhere('key')->eq('longlife')
-            ->fetch('value');
-
-        if(!$longlife) $longlife = 7;
     }
 
     /**
