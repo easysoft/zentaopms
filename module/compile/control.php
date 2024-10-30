@@ -102,7 +102,7 @@ class compile extends control
         $build = $this->compile->getByID($buildID);
         $job   = $this->loadModel('job')->getByID($build->job);
 
-        if(empty($build->logs) and !in_array($build->status, array('created', 'pending'))) $build->logs = $this->compile->getLogs($job, $build);
+        if(!in_array($build->status, array('created', 'pending'))) $build->logs = $this->compile->getLogs($job, $build);
         $logs = $build->logs ? str_replace(array("\r\n", "\n"), "<br />", $build->logs) : '';
 
         $this->view->logs  = $logs;
