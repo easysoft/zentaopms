@@ -227,7 +227,6 @@ class router extends baseRouter
             foreach($flows as $flow)
             {
                 if($flow->navigator == 'primary') $this->lang->mainNav->{$flow->module} = "{$this->lang->navIcons['workflow']} {$flow->name}|{$flow->module}|browse|";
-                if($flow->belong) $this->config->hasDropmenuApps[] = $flow->app; // 带有1.5级导航的应用
             }
         }
         catch(PDOException){}
