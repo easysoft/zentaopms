@@ -924,6 +924,27 @@ class pivotModel extends model
         return $fieldSql;
     }
 
+    public function filterFieldsWithSettings(array $fields, array $groups, array $columns)
+    {
+        $filteredFields = array();
+        $settingFields  = $groups;
+
+        foreach($columns as $column)
+        {
+            $slice = zget($column, 'slice', 'noSlice');
+            $settingFields[] = $column['field'];
+            if($slice != 'noSlice') $settingFields[] = $slice;
+        }
+
+        $settingFields = array_unique($settingFields);
+        foreach($settingFields as $field)
+        {
+            if(!isset($filteredFields[$field]) && isset($fields[$field])) $filteredFields[$field] = $fields[$field];
+        }
+
+        return $filteredFields;
+    }
+
     /**
      * Filter fields with settings.
      *
