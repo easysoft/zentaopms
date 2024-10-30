@@ -258,6 +258,25 @@ class dataset
     }
 
     /**
+     * 获取项目bug数据。
+     * Get project bug list.
+     *
+     * @param  string       $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getProjectBugs($fieldList)
+    {
+        $longlife = $this->dao->select('value')
+            ->from(TABLE_CONFIG)
+            ->where('module')->eq('bug')
+            ->andWhere('key')->eq('longlife')
+            ->fetch('value');
+
+        if(!$longlife) $longlife = 7;
+    }
+
+    /**
      * 获取执行bug数据。
      * Get execution product bug list.
      *
