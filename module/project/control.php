@@ -646,7 +646,7 @@ class project extends control
         $this->executeHooks($projectID);
         list($userPairs, $userList) = $this->projectZen->buildUsers();
 
-        if($this->config->edition != 'open') $this->view->workflowGroups = $this->loadModel('workflowgroup')->getPairs('project', $project->model, $project->hasProduct);
+        if($this->config->edition != 'open') $this->view->workflowGroups = $this->loadModel('workflowgroup')->getPairs('project', $project->model, $project->hasProduct, 'all');
 
         $this->view->title        = $this->lang->project->view;
         $this->view->projectID    = $projectID;

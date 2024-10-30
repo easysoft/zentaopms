@@ -277,7 +277,7 @@ row
                 (
                     setClass('flex mt-4 program'),
                     $programDom ? div(setClass('clip programBox w-1/2'), $programDom) : null,
-                    $config->edition != 'open' && $project->workflowGroup && isset($workflowGroups[$project->workflowGroup]) ? div
+                    $config->edition != 'open' && $project->workflowGroup ? div
                     (
                         setClass('clip w-1/2'),
                         set::title($lang->project->workflowGroup),
