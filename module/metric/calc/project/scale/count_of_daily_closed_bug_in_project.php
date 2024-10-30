@@ -26,6 +26,22 @@ class count_of_daily_closed_bug_in_project extends baseCalc
 
     public $result = array();
 
+    public function calculate($row)
+    {
+        if($row->status != 'closed' || empty($row->closedDate)) return false;
+
+        $date = substr($row->closedDate, 0, 10);
+        list($year, $month, $day) = explode('-', $date);
+        if($year == '0000') return false;
+
+        if(!isset($this->result[$row->project]))                      $this->result[$row->project] = array();
+        if(!isset($this->result[$row->project][$year]))               $this->result[$row->project][$year] = array();
+        if(!isset($this->result[$row->project][$year][$month]))       $this->result[$row->project][$year][$month] = array();
+        if(!isset($this->result[$row->project][$year][$month][$day])) $this->result[$row->project][$year][$month][$day] = 0;
+
+        $this->result[$row->project][$year][$month][$day] ++;
+    }
+
     public function getResult($options = array())
     {
         $records = $this->getRecords(array('project', 'year', 'month', 'day'));
