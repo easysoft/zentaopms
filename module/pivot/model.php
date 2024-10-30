@@ -881,8 +881,8 @@ class pivotModel extends model
         };
 
         $this->app->loadConfig('dataview');
+        $fieldOptions = $this->getFieldsOptions($fields, $records, $driver);
         $records      = json_decode(json_encode($records), true);
-        $fieldOptions = $this->getFieldsOptions($fields, $sql, $driver);
         foreach($records as $index => $record)
         {
             foreach($record as $field => $value)
@@ -1663,6 +1663,7 @@ class pivotModel extends model
                 {
                     list($number, $total,, $monopolize) = $cell['percentage'];
                     if($monopolize) $colKey .= '_percentage';
+                    if(!$total) $total = 100;
                     $row[$colKey] = round($number / $total * 100, 2) . '%';
                 }
             }
@@ -1884,8 +1885,10 @@ class pivotModel extends model
         $sql = $this->trimSemicolon($sql);
         $sql = $this->appendWhereFilterToSql($sql, $filters, $driver);
 
-        $dbh  = $this->app->loadDriver($driver);
-        $rows = $dbh->query($sql)->fetchAll();
+        $dbh          = $this->app->loadDriver($driver);
+        $rows         = $dbh->query($sql)->fetchAll();
+        $fieldOptions = $this->getFieldsOptions($fields, $rows);
+
         $rows = json_decode(json_encode($rows), true);
 
         $cols   = array();
@@ -1908,7 +1911,6 @@ class pivotModel extends model
             $cols[0][] = $col;
         }
 
-        $fieldOptions    = $this->getFieldsOptions($fields, $sql);
         $dataDrills      = array();
         $rowsAfterFields = array();
         foreach($rows as $key => $row)
@@ -2199,15 +2201,7 @@ class pivotModel extends model
                 $options = $this->bi->getDataviewOptions($object, $field);
                 break;
             case 'object':
-                if(is_array($source))
-                {
-                    $options = array();
-                    foreach($source as $row) $options[$row->id] = $row->$field;
-                }
-                else
-                {
-                    $options = $this->bi->getObjectOptions($object, $field);
-                }
+                $options = $this->bi->getObjectOptions($object, $field);
                 break;
             case 'string':
             case 'number':
@@ -2359,12 +2353,9 @@ class pivotModel extends model
      * @return array
      *
      */
-    public function getFieldsOptions(array $fieldSettings, string $sql, string $driver = 'mysql'): array
+    public function getFieldsOptions(array $fieldSettings, array $records, string $driver = 'mysql'): array
     {
         $options = array();
-
-        $dbh        = $this->app->loadDriver($driver);
-        $sqlRecords = $dbh->query($sql)->fetchAll();
 
         foreach($fieldSettings as $key => $fieldSetting)
         {
@@ -2372,10 +2363,7 @@ class pivotModel extends model
             $object = $fieldSetting['object'];
             $field  = $fieldSetting['field'];
 
-            $source = $sql;
-            if(in_array($type, array('string', 'number', 'date'))) $source = $sqlRecords;
-
-            $options[$key] = $this->getSysOptions($type, $object, $field, $source, '', $driver);
+            $options[$key] = $this->getSysOptions($type, $object, $field, $records, '', $driver);
         }
 
         return $options;
