@@ -182,6 +182,20 @@ $config->bug->dtable->fieldList['activatedCount']['type']     = 'count';
 $config->bug->dtable->fieldList['activatedCount']['group']    = 8;
 $config->bug->dtable->fieldList['activatedCount']['sortType'] = true;
 
+if($config->edition != 'open')
+{
+    $config->bug->dtable->fieldList['relatedObject']['name']        = 'relatedObject';
+    $config->bug->dtable->fieldList['relatedObject']['title']       = $lang->custom->relateObject;
+    $config->bug->dtable->fieldList['relatedObject']['sortType']    = false;
+    $config->bug->dtable->fieldList['relatedObject']['width']       = '70';
+    $config->bug->dtable->fieldList['relatedObject']['type']        = 'text';
+    $config->bug->dtable->fieldList['relatedObject']['link']        = common::hasPriv('custom', 'showRelationGraph') ? "RAWJS<function(info){ if(info.row.data.relatedObject == 0) return 0; else return '" . helper::createLink('custom', 'showRelationGraph', 'objectID={id}&objectType=bug') . "'; }>RAWJS" : null;
+    $config->bug->dtable->fieldList['relatedObject']['data-toggle'] = 'modal';
+    $config->bug->dtable->fieldList['relatedObject']['data-size']   = 'lg';
+    $config->bug->dtable->fieldList['relatedObject']['show']        = 8;
+    $config->bug->dtable->fieldList['relatedObject']['group']       = 5;
+}
+
 $config->bug->dtable->fieldList['activatedDate']['title']    = $lang->bug->activatedDate;
 $config->bug->dtable->fieldList['activatedDate']['type']     = 'date';
 $config->bug->dtable->fieldList['activatedDate']['group']    = 8;

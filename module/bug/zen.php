@@ -780,6 +780,8 @@ class bugZen extends bug
                 $bug->injection = zget($identifyList, $bug->injection, '');
                 $bug->identify  = zget($identifyList, $bug->identify, '');
             }
+
+            if($this->config->edition != 'open') $bug->relatedObject = $this->loadModel('custom')->getRelatedObjectList($bug->id, 'bug', true);
         }
 
         $showModule = !empty($this->config->bug->browse->showModule) ? $this->config->bug->browse->showModule : '';
