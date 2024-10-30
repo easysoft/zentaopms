@@ -296,8 +296,8 @@ $config->block->modules['common']->moreLinkList->dynamic = 'my|dynamic|';
 
 $config->block->modules['doc'] = new stdclass();
 $config->block->modules['doc']->moreLinkList = new stdclass();
-// $config->block->modules['doc']->moreLinkList->docmycollection = 'doc|myspace|type=collect&libID=0&moduleID=0&browseType=all&param=0&orderBy=editedDate_desc';
-// $config->block->modules['doc']->moreLinkList->docmycreated    = 'doc|myspace|type=createdby&libID=0&moduleID=0&browseType=all&param=0&orderBy=addedDate_desc';
+$config->block->modules['doc']->moreLinkList->docmycollection = 'doc|quick|type=collect';
+$config->block->modules['doc']->moreLinkList->docmycreated    = 'doc|quick|type=createdby';
 $config->block->modules['doc']->moreLinkList->productdoc      = 'doc|productspace|';
 $config->block->modules['doc']->moreLinkList->projectdoc      = 'doc|projectspace|';
 
