@@ -203,7 +203,9 @@ class pivotModel extends model
         $settings = $pivot->settings;
         if(!is_array($settings) || !isset($settings['columns'])) return;
         $columns  = $settings['columns'];
-        foreach($columns as $index => $column) $pivot->settings['columns'][$index]['drill'] = $this->pivotTao->fetchPivotDrill($pivot->id, $column['field']);
+        $drillFields = array_column($columns, 'field');
+        $drills = $this->pivotTao->fetchPivotDrills($pivot->id, $drillFields);
+        foreach($columns as $index => $column) $pivot->settings['columns'][$index]['drill'] = zget($drills, $column['field']);
     }
 
     /**
