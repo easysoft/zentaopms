@@ -33,4 +33,16 @@ class rate_of_fixed_bug_in_project extends baseCalc
         if($row->resolution == 'fixed' and $row->status == 'closed') $this->result[$row->project]['fixed'] ++;
         if($row->resolution == 'fixed' or $row->resolution == 'postponed' or $row->status == 'active') $this->result[$row->project]['valid'] ++;
     }
+
+    public function getResult($options = array())
+    {
+        foreach($this->result as $projectID => $bugInfo)
+        {
+            $records[] = array(
+                'project' => $projectID,
+                'value'   => $bugInfo['valid'] ? round($bugInfo['fixed'] / $bugInfo['valid'], 4) : 0,
+            );
+        }
+        return $this->filterByOptions($records, $options);
+    }
 }
