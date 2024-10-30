@@ -89,7 +89,7 @@ class thinkAnsoff extends thinkModel
     protected function build(): node
     {
         $mode  = $this->prop('mode');
-        $style = $mode == 'preview' ? setStyle(array('min-height' => '254px')) : setStyle(array('min-height' => '254px', 'min-width' => '2400px'));
+        $style = $mode == 'preview' ? setStyle(array('min-height' => '254px')) : setStyle(array('min-height' => '254px', 'min-width' => '2200px'));
 
         return div
         (
