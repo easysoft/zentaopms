@@ -717,8 +717,11 @@ class cneModel extends model
         $result = $this->apiGet($apiUrl, $apiParams, $this->config->CNE->api->headers);
         if($result && $result->code != 200) return false;
 
-        $result->data->min = $result->data->oversold;
-        $result->data->max = $result->data->resources;
+        $resources = new stdclass();
+        $resources->cpu    = 0;
+        $resources->memory = 0;
+        $result->data->min = zget($result->data, 'oversold', $resources);
+        $result->data->max = zget($result->data, 'resources', $resources);
         return $result->data;
     }
 
