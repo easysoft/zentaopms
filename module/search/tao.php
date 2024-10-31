@@ -36,7 +36,8 @@ class searchTao extends searchModel
 
         if(!$buildin) return $searchConfig;
 
-        $fields   = $this->loadModel('workflowfield')->getList($flowModule, 'searchOrder, `order`, id');
+        $groupID  = $this->loadModel('workflowgroup')->getGroupIDBySession();
+        $fields   = $this->loadModel('workflowfield')->getList($flowModule, 'searchOrder, `order`, id', $groupID);
         $maxCount = $this->config->maxCount;
         $this->config->maxCount = 0;
 
