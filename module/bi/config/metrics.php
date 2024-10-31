@@ -4606,3 +4606,17 @@ $config->bi->builtin->metrics[] = array
     'desc'       => '按项目统计的严重程度为2级的Bug数是指在项目开发过程中发现的、对项目功能或性能产生重大影响的Bug数量。这些Bug可能会导致系统崩溃、功能无法正常运行、数据丢失等严重问题。统计这些Bug的数量可以帮助评估项目的稳定性和可靠性。',
     'definition' => "项目中Bug的个数求和\n 严重程度为2级\n 过滤已删除的Bug\n 过滤已删除的项目\n"
 );
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按项目统计的严重程度为1、2级的Bug数',
+    'alias'      => '严重程度为1、2级的Bug数',
+    'code'       => 'count_of_severe_bug_in_project',
+    'purpose'    => 'scale',
+    'scope'      => 'project',
+    'object'     => 'bug',
+    'unit'       => 'count',
+    'dateType'   => 'nodate',
+    'desc'       => '按项目统计的严重程度为1、2级的Bug数是指在项目开发过程中发现的严重程度为1级和2级的Bug数量的总和。统计这些Bug的数量可以评估项目开发过程的质量和稳定性，同时也关注影响用户体验和功能完整性的问题',
+    'definition' => "复用： 按项目统计的严重程度为1级的Bug数、按项目统计的严重程度为2级的Bug数。公式： 按项目统计的严重程度为1、2级的Bug数=按项目统计的严重程度为1级的Bug数+按项目统计的严重程度为2级的Bug数\n"
+);
