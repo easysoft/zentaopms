@@ -69,5 +69,5 @@ $action->gen(0);
 $tester = new processStoryChangeTester();
 $tester->login();
 
-r($tester->processStoryChange('变更父需求')) && p('message,status') && e('确认需求变更成功,SUCCESS');
+r($tester->processStoryChange('变更父需求')) && p('message,status') && e('确认父需求变更成功,SUCCESS');
 $tester->closeBrowser();
