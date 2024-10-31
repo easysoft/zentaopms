@@ -34,7 +34,7 @@ jsVar('executions',       $executions);
 jsVar('disableExecution', $lang->project->disableExecution);
 
 $isInModal    = isInModal();
-$canCreateBug = hasPriv('bug', 'create');
+$canCreateBug = $this->app->tab != 'devops' && hasPriv('bug', 'create');
 $canViewRepo  = hasPriv('repo', 'revision');
 $canViewMR    = hasPriv('mr', 'view');
 $canViewBug   = hasPriv('bug', 'view');
