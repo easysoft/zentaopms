@@ -115,7 +115,8 @@ class design extends control
         $designs = $this->design->getList($projectID, $productID, $type, $queryID, $orderBy, $pager);
         if($this->config->edition != 'open')
         {
-            foreach($designs as $design) $design->relatedObject = $this->loadModel('custom')->getRelatedObjectList($design->id, 'design', true);
+            $this->loadModel('custom');
+            foreach($designs as $design) $design->relatedObject = $this->custom->getRelatedObjectList($design->id, 'design', 'byRelation', true);
         }
 
         $this->view->title     = $this->lang->design->common . $this->lang->hyphen . $this->lang->design->browse;

@@ -519,7 +519,8 @@ class testcaseZen extends testcase
 
         if($this->config->edition != 'open')
         {
-            foreach($cases as $caseID => $case) $case->relatedObject = $this->loadModel('custom')->getRelatedObjectList($caseID, 'testcase', true);
+            $this->loadModel('custom');
+            foreach($cases as $caseID => $case) $case->relatedObject = $this->custom->getRelatedObjectList($caseID, 'testcase', 'byRelation', true);
         }
 
         $this->view->cases   = array_merge($scenes, $cases);
