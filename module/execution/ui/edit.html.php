@@ -17,7 +17,7 @@ jsVar('executionAttr', $execution->attribute);
 jsVar('window.lastProjectID', $execution->project);
 jsVar('weekend', $config->execution->weekend);
 
-$confirmTip   = !empty($unclosedTasks) ? sprintf($this->lang->execution->confirmCloseExecution, implode($this->lang->comma, $unclosedTasks)) : '';
+$confirmTip   = !empty($unclosedTasks) ? sprintf($this->lang->execution->confirmCloseExecution, implode($this->lang->comma, array_keys($unclosedTasks))) : '';
 $beforeSubmit = jsRaw("() =>
 {
     if($('[name=status]').val() != 'closed') return true;
