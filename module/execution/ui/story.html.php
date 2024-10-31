@@ -132,7 +132,7 @@ if(in_array($execution->attribute, array('mix', 'request', 'design')) || !$execu
     if($canOpreate['batchCreateEpic'])        $batchItems[]  = array('text' => $lang->ERCommon, 'url' => $batchCreateEpicLink);
 }
 
-if($productID > 0)
+if(!empty($product->id))
 {
     if(count($batchItems) > 1)
     {
