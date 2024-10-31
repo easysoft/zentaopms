@@ -32,6 +32,6 @@ $config->user->defaultFields['todo']      = array('id', 'name', 'pri', 'date', '
 $config->user->defaultFields['task']      = array('id', 'name', 'pri', 'status', 'execution', 'deadline', 'estimate', 'consumed', 'left');
 $config->user->defaultFields['story']     = array('id', 'title', 'pri', 'status', 'product', 'plan', 'openedBy', 'estimate', 'stage');
 $config->user->defaultFields['bug']       = array('id', 'title', 'severity', 'pri', 'type', 'openedBy', 'resolvedBy', 'resolution');
-$config->user->defaultFields['testtask']  = array('id', 'title', 'pri', 'execution', 'build', 'begin', 'end', 'status');
+$config->user->defaultFields['testtask']  = array('id', 'name', 'pri', 'executionName', 'buildName', 'begin', 'end', 'status');
 $config->user->defaultFields['testcase']  = array('id', 'title', 'pri', 'type', 'status', 'openedBy', 'lastRunner', 'lastRunDate', 'lastRunResult');
 $config->user->defaultFields['execution'] = array('id', 'name', 'status', 'role', 'begin', 'end', 'join', 'hours');
