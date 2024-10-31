@@ -10,7 +10,11 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
         const getNonClosableLink = $.createLink('execution', 'ajaxGetNonClosableExecutions', 'executionID=' + checkedList.join(','));
         $.getJSON(getNonClosableLink, function(exeuctions)
         {
-            if(!exeuctions) return;
+            if(!exeuctions || exeuctions.length == 0)
+            {
+                postBatchBtn($target, checkedList);
+                return;
+            }
 
             const confirmCloseTip = confirmBatchCloseExecution.replace('%s', exeuctions.join(', '));
             zui.Modal.confirm(confirmCloseTip).then((res) =>
