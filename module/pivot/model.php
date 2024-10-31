@@ -900,12 +900,6 @@ class pivotModel extends model
      */
     public function mapRecordValueWithFieldOptions(array $records, array $fields, string $driver): array
     {
-        $removeQuote = function($value)
-        {
-            if(is_string($value)) return str_replace('"', '', htmlspecialchars_decode($value));
-            return $value;
-        };
-
         $this->app->loadConfig('dataview');
         $fieldOptions = $this->getFieldsOptions($fields, $records, $driver);
         $records      = json_decode(json_encode($records), true);
@@ -913,7 +907,9 @@ class pivotModel extends model
         {
             foreach($record as $field => $value)
             {
-                $value = $removeQuote($value);
+                if(!isset($fields[$field])) continue;
+
+                $value = is_string($value) ? str_replace('"', '', htmlspecialchars_decode($value)) : $value;
                 $record["{$field}_origin"] = $value;
                 $tableField = !isset($fields[$field]) ? '' : $fields[$field]['object'] . '-' . $fields[$field]['field'];
                 $withComma  = in_array($tableField, $this->config->dataview->multipleMappingFields);
@@ -1503,16 +1499,19 @@ class pivotModel extends model
      *
      * @param  array $records
      * @param  string $field
-     * @param  string $value
      * @access public
      * @return array
      */
-    public function filterRecords(array $records, string $field, string $value): array
+    public function getSliceRecords(array $records, string $field): array
     {
-        return array_filter($records, function($record) use ($field, $value)
+        $sliceRecords = array();
+        foreach($records as $record)
         {
-            return $record->$field === $value;
-        });
+            if(!isset($sliceRecords[$record->$field])) $sliceRecords[$record->$field] = array();
+            $sliceRecords[$record->$field][] = $record;
+        }
+
+        return $sliceRecords;
     }
 
     /**
@@ -1554,13 +1553,13 @@ class pivotModel extends model
         /* Handle the slice column situation. */
         $uniqueSlices = zget($setting, 'uniqueSlices', array());
         $cell         = array();
+        $sliceRecords = $this->getSliceRecords($records, $slice);
         foreach($uniqueSlices as $sliceRecord)
         {
             $sliceValue   = $sliceRecord->$slice;
             $sliceKey     = "{$slice}_{$sliceValue}";
-            $sliceRecords = $this->filterRecords($records, $slice, $sliceValue);
 
-            $value = $this->columnStatistics($sliceRecords, $stat, $field);
+            $value = $this->columnStatistics(zget($sliceRecords, $sliceValue, array()), $stat, $field);
 
             $sliceCell = array('value' => $value, 'drillFields' => array($slice => $sliceRecord->{$slice . '_origin'}), 'isGroup' => false);
             if($showMode != 'default') $sliceCell['percentage'] = array($value, 1, $showMode, $monopolize, $columnKey);
