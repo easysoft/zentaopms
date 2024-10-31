@@ -837,7 +837,7 @@ class storyZen extends story
         $fields['reviewedDate']['default'] = helper::now();
         $fields['assignedTo']['default']   = $story->assignedTo;
         $fields['pri']['default']          = $story->pri;
-        $fields['estimate']['default']     = $story->estimate;
+        $fields['estimate']['default']     = $story->estimate ? $story->estimate : 0;
         $fields['status']['default']       = $story->status;
 
         $fields['closedReason']['required']   = true;
