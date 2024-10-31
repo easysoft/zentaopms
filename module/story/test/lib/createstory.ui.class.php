@@ -45,7 +45,7 @@ class createStoryTester extends tester
         $form = $this->initForm($storyType, 'create', $createStoryParam, 'appIframe-product'); //再进入创建需求页面
         $form->dom->title->setValue($storyName);
         $form->dom->assignedTo->picker('admin');
-        #$form->dom->reviewer->multiPicker(array('admin'));
+        $form->dom->reviewer->multiPicker(array('admin'));
         $form->dom->btn($this->lang->save)->click();
         $form->wait(1);
 
@@ -78,7 +78,7 @@ class createStoryTester extends tester
 
         $viewPage = $this->loadPage('story', 'view');
         if($viewPage->dom->storyName->getText() != $storyName) return $this->failed('需求名称不正确');
-        if($viewPage->dom->status->getText() != '激活') return $this->failed('需求状态不正确');
+        if($viewPage->dom->status->getText() != '评审中') return $this->failed('需求状态不正确');
         $viewPage->dom->btn($this->lang->story->legendLifeTime)->click();
         if(strpos($viewPage->dom->openedBy->getText() , 'admin') === false) return $this->failed('创建人不正确');
 
@@ -115,6 +115,7 @@ class createStoryTester extends tester
         $form = $this->initForm('product', 'browse', $browseStoryParam, 'appIframe-product');
         $form = $this->initForm($storyType, 'batchCreate', $createStoryParam, 'appIframe-product');
         $form->dom->name->setValue($storyName);
+        $form->dom->reviewer->multiPicker(array('admin'));
         if($storyName == '批量创建业务需求')
         {
             $form->dom->epicSave->click();
@@ -127,7 +128,6 @@ class createStoryTester extends tester
         {
             $form->dom->storySave->click();
         }
-        $form->dom->btn($this->lang->save)->click();
         $form->wait(1);
 
         if($this->response('method') != 'browse')
@@ -159,7 +159,7 @@ class createStoryTester extends tester
 
         $viewPage = $this->loadPage('story', 'view');
         if($viewPage->dom->storyName->getText() != $storyName) return $this->failed('需求名称不正确');
-        if($viewPage->dom->status->getText()    != '激活') return $this->failed('需求状态不正确');
+        if($viewPage->dom->status->getText()    != '评审中') return $this->failed('需求状态不正确');
         $viewPage->dom->btn($this->lang->story->legendLifeTime)->click();
         if(strpos($viewPage->dom->openedBy->getText() , 'admin') === false) return $this->failed('创建人不正确');
 
