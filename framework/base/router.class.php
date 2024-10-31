@@ -307,6 +307,15 @@ class baseRouter
     public $lang;
 
     /**
+     * 全局缓存对象，用于操作缓存。
+     * The global cache object, used to operate cache.
+     *
+     * @var object
+     * @access public
+     */
+    public $cache = null;
+
+    /**
      * 全局$dbh对象，数据库连接句柄。
      * The global $dbh object, the database connection handler.
      *
@@ -494,12 +503,7 @@ class baseRouter
         $this->setTimezone();
 
         if($this->config->framework->autoConnectDB) $this->connectDB();
-
-        if($this->config->redis->enable)
-        {
-            $this->loadClass('zredis', true);
-            $this->redis = new zredis($this);
-        }
+        if($this->config->cache->enable) $this->loadCache();
 
         $this->setupProfiling();
         $this->setupXhprof();
@@ -3078,6 +3082,23 @@ class baseRouter
 
         $this->loadClass('mao', true);
         $this->mao = new mao($this);
+    }
+
+    /**
+     * 加载缓存类，初始化全局缓存对象。
+     * Load the cache class and init the global cache object.
+     *
+     * @access public
+     * @return void
+     */
+    private function loadCache()
+    {
+        $this->loadClass('cache', true);
+        $this->cache = new cache($this);
+
+        /* 为 dao 和 mao 设置访问缓存的对象。 Set the cache object for dao and mao. */
+        $this->dao->cache = $this->cache;
+        $this->mao->cache = $this->cache;
     }
 
     /**
