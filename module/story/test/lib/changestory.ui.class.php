@@ -23,6 +23,7 @@ class changeStoryTester extends tester
     {
         $form = $this->initForm('story', 'change', array('id' => 1), 'appIframe-product');
         $form->dom->title->setValue($storyName);
+        $form->dom->reviewer->multiPicker(array('admin'));
         $form->dom->btn($this->lang->save)->click();
         $form->wait(1);
 
