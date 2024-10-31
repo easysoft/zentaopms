@@ -48,7 +48,7 @@ else
             ),
             h::td
             (
-                setClass('px-1 py-0'),
+                setClass('px-1 py-0 w-full'),
                 html_entity_decode(str_replace(' ', '&nbsp;', $line))
             )
         );
@@ -56,7 +56,7 @@ else
 
     h::table
     (
-        setClass('border w-full'),
+        setClass('border'),
         $rows
     );
 }
