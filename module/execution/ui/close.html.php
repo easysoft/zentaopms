@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$confirmTip   = !empty($unclosedTasks) ? sprintf($this->lang->execution->confirmCloseExecution, implode($this->lang->comma, $unclosedTasks)) : '';
+$confirmTip   = !empty($unclosedTasks) ? sprintf($this->lang->execution->confirmCloseExecution, implode($this->lang->comma, array_keys($unclosedTasks))) : '';
 $confirmURL   = $this->createLink('execution', 'close', "executionID={$executionID}&from={$from}");
 $beforeSubmit = jsRaw("() =>
 {
