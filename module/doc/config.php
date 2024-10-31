@@ -118,6 +118,6 @@ $config->doc->showfiles->actionList['download']['target'] = '_blank';
 
 $config->doc->quickMenu = array();
 $config->doc->quickMenu['view']      = array('id' => 1, 'name' => $lang->doc->myView);
-$config->doc->quickMenu['collect']   = array('id' => 2, 'name' => $lang->doc->myCollection);
-$config->doc->quickMenu['createdby'] = array('id' => 3, 'name' => $lang->doc->myCreation);
+$config->doc->quickMenu['createdby'] = array('id' => 2, 'name' => $lang->doc->myCreation);
+$config->doc->quickMenu['collect']   = array('id' => 3, 'name' => $lang->doc->myCollection);
 $config->doc->quickMenu['editedby']  = array('id' => 4, 'name' => $lang->doc->myEdited);
