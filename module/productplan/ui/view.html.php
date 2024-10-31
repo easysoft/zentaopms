@@ -356,7 +356,7 @@ detailBody
                 ),
                 html($this->printExtendFields($plan, 'html', 'position=all', false)),
                 h::hr(setClass('mt-4')),
-                history(set::objectID($plan->id), set::commentBtn(false))
+                history(set::objectID($plan->id), set::commentBtn(false), set::objectType('productplan'))
             )
         )
     )
