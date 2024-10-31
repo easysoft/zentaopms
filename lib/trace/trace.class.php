@@ -85,6 +85,9 @@ class trace
         /* 达梦数据库不支持下面的语法，直接跳过。The  */
         if($config->db->driver === 'dm') return;
 
+        ini_set('serialize_precision', 14);
+        ini_set('precision', 14);
+
         $profiling = $this->dao->dbh->query('SHOW PROFILES')->fetchAll(PDO::FETCH_ASSOC);
 
         $this->trace['profiles'] = $profiling;
