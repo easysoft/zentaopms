@@ -38,4 +38,23 @@ class bugTester extends tester
         if($form->dom->bugNum->getText() == $expectNum) return $this->success('切换' . $product . '查看数据成功');
         return $this->failed('切换' . $product . '查看数据失败');
     }
+
+    /**
+     * 单个指派bug。
+     * Assign bug.
+     *
+     * @param  string $user
+     * @access public
+     * @return object
+     */
+    public function assignBug($user)
+    {
+        $form = $this->initForm('project', 'bug', array('project' => 1), 'appIframe-project');
+        $form->dom->firstAssign->click();
+        $form->dom->assignTo->picker($user);
+        $form->dom->submitBtn->click();
+        $form->wait(1);
+        if($form->dom->firstAssign->getText() == $user) return $this->success('单个指派Bug成功');
+        return $this->failed('单个指派Bug失败');
+    }
 }
