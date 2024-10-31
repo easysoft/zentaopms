@@ -37,13 +37,14 @@ class flowSubTable extends wg
             $field = (object)$field;
             if(!$field->show) continue;
 
-            $items[] = [
+            $required = ($notEmptyRule && (strpos(",{$field->layoutRules},", ",{$notEmptyRule->id},") !== false) || strpos(",{$field->rules},", ",{$notEmptyRule->id},") !== false) || !empty($field->required);
+            $items[]  = [
                 'name'         => "children[sub_{$module}][{$field->field}]",    // 子表的字段可以重名，所以需要加上 module
                 'label'        => $field->name,
                 'control'      => $common->flow->buildFormControl($field, 'batch'),
                 'items'        => array_filter($field->options),
                 'width'        => $field->width == 'auto' ? '160px' : $field->width,
-                'required'     => $notEmptyRule && strpos(",{$field->layoutRules},", ",{$notEmptyRule->id},") !== false,
+                'required'     => $required,
                 'ditto'        => in_array($field->control, $dittoControl),
                 'defaultDitto' => $dataList ? 'off' : 'on'
             ];
