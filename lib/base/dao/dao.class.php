@@ -215,20 +215,8 @@ class baseDAO
         $this->config    = $config;
         $this->lang      = $lang;
         $this->dbh       = $dbh;
+        $this->cache     = $app->cache;
         $this->slaveDBH  = $slaveDBH ? $slaveDBH : false;
-
-        if($config->cache->dao->enable)
-        {
-            $this->app->loadClass('cache', true);
-            try
-            {
-                $this->cache = new cache($config->cache->dao->driver, $config->db->name . '-dao-', $config->cache->dao->lifetime);
-            }
-            catch (Exception $e)
-            {
-                die($e->getMessage());
-            }
-        }
 
         $this->reset();
     }
@@ -344,7 +332,7 @@ class baseDAO
     {
         if(!$this->app->isServing() || empty($this->cache)) return self::CACHE_MISS;
 
-        $cache = $this->cache->get($key);
+        $cache = $this->cache->getByKey($key);
         if($cache === null) return self::CACHE_MISS;
 
         /* 解析缓存的更新时间和值到变量中。 */
@@ -362,7 +350,7 @@ class baseDAO
         {
             if(strpos($table, 'boardlayer') !== false) return self::CACHE_MISS;
 
-            $tableCache = $this->cache->get($table);
+            $tableCache = $this->cache->getByKey($table);
             if($tableCache === null) continue;
 
             if($tableCache[0] > $cachedTime) return self::CACHE_MISS;
@@ -390,7 +378,7 @@ class baseDAO
 
         $this->app->useClientCache = false;
 
-        $this->cache->set($key, array(microtime(true), $value));
+        $this->cache->saveByKey($key, array(microtime(true), $value));
     }
 
     /**
@@ -1054,14 +1042,14 @@ class baseDAO
             /* Force to query from master db, if db has been changed. */
             $this->slaveDBH = false;
 
-            $this->app->redis->prepare($table, $method, $sql);
+            $this->cache->prepare($table, $method, $sql);
 
             $result = $this->dbh->exec($sql);
 
             /* See: https://www.php.net/manual/en/pdo.lastinsertid.php .*/
             if($method == 'insert') $this->_lastInsertID = $this->dbh->lastInsertID();
 
-            $result ? $this->app->redis->sync() : $this->app->redis->reset();
+            $result ? $this->cache->sync() : $this->cache->reset();
 
             $this->setTableCache($sql);
 
@@ -1099,7 +1087,7 @@ class baseDAO
     public function fetch($field = '')
     {
         $sql = $this->processSQL();
-        $key = 'fetch-' . md5($sql);
+        $key = 'dao:fetch:' . md5($sql);
 
         $result = $this->getCache($key, $sql);
         if($result === self::CACHE_MISS)
@@ -1125,7 +1113,7 @@ class baseDAO
     public function fetchAll($keyField = '')
     {
         $sql = $this->processSQL();
-        $key = 'fetchAll-' . md5($sql);
+        $key = 'dao:fetchAll:' . md5($sql);
 
         $rows = $this->getCache($key, $sql);
         if($rows === self::CACHE_MISS)
@@ -1154,7 +1142,7 @@ class baseDAO
     {
         $sql   = $this->processSQL();
         $table = $this->table;
-        $key   = 'fetchGroup-' . md5($sql);
+        $key   = 'dao:fetchAll:' . md5($sql);
 
         $rows = $this->getCache($key, $sql);
         if($rows === self::CACHE_MISS)
@@ -1186,7 +1174,7 @@ class baseDAO
     public function fetchPairs($keyField = '', $valueField = '')
     {
         $sql = $this->processSQL();
-        $key = 'fetchPairs-' . md5($sql);
+        $key = 'dao:fetchAll:' . md5($sql);
 
         $rows = $this->getCache($key, $sql);
         if($rows === self::CACHE_MISS)

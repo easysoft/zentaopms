@@ -38,15 +38,6 @@ class baseMao
     public $config;
 
     /**
-     * 缓存类型。
-     * The cache driver.
-     *
-     * @var bool
-     * @access public
-     */
-    public $driver = 'redis';
-
-    /**
      * 正在使用的表。
      * The table of current query.
      *
@@ -119,33 +110,6 @@ class baseMao
     public $dataColumn;
 
     /**
-     * The labels to get or set。
-     * The labels to get or set.
-     *
-     * @var array
-     * @access public
-     */
-    public $labels;
-
-    /**
-     * 当前设置的label。
-     * Current label.
-     *
-     * @var string
-     * @access public
-     */
-    public $currentLabel;
-
-    /**
-     * 当前设置的 key。
-     * Current key.
-     *
-     * @var string
-     * @access private
-     */
-    private $currentKey;
-
-    /**
      * 构造方法。
      * The construct method.
      *
@@ -158,6 +122,7 @@ class baseMao
         global $config;
         $this->app    = $app;
         $this->config = $config;
+        $this->cache  = $app->cache;
 
         $this->reset();
     }
@@ -531,7 +496,7 @@ class baseMao
         {
             if(!in_array($row->$key, $cacheKeys)) $cacheKeys[] = $row->$key;
         }
-        $objects = $this->app->redis->fetchAll($tableName, $cacheKeys);
+        $objects = $this->cache->fetchAll($tableName, $cacheKeys);
         foreach($this->data as $row)
         {
             $object = $objects[$row->$key];
@@ -597,7 +562,7 @@ class baseMao
      */
     public function fetch(string $field = '')
     {
-        $rawResult = $this->app->redis->fetchAll($this->table);
+        $rawResult = $this->cache->fetchAll($this->table);
         if(empty($rawResult)) return '';
 
         foreach($rawResult as $row)
@@ -621,7 +586,7 @@ class baseMao
      */
     public function fetchAll(string $keyField = '')
     {
-        $rawResult = $this->app->redis->fetchAll($this->table);
+        $rawResult = $this->cache->fetchAll($this->table);
         if(empty($rawResult)) return [];
 
         $result = [];
@@ -683,155 +648,10 @@ class baseMao
         return $pairs;
     }
 
-    /**
-     * 设置label.
-     * Set label.
-     *
-     * @param  string $key
-     * @access public
-     * @return object
-     */
-    public function label(string $label)
+    public function __call(string $method, array $args)
     {
-        $this->currentLabel = $label;
+        if(method_exists($this->cache, $method)) return call_user_func_array([$this->cache, $method], $args);
 
-        return $this;
-    }
-
-    /**
-     * 把数组转换成字符串。
-     * Convert array to string.
-     *
-     * @param  array $args
-     * @access private
-     * @return string
-     */
-    private function recrusiveArgs(array $args): string
-    {
-        $result = [];
-        foreach($args as $key => $arg)
-        {
-            if(is_object($arg)) $arg = (array)$arg;
-            if(is_array($arg))
-            {
-                if(array_values($arg) === $arg)
-                {
-                    sort($arg);
-                }
-                else
-                {
-                    ksort($arg);
-                }
-                $result[] = $key . '=' . $this->recrusiveArgs($arg);
-            }
-            else
-            {
-                $result[] = $key . '=' . $arg;
-            }
-        }
-
-        return implode('&', $result);
-    }
-
-    /**
-     * 创建缓存的key。
-     * Create cache key.
-     *
-     * @param  mixed ...$args
-     * @access public
-     * @return string
-     */
-    public function createKey(...$args)
-    {
-        $args = $this->recrusiveArgs($args);
-        return substr(sha1($args), 0, 7);
-    }
-
-    /**
-     * 通过Key获取值
-     * Get value by key.
-     *
-     * @param  string $key
-     * @param  mixed  ...$arguments
-     * @access public
-     * @return mixed
-     */
-    public function getByKey(string $key, ...$arguments)
-    {
-        if(empty($this->config->cache->keys[$key])) return $this->app->triggerError("The {$key} key is not defined", __FILE__, __LINE__, true);
-
-        $cache = $this->config->cache->keys[$key];
-        if(!empty($cache->fields) && !empty($arguments))
-        {
-            $tableFields = $this->app->dao->descTable($cache->table);
-            foreach($cache->fields as $index => $field)
-            {
-                if(!isset($tableFields[$field])) return $this->app->triggerError("The {$field} field does not exist in table {$cache->table}", __FILE__, __LINE__, true);
-                if(!isset($arguments[$index])) continue;
-
-                $tableField = $tableFields[$field];
-                if(stripos($tableField->type, 'int')     !== false) $arguments[$index] = (int)  $arguments[$index];
-                if(stripos($tableField->type, 'float')   !== false) $arguments[$index] = (float)$arguments[$index];
-                if(stripos($tableField->type, 'decimal') !== false) $arguments[$index] = (float)$arguments[$index];
-                if(stripos($tableField->type, 'double')  !== false) $arguments[$index] = (float)$arguments[$index];
-            }
-        }
-
-        $key = constant($key);
-        $key = str_replace(['cache', '_'], ['res', ':'], strtolower($key));
-        foreach($arguments as $argument) $key .= ':' . $argument;
-
-        $this->currentKey = $key;
-        $this->labels[$this->currentLabel] = $key;
-        $this->lastLabel = '';
-
-        return $this->app->redis->get($key);
-    }
-
-    /**
-     * 给当前 key 设置值。
-     * Set value to current key.
-     *
-     * @param  mixed $value
-     * @access public
-     * @return void
-     */
-    public function save($value)
-    {
-        if(empty($this->currentKey)) return $this->app->triggerError('The current key is empty', __FILE__, __LINE__, true);
-        $this->app->redis->set($this->currentKey, $value);
-    }
-
-    /**
-     * 给指定 key 设置值。
-     * Set cache by key.
-     *
-     * @param  string $key
-     * @param  mixed  $value
-     * @access public
-     * @return void
-     */
-    public function setByKey(string $key, $value)
-    {
-        if(empty($key)) return $this->app->triggerError('The key is empty', __FILE__, __LINE__, true);
-
-        $this->app->redis->set($key, $value);
-    }
-
-    /**
-     * 给指定 label 设置值。
-     * Set cache by label.
-     *
-     * @param  string $label
-     * @param  mixed  $value
-     * @access public
-     * @return void
-     */
-    public function setByLabel(string $label, $value)
-    {
-        if(empty($label)) return $this->app->triggerError('The label is empty', __FILE__, __LINE__, true);
-        if(empty($this->labels[$label])) return $this->app->triggerError("The {$label} label is not set", __FILE__, __LINE__, true);
-
-        $this->app->redis->set($this->labels[$label], $value);
+        $this->app->triggerError("Method $method not found in class baseMao.", __FILE__, __LINE__, true);
     }
 }
