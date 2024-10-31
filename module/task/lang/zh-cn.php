@@ -318,10 +318,10 @@ $lang->task->error->leftEmptyAB       = '任务状态为%s时，预计剩余不�
 $lang->task->error->leftEmpty         = 'Task#%s任务状态为%s时，剩余不能为0';
 $lang->task->error->notempty          = '%s必须大于0。';
 $lang->task->error->teamLeftEmpty     = '请维护团队工时。';
-$lang->task->error->beginLtExecution  = "任务开始日期应大于等于%s的开始日期：%s。";
-$lang->task->error->beginGtExecution  = "任务开始日期应小于等于%s的结束日期：%s。";
-$lang->task->error->endGtExecution    = "任务截止日期应小于等于%s的结束日期：%s。";
-$lang->task->error->endLtExecution    = "任务截止日期应大于等于%s的开始日期：%s。";
+$lang->task->error->beginLtExecution  = "任务预计开始日期应大于等于%s的预计开始日期：%s。";
+$lang->task->error->beginGtExecution  = "任务预计开始日期应小于等于%s的截止日期：%s。";
+$lang->task->error->endGtExecution    = "任务截止日期应小于等于%s的截止日期：%s。";
+$lang->task->error->endLtExecution    = "任务截止日期应大于等于%s的预计开始日期：%s。";
 $lang->task->error->dateExceed        = "任务%s的计划日期超过该{$lang->execution->common}计划日期，将自动改为{$lang->execution->common}的计划日期。";
 $lang->task->error->length            = "长度超过了%d个字符，无法保存，请修改后再试";
 
@@ -416,5 +416,5 @@ $lang->taskestimate->consumed = '工时';
 $lang->task->overEsStartDate = '已超出%s计划开始时间，请先修改%s计划开始时间';
 $lang->task->overEsEndDate   = '已超出%s计划结束时间，请先修改%s计划结束时间';
 
-$lang->task->overParentEsStarted = '任务开始日期小于父任务开始日期：%s';
-$lang->task->overParentDeadline  = '任务结束日期大于父任务结束日期：%s';
+$lang->task->overParentEsStarted = '任务预计开始日期小于父任务预计开始日期：%s';
+$lang->task->overParentDeadline  = '任务截止日期大于父任务截止日期：%s';
