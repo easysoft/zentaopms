@@ -18,3 +18,21 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
+class count_of_severity_2_bug_in_project extends baseCalc
+{
+    public $dataset = 'getProjectBugs';
+
+    public $fieldList = array('t1.severity', 't1.project');
+
+    public $result = array();
+
+    public function calculate($data)
+    {
+        $severity = $data->severity;
+        $project  = $data->project;
+
+        if(!isset($this->result[$project])) $this->result[$project] = 0;
+
+        if($severity == '2') $this->result[$project] += 1;
+    }
+}
