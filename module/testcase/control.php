@@ -576,6 +576,12 @@ class testcase extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->caseList));
         }
 
+        if($this->app->tab == 'project')
+        {
+            $this->loadModel('project')->setMenu($this->session->project);
+            $this->view->projectID = $this->session->project;
+        }
+
         $this->testcaseZen->assignForBatchEdit($productID, $branch, $type, $cases);
         if($type == 'lib') $this->testcaseZen->assignLibForBatchEdit($productID);
 
