@@ -1232,6 +1232,24 @@ class pivotState
     }
 
     /**
+     * Get filters.
+     *
+     * @param  string $type
+     * @access public
+     * @return object|string
+     */
+    public function getFiltersForSave($type = 'object')
+    {
+        $filters = $this->filters;
+        foreach($filters as $index => $filter)
+        {
+            if(isset($filter['items'])) unset($filters[$index]['items']);
+        }
+        if($type == 'object') return $filters;
+        return json_encode($filters);
+    }
+
+    /**
      * Judge is queried.
      *
      * @access public
