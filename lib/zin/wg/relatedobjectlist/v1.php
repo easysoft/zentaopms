@@ -8,9 +8,10 @@ class relatedObjectList extends relatedList
 {
     protected static array $defineProps = array
     (
-        'objectID'       => '?int',    //主动关联对象ID
-        'objectType'     => '?string', //主动关联对象类型
-        'relatedObjects' => '?array',  //被关联对象列表。
+        'objectID'       => '?int',                //主动关联对象ID
+        'objectType'     => '?string',             //主动关联对象类型
+        'relatedObjects' => '?array',              //被关联对象列表
+        'browseType'     => '?string="byRelation"' //浏览类型 byRelation|byObject
     );
 
     public static function getPageJS(): ?string
@@ -38,36 +39,35 @@ class relatedObjectList extends relatedList
         JS;
     }
 
-    protected function getObjectItem(int $relatedObjectID, string $relatedObjectType, array $relatedObjectTitle, string $relationName, string $relationType): object
+    protected function getObjectItem(int $relatedObjectID, string $relatedObjectType, array $relatedObjectInfo, string $relationName, string $relationType, string $browseType): object
     {
-        global $config,$lang,$app;
+        global $config,$lang;
         $objectID   = $this->prop('objectID');
         $objectType = $this->prop('objectType');
-        $title      = $relatedObjectTitle['title'];
-
-        $app->control->loadModel('custom')->setConfig4Workflow();
+        $title      = $relatedObjectInfo['title'];
 
         $type = $relatedObjectType == 'commit' ? 'repocommit' : $relatedObjectType;
         $item = new stdClass();
         $item->id         = $relatedObjectID;
         $item->title      = "#$relatedObjectID $title";
-        $item->type       = $config->custom->relateObjectList[$type];
-        $item->url        = !empty($relatedObjectTitle['url']) ? $relatedObjectTitle['url'] : null;
-        $item->titleAttrs = !empty($relatedObjectTitle['url']) ? array('data-toggle' => 'modal', 'data-size' => 'lg') : null;
+        $item->type       = $browseType == 'byRelation' ? $config->custom->relateObjectList[$type] : $relationName;
+        $item->url        = !empty($relatedObjectInfo['url']) ? $relatedObjectInfo['url'] : null;
+        $item->titleAttrs = !empty($relatedObjectInfo['url']) ? array('data-toggle' => 'modal', 'data-size' => 'lg') : null;
 
-        if(hasPriv('custom', 'removeObjects') && $relationType != 'default')
+        if(hasPriv('custom', 'removeObjects'))
         {
+            $disabled        = $relationType == 'default' ? 'disabled' : '';
             $removeObjectUrl = createLink('custom', 'removeObjects', "objectID=$objectID&objectType=$objectType&relationName=$relationName&relatedObjectID=$relatedObjectID&relatedObjectType=$relatedObjectType");
 
             $btn = array
             (
-                'class'       => 'removeObject text-primary',
+                'class'       => "removeObject text-primary $disabled",
                 'icon'        => 'unlink',
                 'data-on'     => 'click',
                 'data-url'    => $removeObjectUrl,
                 'data-params' => 'event',
-                'data-call'   => 'removeObject',
-                'hint'        => $lang->custom->removeObjects
+                'data-call'   => $disabled ? null : 'removeObject',
+                'hint'        => $disabled ? $lang->custom->defaultRelation : $lang->custom->removeObjects
             );
             $item->actions = array($btn);
         }
@@ -97,26 +97,52 @@ class relatedObjectList extends relatedList
         $relatedObjects = $this->prop('relatedObjects', data('relatedObjects'));
         if(!$relatedObjects) return;
 
-        global $lang;
+        $browseType = $this->prop('browseType', data('browseType'));
+
+        global $config;
         $data = array();
-        foreach($relatedObjects as $key => $relatedObjectList)
+        if($browseType == 'byRelation')
         {
-            $explodeName  = explode('_', $key, 2);
-            $relationType = $explodeName[0]; //default是内置关系，custom是用户自定义关系
-            $relationName = $explodeName[1];
-
-            $relatedObjectItems = array();
-            foreach($relatedObjectList as $relatedObjectType => $relatedObjectPairs)
+            foreach($relatedObjects as $relationNameAndType => $relatedObjectList)
             {
-                foreach($relatedObjectPairs as $id => $title) $relatedObjectItems[] = $this->getObjectItem($id, $relatedObjectType, $title, (string)$relationName, $relationType);
-            }
+                $nameAndType  = explode('_', $relationNameAndType, 2);
+                $relationType = $nameAndType[0]; //default是内置关系，custom是用户自定义关系
+                $relationName = $nameAndType[1];
 
-            $data[$key] = array
-            (
-                'title'   => $relationName,
-                'items'   => $relatedObjectItems,
-                'content' => $relationType == 'default' ? "<i class='icon icon-help ml-2 mt-2 text-gray' data-title='{$lang->custom->defaultRelation}' data-toggle='tooltip' data-placement='right' data-type='white' data-class-name='text-gray border border-light'></i>" : ''
-            );
+                $relatedObjectItems = array();
+                foreach($relatedObjectList as $relatedObjectType => $relatedObjectPairs)
+                {
+                    foreach($relatedObjectPairs as $relatedObjectID => $relatedObjectInfo) $relatedObjectItems[] = $this->getObjectItem($relatedObjectID, $relatedObjectType, $relatedObjectInfo, (string)$relationName, $relationType, $browseType);
+                }
+
+                $data[$relationNameAndType] = array
+                (
+                    'title'   => $relationName,
+                    'items'   => $relatedObjectItems
+                );
+            }
+        }
+        if($browseType == 'byObject')
+        {
+            foreach($relatedObjects as $relatedObjectType => $relatedObjectList)
+            {
+                $relatedObjectItems = array();
+                foreach($relatedObjectList as $relationNameAndType => $relatedObjectPairs)
+                {
+                    $nameAndType  = explode('_', $relationNameAndType, 2);
+                    $relationType = $nameAndType[0]; //default是内置关系，custom是用户自定义关系
+                    $relationName = $nameAndType[1];
+
+                    foreach($relatedObjectPairs as $relatedObjectID => $relatedObjectInfo) $relatedObjectItems[] = $this->getObjectItem($relatedObjectID, $relatedObjectType, $relatedObjectInfo, (string)$relationName, $relationType, $browseType);
+                }
+
+                $type = $relatedObjectType == 'commit' ? 'repocommit' : $relatedObjectType;
+                $data[$relatedObjectType] = array
+                (
+                    'title'   => $config->custom->relateObjectList[$type],
+                    'items'   => $relatedObjectItems
+                );
+            }
         }
 
         $this->setProp('data', $data);
