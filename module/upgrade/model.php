@@ -7606,7 +7606,6 @@ class upgradeModel extends model
         $pivot->createdBy   = $table->createdBy;
         $pivot->createdDate = $table->createdDate;
         $pivot->dataset     = $table->dataset;
-        $pivot->mode        = 'text';
 
         $name = array();
         $name['zh-cn'] = $table->name;
