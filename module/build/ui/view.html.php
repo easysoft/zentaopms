@@ -345,7 +345,7 @@ detailBody
                             ) : null
                         ),
                         h::hr(set::className('mt-6')),
-                        history(set::objectID($build->id))
+                        history(set::objectID($build->id), set::objectType('build'))
                     )
                 )
             )
