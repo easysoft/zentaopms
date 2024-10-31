@@ -31,8 +31,43 @@ class RedisDriver implements CacheInterface
         $this->namespace = $namespace;
         $this->defaultLifetime = $defaultLifetime;
 
-        global $app;
-        $this->redis = $app->redis;
+        $this->connectRedis();
+    }
+
+    /**
+     * 连接 Redis 服务器。
+     * Connect to the Redis server.
+     *
+     * @access private
+     * @return object
+     */
+    private function connectRedis()
+    {
+        global $config;
+
+        if(empty($config->redis)) \helper::end('Redis is not enabled in the configuration file.');
+
+        try
+        {
+            $this->redis = new \Redis();
+
+            $version = phpversion('redis');
+            if(version_compare($version, '5.3.0', 'ge'))
+            {
+                $this->redis->connect($config->redis->host , $config->redis->port, $config->redis->timeout, '', 0, 0, ['auth' => [$config->redis->username, $config->redis->password]]);
+            }
+            else
+            {
+                $this->redis->connect($this->config->redis->host , $this->config->redis->port, $this->config->redis->timeout, '', 0, 0);
+                $this->redis->auth(['pass' => $this->config->redis->password]);
+            }
+
+            if(!$this->redis->ping()) \helper::end('Can not connect to Redis server.');
+        }
+        catch(RedisException $e)
+        {
+            \helper::end('Can not connect to Redis server. The error message is: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -224,7 +259,7 @@ class RedisDriver implements CacheInterface
      */
     private function buildKeyName($key)
     {
-        return $this->namespace . $key;
+        return $this->namespace . ':' . $key;
     }
 
     /**
