@@ -4620,3 +4620,31 @@ $config->bi->builtin->metrics[] = array
     'desc'       => '按项目统计的严重程度为1、2级的Bug数是指在项目开发过程中发现的严重程度为1级和2级的Bug数量的总和。统计这些Bug的数量可以评估项目开发过程的质量和稳定性，同时也关注影响用户体验和功能完整性的问题',
     'definition' => "复用： 按项目统计的严重程度为1级的Bug数、按项目统计的严重程度为2级的Bug数。公式： 按项目统计的严重程度为1、2级的Bug数=按项目统计的严重程度为1级的Bug数+按项目统计的严重程度为2级的Bug数\n"
 );
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按项目统计的年度新增Bug数',
+    'alias'      => '新增Bug数',
+    'code'       => 'count_of_annual_created_bug_in_project',
+    'purpose'    => 'scale',
+    'scope'      => 'project',
+    'object'     => 'bug',
+    'unit'       => 'count',
+    'dateType'   => 'year',
+    'desc'       => '按项目统计的年度新增Bug数是指项目在某年度新发现的Bug数量。这个度量项反映了项目在某年度出现的新问题数量。年度新增Bug数越多可能意味着质量控制存在问题，需要及时进行处理和改进。',
+    'definition' => "项目中Bug的个数求和\n 创建时间为某年\n 过滤已删除的Bug\n 过滤已删除的项目\n"
+);
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按项目统计的月度新增Bug数',
+    'alias'      => '新增Bug数',
+    'code'       => 'count_of_monthly_created_bug_in_project',
+    'purpose'    => 'scale',
+    'scope'      => 'project',
+    'object'     => 'bug',
+    'unit'       => 'count',
+    'dateType'   => 'month',
+    'desc'       => '按项目统计的月度新增Bug数是指在某年度新发现的Bug数量。这个度量项反映了系统或项目在某月度出现的新问题数量。月度新增Bug数的增加可能意味着质量控制存在问题，需要及时进行处理和改进。',
+    'definition' => "项目中创建时间在某年某月的Bug个数求和，过滤已删除的Bug，过滤已删除的项目。"
+);
