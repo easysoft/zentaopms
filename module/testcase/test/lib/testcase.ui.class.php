@@ -90,4 +90,20 @@ class testcase extends tester
         if(in_array($testcase['caseName'], $caseList)) return $this->success('创建多层级测试用例成功');
         return $this->failed('创建多层级测试用例失败');
     }
+
+	/**
+     * 测试用例列表。
+     * check testcase list.
+     *
+     * @param  array  $project
+     * @access public
+     * @return object
+     */
+    public function testcaseBrowse($project)
+    {
+        $this->login();
+        $form = $this->initForm('testcase', 'browse', $project, 'appIframe-qa');
+        if($form->dom->caseListID->getText()) return $this->success('测试用例列表验证成功');
+        return $this->failed('测试用例列表验证失败');
+    }
 }
