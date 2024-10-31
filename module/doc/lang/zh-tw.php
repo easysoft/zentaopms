@@ -104,7 +104,7 @@ $lang->doc->orderByVisit  = '最近訪問';
 $lang->doc->todayEdited   = '今日更新';
 $lang->doc->pastEdited    = '往日更新';
 $lang->doc->myDoc         = '我的文檔';
-$lang->doc->myCollection  = '我的收藏';
+$lang->doc->myCollection  = '我收藏的';
 $lang->doc->tableContents = '目錄';
 
 /* 方法列表。*/
