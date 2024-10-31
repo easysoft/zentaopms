@@ -22,8 +22,12 @@ class biModel extends model
             'chart'     => TABLE_CHART
         );
 
+        $objects = $this->dao->select('id,createdBy,acl,whitelist')->from($table[$objectType])
+            ->where('deleted')->eq('0')
+            ->fetchAll('id');
+
         /* IF table have not acl or whitelist field */
-        $object = $this->dao->select('*')->from($table[$objectType])->fetch();
+        $object = reset($objects);
         if(!isset($object->acl) || !isset($object->whitelist))
         {
             $objects = $this->dao->select('id')->from($table[$objectType])
@@ -34,9 +38,6 @@ class biModel extends model
         }
 
         /* IF table have acl and whitelist field */
-        $objects = $this->dao->select('id,createdBy,acl,whitelist')->from($table[$objectType])
-            ->where('deleted')->eq('0')
-            ->fetchAll('id');
         if($this->app->user->admin) return array_keys($objects);
 
         $objectIDList = array();
