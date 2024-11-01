@@ -1567,14 +1567,39 @@ eof;
         if(empty($object)) return true;
 
         $account = $app->user->account;
-        if(!empty($object->openedBy)     && $object->openedBy     == $account) return true;
-        if(!empty($object->addedBy)      && $object->addedBy      == $account) return true;
-        if(!empty($object->account)      && $object->account      == $account) return true;
-        if(!empty($object->assignedTo)   && $object->assignedTo   == $account) return true;
-        if(!empty($object->finishedBy)   && $object->finishedBy   == $account) return true;
-        if(!empty($object->canceledBy)   && $object->canceledBy   == $account) return true;
-        if(!empty($object->closedBy)     && $object->closedBy     == $account) return true;
-        if(!empty($object->lastEditedBy) && $object->lastEditedBy == $account) return true;
+        if($module == 'task' && !empty($object->team))
+        {
+            $taskModel = $app->control->loadModel('task');
+            if($object->mode == 'linear')
+            {
+                if($method == 'assignto' && !in_array($object->status, array('done', 'cancel', 'closed'))) return false;
+                if($method == 'start' && in_array($object->status, array('wait', 'doing')))
+                {
+                    if($object->assignedTo != $account) return false;
+
+                    $currentTeam = $taskModel->getTeamByAccount($object->team, $account);
+                    if($currentTeam && $currentTeam->status == 'wait') return true;
+                }
+                if($method == 'finish' && $object->assignedTo != $account) return false;
+            }
+            elseif($object->mode == 'multi')
+            {
+                $currentTeam = $taskModel->getTeamByAccount($object->team, $account);
+                if($method == 'start' && in_array($object->status, array('wait', 'doing')) && $currentTeam && $currentTeam->status == 'wait') return true;
+                if($method == 'finish' && (empty($currentTeam) || $currentTeam->status == 'done')) return false;
+            }
+        }
+        else
+        {
+            if(!empty($object->openedBy)     && $object->openedBy     == $account) return true;
+            if(!empty($object->addedBy)      && $object->addedBy      == $account) return true;
+            if(!empty($object->account)      && $object->account      == $account) return true;
+            if(!empty($object->assignedTo)   && $object->assignedTo   == $account) return true;
+            if(!empty($object->finishedBy)   && $object->finishedBy   == $account) return true;
+            if(!empty($object->canceledBy)   && $object->canceledBy   == $account) return true;
+            if(!empty($object->closedBy)     && $object->closedBy     == $account) return true;
+            if(!empty($object->lastEditedBy) && $object->lastEditedBy == $account) return true;
+        }
 
         return false;
     }
