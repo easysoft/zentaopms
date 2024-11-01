@@ -490,7 +490,7 @@ class metricModel extends model
     {
         static $metricsWithCode;
         if(is_array($fieldList)) $fieldList = implode(',', $fieldList);
-        if(!isset($metricsWithCode[$code . $fieldList])) $metricsWithCode[$code . $fieldList] = $this->metricTao->fetchMetricByCode($code, $fieldList);
+        if(!isset($metricsWithCode[$code . $fieldList])) $metricsWithCode[$code . $fieldList] = $this->fetchMetricByCode($code, $fieldList);
 
         return $metricsWithCode[$code . $fieldList];
     }
