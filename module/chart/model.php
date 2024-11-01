@@ -23,7 +23,6 @@ class chartModel extends model
         parent::__construct($appName);
         $this->loadBIDAO();
         $this->loadModel('bi');
-        $this->viewableObjects = $this->bi->getViewableObject('chart');
     }
 
     /**
@@ -36,7 +35,8 @@ class chartModel extends model
      */
     public function checkAccess($chartID, $method = 'preview')
     {
-        if(!in_array($chartID, $this->viewableObjects))
+        $viewableObjects = $this->bi->getViewableObject('chart');
+        if(!in_array($chartID, $viewableObjects))
         {
             return $this->app->control->sendError($this->lang->chart->accessDenied, helper::createLink('chart', $method));
         }
@@ -80,6 +80,7 @@ class chartModel extends model
 
         $this->app->loadModuleConfig('screen');
 
+        $viewableObjects = $this->bi->getViewableObject('chart');
         /* 获取分组下的第一个图表。*/
         /* Get the first chart under the group. */
         foreach($groups as $groupID)
@@ -91,7 +92,7 @@ class chartModel extends model
                 ->markRight(1)
                 ->andWhere("FIND_IN_SET({$groupID}, `group`)")
                 ->andWhere('stage')->eq('published')
-                ->andWhere('id')->in($this->viewableObjects)
+                ->andWhere('id')->in($viewableObjects)
                 ->orderBy('id_desc')
                 ->limit(1)
                 ->fetch();
@@ -174,6 +175,7 @@ class chartModel extends model
 
         $this->app->loadModuleConfig('screen');
 
+        $viewableObjects = $this->bi->getViewableObject('chart');
         /* 获取每个分组下的图表以供生成菜单树。*/
         /* Get the charts under each group for generating the menu tree. */
         $chartGroups = array();
@@ -186,7 +188,7 @@ class chartModel extends model
                 ->markRight(1)
                 ->andWhere("FIND_IN_SET({$group->id}, `group`)")
                 ->andWhere('stage')->eq('published')
-                ->andWhere('id')->in($this->viewableObjects)
+                ->andWhere('id')->in($viewableObjects)
                 ->orderBy($orderBy)
                 ->fetchAll();
         }
