@@ -49,19 +49,21 @@ class metricTao extends metricModel
      * 根据范围获取度量项。
      * Fetch metric by scope.
      *
-     * @param  string $scope
-     * @param  int    $limit
+     * @param  string|array $scopes
+     * @param  int          $limit
      * @access protected
      * @return array
      */
-    protected function fetchMetricsByScope($scope, $limit = -1)
+    protected function fetchMetricsByScope($scopes, $limit = -1)
     {
+        if(!is_array($scopes)) $scopes = array($scopes);
         $metrics = $this->dao->select('*')->from(TABLE_METRIC)
             ->where('deleted')->eq('0')
-            ->andWhere('scope')->eq($scope)
+            ->andWhere('scope')->in($scopes)
             ->andWhere('object')->in(array_keys($this->lang->metric->objectList))
+            ->groupBy('scope')
             ->beginIF($limit > 0)->limit($limit)->fi()
-            ->fetchAll();
+            ->fetchAll('scope');
 
         return $metrics;
     }
@@ -123,9 +125,9 @@ class metricTao extends metricModel
      * @access protected
      * @return object|false
      */
-    protected function fetchMetricByCode($code)
+    protected function fetchMetricByCode($code, $fieldList = '*')
     {
-        return $this->dao->select('*')->from(TABLE_METRIC)
+        return $this->dao->select($fieldList)->from(TABLE_METRIC)
             ->where('code')->eq($code)
             ->fetch();
     }
@@ -316,7 +318,7 @@ class metricTao extends metricModel
      */
     protected function fetchMetricRecords($code, $fieldList, $query = array(), $pager = null)
     {
-        $metric   = $this->fetchMetricByID($code);
+        $metric   = $this->getByCode($code);
         $scopeKey = $metric->scope;
         $dateType = $metric->dateType;
 
@@ -348,7 +350,7 @@ class metricTao extends metricModel
 
     protected function fetchMetricRecordsWithOption($code, $fieldList, $options = array(), $pager = null)
     {
-        $metric = $this->fetchMetricByID($code);
+        $metric = $this->getByCode($code);
 
         $scopeKey = $metric->scope;
         $dateType = $metric->dateType;
@@ -394,7 +396,7 @@ class metricTao extends metricModel
      */
     protected function fetchLatestMetricRecords($code, $fieldList, $query = array(), $pager = null)
     {
-        $metric       = $this->fetchMetricByID($code);
+        $metric       = $this->getByCode($code);
         $dateType     = $metric->dateType;
         $lastCalcDate = substr($metric->lastCalcTime, 0, 10);
         $objectList   = $this->getObjectsWithPager($metric, $query);
