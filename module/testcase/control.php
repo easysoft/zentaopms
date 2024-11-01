@@ -1792,9 +1792,13 @@ class testcase extends control
 
         if(!empty($_POST))
         {
+            $productID    = (int)$this->post->productID;
+            $branch       = $this->post->branch;
+            $isInsert     = (bool)$this->post->insert;
             $sceneList    = json_decode($this->post->sceneList,    true);
             $testcaseList = json_decode($this->post->testcaseList, true);
-            $cases  = $this->testcaseZen->buildCasesByXmind($testcaseList);
+
+            $cases  = $this->testcaseZen->buildCasesByXmind($productID, $branch, $testcaseList, $isInsert);
             $result = $this->testcase->saveXmindImport($sceneList, $cases);
             if($result['result'] == 'success') $result['load'] = $this->createLink('testcase', 'browse');
             return $this->send($result);

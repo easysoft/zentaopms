@@ -16,7 +16,10 @@ jsVar('userConfig_scene', $settings['scene']);
 jsVar('userConfig_case', $settings['case']);
 jsVar('userConfig_pri', $settings['pri']);
 jsVar('userConfig_group', $settings['group']);
-jsVar('jsLng', $this->lang->testcase->jsLng);
+jsVar('jsLng', $lang->testcase->jsLng);
+jsVar('noticeImport', $lang->noticeImport);
+jsVar('importAndCoverLang', $lang->importAndCover);
+jsVar('importAndInsertLang', $lang->importAndInsert);
 
 $nodeTemplate =
 "<div  data-toggle='tooltip' data-placement='bottom' id='node-{id}' class='mindmap-node' data-type='{type}' data-id='{id}' data-parent='{parent}'>" .
