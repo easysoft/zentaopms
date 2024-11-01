@@ -565,7 +565,20 @@ class baseMao
     {
         if(!isset($this->config->cache->raw[$this->table])) return $this->fetchFromDB('fetch', $keyField);
 
-        $rawResult = $this->cache->fetchAll($this->table);
+        $rawResult = [];
+
+        /* 如果条件中有主键字段，则尝试通过主键字段从缓存中获取。If the primary key field is in the condition, try to get from the cache by the primary key field. */
+        $field = $this->config->cache->raw[$this->table];
+        foreach($this->conditions as $condition)
+        {
+            if($condition['field'] == $field && $condition['operator'] == 'eq')
+            {
+                $rawResult[] = $this->cache->fetch($this->table, $condition['value']);
+                break;
+            }
+        }
+
+        if(empty($rawResult)) $rawResult = $this->cache->fetchAll($this->table);
         if(empty($rawResult)) return '';
 
         foreach($rawResult as $row)
@@ -591,6 +604,26 @@ class baseMao
     {
         if(!isset($this->config->cache->raw[$this->table])) return $this->fetchFromDB('fetchAll', $keyField);
 
+        $rawResult = [];
+
+        /* 如果条件中有主键字段，则尝试通过主键字段从缓存中获取。If the primary key field is in the condition, try to get from the cache by the primary key field. */
+        $field = $this->config->cache->raw[$this->table];
+        foreach($this->conditions as $condition)
+        {
+            if($condition['field'] == $field && $condition['operator'] == 'in')
+            {
+                $value  = $condition['value'];
+                if(is_numeric($value)) $value = [$value];
+                if(is_string($value))  $value = explode(',', str_replace(' ', '', $value));
+                if(is_array($value))
+                {
+                    $rawResult = $this->cache->fetchAll($this->table, $value);
+                    break;
+                }
+            }
+        }
+
+        if(empty($rawResult)) $rawResult = $this->cache->fetchAll($this->table);
         if(empty($rawResult)) return [];
 
         $result = [];
@@ -658,7 +691,7 @@ class baseMao
      * 从数据库中获取数据。
      * Fetch data from database.
      *
-     * @param  string $fetchFunc    fetch|fetchAll|fetchPairs
+     * @param  string $fetchFunc    fetch|fetchAll
      * @param  string $keyField
      * @param  string $valueField
      * @access private
