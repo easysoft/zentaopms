@@ -1219,6 +1219,7 @@ class storyZen extends story
             ->setIF(!in_array($this->post->source, $this->config->story->feedbackSource), 'notifyEmail', '')
             ->setIF($executionID > 0, 'stage', 'projected')
             ->setIF($bugID > 0, 'fromBug', $bugID)
+            ->setIF(!$this->post->estimate, 'estimate', 0)
             ->get();
 
         if(isset($_POST['reviewer'])) $_POST['reviewer'] = array_filter($_POST['reviewer']);
@@ -1282,7 +1283,6 @@ class storyZen extends story
             ->setDefault('deleteFiles', array())
             ->setDefault('product', $oldStory->product)
             ->setDefault('branch', $oldStory->branch)
-            ->setDefault('estimate', $oldStory->estimate)
             ->setDefault('stage', $oldStory->stage)
             ->setDefault('stagedBy', $oldStory->stagedBy)
             ->setIF($this->post->assignedTo   != $oldStory->assignedTo, 'assignedDate', $now)
