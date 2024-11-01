@@ -532,6 +532,33 @@ class cache
     }
 
     /**
+     * 从缓存中获取指定表指定 id 的数据。
+     * Get the data of the specified table and id from the cache.
+     *
+     * @param  string $table 表名。
+     * @param  int|string $id 主键值。
+     * @access public
+     * @return object|false
+     */
+    public function fetch(string $table, int|string $id): object|bool
+    {
+        if(!$this->checkTable($table)) return $this->log("The {$table} table is not set in the cache configuration", __FILE__, __LINE__);
+
+        if(empty($table)) return $this->log('The table name is empty', __FILE__, __LINE__);
+        if(empty($id))    return $this->log('The id is empty', __FILE__, __LINE__);
+
+        $this->setTable($table);
+
+        $code   = $this->getTableCode();
+        $key    = $this->getRawCacheKey($code, $id);
+        $object = $this->cache->get($key);
+        if($object) return $object;
+
+        $objects = $this->initTableCache();
+        return isset($objects[$id]) ? $objects[$id] : false;
+    }
+
+    /**
      * 从缓存中获取指定表的所有数据。
      * Get all data of the specified table from the cache.
      *
