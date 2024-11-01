@@ -18,6 +18,7 @@ $lang->host->type         = '类型';
 $lang->host->hardwareType = '硬件类型';
 $lang->host->group        = '主机分组';
 $lang->host->admin        = '管理账号';
+$lang->host->account      = '账号';
 $lang->host->password     = '密码';
 $lang->host->defaultPWD   = '******';
 $lang->host->sshPort      = 'SSH端口';
