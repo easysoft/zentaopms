@@ -223,100 +223,95 @@ class actionModel extends model
                 {
                     $history->diff = str_replace(array("class='iframe'", '+'), array("data-size='{\"width\": 800, \"height\": 500}' data-toggle='modal'", '%2B'), $history->diff);
                 }
+                $history->new = !empty($history->newValue) ? $history->newValue : $history->new;
+                $history->old = !empty($history->oldValue) ? $history->oldValue : $history->old;
                 $history = $this->file->replaceImgURL($history, 'old,new');
             }
 
             $action->comment = $this->file->setImgSize($action->comment, $this->config->action->commonImgSize);
             $actions[$actionID] = $action;
         }
-        return $this->processActions($actions);
+        return $actions;
     }
 
     /**
      * 将类型、状态等键值转换为具体的值。
      * Process object type, status and etc.
      *
-     * @param  array  $actions
+     * @param  object  $history
      * @access public
-     * @return array
+     * @return object
      */
-    public function processActions(array $actions = array()): array
+    public function processHistory(object $history = null): object
     {
-        if(empty($actions)) return $actions;
-
+        if(empty($history)) return $history;
         $users          = $this->loadModel('user')->getPairs('noletter');
+        $objectType     = $this->dao->select('objectType')->from(TABLE_ACTION)->where('id')->eq($history->action)->fetch('objectType');
         $objectTypeList = array();
-        foreach($actions as $action)
+
+        if(!isset($objectTypeList[$objectType])) $this->app->loadLang($objectType);
+        $objectTypeList[$objectType] = $objectType;
+
+        if(isset($this->config->action->approvalFields[$history->field]))
         {
-            if(empty($action->history)) continue;
+            $fieldListVar = $this->config->action->approvalFields[$history->field];
+            $fieldList    = isset($this->lang->action->{$fieldListVar}) ? $this->lang->action->{$fieldListVar} : array();
 
-            if(!isset($objectTypeList[$action->objectType])) $this->app->loadLang($action->objectType);
-            $objectTypeList[$action->objectType] = $action->objectType;
-
-            foreach($action->history as $history)
+            if(isset($fieldList[$history->old])) $history->oldValue = $fieldList[$history->old];
+            if(isset($fieldList[$history->new])) $history->newValue = $fieldList[$history->new];
+        }
+        elseif(isset($this->config->action->multipleObjectFields[$objectType][$history->field]))
+        {
+            $fieldListVar = $this->config->action->multipleObjectFields[$objectType][$history->field];
+            $fieldList    = isset($this->lang->{$objectType}->{$fieldListVar}) ? $this->lang->{$objectType}->{$fieldListVar} : array();
+            if(!empty($history->old))
             {
-                if(isset($this->config->action->approvalFields[$history->field]))
-                {
-                    $fieldListVar = $this->config->action->approvalFields[$history->field];
-                    $fieldList    = isset($this->lang->action->{$fieldListVar}) ? $this->lang->action->{$fieldListVar} : array();
+                $history->oldValue = '';
+                $oldValues = explode(',', $history->old);
+                foreach($oldValues as $key => $value) $history->oldValue .= zget($fieldList, $value) . ',';
+                $history->oldValue = trim($history->oldValue, ',');
+            }
 
-                    $history->old = zget($fieldList, $history->old);
-                    $history->new = zget($fieldList, $history->new);
-                }
-                elseif(isset($this->config->action->multipleObjectFields[$action->objectType][$history->field]))
-                {
-                    $fieldListVar = $this->config->action->multipleObjectFields[$action->objectType][$history->field];
-                    $fieldList    = isset($this->lang->{$action->objectType}->{$fieldListVar}) ? $this->lang->{$action->objectType}->{$fieldListVar} : array();
-                    if(!empty($history->old))
-                    {
-                        $oldValues = explode(',', $history->old);
-                        $history->old = '';
-                        foreach($oldValues as $key => $value) $history->old .= zget($fieldList, $value) . ',';
-                        $history->old = trim($history->old, ',');
-                    }
-
-                    if(!empty($history->new))
-                    {
-                        $newValues = explode(',', $history->new);
-                        $history->new = '';
-                        foreach($newValues as $key => $value) $history->new .= zget($fieldList, $value) . ',';
-                        $history->new = trim($history->new, ',');
-                    }
-                }
-                elseif(strpos(",{$this->config->action->userFields},", ",{$history->field},") !== false)
-                {
-                    $history->old = zget($users, $history->old);
-                    $history->new = zget($users, $history->new);
-                }
-                elseif(strpos(",{$this->config->action->multipleUserFields},", ",{$history->field},") !== false)
-                {
-                    if(!empty($history->old))
-                    {
-                        $oldValues = explode(',', $history->old);
-                        $history->old = '';
-                        foreach($oldValues as $key => $value) $history->old .= zget($users, $value) . ',';
-                        $history->old = trim($history->old, ',');
-                    }
-
-                    if(!empty($history->new))
-                    {
-                        $newValues = explode(',', $history->new);
-                        $history->new = '';
-                        foreach($newValues as $key => $value) $history->new .= zget($users, $value) . ',';
-                        $history->new = trim($history->new, ',');
-                    }
-                }
-                else
-                {
-                    $fieldListVar = isset($this->config->action->objectFields[$action->objectType][$history->field]) ? $this->config->action->objectFields[$action->objectType][$history->field] : $history->field . 'List';
-                    $fieldList    = isset($this->lang->{$action->objectType}->{$fieldListVar}) ? $this->lang->{$action->objectType}->{$fieldListVar} : array();
-
-                    $history->old = zget($fieldList, $history->old);
-                    $history->new = zget($fieldList, $history->new);
-                }
+            if(!empty($history->new))
+            {
+                $history->newValue = '';
+                $newValues = explode(',', $history->new);
+                foreach($newValues as $key => $value) $history->newValue .= zget($fieldList, $value) . ',';
+                $history->newValue = trim($history->newValue, ',');
             }
         }
-        return $actions;
+        elseif(strpos(",{$this->config->action->userFields},", ",{$history->field},") !== false)
+        {
+            if(isset($users[$history->old])) $history->oldValue = $users[$history->old];
+            if(isset($users[$history->new])) $history->newValue = $users[$history->new];
+        }
+        elseif(strpos(",{$this->config->action->multipleUserFields},", ",{$history->field},") !== false)
+        {
+            if(!empty($history->old))
+            {
+                $history->oldValue = '';
+                $oldValues = explode(',', $history->old);
+                foreach($oldValues as $key => $value) $history->oldValue .= zget($users, $value) . ',';
+                $history->oldValue = trim($history->oldValue, ',');
+            }
+
+            if(!empty($history->new))
+            {
+                $history->newValue = '';
+                $newValues = explode(',', $history->new);
+                foreach($newValues as $key => $value) $history->newValue .= zget($users, $value) . ',';
+                $history->newValue = trim($history->newValue, ',');
+            }
+        }
+        else
+        {
+            $fieldListVar = isset($this->config->action->objectFields[$objectType][$history->field]) ? $this->config->action->objectFields[$objectType][$history->field] : $history->field . 'List';
+            $fieldList    = isset($this->lang->{$objectType}->{$fieldListVar}) ? $this->lang->{$objectType}->{$fieldListVar} : array();
+
+            if(isset($fieldList[$history->old])) $history->oldValue = $fieldList[$history->old];
+            if(isset($fieldList[$history->new])) $history->newValue = $fieldList[$history->new];
+        }
+        return $history;
     }
 
     /**
@@ -564,14 +559,10 @@ class actionModel extends model
         if(empty($actionID)) return false;
         foreach($changes as $change)
         {
-            if(is_object($change))
-            {
-                $change->action = $actionID;
-            }
-            else
-            {
-                $change['action'] = $actionID;
-            }
+            $change = is_array($change) ? json_decode(json_encode($change)) : $change;
+            $change->action = $actionID;
+
+            $change = $this->processHistory($change);
             $this->dao->insert(TABLE_HISTORY)->data($change)->exec();
             if(dao::isError()) return false;
         }
