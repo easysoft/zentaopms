@@ -1732,9 +1732,7 @@ class project extends control
 
         $workflowGroups = $this->loadModel('workflowgroup')->getPairs('project', $model, $hasProduct);
 
-        $items = array();
-        foreach($workflowGroups as $id => $name) $items[] = array('text' => $name, 'value' => $id);
-
+        $items = $this->workflowgroup->appendBuildinLabel($workflowGroups);
         return $this->send(array('items' => array_values($items), 'defaultValue' => key($workflowGroups)));
     }
 }
