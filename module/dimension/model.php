@@ -14,7 +14,6 @@ class dimensionModel extends model
     public function __construct()
     {
         parent::__construct();
-        $this->viewableObjects = $this->loadModel('bi')->getViewableObject('dimension');
     }
 
     /**
@@ -39,7 +38,8 @@ class dimensionModel extends model
      */
     public function getFirst(): object|false
     {
-        $firstID = current($this->viewableObjects);
+        $viewableObjects = $this->loadModel('bi')->getViewableObject('dimension');
+        $firstID = current($viewableObjects);
         return $this->dao->select('*')->from(TABLE_DIMENSION)->where('id')->eq($firstID)->fetch();
     }
 
@@ -52,7 +52,8 @@ class dimensionModel extends model
      */
     public function getList(): array
     {
-        return $this->dao->select('*')->from(TABLE_DIMENSION)->where('id')->in($this->viewableObjects)->fetchAll('id');
+        $viewableObjects = $this->loadModel('bi')->getViewableObject('dimension');
+        return $this->dao->select('*')->from(TABLE_DIMENSION)->where('id')->in($viewableObjects)->fetchAll('id');
     }
 
     /**
@@ -90,7 +91,8 @@ class dimensionModel extends model
         if(!$dimensionID && $this->session->dimension) $dimensionID = $this->session->dimension;
 
         /* 验证维度是否可见 */
-        if($dimensionID && $this->viewableObjects && !in_array($dimensionID, $this->viewableObjects)) $dimensionID = current($this->viewableObjects);
+        $viewableObjects = $this->loadModel('bi')->getViewableObject('dimension');
+        if($dimensionID && $viewableObjects && !in_array($dimensionID, $viewableObjects)) $dimensionID = current($viewableObjects);
 
         /* 如果维度 ID 不为空，检查对应的对象是否存在。*/
         /* If dimension ID is not empty, check if the object exists. */
