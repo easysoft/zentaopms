@@ -4595,6 +4595,8 @@ class executionModel extends model
         $rows = array();
         $this->app->loadConfig('project');
 
+        $this->getLimitedExecution();
+
         $executionList = array();
         foreach($executions as $execution) $executionList[$execution->id] = $execution;
         foreach($executionList as $execution)
@@ -4669,6 +4671,8 @@ class executionModel extends model
             {
                 $rawAction = str_replace('Task', '', $action);
                 if(!commonModel::hasPriv('task', $rawAction)) continue;
+                if(!common::hasDBPriv($task, 'task', $rawAction)) continue;
+
                 $clickable = $this->task->isClickable($task, $rawAction);
                 $action    = array('name' => $action);
                 if(!$clickable) $action['disabled'] = true;
