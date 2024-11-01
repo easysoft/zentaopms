@@ -2172,7 +2172,7 @@ class testcaseModel extends model
 
         foreach($testcases as $testcase)
         {
-            $result   = $this->saveTestcase($testcase, $sceneIDList);
+            $result = $this->saveTestcase($testcase, $sceneIDList);
             if($result['result'] == 'fail')
             {
                 $this->dao->rollBack();

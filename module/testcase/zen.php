@@ -1562,11 +1562,14 @@ class testcaseZen extends testcase
      * 根据 xmind 构建导入用例的数据。
      * Build imported cases by xmind data.
      *
+     * @param  int       $productID
+     * @param  string    $branch
      * @param  array     $caseList
+     * @param  bool      $isInsert
      * @access protected
      * @return array
      */
-    protected function buildCasesByXmind(array $caseList): array
+    protected function buildCasesByXmind(int $productID, string $branch, array $caseList, bool $isInsert): array
     {
         $caseIdList     = array_filter(array_map(function($case){return zget($case, 'id', 0);}, $caseList));
         $now            = helper::now();
@@ -1574,14 +1577,17 @@ class testcaseZen extends testcase
         $account        = $this->app->user->account;
         $oldCases       = $this->testcase->getByList($caseIdList);
         $oldSteps       = $this->testcase->fetchStepsByList($caseIdList);
+        $branch         = (int)$branch;
+        $modules        = $this->loadModel('tree')->getOptionMenu($productID, 'case');
 
         $cases = array();
         foreach($caseList as $caseData)
         {
-            $case = new stdclass();
-            $case->module  = $caseData['module'];
-            $case->product = $caseData['product'];
-            $case->branch  = zget($caseData, 'branch', 0);
+            $moduleID = (int)$caseData['module'];
+            $case     = new stdclass();
+            $case->module  = isset($modules[$moduleID]) ? $moduleID : 0;
+            $case->product = $productID;
+            $case->branch  = $branch;
             $case->title   = $caseData['name'];
             $case->pri     = $caseData['pri'];
             $case->tmpPId  = $caseData['tmpPId'];
@@ -1592,7 +1598,7 @@ class testcaseZen extends testcase
             $caseID  = (int)zget($caseData, 'id', 0);
             $oldCase = zget($oldCases, $caseID, null);
 
-            if(empty($oldCase))
+            if(empty($oldCase) || $isInsert)
             {
                 $case->type       = 'feature';
                 $case->status     = !$forceNotReview ? 'wait' : 'normal';
