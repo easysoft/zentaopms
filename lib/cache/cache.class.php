@@ -464,7 +464,7 @@ class cache
         if(!$this->config->debug) return false;
 
         $runMode = PHP_SAPI == 'cli' ? '_cli' : '';
-        $logFile = $this->app->getLogRoot() . 'redis' . $runMode . '.' . date('Ymd') . '.log.php';
+        $logFile = $this->app->getLogRoot() . 'cache' . $runMode . '.' . date('Ymd') . '.log.php';
         if(!file_exists($logFile)) file_put_contents($logFile, '<?php die(); ?' . ">\n");
 
         $content = date('Ymd H:i:s') . ': ' . $this->getURI() . "\nError: {$message} in $file on line $line\n";
