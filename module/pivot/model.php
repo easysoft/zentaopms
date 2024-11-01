@@ -70,7 +70,7 @@ class pivotModel extends model
      * @access public
      * @return object|bool
      */
-    public function getByID(int $pivotID, bool $processDateVar = false, string $filterStatus = 'published'): object|bool
+    public function getByID(int $pivotID, bool $processDateVar = false, string $filterStatus = 'published', bool $addDrills = true): object|bool
     {
         $pivot = $this->pivotTao->fetchPivot($pivotID);
         if(!$pivot) return false;
@@ -92,7 +92,9 @@ class pivotModel extends model
             $pivot->filters = array();
         }
 
-        $this->processPivot($pivot);
+        $this->completePivot($pivot);
+        if($addDrills) $this->addDrills($pivot);
+
         // if(isset($pivot->stage) && $pivot->stage == 'published' && $this->app->methodName == 'preview') $this->processFieldSettings($pivot);
 
         return $pivot;
