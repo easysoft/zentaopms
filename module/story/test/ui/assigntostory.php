@@ -68,4 +68,5 @@ $tester = new assignToStoryTester();
 $tester->login();
 
 r($tester->assignToStory()) && p('message') && e('指派研发需求成功');
+r($tester->assignToEpic())  && p('message') && e('指派业务需求成功');
 $tester->closeBrowser();
