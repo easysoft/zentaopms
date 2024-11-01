@@ -239,6 +239,7 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
+$lang->misc->feature->all['21.0'][]        = array('title' => 'Optimization of document functionalities; enhancements to product and project process templates in the BI designer.', 'desc' => '');
 $lang->misc->feature->all['20.8'][]        = array('title' => 'Document Optimization: We have optimized the task dependencies and fixed some Bugs.', 'desc' => '');
 $lang->misc->feature->all['20.7.1'][]      = array('title' => 'Addressing any known bugs.', 'desc' => '');
 $lang->misc->feature->all['20.7'][]        = array('title' => "Optimized the new user guide; Menu can be custimized now; Improved the workflow; A contribution module has been added to the OR interface.", 'desc' => '');
