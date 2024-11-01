@@ -469,6 +469,29 @@ class cache
     }
 
     /**
+     * 初始化指定表的缓存。
+     * Initialize the cache of the specified table.
+     *
+     * @access private
+     * @return array
+     */
+    private function initTableCache(): array
+    {
+        $field   = $this->getTableField();
+        $objects = $this->dao->select('*')->from($this->table)->fetchAll($field);
+        if(!$objects) return [];
+
+        $values = [];
+        $code   = $this->getTableCode();
+        foreach($objects as $key => $object) $values["raw:{$code}:{$key}"] = $object;
+
+        $this->cache->setMultiple($values);
+        $this->cache->set("set:{$code}List", array_keys($objects));
+
+        return $objects;
+    }
+
+    /**
      * 从缓存中获取指定表的所有数据。
      * Get all data of the specified table from the cache.
      *
@@ -484,9 +507,12 @@ class cache
 
         $this->setTable($table);
 
-        $code = $this->getTableCode();
-        $keys = $this->cache->get("set:{$code}List");
-        if(!$keys) return [];
+        $code         = $this->getTableCode();
+        $objectIdList = $this->cache->get("set:{$code}List");
+        if(!$objectIdList) return $this->initTableCache();
+
+        $keys = [];
+        foreach($objectIdList as $objectID) $keys[] = "raw:{$code}:{$objectID}";
 
         $objects = $this->cache->getMultiple($keys);
         if(!$objects) return [];
