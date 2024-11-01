@@ -566,7 +566,7 @@ class cache
      * @access public
      * @return array
      */
-    public function fetchAll(string $table): array
+    public function fetchAll(string $table, array $objectIdList = []): array
     {
         if(!$this->checkTable($table)) return [];
 
@@ -574,10 +574,14 @@ class cache
 
         $this->setTable($table);
 
-        $code         = $this->getTableCode();
-        $setCacheKey  = $this->getSetCacheKey($code);
-        $objectIdList = $this->cache->get($setCacheKey);
-        if(!$objectIdList) return $this->initTableCache();
+        $code = $this->getTableCode();
+
+        if(!$objectIdList)
+        {
+            $setCacheKey  = $this->getSetCacheKey($code);
+            $objectIdList = $this->cache->get($setCacheKey);
+            if(!$objectIdList) return $this->initTableCache();
+        }
 
         $keys = [];
         foreach($objectIdList as $objectID) $keys[] = $this->getRawCacheKey($code, $objectID);
