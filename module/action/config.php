@@ -121,8 +121,9 @@ $config->action->multipleUserFields = 'mailto,whitelist,reviewer,users,assignee,
 
 $config->action->objectFields['task']['closedReason'] = 'reasonList';
 
-$config->action->multipleObjectFields['bug']['os']      = 'osList';
-$config->action->multipleObjectFields['bug']['browser'] = 'browserList';
+$config->action->multipleObjectFields['bug']['os']        = 'osList';
+$config->action->multipleObjectFields['bug']['browser']   = 'browserList';
+$config->action->multipleObjectFields['testtask']['type'] = 'typeList';
 
 $config->action->approvalFields['reviewStatus'] = 'reviewStatusList';
 $config->action->approvalFields['reviewResult'] = 'reviewResultList';
