@@ -528,11 +528,11 @@ class baseMao
             $value = $object->{$condition['field']};
             if($condition['operator'] == 'eq')
             {
-                if($condition['value'] !== $value) return false;
+                if($condition['value'] != $value) return false;
             }
             elseif($condition['operator'] == 'ne')
             {
-                if($condition['value'] === $value) return false;
+                if($condition['value'] == $value) return false;
             }
             elseif($condition['operator'] == 'in')
             {
