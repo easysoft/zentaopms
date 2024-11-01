@@ -55,3 +55,6 @@ INSERT INTO `zt_workflowgroup` (`type`, `projectModel`, `projectType`, `name`, `
 ALTER TABLE `zt_doclib` ADD `orderBy` varchar(30) NOT NULL DEFAULT 'id_asc' AFTER `deleted`;
 
 UPDATE `zt_grouppriv` SET `method` = 'quick' WHERE `module` = 'doc' AND `method` = 'myView';
+
+ALTER TABLE `zt_history` ADD `oldValue` text NULL AFTER `old`;
+ALTER TABLE `zt_history` ADD `newValue` text NULL AFTER `new`;
