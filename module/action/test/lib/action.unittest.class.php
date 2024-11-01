@@ -799,15 +799,13 @@ class actionTest
      * 将类型、状态等键值转换为具体的值。
      * Process object type, status and etc.
      *
-     * @param  string $objectType
-     * @param  int    $objectID
+     * @param  int    $historyID
      * @access public
-     * @return array
+     * @return object
      */
-    public function processActionsTest(string $objectType, int $objectID): array
+    public function processHistoryTest(int $historyID): object
     {
-        $actions = $this->objectModel->getList($objectType, $objectID);
-        $action  = current($actions);
-        return empty($action->history) ? array() : $action->history;
+        $history = $this->objectModel->dao->select('*')->from(TABLE_HISTORY)->where('id')->eq($historyID)->fetch();
+        return $this->objectModel->processHistory($history);
     }
 }
