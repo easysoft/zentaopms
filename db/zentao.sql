@@ -957,7 +957,9 @@ CREATE TABLE IF NOT EXISTS `zt_history` (
   `action` mediumint(8) unsigned NOT NULL default '0',
   `field` varchar(30) NOT NULL default '',
   `old` text NULL,
+  `oldValue` text NULL,
   `new` text NULL,
+  `newValue` text NULL,
   `diff` mediumtext NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
