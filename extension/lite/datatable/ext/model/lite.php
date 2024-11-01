@@ -43,7 +43,7 @@ public function getFieldList(string $module, string $method = ''): array
     }
 
     /* Logic except open source version .*/
-    if($this->config->edition != 'open' and $module != 'story') $fieldList = $this->appendWorkflowFields($module, $method, $fieldList);
+    if($this->config->edition != 'open' and $module != 'story') $fieldList += $this->appendWorkflowFields($module, $method);
 
     return $fieldList;
 }
