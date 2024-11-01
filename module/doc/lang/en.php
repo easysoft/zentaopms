@@ -480,6 +480,7 @@ $lang->doc->docLang->filterTypes                 = $lang->doc->filterTypes;
 $lang->doc->docLang->fileFilterTypes             = $lang->doc->fileFilterTypes;
 $lang->doc->docLang->productFilterTypes          = $lang->doc->productFilterTypes;
 $lang->doc->docLang->projectFilterTypes          = $lang->doc->projectFilterTypes;
+$lang->doc->docLang->spaceFilterTypes            = $lang->doc->spaceFilterTypes;
 $lang->doc->docLang->sortCatalog                 = $lang->doc->sortCatalog;
 $lang->doc->docLang->sortDoclib                  = $lang->doc->sortDoclib;
 $lang->doc->docLang->sortDoc                     = $lang->doc->sortDoc;
