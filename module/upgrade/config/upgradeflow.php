@@ -104,7 +104,7 @@ $config->upgrade->execFlow['20_4']        = array('functions' => 'createDefaultD
 $config->upgrade->execFlow['20_5']        = array('functions' => 'fixWorkflowFieldOptions');
 $config->upgrade->execFlow['20_6']        = array('functions' => 'processDemandFiles,processSqlbuilderTables');
 $config->upgrade->execFlow['20_7']        = array('functions' => 'upgradeMyDocSpace');
-$config->upgrade->execFlow['20_8']        = array('functions' => 'processWorkflowGroups,processObjectRelation');
+$config->upgrade->execFlow['20_8']        = array('functions' => 'processWorkflowGroups');
 
 if(!empty($config->isINT))
 {
@@ -172,6 +172,7 @@ $config->upgrade->execFlow['biz6_4']       = array('functions' => 'importLiteMod
 $config->upgrade->execFlow['biz8_12']      = array('functions' => 'AddFeedbackDatasource');
 $config->upgrade->execFlow['biz10_0_0']    = array('functions' => 'importERURModules');
 $config->upgrade->execFlow['biz10_5']      = array('functions' => 'processBuildinBrowseFields,importCaseLibModule,appendFlowFieldsForBelong');
+$config->upgrade->execFlow['biz11_0']      = array('functions' => 'processObjectRelation');
 
 if(!empty($config->isINT))
 {
