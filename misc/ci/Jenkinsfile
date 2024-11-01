@@ -497,7 +497,9 @@ pipeline {
                 } // End Zbox linux
 
                 stage("制作tar.xz包") {
-                  environment name: 'BUILD_KIND', value: 'release'
+                  when {
+                    environment name: 'BUILD_KIND', value: 'release'
+                  }
                   agent {
                     kubernetes {
                       inheritFrom "zentao-package upload-azure"
