@@ -191,6 +191,8 @@ unset($lang->createIcons['testcase']);
 unset($lang->createIcons['product']);
 unset($lang->createIcons['program']);
 
+unset($lang->workflow->menu->flowgroup);
+
 $lang->createObjects['story']     = '目标';
 $lang->createObjects['task']      = '任务';
 $lang->createObjects['execution'] = '任务看板';

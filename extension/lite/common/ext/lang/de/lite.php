@@ -191,6 +191,8 @@ unset($lang->createIcons['testcase']);
 unset($lang->createIcons['product']);
 unset($lang->createIcons['program']);
 
+unset($lang->workflow->menu->flowgroup);
+
 $lang->createObjects['story']     = 'Story';
 $lang->createObjects['task']      = 'Task';
 $lang->createObjects['execution'] = 'TaskKanban';
