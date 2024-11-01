@@ -75,7 +75,6 @@ window.clickSubmit = async function(e)
     const $taskBatchFormTrs = $taskBatchForm.find('tbody tr');
 
     var confirmID = '';
-    var tipAll    = true;
     for(let i = 0; i < $taskBatchFormTrs.length; i++)
     {
         const $currentTr = $($taskBatchFormTrs[i]);
@@ -94,7 +93,6 @@ window.clickSubmit = async function(e)
         const nonStoryChildTaskIdList = Object.keys(nonStoryChildTasks[taskID]);
         if(nonStoryChildTaskIdList.length == 0) continue;
 
-        if(tipAll) tipAll = Object.keys(childTasks[taskID]).length == nonStoryChildTaskIdList.length;
 
         for(let j = 0; j < nonStoryChildTaskIdList.length; j++) confirmID += 'ID' + nonStoryChildTaskIdList[j].toString() + ', ';
     }
@@ -102,8 +100,7 @@ window.clickSubmit = async function(e)
 
     if(confirmID.endsWith(', ')) confirmID = confirmID.slice(0, -2);
 
-    let confirmTip = tipAll ? syncStoryToAllChildrenTip : syncStoryToChildrenTip;
-    confirmTip     = confirmTip.replace('%s', confirmID);
+    let confirmTip = syncStoryToChildrenTip.replace('%s', confirmID);
     zui.Modal.confirm(confirmTip).then((res) =>
     {
         $taskBatchForm.find('[name=syncChildren]').remove();

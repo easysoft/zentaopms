@@ -286,7 +286,6 @@ $lang->task->cannotDeleteParent        = '不能删除父任务。';
 $lang->task->addChildTask              = '因该任务已经产生消耗，为保证数据一致性，我们会帮您创建一条同名子任务记录该消耗。';
 $lang->task->selectTestStoryTip        = "以下{$lang->SRCommon}将作为此任务的子任务";
 $lang->task->effortOperateTips         = '只有项目负责人、执行负责人、所属部门负责人才能%s他人日志。';
-$lang->task->syncStoryToAllChildrenTip = "是否同步更新所有子任务的相关{$lang->SRCommon}？";
 $lang->task->syncStoryToChildrenTip    = "子任务%s没有关联{$lang->SRCommon}，是否同步更新这些子任务的相关{$lang->SRCommon}？";
 
 $lang->task->error                    = new stdclass();

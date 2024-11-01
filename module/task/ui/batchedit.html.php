@@ -22,7 +22,6 @@ jsVar('childTasks', $childTasks);
 jsVar('nonStoryChildTasks', $nonStoryChildTasks);
 jsVar('tasks', $tasks);
 jsVar('stories', $stories);
-jsVar('syncStoryToAllChildrenTip', $lang->task->syncStoryToAllChildrenTip);
 jsVar('syncStoryToChildrenTip', $lang->task->syncStoryToChildrenTip);
 jsVar('parentTasks', $parentTasks);
 jsVar('ignoreLang', $lang->project->ignore);
