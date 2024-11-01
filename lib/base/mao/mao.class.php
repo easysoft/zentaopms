@@ -122,6 +122,7 @@ class baseMao
         global $config;
         $this->app    = $app;
         $this->config = $config;
+        $this->dao    = $app->dao;
         $this->cache  = $app->cache;
 
         $this->reset();
@@ -555,13 +556,15 @@ class baseMao
      * 获取一个记录。
      * Fetch one record.
      *
-     * @param  string $field        如果已经设置获取的字段，则只返回这个字段的值，否则返回这个记录。
+     * @param  string $keyField     如果已经设置获取的字段，则只返回这个字段的值，否则返回这个记录。
      *                              if the field is set, only return the value of this field, else return this record
      * @access public
      * @return object|mixed
      */
-    public function fetch(string $field = '')
+    public function fetch(string $keyField = '')
     {
+        if(!isset($this->config->cache->raw[$this->table])) return $this->fetchFromDB('fetch', $keyField);
+
         $rawResult = $this->cache->fetchAll($this->table);
         if(empty($rawResult)) return '';
 
@@ -569,7 +572,7 @@ class baseMao
         {
             if(!$this->isConditionMatched($row, $this->conditions)) continue;
 
-            return $field ? $row->$field : $row;
+            return $keyField ? $row->$keyField : $row;
         }
 
         return '';
@@ -584,9 +587,10 @@ class baseMao
      * @access public
      * @return array the records
      */
-    public function fetchAll(string $keyField = '')
+    public function fetchAll(string $keyField = ''): array
     {
-        $rawResult = $this->cache->fetchAll($this->table);
+        if(!isset($this->config->cache->raw[$this->table])) return $this->fetchFromDB('fetchAll', $keyField);
+
         if(empty($rawResult)) return [];
 
         $result = [];
@@ -632,12 +636,14 @@ class baseMao
      */
     public function fetchPairs(string $keyField = '', string $valueField = '')
     {
+        if(!isset($this->config->cache->raw[$this->table])) return $this->fetchFromDB('fetchPairs', $keyField, $valueField);
+
         $pairs = [];
 
         $rows = $this->fetchAll();
         if(empty($rows)) return [];
 
-        if(empty($keyField))   $keyField = $this->fields[0];
+        if(empty($keyField))   $keyField   = $this->fields[0];
         if(empty($valueField)) $valueField = $this->fields[1];
 
         foreach($rows as $row)
@@ -646,6 +652,30 @@ class baseMao
         }
 
         return $pairs;
+    }
+
+    /**
+     * 从数据库中获取数据。
+     * Fetch data from database.
+     *
+     * @param  string $fetchFunc    fetch|fetchAll|fetchPairs
+     * @param  string $keyField
+     * @param  string $valueField
+     * @access private
+     * @return mixed
+     */
+    private function fetchFromDB(string $fetchFunc, string $keyField, string $valueField = '')
+    {
+        $fields = implode(',', $this->fields);
+        $this->dao->select($fields)->from($this->table)->where('1=1');
+
+        foreach($this->conditions as $index => $condition)
+        {
+            $func = $condition['operator'];
+            $this->dao->andWhere($condition['field'])->$func($condition['value']);
+        }
+
+        return $this->dao->$fetchFunc($keyField, $valueField);
     }
 
     /**
