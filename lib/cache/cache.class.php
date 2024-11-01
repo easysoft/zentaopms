@@ -248,14 +248,41 @@ class cache
     }
 
     /**
-     * 获取缓存键。
-     * Get cache key.
+     * 获取原始数据类型缓存的键。该缓存用于保存表的原始数据。
+     * Get the key of the raw data type cache. This cache is used to save the original data of the table.
+     *
+     * @param  string $code 缓存代号。
+     * @param  int|string $id 主键值。
+     * @access private
+     * @return string
+     */
+    private function getRawCacheKey(string $code, int|string $id): string
+    {
+        return 'raw:' . $code . ':' . $id;
+    }
+
+    /**
+     * 获取集合类型缓存的键。该缓存用于保存表的主键字段。
+     * Get the key of the set type cache. This cache is used to save the primary key field of the table.
+     *
+     * @param  string $code 缓存代号。
+     * @access private
+     * @return string
+     */
+    private function getSetCacheKey(string $code): string
+    {
+        return 'set:' . $code . ':list';
+    }
+
+    /**
+     * 获取结果类型缓存的键。该缓存用于保存表的计算结果。
+     * Get the key of the result type cache. This cache is used to save the calculation results of the table.
      *
      * @param  string $key 缓存键。
      * @access private
      * @return string
      */
-    private function getCacheKey(string $key): string
+    private function getResCacheKey(string $key): string
     {
         return str_replace(['cache', '_'], ['res', ':'], strtolower($key));
     }
@@ -280,11 +307,13 @@ class cache
         if(!$object) return $this->log('Failed to fetch the new object. The sql is: ' . $this->dao->get(), __FILE__, __LINE__);
 
         /* 把新增的数据保存到缓存中。Save the new data to cache. */
-        $this->cache->set("raw:{$code}:{$object->$field}", $object);
+        $rawCacheKey = $this->getRawCacheKey($code, $object->$field);
+        $this->cache->set($rawCacheKey, $object);
 
         /* 把新增的数据的 id 保存到缓存中。Save the id of the new data to cache. */
-        $objectIdList = $this->cache->get("set:{$code}List");
-        $this->cache->set("set:{$code}List", $objectIdList ? array_merge($objectIdList, [$object->$field]) : [$object->$field]);
+        $setCacheKey  = $this->getSetCacheKey($code);
+        $objectIdList = $this->cache->get($setCacheKey);
+        $this->cache->set($setCacheKey, $objectIdList ? array_merge($objectIdList, [$object->$field]) : [$object->$field]);
 
         if(empty($this->config->cache->res[$this->table])) return;
 
@@ -315,7 +344,11 @@ class cache
 
         /* 把更新后的数据保存到缓存中。Save the updated data to cache. */
         $values = [];
-        foreach($objects as $object) $values["raw:{$code}:{$object->$field}"] = $object;
+        foreach($objects as $object)
+        {
+            $rawCacheKey = $this->getRawCacheKey($code, $object->$field);
+            $values[$rawCacheKey] = $object;
+        }
         $this->cache->setMultiple($values);
 
         if(empty($this->config->cache->res[$this->table])) return;
@@ -346,13 +379,14 @@ class cache
         $code  = $this->getTableCode();
 
         /* 把被删除的数据从缓存中删除。Delete the deleted data from cache. */
-        $keys = [];
-        foreach($this->objects as $object) $keys[] = "raw:{$code}:{$object->key}";
-        $this->cache->deleteMultiple($keys);
+        $affectedKeys = [];
+        foreach($this->objects as $object) $affectedKeys = $this->getRawCacheKey($code, $object->$field);
+        $this->cache->deleteMultiple($affectedKeys);
 
         /* 把被删除的数据的 id 从缓存中删除。Delete the id of the deleted data from cache. */
-        $objectIdList = $this->cache->get("set:{$code}List");
-        $this->cache->set("set:{$code}List", array_diff($objectIdList, array_map(function($object) use ($field) { return $object->$field; }, $this->objects)));
+        $setCacheKey  = $this->getSetCacheKey($code);
+        $objectIdList = $this->cache->get($setCacheKey);
+        $this->cache->set($setCacheKey, array_diff($objectIdList, array_map(function($object) use ($field) { return $object->$field; }, $this->objects)));
 
         if(empty($this->config->cache->res[$this->table])) return;
 
@@ -379,14 +413,14 @@ class cache
             /* 如果没有设置关联字段则整个缓存都受影响。If no associated fields are set, the entire cache is affected. */
             if(empty($res->fields))
             {
-                $keys[] = $this->getCacheKey($res->name);
+                $keys[] = $this->getResCacheKey($res->name);
                 continue;
             }
 
             /* 根据关联字段查找受影响的缓存。Find the affected cache by the associated fields. */
             foreach($objects as $object)
             {
-                $key = $this->getCacheKey($res->name);
+                $key = $this->getResCacheKey($res->name);
                 foreach($res->fields as $field)
                 {
                     if(!isset($object->$field)) return $this->log("The {$field} field does not exist in table {$this->table}.", __FILE__, __LINE__);
@@ -483,10 +517,16 @@ class cache
 
         $values = [];
         $code   = $this->getTableCode();
-        foreach($objects as $key => $object) $values["raw:{$code}:{$key}"] = $object;
+        foreach($objects as $key => $object)
+        {
+            $rawCacheKey = $this->getRawCacheKey($code, $key);
+            $values[$rawCacheKey] = $object;
+        }
 
         $this->cache->setMultiple($values);
-        $this->cache->set("set:{$code}List", array_keys($objects));
+
+        $setCacheKey = $this->getSetCacheKey($code);
+        $this->cache->set($setCacheKey, array_keys($objects));
 
         return $objects;
     }
@@ -508,11 +548,12 @@ class cache
         $this->setTable($table);
 
         $code         = $this->getTableCode();
-        $objectIdList = $this->cache->get("set:{$code}List");
+        $setCacheKey  = $this->getSetCacheKey($code);
+        $objectIdList = $this->cache->get($setCacheKey);
         if(!$objectIdList) return $this->initTableCache();
 
         $keys = [];
-        foreach($objectIdList as $objectID) $keys[] = "raw:{$code}:{$objectID}";
+        foreach($objectIdList as $objectID) $keys[] = $this->getRawCacheKey($code, $objectID);
 
         $objects = $this->cache->getMultiple($keys);
         if(!$objects) return [];
@@ -554,7 +595,7 @@ class cache
             }
         }
 
-        $key = $this->getCacheKey(constant($key));
+        $key = $this->getResCacheKey(constant($key));
         foreach($args as $arg) $key .= ':' . $arg;
 
         $this->setKey($key);
