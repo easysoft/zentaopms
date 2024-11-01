@@ -90,7 +90,7 @@ class model extends baseModel
         $table = zget($this->config->objectTables, $moduleName, '');
         if(empty($table)) return false;
 
-        return $this->dao->findById($objectID)->from($table)->fetch();
+        return $this->mao->findById($objectID)->from($table)->fetch();
     }
 
     /**
