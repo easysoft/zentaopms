@@ -336,10 +336,10 @@ $lang->doc->customShowLibsList['children'] = '显示子分类的文档';
 $lang->doc->customShowLibsList['unclosed'] = '只显示未关闭的' . $lang->executionCommon;
 
 $lang->doc->mail = new stdclass();
-$lang->doc->mail->create = new stdclass();
-$lang->doc->mail->edit   = new stdclass();
-$lang->doc->mail->create->title = "%s创建了文档 #%s:%s";
-$lang->doc->mail->edit->title   = "%s编辑了文档 #%s:%s";
+$lang->doc->mail->releasedDoc = new stdclass();
+$lang->doc->mail->edit        = new stdclass();
+$lang->doc->mail->releasedDoc->title = "%s发布了文档 #%s:%s";
+$lang->doc->mail->edit->title        = "%s编辑了文档 #%s:%s";
 
 $lang->doc->confirmDelete        = "您确定删除该文档吗？";
 $lang->doc->confirmDeleteLib     = "您确定删除该文档库吗？";
