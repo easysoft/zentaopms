@@ -496,6 +496,29 @@ pipeline {
                   }
                 } // End Zbox linux
 
+                stage("制作tar.xz包") {
+                  environment name: 'BUILD_KIND', value: 'release'
+                  agent {
+                    kubernetes {
+                      inheritFrom "zentao-package upload-azure"
+                      yamlFile 'misc/ci/publish-zbox.yaml'
+                    }
+                  }
+                  steps {
+                    container('package') {
+                      sh 'mkdir -p $OUTPUT_PKG_PATH'
+                    }
+                    script {
+                      buildPkg.doConvertTarXz()
+                    }
+                    withCredentials([string(credentialsId: env.AZURE_CRED_ID, variable: 'AZURE_SAS_TOKEN')]) {
+                      container('azcopy') {
+                        sh 'azcopy cp --recursive "$OUTPUT_PKG_PATH/*" "https://zentao.blob.core.windows.net/$AZURE_BUCKET/zentao/?$AZURE_SAS_TOKEN"'
+                      }
+                    }
+                  }
+                }
+
               } // End parallel
             }
 
