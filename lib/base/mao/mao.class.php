@@ -648,8 +648,45 @@ class baseMao
         return $pairs;
     }
 
+    /**
+     * 把名为 findByXXX 的方法转换为 where 条件。
+     * Convert the method findByXXX to where condition.
+     *
+     * @param  string $method
+     * @param  array  $args
+     * @access private
+     * @return object the mao object.
+     */
+    private function findBy(string $method, array $args)
+    {
+        $field = str_replace('findby', '', $method);
+        if(count($args) == 1)
+        {
+            $operator = 'eq';
+            $value    = $args[0];
+        }
+        else
+        {
+            $operator = $args[0];
+            $value    = $args[1];
+        }
+
+        $this->setFields(['*']);
+        $this->conditions = [['field' => $field, 'operator' => $operator, 'value' => $value]];
+
+        return $this;
+    }
+
     public function __call(string $method, array $args)
     {
+        $method = strtolower($method);
+
+        /*
+         * 如果是findByxxx，转换为where条件语句。
+         * findByxxx, xxx as will be in the where.
+         **/
+        if(strpos($method, 'findby') !== false) return $this->findBy($method, $args);
+
         if(method_exists($this->cache, $method)) return call_user_func_array([$this->cache, $method], $args);
 
         $this->app->triggerError("Method $method not found in class baseMao.", __FILE__, __LINE__, true);
