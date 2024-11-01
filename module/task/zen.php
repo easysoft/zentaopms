@@ -1943,6 +1943,7 @@ class taskZen extends task
         {
             $bug = $this->loadModel('bug')->getById($bugID);
             $task->name       = $bug->title;
+            $task->story      = $bug->story;
             $task->pri        = !empty($bug->pri) ? $bug->pri : $this->config->task->default->pri;
             $task->assignedTo = array($bug->assignedTo);
         }
