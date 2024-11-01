@@ -932,7 +932,7 @@ class pivotModel extends model
                     $valueKey       = "$value";
                     $record[$field] = isset($optionList[$valueKey]) ? $optionList[$valueKey] : $value;
                 }
-                $record[$field] = $removeQuote($record[$field]);
+                $record[$field] = is_string($record[$field]) ? str_replace('"', '', htmlspecialchars_decode($record[$field])) : $record[$field];
             }
 
             $records[$index] = (object)$record;
