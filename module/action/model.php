@@ -246,7 +246,8 @@ class actionModel extends model
     {
         if(empty($history)) return $history;
         $users          = $this->loadModel('user')->getPairs('noletter');
-        $objectType     = $this->dao->select('objectType')->from(TABLE_ACTION)->where('id')->eq($history->action)->fetch('objectType');
+        $action         = $this->dao->select('objectType,objectID')->from(TABLE_ACTION)->where('id')->eq($history->action)->fetch();
+        $objectType     = $action->objectType == 'story' ? $this->dao->select('type')->from(TABLE_STORY)->where('id')->eq($action->objectID)->fetch('type') : $action->objectType;
         $objectTypeList = array();
 
         if(!isset($objectTypeList[$objectType])) $this->app->loadLang($objectType);
