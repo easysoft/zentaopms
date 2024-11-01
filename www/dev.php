@@ -14,7 +14,7 @@
 <body>
 <div class="mx-4 mt-4 space-y-2">
   <div class="row items-center gap-4">
-    <h1>Perf guard data</h1>
+    <h1>Zentao Profiles</h1>
     <div class="switch mt-1">
       <input type="checkbox" id="autoRefresh">
       <label for="autoRefresh">Auto Refresh</label>
@@ -129,31 +129,31 @@ function initTable(data)
         {name: 'metricsLevel', title: 'LEVEL', hint: true, width: 60, fixed: 'left', cellClass: 'font-mono text-sm select-all', map: metricsLevelNames, hint: info => info.row.data.requestId, flex: 0, align: 'center', sort: 'number', border: 'right'},
         {name: 'identifier', type: Object.keys(window.userMap || {}).length ? 'avatarName' : '', title: 'User', fixed: 'left', flex: 0, width: 80, sort: true, avatarKey: 'identifier_avatar', avatarCodeKey: 'identifier_avatar_code', avatarNameKey: 'identifier_name'},
         {name: 'path', type: 'title', title: 'Page', hint: (info) => info.row.data.request.url, link: (info) => ({url: info.row.data.request.url, target: '_blank'}), flex: 1, fixed: 'left', maxWidth: 1000, sort: true},
-        {name: 'metrics.backend.totalTime', title: 'Back Time', sort: 'number', type: 'number', digits: 2, format: '{0}ms', digits: 3, headerGroup: 'Backend', hint: info =>
+        {name: 'metrics.backend.totalTime', title: 'Back Time', sort: 'number', digits: 1, format: '{0}ms', headerGroup: 'Backend', align: 'right', hint: info =>
         {
             const timeClass = info.row.data['metrics.backend.totalTimeClass'];
             if(timeClass === 'danger') return `BLOCK: > 500ms`;
             if(timeClass === 'warning') return `WARN: > 300ms`;
         }},
-        {name: 'metrics.backend.sqlTime', title: 'SQL Time', sort: 'number', format: '{0}ms', digits: 3, headerGroup: 'Backend', hint: info =>
+        {name: 'metrics.backend.sqlTime', title: 'SQL Time', sort: 'number', format: '{0}ms', digits: 1, headerGroup: 'Backend', align: 'right', hint: info =>
         {
             const timeClass = info.row.data['metrics.backend.sqlTimeClass'];
             if(timeClass === 'danger') return `BLOCK: > 300ms`;
             if(timeClass === 'warning') return `WARN: > 200ms`;
         }},
-        {name: 'metrics.backend.sqlCount', title: 'SQLs', sort: 'number', width: 48, link: '#', hint: 'Click to check details', headerGroup: 'Backend'},
-        {name: 'metrics.backend.requestMemory', title: 'Memory', sort: 'number', format: (value) => value ? zui.formatBytes(value) : '', headerGroup: 'Backend'},
+        {name: 'metrics.backend.sqlCount', title: 'SQLs', sort: 'number', width: 48, link: '#', hint: 'Click to check details', headerGroup: 'Backend', align: 'center'},
+        {name: 'metrics.backend.requestMemory', title: 'Memory', sort: 'number', format: (value) => value ? zui.formatBytes(value) : '', headerGroup: 'Backend', align: 'right'},
         {name: 'metrics.backend.phpFileLoaded', title: 'PHP Files', width: 50, sort: 'number', align: 'center', headerGroup: 'Backend'},
-        {name: 'metrics.frontend.downloadSize', title: 'Transfer Size', sort: 'number', format: (value) => value ? zui.formatBytes(value) : '', headerGroup: 'Frontend'},
-        {name: 'metrics.frontend.renderTime', title: 'Front Time', sort: 'number', format: '{0}ms', headerGroup: 'Frontend', border: 'left', hint: info =>
+        {name: 'metrics.frontend.downloadSize', title: 'Transfer Size', sort: 'number', format: (value) => value ? zui.formatBytes(value) : '', headerGroup: 'Frontend', align: 'right'},
+        {name: 'metrics.frontend.renderTime', title: 'Front Time', sort: 'number', format: '{0}ms', headerGroup: 'Frontend', border: 'left', align: 'right', hint: info =>
         {
             const timeClass = info.row.data['metrics.frontend.renderTimeClass'];
             if(timeClass === 'danger') return `BLOCK: > 100ms`;
             if(timeClass === 'warning') return `WARN: > 60ms`;
         }},
-        {name: 'userEnv.browser', title: 'Client Browser', sort: true, align: 'left', headerGroup: 'Frontend'},
-        {name: 'userEnv.system', title: 'Client OS', sort: true, align: 'center', headerGroup: 'Frontend'},
-        {name: 'request.php', title: 'PHP', hint: true, width: 40},
+        {name: 'userEnv.browser', title: 'Client Browser', sort: true, align: 'left', headerGroup: 'Frontend', hidden: true},
+        {name: 'userEnv.system', title: 'Client OS', sort: true, align: 'center', headerGroup: 'Frontend', hidden: true},
+        {name: 'request.php', title: 'PHP', hint: true, width: 40, align: 'center'},
         {name: 'request.xhprof', title: 'Xhprof', link: (info) => ({url: info.row.data.request.xhprof || '#', target: '_blank'}), format: (value) => (value ? 'Open' : ''), hint: true, width: 40},
         {name: 'requestId', title: 'RID', hint: true, width: 80, cellClass: 'font-mono text-sm select-all', hint: info => info.row.data.requestId, flex: 0, align: 'left', fixed: 'right'},
         {name: 'timestamp', title: 'Date', type: 'datetime', hint: (info) => zui.formatDate(info.row.data.timestamp, 'yyyy-MM-dd hh:mm:ss'), width: 120, sort: 'number', fixed: 'right'},
@@ -207,7 +207,7 @@ function initTable(data)
 
             if(window.userMap)
             {
-                const user = window.userMap[row.identifier];
+                const user = window.userMap[row.identifier.toLowerCase()];
                 if(user)
                 {
                     row.identifier_avatar      = user.avatar;
