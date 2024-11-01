@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowgroup` (
   `projectType` varchar(10) NOT NULL DEFAULT '',
   `name` varchar(30) NOT NULL DEFAULT '',
   `desc` text NULL,
-  `disabledModules` text NULL DEFAULT '',
+  `disabledModules` varchar(255) NOT NULL DEFAULT '',
   `status` varchar(10) NOT NULL DEFAULT 'wait',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
