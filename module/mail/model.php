@@ -663,7 +663,7 @@ class mailModel extends model
         {
             $this->app->loadLang('doc');
 
-            if($actionType == 'created') $titleType = 'create';
+            if($actionType == 'releaseddoc') $titleType = 'releasedDoc';
             return sprintf($this->lang->doc->mail->{$titleType}->title, $this->app->user->realname, $object->id, $object->title);
         }
 

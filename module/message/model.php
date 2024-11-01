@@ -249,11 +249,10 @@ class messageModel extends model
         if(empty($toList) && $objectType == 'mr')          $toList = $object->createdBy . ',' . $object->assignee;
         if(empty($toList) and $objectType == 'demandpool') $toList = trim($object->owner, ',') . ',' . trim($object->reviewer, ',');
         if(empty($toList) and $objectType == 'feedback')   $toList = $object->openedBy;
-        if(empty($toList) && $objectType == 'doc')         $toList = $object->mailto;
-        if(empty($toList) && $objectType == 'release')
+        if(empty($toList) && in_array($objectType, array('release', 'doc')))
         {
             list($toList, $ccList) = $this->loadModel($objectType)->getToAndCcList($object);
-            $toList = $toList . $ccList;
+            $toList = $toList . ',' . $ccList;
         }
         if(empty($toList) && $objectType == 'task' && $object->mode == 'multi')
         {

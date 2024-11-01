@@ -336,10 +336,10 @@ $lang->doc->customShowLibsList['children'] = 'Display Child-category Documents';
 $lang->doc->customShowLibsList['unclosed'] = "Display Active {$lang->executionCommon}s Only";
 
 $lang->doc->mail = new stdclass();
-$lang->doc->mail->create = new stdclass();
-$lang->doc->mail->edit   = new stdclass();
-$lang->doc->mail->create->title = "%s created document #%s:%s";
-$lang->doc->mail->edit->title   = "%s edited document #%s:%s";
+$lang->doc->mail->releasedDoc = new stdclass();
+$lang->doc->mail->edit        = new stdclass();
+$lang->doc->mail->releasedDoc->title = "%s released document #%s:%s";
+$lang->doc->mail->edit->title        = "%s edited document #%s:%s";
 
 $lang->doc->confirmDelete        = "Do you want to delete this document?";
 $lang->doc->confirmDeleteLib     = "Do you want to delete this document library?";
