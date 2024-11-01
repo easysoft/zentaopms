@@ -163,7 +163,7 @@ function checkBatchEstStartedAndDeadline(event)
     if(field == 'estStarted')
     {
         let parentEstStarted = typeof tasks[parentID] == 'undefined' || $(event.target).closest('tbody').find('[name="estStarted[' + parentID + ']"]').length == 0 ? parentTask.estStarted : $(event.target).closest('tbody').find('[name="estStarted[' + parentID + ']"]').val();
-        if(estStarted.length > 0 && estStarted < parentEstStarted)
+        if(estStarted.length > 0 && parentEstStarted.length > 0 && estStarted < parentEstStarted)
         {
             const $estStartedTd = $currentRow.find('td[data-name=estStarted]');
             if($estStartedTd.find('.date-tip').length == 0 || $estStartedTd.find('.date-tip .form-tip').length > 0)
@@ -181,7 +181,7 @@ function checkBatchEstStartedAndDeadline(event)
     if(field == 'deadline')
     {
         let parentDeadline = typeof tasks[parentID] == 'undefined' || $(event.target).closest('tbody').find('[name="deadline[' + parentID + ']"]').length == 0 ? parentTask.deadline : $(event.target).closest('tbody').find('[name="deadline[' + parentID + ']"]').val();
-        if(deadline.length > 0 && deadline > parentDeadline)
+        if(deadline.length > 0 && parentDeadline.length > 0 && deadline > parentDeadline)
         {
             const $deadlineTd = $currentRow.find('td[data-name=deadline]');
             if($deadlineTd.find('.date-tip').length == 0 || $deadlineTd.find('.date-tip .form-tip').length > 0)
