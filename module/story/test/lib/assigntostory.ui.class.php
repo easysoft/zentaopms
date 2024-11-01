@@ -35,9 +35,15 @@ class assignToStoryTester extends tester
         return $this->success('指派研发需求成功');
     }
 
+    /**
+     * check the assignedTo after assignto epic.
+     * @param string
+     * @access public
+     * @return object
+     */
     public function assignToEpic()
     {
-        $form = $this->openURL('epic', 'view', array('id' => 3), 'appIframe-product');  //进入研发需求列表
+        $form = $this->openURL('epic', 'view', array('id' => 3), 'appIframe-product');  //进入业务需求详情页
         $form = $this->loadPage('epic', 'view');
         $form->dom->btn($this->lang->story->assignTo)->click();  //点击指派按钮
         $form->wait(1);
