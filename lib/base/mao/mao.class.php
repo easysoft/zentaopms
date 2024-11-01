@@ -563,7 +563,7 @@ class baseMao
      */
     public function fetch(string $keyField = '')
     {
-        if(!isset($this->config->cache->raw[$this->table])) return $this->fetchFromDB('fetch', $keyField);
+        if(empty($this->cache) || empty($this->config->cache->raw[$this->table])) return $this->fetchFromDB('fetch', $keyField);
 
         $rawResult = [];
 
@@ -579,7 +579,7 @@ class baseMao
         }
 
         if(empty($rawResult)) $rawResult = $this->cache->fetchAll($this->table);
-        if(empty($rawResult)) return '';
+        if(empty($rawResult)) return $this->fetchFromDB('fetch', $keyField);
 
         foreach($rawResult as $row)
         {
@@ -602,7 +602,7 @@ class baseMao
      */
     public function fetchAll(string $keyField = ''): array
     {
-        if(!isset($this->config->cache->raw[$this->table])) return $this->fetchFromDB('fetchAll', $keyField);
+        if(empty($this->cache) || empty($this->config->cache->raw[$this->table])) return $this->fetchFromDB('fetchAll', $keyField);
 
         $rawResult = [];
 
@@ -624,7 +624,7 @@ class baseMao
         }
 
         if(empty($rawResult)) $rawResult = $this->cache->fetchAll($this->table);
-        if(empty($rawResult)) return [];
+        if(empty($rawResult)) return $this->fetchFromDB('fetchAll', $keyField);
 
         $result = [];
         foreach($rawResult as $row)
@@ -669,9 +669,7 @@ class baseMao
      */
     public function fetchPairs(string $keyField = '', string $valueField = '')
     {
-        if(!isset($this->config->cache->raw[$this->table])) return $this->fetchFromDB('fetchPairs', $keyField, $valueField);
-
-        $pairs = [];
+        if(empty($this->cache) || empty($this->config->cache->raw[$this->table])) return $this->fetchFromDB('fetchPairs', $keyField, $valueField);
 
         $rows = $this->fetchAll();
         if(empty($rows)) return [];
@@ -679,6 +677,7 @@ class baseMao
         if(empty($keyField))   $keyField   = $this->fields[0];
         if(empty($valueField)) $valueField = $this->fields[1];
 
+        $pairs = [];
         foreach($rows as $row)
         {
             $pairs[$row->$keyField] = $row->$valueField;
@@ -750,8 +749,10 @@ class baseMao
          **/
         if(strpos($method, 'findby') !== false) return $this->findBy($method, $args);
 
+        if(empty($this->cache)) return false;
+
         if(method_exists($this->cache, $method)) return call_user_func_array([$this->cache, $method], $args);
 
-        $this->app->triggerError("Method $method not found in class baseMao.", __FILE__, __LINE__, true);
+        $this->app->triggerError("Method $method not found in class baseMao.", __FILE__, __LINE__, $this->config->debug >= 2);
     }
 }
