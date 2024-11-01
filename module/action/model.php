@@ -1296,12 +1296,14 @@ class actionModel extends model
      */
     public function computeBeginAndEnd(string $period, string $date, string $direction): array
     {
+        $period = strtolower($period);
+
         /* 1. 确切的日期。 */
         /* 1. The exact date. */
         if($date)
         {
-            if($direction == 'next') return array('begin' => $date,  'end' => FUTURE_DATE);
-            if($direction == 'pre')  return array('begin' => EPOCH_DATE,  'end' => $date);
+            if($direction == 'pre')   return array('begin' => $date,  'end' => FUTURE_DATE);
+            if($direction == 'next')  return array('begin' => EPOCH_DATE,  'end' => $date);
             return array('begin' => $date, 'end' => $date);
         }
 
@@ -1318,11 +1320,6 @@ class actionModel extends model
             $beginDate = $year . '-01-01';
             return array('begin' => $beginDate, 'end' => FUTURE_DATE);
         }
-
-        /* 3. 时间段。 */
-        /* 3. Period. */
-        $period = strtolower($period);
-        if($period == 'all') return array('begin' => EPOCH_DATE,  'end' => FUTURE_DATE);
 
         $this->app->loadClass('date');
 
