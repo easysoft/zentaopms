@@ -702,7 +702,7 @@ class baseMao
         $fields = implode(',', $this->fields);
         $this->dao->select($fields)->from($this->table)->where('1=1');
 
-        foreach($this->conditions as $index => $condition)
+        foreach($this->conditions as $condition)
         {
             $func = $condition['operator'];
             $this->dao->andWhere($condition['field'])->$func($condition['value']);
