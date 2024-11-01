@@ -46,11 +46,11 @@ ALTER TABLE `zt_workflowgroup` ADD `code` varchar(30) NOT NULL DEFAULT '' AFTER 
 
 DELETE FROM `zt_workflowgroup` WHERE `main` = '1';
 INSERT INTO `zt_workflowgroup` (`type`, `projectModel`, `projectType`, `name`, `code`, `status`, `vision`, `main`) VALUES
-('product', '',          'project',    '默认流程',            'productproject',   'normal', 'rnd', '1'),
-('project', 'scrum',     'product',    '敏捷-产品型默认流程', 'scrumproduct',     'normal', 'rnd', '1'),
-('project', 'scrum',     'project',    '敏捷-项目型默认流程', 'scrumproject',     'normal', 'rnd', '1'),
-('project', 'waterfall', 'product',    '瀑布-产品型默认流程', 'waterfallproduct', 'normal', 'rnd', '1'),
-('project', 'waterfall', 'project',    '瀑布-项目型默认流程', 'waterfallproject', 'normal', 'rnd', '1');
+('product', '',          'project',  '默认流程',           'productproject',  'normal', 'rnd', '1'),
+('project', 'scrum',     'product',  '产品型敏捷项目流程', 'scrumproduct',    'normal', 'rnd', '1'),
+('project', 'scrum',     'project',  '项目型敏捷项目流程', 'scrumproject',    'normal', 'rnd', '1'),
+('project', 'waterfall', 'product',  '产品型瀑布项目流程', 'waterfallproduct','normal', 'rnd', '1'),
+('project', 'waterfall', 'project',  '项目型瀑布项目流程', 'waterfallproject','normal', 'rnd', '1');
 
 ALTER TABLE `zt_doclib` ADD `orderBy` varchar(30) NOT NULL DEFAULT 'id_asc' AFTER `deleted`;
 
