@@ -109,7 +109,7 @@ class thinkModel extends wg
                 }
                 else
                 {
-                    $resultCard = $this->buildQuestionItem($step);
+                    $resultCard = empty($step->answer->result) ? array() : $this->buildQuestionItem($step);
                 }
             }
             elseif($step->link['showMethod'] == '1')
