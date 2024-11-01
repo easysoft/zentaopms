@@ -81,7 +81,7 @@ formBatchPanel
         set::label($lang->task->story),
         set::control('picker'),
         set::items(array()),
-        set::width('200px'),
+        set::width('300px'),
         set::ditto(true),
         set::defaultDitto('off')
     ),
