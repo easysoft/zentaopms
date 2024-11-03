@@ -39,6 +39,7 @@ $privs['editLib']      = hasPriv('doc', 'editLib');
 $privs['moveLib']      = hasPriv('doc', 'moveLib');
 $privs['deleteLib']    = hasPriv('doc', 'deleteLib');
 $privs['sortDocLib']   = hasPriv('doc', 'sortDocLib');
+$privs['uploadFile']   = hasPriv('doc', 'create');
 $privs['exportFiles']  = hasPriv('doc', 'exportFiles');
 $privs['createSpace']  = $hasCustomSpace && hasPriv('doc', 'createSpace');
 $privs['deleteSpace']  = $hasCustomSpace && hasPriv('doc', 'deleteSpace');
