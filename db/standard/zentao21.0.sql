@@ -1690,7 +1690,9 @@ CREATE TABLE `zt_history` (
   `action` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `field` varchar(30) NOT NULL DEFAULT '',
   `old` text DEFAULT NULL,
+  `oldValue` text DEFAULT NULL,
   `new` text DEFAULT NULL,
+  `newValue` text DEFAULT NULL,
   `diff` mediumtext DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `action` (`action`)
@@ -4292,7 +4294,7 @@ CREATE TABLE `zt_workflowgroup` (
   `name` varchar(30) NOT NULL DEFAULT '',
   `code` varchar(30) NOT NULL DEFAULT '',
   `desc` text DEFAULT NULL,
-  `disabledModules` text DEFAULT '',
+  `disabledModules` varchar(255) NOT NULL DEFAULT '',
   `status` varchar(10) NOT NULL DEFAULT 'wait',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `main` enum('0','1') NOT NULL DEFAULT '0',
