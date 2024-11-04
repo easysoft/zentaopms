@@ -40,3 +40,8 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
 
     $.ajaxSubmit({url, data: form});
 });
+
+window.calcHeight = function()
+{
+    return $('#viewCommitModal').height() - $('#viewCommitModal .modal-header').height() - $('#viewCommitModal .modal-body > .flex').height() - 200;
+}
