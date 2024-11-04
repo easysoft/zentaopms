@@ -545,7 +545,7 @@ class api extends control
             if(dao::isError()) return $this->sendError(dao::getError());
 
             if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
-            return $this->sendSuccess(array('locate' => helper::createLink('api', 'index', "libID={$formData->lib}&moduleID={$formData->module}&apiID={$apiID}")));
+            return $this->sendSuccess(array('locate' => helper::createLink('api', 'index', "libID={$formData->lib}&moduleID={$formData->module}&apiID={$apiID}"), 'docApp' => array('executeCommand', 'loadApi', array($apiID, 0, 0, true))));
         }
 
         $this->setMenu($libID, $space);
@@ -582,7 +582,7 @@ class api extends control
             $this->api->update($formData);
 
             if(dao::isError()) return $this->sendError(dao::getError());
-            return $this->sendSuccess(array('locate' => helper::createLink('api', 'index', "libID=$api->lib&moduleID=0&apiID=$apiID")));
+            return $this->sendSuccess(array('locate' => helper::createLink('api', 'index', "libID=$api->lib&moduleID=0&apiID=$apiID"), 'docApp' => array(array('selectDoc', $apiID), array('executeCommand', 'loadApi'))));
         }
 
         $this->setMenu($api->lib);
