@@ -250,7 +250,7 @@ class api extends control
         $this->api->deleteRelease($id);
 
         if(dao::isError()) return $this->sendError(dao::getError());
-        return $this->sendSuccess(array('load' => true, 'closeModal' => true));
+        return $this->sendSuccess(array('load' => true, 'closeModal' => true, 'docApp' => array('executeCommand', 'loadLazyContent', array('.api-release-list'))));
     }
 
     /**
@@ -274,7 +274,7 @@ class api extends control
 
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            return $this->sendSuccess(array('load' => true, 'closeModal' => true));
+            return $this->sendSuccess(array('load' => true, 'closeModal' => true, 'docApp' => array('executeCommand', 'loadLazyContent', array('.api-release-list'))));
         }
 
         $this->display();
