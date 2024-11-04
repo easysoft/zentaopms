@@ -235,7 +235,7 @@ if($confirm != 'yes')
         ),
         h::td
         (
-            nl2br(zget($run->case, 'precondition', '')),
+            html(nl2br(zget($run->case, 'precondition', ''))),
         )
     )
 ) : '';
