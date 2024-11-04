@@ -1,5 +1,13 @@
+/**
+ * 定义页面上的自定义渲染器。
+ * Define the custom renderers on the page.
+ */
 const customRenders =
 {
+    /**
+     * 定义 API 文档编辑器渲染，包括查看、编辑和创建。
+     * Define the API doc editor render, including view, edit and create.
+     */
     editor: function()
     {
         const mode = this.mode;
@@ -19,6 +27,11 @@ const customRenders =
         const version = this.signals.docVersion.value || 0;
         return {fetcher: $.createLink('api', 'view', `libID=${doc.lib}&apiID=${doc.id}&moduleID=${doc.module}&version=${version}&release=${release}`), loadingText: getDocAppLang('loadingDocsData'), className: 'doc-editor-content'};
     },
+
+    /**
+     * 定义 API 文档列表渲染，包括结构和版本。
+     * Define the API doc list render, including structs and releases.
+     */
     list: function()
     {
         const listType = this.signals.listType.value;
@@ -27,12 +40,22 @@ const customRenders =
         if(listType === 'structs') return {fetcher: $.createLink('api', 'struct', `libID=${this.libID}&releaseID=${releaseID}`), loadingText: getDocAppLang('loading'), className: 'api-struct-list'};
         if(listType === 'releases') return {fetcher: $.createLink('api', 'releases', `libID=${this.libID}`), loadingText: getDocAppLang('loading'), className: 'api-release-list'};
     },
+
+    /**
+     * 定义 API 文档列表筛选菜单渲染，当展示结构和版本时不显示筛选菜单。
+     * Define the API doc list filter menu render, not show the filter menu when showing structs and releases.
+     */
     filters: function()
     {
         const listType = this.signals.listType.value;
         if(this.mode !== 'list' || !listType) return;
         return null;
     },
+
+    /**
+     * 定义 API 文档列表工具栏渲染。
+     * Define the API doc list toolbar render.
+     */
     toolbar: function()
     {
         const listType = this.signals.listType.value;
@@ -44,6 +67,11 @@ const customRenders =
             return {component: 'toolbar', props: {items: items}};
         }
     },
+
+    /**
+     * 定义顶部面包屑导航渲染。
+     * Define the top breadcrumb render.
+     */
     'app-nav': function(items)
     {
         const lib = this.lib;
@@ -85,6 +113,11 @@ const customRenders =
         if(listType === 'releases') items.push([listType, zui.renderCustomContent({className: 'mx-2', content: getDocAppLang('releases')})]);
         return items;
     },
+
+    /**
+     * 定义侧边栏渲染，显示结构、版本和模块。
+     * Define the sidebar render, show structs, releases and modules.
+     */
     'sidebar-before': function()
     {
         if(!this.libID) return;
@@ -106,6 +139,10 @@ const customRenders =
     }
 };
 
+/**
+ * 获取查看视图的 URL，用于更新浏览器地址栏。
+ * Get the view mode URL for updating the browser address bar.
+ */
 function getViewModeUrl(options)
 {
     const doc = this.doc;
@@ -167,6 +204,7 @@ function getTableOptions(options, info)
     });
 }
 
+/* 扩展文档应用操作按钮生成定义。 Extend the doc app action definition. */
 $.extend(window.docAppActions,
 {
     /**
@@ -201,12 +239,23 @@ $.extend(window.docAppActions,
     },
 });
 
+/* 扩展文档应用命令定义。 Extend the doc app command definition. */
 $.extend(window.docAppCommands,
 {
+    /**
+     * 保存 API 文档数据。
+     * Save the API doc data.
+     */
     saveApiDoc: function()
     {
+        /* 触发 API 表单的提交事件。 */
         $('#docApp .doc-view form').trigger('submit');
     },
+
+    /**
+     * 加载指定的 API 文档。
+     * Load the specified API doc.
+     */
     loadApi: function(_, args)
     {
         const apiID   = args[0] || this.docID;
@@ -221,6 +270,11 @@ $.extend(window.docAppCommands,
             if(select) docApp.selectDoc(apiID);
         });
     },
+
+    /**
+     * 显示结构列表。
+     * Show the struct list.
+     */
     showStructs: function()
     {
         getDocApp().changeState(
@@ -231,6 +285,11 @@ $.extend(window.docAppCommands,
             listType: 'structs',
         });
     },
+
+    /**
+     * 显示版本列表。
+     * Show the release list.
+     */
     showReleases: function()
     {
         getDocApp().changeState(
@@ -241,6 +300,11 @@ $.extend(window.docAppCommands,
             listType: 'releases',
         });
     },
+
+    /**
+     * 显示API 目录。
+     * Show the api catalog.
+     */
     showModules: function()
     {
         getDocApp().changeState(
@@ -251,6 +315,11 @@ $.extend(window.docAppCommands,
             listType: '',
         });
     },
+
+    /**
+     * 更改当前库的发布版本。
+     * Change the release of the current library.
+     */
     changeLibRelease: function(_, args)
     {
         const docApp = getDocApp();
@@ -262,12 +331,22 @@ $.extend(window.docAppCommands,
         const doc = docApp.doc;
         if(doc && doc.data.lib === libID) docApp.executeCommand('loadApi', [doc.data.id, 0, release]);
     },
+
+    /**
+     * 加载懒加载内容。
+     * Load the lazy content.
+     */
     loadLazyContent: function(_, args)
     {
         const selector = args[0];
         if(!selector) return;
         $(selector).closest('.lazy-content').trigger('loadContent');
     },
+
+    /**
+     * 更新懒加载内容。
+     * Update the lazy content.
+     */
     updateLazyContent: function(context, args)
     {
         const event = context.event;
@@ -281,11 +360,15 @@ $.extend(window.docAppCommands,
     }
 });
 
-window._setDocAppOptions = window.setDocAppOptions;
-window.setDocAppOptions = function(_, options)
+/**
+ * 重写文档应用的配置选项方法。
+ * Override the method to set the doc app options.
+ */
+window._setDocAppOptions = window.setDocAppOptions; // Save the original method.
+window.setDocAppOptions = function(_, options) // Override the method.
 {
     options = window._setDocAppOptions(_, options);
-    const oldIsMatchFilter = options.isMatchFilter;
+    const oldIsMatchFilter = options.isMatchFilter; // Save the original isMatchFilter method.
     return $.extend(options,
     {
         defaultState         : {libReleaseMap: {}, listType: ''},
