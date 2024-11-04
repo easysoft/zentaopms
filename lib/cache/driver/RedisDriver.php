@@ -17,21 +17,56 @@ use ZenTao\Cache\SimpleCache\InvalidArgumentException;
 class RedisDriver implements CacheInterface
 {
     /**
+     * 缓存命名空间，用来区分不同的缓存。
+     * The cache namespace, used to distinguish different caches.
+     *
      * @var string
      */
     private $namespace;
 
     /**
+     * 缓存过期时间，单位为秒。
+     * The cache expiration time, in seconds.
+     *
      * @var int
      */
     private $defaultLifetime;
+
+    /**
+     * 缓存序列化器，默认使用 PHP 内置的序列化器。
+     * The cache serializer, the default is the PHP built-in serializer.
+     *
+     * @var int
+     */
+    private $serializer = \Redis::SERIALIZER_PHP;
 
     public function __construct($namespace = '', $defaultLifetime = 0)
     {
         $this->namespace = $namespace;
         $this->defaultLifetime = $defaultLifetime;
 
+        $this->setSerializer();
+
         $this->connectRedis();
+    }
+
+    /**
+     * 设置序列化器。
+     * Set the serializer.
+     *
+     * @access private
+     * @return void
+     */
+    private function setSerializer()
+    {
+        if(function_exists('igbinary_serialize'))
+        {
+            $this->serializer = \Redis::SERIALIZER_IGBINARY;
+        }
+        elseif(function_exists('msgpack_pack'))
+        {
+            $this->serializer = \Redis::SERIALIZER_MSGPACK;
+        }
     }
 
     /**
@@ -63,6 +98,8 @@ class RedisDriver implements CacheInterface
             }
 
             if(!$this->redis->ping()) \helper::end('Can not connect to Redis server.');
+
+            $this->redis->setOption(\Redis::OPT_SERIALIZER, $this->serializer);
         }
         catch(RedisException $e)
         {
@@ -85,7 +122,7 @@ class RedisDriver implements CacheInterface
 
         $value = $this->redis->get($key);
 
-        return $value ? unserialize($value) : $default;
+        return $value ? $value : $default;
     }
 
     /**
@@ -103,7 +140,7 @@ class RedisDriver implements CacheInterface
 
         $ttl = is_null($ttl) ? $this->defaultLifetime : $ttl;
 
-        return $this->redis->set($key, serialize($value), (int)$ttl);
+        return $this->redis->set($key, $value, (int)$ttl);
     }
 
     /**
@@ -178,7 +215,7 @@ class RedisDriver implements CacheInterface
         {
             $key = preg_replace("/^$this->namespace/", '', $key);
 
-            $mappedResult[$key] = unserialize($value);
+            $mappedResult[$key] = $value;
         }
 
         return $mappedResult;
@@ -200,7 +237,7 @@ class RedisDriver implements CacheInterface
 
         foreach($values as $key => $value)
         {
-            $mappedByNamespaceValues[$this->buildKeyName($key)] = serialize($value);
+            $mappedByNamespaceValues[$this->buildKeyName($key)] = $value;
         }
 
         $ttl = is_null($ttl) ? $this->defaultLifetime : $ttl;
