@@ -153,6 +153,21 @@ class api extends control
             }
         }
         if($pickModule) $data['modules'] = array_values($this->doc->getModulesOfLibs($libIds, 'api'));
+
+        if($noPicks || strpos($picks, ',doc,') !== false)
+        {
+            $apis       = $this->api->getApiListBySearch(0, 0);
+            $unsetProps = array('commonParams', 'params', 'paramsExample', 'response', 'responseExample');
+            foreach($apis as $api)
+            {
+                foreach($unsetProps as $prop) unset($api->$prop);
+                $api->originTitle = $api->title;
+                $api->icon        = "api is-$api->method";
+                $api->title       = "$api->method $api->path $api->title";
+            }
+            $data['docs'] = array_values($apis);
+        }
+
         echo json_encode($data);
     }
     /**
