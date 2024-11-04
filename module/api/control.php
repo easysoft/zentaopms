@@ -119,6 +119,19 @@ class api extends control
         $pickModule = $noPicks || strpos($picks, ',module,') !== false;
         $data       = array('spaceID' => $spaceID);
 
+        if($noPicks || strpos($picks, ',space,') !== false)
+        {
+            $data['spaces'][] = array('id' => 'nolink', 'name' => $this->lang->api->noLinked, 'type' => 'api');
+            list($normalObjects, $closedObjects) = $this->api->getOrderedObjects();
+            foreach($normalObjects as $type => $list)
+            {
+                foreach($list as $id => $name) $data['spaces'][] = array('id' => "product.{$id}", 'name' => $name, 'type' => 'api', 'objectType' => $type);
+            }
+            foreach($closedObjects as $type => $list)
+            {
+                foreach($list as $id => $name) $data['spaces'][] = array('id' => "project.{$id}", 'name' => $name, 'type' => 'api', 'objectType' => $type, 'closed' => true);
+            }
+        }
         echo json_encode($data);
     }
     /**
