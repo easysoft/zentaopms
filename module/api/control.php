@@ -132,6 +132,27 @@ class api extends control
                 foreach($list as $id => $name) $data['spaces'][] = array('id' => "project.{$id}", 'name' => $name, 'type' => 'api', 'objectType' => $type, 'closed' => true);
             }
         }
+
+        if($pickLib || $pickModule)
+        {
+            $libs     = $this->doc->getApiLibs();
+            $libIds   = array_keys($libs);
+            if($pickLib)
+            {
+                $releases   = $this->api->getReleaseByQuery($libIds);
+                $releaseMap = array();
+                foreach($releases as $release) $releaseMap[$release->lib][] = $release;
+                foreach($libs as $lib)
+                {
+                    $lib->versions = isset($releaseMap[$lib->id]) ? $releaseMap[$lib->id] : array();
+                    if(!empty($lib->product))     $lib->space = "product.{$lib->product}";
+                    elseif(!empty($lib->project)) $lib->space = "project.{$lib->project}";
+                    else                          $lib->space = 'nolink';
+                }
+                $data['libs'] = array_values($libs);
+            }
+        }
+        if($pickModule) $data['modules'] = array_values($this->doc->getModulesOfLibs($libIds, 'api'));
         echo json_encode($data);
     }
     /**
