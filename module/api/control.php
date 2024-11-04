@@ -170,6 +170,22 @@ class api extends control
 
         echo json_encode($data);
     }
+
+    /**
+     * 获取接口数据。
+     *
+     * @param  int    $apiID
+     * @param  int    $version
+     * @param  int    $release
+     * @access public
+     * @return void
+     */
+    public function ajaxGetApi(int $apiID, int $version = 0, int $release = 0)
+    {
+        $api = $this->api->getByID($apiID, $version, $release);
+        $this->send($api);
+    }
+
     /**
      * API详情页面。
      * View api.
