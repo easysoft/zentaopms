@@ -16,7 +16,6 @@ formPanel
 (
     set::id('hostCreateForm'),
     set::title($lang->host->create),
-    on::change('[name="CD"]')->call('showSpugConfig', jsRaw('this')),
     formRow
     (
         setID('groupRow'),
@@ -41,19 +40,9 @@ formPanel
     (
         formGroup
         (
-            setID('openName'),
             set::width('1/3'),
             set::name('name'),
             set::label($lang->host->name)
-        ),
-        formGroup
-        (
-            setID('sshPort'),
-            setClass('hidden'),
-            set::width('1/3'),
-            set::label($lang->host->sshPort),
-            set::required(true),
-            set::name('sshPort')
         ),
         formGroup
         (
@@ -64,35 +53,6 @@ formPanel
             set::items($lang->host->osNameList),
             set::value($osName ? $osName : $host->osName),
             on::change('osChange')
-        ),
-        formGroup
-        (
-            setClass('useManual hidden'),
-            set::width('1/3'),
-            set::label($lang->host->osVersion),
-            set::control('picker'),
-            set::name('osVersion'),
-            set::items($lang->host->{"{$osName}List"})
-        )
-    ),
-    formRow
-    (
-        setID('spugConfig'),
-        setClass('hidden'),
-        formGroup
-        (
-            setID('admin'),
-            set::width('1/3'),
-            set::label($lang->host->admin),
-            set::name('admin'),
-        ),
-        formGroup
-        (
-            set::width('1/3'),
-            set::label($lang->host->password),
-            set::name('password'),
-            set::required(true),
-            set::control('password')
         )
     ),
     formRow
@@ -105,26 +65,17 @@ formPanel
         ),
         formGroup
         (
-            setClass('useSpug'),
             set::width('1/3'),
             set::label($lang->host->osVersion),
             set::control('picker'),
             set::name('osVersion'),
             set::items($lang->host->{"{$osName}List"})
-        ),
-        formGroup
-        (
-            setClass('useManual hidden'),
-            set::width('1/3'),
-            set::name('extranet'),
-            set::label($lang->host->extranet)
         )
     ),
     formRow
     (
         formGroup
         (
-            setClass('useSpug'),
             set::width('1/3'),
             set::name('extranet'),
             set::label($lang->host->extranet)
@@ -135,26 +86,12 @@ formPanel
             set::name('cpuNumber'),
             set::label($lang->host->cpuNumber),
             set::control(array('type' => 'number', 'min' => 1))
-        ),
-        formGroup
-        (
-            setClass('useManual hidden'),
-            set::width('1/3'),
-            set::name('memory'),
-            set::label($lang->host->memory),
-            set::control(array
-            (
-                'type'        => 'inputControl',
-                'suffix'      => 'GB',
-                'suffixWidth' => 40
-            ))
         )
     ),
     formRow
     (
         formGroup
         (
-            setClass('useSpug'),
             set::width('1/3'),
             set::name('memory'),
             set::label($lang->host->memory),

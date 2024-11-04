@@ -18,7 +18,6 @@ formPanel
 (
     set::id('hostEditForm'),
     set::title($lang->host->edit),
-    on::change('[name="CD"]')->call('showSpugConfig', jsRaw('this')),
     formRow
     (
         setID('groupRow'),
@@ -45,21 +44,10 @@ formPanel
     (
         formGroup
         (
-            setID('openName'),
             set::width('1/3'),
             set::name('name'),
             set::label($lang->host->name),
             set::value($host->name)
-        ),
-        formGroup
-        (
-            setID('sshPort'),
-            setClass('hidden'),
-            set::width('1/3'),
-            set::label($lang->host->sshPort),
-            set::required(true),
-            set::name('sshPort'),
-            set::value(zget($host, 'sshPort') ? $host->sshPort : '')
         ),
         formGroup
         (
@@ -70,38 +58,6 @@ formPanel
             set::items($lang->host->osNameList),
             set::value($osName ? $osName : $host->osName),
             on::change('osChange')
-        ),
-        formGroup
-        (
-            setClass('useManual hidden'),
-            set::width('1/3'),
-            set::label($lang->host->osVersion),
-            set::control('picker'),
-            set::name('osVersion'),
-            set::items($lang->host->{"{$osName}List"}),
-            set::value($host->osVersion)
-        )
-    ),
-    formRow
-    (
-        setID('spugConfig'),
-        setClass('hidden'),
-        formGroup
-        (
-            setID('admin'),
-            set::width('1/3'),
-            set::label($lang->host->account),
-            set::name('admin'),
-            set::value($host->admin)
-        ),
-        formGroup
-        (
-            set::width('1/3'),
-            set::label($lang->host->password),
-            set::name('password'),
-            set::control('password'),
-            set::required(true),
-            set::value($lang->host->defaultPWD)
         )
     ),
     formRow
@@ -115,28 +71,18 @@ formPanel
         ),
         formGroup
         (
-            setClass('useSpug'),
             set::width('1/3'),
             set::label($lang->host->osVersion),
             set::control('picker'),
             set::name('osVersion'),
             set::items($lang->host->{"{$osName}List"}),
             set::value($host->osVersion)
-        ),
-        formGroup
-        (
-            setClass('useManual hidden'),
-            set::width('1/3'),
-            set::name('extranet'),
-            set::label($lang->host->extranet),
-            set::value($host->extranet)
         )
     ),
     formRow
     (
         formGroup
         (
-            setClass('useSpug'),
             set::width('1/3'),
             set::name('extranet'),
             set::label($lang->host->extranet),
@@ -165,35 +111,18 @@ formPanel
             ))
         )
     ),
-    formRow
+    formGroup
     (
-        formGroup
+        set::width('1/3'),
+        set::name('diskSize'),
+        set::label($lang->host->diskSize),
+        set::value(zget($host, 'diskSize', '') ? $host->diskSize : ''),
+        set::control(array
         (
-            setClass('useSpug'),
-            set::width('1/3'),
-            set::name('memory'),
-            set::label($lang->host->memory),
-            set::value(zget($host, 'memory', '') ? $host->memory : ''),
-            set::control(array
-            (
-                'type'        => 'inputControl',
-                'suffix'      => 'GB',
-                'suffixWidth' => 40
-            ))
-        ),
-        formGroup
-        (
-            set::width('1/3'),
-            set::name('diskSize'),
-            set::label($lang->host->diskSize),
-            set::value(zget($host, 'diskSize', '') ? $host->diskSize : ''),
-            set::control(array
-            (
-                'type'        => 'inputControl',
-                'suffix'      => 'GB',
-                'suffixWidth' => 40
-            ))
-        )
+            'type'        => 'inputControl',
+            'suffix'      => 'GB',
+            'suffixWidth' => 40
+        ))
     ),
     formGroup
     (
