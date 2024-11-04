@@ -117,6 +117,7 @@ class docApp extends wg
         $langData->fileDelete            = $lang->file->delete;
         $langData->fileRename            = $lang->file->edit;
         $langData->fileConfirmDelete     = $lang->file->confirmDelete;
+        $langData->deleted               = $lang->file->deleted;
 
         /**
          * 通过语言项定义文档表格列显示名称。

@@ -111,6 +111,10 @@ class actionZen extends action
                 $params     = "libID=0&moduelID=0&apiID={$trash->objectID}";
                 $methodName = 'index';
             }
+            if($trash->objectType == 'doc')
+            {
+                $params = "docID={$trash->objectID}";
+            }
             if(in_array($module, array('traincourse','traincontents')))
             {
                 $methodName = $module == 'traincourse' ? 'viewcourse' : 'viewchapter';
