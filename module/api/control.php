@@ -198,43 +198,17 @@ class api extends control
      */
     public function view(int $libID, int $apiID, int $moduleID = 0, int $version = 0, int $release = 0)
     {
-        if(strpos($this->server->http_referer, 'space') === false && strpos($this->server->http_referer, 'api') === false)
+        if(helper::isAjaxRequest('fetch'))
         {
-            setCookie("docSpaceParam", '', $this->config->cookieLife, $this->config->webRoot, '', false, true);
+            $api = $this->api->getByID($apiID, $version, $release);
+
+            $this->view->api      = $api;
+            $this->view->typeList = $this->api->getTypeList($api->lib);
+            $this->display();
+            return;
         }
 
-        /* 获取文档目录列表和当前选中的文档目录. */
-        $libs      = $this->doc->getApiLibs($libID, $this->objectType, (int)$this->objectID);
-        $api       = $this->api->getByID($apiID, $version, $release);
-        $libID     = $api->lib;
-        $lib       = zget($libs, $libID);
-        $api->desc = htmlspecialchars_decode($api->desc);
-
-        if($libID && !isset($libs[$libID])) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->doc->accessDenied, 'locate' => $this->createLink('api', 'index'))));
-
-        /* 生成一些必要的参数。 */
-        $type       = $lib->product ? 'product' : ($lib->project ? 'project' : 'nolink');
-        $objectID   = $lib->product ? $lib->product : $lib->project;
-        $linkObject = zget($lib, $type, 0);
-        $spaceType  = 'api';
-        $moduleID   = $api->module;
-        $linkParams = "%s";
-        if($this->app->tab != 'doc' && $type != 'nolink') $linkParams = "objectID=$linkObject&$linkParams";
-
-        /* 解析cookie并获取左侧目录树。 */
-        $this->apiZen->parseDocSpaceParam($libs, $libID, $type, $objectID, $moduleID, $spaceType, $release);
-
-        $this->view->title      = $this->lang->api->pageTitle;
-        $this->view->isRelease  = $release > 0;
-        $this->view->release    = $release;
-        $this->view->version    = $version;
-        $this->view->apiID      = $apiID;
-        $this->view->api        = $api;
-        $this->view->linkParams = $linkParams;
-        $this->view->typeList   = $this->api->getTypeList($api->lib);
-        $this->view->users      = $this->user->getPairs('noclosed,noletter');
-        $this->view->actions    = $apiID ? $this->action->getList('api', $apiID) : array();
-        $this->display();
+        echo $this->fetch('api', 'index', "libID=$libID&moduleID=$moduleID&apiID=$apiID&version=$version&release=$release");
     }
 
     /**
