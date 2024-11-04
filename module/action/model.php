@@ -1632,7 +1632,7 @@ class actionModel extends model
 
         /* 移除搜索中的时间筛选条件。 */
         /* Remove time filter from search. */
-        $condition = preg_replace("/AND +date[\<\>]'\d{4}\-\d{2}\-\d{2}'/", '', $condition);
+        $condition = preg_replace("/AND +`?date`? +(<|>|<=|>=) +'\d{4}\-\d{2}\-\d{2}'/", '', $condition);
         $count     = $this->dao->select('COUNT(1) AS count')
             ->from(TABLE_ACTION)
             ->where($condition)
