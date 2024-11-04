@@ -49,6 +49,31 @@ class testcase extends tester
     }
 
 	/**
+     * 编辑测试用例。
+     * edit testcase.
+     *
+     * @param  array  $url
+     * @param  array  $testcase
+     * @access public
+     * @return object
+     */
+    public function editTestCase($url, $testcase)
+    {
+        $this->login();
+        $form = $this->initForm('testcase', 'edit', $url, 'appIframe-qa');
+        if(isset($testcase['caseName']))   $form->dom->title->setValue($testcase['caseName']);
+        if(isset($testcase['type']))       $form->dom->type->picker($testcase['type']);
+        if(isset($testcase['stage']))      $form->dom->{'stage[]'}->multiPicker($testcase['stage']);
+        if(isset($testcase['pri']))        $form->dom->pri->picker($testcase['pri']);
+        if(isset($testcase['prediction'])) $form->dom->prediction->setValue($testcase['prediction']);
+        if(isset($testcase['steps']))      $this->fillInCaseSteps($form, $testcase);
+        $form->dom->saveButton->click();
+        $this->webdriver->wait(3);
+        if($form->dom->caseName->getText() == $testcase['caseName']) return $this->success('编辑测试用例成功');
+        return $this->failed('编辑测试用例失败');
+    }
+
+	/**
      * 添加测试用例步骤
      * fill in case steps
      *
