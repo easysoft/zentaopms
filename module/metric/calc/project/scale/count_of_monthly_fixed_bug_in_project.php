@@ -26,6 +26,26 @@ class count_of_monthly_fixed_bug_in_project extends baseCalc
 
     public $result = array();
 
+    public function calculate($data)
+    {
+        $project    = $data->project;
+        $resolution = $data->resolution;
+        $closedDate = $data->closedDate;
+
+        if(empty($closedDate)) return false;
+
+        $year = substr($closedDate, 0, 4);
+        if($resolution != 'fixed' || $year == '0000') return false;
+
+        $month = substr($closedDate, 5, 2);
+
+        if(!isset($this->result[$project])) $this->result[$project] = array();
+        if(!isset($this->result[$project][$year])) $this->result[$project][$year] = array();
+        if(!isset($this->result[$project][$year][$month])) $this->result[$project][$year][$month] = 0;
+
+        $this->result[$project][$year][$month] += 1;
+    }
+
     public function getResult($options = array())
     {
         $records = $this->getRecords(array('project', 'year', 'month', 'value'));
