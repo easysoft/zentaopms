@@ -62,7 +62,8 @@ $lang->api->defaultVersion      = "Current Version";
 $lang->api->zentaoAPI           = "Zentao API v1";
 $lang->api->search              = "Search";
 $lang->api->allLibs             = "AllLibs";
-$lang->api->noLinked            = "No Linked {$lang->productCommon} and {$lang->projectCommon}";
+$lang->api->noLinked            = "Stand-alone APIs";
+$lang->api->apiCatalog          = 'Api Catalogs';
 $lang->api->addCatalog          = 'Add Catalog';
 $lang->api->editCatalog         = 'Edit Catalog';
 $lang->api->sortCatalog         = 'Catalog Sorting';
@@ -234,3 +235,11 @@ $lang->api->error = new stdclass();
 $lang->api->error->onlySelect = 'SQL API only allows SELECT query.';
 $lang->api->error->disabled   = 'For security reasons, this feature is disabled. Go to the config directory and modify the configuration item %s to enable it.';
 $lang->api->error->notInput   = 'Debugging is not supported temporarily due to field parameter type restrictions';
+
+$lang->api->filterTypes[] = array('all', 'All');
+$lang->api->filterTypes[] = array('createdByMe', 'Created by me');
+$lang->api->filterTypes[] = array('editedByMe', 'Edited by me');
+
+$lang->api->homeFilterTypes[] = array('noLink',  $lang->api->libTypeList['nolink']);
+$lang->api->homeFilterTypes[] = array('product', $lang->api->libTypeList['product']);
+$lang->api->homeFilterTypes[] = array('project', $lang->api->libTypeList['project']);

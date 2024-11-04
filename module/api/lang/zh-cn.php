@@ -62,7 +62,8 @@ $lang->api->defaultVersion      = "当前版本";
 $lang->api->zentaoAPI           = "禅道API文档v1";
 $lang->api->search              = "搜索";
 $lang->api->allLibs             = "全部库";
-$lang->api->noLinked            = "未关联{$lang->productCommon}和{$lang->projectCommon}";
+$lang->api->noLinked            = "独立接口";
+$lang->api->apiCatalog          = '接口目录';
 $lang->api->addCatalog          = '添加目录';
 $lang->api->editCatalog         = '编辑目录';
 $lang->api->sortCatalog         = '目录排序';
@@ -234,3 +235,11 @@ $lang->api->error             = new stdclass();
 $lang->api->error->onlySelect = 'SQL查询接口只允许SELECT查询';
 $lang->api->error->disabled   = '因为安全原因，该功能被禁用。可以到config目录，修改配置项 %s，打开此功能。';
 $lang->api->error->notInput   = '因字段参数类型限制，暂不支持调试';
+
+$lang->api->filterTypes[] = array('all', '全部');
+$lang->api->filterTypes[] = array('createdByMe', '我创建的');
+$lang->api->filterTypes[] = array('editedByMe', '我编辑的');
+
+$lang->api->homeFilterTypes[] = array('noLink',  $lang->api->libTypeList['nolink']);
+$lang->api->homeFilterTypes[] = array('product', $lang->api->libTypeList['product']);
+$lang->api->homeFilterTypes[] = array('project', $lang->api->libTypeList['project']);
