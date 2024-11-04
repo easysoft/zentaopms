@@ -68,7 +68,7 @@ class host extends control
     {
         if($_POST)
         {
-            $formData = form::data($this->config->host->form->create)->add('createdBy', $this->app->user->account)->add('createdDate', helper::now())->get();
+            $formData = form::data($this->config->host->form->create)->add('createdBy', $this->app->user->account)->add('createdDate', helper::now())->skipSpecial('name')->get();
             $this->hostZen->checkFormData($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -99,7 +99,7 @@ class host extends control
     {
         if($_POST)
         {
-            $formData = form::data($this->config->host->form->edit)->add('id', $id)->add('editedBy', $this->app->user->account)->add('editedDate', helper::now())->get();
+            $formData = form::data($this->config->host->form->edit)->add('id', $id)->add('editedBy', $this->app->user->account)->add('editedDate', helper::now())->skipSpecial('name')->get();
             $this->hostZen->checkFormData($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
