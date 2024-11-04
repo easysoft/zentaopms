@@ -1042,14 +1042,14 @@ class baseDAO
             /* Force to query from master db, if db has been changed. */
             $this->slaveDBH = false;
 
-            $this->cache->prepare($table, $method, $sql);
+            if($this->cache) $this->cache->prepare($table, $method, $sql);
 
             $result = $this->dbh->exec($sql);
 
             /* See: https://www.php.net/manual/en/pdo.lastinsertid.php .*/
             if($method == 'insert') $this->_lastInsertID = $this->dbh->lastInsertID();
 
-            $result ? $this->cache->sync() : $this->cache->reset();
+            if($this->cache) $result ? $this->cache->sync() : $this->cache->reset();
 
             $this->setTableCache($sql);
 
