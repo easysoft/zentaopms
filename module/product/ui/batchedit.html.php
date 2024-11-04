@@ -24,25 +24,8 @@ foreach($fields as $fieldName => $field)
 }
 $items['acl']['control'] = array('control' => $items['acl']['control'], 'inline' => true);
 
-$extendFields = $this->product->getFlowExtendFields();
-foreach($extendFields as $extendField)
-{
-    $items[$extendField->field] = array('name' => $extendField->field, 'label' => $extendField->name,  'required' => strpos(",$extendField->rules,", ',1,') !== false, 'control' => $extendField->control, 'items' => zget($extendField, 'options', array()));
-    if($extendField->control == 'select') $items[$extendField->field]['control'] = 'picker';
-    if($extendField->control == 'multi-select')
-    {
-        $items[$extendField->field]['control']  = 'picker';
-        $items[$extendField->field]['multiple'] = true;
-    }
-}
-
 /* Build form field value for batch edit. */
 $fieldNameList = array_keys($items);
-$productData   = array();
-foreach($products as $product)
-{
-    foreach($fieldNameList as $fieldName) $productData[$product->id][$fieldName] = zget($product, $fieldName, $fieldName == 'productIdList' ? $product->id : '');
-}
 
 formBatchPanel
 (
@@ -51,7 +34,7 @@ formBatchPanel
     set::mode('edit'),
     set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'batchEditFields')),
     set::items($items),
-    set::data(array_values($productData)),
+    set::data(array_values($products)),
     set::onRenderRow(jsRaw('renderRowData'))
 );
 
