@@ -183,6 +183,12 @@ class api extends control
     public function ajaxGetApi(int $apiID, int $version = 0, int $release = 0)
     {
         $api = $this->api->getByID($apiID, $version, $release);
+        if($api)
+        {
+            $api->originTitle = $api->title;
+            $api->icon        = "api is-$api->method";
+            $api->title       = "$api->method $api->path $api->title";
+        }
         $this->send($api);
     }
 
