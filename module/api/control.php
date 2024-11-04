@@ -40,21 +40,20 @@ class api extends control
      * @access public
      * @return void
      */
-    public function index(int $libID = 0, int $moduleID = 0, int $apiID = 0, int $version = 0, int $release = 0, string $browseType = '', int $param = 0)
+    public function index(int $libID = 0, int $moduleID = 0, int $apiID = 0, int $version = 0, int $release = 0, string $browseType = 'all', int $param = 0, string $orderBy = 'order_asc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = '', string $search = '')
     {
-        /* Get an api doc. */
-        if($apiID > 0)
-        {
-            /* 有apiID的直接打印详情页面。 */
-            echo $this->fetch('api', 'view', "libID=$libID&apiID=$apiID&moduleID=$moduleID&version=$version&release=$release");
-            return;
-        }
-
         /* 设置空间类型。 */
         $this->session->set('spaceType', 'api', 'doc');
         /* 详情页返回上一页用的链接。 */
         $this->session->set('structList', inLink('index', "libID=$libID&moduleID=$moduleID"), 'doc');
         setCookie("docSpaceParam", '', $this->config->cookieLife, $this->config->webRoot, '', false, true);
+
+        if(empty($mode))
+        {
+            if(!$libID)    $mode = 'home';
+            elseif($apiID) $mode = 'view';
+            else           $mode = 'list';
+        }
 
         $this->setMenu($libID);
         $objectType = $this->objectType;
@@ -75,30 +74,23 @@ class api extends control
         $objectType = !empty($lib->product) ? 'product'     : (!empty($lib->project) ? 'project' : 'nolink');
         $objectID   = !empty($lib->product) ? $lib->product : (!empty($lib->project) ? $lib->project : 0);
 
-        /* Build the search form. */
-        if($lib)
-        {
-            $browseType = $release ? 'byrelease' : $browseType;
-            $param      = $release ? $release : $param;
-            $queryID    = $browseType == 'bySearch' ? (int)$param : 0;
-            $actionURL  = $this->createLink('api', 'index', "libID=$libID&moduleID=0&apiID=0&version=0&release=0&browseType=bySearch&param=myQueryID");
-            $this->api->buildSearchForm($lib, $queryID, $actionURL, $libs);
-        }
-
-        $this->view->title          = $this->lang->api->pageTitle;
-        $this->view->lib            = $lib;
         $this->view->libID          = $libID;
-        $this->view->libs           = $libs;
-        $this->view->release        = $release;
+        $this->view->moduleID       = $moduleID;
+        $this->view->apiID          = (int)$apiID;
+        $this->view->release        = (int)$release;
+        $this->view->apiVersion     = (int)$version;
+        $this->view->mode           = $mode;
+        $this->view->filterType     = $browseType;
+        $this->view->search         = $search;
+        $this->view->recTotal       = $recTotal;
+        $this->view->recPerPage     = $recPerPage;
+        $this->view->pageID         = $pageID;
+        $this->view->orderBy        = $orderBy;
         $this->view->objectType     = $objectType;
         $this->view->objectID       = $objectID;
-        $this->view->moduleID       = $moduleID;
-        $this->view->version        = $version;
-        $this->view->apiList        = $browseType == 'bySearch' ? $this->api->getApiListBySearch($libID, $queryID, '', array_keys($libs)) : $this->api->getListByModuleID($libID, $moduleID, $release);
-        $this->view->libTree        = $this->doc->getLibTree($libID, $libs, 'api', $moduleID, $objectID, $browseType, (int)$param);
-        $this->view->objectDropdown = isset($libs[$libID]) ? $this->apiZen->generateLibsDropMenu($libs[$libID], $release) : '';
-        $this->view->spaceType      = 'api';
-        $this->view->linkParams     = '%s';
+        $this->view->param          = $param;
+        $this->view->users          = $this->loadModel('user')->getPairs('noclosed,noletter');
+        $this->view->title          = $this->lang->api->pageTitle;
         $this->display();
     }
 
