@@ -241,7 +241,11 @@ class program extends control
             $hasUnfinished = $this->program->hasUnfinishedChildren($program);
             if($hasUnfinished) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$this->lang->program->closeErrorMessage}');"));
 
-            $programData = form::data(null, $programID)->get();
+            $programData = form::data(null, $programID)
+                ->add('closedBy', $this->app->user->account)
+                ->add('lastEditedBy', $this->app->user->account)
+                ->get();
+
             $changes     = $this->program->close($programData, $program);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -316,7 +320,7 @@ class program extends control
 
         if(!empty($_POST))
         {
-            $programData = form::data(null, $programID)->get();
+            $programData = form::data(null, $programID)->add('lastEditedBy', $this->app->user->account)->get();
             $changes     = $this->program->activate($programData, $program);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
