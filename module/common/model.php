@@ -910,7 +910,7 @@ class commonModel extends model
                     $diff = '';
                     if(substr_count((string)$value, "\n") > 1     or
                         substr_count((string)$old->$key, "\n") > 1 or
-                        strpos('name,title,desc,spec,steps,content,digest,verify,report,definition,analysis,summary,prevention,resolution,outline,schedule,minutes,sql,interface,ui,langs,performance,privileges,search,actions,deploy,bi,safe,other', strtolower($key)) !== false)
+                        strpos(',name,title,desc,spec,steps,content,digest,verify,report,definition,analysis,summary,prevention,resolution,outline,schedule,minutes,sql,interface,ui,langs,performance,privileges,search,actions,deploy,bi,safe,other,', ',' . strtolower($key) . ',') !== false)
                     {
                         $diff = commonModel::diff((string)$old->$key, (string)$value);
                     }
