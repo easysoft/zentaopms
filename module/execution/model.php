@@ -3569,7 +3569,7 @@ class executionModel extends model
             $onSQL = '';
             foreach($matches[1] as $matchIndex => $match) $onSQL .= "t2.account {$match} or ";
             $onSQL = trim($onSQL, ' or ');
-            $sql = $sql->leftJoin(TABLE_TASKTEAM)->alias('t2')->on("t2.task = t1.id and ({$onSQL})");
+            if($onSQL) $sql = $sql->leftJoin(TABLE_TASKTEAM)->alias('t2')->on("t2.task = t1.id and ({$onSQL})");
         }
 
         $orderBy = array_map(function($value){return 't1.' . $value;}, explode(',', $orderBy));
