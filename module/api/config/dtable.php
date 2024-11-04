@@ -39,9 +39,11 @@ $config->api->dtable->struct->fieldList['actions']['fixed']    = 'right';
 $config->api->dtable->struct->fieldList['actions']['name']     = 'actions';
 $config->api->dtable->struct->fieldList['actions']['menu']     = array('editStruct', 'deleteStruct');
 
-$config->api->dtable->struct->fieldList['actions']['list']['editStruct']['icon'] = 'edit';
-$config->api->dtable->struct->fieldList['actions']['list']['editStruct']['hint'] = $lang->api->editStruct;
-$config->api->dtable->struct->fieldList['actions']['list']['editStruct']['url']  = helper::createLink('api', 'editStruct', 'lib={lib}&id={id}');
+$config->api->dtable->struct->fieldList['actions']['list']['editStruct']['icon']        = 'edit';
+$config->api->dtable->struct->fieldList['actions']['list']['editStruct']['hint']        = $lang->api->editStruct;
+$config->api->dtable->struct->fieldList['actions']['list']['editStruct']['data-toggle'] = 'modal';
+$config->api->dtable->struct->fieldList['actions']['list']['editStruct']['data-size']   = 'lg';
+$config->api->dtable->struct->fieldList['actions']['list']['editStruct']['url']         = helper::createLink('api', 'editStruct', 'lib={lib}&id={id}');
 
 $config->api->dtable->struct->fieldList['actions']['list']['deleteStruct']['icon']         = 'trash';
 $config->api->dtable->struct->fieldList['actions']['list']['deleteStruct']['hint']         = $lang->api->deleteStruct;

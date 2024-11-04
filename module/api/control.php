@@ -342,7 +342,7 @@ class api extends control
             $this->api->createStruct($formData);
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            return $this->sendSuccess(array('locate' => helper::createLink('api', 'struct', "libID=$libID")));
+            return $this->sendSuccess(array('locate' => helper::createLink('api', 'struct', "libID=$libID"), 'docApp' => array('executeCommand', 'loadLazyContent', array('.api-struct-list'))));
         }
 
         $options = array();
@@ -380,7 +380,7 @@ class api extends control
             $this->api->updateStruct($formData);
 
             if(dao::isError()) return $this->sendError(dao::getError());
-            return $this->sendSuccess(array('locate' => helper::createLink('api', 'struct', "libID={$struct->lib}")));
+            return $this->sendSuccess(array('locate' => helper::createLink('api', 'struct', "libID={$struct->lib}"), 'docApp' => array('executeCommand', 'loadLazyContent', array('.api-struct-list'))));
         }
 
         $options = array();
@@ -409,7 +409,7 @@ class api extends control
         $this->api->delete(TABLE_APISTRUCT, $structID);
 
         if(dao::isError()) return $this->sendError(dao::getError());
-        return $this->sendSuccess(array('load' => inlink('struct', "libID=$libID")));
+        return $this->sendSuccess(array('load' => inlink('struct', "libID=$libID"), 'docApp' => array('executeCommand', 'loadLazyContent', array('.api-struct-list'))));
     }
 
     /**
