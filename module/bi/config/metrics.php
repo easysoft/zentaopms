@@ -4648,3 +4648,17 @@ $config->bi->builtin->metrics[] = array
     'desc'       => '按项目统计的月度新增Bug数是指在某年度新发现的Bug数量。这个度量项反映了系统或项目在某月度出现的新问题数量。月度新增Bug数的增加可能意味着质量控制存在问题，需要及时进行处理和改进。',
     'definition' => "项目中创建时间在某年某月的Bug个数求和，过滤已删除的Bug，过滤已删除的项目。"
 );
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按项目统计的月度关闭Bug数',
+    'alias'      => '关闭Bug数',
+    'code'       => 'count_of_monthly_closed_bug_in_project',
+    'purpose'    => 'scale',
+    'scope'      => 'project',
+    'object'     => 'bug',
+    'unit'       => 'count',
+    'dateType'   => 'month',
+    'desc'       => '按项目统计的月度关闭Bug数是指在某月度关闭的Bug数量。这个度量项反映了产品开发过程中每月被确认并关闭的Bug的数量。该度量项可以帮助我们了解开发团队对Bug进行确认与关闭的速度和效率。',
+    'definition' => "项目中关闭时间在某年某月的Bug个数求和，过滤已删除的Bug，过滤已删除的项目。",
+);
