@@ -88,6 +88,7 @@ let autoRefreshTimer    = 0;
 let autoRefreshInterval = 10000;
 const $table            = $('#table');
 const metricsLevelNames = ['', 'BLOCK', 'WARN', 'PASS'];
+const metricsStats      = {warning: 0, danger: 0};
 
 function getQueryUrl()
 {
@@ -173,56 +174,12 @@ function initTable(data)
         colResize: true,
         rowKey: 'requestId',
         footer: [function(result, layout) {
-            const metricsStats = this.metricsStats || {};
             return [
                 {html: `Total <strong>${layout.allRows.length}</strong>`, className: 'text-gray mr-4'},
                 metricsStats.danger ? {html: `<div class="font-bold row items-center gap-2 rounded-full px-2 danger" data-toggle="tooltip" data-type="danger" data-title="Black Time &gt; 500ms or SQL time &gt; 300ms or Client time &gt; 100ms" data-placement="top-start"><i class="icon icon-alert"></i>BLOCK <strong>${metricsStats.danger}</strong> </div>`, className: 'text-danger mr-4'} : null,
                 metricsStats.warning ? {html: `<div class="font-bold row items-center gap-2 rounded-full px-2 warning-pale" data-toggle="tooltip" data-type="warning" data-title="Black Time &gt; 300ms or SQL time &gt; 200ms or Client time &gt; 60ms" data-placement="top-start"><i class="icon icon-alert"></i>WARN <strong>${metricsStats.warning}</strong> </div>`, className: 'text-warning mr-4'} : null,
             ];
         }],
-        rowConverter: function(row)
-        {
-            row.path                                = `${row.request.module}-${row.request.method}`;
-            row['metrics.backend.totalTime']        = row.metrics.backend.totalTime;
-            row['metrics.backend.sqlCount']         = row.metrics.backend.sqlCount;
-            row['metrics.backend.sqlTime']          = row.metrics.backend.sqlTime * ((!row.dataVer || row.dataVer < 2) ? 1000 : 1);
-            row['metrics.backend.requestMemory']    = row.metrics.backend.requestMemory;
-            row['metrics.backend.phpFileLoaded']    = row.metrics.backend.phpFileLoaded;
-            row['metrics.frontend.renderTime']      = row.metrics.frontend.renderTime;
-            row['metrics.frontend.downloadSize']    = row.metrics.frontend.downloadSize;
-            row['userEnv.browser']                  = row.userEnv.browser;
-            row['userEnv.system']                   = row.userEnv.system;
-            row['request.xhprof']                   = row.request.xhprof;
-            row['request.php']                      = row.request.php;
-
-            const totalTimeClass  = getTimeClass(row.metrics.backend.totalTime || 0, 500, 300);
-            const sqlTimeClass    = getTimeClass(row.metrics.backend.sqlTime || 0, 300, 200);
-            const renderTimeClass = getTimeClass(row.metrics.frontend.renderTime || 0, 100, 60);
-            const classList       = [totalTimeClass, sqlTimeClass, renderTimeClass];
-            row['metrics.backend.totalTimeClass']   = totalTimeClass;
-            row['metrics.backend.sqlTimeClass']     = sqlTimeClass;
-            row['metrics.frontend.renderTimeClass'] = renderTimeClass;
-            row.metricsClass = classList.includes('danger') ? 'danger' : (classList.includes('warning') ? 'warning' : '');
-            row.metricsLevel = classList.includes('danger') ? 1 : (classList.includes('warning') ? 2 : 3);
-
-            if(window.userMap)
-            {
-                const user = window.userMap[row.identifier.toLowerCase()];
-                if(user)
-                {
-                    row.identifier_avatar      = user.avatar;
-                    row.identifier_avatar_code = user.id;
-                    row.identifier_name        = user.realname || user.account;
-                }
-            }
-
-            if(row.metricsClass)
-            {
-                if(!this.metricsStats) this.metricsStats = {warning: 0, danger: 0};
-                this.metricsStats[row.metricsClass]++;
-            }
-            return row;
-        },
         cols: cols,
         data: data,
         onRenderCell: function(result, info)
@@ -277,6 +234,52 @@ function initTable(data)
     console.log('> table', table);
 }
 
+function initData(data)
+{
+    metricsStats.danger = 0;
+    metricsStats.warning = 0;
+    data.forEach(row =>
+    {
+        row.path                                = `${row.request.module}-${row.request.method}`;
+        row['metrics.backend.totalTime']        = row.metrics.backend.totalTime;
+        row['metrics.backend.sqlCount']         = row.metrics.backend.sqlCount;
+        row['metrics.backend.sqlTime']          = row.metrics.backend.sqlTime * ((!row.dataVer || row.dataVer < 2) ? 1000 : 1);
+        row['metrics.backend.requestMemory']    = row.metrics.backend.requestMemory;
+        row['metrics.backend.phpFileLoaded']    = row.metrics.backend.phpFileLoaded;
+        row['metrics.frontend.renderTime']      = row.metrics.frontend.renderTime;
+        row['metrics.frontend.downloadSize']    = row.metrics.frontend.downloadSize;
+        row['userEnv.browser']                  = row.userEnv.browser;
+        row['userEnv.system']                   = row.userEnv.system;
+        row['request.xhprof']                   = row.request.xhprof;
+        row['request.php']                      = row.request.php;
+
+        const totalTimeClass  = getTimeClass(row.metrics.backend.totalTime || 0, 500, 300);
+        const sqlTimeClass    = getTimeClass(row.metrics.backend.sqlTime || 0, 300, 200);
+        const renderTimeClass = getTimeClass(row.metrics.frontend.renderTime || 0, 100, 60);
+        const classList       = [totalTimeClass, sqlTimeClass, renderTimeClass];
+        row['metrics.backend.totalTimeClass']   = totalTimeClass;
+        row['metrics.backend.sqlTimeClass']     = sqlTimeClass;
+        row['metrics.frontend.renderTimeClass'] = renderTimeClass;
+        row.metricsClass = classList.includes('danger') ? 'danger' : (classList.includes('warning') ? 'warning' : '');
+        row.metricsLevel = classList.includes('danger') ? 1 : (classList.includes('warning') ? 2 : 3);
+
+        if(window.userMap)
+        {
+            const user = window.userMap[row.identifier.toLowerCase()];
+            if(user)
+            {
+                row.identifier_avatar      = user.avatar;
+                row.identifier_avatar_code = user.id;
+                row.identifier_name        = user.realname || user.account;
+            }
+        }
+
+        if(row.metricsClass) metricsStats[row.metricsClass]++;
+        return row;
+    });
+    return data;
+}
+
 function queryData(options)
 {
     options = options || {};
@@ -284,11 +287,8 @@ function queryData(options)
     loadData().then(data =>
     {
         $table.removeClass('loading');
-        if(table)
-        {
-            table.$.metricsStats = {warning: 0, danger: 0};
-            return table.render({data});
-        }
+        data = initData(data);
+        if(table) return table.render({data});
         initTable(data);
     }).catch(error => {
         $table.removeClass('loading');
