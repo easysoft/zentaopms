@@ -103,6 +103,25 @@ class api extends control
     }
 
     /**
+     * 获取接口界面数据。
+     * Get the api UI data.
+     *
+     * @param  string $spaceID
+     * @param  string $picks
+     * @access public
+     * @return void
+     */
+    public function ajaxGetData(string $spaceID = 'nolink', string $picks = '')
+    {
+        $noPicks    = empty($picks);
+        $picks      = $noPicks ? '' : ",$picks,";
+        $pickLib    = $noPicks || strpos($picks, ',lib,')    !== false;
+        $pickModule = $noPicks || strpos($picks, ',module,') !== false;
+        $data       = array('spaceID' => $spaceID);
+
+        echo json_encode($data);
+    }
+    /**
      * API详情页面。
      * View api.
      *
