@@ -1,9 +1,10 @@
 <?php
 /* 缓存设置。Cache settings. */
 $config->cache = new stdclass();
-$config->cache->enable   = false;       // 是否开启缓存。Enable cache or not.
-$config->cache->driver   = '';          // 缓存驱动。    The driver of cache. Can be File|Yac|Apcu|Redis.
-$config->cache->lifetime = 2592000;     // 缓存生存时间。The lifetime of cache. The default value is 30 days.
+$config->cache->enable    = false;       // 是否开启缓存。Enable cache or not.
+$config->cache->driver    = '';          // 缓存驱动。    The driver of cache. Can be File|Yac|Apcu|Redis.
+$config->cache->namespace = '';          // 缓存命名空间。The namespace of cache.
+$config->cache->lifetime  = 2592000;     // 缓存生存时间。The lifetime of cache. The default value is 30 days.
 
 $config->cache->client = new stdClass();
 $config->cache->client->enable = false; // 是否开启客户端缓存。Enable client cache or not.
