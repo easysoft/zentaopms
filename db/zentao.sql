@@ -2970,6 +2970,7 @@ CREATE TABLE IF NOT EXISTS `zt_deploy` (
   `begin` datetime NULL,
   `end` datetime NULL,
   `name` varchar(255) NOT NULL DEFAULT '',
+  `host` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `desc` mediumtext NULL,
   `status` varchar(20) NOT NULL DEFAULT '',
   `owner` char(30) NOT NULL DEFAULT '',

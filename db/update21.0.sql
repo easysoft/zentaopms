@@ -11,3 +11,5 @@ ALTER TABLE `zt_deploystep` DROP COLUMN `end`;
 ALTER TABLE `zt_deploystep` ADD `parent` mediumint(8) unsigned NOT NULL DEFAULT 0 AFTER `deploy`;
 
 DROP TABLE IF EXISTS `zt_deployscope`;
+
+ALTER TABLE `zt_deploy` ADD `host` mediumint(8) unsigned NOT NULL DEFAULT 0 AFTER `name`;
