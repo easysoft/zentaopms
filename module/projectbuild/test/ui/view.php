@@ -56,3 +56,23 @@ $execution->gen(2, false);
 
 $projectProduct = zenData('projectproduct');
 $projectProduct->project->range('1,2,3');
+$projectProduct->product->range('1');
+$projectProduct->gen(3);
+
+$build = zenData('build');
+$build->id->range('1');
+$build->project->range('1');
+$build->product->range('1');
+$build->branch->range('0');
+$build->execution->range('2');
+$build->name->range('版本1');
+$build->stories->range('[]');
+$build->bugs->range('[]');
+$build->scmPath->range('[]');
+$build->filePath->range('[]');
+$build->desc->range('描述111');
+$build->deleted->range('0');
+$build->gen(1);
+
+
+$tester = new buildViewTester();
