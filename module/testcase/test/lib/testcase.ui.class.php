@@ -93,6 +93,35 @@ class testcase extends tester
     }
 
 	/**
+     * 批量创建测试用例。
+     * batch create testcase.
+     *
+     * @param  array  $product
+     * @access public
+     * @return object
+     */
+    public function batchCreate($product, $testcase)
+    {
+        $this->login();
+        $form = $this->initForm('testcase', 'batchCreate', $product, 'appIframe-qa');
+        if(isset($testcase['caseName'])) 
+        {
+            $count = 0;
+            foreach($testcase['caseName'] as $caseName)
+            {
+                $count++;
+                $form->dom->{"title[$count]"}->setValue($caseName);
+            }
+        }
+        $form->dom->saveButton->click();
+        $this->webdriver->wait(2);
+
+        $caseList = array_map(function($element){return $element->getText();}, $form->dom->getElementList($form->dom->xpath['caseNameList'])->element);
+        if(!in_array($testcase['caseName'], $caseList)) return $this->success('批量创建测试用例成功');
+        return $this->failed('批量创建测试用例成功');
+    }
+
+	/**
      * 添加测试用例步骤
      * fill in case steps
      *
