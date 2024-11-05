@@ -44,14 +44,14 @@ $fields->orders('type,testStoryBox', 'type,testStoryBox,parent,assignedToBox', '
 $fields->fullModeOrders('type,module,storyBox,testStoryBox', 'desc,files,mailto,keywords');
 if($execution->type == 'kanban' || empty(data('execution.multiple')))
 {
-    $fields->orders('desc,module,storyBox', 'type,assignedToBox,testStoryBox,region,lane');
+    $fields->orders('desc,module,storyBox', 'type,parent,assignedToBox,testStoryBox,region,lane');
     $fields->fullModeOrders('name,assignedToBox', 'type,module,storyBox,testStoryBox', 'desc,files,mailto,keywords');
     if(empty($features['story'])) $fields->fullModeOrders('type,module,storyBox', 'name,assignedToBox', 'desc,files,mailto,keywords');
 }
 
 if(empty($features['story']) && $execution->type != 'kanban' && !empty(data('execution.multiple')))
 {
-    $fields->fullModeOrders('type,module,storyBox,testStoryBox,assignedToBox', 'desc,files,mailto,keywords');
+    $fields->fullModeOrders('type,module,storyBox,testStoryBox,parent,assignedToBox', 'desc,files,mailto,keywords');
 }
 
 formGridPanel
