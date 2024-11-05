@@ -46,11 +46,18 @@ class relatedObjectList extends relatedList
         $objectType = $this->prop('objectType');
         $title      = $relatedObjectInfo['title'];
 
-        $type = $relatedObjectType == 'commit' ? 'repocommit' : $relatedObjectType;
+        $itemType = $relationName;
+        if($browseType == 'byRelation')
+        {
+            $relatedObjectTypeList = $config->custom->relateObjectList;
+            $relatedObjectTypeList['commit'] = $config->custom->relateObjectList['repocommit'];
+            $relatedObjectTypeList['mr']     = $lang->mr->common;
+            $itemType = $relatedObjectTypeList[$relatedObjectType];
+        }
         $item = new stdClass();
         $item->id         = $relatedObjectID;
         $item->title      = "#$relatedObjectID $title";
-        $item->type       = $browseType == 'byRelation' ? $config->custom->relateObjectList[$type] : $relationName;
+        $item->type       = $itemType;
         $item->url        = !empty($relatedObjectInfo['url']) ? $relatedObjectInfo['url'] : null;
         $item->titleAttrs = !empty($relatedObjectInfo['url']) ? array('data-toggle' => 'modal', 'data-size' => 'lg') : null;
 
@@ -99,7 +106,7 @@ class relatedObjectList extends relatedList
 
         $browseType = $this->prop('browseType', data('browseType'));
 
-        global $config;
+        global $config, $lang;
         $data = array();
         if($browseType == 'byRelation')
         {
@@ -136,10 +143,12 @@ class relatedObjectList extends relatedList
                     foreach($relatedObjectPairs as $relatedObjectID => $relatedObjectInfo) $relatedObjectItems[] = $this->getObjectItem($relatedObjectID, $relatedObjectType, $relatedObjectInfo, (string)$relationName, $relationType, $browseType);
                 }
 
-                $type = $relatedObjectType == 'commit' ? 'repocommit' : $relatedObjectType;
+                $relatedObjectTypePairs = $config->custom->relateObjectList;
+                $relatedObjectTypePairs['commit'] = $config->custom->relateObjectList['repocommit'];
+                $relatedObjectTypePairs['mr']     = $lang->mr->common;
                 $data[$relatedObjectType] = array
                 (
-                    'title'   => $config->custom->relateObjectList[$type],
+                    'title'   => $relatedObjectTypePairs[$relatedObjectType],
                     'items'   => $relatedObjectItems
                 );
             }
