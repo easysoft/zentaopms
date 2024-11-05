@@ -1945,6 +1945,8 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `parent` mediumint(8) NOT NULL DEFAULT '0',
+  `isParent` tinyint(1) NOT NULL DEFAULT '0',
+  `path` text NULL,
   `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `module` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `design` mediumint(8) unsigned NOT NULL DEFAULT '0',
