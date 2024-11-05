@@ -8,15 +8,15 @@ class testcase extends tester
      * 添加测试用例
      * create testcase
      *
-     * @param  array  $project
+     * @param  array  $product
      * @param  array  $testcase
      * @access public
      * @return object
      */
-    public function createTestCase($project = array(), $testcase = array())
+    public function createTestCase($product = array(), $testcase = array())
     {
         $this->login();
-        $form = $this->initForm('testcase', 'create', $project, 'appIframe-qa');
+        $form = $this->initForm('testcase', 'create', $product, 'appIframe-qa');
         if(isset($testcase['caseName']))   $form->dom->title->setValue($testcase['caseName']);
         if(isset($testcase['type']))       $form->dom->type->picker($testcase['type']);
         if(isset($testcase['stage']))      $form->dom->{'stage[]'}->multiPicker($testcase['stage']);
@@ -36,14 +36,14 @@ class testcase extends tester
      * 测试用例列表。
      * check testcase list.
      *
-     * @param  array  $project
+     * @param  array  $product
      * @access public
      * @return object
      */
-    public function testcaseBrowse($project)
+    public function testcaseBrowse($product)
     {
         $this->login();
-        $form = $this->initForm('testcase', 'browse', $project, 'appIframe-qa');
+        $form = $this->initForm('testcase', 'browse', $product, 'appIframe-qa');
         if($form->dom->caseListID->getText()) return $this->success('测试用例列表验证成功');
         return $this->failed('测试用例列表验证失败');
     }
@@ -71,6 +71,25 @@ class testcase extends tester
         $this->webdriver->wait(3);
         if($form->dom->caseName->getText() == $testcase['caseName']) return $this->success('编辑测试用例成功');
         return $this->failed('编辑测试用例失败');
+    }
+
+	/**
+     * 测试用例详情。
+     * testcase view.
+     *
+     * @param  array  $product
+     * @access public
+     * @return object
+     */
+    public function testcaseView($product)
+    {
+        $this->login();
+        $form = $this->initForm('testcase', 'browse', $product, 'appIframe-qa');
+        $caseName = $form->dom->caseName->getText();
+        $form->dom->caseName->click();
+        $this->webdriver->wait(1);
+        if($this->response('method') == 'view' && $form->dom->caseNameView->getText() == $caseName) return $this->success('测试用例详情页验证成功');
+        return $this->failed('测试用例详情页验证失败');
     }
 
 	/**
