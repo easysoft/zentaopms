@@ -157,24 +157,24 @@ class relatedObjectList extends relatedList
         $objectID       = $this->prop('objectID');
         $objectType     = $this->prop('objectType');
         $relatedObjects = $this->prop('relatedObjects', data('relatedObjects'));
-        $btn = hasPriv('custom', 'relateObject') ? new btn
+        $btn = hasPriv('custom', 'relateObject') ? btn
         (
             set::url('custom', 'relateObject', "objectID=$objectID&objectType=$objectType&relatedObjectType=$objectType"),
             set::icon('plus'),
             set::size('sm'),
             set::type('secondary'),
-            setClass('m-2'),
+            setClass('my-2'),
             setData(array('toggle' => 'modal', 'size' => 'lg')),
             setID('linkButton'),
             $lang->custom->relateObject
         ) : null;
-        $graphBtn = hasPriv('custom', 'showRelationGraph') && !empty($relatedObjects) ? new btn
+        $graphBtn = hasPriv('custom', 'showRelationGraph') && !empty($relatedObjects) ? btn
         (
             set::url('custom', 'showRelationGraph', "objectID=$objectID&objectType=$objectType"),
             set::icon('treemap'),
             set::size('sm'),
             set::type('secondary'),
-            setClass('m-2 pull-right'),
+            setClass('my-2 pull-right'),
             setData(array('toggle' => 'modal', 'size' => 'lg')),
             setID('graphButton'),
             $app->loadLang('custom')->custom->relationGraph
