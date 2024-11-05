@@ -28,10 +28,10 @@ class count_of_delayed_finished_execution_which_annual_finished extends baseCalc
 
     public function calculate($row)
     {
-        if(empty($row->closedDate) || empty($row->firstEnd)) return false;
+        if(empty($row->firstEnd)) return false;
 
-        $year = substr($row->closedDate, 0, 4);
-        if($year == '0000') return false;
+        $year = $this->getYear($row->closedDate);
+        if(!$year) return false;
 
         if($row->status == 'closed' and $row->closedDate > $row->firstEnd)
         {

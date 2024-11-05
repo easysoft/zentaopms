@@ -28,14 +28,11 @@ class count_of_monthly_created_release extends baseCalc
 
     public function calculate($data)
     {
-        if(empty($data->date)) return false;
-
         $date = $data->date;
+        $year = $this->getYear($date);
+        if(!$year) return false;
 
-        $year  = substr($date, 0, 4);
         $month = substr($date, 5, 2);
-
-        if($year == '0000') return false;
 
         if(!isset($this->result[$year])) $this->result[$year] = array();
         if(!isset($this->result[$year][$month])) $this->result[$year][$month] = 0;

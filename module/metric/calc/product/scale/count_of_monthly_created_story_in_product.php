@@ -31,12 +31,11 @@ class count_of_monthly_created_story_in_product extends baseCalc
         $product    = $data->product;
         $openedDate = $data->openedDate;
 
-        if(empty($openedDate)) return false;
+        $year = $this->getYear($openedDate);
+        if(!$year) return false;
 
         $year  = substr($openedDate, 0, 4);
         $month = substr($openedDate, 5, 2);
-
-        if($year == '0000') return false;
 
         if(!isset($this->result[$product])) $this->result[$product] = array();
         if(!isset($this->result[$product][$year])) $this->result[$product][$year] = array();

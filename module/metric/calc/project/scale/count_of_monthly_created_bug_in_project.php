@@ -31,10 +31,8 @@ class count_of_monthly_created_bug_in_project extends baseCalc
         $project    = $row->project;
         $openedDate = $row->openedDate;
 
-        if(empty($openedDate)) return false;
-
-        $year = substr($openedDate, 0 ,4);
-        if($year == '0000') return false;
+        $year = $this->getYear($openedDate);
+        if(!$year) return false;
 
         $month = substr($openedDate, 5, 2);
 

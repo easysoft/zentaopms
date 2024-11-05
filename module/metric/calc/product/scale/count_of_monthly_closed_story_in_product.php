@@ -31,12 +31,9 @@ class count_of_monthly_closed_story_in_product extends baseCalc
         $product    = $data->product;
         $closedDate = $data->closedDate;
 
-        if(empty($closedDate)) return false;
-
-        $year  = substr($closedDate, 0, 4);
+        $year = $this->getYear($closedDate);
+        if(!$year) return false;
         $month = substr($closedDate, 5, 2);
-
-        if($year == '0000') return false;
 
         if(!isset($this->result[$product])) $this->result[$product] = array();
         if(!isset($this->result[$product][$year])) $this->result[$product][$year] = array();

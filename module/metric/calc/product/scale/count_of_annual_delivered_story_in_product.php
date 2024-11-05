@@ -37,16 +37,14 @@ class count_of_annual_delivered_story_in_product extends baseCalc
         $year = null;
         if($stage == 'released')
         {
-            if(empty($releasedDate)) return false;
-            $year = substr($releasedDate, 0, 4);
-            if($year == '0000') return false;
+            $year = $this->getYear($releasedDate);
+            if(!$year) return false;
         }
 
         if($closedReason == 'done')
         {
-            if(empty($closedDate)) return false;
-            $year = substr($closedDate, 0, 4);
-            if($year == '0000') return false;
+            $year = $this->getYear($closedDate);
+            if(!$year) return false;
         }
 
         if(empty($year)) return false;

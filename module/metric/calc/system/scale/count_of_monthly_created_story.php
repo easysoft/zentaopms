@@ -30,12 +30,9 @@ class count_of_monthly_created_story extends baseCalc
     {
         $openedDate = $data->openedDate;
 
-        if(empty($openedDate)) return false;
-
-        $year  = substr($openedDate, 0, 4);
+        $year = $this->getYear($openedDate);
+        if(!$year) return false;
         $month = substr($openedDate, 5, 2);
-
-        if($year == '0000') return false;
 
         if(!isset($this->result[$year])) $this->result[$year] = array();
         if(!isset($this->result[$year][$month])) $this->result[$year][$month] = 0;
