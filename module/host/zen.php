@@ -24,10 +24,14 @@ class hostZen extends host
         $ipFields = explode(',', $this->config->host->create->ipFields);
         foreach($ipFields as $field)
         {
-            $address = str_replace(array('https://', 'http://'), '', $formData->{$field});
-            if(!filter_var($address, FILTER_VALIDATE_IP) && !filter_var(gethostbyname($address), FILTER_VALIDATE_IP))
+            $ipList = explode(',', $formData->{$field});
+            foreach($ipList as $ip)
             {
-                dao::$errors[$field] = sprintf($this->lang->host->notice->ip, $this->lang->host->{$field});
+                $address = str_replace(array('https://', 'http://'), '', $ip);
+                if(!filter_var($address, FILTER_VALIDATE_IP) && !filter_var(gethostbyname($address), FILTER_VALIDATE_IP))
+                {
+                    dao::$errors[$field] = sprintf($this->lang->host->notice->ip, $this->lang->host->{$field});
+                }
             }
         }
         return !dao::isError();

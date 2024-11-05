@@ -44,13 +44,12 @@ detailBody
                 h::th($lang->host->serverRoom),
                 h::td(zget($rooms, $host->serverRoom, ""))
             ),
-            h::tr
+            $host->CD == 'spug' ? h::tr
             (
                 h::th($lang->host->admin),
-                h::td(zget($host, 'admin', '') ? $accounts[$host->admin] : ''),
-            ),
-            $host->CD == 'spug'?
-            h::tr
+                h::td(zget($host, 'admin')),
+            ) : null,
+            $host->CD == 'spug' ?  h::tr
             (
                 h::th($lang->host->password),
                 h::td($lang->host->defaultPWD),
@@ -78,18 +77,18 @@ detailBody
             ),
             h::tr
             (
-                h::th($lang->host->osName),
-                h::td($host->osName),
+                $host->CD != 'spug' ? h::th($lang->host->osName) : null,
+                $host->CD != 'spug' ? h::td($host->osName) : null,
                 h::th($lang->host->osVersion),
-                h::td(zget($lang->host->{$host->osName.'List'}, $host->osVersion))
+                h::td($host->CD != 'spug' ? zget($lang->host->{$host->osName.'List'}, $host->osVersion) : $host->osName)
             ),
-            h::tr
+            $host->CD != 'spug' ? h::tr
             (
                 h::th($lang->host->status),
                 h::td($lang->host->statusList[$host->status]),
                 h::th(),
                 h::td()
-            )
+            ) : null
         )
     ),
     history

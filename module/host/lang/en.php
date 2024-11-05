@@ -12,16 +12,11 @@ $lang->host->changeStatus = 'Online/Offline';
 $lang->host->byQuery      = 'Search';
 $lang->host->reason       = 'Reason';
 
-$lang->host->CD           = 'CD';
 $lang->host->name         = 'Name';
 $lang->host->type         = 'Type';
 $lang->host->hardwareType = 'Hardware Type';
 $lang->host->group        = 'Host Group';
 $lang->host->admin        = 'Admin';
-$lang->host->account      = 'Account';
-$lang->host->password     = 'Password';
-$lang->host->defaultPWD   = '******';
-$lang->host->sshPort      = 'SSH Port';
 $lang->host->cabinet      = 'Cabinet';
 $lang->host->intranet     = 'Intranet IP';
 $lang->host->extranet     = 'Extranet IP';

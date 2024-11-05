@@ -8,15 +8,6 @@ $config->host->dtable->fieldList['id']['title'] = 'ID';
 $config->host->dtable->fieldList['id']['name']  = 'id';
 $config->host->dtable->fieldList['id']['type']  = 'id';
 
-$config->host->dtable->fieldList['CD']['title']    = $lang->host->CD;
-$config->host->dtable->fieldList['CD']['name']     = 'CD';
-$config->host->dtable->fieldList['CD']['type']     = 'text';
-$config->host->dtable->fieldList['CD']['sortType'] = true;
-$config->host->dtable->fieldList['CD']['minWidth'] = '50';
-$config->host->dtable->fieldList['CD']['map']      = $lang->host->CDlist;
-$config->host->dtable->fieldList['CD']['required'] = true;
-$config->host->dtable->fieldList['CD']['show']     = true;
-
 $config->host->dtable->fieldList['group']['title']    = $lang->host->group;
 $config->host->dtable->fieldList['group']['name']     = 'group';
 $config->host->dtable->fieldList['group']['type']     = 'text';
@@ -35,15 +26,6 @@ $config->host->dtable->fieldList['name']['link']        = array('module' => 'hos
 $config->host->dtable->fieldList['name']['show']        = true;
 $config->host->dtable->fieldList['name']['required']    = true;
 $config->host->dtable->fieldList['name']['data-toggle'] = 'modal';
-
-$config->host->dtable->fieldList['admin']['title']       = $lang->host->admin;
-$config->host->dtable->fieldList['admin']['name']        = 'admin';
-$config->host->dtable->fieldList['admin']['type']        = 'text';
-$config->host->dtable->fieldList['admin']['sortType']    = true;
-$config->host->dtable->fieldList['admin']['link']        = array('module' => 'account', 'method' => 'view', 'params' => 'id={admin}');
-$config->host->dtable->fieldList['admin']['required']    = true;
-$config->host->dtable->fieldList['admin']['show']        = true;
-$config->host->dtable->fieldList['admin']['data-toggle'] = 'modal';
 
 $config->host->dtable->fieldList['serverRoom']['title']       = $lang->host->serverRoom;
 $config->host->dtable->fieldList['serverRoom']['name']        = 'serverRoom';
