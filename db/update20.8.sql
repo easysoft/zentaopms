@@ -30,13 +30,13 @@ ALTER TABLE `zt_workflowui` ADD `group` mediumint(8) unsigned NOT NULL DEFAULT '
 
 UPDATE `zt_workflow` SET `role` = 'custom' WHERE `buildin` = '0';
 
-ALTER TABLE `zt_workflow` DROP INDEX `unique`;
+DROP INDEX `unique` ON `zt_workflow`;
 CREATE UNIQUE INDEX `unique` ON `zt_workflow`(`group`,`app`,`module`,`vision`);
-ALTER TABLE `zt_workflowfield` DROP INDEX `unique`;
+DROP INDEX `unique` ON `zt_workflowfield`;
 CREATE UNIQUE INDEX `unique` ON `zt_workflowfield`(`group`,`module`,`field`);
-ALTER TABLE `zt_workflowaction` DROP INDEX `unique`;
+DROP INDEX `unique` ON `zt_workflowaction`;
 CREATE UNIQUE INDEX `unique` ON `zt_workflowaction`(`group`,`module`,`action`,`vision`);
-ALTER TABLE `zt_workflowlayout` DROP INDEX `unique`;
+DROP INDEX `unique` ON `zt_workflowlayout`;
 CREATE UNIQUE INDEX `unique` ON `zt_workflowlayout`(`group`,`module`,`action`,`ui`,`field`,`vision`);
 
 ALTER TABLE `zt_product` ADD `workflowGroup` int(8) NOT NULL DEFAULT '0' AFTER `ticket`;
