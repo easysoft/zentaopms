@@ -73,6 +73,9 @@ class metric extends control
             $result    = $this->metric->getResultByCode($current->code, array(), 'cron', $pager);
             $allResult = $this->metric->getResultByCode($current->code, array(), 'cron');
 
+            $result    = $this->completeMissingRecords($result, $current);
+            $allResult = $this->completeMissingRecords($allResult, $current);
+
             $resultHeader  = $this->metric->getViewTableHeader($current);
             $resultData    = $this->metric->getViewTableData($current, $result);
             $allResultData = $this->metric->getViewTableData($current, $allResult);
