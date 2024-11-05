@@ -41,7 +41,7 @@ class relatedObjectList extends relatedList
 
     protected function getObjectItem(int $relatedObjectID, string $relatedObjectType, array $relatedObjectInfo, string $relationName, string $relationType, string $browseType): object
     {
-        global $config,$lang;
+        global $config, $lang, $app;
         $objectID   = $this->prop('objectID');
         $objectType = $this->prop('objectType');
         $title      = $relatedObjectInfo['title'];
@@ -51,7 +51,7 @@ class relatedObjectList extends relatedList
         {
             $relatedObjectTypeList = $config->custom->relateObjectList;
             $relatedObjectTypeList['commit'] = $config->custom->relateObjectList['repocommit'];
-            $relatedObjectTypeList['mr']     = $lang->mr->common;
+            if(!isset($relatedObjectTypeList[$relatedObjectType])) $relatedObjectTypeList[$relatedObjectType] = $app->loadLang($relatedObjectType)->$relatedObjectType->common;
             $itemType = $relatedObjectTypeList[$relatedObjectType];
         }
         $item = new stdClass();
@@ -106,7 +106,7 @@ class relatedObjectList extends relatedList
 
         $browseType = $this->prop('browseType', data('browseType'));
 
-        global $config, $lang;
+        global $config, $app;
         $data = array();
         if($browseType == 'byRelation')
         {
@@ -145,7 +145,7 @@ class relatedObjectList extends relatedList
 
                 $relatedObjectTypePairs = $config->custom->relateObjectList;
                 $relatedObjectTypePairs['commit'] = $config->custom->relateObjectList['repocommit'];
-                $relatedObjectTypePairs['mr']     = $lang->mr->common;
+                if(!isset($relatedObjectTypePairs[$relatedObjectType])) $relatedObjectTypePairs[$relatedObjectType] = $app->loadLang($relatedObjectType)->$relatedObjectType->common;
                 $data[$relatedObjectType] = array
                 (
                     'title'   => $relatedObjectTypePairs[$relatedObjectType],
@@ -159,7 +159,7 @@ class relatedObjectList extends relatedList
 
     protected function build()
     {
-        global $lang,$app;
+        global $lang, $app;
         $list = parent::build();
         $list->add(set::hoverItemActions());
 

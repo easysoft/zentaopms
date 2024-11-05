@@ -167,7 +167,7 @@ if($isStoryType && hasPriv('story', 'tasks'))
 /* 相关信息。 Related info. */
 if($config->vision != 'lite')
 {
-    $tabs[] = setting()
+    $tabs['storyRelatedList'] = setting()
         ->group('relatives')
         ->title($lang->story->legendRelated)
         ->control('storyRelatedList');
