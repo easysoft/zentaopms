@@ -76,3 +76,8 @@ $build->gen(1);
 
 
 $tester = new buildViewTester();
+$tester->login();
+
+r($tester->checkBuildView()) && p('message,status') && e('项目版本详情查看成功,SUCCESS');    //项目版本详情检查
+
+$tester->closeBrowser();
