@@ -1894,25 +1894,45 @@ class taskModel extends model
      *
      * @param  int    $executionID
      * @param  string $appendIdList
+     * @param  int    $taskID
      * @access public
      * @return array
      */
-    public function getParentTaskPairs(int $executionID, string $appendIdList = ''): array
+    public function getParentTaskPairs(int $executionID, string $appendIdList = '', int $taskID = 0): array
     {
-        $taskPairs = $this->dao->select('id, name')->from(TABLE_TASK)
+        /*
+         过滤多人任务。
+         过滤已经记录工时的任务。
+         过滤已暂停、已取消、已关闭的任务。
+         过滤自己和后代任务。
+        */
+        $children = $this->getAllChildId($taskID);
+
+        return $this->dao->select('id, name')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
-            ->andWhere('parent')->le(0)
-            ->andWhere('status')->notin('cancel,closed')
+            ->andWhere('consumed')->eq(0)
+            ->andWhere('status')->notin('pause,cancel,closed')
             ->andWhere('execution')->eq($executionID)
+            ->andWhere('mode')->eq('')
+            ->beginIF($children)->andWhere('id')->notin($children)->fi()
             ->beginIF($appendIdList)->orWhere('id')->in($appendIdList)->fi()
             ->fetchPairs();
+    }
 
-        $taskTeams = $this->dao->select('task')->from(TABLE_TASKTEAM)->where('task')->in(array_keys($taskPairs))->fetchPairs('task', 'task');
-        foreach($taskPairs as $id => $name)
-        {
-            if(!empty($taskTeams[$id])) unset($taskPairs[$id]);
-        }
-        return $taskPairs;
+    /**
+     * 获取任务所有子任务id，包括任务它自己。
+     * Get all child task id, including the task itself.
+     *
+     * @param  int    $taskID
+     * @access public
+     * @return array
+     */
+    public function getAllChildId(int $taskID): array
+    {
+        return $this->dao->select('id')->from(TABLE_TASK)
+            ->where('path')->like("%,$taskID,%")
+            ->andWhere('deleted')->eq(0)
+            ->fetchPairs('id');
     }
 
     /**
