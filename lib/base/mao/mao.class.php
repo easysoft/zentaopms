@@ -243,7 +243,28 @@ class baseMao
     {
         $this->conditions = [];
 
-        $this->setFields(explode(',', str_replace(' ', '', $fields)));
+        $fields = explode(',', $fields);
+
+        $alias = [];
+        foreach($fields as $field)
+        {
+            $fieldInfo = explode(' ', trim($field));
+            if(count($fieldInfo) == 1)
+            {
+                $alias[$fieldInfo[0]] = $fieldInfo[0];
+            }
+            elseif(count($fieldInfo) == 2)
+            {
+                $alias[$fieldInfo[0]] = $fieldInfo[1];
+            }
+            else
+            {
+                $alias[$fieldInfo[0]] = $fieldInfo[2];
+            }
+        }
+
+        $this->setFields($alias);
+
         return $this;
     }
 
@@ -310,7 +331,7 @@ class baseMao
     public function where(string $field)
     {
         $this->resetCondition();
-        $this->condition['field'] = $field;
+        $this->condition['field'] = trim($field, '`');
         return $this;
     }
 
@@ -325,7 +346,7 @@ class baseMao
     public function andWhere(string $field)
     {
         $this->resetCondition();
-        $this->condition['field'] = $field;
+        $this->condition['field'] = trim($field, '`');
         return $this;
     }
 
@@ -585,7 +606,10 @@ class baseMao
         {
             if(!$this->isConditionMatched($row, $this->conditions)) continue;
 
-            return $keyField ? $row->$keyField : $row;
+            if(!$field) return $row;
+
+            $field = trim($field, '`');
+            return $row->$field;
         }
 
         return '';
@@ -632,14 +656,14 @@ class baseMao
             if(!$this->isConditionMatched($row, $this->conditions)) continue;
 
             $data = new stdclass();
-            foreach($this->fields as $field)
+            foreach($this->fields as $field => $alias)
             {
                 if($field == '*')
                 {
                     $data = $row;
                     break;
                 }
-                $data->$field = $row->$field;
+                $data->$alias = $row->$field;
             }
 
             if($keyField)
@@ -737,6 +761,47 @@ class baseMao
         $this->conditions = [['field' => $field, 'operator' => $operator, 'value' => $value]];
 
         return $this;
+    }
+
+    /**
+     * 获取缓存数据拼接到已有数据。
+     * Append cache fields to data.
+     *
+     * @param  array  $data
+     * @param  string $primaryKey
+     * @access public
+     * @return void
+     */
+    public function into(array $data, $primaryKey)
+    {
+        if(empty($data)) return;
+
+        /* Get data keys as conditions. */
+        $keyList = [];
+        foreach($data as $row) $keyList[$row->$primaryKey] = $row->$primaryKey;
+
+        $rawResult = $this->cache->fetchAll($this->table, $keyList);
+
+        $result = [];
+        foreach($rawResult as $row)
+        {
+            $data = new stdclass();
+            foreach($this->fields as $field => $alias)
+            {
+                $data->$alias = $row->$field;
+            }
+
+            if($keyField)
+            {
+                $result[$row->$keyField] = $data;
+            }
+            else
+            {
+                $result[] = $data;
+            }
+        }
+
+        return $result;
     }
 
     public function __call(string $method, array $args)

@@ -877,7 +877,7 @@ class bugModel extends model
             ->page($pager)
             ->fetchAll();
 
-        $this->mao->use($bugs, 'product')->append(TABLE_PRODUCT, 'name AS productName, shadow');
+        $this->mao->select('name AS productName, shadow')->from(TABLE_PRODUCT)->into($bugs, 'product');
         return $bugs;
     }
 
