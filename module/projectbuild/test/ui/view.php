@@ -36,3 +36,23 @@ $project->begin->range('(-3w)-(-2w):1D')->type('timestamp')->format('YY/MM/DD');
 $project->end->range('(+5w)-(+6w):1D')->type('timestamp')->format('YY/MM/DD');
 $project->acl->range('open');
 $project->status->range('wait');
+$project->gen(1);
+
+$execution = zenData('project');
+$execution->id->range('2-3');
+$execution->project->range('1');
+$execution->type->range('sprint');
+$execution->attribute->range('[]');
+$execution->auth->range('[]');
+$execution->parent->range('1');
+$execution->grade->range('1');
+$execution->name->range('项目1迭代1, 项目1迭代2');
+$execution->path->range('`,1,2,`, `,1,3,`');
+$execution->begin->range('(-3w)-(-2w):1D')->type('timestamp')->format('YY/MM/DD');
+$execution->end->range('(+5w)-(+6w):1D')->type('timestamp')->format('YY/MM/DD');
+$execution->acl->range('open');
+$execution->status->range('wait');
+$execution->gen(2, false);
+
+$projectProduct = zenData('projectproduct');
+$projectProduct->project->range('1,2,3');
