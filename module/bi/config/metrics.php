@@ -4743,6 +4743,6 @@ $config->bi->builtin->metrics[] = array
     'object'     => 'bug',
     'unit'       => 'count',
     'dateType'   => 'month',
-    'desc'       => '按项目统计的月度解决Bug数是指每天在项目开发过程中被解决的Bug的数量。该度量项可以帮助我们了解开发团队解决Bug的速度和效率。',
-    'definition' => "项目中Bug个数求和\n解决日期为某年某月\n过滤已删除的Bug\n过滤已删除的项目\n",
+    'desc'       => '按项目统计的月度解决Bug数是指每天在项目开发过程中被解决并关闭的Bug的数量。该度量项可以帮助我们了解开发团队解决Bug的速度和效率。',
+    'definition' => "项目中创建时间在某年某月的Bug个数求和\n过滤已删除的Bug\n过滤已删除的项目\n",
 );
