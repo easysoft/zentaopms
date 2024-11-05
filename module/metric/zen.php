@@ -393,6 +393,15 @@ class metricZen extends metric
         return $record;
     }
 
+    /**
+     * 补全缺失的度量数据。
+     * Complete missing metric data.
+     *
+     * @param  array     $records
+     * @param  array     $metric
+     * @access protected
+     * @return array
+     */
     protected function completeMissingRecords($records, $metric)
     {
         $now          = helper::now();
