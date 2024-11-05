@@ -606,10 +606,10 @@ class baseMao
         {
             if(!$this->isConditionMatched($row, $this->conditions)) continue;
 
-            if(!$field) return $row;
+            if(!$keyField) return $row;
 
-            $field = trim($field, '`');
-            return $row->$field;
+            $keyField = trim($keyField, '`');
+            return $row->$keyField;
         }
 
         return '';
