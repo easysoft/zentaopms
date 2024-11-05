@@ -122,6 +122,33 @@ class testcase extends tester
     }
 
 	/**
+     * 批量创建测试用例。
+     * batch create testcase.
+     *
+     * @param  array  $product
+     * @param  array  $testcase
+     * @access public
+     * @return object
+     */
+    public function testcaseReview($product, $testcase)
+    {
+        $this->login();
+        $form = $this->initForm('testcase', 'browse', $product, 'appIframe-qa');
+        $form->dom->review->click();
+        $this->webdriver->wait(1);
+
+        if(isset($testcase['reviewedDate'])) $form->dom->reviewedDate->datePicker($testcase['reviewedDate']);
+        if(isset($testcase['result']))       $form->dom->result->picker($testcase['result']);
+        if(isset($testcase['reviewedBy']))   $form->dom->{'reviewedBy[]'}->multiPicker($testcase['reviewedBy']);
+        if(isset($testcase['comment']))      $form->dom->comment->setValueInZenEditor($testcase['comment']);
+        $form->dom->btn($this->lang->projectreview->common)->click();
+        $this->webdriver->wait(1);
+
+        if($form->dom->review->attr('href')) return $this->success('测试用例评审通过');
+        return $this->failed('测试用例评审失败');
+    }
+
+	/**
      * 添加测试用例步骤
      * fill in case steps
      *
