@@ -1,5 +1,5 @@
 library 'z-common@master'
-library 'z-zentaopms@feat-240509'
+library 'z-zentaopms'
 
 pipeline {
   agent {
@@ -52,11 +52,11 @@ pipeline {
             checkout scm
             script {
               def triggeredBy = currentBuild.getBuildCauses()
-              println "Build triggered by: ${triggeredBy}"              
+              println "Build triggered by: ${triggeredBy}"
 
               env.GIT_URL = sh(returnStdout: true, script: 'git config --get remote.origin.url').trim()
               env.GIT_COMMIT = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
-              
+
               def j = job.newJob()
 
               env.GIT_BRANCH = j.getBranchById(env.GIT_COMMIT)
@@ -73,7 +73,7 @@ pipeline {
                 [name: "downRepoExt", subDir: true, url: "https://${env.GITFOX_HOST}/git/${env.DOWNGRADE_EXT_GIT_REPO}.git", credentialsId: "gitfox-zcorp-cc-ci-robot", branchs: ["downgrade/blank"] ]
               ])
             }
-          
+
           }
         }
 
@@ -86,11 +86,11 @@ pipeline {
                   sh 'git config --global --add safe.directory $PWD/zentaoext'
                   sh 'git config --global --add safe.directory $PWD/downRepo'
                   sh 'git config --global --add safe.directory $PWD/downRepoExt'
-                  
+
                   sh 'echo ${GIT_BRANCH}'
                   sh 'mkdir -pv ${ZENTAO_RELEASE_PATH} && chown 1000:1000 ${ZENTAO_RELEASE_PATH}'
                   sh 'make ciCommon'
-                  
+
                   withCredentials([gitUsernamePassword(credentialsId: 'gitfox-zcorp-cc-ci-robot', gitToolName: 'Default')]) {
                     sh '${ZENTAO_BUILD_PATH}/script/downgrade/fullDowngrade_v2.sh -c $PWD/misc -r $PWD/zentaopms -b ${GIT_BRANCH} -d downRepo -i -s -g $GIT_COMMIT -o "$ZENTAO_RELEASE_PATH" -p "$DOWNGRADE_VERSIONS" api extension framework lib module/*'
                   }
@@ -136,7 +136,7 @@ pipeline {
                   sh 'git config --global --add safe.directory $SRC_ZENTAOEXT_PATH/zentaomax'
                   sh 'git config --global --add safe.directory $SRC_ZENTAOEXT_PATH/zentaoipd'
                   sh 'cd $SRC_ZENTAOEXT_PATH;make build'
-                  
+
                   withCredentials([gitUsernamePassword(credentialsId: 'gitfox-zcorp-cc-ci-robot', gitToolName: 'Default')]) {
                     sh '${ZENTAO_BUILD_PATH}/script/downgrade/fullDowngrade_v2.sh -c $PWD/misc -r $ZENTAO_BUILD_PATH/zentaoext -b ${GIT_BRANCH} -d downRepoExt -i -s -g $GIT_COMMIT -o "$ZENTAO_RELEASE_PATH" -p "$DOWNGRADE_VERSIONS" bizext biz max ipd'
                   }
