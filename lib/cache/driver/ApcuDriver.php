@@ -34,9 +34,6 @@ class ApcuDriver implements CacheInterface
 
     public function get($key, $default = null)
     {
-        $this->assertKeyName($key);
-        $key = $this->buildKeyName($key);
-
         $value = apcu_fetch($key, $success);
 
         return $success === false ? $default : $value;
@@ -44,9 +41,6 @@ class ApcuDriver implements CacheInterface
 
     public function set($key, $value, $ttl = null)
     {
-        $this->assertKeyName($key);
-        $key = $this->buildKeyName($key);
-
         $ttl = is_null($ttl) ? $this->defaultLifetime : $ttl;
 
         return apcu_store($key, $value, (int) $ttl);
@@ -54,9 +48,6 @@ class ApcuDriver implements CacheInterface
 
     public function delete($key)
     {
-        $this->assertKeyName($key);
-        $key = $this->buildKeyName($key);
-
         return apcu_delete($key);
     }
 
@@ -67,52 +58,20 @@ class ApcuDriver implements CacheInterface
 
     public function getMultiple($keys, $default = null)
     {
-        $this->assertKeyNames($keys);
-        $keys = $this->buildKeyNames($keys);
-
-        $result = apcu_fetch($keys);
-
-        if(!is_null($default) && is_array($result) && count($keys) > count($result))
-        {
-            $notFoundKeys = array_diff($keys, array_keys($result));
-            $result       = array_merge($result, array_fill_keys($notFoundKeys, $default));
-        }
-
-        $mappedResult = array();
-
-        foreach($result as $key => $value)
-        {
-            $key = preg_replace("/^$this->namespace/", '', $key);
-
-            $mappedResult[$key] = $value;
-        }
-
-        return $mappedResult;
+        return apcu_fetch($keys);
     }
 
     public function setMultiple($values, $ttl = null)
     {
-        $this->assertKeyNames(array_keys($values));
-
-        $mappedByNamespaceValues = array();
-
-        foreach($values as $key => $value)
-        {
-            $mappedByNamespaceValues[$this->buildKeyName($key)] = $value;
-        }
-
         $ttl = is_null($ttl) ? $this->defaultLifetime : $ttl;
 
-        $result = apcu_store($mappedByNamespaceValues, (int) $ttl);
+        $result = apcu_store($values, (int) $ttl);
 
         return $result === true ? true : (is_array($result) && count($result) == 0 ? true : false);
     }
 
     public function deleteMultiple($keys)
     {
-        $this->assertKeyNames($keys);
-        $keys = $this->buildKeyNames($keys);
-
         $result = apcu_delete($keys);
 
         return count($result) === count($keys) ? false : true;
@@ -120,54 +79,6 @@ class ApcuDriver implements CacheInterface
 
     public function has($key)
     {
-        $this->assertKeyName($key);
-        $key = $this->buildKeyName($key);
-
         return (bool) apcu_exists($key);
-    }
-
-    /**
-     * @param string $key
-     *
-     * @return string
-     */
-    private function buildKeyName($key)
-    {
-        return $this->namespace . $key;
-    }
-
-    /**
-     * @param string[] $keys
-     *
-     * @return string[]
-     */
-    private function buildKeyNames(array $keys)
-    {
-        return array_map(function($key) {
-            return $this->buildKeyName($key);
-        }, $keys);
-
-    }
-
-    /**
-     * @param mixed $key
-     *
-     * @throws InvalidArgumentException
-     */
-    private function assertKeyName($key)
-    {
-        if(!is_scalar($key) || is_bool($key)) throw new InvalidArgumentException();
-    }
-
-    /**
-     * @param string[] $keys
-     *
-     * @throws InvalidArgumentException
-     */
-    private function assertKeyNames(array $keys)
-    {
-        array_map(function ($value) {
-            $this->assertKeyName($value);
-        }, $keys);
     }
 }

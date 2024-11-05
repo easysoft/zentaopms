@@ -117,9 +117,6 @@ class RedisDriver implements CacheInterface
      */
     public function get($key, $default = null)
     {
-        $this->assertKeyName($key);
-        $key = $this->buildKeyName($key);
-
         $value = $this->redis->get($key);
 
         return $value ? $value : $default;
@@ -135,9 +132,6 @@ class RedisDriver implements CacheInterface
      */
     public function set($key, $value, $ttl = null)
     {
-        $this->assertKeyName($key);
-        $key = $this->buildKeyName($key);
-
         $ttl = is_null($ttl) ? $this->defaultLifetime : $ttl;
 
         return $this->redis->set($key, $value, (int)$ttl);
@@ -148,16 +142,10 @@ class RedisDriver implements CacheInterface
      *
      * @link   https://github.com/phpredis/phpredis?tab=readme-ov-file#del-delete-unlink
      * @param  mixed $key
-     * @param  bool  $prefix
      * @return int
      */
-    public function delete($key, $prefix = true)
+    public function delete($key)
     {
-        if(!$prefix) return $this->redis->del($key);
-
-        $this->assertKeyName($key);
-        $key = $this->buildKeyName($key);
-
         return $this->redis->del($key);
     }
 
@@ -169,24 +157,18 @@ class RedisDriver implements CacheInterface
      */
     public function clear()
     {
-        global $config;
-
         /* With Redis::SCAN_RETRY enabled */
         $this->redis->setOption(\Redis::OPT_SCAN, \Redis::SCAN_RETRY);
-        $it = NULL;
 
-        while($cachedKeys = $this->redis->scan($it))
+        $it   = null;
+        $keys = [];
+
+        while($cachedKeys = $this->redis->scan($it, $this->namespace . ':*'))
         {
-            foreach ($cachedKeys as $key)
-            {
-                if(strpos($key, $config->db->name) !== false)
-                {
-                    $this->delete($key, false);
-                }
-            }
+            $keys = array_merge($keys, $cachedKeys);
         }
 
-        return true;
+        return $this->deleteMultiple($keys);
     }
 
     /**
@@ -198,27 +180,7 @@ class RedisDriver implements CacheInterface
      */
     public function getMultiple($keys, $default = null)
     {
-        $this->assertKeyNames($keys);
-        $keys = $this->buildKeyNames($keys);
-
-        $result = $this->redis->mget($keys);
-
-        if(!is_null($default) && is_array($result) && count($keys) > count($result))
-        {
-            $notFoundKeys = array_diff($keys, array_keys($result));
-            $result       = array_merge($result, array_fill_keys($notFoundKeys, $default));
-        }
-
-        $mappedResult = array();
-
-        foreach($result as $key => $value)
-        {
-            $key = preg_replace("/^$this->namespace/", '', $key);
-
-            $mappedResult[$key] = $value;
-        }
-
-        return $mappedResult;
+        return $this->redis->mget($keys);
     }
 
     /**
@@ -231,26 +193,17 @@ class RedisDriver implements CacheInterface
      */
     public function setMultiple($values, $ttl = null)
     {
-        $this->assertKeyNames(array_keys($values));
-
-        $mappedByNamespaceValues = array();
-
-        foreach($values as $key => $value)
-        {
-            $mappedByNamespaceValues[$this->buildKeyName($key)] = $value;
-        }
-
         $ttl = is_null($ttl) ? $this->defaultLifetime : $ttl;
 
         if(!empty($ttl))
         {
-            foreach($mappedByNamespaceValues as $key => $value)
+            foreach($values as $key => $value)
             {
                 $this->redis->set($key, $value, $ttl);
             }
         }
 
-        return $this->redis->mset($mappedByNamespaceValues);
+        return $this->redis->mset($values);
     }
 
     /**
@@ -261,17 +214,9 @@ class RedisDriver implements CacheInterface
      */
     public function deleteMultiple($keys)
     {
-        $this->assertKeyNames($keys);
-        $keys = $this->buildKeyNames($keys);
+        $result = $this->redis->del($keys);
 
-        $result = array();
-        foreach($keys as $key)
-        {
-            $isDeleted = $this->delete($key);
-            if($isDeleted) $result[] = $isDeleted;
-        }
-
-        return count($result) === count($keys) ? true : false;
+        return count($result) === count($keys);
     }
 
     /**
@@ -283,49 +228,6 @@ class RedisDriver implements CacheInterface
      */
     public function has($key)
     {
-        $this->assertKeyName($key);
-        $key = $this->buildKeyName($key);
-
         return (bool) $this->redis->exists($key);
-    }
-
-    /**
-     * @param string $key
-     *
-     * @return string
-     */
-    private function buildKeyName($key)
-    {
-        return $this->namespace . ':' . $key;
-    }
-
-    /**
-     * @param string[] $keys
-     *
-     * @return string[]
-     */
-    private function buildKeyNames(array $keys)
-    {
-        return array_map(function($key){return $this->buildKeyName($key);}, $keys);
-    }
-
-    /**
-     * @param mixed $key
-     *
-     * @throws InvalidArgumentException
-     */
-    private function assertKeyName($key)
-    {
-        if(!is_scalar($key) || is_bool($key)) throw new InvalidArgumentException();
-    }
-
-    /**
-     * @param string[] $keys
-     *
-     * @throws InvalidArgumentException
-     */
-    private function assertKeyNames(array $keys)
-    {
-        array_map(function ($value){$this->assertKeyName($value);}, $keys);
     }
 }
