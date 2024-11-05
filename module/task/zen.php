@@ -70,6 +70,7 @@ class taskZen extends task
         $this->view->hideStory     = $this->task->isNoStoryExecution($execution);
         $this->view->from          = $storyID || $todoID || $bugID  ? 'other' : 'task';
         $this->view->taskID        = $taskID;
+        $this->view->parents       = $this->task->getParentTaskPairs($executionID);
         $this->view->loadUrl       = $this->createLink('task', 'create', "executionID={execution}&storyID={$storyID}&moduleID={$moduleID}&task={$taskID}&todoID={$todoID}&cardPosition={$cardPosition}&bugID={$bugID}");
 
         $this->display();

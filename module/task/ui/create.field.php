@@ -72,6 +72,11 @@ $buildAssignedTo = function()
         );
 };
 
+$fields->field('parent')
+    ->label($lang->task->parent)
+    ->control('picker')
+    ->items(data('parents'));
+
 $fields->field('assignedToBox')
     ->label($lang->task->assignedTo)
     ->checkbox(array('text' => $lang->task->multiple, 'name' => 'multiple', 'checked' => !empty(data('task.mode'))))

@@ -40,7 +40,7 @@ if(!empty($task->team))
 $fields = useFields('task.create');
 $fields->autoLoad('execution', 'execution,type,name,assignedToBox,region,lane,module,storyBox,datePlan,pri,estimate,desc,files,mailto,keywords,after,testStoryBox');
 
-$fields->orders('name,assignedToBox', 'type,testStoryBox', 'desc,module,storyBox');
+$fields->orders('type,testStoryBox', 'type,testStoryBox,parent,assignedToBox', 'desc,module,storyBox');
 $fields->fullModeOrders('type,module,storyBox,testStoryBox', 'desc,files,mailto,keywords');
 if($execution->type == 'kanban' || empty(data('execution.multiple')))
 {

@@ -11,6 +11,7 @@ $account = isset($app->user->account) ? $app->user->account : '';
 $config->task->form->create = array();
 $config->task->form->create['execution']    = array('type' => 'int',      'required' => true,  'default' => 0);
 $config->task->form->create['type']         = array('type' => 'string',   'required' => true,  'default' => '');
+$config->task->form->create['parent']       = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->task->form->create['assignedTo']   = array('type' => 'string',   'required' => false, 'default' => '');
 $config->task->form->create['module']       = array('type' => 'int',      'required' => false);
 $config->task->form->create['story']        = array('type' => 'int',      'required' => false);

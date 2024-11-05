@@ -84,6 +84,8 @@ function toggleSelectTestStory()
         $('#form-task-create [data-name=storyBox]').addClass('hidden');
         $('#form-task-create [data-name=datePlan]').addClass('hidden');
         $('#form-task-create [data-name=estimate]').addClass('hidden');
+        $('#form-task-create [data-name=parent]').addClass('hidden');
+        $('#form-task-create [data-name=assignedToBox]').insertAfter('#form-task-create [data-name=name]');
         $('#form-task-create [name=multiple]').closest('.checkbox-primary').addClass('hidden');
         $('#form-task-create [data-name=testStoryBox]').removeClass('hidden');
         loadTarget($.createLink('task', 'ajaxGetTestStories', 'executionID=' + executionID + '&taskID=' + taskID), '#testStoryBox');
@@ -108,6 +110,8 @@ function toggleSelectTestStory()
         $('#form-task-create [data-name=storyBox]').removeClass('hidden');
         $('#form-task-create [data-name=datePlan]').removeClass('hidden');
         $('#form-task-create [data-name=estimate]').removeClass('hidden');
+        $('#form-task-create [data-name=parent]').removeClass('hidden');
+        $('#form-task-create [data-name=assignedToBox]').insertBefore('#form-task-create [data-name=name]');
         $('#form-task-create [data-name=testStoryBox]').addClass('hidden');
         if($('#form-task-create [name=type]').val() != 'affair') $('#form-task-create [name=multiple]').closest('.checkbox-primary').removeClass('hidden');
 
