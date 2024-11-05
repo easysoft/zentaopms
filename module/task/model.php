@@ -949,6 +949,12 @@ class taskModel extends model
         /* Get task id. */
         $taskID = $this->dao->lastInsertID();
 
+        if($task->parent)
+        {
+            $task->id = $taskID;
+            $this->updateParent($task, false);
+        }
+
         /* Insert task desc data. */
         $taskSpec = new stdclass();
         $taskSpec->task       = $taskID;
@@ -3183,10 +3189,11 @@ class taskModel extends model
      */
     public function updateParent(object $task, bool $isParentChanged): void
     {
-        $task->parent = (int)$task->parent;
-        $parentTask = $this->fetchByID($task->parent);
+        $parentTask = $this->fetchByID((int)$task->parent);
+        $path       = $parentTask ? $parentTask->path . $task->id . ',' : ',' . $task->id . ',';
 
-        $this->dao->update(TABLE_TASK)->set('parent')->eq(-1)->where('id')->eq($task->parent)->exec();
+        $this->dao->update(TABLE_TASK)->set('path')->eq($path)->where('id')->eq($task->id)->exec();
+        if(!$parentTask->isParent) $this->dao->update(TABLE_TASK)->set('isParent')->eq(1)->where('id')->eq((int)$task->parent)->exec();
 
         $this->updateParentStatus($task->id, $task->parent, !$isParentChanged);
         $this->computeBeginAndEnd($task->parent);
@@ -3218,11 +3225,7 @@ class taskModel extends model
         $childTask = $this->dao->select('id,assignedTo,parent')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
         if(empty($childTask)) return;
 
-        if(empty($parentID)) $parentID = $childTask->parent;
-        if($parentID <= 0) return;
-
         $oldParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parentID)->fetch();
-        if($oldParentTask->parent != '-1') $this->dao->update(TABLE_TASK)->set('parent')->eq('-1')->where('id')->eq($parentID)->exec();
 
         /* Compute parent task hours and status. */
         $this->computeWorkingHours($parentID);
