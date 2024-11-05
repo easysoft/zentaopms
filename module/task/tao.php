@@ -717,11 +717,9 @@ class taskTao extends taskModel
     protected function getParentStatusById(int $taskID) :string
     {
         $children = $this->dao->select('id,status,closedReason,parent')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('deleted')->eq('0')->fetchAll();
-
         if(empty($children)) return '';
 
         $childrenStatus = $childrenClosedReason = array();
-
         foreach($children as $task)
         {
             $childrenStatus[$task->status]             = $task->status;
@@ -731,9 +729,7 @@ class taskTao extends taskModel
         if(count($childrenStatus) == 1) return current($childrenStatus);
 
         if(isset($childrenStatus['doing']) || isset($childrenStatus['pause'])) return 'doing';
-
         if((isset($childrenStatus['done']) || isset($childrenClosedReason['done'])) && isset($childrenStatus['wait'])) return 'doing';
-
         if(isset($childrenStatus['wait']))   return 'wait';
         if(isset($childrenStatus['done']))   return 'done';
         if(isset($childrenStatus['closed'])) return 'closed';
@@ -1056,7 +1052,6 @@ class taskTao extends taskModel
 
         $task->lastEditedBy   = $this->app->user->account;
         $task->lastEditedDate = $now;
-        $task->parent         = '-1';
 
         $this->dao->update(TABLE_TASK)->data($task)->where('id')->eq($parentTask->id)->exec();
     }

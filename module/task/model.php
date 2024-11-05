@@ -3226,49 +3226,39 @@ class taskModel extends model
     public function updateParentStatus(int $taskID, int $parentID = 0, bool $createAction = true) :void
     {
         /* Get child task info. */
-        $childTask = $this->dao->select('id,assignedTo,parent')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
+        $childTask = $this->dao->select('id,assignedTo,parent,path')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
         if(empty($childTask)) return;
 
-        $oldParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parentID)->fetch();
+        if(empty($parentID)) $parentID = $childTask->parent;
+        if($parentID <= 0) return;
 
-        /* Compute parent task hours and status. */
-        $this->computeWorkingHours($parentID);
-        $status = $this->taskTao->getParentStatusById($parentID);
-        if(empty($status))
-        {
-            $this->dao->update(TABLE_TASK)->set('parent')->eq('0')->where('id')->eq($parentID)->exec();
-            return;
-        }
+        $parentTasks = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($childTask->path)->andWhere('id')->ne($taskID)->fetchAll('id');
+        if(empty($parentTasks)) return;
 
-        /* Get new task info. */
-        $parentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parentID)->andWhere('deleted')->eq(0)->fetch();
-        if(empty($parentTask))
+        $this->loadModel('story');
+        foreach($parentTasks as $parentID => $parentTask)
         {
-            $this->dao->update(TABLE_TASK)->set('parent')->eq('0')->where('id')->eq($taskID)->exec();
-            return;
-        }
-
-        if($parentTask->status == $status)
-        {
-            if(dao::isError()) return;
-            $changes = common::createChanges($oldParentTask, $parentTask);
-            if($changes)
+            /* Compute parent task hours and status. */
+            $this->computeWorkingHours($parentID);
+            $status = $this->taskTao->getParentStatusById($parentID);
+            if(empty($status))
             {
-                $actionID = $this->loadModel('action')->create('task', $parentID, 'Edited', '', '', '', false);
-                $this->action->logHistory($actionID, $changes);
+                $this->dao->update(TABLE_TASK)->set('parent')->eq('0')->set('path')->eq(",{$parentID},")->where('id')->eq($parentID)->exec();
+                continue;
             }
-            return;
+            if(!in_array($status, array('doing', 'done'))) continue;
+            if($parentTask->status == $status) continue;
+
+            /* Update task status. */
+            $this->taskTao->updateTaskByChildAndStatus($parentTask, $childTask, $status);
+            if(dao::isError() || !$createAction) return;
+
+            if($parentTask->story) $this->story->setStage($parentTask->story);
+
+            /* Create action record. */
+            $this->taskTao->createUpdateParentTaskAction($parentTask);
+            if($this->config->edition != 'open' && $parentTask->feedback) $this->loadModel('feedback')->updateStatus('task', $parentTask->feedback, $status, $parentTask->status);
         }
-
-        /* Update task status. */
-        $this->taskTao->updateTaskByChildAndStatus($parentTask, $childTask, $status);
-        if(dao::isError() || !$createAction) return;
-
-        if($parentTask->story) $this->loadModel('story')->setStage($parentTask->story);
-
-        /* Create action record. */
-        $this->taskTao->createUpdateParentTaskAction($oldParentTask);
-        if($this->config->edition != 'open' && $oldParentTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldParentTask->feedback, $status, $oldParentTask->status);
     }
 
     /**
