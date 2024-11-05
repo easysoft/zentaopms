@@ -487,8 +487,36 @@ class testcaseTao extends testcaseModel
         $newBugs    = array_diff($toLinkBugs, $linkedBugs);
         $removeBugs = array_diff($linkedBugs, $toLinkBugs);
 
-        foreach($newBugs as $bugID)    $this->dao->update(TABLE_BUG)->set('`case`')->eq($caseID)->set('caseVersion')->eq($case->version)->set('`story`')->eq($case->story)->set('storyVersion')->eq($case->storyVersion)->where('id')->eq($bugID)->exec();
-        foreach($removeBugs as $bugID) $this->dao->update(TABLE_BUG)->set('`case`')->eq(0)->set('caseVersion')->eq(0)->set('`story`')->eq(0)->set('storyVersion')->eq(0)->where('id')->eq($bugID)->exec();
+        foreach($newBugs as $bugID)
+        {
+            $this->dao->update(TABLE_BUG)->set('`case`')->eq($caseID)->set('caseVersion')->eq($case->version)->set('`story`')->eq($case->story)->set('storyVersion')->eq($case->storyVersion)->where('id')->eq($bugID)->exec();
+
+            if($this->config->edition != 'open')
+            {
+                $relation = new stdClass();
+                $relation->relation = 'generated';
+                $relation->AID      = $bugID;
+                $relation->AType    = 'bug';
+                $relation->BID      = $caseID;
+                $relation->BType    = 'testcase';
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
+        }
+        foreach($removeBugs as $bugID)
+        {
+            $this->dao->update(TABLE_BUG)->set('`case`')->eq(0)->set('caseVersion')->eq(0)->set('`story`')->eq(0)->set('storyVersion')->eq(0)->where('id')->eq($bugID)->exec();
+
+            if($this->config->edition != 'open')
+            {
+                $this->dao->delete()->from(TABLE_RELATION)
+                    ->where('relation')->eq('generated')
+                    ->andWhere('AID')->eq($bugID)
+                    ->andWhere('AType')->eq('bug')
+                    ->andWhere('BID')->eq($caseID)
+                    ->andWhere('BType')->eq('testcase')
+                    ->exec();
+            }
+        }
 
         return !dao::isError();
     }
