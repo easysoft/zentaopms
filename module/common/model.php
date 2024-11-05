@@ -1941,18 +1941,21 @@ eof;
         {
             if(!isset($executionsStatus[$object->execution]))
             {
-                $execution = $commonModel->loadModel('execution')->getByID($object->execution);
+                $execution = $commonModel->loadModel('execution')->getByID((int)$object->execution);
                 $executionsStatus[$object->execution] = $execution ? $execution->status : '';
             }
             if($executionsStatus[$object->execution] == 'closed'  || !empty($config->CRProject)) return false;
 
             /* Check the execution's project is closed. */
-            if(isset($object->project) && !isset($projectsStatus[$object->project]))
+            if(isset($object->project))
             {
-                $project = $commonModel->loadModel('project')->getByID((int)$object->project);
-                $projectsStatus[$object->project] = $project ? $project->status : '';
+                if(!isset($projectsStatus[$object->project]))
+                {
+                    $project = $commonModel->loadModel('project')->getByID((int)$object->project);
+                    $projectsStatus[$object->project] = $project ? $project->status : '';
+                }
+                if($projectsStatus[$object->project] == 'closed') return false;
             }
-            if($projectsStatus[$object->project] == 'closed') return false;
         }
 
         return true;
