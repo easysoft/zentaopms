@@ -56,6 +56,7 @@ window.docAppActions.doc = function(info)
         const object    = doc.object;
         const lib       = doc.libInfo;
         const objectUrl = object ? getObjectBrowseUrl(object, doc.objectType) : null;
+        const libUrl    = object ? getObjectBrowseUrl(object, doc.objectType, lib.id) : null;
         actions.unshift(
         {
             type: 'custom',
@@ -63,7 +64,7 @@ window.docAppActions.doc = function(info)
             className: 'order-first mr-2',
             html: `<span class="text-gray">${getDocAppLang('position')}${getDocAppLang('colon')} </span>` + [
                 objectUrl ? `<a href="${objectUrl}">${object.name || object.title}</a>` : null,
-                lib ? `<a href="${$.createLink('doc', 'view', `docID=${doc.id}`)}">${lib.name}</a> ` : null,
+                lib ? `<a href="${libUrl}">${lib.name}</a> ` : null,
             ].filter(Boolean).join(' <span class="text-gray">/</span> '),
         });
     }
