@@ -2988,8 +2988,7 @@ CREATE TABLE IF NOT EXISTS `zt_deploy` (
 CREATE TABLE IF NOT EXISTS `zt_deployproduct` (
   `deploy` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `release` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `package` varchar(255) NOT NULL DEFAULT ''
+  `release` mediumint(8) unsigned NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE UNIQUE INDEX `deploy_product_release` ON `zt_deployproduct`(`deploy`,`product`,`release`);
 
