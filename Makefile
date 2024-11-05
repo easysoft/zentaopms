@@ -9,7 +9,6 @@ BUILD_KIND    := $(if $(BUILD_KIND),$(BUILD_KIND),auto)
 BUILD_PATH    := $(if $(ZENTAO_BUILD_PATH),$(ZENTAO_BUILD_PATH),$(shell pwd))
 RELEASE_PATH  := $(if $(ZENTAO_RELEASE_PATH),$(ZENTAO_RELEASE_PATH),$(shell pwd))
 XUAN_WEB_PATH := $(ZENTAO_BUILD_PATH)/web
-GITFOX_HOST   := https://$(GITFOX_HOST)
 
 all:
 	make clean
@@ -30,7 +29,7 @@ clean:
 	rm -f  *.sh
 	rm -f *.deb *.rpm
 common:
-	curl $(GITFOX_HOST)/_artifacts/zentao/raw/zui3/static/blocksuite/$(SUITEVERSION)/blocksuite-$(SUITEVERSION).tar.gz  | tar zxf - -C www/js/zui3/editor/
+	curl https://$(GITFOX_HOST)/_artifacts/zentao/raw/zui3/static/blocksuite/$(SUITEVERSION)/blocksuite-$(SUITEVERSION).tar.gz  | tar zxf - -C www/js/zui3/editor/
 
 	mkdir zentaopms
 	cp -fr api zentaopms/
