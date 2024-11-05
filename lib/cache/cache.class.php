@@ -65,6 +65,24 @@ class cache
     private $cache;
 
     /**
+     * 缓存命名空间。
+     * Cache namespace.
+     *
+     * @access private
+     * @var string
+     */
+    private $namespace;
+
+    /**
+     * 缓存键连接符。
+     * Cache key connector.
+     *
+     * @access private
+     * @var string
+     */
+    private $connector;
+
+    /**
      * 缓存键。
      * Cache key.
      *
@@ -138,15 +156,19 @@ class cache
         switch($driver)
         {
             case self::DRIVER_APCU:
+                $this->setConnector('-');
                 $className = 'ZenTao\Cache\Driver\ApcuDriver';
                 break;
             case self::DRIVER_YAC:
+                $this->setConnector('-');
                 $className = 'ZenTao\Cache\Driver\YacDriver';
                 break;
             case self::DRIVER_FILE:
+                $this->setConnector('_');
                 $className = 'ZenTao\Cache\Driver\FileDriver';
                 break;
             case self::DRIVER_REDIS:
+                $this->setConnector(':');
                 $className = 'ZenTao\Cache\Driver\RedisDriver';
                 break;
             default:
@@ -155,7 +177,35 @@ class cache
 
         if($driver != self::DRIVER_FILE && !extension_loaded($driver)) return $this->log("Driver ext-{$driver} is not loaded.", __FILE__, __LINE__);
 
-        $this->cache = new $className($this->config->db->name, $this->config->cache->lifetime, $app->getCacheRoot());
+        $this->cache = new $className($this->config->cache->namespace, $this->config->cache->lifetime, $app->getCacheRoot());
+
+        $this->setNamespace($this->config->cache->namespace);
+    }
+
+    /**
+     * 设置缓存命名空间。
+     * Set cache namespace.
+     *
+     * @param  string $namespace 缓存命名空间。
+     * @access private
+     * @return void
+     */
+    private function setNamespace(string $namespace)
+    {
+        $this->namespace = $namespace;
+    }
+
+    /**
+     * 设置缓存键连接符。
+     * Set cache key connector.
+     *
+     * @param  string $connector 缓存键连接符。
+     * @access private
+     * @return void
+     */
+    private function setConnector(string $connector)
+    {
+        $this->connector = $connector;
     }
 
     /**
@@ -258,7 +308,7 @@ class cache
      */
     private function getRawCacheKey(string $code, int|string $id): string
     {
-        return 'raw:' . $code . ':' . $id;
+        return $this->namespace . $this->connector . 'raw' . $this->connector . $code . $this->connector . $id;
     }
 
     /**
@@ -271,7 +321,7 @@ class cache
      */
     private function getSetCacheKey(string $code): string
     {
-        return 'set:' . $code . ':list';
+        return $this->namespace . $this->connector . 'set' . $this->connector . $code . $this->connector . 'list';
     }
 
     /**
@@ -284,7 +334,7 @@ class cache
      */
     private function getResCacheKey(string $key): string
     {
-        return str_replace(['cache', '_'], ['res', ':'], strtolower($key));
+        return $this->namespace . $this->connector . str_replace(['cache', '_'], ['res', $this->connector], strtolower($key));
     }
 
     /**
@@ -425,7 +475,7 @@ class cache
                 {
                     if(!isset($object->$field)) return $this->log("The {$field} field does not exist in table {$this->table}.", __FILE__, __LINE__);
 
-                    $key .= ':' . $object->$field;
+                    $key .= $this->connector . $object->$field;
                 }
                 $keys[] = $key;
             }
@@ -627,7 +677,7 @@ class cache
         }
 
         $key = $this->getResCacheKey(constant($key));
-        foreach($args as $arg) $key .= ':' . $arg;
+        foreach($args as $arg) $key .= $this->connector . $arg;
 
         $this->setKey($key);
         return $this;
@@ -673,6 +723,8 @@ class cache
     public function getByKey(string $key)
     {
         if(empty($key)) return $this->log('The key is empty', __FILE__, __LINE__);
+
+        $key = $this->namespace . $this->connector . $key;
         return $this->cache->get($key);
     }
 
@@ -702,6 +754,8 @@ class cache
     public function saveByKey(string $key, $value)
     {
         if(empty($key)) return $this->log('The key is empty', __FILE__, __LINE__);
+
+        $key = $this->namespace . $this->connector . $key;
         return $this->cache->set($key, $value);
     }
 
