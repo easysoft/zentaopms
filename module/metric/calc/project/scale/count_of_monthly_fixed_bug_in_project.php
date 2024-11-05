@@ -32,10 +32,10 @@ class count_of_monthly_fixed_bug_in_project extends baseCalc
         $resolution = $data->resolution;
         $closedDate = $data->closedDate;
 
-        if(empty($closedDate)) return false;
+        $year = $this->getYear($closedDate);
+        if(!$year) return false;
 
-        $year = substr($closedDate, 0, 4);
-        if($resolution != 'fixed' || $year == '0000') return false;
+        if($resolution != 'fixed') return false;
 
         $month = substr($closedDate, 5, 2);
 
