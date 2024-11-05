@@ -10356,6 +10356,40 @@ class upgradeModel extends model
             $relation->BID      = $designID;
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
         }
+
+        /* Process release. */
+        $releaseLinkedStories = $this->dao->select('id,stories')->from(TABLE_RELEASE)->where('stories')->ne('')->fetchPairs('id');
+        foreach($releaseLinkedStories as $releaseID => $storyIdList)
+        {
+            foreach(explode(',', trim($storyIdList, ',')) as $storyID)
+            {
+                if(empty($storyID)) continue;
+                $relation = new stdClass();
+                $relation->AType    = 'story';
+                $relation->AID      = $storyID;
+                $relation->relation = 'interrated';
+                $relation->BType    = 'release';
+                $relation->BID      = $releaseID;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
+        }
+
+        /* Process build. */
+        $buildLinkedStories = $this->dao->select('id,stories')->from(TABLE_BUILD)->where('stories')->ne('')->fetchPairs('id');
+        foreach($buildLinkedStories as $buildID => $storyIdList)
+        {
+            foreach(explode(',', trim($storyIdList, ',')) as $storyID)
+            {
+                if(empty($storyID)) continue;
+                $relation = new stdClass();
+                $relation->AType    = 'story';
+                $relation->AID      = $storyID;
+                $relation->relation = 'interrated';
+                $relation->BType    = 'build';
+                $relation->BID      = $buildID;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
+        }
         return true;
     }
 }
