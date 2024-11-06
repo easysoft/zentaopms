@@ -865,4 +865,16 @@ class cache
 
         $this->reset();
     }
+
+    /**
+     * 清空缓存。
+     * Clear cache.
+     *
+     * @access public
+     * @return void
+     */
+    public function clear
+    {
+        $this->cache->clear();
+    }
 }
