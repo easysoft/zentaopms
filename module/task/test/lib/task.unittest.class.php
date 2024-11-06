@@ -963,6 +963,22 @@ class taskTest
         }
     }
 
+    public function updateChildrenStatusTest($taskID, $status)
+    {
+        $task = $this->objectModel->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
+        $this->objectModel->dao->update(TABLE_TASK)->set('status')->eq($status)->where('id')->eq($taskID)->exec();
+        $this->objectModel->updateChildrenStatus($taskID, empty($task) ? '' : $task->status);
+        if(empty($taskID)) return 0;
+
+        $child = $this->objectModel->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($taskID)->fetch();
+        if(empty($child)) return 0;
+
+        $action = $this->objectModel->dao->select('*')->from(TABLE_ACTION)->where('objectType')->eq('task')->andWhere('objectID')->eq($child->id)->orderBy('id_desc')->limit(1)->fetch();
+        $child->action = $action->action;
+        $child->extra  = $action->extra;
+        return $child;
+    }
+
     /**
      * Test judge an action is clickable or not.
      *

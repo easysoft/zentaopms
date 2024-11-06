@@ -999,7 +999,7 @@ class taskTao extends taskModel
      * @access protected
      * @return void
      */
-    protected function autoUpdateTaskByStatus(object $task, object $childTask, string $status) :void
+    protected function autoUpdateTaskByStatus(object $task, object|null $childTask, string $status) :void
     {
         $now     = helper::now();
         $account = $this->app->user->account;
@@ -1037,7 +1037,7 @@ class taskTao extends taskModel
         {
             if($task->assignedTo == 'closed')
             {
-                $data->assignedTo   = $childTask->assignedTo;
+                $data->assignedTo   = !empty($childTask) ? $childTask->assignedTo : $task->openedBy;
                 $data->assignedDate = $now;
             }
 

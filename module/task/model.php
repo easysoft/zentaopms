@@ -201,6 +201,7 @@ class taskModel extends model
     {
         /* Process other data. */
         if($task->parent > 0) $this->updateParentStatus($task->id);
+        if($task->isParent)   $this->updateChildrenStatus($task->id, $task->status);
         if($task->story) $this->loadModel('story')->setStage($task->story);
 
         $this->updateKanbanCell($task->id, $output, $task->execution);
@@ -2231,7 +2232,7 @@ class taskModel extends model
         if($action == 'totask') return true;
 
         /* 父任务只能编辑、创建子任务和指派。 Parent task only can edit task, create children and assign to somebody. */
-        if((!empty($task->isParent) || $task->parent < 0) && !in_array($action, array('edit', 'batchcreate', 'cancel', 'assignto'))) return false;
+        if((!empty($task->isParent) || $task->parent < 0) && !in_array($action, array('edit', 'batchcreate', 'cancel', 'assignto', 'pause', 'close', 'restart'))) return false;
 
         /* 子任务和多人任务不能创建子任务。Multi task and child task cannot create children. */
         if($action == 'batchcreate' && (!empty($task->team) || $task->parent > 0)) return false;
@@ -2468,6 +2469,9 @@ class taskModel extends model
 
         /* Update kanban status. */
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()->where('id')->eq($task->id)->exec();
+
+        /* If task has parent task, update status of the parent task by the child task. */
+        if($oldTask->isParent) $this->updateChildrenStatus($task->id);
 
         /* If output is not empty, update kanban cell. */
         $this->updateKanbanCell($task->id, $output, $oldTask->execution);
@@ -3267,6 +3271,50 @@ class taskModel extends model
             /* Create action record. */
             $this->taskTao->createAutoUpdateAction($parentTask);
             if($this->config->edition != 'open' && $parentTask->feedback) $this->loadModel('feedback')->updateStatus('task', $parentTask->feedback, $status, $parentTask->status);
+        }
+    }
+
+    /**
+     * 更新子任务的状态.
+     * Update children status by taskID.
+     *
+     * @param  int    $taskID
+     * @param  string $oldParentStatus
+     * @access public
+     * @return void
+     */
+    public function updateChildrenStatus(int $taskID, string $oldParentStatus = '') :void
+    {
+        /* Get child task info. */
+        $parentTask = $this->dao->select('id,status,isParent,parent,path')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
+        if(empty($parentTask)) return;
+
+        $parentStatus = $parentTask->status;
+        if(!in_array($parentStatus, array('doing', 'pause', 'cancel', 'closed'))) return;
+
+        $childrenTasks = $this->dao->select('*')->from(TABLE_TASK)->where('path')->like("{$parentTask->path}%")->andWhere('id')->ne($taskID)->fetchAll('id');
+        if(empty($childrenTasks)) return;
+
+        $autoActions = array();
+        if($parentTask->status == 'doing' && $oldParentStatus == 'pause') $autoActions = $this->dao->select('objectID,extra')->from(TABLE_ACTION)->where('objectType')->eq("task")->andWhere('objectID')->in(array_keys($childrenTasks))->andWhere('action')->eq('paused')->orderBy('date')->fetchAll('objectID');
+
+        $this->loadModel('story');
+        foreach($childrenTasks as $childID => $childTask)
+        {
+            if($childTask->status == $parentStatus) continue;
+            if($parentStatus == 'pause'  && $childTask->status != 'doing') continue;
+            if($parentStatus == 'cancel' && in_array($childTask->status, array('done', 'closed'))) continue;
+            if($parentStatus == 'doing'  && $childTask->status != 'pause') continue;
+            if(isset($autoActions[$childID]) && $autoActions[$childID]->extra != 'auto') continue;
+
+            $this->taskTao->autoUpdateTaskByStatus($childTask, null, $parentStatus);
+            if(dao::isError()) return;
+
+            if($childTask->story) $this->story->setStage($childTask->story);
+
+            /* Create action record. */
+            $this->taskTao->createAutoUpdateTaskAction($childTask);
+            if($this->config->edition != 'open' && $childTask->feedback) $this->loadModel('feedback')->updateStatus('task', $childTask->feedback, $status, $childTask->status);
         }
     }
 
