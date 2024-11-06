@@ -959,6 +959,10 @@ class taskModel extends model
             $this->updateParent($task, false);
             unset($task->id);
         }
+        else
+        {
+            $this->dao->update(TABLE_TASK)->set('path')->eq(",$taskID,")->where('id')->eq($taskID)->exec();
+        }
 
         /* Insert task desc data. */
         $taskSpec = new stdclass();
@@ -3207,7 +3211,7 @@ class taskModel extends model
     public function updateParent(object $task, bool $isParentChanged): void
     {
         $parentTask = $this->fetchByID((int)$task->parent);
-        $path       = $parentTask ? $parentTask->path . $task->id . ',' : ',' . $task->id . ',';
+        $path       = $parentTask->path . $task->id . ',';
 
         $this->dao->update(TABLE_TASK)->set('path')->eq($path)->where('id')->eq($task->id)->exec();
         if(!$parentTask->isParent) $this->dao->update(TABLE_TASK)->set('isParent')->eq(1)->where('id')->eq((int)$task->parent)->exec();
