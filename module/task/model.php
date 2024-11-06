@@ -280,7 +280,7 @@ class taskModel extends model
         $parentID = (int)$oldParentTask->id;
 
         /* When a normal task is consumed, create the subtask and update the parent task status. */
-        if($oldParentTask->parent == 0 && $oldParentTask->consumed > 0)
+        if($oldParentTask->isParent == 0 && $oldParentTask->consumed > 0)
         {
             $this->taskTao->copyTaskData($oldParentTask);
             if(dao::isError()) return false;
