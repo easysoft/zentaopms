@@ -26,6 +26,23 @@ class count_of_annual_fixed_bug_in_project extends baseCalc
 
     public $result = array();
 
+    public function calculate($data)
+    {
+        $project    = $data->project;
+        $resolution = $data->resolution;
+        $closedDate = $data->closedDate;
+
+        $year = $this->getYear($closedDate);
+        if(!$year) return false;
+
+        if($resolution != 'fixed') return false;
+
+        if(!isset($this->result[$project])) $this->result[$project] = array();
+        if(!isset($this->result[$project][$year])) $this->result[$project][$year] = 0;
+
+        $this->result[$project][$year] += 1;
+    }
+
     public function getResult($options = array())
     {
         $records = $this->getRecords(array('project', 'year', 'value'));
