@@ -2157,7 +2157,7 @@ class docModel extends model
         {
             if(!$this->checkPrivDoc($doc)) unset($docs[$id]);
         }
-        $docIdList = empty($docs) ? 0 : $this->dao->select('id')->from(TABLE_DOC)->where($type)->eq($objectID)->andWhere('id')->in(array_keys($docs))->get();
+        $docIdList = empty($docs) ? 0 : $this->dao->select('id')->from(TABLE_DOC)->where($type)->eq($objectID)->andWhere('vision')->eq($this->config->vision)->andWhere('id')->in(array_keys($docs))->get();
 
         if($type == 'product')
         {
