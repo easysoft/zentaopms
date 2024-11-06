@@ -398,6 +398,7 @@ $lang->doc->productSpace  = "{$lang->productCommon} Space";
 $lang->doc->projectSpace  = "{$lang->projectCommon} Space";
 $lang->doc->apiSpace      = 'API Space';
 $lang->doc->teamSpace     = 'Team Space';
+$lang->doc->template      = 'Document Template';
 
 $lang->product->list   = $lang->productCommon . ' List';
 $lang->product->kanban = $lang->productCommon . ' Kanban';

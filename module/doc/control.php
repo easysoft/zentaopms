@@ -312,6 +312,19 @@ class doc extends control
     }
 
     /**
+     * 文档模板列表。
+     * Browse template list.
+     *
+     * @access public
+     * @return void
+     */
+    public function browseTemplate()
+    {
+        $this->view->title = $this->lang->doc->template;
+        $this->display();
+    }
+
+    /**
      * 上传文档。
      * Upload docs.
      *

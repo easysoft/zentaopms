@@ -559,6 +559,7 @@ $lang->doc->menu->product   = array('link' => "{$lang->doc->productSpace}|doc|pr
 $lang->doc->menu->project   = array('link' => "{$lang->doc->projectSpace}|doc|projectSpace|", 'alias' => 'projectspace');
 $lang->doc->menu->api       = array('link' => "{$lang->doc->apiSpace}|api|index", 'alias' => '', 'exclude' => 'index');
 $lang->doc->menu->team      = array('link' => "{$lang->doc->teamSpace}|doc|teamSpace|", 'alias' => 'teamspace');
+$lang->doc->menu->template  = array('link' => "{$lang->doc->template}|doc|browseTemplate|", 'alias' => 'browsetemplate');
 
 $lang->doc->dividerMenu = ',product,';
 
@@ -570,6 +571,7 @@ $lang->doc->menuOrder[15] = 'team';
 $lang->doc->menuOrder[20] = 'product';
 $lang->doc->menuOrder[25] = 'project';
 $lang->doc->menuOrder[30] = 'api';
+$lang->doc->menuOrder[35] = 'template';
 
 /* BI menu.*/
 $lang->bi->menu         = new stdclass();
