@@ -17,3 +17,19 @@ class browseTester extends tester
         $form->wait(2);
         if($product != '') $form->dom->product->picker($product);
         $form->wait(1);
+        $string = $form->dom->num->getText();
+        $num = preg_replace('/\D/', '', $string);
+        if($num == $expectNum) return $this->success('版本显示正确');
+        return $this->failed('版本显示错误');
+    }
+
+    /**
+     * 搜索项目版本。
+     * Search projectbuild.
+     *
+     * @param  array $build
+     * @access public
+     */
+    public function searchBuild($build)
+    {
+        $form = $this->initForm('projectbuild', 'browse', array('projectID' => '1' ), 'appIframe-project');
