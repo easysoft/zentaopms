@@ -55,3 +55,18 @@ $story->stage->range('projected{2}, developing, testing{2} ');
 $story->assignedTo->range('[]');
 $story->version->range('1');
 $story->gen(5);
+
+$storySpec = zenData('storyspec');
+$storySpec->story->range('1-100');
+$storySpec->version->range('1');
+$storySpec->title->range('1-100');
+$storySpec->gen(3);
+
+$projectStory = zenData('projectstory');
+$projectStory->project->range('1{5}, 2{5}');
+$projectStory->product->range('1');
+$projectStory->branch->range('0');
+$projectStory->story->range('1-5 ');
+$projectStory->version->range('1');
+$projectStory->order->range('1-5');
+$projectStory->gen(10);
