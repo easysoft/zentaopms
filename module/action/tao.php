@@ -369,7 +369,12 @@ class actionTao extends actionModel
 
             $name = $execution->name;
             if($execution->type == 'kanban') $method = 'kanban';
-            if($name) $action->extra = !common::hasPriv('execution', $method) || ($method == 'kanban' && isonlybody()) || $this->config->vision == 'or' ? $name : html::a(helper::createLink('execution', $method, "executionID={$action->execution}"), $name, '', "data-app='execution'");
+            if($name)
+            {
+                $isModalKanban = $method == 'kanban' && isonlybody();
+                $canShowLink   = common::hasPriv('execution', $method) && !$isModalKanban && $this->config->vision != 'or';
+                $action->extra = $canShowLink ? html::a(helper::createLink('execution', $method, "executionID={$action->execution}"), $name, '', "data-app='execution'") : $name;
+            }
         }
         elseif($type == 'project')
         {
@@ -790,7 +795,7 @@ class actionTao extends actionModel
         {
             $action->objectName = $this->dao->select('name')->from(TABLE_AI_ASSISTANT)->where('id')->eq($action->objectID)->fetch('name');
         }
-        if(empty($action->objectName) && (substr($objectType, 0, 6) == 'gitlab' || substr($objectType, 0, 5) == 'gitea' || substr($objectType, 0, 4) == 'gogs' || substr($objectType, 0, 2) == 'mr')) $action->objectName = $action->extra;
+        if (empty($action->objectName) && preg_match('/^(gitlab|gitea|gogs|mr)/', $objectType)) $action->objectName = $action->extra;
     }
 
     /**
