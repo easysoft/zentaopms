@@ -72,3 +72,15 @@ $projectStory->story->range('1, 2, 3');
 $projectStory->version->range('1');
 $projectStory->order->range('1, 2, 3');
 $projectStory->gen(6);
+
+$module = zenData('module');
+$module->id->range('1-100');
+$module->root->range('1, 2, 2');
+$module->branch->range('0');
+$module->name->range('产品1模块1, 产品2模块1, 执行模块1');
+$module->parent->range('0');
+$module->path->range('`,1,`, `,2,`, `,3,`');
+$module->grade->range('1');
+$module->type->range('story{2}, task');
+$module->short->range('0');
+$module->gen(3);
