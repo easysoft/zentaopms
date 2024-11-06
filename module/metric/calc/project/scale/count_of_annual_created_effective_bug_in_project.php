@@ -18,3 +18,25 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
+class count_of_annual_created_effective_bug_in_project extends baseCalc
+{
+    public $dataset = 'getProjectBugs';
+
+    public $fieldList = array('t1.project', 't1.status', 't1.resolution', 't1.openedDate');
+
+    public $result = array();
+
+    public function getResult($options = array())
+    {
+        $records = array();
+        foreach($this->result as $project => $years)
+        {
+            foreach($years as $year => $value)
+            {
+                $records[] = array('project' => $project, 'year' => $year, 'value' => $value);
+            }
+        }
+
+        return $this->filterByOptions($records, $options);
+    }
+}
