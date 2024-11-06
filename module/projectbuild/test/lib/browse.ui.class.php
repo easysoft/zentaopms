@@ -33,3 +33,11 @@ class browseTester extends tester
     public function searchBuild($build)
     {
         $form = $this->initForm('projectbuild', 'browse', array('projectID' => '1' ), 'appIframe-project');
+        $form->dom->search($searchList = array("名称,=, {$build}"));
+        $form->wait(2);
+
+        //断言检查搜索是否成功
+        if($form->dom->buildNameBrowse->getText() != $build) return $this->failed('项目版本搜索失败');
+        return $this->success('项目版本搜索成功');
+    }
+}
