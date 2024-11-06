@@ -1279,6 +1279,23 @@ class task extends control
     }
 
     /**
+     * AJAX: 获取任务的开始时间和截止时间。
+     * AJAX: Get the start time and end time of the task.
+     *
+     * @param  int    $taskID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetTaskEstStartedAndDeadline(int $taskID)
+    {
+        $task = $this->task->fetchById($taskID);
+        $overParentEstStartedLang = !empty($task) ? sprintf($this->lang->task->overParentEsStarted, $task->estStarted) : '';
+        $overParentDeadlineLang   = !empty($task) ? sprintf($this->lang->task->overParentDeadline, $task->deadline) : '';
+
+        return print(json_encode(array('estStarted' => $task->estStarted, 'deadline' => $task->deadline, 'overParentEstStartedLang' => $overParentEstStartedLang, 'overParentDeadlineLang' => $overParentDeadlineLang)));
+    }
+
+    /**
      * 创建代码分支。
      * Create repo branch.
      *
