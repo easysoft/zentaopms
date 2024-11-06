@@ -57,4 +57,23 @@ class bugTester extends tester
         if($form->dom->firstAssign->getText() == $user) return $this->success('单个指派Bug成功');
         return $this->failed('单个指派Bug失败');
     }
+
+    /**
+     * 批量指派bug。
+     * Batch assign bug.
+     *
+     * @param  string $user
+     * @access public
+     * @return object
+     */
+    public function batchAssignBug($user)
+    {
+        $form = $this->initForm('project', 'bug', array('project' => 1), 'appIframe-project');
+        $form->dom->secondCheckbox->click();
+        $form->dom->batchAssignTo->click();
+        $form->dom->assignToAdmin->click();
+        $form->wait(1);
+        if($form->dom->firstAssign->getText() == $user) return $this->success('批量指派Bug成功');
+        return $this->failed('批量指派Bug失败');
+    }
 }
