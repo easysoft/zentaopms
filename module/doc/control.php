@@ -315,12 +315,40 @@ class doc extends control
      * 文档模板列表。
      * Browse template list.
      *
+     * @param  string $scope
+     * @param  string $type
+     * @param  int    $docID
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function browseTemplate()
+    public function browseTemplate(string $scope = '', string $type = 'all', int $docID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $this->view->title = $this->lang->doc->template;
+        if(!isset($this->config->doc->templateMenu[$scope])) $scope = 'product';
+        $menu = $this->config->doc->templateMenu[$scope];
+
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $templateList = $this->doc->getDocTemplateList($type, $orderBy, $pager);
+        foreach($templateList as $template)
+        {
+            $template->originLib   = $template->lib;
+            $template->lib         = $menu['id'];
+        }
+
+        $this->view->title        = $this->lang->doc->template;
+        $this->view->menu         = $menu;
+        $this->view->scope        = $scope;
+        $this->view->users        = $this->loadModel('user')->getPairs('noclosed,noletter');
+        $this->view->templateList = $templateList;
+        $this->view->docID        = $docID;
+        $this->view->orderBy      = $orderBy;
+        $this->view->recPerPage   = $recPerPage;
+        $this->view->pageID       = $pageID;
         $this->display();
     }
 
