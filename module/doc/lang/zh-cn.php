@@ -79,6 +79,12 @@ $lang->docTemplate->scopes['project']   = '项目';
 $lang->docTemplate->scopes['execution'] = '执行';
 $lang->docTemplate->scopes['personal']  = '个人';
 
+$lang->docTemplate->filterTypes = array();
+$lang->docTemplate->filterTypes[] = array('all', '全部');
+$lang->docTemplate->filterTypes[] = array('draft', '草稿');
+$lang->docTemplate->filterTypes[] = array('released', '已发布');
+$lang->docTemplate->filterTypes[] = array('createdByMe', '我创建的');
+
 /* 字段列表。*/
 $lang->doc->common       = '文档';
 $lang->doc->id           = 'ID';

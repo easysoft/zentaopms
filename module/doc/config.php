@@ -123,7 +123,7 @@ $config->doc->quickMenu['collect']   = array('id' => 3, 'name' => $lang->doc->my
 $config->doc->quickMenu['editedby']  = array('id' => 4, 'name' => $lang->doc->myEdited);
 
 $config->doc->templateMenu = array();
-$config->doc->templateMenu['product']   = array('id' => 1, 'scope' => 'product',   'name' => $lang->doc->templateScopes['product']);
-$config->doc->templateMenu['project']   = array('id' => 2, 'scope' => 'project',   'name' => $lang->doc->templateScopes['project']);
-$config->doc->templateMenu['execution'] = array('id' => 3, 'scope' => 'execution', 'name' => $lang->doc->templateScopes['execution']);
-$config->doc->templateMenu['personal']  = array('id' => 4, 'scope' => 'personal',  'name' => $lang->doc->templateScopes['personal']);
+$config->doc->templateMenu['product']   = array('id' => 1, 'scope' => 'product',   'name' => $lang->docTemplate->scopes['product']);
+$config->doc->templateMenu['project']   = array('id' => 2, 'scope' => 'project',   'name' => $lang->docTemplate->scopes['project']);
+$config->doc->templateMenu['execution'] = array('id' => 3, 'scope' => 'execution', 'name' => $lang->docTemplate->scopes['execution']);
+$config->doc->templateMenu['personal']  = array('id' => 4, 'scope' => 'personal',  'name' => $lang->docTemplate->scopes['personal']);

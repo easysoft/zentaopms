@@ -79,6 +79,12 @@ $lang->docTemplate->scopes['project']   = 'Project';
 $lang->docTemplate->scopes['execution'] = 'Execution';
 $lang->docTemplate->scopes['personal']  = 'Personal';
 
+$lang->docTemplate->filterTypes = array();
+$lang->docTemplate->filterTypes[] = array('all', 'All');
+$lang->docTemplate->filterTypes[] = array('draft', 'Draft');
+$lang->docTemplate->filterTypes[] = array('released', 'Released');
+$lang->docTemplate->filterTypes[] = array('createdByMe', 'Created By Me');
+
 /* Fields. */
 $lang->doc->common       = 'Document';
 $lang->doc->id           = 'ID';

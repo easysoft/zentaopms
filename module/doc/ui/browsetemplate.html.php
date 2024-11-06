@@ -17,7 +17,12 @@ $data['spaces'][] = array('name' => $lang->doc->template, 'id' => $spaceID);
 foreach($config->doc->templateMenu as $item) $data['libs'][] = $item + array('space' => $spaceID);
 
 $privs = array();
+
+$filterTypes = $lang->docTemplate->filterTypes;
+if(!hasPriv('doc', 'editDocTemplate')) $filterTypes = array_values(array_filter($filterTypes, function($item){ return $item[0] != 'draft'; }));
+
 $langData = array();
+$langData['filterTypes'] = $filterTypes;
 
 docApp
 (
