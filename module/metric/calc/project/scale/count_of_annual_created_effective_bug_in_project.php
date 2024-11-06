@@ -26,6 +26,23 @@ class count_of_annual_created_effective_bug_in_project extends baseCalc
 
     public $result = array();
 
+    public function calculate($data)
+    {
+        $openedDate = $data->openedDate;
+
+        $year = $this->getYear($openedDate);
+        if(!$year) return false;
+
+        $project = $data->project;
+        if(!isset($this->result[$project])) $this->result[$project] = array();
+        if(!isset($this->result[$project][$year])) $this->result[$project][$year] = 0;
+
+        $resolution = $data->resolution;
+        $status     = $data->status;
+
+        if($status == 'active' or $resolution == 'fixed' or $resolution == 'postponed') $this->result[$project][$year] += 1;
+    }
+
     public function getResult($options = array())
     {
         $records = array();
