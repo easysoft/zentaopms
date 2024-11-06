@@ -70,17 +70,3 @@ $projectStory->story->range('1-5 ');
 $projectStory->version->range('1');
 $projectStory->order->range('1-5');
 $projectStory->gen(10);
-
-$task = zenData('task');
-$task->id->range('1-100');
-$task->project->range('1');
-$task->execution->range('2');
-$task->name->range('1-100');
-$task->status->range('wait, doing{2}, done{3}, pause{4}, cancel{5}, closed{6}');
-$task->gen(21);
-
-$taskSpec = zenData('taskspec');
-$taskSpec->task->range('1-100');
-$taskSpec->version->range('0');
-$taskSpec->name->range('1-100');
-$taskSpec->gen(21);
