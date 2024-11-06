@@ -2061,10 +2061,11 @@ class taskModel extends model
      * Get toList and ccList.
      *
      * @param  object      $task
+     * @param  string      $action
      * @access public
      * @return array|false
      */
-    public function getToAndCcList(object $task): array|false
+    public function getToAndCcList(object $task, string $action): array|false
     {
         /* Set assignedTo and mailto. */
         $assignedTo = $task->assignedTo;
@@ -2088,6 +2089,17 @@ class taskModel extends model
             /* If the assignor is closed, treat the completion person as the assignor. */
             $assignedTo = $task->finishedBy;
         }
+
+        if(in_array($action, array('paused', 'closed', 'canceled')) && $task->parent > 0)
+        {
+            $parentTasks = $this->dao->select('id,assignedTo,finishedBy,mailto')->from(TABLE_TASK)->where('id')->in($task->path)->fetchAll('id');
+            foreach($parentTasks as $parentID => $parentTask)
+            {
+                $mailto[] = (strtolower($parentTask->assignedTo) == 'closed') ? $parentTask->finishedBy : $parentTask->assignedTo;
+                $mailto  += is_null($parentTask->mailto) ? array() : explode(',', trim($parentTask->mailto, ','));
+            }
+        }
+        $mailto = array_unique(array_filter(array_map(function($account) use($assignedTo){ return $account == $assignedTo ? '' : $account;}, $mailto)));
 
         return array($assignedTo, implode(',', $mailto));
     }
@@ -2456,9 +2468,6 @@ class taskModel extends model
 
         /* Update kanban status. */
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()->where('id')->eq($task->id)->exec();
-
-        /* If task has parent task, update status of the parent task by the child task. */
-        if($oldTask->parent > 0) $this->updateParentStatus($task->id);
 
         /* If output is not empty, update kanban cell. */
         $this->updateKanbanCell($task->id, $output, $oldTask->execution);
@@ -3243,20 +3252,20 @@ class taskModel extends model
             $status = $this->taskTao->getParentStatusById($parentID);
             if(empty($status))
             {
-                $this->dao->update(TABLE_TASK)->set('parent')->eq('0')->set('path')->eq(",{$parentID},")->where('id')->eq($parentID)->exec();
+                $this->dao->update(TABLE_TASK)->set('parent')->eq('0')->set('isParent')->eq(0)->set('path')->eq(",{$parentID},")->where('id')->eq($parentID)->exec();
                 continue;
             }
             if(!in_array($status, array('doing', 'done'))) continue;
             if($parentTask->status == $status) continue;
 
             /* Update task status. */
-            $this->taskTao->updateTaskByChildAndStatus($parentTask, $childTask, $status);
+            $this->taskTao->autoUpdateTaskByStatus($parentTask, $childTask, $status);
             if(dao::isError() || !$createAction) return;
 
             if($parentTask->story) $this->story->setStage($parentTask->story);
 
             /* Create action record. */
-            $this->taskTao->createUpdateParentTaskAction($parentTask);
+            $this->taskTao->createAutoUpdateAction($parentTask);
             if($this->config->edition != 'open' && $parentTask->feedback) $this->loadModel('feedback')->updateStatus('task', $parentTask->feedback, $status, $parentTask->status);
         }
     }

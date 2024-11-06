@@ -1012,15 +1012,16 @@ class taskTest
      * Test get toList and ccList.
      *
      * @param  int    $taskID
+     * @param  string $action
      * @access public
      * @return array|false
      */
-    public function getToAndCcListTest(int $taskID): array|false
+    public function getToAndCcListTest(int $taskID, string $action = ''): array|false
     {
         $task = $this->objectModel->getByID($taskID);
         if(empty($task)) return false;
 
-        return $this->objectModel->getToAndCcList($task);
+        return $this->objectModel->getToAndCcList($task, $action);
     }
 
     /**

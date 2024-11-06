@@ -23,7 +23,7 @@ fields:
   - field: deleted
     range: 0{9},1{3}
   - field: assignedTo
-    range: "[],admin{2},[]{3}"
+    range: "[],admin{2},user2,user3,user4,user5,[]{3}"
   - field: mailto
     fields:
       - field: mailto1
