@@ -319,7 +319,7 @@ class taskModel extends model
      * @access public
      * @return array|bool
      */
-    public function afterStart(object $oldTask, array $changes, float $left, array $output): array|bool
+    public function afterStart(object $oldTask, array $changes, float $left, array $output = array()): array|bool
     {
         /* Update the data of the parent task. */
         if($oldTask->parent > 0) $this->computeBeginAndEnd($oldTask->parent);

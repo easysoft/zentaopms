@@ -724,9 +724,8 @@ class task extends control
             $changes = $this->task->start($task, $taskData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $action   = $this->post->left == 0 ? 'Finished' : 'Restarted';
-            $actionID = $this->loadModel('action')->create('task', $taskID, $action, $this->post->comment);
-            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+            $result = $this->task->afterStart($task, $changes, (float)$this->post->left);
+            if(is_array($result)) $this->send($result);
 
             $this->executeHooks($taskID);
             $response = $this->taskZen->responseAfterChangeStatus($task, $from);
