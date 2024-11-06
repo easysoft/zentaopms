@@ -34,7 +34,7 @@ class taskModel extends model
         }
 
         $oldTask = $this->getById($taskID);
-        if($oldTask->parent == '-1') $this->config->task->activate->requiredFields = '';
+        if($oldTask->isParent) $this->config->task->activate->requiredFields = '';
 
         $this->dao->update(TABLE_TASKTEAM)->set('status')->eq('wait')->where('task')->eq($task->id)->andWhere('consumed')->eq(0)->andWhere('left')->gt('0')->exec();
         $this->dao->update(TABLE_TASKTEAM)->set('status')->eq('doing')->where('task')->eq($task->id)->andWhere('consumed')->gt(0)->andWhere('left')->gt(0)->exec();
@@ -62,7 +62,7 @@ class taskModel extends model
         if($task->left != $oldTask->left) $this->loadModel('program')->refreshProjectStats($oldTask->project);
 
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
-        if($oldTask->parent == '-1')
+        if($oldTask->isParent)
         {
             unset($task->left);
             unset($task->id);
@@ -180,7 +180,7 @@ class taskModel extends model
                 $this->feedback->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
             }
 
-            if(!empty($task->story) && !empty($task->parent) && $task->parent == '-1' && $this->post->syncChildren) $this->syncStoryToChildren($task);
+            if(!empty($task->story) && !empty($task->isParent) && $this->post->syncChildren) $this->syncStoryToChildren($task);
         }
 
         return !dao::isError();
@@ -286,7 +286,7 @@ class taskModel extends model
         }
 
         $parentTask = new stdclass();
-        $parentTask->parent         = '-1';
+        $parentTask->isParent       = 1;
         $parentTask->lastEditedBy   = $this->app->user->account;
         $parentTask->lastEditedDate = helper::now();
         $this->dao->update(TABLE_TASK)->data($parentTask)->where('id')->eq($parentID)->exec();
@@ -655,7 +655,7 @@ class taskModel extends model
         if($oldTask->parent > 0) $this->updateParentStatus($task->id);
 
         /* Cancel a parent task. */
-        if($oldTask->parent == '-1') $this->taskTao->cancelParentTask($task);
+        if($oldTask->isParent) $this->taskTao->cancelParentTask($task);
 
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
 
@@ -807,6 +807,9 @@ class taskModel extends model
         if(!empty($earliestRealStarted)) $newTask['realStarted'] = $earliestRealStarted;
         if(!empty($latestDeadline))      $newTask['deadline']    = $latestDeadline;
         if(!empty($newTask)) $this->dao->update(TABLE_TASK)->data($newTask)->autoCheck()->where('id')->eq($taskID)->exec();
+
+        $task = $this->fetchById($taskID);
+        if($task->parent) $this->computeBeginAndEnd($task->parent);
 
         return !dao::isError();
     }
@@ -1070,7 +1073,7 @@ class taskModel extends model
             $this->createTestChildTasks($taskID, $testTasks);
             $this->computeWorkingHours($taskID);
             $this->computeBeginAndEnd($taskID);
-            $this->dao->update(TABLE_TASK)->set('`parent`')->eq(-1)->where('id')->eq($taskID)->exec();
+            $this->dao->update(TABLE_TASK)->set('isParent')->eq(1)->where('id')->eq($taskID)->exec();
         }
 
         if(dao::isError()) return false;
