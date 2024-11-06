@@ -16,3 +16,11 @@ class addTodoTester extends tester
         $todoList = $this->loadPage('my', 'todo', array('type' => 'all'));
         $todoList->dom->addTodo->click();
         $todoList->wait(1);
+        $todoList->dom->name->setValue($todoTitle->name);
+        $todoList->wait(1);
+        $todoList->dom->status->picker($todoStatus->doing);
+        $todoList->wait(1);
+        $todoList->dom->switchTime->click();
+        $todoList->dom->addTodoBtn->click();
+    }
+}
