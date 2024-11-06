@@ -983,9 +983,10 @@ class actionTao extends actionModel
      */
     public function getUndeleteParamsByObjectType(string $objectType): array
     {
-        $table   = $this->config->objectTables[$objectType];
-        $orderby = '';
-        $field   = '*';
+        $table    = $this->config->objectTables[$objectType];
+        $orderby  = '';
+        $field    = '*';
+        $queryKey = 'id';
         switch($objectType)
         {
             case 'product':
@@ -996,11 +997,12 @@ class actionTao extends actionModel
                 $field = 'id, acl, name, hasProduct';
                 break;
             case 'doc':
-                $table   = TABLE_DOCCONTENT;
-                $orderby = 'version desc';
+                $table    = TABLE_DOCCONTENT;
+                $orderby  = 'version desc';
+                $queryKey = 'doc';
             default:
                 break;
-       }
-        return array($table, $orderby, $field);
+        }
+        return array($table, $orderby, $field, $queryKey);
     }
 }

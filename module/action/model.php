@@ -1448,8 +1448,9 @@ class actionModel extends model
         $action = $this->getById($actionID);
         if(!$action || $action->action != 'deleted') return false;
 
-        list($table, $orderby, $field) = $this->actionTao->getUndeleteParamsByObjectType($action->objectType);
-        $object = $this->actionTao->getObjectBaseInfo($table, array('id' => $action->objectID), $field, $orderby);
+        list($table, $orderby, $field, $queryKey) = $this->actionTao->getUndeleteParamsByObjectType($action->objectType);
+        if(empty($queryKey)) $queryKey = 'id';
+        $object = $this->actionTao->getObjectBaseInfo($table, array($queryKey => $action->objectID), $field, $orderby);
         if(empty($object)) return false;
 
         $result = $this->checkActionCanUndelete($action, $object);
