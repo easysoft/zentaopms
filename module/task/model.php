@@ -1914,7 +1914,7 @@ class taskModel extends model
         /*
          过滤多人任务。
          过滤已经记录工时的任务。
-         过滤已暂停、已取消、已关闭的任务。
+         过滤已取消、已关闭的任务。
          过滤自己和后代任务。
         */
         $children = $this->getAllChildId($taskID);
@@ -1922,7 +1922,7 @@ class taskModel extends model
         return $this->dao->select('id, name')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
             ->andWhere('consumed')->eq(0)
-            ->andWhere('status')->notin('pause,cancel,closed')
+            ->andWhere('status')->notin('cancel,closed')
             ->andWhere('execution')->eq($executionID)
             ->andWhere('mode')->eq('')
             ->beginIF($children)->andWhere('id')->notin($children)->fi()

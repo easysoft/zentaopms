@@ -275,7 +275,7 @@ class taskZen extends task
         $task = $this->view->task;
 
         /* Get the task parent id,name pairs. */
-        $tasks = $this->task->getParentTaskPairs($this->view->execution->id, strVal($task->parent));
+        $tasks = $this->task->getParentTaskPairs($this->view->execution->id, strVal($task->parent), $taskID);
         if(isset($tasks[$taskID])) unset($tasks[$taskID]);
 
         /* Prepare to assign to relevant parameters. */
