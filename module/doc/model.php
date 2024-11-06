@@ -1298,7 +1298,6 @@ class docModel extends model
         }
         if($type == 'project')
         {
-            $account          = $this->app->user->account;
             $projects         = $this->loadModel('project')->getListByCurrentUser();
             $involvedProjects = $this->project->getInvolvedListByCurrentUser();
             $spaceID          = $this->project->checkAccess($spaceID, $projects);
