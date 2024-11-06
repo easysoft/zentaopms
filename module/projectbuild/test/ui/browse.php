@@ -78,3 +78,14 @@ $build->scmPath->range('[]');
 $build->filePath->range('[]');
 $build->desc->range('描述111');
 $build->builder->range('admin');
+$build->deleted->range('0');
+$build->gen(6);
+
+$tester = new browseTester();
+$tester->login();
+
+r($tester->switchProduct('产品1', '1')) && p('status,message') && e('SUCCESS,版本显示正确');     //查看产品1下的版本
+r($tester->switchProduct('产品2', '5')) && p('status,message') && e('SUCCESS,版本显示正确');     //切换产品，查看产品2下版本
+r($tester->searchBuild('版本2'))        && p('status,message') && e('SUCCESS,项目版本搜索成功'); //项目版本列表搜索版本
+
+$tester->closeBrowser();
