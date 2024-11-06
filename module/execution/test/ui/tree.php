@@ -84,3 +84,22 @@ $module->grade->range('1');
 $module->type->range('story{2}, task');
 $module->short->range('0');
 $module->gen(3);
+
+$task = zenData('task');
+$task->id->range('1-100');
+$task->project->range('1');
+$task->execution->range('2');
+$task->module->range('1{3}, 2, 3, 0{99}');
+$task->story->range('1, 1, 2, 3, 0{99}');
+$task->storyVersion->range('1');
+$task->name->range('1-100');
+$task->gen(12);
+
+$taskSpec = zenData('taskspec');
+$taskSpec->task->range('1-100');
+$taskSpec->version->range('0');
+$taskSpec->name->range('1-100');
+$taskSpec->gen(12);
+
+$tester = new treeTester();
+$tester->login();
