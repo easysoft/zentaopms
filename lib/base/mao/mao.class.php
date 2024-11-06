@@ -778,30 +778,17 @@ class baseMao
 
         /* Get data keys as conditions. */
         $keyList = [];
-        foreach($data as $row) $keyList[$row->$primaryKey] = $row->$primaryKey;
+        foreach($data as $index => $row) $keyList[$index] = $row->$primaryKey;
 
-        $rawResult = $this->cache->fetchAll($this->table, $keyList);
+        $cacheResult = $this->cache->fetchAll($this->table, array_unique($keyList));
 
-        $result = [];
-        foreach($rawResult as $row)
+        foreach($data as $index=> $row)
         {
-            $data = new stdclass();
-            foreach($this->fields as $field => $alias)
-            {
-                $data->$alias = $row->$field;
-            }
+            $key      = $keyList[$index];
+            $cacheRow = $cacheResult[$key];
 
-            if($keyField)
-            {
-                $result[$row->$keyField] = $data;
-            }
-            else
-            {
-                $result[] = $data;
-            }
+            foreach($this->fields as $field => $alias) $row->$alias = $cacheRow->$field;
         }
-
-        return $result;
     }
 
     public function __call(string $method, array $args)

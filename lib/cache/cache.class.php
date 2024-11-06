@@ -626,22 +626,34 @@ class cache
 
         $code = $this->getTableCode();
 
-        if(!$objectIdList)
-        {
-            $setCacheKey  = $this->getSetCacheKey($code);
-            $objectIdList = $this->cache->get($setCacheKey);
-            if(!$objectIdList) return $this->initTableCache();
-        }
-
-        $keys = [];
-        foreach($objectIdList as $objectID) $keys[] = $this->getRawCacheKey($code, $objectID);
-
-        $objects = $this->cache->getMultiple($keys);
-        if(!$objects) return [];
-
         $result = [];
-        $field  = $this->getTableField();
-        foreach($objects as $object) $result[$object->$field] = $object;
+
+        /* Try get all objectIdList. */
+        $setCacheKey     = $this->getSetCacheKey($code);
+        $allObjectIdList = $this->cache->get($setCacheKey);
+
+        /* No data in cache, init table cache. */
+        if(!$allObjectIdList)
+        {
+            $allData = $this->initTableCache();
+            if(empty($objectIdList)) return $allData;
+
+            foreach($allData as $objectId => $object)
+            {
+                if(in_array($objectId, $objectIdList)) $result[$objectId] = $object;
+            }
+        }
+        else
+        {
+            $keys = [];
+            foreach($objectIdList as $objectID) $keys[] = $this->getRawCacheKey($code, $objectID);
+
+            $objects = $this->cache->getMultiple($keys);
+            if(!$objects) return [];
+
+            $field  = $this->getTableField();
+            foreach($objects as $object) $result[$object->$field] = $object;
+        }
 
         return $result;
     }
@@ -864,17 +876,5 @@ class cache
         if($this->event == 'delete') $this->delete();
 
         $this->reset();
-    }
-
-    /**
-     * 清空缓存。
-     * Clear cache.
-     *
-     * @access public
-     * @return void
-     */
-    public function clear
-    {
-        $this->cache->clear();
     }
 }
