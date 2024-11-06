@@ -2489,6 +2489,17 @@ class executionModel extends model
 
             $this->afterImportBug($task, $bug);
             if(dao::isError()) return false;
+
+            if($this->config->edition != 'open')
+            {
+                $relation = new stdClass();
+                $relation->AType    = 'bug';
+                $relation->AID      = $bug->id;
+                $relation->relation = 'transferredto';
+                $relation->BType    = 'task';
+                $relation->BID      = $taskID;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
         }
 
         return $mails;
