@@ -245,37 +245,25 @@ class metricZen extends metric
         $records = array();
         foreach($calcList as $code => $calc)
         {
-            $metric       = $this->metric->getByCode($code);
-            $dateType     = $this->metric->getDateTypeByCode($code);
-            $recordCommon = $this->buildRecordCommonFields($metric->id, $code, $now, $dateValues->$dateType);
-            $initRecords  = !$calc->initRecord ? array() : $this->initMetricRecords($recordCommon, $metric->scope);
-
+            $metric = $this->metric->getByCode($code);
             if($calc->reuse) $this->prepareReuseMetricResult($calc, $options);
             $results = $calc->getResult($options);
+            $records[$code] = array();
             if(is_array($results))
             {
                 foreach($results as $record)
                 {
                     $record = (object)$record;
-                    if(!is_numeric($record->value)) continue;
+                    if(!is_numeric($record->value) || empty($record->value)) continue;
 
                     $record->metricID   = $calc->id;
                     $record->metricCode = $code;
                     $record->date       = $now;
                     $record->system     = $metric->scope == 'system' ? 1 : 0;
 
-                    $uniqueKey = $this->getUniqueKeyByRecord($record);
-                    if(!isset($initRecords[$uniqueKey]))
-                    {
-                        $initRecords[$uniqueKey] = $record;
-                        continue;
-                    }
-
-                    $initRecords[$uniqueKey]->value = $record->value;
+                    $records[$code][] = $record;
                 }
             }
-
-            $records[$code] = array_values($initRecords);
         }
 
         return $records;
@@ -318,11 +306,10 @@ class metricZen extends metric
         if($dateType == 'nodate') return array();
         if($type == 'all' && $this->metric->checkHasInferenceOfDate($code, $dateType, $date)) return array();
 
-        $dateConfig   = $this->metric->parseDateStr($date, $dateType);
-        $recordCommon = $this->buildRecordCommonFields($metric->id, $code, $now, $dateConfig);
-        $initRecords  = !$calc->initRecord ? array() : $this->initMetricRecords($recordCommon, $metric->scope, "{$date} 23:59:59");
+        $records    = array();
+        $dateConfig = $this->metric->parseDateStr($date, $dateType);
+        $results    = $calc->getResult($dateConfig);
 
-        $results = $calc->getResult($dateConfig);
         if(is_array($results))
         {
             foreach($results as $record)
@@ -335,18 +322,11 @@ class metricZen extends metric
                 $record->date       = $now;
                 $record->system     = $metric->scope == 'system' ? 1 : 0;
 
-                $uniqueKey = $this->getUniqueKeyByRecord($record);
-                if(!isset($initRecords[$uniqueKey]))
-                {
-                    $initRecords[$uniqueKey] = $record;
-                    continue;
-                }
-
-                $initRecords[$uniqueKey]->value = $record->value;
+                $records[] = $record;
             }
         }
 
-        return array_values($initRecords);
+        return $records;
     }
 
     /**
@@ -403,14 +383,46 @@ class metricZen extends metric
     protected function buildRecordCommonFields($metricID, $code, $date, $dateValues)
     {
         $record = new stdclass();
-        $record->value      = 0;
-        $record->metricID   = $metricID;
-        $record->metricCode = $code;
-        $record->date       = $date;
+        $record->value        = 0;
+        $record->date         = $date;
+        $record->calcType     = 'cron';
+        $record->calculatedBy = 'system';
 
         $record = (object)array_merge((array)$record, $dateValues);
 
         return $record;
+    }
+
+    /**
+     * 补全缺失的度量数据。
+     * Complete missing metric data.
+     *
+     * @param  array     $records
+     * @param  array     $metric
+     * @access protected
+     * @return array
+     */
+    protected function completeMissingRecords($records, $metric)
+    {
+        $now          = helper::now();
+        $dateValues   = $this->metric->parseDateStr($now);
+        $dateType     = $metric->dateType;
+        $recordCommon = $this->buildRecordCommonFields($metric->id, $metric->code, $now, $dateValues->$dateType);
+        $initRecords  = $this->initMetricRecords($recordCommon, $metric->scope);
+
+        foreach($records as $record)
+        {
+            $uniqueKey = $this->getUniqueKeyByRecord($record);
+            if(!isset($initRecords[$uniqueKey]))
+            {
+                $initRecords[$uniqueKey] = $record;
+                continue;
+            }
+
+            $initRecords[$uniqueKey]->value = $record->value;
+        }
+
+        return array_values($initRecords);
     }
 
     /**

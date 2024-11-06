@@ -726,18 +726,16 @@ class docModel extends model
      * 获取文档列表数据。
      * Get doc list.
      *
-     * @param  array  $docIdList
-     * @param  string $orderBy
-     * @param  object $pager
+     * @param  array  $libs
+     * @param  string $spaceType
      * @access public
      * @return array
      */
-    public function getDocsOfLibs(array $libs): array
+    public function getDocsOfLibs(array $libs, string $spaceType): array
     {
         $docs = $this->dao->select('t1.*')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id')
-            ->where('t1.deleted')->eq(0)
-            ->andWhere('t1.lib')->in($libs)
+            ->where('t1.lib')->in($libs)
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.templateType')->eq('')
             ->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")
@@ -747,8 +745,7 @@ class docModel extends model
             ->fetchAll('id');
 
         $rootDocs = $this->dao->select('*')->from(TABLE_DOC)
-            ->where('deleted')->eq(0)
-            ->andWhere('lib')->in($libs)
+            ->where('lib')->in($libs)
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('templateType')->eq('')
             ->andWhere("(status = 'normal' or (status = 'draft' and addedBy='{$this->app->user->account}'))")
@@ -758,7 +755,7 @@ class docModel extends model
 
         $docs = $docs + $rootDocs;
         $docs = $this->processCollector($docs);
-        $docs = $this->filterPrivDocs($docs);
+        $docs = $this->filterPrivDocs($docs, $spaceType);
 
         foreach($docs as &$doc)
         {
@@ -778,20 +775,24 @@ class docModel extends model
      * Filter docs which has privilege.
      *
      * @param  array  $docs
+     * @param  string $spaceType
      * @access public
      * @return array
      */
-    public function filterPrivDocs(array $docs): array
+    public function filterPrivDocs(array $docs, string $spaceType): array
     {
         $currentAccount = $this->app->user->account;
         $userGroups     = $this->app->user->groups;
 
         $privDocs = array();
-        foreach($docs as $index => $doc)
+        foreach($docs as $doc)
         {
-            if($doc->acl == 'open' || ($doc->acl == 'private' && $doc->addedBy == $currentAccount) || strpos(",$doc->users,", ",$currentAccount,") !== false)
+            $isOpen = $doc->acl == 'open';
+            $isAuthorOrAdmin = $doc->acl == 'private' && ($doc->addedBy == $currentAccount || ($this->app->user->admin && $spaceType !== 'mine'));
+            $isInUsers = strpos(",$doc->users,", ",$currentAccount,") !== false;
+            if($isOpen || $isAuthorOrAdmin || $isInUsers)
             {
-                $privDocs[$index] = $doc;
+                $privDocs[] = $doc;
             }
             elseif(!empty($doc->groups))
             {
@@ -799,7 +800,7 @@ class docModel extends model
                 {
                     if(strpos(",$doc->groups,", ",$groupID,") !== false)
                     {
-                        $privDocs[$index] = $doc;
+                        $privDocs[] = $doc;
                         break;
                     }
                 }
@@ -1297,7 +1298,6 @@ class docModel extends model
         }
         if($type == 'project')
         {
-            $account          = $this->app->user->account;
             $projects         = $this->loadModel('project')->getListByCurrentUser();
             $involvedProjects = $this->project->getInvolvedListByCurrentUser();
             $spaceID          = $this->project->checkAccess($spaceID, $projects);
@@ -2156,7 +2156,7 @@ class docModel extends model
         {
             if(!$this->checkPrivDoc($doc)) unset($docs[$id]);
         }
-        $docIdList = empty($docs) ? 0 : $this->dao->select('id')->from(TABLE_DOC)->where($type)->eq($objectID)->andWhere('id')->in(array_keys($docs))->get();
+        $docIdList = empty($docs) ? 0 : $this->dao->select('id')->from(TABLE_DOC)->where($type)->eq($objectID)->andWhere('vision')->eq($this->config->vision)->andWhere('id')->in(array_keys($docs))->get();
 
         if($type == 'product')
         {

@@ -421,11 +421,12 @@ EOT)->from(TABLE_TASK)->alias('t1')
      */
     protected function getPivotID(int $groupID): int
     {
+        $viewableObjects = $this->bi->getViewableObject('pivot');
         return (int)$this->dao->select('id')->from(TABLE_PIVOT)
             ->where("FIND_IN_SET({$groupID}, `group`)")
             ->andWhere('stage')->ne('draft')
             ->andWhere('deleted')->eq('0')
-            ->andWhere('id')->in($this->viewableObjects)
+            ->andWhere('id')->in($viewableObjects)
             ->orderBy('id_desc')
             ->limit(1)
             ->fetch('id');

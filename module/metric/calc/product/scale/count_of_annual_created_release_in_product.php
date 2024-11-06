@@ -28,10 +28,8 @@ class count_of_annual_created_release_in_product extends baseCalc
 
     public function calculate($row)
     {
-        if(empty($row->date)) return null;
-
-        $year = substr($row->date, 0, 4);
-        if($year == '0000') return null;
+        $year = $this->getYear($row->date);
+        if(!$year) return false;
 
         if(!isset($this->result[$year])) $this->result[$year] = array();
         if(!isset($this->result[$year][$row->product])) $this->result[$year][$row->product] = 0;

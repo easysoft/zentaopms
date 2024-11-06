@@ -199,7 +199,7 @@ class holidayModel extends model
          /* Get holidays, working days and weekend days .*/
          $holidays    = $this->getHolidays($begin, $end);
          $workingDays = $this->getWorkingDays($begin, $end);
-         $weekend     = isset($this->config->project->weekend) ? $this->config->project->weekend : 2;
+         $weekend     = isset($this->config->execution->weekend) ? $this->config->execution->weekend : 2;
 
          /* When the start date and end date are the same. */
          $actualDays = array();

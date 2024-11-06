@@ -284,9 +284,7 @@ class docZen extends doc
 
         $docAppActions = array();
         $docAppActions[] = array('update', 'lib', $lib);
-        $docAppActions[] = array('list:selectLib', $libID);
-        $docAppActions[] = array('home:selectSpace', $objectID, $libID);
-        $docAppActions[] = array('load', null, null, null, array('picks' => 'lib'));
+        $docAppActions[] = array('selectSpace', $objectID, $libID);
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('name' => 'locateNewLib', 'params' => array($type, $objectID, $libID, $libName)), 'docApp' => $docAppActions));
     }
 
@@ -394,24 +392,18 @@ class docZen extends doc
      * Return after move lib or doc.
      *
      * @param  string     $space
-     * @param  string     $spaceType
      * @param  int        $libID
-     * @param  string     $locateLink
      * @param  int        $docID
      *
      * @access protected
-     * @return bool|int
+     * @return void
      */
-    protected function responseAfterMove(string $space, string $spaceType = 'mine', int $libID = 0, string $locateLink = '', int $docID = 0): bool|int
+    protected function responseAfterMove(string $space, int $libID = 0, int $docID = 0)
     {
-        if(empty($locateLink))
-        {
-            if($spaceType == 'mine')       $locateLink = $this->createLink('doc', 'mySpace', "type=mine&libID={$libID}");
-            elseif($spaceType == 'custom') $locateLink = $this->createLink('doc', 'teamSpace', "objectID={$space}&libID={$libID}");
-            else                           $locateLink = true;
-        }
-        if($locateLink === 'true') $locateLink = true;
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'docApp' => $docID ? array('executeCommand', 'handleMovedDoc', array($docID, $space, $libID)) : array('load', null, null, null, array('noLoading' => true, 'picks' => 'lib'))));
+        $spaceID = (int)(explode('.', $space)[1]);
+        if($docID) $docAppAction = array('executeCommand', 'handleMovedDoc', array($docID, $space, $libID));
+        else       $docAppAction = array('selectSpace', $spaceID, $libID);
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'docApp' => $docAppAction));
     }
 
     /**

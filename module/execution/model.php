@@ -3580,7 +3580,7 @@ class executionModel extends model
             $onSQL = '';
             foreach($matches[1] as $matchIndex => $match) $onSQL .= "t2.account {$match} or ";
             $onSQL = trim($onSQL, ' or ');
-            $sql = $sql->leftJoin(TABLE_TASKTEAM)->alias('t2')->on("t2.task = t1.id and ({$onSQL})");
+            if($onSQL) $sql = $sql->leftJoin(TABLE_TASKTEAM)->alias('t2')->on("t2.task = t1.id and ({$onSQL})");
         }
 
         $orderBy = array_map(function($value){return 't1.' . $value;}, explode(',', $orderBy));
@@ -4613,6 +4613,8 @@ class executionModel extends model
         $rows = array();
         $this->app->loadConfig('project');
 
+        $this->getLimitedExecution();
+
         $executionList = array();
         foreach($executions as $execution) $executionList[$execution->id] = $execution;
         foreach($executionList as $execution)
@@ -4687,6 +4689,8 @@ class executionModel extends model
             {
                 $rawAction = str_replace('Task', '', $action);
                 if(!commonModel::hasPriv('task', $rawAction)) continue;
+                if(!common::hasDBPriv($task, 'task', $rawAction)) continue;
+
                 $clickable = $this->task->isClickable($task, $rawAction);
                 $action    = array('name' => $action);
                 if(!$clickable) $action['disabled'] = true;

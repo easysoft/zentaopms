@@ -286,7 +286,6 @@ $lang->task->cannotDeleteParent        = '不能删除父任务。';
 $lang->task->addChildTask              = '因该任务已经产生消耗，为保证数据一致性，我们会帮您创建一条同名子任务记录该消耗。';
 $lang->task->selectTestStoryTip        = "以下{$lang->SRCommon}将作为此任务的子任务";
 $lang->task->effortOperateTips         = '只有项目负责人、执行负责人、所属部门负责人才能%s他人日志。';
-$lang->task->syncStoryToAllChildrenTip = "是否同步更新所有子任务的相关{$lang->SRCommon}？";
 $lang->task->syncStoryToChildrenTip    = "子任务%s没有关联{$lang->SRCommon}，是否同步更新这些子任务的相关{$lang->SRCommon}？";
 
 $lang->task->error                    = new stdclass();
@@ -416,5 +415,5 @@ $lang->taskestimate->consumed = '工时';
 $lang->task->overEsStartDate = '已超出%s计划开始时间，请先修改%s计划开始时间';
 $lang->task->overEsEndDate   = '已超出%s计划结束时间，请先修改%s计划结束时间';
 
-$lang->task->overParentEsStarted = '任务预计开始日期小于父任务预计开始日期：%s';
-$lang->task->overParentDeadline  = '任务截止日期大于父任务截止日期：%s';
+$lang->task->overParentEsStarted = '任务的预计开始日期小于了父任务的预计开始日期：%s';
+$lang->task->overParentDeadline  = '任务的截止日期大于了父任务的截止日期：%s';

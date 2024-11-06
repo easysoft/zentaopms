@@ -75,7 +75,6 @@ window.clickSubmit = async function(e)
     const $taskBatchFormTrs = $taskBatchForm.find('tbody tr');
 
     var confirmID = '';
-    var tipAll    = true;
     for(let i = 0; i < $taskBatchFormTrs.length; i++)
     {
         const $currentTr = $($taskBatchFormTrs[i]);
@@ -94,7 +93,6 @@ window.clickSubmit = async function(e)
         const nonStoryChildTaskIdList = Object.keys(nonStoryChildTasks[taskID]);
         if(nonStoryChildTaskIdList.length == 0) continue;
 
-        if(tipAll) tipAll = Object.keys(childTasks[taskID]).length == nonStoryChildTaskIdList.length;
 
         for(let j = 0; j < nonStoryChildTaskIdList.length; j++) confirmID += 'ID' + nonStoryChildTaskIdList[j].toString() + ', ';
     }
@@ -102,8 +100,7 @@ window.clickSubmit = async function(e)
 
     if(confirmID.endsWith(', ')) confirmID = confirmID.slice(0, -2);
 
-    let confirmTip = tipAll ? syncStoryToAllChildrenTip : syncStoryToChildrenTip;
-    confirmTip     = confirmTip.replace('%s', confirmID);
+    let confirmTip = syncStoryToChildrenTip.replace('%s', confirmID);
     zui.Modal.confirm(confirmTip).then((res) =>
     {
         $taskBatchForm.find('[name=syncChildren]').remove();
@@ -166,7 +163,7 @@ function checkBatchEstStartedAndDeadline(event)
     if(field == 'estStarted')
     {
         let parentEstStarted = typeof tasks[parentID] == 'undefined' || $(event.target).closest('tbody').find('[name="estStarted[' + parentID + ']"]').length == 0 ? parentTask.estStarted : $(event.target).closest('tbody').find('[name="estStarted[' + parentID + ']"]').val();
-        if(estStarted.length > 0 && estStarted < parentEstStarted)
+        if(estStarted.length > 0 && parentEstStarted.length > 0 && estStarted < parentEstStarted)
         {
             const $estStartedTd = $currentRow.find('td[data-name=estStarted]');
             if($estStartedTd.find('.date-tip').length == 0 || $estStartedTd.find('.date-tip .form-tip').length > 0)
@@ -184,7 +181,7 @@ function checkBatchEstStartedAndDeadline(event)
     if(field == 'deadline')
     {
         let parentDeadline = typeof tasks[parentID] == 'undefined' || $(event.target).closest('tbody').find('[name="deadline[' + parentID + ']"]').length == 0 ? parentTask.deadline : $(event.target).closest('tbody').find('[name="deadline[' + parentID + ']"]').val();
-        if(deadline.length > 0 && deadline > parentDeadline)
+        if(deadline.length > 0 && parentDeadline.length > 0 && deadline > parentDeadline)
         {
             const $deadlineTd = $currentRow.find('td[data-name=deadline]');
             if($deadlineTd.find('.date-tip').length == 0 || $deadlineTd.find('.date-tip .form-tip').length > 0)

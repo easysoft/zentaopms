@@ -7132,9 +7132,11 @@ class upgradeModel extends model
     public function processDashboard()
     {
         $dashboards = $this->dao->select('*')->from(TABLE_DASHBOARD)->fetchAll();
+        $id = 1002;
         foreach($dashboards as $dashboard)
         {
             $screen = new stdclass();
+            $screen->id          = $id;
             $screen->name        = $dashboard->name;
             $screen->dimension   = 1;
             $screen->desc        = $dashboard->desc;
@@ -7144,6 +7146,7 @@ class upgradeModel extends model
             $screen->createdBy   = $dashboard->createdBy;
             $screen->createdDate = $dashboard->createdDate;
             $this->dao->insert(TABLE_SCREEN)->data($screen)->exec();
+            $id++;
         }
 
         $this->dao->exec("ALTER TABLE " . TABLE_CHART . " DROP `dataset`");
@@ -7179,7 +7182,7 @@ class upgradeModel extends model
             $component->attr->h = round(54 * $option->h);
 
             $type  = !empty($option->i->type) ? $option->i->type : 'chart';
-            $chart = $this->loadModel($type)->getByID($option->i->id);
+            $chart = $this->loadModel($type)->getByID($option->i->id, false, 'published', false);
 
             if($chart)
             {
@@ -7210,7 +7213,6 @@ class upgradeModel extends model
                 $chart->langs    = json_encode($chart->langs);
 
                 $chartFilters = !empty($chart->filters) ? json_decode($chart->filters, true) : array();
-                $component    = $this->screen->getChartOption($chart, $component, $chartFilters);
             }
 
             $componentList[] = $component;

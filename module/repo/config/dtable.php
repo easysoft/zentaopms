@@ -263,8 +263,8 @@ $config->repo->reviewDtable->fieldList['revisionA']['link']  = array('module' =>
 $app->loadLang('bug');
 $config->repo->reviewDtable->fieldList['type']['title'] = $lang->repo->type;
 $config->repo->reviewDtable->fieldList['type']['name']  = 'type';
-$config->repo->reviewDtable->fieldList['type']['map']   = $lang->bug->typeList;
-$config->repo->reviewDtable->fieldList['type']['map']  += $lang->repo->typeList;
+$config->repo->reviewDtable->fieldList['type']['map']   = $lang->repo->typeList;
+$config->repo->reviewDtable->fieldList['type']['map']  += $lang->bug->typeList;
 
 $config->repo->reviewDtable->fieldList['status']['map'] = $lang->bug->statusList;
 

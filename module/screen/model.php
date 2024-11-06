@@ -41,7 +41,6 @@ class screenModel extends model
         $this->filter->dept    = '';
         $this->filter->account = '';
         $this->filter->charts  = array();
-        $this->viewableObjects = $this->bi->getViewableObject('screen');
     }
 
     /**
@@ -54,7 +53,8 @@ class screenModel extends model
      */
     public function checkAccess($screenID)
     {
-        if(!in_array($screenID, $this->viewableObjects))
+        $viewableObjects = $this->bi->getViewableObject('screen');
+        if(!in_array($screenID, $viewableObjects))
         {
             return $this->app->control->sendError($this->lang->screen->accessDenied, helper::createLink('screen', 'browse'));
         }

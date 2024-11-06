@@ -23,7 +23,6 @@ class pivotModel extends model
         parent::__construct();
         $this->loadBIDAO();
         $this->loadModel('bi');
-        $this->viewableObjects = $this->bi->getViewableObject('pivot');
     }
 
     /**
@@ -36,7 +35,8 @@ class pivotModel extends model
      */
     public function checkAccess($pivotID, $method = 'preview')
     {
-        if(!in_array($pivotID, $this->viewableObjects))
+        $viewableObjects = $this->bi->getViewableObject('pivot');
+        if(!in_array($pivotID, $viewableObjects))
         {
             return $this->app->control->sendError($this->lang->pivot->accessDenied, helper::createLink('pivot', $method));
         }
@@ -52,9 +52,10 @@ class pivotModel extends model
      */
     public function filterInvisiblePivot($pivots)
     {
+        $viewableObjects = $this->bi->getViewableObject('pivot');
         foreach($pivots as $index => $pivot)
         {
-            if(!in_array($pivot->id, $this->viewableObjects)) unset($pivots[$index]);
+            if(!in_array($pivot->id, $viewableObjects)) unset($pivots[$index]);
         }
 
         return array_values($pivots);
@@ -69,7 +70,7 @@ class pivotModel extends model
      * @access public
      * @return object|bool
      */
-    public function getByID(int $pivotID, bool $processDateVar = false, string $filterStatus = 'published'): object|bool
+    public function getByID(int $pivotID, bool $processDateVar = false, string $filterStatus = 'published', bool $addDrills = true): object|bool
     {
         $pivot = $this->pivotTao->fetchPivot($pivotID);
         if(!$pivot) return false;
@@ -91,7 +92,9 @@ class pivotModel extends model
             $pivot->filters = array();
         }
 
-        $this->processPivot($pivot);
+        $this->completePivot($pivot);
+        if($addDrills) $this->addDrills($pivot);
+
         // if(isset($pivot->stage) && $pivot->stage == 'published' && $this->app->methodName == 'preview') $this->processFieldSettings($pivot);
 
         return $pivot;

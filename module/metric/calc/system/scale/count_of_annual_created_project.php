@@ -28,10 +28,8 @@ class count_of_annual_created_project extends baseCalc
 
     public function calculate($row)
     {
-        if(empty($row->openedDate)) return false;
-
-        $year = substr($row->openedDate, 0, 4);
-        if($year == '0000') return false;
+        $year = $this->getYear($row->openedDate);
+        if(!$year) return false;
 
         if(!isset($this->result[$year])) $this->result[$year] = 0;
 

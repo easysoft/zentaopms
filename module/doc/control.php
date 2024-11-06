@@ -1238,7 +1238,7 @@ class doc extends control
             $this->doc->moveLib($libID, $data);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            return $this->docZen->responseAfterMove($this->post->space, $spaceType, $libID);
+            return $this->docZen->responseAfterMove($this->post->space, $libID);
         }
 
         $this->docZen->setAclForCreateLib($spaceType);
@@ -1294,7 +1294,7 @@ class doc extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            return $this->docZen->responseAfterMove($this->post->space, $spaceType, $data->lib, $locate, $docID);
+            return $this->docZen->responseAfterMove($this->post->space, $data->lib, $docID);
         }
 
         $projects   = $this->loadModel('project')->getPairsByProgram(0, 'all', false, 'order_asc');
@@ -1576,7 +1576,7 @@ class doc extends control
         if($noPicks || strpos($picks, ',space,') !== false)  $data['spaces'] = $spaces;
         if($noPicks || strpos($picks, ',lib,') !== false)    $data['libs'] = array_values($libs);
         if($noPicks || strpos($picks, ',module,') !== false) $data['modules'] = array_values($this->doc->getModulesOfLibs($libIds));
-        if($noPicks || strpos($picks, ',doc,') !== false)    $data['docs'] = array_values($this->doc->getDocsOfLibs($libIds + array($spaceID)));
+        if($noPicks || strpos($picks, ',doc,') !== false)    $data['docs'] = array_values($this->doc->getDocsOfLibs($libIds + array($spaceID), $type));
 
         $this->send($data);
     }

@@ -1,6 +1,7 @@
 VERSION        = $(shell head -n 1 VERSION)
 XUANVERSION    = $(shell jq -r .pkg.xuanxuan.gitVersion < ci.json)
 XVERSION       = $(shell jq -r .pkg.xuanxuan.version < ci.json)
+SUITEVERSION   = $(shell jq -r .pkg.blocksuite.version < ci.json)
 XHPROF_VERSION = 2.3.9
 
 XUANPATH      := $(XUANXUAN_SRC_PATH)
@@ -28,6 +29,8 @@ clean:
 	rm -f  *.sh
 	rm -f *.deb *.rpm
 common:
+	curl https://$(GITFOX_HOST)/_artifacts/zentao/raw/zui3/static/blocksuite/$(SUITEVERSION)/blocksuite-$(SUITEVERSION).tar.gz  | tar zxf - -C www/js/zui3/editor/
+
 	mkdir zentaopms
 	cp -fr api zentaopms/
 	cp -fr bin zentaopms/

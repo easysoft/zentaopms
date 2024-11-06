@@ -442,11 +442,11 @@ class helper extends baseHelper
      * @param  string           $characters
      * @static
      * @access public
-     * @return string
+     * @return float
      */
-    public static function formatHours($hours, $characters = '.0'): string
+    public static function formatHours($hours, $characters = '.0'): float
     {
-        return rtrim(number_format((float)$hours, 2, '.', ''), $characters);
+        return (float)rtrim(number_format((float)$hours, 2, '.', ''), $characters);
     }
 }
 

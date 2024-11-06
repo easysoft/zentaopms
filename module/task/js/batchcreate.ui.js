@@ -170,7 +170,7 @@ function checkBatchEstStartedAndDeadline(event)
     const estStarted  = $currentRow.find('[name^=estStarted]').val();
     const deadline    = $currentRow.find('[name^=deadline]').val();
 
-    if(field == 'estStarted' && estStarted.length > 0 && estStarted < parentEstStarted)
+    if(field == 'estStarted' && estStarted.length > 0 && parentEstStarted.length > 0 && estStarted < parentEstStarted)
     {
         const $estStartedTd = $currentRow.find('td[data-name=estStarted]');
         if($estStartedTd.find('.date-tip').length == 0 || $estStartedTd.find('.date-tip .form-tip').length > 0)
@@ -184,7 +184,7 @@ function checkBatchEstStartedAndDeadline(event)
         }
     }
 
-    if(field == 'deadline' && deadline.length > 0 && deadline > parentDeadline)
+    if(field == 'deadline' && deadline.length > 0 && parentDeadline.length > 0 && deadline > parentDeadline)
     {
         const $deadlineTd = $currentRow.find('td[data-name=deadline]');
         if($deadlineTd.find('.date-tip').length == 0 || $deadlineTd.find('.date-tip .form-tip').length > 0)

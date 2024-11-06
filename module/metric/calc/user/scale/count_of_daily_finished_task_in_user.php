@@ -50,8 +50,8 @@ class count_of_daily_finished_task_in_user extends baseCalc
         if(empty($finishedDate) || empty($finishedBy)) return false;
         if($projectStatus == 'suspended' || $executionStatus == 'suspended') return false;
 
-        $year = substr($finishedDate, 0, 4);
-        if($year == '0000') return false;
+        $year = $this->getYear($finishedDate);
+        if(!$year) return false;
 
         $date = date("Y-m-d", strtotime($finishedDate));
         list($year, $month, $day) = explode('-', $date);

@@ -32,12 +32,13 @@ class count_of_daily_finished_task_in_execution extends baseCalc
         $finishedDate = $row->finishedDate;
         $execution = $row->execution;
 
-        if($status != 'done' || empty($finishedDate)) return false;
+        if($status != 'done') return false;
 
-        if(empty($finishedDate)) return false;
+        $year = $this->getYear($finishedDate);
+        if(!$year) return false;
+
         $date = substr($finishedDate, 0, 10);
         list($year, $month, $day) = explode('-', $date);
-        if($year == '0000') return false;
 
         if(!isset($this->result[$execution]))                      $this->result[$execution] = array();
         if(!isset($this->result[$execution][$year]))               $this->result[$execution][$year] = array();

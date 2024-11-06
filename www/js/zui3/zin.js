@@ -1683,7 +1683,7 @@
         const $target = $(e.target);
         if($target.closest('.not-open-url').length) return;
         const $link = $target.closest('a,.open-url');
-        if(!$link.length || $link.hasClass('ajax-submit') || $link.attr('download') || $link.attr('data-on') || $link.hasClass('show-in-app') || $link.hasClass('not-open-url') || ($link.attr('target') || '')[0] === '_') return;
+        if(!$link.length || $link.hasClass('ajax-submit') || $link.attr('download') || $link.attr('data-on') || $link.attr('zui-on') || $link.attr('zui-toggle') || $link.attr('zui-command') || $link.hasClass('show-in-app') || $link.hasClass('not-open-url') || ($link.attr('target') || '')[0] === '_') return;
 
         const href = $link.attr('href');
         if($link.is('a') && (/^(https?|javascript):/.test(href)) && !$link.data('app')) return;

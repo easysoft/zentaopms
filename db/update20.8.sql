@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowgroup` (
   `projectType` varchar(10) NOT NULL DEFAULT '',
   `name` varchar(30) NOT NULL DEFAULT '',
   `desc` text NULL,
-  `disabledModules` text NULL DEFAULT '',
+  `disabledModules` varchar(255) NOT NULL DEFAULT '',
   `status` varchar(10) NOT NULL DEFAULT 'wait',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
@@ -30,13 +30,13 @@ ALTER TABLE `zt_workflowui` ADD `group` mediumint(8) unsigned NOT NULL DEFAULT '
 
 UPDATE `zt_workflow` SET `role` = 'custom' WHERE `buildin` = '0';
 
-ALTER TABLE `zt_workflow` DROP INDEX `unique`;
+DROP INDEX `unique` ON `zt_workflow`;
 CREATE UNIQUE INDEX `unique` ON `zt_workflow`(`group`,`app`,`module`,`vision`);
-ALTER TABLE `zt_workflowfield` DROP INDEX `unique`;
+DROP INDEX `unique` ON `zt_workflowfield`;
 CREATE UNIQUE INDEX `unique` ON `zt_workflowfield`(`group`,`module`,`field`);
-ALTER TABLE `zt_workflowaction` DROP INDEX `unique`;
+DROP INDEX `unique` ON `zt_workflowaction`;
 CREATE UNIQUE INDEX `unique` ON `zt_workflowaction`(`group`,`module`,`action`,`vision`);
-ALTER TABLE `zt_workflowlayout` DROP INDEX `unique`;
+DROP INDEX `unique` ON `zt_workflowlayout`;
 CREATE UNIQUE INDEX `unique` ON `zt_workflowlayout`(`group`,`module`,`action`,`ui`,`field`,`vision`);
 
 ALTER TABLE `zt_product` ADD `workflowGroup` int(8) NOT NULL DEFAULT '0' AFTER `ticket`;
@@ -46,11 +46,11 @@ ALTER TABLE `zt_workflowgroup` ADD `code` varchar(30) NOT NULL DEFAULT '' AFTER 
 
 DELETE FROM `zt_workflowgroup` WHERE `main` = '1';
 INSERT INTO `zt_workflowgroup` (`type`, `projectModel`, `projectType`, `name`, `code`, `status`, `vision`, `main`) VALUES
-('product', '',          'project',    '默认流程',            'productproject',   'normal', 'rnd', '1'),
-('project', 'scrum',     'product',    '敏捷-产品型默认流程', 'scrumproduct',     'normal', 'rnd', '1'),
-('project', 'scrum',     'project',    '敏捷-项目型默认流程', 'scrumproject',     'normal', 'rnd', '1'),
-('project', 'waterfall', 'product',    '瀑布-产品型默认流程', 'waterfallproduct', 'normal', 'rnd', '1'),
-('project', 'waterfall', 'project',    '瀑布-项目型默认流程', 'waterfallproject', 'normal', 'rnd', '1');
+('product', '',          'project',  '默认流程',           'productproject',  'normal', 'rnd', '1'),
+('project', 'scrum',     'product',  '产品型敏捷项目流程', 'scrumproduct',    'normal', 'rnd', '1'),
+('project', 'scrum',     'project',  '项目型敏捷项目流程', 'scrumproject',    'normal', 'rnd', '1'),
+('project', 'waterfall', 'product',  '产品型瀑布项目流程', 'waterfallproduct','normal', 'rnd', '1'),
+('project', 'waterfall', 'project',  '项目型瀑布项目流程', 'waterfallproject','normal', 'rnd', '1');
 
 ALTER TABLE `zt_doclib` ADD `orderBy` varchar(30) NOT NULL DEFAULT 'id_asc' AFTER `deleted`;
 
