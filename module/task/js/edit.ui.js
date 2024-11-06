@@ -399,6 +399,7 @@ window.setStoryModule = function()
         });
     }
 }
+
 function checkEstStartedAndDeadline(event)
 {
     const $form       = $(event.target).closest('form');
@@ -408,7 +409,7 @@ function checkEstStartedAndDeadline(event)
     const $deadline   = $form.find('[name=deadline]');
     const deadline    = $deadline.val();
 
-    if(field == 'estStarted' && estStarted.length > 0 && parentEstStarted.length > 0&& estStarted < parentEstStarted)
+    if(field == 'estStarted' && estStarted.length > 0 && parentEstStarted.length > 0 && estStarted < parentEstStarted)
     {
         const $estStartedDiv = $estStarted.closest('.form-group');
         if($estStartedDiv.find('.date-tip').length == 0 || $estStartedDiv.find('.date-tip .form-tip').length > 0)
