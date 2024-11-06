@@ -57,3 +57,18 @@ $story->stage->range('projected');
 $story->assignedTo->range('[]');
 $story->version->range('1');
 $story->gen(3);
+
+$storySpec = zenData('storyspec');
+$storySpec->story->range('1-100');
+$storySpec->version->range('1');
+$storySpec->title->range('1-100');
+$storySpec->gen(3);
+
+$projectStory = zenData('projectstory');
+$projectStory->project->range('1{3}, 2{3}');
+$projectStory->product->range('1{2}, 2');
+$projectStory->branch->range('0');
+$projectStory->story->range('1, 2, 3');
+$projectStory->version->range('1');
+$projectStory->order->range('1, 2, 3');
+$projectStory->gen(6);
