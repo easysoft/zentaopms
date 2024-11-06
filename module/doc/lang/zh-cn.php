@@ -72,6 +72,13 @@ $lang->doclib->apiNameUnique['product'] = '同一' . $lang->productCommon . '下
 $lang->doclib->apiNameUnique['project'] = '同一' . $lang->projectCommon . '下的接口库中';
 $lang->doclib->apiNameUnique['nolink']  = '独立接口库中';
 
+$lang->docTemplate = new stdclass();
+$lang->docTemplate->scopes = array();
+$lang->docTemplate->scopes['product']   = '产品';
+$lang->docTemplate->scopes['project']   = '项目';
+$lang->docTemplate->scopes['execution'] = '执行';
+$lang->docTemplate->scopes['personal']  = '个人';
+
 /* 字段列表。*/
 $lang->doc->common       = '文档';
 $lang->doc->id           = 'ID';

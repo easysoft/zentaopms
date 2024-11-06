@@ -72,6 +72,13 @@ $lang->doclib->apiNameUnique['product'] = 'In the api library of the same ' . $l
 $lang->doclib->apiNameUnique['project'] = 'In the api library of the same ' . $lang->projectCommon . ', ';
 $lang->doclib->apiNameUnique['nolink']  = 'In the no linked api library, ';
 
+$lang->docTemplate = new stdclass();
+$lang->docTemplate->scopes = array();
+$lang->docTemplate->scopes['product']   = 'Product';
+$lang->docTemplate->scopes['project']   = 'Project';
+$lang->docTemplate->scopes['execution'] = 'Execution';
+$lang->docTemplate->scopes['personal']  = 'Personal';
+
 /* Fields. */
 $lang->doc->common       = 'Dok';
 $lang->doc->id           = 'ID';

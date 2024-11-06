@@ -121,3 +121,9 @@ $config->doc->quickMenu['view']      = array('id' => 1, 'name' => $lang->doc->my
 $config->doc->quickMenu['createdby'] = array('id' => 2, 'name' => $lang->doc->myCreation);
 $config->doc->quickMenu['collect']   = array('id' => 3, 'name' => $lang->doc->myCollection);
 $config->doc->quickMenu['editedby']  = array('id' => 4, 'name' => $lang->doc->myEdited);
+
+$config->doc->templateMenu = array();
+$config->doc->templateMenu['product']   = array('id' => 1, 'scope' => 'product',   'name' => $lang->doc->templateScopes['product']);
+$config->doc->templateMenu['project']   = array('id' => 2, 'scope' => 'project',   'name' => $lang->doc->templateScopes['project']);
+$config->doc->templateMenu['execution'] = array('id' => 3, 'scope' => 'execution', 'name' => $lang->doc->templateScopes['execution']);
+$config->doc->templateMenu['personal']  = array('id' => 4, 'scope' => 'personal',  'name' => $lang->doc->templateScopes['personal']);
