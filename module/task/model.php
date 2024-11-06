@@ -3269,7 +3269,7 @@ class taskModel extends model
             if($parentTask->story) $this->story->setStage($parentTask->story);
 
             /* Create action record. */
-            $this->taskTao->createAutoUpdateAction($parentTask);
+            $this->taskTao->createAutoUpdateTaskAction($parentTask);
             if($this->config->edition != 'open' && $parentTask->feedback) $this->loadModel('feedback')->updateStatus('task', $parentTask->feedback, $status, $parentTask->status);
         }
     }
