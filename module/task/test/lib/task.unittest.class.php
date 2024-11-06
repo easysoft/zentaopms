@@ -1891,11 +1891,11 @@ class taskTest
      * @access public
      * @return object
      */
-    public function updateTaskByChildAndStatusTest(object $parentTask, object $childTask, string $status)
+    public function autoUpdateTaskByStatusTest(object $parentTask, object $childTask, string $status)
     {
         $now = time();
 
-        $this->objectModel->updateTaskByChildAndStatus($parentTask, $childTask, $status);
+        $this->objectModel->autoUpdateTaskByStatus($parentTask, $childTask, $status);
 
         $task = $this->objectModel->getByID(intval($parentTask->id));
 
@@ -1922,9 +1922,9 @@ class taskTest
      * @access public
      * @return object
      */
-    public function createUpdateParentTaskActionTest(object $oldParentTask)
+    public function createAutoUpdateTaskActionTest(object $oldParentTask)
     {
-        $this->objectModel->createUpdateParentTaskAction($oldParentTask);
+        $this->objectModel->createAutoUpdateTaskAction($oldParentTask);
 
         return $this->objectModel->dao->select('action')->from(TABLE_ACTION)->where('objectType')->eq('task')->andWhere('objectID')->eq($oldParentTask->id)->orderBy('`id` desc')->fetch();;
     }
