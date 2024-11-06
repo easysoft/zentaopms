@@ -644,6 +644,28 @@ class docModel extends model
     }
 
     /**
+     * 获取文档模板列表。
+     * Get document template list.
+     *
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getDocTemplateList(string $type = 'all', string $orderBy = 'id_desc', object $pager = NULL): array
+    {
+        return $this->dao->select('*')->from(TABLE_DOC)
+            ->where('deleted')->eq('0')
+            ->beginIF($type == 'all')->andWhere('templateType')->ne('')->fi()
+            ->beginIF($type != 'all')->andWhere('templateType')->eq($type)->fi()
+            ->andWhere('lib')->eq('')
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
+    }
+
+    /**
      * 通过文档ID获取文档所属产品、项目、执行。
      * Get projects, executions and products by docIdList.
      *
