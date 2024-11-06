@@ -25,6 +25,9 @@ cid=1
  - 执行tester模块的batchAssignBug方法，参数是'admin'
  - 最终测试状态 @SUCCESS
  - 测试结果 @批量指派Bug成功
+- 执行tester模块的confirmBug方法，参数是'admin'
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @确认Bug成功
 
  */
 
@@ -88,5 +91,7 @@ r($tester->switchProduct('secondProduct', '5')) && p('status,message') && e('SUC
 r($tester->assignBug('admin')) && p('status,message') && e('SUCCESS,单个指派Bug成功');
 /* 批量指派Bug */
 r($tester->batchAssignBug('admin')) && p('status,message') && e('SUCCESS,批量指派Bug成功');
+#/* 确认Bug */
+r($tester->confirmBug('admin')) && p('status,message') && e('SUCCESS,确认Bug成功');
 
 $tester->closeBrowser();
