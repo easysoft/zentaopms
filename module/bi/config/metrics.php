@@ -2705,7 +2705,7 @@ $config->bi->builtin->metrics[] = array
 
 $config->bi->builtin->metrics[] = array
 (
-    'name'       => '按产品统计的月度解决Bug数',
+    'name'       => '按产品统计的月度修复Bug数',
     'alias'      => '解决Bug数',
     'code'       => 'count_of_monthly_fixed_bug_in_product',
     'purpose'    => 'scale',
@@ -2713,8 +2713,8 @@ $config->bi->builtin->metrics[] = array
     'object'     => 'bug',
     'unit'       => 'count',
     'dateType'   => 'month',
-    'desc'       => '按产品统计的月度解决Bug数是指每天在产品开发过程中被解决并关闭的Bug的数量。该度量项可以帮助我们了解开发团队解决Bug的速度和效率。',
-    'definition' => "产品中Bug个数求和\n解决日期为某年某月\n过滤已删除的Bug\n过滤已删除的产品"
+    'desc'       => '按产品统计的月度修复Bug数是指每天在产品开发过程中被解决并关闭的Bug的数量。该度量项可以帮助我们了解开发团队解决Bug的速度和效率。',
+    'definition' => "产品中Bug的个数求和\n关闭时间为某年某月\n解决方案为已解决\n过滤已删除的Bug\n过滤已删除的产品\n",
 );
 
 $config->bi->builtin->metrics[] = array
