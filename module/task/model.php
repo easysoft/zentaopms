@@ -953,6 +953,7 @@ class taskModel extends model
         {
             $task->id = $taskID;
             $this->updateParent($task, false);
+            unset($task->id);
         }
 
         /* Insert task desc data. */
