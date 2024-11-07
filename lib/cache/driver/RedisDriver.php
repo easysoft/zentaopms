@@ -230,4 +230,22 @@ class RedisDriver implements CacheInterface
     {
         return (bool) $this->redis->exists($key);
     }
+
+    /**
+     * 获取内存使用情况。
+     * Get memory usage.
+     *
+     * @param  string $type
+     * @return string
+     */
+    public function memory($type)
+    {
+        $info = $this->redis->info();
+
+        if($type == 'total') return $info['total_system_memory_human'];
+        if($type == 'free')  return \helper::formatKB($info['total_system_memory'] - $info['used_memory']);
+        if($type == 'used')  return $info['used_memory_human'];
+        if($type == 'rate')  return round(($info['used_memory'] / $info['total_system_memory']) * 100, 2);
+        return '';
+    }
 }

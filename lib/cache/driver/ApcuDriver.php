@@ -81,4 +81,22 @@ class ApcuDriver implements CacheInterface
     {
         return (bool) apcu_exists($key);
     }
+
+    /**
+     * 获取内存使用情况。
+     * Get memory usage.
+     *
+     * @param  string $type
+     * @return string
+     */
+    public function memory($type)
+    {
+        $info = apcu_sma_info(true);
+
+        if($type == 'total') return \helper::formatKB($info['seg_size']);
+        if($type == 'free')  return \helper::formatKB($info['avail_mem']);
+        if($type == 'used')  return \helper::formatKB($info['seg_size'] - $info['avail_mem']);
+        if($type == 'rate')  return round(($info['seg_size'] - $info['avail_mem']) / $info['seg_size'] * 100, 2);
+        return '';
+    }
 }

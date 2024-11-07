@@ -889,4 +889,16 @@ class cache
     {
         $this->cache->clear();
     }
+
+    /**
+     * 获取内存使用情况。
+     * Get memory usage.
+     *
+     * @param  string $type
+     * @return string
+     */
+    public function memory(string $type)
+    {
+        return $this->cache->memory($type);
+    }
 }
