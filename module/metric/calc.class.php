@@ -256,6 +256,7 @@ class baseCalc
      */
     public function isDate($dateString)
     {
+        if(empty($dateString)) return false;
         $format   = 'Y-m-d';
         $dateTime = DateTime::createFromFormat($format, $dateString);
 
