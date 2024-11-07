@@ -59,7 +59,7 @@ class relatedObjectList extends relatedList
         $item->title      = "#$relatedObjectID $title";
         $item->type       = $itemType;
         $item->url        = !empty($relatedObjectInfo['url']) ? $relatedObjectInfo['url'] : null;
-        $item->titleAttrs = !empty($relatedObjectInfo['url']) ? array('data-toggle' => 'modal', 'data-size' => 'lg') : null;
+        $item->titleAttrs = !empty($relatedObjectInfo['url']) && !in_array($relatedObjectType, array('repocommit', 'commit', 'mr')) ? array('data-toggle' => 'modal', 'data-size' => 'lg') : null;
 
         if(hasPriv('custom', 'removeObjects'))
         {
