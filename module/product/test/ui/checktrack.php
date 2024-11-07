@@ -105,3 +105,15 @@ $bug->gen(1);
 $tester = new trackTester();
 $tester->login();
 $trackurl['productID'] = 1;
+
+r($tester->checkTrackData($trackurl, 'ER','业需01'))       && p('message,status') && e('业务需求显示正确,SUCCESS');//检查业务需求的显示
+r($tester->checkTrackData($trackurl, 'UR','用需01'))       && p('message,status') && e('用户需求显示正确,SUCCESS');//检查用户需求的显示
+r($tester->checkTrackData($trackurl, 'SR','研需01'))       && p('message,status') && e('研发需求显示正确,SUCCESS');//检查研发需求的显示
+r($tester->checkTrackData($trackurl, 'sub_SR','子需求01')) && p('message,status') && e('子研发需求显示正确,SUCCESS');//检查子需求的显示
+r($tester->checkTrackData($trackurl, 'project','项目1'))   && p('message,status') && e('所属项目显示正确,SUCCESS');//检查所属项目的显示
+r($tester->checkTrackData($trackurl, 'execution','迭代1')) && p('message,status') && e('所属执行显示正确,SUCCESS');//检查所属执行的显示
+r($tester->checkTrackData($trackurl, 'task','任务1'))      && p('message,status') && e('相关任务显示正确,SUCCESS');//检查相关任务的显示
+r($tester->checkTrackData($trackurl, 'bug','bug1'))        && p('message,status') && e('相关Bug显示正确,SUCCESS');//检查相关Bug的显示
+r($tester->checkTrackData($trackurl, 'case','用例1'))      && p('message,status') && e('相关用例显示正确,SUCCESS');//检查相关用例的显示
+
+$tester->closeBrowser();
