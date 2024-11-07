@@ -127,3 +127,40 @@ $config->doc->templateMenu['product']   = array('id' => 1, 'scope' => 'product',
 $config->doc->templateMenu['project']   = array('id' => 2, 'scope' => 'project',   'name' => $lang->docTemplate->scopes['project']);
 $config->doc->templateMenu['execution'] = array('id' => 3, 'scope' => 'execution', 'name' => $lang->docTemplate->scopes['execution']);
 $config->doc->templateMenu['personal']  = array('id' => 4, 'scope' => 'personal',  'name' => $lang->docTemplate->scopes['personal']);
+
+$config->doc->templateModule = array();
+$config->doc->templateModule['product'] = array();
+$config->doc->templateModule['product']['plan'] = array();
+$config->doc->templateModule['product']['plan']['softwareProductPlan']  = 'Software product plan';
+$config->doc->templateModule['product']['plan']['hardwareProductPlan']  = 'Hardware product plan';
+$config->doc->templateModule['product']['plan']['qualityAssurancePlan'] = 'Quality assurance plan';
+
+$config->doc->templateModule['product']['desc'] = array();
+$config->doc->templateModule['product']['desc']['productDesign']            = 'Product design';
+$config->doc->templateModule['product']['desc']['requirementSpecification'] = 'Requirement specification';
+$config->doc->templateModule['product']['desc']['userManual']               = 'User manual';
+
+$config->doc->templateModule['product']['report'] = array();
+$config->doc->templateModule['product']['report']['competitiveProductAnalysisReport'] = 'Competitive product analysis report';
+$config->doc->templateModule['product']['report']['productAcceptanceReport']          = 'Product acceptance report';
+$config->doc->templateModule['product']['report']['productSummaryReport']             = 'Product summary report';
+$config->doc->templateModule['product']['report']['productQualityReport']             = 'Product quality report';
+
+$config->doc->templateModule['project'] = array();
+$config->doc->templateModule['project']['plan'] = array();
+$config->doc->templateModule['project']['desc'] = array();
+$config->doc->templateModule['project']['dev']  = array();
+$config->doc->templateModule['project']['test']  = array();
+$config->doc->templateModule['project']['report']  = array();
+$config->doc->templateModule['project']['other']  = array();
+
+$config->doc->templateModule['execution'] = array();
+$config->doc->templateModule['execution']['plan'] = array();
+$config->doc->templateModule['execution']['desc'] = array();
+$config->doc->templateModule['execution']['dev'] = array();
+$config->doc->templateModule['execution']['test'] = array();
+$config->doc->templateModule['execution']['report'] = array();
+
+$config->doc->templateModule['personal'] = array();
+$config->doc->templateModule['personal']['plan'] = array();
+$config->doc->templateModule['personal']['report'] = array();
