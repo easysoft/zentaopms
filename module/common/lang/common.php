@@ -1,5 +1,6 @@
 <?php
 $lang->common      = new stdclass();
+$lang->cache       = new stdclass();
 $lang->index       = new stdclass();
 $lang->my          = new stdclass();
 $lang->todo        = new stdclass();

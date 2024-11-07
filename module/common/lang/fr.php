@@ -204,6 +204,7 @@ $lang->contactUs->wechat = 'Wechat';
 
 $lang->common->common       = 'Module Commun';
 $lang->common->story        = 'Story';
+$lang->cache->common        = 'Cache';
 $lang->my->common           = 'My';
 $lang->todo->common         = 'Agenda';
 $lang->block->common        = 'Bloc';

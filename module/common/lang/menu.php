@@ -784,6 +784,7 @@ $lang->navGroup->account       = 'admin';
 $lang->navGroup->ops           = 'admin';
 $lang->navGroup->service       = 'admin';
 $lang->navGroup->domain        = 'admin';
+$lang->navGroup->cache         = 'admin';
 
 $lang->navGroup->aiapp = 'aiapp';
 

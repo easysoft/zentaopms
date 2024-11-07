@@ -204,6 +204,7 @@ $lang->contactUs->wechat = '微信';
 
 $lang->common->common       = '公有模块';
 $lang->common->story        = '需求';
+$lang->cache->common        = '缓存';
 $lang->my->common           = '地盘';
 $lang->todo->common         = '待办';
 $lang->block->common        = '区块';
