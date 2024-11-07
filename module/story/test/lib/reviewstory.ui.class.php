@@ -48,8 +48,7 @@ class reviewStoryTester extends tester
         $form->dom->btn($this->lang->story->submitReview)->click();
         $form->wait(1);
 
-        $form->dom->subReviewerBtn->click();
-        $form->dom->subReviewer->clickByMouse();
+        $form->dom->subReviewer->multiPicker(array('admin'));
         $form->dom->submitReviewSave->click();
         $form->wait(1);
 

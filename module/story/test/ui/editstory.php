@@ -1,20 +1,13 @@
 #!/usr/bin/env php
 <?php
 declare(strict_types=1);
+
 /**
 
 title=编辑研发需求测试
 timeout=0
 cid=80
 
-- 编辑需求的来源后的链接检查
- - 属性module @story
- - 属性method @view
-- 编辑研发需求
-- 成功 最终测试状态 @SUCCESS
-
-- 批量编辑研发需求
- - 成功 最终测试状态 @SUCCESS
 */
 chdir(__DIR__);
 include '../lib/editstory.ui.class.php';

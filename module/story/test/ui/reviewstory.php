@@ -1,13 +1,14 @@
 #!/usr/bin/env php
 <?php
 declare(strict_types=1);
+
 /**
- *
- * title=指派给需求测试
- * timeout=0
- * cid=89
- * - 指派需求后检查指派人信息正确
- */
+
+title=指派给需求测试
+timeout=0
+cid=89
+
+*/
 chdir (__DIR__);
 include '../lib/reviewstory.ui.class.php';
 
@@ -29,7 +30,7 @@ $story->path->range('`,1,`, `,2,`');
 $story->grade->range('1');
 $story->product->range('1');
 $story->module->range('0');
-$story->title->range('激活研发需求,草稿研发需求');
+$story->title->range('草稿研发需求1,草稿研发需求2');
 $story->type->range('story');
 $story->stage->range('wait');
 $story->status->range('reviewing');
@@ -45,7 +46,7 @@ $story->gen(2);
 $storyspec = zenData('storyspec');
 $storyspec->story->range('1-2');
 $storyspec->version->range('1');
-$storyspec->title->range('激活研发需求,草稿研发需求');
+$storyspec->title->range('草稿研发需求1,草稿研发需求2');
 $storyspec->gen(1);
 
 $storyreview = zenData('storyreview');
