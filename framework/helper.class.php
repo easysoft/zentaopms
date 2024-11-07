@@ -433,6 +433,43 @@ class helper extends baseHelper
         $checkFunc = 'check' . $operator;
         return validater::$checkFunc($value1, $value2);
     }
+
+    /**
+     * 连接 Redis 服务器。
+     * Connect to Redis server.
+     *
+     * @param  object $setting
+     * @static
+     * @access public
+     * @return object
+     */
+    public static function connectRedis(object $setting)
+    {
+        if(!class_exists('Redis')) throw new Exception('The Redis extension is not installed.');
+        try
+        {
+            $redis = new Redis();
+
+            $version = phpversion('redis');
+            if(version_compare($version, '5.3.0', 'ge'))
+            {
+                $redis->connect($setting->host, (int)$setting->port, 1, null, 0, 0, ['auth' => [$setting->username ?: null, $setting->password ?: null]]);
+            }
+            else
+            {
+                $redis->connect($setting->host, (int)$setting->port, 1, null, 0, 0);
+                $redis->auth(['pass' => $setting->password ?: null]);
+            }
+
+            if(!$redis->ping()) throw new Exception('Can not connect to Redis server.');
+
+            return $redis;
+        }
+        catch(RedisException $e)
+        {
+            throw new Exception('Can not connect to Redis server. The error message is: ' . $e->getMessage());
+        }
+    }
 }
 
 /**
