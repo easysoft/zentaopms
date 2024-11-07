@@ -223,6 +223,7 @@ class programplanTao extends programplanModel
             if(isset($plans[$plan->parent])) $plans[$plan->parent]->isParent = true;
         }
 
+        $this->loadModel('holiday');
         foreach($plans as $plan)
         {
             $planIdList[$plan->id] = $plan->id;
@@ -240,8 +241,15 @@ class programplanTao extends programplanModel
                 $data->delayDays = helper::diffDate($today, $data->endDate);
             }
 
-            if($data->endDate > $data->start_date) $data->duration = helper::diffDate($data->endDate, $data->start_date) + 1;
-            if(empty($data->start_date) or empty($data->endDate)) $data->duration = 1;
+            if(empty($data->start_date) || empty($data->endDate))
+            {
+                $data->duration = 1;
+            }
+            elseif($data->endDate > $data->start_date)
+            {
+                $durationDays = $this->holiday->getActualWorkingDays($data->start_date, $data->endDate);
+                $data->duration = count($durationDays);
+            }
 
             $datas['data'][$plan->id] = $data;
             $stageIndex[$plan->id]    = array('planID' => $plan->id, 'parent' => $plan->parent, 'totalEstimate' => 0, 'totalConsumed' => 0, 'totalReal' => 0);
@@ -658,8 +666,15 @@ class programplanTao extends programplanModel
         $data->progress      = $plan->progress / 100;
         $data->taskProgress  = $plan->progress . '%';
 
-        if($data->endDate > $data->start_date)                $data->duration = helper::diffDate($data->endDate, $data->start_date) + 1;
-        if(empty($data->start_date) || empty($data->endDate)) $data->duration = 1;
+        if(empty($data->start_date) || empty($data->endDate))
+        {
+            $data->duration = 1;
+        }
+        elseif($data->endDate > $data->start_date)
+        {
+            $durationDays = $this->loadModel('holiday')->getActualWorkingDays($data->start_date, $data->endDate);
+            $data->duration = count($durationDays);
+        }
 
         if(!empty($this->config->setPercent)) $data->percent = $plan->percent;
         if($data->start_date) $data->start_date = date('d-m-Y', strtotime($data->start_date));
@@ -799,8 +814,15 @@ class programplanTao extends programplanModel
         $data->textColor     = zget($this->lang->execution->gantt->textColor, $task->pri, $this->lang->execution->gantt->defaultTextColor);
         $data->bar_height    = $this->lang->execution->gantt->bar_height;
 
-        if($data->endDate > $data->start_date)                $data->duration = helper::diffDate($data->endDate, $data->start_date) + 1;
-        if(empty($data->start_date) or empty($data->endDate)) $data->duration = 1;
+        if(empty($data->start_date) || empty($data->endDate))
+        {
+            $data->duration = 1;
+        }
+        elseif($data->endDate > $data->start_date)
+        {
+            $durationDays = $this->loadModel('holiday')->getActualWorkingDays($data->start_date, $data->endDate);
+            $data->duration = count($durationDays);
+        }
         if($data->start_date) $data->start_date = date('d-m-Y', strtotime($data->start_date));
 
         return $data;
