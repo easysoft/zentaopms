@@ -889,7 +889,7 @@ class cache
      */
     public function clear()
     {
-        $this->cache->clear();
+        return $this->cache->clear();
     }
 
     /**
