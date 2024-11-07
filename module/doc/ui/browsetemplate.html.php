@@ -21,8 +21,26 @@ $privs = array();
 $filterTypes = $lang->docTemplate->filterTypes;
 if(!hasPriv('doc', 'editDocTemplate')) $filterTypes = array_values(array_filter($filterTypes, function($item){ return $item[0] != 'draft'; }));
 
+$tableCols = array();
+$tableCols['id']         = $lang->docTemplate->id;
+$tableCols['title']      = $lang->docTemplate->title;
+$tableCols['frequency']  = $lang->docTemplate->frequency;
+$tableCols['type']       = $lang->docTemplate->type;
+$tableCols['addedBy']    = $lang->docTemplate->addedBy;
+$tableCols['addedDate']  = $lang->docTemplate->addedDate;
+$tableCols['editedBy']   = $lang->docTemplate->editedBy;
+$tableCols['editedDate'] = $lang->docTemplate->editedDate;
+$tableCols['views']      = $lang->docTemplate->views;
+
 $langData = array();
-$langData['filterTypes'] = $filterTypes;
+$langData['filterTypes']    = $filterTypes;
+$langData['tableCols']      = $tableCols;
+$langData['create']         = $lang->docTemplate->create;
+$langData['edit']           = $lang->docTemplate->edit;
+$langData['delete']         = $lang->docTemplate->delete;
+$langData['editTemplate']   = $lang->docTemplate->edit;
+$langData['deleteTemplate'] = $lang->docTemplate->delete;
+$langData['confirmDelete']  = $lang->docTemplate->confirmDelete;
 
 docApp
 (
