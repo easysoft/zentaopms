@@ -2,12 +2,12 @@
 <?php
 
 /**
- *
- * title=检查产品看板数据准确性
- * timeout=0
- * cid=0
- *
- */
+
+title=检查产品看板数据准确性
+timeout=0
+cid=0
+
+*/
 chdir(__DIR__);
 include '../lib/kanban.ui.class.php';
 
