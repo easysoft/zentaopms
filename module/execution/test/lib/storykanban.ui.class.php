@@ -17,7 +17,7 @@ class storykanbanTester extends tester
         $form->dom->kanbanBtn->click();
         $form->wait(1);
         preg_match_all('/\d+(?:\.\d+)?/', $form->dom->$stage->getText(), $matches);
-        if($matches[0][0] != $num) return $this->failed("$stage列数据有误");
-        return $this->success("$stage列数据正确");
+        if($matches[0][0] != $num) return $this->failed("{$stage}列数据有误");
+        return $this->success("{$stage}列数据正确");
     }
 }
