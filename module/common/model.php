@@ -2370,7 +2370,7 @@ eof;
      * @access public
      * @return string
      */
-    public static function processMarkdown(string $markdown): string
+    public static function processMarkdown(string $markdown): string|bool
     {
         if(empty($markdown)) return false;
 
