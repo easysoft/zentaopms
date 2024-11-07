@@ -400,6 +400,24 @@ window.setStoryModule = function()
     }
 }
 
+getParentEstStartedAndDeadline = function()
+{
+    const parent = $('[name=parent]').val();
+    if(!parent) return;
+
+    const link = $.createLink('task', 'ajaxGetTaskEstStartedAndDeadline', 'taskID=' + parent);
+    $.getJSON(link, function(data)
+    {
+        parentEstStarted         = data.estStarted;
+        parentDeadline           = data.deadline;
+        overParentEstStartedLang = data.overParentEstStartedLang;
+        overParentDeadlineLang   = data.overParentDeadlineLang;
+
+        window.checkEstStartedAndDeadline({target: $('[name=estStarted]')});
+        window.checkEstStartedAndDeadline({target: $('[name=deadline]')});
+    });
+}
+
 function checkEstStartedAndDeadline(event)
 {
     const $form       = $(event.target).closest('form');

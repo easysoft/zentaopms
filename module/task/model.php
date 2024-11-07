@@ -1924,16 +1924,23 @@ class taskModel extends model
          过滤自己和后代任务。
         */
         $children = $this->getAllChildId($taskID);
-
-        return $this->dao->select('id, name')->from(TABLE_TASK)
+        $taskList = $this->dao->select('id, name, isParent, consumed')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
-            ->andWhere('consumed')->eq(0)
             ->andWhere('status')->notin('cancel,closed')
             ->andWhere('execution')->eq($executionID)
             ->andWhere('mode')->eq('')
             ->beginIF($children)->andWhere('id')->notin($children)->fi()
             ->beginIF($appendIdList)->orWhere('id')->in($appendIdList)->fi()
-            ->fetchPairs();
+            ->fetchAll();
+
+        $taskPairs = array();
+        foreach($taskList as $task)
+        {
+            if(!$task->isParent && $task->consumed > 0) continue;
+            $taskPairs[$task->id] = $task->name;
+        }
+
+        return $taskPairs;
     }
 
     /**

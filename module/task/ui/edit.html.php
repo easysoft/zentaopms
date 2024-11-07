@@ -31,11 +31,11 @@ jsVar('confirmRecord', $lang->task->confirmRecord);
 jsVar('estimateNotEmpty', sprintf($lang->error->gt, $lang->task->estimate, '0'));
 jsVar('leftNotEmpty', sprintf($lang->error->gt, $lang->task->left, '0'));
 jsVar('requiredFields', $config->task->edit->requiredFields);
-jsVar('parentEstStarted', !empty($parentTask) ? $parentTask->estStarted : '');
-jsVar('parentDeadline', !empty($parentTask) ? $parentTask->deadline : '');
+jsVar('+parentEstStarted', !empty($parentTask) ? $parentTask->estStarted : '');
+jsVar('+parentDeadline', !empty($parentTask) ? $parentTask->deadline : '');
 jsVar('ignoreLang', $lang->project->ignore);
-jsVar('overParentEstStartedLang', !empty($parentTask) ? sprintf($lang->task->overParentEsStarted, $parentTask->estStarted) : '');
-jsVar('overParentDeadlineLang', !empty($parentTask) ? sprintf($lang->task->overParentDeadline, $parentTask->deadline) : '');
+jsVar('+overParentEstStartedLang', !empty($parentTask) ? sprintf($lang->task->overParentEsStarted, $parentTask->estStarted) : '');
+jsVar('+overParentDeadlineLang', !empty($parentTask) ? sprintf($lang->task->overParentDeadline, $parentTask->deadline) : '');
 
 $confirmSyncTip = '';
 if(!empty($syncChildren) && !empty($task->children)) $confirmSyncTip = sprintf($lang->task->syncStoryToChildrenTip, 'ID' . implode(', ID', $syncChildren));
@@ -249,7 +249,8 @@ detailBody
                 (
                     set::name('parent'),
                     set::value($task->parent),
-                    set::items($tasks)
+                    set::items($tasks),
+                    on::change('getParentEstStartedAndDeadline')
                 )
             ) : formHidden('parent', $task->parent),
             empty($modeText) ? item
