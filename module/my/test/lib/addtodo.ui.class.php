@@ -22,5 +22,10 @@ class addTodoTester extends tester
         $todoList->wait(1);
         $todoList->dom->switchTime->click();
         $todoList->dom->addTodoBtn->click();
+
+        $this->openUrl('my', 'todo', array('type' => 'all'));
+        $todoList = $this->loadPage('my', 'todo', array('type' => 'all'));
+        if($todoList->dom->fstTodoTitle->getText() != $todoTitle->name) return $this->failed('添加待办失败');
+        return $this->success('添加待办成功');
     }
 }
