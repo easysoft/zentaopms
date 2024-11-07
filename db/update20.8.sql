@@ -58,3 +58,5 @@ UPDATE `zt_grouppriv` SET `method` = 'quick' WHERE `module` = 'doc' AND `method`
 
 ALTER TABLE `zt_history` ADD `oldValue` text NULL AFTER `old`;
 ALTER TABLE `zt_history` ADD `newValue` text NULL AFTER `new`;
+
+ALTER TABLE `zt_dataview` ADD `driver` enum('mysql', 'duckdb') not NULL default 'mysql' AFTER `code`;
