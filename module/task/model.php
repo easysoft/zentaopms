@@ -3282,7 +3282,7 @@ class taskModel extends model
             if($parentTask->story) $this->story->setStage($parentTask->story);
 
             /* Create action record. */
-            $this->taskTao->createAutoUpdateTaskAction($parentTask);
+            $this->taskTao->createAutoUpdateTaskAction($parentTask, 'child');
             if($this->config->edition != 'open' && $parentTask->feedback) $this->loadModel('feedback')->updateStatus('task', $parentTask->feedback, $status, $parentTask->status);
         }
     }
@@ -3318,7 +3318,7 @@ class taskModel extends model
             if($parentStatus == 'pause'  && $childTask->status != 'doing') continue;
             if($parentStatus == 'cancel' && in_array($childTask->status, array('done', 'closed'))) continue;
             if($parentStatus == 'doing'  && $childTask->status != 'pause') continue;
-            if(isset($autoActions[$childID]) && $autoActions[$childID]->extra != 'auto') continue;
+            if(isset($autoActions[$childID]) && $autoActions[$childID]->extra != 'autobyparent') continue;
 
             $this->taskTao->autoUpdateTaskByStatus($childTask, null, $parentStatus);
             if(dao::isError()) return;
@@ -3326,7 +3326,7 @@ class taskModel extends model
             if($childTask->story) $this->story->setStage($childTask->story);
 
             /* Create action record. */
-            $this->taskTao->createAutoUpdateTaskAction($childTask);
+            $this->taskTao->createAutoUpdateTaskAction($childTask, 'parent');
             if($this->config->edition != 'open' && $childTask->feedback) $this->loadModel('feedback')->updateStatus('task', $childTask->feedback, $status, $childTask->status);
         }
     }

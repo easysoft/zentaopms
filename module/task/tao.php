@@ -408,10 +408,11 @@ class taskTao extends taskModel
      * Create action record when auto update task.
      *
      * @param  object    $oldTask
+     * @param  string    $source   parent|child
      * @access protected
      * @return void
      */
-    protected function createAutoUpdateTaskAction(object $oldTask) :void
+    protected function createAutoUpdateTaskAction(object $oldTask, string $source = 'parent') :void
     {
         $newTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($oldTask->id)->fetch();
 
@@ -432,7 +433,7 @@ class taskTao extends taskModel
 
         if(!$action) return;
 
-        $actionID = $this->loadModel('action')->create('task', $oldTask->id, $action, '', 'auto', '', false);
+        $actionID = $this->loadModel('action')->create('task', $oldTask->id, $action, '', 'autoby' . $source, '', false);
         $this->action->logHistory($actionID, $changes);
     }
 

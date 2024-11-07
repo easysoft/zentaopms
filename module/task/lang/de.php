@@ -253,8 +253,16 @@ $lang->task->legendDetail = 'Task Detail';
 $lang->task->legendMisc   = 'Misc.';
 
 $lang->task->action = new stdclass();
-$lang->task->action->linked2revision      = array('main' => '$date, linked by <strong>$actor</strong> to Revision <strong>$extra</strong>.');
-$lang->task->action->unlinkedfromrevision = array('main' => '$date, unlinked by <strong>$actor</strong> to Revision <strong>$extra</strong>.');
+$lang->task->action->linked2revision       = array('main' => '$date, linked by <strong>$actor</strong> to Revision <strong>$extra</strong>.');
+$lang->task->action->unlinkedfromrevision  = array('main' => '$date, unlinked by <strong>$actor</strong> to Revision <strong>$extra</strong>.');
+$lang->task->action->autobyparentrestarted = array('main' => '$date, continued parent task by <strong>$actor</strong>, this task automatically continue.');
+$lang->task->action->autobychildrestarted  = array('main' => '$date, continued child task by <strong>$actor</strong>, this task automatically continue.');
+$lang->task->action->autobyparentpaused    = array('main' => '$date, paused parent task by <strong>$actor</strong>, this task automatically pause.');
+$lang->task->action->autobyparentcanceled  = array('main' => '$date, cancelled parent task by <strong>$actor</strong>, this task automatically cancel.');
+$lang->task->action->autobyparentclosed    = array('main' => '$date, closed parent task by <strong>$actor</strong>, this task automatically close.');
+$lang->task->action->autobychildstarted    = array('main' => '$date, started child task by <strong>$actor</strong>, this task automatically start.');
+$lang->task->action->autobychildfinished   = array('main' => '$date, finished child task by <strong>$actor</strong>, this task automatically finish.');
+$lang->task->action->autobychildactivated  = array('main' => '$date, activated child task by <strong>$actor</strong>, this task automatically activate.');
 
 $lang->task->confirmDelete             = "Möchten Sie diese Aufgabe löschen?";
 $lang->task->confirmDeleteEffort       = "Do you want to delete it?";

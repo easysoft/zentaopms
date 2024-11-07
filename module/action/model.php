@@ -635,6 +635,10 @@ class actionModel extends model
             {
                 $desc = $this->lang->{$objectType}->action->{$actionType};
             }
+            elseif(in_array($action->extra, array('autobyparent', 'autobychild')) && isset($this->lang->{$objectType}) && isset($this->lang->{$objectType}->action->{$action->extra . $actionType}))
+            {
+                $desc = $this->lang->{$objectType}->action->{$action->extra . $actionType};
+            }
             elseif($action->objectType == 'instance' && isset($this->lang->action->desc->{$actionType}))
             {
                 $desc  = $this->lang->action->desc->{$actionType};

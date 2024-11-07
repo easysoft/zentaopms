@@ -253,8 +253,16 @@ $lang->task->legendDetail = '任务详情';
 $lang->task->legendMisc   = '其他相关';
 
 $lang->task->action = new stdclass();
-$lang->task->action->linked2revision      = array('main' => '$date, 由 <strong>$actor</strong> 关联到代码提交 <strong>$extra</strong>。');
-$lang->task->action->unlinkedfromrevision = array('main' => '$date, 由 <strong>$actor</strong> 取消关联到代码提交 <strong>$extra</strong>。');
+$lang->task->action->linked2revision       = array('main' => '$date, 由 <strong>$actor</strong> 关联到代码提交 <strong>$extra</strong>。');
+$lang->task->action->unlinkedfromrevision  = array('main' => '$date, 由 <strong>$actor</strong> 取消关联到代码提交 <strong>$extra</strong>。');
+$lang->task->action->autobyparentrestarted = array('main' => '$date, 由 <strong>$actor</strong> 继续父任务，该任务自动继续。');
+$lang->task->action->autobychildrestarted  = array('main' => '$date, 由 <strong>$actor</strong> 继续子任务，该任务自动继续。');
+$lang->task->action->autobyparentpaused    = array('main' => '$date, 由 <strong>$actor</strong> 暂停父任务，该任务自动暂停。');
+$lang->task->action->autobyparentcanceled  = array('main' => '$date, 由 <strong>$actor</strong> 取消父任务，该任务自动取消。');
+$lang->task->action->autobyparentclosed    = array('main' => '$date, 由 <strong>$actor</strong> 关闭父任务，该任务自动关闭。');
+$lang->task->action->autobychildstarted    = array('main' => '$date, 由 <strong>$actor</strong> 启动子任务，该任务自动启动。');
+$lang->task->action->autobychildfinished   = array('main' => '$date, 由 <strong>$actor</strong> 完成子任务，该任务自动完成。');
+$lang->task->action->autobychildactivated  = array('main' => '$date, 由 <strong>$actor</strong> 激活子任务，该任务自动激活。');
 
 $lang->task->confirmDelete             = "您确定要删除这个任务吗？";
 $lang->task->confirmDeleteEffort       = "您确定要删除这个记录吗？";
