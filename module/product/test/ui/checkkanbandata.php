@@ -56,3 +56,13 @@ $release->product->range('1');
 $release->name->range('发布1,发布2,发布3,发布4,发布5');
 $release->status->range('normal{4},closed{1}');
 $release->gen(5);
+
+$tester = new kanbanTester();
+$tester->login();
+
+r($tester->checkKanbanData('plan', '3'))      && p('message,status') && e('未过期计划数正确,SUCCESS');//检查未过期计划数
+r($tester->checkKanbanData('project', '2'))   && p('message,status') && e('进行中的项目数正确,SUCCESS');//检查进行中的项目数
+r($tester->checkKanbanData('execution', '1')) && p('message,status') && e('进行中的执行数正确,SUCCESS');//检查进行中的执行数
+r($tester->checkKanbanData('release', '4'))   && p('message,status') && e('正常发布数正确,SUCCESS');//检查正常发布数
+
+$tester->closeBrowser();
