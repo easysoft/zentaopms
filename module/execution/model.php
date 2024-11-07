@@ -1074,10 +1074,11 @@ class executionModel extends model
      * @param  int    $projectID
      * @param  string $type      all|sprint|stage|kanban
      * @param  string $mode      all|noclosed|stagefilter|withdelete|multiple|leaf|order_asc|empty|noprefix|withobject|hideMultiple
+     * @param  bool   $ignoreVision
      * @access public
      * @return array
      */
-    public function getPairs(int $projectID = 0, string $type = 'all', string $mode = ''): array
+    public function getPairs(int $projectID = 0, string $type = 'all', string $mode = '', bool $ignoreVision = false): array
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getExecutionPairs();
 
@@ -1099,7 +1100,8 @@ class executionModel extends model
 
         /* Order by status's content whether or not done. */
         $executions = $this->dao->select("*, IF(INSTR('done,closed', status) < 2, 0, 1) AS isDone, INSTR('doing,wait,suspended,closed', status) AS sortStatus")->from(TABLE_EXECUTION)
-            ->where('vision')->eq($this->config->vision)
+            ->where('1=1')
+            ->beginIF(!$ignoreVision)->andWhere('vision')->eq($this->config->vision)->fi()
             ->beginIF((!$this->session->multiple && $this->app->tab == 'execution') || strpos($mode, 'multiple') !== false)->andWhere('multiple')->eq('1')->fi()
             ->beginIF($type != 'all')->andWhere('type')->in($type)->fi()
             ->beginIF($type == 'all')->andWhere('type')->in('stage,sprint,kanban')->fi()
