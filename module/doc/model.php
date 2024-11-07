@@ -3620,6 +3620,13 @@ class docModel extends model
         return !empty($docID);
     }
 
+    /**
+     * 插入内置文档模板类型数据。
+     * insert doc template type.
+     *
+     * @access public
+     * @return bool
+     */
     public function insertBuiltinTemplateModule()
     {
         foreach($this->config->doc->templateModule as $scope => $moduleList)
