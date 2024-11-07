@@ -95,4 +95,13 @@ class bugTester extends tester
         if($form->dom->firstConfirm->getText() == '已确认') return $this->success('确认Bug成功');
         return $this->failed('确认Bug失败');
     }
+
+    /**
+     * 解决bug。
+     * Resolve bug.
+     *
+     * @param  array $bug
+     * @access public
+     * @return object
+     */
 }
