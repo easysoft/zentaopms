@@ -820,4 +820,17 @@ class upgrade extends control
         $check = $this->loadModel('bi')->checkDuckdbInstall();
         echo(json_encode($check));
     }
+
+    /**
+     * Insert template module.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxInsertBuiltinTemplateModule()
+    {
+        $result = $this->upgrade->insertBuiltinTemplateModule();
+        if($result)  echo 'ok';
+        if(!$result) echo dao::getError();
+    }
 }
