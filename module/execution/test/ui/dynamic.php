@@ -39,3 +39,17 @@ $projectproduct = zenData('projectproduct');
 $projectproduct->project->range('1, 2');
 $projectproduct->product->range('1');
 $projectproduct->gen(2);
+
+$task = zenData('task');
+$task->id->range('1-100');
+$task->project->range('1');
+$task->execution->range('2');
+$task->name->range('1-100');
+$task->status->range('wait');
+$task->gen(2);
+
+$taskSpec = zenData('taskspec');
+$taskSpec->task->range('1-100');
+$taskSpec->version->range('0');
+$taskSpec->name->range('1-100');
+$taskSpec->gen(2);
