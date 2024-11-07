@@ -68,6 +68,16 @@ $storyID = array();
 $storyID['1'] = 1;
 $storyID['2'] = 2;
 $storyID['3'] = 3;
+$storyID['4'] = 4;
+$storyID['5'] = 5;
+$storyID['6'] = 6;
+
+$result = array();
+$result['pass']    = '确认通过';
+$result['clarify'] = '有待明确';
+$result['reject']  = '拒绝';
+$result['revert']  = '撤销变更';
+
 $status = array();
 $status['active'] = '激活';
 $status['draft']  = '草稿';
