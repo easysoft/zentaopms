@@ -381,29 +381,25 @@ class taskModel extends model
         $isParentChanged = $task->parent != $oldTask->parent;
 
         /* If there is a parent task before updating the task, update the parent. */
-        if($oldTask->parent > 0)
+        if($task->parent > 0) $this->updateParent($task, $isParentChanged);
+        if($isParentChanged && $oldTask->parent > 0)
         {
             $oldParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($oldTask->parent)->fetch();
             $this->updateParentStatus($task->id, $oldTask->parent, !$isParentChanged);
             $this->computeBeginAndEnd($oldTask->parent);
 
-            if($isParentChanged)
-            {
-                $oldChildCount = $this->dao->select('COUNT(1) AS count')->from(TABLE_TASK)->where('parent')->eq($oldTask->parent)->fetch('count');
-                if(!$oldChildCount) $this->dao->update(TABLE_TASK)->set('parent')->eq(0)->where('id')->eq($oldTask->parent)->exec();
-                $this->dao->update(TABLE_TASK)->set('lastEditedBy')->eq($this->app->user->account)->set('lastEditedDate')->eq(helper::now())->where('id')->eq($oldTask->parent)->exec();
-                $this->loadModel('action')->create('task', $task->id, 'unlinkParentTask', '', $oldTask->parent, '', false);
+            $oldChildCount = $this->dao->select('COUNT(1) AS count')->from(TABLE_TASK)->where('parent')->eq($oldTask->parent)->fetch('count');
+            if(!$oldChildCount) $this->dao->update(TABLE_TASK)->set('parent')->eq(0)->set('isParent')->eq(0)->where('id')->eq($oldTask->parent)->exec();
 
-                $actionID = $this->action->create('task', $oldTask->parent, 'unLinkChildrenTask', '', $task->id, '', false);
+            $this->dao->update(TABLE_TASK)->set('lastEditedBy')->eq($this->app->user->account)->set('lastEditedDate')->eq(helper::now())->where('id')->eq($oldTask->parent)->exec();
+            $newParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($oldTask->parent)->fetch();
+            $changes       = common::createChanges($oldParentTask, $newParentTask);
 
-                $newParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($oldTask->parent)->fetch();
-
-                $changes = common::createChanges($oldParentTask, $newParentTask);
-                if(!empty($changes)) $this->action->logHistory($actionID, $changes);
-            }
+            $this->loadModel('action')->create('task', $task->id, 'unlinkParentTask', '', $oldTask->parent, '', false);
+            $actionID = $this->action->create('task', $oldTask->parent, 'unLinkChildrenTask', '', $task->id, '', false);
+            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
         }
 
-        if(!empty($task->parent)) $this->updateParent($task, $isParentChanged);
         if($this->config->edition != 'open' && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
         if(!empty($oldTask->mode) && empty($task->mode)) $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->exec();
 
@@ -3270,10 +3266,11 @@ class taskModel extends model
         $childTask = $this->dao->select('id,assignedTo,parent,path')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
         if(empty($childTask)) return;
 
-        if(empty($parentID)) $parentID = $childTask->parent;
-        if($parentID <= 0) return;
+        $taskIdList = $childTask->path;
+        if($parentID && $childTask->parent != $parentID) $taskIdList = $this->dao->select('id,assignedTo,parent,path')->from(TABLE_TASK)->where('id')->eq($parentID)->fetch('path');
 
-        $parentTasks = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($childTask->path)->andWhere('id')->ne($taskID)->orderBy('path_desc')->fetchAll('id');
+        $taskIdList  = array_unique(array_filter(explode(',', $taskIdList)));
+        $parentTasks = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($taskIdList)->andWhere('id')->ne($taskID)->orderBy('path_desc')->fetchAll('id');
         if(empty($parentTasks)) return;
 
         $this->loadModel('story');
