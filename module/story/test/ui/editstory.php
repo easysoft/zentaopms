@@ -76,8 +76,21 @@ $tester->login();
 
 $storyFrom = '客户';
 
-r($tester->editStory($storyFrom)) && p('module,method')  && e('story,view'); // 编辑需求后跳转页面检查
-r($tester->editStory($storyFrom)) && p('message,status') && e('编辑研发需求成功,SUCCESS'); // 编辑需求成功
+$storyID   = array();
+$storyID[1] = 1;
+$storyID[2] = 2;
+$storyID[3] = 3;
+
+$storyType = array();
+$storyType['story']       = 'story';
+$storyType['requirement'] = 'requirement';
+$storyType['epic']        = 'epic';
+
+r($tester->editStory($storyID[1], $storyType['story'], $storyFrom)) && p('module,method')  && e('story,view'); // 编辑需求后跳转页面检查
+r($tester->editStory($storyID[1], $storyType['story'], $storyFrom)) && p('message,status') && e('编辑研发需求成功,SUCCESS'); // 编辑需求成功
+
+r($tester->editStory($storyID[3], $storyType['epic'], $storyFrom)) && p('module,method')  && e('epic,view'); // 编辑需求后跳转页面检查
+r($tester->editStory($storyID[3], $storyType['epic'], $storyFrom)) && p('message,status') && e('编辑业务需求成功,SUCCESS'); // 编辑需求成功
 
 r($tester->batchEditStory($storyFrom)) && p('message,status')  && e('批量编辑研发需求成功,SUCCESS'); // 批量编辑需求成功
 $tester->closeBrowser();
