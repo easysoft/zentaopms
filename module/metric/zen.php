@@ -510,7 +510,7 @@ class metricZen extends metric
             $rows = $dbh->query($sql)->fetchAll();
             foreach($rows as $row)
             {
-                foreach($calcList as $code => $calc)
+                foreach($calcList as $calc)
                 {
                     if(!$calc->reuse)
                     {
