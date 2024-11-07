@@ -247,7 +247,7 @@ class programplanTao extends programplanModel
             }
             elseif($data->endDate > $data->start_date)
             {
-                $durationDays = $this->holiday->getActualWorkingDays($data->start_date, $data->endDate);
+                $durationDays = $this->holiday->getActualWorkingDays($data->start_date, date('Y-m-d', strtotime($data->endDate)));
                 $data->duration = count($durationDays);
             }
 
@@ -672,7 +672,7 @@ class programplanTao extends programplanModel
         }
         elseif($data->endDate > $data->start_date)
         {
-            $durationDays = $this->loadModel('holiday')->getActualWorkingDays($data->start_date, $data->endDate);
+            $durationDays = $this->loadModel('holiday')->getActualWorkingDays($data->start_date, date('Y-m-d', strtotime($data->endDate)));
             $data->duration = count($durationDays);
         }
 
@@ -820,7 +820,7 @@ class programplanTao extends programplanModel
         }
         elseif($data->endDate > $data->start_date)
         {
-            $durationDays = $this->loadModel('holiday')->getActualWorkingDays($data->start_date, $data->endDate);
+            $durationDays = $this->loadModel('holiday')->getActualWorkingDays($data->start_date, date('Y-m-d', strtotime($data->endDate)));
             $data->duration = count($durationDays);
         }
         if($data->start_date) $data->start_date = date('d-m-Y', strtotime($data->start_date));
