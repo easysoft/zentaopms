@@ -16,3 +16,21 @@ class dynamicTester extends tester
         if($form->dom->num->getText !== $num)  return $this->failed('执行动态数量不正确');
         return $this->success('执行动态数量正确');
     }
+
+    /**
+     * 按用户筛选执行动态。
+     * Check the execution dynamic groupby user.
+     *
+     * @param  string $user
+     * @param  string $num
+     * @access public
+     * @return void
+     */
+    public function checkNumByUser($user, $num)
+    {
+        $form = $this->initForm('execution', 'dynamic', array('execution' => '3', 'user' => $user), 'appIframe-execution');
+        $form->dom->user->picker($user);
+        if(count($form->dom->getElementList($form->dom->xpath['detailNum'])->element) != $num) return $this->failed('按用户筛选数据错误');
+        return $this->success('按用户筛选数据正确');
+    }
+}
