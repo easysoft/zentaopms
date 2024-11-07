@@ -10394,4 +10394,48 @@ class upgradeModel extends model
         }
         return true;
     }
+
+    /**
+     * 处理上线步骤数据。
+     * Process deploy step.
+     *
+     * @access public
+     * @return void
+     */
+    public function processDeployStep()
+    {
+        $this->app->loadLang('deploy');
+        if(empty($this->lang->deploy->stageList)) return;
+
+        $deploySteps = $this->dao->select('*')->from(TABLE_DEPLOYSTEP)->fetchGroup('deploy');
+
+        $deployData = array();
+        foreach($deploySteps as $deployID => $steps)
+        {
+            foreach($steps as $step)
+            {
+                if($step->parent || $step->stage == '') return;
+
+                $deployData[$deployID][$step->status][] = $step->id;
+            }
+        }
+
+        foreach($deployData as $deployID => $steps)
+        {
+            foreach($steps as $status => $steps)
+            {
+                $parent = new stdclass();
+                $parent->title       = zget($this->lang->deploy->stageList, $status);
+                $parent->stage       = '';
+                $parent->deploy      = $deployID;
+                $parent->createdBy   = $this->app->user->account;
+                $parent->createdDate = helper::now();
+                $parent->status      = 'wait';
+                $this->dao->insert(TABLE_DEPLOYSTEP)->data($parent)->autoCheck()->exec();
+
+                $parentID = $this->dao->lastInsertID();
+                $this->dao->update(TABLE_DEPLOYSTEP)->set('parent')->eq($parentID)->where('id')->in($steps)->exec();
+            }
+        }
+    }
 }
