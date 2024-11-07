@@ -503,7 +503,7 @@ class baseRouter
         $this->setTimezone();
 
         if($this->config->framework->autoConnectDB) $this->connectDB();
-        if($this->config->cache->enable) $this->loadCache();
+        $this->loadCache();
 
         $this->setupProfiling();
         $this->setupXhprof();
@@ -3093,6 +3093,16 @@ class baseRouter
      */
     private function loadCache()
     {
+        $cacheConfig = $this->dao->select('`key`, value')->from(TABLE_CONFIG)->where('owner')->eq('system')->andWhere('module')->eq('common')->andWhere('section')->eq('cache')->fetchPairs();
+        foreach($cacheConfig as $key => $value) $this->config->cache->$key = $value;
+        if(!$this->config->cache->enable) return;
+
+        if($this->config->cache->driver == 'redis')
+        {
+            $redisConfig = $this->dao->select('`key`, value')->from(TABLE_CONFIG)->where('owner')->eq('system')->andWhere('module')->eq('common')->andWhere('section')->eq('redis')->fetchPairs();
+            foreach($redisConfig as $key => $value) $this->config->redis->$key = $value;
+        }
+
         $this->loadClass('cache', true);
         $this->cache = new Zentao\Cache\cache($this);
 
