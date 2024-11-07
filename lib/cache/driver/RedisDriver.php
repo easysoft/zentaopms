@@ -80,30 +80,14 @@ class RedisDriver implements CacheInterface
     {
         global $config;
 
-        if(empty($config->redis)) \helper::end('Redis is not enabled in the configuration file.');
-
         try
         {
-            $this->redis = new \Redis();
-
-            $version = phpversion('redis');
-            if(version_compare($version, '5.3.0', 'ge'))
-            {
-                $this->redis->connect($config->redis->host , $config->redis->port, $config->redis->timeout, '', 0, 0, ['auth' => [$config->redis->username, $config->redis->password]]);
-            }
-            else
-            {
-                $this->redis->connect($this->config->redis->host , $this->config->redis->port, $this->config->redis->timeout, '', 0, 0);
-                $this->redis->auth(['pass' => $this->config->redis->password]);
-            }
-
-            if(!$this->redis->ping()) \helper::end('Can not connect to Redis server.');
-
+            $this->redis = \helper::connectRedis($config->redis);
             $this->redis->setOption(\Redis::OPT_SERIALIZER, $this->serializer);
         }
-        catch(RedisException $e)
+        catch(Exception $e)
         {
-            \helper::end('Can not connect to Redis server. The error message is: ' . $e->getMessage());
+            \helper::end($e->getMessage());
         }
     }
 
