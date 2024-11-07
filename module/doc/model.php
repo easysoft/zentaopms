@@ -3619,4 +3619,49 @@ class docModel extends model
 
         return !empty($docID);
     }
+
+    public function insertBuiltinTemplateModule()
+    {
+        foreach($this->config->doc->templateModule as $scope => $moduleList)
+        {
+            $moduleOrder = 10;
+            foreach($moduleList as $moduleKey => $subModuleList)
+            {
+                $module = new stdclass();
+                $module->root   = $this->config->doc->templateMenu[$scope]['id'];
+                $module->name   = $this->lang->docTemplate->moduleName[$moduleKey];
+                $module->parent = 0;
+                $module->path   = '';
+                $module->grade  = 1;
+                $module->order  = ++ $moduleOrder;
+                $module->type   = 'docTemplate';
+                $module->short  = ucfirst($scope) . ' ' . $moduleKey;
+                $this->dao->insert(TABLE_MODULE)->data($module)->exec();
+                if(dao::isError()) return false;
+
+                $moduleID = $this->dao->lastInsertID();
+                $this->dao->update(TABLE_MODULE)->set('path')->eq(",{$moduleID},")->where('id')->eq($moduleID)->exec();
+
+                $subModuleOrder = 10;
+                foreach($subModuleList as $subModuleKey => $subModuleCode)
+                {
+                    $subModule = new stdclass();
+                    $subModule->root   = $this->config->doc->templateMenu[$scope]['id'];
+                    $subModule->name   = $this->lang->docTemplate->moduleName[$subModuleKey];
+                    $subModule->parent = $moduleID;
+                    $subModule->path   = '';
+                    $subModule->grade  = 2;
+                    $subModule->order  = ++ $subModuleOrder;
+                    $subModule->type   = 'docTemplate';
+                    $subModule->short  = $subModuleCode;
+                    $this->dao->insert(TABLE_MODULE)->data($subModule)->exec();
+                    if(dao::isError()) return false;
+
+                    $subModuleID = $this->dao->lastInsertID();
+                    $this->dao->update(TABLE_MODULE)->set('path')->eq(",{$moduleID},{$subModuleID},")->where('id')->eq($subModuleID)->exec();
+                }
+            }
+        }
+        return true;
+    }
 }
