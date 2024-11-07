@@ -86,3 +86,7 @@ $action->gen(10);
 
 $tester = new dynamicTester();
 $tester->login();
+
+r($tester->checkTotalNum('9'))           && p('status,message') && e('SUCCESS,执行动态数量正确');
+r($tester->checkNumByUser('USER2', '7')) && p('status,message') && e('SUCCESS,按用户筛选动态数据正确');
+$tester->closeBrowser();
