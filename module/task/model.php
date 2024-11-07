@@ -3266,7 +3266,7 @@ class taskModel extends model
         if(empty($parentID)) $parentID = $childTask->parent;
         if($parentID <= 0) return;
 
-        $parentTasks = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($childTask->path)->andWhere('id')->ne($taskID)->fetchAll('id');
+        $parentTasks = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($childTask->path)->andWhere('id')->ne($taskID)->orderBy('path_desc')->fetchAll('id');
         if(empty($parentTasks)) return;
 
         $this->loadModel('story');
