@@ -247,7 +247,7 @@ class programplanTao extends programplanModel
             }
             elseif($data->endDate > $data->start_date)
             {
-                $durationDays = $this->holiday->getActualWorkingDays($data->start_date, date('Y-m-d', strtotime($data->endDate)));
+                $durationDays = $this->holiday->getActualWorkingDays(date('Y-m-d', strtotime($data->start_date)), date('Y-m-d', strtotime($data->endDate)));
                 $data->duration = count($durationDays);
             }
 
