@@ -28,7 +28,7 @@ class count_of_annual_created_productplan_in_product extends baseCalc
 
     public function calculate($row)
     {
-        if(empty(trim($row->createdDate))) return false;
+        if(!$this->isDate($row->createdDate)) return false;
 
         $row->year = $this->getYear($row->createdDate);
         if(!$row->year) return false;
