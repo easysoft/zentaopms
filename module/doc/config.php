@@ -148,19 +148,69 @@ $config->doc->templateModule['product']['report']['productQualityReport']       
 
 $config->doc->templateModule['project'] = array();
 $config->doc->templateModule['project']['plan'] = array();
+$config->doc->templateModule['project']['plan']['projectPlan']                        = 'Project plan';
+$config->doc->templateModule['project']['plan']['projectQualityAssurancePlan']        = 'Project quality assurance plan';
+$config->doc->templateModule['project']['plan']['projectConfigurationManagementPlan'] = 'Project configuration management plan';
+$config->doc->templateModule['project']['plan']['projectIntegrationTestPlan']         = 'Project integration test plan';
+$config->doc->templateModule['project']['plan']['projectSystemTestPlan']              = 'Project system test plan';
+
 $config->doc->templateModule['project']['desc'] = array();
+$config->doc->templateModule['project']['desc']['businessRequirementsStatement']            = 'Business requirements statement';
+$config->doc->templateModule['project']['desc']['projectUserRequirementsSpecification']     = 'Project user requirements specification';
+$config->doc->templateModule['project']['desc']['projectSoftwareRequirementsSpecification'] = 'Project software requirements specification';
+$config->doc->templateModule['project']['desc']['projectSummaryDesignSpecification']        = 'Project summary design specification';
+$config->doc->templateModule['project']['desc']['projectDetailedDesignSpecification']       = 'Project detailed design specification';
+$config->doc->templateModule['project']['desc']['projectUserManual']                        = 'Project user manual';
+
 $config->doc->templateModule['project']['dev']  = array();
+$config->doc->templateModule['project']['dev']['projectCode']                    = 'Project code';
+$config->doc->templateModule['project']['dev']['projectDatabaseDesignDocument']  = 'Project database design document';
+$config->doc->templateModule['project']['dev']['projectInterfaceDesignDocument'] = 'Project interface design document';
+
 $config->doc->templateModule['project']['test']  = array();
+$config->doc->templateModule['project']['test']['projectIntegrationTestCases'] = 'Project integration test cases';
+$config->doc->templateModule['project']['test']['projectSystemTestCases']      = 'Project system test cases';
+
 $config->doc->templateModule['project']['report']  = array();
+$config->doc->templateModule['project']['report']['projectProgressReport']   = 'Project progress report';
+$config->doc->templateModule['project']['report']['projectRiskReport']       = 'Project risk report';
+$config->doc->templateModule['project']['report']['projectAcceptanceReport'] = 'Project acceptance report';
+$config->doc->templateModule['project']['report']['projectSummaryReport']    = 'Project summary report';
+$config->doc->templateModule['project']['report']['projectQualityReport']    = 'Project quality report';
+
 $config->doc->templateModule['project']['other']  = array();
 
 $config->doc->templateModule['execution'] = array();
 $config->doc->templateModule['execution']['plan'] = array();
+$config->doc->templateModule['execution']['plan']['executionDevelopmentPlan']      = 'Execution development plan';
+$config->doc->templateModule['execution']['plan']['executionQualityAssurancePlan'] = 'Execution quality assurance plan';
+$config->doc->templateModule['execution']['plan']['executionTestPlan']             = 'Execution test plan';
+
 $config->doc->templateModule['execution']['desc'] = array();
+$config->doc->templateModule['execution']['desc']['executionSoftwareRequirementsSpecification'] = 'Execution software requirements specification';
+$config->doc->templateModule['execution']['desc']['executionArchitecturalDesignSpecification']  = 'Execution architectural design specification';
+$config->doc->templateModule['execution']['desc']['executionCodeDesignSpecification']           = 'Execution code design specification';
+
 $config->doc->templateModule['execution']['dev'] = array();
+$config->doc->templateModule['execution']['dev']['executionCode']                    = 'Execution code';
+$config->doc->templateModule['execution']['dev']['executionDatabaseDesignDocument']  = 'Execution database design document';
+$config->doc->templateModule['execution']['dev']['executionInterfaceDesignDocument'] = 'Execution interface design document';
+
 $config->doc->templateModule['execution']['test'] = array();
+$config->doc->templateModule['execution']['test']['executionFunctionalTesting'] = 'Execution functional testing';
+$config->doc->templateModule['execution']['test']['executionTestCases']         = 'Execution test cases';
+
 $config->doc->templateModule['execution']['report'] = array();
+$config->doc->templateModule['execution']['report']['executionProgressReport']   = 'Execution progress report';
+$config->doc->templateModule['execution']['report']['executionRiskReport']       = 'Execution risk report';
+$config->doc->templateModule['execution']['report']['executionAcceptanceReport'] = 'Execution acceptance report';
+$config->doc->templateModule['execution']['report']['executionSummaryReport']    = 'Execution summary report';
+$config->doc->templateModule['execution']['report']['executionQualityReport']    = 'Execution quality report';
 
 $config->doc->templateModule['personal'] = array();
 $config->doc->templateModule['personal']['plan'] = array();
+$config->doc->templateModule['personal']['plan']['personalWorkPlan'] = 'Personal work plan';
+
 $config->doc->templateModule['personal']['report'] = array();
+$config->doc->templateModule['personal']['report']['personalWorkSummaryReport']   = 'Personal work summary report';
+$config->doc->templateModule['personal']['report']['personalValueAnalysisReport'] = 'Personal value analysis report';
