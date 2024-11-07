@@ -1746,12 +1746,12 @@ class projectZen extends project
                         {
                             if(!empty($latestExecutions[$card->id]))
                             {
-                                $columnKey = 'doingExecutions';
+                                $columnKeyExecution = 'doingExecutions';
                                 $execution = $latestExecutions[$card->id];
-                                $items["lane$laneKey"][$columnKey][] = array('id' => $execution->id, 'name' => $execution->id, 'title' => $execution->name, 'status' => $execution->status, 'cardType' => 'execution', 'delay' => !empty($execution->delay) ? $execution->delay : 0, 'progress' => $execution->progress);
+                                $items["lane$laneKey"][$columnKeyExecution][] = array('id' => $execution->id, 'name' => $execution->id, 'title' => $execution->name, 'status' => $execution->status, 'cardType' => 'execution', 'delay' => !empty($execution->delay) ? $execution->delay : 0, 'progress' => $execution->progress);
 
-                                if(!isset($columnCards[$columnKey])) $columnCards[$columnKey] = 0;
-                                $columnCards[$columnKey] ++;
+                                if(!isset($columnCards[$columnKeyExecution])) $columnCards[$columnKeyExecution] = 0;
+                                $columnCards[$columnKeyExecution] ++;
                             }
                         }
                     }
