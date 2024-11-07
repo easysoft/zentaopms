@@ -363,16 +363,14 @@ class docZen extends doc
      * 在创建文档后的返回。
      * Return after create a document.
      *
-     * @param  int       $libID
      * @param  array     $docResult
      * @access protected
-     * @return bool|int
+     * @return void
      */
-    protected function responseAfterCreate(int $libID, array $docResult): bool|int
+    protected function responseAfterCreate(array $docResult)
     {
         $docID = $docResult['id'];
         $files = zget($docResult, 'files', '');
-        $lib   = $this->doc->getLibByID($libID);
 
         $fileAction = '';
         if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n";
@@ -381,9 +379,14 @@ class docZen extends doc
         $this->action->create('doc', $docID, $actionType, $fileAction);
 
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
-        $params   = "docID=" . $docResult['id'];
-        $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('doc', 'view', $params), 'id' => $docID, 'doc' => $docResult);
 
+        $response = array(
+            'result'  => 'success',
+            'message' => $this->lang->saveSuccess,
+            'load'    => $this->createLink('doc', 'view', "docID={$docResult['id']}"),
+            'id'      => $docID,
+            'doc'     => $docResult
+        );
         return $this->send($response);
     }
 
