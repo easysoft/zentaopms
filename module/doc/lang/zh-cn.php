@@ -73,6 +73,21 @@ $lang->doclib->apiNameUnique['project'] = '同一' . $lang->projectCommon . '下
 $lang->doclib->apiNameUnique['nolink']  = '独立接口库中';
 
 $lang->docTemplate = new stdclass();
+$lang->docTemplate->id            = '编号';
+$lang->docTemplate->title         = '模板标题';
+$lang->docTemplate->frequecy      = '频率';
+$lang->docTemplate->type          = '类型';
+$lang->docTemplate->addedBy       = '创建者';
+$lang->docTemplate->addedDate     = '创建时间';
+$lang->docTemplate->editedBy      = '最后修改者';
+$lang->docTemplate->editedDate    = '最后修改时间';
+$lang->docTemplate->views         = '阅读次数';
+$lang->docTemplate->confirmDelete = '您确定删除该文档模板吗？';
+
+$lang->docTemplate->create = '创建模板';
+$lang->docTemplate->edit   = '编辑模板';
+$lang->docTemplate->delete = '删除模板';
+
 $lang->docTemplate->scopes = array();
 $lang->docTemplate->scopes['product']   = '产品';
 $lang->docTemplate->scopes['project']   = '项目';
