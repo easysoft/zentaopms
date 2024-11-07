@@ -10,22 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-/*
- * 定义库类型名称和图标。
- * Define the lib types and icons.
- */
-$libTypes = array();
-if($type === 'project')
-{
-    $libTypes[] = array('type' => 'project',   'name' => $lang->projectCommon,     'icon' => 'project');
-    $libTypes[] = array('type' => 'execution', 'name' => $lang->execution->common, 'icon' => 'run');
-}
-
-/**
- * 定义文档界面上的权限。
- * Define the privs of doc app.
- */
-$hasCustomSpace = $type == 'mine' || $type == 'custom';
 $privs = array();
 $privs['collect']      = 'no';
 $privs['create']       = hasPriv('api', 'create');
@@ -59,7 +43,6 @@ $langData['save']             = $lang->save;
 docApp
 (
     set::spaceType('api'),
-    set::libTypes($libTypes),
     set::mode($mode),
     set::pager(array('recTotal' => $recTotal, 'recPerPage' => $recPerPage, 'page' => $pageID)),
     set::privs($privs),
