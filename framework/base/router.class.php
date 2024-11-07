@@ -3094,7 +3094,7 @@ class baseRouter
     private function loadCache()
     {
         $this->loadClass('cache', true);
-        $this->cache = new cache($this);
+        $this->cache = new Zentao\Cache\cache($this);
 
         /* 为 dao 和 mao 设置访问缓存的对象。 Set the cache object for dao and mao. */
         $this->dao->cache = $this->cache;

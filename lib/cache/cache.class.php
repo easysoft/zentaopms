@@ -8,13 +8,15 @@
  * @package     cache
  * @link        https://www.zentao.net
  */
-helper::import(dirname(__FILE__) . DS . 'simple-cache' . DS . 'CacheInterface.php');
-helper::import(dirname(__FILE__) . DS . 'simple-cache' . DS . 'CacheException.php');
-helper::import(dirname(__FILE__) . DS . 'simple-cache' . DS . 'InvalidArgumentException.php');
-helper::import(dirname(__FILE__) . DS . 'driver' . DS . 'ApcuDriver.php');
-helper::import(dirname(__FILE__) . DS . 'driver' . DS . 'RedisDriver.php');
-helper::import(dirname(__FILE__) . DS . 'driver' . DS . 'YacDriver.php');
-helper::import(dirname(__FILE__) . DS . 'driver' . DS . 'FileDriver.php');
+namespace Zentao\Cache;
+
+\helper::import(dirname(__FILE__) . DS . 'simple-cache' . DS . 'CacheInterface.php');
+\helper::import(dirname(__FILE__) . DS . 'simple-cache' . DS . 'CacheException.php');
+\helper::import(dirname(__FILE__) . DS . 'simple-cache' . DS . 'InvalidArgumentException.php');
+\helper::import(dirname(__FILE__) . DS . 'driver' . DS . 'ApcuDriver.php');
+\helper::import(dirname(__FILE__) . DS . 'driver' . DS . 'RedisDriver.php');
+\helper::import(dirname(__FILE__) . DS . 'driver' . DS . 'YacDriver.php');
+\helper::import(dirname(__FILE__) . DS . 'driver' . DS . 'FileDriver.php');
 
 use ZenTao\Cache\SimpleCache\InvalidArgumentException;
 
