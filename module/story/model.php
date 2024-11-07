@@ -2057,7 +2057,20 @@ class storyModel extends model
             $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->autoCheck()->exec();
             if(dao::isError()) return false;
 
-            if($task->story) $this->setStage($task->story);
+            if($task->story)
+            {
+                $this->setStage($task->story);
+                if($this->config->edition != 'open')
+                {
+                    $relation = new stdClass();
+                    $relation->relation = 'generated';
+                    $relation->AID      = $task->story;
+                    $relation->AType    = 'story';
+                    $relation->BID      = $taskID;
+                    $relation->BType    = 'task';
+                    $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+                }
+            }
             $this->action->create('task', $taskID, 'Opened', '');
         }
 

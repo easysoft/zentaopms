@@ -338,6 +338,49 @@ class bugModel extends model
             if($changes) $this->action->logHistory($actionID, $changes);
         }
 
+        if($this->config->edition != 'open')
+        {
+            if($oldBug->story > 0 || $oldBug->task > 0 || $oldBug->case > 0)
+            {
+                $AID    = $oldBug->story > 0 ? ($oldBug->task > 0 ? "{$oldBug->story},{$oldBug->task}" : $oldBug->story) : $oldBug->task;
+                $AID   .= $oldBug->case  > 0 ? ",{$oldBug->case}" : '';
+                $AType  = $oldBug->story > 0 ? ($oldBug->task > 0 ? 'story,task' : 'story') : 'task';
+                $AType .= $oldBug->case  > 0 ? ",testcase" : '';
+                $this->dao->delete()->from(TABLE_RELATION)
+                    ->where('relation')->eq('generated')
+                    ->andWhere('AID')->in($AID)
+                    ->andWhere('AType')->in($AType)
+                    ->andWhere('BID')->eq($oldBug->id)
+                    ->andWhere('BType')->eq('bug')
+                    ->exec();
+            }
+            if($bug->story > 0 || $bug->task > 0 || $bug->case > 0)
+            {
+                $relation = new stdClass();
+                $relation->relation = 'generated';
+                $relation->BID      = $bug->id;
+                $relation->BType    = 'bug';
+                if($bug->story > 0)
+                {
+                    $relation->AID   = $bug->story;
+                    $relation->AType = 'story';
+                    $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+                }
+                if($bug->task > 0)
+                {
+                    $relation->AID   = $bug->task;
+                    $relation->AType = 'task';
+                    $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+                }
+                if($bug->case > 0)
+                {
+                    $relation->AID   = $bug->case;
+                    $relation->AType = 'testcase';
+                    $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+                }
+            }
+        }
+
         if(dao::isError()) return false;
 
         return $changes;
@@ -694,6 +737,9 @@ class bugModel extends model
     public function buildSearchForm(int $productID, array $products, int $queryID, string $actionURL, string $branch = '0'): void
     {
         if(commonModel::isTutorialMode()) return;
+
+        if(empty($productID) && empty($products)) $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
+
         $projectID = $this->lang->navGroup->bug == 'qa' ? 0 : $this->session->project;
 
         /* Get product params. */
@@ -724,7 +770,7 @@ class bugModel extends model
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs(array($productID), 'all', 'withbranch|releasetag');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
 
-        $product = $this->loadModel('product')->fetchByID($productID);
+        $product = $this->loadModel('product')->fetchByID(empty($productID) ? key($products) : $productID);
         if($product->type == 'normal')
         {
             unset($this->config->bug->search['fields']['branch']);

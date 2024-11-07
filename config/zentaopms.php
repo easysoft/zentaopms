@@ -720,6 +720,7 @@ $config->objectTables['marketresearch'] = TABLE_PROJECT;
 $config->objectTables['researchstage']  = TABLE_PROJECT;
 $config->objectTables['workflowgroup']  = TABLE_WORKFLOWGROUP;
 $config->objectTables['productline']    = TABLE_MODULE;
+$config->objectTables['repocommit']     = TABLE_REPOHISTORY;
 
 $config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions', 'aiPrompts', 'promptDesign', 'promptExec');
 $config->disabledFeatures = '';

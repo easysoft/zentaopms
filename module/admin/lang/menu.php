@@ -155,7 +155,7 @@ $lang->admin->menuList->feature['menuOrder']['15'] = 'execution';
 $lang->admin->menuList->feature['menuOrder']['20'] = 'qa';
 $lang->admin->menuList->feature['menuOrder']['25'] = 'kanban';
 $lang->admin->menuList->feature['menuOrder']['30'] = 'doc';
-$lang->admin->menuList->feature['menuOrder']['50'] = 'user';
+$lang->admin->menuList->feature['menuOrder']['39'] = 'user';
 
 $lang->admin->menuList->feature['dividerMenu'] = ',user,';
 

@@ -759,6 +759,7 @@ class bugZen extends bug
     protected function buildBrowseView(array $bugs, object $product, string $branch, string $browseType, int $moduleID, array $executions, int $param, string $orderBy, object $pager): void
     {
         $this->loadModel('datatable');
+        $this->loadModel('custom');
 
         /* 获取分支列表。*/
         /* Get branch options. */
@@ -780,6 +781,8 @@ class bugZen extends bug
                 $bug->injection = zget($identifyList, $bug->injection, '');
                 $bug->identify  = zget($identifyList, $bug->identify, '');
             }
+
+            if($this->config->edition != 'open') $bug->relatedObject = $this->custom->getRelatedObjectList($bug->id, 'bug', 'byRelation', true);
         }
 
         $showModule = !empty($this->config->bug->browse->showModule) ? $this->config->bug->browse->showModule : '';

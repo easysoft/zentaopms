@@ -136,7 +136,7 @@ $tabs[] = setting()
     ->title(!empty($project->multiple) ? $lang->bug->legendPRJExecStoryTask : $lang->bug->legendExecStoryTask)
     ->control('bugRelatedInfo');
 
-$tabs[] = setting()
+$tabs['bugRelatedList'] = setting()
     ->group('related')
     ->title($lang->bug->legendMisc)
     ->control('bugRelatedList');

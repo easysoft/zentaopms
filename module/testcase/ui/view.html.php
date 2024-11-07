@@ -209,7 +209,7 @@ $tabs[] = setting()
     ->title($lang->testcase->legendOpenAndEdit)
     ->control('caseTimeInfo');
 
-$tabs[] = setting()
+$tabs['caseRelatedList'] = setting()
     ->group('relatives')
     ->title($lang->testcase->legendOther)
     ->control('caseRelatedList');

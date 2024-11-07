@@ -112,8 +112,15 @@ class design extends control
         if(isset($project->hasProduct) && $project->hasProduct) $this->config->design->dtable->fieldList['product']['map'] = $this->view->products;
         if(!helper::hasFeature('devops')) $this->config->design->dtable->fieldList['actions']['menu'] = array('edit', 'delete');
 
+        $designs = $this->design->getList($projectID, $productID, $type, $queryID, $orderBy, $pager);
+        if($this->config->edition != 'open')
+        {
+            $this->loadModel('custom');
+            foreach($designs as $design) $design->relatedObject = $this->custom->getRelatedObjectList($design->id, 'design', 'byRelation', true);
+        }
+
         $this->view->title     = $this->lang->design->common . $this->lang->hyphen . $this->lang->design->browse;
-        $this->view->designs   = $this->design->getList($projectID, $productID, $type, $queryID, $orderBy, $pager);
+        $this->view->designs   = $designs;
         $this->view->projectID = $projectID;
         $this->view->productID = $productID;
         $this->view->type      = $type;

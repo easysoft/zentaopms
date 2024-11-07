@@ -2489,6 +2489,17 @@ class executionModel extends model
 
             $this->afterImportBug($task, $bug);
             if(dao::isError()) return false;
+
+            if($this->config->edition != 'open')
+            {
+                $relation = new stdClass();
+                $relation->AType    = 'bug';
+                $relation->AID      = $bug->id;
+                $relation->relation = 'transferredto';
+                $relation->BType    = 'task';
+                $relation->BID      = $taskID;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
         }
 
         return $mails;
@@ -3945,9 +3956,16 @@ class executionModel extends model
      */
     public function buildTaskSearchForm(int $executionID, array $executions, int $queryID, string $actionURL)
     {
+        $showAll = empty($executionID) && empty($executions) ? true : false;
+        if($showAll)
+        {
+            $executions  = $this->getPairs(0, 'all', "nocode,noprefix,multiple");
+            $executionID = empty($executions) ? 0 : current(array_keys($executions));
+        }
+
         $this->config->execution->search['actionURL'] = $actionURL;
         $this->config->execution->search['queryID']   = $queryID;
-        $this->config->execution->search['params']['execution']['values'] = array(''=>'', $executionID => $executions[$executionID], 'all' => $this->lang->execution->allExecutions);
+        $this->config->execution->search['params']['execution']['values'] = $showAll ? $executions : array(''=>'', $executionID => $executions[$executionID], 'all' => $this->lang->execution->allExecutions);
         $this->config->execution->search['params']['story']['values']     = $this->loadModel('story')->getExecutionStoryPairs($executionID, 0, 'all', '', 'full', 'unclosed', 'story', false);
 
         $projects = $this->loadModel('project')->getPairsByProgram();
