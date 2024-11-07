@@ -34,3 +34,8 @@ $project->openedBy->range('user1');
 $project->acl->range('open');
 $project->status->range('doing');
 $project->gen(2);
+
+$projectproduct = zenData('projectproduct');
+$projectproduct->project->range('1, 2');
+$projectproduct->product->range('1');
+$projectproduct->gen(2);
