@@ -15,3 +15,5 @@ DROP TABLE IF EXISTS `zt_deployscope`;
 ALTER TABLE `zt_deploy` ADD `host` mediumint(8) unsigned NOT NULL DEFAULT 0 AFTER `name`;
 
 ALTER TABLE `zt_deployproduct` DROP COLUMN `package`;
+
+UPDATE `zt_deploy` SET `status` = 'success' WHERE `status` = 'done';
