@@ -38,3 +38,21 @@ $project->gen(6);
 $projectProduct = zenData('projectproduct');
 $projectProduct->project->range('1-6');
 $projectProduct->product->range('1');
+$projectProduct->gen(6);
+
+$productplan = zenData('productplan');
+$productplan->id->range('1-7');
+$productplan->product->range(1);
+$productplan->title->range('计划1,计划2,计划3,计划4,计划5,计划6,计划7');
+$productplan->parent->range(0);
+$productplan->begin->range('(-10M)-(-7M):7D')->type('timestamp')->format('YYYY-MM-DD');
+$productplan->end->range('(-1M)-(+6M):10D')->type('timestamp')->format('YYYY-MM-DD');
+$productplan->status->range('wait{3},doing{2},done{1},closed{1}');
+$productplan->gen(7);
+
+$release = zenData('release');
+$release->id->range('1-5');
+$release->product->range('1');
+$release->name->range('发布1,发布2,发布3,发布4,发布5');
+$release->status->range('normal{4},closed{1}');
+$release->gen(5);
