@@ -241,6 +241,13 @@ CREATE TABLE IF NOT EXISTS `zt_approvalobject` (
   `approval` int(8) NOT NULL DEFAULT '0',
   `objectType` char(30) NOT NULL DEFAULT '',
   `objectID` mediumint(8) NOT NULL DEFAULT '0',
+  `reviewers` text DEFAULT NULL,
+  `opinion` text DEFAULT NULL,
+  `result` varchar(10) NOT NULL DEFAULT '',
+  `status` varchar(30) NOT NULL DEFAULT '',
+  `appliedBy` char(30) NOT NULL DEFAULT '',
+  `appliedDate` datetime NULL,
+  `desc` text NULL,
   `extra` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -14480,11 +14487,17 @@ CREATE TABLE `zt_scene` (
 
 REPLACE INTO `zt_approvalflow` (`id`, `name`, `code`, `desc`, `version`, `createdBy`, `createdDate`, `workflow`, `deleted`) VALUES
 (1, '最简审批', 'simple', '', 1, 'admin', '2022-04-29 08:46:40', '', 0),
-(2, '立项审批流', 'charter', '用于立项、结项、取消立项和激活立项的专属审批流。', 1, 'system', NOW(), '', 0);
+(2, '立项审批流', 'projectApproval', '可以为发起立项审批设计审批流程。', 1, 'system', NOW(), '', 0),
+(3, '结项审批流', 'completionApproval', '可以为发起结项审批设计审批流程。', 1, 'system', NOW(), '', 0),
+(4, '取消立项审批流', 'cancelProjectApproval', '可以为取消立项审批设计审批流程。', 1, 'system', NOW(), '', 0),
+(5, '激活立项审批流', 'activateProjectApproval', '可以为激活立项审批设计审批流程。', 1, 'system', NOW(), '', 0);
 
 REPLACE INTO `zt_approvalflowspec` (`id`, `flow`, `version`, `nodes`, `createdBy`, `createdDate`) VALUES
 (1, 1, 1, '[{\"type\":\"start\",\"ccs\":[]},{\"id\":\"3ewcj92p55e\",\"type\":\"approval\",\"title\":\"审批\",\"reviewType\":\"manual\",\"multiple\":\"and\",\"agentType\":\"pass\",\"reviewers\":[{\"type\":\"select\"}],\"ccs\":[]},{\"type\":\"end\",\"ccs\":[]}]', 'admin', '2022-04-29 08:46:40'),
-(2, 2, 1, '[{"type":"start","ccs":[]},{"id":"6284isggmhj","type":"branch","branchType":"condition","branches":[{"id":"n81udmvr75","conditions":[{"conditionField":"approvalType","conditionOperator":"equal","conditionValue":"projectApproval"}],"nodes":[{"id":"8s3k6sabm23","type":"approval","reviewers":[{"type":"select"}]}]},{"id":"k95j4i13j2n","conditions":[{"conditionField":"approvalType","conditionOperator":"equal","conditionValue":"completionApproval"}],"nodes":[{"id":"g5y1qssvvt4","reviewType":"manual","type":"approval","reviewers":[{"type":"select"}]}]},{"id":"rynphmliq48","conditions":[{"conditionField":"approvalType","conditionOperator":"equal","conditionValue":"cancelCharter"}],"nodes":[{"id":"mnv6la77nhe","reviewType":"manual","type":"approval","reviewers":[{"type":"select"}]}]},{"id":"jhsx8bvndk","conditions":[{"conditionField":"approvalType","conditionOperator":"equal","conditionValue":"activateCharter"}],"nodes":[{"id":"348i3unk88d","reviewType":"manual","type":"approval","reviewers":[{"type":"select"}]}]}],"default":{"id":"k5rrandywo","nodes":[{"id":"mh62tl0pa7r","type":"approval","reviewers":[{"type":"select"}]}]}},{"id":"3ewcj92p55e","type":"approval","reviewType":"manual","reviewers":[{"type":"select"}]},{"type":"end","ccs":[]}]', 'system', NOW());
+(2, 2, 1, '[{\"type\":\"start\",\"ccs\":[]},{\"id\":\"3ewcj92p55e\",\"type\":\"approval\",\"title\":\"审批\",\"reviewType\":\"manual\",\"multiple\":\"and\",\"percent\":\"50\",\"commentType\":\"noRequired\",\"agentType\":\"pass\",\"selfType\":\"selfReview\",\"deletedType\":\"setAdmin\",\"reviewers\":[{\"type\":\"select\",\"users\":[],\"roles\":[\"\"],\"depts\":[\"\"],\"positions\":[\"\"],\"userRange\":\"all\",\"required\":\"yes\"}],\"ccs\":[{\"type\":\"select\",\"users\":[],\"roles\":[\"\"],\"depts\":[\"\"],\"positions\":[\"\"],\"userRange\":\"all\"}]},{\"type\":\"end\",\"ccs\":[]}]', 'system', NOW()),
+(3, 3, 1, '[{\"type\":\"start\",\"ccs\":[]},{\"id\":\"3ewcj92p55e\",\"type\":\"approval\",\"title\":\"审批\",\"reviewType\":\"manual\",\"multiple\":\"and\",\"percent\":\"50\",\"commentType\":\"noRequired\",\"agentType\":\"pass\",\"selfType\":\"selfReview\",\"deletedType\":\"setAdmin\",\"reviewers\":[{\"type\":\"select\",\"users\":[],\"roles\":[\"\"],\"depts\":[\"\"],\"positions\":[\"\"],\"userRange\":\"all\",\"required\":\"yes\"}],\"ccs\":[{\"type\":\"select\",\"users\":[],\"roles\":[\"\"],\"depts\":[\"\"],\"positions\":[\"\"],\"userRange\":\"all\"}]},{\"type\":\"end\",\"ccs\":[]}]', 'system', NOW()),
+(4, 4, 1, '[{\"type\":\"start\",\"ccs\":[]},{\"id\":\"3ewcj92p55e\",\"type\":\"approval\",\"title\":\"审批\",\"reviewType\":\"manual\",\"multiple\":\"and\",\"percent\":\"50\",\"commentType\":\"noRequired\",\"agentType\":\"pass\",\"selfType\":\"selfReview\",\"deletedType\":\"setAdmin\",\"reviewers\":[{\"type\":\"select\",\"users\":[],\"roles\":[\"\"],\"depts\":[\"\"],\"positions\":[\"\"],\"userRange\":\"all\",\"required\":\"yes\"}],\"ccs\":[{\"type\":\"select\",\"users\":[],\"roles\":[\"\"],\"depts\":[\"\"],\"positions\":[\"\"],\"userRange\":\"all\"}]},{\"type\":\"end\",\"ccs\":[]}]', 'system', NOW()),
+(5, 5, 1, '[{\"type\":\"start\",\"ccs\":[]},{\"id\":\"3ewcj92p55e\",\"type\":\"approval\",\"title\":\"审批\",\"reviewType\":\"manual\",\"multiple\":\"and\",\"percent\":\"50\",\"commentType\":\"noRequired\",\"agentType\":\"pass\",\"selfType\":\"selfReview\",\"deletedType\":\"setAdmin\",\"reviewers\":[{\"type\":\"select\",\"users\":[],\"roles\":[\"\"],\"depts\":[\"\"],\"positions\":[\"\"],\"userRange\":\"all\",\"required\":\"yes\"}],\"ccs\":[{\"type\":\"select\",\"users\":[],\"roles\":[\"\"],\"depts\":[\"\"],\"positions\":[\"\"],\"userRange\":\"all\"}]},{\"type\":\"end\",\"ccs\":[]}]', 'system', NOW());
 
 REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`) VALUES
 ('all', 'process', 'classify', 'support', '支持过程', '1'),
@@ -15714,12 +15727,7 @@ CREATE TABLE `zt_charter` (
   `reviewedBy` varchar(255) NOT NULL DEFAULT '',
   `reviewedResult` char(30) NOT NULL DEFAULT '',
   `reviewedDate` datetime NULL,
-  `reviewers` text DEFAULT NULL,
-  `reviewOpinion` text DEFAULT NULL,
-  `reviewResult` varchar(10) NOT NULL,
   `reviewStatus` varchar(30) NOT NULL DEFAULT 'wait',
-  `approval` mediumint(8) unsigned NOT NULL DEFAULT 0,
-  `applicationInfo` text DEFAULT NULL,
   `meetingDate` date NULL,
   `meetingLocation` varchar(255) NOT NULL DEFAULT '',
   `meetingMinutes` mediumtext NULL,
