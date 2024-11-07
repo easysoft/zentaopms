@@ -104,4 +104,15 @@ class bugTester extends tester
      * @access public
      * @return object
      */
+    public function resolveBug(array $bug)
+    {
+        $form = $this->initForm('project', 'bug', array('project' => 1), 'appIframe-project');
+        $form->dom->resolveBtn->click();
+        $resolveForm = $this->loadPage('bug', 'bug');
+        $form->wait(1);
+        $title = $form->dom->resolveTitle->getText();
+        if(isset($bug['resolution']) && !empty($bug['resolution'])) $form->dom->resolution->picker($bug['resolution']);
+        if(isset($bug['build']) && !empty($bug['build']))           $form->dom->build->picker($bug['build']);
+        $form->dom->resolve->click();
+    }
 }
