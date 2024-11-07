@@ -178,6 +178,17 @@ class metricZen extends metric
         return $scopeList;
     }
 
+    private function startTime()
+    {
+        return microtime(true);
+    }
+
+    private function endTime($beginTime)
+    {
+        $time = microtime(true) - $beginTime;
+        return number_format((float)$time, 5, '.', '0');
+    }
+
     /**
      * 计算度量数据。
      * Calculate metric data.
@@ -189,22 +200,31 @@ class metricZen extends metric
     protected function calculateMetric($classifiedCalcGroup)
     {
         set_time_limit(0);
+        $calcBeginTime = $this->startTime();
         foreach($classifiedCalcGroup as $calcGroup)
         {
             try
             {
-                $beginTime = microtime(true);
+                $beginTime = $this->startTime();
                 $statement = $this->prepareDataset($calcGroup);
                 $sql = $statement ? $statement->get() : '';
-
                 $this->calcMetric($statement, $calcGroup->calcList);
-
                 $recordWithCode = $this->prepareMetricRecord($calcGroup->calcList);
+                $calcTime = $this->endTime($beginTime);
+
+                $beginTime = $this->startTime();
                 $this->metric->insertMetricLib($recordWithCode);
-                $endTime = microtime(true);
-                $executeTime = $endTime - $beginTime;
-                $codes = implode(',', array_keys($calcGroup->calcList));
-                $this->metric->saveLogs("Calculate consumed time: {$executeTime} seconds, the sql: $sql, the codes: $codes");
+                $executeTime = $this->endTime($beginTime);
+
+                $total = 0;
+                $codes = '';
+                foreach($recordWithCode as $code => $records)
+                {
+                    $count = count($records);
+                    $codes .= "$code($count), ";
+                    $total += $count;
+                }
+                $this->metric->saveLogs("Calculate consumed time(seconds): calc: $calcTime, insert: $executeTime, total: $total, sql: $sql, $codes");
             }
             catch(Exception $e)
             {
@@ -216,13 +236,21 @@ class metricZen extends metric
             }
         }
 
-        $beginTime = microtime(true);
+        $executeTime = $this->endTime($calcBeginTime);
+        $this->metric->saveLogs("Calculate all consumed time: {$executeTime} seconds");
+
+        $beginTime = $this->startTime();
         $metrics = $this->metric->getExecutableMetric();
-        foreach($metrics as $code) $this->metric->deduplication($code);
+        foreach($metrics as $code)
+        {
+            $deduplicationBeginTime = $this->startTime();
+            $this->metric->deduplication($code);
+            $executeTime = $this->endTime($deduplicationBeginTime);
+            $this->metric->saveLogs("Deduplication consumed time: {$executeTime} seconds, the code: $code");
+        }
         $this->metric->rebuildPrimaryKey();
-        $endTime = microtime(true);
-        $executeTime = $endTime - $beginTime;
-        $this->metric->saveLogs("Deduplicate consumed time: {$executeTime} seconds");
+        $executeTime = $this->endTime($beginTime);
+        $this->metric->saveLogs("Deduplicate all consumed time: {$executeTime} seconds");
     }
 
     /**
@@ -460,8 +488,28 @@ class metricZen extends metric
     {
         if(empty($statement)) return;
 
-        $statement = $statement->query();
+        $dbType = $this->config->metricDB->type;
+        if($dbType == 'duckdb')
+        {
+            $this->loadModel('bi');
+            $sql = $statement->get();
+            $dbh = $this->app->loadDriver('duckdb');
+            $rows = $dbh->query($sql)->fetchAll();
+            foreach($rows as $row)
+            {
+                foreach($calcList as $code => $calc)
+                {
+                    if(!$calc->reuse)
+                    {
+                        $record = $this->getCalcFields($calc, $row);
+                        $calc->calculate($record);
+                    }
+                }
+            }
+            return;
+        }
 
+        $statement = $statement->query();
         while($row = $statement->fetch())
         {
             foreach($calcList as $code => $calc)
