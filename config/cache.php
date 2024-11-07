@@ -62,3 +62,10 @@ $config->cacheKeys->execution->ajaxGetDropMenuExecutions = 'ajaxDropMenuExecutio
 
 $config->cacheKeys->bug = new stdclass();
 $config->cacheKeys->bug->browse = 'bugBrowse%s';
+
+$config->redis = new stdClass();
+$config->redis->host       = '';
+$config->redis->port       = '';
+$config->redis->username   = '';
+$config->redis->password   = '';
+$config->redis->serializer = 'serialize'; // serialize|igbinary
