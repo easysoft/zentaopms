@@ -3012,15 +3012,6 @@ CREATE TABLE IF NOT EXISTS `zt_deploystep` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- DROP TABLE IF EXISTS `zt_deployscope`;
-CREATE TABLE IF NOT EXISTS `zt_deployscope` (
-  `deploy` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `service` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `hosts` text NULL,
-  `remove` text NULL,
-  `add` text NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 -- DROP TABLE IF EXISTS `zt_traincourse`;
 CREATE TABLE IF NOT EXISTS `zt_traincourse` (
   `id` mediumint(8) NOT NULL AUTO_INCREMENT,

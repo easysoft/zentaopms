@@ -518,7 +518,6 @@ define('TABLE_BUDGET',                 '`' . $config->db->prefix . 'budget`');
 define('TABLE_CMCL',                   '`' . $config->db->prefix . 'cmcl`');
 define('TABLE_DEPLOY',                 '`' . $config->db->prefix . 'deploy`');
 define('TABLE_DEPLOYPRODUCT',          '`' . $config->db->prefix . 'deployproduct`');
-define('TABLE_DEPLOYSCOPE',            '`' . $config->db->prefix . 'deployscope`');
 define('TABLE_DEPLOYSTEP',             '`' . $config->db->prefix . 'deploystep`');
 define('TABLE_DERIVEMEAS',             '`' . $config->db->prefix . 'derivemeas`');
 define('TABLE_DOMAIN',                 '`' . $config->db->prefix . 'domain`');
