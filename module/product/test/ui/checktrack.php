@@ -92,3 +92,16 @@ $casestep->id->range('1');
 $casestep->case->range('1');
 $casestep->type->range('step');
 $casestep->gen(1);
+
+$bug = zenData('bug');
+$bug->id->range('1');
+$bug->product->range('1');
+$bug->execution->range('2');
+$bug->story->range('4');
+$bug->title->range('bug1');
+$bug->status->range('active');
+$bug->gen(1);
+
+$tester = new trackTester();
+$tester->login();
+$trackurl['productID'] = 1;
