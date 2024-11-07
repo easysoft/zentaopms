@@ -146,7 +146,7 @@ class dataset
         $dbType = $this->config->metricDB->type;
         $stmt = $this->dao->select($fieldList)
             ->from(TABLE_RELEASE)->alias('t1')
-            ->beginIF($dbType == 'mysql')->leftJoin(TABLE_PROJECT)->alias('t2')->on("CONCAT(',', t2.id, ',') LIKE CONCAT('%,', t1.project, ',%')")->fi()
+            ->beginIF($dbType == 'mysql' || $dbType == 'duckdb')->leftJoin(TABLE_PROJECT)->alias('t2')->on("CONCAT(',', t2.id, ',') LIKE CONCAT('%,', t1.project, ',%')")->fi()
             ->beginIF($dbType == 'sqlite')->leftJoin(TABLE_PROJECT)->alias('t2')->on("(',' || t2.id || ',') LIKE ('%' || t1.project || '%')")->fi()
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
             ->where('t1.deleted')->eq(0)
@@ -561,10 +561,18 @@ class dataset
             return $this->defaultWhere($stmt, 't1');
         }
 
-        $table = 'tmp_case_getDevStories';
-        $this->dao->exec("DROP TABLE IF EXISTS `{$table}`");
-        $this->dao->exec("CREATE TABLE `{$table}` AS SELECT `story`, COUNT(`id`) AS `case_count` FROM " . TABLE_CASE . 'GROUP BY `story`');
-        $this->dao->exec("CREATE INDEX `story` ON `{$table}` (`story`)");
+        $dbType = $this->config->metricDB->type;
+        if($dbType == 'duckdb')
+        {
+            $table = "(SELECT `story`, COUNT(`id`) AS `case_count` FROM " . TABLE_CASE . " GROUP BY `story`)";
+        }
+        else
+        {
+            $table = 'tmp_case_getDevStories';
+            $this->dao->exec("DROP TABLE IF EXISTS `{$table}`");
+            $this->dao->exec("CREATE TABLE `{$table}` AS SELECT `story`, COUNT(`id`) AS `case_count` FROM " . TABLE_CASE . 'GROUP BY `story`');
+            $this->dao->exec("CREATE INDEX `story` ON `{$table}` (`story`)");
+        }
 
         $stmt = $this->dao->select($fieldList)
             ->from(TABLE_STORY)->alias('t1')
@@ -1228,10 +1236,18 @@ class dataset
 
         $query = $this->defaultWhere($task, 't1')->groupBy('t1.project')->get();
 
-        $table = 'tmp_task_getProjectTasks';
-        $this->dao->exec("DROP TABLE IF EXISTS `{$table}`");
-        $this->dao->exec("CREATE TABLE `{$table}` AS {$query}");
-        $this->dao->exec("CREATE INDEX `project` ON `{$table}` (`project`)");
+        $dbType = $this->config->metricDB->type;
+        if($dbType == 'duckdb')
+        {
+            $table = "($query)";
+        }
+        else
+        {
+            $table = 'tmp_task_getProjectTasks';
+            $this->dao->exec("DROP TABLE IF EXISTS `{$table}`");
+            $this->dao->exec("CREATE TABLE `{$table}` AS {$query}");
+            $this->dao->exec("CREATE INDEX `project` ON `{$table}` (`project`)");
+        }
 
         $stmt = $this->dao->select("$fieldList, $defaultHours AS defaultHours")
             ->from(TABLE_PROJECT)->alias('t1')
@@ -1320,31 +1336,27 @@ class dataset
         $userTable      = $this->config->objectTables['user'];
         $projectTable   = $this->config->objectTables['project'];
 
-        $auditplanSQL = <<<EOT
-    SELECT $fieldList
-    FROM $auditplanTable AS t1
-    LEFT JOIN $projectTable AS t2 ON t1.project = t2.id
-    LEFT JOIN $userTable    AS t3 ON t1.assignedTo = t3.account
-    WHERE t1.status = 'wait'
-    AND   t2.type = 'project'
-    AND   t1.deleted = '0'
-    AND   t2.deleted = '0'
-    AND   t3.deleted = '0'
-    EOT;
+        $auditplan = $this->dao->select($fieldList)
+            ->from(TABLE_AUDITPLAN)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
+            ->where('t1.status')->eq('wait')
+            ->andWhere('t2.type')->eq('project')
+            ->andWhere('t1.deleted')->eq('0')
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t3.deleted')->eq('0')->get();
 
-        $ncSQL = <<<EOT
-    SELECT $fieldList
-    FROM $ncTable AS t1
-    LEFT JOIN $projectTable AS t2 ON t1.project = t2.id
-    LEFT JOIN $userTable    AS t3 ON t1.assignedTo = t3.account
-    WHERE t1.status = 'active'
-    AND   t2.type = 'project'
-    AND   t1.deleted = '0'
-    AND   t2.deleted = '0'
-    AND   t3.deleted = '0'
-    EOT;
+        $nc = $this->dao->select($fieldList)
+            ->from(TABLE_NC)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
+            ->where('t1.status')->eq('active')
+            ->andWhere('t2.type')->eq('project')
+            ->andWhere('t1.deleted')->eq('0')
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t3.deleted')->eq('0')->get();
 
-        $sql  = "$auditplanSQL UNION ALL $ncSQL";
+        $sql  = "$auditplan UNION ALL $nc";
         $stmt = $this->dao->select('*')->from("($sql) tt")->where('1=1');
         $stmt = $this->defaultWhere($stmt, 'tt');
 
