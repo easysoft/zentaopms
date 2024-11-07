@@ -114,5 +114,19 @@ class bugTester extends tester
         if(isset($bug['resolution']) && !empty($bug['resolution'])) $form->dom->resolution->picker($bug['resolution']);
         if(isset($bug['build']) && !empty($bug['build']))           $form->dom->build->picker($bug['build']);
         $form->dom->resolve->click();
+
+        /* 检查解决方案必填提示 */
+        if($resolveForm->dom->resolutionTip)
+        {
+            if($this->checkFormTips('bug')) return $this->success('解决Bug表单页提示信息正确');
+            return $this->failed('解决Bug表单页提示信息不正确');
+        }
+
+        $form->wait(1);
+        /* 搜索已解决的Bug,检查列表状态字段 */
+        $form->dom->search(array("{$this->lang->bug->name},=,{$title}"));
+        $form->wait(1);
+        if($form->dom->status->getText() == '已解决') return $this->success('解决Bug成功');
+        return $this->failed('解决Bug失败');
     }
 }
