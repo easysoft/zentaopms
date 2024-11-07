@@ -53,5 +53,6 @@ docApp
     set::fetchOnChangeSpace(false),
     set::maxHomeLibsOfSpace(0),
     set::langData($langData),
+    set::autoSelectLib(),
     set('$options', jsRaw('window.setDocAppOptions'))
 );
