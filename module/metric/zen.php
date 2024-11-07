@@ -178,11 +178,24 @@ class metricZen extends metric
         return $scopeList;
     }
 
+    /**
+     * 开始计时。
+     *
+     * @access private
+     * @return float
+     */
     private function startTime()
     {
         return microtime(true);
     }
 
+    /**
+     * 结束计时。
+     *
+     * @param  float   $beginTime
+     * @access private
+     * @return string
+     */
     private function endTime($beginTime)
     {
         $time = microtime(true) - $beginTime;
