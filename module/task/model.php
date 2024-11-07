@@ -325,7 +325,9 @@ class taskModel extends model
         if($oldTask->parent > 0) $this->computeBeginAndEnd($oldTask->parent);
 
         /* Create related dynamic and record. */
-        $action = $left == 0 ? 'Finished' : 'Started';
+        $action = 'Started';
+        if($oldTask->status == 'pause') $action = 'Restarted';
+        if($left == 0) $action = 'Finished';
         $this->afterChangeStatus($oldTask, $changes, $action, $output);
 
         /* Send Webhook notifications and synchronize status to execution, project and program. */
