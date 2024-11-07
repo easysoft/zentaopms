@@ -16,3 +16,23 @@ class trackTester extends tester
         $form = $this->initForm('product', 'track', $trackurl, 'appIframe-product');
         $form->wait(2);
         $title = $form->dom->$type->getText();
+        $message = [
+            'ER'        => '业务需求',
+            'UR'        => '用户需求',
+            'SR'        => '研发需求',
+            'sub_SR'    => '子研发需求',
+            'project'   => '所属项目',
+            'execution' => '所属执行',
+            'task'      => '相关任务',
+            'bug'       => '相关Bug',
+            'case'      => '相关用例'
+        ];
+        if (isset($message[$type]))
+        {
+            return ($title == $expected)
+                ? $this->success($message[$type] . '显示正确')
+                : $this->failed($message[$type] . '显示不正确');
+        }
+        return $this->failed('矩阵中无该类型的数据');
+    }
+}
