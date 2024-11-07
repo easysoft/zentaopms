@@ -76,3 +76,19 @@ $task->type->range('devel');
 $task->pri->range('1');
 $task->status->range('wait');
 $task->gen(1);
+
+$case = zenData('case');
+$case->id->range('1');
+$case->product->range('1');
+$case->execution->range('2');
+$case->story->range('4');
+$case->title->range('用例1');
+$case->type->range('feature');
+$case->pri->range('1');
+$case->gen(1);
+
+$casestep = zenData('casestep');
+$casestep->id->range('1');
+$casestep->case->range('1');
+$casestep->type->range('step');
+$casestep->gen(1);
