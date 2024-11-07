@@ -8,7 +8,7 @@ class dynamicTester extends tester
      *
      * @param  string $num
      * @access public
-     * @return void
+     * @return object
      */
     public function checkTotalNum($num)
     {
@@ -24,7 +24,7 @@ class dynamicTester extends tester
      * @param  string $user
      * @param  string $num
      * @access public
-     * @return void
+     * @return object
      */
     public function checkNumByUser($user, $num)
     {
