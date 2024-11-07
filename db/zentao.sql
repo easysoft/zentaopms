@@ -2703,6 +2703,7 @@ CREATE TABLE `zt_host` (
   `ztf` int(11) NOT NULL DEFAULT '0',
   `zd` int(11) NOT NULL DEFAULT '0',
   `ssh` int(11) NOT NULL DEFAULT '0',
+  `sshPort` mediumint NOT NULL DEFAULT '0',
   `parent` int(11) unsigned NOT NULL DEFAULT '0',
   `image` int(11) unsigned NOT NULL DEFAULT '0',
   `admin` smallint(5) unsigned NOT NULL DEFAULT '0',
