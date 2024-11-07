@@ -62,3 +62,16 @@ $team->type->range('project');
 $team->account->range('admin');
 $team->join->range('(-2M)-(-M):1D')->type('timestamp')->format('YY/MM/DD');
 $team->gen(1);
+
+$tester = new bugTester();
+$tester->login();
+
+$bug = array(
+    array('resolution' => '', 'build' => ''),
+    array('resolution' => '已解决', 'build' => '主干'),
+);
+
+r($tester->resolveBug($bug[0])) && p('status,message') && e('SUCCESS,解决Bug表单页提示信息正确');
+r($tester->resolveBug($bug[1])) && p('status,message') && e('SUCCESS,解决Bug成功');
+
+$tester->closeBrowser();
