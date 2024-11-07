@@ -699,9 +699,7 @@ class taskTao extends taskModel
      */
     protected function getListByReportCondition(string $field, string $condition): array
     {
-        return $this->dao->select("id,{$field}")->from(TABLE_TASK)
-                ->where($condition)
-                ->fetchAll('id');
+        return $this->dao->select("id,{$field}")->from(TABLE_TASK)->where($condition)->fetchAll('id');
     }
 
     /**
@@ -714,21 +712,12 @@ class taskTao extends taskModel
      */
     protected function getParentStatusById(int $taskID) :string
     {
-        $children = $this->dao->select('id,status,closedReason,parent')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('deleted')->eq('0')->fetchAll();
-        if(empty($children)) return '';
-
-        $childrenStatus = $childrenClosedReason = array();
-        foreach($children as $task)
-        {
-            $childrenStatus[$task->status]             = $task->status;
-            $childrenClosedReason[$task->closedReason] = $task->closedReason;
-        }
+        $childrenStatus = $this->dao->select('id,status,parent')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('deleted')->eq('0')->fetchPairs('status', 'status');
+        if(empty($childrenStatus)) return '';
 
         if(count($childrenStatus) == 1) return current($childrenStatus);
 
-        if(isset($childrenStatus['doing']) || isset($childrenStatus['pause'])) return 'doing';
-        if((isset($childrenStatus['done']) || isset($childrenClosedReason['done'])) && isset($childrenStatus['wait'])) return 'doing';
-        if(isset($childrenStatus['wait']))   return 'wait';
+        if(isset($childrenStatus['doing']) || isset($childrenStatus['pause']) || isset($childrenStatus['wait'])) return 'doing';
         if(isset($childrenStatus['done']))   return 'done';
         if(isset($childrenStatus['closed'])) return 'closed';
         if(isset($childrenStatus['cancel'])) return 'cancel';
