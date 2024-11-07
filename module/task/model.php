@@ -1299,7 +1299,8 @@ class taskModel extends model
         $task->realStarted    = !empty($task->realStarted)    ? substr($task->realStarted, 0, 19)    : null;
 
         /* Get the child tasks of the parent task. */
-        $children = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('deleted')->eq(0)->fetchAll('id');
+        $childIdList = $this->getAllChildId($taskID, false);
+        $children    = $this->getByIdList($childIdList);
         foreach($children as $child)
         {
             $child->team    = array();
@@ -1329,7 +1330,7 @@ class taskModel extends model
         if($task->story) $task->cases = $this->dao->select('id, title')->from(TABLE_CASE)->where('story')->eq($task->story)->andWhere('storyVersion')->eq($task->storyVersion)->andWhere('deleted')->eq('0')->fetchPairs();
 
         /* Process a task, compute its progress and get its related information. */
-        return $this->processTask($task);
+        return $this->processTask($task, false);
     }
 
     /**
@@ -1944,18 +1945,20 @@ class taskModel extends model
     }
 
     /**
-     * 获取任务所有子任务id，包括任务它自己。
-     * Get all child task id, including the task itself.
+     * 获取任务所有子任务id。
+     * Get all child task id.
      *
      * @param  int    $taskID
+     * @param  bool   $includeSelf
      * @access public
      * @return array
      */
-    public function getAllChildId(int $taskID): array
+    public function getAllChildId(int $taskID, bool $includeSelf = true): array
     {
         return $this->dao->select('id')->from(TABLE_TASK)
             ->where('path')->like("%,$taskID,%")
             ->andWhere('deleted')->eq(0)
+            ->beginIF(!$includeSelf)->andWhere('id')->ne($taskID)->fi()
             ->fetchPairs('id');
     }
 
@@ -2600,10 +2603,11 @@ class taskModel extends model
      * Process a task, compute its progress and get its relates.
      *
      * @param  object $task
+     * @param  bool   $convertParent
      * @access public
      * @return object
      */
-    public function processTask(object $task): object
+    public function processTask(object $task, bool $convertParent = true): object
     {
         $today = helper::today();
 
@@ -2653,12 +2657,15 @@ class taskModel extends model
             if(in_array($field, $this->config->task->dateFields) && helper::isZeroDate($value)) $task->$field = '';
         }
 
-        $task->parent = array();
-        foreach(explode(',', trim((string)$task->path, ',')) as $parentID)
+        if($convertParent)
         {
-            if(!$parentID) continue;
-            if($parentID == $task->id) continue;
-            $task->parent[] = (int)$parentID;
+            $task->parent = array();
+            foreach(explode(',', trim((string)$task->path, ',')) as $parentID)
+            {
+                if(!$parentID) continue;
+                if($parentID == $task->id) continue;
+                $task->parent[] = (int)$parentID;
+            }
         }
 
         return $task;
