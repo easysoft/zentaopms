@@ -1441,8 +1441,9 @@ class storyModel extends model
      */
     public function subdivide(int $storyID, array $SRList): void
     {
-        $now      = helper::now();
-        $oldStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+        $now       = helper::now();
+        $oldStory  = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+        $storyType = $this->dao->select('id,type')->from(TABLE_STORY)->where('id')->in($SRList)->fetchPairs('id');
 
         /* Set parent to child story. */
         foreach($SRList as $childStoryID)
@@ -1455,6 +1456,17 @@ class storyModel extends model
                  ->set('path')->eq($path)
                  ->where('id')->eq($childStoryID)
                  ->exec();
+
+            if($this->config->edition != 'open')
+            {
+                $relation = new stdClass();
+                $relation->AID      = $storyID;
+                $relation->AType    = $oldStory->type;
+                $relation->relation = 'subdivideinto';
+                $relation->BID      = $childStoryID;
+                $relation->BType    = $storyType[$childStoryID];
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
         }
         $this->computeEstimate($storyID);
 
