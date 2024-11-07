@@ -200,7 +200,7 @@ class RedisDriver implements CacheInterface
     {
         $result = $this->redis->del($keys);
 
-        return count($result) === count($keys);
+        return $result === count($keys);
     }
 
     /**
