@@ -58,3 +58,21 @@ $storyspec->story->range('1-4');
 $storyspec->version->range('1');
 $storyspec->title->range('业需01,用需01,研需01,子需求01');
 $storyspec->gen(4);
+
+$projectstory = zenData('projectstory');
+$projectstory->project->range('1{2},2{2}');
+$projectstory->product->range('1');
+$projectstory->story->range('3,4,3,4');
+$projectstory->order->range('1,2,1,2');
+$projectstory->gen(4);
+
+$task = zenData('task');
+$task->id->range('1');
+$task->project->range('1');
+$task->execution->range('2');
+$task->story->range('4');
+$task->name->range('任务1');
+$task->type->range('devel');
+$task->pri->range('1');
+$task->status->range('wait');
+$task->gen(1);
