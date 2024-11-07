@@ -83,7 +83,7 @@ class queryBase extends wg
                     ),
                     $formActionsBlock
                 ),
-                set::submitBtnText($lang->pivot->query),
+                set::submitBtnText($lang->bi->query),
                 formGroup
                 (
                     setID('querySql'),
