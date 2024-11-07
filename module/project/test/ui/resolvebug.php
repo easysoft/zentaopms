@@ -15,3 +15,12 @@ cid=1
  - 测试结果 @解决Bug成功
 
 */
+
+chdir(__DIR__);
+include '../lib/bug.ui.class.php';
+
+$product = zenData('product');
+$product->id->range('1-2');
+$product->name->range('产品1, 产品2');
+$product->type->range('normal');
+$product->gen(2);
