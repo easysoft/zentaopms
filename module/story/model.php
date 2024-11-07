@@ -2173,6 +2173,14 @@ class storyModel extends model
         {
             $this->loadModel('demand')->changeDemandStatus($oldStory->demand, '0', true);
             $this->loadModel('action')->create('demand', $oldStory->demand, 'restored', '', $storyID);
+
+            $relation = new stdClass();
+            $relation->AID      = $oldStory->demand;
+            $relation->AType    = 'demand';
+            $relation->relation = 'subdivideinto';
+            $relation->BID      = $storyID;
+            $relation->BType    = $oldStory->type;
+            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
         }
         return $changes;
     }
