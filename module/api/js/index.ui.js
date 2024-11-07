@@ -170,12 +170,12 @@ function getViewModeUrl(options)
 function getDocViewSidebarTabs(doc, info)
 {
     const lang = getDocAppLang();
-    if(info.isNewDoc) return [{key: 'outline', icon: 'list-box', title: lang.docOutline}];
+    if(info.isNewDoc || info.mode === 'create') return [];
     return [
         {key: 'info',    icon: 'info',     title: lang.docInfo},
-        {key: 'outline', icon: 'list-box', title: lang.docOutline},
+        info.mode === 'edit' ? null : {key: 'outline', icon: 'list-box', title: lang.docOutline},
         {key: 'history', icon: 'history',  title: lang.history},
-    ];
+    ].filter(Boolean);
 }
 
 /**
