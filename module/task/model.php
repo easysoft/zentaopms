@@ -2653,6 +2653,14 @@ class taskModel extends model
             if(in_array($field, $this->config->task->dateFields) && helper::isZeroDate($value)) $task->$field = '';
         }
 
+        $task->parent = array();
+        foreach(explode(',', trim((string)$task->path, ',')) as $parentID)
+        {
+            if(!$parentID) continue;
+            if($parentID == $task->id) continue;
+            $task->parent[] = (int)$parentID;
+        }
+
         return $task;
     }
 
