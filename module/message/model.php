@@ -64,8 +64,8 @@ class messageModel extends model
         {
             foreach($actions as $action)
             {
-                if(!isset($this->lang->message->label->{$action})) continue;
-                $objectActions[$objectType][$action] = $this->lang->message->label->{$action};
+                if(isset($this->lang->message->label->{$action})) $objectActions[$objectType][$action] = $this->lang->message->label->{$action};
+                if(isset($this->lang->message->label->{$objectType}) && isset($this->lang->message->label->{$objectType}->{$action})) $objectActions[$objectType][$action] = $this->lang->message->label->{$objectType}->{$action};
             }
         }
         return $objectActions;
@@ -296,6 +296,8 @@ class messageModel extends model
             if($reviewers) $toList .= ',' . implode(',', $reviewers);
             $toList = trim($toList, ',');
         }
+
+        if(strpos(',opportunity,risk,issue,', ",{$objectType},") !== false) $toList = "{$object->assignedTo},{$object->createdBy}";
 
         /* 非内置工作流使用工作流的toList。 */
         if($this->config->edition != 'open')
