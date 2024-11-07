@@ -38,3 +38,23 @@ $projectProduct = zenData('projectproduct');
 $projectProduct->project->range('1-6');
 $projectProduct->product->range('1');
 $projectProduct->gen(6);
+
+$story = zenData('story');
+$story->id->range('1-4');
+$story->parent->range('0,1,2,3');
+$story->isParent->range('1{3},0{1}');
+$story->root->range('1');
+$story->path->range('`,1,`,`,1,2,`,`,1,2,3,`,`,1,2,3,4,`');
+$story->grade->range('1{3},2{1}');
+$story->product->range('1');
+$story->title->range('业需01,用需01,研需01,子需求01');
+$story->type->range('epic,requirement,story{2}');
+$story->status->range('active');
+$story->version->range('1');
+$story->gen(4);
+
+$storyspec = zenData('storyspec');
+$storyspec->story->range('1-4');
+$storyspec->version->range('1');
+$storyspec->title->range('业需01,用需01,研需01,子需求01');
+$storyspec->gen(4);
