@@ -12,17 +12,21 @@ namespace zin;
 
 set::title($lang->api->releases);
 
-$releases = initTableData($releases, $config->api->dtable->release->fieldList, $this->api);
+$releases   = initTableData($releases, $config->api->dtable->release->fieldList, $this->api);
+$footerInfo = empty($releases) ? $lang->pager->noRecord : str_replace('{recTotal}', '' . count($releases), $lang->pager->totalCountAB);
 
-dtable
+div
 (
-    setStyle('overflow-y', 'hidden'),
-    set::extraHeight('+144'),
-    set::cols(array_values($config->api->dtable->release->fieldList)),
-    set::data(array_values($releases)),
-    set::userMap($users),
-    set::orderBy($orderBy),
-    set::sortLink(inlink('releases', "libID={$libID}&orderBy={name}_{sortType}"))
+    dtable
+    (
+        set::_className(''),
+        set::cols(array_values($config->api->dtable->release->fieldList)),
+        set::data(array_values($releases)),
+        set::userMap($users),
+        set::orderBy($orderBy),
+        set::footer($footerInfo),
+        set::loadPartial(),
+        set::sortLink(inlink('releases', "libID={$libID}&orderBy={name}_{sortType}")),
+        set::loadOptions(array('zui-command' => 'updateLazyContent'))
+    ),
 );
-
-render();

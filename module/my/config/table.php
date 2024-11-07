@@ -240,6 +240,7 @@ $config->my->task->dtable->fieldList['name']['title']        = $lang->task->name
 $config->my->task->dtable->fieldList['name']['type']         = 'title';
 $config->my->task->dtable->fieldList['name']['nestedToggle'] = true;
 $config->my->task->dtable->fieldList['name']['link']         = array('url' => array('module' => 'task', 'method' => 'view', 'params' => 'taskID={id}'), 'data-app' => 'execution');
+$config->my->task->dtable->fieldList['name']['styleMap']     = array('--color-link' => 'color');
 $config->my->task->dtable->fieldList['name']['fixed']        = 'left';
 $config->my->task->dtable->fieldList['name']['data-toggle']  = 'modal';
 $config->my->task->dtable->fieldList['name']['data-size']    = 'lg';
@@ -667,6 +668,7 @@ $config->my->bug->dtable->fieldList['id']['group'] = 'left';
 
 $config->my->bug->dtable->fieldList['title']['name']     = 'title';
 $config->my->bug->dtable->fieldList['title']['title']    = $lang->bug->title;
+$config->my->bug->dtable->fieldList['title']['styleMap'] = array('--color-link' => 'color');
 $config->my->bug->dtable->fieldList['title']['type']     = 'title';
 $config->my->bug->dtable->fieldList['title']['minWidth'] = '200';
 $config->my->bug->dtable->fieldList['title']['fixed']    = 'left';
@@ -956,6 +958,7 @@ $config->my->testcase->dtable->fieldList['title']['name']     = 'title';
 $config->my->testcase->dtable->fieldList['title']['title']    = $lang->testcase->title;
 $config->my->testcase->dtable->fieldList['title']['type']     = 'title';
 $config->my->testcase->dtable->fieldList['title']['link']     = array('module' => 'testcase', 'method' => 'view', 'params' => 'caseID={id}&version={version}');
+$config->my->testcase->dtable->fieldList['title']['styleMap'] = array('--color-link' => 'color');
 $config->my->testcase->dtable->fieldList['title']['fixed']    = 'left';
 $config->my->testcase->dtable->fieldList['title']['sortType'] = true;
 

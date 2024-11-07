@@ -1302,7 +1302,7 @@ class bugZen extends bug
             if($testtaskID and empty($oldBug->testtask)) $bug->testtask = $testtaskID;
         }
 
-        return $bug;
+        return $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->resolve['id'], $this->post->uid);
     }
 
     /**

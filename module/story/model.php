@@ -571,7 +571,8 @@ class storyModel extends model
         $this->loadModel('score')->create('story', 'create',$storyID);
 
         /* Create actions. Record submit review action. */
-        $action = $bugID == 0 ? (empty($storyFrom) ? 'Opened' : 'From' . ucfirst($storyFrom)) : 'Frombug';
+        $bugAction = empty($storyFrom) ? 'Opened' : 'From' . ucfirst($storyFrom);
+        $action    = $bugID == 0 ? $bugAction : 'Frombug';
         $this->action->create('story', $storyID, $action, '', $extra);
         if($story->status == 'reviewing') $this->action->create('story', $storyID, 'submitReview');
         if(!empty($story->assignedTo)) $this->action->create('story', $storyID, 'Assigned', '', $story->assignedTo);
@@ -4508,7 +4509,8 @@ class storyModel extends model
         {
             /* When the review result of the changed story is clarify, the status should be changing. */
             $isChanged = $oldStory->changedBy ? true : false;
-            $story->status = $isChanged ? 'changing' : 'draft';
+            $story->status     = $isChanged ? 'changing' : 'draft';
+            $story->reviewedBy = '';
         }
 
         if($result == 'revert')
