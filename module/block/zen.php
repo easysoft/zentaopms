@@ -1587,8 +1587,17 @@ class blockZen extends block
         $count  = isset($block->params->count) ? (int)$block->params->count : 0;
 
         /* 测试统计是按产品分组统计的。 */
-        $products      = $this->loadModel('product')->getOrderedProducts($status, $count, 0, 'all');
+        $products          = $this->loadModel('product')->getOrderedProducts($status, $count, 0, 'all');
+        $shadowProductList = array();
+        foreach($products as $productID => $product) if($product->shadow) $shadowProductList[] = $productID;
+        $productProject    = $this->dao->select('t1.product, t1.project')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('product')->in(array_values($shadowProductList))
+            ->andWhere('type')->eq('project')
+            ->fetchPairs();
+
         $productIdList = array_keys($products);
+        $projectIdList = array_values($productProject);
 
         /* 计算昨日和今日可能包含的日期情况。 */
         $years  = array();
@@ -1600,18 +1609,35 @@ class blockZen extends block
         }
 
         $this->loadModel('metric');
-        $createdBugGroup  = $this->metric->getResultByCodeWithArray('count_of_daily_created_bug_in_product',  array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 获取昨日和今日新增的Bug数。
-        $resolvedBugGroup = $this->metric->getResultByCodeWithArray('count_of_daily_resolved_bug_in_product', array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 获取昨日和今日解决的Bug数。
-        $closedBugGroup   = $this->metric->getResultByCodeWithArray('count_of_daily_closed_bug_in_product',   array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 获取昨日和今日关闭的Bug数。
-        $bugFixRate       = $this->metric->getResultByCodeWithArray('rate_of_fixed_bug_in_product',           array('product' => join(',', $productIdList)), 'cron'); // 获取Bug修复率。
-        $effectiveBug     = $this->metric->getResultByCodeWithArray('count_of_effective_bug_in_product',      array('product' => join(',', $productIdList)), 'cron'); // 获取有效Bug总数。
-        $fixedBug         = $this->metric->getResultByCodeWithArray('count_of_fixed_bug_in_product',          array('product' => join(',', $productIdList)), 'cron'); // 获取Bug修复数。
-        $activatedBug     = $this->metric->getResultByCodeWithArray('count_of_activated_bug_in_product',      array('product' => join(',', $productIdList)), 'cron'); // 获取Bug激活数。
+        $createdBugGroup       = $this->metric->getResultByCodeWithArray('count_of_daily_created_bug_in_product',  array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 获取昨日和今日新增的Bug数。
+        $shadowCreatedBugGroup = $this->metric->getResultByCodeWithArray('count_of_daily_created_bug_in_project',  array('project' => join(',', $projectIdList), 'year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 获取昨日和今日新增的Bug数。
 
-        if(!empty($bugFixRate))   $bugFixRate   = array_column($bugFixRate,   null, 'product');
-        if(!empty($effectiveBug)) $effectiveBug = array_column($effectiveBug, null, 'product');
-        if(!empty($fixedBug))     $fixedBug     = array_column($fixedBug,     null, 'product');
-        if(!empty($activatedBug)) $activatedBug = array_column($activatedBug, null, 'product');
+        $resolvedBugGroup       = $this->metric->getResultByCodeWithArray('count_of_daily_resolved_bug_in_product', array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 获取昨日和今日解决的Bug数。
+        $shadowResolvedBugGroup = $this->metric->getResultByCodeWithArray('count_of_daily_resolved_bug_in_project', array('project' => join(',', $projectIdList), 'year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 获取影子产品昨日和今日解决的Bug数。
+
+        $closedBugGroup       = $this->metric->getResultByCodeWithArray('count_of_daily_closed_bug_in_product',   array('product' => join(',', $productIdList), 'year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 获取昨日和今日关闭的Bug数。
+        $shadowClosedBugGroup = $this->metric->getResultByCodeWithArray('count_of_daily_closed_bug_in_project',   array('project' => join(',', $projectIdList), 'year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 获取影子产品昨日和今日关闭的Bug数。
+
+        $bugFixRate       = $this->metric->getResultByCodeWithArray('rate_of_fixed_bug_in_product',           array('product' => join(',', $productIdList)), 'cron'); // 获取Bug修复率。
+        $shadowBugFixRate = $this->metric->getResultByCodeWithArray('rate_of_fixed_bug_in_project',           array('project' => join(',', $projectIdList)), 'cron'); // 获取影子产品Bug修复率。
+
+        $effectiveBug       = $this->metric->getResultByCodeWithArray('count_of_effective_bug_in_product',      array('product' => join(',', $productIdList)), 'cron'); // 获取有效Bug总数。
+        $shadowEffectiveBug = $this->metric->getResultByCodeWithArray('count_of_effective_bug_in_project',      array('project' => join(',', $projectIdList)), 'cron'); // 获取影子产品有效Bug总数。
+
+        $fixedBug       = $this->metric->getResultByCodeWithArray('count_of_fixed_bug_in_product',          array('product' => join(',', $productIdList)), 'cron'); // 获取Bug修复数。
+        $shadowFixedBug = $this->metric->getResultByCodeWithArray('count_of_fixed_bug_in_project',          array('project' => join(',', $projectIdList)), 'cron'); // 获取影子产品Bug修复数。
+
+        $activatedBug       = $this->metric->getResultByCodeWithArray('count_of_activated_bug_in_product',      array('product' => join(',', $productIdList)), 'cron'); // 获取Bug激活数。
+        $shadowActivatedBug = $this->metric->getResultByCodeWithArray('count_of_activated_bug_in_project',      array('project' => join(',', $projectIdList)), 'cron'); // 获取影子产品Bug激活数。
+
+        if(!empty($bugFixRate))         $bugFixRate         = array_column($bugFixRate,   null, 'product');
+        if(!empty($shadowBugFixRate))   $shadowBugFixRate   = array_column($shadowBugFixRate,   null, 'project');
+        if(!empty($effectiveBug))       $effectiveBug       = array_column($effectiveBug, null, 'product');
+        if(!empty($shadowEffectiveBug)) $shadowEffectiveBug = array_column($shadowEffectiveBug, null, 'project');
+        if(!empty($fixedBug))           $fixedBug           = array_column($fixedBug,     null, 'product');
+        if(!empty($shadowFixedBug))     $shadowFixedBug     = array_column($shadowFixedBug,     null, 'project');
+        if(!empty($activatedBug))       $activatedBug       = array_column($activatedBug, null, 'product');
+        if(!empty($shadowActivatedBug)) $shadowActivatedBug = array_column($shadowActivatedBug, null, 'project');
 
         $productIdList     = array_keys($products);
         $unclosedTesttasks = $this->dao->select('product,id,name')->from(TABLE_TESTTASK)
@@ -1622,50 +1648,45 @@ class blockZen extends block
             ->orderBy('id_desc')
             ->fetchGroup('product');
 
+
         /* 将获取出的度量项数据塞入产品列表数据中。 */
         foreach($products as $productID => $product)
         {
+            $isShadow    = $product->shadow;
+            $useObjectID = !$isShadow ? $productID : $productProject[$productID]; // 如果是影子产品，用项目查询
+            $useDataKey  = !$isShadow ? 'product' : 'project';
+
             $product->addToday          = 0;
             $product->addYesterday      = 0;
             $product->resolvedToday     = 0;
             $product->resolvedYesterday = 0;
             $product->closedToday       = 0;
             $product->closedYesterday   = 0;
-            if(!empty($createdBugGroup))
+
+            $useCreatedBug = !$isShadow ? 'createdBugGroup' : 'shadowCreatedBugGroup';
+            if(!empty($$useCreatedBug))
             {
-                foreach($createdBugGroup as $data)
+                foreach($$useCreatedBug as $data)
                 {
+                    $objectEQ = $useObjectID == $data[$useDataKey];
                     $currentDay = "{$data['year']}-{$data['month']}-{$data['day']}";
-                    if($currentDay == date('Y-m-d') && $productID == $data['product'])                      $product->addToday     = $data['value'];
-                    if($currentDay == date('Y-m-d', strtotime("-1 day")) && $productID == $data['product']) $product->addYesterday = $data['value'];
+                    if($currentDay == date('Y-m-d') && $objectEQ)                      $product->addToday     = $data['value'];
+                    if($currentDay == date('Y-m-d', strtotime("-1 day")) && $objectEQ) $product->addYesterday = $data['value'];
                 }
             }
 
-            if(!empty($resolvedBugGroup))
+            $useResolvedBug = !$isShadow ? 'resolvedBugGroup' : 'shadowResolvedBugGroup';
+            if(!empty($$useResolvedBug))
             {
-                foreach($resolvedBugGroup as $data)
+                foreach($$useResolvedBug as $data)
                 {
+                    $objectEQ = $useObjectID == $data[$useDataKey];
+
                     $currentDay = "{$data['year']}-{$data['month']}-{$data['day']}";
-                    if($currentDay == date('Y-m-d') && $productID == $data['product'])                      $product->resolvedToday     = $data['value'];
-                    if($currentDay == date('Y-m-d', strtotime("-1 day")) && $productID == $data['product']) $product->resolvedYesterday = $data['value'];
+                    if($currentDay == date('Y-m-d') && $objectEQ)                      $product->resolvedToday     = $data['value'];
+                    if($currentDay == date('Y-m-d', strtotime("-1 day")) && $objectEQ) $product->resolvedYesterday = $data['value'];
                 }
             }
-
-            if(!empty($closedBugGroup))
-            {
-                foreach($closedBugGroup as $data)
-                {
-                    $currentDay = "{$data['year']}-{$data['month']}-{$data['day']}";
-                    if($currentDay == date('Y-m-d') && $productID == $data['product'])                      $product->closedToday     = $data['value'];
-                    if($currentDay == date('Y-m-d', strtotime("-1 day")) && $productID == $data['product']) $product->closedYesterday = $data['value'];
-                }
-            }
-
-            $product->fixedBugRate      = isset($bugFixRate[$productID]['value'])   ? $bugFixRate[$productID]['value'] * 100 : 0;
-            $product->totalBug          = isset($effectiveBug[$productID]['value']) ? $effectiveBug[$productID]['value']     : 0;
-            $product->fixedBug          = isset($fixedBug[$productID]['value'])     ? $fixedBug[$productID]['value']         : 0;
-            $product->activatedBug      = isset($activatedBug[$productID]['value']) ? $activatedBug[$productID]['value']     : 0;
-            $product->unclosedTesttasks = isset($unclosedTesttasks[$productID])     ? $unclosedTesttasks[$productID]         : '';
         }
 
         $this->view->products = $products;
