@@ -9,7 +9,7 @@ class storykanbanTester extends tester
      * @param  string $stage
      * @param  string $num
      * @access public
-     * @return void
+     * @return object
      */
     public function check($stage, $num)
     {
