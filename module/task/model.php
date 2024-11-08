@@ -1924,6 +1924,7 @@ class taskModel extends model
         $taskList = $this->dao->select('id, name, isParent, consumed')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
             ->andWhere('status')->notin('cancel,closed')
+            ->andWhere('parent')->eq('0')
             ->andWhere('execution')->eq($executionID)
             ->andWhere('mode')->eq('')
             ->beginIF($children)->andWhere('id')->notin($children)->fi()
@@ -2244,10 +2245,10 @@ class taskModel extends model
         if($action == 'totask') return true;
 
         /* 父任务只能编辑、创建子任务和指派。 Parent task only can edit task, create children and assign to somebody. */
-        if((!empty($task->isParent) || $task->parent < 0) && !in_array($action, array('edit', 'batchcreate', 'cancel', 'assignto', 'pause', 'close', 'restart'))) return false;
+        if((!empty($task->isParent)) && !in_array($action, array('edit', 'batchcreate', 'cancel', 'assignto', 'pause', 'close', 'restart'))) return false;
 
         /* 子任务和多人任务不能创建子任务。Multi task and child task cannot create children. */
-        if($action == 'batchcreate' && (!empty($task->team) || $task->parent > 0)) return false;
+        if($action == 'batchcreate' && (!empty($task->team) || !empty($task->rawParent))) return false;
 
         if(!empty($task->team))
         {
@@ -2655,7 +2656,8 @@ class taskModel extends model
 
         if($convertParent)
         {
-            $task->parent = array();
+            $task->rawParent = $task->parent;
+            $task->parent    = array();
             foreach(explode(',', trim((string)$task->path, ',')) as $parentID)
             {
                 if(!$parentID) continue;
