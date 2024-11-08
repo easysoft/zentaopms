@@ -7,6 +7,7 @@ class addTodoTester extends tester
      * Add a todo.
      *
      * @param  string $todoTitle
+     * @param  string $todoStatus
      * @access public
      * @return void
      */
