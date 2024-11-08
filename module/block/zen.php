@@ -1687,6 +1687,25 @@ class blockZen extends block
                     if($currentDay == date('Y-m-d', strtotime("-1 day")) && $objectEQ) $product->resolvedYesterday = $data['value'];
                 }
             }
+
+            $useClosedBug = !$isShadow ? 'closedBugGroup' : 'shadowClosedBugGroup';
+            if(!empty($$useClosedBug))
+            {
+                foreach($$useClosedBug as $data)
+                {
+                    $objectEQ = $useObjectID == $data[$useDataKey];
+
+                    $currentDay = "{$data['year']}-{$data['month']}-{$data['day']}";
+                    if($currentDay == date('Y-m-d') && $objectEQ)                      $product->closedToday     = $data['value'];
+                    if($currentDay == date('Y-m-d', strtotime("-1 day")) && $objectEQ) $product->closedYesterday = $data['value'];
+                }
+            }
+
+            $product->fixedBugRate      = isset($$useBugFixRate[$useObjectID]['value'])   ? $$useBugFixRate[$useObjectID]['value'] * 100 : 0;
+            $product->totalBug          = isset($$useEffectiveBug[$useObjectID]['value']) ? $$useEffectiveBug[$useObjectID]['value']     : 0;
+            $product->fixedBug          = isset($$useFixedBug[$useObjectID]['value'])     ? $$useFixedBug[$useObjectID]['value']         : 0;
+            $product->activatedBug      = isset($$useActivatedBug[$useObjectID]['value']) ? $$useActivatedBug[$useObjectID]['value']     : 0;
+            $product->unclosedTesttasks = isset($$unclosedTesttasks[$useObjectID])        ? $$unclosedTesttasks[$useObjectID]         : '';
         }
 
         $this->view->products = $products;
