@@ -57,6 +57,10 @@ class formBatch extends formBase
         'mode'    => 'add'
     );
 
+    protected static array $defineBlocks = array(
+        'formBefore' => array()
+    );
+
     /**
      * Handle building inner items.
      *
@@ -135,6 +139,7 @@ class formBatch extends formBase
             div
             (
                 setClass('form-batch-container relative'),
+                $this->block('formBefore'),
                 h::table
                 (
                     setClass('table form-batch-table'),
