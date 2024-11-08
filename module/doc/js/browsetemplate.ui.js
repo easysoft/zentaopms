@@ -10,8 +10,18 @@ function getTableOptions(options, info)
 {
     const lang = getDocAppLang();
 
-    options.cols = options.cols.filter(col => col.name !== 'collects');
+    templateCols = [];
+    templateCols.push(options.cols.find(col => col.name == 'id'));
+    templateCols.push(options.cols.find(col => col.name == 'title'));
+    templateCols.push({name: 'type', title: lang.tableCols.type, type: 'string', sort: true});
+    templateCols.push(options.cols.find(col => col.name == 'addedBy'));
+    templateCols.push(options.cols.find(col => col.name == 'addedDate'));
+    templateCols.push(options.cols.find(col => col.name == 'editedBy'));
+    templateCols.push(options.cols.find(col => col.name == 'editedDate'));
+    templateCols.push({name: 'views', title: lang.tableCols.views, type: 'number', sort: true});
+    templateCols.push(options.cols.find(col => col.name == 'actions'));
 
+    options.cols = templateCols;
     options.cols.forEach(col =>
     {
         if(col.name === 'actions' && col.actionsMap)
