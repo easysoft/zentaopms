@@ -90,6 +90,15 @@ class baseDAO
     public $slaveDBH;
 
     /**
+     * 全局对象$cache。
+     * The global cache object.
+     *
+     * @var object
+     * @access public
+     */
+    public $cache = null;
+
+    /**
      * sql对象，用于生成sql语句。
      * The sql object, used to create the query sql.
      *

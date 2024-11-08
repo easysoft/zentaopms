@@ -38,6 +38,24 @@ class baseMao
     public $config;
 
     /**
+     * 全局对象$dao
+     * The global dao object.
+     *
+     * @var object
+     * @access protected
+     */
+    protected $dao;
+
+    /**
+     * 全局对象$cache
+     * The global cache object.
+     *
+     * @var object
+     * @access public
+     */
+    public $cache = null;
+
+    /**
      * 正在使用的表。
      * The table of current query.
      *
