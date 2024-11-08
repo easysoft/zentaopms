@@ -3232,11 +3232,24 @@ class taskModel extends model
      */
     public function updateParent(object $task, bool $isParentChanged): void
     {
+        $oldTask    = $this->fetchByID($task->id);
         $parentTask = $this->fetchByID((int)$task->parent);
         $path       = $parentTask->path . $task->id . ',';
 
         $this->dao->update(TABLE_TASK)->set('path')->eq($path)->where('id')->eq($task->id)->exec();
         if(!$parentTask->isParent) $this->dao->update(TABLE_TASK)->set('isParent')->eq(1)->where('id')->eq((int)$task->parent)->exec();
+
+        /* 更新所有子任务的path. */
+        $childIdList = $this->getAllChildId($task->id, false);
+        if($childIdList)
+        {
+            $children = $this->getByIdList($childIdList);
+            foreach($children as $child)
+            {
+                $newChildPath = str_replace($oldTask->path, $path, $child->path);
+                $this->dao->update(TABLE_TASK)->set('path')->eq($newChildPath)->where('id')->eq($child->id)->exec();
+            }
+        }
 
         $this->updateParentStatus($task->id, $task->parent, !$isParentChanged);
         $this->computeBeginAndEnd($task->parent);
