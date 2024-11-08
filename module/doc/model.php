@@ -3671,4 +3671,19 @@ class docModel extends model
         }
         return true;
     }
+
+    /**
+     * 获取文档模板类型的模块。
+     * Get modules of doc template type.
+     *
+     * @access public
+     * @return array
+     */
+    public function getTemplateModules()
+    {
+        return $this->dao->select('*')->from(TABLE_MODULE)
+            ->where('deleted')->eq('0')
+            ->andWhere('type')->eq('docTemplate')
+            ->fetchAll();
+    }
 }
