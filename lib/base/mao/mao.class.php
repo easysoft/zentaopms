@@ -732,6 +732,19 @@ class baseMao
         }
     }
 
+    /**
+     * 魔术方法。
+     * 1. 转换 findByxxx 为 where 条件。
+     * 2. 调用cache对象的方法。
+     * Magic method.
+     * 1. Convert findByxxx to where condition.
+     * 2. Call the cache object method.
+     *
+     * @param  string $method
+     * @param  array  $args
+     * @access public
+     * @return mixed
+     */
     public function __call(string $method, array $args)
     {
         $method = strtolower($method);
