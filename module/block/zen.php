@@ -1701,6 +1701,11 @@ class blockZen extends block
                 }
             }
 
+            $useBugFixRate   = !$isShadow ? 'bugFixRate' : 'shadowBugFixRate';
+            $useEffectiveBug = !$isShadow ? 'effectiveBug' : 'shadowEffectiveBug';
+            $useFixedBug     = !$isShadow ? 'fixedBug' : 'shadowFixedBug';
+            $useActivatedBug = !$isShadow ? 'activatedBug' : 'shadowActivatedBug';
+
             $product->fixedBugRate      = isset($$useBugFixRate[$useObjectID]['value'])   ? $$useBugFixRate[$useObjectID]['value'] * 100 : 0;
             $product->totalBug          = isset($$useEffectiveBug[$useObjectID]['value']) ? $$useEffectiveBug[$useObjectID]['value']     : 0;
             $product->fixedBug          = isset($$useFixedBug[$useObjectID]['value'])     ? $$useFixedBug[$useObjectID]['value']         : 0;
