@@ -709,6 +709,7 @@ class cache
     {
         if(empty($label)) return $this->log('The label is empty', __FILE__, __LINE__);
         if(empty($this->key)) return $this->log('The key is empty', __FILE__, __LINE__);
+        if(isset($this->labels[$label])) return $this->log("Label {$label} already used", __FILE__, __LINE__);
         $this->labels[$label] = $this->key;
         return $this;
     }
