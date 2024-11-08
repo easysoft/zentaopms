@@ -3093,6 +3093,8 @@ class baseRouter
      */
     private function loadCache()
     {
+        if(!$this->checkInstalled()) return false;
+
         $cacheConfig = $this->dao->select('`key`, value')->from(TABLE_CONFIG)->where('owner')->eq('system')->andWhere('module')->eq('common')->andWhere('section')->eq('cache')->fetchPairs();
         foreach($cacheConfig as $key => $value) $this->config->cache->$key = $value;
         if(!$this->config->cache->enable) return;
