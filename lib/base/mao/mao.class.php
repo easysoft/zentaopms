@@ -459,23 +459,6 @@ class baseMao
     }
 
     /**
-     * 选择处理的数据和column最为缓存的key。
-     * Load data and select column as key.
-     *
-     * @param  array  $data
-     * @param  string $field
-     * @access public
-     * @return static|cache.
-     */
-    public function use(array $data, string $column)
-    {
-        $this->data       = $data;
-        $this->dataColumn = $column;
-
-        return $this;
-    }
-
-    /**
      * 判断匹配条件。
      * Check condition is matched.
      *
