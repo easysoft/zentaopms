@@ -352,7 +352,7 @@ class baseMao
      * @access public
      * @return static the dao object.
      */
-    public function eq(string $value)
+    public function eq($value)
     {
         $this->condition['operator'] = 'eq';
         $this->condition['value']    = $value;
@@ -374,7 +374,7 @@ class baseMao
      * @access public
      * @return static the dao object.
      */
-    public function ne(string $value)
+    public function ne($value)
     {
         $this->condition['operator'] = 'ne';
         $this->condition['value']    = $value;
