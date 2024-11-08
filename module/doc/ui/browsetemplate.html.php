@@ -42,6 +42,10 @@ $langData['createTemplate'] = $lang->docTemplate->create;
 $langData['editTemplate']   = $lang->docTemplate->edit;
 $langData['deleteTemplate'] = $lang->docTemplate->delete;
 $langData['confirmDelete']  = $lang->docTemplate->confirmDelete;
+$langData['addModule']      = $lang->docTemplate->addModule;
+$langData['addSubModule']   = $lang->docTemplate->addSubModule;
+$langData['editModule']     = $lang->docTemplate->editModule;
+$langData['deleteModule']   = $lang->docTemplate->deleteModule;
 
 $viewModeUrl = createLink('doc', 'browsetemplate', 'libID={libID}&type={filterType}&docID={docID}&orderBy={orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}');
 
