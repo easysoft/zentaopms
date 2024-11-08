@@ -476,59 +476,6 @@ class baseMao
     }
 
     /**
-     * data追加字段。
-     * Append field to data.
-     *
-     * @param  string $tableName
-     * @param  string $fields
-     * @access public
-     * @return static|cache.
-     */
-    public function append(string $tableName, string $fields)
-    {
-        $fields = explode(',', $fields);
-
-        $alias = [];
-        foreach($fields as $field)
-        {
-            $fieldInfo = explode(' ', trim($field));
-            if(count($fieldInfo) == 1)
-            {
-                $alias[$fieldInfo[0]] = $fieldInfo[0];
-            }
-            elseif(count($fieldInfo) == 2)
-            {
-                $alias[$fieldInfo[0]] = $fieldInfo[1];
-            }
-            else
-            {
-                $alias[$fieldInfo[0]] = $fieldInfo[2];
-            }
-        }
-
-        $cacheKeys = [];
-        $key = $this->dataColumn;
-        foreach($this->data as $row)
-        {
-            if(!in_array($row->$key, $cacheKeys)) $cacheKeys[] = $row->$key;
-        }
-        $objects = $this->cache->fetchAll($tableName, $cacheKeys);
-        foreach($this->data as $row)
-        {
-            $object = $objects[$row->$key];
-            foreach($alias as $aliasKey => $aliasValue)
-            {
-                $row->$aliasValue = $object->$aliasKey;
-            }
-        }
-
-        return $this;
-    }
-
-
-    //-------------------- Fetch相关方法(Fetch related methods) -------------------//
-
-    /**
      * 判断匹配条件。
      * Check condition is matched.
      *
@@ -776,7 +723,7 @@ class baseMao
 
         $cacheResult = $this->cache->fetchAll($this->table, array_unique($keyList));
 
-        foreach($data as $index=> $row)
+        foreach($data as $index => $row)
         {
             $key      = $keyList[$index];
             $cacheRow = $cacheResult[$key];
