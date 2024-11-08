@@ -187,35 +187,6 @@ class taskTao extends taskModel
     }
 
     /**
-     * 取消父任务更新子任务。
-     * Update a child task when cancel its parent task.
-     *
-     * @param  object    $task
-     * @access protected
-     * @return void
-     */
-    protected function cancelParentTask(object $task): void
-    {
-        $taskID = $task->id;
-        unset($task->assignedTo);
-        unset($task->id);
-
-        $oldChildrenTasks = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($taskID)->fetchAll('id');
-        $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('parent')->eq((int)$taskID)->exec();
-        $this->dao->update(TABLE_TASK)->set('assignedTo=openedBy')->where('parent')->eq((int)$taskID)->exec();
-
-        if(!dao::isError() && count($oldChildrenTasks) > 0)
-        {
-            $this->loadModel('action');
-            foreach($oldChildrenTasks as $oldChildrenTask)
-            {
-                $actionID = $this->action->create('task', $oldChildrenTask->id, 'Canceled', $this->post->comment);
-                $this->action->logHistory($actionID, common::createChanges($oldChildrenTask, $task));
-            }
-        }
-    }
-
-    /**
      * 编辑日志时，检查输入是否合法。
      * When editing a effort, check that the input is legal.
      *

@@ -1946,30 +1946,6 @@ class taskTest
     }
 
     /**
-     * 取消父任务更新子任务。。
-     * Update a child task when cancel its parent task.
-     *
-     * @param  int    $taskID
-     * @access public
-     * @return object|false
-     */
-    public function cancelParentTaskTest(int $taskID): object|false
-    {
-        $task = $this->objectModel->getByID($taskID);
-
-        $data = new stdclass();
-        $data->id        = $task->id;
-        $data->name      = $task->name;
-        $data->pri       = $task->pri;
-        $data->status    = $task->status;
-        $data->execution = $task->execution;
-        $this->objectModel->cancelParentTask($data);
-
-        $childID = $this->objectModel->dao->select('id')->from(TABLE_TASK)->where('parent')->eq($taskID)->fetch('id');
-        return $this->objectModel->dao->select('action')->from(TABLE_ACTION)->where('objectType')->eq('task')->andWhere('objectID')->eq($childID)->orderBy('id_desc')->fetch();
-    }
-
-    /**
      * 获取报表的查询语句。
      * Get report condition from session.
      *

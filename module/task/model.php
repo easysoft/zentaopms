@@ -628,43 +628,23 @@ class taskModel extends model
      * 取消一个任务。
      * Cancel a task.
      *
+     * @param  object  $oldTask
      * @param  object  $task
-     * @param  string  $extra
+     * @param  array   $output
      * @access public
      * @return bool
      */
-    public function cancel(object $task, string $extra = ''): bool
+    public function cancel(object $oldTask, object $task, array $output = array()): bool
     {
-        $oldTask = $this->getByID($task->id);
-        $this->dao->update(TABLE_TASK)->data($task)
-             ->autoCheck()
-             ->checkFlow()
-             ->where('id')->eq($task->id)
-             ->exec();
-
+        $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()->where('id')->eq($oldTask->id)->exec();
         if(dao::isError()) return false;
 
-        if($oldTask->fromBug) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($oldTask->fromBug)->exec();
-        if($oldTask->parent > 0) $this->updateParentStatus($task->id);
+        if(!empty($oldTask->mode))    $this->dao->update(TABLE_TASKTEAM)->set('status')->eq($task->status)->where('task')->eq($oldTask->id)->exec();
+        if(!empty($oldTask->fromBug)) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($oldTask->fromBug)->exec();
 
         /* Cancel a parent task. */
-        if($oldTask->isParent) $this->taskTao->cancelParentTask($task);
-
-        if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
-
-        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-        parse_str($extra, $output);
-
-        $this->updateKanbanCell($oldTask->id, $output, $oldTask->execution);
-        if(!empty($oldTask->mode)) $this->dao->update(TABLE_TASKTEAM)->set('status')->eq($task->status)->where('task')->eq($task->id)->exec();
-
         $changes = common::createChanges($oldTask, $task);
-        if($changes || $this->post->comment != '')
-        {
-            $actionID = $this->loadModel('action')->create('task', $oldTask->id, 'Canceled', $this->post->comment);
-            $this->action->logHistory($actionID, $changes);
-        }
-
+        $this->afterChangeStatus($oldTask, $changes, 'Canceled', $output);
         return true;
     }
 
