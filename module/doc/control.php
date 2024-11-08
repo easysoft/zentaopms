@@ -315,7 +315,7 @@ class doc extends control
      * 文档模板列表。
      * Browse template list.
      *
-     * @param  string $scope
+     * @param  int    $libID
      * @param  string $type
      * @param  int    $docID
      * @param  string $orderBy
@@ -325,10 +325,9 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function browseTemplate(string $scope = '', string $type = 'all', int $docID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function browseTemplate(int $libID = 0, string $type = 'all', int $docID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        if(!isset($this->config->doc->templateMenu[$scope])) $scope = 'product';
-        $menu = $this->config->doc->templateMenu[$scope];
+        if(!isset($this->config->doc->templateMenu[$libID])) $libID = 1;
 
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -337,12 +336,11 @@ class doc extends control
         foreach($templateList as $template)
         {
             $template->originLib   = $template->lib;
-            $template->lib         = $menu['id'];
+            $template->lib         = $libID;
         }
 
         $this->view->title        = $this->lang->doc->template;
-        $this->view->menu         = $menu;
-        $this->view->scope        = $scope;
+        $this->view->libID        = $libID;
         $this->view->users        = $this->loadModel('user')->getPairs('noclosed,noletter');
         $this->view->templateList = $templateList;
         $this->view->docID        = $docID;

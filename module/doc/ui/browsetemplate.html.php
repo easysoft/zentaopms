@@ -11,7 +11,6 @@ declare(strict_types=1);
 namespace zin;
 
 $spaceID = 1;
-$libID   = $menu['id'];
 $data    = array('spaceID' => $spaceID, 'docs' => array_values($templateList));
 $data['spaces'][] = array('name' => $lang->doc->template, 'id' => $spaceID);
 foreach($config->doc->templateMenu as $item) $data['libs'][] = $item + array('space' => $spaceID);
@@ -44,6 +43,8 @@ $langData['editTemplate']   = $lang->docTemplate->edit;
 $langData['deleteTemplate'] = $lang->docTemplate->delete;
 $langData['confirmDelete']  = $lang->docTemplate->confirmDelete;
 
+$viewModeUrl = createLink('doc', 'browsetemplate', 'libID={libID}&type={filterType}&docID={docID}&orderBy={orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}');
+
 docApp
 (
     set::data($data),
@@ -58,6 +59,7 @@ docApp
     set::userMap($users),
     set::spaceIcon('home'),
     set::langData($langData),
+    set::viewModeUrl($viewModeUrl),
     set::pager(array('recTotal' => count($templateList), 'recPerPage' => $recPerPage, 'page' => $pageID)),
     set('$options', jsRaw('window.setDocAppOptions'))
 );
