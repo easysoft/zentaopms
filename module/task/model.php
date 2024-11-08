@@ -2651,13 +2651,10 @@ class taskModel extends model
     {
         foreach($tasks as &$task)
         {
-            $task = $this->processTask($task);
+            $task = $this->processTask($task, false);
             if(!empty($task->children))
             {
-                foreach($task->children as &$child)
-                {
-                    $child = $this->processTask($child);
-                }
+                foreach($task->children as &$child) $child = $this->processTask($child, false);
             }
         }
 

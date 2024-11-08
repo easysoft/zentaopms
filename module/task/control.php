@@ -798,8 +798,8 @@ class task extends control
             {
                 if(!in_array($task->status, $this->config->task->unfinishedStatus)) continue;
 
-                $task = $this->taskZen->buildTaskForCancel($task);
-                $this->task->cancel($task);
+                $taskData = $this->taskZen->buildTaskForCancel($task);
+                $this->task->cancel($task, $taskData);
             }
         }
 
@@ -840,7 +840,7 @@ class task extends control
                 }
 
                 /* Skip parent task when batch close task. */
-                if($task->parent == '-1')
+                if($task->isParent)
                 {
                     $parentTasks[$taskID] = $taskID;
                     continue;
@@ -967,7 +967,7 @@ class task extends control
     public function delete(int $executionID, int $taskID, string $from = '')
     {
         $task = $this->task->getByID($taskID);
-        if($task->parent == '-1') return $this->send(array('result' => 'fail', 'message' => $this->lang->task->cannotDeleteParent));
+        if($task->isParent) return $this->send(array('result' => 'fail', 'message' => $this->lang->task->cannotDeleteParent));
 
         $this->task->delete(TABLE_TASK, $taskID);
         if($task->parent > 0)

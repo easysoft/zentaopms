@@ -65,7 +65,7 @@
             <?php endif;?>
           </td>
         </tr>
-        <?php if($task->parent != '-1'):?>
+        <?php if($task->isParent == '0'):?>
         <tr>
           <th><?php echo $lang->task->left;?></th>
           <td>
