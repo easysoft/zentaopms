@@ -88,6 +88,11 @@ $lang->docTemplate->create = 'Create Template';
 $lang->docTemplate->edit   = 'Edit Template';
 $lang->docTemplate->delete = 'Delete Template';
 
+$lang->docTemplate->addModule    = 'Add Template type';
+$lang->docTemplate->addSubModule = 'Add Sub Template type';
+$lang->docTemplate->editModule   = 'Edit Template type';
+$lang->docTemplate->deleteModule = 'Delete Template type';
+
 $lang->docTemplate->scopes = array();
 $lang->docTemplate->scopes['product']   = 'Product';
 $lang->docTemplate->scopes['project']   = 'Project';
