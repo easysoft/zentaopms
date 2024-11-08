@@ -62,12 +62,6 @@ class taskModel extends model
         if($task->left != $oldTask->left) $this->loadModel('program')->refreshProjectStats($oldTask->project);
 
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
-        if($oldTask->isParent)
-        {
-            unset($task->left);
-            unset($task->id);
-            $this->taskTao->updateChildrenByParent($taskID, $task, 'Activated', $comment);
-        }
         if($oldTask->story)  $this->loadModel('story')->setStage($oldTask->story);
 
         $this->updateKanbanCell($taskID, $drag, $oldTask->execution);
@@ -3299,6 +3293,8 @@ class taskModel extends model
                 $this->dao->update(TABLE_TASK)->set('parent')->eq('0')->set('isParent')->eq(0)->set('path')->eq(",{$parentID},")->where('id')->eq($parentID)->exec();
                 continue;
             }
+            /* 只有子任务是进行中和已完成的时候才更新父任务的状态。*/
+            /* Update parent task status only child status is 'doing' or 'done'. */
             if(!in_array($status, array('doing', 'done'))) continue;
             if($parentTask->status == $status) continue;
 

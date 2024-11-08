@@ -939,8 +939,7 @@ class taskTao extends taskModel
     {
         foreach($members as $account)
         {
-            $this->dao->update(TABLE_EFFORT)->set('`left`')->eq(0)
-                ->where('account')->eq($account)
+            $this->dao->update(TABLE_EFFORT)->set('`left`')->eq(0)->where('account')->eq($account)
                 ->andWhere('objectID')->eq($taskID)
                 ->andWhere('objectType')->eq('task')
                 ->orderBy('date_desc,id_desc')
@@ -949,34 +948,6 @@ class taskTao extends taskModel
         }
 
         return !dao::isError();
-    }
-
-    /**
-     * 通过父任务更新子任务。
-     * Update children task by parent task.
-     *
-     * @param  int       $parentID
-     * @param  object    $data
-     * @param  string    $action Activated
-     * @param  string    $comment
-     * @access protected
-     * @return void
-     */
-    protected function updateChildrenByParent(int $parentID, object $data, string $action, string $comment): void
-    {
-        $oldChildrenTasks = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($parentID)->fetchAll('id');
-        $this->dao->update(TABLE_TASK)->data($data)->autoCheck()->where('parent')->eq($parentID)->exec();
-        $this->computeWorkingHours($parentID);
-
-        if(!dao::isError() && count($oldChildrenTasks) > 0)
-        {
-            $this->loadModel('action');
-            foreach($oldChildrenTasks as $oldChildrenTask)
-            {
-                $actionID = $this->action->create('task', $oldChildrenTask->id, $action, $comment);
-                $this->action->logHistory($actionID, common::createChanges($oldChildrenTask, $data));
-            }
-        }
     }
 
     /**

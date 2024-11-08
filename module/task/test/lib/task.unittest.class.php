@@ -1946,31 +1946,6 @@ class taskTest
     }
 
     /**
-     * 通过父任务更新子任务。
-     * Update children task by parent task.
-     *
-     * @param  int    $parentID
-     * @param  string $action
-     * @param  string $comment
-     * @access public
-     * @return object|false
-     */
-    public function updateChildrenByParentTest(int $parentID, string $action, string $comment): object|false
-    {
-        $task = $this->objectModel->getByID($parentID);
-
-        $data = new stdclass();
-        $data->name   = $task->name;
-        $data->pri    = $task->pri;
-        $data->status = $task->status;
-
-        $this->objectModel->updateChildrenByParent($parentID, $data, $action, $comment);
-
-        $childID = $this->objectModel->dao->select('id')->from(TABLE_TASK)->where('parent')->eq($parentID)->fetch('id');
-        return $this->objectModel->dao->select('action')->from(TABLE_ACTION)->where('objectType')->eq('task')->andWhere('objectID')->eq($childID)->orderBy('id_desc')->fetch();
-    }
-
-    /**
      * 取消父任务更新子任务。。
      * Update a child task when cancel its parent task.
      *
