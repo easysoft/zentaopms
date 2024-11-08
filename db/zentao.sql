@@ -15719,6 +15719,7 @@ CREATE TABLE `zt_charter` (
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `charterFiles` text NULL,
+  `completionFiles` text NULL,
   `closedBy` char(30) NOT NULL DEFAULT '',
   `closedDate` datetime NULL,
   `closedReason` varchar(255) NOT NULL DEFAULT '',
