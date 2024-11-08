@@ -33,6 +33,23 @@ function getTableOptions(options, info)
     return options;
 }
 
+const customRenders =
+{
+    /**
+     * 定义 API 文档列表工具栏渲染。
+     * Define the API doc list toolbar render.
+     */
+    toolbar: function()
+    {
+        if(this.mode === 'list')
+        {
+            const items = [];
+            items.push({text: getDocAppLang('createTemplate'), icon: 'plus', btnType: 'primary', 'data-toggle': 'modal', 'data-size': 'lg', url: $.createLink('doc', 'createTemplate')});
+            return {component: 'toolbar', props: {items: items}};
+        }
+    }
+}
+
 /**
  * 重写文档应用的配置选项方法。
  * Override the method to set the doc app options.
@@ -43,7 +60,8 @@ window.setDocAppOptions = function(_, options) // Override the method.
     options = window._setDocAppOptions(_, options);
     return $.extend(options,
     {
-        getTableOptions : getTableOptions
+        getTableOptions : getTableOptions,
+        customRenders   : customRenders
     });
 };
 

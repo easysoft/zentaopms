@@ -39,6 +39,7 @@ $langData['tableCols']      = $tableCols;
 $langData['create']         = $lang->docTemplate->create;
 $langData['edit']           = $lang->docTemplate->edit;
 $langData['delete']         = $lang->docTemplate->delete;
+$langData['createTemplate'] = $lang->docTemplate->create;
 $langData['editTemplate']   = $lang->docTemplate->edit;
 $langData['deleteTemplate'] = $lang->docTemplate->delete;
 $langData['confirmDelete']  = $lang->docTemplate->confirmDelete;
@@ -57,7 +58,8 @@ docApp
     set::userMap($users),
     set::spaceIcon('home'),
     set::langData($langData),
-    set::pager(array('recTotal' => count($templateList), 'recPerPage' => $recPerPage, 'page' => $pageID))
+    set::pager(array('recTotal' => count($templateList), 'recPerPage' => $recPerPage, 'page' => $pageID)),
+    set('$options', jsRaw('window.setDocAppOptions'))
 );
 
 render();
