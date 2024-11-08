@@ -61,6 +61,43 @@ const customRenders =
 }
 
 /**
+ * 定义文档模板各个视图和 UI 元素的上的操作方法。
+ * Define the operation methods on the views and UI elements of the doc template.
+ */
+const actionsMap =
+{
+    /**
+     * 定义分组的操作按钮。
+     * Define the actions on the type group.
+     */
+    module: function(info)
+    {
+        const items  = [];
+        const module = info.data;
+
+        items.push({text: getDocAppLang('addModule'), command: `addModule/${module.lib}`});
+        if(module.grade == 1) items.push({text: getDocAppLang('addSubModule'), command: `addSubModule/${module.id}`});
+        items.push({text: getDocAppLang('editModule'), command: `editModule/${module.id}`});
+        items.push({text: getDocAppLang('deleteModule'), command: `deleteModule/${module.id}`});
+
+        if(info.ui === 'sidebar')
+        {
+            return [
+                items.length ? {icon: 'ellipsis-v', caret: false, placement: 'bottom-end', size: 'xs', items: items} : null,
+            ];
+        }
+
+        return items;
+    },
+};
+
+function getActions(type, info)
+{
+    const builder = actionsMap[type];
+    if(builder) return builder.call(this, info);
+}
+
+/**
  * 重写文档应用的配置选项方法。
  * Override the method to set the doc app options.
  */
@@ -71,6 +108,7 @@ window.setDocAppOptions = function(_, options) // Override the method.
     return $.extend(options,
     {
         getTableOptions : getTableOptions,
+        getActions      : getActions,
         customRenders   : customRenders
     });
 };
