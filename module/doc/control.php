@@ -575,6 +575,26 @@ class doc extends control
     }
 
     /**
+     * 删除一个文档模板。
+     * Delete a doctemplate.
+     *
+     * @param  int    $templateID
+     * @access public
+     * @return void
+     */
+    public function deleteTemplate(int $templateID)
+    {
+        $this->doc->delete(TABLE_DOC, $templateID);
+
+        /* Delete template files. */
+        $template = $this->doc->getByID($templateID);
+        if($template->files) $this->doc->deleteFiles(array_keys($template->files));
+
+        if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        return $this->sendSuccess(array());
+    }
+
+    /**
      * 收藏一个文档。
      * Collect a doc.
      *
