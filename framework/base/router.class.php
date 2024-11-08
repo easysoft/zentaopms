@@ -3226,6 +3226,9 @@ class baseRouter
      */
     public function shutdown()
     {
+        /* 如果开启了缓存则关闭缓存连接，主要用于 Redis 等缓存服务。Close the cache connection if it's open. */
+        if(!empty($this->cache)) $this->cache->close();
+
         /* 如果debug模式开启，保存sql语句(If debug on, save sql queries) */
         if(!empty($this->config->debug)) $this->saveSQL();
 

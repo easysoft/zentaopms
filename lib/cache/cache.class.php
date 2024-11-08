@@ -894,6 +894,18 @@ class cache
     }
 
     /**
+     * 关闭缓存连接。
+     * Close cache connection.
+     *
+     * @access public
+     * @return void
+     */
+    public function close()
+    {
+        if(method_exists($this->cache, 'close')) $this->cache->close();
+    }
+
+    /**
      * 获取内存使用情况。
      * Get memory usage.
      *

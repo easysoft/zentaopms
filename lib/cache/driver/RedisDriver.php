@@ -216,6 +216,18 @@ class RedisDriver implements CacheInterface
     }
 
     /**
+     * 关闭 Redis 连接。
+     * Close the Redis connection.
+     *
+     * @access public
+     * @return bool
+     */
+    public function close()
+    {
+        return $this->redis->close();
+    }
+
+    /**
      * 获取内存使用情况。
      * Get memory usage.
      *
