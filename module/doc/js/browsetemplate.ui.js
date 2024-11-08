@@ -33,10 +33,7 @@ function getTableOptions(options, info)
             $.each(col.actionsMap, (key, value) =>
             {
                 if(typeof actionHints[key] === 'string') value.hint = actionHints[key];
-                if(key == 'edit')   value.command = 'editTemplate/{id}';
-                if(key == 'delete') value.command = 'deleteTemplate/{id}';
             });
-
         }
     });
 

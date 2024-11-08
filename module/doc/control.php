@@ -335,8 +335,8 @@ class doc extends control
         $templateList = $this->doc->getDocTemplateList($type, $orderBy, $pager);
         foreach($templateList as $template)
         {
-            $template->originLib   = $template->lib;
-            $template->lib         = $libID;
+            $template->originLib = $template->lib;
+            $template->lib       = $libID;
         }
 
         $this->view->title        = $this->lang->doc->template;
