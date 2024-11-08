@@ -3640,7 +3640,7 @@ class docModel extends model
                 $module->parent = 0;
                 $module->path   = '';
                 $module->grade  = 1;
-                $module->order  = ++ $moduleOrder;
+                $module->order  = $moduleOrder;
                 $module->type   = 'docTemplate';
                 $module->short  = ucfirst($scope) . ' ' . $moduleKey;
                 $this->dao->insert(TABLE_MODULE)->data($module)->exec();
@@ -3649,6 +3649,7 @@ class docModel extends model
                 $moduleID = $this->dao->lastInsertID();
                 $this->dao->update(TABLE_MODULE)->set('path')->eq(",{$moduleID},")->where('id')->eq($moduleID)->exec();
 
+                $moduleOrder = $moduleOrder + 10;
                 $subModuleOrder = 10;
                 foreach($subModuleList as $subModuleKey => $subModuleCode)
                 {
@@ -3658,7 +3659,7 @@ class docModel extends model
                     $subModule->parent = $moduleID;
                     $subModule->path   = '';
                     $subModule->grade  = 2;
-                    $subModule->order  = ++ $subModuleOrder;
+                    $subModule->order  = $subModuleOrder;
                     $subModule->type   = 'docTemplate';
                     $subModule->short  = $subModuleCode;
                     $this->dao->insert(TABLE_MODULE)->data($subModule)->exec();
@@ -3666,6 +3667,8 @@ class docModel extends model
 
                     $subModuleID = $this->dao->lastInsertID();
                     $this->dao->update(TABLE_MODULE)->set('path')->eq(",{$moduleID},{$subModuleID},")->where('id')->eq($subModuleID)->exec();
+
+                    $subModuleOrder = $subModuleOrder + 10;
                 }
             }
         }
