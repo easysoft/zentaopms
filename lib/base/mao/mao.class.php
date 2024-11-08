@@ -226,30 +226,6 @@ class baseMao
     }
 
     /**
-     * 开始事务。
-     * Begin Transaction
-     *
-     * @access public
-     * @return void
-     */
-    public function begin()
-    {
-        $this->app->redis->multi();
-    }
-
-    /**
-     * 提交事务。
-     * Commits a transaction.
-     *
-     * @access public
-     * @return void
-     */
-    public function commit()
-    {
-        $this->app->redis->exec();
-    }
-
-    /**
      * select方法，调用sql::select()。
      * The select method, call sql::select().
      *
