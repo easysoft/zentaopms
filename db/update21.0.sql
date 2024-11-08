@@ -12,7 +12,7 @@ ALTER TABLE `zt_deploystep` ADD `parent` mediumint(8) unsigned NOT NULL DEFAULT 
 
 DROP TABLE IF EXISTS `zt_deployscope`;
 
-ALTER TABLE `zt_deploy` ADD `host` mediumint(8) unsigned NOT NULL DEFAULT 0 AFTER `name`;
+ALTER TABLE `zt_deploy` ADD `host` varchar(255) NOT NULL DEFAULT '' AFTER `name`;
 
 ALTER TABLE `zt_deployproduct` DROP COLUMN `package`;
 
