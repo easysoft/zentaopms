@@ -831,12 +831,12 @@ class cache
         if($event == 'update' || $event == 'delete')
         {
             /* 获取 WHERE 子句的内容。Get the content of WHERE clause. */
-            $whereLen  = strlen(DAO::WHERE);
-            $wherePOS  = strrpos($sql, DAO::WHERE);
-            $groupPOS  = strrpos($sql, DAO::GROUPBY);
-            $havingPOS = strrpos($sql, DAO::HAVING);
-            $orderPOS  = strrpos($sql, DAO::ORDERBY);
-            $limitPOS  = strrpos($sql, DAO::LIMIT);
+            $whereLen  = strlen(\DAO::WHERE);
+            $wherePOS  = strrpos($sql, \DAO::WHERE);
+            $groupPOS  = strrpos($sql, \DAO::GROUPBY);
+            $havingPOS = strrpos($sql, \DAO::HAVING);
+            $orderPOS  = strrpos($sql, \DAO::ORDERBY);
+            $limitPOS  = strrpos($sql, \DAO::LIMIT);
             $splitPOS  = $orderPOS  ? $orderPOS  : $limitPOS;
             $splitPOS  = $havingPOS ? $havingPOS : $splitPOS;
             $splitPOS  = $groupPOS  ? $groupPOS  : $splitPOS;
