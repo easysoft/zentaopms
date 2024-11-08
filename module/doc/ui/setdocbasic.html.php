@@ -10,6 +10,12 @@ declare(strict_types=1);
  */
 namespace zin;
 
+if($objectType == 'template')
+{
+    include 'setdocbasic.template.html.php';
+    return;
+}
+
 formPanel
 (
     setID('setDocBasicForm'),

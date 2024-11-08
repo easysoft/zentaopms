@@ -52,8 +52,8 @@ const customRenders =
         {
             const items = [];
             const {libID, filterType, docID, orderBy, pager, mode} = this.location;
-            const {recTotal, recPerPage, pageID} = pager;
-            const url = $.createLink('doc', 'browseTemplate', `libID=${libID}&filterType=${filterType}&docID=${docID}&orderBy=${orderBy}&recTotal=${recTotal}&recPerPage=${recPerPage}&pageID=${pageID}&mode=create`);
+            const {recTotal, recPerPage, page} = pager;
+            const url = $.createLink('doc', 'browseTemplate', `libID=${libID}&filterType=${filterType}&docID=${docID}&orderBy=${orderBy}&recTotal=${recTotal}&recPerPage=${recPerPage}&pageID=${page}&mode=create`);
             items.push({text: getDocAppLang('createTemplate'), icon: 'plus', btnType: 'primary', url: url});
             return {component: 'toolbar', props: {items: items}};
         }

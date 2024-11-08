@@ -3635,14 +3635,14 @@ class docModel extends model
             foreach($moduleList as $moduleKey => $subModuleList)
             {
                 $module = new stdclass();
-                $module->root   = $this->config->doc->templateMenu[$scope]['id'];
+                $module->root   = $scope;
                 $module->name   = $this->lang->docTemplate->moduleName[$moduleKey];
                 $module->parent = 0;
                 $module->path   = '';
                 $module->grade  = 1;
                 $module->order  = $moduleOrder;
                 $module->type   = 'docTemplate';
-                $module->short  = ucfirst($scope) . ' ' . $moduleKey;
+                $module->short  = $scope . ' ' . $moduleKey;
                 $this->dao->insert(TABLE_MODULE)->data($module)->exec();
                 if(dao::isError()) return false;
 
@@ -3654,7 +3654,7 @@ class docModel extends model
                 foreach($subModuleList as $subModuleKey => $subModuleCode)
                 {
                     $subModule = new stdclass();
-                    $subModule->root   = $this->config->doc->templateMenu[$scope]['id'];
+                    $subModule->root   = $scope;
                     $subModule->name   = $this->lang->docTemplate->moduleName[$subModuleKey];
                     $subModule->parent = $moduleID;
                     $subModule->path   = '';
