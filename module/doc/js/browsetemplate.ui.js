@@ -54,7 +54,10 @@ const customRenders =
         if(this.mode === 'list')
         {
             const items = [];
-            items.push({text: getDocAppLang('createTemplate'), icon: 'plus', btnType: 'primary', 'data-toggle': 'modal', 'data-size': 'lg', url: $.createLink('doc', 'createTemplate')});
+            const {libID, filterType, docID, orderBy, pager, mode} = this.location;
+            const {recTotal, recPerPage, pageID} = pager;
+            const url = $.createLink('doc', 'browseTemplate', `libID=${libID}&filterType=${filterType}&docID=${docID}&orderBy=${orderBy}&recTotal=${recTotal}&recPerPage=${recPerPage}&pageID=${pageID}&mode=create`);
+            items.push({text: getDocAppLang('createTemplate'), icon: 'plus', btnType: 'primary', url: url});
             return {component: 'toolbar', props: {items: items}};
         }
     }
@@ -146,5 +149,16 @@ $.extend(window.docAppCommands,
                 getDocApp().delete('doc', templateID);
             }
         })
+    },
+    saveNewDoc: function(_, args)
+    {
+        const docApp    = getDocApp();
+        const spaceType = docApp.spaceType;
+        const spaceID   = docApp.spaceID;
+        const libID     = docApp.libID;
+        const moduleID  = docApp.moduleID;
+        const url       = $.createLink('doc', 'setDocBasic', `objectType=template&objectID=${spaceID}&libID=${libID}&moduleID=${moduleID}&docID=0&isDraft=no`);
+        zui.Modal.open({url: url});
+        return new Promise((resolve) => {window.docBasicModalResolver = resolve;});
     }
 });

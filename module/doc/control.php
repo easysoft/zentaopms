@@ -325,7 +325,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function browseTemplate(int $libID = 0, string $type = 'all', int $docID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function browseTemplate(int $libID = 0, string $type = 'all', int $docID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = 'list')
     {
         if(!isset($this->config->doc->templateMenu[$libID])) $libID = 1;
 
@@ -347,6 +347,7 @@ class doc extends control
         $this->view->orderBy      = $orderBy;
         $this->view->recPerPage   = $recPerPage;
         $this->view->pageID       = $pageID;
+        $this->view->mode         = $mode;
         $this->display();
     }
 
@@ -1736,7 +1737,7 @@ class doc extends control
         if(empty($docID))
         {
             if(empty($objectID) && $lib) $objectID = $this->doc->getObjectIDByLib($lib);
-            if($lib) $objectType = $lib->type;
+            if($lib && $objectType != 'template') $objectType = $lib->type;
 
             $unclosed = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
             $libPairs = $this->doc->getLibs($objectType, "{$unclosed}", $libID, $objectID);
