@@ -2085,19 +2085,15 @@ class taskModel extends model
             $assignedTo = $teamList;
         }
 
+        if(empty($assignedTo) && empty($mailto)) return false;
+
         /* If the assignor is empty, consider the first one with the cc as the assignor. */
-        if(empty($assignedTo))
-        {
-            if(empty($mailto)) return false;
+        if(empty($assignedTo)) $assignedTo = array_shift($mailto);
 
-            $assignedTo = array_shift($mailto);
-        }
-        elseif(strtolower($assignedTo) == 'closed')
-        {
-            /* If the assignor is closed, treat the completion person as the assignor. */
-            $assignedTo = $task->finishedBy;
-        }
+        /* If the assignor is closed, treat the completion person as the assignor. */
+        if(strtolower($assignedTo) == 'closed') $assignedTo = $task->finishedBy;
 
+        /* If the child task is paused, closed or canceled, append the mailto from parent task. */
         if(in_array($action, array('paused', 'closed', 'canceled')) && $task->parent > 0)
         {
             $parentTasks = $this->dao->select('id,assignedTo,finishedBy,mailto')->from(TABLE_TASK)->where('id')->in($task->path)->fetchAll('id');
