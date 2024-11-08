@@ -356,7 +356,7 @@ class cache
 
         /* 获取新增的数据。Get the new data. */
         $object = $this->dao->select('*')->from($this->table)->where('id')->eq($objectID)->fetch();
-        if(!$object) return $this->log('Failed to fetch the new object. The sql is: ' . $this->dao->get(), __FILE__, __LINE__);
+        if(!$object) return $this->log('Failed to fetch new object. The sql is: ' . $this->dao->get(), __FILE__, __LINE__);
 
         /* 把新增的数据保存到缓存中。Save the new data to cache. */
         $rawCacheKey = $this->getRawCacheKey($code, $object->$field);
@@ -475,7 +475,7 @@ class cache
                 $key = $this->getResCacheKey($res->name);
                 foreach($res->fields as $field)
                 {
-                    if(!isset($object->$field)) return $this->log("The {$field} field does not exist in table {$this->table}.", __FILE__, __LINE__);
+                    if(!isset($object->$field)) return $this->log("Field {$field} does not exist in table {$this->table}.", __FILE__, __LINE__);
 
                     $key .= $this->connector . $object->$field;
                 }
@@ -594,7 +594,7 @@ class cache
      */
     public function fetch(string $table, int|string $id): object|bool
     {
-        if(!$this->checkTable($table)) return $this->log("The {$table} table is not set in the cache configuration", __FILE__, __LINE__);
+        if(!$this->checkTable($table)) return $this->log("Table {$table} is not set in the cache configuration", __FILE__, __LINE__);
 
         if(empty($table)) return $this->log('The table name is empty', __FILE__, __LINE__);
         if(empty($id))    return $this->log('The id is empty', __FILE__, __LINE__);
@@ -671,7 +671,7 @@ class cache
      */
     public function key($key, ...$args)
     {
-        if(empty($this->config->cache->keys[$key])) return $this->log("The {$key} key is not defined", __FILE__, __LINE__);
+        if(empty($this->config->cache->keys[$key])) return $this->log("Key {$key} is not defined", __FILE__, __LINE__);
 
         $cache = $this->config->cache->keys[$key];
         if(!empty($cache->fields) && !empty($args))
@@ -679,7 +679,7 @@ class cache
             $tableFields = $this->dao->descTable($cache->table);
             foreach($cache->fields as $index => $field)
             {
-                if(!isset($tableFields[$field])) return $this->log("The {$field} field does not exist in table {$cache->table}", __FILE__, __LINE__);
+                if(!isset($tableFields[$field])) return $this->log("Field {$field} does not exist in table {$cache->table}", __FILE__, __LINE__);
                 if(!isset($args[$index])) continue;
 
                 $tableField = $tableFields[$field];
@@ -785,7 +785,7 @@ class cache
     public function saveByLabel(string $label, $value)
     {
         if(empty($label)) return $this->log('The label is empty', __FILE__, __LINE__);
-        if(empty($this->labels[$label])) return $this->log("The {$label} label is not set", __FILE__, __LINE__);
+        if(empty($this->labels[$label])) return $this->log("Label {$label} does not exist", __FILE__, __LINE__);
 
         return $this->cache->set($this->labels[$label], $value);
     }
