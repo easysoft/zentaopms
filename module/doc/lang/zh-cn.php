@@ -83,7 +83,9 @@ $lang->docTemplate->editedBy         = '最后修改者';
 $lang->docTemplate->editedDate       = '最后修改时间';
 $lang->docTemplate->views            = '阅读次数';
 $lang->docTemplate->confirmDelete    = '您确定删除该文档模板吗？';
-$lang->docTemplate->scope            = '范围';
+$lang->docTemplate->scope            = '所属范围';
+$lang->docTemplate->module           = '模板类型';
+$lang->docTemplate->desc             = '模板简介';
 $lang->docTemplate->parentModule     = '上级类型';
 $lang->docTemplate->typeName         = '类型名称';
 $lang->docTemplate->editTemplateType = '编辑文档模板类型';
@@ -98,10 +100,10 @@ $lang->docTemplate->editModule   = '编辑类型';
 $lang->docTemplate->deleteModule = '删除类型';
 
 $lang->docTemplate->scopes = array();
-$lang->docTemplate->scopes['product']   = '产品';
-$lang->docTemplate->scopes['project']   = '项目';
-$lang->docTemplate->scopes['execution'] = '执行';
-$lang->docTemplate->scopes['personal']  = '个人';
+$lang->docTemplate->scopes[1] = '产品';
+$lang->docTemplate->scopes[2] = '项目';
+$lang->docTemplate->scopes[3] = '执行';
+$lang->docTemplate->scopes[4] = '个人';
 
 $lang->docTemplate->filterTypes = array();
 $lang->docTemplate->filterTypes[] = array('all', '全部');

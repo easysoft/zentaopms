@@ -84,6 +84,8 @@ $lang->docTemplate->editedDate       = 'Edited Date';
 $lang->docTemplate->views            = 'Views';
 $lang->docTemplate->confirmDelete    = 'Do you want to delete this document template?';
 $lang->docTemplate->scope            = 'Scope';
+$lang->docTemplate->module           = 'Type';
+$lang->docTemplate->desc             = 'Describe';
 $lang->docTemplate->parentModule     = 'Parent';
 $lang->docTemplate->typeName         = 'Type Name';
 $lang->docTemplate->editTemplateType = 'Edit template type';
@@ -98,10 +100,10 @@ $lang->docTemplate->editModule   = 'Edit Template type';
 $lang->docTemplate->deleteModule = 'Delete Template type';
 
 $lang->docTemplate->scopes = array();
-$lang->docTemplate->scopes['product']   = 'Product';
-$lang->docTemplate->scopes['project']   = 'Project';
-$lang->docTemplate->scopes['execution'] = 'Execution';
-$lang->docTemplate->scopes['personal']  = 'Personal';
+$lang->docTemplate->scopes[1] = 'Product';
+$lang->docTemplate->scopes[2] = 'Project';
+$lang->docTemplate->scopes[3] = 'Execution';
+$lang->docTemplate->scopes[4] = 'Personal';
 
 $lang->docTemplate->filterTypes = array();
 $lang->docTemplate->filterTypes[] = array('all', 'All');
