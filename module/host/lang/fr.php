@@ -169,12 +169,14 @@ $lang->host->diskTypeList['ssd'] = 'SSD';
 $lang->host->confirmDelete = 'Do you want to delete this host?';
 
 $lang->host->notice = new stdclass();
-$lang->host->notice->memory    = 'Memory size should be numbers！';
-$lang->host->notice->diskSize  = 'Disk size should be numbers！';
-$lang->host->notice->cpuNumber = 'CPU number should be numbers！';
-$lang->host->notice->cpuCores  = 'CPU cores should be numbers！';
-$lang->host->notice->int       = '『%s』should be a positive integer!';
-$lang->host->notice->ip        = '『%s』incorrect format!';
+$lang->host->notice->memory     = 'Memory size should be numbers！';
+$lang->host->notice->diskSize   = 'Disk size should be numbers！';
+$lang->host->notice->cpuNumber  = 'CPU number should be numbers！';
+$lang->host->notice->cpuCores   = 'CPU cores should be numbers！';
+$lang->host->notice->int        = '『%s』should be a positive integer!';
+$lang->host->notice->ip         = '『%s』incorrect format!';
+$lang->host->notice->nameLength = 'Host name length should not exceed 100 characters!';
+$lang->host->notice->descLength = 'Host description length should not exceed 255 characters!';
 
 $lang->host->CDlist = array();
 $lang->host->CDlist['manual'] = 'Manual';
