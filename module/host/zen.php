@@ -21,6 +21,16 @@ class hostZen extends host
      */
     protected function checkFormData(object $formData): bool
     {
+        if($formData->name && mb_strlen($formData->name) > 100)
+        {
+            dao::$errors['name'] = $this->lang->host->notice->nameLength;
+        }
+
+        if($formData->desc && mb_strlen($formData->desc) > 255)
+        {
+            dao::$errors['desc'] = $this->lang->host->notice->descLength;
+        }
+
         $ipFields = explode(',', $this->config->host->create->ipFields);
         foreach($ipFields as $field)
         {
