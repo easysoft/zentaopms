@@ -169,12 +169,14 @@ $lang->host->diskTypeList['ssd'] = '固态硬盘';
 $lang->host->confirmDelete  = '是否删除该主机记录？';
 
 $lang->host->notice = new stdclass();
-$lang->host->notice->memory    = '内存大小只能为数字！';
-$lang->host->notice->diskSize  = '硬盘容量只能为数字！';
-$lang->host->notice->cpuNumber = 'CPU数量只能为数字！';
-$lang->host->notice->cpuCores  = 'CPU核心数只能为数字！';
-$lang->host->notice->int       = '『%s』应当是正整数！';
-$lang->host->notice->ip        = '『%s』格式不正确！';
+$lang->host->notice->memory     = '内存大小只能为数字！';
+$lang->host->notice->diskSize   = '硬盘容量只能为数字！';
+$lang->host->notice->cpuNumber  = 'CPU数量只能为数字！';
+$lang->host->notice->cpuCores   = 'CPU核心数只能为数字！';
+$lang->host->notice->int        = '『%s』应当是正整数！';
+$lang->host->notice->ip         = '『%s』格式不正确！';
+$lang->host->notice->nameLength = '主机名称长度不能超过100个字符！';
+$lang->host->notice->descLength = '主机描述长度不能超过255个字符！';
 
 $lang->host->CDlist = array();
 $lang->host->CDlist['manual'] = '手工';
