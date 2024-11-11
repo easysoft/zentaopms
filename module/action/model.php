@@ -249,6 +249,8 @@ class actionModel extends model
         $action         = $this->dao->select('objectType,objectID')->from(TABLE_ACTION)->where('id')->eq($history->action)->fetch();
         $objectType     = $action->objectType == 'story' ? $this->dao->select('type')->from(TABLE_STORY)->where('id')->eq($action->objectID)->fetch('type') : $action->objectType;
         $objectTypeList = array();
+        $history->old   = (string)$history->old;
+        $history->new   = (string)$history->new;
 
         if(!isset($objectTypeList[$objectType])) $this->app->loadLang($objectType);
         $objectTypeList[$objectType] = $objectType;
