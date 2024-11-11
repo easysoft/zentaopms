@@ -3704,7 +3704,7 @@ class docModel extends model
             {
                 $names[] = $modules[$id]->name;
             }
-            $module->name = join(' / ', $names);
+            $module->name = implode(' / ', $names);
         }
 
         return $modules;
@@ -3728,7 +3728,7 @@ class docModel extends model
             {
                 if($module->short == ucfirst($this->config->doc->scopeMaps[$scope]) . ' ' . $moduleKey) return true;
 
-                foreach($subModuleList as $subModuleKey => $subModuleCode)
+                foreach($subModuleList as $subModuleCode)
                 {
                     if($module->short == $subModuleCode) return true;
                 }
