@@ -15720,6 +15720,8 @@ CREATE TABLE `zt_charter` (
   `createdDate` datetime NULL,
   `charterFiles` text NULL,
   `completionFiles` text NULL,
+  `canceledFiles` text NULL,
+  `beforeCanceled` varchar(30) NOT NULL DEFAULT '',
   `closedBy` char(30) NOT NULL DEFAULT '',
   `closedDate` datetime NULL,
   `closedReason` varchar(255) NOT NULL DEFAULT '',
