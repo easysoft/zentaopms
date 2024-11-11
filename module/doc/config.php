@@ -122,6 +122,12 @@ $config->doc->quickMenu['createdby'] = array('id' => 2, 'name' => $lang->doc->my
 $config->doc->quickMenu['collect']   = array('id' => 3, 'name' => $lang->doc->myCollection);
 $config->doc->quickMenu['editedby']  = array('id' => 4, 'name' => $lang->doc->myEdited);
 
+$config->doc->scopeMaps = array();
+$config->doc->scopeMaps[1] = 'product';
+$config->doc->scopeMaps[2] = 'project';
+$config->doc->scopeMaps[3] = 'execution';
+$config->doc->scopeMaps[4] = 'personal';
+
 $config->doc->templateMenu = array();
 $config->doc->templateMenu[1] = array('id' => 1, 'name' => $lang->docTemplate->scopes[1]);
 $config->doc->templateMenu[2] = array('id' => 2, 'name' => $lang->docTemplate->scopes[2]);

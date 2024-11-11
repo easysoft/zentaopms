@@ -3642,7 +3642,7 @@ class docModel extends model
                 $module->grade  = 1;
                 $module->order  = $moduleOrder;
                 $module->type   = 'docTemplate';
-                $module->short  = $scope . ' ' . $moduleKey;
+                $module->short  = ucfirst($this->config->doc->scopeMaps[$scope]) . ' ' . $moduleKey;
                 $this->dao->insert(TABLE_MODULE)->data($module)->exec();
                 if(dao::isError()) return false;
 
@@ -3706,7 +3706,7 @@ class docModel extends model
         {
             foreach($moduleList as $moduleKey => $subModuleList)
             {
-                if($module->short == ucfirst($scope) . ' ' . $moduleKey) return true;
+                if($module->short == ucfirst($this->config->doc->scopeMaps[$scope]) . ' ' . $moduleKey) return true;
 
                 foreach($subModuleList as $subModuleKey => $subModuleCode)
                 {
