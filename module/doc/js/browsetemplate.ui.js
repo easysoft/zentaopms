@@ -98,6 +98,21 @@ function getActions(type, info)
 }
 
 /**
+ * 定义界面操作命令。
+ * Define the UI commands.
+ */
+const commands =
+{
+    editModule: function(_, args)
+    {
+        const docApp   = getDocApp();
+        const moduleID = args[0] || docApp.moduleID;
+        const url      = $.createLink('doc', 'editTemplateType', `moduleID=${moduleID}`);
+        zui.Modal.open({size: 'sm', url: url});
+    },
+};
+
+/**
  * 重写文档应用的配置选项方法。
  * Override the method to set the doc app options.
  */
@@ -107,6 +122,7 @@ window.setDocAppOptions = function(_, options) // Override the method.
     options = window._setDocAppOptions(_, options);
     return $.extend(options,
     {
+        commands        : commands,
         getTableOptions : getTableOptions,
         getActions      : getActions,
         customRenders   : customRenders
