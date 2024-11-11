@@ -37,3 +37,11 @@ $projectProduct = zenData('projectproduct');
 $projectProduct->project->range('1');
 $projectProduct->product->range('2');
 $projectProduct->gen(1);
+
+$tester = new projectTester();
+$tester->login();
+$projecturl['status']    = 'all';
+$projecturl['productID'] = 1;
+
+r($tester->linkProject($projecturl, '项目1')) && p('message,status') && e('产品关联项目成功,SUCCESS');//产品关联项目
+$tester->closeBrowser();
