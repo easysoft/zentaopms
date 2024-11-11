@@ -1520,7 +1520,7 @@ class docModel extends model
         if(strpos("url|word|ppt|excel", $doc->type) !== false) $requiredFields = trim(str_replace(",content,", ",", ",{$requiredFields},"), ',');
 
         $checkContent = strpos(",$requiredFields,", ',content,') !== false;
-        if($checkContent && strpos("url|word|ppt|excel|", $lib->type) === false)
+        if($checkContent)
         {
             $requiredFields = trim(str_replace(',content,', ',', ",$requiredFields,"), ',');
             if(empty($docContent->content)) return dao::$errors['content'] = sprintf($this->lang->error->notempty, $this->lang->doc->content);
@@ -1543,7 +1543,7 @@ class docModel extends model
         $files = $this->file->saveUpload('doc', $docID);
 
         $docContent->doc   = $docID;
-        $docContent->files = join(',', array_keys($files));
+        $docContent->files = implode(',', array_keys($files));
         $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
         $this->loadModel('score')->create('doc', 'createTemplate', $docID);
         return array('status' => 'new', 'id' => $docID, 'files' => $files, 'docType' => $doc->type, 'libID' => $doc->lib);
@@ -1583,7 +1583,7 @@ class docModel extends model
             $docContent->title   = $doc->title;
             $docContent->content = isset($doc->content) ? $doc->content : '';
             $docContent->files   = $oldDocContent->files;
-            if($files) $docContent->files .= ',' . join(',', array_keys($files));
+            if($files) $docContent->files .= ',' . implode(',', array_keys($files));
             $docContent->files = trim($docContent->files, ',');
             if(isset($doc->digest)) $docContent->digest = $doc->digest;
 
