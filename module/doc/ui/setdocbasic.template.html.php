@@ -10,6 +10,9 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$modules = $this->doc->getTemplateModules(false, $libID);
+$modules = array_column($modules, 'name', 'id');
+
 formPanel
 (
     setID('setDocBasicForm'),
@@ -28,8 +31,13 @@ formPanel
     ),
     formGroup
     (
-        set::width('1/2'),
         set::label($lang->docTemplate->module),
-        picker(set::name('module'), set::items(array()), set::value($moduleID), set::required(true))
+        set::required(true),
+        picker(set::name('module'), set::items($modules), set::value($moduleID), set::required(true))
+    ),
+    formGroup
+    (
+        set::label($lang->docTemplate->desc),
+        textarea(set::name('desc'), set::value(''), set::rows(3))
     )
 );

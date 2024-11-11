@@ -3679,15 +3679,35 @@ class docModel extends model
      * 获取文档模板类型的模块。
      * Get modules of doc template type.
      *
+     * @param  bool       $onlyNode
+     * @param  string|int $libID
      * @access public
      * @return array
      */
-    public function getTemplateModules()
+    public function getTemplateModules($onlyNode = true, $libID = 'all')
     {
-        return $this->dao->select('*')->from(TABLE_MODULE)
+        $modules = $this->dao->select('*')->from(TABLE_MODULE)
             ->where('deleted')->eq('0')
             ->andWhere('type')->eq('docTemplate')
-            ->fetchAll();
+            ->beginIF($libID != 'all')->andWhere('root')->eq($libID)->fi()
+            ->fetchAll('id');
+
+        if($onlyNode) return array_values($modules);
+
+        foreach($modules as $module)
+        {
+            if($module->parent === 0) continue;
+            $path = explode(',', trim($module->path, ','));
+
+            $names = array();
+            foreach($path as $id)
+            {
+                $names[] = $modules[$id]->name;
+            }
+            $module->name = join(' / ', $names);
+        }
+
+        return $modules;
     }
 
     /**

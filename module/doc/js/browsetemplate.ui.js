@@ -40,6 +40,18 @@ function getTableOptions(options, info)
     return options;
 }
 
+/**
+ * 处理创建文档的操作请求，向服务器发送请求并返回创建的文档对象。
+ * Handle the create doc operation request, send a request to the server and return the created doc object.
+ */
+function handleCreateDoc(doc, spaceID, libID, moduleID)
+{
+    const url = $.createLink('doc', 'setDocBasic', `objectType=template&objectID=${spaceID}&libID=${libID}&moduleID=${moduleID}&docID=0&isDraft=no`);
+    zui.Modal.open({url: url});
+
+    return new Promise((resolve) => {window.docBasicModalResolver = resolve;});
+}
+
 const customRenders =
 {
     /**
@@ -117,6 +129,7 @@ window.setDocAppOptions = function(_, options) // Override the method.
     return $.extend(options,
     {
         commands        : commands,
+        onCreateDoc     : handleCreateDoc,
         getTableOptions : getTableOptions,
         customRenders   : customRenders
     });
@@ -155,16 +168,5 @@ $.extend(window.docAppCommands,
                 getDocApp().delete('doc', templateID);
             }
         })
-    },
-    saveNewDoc: function(_, args)
-    {
-        const docApp    = getDocApp();
-        const spaceType = docApp.spaceType;
-        const spaceID   = docApp.spaceID;
-        const libID     = docApp.libID;
-        const moduleID  = docApp.moduleID;
-        const url       = $.createLink('doc', 'setDocBasic', `objectType=template&objectID=${spaceID}&libID=${libID}&moduleID=${moduleID}&docID=0&isDraft=no`);
-        zui.Modal.open({url: url});
-        return new Promise((resolve) => {window.docBasicModalResolver = resolve;});
     }
 });
