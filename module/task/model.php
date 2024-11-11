@@ -2064,25 +2064,25 @@ class taskModel extends model
             $assignedTo = $teamList;
         }
 
-        if(empty($assignedTo) && empty($mailto)) return false;
-
-        /* If the assignor is empty, consider the first one with the cc as the assignor. */
-        if(empty($assignedTo)) $assignedTo = array_shift($mailto);
-
         /* If the assignor is closed, treat the completion person as the assignor. */
         if(strtolower($assignedTo) == 'closed') $assignedTo = $task->finishedBy;
 
         /* If the child task is paused, closed or canceled, append the mailto from parent task. */
         if(in_array($action, array('paused', 'closed', 'canceled')) && $task->parent > 0)
         {
-            $parentTasks = $this->dao->select('id,assignedTo,finishedBy,mailto')->from(TABLE_TASK)->where('id')->in($task->path)->fetchAll('id');
+            $parentTasks = $this->dao->select('id,assignedTo,finishedBy,mailto')->from(TABLE_TASK)->where('id')->in($task->path)->andWhere('id')->ne($task->id)->fetchAll('id');
             foreach($parentTasks as $parentID => $parentTask)
             {
                 $mailto[] = (strtolower($parentTask->assignedTo) == 'closed') ? $parentTask->finishedBy : $parentTask->assignedTo;
-                $mailto  += is_null($parentTask->mailto) ? array() : explode(',', trim($parentTask->mailto, ','));
+                $mailto   = array_merge($mailto, is_null($parentTask->mailto) ? array() : explode(',', trim($parentTask->mailto, ',')));
             }
         }
         $mailto = array_unique(array_filter(array_map(function($account) use($assignedTo){ return $account == $assignedTo ? '' : $account;}, $mailto)));
+
+        if(empty($assignedTo) && empty($mailto)) return false;
+
+        /* If the assignor is empty, consider the first one with the cc as the assignor. */
+        if(empty($assignedTo)) $assignedTo = array_shift($mailto);
 
         return array($assignedTo, implode(',', $mailto));
     }
