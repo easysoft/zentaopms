@@ -54,7 +54,7 @@ class hostModel extends model
         $modules = 0;
         if($browseType == 'bymodule' && $param) $modules = $this->loadModel('tree')->getAllChildId($param);
 
-        return $this->dao->select('*')->from(TABLE_HOST)
+        $hostList = $this->dao->select('*')->from(TABLE_HOST)
             ->where('deleted')->eq('0')
             ->andWhere('type')->eq('normal')
             ->beginIF($modules)->andWhere('`group`')->in($modules)->fi()
@@ -62,6 +62,9 @@ class hostModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
+        foreach($hostList as &$host) if(!$host->serverRoom) $host->serverRoom = '';
+
+        return $hostList;
     }
 
     /**
