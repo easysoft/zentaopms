@@ -1002,4 +1002,17 @@ class docZen extends doc
             $this->action->logHistory($actionID, $changes);
         }
     }
+
+    /**
+     * 在创建版本类型后的返回。
+     * Return after create a template type.
+     *
+     * @access public
+     * @return string
+     */
+    public function responseAfterAddTemplateType()
+    {
+        $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('doc', 'browseTemplate'));
+        return $this->send($response);
+    }
 }

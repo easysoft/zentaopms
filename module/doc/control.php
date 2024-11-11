@@ -362,6 +362,21 @@ class doc extends control
     {
         $moduleList = $this->doc->getTemplateModules(true, $scope, '1');
 
+        if(!empty($_POST))
+        {
+            $moduleData = form::data($this->config->doc->form->addTemplateType)
+                ->setDefault('type', 'docTemplate')
+                ->setDefault('path', '')
+                ->get();
+            $moduleData->grade = $moduleData->parent === 0 ? 1 : 2;
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $moduleID = $this->doc->addTemplateType($moduleData);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            return $this->docZen->responseAfterAddTemplateType();
+        }
+
         $moduleItems = array();
         if($parentModule === 0)
         {
@@ -370,6 +385,7 @@ class doc extends control
         else
         {
             foreach($moduleList as $module) $moduleItems[] = array('value' => $module->id, 'text' => '/' . $module->name);
+            $moduleItems[] = array('value' => 0, 'text' => '/');
         }
 
         $this->view->scope        = $scope;
