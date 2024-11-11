@@ -64,7 +64,7 @@ const customRenders =
  * 定义文档模板各个视图和 UI 元素的上的操作方法。
  * Define the operation methods on the views and UI elements of the doc template.
  */
-const actionsMap =
+$.extend(window.docAppActions,
 {
     /**
      * 定义分组的操作按钮。
@@ -89,13 +89,7 @@ const actionsMap =
 
         return items;
     },
-};
-
-function getActions(type, info)
-{
-    const builder = actionsMap[type];
-    if(builder) return builder.call(this, info);
-}
+});
 
 /**
  * 定义界面操作命令。
@@ -124,7 +118,6 @@ window.setDocAppOptions = function(_, options) // Override the method.
     {
         commands        : commands,
         getTableOptions : getTableOptions,
-        getActions      : getActions,
         customRenders   : customRenders
     });
 };
