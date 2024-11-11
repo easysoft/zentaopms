@@ -23,6 +23,15 @@ class projectTester extends tester
             ? $this->success($tabName . '标签下项目数显示正确')
             : $this->failed($tabName . '标签下项目数显示不正确');
     }
+
+    /*
+     * 关联项目
+     * link project
+     *
+     * @param $projecturl url
+     * @param $expectedProject 项目名称
+     * @return mixed
+     */
     public function linkProject($projecturl, $expectedProject)
     {
         $projectPage = $this->initForm('product', 'project', $projecturl, 'appIframe-product');
