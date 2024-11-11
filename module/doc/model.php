@@ -3718,6 +3718,25 @@ class docModel extends model
      * @access public
      * @return bool
      */
+    public function getScopeTemplates()
+    {
+        $scopeTemplates = array();
+        foreach($this->lang->docTemplate->scopes as $scopeID => $scopeName)
+        {
+            $scopeTemplates[$scopeID] = array();
+        }
+
+        return $scopeTemplates;
+    }
+
+    /**
+     * 判断一个模块是否是内置的文档模板类型。
+     * Judge whether a module is builtin template type.
+     *
+     * @param  object $module
+     * @access public
+     * @return bool
+     */
     public function isBuiltinTemplateModule($module)
     {
         if(!$module->short || $module->type != 'docTemplate') return false;
