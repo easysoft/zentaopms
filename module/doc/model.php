@@ -3689,4 +3689,32 @@ class docModel extends model
             ->andWhere('type')->eq('docTemplate')
             ->fetchAll();
     }
+
+    /**
+     * 判断一个模块是否是内置的文档模板类型。
+     * Judge whether a module is builtin template type.
+     *
+     * @param  object $module
+     * @access public
+     * @return bool
+     */
+    public function isBuiltinTemplateModule($module)
+    {
+        if(!$module->short || $module->type != 'docTemplate') return false;
+
+        foreach($this->config->doc->templateModule as $scope => $moduleList)
+        {
+            foreach($moduleList as $moduleKey => $subModuleList)
+            {
+                if($module->short == ucfirst($scope) . ' ' . $moduleKey) return true;
+
+                foreach($subModuleList as $subModuleKey => $subModuleCode)
+                {
+                    if($module->short == $subModuleCode) return true;
+                }
+            }
+        }
+
+        return false;
+    }
 }
