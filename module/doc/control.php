@@ -350,6 +350,20 @@ class doc extends control
     }
 
     /**
+     * 创建一个模板类型。
+     * Add a template type.
+     *
+     * @param  int    $parentModule
+     * @access public
+     * @return void
+     */
+    public function addTemplateType(int $parentModule)
+    {
+        $this->view->parentModule = $parentModule;
+        $this->display();
+    }
+
+    /**
      * 编辑一个模板类型。
      * Edit a template type.
      *
