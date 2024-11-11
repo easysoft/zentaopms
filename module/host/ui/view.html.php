@@ -16,7 +16,7 @@ detailHeader
     isAjaxRequest('modal') ? to::prefix() : '',
     to::title(
         entityLabel(
-            set(array('entityID' => $host->id, 'level' => 1, 'text' => $host->name))
+            set(array('entityID' => $host->id, 'level' => 1, 'text' => $host->name, 'className' => 'clip', 'title' => $host->name))
         )
     )
 );
@@ -71,9 +71,9 @@ detailBody
             h::tr
             (
                 h::th($lang->host->intranet),
-                h::td($host->intranet),
+                h::td($host->intranet, set::title($host->intranet)),
                 h::th($lang->host->extranet),
-                h::td($host->extranet)
+                h::td($host->extranet, set::title($host->extranet))
             ),
             h::tr
             (
