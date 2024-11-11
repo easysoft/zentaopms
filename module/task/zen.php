@@ -1802,12 +1802,11 @@ class taskZen extends task
      * The information return after process the batch close task.
      *
      * @param  array     $skipTasks
-     * @param  array     $parentTasks
      * @param  string    $confirm       yes|no
      * @access protected
      * @return array
      */
-    protected function responseAfterBatchClose(array $skipTasks, array $parentTasks, string $confirm): array
+    protected function responseAfterBatchClose(array $skipTasks, string $confirm): array
     {
         if(!empty($skipTasks) && $confirm == 'no')
         {
@@ -1815,12 +1814,6 @@ class taskZen extends task
             $confirmURL = $this->createLink('task', 'batchClose', "confirm=yes");
             $this->session->set('batchCloseTaskIDList', $skipTasks, 'task');
             return array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->task->error->skipClose, $skipTasks), 'confirmed' => $confirmURL));
-        }
-
-        if(!empty($parentTasks))
-        {
-            $parentTasks = implode(',', $parentTasks);
-            return array('result' => 'success', 'load' => true, 'message' => sprintf($this->lang->task->error->closeParent, $parentTasks));
         }
 
         return array('result' => 'success', 'load' => true);

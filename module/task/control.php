@@ -790,13 +790,13 @@ class task extends control
      */
     public function batchCancel()
     {
-        if($this->post->taskIdList)
+        $taskIdList = $this->post->taskIdList ? array_unique($this->post->taskIdList) : array();
+        if($taskIdList) $taskIdList = array_filter(array_unique($taskIdList));
+        if($taskIdList)
         {
-            $taskIdList = array_unique($this->post->taskIdList);
-
-            $tasks = $this->task->getByIdList($taskIdList);
-            foreach($tasks as $task)
+            foreach($taskIdList as $taskID)
             {
+                $task = $this->task->fetchById((int)$taskID);
                 if(!in_array($task->status, $this->config->task->unfinishedStatus)) continue;
 
                 $taskData = $this->taskZen->buildTaskForCancel($task);
@@ -817,9 +817,8 @@ class task extends control
      */
     public function batchClose(string $confirm = 'no')
     {
-        $skipTasks      = array();
-        $parentTasks    = array();
-        $taskIdList     = $this->post->taskIdList ? array_unique($this->post->taskIdList) : array();
+        $skipTasks  = array();
+        $taskIdList = $this->post->taskIdList ? array_unique($this->post->taskIdList) : array();
         if(!empty($taskIdList) || $confirm == 'yes')
         {
             if(!isset($_POST['taskIdList']) && !empty($_SESSION['batchCloseTaskIDList']))
@@ -827,23 +826,16 @@ class task extends control
                 $taskIdList = explode(',', $this->session->batchCloseTaskIDList);
                 unset($_SESSION['batchCloseTaskIDList']);
             }
-            if($taskIdList) $taskIdList = array_unique($taskIdList);
+            if($taskIdList) $taskIdList = array_filter(array_unique($taskIdList));
 
-            $tasks = $this->task->getByIdList($taskIdList);
-            foreach($tasks as $taskID => $task)
+            foreach($taskIdList as $taskID)
             {
+                $task = $this->task->fetchById((int)$taskID);
                 if($task->status == 'closed') continue;
 
                 if($confirm == 'no' && !in_array($task->status, array('done', 'cancel')))
                 {
                     $skipTasks[$taskID] = $taskID;
-                    continue;
-                }
-
-                /* Skip parent task when batch close task. */
-                if($task->isParent)
-                {
-                    $parentTasks[$taskID] = $taskID;
                     continue;
                 }
 
@@ -854,7 +846,7 @@ class task extends control
             if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         }
 
-        return $this->send($this->taskZen->responseAfterBatchClose($skipTasks, $parentTasks, $confirm));
+        return $this->send($this->taskZen->responseAfterBatchClose($skipTasks, $confirm));
     }
 
     /**
