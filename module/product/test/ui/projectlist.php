@@ -37,3 +37,17 @@ $projectProduct = zenData('projectproduct');
 $projectProduct->project->range('1-10');
 $projectProduct->product->range('1{9},2');
 $projectProduct->gen(10);
+
+$tester = new projectTester();
+$tester->login();
+$projecturl['status']    = 'all';
+$projecturl['productID'] = 1;
+
+r($tester->switchTab($projecturl, 'all', '9'))        && p('message,status') && e('all标签下项目数显示正确,SUCCESS');//检查全部标签下项目数
+r($tester->switchTab($projecturl, 'unfinished', '2')) && p('message,status') && e('unfinished标签下项目数显示正确,SUCCESS');//检查未完成标签下项目数
+r($tester->switchTab($projecturl, 'waiting', '1'))    && p('message,status') && e('waiting标签下项目数显示正确,SUCCESS');//检查未开始标签下项目数
+r($tester->switchTab($projecturl, 'doing', '1'))      && p('message,status') && e('doing标签下项目数显示正确,SUCCESS');//检查进行中标签下项目数
+r($tester->switchTab($projecturl, 'suspended', '3'))  && p('message,status') && e('suspended标签下项目数显示正确,SUCCESS');//检查已挂起标签下项目数
+r($tester->switchTab($projecturl, 'closed', '4'))     && p('message,status') && e('closed标签下项目数显示正确,SUCCESS');//检查已关闭标签下项目数
+
+$tester->closeBrowser();
