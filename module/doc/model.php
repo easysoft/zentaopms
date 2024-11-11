@@ -3680,16 +3680,18 @@ class docModel extends model
      * Get modules of doc template type.
      *
      * @param  bool       $onlyNode
-     * @param  string|int $libID
+     * @param  string|int $root
+     * @param  string     $grade
      * @access public
      * @return array
      */
-    public function getTemplateModules($onlyNode = true, $libID = 'all')
+    public function getTemplateModules($onlyNode = true, $root = 'all', $grade = 'all')
     {
         $modules = $this->dao->select('*')->from(TABLE_MODULE)
             ->where('deleted')->eq('0')
             ->andWhere('type')->eq('docTemplate')
-            ->beginIF($libID != 'all')->andWhere('root')->eq($libID)->fi()
+            ->beginIF($root != 'all')->andWhere('root')->eq($root)->fi()
+            ->beginIF($grade != 'all')->andWhere('grade')->eq($grade)->fi()
             ->fetchAll('id');
 
         if($onlyNode) return array_values($modules);
@@ -3700,14 +3702,25 @@ class docModel extends model
             $path = explode(',', trim($module->path, ','));
 
             $names = array();
-            foreach($path as $id)
-            {
-                $names[] = $modules[$id]->name;
-            }
+            foreach($path as $id) $names[] = $modules[$id]->name;
             $module->name = implode(' / ', $names);
         }
 
         return $modules;
+    }
+
+    /**
+     * 获取范围数据。
+     * Get scope items.
+     *
+     * @access public
+     * @return array
+     */
+    public function getScopeItems()
+    {
+        $items = array();
+        foreach($this->config->doc->templateMenu as $scope) $items[] = array('value' => $scope['id'], 'text' => $scope['name']);
+        return $items;
     }
 
     /**

@@ -360,7 +360,7 @@ class doc extends control
      */
     public function addTemplateType(int $scope, int $parentModule)
     {
-        $moduleList = $this->doc->getTemplateModules($scope, '1');
+        $moduleList = $this->doc->getTemplateModules(true, $scope, '1');
 
         $moduleItems = array();
         if($parentModule == 0)
