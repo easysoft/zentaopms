@@ -351,7 +351,6 @@ class doc extends control
         $this->display();
     }
 
-
     /**
      * 编辑一个模板类型。
      * Edit a template type.

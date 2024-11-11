@@ -88,6 +88,7 @@ $lang->docTemplate->module           = '模板类型';
 $lang->docTemplate->desc             = '模板简介';
 $lang->docTemplate->parentModule     = '上级类型';
 $lang->docTemplate->typeName         = '类型名称';
+$lang->docTemplate->addTemplateType  = '添加文档模板类型';
 $lang->docTemplate->editTemplateType = '编辑文档模板类型';
 
 $lang->docTemplate->create = '创建模板';
