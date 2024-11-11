@@ -1190,8 +1190,12 @@ class myModel extends model
         $objectGroup = array();
         foreach($objectIdList as $objectType => $idList)
         {
-            if(!isset($flows[$objectType])) continue;
-            $table = zget($this->config->objectTables, $objectType, $flows[$objectType]->table);
+            $table = zget($this->config->objectTables, $objectType, '');
+            if(!in_array($objectType, $this->config->my->notFlowModules))
+            {
+                if(!isset($flows[$objectType])) continue;
+                if(!$table) $table = $flows[$objectType]->table;
+            }
             if(empty($table)) continue;
 
             $objectGroup[$objectType] = $this->dao->select('*')->from($table)->where('id')->in($idList)->fetchAll('id');
