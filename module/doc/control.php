@@ -393,6 +393,30 @@ class doc extends control
     }
 
     /**
+     * 创建一个文档模板。
+     * Create a doc template.
+     *
+     * @param  int $moduleID
+     * @access public
+     * @return void
+     */
+    public function createTemplate(int $moduleID = 0)
+    {
+        if(!empty($_POST))
+        {
+            helper::setcookie('lastDocModule', $moduleID);
+            $docData = form::data()
+                ->setDefault('addedBy', $this->app->user->account)
+                ->setDefault('editedBy', $this->app->user->account)
+                ->get();
+
+            $docResult = $this->doc->createTemplate($docData, $this->post->labels);
+            if(!$docResult || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->docZen->responseAfterCreateTemplate($docData->lib, $docResult);
+        }
+    }
+
+    /**
      * 上传文档。
      * Upload docs.
      *
