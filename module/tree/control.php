@@ -177,7 +177,7 @@ class tree extends control
         }
         elseif($type != 'chart')
         {
-            $this->view->optionMenu = $this->tree->getOptionMenu($module->root, $module->type, 0, (string)$module->branch, 'noMainBranch|nodeleted');
+            $this->view->optionMenu = $this->tree->getOptionMenu($module->root, $module->type, 0, (string)$module->branch, 'noMainBranch|nodeleted', $type == 'docTemplate' ? '1' : 'all');
         }
 
         if($type == 'doc')
