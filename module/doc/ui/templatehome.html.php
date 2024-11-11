@@ -17,6 +17,20 @@ foreach($lang->docTemplate->scopes as $scopeID => $scopeName)
     $scopeItems[] = div
     (
         setClass('doc-space-card ring rounded surface-light'),
+        div
+        (
+            setClass('row items-center justify-between gap-2 px-2.5 py-1 border-b'),
+            div
+            (
+                setClass('row items-center ml-2 flex-none'),
+                div
+                (
+                    setClass('min-w-0 flex-auto'),
+                    strong($scopeName),
+                    span(setClass('label ml-2 flex-none bg-white size-sm text-sm'), $lang->docTemplate->scopeLabel)
+                ),
+            ),
+        ),
     );
 }
 
