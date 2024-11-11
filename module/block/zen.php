@@ -1710,7 +1710,7 @@ class blockZen extends block
             $product->totalBug          = isset($$useEffectiveBug[$useObjectID]['value']) ? $$useEffectiveBug[$useObjectID]['value']     : 0;
             $product->fixedBug          = isset($$useFixedBug[$useObjectID]['value'])     ? $$useFixedBug[$useObjectID]['value']         : 0;
             $product->activatedBug      = isset($$useActivatedBug[$useObjectID]['value']) ? $$useActivatedBug[$useObjectID]['value']     : 0;
-            $product->unclosedTesttasks = isset($$unclosedTesttasks[$useObjectID])        ? $$unclosedTesttasks[$useObjectID]         : '';
+            $product->unclosedTesttasks = isset($unclosedTesttasks[$productID])           ? $unclosedTesttasks[$productID]               : '';
         }
 
         $this->view->products = $products;
