@@ -353,17 +353,17 @@ class doc extends control
      * 创建一个模板类型。
      * Add a template type.
      *
-     * @param  int    $scope
-     * @param  int    $parentModule
+     * @param  int        $scope
+     * @param  int|string $parentModule
      * @access public
      * @return void
      */
-    public function addTemplateType(int $scope, int $parentModule)
+    public function addTemplateType(int $scope, int|string $parentModule = '')
     {
         $moduleList = $this->doc->getTemplateModules(true, $scope, '1');
 
         $moduleItems = array();
-        if($parentModule == 0)
+        if($parentModule === 0)
         {
             $moduleItems[] = array('value' => 0, 'text' => '/');
         }
@@ -374,8 +374,8 @@ class doc extends control
 
         $this->view->scope        = $scope;
         $this->view->scopes       = $this->doc->getScopeItems();
-        $this->view->parentModule = $parentModule;
         $this->view->moduleItems  = $moduleItems;
+        $this->view->parentModule = $parentModule === '' ? current($moduleItems) : $parentModule;
         $this->display();
     }
 

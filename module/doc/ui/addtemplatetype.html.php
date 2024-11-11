@@ -23,7 +23,8 @@ formPanel
             set::name('root'),
             set::value($scope),
             set::items($scopes),
-            set::required(true)
+            set::required(true),
+            on::change('changeScope')
         )
     ),
     formGroup
@@ -42,5 +43,5 @@ formPanel
         set::name('name'),
         set::label($lang->docTemplate->typeName),
         set::control('input')
-    ),
+    )
 );
