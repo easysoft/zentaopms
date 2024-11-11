@@ -793,6 +793,15 @@ class productModel extends model
             unset($searchConfig['params']['branch']);
         }
 
+        /* Reset the stage list for epic and requirement. */
+        if(in_array($storyType, array('epic', 'requirement')))
+        {
+            $epicStageList = array();
+            $epicStages    = array('wait', 'planned', 'projected', 'developing', 'delivering', 'delivered', 'closed');
+            foreach($epicStages as $stageName) $epicStageList[$stageName] = $this->lang->story->stageList[$stageName];
+            $searchConfig['params']['stage']['values'] = $epicStageList;
+        }
+
         $this->loadModel('search')->setSearchParams($searchConfig);
     }
 
