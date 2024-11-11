@@ -2335,7 +2335,7 @@ class executionModel extends model
             /* Save the assignedToes and stories, should linked to execution. */
             $assignedToes[$task->assignedTo] = $task->execution;
             $taskStories[$task->story]       = $task->story;
-            if($task->parent < 0) $parents[$task->id] = $task->id;
+            if($task->isParent) $parents[$task->id] = $task->id;
 
             $data = new stdclass();
             $data->project      = $execution->project;
@@ -2351,7 +2351,7 @@ class executionModel extends model
             }
 
             /* Update tasks and save logs. */
-            if($task->parent < 0) $this->dao->update(TABLE_TASK)->data($data)->where('parent')->eq($task->id)->exec();
+            if($task->isParent) $this->dao->update(TABLE_TASK)->data($data)->where('parent')->eq($task->id)->exec();
 
             $data->status = $task->consumed > 0 ? 'doing' : 'wait';
             $this->dao->update(TABLE_TASK)->data($data)->where('id')->eq($task->id)->exec();
@@ -3614,13 +3614,6 @@ class executionModel extends model
             foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;
         }
 
-        $parents = array();
-        foreach($tasks as $task)
-        {
-            if($task->parent > 0) $parents[$task->parent] = $task->parent;
-        }
-        $parents = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($parents)->fetchAll('id');
-
         if($this->config->vision == 'lite') $tasks = $this->loadModel('task')->appendLane($tasks);
         return $this->loadModel('task')->processTasks($tasks);
     }
@@ -3646,7 +3639,7 @@ class executionModel extends model
 
         foreach($tasks as $task)
         {
-            if(!isset($tasks[$task->parent]) or $task->parent <= 0)
+            if(!isset($tasks[$task->parent]) or $task->isParent == 0)
             {
                 $totalEstimate += $task->estimate;
                 $totalConsumed += $task->consumed;
@@ -4679,15 +4672,14 @@ class executionModel extends model
                 $task->actions[] = $action;
             }
 
-            $childrenLabel       = $task->parent >  0 ? "<span class='label gray-pale rounded-xl mx-1'>{$this->lang->task->childrenAB}</span>" : '';
+            $childrenLabel       = $task->parent > 0 ? "<span class='label gray-pale rounded-xl mx-1'>{$this->lang->task->childrenAB}</span>" : '';
             $task->name          = "<span class='label secondary-pale'>{$this->lang->task->common}</span> " . $childrenLabel . html::a(helper::createLink('task', 'view', "id={$task->id}"), $task->name);
             $task->rawID         = $task->id;
             $task->id            = 'tid' . (string)$task->id;
             $task->totalEstimate = $task->estimate;
             $task->totalConsumed = $task->consumed;
             $task->totalLeft     = $task->left;
-            $task->isParent      = ($task->parent < 0);
-            $task->parent        = $task->parent <= 0 ? 'pid' . (string)$task->execution : 'tid' . (string)$task->parent;
+            $task->parent        = ($task->isParent || $task->parent == '0') ? 'pid' . (string)$task->execution : 'tid' . (string)$task->parent;
             $task->progress      = ($task->consumed + $task->left) == 0 ? 0 : round($task->consumed / ($task->consumed + $task->left), 2) * 100;
             $task->begin         = $task->estStarted;
             $task->end           = $task->deadline;

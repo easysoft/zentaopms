@@ -500,6 +500,7 @@ class taskZen extends task
         $task = form::data($this->config->task->form->edit, $task->id)
             ->add('id', $task->id)
             ->add('lastEditedDate', $now)
+            ->setDefault('design', $oldTask->design)
             ->setIF(!$task->assignedTo && !empty($oldTask->team) && !empty($this->post->team), 'assignedTo', $this->task->getAssignedTo4Multi($this->post->team, $oldTask))
             ->setIF($task->assignedTo != $oldTask->assignedTo, 'assignedDate', $now)
             ->setIF($task->mode == 'single', 'mode', '')
