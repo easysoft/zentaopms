@@ -59,11 +59,11 @@ window.setStatistics = function(element, checkedIDList)
             const task = row.data;
 
             totalCount ++;
-            if(task.status == 'wait')
+            if(task.rawStatus == 'wait')
             {
                 waitCount ++;
             }
-            else if(task.status == 'doing')
+            else if(task.rawStatus == 'doing')
             {
                 doingCount ++;
             }
@@ -76,7 +76,7 @@ window.setStatistics = function(element, checkedIDList)
                 totalConsumed += Number(task.consumed);
             }
 
-            if(task.status != 'cancel' && task.status != 'closed' && !task.isParent) totalLeft += Number(task.left);
+            if(task.rawStatus != 'cancel' && task.rawStatus != 'closed' && !task.isParent) totalLeft += Number(task.left);
         }
     })
 
@@ -149,7 +149,7 @@ window.renderCell = function(result, info)
     }
     if(info.col.name == 'assignedTo' && result)
     {
-        if(task.mode == 'multi' && !task.assignedTo && !['done,closed'].includes(task.status))
+        if(task.mode == 'multi' && !task.assignedTo && !['done,closed'].includes(task.rawStatus))
         {
             result[0]['props']['children'][1]['props']['children'] = teamLang;
         }
