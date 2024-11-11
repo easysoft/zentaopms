@@ -74,10 +74,16 @@ $storys = array();
 $storys['null']    = '';
 $storys['default'] = '变更后需求';
 
-r($tester->changeStory($storys['null']))    && p('message,status') && e('变更需求表单页面提示信息正确,SUCCESS'); // 缺少需求名称，变更失败
-r($tester->changeStory($storys['default'])) && p('message,status') && e('变更需求成功,SUCCESS');                 // 使用默认选项变更需求,详情页信息对应
+$reviewer = array();
+$reviewer['null']    = array();
+$reviewer['default'] = array('admin');
 
-r($tester->changeEpic($storys['null']))    && p('message,status') && e('变更需求表单页面提示信息正确,SUCCESS'); // 缺少需求名称，变更失败
-r($tester->changeEpic($storys['default'])) && p('message,status') && e('变更需求成功,SUCCESS');                 // 使用默认选项变更需求,详情页信息对应
+r($tester->changeStory($storys['default'], $reviewer['null']))    && p('message,status') && e('变更需求表单页面提示信息正确,SUCCESS'); // 缺少评审人，变更失败
+r($tester->changeStory($storys['null'], $reviewer['default']))    && p('message,status') && e('变更需求表单页面提示信息正确,SUCCESS'); // 缺少需求名称，变更失败
+r($tester->changeStory($storys['default'], $reviewer['default'])) && p('message,status') && e('变更需求成功,SUCCESS');                 // 使用默认选项变更需求，详情页信息对应
+
+r($tester->changeEpic($storys['default'], $reviewer['null']))    && p('message,status') && e('变更需求表单页面提示信息正确,SUCCESS'); // 缺少评审人，变更失败
+r($tester->changeEpic($storys['null'], $reviewer['default']))    && p('message,status') && e('变更需求表单页面提示信息正确,SUCCESS'); // 缺少需求名称，变更失败
+r($tester->changeEpic($storys['default'], $reviewer['default'])) && p('message,status') && e('变更需求成功,SUCCESS');                 // 使用默认选项变更需求,详情页信息对应
 
 $tester->closeBrowser();
