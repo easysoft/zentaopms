@@ -14,6 +14,13 @@ class relatedObjectList extends relatedList
         'browseType'     => '?string="byRelation"' //浏览类型 byRelation|byObject
     );
 
+    public static function getPageCSS(): ?string
+    {
+        return <<<'CSS'
+        li.objectItem div.listitem span.is-empty {display: none !important;}
+        CSS;
+    }
+
     public static function getPageJS(): ?string
     {
         global $lang;
@@ -92,8 +99,9 @@ class relatedObjectList extends relatedList
             'title'      => $title,
             'hint'       => $title,
             'titleAttrs' => $item->titleAttrs,
-            'leading'    => array('html' => wg(idLabel::create($item->type, array('class' => 'text-clip')))->render()),
+            'leading'    => array('html' => wg(idLabel::create($item->type, array('class' => 'text-clip text-left', 'style' => array('max-width' => '45px'))))->render()),
             'url'        => $item->url,
+            'class'      => 'objectItem',
             'actions'    => isset($item->actions) ? $item->actions : array()
         );
         return $info;
