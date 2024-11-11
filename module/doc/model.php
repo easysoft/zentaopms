@@ -659,7 +659,6 @@ class docModel extends model
             ->where('deleted')->eq('0')
             ->beginIF($type == 'all')->andWhere('templateType')->ne('')->fi()
             ->beginIF($type != 'all')->andWhere('templateType')->eq($type)->fi()
-            ->andWhere('lib')->eq('')
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
@@ -1491,6 +1490,62 @@ class docModel extends model
         $docContent->files = join(',', array_keys($files));
         $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
         $this->loadModel('score')->create('doc', 'create', $docID);
+        return array('status' => 'new', 'id' => $docID, 'files' => $files, 'docType' => $doc->type, 'libID' => $doc->lib);
+    }
+
+    /**
+     * 创建一个文档模板。
+     * Create a doc template.
+     *
+     * @param  object    $doc
+     * @access public
+     * @return array|bool|string
+     */
+    public function createTemplate(object $doc): array|bool|string
+    {
+        if(empty($doc->lib)) return dao::$errors['lib'] = sprintf($this->lang->error->notempty, $this->lang->doc->lib);
+
+        $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->create['id'], (string)$this->post->uid);
+
+        $docContent          = new stdclass();
+        $docContent->title   = $doc->title;
+        $docContent->content = $doc->content;
+        $docContent->type    = $doc->contentType;
+        $docContent->digest  = '';
+        $docContent->version = 1;
+        unset($doc->contentType);
+
+        $requiredFields = $this->config->doc->createTemplate->requiredFields;
+        if($doc->status == 'draft') $requiredFields = 'title';
+        if(strpos("url|word|ppt|excel", $doc->type) !== false) $requiredFields = trim(str_replace(",content,", ",", ",{$requiredFields},"), ',');
+
+        $checkContent = strpos(",$requiredFields,", ',content,') !== false;
+        if($checkContent && strpos("url|word|ppt|excel|", $lib->type) === false)
+        {
+            $requiredFields = trim(str_replace(',content,', ',', ",$requiredFields,"), ',');
+            if(empty($docContent->content)) return dao::$errors['content'] = sprintf($this->lang->error->notempty, $this->lang->doc->content);
+        }
+
+        $files = $this->loadModel('file')->getUpload();
+        if($doc->type == 'attachment' && (empty($files) || isset($files['name']))) return dao::$errors['files'] = sprintf($this->lang->error->notempty, $this->lang->doc->uploadFile);
+
+        $doc->draft  = $docContent->content;
+        $doc->vision = $this->config->vision;
+        $this->dao->insert(TABLE_DOC)->data($doc, 'content')->autoCheck()
+            ->batchCheck($requiredFields, 'notempty')
+            ->exec();
+        if(dao::isError()) return false;
+
+        $docID = $this->dao->lastInsertID();
+
+        $this->dao->update(TABLE_DOC)->set('`order`')->eq($docID)->where('id')->eq($docID)->exec();
+        $this->file->updateObjectID($this->post->uid, $docID, 'doc');
+        $files = $this->file->saveUpload('doc', $docID);
+
+        $docContent->doc   = $docID;
+        $docContent->files = join(',', array_keys($files));
+        $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
+        $this->loadModel('score')->create('doc', 'createTemplate', $docID);
         return array('status' => 'new', 'id' => $docID, 'files' => $files, 'docType' => $doc->type, 'libID' => $doc->lib);
     }
 
