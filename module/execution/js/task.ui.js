@@ -116,7 +116,7 @@ window.renderCell = function(result, info)
         {
             html += "<span class='label gray-pale rounded p-0 size-sm whitespace-nowrap'>" + multipleAB + "</span>";
         }
-        if(task.parent > 0)
+        if(!task.isParent)
         {
             html += "<span class='label gray-pale rounded p-0 size-sm whitespace-nowrap'>" + childrenAB + "</span>";
         }
