@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
 
-title=变更研发需求测试
+title=变更需求测试
 timeout=0
 cid=80
 
@@ -51,6 +51,9 @@ $storyspec->version->range('1');
 $storyspec->title->range('激活研发需求,激活用户需求,激活业务需求');
 $storyspec->gen(3);
 
+$storyreview = zenData('storyreview');
+$storyreview->gen(0);
+
 $action = zenData('action');
 $action->id->range('1-4');
 $action->objectType->range('product,story,story,story');
@@ -73,5 +76,8 @@ $storys['default'] = '变更后需求';
 
 r($tester->changeStory($storys['null']))    && p('message,status')  && e('变更需求表单页面提示信息正确,SUCCESS'); // 缺少需求名称，变更失败
 r($tester->changeStory($storys['default'])) && p('message,status') && e('变更需求成功,SUCCESS');                 // 使用默认选项变更需求,详情页信息对应
+
+r($tester->changeEpic($storys['null']))    && p('message,status')  && e('变更需求表单页面提示信息正确,SUCCESS'); // 缺少需求名称，变更失败
+r($tester->changeEpic($storys['default'])) && p('message,status') && e('变更需求成功,SUCCESS');                 // 使用默认选项变更需求,详情页信息对应
 
 $tester->closeBrowser();

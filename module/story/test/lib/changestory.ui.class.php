@@ -61,4 +61,14 @@ class changeStoryTester extends tester
         {
             if($form->dom->alertmodal('text') == '『业务需求名称』不能为空。') return $this->success('变更需求表单页面提示信息正确');
             return $this->failed('变更需求表单页面提示信息不正确');
+        }
+
+        /* 跳转到需求列表页面搜索创建需求并进入该需求详情页。 */
+
+        $viewPage = $this->loadPage('epic', 'view');
+        if($viewPage->dom->storyName->getText() != $storyName) return $this->failed('需求名称不正确');
+        if($viewPage->dom->status->getText()    != '评审中') return $this->failed('需求状态不正确');
+
+        return $this->success('变更需求成功');
+}
 }
