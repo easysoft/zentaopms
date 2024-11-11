@@ -87,8 +87,8 @@ $.extend(window.docAppActions,
         const items  = [];
         const module = info.data;
 
-        items.push({text: getDocAppLang('addModule'), command: `addModule/${module.lib}`});
-        if(module.grade == 1) items.push({text: getDocAppLang('addSubModule'), command: `addSubModule/${module.id}`});
+        items.push({text: getDocAppLang('addModule'), command: `addModule/${module.parent}`});
+        if(module.grade == 1) items.push({text: getDocAppLang('addSubModule'), command: `addModule/${module.id}`});
         items.push({text: getDocAppLang('editModule'), command: `editModule/${module.id}`});
         items.push({text: getDocAppLang('deleteModule'), command: `deleteModule/${module.id}`});
 
@@ -109,6 +109,13 @@ $.extend(window.docAppActions,
  */
 const commands =
 {
+    addModule: function(_, args)
+    {
+        const docApp = getDocApp();
+        const parentModule = args[0];
+        const url = $.createLink('doc', 'addTemplateType', `parentModule=${parentModule}`);
+        zui.Modal.open({size: 'sm', url: url});
+    },
     editModule: function(_, args)
     {
         const docApp   = getDocApp();
