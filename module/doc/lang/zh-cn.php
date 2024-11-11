@@ -91,6 +91,9 @@ $lang->docTemplate->typeName         = '类型名称';
 $lang->docTemplate->addTemplateType  = '添加文档模板类型';
 $lang->docTemplate->editTemplateType = '编辑文档模板类型';
 
+$lang->docTemplate->more       = '更多';
+$lang->docTemplate->scopeLabel = '范围';
+
 $lang->docTemplate->create = '创建模板';
 $lang->docTemplate->edit   = '编辑模板';
 $lang->docTemplate->delete = '删除模板';
