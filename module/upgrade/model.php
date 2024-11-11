@@ -10192,19 +10192,6 @@ class upgradeModel extends model
             }
         }
 
-        /* Process issue link risk. */
-        $riskIssues = $this->dao->select('*')->from(TABLE_RISKISSUE)->fetchAll();
-        foreach($riskIssues as $riskIssueList)
-        {
-            $relation = new stdClass();
-            $relation->AType    = 'issue';
-            $relation->AID      = $riskIssueList->issue;
-            $relation->relation = 1;
-            $relation->BType    = 'risk';
-            $relation->BID      = $riskIssueList->risk;
-            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
-        }
-
         /* Process bug transferred to task. */
         $taskList = $this->dao->select('id,story,fromBug,design')->from(TABLE_TASK)->where('fromBug')->ne(0)->orWhere('story')->ne(0)->orWhere('design')->ne(0)->fetchAll('id');
         foreach($taskList as $taskID => $task)
@@ -10245,6 +10232,54 @@ class upgradeModel extends model
             $relation->relation = 'transferredto';
             $relation->BType    = 'story';
             $relation->BID      = $storyID;
+            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+        }
+
+        /* Process release. */
+        $releaseLinkedStories = $this->dao->select('id,stories')->from(TABLE_RELEASE)->where('stories')->ne('')->fetchPairs('id');
+        foreach($releaseLinkedStories as $releaseID => $storyIdList)
+        {
+            foreach(explode(',', trim($storyIdList, ',')) as $storyID)
+            {
+                if(empty($storyID)) continue;
+                $relation = new stdClass();
+                $relation->AType    = 'story';
+                $relation->AID      = $storyID;
+                $relation->relation = 'interrated';
+                $relation->BType    = 'release';
+                $relation->BID      = $releaseID;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
+        }
+
+        /* Process build. */
+        $buildLinkedStories = $this->dao->select('id,stories')->from(TABLE_BUILD)->where('stories')->ne('')->fetchPairs('id');
+        foreach($buildLinkedStories as $buildID => $storyIdList)
+        {
+            foreach(explode(',', trim($storyIdList, ',')) as $storyID)
+            {
+                if(empty($storyID)) continue;
+                $relation = new stdClass();
+                $relation->AType    = 'story';
+                $relation->AID      = $storyID;
+                $relation->relation = 'interrated';
+                $relation->BType    = 'build';
+                $relation->BID      = $buildID;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
+        }
+
+        /* Process story generated design. */
+        $designStories = $this->dao->select('id,story')->from(TABLE_DESIGN)->where('story')->ne(0)->fetchPairs('id');
+        $storyTypeList = $this->dao->select('id,type')->from(TABLE_STORY)->where('id')->in(array_values($designStories))->fetchPairs('id');
+        foreach($designStories as $designID => $storyID)
+        {
+            $relation = new stdClass();
+            $relation->AType    = $storyTypeList[$storyID];
+            $relation->AID      = $storyID;
+            $relation->relation = 'generated';
+            $relation->BType    = 'design';
+            $relation->BID      = $designID;
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
         }
 
@@ -10332,6 +10367,19 @@ class upgradeModel extends model
             }
         }
 
+        /* Process issue link risk. */
+        $riskIssues = $this->dao->select('*')->from(TABLE_RISKISSUE)->fetchAll();
+        foreach($riskIssues as $riskIssueList)
+        {
+            $relation = new stdClass();
+            $relation->AType    = 'issue';
+            $relation->AID      = $riskIssueList->issue;
+            $relation->relation = 1;
+            $relation->BType    = 'risk';
+            $relation->BID      = $riskIssueList->risk;
+            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+        }
+
         /* Process child demand. */
         $childDemands = $this->dao->select('id,parent')->from(TABLE_DEMAND)->where('parent')->gt(0)->fetchPairs('id');
         foreach($childDemands as $childDemandID => $parentDemandID)
@@ -10343,54 +10391,6 @@ class upgradeModel extends model
             $relation->BType    = 'demand';
             $relation->BID      = $childDemandID;
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
-        }
-
-        /* Process story generated design. */
-        $designStories = $this->dao->select('id,story')->from(TABLE_DESIGN)->where('story')->ne(0)->fetchPairs('id');
-        $storyTypeList = $this->dao->select('id,type')->from(TABLE_STORY)->where('id')->in(array_values($designStories))->fetchPairs('id');
-        foreach($designStories as $designID => $storyID)
-        {
-            $relation = new stdClass();
-            $relation->AType    = $storyTypeList[$storyID];
-            $relation->AID      = $storyID;
-            $relation->relation = 'generated';
-            $relation->BType    = 'design';
-            $relation->BID      = $designID;
-            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
-        }
-
-        /* Process release. */
-        $releaseLinkedStories = $this->dao->select('id,stories')->from(TABLE_RELEASE)->where('stories')->ne('')->fetchPairs('id');
-        foreach($releaseLinkedStories as $releaseID => $storyIdList)
-        {
-            foreach(explode(',', trim($storyIdList, ',')) as $storyID)
-            {
-                if(empty($storyID)) continue;
-                $relation = new stdClass();
-                $relation->AType    = 'story';
-                $relation->AID      = $storyID;
-                $relation->relation = 'interrated';
-                $relation->BType    = 'release';
-                $relation->BID      = $releaseID;
-                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
-            }
-        }
-
-        /* Process build. */
-        $buildLinkedStories = $this->dao->select('id,stories')->from(TABLE_BUILD)->where('stories')->ne('')->fetchPairs('id');
-        foreach($buildLinkedStories as $buildID => $storyIdList)
-        {
-            foreach(explode(',', trim($storyIdList, ',')) as $storyID)
-            {
-                if(empty($storyID)) continue;
-                $relation = new stdClass();
-                $relation->AType    = 'story';
-                $relation->AID      = $storyID;
-                $relation->relation = 'interrated';
-                $relation->BType    = 'build';
-                $relation->BID      = $buildID;
-                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
-            }
         }
         return true;
     }

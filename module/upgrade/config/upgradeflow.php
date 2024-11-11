@@ -137,6 +137,7 @@ if($config->edition != 'open')
     $config->upgrade->execFlow['18_3']['functions']      .= ',processDataset,processChart,processReport,processDashboard';
     $config->upgrade->execFlow['18_4_beta1']['functions'] = 'processDeployStepAction,updateBISQL,updatePivotStage';
     $config->upgrade->execFlow['20_4']['functions']      .= ',updateTaskRelationPriv';
+    $config->upgrade->execFlow['21_0']                    = array('functions' => 'processObjectRelation');
 }
 
 if(in_array($this->config->edition, array('max', 'ipd'))) $config->upgrade->execFlow['18_7']['functions'] = 'processOldMetrics,processHistoryDataForMetric,metric-updateMetricDate';
@@ -172,7 +173,7 @@ $config->upgrade->execFlow['biz6_4']       = array('functions' => 'importLiteMod
 $config->upgrade->execFlow['biz8_12']      = array('functions' => 'AddFeedbackDatasource');
 $config->upgrade->execFlow['biz10_0_0']    = array('functions' => 'importERURModules');
 $config->upgrade->execFlow['biz10_5']      = array('functions' => 'processBuildinBrowseFields,importCaseLibModule,appendFlowFieldsForBelong');
-$config->upgrade->execFlow['biz11_0']      = array('functions' => 'processObjectRelation,processDeployStep');
+$config->upgrade->execFlow['biz11_0']      = array('functions' => 'processDeployStep');
 
 if(!empty($config->isINT))
 {
