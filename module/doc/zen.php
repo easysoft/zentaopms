@@ -391,6 +391,33 @@ class docZen extends doc
     }
 
     /**
+     * 在创建文档模板后的返回。
+     * Return after create a document template.
+     *
+     * @param  int       $libID
+     * @param  array     $docResult
+     * @access protected
+     * @return bool|int
+     */
+    protected function responseAfterCreateTemplate(int $libID, array $docResult): bool|int
+    {
+        $docID = $docResult['id'];
+        $files = zget($docResult, 'files', '');
+
+        $fileAction = '';
+        if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n";
+
+        $actionType = $_POST['status'] == 'draft' ? 'savedTemplateDraft' : 'releasedTemplate';
+        $this->action->create('docTemplate', $docID, $actionType, $fileAction);
+
+        if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
+        $params   = "docID=" . $docResult['id'];
+        $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('doc', 'browseTemplate', $params), 'id' => $docID, 'doc' => $docResult);
+
+        return $this->send($response);
+    }
+
+    /**
      * 在移动库或文档后的返回。
      * Return after move lib or doc.
      *
