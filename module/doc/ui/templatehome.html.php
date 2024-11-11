@@ -30,7 +30,26 @@ foreach($lang->docTemplate->scopes as $scopeID => $scopeName)
                     span(setClass('label ml-2 flex-none bg-white size-sm text-sm'), $lang->docTemplate->scopeLabel)
                 ),
             ),
+            toolbar
+            (
+                item(set(array
+                (
+                    'trailingIcon'  => 'angle-right',
+                    'text'  => $lang->docTemplate->more,
+                    'class' => 'ghost size-md text-primary',
+                    'url'   => createLink('doc', 'browseTemplate', "libID=$scopeID")
+                )))
+            ),
         ),
+        div
+        (
+            setClass('doc-space-card-libs py-3 px-1.5'),
+            div
+            (
+                setClass('row'),
+                $scopeDocs
+            ),
+        )
     );
 }
 
