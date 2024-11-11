@@ -56,7 +56,7 @@ foreach($lang->docTemplate->scopes as $scopeID => $scopeName)
                 div
                 (
                     setClass('text-gray'),
-                    $lang->docTemplate->emptyTip
+                    $lang->docTemplate->noTemplate
                 )
             )
         )

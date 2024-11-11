@@ -48,6 +48,8 @@ $langData['addSubModule']   = $lang->docTemplate->addSubModule;
 $langData['editModule']     = $lang->docTemplate->editModule;
 $langData['deleteModule']   = $lang->docTemplate->deleteModule;
 
+$langData['noDocs'] = $lang->docTemplate->noTemplate;
+
 $viewModeUrl = createLink('doc', 'browsetemplate', 'libID={libID}&type={filterType}&docID={docID}&orderBy={orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}&mode={mode}');
 
 docApp
