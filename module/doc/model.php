@@ -3824,4 +3824,23 @@ class docModel extends model
 
         return false;
     }
+
+    /**
+     * 添加文档模板类型。
+     * Add template type.
+     *
+     * @param  object $moduleData
+     * @access public
+     * @return int
+     */
+    public function addTemplateType($moduleData)
+    {
+        $this->dao->insert(TABLE_MODULE)->data($moduleData)->autoCheck()->exec();
+        $moduleID = $this->dao->lastInsertID();
+
+        $path = $moduleData->grade == 1 ? ",{$moduleID}," : ",{$moduleData->parent},{$moduleID},";
+        $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->where('id')->eq($moduleID)->exec();
+
+        return $moduleID;
+    }
 }
