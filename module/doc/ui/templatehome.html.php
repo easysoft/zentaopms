@@ -9,3 +9,19 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+
+$scopeItems = array();
+foreach($lang->docTemplate->scopes as $scopeID => $scopeName)
+{
+    $scopeDocs = array();
+    $scopeItems[] = div
+    (
+        setClass('doc-space-card ring rounded surface-light'),
+    );
+}
+
+div
+(
+    setClass('doc-home-body flex-auto min-h-0 col gap-4 p-4 items-stretch overflow-auto scrollbar-hover'),
+    $scopeItems
+);
