@@ -40,16 +40,111 @@ function getTableOptions(options, info)
     return options;
 }
 
+function mergeDocFormData(doc, formData)
+{
+    if(!doc || !formData) return;
+    const keys = new Set(formData.keys());
+    for(const key of keys)
+    {
+        const values = formData.getAll(key);
+        if(!values.length) continue;
+        if(key === 'module' || key === 'lib') doc[key] = +values[0];
+        else doc[key] = values.length > 1 ? values : values[0];
+    }
+    return doc;
+}
+
+function showDocBasicModal(docID, isDraft)
+{
+    const docApp    = getDocApp();
+    const spaceType = docApp.spaceType;
+    const spaceID   = docApp.spaceID;
+    const libID     = docApp.libID;
+    const moduleID  = docApp.moduleID;
+    const url = $.createLink('doc', 'setDocBasic', `objectType=template&objectID=${spaceID}&libID=${libID}&moduleID=${moduleID}&docID=0&isDraft=no`);
+    zui.Modal.open({url: url});
+    return new Promise((resolve) => {window.docBasicModalResolver = resolve;});
+}
+
+/**
+ * 向服务器提交新文档。
+ * Submit new doc to server.
+ *
+ * @param {object}   doc
+ * @param {number}   spaceID
+ * @param {number}   libID
+ * @param {number}   moduleID
+ * @param {FormData} formData
+ * @returns
+ */
+function submitNewDoc(doc, spaceID, libID, moduleID, formData)
+{
+    const docApp    = getDocApp();
+    const spaceType = docApp.signals.spaceType.value;
+    const module    = docApp.treeMap.modules.get(moduleID);
+    const url       = $.createLink('doc', 'createTemplate', `libID=${libID}&moduleID=${moduleID}`);
+    const docData   =
+    {
+        content     : doc.content,
+        status      : doc.status || 'normal',
+        contentType : doc.contentType,
+        type        : 'text',
+        lib         : libID,
+        module      : moduleID,
+        title       : doc.title,
+        keywords    : doc.keywords,
+        acl         : 'private',
+        space       : spaceType,
+        project     : 0,
+        templateType: module.data.short,
+        uid         : (doc.uid || `doc${doc.id}`),
+    };
+    if(formData) mergeDocFormData(docData, formData);
+    const getErrorMessage = (res) => {
+        if(typeof res.message === 'string') return res.message;
+        if(typeof res.message === 'object' && res.message && Object.values(res.message).length)
+        {
+            for(const x of Object.values(res.message))
+            {
+                if(typeof x === 'string') return x;
+                if(Array.isArray(x) && x.length) return x[0];
+            }
+        }
+        if(typeof data.error === 'string') return data.error;
+        return getLang('errorOccurred');
+    };
+    return new Promise((resolve, reject) =>
+    {
+        $.post(url, docData, (res) =>
+        {
+            try
+            {
+                const data = JSON.parse(res);
+                if(typeof data !== 'object' || data.result === 'fail')
+                {
+                    throw new Error(getErrorMessage(data));
+                }
+                resolve($.extend(doc, {id: data.id}, docData, data.doc, {status: doc.status || data.status}));
+            }
+            catch (error)
+            {
+                zui.Modal.alert(error.message);
+                reject(error);
+            }
+        });
+    });
+}
+
 /**
  * 处理创建文档的操作请求，向服务器发送请求并返回创建的文档对象。
  * Handle the create doc operation request, send a request to the server and return the created doc object.
  */
 function handleCreateDoc(doc, spaceID, libID, moduleID)
 {
-    const url = $.createLink('doc', 'setDocBasic', `objectType=template&objectID=${spaceID}&libID=${libID}&moduleID=${moduleID}&docID=0&isDraft=no`);
-    zui.Modal.open({url: url});
-
-    return new Promise((resolve) => {window.docBasicModalResolver = resolve;});
+    return showDocBasicModal(0).then((formData) => {
+        moduleID = parseInt(formData.get('module'));
+        return submitNewDoc(doc, spaceID, libID, moduleID, formData);
+    });
 }
 
 const customRenders =
