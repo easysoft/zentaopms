@@ -335,6 +335,7 @@ class taskTao extends taskModel
         }
 
         $copyTaskID = $this->dao->insert(TABLE_TASK)->data($copyTask)->autoCheck()->exec();
+
         if(dao::isError()) return false;
 
         /* 将父任务的日志记录更新到子任务下。 */

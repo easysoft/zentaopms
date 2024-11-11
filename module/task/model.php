@@ -108,17 +108,16 @@ class taskModel extends model
      * other data process after task batch create.
      *
      * @param  array  $taskIdList
-     * @param  int    $parentID
+     * @param  object $parent
      * @access public
      * @return bool
      */
-    public function afterBatchCreate(array $taskIdList, int $parentID = 0): bool
+    public function afterBatchCreate(array $taskIdList, object $parent = null): bool
     {
         /* Process other data after split task. */
-        if($parentID && !empty($taskIdList))
+        if($parent && !empty($taskIdList))
         {
-            $parentTask = $this->fetchByID($parentID);
-            $this->afterSplitTask($parentTask, $taskIdList);
+            $this->afterSplitTask($parent, $taskIdList);
         }
 
         return !dao::isError();

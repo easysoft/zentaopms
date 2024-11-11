@@ -141,6 +141,7 @@ class task extends control
 
         if(!empty($_POST))
         {
+            $parent = $taskID > 0 ? $this->task->fetchById($taskID) : new stdclass();
             /* Process the request data for the batch create tasks. */
             $taskData = $this->taskZen->buildTasksForBatchCreate($execution, $taskID, $output);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -149,7 +150,7 @@ class task extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Update other data related to the task after it is created. */
-            $this->task->afterBatchCreate($taskIdList, $taskID);
+            $this->task->afterBatchCreate($taskIdList, $parent);
             if(!isset($output['laneID']) || !isset($output['columnID'])) $this->loadModel('kanban')->updateLane($executionID, 'task');
 
             $response = $this->taskZen->responseAfterbatchCreate($taskIdList, $execution);
