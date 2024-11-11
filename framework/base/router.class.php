@@ -334,6 +334,15 @@ class baseRouter
     public $dao;
 
     /**
+     * $mao对象，用于访问或者更新缓存。
+     * The $mao object, used to access or update cache.
+     *
+     * @var mao
+     * @access public
+     */
+    public $mao;
+
+    /**
      * 从数据库的句柄。
      * The slave database handler.
      *
