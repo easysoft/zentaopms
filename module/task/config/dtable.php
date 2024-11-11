@@ -333,6 +333,7 @@ $config->task->dtable->children->fieldList['name']['name']         = 'name';
 $config->task->dtable->children->fieldList['name']['nestedToggle'] = true;
 $config->task->dtable->children->fieldList['name']['data-toggle']  = 'modal';
 $config->task->dtable->children->fieldList['name']['data-size']    = 'lg';
+$config->task->dtable->children->fieldList['name']['data-load']    = 'modal';
 
 $config->task->dtable->children->fieldList['pri']             = $config->task->dtable->fieldList['pri'];
 $config->task->dtable->children->fieldList['pri']['sortType'] = false;
