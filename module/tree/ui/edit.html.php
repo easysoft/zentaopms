@@ -58,14 +58,14 @@ formPanel
             )
         )
     ) : null,
-    $type == 'doc' ? formGroup
+    ($type == 'doc' || $type == 'docTemplate') ? formGroup
     (
-        set::label($lang->doc->lib),
+        set::label($type == 'docTemplate' ? $lang->docTemplate->scope : $lang->doc->lib),
         picker
         (
             set::name('root'),
             set::value($module->root),
-            set::items($libs),
+            set::items($type == 'docTemplate' ? $scopes : $libs),
             set::required(true),
             on::change('changeRoot')
         )
@@ -82,7 +82,7 @@ formPanel
     $module->type != 'line' ? formGroup
     (
         set::className('moduleBox ', $hidden ? 'hidden' : ''),
-        set::label(($type == 'doc' or $type == 'api') ? $lang->tree->parentCate : $lang->tree->parent),
+        set::label($parentLabel),
         picker
         (
             set::name('parent'),
@@ -102,7 +102,7 @@ formPanel
             set::items($users)
         )
     ) : null,
-    formGroup
+    $type != 'docTemplate' ? formGroup
     (
         set::label($lang->tree->short),
         inputControl
@@ -113,5 +113,5 @@ formPanel
                 set::value($module->short)
             )
         )
-    )
+    ) : null
 );

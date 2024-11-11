@@ -351,6 +351,20 @@ class doc extends control
         $this->display();
     }
 
+
+    /**
+     * 编辑一个模板类型。
+     * Edit a template type.
+     *
+     * @param  int    $moduleID
+     * @access public
+     * @return void
+     */
+    public function editTemplateType(int $moduleID)
+    {
+        echo $this->fetch('tree', 'edit', "moduleID={$moduleID}&type=docTemplate");
+    }
+
     /**
      * 上传文档。
      * Upload docs.

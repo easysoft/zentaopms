@@ -187,31 +187,45 @@ class tree extends control
             $this->view->libs = $this->doc->getLibs($docLib->type, '', '', $objectID, 'book');
         }
 
-        if($type == 'doc' || $type == 'api')
+        if($type == 'docTemplate')
         {
-            $name  = $this->lang->tree->dir;
-            $title = $this->lang->tree->editDir;
+            $name        = $this->lang->docTemplate->typeName;
+            $title       = $this->lang->docTemplate->editTemplateType;
+            $parentLabel = $this->lang->docTemplate->parentModule;
+
+            $scopes = array();
+            foreach($this->config->doc->templateMenu as $scopeID => $scope) $scopes[$scopeID] = $scope['name'];
+            $this->view->scopes = $scopes;
+        }
+        elseif($type == 'doc' || $type == 'api')
+        {
+            $name        = $this->lang->tree->dir;
+            $title       = $this->lang->tree->editDir;
+            $parentLabel = $this->lang->tree->parentCate;
         }
         elseif($type == 'line')
         {
-            $name  = $this->lang->tree->line;
-            $title = $this->lang->tree->manageLine;
+            $name        = $this->lang->tree->line;
+            $title       = $this->lang->tree->manageLine;
+            $parentLabel = $this->lang->tree->parent;
         }
         else
         {
-            $name  = $this->lang->tree->name;
-            $title = $this->lang->tree->edit;
+            $name        = $this->lang->tree->name;
+            $title       = $this->lang->tree->edit;
+            $parentLabel = $this->lang->tree->parent;
         }
 
         if($type == 'host') $this->app->loadLang('host');
 
-        $this->view->name   = $name;
-        $this->view->title  = $title;
-        $this->view->title  = $type == 'host' ? $this->lang->host->groupMaintenance : $title;
-        $this->view->module = $module;
-        $this->view->type   = $type;
-        $this->view->branch = $branch;
-        $this->view->users  = $this->loadModel('user')->getPairs('noclosed|nodeleted', $module->owner);
+        $this->view->name        = $name;
+        $this->view->title       = $title;
+        $this->view->title       = $type == 'host' ? $this->lang->host->groupMaintenance : $title;
+        $this->view->parentLabel = $parentLabel;
+        $this->view->module      = $module;
+        $this->view->type        = $type;
+        $this->view->branch      = $branch;
+        $this->view->users       = $this->loadModel('user')->getPairs('noclosed|nodeleted', $module->owner);
 
         $showProduct = strpos('story|bug|case', $type) !== false ? true : false;
         if($showProduct)
