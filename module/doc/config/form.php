@@ -59,6 +59,8 @@ $config->doc->form->create['template']     = array('type' => 'string',   'requir
 $config->doc->form->create['templateType'] = array('type' => 'string',   'required' => false, 'default' => '');
 $config->doc->form->create['chapterType']  = array('type' => 'string',   'required' => false, 'default' => '');
 
+$config->doc->form->createtemplate = $config->doc->form->create;
+
 $config->doc->form->edit['title']      = array('type' => 'string',   'required' => true,  'default' => '', 'filter' => 'trim');
 $config->doc->form->edit['product']    = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->doc->form->edit['project']    = array('type' => 'int',      'required' => false, 'default' => 0);
