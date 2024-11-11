@@ -952,6 +952,8 @@ class taskTao extends taskModel
             $data->assignedDate = $now;
             $data->finishedBy   = $account;
             $data->finishedDate = $now;
+            $data->canceledBy   = '';
+            $data->canceledDate = null;
         }
 
         if($status == 'cancel')
@@ -983,6 +985,8 @@ class taskTao extends taskModel
 
             $data->finishedBy   = '';
             $data->finishedDate = null;
+            $data->canceledBy   = '';
+            $data->canceledDate = null;
             $data->closedBy     = '';
             $data->closedDate   = null;
             $data->closedReason = '';
