@@ -67,6 +67,7 @@ foreach($products as $programID => $programProducts)
         $item['active']   = $productID == $product->id;
         $item['keys']     = zget(common::convert2Pinyin(array($product->name)), $product->name, '');
         $item['data-app'] = $app->tab;
+        $item['isPO']     = $product->PO == $this->app->user->account;
 
         if($config->systemMode == 'light' || $config->vision == 'or')
         {
