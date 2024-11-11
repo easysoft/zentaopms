@@ -2217,8 +2217,8 @@ class taskModel extends model
         /* 父任务只能编辑、创建子任务和指派。 Parent task only can edit task, create children and assign to somebody. */
         if((!empty($task->isParent)) && !in_array($action, array('edit', 'batchcreate', 'cancel', 'assignto', 'pause', 'close', 'restart'))) return false;
 
-        /* 子任务和多人任务不能创建子任务。Multi task and child task cannot create children. */
-        if($action == 'batchcreate' && (!empty($task->team) || !empty($task->rawParent))) return false;
+        /* 子任务、多人任务、已取消已关闭的任务不能创建子任务。Multi task and child task and canceled/closed task cannot create children. */
+        if($action == 'batchcreate' && (!empty($task->team) || !empty($task->rawParent) || in_array($task->status, array('closed', 'cancel')))) return false;
 
         if(!empty($task->team))
         {
