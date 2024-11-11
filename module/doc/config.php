@@ -5,12 +5,14 @@ $config->doc = new stdclass();
 $config->doc->createlib = new stdclass();
 $config->doc->editlib   = new stdclass();
 $config->doc->create    = new stdclass();
+$config->doc->createTemplate    = new stdclass();
 $config->doc->edit      = new stdclass();
 $config->doc->showfiles = new stdclass();
 
 $config->doc->createlib->requiredFields = 'name';
 $config->doc->editlib->requiredFields   = 'name';
 $config->doc->create->requiredFields    = 'lib,title';
+$config->doc->createTemplate->requiredFields    = 'lib,title';
 $config->doc->edit->requiredFields      = 'lib,title';
 
 $config->doc->customObjectLibs  = 'files,customFiles';
