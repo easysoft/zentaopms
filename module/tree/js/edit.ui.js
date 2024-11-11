@@ -46,17 +46,24 @@ function changeRoot()
     var confirmRoot = type == 'doc' ? confirmRoot4Doc : confirmRoot;
     if(moduleRoot != root)
     {
-        zui.Modal.confirm(confirmRoot).then(result =>
+        if(type == 'docTemplate')
         {
-            if(result)
+            ajaxLoadModules(root, 0, 'docTemplate', moduleID);
+        }
+        else
+        {
+            zui.Modal.confirm(confirmRoot).then(result =>
             {
-                ajaxLoadModules(root, 0, type != 'doc' ? 'story' : type, moduleID);
-            }
-            else
-            {
-                $('[name=root]').zui('picker').$.setValue(moduleRoot);
-            }
-        });
+                if(result)
+                {
+                    ajaxLoadModules(root, 0, type != 'doc' ? 'story' : type, moduleID);
+                }
+                else
+                {
+                    $('[name=root]').zui('picker').$.setValue(moduleRoot);
+                }
+            });
+        }
     }
     else
     {
