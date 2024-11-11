@@ -93,6 +93,7 @@ $lang->docTemplate->editTemplateType = '编辑文档模板类型';
 
 $lang->docTemplate->more       = '更多';
 $lang->docTemplate->scopeLabel = '范围';
+$lang->docTemplate->emptyTip   = '没有文档模板';
 
 $lang->docTemplate->create = '创建模板';
 $lang->docTemplate->edit   = '编辑模板';

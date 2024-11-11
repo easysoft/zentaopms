@@ -10,10 +10,12 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$scopeTemplates = $this->doc->getScopeTemplates();
+
 $scopeItems = array();
 foreach($lang->docTemplate->scopes as $scopeID => $scopeName)
 {
-    $scopeDocs = array();
+    $scopeDocs = $scopeTemplates[$scopeID];
     $scopeItems[] = div
     (
         setClass('doc-space-card ring rounded surface-light'),
@@ -44,11 +46,19 @@ foreach($lang->docTemplate->scopes as $scopeID => $scopeName)
         div
         (
             setClass('doc-space-card-libs py-3 px-1.5'),
-            div
+            !empty($scopeDocs) ? div
             (
                 setClass('row'),
                 $scopeDocs
-            ),
+            ) : div
+            (
+                setClass('center gap-4 py-10'),
+                div
+                (
+                    setClass('text-gray'),
+                    $lang->docTemplate->emptyTip
+                )
+            )
         )
     );
 }
