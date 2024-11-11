@@ -38,7 +38,23 @@ class filter extends wg
             set::items($items),
             set::menu($menu),
             set::multiple($multiple),
-            on::change("$onChange(e, '$name')")
+            on::change("$onChange(e, '$name')"),
+            on::inited()->do(<<<JS
+            const getItems = () => \$this.zui().\$.state.items;
+            const hasUrl   = () => \$this.zui().\$.state.items.hasOwnProperty('url');
+            const waitItems = () => {
+                if(!hasUrl())
+                {
+                    const picker = \$this.zui().\$;
+                    const itemValues = picker.state.items.map(item => item.value);
+                    const values = picker.valueList.filter(value => itemValues.includes(value));
+                    picker.setValue(values);
+                    return;
+                }
+                setTimeout(waitItems, 100);
+            }
+            if(hasUrl()) waitItems();
+            JS)
         );
     }
 

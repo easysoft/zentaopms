@@ -147,7 +147,7 @@ if($twins)
 
 if(!in_array($config->vision, array('lite', 'or')))
 {
-    $tabs[] = setting()
+    $tabs['linkStories'] = setting()
         ->group('relatives')
         ->title($lang->story->linkStories)
         ->control('linkedStoryList')
@@ -167,7 +167,7 @@ if($isStoryType && hasPriv('story', 'tasks'))
 /* 相关信息。 Related info. */
 if($config->vision != 'lite')
 {
-    $tabs[] = setting()
+    $tabs['storyRelatedList'] = setting()
         ->group('relatives')
         ->title($lang->story->legendRelated)
         ->control('storyRelatedList');

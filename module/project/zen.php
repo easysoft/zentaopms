@@ -1736,22 +1736,22 @@ class projectZen extends project
                     $cardList = !empty($laneData[$columnKey]) ? $laneData[$columnKey] : array();
                     foreach($cardList as $card)
                     {
-                        $columnKey = $columnKey == 'doing' ? 'doingProjects' : $columnKey;
-                        $items["lane$laneKey"][$columnKey][] = array('id' => $card->id, 'name' => $card->id, 'title' => $card->name, 'status' => $card->status, 'cardType' => 'project', 'delay' => !empty($card->delay) ? $card->delay : 0, 'progress' => $card->progress);
+                        $cardColumnKey = $columnKey == 'doing' ? 'doingProjects' : $columnKey;
+                        $items["lane$laneKey"][$cardColumnKey][] = array('id' => $card->id, 'name' => $card->id, 'title' => $card->name, 'status' => $card->status, 'cardType' => 'project', 'delay' => !empty($card->delay) ? $card->delay : 0, 'progress' => $card->progress);
 
-                        if(!isset($columnCards[$columnKey])) $columnCards[$columnKey] = 0;
-                        $columnCards[$columnKey] ++;
+                        if(!isset($columnCards[$cardColumnKey])) $columnCards[$cardColumnKey] = 0;
+                        $columnCards[$cardColumnKey] ++;
 
-                        if($columnKey == 'doingProjects')
+                        if($cardColumnKey == 'doingProjects')
                         {
                             if(!empty($latestExecutions[$card->id]))
                             {
-                                $columnKey = 'doingExecutions';
+                                $cardColumnKey = 'doingExecutions';
                                 $execution = $latestExecutions[$card->id];
-                                $items["lane$laneKey"][$columnKey][] = array('id' => $execution->id, 'name' => $execution->id, 'title' => $execution->name, 'status' => $execution->status, 'cardType' => 'execution', 'delay' => !empty($execution->delay) ? $execution->delay : 0, 'progress' => $execution->progress);
+                                $items["lane$laneKey"][$cardColumnKey][] = array('id' => $execution->id, 'name' => $execution->id, 'title' => $execution->name, 'status' => $execution->status, 'cardType' => 'execution', 'delay' => !empty($execution->delay) ? $execution->delay : 0, 'progress' => $execution->progress);
 
-                                if(!isset($columnCards[$columnKey])) $columnCards[$columnKey] = 0;
-                                $columnCards[$columnKey] ++;
+                                if(!isset($columnCards[$cardColumnKey])) $columnCards[$cardColumnKey] = 0;
+                                $columnCards[$cardColumnKey] ++;
                             }
                         }
                     }

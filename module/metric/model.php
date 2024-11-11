@@ -571,7 +571,8 @@ class metricModel extends model
      */
     public function getDAO()
     {
-        if($this->config->metricDB->type == 'sqlite')
+        $dbType = $this->config->metricDB->type;
+        if($dbType === 'sqlite')
         {
             $dao = clone $this->dao;
             $dao->reset();
@@ -921,6 +922,14 @@ class metricModel extends model
     public function calculateDefaultMetric($calculator, $vision)
     {
         $statement = $this->getDataStatement($calculator, 'statement', $vision);
+        $dbType = $this->config->metricDB->type;
+        if($dbType == 'duckdb')
+        {
+            $this->loadModel('bi');
+            $sql = $statement->get();
+            $dbh = $this->app->loadDriver('duckdb');
+            $statement = $dbh->query($sql);
+        }
         $rows = $statement->fetchAll();
         if(!empty($rows)) foreach($rows as $row) $calculator->calculate($row);
     }
@@ -1130,19 +1139,27 @@ class metricModel extends model
      */
     public function insertMetricLib($recordWithCode, $calcType = 'cron')
     {
-        $this->dao->begin();
         foreach($recordWithCode as $code => $records)
         {
+            $schema = '';
+            $values = array();
             foreach($records as $record)
             {
                 if(empty($record)) continue;
 
                 $record->calcType = $calcType;
                 $record->calculatedBy = $calcType == 'inference' ? $this->app->user->account : 'system';
-                $this->dao->insert(TABLE_METRICLIB)
+
+                $sql = $this->dao->insert(TABLE_METRICLIB)
                     ->data($record)
-                    ->exec();
+                    ->get();
+
+                $position = strpos($sql, 'VALUES');
+
+                if(empty($schema)) $schema .= substr($sql, 0, $position + 6);
+                $values[] = substr($sql, $position + 6);
             }
+
             $rows = count($records);
             $time = helper::now();
 
@@ -1151,8 +1168,14 @@ class metricModel extends model
                 ->set('lastCalcTime')->eq($time)
                 ->where('code')->eq($code)
                 ->exec();
+
+            while($rows > 0)
+            {
+                $sql = $schema . implode(',', array_splice($values, 0, 10000));
+                $this->dao->exec($sql);
+                $rows -= 10000;
+            }
         }
-        $this->dao->commit();
 
         return dao::isError();
     }

@@ -8,6 +8,7 @@ $lang->bi->driver = '数据库类型';
 $lang->bi->driverList = array();
 $lang->bi->driverList['mysql'] = 'MySQL';
 
+$lang->bi->query      = '查询';
 $lang->bi->sqlQuery   = 'SQL语句查询';
 $lang->bi->sqlBuilder = 'SQL构建器';
 $lang->bi->dictionary = '数据字典';

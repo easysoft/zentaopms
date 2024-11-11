@@ -298,9 +298,7 @@ class myTao extends myModel
         {
             $title           = '';
             $titleFieldName  = zget($objectNameFields, $objectType, '');
-            $openedDateField = 'openedDate';
-            if(in_array($objectType, array('product', 'productplan', 'release', 'build', 'testtask'))) $openedDateField = 'createdDate';
-            if(in_array($objectType, array('testsuite', 'caselib')))$openedDateField = 'addedDate';
+            $openedDateField = zget($this->config->my->openedDateField, $objectType, 'openedDate');
             if(empty($titleFieldName) && isset($flows[$objectType]))
             {
                 if(!empty($flows[$objectType]->titleField)) $titleFieldName = $flows[$objectType]->titleField;
@@ -316,7 +314,7 @@ class myTao extends myModel
                 $data->type   = $objectType;
                 $data->time   = $object->{$openedDateField};
                 $data->status = 'doing';
-                $data->app    = $flows[$objectType]->app;
+                $data->app    = isset($flows[$objectType]->app) ? $flows[$objectType]->app : zget($this->lang->navGroup, $objectType, '');
                 $approvalList[] = $data;
             }
         }

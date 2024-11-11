@@ -155,7 +155,7 @@ $lang->admin->menuList->feature['menuOrder']['15'] = 'execution';
 $lang->admin->menuList->feature['menuOrder']['20'] = 'qa';
 $lang->admin->menuList->feature['menuOrder']['25'] = 'kanban';
 $lang->admin->menuList->feature['menuOrder']['30'] = 'doc';
-$lang->admin->menuList->feature['menuOrder']['50'] = 'user';
+$lang->admin->menuList->feature['menuOrder']['39'] = 'user';
 
 $lang->admin->menuList->feature['dividerMenu'] = ',user,';
 
@@ -188,10 +188,9 @@ if(helper::hasFeature('devops'))
     $lang->admin->menuList->platform['order'] = 55;
 
     //$lang->admin->menuList->platform['subMenu']['environment'] = array('link' => "{$lang->devops->environment}|gitlab|browse|", 'subModule' => 'gitlab,jenkins,sonarqube,gitea,gogs', 'alias' => 'create,edit,import');
-    $lang->admin->menuList->platform['subMenu']['resource']    = array('link' => "{$lang->devops->resource}|host|browse|", 'subModule' => 'host,account,serverroom,ops,tree,domain,service');
+    $lang->admin->menuList->platform['subMenu']['resource']    = array('link' => "{$lang->devops->resource}|serverroom|browse|", 'subModule' => 'account,serverroom,ops,tree,domain,service');
     $lang->admin->menuList->platform['subMenu']['setrules']    = array('link' => "{$lang->devops->rules}|repo|setrules|");
 
-    $lang->admin->menuList->platform['tabMenu']['resource']['host']       = array('link' => "{$lang->devops->host}|host|browse|", 'alias' => 'create,edit,browse,view,treemap,changestatus,group', 'subModule' => 'tree');
     $lang->admin->menuList->platform['tabMenu']['resource']['serverroom'] = array('link' => "{$lang->devops->serverroom}|serverroom|browse|", 'alias' => 'create,edit,view,browse');
     $lang->admin->menuList->platform['tabMenu']['resource']['service']    = array('link' => "{$lang->devops->service}|service|browse|", 'alias' => 'create,edit,view,browse,manage');
     $lang->admin->menuList->platform['tabMenu']['resource']['account']    = array('link' => "{$lang->devops->account}|account|browse|", 'alias' => 'create,edit,view,browse');
@@ -202,7 +201,6 @@ if(helper::hasFeature('devops'))
     $lang->admin->menuList->platform['tabMenu']['resource']['os']         = array('link' => "{$lang->devops->os}|ops|os|", 'alias' => 'os');
     $lang->admin->menuList->platform['tabMenu']['resource']['stage']      = array('link' => "{$lang->devops->stage}|ops|stage|", 'alias' => 'stage');
 
-    $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['10']  = 'host';
     $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['15'] = 'serverroom';
     $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['20'] = 'service';
     $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['25'] = 'account';

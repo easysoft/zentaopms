@@ -37,9 +37,9 @@ class scale_of_monthly_delivered_story extends baseCalc
 
         if($date === null) return false;
 
-        $year  = substr($date, 0, 4);
+        $year = $this->getYear($date);
+        if(!$year) return false;
         $month = substr($date, 5, 2);
-        if($year == '0000') return false;
 
         if(!isset($this->result[$year])) $this->result[$year] = array();
         if(!isset($this->result[$year][$month])) $this->result[$year][$month] = 0;

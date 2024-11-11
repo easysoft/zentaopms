@@ -3,7 +3,7 @@ $lang->host->common       = 'Host';
 $lang->host->browse       = 'Host List';
 $lang->host->create       = 'Add Host';
 $lang->host->view         = 'Host View';
-$lang->host->edit         = 'Edit';
+$lang->host->edit         = 'Edit Host';
 $lang->host->editAction   = 'Edit Host';
 $lang->host->delete       = 'Delete';
 $lang->host->deleteAction = 'Delete Host';
@@ -28,6 +28,7 @@ $lang->host->cpuCores     = 'CPU Cores';
 $lang->host->cpuRate      = 'CPU Rate';
 $lang->host->memory       = 'Memory Size';
 $lang->host->serverRoom   = 'IDC';
+$lang->host->desc         = 'Description';
 
 $lang->host->createdBy   = 'CreatedBy';
 $lang->host->createdDate = 'CreatedDate';
@@ -168,9 +169,14 @@ $lang->host->diskTypeList['ssd'] = 'SSD';
 $lang->host->confirmDelete = 'Do you want to delete this host?';
 
 $lang->host->notice = new stdclass();
-$lang->host->notice->memory    = 'Memory size should be numbers！';
-$lang->host->notice->diskSize  = 'Disk size should be numbers！';
-$lang->host->notice->cpuNumber = 'CPU number should be numbers！';
-$lang->host->notice->cpuCores  = 'CPU cores should be numbers！';
-$lang->host->notice->int       = '『%s』should be a positive integer!';
-$lang->host->notice->ip        = '『%s』incorrect format!';
+$lang->host->notice->memory     = 'Memory size should be numbers！';
+$lang->host->notice->diskSize   = 'Disk size should be numbers！';
+$lang->host->notice->cpuNumber  = 'CPU number should be numbers！';
+$lang->host->notice->cpuCores   = 'CPU cores should be numbers！';
+$lang->host->notice->int        = '『%s』should be a positive integer!';
+$lang->host->notice->ip         = '『%s』incorrect format!';
+$lang->host->notice->nameLength = 'Host name length should not exceed 100 characters!';
+$lang->host->notice->descLength = 'Host description length should not exceed 255 characters!';
+
+$lang->host->CDlist = array();
+$lang->host->CDlist['manual'] = 'Manual';

@@ -28,11 +28,8 @@ class count_of_annual_fixed_bug extends baseCalc
 
     public function calculate($row)
     {
-        $closedDate = $row->closedDate;
-        if(empty($closedDate)) return false;
-
-        $year = substr($closedDate, 0, 4);
-        if($year == '0000') return false;
+        $year = $this->getYear($row->closedDate);
+        if(!$year) return false;
 
         if(!isset($this->result[$year])) $this->result[$year] = 0;
         if($row->status == 'closed' and $row->resolution == 'fixed') $this->result[$year] += 1;

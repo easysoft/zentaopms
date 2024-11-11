@@ -719,13 +719,19 @@ class productModel extends model
         $searchConfig['actionURL'] = $actionURL;
 
         /* Get product data. */
-        $product = ($this->app->tab == 'project' && empty($productID)) ? $products : array();
+        if(empty($productID) && empty($products))
+        {
+            $products  = $this->getPairs('all', 0, '', 'all');
+            $productID = key($products);
+            $showAll   = true;
+        }
+        $product = ($this->app->tab == 'project' && empty($productID)) || !empty($showAll) ? $products : array();
         if(empty($product) && isset($products[$productID])) $product = array($productID => $products[$productID]);
         $searchConfig['params']['product']['values'] = array('' => '') + $product + array('all' => $this->lang->product->allProduct);
 
         /* Get module data. */
         $projectID = ($this->app->tab == 'project' && empty($projectID)) ? $this->session->project : $projectID;
-        $searchConfig['params']['module']['values'] = $this->productTao->getModulesForSearchForm($productID, $products, $branch, (int)$projectID);
+        $searchConfig['params']['module']['values'] = empty($showAll) ? $this->productTao->getModulesForSearchForm($productID, $products, $branch, (int)$projectID) : $this->loadModel('tree')->getAllModulePairs('story');
 
         $gradePairs = $this->loadModel('story')->getGradePairs($storyType, 'all');
 
@@ -757,12 +763,12 @@ class productModel extends model
         if($this->config->edition == 'ipd') $searchConfig['params']['roadmap']['values'] = $this->loadModel('roadmap')->getPairs($productID);
 
         /* Get product plan data. */
-        $productIdList = ($this->app->tab == 'project' && empty($productID)) ? array_keys($products) : array($productID);
-        $branchParam   = ($this->app->tab == 'project' && empty($productID)) ? '' : $branch;
+        $productIdList = ($this->app->tab == 'project' && empty($productID)) || !empty($showAll) ? array_keys($products) : array($productID);
+        $branchParam   = ($this->app->tab == 'project' && empty($productID)) || !empty($showAll) ? '' : $branch;
         $searchConfig['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($productIdList, (empty($branchParam) || $branchParam == 'all') ? '' : $branchParam);
 
         /* Get branch data. */
-        if($productID)
+        if($productID && empty($showAll))
         {
             $productInfo = $this->getByID($productID);
             if(!empty($productInfo->shadow))
@@ -786,6 +792,9 @@ class productModel extends model
             unset($searchConfig['fields']['branch']);
             unset($searchConfig['params']['branch']);
         }
+
+        /* Reset the stage list for epic and requirement. */
+        if($storyType != 'all') $searchConfig['params']['stage']['values'] = $this->lang->$storyType->stageList;
 
         $this->loadModel('search')->setSearchParams($searchConfig);
     }

@@ -1320,7 +1320,6 @@ class docModel extends model
         }
         if($type == 'project')
         {
-            $account          = $this->app->user->account;
             $projects         = $this->loadModel('project')->getListByCurrentUser();
             $involvedProjects = $this->project->getInvolvedListByCurrentUser();
             $spaceID          = $this->project->checkAccess($spaceID, $projects);
@@ -2179,7 +2178,7 @@ class docModel extends model
         {
             if(!$this->checkPrivDoc($doc)) unset($docs[$id]);
         }
-        $docIdList = empty($docs) ? 0 : $this->dao->select('id')->from(TABLE_DOC)->where($type)->eq($objectID)->andWhere('id')->in(array_keys($docs))->get();
+        $docIdList = empty($docs) ? 0 : $this->dao->select('id')->from(TABLE_DOC)->where($type)->eq($objectID)->andWhere('vision')->eq($this->config->vision)->andWhere('id')->in(array_keys($docs))->get();
 
         if($type == 'product')
         {
@@ -2751,14 +2750,15 @@ class docModel extends model
      * Get modules from libs.
      *
      * @param  array $libs  Lib id list.
+     * @param  string $type doc|api
      * @access public
      * @return array
      */
-    public function getModulesOfLibs(array $libs)
+    public function getModulesOfLibs(array $libs, $type = 'doc')
     {
         return $this->dao->select('*')->from(TABLE_MODULE)
             ->where('root')->in($libs)
-            ->andWhere('type')->eq('doc')
+            ->andWhere('type')->eq($type)
             ->andWhere('deleted')->eq(0)
             ->orderBy('grade desc, `order`')
             ->fetchAll('id');

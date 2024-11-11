@@ -115,6 +115,22 @@ $config->task->dtable->fieldList['progress']['show']     = true;
 $config->task->dtable->fieldList['progress']['sortType'] = false;
 $config->task->dtable->fieldList['progress']['group']    = 5;
 
+if($config->edition != 'open')
+{
+    $config->task->dtable->fieldList['relatedObject']['name']        = 'relatedObject';
+    $config->task->dtable->fieldList['relatedObject']['title']       = $lang->custom->relateObject;
+    $config->task->dtable->fieldList['relatedObject']['sortType']    = false;
+    $config->task->dtable->fieldList['relatedObject']['width']       = '70';
+    $config->task->dtable->fieldList['relatedObject']['type']        = 'text';
+    $config->task->dtable->fieldList['relatedObject']['link']        = common::hasPriv('custom', 'showRelationGraph') ? "RAWJS<function(info){ if(info.row.data.relatedObject == 0) return 0; else return '" . helper::createLink('custom', 'showRelationGraph', 'objectID={id}&objectType=task') . "'; }>RAWJS" : null;
+    $config->task->dtable->fieldList['relatedObject']['data-toggle'] = 'modal';
+    $config->task->dtable->fieldList['relatedObject']['data-size']   = 'lg';
+    $config->task->dtable->fieldList['relatedObject']['show']        = true;
+    $config->task->dtable->fieldList['relatedObject']['group']       = 5;
+    $config->task->dtable->fieldList['relatedObject']['flex']        = false;
+    $config->task->dtable->fieldList['relatedObject']['align']       = 'center';
+}
+
 $config->task->dtable->fieldList['closedBy']['type']     = 'user';
 $config->task->dtable->fieldList['closedBy']['sortType'] = true;
 $config->task->dtable->fieldList['closedBy']['group']    = 6;
@@ -164,13 +180,15 @@ $config->task->dtable->fieldList['module']['control']    = 'select';
 $config->task->dtable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getTaskOptionMenu', 'params' => ['rootID' => '$executionID', 'startModule' => (int)0, 'extra' => 'allModule']);
 $config->task->dtable->fieldList['module']['display']    = false;
 
-$config->task->dtable->fieldList['execution']['title']      = 'execution';
+$config->task->dtable->fieldList['execution']['name']       = 'execution';
+$config->task->dtable->fieldList['execution']['title']      = $lang->task->execution;
 $config->task->dtable->fieldList['execution']['control']    = 'hidden';
 $config->task->dtable->fieldList['execution']['type']       = 'html';
 $config->task->dtable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs', 'params' => ['projectID' => 0]);
 $config->task->dtable->fieldList['execution']['display']    = false;
 
-$config->task->dtable->fieldList['project']['title']      = 'project';
+$config->task->dtable->fieldList['project']['name']       = 'project';
+$config->task->dtable->fieldList['project']['title']      = $lang->task->project;
 $config->task->dtable->fieldList['project']['control']    = 'hidden';
 $config->task->dtable->fieldList['project']['type']       = 'html';
 $config->task->dtable->fieldList['project']['dataSource'] = array('module' => 'project', 'method' => 'getPairs');

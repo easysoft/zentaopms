@@ -273,6 +273,7 @@ div
                     $moduleRows,
                     set::actionsClass('justify-start'),
                     set::submitBtnText($lang->save),
+                    set::back($isFlowModule ? 'GLOBAL' : 'APP'),
                     input
                     (
                         set::type('hidden'),

@@ -269,7 +269,7 @@ class actionModel extends model
             {
                 $history->oldValue = '';
                 $oldValues = explode(',', $history->old);
-                foreach($oldValues as $key => $value) $history->oldValue .= zget($fieldList, $value) . ',';
+                foreach($oldValues as $value) $history->oldValue .= zget($fieldList, $value) . ',';
                 $history->oldValue = trim($history->oldValue, ',');
             }
 
@@ -277,7 +277,7 @@ class actionModel extends model
             {
                 $history->newValue = '';
                 $newValues = explode(',', $history->new);
-                foreach($newValues as $key => $value) $history->newValue .= zget($fieldList, $value) . ',';
+                foreach($newValues as $value) $history->newValue .= zget($fieldList, $value) . ',';
                 $history->newValue = trim($history->newValue, ',');
             }
         }
@@ -292,7 +292,7 @@ class actionModel extends model
             {
                 $history->oldValue = '';
                 $oldValues = explode(',', $history->old);
-                foreach($oldValues as $key => $value) $history->oldValue .= zget($users, $value) . ',';
+                foreach($oldValues as $value) $history->oldValue .= zget($users, $value) . ',';
                 $history->oldValue = trim($history->oldValue, ',');
             }
 
@@ -300,7 +300,7 @@ class actionModel extends model
             {
                 $history->newValue = '';
                 $newValues = explode(',', $history->new);
-                foreach($newValues as $key => $value) $history->newValue .= zget($users, $value) . ',';
+                foreach($newValues as $value) $history->newValue .= zget($users, $value) . ',';
                 $history->newValue = trim($history->newValue, ',');
             }
         }
@@ -771,13 +771,11 @@ class actionModel extends model
             }
         }
 
-        if($action->objectType == 'story' && $action->action == 'closed')
+        $isCloseStory = $action->objectType == 'story' && $action->action == 'closed';
+        if($isCloseStory && !empty($extra) && strpos($extra, '|') !== false)
         {
-            if(!empty($extra) && strpos($extra, '|') !== false)
-            {
-                list($extra, $status) = explode('|', $extra);
-                if(!empty($desc['extra'][$extra])) $actionDesc = str_replace('$extra', $desc['extra'][$extra], $desc['main']);
-            }
+            list($extra) = explode('|', $extra);
+            if(!empty($desc['extra'][$extra])) $actionDesc = str_replace('$extra', $desc['extra'][$extra], $desc['main']);
         }
 
         if($action->objectType == 'module' && strpos(',created,moved,', $action->action) !== false)
@@ -1448,8 +1446,9 @@ class actionModel extends model
         $action = $this->getById($actionID);
         if(!$action || $action->action != 'deleted') return false;
 
-        list($table, $orderby, $field) = $this->actionTao->getUndeleteParamsByObjectType($action->objectType);
-        $object = $this->actionTao->getObjectBaseInfo($table, array('id' => $action->objectID), $field, $orderby);
+        list($table, $orderby, $field, $queryKey) = $this->actionTao->getUndeleteParamsByObjectType($action->objectType);
+        if(empty($queryKey)) $queryKey = 'id';
+        $object = $this->actionTao->getObjectBaseInfo($table, array($queryKey => $action->objectID), $field, $orderby);
         if(empty($object)) return false;
 
         $result = $this->checkActionCanUndelete($action, $object);
@@ -1659,7 +1658,10 @@ class actionModel extends model
 
         $actionType = strtolower($actionType);
         if(!isset($this->config->search->fields->{$objectType})) return false;
-        if((strpos($this->config->search->buildAction, ",{$actionType},") === false && $actionType != 'commented'  && empty($_POST['comment'])) || ($actionType == 'commented' && empty($_POST['actioncomment']))) return false;
+
+        $isCommentedAction = $actionType == 'commented';
+        if(strpos($this->config->search->buildAction, ",{$actionType},") === false && !$isCommentedAction && empty($_POST['comment'])) return false;
+        if($isCommentedAction && empty($_POST['actioncomment'])) return false;
         if($actionType == 'deleted' || $actionType == 'erased') return $this->search->deleteIndex($objectType, $objectID);
 
         $field = $this->config->search->fields->{$objectType};

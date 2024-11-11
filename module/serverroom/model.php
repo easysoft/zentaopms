@@ -81,7 +81,6 @@ class serverroomModel extends model
             $rooms[$roomID] = $name;
         }
 
-        $rooms[0] = '';
         return $rooms;
     }
 

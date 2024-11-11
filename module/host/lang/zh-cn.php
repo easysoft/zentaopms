@@ -3,7 +3,7 @@ $lang->host->common       = '主机';
 $lang->host->browse       = '主机列表';
 $lang->host->create       = '添加主机';
 $lang->host->view         = '主机详情';
-$lang->host->edit         = '编辑';
+$lang->host->edit         = '编辑主机';
 $lang->host->editAction   = '编辑主机';
 $lang->host->delete       = '删除';
 $lang->host->deleteAction = '删除主机';
@@ -28,6 +28,7 @@ $lang->host->cpuCores     = '单CPU核心数';
 $lang->host->cpuRate      = 'CPU频率';
 $lang->host->memory       = '内存大小';
 $lang->host->serverRoom   = '机房';
+$lang->host->desc         = '描述';
 
 $lang->host->createdBy   = '由谁创建';
 $lang->host->createdDate = '创建时间';
@@ -168,9 +169,14 @@ $lang->host->diskTypeList['ssd'] = '固态硬盘';
 $lang->host->confirmDelete  = '是否删除该主机记录？';
 
 $lang->host->notice = new stdclass();
-$lang->host->notice->memory    = '内存大小只能为数字！';
-$lang->host->notice->diskSize  = '硬盘容量只能为数字！';
-$lang->host->notice->cpuNumber = 'CPU数量只能为数字！';
-$lang->host->notice->cpuCores  = 'CPU核心数只能为数字！';
-$lang->host->notice->int       = '『%s』应当是正整数！';
-$lang->host->notice->ip        = '『%s』格式不正确！';
+$lang->host->notice->memory     = '内存大小只能为数字！';
+$lang->host->notice->diskSize   = '硬盘容量只能为数字！';
+$lang->host->notice->cpuNumber  = 'CPU数量只能为数字！';
+$lang->host->notice->cpuCores   = 'CPU核心数只能为数字！';
+$lang->host->notice->int        = '『%s』应当是正整数！';
+$lang->host->notice->ip         = '『%s』格式不正确！';
+$lang->host->notice->nameLength = '主机名称长度不能超过100个字符！';
+$lang->host->notice->descLength = '主机描述长度不能超过255个字符！';
+
+$lang->host->CDlist = array();
+$lang->host->CDlist['manual'] = '手工';

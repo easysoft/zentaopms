@@ -21,21 +21,27 @@ class hostZen extends host
      */
     protected function checkFormData(object $formData): bool
     {
-        $intFields = explode(',', $this->config->host->create->intFields);
-        foreach($intFields as $field)
+        if($formData->name && mb_strlen($formData->name) > 100)
         {
-            if(!preg_match("/^-?\d+$/", (string)$formData->{$field}))
-            {
-                dao::$errors[$field] = sprintf($this->lang->host->notice->int, $this->lang->host->{$field});
-            }
+            dao::$errors['name'] = $this->lang->host->notice->nameLength;
+        }
+
+        if($formData->desc && mb_strlen($formData->desc) > 255)
+        {
+            dao::$errors['desc'] = $this->lang->host->notice->descLength;
         }
 
         $ipFields = explode(',', $this->config->host->create->ipFields);
         foreach($ipFields as $field)
         {
-            if(!preg_match('/((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}/', (string)$formData->{$field}))
+            $ipList = explode(',', $formData->{$field});
+            foreach($ipList as $ip)
             {
-                dao::$errors[$field] = sprintf($this->lang->host->notice->ip, $this->lang->host->{$field});
+                $address = str_replace(array('https://', 'http://'), '', $ip);
+                if(!filter_var($address, FILTER_VALIDATE_IP) && !filter_var(gethostbyname($address), FILTER_VALIDATE_IP))
+                {
+                    dao::$errors[$field] = sprintf($this->lang->host->notice->ip, $this->lang->host->{$field});
+                }
             }
         }
         return !dao::isError();

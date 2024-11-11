@@ -353,6 +353,10 @@ $lang->action->desc->updatecustom            = '$date, 由 <strong>$actor</stron
 $lang->action->desc->delist  = '$date, 由 <strong>$actor</strong> 下架。' . "\n";
 $lang->action->desc->publish = '$date, 由 <strong>$actor</strong> 发布。' . "\n";
 
+$lang->action->desc->manualbackup    = '$date, 由 <strong>$actor</strong> 手动备份。' . "\n";
+$lang->action->desc->openautobackup  = '$date, 由 <strong>$actor</strong> 开启自动备份。' . "\n";
+$lang->action->desc->closeautobackup = '$date, 由 <strong>$actor</strong> 关闭自动备份。' . "\n";
+
 /* 用来显示动态信息。*/
 $lang->action->label = new stdclass();
 $lang->action->label->install                 = '安装了';

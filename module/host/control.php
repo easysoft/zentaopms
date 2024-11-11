@@ -68,7 +68,7 @@ class host extends control
     {
         if($_POST)
         {
-            $formData = form::data($this->config->host->form->create)->add('createdBy', $this->app->user->account)->add('createdDate', helper::now())->get();
+            $formData = form::data($this->config->host->form->create)->add('createdBy', $this->app->user->account)->add('createdDate', helper::now())->skipSpecial('name,desc')->get();
             $this->hostZen->checkFormData($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -99,7 +99,7 @@ class host extends control
     {
         if($_POST)
         {
-            $formData = form::data($this->config->host->form->edit)->add('id', $id)->add('editedBy', $this->app->user->account)->add('editedDate', helper::now())->get();
+            $formData = form::data($this->config->host->form->edit)->add('id', $id)->add('editedBy', $this->app->user->account)->add('editedDate', helper::now())->skipSpecial('name,desc')->get();
             $this->hostZen->checkFormData($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -133,7 +133,7 @@ class host extends control
         $this->view->rooms      = $this->loadModel('serverroom')->getPairs();
         $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu(0, 'host');
         $this->view->actions    = $this->loadModel('action')->getList('host', $id);
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->accounts   = $this->loadModel('account')->getPairs();
         $this->display();
     }
 

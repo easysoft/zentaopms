@@ -18,6 +18,26 @@ formPanel
     set::title($lang->host->create),
     formRow
     (
+        setID('groupRow'),
+        formGroup
+        (
+            set::width('1/3'),
+            set::label($lang->host->group),
+            set::control('picker'),
+            set::name('group'),
+            set::items($optionMenu)
+        ),
+        formGroup
+        (
+            set::width('1/3'),
+            set::label($lang->host->serverRoom),
+            set::control('picker'),
+            set::name('serverRoom'),
+            set::items($rooms)
+        )
+    ),
+    formRow
+    (
         formGroup
         (
             set::width('1/3'),
@@ -27,10 +47,12 @@ formPanel
         formGroup
         (
             set::width('1/3'),
-            set::label($lang->host->admin),
+            set::label($lang->host->osName),
             set::control('picker'),
-            set::name('admin'),
-            set::items($accounts)
+            set::name('osName'),
+            set::items($lang->host->osNameList),
+            set::value($osName ? $osName : $host->osName),
+            on::change('osChange')
         )
     ),
     formRow
@@ -38,31 +60,32 @@ formPanel
         formGroup
         (
             set::width('1/3'),
-            set::label($lang->host->cpuBrand),
-            set::control('picker'),
-            set::name('cpuBrand'),
-            set::items($lang->host->cpuBrandList)
+            set::name('intranet'),
+            set::label($lang->host->intranet)
         ),
         formGroup
         (
             set::width('1/3'),
-            set::name('cpuModel'),
-            set::label($lang->host->cpuModel)
+            set::label($lang->host->osVersion),
+            set::control('picker'),
+            set::name('osVersion'),
+            set::items($lang->host->{"{$osName}List"})
         )
     ),
     formRow
     (
+        formGroup
+        (
+            set::width('1/3'),
+            set::name('extranet'),
+            set::label($lang->host->extranet)
+        ),
         formGroup
         (
             set::width('1/3'),
             set::name('cpuNumber'),
-            set::label($lang->host->cpuNumber)
-        ),
-        formGroup
-        (
-            set::width('1/3'),
-            set::name('cpuCores'),
-            set::label($lang->host->cpuCores)
+            set::label($lang->host->cpuNumber),
+            set::control(array('type' => 'number', 'min' => 1))
         )
     ),
     formRow
@@ -90,119 +113,23 @@ formPanel
                 'suffix'      => 'GB',
                 'suffixWidth' => 40
             ))
-        )
-    ),
-    formRow
-    (
-        formGroup
-        (
-            set::width('1/3'),
-            set::label($lang->host->group),
-            set::control('picker'),
-            set::name('group'),
-            set::items($optionMenu)
         ),
-        formGroup
-        (
-            set::width('1/3'),
-            set::label($lang->host->serverRoom),
-            set::control('picker'),
-            set::name('serverRoom'),
-            set::items($rooms)
-        )
     ),
-    formRow
+    formGroup
     (
-        formGroup
-        (
-            set::width('1/3'),
-            set::name('serverModel'),
-            set::label($lang->host->serverModel)
-        ),
-        formGroup
-        (
-            set::width('1/3'),
-            set::label($lang->host->hostType),
-            set::control('picker'),
-            set::name('hostType'),
-            set::items($lang->host->hostTypeList),
-            set::value('virtual')
-        )
+        set::width('2/3'),
+        set::name('desc'),
+        set::label($lang->host->desc),
+        set::control(array('type' => 'textarea', 'rows' => 3))
     ),
-    formRow
+    formGroup
     (
-        formGroup
-        (
-            set::width('1/3'),
-            set::label($lang->host->osName),
-            set::control('picker'),
-            set::name('osName'),
-            set::items($lang->host->osNameList),
-            set::value($osName ? $osName : $host->osName),
-            on::change('osChange')
-        ),
-        formGroup
-        (
-            set::width('1/3'),
-            set::label($lang->host->osVersion),
-            set::control('picker'),
-            set::name('osVersion'),
-            set::items($lang->host->{"{$osName}List"})
-        )
-    ),
-    formRow
-    (
-        formGroup
-        (
-            set::width('1/3'),
-            set::name('zap'),
-            set::label($lang->host->zap),
-            set::value(8086)
-        ),
-        formGroup
-        (
-            set::width('1/3'),
-            set::label($lang->host->tags),
-            set::control('picker'),
-            set::name('vsoft'),
-            set::items($lang->host->tagsList),
-            set::value('vm')
-        )
-    ),
-    formRow
-    (
-        formGroup
-        (
-            set::width('1/3'),
-            set::name('intranet'),
-            set::label($lang->host->intranet)
-        ),
-        formGroup
-        (
-            set::width('1/3'),
-            set::name('extranet'),
-            set::label($lang->host->extranet)
-        )
-    ),
-    formRow
-    (
-        formGroup
-        (
-            set::width('1/3'),
-            set::label($lang->host->provider),
-            set::control('picker'),
-            set::name('provider'),
-            set::items($lang->host->providerList)
-        ),
-        formGroup
-        (
-            set::width('1/3'),
-            set::name('status'),
-            set::control('radioList'),
-            set::label($lang->host->status),
-            set::value('online'),
-            set::inline(true),
-            set::items($lang->host->statusList)
-        )
+        set::width('1/3'),
+        set::name('status'),
+        set::control('radioList'),
+        set::label($lang->host->status),
+        set::value('online'),
+        set::inline(true),
+        set::items($lang->host->statusList)
     )
 );

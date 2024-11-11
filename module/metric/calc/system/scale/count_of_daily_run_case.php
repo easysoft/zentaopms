@@ -29,10 +29,9 @@ class count_of_daily_run_case extends baseCalc
     public function calculate($row)
     {
         $date = $row->date;
-        if(empty($date)) return false;
 
-        $year = substr($date, 0, 4);
-        if($year == '0000') return false;
+        $year = $this->getYear($date);
+        if(!$year) return false;
 
         $month = substr($date, 5, 2);
         $day   = substr($date, 8, 2);

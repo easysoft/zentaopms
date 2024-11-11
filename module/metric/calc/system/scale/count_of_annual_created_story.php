@@ -30,10 +30,8 @@ class count_of_annual_created_story extends baseCalc
     {
         $openedDate = $data->openedDate;
 
-        if(empty($openedDate)) return false;
-
-        $year = substr($openedDate, 0, 4);
-        if($year == '0000') return false;
+        $year = $this->getYear($openedDate);
+        if(!$year) return false;
 
         if(!isset($this->result[$year])) $this->result[$year] = 0;
 

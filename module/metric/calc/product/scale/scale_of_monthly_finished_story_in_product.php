@@ -38,11 +38,8 @@ class scale_of_monthly_finished_story_in_product extends baseCalc
 
         if($closedReason != 'done') return false;
 
-        if(empty($closedDate)) return false;
-
-        $year = substr($closedDate, 0, 4);
-
-        if($year == '0000') return false;
+        $year = $this->getYear($closedDate);
+        if(!$year) return false;
 
         $month = substr($closedDate, 5, 2);
 

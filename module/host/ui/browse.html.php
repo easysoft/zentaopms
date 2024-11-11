@@ -51,14 +51,17 @@ sidebar
         'settingText' => $lang->host->groupMaintenance,
         'showDisplay' => false,
         'settingLink' => $this->createLink('tree', 'browse', "productID=0&view=host"),
-        'closeLink'   => $this->createLink('host', 'browse')
+        'closeLink'   => $this->createLink('host', 'browse'),
+        'settingApp'  => 'devops',
     )))
 );
+$cols = $this->loadModel('datatable')->getSetting('host');
 
 dtable
 (
+    set::customCols(true),
     set::userMap($accounts),
-    set::cols(array_values($config->host->dtable->fieldList)),
+    set::cols($cols),
     set::data($tableData),
     set::sortLink(createLink('host', 'browse', "browseType=$browseType&param=$param&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
     set::orderBy($orderBy),

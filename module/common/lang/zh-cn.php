@@ -341,6 +341,7 @@ $lang->systemdynamic->common    = '组织动态';
 $lang->systemcompany->common    = '组织公司';
 $lang->pipeline->common         = '流水线';
 $lang->devopssetting->common    = '设置';
+$lang->deployment->common       = '主机';
 
 $lang->dashboard       = '仪表盘';
 $lang->contribute      = '贡献';

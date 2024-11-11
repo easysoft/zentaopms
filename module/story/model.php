@@ -571,7 +571,8 @@ class storyModel extends model
         $this->loadModel('score')->create('story', 'create',$storyID);
 
         /* Create actions. Record submit review action. */
-        $action = $bugID == 0 ? (empty($storyFrom) ? 'Opened' : 'From' . ucfirst($storyFrom)) : 'Frombug';
+        $bugAction = empty($storyFrom) ? 'Opened' : 'From' . ucfirst($storyFrom);
+        $action    = $bugID == 0 ? $bugAction : 'Frombug';
         $this->action->create('story', $storyID, $action, '', $extra);
         if($story->status == 'reviewing') $this->action->create('story', $storyID, 'submitReview');
         if(!empty($story->assignedTo)) $this->action->create('story', $storyID, 'Assigned', '', $story->assignedTo);
@@ -1440,8 +1441,9 @@ class storyModel extends model
      */
     public function subdivide(int $storyID, array $SRList): void
     {
-        $now      = helper::now();
-        $oldStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+        $now       = helper::now();
+        $oldStory  = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+        $storyType = $this->dao->select('id,type')->from(TABLE_STORY)->where('id')->in($SRList)->fetchPairs('id');
 
         /* Set parent to child story. */
         foreach($SRList as $childStoryID)
@@ -1454,6 +1456,17 @@ class storyModel extends model
                  ->set('path')->eq($path)
                  ->where('id')->eq($childStoryID)
                  ->exec();
+
+            if($this->config->edition != 'open')
+            {
+                $relation = new stdClass();
+                $relation->AID      = $storyID;
+                $relation->AType    = $oldStory->type;
+                $relation->relation = 'subdivideinto';
+                $relation->BID      = $childStoryID;
+                $relation->BType    = $storyType[$childStoryID];
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
         }
         $this->computeEstimate($storyID);
 
@@ -2056,7 +2069,20 @@ class storyModel extends model
             $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->autoCheck()->exec();
             if(dao::isError()) return false;
 
-            if($task->story) $this->setStage($task->story);
+            if($task->story)
+            {
+                $this->setStage($task->story);
+                if($this->config->edition != 'open')
+                {
+                    $relation = new stdClass();
+                    $relation->relation = 'generated';
+                    $relation->AID      = $task->story;
+                    $relation->AType    = 'story';
+                    $relation->BID      = $taskID;
+                    $relation->BType    = 'task';
+                    $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+                }
+            }
             $this->action->create('task', $taskID, 'Opened', '');
         }
 
@@ -2159,6 +2185,14 @@ class storyModel extends model
         {
             $this->loadModel('demand')->changeDemandStatus($oldStory->demand, '0', true);
             $this->loadModel('action')->create('demand', $oldStory->demand, 'restored', '', $storyID);
+
+            $relation = new stdClass();
+            $relation->AID      = $oldStory->demand;
+            $relation->AType    = 'demand';
+            $relation->relation = 'subdivideinto';
+            $relation->BID      = $storyID;
+            $relation->BType    = $oldStory->type;
+            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
         }
         return $changes;
     }
@@ -4495,7 +4529,8 @@ class storyModel extends model
         {
             /* When the review result of the changed story is clarify, the status should be changing. */
             $isChanged = $oldStory->changedBy ? true : false;
-            $story->status = $isChanged ? 'changing' : 'draft';
+            $story->status     = $isChanged ? 'changing' : 'draft';
+            $story->reviewedBy = '';
         }
 
         if($result == 'revert')

@@ -31,10 +31,8 @@ class count_of_monthly_created_release_in_product extends baseCalc
         $product     = $row->product;
         $createdDate = $row->date;
 
-        if(empty($createdDate)) return false;
-
-        $year = substr($createdDate, 0, 4);
-        if($year == '0000') return false;
+        $year = $this->getYear($createdDate);
+        if(!$year) return false;
 
         $month = substr($createdDate, 5, 2);
 

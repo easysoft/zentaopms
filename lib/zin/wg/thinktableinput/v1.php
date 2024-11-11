@@ -14,6 +14,7 @@ class thinkTableInput extends thinkQuestion
         'fields?: array',             // 行标题
         'supportAdd?: bool',          // 是否支持用户添加行
         'canAddRows: number=1',       // 可添加行数
+        'inputType?: bool=flase',     // 输入类型
     );
 
     public static function getPageJS(): string
@@ -31,7 +32,7 @@ class thinkTableInput extends thinkQuestion
     {
         global $lang;
         $detailWg = parent::buildDetail();
-        list($step, $fields, $supportAdd, $canAddRows, $mode) = $this->prop(array('step', 'fields', 'supportAdd', 'canAddRows', 'mode'));
+        list($step, $fields, $supportAdd, $canAddRows, $mode, $inputType) = $this->prop(array('step', 'fields', 'supportAdd', 'canAddRows', 'mode', 'inputType'));
         if($mode != 'detail') return array();
 
         if($step)
@@ -42,6 +43,7 @@ class thinkTableInput extends thinkQuestion
             $answer       = $step->answer;
             $result       = isset($answer->result) && !empty($answer->result) ? (array) $answer->result : array();
             $customFields = !empty($answer->customFields) ? get_object_vars($answer->customFields) : array();
+            $inputType    = isset($step->options->inputType)? $step->options->inputType : false;
         }
 
         $tableInputItems = array();
@@ -62,14 +64,29 @@ class thinkTableInput extends thinkQuestion
                 div
                 (
                     set::title($value),
-                    setClass('result-width', $index == 0 ? '' : 'mt-2'),
-                    textarea
+                    setClass(empty($inputType) ? 'result-width' : '', $index == 0 ? '' : 'mt-2'),
+                    empty($inputType) ? textarea
                     (
                         set::rows('2'),
                         set::name('result[' . $index . ']'),
                         set::value($value),
                         set::placeholder($lang->thinkrun->pleaseInput)
-                    )
+                    ) : inputControl
+                    (
+                        input(set(array(
+                                'class'       => 'w-72 dimension-weight',
+                                'name'        => 'result[' . $index . ']',
+                                'type'        => 'number',
+                                'min'         => 1,
+                                'max'         => 100,
+                                'value'       => $value,
+                                'placeholder' => $lang->thinkrun->pleaseInput
+                            )),
+                            on::input('changeInput')
+                        ),
+                        to::suffix($lang->thinkwizard->dimension->percentageSign),
+                        set::suffixWidth(32)
+                    ),
                 ),
                 div
                 (
@@ -200,7 +217,7 @@ class thinkTableInput extends thinkQuestion
         $app->loadLang('thinkstep');
         $formItems = parent::buildFormItem();
 
-        list($step, $required, $requiredRows, $supportAdd, $canAddRows, $fields) = $this->prop(array('step','required', 'requiredRows', 'supportAdd', 'canAddRows', 'fields'));
+        list($step, $required, $requiredRows, $supportAdd, $canAddRows, $fields, $inputType) = $this->prop(array('step','required', 'requiredRows', 'supportAdd', 'canAddRows', 'fields', 'inputType'));
         if($step)
         {
             $required = $step->options->required;
@@ -209,10 +226,12 @@ class thinkTableInput extends thinkQuestion
             $requiredRows = $step->options->requiredRows;
             $supportAdd   = $step->options->supportAdd;
             $canAddRows   = $step->options->canAddRows;
+            $inputType    = isset($step->options->inputType) ? $step->options->inputType : false;
         }
 
         $formItems[] = array (
             formHidden('options[questionType]', 'tableInput'),
+            formHidden('options[inputType]', $inputType),
             formRow
             (
                 setClass('mb-3'),

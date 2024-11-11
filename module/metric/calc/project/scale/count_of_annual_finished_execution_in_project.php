@@ -31,9 +31,8 @@ class count_of_annual_finished_execution_in_project extends baseCalc
         $project = $row->project;
         $realEnd = $row->realEnd;
 
-        if(empty($realEnd)) return false;
-        $year = substr($realEnd, 0, 4);
-        if($year == '0000') return false;
+        $year = $this->getYear($realEnd);
+        if(!$year) return false;
 
         if(!isset($this->result[$project])) $this->result[$project] = array();
         if(!isset($this->result[$project][$year])) $this->result[$project][$year] = 0;

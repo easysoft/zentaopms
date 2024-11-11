@@ -57,4 +57,76 @@ class bugTester extends tester
         if($form->dom->firstAssign->getText() == $user) return $this->success('单个指派Bug成功');
         return $this->failed('单个指派Bug失败');
     }
+
+    /**
+     * 批量指派bug。
+     * Batch assign bug.
+     *
+     * @param  string $user
+     * @access public
+     * @return object
+     */
+    public function batchAssignBug($user)
+    {
+        $form = $this->initForm('project', 'bug', array('project' => 1), 'appIframe-project');
+        $form->dom->secondCheckbox->click();
+        $form->dom->batchAssignTo->click();
+        $form->dom->assignToAdmin->click();
+        $form->wait(1);
+        if($form->dom->firstAssign->getText() == $user) return $this->success('批量指派Bug成功');
+        return $this->failed('批量指派Bug失败');
+    }
+
+    /**
+     * 确认bug。
+     * Confirm bug.
+     *
+     * @param  string $user
+     * @access public
+     * @return object
+     */
+    public function confirmBug($user)
+    {
+        $form = $this->initForm('project', 'bug', array('project' => 1), 'appIframe-project');
+        $form->dom->confirmBtn->click();
+        $form->dom->confirmAssignTo->picker($user);
+        $form->dom->confirm->click();
+        $form->wait(1);
+        if($form->dom->firstConfirm->getText() == '已确认') return $this->success('确认Bug成功');
+        return $this->failed('确认Bug失败');
+    }
+
+    /**
+     * 解决bug。
+     * Resolve bug.
+     *
+     * @param  array $bug
+     * @access public
+     * @return object
+     */
+    public function resolveBug(array $bug)
+    {
+        $form = $this->initForm('project', 'bug', array('project' => 1), 'appIframe-project');
+        $form->dom->resolveBtn->click();
+        $resolveForm = $this->loadPage('bug', 'bug');
+        $form->wait(1);
+        $title = $form->dom->resolveTitle->getText();
+        if(isset($bug['resolution']) && !empty($bug['resolution'])) $form->dom->resolution->picker($bug['resolution']);
+        if(isset($bug['build']) && !empty($bug['build']))           $form->dom->build->picker($bug['build']);
+        $form->dom->resolve->click();
+
+        /* 检查解决方案必填提示 */
+        if($resolveForm->dom->resolutionTip)
+        {
+            if($this->checkFormTips('bug')) return $this->success('解决Bug表单页提示信息正确');
+            return $this->failed('解决Bug表单页提示信息不正确');
+        }
+
+        $form->wait(1);
+        /* 搜索已解决的Bug,检查列表状态字段 */
+        $form->dom->search(array("{$this->lang->bug->name},=,{$title}"));
+        $form->wait(1);
+        if($form->dom->status->getText() == '已解决') return $this->success('解决Bug成功');
+        return $this->failed('解决Bug失败');
+    }
 }

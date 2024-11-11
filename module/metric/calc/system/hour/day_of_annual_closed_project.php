@@ -29,13 +29,13 @@ class day_of_annual_closed_project extends baseCalc
     public function calculate($data)
     {
         $project  = $data->project;
-        $year     = substr($data->closedDate, 0, 4);
         $consumed = (float)$data->consumed;
         $status   = $data->status;
         $defaultHours = (float)$data->defaultHours;
 
         if($status != 'closed') return false;
-        if(empty($year) || $year == '0000') return false;
+        $year = $this->getYear($data->closedDate);
+        if(!$year) return false;
 
         if(!isset($this->result[$year])) $this->result[$year] = array();
         if(!isset($this->result[$year][$project])) $this->result[$year][$project] = 0;

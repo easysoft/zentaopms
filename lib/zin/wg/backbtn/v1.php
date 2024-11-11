@@ -92,7 +92,8 @@ class backBtn extends btn
             'review'         => 'review-browse,my-index,product-dynamic,project-dynamic,project-view,programplan-browse,project-execution',
             'charter'        => 'charter-browse',
             'roadmap'        => 'charter-view',
-            'approvalflow'   => 'approvalflow-browse'
+            'approvalflow'   => 'approvalflow-browse',
+            'host'           => 'host-browse,my-index'
         );
 
         $props  = parent::getProps();

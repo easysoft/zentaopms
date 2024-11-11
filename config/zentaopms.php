@@ -518,7 +518,6 @@ define('TABLE_BUDGET',                 '`' . $config->db->prefix . 'budget`');
 define('TABLE_CMCL',                   '`' . $config->db->prefix . 'cmcl`');
 define('TABLE_DEPLOY',                 '`' . $config->db->prefix . 'deploy`');
 define('TABLE_DEPLOYPRODUCT',          '`' . $config->db->prefix . 'deployproduct`');
-define('TABLE_DEPLOYSCOPE',            '`' . $config->db->prefix . 'deployscope`');
 define('TABLE_DEPLOYSTEP',             '`' . $config->db->prefix . 'deploystep`');
 define('TABLE_DERIVEMEAS',             '`' . $config->db->prefix . 'derivemeas`');
 define('TABLE_DOMAIN',                 '`' . $config->db->prefix . 'domain`');
@@ -720,6 +719,7 @@ $config->objectTables['marketresearch'] = TABLE_PROJECT;
 $config->objectTables['researchstage']  = TABLE_PROJECT;
 $config->objectTables['workflowgroup']  = TABLE_WORKFLOWGROUP;
 $config->objectTables['productline']    = TABLE_MODULE;
+$config->objectTables['repocommit']     = TABLE_REPOHISTORY;
 
 $config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions', 'aiPrompts', 'promptDesign', 'promptExec');
 $config->disabledFeatures = '';

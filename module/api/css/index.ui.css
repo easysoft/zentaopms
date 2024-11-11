@@ -1,23 +1,24 @@
-.base-url > p {margin: 0;}
-.table-empty-tip > div {display: inline-block;}
-.detail .list-group-item .heading.GET { background-color: #e7f0f7; }
-.detail .list-group-item .heading.GET a { color: #0f6ab4; }
-.detail .list-group { height: calc(100vh - 215px); overflow-y: auto; }
-.detail .list-group-item .heading.OPTIONS { background-color: #e7f0f7; }
-.detail .list-group-item .heading.OPTIONS a { color: #0f6ab4; }
-.detail .list-group-item .heading.POST { background-color: #e7f6ec; }
-.detail .list-group-item .heading.POST a { color: #10a54a; }
-.detail .list-group-item .heading.PUT { background-color: #f9f2e9; }
-.detail .list-group-item .heading.PUT a { color: #c5862b; }
-.detail .list-group-item .heading.PATCH { background-color: #f9f2e9; }
-.detail .list-group-item .heading.PATCH a { color: #c5862b; }
-.detail .list-group-item .heading.DELETE { background-color: #f5e8e8; border: 1px solid #e8c6c7; }
-.detail .list-group-item .heading.DELETE a { color: #a41e22; }
-.detail .list-group-item a { display: flex; align-items: center; }
-.detail .list-group-item .path, .detail .list-group-item .desc { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.detail .list-group-item .path { padding-left: 10px; font-size: 14px; color: black; flex: 1; }
-.detail .list-group-item .desc { width: auto; font-size: 14px; line-height: 38px; float: right; padding-right: 10px; max-width: 200px; }
-.detail .list-group-item {list-style: none; font-size: 14px; margin-bottom: 10px; line-height: 30px}
-.detail .list-group-item span.method {line-height: 38px; width: 65px;background: #2e7fff; color: #fff; text-align: center;}
-.detail .list-group-item .label+.label {margin-left: -4px;}
-.detail .list-group-item .label {border-radius: 0;}
+.icon-api {text-align: center; --api-color-rgb: var(--color-success-500-rgb); color: rgba(var(--api-color-rgb), 1);}
+.icon-api::before {content: ' '; display: inline-block; width: 8px; height: 8px; border-radius: 2px; background-color: currentColor; min-width: 0;}
+
+.api-list-item.is-GET, .icon-api.is-GET {--api-color-rgb: var(--color-success-500-rgb)}
+.api-list-item.is-POST, .icon-api.is-POST {--api-color-rgb: var(--color-important-500-rgb)}
+.api-list-item.is-DELETE, .icon-api.is-DELETE {--api-color-rgb: var(--color-danger-500-rgb)}
+.api-list-item.is-PUT, .icon-api.is-PUT {--api-color-rgb: var(--color-important-500-rgb)}
+.api-list-item.is-PATCH, .icon-api.is-PATCH {--api-color-rgb: var(--color-special-500-rgb)}
+.api-list-item.is-OPTIONS, .icon-api.is-OPTIONS {--api-color-rgb: var(--color-special-500-rgb)}
+.api-list-item.is-HEAD, .icon-api.is-HEAD {--api-color-rgb: var(--color-gray-500-rgb)}
+
+.api-list-item {background-color: rgba(var(--api-color-rgb), .1);}
+.api-list-item .api-method {background-color: rgba(var(--api-color-rgb), 1); color: var(--color-canvas)}
+.api-list-item .api-title {color: rgba(var(--api-color-rgb), 1)}
+
+.doc-app-mode-edit, .doc-app-mode-create {--doc-view-max-width: 1100px}
+.doc-app-mode-edit .doc-view-content, .doc-app-mode-create .doc-view-content {padding: 0 24px;}
+.doc-app-mode-edit form .form-actions, .doc-app-mode-create form .form-actions {display: none;}
+
+.doc-tree .item-inner>.item-icon {margin-right: -4px;}
+.doc-list > .dtable {--dtable-border-color: transparent}
+.api-lib-menu + .doc-tree > .tree {padding-top: 0;}
+
+.dropdown-menu .divider + .divider {display: none;}

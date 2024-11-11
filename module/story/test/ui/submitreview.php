@@ -1,13 +1,14 @@
 #!/usr/bin/env php
 <?php
 declare(strict_types=1);
+
 /**
- *
- * title=需求提交评审测试
- * timeout=0
- * cid=82
- * - 需求提交评审后检查需求状态正确
- */
+
+title=需求提交评审测试
+timeout=0
+cid=82
+
+*/
 chdir (__DIR__);
 include '../lib/reviewstory.ui.class.php';
 
@@ -60,6 +61,9 @@ $action->action->range('opened');
 $action->read->range('0');
 $action->vision->range('rnd');
 $action->gen(2);
+
+$storyreview = zenData('storyreview');
+$storyreview->gen(0);
 
 $tester = new reviewStoryTester();
 $tester->login();

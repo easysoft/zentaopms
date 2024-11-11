@@ -489,7 +489,7 @@ class doc extends control
 
             $docResult = $this->doc->create($docData, $this->post->labels);
             if(!$docResult || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->docZen->responseAfterCreate($docData->lib, $docResult);
+            return $this->docZen->responseAfterCreate($docResult);
         }
 
         $this->docZen->assignVarsForCreate($objectType, $objectID, $libID, $moduleID, $docType);
@@ -862,11 +862,10 @@ class doc extends control
      *
      * @param  int    $docID
      * @param  int    $version
-     * @param  int    $appendLib
      * @access public
      * @return void
      */
-    public function view(int $docID = 0, int $version = 0, int $appendLib = 0)
+    public function view(int $docID = 0, int $version = 0)
     {
         $doc = $this->doc->getByID($docID, $version, true);
         if(!$doc || !isset($doc->id))
@@ -877,8 +876,6 @@ class doc extends control
         if(!$this->doc->checkPrivDoc($doc)) return $this->sendError($this->lang->doc->accessDenied, inlink('index'));
 
         $lib = $this->doc->getLibByID((int)$doc->lib);
-        if(!empty($lib) && $lib->deleted == '1') $appendLib = $doc->lib;
-        if($this->app->tab == 'doc' && !empty($lib) && $lib->type == 'execution') $appendLib = $doc->lib;
 
         $objectType = $lib->type;
         $objectID   = $this->doc->getObjectIDByLib($lib, $objectType);
@@ -1339,7 +1336,7 @@ class doc extends control
             $this->doc->moveLib($libID, $data);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            return $this->docZen->responseAfterMove($this->post->space, $spaceType, $libID);
+            return $this->docZen->responseAfterMove($this->post->space, $libID);
         }
 
         $this->docZen->setAclForCreateLib($spaceType);
@@ -1395,7 +1392,7 @@ class doc extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            return $this->docZen->responseAfterMove($this->post->space, $spaceType, $data->lib, $locate, $docID);
+            return $this->docZen->responseAfterMove($this->post->space, $data->lib, $docID);
         }
 
         $projects   = $this->loadModel('project')->getPairsByProgram(0, 'all', false, 'order_asc');

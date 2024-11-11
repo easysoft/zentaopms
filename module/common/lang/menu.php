@@ -521,7 +521,7 @@ $lang->qa->menu->automation['subMenu']->zanode      = array('link' => "{$lang->z
 $lang->devops->homeMenu = new stdclass();
 $lang->devops->homeMenu->repos        = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit,import,createrepo');
 $lang->devops->homeMenu->compile      = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
-if($config->edition != 'open') $lang->devops->homeMenu->deploy = array('link' => "{$lang->devops->deploy}|deploy|browse", 'alias' => 'steps,managestep,create,edit,browse,view,scope,cases', 'subModule' => 'ops,deploy');
+$lang->devops->homeMenu->deploy       = array('link' => "{$lang->devops->host}|host|browse", 'alias' => 'create,edit,view,treemap,changestatus,group', 'subModule' => 'tree');
 $lang->devops->homeMenu->apps  = array('link' => "{$lang->app->common}|space|browse", 'subModule' => 'instance,gitlab,gitea,gogs,jenkins,sonarqube', 'alias' => 'createapplication,binduser,edit');
 if($config->inQuickon) $lang->devops->homeMenu->store = array('link' => "{$lang->app->store}|store|browse", 'subModule' => 'store');
 
@@ -735,6 +735,7 @@ $lang->navGroup->space            = 'devops';
 $lang->navGroup->store            = 'devops';
 $lang->navGroup->instance         = 'devops';
 $lang->navGroup->deploy           = 'devops';
+$lang->navGroup->host             = 'devops';
 
 $lang->navGroup->company        = 'system';
 $lang->navGroup->systemteam     = 'system';
@@ -782,7 +783,6 @@ $lang->navGroup->system        = 'admin';
 $lang->navGroup->holiday       = 'admin';
 $lang->navGroup->serverroom    = 'admin';
 $lang->navGroup->account       = 'admin';
-$lang->navGroup->host          = 'admin';
 $lang->navGroup->ops           = 'admin';
 $lang->navGroup->service       = 'admin';
 $lang->navGroup->domain        = 'admin';

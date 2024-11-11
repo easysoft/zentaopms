@@ -1,13 +1,14 @@
 #!/usr/bin/env php
 <?php
 declare(strict_types=1);
+
 /**
- *
- * title=指派给需求测试
- * timeout=0
- * cid=89
- * - 指派需求后检查指派人信息正确
- */
+
+title=指派给需求测试
+timeout=0
+cid=89
+
+*/
 chdir (__DIR__);
 include '../lib/assigntostory.ui.class.php';
 

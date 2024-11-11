@@ -599,6 +599,7 @@ $lang->doc->docLang->docTitleRequired            = 'Please enter the document ti
 $lang->doc->docLang->docTitlePlaceholder         = 'Enter the document title';
 $lang->doc->docLang->noDataYet                   = 'No data yet';
 $lang->doc->docLang->position                    = $lang->doc->position;
+$lang->doc->docLang->relateObject                = 'Related Objects';
 
 $lang->docTemplate->moduleName = array();
 $lang->docTemplate->moduleName['plan']   = 'plan';
