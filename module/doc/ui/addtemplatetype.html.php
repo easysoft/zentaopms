@@ -9,3 +9,38 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+
+modalHeader(set::title($lang->docTemplate->addTemplateType));
+formPanel
+(
+    setID('addForm'),
+    set::submitBtnText($lang->save),
+    formGroup
+    (
+        set::label($lang->docTemplate->scope),
+        picker
+        (
+            set::name('root'),
+            set::value($scope),
+            set::items($scopes),
+            set::required(true)
+        )
+    ),
+    formGroup
+    (
+        set::label($lang->docTemplate->parentModule),
+        picker
+        (
+            set::name('parent'),
+            set::value($parentModule),
+            set::items($moduleItems),
+            set::required(true)
+        )
+    ),
+    formGroup
+    (
+        set::name('name'),
+        set::label($lang->docTemplate->typeName),
+        set::control('input')
+    ),
+);
