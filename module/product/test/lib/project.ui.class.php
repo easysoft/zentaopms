@@ -3,7 +3,7 @@ include dirname(__FILE__, 5) . '/test/lib/ui.php';
 class projectTester extends tester
 {
     /**
-     * 切换tab
+     * 切换标签
      * switch tab
      *
      * @param $projecturl url
@@ -28,7 +28,7 @@ class projectTester extends tester
      * 关联项目
      * link project
      *
-     * @param $projecturl url
+     * @param $projecturl      url
      * @param $expectedProject 项目名称
      * @return mixed
      */
