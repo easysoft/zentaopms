@@ -32,8 +32,8 @@ detailBody
             setClass('table table-fixed canvas host-view-table'),
             h::tr
             (
-                h::th($lang->host->CD),
-                h::td($host->CD),
+                isset($host->CD) ? h::th($lang->host->CD) : null,
+                isset($host->CD) ? h::td($host->CD) : null,
                 h::th($lang->host->name),
                 h::td($host->name)
             ),
@@ -44,12 +44,12 @@ detailBody
                 h::th($lang->host->serverRoom),
                 h::td(zget($rooms, $host->serverRoom, ""))
             ),
-            $host->CD == 'spug' ? h::tr
+            zget($host, 'CD') == 'spug' ? h::tr
             (
                 h::th($lang->host->admin),
                 h::td(zget($host, 'admin')),
             ) : null,
-            $host->CD == 'spug' ?  h::tr
+            zget($host, 'CD') == 'spug' ?  h::tr
             (
                 h::th($lang->host->password),
                 h::td($lang->host->defaultPWD),
@@ -77,12 +77,12 @@ detailBody
             ),
             h::tr
             (
-                $host->CD != 'spug' ? h::th($lang->host->osName) : null,
-                $host->CD != 'spug' ? h::td($host->osName) : null,
+                zget($host, 'CD') != 'spug' ? h::th($lang->host->osName) : null,
+                zget($host, 'CD') != 'spug' ? h::td($host->osName) : null,
                 h::th($lang->host->osVersion),
-                h::td($host->CD != 'spug' ? zget($lang->host->{$host->osName.'List'}, $host->osVersion) : $host->osName)
+                h::td(zget($host, 'CD') != 'spug' ? zget($lang->host->{$host->osName.'List'}, $host->osVersion) : $host->osName)
             ),
-            $host->CD != 'spug' ? h::tr
+            zget($host, 'CD') != 'spug' ? h::tr
             (
                 h::th($lang->host->status),
                 h::td($lang->host->statusList[$host->status]),

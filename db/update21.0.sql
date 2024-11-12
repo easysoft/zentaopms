@@ -3,8 +3,6 @@ ALTER TABLE `zt_host` DROP COLUMN `hardwareType`;
 ALTER TABLE `zt_host` DROP COLUMN `cpuBrand`;
 ALTER TABLE `zt_host` DROP COLUMN `cpuModel`;
 ALTER TABLE `zt_host` DROP COLUMN `provider`;
-ALTER TABLE `zt_host` ADD `CD` varchar(32) NOT NULL DEFAULT 'manual' AFTER `name`;
-ALTER TABLE `zt_host` ADD `sshPort` mediumint NOT NULL DEFAULT 0 AFTER `ssh`;
 
 ALTER TABLE `zt_deploystep` DROP COLUMN `begin`;
 ALTER TABLE `zt_deploystep` DROP COLUMN `end`;
