@@ -2073,8 +2073,13 @@ class taskModel extends model
         /* If the child task is paused, closed or canceled, append the mailto from parent task. */
         if($task->parent > 0)
         {
-            $appendParent = in_array($action, array('paused', 'closed', 'canceled'));
-            if($action == 'edited')
+            $appendParent = false;
+            if(in_array($action, array('paused', 'closed', 'canceled')))
+            {
+                $actionExtra = $this->dao->select('id,extra')->from(TABLE_ACTION)->where('objectType')->eq('task')->andWhere('objectID')->eq($task->id)->andWhere('action')->eq($action)->orderBy('id_desc')->limit(1)->fetch('extra');
+                if($actionExtra != 'autobyparent') $appendParent = true;
+            }
+            elseif($action == 'edited')
             {
                 $actionExtra = $this->dao->select('id,extra')->from(TABLE_ACTION)->where('objectType')->eq('task')->andWhere('objectID')->eq($task->id)->andWhere('action')->eq($action)->orderBy('id_desc')->limit(1)->fetch('extra');
                 if($actionExtra == 'statuschanged' && in_array($task->status, array('pause', 'close', 'cancel'))) $appendParent = true;
