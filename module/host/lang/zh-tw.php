@@ -44,8 +44,6 @@ $lang->host->unitList['GB'] = 'GB';
 $lang->host->unitList['TB'] = 'TB';
 
 $lang->host->cpuBrandList[''] = '';
-$lang->host->cpuBrandList['intel'] = '英特爾';
-$lang->host->cpuBrandList['amd']   = 'AMD';
 
 $lang->host->database = '資料庫';
 $lang->host->databaseList['']             = '';

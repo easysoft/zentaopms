@@ -2656,30 +2656,6 @@ CREATE TABLE IF NOT EXISTS `zt_serverroom` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- DROP TABLE IF EXISTS `zt_account`;
-CREATE TABLE IF NOT EXISTS `zt_account` (
-  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL DEFAULT '',
-  `type` varchar(255) NOT NULL DEFAULT '',
-  `provider` varchar(255) NOT NULL DEFAULT '',
-  `adminURI` varchar(255) NOT NULL DEFAULT '',
-  `account` varchar(255) NOT NULL DEFAULT '',
-  `password` varchar(255) NOT NULL DEFAULT '',
-  `email` varchar(255) NOT NULL DEFAULT '',
-  `mobile` varchar(255) NOT NULL DEFAULT '',
-  `extra` text NULL,
-  `createdBy` varchar(30) NOT NULL DEFAULT '',
-  `createdDate` datetime NULL,
-  `editedBy` varchar(30) NOT NULL DEFAULT '',
-  `editedDate` datetime NULL,
-  `status` varchar(30) NOT NULL DEFAULT '',
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE INDEX `name`     ON `zt_account` (`name`);
-CREATE INDEX `provider` ON `zt_account` (`provider`);
-CREATE INDEX `status`   ON `zt_account` (`status`);
-
 -- DROP TABLE IF EXISTS `zt_host`;
 CREATE TABLE `zt_host` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,

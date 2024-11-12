@@ -46,7 +46,6 @@ class host extends control
         $this->view->title      = $this->lang->host->common;
         $this->view->hostList   = $this->host->getList($browseType, $param, $orderBy, $pager);
         $this->view->rooms      = $rooms;
-        $this->view->accounts   = $this->loadModel('account')->getPairs();
         $this->view->param      = $param;
         $this->view->browseType = $browseType;
         $this->view->orderBy    = $orderBy;
@@ -80,7 +79,6 @@ class host extends control
 
         $this->view->title      = $this->lang->host->create;
         $this->view->rooms      = $this->loadModel('serverroom')->getPairs();
-        $this->view->accounts   = $this->loadModel('account')->getPairs();
         $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu(0, 'host');
         $this->display();
     }
@@ -111,7 +109,6 @@ class host extends control
         $this->view->title      = $this->lang->host->edit;
         $this->view->host       = $this->host->fetchByID($id);
         $this->view->rooms      = $this->loadModel('serverroom')->getPairs();
-        $this->view->accounts   = $this->loadModel('account')->getPairs();
         $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu(0, 'host');
         $this->display();
     }
@@ -131,7 +128,6 @@ class host extends control
         $this->view->rooms      = $this->loadModel('serverroom')->getPairs();
         $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu(0, 'host');
         $this->view->actions    = $this->loadModel('action')->getList('host', $id);
-        $this->view->accounts   = $this->loadModel('account')->getPairs();
         $this->display();
     }
 

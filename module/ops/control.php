@@ -50,19 +50,6 @@ class ops extends control
     }
 
     /**
-     * 管理主机CPU品牌信息。
-     * Manger cpuBrand options of host.
-     *
-     * @param string $currentLang
-     * @access public
-     * @return void
-     */
-    public function cpuBrand($currentLang = '')
-    {
-        $this->setting('host', 'cpuBrand', 'cpuBrand', $currentLang);
-    }
-
-    /**
      * 管理主机系统版本信息。
      * Manger OS options of host.
      *

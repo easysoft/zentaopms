@@ -1408,6 +1408,30 @@ $config->delete['20_9'][] = 'extension/biz/deploy/js/finish.ui.js';
 $config->delete['20_9'][] = 'extension/max/deploy/js/finish.ui.js';
 $config->delete['20_9'][] = 'extension/ipd/deploy/js/finish.ui.js';
 
+$config->delete['20_9'][] = 'module/account/config/dtable.php';
+$config->delete['20_9'][] = 'module/account/config/form.php';
+$config->delete['20_9'][] = 'module/account/config/search.php';
+$config->delete['20_9'][] = 'module/account/css/common.ui.css';
+$config->delete['20_9'][] = 'module/account/lang/de.php';
+$config->delete['20_9'][] = 'module/account/lang/en.php';
+$config->delete['20_9'][] = 'module/account/lang/fr.php';
+$config->delete['20_9'][] = 'module/account/lang/zh-cn.php';
+$config->delete['20_9'][] = 'module/account/test/model/create.php';
+$config->delete['20_9'][] = 'module/account/test/model/getlist.php';
+$config->delete['20_9'][] = 'module/account/test/model/getpairs.php';
+$config->delete['20_9'][] = 'module/account/test/model/update.php';
+$config->delete['20_9'][] = 'module/account/ui/browse.html.php';
+$config->delete['20_9'][] = 'module/account/ui/create.html.php';
+$config->delete['20_9'][] = 'module/account/ui/edit.html.php';
+$config->delete['20_9'][] = 'module/account/ui/view.html.php';
+$config->delete['20_9'][] = 'module/account/view/browse.html.php';
+$config->delete['20_9'][] = 'module/account/view/create.html.php';
+$config->delete['20_9'][] = 'module/account/view/edit.html.php';
+$config->delete['20_9'][] = 'module/account/view/view.html.php';
+$config->delete['20_9'][] = 'module/account/config.php';
+$config->delete['20_9'][] = 'module/account/control.php';
+$config->delete['20_9'][] = 'module/account/model.php';
+
 $config->upgrade->openModules  = array('action', 'admin', 'ai', 'bi', 'aiapp', 'api', 'automation', 'backup', 'block', 'branch', 'budget', 'bug', 'build', 'caselib', 'chart', 'ci', 'client', 'common', 'company', 'compile', 'convert', 'cron', 'custom', 'datatable', 'dataview', 'dept', 'design', 'dev', 'dimension', 'doc', 'durationestimation', 'entry', 'execution', 'extension', 'file', 'git', 'gitlab', 'group', 'holiday', 'im', 'index', 'index.html', 'install', 'issue', 'jenkins', 'job', 'kanban', 'license', 'mail', 'message', 'metric', 'misc', 'mr', 'my', 'personnel', 'pipeline', 'product', 'productplan', 'productset', 'program', 'programplan', 'project', 'projectbuild', 'projectplan', 'projectrelease', 'projectstory', 'pivot', 'qa', 'release', 'repo', 'report', 'risk', 'score', 'screen', 'search', 'setting', 'sonarqube', 'sso', 'stage', 'stakeholder', 'story', 'subject', 'svn', 'task', 'testcase', 'testreport', 'testsuite', 'testtask', 'todo', 'tree', 'tutorial', 'upgrade', 'user', 'webhook', 'weekly', 'workestimation', 'gitea', 'gogs', 'transfer', 'zahost', 'zanode', 'editor', 'charter', 'roadmap', 'account', 'cne', 'host', 'instance', 'ops', 'serverroom', 'space', 'store', 'system', 'solution', 'demand', 'gitfox', 'epic', 'requirement');
 $config->upgrade->unsetModules = array('design', 'program', 'programplan', 'projectbuild', 'projectrelease', 'stage', 'stakeholder', 'product', 'branch', 'productplan', 'release', 'build', 'qa', 'bug', 'testcase', 'testtask', 'testreport', 'testsuite', 'caselib', 'automation', 'repo', 'ci', 'compile', 'jenkins', 'job', 'svn', 'gitlab', 'sonarqube', 'mr', 'git', 'report', 'sqlbuilder', 'feedback', 'faq', 'attend', 'holiday', 'leave', 'makeup', 'overtime', 'lieu', 'ops', 'host', 'serverroom', 'account', 'domain', 'service', 'deploy', 'conference', 'traincourse', 'pssp', 'baseline', 'classify', 'cm', 'cmcl', 'auditcl', 'reviewcl', 'process', 'activity', 'zoutput', 'auditplan', 'nc', 'subject', 'weekly', 'workestimation', 'issue', 'durationestimation', 'risk', 'opportunity', 'trainplan', 'gapanalysis', 'researchplan', 'researchreport', 'meeting', 'meetingroom', 'budget', 'reviewissue', 'reviewsetting', 'review', 'milestone', 'measurement', 'measrecord', 'assetlib', 'setting', 'im', 'client', 'ldap', 'dev', 'api', 'gitea', 'gogs', 'zanode', 'zahost');
 
