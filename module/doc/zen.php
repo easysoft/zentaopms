@@ -1041,12 +1041,13 @@ class docZen extends doc
      * 在创建版本类型后的返回。
      * Return after create a template type.
      *
+     * @param  int    $scope
      * @access public
      * @return string
      */
-    public function responseAfterAddTemplateType()
+    public function responseAfterAddTemplateType(int $scope)
     {
-        $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('doc', 'browseTemplate'));
+        $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('doc', 'browseTemplate', "libID={$scope}"));
         return $this->send($response);
     }
 }

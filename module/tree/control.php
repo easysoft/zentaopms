@@ -378,10 +378,11 @@ class tree extends control
      * @param  string $fieldID
      * @param  string $extra
      * @param  int    $currentModuleID
+     * @param  string $grade
      * @access public
      * @return string the html select string.
      */
-    public function ajaxGetOptionMenu(int $rootID, string $viewType = 'story', string $branch = 'all', int $rootModuleID = 0, string $returnType = 'html', string $fieldID = '', string $extra = 'nodeleted', int $currentModuleID = 0)
+    public function ajaxGetOptionMenu(int $rootID, string $viewType = 'story', string $branch = 'all', int $rootModuleID = 0, string $returnType = 'html', string $fieldID = '', string $extra = 'nodeleted', int $currentModuleID = 0, string $grade = 'all')
     {
         if($viewType == 'task')
         {
@@ -389,7 +390,7 @@ class tree extends control
         }
         else
         {
-            $optionMenu = $this->tree->getOptionMenu($rootID, $viewType, $rootModuleID, $branch, $extra);
+            $optionMenu = $this->tree->getOptionMenu($rootID, $viewType, $rootModuleID, $branch, $extra, $grade);
         }
 
         if(strpos($extra, 'excludeModuleID') !== false)

@@ -374,7 +374,7 @@ class doc extends control
             $this->doc->addTemplateType($moduleData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            return $this->docZen->responseAfterAddTemplateType();
+            return $this->docZen->responseAfterAddTemplateType($scope);
         }
 
         $moduleItems = array();
