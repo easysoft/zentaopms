@@ -17,6 +17,24 @@ $buildScopeCards = function($templates)
     $cardItems = array();
     foreach($templates as $template)
     {
+        $cardItems[] = div
+        (
+            setClass('doc-space-card-lib px-2 w-1/5 group'),
+            div
+            (
+                setClass('canvas border rounded py-2 px-3 col gap-1 hover:shadow-lg hover:border-primary relative cursor-pointer'),
+                icon
+                (
+                    setClass('icon-doclib text-2xl')
+                ),
+                div
+                (
+                    setClass('font-bold text-clip'),
+                    set::title($template->title),
+                    $template->title
+                )
+            )
+        );
     }
 
     return $cardItems;
