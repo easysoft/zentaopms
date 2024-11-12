@@ -139,3 +139,35 @@ div
         ->const('showclosed', jsRaw('$this.closest(".doc-app-header").find("[name=showclosed]:checked").length'))
         ->call('loadHome', $type, jsRaw('[notempty ? "notempty" : "", showclosed ? "" : "unclosed"].join("_")'))
 );
+
+$views = array();
+if($isEmpty)
+{
+    $views = div
+    (
+        setKey('empty'),
+        setClass('doc-app-empty h-full center gap-4'),
+        div(setClass('text-gray'), $lang->api->noLib),
+        $canCreateLib ? btn
+        (
+            set::icon('plus'),
+            set::type('primary'),
+            set::text($lang->api->createLib),
+            set('zui-command', "createLib/$type")
+        ) : null
+    );
+}
+elseif($type === 'nolink')
+{
+    foreach($libs as $lib) $views[] = $buildLibItem($lib->id, $lib->name, isset($lib->apiCount) ? $lib->apiCount : 0);
+    $views = div
+    (
+        setClass('doc-space-card-libs'),
+        setStyle('margin', '0 -8px'),
+        div(setClass('row'), $views)
+    );
+}
+else
+{
+    foreach($programs as $program) $views[] = $buildProgramItem($program);
+}
