@@ -1,3 +1,5 @@
+.doc-app-header > .nav {--nav-active-bg: var(--color-primary-100); --nav-active-color: var(--color-fore); --nav-item-height: 24px; --nav-divider-margin: 8px;}
+
 .icon-api {text-align: center; --api-color-rgb: var(--color-success-500-rgb); color: rgba(var(--api-color-rgb), 1);}
 .icon-api::before {content: ' '; display: inline-block; width: 8px; height: 8px; border-radius: 2px; background-color: currentColor; min-width: 0;}
 
