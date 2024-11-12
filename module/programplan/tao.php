@@ -284,7 +284,7 @@ class programplanTao extends programplanModel
             $dateLimit    = $this->getTaskDateLimit($task, $plan);
             $data         = $this->buildTaskDataForGantt($task, $dateLimit);
             $data->id     = $task->execution . '-' . $task->id;
-            $data->parent = $task->parent > 0 ? $task->execution . '-' . $task->parent : $task->execution;
+            $data->parent = $task->parent > 0 && isset($tasks[$task->parent]) ? $task->execution . '-' . $task->parent : $task->execution;
             if(!isset($executions[$task->execution])) $executions[$task->execution] = $this->dao->select('status')->from(TABLE_EXECUTION)->where('id')->eq($task->execution)->fetch('status');
 
             /* Determines if the object is delay. */

@@ -15,6 +15,7 @@ namespace zin;
 data('fileName', 'gantt-export-' . $projectID);
 include './ganttfields.html.php';
 
+
 if($app->rawModule == 'programplan')
 {
     if($project->stageBy == 'product')
@@ -33,7 +34,11 @@ if($app->rawModule == 'programplan')
     }
     else
     {
-        featureBar(span(setClass('text font-bold'), $lang->programplan->gantt));
+        featureBar
+        (
+            btn(setClass('ghost mr-2', ($browseType != 'bysearch' ? 'active' : '')), $lang->programplan->gantt, set::url($this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=gantt"))),
+            $hasSearch ? li(searchToggle(set::module('projectTask'), set::open($browseType == 'bysearch'))) : null
+        );
     }
     toolbar
     (
