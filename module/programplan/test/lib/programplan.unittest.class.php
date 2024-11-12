@@ -495,4 +495,22 @@ class programplanTest
 
         return $gantt['data'];
     }
+
+    /**
+     * 测试获取甘特图的任务。
+     * Test get tasks for gantt.
+     *
+     * @param  int    $projectID
+     * @param  array  $plans
+     * @param  string $browseType
+     * @param  int    $queryID
+     * @access public
+     * @return string
+     */
+    public function getGanttTasksTest(int $projectID, array $plans, string $browseType = '', int $queryID = 0): string
+    {
+        $tasks = $this->objectModel->getGanttTasks($projectID, $plans, $browseType, $queryID);
+
+        return implode(array_keys($tasks));
+    }
 }
