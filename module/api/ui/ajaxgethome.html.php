@@ -17,3 +17,18 @@ $canCreateLib = hasPriv('api', 'createLib');
 $canEditLib   = hasPriv('api', 'editLib');
 $canDeleteLib = hasPriv('api', 'deleteLib');
 $showLibAction = $isNolink ? ($canEditLib || $canDeleteLib) : $canCreateLib;
+
+/* Create load home command statement. */
+$createCommand = function(array $args) use($pager, $type, $unclosed, $notempty)
+{
+    $args = array_merge(array('type' => $type, 'unclosed' => $unclosed, 'notempty' => $notempty, 'recPerPage' => $pager->recPerPage, 'pageID' => $pager->pageID), $args);
+    $parts = array('loadHome');
+    $parts[] = $args['type'];
+    $params = array();
+    if($args['notempty']) $params[] = 'notempty';
+    if($args['unclosed']) $params[] = 'unclosed';
+    $parts[] = implode('_', $params);
+    $parts[] = $args['recPerPage'];
+    $parts[] = $args['pageID'];
+    return implode('/', $parts);
+};
