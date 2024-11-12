@@ -24,9 +24,37 @@ $hidden = $type != 'story' && $module->type == 'story';
 $isBuiltinTemplateModule = $type == 'docTemplate' && $this->loadModel('doc')->isBuiltinTemplateModule($module);
 
 /* ====== Define the page structure with zin widgets ====== */
-modalHeader(set::title($title));
+if($type != 'docTemplate') modalHeader(set::title($title));
 formPanel
 (
+    $type == 'docTemplate' ? detailHeader
+    (
+        to::title
+        (
+            entityLabel
+            (
+                setClass('text-xl font-black'),
+                set::level(1),
+                set::text($lang->docTemplate->addTemplateType)
+            ),
+            div
+            (
+                label
+                (
+                    to::before
+                    (
+                        icon
+                        (
+                            setClass('warning-ghost margin-left8'),
+                            'help'
+                        )
+                    ),
+                    set::text($lang->docTemplate->noticeAddTemplateType),
+                    setClass('gray-200-pale')
+                )
+            )
+        )
+    ) : null,
     setID('editForm'),
     set::action(helper::createLink($app->rawModule, $app->rawMethod, 'module=' . $module->id .'&type=' . $type)),
     set::submitBtnText($lang->save),
