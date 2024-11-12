@@ -99,3 +99,28 @@ $buildProgramItem = function($program) use ($type, $buildLibItem)
         )
     );
 };
+
+$filterItems = array();
+foreach($lang->api->homeFilterTypes as $key => $text)
+{
+    $item = array('text' => $text, 'zui-command' => $createCommand(array('type' => $key)));
+    if($key === $type)
+    {
+        $count          = $isNolink ? count($libs) : count($programs);
+        $item['active'] = true;
+        $item['badge']  = wg(label(setClass('size-sm canvas ring-0 rounded-md'), $count));
+    }
+    $filterItems[] = $item;
+}
+
+div
+(
+    setKey('header'),
+    setClass('doc-app-header flex-none surface-light row items-center border-b py-1 pl-1 h-10 pr-2 gap-3 flex-none'),
+    nav
+    (
+        setClass('ml-2'),
+        set::compact(),
+        set::items($filterItems)
+    ),
+);
