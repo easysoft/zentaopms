@@ -273,6 +273,19 @@ $.extend(window.docAppCommands,
     },
 
     /**
+     * 取消编辑 API 文档库。
+     * Create api lib.
+     */
+    createLib: function(_, args)
+    {
+        const docApp  = getDocApp();
+        const spaceID = args[0] || docApp.spaceID;
+        const parts   = String(spaceID).split('.');
+        const url     = $.createLink('api', 'createLib', `type=${parts[0] || 'nolink'}&objectID=${parts[1] || 0}`);
+        zui.Modal.open({size: 'sm', url: url});
+    },
+
+    /**
      * 加载指定的 API 文档。
      * Load the specified API doc.
      */
