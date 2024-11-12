@@ -3750,9 +3750,10 @@ class docModel extends model
     {
         return $this->dao->select('*')->from(TABLE_DOC)
             ->where('templateType')->ne('')
+            ->andWhere('deleted')->eq('0')
             ->beginIF($scopeID)->andWhere('lib')->eq($scopeID)->fi()
             ->orderBy('addedDate_desc,editedDate_desc')
-            ->beginIF($limit)->limit(5)->fi()
+            ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll();
     }
 
