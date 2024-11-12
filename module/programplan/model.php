@@ -745,9 +745,31 @@ class programplanModel extends model
         $this->setting->setItem("$owner.$module.ganttCustom.zooming", $zooming);
     }
 
+    /**
+     * 获取甘特图的任务.
+     * Get tasks in gantt.
+     *
+     * @param  int    $projectID
+     * @param  array  $planIdList
+     * @param  string $browseType
+     * @param  int    $queryID
+     * @access public
+     * @return array
+     */
     public function getGanttTasks(int $projectID, array $planIdList, string $browseType, int $queryID)
     {
         $tasks = array();
+        if(!empty($planIdList))
+        {
+            if($browseType == 'bysearch')
+            {
+                $query = $this->loadModel('search')->getQuery($queryID);
+            }
+            else
+            {
+                $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('project')->eq($projectID)->andWhere('execution')->in($planIdList)->orderBy('execution_asc, order_asc, id_desc')->fetchAll('id');
+            }
+        }
         return $tasks;
     }
 }
