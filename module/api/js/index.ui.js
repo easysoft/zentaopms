@@ -212,6 +212,18 @@ function getSpaceFetcher(spaceType, spaceID)
     const libID      = getDocApp().libID;
     return $.createLink('api', 'ajaxGetDropMenu', `objectType=${objectType}&objectID=${objectID}&libID=${libID}`);
 }
+
+function handleClickSpaceMenu(event, value)
+{
+    event.preventDefault();
+    const $item = $(event.target).closest('[z-item]');
+    if(!$item.length) return;
+    const type = $item.z('type');
+    const docApp = getDocApp();
+    if(type === 'product' || type === 'project') docApp.selectSpace(`${type}.${value}`, true);
+    else                                         docApp.selectSpace('nolink', value);
+}
+
 /* 扩展文档应用操作按钮生成定义。 Extend the doc app action definition. */
 $.extend(window.docAppActions,
 {
@@ -380,6 +392,7 @@ window.setDocAppOptions = function(_, options) // Override the method.
     return $.extend(options,
     {
         defaultState         : {libReleaseMap: {}, listType: ''},
+        spaceMenuOptions     : {popWidth: 350, onClickItem: handleClickSpaceMenu},
         customRenders        : customRenders,
         viewModeUrl          : getViewModeUrl,
         getTableOptions      : getTableOptions,
