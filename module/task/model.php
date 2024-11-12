@@ -614,7 +614,10 @@ class taskModel extends model
             $changes  = common::createChanges($oldTask, $task);
             if(!empty($changes))
             {
-                $actionID = $this->action->create('task', $taskID, 'Edited');
+                $extra = '';
+                array_map(function($field) use (&$extra) { if($field['field'] == 'status') $extra = 'statuschanged'; }, $changes);
+
+                $actionID = $this->action->create('task', $taskID, 'Edited', '', $extra);
                 $this->action->logHistory($actionID, $changes);
                 $allChanges[$taskID] = $changes;
             }
@@ -2056,7 +2059,7 @@ class taskModel extends model
     {
         /* Set assignedTo and mailto. */
         $assignedTo = $task->assignedTo;
-        $mailto     = is_null($task->mailto) ? array() : explode(',', trim($task->mailto, ','));
+        $mailto     = empty($task->mailto) ? array() : explode(',', $task->mailto);
         if($task->mode == 'multi')
         {
             $teamList   = $this->getMultiTaskMembers($task->id);
@@ -2068,13 +2071,23 @@ class taskModel extends model
         if(strtolower($assignedTo) == 'closed') $assignedTo = $task->finishedBy;
 
         /* If the child task is paused, closed or canceled, append the mailto from parent task. */
-        if(in_array($action, array('paused', 'closed', 'canceled')) && $task->parent > 0)
+        if($task->parent > 0)
         {
-            $parentTasks = $this->dao->select('id,assignedTo,finishedBy,mailto')->from(TABLE_TASK)->where('id')->in($task->path)->andWhere('id')->ne($task->id)->fetchAll('id');
-            foreach($parentTasks as $parentID => $parentTask)
+            $appendParent = in_array($action, array('paused', 'closed', 'canceled'));
+            if($action == 'edited')
             {
-                $mailto[] = (strtolower($parentTask->assignedTo) == 'closed') ? $parentTask->finishedBy : $parentTask->assignedTo;
-                $mailto   = array_merge($mailto, is_null($parentTask->mailto) ? array() : explode(',', trim($parentTask->mailto, ',')));
+                $actionExtra = $this->dao->select('id,extra')->from(TABLE_ACTION)->where('objectType')->eq('task')->andWhere('objectID')->eq($task->id)->andWhere('action')->eq($action)->orderBy('id_desc')->limit(1)->fetch('extra');
+                if($actionExtra == 'statuschanged' && in_array($task->status, array('pause', 'close', 'cancel'))) $appendParent = true;
+            }
+
+            if($appendParent)
+            {
+                $parentTasks = $this->dao->select('id,assignedTo,finishedBy,mailto')->from(TABLE_TASK)->where('id')->in($task->path)->andWhere('id')->ne($task->id)->fetchAll('id');
+                foreach($parentTasks as $parentID => $parentTask)
+                {
+                    $mailto[] = (strtolower($parentTask->assignedTo) == 'closed') ? $parentTask->finishedBy : $parentTask->assignedTo;
+                    $mailto   = array_merge($mailto, empty($parentTask->mailto) ? array() : explode(',', $parentTask->mailto));
+                }
             }
         }
         $mailto = array_unique(array_filter(array_map(function($account) use($assignedTo){ return $account == $assignedTo ? '' : $account;}, $mailto)));
@@ -2935,8 +2948,11 @@ class taskModel extends model
         /* Record log. */
         if($this->post->comment != '' || !empty($changes))
         {
+            $extra = '';
+            array_map(function($field) use (&$extra) { if($field['field'] == 'status') $extra = 'statuschanged'; }, $changes);
+
             $action   = !empty($changes) ? 'Edited' : 'Commented';
-            $actionID = $this->loadModel('action')->create('task', $taskID, $action, $this->post->comment);
+            $actionID = $this->loadModel('action')->create('task', $taskID, $action, $this->post->comment, $extra);
             if(!empty($changes)) $this->action->logHistory($actionID, $changes);
         }
 
