@@ -394,6 +394,36 @@ $.extend(window.docAppCommands,
         const pageID     = args[3] !== undefined ? args[3] : data.pageID;
         window.loadHome(type, params, recPerPage, pageID);
     },
+
+    /**
+     * 显示首页菜单。
+     * Show the home item menu.
+     */
+    showHomeItemMenu: function(context, args)
+    {
+        const event = context.event;
+        const type  = args[0];
+        const id    = args[1];
+        const lang  = getDocAppLang();
+        const items = [];
+
+        if(type === 'nolink')
+        {
+            if(docAppHasPriv('editLib')) items.push({text: lang.editLib, command: `editLib/${id}`});
+            if(docAppHasPriv('deleteLib')) items.push({text: lang.deleteLib, command: `deleteLib/${id}`});
+        }
+        else if(docAppHasPriv('createLib'))
+        {
+            items.push({text: lang.createLib, command: `createLib/${type}.${id}`});
+        }
+
+        if(items.length)
+        {
+            zui.ContextMenu.show({event: event, items: items, placement: 'bottom-end'});
+        }
+        event.preventDefault();
+        event.stopPropagation();
+    },
 });
 
 /**
