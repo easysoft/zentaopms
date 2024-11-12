@@ -95,10 +95,12 @@ formPanel
             set::label($lang->host->cpuNumber),
             set::control(array('type' => 'number', 'min' => 1)),
             set::value(zget($host, 'cpuNumber', '') ? $host->cpuNumber : '')
-        ),
+        )
+    ),
+    formRow
+    (
         formGroup
         (
-            setClass('useManual hidden'),
             set::width('1/3'),
             set::name('memory'),
             set::label($lang->host->memory),
@@ -109,20 +111,20 @@ formPanel
                 'suffix'      => 'GB',
                 'suffixWidth' => 40
             ))
-        )
-    ),
-    formGroup
-    (
-        set::width('1/3'),
-        set::name('diskSize'),
-        set::label($lang->host->diskSize),
-        set::value(zget($host, 'diskSize', '') ? $host->diskSize : ''),
-        set::control(array
+        ),
+        formGroup
         (
-            'type'        => 'inputControl',
-            'suffix'      => 'GB',
-            'suffixWidth' => 40
-        ))
+            set::width('1/3'),
+            set::name('diskSize'),
+            set::label($lang->host->diskSize),
+            set::value(zget($host, 'diskSize', '') ? $host->diskSize : ''),
+            set::control(array
+            (
+                'type'        => 'inputControl',
+                'suffix'      => 'GB',
+                'suffixWidth' => 40
+            ))
+        )
     ),
     formGroup
     (
