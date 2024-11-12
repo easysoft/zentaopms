@@ -44,7 +44,7 @@ class thinkStepBase extends wg
         if($mode != 'detail') return array();
 
         $options = $step->options;
-        if($options)
+        if($step->type == 'questions')
         {
             $questionType = $options->questionType;
             $tips         = $lang->thinkstep->$questionType;
@@ -111,7 +111,7 @@ class thinkStepBase extends wg
 
         if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);
 
-        $questionType = !empty($step) && !empty($step->options) ? $step->options->questionType : '';
+        $questionType = !empty($step) && $step->type == 'questions' ? $step->options->questionType : '';
         $isCheckBox   = !empty($step) && $step->type == 'question' && in_array($questionType, $config->thinkstep->quoteQuestionType);
         $isQuoteItem  = $isCheckBox && !empty($step->options->setOption) && $step->options->setOption == 1;
         $detailTip    = array();
