@@ -14,8 +14,8 @@ $driver      = !empty($config->cache->driver)     ? $config->cache->driver     :
 $namespace   = !empty($config->cache->namespace)  ? $config->cache->namespace  : $config->db->name;
 $serializer  = !empty($config->redis->serializer) ? $config->redis->serializer : 'serialize';
 $hiddenCache = $config->cache->enable ? '' : ' hidden';
-$hiddenApcu  = $driver == 'apcu'  ? '' : ' hidden';
-$hiddenRedis = $driver == 'redis' ? '' : ' hidden';
+$hiddenApcu  = !$hiddenCache && $driver == 'apcu'  ? '' : ' hidden';
+$hiddenRedis = !$hiddenCache && $driver == 'redis' ? '' : ' hidden';
 
 formPanel
 (
@@ -42,7 +42,7 @@ formPanel
     formGroup
     (
         setClass('cache' . $hiddenCache),
-        set::label($lang->cache->type),
+        set::label($lang->cache->driver),
         set::required(),
         radioList
         (
