@@ -39,6 +39,7 @@ $langData['version']          = $lang->api->version;
 $langData['defaultVersion']   = $lang->api->defaultVersion;
 $langData['createStruct']     = $lang->api->createStruct;
 $langData['createRelease']    = $lang->api->createRelease;
+$langData['libTypeList']      = $lang->api->libTypeList;
 $langData['save']             = $lang->save;
 
 docApp

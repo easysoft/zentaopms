@@ -230,12 +230,21 @@ function getSpaceFetcher(spaceType, spaceID)
 function handleClickSpaceMenu(event, value)
 {
     event.preventDefault();
-    const $item = $(event.target).closest('[z-item]');
-    if(!$item.length) return;
-    const type = $item.z('type');
+    if($(event.target).closest('.dropmenu-nav').length) return;
+    const parts  = String(value).split('.');
+    const type   = parts[0];
+    const id     = parts[1] || 0;
     const docApp = getDocApp();
-    if(type === 'product' || type === 'project') docApp.selectSpace(`${type}.${value}`, true);
-    else                                         docApp.selectSpace('nolink', value);
+    if(type === 'product' || type === 'project') docApp.selectSpace(value, '_first');
+    else                                         docApp.selectSpace('nolink', +id);
+}
+
+function getSpaceMenuText(text, state)
+{
+    const spaceID = getDocApp().spaceID;
+    if(spaceID === 'nolink') return text;
+    const libTypeList = getDocAppLang('libTypeList');
+    return `${libTypeList[spaceID.split('.')[0]]} / ${text}`;
 }
 
 /* 扩展文档应用操作按钮生成定义。 Extend the doc app action definition. */
@@ -480,7 +489,12 @@ window.setDocAppOptions = function(_, options) // Override the method.
     return $.extend(options,
     {
         defaultState         : {libReleaseMap: {}, listType: ''},
-        spaceMenuOptions     : {popWidth: 350, onClickItem: handleClickSpaceMenu},
+        spaceMenuOptions     : {
+            popWidth    : 350,
+            onClickItem : handleClickSpaceMenu,
+            defaultValue: options.spaceID === 'nolink' ? `lib.${options.libID}`: options.spaceID,
+            display     : getSpaceMenuText
+        },
         customRenders        : customRenders,
         viewModeUrl          : getViewModeUrl,
         getTableOptions      : getTableOptions,
