@@ -95,6 +95,28 @@ class api extends control
     }
 
     /**
+     * 获取接口空间首页页面。
+     * Get the api home page.
+     *
+     * @param  string $type
+     * @param  string $params
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetHome(string $type = 'nolink', string $params = 'notempty_unclosed', int $recPerPage = 20, int $pageID = 1)
+    {
+        $flags         = explode('_', $params);
+        $unclosed      = in_array('unclosed', $flags);
+        $notempty      = in_array('notempty', $flags);
+
+        $this->view->unclosed = $unclosed;
+        $this->view->notempty = $notempty;
+        $this->view->type     = $type;
+        $this->display();
+    }
+    /**
      * 获取接口界面数据。
      * Get the api UI data.
      *
