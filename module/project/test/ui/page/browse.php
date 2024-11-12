@@ -48,7 +48,9 @@ class browsePage extends page
             'moreTab'   => "//*[@id='featureBar']/menu/li[5]/a/span[1]",
             'suspended' => "//*[@id='more']/menu/menu/li[1]/a/div/div",
             'closed'    => "//*[@id='more']/menu/menu/li[2]/a/div/div",
-            'num'       => "//*[@id='table-project-browse']/div[3]/div[2]/strong"
+            'num'       => "//*[@id='table-project-browse']/div[3]/div[2]/strong",
+            /*创建看板项目*/
+            'kanbanName' => "//*[@id='mainContent']/div[2]/div/div/div[2]/div[1]/div/div[2]/div/a"
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
