@@ -38,3 +38,23 @@ class createKanbanTester extends tester
         /* 检查创建页面时的提示信息 */
         if($this->response('method') != 'browse')
         {
+            if($this->checkFormTips('project')) return $this->success('创建看板项目表单页提示信息正确');
+            if($form->dom->endTip)
+            {
+                /* 检查结束日期不能为空 */
+                $endTiptext = $form->dom->endTip->getText();
+                $endTip     = sprintf($this->lang->copyProject->endTip,'');
+                return ($endTiptext == $endTip) ? $this->success('创建看板项目表单页提示信息正确') : $this->failed('创建看板项目表单页提示信息不正确');
+                form->wait(1);
+            }
+            return $this->failed('创建看板项目表单页提示信息不正确');
+        }
+        /* 检查创建成功后的提示信息 */
+        else
+        {
+        /* 跳转到项目列表页面，按照项目名称进行搜索 */
+        $browsePage = $this->loadPage('project', 'browse');
+        $browsePage->dom->search($searchList = array("项目名称,包含, {$kanban['name']}"));
+        $browsePage->wait(2);
+        $browsePage->dom->kanbanName->click();
+        // 进入项目概况页面
