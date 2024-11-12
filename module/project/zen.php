@@ -1806,4 +1806,9 @@ class projectZen extends project
 
         return $unmodifiableProducts;
     }
+
+    protected function getExecutionStats(string $status, int $projectID, array $executionIdList, int $productID, int $queryID, string $sort, object $pager): array
+    {
+        return $executionStats;
+    }
 }

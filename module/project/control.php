@@ -790,10 +790,11 @@ class project extends control
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
+     * @param  int    $queryID
      * @access public
      * @return void
      */
-    public function execution(string $status = 'undone', int $projectID = 0, string $orderBy = 'order_asc', int $productID = 0, int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
+    public function execution(string $status = 'undone', int $projectID = 0, string $orderBy = 'order_asc', int $productID = 0, int $recTotal = 0, int $recPerPage = 100, int $pageID = 1, int $queryID = 0)
     {
         $projects  = $this->project->getPairsByProgram();
         $projectID = $this->project->checkAccess($projectID, $projects);
@@ -832,8 +833,20 @@ class project extends control
         if(strpos($sort, 'rawID_') !== false) $sort = str_replace('rawID_', 'id_', $sort);
         if(strpos($sort, 'nameCol_') !== false) $sort = str_replace('nameCol_', 'name_', $sort);
 
+        if($this->cookie->showTask)
+        {
+            /* Build the search form. */
+            $this->config->execution->search['module'] = 'projectTask';
+
+            $actionURL = $this->createLink('project', 'execution', "status=bysearch&projectID=$projectID&orderBy=$orderBy&productID=$productID&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&queryID=myQueryID");
+            unset($this->config->execution->search['fields']['project']);
+            unset($this->config->execution->search['fields']['module']);
+            $executions = $this->programplan->getPairs($projectID, $productID, 'all');
+            $this->execution->buildTaskSearchForm($projectID, $executions, $queryID, $actionURL);
+        }
+
         $this->view->title          = $this->lang->execution->allExecutions;
-        $this->view->executionStats = $this->execution->getStatData($projectID, $status, $productID, 0, (bool)$this->cookie->showTask, '', $sort, $pager);
+        $this->view->executionStats = $this->projectZen->getExecutionStats($status, $projectID, isset($executions) ? array_keys($executions) : array(), $productID, $queryID, $sort, $pager);
         $this->view->productList    = array(0 => $this->lang->product->all) + $this->product->getProductPairsByProject($projectID, 'all', '', false);
         $this->view->productID      = $productID;
         $this->view->product        = $this->product->getByID($productID);
@@ -846,6 +859,7 @@ class project extends control
         $this->view->users          = $this->loadModel('user')->getPairs('noletter');
         $this->view->isStage        = isset($project->model) && (in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')));
         $this->view->avatarList     = $this->user->getAvatarPairs('');
+        $this->view->queryID        = $queryID;
 
         $this->display();
     }
