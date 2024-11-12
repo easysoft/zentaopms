@@ -13,11 +13,12 @@ declare(strict_types=1);
 
 namespace zin;
 
-jsVar('copied',         $lang->instance->copied);
-jsVar('instanceID',     $instance->id);
-jsVar('instanceStatus', $instance->status);
-jsVar('instanceType',   $type);
-jsVar('inQuickon',      $config->inQuickon);
+jsVar('copied',           $lang->instance->copied);
+jsVar('instanceID',       $instance->id);
+jsVar('instanceStatus',   $instance->status);
+jsVar('instanceType',     $type);
+jsVar('inQuickon',        $config->inQuickon);
+jsVar('confirmBackupTip', $lang->instance->backup->confirmTip);
 
 if(empty($instance->externalID)) $instance->externalID = 0;
 $instance->appName = strtolower($instance->appName);
@@ -271,7 +272,54 @@ div
                         ),
                         $dbListWg
                     )
-                )
+                ),
+                /* 应用实例备份块。 */
+                /* Instance Backup block. */
+                !($config->inQuickon && $type == 'store') ? null : section(
+                    set::title($lang->instance->backup->common),
+                    set::id('backupSection'),
+                    set('data-example', 1),
+                    div(
+                        setClass('ml-10 inline-block'),
+                        btn(
+                            set(array
+                            (
+                                'icon'      => 'backend',
+                                'class'     => 'ghost btn',
+                                'text'      => $lang->instance->backup->operators['manual'] ,
+                                'data-size' => 'sm',
+                                'onclick'   => "onManualBackup({$instance->id})"
+                            ))
+                        ),
+                        btn(
+                            set(array
+                            (
+                                'icon'        => 'backend',
+                                'class'       => 'ghost btn',
+                                'text'        => $lang->instance->backup->operators['auto'] ,
+                                'url'         => createLink('instance', 'autoBackup', "id={$instance->id}"),
+                                'data-size'   => 'sm',
+                                'data-toggle' => 'modal'
+                            ))
+                        ),
+                        btn(
+                            set(array
+                            (
+                                'icon'        => 'backend',
+                                'class'       => 'ghost btn',
+                                'text'        => $lang->instance->backup->operators['settings'] ,
+                                'url'         => createLink('instance', 'backupSettings', "id={$instance->id}"),
+                                'data-size'   => 'sm',
+                                'data-toggle' => 'modal'
+                            ))
+                        ),
+                    ),
+                    div
+                    (
+                        setID('backupList'),
+                        h::js("if(!$('#backupList').find('.dtable-header-cell').length) loadTarget($.createLink('instance', 'backupList', 'id={$instance->id}'), '#backupList');"),
+                    )
+                ),
             ),
             floatToolbar
             (
