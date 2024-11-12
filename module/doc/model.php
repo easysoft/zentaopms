@@ -653,12 +653,15 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getDocTemplateList(string $type = 'all', string $orderBy = 'id_desc', object $pager = NULL): array
+    public function getDocTemplateList(int $libID, string $type = 'all', string $orderBy = 'id_desc', object $pager = NULL): array
     {
         return $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq('0')
-            ->beginIF($type == 'all')->andWhere('templateType')->ne('')->fi()
-            ->beginIF($type != 'all')->andWhere('templateType')->eq($type)->fi()
+            ->andWhere('templateType')->ne('')
+            ->beginIF($libID)->andWhere('lib')->eq($libID)->fi()
+            ->beginIF($type == 'draft')->andWhere('status')->eq('draft')->fi()
+            ->beginIF($type == 'released')->andWhere('status')->eq('normal')->fi()
+            ->beginIF($type == 'createdByMe')->andWhere('addedBy')->eq($this->app->user->account)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
