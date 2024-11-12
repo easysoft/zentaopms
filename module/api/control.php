@@ -36,11 +36,11 @@ class api extends control
      * @param  int    $version
      * @param  int    $release
      * @param  string $browseType
-     * @param  int    $param
+     * @param  string $params
      * @access public
      * @return void
      */
-    public function index(int $libID = 0, int $moduleID = 0, int $apiID = 0, int $version = 0, int $release = 0, string $browseType = 'all', int $param = 0, string $orderBy = 'order_asc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = '', string $search = '')
+    public function index(int $libID = 0, int $moduleID = 0, int $apiID = 0, int $version = 0, int $release = 0, string $browseType = 'nolink', string $params = '', string $orderBy = 'order_asc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = '', string $search = '')
     {
         /* 设置空间类型。 */
         $this->session->set('spaceType', 'api', 'doc');
@@ -88,7 +88,7 @@ class api extends control
         $this->view->orderBy        = $orderBy;
         $this->view->objectType     = $objectType;
         $this->view->objectID       = $objectID;
-        $this->view->param          = $param;
+        $this->view->params         = $params;
         $this->view->users          = $this->loadModel('user')->getPairs('noclosed,noletter');
         $this->view->title          = $this->lang->api->pageTitle;
         $this->display();
