@@ -30,20 +30,21 @@ formPanel
     on::change('input[name=redis\\\[serializer\\\]]', 'toggleSerializer'),
     formGroup
     (
-        set::label($lang->cache->common),
+        set::label($lang->cache->status),
+        set::required(),
         radioList
         (
             set::name('enable'),
             set::items($lang->cache->statusList),
             set::value($config->cache->enable),
             set::inline(true)
-        ),
-        set::required()
+        )
     ),
     formGroup
     (
         setClass('cache' . $hiddenCache),
         set::label($lang->cache->type),
+        set::required(),
         radioList
         (
             setClass('w-1/3'),
@@ -63,8 +64,27 @@ formPanel
             setClass('redis ml-4 mt-1.5' . $hiddenRedis),
             icon('info text-warning mr-2'),
             $lang->cache->redis->notice
+        )
+    ),
+    formGroup
+    (
+        setClass('cache' . $hiddenCache),
+        set::label($lang->cache->scope),
+        set::required(),
+        radioList
+        (
+            setClass('w-1/3'),
+            set::name('scope'),
+            set::items($lang->cache->scopeList),
+            set::value($config->cache->scope),
+            set::inline(true)
         ),
-        set::required()
+        span
+        (
+            setClass('ml-4 mt-1.5'),
+            icon('info text-warning mr-2'),
+            $lang->cache->tips->scope
+        )
     ),
     formGroup
     (

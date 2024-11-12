@@ -3,6 +3,7 @@
 $config->cache = new stdclass();
 $config->cache->enable    = false;       // 是否开启缓存。Enable cache or not.
 $config->cache->driver    = '';          // 缓存驱动。    The driver of cache. Can be File|Yac|Apcu|Redis.
+$config->cache->scope     = '';          // 缓存服务范围。The scope of cache. Can be private|shared.
 $config->cache->namespace = '';          // 缓存命名空间。The namespace of cache.
 $config->cache->lifetime  = 2592000;     // 缓存生存时间。The lifetime of cache. The default value is 30 days.
 
