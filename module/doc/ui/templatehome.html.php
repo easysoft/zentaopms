@@ -12,7 +12,7 @@ namespace zin;
 
 $scopeTemplates = $this->doc->getScopeTemplates();
 
-$buildScopeCards = function($templates)
+$buildScopeCards = function($templates) use ($lang)
 {
     $cardItems = array();
     foreach($templates as $template)
@@ -23,15 +23,24 @@ $buildScopeCards = function($templates)
             div
             (
                 setClass('canvas border rounded py-2 px-3 col gap-1 hover:shadow-lg hover:border-primary relative cursor-pointer'),
-                icon
+                div
                 (
-                    setClass('icon-doclib text-2xl')
+                    setClass('flex gap-2 items-center py-2'),
+                    icon
+                    (
+                        setClass('icon-doc text-2xl')
+                    ),
+                    div
+                    (
+                        setClass('font-bold text-clip'),
+                        set::title($template->title),
+                        $template->title
+                    )
                 ),
                 div
                 (
-                    setClass('font-bold text-clip'),
-                    set::title($template->title),
-                    $template->title
+                    setClass('text-gray text-sm py-1'),
+                    $lang->docTemplate->noDesc
                 )
             )
         );
