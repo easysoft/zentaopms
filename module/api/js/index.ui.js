@@ -204,6 +204,14 @@ function getTableOptions(options, info)
     });
 }
 
+function getSpaceFetcher(spaceType, spaceID)
+{
+    const parts      = String(spaceID).split('.');
+    const objectType = parts[0] || 'nolink';
+    const objectID   = parts[1] || 0;
+    const libID      = getDocApp().libID;
+    return $.createLink('api', 'ajaxGetDropMenu', `objectType=${objectType}&objectID=${objectID}&libID=${libID}`);
+}
 /* 扩展文档应用操作按钮生成定义。 Extend the doc app action definition. */
 $.extend(window.docAppActions,
 {
@@ -376,6 +384,7 @@ window.setDocAppOptions = function(_, options) // Override the method.
         viewModeUrl          : getViewModeUrl,
         getTableOptions      : getTableOptions,
         getDocViewSidebarTabs: getDocViewSidebarTabs,
+        getSpaceFetcher      : getSpaceFetcher,
         isMatchFilter        : function(type, filterType, item)
         {
             if(type === 'api') return (item.objectType || 'nolink').toLowerCase() === filterType.toLowerCase();
