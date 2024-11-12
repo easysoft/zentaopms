@@ -105,7 +105,7 @@ class host extends control
             $this->host->update($formData);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('browse'), 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('browse')));
         }
 
         $this->view->title      = $this->lang->host->edit;
