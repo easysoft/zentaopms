@@ -439,6 +439,21 @@ $.extend(window.docAppCommands,
     },
 });
 
+window.loadHome = function(type, params, recPerPage, pageID)
+{
+    const location = {};
+    if(typeof type === 'object') $.extend(location, type);
+    else if(type !== undefined) location.filterType = type;
+    if(params !== undefined) location.params = params;
+    if(recPerPage !== undefined || pageID !== undefined)
+    {
+        location.pager = {};
+        if(recPerPage !== undefined) location.pager.recPerPage = recPerPage;
+        if(pageID !== undefined)     location.pager.page = pageID;
+    }
+    if(Object.keys(location).length) getDocApp().switchView(location, 'home');
+};
+
 /**
  * 重写文档应用的配置选项方法。
  * Override the method to set the doc app options.
