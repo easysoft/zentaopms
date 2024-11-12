@@ -27,7 +27,6 @@ formPanel
     ]),
     on::change('input[name=enable]', 'toggleCache'),
     on::change('input[name=driver]', 'toggleDriver'),
-    on::change('input[name=redis\\\[serializer\\\]]', 'toggleSerializer'),
     formGroup
     (
         set::label($lang->cache->status),
