@@ -208,7 +208,7 @@ class api extends control
         $data       = array('spaceID' => $spaceID);
         $isNolink   = $spaceID == 'nolink';
 
-        list($objectType, $objectID) = $isNolink ? array('', 0) : explode('.', $spaceID);
+        list($objectType, $objectID) = $isNolink ? array('', 0) : explode('.', $spaceID . '.');
         if($noPicks || strpos($picks, ',space,') !== false)
         {
             $spaces['nolink'] = array('id' => 'nolink', 'name' => $this->lang->api->noLinked, 'type' => 'api');

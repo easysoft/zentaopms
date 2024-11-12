@@ -13,13 +13,13 @@ namespace zin;
 $data = array('nolink' => array(), 'product' => array(), 'project' => array());
 
 /* 处理独立接口库。Process independent libs. */
-foreach($nolinkLibs as $lib) $data['nolink'][] = array('id' => $lib->id, 'text' => $lib->name, 'active' => $lib->id == $libID, 'type' => 'item', 'url' => createLink('api', 'index', "libID=$lib->id"));
+foreach($nolinkLibs as $lib) $data['nolink'][] = array('id' => "lib.$lib->id", 'text' => $lib->name, 'active' => $lib->id == $libID, 'type' => 'item', 'url' => createLink('api', 'index', "libID=$lib->id"));
 
 /* 处理产品和项目数据。Process product and project data. */
 foreach($products as $product)
 {
     $programID = $product->program;
-    $item      = array('type' => 'product', 'id' => $product->id, 'text' => $product->name, 'active' => $objectType == 'product' && $product->id == $objectID, 'url' => createLink('api', 'index', 'libID=' . (isset($product->firstLib) ? $product->firstLib : 0)));
+    $item      = array('type' => 'product', 'id' => "product.$product->id", 'text' => $product->name, 'active' => $objectType == 'product' && $product->id == $objectID, 'url' => createLink('api', 'index', 'libID=' . (isset($product->firstLib) ? $product->firstLib : 0)));
     if(isset($programs[$programID]))
     {
         $programKey = "program.$programID";
@@ -35,7 +35,7 @@ foreach($products as $product)
 foreach($projects as $project)
 {
     $programID = $project->parent;
-    $item      = array('type' => 'project', 'id' => $project->id, 'text' => $project->name, 'active' => $objectType == 'project' && $project->id == $objectID, 'url' => createLink('api', 'index', 'libID=' . (isset($project->firstLib) ? $project->firstLib : 0)));
+    $item      = array('type' => 'project', 'id' => "project.$project->id", 'text' => $project->name, 'active' => $objectType == 'project' && $project->id == $objectID, 'url' => createLink('api', 'index', 'libID=' . (isset($project->firstLib) ? $project->firstLib : 0)));
     if(isset($programs[$programID]))
     {
         $programKey = "program.$programID";
