@@ -24,3 +24,4 @@
 .api-lib-menu + .doc-tree > .tree {padding-top: 0;}
 
 .dropdown-menu .divider + .divider {display: none;}
+.dropmenu-item .tree-item-inner[data-type="lib"] {padding-left: 8px;}
