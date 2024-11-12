@@ -1,0 +1,7 @@
+title: programplanModel::getGanttTasks UTC.
+desc: programplanModel::getGanttTasks UTC.
+author: liumengyi
+version: '1.0'
+fields:
+  - field: sql
+    range: "(( 1   AND `id`  LIKE '%2%' ) AND ( 1  )) AND `deleted` = '0'"
