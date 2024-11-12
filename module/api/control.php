@@ -115,6 +115,26 @@ class api extends control
         $recTotal      = 0;
         $recPerPage    = $recPerPage ? max(1, $recPerPage) : 20;
 
+        $productsCount = array();
+        $projectsCount = array();
+        foreach($apis as $api)
+        {
+            if(!isset($libs[$api->lib])) continue;
+            $lib = $libs[$api->lib];
+            if(isset($lib->apiCount)) $lib->apiCount++;
+            else                      $lib->apiCount = 1;
+
+            if($lib->product)
+            {
+                if(isset($productsCount[$lib->product])) $productsCount[$lib->product]++;
+                else                                     $productsCount[$lib->product] = 1;
+            }
+            if($lib->project)
+            {
+                if(isset($projectsCount[$lib->project])) $projectsCount[$lib->project]++;
+                else                                     $projectsCount[$lib->project] = 1;
+            }
+        }
 
         $this->app->loadClass('pager', $static = true);
 
