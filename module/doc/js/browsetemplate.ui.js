@@ -1,3 +1,4 @@
+const savingDocData = {};
 /**
  * 获取文档界面上的表格初始化选项。
  * Get the table initialization options on the doc UI.
@@ -147,6 +148,65 @@ function handleCreateDoc(doc, spaceID, libID, moduleID)
     });
 }
 
+/**
+ * 处理保存文档的操作请求，向服务器发送请求并返回保存的文档对象。
+ * Handle the save doc operation request, send a request to the server and return the saved doc object.
+ */
+function handleSaveDoc(doc)
+{
+    const docApp    = getDocApp();
+    const spaceType = docApp.signals.spaceType.value;
+    const libID     = docApp.signals.libID.value;
+    const moduleID  = docApp.signals.moduleID.value;
+    const url       = $.createLink('doc', 'editTemplate', `docID=${doc.id}`);
+    const docData   = {
+        content    : doc.content,
+        status     : doc.status || 'normal',
+        contentType: doc.contentType,
+        type       : 'text',
+        lib        : libID,
+        module     : moduleID,
+        title      : doc.title,
+        keywords   : doc.keywords,
+        acl        : doc.acl,
+        space      : spaceType,
+        uid        : (doc.uid || `doc${doc.id}`),
+    };
+
+    const docAppData = docApp.doc.data;
+    if (doc.id === docAppData.id) docData.mailto = docAppData.mailto;
+
+    if(savingDocData[doc.id])
+    {
+        mergeDocFormData(docData, savingDocData[doc.id]);
+        delete savingDocData[doc.id];
+    }
+
+    return new Promise((resolve) => {
+        $.post(url, docData, (res) =>
+        {
+            try
+            {
+                const data = JSON.parse(res);
+                if(typeof data !== 'object' || data.result === 'fail')
+                {
+                    let message = data.message || data.error || getLang('errorOccurred');
+                    if(typeof message === 'object') message = Object.values(message).map(x => Array.isArray(x) ? x.join('\n') : x).join('\n');
+                    throw new Error(message);
+                }
+                docApp.update('doc', $.extend({}, doc, docData, data.doc));
+                resolve(true);
+            }
+            catch (error)
+            {
+                resolve(false);
+                if(!error.message) return;
+                zui.Modal.alert(error.message);
+            }
+        });
+    });
+}
+
 const customRenders =
 {
     /**
@@ -196,13 +256,44 @@ $.extend(window.docAppActions,
 
         return items;
     },
+    /**
+     * 定义文档编辑时的操作按钮。
+     * Define the actions on toolbar of the doc editing page.
+     */
+    'doc-edit': function(info)
+    {
+        const doc = info.data;
+        if(!doc) return;
+
+        const lang = getLang();
+        return [
+            {text: lang.saveDraft, size: 'md', className: 'btn-wide', type: 'secondary', command: 'saveDoc/draft'},
+            {text: lang.release, size: 'md', className: 'btn-wide', type: 'primary', command: 'saveDoc'},
+            {text: lang.cancel, size: 'md', className: 'btn-wide', type: 'primary-outline', command: 'cancelEditDoc'},
+            {text: lang.settings, size: 'md', type: 'ghost', command: `showDocSettingModal/${doc.id}/${doc.contentType}/1`, icon: 'cog-outline'},
+        ];
+    }
 });
 
 /**
- * 定义界面操作命令。
- * Define the UI commands.
+ * 重写文档应用的配置选项方法。
+ * Override the method to set the doc app options.
  */
-const commands =
+window._setDocAppOptions = window.setDocAppOptions; // Save the original method.
+window.setDocAppOptions = function(_, options) // Override the method.
+{
+    options = window._setDocAppOptions(_, options);
+    return $.extend(options,
+    {
+        onCreateDoc     : handleCreateDoc,
+        onSaveDoc       : handleSaveDoc,
+        getTableOptions : getTableOptions,
+        customRenders   : customRenders
+    });
+};
+
+/* 扩展文档模板命令定义。 Extend the doc app command definition. */
+$.extend(window.docAppCommands,
 {
     addModule: function(_, args)
     {
@@ -219,28 +310,6 @@ const commands =
         const url      = $.createLink('doc', 'editTemplateType', `moduleID=${moduleID}`);
         zui.Modal.open({size: 'sm', url: url});
     },
-};
-
-/**
- * 重写文档应用的配置选项方法。
- * Override the method to set the doc app options.
- */
-window._setDocAppOptions = window.setDocAppOptions; // Save the original method.
-window.setDocAppOptions = function(_, options) // Override the method.
-{
-    options = window._setDocAppOptions(_, options);
-    return $.extend(options,
-    {
-        commands        : commands,
-        onCreateDoc     : handleCreateDoc,
-        getTableOptions : getTableOptions,
-        customRenders   : customRenders
-    });
-};
-
-/* 扩展文档模板命令定义。 Extend the doc app command definition. */
-$.extend(window.docAppCommands,
-{
     /**
      * 编辑文档模板。
      * Edit doc template.
