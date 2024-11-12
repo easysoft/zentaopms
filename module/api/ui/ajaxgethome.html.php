@@ -171,3 +171,26 @@ else
 {
     foreach($programs as $program) $views[] = $buildProgramItem($program);
 }
+
+div
+(
+    setKey('body'),
+    setClass('doc-app-body flex-auto min-h-0 col gap-4 p-4 items-stretch overflow-auto scrollbar-hover no-morph'),
+    $views
+);
+
+if(!$isEmpty)
+{
+    div
+    (
+        setKey('footer'),
+        setClass('doc-app-footer surface-light row items-center border-t py-1.5 px-2'),
+        div(setClass('flex-auto')),
+        pager
+        (
+            set(usePager()),
+            set::useState(),
+            set::onChangePageInfo(jsRaw('(info, event) => {event.preventDefault(); window.loadHome({pager: {recPerPage: info.recPerPage, page: info.page}});}'))
+        )
+    );
+}
