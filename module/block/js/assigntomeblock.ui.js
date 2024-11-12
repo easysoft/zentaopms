@@ -59,6 +59,8 @@ window.renderCell = function(result, info)
         result[0] = {html: '<a href="' + $.createLink(info.row.data.storyType, 'view', `id=${info.row.data.id}`) + '" data-app="' + openTab + '">' + info.row.data.title + '</a>'};
     }
 
+    if(info.col.name == 'title' && info.row.data.module == 'attend') result[0].props.href = undefined;
+
     return result;
 }
 
