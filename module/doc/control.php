@@ -426,9 +426,50 @@ class doc extends control
                 ->setDefault('editedBy', $this->app->user->account)
                 ->get();
 
-            $docResult = $this->doc->createTemplate($docData, $this->post->labels);
+            $_POST['type'] = 'docTemplate';
+
+            $docResult = $this->doc->create($docData, $this->post->labels);
             if(!$docResult || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->docZen->responseAfterCreateTemplate($docData->lib, $docResult);
+        }
+    }
+
+    /**
+     * 编辑一个文档。
+     * Edit a doc.
+     *
+     * @param  int    $docID
+     * @param  bool   $comment
+     * @param  int    $appendLib
+     * @access public
+     * @return void
+     */
+    public function editTemplate(int $docID, bool $comment = false, int $appendLib = 0)
+    {
+        $doc = $this->doc->getByID($docID);
+        if(!empty($_POST))
+        {
+            $changes = $files = array();
+            if($comment == false)
+            {
+                $docData = form::data()
+                    ->setDefault('editedBy', $this->app->user->account)
+                    ->setIF(strpos(",$doc->editedList,", ",{$this->app->user->account},") === false, 'editedList', $doc->editedList . ",{$this->app->user->account}")
+                    ->get();
+
+                $_POST['type'] = 'docTemplate';
+                $result  = $this->doc->update($docID, $docData);
+                if(dao::isError())
+                {
+                    if(!empty(dao::$errors['lib']) || !empty(dao::$errors['keywords'])) return $this->send(array('result' => 'fail', 'message' => dao::getError(), 'callback' => "zui.Modal.open({id: 'modalBasicInfo'});"));
+                    return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                }
+
+                $changes = $result['changes'];
+                $files   = $result['files'];
+            }
+
+            return $this->docZen->responseAfterEditTemplate($doc, $changes, $files);
         }
     }
 
