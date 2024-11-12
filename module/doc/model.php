@@ -3789,12 +3789,23 @@ class docModel extends model
     public function getScopeTemplates()
     {
         $scopeTemplates = array();
+
         foreach($this->lang->docTemplate->scopes as $scopeID => $scopeName)
         {
-            $scopeTemplates[$scopeID] = array();
+            $scopeTemplates[$scopeID] = $this->getHotTemplates($scopeID, 5);
         }
 
         return $scopeTemplates;
+    }
+
+    public function getHotTemplates($scopeID = 0, $limit = 0)
+    {
+        return $this->dao->select('*')->from(TABLE_DOC)
+            ->where('templateType')->ne('')
+            ->beginIF($scopeID)->andWhere('lib')->eq($scopeID)->fi()
+            ->orderBy('addedDate_desc,editedDate_desc')
+            ->beginIF($limit)->limit(5)->fi()
+            ->fetchAll();
     }
 
     /**
