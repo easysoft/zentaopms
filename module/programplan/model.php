@@ -146,7 +146,7 @@ class programplanModel extends model
         {
             $baseline = $this->loadModel('cm')->getByID($baselineID);
             $oldData  = json_decode($baseline->data);
-            $plans    = $this->programplanTao->setPlanBaseline($oldData->stage, $plans);
+            $plans    = $this->programplanTao->setPlanBaseline((array)$oldData->stage, $plans);
         }
 
         /* Set plan for gantt view. */
