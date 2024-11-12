@@ -1182,7 +1182,8 @@ class instanceModel extends model
         if(empty($result) || $result->code != 200 || empty($result->data)) return array();
 
         $backupList = $result->data;
-        usort($backupList, function($backup1, $backup2){
+        usort($backupList, function($backup1, $backup2)
+        {
             if($backup1->create_time < $backup2->create_time) return 1;
             elseif ($backup1->create_time > $backup2->create_time) return -1;
             else return 0;
@@ -1385,7 +1386,7 @@ class instanceModel extends model
             if($deadline < time())
             {
                 $result = $this->cne->deleteBackup($instance, $backup->name);
-                $this->action->create('instance', $instance->id, 'deleteexpiredbackup', '', json_encode(array('result' => 'success', 'data' => array('backupName' => $backup->name, 'backupCreateTime' => $backup->create_time))));
+                $this->action->create('instance', $instance->id, 'deleteexpiredbackup', '', json_encode(array('result' => 'success', 'data' => array('backupName' => $backup->name, 'backupCreateTime' => $backup->create_time, 'result' => $result))));
             }
         }
         return true;
