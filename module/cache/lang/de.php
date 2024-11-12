@@ -1,8 +1,10 @@
 <?php
 $lang->cache->clear        = 'Clear Cache';
 $lang->cache->clearSuccess = 'Cache cleared successfully.';
-$lang->cache->type         = 'Cache Type';
+$lang->cache->status       = 'Status';
+$lang->cache->driver       = 'Cache Type';
 $lang->cache->namespace    = 'Namespace';
+$lang->cache->scope        = 'Scope';
 $lang->cache->memory       = 'Memory';
 $lang->cache->usedMemory   = 'Total %s, used %s';
 
@@ -11,6 +13,9 @@ $lang->cache->statusList[0] = 'Off';
 
 $lang->cache->driverList['apcu']  = 'APCu';
 $lang->cache->driverList['redis'] = 'Redis';
+
+$lang->cache->scopeList['private'] = 'Exclusively for this application';
+$lang->cache->scopeList['shared']  = 'Shared by multiple applications';
 
 $lang->cache->apcu = new stdClass();
 $lang->cache->apcu->notice     = 'To use APCu cache, you need to load the APCu extension first.';
@@ -35,4 +40,5 @@ $lang->cache->redis->tips->host       = 'Fill in the domain name or IP address, 
 $lang->cache->redis->tips->serializer = 'Data needs to be serialized and cached. Changing the serializer will clear the cached data.';
 
 $lang->cache->tips = new stdClass();
-$lang->cache->tips->namespace = 'Namespaces are used to prevent cache data conflicts between different applications. Changing the namespace will clear the cache data.';
+$lang->cache->tips->namespace = 'Namespaces are used to prevent cache data conflicts between different applications. Changing the namespace after caching is enabled will clear the cache data.';
+$lang->cache->tips->scope     = 'If the cache service is only used by this application, please select "Exclusively for this application", otherwise select "Shared by multiple applications".';

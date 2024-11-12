@@ -1,8 +1,8 @@
 <?php
 $lang->cache->clear        = '清除缓存';
 $lang->cache->clearSuccess = '清除成功';
-$lang->cache->status       = '状态';
-$lang->cache->type         = '服务';
+$lang->cache->status       = '缓存状态';
+$lang->cache->driver       = '缓存服务';
 $lang->cache->namespace    = '命名空间';
 $lang->cache->scope        = '服务范围';
 $lang->cache->memory       = '内存使用';
@@ -40,5 +40,5 @@ $lang->cache->redis->tips->host       = '填写域名或 IP 地址，无需填�
 $lang->cache->redis->tips->serializer = '数据需要序列化后缓存。更改序列化器会清空缓存数据。';
 
 $lang->cache->tips = new stdClass();
-$lang->cache->tips->namespace = '命名空间用来防止不同应用间缓存数据冲突。更改命名空间会清空缓存数据。';
+$lang->cache->tips->namespace = '命名空间用来防止不同应用间缓存数据冲突。启用缓存后更改命名空间会清空缓存数据。';
 $lang->cache->tips->scope     = '如果缓存服务只有本应用使用请选择『本应用独享』，否则选择『多应用共享』。';
