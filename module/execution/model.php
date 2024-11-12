@@ -1467,17 +1467,19 @@ class executionModel extends model
      * @param  int        $projectID
      * @param  int        $productID
      * @param  bool       $withTasks
-     * @param  string|int $param     skipParent|hasParentName
+     * @param  string|int $param          skipParent|hasParentName
+     * @param  array      $executionTasks
      * @access public
      * @return array
      */
-    public function batchProcessExecution(array $executions, int $projectID = 0, int $productID = 0, bool $withTasks = false, string|int $param = ''): array
+    public function batchProcessExecution(array $executions, int $projectID = 0, int $productID = 0, bool $withTasks = false, string|int $param = '', array $executionTasks = array()): array
     {
         if(empty($executions)) return $executions;
 
-        $productList = $this->executionTao->getProductList($projectID); // Get product name of the linked execution.
+        $project     = $this->loadModel('project')->fetchByID($projectID);
+        $productList = $this->executionTao->getProductList($projectID);   // Get product name of the linked execution.
 
-        if($withTasks) $executionTasks = $this->getTaskGroupByExecution(array_keys($executions));
+        if($withTasks && empty($executionTasks)) $executionTasks = $this->getTaskGroupByExecution(array_keys($executions));
 
         $parentList       = array();
         $today            = helper::today();
@@ -1492,6 +1494,8 @@ class executionModel extends model
             $execution->product     = $productID;
             $execution->productID   = $productID;
             if($execution->end) $execution->end = date(DT_DATE1, strtotime($execution->end));
+            if(!isset($execution->projectName))  $execution->projectName  = $project->name;
+            if(!isset($execution->projectModel)) $execution->projectModel = $project->model;
 
             if(isset($parentExecutions[$execution->id])) $executions[$execution->id]->isParent = 1;
             if(empty($productID) && !empty($productList[$execution->id])) $execution->product = trim($productList[$execution->id]->product, ',');
@@ -4719,7 +4723,7 @@ class executionModel extends model
             $task->totalConsumed = $task->consumed;
             $task->totalLeft     = $task->left;
             $task->isParent      = ($task->parent < 0);
-            $task->parent        = $task->parent <= 0 ? 'pid' . (string)$task->execution : 'tid' . (string)$task->parent;
+            $task->parent        = $task->parent <= 0 || !isset($tasks[$task->parent]) ? 'pid' . (string)$task->execution : 'tid' . (string)$task->parent;
             $task->progress      = ($task->consumed + $task->left) == 0 ? 0 : round($task->consumed / ($task->consumed + $task->left), 2) * 100;
             $task->begin         = $task->estStarted;
             $task->end           = $task->deadline;
