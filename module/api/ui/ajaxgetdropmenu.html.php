@@ -10,46 +10,46 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$data = array('normal' => array(), 'closed' => array());
-$data['normal'][] = array('id' => 0, 'text' => $lang->api->noLinked, 'active' => $objectID == 0, 'type' => 'nolink');
+$data = array('nolink' => array(), 'product' => array(), 'project' => array());
 
-/* 处理分组数据。Process grouped data. */
-foreach(array('product', 'project') as $moduleType)
+/* 处理独立接口库。Process independent libs. */
+foreach($nolinkLibs as $lib) $data['nolink'][] = array('id' => $lib->id, 'text' => $lib->name, 'active' => $lib->id == $libID, 'type' => 'item', 'url' => createLink('api', 'index', "libID=$lib->id"));
+
+/* 处理产品和项目数据。Process product and project data. */
+foreach($products as $product)
 {
-    if(isset($normalObjects[$moduleType]))
+    $programID = $product->program;
+    $item      = array('type' => 'product', 'id' => $product->id, 'text' => $product->name, 'active' => $objectType == 'product' && $product->id == $objectID, 'url' => createLink('api', 'index', 'libID=' . (isset($product->firstLib) ? $product->firstLib : 0)));
+    if(isset($programs[$programID]))
     {
-        foreach($normalObjects[$moduleType] as $normalObjectID => $normalObjectName)
-        {
-            $item = array();
-            $item['id']     = $normalObjectID;
-            $item['text']   = $normalObjectName;
-            $item['active'] = $normalObjectID == $objectID;
-            $item['type']   = $moduleType;
-            $item['keys']   = zget(common::convert2Pinyin(array($normalObjectName)), $normalObjectName, '');
-
-            $data['normal'][] = $item;
-        }
+        $programKey = "program.$programID";
+        $program    = $programs[$programID];
+        if(!isset($data['product'][$programKey])) $data['product'][$programKey] = array('id' => $programKey, 'text' => $program->name, 'type' => 'program', 'items' => array());
+        $data['product'][$programKey]['items'][] = $item;
     }
-
-    if(isset($closedObjects[$moduleType]))
+    else
     {
-        foreach($closedObjects[$moduleType] as $closedObjectID => $closedObjectName)
-        {
-            $item = array();
-            $item['id']     = $closedObjectID;
-            $item['text']   = $closedObjectName;
-            $item['active'] = $closedObjectID == $objectID;
-            $item['type']   = $moduleType;
-            $item['keys']   = zget(common::convert2Pinyin(array($closedObjectName)), $closedObjectName, '');
-
-            $data['closed'][] = $item;
-        }
+        $data['product'][$product->id] = $item;
     }
 }
-
-$tabs = array();
-$tabs[] = array('name' => 'normal', 'text' => '');
-$tabs[] = array('name' => 'closed', 'text' => $lang->doc->closed);
+foreach($projects as $project)
+{
+    $programID = $project->parent;
+    $item      = array('type' => 'project', 'id' => $project->id, 'text' => $project->name, 'active' => $objectType == 'project' && $project->id == $objectID, 'url' => createLink('api', 'index', 'libID=' . (isset($project->firstLib) ? $project->firstLib : 0)));
+    if(isset($programs[$programID]))
+    {
+        $programKey = "program.$programID";
+        $program    = $programs[$programID];
+        if(!isset($data['project'][$programKey])) $data['project'][$programKey] = array('id' => $programKey, 'text' => $program->name, 'type' => 'program', 'items' => array());
+        $data['project'][$programKey]['items'][] = $item;
+    }
+    else
+    {
+        $data['project'][$project->id] = $item;
+    }
+}
+$data['product'] = array_values($data['product']);
+$data['project'] = array_values($data['project']);
 
 /**
  * 定义最终的 JSON 数据。
@@ -57,13 +57,20 @@ $tabs[] = array('name' => 'closed', 'text' => $lang->doc->closed);
  */
 $link = $this->createLink('api', 'ajaxGetList', "objectID={id}&objectType={type}");
 
+$tabs = array();
+$tabs[] = array('name' => 'nolink',  'text' => $lang->api->libTypeList['nolink']);
+$tabs[] = array('name' => 'product', 'text' => $lang->api->libTypeList['product']);
+$tabs[] = array('name' => 'project', 'text' => $lang->api->libTypeList['project']);
+
 $json = array();
-$json['data']       = $data;
-$json['tabs']       = $tabs;
-$json['searchHint'] = $lang->searchAB;
 $json['link']       = $link;
-$json['itemType']   = 'api';
-$json['expandName'] = 'closed';
+$json['data']        = $data;
+$json['tabs']        = $tabs;
+$json['searchHint']  = $lang->searchAB;
+$json['labelMap']    = array('program' => $lang->program->common);
+$json['itemType']    = 'lib';
+$json['typeIconMap'] = array('lib' => 'doclib');
+$json['debug']       = array('libID' => $libID, 'objectType' => $objectType, 'objectID' => $objectID);
 
 /**
  * 渲染 JSON 字符串并发送到客户端。
