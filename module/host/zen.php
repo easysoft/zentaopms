@@ -31,9 +31,23 @@ class hostZen extends host
             dao::$errors['desc'] = $this->lang->host->notice->descLength;
         }
 
+        $intFields = explode(',', $this->config->host->create->intFields);
+        foreach($intFields as $field)
+        {
+            if(!$formData->{$field}) continue;
+
+            if(!preg_match("/^-?\d+$/", $formData->{$field}))
+            {
+                dao::$errors[$field] = $this->lang->host->notice->{$field};
+            }
+        }
+
+
         $ipFields = explode(',', $this->config->host->create->ipFields);
         foreach($ipFields as $field)
         {
+            if(!$formData->{$field}) continue;
+
             $ipList = explode(',', $formData->{$field});
             foreach($ipList as $ip)
             {
