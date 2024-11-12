@@ -18,6 +18,7 @@ formPanel
 (
     set::id('hostEditForm'),
     set::title($lang->host->edit),
+    on::init()->do('$(function() {setTimeout(osChange, 50); });'),
     formRow
     (
         setID('groupRow'),
@@ -56,7 +57,7 @@ formPanel
             set::control('picker'),
             set::name('osName'),
             set::items($lang->host->osNameList),
-            set::value($osName ? $osName : $host->osName),
+            set::value(zget($host, 'osName', '')),
             on::change('osChange')
         )
     ),
@@ -71,11 +72,12 @@ formPanel
         ),
         formGroup
         (
+            setID('osVersion'),
             set::width('1/3'),
             set::label($lang->host->osVersion),
             set::control('picker'),
             set::name('osVersion'),
-            set::items($lang->host->{"{$osName}List"}),
+            set::items(array()),
             set::value($host->osVersion)
         )
     ),
