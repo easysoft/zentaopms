@@ -85,6 +85,7 @@ function toggleSelectTestStory()
         $('#form-task-create [data-name=datePlan]').addClass('hidden');
         $('#form-task-create [data-name=estimate]').addClass('hidden');
         $('#form-task-create [data-name=parent]').addClass('hidden');
+        $('.panel-actions .btn').attr('disabled', 'disabled');
         $('[name=parent]').zui('picker').$.setValue('');
         $('#form-task-create [data-name=assignedToBox]').insertAfter('#form-task-create [data-name=name]');
         $('#form-task-create [name=multiple]').closest('.checkbox-primary').addClass('hidden');
@@ -108,6 +109,7 @@ function toggleSelectTestStory()
     }
     else
     {
+        $('.panel-actions .btn').removeAttr('disabled');
         $('#form-task-create [data-name=name]').removeClass('w-1/2').addClass('w-full');
         $('#form-task-create [data-name=module]').removeClass('hidden');
         $('#form-task-create [data-name=storyBox]').removeClass('hidden');
