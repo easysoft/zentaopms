@@ -874,29 +874,23 @@ class api extends control
      *
      * @param  string $objectType
      * @param  int    $objectID
-     * @param  string $module
-     * @param  string $method
+     * @param  int    $libID
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu(string $objectType, int $objectID, string $module, string $method)
+    public function ajaxGetDropMenu(string $objectType, int $objectID, int $libID = 0)
     {
-        list($normalObjects, $closedObjects) = $this->api->getOrderedObjects();
+        $objects   = $this->api->getGroupedObjects();
+        $programs  = $this->loadModel('program')->getList('all', 'order_asc', 'top');
+        $programs  = array_filter($programs, function($program) {return $program->parent == '0';});
 
-        $titleList = array($this->lang->api->noLinked);
-        if(!empty($normalObjects['product'])) $titleList += array_values($normalObjects['product']);
-        if(!empty($normalObjects['project'])) $titleList += array_values($normalObjects['project']);
-        if(!empty($closedObjects['product'])) $titleList += array_values($closedObjects['product']);
-        if(!empty($closedObjects['project'])) $titleList += array_values($closedObjects['project']);
-
-        $this->view->objectType    = $objectType;
-        $this->view->objectID      = $objectID;
-        $this->view->module        = $module;
-        $this->view->method        = $method;
-        $this->view->normalObjects = $normalObjects;
-        $this->view->closedObjects = $closedObjects;
-        $this->view->nolinkLibs    = $this->doc->getApiLibs(0, 'nolink');
-        $this->view->objectsPinYin = common::convert2Pinyin($titleList);
+        $this->view->objectType = $objectType;
+        $this->view->objectID   = $objectID;
+        $this->view->libID      = $libID;
+        $this->view->programs   = $programs;
+        $this->view->products   = $objects['product'];
+        $this->view->projects   = $objects['project'];
+        $this->view->nolinkLibs = $objects['nolink'];
         $this->display();
     }
 
