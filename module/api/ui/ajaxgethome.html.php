@@ -32,3 +32,32 @@ $createCommand = function(array $args) use($pager, $type, $unclosed, $notempty)
     $parts[] = $args['pageID'];
     return implode('/', $parts);
 };
+
+$buildLibItem = function(int $id, string $name, int $count = 0) use ($libColors, $type, $isNolink, $showLibAction, $lang)
+{
+    return div
+    (
+        setClass('doc-space-card-lib px-2 w-1/5 group'),
+        setKey($id),
+        div
+        (
+            setClass('canvas border rounded py-2 px-3 col gap-1 hover:shadow-lg hover:border-primary relative cursor-pointer'),
+            set('zui-command', $isNolink ? "selectSpace/nolink/$id" : "selectSpace/$type.$id/_first"),
+            icon($isNolink ? 'doclib' : $type, setClass('text-2xl'), $isNolink ? setStyle('color', $libColors[$id % count($libColors)]) : setClass('text-gray')),
+            div(setClass('font-bold text-clip'), set::title($name), $name),
+            div(setClass('text-gray text-sm'), $count ? sprintf($lang->api->apiTotalInfo, $count) : $lang->api->noApi),
+            $showLibAction ? div
+            (
+                setClass('toolbar absolute top-1 right-1 opacity-0 group-hover:opacity-100'),
+                btn
+                (
+                    setClass('doc-space-lib-btn'),
+                    set('zui-command', "showHomeItemMenu/$type/$id"),
+                    set::icon('ellipsis-v'),
+                    set::size('sm'),
+                    set::type('ghost')
+                )
+            ) : null
+        )
+    );
+};
