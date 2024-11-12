@@ -55,20 +55,11 @@ zenData('setting')->dao->insert(TABLE_CONFIG)->data($reviewData->open->reviewCas
 zenData('setting')->dao->insert(TABLE_CONFIG)->data($reviewData->open->needReview)->exec();
 zenData('setting')->dao->insert(TABLE_CONFIG)->data($reviewData->open->forceNotReview)->exec();
 
-/* 通过`zenData`创建审批用户 */
-$userData = new stdclass();
-$userData->dev = new stdclass();
-$userData->dev->id = zenData('user')->dao->lastInsertID();
-$userData->dev->company = '0';
-$userData->dev->type = 'inside';
-$userData->dev->dept = '0';
-$userData->dev->account = 'dev';
-$userData->dev->password = '2aab594f45cbe9ed242ef3c22ca9460e';
-$userData->dev->realname = '研发';
-$userData->dev->email = 'dev@local.com';
-$userData->dev->visions = 'rnd,lite';
-$userData->dev->deleted = '0';
-zenData('user')->dao->insert(TABLE_USER)->data($userData->dev)->exec();
+$user = zenData('user');
+$user->id->setFields(array(array('range' => zenData('user')->dao->lastInsertID())));
+$user->account->setFields(array(array('range' => 'luxuyang')));
+$user->realname->setFields(array(array('range' => '研发')));
+$user->gen(1, $isClear = false);
 
 zenData('case')->loadYaml('case')->gen(1);
 
@@ -85,3 +76,8 @@ $testcase = array(
 );
 
 r($tester->testcaseReview($product, $testcase)) && p('message,status') && e('测试用例评审通过,SUCCESS'); //测试用例评审通过。
+
+/* 还原zt_config、zt_user数据 */
+zenData('setting')->dao->delete()->from(TABLE_CONFIG)->where('module')->eq('testcase')->andWhere('key')->in('forceReview, reviewCase, needReview, forceNotReview')->exec();
+zenData('user')->dao->delete()->from(TABLE_USER)->where('account')->eq('luxuyang')->exec();
+$tester->closeBrowser();
