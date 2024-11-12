@@ -3,7 +3,14 @@ $(document).off('click', '#showTask').on('click', '#showTask', function()
     const show = $(this).is(':checked') ? 1 : 0;
     $.cookie.set('showTask', show, {expires:config.cookieLife, path:config.webRoot});
 
-    reloadPage();
+    if(show == 0 && status == 'bysearch')
+    {
+        loadPage($.createLink('project', 'execution', 'status=undone&projectID=' + projectID));
+    }
+    else
+    {
+        reloadPage();
+    }
 });
 
 $(document).off('click', '#showStage').on('click', '#showStage', function()

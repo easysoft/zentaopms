@@ -116,7 +116,8 @@ featureBar
             set::text($lang->programplan->stageCustom['point']),
             set::rootClass('ml-4')
         )
-    ) : null
+    ) : null,
+    $this->cookie->showTask ? li(setClass('ml-2'), searchToggle(set::module('projectTask'), set::open($status == 'bysearch'))) : null
 );
 
 /* zin: Define the toolbar on main menu. */
