@@ -764,6 +764,19 @@ class programplanModel extends model
             if($browseType == 'bysearch')
             {
                 $query = $this->loadModel('search')->getQuery($queryID);
+                if($query)
+                {
+                    $this->session->set('projectTaskQuery', $query->sql);
+                    $this->session->set('projectTaskForm', $query->form);
+                }
+                elseif(!$this->session->projectTaskQuery)
+                {
+                    $this->session->set('projectTaskQuery', ' 1 = 1');
+                }
+
+                if(strpos($this->session->projectTaskQuery, "deleted =") === false) $this->session->set('projectTaskQuery', $this->session->projectTaskQuery . " AND deleted = '0'");
+
+                $tasks = $this->loadModel('execution')->getSearchTasks($projectTaskQuery, 'execution_asc,order_asc,id_desc', null, 'projectTask');
             }
             else
             {
