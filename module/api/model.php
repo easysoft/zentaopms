@@ -911,6 +911,20 @@ class apiModel extends model
      */
     public function getGroupedObjects(): array
     {
+        $libs   = $this->loadModel('doc')->getApiLibs();
+        $libIDs = array_keys($libs);
+
+        /* 获取接口库所属产品的产品列表。 */
+        $products = $this->dao->select('t1.id, t1.order, t1.name, t1.status, t1.program')->from(TABLE_PRODUCT)->alias('t1')
+            ->leftJoin(TABLE_DOCLIB)->alias('t2')->on('t2.product=t1.id')
+            ->where('t2.id')->gt(0)
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t2.id')->in($libIDs)
+            ->orderBy('order_asc')
+            ->fetchAll('id');
+
+        return array('product' => $products);
     }
 
     /**
