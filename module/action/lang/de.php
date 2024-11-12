@@ -353,9 +353,12 @@ $lang->action->desc->updatecustom        = '$date, updated by <strong>$actor</st
 $lang->action->desc->delist  = '$date, delist by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->publish = '$date, publish by <strong>$actor</strong>.' . "\n";
 
-$lang->action->desc->manualbackup    = '$date, Manually backed up by <strong>$actor</strong>.' . "\n";
-$lang->action->desc->openautobackup  = '$date, Enable automatic backup by <strong>$actor</strong>.' . "\n";
-$lang->action->desc->closeautobackup = '$date, Disable automatic backup by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->manualbackup        = '$date, Manually backed up by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->openautobackup      = '$date, Enable automatic backup by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->closeautobackup     = '$date, Disable automatic backup by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->autodeletebackups   = '$date, Automatically clean up backups by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->savebackupsettings  = '$date, Save backup settings backups by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->deleteexpiredbackup = '$date, Clean up expired backups by <strong>$actor</strong>.' . "\n";
 
 /* Used to display dynamic information. */
 $lang->action->label = new stdclass();
