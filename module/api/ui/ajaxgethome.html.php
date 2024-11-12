@@ -79,6 +79,17 @@ $buildProgramItem = function($program) use ($type, $buildLibItem)
         setKey($program->id),
         div
         (
+            setClass('row items-center justify-between gap-2 px-2.5 py-1 border-b'),
+            div
+            (
+                setClass('row items-center gap-2 flex-none cursor-pointer hover:text-primary'),
+                setClass('row items-center gap-2 flex-none cursor-pointer hover:text-primary'),
+                icon('program', setClass('text-gray flex-none')),
+                div(setClass('min-w-0 flex-auto'), strong($program->name)),
+            )
+        ),
+        div
+        (
             setClass('doc-space-card-libs py-3 px-1.5'),
             div
             (
