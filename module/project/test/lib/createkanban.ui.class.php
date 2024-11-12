@@ -78,3 +78,23 @@ class createKanbanTester extends tester
             {
                 $endtext = trim($viewPage->dom->hasproductend->getText());
                 if($endtext != '长期') return $this->failed('日期错误');
+            }
+        }
+        // 如果是项目型项目，就使用noproductend元素
+        else
+        {
+            if(isset($kanban['end']))
+            {
+                $endtext = $viewPage->dom->noproductend->getText();
+                if($endtext != $kanban['end']) return $this->failed('日期错误');
+            }
+            else
+            {
+                $endtext = trim($viewPage->dom->noproductend->getText());
+                if($endtext != '长期') return $this->failed('日期错误');
+            }
+        }
+
+        return $this->success();
+        }
+    }
