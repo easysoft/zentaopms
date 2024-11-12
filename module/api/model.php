@@ -904,6 +904,16 @@ class apiModel extends model
     }
 
     /**
+     * 获取分组后的对象列表。
+     *
+     * @access public
+     * @return array
+     */
+    public function getGroupedObjects(): array
+    {
+    }
+
+    /**
      * 获取有权限的接口文档列表。
      * Get priv Apis.
      *
