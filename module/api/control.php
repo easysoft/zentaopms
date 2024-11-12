@@ -206,24 +206,32 @@ class api extends control
         $pickLib    = $noPicks || strpos($picks, ',lib,')    !== false;
         $pickModule = $noPicks || strpos($picks, ',module,') !== false;
         $data       = array('spaceID' => $spaceID);
+        $isNolink   = $spaceID == 'nolink';
 
+        list($objectType, $objectID) = $isNolink ? array('', 0) : explode('.', $spaceID);
         if($noPicks || strpos($picks, ',space,') !== false)
         {
-            $data['spaces'][] = array('id' => 'nolink', 'name' => $this->lang->api->noLinked, 'type' => 'api');
+            $spaces['nolink'] = array('id' => 'nolink', 'name' => $this->lang->api->noLinked, 'type' => 'api');
             list($normalObjects, $closedObjects) = $this->api->getOrderedObjects();
             foreach($normalObjects as $type => $list)
             {
-                foreach($list as $id => $name) $data['spaces'][] = array('id' => "product.{$id}", 'name' => $name, 'type' => 'api', 'objectType' => $type);
+                foreach($list as $id => $name) $spaces["$type.{$id}"] = array('id' => "$type.{$id}", 'name' => $name, 'type' => 'api', 'objectType' => $type);
             }
             foreach($closedObjects as $type => $list)
             {
-                foreach($list as $id => $name) $data['spaces'][] = array('id' => "project.{$id}", 'name' => $name, 'type' => 'api', 'objectType' => $type, 'closed' => true);
+                foreach($list as $id => $name) $spaces["$type.{$id}"] = array('id' => "$type.{$id}", 'name' => $name, 'type' => 'api', 'objectType' => $type, 'closed' => true);
             }
+            if(!$isNolink && !isset($spaces[$spaceID]))
+            {
+                $object = $this->loadModel($objectType)->getByID((int)$objectID);
+                $spaces[$spaceID] = array('id' => $spaceID, 'name' => $object->name, 'type' => 'api');
+            }
+            $data['spaces'] = array_values($spaces);
         }
 
         if($pickLib || $pickModule)
         {
-            $libs     = $this->doc->getApiLibs();
+            $libs     = $isNolink ? $this->doc->getApiLibs(0, 'nolink') : $this->doc->getApiLibs(0, $objectType, (int)$objectID);
             $libIds   = array_keys($libs);
             if($pickLib)
             {
@@ -244,7 +252,7 @@ class api extends control
 
         if($noPicks || strpos($picks, ',doc,') !== false)
         {
-            $apis       = $this->api->getApiListBySearch(0, 0);
+            $apis       = $this->api->getApiListBySearch(0, 0, $objectType);
             $unsetProps = array('commonParams', 'params', 'paramsExample', 'response', 'responseExample');
             foreach($apis as $api)
             {
