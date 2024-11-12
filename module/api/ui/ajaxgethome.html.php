@@ -61,3 +61,30 @@ $buildLibItem = function(int $id, string $name, int $count = 0) use ($libColors,
         )
     );
 };
+
+$buildProgramItem = function($program) use ($type, $buildLibItem)
+{
+    $items = array();
+    if($type === 'product' && !empty($program->products))
+    {
+        foreach($program->products as $product) $items[] = $buildLibItem($product->id, $product->name, isset($product->apiCount) ? $product->apiCount : 0);
+    }
+    if($type === 'project' && !empty($program->projects))
+    {
+        foreach($program->projects as $project) $items[] = $buildLibItem($project->id, $project->name, isset($project->apiCount) ? $project->apiCount : 0);
+    }
+    return div
+    (
+        setClass('doc-space-card ring rounded surface-light'),
+        setKey($program->id),
+        div
+        (
+            setClass('doc-space-card-libs py-3 px-1.5'),
+            div
+            (
+                setClass('row'),
+                $items
+            )
+        )
+    );
+};
