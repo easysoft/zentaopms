@@ -155,7 +155,7 @@ function getViewModeUrl(options)
     }
     else
     {
-        const params = zui.formatString('libID={libID}&moduleID={moduleID}&apiID={docID}&version={docVersion}&release={release}&browseType={filterType}&param=0&orderBy={orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}&mode={mode}&search={search}', options).replace('libID=0&moduleID=0&apiID=0&version=0&release=0&browseType=all&param=0&orderBy=order_asc&recTotal=0&recPerPage=20&pageID=1&mode=&search=', '').replace('&apiID=0&version=0&release=0&browseType=all&param=0&orderBy=order_asc&recTotal=0&recPerPage=20&pageID=1&mode=&search=', '').replace('&browseType=all&param=0&orderBy=order_asc&recTotal=0&recPerPage=20&pageID=1&mode=&search=', '');
+        const params = zui.formatString('libID={libID}&moduleID={moduleID}&apiID={docID}&version={docVersion}&release={release}&browseType={filterType}&params={params}&orderBy={orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}&mode={mode}&search={search}', options).replace('libID=0&moduleID=0&apiID=0&version=0&release=0&browseType=all&params=0&orderBy=order_asc&recTotal=0&recPerPage=20&pageID=1&mode=&search=', '').replace('&apiID=0&version=0&release=0&browseType=all&params=0&orderBy=order_asc&recTotal=0&recPerPage=20&pageID=1&mode=&search=', '').replace('&browseType=all&params=0&orderBy=order_asc&recTotal=0&recPerPage=20&pageID=1&mode=&search=', '');
         url = $.createLink('api', 'index', params);
     }
     return url;
