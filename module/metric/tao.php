@@ -61,7 +61,6 @@ class metricTao extends metricModel
             ->where('deleted')->eq('0')
             ->andWhere('scope')->in($scopes)
             ->andWhere('object')->in(array_keys($this->lang->metric->objectList))
-            ->groupBy('scope')
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->fetchAll('scope');
 
