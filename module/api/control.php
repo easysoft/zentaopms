@@ -136,6 +136,25 @@ class api extends control
             }
         }
 
+        if($type !== 'nolink')
+        {
+            $programs  = $this->loadModel('program')->getList($unclosed ? 'unclosed' : 'all', 'id_asc', 'top');
+            $programs  = array_filter($programs, function($program) {return $program->parent == '0';});
+
+            if($notempty) $programs = array_filter($programs, function($program) {return isset($program->apiCount) && $program->apiCount > 0;});
+
+            $recTotal = count($programs);
+            $pageID   = max(1, min($pageID, ceil($recTotal / $recPerPage)));
+            $programs = array_slice($programs, ($pageID - 1) * $recPerPage, $recPerPage);
+        }
+        else
+        {
+            if($notempty) $libs = array_filter($libs, function($lib) {return isset($lib->apiCount) && $lib->apiCount > 0;});
+            $recTotal = count($libs);
+            $pageID   = max(1, min($pageID, ceil($recTotal / $recPerPage)));
+            $libs     = array_slice($libs, ($pageID - 1) * $recPerPage, $recPerPage);
+        }
+
         $this->app->loadClass('pager', $static = true);
 
         $this->view->programs = isset($programs) ? $programs : array();
