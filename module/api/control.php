@@ -152,6 +152,18 @@ class api extends control
                     $program->apiCount = isset($program->apiCount) ? $program->apiCount + $product->apiCount : $product->apiCount;
                 }
             }
+            else
+            {
+                $projects = $this->loadModel('project')->getList($unclosed ? 'unclosed' : 'all');
+                foreach($projects as $project)
+                {
+                    if(!isset($programs[$project->parent])) continue;
+                    $program = $programs[$project->parent];
+                    $program->projects[] = $project;
+                    $project->apiCount = isset($projectsCount[$project->id]) ? $projectsCount[$project->id] : 0;
+                    $program->apiCount = isset($program->apiCount) ? $program->apiCount + $project->apiCount : $project->apiCount;
+                }
+            }
 
             if($notempty) $programs = array_filter($programs, function($program) {return isset($program->apiCount) && $program->apiCount > 0;});
 
