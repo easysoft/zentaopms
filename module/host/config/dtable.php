@@ -13,8 +13,8 @@ $config->host->dtable->fieldList['group']['name']     = 'group';
 $config->host->dtable->fieldList['group']['type']     = 'text';
 $config->host->dtable->fieldList['group']['sortType'] = true;
 $config->host->dtable->fieldList['group']['minWidth'] = '80';
-$config->host->dtable->fieldList['group']['required'] = true;
 $config->host->dtable->fieldList['group']['show']     = true;
+$config->host->dtable->fieldList['group']['order']    = 30;
 
 $config->host->dtable->fieldList['name']['title']       = $lang->host->name;
 $config->host->dtable->fieldList['name']['name']        = 'name';
@@ -26,36 +26,37 @@ $config->host->dtable->fieldList['name']['link']        = array('module' => 'hos
 $config->host->dtable->fieldList['name']['show']        = true;
 $config->host->dtable->fieldList['name']['required']    = true;
 $config->host->dtable->fieldList['name']['data-toggle'] = 'modal';
+$config->host->dtable->fieldList['name']['order']       = 40;
 
 $config->host->dtable->fieldList['serverRoom']['title']       = $lang->host->serverRoom;
 $config->host->dtable->fieldList['serverRoom']['name']        = 'serverRoom';
 $config->host->dtable->fieldList['serverRoom']['type']        = 'text';
 $config->host->dtable->fieldList['serverRoom']['sortType']    = true;
 $config->host->dtable->fieldList['serverRoom']['link']        = array('module' => 'serverroom', 'method' => 'view', 'params' => 'id={serverRoom}');
-$config->host->dtable->fieldList['serverRoom']['required']    = true;
 $config->host->dtable->fieldList['serverRoom']['show']        = true;
 $config->host->dtable->fieldList['serverRoom']['data-toggle'] = 'modal';
+$config->host->dtable->fieldList['serverRoom']['order']       = 50;
 
 $config->host->dtable->fieldList['intranet']['title']    = $lang->host->intranet;
 $config->host->dtable->fieldList['intranet']['name']     = 'intranet';
 $config->host->dtable->fieldList['intranet']['type']     = 'text';
 $config->host->dtable->fieldList['intranet']['sortType'] = true;
 $config->host->dtable->fieldList['intranet']['show']     = true;
-$config->host->dtable->fieldList['intranet']['required'] = true;
+$config->host->dtable->fieldList['intranet']['order']    = 60;
 
 $config->host->dtable->fieldList['extranet']['title']    = $lang->host->extranet;
 $config->host->dtable->fieldList['extranet']['name']     = 'extranet';
 $config->host->dtable->fieldList['extranet']['type']     = 'text';
 $config->host->dtable->fieldList['extranet']['sortType'] = true;
 $config->host->dtable->fieldList['extranet']['show']     = true;
-$config->host->dtable->fieldList['extranet']['required'] = true;
+$config->host->dtable->fieldList['extranet']['order']    = 70;
 
 $config->host->dtable->fieldList['osVersion']['title']    = $lang->host->osVersion;
 $config->host->dtable->fieldList['osVersion']['name']     = 'osVersion';
 $config->host->dtable->fieldList['osVersion']['type']     = 'text';
 $config->host->dtable->fieldList['osVersion']['sortType'] = true;
 $config->host->dtable->fieldList['osVersion']['show']     = true;
-$config->host->dtable->fieldList['osVersion']['required'] = true;
+$config->host->dtable->fieldList['osVersion']['order']    = 80;
 
 $config->host->dtable->fieldList['status']['title']    = $lang->host->status;
 $config->host->dtable->fieldList['status']['name']     = 'status';
@@ -64,7 +65,7 @@ $config->host->dtable->fieldList['status']['sortType'] = true;
 $config->host->dtable->fieldList['status']['minWidth'] = '80';
 $config->host->dtable->fieldList['status']['map']      = $lang->host->statusList;
 $config->host->dtable->fieldList['status']['show']     = true;
-$config->host->dtable->fieldList['status']['required'] = true;
+$config->host->dtable->fieldList['status']['order']    = 90;
 
 $config->host->actionList = array();
 $config->host->actionList['online']['icon']         = 'arrow-up';
