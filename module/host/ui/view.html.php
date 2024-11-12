@@ -33,7 +33,7 @@ detailBody
             h::tr
             (
                 isset($host->CD) ? h::th($lang->host->CD) : null,
-                isset($host->CD) ? h::td($host->CD) : null,
+                isset($host->CD) ? h::td($lang->host->CDlist[$host->CD]) : null,
                 h::th($lang->host->name),
                 h::td($host->name)
             ),
