@@ -1809,6 +1809,25 @@ class projectZen extends project
 
     protected function getExecutionStats(string $status, int $projectID, array $executionIdList, int $productID, int $queryID, string $sort, object $pager): array
     {
+        if($this->cookie->showTask && strtolower($status) == 'bysearch')
+        {
+            $tasks = $this->loadModel('programplan')->getGanttTasks($projectID, $executionIdList, strtolower($status), $queryID, $pager);
+            $executionTasks  = array();
+            $executionIdList = array();
+            foreach($tasks as $task)
+            {
+                $executionIdList[$task->execution] = $task->execution;
+                if(!isset($executionTasks[$task->execution])) $executionTasks[$task->execution] = array();
+                $executionTasks[$task->execution][$task->id] = $task;
+            }
+            $executions = $this->loadModel('execution')->getByIdList($executionIdList);
+            $executions = $this->execution->batchProcessExecution($executions, $projectID, $productID, true, '', $executionTasks);
+            $executionStats = array_values($executions);
+        }
+        else
+        {
+            $executionStats = $this->loadModel('execution')->getStatData($projectID, $status, $productID, 0, (bool)$this->cookie->showTask, $queryID, $sort, $pager);
+        }
         return $executionStats;
     }
 }
