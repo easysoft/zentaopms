@@ -378,6 +378,22 @@ $.extend(window.docAppCommands,
         event.preventDefault();
         event.stopPropagation();
     }
+
+    /**
+     * 更新首页内容。
+     * Update the home content.
+     */
+    loadHome: function(context, args)
+    {
+        const event      = context.event;
+        const $element   = $(event.currentTarget);
+        const data       = $element.data();
+        const type       = args[0] !== undefined ? args[0] : data.type;
+        const params     = args[1] !== undefined ? args[1] : data.params;
+        const recPerPage = args[2] !== undefined ? args[2] : data.recPerPage;
+        const pageID     = args[3] !== undefined ? args[3] : data.pageID;
+        window.loadHome(type, params, recPerPage, pageID);
+    },
 });
 
 /**
