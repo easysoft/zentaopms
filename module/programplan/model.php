@@ -776,6 +776,20 @@ class programplanModel extends model
 
                 if(strpos($this->session->projectTaskQuery, "deleted =") === false) $this->session->set('projectTaskQuery', $this->session->projectTaskQuery . " AND deleted = '0'");
 
+                $projectTaskQuery = $this->session->projectTaskQuery;
+                $projectTaskQuery .= " AND `project` = $projectID";
+
+                /* Limit current execution when no execution. */
+                if(strpos($projectTaskQuery, "`execution` = 'all'") !== false)
+                {
+                    $executions       = $this->loadModel('execution')->getPairs($projectID, 'all', "nocode,noprefix");
+                    $executionQuery   = "`execution` " . helper::dbIN(array_keys($executions));
+                    $projectTaskQuery = str_replace("`execution` = 'all'", $executionQuery, $projectTaskQuery); // Search all execution.
+                }
+
+                $this->session->set('projectTaskQueryCondition', $projectTaskQuery, $this->app->tab);
+                $this->session->set('projectTaskOnlyCondition', true, $this->app->tab);
+
                 $tasks = $this->loadModel('execution')->getSearchTasks($projectTaskQuery, 'execution_asc,order_asc,id_desc', null, 'projectTask');
             }
             else
