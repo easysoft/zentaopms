@@ -1807,6 +1807,20 @@ class projectZen extends project
         return $unmodifiableProducts;
     }
 
+    /**
+     * 获取执行列表：
+     * Get execution stats.
+     *
+     * @param  string    $status
+     * @param  int       $projectID
+     * @param  array     $executionIdList
+     * @param  int       $productID
+     * @param  int       $queryID
+     * @param  string    $sort
+     * @param  object    $pager
+     * @access protected
+     * @return array
+     */
     protected function getExecutionStats(string $status, int $projectID, array $executionIdList, int $productID, int $queryID, string $sort, object $pager): array
     {
         if($this->cookie->showTask && strtolower($status) == 'bysearch')
