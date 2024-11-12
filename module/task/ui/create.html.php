@@ -54,6 +54,7 @@ if(empty($features['story']) && $execution->type != 'kanban' && !empty(data('exe
 {
     $fields->fullModeOrders('type,module,storyBox,testStoryBox,parent,assignedToBox', 'desc,files,mailto,keywords');
 }
+if($execution->lifetime == 'ops') $fields->fullModeOrders('type,module,storyBox,testStoryBox,parent,name,assignedToBox', 'desc,files,mailto,keywords');
 
 formGridPanel
 (
