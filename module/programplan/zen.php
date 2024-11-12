@@ -343,10 +343,11 @@ class programplanZen extends programplan
      * @param  int      $baselineID
      * @param  string   $type
      * @param  string   $orderBy
+     * j
      * @access protected
      * @return array
      */
-    protected function buildStages(int $projectID, int $productID, int $baselineID, string $type, string $orderBy): array
+    protected function buildStages(int $projectID, int $productID, int $baselineID, string $type, string $orderBy, string $browseType = '', int $queryID = 0): array
     {
         /* Get data of type. */
         if($type == 'lists')
@@ -374,8 +375,8 @@ class programplanZen extends programplan
 
         /* Get data for gantt. */
         $stages = array();
-        if($type == 'gantt' )     $stages = $this->programplan->getDataForGantt($projectID, $productID, $baselineID, $selectCustom, false);
-        if($type == 'assignedTo') $stages = $this->programplan->getDataForGanttGroupByAssignedTo($projectID, $productID, $baselineID, $selectCustom, false);
+        if($type == 'gantt' )     $stages = $this->programplan->getDataForGantt($projectID, $productID, $baselineID, $selectCustom, false, $browseType, $queryID);
+        if($type == 'assignedTo') $stages = $this->programplan->getDataForGanttGroupByAssignedTo($projectID, $productID, $baselineID, $selectCustom, false, $browseType, $queryID);
 
         return $stages;
     }
@@ -384,20 +385,36 @@ class programplanZen extends programplan
      * 生成gantt图视图数据。
      * Build gantt browse view.
      *
-     * @param  int    $projectID
-     * @param  int    $productID
-     * @param  array  $stages
-     * @param  string $type
-     * @param  string $orderBy
+     * @param  int       $projectID
+     * @param  int       $productID
+     * @param  array     $stages
+     * @param  string    $type
+     * @param  string    $orderBy
+     * @param  int       $baselineID
+     * @param  string    $browseType
+     * @param  int       $queryID
      * @access protected
      * @return void
      */
-    protected function buildBrowseView(int $projectID, int $productID, array $stages, string $type, string $orderBy): void
+    protected function buildBrowseView(int $projectID, int $productID, array $stages, string $type, string $orderBy, int $baselineID, string $browseType, int $queryID): void
     {
         $project = $this->loadModel('project')->getByID($projectID);
         if($project->model == 'ipd' and $this->config->edition == 'ipd')
         {
             $this->view->reviewPoints = $this->loadModel('review')->getReviewPointByProject($projectID);
+        }
+
+        $stageCustom = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=programplan&section=browse&key=stageCustom");
+        $hasSearch   = strpos(",{$stageCustom},", ',task,') !== false;
+        if($hasSearch)
+        {
+            /* Build the search form. */
+            $this->config->execution->search['module'] = 'projectTask';
+
+            $actionURL = $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=$type&orderBy=$orderBy&baselineID=$baselineID&browseType=bysearch&queryID=myQueryID");
+            unset($this->config->execution->search['fields']['project']);
+            $executions = $this->programplan->getPairs($projectID, $productID, 'all');
+            $this->loadModel('execution')->buildTaskSearchForm($projectID, $executions, $queryID, $actionURL);
         }
 
         $this->view->title       = $this->lang->programplan->browse;
@@ -412,6 +429,9 @@ class programplanZen extends programplan
         $this->view->product     = $this->loadModel('product')->getByID($productID);
         $this->view->productList = $this->loadModel('product')->getProductPairsByProject($projectID, 'all', '', false);
         $this->view->zooming     = !empty($this->config->programplan->ganttCustom->zooming) ? $this->config->programplan->ganttCustom->zooming : 'day';
+        $this->view->hasSearch   = $hasSearch;
+        $this->view->browseType  = $browseType;
+        $this->view->queryID     = $queryID;
 
         $this->display();
     }

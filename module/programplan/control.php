@@ -44,10 +44,12 @@ class programplan extends control
      * @param  string $type
      * @param  string $orderBy
      * @param  int    $baselineID
+     * @param  string $browseType
+     * @param  int    $queryID
      * @access public
      * @return void
      */
-    public function browse(int $projectID = 0, int $productID = 0, string $type = 'gantt', string $orderBy = 'id_asc', int $baselineID = 0)
+    public function browse(int $projectID = 0, int $productID = 0, string $type = 'gantt', string $orderBy = 'id_asc', int $baselineID = 0, string $browseType = '', int $queryID = 0)
     {
         if($type == 'lists')
         {
@@ -66,10 +68,11 @@ class programplan extends control
         if($this->session->hasProduct) $this->lang->modulePageNav = $this->product->select($products, $productID, 'programplan', 'browse', $type, 0, false);
 
         /* Generate stage list page data. */
-        $plans = $this->programplanZen->buildStages($projectID, $productID, $baselineID, $type, $orderBy);
+        $browseType = strtolower($browseType);
+        $plans = $this->programplanZen->buildStages($projectID, $productID, $baselineID, $type, $orderBy, $browseType, $queryID);
 
         /* Build gantt browse view. */
-        $this->programplanZen->buildBrowseView($projectID, $productID, $plans, $type, $orderBy);
+        $this->programplanZen->buildBrowseView($projectID, $productID, $plans, $type, $orderBy, $baselineID, $browseType, $queryID);
     }
 
     /**
