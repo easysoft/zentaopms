@@ -42,7 +42,6 @@ class hostZen extends host
             }
         }
 
-
         $ipFields = explode(',', $this->config->host->create->ipFields);
         foreach($ipFields as $field)
         {
