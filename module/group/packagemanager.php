@@ -4194,12 +4194,15 @@ $config->group->package->useThinkWizard->privs['thinkwizard-result'] = array('ed
 $config->group->package->manageThinkWizard = new stdclass();
 $config->group->package->manageThinkWizard->subset = 'thinkwizard';
 $config->group->package->manageThinkWizard->privs  = array();
-$config->group->package->manageThinkWizard->privs['thinkwizard-create']  = array('edition' => 'ipd', 'vision' => 'or', 'order' => 5,  'depend' => array('thinkwizard-browse'));
-$config->group->package->manageThinkWizard->privs['thinkwizard-edit']    = array('edition' => 'ipd', 'vision' => 'or', 'order' => 10, 'depend' => array('thinkwizard-browse'));
-$config->group->package->manageThinkWizard->privs['thinkwizard-design']  = array('edition' => 'ipd', 'vision' => 'or', 'order' => 15, 'depend' => array('thinkwizard-browse', 'thinkwizard-result', 'thinkstep-create', 'thinkstep-edit', 'thinkstep-view', 'thinkstep-delete', 'thinkstep-link', 'thinkstep-cancelLink', 'thinkwizard-configureobjectsforappeals', 'thinkwizard-configuredimensionforappeals'));
-$config->group->package->manageThinkWizard->privs['thinkwizard-publish'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 20, 'depend' => array('thinkwizard-browse'));
-$config->group->package->manageThinkWizard->privs['thinkwizard-offline'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 25, 'depend' => array('thinkwizard-browse'));
-$config->group->package->manageThinkWizard->privs['thinkwizard-admin']   = array('edition' => 'ipd', 'vision' => 'or', 'order' => 25, 'depend' => array('thinkwizard-browse'));
+$config->group->package->manageThinkWizard->privs['thinkwizard-create']                       = array('edition' => 'ipd', 'vision' => 'or', 'order' => 5,  'depend' => array('thinkwizard-browse'));
+$config->group->package->manageThinkWizard->privs['thinkwizard-edit']                         = array('edition' => 'ipd', 'vision' => 'or', 'order' => 10, 'depend' => array('thinkwizard-browse'));
+$config->group->package->manageThinkWizard->privs['thinkwizard-design']                       = array('edition' => 'ipd', 'vision' => 'or', 'order' => 15, 'depend' => array('thinkwizard-browse', 'thinkwizard-result', 'thinkstep-create', 'thinkstep-edit', 'thinkstep-view', 'thinkstep-delete', 'thinkstep-link', 'thinkstep-cancelLink', 'thinkwizard-configureobjectsforappeals', 'thinkwizard-configuredimensionforappeals'));
+$config->group->package->manageThinkWizard->privs['thinkwizard-publish']                      = array('edition' => 'ipd', 'vision' => 'or', 'order' => 20, 'depend' => array('thinkwizard-browse'));
+$config->group->package->manageThinkWizard->privs['thinkwizard-offline']                      = array('edition' => 'ipd', 'vision' => 'or', 'order' => 25, 'depend' => array('thinkwizard-browse'));
+$config->group->package->manageThinkWizard->privs['thinkwizard-admin']                        = array('edition' => 'ipd', 'vision' => 'or', 'order' => 30, 'depend' => array('thinkwizard-browse'));
+$config->group->package->manageThinkWizard->privs['thinkwizard-configureobjectsforappeals']   = array('edition' => 'ipd', 'vision' => 'or', 'order' => 35, 'depend' => array('thinkwizard-configureobjectsforappeals'));
+$config->group->package->manageThinkWizard->privs['thinkwizard-configuredimensionforappeals'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 40, 'depend' => array('thinkwizard-configuredimensionforappeals'));
+
 
 $config->group->package->deleteThinkWizard = new stdclass();
 $config->group->package->deleteThinkWizard->subset = 'thinkwizard';
