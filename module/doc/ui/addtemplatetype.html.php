@@ -10,9 +10,36 @@ declare(strict_types=1);
  */
 namespace zin;
 
-modalHeader(set::title($lang->docTemplate->addTemplateType));
 formPanel
 (
+    detailHeader
+    (
+        to::title
+        (
+            entityLabel
+            (
+                setClass('text-xl font-black'),
+                set::level(1),
+                set::text($lang->docTemplate->addTemplateType)
+            ),
+            div
+            (
+                label
+                (
+                    to::before
+                    (
+                        icon
+                        (
+                            setClass('warning-ghost margin-left8'),
+                            'help'
+                        )
+                    ),
+                    set::text($lang->docTemplate->noticeAddTemplateType),
+                    setClass('gray-200-pale')
+                )
+            )
+        )
+    ),
     setID('addForm'),
     set::submitBtnText($lang->save),
     formGroup
