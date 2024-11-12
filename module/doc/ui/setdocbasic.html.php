@@ -73,14 +73,15 @@ formPanel
         set::label($lang->doc->module),
         picker(set::name('module'), set::items($optionMenu), set::value($moduleID), set::required(true))
     ),
-    $isDraft ? null : formGroup
-    (
-        set::label($lang->doc->mailto),
-        mailto(
-            set::items($users),
-            set::value(isset($doc) ? $doc->mailto : null)
+    (!$isDraft && $objectType !== 'mine')
+        ? formGroup(
+            set::label($lang->doc->mailto),
+            mailto(
+                set::items($users),
+                set::value(isset($doc) ? $doc->mailto : null)
+            )
         )
-    ),
+        : null,
     $isDraft ? null : formGroup
     (
         set::label($lang->doclib->control),
