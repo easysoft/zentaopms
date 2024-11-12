@@ -179,7 +179,7 @@ class api extends control
             $libs     = array_slice($libs, ($pageID - 1) * $recPerPage, $recPerPage);
         }
 
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
 
         $this->view->programs = isset($programs) ? $programs : array();
         $this->view->unclosed = $unclosed;
