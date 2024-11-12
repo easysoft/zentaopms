@@ -756,46 +756,36 @@ class programplanModel extends model
      * @access public
      * @return array
      */
-    public function getGanttTasks(int $projectID, array $planIdList, string $browseType, int $queryID)
+    public function getGanttTasks(int $projectID, array $planIdList, string $browseType, int $queryID, object $pager = null)
     {
         $tasks = array();
-        if(!empty($planIdList))
+        if($browseType == 'bysearch')
         {
-            if($browseType == 'bysearch')
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
             {
-                $query = $this->loadModel('search')->getQuery($queryID);
-                if($query)
-                {
-                    $this->session->set('projectTaskQuery', $query->sql);
-                    $this->session->set('projectTaskForm', $query->form);
-                }
-                elseif(!$this->session->projectTaskQuery)
-                {
-                    $this->session->set('projectTaskQuery', ' 1 = 1');
-                }
-
-                if(strpos($this->session->projectTaskQuery, "deleted =") === false) $this->session->set('projectTaskQuery', $this->session->projectTaskQuery . " AND deleted = '0'");
-
-                $projectTaskQuery = $this->session->projectTaskQuery;
-                $projectTaskQuery .= " AND `project` = $projectID";
-
-                /* Limit current execution when no execution. */
-                if(strpos($projectTaskQuery, "`execution` = 'all'") !== false)
-                {
-                    $executions       = $this->loadModel('execution')->getPairs($projectID, 'all', "nocode,noprefix");
-                    $executionQuery   = "`execution` " . helper::dbIN(array_keys($executions));
-                    $projectTaskQuery = str_replace("`execution` = 'all'", $executionQuery, $projectTaskQuery); // Search all execution.
-                }
-
-                $this->session->set('projectTaskQueryCondition', $projectTaskQuery, $this->app->tab);
-                $this->session->set('projectTaskOnlyCondition', true, $this->app->tab);
-
-                $tasks = $this->loadModel('execution')->getSearchTasks($projectTaskQuery, 'execution_asc,order_asc,id_desc', null, 'projectTask');
+                $this->session->set('projectTaskQuery', $query->sql);
+                $this->session->set('projectTaskForm', $query->form);
             }
-            else
+            elseif(!$this->session->projectTaskQuery)
             {
-                $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('project')->eq($projectID)->andWhere('execution')->in($planIdList)->orderBy('execution_asc, order_asc, id_desc')->fetchAll('id');
+                $this->session->set('projectTaskQuery', ' 1 = 1');
             }
+
+            if(strpos($this->session->projectTaskQuery, "deleted =") === false) $this->session->set('projectTaskQuery', $this->session->projectTaskQuery . " AND deleted = '0'");
+
+            $projectTaskQuery = $this->session->projectTaskQuery;
+            $projectTaskQuery .= " AND `project` = '$projectID'";
+            if(!empty($planIdList)) $projectTaskQuery .= " AND `execution` " . helper::dbIN($planIdList);
+
+            $this->session->set('projectTaskQueryCondition', $projectTaskQuery, $this->app->tab);
+            $this->session->set('projectTaskOnlyCondition', true, $this->app->tab);
+
+            $tasks = $this->loadModel('execution')->getSearchTasks($projectTaskQuery, 'execution_asc,order_asc,id_desc', $pager, 'projectTask');
+        }
+        elseif(!empty($planIdList))
+        {
+            $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('project')->eq($projectID)->andWhere('execution')->in($planIdList)->orderBy('execution_asc, order_asc, id_desc')->fetchAll('id');
         }
         return $tasks;
     }
