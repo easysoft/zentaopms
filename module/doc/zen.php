@@ -397,16 +397,33 @@ class docZen extends doc
      * @param  string     $space
      * @param  int        $libID
      * @param  int        $docID
+     * @param  bool       $spaceTypeChanged
      *
      * @access protected
      * @return void
      */
-    protected function responseAfterMove(string $space, int $libID = 0, int $docID = 0)
+    protected function responseAfterMove(string $space, int $libID = 0, int $docID = 0, bool $spaceTypeChanged = false)
     {
-        $spaceID = (int)(explode('.', $space)[1]);
-        if($docID) $docAppAction = array('executeCommand', 'handleMovedDoc', array($docID, $space, $libID));
-        else       $docAppAction = array('selectSpace', $spaceID, $libID);
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'docApp' => $docAppAction));
+        list($spaceType, $spaceID) = explode('.', $space);
+        if($docID)
+        {
+            $docAppAction = array('executeCommand', 'handleMovedDoc', array($docID, $spaceID, $libID));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'docApp' => $docAppAction));
+        }
+
+        if($spaceTypeChanged)
+        {
+            if($spaceType == 'mine')        $locateLink = $this->createLink('doc', 'mySpace',      "objectID={$spaceID}&libID={$libID}");
+            elseif($spaceType == 'custom')  $locateLink = $this->createLink('doc', 'teamSpace',    "objectID={$spaceID}&libID={$libID}");
+            elseif($spaceType == 'product') $locateLink = $this->createLink('doc', 'productSpace', "objectID={$spaceID}&libID={$libID}");
+            elseif($spaceType == 'project') $locateLink = $this->createLink('doc', 'projectSpace', "objectID={$spaceID}&libID={$libID}");
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $locateLink));
+        }
+        else
+        {
+            $docAppAction = array('selectSpace', $spaceID, $libID);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'docApp' => $docAppAction));
+        }
     }
 
     /**

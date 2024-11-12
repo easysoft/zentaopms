@@ -1234,8 +1234,8 @@ class doc extends control
 
             $this->doc->moveLib($libID, $data);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            return $this->docZen->responseAfterMove($this->post->space, $libID);
+            $spaceTypeChanged = $spaceType != $lib->type;
+            return $this->docZen->responseAfterMove($this->post->space, $libID, 0, $spaceTypeChanged);
         }
 
         $this->docZen->setAclForCreateLib($spaceType);
@@ -1291,7 +1291,8 @@ class doc extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            return $this->docZen->responseAfterMove($this->post->space, $data->lib, $docID);
+            $spaceTypeChanged = $spaceType != $lib->type;
+            return $this->docZen->responseAfterMove($this->post->space, $data->lib, $docID, $spaceTypeChanged);
         }
 
         $projects   = $this->loadModel('project')->getPairsByProgram(0, 'all', false, 'order_asc');
