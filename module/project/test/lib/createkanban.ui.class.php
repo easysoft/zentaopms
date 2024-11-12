@@ -98,3 +98,4 @@ class createKanbanTester extends tester
         return $this->success();
         }
     }
+}
