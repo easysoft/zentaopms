@@ -52,6 +52,7 @@ class docApp extends wg
         'search'                => '?string',              // 搜索关键字。
         'filterType'            => '?string',              // 过滤类型。
         'pager'                 => '?PagerInfo',           // 分页信息。
+        'params'                => '?string',              // 额外参数信息。
         'orderBy'               => '?string',              // 排序字段。
         'langData'              => '?array',               // 语言数据。
         'showLibFiles'          => '?boolean|array|string',// 是否显示库文件。
