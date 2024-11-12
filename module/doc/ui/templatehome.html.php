@@ -12,6 +12,16 @@ namespace zin;
 
 $scopeTemplates = $this->doc->getScopeTemplates();
 
+$buildScopeCards = function($templates)
+{
+    $cardItems = array();
+    foreach($templates as $template)
+    {
+    }
+
+    return $cardItems;
+};
+
 $scopeItems = array();
 foreach($lang->docTemplate->scopes as $scopeID => $scopeName)
 {
@@ -49,7 +59,7 @@ foreach($lang->docTemplate->scopes as $scopeID => $scopeName)
             !empty($scopeDocs) ? div
             (
                 setClass('row'),
-                $scopeDocs
+                $buildScopeCards($scopeDocs)
             ) : div
             (
                 setClass('center gap-4 py-10'),
