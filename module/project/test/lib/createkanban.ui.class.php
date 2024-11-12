@@ -18,3 +18,23 @@ class createKanbanTester extends tester
         if(isset($kanban['name'])) $form->dom->name->setValue($kanban['name']);
         if(isset($kanban['end']))  $form->dom->end->datepicker($kanban['end']);
         else $form->dom->longTime->click(); //如果设置了end时间就选择，没有设置就选择长期
+        if(isset($kanban['PM']))   $form->dom->PM->picker($kanban['PM']);
+
+        $form->dom->btn($this->lang->save)->click();
+        $form->wait(5);
+        return $this->checkResult($kanban);
+    }
+
+    /**
+     * 创建看板项目后结果检查。
+     * Check the result after creating the kanban project.
+     *
+     * @param  string $kanban
+     * @access public
+     * @return object
+     */
+    public function checkResult($kanban = array())
+    {
+        /* 检查创建页面时的提示信息 */
+        if($this->response('method') != 'browse')
+        {
