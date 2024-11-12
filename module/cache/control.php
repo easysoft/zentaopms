@@ -36,6 +36,14 @@ class cache extends control
 
             if($cache->enable)
             {
+                $errors = [];
+                if(empty($cache->driver))    $errors['driver']    = sprintf($this->lang->error->notempty, $this->lang->cache->driver);
+                if(empty($cache->scope))     $errors['scope']     = sprintf($this->lang->error->notempty, $this->lang->cache->scope);
+                if(empty($cache->namespace)) $errors['namespace'] = sprintf($this->lang->error->notempty, $this->lang->cache->namespace);
+                if($cache->driver == 'redis' && empty($redis->host)) $errors['redis[host]'] = sprintf($this->lang->error->notempty, $this->lang->cache->redis->host);
+                if($cache->driver == 'redis' && empty($redis->port)) $errors['redis[port]'] = sprintf($this->lang->error->notempty, $this->lang->cache->redis->port);
+                if($errors) return $this->send(array('result' => 'fail', 'message' => $errors));
+
                 if($cache->driver == 'apcu')
                 {
                     /* 检查是否加载了 APCu 扩展。Check if the APCu extension is loaded. */
@@ -47,12 +55,6 @@ class cache extends control
                     /* 检查是否加载了 Redis 扩展。Check if the Redis extension is loaded. */
                     if(!extension_loaded('redis')) return $this->send(array('result' => 'fail', 'message' => $this->lang->cache->redis->notLoaded));
                     if(!extension_loaded('igbinary') && $redis->serializer == 'igbinary') return $this->send(array('result' => 'fail', 'message' => $this->lang->cache->redis->igbinaryNotLoaded));
-
-                    /* 检查 Redis 配置是否正确。Check if the Redis configuration is correct. */
-                    $errors = [];
-                    if(empty($redis->host)) $errors['redis[host]'] = sprintf($this->lang->error->notempty, $this->lang->cache->redis->host);
-                    if(empty($redis->port)) $errors['redis[port]'] = sprintf($this->lang->error->notempty, $this->lang->cache->redis->port);
-                    if($errors) return $this->send(array('result' => 'fail', 'message' => $errors));
 
                     /* 检查 Redis 连接是否正常。Check if the Redis connection is normal. */
                     try
