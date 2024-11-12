@@ -96,6 +96,11 @@ $lang->docTemplate->create = 'Create Template';
 $lang->docTemplate->edit   = 'Edit Template';
 $lang->docTemplate->delete = 'Delete Template';
 
+$lang->docTemplate->more       = 'More';
+$lang->docTemplate->scopeLabel = 'Scope';
+$lang->docTemplate->noTemplate = 'No Doc Template';
+$lang->docTemplate->noDesc     = 'No Desc';
+
 $lang->docTemplate->addModule    = 'Add Template type';
 $lang->docTemplate->addSubModule = 'Add Sub Template type';
 $lang->docTemplate->editModule   = 'Edit Template type';
