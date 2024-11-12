@@ -27,8 +27,9 @@ $privs['sortModule']   = hasPriv('doc', 'sortCatalog');
 
 $langData = array();
 $langData['filterTypes']      = $lang->api->filterTypes;
-$langData['spaceFilterTypes'] = $lang->api->homeFilterTypes;
 $langData['createLib']        = $lang->api->createLib;
+$langData['editLib']          = $lang->api->editLib;
+$langData['deleteLib']        = $lang->api->deleteLib;
 $langData['createDoc']        = $lang->api->createApi;
 $langData['struct']           = $lang->api->struct;
 $langData['releases']         = $lang->api->releases;
@@ -43,6 +44,7 @@ $langData['save']             = $lang->save;
 docApp
 (
     set::spaceType('api'),
+    set::spaceID($objectType == 'nolink' ? 'nolink' : "$objectType.$objectID"),
     set::mode($mode),
     set::pager(array('recTotal' => $recTotal, 'recPerPage' => $recPerPage, 'page' => $pageID)),
     set::privs($privs),
@@ -50,9 +52,9 @@ docApp
     set::fetcher(createLink('api', 'ajaxGetData', 'spaceID={spaceID}&picks={picks}')),
     set::docFetcher(null),
     set::libSummariesFetcher(null),
-    set::fetchOnChangeSpace(false),
     set::maxHomeLibsOfSpace(0),
     set::langData($langData),
+    set::params($params),
     set::autoSelectLib(),
     set('$options', jsRaw('window.setDocAppOptions'))
 );
