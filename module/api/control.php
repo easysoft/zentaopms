@@ -107,15 +107,26 @@ class api extends control
      */
     public function ajaxGetHome(string $type = 'nolink', string $params = 'notempty_unclosed', int $recPerPage = 20, int $pageID = 1)
     {
+        $libs          = $this->doc->getApiLibs(0, $type);
         $flags         = explode('_', $params);
         $unclosed      = in_array('unclosed', $flags);
         $notempty      = in_array('notempty', $flags);
+        $apis          = $this->api->getApiListBySearch(0, 0);
+        $recTotal      = 0;
+        $recPerPage    = $recPerPage ? max(1, $recPerPage) : 20;
 
+
+        $this->app->loadClass('pager', $static = true);
+
+        $this->view->programs = isset($programs) ? $programs : array();
         $this->view->unclosed = $unclosed;
         $this->view->notempty = $notempty;
+        $this->view->libs     = $libs;
         $this->view->type     = $type;
+        $this->view->pager    = new pager($recTotal, $recPerPage, $pageID);
         $this->display();
     }
+
     /**
      * 获取接口界面数据。
      * Get the api UI data.
