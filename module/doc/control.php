@@ -330,11 +330,14 @@ class doc extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        $modules      = $this->doc->getTemplateModules(false, $libID);
+        $modules      = array_column($modules, 'name', 'id');
         $templateList = $this->doc->getDocTemplateList($type, $orderBy, $pager);
         foreach($templateList as $template)
         {
             $template->originLib = $template->lib;
             $template->lib       = $libID;
+            $template->moduleName = zget($modules, $template->module);
         }
 
         $this->view->title        = $this->lang->doc->template;
