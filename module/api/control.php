@@ -140,6 +140,18 @@ class api extends control
         {
             $programs  = $this->loadModel('program')->getList($unclosed ? 'unclosed' : 'all', 'id_asc', 'top');
             $programs  = array_filter($programs, function($program) {return $program->parent == '0';});
+            if($type == 'product')
+            {
+                $products = $this->loadModel('product')->getList(0, $unclosed ? 'noclosed' : 'all', 0, 0);
+                foreach($products as $product)
+                {
+                    if(!isset($programs[$product->program])) continue;
+                    $program = $programs[$product->program];
+                    $program->products[] = $product;
+                    $product->apiCount = isset($productsCount[$product->id]) ? $productsCount[$product->id] : 0;
+                    $program->apiCount = isset($program->apiCount) ? $program->apiCount + $product->apiCount : $product->apiCount;
+                }
+            }
 
             if($notempty) $programs = array_filter($programs, function($program) {return isset($program->apiCount) && $program->apiCount > 0;});
 
