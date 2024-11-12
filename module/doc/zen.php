@@ -677,6 +677,40 @@ class docZen extends doc
     }
 
     /**
+     * 在编辑文档后的返回。
+     * Return after edit a document.
+     *
+     * @param  object    $doc
+     * @param  array     $changes
+     * @param  array     $files
+     * @access protected
+     * @return void
+     */
+    protected function responseAfterEditTemplate(object $doc, array $changes = array(), array $files = array())
+    {
+        if($this->post->comment != '' || !empty($changes) || !empty($files))
+        {
+            $action = 'Commented';
+            if(!empty($changes))
+            {
+                $newType = $_POST['status'];
+                if($doc->status == 'draft' && $newType == 'normal') $action = 'releasedDoc';
+                if($doc->status == $newType) $action = 'Edited';
+            }
+
+            $fileAction = '';
+            if(!empty($files)) $fileAction = $this->lang->addFiles . implode(',', $files) . "\n";
+            $actionID = $this->action->create('docTemplate', $doc->id, $action, $fileAction . $this->post->comment);
+            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+        }
+
+        $link = $this->createLink('doc', 'view', "docID={$doc->id}");
+        $doc  = $this->doc->getByID($doc->id);
+        if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link, 'doc' => $doc));
+    }
+
+    /**
      * 处理文档大纲。
      *
      * @param  object    $doc
