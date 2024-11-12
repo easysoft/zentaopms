@@ -73,3 +73,20 @@ window.copyText = function(dom)
         time:    2000
     });
 }
+
+window.onManualBackup = function()
+{
+    zui.Modal.confirm({message: confirmBackupTip, icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then(res =>
+    {
+        if(res)
+        {
+            $.ajaxSubmit({
+                url: $.createLink('instance', 'manualBackup', `modelID=${instanceID}`),
+                onComplete: function(res)
+                {
+                    if(res.result === 'success') loadPage($.createLink('instance', 'view', `instanceID=${instanceID}`), '#backupList');
+                }
+            });
+        }
+    })
+}
