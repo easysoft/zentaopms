@@ -2068,7 +2068,7 @@ class taskModel extends model
         }
 
         /* If the assignor is closed, treat the completion person as the assignor. */
-        if(strtolower($assignedTo) == 'closed') $assignedTo = $task->finishedBy;
+        if(strtolower($assignedTo) == 'closed') $assignedTo = empty($task->finishedBy) ? $task->openedBy : $task->finishedBy;
 
         /* If the child task is paused, closed or canceled, append the mailto from parent task. */
         if($task->parent > 0)
@@ -2090,7 +2090,10 @@ class taskModel extends model
                 $parentTasks = $this->dao->select('id,assignedTo,finishedBy,mailto')->from(TABLE_TASK)->where('id')->in($task->path)->andWhere('id')->ne($task->id)->fetchAll('id');
                 foreach($parentTasks as $parentID => $parentTask)
                 {
-                    $mailto[] = (strtolower($parentTask->assignedTo) == 'closed') ? $parentTask->finishedBy : $parentTask->assignedTo;
+                    $parentAssignedTo = $parentTask->assignedTo;
+                    if(strtolower($parentAssignedTo) == 'closed') $parentAssignedTo = empty($parentTask->finishedBy) ? $parentTask->openedBy : $parentTask->finishedBy;
+
+                    $mailto[] = $parentAssignedTo;
                     $mailto   = array_merge($mailto, empty($parentTask->mailto) ? array() : explode(',', $parentTask->mailto));
                 }
             }
