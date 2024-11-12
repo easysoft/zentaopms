@@ -753,6 +753,7 @@ class programplanModel extends model
      * @param  array  $planIdList
      * @param  string $browseType
      * @param  int    $queryID
+     * @param  object $pager
      * @access public
      * @return array
      */
