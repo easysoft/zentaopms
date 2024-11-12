@@ -78,6 +78,8 @@ $config->doc->form->edit['mailto']     = array('type' => 'array',    'required' 
 $config->doc->form->edit['editedBy']   = array('type' => 'string',   'required' => false, 'default' => '');
 $config->doc->form->edit['editedDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);
 
+$config->doc->form->edittemplate = $config->doc->form->edit;
+
 $config->doc->form->movelib['space']  = array('type' => 'string',   'required' => true,  'default' => '');
 $config->doc->form->movelib['acl']    = array('type' => 'string',   'required' => true,  'default' => '');
 $config->doc->form->movelib['groups'] = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
