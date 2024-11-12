@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('hostLang', $lang->host);
+jsVar('rooms', $rooms);
 
 $config->host->featureBar['all']['active'] = true;
 $config->host->featureBar['all']['badge']  = $pager->recTotal != '' ? array('text' => $pager->recTotal, 'class' => 'size-sm rounded-full white') : null;
