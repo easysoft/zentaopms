@@ -123,4 +123,19 @@ div
         set::compact(),
         set::items($filterItems)
     ),
+    checkbox(set::name('notempty'), set::text($lang->api->showNotEmpty), set::checked($notempty)),
+    $type !== 'nolink' ? checkbox(set::name('showclosed'), set::text($lang->api->showClosed), set::checked(!$unclosed)) : null,
+    div(setClass('flex-auto')),
+    (!$isEmpty && $canCreateLib) ? btn
+    (
+        set::icon('plus'),
+        set::type('primary'),
+        set::size('md'),
+        set::text($lang->api->createLib),
+        set('zui-command', "createLib/$type")
+    ) : null,
+    on::change('[type=checkbox]')
+        ->const('notempty', jsRaw('$this.closest(".doc-app-header").find("[name=notempty]:checked").length'))
+        ->const('showclosed', jsRaw('$this.closest(".doc-app-header").find("[name=showclosed]:checked").length'))
+        ->call('loadHome', $type, jsRaw('[notempty ? "notempty" : "", showclosed ? "" : "unclosed"].join("_")'))
 );
