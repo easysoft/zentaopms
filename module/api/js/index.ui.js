@@ -382,15 +382,15 @@ $.extend(window.docAppCommands,
      */
     updateLazyContent: function(context, args)
     {
-        const event = context.event;
+        const event    = context.event;
         const $element = $(event.currentTarget);
         const selector = args[0] || $element.data('lazyTarget');
-        const $lazy = (selector ? $(selector) : $element).closest('.lazy-content');
-        const url = $element.data('url') || $element.attr('href');
+        const $lazy    = (selector ? $(selector) : $element).closest('.lazy-content');
+        const url      = $element.data('url') || $element.attr('href');
         if(url) $lazy.trigger('loadContent', url);
         event.preventDefault();
         event.stopPropagation();
-    }
+    },
 
     /**
      * 更新首页内容。
