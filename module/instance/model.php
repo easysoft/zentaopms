@@ -1151,4 +1151,243 @@ class instanceModel extends model
             if(empty($this->loadModel('pipeline')->getByNameAndType($name . '-' . $times, $name))) return $name . '-' . $times;
         }
     }
+
+    /**
+     * Backup instance.
+     * 备份应用实例。
+     * @param  object $instance
+     * @param  object $user
+     * @access public
+     * @return bool
+     */
+    public function backup($instance, $user)
+    {
+        $result = $this->cne->backup($instance, $user->account);
+        if($result->code != 200) return false;
+
+        return true;
+    }
+
+    /**
+     * Get backup list of instance.
+     * 获取应用备份列表。
+     *
+     * @param  object $instance
+     * @access public
+     * @return array
+     */
+    public function backupList($instance)
+    {
+        $result = $this->cne->getBackupList($instance);
+        if(empty($result) || $result->code != 200 || empty($result->data)) return array();
+
+        $backupList = $result->data;
+        usort($backupList, function($backup1, $backup2){
+            if($backup1->create_time < $backup2->create_time) return 1;
+            elseif ($backup1->create_time > $backup2->create_time) return -1;
+            else return 0;
+        });
+
+        $accounts = array_column($backupList, 'creator');
+        foreach($backupList as $backup) $accounts = array_merge($accounts, array_column($backup->restores, 'creator'));
+
+        $accounts = array_unique($accounts);
+
+        $users = $this->dao->select('account,realname')->from(TABLE_USER)->where('account')->in($accounts)->fetchPairs('account', 'realname');
+
+        foreach($backupList as &$backup)
+        {
+            $backup->latest_restore_time   = 0;
+            $backup->latest_restore_status = '';
+            $backup->username = zget($users, $backup->creator);
+            /* Mount backup operator info and latest restore info. */
+            foreach($backup->restores as &$restore)
+            {
+                $restore->username = zget($users, $restore->creator);
+
+                if($restore->create_time > $backup->latest_restore_time)
+                {
+                    $backup->latest_restore_time   = $restore->create_time;
+                    $backup->latest_restore_status = $restore->status;
+                }
+            }
+
+            /* Calculate backup size. */
+            $backupSize = isset($backup->backup_details->db[0]) ? intval(zget($backup->backup_details->db[0], 'size', 0)) : 0;
+            $backupSize += isset($backup->backup_details->volume[0]) ? intval(zget($backup->backup_details->volume[0], 'doneBytes', 0)) : 0;
+            $backup->fmtBackupSize = helper::formatKB($backupSize / 1024);
+        }
+        return $backupList;
+    }
+
+    /**
+     * Save auto backup settings.
+     * 保存自动备份配置。
+     * @param  object $instance
+     * @access public
+     * @return bool
+     */
+    public function saveAutoBackupSettings($instance)
+    {
+        /* Init Default backup properties. */
+        $settings = fixer::input('post')
+            ->setDefault('autoBackup', '')
+            ->setDefault('backupTime', '1:00')
+            ->setDefault('backupCycle', '1')
+            ->get();
+        if(!preg_match("/^([0-2][0-9]):([0-5][0-9])$/", $settings->backupTime, $parts))
+        {
+            dao::$errors[] = $this->lang->instance->backup->invalidTime;
+            return false;
+        }
+        $autoBackup = $settings->autoBackup;
+        $command    = 'moduleName=instance&methodName=cronBackup&instanceID=' . $instance->id;
+
+        /* Disable backup operation. */
+        if(!$autoBackup)
+        {
+            $this->dao->delete()->from(TABLE_CRON)->where('command')->eq($command)->exec();
+            $this->dao->update(TABLE_INSTANCE)->set('autoBackup')->eq($autoBackup)->where('id')->eq($instance->id)->exec();
+            if($this->dao->isError()) return false;
+
+            $this->action->create('instance', $instance->id, 'closeautobackup', '', json_encode(array('result' => 'success', 'data' => $settings)));
+            return true;
+        }
+
+        /* Enable backup operation. */
+        $cron = $this->dao->select('*')->from(TABLE_CRON)->where('command')->eq($command)->fetch();
+
+        list($hour, $minute) = explode(':', $settings->backupTime);
+        $cronData = new stdclass;
+        $cronData->m       = intval($minute);
+        $cronData->h       = intval($hour);
+        $cronData->dom     = '*';
+        $cronData->mon     = '*';
+        $cronData->dow     = '*';
+        $cronData->type    = 'zentao';
+        $cronData->status  = 'normal';
+        $cronData->command = $command;
+        $cronData->remark  = $this->lang->instance->backup->cronRemark;
+
+        /* Save cron task. */
+        if($cron) $this->dao->update(TABLE_CRON)->autoCheck()->data($cronData)->where('id')->eq($cron->id)->exec();
+        else $this->dao->insert(TABLE_CRON)->data($cronData)->exec();
+        if($this->dao->isError()) return false;
+
+        /* Save instance backup settings. */
+        $this->dao->update(TABLE_INSTANCE)->set('autoBackup')->eq($settings->autoBackup)->where('id')->eq($instance->id)->exec();
+        if($this->dao->isError()) return false;
+
+        $this->action->create('instance', $instance->id, 'openautobackup', '', json_encode(array('result' => 'success', 'data' => $settings)));
+        return true;
+    }
+
+    /**
+     * Save backup settings.
+     * 保存备份设置。
+     *
+     * @param $instance
+     * @return void
+     */
+    public function saveBackupSettings($instance)
+    {
+        $settings = fixer::input('post')->trim('backupKeepDays')->get();
+        if($instance->backupKeepDays == $settings->backupKeepDays) return true;
+
+        /* Save instance backup settings. */
+        $this->dao->update(TABLE_INSTANCE)->set('backupKeepDays')->eq($settings->backupKeepDays)->where('id')->eq($instance->id)->exec();
+        if($this->dao->isError()) return false;
+
+        $this->action->create('instance', $instance->id, 'savebackupsettings', '', json_encode(array('result' => 'success', 'data' => $settings)));
+        return true;
+    }
+
+    /**
+     * Get auto backup settings.
+     * 获取自动备份设置。
+     *
+     * @param  int    $instnaceID
+     * @access public
+     * @return object
+     */
+    public function getAutoBackupSettings($instanceID)
+    {
+        $instance = $this->getByID($instanceID);
+        $cron     = $this->dao->select('*')->from(TABLE_CRON)->where('command')->eq('moduleName=instance&methodName=cronBackup&instanceID=' . $instance->id)->limit(1)->fetch();
+        if(!$cron) $cron = new stdclass;
+
+        $hour   = substr('0' . zget($cron, 'h', '1'), -2, 2);
+        $minute = substr('0' . zget($cron, 'm', '00'), -2, 2);
+
+        $settings = new stdclass;
+        $settings->backupTime = "{$hour}:{$minute}";
+        $settings->autoBackup = boolval(zget($instance, 'autoBackup', false));
+        $settings->cycleDays  = 1; // Cycle days is always is 1 at present.
+        return $settings;
+    }
+
+    /**
+     * Restore instance.
+     * 还原应用实例。
+     * @param  object $instance
+     * @param  object $user
+     * @param  string $backupName
+     * @access public
+     * @return bool
+     */
+    public function restore($instance, $user, $backupName)
+    {
+        $result = $this->cne->restore($instance, $backupName, $user->account);
+        if ($result->code != 200) return false;
+        return true;
+    }
+
+    /**
+     * auto backup.
+     * 自动备份。
+     *
+     * @param $instance
+     * @param $user
+     * @return void
+     */
+    public function autoBackup($instance, $user)
+    {
+        $cron = $this->dao->select('*')->from(TABLE_CRON)->where('command')->eq('moduleName=instance&methodName=cronBackup&instanceID=' . $instance->id)->limit(1)->fetch();
+        if(!$cron)
+        {
+            $this->action->create('instance', $instance->id, 'autobackup', '', json_encode(array('result' => 'fail', 'data'=> $cron)));
+            return false;
+        }
+
+        /* 1. Call automatic backup*/
+        $result = $this->cne->backup($instance, $user->account);
+        if($result->code != 200)
+        {
+            $this->action->create('instance', $instance->id, 'autobackup', '', json_encode(array('result' => 'fail', 'data' => $result)));
+            return false;
+        }
+        $this->action->create('instance', $instance->id, 'autobackup', '', json_encode(array('result' => 'success', 'data' => $result)));
+
+        /* 2. Pick latest successful backup recorder. */
+        $latestBackup = null;
+        $backupList = $this->backupList($instance);
+        foreach($backupList as $backup)
+        {
+            if(empty($latestBackup) or $backup->status == 'completed' && $backup->create_time > $latestBackup->create_time) $latestBackup = $backup;
+        }
+
+        /* 3. delete expired backup. Get backup list of instance, then check every backup is expired or not.*/
+        foreach($backupList as $backup)
+        {
+            if($latestBackup && $latestBackup->name == $backup->name) continue; // Keep latest successful backup.
+
+            $deadline = intval($backup->create_time) + $instance->backupKeepDays * 24 * 3600;
+            if($deadline < time())
+            {
+                $result = $this->cne->deleteBackup($instance, $backup->name);
+                $this->action->create('instance', $instance->id, 'deleteexpiredbackup', '', json_encode(array('result' => 'success', 'data' => array('backupName' => $backup->name, 'backupCreateTime' => $backup->create_time))));
+            }
+        }
+        return true;
+    }
 }
