@@ -5,6 +5,20 @@
 const customRenders =
 {
     /**
+     * 落地页渲染，根据 API 接口类型显示不同的内容。
+     * Home page render, show different content according to the API interface type.
+     */
+    home: function()
+    {
+        const docApp = this;
+        const filterType = docApp.location.filterType || 'nolink';
+        const pager = $.extend({page: 1, recPerPage: 20}, docApp.signals.pager.value);
+        const params = docApp.signals.params.value || 'notempty_unclosed';
+        const homeViewUrl = $.createLink('api', 'ajaxgethome', `type=${filterType}&params=${params}&recPerPage=${pager.recPerPage}&pageID=${pager.page}`);
+        return {fetcher: homeViewUrl, clearBeforeLoad: false, className: 'doc-api-home h-full', class: 'h-full col',htmlRender: (element, props) => $(element).morphInner(`<div class="lazy-content doc-api-home h-full">${props.html}</div>`)};
+    },
+
+    /**
      * 定义 API 文档编辑器渲染，包括查看、编辑和创建。
      * Define the API doc editor render, including view, edit and create.
      */
