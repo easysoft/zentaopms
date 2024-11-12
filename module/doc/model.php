@@ -1508,7 +1508,6 @@ class docModel extends model
      */
     public function update(int $docID, object $doc): array|string|bool
     {
-        $type = zget($_POST, 'type', 'doc');
         $oldDoc = $this->dao->select('*')->from(TABLE_DOC)->where('id')->eq($docID)->fetch();
         list($doc, $oldDocContent) = $this->processDocForUpdate($oldDoc, $doc);
         if(dao::isError()) return false;

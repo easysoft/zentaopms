@@ -371,7 +371,7 @@ class doc extends control
             $moduleData->grade = $moduleData->parent === 0 ? 1 : 2;
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $moduleID = $this->doc->addTemplateType($moduleData);
+            $this->doc->addTemplateType($moduleData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             return $this->docZen->responseAfterAddTemplateType();
@@ -450,7 +450,7 @@ class doc extends control
         if(!empty($_POST))
         {
             $changes = $files = array();
-            if($comment == false)
+            if($comment)
             {
                 $docData = form::data()
                     ->setDefault('editedBy', $this->app->user->account)
