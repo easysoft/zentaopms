@@ -5,7 +5,7 @@ $config->cache->enable    = false;       // 是否开启缓存。Enable cache or
 $config->cache->driver    = 'redis';     // 缓存驱动。    The driver of cache. Can be file|yac|apcu|redis.
 $config->cache->scope     = '';          // 缓存服务范围。The scope of cache. Can be private|shared.
 $config->cache->namespace = '';          // 缓存命名空间。The namespace of cache.
-$config->cache->lifetime  = 2592000;     // 缓存生存时间。The lifetime of cache. The default value is 30 days.
+$config->cache->lifetime  = 0;           // 缓存生存时间，默认永不过期。The lifetime of cache. Default is no expiration.
 
 $config->cache->client = new stdClass();
 $config->cache->client->enable = false; // 是否开启客户端缓存。Enable client cache or not.
