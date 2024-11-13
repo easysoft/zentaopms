@@ -325,7 +325,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function browseTemplate(int $libID = 1, string $type = 'all', int $docID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = 'list')
+    public function browseTemplate(int $libID = 0, string $type = 'all', int $docID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = 'list')
     {
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
