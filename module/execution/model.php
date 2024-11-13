@@ -4645,9 +4645,9 @@ class executionModel extends model
             $execution->parent      = (isset($executionList[$execution->parent]) && $execution->parent && $execution->grade > 1) ? 'pid' . (string)$execution->parent : '';
             $execution->isParent    = !empty($execution->isParent) or !empty($execution->tasks);
             $execution->actions     = array();
-            if(isset($this->config->projectExecution->dtable->actionsRule[$execution->projectModel]))
+            if(isset($this->config->project->execution->dtable->actionsRule[$execution->projectModel]))
             {
-                foreach($this->config->projectExecution->dtable->actionsRule[$execution->projectModel] as $actionKey)
+                foreach($this->config->project->execution->dtable->actionsRule[$execution->projectModel] as $actionKey)
                 {
                     $action  = array();
                     $actions = explode('|', $actionKey);
@@ -4703,7 +4703,7 @@ class executionModel extends model
 
         foreach($tasks as $task)
         {
-            foreach($this->config->projectExecution->dtable->actionsRule['task'] as $action)
+            foreach($this->config->project->execution->dtable->actionsRule['task'] as $action)
             {
                 $rawAction = str_replace('Task', '', $action);
                 if(!commonModel::hasPriv('task', $rawAction)) continue;
@@ -4727,6 +4727,8 @@ class executionModel extends model
             $task->progress      = ($task->consumed + $task->left) == 0 ? 0 : round($task->consumed / ($task->consumed + $task->left), 2) * 100;
             $task->begin         = $task->estStarted;
             $task->end           = $task->deadline;
+            $task->realBegan     = $task->realStarted;
+            $task->realEnd       = $task->finishedDate;
             $task->PM            = $task->assignedTo;
             if($task->PM)
             {

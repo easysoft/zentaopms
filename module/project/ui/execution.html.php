@@ -54,28 +54,29 @@ if($canBatchAction)
 }
 
 /* Generate data table fields. */
-$fnGenerateCols = function() use ($config, $project)
+$fieldList = $config->project->execution->dtable->fieldList;
+
+/* waterfall & waterfallplus model with different edit link. */
+if(in_array($project->model, array('waterfall', 'waterfallplus')))
 {
-    $fieldList = $config->projectExecution->dtable->fieldList;
+    $fieldList['actions']['actionsMap']['edit']['data-size'] = 'md';
+    $fieldList['actions']['actionsMap']['edit']['url'] = createLink('programplan', 'edit', "stageID={rawID}&projectID={projectID}");
+}
+if(!$this->cookie->showStage && !$this->cookie->showTask)
+{
+    $fieldList['name']['type'] = 'title';
+    if(!in_array($project->model, array('waterfall', 'waterfallplus', 'ipd'))) unset($fieldList['name']['nestedToggle']);
+}
+if(!$project->hasProduct) unset($fieldList['productName']);
 
-    /* waterfall & waterfallplus model with different edit link. */
-    if(in_array($project->model, array('waterfall', 'waterfallplus')))
-    {
-        $fieldList['actions']['actionsMap']['edit']['data-size'] = 'md';
-        $fieldList['actions']['actionsMap']['edit']['url'] = createLink('programplan', 'edit', "stageID={rawID}&projectID={projectID}");
-    }
-    if(!$this->cookie->showStage && !$this->cookie->showTask)
-    {
-        $fieldList['name']['type'] = 'title';
-        if(!in_array($project->model, array('waterfall', 'waterfallplus', 'ipd'))) unset($fieldList['name']['nestedToggle']);
-    }
+$fieldList = $this->loadModel('datatable')->getSetting('project', 'execution');
+$fieldList['name']['name'] = 'nameCol';
+$fieldList['actions']['width'] = '160';
 
-    if(!$project->hasProduct) unset($fieldList['productName']);
+foreach(array_keys($fieldList['actions']['actionsMap']) as $actionKey) unset($fieldList['actions']['actionsMap'][$actionKey]['text']);
 
-    return array_values($fieldList);
-};
+$config->project->execution->dtable->fieldList = $fieldList;
 
-foreach(array_keys($config->projectExecution->dtable->fieldList['actions']['actionsMap']) as $actionKey) unset($config->projectExecution->dtable->fieldList['actions']['actionsMap'][$actionKey]['text']);
 $executions = $this->execution->generateRow($executionStats, $users, $avatarList);
 
 /* zin: Define the feature bar on main menu. */
@@ -175,10 +176,10 @@ $canCreateExecution = $canModifyProject &&  $isStage ? common::hasPriv('programp
 dtable
 (
     set::userMap($users),
-    set::cols($fnGenerateCols()),
+    set::cols($fieldList),
     set::data($executions),
+    set::customCols(true),
     set::checkable($canBatchAction),
-    set::fixedLeftWidth('44%'),
     set::onRenderCell(jsRaw('window.onRenderCell')),
     set::canRowCheckable(jsRaw("function(rowID){return this.getRowInfo(rowID).data.id.indexOf('pid') > -1;}")),
     set::checkInfo(jsRaw("function(checkedIDList){ return window.footerSummary(this, checkedIDList);}")),
