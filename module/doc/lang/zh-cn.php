@@ -493,6 +493,8 @@ $lang->doc->projectFilterTypes[] = array('mine', '我参与的');
 
 $lang->doc->spaceFilterTypes[] = array('all', '全部');
 
+$lang->doc->browseTemplate = '文档模板';
+
 $lang->doc->docLang = new stdClass();
 $lang->doc->docLang->cancel                      = $lang->cancel;
 $lang->doc->docLang->export                      = $lang->export;

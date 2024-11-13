@@ -339,7 +339,7 @@ $config->group->subset->featureconfig->nav   = 'admin';
 
 $config->group->subset->doctemplate = new stdclass();
 $config->group->subset->doctemplate->order = 1220;
-$config->group->subset->doctemplate->nav   = 'admin';
+$config->group->subset->doctemplate->nav   = 'doc';
 
 $config->group->subset->notifysetting = new stdclass();
 $config->group->subset->notifysetting->order = 1230;
@@ -2920,14 +2920,7 @@ $config->group->package->docTemplate = new stdclass();
 $config->group->package->docTemplate->order  = 5;
 $config->group->package->docTemplate->subset = 'doctemplate';
 $config->group->package->docTemplate->privs  = array();
-$config->group->package->docTemplate->privs['baseline-templateType']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array());
-$config->group->package->docTemplate->privs['baseline-template']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array(), 'recommend' => array());
-$config->group->package->docTemplate->privs['baseline-createTemplate'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('baseline-template'), 'recommend' => array('baseline-delete', 'baseline-editBook', 'baseline-editTemplate', 'baseline-manageBook'));
-$config->group->package->docTemplate->privs['baseline-view']           = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('baseline-template'), 'recommend' => array());
-$config->group->package->docTemplate->privs['baseline-editTemplate']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('baseline-template'), 'recommend' => array('baseline-createTemplate', 'baseline-delete', 'baseline-editBook', 'baseline-manageBook'));
-$config->group->package->docTemplate->privs['baseline-editBook']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('baseline-template'), 'recommend' => array('baseline-createTemplate', 'baseline-delete', 'baseline-editTemplate', 'baseline-manageBook'));
-$config->group->package->docTemplate->privs['baseline-manageBook']     = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 7, 'depend' => array('baseline-template'), 'recommend' => array('baseline-createTemplate', 'baseline-delete', 'baseline-editBook', 'baseline-editTemplate'));
-$config->group->package->docTemplate->privs['baseline-delete']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 6, 'depend' => array('baseline-template'), 'recommend' => array('baseline-createTemplate'));
+$config->group->package->docTemplate->privs['doc-browseTemplate']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->projectStakeholder = new stdclass();
 $config->group->package->projectStakeholder->order  = 5;
