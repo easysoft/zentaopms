@@ -423,24 +423,27 @@ class installModel extends model
     }
 
     /**
-     * 开启 dao 缓存。
-     * Enable dao cache.
+     * 开启缓存。
+     * Enable cache.
      *
      * @access public
      * @return bool
      */
-    public function enableDaoCache(): bool
+    public function enableCache(): bool
     {
         if(!helper::isAPCuEnabled()) return false;
 
         $cache = new stdclass();
-        $cache->owner   = 'system';
-        $cache->module  = 'common';
-        $cache->section = 'global';
-        $cache->key     = 'cache';
-        $cache->value   = '{"dao":{"enable":"1"}}';
-        $this->dao->replace(TABLE_CONFIG)->data($cache)->exec();
+        $cache->status    = true;
+        $cache->driver    = 'apcu';
+        $cache->scope     = 'shared';
+        $cache->namespace = $this->config->db->name;
 
-        return !dao::isError();
+        $this->loadModel('setting')->setItems('system.common.cache', $cache);
+        if(dao::isError()) return false;
+
+        $this->mao->clearCache();
+
+        return true;
     }
 }

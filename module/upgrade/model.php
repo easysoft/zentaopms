@@ -9214,7 +9214,7 @@ class upgradeModel extends model
      */
     public function openCacheByAPCu(): bool
     {
-        return $this->loadModel('install')->enableDaoCache();
+        return $this->loadModel('install')->enableCache();
     }
 
     /**
