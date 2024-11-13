@@ -27,6 +27,8 @@ if(!empty($config->user->contactField))
 
         if($i % 2 == 1) $contacts[] = formRow($contactGroup);
     }
+
+    if($i % 2 == 0) $contacts[] = formRow($contactGroup);
 }
 
 formPanel
