@@ -31,7 +31,7 @@ $lang->doclib->defaultOrder = '文档默认排序';
 $lang->doclib->tip = new stdclass();
 $lang->doclib->tip->selectExecution = "执行为空时，创建的库为{$lang->projectCommon}库";
 
-$lang->doclib->type['wiki'] = 'Wiki文档库';
+$lang->doclib->type['wiki'] = '文档库';
 $lang->doclib->type['api']  = '接口库';
 
 $lang->doclib->aclListA = array();

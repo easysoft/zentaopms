@@ -31,7 +31,7 @@ $lang->doclib->defaultOrder = 'Doc order';
 $lang->doclib->tip = new stdclass();
 $lang->doclib->tip->selectExecution = "When execution is empty, the library created is the {$lang->projectCommon} library";
 
-$lang->doclib->type['wiki'] = 'Wiki';
+$lang->doclib->type['wiki'] = 'Doc';
 $lang->doclib->type['api']  = 'API';
 
 $lang->doclib->aclListA = array();
