@@ -116,9 +116,9 @@ class RedisDriver implements CacheInterface
      */
     public function set($key, $value, $ttl = null)
     {
-        $ttl = is_null($ttl) ? $this->defaultLifetime : $ttl;
+        $ttl = (int)($ttl ?: $this->defaultLifetime);
 
-        return $this->redis->set($key, $value, (int)$ttl);
+        return $this->redis->set($key, $value, $ttl ?: null);
     }
 
     /**
@@ -177,17 +177,11 @@ class RedisDriver implements CacheInterface
      */
     public function setMultiple($values, $ttl = null)
     {
-        $ttl = is_null($ttl) ? $this->defaultLifetime : $ttl;
+        $ttl = (int)($ttl ?: $this->defaultLifetime);
 
-        if(!empty($ttl))
-        {
-            foreach($values as $key => $value)
-            {
-                $this->redis->set($key, $value, $ttl);
-            }
-        }
+        if(!$ttl) return $this->redis->mset($values);
 
-        return $this->redis->mset($values);
+        foreach($values as $key => $value) $this->redis->set($key, $value, $ttl);
     }
 
     /**

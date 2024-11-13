@@ -41,9 +41,9 @@ class ApcuDriver implements CacheInterface
 
     public function set($key, $value, $ttl = null)
     {
-        $ttl = is_null($ttl) ? $this->defaultLifetime : $ttl;
+        $ttl = (int)($ttl ?: $this->defaultLifetime);
 
-        return apcu_store($key, $value, (int) $ttl);
+        return apcu_store($key, $value, $ttl);
     }
 
     public function delete($key)
@@ -63,9 +63,9 @@ class ApcuDriver implements CacheInterface
 
     public function setMultiple($values, $ttl = null)
     {
-        $ttl = is_null($ttl) ? $this->defaultLifetime : $ttl;
+        $ttl = (int)($ttl ?: $this->defaultLifetime);
 
-        $result = apcu_store($values, (int) $ttl);
+        $result = apcu_store($values, $ttl);
 
         return $result === true ? true : (is_array($result) && count($result) == 0 ? true : false);
     }
