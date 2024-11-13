@@ -73,9 +73,10 @@ foreach($lang->docTemplate->scopes as $scopeID => $scopeName)
             (
                 item(set(array
                 (
-                    'trailingIcon'  => 'angle-right',
-                    'text'  => $lang->docTemplate->more,
-                    'class' => 'ghost size-md text-primary',
+                    'type'  => 'ghost',
+                    'caret' => 'right',
+                    'class' => 'text-primary',
+                    'text'  => $lang->more,
                     'url'   => createLink('doc', 'browseTemplate', "libID=$scopeID")
                 )))
             ),

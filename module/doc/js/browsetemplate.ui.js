@@ -12,7 +12,8 @@ function getTableOptions(options, info)
     const lang = getDocAppLang();
 
     templateCols = [];
-    templateCols.push(options.cols.find(col => col.name == 'id'));
+    templateCols.push(options.cols.find(col => col.name === 'rawID'));
+
     let title = options.cols.find(col => col.name == 'title');
     title.title = lang.tableCols.title;
     templateCols.push(title);
