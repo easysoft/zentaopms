@@ -310,7 +310,7 @@ class cache
      */
     private function getRawCacheKey(string $code, int|string $id): string
     {
-        return $this->namespace . $this->connector . 'raw' . $this->connector . $code . $this->connector . $id;
+        return $this->createKey('raw', $code, $id);
     }
 
     /**
@@ -323,7 +323,7 @@ class cache
      */
     private function getSetCacheKey(string $code): string
     {
-        return $this->namespace . $this->connector . 'set' . $this->connector . $code . $this->connector . 'list';
+        return $this->createKey('set', $code, 'list');
     }
 
     /**
@@ -336,7 +336,8 @@ class cache
      */
     private function getResCacheKey(string $key): string
     {
-        return $this->namespace . $this->connector . str_replace(['cache', '_'], ['res', $this->connector], strtolower($key));
+        $args = explode('_', str_replace('cache', 'res', strtolower($key)));
+        return $this->createKey(...$args);
     }
 
     /**
@@ -584,6 +585,19 @@ class cache
     }
 
     /**
+     * 生成缓存键。
+     * Generate cache key.
+     *
+     * @param  mixed  ...$args 缓存键的参数。
+     * @access public
+     * @return string
+     */
+    public function createKey(...$args): string
+    {
+        return $this->namespace . $this->connector . implode($this->connector, $args);
+    }
+
+    /**
      * 从缓存中获取指定表指定 id 的数据。
      * Get the data of the specified table and id from the cache.
      *
@@ -739,7 +753,6 @@ class cache
     {
         if(empty($key)) return $this->log('The key is empty', __FILE__, __LINE__);
 
-        $key = $this->namespace . $this->connector . $key;
         return $this->cache->get($key);
     }
 
@@ -771,7 +784,6 @@ class cache
     {
         if(empty($key)) return $this->log('The key is empty', __FILE__, __LINE__);
 
-        $key = $this->namespace . $this->connector . $key;
         return $this->cache->set($key, $value, $ttl);
     }
 
