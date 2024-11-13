@@ -47,7 +47,7 @@ detailBody
             zget($host, 'CD') == 'spug' ? h::tr
             (
                 h::th($lang->host->admin),
-                h::td(zget($host, 'admin')),
+                h::td(zget($host, 'admin'))
             ) : null,
             zget($host, 'CD') == 'spug' ?  h::tr
             (
@@ -80,7 +80,8 @@ detailBody
                 zget($host, 'CD') != 'spug' ? h::th($lang->host->osName) : null,
                 zget($host, 'CD') != 'spug' ? h::td($host->osName) : null,
                 h::th($lang->host->osVersion),
-                h::td(zget($host, 'CD') != 'spug' ? zget($lang->host->{$host->osName.'List'}, $host->osVersion) : $host->osName)
+                zget($host, 'CD') == 'spug' ? h::td($host->osVersion) : null,
+                zget($host, 'CD') != 'spug' && !empty($host->osName) ? h::td(zget($lang->host->{$host->osName.'List'}, $host->osVersion)) : null
             ),
             zget($host, 'CD') != 'spug' ? h::tr
             (
