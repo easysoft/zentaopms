@@ -206,11 +206,12 @@ class programplanTao extends programplanModel
      * 设置甘特图阶段数据。
      * Set the Gantt chart stage data.
      *
-     * @param  array   $plans
+     * @param  array     $plans
+     * @param  string    $browseType
      * @access protected
      * @return array
      */
-    protected function initGanttPlans(array $plans): array
+    protected function initGanttPlans(array $plans, string $browseType = ''): array
     {
         $this->app->loadLang('stage');
 
@@ -220,7 +221,14 @@ class programplanTao extends programplanModel
         foreach($plans as $plan)
         {
             $plan->isParent = false;
-            if(isset($plans[$plan->parent])) $plans[$plan->parent]->isParent = true;
+            if(isset($plans[$plan->parent]))
+            {
+                $plans[$plan->parent]->isParent = true;
+            }
+            elseif($browseType == 'bysearch')
+            {
+                $plans[$plan->id]->parent = 0;
+            }
         }
 
         $this->loadModel('holiday');
@@ -252,7 +260,7 @@ class programplanTao extends programplanModel
             }
 
             $datas['data'][$plan->id] = $data;
-            $stageIndex[$plan->id]    = array('planID' => $plan->id, 'parent' => $plan->parent, 'totalEstimate' => 0, 'totalConsumed' => 0, 'totalReal' => 0);
+            $stageIndex[$plan->id]    = array('planID' => $plan->id, 'parent' => isset($plans[$plan->parent]) ? $plan->parent : $plan->project, 'totalEstimate' => 0, 'totalConsumed' => 0, 'totalReal' => 0);
         }
         return array('datas' => $datas, 'stageIndex' => $stageIndex, 'planIdList' => $planIdList, 'reviewDeadline' => $reviewDeadline);
     }

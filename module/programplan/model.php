@@ -149,8 +149,18 @@ class programplanModel extends model
             $plans    = $this->programplanTao->setPlanBaseline((array)$oldData->stage, $plans);
         }
 
+        /* Set task baseline data. */
+        $tasks = $this->getGanttTasks($projectID, array_keys($plans), $browseType, $queryID);
+        if($baselineID) $this->programplanTao->setTaskBaseline(isset($oldData->task) ? $oldData->task : array(), $tasks); // Set task baseline.
+
+        if($browseType == 'bysearch')
+        {
+            $taskExecutions = array_column($tasks, 'execution');
+            $plans = array_filter($plans, function($plan) use($taskExecutions) {return in_array($plan->id, $taskExecutions);});
+        }
+
         /* Set plan for gantt view. */
-        $result = $this->programplanTao->initGanttPlans($plans);
+        $result = $this->programplanTao->initGanttPlans($plans, $browseType);
         $datas          = $result['datas'];
         $planIdList     = $result['planIdList'];
         $stageIndex     = $result['stageIndex'];
@@ -158,10 +168,6 @@ class programplanModel extends model
 
         /* Judge whether to display tasks under the stage. */
         if(empty($selectCustom)) $selectCustom = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=programplan&section=browse&key=stageCustom");
-
-        /* Set task baseline data. */
-        $tasks = $this->getGanttTasks($projectID, $planIdList, $browseType, $queryID);
-        if($baselineID) $this->programplanTao->setTaskBaseline(isset($oldData->task) ? $oldData->task : array(), $tasks); // Set task baseline.
 
         /* Set task for gantt view. */
         $result = $this->programplanTao->setTask($tasks, $plans, $selectCustom, $datas, $stageIndex);
