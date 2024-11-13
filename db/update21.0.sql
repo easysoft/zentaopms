@@ -1,4 +1,3 @@
-ALTER TABLE zt_module MODIFY COLUMN short varchar(60);
 ALTER TABLE `zt_host` DROP COLUMN `serverModel`;
 ALTER TABLE `zt_host` DROP COLUMN `hardwareType`;
 ALTER TABLE `zt_host` DROP COLUMN `cpuBrand`;

@@ -739,6 +739,7 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `lib` varchar(30) NOT NULL DEFAULT '',
   `template` varchar(30) NOT NULL DEFAULT '',
   `templateType` varchar(30) NOT NULL DEFAULT '',
+  `templateDesc` text NULL,
   `chapterType` varchar(30) NOT NULL DEFAULT '',
   `module` varchar(30) NOT NULL DEFAULT '',
   `title` varchar(255) NOT NULL DEFAULT '',
@@ -1202,7 +1203,7 @@ CREATE TABLE IF NOT EXISTS `zt_module` (
   `from` mediumint(8) unsigned NOT NULL default '0',
   `owner` varchar(30) NOT NULL DEFAULT '',
   `collector` text NULL,
-  `short` varchar(30) NOT NULL DEFAULT '',
+  `short` varchar(60) NOT NULL DEFAULT '',
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
