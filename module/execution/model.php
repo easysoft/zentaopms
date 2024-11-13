@@ -3586,6 +3586,7 @@ class executionModel extends model
         }
 
         $orderBy = array_map(function($value){return 't1.' . $value;}, explode(',', $orderBy));
+        $orderBy = str_replace('storyTitle', 'story', $orderBy);
         $orderBy = implode(',', $orderBy);
 
         $taskIdList = $sql->where($condition)
