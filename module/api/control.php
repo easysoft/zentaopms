@@ -686,7 +686,7 @@ class api extends control
             $this->api->update($formData);
 
             if(dao::isError()) return $this->sendError(dao::getError());
-            return $this->sendSuccess(array('locate' => helper::createLink('api', 'index', "libID=$api->lib&moduleID=0&apiID=$apiID"), 'docApp' => array(array('selectDoc', $apiID), array('executeCommand', 'loadApi'))));
+            return $this->sendSuccess(array('locate' => helper::createLink('api', 'index', "libID=$api->lib&moduleID=0&apiID=$apiID"), 'docApp' => array(array('executeCommand', 'selectApi', array($apiID)), array('executeCommand', 'loadApi'))));
         }
 
         $this->setMenu($api->lib);

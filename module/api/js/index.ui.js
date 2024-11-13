@@ -328,6 +328,16 @@ $.extend(window.docAppCommands,
     },
 
     /**
+     * 选择 API 文档。
+     * Select the specified API doc.
+     */
+    selectApi: function(_, args)
+    {
+        const apiID = args[0];
+        getDocApp().selectDoc(apiID);
+    },
+
+    /**
      * 显示结构列表。
      * Show the struct list.
      */
