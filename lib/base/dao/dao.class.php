@@ -329,6 +329,21 @@ class baseDAO
     }
 
     /**
+     * 生成缓存的 key。
+     * Create the cache key.
+     *
+     * @param  mixed  $args
+     * @access private
+     * @return string
+     */
+    private function createCacheKey(...$args): string
+    {
+        if(empty($this->cache)) return implode('-', $args);
+
+        return $this->cache->createKey('dao', ...$args);
+    }
+
+    /**
      * 获取缓存。
      * Get the cache.
      *
@@ -359,7 +374,8 @@ class baseDAO
         {
             if(strpos($table, 'boardlayer') !== false) return self::CACHE_MISS;
 
-            $tableCache = $this->cache->getByKey($table);
+            $tableKey   = $this->createCacheKey('table', $table);
+            $tableCache = $this->cache->getByKey($tableKey);
             if($tableCache === null) continue;
 
             if($tableCache[0] > $cachedTime) return self::CACHE_MISS;
@@ -410,7 +426,8 @@ class baseDAO
             /* 更新表的缓存时间。*/
             /* Update the table cache time. */
             $table = str_replace(array('`', '"'), '', $table);
-            $this->setCache($table);
+            $key   = $this->createCacheKey('table', $table);
+            $this->setCache($key);
         }
     }
 
@@ -1095,9 +1112,8 @@ class baseDAO
      */
     public function fetch($field = '')
     {
-        $sql = $this->processSQL();
-        $key = 'dao:fetch:' . md5($sql);
-
+        $sql    = $this->processSQL();
+        $key    = $this->createCacheKey('fetch', md5($sql));
         $result = $this->getCache($key, $sql);
         if($result === self::CACHE_MISS)
         {
@@ -1121,9 +1137,8 @@ class baseDAO
      */
     public function fetchAll($keyField = '')
     {
-        $sql = $this->processSQL();
-        $key = 'dao:fetchAll:' . md5($sql);
-
+        $sql  = $this->processSQL();
+        $key  = $this->createCacheKey('fetchAll', md5($sql));
         $rows = $this->getCache($key, $sql);
         if($rows === self::CACHE_MISS)
         {
@@ -1150,8 +1165,7 @@ class baseDAO
     public function fetchGroup($groupField, $keyField = '')
     {
         $sql = $this->processSQL();
-        $key = 'dao:fetchAll:' . md5($sql);
-
+        $key = $this->createCacheKey('fetchAll', md5($sql));
         $rows = $this->getCache($key, $sql);
         if($rows === self::CACHE_MISS)
         {
@@ -1181,9 +1195,8 @@ class baseDAO
      */
     public function fetchPairs($keyField = '', $valueField = '')
     {
-        $sql = $this->processSQL();
-        $key = 'dao:fetchAll:' . md5($sql);
-
+        $sql  = $this->processSQL();
+        $key  = $this->createCacheKey('fetchAll', md5($sql));
         $rows = $this->getCache($key, $sql);
         if($rows === self::CACHE_MISS)
         {
