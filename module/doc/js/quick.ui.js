@@ -52,20 +52,24 @@ window.docAppActions.doc = function(info)
     const actions = buildDocActions(info);
     if(info.ui === 'toolbar')
     {
-        const doc       = info.data;
-        const object    = doc.object;
-        const lib       = doc.libInfo;
-        const objectUrl = object ? getObjectBrowseUrl(object, doc.objectType) : null;
-        const libUrl    = object ? getObjectBrowseUrl(object, doc.objectType, lib.id) : null;
+        const doc    = info.data;
+        const object = doc.object;
+        const lib    = doc.libInfo;
+        const docUrl = $.createLink('doc', 'view', `docID=${doc.id}`);
         actions.unshift(
         {
             type: 'custom',
             component: 'div',
             className: 'order-first mr-2',
-            html: `<span class="text-gray">${getDocAppLang('position')}${getDocAppLang('colon')} </span>` + [
-                objectUrl ? `<a href="${objectUrl}">${object.name || object.title}</a>` : null,
-                lib ? `<a href="${libUrl}">${lib.name}</a> ` : null,
-            ].filter(Boolean).join(' <span class="text-gray">/</span> '),
+            html: [
+                `<span class="text-gray">${getDocAppLang('position')}${getDocAppLang('colon')} </span>`,
+                `<a href="${docUrl}">`,
+                    [
+                        object ? (object.name || object.title) : '',
+                        lib ? lib.name : '',
+                    ].filter(Boolean).join(' <span class="text-gray">/</span> '),
+                '</a>',
+            ].join(''),
         });
     }
     return actions;
