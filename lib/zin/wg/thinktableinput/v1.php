@@ -74,7 +74,7 @@ class thinkTableInput extends thinkQuestion
                     ) : inputControl
                     (
                         input(set(array(
-                                'class'       => 'w-72 dimension-weight',
+                                'class'       => 'w-72 h-10 dimension-weight',
                                 'name'        => 'result[' . $index . ']',
                                 'type'        => 'number',
                                 'min'         => 1,
