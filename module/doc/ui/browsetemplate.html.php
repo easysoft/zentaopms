@@ -10,5 +10,5 @@ declare(strict_types=1);
  */
 namespace zin;
 
-if($libID) include './templatelist.html.php';
-else include './templatehome.html.php';
+if($mode == 'home' || !$libID) include './templatehome.html.php';
+else include './templatelist.html.php';

@@ -81,7 +81,7 @@ foreach($lang->docTemplate->scopes as $scopeID => $scopeName)
                     'caret' => 'right',
                     'class' => 'text-primary',
                     'text'  => $lang->more,
-                    'url'   => createLink('doc', 'browseTemplate', "libID=$scopeID")
+                    'url'   => createLink('doc', 'browseTemplate', "libID=$scopeID&type=all&docID=0&orderBy=id_desc&recTotal=&recPerPae=20&pageID=1&mode=list")
                 )))
             ),
         ),

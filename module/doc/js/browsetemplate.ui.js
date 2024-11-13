@@ -242,6 +242,12 @@ function handleSaveDoc(doc)
 
 const customRenders =
 {
+    home: function()
+    {
+        const homeViewUrl = $.createLink('doc', 'browseTemplate', `libID=0&filterType=all&docID=0&orderBy=&recTotal=&recPerPage=20&pageID=1&mode=home`);
+        return {fetcher: homeViewUrl, clearBeforeLoad: false, className: 'doc-template-home h-full', class: 'h-full col',htmlRender: (element, props) => $(element).morphInner(`<div class="lazy-content doc-template-home h-full">${props.html}</div>`)};
+    },
+
     /**
      * 定义 API 文档列表工具栏渲染。
      * Define the API doc list toolbar render.
