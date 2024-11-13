@@ -763,15 +763,16 @@ class cache
      *
      * @param  string $key   缓存键。
      * @param  mixed  $value 缓存值。
+     * @param  int    $ttl   缓存时间。
      * @access public
      * @return bool
      */
-    public function saveByKey(string $key, $value)
+    public function saveByKey(string $key, $value, int $ttl = 0)
     {
         if(empty($key)) return $this->log('The key is empty', __FILE__, __LINE__);
 
         $key = $this->namespace . $this->connector . $key;
-        return $this->cache->set($key, $value);
+        return $this->cache->set($key, $value, $ttl);
     }
 
     /**
