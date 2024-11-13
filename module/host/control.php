@@ -200,7 +200,7 @@ class host extends control
      */
     public function ajaxGetOS(string $type)
     {
-        $type   = "{$type}List";
+        $type  .= 'List';
         $osList = $this->lang->host->{$type};
         if(empty($osList)) return '';
 
