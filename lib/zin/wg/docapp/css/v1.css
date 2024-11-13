@@ -1,0 +1,29 @@
+.doc-app-header > .nav {--nav-active-bg: var(--color-primary-100); --nav-active-color: var(--color-fore); --nav-item-height: 24px; --nav-divider-margin: 8px;}
+
+.icon-api {text-align: center; --api-color-rgb: var(--color-success-500-rgb); color: rgba(var(--api-color-rgb), 1); margin: 0 3px;}
+.icon-api::before {content: ' '; display: inline-block; width: 8px; height: 8px; border-radius: 2px; background-color: currentColor; min-width: 0;}
+
+.api-list-item.is-GET, .icon-api.is-GET {--api-color-rgb: var(--color-success-500-rgb)}
+.api-list-item.is-POST, .icon-api.is-POST {--api-color-rgb: var(--color-important-500-rgb)}
+.api-list-item.is-DELETE, .icon-api.is-DELETE {--api-color-rgb: var(--color-danger-500-rgb)}
+.api-list-item.is-PUT, .icon-api.is-PUT {--api-color-rgb: var(--color-important-500-rgb)}
+.api-list-item.is-PATCH, .icon-api.is-PATCH {--api-color-rgb: var(--color-special-500-rgb)}
+.api-list-item.is-OPTIONS, .icon-api.is-OPTIONS {--api-color-rgb: var(--color-special-500-rgb)}
+.api-list-item.is-HEAD, .icon-api.is-HEAD {--api-color-rgb: var(--color-gray-500-rgb)}
+
+.api-list-item {background-color: rgba(var(--api-color-rgb), .1);}
+.api-list-item .api-method {background-color: rgba(var(--api-color-rgb), 1); color: var(--color-canvas)}
+.api-list-item .api-title {color: rgba(var(--api-color-rgb), 1)}
+
+.doc-app-mode-edit[data-lib-type="api"], .doc-app-mode-create {--doc-view-max-width: 1100px}
+.doc-app-mode-edit[data-lib-type="api"] .doc-view-content,
+.doc-app-mode-create[data-lib-type="api"] .doc-view-content {padding: 0 24px;}
+.doc-app-mode-edit[data-lib-type="api"] form .form-actions,
+.doc-app-mode-create[data-lib-type="api"] form .form-actions {display: none;}
+
+.doc-tree .item-inner>.item-icon {margin-right: -4px;}
+.doc-list > .dtable {--dtable-border-color: transparent}
+.api-lib-menu + .doc-tree > .tree {padding-top: 0;}
+
+.dropdown-menu .divider + .divider {display: none;}
+.dropmenu-item .tree-item-inner[data-type="lib"] {padding-left: 8px;}
