@@ -195,32 +195,6 @@ function getDocViewSidebarTabs(doc, info)
     ].filter(Boolean);
 }
 
-/**
- * 获取文档界面上的表格初始化选项。
- * Get the table initialization options on the doc UI.
- *
- * @param {object} options
- * @param {object} info
- * @returns {object}
- */
-function getTableOptions(options, info)
-{
-    return $.extend(options, {
-        cols: [{name: 'title', onRenderCell: function(result, info)
-        {
-            const doc = info.row.data;
-            return [{className: `api-list-item row items-center my-0.5 mx-1 gap-2 flex-auto is-${doc.method} cursor-pointer rounded`, html: [
-                `<div class="font-mono w-14 text-center api-method py-1 rounded rounded-r-none">${doc.method}</div>`,
-                `<div class="font-mono api-path">${doc.path}</div>`,
-                `<div class="flex-auto text-right api-title pr-2">${doc.originTitle}</div>`,
-            ].join('')}]
-        }}],
-        header:    false,
-        checkable: false,
-        footer:    ['flex', 'pager'],
-    });
-}
-
 function getSpaceFetcher(spaceType, spaceID)
 {
     const parts      = String(spaceID).split('.');
@@ -516,7 +490,6 @@ window.setDocAppOptions = function(_, options) // Override the method.
         spaceMenuOptions     : getSpaceMenuOptions,
         customRenders        : customRenders,
         viewModeUrl          : getViewModeUrl,
-        getTableOptions      : getTableOptions,
         getDocViewSidebarTabs: getDocViewSidebarTabs,
         getSpaceFetcher      : getSpaceFetcher,
         isMatchFilter        : function(type, filterType, item)
