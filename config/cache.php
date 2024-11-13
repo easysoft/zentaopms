@@ -69,4 +69,4 @@ $config->redis->host       = '';
 $config->redis->port       = '';
 $config->redis->username   = '';
 $config->redis->password   = '';
-$config->redis->serializer = 'serialize'; // serialize|igbinary
+$config->redis->serializer = 'igbinary'; // serialize|igbinary
