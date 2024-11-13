@@ -716,6 +716,18 @@ class baseMao
     }
 
     /**
+     * 清除缓存。
+     * Clear cache.
+     *
+     * @access public
+     * @return void
+     */
+    public function clearCache()
+    {
+        $this->cache->clear();
+    }
+
+    /**
      * 魔术方法。
      * 1. 转换 findByxxx 为 where 条件。
      * 2. 调用cache对象的方法。
