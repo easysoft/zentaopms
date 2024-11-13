@@ -138,7 +138,6 @@ formPanel
     ),
     formGroup
     (
-        set::width('1/3'),
         set::name('status'),
         set::control('radioList'),
         set::label($lang->host->status),
