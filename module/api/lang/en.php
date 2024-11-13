@@ -15,6 +15,7 @@ $lang->api->sql      = 'SQL Query API';
 $lang->api->manage   = 'API management';
 
 $lang->api->index               = 'API Space';
+$lang->api->view                = 'API Detail';
 $lang->api->editLib             = 'Edit';
 $lang->api->releases            = 'Release';
 $lang->api->deleteRelease       = 'Delete Release';

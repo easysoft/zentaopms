@@ -15,6 +15,7 @@ $lang->api->sql      = 'SQL查询接口';
 $lang->api->manage   = '接口管理';
 
 $lang->api->index               = '接口空间';
+$lang->api->view                = '接口详情';
 $lang->api->editLib             = '编辑库';
 $lang->api->releases            = '版本管理';
 $lang->api->deleteRelease       = '删除版本';

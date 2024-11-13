@@ -3608,7 +3608,8 @@ $config->group->package->browseAPI = new stdclass();
 $config->group->package->browseAPI->order  = 5;
 $config->group->package->browseAPI->subset = 'api';
 $config->group->package->browseAPI->privs  = array();
-$config->group->package->browseAPI->privs['api-index'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
+$config->group->package->browseAPI->privs['api-index'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array('api-view'));
+$config->group->package->browseAPI->privs['api-view'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('api-index'), 'recommend' => array());
 
 $config->group->package->manageAPI = new stdclass();
 $config->group->package->manageAPI->order  = 10;

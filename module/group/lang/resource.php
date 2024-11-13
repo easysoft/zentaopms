@@ -1976,6 +1976,7 @@ $lang->resource->aiapp->collectMiniProgram      = 'collectMiniProgram';
 /* Others. */
 $lang->resource->api = new stdclass();
 $lang->resource->api->index         = 'index';
+$lang->resource->api->view          = 'view';
 $lang->resource->api->createLib     = 'createLib';
 $lang->resource->api->editLib       = 'editLib';
 $lang->resource->api->deleteLib     = 'deleteLib';
@@ -1999,6 +2000,7 @@ $lang->resource->api->debug        = 'debug';
 $lang->resource->api->sql          = 'sql';
 
 $lang->api->methodOrder[0]   = 'index';
+$lang->api->methodOrder[3]   = 'view';
 $lang->api->methodOrder[5]   = 'createLib';
 $lang->api->methodOrder[10]  = 'editLib';
 $lang->api->methodOrder[15]  = 'deleteLib';
