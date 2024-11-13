@@ -41,3 +41,4 @@ REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`, `
 UPDATE `zt_action` SET `action` = 'canceled' WHERE `objectType` = 'deploy' AND `action` = 'activated';
 
 DROP TABLE IF EXISTS `zt_account`;
+DELETE FROM `zt_host` WHERE `module` = 'host' AND `section` = 'cpuBrandList';
