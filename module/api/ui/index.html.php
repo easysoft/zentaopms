@@ -12,7 +12,7 @@ namespace zin;
 
 $privs = array();
 $privs['collect']      = 'no';
-$privs['create']       = hasPriv('api', 'create');
+$privs['createApi']    = hasPriv('api', 'create');
 $privs['edit']         = hasPriv('api', 'edit');
 $privs['delete']       = hasPriv('api', 'delete');
 $privs['createLib']    = hasPriv('api', 'createLib');

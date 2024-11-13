@@ -51,6 +51,10 @@ $privs['sortModule']   = hasPriv('doc', 'sortCatalog');
 $privs['sortDoclib']   = hasPriv('doc', 'sortDoclib');
 $privs['sortDoc']      = hasPriv('doc', 'sortDoc');
 $privs['batchMoveDoc'] = hasPriv('doc', 'batchMoveDoc');
+$privs['createApi']    = hasPriv('api', 'create');
+$privs['editApi']      = hasPriv('api', 'edit');
+$privs['createStruct'] = hasPriv('api', 'createStruct');
+$privs['createRelease']= hasPriv('api', 'createRelease');
 $privs['createOffice'] = true;
 
 $homeName = false;
