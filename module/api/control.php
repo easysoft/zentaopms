@@ -36,11 +36,11 @@ class api extends control
      * @param  int    $version
      * @param  int    $release
      * @param  string $browseType
-     * @param  int    $param
+     * @param  string $params
      * @access public
      * @return void
      */
-    public function index(int $libID = 0, int $moduleID = 0, int $apiID = 0, int $version = 0, int $release = 0, string $browseType = 'all', int $param = 0, string $orderBy = 'order_asc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = '', string $search = '')
+    public function index(int $libID = 0, int $moduleID = 0, int $apiID = 0, int $version = 0, int $release = 0, string $browseType = 'nolink', string $params = '', string $orderBy = 'order_asc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = '', string $search = '')
     {
         /* 设置空间类型。 */
         $this->session->set('spaceType', 'api', 'doc');
@@ -88,9 +88,105 @@ class api extends control
         $this->view->orderBy        = $orderBy;
         $this->view->objectType     = $objectType;
         $this->view->objectID       = $objectID;
-        $this->view->param          = $param;
+        $this->view->params         = $params;
         $this->view->users          = $this->loadModel('user')->getPairs('noclosed,noletter');
         $this->view->title          = $this->lang->api->pageTitle;
+        $this->display();
+    }
+
+    /**
+     * 获取接口空间首页页面。
+     * Get the api home page.
+     *
+     * @param  string $type
+     * @param  string $params
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetHome(string $type = 'nolink', string $params = 'notempty_unclosed', int $recPerPage = 20, int $pageID = 1)
+    {
+        $libs          = $this->doc->getApiLibs(0, $type);
+        $flags         = explode('_', $params);
+        $unclosed      = in_array('unclosed', $flags);
+        $notempty      = in_array('notempty', $flags);
+        $apis          = $this->api->getApiListBySearch(0, 0);
+        $recTotal      = 0;
+        $recPerPage    = $recPerPage ? max(1, $recPerPage) : 20;
+
+        $productsCount = array();
+        $projectsCount = array();
+        foreach($apis as $api)
+        {
+            if(!isset($libs[$api->lib])) continue;
+            $lib = $libs[$api->lib];
+            if(isset($lib->apiCount)) $lib->apiCount++;
+            else                      $lib->apiCount = 1;
+
+            if($lib->product)
+            {
+                if(isset($productsCount[$lib->product])) $productsCount[$lib->product]++;
+                else                                     $productsCount[$lib->product] = 1;
+            }
+            if($lib->project)
+            {
+                if(isset($projectsCount[$lib->project])) $projectsCount[$lib->project]++;
+                else                                     $projectsCount[$lib->project] = 1;
+            }
+        }
+
+        if($type !== 'nolink')
+        {
+            $programs  = $this->loadModel('program')->getList($unclosed ? 'unclosed' : 'all', 'id_asc', 'top');
+            $programs  = array_filter($programs, function($program) {return $program->parent == '0';});
+            if($type == 'product')
+            {
+                $products = $this->loadModel('product')->getList(0, $unclosed ? 'noclosed' : 'all', 0, 0);
+                foreach($products as $product)
+                {
+                    if(!isset($programs[$product->program])) continue;
+                    $program = $programs[$product->program];
+                    $program->products[] = $product;
+                    $product->apiCount = isset($productsCount[$product->id]) ? $productsCount[$product->id] : 0;
+                    $program->apiCount = isset($program->apiCount) ? $program->apiCount + $product->apiCount : $product->apiCount;
+                }
+            }
+            else
+            {
+                $projects = $this->loadModel('project')->getList($unclosed ? 'unclosed' : 'all');
+                foreach($projects as $project)
+                {
+                    if(!isset($programs[$project->parent])) continue;
+                    $program = $programs[$project->parent];
+                    $program->projects[] = $project;
+                    $project->apiCount = isset($projectsCount[$project->id]) ? $projectsCount[$project->id] : 0;
+                    $program->apiCount = isset($program->apiCount) ? $program->apiCount + $project->apiCount : $project->apiCount;
+                }
+            }
+
+            if($notempty) $programs = array_filter($programs, function($program) {return isset($program->apiCount) && $program->apiCount > 0;});
+
+            $recTotal = count($programs);
+            $pageID   = max(1, min($pageID, ceil($recTotal / $recPerPage)));
+            $programs = array_slice($programs, ($pageID - 1) * $recPerPage, $recPerPage);
+        }
+        else
+        {
+            if($notempty) $libs = array_filter($libs, function($lib) {return isset($lib->apiCount) && $lib->apiCount > 0;});
+            $recTotal = count($libs);
+            $pageID   = max(1, min($pageID, ceil($recTotal / $recPerPage)));
+            $libs     = array_slice($libs, ($pageID - 1) * $recPerPage, $recPerPage);
+        }
+
+        $this->app->loadClass('pager', true);
+
+        $this->view->programs = isset($programs) ? $programs : array();
+        $this->view->unclosed = $unclosed;
+        $this->view->notempty = $notempty;
+        $this->view->libs     = $libs;
+        $this->view->type     = $type;
+        $this->view->pager    = new pager($recTotal, $recPerPage, $pageID);
         $this->display();
     }
 
@@ -110,24 +206,32 @@ class api extends control
         $pickLib    = $noPicks || strpos($picks, ',lib,')    !== false;
         $pickModule = $noPicks || strpos($picks, ',module,') !== false;
         $data       = array('spaceID' => $spaceID);
+        $isNolink   = $spaceID == 'nolink';
 
+        list($objectType, $objectID) = $isNolink ? array('', 0) : explode('.', $spaceID . '.');
         if($noPicks || strpos($picks, ',space,') !== false)
         {
-            $data['spaces'][] = array('id' => 'nolink', 'name' => $this->lang->api->noLinked, 'type' => 'api');
+            $spaces['nolink'] = array('id' => 'nolink', 'name' => $this->lang->api->noLinked, 'type' => 'api');
             list($normalObjects, $closedObjects) = $this->api->getOrderedObjects();
             foreach($normalObjects as $type => $list)
             {
-                foreach($list as $id => $name) $data['spaces'][] = array('id' => "product.{$id}", 'name' => $name, 'type' => 'api', 'objectType' => $type);
+                foreach($list as $id => $name) $spaces["$type.{$id}"] = array('id' => "$type.{$id}", 'name' => $name, 'type' => 'api', 'objectType' => $type);
             }
             foreach($closedObjects as $type => $list)
             {
-                foreach($list as $id => $name) $data['spaces'][] = array('id' => "project.{$id}", 'name' => $name, 'type' => 'api', 'objectType' => $type, 'closed' => true);
+                foreach($list as $id => $name) $spaces["$type.{$id}"] = array('id' => "$type.{$id}", 'name' => $name, 'type' => 'api', 'objectType' => $type, 'closed' => true);
             }
+            if(!$isNolink && !isset($spaces[$spaceID]))
+            {
+                $object = $this->loadModel($objectType)->getByID((int)$objectID);
+                $spaces[$spaceID] = array('id' => $spaceID, 'name' => $object->name, 'type' => 'api');
+            }
+            $data['spaces'] = array_values($spaces);
         }
 
         if($pickLib || $pickModule)
         {
-            $libs     = $this->doc->getApiLibs();
+            $libs     = $isNolink ? $this->doc->getApiLibs(0, 'nolink') : $this->doc->getApiLibs(0, $objectType, (int)$objectID);
             $libIds   = array_keys($libs);
             if($pickLib)
             {
@@ -148,7 +252,7 @@ class api extends control
 
         if($noPicks || strpos($picks, ',doc,') !== false)
         {
-            $apis       = $this->api->getApiListBySearch(0, 0);
+            $apis       = $this->api->getApiListBySearch(0, 0, $objectType);
             $unsetProps = array('commonParams', 'params', 'paramsExample', 'response', 'responseExample');
             foreach($apis as $api)
             {
@@ -582,7 +686,7 @@ class api extends control
             $this->api->update($formData);
 
             if(dao::isError()) return $this->sendError(dao::getError());
-            return $this->sendSuccess(array('locate' => helper::createLink('api', 'index', "libID=$api->lib&moduleID=0&apiID=$apiID"), 'docApp' => array(array('selectDoc', $apiID), array('executeCommand', 'loadApi'))));
+            return $this->sendSuccess(array('locate' => helper::createLink('api', 'index', "libID=$api->lib&moduleID=0&apiID=$apiID"), 'docApp' => array(array('executeCommand', 'selectApi', array($apiID)), array('executeCommand', 'loadApi'))));
         }
 
         $this->setMenu($api->lib);
@@ -874,29 +978,23 @@ class api extends control
      *
      * @param  string $objectType
      * @param  int    $objectID
-     * @param  string $module
-     * @param  string $method
+     * @param  int    $libID
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu(string $objectType, int $objectID, string $module, string $method)
+    public function ajaxGetDropMenu(string $objectType, int $objectID, int $libID = 0)
     {
-        list($normalObjects, $closedObjects) = $this->api->getOrderedObjects();
+        $objects   = $this->api->getGroupedObjects();
+        $programs  = $this->loadModel('program')->getList('all', 'order_asc', 'top');
+        $programs  = array_filter($programs, function($program) {return $program->parent == '0';});
 
-        $titleList = array($this->lang->api->noLinked);
-        if(!empty($normalObjects['product'])) $titleList += array_values($normalObjects['product']);
-        if(!empty($normalObjects['project'])) $titleList += array_values($normalObjects['project']);
-        if(!empty($closedObjects['product'])) $titleList += array_values($closedObjects['product']);
-        if(!empty($closedObjects['project'])) $titleList += array_values($closedObjects['project']);
-
-        $this->view->objectType    = $objectType;
-        $this->view->objectID      = $objectID;
-        $this->view->module        = $module;
-        $this->view->method        = $method;
-        $this->view->normalObjects = $normalObjects;
-        $this->view->closedObjects = $closedObjects;
-        $this->view->nolinkLibs    = $this->doc->getApiLibs(0, 'nolink');
-        $this->view->objectsPinYin = common::convert2Pinyin($titleList);
+        $this->view->objectType = $objectType;
+        $this->view->objectID   = $objectID;
+        $this->view->libID      = $libID;
+        $this->view->programs   = $programs;
+        $this->view->products   = $objects['product'];
+        $this->view->projects   = $objects['project'];
+        $this->view->nolinkLibs = $objects['nolink'];
         $this->display();
     }
 

@@ -161,6 +161,9 @@ $lang->api->format             = 'Format';
 $lang->api->libType            = 'Api Library Type';
 $lang->api->product            = $lang->productCommon;
 $lang->api->project            = $lang->projectCommon;
+$lang->api->apiTotalInfo       = 'Total %d APIs';
+$lang->api->showNotEmpty       = 'Show not empty';
+$lang->api->showClosed         = 'Show with closed';
 
 $lang->api->methodOptions      = array(
     'GET'     => 'GET',
@@ -184,9 +187,9 @@ $lang->api->requestTypeOptions['application/x-www-form-urlencoded'] = 'applicati
 $lang->api->requestTypeOptions['multipart/form-data']               = 'multipart/form-data';
 
 $lang->api->libTypeList = array();
-$lang->api->libTypeList['product'] = $lang->productCommon . ' Api Library';
-$lang->api->libTypeList['project'] = $lang->projectCommon . ' Api Library';
-$lang->api->libTypeList['nolink']  = 'Independent Api Library';
+$lang->api->libTypeList['product'] = $lang->productCommon . ' API';
+$lang->api->libTypeList['project'] = $lang->projectCommon . ' API';
+$lang->api->libTypeList['nolink']  = 'Independent API';
 
 $lang->api->statusOptions      = array(
     'done'   => 'Done',
@@ -240,6 +243,6 @@ $lang->api->filterTypes[] = array('all', 'All');
 $lang->api->filterTypes[] = array('createdByMe', 'Created by me');
 $lang->api->filterTypes[] = array('editedByMe', 'Edited by me');
 
-$lang->api->homeFilterTypes[] = array('noLink',  $lang->api->libTypeList['nolink']);
-$lang->api->homeFilterTypes[] = array('product', $lang->api->libTypeList['product']);
-$lang->api->homeFilterTypes[] = array('project', $lang->api->libTypeList['project']);
+$lang->api->homeFilterTypes['nolink']  = $lang->api->libTypeList['nolink'];
+$lang->api->homeFilterTypes['product'] = $lang->api->libTypeList['product'];
+$lang->api->homeFilterTypes['project'] = $lang->api->libTypeList['project'];

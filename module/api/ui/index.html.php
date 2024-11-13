@@ -12,7 +12,7 @@ namespace zin;
 
 $privs = array();
 $privs['collect']      = 'no';
-$privs['create']       = hasPriv('api', 'create');
+$privs['createApi']    = hasPriv('api', 'create');
 $privs['edit']         = hasPriv('api', 'edit');
 $privs['delete']       = hasPriv('api', 'delete');
 $privs['createLib']    = hasPriv('api', 'createLib');
@@ -20,29 +20,17 @@ $privs['editLib']      = hasPriv('api', 'editLib');
 $privs['moveLib']      = hasPriv('api', 'moveLib');
 $privs['sortDoclib']   = hasPriv('doc', 'sortDoclib');
 $privs['deleteLib']    = hasPriv('api', 'deleteLib');
+$privs['createStruct'] = hasPriv('api', 'createStruct');
+$privs['createRelease']= hasPriv('api', 'createRelease');
 $privs['addModule']    = hasPriv('doc', 'addCatalog');
 $privs['deleteModule'] = hasPriv('doc', 'deleteCatalog');
 $privs['editModule']   = hasPriv('doc', 'editCatalog');
 $privs['sortModule']   = hasPriv('doc', 'sortCatalog');
 
-$langData = array();
-$langData['filterTypes']      = $lang->api->filterTypes;
-$langData['spaceFilterTypes'] = $lang->api->homeFilterTypes;
-$langData['createLib']        = $lang->api->createLib;
-$langData['createDoc']        = $lang->api->createApi;
-$langData['struct']           = $lang->api->struct;
-$langData['releases']         = $lang->api->releases;
-$langData['module']           = $lang->api->module;
-$langData['noDocs']           = $lang->api->noApi;
-$langData['version']          = $lang->api->version;
-$langData['defaultVersion']   = $lang->api->defaultVersion;
-$langData['createStruct']     = $lang->api->createStruct;
-$langData['createRelease']    = $lang->api->createRelease;
-$langData['save']             = $lang->save;
-
 docApp
 (
     set::spaceType('api'),
+    set::spaceID($objectType == 'nolink' ? 'nolink' : "$objectType.$objectID"),
     set::mode($mode),
     set::pager(array('recTotal' => $recTotal, 'recPerPage' => $recPerPage, 'page' => $pageID)),
     set::privs($privs),
@@ -50,9 +38,8 @@ docApp
     set::fetcher(createLink('api', 'ajaxGetData', 'spaceID={spaceID}&picks={picks}')),
     set::docFetcher(null),
     set::libSummariesFetcher(null),
-    set::fetchOnChangeSpace(false),
     set::maxHomeLibsOfSpace(0),
-    set::langData($langData),
+    set::params($params),
     set::autoSelectLib(),
     set('$options', jsRaw('window.setDocAppOptions'))
 );

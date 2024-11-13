@@ -532,4 +532,155 @@ class instance extends control
         $this->loadModel('instance')->syncGitFoxData();
         return true;
     }
+
+    /**
+     * Instance Backup List.
+     * 应用备份列表。
+     * @param int $id
+     * @param int $recPerPage
+     * @param int $pageID
+     * @return void
+     */
+    public function backupList(int $id, int $recPerPage = 5, int $pageID = 1)
+    {
+        /* Initialize Backup List. */
+        $instance = $this->instance->getByID($id);
+        $backupList  = $this->instance->backupList($instance);
+
+        /* Pager. */
+        $this->app->loadClass('pager', true);
+        $recTotal   = count($backupList);
+        $pager      = new pager($recTotal, $recPerPage, $pageID);
+        $backupList = array_chunk($backupList, $pager->recPerPage);
+        $backupList = empty($backupList) ? array() : $backupList[$pageID - 1];
+
+        $this->view->instance   = $instance;
+        $this->view->pager      = $pager;
+        $this->view->backupList = $backupList;
+        $this->display();
+    }
+
+    /**
+     * Restore instance by ajax.
+     * 还原应用。
+     * @access public
+     * @return void
+     */
+    public function ajaxRestore(int $instanceID, string $backupName)
+    {
+        if(empty($instanceID) || empty($backupName)) return $this->send(array('result' => 'fail', 'message' => $this->lang->instance->errors->wrongRequestData));
+
+        $instance = $this->instance->getByID($instanceID);
+        if(empty($instance)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->instance->instanceNotExists)));
+
+        $success = $this->instance->restore($instance, $this->app->user, $backupName);
+        if(!$success)
+        {
+            $this->action->create('instance', $instance->id, 'restore', '', json_encode(array('result' => array('result' => 'fail'))));
+            return $this->send(array('result' => 'fail', 'message' => zget($this->lang->instance->notices, 'restoreFail') ));
+        }
+        $this->action->create('instance', $instance->id, 'restore', '', json_encode(array('result' => array('result' => 'success'))));
+        return $this->send(array('result' => 'success', 'message' => zget($this->lang->instance->notices, 'restoreSuccess'), 'locate' => $this->createLink('instance', 'view', 'id=' . $instanceID)));
+    }
+
+    /**
+     * 手动备份。
+     * Manual backup.
+     *
+     * @param  int    $id
+     * @param  string $component 0|mysql
+     * @access public
+     * @return void
+     */
+    public function manualBackup(int $id)
+    {
+        $instance = $this->instance->getByID($id);
+        $success  = $this->instance->backup($instance, $this->app->user);
+        if(!$success)
+        {
+            $this->action->create('instance', $instance->id, 'manualbackup', '', json_encode(array('result' => 'fail')));
+            return $this->send(array('result' => 'fail', 'message' => zget($this->lang->instance->notices, 'backupFail')));
+        }
+        $this->action->create('instance', $instance->id, 'manualbackup', '', json_encode(array('result' => 'success')));
+        return $this->send(array('result' => 'success', 'message' => zget($this->lang->instance->notices, 'backupSuccess')));
+    }
+
+    /**
+     * 备份设置。
+     * backup settings.
+     *
+     * @param  int    $id
+     * @param  string $component 0|mysql
+     * @access public
+     * @return void
+     */
+    public function backupSettings(int $instanceID)
+    {
+        $instance = $this->instance->getByID($instanceID);
+        if($_POST)
+        {
+            $this->instance->saveBackupSettings($instance);
+            if(dao::isError())  return $this->send(array('result' => 'fail', 'load' => array('alert' => dao::getError())));
+
+            return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
+        }
+        $this->view->instance        = $instance;
+        $this->view->backupSettings = $this->instance->getAutoBackupSettings($instanceID);
+        $this->display();
+    }
+
+    /**
+     * Display or save auto backup.
+     * 自动备份设置。
+     *
+     * @param  int    $id
+     * @access public
+     * @return void
+     */
+    public function autoBackup(int $instanceID)
+    {
+        $instance = $this->instance->getByID($instanceID);
+        if($_POST)
+        {
+            $this->instance->saveAutoBackupSettings($instance);
+            if(dao::isError())  return $this->send(array('result' => 'fail', 'load' => array('alert' => dao::getError())));
+
+            $backupSettings = $this->instance->getAutoBackupSettings($instanceID);
+            $locate         = $this->createLink('instance', 'view', 'id=' . $instanceID);
+            $startTime      = strtotime($backupSettings->backupTime);
+            if($startTime < time()) $startTime = strtotime("+1 day $backupSettings->backupTime");
+            if($backupSettings->autoBackup)
+            {
+                $startRestoreMessage = sprintf($this->lang->instance->restore->firstStartTime, $instance->name, date('Y-m-d H:i:s', $startTime));
+                return $this->send(array('result' => 'success', 'load' => array('alert' => $startRestoreMessage, 'locate' => $locate)));
+            }
+            return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->instance->backup->disableAutoBackup, 'locate' => $locate)));
+        }
+        $this->view->instance        = $instance;
+        $this->view->backupSettings = $this->instance->getAutoBackupSettings($instanceID);
+        $this->display();
+    }
+
+
+    /**
+     * Cron task of auto backup.
+     * 定时备份。
+     *
+     * @param $instanceID
+     * @return int|null
+     */
+    public function cronBackup(string $instanceID)
+    {
+        $instance = $this->instance->getByID((int)$instanceID);
+        if(empty($instance)) $this->send(array('result' => 'success', 'message' => $this->lang->instance->instanceNotExists));
+
+        $sysUser = new stdclass;
+        $sysUser->account = 'system';
+        $success = $this->instance->autoBackup($instance, $sysUser);
+        if(!$success)
+        {
+            return $this->send(array('result' => 'fail', 'message' => zget($this->lang->instance->notices, 'backupFail')));
+        }
+        return $this->send(array('result' => 'success', 'message' => zget($this->lang->instance->notices, 'backupSuccess')));
+    }
 }

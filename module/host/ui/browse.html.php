@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('hostLang', $lang->host);
+jsVar('rooms', $rooms);
 
 $config->host->featureBar['all']['active'] = true;
 $config->host->featureBar['all']['badge']  = $pager->recTotal != '' ? array('text' => $pager->recTotal, 'class' => 'size-sm rounded-full white') : null;
@@ -28,7 +29,6 @@ $createLink = $this->createLink('host', 'create');
 $createItem = array('text' => $lang->host->create, 'url' => $createLink, 'class' => 'primary', 'icon' => 'plus');
 
 $config->host->dtable->fieldList['group']['map']      = $optionMenu;
-$config->host->dtable->fieldList['admin']['map']      = $accounts;
 $config->host->dtable->fieldList['serverRoom']['map'] = $rooms;
 $tableData = initTableData($hostList, $config->host->dtable->fieldList, $this->host);
 foreach($tableData as $row)
@@ -60,7 +60,6 @@ $cols = $this->loadModel('datatable')->getSetting('host');
 dtable
 (
     set::customCols(true),
-    set::userMap($accounts),
     set::cols($cols),
     set::data($tableData),
     set::sortLink(createLink('host', 'browse', "browseType=$browseType&param=$param&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),

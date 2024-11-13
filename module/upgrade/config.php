@@ -58,7 +58,8 @@ $config->upgrade->maxVersion['max5_5']         = '20_6';
 $config->upgrade->maxVersion['max5_6']         = '20_7';
 $config->upgrade->maxVersion['max5_6_1']       = '20_7_1';
 $config->upgrade->maxVersion['max5_7']         = '20_8';
-$config->upgrade->maxVersion['max6_0']         = '21_0'; // max insert position.
+$config->upgrade->maxVersion['max6_0']         = '21_0';
+$config->upgrade->maxVersion['max6_1']         = '21_1'; // max insert position.
 
 $config->upgrade->bizVersion = array();
 $config->upgrade->bizVersion['biz1_0']          = '9_5_1';
@@ -155,7 +156,8 @@ $config->upgrade->bizVersion['biz10_5']         = '20_6';
 $config->upgrade->bizVersion['biz10_6']         = '20_7';
 $config->upgrade->bizVersion['biz10_6_1']       = '20_7_1';
 $config->upgrade->bizVersion['biz10_7']         = '20_8';
-$config->upgrade->bizVersion['biz11_0']         = '21_0'; // biz insert position.
+$config->upgrade->bizVersion['biz11_0']         = '21_0';
+$config->upgrade->bizVersion['biz11_1']         = '21_1'; // biz insert position.
 
 $config->upgrade->proVersion = array();
 $config->upgrade->proVersion['pro1_0']        = '3_1';
@@ -289,7 +291,8 @@ $config->upgrade->ipdVersion['ipd2_5']         = '20_6';
 $config->upgrade->ipdVersion['ipd2_6']         = '20_7';
 $config->upgrade->ipdVersion['ipd2_6_1']       = '20_7_1';
 $config->upgrade->ipdVersion['ipd2_7']         = '20_8';
-$config->upgrade->ipdVersion['ipd3_0']         = '21_0'; // ipd insert position.
+$config->upgrade->ipdVersion['ipd3_0']         = '21_0';
+$config->upgrade->ipdVersion['ipd3_1']         = '21_1'; // ipd insert position.
 
 $config->upgrade->lowerTables = array();
 $config->upgrade->lowerTables[$config->db->prefix . 'caseStep']       = $config->db->prefix . 'casestep';
@@ -1401,6 +1404,10 @@ $config->delete['20_9'][] = 'extension/ipd/deploy/ui/managescope.html.php';
 $config->delete['20_9'][] = 'extension/biz/deploy/js/managescope.ui.js';
 $config->delete['20_9'][] = 'extension/max/deploy/js/managescope.ui.js';
 $config->delete['20_9'][] = 'extension/ipd/deploy/js/managescope.ui.js';
+$config->delete['20_9'][] = 'extension/biz/deploy/js/finish.ui.js';
+$config->delete['20_9'][] = 'extension/max/deploy/js/finish.ui.js';
+$config->delete['20_9'][] = 'extension/ipd/deploy/js/finish.ui.js';
+$config->delete['20_9'][] = 'module/account/';
 
 $config->upgrade->openModules  = array('action', 'admin', 'ai', 'bi', 'aiapp', 'api', 'automation', 'backup', 'block', 'branch', 'budget', 'bug', 'build', 'caselib', 'chart', 'ci', 'client', 'common', 'company', 'compile', 'convert', 'cron', 'custom', 'datatable', 'dataview', 'dept', 'design', 'dev', 'dimension', 'doc', 'durationestimation', 'entry', 'execution', 'extension', 'file', 'git', 'gitlab', 'group', 'holiday', 'im', 'index', 'index.html', 'install', 'issue', 'jenkins', 'job', 'kanban', 'license', 'mail', 'message', 'metric', 'misc', 'mr', 'my', 'personnel', 'pipeline', 'product', 'productplan', 'productset', 'program', 'programplan', 'project', 'projectbuild', 'projectplan', 'projectrelease', 'projectstory', 'pivot', 'qa', 'release', 'repo', 'report', 'risk', 'score', 'screen', 'search', 'setting', 'sonarqube', 'sso', 'stage', 'stakeholder', 'story', 'subject', 'svn', 'task', 'testcase', 'testreport', 'testsuite', 'testtask', 'todo', 'tree', 'tutorial', 'upgrade', 'user', 'webhook', 'weekly', 'workestimation', 'gitea', 'gogs', 'transfer', 'zahost', 'zanode', 'editor', 'charter', 'roadmap', 'account', 'cne', 'host', 'instance', 'ops', 'serverroom', 'space', 'store', 'system', 'solution', 'demand', 'gitfox', 'epic', 'requirement');
 $config->upgrade->unsetModules = array('design', 'program', 'programplan', 'projectbuild', 'projectrelease', 'stage', 'stakeholder', 'product', 'branch', 'productplan', 'release', 'build', 'qa', 'bug', 'testcase', 'testtask', 'testreport', 'testsuite', 'caselib', 'automation', 'repo', 'ci', 'compile', 'jenkins', 'job', 'svn', 'gitlab', 'sonarqube', 'mr', 'git', 'report', 'sqlbuilder', 'feedback', 'faq', 'attend', 'holiday', 'leave', 'makeup', 'overtime', 'lieu', 'ops', 'host', 'serverroom', 'account', 'domain', 'service', 'deploy', 'conference', 'traincourse', 'pssp', 'baseline', 'classify', 'cm', 'cmcl', 'auditcl', 'reviewcl', 'process', 'activity', 'zoutput', 'auditplan', 'nc', 'subject', 'weekly', 'workestimation', 'issue', 'durationestimation', 'risk', 'opportunity', 'trainplan', 'gapanalysis', 'researchplan', 'researchreport', 'meeting', 'meetingroom', 'budget', 'reviewissue', 'reviewsetting', 'review', 'milestone', 'measurement', 'measrecord', 'assetlib', 'setting', 'im', 'client', 'ldap', 'dev', 'api', 'gitea', 'gogs', 'zanode', 'zahost');

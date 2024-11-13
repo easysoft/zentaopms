@@ -161,6 +161,9 @@ $lang->api->format             = '格式化';
 $lang->api->libType            = '接口库类型';
 $lang->api->product            = '所属' . $lang->productCommon;
 $lang->api->project            = '所属' . $lang->projectCommon;
+$lang->api->apiTotalInfo       = '共 %d 个 API';
+$lang->api->showNotEmpty       = '仅显示有接口的';
+$lang->api->showClosed         = '显示包含已关闭的';
 
 $lang->api->methodOptions      = array(
     'GET'     => 'GET',
@@ -184,9 +187,9 @@ $lang->api->requestTypeOptions['application/x-www-form-urlencoded'] = 'applicati
 $lang->api->requestTypeOptions['multipart/form-data']               = 'multipart/form-data';
 
 $lang->api->libTypeList = array();
-$lang->api->libTypeList['product'] = $lang->productCommon . '接口库';
-$lang->api->libTypeList['project'] = $lang->projectCommon . '接口库';
-$lang->api->libTypeList['nolink']  = '独立接口库';
+$lang->api->libTypeList['product'] = $lang->productCommon . '接口';
+$lang->api->libTypeList['project'] = $lang->projectCommon . '接口';
+$lang->api->libTypeList['nolink']  = '独立接口';
 
 $lang->api->statusOptions      = array(
     'done'   => '开发完成',
@@ -240,6 +243,6 @@ $lang->api->filterTypes[] = array('all', '全部');
 $lang->api->filterTypes[] = array('createdByMe', '我创建的');
 $lang->api->filterTypes[] = array('editedByMe', '我编辑的');
 
-$lang->api->homeFilterTypes[] = array('noLink',  $lang->api->libTypeList['nolink']);
-$lang->api->homeFilterTypes[] = array('product', $lang->api->libTypeList['product']);
-$lang->api->homeFilterTypes[] = array('project', $lang->api->libTypeList['project']);
+$lang->api->homeFilterTypes['nolink']  = $lang->api->libTypeList['nolink'];
+$lang->api->homeFilterTypes['product'] = $lang->api->libTypeList['product'];
+$lang->api->homeFilterTypes['project'] = $lang->api->libTypeList['project'];

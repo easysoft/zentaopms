@@ -1759,16 +1759,6 @@ $config->group->package->serverRoom->privs['serverroom-edit']   = array('edition
 $config->group->package->serverRoom->privs['serverroom-view']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('serverroom-browse'), 'recommend' => array('serverroom-create', 'serverroom-edit'));
 $config->group->package->serverRoom->privs['serverroom-delete'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('serverroom-browse'), 'recommend' => array('serverroom-create', 'serverroom-edit'));
 
-$config->group->package->account = new stdclass();
-$config->group->package->account->order  = 2260;
-$config->group->package->account->subset = 'ops';
-$config->group->package->account->privs  = array();
-$config->group->package->account->privs['account-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array('account-create', 'account-edit', 'account-view'));
-$config->group->package->account->privs['account-create'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('account-browse'), 'recommend' => array('account-edit'));
-$config->group->package->account->privs['account-edit']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('account-browse'), 'recommend' => array('account-create'));
-$config->group->package->account->privs['account-view']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('account-browse'), 'recommend' => array('account-create', 'account-edit'));
-$config->group->package->account->privs['account-delete'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('account-browse'), 'recommend' => array('account-create', 'account-edit'));
-
 $config->group->package->domain = new stdclass();
 $config->group->package->domain->order  = 2270;
 $config->group->package->domain->subset = 'ops';
@@ -3955,12 +3945,6 @@ $config->group->package->manageCity->subset = 'ops';
 $config->group->package->manageCity->privs  = array();
 $config->group->package->manageCity->privs['ops-city'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array(), 'recommend' => array());
 
-$config->group->package->manageCPU = new stdclass();
-$config->group->package->manageCPU->order  = 2340;
-$config->group->package->manageCPU->subset = 'ops';
-$config->group->package->manageCPU->privs  = array();
-$config->group->package->manageCPU->privs['ops-cpubrand'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array(), 'recommend' => array());
-
 $config->group->package->manageOS = new stdclass();
 $config->group->package->manageOS->order  = 2360;
 $config->group->package->manageOS->subset = 'ops';
@@ -4194,12 +4178,14 @@ $config->group->package->useThinkWizard->privs['thinkwizard-result'] = array('ed
 $config->group->package->manageThinkWizard = new stdclass();
 $config->group->package->manageThinkWizard->subset = 'thinkwizard';
 $config->group->package->manageThinkWizard->privs  = array();
-$config->group->package->manageThinkWizard->privs['thinkwizard-create']  = array('edition' => 'ipd', 'vision' => 'or', 'order' => 5,  'depend' => array('thinkwizard-browse'));
-$config->group->package->manageThinkWizard->privs['thinkwizard-edit']    = array('edition' => 'ipd', 'vision' => 'or', 'order' => 10, 'depend' => array('thinkwizard-browse'));
-$config->group->package->manageThinkWizard->privs['thinkwizard-design']  = array('edition' => 'ipd', 'vision' => 'or', 'order' => 15, 'depend' => array('thinkwizard-browse', 'thinkwizard-result', 'thinkstep-create', 'thinkstep-edit', 'thinkstep-view', 'thinkstep-delete', 'thinkstep-link', 'thinkstep-cancelLink', 'thinkwizard-configureobjectsforappeals', 'thinkwizard-configuredimensionforappeals'));
-$config->group->package->manageThinkWizard->privs['thinkwizard-publish'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 20, 'depend' => array('thinkwizard-browse'));
-$config->group->package->manageThinkWizard->privs['thinkwizard-offline'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 25, 'depend' => array('thinkwizard-browse'));
-$config->group->package->manageThinkWizard->privs['thinkwizard-admin']   = array('edition' => 'ipd', 'vision' => 'or', 'order' => 25, 'depend' => array('thinkwizard-browse'));
+$config->group->package->manageThinkWizard->privs['thinkwizard-create']                       = array('edition' => 'ipd', 'vision' => 'or', 'order' => 5,  'depend' => array('thinkwizard-browse'));
+$config->group->package->manageThinkWizard->privs['thinkwizard-edit']                         = array('edition' => 'ipd', 'vision' => 'or', 'order' => 10, 'depend' => array('thinkwizard-browse'));
+$config->group->package->manageThinkWizard->privs['thinkwizard-design']                       = array('edition' => 'ipd', 'vision' => 'or', 'order' => 15, 'depend' => array('thinkwizard-browse', 'thinkwizard-result', 'thinkstep-create', 'thinkstep-edit', 'thinkstep-view', 'thinkstep-delete', 'thinkstep-link', 'thinkstep-cancelLink', 'thinkwizard-configureobjectsforappeals', 'thinkwizard-configuredimensionforappeals'));
+$config->group->package->manageThinkWizard->privs['thinkwizard-publish']                      = array('edition' => 'ipd', 'vision' => 'or', 'order' => 20, 'depend' => array('thinkwizard-browse'));
+$config->group->package->manageThinkWizard->privs['thinkwizard-offline']                      = array('edition' => 'ipd', 'vision' => 'or', 'order' => 25, 'depend' => array('thinkwizard-browse'));
+$config->group->package->manageThinkWizard->privs['thinkwizard-admin']                        = array('edition' => 'ipd', 'vision' => 'or', 'order' => 30, 'depend' => array('thinkwizard-browse'));
+$config->group->package->manageThinkWizard->privs['thinkwizard-configureobjectsforappeals']   = array('edition' => 'ipd', 'vision' => 'or', 'order' => 35, 'depend' => array('thinkwizard-admin'));
+$config->group->package->manageThinkWizard->privs['thinkwizard-configuredimensionforappeals'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 40, 'depend' => array('thinkwizard-admin'));
 
 $config->group->package->deleteThinkWizard = new stdclass();
 $config->group->package->deleteThinkWizard->subset = 'thinkwizard';

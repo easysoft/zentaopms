@@ -131,12 +131,15 @@ $lang->instance->backup->disableAutoBackup   = '自动备份已关闭';
 $lang->instance->backup->keepBackupBySystem  = '备份数据超过1条时系统才会删除过期的自动备份数据。';
 $lang->instance->backup->backupSize          = '大小';
 $lang->instance->backup->confirmTip          = '确认要备份吗？';
+$lang->instance->backup->cronRemark          = 'Devops服务自动备份任务';
+$lang->instance->backup->backupSettingsTips  = '备份超出时间设置且大于一个备份时，系统会自动删除备份';
 
 $lang->instance->backup->cycleList[1]  = '每日';
 
 $lang->instance->backup->operators = array();
-$lang->instance->backup->operators['auto']   = '自动备份';
-$lang->instance->backup->operators['manual'] = '手动备份';
+$lang->instance->backup->operators['auto']     = '自动备份';
+$lang->instance->backup->operators['manual']   = '手动备份';
+$lang->instance->backup->operators['settings'] = '设置';
 
 $lang->instance->backup->statusList = array();
 $lang->instance->backup->statusList['success']        = '成功';
@@ -154,13 +157,13 @@ $lang->instance->backup->statusList['downloadFailed'] = '下载失败';
 
 $lang->instance->restore = new stdclass;
 $lang->instance->restore->common             = '还原';
-$lang->instance->restore->autoRestore        = '自动还原';
+$lang->instance->restore->autoRestore        = '自动备份';
 $lang->instance->restore->enableAutoRestore  = '是否开启自动备份';
-$lang->instance->restore->cycleDays          = '备份周期';
-$lang->instance->restore->restoreTime        = '备份时间';
+$lang->instance->restore->cycleDays          = '还原周期';
+$lang->instance->restore->restoreTime        = '还原时间';
 $lang->instance->restore->invalidTime        = '无效的时间';
-$lang->instance->restore->disableAutoRestore = '自动还原已关闭';
-$lang->instance->restore->firstStartTime     = '%s 首次自动还原将于%s 执行';
+$lang->instance->restore->disableAutoRestore = '自动备份已关闭';
+$lang->instance->restore->firstStartTime     = '%s 首次自动备份将于%s 执行';
 
 $lang->instance->restore->cycleList[1] = '每日';
 
@@ -286,8 +289,9 @@ $lang->instance->notices['upgradeSuccess']           = '升级成功';
 $lang->instance->notices['upgradeFail']              = '升级失败';
 $lang->instance->notices['backupSuccess']            = '备份任务已提交';
 $lang->instance->notices['backupFail']               = '备份失败';
-$lang->instance->notices['restoreSuccess']           = '回滚任务已提交';
-$lang->instance->notices['restoreFail']              = '回滚失败';
+$lang->instance->notices['cleanBackupsSuccess']       = '备份清理成功';
+$lang->instance->notices['restoreSuccess']           = '还原任务已提交';
+$lang->instance->notices['restoreFail']              = '还原失败';
 $lang->instance->notices['deleteSuccess']            = '删除成功';
 $lang->instance->notices['deleteFail']               = '删除失败';
 $lang->instance->notices['starting']                 = '启动中，请稍候...';
@@ -296,7 +300,7 @@ $lang->instance->notices['installing']               = '安装中，请稍候...
 $lang->instance->notices['uninstalling']             = '删除中，请稍候...';
 $lang->instance->notices['upgrading']                = '升级中，请稍候...';
 $lang->instance->notices['backuping']                = '备份中，请稍候...';
-$lang->instance->notices['restoring']                = '回滚中，请稍候...';
+$lang->instance->notices['restoring']                = '还原中，请稍候...';
 $lang->instance->notices['deleting']                 = '删除中，请稍候...';
 $lang->instance->notices['adjusting']                = '调整中，请稍候...';
 $lang->instance->notices['switching']                = '提交中，请稍候...';

@@ -5,6 +5,7 @@ $config->host->changestatus = new stdclass();
 $config->host->create->requiredFields = 'name,intranet,extranet';
 $config->host->edit->requiredFields   = 'name,intranet,extranet';
 $config->host->create->ipFields       = 'intranet,extranet';
+$config->host->create->intFields      = 'diskSize,memory';
 
 $config->host->editor = new stdclass();
 $config->host->editor->changestatus = array('id' => 'reason', 'tools' => 'simple');

@@ -25,6 +25,7 @@ $config->testcase->actionList['ztfRun']['text']         = $lang->testtask->runCa
 $config->testcase->actionList['ztfRun']['hint']         = $lang->testtask->runCase;
 $config->testcase->actionList['ztfRun']['url']          = array('module' => 'testtask', 'method' => 'runCase', 'params' => 'runID={runID}&caseID={caseID}&version={version}');
 $config->testcase->actionList['ztfRun']['notLoadModel'] = true;
+$config->testcase->actionList['ztfRun']['notInModal']   = true;
 $config->testcase->actionList['ztfRun']['className']    = 'ztf-case';
 $config->testcase->actionList['ztfRun']['data-toggle']  = 'modal';
 $config->testcase->actionList['ztfRun']['data-size']    = 'lg';

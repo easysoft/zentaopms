@@ -38,7 +38,11 @@ class filter extends wg
             set::items($items),
             set::menu($menu),
             set::multiple($multiple),
-            on::change("$onChange(e, '$name')"),
+            on::change()->do(<<<JS
+            const hasUrl = () => \$this.zui().\$.props.items.hasOwnProperty('url');
+            if(hasUrl()) \$this.zui().\$.props.items.data.values = \$this.zui().\$.value;
+            $onChange(event, '$name');
+            JS),
             on::inited()->do(<<<JS
             const getItems = () => \$this.zui().\$.state.items;
             const hasUrl   = () => \$this.zui().\$.state.items.hasOwnProperty('url');

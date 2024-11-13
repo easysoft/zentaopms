@@ -87,7 +87,7 @@ class trace
 
         $profiling = $this->dao->dbh->query('SHOW PROFILES')->fetchAll(PDO::FETCH_ASSOC);
 
-        foreach($profiling as $key => $profile) $profiling[$key]['Duration'] = number_format($profile['Duration'], 4);
+        foreach($profiling as $key => $profile) $profiling[$key]['Duration'] = round($profile['Duration'], 4);
 
         $this->trace['profiles'] = $profiling;
     }

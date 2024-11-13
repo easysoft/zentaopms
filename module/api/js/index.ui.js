@@ -5,6 +5,20 @@
 const customRenders =
 {
     /**
+     * 落地页渲染，根据 API 接口类型显示不同的内容。
+     * Home page render, show different content according to the API interface type.
+     */
+    home: function()
+    {
+        const docApp = this;
+        const filterType = docApp.location.filterType || 'nolink';
+        const pager = $.extend({page: 1, recPerPage: 20}, docApp.signals.pager.value);
+        const params = docApp.signals.params.value || 'notempty_unclosed';
+        const homeViewUrl = $.createLink('api', 'ajaxgethome', `type=${filterType}&params=${params}&recPerPage=${pager.recPerPage}&pageID=${pager.page}`);
+        return {fetcher: homeViewUrl, clearBeforeLoad: false, className: 'doc-api-home h-full', class: 'h-full col',htmlRender: (element, props) => $(element).morphInner(`<div class="lazy-content doc-api-home h-full">${props.html}</div>`)};
+    },
+
+    /**
      * 定义 API 文档编辑器渲染，包括查看、编辑和创建。
      * Define the API doc editor render, including view, edit and create.
      */
@@ -62,8 +76,9 @@ const customRenders =
         if(this.mode === 'list' && listType)
         {
             const items = [];
-            if(listType === 'structs') items.push({text: getDocAppLang('createStruct'), icon: 'plus', btnType: 'primary', 'data-toggle': 'modal', 'data-size': 'lg', url: $.createLink('api', 'createStruct', `libID=${this.libID}`)});
-            if(listType === 'releases') items.push({text: getDocAppLang('createRelease'), icon: 'plus', btnType: 'primary', 'data-toggle': 'modal', url: $.createLink('api', 'createRelease', `libID=${this.libID}`)});
+            if(docAppHasPriv('createStruct') && listType === 'structs') items.push({text: getDocAppLang('createStruct'), icon: 'plus', btnType: 'primary', 'data-toggle': 'modal', 'data-size': 'lg', url: $.createLink('api', 'createStruct', `libID=${this.libID}`)});
+            if(docAppHasPriv('createRelease') && listType === 'releases') items.push({text: getDocAppLang('createRelease'), icon: 'plus', btnType: 'primary', 'data-toggle': 'modal', url: $.createLink('api', 'createRelease', `libID=${this.libID}`)});
+            if(!items.length) return null;
             return {component: 'toolbar', props: {items: items}};
         }
     },
@@ -155,7 +170,7 @@ function getViewModeUrl(options)
     }
     else
     {
-        const params = zui.formatString('libID={libID}&moduleID={moduleID}&apiID={docID}&version={docVersion}&release={release}&browseType={filterType}&param=0&orderBy={orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}&mode={mode}&search={search}', options).replace('libID=0&moduleID=0&apiID=0&version=0&release=0&browseType=all&param=0&orderBy=order_asc&recTotal=0&recPerPage=20&pageID=1&mode=&search=', '').replace('&apiID=0&version=0&release=0&browseType=all&param=0&orderBy=order_asc&recTotal=0&recPerPage=20&pageID=1&mode=&search=', '').replace('&browseType=all&param=0&orderBy=order_asc&recTotal=0&recPerPage=20&pageID=1&mode=&search=', '');
+        const params = zui.formatString('libID={libID}&moduleID={moduleID}&apiID={docID}&version={docVersion}&release={release}&browseType={filterType}&params={params}&orderBy={orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}&mode={mode}&search={search}', options).replace('libID=0&moduleID=0&apiID=0&version=0&release=0&browseType=all&params=0&orderBy=order_asc&recTotal=0&recPerPage=20&pageID=1&mode=&search=', '').replace('&apiID=0&version=0&release=0&browseType=all&params=0&orderBy=order_asc&recTotal=0&recPerPage=20&pageID=1&mode=&search=', '').replace('&browseType=all&params=0&orderBy=order_asc&recTotal=0&recPerPage=20&pageID=1&mode=&search=', '');
         url = $.createLink('api', 'index', params);
     }
     return url;
@@ -202,6 +217,35 @@ function getTableOptions(options, info)
         checkable: false,
         footer:    ['flex', 'pager'],
     });
+}
+
+function getSpaceFetcher(spaceType, spaceID)
+{
+    const parts      = String(spaceID).split('.');
+    const objectType = parts[0] || 'nolink';
+    const objectID   = parts[1] || 0;
+    const libID      = getDocApp().libID;
+    return $.createLink('api', 'ajaxGetDropMenu', `objectType=${objectType}&objectID=${objectID}&libID=${libID}`);
+}
+
+function handleClickSpaceMenu(event, value)
+{
+    event.preventDefault();
+    if($(event.target).closest('.dropmenu-nav').length) return;
+    const parts  = String(value).split('.');
+    const type   = parts[0];
+    const id     = parts[1] || 0;
+    const docApp = getDocApp();
+    if(type === 'product' || type === 'project') docApp.selectSpace(value, '_first');
+    else                                         docApp.selectSpace('nolink', +id);
+}
+
+function getSpaceMenuText(text, state)
+{
+    const spaceID = getDocApp().spaceID;
+    if(spaceID === 'nolink') return text;
+    const libTypeList = getDocAppLang('libTypeList');
+    return `${libTypeList[spaceID.split('.')[0]]} / ${text}`;
 }
 
 /* 扩展文档应用操作按钮生成定义。 Extend the doc app action definition. */
@@ -253,6 +297,19 @@ $.extend(window.docAppCommands,
     },
 
     /**
+     * 取消编辑 API 文档库。
+     * Create api lib.
+     */
+    createLib: function(_, args)
+    {
+        const docApp  = getDocApp();
+        const spaceID = args[0] || docApp.spaceID;
+        const parts   = String(spaceID).split('.');
+        const url     = $.createLink('api', 'createLib', `type=${parts[0] || 'nolink'}&objectID=${parts[1] || 0}`);
+        zui.Modal.open({size: 'sm', url: url});
+    },
+
+    /**
      * 加载指定的 API 文档。
      * Load the specified API doc.
      */
@@ -269,6 +326,16 @@ $.extend(window.docAppCommands,
             docApp.update('doc', result);
             if(select) docApp.selectDoc(apiID);
         });
+    },
+
+    /**
+     * 选择 API 文档。
+     * Select the specified API doc.
+     */
+    selectApi: function(_, args)
+    {
+        const apiID = args[0];
+        getDocApp().selectDoc(apiID);
     },
 
     /**
@@ -349,16 +416,77 @@ $.extend(window.docAppCommands,
      */
     updateLazyContent: function(context, args)
     {
-        const event = context.event;
+        const event    = context.event;
         const $element = $(event.currentTarget);
         const selector = args[0] || $element.data('lazyTarget');
-        const $lazy = (selector ? $(selector) : $element).closest('.lazy-content');
-        const url = $element.data('url') || $element.attr('href');
+        const $lazy    = (selector ? $(selector) : $element).closest('.lazy-content');
+        const url      = $element.data('url') || $element.attr('href');
         if(url) $lazy.trigger('loadContent', url);
         event.preventDefault();
         event.stopPropagation();
-    }
+    },
+
+    /**
+     * 更新首页内容。
+     * Update the home content.
+     */
+    loadHome: function(context, args)
+    {
+        const event      = context.event;
+        const $element   = $(event.currentTarget);
+        const data       = $element.data();
+        const type       = args[0] !== undefined ? args[0] : data.type;
+        const params     = args[1] !== undefined ? args[1] : data.params;
+        const recPerPage = args[2] !== undefined ? args[2] : data.recPerPage;
+        const pageID     = args[3] !== undefined ? args[3] : data.pageID;
+        window.loadHome(type, params, recPerPage, pageID);
+    },
+
+    /**
+     * 显示首页菜单。
+     * Show the home item menu.
+     */
+    showHomeItemMenu: function(context, args)
+    {
+        const event = context.event;
+        const type  = args[0];
+        const id    = args[1];
+        const lang  = getDocAppLang();
+        const items = [];
+
+        if(type === 'nolink')
+        {
+            if(docAppHasPriv('editLib')) items.push({text: lang.editLib, command: `editLib/${id}`});
+            if(docAppHasPriv('deleteLib')) items.push({text: lang.deleteLib, command: `deleteLib/${id}`});
+        }
+        else if(docAppHasPriv('createLib'))
+        {
+            items.push({text: lang.createLib, command: `createLib/${type}.${id}`});
+        }
+
+        if(items.length)
+        {
+            zui.ContextMenu.show({event: event, items: items, placement: 'bottom-end'});
+        }
+        event.preventDefault();
+        event.stopPropagation();
+    },
 });
+
+window.loadHome = function(type, params, recPerPage, pageID)
+{
+    const location = {};
+    if(typeof type === 'object') $.extend(location, type);
+    else if(type !== undefined) location.filterType = type;
+    if(params !== undefined) location.params = params;
+    if(recPerPage !== undefined || pageID !== undefined)
+    {
+        location.pager = {};
+        if(recPerPage !== undefined) location.pager.recPerPage = recPerPage;
+        if(pageID !== undefined)     location.pager.page = pageID;
+    }
+    if(Object.keys(location).length) getDocApp().switchView(location, 'home');
+};
 
 /**
  * 重写文档应用的配置选项方法。
@@ -372,10 +500,17 @@ window.setDocAppOptions = function(_, options) // Override the method.
     return $.extend(options,
     {
         defaultState         : {libReleaseMap: {}, listType: ''},
+        spaceMenuOptions     : {
+            popWidth    : 350,
+            onClickItem : handleClickSpaceMenu,
+            defaultValue: options.spaceID === 'nolink' ? `lib.${options.libID}`: options.spaceID,
+            display     : getSpaceMenuText
+        },
         customRenders        : customRenders,
         viewModeUrl          : getViewModeUrl,
         getTableOptions      : getTableOptions,
         getDocViewSidebarTabs: getDocViewSidebarTabs,
+        getSpaceFetcher      : getSpaceFetcher,
         isMatchFilter        : function(type, filterType, item)
         {
             if(type === 'api') return (item.objectType || 'nolink').toLowerCase() === filterType.toLowerCase();

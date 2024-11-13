@@ -141,7 +141,7 @@ class testcase extends tester
         if(isset($testcase['result']))       $form->dom->result->picker($testcase['result']);
         if(isset($testcase['reviewedBy']))   $form->dom->{'reviewedBy[]'}->multiPicker($testcase['reviewedBy']);
         if(isset($testcase['comment']))      $form->dom->comment->setValueInZenEditor($testcase['comment']);
-        $form->dom->btn($this->lang->projectreview->common)->click();
+        $form->dom->needReview->click();
         $this->webdriver->wait(1);
 
         if($form->dom->review->attr('href')) return $this->success('测试用例评审通过');
@@ -225,21 +225,5 @@ class testcase extends tester
                 }
             }
         }
-    }
-
-	/**
-     * 测试用例列表。
-     * check testcase list.
-     *
-     * @param  array  $project
-     * @access public
-     * @return object
-     */
-    public function testcaseBrowse($project)
-    {
-        $this->login();
-        $form = $this->initForm('testcase', 'browse', $project, 'appIframe-qa');
-        if($form->dom->caseListID->getText()) return $this->success('测试用例列表验证成功');
-        return $this->failed('测试用例列表验证失败');
     }
 }

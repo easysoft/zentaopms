@@ -50,8 +50,7 @@ formPanel
             set::label($lang->host->osName),
             set::control('picker'),
             set::name('osName'),
-            set::items($lang->host->osNameList),
-            set::value($osName ? $osName : $host->osName),
+            set::items(array()),
             on::change('osChange')
         )
     ),

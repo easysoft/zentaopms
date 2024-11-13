@@ -99,7 +99,7 @@ class thinkMulticolumn extends thinkQuestion
         if(empty($fields)) $fields = array($defalutField, $defalutField, $defalutField, $defalutField);
         foreach($fields as $key => $field) $batchItems[] = $this->buildFormBatchItem($field, (int)$key, $isRun, $quotedQuestions, !empty($result));
 
-        if($isResult || $isRun) $result = $this->processResult($result);
+        if($isResult || $isRun || !empty($result)) $result = $this->processResult($result);
         $detailWg[] = formBatch
         (
             setClass('think-form-batch'),

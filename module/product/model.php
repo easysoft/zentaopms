@@ -794,7 +794,11 @@ class productModel extends model
         }
 
         /* Reset the stage list for epic and requirement. */
-        if($storyType != 'all') $searchConfig['params']['stage']['values'] = $this->lang->$storyType->stageList;
+        if($storyType != 'all')
+        {
+            $this->app->loadLang($storyType);
+            $searchConfig['params']['stage']['values'] = $this->lang->$storyType->stageList;
+        }
 
         $this->loadModel('search')->setSearchParams($searchConfig);
     }

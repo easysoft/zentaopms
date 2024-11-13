@@ -4,8 +4,6 @@ ALTER TABLE `zt_host` DROP COLUMN `hardwareType`;
 ALTER TABLE `zt_host` DROP COLUMN `cpuBrand`;
 ALTER TABLE `zt_host` DROP COLUMN `cpuModel`;
 ALTER TABLE `zt_host` DROP COLUMN `provider`;
-ALTER TABLE `zt_host` ADD `CD` varchar(32) NOT NULL DEFAULT 'manual' AFTER `name`;
-ALTER TABLE `zt_host` ADD `sshPort` mediumint NOT NULL DEFAULT 0 AFTER `ssh`;
 
 ALTER TABLE `zt_deploystep` DROP COLUMN `begin`;
 ALTER TABLE `zt_deploystep` DROP COLUMN `end`;
@@ -40,3 +38,8 @@ REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`, `
 ('zh-tw', 'custom', 'relationList', '2', '{\"relation\":\"\\u4f9d\\u8cf4\",\"relativeRelation\":\"\\u88ab\\u4f9d\\u8cf4\"}', '0', 'all'),
 ('zh-tw', 'custom', 'relationList', '3', '{\"relation\":\"\\u91cd\\u8907\",\"relativeRelation\":\"\\u91cd\\u8907\"}', '0', 'all'),
 ('zh-tw', 'custom', 'relationList', '4', '{\"relation\":\"\\u5f15\\u7528\",\"relativeRelation\":\"\\u88ab\\u5f15\\u7528\"}', '0', 'all');
+
+UPDATE `zt_action` SET `action` = 'canceled' WHERE `objectType` = 'deploy' AND `action` = 'activated';
+
+DROP TABLE IF EXISTS `zt_account`;
+DELETE FROM `zt_lang` WHERE `module` = 'host' AND `section` = 'cpuBrandList';

@@ -131,12 +131,15 @@ $lang->instance->backup->disableAutoBackup   = 'Automatic backup has been turned
 $lang->instance->backup->keepBackupBySystem  = 'The system will only delete expired automatic backup data when there is more than one backup data.';
 $lang->instance->backup->backupSize          = 'Size';
 $lang->instance->backup->confirmTip          = 'Are you sure you want to back up?';
+$lang->instance->backup->cronRemark          = 'DevOps service automatic backup task';
+$lang->instance->backup->backupSettingsTips  = 'When the backup exceeds the set time and is greater than one backup, the system will self delete';
 
 $lang->instance->backup->cycleList[1] = 'Daily';
 
 $lang->instance->backup->operators = array();
-$lang->instance->backup->operators['auto']   = 'Automatic backup';
-$lang->instance->backup->operators['manual'] = 'Manual backup';
+$lang->instance->backup->operators['auto']     = 'Automatic backup';
+$lang->instance->backup->operators['manual']   = 'Manual backup';
+$lang->instance->backup->operators['settings'] = 'Settings';
 
 $lang->instance->backup->statusList = array();
 $lang->instance->backup->statusList['success']        = 'successful';
@@ -286,6 +289,7 @@ $lang->instance->notices['upgradeSuccess']           = 'Upgrade successful';
 $lang->instance->notices['upgradeFail']              = 'Upgrade failed';
 $lang->instance->notices['backupSuccess']            = 'Backup task submitted';
 $lang->instance->notices['backupFail']               = 'Backup failed';
+$lang->instance->notices['cleanBackupsSuccess']      = 'Backup cleanup successfuls';
 $lang->instance->notices['restoreSuccess']           = 'The rollback task has been submitted';
 $lang->instance->notices['restoreFail']              = 'Rollback failed';
 $lang->instance->notices['deleteSuccess']            = 'DeleteSuccess';

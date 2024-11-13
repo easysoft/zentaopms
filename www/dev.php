@@ -176,8 +176,8 @@ function initTable(data)
         footer: [function(result, layout) {
             return [
                 {html: `Total <strong>${layout.allRows.length}</strong>`, className: 'text-gray mr-4'},
-                metricsStats.danger ? {html: `<div class="font-bold row items-center gap-2 rounded-full px-2 danger" data-toggle="tooltip" data-type="danger" data-title="Black Time &gt; 500ms or SQL time &gt; 300ms or Client time &gt; 100ms" data-placement="top-start"><i class="icon icon-alert"></i>BLOCK <strong>${metricsStats.danger}</strong> </div>`, className: 'text-danger mr-4'} : null,
-                metricsStats.warning ? {html: `<div class="font-bold row items-center gap-2 rounded-full px-2 warning-pale" data-toggle="tooltip" data-type="warning" data-title="Black Time &gt; 300ms or SQL time &gt; 200ms or Client time &gt; 60ms" data-placement="top-start"><i class="icon icon-alert"></i>WARN <strong>${metricsStats.warning}</strong> </div>`, className: 'text-warning mr-4'} : null,
+                metricsStats.danger ? {html: `<div class="font-bold row items-center gap-2 rounded-full px-2 danger" data-toggle="tooltip" data-type="danger" data-title="Black Time &gt; 500ms or SQL time &gt; 300ms or Front time &gt; 100ms" data-placement="top-start"><i class="icon icon-alert"></i>BLOCK <strong>${metricsStats.danger}</strong> </div>`, className: 'text-danger mr-4'} : null,
+                metricsStats.warning ? {html: `<div class="font-bold row items-center gap-2 rounded-full px-2 warning-pale" data-toggle="tooltip" data-type="warning" data-title="Black Time &gt; 300ms or SQL time &gt; 200ms or Front time &gt; 60ms" data-placement="top-start"><i class="icon icon-alert"></i>WARN <strong>${metricsStats.warning}</strong> </div>`, className: 'text-warning mr-4'} : null,
             ];
         }],
         cols: cols,
@@ -231,7 +231,7 @@ function initTable(data)
             console.log('> clicked', info.rowInfo.data);
         }
     });
-    console.log('> table', table);
+    window.table = table;
 }
 
 function initData(data)
@@ -244,7 +244,7 @@ function initData(data)
         row['metrics.backend.totalTime']        = row.metrics.backend.totalTime;
         row['metrics.backend.sqlCount']         = row.metrics.backend.sqlCount;
         row['metrics.backend.sqlTime']          = row.metrics.backend.sqlTime * ((!row.dataVer || row.dataVer < 2) ? 1000 : 1);
-        row['metrics.backend.requestMemory']    = row.metrics.backend.requestMemory;
+        row['metrics.backend.requestMemory']    = row.metrics.backend.requestMemory * 1024;
         row['metrics.backend.phpFileLoaded']    = row.metrics.backend.phpFileLoaded;
         row['metrics.frontend.renderTime']      = row.metrics.frontend.renderTime;
         row['metrics.frontend.downloadSize']    = row.metrics.frontend.downloadSize;

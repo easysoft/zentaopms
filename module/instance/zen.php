@@ -50,6 +50,7 @@ class instanceZen extends instance
         $this->view->instanceMetric  = $instanceMetric;
         $this->view->diskSettings    = $this->cne->getDiskSettings($instance);
         $this->view->dbList          = $this->cne->appDBList($instance);
+        $this->view->backupList      = $this->instance->backupList($instance);
     }
 
     /**

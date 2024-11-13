@@ -18,6 +18,7 @@ formPanel
 (
     set::id('hostEditForm'),
     set::title($lang->host->edit),
+    on::init()->do('$(function() {setTimeout(osChange, 50); });'),
     formRow
     (
         setID('groupRow'),
@@ -56,7 +57,7 @@ formPanel
             set::control('picker'),
             set::name('osName'),
             set::items($lang->host->osNameList),
-            set::value($osName ? $osName : $host->osName),
+            set::value(zget($host, 'osName', '')),
             on::change('osChange')
         )
     ),
@@ -71,11 +72,12 @@ formPanel
         ),
         formGroup
         (
+            setID('osVersion'),
             set::width('1/3'),
             set::label($lang->host->osVersion),
             set::control('picker'),
             set::name('osVersion'),
-            set::items($lang->host->{"{$osName}List"}),
+            set::items(array()),
             set::value($host->osVersion)
         )
     ),
@@ -95,10 +97,12 @@ formPanel
             set::label($lang->host->cpuNumber),
             set::control(array('type' => 'number', 'min' => 1)),
             set::value(zget($host, 'cpuNumber', '') ? $host->cpuNumber : '')
-        ),
+        )
+    ),
+    formRow
+    (
         formGroup
         (
-            setClass('useManual hidden'),
             set::width('1/3'),
             set::name('memory'),
             set::label($lang->host->memory),
@@ -109,20 +113,20 @@ formPanel
                 'suffix'      => 'GB',
                 'suffixWidth' => 40
             ))
-        )
-    ),
-    formGroup
-    (
-        set::width('1/3'),
-        set::name('diskSize'),
-        set::label($lang->host->diskSize),
-        set::value(zget($host, 'diskSize', '') ? $host->diskSize : ''),
-        set::control(array
+        ),
+        formGroup
         (
-            'type'        => 'inputControl',
-            'suffix'      => 'GB',
-            'suffixWidth' => 40
-        ))
+            set::width('1/3'),
+            set::name('diskSize'),
+            set::label($lang->host->diskSize),
+            set::value(zget($host, 'diskSize', '') ? $host->diskSize : ''),
+            set::control(array
+            (
+                'type'        => 'inputControl',
+                'suffix'      => 'GB',
+                'suffixWidth' => 40
+            ))
+        )
     ),
     formGroup
     (

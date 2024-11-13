@@ -55,10 +55,6 @@ $lang->host->offlineReason = 'Offline Reason';
 $lang->host->unitList['GB'] = 'GB';
 $lang->host->unitList['TB'] = 'TB';
 
-$lang->host->cpuBrandList[''] = '';
-$lang->host->cpuBrandList['intel'] = 'Intel';
-$lang->host->cpuBrandList['amd']   = 'AMD';
-
 $lang->host->database = 'Database';
 $lang->host->databaseList['']             = '';
 $lang->host->databaseList['mysql55']      = 'MySQL 5.5';

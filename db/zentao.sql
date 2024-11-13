@@ -2656,30 +2656,6 @@ CREATE TABLE IF NOT EXISTS `zt_serverroom` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- DROP TABLE IF EXISTS `zt_account`;
-CREATE TABLE IF NOT EXISTS `zt_account` (
-  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL DEFAULT '',
-  `type` varchar(255) NOT NULL DEFAULT '',
-  `provider` varchar(255) NOT NULL DEFAULT '',
-  `adminURI` varchar(255) NOT NULL DEFAULT '',
-  `account` varchar(255) NOT NULL DEFAULT '',
-  `password` varchar(255) NOT NULL DEFAULT '',
-  `email` varchar(255) NOT NULL DEFAULT '',
-  `mobile` varchar(255) NOT NULL DEFAULT '',
-  `extra` text NULL,
-  `createdBy` varchar(30) NOT NULL DEFAULT '',
-  `createdDate` datetime NULL,
-  `editedBy` varchar(30) NOT NULL DEFAULT '',
-  `editedDate` datetime NULL,
-  `status` varchar(30) NOT NULL DEFAULT '',
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE INDEX `name`     ON `zt_account` (`name`);
-CREATE INDEX `provider` ON `zt_account` (`provider`);
-CREATE INDEX `status`   ON `zt_account` (`status`);
-
 -- DROP TABLE IF EXISTS `zt_host`;
 CREATE TABLE `zt_host` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -2698,20 +2674,14 @@ CREATE TABLE `zt_host` (
   `vsoft` varchar(30) NOT NULL DEFAULT '',
   `heartbeat` datetime NULL,
   `zap` varchar(10) NOT NULL DEFAULT '',
-  `provider` varchar(255) NOT NULL DEFAULT '',
   `vnc` int(11) NOT NULL DEFAULT '0',
   `ztf` int(11) NOT NULL DEFAULT '0',
   `zd` int(11) NOT NULL DEFAULT '0',
   `ssh` int(11) NOT NULL DEFAULT '0',
-  `sshPort` mediumint NOT NULL DEFAULT '0',
   `parent` int(11) unsigned NOT NULL DEFAULT '0',
   `image` int(11) unsigned NOT NULL DEFAULT '0',
   `admin` smallint(5) unsigned NOT NULL DEFAULT '0',
   `serverRoom` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `serverModel` varchar(256) NOT NULL DEFAULT '',
-  `hardwareType` varchar(64) NOT NULL DEFAULT '',
-  `cpuBrand` varchar(128) NOT NULL DEFAULT '',
-  `cpuModel` varchar(128) NOT NULL DEFAULT '',
   `cpuNumber` varchar(16) NOT NULL DEFAULT '',
   `cpuCores` varchar(30) NOT NULL DEFAULT '',
   `intranet` varchar(128) NOT NULL DEFAULT '',

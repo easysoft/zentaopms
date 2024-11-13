@@ -93,7 +93,8 @@ class backBtn extends btn
             'charter'        => 'charter-browse',
             'roadmap'        => 'charter-view',
             'approvalflow'   => 'approvalflow-browse',
-            'host'           => 'host-browse,my-index'
+            'host'           => 'host-browse,my-index',
+            'deploy'         => 'deploy-browse',
         );
 
         $props  = parent::getProps();
