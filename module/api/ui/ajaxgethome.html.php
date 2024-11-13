@@ -37,7 +37,7 @@ $buildLibItem = function(int $id, string $name, int $count = 0) use ($libColors,
 {
     return div
     (
-        setClass('doc-space-card-lib px-2 w-1/5 group'),
+        setClass('doc-space-card-lib p-2 w-1/5 group'),
         setKey($id),
         div
         (
@@ -163,8 +163,8 @@ elseif($type === 'nolink')
     $views = div
     (
         setClass('doc-space-card-libs'),
-        setStyle('margin', '0 -8px'),
-        div(setClass('row'), $views)
+        setStyle('margin', '-8px'),
+        div(setClass('row flex-wrap'), $views)
     );
 }
 else

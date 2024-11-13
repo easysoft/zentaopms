@@ -530,24 +530,26 @@ class api extends control
         if(!empty($_POST))
         {
             /* 组装formData。 */
-            $fields = $this->config->api->form->createLib;
-            if($this->post->libType == 'project') $fields['project']['required'] = true;
-            if($this->post->libType == 'product') $fields['product']['required'] = true;
+            $fields  = $this->config->api->form->createLib;
+            $libType = $this->post->libType;
+            if($libType == 'project') $fields['project']['required'] = true;
+            if($libType == 'product') $fields['product']['required'] = true;
             $formData = form::data($fields)->add('addedBy', $this->app->user->account)->add('addedDate', helper::now())->get();
             $formData->product   = $formData->libType == 'product' && !empty($formData->product)   ? $formData->product   : 0;
             $formData->project   = $formData->libType == 'project' && !empty($formData->project)   ? $formData->project   : 0;
             $formData->execution = $formData->libType == 'project' && !empty($formData->execution) ? $formData->execution : 0;
 
-            $this->doc->createApiLib($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if(helper::isAjaxRequest('modal')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
+            $libID    = $this->doc->createApiLib($formData);
+            $objectID = $libType == 'project' ? $this->post->project : $this->post->product;
+            if(helper::isAjaxRequest('modal')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true, 'docApp' => array("selectSpace", ($libType == 'product' || $libType == 'project') ? "$libType.$objectID" : 'nolink', $libID, true)));
 
             /* Set locate object data. */
-            setCookie("objectType", $this->post->libType, $this->config->cookieLife, $this->config->webRoot);
-            setCookie("objectID",   $this->post->libType == 'project' ? $this->post->project : $this->post->product, $this->config->cookieLife, $this->config->webRoot);
+            setCookie("objectType", $libType, $this->config->cookieLife, $this->config->webRoot);
+            setCookie("objectID",   $objectID, $this->config->cookieLife, $this->config->webRoot);
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('api', 'index', "libID=$libID"), 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('api', 'index', "libID=$libID"), 'closeModal' => true, 'docApp' => array("selectSpace", ($libType == 'product' || $libType == 'project') ? "$libType.$objectID" : 'nolink', $libID, true)));
         }
 
         /* 设置默认访问控制的语言项。 */
