@@ -234,6 +234,7 @@ $lang->apistruct->name = 'Name';
 
 $lang->api_lib_release = new stdClass();
 $lang->api_lib_release->version = 'Version';
+$lang->api_lib_release->desc    = 'Description';
 
 $lang->api->error = new stdclass();
 $lang->api->error->onlySelect = 'SQL API only allows SELECT query.';

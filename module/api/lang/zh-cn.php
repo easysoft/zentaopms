@@ -234,6 +234,7 @@ $lang->apistruct->name = '结构名';
 
 $lang->api_lib_release = new stdClass();
 $lang->api_lib_release->version = '版本号';
+$lang->api_lib_release->desc    = '描述';
 
 $lang->api->error             = new stdclass();
 $lang->api->error->onlySelect = 'SQL查询接口只允许SELECT查询';
