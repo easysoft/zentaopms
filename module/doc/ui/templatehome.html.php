@@ -18,9 +18,10 @@ $buildScopeCards = function($templates) use ($lang)
     foreach($templates as $template)
     {
         $cardDesc = $template->templateDesc ? $template->templateDesc : $lang->docTemplate->noDesc;
+        $cardLink = helper::createLink('doc', 'view', "docID=$template->id");
         $cardItems[] = div
         (
-            on::click()->do("redirectDoc(event, {$template->id})"),
+            common::hasPriv('doc', 'view') ? on::click()->do("openUrl('$cardLink')") : null,
             setClass('doc-space-card-lib px-2 w-1/5 group'),
             div
             (
