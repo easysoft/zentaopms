@@ -50,7 +50,7 @@ formPanel
             set::label($lang->host->osName),
             set::control('picker'),
             set::name('osName'),
-            set::items(array()),
+            set::items($lang->host->osNameList),
             on::change('osChange')
         )
     ),
@@ -68,7 +68,7 @@ formPanel
             set::label($lang->host->osVersion),
             set::control('picker'),
             set::name('osVersion'),
-            set::items($lang->host->{"{$osName}List"})
+            set::items(array())
         )
     ),
     formRow
