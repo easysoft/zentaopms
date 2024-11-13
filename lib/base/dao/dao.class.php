@@ -387,7 +387,7 @@ class baseDAO
 
         $this->app->useClientCache = false;
 
-        $this->cache->saveByKey($key, array(microtime(true), $value));
+        $this->cache->saveByKey($key, array(microtime(true), $value), $this->config->cache->dao->lifetime);
     }
 
     /**
