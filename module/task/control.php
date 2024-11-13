@@ -141,7 +141,7 @@ class task extends control
 
         if(!empty($_POST))
         {
-            $parent = $taskID > 0 ? $this->task->fetchById($taskID) : new stdclass();
+            $parent = $taskID > 0 ? $this->task->fetchById($taskID) : null;
             /* Process the request data for the batch create tasks. */
             $taskData = $this->taskZen->buildTasksForBatchCreate($execution, $taskID, $output);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
