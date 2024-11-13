@@ -220,12 +220,12 @@ class baseDAO
     public function __construct($app)
     {
         global $config, $lang, $dbh, $slaveDBH;
-        $this->app       = $app;
-        $this->config    = $config;
-        $this->lang      = $lang;
-        $this->dbh       = $dbh;
-        $this->cache     = $app->cache;
-        $this->slaveDBH  = $slaveDBH ? $slaveDBH : false;
+        $this->app      = $app;
+        $this->config   = $config;
+        $this->lang     = $lang;
+        $this->dbh      = $dbh;
+        $this->cache    = $app->cache;
+        $this->slaveDBH = $slaveDBH ? $slaveDBH : false;
 
         $this->reset();
     }
