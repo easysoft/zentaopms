@@ -2966,9 +2966,8 @@ CREATE UNIQUE INDEX `deploy_product_release` ON `zt_deployproduct`(`deploy`,`pro
 CREATE TABLE IF NOT EXISTS `zt_deploystep` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `deploy` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `parent` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `title` varchar(255) NOT NULL DEFAULT '',
-  `begin` datetime NULL,
-  `end` datetime NULL,
   `stage` varchar(30) NOT NULL DEFAULT '',
   `content` text NULL,
   `status` varchar(30) NOT NULL DEFAULT '',
