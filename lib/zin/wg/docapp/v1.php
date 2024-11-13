@@ -135,6 +135,7 @@ class docApp extends wg
         $langData->defaultVersion    = $lang->api->defaultVersion;
         $langData->createStruct      = $lang->api->createStruct;
         $langData->createRelease     = $lang->api->createRelease;
+        $langData->libTypeList       = $lang->api->libTypeList;
 
         /**
          * 通过语言项定义文档表格列显示名称。
