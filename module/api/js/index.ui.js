@@ -76,8 +76,9 @@ const customRenders =
         if(this.mode === 'list' && listType)
         {
             const items = [];
-            if(listType === 'structs') items.push({text: getDocAppLang('createStruct'), icon: 'plus', btnType: 'primary', 'data-toggle': 'modal', 'data-size': 'lg', url: $.createLink('api', 'createStruct', `libID=${this.libID}`)});
-            if(listType === 'releases') items.push({text: getDocAppLang('createRelease'), icon: 'plus', btnType: 'primary', 'data-toggle': 'modal', url: $.createLink('api', 'createRelease', `libID=${this.libID}`)});
+            if(docAppHasPriv('createStruct') && listType === 'structs') items.push({text: getDocAppLang('createStruct'), icon: 'plus', btnType: 'primary', 'data-toggle': 'modal', 'data-size': 'lg', url: $.createLink('api', 'createStruct', `libID=${this.libID}`)});
+            if(docAppHasPriv('createRelease') && listType === 'releases') items.push({text: getDocAppLang('createRelease'), icon: 'plus', btnType: 'primary', 'data-toggle': 'modal', url: $.createLink('api', 'createRelease', `libID=${this.libID}`)});
+            if(!items.length) return null;
             return {component: 'toolbar', props: {items: items}};
         }
     },
