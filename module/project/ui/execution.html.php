@@ -21,6 +21,8 @@ jsVar('delayed', $lang->execution->delayed);
 jsVar('pageExecSummary', $lang->execution->pageExecSummary);
 jsVar('checkedExecSummary', $lang->execution->checkedExecSummary);
 
+$searchTask = strtolower($status) == 'bysearch';
+
 $footToolbar = array();
 $canBatchEdit         = hasPriv('execution', 'batchEdit');
 $canBatchChangeStatus = hasPriv('execution', 'batchChangeStatus');
@@ -117,7 +119,7 @@ featureBar
             set::rootClass('ml-4')
         )
     ) : null,
-    $this->cookie->showTask ? li(setClass('ml-2'), searchToggle(set::module('projectTask'), set::open($status == 'bysearch'))) : null
+    $this->cookie->showTask ? li(setClass('ml-2'), searchToggle(set::module('projectTask'), set::open($searchTask))) : null
 );
 
 /* zin: Define the toolbar on main menu. */
@@ -184,9 +186,9 @@ dtable
     set::orderBy($orderBy),
     set::sortLink(createLink('project', 'execution', "status={$status}&projectID=$projectID&orderBy={name}_{sortType}&productID={$productID}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footPager(usePager(array('linkCreator' => createLink('project', 'execution', "status={$status}&projectID=$projectID&orderBy={$orderBy}&productID={$productID}&recTotal={recTotal}&recPerPage={recPerPage}&page={page}")))),
-    set::emptyTip($lang->execution->noExecution),
+    set::emptyTip(!$searchTask ? $lang->execution->noExecution : $lang->task->noTask),
     set::createTip($isStage ? $lang->programplan->create : $lang->execution->create),
-    set::createLink($canCreateExecution ? $createLink : ''),
+    set::createLink($canCreateExecution && !$searchTask ? $createLink : ''),
     set::createAttr($isStage ? 'data-app="project"' : 'data-app="execution"')
 );
 
