@@ -55,8 +55,6 @@ $lang->host->offlineReason = '下架原因';
 $lang->host->unitList['GB'] = 'GB';
 $lang->host->unitList['TB'] = 'TB';
 
-$lang->host->cpuBrandList[''] = '';
-
 $lang->host->database = '数据库';
 $lang->host->databaseList['']             = '';
 $lang->host->databaseList['mysql55']      = 'MySQL 5.5';

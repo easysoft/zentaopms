@@ -43,8 +43,6 @@ $lang->host->offline = '下架';
 $lang->host->unitList['GB'] = 'GB';
 $lang->host->unitList['TB'] = 'TB';
 
-$lang->host->cpuBrandList[''] = '';
-
 $lang->host->database = '資料庫';
 $lang->host->databaseList['']             = '';
 $lang->host->databaseList['mysql55']      = 'MySQL 5.5';
