@@ -11,6 +11,8 @@ function getTableOptions(options, info)
 {
     const lang = getDocAppLang();
 
+    options.data.sort((a, b) => a.addedDate > b.addedDate ? -1 : 1);
+
     templateCols = [];
     templateCols.push(options.cols.find(col => col.name === 'rawID'));
 
