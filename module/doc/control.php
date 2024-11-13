@@ -1583,13 +1583,21 @@ class doc extends control
      * Ajax: Get doc data.
      * Ajax: 获取文档数据。
      *
-     * @param  int    $docID
+     * @param  string|int    $docID
      * @param  int    $version
      * @access public
      * @return void
      */
-    public function ajaxGetDoc(int $docID, int $version = 0, $details = 'no')
+    public function ajaxGetDoc(string|int $docID, int $version = 0, $details = 'no')
     {
+        if(is_string($docID) && strpos($docID, 'api.') === 0)
+        {
+            $apiID = (int)str_replace('api.', '', $docID);
+            echo $this->fetch('api', 'ajaxGetApi', "apiID=$apiID&version=$version");
+            return;
+        }
+
+        $docID = (int)$docID;
         $doc = $this->doc->getByID($docID, $version);
         $doc->lib     = (int)$doc->lib;
         $doc->module  = (int)$doc->module;
