@@ -41,5 +41,6 @@ docApp
     set::maxHomeLibsOfSpace(0),
     set::params($params),
     set::autoSelectLib(),
+    set::fetchOnChangeSpace(),
     set('$options', jsRaw('window.setDocAppOptions'))
 );
