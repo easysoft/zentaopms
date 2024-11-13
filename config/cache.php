@@ -7,6 +7,10 @@ $config->cache->scope     = '';          // 缓存服务范围。The scope of ca
 $config->cache->namespace = '';          // 缓存命名空间。The namespace of cache.
 $config->cache->lifetime  = 0;           // 缓存生存时间，默认永不过期。The lifetime of cache. Default is no expiration.
 
+$config->cache->dao = new stdClass();
+$config->cache->dao->enable   = true;    // 是否开启 DAO 缓存。Enable DAO cache or not.
+$config->cache->dao->lifetime = 2592000; // DAO 缓存生存时间，默认为 30 天。The lifetime of DAO cache. Default is 30 days.
+
 $config->cache->client = new stdClass();
 $config->cache->client->enable = false; // 是否开启客户端缓存。Enable client cache or not.
 
