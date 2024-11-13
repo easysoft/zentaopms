@@ -26,6 +26,8 @@ $privs['addModule']    = hasPriv('doc', 'addCatalog');
 $privs['deleteModule'] = hasPriv('doc', 'deleteCatalog');
 $privs['editModule']   = hasPriv('doc', 'editCatalog');
 $privs['sortModule']   = hasPriv('doc', 'sortCatalog');
+$privs['releases']     = hasPriv('api', 'releases');
+$privs['struct']       = hasPriv('api', 'struct');
 
 docApp
 (

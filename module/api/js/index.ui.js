@@ -136,16 +136,18 @@ const customRenders =
     'sidebar-before': function()
     {
         if(!this.libID) return;
+
+        const canViewStructs  = docAppHasPriv('struct');
+        const canViewReleases = docAppHasPriv('releases');
+        if(!canViewStructs && !canViewReleases) return;
+
         const isListMode = this.mode === 'list';
-        const lang = getDocAppLang();
-        const listType = this.signals.listType.value;
-        const items = [
-            {text: lang.struct, selected: listType === 'structs' && isListMode, icon: 'treemap muted', command: 'showStructs'},
-            {type: 'divider', className: 'my-1'},
-            {text: lang.releases, selected: listType === 'releases' && isListMode, icon: 'version muted', command: 'showReleases'},
-            {type: 'divider', className: 'my-1'},
-            {text: lang.module, icon: 'list muted', command: 'showModules'}
-        ];
+        const lang       = getDocAppLang();
+        const listType   = this.signals.listType.value;
+        const items      = [];
+        if(canViewStructs) items.push({text: lang.struct, selected: listType === 'structs' && isListMode, icon: 'treemap muted', command: 'showStructs'}, {type: 'divider', className: 'my-1'});
+        if(canViewReleases) items.push({text: lang.releases, selected: listType === 'releases' && isListMode, icon: 'version muted', command: 'showReleases'}, {type: 'divider', className: 'my-1'});
+        items.push({text: lang.module, icon: 'list muted', command: 'showModules'});
         return {
             component: 'tree',
             className: 'p-2 pb-0 api-lib-menu',
