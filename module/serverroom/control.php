@@ -101,7 +101,8 @@ class serverroom extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('serverroom', 'view', "room=$roomID")));
+            $loadUrl = $this->app->tab = 'devops' ? true : $this->createLink('serverroom', 'view', "room=$roomID");
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $loadUrl));
         }
 
         $this->view->title      = $this->lang->serverroom->edit;
