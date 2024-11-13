@@ -1149,9 +1149,8 @@ class baseDAO
      */
     public function fetchGroup($groupField, $keyField = '')
     {
-        $sql   = $this->processSQL();
-        $table = $this->table;
-        $key   = 'dao:fetchAll:' . md5($sql);
+        $sql = $this->processSQL();
+        $key = 'dao:fetchAll:' . md5($sql);
 
         $rows = $this->getCache($key, $sql);
         if($rows === self::CACHE_MISS)
