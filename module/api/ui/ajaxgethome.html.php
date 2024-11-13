@@ -43,7 +43,7 @@ $buildLibItem = function(int $id, string $name, int $count = 0) use ($libColors,
         (
             setClass('canvas border rounded py-2 px-3 col gap-1 hover:shadow-lg hover:border-primary relative cursor-pointer'),
             set('zui-command', $isNolink ? "selectSpace/nolink/$id" : "selectSpace/$type.$id/_first"),
-            icon($isNolink ? 'doclib' : $type, setClass('text-2xl'), $isNolink ? setStyle('color', $libColors[$id % count($libColors)]) : setClass('text-gray')),
+            icon($isNolink ? 'interface-lib' : $type, setClass('text-2xl'), $isNolink ? setStyle('color', $libColors[$id % count($libColors)]) : setClass('text-gray')),
             div(setClass('font-bold text-clip'), set::title($name), $name),
             div(setClass('text-gray text-sm'), $count ? sprintf($lang->api->apiTotalInfo, $count) : $lang->api->noApi),
             $showLibAction ? div

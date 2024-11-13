@@ -69,7 +69,7 @@ $json['tabs']        = $tabs;
 $json['searchHint']  = $lang->searchAB;
 $json['labelMap']    = array('program' => $lang->program->common);
 $json['itemType']    = 'lib';
-$json['typeIconMap'] = array('lib' => 'doclib');
+$json['typeIconMap'] = array('lib' => 'interface-lib');
 $json['debug']       = array('libID' => $libID, 'objectType' => $objectType, 'objectID' => $objectID);
 
 /**

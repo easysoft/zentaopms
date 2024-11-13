@@ -35,6 +35,7 @@ docApp
     set::pager(array('recTotal' => $recTotal, 'recPerPage' => $recPerPage, 'page' => $pageID)),
     set::privs($privs),
     set::docID($apiID),
+    set::libIcon('interface-lib'),
     set::fetcher(createLink('api', 'ajaxGetData', 'spaceID={spaceID}&picks={picks}')),
     set::docFetcher(null),
     set::libSummariesFetcher(null),
