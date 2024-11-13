@@ -450,6 +450,7 @@ $lang->doc->docLang = new stdClass();
 $lang->doc->docLang->cancel                      = $lang->cancel;
 $lang->doc->docLang->export                      = $lang->export;
 $lang->doc->docLang->settings                    = $lang->settings;
+$lang->doc->docLang->save                        = $lang->save;
 $lang->doc->docLang->createSpace                 = $lang->doc->createSpace;
 $lang->doc->docLang->createLib                   = $lang->doc->createLib;
 $lang->doc->docLang->actions                     = $lang->doc->libDropdown;
