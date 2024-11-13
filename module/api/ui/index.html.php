@@ -25,23 +25,6 @@ $privs['deleteModule'] = hasPriv('doc', 'deleteCatalog');
 $privs['editModule']   = hasPriv('doc', 'editCatalog');
 $privs['sortModule']   = hasPriv('doc', 'sortCatalog');
 
-$langData = array();
-$langData['filterTypes']      = $lang->api->filterTypes;
-$langData['createLib']        = $lang->api->createLib;
-$langData['editLib']          = $lang->api->editLib;
-$langData['deleteLib']        = $lang->api->deleteLib;
-$langData['createDoc']        = $lang->api->createApi;
-$langData['struct']           = $lang->api->struct;
-$langData['releases']         = $lang->api->releases;
-$langData['module']           = $lang->api->module;
-$langData['noDocs']           = $lang->api->noApi;
-$langData['version']          = $lang->api->version;
-$langData['defaultVersion']   = $lang->api->defaultVersion;
-$langData['createStruct']     = $lang->api->createStruct;
-$langData['createRelease']    = $lang->api->createRelease;
-$langData['libTypeList']      = $lang->api->libTypeList;
-$langData['save']             = $lang->save;
-
 docApp
 (
     set::spaceType('api'),
@@ -54,7 +37,6 @@ docApp
     set::docFetcher(null),
     set::libSummariesFetcher(null),
     set::maxHomeLibsOfSpace(0),
-    set::langData($langData),
     set::params($params),
     set::autoSelectLib(),
     set('$options', jsRaw('window.setDocAppOptions'))
