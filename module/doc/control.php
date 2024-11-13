@@ -428,6 +428,7 @@ class doc extends control
                 ->setDefault('addedBy', $this->app->user->account)
                 ->setDefault('editedBy', $this->app->user->account)
                 ->get();
+            $docData->templateDesc = $_POST['desc'];
 
             $_POST['type'] = 'docTemplate';
 

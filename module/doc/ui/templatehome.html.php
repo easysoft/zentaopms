@@ -17,8 +17,10 @@ $buildScopeCards = function($templates) use ($lang)
     $cardItems = array();
     foreach($templates as $template)
     {
+        $cardDesc = $template->templateDesc ? $template->templateDesc : $lang->docTemplate->noDesc;
         $cardItems[] = div
         (
+            on::click()->do("redirectDoc(event, {$template->id})"),
             setClass('doc-space-card-lib px-2 w-1/5 group'),
             div
             (
@@ -39,8 +41,9 @@ $buildScopeCards = function($templates) use ($lang)
                 ),
                 div
                 (
-                    setClass('text-gray text-sm py-1'),
-                    $lang->docTemplate->noDesc
+                    setClass('text-gray text-clip text-sm py-1'),
+                    set::title($cardDesc),
+                    $cardDesc
                 )
             )
         );

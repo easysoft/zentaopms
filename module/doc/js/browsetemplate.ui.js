@@ -376,3 +376,9 @@ $.extend(window.docAppCommands,
     },
     showDocSettingModal: showDocSettingModal
 });
+
+window.redirectDoc = function(event, docID)
+{
+   const url = $.createLink('doc', 'view', 'docID=' + docID);
+   openUrl(url);
+}
