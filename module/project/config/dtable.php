@@ -219,6 +219,22 @@ $config->project->execution->dtable->fieldList['end']['width']    = '96';
 $config->project->execution->dtable->fieldList['end']['group']    = '3';
 $config->project->execution->dtable->fieldList['end']['show']     = true;
 
+$config->project->execution->dtable->fieldList['realBegan']['title']    = $lang->execution->realBeganAB;
+$config->project->execution->dtable->fieldList['realBegan']['name']     = 'realBegan';
+$config->project->execution->dtable->fieldList['realBegan']['type']     = 'date';
+$config->project->execution->dtable->fieldList['realBegan']['sortType'] = true;
+$config->project->execution->dtable->fieldList['realBegan']['width']    = '106';
+$config->project->execution->dtable->fieldList['realBegan']['group']    = '3';
+$config->project->execution->dtable->fieldList['realBegan']['show']     = true;
+
+$config->project->execution->dtable->fieldList['realEnd']['title']    = $lang->execution->realEndAB;
+$config->project->execution->dtable->fieldList['realEnd']['name']     = 'realEnd';
+$config->project->execution->dtable->fieldList['realEnd']['type']     = 'date';
+$config->project->execution->dtable->fieldList['realEnd']['sortType'] = true;
+$config->project->execution->dtable->fieldList['realEnd']['width']    = '106';
+$config->project->execution->dtable->fieldList['realEnd']['group']    = '3';
+$config->project->execution->dtable->fieldList['realEnd']['show']     = true;
+
 $config->project->execution->dtable->fieldList['totalEstimate']['title']    = $lang->execution->totalEstimate;
 $config->project->execution->dtable->fieldList['totalEstimate']['name']     = 'estimate';
 $config->project->execution->dtable->fieldList['totalEstimate']['type']     = 'number';
