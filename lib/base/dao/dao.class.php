@@ -394,16 +394,17 @@ class baseDAO
      *
      * @param  string $key
      * @param  mixed  $value
+     * @param  int    $ttl
      * @access public
      * @return void
      */
-    public function setCache($key, $value = null)
+    public function setCache($key, $value = null, int $ttl = null)
     {
         if(!$this->app->isServing() || empty($this->cache)) return false;
 
         $this->app->useClientCache = false;
 
-        $this->cache->saveByKey($key, array(microtime(true), $value), $this->config->cache->dao->lifetime);
+        $this->cache->saveByKey($key, array(microtime(true), $value), $ttl ?? $this->config->cache->dao->lifetime);
     }
 
     /**
@@ -427,7 +428,7 @@ class baseDAO
             /* Update the table cache time. */
             $table = str_replace(array('`', '"'), '', $table);
             $key   = $this->createCacheKey('table', $table);
-            $this->setCache($key);
+            $this->setCache($key, $table, 0);
         }
     }
 
