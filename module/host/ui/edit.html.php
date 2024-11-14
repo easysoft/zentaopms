@@ -18,6 +18,7 @@ formPanel
 (
     set::id('hostEditForm'),
     set::title($lang->host->edit),
+    set::submitBtnText($lang->save),
     on::init()->do('$(function() {setTimeout(osChange, 50); });'),
     formRow
     (

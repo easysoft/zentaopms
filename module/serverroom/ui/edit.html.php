@@ -16,6 +16,7 @@ formPanel
 (
     set::id('serverroomCreateForm'),
     set::title($lang->serverroom->edit),
+    set::submitBtnText($lang->save),
     formRow
     (
         formGroup
