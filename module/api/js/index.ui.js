@@ -443,8 +443,8 @@ $.extend(window.docAppCommands,
 
         if(type === 'nolink')
         {
-            if(docAppHasPriv('editLib')) items.push({text: lang.editLib, command: `editLib/${id}`});
-            if(docAppHasPriv('deleteLib')) items.push({text: lang.deleteLib, command: `deleteLib/${id}`});
+            if(docAppHasPriv('editLib')) items.push({text: lang.actions.editLib, command: `editLib/${id}`});
+            if(docAppHasPriv('deleteLib')) items.push({text: lang.actions.deleteLib, command: `deleteLib/${id}`});
         }
         else if(docAppHasPriv('createLib'))
         {
