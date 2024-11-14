@@ -73,4 +73,4 @@ $config->redis->host       = '';
 $config->redis->port       = '';
 $config->redis->username   = '';
 $config->redis->password   = '';
-$config->redis->serializer = 'igbinary'; // serialize|igbinary
+$config->redis->serializer = 'igbinary'; // php|igbinary

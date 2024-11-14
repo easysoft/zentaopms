@@ -32,8 +32,8 @@ $lang->cache->redis->notice             = '使用 Redis 缓存需要先加载 Re
 $lang->cache->redis->notLoaded          = '请加载 Redis 扩展后再开启数据缓存。';
 $lang->cache->redis->igbinaryNotLoaded  = '请加载 igbinary 扩展后再开启数据缓存。';
 
-$lang->cache->redis->serializerList['serialize'] = 'PHP 内置序列化器';
-$lang->cache->redis->serializerList['igbinary']  = 'igbinary';
+$lang->cache->redis->serializerList['php']      = 'PHP 内置序列化器';
+$lang->cache->redis->serializerList['igbinary'] = 'igbinary';
 
 $lang->cache->redis->tips = new stdClass();
 $lang->cache->redis->tips->host       = '填写域名或 IP 地址，无需填写协议和端口号。';

@@ -32,8 +32,8 @@ $lang->cache->redis->notice             = 'To use Redis cache, you need to load 
 $lang->cache->redis->notLoaded          = 'Please load the Redis extension before enabling cach.';
 $lang->cache->redis->igbinaryNotLoaded  = 'Please load the igbinary extension before enabling cach.';
 
-$lang->cache->redis->serializerList['serialize'] = 'PHP Serialize';
-$lang->cache->redis->serializerList['igbinary']  = 'igbinary';
+$lang->cache->redis->serializerList['php']      = 'PHP Serialize';
+$lang->cache->redis->serializerList['igbinary'] = 'igbinary';
 
 $lang->cache->redis->tips = new stdClass();
 $lang->cache->redis->tips->host       = 'Fill in the domain name or IP address, and do not need to fill in the protocol and port number.';
