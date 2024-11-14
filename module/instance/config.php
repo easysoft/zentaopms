@@ -59,7 +59,8 @@ $config->instance->actions->view = array();
 $config->instance->actions->view['mainActions']   = array('visit', 'ajaxStart', 'ajaxStop', 'upgrade');
 $config->instance->actions->view['suffixActions'] = array('ajaxUninstall');
 
-$config->instance->devopsApps = array('gitea', 'gitlab', 'jenkins', 'sonarqube', 'nexus3', 'nexus');
+$config->instance->devopsApps   = array('gitea', 'gitlab', 'jenkins', 'sonarqube', 'nexus3', 'nexus');
+$config->instance->initUserApps = array();
 
 /* The zentaopaas instance object. */
 $config->instance->zentaopaas = new stdclass();

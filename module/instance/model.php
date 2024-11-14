@@ -536,7 +536,7 @@ class instanceModel extends model
             $settingsMap->ci->enabled = true;
         }
 
-        if($instance->source == 'system')
+        if($instance->source == 'system' && in_array($instance->chart, $this->config->instance->initUserApps))
         {
             $user = $this->dao->select('account')->from(TABLE_USER)->where('deleted')->eq(0)->fetch('account');
             if($user)
