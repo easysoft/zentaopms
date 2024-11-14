@@ -586,6 +586,7 @@ class testcaseModel extends model
             ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.run = t2.id')
             ->where('t1.`case`')->in($caseIdList)
             ->beginIF($taskID)->andWhere('t2.task')->eq($taskID)->fi()
+            ->beginIF($this->app->tab == 'devops')->andWhere('t1.deploy')->eq($this->session->deployID)->fi()
             ->orderBy('id_desc')
             ->query();
 
