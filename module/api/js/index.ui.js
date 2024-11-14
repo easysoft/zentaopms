@@ -218,7 +218,7 @@ function handleClickSpaceMenu(event, value)
 
 function getSpaceMenuText(text, state)
 {
-    const spaceID = getDocApp().spaceID;
+    const spaceID = this.spaceID;
     if(spaceID === 'nolink') return text;
     const libTypeList = getDocAppLang('libTypeList');
     return `${libTypeList[spaceID.split('.')[0]]} / ${text}`;
@@ -231,7 +231,7 @@ function getSpaceMenuOptions(spaceType, spaceID)
         popWidth    : 350,
         onClickItem : handleClickSpaceMenu,
         defaultValue: spaceID === 'nolink' ? `lib.${libID}`: spaceID,
-        display     : getSpaceMenuText
+        display     : getSpaceMenuText.bind(this)
     };
 }
 
