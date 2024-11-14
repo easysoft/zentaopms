@@ -2,7 +2,7 @@
 /* 缓存设置。Cache settings. */
 $config->cache = new stdclass();
 $config->cache->enable    = false;       // 是否开启缓存。Enable cache or not.
-$config->cache->driver    = 'redis';     // 缓存驱动。    The driver of cache. Can be file|yac|apcu|redis.
+$config->cache->driver    = 'apcu';      // 缓存驱动。    The driver of cache. Can be file|yac|apcu|redis.
 $config->cache->scope     = '';          // 缓存服务范围。The scope of cache. Can be private|shared.
 $config->cache->namespace = '';          // 缓存命名空间。The namespace of cache.
 $config->cache->lifetime  = 0;           // 缓存生存时间，默认永不过期。The lifetime of cache. Default is no expiration.
