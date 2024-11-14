@@ -62,7 +62,7 @@ docApp
     set::spaceID($spaceID),
     set::libID($libID),
     set::docID($docID),
-    set::noSpace(),
+    set::noSpace('hidden'),
     set::noModule(),
     set::homeName($lang->doc->template),
     set::mode($mode),
