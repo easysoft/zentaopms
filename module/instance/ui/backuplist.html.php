@@ -41,7 +41,7 @@ foreach($backupList as &$backup)
     $backup->latestRestoreTime = $backup->latestRestoreTime == 0 ? '' : date('Y-m-d H:i:s', $backup->latestRestoreTime);
     $backup->restoreTime = zget($lang->instance->backup->operators, $backup->username, $backup->username);
 
-    if(in_array($status, array('processing', 'inprogress')) || in_array($restoreStatus, array('pending', 'inprogress')))  $backup->actions[0]['disabled'] = true;
+    if(!in_array($status, array('success', 'completed')) || in_array($restoreStatus, array('pending', 'inprogress')))  $backup->actions[0]['disabled'] = true;
 }
 dtable
 (
