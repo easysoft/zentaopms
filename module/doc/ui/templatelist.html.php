@@ -19,6 +19,7 @@ $data['modules'] = $this->doc->getTemplateModules();
 $privs = array();
 $privs['create']  = hasPriv('docTemplate', 'create');
 $privs['edit']    = hasPriv('docTemplate ', 'edit');
+$privs['delete']  = hasPriv('docTemplate ', 'delete');
 $privs['collect'] = 'no';
 
 $filterTypes = $lang->docTemplate->filterTypes;
