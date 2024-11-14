@@ -62,7 +62,7 @@ $buildLibItem = function(int $id, string $name, int $count = 0) use ($libColors,
     );
 };
 
-$buildProgramItem = function($program) use ($type, $buildLibItem)
+$buildProgramItem = function($program) use ($type, $buildLibItem, $lang)
 {
     $items = array();
     if($type === 'product' && !empty($program->products))
@@ -82,8 +82,7 @@ $buildProgramItem = function($program) use ($type, $buildLibItem)
             setClass('row items-center justify-between gap-2 px-2.5 py-1 border-b'),
             div
             (
-                setClass('row items-center gap-2 flex-none cursor-pointer hover:text-primary'),
-                setClass('row items-center gap-2 flex-none cursor-pointer hover:text-primary'),
+                setClass('row items-center gap-2 flex-none'),
                 icon('program', setClass('text-gray flex-none')),
                 div(setClass('min-w-0 flex-auto'), strong($program->name)),
             )
@@ -91,11 +90,7 @@ $buildProgramItem = function($program) use ($type, $buildLibItem)
         div
         (
             setClass('doc-space-card-libs py-3 px-1.5'),
-            div
-            (
-                setClass('row'),
-                $items
-            )
+            empty($items) ? div(setClass('h-24 center text-gray'), $lang->noData) : div(setClass('row flex-wrap'), $items)
         )
     );
 };
