@@ -619,6 +619,9 @@ class instance extends control
         $instance = $this->instance->getByID($instanceID);
         if($_POST)
         {
+            $settings = fixer::input('post')->trim('backupKeepDays')->get();
+            if(!validater::checkInt($settings->backupKeepDays, 1, 30)) return $this->send(array('result' => 'fail', 'message' => array('days' => $this->lang->instance->backup->keepDayRange)));
+
             $this->instance->saveBackupSettings($instance);
             if(dao::isError())  return $this->send(array('result' => 'fail', 'load' => array('alert' => dao::getError())));
 
