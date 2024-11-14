@@ -36,8 +36,13 @@ if($type == 'assignedTo') unset($config->my->task->dtable->fieldList['assignedTo
 if($type == 'openedBy')   unset($config->my->task->dtable->fieldList['openedBy']);
 if($type == 'finishedBy') unset($config->my->task->dtable->fieldList['finishedBy']);
 
-$tasks = initTableData($tasks, $config->my->task->dtable->fieldList, $this->task);
 $cols  = array_values($config->my->task->dtable->fieldList);
+$tasks = initTableData($tasks, $config->my->task->dtable->fieldList, $this->task);
+foreach($tasks as $task)
+{
+    $task->rawStatus = $task->status;
+    $task->status    = $this->processStatus('task', $task);
+}
 $data  = array_values($tasks);
 
 if($config->edition == 'ipd')

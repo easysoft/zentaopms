@@ -58,9 +58,9 @@ window.setStatistics = function(element, checks)
  */
 window.renderCell = function(result, info)
 {
+    const task = info.row.data;
     if(info.col.name == 'name' && result)
     {
-        const task = info.row.data;
         let html = '';
         if(task.team)
         {
@@ -74,6 +74,8 @@ window.renderCell = function(result, info)
     }
     if(info.col.name == 'deadline' && result[0])
     {
+        if(['done', 'cancel', 'close'].includes(task.rawStatus)) return result;
+
         const today     = zui.formatDate(zui.createDate(), 'yyyy-MM-dd');
         const yesterday = zui.formatDate(convertStringToDate(today) - 24 * 60 * 60 * 1000, 'yyyy-MM-dd');
         if(result[0] == today)
