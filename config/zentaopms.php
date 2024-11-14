@@ -461,7 +461,6 @@ define('TABLE_MR',            '`' . $config->db->prefix . 'mr`');
 define('TABLE_MRAPPROVAL',    '`' . $config->db->prefix . 'mrapproval`');
 
 define('TABLE_SERVERROOM',   '`' . $config->db->prefix . 'serverroom`');
-define('TABLE_ACCOUNT',      '`' . $config->db->prefix . 'account`');
 define('TABLE_HOST',         '`' . $config->db->prefix . 'host`');
 define('TABLE_REPO',         '`' . $config->db->prefix . 'repo`');
 define('TABLE_RELATION',     '`' . $config->db->prefix . 'relation`');
