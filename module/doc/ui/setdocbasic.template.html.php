@@ -38,6 +38,6 @@ formPanel
     formGroup
     (
         set::label($lang->docTemplate->desc),
-        textarea(set::name('desc'), set::value($doc->templateDesc), set::rows(3))
+        textarea(set::name('desc'), set::value($docID ? $doc->templateDesc : ''), set::rows(3))
     )
 );

@@ -478,7 +478,7 @@ class doc extends control
                 ->setDefault('editedBy', $this->app->user->account)
                 ->setIF(strpos(",$doc->editedList,", ",{$this->app->user->account},") === false, 'editedList', $doc->editedList . ",{$this->app->user->account}")
                 ->get();
-            $docData->templateDesc = $_POST['desc'];
+            if(isset($_POST['desc'])) $docData->templateDesc = $_POST['desc'];
 
             $_POST['type'] = 'docTemplate';
             $result  = $this->doc->update($docID, $docData);
