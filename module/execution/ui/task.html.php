@@ -58,7 +58,8 @@ if($execution->type != 'stage') unset($cols['design']);
 $tableData = initTableData($tasks, $cols, $this->task);
 foreach($tableData as $task)
 {
-    $task->status = $this->processStatus('task', $task);
+    $task->rawStatus = $task->status;
+    $task->status    = $this->processStatus('task', $task);
     if(helper::isZeroDate($task->deadline))   $task->deadline   = '';
     if(helper::isZeroDate($task->estStarted)) $task->estStarted = '';
 }

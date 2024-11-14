@@ -130,6 +130,10 @@ window.renderCell = function(result, info)
             result.push({html: bugTitle});
         }
     }
+    if(info.col.name == 'status' && result)
+    {
+        result[0] = {html: `<span class='status-${info.row.data.rawStatus}'>` + info.row.data.status + "</span>"};
+    }
     if(info.col.name == 'deadline' && result[0])
     {
         const today     = zui.formatDate(zui.createDate(), 'yyyy-MM-dd');
