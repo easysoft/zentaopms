@@ -2746,11 +2746,13 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getModulesOfLibs(array $libs, $type = 'doc')
+    public function getModulesOfLibs(array $libs, $type = 'doc,api')
     {
+        $types = explode(',', $type);
         return $this->dao->select('*')->from(TABLE_MODULE)
             ->where('root')->in($libs)
-            ->andWhere('type')->eq($type)
+            ->beginIF(count($types) > 1)->andWhere('type')->in($types)->fi()
+            ->beginIF(count($types) == 1)->andWhere('type')->eq($type)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy('grade desc, `order`')
             ->fetchAll('id');
