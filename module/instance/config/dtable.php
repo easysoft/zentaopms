@@ -46,12 +46,13 @@ if(!isset($config->backup))
     $config->backup->dtable->fieldList['restoreStatus']['type']     = 'desc';
     $config->backup->dtable->fieldList['restoreStatus']['sortType'] = false;
     $config->backup->dtable->fieldList['restoreStatus']['hint']     = true;
-    $config->backup->dtable->fieldList['restoreStatus']['width']    = '80';
+    $config->backup->dtable->fieldList['restoreStatus']['width']    = '100';
 
     $config->backup->dtable->fieldList['actions']['name']     = 'actions';
     $config->backup->dtable->fieldList['actions']['title']    =  $lang->instance->backup->action;
     $config->backup->dtable->fieldList['actions']['type']     = 'actions';
     $config->backup->dtable->fieldList['actions']['hint']     = true;
+    $config->backup->dtable->fieldList['actions']['width']    = '100';
     $config->backup->dtable->fieldList['actions']['menu']     = array('restore');
 
     $config->backup->dtable->fieldList['actions']['list']['restore']['icon'] = 'icon-restart';
