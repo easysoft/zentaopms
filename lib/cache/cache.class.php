@@ -30,6 +30,8 @@ class cache
 
     const DRIVER_REDIS = 'Redis';
 
+    const DRIVER_LIST = [self::DRIVER_APCU, self::DRIVER_FILE, self::DRIVER_YAC, self::DRIVER_REDIS];
+
     /**
      * 全局应用程序对象。
      * Global application object.
@@ -155,33 +157,24 @@ class cache
         if(empty($this->config->cache->enable)) return $this->log('The cache is not enabled', __FILE__, __LINE__);
 
         $driver = ucfirst(strtolower($this->config->cache->driver));
-        switch($driver)
-        {
-            case self::DRIVER_APCU:
-                $this->setConnector('-');
-                $className = 'ZenTao\Cache\Driver\ApcuDriver';
-                break;
-            case self::DRIVER_YAC:
-                $this->setConnector('-');
-                $className = 'ZenTao\Cache\Driver\YacDriver';
-                break;
-            case self::DRIVER_FILE:
-                $this->setConnector('_');
-                $className = 'ZenTao\Cache\Driver\FileDriver';
-                break;
-            case self::DRIVER_REDIS:
-                $this->setConnector(':');
-                $className = 'ZenTao\Cache\Driver\RedisDriver';
-                break;
-            default:
-                return $this->log("Driver {$driver} is not supported.", __FILE__, __LINE__);
-        }
 
+        if(!in_array($driver, self::DRIVER_LIST)) return $this->log("Driver {$driver} is not supported.", __FILE__, __LINE__);
         if($driver != self::DRIVER_FILE && !extension_loaded($driver)) return $this->log("Driver ext-{$driver} is not loaded.", __FILE__, __LINE__);
 
-        $this->cache = new $className($this->config->cache->namespace, $this->config->cache->lifetime, $app->getCacheRoot());
+        $connector  = $driver == self::DRIVER_REDIS ? ':' : '-';
+        $className  = "ZenTao\Cache\Driver\\{$driver}Driver";
+        $scope      = $this->config->cache->scope;
+        $namespace  = $this->config->cache->namespace;
+        $lifetime   = $this->config->cache->lifetime;
+        $redis      = $this->config->redis;
 
-        $this->setNamespace($this->config->cache->namespace);
+        $this->setNamespace($namespace);
+        $this->setConnector($connector);
+
+        if($driver == self::DRIVER_APCU) return $this->cache = new $className($namespace, $lifetime, $scope, $connector);
+        if($driver == self::DRIVER_REDIS) return $this->cache = new $className($namespace, $lifetime, $scope, $connector, $redis);
+        if($driver == self::DRIVER_YAC) return $this->cache = new $className($namespace, $lifetime);
+        if($driver == self::DRIVER_FILE) return $this->cache = new $className($namespace, $lifetime, $app->getCacheRoot());
     }
 
     /**
@@ -466,7 +459,7 @@ class cache
             /* 如果没有设置关联字段则整个缓存都受影响。If no associated fields are set, the entire cache is affected. */
             if(empty($res->fields))
             {
-                $keys[] = $this->getResCacheKey($res->name);
+                $keys = $this->getResCacheKey($res->name);
                 continue;
             }
 

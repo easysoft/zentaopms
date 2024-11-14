@@ -33,62 +33,70 @@ class RedisDriver implements CacheInterface
     private $defaultLifetime;
 
     /**
-     * 缓存序列化器，默认使用 PHP 内置的序列化器。
-     * The cache serializer, the default is the PHP built-in serializer.
-     *
-     * @var int
-     */
-    private $serializer = \Redis::SERIALIZER_PHP;
-
-    public function __construct($namespace = '', $defaultLifetime = 0)
-    {
-        $this->namespace = $namespace;
-        $this->defaultLifetime = $defaultLifetime;
-
-        $this->setSerializer();
-
-        $this->connectRedis();
-    }
-
-    /**
-     * 设置序列化器。
-     * Set the serializer.
+     * 缓存服务范围。private 独享|public 共享。
+     * The cache scope.
      *
      * @access private
-     * @return void
+     * @var string
      */
-    private function setSerializer()
+    private $scope;
+
+    /**
+     * 缓存键连接符。
+     * Cache key connector.
+     *
+     * @access private
+     * @var string
+     */
+    private $connector;
+
+    public function __construct($namespace = '', $defaultLifetime = 0, $scope = '', $connector = '', $setting = null)
     {
-        if(function_exists('igbinary_serialize'))
-        {
-            $this->serializer = \Redis::SERIALIZER_IGBINARY;
-        }
-        elseif(function_exists('msgpack_pack'))
-        {
-            $this->serializer = \Redis::SERIALIZER_MSGPACK;
-        }
+        $this->namespace       = $namespace;
+        $this->defaultLifetime = $defaultLifetime;
+        $this->scope           = $scope;
+        $this->connector       = $connector;
+
+        $this->connectRedis($setting);
     }
 
     /**
      * 连接 Redis 服务器。
      * Connect to the Redis server.
      *
+     * @param  object $setting
      * @access private
      * @return object
      */
-    private function connectRedis()
+    private function connectRedis($setting)
     {
         global $config;
 
         try
         {
-            $this->redis = \helper::connectRedis($config->redis);
-            $this->redis->setOption(\Redis::OPT_SERIALIZER, $this->serializer);
+            $this->redis = \helper::connectRedis($setting);
+            $this->redis->setOption(\Redis::OPT_SERIALIZER, $this->getSerializer($setting->serializer));
         }
         catch(Exception $e)
         {
             \helper::end($e->getMessage());
         }
+    }
+
+    /**
+     * 设置序列化器。
+     * Set the serializer.
+     *
+     * @param  string $serializer
+     * @access private
+     * @return void
+     */
+    private function getSerializer($serializer)
+    {
+        if($serializer == 'igbinary') return \Redis::SERIALIZER_IGBINARY;
+        if($serializer == 'php')      return \Redis::SERIALIZER_PHP;
+        if($serializer == 'msgpack')  return \Redis::SERIALIZER_MSGPACK;
+        if($serializer == 'json')     return \Redis::SERIALIZER_JSON;
     }
 
     /**
@@ -141,13 +149,15 @@ class RedisDriver implements CacheInterface
      */
     public function clear()
     {
+        if($this->scope == 'private') return $this->redis->flushDB();
+
         /* With Redis::SCAN_RETRY enabled */
         $this->redis->setOption(\Redis::OPT_SCAN, \Redis::SCAN_RETRY);
 
         $it   = null;
         $keys = [];
 
-        while($cachedKeys = $this->redis->scan($it, $this->namespace . ':*'))
+        while($cachedKeys = $this->redis->scan($it, $this->namespace . $this->connector . '*'))
         {
             $keys = array_merge($keys, $cachedKeys);
         }

@@ -17,19 +17,47 @@ use ZenTao\Cache\SimpleCache\InvalidArgumentException;
 class ApcuDriver implements CacheInterface
 {
     /**
+     * 缓存命名空间。
+     * The cache namespace.
+     *
+     * @access private
      * @var string
      */
     private $namespace;
 
     /**
+     * 缓存默认生命周期。
+     * The cache default lifetime.
+     *
+     * @access private
      * @var int
      */
     private $defaultLifetime;
 
-    public function __construct($namespace = '', $defaultLifetime = 0)
+    /**
+     * 缓存服务范围。private 独享|public 共享。
+     * The cache scope.
+     *
+     * @access private
+     * @var string
+     */
+    private $scope;
+
+    /**
+     * 缓存键连接符。
+     * Cache key connector.
+     *
+     * @access private
+     * @var string
+     */
+    private $connector;
+
+    public function __construct($namespace = '', $defaultLifetime = 0, $scope = '', $connector = '')
     {
-        $this->namespace = $namespace;
+        $this->namespace       = $namespace;
         $this->defaultLifetime = $defaultLifetime;
+        $this->scope           = $scope;
+        $this->connector       = $connector;
     }
 
     public function get($key, $default = null)
@@ -53,7 +81,18 @@ class ApcuDriver implements CacheInterface
 
     public function clear()
     {
-        return apcu_clear_cache();
+        if($this->scope == 'private') return apcu_clear_cache();
+
+        $keys      = [];
+        $info      = apcu_cache_info();
+        $cacheList = $info['cache_list'];
+        foreach($cacheList as $cache)
+        {
+            if(strpos($cache['info'], $this->namespace . $this->connector) === 0) $keys[] = $cache['info'];
+        }
+        if(!$keys) return true;
+
+        return $this->deleteMultiple($keys);
     }
 
     public function getMultiple($keys, $default = null)
