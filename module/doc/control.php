@@ -734,7 +734,9 @@ class doc extends control
         if($template->files) $this->doc->deleteFiles(array_keys($template->files));
 
         if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-        return $this->sendSuccess(array());
+
+        $link = $this->createLink('doc', 'browseTemplate');
+        return $this->sendSuccess(array('load' => $link));
     }
 
     /**
