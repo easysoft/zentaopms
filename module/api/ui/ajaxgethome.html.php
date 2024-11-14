@@ -37,7 +37,7 @@ $buildLibItem = function(int $id, string $name, int $count = 0) use ($libColors,
 {
     return div
     (
-        setClass('doc-space-card-lib p-2 w-1/5 group'),
+        setClass('doc-space-card-lib p-1.5 w-1/5 group'),
         setKey($id),
         div
         (
@@ -89,7 +89,7 @@ $buildProgramItem = function($program) use ($type, $buildLibItem, $lang)
         ),
         div
         (
-            setClass('doc-space-card-libs py-3 px-1.5'),
+            setClass('doc-space-card-libs p-1.5'),
             empty($items) ? div(setClass('h-24 center text-gray'), $lang->noData) : div(setClass('row flex-wrap'), $items)
         )
     );
