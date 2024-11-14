@@ -17,11 +17,18 @@ $buildScopeCards = function($templates) use ($lang)
     $cardItems = array();
     foreach($templates as $template)
     {
-        $cardDesc = $template->templateDesc ? $template->templateDesc : $lang->docTemplate->noDesc;
-        $cardLink = helper::createLink('doc', 'view', "docID=$template->id");
+        $cardDesc   = $template->templateDesc ? $template->templateDesc : $lang->docTemplate->noDesc;
+        $viewLink   = helper::createLink('doc', 'view', "docID=$template->id");
+        $editLink   = helper::createLink('doc', 'browsetemplate', "libID=$template->lib&type=all&docID=$template->id&orderBy=id_desc&recTotal=0&recPerPage=20&page=1&mode=edit");
+        $deleteLink = helper::createLink('doc', 'deleteTemplate', "templateID=$template->id");
+
+        $actions = array();
+        $actions[] = array('icon' => 'edit', 'text' => $this->lang->docTemplate->edit, 'url' => $editLink);
+        $actions[] = array('icon' => 'trash', 'text' => $this->lang->docTemplate->delete, 'url' => $deleteLink, 'data-confirm' => $this->lang->docTemplate->confirmDelete);
+
         $cardItems[] = div
         (
-            common::hasPriv('doc', 'view') ? on::click()->do("openUrl('$cardLink')") : null,
+            common::hasPriv('doc', 'view') ? on::click()->do("clickTemplateCard(event, '$viewLink')") : null,
             setClass('doc-space-card-lib px-2 w-1/5 group'),
             div
             (
@@ -45,6 +52,25 @@ $buildScopeCards = function($templates) use ($lang)
                     setClass('text-gray text-clip text-sm py-1'),
                     set::title($cardDesc),
                     $cardDesc
+                ),
+                div
+                (
+                    setClass('toolbar absolute top-1 right-1 opacity-0 group-hover:opacity-100'),
+                    dropdown
+                    (
+                        btn
+                        (
+                            setClass('size-sm dropdown'),
+                            set::type('ghost'),
+                            set::icon('ellipsis-v'),
+                            set::caret(false),
+                        ),
+                        set::items($actions),
+                        set::flip(true),
+                        set::placement('bottom-center'),
+                        set::strategy('absolute'),
+                        set::hasIcons(false)
+                    )
                 )
             )
         );
