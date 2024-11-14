@@ -3816,7 +3816,7 @@ class docModel extends model
         $moduleID = $this->dao->lastInsertID();
 
         $path = $moduleData->grade == 1 ? ",{$moduleID}," : ",{$moduleData->parent},{$moduleID},";
-        $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->where('id')->eq($moduleID)->exec();
+        $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->set('short')->eq("custom{$moduleID}")->where('id')->eq($moduleID)->exec();
 
         return $moduleID;
     }
