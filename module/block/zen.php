@@ -1653,7 +1653,7 @@ class blockZen extends block
         foreach($products as $productID => $product)
         {
             $isShadow    = $product->shadow;
-            $useObjectID = !$isShadow ? $productID : $productProject[$productID]; // 如果是影子产品，用项目查询
+            $useObjectID = !$isShadow ? $productID : (isset($productProject[$productID]) ? $productProject[$productID] : $productID); // 如果是影子产品，用项目查询
             $useDataKey  = !$isShadow ? 'product' : 'project';
 
             $product->addToday          = 0;
