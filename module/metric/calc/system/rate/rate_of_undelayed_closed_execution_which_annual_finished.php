@@ -28,10 +28,8 @@ class rate_of_undelayed_closed_execution_which_annual_finished extends baseCalc
 
     public function calculate($row)
     {
-        if(empty($row->closedDate)) return false;
-
-        $year = substr($row->closedDate, 0, 4);
-        if($year == '0000') return false;
+        $year = $this->getYear($row->closedDate);
+        if(!$year) return false;
 
         if(!isset($this->result[$year])) $this->result[$year] = array('closed' => 0, 'undelayed' => 0);
         if($row->status == 'closed') $this->result[$year]['closed'] ++;

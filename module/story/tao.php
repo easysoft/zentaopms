@@ -826,6 +826,17 @@ class storyTao extends storyModel
             $changes  = common::createChanges($oldParentStory, $newParentStory);
             if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             $this->updateLane($oldParentStory->id, $oldParentStory->type);
+
+            if($this->config->edition != 'open')
+            {
+                $this->dao->delete()->from(TABLE_RELATION)
+                    ->where('relation')->eq('subdivideinto')
+                    ->andWhere('AID')->eq($oldStory->parent)
+                    ->andWhere('AType')->eq($oldParentStory->type)
+                    ->andWhere('BID')->eq($oldStory->id)
+                    ->andWhere('BType')->eq($oldStory->type)
+                    ->exec();
+            }
         }
 
         if($story->parent > 0)
@@ -848,6 +859,17 @@ class storyTao extends storyModel
             $changes  = common::createChanges($parentStory, $newParentStory);
             if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             $this->updateLane($parentStory->id, $parentStory->type);
+
+            if($this->config->edition != 'open')
+            {
+                $relation = new stdClass();
+                $relation->AID      = $story->parent;
+                $relation->AType    = $parentStory->type;
+                $relation->relation = 'subdivideinto';
+                $relation->BID      = $oldStory->id;
+                $relation->BType    = $oldStory->type;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
         }
         else
         {
@@ -980,6 +1002,17 @@ class storyTao extends storyModel
         $actionID = $this->action->create('bug', $bugID, 'Closed');
         $changes  = common::createChanges($oldBug, $bug, 'bug');
         $this->action->logHistory($actionID, $changes);
+
+        if($this->config->edition != 'open')
+        {
+            $relation = new stdClass();
+            $relation->AID      = $bugID;
+            $relation->AType    = 'bug';
+            $relation->relation = 'transferredto';
+            $relation->BID      = $storyID;
+            $relation->BType    = 'story';
+            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+        }
 
         /* add files to story from bug. */
         $files = $this->dao->select('*')->from(TABLE_FILE)->where('objectType')->eq('bug')->andWhere('objectID')->eq($bugID)->fetchAll();

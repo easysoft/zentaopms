@@ -1469,19 +1469,6 @@ $lang->job->methodOrder[25] = 'exec';
 $lang->job->methodOrder[30] = 'view';
 $lang->job->methodOrder[35] = 'trigger';
 
-$lang->resource->account = new stdclass();
-$lang->resource->account->browse = 'browse';
-$lang->resource->account->create = 'create';
-$lang->resource->account->edit   = 'editAction';
-$lang->resource->account->delete = 'deleteAction';
-$lang->resource->account->view   = 'view';
-
-$lang->account->methodOrder[0]  = 'browse';
-$lang->account->methodOrder[5]  = 'create';
-$lang->account->methodOrder[10] = 'edit';
-$lang->account->methodOrder[15] = 'delete';
-$lang->account->methodOrder[20] = 'view';
-
 $lang->resource->serverroom = new stdclass();
 $lang->resource->serverroom->browse = 'browse';
 $lang->resource->serverroom->create = 'create';
@@ -1510,7 +1497,6 @@ $lang->resource->system->ossview      = 'ossView';
 $lang->resource->ops = new stdclass();
 $lang->resource->ops->provider = 'provider';
 $lang->resource->ops->city     = 'city';
-$lang->resource->ops->cpubrand = 'cpuBrand';
 $lang->resource->ops->os       = 'os';
 
 /* Doc. */
@@ -1990,6 +1976,7 @@ $lang->resource->aiapp->collectMiniProgram      = 'collectMiniProgram';
 /* Others. */
 $lang->resource->api = new stdclass();
 $lang->resource->api->index         = 'index';
+$lang->resource->api->view          = 'view';
 $lang->resource->api->createLib     = 'createLib';
 $lang->resource->api->editLib       = 'editLib';
 $lang->resource->api->deleteLib     = 'deleteLib';
@@ -2013,6 +2000,7 @@ $lang->resource->api->debug        = 'debug';
 $lang->resource->api->sql          = 'sql';
 
 $lang->api->methodOrder[0]   = 'index';
+$lang->api->methodOrder[3]   = 'view';
 $lang->api->methodOrder[5]   = 'createLib';
 $lang->api->methodOrder[10]  = 'editLib';
 $lang->api->methodOrder[15]  = 'deleteLib';

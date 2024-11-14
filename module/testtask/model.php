@@ -107,7 +107,7 @@ class testtaskModel extends model
     {
         $begin = '';
         $end   = '';
-        $beginAndEnd = $this->loadModel('action')->computeBeginAndEnd($browseType);
+        $beginAndEnd = $this->loadModel('action')->computeBeginAndEnd($browseType, '', 'next');
         if($browseType != 'all' and $browseType != 'newest' and !empty($beginAndEnd))
         {
             $begin = $beginAndEnd['begin'];

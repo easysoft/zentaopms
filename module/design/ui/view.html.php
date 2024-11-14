@@ -82,51 +82,49 @@ detailBody
     ),
     detailSide
     (
-        panel
+        tabs
         (
-            set::title
+            set::id('detailTabs'),
+            tabPane
             (
-                setClass('font-bold text-md'),
-                $lang->design->basicInfo
-            ),
-            setClass('mt-2'),
-            set::shadow(false),
-            tableData
-            (
-                item
+                set::title($lang->design->basicInfo),
+                tableData
                 (
-                    set::name($lang->design->type),
-                    zget($lang->design->typeList, $design->type)
-                ),
-                item
-                (
-                    set::name($lang->design->product),
-                    $design->productName
-                ),
-                item
-                (
-                    set::name($lang->design->story),
-                    $storyItem
-                ),
-                item
-                (
-                    set::name($lang->design->submission),
-                    html($design->commit)
-                ),
-                item
-                (
-                    set::name($lang->design->assignedTo),
-                    zget($users, $design->assignedTo)
-                ),
-                item
-                (
-                    set::name($lang->design->createdBy),
-                    zget($users, $design->createdBy)
-                ),
-                item
-                (
-                    set::name($lang->design->createdDate),
-                    substr($design->createdDate, 0, 11)
+                    item
+                    (
+                        set::name($lang->design->type),
+                        zget($lang->design->typeList, $design->type)
+                    ),
+                    item
+                    (
+                        set::name($lang->design->product),
+                        $design->productName
+                    ),
+                    item
+                    (
+                        set::name($lang->design->story),
+                        $storyItem
+                    ),
+                    item
+                    (
+                        set::name($lang->design->submission),
+                        html($design->commit)
+                    ),
+                    item
+                    (
+                        set::name($lang->design->assignedTo),
+                        zget($users, $design->assignedTo)
+                    ),
+                    item
+                    (
+                        set::name($lang->design->createdBy),
+                        zget($users, $design->createdBy)
+                    ),
+                    item
+                    (
+                        set::name($lang->design->createdDate),
+                        substr($design->createdDate, 0, 11)
+                    )
                 )
             )
         )

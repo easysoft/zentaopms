@@ -11,10 +11,11 @@ declare(strict_types=1);
 namespace zin;
 
 $privs = array();
-$privs['edit']    = hasPriv('doc', 'edit');
-$privs['delete']  = hasPriv('doc', 'delete');
-$privs['moveDoc'] = hasPriv('doc', 'moveDoc');
-$privs['collect'] = hasPriv('doc', 'collect');
+$privs['edit']         = hasPriv('doc', 'edit');
+$privs['delete']       = hasPriv('doc', 'delete');
+$privs['moveDoc']      = hasPriv('doc', 'moveDoc');
+$privs['collect']      = hasPriv('doc', 'collect');
+$privs['batchMoveDoc'] = hasPriv('doc', 'batchMoveDoc');
 
 $spaceID = 1;
 $libID   = $menu['id'];

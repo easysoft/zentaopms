@@ -15,9 +15,9 @@ class viewPage extends page
             'closeReason'      => "/html/body/div[1]/div/div/div/div[2]/div[2]/div[1]/div[2]/div[2]/div/div[6]/div[2]",
             'activate'         => "//*[@type='submit']",
             'assignToBtn'      => "//*[@type='submit']",
+            /*提交评审弹窗*/
             'submitReviewSave' => "//*[@type='submit']",
-            'subReviewerBtn'   => "//*[@id='reviewer']",
-            'subReviewer'      => "/html/body/div[3]/div/menu/menu/li[2]/a/div",
+            'subReviewer'      => "//*[@id='reviewer']",
             /*关联的业需和用需*/
             'firLinkStories'   => "//*[@id='mainContainer']/div/div/div[2]/div[2]/div[2]/div[2]/div/ul/li[2]/div/div",
             'secLinkStories'   => "//*[@id='mainContainer']/div/div/div[2]/div[2]/div[2]/div[2]/div/ul/li[4]/div/div",

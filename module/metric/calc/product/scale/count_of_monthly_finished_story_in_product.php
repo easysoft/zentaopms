@@ -32,13 +32,9 @@ class count_of_monthly_finished_story_in_product extends baseCalc
         $closedDate   = $row->closedDate;
         $closedReason = $row->closedReason;
 
-        if(empty($closedDate)) return false;
-
-        $year  = substr($closedDate, 0, 4);
+        $year = $this->getYear($closedDate);
+        if(!$year) return false;
         $month = substr($closedDate, 5, 2);
-
-        if(empty($year) || empty($month)) return false;
-        if($year == '0000') return false;
 
         if($closedReason != 'done') return false;
 

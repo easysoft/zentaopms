@@ -30,10 +30,9 @@ class count_of_annual_created_bug_in_project extends baseCalc
     {
         $project    = $data->project;
         $openedDate = $data->openedDate;
-        if(empty($openedDate)) return false;
 
-        $year = substr($openedDate, 0, 4);
-        if($year == '0000') return false;
+        $year = $this->getYear($openedDate);
+        if(!$year) return false;
 
         if(!isset($this->result[$project])) $this->result[$project] = array();
         if(!isset($this->result[$project][$year])) $this->result[$project][$year] = 0;

@@ -28,11 +28,13 @@ class count_of_daily_resolved_bug_in_product extends baseCalc
 
     public function calculate($row)
     {
-        if($row->status == 'active' || empty($row->resolvedDate)) return false;
+        $year = $this->getYear($row->resolvedDate);
+        if(!$year) return false;
+
+        if($row->status == 'active') return false;
 
         $date = substr($row->resolvedDate, 0, 10);
         list($year, $month, $day) = explode('-', $date);
-        if($year == '0000') return false;
 
         if(!isset($this->result[$row->product]))                      $this->result[$row->product] = array();
         if(!isset($this->result[$row->product][$year]))               $this->result[$row->product][$year] = array();

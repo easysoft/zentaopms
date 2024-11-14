@@ -510,7 +510,8 @@ class metricTao extends metricModel
     {
         $this->dao->delete()->from(TABLE_METRICLIB)
             ->where('metricCode')->eq($code)
-            ->andWhere('deleted')->eq('1')
+            ->andWhere('deleted', true)->eq('1')
+            ->orWhere('value')->eq(0)->markRight(1)
             ->exec();
     }
 

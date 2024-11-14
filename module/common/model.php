@@ -907,10 +907,10 @@ class commonModel extends model
 
                 if($value != stripslashes((string)$old->$key))
                 {
-                    $diff = '';
-                    if(substr_count((string)$value, "\n") > 1     or
-                        substr_count((string)$old->$key, "\n") > 1 or
-                        strpos('name,title,desc,spec,steps,content,digest,verify,report,definition,analysis,summary,prevention,resolution,outline,schedule,minutes,sql,interface,ui,langs,performance,privileges,search,actions,deploy,bi,safe,other', strtolower($key)) !== false)
+                    $diff       = '';
+                    $showDiff   = (substr_count((string)$value, "\n") > 1 || substr_count((string)$old->$key, "\n") > 1 || strpos(',name,title,desc,spec,steps,content,digest,verify,report,definition,analysis,summary,prevention,resolution,outline,schedule,minutes,sql,interface,ui,langs,performance,privileges,search,actions,deploy,bi,safe,other,', ',' . strtolower($key) . ',') !== false);
+                    $hiddenDiff = array('bug' => 'resolution');
+                    if($showDiff && (!isset($hiddenDiff[$moduleName]) || (isset($hiddenDiff[$moduleName]) && strpos(",$hiddenDiff[$moduleName],", ",$key,") === false)))
                     {
                         $diff = commonModel::diff((string)$old->$key, (string)$value);
                     }
@@ -1941,18 +1941,21 @@ eof;
         {
             if(!isset($executionsStatus[$object->execution]))
             {
-                $execution = $commonModel->loadModel('execution')->getByID($object->execution);
+                $execution = $commonModel->loadModel('execution')->getByID((int)$object->execution);
                 $executionsStatus[$object->execution] = $execution ? $execution->status : '';
             }
             if($executionsStatus[$object->execution] == 'closed'  || !empty($config->CRProject)) return false;
 
             /* Check the execution's project is closed. */
-            if(isset($object->project) && !isset($projectsStatus[$object->project]))
+            if(isset($object->project))
             {
-                $project = $commonModel->loadModel('project')->getByID((int)$object->project);
-                $projectsStatus[$object->project] = $project ? $project->status : '';
+                if(!isset($projectsStatus[$object->project]))
+                {
+                    $project = $commonModel->loadModel('project')->getByID((int)$object->project);
+                    $projectsStatus[$object->project] = $project ? $project->status : '';
+                }
+                if($projectsStatus[$object->project] == 'closed') return false;
             }
-            if($projectsStatus[$object->project] == 'closed') return false;
         }
 
         return true;

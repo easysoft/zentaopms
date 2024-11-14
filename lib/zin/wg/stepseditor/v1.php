@@ -37,7 +37,9 @@ class stepsEditor extends wg
         'subLevelText?: string',            // 子级文本。
         'expectDisabledTip?: string',       // 预期输入框禁用提示。
         'deleteStepTip?: string',           // 有子层级禁用删除提示。
-        'dragNestedTip?: string'            // 拖拽超出提示。
+        'dragNestedTip?: string',           // 拖拽超出提示。
+        'expectDisabled: bool=true',        // 是否禁用预期输入框。
+        'postDataID: bool=false'            // 是否提交表单时附加 ID。
     );
 
     public static function getPageJS(): ?string
@@ -64,10 +66,10 @@ class stepsEditor extends wg
         $subLevelText      = $this->prop('subLevelText', data('lang.testcase.stepSubLevel'));
         $id                = $this->prop('id') ? $this->prop('id') : $this->gid;
 
-        $options = $this->props->pick(array('name', 'expectsName', 'data'));
+        $options = $this->props->pick(array('name', 'expectsName', 'data', 'postDataID', 'expectDisabled'));
         $options['expectDisabledTip'] = $this->prop('expectDisabledTip', data('lang.testcase.expectDisabledTip'));
-        $options['deleteStepTip'] = $this->prop('deleteStepTip', data('lang.testcase.deleteStepTip'));
-        $options['dragNestedTip'] = $this->prop('dragNestedTip', data('lang.testcase.dragNestedTip'));
+        $options['deleteStepTip']     = $this->prop('deleteStepTip', data('lang.testcase.deleteStepTip'));
+        $options['dragNestedTip']     = $this->prop('dragNestedTip', data('lang.testcase.dragNestedTip'));
 
         return div
         (

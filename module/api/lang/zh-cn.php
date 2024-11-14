@@ -15,6 +15,7 @@ $lang->api->sql      = 'SQL查询接口';
 $lang->api->manage   = '接口管理';
 
 $lang->api->index               = '接口空间';
+$lang->api->view                = '接口详情';
 $lang->api->editLib             = '编辑库';
 $lang->api->releases            = '版本管理';
 $lang->api->deleteRelease       = '删除版本';
@@ -62,7 +63,8 @@ $lang->api->defaultVersion      = "当前版本";
 $lang->api->zentaoAPI           = "禅道API文档v1";
 $lang->api->search              = "搜索";
 $lang->api->allLibs             = "全部库";
-$lang->api->noLinked            = "未关联{$lang->productCommon}和{$lang->projectCommon}";
+$lang->api->noLinked            = "独立接口";
+$lang->api->apiCatalog          = '接口目录';
 $lang->api->addCatalog          = '添加目录';
 $lang->api->editCatalog         = '编辑目录';
 $lang->api->sortCatalog         = '目录排序';
@@ -160,6 +162,9 @@ $lang->api->format             = '格式化';
 $lang->api->libType            = '接口库类型';
 $lang->api->product            = '所属' . $lang->productCommon;
 $lang->api->project            = '所属' . $lang->projectCommon;
+$lang->api->apiTotalInfo       = '共 %d 个 API';
+$lang->api->showNotEmpty       = '仅显示有接口的';
+$lang->api->showClosed         = '显示包含已关闭的';
 
 $lang->api->methodOptions      = array(
     'GET'     => 'GET',
@@ -183,9 +188,9 @@ $lang->api->requestTypeOptions['application/x-www-form-urlencoded'] = 'applicati
 $lang->api->requestTypeOptions['multipart/form-data']               = 'multipart/form-data';
 
 $lang->api->libTypeList = array();
-$lang->api->libTypeList['product'] = $lang->productCommon . '接口库';
-$lang->api->libTypeList['project'] = $lang->projectCommon . '接口库';
-$lang->api->libTypeList['nolink']  = '独立接口库';
+$lang->api->libTypeList['product'] = $lang->productCommon . '接口';
+$lang->api->libTypeList['project'] = $lang->projectCommon . '接口';
+$lang->api->libTypeList['nolink']  = '独立接口';
 
 $lang->api->statusOptions      = array(
     'done'   => '开发完成',
@@ -229,8 +234,17 @@ $lang->apistruct->name = '结构名';
 
 $lang->api_lib_release = new stdClass();
 $lang->api_lib_release->version = '版本号';
+$lang->api_lib_release->desc    = '描述';
 
 $lang->api->error             = new stdclass();
 $lang->api->error->onlySelect = 'SQL查询接口只允许SELECT查询';
 $lang->api->error->disabled   = '因为安全原因，该功能被禁用。可以到config目录，修改配置项 %s，打开此功能。';
 $lang->api->error->notInput   = '因字段参数类型限制，暂不支持调试';
+
+$lang->api->filterTypes[] = array('all', '全部');
+$lang->api->filterTypes[] = array('createdByMe', '我创建的');
+$lang->api->filterTypes[] = array('editedByMe', '我编辑的');
+
+$lang->api->homeFilterTypes['nolink']  = $lang->api->libTypeList['nolink'];
+$lang->api->homeFilterTypes['product'] = $lang->api->libTypeList['product'];
+$lang->api->homeFilterTypes['project'] = $lang->api->libTypeList['project'];

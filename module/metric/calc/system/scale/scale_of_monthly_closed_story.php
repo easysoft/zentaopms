@@ -33,10 +33,9 @@ class scale_of_monthly_closed_story extends baseCalc
 
         if(empty($row->closedDate) || $row->status != 'closed') return false;
 
-        $year  = substr($row->closedDate, 0, 4);
+        $year = $this->getYear($row->closedDate);
+        if(!$year) return false;
         $month = substr($row->closedDate, 5, 2);
-
-        if($year == '0000') return false;
 
         if(!isset($this->result[$year])) $this->result[$year] = array();
         if(!isset($this->result[$year][$month])) $this->result[$year][$month] = 0;

@@ -62,17 +62,12 @@ $fnGenerateCols = function() use ($config, $project)
         $fieldList['actions']['actionsMap']['edit']['data-size'] = 'md';
         $fieldList['actions']['actionsMap']['edit']['url'] = createLink('programplan', 'edit', "stageID={rawID}&projectID={projectID}");
     }
-    if(!$this->cookie->showStage)
+    if(!$this->cookie->showStage && !$this->cookie->showTask)
     {
         $fieldList['name']['type'] = 'title';
         if(!in_array($project->model, array('waterfall', 'waterfallplus', 'ipd'))) unset($fieldList['name']['nestedToggle']);
     }
 
-    if(!$this->cookie->showTask)
-    {
-        $fieldList['name']['type'] = 'title';
-        if(!in_array($project->model, array('waterfall', 'waterfallplus', 'ipd'))) unset($fieldList['name']['nestedToggle']);
-    }
     if(!$project->hasProduct) unset($fieldList['productName']);
 
     return array_values($fieldList);

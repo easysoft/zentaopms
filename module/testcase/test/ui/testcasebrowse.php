@@ -18,8 +18,8 @@ $data1 = zenData('product')->loadYaml('product')->gen(1);
 $data2 = zenData('case')->loadYaml('case')->gen(1);
 $tester = new testcase();
 
-$project  = array(
+$product  = array(
     'productID' => 1,
 );
 
-r($tester->testcaseBrowse($project)) && p('message,status') && e('测试用例列表验证成功,SUCCESS'); //测试用例列表验证成功
+r($tester->testcaseBrowse($product)) && p('message,status') && e('测试用例列表验证成功,SUCCESS'); //测试用例列表验证成功

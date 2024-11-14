@@ -94,13 +94,6 @@ fields:
     loop: 0
     loopfix: ""
     format: ""
-  - field: isKey
-    note: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    loopfix: ""
-    format: ""
   - field: isValue
     note: ""
     prefix: ""

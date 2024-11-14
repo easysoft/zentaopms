@@ -78,8 +78,8 @@ class backBtn extends btn
             'ai'             => 'ai-models',
             'api'            => 'api-index',
             'demand'         => 'demand-browse,demand-view,my-work,my-contribute,feedback-adminview,feedback-admin,my-index,demandpool-track,product-dynamic',
-            'issue'          => 'issue-browse,issue-view,my-index,project-dynamic,execution-dynamic,project-view,execution-view',
-            'risk'           => 'risk-browse,risk-view,my-index,project-dynamic,execution-dynamic,project-view,execution-view',
+            'issue'          => 'issue-browse,issue-view,my-index,project-index,project-dynamic,execution-dynamic,project-view,execution-view',
+            'risk'           => 'risk-browse,risk-view,my-index,project-index,project-dynamic,execution-dynamic,project-view,execution-view',
             'meeting'        => 'meeting-browse,meeting-view,my-index,project-dynamic,execution-dynamic,project-view,execution-view',
             'todo'           => 'my-todo,my-effort',
             'feedback'       => 'my-effort,feedback-admin,feedback-browse,my-work,my-contribute',
@@ -92,7 +92,9 @@ class backBtn extends btn
             'review'         => 'review-browse,my-index,product-dynamic,project-dynamic,project-view,programplan-browse,project-execution',
             'charter'        => 'charter-browse,charter-view',
             'roadmap'        => 'charter-view',
-            'approvalflow'   => 'approvalflow-browse'
+            'approvalflow'   => 'approvalflow-browse',
+            'host'           => 'host-browse,my-index',
+            'deploy'         => 'deploy-browse',
         );
 
         $props  = parent::getProps();

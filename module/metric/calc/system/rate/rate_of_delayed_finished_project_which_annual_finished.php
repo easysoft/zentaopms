@@ -28,9 +28,8 @@ class rate_of_delayed_finished_project_which_annual_finished extends baseCalc
 
     public function calculate($row)
     {
-        if(empty($row->closedDate)) return false;
-
-        $closedYear = substr($row->closedDate, 0, 4);
+        $closedYear = $this->getYear($row->closedDate);
+        if(!$closedYear) return false;
 
         if(!isset($this->result[$closedYear])) $this->result[$closedYear] = array('closed' => 0, 'delayed' => 0);
         if($row->status == 'closed') $this->result[$closedYear]['closed'] ++;

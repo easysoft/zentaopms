@@ -38,6 +38,7 @@ pipeline {
 
   environment {
     TZ="Asia/Shanghai"
+    GIT_HTTP_USER_AGENT="gitfox/pipeline"
 
     ZENTAO_RELEASE_PATH = "${WORKSPACE}/release"
     XUANXUAN_SRC_PATH = "${WORKSPACE}/xuansrc"

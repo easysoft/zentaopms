@@ -408,7 +408,7 @@ class doc extends control
 
             $docResult = $this->doc->create($docData, $this->post->labels);
             if(!$docResult || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->docZen->responseAfterCreate($docData->lib, $docResult);
+            return $this->docZen->responseAfterCreate($docResult);
         }
 
         $this->docZen->assignVarsForCreate($objectType, $objectID, $libID, $moduleID, $docType);
@@ -759,34 +759,41 @@ class doc extends control
      * 文档详情页面。
      * Document details page.
      *
-     * @param  int    $docID
-     * @param  int    $version
-     * @param  int    $appendLib
+     * @param  string|int   $docID
+     * @param  int          $version
      * @access public
      * @return void
      */
-    public function view(int $docID = 0, int $version = 0, int $appendLib = 0)
+    public function view(string|int $docID = 0, int $version = 0)
     {
-        $doc = $this->doc->getByID($docID, $version, true);
+        $isApi = is_string($docID) && strpos($docID, 'api.') === 0;
+        $docID = $isApi ? (int)str_replace('api.', '', $docID) : (int)$docID;
+        $doc   = $isApi ? $this->loadModel('api')->getByID($docID, $version) : $this->doc->getByID($docID, $version, true);
         if(!$doc || !isset($doc->id))
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
             return $this->sendError($this->lang->notFound, $this->inlink('index'));
         }
-        if(!$this->doc->checkPrivDoc($doc)) return $this->sendError($this->lang->doc->accessDenied, inlink('index'));
+        if(!$isApi && !$this->doc->checkPrivDoc($doc)) return $this->sendError($this->lang->doc->accessDenied, inlink('index'));
 
-        $lib = $this->doc->getLibByID((int)$doc->lib);
-        if(!empty($lib) && $lib->deleted == '1') $appendLib = $doc->lib;
-        if($this->app->tab == 'doc' && !empty($lib) && $lib->type == 'execution') $appendLib = $doc->lib;
-
+        $lib        = $this->doc->getLibByID((int)$doc->lib);
         $objectType = $lib->type;
-        $objectID   = $this->doc->getObjectIDByLib($lib, $objectType);
+        if($objectType == 'api')
+        {
+            if(isset($lib->product) && $lib->product) list($objectType, $objectID) = array('product', $lib->product);
+            if(isset($lib->project) && $lib->project) list($objectType, $objectID) = array('project', $lib->project);
+        }
+        else
+        {
+            $objectID   = $this->doc->getObjectIDByLib($lib, $objectType);
+        }
 
         /* Get doc. */
         if($docID) $this->doc->createAction($docID, 'view');
 
         $this->view->title = $doc->title;
         $docParam = $version ? ($docID . '_' . $version) : $docID;
+        if($isApi) $docParam = 'api.' . $docParam;
         echo $this->fetch('doc', 'app', "type=$objectType&spaceID=$objectID&libID=$lib->id&moduleID=$doc->module&docID=$docParam&mode=view");
     }
 
@@ -1237,8 +1244,8 @@ class doc extends control
 
             $this->doc->moveLib($libID, $data);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            return $this->docZen->responseAfterMove($this->post->space, $spaceType, $libID);
+            $spaceTypeChanged = $spaceType != $lib->type;
+            return $this->docZen->responseAfterMove($this->post->space, $libID, 0, $spaceTypeChanged);
         }
 
         $this->docZen->setAclForCreateLib($spaceType);
@@ -1294,7 +1301,8 @@ class doc extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            return $this->docZen->responseAfterMove($this->post->space, $spaceType, $data->lib, $locate, $docID);
+            $spaceTypeChanged = $spaceType != $lib->type;
+            return $this->docZen->responseAfterMove($this->post->space, $data->lib, $docID, $spaceTypeChanged);
         }
 
         $projects   = $this->loadModel('project')->getPairsByProgram(0, 'all', false, 'order_asc');
@@ -1492,13 +1500,15 @@ class doc extends control
         if(isset($this->lang->doc->menu->{$menuType})) $this->lang->doc->menu->{$menuType}['alias'] .= ',' . $this->app->rawMethod;
 
         $docVersion = 0;
+        $isApi      = is_string($docID) && strpos($docID, 'api.') === 0;
+        if($isApi) $docID = str_replace('api.', '', $docID);
         if(is_string($docID) && strpos($docID, '_') !== false) list($docID, $docVersion) = explode('_', $docID);
 
         $this->view->type           = $type;
         $this->view->spaceID        = $spaceID;
         $this->view->libID          = $libID;
         $this->view->moduleID       = $moduleID;
-        $this->view->docID          = (int)$docID;
+        $this->view->docID          = $isApi ? "api.$docID" : (int)$docID;
         $this->view->docVersion     = (int)$docVersion;
         $this->view->mode           = $mode;
         $this->view->filterType     = $filterType;
@@ -1585,13 +1595,21 @@ class doc extends control
      * Ajax: Get doc data.
      * Ajax: 获取文档数据。
      *
-     * @param  int    $docID
+     * @param  string|int    $docID
      * @param  int    $version
      * @access public
      * @return void
      */
-    public function ajaxGetDoc(int $docID, int $version = 0, $details = 'no')
+    public function ajaxGetDoc(string|int $docID, int $version = 0, $details = 'no')
     {
+        if(is_string($docID) && strpos($docID, 'api.') === 0)
+        {
+            $apiID = (int)str_replace('api.', '', $docID);
+            echo $this->fetch('api', 'ajaxGetApi', "apiID=$apiID&version=$version");
+            return;
+        }
+
+        $docID = (int)$docID;
         $doc = $this->doc->getByID($docID, $version);
         $doc->lib     = (int)$doc->lib;
         $doc->module  = (int)$doc->module;

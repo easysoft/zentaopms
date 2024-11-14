@@ -167,7 +167,7 @@ $tabs[] = setting()
     ->group('related')
     ->title($lang->task->legendEffort)
     ->control('taskEffortInfo');
-$tabs[] = setting()
+$tabs['taskMiscInfo'] = setting()
     ->group('related')
     ->title($lang->task->legendMisc)
     ->control('taskMiscInfo');

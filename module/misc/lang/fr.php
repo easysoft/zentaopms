@@ -114,6 +114,7 @@ $lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec
 $lang->misc->feature->promptLearnMore   = 'https://www.zentao.net/book/zentaopms/1097.html';
 
 /* Release Date. */
+$lang->misc->releaseDate['21.1']        = '2024-11-15';
 $lang->misc->releaseDate['21.0']        = '2024-11-01';
 $lang->misc->releaseDate['20.8']        = '2024-10-21';
 $lang->misc->releaseDate['20.7.1']      = '2024-09-30';
@@ -239,6 +240,7 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
+$lang->misc->feature->all['21.1'][]        = array('title' => 'This launch includes enhanced document interface space, improved host functionality, refined object relationship mapping, implementation of zero-padding logic for metrics, DuckDB-related optimizations, and significant enhancements to our online features.', 'desc' => '');
 $lang->misc->feature->all['21.0'][]        = array('title' => 'Optimization of document functionalities; enhancements to product and project process templates in the BI designer.', 'desc' => '');
 $lang->misc->feature->all['20.8'][]        = array('title' => 'Document Optimization: We have optimized the task dependencies and fixed some Bugs.', 'desc' => '');
 $lang->misc->feature->all['20.7.1'][]      = array('title' => 'Addressing any known bugs.', 'desc' => '');

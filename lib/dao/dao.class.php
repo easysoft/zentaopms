@@ -262,6 +262,7 @@ class dao extends baseDAO
      */
     public function checkExtend($fields)
     {
+        global $lang;
         if(!$fields) return $this;
         foreach($fields as $field)
         {
@@ -276,7 +277,7 @@ class dao extends baseDAO
                     if($rule->type != 'system' || $rule->rule != 'notempty') continue;
 
                     $files = !empty($_FILES[$field->field]) ? $_FILES[$field->field] : '';
-                    if(empty($files['size'][0])) dao::$errors[$field->field][] = sprintf($this->lang->error->notempty, $field->name);
+                    if(empty($files['size'][0])) dao::$errors[$field->field][] = sprintf($lang->error->notempty, $field->name);
                     break;
                 }
                 continue;

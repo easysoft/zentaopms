@@ -130,6 +130,7 @@ $lang->SRCommon = '目标';
 /* Doc menu. */
 $lang->doc->menu            = new stdclass();
 $lang->doc->menu->dashboard = array('link' => "{$lang->dashboard}|doc|index");
+$lang->doc->menu->quick     = array('link' => "{$lang->doc->quick}|doc|quick");
 $lang->doc->menu->my        = array('link' => "{$lang->doc->mySpace}|doc|mySpace|", 'alias' => 'myspace');
 $lang->doc->menu->project   = array('link' => "{$lang->doc->projectSpace}|doc|projectSpace", 'alias' => 'showfiles,project');
 $lang->doc->menu->custom    = array('link' => "{$lang->doc->teamSpace}|doc|teamSpace|", 'alias' => 'teamspace');
@@ -139,9 +140,10 @@ $lang->doc->dividerMenu = ',project,';
 /* Doc menu order. */
 $lang->doc->menuOrder     = array();
 $lang->doc->menuOrder[5]  = 'dashboard';
-$lang->doc->menuOrder[10] = 'my';
-$lang->doc->menuOrder[15] = 'custom';
-$lang->doc->menuOrder[20] = 'project';
+$lang->doc->menuOrder[10] = 'quick';
+$lang->doc->menuOrder[15] = 'my';
+$lang->doc->menuOrder[20] = 'custom';
+$lang->doc->menuOrder[25] = 'project';
 
 /* Admin menu. */
 $lang->admin->menu = new stdclass();

@@ -38,21 +38,19 @@ class count_of_monthly_delivered_story_in_product extends baseCalc
         $month = null;
         if($stage == 'released')
         {
-            if(empty($releasedDate)) return false;
-            $year = substr($releasedDate, 0, 4);
-            if($year == '0000') return false;
+            $year = $this->getYear($releasedDate);
+            if(!$year) return false;
+
             $month = substr($releasedDate, 5, 2);
         }
 
         if($closedReason == 'done')
         {
-            if(empty($closedDate)) return false;
-            $year = substr($closedDate, 0, 4);
-            if($year == '0000') return false;
+            $year = $this->getYear($closedDate);
+            if(!$year) return false;
+
             $month = substr($closedDate, 5, 2);
         }
-
-        if(empty($year)) return false;
 
         if(!isset($this->result[$product])) $this->result[$product] = array();
         if(!isset($this->result[$product][$year])) $this->result[$product][$year] = array();

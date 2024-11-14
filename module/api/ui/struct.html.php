@@ -10,35 +10,20 @@ declare(strict_types=1);
  */
 namespace zin;
 
-featureBar
-(
-    li(backBtn(setClass('ghost'), set::icon('back'), $lang->goback)),
-    div(setClass('divider')),
-    li
-    (
-        set::className('nav-item'),
-        $lang->struct->list
-    )
-);
-
-toolbar
-(
-    hasPriv('api', 'createStruct') ? item(set(array
-    (
-        'icon'        => 'plus',
-        'text'        => $lang->api->createStruct,
-        'class'       => 'primary',
-        'url'         => createLink('api', 'createStruct', "libID=$libID"),
-    ))) : null
-);
-
 $structs = initTableData($structs, $config->api->dtable->struct->fieldList, $this->api);
 $cols = array_values($config->api->dtable->struct->fieldList);
 $data = array_values($structs);
-dtable
+
+div
 (
-    set::cols($cols),
-    set::data($data),
-    set::userMap($users),
-    set::footPager(usePager())
+    dtable
+    (
+        set::_className(''),
+        set::cols($cols),
+        set::data($data),
+        set::userMap($users),
+        set::footPager(usePager()),
+        set::loadPartial(),
+        set::loadOptions(array('zui-command' => 'updateLazyContent', 'data-lazy-target' => '#table-api-struct'))
+    ),
 );

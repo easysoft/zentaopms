@@ -621,6 +621,7 @@ class groupModel extends model
         $privs = array();
         foreach($this->post->actions as $action)
         {
+            if(!$action) continue;
             list($module, $method) = explode('-', $action);
             foreach($this->post->groups as $group)
             {

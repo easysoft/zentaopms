@@ -376,12 +376,8 @@ class dbh
     {
         $sql = trim($sql);
         $sql = $this->formatFunction($sql);
-
-        if(defined('IN_UPGRADE'))
-        {
-            $sql = $this->processDmChangeColumn($sql);
-            $sql = $this->processDmTableIndex($sql);
-        }
+        $sql = $this->processDmChangeColumn($sql);
+        $sql = $this->processDmTableIndex($sql);
 
         $actionPos = strpos($sql, ' ');
         $action    = strtoupper(substr($sql, 0, $actionPos));

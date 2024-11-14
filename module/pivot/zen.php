@@ -408,7 +408,11 @@ class pivotZen extends pivot
      */
     public function getDrill(int $pivotID, string $colName, string $status = 'published'): object
     {
-        if($status == 'published') return $this->pivot->fetchPivotDrill($pivotID, $colName);
+        if($status == 'published')
+        {
+            $drills = $this->pivot->fetchPivotDrills($pivotID, $colName);
+            return reset($drills);
+        }
 
         $cache  = $this->getCache($pivotID);
         $drills = json_decode(json_encode($cache->drills), true);

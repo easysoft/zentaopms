@@ -30,9 +30,11 @@ class count_of_delayed_finished_project_which_annual_finished extends baseCalc
     {
         if(empty($row->closedDate) || empty($row->firstEnd) || empty($row->realEnd)) return false;
 
-        $finishedYear = substr($row->realEnd, 0, 4);
-        $firstEndYear = substr($row->firstEnd, 0, 4);
-        if($finishedYear == '0000' || $firstEndYear == '0000') return false;
+        $finishedYear = $this->getYear($row->realEnd);
+        if(!$finishedYear) return false;
+
+        $firstEndYear = $this->getYear($row->firstEnd);
+        if(!$firstEndYear) return false;
 
         if($row->status == 'closed' && $row->realEnd > $row->firstEnd)
         {

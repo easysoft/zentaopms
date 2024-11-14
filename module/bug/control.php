@@ -172,14 +172,14 @@ class bug extends control
         $product   = $this->product->getByID($bug->product);
         $branches  = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product);
         $projects  = $this->product->getProjectPairsByProduct($bug->product, (string)$bug->branch);
-        $projectID = key($projects);
+        $projectID = isset($projects[$bug->project]) ? $bug->project : key($projects);
         if(in_array($this->app->tab, array('project', 'execution')))
         {
             $objectType = $this->app->tab == 'project' ? 'projectID' : 'executionID';
             $this->view->{$objectType} = $this->session->{$this->app->tab};
         }
 
-        $this->session->set("project", $projectID, 'project');
+        $this->session->set('project', $projectID, 'project');
         $this->session->set('storyList', '', 'product');
         $this->session->set('projectList', $this->app->getURI(true) . "#app={$this->app->tab}", 'project');
 

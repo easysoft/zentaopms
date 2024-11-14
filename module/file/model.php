@@ -463,7 +463,8 @@ class fileModel extends model
      */
     public function setSavePath(): void
     {
-        $savePath = $this->app->getAppRoot() . "www/data/upload/{$this->app->company->id}/" . date('Ym/', $this->now);
+        $companyID = isset($this->app->company->id) ? $this->app->company->id : 1;
+        $savePath  = $this->app->getAppRoot() . "www/data/upload/{$companyID}/" . date('Ym/', $this->now);
         if(!file_exists($savePath))
         {
             mkdir($savePath, 0777, true);
@@ -480,7 +481,8 @@ class fileModel extends model
      */
     public function setWebPath(): void
     {
-        $this->webPath = $this->app->getWebRoot() . "data/upload/{$this->app->company->id}/";
+        $companyID     = isset($this->app->company->id) ? $this->app->company->id : 1;
+        $this->webPath = $this->app->getWebRoot() . "data/upload/{$companyID}/";
     }
 
     /**

@@ -7132,9 +7132,11 @@ class upgradeModel extends model
     public function processDashboard()
     {
         $dashboards = $this->dao->select('*')->from(TABLE_DASHBOARD)->fetchAll();
+        $id = 1002;
         foreach($dashboards as $dashboard)
         {
             $screen = new stdclass();
+            $screen->id          = $id;
             $screen->name        = $dashboard->name;
             $screen->dimension   = 1;
             $screen->desc        = $dashboard->desc;
@@ -7144,6 +7146,7 @@ class upgradeModel extends model
             $screen->createdBy   = $dashboard->createdBy;
             $screen->createdDate = $dashboard->createdDate;
             $this->dao->insert(TABLE_SCREEN)->data($screen)->exec();
+            $id++;
         }
 
         $this->dao->exec("ALTER TABLE " . TABLE_CHART . " DROP `dataset`");
@@ -7179,7 +7182,7 @@ class upgradeModel extends model
             $component->attr->h = round(54 * $option->h);
 
             $type  = !empty($option->i->type) ? $option->i->type : 'chart';
-            $chart = $this->loadModel($type)->getByID($option->i->id);
+            $chart = $this->loadModel($type)->getByID($option->i->id, false, 'published', false);
 
             if($chart)
             {
@@ -7210,7 +7213,6 @@ class upgradeModel extends model
                 $chart->langs    = json_encode($chart->langs);
 
                 $chartFilters = !empty($chart->filters) ? json_decode($chart->filters, true) : array();
-                $component    = $this->screen->getChartOption($chart, $component, $chartFilters);
             }
 
             $componentList[] = $component;
@@ -10007,7 +10009,7 @@ class upgradeModel extends model
     }
 
     /**
-     * Upgrade demand files.
+     * Upgrade my doc space.
      *
      * @access public
      * @return bool
@@ -10073,44 +10075,380 @@ class upgradeModel extends model
     }
 
     /**
-     * 创建内置立项审批流。
-     * Add default charter approval flow.
+     * Process object relations.
+     * 将系统内原有关联关系合并到relation表中：需求关联需求、bug关联bug、用例关联用例、问题关联风险、风险关联问题.
      *
      * @access public
      * @return bool
      */
-    public function addCharterApprovalFlow()
+    public function processObjectRelation()
     {
-        $this->app->loadLang('charter');
+        if($this->config->edition == 'open') return true;
 
-        foreach($this->lang->charter->defaultApprovalFlow as $approvalType => $approval)
+        /* Process story link story. */
+        $linkedtoStories = $this->dao->select('*')->from(TABLE_RELATION)
+            ->where('AType')->in('story,requirement,epic')
+            ->andWhere('relation')->eq('linkedto')
+            ->andWhere('BType')->in('story,requirement,epic')
+            ->fetchAll('id');
+        foreach($linkedtoStories as $story)
         {
-            $approvalflow = new stdclass();
-            $approvalflow->name        = $approval->title;
-            $approvalflow->code        = $approvalType;
-            $approvalflow->desc        = $approval->desc;
-            $approvalflow->version     = 1;
-            $approvalflow->createdBy   = 'system';
-            $approvalflow->createdDate = helper::now();
-            $approvalflow->workflow    = '';
-            $approvalflow->deleted     = 0;
-            $this->dao->insert(TABLE_APPROVALFLOW)->data($approvalflow)->exec();
-
-            if(dao::isError()) return false;
-
-            $approvalflowID = $this->dao->lastInsertId();
-
-            $approvalflowSpec = new stdclass();
-            $approvalflowSpec->flow        = $approvalflowID;
-            $approvalflowSpec->version     = 1;
-            $approvalflowSpec->nodes       = '[{"type":"start","ccs":[]},{"id":"3ewcj92p55e","type":"approval","title":"审批","reviewType":"manual","multiple":"and","percent":"50","commentType":"noRequired","agentType":"pass","selfType":"selfReview","deletedType":"setAdmin","reviewers":[{"type":"select","users":[],"roles":[""],"depts":[""],"positions":[""],"userRange":"all","required":"yes"}],"ccs":[{"type":"select","users":[],"roles":[""],"depts":[""],"positions":[""],"userRange":"all"}]},{"type":"end","ccs":[]}]';
-            $approvalflowSpec->createdBy   = 'system';
-            $approvalflowSpec->createdDate = helper::now();
-            $this->dao->insert(TABLE_APPROVALFLOWSPEC)->data($approvalflowSpec)->exec();
-
-            if(dao::isError()) return false;
+            $relation = new stdClass();
+            $relation->AType    = $story->AType;
+            $relation->AID      = $story->AID;
+            $relation->relation = 1;
+            $relation->BType    = $story->BType;
+            $relation->BID      = $story->BID;
+            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
         }
 
+        /* Process bug link bug. */
+        $bugList = $this->dao->select('id,story,relatedBug,task,`case`')->from(TABLE_BUG)
+            ->where('relatedBug')->ne('')
+            ->orWhere('story')->ne(0)
+            ->orWhere('task')->ne(0)
+            ->orWhere('case')->ne(0)
+            ->fetchAll('id');
+        foreach($bugList as $bugID => $bug)
+        {
+            if(!empty($bug->relatedBug))
+            {
+                foreach(explode(',', ",{$bug->relatedBug},") as $relatedBugID)
+                {
+                    if(empty($relatedBugID)) continue;
+                    $relation = new stdClass();
+                    $relation->AType    = 'bug';
+                    $relation->AID      = $bugID;
+                    $relation->relation = 1;
+                    $relation->BType    = 'bug';
+                    $relation->BID      = $relatedBugID;
+                    $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+                }
+            }
+            if(!empty($bug->story))
+            {
+                $relation = new stdClass();
+                $relation->AType    = 'story';
+                $relation->AID      = $bug->story;
+                $relation->relation = 'generated';
+                $relation->BType    = 'bug';
+                $relation->BID      = $bugID;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
+            if(!empty($bug->task))
+            {
+                $relation = new stdClass();
+                $relation->AType    = 'task';
+                $relation->AID      = $bug->task;
+                $relation->relation = 'generated';
+                $relation->BType    = 'bug';
+                $relation->BID      = $bugID;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
+            if(!empty($bug->case))
+            {
+                $relation = new stdClass();
+                $relation->AType    = 'testcase';
+                $relation->AID      = $bug->case;
+                $relation->relation = 'generated';
+                $relation->BType    = 'bug';
+                $relation->BID      = $bugID;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
+        }
+
+        /* Process case link case. */
+        $caseList = $this->dao->select('id,story,linkCase,fromBug')->from(TABLE_CASE)->where('linkCase')->ne('')->orWhere('story')->ne(0)->orWhere('fromBug')->ne(0)->fetchAll('id');
+        foreach($caseList as $caseID => $case)
+        {
+            foreach(explode(',', ",{$case->linkCase},") as $relatedCaseID)
+            {
+                if(empty($relatedCaseID)) continue;
+                $relation = new stdClass();
+                $relation->AType    = 'testcase';
+                $relation->AID      = $caseID;
+                $relation->relation = 1;
+                $relation->BType    = 'testcase';
+                $relation->BID      = $relatedCaseID;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
+            if(!empty($case->story))
+            {
+                $relation = new stdClass();
+                $relation->AType    = 'story';
+                $relation->AID      = $case->story;
+                $relation->relation = 'generated';
+                $relation->BType    = 'testcase';
+                $relation->BID      = $caseID;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
+            if(!empty($case->fromBug))
+            {
+                $relation = new stdClass();
+                $relation->AType    = 'bug';
+                $relation->AID      = $case->fromBug;
+                $relation->relation = 'generated';
+                $relation->BType    = 'testcase';
+                $relation->BID      = $caseID;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
+        }
+
+        /* Process bug transferred to task. */
+        $taskList = $this->dao->select('id,story,fromBug,design')->from(TABLE_TASK)->where('fromBug')->ne(0)->orWhere('story')->ne(0)->orWhere('design')->ne(0)->fetchAll('id');
+        foreach($taskList as $taskID => $task)
+        {
+            $relation = new stdClass();
+            $relation->BType = 'task';
+            $relation->BID   = $taskID;
+            if(!empty($task->fromBug))
+            {
+                $relation->relation = 'transferredto';
+                $relation->AType    = 'bug';
+                $relation->AID      = $task->fromBug;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
+            if(!empty($task->story))
+            {
+                $relation->relation = 'generated';
+                $relation->AType    = 'story';
+                $relation->AID      = $task->story;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
+            if(!empty($task->design))
+            {
+                $relation->relation = 'generated';
+                $relation->AType    = 'design';
+                $relation->AID      = $task->design;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
+        }
+
+        /* Process bug transferred to story. */
+        $bugTransferredToStory = $this->dao->select('id,fromBug')->from(TABLE_STORY)->where('fromBug')->ne(0)->fetchPairs('id');
+        foreach($bugTransferredToStory as $storyID => $bugID)
+        {
+            $relation = new stdClass();
+            $relation->AType    = 'bug';
+            $relation->AID      = $bugID;
+            $relation->relation = 'transferredto';
+            $relation->BType    = 'story';
+            $relation->BID      = $storyID;
+            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+        }
+
+        /* Process release. */
+        $releaseLinkedStories = $this->dao->select('id,stories')->from(TABLE_RELEASE)->where('stories')->ne('')->fetchPairs('id');
+        foreach($releaseLinkedStories as $releaseID => $storyIdList)
+        {
+            foreach(explode(',', trim($storyIdList, ',')) as $storyID)
+            {
+                if(empty($storyID)) continue;
+                $relation = new stdClass();
+                $relation->AType    = 'story';
+                $relation->AID      = $storyID;
+                $relation->relation = 'interrated';
+                $relation->BType    = 'release';
+                $relation->BID      = $releaseID;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
+        }
+
+        /* Process build. */
+        $buildLinkedStories = $this->dao->select('id,stories')->from(TABLE_BUILD)->where('stories')->ne('')->fetchPairs('id');
+        foreach($buildLinkedStories as $buildID => $storyIdList)
+        {
+            foreach(explode(',', trim($storyIdList, ',')) as $storyID)
+            {
+                if(empty($storyID)) continue;
+                $relation = new stdClass();
+                $relation->AType    = 'story';
+                $relation->AID      = $storyID;
+                $relation->relation = 'interrated';
+                $relation->BType    = 'build';
+                $relation->BID      = $buildID;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
+        }
+
+        /* Process story generated design. */
+        $designStories = $this->dao->select('id,story')->from(TABLE_DESIGN)->where('story')->ne(0)->fetchPairs('id');
+        $storyTypeList = $this->dao->select('id,type')->from(TABLE_STORY)->where('id')->in(array_values($designStories))->fetchPairs('id');
+        foreach($designStories as $designID => $storyID)
+        {
+            $relation = new stdClass();
+            $relation->AType    = $storyTypeList[$storyID];
+            $relation->AID      = $storyID;
+            $relation->relation = 'generated';
+            $relation->BType    = 'design';
+            $relation->BID      = $designID;
+            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+        }
+
+        /* Process feedback transferred to story. */
+        $feedbackTransferredToStories = $this->dao->select('id,type,feedback')->from(TABLE_STORY)->where('feedback')->ne(0)->fetchAll('id');
+        foreach($feedbackTransferredToStories as $story)
+        {
+            $relation = new stdClass();
+            $relation->AType    = 'feedback';
+            $relation->AID      = $story->feedback;
+            $relation->relation = 'transferredto';
+            $relation->BType    = $story->type;
+            $relation->BID      = $story->id;
+            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+        }
+
+        /* Process feedback transferredto to bug, task, ticket, demand. */
+        foreach(array('bug', 'task', 'ticket', 'demand') as $feedbackTransferredToType)
+        {
+            $feedbackTransferredTo = $this->dao->select('id,feedback')->from($this->config->objectTables[$feedbackTransferredToType])->where('feedback')->ne(0)->fetchPairs('id');
+            foreach($feedbackTransferredTo as $id => $feedbackID)
+            {
+                $relation = new stdClass();
+                $relation->AType    = 'feedback';
+                $relation->AID      = $feedbackID;
+                $relation->relation = 'transferredto';
+                $relation->BType    = $feedbackTransferredToType;
+                $relation->BID      = $id;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
+        }
+
+        /* Process ticket transferred to story and bug. */
+        $ticketTransferred = $this->dao->select('*')->from(TABLE_TICKETRELATION)->fetchAll('id');
+        foreach($ticketTransferred as $transferredObject)
+        {
+                $relation = new stdClass();
+                $relation->AType    = 'ticket';
+                $relation->AID      = $transferredObject->ticketId;
+                $relation->relation = 'transferredto';
+                $relation->BType    = $transferredObject->objectType;
+                $relation->BID      = $transferredObject->objectId;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+        }
+
+        /* Process twins. */
+        $twins = $this->dao->select('id,twins')->from(TABLE_STORY)->where('twins')->ne('')->fetchPairs('id');
+        foreach($twins as $storyID => $twinsID)
+        {
+            foreach(explode(',', trim($twinsID, ',')) as $twinID)
+            {
+                if(empty($twinID)) continue;
+                $relation = new stdClass();
+                $relation->AType    = 'story';
+                $relation->AID      = $storyID;
+                $relation->relation = 'twin';
+                $relation->BType    = 'story';
+                $relation->BID      = $twinID;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
+        }
+
+        /* Process child story. */
+        $parentStories = array();
+        $childStories  = $this->dao->select('id,type,parent,demand')->from(TABLE_STORY)->where('parent')->gt(0)->orWhere('demand')->gt(0)->fetchAll('id');
+        foreach($childStories as $childStory) $parentStories[$childStory->parent] = $childStory->parent;
+        $parentStoryType = $this->dao->select('id,type')->from(TABLE_STORY)->where('id')->in($parentStories)->fetchPairs('id');
+        foreach($childStories as $childStory)
+        {
+            $relation = new stdClass();
+            $relation->relation = 'subdivideinto';
+            $relation->BType    = $childStory->type;
+            $relation->BID      = $childStory->id;
+            if(!empty($childStory->parent))
+            {
+                $relation->AType = $parentStoryType[$childStory->parent];
+                $relation->AID   = $childStory->parent;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
+            if(!empty($childStory->demand))
+            {
+                $relation->AType = 'demand';
+                $relation->AID   = $childStory->demand;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
+        }
+
+        /* Process issue link risk. */
+        $riskIssues = $this->dao->select('*')->from(TABLE_RISKISSUE)->fetchAll();
+        foreach($riskIssues as $riskIssueList)
+        {
+            $relation = new stdClass();
+            $relation->AType    = 'issue';
+            $relation->AID      = $riskIssueList->issue;
+            $relation->relation = 1;
+            $relation->BType    = 'risk';
+            $relation->BID      = $riskIssueList->risk;
+            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+        }
+
+        /* Process child demand. */
+        $childDemands = $this->dao->select('id,parent')->from(TABLE_DEMAND)->where('parent')->gt(0)->fetchPairs('id');
+        foreach($childDemands as $childDemandID => $parentDemandID)
+        {
+            $relation = new stdClass();
+            $relation->AType    = 'demand';
+            $relation->AID      = $parentDemandID;
+            $relation->relation = 'subdivideinto';
+            $relation->BType    = 'demand';
+            $relation->BID      = $childDemandID;
+            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+        }
+
+        if(!dao::isError())
+        {
+            $this->dao->delete()->from(TABLE_CRON)
+                ->where('`command`')->eq('moduleName=upgrade&methodName=ajaxProcessObjectRelation')
+                ->andWhere('type')->eq('zentao')
+                ->andWhere('status')->eq('normal')
+                ->exec();
+        }
         return true;
+    }
+
+    /**
+     * 处理上线步骤数据。
+     * Process deploy step.
+     *
+     * @access public
+     * @return void
+     */
+    public function processDeployStep()
+    {
+        $this->app->loadLang('deploy');
+        if(empty($this->lang->deploy->stageList)) return;
+
+        $deploySteps = $this->dao->select('*')->from(TABLE_DEPLOYSTEP)->fetchGroup('deploy');
+
+        $deployData = array();
+        foreach($deploySteps as $deployID => $steps)
+        {
+            foreach($steps as $step)
+            {
+                if($step->parent || $step->stage == '') return;
+
+                $deployData[$deployID][$step->stage][] = $step->id;
+            }
+        }
+
+        $this->loadModel('action');
+        foreach($deployData as $deployID => $steps)
+        {
+            foreach($steps as $stage => $childs)
+            {
+                $parent = new stdclass();
+                $parent->title       = zget($this->lang->deploy->stageList, $stage, '');
+                $parent->status      = 'wait';
+                $parent->deploy      = $deployID;
+                $parent->createdBy   = $this->app->user->account;
+                $parent->createdDate = helper::now();
+                $this->dao->insert(TABLE_DEPLOYSTEP)->data($parent)->autoCheck()->exec();
+
+                $parentID = $this->dao->lastInsertID();
+                $this->action->create('deploystep', $parentID, 'created');
+
+                $this->dao->update(TABLE_DEPLOYSTEP)->set('parent')->eq($parentID)->where('id')->in($childs)->exec();
+            }
+        }
     }
 }

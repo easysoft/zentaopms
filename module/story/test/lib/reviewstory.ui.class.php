@@ -17,12 +17,12 @@ class reviewStoryTester extends tester
      * @access public
      * @return object
      */
-    public function reviewStory($result, $status)
+    public function reviewStory($storyType, $storyID, $result, $status)
     {
-        $form = $this->initForm('story', 'review', array('id' => 1), 'appIframe-product');  //进入研发评审页面
+        $form = $this->initForm($storyType, 'review', array('id' => $storyID), 'appIframe-product');  //进入研发评审页面
 
         $form->dom->result->picker($result); //选择研发评审结果
-        $form->dom->assignedTo->picker('admin'); //指派人选择admin
+        if($result != '拒绝') $form->dom->assignedTo->picker('admin'); //指派人选择admin
         $form->dom->btn($this->lang->save)->click();
         $form->wait(1);
 
@@ -33,7 +33,7 @@ class reviewStoryTester extends tester
         $viewPage->dom->btn($this->lang->story->legendLifeTime)->click();
         if($viewPage->dom->reviewer->getText() != 'admin') return $this->fail('需求评审人错误');
 
-        return $this->success('评审研发需求成功');
+        return $this->success('评审需求成功');
     }
 
     /**
@@ -48,8 +48,7 @@ class reviewStoryTester extends tester
         $form->dom->btn($this->lang->story->submitReview)->click();
         $form->wait(1);
 
-        $form->dom->subReviewerBtn->click();
-        $form->dom->subReviewer->clickByMouse();
+        $form->dom->subReviewer->multiPicker(array('admin'));
         $form->dom->submitReviewSave->click();
         $form->wait(1);
 

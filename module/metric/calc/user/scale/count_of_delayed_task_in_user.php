@@ -34,7 +34,9 @@ class count_of_delayed_task_in_user extends baseCalc
         $deadline   = $row->deadline;
         $assignedTo = $row->assignedTo;
 
-        if(empty($deadline) || substr($deadline, 0 ,4) == '0000') return false;
+        $year = $this->getYear($deadline);
+        if(!$year) return false;
+
         if(strtotime($nowDate) <= strtotime($deadline)) return false;
 
         if(!isset($this->result[$assignedTo])) $this->result[$assignedTo] = 0;

@@ -735,8 +735,7 @@ class docModel extends model
     {
         $docs = $this->dao->select('t1.*')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id')
-            ->where('t1.deleted')->eq(0)
-            ->andWhere('t1.lib')->in($libs)
+            ->where('t1.lib')->in($libs)
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.templateType')->eq('')
             ->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")
@@ -746,8 +745,7 @@ class docModel extends model
             ->fetchAll('id');
 
         $rootDocs = $this->dao->select('*')->from(TABLE_DOC)
-            ->where('deleted')->eq(0)
-            ->andWhere('lib')->in($libs)
+            ->where('lib')->in($libs)
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('templateType')->eq('')
             ->andWhere("(status = 'normal' or (status = 'draft' and addedBy='{$this->app->user->account}'))")
@@ -759,6 +757,18 @@ class docModel extends model
         $docs = $this->processCollector($docs);
         $docs = $this->filterPrivDocs($docs, $spaceType);
 
+        $apis = $this->loadModel('api')->getApiListBySearch(0, 0, '', $libs);
+        foreach($apis as &$api)
+        {
+            $api->id          = "api.$api->id";
+            $api->lib         = (int)$api->lib;
+            $api->module      = (int)$api->module;
+            $api->deleted     = boolval($api->deleted);
+            $api->originTitle = $api->title;
+            $api->icon        = "api is-$api->method";
+            $api->title       = "$api->method $api->path $api->title";
+        }
+
         foreach($docs as &$doc)
         {
             $doc->lib         = (int)$doc->lib;
@@ -768,6 +778,8 @@ class docModel extends model
             unset($doc->content);
             unset($doc->draft);
         }
+
+        $docs = $docs + $apis;
 
         return $docs;
     }
@@ -1300,7 +1312,6 @@ class docModel extends model
         }
         if($type == 'project')
         {
-            $account          = $this->app->user->account;
             $projects         = $this->loadModel('project')->getListByCurrentUser();
             $involvedProjects = $this->project->getInvolvedListByCurrentUser();
             $spaceID          = $this->project->checkAccess($spaceID, $projects);
@@ -2159,7 +2170,7 @@ class docModel extends model
         {
             if(!$this->checkPrivDoc($doc)) unset($docs[$id]);
         }
-        $docIdList = empty($docs) ? 0 : $this->dao->select('id')->from(TABLE_DOC)->where($type)->eq($objectID)->andWhere('id')->in(array_keys($docs))->get();
+        $docIdList = empty($docs) ? 0 : $this->dao->select('id')->from(TABLE_DOC)->where($type)->eq($objectID)->andWhere('vision')->eq($this->config->vision)->andWhere('id')->in(array_keys($docs))->get();
 
         if($type == 'product')
         {
@@ -2731,14 +2742,17 @@ class docModel extends model
      * Get modules from libs.
      *
      * @param  array $libs  Lib id list.
+     * @param  string $type doc|api
      * @access public
      * @return array
      */
-    public function getModulesOfLibs(array $libs)
+    public function getModulesOfLibs(array $libs, $type = 'doc,api')
     {
+        $types = explode(',', $type);
         return $this->dao->select('*')->from(TABLE_MODULE)
             ->where('root')->in($libs)
-            ->andWhere('type')->eq('doc')
+            ->beginIF(count($types) > 1)->andWhere('type')->in($types)->fi()
+            ->beginIF(count($types) == 1)->andWhere('type')->eq($type)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy('grade desc, `order`')
             ->fetchAll('id');

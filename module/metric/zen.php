@@ -179,6 +179,30 @@ class metricZen extends metric
     }
 
     /**
+     * 开始计时。
+     *
+     * @access private
+     * @return float
+     */
+    private function startTime()
+    {
+        return microtime(true);
+    }
+
+    /**
+     * 结束计时。
+     *
+     * @param  float   $beginTime
+     * @access private
+     * @return string
+     */
+    private function endTime($beginTime)
+    {
+        $time = microtime(true) - $beginTime;
+        return number_format((float)$time, 5, '.', '0');
+    }
+
+    /**
      * 计算度量数据。
      * Calculate metric data.
      *
@@ -189,22 +213,31 @@ class metricZen extends metric
     protected function calculateMetric($classifiedCalcGroup)
     {
         set_time_limit(0);
+        $calcBeginTime = $this->startTime();
         foreach($classifiedCalcGroup as $calcGroup)
         {
             try
             {
-                $beginTime = microtime(true);
+                $beginTime = $this->startTime();
                 $statement = $this->prepareDataset($calcGroup);
                 $sql = $statement ? $statement->get() : '';
-
                 $this->calcMetric($statement, $calcGroup->calcList);
-
                 $recordWithCode = $this->prepareMetricRecord($calcGroup->calcList);
+                $calcTime = $this->endTime($beginTime);
+
+                $beginTime = $this->startTime();
                 $this->metric->insertMetricLib($recordWithCode);
-                $endTime = microtime(true);
-                $executeTime = $endTime - $beginTime;
-                $codes = implode(',', array_keys($calcGroup->calcList));
-                $this->metric->saveLogs("Calculate consumed time: {$executeTime} seconds, the sql: $sql, the codes: $codes");
+                $executeTime = $this->endTime($beginTime);
+
+                $total = 0;
+                $codes = '';
+                foreach($recordWithCode as $code => $records)
+                {
+                    $count = count($records);
+                    $codes .= "$code($count), ";
+                    $total += $count;
+                }
+                $this->metric->saveLogs("Calculate consumed time(seconds): calc: $calcTime, insert: $executeTime, total: $total, sql: $sql, $codes");
             }
             catch(Exception $e)
             {
@@ -216,13 +249,21 @@ class metricZen extends metric
             }
         }
 
-        $beginTime = microtime(true);
+        $executeTime = $this->endTime($calcBeginTime);
+        $this->metric->saveLogs("Calculate all consumed time: {$executeTime} seconds");
+
+        $beginTime = $this->startTime();
         $metrics = $this->metric->getExecutableMetric();
-        foreach($metrics as $code) $this->metric->deduplication($code);
+        foreach($metrics as $code)
+        {
+            $deduplicationBeginTime = $this->startTime();
+            $this->metric->deduplication($code);
+            $executeTime = $this->endTime($deduplicationBeginTime);
+            $this->metric->saveLogs("Deduplication consumed time: {$executeTime} seconds, the code: $code");
+        }
         $this->metric->rebuildPrimaryKey();
-        $endTime = microtime(true);
-        $executeTime = $endTime - $beginTime;
-        $this->metric->saveLogs("Deduplicate consumed time: {$executeTime} seconds");
+        $executeTime = $this->endTime($beginTime);
+        $this->metric->saveLogs("Deduplicate all consumed time: {$executeTime} seconds");
     }
 
     /**
@@ -245,37 +286,25 @@ class metricZen extends metric
         $records = array();
         foreach($calcList as $code => $calc)
         {
-            $metric       = $this->metric->getByCode($code);
-            $dateType     = $this->metric->getDateTypeByCode($code);
-            $recordCommon = $this->buildRecordCommonFields($metric->id, $code, $now, $dateValues->$dateType);
-            $initRecords  = !$calc->initRecord ? array() : $this->initMetricRecords($recordCommon, $metric->scope);
-
+            $metric = $this->metric->getByCode($code);
             if($calc->reuse) $this->prepareReuseMetricResult($calc, $options);
             $results = $calc->getResult($options);
+            $records[$code] = array();
             if(is_array($results))
             {
                 foreach($results as $record)
                 {
                     $record = (object)$record;
-                    if(!is_numeric($record->value)) continue;
+                    if(!is_numeric($record->value) || empty($record->value)) continue;
 
                     $record->metricID   = $calc->id;
                     $record->metricCode = $code;
                     $record->date       = $now;
                     $record->system     = $metric->scope == 'system' ? 1 : 0;
 
-                    $uniqueKey = $this->getUniqueKeyByRecord($record);
-                    if(!isset($initRecords[$uniqueKey]))
-                    {
-                        $initRecords[$uniqueKey] = $record;
-                        continue;
-                    }
-
-                    $initRecords[$uniqueKey]->value = $record->value;
+                    $records[$code][] = $record;
                 }
             }
-
-            $records[$code] = array_values($initRecords);
         }
 
         return $records;
@@ -318,11 +347,10 @@ class metricZen extends metric
         if($dateType == 'nodate') return array();
         if($type == 'all' && $this->metric->checkHasInferenceOfDate($code, $dateType, $date)) return array();
 
-        $dateConfig   = $this->metric->parseDateStr($date, $dateType);
-        $recordCommon = $this->buildRecordCommonFields($metric->id, $code, $now, $dateConfig);
-        $initRecords  = !$calc->initRecord ? array() : $this->initMetricRecords($recordCommon, $metric->scope, "{$date} 23:59:59");
+        $records    = array();
+        $dateConfig = $this->metric->parseDateStr($date, $dateType);
+        $results    = $calc->getResult($dateConfig);
 
-        $results = $calc->getResult($dateConfig);
         if(is_array($results))
         {
             foreach($results as $record)
@@ -335,18 +363,11 @@ class metricZen extends metric
                 $record->date       = $now;
                 $record->system     = $metric->scope == 'system' ? 1 : 0;
 
-                $uniqueKey = $this->getUniqueKeyByRecord($record);
-                if(!isset($initRecords[$uniqueKey]))
-                {
-                    $initRecords[$uniqueKey] = $record;
-                    continue;
-                }
-
-                $initRecords[$uniqueKey]->value = $record->value;
+                $records[] = $record;
             }
         }
 
-        return array_values($initRecords);
+        return $records;
     }
 
     /**
@@ -403,14 +424,46 @@ class metricZen extends metric
     protected function buildRecordCommonFields($metricID, $code, $date, $dateValues)
     {
         $record = new stdclass();
-        $record->value      = 0;
-        $record->metricID   = $metricID;
-        $record->metricCode = $code;
-        $record->date       = $date;
+        $record->value        = 0;
+        $record->date         = $date;
+        $record->calcType     = 'cron';
+        $record->calculatedBy = 'system';
 
         $record = (object)array_merge((array)$record, $dateValues);
 
         return $record;
+    }
+
+    /**
+     * 补全缺失的度量数据。
+     * Complete missing metric data.
+     *
+     * @param  array     $records
+     * @param  array     $metric
+     * @access protected
+     * @return array
+     */
+    protected function completeMissingRecords($records, $metric)
+    {
+        $now          = helper::now();
+        $dateValues   = $this->metric->parseDateStr($now);
+        $dateType     = $metric->dateType;
+        $recordCommon = $this->buildRecordCommonFields($metric->id, $metric->code, $now, $dateValues->$dateType);
+        $initRecords  = $this->initMetricRecords($recordCommon, $metric->scope);
+
+        foreach($records as $record)
+        {
+            $uniqueKey = $this->getUniqueKeyByRecord($record);
+            if(!isset($initRecords[$uniqueKey]))
+            {
+                $initRecords[$uniqueKey] = $record;
+                continue;
+            }
+
+            $initRecords[$uniqueKey]->value = $record->value;
+        }
+
+        return array_values($initRecords);
     }
 
     /**
@@ -448,8 +501,28 @@ class metricZen extends metric
     {
         if(empty($statement)) return;
 
-        $statement = $statement->query();
+        $dbType = $this->config->metricDB->type;
+        if($dbType == 'duckdb')
+        {
+            $this->loadModel('bi');
+            $sql = $statement->get();
+            $dbh = $this->app->loadDriver('duckdb');
+            $rows = $dbh->query($sql)->fetchAll();
+            foreach($rows as $row)
+            {
+                foreach($calcList as $calc)
+                {
+                    if(!$calc->reuse)
+                    {
+                        $record = $this->getCalcFields($calc, $row);
+                        $calc->calculate($record);
+                    }
+                }
+            }
+            return;
+        }
 
+        $statement = $statement->query();
         while($row = $statement->fetch())
         {
             foreach($calcList as $code => $calc)

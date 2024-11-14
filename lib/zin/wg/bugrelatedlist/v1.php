@@ -20,7 +20,7 @@ class bugRelatedList extends relatedList
         if(!$bug) $bug = data('bug');
         if(!$bug) return;
 
-        global $lang;
+        global $lang, $config;
 
         $canViewCase   = common::hasPriv('testcase', 'view');
         $canViewStory  = common::hasPriv('story', 'view');
@@ -31,24 +31,27 @@ class bugRelatedList extends relatedList
         $data = array();
 
         /* Related bugs. */
-        $relatedBugList  = isset($bug->relatedBugTitles) ? $bug->relatedBugTitles :array();
-        $relatedBugItems = array();
-        foreach($relatedBugList as $relatedBugID => $relatedBugTitle)
+        if($config->edition == 'open')
         {
-            $relatedBugItem = new stdclass();
-            $relatedBugItem->id    = $relatedBugID;
-            $relatedBugItem->title = $relatedBugTitle;
-            $relatedBugItems[] = $relatedBugItem;
-        }
+            $relatedBugList  = isset($bug->relatedBugTitles) ? $bug->relatedBugTitles :array();
+            $relatedBugItems = array();
+            foreach($relatedBugList as $relatedBugID => $relatedBugTitle)
+            {
+                $relatedBugItem = new stdclass();
+                $relatedBugItem->id    = $relatedBugID;
+                $relatedBugItem->title = $relatedBugTitle;
+                $relatedBugItems[] = $relatedBugItem;
+            }
 
-        $data['relatedBug'] = array
-        (
-            'title'       => $lang->bug->relatedBug,
-            'items'       => $relatedBugItems,
-            'url'         => createLink('bug', 'view', 'bugID={id}'),
-            'data-toggle' => 'modal',
-            'data-size'   => 'lg'
-        );
+            $data['relatedBug'] = array
+            (
+                'title'       => $lang->bug->relatedBug,
+                'items'       => $relatedBugItems,
+                'url'         => createLink('bug', 'view', 'bugID={id}'),
+                'data-toggle' => 'modal',
+                'data-size'   => 'lg'
+            );
+        }
 
         /* To cases. */
         $toCaseList  = isset($bug->toCases) ? $bug->toCases :array();

@@ -28,11 +28,11 @@ class count_of_daily_created_bug_in_project extends baseCalc
 
     public function calculate($row)
     {
-        if(empty($row->openedDate)) return false;
+        $year = $this->getYear($row->openedDate);
+        if(!$year) return false;
 
         $date = substr($row->openedDate, 0, 10);
         list($year, $month, $day) = explode('-', $date);
-        if($year == '0000') return false;
 
         if(!isset($this->result[$row->project]))                      $this->result[$row->project] = array();
         if(!isset($this->result[$row->project][$year]))               $this->result[$row->project][$year] = array();
