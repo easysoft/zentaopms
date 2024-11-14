@@ -44,3 +44,4 @@ UPDATE `zt_action` SET `action` = 'canceled' WHERE `objectType` = 'deploy' AND `
 DROP TABLE IF EXISTS `zt_account`;
 DELETE FROM `zt_lang` WHERE `module` = 'host' AND `section` = 'cpuBrandList';
 DELETE FROM `zt_action` WHERE `objectType` = 'account';
+DELETE FROM `zt_actionrecent` WHERE `objectType` = 'account';
