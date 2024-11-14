@@ -107,6 +107,8 @@ class api extends control
      */
     public function ajaxGetHome(string $type = 'nolink', string $params = 'notempty_unclosed', int $recPerPage = 20, int $pageID = 1)
     {
+        if(!in_array($type, array('product', 'project', 'nolink'))) $type = 'nolink';
+
         $libs          = $this->doc->getApiLibs(0, $type);
         $flags         = explode('_', $params);
         $unclosed      = in_array('unclosed', $flags);
@@ -136,10 +138,20 @@ class api extends control
             }
         }
 
-        if($type !== 'nolink')
+        if($type === 'product' || $type === 'project')
         {
-            $programs  = $this->loadModel('program')->getList($unclosed ? 'unclosed' : 'all', 'id_asc', 'top');
-            $programs  = array_filter($programs, function($program) {return $program->parent == '0';});
+            $this->loadModel('program');
+            $this->app->loadLang('project');
+            $this->app->loadLang('product');
+            $programPairs = $this->loadModel('program')->getTopPairs($unclosed ? 'noclosed' : '');
+            $programs[]   = (object)array('id' => 0, 'name' => $this->lang->$type->emptyProgram);
+            foreach($programPairs as $id => $name)
+            {
+                $program = new stdclass();
+                $program->id = $id;
+                $program->name = $name;
+                $programs[$id] = $program;
+            }
             if($type == 'product')
             {
                 $products = $this->loadModel('product')->getList(0, $unclosed ? 'noclosed' : 'all', 0, 0);
@@ -154,11 +166,12 @@ class api extends control
             }
             else
             {
-                $projects = $this->loadModel('project')->getList($unclosed ? 'unclosed' : 'all');
+                $projects = $this->program->getProjectList(0, $unclosed ? 'unclosed' : 'all', 0, 'order_asc,id_desc');
                 foreach($projects as $project)
                 {
-                    if(!isset($programs[$project->parent])) continue;
-                    $program = $programs[$project->parent];
+                    $topParent = $project->parent ? explode(',', trim($project->path, ','))[0] : 0;
+                    if(!isset($programs[$topParent])) continue;
+                    $program = $programs[$topParent];
                     $program->projects[] = $project;
                     $project->apiCount = isset($projectsCount[$project->id]) ? $projectsCount[$project->id] : 0;
                     $program->apiCount = isset($program->apiCount) ? $program->apiCount + $project->apiCount : $project->apiCount;
