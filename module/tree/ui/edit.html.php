@@ -35,7 +35,7 @@ formPanel
             (
                 setClass('text-xl font-black'),
                 set::level(1),
-                set::text($lang->docTemplate->addTemplateType)
+                set::text($lang->docTemplate->editTemplateType)
             ),
             div
             (
