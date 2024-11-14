@@ -561,8 +561,15 @@ $lang->action->label->deletebackup            = '删除了系统备份';
 $lang->action->label->restorebackup           = '还原了系统备份';
 $lang->action->label->upgradesystem           = '执行了系统升级';
 $lang->action->label->system                  = '';
-$lang->action->label->synced                  = '同步了';
-$lang->action->label->imported                = '导入了';
+$lang->action->label->manualbackup            = '手动备份了';
+$lang->action->label->autobackup              = '自动备份了';
+$lang->action->label->openautobackup          = '开启自动备份';
+$lang->action->label->closeautobackup         = '关闭自动备份';
+$lang->action->label->autodeletebackups       = '自动清理备份';
+$lang->action->label->savebackupsettings      = '保存备份设置';
+$lang->action->label->deleteexpiredbackup     = '清理过期备份';
+
+
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
