@@ -10083,6 +10083,8 @@ class upgradeModel extends model
      */
     public function processObjectRelation()
     {
+        if($this->config->edition == 'open') return true;
+
         /* Process story link story. */
         $linkedtoStories = $this->dao->select('*')->from(TABLE_RELATION)
             ->where('AType')->in('story,requirement,epic')
@@ -10391,6 +10393,15 @@ class upgradeModel extends model
             $relation->BType    = 'demand';
             $relation->BID      = $childDemandID;
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+        }
+
+        if(!dao::isError())
+        {
+            $this->dao->delete()->from(TABLE_CRON)
+                ->where('`command`')->eq('moduleName=upgrade&methodName=ajaxProcessObjectRelation')
+                ->andWhere('type')->eq('zentao')
+                ->andWhere('status')->eq('normal')
+                ->exec();
         }
         return true;
     }
