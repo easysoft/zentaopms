@@ -52,6 +52,7 @@ $langData['editModule']     = $lang->docTemplate->editModule;
 $langData['deleteModule']   = $lang->docTemplate->deleteModule;
 
 $langData['docTitlePlaceholder'] = $lang->docTemplate->docTitlePlaceholder;
+$langData['docTitleRequired']    = $lang->docTemplate->docTitleRequired;
 
 $langData['noDocs'] = $lang->docTemplate->noTemplate;
 
