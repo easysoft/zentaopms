@@ -400,6 +400,28 @@ class doc extends control
     }
 
     /**
+     * 删除一个模板类型。
+     * Delete a template type.
+     *
+     * @param  int    $moduleID
+     * @access public
+     * @return void
+     */
+    public function deleteTemplateType(int $moduleID)
+    {
+        $templates = $this->doc->getTemplatesByType($moduleID);
+        if(empty($templates))
+        {
+            $this->dao->update(TABLE_MODULE)->set('deleted')->eq('1')->where('id')->eq($moduleID)->exec();
+            return $this->sendSuccess(array('load' => true));
+        }
+        else
+        {
+            return $this->send(array('result' => 'fail', 'message' => $this->lang->docTemplate->errorDeleteType));
+        }
+    }
+
+    /**
      * 编辑一个模板类型。
      * Edit a template type.
      *

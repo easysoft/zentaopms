@@ -92,6 +92,7 @@ $lang->docTemplate->addTemplateType       = 'Add template type';
 $lang->docTemplate->editTemplateType      = 'Edit template type';
 $lang->docTemplate->docTitlePlaceholder   = 'Please enter the title of the document template';
 $lang->docTemplate->noticeAddTemplateType = 'Supports up to two levels of types. Built-in document template types participate in logical operations so their positions cannot be modified.';
+$lang->docTemplate->errorDeleteType       = 'There is document template exists in the current type, it cannot be deleted.';
 
 $lang->docTemplate->create = 'Create Template';
 $lang->docTemplate->edit   = 'Edit Template';

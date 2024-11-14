@@ -3820,4 +3820,21 @@ class docModel extends model
 
         return $moduleID;
     }
+
+    /**
+     * 获取某个模板类型下的所有模板。
+     * Get template list by type.
+     *
+     * @param  int    $type
+     * @access public
+     * @return int
+     */
+    public function getTemplatesByType($type)
+    {
+        return $this->dao->select('*')->from(TABLE_DOC)
+            ->where('deleted')->eq('0')
+            ->andWhere('templateType')->ne('')
+            ->andWhere('module')->eq($type)
+            ->fetchAll('id');
+    }
 }

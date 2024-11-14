@@ -351,6 +351,16 @@ $.extend(window.docAppCommands,
         const url      = $.createLink('doc', 'editTemplateType', `moduleID=${moduleID}`);
         zui.Modal.open({size: 'sm', url: url});
     },
+    deleteModule: function(_, args)
+    {
+        const docApp   = getDocApp();
+        const moduleID = args[0] || docApp.moduleID;
+        $.ajaxSubmit(
+        {
+            url: $.createLink('doc', 'deleteTemplateType', `moduleID=${moduleID}`),
+            load:false
+        })
+    },
     /**
      * 编辑文档模板。
      * Edit doc template.
