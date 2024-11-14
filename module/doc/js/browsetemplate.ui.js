@@ -395,3 +395,11 @@ $.extend(window.docAppCommands,
     },
     showDocSettingModal: showDocSettingModal
 });
+
+window.clickTemplateCard = function(event, url)
+{
+    const target = $(event.target);
+    if(target.hasClass('icon') || target.hasClass('dropdown') || target.hasClass('toolbar')) return;
+
+    openUrl(url);
+}
