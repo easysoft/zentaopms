@@ -478,6 +478,7 @@ class doc extends control
                 ->setDefault('editedBy', $this->app->user->account)
                 ->setIF(strpos(",$doc->editedList,", ",{$this->app->user->account},") === false, 'editedList', $doc->editedList . ",{$this->app->user->account}")
                 ->get();
+            $docData->templateDesc = $_POST['desc'];
 
             $_POST['type'] = 'docTemplate';
             $result  = $this->doc->update($docID, $docData);
@@ -1939,7 +1940,7 @@ class doc extends control
             $moduleID   = (int)$doc->module;
             $libID      = (int)$doc->lib;
             $lib        = $this->doc->getLibByID($libID);
-            $objectType = $lib->type;
+            if($lib && $objectType != 'template') $objectType = $lib->type;
             $objectID   = $this->doc->getObjectIDByLib($lib);
 
             $libPairs = $this->doc->getLibs($objectType, '', $libID, $objectID);

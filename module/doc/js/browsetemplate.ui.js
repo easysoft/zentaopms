@@ -60,14 +60,14 @@ function mergeDocFormData(doc, formData)
     return doc;
 }
 
-function showDocBasicModal(docID, isDraft)
+function showDocBasicModal(docID, isDraft = 'no')
 {
     const docApp    = getDocApp();
     const spaceType = docApp.spaceType;
     const spaceID   = docApp.spaceID;
     const libID     = docApp.libID;
     const moduleID  = docApp.moduleID;
-    const url = $.createLink('doc', 'setDocBasic', `objectType=template&objectID=${spaceID}&libID=${libID}&moduleID=${moduleID}&docID=0&isDraft=no`);
+    const url = $.createLink('doc', 'setDocBasic', `objectType=template&objectID=${spaceID}&libID=${libID}&moduleID=${moduleID}&docID=${docID}&isDraft=${isDraft}`);
     zui.Modal.open({url: url});
     return new Promise((resolve) => {window.docBasicModalResolver = resolve;});
 }
