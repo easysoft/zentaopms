@@ -330,6 +330,7 @@ class doc extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        $this->lang->doc->menu->template['alias'] .= ',' . $this->app->rawMethod;
         $modules      = $this->doc->getTemplateModules(false, $libID);
         $modules      = array_column($modules, 'name', 'id');
         $templateList = $this->doc->getDocTemplateList($libID, $type, $orderBy, $pager);
@@ -955,6 +956,11 @@ class doc extends control
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
             return $this->sendError($this->lang->notFound, $this->inlink('index'));
         }
+        if($doc->templateType)
+        {
+            echo $this->fetch('doc', 'browseTemplate', "libID=$doc->lib&type=all&docID=$docID&orderBy=id_desc&recTotal=0&recPerPage=20&pageID=1&mode=view");
+        }
+
         if(!$isApi && !$this->doc->checkPrivDoc($doc)) return $this->sendError($this->lang->doc->accessDenied, inlink('index'));
 
         $lib        = $this->doc->getLibByID((int)$doc->lib);
