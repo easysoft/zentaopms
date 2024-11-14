@@ -331,13 +331,11 @@ class doc extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $this->lang->doc->menu->template['alias'] .= ',' . $this->app->rawMethod;
-        $modules      = $this->doc->getTemplateModules(false, $libID);
-        $modules      = array_column($modules, 'name', 'id');
-        $templateList = $this->doc->getDocTemplateList($libID, $type, $orderBy, $pager);
+        $modules      = $this->doc->getTemplateModules();
+        $modules      = array_column($modules, 'fullName', 'id');
+        $templateList = $this->doc->getDocTemplateList(0, $type, $orderBy, $pager);
         foreach($templateList as $template)
         {
-            $template->originLib = $template->lib;
-            $template->lib       = $libID;
             $template->moduleName = zget($modules, $template->module);
         }
 
@@ -364,7 +362,7 @@ class doc extends control
      */
     public function addTemplateType(int $scope, int|string $parentModule = '')
     {
-        $moduleList = $this->doc->getTemplateModules(true, $scope, '1');
+        $moduleList = $this->doc->getTemplateModules($scope, '1');
 
         if(!empty($_POST))
         {
@@ -1782,20 +1780,37 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function ajaxGetSpaceData(string $type = 'custom', int $spaceID = 0, string $picks = '')
+    public function ajaxGetSpaceData(string $type = 'custom', int $spaceID = 0, string $picks = '', int $libID = 0)
     {
-        $noPicks = empty($picks);
-        $picks   = $noPicks ? '' : ",$picks,";
+        if($type === 'template')
+        {
+            $modules      = $this->doc->getTemplateModules();
+            $moduleNames  = array_column($modules, 'fullName', 'id');
+            $templateList = $this->doc->getDocTemplateList(0, 'all');
+            foreach($templateList as $template)
+            {
+                $template->moduleName = zget($moduleNames, $template->module);
+            }
+            $data    = array('spaceID' => $spaceID, 'docs' => array_values($templateList));
+            $data['spaces'][] = array('name' => $this->lang->doc->template, 'id' => $spaceID);
+            foreach($this->config->doc->templateMenu as $item) $data['libs'][] = $item + array('space' => $spaceID);
+            $data['modules'] = $modules;
+        }
+        else
+        {
+            $noPicks = empty($picks);
+            $picks   = $noPicks ? '' : ",$picks,";
 
-        list($spaces, $spaceID) = $this->doc->getSpaces($type, $spaceID);
-        $data   = array('spaceID' => (int)$spaceID);
-        $libs   = $this->doc->getLibsOfSpace($type, $spaceID);
-        $libIds = array_keys($libs);
+            list($spaces, $spaceID) = $this->doc->getSpaces($type, $spaceID);
+            $data   = array('spaceID' => (int)$spaceID);
+            $libs   = $this->doc->getLibsOfSpace($type, $spaceID);
+            $libIds = array_keys($libs);
 
-        if($noPicks || strpos($picks, ',space,') !== false)  $data['spaces'] = $spaces;
-        if($noPicks || strpos($picks, ',lib,') !== false)    $data['libs'] = array_values($libs);
-        if($noPicks || strpos($picks, ',module,') !== false) $data['modules'] = array_values($this->doc->getModulesOfLibs($libIds));
-        if($noPicks || strpos($picks, ',doc,') !== false)    $data['docs'] = array_values($this->doc->getDocsOfLibs($libIds + array($spaceID), $type));
+            if($noPicks || strpos($picks, ',space,') !== false)  $data['spaces'] = $spaces;
+            if($noPicks || strpos($picks, ',lib,') !== false)    $data['libs'] = array_values($libs);
+            if($noPicks || strpos($picks, ',module,') !== false) $data['modules'] = array_values($this->doc->getModulesOfLibs($libIds));
+            if($noPicks || strpos($picks, ',doc,') !== false)    $data['docs'] = array_values($this->doc->getDocsOfLibs($libIds + array($spaceID), $type));
+        }
 
         $this->send($data);
     }

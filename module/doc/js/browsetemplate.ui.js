@@ -136,6 +136,7 @@ function submitNewDoc(doc, spaceID, libID, moduleID, formData)
         uid         : (doc.uid || `doc${doc.id}`),
     };
     if(formData) mergeDocFormData(docData, formData);
+    docApp.props.fetcher = $.createLink('doc', 'ajaxGetSpaceData', `type=template&spaceID=${spaceID}&picks={picks}&libID=${libID}`);
     const getErrorMessage = (res) => {
         if(typeof res.message === 'string') return res.message;
         if(typeof res.message === 'object' && res.message && Object.values(res.message).length)

@@ -10,8 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$modules = $this->doc->getTemplateModules(false, $libID);
-$modules = array_column($modules, 'name', 'id');
+$modules = $this->doc->getTemplateModules($libID);
+$modules = array_column($modules, 'fullName', 'id');
 
 formPanel
 (

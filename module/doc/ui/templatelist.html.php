@@ -66,6 +66,7 @@ docApp
     set::noModule(),
     set::homeName($lang->doc->template),
     set::mode($mode),
+    set::fetcher(createLink('doc', 'ajaxGetSpaceData', 'type=template&spaceID=1&picks={picks}')),
     set::privs($privs),
     set::userMap($users),
     set::spaceIcon(false),

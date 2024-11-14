@@ -3705,7 +3705,7 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getTemplateModules($onlyNode = true, $root = 'all', $grade = 'all')
+    public function getTemplateModules($root = 'all', $grade = 'all')
     {
         $modules = $this->dao->select('*')->from(TABLE_MODULE)
             ->where('deleted')->eq('0')
@@ -3714,8 +3714,6 @@ class docModel extends model
             ->beginIF($grade != 'all')->andWhere('grade')->eq($grade)->fi()
             ->fetchAll('id');
 
-        if($onlyNode) return array_values($modules);
-
         foreach($modules as $module)
         {
             if($module->parent === 0) continue;
@@ -3723,10 +3721,10 @@ class docModel extends model
 
             $names = array();
             foreach($path as $id) $names[] = $modules[$id]->name;
-            $module->name = implode(' / ', $names);
+            $module->fullName = implode(' / ', $names);
         }
 
-        return $modules;
+        return array_values($modules);
     }
 
     /**
