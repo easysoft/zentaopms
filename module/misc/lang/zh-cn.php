@@ -240,7 +240,7 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
-$lang->misc->feature->all['21.1'][]        = array('title' => '', 'desc' => '');
+$lang->misc->feature->all['21.1'][]        = array('title' => '文档接口空间优化升级，接口空间核心功能入口优化，主机功能优化，对象间关联关系完善，度量项补0逻辑，DuckDB相关优化，上线功能优化。', 'desc' => '');
 $lang->misc->feature->all['21.0'][]        = array('title' => '文档功能优化；产品流程模板、项目流程模板BI设计器优化。', 'desc' => '');
 $lang->misc->feature->all['20.8'][]        = array('title' => '文档优化：优化任务关系，修复Bug。', 'desc' => '');
 $lang->misc->feature->all['20.7.1'][]      = array('title' => '修复已知Bug。', 'desc' => '');
