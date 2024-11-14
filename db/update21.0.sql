@@ -14,8 +14,8 @@ ALTER TABLE `zt_deploy` ADD `host` varchar(255) NOT NULL DEFAULT '' AFTER `name`
 
 ALTER TABLE `zt_deployproduct` DROP COLUMN `package`;
 
-UPDATE `zt_deploy` SET `status` = 'success' WHERE `status` = 'done';
 UPDATE `zt_deploy` SET `status` = 'fail' WHERE `status` = 'done' AND `result` = 'fail';
+UPDATE `zt_deploy` SET `status` = 'success' WHERE `status` = 'done';
 
 REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`, `vision`) VALUES
 ('zh-cn', 'custom', 'relationList', '1', '{\"relation\":\"\\u76f8\\u5173\",\"relativeRelation\":\"\\u76f8\\u5173\"}', '0', 'all'),
