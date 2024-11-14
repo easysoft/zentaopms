@@ -622,7 +622,7 @@ class instance extends control
             $this->instance->saveBackupSettings($instance);
             if(dao::isError())  return $this->send(array('result' => 'fail', 'load' => array('alert' => dao::getError())));
 
-            return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'closeModal' => true));
         }
         $this->view->instance        = $instance;
         $this->view->backupSettings = $this->instance->getAutoBackupSettings($instanceID);
