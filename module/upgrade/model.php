@@ -10416,28 +10416,27 @@ class upgradeModel extends model
             {
                 if($step->parent || $step->stage == '') return;
 
-                if($step->result) $step->status = $step->result;
-                $deployData[$deployID][$step->status][$step->id] = zget($this->lang->deploy->stageList, $step->stage);
+                $deployData[$deployID][$step->stage][] = $step->id;
             }
         }
 
         $this->loadModel('action');
         foreach($deployData as $deployID => $steps)
         {
-            foreach($steps as $status => $childs)
+            foreach($steps as $stage => $childs)
             {
                 $parent = new stdclass();
-                $parent->title       = current($childs);
-                $parent->stage       = '';
+                $parent->title       = zget($this->lang->deploy->stageList, $stage, '');
+                $parent->status      = 'wait';
                 $parent->deploy      = $deployID;
                 $parent->createdBy   = $this->app->user->account;
                 $parent->createdDate = helper::now();
-                $parent->status      = $status;
                 $this->dao->insert(TABLE_DEPLOYSTEP)->data($parent)->autoCheck()->exec();
 
                 $parentID = $this->dao->lastInsertID();
-                $this->action->create('deploy', $parentID, 'Created');
-                $this->dao->update(TABLE_DEPLOYSTEP)->set('parent')->eq($parentID)->set('status')->eq($status)->where('id')->in(array_keys($childs))->exec();
+                $this->action->create('deploystep', $parentID, 'created');
+
+                $this->dao->update(TABLE_DEPLOYSTEP)->set('parent')->eq($parentID)->where('id')->in($childs)->exec();
             }
         }
     }
