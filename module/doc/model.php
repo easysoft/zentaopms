@@ -653,7 +653,7 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getDocTemplateList(int $libID = 0, string $type = 'all', string $orderBy = 'id_desc', object $pager = NULL): array
+    public function getDocTemplateList(int $libID = 0, string $type = 'all', string $orderBy = 'id_desc', object $pager = null): array
     {
         return $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq('0')
