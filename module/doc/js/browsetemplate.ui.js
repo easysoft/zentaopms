@@ -14,7 +14,7 @@ function getTableOptions(options, info)
     options.data.sort((a, b) => a.addedDate > b.addedDate ? -1 : 1);
 
     templateCols = [];
-    templateCols.push(options.cols.find(col => col.name === 'rawID'));
+    templateCols.push({...options.cols.find(col => col.name === 'rawID'), type: 'id'});
 
     let title = options.cols.find(col => col.name == 'title');
     title.title = lang.tableCols.title;
@@ -42,6 +42,8 @@ function getTableOptions(options, info)
             });
         }
     });
+
+    options.footer = options.footer.filter(f => f !== 'checkbox');
 
     return options;
 }
