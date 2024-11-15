@@ -48,5 +48,6 @@ dtable
     set::cols($config->backup->dtable->fieldList),
     set::data($backups),
     set::sortLink(createLink('instance', 'backuplist', "id={$instance->id}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&pageID={$pager->pageID}")),
+    set::loadPartial(true),
     set::footPager(usePager())
 );

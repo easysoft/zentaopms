@@ -580,7 +580,7 @@ class instance extends control
             return $this->send(array('result' => 'fail', 'message' => zget($this->lang->instance->notices, 'restoreFail') ));
         }
         $this->action->create('instance', $instance->id, 'restore', '', json_encode(array('result' => array('result' => 'success'))));
-        return $this->send(array('result' => 'success', 'message' => zget($this->lang->instance->notices, 'restoreSuccess'), 'locate' => $this->createLink('instance', 'view', 'id=' . $instanceID)));
+        return $this->send(array('result' => 'success', 'message' => zget($this->lang->instance->notices, 'restoreSuccess'), 'load' => true));
     }
 
     /**
