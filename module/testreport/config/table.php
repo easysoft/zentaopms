@@ -121,6 +121,7 @@ $config->testreport->bug->dtable->fieldList['pri']['sort']          = false;
 $config->testreport->bug->dtable->fieldList['status']['sort']       = false;
 $config->testreport->bug->dtable->fieldList['openedBy']['sort']     = false;
 $config->testreport->bug->dtable->fieldList['resolvedBy']['sort']   = false;
+$config->testreport->bug->dtable->fieldList['resolution']['sort']   = false;
 $config->testreport->bug->dtable->fieldList['resolvedDate']['sort'] = false;
 
 $app->loadLang('build');
