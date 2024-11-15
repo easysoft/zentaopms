@@ -100,7 +100,7 @@ const customRenders =
                 const libView = items[viewIndex][1];
                 const libID   = lib.data.id;
                 const release = this.signals.libReleaseMap.value[libID] || 0;
-                const options = [{text: getDocAppLang('defaultVersion'), value: 0, selected: !release, command: `changeLibRelease/${libID}/0`}];
+                const options = [{text: getDocAppLang('latestVersion'), value: 0, selected: !release, command: `changeLibRelease/${libID}/0`}];
                 versions.forEach(version => options.push({selected: release === version.id, text: `v${version.version}`, value: version.id, command: `changeLibRelease/${libID}/${version.id}`}));
                 const currentVersion = versions.find(x => x.id === release);
                 const versionPicker = zui.renderCustomContent(
@@ -110,7 +110,7 @@ const customRenders =
                         component: 'DropdownButton',
                         props:
                         {
-                            text     : currentVersion ? currentVersion.version : getDocAppLang('version'),
+                            text     : currentVersion ? currentVersion.version : getDocAppLang('latestVersion'),
                             size     : 'xs',
                             type     : 'gray-pale',
                             rounded  : 'full',

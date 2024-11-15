@@ -60,6 +60,7 @@ $lang->api->confirmDeleteLib    = "您确定删除该库吗？";
 $lang->api->confirmDeleteStruct = "您确定删除该数据结构吗？";
 $lang->api->filterStruct        = "使用数据结构填充";
 $lang->api->defaultVersion      = "当前版本";
+$lang->api->latestVersion       = '最新版本';
 $lang->api->zentaoAPI           = "禅道API文档v1";
 $lang->api->search              = "搜索";
 $lang->api->allLibs             = "全部库";
