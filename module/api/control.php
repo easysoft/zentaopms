@@ -280,6 +280,15 @@ class api extends control
         echo json_encode($data);
     }
 
+    /**
+     * 获取指定库的 API 列表。
+     * Get the API list of the specified library.
+     *
+     * @param  int    $libID
+     * @param  int    $releaseID
+     * @access public
+     * @return void
+     */
     public function ajaxGetLibApiList(int $libID, int $releaseID = 0)
     {
         if($releaseID)
