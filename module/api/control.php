@@ -280,6 +280,30 @@ class api extends control
         echo json_encode($data);
     }
 
+    public function ajaxGetLibApiList(int $libID, int $releaseID = 0)
+    {
+        if($releaseID)
+        {
+            $release = $this->api->getRelease(0, 'byID', $releaseID);
+            $apis    = $release ? $this->api->getApiListByRelease($release) : array();
+        }
+        else
+        {
+            $apis = $this->api->getApiListBySearch($libID, 0);
+        }
+
+        $unsetProps = array('commonParams', 'params', 'paramsExample', 'response', 'responseExample');
+        foreach($apis as $api)
+        {
+            foreach($unsetProps as $prop) unset($api->$prop);
+            $api->originTitle = $api->title;
+            $api->icon        = "api is-$api->method";
+            $api->title       = "$api->method $api->path $api->title";
+        }
+
+        echo json_encode($apis);
+    }
+
     /**
      * 获取接口数据。
      *
