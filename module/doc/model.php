@@ -3259,6 +3259,7 @@ class docModel extends model
         $allLibs          = $this->getLibs('hasApi');
         $hasPrivDocIdList = $this->getPrivDocs(array(), 0, 'all');
         $apiList          = $this->loadModel('api')->getPrivApis();
+        $actionCondition  = $this->loadModel('action')->getActionCondition('doc');
 
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('vision')->eq($this->config->vision)
@@ -3271,6 +3272,7 @@ class docModel extends model
             ->orWhere('(objectType')->eq('api')
             ->andWhere('objectID')->in(array_keys($apiList))
             ->markRight(2)
+            ->beginIF($actionCondition)->andWhere("($actionCondition)")->fi()
             ->orderBy('date_desc,id_asc')
             ->page($pager)
             ->fetchAll();

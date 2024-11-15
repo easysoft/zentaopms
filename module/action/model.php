@@ -949,18 +949,21 @@ class actionModel extends model
      * 通过视野获取用户可访问的动态类型。
      * Get the action types that the user can access through the vision.
      *
+     * @param  string $module
      * @access public
      * @return string
      */
-    public function getActionCondition(): string
+    public function getActionCondition($module = ''): string
     {
         if($this->app->user->admin) return '';
 
         $actionCondition = '';
         if(!empty($this->app->user->rights['acls']['actions']))
         {
+            if($module && !isset($this->app->user->rights['acls']['actions'][$module])) return '1 != 1';
             foreach($this->app->user->rights['acls']['actions'] as $moduleName => $actions)
             {
+                if($module && $module != $moduleName) continue;
                 if(isset($this->lang->mainNav->{$moduleName}) && !empty($this->app->user->rights['acls']['views']) && !isset($this->app->user->rights['acls']['views'][$moduleName])) continue;
                 $actionCondition .= "(`objectType` = '{$moduleName}' AND `action` " . helper::dbIN(array_keys($actions)) . ") OR ";
             }
