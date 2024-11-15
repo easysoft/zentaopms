@@ -132,7 +132,7 @@ $lang->instance->backup->keepBackupBySystem  = 'The system will only delete expi
 $lang->instance->backup->backupSize          = 'Size';
 $lang->instance->backup->confirmTip          = 'Are you sure you want to back up?';
 $lang->instance->backup->cronRemark          = 'DevOps service automatic backup task';
-$lang->instance->backup->backupSettingsTips  = 'When the backup exceeds the set time and is greater than one backup, the system will self delete';
+$lang->instance->backup->backupSettingsTips  = 'The system will delete backups that exceed the set number of days, but will retain at least one valid backup.';
 
 $lang->instance->backup->cycleList[1] = 'Daily';
 
