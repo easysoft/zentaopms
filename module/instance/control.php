@@ -655,9 +655,10 @@ class instance extends control
             if($backupSettings->autoBackup)
             {
                 $startRestoreMessage = sprintf($this->lang->instance->restore->firstStartTime, $instance->name, date('Y-m-d H:i:s', $startTime));
-                return $this->send(array('result' => 'success', 'load' => array('alert' => $startRestoreMessage, 'locate' => $locate)));
+                return $this->send(array('result' => 'success', 'load' => array('alert' => $startRestoreMessage, 'locate' => $locate, 'closeModal' => true)));
             }
-            return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->instance->backup->disableAutoBackup, 'locate' => $locate)));
+
+            return $this->send(array('result' => 'success', 'closeModal' => true, 'load' => array('alert' => $this->lang->instance->backup->disableAutoBackup)));
         }
         $this->view->instance        = $instance;
         $this->view->backupSettings = $this->instance->getAutoBackupSettings($instanceID);
