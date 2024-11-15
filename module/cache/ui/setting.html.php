@@ -10,12 +10,9 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$driver      = !empty($config->cache->driver)     ? $config->cache->driver     : '';
-$namespace   = !empty($config->cache->namespace)  ? $config->cache->namespace  : $config->db->name;
-$serializer  = !empty($config->redis->serializer) ? $config->redis->serializer : 'serialize';
 $hiddenCache = $config->cache->enable ? '' : ' hidden';
-$hiddenApcu  = !$hiddenCache && $driver == 'apcu'  ? '' : ' hidden';
-$hiddenRedis = !$hiddenCache && $driver == 'redis' ? '' : ' hidden';
+$hiddenApcu  = !$hiddenCache && $config->cache->driver == 'apcu'  ? '' : ' hidden';
+$hiddenRedis = !$hiddenCache && $config->cache->driver == 'redis' ? '' : ' hidden';
 
 formPanel
 (
@@ -49,7 +46,7 @@ formPanel
             setClass('w-1/3'),
             set::name('driver'),
             set::items($lang->cache->driverList),
-            set::value($driver),
+            set::value($config->cache->driver),
             set::inline(true)
         ),
         span
@@ -94,7 +91,7 @@ formPanel
         (
             setClass('w-1/3'),
             set::name('namespace'),
-            set::value($namespace)
+            set::value($config->cache->namespace ?: $config->db->name)
         ),
         span
         (
@@ -159,13 +156,34 @@ formPanel
     formGroup
     (
         setClass('redis' . $hiddenRedis),
+        set::label($lang->cache->redis->database),
+        set::required(),
+        input
+        (
+            setClass('w-1/3'),
+            set::type('number'),
+            set::min(0),
+            set::step(1),
+            set::name('redis[database]'),
+            set::value($config->redis->database)
+        ),
+        span
+        (
+            setClass('ml-4 mt-1.5'),
+            icon('info text-warning mr-2'),
+            $lang->cache->redis->tips->database
+        )
+    ),
+    formGroup
+    (
+        setClass('redis' . $hiddenRedis),
         set::label($lang->cache->redis->serializer),
         radioList
         (
             setClass('w-1/3'),
             set::name('redis[serializer]'),
             set::items($lang->cache->redis->serializerList),
-            set::value($serializer),
+            set::value($config->redis->serializer),
             set::inline(true)
         ),
         span

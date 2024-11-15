@@ -37,6 +37,7 @@ $lang->cache->redis->serializerList['igbinary'] = 'igbinary';
 
 $lang->cache->redis->tips = new stdClass();
 $lang->cache->redis->tips->host       = 'Fill in the domain name or IP address, and do not need to fill in the protocol and port number.';
+$lang->cache->redis->tips->database   = 'Fill in the number of the Redis database, the default is 0.';
 $lang->cache->redis->tips->serializer = 'Data needs to be serialized and cached. Changing the serializer will clear the cached data.';
 
 $lang->cache->tips = new stdClass();

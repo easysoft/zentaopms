@@ -27,6 +27,7 @@ $lang->cache->redis->host               = 'Redis 主机';
 $lang->cache->redis->port               = 'Redis 端口';
 $lang->cache->redis->username           = 'Redis 用户名';
 $lang->cache->redis->password           = 'Redis 密码';
+$lang->cache->redis->database           = 'Redis 数据库';
 $lang->cache->redis->serializer         = 'Redis 序列化器';
 $lang->cache->redis->notice             = '使用 Redis 缓存需要先加载 Redis 扩展。';
 $lang->cache->redis->notLoaded          = '请加载 Redis 扩展后再开启数据缓存。';
@@ -37,6 +38,7 @@ $lang->cache->redis->serializerList['igbinary'] = 'igbinary';
 
 $lang->cache->redis->tips = new stdClass();
 $lang->cache->redis->tips->host       = '填写域名或 IP 地址，无需填写协议和端口号。';
+$lang->cache->redis->tips->database   = '填写 Redis 数据库的编号，默认为 0。';
 $lang->cache->redis->tips->serializer = '数据需要序列化后缓存。更改序列化器会清空缓存数据。';
 
 $lang->cache->tips = new stdClass();

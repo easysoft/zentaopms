@@ -32,6 +32,7 @@ class cache extends control
             if(!isset($redis->port))       $redis->port       = '';
             if(!isset($redis->username))   $redis->username   = '';
             if(!isset($redis->password))   $redis->password   = '';
+            if(!isset($redis->database))   $redis->database   = '';
             if(!isset($redis->serializer)) $redis->serializer = '';
 
             if($cache->enable)
@@ -42,6 +43,7 @@ class cache extends control
                 if(empty($cache->namespace)) $errors['namespace'] = sprintf($this->lang->error->notempty, $this->lang->cache->namespace);
                 if($cache->driver == 'redis' && empty($redis->host)) $errors['redis[host]'] = sprintf($this->lang->error->notempty, $this->lang->cache->redis->host);
                 if($cache->driver == 'redis' && empty($redis->port)) $errors['redis[port]'] = sprintf($this->lang->error->notempty, $this->lang->cache->redis->port);
+                if($cache->driver == 'redis' && empty($redis->database) && $redis->database !== '0') $errors['redis[database]'] = sprintf($this->lang->error->notempty, $this->lang->cache->redis->database);
                 if($errors) return $this->send(array('result' => 'fail', 'message' => $errors));
 
                 if($cache->driver == 'apcu')
