@@ -174,7 +174,7 @@ class RedisDriver implements CacheInterface
      */
     public function getMultiple($keys, $default = null)
     {
-        return $this->redis->mget($keys);
+        return array_filter(array_combine($keys, $this->redis->mget($keys)));
     }
 
     /**

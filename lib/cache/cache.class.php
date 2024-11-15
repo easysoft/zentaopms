@@ -622,12 +622,13 @@ class cache
      * Get all data of the specified table from the cache.
      *
      * @param  string $table 表名。
+     * @param  array  $objectIdList 主键值列表。
      * @access public
      * @return array
      */
     public function fetchAll(string $table, array $objectIdList = []): array
     {
-        if(!$this->checkTable($table)) return [];
+        if(!$this->checkTable($table)) return $this->log("Table {$table} is not set in the cache configuration", __FILE__, __LINE__);
 
         if(empty($table)) return $this->log('The table name is empty', __FILE__, __LINE__);
 
@@ -635,34 +636,50 @@ class cache
 
         $code = $this->getTableCode();
 
-        $result = [];
-
-        /* Try get all objectIdList. */
+        /* 尝试获取指定表的所有主键字段的值。Try to get the values of all primary key fields of the specified table. */
         $setCacheKey     = $this->getSetCacheKey($code);
         $allObjectIdList = $this->cache->get($setCacheKey);
 
-        /* No data in cache, init table cache. */
+        /* 如果主键字段的值为空，则初始化指定表的缓存。If the value of the primary key field is empty, initialize the cache of the specified table. */
         if(!$allObjectIdList)
         {
             $allData = $this->initTableCache();
             if(empty($objectIdList)) return $allData;
 
-            foreach($allData as $objectId => $object)
-            {
-                if(in_array($objectId, $objectIdList)) $result[$objectId] = $object;
-            }
+            return array_intersect_key($allData, $objectIdList);
         }
-        else
+
+        /* 如果主键字段的值不为空，则从缓存中获取数据。If the value of the primary key field is not empty, get the data from the cache. */
+        if(empty($objectIdList)) $objectIdList = $allObjectIdList;
+
+        $keys = [];
+        foreach($objectIdList as $objectID) $keys[$objectID] = $this->getRawCacheKey($code, $objectID);
+
+        $objects = $this->cache->getMultiple(array_values($keys));
+
+        /* 如果缓存中没有全部的数据，则从数据库中获取缺失的数据。If not all data in cache, get the missing data from the database. */
+        if(count($keys) > count($objects))
         {
-            $keys = [];
-            foreach($objectIdList as $objectID) $keys[] = $this->getRawCacheKey($code, $objectID);
+            $lostObjects = [];
+            $diffIdList  = array_keys(array_diff($keys, array_keys($objects)));
+            $diffObjects = $this->dao->select('*')->from($table)->where('id')->in($diffIdList)->fetchAll();
+            foreach($diffObjects as $object)
+            {
+                $rawCacheKey = $this->getRawCacheKey($code, $object->id);
+                $lostObjects[$rawCacheKey] = $object;
+            }
 
-            $objects = $this->cache->getMultiple($keys);
-            if(!$objects) return [];
+            /* 把缺失的数据保存到缓存中。Save the missing data to cache. */
+            $this->cache->setMultiple($lostObjects);
 
-            $field  = $this->getTableField();
-            foreach($objects as $object) $result[$object->$field] = $object;
+            $objects += $lostObjects;
         }
+
+        if(!$objects) return [];
+
+        $result = [];
+        $field  = $this->getTableField();
+        foreach($objects as $object) $result[$object->$field] = $object;
 
         return $result;
     }

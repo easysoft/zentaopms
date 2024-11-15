@@ -97,7 +97,10 @@ class ApcuDriver implements CacheInterface
 
     public function getMultiple($keys, $default = null)
     {
-        return apcu_fetch($keys);
+        $values = apcu_fetch($keys);
+        if($values === false) return [];
+
+        return $values;
     }
 
     public function setMultiple($values, $ttl = null)
