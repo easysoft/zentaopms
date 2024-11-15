@@ -296,6 +296,7 @@ $config->logonMethods[] = 'instance.install';
 $config->logonMethods[] = 'instance.setting';
 $config->logonMethods[] = 'instance.upgrade';
 $config->logonMethods[] = 'instance.view';
+$config->logonMethods[] = 'instance.backuplist';
 $config->logonMethods[] = 'instance.visit';
 $config->logonMethods[] = 'jenkins.create';
 $config->logonMethods[] = 'jenkins.edit';
