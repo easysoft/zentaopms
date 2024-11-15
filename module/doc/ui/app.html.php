@@ -30,6 +30,7 @@ $privs = array();
 $privs['create']       = hasPriv('doc', 'create');
 $privs['edit']         = hasPriv('doc', 'edit');
 $privs['delete']       = hasPriv('doc', 'delete');
+$privs['view']         = hasPriv('doc', 'view');
 $privs['effort']       = $this->config->edition != 'open' && hasPriv('effort', 'createForObject');
 $privs['exportDoc']    = $this->config->edition != 'open' && hasPriv('doc', $type . '2export');
 $privs['exportApi']    = $this->config->edition != 'open' && hasPriv('api', 'export');
