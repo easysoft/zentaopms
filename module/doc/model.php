@@ -757,18 +757,6 @@ class docModel extends model
         $docs = $this->processCollector($docs);
         $docs = $this->filterPrivDocs($docs, $spaceType);
 
-        $apis = $this->loadModel('api')->getApiListBySearch(0, 0, '', $libs);
-        foreach($apis as &$api)
-        {
-            $api->id          = "api.$api->id";
-            $api->lib         = (int)$api->lib;
-            $api->module      = (int)$api->module;
-            $api->deleted     = boolval($api->deleted);
-            $api->originTitle = $api->title;
-            $api->icon        = "api is-$api->method";
-            $api->title       = "$api->method $api->path $api->title";
-        }
-
         foreach($docs as &$doc)
         {
             $doc->lib         = (int)$doc->lib;
@@ -779,7 +767,19 @@ class docModel extends model
             unset($doc->draft);
         }
 
-        $docs = $docs + $apis;
+        $apis = $this->loadModel('api')->getApiListBySearch(0, 0, '', $libs);
+        foreach($apis as &$api)
+        {
+            $api->id          = "api.$api->id";
+            $api->lib         = (int)$api->lib;
+            $api->module      = (int)$api->module;
+            $api->deleted     = boolval($api->deleted);
+            $api->originTitle = $api->title;
+            $api->icon        = "api is-$api->method";
+            $api->title       = "$api->method $api->path $api->title";
+
+            $docs[$api->id] = $api;
+        }
 
         return $docs;
     }
