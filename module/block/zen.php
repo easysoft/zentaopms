@@ -1592,8 +1592,8 @@ class blockZen extends block
         foreach($products as $productID => $product) if($product->shadow) $shadowProductList[] = $productID;
         $productProject    = $this->dao->select('t1.product, t1.project')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->where('product')->in(array_values($shadowProductList))
-            ->andWhere('type')->eq('project')
+            ->where('t1.product')->in(array_values($shadowProductList))
+            ->andWhere('t2.type')->eq('project')
             ->fetchPairs();
 
         $productIdList = array_keys($products);
