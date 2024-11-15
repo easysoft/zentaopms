@@ -400,7 +400,7 @@ class api extends control
         $this->api->deleteRelease($id);
 
         if(dao::isError()) return $this->sendError(dao::getError());
-        return $this->sendSuccess(array('load' => true, 'closeModal' => true, 'docApp' => array('executeCommand', 'loadLazyContent', array('.api-release-list'))));
+        return $this->sendSuccess(array('load' => true, 'closeModal' => true, 'docApp' => array(array('executeCommand', 'loadLazyContent', array('.api-release-list')), array('load', null, null, null, array('noLoading' => true, 'picks' => 'lib')))));
     }
 
     /**
@@ -424,7 +424,7 @@ class api extends control
 
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            return $this->sendSuccess(array('load' => true, 'closeModal' => true, 'docApp' => array('executeCommand', 'loadLazyContent', array('.api-release-list'))));
+            return $this->sendSuccess(array('load' => true, 'closeModal' => true, 'docApp' => array(array('executeCommand', 'loadLazyContent', array('.api-release-list')), array('load', null, null, null, array('noLoading' => true, 'picks' => 'lib')))));
         }
 
         $this->display();
@@ -634,7 +634,7 @@ class api extends control
             $this->doc->updateApiLib($id, $formData);
 
             if(dao::isError()) return $this->sendError(dao::getError());
-            return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
+            return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true, 'docApp' => array('load', null, null, null, array('noLoading' => true, 'picks' => 'lib'))));
         }
 
         $type   = $lib->product ? 'product' : ($lib->project ? 'project' : 'nolink');
