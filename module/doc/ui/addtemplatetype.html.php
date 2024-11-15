@@ -67,6 +67,7 @@ formPanel
     ),
     formGroup
     (
+        set::required(true),
         set::name('name'),
         set::label($lang->docTemplate->typeName),
         set::control('input')
