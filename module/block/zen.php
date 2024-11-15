@@ -1648,7 +1648,6 @@ class blockZen extends block
             ->orderBy('id_desc')
             ->fetchGroup('product');
 
-
         /* 将获取出的度量项数据塞入产品列表数据中。 */
         foreach($products as $productID => $product)
         {
@@ -2741,16 +2740,32 @@ class blockZen extends block
         $productID  = !empty($params['active']) ? $params['active'] : key($products);
         if(empty($productID)) $productID = 0;
 
+        $isShadow    = $productID ? (bool)$products[$productID]->shadow : false;
+        $projectID   = $isShadow ? $this->dao->select('project')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($productID)->fetch('project') : 0;
+        $useObjectID = $isShadow ? $projectID : $productID;
+        $useDataKey  = $isShadow ? 'project' : 'product';
+
         $this->loadModel('metric');
         $bugFixedRate      = $this->metric->getResultByCodeWithArray('rate_of_fixed_bug_in_product',      array('product' => $productID), 'cron'); // 从度量项获取各个产品的Bug修复率。
-        $effectiveBugGroup = $this->metric->getResultByCodeWithArray('count_of_effective_bug_in_product', array('product' => $productID), 'cron'); // 从度量项获取各个产品的有效Bug数。
-        $fixedBugGroup     = $this->metric->getResultByCodeWithArray('count_of_fixed_bug_in_product',     array('product' => $productID), 'cron'); // 从度量项获取各个产品的Bug修复数。
-        $activatedBugGroup = $this->metric->getResultByCodeWithArray('count_of_activated_bug_in_product', array('product' => $productID), 'cron'); // 从度量项获取各个产品的Bug激活数。
+        $shadowBugFixRate  = $this->metric->getResultByCodeWithArray('rate_of_fixed_bug_in_project',      array('project' => $projectID), 'cron'); // 获取影子产品Bug修复率。
 
-        if(!empty($bugFixedRate))      $bugFixedRate      = array_column($bugFixedRate,      null, 'product');
-        if(!empty($effectiveBugGroup)) $effectiveBugGroup = array_column($effectiveBugGroup, null, 'product');
-        if(!empty($fixedBugGroup))     $fixedBugGroup     = array_column($fixedBugGroup,     null, 'product');
-        if(!empty($activatedBugGroup)) $activatedBugGroup = array_column($activatedBugGroup, null, 'product');
+        $effectiveBugGroup  = $this->metric->getResultByCodeWithArray('count_of_effective_bug_in_product', array('product' => $productID), 'cron'); // 从度量项获取各个产品的有效Bug数。
+        $shadowEffectiveBug = $this->metric->getResultByCodeWithArray('count_of_effective_bug_in_project', array('project' => $projectID), 'cron'); // 获取影子产品有效Bug总数。
+
+        $fixedBugGroup       = $this->metric->getResultByCodeWithArray('count_of_fixed_bug_in_product',     array('product' => $productID), 'cron'); // 从度量项获取各个产品的Bug修复数。
+        $shadowFixedBugGroup = $this->metric->getResultByCodeWithArray('count_of_fixed_bug_in_project',     array('project' => $projectID), 'cron'); // 获取影子产品Bug修复数。
+
+        $activatedBugGroup       = $this->metric->getResultByCodeWithArray('count_of_activated_bug_in_product', array('product' => $productID), 'cron'); // 从度量项获取各个产品的Bug激活数。
+        $shadowActivatedBugGroup = $this->metric->getResultByCodeWithArray('count_of_activated_bug_in_project', array('project' => $projectID), 'cron'); // 获取影子产品Bug激活数。
+
+        if(!empty($bugFixedRate))            $bugFixedRate            = array_column($bugFixedRate,            null, 'product');
+        if(!empty($shadowBugFixRate))        $shadowBugFixRate        = array_column($shadowBugFixRate,        null, 'project');
+        if(!empty($effectiveBugGroup))       $effectiveBugGroup       = array_column($effectiveBugGroup,       null, 'product');
+        if(!empty($shadowEffectiveBug))      $shadowEffectiveBug      = array_column($shadowEffectiveBug,      null, 'project');
+        if(!empty($fixedBugGroup))           $fixedBugGroup           = array_column($fixedBugGroup,           null, 'product');
+        if(!empty($shadowFixedBugGroup))     $shadowFixedBugGroup     = array_column($shadowFixedBugGroup,     null, 'project');
+        if(!empty($activatedBugGroup))       $activatedBugGroup       = array_column($activatedBugGroup,       null, 'product');
+        if(!empty($shadowActivatedBugGroup)) $shadowActivatedBugGroup = array_column($shadowActivatedBugGroup, null, 'project');
 
         /* 按照产品和日期分组获取产品每月新增和完成的需求数度量项。 */
         $years  = array();
@@ -2763,33 +2778,43 @@ class blockZen extends block
             $dates[]  = date('Y-m', strtotime("first day of -{$i} month"));
         }
 
-        $monthCreatedBugGroup = $this->metric->getResultByCodeWithArray('count_of_monthly_created_bug_in_product', array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 从度量项获取每月的激活Bug数。
-        $monthClosedBugGroup  = $this->metric->getResultByCodeWithArray('count_of_monthly_closed_bug_in_product',  array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 从度量项获取每月的关闭Bug数。
+        $monthCreatedBugGroup       = $this->metric->getResultByCodeWithArray('count_of_monthly_created_bug_in_product', array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 从度量项获取每月的激活Bug数。
+        $shadowMonthCreatedBugGroup = $this->metric->getResultByCodeWithArray('count_of_monthly_created_bug_in_project', array('project' => $projectID, 'year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 从度量项获取每月的激活Bug数。
+        $monthClosedBugGroup        = $this->metric->getResultByCodeWithArray('count_of_monthly_closed_bug_in_product',  array('product' => $productID, 'year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 从度量项获取每月的关闭Bug数。
+        $shadowMonthClosedBugGroup  = $this->metric->getResultByCodeWithArray('count_of_monthly_closed_bug_in_project',  array('project' => $projectID, 'year' => join(',', $years), 'month' => join(',', $months)), 'cron'); // 从度量项获取每月的关闭Bug数。
 
         /* 组装页面所需的度量项数组。 */
-        $closedBugs     = isset($fixedBugGroup[$productID]['value'])     ? $fixedBugGroup[$productID]['value']      : 0;
-        $unresovledBugs = isset($activatedBugGroup[$productID]['value']) ? $activatedBugGroup[$productID]['value']  : 0;
-        $totalBugs      = isset($effectiveBugGroup[$productID]['value']) ? $effectiveBugGroup[$productID]['value']  : 0;
-        $resolvedRate   = isset($bugFixedRate[$productID]['value'])      ? $bugFixedRate[$productID]['value'] * 100 : 0;
+        $useClosedBug      = $isShadow ? 'shadowFixedBugGroup' : 'fixedBugGroup';
+        $useUnresovledBugs = $isShadow ? 'shadowActivatedBugGroup' : 'activatedBugGroup';
+        $useTotalBugs      = $isShadow ? 'shadowEffectiveBug' : 'effectiveBugGroup';
+        $useResolvedRate   = $isShadow ? 'shadowBugFixRate' : 'bugFixedRate';
+
+        $closedBugs     = isset($$useClosedBug[$useObjectID]['value'])      ? $$useClosedBug[$useObjectID]['value']          : 0;
+        $unresovledBugs = isset($$useUnresovledBugs[$useObjectID]['value']) ? $$useUnresovledBugs[$useObjectID]['value']     : 0;
+        $totalBugs      = isset($$useTotalBugs[$useObjectID]['value'])      ? $$useTotalBugs[$useObjectID]['value']          : 0;
+        $resolvedRate   = isset($$useResolvedRate[$useObjectID]['value'])   ? $$useResolvedRate[$useObjectID]['value'] * 100 : 0;
+
+        $useMonthCreate = $isShadow ? 'shadowMonthCreatedBugGroup' : 'monthCreatedBugGroup';
+        $useMonthClose  = $isShadow ? 'shadowMonthClosedBugGroup'  : 'monthClosedBugGroup';
         foreach($dates as $date)
         {
             $activateBugs[$date] = 0;
             $resolveBugs[$date]  = 0;
             $closeBugs[$date]    = 0;
 
-            if(!empty($monthCreatedBugGroup))
+            if(!empty($$useMonthCreate))
             {
-                foreach($monthCreatedBugGroup as $data)
+                foreach($$useMonthCreate as $data)
                 {
-                    if($date == "{$data['year']}-{$data['month']}" && $productID == $data['product']) $activateBugs[$date] = $data['value'];
+                    if($date == "{$data['year']}-{$data['month']}" && $useObjectID == $data[$useDataKey]) $activateBugs[$date] = $data['value'];
                 }
             }
 
-            if(!empty($monthClosedBugGroup))
+            if(!empty($$useMonthClose))
             {
-                foreach($monthClosedBugGroup as $data)
+                foreach($$useMonthClose as $data)
                 {
-                    if($date == "{$data['year']}-{$data['month']}" && $productID == $data['product']) $closeBugs[$date] = $data['value'];
+                    if($date == "{$data['year']}-{$data['month']}" && $useObjectID == $data[$useDataKey]) $closeBugs[$date] = $data['value'];
                 }
             }
         }
