@@ -3716,14 +3716,8 @@ class docModel extends model
 
         foreach($modules as $module)
         {
-            if($module->parent === 0)
-            {
-                $module->fullName = $module->name;
-                continue;
-            }
             $path = explode(',', trim($module->path, ','));
-
-            $names = array();
+            $names = array('');
             foreach($path as $id)
             {
                 if(!isset($modules[$id])) continue;

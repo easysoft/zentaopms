@@ -218,17 +218,27 @@ window.loadObjectModules = function(e)
     });
 }
 
-window.loadLibModules = function(e)
+window.loadLibModules = function(e, docType)
 {
     const objectID = e.target.value;
 
-    let docType = $('.radio-primary [name=type]:not(.hidden):checked').val();
-    if(typeof docType == 'undefined') docType = 'doc';
+    if(!docType)
+    {
+        docType = $('.radio-primary [name=type]:not(.hidden):checked').val();
+        if(typeof docType == 'undefined') docType = 'doc';
+    }
 
     const link = $.createLink('tree', 'ajaxGetOptionMenu', 'rootID=' + objectID + '&viewType=' + docType + '&branch=all&rootModuleID=0&returnType=items');
     $.get(link, function(data)
     {
         data = JSON.parse(data);
+        if(docType == 'docTemplate')
+        {
+            data = data.filter(function(item)
+            {
+                return item.value != 0;
+            });
+        }
 
         const $modulePicker = $("[name='module']").zui('picker');
         $modulePicker.render({items: data});

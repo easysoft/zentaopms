@@ -10,8 +10,13 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$modules = $this->doc->getTemplateModules($libID);
-$modules = array_column($modules, 'fullName', 'id');
+$optionMenu = $this->tree->getOptionMenu($libID, 'docTemplate', 0, 'all', 'nodeleted', 'all');
+$modules = array();
+foreach($optionMenu as $menuID => $menu)
+{
+    if($menuID == 0) continue;
+    $modules[] = array('text' => $menu, 'value' => $menuID, 'keys' => $menu);
+}
 
 formPanel
 (
@@ -20,8 +25,7 @@ formPanel
     setData('docType', isset($doc) ? $doc->users : 'undefined'),
     set::title($title),
     set::submitBtnText($isDraft ? $lang->doc->saveDraft : (empty($docID) ? $lang->doc->release : $lang->save)),
-    on::change('[name=lib]')->call('loadLibModules', jsRaw('event')),
-    on::change('[name=lib],[name^=users]', 'checkLibPriv'),
+    on::change('[name=lib]')->call('loadLibModules', jsRaw("event, 'docTemplate'")),
     set::ajax(array('beforeSubmit' => jsRaw('window.beforeSetDocBasicInfo'))),
     formGroup
     (
