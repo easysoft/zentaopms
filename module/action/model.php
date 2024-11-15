@@ -958,8 +958,9 @@ class actionModel extends model
         if($this->app->user->admin) return '';
 
         $actionCondition = '';
-        if(!empty($this->app->user->rights['acls']['actions']))
+        if(isset($this->app->user->rights['acls']['actions']))
         {
+            if(empty($this->app->user->rights['acls']['actions'])) return '1 != 1';
             if($module && !isset($this->app->user->rights['acls']['actions'][$module])) return '1 != 1';
             foreach($this->app->user->rights['acls']['actions'] as $moduleName => $actions)
             {
