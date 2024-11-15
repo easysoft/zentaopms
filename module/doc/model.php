@@ -3724,7 +3724,11 @@ class docModel extends model
             $path = explode(',', trim($module->path, ','));
 
             $names = array();
-            foreach($path as $id) $names[] = $modules[$id]->name;
+            foreach($path as $id)
+            {
+                if(!isset($modules[$id])) continue;
+                $names[] = $modules[$id]->name;
+            }
             $module->fullName = implode(' / ', $names);
         }
 
