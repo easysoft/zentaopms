@@ -398,10 +398,12 @@ class cron extends control
                 if(isset($params['moduleName']) and isset($params['methodName']))
                 {
                     $this->viewType = 'html';
-
-                    $this->app->loadLang($params['moduleName']);
-                    $this->app->loadConfig($params['moduleName']);
-                    $output = $this->fetch($params['moduleName'], $params['methodName']);
+                    $moduleName     = $params['moduleName'];
+                    $methodName     = $params['methodName'];
+                    $this->app->loadLang($moduleName);
+                    $this->app->loadConfig($moduleName);
+                    unset($params['moduleName'], $params['methodName']);
+                    $output = $this->fetch($moduleName, $methodName, $params);
                 }
             }
             elseif($task->type == 'system')
