@@ -62,13 +62,14 @@ function mergeDocFormData(doc, formData)
     return doc;
 }
 
-function showDocBasicModal(docID, isDraft = 'no')
+function showDocBasicModal(docID, isDraft = false)
 {
     const docApp    = getDocApp();
     const spaceType = docApp.spaceType;
     const spaceID   = docApp.spaceID;
     const libID     = docApp.libID;
     const moduleID  = docApp.moduleID;
+    isDraft = isDraft ? 'yes' : 'no';
     const url = $.createLink('doc', 'setDocBasic', `objectType=template&objectID=${spaceID}&libID=${libID}&moduleID=${moduleID}&docID=${docID}&isDraft=${isDraft}`);
     zui.Modal.open({url: url});
     return new Promise((resolve) => {window.docBasicModalResolver = resolve;});
@@ -180,7 +181,7 @@ function submitNewDoc(doc, spaceID, libID, moduleID, formData)
  */
 function handleCreateDoc(doc, spaceID, libID, moduleID)
 {
-    return showDocBasicModal(0).then((formData) => {
+    return showDocBasicModal(0, doc.status === 'draft').then((formData) => {
         moduleID = parseInt(formData.get('module'));
         return submitNewDoc(doc, spaceID, libID, moduleID, formData);
     });
