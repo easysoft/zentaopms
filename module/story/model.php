@@ -907,7 +907,7 @@ class storyModel extends model
         unset($oldStory->parent, $story->parent);
         if($this->config->edition != 'open' && $oldStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
 
-        if(isset($story->reviewer))
+        if(!empty($story->reviewer))
         {
             $oldReviewer = $this->getReviewerPairs($storyID, $oldStory->version);
             $oldStory->reviewers = implode(',', array_keys($oldReviewer));
