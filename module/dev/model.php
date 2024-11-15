@@ -688,6 +688,7 @@ class devModel extends model
                 $menuList->menuOrder = $this->lang->$module->menuOrder;
                 $menuList = $this->sortMenus($menuList);
             }
+            if(!is_array($menuList)) $menuList = (array)$menuList;
 
             /* Construct menu tree. */
             foreach($menuList as $menuKey => $menuValue)
@@ -743,7 +744,7 @@ class devModel extends model
                             foreach($moduleList as $moduleKey)
                             {
                                 if(empty($moduleKey)) continue;
-                                if(isset($menuList[$subMenuKey]) and isset($menuList[$subMenuKey]['subMenu']->$moduleKey))
+                                if(isset($menuList[$subMenuKey]) and isset($menuList[$subMenuKey]['subMenu']) and isset($menuList[$subMenuKey]['subMenu']->$moduleKey))
                                 {
                                     $labelList = $this->getLinkTitle(array($moduleKey => $menuList[$subMenuKey]['subMenu']->$moduleKey));
                                     $label     = zget($labelList, $moduleKey, $label);
@@ -806,7 +807,7 @@ class devModel extends model
         }
 
         $titlePinYin = common::convert2Pinyin($titleList);
-        foreach($menus as &$menu) $menu->key = zget($titlePinYin, $menu->title, '');
+        foreach($menus as &$menu) $menu->key = !empty($titlePinYin) ? zget($titlePinYin, $menu->title, '') : '';
 
         return $menus;
     }
@@ -1073,7 +1074,7 @@ class devModel extends model
     {
         $menu = new stdclass();
         $menu->title    = isset($this->lang->dev->replaceLable["$module-$method"]) ? $this->lang->dev->replaceLable["$module-$method"] : $label;
-        $menu->key      = zget($titlePinYin, $menu->title, '');
+        $menu->key      = !empty($titlePinYin) ? zget($titlePinYin, $menu->title, '') : '';
         $menu->module   = $module;
         $menu->method   = $method;
         $menu->active   = (int)$active;

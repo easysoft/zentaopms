@@ -7,7 +7,7 @@
 window.computeWorkDays = function(currentID)
 {
     isBatchEdit = false;
-    if(currentID)
+    if(currentID && typeof currentID != 'object')
     {
         index = currentID.replace(/[a-zA-Z]*\[|\]/g, '');
         if(!isNaN(index)) isBatchEdit = true;
