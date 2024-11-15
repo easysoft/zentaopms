@@ -2989,6 +2989,23 @@ class execution extends control
                 if($this->app->tab == 'project' and ($project->model == 'agileplus' or $project->model == 'waterfallplus')) $execution->method = zget($executionLang->typeList, $execution->type);
 
                 $rows[] = $execution;
+
+                if(empty($execution->tasks)) continue;
+                foreach($execution->tasks as $task)
+                {
+                    $task->name          = $this->lang->task->common . '-' . (!empty($task->parent) && isset($execution->tasks[$task->parent]) ? '>' : '') . $task->name;
+                    $task->status        = zget($this->lang->task->statusList, $task->status);
+                    $task->totalEstimate = $task->estimate;
+                    $task->totalConsumed = $task->consumed;
+                    $task->totalLeft     = $task->left;
+                    $task->progress      = (($task->consumed + $task->left) == 0 ? 0 : round($task->consumed / ($task->consumed + $task->left), 4) * 100) . '%';
+                    $task->begin         = !helper::isZeroDate($task->estStarted) ? $task->estStarted : '';
+                    $task->end           = !helper::isZeroDate($task->deadline) ? $task->deadline : '';
+                    $task->realBegan     = !helper::isZeroDate($task->realStarted) ? $task->realStarted : '';
+                    $task->realEnd       = !helper::isZeroDate($task->realFinished) ? $task->realFinished : '';
+                    $task->PM            = zget($users, $task->assignedTo);
+                    $rows[] = $task;
+                }
             }
 
             if($this->config->edition != 'open') list($fields, $executionStats) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $executionStats);
