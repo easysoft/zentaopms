@@ -4666,7 +4666,7 @@ $config->bi->builtin->metrics[] = array
 $config->bi->builtin->metrics[] = array
 (
     'name'       => '按项目统计的月度修复Bug数',
-    'alias'      => '解决Bug数',
+    'alias'      => '修复Bug数',
     'code'       => 'count_of_monthly_fixed_bug_in_project',
     'purpose'    => 'scale',
     'scope'      => 'project',
