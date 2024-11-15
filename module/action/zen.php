@@ -88,12 +88,14 @@ class actionZen extends action
         if($trash->objectType == 'pivot')
         {
             $pivotNames = json_decode($trash->objectName, true);
+            if(empty($pivotNames)) return;
             $trash->objectName = zget($pivotNames, $this->app->getClientLang(), '') ? : reset(array_filter($pivotNames));
         }
         else
         {
-            $module     = $trash->objectType == 'case' ? 'testcase'                      : $trash->objectType;
-            $params     = $trash->objectType == 'user' ? "account={$trash->objectName}" : "id={$trash->objectID}";
+            $module     = $trash->objectType == 'case'         ? 'testcase'                     : $trash->objectType;
+            $module     = $trash->objectType == 'doctemplate'  ? 'doc'                          : $trash->objectType;
+            $params     = $trash->objectType == 'user'         ? "account={$trash->objectName}" : "id={$trash->objectID}";
             $methodName = 'view';
             if($module == 'basicmeas')
             {

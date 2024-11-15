@@ -651,6 +651,7 @@ $config->objectTables['api']            = TABLE_API;
 $config->objectTables['doc']            = TABLE_DOC;
 $config->objectTables['doclib']         = TABLE_DOCLIB;
 $config->objectTables['docspace']       = TABLE_DOCLIB;
+$config->objectTables['doctemplate']    = TABLE_DOC;
 $config->objectTables['demand']         = TABLE_DEMAND;
 $config->objectTables['demandpool']     = TABLE_DEMANDPOOL;
 $config->objectTables['demandspec']     = TABLE_DEMANDSPEC;

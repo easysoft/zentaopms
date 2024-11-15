@@ -3803,6 +3803,26 @@ class docModel extends model
     }
 
     /**
+     * 删除一个文档模板。
+     * Delete a doc template.
+     *
+     * @param  string $table
+     * @param  int $id
+     * @param  string $objectType
+     * @access public
+     * @return void
+     */
+    public function deleteTemplate(int $id)
+    {
+        if(empty($id)) return false;
+
+        $this->dao->update(TABLE_DOC)->set('deleted')->eq(1)->where('id')->eq($id)->exec();
+        $this->loadModel('action')->create('doctemplate', $id, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
+
+        return true;
+    }
+
+    /**
      * 添加文档模板类型。
      * Add template type.
      *

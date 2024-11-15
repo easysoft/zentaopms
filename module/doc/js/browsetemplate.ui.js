@@ -342,6 +342,22 @@ window.setDocAppOptions = function(_, options) // Override the method.
 /* 扩展文档模板命令定义。 Extend the doc app command definition. */
 $.extend(window.docAppCommands,
 {
+    deleteDoc: function(_, args)
+    {
+        const docApp  = getDocApp();
+        const docID   = args[0] || docApp.docID;
+
+        $.ajaxSubmit(
+        {
+            confirm: getLang('confirmDelete'),
+            url:     $.createLink('doc', 'deleteTemplate', `docID=${docID}`),
+            load:    false,
+            onSuccess: function()
+            {
+                getDocApp().delete('doc', docID);
+            }
+        });
+    },
     addModule: function(_, args)
     {
         const docApp = getDocApp();

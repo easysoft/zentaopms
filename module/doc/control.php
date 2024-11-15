@@ -728,7 +728,7 @@ class doc extends control
      */
     public function deleteTemplate(int $templateID)
     {
-        $this->doc->delete(TABLE_DOC, $templateID);
+        $this->doc->deleteTemplate($templateID);
 
         /* Delete template files. */
         $template = $this->doc->getByID($templateID);
