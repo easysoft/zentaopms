@@ -191,7 +191,7 @@ $config->task->dtable->fieldList['project']['name']       = 'project';
 $config->task->dtable->fieldList['project']['title']      = $lang->task->project;
 $config->task->dtable->fieldList['project']['control']    = 'hidden';
 $config->task->dtable->fieldList['project']['type']       = 'html';
-$config->task->dtable->fieldList['project']['dataSource'] = array('module' => 'project', 'method' => 'getPairs');
+$config->task->dtable->fieldList['project']['dataSource'] = array('module' => 'project', 'method' => 'getPairs', 'params' => ['ignoreVision' => false]);
 $config->task->dtable->fieldList['project']['display']    = false;
 
 $config->task->dtable->fieldList['mode']['title']   = 'mode';
