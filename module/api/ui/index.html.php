@@ -15,6 +15,7 @@ $privs['collect']      = 'no';
 $privs['createApi']    = hasPriv('api', 'create');
 $privs['exportApi']    = $this->config->edition != 'open' && hasPriv('api', 'export');
 $privs['edit']         = hasPriv('api', 'edit');
+$privs['view']         = hasPriv('api', 'view');
 $privs['delete']       = hasPriv('api', 'delete');
 $privs['createLib']    = hasPriv('api', 'createLib');
 $privs['editLib']      = hasPriv('api', 'editLib');

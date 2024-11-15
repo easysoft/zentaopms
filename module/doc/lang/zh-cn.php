@@ -571,3 +571,4 @@ $lang->doc->docLang->productMine                 = '我负责的';
 $lang->doc->docLang->projectMine                 = '我参与的';
 $lang->doc->docLang->productOther                = '其他';
 $lang->doc->docLang->projectOther                = '其他';
+$lang->doc->docLang->accessDenied                = $lang->doc->accessDenied;

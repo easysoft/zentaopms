@@ -37,6 +37,7 @@ const customRenders =
             return {fetcher: $.createLink('api', 'edit', `apiID=${doc.id}`), loadingText: getDocAppLang('loading')};
         }
         const doc = this.doc.data;
+        if(!docAppHasPriv('view')) return {html: `<h1>${doc ? doc.title : ''}</h1><p>${getDocAppLang('accessDenied')}</p>`};
         const release = this.signals.libReleaseMap.value[doc.lib] || 0;
         const version = this.signals.docVersion.value || 0;
         return {fetcher: $.createLink('api', 'view', `libID=${doc.lib}&apiID=${doc.id}&moduleID=${doc.module}&version=${version}&release=${release}`), loadingText: getDocAppLang('loadingDocsData'), className: 'doc-editor-content'};
