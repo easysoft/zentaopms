@@ -3851,10 +3851,18 @@ class docModel extends model
      */
     public function getTemplatesByType($type)
     {
+        $subTypes = $this->dao->select('id')->from(TABLE_MODULE)
+            ->where('deleted')->eq('0')
+            ->andWhere('parent')->eq($type)
+            ->andWhere('type')->eq('docTemplate')
+            ->fetchPairs('id');
+        $types = array_values($subTypes);
+        $types[] = $type;
+
         return $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq('0')
             ->andWhere('templateType')->ne('')
-            ->andWhere('module')->eq($type)
+            ->andWhere('module')->in($types)
             ->fetchAll('id');
     }
 }
