@@ -101,7 +101,7 @@ const customRenders =
                 const libID   = lib.data.id;
                 const release = this.signals.libReleaseMap.value[libID] || 0;
                 const options = [{text: getDocAppLang('defaultVersion'), value: 0, selected: !release, command: `changeLibRelease/${libID}/0`}];
-                versions.forEach(version => options.push({selected: release === version.id, text: `v${version.version}`, value: version.id, command: `changeLibRelease/${libID}/${version.version}`}));
+                versions.forEach(version => options.push({selected: release === version.id, text: `v${version.version}`, value: version.id, command: `changeLibRelease/${libID}/${version.id}`}));
                 const currentVersion = versions.find(x => x.id === release);
                 const versionPicker = zui.renderCustomContent(
                 {
@@ -371,6 +371,27 @@ $.extend(window.docAppCommands,
     },
 
     /**
+     * 获取库的 API 列表。
+     * Get the API list of the library.
+     */
+    loadLibApi: function(_, args)
+    {
+        const docApp        = getDocApp();
+        const libReleaseMap = docApp.signals.libReleaseMap.value;
+        const libID         = args[0] || docApp.libID;
+        if(!libID) return;
+
+        const releaseID = args[1] || libReleaseMap[libID] || 0;
+        const url       = $.createLink('api', 'ajaxGetLibApiList', `libID=${libID}&releaseID=${releaseID}`);
+        $.getJSON(url, function(data)
+        {
+            const lib = docApp.getLib(libID);
+            if(lib && lib.docs && lib.docs.length) docApp.delete('doc', lib.docs.map(x => x.data.id));
+            docApp.update('doc', data);
+        });
+    },
+
+    /**
      * 更改当前库的发布版本。
      * Change the release of the current library.
      */
@@ -380,8 +401,10 @@ $.extend(window.docAppCommands,
         const libID = args[0];
         const release = args[1];
         const libReleaseMap = docApp.signals.libReleaseMap.value;
+        if(libReleaseMap[libID] === release) return;
         libReleaseMap[libID] = release;
         docApp.signals.libReleaseMap.value = $.extend({}, libReleaseMap);
+        docApp.executeCommand('loadLibApi', [libID, release]);
         const doc = docApp.doc;
         if(doc && doc.data.lib === libID) docApp.executeCommand('loadApi', [doc.data.id, 0, release]);
     },
