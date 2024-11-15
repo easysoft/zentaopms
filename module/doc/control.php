@@ -410,7 +410,8 @@ class doc extends control
         $templates = $this->doc->getTemplatesByType($moduleID);
         if(empty($templates))
         {
-            $this->dao->update(TABLE_MODULE)->set('deleted')->eq('1')->where('id')->eq($moduleID)->exec();
+            $this->dao->update(TABLE_MODULE)->set('deleted')->eq('1')->where('id')->eq($moduleID)->andWhere('type')->eq('docTemplate')->exec();
+            $this->dao->update(TABLE_MODULE)->set('deleted')->eq('1')->where('parent')->eq($moduleID)->andWhere('type')->eq('docTemplate')->exec();
             return $this->sendSuccess(array('load' => true));
         }
         else
