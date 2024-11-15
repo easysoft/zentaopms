@@ -1480,7 +1480,7 @@ class executionModel extends model
         $project     = $this->loadModel('project')->fetchByID($projectID);
         $productList = $this->executionTao->getProductList($projectID);   // Get product name of the linked execution.
 
-        if($withTasks && empty($executionTasks)) $executionTasks = $this->getTaskGroupByExecution(array_keys($executions));
+        if($withTasks && empty($executionTasks)) $executionTasks = $this->getTaskGroupByExecution(array_keys($executions), false);
 
         $parentList       = array();
         $today            = helper::today();
@@ -1911,16 +1911,17 @@ class executionModel extends model
      * Get the task data group by execution id list.
      *
      * @param  array  $executionIdList
+     * @param  bool   $filterStatus
      * @access public
      * @return array
      */
-    public function getTaskGroupByExecution(array $executionIdList = array()): array
+    public function getTaskGroupByExecution(array $executionIdList = array(), bool $filterStatus = true): array
     {
         if(empty($executionIdList)) return array();
 
         $executionTasks = $this->dao->select('*')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
-            ->andWhere('status')->notin('closed,cancel')
+            ->beginIF($filterStatus)->andWhere('status')->notin('closed,cancel')->fi()
             ->andWhere('execution')->in($executionIdList)
             ->orderBy('order_asc')
             ->fetchGroup('execution', 'id');
