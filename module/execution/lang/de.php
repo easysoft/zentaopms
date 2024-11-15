@@ -552,6 +552,7 @@ $lang->execution->featureBar['all']['undone']    = $lang->execution->undone;
 $lang->execution->featureBar['all']['wait']      = $lang->execution->statusList['wait'];
 $lang->execution->featureBar['all']['doing']     = $lang->execution->statusList['doing'];
 $lang->execution->featureBar['all']['suspended'] = $lang->execution->statusList['suspended'];
+$lang->execution->featureBar['all']['delayed']   = $lang->execution->delayed;
 $lang->execution->featureBar['all']['closed']    = $lang->execution->statusList['closed'];
 
 $lang->execution->featureBar['bug']['all']        = 'All';

@@ -333,6 +333,7 @@ $lang->project->featureBar['execution']['undone']    = '未完成';
 $lang->project->featureBar['execution']['wait']      = '未开始';
 $lang->project->featureBar['execution']['doing']     = '进行中';
 $lang->project->featureBar['execution']['suspended'] = '已挂起';
+$lang->project->featureBar['execution']['delayed']   = '已延期';
 $lang->project->featureBar['execution']['closed']    = '已关闭';
 
 $lang->project->featureBar['bug']['all']        = '全部';

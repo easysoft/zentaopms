@@ -168,8 +168,9 @@ $lang->my->featureBar['project']['suspended']  = '已挂起';
 $lang->my->featureBar['project']['closed']     = '已关闭';
 $lang->my->featureBar['project']['openedbyme'] = '由我创建';
 
-$lang->my->featureBar['execution']['undone'] = '未完成';
-$lang->my->featureBar['execution']['done']   = '已完成';
+$lang->my->featureBar['execution']['undone']  = '未完成';
+$lang->my->featureBar['execution']['done']    = '已完成';
+$lang->my->featureBar['execution']['delayed'] = '已延期';
 
 $lang->my->featureBar['dynamic']['all']       = '全部';
 $lang->my->featureBar['dynamic']['today']     = '今天';

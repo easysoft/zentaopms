@@ -110,6 +110,7 @@ class userTao extends userModel
             ->beginIF($status == 'done')->andWhere('t2.status')->in('done,closed')->fi()
             ->beginIF($status == 'undone')->andWhere('t2.status')->notin('done,closed')->fi()
             ->beginIF($status == 'openedbyme')->andWhere('t2.openedBy')->eq($account)->fi()
+            ->beginIF($status == 'delayed')->andWhere('t2.end')->gt('1970-1-1')->andWhere('t2.end')->lt(date(DT_DATE1))->andWhere('t2.status')->notin('done,closed,suspended')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
             ->orderBy("t2.$orderBy")
             ->page($pager)
