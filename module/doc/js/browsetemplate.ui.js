@@ -35,10 +35,12 @@ function getTableOptions(options, info)
             col.actions = col.actions.filter(action => action !== 'move');
             delete col.actionsMap.move;
 
+            const privMap     = {edit: docAppHasPriv('edit'), delete: docAppHasPriv('delete')};
             const actionHints = {edit: lang.editTemplate, delete: lang.deleteTemplate};
             $.each(col.actionsMap, (key, value) =>
             {
                 if(typeof actionHints[key] === 'string') value.hint = actionHints[key];
+                value.disabled = !privMap[key];
             });
         }
     });
