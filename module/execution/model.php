@@ -4716,7 +4716,7 @@ class executionModel extends model
             }
 
             $childrenLabel       = $task->parent >  0 ? "<span class='label gray-pale rounded-xl mx-1'>{$this->lang->task->childrenAB}</span>" : '';
-            $task->name          = "<span class='label secondary-pale'>{$this->lang->task->common}</span> " . $childrenLabel . html::a(helper::createLink('task', 'view', "id={$task->id}"), $task->name);
+            $task->name          = "<span class='pri-{$task->pri} mr-1'>{$task->pri}</span> " . $childrenLabel . html::a(helper::createLink('task', 'view', "id={$task->id}"), $task->name);
             $task->rawID         = $task->id;
             $task->id            = 'tid' . (string)$task->id;
             $task->totalEstimate = $task->estimate;

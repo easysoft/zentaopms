@@ -51,7 +51,7 @@ window.onRenderCell = function(result, {col, row})
         let executionName   = '';
         if(typeof executionType != 'undefined') executionName += `<span class='label secondary-pale flex-none'>${executionType}</span> `;
 
-        executionName += '<div class="ml-1 clip" style="width: max-content;">';
+        executionName += '<div class="ml-1 clip flex items-center" style="width: max-content;">';
         executionName += (executionType !== undefined && !row.data.isParent) ? `<a href="${executionLink}" class="text-primary">${row.data.name}</a>` : row.data.name;
         executionName += '</div>';
         executionName += (!['done', 'closed', 'suspended'].includes(row.data.status) && row.data.type != 'point' && row.data.end != '' && today > row.data.end) ? `<span class="label danger-pale ml-1 flex-none">${delayed}</span>` : '';
@@ -59,7 +59,7 @@ window.onRenderCell = function(result, {col, row})
         result.push({html: executionName, className: 'w-full flex items-center'});
         return result;
     }
-    if(col.name == 'rawID' && row.data.parent && !row.data.isExecution) result[0] = '';
+    if(col.name == 'rawID' && row.data.parent && !row.data.isExecution) result.push({className: 'ml-5'});
     if(['estimate', 'consumed', 'left'].includes(col.name) && result) result[0] = row.data.type == 'point' ? '' : {html: result[0] + ' h'};
     if(col.name == 'progress' && row.data.type == 'point') result[0] = '';
 
