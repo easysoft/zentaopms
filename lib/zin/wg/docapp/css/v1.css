@@ -16,7 +16,7 @@
 .api-list-item .api-method {background-color: rgba(var(--api-color-rgb), 1); color: var(--color-canvas)}
 .api-list-item .api-title {color: rgba(var(--api-color-rgb), 1)}
 
-.doc-app-mode-edit[data-lib-type="api"], .doc-app-mode-create {--doc-view-max-width: 1100px}
+.doc-app-mode-edit[data-lib-type="api"], .doc-app-mode-create[data-lib-type="api"] {--doc-view-max-width: 1100px}
 .doc-app-mode-edit[data-lib-type="api"] .doc-view-content,
 .doc-app-mode-create[data-lib-type="api"] .doc-view-content {padding: 0 24px;}
 .doc-app-mode-edit[data-lib-type="api"] form .form-actions,
