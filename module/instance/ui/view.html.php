@@ -280,7 +280,7 @@ div
                     set::id('backupSection'),
                     set('data-example', 1),
                     div(
-                        setClass('ml-10 inline-block'),
+                        setClass('ml-10 inline-block pull-right'),
                         btn(
                             set(array
                             (
