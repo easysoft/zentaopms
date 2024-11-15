@@ -52,3 +52,4 @@ config/ext/xuan*.php
 framework/xuanxuan.class.php
 lib/phpaes/
 www/x.php
+www/js/zui3/editor/blocksuite/*
