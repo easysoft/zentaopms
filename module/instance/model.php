@@ -1241,7 +1241,7 @@ class instanceModel extends model
             dao::$errors[] = $this->lang->instance->backup->invalidTime;
             return false;
         }
-        $autoBackup = $settings->autoBackup;
+        $autoBackup = (int)$settings->autoBackup;
         $command    = 'moduleName=instance&methodName=cronBackup&instanceID=' . $instance->id;
 
         /* Disable backup operation. */
