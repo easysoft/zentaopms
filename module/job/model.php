@@ -321,7 +321,7 @@ class jobModel extends model
             $compileID = $this->loadModel('compile')->createByJob($job->id, $tag, 'tag');
         }
 
-        if(!$compileID && in_array($triggerType, array('', 'commit')) && strpos($job->triggerType, 'commit') !== false)
+        if(!$compileID && in_array($triggerType, array('', 'commit')) && (!$job->triggerType || strpos($job->triggerType, 'commit') !== false))
         {
             $compileID = $this->loadModel('compile')->createByJob($job->id);
         }
