@@ -271,6 +271,10 @@ const customRenders =
             if(docAppHasPriv('create')) items.push({text: getDocAppLang('createTemplate'), icon: 'plus', btnType: 'primary', url: url});
             return {component: 'toolbar', props: {items: items}};
         }
+    },
+    'sidebar-footer-hint': function()
+    {
+        return '';
     }
 }
 
