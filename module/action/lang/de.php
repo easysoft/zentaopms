@@ -131,6 +131,7 @@ $lang->action->objectTypes['doc']              = 'Dok';
 $lang->action->objectTypes['api']              = 'Interface';
 $lang->action->objectTypes['doclib']           = 'Dok Bibliothek';
 $lang->action->objectTypes['docspace']         = 'Dok Space';
+$lang->action->objectTypes['doctemplate']      = '文档模板';
 $lang->action->objectTypes['apistruct']        = 'API struct';
 $lang->action->objectTypes['todo']             = 'Todo';
 $lang->action->objectTypes['risk']             = 'Risk';

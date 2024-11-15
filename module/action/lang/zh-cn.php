@@ -131,6 +131,7 @@ $lang->action->objectTypes['doc']              = '文档';
 $lang->action->objectTypes['api']              = '接口';
 $lang->action->objectTypes['doclib']           = '文档库';
 $lang->action->objectTypes['docspace']         = '文档空间';
+$lang->action->objectTypes['doctemplate']      = '文档模板';
 $lang->action->objectTypes['apistruct']        = '数据结构';
 $lang->action->objectTypes['todo']             = '待办';
 $lang->action->objectTypes['risk']             = '风险';
