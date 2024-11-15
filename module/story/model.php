@@ -1496,6 +1496,8 @@ class storyModel extends model
         $oldStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
         $story    = $postData;
 
+        $this->loadModel($oldStory->type);
+
         if(!empty($story->duplicateStory))
         {
             $duplicateStoryID = $this->dao->select('id')->from(TABLE_STORY)->where('id')->eq($story->duplicateStory)->fetch();
