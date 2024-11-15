@@ -3771,11 +3771,12 @@ class docModel extends model
 
     public function getHotTemplates($scopeID = 0, $limit = 0)
     {
-        return $this->dao->select('*')->from(TABLE_DOC)
+        return $this->dao->select('*, CASE WHEN addedDate > editedDate THEN addedDate ELSE editedDate END as hotDate')->from(TABLE_DOC)
             ->where('templateType')->ne('')
             ->andWhere('deleted')->eq('0')
+            ->andWhere('status')->eq('normal')
             ->beginIF($scopeID)->andWhere('lib')->eq($scopeID)->fi()
-            ->orderBy('addedDate_desc,editedDate_desc')
+            ->orderBy('hotDate_desc')
             ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll();
     }
