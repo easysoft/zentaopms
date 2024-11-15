@@ -658,7 +658,7 @@ class instance extends control
                 return $this->send(array('result' => 'success', 'load' => array('alert' => $startRestoreMessage, 'locate' => $locate, 'closeModal' => true)));
             }
 
-            return $this->send(array('result' => 'success', 'closeModal' => true, 'load' => array('alert' => $this->lang->instance->backup->disableAutoBackup)));
+            return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->instance->backup->disableAutoBackup, 'locate' => $locate, 'closeModal' => true)));
         }
         $this->view->instance        = $instance;
         $this->view->backupSettings = $this->instance->getAutoBackupSettings($instanceID);
