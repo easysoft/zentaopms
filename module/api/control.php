@@ -272,6 +272,7 @@ class api extends control
                 foreach($unsetProps as $prop) unset($api->$prop);
                 $api->originTitle = $api->title;
                 $api->icon        = "api is-$api->method";
+                $api->api         = true;
                 $api->title       = "$api->method $api->path $api->title";
             }
             $data['docs'] = array_values($apis);
@@ -307,6 +308,7 @@ class api extends control
             foreach($unsetProps as $prop) unset($api->$prop);
             $api->originTitle = $api->title;
             $api->icon        = "api is-$api->method";
+            $api->api         = true;
             $api->title       = "$api->method $api->path $api->title";
         }
 
