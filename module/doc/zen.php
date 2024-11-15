@@ -1064,7 +1064,7 @@ class docZen extends doc
      */
     public function responseAfterAddTemplateType(int $scope)
     {
-        $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('doc', 'browseTemplate', "libID={$scope}"));
+        $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true);
         return $this->send($response);
     }
 }
