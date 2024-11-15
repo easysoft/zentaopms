@@ -2794,4 +2794,18 @@ class testcaseModel extends model
 
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
     }
+
+    /**
+     * 过略自动测试用例的ID列表
+     * Ignore auto testcase id list.
+     *
+     * @param  array  $caseIdList
+     * @access public
+     * @return array
+     */
+    public function ignoreAutoCaseIdList(array $caseIdList): array
+    {
+        if(empty($caseIdList)) return array();
+        return $this->dao->select('id')->from(TABLE_CASE)->where('id')->in($caseIdList)->andWhere('auto')->ne('auto')->fetchPairs('id', 'id');
+    }
 }
