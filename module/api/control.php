@@ -107,6 +107,8 @@ class api extends control
      */
     public function ajaxGetHome(string $type = 'nolink', string $params = 'notempty_unclosed', int $recPerPage = 20, int $pageID = 1)
     {
+        if(!in_array($type, array('product', 'project', 'nolink'))) $type = 'nolink';
+
         $libs          = $this->doc->getApiLibs(0, $type);
         $flags         = explode('_', $params);
         $unclosed      = in_array('unclosed', $flags);
@@ -136,10 +138,20 @@ class api extends control
             }
         }
 
-        if($type !== 'nolink')
+        if($type === 'product' || $type === 'project')
         {
-            $programs  = $this->loadModel('program')->getList($unclosed ? 'unclosed' : 'all', 'id_asc', 'top');
-            $programs  = array_filter($programs, function($program) {return $program->parent == '0';});
+            $this->loadModel('program');
+            $this->app->loadLang('project');
+            $this->app->loadLang('product');
+            $programPairs = $this->loadModel('program')->getTopPairs($unclosed ? 'noclosed' : '');
+            $programs[]   = (object)array('id' => 0, 'name' => $this->lang->$type->emptyProgram);
+            foreach($programPairs as $id => $name)
+            {
+                $program = new stdclass();
+                $program->id = $id;
+                $program->name = $name;
+                $programs[$id] = $program;
+            }
             if($type == 'product')
             {
                 $products = $this->loadModel('product')->getList(0, $unclosed ? 'noclosed' : 'all', 0, 0);
@@ -154,11 +166,12 @@ class api extends control
             }
             else
             {
-                $projects = $this->loadModel('project')->getList($unclosed ? 'unclosed' : 'all');
+                $projects = $this->program->getProjectList(0, $unclosed ? 'unclosed' : 'all', 0, 'order_asc,id_desc');
                 foreach($projects as $project)
                 {
-                    if(!isset($programs[$project->parent])) continue;
-                    $program = $programs[$project->parent];
+                    $topParent = $project->parent ? explode(',', trim($project->path, ','))[0] : 0;
+                    if(!isset($programs[$topParent])) continue;
+                    $program = $programs[$topParent];
                     $program->projects[] = $project;
                     $project->apiCount = isset($projectsCount[$project->id]) ? $projectsCount[$project->id] : 0;
                     $program->apiCount = isset($program->apiCount) ? $program->apiCount + $project->apiCount : $project->apiCount;
@@ -259,12 +272,47 @@ class api extends control
                 foreach($unsetProps as $prop) unset($api->$prop);
                 $api->originTitle = $api->title;
                 $api->icon        = "api is-$api->method";
+                $api->api         = true;
                 $api->title       = "$api->method $api->path $api->title";
             }
             $data['docs'] = array_values($apis);
         }
 
         echo json_encode($data);
+    }
+
+    /**
+     * 获取指定库的 API 列表。
+     * Get the API list of the specified library.
+     *
+     * @param  int    $libID
+     * @param  int    $releaseID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetLibApiList(int $libID, int $releaseID = 0)
+    {
+        if($releaseID)
+        {
+            $release = $this->api->getRelease(0, 'byID', $releaseID);
+            $apis    = $release ? $this->api->getApiListByRelease($release) : array();
+        }
+        else
+        {
+            $apis = $this->api->getApiListBySearch($libID, 0);
+        }
+
+        $unsetProps = array('commonParams', 'params', 'paramsExample', 'response', 'responseExample');
+        foreach($apis as $api)
+        {
+            foreach($unsetProps as $prop) unset($api->$prop);
+            $api->originTitle = $api->title;
+            $api->icon        = "api is-$api->method";
+            $api->api         = true;
+            $api->title       = "$api->method $api->path $api->title";
+        }
+
+        echo json_encode($apis);
     }
 
     /**
@@ -354,7 +402,7 @@ class api extends control
         $this->api->deleteRelease($id);
 
         if(dao::isError()) return $this->sendError(dao::getError());
-        return $this->sendSuccess(array('load' => true, 'closeModal' => true, 'docApp' => array('executeCommand', 'loadLazyContent', array('.api-release-list'))));
+        return $this->sendSuccess(array('load' => true, 'closeModal' => true, 'docApp' => array(array('executeCommand', 'loadLazyContent', array('.api-release-list')), array('load', null, null, null, array('noLoading' => true, 'picks' => 'lib')))));
     }
 
     /**
@@ -378,7 +426,7 @@ class api extends control
 
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            return $this->sendSuccess(array('load' => true, 'closeModal' => true, 'docApp' => array('executeCommand', 'loadLazyContent', array('.api-release-list'))));
+            return $this->sendSuccess(array('load' => true, 'closeModal' => true, 'docApp' => array(array('executeCommand', 'loadLazyContent', array('.api-release-list')), array('load', null, null, null, array('noLoading' => true, 'picks' => 'lib')))));
         }
 
         $this->display();
@@ -530,24 +578,26 @@ class api extends control
         if(!empty($_POST))
         {
             /* 组装formData。 */
-            $fields = $this->config->api->form->createLib;
-            if($this->post->libType == 'project') $fields['project']['required'] = true;
-            if($this->post->libType == 'product') $fields['product']['required'] = true;
+            $fields  = $this->config->api->form->createLib;
+            $libType = $this->post->libType;
+            if($libType == 'project') $fields['project']['required'] = true;
+            if($libType == 'product') $fields['product']['required'] = true;
             $formData = form::data($fields)->add('addedBy', $this->app->user->account)->add('addedDate', helper::now())->get();
             $formData->product   = $formData->libType == 'product' && !empty($formData->product)   ? $formData->product   : 0;
             $formData->project   = $formData->libType == 'project' && !empty($formData->project)   ? $formData->project   : 0;
             $formData->execution = $formData->libType == 'project' && !empty($formData->execution) ? $formData->execution : 0;
 
-            $this->doc->createApiLib($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if(helper::isAjaxRequest('modal')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
+            $libID    = $this->doc->createApiLib($formData);
+            $objectID = $libType == 'project' ? $this->post->project : $this->post->product;
+            if(helper::isAjaxRequest('modal')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true, 'docApp' => array("selectSpace", ($libType == 'product' || $libType == 'project') ? "$libType.$objectID" : 'nolink', $libID, true)));
 
             /* Set locate object data. */
-            setCookie("objectType", $this->post->libType, $this->config->cookieLife, $this->config->webRoot);
-            setCookie("objectID",   $this->post->libType == 'project' ? $this->post->project : $this->post->product, $this->config->cookieLife, $this->config->webRoot);
+            setCookie("objectType", $libType, $this->config->cookieLife, $this->config->webRoot);
+            setCookie("objectID",   $objectID, $this->config->cookieLife, $this->config->webRoot);
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('api', 'index', "libID=$libID"), 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('api', 'index', "libID=$libID"), 'closeModal' => true, 'docApp' => array("selectSpace", ($libType == 'product' || $libType == 'project') ? "$libType.$objectID" : 'nolink', $libID, true)));
         }
 
         /* 设置默认访问控制的语言项。 */
@@ -586,7 +636,7 @@ class api extends control
             $this->doc->updateApiLib($id, $formData);
 
             if(dao::isError()) return $this->sendError(dao::getError());
-            return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
+            return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true, 'docApp' => array('load', null, null, null, array('noLoading' => true, 'picks' => 'lib'))));
         }
 
         $type   = $lib->product ? 'product' : ($lib->project ? 'project' : 'nolink');

@@ -59,43 +59,6 @@ class instanceZen extends instance
      *
      * @param  object     $instance
      * @access protected
-     * @return void
-     */
-    protected function saveAuthInfo(object $instance): void
-    {
-        if(!in_array($instance->chart, $this->config->instance->devopsApps)) return;
-
-        $url      = strstr(getWebRoot(true), ':', true) . '://' . $instance->domain;
-        $pipeline = $this->loadModel('pipeline')->getByUrl($url);
-        if(!empty($pipeline)) return;
-
-        $tempMappings = $this->loadModel('cne')->getSettingsMapping($instance);
-        if(empty($tempMappings)) return;
-
-        $pipeline = new stdclass();
-        $instance->type        = $instance->chart;
-        $pipeline->type        = $instance->type;
-        $pipeline->private     = md5(strval(rand(10,113450)));
-        $pipeline->createdBy   = 'system';
-        $pipeline->createdDate = helper::now();
-        $pipeline->url         = $url;
-        $pipeline->name        = $this->generatePipelineName($instance);
-        $pipeline->token       = zget($tempMappings, 'api_token', '');
-        $pipeline->account     = zget($tempMappings, 'z_username', '');
-        $pipeline->password    = zget($tempMappings, 'z_password', '');
-        if($instance->appID == 60) $pipeline->token = base64_encode($pipeline->token . ':');
-        if(empty($pipeline->account)) $pipeline->account = zget($tempMappings, 'admin_username', '');
-
-        $this->pipeline->create($pipeline);
-        if(dao::isError()) dao::getError();
-    }
-
-    /**
-     * 自动保存devops应用授权信息。
-     * Auto save auth info of devops.
-     *
-     * @param  object     $instance
-     * @access protected
      * @return string
      */
     protected function generatePipelineName(object $instance): string

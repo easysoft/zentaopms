@@ -580,7 +580,7 @@ class instance extends control
             return $this->send(array('result' => 'fail', 'message' => zget($this->lang->instance->notices, 'restoreFail') ));
         }
         $this->action->create('instance', $instance->id, 'restore', '', json_encode(array('result' => array('result' => 'success'))));
-        return $this->send(array('result' => 'success', 'message' => zget($this->lang->instance->notices, 'restoreSuccess'), 'locate' => $this->createLink('instance', 'view', 'id=' . $instanceID)));
+        return $this->send(array('result' => 'success', 'message' => zget($this->lang->instance->notices, 'restoreSuccess'), 'load' => true));
     }
 
     /**
@@ -619,10 +619,13 @@ class instance extends control
         $instance = $this->instance->getByID($instanceID);
         if($_POST)
         {
+            $settings = fixer::input('post')->trim('backupKeepDays')->get();
+            if(!validater::checkInt($settings->backupKeepDays, 1, 30)) return $this->send(array('result' => 'fail', 'message' => array('days' => $this->lang->instance->backup->keepDayRange)));
+
             $this->instance->saveBackupSettings($instance);
             if(dao::isError())  return $this->send(array('result' => 'fail', 'load' => array('alert' => dao::getError())));
 
-            return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'closeModal' => true));
         }
         $this->view->instance        = $instance;
         $this->view->backupSettings = $this->instance->getAutoBackupSettings($instanceID);
@@ -652,9 +655,10 @@ class instance extends control
             if($backupSettings->autoBackup)
             {
                 $startRestoreMessage = sprintf($this->lang->instance->restore->firstStartTime, $instance->name, date('Y-m-d H:i:s', $startTime));
-                return $this->send(array('result' => 'success', 'load' => array('alert' => $startRestoreMessage, 'locate' => $locate)));
+                return $this->send(array('result' => 'success', 'load' => array('alert' => $startRestoreMessage, 'locate' => $locate, 'closeModal' => true)));
             }
-            return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->instance->backup->disableAutoBackup, 'locate' => $locate)));
+
+            return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->instance->backup->disableAutoBackup, 'locate' => $locate, 'closeModal' => true)));
         }
         $this->view->instance        = $instance;
         $this->view->backupSettings = $this->instance->getAutoBackupSettings($instanceID);

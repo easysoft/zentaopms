@@ -15,6 +15,7 @@ $lang->api->sql      = 'SQL Query API';
 $lang->api->manage   = 'API management';
 
 $lang->api->index               = 'API Space';
+$lang->api->view                = 'API Detail';
 $lang->api->editLib             = 'Edit';
 $lang->api->releases            = 'Release';
 $lang->api->deleteRelease       = 'Delete Release';
@@ -59,6 +60,7 @@ $lang->api->confirmDeleteLib    = "Do you want to delete this interface library?
 $lang->api->confirmDeleteStruct = "Do you want to delete this data struct?";
 $lang->api->filterStruct        = "use struct";
 $lang->api->defaultVersion      = "Current Version";
+$lang->api->latestVersion       = 'Lastest Version';
 $lang->api->zentaoAPI           = "Zentao API v1";
 $lang->api->search              = "Search";
 $lang->api->allLibs             = "AllLibs";
@@ -233,6 +235,7 @@ $lang->apistruct->name = 'Name';
 
 $lang->api_lib_release = new stdClass();
 $lang->api_lib_release->version = 'Version';
+$lang->api_lib_release->desc    = 'Description';
 
 $lang->api->error = new stdclass();
 $lang->api->error->onlySelect = 'SQL API only allows SELECT query.';

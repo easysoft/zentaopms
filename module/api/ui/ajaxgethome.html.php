@@ -37,13 +37,13 @@ $buildLibItem = function(int $id, string $name, int $count = 0) use ($libColors,
 {
     return div
     (
-        setClass('doc-space-card-lib px-2 w-1/5 group'),
+        setClass('doc-space-card-lib p-1.5 w-1/5 group'),
         setKey($id),
         div
         (
             setClass('canvas border rounded py-2 px-3 col gap-1 hover:shadow-lg hover:border-primary relative cursor-pointer'),
             set('zui-command', $isNolink ? "selectSpace/nolink/$id" : "selectSpace/$type.$id/_first"),
-            icon($isNolink ? 'doclib' : $type, setClass('text-2xl'), $isNolink ? setStyle('color', $libColors[$id % count($libColors)]) : setClass('text-gray')),
+            icon($isNolink ? 'interface-lib' : $type, setClass('text-2xl'), $isNolink ? setStyle('color', $libColors[$id % count($libColors)]) : setClass('text-gray')),
             div(setClass('font-bold text-clip'), set::title($name), $name),
             div(setClass('text-gray text-sm'), $count ? sprintf($lang->api->apiTotalInfo, $count) : $lang->api->noApi),
             $showLibAction ? div
@@ -62,7 +62,7 @@ $buildLibItem = function(int $id, string $name, int $count = 0) use ($libColors,
     );
 };
 
-$buildProgramItem = function($program) use ($type, $buildLibItem)
+$buildProgramItem = function($program) use ($type, $buildLibItem, $lang)
 {
     $items = array();
     if($type === 'product' && !empty($program->products))
@@ -82,20 +82,15 @@ $buildProgramItem = function($program) use ($type, $buildLibItem)
             setClass('row items-center justify-between gap-2 px-2.5 py-1 border-b'),
             div
             (
-                setClass('row items-center gap-2 flex-none cursor-pointer hover:text-primary'),
-                setClass('row items-center gap-2 flex-none cursor-pointer hover:text-primary'),
+                setClass('row items-center gap-2 flex-none'),
                 icon('program', setClass('text-gray flex-none')),
                 div(setClass('min-w-0 flex-auto'), strong($program->name)),
             )
         ),
         div
         (
-            setClass('doc-space-card-libs py-3 px-1.5'),
-            div
-            (
-                setClass('row'),
-                $items
-            )
+            setClass('doc-space-card-libs p-1.5'),
+            empty($items) ? div(setClass('h-24 center text-gray'), $lang->noData) : div(setClass('row flex-wrap'), $items)
         )
     );
 };
@@ -163,8 +158,8 @@ elseif($type === 'nolink')
     $views = div
     (
         setClass('doc-space-card-libs'),
-        setStyle('margin', '0 -8px'),
-        div(setClass('row'), $views)
+        setStyle('margin', '-8px'),
+        div(setClass('row flex-wrap'), $views)
     );
 }
 else

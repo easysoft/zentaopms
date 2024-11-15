@@ -14,6 +14,7 @@ ALTER TABLE `zt_deploy` ADD `host` varchar(255) NOT NULL DEFAULT '' AFTER `name`
 
 ALTER TABLE `zt_deployproduct` DROP COLUMN `package`;
 
+UPDATE `zt_deploy` SET `status` = 'fail' WHERE `status` = 'done' AND `result` = 'fail';
 UPDATE `zt_deploy` SET `status` = 'success' WHERE `status` = 'done';
 
 REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`, `vision`) VALUES
@@ -38,7 +39,13 @@ REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`, `
 ('zh-tw', 'custom', 'relationList', '3', '{\"relation\":\"\\u91cd\\u8907\",\"relativeRelation\":\"\\u91cd\\u8907\"}', '0', 'all'),
 ('zh-tw', 'custom', 'relationList', '4', '{\"relation\":\"\\u5f15\\u7528\",\"relativeRelation\":\"\\u88ab\\u5f15\\u7528\"}', '0', 'all');
 
+INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`) VALUES
+('0', '2', '*', '*', '*', 'moduleName=upgrade&methodName=ajaxProcessObjectRelation', '更新关联关系', 'zentao', 1, 'normal');
+
 UPDATE `zt_action` SET `action` = 'canceled' WHERE `objectType` = 'deploy' AND `action` = 'activated';
 
 DROP TABLE IF EXISTS `zt_account`;
 DELETE FROM `zt_lang` WHERE `module` = 'host' AND `section` = 'cpuBrandList';
+DELETE FROM `zt_action` WHERE `objectType` = 'account';
+DELETE FROM `zt_actionrecent` WHERE `objectType` = 'account';
+DELETE FROM `zt_config` WHERE `module` ='common' AND `section` = 'zentaoWebsite';

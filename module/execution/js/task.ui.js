@@ -130,8 +130,14 @@ window.renderCell = function(result, info)
             result.push({html: bugTitle});
         }
     }
+    if(info.col.name == 'status' && result)
+    {
+        result[0] = {html: `<span class='status-${info.row.data.rawStatus}'>` + info.row.data.status + "</span>"};
+    }
     if(info.col.name == 'deadline' && result[0])
     {
+        if(['done', 'cancel', 'close'].includes(task.rawStatus)) return result;
+
         const today     = zui.formatDate(zui.createDate(), 'yyyy-MM-dd');
         const yesterday = zui.formatDate(convertStringToDate(today) - 24 * 60 * 60 * 1000, 'yyyy-MM-dd');
         if(result[0] == today)

@@ -833,4 +833,16 @@ class upgrade extends control
         if($result)  echo 'ok';
         if(!$result) echo dao::getError();
     }
+
+    /**
+     * 定时任务：处理内置关联关系。
+     * AJAX: Process object relation.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxProcessObjectRelation()
+    {
+        $this->upgrade->processObjectRelation();
+    }
 }

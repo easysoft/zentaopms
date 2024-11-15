@@ -58,9 +58,9 @@ $data['project'] = array_values($data['project']);
 $link = $this->createLink('api', 'ajaxGetList', "objectID={id}&objectType={type}");
 
 $tabs = array();
-$tabs[] = array('name' => 'nolink',  'text' => $lang->api->libTypeList['nolink']);
-$tabs[] = array('name' => 'product', 'text' => $lang->api->libTypeList['product']);
-$tabs[] = array('name' => 'project', 'text' => $lang->api->libTypeList['project']);
+$tabs[] = array('name' => 'nolink',  'active' => $libID, 'text' => $lang->api->libTypeList['nolink']);
+$tabs[] = array('name' => 'product', 'active' => $objectType == 'product', 'text' => $lang->api->libTypeList['product']);
+$tabs[] = array('name' => 'project', 'active' => $objectType == 'project', 'text' => $lang->api->libTypeList['project']);
 
 $json = array();
 $json['link']       = $link;
@@ -69,7 +69,7 @@ $json['tabs']        = $tabs;
 $json['searchHint']  = $lang->searchAB;
 $json['labelMap']    = array('program' => $lang->program->common);
 $json['itemType']    = 'lib';
-$json['typeIconMap'] = array('lib' => 'doclib');
+$json['typeIconMap'] = array('lib' => 'interface-lib');
 $json['debug']       = array('libID' => $libID, 'objectType' => $objectType, 'objectID' => $objectID);
 
 /**

@@ -419,10 +419,10 @@ class executionTao extends executionModel
      * @param  string      $sql
      * @param  string      $orderBy
      * @param  object|null $pager
-     * @access protected
+     * @access public
      * @return object[]
      */
-    protected function getSearchBugs(array $productIdList, int $executionID, string $sql = '1=1', string $orderBy = 'id_desc', object|null $pager = null): array
+    public function getSearchBugs(array $productIdList, int $executionID, string $sql = '1=1', string $orderBy = 'id_desc', object|null $pager = null): array
     {
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where($sql)
@@ -677,6 +677,8 @@ class executionTao extends executionModel
      */
     protected function updateTeam(int $executionID, object $oldExecution, object $execution)
     {
+        if(defined('RUN_MODE') && RUN_MODE == 'api') return;
+
         /* Get team and language item. */
         $this->loadModel('user');
         $team    = $this->user->getTeamMemberPairs($executionID, 'execution');

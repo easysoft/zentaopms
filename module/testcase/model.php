@@ -586,6 +586,7 @@ class testcaseModel extends model
             ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.run = t2.id')
             ->where('t1.`case`')->in($caseIdList)
             ->beginIF($taskID)->andWhere('t2.task')->eq($taskID)->fi()
+            ->beginIF($this->app->tab == 'devops')->andWhere('t1.deploy')->eq($this->session->deployID)->fi()
             ->orderBy('id_desc')
             ->query();
 
@@ -2792,5 +2793,19 @@ class testcaseModel extends model
         $this->config->testcase->search['module']    = 'testcase';
 
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
+    }
+
+    /**
+     * 过滤自动测试用例的ID列表。
+     * Ignore auto testcase id list.
+     *
+     * @param  array  $caseIdList
+     * @access public
+     * @return array
+     */
+    public function ignoreAutoCaseIdList(array $caseIdList): array
+    {
+        if(empty($caseIdList)) return array();
+        return $this->dao->select('id')->from(TABLE_CASE)->where('id')->in($caseIdList)->andWhere('auto')->ne('auto')->fetchPairs('id', 'id');
     }
 }

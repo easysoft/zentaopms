@@ -82,9 +82,9 @@ window.onManualBackup = function()
         {
             $.ajaxSubmit({
                 url: $.createLink('instance', 'manualBackup', `modelID=${instanceID}`),
-                onComplete: function(res)
+                onSuccess: function(res)
                 {
-                    if(res.result === 'success') loadPage($.createLink('instance', 'view', `instanceID=${instanceID}`), '#backupList');
+                    if(res.result === 'success') $('#backupList').load($.createLink('instance', 'backupList', `id=${instanceID}`));
                 }
             });
         }

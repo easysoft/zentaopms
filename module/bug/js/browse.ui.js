@@ -50,10 +50,13 @@ window.onRenderCell = function(result, {row, col})
         }
     }
 
-    if(result && col.name == 'deadline')
+    if(result[0] && col.name == 'deadline')
     {
-        if(row.data.deadline === '0000-00-00') return result;
-        if(row.data.deadline < today) result[0] = {html: '<span class="text-danger" >' + row.data.deadline + '</span>'};
+        const bug = row.data;
+        if(['resolved', 'closed'].includes(bug.status)) return result;
+
+        const yesterday = zui.formatDate(zui.createDate() - 24 * 60 * 60 * 1000, 'yyyy-MM-dd');
+        if(result[0] <= yesterday) result[0] = {html: '<span class="label danger-pale rounded-full size-sm">' + result[0] + '</span>'};
     }
 
     return result;

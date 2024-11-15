@@ -66,6 +66,14 @@ window.onRenderCell = function(result, {row, col})
             result.push({html: '<a href="' + caseLink + '"class="text-gray" title="' + row.data.case + '">[' + caseCommonLang + '#' + row.data.case + ']</a>'});
         }
     }
+    if(col.name == 'deadline' && result[0])
+    {
+        const bug = row.data;
+        if(['resolved', 'closed'].includes(bug.status)) return result;
+
+        const yesterday = zui.formatDate(zui.createDate() - 24 * 60 * 60 * 1000, 'yyyy-MM-dd');
+        if(result[0] <= yesterday) result[0] = {html: '<span class="label danger-pale rounded-full size-sm">' + result[0] + '</span>'};
+    }
 
     return result;
 }

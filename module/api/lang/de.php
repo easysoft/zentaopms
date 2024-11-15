@@ -15,6 +15,7 @@ $lang->api->sql      = 'SQL Query API';
 $lang->api->manage   = 'API management';
 
 $lang->api->index               = 'API Space';
+$lang->api->view                = 'API Detail';
 $lang->api->editLib             = 'Edit';
 $lang->api->releases            = 'Release';
 $lang->api->deleteRelease       = 'Delete Release';
@@ -63,6 +64,7 @@ $lang->api->zentaoAPI           = "Zentao API v1";
 $lang->api->search              = "Search";
 $lang->api->allLibs             = "AllLibs";
 $lang->api->noLinked            = "No Linked {$lang->productCommon} and {$lang->projectCommon}";
+$lang->api->apiCatalog          = 'Api Catalogs';
 $lang->api->addCatalog          = 'Add Catalog';
 $lang->api->editCatalog         = 'Edit Catalog';
 $lang->api->sortCatalog         = 'Catalog Sorting';
@@ -160,6 +162,9 @@ $lang->api->format             = 'Format';
 $lang->api->libType            = 'Api Library Type';
 $lang->api->product            = $lang->productCommon;
 $lang->api->project            = $lang->projectCommon;
+$lang->api->apiTotalInfo       = 'Total %d APIs';
+$lang->api->showNotEmpty       = 'Show not empty';
+$lang->api->showClosed         = 'Show with closed';
 
 $lang->api->methodOptions      = array(
     'GET'     => 'GET',
@@ -229,8 +234,17 @@ $lang->apistruct->name = 'Name';
 
 $lang->api_lib_release = new stdClass();
 $lang->api_lib_release->version = 'Version';
+$lang->api_lib_release->desc    = 'Description';
 
 $lang->api->error = new stdclass();
 $lang->api->error->onlySelect = 'Das SQL Interface erlaubt nur SELECT Abfragen.';
 $lang->api->error->disabled   = 'For security reasons, this feature is disabled. You can go to the config directory and modify the configuration item %s to open this function.';
 $lang->api->error->notInput   = 'Debugging is not supported temporarily due to field parameter type restrictions';
+
+$lang->api->filterTypes[] = array('all', 'All');
+$lang->api->filterTypes[] = array('createdByMe', 'Created by me');
+$lang->api->filterTypes[] = array('editedByMe', 'Edited by me');
+
+$lang->api->homeFilterTypes['nolink']  = $lang->api->libTypeList['nolink'];
+$lang->api->homeFilterTypes['product'] = $lang->api->libTypeList['product'];
+$lang->api->homeFilterTypes['project'] = $lang->api->libTypeList['project'];

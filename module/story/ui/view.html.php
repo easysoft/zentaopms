@@ -41,7 +41,7 @@ if($app->tab == 'product') setPageData('activeMenuID', $story->type);
 
 /* 初始化头部右上方工具栏。Init detail toolbar. */
 $toolbar = array();
-if(!$isInModal && hasPriv('story', 'create'))
+if(!$isInModal && hasPriv($story->type, 'create'))
 {
     $otherParam = 'storyID=&projectID=';
     if($app->rawModule == 'projectstory' || $app->tab == 'project') $otherParam = "storyID=&projectID={$this->session->project}";

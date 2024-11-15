@@ -137,7 +137,7 @@ if($canBatchReview)
 $moduleItems = array();
 if($canBatchChangeModule)
 {
-    foreach($modules as $moduleID => $module) $moduleItems[] = array('text' => $module, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchChangeModule', "moduleID=$moduleID"));
+    foreach($modules as $moduleIdKey => $moduleName) $moduleItems[] = array('text' => $moduleName, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchChangeModule', "moduleID=$moduleIdKey"));
 }
 
 $navActions = array();

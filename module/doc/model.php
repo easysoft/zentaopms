@@ -760,6 +760,7 @@ class docModel extends model
         $docs = $this->dao->select('t1.*')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id')
             ->where('t1.lib')->in($libs)
+            ->andWhere('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.templateType')->eq('')
             ->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")
@@ -774,24 +775,13 @@ class docModel extends model
             ->andWhere('templateType')->eq('')
             ->andWhere("(status = 'normal' or (status = 'draft' and addedBy='{$this->app->user->account}'))")
             ->andWhere('module')->eq(0)
+            ->andWhere('deleted')->eq('0')
             ->orderBy('`order` asc, id_asc')
             ->fetchAll('id');
 
         $docs = $docs + $rootDocs;
         $docs = $this->processCollector($docs);
         $docs = $this->filterPrivDocs($docs, $spaceType);
-
-        $apis = $this->loadModel('api')->getApiListBySearch(0, 0, '', $libs);
-        foreach($apis as &$api)
-        {
-            $api->id          = "api.$api->id";
-            $api->lib         = (int)$api->lib;
-            $api->module      = (int)$api->module;
-            $api->deleted     = boolval($api->deleted);
-            $api->originTitle = $api->title;
-            $api->icon        = "api is-$api->method";
-            $api->title       = "$api->method $api->path $api->title";
-        }
 
         foreach($docs as &$doc)
         {
@@ -803,7 +793,19 @@ class docModel extends model
             unset($doc->draft);
         }
 
-        $docs = $docs + $apis;
+        $apis = $this->loadModel('api')->getApiListBySearch(0, 0, '', $libs);
+        foreach($apis as &$api)
+        {
+            $api->id          = "api.$api->id";
+            $api->lib         = (int)$api->lib;
+            $api->module      = (int)$api->module;
+            $api->deleted     = boolval($api->deleted);
+            $api->originTitle = $api->title;
+            $api->icon        = "api is-$api->method";
+            $api->title       = "$api->method $api->path $api->title";
+
+            $docs[$api->id] = $api;
+        }
 
         return $docs;
     }
@@ -2774,11 +2776,13 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getModulesOfLibs(array $libs, $type = 'doc')
+    public function getModulesOfLibs(array $libs, $type = 'doc,api')
     {
+        $types = explode(',', $type);
         return $this->dao->select('*')->from(TABLE_MODULE)
             ->where('root')->in($libs)
-            ->andWhere('type')->eq($type)
+            ->beginIF(count($types) > 1)->andWhere('type')->in($types)->fi()
+            ->beginIF(count($types) == 1)->andWhere('type')->eq($type)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy('grade desc, `order`')
             ->fetchAll('id');
@@ -3285,6 +3289,7 @@ class docModel extends model
         $allLibs          = $this->getLibs('hasApi');
         $hasPrivDocIdList = $this->getPrivDocs(array(), 0, 'all');
         $apiList          = $this->loadModel('api')->getPrivApis();
+        $actionCondition  = $this->loadModel('action')->getActionCondition('doc');
 
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('vision')->eq($this->config->vision)
@@ -3297,6 +3302,7 @@ class docModel extends model
             ->orWhere('(objectType')->eq('api')
             ->andWhere('objectID')->in(array_keys($apiList))
             ->markRight(2)
+            ->beginIF($actionCondition)->andWhere("($actionCondition)")->fi()
             ->orderBy('date_desc,id_asc')
             ->page($pager)
             ->fetchAll();

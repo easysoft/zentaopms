@@ -10094,6 +10094,8 @@ class upgradeModel extends model
      */
     public function processObjectRelation()
     {
+        if($this->config->edition == 'open') return true;
+
         /* Process story link story. */
         $linkedtoStories = $this->dao->select('*')->from(TABLE_RELATION)
             ->where('AType')->in('story,requirement,epic')
@@ -10403,6 +10405,15 @@ class upgradeModel extends model
             $relation->BID      = $childDemandID;
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
         }
+
+        if(!dao::isError())
+        {
+            $this->dao->delete()->from(TABLE_CRON)
+                ->where('`command`')->eq('moduleName=upgrade&methodName=ajaxProcessObjectRelation')
+                ->andWhere('type')->eq('zentao')
+                ->andWhere('status')->eq('normal')
+                ->exec();
+        }
         return true;
     }
 
@@ -10427,25 +10438,27 @@ class upgradeModel extends model
             {
                 if($step->parent || $step->stage == '') return;
 
-                $deployData[$deployID][$step->status][] = $step->id;
+                $deployData[$deployID][$step->stage][] = $step->id;
             }
         }
 
+        $this->loadModel('action');
         foreach($deployData as $deployID => $steps)
         {
-            foreach($steps as $status => $steps)
+            foreach($steps as $stage => $childs)
             {
                 $parent = new stdclass();
-                $parent->title       = zget($this->lang->deploy->stageList, $status);
-                $parent->stage       = '';
+                $parent->title       = zget($this->lang->deploy->stageList, $stage, '');
+                $parent->status      = 'wait';
                 $parent->deploy      = $deployID;
                 $parent->createdBy   = $this->app->user->account;
                 $parent->createdDate = helper::now();
-                $parent->status      = 'wait';
                 $this->dao->insert(TABLE_DEPLOYSTEP)->data($parent)->autoCheck()->exec();
 
                 $parentID = $this->dao->lastInsertID();
-                $this->dao->update(TABLE_DEPLOYSTEP)->set('parent')->eq($parentID)->where('id')->in($steps)->exec();
+                $this->action->create('deploystep', $parentID, 'created');
+
+                $this->dao->update(TABLE_DEPLOYSTEP)->set('parent')->eq($parentID)->where('id')->in($childs)->exec();
             }
         }
     }

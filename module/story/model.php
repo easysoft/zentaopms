@@ -907,7 +907,7 @@ class storyModel extends model
         unset($oldStory->parent, $story->parent);
         if($this->config->edition != 'open' && $oldStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
 
-        if(isset($story->reviewer))
+        if(!empty($story->reviewer))
         {
             $oldReviewer = $this->getReviewerPairs($storyID, $oldStory->version);
             $oldStory->reviewers = implode(',', array_keys($oldReviewer));
@@ -1495,6 +1495,8 @@ class storyModel extends model
     {
         $oldStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
         $story    = $postData;
+
+        $this->loadModel($oldStory->type);
 
         if(!empty($story->duplicateStory))
         {

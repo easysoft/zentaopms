@@ -275,12 +275,12 @@ div
                 ),
                 /* 应用实例备份块。 */
                 /* Instance Backup block. */
-                !($config->inQuickon && $type == 'store') ? null : section(
+                ($config->inQuickon && $type == 'store' && $instance->name != 'ZenTao') ? section(
                     set::title($lang->instance->backup->common),
                     set::id('backupSection'),
                     set('data-example', 1),
                     div(
-                        setClass('ml-10 inline-block'),
+                        setClass('ml-10 inline-block pull-right'),
                         btn(
                             set(array
                             (
@@ -319,7 +319,7 @@ div
                         setID('backupList'),
                         h::js("if(!$('#backupList').find('.dtable-header-cell').length) loadTarget($.createLink('instance', 'backupList', 'id={$instance->id}'), '#backupList');"),
                     )
-                ),
+                ) : null,
             ),
             floatToolbar
             (

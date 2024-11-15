@@ -18,6 +18,7 @@ formPanel
 (
     set::id('hostEditForm'),
     set::title($lang->host->edit),
+    set::submitBtnText($lang->save),
     on::init()->do('$(function() {setTimeout(osChange, 50); });'),
     formRow
     (
@@ -138,7 +139,6 @@ formPanel
     ),
     formGroup
     (
-        set::width('1/3'),
         set::name('status'),
         set::control('radioList'),
         set::label($lang->host->status),

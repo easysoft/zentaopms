@@ -37,6 +37,7 @@ const customRenders =
             return {fetcher: $.createLink('api', 'edit', `apiID=${doc.id}`), loadingText: getDocAppLang('loading')};
         }
         const doc = this.doc.data;
+        if(!docAppHasPriv('view')) return {html: `<h1>${doc ? doc.title : ''}</h1><p>${getDocAppLang('accessDenied')}</p>`};
         const release = this.signals.libReleaseMap.value[doc.lib] || 0;
         const version = this.signals.docVersion.value || 0;
         return {fetcher: $.createLink('api', 'view', `libID=${doc.lib}&apiID=${doc.id}&moduleID=${doc.module}&version=${version}&release=${release}`), loadingText: getDocAppLang('loadingDocsData'), className: 'doc-editor-content'};
@@ -100,8 +101,8 @@ const customRenders =
                 const libView = items[viewIndex][1];
                 const libID   = lib.data.id;
                 const release = this.signals.libReleaseMap.value[libID] || 0;
-                const options = [{text: getDocAppLang('defaultVersion'), value: 0, selected: !release, command: `changeLibRelease/${libID}/0`}];
-                versions.forEach(version => options.push({selected: release === version.id, text: `v${version.version}`, value: version.id, command: `changeLibRelease/${libID}/${version.version}`}));
+                const options = [{text: getDocAppLang('latestVersion'), value: 0, selected: !release, command: `changeLibRelease/${libID}/0`}];
+                versions.forEach(version => options.push({selected: release === version.id, text: `v${version.version}`, value: version.id, command: `changeLibRelease/${libID}/${version.id}`}));
                 const currentVersion = versions.find(x => x.id === release);
                 const versionPicker = zui.renderCustomContent(
                 {
@@ -110,7 +111,7 @@ const customRenders =
                         component: 'DropdownButton',
                         props:
                         {
-                            text     : currentVersion ? currentVersion.version : getDocAppLang('version'),
+                            text     : currentVersion ? currentVersion.version : getDocAppLang('latestVersion'),
                             size     : 'xs',
                             type     : 'gray-pale',
                             rounded  : 'full',
@@ -136,16 +137,18 @@ const customRenders =
     'sidebar-before': function()
     {
         if(!this.libID) return;
+
+        const canViewStructs  = docAppHasPriv('struct');
+        const canViewReleases = docAppHasPriv('releases');
+        if(!canViewStructs && !canViewReleases) return;
+
         const isListMode = this.mode === 'list';
-        const lang = getDocAppLang();
-        const listType = this.signals.listType.value;
-        const items = [
-            {text: lang.struct, selected: listType === 'structs' && isListMode, icon: 'treemap muted', command: 'showStructs'},
-            {type: 'divider', className: 'my-1'},
-            {text: lang.releases, selected: listType === 'releases' && isListMode, icon: 'version muted', command: 'showReleases'},
-            {type: 'divider', className: 'my-1'},
-            {text: lang.module, icon: 'list muted', command: 'showModules'}
-        ];
+        const lang       = getDocAppLang();
+        const listType   = this.signals.listType.value;
+        const items      = [];
+        if(canViewStructs) items.push({text: lang.struct, selected: listType === 'structs' && isListMode, icon: 'treemap muted', command: 'showStructs'}, {type: 'divider', className: 'my-1'});
+        if(canViewReleases) items.push({text: lang.releases, selected: listType === 'releases' && isListMode, icon: 'version muted', command: 'showReleases'}, {type: 'divider', className: 'my-1'});
+        items.push({text: lang.module, icon: 'list muted', command: 'showModules'});
         return {
             component: 'tree',
             className: 'p-2 pb-0 api-lib-menu',
@@ -193,32 +196,6 @@ function getDocViewSidebarTabs(doc, info)
     ].filter(Boolean);
 }
 
-/**
- * 获取文档界面上的表格初始化选项。
- * Get the table initialization options on the doc UI.
- *
- * @param {object} options
- * @param {object} info
- * @returns {object}
- */
-function getTableOptions(options, info)
-{
-    return $.extend(options, {
-        cols: [{name: 'title', onRenderCell: function(result, info)
-        {
-            const doc = info.row.data;
-            return [{className: `api-list-item row items-center my-0.5 mx-1 gap-2 flex-auto is-${doc.method} cursor-pointer rounded`, html: [
-                `<div class="font-mono w-14 text-center api-method py-1 rounded rounded-r-none">${doc.method}</div>`,
-                `<div class="font-mono api-path">${doc.path}</div>`,
-                `<div class="flex-auto text-right api-title pr-2">${doc.originTitle}</div>`,
-            ].join('')}]
-        }}],
-        header:    false,
-        checkable: false,
-        footer:    ['flex', 'pager'],
-    });
-}
-
 function getSpaceFetcher(spaceType, spaceID)
 {
     const parts      = String(spaceID).split('.');
@@ -236,16 +213,27 @@ function handleClickSpaceMenu(event, value)
     const type   = parts[0];
     const id     = parts[1] || 0;
     const docApp = getDocApp();
-    if(type === 'product' || type === 'project') docApp.selectSpace(value, '_first');
-    else                                         docApp.selectSpace('nolink', +id);
+    if(type === 'product' || type === 'project') docApp.selectSpace(value, true, true);
+    else                                         docApp.selectSpace('nolink', +id, true);
 }
 
 function getSpaceMenuText(text, state)
 {
-    const spaceID = getDocApp().spaceID;
+    const spaceID = this.spaceID;
     if(spaceID === 'nolink') return text;
     const libTypeList = getDocAppLang('libTypeList');
     return `${libTypeList[spaceID.split('.')[0]]} / ${text}`;
+}
+
+function getSpaceMenuOptions(spaceType, spaceID)
+{
+    const libID = this.libID;
+    return {
+        popWidth    : 350,
+        onClickItem : handleClickSpaceMenu,
+        defaultValue: spaceID === 'nolink' ? `lib.${libID}`: spaceID,
+        display     : getSpaceMenuText.bind(this)
+    };
 }
 
 /* 扩展文档应用操作按钮生成定义。 Extend the doc app action definition. */
@@ -384,6 +372,27 @@ $.extend(window.docAppCommands,
     },
 
     /**
+     * 获取库的 API 列表。
+     * Get the API list of the library.
+     */
+    loadLibApi: function(_, args)
+    {
+        const docApp        = getDocApp();
+        const libReleaseMap = docApp.signals.libReleaseMap.value;
+        const libID         = args[0] || docApp.libID;
+        if(!libID) return;
+
+        const releaseID = args[1] || libReleaseMap[libID] || 0;
+        const url       = $.createLink('api', 'ajaxGetLibApiList', `libID=${libID}&releaseID=${releaseID}`);
+        $.getJSON(url, function(data)
+        {
+            const lib = docApp.getLib(libID);
+            if(lib && lib.docs && lib.docs.length) docApp.delete('doc', lib.docs.map(x => x.data.id));
+            docApp.update('doc', data);
+        });
+    },
+
+    /**
      * 更改当前库的发布版本。
      * Change the release of the current library.
      */
@@ -393,8 +402,10 @@ $.extend(window.docAppCommands,
         const libID = args[0];
         const release = args[1];
         const libReleaseMap = docApp.signals.libReleaseMap.value;
+        if(libReleaseMap[libID] === release) return;
         libReleaseMap[libID] = release;
         docApp.signals.libReleaseMap.value = $.extend({}, libReleaseMap);
+        docApp.executeCommand('loadLibApi', [libID, release]);
         const doc = docApp.doc;
         if(doc && doc.data.lib === libID) docApp.executeCommand('loadApi', [doc.data.id, 0, release]);
     },
@@ -456,8 +467,8 @@ $.extend(window.docAppCommands,
 
         if(type === 'nolink')
         {
-            if(docAppHasPriv('editLib')) items.push({text: lang.editLib, command: `editLib/${id}`});
-            if(docAppHasPriv('deleteLib')) items.push({text: lang.deleteLib, command: `deleteLib/${id}`});
+            if(docAppHasPriv('editLib')) items.push({text: lang.actions.editLib, command: `editLib/${id}`});
+            if(docAppHasPriv('deleteLib')) items.push({text: lang.actions.deleteLib, command: `deleteLib/${id}`});
         }
         else if(docAppHasPriv('createLib'))
         {
@@ -500,15 +511,9 @@ window.setDocAppOptions = function(_, options) // Override the method.
     return $.extend(options,
     {
         defaultState         : {libReleaseMap: {}, listType: ''},
-        spaceMenuOptions     : {
-            popWidth    : 350,
-            onClickItem : handleClickSpaceMenu,
-            defaultValue: options.spaceID === 'nolink' ? `lib.${options.libID}`: options.spaceID,
-            display     : getSpaceMenuText
-        },
+        spaceMenuOptions     : getSpaceMenuOptions,
         customRenders        : customRenders,
         viewModeUrl          : getViewModeUrl,
-        getTableOptions      : getTableOptions,
         getDocViewSidebarTabs: getDocViewSidebarTabs,
         getSpaceFetcher      : getSpaceFetcher,
         isMatchFilter        : function(type, filterType, item)

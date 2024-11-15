@@ -13,7 +13,9 @@ namespace zin;
 $privs = array();
 $privs['collect']      = 'no';
 $privs['createApi']    = hasPriv('api', 'create');
+$privs['exportApi']    = $this->config->edition != 'open' && hasPriv('api', 'export');
 $privs['edit']         = hasPriv('api', 'edit');
+$privs['view']         = hasPriv('api', 'view');
 $privs['delete']       = hasPriv('api', 'delete');
 $privs['createLib']    = hasPriv('api', 'createLib');
 $privs['editLib']      = hasPriv('api', 'editLib');
@@ -26,6 +28,8 @@ $privs['addModule']    = hasPriv('doc', 'addCatalog');
 $privs['deleteModule'] = hasPriv('doc', 'deleteCatalog');
 $privs['editModule']   = hasPriv('doc', 'editCatalog');
 $privs['sortModule']   = hasPriv('doc', 'sortCatalog');
+$privs['releases']     = hasPriv('api', 'releases');
+$privs['struct']       = hasPriv('api', 'struct');
 
 docApp
 (
@@ -35,11 +39,13 @@ docApp
     set::pager(array('recTotal' => $recTotal, 'recPerPage' => $recPerPage, 'page' => $pageID)),
     set::privs($privs),
     set::docID($apiID),
+    set::libIcon('interface-lib'),
     set::fetcher(createLink('api', 'ajaxGetData', 'spaceID={spaceID}&picks={picks}')),
     set::docFetcher(null),
     set::libSummariesFetcher(null),
     set::maxHomeLibsOfSpace(0),
     set::params($params),
     set::autoSelectLib(),
+    set::fetchOnChangeSpace(),
     set('$options', jsRaw('window.setDocAppOptions'))
 );

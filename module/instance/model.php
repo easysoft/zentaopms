@@ -304,7 +304,7 @@ class instanceModel extends model
         $settings->settings_map->resources = new stdclass;
         $settings->settings_map->resources->cpu = $size;
 
-        $oldValue = $instance->oldValue;
+        $oldValue = (int)$instance->oldValue;
         $newValue = (string)$size;
         unset($instance->oldValue);
         $success = $this->cne->updateConfig($instance, $settings);
@@ -536,7 +536,7 @@ class instanceModel extends model
             $settingsMap->ci->enabled = true;
         }
 
-        if($instance->source == 'system')
+        if($instance->source == 'system' && in_array($instance->chart, $this->config->instance->initUserApps))
         {
             $user = $this->dao->select('account')->from(TABLE_USER)->where('deleted')->eq(0)->fetch('account');
             if($user)
@@ -1241,7 +1241,7 @@ class instanceModel extends model
             dao::$errors[] = $this->lang->instance->backup->invalidTime;
             return false;
         }
-        $autoBackup = $settings->autoBackup;
+        $autoBackup = (int)$settings->autoBackup;
         $command    = 'moduleName=instance&methodName=cronBackup&instanceID=' . $instance->id;
 
         /* Disable backup operation. */

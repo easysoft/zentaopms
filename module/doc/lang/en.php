@@ -31,7 +31,7 @@ $lang->doclib->defaultOrder = 'Doc order';
 $lang->doclib->tip = new stdclass();
 $lang->doclib->tip->selectExecution = "When execution is empty, the library created is the {$lang->projectCommon} library";
 
-$lang->doclib->type['wiki'] = 'Wiki';
+$lang->doclib->type['wiki'] = 'Doc';
 $lang->doclib->type['api']  = 'API';
 
 $lang->doclib->aclListA = array();
@@ -628,6 +628,7 @@ $lang->doc->docLang->productMine                 = 'My responsibility';
 $lang->doc->docLang->projectMine                 = 'My participation';
 $lang->doc->docLang->productOther                = 'Other';
 $lang->doc->docLang->projectOther                = 'Other';
+$lang->doc->docLang->accessDenied                = $lang->doc->accessDenied;
 
 $lang->docTemplate->moduleName = array();
 $lang->docTemplate->moduleName['plan']   = 'plan';
