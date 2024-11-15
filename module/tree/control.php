@@ -173,6 +173,7 @@ class tree extends control
 
         if(!empty($_POST))
         {
+            if($type == 'docTemplate') $this->lang->tree->name = $this->lang->docTemplate->typeName;
             $this->tree->update($moduleID, $type);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));

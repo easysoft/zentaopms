@@ -366,6 +366,7 @@ class doc extends control
 
         if(!empty($_POST))
         {
+            $this->lang->doc->name = $this->lang->docTemplate->typeName;
             $moduleData = form::data($this->config->doc->form->addTemplateType)
                 ->setDefault('type', 'docTemplate')
                 ->setDefault('path', '')
