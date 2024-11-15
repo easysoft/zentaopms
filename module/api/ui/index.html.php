@@ -13,6 +13,7 @@ namespace zin;
 $privs = array();
 $privs['collect']      = 'no';
 $privs['createApi']    = hasPriv('api', 'create');
+$privs['exportApi']    = $this->config->edition != 'open' && hasPriv('api', 'export');
 $privs['edit']         = hasPriv('api', 'edit');
 $privs['delete']       = hasPriv('api', 'delete');
 $privs['createLib']    = hasPriv('api', 'createLib');
