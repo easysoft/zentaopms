@@ -76,6 +76,7 @@ class RedisDriver implements CacheInterface
         {
             $this->redis = \helper::connectRedis($setting);
             $this->redis->setOption(\Redis::OPT_SERIALIZER, $this->getSerializer($setting->serializer));
+            $this->redis->select($setting->database);
         }
         catch(Exception $e)
         {
