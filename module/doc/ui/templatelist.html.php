@@ -17,10 +17,13 @@ foreach($config->doc->templateMenu as $item) $data['libs'][] = $item + array('sp
 $data['modules'] = $this->doc->getTemplateModules();
 
 $privs = array();
-$privs['create']  = hasPriv('docTemplate', 'create');
-$privs['edit']    = hasPriv('docTemplate ', 'edit');
-$privs['delete']  = hasPriv('docTemplate ', 'delete');
-$privs['collect'] = 'no';
+$privs['create']       = hasPriv('doc', 'createTemplate');
+$privs['edit']         = hasPriv('doc', 'editTemplate');
+$privs['delete']       = hasPriv('doc', 'deleteTemplate');
+$privs['addModule']    = hasPriv('doc', 'addTemplateType');
+$privs['editModule']   = hasPriv('doc', 'editTemplateType');
+$privs['deleteModule'] = hasPriv('doc', 'deleteTemplateType');
+$privs['collect']      = 'no';
 
 $filterTypes = $lang->docTemplate->filterTypes;
 if(!hasPriv('doc', 'editDocTemplate')) $filterTypes = array_values(array_filter($filterTypes, function($item){ return $item[0] != 'draft'; }));

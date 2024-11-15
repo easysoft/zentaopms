@@ -2916,11 +2916,27 @@ $config->group->package->commonEffort->subset = 'generaleffort';
 $config->group->package->commonEffort->privs  = array();
 $config->group->package->commonEffort->privs['effort-createForObject'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 3, 'depend' => array(), 'recommend' => array('effort-delete', 'effort-edit'));
 
-$config->group->package->docTemplate = new stdclass();
-$config->group->package->docTemplate->order  = 5;
-$config->group->package->docTemplate->subset = 'doctemplate';
-$config->group->package->docTemplate->privs  = array();
-$config->group->package->docTemplate->privs['doc-browseTemplate']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array());
+$config->group->package->browseDoctemplate = new stdclass();
+$config->group->package->browseDoctemplate->order  = 5;
+$config->group->package->browseDoctemplate->subset = 'doctemplate';
+$config->group->package->browseDoctemplate->privs  = array();
+$config->group->package->browseDoctemplate->privs['doc-browseTemplate'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array());
+
+$config->group->package->manageDoctemplate = new stdclass();
+$config->group->package->manageDoctemplate->order  = 15;
+$config->group->package->manageDoctemplate->subset = 'doctemplate';
+$config->group->package->manageDoctemplate->privs  = array();
+$config->group->package->manageDoctemplate->privs['doc-createTemplate']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array('doc-browseTemplate'), 'recommend' => array('doc-editTemplate'));
+$config->group->package->manageDoctemplate->privs['doc-editTemplate']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array('doc-browseTemplate'), 'recommend' => array('doc-createTemplate'));
+$config->group->package->manageDoctemplate->privs['doc-addTemplateType']    = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array('doc-browseTemplate'), 'recommend' => array('doc-editTemplateType'));
+$config->group->package->manageDoctemplate->privs['doc-editTemplateType']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array('doc-browseTemplate'), 'recommend' => array('doc-addTemplateType'));
+$config->group->package->manageDoctemplate->privs['doc-deleteTemplateType'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array('doc-browseTemplate'), 'recommend' => array(''));
+
+$config->group->package->deleteDoctemplate = new stdclass();
+$config->group->package->deleteDoctemplate->order  = 20;
+$config->group->package->deleteDoctemplate->subset = 'doctemplate';
+$config->group->package->deleteDoctemplate->privs  = array();
+$config->group->package->deleteDoctemplate->privs['doc-deleteTemplate'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('doc-browseTemplate'), 'recommend' => array());
 
 $config->group->package->projectStakeholder = new stdclass();
 $config->group->package->projectStakeholder->order  = 5;

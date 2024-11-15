@@ -495,6 +495,14 @@ $lang->doc->projectFilterTypes[] = array('mine', 'Involved');
 
 $lang->doc->spaceFilterTypes[] = array('all', 'All');
 
+$lang->doc->browseTemplate     = 'Template Square';
+$lang->doc->createTemplate     = 'Create Document Template';
+$lang->doc->editTemplate       = 'Edit Document Template';
+$lang->doc->deleteTemplate     = 'Delete Document Template';
+$lang->doc->addTemplateType    = 'Create Type';
+$lang->doc->editTemplateType   = 'Edit Type';
+$lang->doc->deleteTemplateType = 'Delete Type';
+
 $lang->doc->docLang                              = new stdClass();
 $lang->doc->docLang->cancel                      = $lang->cancel;
 $lang->doc->docLang->export                      = $lang->export;
