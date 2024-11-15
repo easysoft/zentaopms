@@ -2796,7 +2796,7 @@ class testcaseModel extends model
     }
 
     /**
-     * 过略自动测试用例的ID列表
+     * 过滤自动测试用例的ID列表。
      * Ignore auto testcase id list.
      *
      * @param  array  $caseIdList
