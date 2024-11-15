@@ -736,6 +736,7 @@ class docModel extends model
         $docs = $this->dao->select('t1.*')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id')
             ->where('t1.lib')->in($libs)
+            ->andWhere('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.templateType')->eq('')
             ->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")
