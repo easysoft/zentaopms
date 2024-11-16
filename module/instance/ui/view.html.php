@@ -278,9 +278,8 @@ div
                 ($config->inQuickon && $type == 'store' && $instance->name != 'ZenTao') ? section(
                     set::title($lang->instance->backup->common),
                     set::id('backupSection'),
-                    set('data-example', 1),
                     div(
-                        setClass('ml-10 inline-block pull-right'),
+                        setClass('flex justify-end'),
                         btn(
                             set(array
                             (
