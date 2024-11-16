@@ -1233,7 +1233,6 @@ class instanceModel extends model
         /* Initialize properties and validate. */
         $settings = fixer::input('post')
             ->setDefault('autoBackup', '0')
-            ->setDefault('backupKeepDays', 14)
             ->setDefault('backupTime', '1:00')
             ->setDefault('backupCycle', '1')
             ->get();
@@ -1241,12 +1240,12 @@ class instanceModel extends model
         $command    = 'moduleName=instance&methodName=cronBackup&instanceID=' . $instance->id;
         if(!validater::checkInt($settings->backupKeepDays, 1, 30))
         {
-            dao::$errors[] = $this->lang->instance->backup->keepDayRange;
+            dao::$errors['message'] = $this->lang->instance->backup->keepDayRange;
             return false;
         }
         if($autoBackup == 1 && !preg_match("/^([0-2][0-9]):([0-5][0-9])$/", $settings->backupTime, $parts))
         {
-            dao::$errors[] = $this->lang->instance->backup->invalidTime;
+            dao::$errors['message'] = $this->lang->instance->backup->invalidTime;
             return false;
         }
         if($instance->backupKeepDays != $settings->backupKeepDays)
@@ -1365,6 +1364,7 @@ class instanceModel extends model
         }
 
         /* 3. delete expired backup. Get backup list of instance, then check every backup is expired or not.*/
+        $deleteData = array();
         foreach($backupList as $backup)
         {
             if($latestBackup && $latestBackup->name == $backup->name) continue; // Keep latest successful backup.
@@ -1372,10 +1372,11 @@ class instanceModel extends model
             $deadline = intval($backup->create_time) + $instance->backupKeepDays * 24 * 3600;
             if($deadline < time())
             {
-                $result = $this->cne->deleteBackup($instance, $backup->name);
-                $this->action->create('instance', $instance->id, 'deleteexpiredbackup', '', json_encode(array('result' => 'success', 'data' => array('backupName' => $backup->name, 'backupCreateTime' => $backup->create_time, 'result' => $result))));
+                $this->cne->deleteBackup($instance, $backup->name);
+                array_push($deleteData, array('backupName' => $backup->name, 'backupCreateTime' => $backup->create_time));
             }
         }
+        if(count($deleteData) > 0) $this->action->create('instance', $instance->id, 'deleteexpiredbackup', '', json_encode(array('result' => 'success', 'data' =>$deleteData)));
         return true;
     }
 }
