@@ -139,7 +139,7 @@ $lang->instance->backup->cycleList[1]  = '每日';
 $lang->instance->backup->operators = array();
 $lang->instance->backup->operators['auto']     = '自动备份';
 $lang->instance->backup->operators['manual']   = '手动备份';
-$lang->instance->backup->operators['settings'] = '设置';
+$lang->instance->backup->operators['settings'] = '备份设置';
 
 $lang->instance->backup->statusList = array();
 $lang->instance->backup->statusList['success']        = '成功';
@@ -155,15 +155,19 @@ $lang->instance->backup->statusList['uploadFailed']   = '上传失败';
 $lang->instance->backup->statusList['downloading']    = '下载中';
 $lang->instance->backup->statusList['downloadFailed'] = '下载失败';
 
+$lang->instance->backup->autoRestoreOptions[0] = '关闭';
+$lang->instance->backup->autoRestoreOptions[1] = '开启';
+
 $lang->instance->restore = new stdclass;
 $lang->instance->restore->common             = '还原';
 $lang->instance->restore->autoRestore        = '自动备份';
-$lang->instance->restore->enableAutoRestore  = '是否开启自动备份';
+$lang->instance->restore->enableAutoRestore  = '自动备份';
 $lang->instance->restore->cycleDays          = '还原周期';
 $lang->instance->restore->restoreTime        = '还原时间';
 $lang->instance->restore->invalidTime        = '无效的时间';
 $lang->instance->restore->disableAutoRestore = '自动备份已关闭';
 $lang->instance->restore->firstStartTime     = '%s 首次自动备份将于%s 执行';
+
 
 $lang->instance->restore->cycleList[1] = '每日';
 
