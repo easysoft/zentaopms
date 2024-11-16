@@ -1222,27 +1222,38 @@ class instanceModel extends model
     }
 
     /**
-     * Save auto backup settings.
-     * 保存自动备份配置。
-     * @param  object $instance
-     * @access public
-     * @return bool
+     * Save backup settings.
+     * 保存备份设置。
+     *
+     * @param $instance
+     * @return void
      */
-    public function saveAutoBackupSettings($instance)
+    public function saveBackupSettings($instance)
     {
-        /* Init Default backup properties. */
+        /* Initialize properties and validate. */
         $settings = fixer::input('post')
-            ->setDefault('autoBackup', '')
+            ->setDefault('autoBackup', '0')
+            ->setDefault('backupKeepDays', 14)
             ->setDefault('backupTime', '1:00')
             ->setDefault('backupCycle', '1')
             ->get();
-        if(!preg_match("/^([0-2][0-9]):([0-5][0-9])$/", $settings->backupTime, $parts))
+        $autoBackup = (int)$settings->autoBackup;
+        $command    = 'moduleName=instance&methodName=cronBackup&instanceID=' . $instance->id;
+        if(!validater::checkInt($settings->backupKeepDays, 1, 30))
+        {
+            dao::$errors[] = $this->lang->instance->backup->keepDayRange;
+            return false;
+        }
+        if($autoBackup == 1 && !preg_match("/^([0-2][0-9]):([0-5][0-9])$/", $settings->backupTime, $parts))
         {
             dao::$errors[] = $this->lang->instance->backup->invalidTime;
             return false;
         }
-        $autoBackup = (int)$settings->autoBackup;
-        $command    = 'moduleName=instance&methodName=cronBackup&instanceID=' . $instance->id;
+        if($instance->backupKeepDays != $settings->backupKeepDays)
+        {
+            $this->dao->update(TABLE_INSTANCE)->set('backupKeepDays')->eq($settings->backupKeepDays)->where('id')->eq($instance->id)->exec();
+            if($this->dao->isError()) return false;
+        }
 
         /* Disable backup operation. */
         if(!$autoBackup)
@@ -1251,13 +1262,12 @@ class instanceModel extends model
             $this->dao->update(TABLE_INSTANCE)->set('autoBackup')->eq($autoBackup)->where('id')->eq($instance->id)->exec();
             if($this->dao->isError()) return false;
 
-            $this->action->create('instance', $instance->id, 'closeautobackup', '', json_encode(array('result' => 'success', 'data' => $settings)));
+            $this->action->create('instance', $instance->id, 'savebackupsettings', '', json_encode(array('result' => 'success', 'data' => $settings)));
             return true;
         }
 
         /* Enable backup operation. */
         $cron = $this->dao->select('*')->from(TABLE_CRON)->where('command')->eq($command)->fetch();
-
         list($hour, $minute) = explode(':', $settings->backupTime);
         $cronData = new stdclass;
         $cronData->m       = intval($minute);
@@ -1270,48 +1280,25 @@ class instanceModel extends model
         $cronData->command = $command;
         $cronData->remark  = $this->lang->instance->backup->cronRemark;
 
-        /* Save cron task. */
+        $this->dao->update(TABLE_INSTANCE)->set('autoBackup')->eq($autoBackup)->where('id')->eq($instance->id)->exec();
+        if($this->dao->isError()) return false;
+
         if($cron) $this->dao->update(TABLE_CRON)->autoCheck()->data($cronData)->where('id')->eq($cron->id)->exec();
         else $this->dao->insert(TABLE_CRON)->data($cronData)->exec();
         if($this->dao->isError()) return false;
-
-        /* Save instance backup settings. */
-        $this->dao->update(TABLE_INSTANCE)->set('autoBackup')->eq($settings->autoBackup)->where('id')->eq($instance->id)->exec();
-        if($this->dao->isError()) return false;
-
-        $this->action->create('instance', $instance->id, 'openautobackup', '', json_encode(array('result' => 'success', 'data' => $settings)));
-        return true;
-    }
-
-    /**
-     * Save backup settings.
-     * 保存备份设置。
-     *
-     * @param $instance
-     * @return void
-     */
-    public function saveBackupSettings($instance)
-    {
-        $settings = fixer::input('post')->trim('backupKeepDays')->get();
-        if($instance->backupKeepDays == $settings->backupKeepDays) return true;
-
-        /* Save instance backup settings. */
-        $this->dao->update(TABLE_INSTANCE)->set('backupKeepDays')->eq($settings->backupKeepDays)->where('id')->eq($instance->id)->exec();
-        if($this->dao->isError()) return false;
-
         $this->action->create('instance', $instance->id, 'savebackupsettings', '', json_encode(array('result' => 'success', 'data' => $settings)));
         return true;
     }
 
     /**
-     * Get auto backup settings.
-     * 获取自动备份设置。
+     * Get backup settings.
+     * 获取备份设置。
      *
      * @param  int    $instnaceID
      * @access public
      * @return object
      */
-    public function getAutoBackupSettings($instanceID)
+    public function getBackupSettings($instanceID)
     {
         $instance = $this->getByID($instanceID);
         $cron     = $this->dao->select('*')->from(TABLE_CRON)->where('command')->eq('moduleName=instance&methodName=cronBackup&instanceID=' . $instance->id)->limit(1)->fetch();
@@ -1321,9 +1308,9 @@ class instanceModel extends model
         $minute = substr('0' . zget($cron, 'm', '00'), -2, 2);
 
         $settings = new stdclass;
-        $settings->backupTime = "{$hour}:{$minute}";
-        $settings->autoBackup = boolval(zget($instance, 'autoBackup', false));
-        $settings->cycleDays  = 1; // Cycle days is always is 1 at present.
+        $settings->backupTime     = "{$hour}:{$minute}";
+        $settings->autoBackup     = boolval(zget($instance, 'autoBackup', false));
+        $settings->cycleDays      = 1; // Cycle days is always is 1 at present.
         return $settings;
     }
 

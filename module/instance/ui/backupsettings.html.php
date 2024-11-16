@@ -25,11 +25,50 @@ formPanel
             set::name('backupKeepDays'),
             set::width('20px'),
             set::required(true),
-            set::class('backup-settings'),
             set::label($this->lang->instance->backup->keepDays),
             set::control('input'),
             set::value((int)$instance->backupKeepDays),
             span($this->lang->instance->backup->backupSettingsTips, set::className('text-warning inline-block mt-2'))
         ),
+    ),
+    formRow
+    (
+        formGroup
+        (
+            set::width('20px'),
+            set::label($lang->instance->restore->enableAutoRestore),
+            radioList
+            (
+                set::name('autoBackup'),
+                set::items($lang->instance->backup->autoRestoreOptions),
+                set::value($instance->autoBackup),
+                set::inline(true)
+            )
+        )
+    ),
+    formRow(
+        formGroup
+        (
+            set::name('backupTime'),
+            set::width('20px'),
+            set::required(true),
+            set::class('backup-settings'),
+            set::label($lang->instance->backup->backupTime),
+            set::control(array('control' => 'time')),
+            set::value($backupSettings->backupTime)
+        )
+    ),
+    formRow(
+        formGroup
+        (
+            set::name('backupCycle'),
+            set::width('20px'),
+            set::required(true),
+            set::control('picker'),
+            set::class('backup-settings'),
+            set::label($lang->instance->backup->cycleDays),
+            set::items($lang->instance->backup->cycleList),
+            set::value($backupSettings->cycleDays)
+        )
     )
 );

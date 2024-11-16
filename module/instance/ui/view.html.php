@@ -284,22 +284,11 @@ div
                         btn(
                             set(array
                             (
-                                'icon'      => 'backend',
+                                'icon'      => 'refresh',
                                 'class'     => 'ghost btn',
                                 'text'      => $lang->instance->backup->operators['manual'] ,
                                 'data-size' => 'sm',
                                 'onclick'   => "onManualBackup({$instance->id})"
-                            ))
-                        ),
-                        btn(
-                            set(array
-                            (
-                                'icon'        => 'backend',
-                                'class'       => 'ghost btn',
-                                'text'        => $lang->instance->backup->operators['auto'] ,
-                                'url'         => createLink('instance', 'autoBackup', "id={$instance->id}"),
-                                'data-size'   => 'sm',
-                                'data-toggle' => 'modal'
                             ))
                         ),
                         btn(
