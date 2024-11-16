@@ -301,6 +301,7 @@ $config->logonMethods[] = 'instance.visit';
 $config->logonMethods[] = 'instance.manualbackup';
 $config->logonMethods[] = 'instance.backupsettings';
 $config->logonMethods[] = 'instance.autobackup';
+$config->logonMethods[] = 'instance.ajaxRestore';
 $config->logonMethods[] = 'jenkins.create';
 $config->logonMethods[] = 'jenkins.edit';
 $config->logonMethods[] = 'kanban.activatecard';
