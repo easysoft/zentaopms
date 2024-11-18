@@ -20,7 +20,7 @@ detailHeader
 $operateMenus = array();
 foreach($config->design->view->operateList['main'] as $operate)
 {
-    if(!common::hasPriv('design', $operate) || $design->deleted) continue;
+    if(!common::hasPriv('design', $operate) || $design->deleted || !$this->design->isClickable($design, $operate)) continue;
 
     if(empty($repos) && $operate == 'linkCommit')
     {

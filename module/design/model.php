@@ -458,6 +458,22 @@ class designModel extends model
     }
 
     /**
+     * 确认设计的需求变更。
+     * Confirm story change of design.
+     *
+     * @param  int    $designID
+     * @access public
+     * @return bool
+     */
+    public function confirmStoryChange(int $designID)
+    {
+        $design = $this->fetchByID($designID);
+        $story  = $this->loadModel('story')->fetchByID((int)$design->story);
+        if($story) $this->dao->update(TABLE_DESIGN)->set('storyVersion')->eq($story->version)->where('id')->eq($designID)->exec();
+        return dao::isError();
+    }
+
+    /**
      * 判断当前动作是否可以点击。
      * Adjust the action is clickable.
      *
@@ -468,7 +484,8 @@ class designModel extends model
      */
     public static function isClickable(object $object, string $action): bool
     {
-        if($action == 'confirmStoryChange') return (bool)$object->needConfirm;
+        $action = strtolower($action);
+        if($action == 'confirmstorychange') return !empty($object->needConfirm);
         return true;
     }
 }
