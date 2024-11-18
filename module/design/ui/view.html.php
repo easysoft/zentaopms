@@ -42,16 +42,27 @@ foreach($config->design->view->operateList['common'] as $operate)
 
 $moduleName = empty($project->hasProduct) ? 'projectstory' : (isset($design->storyInfo) ? $design->storyInfo->type : 'story');
 $storyName  = zget($stories, $design->story, '');
+$storyItem  = array();
 if($common::hasPriv($moduleName, 'view'))
 {
-    $storyItem = a(
+    $storyItem[] = a(
         set::href(helper::createLink($moduleName, 'view', "id={$design->story}")),
         $storyName
     );
 }
 else
 {
-    $storyItem = $storyName;
+    $storyItem[] = $storyName;
+}
+if($this->design->isClickable($design, 'confirmStoryChange'))
+{
+    $storyItem[] = btn
+    (
+        set::size('sm'),
+        setClass('ml-1 ajax-submit'),
+        set::href(helper::createLink('design', 'confirmStoryChange', "id={$design->story}")),
+        $lang->design->confirmStoryChange
+    );
 }
 
 detailBody
