@@ -351,17 +351,18 @@ $lang->stakeholder->methodOrder[80] = 'userIssue';
 
 /* Design. */
 $lang->resource->design = new stdclass();
-$lang->resource->design->browse       = 'browse';
-$lang->resource->design->view         = 'view';
-$lang->resource->design->create       = 'create';
-$lang->resource->design->batchCreate  = 'batchCreate';
-$lang->resource->design->edit         = 'edit';
-$lang->resource->design->assignTo     = 'assignTo';
-$lang->resource->design->delete       = 'delete';
-$lang->resource->design->linkCommit   = 'linkCommit';
-$lang->resource->design->viewCommit   = 'viewCommit';
-$lang->resource->design->unlinkCommit = 'unlinkCommit';
-$lang->resource->design->revision     = 'revision';
+$lang->resource->design->browse             = 'browse';
+$lang->resource->design->view               = 'view';
+$lang->resource->design->create             = 'create';
+$lang->resource->design->batchCreate        = 'batchCreate';
+$lang->resource->design->edit               = 'edit';
+$lang->resource->design->assignTo           = 'assignTo';
+$lang->resource->design->delete             = 'delete';
+$lang->resource->design->linkCommit         = 'linkCommit';
+$lang->resource->design->viewCommit         = 'viewCommit';
+$lang->resource->design->unlinkCommit       = 'unlinkCommit';
+$lang->resource->design->revision           = 'revision';
+$lang->resource->design->confirmStoryChange = 'confirmStoryChange';
 
 $lang->design->methodOrder[5]  = 'browse';
 $lang->design->methodOrder[10] = 'view';
@@ -374,6 +375,7 @@ $lang->design->methodOrder[40] = 'linkCommit';
 $lang->design->methodOrder[45] = 'viewCommit';
 $lang->design->methodOrder[50] = 'unlinkCommit';
 $lang->design->methodOrder[55] = 'revision';
+$lang->design->methodOrder[60] = 'confirmStoryChange';
 
 /* Program plan. */
 $lang->resource->programplan = new stdclass();
