@@ -310,4 +310,21 @@ class designTest
         $design = $this->objectModel->getAffectedScope($design);
         return isset($design->tasks) ? $design->tasks : array();
     }
+
+    /**
+     * 确认设计需求变更。
+     * Confirm design story change.
+     *
+     * @param  int       $designID
+     * @access public
+     * @return int|array
+     */
+    public function confirmStoryChangeTest(int $designID): int|array
+    {
+        $this->objectModel->confirmStoryChange($designID);
+        if(dao::isError()) return dao::getError();
+
+        $design = $this->objectModel->getByID($designID);
+        return $design ? $design->storyVersion : 0;
+    }
 }
