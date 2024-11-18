@@ -592,7 +592,7 @@ class executionTao extends executionModel
         $children = array();
         foreach($stories as $story)
         {
-            if($story->parent != $parentID) continue;
+            if($story->parent != $parentID && ($parentID || (!$parentID && isset($stories[$story->parent])))) continue;
 
             $avatarAccount = empty($story->assignedTo) ? zget($story, 'openedBy', '') : $story->assignedTo;
             $userAvatar    = zget($avatarPairs, $avatarAccount);
