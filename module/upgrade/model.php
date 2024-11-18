@@ -3327,16 +3327,16 @@ class upgradeModel extends model
 
             $setting->key    = 'storyRequirement';
             $setting->value  = '0';
-            $this->dao->replace(TABLE_CONFIG)->data($setting)->exec();
+            $this->dao->insert(TABLE_CONFIG)->data($setting)->exec();
 
             $setting->key    = 'hourPoint';
             $setting->value  = '0';
-            $this->dao->replace(TABLE_CONFIG)->data($setting)->exec();
+            $this->dao->insert(TABLE_CONFIG)->data($setting)->exec();
 
             $setting->module = 'common';
             $setting->key    = 'conceptSetted';
             $setting->value  = '1';
-            $this->dao->replace(TABLE_CONFIG)->data($setting)->exec();
+            $this->dao->insert(TABLE_CONFIG)->data($setting)->exec();
         }
 
         return true;
@@ -8836,9 +8836,9 @@ class upgradeModel extends model
         {
             unset($createField->id);
             $createField->key = 'createWaterfallFields'; //瀑布模型
-            $this->dao->replace(TABLE_CONFIG)->data($createField)->exec();
+            $this->dao->insert(TABLE_CONFIG)->data($createField)->exec();
             $createField->key = 'createWaterfallplusFields'; //融合瀑布模型
-            $this->dao->replace(TABLE_CONFIG)->data($createField)->exec();
+            $this->dao->insert(TABLE_CONFIG)->data($createField)->exec();
         }
 
         /* 删除旧的config。*/
