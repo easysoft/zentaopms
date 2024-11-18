@@ -10,8 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('langManDay',    $lang->program->manDay);
-jsVar('langPostponed', $lang->project->statusList['delay']);
+jsVar('langManDay',   $lang->program->manDay);
+jsVar('delayWarning', $lang->task->delayWarning);
 
 /* zin: Define the feature bar on main menu. */
 featureBar

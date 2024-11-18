@@ -18,6 +18,7 @@ jsVar('orderBy',   $orderBy);
 jsVar('productID', $productID);
 jsVar('typeList', $lang->execution->typeList);
 jsVar('delayed', $lang->execution->delayed);
+jsVar('delayWarning', $lang->task->delayWarning);
 jsVar('pageExecSummary', $lang->execution->pageExecSummary);
 jsVar('checkedExecSummary', $lang->execution->checkedExecSummary);
 

@@ -54,7 +54,7 @@ window.onRenderCell = function(result, {col, row})
         executionName += '<div class="ml-1 clip flex items-center" style="width: max-content;">';
         executionName += (executionType !== undefined && !row.data.isParent) ? `<a href="${executionLink}" class="text-primary">${row.data.name}</a>` : row.data.name;
         executionName += '</div>';
-        executionName += (!['done', 'closed', 'suspended'].includes(row.data.status) && row.data.type != 'point' && row.data.end != '' && today > row.data.end) ? `<span class="label danger-pale ml-1 flex-none">${delayed}</span>` : '';
+        executionName += (!['done', 'closed', 'suspended'].includes(row.data.status) && row.data.type != 'point' && row.data.end != '' && today > row.data.end) ? '<span class="label danger-pale ml-1 flex-none">' + (typeof row.data.delay != 'undefined' ? delayWarning.replace('%s', row.data.delay) : delayed) + '</span>' : '';
 
         result.push({html: executionName, className: 'w-full flex items-center'});
         return result;
