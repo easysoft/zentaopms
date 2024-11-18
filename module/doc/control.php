@@ -1631,9 +1631,9 @@ class doc extends control
             $lib = $this->doc->getLibByID((int)$doc->lib);
             if(empty($lib->type))
             {
-                if($lib->execution)    $lib->type = 'execution';
-                elseif($lib->project)  $lib->type = 'project';
-                else if($lib->product) $lib->type = 'product';
+                if($lib->execution)   $lib->type = 'execution';
+                elseif($lib->project) $lib->type = 'project';
+                elseif($lib->product) $lib->type = 'product';
             }
 
             $objectID   = $this->doc->getObjectIDByLib($lib, $objectType);
