@@ -74,6 +74,7 @@ class cache extends control
             if($cache->enable != $this->config->cache->enable
                 || $cache->driver != $this->config->cache->driver
                 || $cache->namespace != $this->config->cache->namespace
+                || $redis->database != $this->config->redis->database
                 || $redis->serializer != $this->config->redis->serializer)
             {
                 $this->mao->clear();
