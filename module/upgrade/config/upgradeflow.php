@@ -105,7 +105,7 @@ $config->upgrade->execFlow['20_5']        = array('functions' => 'fixWorkflowFie
 $config->upgrade->execFlow['20_6']        = array('functions' => 'processDemandFiles,processSqlbuilderTables');
 $config->upgrade->execFlow['20_7']        = array('functions' => 'upgradeMyDocSpace');
 $config->upgrade->execFlow['20_8']        = array('functions' => 'processWorkflowGroups');
-$config->upgrade->execFlow['21_0']        = array('functions' => '');
+$config->upgrade->execFlow['21_0']        = array('functions' => 'importBuildinWorkflow', 'params' => array('importBuildinWorkflow' => array('or', 'charter')));
 
 if(!empty($config->isINT))
 {
