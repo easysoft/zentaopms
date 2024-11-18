@@ -865,13 +865,18 @@ class cache
             $splitPOS  = $orderPOS  ? $orderPOS  : $limitPOS;
             $splitPOS  = $havingPOS ? $havingPOS : $splitPOS;
             $splitPOS  = $groupPOS  ? $groupPOS  : $splitPOS;
-            if($splitPOS)
+
+            $where = '';
+            if($wherePOS)
             {
-                $where = substr($sql, $wherePOS + $whereLen, $splitPOS - $wherePOS - $whereLen);
-            }
-            else
-            {
-                $where = substr($sql, $wherePOS + $whereLen);
+                if($splitPOS)
+                {
+                    $where = substr($sql, $wherePOS + $whereLen, $splitPOS - $wherePOS - $whereLen);
+                }
+                else
+                {
+                    $where = substr($sql, $wherePOS + $whereLen);
+                }
             }
 
             /* 执行操作后数据已经被修改，所以需要提前获取被影响的数据。*/
