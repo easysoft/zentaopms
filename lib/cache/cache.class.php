@@ -426,7 +426,7 @@ class cache
 
         /* 把被删除的数据从缓存中删除。Delete the deleted data from cache. */
         $affectedKeys = [];
-        foreach($this->objects as $object) $affectedKeys = $this->getRawCacheKey($code, $object->$field);
+        foreach($this->objects as $object) $affectedKeys[] = $this->getRawCacheKey($code, $object->$field);
         $this->cache->deleteMultiple($affectedKeys);
 
         /* 把被删除的数据的 id 从缓存中删除。Delete the id of the deleted data from cache. */
