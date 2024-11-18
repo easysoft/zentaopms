@@ -343,6 +343,15 @@ class designModel extends model
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
+            $stories = $this->loadModel('story')->getByList(array_column($designs, 'story'));
+            foreach($designs as $designID => $design)
+            {
+                if(isset($stories[$design->story]))
+                {
+                    $storyInfo = $stories[$design->story];
+                    $designs[$designID]->needConfirm = $storyInfo->version != $design->storyVersion;
+                }
+            }
         }
 
         return $designs;
