@@ -77,7 +77,7 @@ class compileTao extends compileModel
         else
         {
             $data->queue  = !empty($build->number) ? $build->number : $build->id;
-            $data->status = $build->status == 'success' ? 'success' : 'failure';
+            $data->status = isset($this->lang->compile->statusList[$build->status]) ? $build->status : 'failure';
 
             $date = isset($build->created_at) ? strtotime($build->created_at) : time();
             if(isset($build->created)) $date = $build->created;
