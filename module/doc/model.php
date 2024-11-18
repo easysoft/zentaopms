@@ -1582,7 +1582,7 @@ class docModel extends model
         }
 
         $lib = !empty($doc->lib) ? $this->getLibByID($doc->lib) : '';
-        if($doc->contentType !== 'doc') $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->edit['id'], (string)$this->post->uid);
+        if(!isset($doc->contentType) || $doc->contentType !== 'doc') $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->edit['id'], (string)$this->post->uid);
 
         if(!empty($lib))
         {
