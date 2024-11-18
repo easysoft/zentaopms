@@ -1629,7 +1629,12 @@ class doc extends control
         if($details == 'yes')
         {
             $lib = $this->doc->getLibByID((int)$doc->lib);
-            if(empty($lib->type)) $lib->type = $lib->execution ? 'execution' : ($lib->project ? 'project' : 'product');
+            if(empty($lib->type))
+            {
+                if($lib->execution)    $lib->type = 'execution';
+                elseif($lib->project)  $lib->type = 'project';
+                else if($lib->product) $lib->type = 'product';
+            }
 
             $objectID   = $this->doc->getObjectIDByLib($lib, $objectType);
             $object     = in_array($objectType, array('product', 'project', 'execution')) ? $this->doc->getObjectByID($objectType, $objectID) : $this->doc->getLibByID((int)$objectID);
