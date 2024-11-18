@@ -85,7 +85,7 @@ class execution extends control
         $childExecutions = $this->execution->getChildExecutions($executionID);
         $teamMembers     = $this->execution->getTeamMembers($executionID);
         $actions         = $this->loadModel('action')->getList($this->objectType, $executionID);
-        $project         = $this->loadModel('project')->getByID($execution->project);
+        $project         = $this->loadModel('project')->fetchByID($execution->project);
 
         /* Set menu. */
         $this->execution->setMenu($executionID, 0, $extra);
