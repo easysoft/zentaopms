@@ -72,7 +72,7 @@ class compileTao extends compileModel
         {
             $data->queue  = $build->queueId;
             $data->status = $build->result == 'SUCCESS' ? 'success' : 'running';
-            if($build->status == 'FAILURE') $data->status = 'failure';
+            if($build->result == 'FAILURE') $data->status = 'failure';
 
             $data->createdDate = date('Y-m-d H:i:s', (int)($build->timestamp / 1000));
         }
