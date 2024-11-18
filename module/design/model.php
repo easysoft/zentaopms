@@ -259,7 +259,12 @@ class designModel extends model
             $design->commit .= html::a(helper::createLink('design', 'revision', "revisionID={$relation->BID}&projectID={$design->project}"), "# {$revision}", '', "title='{$revision}' class='flex clip'");
         }
 
-        if($design->story > 0) $design->storyInfo = $this->loadModel('story')->fetchByID((int)$design->story);
+        if($design->story > 0)
+        {
+            $storyInfo = $this->loadModel('story')->fetchByID((int)$design->story);
+            $design->storyInfo   = $storyInfo;
+            $design->needConfirm = $storyInfo->version != $design->storyVersion;
+        }
 
         return $this->loadModel('file')->replaceImgURL($design, 'desc');
     }
@@ -441,5 +446,20 @@ class designModel extends model
             ->andWhere('t3.id')->ne('')
             ->orderBy('id')
             ->fetchGroup('revision', 'id');
+    }
+
+    /**
+     * 判断当前动作是否可以点击。
+     * Adjust the action is clickable.
+     *
+     * @param  object    $object
+     * @param  string    $action
+     * @access public
+     * @return bool
+     */
+    public static function isClickable(object $object, string $action): bool
+    {
+        if($action == 'confirmStoryChange') return (bool)$object->needConfirm;
+        return true;
     }
 }
