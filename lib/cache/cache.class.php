@@ -826,6 +826,7 @@ class cache
         $this->setKey('');
         $this->setTable('');
         $this->setEvent('');
+        $this->setWhere('');
         $this->setObjects([]);
     }
 
