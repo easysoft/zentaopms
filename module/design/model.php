@@ -468,8 +468,11 @@ class designModel extends model
     public function confirmStoryChange(int $designID)
     {
         $design = $this->fetchByID($designID);
-        $story  = $this->loadModel('story')->fetchByID((int)$design->story);
-        if($story) $this->dao->update(TABLE_DESIGN)->set('storyVersion')->eq($story->version)->where('id')->eq($designID)->exec();
+        if($design)
+        {
+            $story  = $this->loadModel('story')->fetchByID((int)$design->story);
+            if($story) $this->dao->update(TABLE_DESIGN)->set('storyVersion')->eq($story->version)->where('id')->eq($designID)->exec();
+        }
         return dao::isError();
     }
 
