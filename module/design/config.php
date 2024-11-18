@@ -35,6 +35,12 @@ $config->design->search['params']['createdDate'] = array('operator' => '=', 'con
 $config->design->search['params']['assignedTo']  = array('operator' => '=', 'control' => 'select',  'values' => 'users');
 $config->design->search['params']['story']       = array('operator' => '=', 'control' => 'select',  'values' => '');
 
+$config->design->actionList['confirmStoryChange']['icon']      = 'ok';
+$config->design->actionList['confirmStoryChange']['text']      = $lang->design->confirmStoryChange;
+$config->design->actionList['confirmStoryChange']['hint']      = $lang->design->confirmStoryChange;
+$config->design->actionList['confirmStoryChange']['className'] = 'ajax-submit';
+$config->design->actionList['confirmStoryChange']['url']       = helper::createLink('design', 'confirmStoryChange', 'designID={id}');
+
 $config->design->actionList['edit']['icon'] = 'alter';
 $config->design->actionList['edit']['hint'] = $lang->design->edit;
 $config->design->actionList['edit']['url']  = helper::createLink('design', 'edit', 'designID={id}');
@@ -66,5 +72,5 @@ $config->design->actionList['linkCommit']['data-size']     = 'lg';
 $config->design->actionList['linkCommit']['data-id']       = 'linkCommitModal';
 $config->design->actionList['linkCommit']['class']         = 'linkCommit-btn';
 
-$config->design->view->operateList['main']   = array('assignTo', 'linkCommit');
+$config->design->view->operateList['main']   = array('confirmStoryChange', 'assignTo', 'linkCommit');
 $config->design->view->operateList['common'] = array('edit', 'delete');

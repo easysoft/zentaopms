@@ -42,20 +42,21 @@ $lang->design->more          = 'More';
 $lang->design->project       = 'Project';
 
 /* 动作列表. */
-$lang->design->common       = 'Design';
-$lang->design->create       = 'Create Design';
-$lang->design->batchCreate  = 'Batch Create';
-$lang->design->edit         = 'Change';
-$lang->design->delete       = 'Delete';
-$lang->design->view         = 'View';
-$lang->design->browse       = 'Design List';
-$lang->design->viewCommit   = 'View Commit';
-$lang->design->linkCommit   = 'Link Commit';
-$lang->design->unlinkCommit = 'Unlink Commit';
-$lang->design->submit       = 'Submit Review';
-$lang->design->assignTo     = 'Assign';
-$lang->design->assignAction = 'Assign';
-$lang->design->revision     = 'Linked Code';
+$lang->design->common             = 'Design';
+$lang->design->create             = 'Create Design';
+$lang->design->batchCreate        = 'Batch Create';
+$lang->design->edit               = 'Change';
+$lang->design->delete             = 'Delete';
+$lang->design->view               = 'View';
+$lang->design->browse             = 'Design List';
+$lang->design->viewCommit         = 'View Commit';
+$lang->design->linkCommit         = 'Link Commit';
+$lang->design->unlinkCommit       = 'Unlink Commit';
+$lang->design->submit             = 'Submit Review';
+$lang->design->assignTo           = 'Assign';
+$lang->design->assignAction       = 'Assign';
+$lang->design->revision           = 'Linked Code';
+$lang->design->confirmStoryChange = 'Confirm';
 
 $lang->design->browseAction = 'Design List';
 
