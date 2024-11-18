@@ -23,7 +23,7 @@ class cacheModel extends model
         /* Redis 采用遍历删除的方式，所以需要先关闭缓存，清空之后再打开。Redis uses the method of traversing deletion, so you need to turn off the cache first, clear it, and then turn it on. */
         $needStop = $this->config->cache->driver == 'redis';
         if($needStop) $this->loadModel('setting')->setItem('system.common.cache.enable', 0);
-        $this->mao->clear();
+        $this->mao->clearCache();
         if($needStop) $this->setting->setItem('system.common.cache.enable', 1);
     }
 }

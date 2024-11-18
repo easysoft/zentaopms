@@ -77,7 +77,7 @@ class cache extends control
                 || $redis->database != $this->config->redis->database
                 || $redis->serializer != $this->config->redis->serializer)
             {
-                $this->mao->clear();
+                $this->cache->clear();
             }
 
             $this->loadModel('setting')->setItems('system.common.cache', $cache);
