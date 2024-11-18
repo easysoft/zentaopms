@@ -162,13 +162,13 @@ class doc extends control
      * 编辑一个文档空间。
      * Edit a doc space.
      *
-     * @param  int    $libID
+     * @param  int    $spaceID
      * @access public
      * @return void
      */
-    public function editSpace(int $libID)
+    public function editSpace(int $spaceID)
     {
-        $this->commonEditAction($libID);
+        $this->commonEditAction($spaceID);
         $this->display();
     }
 
@@ -657,7 +657,6 @@ class doc extends control
     public function ajaxGetWhitelist(int $doclibID, string $acl = '', string $control = '', int $docID = 0)
     {
         $doclib = $this->doc->getLibByID($doclibID);
-        $doc    = $docID ? $this->doc->getByID($docID) : null;
         $users  = $this->user->getPairs('noletter|noempty|noclosed');
         if($control == 'group')
         {
@@ -1629,10 +1628,11 @@ class doc extends control
 
         if($details == 'yes')
         {
-            $lib        = $this->doc->getLibByID((int)$doc->lib);
-            $objectType = empty($lib->type) ? ($lib->execution ? 'execution' : ($lib->project ? 'project' : 'product')) : $lib->type;
+            $lib = $this->doc->getLibByID((int)$doc->lib);
+            if(empty($lib->type)) $lib->type = $lib->execution ? 'execution' : ($lib->project ? 'project' : 'product');
+
             $objectID   = $this->doc->getObjectIDByLib($lib, $objectType);
-            $object     = in_array($objectType, array('product', 'project', 'execution')) ? $this->doc->getObjectByID($objectType, $objectID) : $this->doc->getLibByID((int)$objectID);;
+            $object     = in_array($objectType, array('product', 'project', 'execution')) ? $this->doc->getObjectByID($objectType, $objectID) : $this->doc->getLibByID((int)$objectID);
 
             $doc->libInfo    = $lib;
             $doc->objectType = $objectType;
@@ -1738,6 +1738,10 @@ class doc extends control
             $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
         }
 
+        $title = $this->lang->settings;
+        if($isDraft == 'yes') $title = $this->lang->doc->saveDraft;
+        elseif(empty($docID)) $title = $this->lang->doc->release;
+
         $this->view->mode       = empty($docID) ? 'create' : 'edit';
         $this->view->users      = $this->user->getPairs('nocode|noclosed|nodeleted');
         $this->view->groups     = $this->loadModel('group')->getPairs();
@@ -1749,7 +1753,7 @@ class doc extends control
         $this->view->libs       = $libPairs;
         $this->view->docID      = $docID;
         $this->view->isDraft    = $isDraft == 'yes';
-        $this->view->title      = $isDraft == 'yes' ? ($this->lang->doc->saveDraft) : (empty($docID) ? $this->lang->doc->release : $this->lang->settings);
+        $this->view->title      = $title;
         $this->display();
     }
 }
