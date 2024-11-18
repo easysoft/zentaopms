@@ -56,12 +56,17 @@ else
 }
 if($this->design->isClickable($design, 'confirmStoryChange'))
 {
-    $storyItem[] = btn
+    $storyItem[] = span
     (
-        set::size('sm'),
-        setClass('ml-1 ajax-submit'),
-        set::href(helper::createLink('design', 'confirmStoryChange', "id={$design->story}")),
-        $lang->design->confirmStoryChange
+        '(',
+        $lang->story->changed,
+        common::hasPriv('design', 'confirmStoryChange') ? a
+        (
+            setClass('mx-1 px-1 primary-pale'),
+            set::href(helper::createLink('design', 'confirmStoryChange', "id={$design->story}")),
+            $lang->design->confirmStoryChange
+        ) : '',
+        ')'
     );
 }
 
