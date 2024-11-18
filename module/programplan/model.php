@@ -783,7 +783,7 @@ class programplanModel extends model
 
             $projectTaskQuery = $this->session->projectTaskQuery;
             $projectTaskQuery .= " AND `project` = '$projectID'";
-            if(!empty($planIdList)) $projectTaskQuery .= " AND `execution` " . helper::dbIN($planIdList);
+            $projectTaskQuery .= " AND `execution` " . helper::dbIN($planIdList);
 
             $this->session->set('projectTaskQueryCondition', $projectTaskQuery, $this->app->tab);
             $this->session->set('projectTaskOnlyCondition', true, $this->app->tab);

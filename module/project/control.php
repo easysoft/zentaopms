@@ -841,7 +841,9 @@ class project extends control
             $actionURL = $this->createLink('project', 'execution', "status=bysearch&projectID=$projectID&orderBy=$orderBy&productID=$productID&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&queryID=myQueryID");
             unset($this->config->execution->search['fields']['project']);
             unset($this->config->execution->search['fields']['module']);
-            $executions = $this->programplan->getPairs($projectID, $productID, 'all');
+            $executions = $this->execution->fetchExecutionList($projectID, 'all', $productID);
+            $executions = $this->execution->getPairsByList(array_keys($executions));
+
             $this->execution->buildTaskSearchForm($projectID, $executions, $queryID, $actionURL);
         }
 
