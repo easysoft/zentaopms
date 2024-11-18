@@ -882,7 +882,6 @@ class cache
             /* 执行操作后数据已经被修改，所以需要提前获取被影响的数据。*/
             $field   = $this->getTableField();
             $objects = $this->dao->select('*')->from($table)->beginIF($where)->where($where)->fi()->fetchAll($field);
-            if(!$objects) return $this->log('Failed to fetch affected objects. The sql is: ' . $this->dao->get(), __FILE__, __LINE__);
 
             $this->setWhere($where);
             $this->setObjects($objects);
