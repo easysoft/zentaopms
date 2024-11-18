@@ -525,4 +525,20 @@ class design extends control
         $this->view->users  = $this->loadModel('project')->getTeamMemberPairs($design->project);
         $this->display();
     }
+
+    /**
+     * 确认设计的需求变更。
+     * Confirm story change of design.
+     *
+     * @param  int    $designID
+     * @access public
+     * @return void
+     */
+    public function confirmStoryChange(int $designID = 0)
+    {
+        $this->design->confirmStoryChange($designID);
+
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        return $this->send(array('result' => 'success', 'load' => true));
+    }
 }
