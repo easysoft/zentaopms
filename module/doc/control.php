@@ -851,6 +851,10 @@ class doc extends control
             $this->view->$objectKey = $objectID;
         }
 
+        $isOrderByOrder = $orderBy == 'order_asc';
+        $isNotCustomLib = $lib && !($lib->type == 'custom' && $lib->parent == 0);
+        $canUpdateOrder = $isOrderByOrder && $isNotCustomLib && common::hasPriv('doc', 'sortDoc');
+
         $this->view->title          = $type == 'custom' ? $this->lang->doc->tableContents : $object->name . $this->lang->hyphen . $this->lang->doc->tableContents;
         $this->view->type           = $type;
         $this->view->objectType     = $type;
@@ -870,7 +874,7 @@ class doc extends control
         $this->view->release        = $browseType == 'byrelease' ? $param : 0;
         $this->view->exportMethod   = $libType == 'api' ? 'export' : $type . '2export';
         $this->view->linkParams     = "objectID={$objectID}&%s&browseType=&orderBy={$orderBy}&param=0";
-        $this->view->canUpdateOrder = $lib && !($lib->type == 'custom' && $lib->parent == 0) && common::hasPriv('doc', 'sortDoc') && $orderBy == 'order_asc';
+        $this->view->canUpdateOrder = $canUpdateOrder;
 
         $this->display();
     }
@@ -1486,7 +1490,11 @@ class doc extends control
     public function app(string $type = 'mine', int $spaceID = 0, int $libID = 0, int $moduleID = 0, mixed $docID = 0, string $mode = '', string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $filterType = '', string $search = '', bool $noSpace = false)
     {
         $isNotDocTab = $this->app->tab != 'doc';
-        if(empty($mode)) $mode = ($isNotDocTab || $type == 'execution' || $noSpace || !empty($spaceID)) ? 'list' : 'home';
+        if(empty($mode))
+        {
+            $showList = $noSpace || !empty($spaceID);
+            $mode = ($isNotDocTab || $type == 'execution' || $showList) ? 'list' : 'home';
+        }
 
         $this->app->loadLang('file');
 
