@@ -58,11 +58,15 @@ class designModel extends model
     public function batchCreate(int $projectID = 0, int $productID = 0, array $designs = array()): bool
     {
         $this->loadModel('action');
+
+        $stories = is_array($_POST['story']) ? $this->loadModel('story')->getByList($this->post->story) : array();
+
         foreach($designs as $rowID => $design)
         {
             $design->product   = $productID;
             $design->project   = $projectID;
             $design->createdBy = $this->app->user->account;
+            if(!empty($stories[$design->story])) $design->storyVersion = $stories[$design->story]->version;
             $this->dao->insert(TABLE_DESIGN)->data($design)->autoCheck()->batchCheck($this->config->design->batchcreate->requiredFields, 'notempty')->exec();
 
             if(dao::isError())

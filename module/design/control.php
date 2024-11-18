@@ -154,6 +154,9 @@ class design extends control
                 ->setDefault('createdBy', $this->app->user->account)
                 ->get();
 
+            $story = $this->loadModel('story')->getById($designData->story);
+            if($story) $designData->storyVersion = $story->version;
+
             $designID = $this->design->create($designData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -263,6 +266,13 @@ class design extends control
         if($_POST)
         {
             $designData = form::data()->setDefault('editedBy', $this->app->user->account)->get();
+
+            if($design->story != $designData->story)
+            {
+                $story = $this->loadModel('story')->getById($designData->story);
+                if($story) $designData->storyVersion = $story->version;
+            }
+
             $changes    = $this->design->update($designID, $designData);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
