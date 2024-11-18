@@ -15675,6 +15675,7 @@ CREATE TABLE `zt_charter` (
   `budgetUnit` char(30) NOT NULL DEFAULT '',
   `product` text NULL,
   `roadmap` text NULL,
+  `plan` text NULL,
   `spec` mediumtext NULL,
   `status` char(30) NOT NULL DEFAULT '',
   `createdBy` char(30) NOT NULL DEFAULT '',
