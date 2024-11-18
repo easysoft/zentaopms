@@ -278,28 +278,16 @@ div
                 ($config->inQuickon && $type == 'store' && $instance->name != 'ZenTao') ? section(
                     set::title($lang->instance->backup->common),
                     set::id('backupSection'),
-                    set('data-example', 1),
                     div(
-                        setClass('ml-10 inline-block pull-right'),
+                        setClass('flex justify-end'),
                         btn(
                             set(array
                             (
-                                'icon'      => 'backend',
+                                'icon'      => 'refresh',
                                 'class'     => 'ghost btn',
                                 'text'      => $lang->instance->backup->operators['manual'] ,
                                 'data-size' => 'sm',
                                 'onclick'   => "onManualBackup({$instance->id})"
-                            ))
-                        ),
-                        btn(
-                            set(array
-                            (
-                                'icon'        => 'backend',
-                                'class'       => 'ghost btn',
-                                'text'        => $lang->instance->backup->operators['auto'] ,
-                                'url'         => createLink('instance', 'autoBackup', "id={$instance->id}"),
-                                'data-size'   => 'sm',
-                                'data-toggle' => 'modal'
                             ))
                         ),
                         btn(

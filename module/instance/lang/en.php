@@ -139,7 +139,7 @@ $lang->instance->backup->cycleList[1] = 'Daily';
 $lang->instance->backup->operators = array();
 $lang->instance->backup->operators['auto']     = 'Automatic backup';
 $lang->instance->backup->operators['manual']   = 'Manual backup';
-$lang->instance->backup->operators['settings'] = 'Settings';
+$lang->instance->backup->operators['settings'] = 'Backup Settings';
 
 $lang->instance->backup->statusList = array();
 $lang->instance->backup->statusList['success']        = 'successful';
@@ -158,7 +158,7 @@ $lang->instance->backup->statusList['downloadFailed'] = 'Download failed';
 $lang->instance->restore  =  new stdclass;
 $lang->instance->restore->common             = 'Restore';
 $lang->instance->restore->autoRestore        = 'Auto Restore';
-$lang->instance->restore->enableAutoRestore  = 'Do you want to enable automatic backup';
+$lang->instance->restore->enableAutoRestore  = 'Automatic backup';
 $lang->instance->restore->cycleDays          = 'Backup cycle';
 $lang->instance->restore->restoreTime        = 'Backup Time';
 $lang->instance->restore->invalidTime        = 'Invalid time';

@@ -1916,17 +1916,18 @@ class docModel extends model
     {
         $libs = $this->getLibsByObject($type, $spaceID);
 
-        if($type == 'project')
+        $executionIDList = array();
+        $apiLibs         = array();
+        foreach($libs as $lib)
         {
-            $executionIDList = array();
-            foreach($libs as $lib)
-            {
-                if($lib->type != 'execution') continue;
-                $executionIDList[] = $lib->execution;
-            }
+            if($lib->type == 'api') $apiLibs[$lib->id] = $lib;
+            if($lib->type != 'execution') continue;
+            $executionIDList[] = $lib->execution;
+        }
 
+        if($type == 'project' && !empty($executionIDList))
+        {
             $executionPairs = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in($executionIDList)->fetchPairs();
-
             foreach($libs as &$lib)
             {
                 if($lib->type != 'execution') continue;
@@ -1934,6 +1935,14 @@ class docModel extends model
                 $lib->executionName = $executionPairs[$lib->execution];
                 $lib->name          = $lib->executionName . '/' . $lib->name;
             }
+        }
+
+        if(!empty($apiLibs))
+        {
+            $releases   = $this->loadModel('api')->getReleaseByQuery(array_keys($apiLibs));
+            $releaseMap = array();
+            foreach($releases as $release) $releaseMap[$release->lib][] = $release;
+            foreach($apiLibs as $lib) $lib->versions = isset($releaseMap[$lib->id]) ? $releaseMap[$lib->id] : array();
         }
 
         return $libs;

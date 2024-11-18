@@ -249,6 +249,8 @@ class actionModel extends model
         $action         = $this->dao->select('objectType,objectID')->from(TABLE_ACTION)->where('id')->eq($history->action)->fetch();
         $objectType     = $action->objectType == 'story' ? $this->dao->select('type')->from(TABLE_STORY)->where('id')->eq($action->objectID)->fetch('type') : $action->objectType;
         $objectTypeList = array();
+        $history->old   = (string)$history->old;
+        $history->new   = (string)$history->new;
 
         if(!isset($objectTypeList[$objectType])) $this->app->loadLang($objectType);
         $objectTypeList[$objectType] = $objectType;
@@ -958,8 +960,9 @@ class actionModel extends model
         if($this->app->user->admin) return '';
 
         $actionCondition = '';
-        if(!empty($this->app->user->rights['acls']['actions']))
+        if(isset($this->app->user->rights['acls']['actions']))
         {
+            if(empty($this->app->user->rights['acls']['actions'])) return '1 != 1';
             if($module && !isset($this->app->user->rights['acls']['actions'][$module])) return '1 != 1';
             foreach($this->app->user->rights['acls']['actions'] as $moduleName => $actions)
             {
