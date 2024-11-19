@@ -1,6 +1,6 @@
 window.onRenderCell = function(result, {row, col})
 {
-    if(result && col.name == 'actions')
+    if(result && col.name == 'actions' && typeof result[0].props != 'undefined')
     {
         if(row.data.module == 'review')
         {
