@@ -29,6 +29,11 @@ $lang->system->nodeQuantity    = 'Nodes';
 $lang->system->serviceQuantity = 'Number of services';
 $lang->system->cpuUsage        = 'CPU（Core）';
 $lang->system->memUsage        = 'Memory（GB）';
+$lang->system->name            = 'Application name';
+$lang->system->latestRelease   = 'Latest version';
+$lang->system->children        = 'Included applications';
+$lang->system->latestRelease   = 'Latest version';
+$lang->system->status          = 'Status';
 
 /* LDAP */
 $lang->system->LDAP = new stdclass;

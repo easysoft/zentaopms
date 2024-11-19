@@ -29,6 +29,11 @@ $lang->system->nodeQuantity    = '节点数';
 $lang->system->serviceQuantity = '服务数';
 $lang->system->cpuUsage        = 'CPU（核）';
 $lang->system->memUsage        = '内存（GB）';
+$lang->system->name            = '应用名称';
+$lang->system->latestRelease   = '最新版本号';
+$lang->system->children        = '包含应用';
+$lang->system->latestRelease   = '最新版本号';
+$lang->system->status          = '状态';
 
 /* LDAP */
 $lang->system->LDAP = new stdclass;
