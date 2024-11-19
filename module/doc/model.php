@@ -789,6 +789,7 @@ class docModel extends model
             $doc->module      = (int)$doc->module;
             $doc->deleted     = boolval($doc->deleted);
             $doc->isCollector = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false;
+            $doc->title       = htmlspecialchars_decode($doc->title);
             unset($doc->content);
             unset($doc->draft);
         }
@@ -1468,11 +1469,11 @@ class docModel extends model
         if($type == 'doc')
         {
             $lib = $this->getLibByID($doc->lib);
+            if($doc->contentType != 'doc') $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->create['id'], (string)$this->post->uid);
             $doc->product   = $lib->product;
             $doc->project   = $lib->project;
             $doc->execution = $lib->execution;
         }
-        $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->create['id'], (string)$this->post->uid);
 
         $docContent          = new stdclass();
         $docContent->title   = $doc->title;
@@ -1609,7 +1610,7 @@ class docModel extends model
         }
 
         $lib = !empty($doc->lib) ? $this->getLibByID($doc->lib) : '';
-        $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->edit['id'], (string)$this->post->uid);
+        if(!isset($doc->contentType) || $doc->contentType !== 'doc') $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->edit['id'], (string)$this->post->uid);
 
         if(!empty($lib))
         {

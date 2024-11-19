@@ -12,11 +12,7 @@ declare(strict_types=1);
 
 namespace zin;
 
-if($repoID)
-{
-    $repoName = $this->dao->select('name')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch('name');
-    dropmenu(set::objectID($repoID), set::text($repoName), set::tab('repo'));
-}
+if(!empty($repoID)) dropmenu(set::objectID($repoID), set::tab('repo'));
 
 /* zin: Define the set::module('compile') feature bar on main menu. */
 $queryMenuLink = createLink('compile', 'browse', "repoID={$repoID}&jobID={$jobID}&browseType=bySearch&param={queryID}");

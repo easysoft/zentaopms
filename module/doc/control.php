@@ -162,13 +162,13 @@ class doc extends control
      * 编辑一个文档空间。
      * Edit a doc space.
      *
-     * @param  int    $libID
+     * @param  int    $spaceID
      * @access public
      * @return void
      */
-    public function editSpace(int $libID)
+    public function editSpace(int $spaceID)
     {
-        $this->commonEditAction($libID);
+        $this->commonEditAction($spaceID);
         $this->display();
     }
 
@@ -864,7 +864,6 @@ class doc extends control
     public function ajaxGetWhitelist(int $doclibID, string $acl = '', string $control = '', int $docID = 0)
     {
         $doclib = $this->doc->getLibByID($doclibID);
-        $doc    = $docID ? $this->doc->getByID($docID) : null;
         $users  = $this->user->getPairs('noletter|noempty|noclosed');
         if($control == 'group')
         {
@@ -1063,6 +1062,10 @@ class doc extends control
             $this->view->$objectKey = $objectID;
         }
 
+        $isOrderByOrder = $orderBy == 'order_asc';
+        $isNotCustomLib = $lib && !($lib->type == 'custom' && $lib->parent == 0);
+        $canUpdateOrder = $isOrderByOrder && $isNotCustomLib && common::hasPriv('doc', 'sortDoc');
+
         $this->view->title          = $type == 'custom' ? $this->lang->doc->tableContents : $object->name . $this->lang->hyphen . $this->lang->doc->tableContents;
         $this->view->type           = $type;
         $this->view->objectType     = $type;
@@ -1082,7 +1085,7 @@ class doc extends control
         $this->view->release        = $browseType == 'byrelease' ? $param : 0;
         $this->view->exportMethod   = $libType == 'api' ? 'export' : $type . '2export';
         $this->view->linkParams     = "objectID={$objectID}&%s&browseType=&orderBy={$orderBy}&param=0";
-        $this->view->canUpdateOrder = $lib && !($lib->type == 'custom' && $lib->parent == 0) && common::hasPriv('doc', 'sortDoc') && $orderBy == 'order_asc';
+        $this->view->canUpdateOrder = $canUpdateOrder;
 
         $this->display();
     }
@@ -1698,7 +1701,11 @@ class doc extends control
     public function app(string $type = 'mine', int $spaceID = 0, int $libID = 0, int $moduleID = 0, mixed $docID = 0, string $mode = '', string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $filterType = '', string $search = '', bool $noSpace = false)
     {
         $isNotDocTab = $this->app->tab != 'doc';
-        if(empty($mode)) $mode = ($isNotDocTab || $type == 'execution' || $noSpace || !empty($spaceID)) ? 'list' : 'home';
+        if(empty($mode))
+        {
+            $showList = $noSpace || !empty($spaceID);
+            $mode = ($isNotDocTab || $type == 'execution' || $showList) ? 'list' : 'home';
+        }
 
         $this->app->loadLang('file');
 
@@ -1850,15 +1857,24 @@ class doc extends control
 
         if($details == 'yes')
         {
-            $lib        = $this->doc->getLibByID((int)$doc->lib);
-            $objectType = empty($lib->type) ? ($lib->execution ? 'execution' : ($lib->project ? 'project' : 'product')) : $lib->type;
+            $lib = $this->doc->getLibByID((int)$doc->lib);
+            if(empty($lib->type))
+            {
+                if($lib->execution)   $lib->type = 'execution';
+                elseif($lib->project) $lib->type = 'project';
+                elseif($lib->product) $lib->type = 'product';
+            }
+
             $objectID   = $this->doc->getObjectIDByLib($lib, $objectType);
-            $object     = in_array($objectType, array('product', 'project', 'execution')) ? $this->doc->getObjectByID($objectType, $objectID) : $this->doc->getLibByID((int)$objectID);;
+            $object     = in_array($objectType, array('product', 'project', 'execution')) ? $this->doc->getObjectByID($objectType, $objectID) : $this->doc->getLibByID((int)$objectID);
 
             $doc->libInfo    = $lib;
             $doc->objectType = $objectType;
             $doc->object     = $object;
         }
+
+        if($doc->contentType === 'doc' && is_string($doc->content)) $doc->content = htmlspecialchars_decode($doc->content);
+        if(is_string($doc->title)) $doc->title = htmlspecialchars_decode($doc->title);
 
         if($docID) $this->doc->createAction($docID, 'view');
 
@@ -1956,6 +1972,10 @@ class doc extends control
             $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
         }
 
+        $title = $this->lang->settings;
+        if($isDraft == 'yes') $title = $this->lang->doc->saveDraft;
+        elseif(empty($docID)) $title = $this->lang->doc->release;
+
         $this->view->mode       = empty($docID) ? 'create' : 'edit';
         $this->view->users      = $this->user->getPairs('nocode|noclosed|nodeleted');
         $this->view->groups     = $this->loadModel('group')->getPairs();
@@ -1967,7 +1987,7 @@ class doc extends control
         $this->view->libs       = $libPairs;
         $this->view->docID      = $docID;
         $this->view->isDraft    = $isDraft == 'yes';
-        $this->view->title      = $isDraft == 'yes' ? ($this->lang->doc->saveDraft) : (empty($docID) ? $this->lang->doc->release : $this->lang->settings);
+        $this->view->title      = $title;
         $this->display();
     }
 }
