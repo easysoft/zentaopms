@@ -14,23 +14,6 @@ declare(strict_types=1);
  */
 class system extends control
 {
-
-    /**
-     * __construct
-     *
-     * @access public
-     * @return void
-     */
-    public function __construct(string $moduleName = '', string $methodName = '')
-    {
-        parent::__construct($moduleName, $methodName);
-
-        $this->loadModel('action');
-        $this->loadModel('setting');
-        $this->loadModel('cne');
-        $this->loadModel('instance');
-    }
-
     /**
      * 服务仪表盘。
      * Dashboard page.
@@ -266,6 +249,7 @@ class system extends control
     {
         session_write_close();
         set_time_limit(0);
+        $this->loadModel('cne');
 
         if(empty($this->config->system->noBackupBeforeRestore))
         {
@@ -321,6 +305,7 @@ class system extends control
         session_write_close();
         set_time_limit(0);
 
+        $this->loadModel('cne');
         if(!$this->system->isUpgradeable()) $this->sendError($this->lang->system->backup->error->beenLatestVersion);
 
         $this->loadModel('action')->create('system', 0, 'upgradeSystem');
@@ -376,6 +361,7 @@ class system extends control
     {
         session_write_close();
 
+        $this->loadModel('cne');
         if(strpos($backupName, '_') !== false) $backupName = str_replace('_', '-', $backupName);
         $result = $this->cne->getBackupStatus($this->config->instance->zentaopaas, $backupName);
         if($result && $result->code == 200)
@@ -403,6 +389,7 @@ class system extends control
     {
         session_write_close();
 
+        $this->loadModel('cne');
         $backupName = str_replace('_', '-', $backupName);
         $result = $this->cne->getRestoreStatus($this->config->instance->zentaopaas, $backupName);
         if($result && $result->code == 200)
@@ -442,6 +429,7 @@ class system extends control
     {
         session_write_close();
 
+        $this->loadModel('cne');
         if(strpos($backupName, '_') !== false) $backupName = str_replace('_', '-', $backupName);
         $rawResult = $this->cne->getBackupList($this->config->instance->zentaopaas);
         if($rawResult && $rawResult->code == 200)
@@ -508,5 +496,29 @@ class system extends control
         if($ossAccount and $ossDomain) return  $this->send(array('result' => 'success', 'message' => '', 'data' => array('account' => $ossAccount, 'url' => $url)));
 
         $this->send(array('result' => 'fail', 'message' => $this->lang->system->errors->failGetOssAccount));
+    }
+
+    /**
+     * 公共函数，设置产品菜单及页面基础数据。
+     * Common action, set the menu and basic data.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @access public
+     * @return void
+     */
+    public function commonAction(int $productID, string $branch = '')
+    {
+        $this->loadModel('product')->setMenu($productID, $branch);
+
+        $product  = $this->product->getById($productID);
+        $products = $this->product->getPairs('all', 0, '', 'all');
+        if(empty($product)) $this->locate($this->createLink('product', 'create'));
+
+        $this->product->checkAccess($productID, $products);
+
+        $this->view->product  = $product;
+        $this->view->branch   = $branch;
+        $this->view->branches = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
     }
 }
