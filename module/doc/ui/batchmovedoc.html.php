@@ -24,6 +24,7 @@ formPanel
 (
     on::change('[name=space]', 'changeSpace'),
     on::change('[name=lib]', 'changeLib'),
+    on::init()->call('toggleDocAcl', jsRaw('$element')),
     formGroup
     (
         set::width('5/6'),
