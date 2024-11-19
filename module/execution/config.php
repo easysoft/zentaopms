@@ -8,7 +8,7 @@ $config->execution->ownerFields       = array('PO', 'PM', 'QD', 'RD');
 $config->execution->defaultBurnPeriod = 30;
 
 $config->execution->list = new stdclass();
-$config->execution->list->exportFields          = 'id,name,projectName,PM,begin,end,realBegan,realEnd,status,estimate,consumed,left,progress';
+$config->execution->list->exportFields          = 'id,name,productName,PM,begin,end,realBegan,realEnd,status,estimate,consumed,left,progress';
 $config->execution->list->customCreateFields    = '';
 $config->execution->list->customBatchEditFields = 'days,lifetime,team,desc,PO,QD,PM,RD';
 

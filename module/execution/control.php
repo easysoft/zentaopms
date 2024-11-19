@@ -2929,8 +2929,9 @@ class execution extends control
     {
         if($_POST)
         {
-            $executionLang   = $this->lang->execution;
-            $executionConfig = $this->config->execution;
+            $executionLang          = $this->lang->execution;
+            $executionConfig        = $this->config->execution;
+            $projectExecutionDtable = $this->config->project->execution->dtable->fieldList;
 
             $projectID = $from == 'project' ? $this->session->project : 0;
             if($projectID) $this->project->setMenu($projectID);
@@ -2943,9 +2944,10 @@ class execution extends control
                 if($fieldName == 'name' and $this->app->tab == 'project' and ($project->model == 'agileplus' or $project->model == 'waterfallplus')) $fields['method'] = $executionLang->method;
 
                 $fieldName = trim($fieldName);
-                $fields[$fieldName] = zget($executionLang, $fieldName);
+                $fields[$fieldName] = $from == 'project' && !empty($projectExecutionDtable[$fieldName]) ? $projectExecutionDtable[$fieldName]['title']  : zget($executionLang, $fieldName);
                 unset($fields[$key]);
             }
+            if(isset($fields['id'])) $fields['id'] = $this->lang->idAB;
 
             $users    = $this->loadModel('user')->getPairs('noletter');
             $showTask = ($this->app->tab == 'project' && (bool)$this->cookie->showTask);
