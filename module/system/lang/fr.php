@@ -34,6 +34,12 @@ $lang->system->latestRelease   = 'Latest version';
 $lang->system->children        = 'Included applications';
 $lang->system->latestRelease   = 'Latest version';
 $lang->system->status          = 'Status';
+$lang->system->browse          = 'Application list';
+$lang->system->create          = 'Create application';
+$lang->system->edit            = 'Edit application';
+$lang->system->delete          = 'Delete application';
+$lang->system->active          = 'Online application';
+$lang->system->inactive        = 'Offline application';
 
 $lang->system->statusList = array();
 $lang->system->statusList['active']   = 'Active';
