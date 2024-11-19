@@ -5,6 +5,16 @@ $app->loadLang('backup');
 
 $config->system->dtable = new stdclass();
 
+$config->system->dtable->fieldList['id']['title'] = 'ID';
+$config->system->dtable->fieldList['id']['name']  = 'id';
+$config->system->dtable->fieldList['id']['type']  = 'id';
+
+$config->system->dtable->fieldList['name']['title'] = $lang->system->name;
+$config->system->dtable->fieldList['name']['name']  = 'name';
+$config->system->dtable->fieldList['name']['type']  = 'title';
+$config->system->dtable->fieldList['name']['flex']  = 4;
+$config->system->dtable->fieldList['name']['hint']  = true;
+
 $config->system->dtable->dbList = new stdclass();
 
 $config->system->dtable->dbList->fieldList['name']['title'] = $lang->system->dbName;
