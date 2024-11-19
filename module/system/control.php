@@ -521,4 +521,18 @@ class system extends control
         $this->view->branch   = $branch;
         $this->view->branches = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
     }
+
+    public function browse(int $productID, string $branch, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    {
+        $this->commonAction($productID, $branch);
+
+        $this->app->loadClass('pager', true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        $this->view->title   = $this->lang->system->browse;
+        $this->view->appList = $this->system->getList($orderBy, $pager);
+        $this->view->orderBy = $orderBy;
+        $this->view->pager   = $pager;
+        $this->display();
+    }
 }
