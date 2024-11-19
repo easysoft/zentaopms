@@ -35,6 +35,10 @@ $lang->system->children        = '包含应用';
 $lang->system->latestRelease   = '最新版本号';
 $lang->system->status          = '状态';
 
+$lang->system->statusList = array();
+$lang->system->statusList['active']   = '已上架';
+$lang->system->statusList['inactive'] = '已下架';
+
 /* LDAP */
 $lang->system->LDAP = new stdclass;
 $lang->system->LDAP->info             = 'LDAP信息';

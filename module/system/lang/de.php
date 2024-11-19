@@ -35,6 +35,10 @@ $lang->system->children        = 'Included applications';
 $lang->system->latestRelease   = 'Latest version';
 $lang->system->status          = 'Status';
 
+$lang->system->statusList = array();
+$lang->system->statusList['active']   = 'Active';
+$lang->system->statusList['inactive'] = 'Inactive';
+
 /* LDAP */
 $lang->system->LDAP = new stdclass;
 $lang->system->LDAP->info             = 'LDAP information';
