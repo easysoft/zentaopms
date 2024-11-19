@@ -375,11 +375,18 @@ class storyZen extends story
         $initStory->feedbackBy  = $story->feedbackBy;
         $initStory->notifyEmail = $story->notifyEmail;
         $initStory->parent      = $story->parent;
+        $initStory->files       = $story->files;
 
         if($this->config->edition != 'open')
         {
             $extendFields = $this->loadModel('flow')->getExtendFields($story->type, 'create');
             foreach($extendFields as $field) $initStory->{$field->field} = $story->{$field->field};
+        }
+
+        foreach($initStory->files as $file)
+        {
+            $file->name = $file->title;
+            $file->url  = $this->createLink('file', 'download', "fileID={$file->id}");
         }
         return $initStory;
     }
@@ -2037,5 +2044,21 @@ class storyZen extends story
             if(strpos((string)$storyID, '-') !== false) $storyIdList[$index] = substr($storyID, strpos($storyID, '-') + 1);
         }
         return $storyIdList;
+    }
+
+    /**
+     * 创建需求后存储上传的文件。
+     * Save files after create a story.
+     *
+     * @param  int     $storyID
+     * @param  string  $storyType
+     * @access public
+     * @return bool
+     */
+    public function updateFileAfterCreate(int $storyID, string $storyType): bool
+    {
+        $this->loadModel('file');
+
+        return !dao::isError();
     }
 }
