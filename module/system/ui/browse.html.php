@@ -30,3 +30,12 @@ toolbar
 (
     $canCreate ? item(set($createItem)) : null,
 );
+
+dtable
+(
+    set::cols($config->system->dtable->fieldList),
+    set::data($tableData),
+    set::sortLink(createLink('system', 'browse', "orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
+    set::orderBy($orderBy),
+    set::footPager(usePager())
+);
