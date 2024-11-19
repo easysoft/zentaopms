@@ -2060,6 +2060,33 @@ class taskZen extends task
     public function updateFileAfterCreate(array $taskIdList): bool
     {
         $this->loadModel('file');
+        if(!empty($_POST['fileList']))
+        {
+            $fileList = $this->post->fileList;
+            if($fileList) $fileList = json_decode($fileList, true);
+            if(!empty($_POST['deleteFiles']))
+            {
+                foreach($this->post->deleteFiles as $deletedCaseFileID) unset($fileList[$deletedCaseFileID]);
+            }
+
+            foreach($taskIdList as $taskID)
+            {
+                foreach($fileList as $file)
+                {
+                    unset($file['id']);
+                    $file['objectType'] = 'task';
+                    $file['objectID']   = $taskID;
+                    $this->file->saveFile($file, 'url,deleted,realPath,webPath,name,url,extra');
+                }
+            }
+        }
+
+        foreach($taskIdList as $taskID)
+        {
+            $uid = $this->post->uid ? $this->post->uid : '';
+            $this->file->updateObjectID($uid, $taskID, 'task');
+            $this->file->saveUpload('task', $taskID);
+        }
 
         return !dao::isError();
     }
