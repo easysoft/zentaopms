@@ -499,7 +499,7 @@ class bugModel extends model
         $files      = $this->loadModel('file')->saveUpload('bug', $bug->id);
         $fileAction = !empty($files) ? $this->lang->addFiles . implode(',', $files) . "\n" : '';
         $changes    = common::createChanges($oldBug, $bug);
-        $actionID   = $this->loadModel('action')->create('bug', $bug->id, 'Resolved', $fileAction . (!empty($bug->comment) ? $bug->comment : ''), $bug->resolution . (isset($bug->duplicateBug) ? ':' . $bug->duplicateBug : ''));
+        $actionID   = $this->loadModel('action')->create('bug', $bug->id, 'Resolved', $fileAction . (!empty($bug->comment) ? $this->post->comment : ''), $bug->resolution . (isset($bug->duplicateBug) ? ':' . $bug->duplicateBug : ''));
         if($changes) $this->action->logHistory($actionID, $changes);
 
         /* If the edition is not pms, update feedback. */
@@ -606,7 +606,7 @@ class bugModel extends model
         if($changes || $files)
         {
             $fileAction = !empty($files) ? $this->lang->addFiles . implode(',', $files) . "\n" : '';
-            $actionID   = $this->loadModel('action')->create('bug', $bug->id, 'Activated', $fileAction . $bug->comment);
+            $actionID   = $this->loadModel('action')->create('bug', $bug->id, 'Activated', $fileAction . $this->post->comment);
             $this->action->logHistory($actionID, $changes);
         }
 
@@ -633,7 +633,7 @@ class bugModel extends model
         if($this->config->edition != 'open' && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
 
         $changes = common::createChanges($oldBug, $bug);
-        $actionID = $this->loadModel('action')->create('bug', $bug->id, 'Closed', $bug->comment);
+        $actionID = $this->loadModel('action')->create('bug', $bug->id, 'Closed', $this->post->comment);
         if($changes) $this->action->logHistory($actionID, $changes);
 
         if($oldBug->execution)
