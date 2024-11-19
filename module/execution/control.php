@@ -2948,6 +2948,7 @@ class execution extends control
                 unset($fields[$key]);
             }
             if(isset($fields['id'])) $fields['id'] = $this->lang->idAB;
+            unset($fields[$from == 'project' ? 'projectName' : 'productName']);
 
             $users    = $this->loadModel('user')->getPairs('noletter');
             $showTask = ($this->app->tab == 'project' && (bool)$this->cookie->showTask);
