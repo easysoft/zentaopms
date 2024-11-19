@@ -65,7 +65,7 @@ if($this->design->isClickable($design, 'confirmStoryChange'))
         common::hasPriv('design', 'confirmStoryChange') ? a
         (
             setClass('mx-1 px-1 primary-pale'),
-            set::href(helper::createLink('design', 'confirmStoryChange', "id={$design->story}")),
+            set::href(helper::createLink('design', 'confirmStoryChange', "id={$design->id}")),
             $lang->design->confirmStoryChange
         ) : '',
         ')'
