@@ -39,6 +39,7 @@ $tableCols['addedDate']  = $lang->docTemplate->addedDate;
 $tableCols['editedBy']   = $lang->docTemplate->editedBy;
 $tableCols['editedDate'] = $lang->docTemplate->editedDate;
 $tableCols['views']      = $lang->docTemplate->views;
+$tableCols['actions']    = $lang->actions;
 
 $langData = array();
 $langData['filterTypes']    = $filterTypes;

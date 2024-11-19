@@ -26,9 +26,11 @@ function getTableOptions(options, info)
     let viewsCol   = {name: 'views', title: lang.tableCols.views, type: 'number', sort: true};
 
     title.title      = lang.tableCols.title;
+    addedBy.title    = lang.tableCols.addedBy;
     addedDate.title  = lang.tableCols.addedDate;
     editedBy.title   = lang.tableCols.editedBy;
     editedDate.title = lang.tableCols.editedDate;
+    actionsCol.title = lang.tableCols.actions;
 
     templateCols.push(title);
     templateCols.push(typeCol);
