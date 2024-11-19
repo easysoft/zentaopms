@@ -15,8 +15,8 @@ function loadBugCreate()
 {
     const begin     = $('#conditions').find('[name="begin"]').val().replaceAll('-', '');
     const end       = $('#conditions').find('[name="end"]').val().replaceAll('-', '');
-    const product   = $('#conditions').find('[name=product]').val();
-    const execution = $('#conditions').find('[name=execution]').val();
+    const product   = $('#conditions').find('[name=product]').val() || 0;
+    const execution = $('#conditions').find('[name=execution]').val() || 0;
     const params    = window.btoa('begin=' + begin + '&end=' + end + '&product=' + +product + '&execution=' + +execution);
     const link      = $.createLink('pivot', 'preview', 'dimensionID=' + dimensionID + '&groupID=' + groupID + '&method=bugCreate&params=' + params);
     loadPage(link, '#pivotPanel');
