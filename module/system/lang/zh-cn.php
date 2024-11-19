@@ -45,6 +45,10 @@ $lang->system->statusList = array();
 $lang->system->statusList['active']   = '已上架';
 $lang->system->statusList['inactive'] = '已下架';
 
+$lang->system->confirmDelete   = '确定要删除应用吗？';
+$lang->system->confirmActive   = '确定要上架应用吗？';
+$lang->system->confirmInactive = '确定要下架应用吗？';
+
 /* LDAP */
 $lang->system->LDAP = new stdclass;
 $lang->system->LDAP->info             = 'LDAP信息';
