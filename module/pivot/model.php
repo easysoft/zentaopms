@@ -2453,26 +2453,29 @@ class pivotModel extends model
         $nowSpan = 1;
         $inFlow  = false;
 
-        /* 处理不需要展示的单元格，设置为0 */
-        $columnCount = count(current($configs));
-        $lineCount   = count($configs);
-        for($i = 0; $i < $columnCount; $i ++)
+        if(!empty($configs))
         {
-            for($j = 0; $j < $lineCount; $j ++)
+            /* 处理不需要展示的单元格，设置为0 */
+            $columnCount = count(current($configs));
+            $lineCount   = count($configs);
+            for($i = 0; $i < $columnCount; $i ++)
             {
-                if($configs[$j][$i] > 1 && !$inFlow)
+                for($j = 0; $j < $lineCount; $j ++)
                 {
-                    $inFlow  = true;
-                    $nowSpan = $configs[$j][$i];
-                    continue;
-                }
+                    if($configs[$j][$i] > 1 && !$inFlow)
+                    {
+                        $inFlow  = true;
+                        $nowSpan = $configs[$j][$i];
+                        continue;
+                    }
 
-                if($configs[$j][$i] > 1 && $inFlow)
-                {
-                    $configs[$j][$i] = 0;
+                    if($configs[$j][$i] > 1 && $inFlow)
+                    {
+                        $configs[$j][$i] = 0;
 
-                    $nowSpan --;
-                    if($nowSpan == 1) $inFlow = false;
+                        $nowSpan --;
+                        if($nowSpan == 1) $inFlow = false;
+                    }
                 }
             }
         }
@@ -2517,7 +2520,7 @@ class pivotModel extends model
         $table .= "<tbody>";
         $rowCount = 0;
 
-        $showAllTotal = $data->showAllTotal;
+        $showAllTotal = isset($data->showAllTotal) and $data->showAllTotal;
 
         for($i = 0; $i < count($data->array); $i ++)
         {
