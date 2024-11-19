@@ -2921,6 +2921,7 @@ $config->group->package->browseDoctemplate->order  = 5;
 $config->group->package->browseDoctemplate->subset = 'doctemplate';
 $config->group->package->browseDoctemplate->privs  = array();
 $config->group->package->browseDoctemplate->privs['doc-browseTemplate'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array());
+$config->group->package->browseDoctemplate->privs['doc-viewTemplate']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->manageDoctemplate = new stdclass();
 $config->group->package->manageDoctemplate->order  = 15;

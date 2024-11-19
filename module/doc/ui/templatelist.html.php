@@ -20,6 +20,7 @@ $privs = array();
 $privs['create']       = hasPriv('doc', 'createTemplate');
 $privs['edit']         = hasPriv('doc', 'editTemplate');
 $privs['delete']       = hasPriv('doc', 'deleteTemplate');
+$privs['view']         = hasPriv('doc', 'viewTemplate');
 $privs['addModule']    = hasPriv('doc', 'addTemplateType');
 $privs['editModule']   = hasPriv('doc', 'editTemplateType');
 $privs['deleteModule'] = hasPriv('doc', 'deleteTemplateType');

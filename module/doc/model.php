@@ -647,6 +647,7 @@ class docModel extends model
      * 获取文档模板列表。
      * Get document template list.
      *
+     * @param  int    $libID
      * @param  string $type
      * @param  string $orderBy
      * @param  object $pager

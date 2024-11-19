@@ -351,7 +351,7 @@ window.setDocAppOptions = function(_, options) // Override the method.
         onCreateDoc     : handleCreateDoc,
         onSaveDoc       : handleSaveDoc,
         getTableOptions : getTableOptions,
-        customRenders   : customRenders
+        customRenders   : $.extend(docAppCustomRenders, customRenders)
     });
 };
 
