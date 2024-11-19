@@ -522,6 +522,19 @@ class system extends control
         $this->view->branches = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
     }
 
+    /**
+     * 获取应用列表。
+     * Get application list.
+     *
+     * @param  int $productID
+     * @param  string $branch
+     * @param  string $orderBy
+     * @param  int $recTotal
+     * @param  int $recPerPage
+     * @param  int $pageID
+     * @access public
+     * @return void
+     */
     public function browse(int $productID, string $branch, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->commonAction($productID, $branch);
