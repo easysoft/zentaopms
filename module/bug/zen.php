@@ -1853,15 +1853,15 @@ class bugZen extends bug
     private function updateFileAfterCreate(int $bugID): bool
     {
         $this->loadModel('file');
-        if(!empty($_POST['resultFiles']))
+        if(!empty($_POST['fileList']))
         {
-            $resultFiles = $this->post->resultFiles;
-            if($resultFiles) $resultFiles = json_decode($resultFiles, true);
+            $fileList = $this->post->fileList;
+            if($fileList) $fileList = json_decode($fileList, true);
             if(!empty($_POST['deleteFiles']))
             {
-                foreach($this->post->deleteFiles as $deletedCaseFileID) unset($resultFiles[$deletedCaseFileID]);
+                foreach($this->post->deleteFiles as $deletedCaseFileID) unset($fileList[$deletedCaseFileID]);
             }
-            foreach($resultFiles as $file)
+            foreach($fileList as $file)
             {
                 unset($file['id']);
                 $file['objectType'] = 'bug';
@@ -2394,6 +2394,13 @@ class bugZen extends bug
                 'pri' => ($bugInfo->pri == 0 ? 3 : $bugInfo->pri));
 
             $bug = $this->updateBug($bug, $fields);
+
+            $bug->files = $bugInfo->files;
+            foreach($bug->files as $file)
+            {
+                $file->name = $file->title;
+                $file->url  = $this->createLink('file', 'download', "fileID={$file->id}");
+            }
 
             if($this->config->edition != 'open')
             {
