@@ -1012,10 +1012,10 @@ $config->my->audit->dtable->fieldList['type']['title']    = $lang->my->auditFiel
 $config->my->audit->dtable->fieldList['type']['type']     = 'catetory';
 $config->my->audit->dtable->fieldList['type']['sortType'] = true;
 
-$config->my->audit->dtable->fieldList['project']['name']   = 'project';
-$config->my->audit->dtable->fieldList['project']['title']  = $lang->execution->project;
-$config->my->audit->dtable->fieldList['project']['type']   = 'text';
-$config->my->audit->dtable->fieldList['project']['show']   = false;
+$config->my->audit->dtable->fieldList['project']['name']     = 'project';
+$config->my->audit->dtable->fieldList['project']['title']    = $lang->execution->project;
+$config->my->audit->dtable->fieldList['project']['type']     = 'text';
+$config->my->audit->dtable->fieldList['project']['sortType'] = true;
 
 $config->my->audit->dtable->fieldList['product']['name']     = 'product';
 $config->my->audit->dtable->fieldList['product']['title']    = $lang->story->product;
