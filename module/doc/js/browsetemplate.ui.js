@@ -16,16 +16,28 @@ function getTableOptions(options, info)
     templateCols = [];
     templateCols.push({...options.cols.find(col => col.name === 'rawID'), type: 'id'});
 
-    let title = options.cols.find(col => col.name == 'title');
-    title.title = lang.tableCols.title;
+    let title      = options.cols.find(col => col.name == 'title');
+    let addedBy    = options.cols.find(col => col.name == 'addedBy');
+    let addedDate  = options.cols.find(col => col.name == 'addedDate');
+    let editedBy   = options.cols.find(col => col.name == 'editedBy');
+    let editedDate = options.cols.find(col => col.name == 'editedDate');
+    let actionsCol = options.cols.find(col => col.name == 'actions');
+    let typeCol    = {name: 'moduleName', title: lang.tableCols.type, type: 'string', sort: true};
+    let viewsCol   = {name: 'views', title: lang.tableCols.views, type: 'number', sort: true};
+
+    title.title      = lang.tableCols.title;
+    addedDate.title  = lang.tableCols.addedDate;
+    editedBy.title   = lang.tableCols.editedBy;
+    editedDate.title = lang.tableCols.editedDate;
+
     templateCols.push(title);
-    templateCols.push({name: 'moduleName', title: lang.tableCols.type, type: 'string', sort: true});
-    templateCols.push(options.cols.find(col => col.name == 'addedBy'));
-    templateCols.push(options.cols.find(col => col.name == 'addedDate'));
-    templateCols.push(options.cols.find(col => col.name == 'editedBy'));
-    templateCols.push(options.cols.find(col => col.name == 'editedDate'));
-    templateCols.push({name: 'views', title: lang.tableCols.views, type: 'number', sort: true});
-    templateCols.push(options.cols.find(col => col.name == 'actions'));
+    templateCols.push(typeCol);
+    templateCols.push(addedBy);
+    templateCols.push(addedDate);
+    templateCols.push(editedBy);
+    templateCols.push(editedDate);
+    templateCols.push(viewsCol);
+    templateCols.push(actionsCol);
 
     options.cols = templateCols;
     options.cols.forEach(col =>
