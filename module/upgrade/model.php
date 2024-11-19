@@ -10502,9 +10502,9 @@ class upgradeModel extends model
             if(dao::isError()) return false;
 
             $approvalflowobject = new stdclass();
-            $approvalflowobject->flow        = $approvalflowID;
-            $approvalflowobject->objectType  = 'charter';
-            $approvalflowobject->extra       = $approvalType;
+            $approvalflowobject->flow       = $approvalflowID;
+            $approvalflowobject->objectType = 'charter';
+            $approvalflowobject->extra      = $approvalType;
             $this->dao->insert(TABLE_APPROVALFLOWOBJECT)->data($approvalflowobject)->exec();
 
             if(dao::isError()) return false;
