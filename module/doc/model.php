@@ -1466,10 +1466,10 @@ class docModel extends model
         if(empty($doc->lib) && strpos((string)$doc->module, '_') !== false) list($doc->lib, $doc->module) = explode('_', $doc->module);
         if(empty($doc->lib)) return dao::$errors['lib'] = sprintf($this->lang->error->notempty, $this->lang->doc->lib);
 
+        if($doc->contentType != 'doc') $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->create['id'], (string)$this->post->uid);
         if($type == 'doc')
         {
             $lib = $this->getLibByID($doc->lib);
-            if($doc->contentType != 'doc') $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->create['id'], (string)$this->post->uid);
             $doc->product   = $lib->product;
             $doc->project   = $lib->project;
             $doc->execution = $lib->execution;
