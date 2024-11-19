@@ -629,6 +629,7 @@ if(!defined('TABLE_CHARTER'))        define('TABLE_CHARTER',        '`' . $confi
 if(!defined('TABLE_MARKET'))         define('TABLE_MARKET',         '`' . $config->db->prefix . 'market`');
 if(!defined('TABLE_MARKETREPORT'))   define('TABLE_MARKETREPORT',   '`' . $config->db->prefix . 'marketreport`');
 if(!defined('TABLE_MARKETRESEARCH')) define('TABLE_MARKETRESEARCH', '`' . $config->db->prefix . 'project`');
+if(!defined('TABLE_SYSTEM'))         define('TABLE_SYSTEM', '`' . $config->db->prefix . 'system`');
 
 $config->objectTables['dept']           = TABLE_DEPT;
 $config->objectTables['product']        = TABLE_PRODUCT;
@@ -723,6 +724,7 @@ $config->objectTables['researchstage']  = TABLE_PROJECT;
 $config->objectTables['workflowgroup']  = TABLE_WORKFLOWGROUP;
 $config->objectTables['productline']    = TABLE_MODULE;
 $config->objectTables['repocommit']     = TABLE_REPOHISTORY;
+$config->objectTables['system']         = TABLE_SYSTEM;
 
 $config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions', 'aiPrompts', 'promptDesign', 'promptExec');
 $config->disabledFeatures = '';
