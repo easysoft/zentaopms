@@ -12,8 +12,9 @@ class productCharterBox extends wg
      * @access protected
      */
     protected static array $defineProps = array(
-        'charter?: object',     // 所属立项。
-        'products?: array'      // 产品下拉列表。
+        'charter?: object',      // 所属立项。
+        'products?: array',      // 产品下拉列表。
+        'objectType?: string'    // 立项关联的对象类型。
     );
 
     public static function getPageCSS(): ?string
@@ -28,6 +29,8 @@ class productCharterBox extends wg
 
     protected function build()
     {
+        jsVar('objectType', $this->prop('objectType'));
+
         $productsBox = $this->initProductsBox();
 
         return div
@@ -46,17 +49,21 @@ class productCharterBox extends wg
         global $lang, $app;
         $products    = $this->prop('products');
         $charter     = $this->prop('charter');
+        $objectType  = $this->prop('objectType');
         $productsBox = array();
         $index       = 0;
 
         if($charter)
         {
-            $roadmapGroup       = $app->control->loadModel('roadmap')->groupByProduct('nolaunching');
+            $objectsGroup = array();
+            if($objectType == 'plan')    $objectsGroup = $app->control->loadModel('productplan')->getPlansForCharter(explode(',', trim($charter->product, ',')), trim($charter->plan, ','));
+            if($objectType == 'roadmap') $objectsGroup = $app->control->loadModel('roadmap')->groupByProduct('nolaunching');
+
             $charterProductMaps = $app->control->loadModel('charter')->getGroupDataByID($charter->id);
-            foreach($charterProductMaps as $productID => $roadmaps)
+            foreach($charterProductMaps as $productID => $objects)
             {
-                $nolaunchRoadmaps = isset($roadmapGroup[$productID]) ? array_keys($roadmapGroup[$productID]) : array();
-                $roadmaps         = array_intersect($nolaunchRoadmaps, array_keys($roadmaps));
+                $productObjects = isset($objectsGroup[$productID]) ? array_keys($objectsGroup[$productID]) : array();
+                $objects        = array_intersect($productObjects, array_keys($objects));
 
                 $productsBox[] = div
                 (
@@ -88,27 +95,27 @@ class productCharterBox extends wg
                         formGroup
                         (
                             set::width('1/2'),
-                            set::label($lang->charter->roadmap),
-                            set::className('roadmapBox'),
+                            set::label($lang->charter->$objectType),
+                            set::className("{$objectType}Box"),
                             $index != 0 ? set::labelClass('hidden') : null,
                             set::required(true),
                             inputGroup
                             (
                                 div
                                 (
-                                    setClass('grow linkRoadmap w-1/2'),
+                                    setClass('grow w-1/2', $objectType == 'roadmap' ? 'linkRoadmap' : 'linkPlan'),
                                     picker
                                     (
-                                        set::name("roadmap[$index]"),
+                                        set::name("{$objectType}[$index]"),
                                         set::multiple(true),
                                         set::required(true),
-                                        set::items(isset($roadmapGroup[$productID]) ? $roadmapGroup[$productID] : array()),
-                                        set::value($roadmaps)
+                                        set::items(isset($objectsGroup[$productID]) ? $objectsGroup[$productID] : array()),
+                                        set::value(array_values($objects))
                                     )
                                 ),
                                 div
                                 (
-                                    common::hasPriv('charter', 'loadRoadmapStories') ? inputGroupAddon
+                                    $objectType == 'roadmap' && common::hasPriv('charter', 'loadRoadmapStories') ? inputGroupAddon
                                     (
                                         setClass('p-0'),
                                         btn
@@ -182,18 +189,18 @@ class productCharterBox extends wg
                     formGroup
                     (
                         set::width('1/2'),
-                        set::label($lang->charter->roadmap),
+                        set::label($lang->charter->$objectType),
                         set::labelClass($charter ? 'hidden' : ''),
-                        set::className('roadmapBox'),
+                        set::className("{$objectType}Box"),
                         set::required(true),
                         inputGroup
                         (
                             div
                             (
-                                setClass('grow linkRoadmap w-1/2'),
+                                setClass('grow w-1/2', $objectType == 'roadmap' ? 'linkRoadmap' : 'linkPlan'),
                                 picker
                                 (
-                                    set::name("roadmap[$index]"),
+                                    set::name("{$objectType}[$index]"),
                                     set::multiple(true),
                                     set::required(true),
                                     set::items(array())
@@ -201,7 +208,7 @@ class productCharterBox extends wg
                             ),
                             div
                             (
-                                common::hasPriv('charter', 'loadRoadmapStories') ? inputGroupAddon
+                                $objectType == 'roadmap' && common::hasPriv('charter', 'loadRoadmapStories') ? inputGroupAddon
                                 (
                                     setClass('p-0'),
                                     btn
