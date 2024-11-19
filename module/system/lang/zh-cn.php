@@ -34,6 +34,12 @@ $lang->system->latestRelease   = '最新版本号';
 $lang->system->children        = '包含应用';
 $lang->system->latestRelease   = '最新版本号';
 $lang->system->status          = '状态';
+$lang->system->browse          = '应用列表';
+$lang->system->create          = '创建应用';
+$lang->system->edit            = '编辑应用';
+$lang->system->delete          = '删除应用';
+$lang->system->active          = '上架应用';
+$lang->system->inactive        = '下架应用';
 
 $lang->system->statusList = array();
 $lang->system->statusList['active']   = '已上架';
