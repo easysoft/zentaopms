@@ -30,6 +30,15 @@ $config->system->dtable->fieldList['status']['type']     = 'status';
 $config->system->dtable->fieldList['status']['map']      = $lang->system->statusList;
 $config->system->dtable->fieldList['status']['sortType'] = true;
 
+$config->system->dtable->fieldList['actions']['name']     = 'actions';
+$config->system->dtable->fieldList['actions']['title']    = $lang->actions;
+$config->system->dtable->fieldList['actions']['type']     = 'actions';
+$config->system->dtable->fieldList['actions']['sortType'] = false;
+$config->system->dtable->fieldList['actions']['fixed']    = 'right';
+$config->system->dtable->fieldList['actions']['menu']     = array('active|inactive', 'edit', 'delete');
+$config->system->dtable->fieldList['actions']['list']     = $config->system->actionList;
+$config->system->dtable->fieldList['actions']['width']    = 100;
+
 $config->system->dtable->dbList = new stdclass();
 
 $config->system->dtable->dbList->fieldList['name']['title'] = $lang->system->dbName;
