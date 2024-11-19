@@ -367,7 +367,7 @@ class docZen extends doc
      * @access protected
      * @return void
      */
-    protected function responseAfterCreate(array $docResult)
+    protected function responseAfterCreate(array $docResult, string $objectType = 'doc')
     {
         $docID = $docResult['id'];
         $files = zget($docResult, 'files', '');
@@ -376,44 +376,17 @@ class docZen extends doc
         if(!empty($files)) $fileAction = $this->lang->addFiles . implode(',', $files) . "\n";
 
         $actionType = $_POST['status'] == 'draft' ? 'savedDraft' : 'releasedDoc';
-        $this->action->create('doc', $docID, $actionType, $fileAction);
+        $this->action->create($objectType, $docID, $actionType, $fileAction);
 
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
 
         $response = array(
             'result'  => 'success',
             'message' => $this->lang->saveSuccess,
-            'load'    => $this->createLink('doc', 'view', "docID={$docResult['id']}"),
+            'load'    => $this->createLink('doc', $objectType == 'doc' ? 'view' : 'browseTemplate', "docID={$docResult['id']}"),
             'id'      => $docID,
             'doc'     => $docResult
         );
-        return $this->send($response);
-    }
-
-    /**
-     * 在创建文档模板后的返回。
-     * Return after create a document template.
-     *
-     * @param  int       $libID
-     * @param  array     $docResult
-     * @access protected
-     * @return bool|int
-     */
-    protected function responseAfterCreateTemplate(int $libID, array $docResult): bool|int
-    {
-        $docID = $docResult['id'];
-        $files = zget($docResult, 'files', '');
-
-        $fileAction = '';
-        if(!empty($files)) $fileAction = $this->lang->addFiles . implode(',', $files) . "\n";
-
-        $actionType = $_POST['status'] == 'draft' ? 'savedDraft' : 'released';
-        $this->action->create('docTemplate', $docID, $actionType, $fileAction);
-
-        if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
-        $params   = "docID=" . $docResult['id'];
-        $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('doc', 'browseTemplate', $params), 'id' => $docID, 'doc' => $docResult);
-
         return $this->send($response);
     }
 
@@ -440,10 +413,11 @@ class docZen extends doc
 
         if($spaceTypeChanged)
         {
-            if($spaceType == 'mine')        $locateLink = $this->createLink('doc', 'mySpace',      "objectID={$spaceID}&libID={$libID}");
-            elseif($spaceType == 'custom')  $locateLink = $this->createLink('doc', 'teamSpace',    "objectID={$spaceID}&libID={$libID}");
-            elseif($spaceType == 'product') $locateLink = $this->createLink('doc', 'productSpace', "objectID={$spaceID}&libID={$libID}");
-            elseif($spaceType == 'project') $locateLink = $this->createLink('doc', 'projectSpace', "objectID={$spaceID}&libID={$libID}");
+            $method = 'mySpace';
+            if($spaceType == 'custom')  $method = 'teamSpace';
+            if($spaceType == 'product') $method = 'productSpace';
+            if($spaceType == 'project') $method = 'projectSpace';
+            $locateLink = $this->createLink('doc', $method, "objectID={$spaceID}&libID={$libID}");
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $locateLink));
         }
         else
