@@ -55,6 +55,7 @@ $lang->my->contactList     = 'Contact List';
 $lang->my->myContact       = 'My Contact';
 $lang->my->publicContact   = 'Public Contact';
 $lang->my->manageSelf      = 'Only can manage contacts created by your self.';
+$lang->my->adminView       = 'The system administrator has the permission to delete public contacts';
 
 $lang->my->indexAction      = 'My Index';
 $lang->my->calendarAction   = 'My Calendar';
