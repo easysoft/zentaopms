@@ -666,7 +666,7 @@ class docZen extends doc
             $fileAction = '';
             if(!empty($files)) $fileAction = $this->lang->addFiles . implode(',', $files) . "\n";
             $actionID = $this->action->create('doc', $doc->id, $action, $fileAction . $this->post->comment);
-            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+            if(!empty($changes) && !empty($actionID)) $this->action->logHistory($actionID, $changes);
         }
 
         $link     = $this->createLink('doc', 'view', "docID={$doc->id}");
@@ -718,7 +718,7 @@ class docZen extends doc
             $fileAction = '';
             if(!empty($files)) $fileAction = $this->lang->addFiles . implode(',', $files) . "\n";
             $actionID = $this->action->create('docTemplate', $doc->id, $action, $fileAction . $this->post->comment);
-            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+            if(!empty($changes) && !empty($actionID)) $this->action->logHistory($actionID, $changes);
         }
 
         $link = $this->createLink('doc', 'view', "docID={$doc->id}");
