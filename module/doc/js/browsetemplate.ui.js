@@ -384,7 +384,7 @@ $.extend(window.docAppCommands,
         $.ajaxSubmit(
         {
             url: $.createLink('doc', 'deleteTemplateType', `moduleID=${moduleID}`),
-            load:false
+            load: true
         })
     },
     /**
