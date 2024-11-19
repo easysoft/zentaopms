@@ -22,6 +22,7 @@ $lang->release->changeStatus     = 'Status ändern';
 $lang->release->batchUnlink      = 'Mehrere entfernen';
 $lang->release->batchUnlinkStory = 'Mehrere Storys entfernen';
 $lang->release->batchUnlinkBug   = 'Mehrere Bugs entfernen';
+$lang->release->manageSystem     = 'System verwalten';
 
 $lang->release->confirmDelete      = 'Möchten Sie dieses Releas löschen?';
 $lang->release->syncFromBuilds     = 'Link the stories completed in the version and the bugs solved to the release';
