@@ -15,6 +15,10 @@ $fields->field('desc')
     ->width('full')
     ->control(array('control' => 'editor', 'templateType' => 'task'));
 
+$files = data('task.files') ? data('task.files') : array();
+$fields->field('files')->control('fileSelector', array('defaultFiles' => array_values($files)));
+$fields->field('fileList')->control('hidden')->value($files);
+
 /* Set foldable attribute. */
 $fields->field('module')->foldable();
 $fields->field('files')->foldable();
