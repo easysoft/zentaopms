@@ -161,6 +161,7 @@ $lang->execution->agileplusMethodTip = "融合敏捷{$lang->projectCommon}创建
 $lang->execution->typeTip            = '“综合”类型的父阶段可以创建其它类型的子级，其它类型的父阶段只能创建同类型的子级';
 $lang->execution->waterfallTip       = "瀑布{$lang->projectCommon}和融合瀑布{$lang->projectCommon}中，";
 $lang->execution->progressTip        = '总进度 = 已消耗工时 / (已消耗工时 + 剩余工时)';
+$lang->execution->limitedTip         = "受限用户只能编辑与自己相关的任务，不能新增任务。与自己相关的内容，包含指派给、已完成、已取消、已关闭、最后编辑，不包含抄送给的内容。 \n如果该用户之前不是受限用户，现在是受限用户，那么之前由他创建的任务还有相关的操作权限。";
 
 $lang->execution->start    = "开始";
 $lang->execution->activate = "激活";

@@ -257,6 +257,12 @@ div
                     h::th
                     (
                         $lang->team->limited,
+                        icon
+                        (
+                            setClass('text-light ml-0.5'),
+                            toggle::tooltip(array('title' => $lang->execution->limitedTip)),
+                            'help'
+                        ),
                         set::width('96px')
                     ),
                     h::th

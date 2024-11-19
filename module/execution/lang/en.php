@@ -161,6 +161,7 @@ $lang->execution->agileplusMethodTip = "When creating executions in an Agile Plu
 $lang->execution->typeTip            = "The sub-stages of other types can be created under the parent stage of the 'mix' type, while the type of other parent-child levels is consistent.";
 $lang->execution->waterfallTip       = "In the Waterfall {$lang->projectCommon} or in the Waterfall + {$lang->projectCommon},";
 $lang->execution->progressTip        = 'All Progress = Consumed / (Consumed + Left)';
+$lang->execution->limitedTip         = "Limited users can only edit tasks that are relevant to them and cannot create new tasks. Relevant tasks include those assigned to them, completed tasks, canceled tasks, closed tasks, and the last edited tasks, but exclude those copied to them. \nIf a user was not a limited user before but is now classified as one, they will still have permissions for tasks they created in the past.";
 
 $lang->execution->start    = 'Start';
 $lang->execution->activate = 'Activate';
