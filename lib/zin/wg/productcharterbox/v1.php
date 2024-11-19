@@ -76,7 +76,6 @@ class productCharterBox extends wg
                             set::width('1/2'),
                             setClass('distributeProduct text-clip'),
                             $index != 0 ? set::labelClass('hidden') : null,
-                            set::required(true),
                             set::label($lang->charter->product),
                             inputGroup
                             (
@@ -98,7 +97,6 @@ class productCharterBox extends wg
                             set::label($lang->charter->$objectType),
                             set::className("{$objectType}Box"),
                             $index != 0 ? set::labelClass('hidden') : null,
-                            set::required(true),
                             inputGroup
                             (
                                 div
@@ -108,7 +106,6 @@ class productCharterBox extends wg
                                     (
                                         set::name("{$objectType}[$index]"),
                                         set::multiple(true),
-                                        set::required(true),
                                         set::items(isset($objectsGroup[$productID]) ? $objectsGroup[$productID] : array()),
                                         set::value(array_values($objects))
                                     )
@@ -168,7 +165,6 @@ class productCharterBox extends wg
                     (
                         set::width('1/2'),
                         setClass('distributeProduct text-clip'),
-                        set::required(true),
                         set::label($lang->charter->product),
                         set::labelClass($charter ? 'hidden' : ''),
                         inputGroup
@@ -192,7 +188,6 @@ class productCharterBox extends wg
                         set::label($lang->charter->$objectType),
                         set::labelClass($charter ? 'hidden' : ''),
                         set::className("{$objectType}Box"),
-                        set::required(true),
                         inputGroup
                         (
                             div
@@ -202,7 +197,6 @@ class productCharterBox extends wg
                                 (
                                     set::name("{$objectType}[$index]"),
                                     set::multiple(true),
-                                    set::required(true),
                                     set::items(array())
                                 )
                             ),
