@@ -175,6 +175,11 @@ div
                 ),
                 item
                 (
+                    set::name($lang->usercontact->account),
+                    zget($users, $list->account)
+                ),
+                item
+                (
                     ($mode == 'adminView' && common::hasPriv('my', 'deleteContacts')) ? btn
                     (
                         setClass('btn ajax-submit ml-4 px-6'),
