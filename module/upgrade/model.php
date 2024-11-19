@@ -10500,6 +10500,14 @@ class upgradeModel extends model
             $this->dao->insert(TABLE_APPROVALFLOWSPEC)->data($approvalflowSpec)->exec();
 
             if(dao::isError()) return false;
+
+            $approvalflowobject = new stdclass();
+            $approvalflowobject->flow        = $approvalflowID;
+            $approvalflowobject->objectType  = 'charter';
+            $approvalflowobject->extra       = $approvalType;
+            $this->dao->insert(TABLE_APPROVALFLOWOBJECT)->data($approvalflowobject)->exec();
+
+            if(dao::isError()) return false;
         }
 
         return true;
