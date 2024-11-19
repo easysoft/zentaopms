@@ -15,3 +15,18 @@ $createLink = $this->createLink('system', 'create');
 $createItem = array('text' => $lang->system->create, 'url' => $createLink, 'class' => 'primary', 'icon' => 'plus', 'data-toggle' => 'modal');
 
 $tableData = initTableData($appList, $config->system->dtable->fieldList, $this->system);
+
+featureBar
+(
+    backBtn
+    (
+        set::icon('back'),
+        set::type('secondary'),
+        $lang->goback
+    )
+);
+
+toolbar
+(
+    $canCreate ? item(set($createItem)) : null,
+);
