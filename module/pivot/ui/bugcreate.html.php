@@ -23,7 +23,7 @@ $generateData = function() use ($lang, $title, $cols, $data, $bugs, $products, $
         div
         (
             setID('conditions'),
-            setClass('flex gap-4 bg-canvas p-2'),
+            setClass('flex gap-4 bg-canvas p-2 no-morph'),
             on::change('loadBugCreate'),
             inputGroup
             (
