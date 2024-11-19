@@ -1630,6 +1630,8 @@ CREATE TABLE IF NOT EXISTS `zt_release` (
   `shadow` mediumint(8) unsigned NOT NULL default '0',
   `build` varchar(255) NOT NULL DEFAULT '',
   `name` varchar(255) NOT NULL default '',
+  `system` mediumint(8) unsigned NOT NULL default '0',
+  `releases` varchar(255) NOT NULL default '',
   `marker` enum('0','1') NOT NULL default '0',
   `date` date NULL,
   `releasedDate` date NULL,
@@ -1648,6 +1650,7 @@ CREATE TABLE IF NOT EXISTS `zt_release` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE INDEX `product` ON `zt_release` (`product`);
 CREATE INDEX `build`   ON `zt_release` (`build`);
+CREATE INDEX `idx_system` ON `zt_release` (`system`);
 
 -- DROP TABLE IF EXISTS `zt_repo`;
 CREATE TABLE IF NOT EXISTS `zt_repo` (
@@ -16098,3 +16101,23 @@ REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`, `
 ('zh-tw', 'custom', 'relationList', '2', '{\"relation\":\"\\u4f9d\\u8cf4\",\"relativeRelation\":\"\\u88ab\\u4f9d\\u8cf4\"}', '0', 'all'),
 ('zh-tw', 'custom', 'relationList', '3', '{\"relation\":\"\\u91cd\\u8907\",\"relativeRelation\":\"\\u91cd\\u8907\"}', '0', 'all'),
 ('zh-tw', 'custom', 'relationList', '4', '{\"relation\":\"\\u5f15\\u7528\",\"relativeRelation\":\"\\u88ab\\u5f15\\u7528\"}', '0', 'all');
+
+CREATE TABLE IF NOT EXISTS `zt_system` (
+  `id` MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(100) NOT NULL DEFAULT '',
+  `product` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
+  `integrated` ENUM('0','1') NOT NULL DEFAULT '0',
+  `latestRelease` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
+  `latestDate` DATETIME NULL,
+  `children` VARCHAR(255) NOT NULL DEFAULT '',
+  `status` ENUM('active','inactive') NOT NULL DEFAULT 'active',
+  `desc` mediumtext NULL,
+  `createdBy` VARCHAR(30) NOT NULL DEFAULT '',
+  `createdDate` DATETIME NULL,
+  `editedBy` VARCHAR(30) NOT NULL DEFAULT '',
+  `editedDate` DATETIME NULL,
+  `deleted` ENUM('0','1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE INDEX `idx_product` ON `zt_system`(`product`);
+CREATE INDEX `idx_status` ON `zt_system`(`status`);
