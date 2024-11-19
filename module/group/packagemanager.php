@@ -3093,6 +3093,12 @@ $config->group->package->custom->privs['custom-kanban']             = array('edi
 $config->group->package->custom->privs['custom-setStoryConcept']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 6, 'depend' => array('custom-browseStoryConcept'), 'recommend' => array());
 $config->group->package->custom->privs['custom-limitTaskDate']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('custom-execution'), 'recommend' => array());
 
+$config->group->package->charter = new stdclass();
+$config->group->package->charter->order  = 6;
+$config->group->package->charter->subset = 'featureconfig';
+$config->group->package->charter->privs  = array();
+$config->group->package->charter->privs['custom-setCharterInfo'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,or', 'order' => 10, 'depend' => array(), 'recommend' => array());
+
 $config->group->package->approvalflow = new stdclass();
 $config->group->package->approvalflow->order  = 10;
 $config->group->package->approvalflow->subset = 'featureconfig';
