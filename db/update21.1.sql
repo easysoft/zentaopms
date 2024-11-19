@@ -17,3 +17,8 @@ CREATE TABLE IF NOT EXISTS `zt_system` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE INDEX `idx_product` ON `zt_system`(`product`);
 CREATE INDEX `idx_status` ON `zt_system`(`status`);
+
+ALTER TABLE `zt_release` ADD `system` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0' AFTER `name`;
+ALTER TABLE `zt_release` ADD `releases` VARCHAR(255) NOT NULL DEFAULT '' AFTER `system`;
+
+CREATE INDEX `idx_system` ON `zt_release`(`system`);
