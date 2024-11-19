@@ -36,8 +36,8 @@ if($type == 'assignedTo') unset($config->my->task->dtable->fieldList['assignedTo
 if($type == 'openedBy')   unset($config->my->task->dtable->fieldList['openedBy']);
 if($type == 'finishedBy') unset($config->my->task->dtable->fieldList['finishedBy']);
 
-$cols  = array_values($config->my->task->dtable->fieldList);
 $tasks = initTableData($tasks, $config->my->task->dtable->fieldList, $this->task);
+$cols  = array_values($config->my->task->dtable->fieldList);
 foreach($tasks as $task)
 {
     $task->rawStatus = $task->status;
