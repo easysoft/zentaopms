@@ -273,7 +273,7 @@ class api extends control
                 $api->originTitle = $api->title;
                 $api->icon        = "api is-$api->method";
                 $api->api         = true;
-                $api->title       = "$api->method $api->path $api->title";
+                $api->title       = "$api->method $api->path " . htmlspecialchars_decode($api->title);
             }
             $data['docs'] = array_values($apis);
         }
@@ -309,7 +309,7 @@ class api extends control
             $api->originTitle = $api->title;
             $api->icon        = "api is-$api->method";
             $api->api         = true;
-            $api->title       = "$api->method $api->path $api->title";
+            $api->title       = "$api->method $api->path " . htmlspecialchars_decode($api->title);
         }
 
         echo json_encode($apis);
