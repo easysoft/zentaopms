@@ -18,3 +18,7 @@ class checkTabTester extends tester
         if(!in_array($tab, $tabs)) $form->dom->moreTab->click();
         $form->dom->$tab->click();
         $form->wait(2);
+        if($form->dom->num->getText() == $expectNum) return $this->success($tab . '下显示条数正确');
+        return $this->failed($tab . '下显示条数不正确');
+    }
+}
