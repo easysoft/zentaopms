@@ -16150,7 +16150,7 @@ CREATE INDEX `idx_status` ON `zt_system`(`status`);
 CREATE TABLE IF NOT EXISTS `zt_mark` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `objectType` varchar(50) NOT NULL DEFAULT '',
-  `objectID` mediuumint(8) unsigned NOT NULL DEFAULT 0,
+  `objectID` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `version` varchar(50) NOT NULL DEFAULT '',
   `account` char(30) NOT NULL DEFAULT '',
   `date` date NOT NULL DEFAULT NULL,
