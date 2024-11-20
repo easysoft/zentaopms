@@ -1200,6 +1200,8 @@ class actionModel extends model
                     $actionObjectLabel = $this->lang->doc->menuTitle;
                 }
             }
+
+            if($objectType == 'system' && strpos(strtolower($actionType), 'backup') !== false) $actionObjectLabel = '';
         }
 
         if(in_array($this->config->edition, array('max', 'ipd')) && $objectType == 'assetlib')

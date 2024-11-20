@@ -70,6 +70,7 @@ $config->action->objectNameFields['solution']     = 'name';
 $config->action->objectNameFields['prompt']       = 'name';
 $config->action->objectNameFields['miniprogram']  = 'name';
 $config->action->objectNameFields['holiday']      = 'name';
+$config->action->objectNameFields['system']       = 'name';
 
 $config->action->commonImgSize = 870;
 
