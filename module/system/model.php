@@ -32,6 +32,23 @@ class systemModel extends model
     }
 
     /**
+     * 获取应用键值对。
+     * Get app pairs.
+     *
+     * @param  string $integrated
+     * @access public
+     * @return array
+     */
+    public function getPairs(string $integrated = ''): array
+    {
+        return $this->dao->select('id, name')->from(TABLE_SYSTEM)
+            ->where('deleted')->eq('0')
+            ->beginIF($integrated)->andWhere('integrated')->eq($integrated)->fi()
+            ->fetchPairs('id', 'name');
+    }
+
+
+    /**
      * 获取自定义的域名设置。
      * Get customized domain settings.
      *
