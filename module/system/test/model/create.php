@@ -34,3 +34,8 @@ r(dao::getError()) && p('name:0') && e('『应用名称』不能为空。');
 $default->name    = '应用11';
 $default->product = '字符串';
 $system->create($default);
+r(dao::getError()) && p('product:0') && e('『product』应当是数字。');
+$default->product = 1;
+$default->status  = 'test';
+$system->create($default);
+r(dao::getError()) && p('status:0') && e('『状态』不符合格式，应当为:『/active|inactive/』。');
