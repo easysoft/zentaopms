@@ -32,3 +32,31 @@ ALTER TABLE zt_dataview MODIFY `fields` text NULL;
 ALTER TABLE zt_dataview MODIFY `objects` text NULL;
 ALTER TABLE zt_dataview MODIFY `mode` varchar(50) NOT NULL DEFAULT 'builder';
 ALTER TABLE zt_dataview ADD `driver` enum('mysql','duckdb') NOT NULL DEFAULT 'mysql' AFTER `code`;
+
+CREATE TABLE `zt_pivotspec` (
+  `pivot` mediumint(8) NOT NULL,
+  `version` varchar(10) NOT NULL,
+  `driver` enum('mysql', 'duckdb') NOT NULL default 'mysql',
+  `mode` varchar(10) NOT NULL default 'builder',
+  `name` text NULL,
+  `desc` text NULL,
+  `sql` text NULL,
+  `fields` text NULL,
+  `langs` text NULL,
+  `vars` text NULL,
+  `objects` text NULL,
+  `settings` text NULL,
+  `filters` text NULL,
+  `createdDate` datetime NULL,
+  UNIQUE KEY `pivot` (`pivot`, `version`)
+) ENGINE = InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `zt_pivot` ADD `version` varchar(10) NOT NULL AFTER `builtin`;
+ALTER TABLE `zt_pivot` CHANGE `mode` `mode` varch(10) NOT NULL DEFAULT 'builder';
+ALTER TABLE `zt_pivot` CHANGE `sql` `sql` text NULL;
+ALTER TABLE `zt_pivot` CHANGE `fields` `fields` text NULL;
+ALTER TABLE `zt_pivot` CHANGE `langs` `langs` text NULL;
+ALTER TABLE `zt_pivot` CHANGE `vars` `vars` text NULL;
+ALTER TABLE `zt_pivot` CHANGE `objects` `objects` text NULL;
+ALTER TABLE `zt_pivot` CHANGE `settings` `settings` text NULL;
+ALTER TABLE `zt_pivot` CHANGE `filters` `filters` text NULL;
