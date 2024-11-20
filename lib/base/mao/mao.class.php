@@ -698,7 +698,7 @@ class baseMao
      */
     public function into(array $data, $keyField)
     {
-        if(empty($data)) return;
+        if(empty($data) || empty($keyField)) return $data;
 
         /* Get data keys as conditions. */
         $keyList = [];
