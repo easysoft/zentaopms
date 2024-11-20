@@ -60,6 +60,7 @@ class productCharterBox extends wg
             if($objectType == 'roadmap') $objectsGroup = $app->control->loadModel('roadmap')->groupByProduct('nolaunching');
 
             $charterProductMaps = $app->control->loadModel('charter')->getGroupDataByID($charter->id);
+            if(empty($charterProductMaps)) $charterProductMaps = array(array()); // 没有产品时，至少渲染一行数据。
             foreach($charterProductMaps as $productID => $objects)
             {
                 $productObjects = isset($objectsGroup[$productID]) ? array_keys($objectsGroup[$productID]) : array();
