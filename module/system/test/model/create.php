@@ -10,7 +10,11 @@ title=测试 systemModel::create();
 timeout=0
 cid=1
 
-
+- 查询默认排序应用 @1
+- 查询默认排序应用第name条的0属性 @『应用名称』已经有『应用10』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。
+- 执行第name条的0属性 @『应用名称』不能为空。
+- 执行第product条的0属性 @『product』应当是数字。
+- 执行第status条的0属性 @『状态』不符合格式，应当为:『/active|inactive/』。
 */
 global $tester;
 $system = $tester->loadModel('system');
