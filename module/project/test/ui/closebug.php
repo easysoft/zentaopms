@@ -59,3 +59,10 @@ $team->type->range('project');
 $team->account->range('admin');
 $team->join->range('(-2M)-(-M):1D')->type('timestamp')->format('YY/MM/DD');
 $team->gen(1);
+
+$tester = new bugTester();
+$tester->login();
+
+r($tester->closeBug()) && p('status,message') && e('SUCCESS,关闭Bug成功');
+
+$tester->closeBrowser();
