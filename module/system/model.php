@@ -43,7 +43,7 @@ class systemModel extends model
     {
         return $this->dao->select('id, name')->from(TABLE_SYSTEM)
             ->where('deleted')->eq('0')
-            ->beginIF($integrated)->andWhere('integrated')->eq($integrated)->fi()
+            ->beginIF($integrated !== '')->andWhere('integrated')->eq($integrated)->fi()
             ->fetchPairs('id', 'name');
     }
 
