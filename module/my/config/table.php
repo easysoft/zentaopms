@@ -1042,6 +1042,7 @@ $config->my->audit->dtable->fieldList['actions']['title']    = $lang->actions;
 $config->my->audit->dtable->fieldList['actions']['type']     = 'actions';
 $config->my->audit->dtable->fieldList['actions']['sortType'] = false;
 $config->my->audit->dtable->fieldList['actions']['fixed']    = 'right';
+$config->my->audit->dtable->fieldList['actions']['width']    = 64;
 $config->my->audit->dtable->fieldList['actions']['list']     = $config->my->audit->actionList;
 $config->my->audit->dtable->fieldList['actions']['menu']     = array('review');
 
