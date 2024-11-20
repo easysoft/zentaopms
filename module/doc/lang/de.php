@@ -91,7 +91,7 @@ $lang->docTemplate->typeName              = 'Type Name';
 $lang->docTemplate->addTemplateType       = 'Add template type';
 $lang->docTemplate->editTemplateType      = 'Edit template type';
 $lang->docTemplate->docTitlePlaceholder   = 'Enter the document template title';
-$lang->docTemplate->docTitleRequired      = 'Please enter the document title.';
+$lang->docTemplate->docTitleRequired      = 'Please enter the doc template title.';
 $lang->docTemplate->noticeAddTemplateType = 'Support two-level types. Built-in template type cannot move.';
 $lang->docTemplate->errorDeleteType       = 'There is document template exists in the current type, it cannot be deleted.';
 
