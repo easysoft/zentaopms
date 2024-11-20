@@ -26,6 +26,7 @@ $lang->pivot->exportRange  = 'Export Range';
 $lang->pivot->story        = 'Story';
 $lang->pivot->clear        = 'Clear';
 $lang->pivot->keep         = 'Keep';
+$lang->pivot->new          = 'New';
 
 $lang->pivot->accessDenied  = 'You do not have access to this pivot';
 $lang->pivot->acl = 'Access Control';
