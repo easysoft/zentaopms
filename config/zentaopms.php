@@ -464,6 +464,7 @@ define('TABLE_JOB',           '`' . $config->db->prefix . 'job`');
 define('TABLE_COMPILE',       '`' . $config->db->prefix . 'compile`');
 define('TABLE_MR',            '`' . $config->db->prefix . 'mr`');
 define('TABLE_MRAPPROVAL',    '`' . $config->db->prefix . 'mrapproval`');
+define('TABLE_MARK',          '`' . $config->db->prefix . 'mark`');
 
 define('TABLE_SERVERROOM',   '`' . $config->db->prefix . 'serverroom`');
 define('TABLE_HOST',         '`' . $config->db->prefix . 'host`');
@@ -726,6 +727,7 @@ $config->objectTables['workflowgroup']  = TABLE_WORKFLOWGROUP;
 $config->objectTables['productline']    = TABLE_MODULE;
 $config->objectTables['repocommit']     = TABLE_REPOHISTORY;
 $config->objectTables['system']         = TABLE_SYSTEM;
+$config->objectTables['mark']           = TABLE_MARK;
 
 $config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions', 'aiPrompts', 'promptDesign', 'promptExec');
 $config->disabledFeatures = '';
