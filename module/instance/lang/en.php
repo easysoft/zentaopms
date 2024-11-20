@@ -117,7 +117,7 @@ $lang->instance->backup->volSpentSeconds     = 'Time taken (seconds)';
 $lang->instance->backup->volSize             = 'Size';
 $lang->instance->backup->lastRestore         = 'Last rollback';
 $lang->instance->backup->restoreDate         = 'Restore time';
-$lang->instance->backup->latestBackupAt        = 'Last backup time';
+$lang->instance->backup->latestBackupAt      = 'Last backup time';
 $lang->instance->backup->backupBeforeRestore = 'We recommend that you backup before rolling back!';
 $lang->instance->backup->enableAutoBackup    = 'Enable automatic backup';
 $lang->instance->backup->autoBackup          = 'Automatic backup';
@@ -132,7 +132,8 @@ $lang->instance->backup->keepBackupBySystem  = 'The system will only delete expi
 $lang->instance->backup->backupSize          = 'Size';
 $lang->instance->backup->confirmTip          = 'Are you sure you want to back up?';
 $lang->instance->backup->cronRemark          = 'DevOps service automatic backup task';
-$lang->instance->backup->backupSettingsTips  = 'The system will delete backups that exceed the set number of days, but will retain at least one valid backup.';
+$lang->instance->backup->backupSettingsTip   = 'The system will delete backups that exceed the set number of days, but will retain at least one valid backup.';
+$lang->instance->backup->confirmDeleteTip    = 'Are you sure you want to delete the backup?';
 
 $lang->instance->backup->cycleList[1] = 'Daily';
 

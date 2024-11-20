@@ -357,9 +357,10 @@ $lang->action->desc->manualbackup        = '$date, 由 <strong>$actor</strong> �
 $lang->action->desc->autobackup          = '$date, 由 <strong>$actor</strong> 自动备份。' . "\n";
 $lang->action->desc->openautobackup      = '$date, 由 <strong>$actor</strong> 开启自动备份。' . "\n";
 $lang->action->desc->closeautobackup     = '$date, 由 <strong>$actor</strong> 关闭自动备份。' . "\n";
-$lang->action->desc->autodeletebackups   = '$date, 由 <strong>$actor</strong> 自动清理备份。' . "\n";
+$lang->action->desc->autodeletebackups   = '$date, 由 <strong>$actor</strong> 自动删除备份。' . "\n";
 $lang->action->desc->savebackupsettings  = '$date, 由 <strong>$actor</strong> 保存备份设置。' . "\n";
-$lang->action->desc->deleteexpiredbackup = '$date, 由 <strong>$actor</strong> 清理过期备份。' . "\n";
+$lang->action->desc->deleteexpiredbackup = '$date, 由 <strong>$actor</strong> 删除过期备份。' . "\n";
+$lang->action->desc->manualdeletebackup  = '$date, 由 <strong>$actor</strong> 手动删除备份。' . "\n";
 
 /* 用来显示动态信息。*/
 $lang->action->label = new stdclass();
@@ -565,10 +566,10 @@ $lang->action->label->manualbackup            = '手动备份了';
 $lang->action->label->autobackup              = '自动备份了';
 $lang->action->label->openautobackup          = '开启自动备份';
 $lang->action->label->closeautobackup         = '关闭自动备份';
-$lang->action->label->autodeletebackups       = '自动清理备份';
+$lang->action->label->autodeletebackups       = '自动删除备份';
 $lang->action->label->savebackupsettings      = '保存备份设置';
-$lang->action->label->deleteexpiredbackup     = '清理过期备份';
-
+$lang->action->label->deleteexpiredbackup     = '删除过期备份';
+$lang->action->label->manualdeletebackup      = '手动删除备份';
 
 
 /* 动态信息按照对象分组 */
