@@ -706,6 +706,7 @@ class baseMao
 
         if(empty($this->cache))
         {
+            /* 如果缓存关闭，从数据库中获取。If the cache is off, get from the database. */
             $fields = [];
             foreach($this->fields as $field => $alias) $fields[] = $field == $alias ? $field : "$field AS $alias";
             $fields = implode(',', $fields);
