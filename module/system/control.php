@@ -542,10 +542,30 @@ class system extends control
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $this->view->title   = $this->lang->system->browse;
-        $this->view->appList = $this->system->getList($orderBy, $pager);
-        $this->view->orderBy = $orderBy;
-        $this->view->pager   = $pager;
+        $systems = $this->system->getList($orderBy, $pager);
+        foreach($systems as &$system)
+        {
+            $system->latestRelease = $system->latestRelease ? $system->latestRelease : '';
+        }
+
+        $this->view->title     = $this->lang->system->browse;
+        $this->view->productID = $productID;
+        $this->view->appList   = $systems;
+        $this->view->appPairs  = $this->system->getPairs();
+        $this->view->orderBy   = $orderBy;
+        $this->view->pager     = $pager;
         $this->display();
+    }
+
+    /**
+     * 创建应用。
+     * Create application.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function create($productID)
+    {
     }
 }
