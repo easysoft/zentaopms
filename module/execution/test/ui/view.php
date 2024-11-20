@@ -18,7 +18,7 @@ $product->gen(2);
 
 $project = zenData('project');
 $project->id->range('1-100');
-$project->project->range('0, 0, 1');
+$project->project->range('0, 0, 2');
 $project->model->range('[], scrum, []');
 $project->type->range('program, project, sprint');
 $project->auth->range('[], extend, []');
@@ -54,6 +54,7 @@ $team->type->range('project{3}, execution{2}');
 $team->account->range('admin, user1, user2, admin, user1');
 $team->gen(5);
 
+$story = zenData('story');
 $story->id->range('1-100');
 $story->parent->range('0');
 $story->isParent->range('0');
@@ -114,16 +115,17 @@ $bug = zenData('bug');
 $bug->id->range('1-100');
 $bug->project->range('2{12}, 0{100}');
 $bug->product->range('1{8},2{100}');
-$bug->execution->range('2{5}, 0{100}');
+$bug->execution->range('3{5}, 0{100}');
 $bug->title->range('1-100');
-$bug->status->range('active{5}, resolved{3}, closed{100}');
+$bug->status->range('active{3}, resolved{3}, closed{100}');
 $bug->assignedTo->range('[]');
 $bug->gen(12);
 
 $doclib = zenData('doclib');
 $doclib->id->range('1-100');
-$doclib->type('project, execution{2}');
+$doclib->type->range('project, execution{2}');
+$doclib->product->range('0');
 $doclib->project->range('2');
-$doclib->execution->range('0, 3');
+$doclib->execution->range('0, 3, 3');
 $doclib->name->range('项目库, 执行库1, 执行库2');
 $doclib->gen(3);
