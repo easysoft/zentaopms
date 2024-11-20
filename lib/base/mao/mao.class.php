@@ -692,17 +692,17 @@ class baseMao
      * Append cache fields to data.
      *
      * @param  array  $data
-     * @param  string $primaryKey
+     * @param  string $keyField
      * @access public
      * @return void
      */
-    public function into(array $data, $primaryKey)
+    public function into(array $data, $keyField)
     {
         if(empty($data)) return;
 
         /* Get data keys as conditions. */
         $keyList = [];
-        foreach($data as $index => $row) $keyList[$index] = $row->$primaryKey;
+        foreach($data as $index => $row) $keyList[$index] = $row->$keyField;
 
         $cacheResult = $this->cache->fetchAll($this->table, array_unique($keyList));
 
