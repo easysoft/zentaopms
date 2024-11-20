@@ -199,5 +199,5 @@ $config->task->actionList['createBranch']['data-toggle'] = 'modal';
 
 $config->task->actions = new stdclass();
 $config->task->actions->view = array();
-$config->task->actions->view['mainActions']   = array('batchCreate', 'assignTo', 'start', 'restart', 'createBranch', 'recordWorkhour', 'pause', 'finish', 'activate', 'close', 'cancel');
+$config->task->actions->view['mainActions']   = array('batchCreate', 'assignTo', 'start', 'createBranch', 'recordWorkhour', 'restart', 'pause', 'finish', 'activate', 'close', 'cancel');
 $config->task->actions->view['suffixActions'] = array('edit', 'create', 'delete', 'view');

@@ -287,12 +287,14 @@ $config->task->dtable->importTask->fieldList['id']['type']     = 'checkID';
 $config->task->dtable->importTask->fieldList['id']['sortType'] = true;
 $config->task->dtable->importTask->fieldList['id']['checkbox'] = true;
 
-$config->task->dtable->importTask->fieldList['name']['title']       = $lang->task->name;
-$config->task->dtable->importTask->fieldList['name']['name']        = 'name';
-$config->task->dtable->importTask->fieldList['name']['type']        = 'nestedTitle';
-$config->task->dtable->importTask->fieldList['name']['link']        = array('module' => 'task', 'method' => 'view', 'params' => 'taskID={id}');
-$config->task->dtable->importTask->fieldList['name']['data-toggle'] = 'modal';
-$config->task->dtable->importTask->fieldList['name']['data-size']   = 'lg';
+$config->task->dtable->importTask->fieldList['name']['title']        = $lang->task->name;
+$config->task->dtable->importTask->fieldList['name']['name']         = 'name';
+$config->task->dtable->importTask->fieldList['name']['type']         = 'nestedTitle';
+$config->task->dtable->importTask->fieldList['name']['nestedToggle'] = true;
+$config->task->dtable->importTask->fieldList['name']['required']     = true;
+$config->task->dtable->importTask->fieldList['name']['link']         = array('module' => 'task', 'method' => 'view', 'params' => 'taskID={id}');
+$config->task->dtable->importTask->fieldList['name']['data-toggle']  = 'modal';
+$config->task->dtable->importTask->fieldList['name']['data-size']    = 'lg';
 
 $config->task->dtable->importTask->fieldList['pri']['title']    = $lang->priAB;
 $config->task->dtable->importTask->fieldList['pri']['name']     = 'pri';

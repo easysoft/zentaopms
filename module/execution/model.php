@@ -2307,7 +2307,6 @@ class executionModel extends model
             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
             ->where('t1.status')->in('wait,doing,pause,cancel')
             ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t1.parent')->lt(1)
             ->andWhere('t1.execution')->in(array_keys($executions))
             ->andWhere("(t1.story = 0 OR (t2.branch IN ('0','" . implode("','", $branches) . "') AND t2.product " . helper::dbIN(array_keys($branches)) . "))")
             ->orderBy($orderBy)
@@ -2353,7 +2352,7 @@ class executionModel extends model
             }
 
             /* Update tasks and save logs. */
-            if($task->isParent) $this->dao->update(TABLE_TASK)->data($data)->where('parent')->eq($task->id)->exec();
+            if($task->isParent) $this->dao->update(TABLE_TASK)->data($data)->where('parent')->eq($task->id)->andWhere('status')->notIn('done,closed')->exec();
 
             $data->status = $task->consumed > 0 ? 'doing' : 'wait';
             $this->dao->update(TABLE_TASK)->data($data)->where('id')->eq($task->id)->exec();
