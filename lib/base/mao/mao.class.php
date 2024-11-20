@@ -704,7 +704,19 @@ class baseMao
         $keyList = [];
         foreach($data as $index => $row) $keyList[$index] = $row->$keyField;
 
-        $cacheResult = $this->cache->fetchAll($this->table, array_unique($keyList));
+        if(empty($this->cache))
+        {
+            $fields = [];
+            foreach($this->fields as $field => $alias) $fields[] = $field == $alias ? $field : "$field AS $alias";
+            $fields = implode(',', $fields);
+
+            $primaryKey  = $this->config->cache->raw[$this->table];
+            $cacheResult = $this->dao->select($fields)->from($this->table)->where($primaryKey)->in(array_unique($keyList))->fetchAll($primaryKey);
+        }
+        else
+        {
+            $cacheResult = $this->cache->fetchAll($this->table, array_unique($keyList));
+        }
 
         foreach($data as $index => $row)
         {
