@@ -129,4 +129,24 @@ class bugTester extends tester
         if($form->dom->status->getText() == '已解决') return $this->success('解决Bug成功');
         return $this->failed('解决Bug失败');
     }
+
+    /**
+     * 关闭bug。
+     * Close bug.
+     *
+     * @access public
+     * @return object
+     */
+    public function closeBug()
+    {
+        $form = $this->initForm('project', 'bug', array('project' => 1), 'appIframe-project');
+        $form->dom->closeBtn->click();
+        $title = $form->dom->closeTitle->getText();
+        $form->dom->close->click();
+        $form->wait(1);
+        $form->dom->search(array("{$this->lang->bug->name},=,{$title}"));
+        $form->wait(1);
+        if($form->dom->status->getText() == '已关闭') return $this->success('关闭Bug成功');
+        return $this->failed('关闭Bug失败');
+    }
 }
