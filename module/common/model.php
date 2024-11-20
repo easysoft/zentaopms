@@ -347,7 +347,7 @@ class commonModel extends model
      */
     public function setApproval()
     {
-        $this->config->openedApproval = (in_array($this->config->edition, array('max', 'ipd'))) && ($this->config->vision == 'rnd');
+        $this->config->openedApproval = (in_array($this->config->edition, array('biz', 'max', 'ipd'))) && ($this->config->vision == 'rnd');
     }
 
     /**
