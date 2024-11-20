@@ -17,6 +17,14 @@ class viewPage extends page
             'linckedProducta' => "//*[@id='mainContent']/div[2]/div[1]/div/table[1]/tbody/tr[1]",
             'linckedProductb' => "//*[@id='mainContent']/div[2]/div[1]/div/table[1]/tbody/tr[2]",
             'productsNev'     => "//*[@data-id='products']",
+            'moreProducts'    => "//*[@id='mainContent']/div[2]/div[1]/div/table[1]/thead/tr/th[1]/div/a/span",
+            'teamMembera'     => "//*[@id='mainContent']/div[2]/div[1]/div/table[2]/tbody/tr/td/div/div[1]/span[1]",
+            'teamMemberb'     => "//*[@id='mainContent']/div[2]/div[1]/div/table[2]/tbody/tr/td/div/div[2]/span[1]",
+            'moreTeamMembers' => "//*[@id='mainContent']/div[2]/div[1]/div/table[2]/thead/tr/th/div/a/span",
+            'docliba'         => "//*[@id='mainContent']/div[2]/div[1]/div/table[5]/tbody/tr/td/div/div[1]/a",
+            'doclibb'         => "//*[@id='mainContent']/div[2]/div[1]/div/table[5]/tbody/tr/td/div/div[2]/a",
+            'moreDoclibs'     => "//*[@id='mainContent']/div[2]/div[1]/div/table[5]/thead/tr/th/div/a/span",
+            'createDoclib'    => "//*[@id='mainContent']/div[2]/div[1]/div/table[5]/tbody/tr/td/div/div[3]/a/span"
             /* 编辑执行弹窗中元素 */
             'products'    => "//*[@name='products[0]']",
             'productsTip' => "//*[@id='products[0]Tip']",
