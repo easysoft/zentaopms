@@ -18,3 +18,23 @@ cid=1
  - 最终测试状态 @SUCCESS
 - 检查评审中标签下显示条数
  - 测试结果 @reviewingTab下显示条数正确
+ - 最终测试状态 @SUCCESS
+- 检查变更中标签下显示条数
+ - 测试结果 @changingTab下显示条数正确
+ - 最终测试状态 @SUCCESS
+- 检查已关闭标签下显示条数
+ - 测试结果 @closedTab下显示条数正确
+ - 最终测试状态 @SUCCESS
+- 检查已关联执行标签下显示条数
+ - 测试结果 @linkedExecutionTab下显示条数正确
+ - 最终测试状态 @SUCCESS
+- 检查未关联执行标签下显示条数
+ - 测试结果 @unlinkedExecutionTab下显示条数正确
+ - 最终测试状态 @SUCCESS
+
+*/
+
+chdir(__DIR__);
+include '../lib/checktab.ui.class.php';
+
+$product = zenData('product');
