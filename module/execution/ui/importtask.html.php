@@ -52,6 +52,8 @@ if(!isInModal())
 }
 
 jsVar('executionID', $execution->id);
+jsVar('childrenAB', $lang->task->childrenAB);
+jsVar('parentAB', $lang->task->parentAB);
 dtable
 (
     set::userMap($memberPairs),
@@ -61,6 +63,7 @@ dtable
     set::orderBy($orderBy),
     set::sortLink(createLink('execution', 'importTask', "executionID={$execution->id}&fromExecution={$fromExecution}&orderBy={name}_{sortType}&recPerPage={$pager->recPerPage}")),
     set::footToolbar($footToolbar),
+    set::onRenderCell(jsRaw('window.renderCell')),
     set::footPager(
         usePager
         (

@@ -116,10 +116,16 @@ window.renderCell = function(result, info)
         {
             html += "<span class='label gray-pale rounded p-0 size-sm whitespace-nowrap'>" + multipleAB + "</span>";
         }
-        if(!task.isParent)
+
+        if(task.isParent > 0)
+        {
+            html += "<span class='label gray-pale rounded p-0 size-sm whitespace-nowrap'>" + parentAB + "</span>";
+        }
+        else if(task.parent > 0)
         {
             html += "<span class='label gray-pale rounded p-0 size-sm whitespace-nowrap'>" + childrenAB + "</span>";
         }
+
         if(task.color) result[0].props.style = 'color: ' + task.color;
         if(html) result.unshift({html});
 

@@ -201,6 +201,7 @@ jsVar('+pageSummary',   $lang->execution->pageSummary);
 jsVar('checkedSummary', $lang->execution->checkedSummary);
 jsVar('multipleAB',     $lang->task->multipleAB);
 jsVar('childrenAB',     $lang->task->childrenAB);
+jsVar('parentAB',       $lang->task->parentAB);
 jsVar('todayLabel',     $lang->today);
 jsVar('yesterdayLabel', $lang->yesterday);
 jsVar('teamLang',       $lang->task->team);
