@@ -5,6 +5,12 @@ su('admin');
 zenData('system')->gen(10);
 
 /**
+
+title=测试 systemModel::getList();
+timeout=0
+cid=1
+
+
 */
 global $tester;
 $system = $tester->loadModel('system');
