@@ -15,4 +15,23 @@ formPanel
     set::id('systemCreateForm'),
     set::title($lang->system->create),
     set::submitBtnText($lang->save),
+    formGroup
+    (
+        set::name('integrated'),
+        set::width('1/2'),
+        set::label($lang->system->integrated),
+        set::labelWidth(common::checkNotCN() ? '160px' : '100px'),
+        set::control('radioListInline'),
+        set::value(0),
+        set::items($lang->system->integratedList),
+        on::change()->do('$("#children").toggleClass("hidden");')
+    ),
+    formGroup
+    (
+        set::name('name'),
+        set::width(common::checkNotCN() ? '3/4' : '1/2'),
+        set::label($lang->system->name),
+        set::labelWidth(common::checkNotCN() ? '160px' : '100px'),
+        set::required(true)
+    ),
 );
