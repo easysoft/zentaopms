@@ -1,0 +1,31 @@
+title: zt_system
+author: Yang Li
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100
+  - field: name
+    range: 1-100
+    prefix: "应用"
+  - field: product
+    range: 1-100
+  - field: integrated
+    range: 0
+  - field: latestRelease
+    range: 0
+  - field: latestDate
+    range: []
+  - field: children
+    range: []
+  - field: status
+    range: active
+  - field: desc
+    range: 1-100
+    prefix: "描述"
+  - field: createdBy
+    range: admin
+  - field: createdDate
+    note: "创建日期"
+    range: "-:60"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
