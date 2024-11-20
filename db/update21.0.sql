@@ -49,3 +49,5 @@ DELETE FROM `zt_lang` WHERE `module` = 'host' AND `section` = 'cpuBrandList';
 DELETE FROM `zt_action` WHERE `objectType` = 'account';
 DELETE FROM `zt_actionrecent` WHERE `objectType` = 'account';
 DELETE FROM `zt_config` WHERE `module` ='common' AND `section` = 'zentaoWebsite';
+ALTER TABLE `zt_review` ADD `toAuditBy` varchar(30) not NULL default '' AFTER `lastAuditedDate`;
+ALTER TABLE `zt_review` ADD `toAuditDate` datetime NULL AFTER `toAuditBy`;

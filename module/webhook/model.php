@@ -287,6 +287,9 @@ class webhookModel extends model
         if(!$webhooks) $webhooks = $this->getList();
         if(!$webhooks) return true;
 
+        /* 如果对象类型是瀑布，动作是提交审计或者审计，那么对象类型就是审批。*/
+        if($objectType == 'waterfall' && strpos(',toaudit,audited,', ",{$actionType},") !== false) $objectType = 'review';
+
         foreach($webhooks as $id => $webhook)
         {
             $postData = $this->buildData($objectType, $objectID, $actionType, $actionID, $webhook);

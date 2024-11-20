@@ -233,12 +233,11 @@ class mailTao extends mailModel
     protected function getAddressees(string $objectType, object $object, object $action): array|bool
     {
         if(empty($objectType) || empty($object) || empty($action)) return false;
-        if($objectType == 'review') return array($object->auditedBy, '');
 
         $objectModel = $this->loadModel($objectType);
         if(!$objectModel) return false;
 
-        if($objectType == 'story' or $objectType == 'meeting') return $objectModel->getToAndCcList($object, $action->action);
+        if(strpos(',story,meeting,review,', ",{$objectType},") !== false) return $objectModel->getToAndCcList($object, $action->action);
         if($objectType == 'ticket') return $objectModel->getToAndCcList($object, $action);
         return $objectModel->getToAndCcList($object);
     }
