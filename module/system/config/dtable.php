@@ -20,15 +20,17 @@ $config->system->dtable->fieldList['latestRelease']['title'] = $lang->system->la
 $config->system->dtable->fieldList['latestRelease']['name']  = 'latestRelease';
 $config->system->dtable->fieldList['latestRelease']['type']  = 'text';
 
-$config->system->dtable->fieldList['children']['title'] = $lang->system->children;
-$config->system->dtable->fieldList['children']['name']  = 'children';
-$config->system->dtable->fieldList['children']['type']  = 'text';
+$config->system->dtable->fieldList['children']['title']     = $lang->system->children;
+$config->system->dtable->fieldList['children']['name']      = 'children';
+$config->system->dtable->fieldList['children']['type']      = 'text';
+$config->system->dtable->fieldList['children']['delimiter'] = ',';
 
-$config->system->dtable->fieldList['status']['title']    = $lang->system->status;
-$config->system->dtable->fieldList['status']['name']     = 'status';
-$config->system->dtable->fieldList['status']['type']     = 'status';
-$config->system->dtable->fieldList['status']['map']      = $lang->system->statusList;
-$config->system->dtable->fieldList['status']['sortType'] = true;
+$config->system->dtable->fieldList['status']['title']     = $lang->system->status;
+$config->system->dtable->fieldList['status']['name']      = 'status';
+$config->system->dtable->fieldList['status']['type']      = 'status';
+$config->system->dtable->fieldList['status']['statusMap'] = $lang->system->statusList;
+$config->system->dtable->fieldList['status']['width']     = 100;
+$config->system->dtable->fieldList['status']['sortType']  = true;
 
 $config->system->dtable->fieldList['actions']['name']     = 'actions';
 $config->system->dtable->fieldList['actions']['title']    = $lang->actions;
