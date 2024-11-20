@@ -3089,13 +3089,27 @@ class executionModel extends model
 
         /* Only changed account update userview. */
         $oldAccountList     = array_keys($oldJoin);
-        $changedAccountList = array_diff($accountList, $oldAccountList);
-        $changedAccountList = array_merge($changedAccountList, array_diff($oldAccountList, $accountList));
+        $addedAccountList   = array_diff($accountList, $oldAccountList);
+        $removedAccountList = array_diff($oldAccountList, $accountList);
+        $changedAccountList = array_merge($addedAccountList, $removedAccountList);
         $changedAccountList = array_unique($changedAccountList);
 
         /* Add the execution team members to the project. */
         if($execution->project) $this->addProjectMembers($execution->project, $executionMember);
         if($execution->acl != 'open') $this->updateUserView($execution->id, 'sprint', $changedAccountList);
+
+        /* Log history. */
+        $actionID = $this->loadModel('action')->create('execution', $execution->id, 'managedTeam');
+
+        if(empty($addedAccountList) && empty($removedAccountList)) return;
+
+        $users = $this->loadModel('user')->getPairs('noletter');
+        $addedAccountList = array_map(function($account) use ($users) { return $users[$account]; }, $addedAccountList);
+        $removedAccountList = array_map(function($account) use ($users) { return $users[$account]; }, $removedAccountList);
+
+        if(!empty($addedAccountList)) $changes[] = array('field' => 'addDiff', 'old' => '', 'new' => '', 'diff' => join(',', $addedAccountList));
+        if(!empty($removedAccountList)) $changes[] = array('field' => 'removeDiff', 'old' => '', 'new' => '', 'diff' => join(',', $removedAccountList));
+        if(!empty($changes)) $this->action->logHistory($actionID, $changes);
     }
 
     /**

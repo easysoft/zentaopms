@@ -2171,7 +2171,6 @@ class execution extends control
             $this->execution->manageMembers($execution, $memberDataList);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->loadModel('action')->create('team', $executionID, 'managedTeam');
             return $this->sendSuccess(array('load' => $this->createLink('execution', 'team', "executionID={$executionID}")));
         }
 
