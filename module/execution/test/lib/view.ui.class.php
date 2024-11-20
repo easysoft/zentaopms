@@ -39,4 +39,26 @@ class viewTester extends tester
         if($url['method'] != 'manageproducts') return $this->failed('页面跳转后method不正确');
         return $this->success('产品信息正确');
     }
+
+    /**
+     * 检查执行概况页面团队成员信息
+     * Check the team members of the execution.
+     *
+     * @access public
+     * @return object
+     */
+    public function checkMember()
+    {
+        $form = $this->initForm('execution', 'view', array('execution' => '3'), 'appIframe-execution');
+        if($form->dom->teamMembera->getText() != 'admin') return $this->failed('团队成员不正确');
+        if($form->dom->teamMemberb->getText() != 'USER1') return $this->failed('团队成员不正确');
+        $form->dom->moreTeamMembers->click();
+        $form->wait(1);
+        $url  = $this->response();
+        if($url['module'] != 'execution') return $this->failed('点击更多按钮，页面跳转后module不正确');
+        if($url['method'] != 'team')      return $this->failed('点击更多按钮，页面跳转后method不正确');
+        $form->dom->btn($this->lang->overview)->click();
+        $form->dom->manageMembers->click();
+        return $this->success('团队成员信息正确');
+    }
 }
