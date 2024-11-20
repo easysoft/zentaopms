@@ -7,8 +7,13 @@ class viewPage extends page
         $xpath = array(
             /* 执行概况页元素 */
             'executionName'   => "//*[@id='mainContent']/div[1]/div[1]/div[2]/div[1]/div",
+            'programName'     => "//*[@id='mainContent']/div[1]/div[1]/div[2]/div[2]/div[1]/div/a",
+            'projectName'     => "//*[@id='mainContent']/div[1]/div[1]/div[2]/div[2]/div[2]/a",
             'status'          => "//*[@id='mainContent']/div[1]/div[1]/div[2]/div[1]/span[2]",
             'acl'             => "//*[@id='mainContent']/div[1]/div[1]/div[2]/div[1]/span[3]",
+            'storyNum'        => "//*[@id='mainContent']/div[1]/div[1]/div[1]/div[2]/div[1]/div",
+            'taskNum'         => "//*[@id='mainContent']/div[1]/div[1]/div[1]/div[2]/div[2]/div",
+            'bugNum'          => "//*[@id='mainContent']/div[1]/div[1]/div[1]/div[2]/div[3]/div",
             'plannedBegin'    => "//*[@id='mainContent']/div[2]/div[1]/div/table[3]/tbody/tr/td/div/div[1]/span[2]",
             'plannedEnd'      => "//*[@id='mainContent']/div[2]/div[1]/div/table[3]/tbody/tr/td/div/div[2]/span[2]",
             'realBeganView'   => "//*[@id='mainContent']/div[2]/div[1]/div/table[3]/tbody/tr/td/div/div[3]/span[2]",
