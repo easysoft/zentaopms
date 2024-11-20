@@ -38,3 +38,21 @@ chdir(__DIR__);
 include '../lib/checktab.ui.class.php';
 
 $product = zenData('product');
+$product->id->range('1');
+$product->name->range('产品1');
+$product->type->range('normal');
+$product->gen(1);
+
+$project = zenData('project');
+$project->id->range('1-2');
+$project->project->range('0,1');
+$project->model->range('scrum');
+$project->type->range('project,sprint');
+$project->auth->range('extend,[]');
+$project->storytype->range('`story,epic,requirement`,`story`');
+$project->path->range('`,1,`, `,1,2,`');
+$project->grade->range('1');
+$project->name->range('项目1,执行1');
+$project->hasProduct->range('1');
+$project->status->range('wait');
+$project->acl->range('open');
