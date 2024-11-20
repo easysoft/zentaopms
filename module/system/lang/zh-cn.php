@@ -30,16 +30,22 @@ $lang->system->serviceQuantity = '服务数';
 $lang->system->cpuUsage        = 'CPU（核）';
 $lang->system->memUsage        = '内存（GB）';
 $lang->system->name            = '应用名称';
+$lang->system->integrated      = '集成应用';
 $lang->system->latestRelease   = '最新版本号';
 $lang->system->children        = '包含应用';
 $lang->system->latestRelease   = '最新版本号';
 $lang->system->status          = '状态';
+$lang->system->desc            = '描述';
 $lang->system->browse          = '应用列表';
 $lang->system->create          = '创建应用';
 $lang->system->edit            = '编辑应用';
 $lang->system->delete          = '删除应用';
 $lang->system->active          = '上架应用';
 $lang->system->inactive        = '下架应用';
+
+$lang->system->integratedList = array();
+$lang->system->integratedList[0] = '否';
+$lang->system->integratedList[1] = '是';
 
 $lang->system->statusList = array();
 $lang->system->statusList['active']   = '已上架';
