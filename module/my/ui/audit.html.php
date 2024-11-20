@@ -104,6 +104,8 @@ foreach($reviewList as $review)
 $reviewList = initTableData($reviewList, $config->my->audit->dtable->fieldList, $this->my);
 $sortLink   = $app->rawMethod == 'audit' ? createLink('my', 'audit', "browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}") : createLink('my', $app->rawMethod, "mode={$mode}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
 
+$config->my->audit->dtable->fieldList['product']['map'] = array(0 => '') + $products;
+$config->my->audit->dtable->fieldList['project']['map'] = array(0 => '') + $projects;
 $cols = array_values($config->my->audit->dtable->fieldList);
 $data = array_values($reviewList);
 

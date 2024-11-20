@@ -309,12 +309,14 @@ class myTao extends myModel
             foreach($objects as $object)
             {
                 $data = new stdclass();
-                $data->id     = $object->id;
-                $data->title  = empty($titleFieldName) || !isset($object->$titleFieldName) ? $title . " #{$object->id}" : $object->{$titleFieldName};
-                $data->type   = $objectType;
-                $data->time   = $object->{$openedDateField};
-                $data->status = 'doing';
-                $data->app    = isset($flows[$objectType]->app) ? $flows[$objectType]->app : zget($this->lang->navGroup, $objectType, '');
+                $data->id      = $object->id;
+                $data->title   = empty($titleFieldName) || !isset($object->$titleFieldName) ? $title . " #{$object->id}" : $object->{$titleFieldName};
+                $data->type    = $objectType;
+                $data->time    = $object->{$openedDateField};
+                $data->status  = 'doing';
+                $data->app     = isset($flows[$objectType]->app) ? $flows[$objectType]->app : zget($this->lang->navGroup, $objectType, '');
+                $data->product = isset($object->product) ? $object->product : 0;
+                $data->project = isset($object->project) ? $object->project : 0;
                 $approvalList[] = $data;
             }
         }
