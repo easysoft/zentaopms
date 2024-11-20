@@ -724,7 +724,7 @@ class baseMao
      */
     public function clearCache()
     {
-        $this->cache->clear();
+        if(!empty($this->cache)) $this->cache->clear();
     }
 
     /**
