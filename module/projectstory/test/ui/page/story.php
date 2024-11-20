@@ -17,3 +17,6 @@ class storyPage extends page
             'unlinkedExecutionTab' => "//*[@id='more']/menu/menu/li[3]/a/div/div",
             'num'                  => "//*[@id='stories_table']/div/div[3]/div[2]/strong[1]"
         );
+        $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
+    }
+}
