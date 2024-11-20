@@ -1817,6 +1817,23 @@ class projectModel extends model
 
         if(empty($project->multiple) and $project->model != 'waterfall') $this->loadModel('execution')->syncNoMultipleSprint($projectID);
 
+        /* Log history. */
+        $actionID = $this->loadModel('action')->create('project', $projectID, 'ManagedTeam');
+
+        $oldJoin = array_keys($oldJoin);
+        $addedAccountList   = array_diff($accounts, $oldJoin);
+        $removedAccountList = array_diff($oldJoin, $accounts);
+
+        if(empty($addedAccountList) && empty($removedAccountList)) return !dao::isError();
+
+        $users = $this->loadModel('user')->getPairs('noletter');
+        $addedAccountList = array_map(function($account) use ($users) { return $users[$account]; }, $addedAccountList);
+        $removedAccountList = array_map(function($account) use ($users) { return $users[$account]; }, $removedAccountList);
+
+        if(!empty($addedAccountList)) $changes[] = array('field' => 'addDiff', 'old' => '', 'new' => '', 'diff' => join(',', $addedAccountList));
+        if(!empty($removedAccountList)) $changes[] = array('field' => 'removeDiff', 'old' => '', 'new' => '', 'diff' => join(',', $removedAccountList));
+        if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+
         return !dao::isError();
     }
 

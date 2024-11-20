@@ -1207,8 +1207,6 @@ class project extends control
                 if($executionID) $this->execution->manageMembers($execution, $members);
             }
 
-            $this->loadModel('action')->create('team', $projectID, 'ManagedTeam');
-
             return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'load' => $this->createLink('project', 'team', "projectID=$projectID")));
         }
 
