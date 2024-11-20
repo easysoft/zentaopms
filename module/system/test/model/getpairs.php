@@ -9,6 +9,12 @@ title=测试 systemModel::getPairs();
 timeout=0
 cid=1
 
+- 查询默认键值对属性1 @应用1
+- 查询默认键值对数量 @10
+- 查询非集成应用属性1 @应用1
+- 查询集成应用属性2 @应用2
+- 查询集成应用数量 @5
+
 */
 global $tester;
 $system = $tester->loadModel('system');
