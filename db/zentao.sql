@@ -15382,7 +15382,7 @@ CREATE INDEX `dimension` ON `zt_pivot` (`dimension`);
 CREATE INDEX `group`     ON `zt_pivot` (`group`);
 
 -- DROP TABLE IF EXISTS `zt_pivotspec`;
-CREATE TABLE `zt_pivotspec` (
+CREATE TABLE IF NOT EXISTS `zt_pivotspec` (
   `pivot` mediumint(8) NOT NULL,
   `version` varchar(10) NOT NULL,
   `driver` enum('mysql', 'duckdb') NOT NULL default 'mysql',
