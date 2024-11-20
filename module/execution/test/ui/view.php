@@ -33,3 +33,8 @@ $project->openedBy->range('user1');
 $project->acl->range('open');
 $project->status->range('doing');
 $project->gen(3);
+
+$projectproduct = zenData('projectproduct');
+$projectproduct->project->range('2, 3');
+$projectproduct->product->range('1');
+$projectproduct->gen(2);
