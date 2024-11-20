@@ -119,3 +119,11 @@ $bug->title->range('1-100');
 $bug->status->range('active{5}, resolved{3}, closed{100}');
 $bug->assignedTo->range('[]');
 $bug->gen(12);
+
+$doclib = zenData('doclib');
+$doclib->id->range('1-100');
+$doclib->type('project, execution{2}');
+$doclib->project->range('2');
+$doclib->execution->range('0, 3');
+$doclib->name->range('项目库, 执行库1, 执行库2');
+$doclib->gen(3);
