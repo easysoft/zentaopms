@@ -103,3 +103,9 @@ $task->canceledBy->range('[]{8}, admin, []{3}');
 $task->closedBy->range('[]{9}, admin{2}, user1');
 $task->deleted->range('0{11}, 1');
 $task->gen(12);
+
+$taskSpec = zenData('taskspec');
+$taskSpec->task->range('1-100');
+$taskSpec->version->range('0');
+$taskSpec->name->range('1-100');
+$taskSpec->gen(12);
