@@ -127,3 +127,21 @@ $doclib->project->range('2');
 $doclib->execution->range('0, 3, 3');
 $doclib->name->range('项目库, 执行库1, 执行库2');
 $doclib->gen(3);
+
+$tester = new viewTester();
+$tester->login();
+
+$basic = array(
+    'executionName' => '执行',
+    'programName'   => '项目集',
+    'projectName'   => '项目',
+    'storyNum'      => '2',
+    'taskNum'       => '11',
+    'bugNum'        => '5',
+);
+
+r($tester->checkBasic($basic))                && p('status,message') && e('SUCCESS,执行基础信息正确');
+r($tester->checkProduct('产品1'))             && p('status,message') && e('SUCCESS,产品信息正确');
+r($tester->checkMember('admin', 'USER1'))     && p('status,message') && e('SUCCESS,团队成员信息正确');
+r($tester->checkDoclib('执行库1', '执行库2')) && p('status,message') && e('SUCCESS,文档库信息正确');
+$tester->closeBrowser();
