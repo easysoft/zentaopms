@@ -19,7 +19,7 @@ UPDATE `zt_workflowfield` SET options = '{"wait":"\\u5f85\\u5ba1\\u6279","doing"
 
 UPDATE `zt_workflowaction` SET `role` = 'buildin' WHERE `buildin` = '1' AND `module` IN ('requirement', 'epic');
 
-CREATE TABLE `zt_pivotSpec` (
+CREATE TABLE `zt_pivotspec` (
   `pivot` mediumint(8) NOT NULL,
   `version` varchar(10) NOT NULL,
   `driver` enum('mysql', 'duckdb') NOT NULL default 'mysql',

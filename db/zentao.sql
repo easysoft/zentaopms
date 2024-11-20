@@ -15354,22 +15354,23 @@ CREATE TABLE IF NOT EXISTS `zt_pivot`  (
   `dimension` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `group` varchar(255) NOT NULL DEFAULT '',
   `code` varchar(255) NOT NULL DEFAULT '',
-  `driver` enum('mysql', 'duckdb') not NULL default 'mysql',
-  `mode` enum('text', 'builder') not NULL default 'builder',
+  `driver` enum('mysql', 'duckdb') NOT NULL default 'mysql',
+  `mode` varchar(10) NOT NULL default 'builder',
   `name` text NULL,
   `desc` text NULL,
   `acl` enum('open','private') NOT NULL DEFAULT 'open',
   `whitelist` text NULL,
-  `sql` mediumtext NULL,
-  `fields` mediumtext NULL,
-  `langs` mediumtext NULL,
-  `vars` mediumtext NULL,
-  `objects` mediumtext NULL,
-  `settings` mediumtext NULL,
-  `filters` mediumtext NULL,
+  `sql` text NULL,
+  `fields` text NULL,
+  `langs` text NULL,
+  `vars` text NULL,
+  `objects` text NULL,
+  `settings` text NULL,
+  `filters` text NULL,
   `step` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `stage` enum('draft','published') NOT NULL DEFAULT 'draft',
   `builtin` enum('0', '1') NOT NULL DEFAULT '0',
+  `version` varchar(10) NOT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
@@ -15379,6 +15380,24 @@ CREATE TABLE IF NOT EXISTS `zt_pivot`  (
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
 CREATE INDEX `dimension` ON `zt_pivot` (`dimension`);
 CREATE INDEX `group`     ON `zt_pivot` (`group`);
+
+CREATE TABLE `zt_pivotspec` (
+  `pivot` mediumint(8) NOT NULL,
+  `version` varchar(10) NOT NULL,
+  `driver` enum('mysql', 'duckdb') NOT NULL default 'mysql',
+  `mode` varchar(10) NOT NULL default 'builder',
+  `name` text NULL,
+  `desc` text NULL,
+  `sql` text NULL,
+  `fields` text NULL,
+  `langs` text NULL,
+  `vars` text NULL,
+  `objects` text NULL,
+  `settings` text NULL,
+  `filters` text NULL,
+  `createdDate` datetime NULL,
+  UNIQUE KEY `pivot` (`pivot`, `version`)
+) ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_sqlbuilder`;
 CREATE TABLE IF NOT EXISTS `zt_sqlbuilder` (

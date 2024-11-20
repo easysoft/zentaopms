@@ -490,6 +490,7 @@ if(!defined('TABLE_SEARCHDICT'))  define('TABLE_SEARCHDICT',  $config->db->prefi
 define('TABLE_SCREEN',     '`' . $config->db->prefix . 'screen`');
 define('TABLE_CHART',      '`' . $config->db->prefix . 'chart`');
 define('TABLE_PIVOT',      '`' . $config->db->prefix . 'pivot`');
+define('TABLE_PIVOTSPEC',  '`' . $config->db->prefix . 'pivotspec`');
 define('TABLE_PIVOTDRILL', '`' . $config->db->prefix . 'pivotdrill`');
 define('TABLE_DASHBOARD',  '`' . $config->db->prefix . 'dashboard`');
 define('TABLE_DATASET',    '`' . $config->db->prefix . 'dataset`');
