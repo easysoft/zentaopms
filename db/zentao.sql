@@ -15381,6 +15381,7 @@ CREATE TABLE IF NOT EXISTS `zt_pivot`  (
 CREATE INDEX `dimension` ON `zt_pivot` (`dimension`);
 CREATE INDEX `group`     ON `zt_pivot` (`group`);
 
+-- DROP TABLE IF EXISTS `zt_pivotspec`;
 CREATE TABLE `zt_pivotspec` (
   `pivot` mediumint(8) NOT NULL,
   `version` varchar(10) NOT NULL,
@@ -15395,9 +15396,9 @@ CREATE TABLE `zt_pivotspec` (
   `objects` text NULL,
   `settings` text NULL,
   `filters` text NULL,
-  `createdDate` datetime NULL,
-  UNIQUE KEY `pivot` (`pivot`, `version`)
+  `createdDate` datetime NULL
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `idx_pivot_version` ON `zt_pivotspec`(`pivot`, `version`);
 
 -- DROP TABLE IF EXISTS `zt_sqlbuilder`;
 CREATE TABLE IF NOT EXISTS `zt_sqlbuilder` (
@@ -16124,6 +16125,7 @@ REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`, `
 ('zh-tw', 'custom', 'relationList', '3', '{\"relation\":\"\\u91cd\\u8907\",\"relativeRelation\":\"\\u91cd\\u8907\"}', '0', 'all'),
 ('zh-tw', 'custom', 'relationList', '4', '{\"relation\":\"\\u5f15\\u7528\",\"relativeRelation\":\"\\u88ab\\u5f15\\u7528\"}', '0', 'all');
 
+-- DROP TABLE IF EXISTS `zt_system`;
 CREATE TABLE IF NOT EXISTS `zt_system` (
   `id` MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(100) NOT NULL DEFAULT '',
@@ -16143,3 +16145,18 @@ CREATE TABLE IF NOT EXISTS `zt_system` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE INDEX `idx_product` ON `zt_system`(`product`);
 CREATE INDEX `idx_status` ON `zt_system`(`status`);
+
+-- DROP TABLE IF EXISTS `zt_mark`;
+CREATE TABLE IF NOT EXISTS `zt_mark` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `objectType` varchar(50) NOT NULL DEFAULT '',
+  `objectID` mediuumint(8) unsigned NOT NULL DEFAULT 0,
+  `version` varchar(50) NOT NULL DEFAULT '',
+  `account` char(30) NOT NULL DEFAULT '',
+  `date` date NOT NULL DEFAULT NULL,
+  `mark` varchar(50) NOT NULL DEFAULT '',
+  `extra` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE INDEX `idx_object` ON `zt_mark`(`objectType`,`objectID`);
+CREATE INDEX `idx_account` ON `zt_mark`(`account`);

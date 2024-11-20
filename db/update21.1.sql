@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS `zt_pivotspec` (
   `filters` text NULL,
   `createdDate` datetime NULL
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
-CREATE UNIQUE INDEX `idx_pivot` ON `zt_pivotspec`(`pivot`);
+CREATE UNIQUE INDEX `idx_pivot_version` ON `zt_pivotspec`(`pivot`, `version`);
 
 ALTER TABLE `zt_pivot` ADD `version` varchar(10) NOT NULL DEFAULT '1' AFTER `builtin`;
 ALTER TABLE `zt_pivot` CHANGE `mode` `mode` varchar(10) NOT NULL DEFAULT 'builder';
@@ -72,3 +72,5 @@ CREATE TABLE IF NOT EXISTS `zt_mark` (
   `extra` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE INDEX `idx_object` ON `zt_mark`(`objectType`,`objectID`);
+CREATE INDEX `idx_account` ON `zt_mark`(`account`);
