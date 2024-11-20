@@ -10,6 +10,11 @@ title=测试 systemModel::getList();
 timeout=0
 cid=1
 
+- 查询默认排序应用第0条的name属性 @应用10
+- 获取所有应用数量 @10
+- 查询默认排序应用下的状态第0条的status属性 @active
+- 查询ID正序排序应用第0条的name属性 @应用1
+- 查询状态倒序排序应用第0条的name属性 @应用1
 
 */
 global $tester;
