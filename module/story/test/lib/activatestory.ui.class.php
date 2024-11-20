@@ -35,6 +35,9 @@ class activateStoryTester extends tester
 
         return $this->success('激活研发需求成功');
     }
+
+    /**
+     * check the information after activate an epic
      * @param string $storyID
      * @access public
      * @return object
