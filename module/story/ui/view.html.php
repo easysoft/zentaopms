@@ -39,9 +39,13 @@ for($i = $story->version; $i >= 1; $i--)
 /* 根据需求类型，设置要激活的导航项。Active navbar item by story type. */
 if($app->tab == 'product') setPageData('activeMenuID', $story->type);
 
+$canModify  = true;
+if($app->tab == 'project' && isset($project)) $canModify = common::canModify('project', $project);
+if($app->tab == 'execution' && isset($execution)) $canModify = common::canModify('execution', $execution);
+
 /* 初始化头部右上方工具栏。Init detail toolbar. */
 $toolbar = array();
-if(!$isInModal && hasPriv($story->type, 'create'))
+if(!$isInModal && hasPriv($story->type, 'create') && $canModify)
 {
     $otherParam = 'storyID=&projectID=';
     if($app->rawModule == 'projectstory' || $app->tab == 'project') $otherParam = "storyID=&projectID={$this->session->project}";
@@ -145,7 +149,7 @@ if($twins)
         ->items($twins);
 }
 
-if(!in_array($config->vision, array('lite', 'or')))
+if(!in_array($config->vision, array('lite', 'or')) && $canModify)
 {
     $tabs['linkStories'] = setting()
         ->group('relatives')
@@ -186,7 +190,7 @@ if($isInModal) $config->story->actionList['recall']['url'] = str_replace('&from=
 if($story->status == 'changing') $config->story->actionList['recall']['text'] = $lang->story->recallChange;
 $this->loadModel('repo');
 $hasRepo    = $this->repo->getListByProduct($story->product, implode(',', $config->repo->gitServiceTypeList), 1);
-$actions    = $story->deleted ? array() : $this->loadModel('common')->buildOperateMenu($story, $story->type);
+$actions    = $story->deleted || !$canModify ? array() : $this->loadModel('common')->buildOperateMenu($story, $story->type);
 $hasDivider = !empty($actions['mainActions']) && !empty($actions['suffixActions']);
 if(!empty($actions)) $actions = array_merge($actions['mainActions'], $hasDivider ? array(array('type' => 'divider')) : array(), $actions['suffixActions']);
 

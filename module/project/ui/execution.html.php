@@ -25,9 +25,10 @@ jsVar('checkedExecSummary', $lang->execution->checkedExecSummary);
 $searchTask = strtolower($status) == 'bysearch';
 
 $footToolbar = array();
+$canModify            = common::canModify('project', $project);
 $canBatchEdit         = hasPriv('execution', 'batchEdit');
 $canBatchChangeStatus = hasPriv('execution', 'batchChangeStatus');
-$canBatchAction       = $canBatchEdit || $canBatchChangeStatus;
+$canBatchAction       = $canModify && ($canBatchEdit || $canBatchChangeStatus);
 if($canBatchAction)
 {
     if($canBatchEdit)

@@ -4647,7 +4647,9 @@ class executionModel extends model
             $execution->parent      = (isset($executionList[$execution->parent]) && $execution->parent && $execution->grade > 1) ? 'pid' . (string)$execution->parent : '';
             $execution->isParent    = !empty($execution->isParent) or !empty($execution->tasks);
             $execution->actions     = array();
-            if(isset($this->config->project->execution->dtable->actionsRule[$execution->projectModel]))
+
+            $canModify = common::canModify('execution', $execution);
+            if($canModify && isset($this->config->project->execution->dtable->actionsRule[$execution->projectModel]))
             {
                 foreach($this->config->project->execution->dtable->actionsRule[$execution->projectModel] as $actionKey)
                 {
@@ -4681,7 +4683,7 @@ class executionModel extends model
             $rows[$execution->id] = $execution;
 
             /* Append tasks and child stages. */
-            if(!empty($execution->tasks))  $rows = $this->appendTasks($execution->tasks, $rows, $users, $avatarList);
+            if(!empty($execution->tasks))  $rows = $this->appendTasks($execution->tasks, $rows, $users, $avatarList, $canModify);
         }
 
         return $rows;
@@ -4695,10 +4697,11 @@ class executionModel extends model
      * @param  array  $rows
      * @param  array  $users
      * @param  array  $avatarList
+     * @param  bool   $canModify
      * @access public
      * @return array
      */
-    public function appendTasks(array $tasks, array $rows, array $users = array(), array $avatarList = array()): array
+    public function appendTasks(array $tasks, array $rows, array $users = array(), array $avatarList = array(), bool $canModify = true): array
     {
         $this->loadModel('task');
         $this->app->loadConfig('project');
@@ -4708,6 +4711,7 @@ class executionModel extends model
             foreach($this->config->project->execution->dtable->actionsRule['task'] as $action)
             {
                 $rawAction = str_replace('Task', '', $action);
+                if(!$canModify) continue;
                 if(!commonModel::hasPriv('task', $rawAction)) continue;
                 if(!common::hasDBPriv($task, 'task', $rawAction)) continue;
 

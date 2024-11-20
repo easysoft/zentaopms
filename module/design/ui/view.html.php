@@ -16,11 +16,13 @@ detailHeader
     to::title(entityLabel(set(array('entityID' => $design->id, 'level' => 1, 'text' => $design->name))), $design->deleted ? span(setClass('label danger'), $lang->deleted) : null),
 );
 
+$canModify = common::canModify('project', $project);
+
 /* Construct suitable actions for the current task. */
 $operateMenus = array();
 foreach($config->design->view->operateList['main'] as $operate)
 {
-    if(!common::hasPriv('design', $operate) || $design->deleted || !$this->design->isClickable($design, $operate)) continue;
+    if(!$canModify || !common::hasPriv('design', $operate) || $design->deleted || !$this->design->isClickable($design, $operate)) continue;
 
     if(empty($repos) && $operate == 'linkCommit')
     {
@@ -35,7 +37,7 @@ foreach($config->design->view->operateList['main'] as $operate)
 $commonActions = array();
 foreach($config->design->view->operateList['common'] as $operate)
 {
-    if(!common::hasPriv('design', $operate) || $design->deleted) continue;
+    if(!$canModify || !common::hasPriv('design', $operate) || $design->deleted) continue;
     if($operate == 'delete') $config->design->actionList['delete']['class'] = 'ajax-submit';
     $commonActions[] = $config->design->actionList[$operate];
 }

@@ -63,6 +63,12 @@ jsVar('releaseID', $release->id);
 jsVar('showGrade', $showGrade);
 jsVar('grades', $grades);
 
+if($app->tab == 'project' && !common::canModify('project', $project))
+{
+    unset($config->release->dtable->story->fieldList['actions']['list']);
+    unset($config->release->dtable->bug->fieldList['actions']['list']);
+}
+
 /* Table data and setting for finished stories tab. */
 jsVar('summary', $summary);
 jsVar('storyCases', $storyCases);
