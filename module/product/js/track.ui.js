@@ -103,7 +103,7 @@ window.itemRender = function(info)
     const col = info.col;
     if(col == 'task')
     {
-        if(info.item.parent > '0') info.item.className.push('hidden childTask parent-' + info.item.parent);
+        if(info.item.parent > '0' && tasks[info.item.parent] !== undefined) info.item.className.push('hidden childTask parent-' + info.item.parent);
         if(info.item.parent == '-1') info.item.className.push('parentTask');
     }
 

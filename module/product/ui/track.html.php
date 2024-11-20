@@ -118,6 +118,7 @@ jsVar('orderByTitle', $orderByTitle);
 jsVar('storyType',    $storyType);
 jsVar('users',        $users);
 jsVar('privs',        $privs);
+jsVar('tasks',        $tasks);
 
 empty($tracks) ? div(setClass('dtable-empty-tip bg-white shadow'), span(setClass('text-gray'), $lang->noData)) : div
 (
