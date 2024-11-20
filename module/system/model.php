@@ -47,6 +47,25 @@ class systemModel extends model
             ->fetchPairs('id', 'name');
     }
 
+    /**
+     * 创建应用。
+     * Create an app.
+     *
+     * @param  object $formData
+     * @access public
+     * @return bool|int
+     */
+    public function create(object $formData): bool|int
+    {
+        $this->dao->insert(TABLE_SYSTEM)->data($formData)
+            ->check('name', 'unique')
+            ->batchCheck($this->config->system->create->requiredFields, 'notempty')
+            ->autoCheck()
+            ->exec();
+
+        if(dao::isError()) return false;
+        return $this->dao->lastInsertID();
+    }
 
     /**
      * 获取自定义的域名设置。
