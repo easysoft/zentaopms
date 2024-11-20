@@ -95,3 +95,19 @@ $projectStory->branch->range('0');
 $projectStory->story->range('1-10,3');
 $projectStory->version->range('1');
 $projectStory->order->range('1{10},2{1}');
+$projectStory->gen(11);
+
+$tester = new checkTabTester();
+$tester->login();
+
+/* 标签统计 */
+r($tester->checkTab('allTab', '10'))              && p('message,status') && e('allTab下显示条数正确,SUCCESS');               //检查全部标签下显示条数
+r($tester->checkTab('unclosedTab', '9'))          && p('message,status') && e('unclosedTab下显示条数正确,SUCCESS');          //检查未关闭标签下显示条数
+r($tester->checkTab('draftTab', '1'))             && p('message,status') && e('draftTab下显示条数正确,SUCCESS');             //检查草稿标签下显示条数
+r($tester->checkTab('reviewingTab', '2'))         && p('message,status') && e('reviewingTab下显示条数正确,SUCCESS');         //检查评审中标签下显示条数
+r($tester->checkTab('changingTab', '3'))          && p('message,status') && e('changingTab下显示条数正确,SUCCESS');          //检查变更中标签下显示条数
+r($tester->checkTab('closedTab', '1'))            && p('message,status') && e('closedTab下显示条数正确,SUCCESS');            //检查已关闭标签下显示条数
+r($tester->checkTab('linkedExecutionTab', '1'))   && p('message,status') && e('linkedExecutionTab下显示条数正确,SUCCESS');   //检查已关联执行标签下显示条数
+r($tester->checkTab('unlinkedExecutionTab', '9')) && p('message,status') && e('unlinkedExecutionTab下显示条数正确,SUCCESS'); //检查未关联执行标签下显示条数
+
+$tester->closeBrowser();
