@@ -27,3 +27,8 @@ ALTER TABLE `zt_review` ADD `toAuditBy` varchar(30) not NULL default '' AFTER `l
 ALTER TABLE `zt_review` ADD `toAuditDate` datetime NULL AFTER `toAuditBy`;
 
 ALTER TABLE `zt_design` ADD `storyVersion` smallint(6) UNSIGNED NOT NULL DEFAULT '1' AFTER `story`;
+
+ALTER TABLE zt_dataview MODIFY `fields` text NULL;
+ALTER TABLE zt_dataview MODIFY `objects` text NULL;
+ALTER TABLE zt_dataview MODIFY `mode` varchar(50) NOT NULL DEFAULT 'builder';
+ALTER TABLE zt_dataview ADD `driver` enum('mysql','duckdb') NOT NULL DEFAULT 'mysql' AFTER `code`;
