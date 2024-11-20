@@ -33,7 +33,7 @@ ALTER TABLE zt_dataview MODIFY `objects` text NULL;
 ALTER TABLE zt_dataview MODIFY `mode` varchar(50) NOT NULL DEFAULT 'builder';
 ALTER TABLE zt_dataview ADD `driver` enum('mysql','duckdb') NOT NULL DEFAULT 'mysql' AFTER `code`;
 
-CREATE TABLE `zt_pivotspec` (
+CREATE TABLE IF NOT EXISTS `zt_pivotspec` (
   `pivot` mediumint(8) NOT NULL,
   `version` varchar(10) NOT NULL,
   `driver` enum('mysql', 'duckdb') NOT NULL default 'mysql',
@@ -47,11 +47,11 @@ CREATE TABLE `zt_pivotspec` (
   `objects` text NULL,
   `settings` text NULL,
   `filters` text NULL,
-  `createdDate` datetime NULL,
-  UNIQUE KEY `pivot` (`pivot`, `version`)
+  `createdDate` datetime NULL
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `idx_pivot` ON `zt_pivotspec`(`pivot`);
 
-ALTER TABLE `zt_pivot` ADD `version` varchar(10) NOT NULL AFTER `builtin`;
+ALTER TABLE `zt_pivot` ADD `version` varchar(10) NOT NULL DEFAULT '1' AFTER `builtin`;
 ALTER TABLE `zt_pivot` CHANGE `mode` `mode` varchar(10) NOT NULL DEFAULT 'builder';
 ALTER TABLE `zt_pivot` CHANGE `sql` `sql` text NULL;
 ALTER TABLE `zt_pivot` CHANGE `fields` `fields` text NULL;
