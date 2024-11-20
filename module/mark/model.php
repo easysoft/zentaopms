@@ -42,7 +42,8 @@ class markModel extends model
 
         foreach($objects as $object)
         {
-            $objectMarks = array_filter($marks, function($mark) use($object) {
+            $objectMarks = array_filter($marks, function($mark) use($object)
+            {
                 return $mark->objectID == $object->id && $mark->version == $object->version;
             });
 
