@@ -16153,7 +16153,7 @@ CREATE TABLE IF NOT EXISTS `zt_mark` (
   `objectID` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `version` varchar(50) NOT NULL DEFAULT '',
   `account` char(30) NOT NULL DEFAULT '',
-  `date` date NOT NULL DEFAULT NULL,
+  `date` datetime NULL,
   `mark` varchar(50) NOT NULL DEFAULT '',
   `extra` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
