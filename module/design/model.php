@@ -58,11 +58,15 @@ class designModel extends model
     public function batchCreate(int $projectID = 0, int $productID = 0, array $designs = array()): bool
     {
         $this->loadModel('action');
+
+        $stories = is_array($_POST['story']) ? $this->loadModel('story')->getByList($this->post->story) : array();
+
         foreach($designs as $rowID => $design)
         {
             $design->product   = $productID;
             $design->project   = $projectID;
             $design->createdBy = $this->app->user->account;
+            if(!empty($stories[$design->story])) $design->storyVersion = $stories[$design->story]->version;
             $this->dao->insert(TABLE_DESIGN)->data($design)->autoCheck()->batchCheck($this->config->design->batchcreate->requiredFields, 'notempty')->exec();
 
             if(dao::isError())
@@ -255,7 +259,12 @@ class designModel extends model
             $design->commit .= html::a(helper::createLink('design', 'revision', "revisionID={$relation->BID}&projectID={$design->project}"), "# {$revision}", '', "title='{$revision}' class='flex clip'");
         }
 
-        if($design->story > 0) $design->storyInfo = $this->loadModel('story')->fetchByID((int)$design->story);
+        if($design->story > 0)
+        {
+            $storyInfo = $this->loadModel('story')->fetchByID((int)$design->story);
+            $design->storyInfo   = $storyInfo;
+            $design->needConfirm = $storyInfo->version != $design->storyVersion;
+        }
 
         return $this->loadModel('file')->replaceImgURL($design, 'desc');
     }
@@ -334,6 +343,15 @@ class designModel extends model
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
+            $stories = $this->loadModel('story')->getByList(array_column($designs, 'story'));
+            foreach($designs as $designID => $design)
+            {
+                if(isset($stories[$design->story]))
+                {
+                    $storyInfo = $stories[$design->story];
+                    $designs[$designID]->needConfirm = $storyInfo->version != $design->storyVersion;
+                }
+            }
         }
 
         return $designs;
@@ -437,5 +455,40 @@ class designModel extends model
             ->andWhere('t3.id')->ne('')
             ->orderBy('id')
             ->fetchGroup('revision', 'id');
+    }
+
+    /**
+     * 确认设计的需求变更。
+     * Confirm story change of design.
+     *
+     * @param  int    $designID
+     * @access public
+     * @return bool
+     */
+    public function confirmStoryChange(int $designID)
+    {
+        $design = $this->fetchByID($designID);
+        if($design)
+        {
+            $story  = $this->loadModel('story')->fetchByID((int)$design->story);
+            if($story) $this->dao->update(TABLE_DESIGN)->set('storyVersion')->eq($story->version)->where('id')->eq($designID)->exec();
+        }
+        return dao::isError();
+    }
+
+    /**
+     * 判断当前动作是否可以点击。
+     * Adjust the action is clickable.
+     *
+     * @param  object    $object
+     * @param  string    $action
+     * @access public
+     * @return bool
+     */
+    public static function isClickable(object $object, string $action): bool
+    {
+        $action = strtolower($action);
+        if($action == 'confirmstorychange') return !empty($object->needConfirm);
+        return true;
     }
 }

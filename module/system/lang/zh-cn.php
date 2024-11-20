@@ -29,6 +29,25 @@ $lang->system->nodeQuantity    = '节点数';
 $lang->system->serviceQuantity = '服务数';
 $lang->system->cpuUsage        = 'CPU（核）';
 $lang->system->memUsage        = '内存（GB）';
+$lang->system->name            = '应用名称';
+$lang->system->latestRelease   = '最新版本号';
+$lang->system->children        = '包含应用';
+$lang->system->latestRelease   = '最新版本号';
+$lang->system->status          = '状态';
+$lang->system->browse          = '应用列表';
+$lang->system->create          = '创建应用';
+$lang->system->edit            = '编辑应用';
+$lang->system->delete          = '删除应用';
+$lang->system->active          = '上架应用';
+$lang->system->inactive        = '下架应用';
+
+$lang->system->statusList = array();
+$lang->system->statusList['active']   = '已上架';
+$lang->system->statusList['inactive'] = '已下架';
+
+$lang->system->confirmDelete   = '确定要删除应用吗？';
+$lang->system->confirmActive   = '确定要上架应用吗？';
+$lang->system->confirmInactive = '确定要下架应用吗？';
 
 /* LDAP */
 $lang->system->LDAP = new stdclass;

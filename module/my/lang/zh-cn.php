@@ -55,6 +55,7 @@ $lang->my->contactList     = '联系人列表';
 $lang->my->myContact       = '我的联系人';
 $lang->my->publicContact   = '公共联系人';
 $lang->my->manageSelf      = '仅可维护自己创建的联系人';
+$lang->my->adminView       = '系统管理员具备删除公共联系人权限';
 
 $lang->my->indexAction      = '地盘仪表盘';
 $lang->my->calendarAction   = '我的日程';
@@ -168,8 +169,9 @@ $lang->my->featureBar['project']['suspended']  = '已挂起';
 $lang->my->featureBar['project']['closed']     = '已关闭';
 $lang->my->featureBar['project']['openedbyme'] = '由我创建';
 
-$lang->my->featureBar['execution']['undone'] = '未完成';
-$lang->my->featureBar['execution']['done']   = '已完成';
+$lang->my->featureBar['execution']['undone']  = '未完成';
+$lang->my->featureBar['execution']['done']    = '已完成';
+$lang->my->featureBar['execution']['delayed'] = '已延期';
 
 $lang->my->featureBar['dynamic']['all']       = '全部';
 $lang->my->featureBar['dynamic']['today']     = '今天';

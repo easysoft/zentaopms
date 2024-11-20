@@ -85,7 +85,7 @@ class execution extends control
         $childExecutions = $this->execution->getChildExecutions($executionID);
         $teamMembers     = $this->execution->getTeamMembers($executionID);
         $actions         = $this->loadModel('action')->getList($this->objectType, $executionID);
-        $project         = $this->loadModel('project')->getByID($execution->project);
+        $project         = $this->loadModel('project')->fetchByID($execution->project);
 
         /* Set menu. */
         $this->execution->setMenu($executionID, 0, $extra);
@@ -2929,8 +2929,9 @@ class execution extends control
     {
         if($_POST)
         {
-            $executionLang   = $this->lang->execution;
-            $executionConfig = $this->config->execution;
+            $executionLang          = $this->lang->execution;
+            $executionConfig        = $this->config->execution;
+            $projectExecutionDtable = $this->config->project->execution->dtable->fieldList;
 
             $projectID = $from == 'project' ? $this->session->project : 0;
             if($projectID) $this->project->setMenu($projectID);
@@ -2943,33 +2944,77 @@ class execution extends control
                 if($fieldName == 'name' and $this->app->tab == 'project' and ($project->model == 'agileplus' or $project->model == 'waterfallplus')) $fields['method'] = $executionLang->method;
 
                 $fieldName = trim($fieldName);
-                $fields[$fieldName] = zget($executionLang, $fieldName);
+                $fields[$fieldName] = $from == 'project' && !empty($projectExecutionDtable[$fieldName]) ? $projectExecutionDtable[$fieldName]['title']  : zget($executionLang, $fieldName);
                 unset($fields[$key]);
             }
+            if(isset($fields['id'])) $fields['id'] = $this->lang->idAB;
+            unset($fields[$from == 'project' ? 'projectName' : 'productName']);
 
-            $users = $this->loadModel('user')->getPairs('noletter');
-            $executionStats = $this->execution->getStatData($projectID, $status == 'byproduct' ? 'all' : $status, $productID, 0, false, 'withchild', $orderBy);
+            $users    = $this->loadModel('user')->getPairs('noletter');
+            $showTask = ($this->app->tab == 'project' && (bool)$this->cookie->showTask);
+            if($showTask && strtolower($status) == 'bysearch')
+            {
+                $executionIdList = $this->loadModel('programplan')->getStageList($projectID, $productID, 'all', 'order');
+                $tasks = $this->programplan->getGanttTasks($projectID, array_keys($executionIdList), strtolower($status), 0, null);
+                $executionTasks  = array();
+                $executionIdList = array();
+                foreach($tasks as $task)
+                {
+                    $executionIdList[$task->execution] = $task->execution;
+                    if(!isset($executionTasks[$task->execution])) $executionTasks[$task->execution] = array();
+                    $executionTasks[$task->execution][$task->id] = $task;
+                }
+                $executions = $this->execution->getByIdList($executionIdList);
+                $executions = $this->execution->batchProcessExecution($executions, $projectID, $productID, true, '', $executionTasks);
+                $executionStats = array_values($executions);
+            }
+            else
+            {
+                $executionStats = $this->execution->getStatData($projectID, $status == 'byproduct' ? 'all' : $status, $productID, 0, (bool)$showTask, 'withchild', $orderBy);
+            }
             $executionStats = $this->flattenObjectArray($executionStats);
+
+            $rows           = array();
+            $checkedItem    = $this->cookie->checkedItem;
             foreach($executionStats as $i => $execution)
             {
+                if($this->post->exportType == 'selected')
+                {
+                    if(strpos(",$checkedItem,", ",pid{$execution->id},") === false) continue;
+                }
+
                 $execution->PM            = zget($users, $execution->PM);
                 $execution->status        = isset($execution->delay) ? $executionLang->delayed : $this->processStatus('execution', $execution);
                 $execution->progress     .= '%';
                 $execution->name          = isset($execution->title) ? $execution->title : $execution->name;
                 if(isset($executionStats[$execution->parent])) $execution->name = $executionStats[$execution->parent]->name . '/' . $execution->name;
+                $execution->name = zget($this->lang->execution->typeList, $execution->type, $this->lang->executionCommon) . '-' . $execution->name;
                 if($this->app->tab == 'project' and ($project->model == 'agileplus' or $project->model == 'waterfallplus')) $execution->method = zget($executionLang->typeList, $execution->type);
 
-                if($this->post->exportType == 'selected')
+                $rows[] = $execution;
+
+                if(empty($execution->tasks)) continue;
+                foreach($execution->tasks as $task)
                 {
-                    $checkedItem = $this->cookie->checkedItem;
-                    if(strpos(",$checkedItem,", ",pid{$execution->id},") === false) unset($executionStats[$i]);
+                    $task->name          = $this->lang->task->common . '-' . (!empty($task->parent) && isset($execution->tasks[$task->parent]) ? '>' : '') . $task->name;
+                    $task->status        = zget($this->lang->task->statusList, $task->status);
+                    $task->totalEstimate = $task->estimate;
+                    $task->totalConsumed = $task->consumed;
+                    $task->totalLeft     = $task->left;
+                    $task->progress      = (($task->consumed + $task->left) == 0 ? 0 : round($task->consumed / ($task->consumed + $task->left), 4) * 100) . '%';
+                    $task->begin         = !helper::isZeroDate($task->estStarted) ? $task->estStarted : '';
+                    $task->end           = !helper::isZeroDate($task->deadline) ? $task->deadline : '';
+                    $task->realBegan     = !helper::isZeroDate($task->realStarted) ? $task->realStarted : '';
+                    $task->realEnd       = !helper::isZeroDate($task->realFinished) ? $task->realFinished : '';
+                    $task->PM            = zget($users, $task->assignedTo);
+                    $rows[] = $task;
                 }
             }
 
             if($this->config->edition != 'open') list($fields, $executionStats) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $executionStats);
 
             $this->post->set('fields', $fields);
-            $this->post->set('rows', $executionStats);
+            $this->post->set('rows', $rows);
             $this->post->set('kind', $this->lang->execution->common);
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
@@ -2980,9 +3025,11 @@ class execution extends control
             $project = $this->project->getByID($this->session->project);
             if(!empty($project->model) && $project->model == 'waterfall') $executionConcept = $this->lang->project->stage;
             if(!empty($project->model) && $project->model == 'scrum')     $executionConcept = $this->lang->executionCommon;
+            $fileName = $project->name . ' - ' . $executionConcept;
         }
 
-        $this->view->fileName = (in_array($status, array('all', 'undone')) ? $this->lang->execution->$status : $this->lang->execution->statusList[$status]) . $executionConcept;
+        if($status != 'bysearch') $fileName = (in_array($status, array('all', 'undone')) ? $this->lang->execution->$status : $this->lang->execution->statusList[$status]) . $executionConcept;
+        $this->view->fileName = $fileName;
         $this->display();
     }
 

@@ -42,20 +42,21 @@ $lang->design->more          = '更多';
 $lang->design->project       = '所属项目';
 
 /* 动作列表. */
-$lang->design->common       = '设计';
-$lang->design->create       = '创建设计';
-$lang->design->batchCreate  = '批量创建';
-$lang->design->edit         = '变更';
-$lang->design->delete       = '删除';
-$lang->design->view         = '设计详情';
-$lang->design->browse       = '设计列表';
-$lang->design->viewCommit   = '查看提交';
-$lang->design->linkCommit   = '关联提交';
-$lang->design->unlinkCommit = '取消关联';
-$lang->design->submit       = '提交评审';
-$lang->design->assignTo     = '指派';
-$lang->design->assignAction = '指派';
-$lang->design->revision     = '查看关联代码';
+$lang->design->common             = '设计';
+$lang->design->create             = '创建设计';
+$lang->design->batchCreate        = '批量创建';
+$lang->design->edit               = '变更';
+$lang->design->delete             = '删除';
+$lang->design->view               = '设计详情';
+$lang->design->browse             = '设计列表';
+$lang->design->viewCommit         = '查看提交';
+$lang->design->linkCommit         = '关联提交';
+$lang->design->unlinkCommit       = '取消关联';
+$lang->design->submit             = '提交评审';
+$lang->design->assignTo           = '指派';
+$lang->design->assignAction       = '指派';
+$lang->design->revision           = '查看关联代码';
+$lang->design->confirmStoryChange = '确认';
 
 $lang->design->browseAction = '设计列表';
 

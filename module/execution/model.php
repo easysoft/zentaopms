@@ -100,7 +100,7 @@ class executionModel extends model
      */
     public function setMenu(int $executionID)
     {
-        $execution = $this->getByID((int)$executionID);
+        $execution = $this->fetchByID((int)$executionID);
         if(!$execution) return;
 
         if($execution->type == 'kanban') $this->executionTao->setKanbanMenu();
@@ -1448,7 +1448,8 @@ class executionModel extends model
             ->beginIF(!empty($executionQuery))->andWhere($executionQuery)->fi()
             ->beginIF($productID)->andWhere('t3.product')->eq($productID)->fi()
             ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
-            ->beginIF(!in_array($browseType, array('all', 'undone', 'involved', 'review', 'bySearch')))->andWhere('t1.status')->eq($browseType)->fi()
+            ->beginIF(!in_array($browseType, array('all', 'undone', 'involved', 'review', 'bySearch', 'delayed')))->andWhere('t1.status')->eq($browseType)->fi()
+            ->beginIF($browseType == 'delayed')->andWhere('t1.end')->gt('1970-1-1')->andWhere('t1.end')->lt(date(DT_DATE1))->andWhere('t1.status')->notin('done,closed,suspended')->fi()
             ->beginIF($browseType == 'undone')->andWhere('t1.status')->notIN('done,closed')->fi()
             ->beginIF($browseType == 'review')
             ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
@@ -1467,17 +1468,19 @@ class executionModel extends model
      * @param  int        $projectID
      * @param  int        $productID
      * @param  bool       $withTasks
-     * @param  string|int $param     skipParent|hasParentName
+     * @param  string|int $param          skipParent|hasParentName
+     * @param  array      $executionTasks
      * @access public
      * @return array
      */
-    public function batchProcessExecution(array $executions, int $projectID = 0, int $productID = 0, bool $withTasks = false, string|int $param = ''): array
+    public function batchProcessExecution(array $executions, int $projectID = 0, int $productID = 0, bool $withTasks = false, string|int $param = '', array $executionTasks = array()): array
     {
         if(empty($executions)) return $executions;
 
-        $productList = $this->executionTao->getProductList($projectID); // Get product name of the linked execution.
+        $project     = $this->loadModel('project')->fetchByID($projectID);
+        $productList = $this->executionTao->getProductList($projectID);   // Get product name of the linked execution.
 
-        if($withTasks) $executionTasks = $this->getTaskGroupByExecution(array_keys($executions));
+        if($withTasks && empty($executionTasks)) $executionTasks = $this->getTaskGroupByExecution(array_keys($executions), false);
 
         $parentList       = array();
         $today            = helper::today();
@@ -1492,6 +1495,8 @@ class executionModel extends model
             $execution->product     = $productID;
             $execution->productID   = $productID;
             if($execution->end) $execution->end = date(DT_DATE1, strtotime($execution->end));
+            if(!isset($execution->projectName))  $execution->projectName  = $project->name;
+            if(!isset($execution->projectModel)) $execution->projectModel = $project->model;
 
             if(isset($parentExecutions[$execution->id])) $executions[$execution->id]->isParent = 1;
             if(empty($productID) && !empty($productList[$execution->id])) $execution->product = trim($productList[$execution->id]->product, ',');
@@ -1906,16 +1911,17 @@ class executionModel extends model
      * Get the task data group by execution id list.
      *
      * @param  array  $executionIdList
+     * @param  bool   $filterStatus
      * @access public
      * @return array
      */
-    public function getTaskGroupByExecution(array $executionIdList = array()): array
+    public function getTaskGroupByExecution(array $executionIdList = array(), bool $filterStatus = true): array
     {
         if(empty($executionIdList)) return array();
 
         $executionTasks = $this->dao->select('*')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
-            ->andWhere('status')->notin('closed,cancel')
+            ->beginIF($filterStatus)->andWhere('status')->notin('closed,cancel')->fi()
             ->andWhere('execution')->in($executionIdList)
             ->orderBy('order_asc')
             ->fetchGroup('execution', 'id');
@@ -3562,10 +3568,11 @@ class executionModel extends model
      * @param  string $condition
      * @param  string $orderBy
      * @param  object $pager
+     * @param  string $queryKey
      * @access public
      * @return array
      */
-    public function getSearchTasks(string $condition, string $orderBy, object $pager = null): array
+    public function getSearchTasks(string $condition, string $orderBy, object $pager = null, string $queryKey = 'task'): array
     {
         if(strpos($condition, '`assignedTo`') !== false)
         {
@@ -3573,7 +3580,7 @@ class executionModel extends model
             $condition = preg_replace('/`(\w+)`/', 't1.`$1`', $condition);
             foreach($matches[0] as $matchIndex => $match) $condition = str_replace("t1.{$match}", "(t1.{$match} or (t1.mode = 'multi' and t2.`account` {$matches[1][$matchIndex]} and t1.status != 'closed' and t2.status != 'done') )", $condition);
 
-            $this->session->set('taskQueryCondition', $condition, $this->app->tab);
+            $this->session->set("{$queryKey}QueryCondition", $condition, $this->app->tab);
         }
 
         $sql = $this->dao->select('t1.id')->from(TABLE_TASK)->alias('t1');
@@ -3965,11 +3972,21 @@ class executionModel extends model
             $executions  = $this->getPairs(0, 'all', "nocode,noprefix,multiple");
             $executionID = empty($executions) ? 0 : current(array_keys($executions));
         }
+        $execution = $this->getByID($executionID);
 
         $this->config->execution->search['actionURL'] = $actionURL;
         $this->config->execution->search['queryID']   = $queryID;
-        $this->config->execution->search['params']['execution']['values'] = $showAll ? $executions : array(''=>'', $executionID => $executions[$executionID], 'all' => $this->lang->execution->allExecutions);
-        $this->config->execution->search['params']['story']['values']     = $this->loadModel('story')->getExecutionStoryPairs($executionID, 0, 'all', '', 'full', 'unclosed', 'story', false);
+        $this->config->execution->search['params']['story']['values'] = $this->loadModel('story')->getExecutionStoryPairs($executionID, 0, 'all', '', 'full', 'unclosed', 'story', false);
+
+        if($execution->type == 'project')
+        {
+            unset($this->config->execution->search['fields']['project']);
+            $this->config->execution->search['params']['execution']['values'] = array('' => '') + $executions;
+        }
+        else
+        {
+            $this->config->execution->search['params']['execution']['values'] = $showAll ? $executions : array(''=>'', $executionID => $executions[$executionID], 'all' => $this->lang->execution->allExecutions);
+        }
 
         $projects = $this->loadModel('project')->getPairsByProgram();
         $this->config->execution->search['params']['project']['values'] = $projects + array('all' => $this->lang->project->allProjects);
@@ -4630,9 +4647,11 @@ class executionModel extends model
             $execution->parent      = (isset($executionList[$execution->parent]) && $execution->parent && $execution->grade > 1) ? 'pid' . (string)$execution->parent : '';
             $execution->isParent    = !empty($execution->isParent) or !empty($execution->tasks);
             $execution->actions     = array();
-            if(isset($this->config->projectExecution->dtable->actionsRule[$execution->projectModel]))
+
+            $canModify = common::canModify('execution', $execution);
+            if($canModify && isset($this->config->project->execution->dtable->actionsRule[$execution->projectModel]))
             {
-                foreach($this->config->projectExecution->dtable->actionsRule[$execution->projectModel] as $actionKey)
+                foreach($this->config->project->execution->dtable->actionsRule[$execution->projectModel] as $actionKey)
                 {
                     $action  = array();
                     $actions = explode('|', $actionKey);
@@ -4664,7 +4683,7 @@ class executionModel extends model
             $rows[$execution->id] = $execution;
 
             /* Append tasks and child stages. */
-            if(!empty($execution->tasks))  $rows = $this->appendTasks($execution->tasks, $rows, $users, $avatarList);
+            if(!empty($execution->tasks))  $rows = $this->appendTasks($execution->tasks, $rows, $users, $avatarList, $canModify);
         }
 
         return $rows;
@@ -4678,19 +4697,21 @@ class executionModel extends model
      * @param  array  $rows
      * @param  array  $users
      * @param  array  $avatarList
+     * @param  bool   $canModify
      * @access public
      * @return array
      */
-    public function appendTasks(array $tasks, array $rows, array $users = array(), array $avatarList = array()): array
+    public function appendTasks(array $tasks, array $rows, array $users = array(), array $avatarList = array(), bool $canModify = true): array
     {
         $this->loadModel('task');
         $this->app->loadConfig('project');
 
         foreach($tasks as $task)
         {
-            foreach($this->config->projectExecution->dtable->actionsRule['task'] as $action)
+            foreach($this->config->project->execution->dtable->actionsRule['task'] as $action)
             {
                 $rawAction = str_replace('Task', '', $action);
+                if(!$canModify) continue;
                 if(!commonModel::hasPriv('task', $rawAction)) continue;
                 if(!common::hasDBPriv($task, 'task', $rawAction)) continue;
 
@@ -4701,17 +4722,19 @@ class executionModel extends model
             }
 
             $childrenLabel       = $task->parent >  0 ? "<span class='label gray-pale rounded-xl mx-1'>{$this->lang->task->childrenAB}</span>" : '';
-            $task->name          = "<span class='label secondary-pale'>{$this->lang->task->common}</span> " . $childrenLabel . html::a(helper::createLink('task', 'view', "id={$task->id}"), $task->name);
+            $task->name          = "<span class='pri-{$task->pri} mr-1'>{$task->pri}</span> " . $childrenLabel . html::a(helper::createLink('task', 'view', "id={$task->id}"), $task->name);
             $task->rawID         = $task->id;
             $task->id            = 'tid' . (string)$task->id;
             $task->totalEstimate = $task->estimate;
             $task->totalConsumed = $task->consumed;
             $task->totalLeft     = $task->left;
             $task->isParent      = ($task->parent < 0);
-            $task->parent        = $task->parent <= 0 ? 'pid' . (string)$task->execution : 'tid' . (string)$task->parent;
+            $task->parent        = $task->parent <= 0 || !isset($tasks[$task->parent]) ? 'pid' . (string)$task->execution : 'tid' . (string)$task->parent;
             $task->progress      = ($task->consumed + $task->left) == 0 ? 0 : round($task->consumed / ($task->consumed + $task->left), 2) * 100;
             $task->begin         = $task->estStarted;
             $task->end           = $task->deadline;
+            $task->realBegan     = $task->realStarted;
+            $task->realEnd       = $task->finishedDate;
             $task->PM            = $task->assignedTo;
             if($task->PM)
             {

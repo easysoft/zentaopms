@@ -78,6 +78,8 @@ class story extends control
             $storyID        = $this->story->{$createFunction}($storyData, $objectID, $bugID, $extra, $todoID);
             if(empty($storyID) || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            $this->storyZen->updateFileAfterCreate($storyID, $storyType);
+
             $productID = $this->post->product ? $this->post->product : $productID;
             $message   = $this->executeHooks($storyID);
             if(empty($message)) $message = $this->post->status == 'draft' ? $this->lang->story->saveDraftSuccess : $this->lang->saveSuccess;

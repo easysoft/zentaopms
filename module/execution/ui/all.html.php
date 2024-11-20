@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('typeList', $lang->execution->typeList);
-jsVar('delayed', $lang->execution->delayed);
+jsVar('delayWarning', $lang->task->delayWarning);
 jsVar('confirmBatchCloseExecution', $lang->execution->confirmBatchCloseExecution);
 
 $footToolbar = array();

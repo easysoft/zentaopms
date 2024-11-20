@@ -55,6 +55,7 @@ $lang->my->contactList     = 'Contact List';
 $lang->my->myContact       = 'My Contact';
 $lang->my->publicContact   = 'Public Contact';
 $lang->my->manageSelf      = 'Only can manage contacts created by your self.';
+$lang->my->adminView       = 'The system administrator has the permission to delete public contacts';
 
 $lang->my->indexAction      = 'My Index';
 $lang->my->calendarAction   = 'My Calendar';
@@ -168,8 +169,9 @@ $lang->my->featureBar['project']['suspended']  = 'Suspended';
 $lang->my->featureBar['project']['closed']     = 'Closed';
 $lang->my->featureBar['project']['openedbyme'] = 'CreatedByMe';
 
-$lang->my->featureBar['execution']['undone'] = 'Undone';
-$lang->my->featureBar['execution']['done']   = 'Done';
+$lang->my->featureBar['execution']['undone']  = 'Undone';
+$lang->my->featureBar['execution']['done']    = 'Done';
+$lang->my->featureBar['execution']['delayed'] = 'Delayed';
 
 $lang->my->featureBar['dynamic']['all']       = 'All';
 $lang->my->featureBar['dynamic']['today']     = 'Today';

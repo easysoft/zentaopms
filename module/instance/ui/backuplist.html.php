@@ -41,13 +41,20 @@ foreach($backupList as &$backup)
     $backup->latestRestoreTime = $backup->latestRestoreTime == 0 ? '' : date('Y-m-d H:i:s', $backup->latestRestoreTime);
     $backup->restoreTime = zget($lang->instance->backup->operators, $backup->username, $backup->username);
 
+    $actionIdx = 0;
+    foreach($config->backup->dtable->fieldList['actions']['actionsMap'] as $actionType => $actionItems)
+    {
+        $backup->actions[$actionIdx]['name']     = $actionType;
+        $backup->actions[$actionIdx]['disabled'] = false;
+        $actionIdx++;
+    }
     if(!in_array($status, array('success', 'completed')) || in_array($restoreStatus, array('pending', 'inprogress')))  $backup->actions[0]['disabled'] = true;
 }
 dtable
 (
     set::cols($config->backup->dtable->fieldList),
     set::data($backups),
-    set::sortLink(createLink('instance', 'backuplist', "id={$instance->id}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&pageID={$pager->pageID}")),
+    set::sortLink(createLink('instance', 'backuplist', "id={$instance->id}&recTotal={$pager->recTotal}&pageID={$pager->pageID}")),
     set::loadPartial(true),
     set::footPager(usePager())
 );

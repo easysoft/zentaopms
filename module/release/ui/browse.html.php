@@ -22,9 +22,12 @@ featureBar
 
 /* zin: Define the toolbar on main menu. */
 $canCreateRelease = hasPriv('release', 'create') && common::canModify('product', $product);
+$canManageSystem  = hasPriv('system', 'browse') && common::canModify('product', $product);
 if($canCreateRelease) $createItem = array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->release->create, 'url' => $this->createLink('release', 'create', "productID={$product->id}&branch={$branch}"));
+if($canManageSystem)  $manageSystemItem = array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->release->manageSystem, 'url' => $this->createLink('system', 'browse', "productID={$product->id}&branch={$branch}"), 'data-app' => 'product');
 toolbar
 (
+    !empty($manageSystemItem) ? item(set($manageSystemItem)) : null,
     !empty($createItem) ? item(set($createItem)) : null
 );
 

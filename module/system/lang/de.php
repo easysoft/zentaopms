@@ -29,6 +29,25 @@ $lang->system->nodeQuantity    = 'Nodes';
 $lang->system->serviceQuantity = 'Number of services';
 $lang->system->cpuUsage        = 'CPU（Core）';
 $lang->system->memUsage        = 'Memory（GB）';
+$lang->system->name            = 'Application name';
+$lang->system->latestRelease   = 'Latest version';
+$lang->system->children        = 'Included applications';
+$lang->system->latestRelease   = 'Latest version';
+$lang->system->status          = 'Status';
+$lang->system->browse          = 'Application list';
+$lang->system->create          = 'Create application';
+$lang->system->edit            = 'Edit application';
+$lang->system->delete          = 'Delete application';
+$lang->system->active          = 'Online application';
+$lang->system->inactive        = 'Offline application';
+
+$lang->system->statusList = array();
+$lang->system->statusList['active']   = 'Active';
+$lang->system->statusList['inactive'] = 'Inactive';
+
+$lang->system->confirmDelete   = 'Are you sure to delete the application?';
+$lang->system->confirmActive   = 'Are you sure to online the application?';
+$lang->system->confirmInactive = 'Are you sure to offline the application?';
 
 /* LDAP */
 $lang->system->LDAP = new stdclass;

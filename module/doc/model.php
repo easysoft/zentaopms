@@ -791,6 +791,7 @@ class docModel extends model
             $doc->deleted     = boolval($doc->deleted);
             $doc->isCollector = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false;
             $doc->title       = htmlspecialchars_decode($doc->title);
+            if(!empty($doc->keywords) && is_string($doc->keywords)) $doc->keywords = htmlspecialchars_decode($doc->keywords);
             unset($doc->content);
             unset($doc->draft);
         }

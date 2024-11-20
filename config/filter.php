@@ -361,6 +361,7 @@ $filter->execution->story->cookie['storyProductParam']     = 'int';
 $filter->execution->story->cookie['storyBranchParam']      = 'int';
 $filter->execution->story->cookie['executionStoryOrder']   = 'code';
 $filter->execution->export->cookie['checkedItem']          = 'reg::paramValue';
+$filter->execution->export->cookie['showTask']             = 'code';
 $filter->execution->kanban->cookie['taskToOpen']           = 'int';
 $filter->execution->all->cookie['showExecutionBatchEdit']  = 'int';
 $filter->execution->tree->cookie['showStory']              = 'int';

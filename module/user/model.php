@@ -1078,7 +1078,11 @@ class userModel extends model
         foreach($groups as $group)
         {
             /* 只要有一个权限分组没有配置过视图权限，就代表所有视图都没有访问限制。 */
-            if(empty($group->acl)) break;
+            if(empty($group->acl))
+            {
+                $actionAllow = true;
+                break;
+            }
 
             $acl = json_decode($group->acl, true);
 

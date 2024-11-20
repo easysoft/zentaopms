@@ -596,8 +596,6 @@ class mailModel extends model
         $domain     = zget($this->config->mail, 'domain', common::getSysURL());
         $domain     = rtrim($domain, '/');
 
-        if($objectType == 'review' and empty($object->auditedBy)) return;
-
         if(empty($title)) $action->appendLink = '';
         if($title and $action->appendLink) $action->appendLink = html::a($domain . helper::createLink($action->objectType, 'view', "id={$action->appendLink}"), "#{$action->appendLink} {$title}");
 
@@ -622,10 +620,11 @@ class mailModel extends model
         }
         else
         {
+            if($objectType == 'review') $this->app->loadLang('baseline');
+
             $emails      = array();
             $mailContent = $this->mailTao->getMailContent($objectType, $object, $action);
 
-            if($objectType == 'review') $this->app->loadLang('baseline');
             if($objectType == 'ticket') $emails = $this->loadModel('ticket')->getContactEmails($object->id, $toList, $ccList, $action->action == 'closed');
 
             $this->send($toList, $subject, $mailContent, $ccList, false, $emails);

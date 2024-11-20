@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('browseType', $type);
+jsVar('isSearch', $browseType == 'bysearch');
 
 if(empty($plans))
 {

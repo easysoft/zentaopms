@@ -933,6 +933,8 @@ class my extends control
         $this->view->param       = $param;
         $this->view->mode        = 'audit';
         $this->view->flows       = $flows;
+        $this->view->products    = $this->loadModel('product')->getPairs('', 0, '', 'all');;
+        $this->view->projects    = $this->loadModel('project')->getPairsByProgram();;
         $this->display();
     }
 
@@ -1338,13 +1340,15 @@ class my extends control
 
         if($list)
         {
-            $mode  = $list->account == $this->app->user->account ? 'edit' : 'view';
-            $label = $list->account == $this->app->user->account ? $this->lang->my->manageContacts : $this->lang->my->viewContacts;
+            $mode  = $list->account == $this->app->user->account ? 'edit' : ($this->app->user->admin ? 'adminView' : 'view');
+            $label = $mode == 'edit' ? $this->lang->my->manageContacts : $this->lang->my->viewContacts;
+            $tip   = $mode == 'edit' ? $this->lang->my->manageSelf : ($this->app->user->admin ? $this->lang->my->adminView : '');
         }
         else
         {
             $mode  = 'create';
             $label = $this->lang->my->createContacts;
+            $tip   = '';
         }
 
         $userParams = empty($this->config->user->showDeleted) ? 'noletter|noempty|noclosed|noclosed|nodeleted' : 'noletter|noempty|noclosed|noclosed';
@@ -1355,6 +1359,7 @@ class my extends control
         $this->view->users = $users;
         $this->view->mode  = $mode;
         $this->view->label = $label;
+        $this->view->tip   = $tip;
         $this->view->list  = $list;
         $this->display();
     }

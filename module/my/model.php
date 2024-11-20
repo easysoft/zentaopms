@@ -1035,6 +1035,8 @@ class myModel extends model
             $demand->type    = 'demand';
             $demand->time    = $data->createdDate;
             $demand->status  = $data->status;
+            $demand->product = $data->product;
+            $demand->project = 0;
             $demands[$demand->id] = $demand;
         }
 
@@ -1079,6 +1081,7 @@ class myModel extends model
             $story->time      = $data->openedDate;
             $story->status    = $data->status;
             $story->product   = $data->product;
+            $story->project   = 0;
             $story->parent    = $data->parent;
             $stories[$story->id] = $story;
         }
@@ -1111,11 +1114,13 @@ class myModel extends model
         {
             if($checkExists) return true;
             $case = new stdclass();
-            $case->id     = $data->id;
-            $case->title  = $data->title;
-            $case->type   = 'testcase';
-            $case->time   = $data->openedDate;
-            $case->status = $data->status;
+            $case->id      = $data->id;
+            $case->title   = $data->title;
+            $case->type    = 'testcase';
+            $case->time    = $data->openedDate;
+            $case->status  = $data->status;
+            $case->product = $data->product;
+            $case->project = $data->project;
             $cases[$case->id] = $case;
         }
 
@@ -1148,11 +1153,13 @@ class myModel extends model
             if($checkExists) return true;
 
             $data = new stdclass();
-            $data->id     = $review->id;
-            $data->title  = $review->title;
-            $data->type   = 'projectreview';
-            $data->time   = date('Y-m-d H:i:s', strtotime($review->createdDate));
-            $data->status = $review->status;
+            $data->id      = $review->id;
+            $data->title   = $review->title;
+            $data->type    = 'projectreview';
+            $data->time    = date('Y-m-d H:i:s', strtotime($review->createdDate));
+            $data->status  = $review->status;
+            $data->product = $review->product;
+            $data->project = $review->project;
             $reviewList[] = $data;
         }
         return $reviewList;
@@ -1235,11 +1242,13 @@ class myModel extends model
             if($checkExists) return true;
 
             $data = new stdclass();
-            $data->id     = $feedback->id;
-            $data->title  = $feedback->title;
-            $data->type   = 'feedback';
-            $data->time   = $feedback->openedDate;
-            $data->status = $feedback->status;
+            $data->id      = $feedback->id;
+            $data->title   = $feedback->title;
+            $data->type    = 'feedback';
+            $data->time    = $feedback->openedDate;
+            $data->status  = $feedback->status;
+            $data->product = isset($feedback->product) ? $feedback->product : 0;
+            $data->project = isset($feedback->project) ? $feedback->project : 0;
             $reviewList[] = $data;
         }
         return $reviewList;
@@ -1291,6 +1300,8 @@ class myModel extends model
                 $review->time   = $type == 'attend' ? $object->date : $object->createdDate;
                 $review->status = $type == 'attend' ? $object->reviewStatus : $object->status;
                 $review->title  = '';
+                $review->product = isset($object->product) ? $object->product : 0;
+                $review->project = isset($object->project) ? $object->project : 0;
                 if($type == 'attend')
                 {
                     $review->title = sprintf($this->lang->my->auditField->oaTitle[$type], zget($users, $object->account), $object->date);

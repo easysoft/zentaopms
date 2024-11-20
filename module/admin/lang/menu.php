@@ -197,7 +197,6 @@ if(helper::hasFeature('devops'))
     $lang->admin->menuList->platform['tabMenu']['resource']['provider']   = array('link' => "{$lang->devops->provider}|ops|provider|", 'alias' => 'provider');
     $lang->admin->menuList->platform['tabMenu']['resource']['city']       = array('link' => "{$lang->devops->city}|ops|city|", 'alias' => 'city');
     $lang->admin->menuList->platform['tabMenu']['resource']['os']         = array('link' => "{$lang->devops->os}|ops|os|", 'alias' => 'os');
-    $lang->admin->menuList->platform['tabMenu']['resource']['stage']      = array('link' => "{$lang->devops->stage}|ops|stage|", 'alias' => 'stage');
 
     $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['15'] = 'serverroom';
     $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['20'] = 'service';
@@ -205,7 +204,6 @@ if(helper::hasFeature('devops'))
     $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['30'] = 'provider';
     $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['35'] = 'city';
     $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['40'] = 'os';
-    $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['45'] = 'stage';
 
     if($config->edition === 'open')
     {
@@ -214,7 +212,6 @@ if(helper::hasFeature('devops'))
         unset($lang->admin->menuList->platform['tabMenu']['resource']['stage']);
         unset($lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['20']);
         unset($lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['25']);
-        unset($lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['45']);
     }
 
     //$lang->admin->menuList->platform['menuOrder']['15'] = 'environment';

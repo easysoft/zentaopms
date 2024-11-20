@@ -206,11 +206,12 @@ class programplanTao extends programplanModel
      * 设置甘特图阶段数据。
      * Set the Gantt chart stage data.
      *
-     * @param  array   $plans
+     * @param  array     $plans
+     * @param  string    $browseType
      * @access protected
      * @return array
      */
-    protected function initGanttPlans(array $plans): array
+    protected function initGanttPlans(array $plans, string $browseType = ''): array
     {
         $this->app->loadLang('stage');
 
@@ -220,7 +221,14 @@ class programplanTao extends programplanModel
         foreach($plans as $plan)
         {
             $plan->isParent = false;
-            if(isset($plans[$plan->parent])) $plans[$plan->parent]->isParent = true;
+            if(isset($plans[$plan->parent]))
+            {
+                $plans[$plan->parent]->isParent = true;
+            }
+            elseif($browseType == 'bysearch')
+            {
+                $plans[$plan->id]->parent = 0;
+            }
         }
 
         foreach($plans as $plan)
@@ -244,7 +252,7 @@ class programplanTao extends programplanModel
             if(empty($data->start_date) or empty($data->endDate)) $data->duration = 1;
 
             $datas['data'][$plan->id] = $data;
-            $stageIndex[$plan->id]    = array('planID' => $plan->id, 'parent' => $plan->parent, 'totalEstimate' => 0, 'totalConsumed' => 0, 'totalReal' => 0);
+            $stageIndex[$plan->id]    = array('planID' => $plan->id, 'parent' => isset($plans[$plan->parent]) ? $plan->parent : $plan->project, 'totalEstimate' => 0, 'totalConsumed' => 0, 'totalReal' => 0);
         }
         return array('datas' => $datas, 'stageIndex' => $stageIndex, 'planIdList' => $planIdList, 'reviewDeadline' => $reviewDeadline);
     }
@@ -276,7 +284,7 @@ class programplanTao extends programplanModel
             $dateLimit    = $this->getTaskDateLimit($task, $plan);
             $data         = $this->buildTaskDataForGantt($task, $dateLimit);
             $data->id     = $task->execution . '-' . $task->id;
-            $data->parent = $task->parent > 0 ? $task->execution . '-' . $task->parent : $task->execution;
+            $data->parent = $task->parent > 0 && isset($tasks[$task->parent]) ? $task->execution . '-' . $task->parent : $task->execution;
             if(!isset($executions[$task->execution])) $executions[$task->execution] = $this->dao->select('status')->from(TABLE_EXECUTION)->where('id')->eq($task->execution)->fetch('status');
 
             /* Determines if the object is delay. */

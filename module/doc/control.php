@@ -1857,12 +1857,13 @@ class doc extends control
 
         if($details == 'yes')
         {
-            $lib = $this->doc->getLibByID((int)$doc->lib);
-            if(empty($lib->type))
+            $lib        = $this->doc->getLibByID((int)$doc->lib);
+            $objectType = $lib->type;
+            if(empty($objectType))
             {
-                if($lib->execution)   $lib->type = 'execution';
-                elseif($lib->project) $lib->type = 'project';
-                elseif($lib->product) $lib->type = 'product';
+                if($lib->execution)   $objectType = 'execution';
+                elseif($lib->project) $objectType = 'project';
+                elseif($lib->product) $objectType = 'product';
             }
 
             $objectID   = $this->doc->getObjectIDByLib($lib, $objectType);
@@ -1873,8 +1874,9 @@ class doc extends control
             $doc->object     = $object;
         }
 
-        if($doc->contentType === 'doc' && is_string($doc->content)) $doc->content = htmlspecialchars_decode($doc->content);
-        if(is_string($doc->title)) $doc->title = htmlspecialchars_decode($doc->title);
+        if($doc->contentType === 'doc' && is_string($doc->content)) $doc->content  = htmlspecialchars_decode($doc->content);
+        if(is_string($doc->title))                                  $doc->title    = htmlspecialchars_decode($doc->title);
+        if(!empty($doc->keywords) && is_string($doc->keywords))     $doc->keywords = htmlspecialchars_decode($doc->keywords);
 
         if($docID) $this->doc->createAction($docID, 'view');
 

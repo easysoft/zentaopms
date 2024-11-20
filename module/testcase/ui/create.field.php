@@ -80,6 +80,9 @@ $fields->field('keywords')
     ->width('full')
     ->value(data('case.keywords'));
 
+$files = data('case.files');
 $fields->field('files')
     ->width('full')
-    ->control('fileSelector');
+    ->control('fileSelector', array('defaultFiles' => ($files ? array_values($files) : array())));
+
+$fields->field('fileList')->control('hidden')->value(data('case.files'));

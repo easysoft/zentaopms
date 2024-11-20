@@ -22,6 +22,7 @@ $lang->release->changeStatus     = 'Change Statut';
 $lang->release->batchUnlink      = 'Retirer par Lot';
 $lang->release->batchUnlinkStory = 'Retirer Stories par Lot';
 $lang->release->batchUnlinkBug   = 'Retirer Bugs par Lot';
+$lang->release->manageSystem     = 'Gestion des Applications';
 
 $lang->release->confirmDelete      = 'Voulez-vous réellement supprimer cette release ?';
 $lang->release->syncFromBuilds     = 'Link the stories completed in the version and the bugs solved to the release';

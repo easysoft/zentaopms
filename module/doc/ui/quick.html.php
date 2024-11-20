@@ -16,6 +16,7 @@ $privs['delete']       = hasPriv('doc', 'delete');
 $privs['moveDoc']      = hasPriv('doc', 'moveDoc');
 $privs['collect']      = hasPriv('doc', 'collect');
 $privs['batchMoveDoc'] = hasPriv('doc', 'batchMoveDoc');
+$privs['view']         = hasPriv('doc', 'view');
 
 $spaceID = 1;
 $libID   = $menu['id'];

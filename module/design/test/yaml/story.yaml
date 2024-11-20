@@ -17,3 +17,5 @@ fields:
     range: 'active'
   - field: type
     range: 'story'
+  - field: version
+    range: 1-2

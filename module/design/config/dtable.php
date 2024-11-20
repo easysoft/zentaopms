@@ -56,7 +56,7 @@ if($config->edition != 'open')
 }
 
 $config->design->dtable->fieldList['actions']['type'] = 'actions';
-$config->design->dtable->fieldList['actions']['menu'] = array('edit', 'viewCommit', 'delete');
+$config->design->dtable->fieldList['actions']['menu'] = array('confirmStoryChange', 'edit', 'viewCommit', 'delete');
 $config->design->dtable->fieldList['actions']['list'] = $config->design->actionList;
 
 $app->loadLang('repo');

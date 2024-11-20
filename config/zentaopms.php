@@ -629,6 +629,7 @@ if(!defined('TABLE_CHARTER'))        define('TABLE_CHARTER',        '`' . $confi
 if(!defined('TABLE_MARKET'))         define('TABLE_MARKET',         '`' . $config->db->prefix . 'market`');
 if(!defined('TABLE_MARKETREPORT'))   define('TABLE_MARKETREPORT',   '`' . $config->db->prefix . 'marketreport`');
 if(!defined('TABLE_MARKETRESEARCH')) define('TABLE_MARKETRESEARCH', '`' . $config->db->prefix . 'project`');
+if(!defined('TABLE_SYSTEM'))         define('TABLE_SYSTEM', '`' . $config->db->prefix . 'system`');
 
 $config->objectTables['dept']           = TABLE_DEPT;
 $config->objectTables['product']        = TABLE_PRODUCT;
@@ -724,6 +725,7 @@ $config->objectTables['researchstage']  = TABLE_PROJECT;
 $config->objectTables['workflowgroup']  = TABLE_WORKFLOWGROUP;
 $config->objectTables['productline']    = TABLE_MODULE;
 $config->objectTables['repocommit']     = TABLE_REPOHISTORY;
+$config->objectTables['system']         = TABLE_SYSTEM;
 
 $config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions', 'aiPrompts', 'promptDesign', 'promptExec');
 $config->disabledFeatures = '';
@@ -734,8 +736,8 @@ $config->pipelineTypeList = array('gitlab', 'gogs', 'gitea', 'jenkins', 'sonarqu
 /* Program privs.*/
 $config->programPriv = new stdclass();
 $config->programPriv->noSprint      = array('task', 'story', 'requirement', 'epic', 'tree', 'project', 'execution', 'projectbuild', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'stakeholder', 'projectrelease');
-$config->programPriv->scrum         = array('story', 'requirement', 'epic', 'productplan', 'tree', 'projectplan', 'projectstory', 'projectrelease', 'project', 'execution', 'projectbuild', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'meeting', 'stakeholder', 'testtask');
-$config->programPriv->waterfall     = array_merge($config->programPriv->scrum, array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'milestone', 'design', 'issue', 'risk', 'opportunity', 'measrecord', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport'));
+$config->programPriv->scrum         = array('story', 'requirement', 'epic', 'productplan', 'tree', 'projectplan', 'projectstory', 'projectrelease', 'project', 'execution', 'projectbuild', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'meeting', 'stakeholder', 'testtask', 'issue', 'risk');
+$config->programPriv->waterfall     = array_merge($config->programPriv->scrum, array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'milestone', 'design', 'opportunity', 'measrecord', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport'));
 $config->programPriv->agileplus     = $config->programPriv->scrum;
 $config->programPriv->waterfallplus = $config->programPriv->waterfall;
 $config->programPriv->ipd           = $config->programPriv->waterfall;

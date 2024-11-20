@@ -18,13 +18,17 @@ jsVar('orderBy',   $orderBy);
 jsVar('productID', $productID);
 jsVar('typeList', $lang->execution->typeList);
 jsVar('delayed', $lang->execution->delayed);
+jsVar('delayWarning', $lang->task->delayWarning);
 jsVar('pageExecSummary', $lang->execution->pageExecSummary);
 jsVar('checkedExecSummary', $lang->execution->checkedExecSummary);
 
+$searchTask = strtolower($status) == 'bysearch';
+
 $footToolbar = array();
+$canModify            = common::canModify('project', $project);
 $canBatchEdit         = hasPriv('execution', 'batchEdit');
 $canBatchChangeStatus = hasPriv('execution', 'batchChangeStatus');
-$canBatchAction       = $canBatchEdit || $canBatchChangeStatus;
+$canBatchAction       = $canModify && ($canBatchEdit || $canBatchChangeStatus);
 if($canBatchAction)
 {
     if($canBatchEdit)
@@ -52,28 +56,29 @@ if($canBatchAction)
 }
 
 /* Generate data table fields. */
-$fnGenerateCols = function() use ($config, $project)
+$fieldList = $config->project->execution->dtable->fieldList;
+
+/* waterfall & waterfallplus model with different edit link. */
+if(in_array($project->model, array('waterfall', 'waterfallplus')))
 {
-    $fieldList = $config->projectExecution->dtable->fieldList;
+    $fieldList['actions']['actionsMap']['edit']['data-size'] = 'md';
+    $fieldList['actions']['actionsMap']['edit']['url'] = createLink('programplan', 'edit', "stageID={rawID}&projectID={projectID}");
+}
+if(!$this->cookie->showStage && !$this->cookie->showTask)
+{
+    $fieldList['name']['type'] = 'title';
+    if(!in_array($project->model, array('waterfall', 'waterfallplus', 'ipd'))) unset($fieldList['name']['nestedToggle']);
+}
+if(!$project->hasProduct) unset($fieldList['productName']);
 
-    /* waterfall & waterfallplus model with different edit link. */
-    if(in_array($project->model, array('waterfall', 'waterfallplus')))
-    {
-        $fieldList['actions']['actionsMap']['edit']['data-size'] = 'md';
-        $fieldList['actions']['actionsMap']['edit']['url'] = createLink('programplan', 'edit', "stageID={rawID}&projectID={projectID}");
-    }
-    if(!$this->cookie->showStage && !$this->cookie->showTask)
-    {
-        $fieldList['name']['type'] = 'title';
-        if(!in_array($project->model, array('waterfall', 'waterfallplus', 'ipd'))) unset($fieldList['name']['nestedToggle']);
-    }
+$fieldList = $this->loadModel('datatable')->getSetting('project', 'execution');
+$fieldList['name']['name'] = 'nameCol';
+$fieldList['actions']['width'] = '160';
 
-    if(!$project->hasProduct) unset($fieldList['productName']);
+foreach(array_keys($fieldList['actions']['actionsMap']) as $actionKey) unset($fieldList['actions']['actionsMap'][$actionKey]['text']);
 
-    return array_values($fieldList);
-};
+$config->project->execution->dtable->fieldList = $fieldList;
 
-foreach(array_keys($config->projectExecution->dtable->fieldList['actions']['actionsMap']) as $actionKey) unset($config->projectExecution->dtable->fieldList['actions']['actionsMap'][$actionKey]['text']);
 $executions = $this->execution->generateRow($executionStats, $users, $avatarList);
 
 /* zin: Define the feature bar on main menu. */
@@ -116,7 +121,8 @@ featureBar
             set::text($lang->programplan->stageCustom['point']),
             set::rootClass('ml-4')
         )
-    ) : null
+    ) : null,
+    $this->cookie->showTask ? li(setClass('ml-2'), searchToggle(set::module('projectTask'), set::open($searchTask))) : null
 );
 
 /* zin: Define the toolbar on main menu. */
@@ -172,10 +178,10 @@ $canCreateExecution = $canModifyProject &&  $isStage ? common::hasPriv('programp
 dtable
 (
     set::userMap($users),
-    set::cols($fnGenerateCols()),
+    set::cols($fieldList),
     set::data($executions),
+    set::customCols(true),
     set::checkable($canBatchAction),
-    set::fixedLeftWidth('44%'),
     set::onRenderCell(jsRaw('window.onRenderCell')),
     set::canRowCheckable(jsRaw("function(rowID){return this.getRowInfo(rowID).data.id.indexOf('pid') > -1;}")),
     set::checkInfo(jsRaw("function(checkedIDList){ return window.footerSummary(this, checkedIDList);}")),
@@ -183,9 +189,9 @@ dtable
     set::orderBy($orderBy),
     set::sortLink(createLink('project', 'execution', "status={$status}&projectID=$projectID&orderBy={name}_{sortType}&productID={$productID}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footPager(usePager(array('linkCreator' => createLink('project', 'execution', "status={$status}&projectID=$projectID&orderBy={$orderBy}&productID={$productID}&recTotal={recTotal}&recPerPage={recPerPage}&page={page}")))),
-    set::emptyTip($lang->execution->noExecution),
+    set::emptyTip(!$searchTask ? $lang->execution->noExecution : $lang->task->noTask),
     set::createTip($isStage ? $lang->programplan->create : $lang->execution->create),
-    set::createLink($canCreateExecution ? $createLink : ''),
+    set::createLink($canCreateExecution && !$searchTask ? $createLink : ''),
     set::createAttr($isStage ? 'data-app="project"' : 'data-app="execution"')
 );
 

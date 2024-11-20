@@ -48,15 +48,12 @@ if(!isset($config->backup))
     $config->backup->dtable->fieldList['restoreStatus']['hint']     = true;
     $config->backup->dtable->fieldList['restoreStatus']['width']    = '100';
 
-    $config->backup->dtable->fieldList['actions']['name']     = 'actions';
-    $config->backup->dtable->fieldList['actions']['title']    =  $lang->instance->backup->action;
-    $config->backup->dtable->fieldList['actions']['type']     = 'actions';
-    $config->backup->dtable->fieldList['actions']['hint']     = true;
-    $config->backup->dtable->fieldList['actions']['width']    = '100';
-    $config->backup->dtable->fieldList['actions']['menu']     = array('restore');
+    $config->backup->dtable->fieldList['actions']['type']  = 'actions';
+    $config->backup->dtable->fieldList['actions']['width'] = '100';
+    $config->backup->dtable->fieldList['actions']['menu']  = array('restore');
 
-    $config->backup->dtable->fieldList['actions']['list']['restore']['icon'] = 'icon-restart';
-    $config->backup->dtable->fieldList['actions']['list']['restore']['hint'] = $lang->instance->restore->common;
-    $config->backup->dtable->fieldList['actions']['list']['restore']['url'] = helper::createLink('instance', 'ajaxRestore', 'instanceID={instanceId}&backupName={name}');
+    $config->backup->dtable->fieldList['actions']['list']['restore']['icon']      = 'icon-restart';
+    $config->backup->dtable->fieldList['actions']['list']['restore']['hint']      = $lang->instance->restore->common;
+    $config->backup->dtable->fieldList['actions']['list']['restore']['url']       = array('module' => 'instance', 'method' => 'ajaxRestore', 'params' => 'instanceID={instanceId}&backupName={name}');
     $config->backup->dtable->fieldList['actions']['list']['restore']['className'] = 'ajax-submit';
 }

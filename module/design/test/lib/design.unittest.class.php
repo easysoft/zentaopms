@@ -310,4 +310,35 @@ class designTest
         $design = $this->objectModel->getAffectedScope($design);
         return isset($design->tasks) ? $design->tasks : array();
     }
+
+    /**
+     * 确认设计需求变更。
+     * Confirm design story change.
+     *
+     * @param  int       $designID
+     * @access public
+     * @return int|array
+     */
+    public function confirmStoryChangeTest(int $designID): int|array
+    {
+        $this->objectModel->confirmStoryChange($designID);
+        if(dao::isError()) return dao::getError();
+
+        $design = $this->objectModel->getByID($designID);
+        return $design ? $design->storyVersion : 0;
+    }
+
+    /**
+     * 判断当前动作是否可以点击。
+     * Judge if the action can be clicked.
+     *
+     * @param  object $design
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public function isClickableTest(object $design, string $action): bool
+    {
+        return $this->objectModel->isClickable($design, $action);
+    }
 }

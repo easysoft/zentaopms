@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 $buildModule  = $app->tab == 'project' ? 'projectbuild' : 'build';
-$canBeChanged = common::canBeChanged($buildModule, $build);
+$canBeChanged = common::canModify('execution', $execution) && common::canBeChanged($buildModule, $build);
 $decodeParam  = helper::safe64Decode($param);
 
 $buildItems = array();
@@ -118,6 +118,11 @@ else
 /* Init table data for dtable. */
 $config->build->bug->dtable->fieldList['actions']['list']['unlinkBug']['url']     = helper::createLink($buildModule, 'unlinkBug', "buildID={$build->id}&bugID={id}");
 $config->build->story->dtable->fieldList['actions']['list']['unlinkStory']['url'] = helper::createLink($buildModule, 'unlinkStory', "buildID={$build->id}&storyID={id}");
+if(!$canBeChanged)
+{
+    unset($config->build->bug->dtable->fieldList['actions']['list']);
+    unset($config->build->story->dtable->fieldList['actions']['list']);
+}
 
 $stories = initTableData($stories, $config->build->story->dtable->fieldList, $this->build);
 $bugs    = initTableData($bugs, $config->build->bug->dtable->fieldList, $this->build);
@@ -168,7 +173,7 @@ detailBody
                 div
                 (
                     setClass('tab-actions'),
-                    common::hasPriv($buildModule, 'linkStory') ? btn
+                    $canBeChanged && common::hasPriv($buildModule, 'linkStory') ? btn
                     (
                         set::text($lang->build->linkStory),
                         set::icon('link'),
@@ -208,7 +213,7 @@ detailBody
                 div
                 (
                     setClass('tab-actions'),
-                    common::hasPriv($buildModule, 'linkBug') ? btn
+                    $canBeChanged && common::hasPriv($buildModule, 'linkBug') ? btn
                     (
                         set::text($lang->build->linkBug),
                         set::type('primary'),

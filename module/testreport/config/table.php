@@ -112,6 +112,7 @@ $config->testreport->bug->dtable->fieldList['pri']          = $config->bug->dtab
 $config->testreport->bug->dtable->fieldList['status']       = $config->bug->dtable->fieldList['status'];
 $config->testreport->bug->dtable->fieldList['openedBy']     = $config->bug->dtable->fieldList['openedBy'];
 $config->testreport->bug->dtable->fieldList['resolvedBy']   = $config->bug->dtable->fieldList['resolvedBy'];
+$config->testreport->bug->dtable->fieldList['resolution']   = $config->bug->dtable->fieldList['resolution'];
 $config->testreport->bug->dtable->fieldList['resolvedDate'] = $config->bug->dtable->fieldList['resolvedDate'];
 
 $config->testreport->bug->dtable->fieldList['title']['sort']        = false;
@@ -120,6 +121,7 @@ $config->testreport->bug->dtable->fieldList['pri']['sort']          = false;
 $config->testreport->bug->dtable->fieldList['status']['sort']       = false;
 $config->testreport->bug->dtable->fieldList['openedBy']['sort']     = false;
 $config->testreport->bug->dtable->fieldList['resolvedBy']['sort']   = false;
+$config->testreport->bug->dtable->fieldList['resolution']['sort']   = false;
 $config->testreport->bug->dtable->fieldList['resolvedDate']['sort'] = false;
 
 $app->loadLang('build');

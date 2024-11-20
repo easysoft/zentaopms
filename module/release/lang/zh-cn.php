@@ -22,6 +22,7 @@ $lang->release->changeStatus     = '修改状态';
 $lang->release->batchUnlink      = '批量移除';
 $lang->release->batchUnlinkStory = "批量移除{$lang->SRCommon}";
 $lang->release->batchUnlinkBug   = '批量移除Bug';
+$lang->release->manageSystem     = '管理应用';
 
 $lang->release->confirmDelete      = '您确认删除该发布吗？';
 $lang->release->syncFromBuilds     = "将版本中完成的{$lang->SRCommon}和已解决的Bug关联到发布下";

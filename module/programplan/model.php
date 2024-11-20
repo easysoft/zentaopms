@@ -131,10 +131,12 @@ class programplanModel extends model
      * @param  int     $baselineID
      * @param  string  $selectCustom
      * @param  bool    $returnJson
+     * @param  string  $browseType
+     * @param  int     $queryID
      * @access public
      * @return string|array
      */
-    public function getDataForGantt(int $projectID, int $productID, int $baselineID = 0, string $selectCustom = '', bool $returnJson = true): string|array
+    public function getDataForGantt(int $projectID, int $productID, int $baselineID = 0, string $selectCustom = '', bool $returnJson = true, $browseType = '', $queryID = 0): string|array
     {
         $plans   = $this->getStage($projectID, $productID, 'all', 'order');
         $project = $this->loadModel('project')->getById($projectID);
@@ -144,11 +146,21 @@ class programplanModel extends model
         {
             $baseline = $this->loadModel('cm')->getByID($baselineID);
             $oldData  = json_decode($baseline->data);
-            $plans    = $this->programplanTao->setPlanBaseline($oldData->stage, $plans);
+            $plans    = $this->programplanTao->setPlanBaseline((array)$oldData->stage, $plans);
+        }
+
+        /* Set task baseline data. */
+        $tasks = $this->getGanttTasks($projectID, array_keys($plans), $browseType, $queryID);
+        if($baselineID) $this->programplanTao->setTaskBaseline(isset($oldData->task) ? $oldData->task : array(), $tasks); // Set task baseline.
+
+        if($browseType == 'bysearch')
+        {
+            $taskExecutions = array_column($tasks, 'execution');
+            $plans = array_filter($plans, function($plan) use($taskExecutions) {return in_array($plan->id, $taskExecutions);});
         }
 
         /* Set plan for gantt view. */
-        $result = $this->programplanTao->initGanttPlans($plans);
+        $result = $this->programplanTao->initGanttPlans($plans, $browseType);
         $datas          = $result['datas'];
         $planIdList     = $result['planIdList'];
         $stageIndex     = $result['stageIndex'];
@@ -156,10 +168,6 @@ class programplanModel extends model
 
         /* Judge whether to display tasks under the stage. */
         if(empty($selectCustom)) $selectCustom = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=programplan&section=browse&key=stageCustom");
-
-        /* Set task baseline data. */
-        $tasks = empty($planIdList) ? array() : $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('execution')->in($planIdList)->orderBy('execution_asc, order_asc, id_desc')->fetchAll('id');
-        if($baselineID) $this->programplanTao->setTaskBaseline(isset($oldData->task) ? $oldData->task : array(), $tasks); // Set task baseline.
 
         /* Set task for gantt view. */
         $result = $this->programplanTao->setTask($tasks, $plans, $selectCustom, $datas, $stageIndex);
@@ -187,10 +195,12 @@ class programplanModel extends model
      * @param  int     $baselineID
      * @param  string  $selectCustom
      * @param  bool    $returnJson
+     * @param  string  $browseType
+     * @param  int     $queryID
      * @access public
      * @return string|array
      */
-    public function getDataForGanttGroupByAssignedTo(int $executionID, int $productID, int $baselineID = 0, string $selectCustom = '', bool $returnJson = true): string|array
+    public function getDataForGanttGroupByAssignedTo(int $executionID, int $productID, int $baselineID = 0, string $selectCustom = '', bool $returnJson = true, string $browseType = '', int $queryID = 0): string|array
     {
         $datas       = array();
         $stageIndex  = array();
@@ -198,7 +208,7 @@ class programplanModel extends model
         $plans      = $this->getStage($executionID, $productID);
         $planIdList = array_column($plans, 'id');
         $users      = $this->loadModel('user')->getPairs('noletter');
-        $tasks      = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('execution')->in($planIdList)->fetchAll('id');
+        $tasks      = $this->getGanttTasks($executionID, $planIdList, $browseType, $queryID);
         $tasksGroup = $this->programplanTao->buildTaskGroup($tasks);
 
         /* Judge whether to display tasks under the stage. */
@@ -739,5 +749,51 @@ class programplanModel extends model
         $this->setting->setItem("$owner.$module.browse.stageCustom", $stageCustom);
         $this->setting->setItem("$owner.$module.ganttCustom.ganttFields", $ganttFields);
         $this->setting->setItem("$owner.$module.ganttCustom.zooming", $zooming);
+    }
+
+    /**
+     * 获取甘特图的任务.
+     * Get tasks in gantt.
+     *
+     * @param  int    $projectID
+     * @param  array  $planIdList
+     * @param  string $browseType
+     * @param  int    $queryID
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getGanttTasks(int $projectID, array $planIdList, string $browseType, int $queryID, object $pager = null)
+    {
+        $tasks = array();
+        if($browseType == 'bysearch')
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set('projectTaskQuery', $query->sql);
+                $this->session->set('projectTaskForm', $query->form);
+            }
+            elseif(!$this->session->projectTaskQuery)
+            {
+                $this->session->set('projectTaskQuery', ' 1 = 1');
+            }
+
+            if(strpos($this->session->projectTaskQuery, "deleted =") === false) $this->session->set('projectTaskQuery', $this->session->projectTaskQuery . " AND deleted = '0'");
+
+            $projectTaskQuery = $this->session->projectTaskQuery;
+            $projectTaskQuery .= " AND `project` = '$projectID'";
+            $projectTaskQuery .= " AND `execution` " . helper::dbIN($planIdList);
+
+            $this->session->set('projectTaskQueryCondition', $projectTaskQuery, $this->app->tab);
+            $this->session->set('projectTaskOnlyCondition', true, $this->app->tab);
+
+            $tasks = $this->loadModel('execution')->getSearchTasks($projectTaskQuery, 'execution_asc,order_asc,id_desc', $pager, 'projectTask');
+        }
+        elseif(!empty($planIdList))
+        {
+            $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('project')->eq($projectID)->andWhere('execution')->in($planIdList)->orderBy('execution_asc, order_asc, id_desc')->fetchAll('id');
+        }
+        return $tasks;
     }
 }

@@ -82,7 +82,7 @@ div
             (
                 set('class', 'panel-title text-lg flex w-full py-6'),
                 $label,
-                $mode == 'edit' ? array
+                !empty($tip) ? array
                 (
                     span
                     (
@@ -92,7 +92,7 @@ div
                     span
                     (
                         setClass('text-gray text-base font-normal'),
-                        $lang->my->manageSelf
+                        $tip
                     )
                 ) : null
             ),
@@ -172,6 +172,22 @@ div
                 (
                     set::name($lang->user->contacts->userList),
                     implode($lang->comma, array_filter($userList))
+                ),
+                item
+                (
+                    set::name($lang->usercontact->account),
+                    zget($users, $list->account)
+                ),
+                item
+                (
+                    ($mode == 'adminView' && common::hasPriv('my', 'deleteContacts')) ? btn
+                    (
+                        setClass('btn ajax-submit ml-4 px-6'),
+                        set::type('danger'),
+                        setData('url', createLink('my', 'deleteContacts', "listID=$listID")),
+                        setData('confirm', $lang->user->contacts->confirmDelete),
+                        $lang->delete
+                    ): null
                 )
             )
         )

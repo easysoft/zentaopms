@@ -15,26 +15,27 @@ namespace zin;
 data('fileName', 'gantt-export-' . $projectID);
 include './ganttfields.html.php';
 
+
 if($app->rawModule == 'programplan')
 {
+    $productDropdown = null;
     if($project->stageBy == 'product')
     {
         $viewName = $productID != 0 ? zget($productList, $productID) : $lang->product->allProduct;
-        $items    = array();
+        $items    = array(array('text' => $lang->product->allProduct, 'url' => $this->createLink('programplan', 'browse', "projectID=$projectID&productID=all&type=gantt")));
         foreach($productList as $key => $productName) $items[] = array('text' => $productName, 'url' => $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$key&type=gantt"));
-        featureBar
+        $productDropdown = dropdown
         (
-            dropdown
-            (
-                btn(set::type('link'), setClass('no-underline'), $viewName),
-                set::items($items)
-            )
+            btn(set::type('link'), setClass('no-underline'), $viewName),
+            set::items($items)
         );
     }
-    else
-    {
-        featureBar(span(setClass('text font-bold'), $lang->programplan->gantt));
-    }
+    featureBar
+    (
+        btn(setClass('ghost mr-2', ($browseType != 'bysearch' ? 'active' : '')), $lang->programplan->gantt, set::url($this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=gantt"))),
+        $productDropdown,
+        $hasSearch ? li(searchToggle(set::module('projectTask'), set::open($browseType == 'bysearch'))) : null
+    );
     toolbar
     (
         btnGroup

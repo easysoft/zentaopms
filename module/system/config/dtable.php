@@ -5,6 +5,40 @@ $app->loadLang('backup');
 
 $config->system->dtable = new stdclass();
 
+$config->system->dtable->fieldList['id']['title']    = 'ID';
+$config->system->dtable->fieldList['id']['name']     = 'id';
+$config->system->dtable->fieldList['id']['type']     = 'id';
+$config->system->dtable->fieldList['id']['sortType'] = true;
+
+$config->system->dtable->fieldList['name']['title'] = $lang->system->name;
+$config->system->dtable->fieldList['name']['name']  = 'name';
+$config->system->dtable->fieldList['name']['type']  = 'title';
+$config->system->dtable->fieldList['name']['flex']  = 4;
+$config->system->dtable->fieldList['name']['hint']  = true;
+
+$config->system->dtable->fieldList['latestRelease']['title'] = $lang->system->latestRelease;
+$config->system->dtable->fieldList['latestRelease']['name']  = 'latestRelease';
+$config->system->dtable->fieldList['latestRelease']['type']  = 'text';
+
+$config->system->dtable->fieldList['children']['title'] = $lang->system->children;
+$config->system->dtable->fieldList['children']['name']  = 'children';
+$config->system->dtable->fieldList['children']['type']  = 'text';
+
+$config->system->dtable->fieldList['status']['title']    = $lang->system->status;
+$config->system->dtable->fieldList['status']['name']     = 'status';
+$config->system->dtable->fieldList['status']['type']     = 'status';
+$config->system->dtable->fieldList['status']['map']      = $lang->system->statusList;
+$config->system->dtable->fieldList['status']['sortType'] = true;
+
+$config->system->dtable->fieldList['actions']['name']     = 'actions';
+$config->system->dtable->fieldList['actions']['title']    = $lang->actions;
+$config->system->dtable->fieldList['actions']['type']     = 'actions';
+$config->system->dtable->fieldList['actions']['sortType'] = false;
+$config->system->dtable->fieldList['actions']['fixed']    = 'right';
+$config->system->dtable->fieldList['actions']['menu']     = array('active|inactive', 'edit', 'delete');
+$config->system->dtable->fieldList['actions']['list']     = $config->system->actionList;
+$config->system->dtable->fieldList['actions']['width']    = 100;
+
 $config->system->dtable->dbList = new stdclass();
 
 $config->system->dtable->dbList->fieldList['name']['title'] = $lang->system->dbName;

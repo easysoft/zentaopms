@@ -64,8 +64,8 @@ class messageModel extends model
         {
             foreach($actions as $action)
             {
-                if(!isset($this->lang->message->label->{$action})) continue;
-                $objectActions[$objectType][$action] = $this->lang->message->label->{$action};
+                if(isset($this->lang->message->label->{$action})) $objectActions[$objectType][$action] = $this->lang->message->label->{$action};
+                if(isset($this->lang->message->label->{$objectType}) && isset($this->lang->message->label->{$objectType}->{$action})) $objectActions[$objectType][$action] = $this->lang->message->label->{$objectType}->{$action};
             }
         }
         return $objectActions;
@@ -98,6 +98,9 @@ class messageModel extends model
             $story = $this->loadModel('story')->fetchByID($objectID);
             if($story) $objectType = $story->type;
         }
+
+        /* 如果对象类型是审批，动作是提交审计或者审计，使用瀑布项目审批的发信配置。*/
+        if($objectType == 'review' && strpos(',toaudit,audited,', ",{$actionType},") !== false) $objectType = 'waterfall';
 
         if(isset($messageSetting['mail']))
         {
@@ -188,6 +191,9 @@ class messageModel extends model
         if(empty($actor)) $actor = $this->app->user->account;
         if(empty($actor) || !$objectID) return false;
 
+        /* 如果对象类型是瀑布，动作是提交审计或者审计，那么对象类型就是审批。*/
+        if($objectType == 'waterfall' && strpos(',toaudit,audited,', ",{$actionType},") !== false) $objectType = 'review';
+
         $this->loadModel('action');
         $user   = $this->loadModel('user')->getById($actor);
         $table  = $this->config->objectTables[$objectType];
@@ -264,7 +270,8 @@ class messageModel extends model
 
         if($toList == 'closed') $toList = '';
         if($objectType == 'feedback' && $object->status == 'replied') $toList = ',' . $object->openedBy . ',';
-        if(in_array($objectType, array('story', 'epic', 'requirement')) && $actionID)
+
+        if(strpos(',story,epic,requirement,ticket,review,', ",{$objectType},") !== false && $actionID)
         {
             $action = $this->loadModel('action')->getById($actionID);
             list($toList, $ccList) = $this->loadModel($objectType)->getToAndCcList($object, $action->action);
@@ -278,13 +285,6 @@ class messageModel extends model
             $toList = implode(',', $toList);
         }
 
-        if($objectType == 'ticket')
-        {
-            $action = $this->loadModel('action')->getById($actionID);
-            list($toList, $ccList) = $this->loadModel($objectType)->getToAndCcList($object, $action);
-            $toList = $toList . ',' . $ccList;
-        }
-
         if(empty($toList) and $objectType == 'demand' and $this->config->edition == 'ipd')
         {
             $toList  = $object->assignedTo;
@@ -296,6 +296,8 @@ class messageModel extends model
             if($reviewers) $toList .= ',' . implode(',', $reviewers);
             $toList = trim($toList, ',');
         }
+
+        if(strpos(',opportunity,risk,issue,', ",{$objectType},") !== false) $toList = "{$object->assignedTo},{$object->createdBy}";
 
         /* 非内置工作流使用工作流的toList。 */
         if($this->config->edition != 'open')
