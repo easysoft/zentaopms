@@ -7,7 +7,8 @@ class todoPage extends page
         $xpath = array(
             'addTodo'      => '/html/body/div/div/div[1]/div[2]/div/a',
             'addTodoBtn'   => '/html/body/div[2]/div/div/div[2]/div/div[2]/form/div[15]/div/button',
-            'fstTodoTitle' => '/html/body/div/div/div[2]/div/div/div[2]/div[1]/div/div[2]/div/a'
+            'fstTodoTitle' => '/html/body/div/div/div[2]/div/div/div[2]/div[1]/div/div[2]/div/a',
+            'editTodoBtn'  => '/html/body/div[5]/div/div/div[2]/div/div/form/div[9]/div/button'
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
