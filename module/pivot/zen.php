@@ -80,6 +80,7 @@ class pivotZen extends pivot
         $groups = $this->pivot->getGroupsByDimensionAndPath($dimensionID, $currentGroup->path);
         if(!$groups) return array();
 
+        $firstAction = $this->loadModel('action')->getAccountFirstAction($this->app->user->account);
         $menus = array();
         foreach($groups as $group)
         {
@@ -87,6 +88,7 @@ class pivotZen extends pivot
 
             $pivots = $this->pivot->getAllPivotByGroupID($group->id);
             $pivots = $this->pivot->filterInvisiblePivot($pivots);
+            $pivots = $this->loadModel('mark')->getMarks($pivots, 'pivot', 'view');
             if(empty($pivots)) continue;
 
             if($group->grade > 1) $menus[] = (object)array('id' => $group->id, 'parent' => 0, 'name' => $group->name);
@@ -95,6 +97,7 @@ class pivotZen extends pivot
 
             foreach($pivots as $pivot)
             {
+                $this->setNewMark($pivot, $firstAction);
                 $params  = helper::safe64Encode("groupID={$group->id}&pivotID={$pivot->id}");
                 $url     = inlink('preview', "dimension={$dimensionID}&group={$currentGroup->id}&method=show&params={$params}");
                 $menus[] = (object)array('id' => $group->id . '_' . $pivot->id, 'parent' => $group->grade > 1 ? $group->id : 0, 'name' => $pivot->name, 'url' => $url);
@@ -106,6 +109,21 @@ class pivotZen extends pivot
 
         $builtinMenus = $this->getBuiltinMenus($dimensionID, $currentGroup);
         return array_merge($menus, $builtinMenus);
+    }
+
+    /**
+     * 设置 “新” 标签。
+     * Set new mark.
+     *
+     * @param  object $pivot
+     * @param  object $firstAction
+     * @access protected
+     * @return void
+     */
+    protected function setNewMark(object $pivot, object $firstAction): void
+    {
+        if(!$pivot->mark && $pivot->createdDate < $firstAction->date) $pivot->mark = true;
+        if(!$pivot->mark) $pivot->name = array('html' => $pivot->name . ' <span class="label ghost size-sm bg-secondary-50 text-secondary-500 rounded-full">' . $this->lang->pivot->new . '</span>');
     }
 
     /**
