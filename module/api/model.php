@@ -904,6 +904,50 @@ class apiModel extends model
     }
 
     /**
+     * 获取分组后的对象列表。
+     *
+     * @access public
+     * @return array
+     */
+    public function getGroupedObjects(): array
+    {
+        $libs   = $this->loadModel('doc')->getApiLibs();
+        $libIDs = array_keys($libs);
+
+        /* 获取接口库所属产品的产品列表。 */
+        $products = $this->dao->select('t1.id, t1.order, t1.name, t1.status, t1.program')->from(TABLE_PRODUCT)->alias('t1')
+            ->leftJoin(TABLE_DOCLIB)->alias('t2')->on('t2.product=t1.id')
+            ->where('t2.id')->gt(0)
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t2.id')->in($libIDs)
+            ->orderBy('order_asc')
+            ->fetchAll('id');
+
+        /* 获取接口库所属项目的项目列表。 */
+        $projects = $this->dao->select('t1.id, t1.order, t1.name, t1.status, t1.parent')->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_DOCLIB)->alias('t2')->on('t2.project=t1.id')
+            ->where('t2.id')->gt(0)
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->andWhere('t1.deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
+            ->andWhere('t2.id')->in($libIDs)
+            ->orderBy('t1.hasProduct_asc, order_asc')
+            ->fetchAll('id');
+
+        $nolinks = array();
+        foreach($libs as $lib)
+        {
+            if($lib->product != 0 && isset($products[$lib->product]) && !isset($products[$lib->product]->firstLib)) $products[$lib->product]->firstLib = $lib->id;
+            if($lib->project != 0 && isset($projects[$lib->project]) && !isset($projects[$lib->project]->firstLib)) $projects[$lib->project]->firstLib = $lib->id;
+            if($lib->product != 0 || $lib->project != 0 || $lib->execution != 0) continue;
+            $nolinks[$lib->id] = $lib;
+        }
+
+        return array('product' => $products, 'project' => $projects, 'nolink' => $nolinks);
+    }
+
+    /**
      * 获取有权限的接口文档列表。
      * Get priv Apis.
      *

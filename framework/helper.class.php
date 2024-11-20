@@ -433,21 +433,6 @@ class helper extends baseHelper
         $checkFunc = 'check' . $operator;
         return validater::$checkFunc($value1, $value2);
     }
-
-    /**
-     * 将科学计数法转化为两位小数。
-     * Convert scientific notation to two decimal places.
-     *
-     * @param  int|float|string $hours
-     * @param  string           $characters
-     * @static
-     * @access public
-     * @return float
-     */
-    public static function formatHours($hours, $characters = '.0'): float
-    {
-        return (float)rtrim(number_format((float)$hours, 2, '.', ''), $characters);
-    }
 }
 
 /**

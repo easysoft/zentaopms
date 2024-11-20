@@ -38,9 +38,8 @@ class rate_of_annual_delivered_story extends baseCalc
         if($stage == 'released' && !empty($closedDate)) $date = $releasedDate;
 
         if(empty($date)) return false;
-
-        $year = substr($date, 0, 4);
-        if($year == '0000') return false;
+        $year = $this->getYear($date);
+        if(!$year) return false;
 
         if(!isset($this->result[$year])) $this->result[$year] = array('finished' => 0, 'valid' => 0);
         if($stage == 'released' || $closedReason == 'done') $this->result[$year]['finished'] += 1;

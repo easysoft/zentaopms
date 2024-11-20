@@ -20,9 +20,13 @@ window.loadExecutions = function(e)
     const link = $.createLink('doc', 'ajaxGetModules', 'objectType=project&objectID=' + projectID + '&type=doc');
     $.getJSON(link, function(data)
     {
-        const moduleElement = officeTypes.includes(docType) ? '.moduleBox input[name="module"]': '#setDocBasicForm input[name="module"]';
-        const $picker = $(moduleElement).zui('picker');
-        $picker.render({items: data});
-        $picker.$.setValue('');
+        const isOfficeType = officeTypes.includes(docType);
+        const $libPicker = $(`${isOfficeType ? '' : '#setDocBasicForm'} [name='lib']`).zui('picker');
+        $libPicker.render({items: data.libs});
+        $libPicker.$.setValue('');
+
+        const $modulePicker = $(`${isOfficeType ? '' : '#setDocBasicForm'} [name='module']`).zui('picker');
+        $modulePicker.render({items: data.modules});
+        $modulePicker.$.setValue('');
     });
 }

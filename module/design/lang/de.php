@@ -39,6 +39,7 @@ $lang->design->basicInfo     = 'Basic Information';
 $lang->design->noAssigned    = 'Unassigned';
 $lang->design->comment       = 'Comment';
 $lang->design->more          = 'Mehr';
+$lang->design->project       = 'Project';
 
 /* 动作列表. */
 $lang->design->common       = 'Design';

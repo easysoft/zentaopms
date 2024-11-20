@@ -95,7 +95,7 @@ if(!$task->fromBug && $task->story)
         'toolbar'  => $task->needConfirm ? array
         (
             array('text' => $lang->task->storyChange, 'class' => 'ghost pointer-events-none'),
-            array('text' => $lang->confirm, 'type' => 'primary', 'url' => createLink('task', 'confirmStoryChange', "taskID={$task->id}"))
+            array('text' => $lang->confirm, 'type' => 'primary', 'class' => 'ajax-submit', 'url' => createLink('task', 'confirmStoryChange', "taskID={$task->id}"))
         ) : null,
         'sections' => array
         (
@@ -168,7 +168,7 @@ $tabs[] = setting()
     ->group('related')
     ->title($lang->task->legendEffort)
     ->control('taskEffortInfo');
-$tabs[] = setting()
+$tabs['taskMiscInfo'] = setting()
     ->group('related')
     ->title($lang->task->legendMisc)
     ->control('taskMiscInfo');

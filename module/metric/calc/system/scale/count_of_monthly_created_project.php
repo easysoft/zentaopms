@@ -28,12 +28,10 @@ class count_of_monthly_created_project extends baseCalc
 
     public function calculate($row)
     {
-        if(empty($row->openedDate)) return false;
+        $year = $this->getYear($row->openedDate);
+        if(!$year) return false;
 
-        $year  = substr($row->openedDate, 0, 4);
         $month = substr($row->openedDate, 5, 2);
-
-        if($year == '0000') return false;
 
         if(!isset($this->result[$year])) $this->result[$year] = array();
         if(!isset($this->result[$year][$month])) $this->result[$year][$month] = 0;

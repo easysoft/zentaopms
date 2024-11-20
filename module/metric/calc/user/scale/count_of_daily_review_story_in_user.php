@@ -36,8 +36,8 @@ class count_of_daily_review_story_in_user extends baseCalc
         /* input ,admin output admin */
         $reviewedBy = current(array_filter(explode(',', $reviewedBy)));
 
-        $year = substr($reviewedDate, 0, 4);
-        if($year == '0000') return false;
+        $year = $this->getYear($reviewedDate);
+        if(!$year) return false;
 
         $date = date("Y-m-d", strtotime($reviewedDate));
         list($year, $month, $day) = explode('-', $date);

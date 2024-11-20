@@ -29,10 +29,9 @@ class count_of_daily_closed_bug extends baseCalc
     public function calculate($row)
     {
         $closedDate = $row->closedDate;
-        if(empty($closedDate)) return false;
+        $year = $this->getYear($closedDate);
+        if(!$year) return false;
 
-        $year = substr($closedDate, 0, 4);
-        if($year == '0000') return false;
         $month = substr($closedDate, 5, 2);
         $day   = substr($closedDate, 8, 2);
 

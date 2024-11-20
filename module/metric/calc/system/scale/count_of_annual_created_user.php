@@ -29,10 +29,9 @@ class count_of_annual_created_user extends baseCalc
     public function calculate($row)
     {
         $join = $row->join;
-        if(empty($join)) return false;
 
-        $year = substr($join, 0, 4);
-        if($year == '0000') return false;
+        $year = $this->getYear($join);
+        if(!$year) return false;
 
         if(!isset($this->result[$year])) $this->result[$year] = 0;
         $this->result[$year] += 1;

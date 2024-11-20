@@ -76,6 +76,7 @@ detailBody
     ),
     history
     (
+        set::objectID($serverRoom->id),
         set::commentUrl(createLink('action', 'comment', array('objectType' => 'serverroom', 'objectID' => $serverRoom->id)))
     ),
     floatToolbar

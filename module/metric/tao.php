@@ -61,7 +61,6 @@ class metricTao extends metricModel
             ->where('deleted')->eq('0')
             ->andWhere('scope')->in($scopes)
             ->andWhere('object')->in(array_keys($this->lang->metric->objectList))
-            ->groupBy('scope')
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->fetchAll('scope');
 
@@ -510,7 +509,8 @@ class metricTao extends metricModel
     {
         $this->dao->delete()->from(TABLE_METRICLIB)
             ->where('metricCode')->eq($code)
-            ->andWhere('deleted')->eq('1')
+            ->andWhere('deleted', true)->eq('1')
+            ->orWhere('value')->eq(0)->markRight(1)
             ->exec();
     }
 

@@ -1431,6 +1431,24 @@ class taskZen extends task
                 }
             }
 
+            /* Compute task progress. */
+            if(!isset($task->progress))
+            {
+                if($task->consumed == 0 && $task->left == 0)
+                {
+                    $task->progress = 0;
+                }
+                elseif($task->consumed != 0 && $task->left == 0)
+                {
+                    $task->progress = 100;
+                }
+                else
+                {
+                    $task->progress = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
+                }
+                $task->progress .= '%';
+            }
+
             if($this->config->edition == 'open' && $task->parent > 0 && strpos($task->name, htmlentities('>')) !== 0) $task->name = '>' . $task->name;
             if(!empty($task->team))
             {

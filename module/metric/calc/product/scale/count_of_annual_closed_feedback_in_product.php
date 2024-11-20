@@ -31,11 +31,8 @@ class count_of_annual_closed_feedback_in_product extends baseCalc
         $product    = $data->product;
         $closedDate = $data->closedDate;
 
-        if(empty($closedDate)) return false;
-
-        $year = substr($closedDate, 0, 4);
-
-        if($year == '0000') return false;
+        $year = $this->getYear($closedDate);
+        if(!$year) return false;
 
         if(!isset($this->result[$product])) $this->result[$product] = array();
         if(!isset($this->result[$product][$year])) $this->result[$product][$year] = 0;

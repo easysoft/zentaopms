@@ -14,6 +14,13 @@ class relatedObjectList extends relatedList
         'browseType'     => '?string="byRelation"' //浏览类型 byRelation|byObject
     );
 
+    public static function getPageCSS(): ?string
+    {
+        return <<<'CSS'
+        li.objectItem div.listitem span.is-empty {display: none !important;}
+        CSS;
+    }
+
     public static function getPageJS(): ?string
     {
         global $lang;
@@ -59,7 +66,7 @@ class relatedObjectList extends relatedList
         $item->title      = "#$relatedObjectID $title";
         $item->type       = $itemType;
         $item->url        = !empty($relatedObjectInfo['url']) ? $relatedObjectInfo['url'] : null;
-        $item->titleAttrs = !empty($relatedObjectInfo['url']) && !in_array($relatedObjectType, array('repocommit', 'commit', 'mr')) ? array('data-toggle' => 'modal', 'data-size' => 'lg') : null;
+        $item->titleAttrs = !empty($relatedObjectInfo['url']) && !in_array($relatedObjectType, array('repocommit', 'commit', 'mr', 'release', 'build')) ? array('data-toggle' => 'modal', 'data-size' => 'lg') : null;
 
         if(hasPriv('custom', 'removeObjects'))
         {
@@ -92,8 +99,9 @@ class relatedObjectList extends relatedList
             'title'      => $title,
             'hint'       => $title,
             'titleAttrs' => $item->titleAttrs,
-            'leading'    => array('html' => wg(idLabel::create($item->type, array('class' => 'text-clip')))->render()),
+            'leading'    => array('html' => wg(idLabel::create($item->type, array('class' => 'text-clip text-left', 'style' => array('max-width' => '45px'))))->render()),
             'url'        => $item->url,
+            'class'      => 'objectItem',
             'actions'    => isset($item->actions) ? $item->actions : array()
         );
         return $info;

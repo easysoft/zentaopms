@@ -11,6 +11,8 @@ declare(strict_types=1);
 namespace zin;
 global $lang;
 
+if(!empty($repoID)) dropmenu(set::objectID($repoID), set::tab('repo'));
+
 detailHeader(
     to::prefix(''),
     to::title(span(setClass('font-semibold'), $lang->compile->logs)),

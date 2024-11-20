@@ -2,10 +2,10 @@
 $config->host->create       = new stdclass();
 $config->host->edit         = new stdclass();
 $config->host->changestatus = new stdclass();
-$config->host->create->requiredFields = 'name,zap,tags,provider,intranet,extranet';
-$config->host->edit->requiredFields   = 'name,zap,tags,provider,intranet,extranet';
-$config->host->create->intFields      = 'cpuNumber,cpuCores,zap';
+$config->host->create->requiredFields = 'name,intranet,extranet';
+$config->host->edit->requiredFields   = 'name,intranet,extranet';
 $config->host->create->ipFields       = 'intranet,extranet';
+$config->host->create->intFields      = 'diskSize,memory';
 
 $config->host->editor = new stdclass();
 $config->host->editor->changestatus = array('id' => 'reason', 'tools' => 'simple');

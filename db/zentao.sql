@@ -1630,6 +1630,8 @@ CREATE TABLE IF NOT EXISTS `zt_release` (
   `shadow` mediumint(8) unsigned NOT NULL default '0',
   `build` varchar(255) NOT NULL DEFAULT '',
   `name` varchar(255) NOT NULL default '',
+  `system` mediumint(8) unsigned NOT NULL default '0',
+  `releases` varchar(255) NOT NULL default '',
   `marker` enum('0','1') NOT NULL default '0',
   `date` date NULL,
   `releasedDate` date NULL,
@@ -1648,6 +1650,7 @@ CREATE TABLE IF NOT EXISTS `zt_release` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE INDEX `product` ON `zt_release` (`product`);
 CREATE INDEX `build`   ON `zt_release` (`build`);
+CREATE INDEX `idx_system` ON `zt_release` (`system`);
 
 -- DROP TABLE IF EXISTS `zt_repo`;
 CREATE TABLE IF NOT EXISTS `zt_repo` (
@@ -2658,30 +2661,6 @@ CREATE TABLE IF NOT EXISTS `zt_serverroom` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- DROP TABLE IF EXISTS `zt_account`;
-CREATE TABLE IF NOT EXISTS `zt_account` (
-  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL DEFAULT '',
-  `type` varchar(255) NOT NULL DEFAULT '',
-  `provider` varchar(255) NOT NULL DEFAULT '',
-  `adminURI` varchar(255) NOT NULL DEFAULT '',
-  `account` varchar(255) NOT NULL DEFAULT '',
-  `password` varchar(255) NOT NULL DEFAULT '',
-  `email` varchar(255) NOT NULL DEFAULT '',
-  `mobile` varchar(255) NOT NULL DEFAULT '',
-  `extra` text NULL,
-  `createdBy` varchar(30) NOT NULL DEFAULT '',
-  `createdDate` datetime NULL,
-  `editedBy` varchar(30) NOT NULL DEFAULT '',
-  `editedDate` datetime NULL,
-  `status` varchar(30) NOT NULL DEFAULT '',
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE INDEX `name`     ON `zt_account` (`name`);
-CREATE INDEX `provider` ON `zt_account` (`provider`);
-CREATE INDEX `status`   ON `zt_account` (`status`);
-
 -- DROP TABLE IF EXISTS `zt_host`;
 CREATE TABLE `zt_host` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -2700,7 +2679,6 @@ CREATE TABLE `zt_host` (
   `vsoft` varchar(30) NOT NULL DEFAULT '',
   `heartbeat` datetime NULL,
   `zap` varchar(10) NOT NULL DEFAULT '',
-  `provider` varchar(255) NOT NULL DEFAULT '',
   `vnc` int(11) NOT NULL DEFAULT '0',
   `ztf` int(11) NOT NULL DEFAULT '0',
   `zd` int(11) NOT NULL DEFAULT '0',
@@ -2709,10 +2687,6 @@ CREATE TABLE `zt_host` (
   `image` int(11) unsigned NOT NULL DEFAULT '0',
   `admin` smallint(5) unsigned NOT NULL DEFAULT '0',
   `serverRoom` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `serverModel` varchar(256) NOT NULL DEFAULT '',
-  `hardwareType` varchar(64) NOT NULL DEFAULT '',
-  `cpuBrand` varchar(128) NOT NULL DEFAULT '',
-  `cpuModel` varchar(128) NOT NULL DEFAULT '',
   `cpuNumber` varchar(16) NOT NULL DEFAULT '',
   `cpuCores` varchar(30) NOT NULL DEFAULT '',
   `intranet` varchar(128) NOT NULL DEFAULT '',
@@ -2971,6 +2945,7 @@ CREATE TABLE IF NOT EXISTS `zt_deploy` (
   `begin` datetime NULL,
   `end` datetime NULL,
   `name` varchar(255) NOT NULL DEFAULT '',
+  `host` varchar(255) NOT NULL DEFAULT '',
   `desc` mediumtext NULL,
   `status` varchar(20) NOT NULL DEFAULT '',
   `owner` char(30) NOT NULL DEFAULT '',
@@ -2988,8 +2963,7 @@ CREATE TABLE IF NOT EXISTS `zt_deploy` (
 CREATE TABLE IF NOT EXISTS `zt_deployproduct` (
   `deploy` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `release` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `package` varchar(255) NOT NULL DEFAULT ''
+  `release` mediumint(8) unsigned NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE UNIQUE INDEX `deploy_product_release` ON `zt_deployproduct`(`deploy`,`product`,`release`);
 
@@ -2997,9 +2971,8 @@ CREATE UNIQUE INDEX `deploy_product_release` ON `zt_deployproduct`(`deploy`,`pro
 CREATE TABLE IF NOT EXISTS `zt_deploystep` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `deploy` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `parent` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `title` varchar(255) NOT NULL DEFAULT '',
-  `begin` datetime NULL,
-  `end` datetime NULL,
   `stage` varchar(30) NOT NULL DEFAULT '',
   `content` text NULL,
   `status` varchar(30) NOT NULL DEFAULT '',
@@ -3011,15 +2984,6 @@ CREATE TABLE IF NOT EXISTS `zt_deploystep` (
   `createdDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- DROP TABLE IF EXISTS `zt_deployscope`;
-CREATE TABLE IF NOT EXISTS `zt_deployscope` (
-  `deploy` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `service` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `hosts` text NULL,
-  `remove` text NULL,
-  `add` text NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_traincourse`;
@@ -16117,3 +16081,45 @@ CREATE INDEX `idx_repo_deleted` ON `zt_job` (`repo`,`deleted`);
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES
 ('*/5', '*', '*', '*', '*', 'moduleName=program&methodName=refreshStats', '刷新项目集统计数据', 'zentao', 1, 'normal', NULL),
 ('*/5', '*', '*', '*', '*', 'moduleName=product&methodName=refreshStats', '刷新产品统计数据',   'zentao', 1, 'normal', NULL);
+
+REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`, `vision`) VALUES
+('zh-cn', 'custom', 'relationList', '1', '{\"relation\":\"\\u76f8\\u5173\",\"relativeRelation\":\"\\u76f8\\u5173\"}', '0', 'all'),
+('zh-cn', 'custom', 'relationList', '2', '{\"relation\":\"\\u4f9d\\u8d56\",\"relativeRelation\":\"\\u88ab\\u4f9d\\u8d56\"}', '0', 'all'),
+('zh-cn', 'custom', 'relationList', '3', '{\"relation\":\"\\u91cd\\u590d\",\"relativeRelation\":\"\\u91cd\\u590d\"}', '0', 'all'),
+('zh-cn', 'custom', 'relationList', '4', '{\"relation\":\"\\u5f15\\u7528\",\"relativeRelation\":\"\\u88ab\\u5f15\\u7528\"}', '0', 'all'),
+('en', 'custom', 'relationList', '1', '{\"relation\":\"Relate\",\"relativeRelation\":\"Relate\"}', '0', 'all'),
+('en', 'custom', 'relationList', '2', '{\"relation\":\"Dependence\",\"relativeRelation\":\"Depended On\"}', '0', 'all'),
+('en', 'custom', 'relationList', '3', '{\"relation\":\"Repetition\",\"relativeRelation\":\"Repetition\"}', '0', 'all'),
+('en', 'custom', 'relationList', '4', '{\"relation\":\"Quote\",\"relativeRelation\":\"Quoted\"}', '0', 'all'),
+('de', 'custom', 'relationList', '1', '{\"relation\":\"Relate\",\"relativeRelation\":\"Relate\"}', '0', 'all'),
+('de', 'custom', 'relationList', '2', '{\"relation\":\"Dependence\",\"relativeRelation\":\"Depended On\"}', '0', 'all'),
+('de', 'custom', 'relationList', '3', '{\"relation\":\"Repetition\",\"relativeRelation\":\"Repetition\"}', '0', 'all'),
+('de', 'custom', 'relationList', '4', '{\"relation\":\"Quote\",\"relativeRelation\":\"Quoted\"}', '0', 'all'),
+('fr', 'custom', 'relationList', '1', '{\"relation\":\"Relate\",\"relativeRelation\":\"Relate\"}', '0', 'all'),
+('fr', 'custom', 'relationList', '2', '{\"relation\":\"Dependence\",\"relativeRelation\":\"Depended On\"}', '0', 'all'),
+('fr', 'custom', 'relationList', '3', '{\"relation\":\"Repetition\",\"relativeRelation\":\"Repetition\"}', '0', 'all'),
+('fr', 'custom', 'relationList', '4', '{\"relation\":\"Quote\",\"relativeRelation\":\"Quoted\"}', '0', 'all'),
+('zh-tw', 'custom', 'relationList', '1', '{\"relation\":\"\\u76f8\\u95dc\",\"relativeRelation\":\"\\u76f8\\u95dc\"}', '0', 'all'),
+('zh-tw', 'custom', 'relationList', '2', '{\"relation\":\"\\u4f9d\\u8cf4\",\"relativeRelation\":\"\\u88ab\\u4f9d\\u8cf4\"}', '0', 'all'),
+('zh-tw', 'custom', 'relationList', '3', '{\"relation\":\"\\u91cd\\u8907\",\"relativeRelation\":\"\\u91cd\\u8907\"}', '0', 'all'),
+('zh-tw', 'custom', 'relationList', '4', '{\"relation\":\"\\u5f15\\u7528\",\"relativeRelation\":\"\\u88ab\\u5f15\\u7528\"}', '0', 'all');
+
+CREATE TABLE IF NOT EXISTS `zt_system` (
+  `id` MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(100) NOT NULL DEFAULT '',
+  `product` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
+  `integrated` ENUM('0','1') NOT NULL DEFAULT '0',
+  `latestRelease` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
+  `latestDate` DATETIME NULL,
+  `children` VARCHAR(255) NOT NULL DEFAULT '',
+  `status` ENUM('active','inactive') NOT NULL DEFAULT 'active',
+  `desc` mediumtext NULL,
+  `createdBy` VARCHAR(30) NOT NULL DEFAULT '',
+  `createdDate` DATETIME NULL,
+  `editedBy` VARCHAR(30) NOT NULL DEFAULT '',
+  `editedDate` DATETIME NULL,
+  `deleted` ENUM('0','1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE INDEX `idx_product` ON `zt_system`(`product`);
+CREATE INDEX `idx_status` ON `zt_system`(`status`);

@@ -19,6 +19,7 @@ window.changeDoclibAcl = function(e)
     if(libType == 'api')
     {
         $('.apilib').removeClass('hidden');
+        $('#orderBox').addClass('hidden');
         $('#aclBox .check-list').html($('#aclAPIBox .check-list').html());
         $("#aclBox input[id='aclopen']").prop('checked', true);
 

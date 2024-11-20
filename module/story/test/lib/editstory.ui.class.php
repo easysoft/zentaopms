@@ -14,30 +14,41 @@ class editStoryTester extends tester
 {
     /**
      * Edit a story.
-     * @param   string $storyFrom
+     * @param   string $storyID, $storyType, $storyFrom
      * @access  public
      * @return  object
      */
-    public function editStory($storyFrom)
+    public function editStory($storyID, $storyType, $storyFrom)
     {
         $editStoryParam = array(
-            'storyID'     => '1',
+            'storyID'     => $storyID,
             'kanbanGroup' => 'default',
-            'storyType'   => 'story'
+            'storyType'   => $storyType,
         );
         /* 提交表单 */
-        $form = $this->initForm('story', 'edit', $editStoryParam, 'appIframe-product');
+        $form = $this->initForm($storyType, 'edit', $editStoryParam, 'appIframe-product');
         $form->dom->source->picker($storyFrom);
         $form->dom->assignedTo->picker('admin');
         $form->dom->btn($this->lang->save)->click();
         $form->wait(1);
 
-        $browsePage = $this->loadPage('story', 'view', '1');
+        $browsePage = $this->loadPage('story', 'view', $storyID);
 
         $viewPage = $this->loadPage('story', 'view');
-        if($viewPage->dom->storyFrom->getText() != '客户') return $this->failed('需求来源不正确');
+        if($viewPage->dom->storyFrom->getText() != $storyFrom) return $this->failed('需求来源不正确');
 
-        return $this->success('编辑研发需求成功');
+        if($storyType == 'requirement')
+        {
+            return $this->success('编辑用户需求成功');
+        }
+        if($storyType == 'story')
+        {
+            return $this->success('编辑研发需求成功');
+        }
+        else
+        {
+            return $this->success('编辑业务需求成功');
+        }
     }
 
     /**

@@ -13,7 +13,7 @@ class caseRelatedList extends relatedList
 
     protected function created()
     {
-        global $app, $lang;
+        global $config, $lang;
 
         $case = $this->prop('case', data('case'));
         if(!$case) return array();
@@ -26,22 +26,25 @@ class caseRelatedList extends relatedList
             'url'   => hasPriv('bug', 'view') ? createLink('bug', 'view', 'bugID={id}') : false
         );
 
-        $linkCases = array();
-        foreach($case->linkCaseTitles as $caseID => $linkCaseTitle)
+        if($config->edition == 'open')
         {
-            $linkCase = new \stdclass();
-            $linkCase->id    = $caseID;
-            $linkCase->title = $linkCaseTitle;
+            $linkCases = array();
+            foreach($case->linkCaseTitles as $caseID => $linkCaseTitle)
+            {
+                $linkCase = new \stdclass();
+                $linkCase->id    = $caseID;
+                $linkCase->title = $linkCaseTitle;
 
-            $linkCases[] = $linkCase;
+                $linkCases[] = $linkCase;
+            }
+
+            $data['linkCases'] = array
+            (
+                'title' => $lang->testcase->linkCase,
+                'items' => $linkCases,
+                'url'   => hasPriv('testcase', 'view') ? createLink('testcase', 'view', 'caseID={id}') : false
+            );
         }
-
-        $data['linkCases'] = array
-        (
-            'title' => $lang->testcase->linkCase,
-            'items' => $linkCases,
-            'url'   => hasPriv('testcase', 'view') ? createLink('testcase', 'view', 'caseID={id}') : false
-        );
 
         $this->setProp('data', $data);
     }

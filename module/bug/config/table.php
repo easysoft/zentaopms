@@ -10,6 +10,7 @@ $config->bug->dtable->fieldList['id']['sortType'] = true;
 $config->bug->dtable->fieldList['id']['required'] = true;
 $config->bug->dtable->fieldList['id']['group']    = 1;
 
+$config->bug->dtable->fieldList['product']['title']      = $lang->bug->product;
 $config->bug->dtable->fieldList['product']['display']    = false;
 $config->bug->dtable->fieldList['product']['dataSource'] = array('module' => 'product', 'method' => 'getPairs', 'params' => ['mode' => '', 'programID' => 0, 'append' => '', 'shadow' => 'all']);
 
@@ -180,6 +181,22 @@ $config->bug->dtable->fieldList['activatedCount']['title']    = $lang->bug->abbr
 $config->bug->dtable->fieldList['activatedCount']['type']     = 'count';
 $config->bug->dtable->fieldList['activatedCount']['group']    = 8;
 $config->bug->dtable->fieldList['activatedCount']['sortType'] = true;
+
+if($config->edition != 'open')
+{
+    $config->bug->dtable->fieldList['relatedObject']['name']        = 'relatedObject';
+    $config->bug->dtable->fieldList['relatedObject']['title']       = $lang->custom->relateObject;
+    $config->bug->dtable->fieldList['relatedObject']['sortType']    = false;
+    $config->bug->dtable->fieldList['relatedObject']['width']       = '70';
+    $config->bug->dtable->fieldList['relatedObject']['type']        = 'text';
+    $config->bug->dtable->fieldList['relatedObject']['link']        = common::hasPriv('custom', 'showRelationGraph') ? "RAWJS<function(info){ if(info.row.data.relatedObject == 0) return 0; else return '" . helper::createLink('custom', 'showRelationGraph', 'objectID={id}&objectType=bug') . "'; }>RAWJS" : null;
+    $config->bug->dtable->fieldList['relatedObject']['data-toggle'] = 'modal';
+    $config->bug->dtable->fieldList['relatedObject']['data-size']   = 'lg';
+    $config->bug->dtable->fieldList['relatedObject']['show']        = true;
+    $config->bug->dtable->fieldList['relatedObject']['group']       = 8;
+    $config->bug->dtable->fieldList['relatedObject']['flex']        = false;
+    $config->bug->dtable->fieldList['relatedObject']['align']       = 'center';
+}
 
 $config->bug->dtable->fieldList['activatedDate']['title']    = $lang->bug->activatedDate;
 $config->bug->dtable->fieldList['activatedDate']['type']     = 'date';

@@ -31,10 +31,8 @@ class count_of_monthly_closed_bug_in_project extends baseCalc
         $project    = $row->project;
         $closedDate = $row->closedDate;
 
-        if(empty($closedDate)) return false;
-
-        $year = substr($closedDate, 0 ,4);
-        if($year == '0000') return false;
+        $year = $this->getYear($closedDate);
+        if(!$year) return false;
 
         $month = substr($closedDate, 5, 2);
 

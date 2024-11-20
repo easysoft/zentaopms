@@ -29,10 +29,8 @@ class count_of_annual_finished_productplan extends baseCalc
     public function calculate($data)
     {
         $finishedDate = $data->finishedDate;
-        if(empty($finishedDate)) return false;
-
-        $year = substr($finishedDate, 0, 4);
-        if($year == '0000') return false;
+        $year = $this->getYear($finishedDate);
+        if(!$year) return false;
 
         if(!isset($this->result[$year])) $this->result[$year] = 0;
 

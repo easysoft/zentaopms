@@ -907,10 +907,10 @@ class commonModel extends model
 
                 if($value != stripslashes((string)$old->$key))
                 {
-                    $diff = '';
-                    if(substr_count((string)$value, "\n") > 1     or
-                        substr_count((string)$old->$key, "\n") > 1 or
-                        strpos(',name,title,desc,spec,steps,content,digest,verify,report,definition,analysis,summary,prevention,resolution,outline,schedule,minutes,sql,interface,ui,langs,performance,privileges,search,actions,deploy,bi,safe,other,', ',' . strtolower($key) . ',') !== false)
+                    $diff       = '';
+                    $showDiff   = (substr_count((string)$value, "\n") > 1 || substr_count((string)$old->$key, "\n") > 1 || strpos(',name,title,desc,spec,steps,content,digest,verify,report,definition,analysis,summary,prevention,resolution,outline,schedule,minutes,sql,interface,ui,langs,performance,privileges,search,actions,deploy,bi,safe,other,', ',' . strtolower($key) . ',') !== false);
+                    $hiddenDiff = array('bug' => 'resolution');
+                    if($showDiff && (!isset($hiddenDiff[$moduleName]) || (isset($hiddenDiff[$moduleName]) && strpos(",$hiddenDiff[$moduleName],", ",$key,") === false)))
                     {
                         $diff = commonModel::diff((string)$old->$key, (string)$value);
                     }
@@ -1947,11 +1947,16 @@ eof;
             if($executionsStatus[$object->execution] == 'closed'  || !empty($config->CRProject)) return false;
 
             /* Check the execution's project is closed. */
-            if(isset($object->project) && !isset($projectsStatus[$object->project]))
+            if(isset($object->project))
             {
-                $project = $commonModel->loadModel('project')->getByID((int)$object->project);
-                $projectsStatus[$object->project] = $project ? $project->status : '';
+                if(!isset($projectsStatus[$object->project]))
+                {
+                    $project = $commonModel->loadModel('project')->getByID((int)$object->project);
+                    $projectsStatus[$object->project] = $project ? $project->status : '';
+                }
+                if($projectsStatus[$object->project] == 'closed') return false;
             }
+
             if(isset($object->project) && $projectsStatus[$object->project] == 'closed') return false;
         }
 
@@ -2623,7 +2628,7 @@ eof;
     {
         if(!empty($actionData['url']) && is_array($actionData['url']))
         {
-            $moduleName = ($actionData['url']['module'] == 'story' && $moduleName == 'story') ? $data->type : $actionData['url']['module'];
+            $moduleName = ($actionData['url']['module'] == 'story' && in_array($moduleName, array('epic', 'requirement', 'story'))) ? $data->type : $actionData['url']['module'];
             $methodName = $actionData['url']['method'];
             $params     = $actionData['url']['params'];
             if(!common::hasPriv($moduleName, $methodName, $data)) return false;
@@ -2631,7 +2636,7 @@ eof;
         }
         else if(!empty($actionData['data-url']) && is_array($actionData['data-url']))
         {
-            $moduleName = ($actionData['data-url']['module'] == 'story' && $moduleName == 'story') ? $data->type : $actionData['data-url']['module'];
+            $moduleName = ($actionData['data-url']['module'] == 'story' && in_array($moduleName, array('epic', 'requirement', 'story'))) ? $data->type : $actionData['data-url']['module'];
             $methodName = $actionData['data-url']['method'];
             $params     = $actionData['data-url']['params'];
             if(!common::hasPriv($moduleName, $methodName, $data)) return false;

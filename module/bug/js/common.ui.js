@@ -7,9 +7,8 @@ function changeProduct(event)
 {
     const productID = $(event.target).val();
     if(productID == undefined) return false;
-    if(productID == bug.product) return false;
 
-    if(typeof(changeProductConfirmed) != 'undefined' && !changeProductConfirmed)
+    if(typeof(changeProductConfirmed) != 'undefined' && !changeProductConfirmed && productID != bug.productID)
     {
         zui.Modal.confirm({message: confirmChangeProduct, onResult: function(result)
         {

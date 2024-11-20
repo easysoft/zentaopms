@@ -8,6 +8,7 @@ $lang->bi->driver = 'Driver';
 $lang->bi->driverList = array();
 $lang->bi->driverList['mysql'] = 'MySQL';
 
+$lang->bi->query      = 'Query';
 $lang->bi->sqlQuery   = 'SQL statements query';
 $lang->bi->sqlBuilder = 'SQL builder';
 $lang->bi->dictionary = 'Data Dictionary';

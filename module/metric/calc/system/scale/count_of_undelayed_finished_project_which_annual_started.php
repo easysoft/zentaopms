@@ -30,8 +30,8 @@ class count_of_undelayed_finished_project_which_annual_started extends baseCalc
     {
         if(empty($row->realBegan) or empty($row->realEnd) or empty($row->firstEnd)) return false;
 
-        $beginYear = substr($row->realBegan, 0, 4);
-        if($beginYear == '0000') return false;
+        $beginYear = $this->getYear($row->realBegan);
+        if(!$beginYear) return false;
 
         if(!isset($this->result[$beginYear])) $this->result[$beginYear] = 0;
 

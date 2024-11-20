@@ -28,10 +28,8 @@ class hour_of_annual_effort extends baseCalc
 
     public function calculate($row)
     {
-        if(empty($row->date)) return false;
-
-        $year = substr($row->date, 0, 4);
-        if($year == '0000') return false;
+        $year = $this->getYear($row->date);
+        if(!$year) return false;
 
         $consumed = $row->consumed;
 

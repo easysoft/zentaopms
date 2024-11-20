@@ -52,6 +52,7 @@ class docApp extends wg
         'search'                => '?string',              // 搜索关键字。
         'filterType'            => '?string',              // 过滤类型。
         'pager'                 => '?PagerInfo',           // 分页信息。
+        'params'                => '?string',              // 额外参数信息。
         'orderBy'               => '?string',              // 排序字段。
         'langData'              => '?array',               // 语言数据。
         'showLibFiles'          => '?boolean|array|string',// 是否显示库文件。
@@ -76,6 +77,11 @@ class docApp extends wg
     public static function getPageJS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
+    }
+
+    public static function getPageCSS(): ?string
+    {
+        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
     protected function build()
@@ -111,13 +117,26 @@ class docApp extends wg
          * 设置前端语言数据。 在 js/app.ui.js 中使用 getLang('xxx') 来访问语言数据。
          */
         $app->loadLang('file');
+        $app->loadLang('api');
         $langData = $lang->doc->docLang;
-        $langData->filePreview           = $lang->file->preview;
-        $langData->fileDownload          = $lang->file->download;
-        $langData->fileDelete            = $lang->file->delete;
-        $langData->fileRename            = $lang->file->edit;
-        $langData->fileConfirmDelete     = $lang->file->confirmDelete;
-        $langData->deleted               = $lang->file->deleted;
+        $langData->filePreview       = $lang->file->preview;
+        $langData->fileDownload      = $lang->file->download;
+        $langData->fileDelete        = $lang->file->delete;
+        $langData->fileRename        = $lang->file->edit;
+        $langData->fileConfirmDelete = $lang->file->confirmDelete;
+        $langData->deleted           = $lang->file->deleted;
+        $langData->createApi         = $lang->api->createApi;
+        $langData->apifilterTypes    = $lang->api->filterTypes;
+        $langData->module            = $lang->api->module;
+        $langData->struct            = $lang->api->struct;
+        $langData->releases          = $lang->api->releases;
+        $langData->noApi             = $lang->api->noApi;
+        $langData->version           = $lang->api->version;
+        $langData->defaultVersion    = $lang->api->defaultVersion;
+        $langData->createStruct      = $lang->api->createStruct;
+        $langData->createRelease     = $lang->api->createRelease;
+        $langData->libTypeList       = $lang->api->libTypeList;
+        $langData->latestVersion     = $lang->api->latestVersion;
 
         /**
          * 通过语言项定义文档表格列显示名称。

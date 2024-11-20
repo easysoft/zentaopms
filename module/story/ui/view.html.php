@@ -41,7 +41,7 @@ if($app->tab == 'product') setPageData('activeMenuID', $story->type);
 
 /* 初始化头部右上方工具栏。Init detail toolbar. */
 $toolbar = array();
-if(!$isInModal && hasPriv('story', 'create'))
+if(!$isInModal && hasPriv($story->type, 'create'))
 {
     $otherParam = 'storyID=&projectID=';
     if($app->rawModule == 'projectstory' || $app->tab == 'project') $otherParam = "storyID=&projectID={$this->session->project}";
@@ -147,7 +147,7 @@ if($twins)
 
 if(!in_array($config->vision, array('lite', 'or')))
 {
-    $tabs[] = setting()
+    $tabs['linkStories'] = setting()
         ->group('relatives')
         ->title($lang->story->linkStories)
         ->control('linkedStoryList')
@@ -167,7 +167,7 @@ if($isStoryType && hasPriv('story', 'tasks'))
 /* 相关信息。 Related info. */
 if($config->vision != 'lite')
 {
-    $tabs[] = setting()
+    $tabs['storyRelatedList'] = setting()
         ->group('relatives')
         ->title($lang->story->legendRelated)
         ->control('storyRelatedList');

@@ -24,6 +24,14 @@ window.onRenderBugNameCell = function(result, info)
     {
         result[result.length] = {html: '<a href=\'' + testcaseLink.replace('{case}', info.row.data.case).replace('{caseVersion}', info.row.data.caseVersion) + '\' title=\'' + info.row.data.case + '\'>' + testcaseTitle.replace('{case}', info.row.data.case) + '</a>'};
     }
+    if(info.col.name == 'deadline' && result[0])
+    {
+        const bug = info.row.data;
+        if(['resolved', 'closed'].includes(bug.status)) return result;
+
+        const yesterday = zui.formatDate(zui.createDate() - 24 * 60 * 60 * 1000, 'yyyy-MM-dd');
+        if(result[0] <= yesterday) result[0] = {html: '<span class="label danger-pale rounded-full size-sm">' + result[0] + '</span>'};
+    }
 
     return result;
 }

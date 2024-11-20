@@ -16,7 +16,7 @@ detailHeader
     isAjaxRequest('modal') ? to::prefix() : '',
     to::title(
         entityLabel(
-            set(array('entityID' => $host->id, 'level' => 1, 'text' => $host->name))
+            set(array('entityID' => $host->id, 'level' => 1, 'text' => $host->name, 'className' => 'clip', 'title' => $host->name))
         )
     )
 );
@@ -32,10 +32,10 @@ detailBody
             setClass('table table-fixed canvas host-view-table'),
             h::tr
             (
+                isset($host->CD) ? h::th($lang->host->CD) : null,
+                isset($host->CD) ? h::td($lang->host->CDlist[$host->CD]) : null,
                 h::th($lang->host->name),
-                h::td($host->name),
-                h::th(),
-                h::td()
+                h::td($host->name)
             ),
             h::tr
             (
@@ -44,26 +44,22 @@ detailBody
                 h::th($lang->host->serverRoom),
                 h::td(zget($rooms, $host->serverRoom, ""))
             ),
-            h::tr
+            zget($host, 'CD') == 'spug' ? h::tr
             (
-                h::th($lang->host->serverModel),
-                h::td($host->serverModel),
-                h::th($lang->host->hostType),
-                h::td(zget($lang->host->hostTypeList, $host->hostType, ""))
-            ),
-            h::tr
+                h::th($lang->host->admin),
+                h::td(zget($host, 'admin'))
+            ) : null,
+            zget($host, 'CD') == 'spug' ?  h::tr
             (
-                h::th($lang->host->cpuBrand),
-                h::td($host->cpuBrand),
-                h::th($lang->host->cpuModel),
-                h::td($host->cpuModel)
-            ),
+                h::th($lang->host->password),
+                h::td($lang->host->defaultPWD),
+                h::th($lang->host->sshPort),
+                h::td($host->sshPort)
+            ) : null,
             h::tr
             (
                 h::th($lang->host->cpuNumber),
-                h::td($host->cpuNumber),
-                h::th($lang->host->cpuCores),
-                h::td($host->cpuCores)
+                h::td($host->cpuNumber ? $host->cpuNumber : ''),
             ),
             h::tr
             (
@@ -75,24 +71,25 @@ detailBody
             h::tr
             (
                 h::th($lang->host->intranet),
-                h::td($host->intranet),
+                h::td($host->intranet, set::title($host->intranet)),
                 h::th($lang->host->extranet),
-                h::td($host->extranet)
+                h::td($host->extranet, set::title($host->extranet))
             ),
             h::tr
             (
-                h::th($lang->host->osName),
-                h::td($host->osName),
+                zget($host, 'CD') != 'spug' ? h::th($lang->host->osName) : null,
+                zget($host, 'CD') != 'spug' ? h::td($host->osName) : null,
                 h::th($lang->host->osVersion),
-                h::td(zget($lang->host->{$host->osName.'List'}, $host->osVersion))
+                zget($host, 'CD') == 'spug' ? h::td($host->osVersion) : null,
+                zget($host, 'CD') != 'spug' && !empty($host->osName) ? h::td(zget($lang->host->{$host->osName.'List'}, $host->osVersion)) : null
             ),
-            h::tr
+            zget($host, 'CD') != 'spug' ? h::tr
             (
                 h::th($lang->host->status),
                 h::td($lang->host->statusList[$host->status]),
                 h::th(),
                 h::td()
-            )
+            ) : null
         )
     ),
     history

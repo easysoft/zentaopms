@@ -1088,7 +1088,7 @@ class userModel extends model
             if(empty($acl['products'])) $productAllow = true;
             if(empty($acl['sprints']))  $sprintAllow  = true;
             if(empty($acl['views']))    $viewAllow    = true;
-            if(empty($acl['actions']))  $actionAllow  = true;
+            if(!isset($acl['actions'])) $actionAllow  = true;
 
             /* 将所有权限分组的视图访问限制合并。 */
             if(!$programAllow && !empty($acl['programs'])) $acls['programs'] = array_merge($acls['programs'], $acl['programs']);
@@ -1106,7 +1106,7 @@ class userModel extends model
         if($sprintAllow)  $acls['sprints']  = array();
         if($viewAllow)    $acls['views']    = array();
         if($actionAllow)  $acls['actions']  = array();
-        if(empty($acls['actions'])) unset($acls['actions']);
+        if($actionAllow && empty($acls['actions'])) unset($acls['actions']);
 
         return $acls;
     }

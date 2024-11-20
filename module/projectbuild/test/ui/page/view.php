@@ -8,6 +8,7 @@ class viewPage extends page
         $xpath = array(
             'basic'          => "//*[@id='mainContent']/div[2]/div/div/div/div/ul/li[4]/a/span",
             'basicBuildName' => "//*[@class='section']/table/tbody[1]/tr[2]/td",
+            'basicProduct'   => "//*[@class='section']/table/tbody[1]/tr[1]/td",
             'basicExecution' => "//*[@class='section']/table/tbody[1]/tr[3]/td",
             /* 版本关联研发需求的元素  */
             'linkStoryBtn'        => "//*[@id='mainContent']/div[2]/div/div/div/div[2]/div/div/button/span",

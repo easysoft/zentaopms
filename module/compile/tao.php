@@ -70,14 +70,16 @@ class compileTao extends compileModel
 
         if($buildType == 'jenkins')
         {
-            $data->queue       = $build->queueId;
-            $data->status      = $build->result == 'SUCCESS' ? 'success' : 'failure';
+            $data->queue  = $build->queueId;
+            $data->status = $build->result == 'SUCCESS' ? 'success' : 'running';
+            if($build->result == 'FAILURE') $data->status = 'failure';
+
             $data->createdDate = date('Y-m-d H:i:s', (int)($build->timestamp / 1000));
         }
         else
         {
             $data->queue  = !empty($build->number) ? $build->number : $build->id;
-            $data->status = $build->status == 'success' ? 'success' : 'failure';
+            $data->status = isset($this->lang->compile->statusList[$build->status]) ? $build->status : 'failure';
 
             $date = isset($build->created_at) ? strtotime($build->created_at) : time();
             if(isset($build->created)) $date = $build->created;

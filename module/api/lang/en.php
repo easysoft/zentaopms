@@ -15,6 +15,7 @@ $lang->api->sql      = 'SQL Query API';
 $lang->api->manage   = 'API management';
 
 $lang->api->index               = 'API Space';
+$lang->api->view                = 'API Detail';
 $lang->api->editLib             = 'Edit';
 $lang->api->releases            = 'Release';
 $lang->api->deleteRelease       = 'Delete Release';
@@ -59,10 +60,12 @@ $lang->api->confirmDeleteLib    = "Do you want to delete this interface library?
 $lang->api->confirmDeleteStruct = "Do you want to delete this data struct?";
 $lang->api->filterStruct        = "use struct";
 $lang->api->defaultVersion      = "Current Version";
+$lang->api->latestVersion       = 'Lastest Version';
 $lang->api->zentaoAPI           = "Zentao API v1";
 $lang->api->search              = "Search";
 $lang->api->allLibs             = "AllLibs";
-$lang->api->noLinked            = "No Linked {$lang->productCommon} and {$lang->projectCommon}";
+$lang->api->noLinked            = "Stand-alone APIs";
+$lang->api->apiCatalog          = 'Api Catalogs';
 $lang->api->addCatalog          = 'Add Catalog';
 $lang->api->editCatalog         = 'Edit Catalog';
 $lang->api->sortCatalog         = 'Catalog Sorting';
@@ -160,6 +163,9 @@ $lang->api->format             = 'Format';
 $lang->api->libType            = 'Api Library Type';
 $lang->api->product            = $lang->productCommon;
 $lang->api->project            = $lang->projectCommon;
+$lang->api->apiTotalInfo       = 'Total %d APIs';
+$lang->api->showNotEmpty       = 'Show not empty';
+$lang->api->showClosed         = 'Show with closed';
 
 $lang->api->methodOptions      = array(
     'GET'     => 'GET',
@@ -183,9 +189,9 @@ $lang->api->requestTypeOptions['application/x-www-form-urlencoded'] = 'applicati
 $lang->api->requestTypeOptions['multipart/form-data']               = 'multipart/form-data';
 
 $lang->api->libTypeList = array();
-$lang->api->libTypeList['product'] = $lang->productCommon . ' Api Library';
-$lang->api->libTypeList['project'] = $lang->projectCommon . ' Api Library';
-$lang->api->libTypeList['nolink']  = 'Independent Api Library';
+$lang->api->libTypeList['product'] = $lang->productCommon . ' API';
+$lang->api->libTypeList['project'] = $lang->projectCommon . ' API';
+$lang->api->libTypeList['nolink']  = 'Independent API';
 
 $lang->api->statusOptions      = array(
     'done'   => 'Done',
@@ -229,8 +235,17 @@ $lang->apistruct->name = 'Name';
 
 $lang->api_lib_release = new stdClass();
 $lang->api_lib_release->version = 'Version';
+$lang->api_lib_release->desc    = 'Description';
 
 $lang->api->error = new stdclass();
 $lang->api->error->onlySelect = 'SQL API only allows SELECT query.';
 $lang->api->error->disabled   = 'For security reasons, this feature is disabled. Go to the config directory and modify the configuration item %s to enable it.';
 $lang->api->error->notInput   = 'Debugging is not supported temporarily due to field parameter type restrictions';
+
+$lang->api->filterTypes[] = array('all', 'All');
+$lang->api->filterTypes[] = array('createdByMe', 'Created by me');
+$lang->api->filterTypes[] = array('editedByMe', 'Edited by me');
+
+$lang->api->homeFilterTypes['nolink']  = $lang->api->libTypeList['nolink'];
+$lang->api->homeFilterTypes['product'] = $lang->api->libTypeList['product'];
+$lang->api->homeFilterTypes['project'] = $lang->api->libTypeList['project'];

@@ -19,15 +19,21 @@ class changeStoryTester extends tester
      * @access public
      * @return object
      */
-    public function changeStory($storyName)
+    public function changeStory($storyName, $reviewer)
     {
         $form = $this->initForm('story', 'change', array('id' => 1), 'appIframe-product');
         $form->dom->title->setValue($storyName);
-        $form->dom->reviewer->multiPicker(array('admin'));
+        $form->dom->reviewer->multiPicker($reviewer);
         $form->dom->btn($this->lang->save)->click();
         $form->wait(1);
 
-        if($this->response('method') != 'view')
+        if($this->response('method') != 'view' and $reviewer == array())
+        {
+            if($form->dom->alertmodal('text') == '『评审人员』不能为空。') return $this->success('变更需求表单页面提示信息正确');
+            return $this->failed('变更需求表单页面提示信息不正确');
+        }
+
+        if($this->response('method') != 'view' and $storyName == null)
         {
             if($form->dom->alertmodal('text') == '『研发需求名称』不能为空。') return $this->success('变更需求表单页面提示信息正确');
             return $this->failed('变更需求表单页面提示信息不正确');
@@ -36,6 +42,42 @@ class changeStoryTester extends tester
         /* 跳转到需求列表页面搜索创建需求并进入该需求详情页。 */
 
         $viewPage = $this->loadPage('story', 'view');
+        if($viewPage->dom->storyName->getText() != $storyName) return $this->failed('需求名称不正确');
+        if($viewPage->dom->status->getText()    != '评审中') return $this->failed('需求状态不正确');
+
+        return $this->success('变更需求成功');
+    }
+
+    /**
+     *  change an epic.
+     *
+     * @param  string $storyName
+     * @param  array $reviewer
+     * @access public
+     * @return object
+     */
+    public function changeEpic($storyName, $reviewer)
+    {
+        $form = $this->initForm('epic', 'change', array('id' => 3), 'appIframe-product');
+        $form->dom->title->setValue($storyName);
+        $form->dom->reviewer->multiPicker($reviewer);
+        $form->dom->btn($this->lang->save)->click();
+        $form->wait(1);
+
+        if($this->response('method') != 'view' and $reviewer == array())
+        {
+            if($form->dom->alertmodal('text') == '『评审人员』不能为空。') return $this->success('变更需求表单页面提示信息正确');
+            return $this->failed('变更需求表单页面提示信息不正确');
+        }
+        if($this->response('method') != 'view' and $storyName == null)
+        {
+            if($form->dom->alertmodal('text') == '『业务需求名称』不能为空。') return $this->success('变更需求表单页面提示信息正确');
+            return $this->failed('变更需求表单页面提示信息不正确');
+        }
+
+        /* 跳转到需求列表页面搜索创建需求并进入该需求详情页。 */
+
+        $viewPage = $this->loadPage('epic', 'view');
         if($viewPage->dom->storyName->getText() != $storyName) return $this->failed('需求名称不正确');
         if($viewPage->dom->status->getText()    != '评审中') return $this->failed('需求状态不正确');
 

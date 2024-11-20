@@ -28,11 +28,8 @@ class count_of_annual_created_doc extends baseCalc
 
     public function calculate($row)
     {
-        $addedDate = $row->addedDate;
-        if(empty($addedDate)) return false;
-
-        $year = substr($addedDate, 0, 4);
-        if($year == '0000') return false;
+        $year = $this->getYear($row->addedDate);
+        if(!$year) return false;
 
         if(!isset($this->result[$year])) $this->result[$year] = 0;
         $this->result[$year] += 1;

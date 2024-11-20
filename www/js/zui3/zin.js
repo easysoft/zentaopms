@@ -1848,8 +1848,9 @@
             if(!isInAppTab && !zui.store.get('Zinbar:hidden') && zui.dom.isVisible($('#navbar'))) loadCurrentPage();
             if(zinbar)
             {
-                $(document).on('inited.zt', () =>
+                $(document).on('inited.zt', (e) =>
                 {
+                    if(e.target.parentElement.closest('[z-use]')) return;
                     const now = performance.now();
                     if(zinbar.waitZUI && (now - zinbar.waitZUI.time) <= 100)
                     {

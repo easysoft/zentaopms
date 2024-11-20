@@ -336,7 +336,7 @@ detailBody
                     )
                 )
             ),
-            (!$isLibCase && hasPriv('testcase', 'linkCases')) ? item
+            (!$isLibCase && hasPriv('testcase', 'linkCases') && $config->edition == 'open') ? item
             (
                 set::name($lang->testcase->linkCase),
                 a
@@ -347,7 +347,7 @@ detailBody
                     $lang->testcase->linkCases
                 )
             ) : null,
-            (!$isLibCase && hasPriv('testcase', 'linkCases')) ? item
+            (!$isLibCase && hasPriv('testcase', 'linkCases') && $config->edition == 'open') ? item
             (
                 set::trClass(!isset($case->linkCaseTitles) ? 'hidden' : ''),
                 control

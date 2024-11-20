@@ -163,6 +163,7 @@ class execution extends control
 
         /* Append branches to task. */
         $this->loadModel('task');
+        $this->loadModel('custom');
         $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($this->view->products));
         foreach($tasks as $task)
         {
@@ -182,6 +183,7 @@ class execution extends control
             }
             if(isset($branchGroups[$task->product][$task->branch])) $task->branch = $branchGroups[$task->product][$task->branch];
             if($task->needConfirm) $task->status = 'changed';
+            if($this->config->edition != 'open') $task->relatedObject = $this->custom->getRelatedObjectList($task->id, 'task', 'byRelation', true);
         }
 
         $showAllModule = empty($this->config->execution->task->allModule) ? '' : 'allModule';
@@ -192,7 +194,7 @@ class execution extends control
         $actionURL = $this->createLink('execution', 'task', "executionID=$executionID&status=bySearch&param=myQueryID");
         $this->config->execution->search['onMenuBar'] = 'yes';
         if(!$execution->multiple) unset($this->config->execution->search['fields']['execution']);
-        $this->execution->buildTaskSearchForm($executionID, $this->executions, $queryID, $actionURL, $modules);
+        $this->execution->buildTaskSearchForm($executionID, $this->executions, $queryID, $actionURL);
 
         $this->view->title       = $execution->name . $this->lang->hyphen . $this->lang->execution->task;
         $this->view->tasks       = $tasks;

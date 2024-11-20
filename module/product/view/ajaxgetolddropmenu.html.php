@@ -89,19 +89,19 @@ foreach($products as $programID => $programProducts)
 
             $myProducts ++;
         }
-        else if($product->status == 'normal' and !($product->PO == $this->app->user->account))
+        else if($product->status == 'closed')
+        {
+            $closedProductsHtml .= '<li>' . html::a($linkHtml, $productName, '', "class='$selected clickable' title='$productName' class='closed' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$app->tab'") . '</li>';
+
+            if($selected == 'selected') $tabActive = 'closed';
+        }
+        else
         {
             $normalProductsHtml .= '<li>' . html::a($linkHtml, $productName, '', "class='$selected clickable' title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$app->tab'") . '</li>';
 
             if($selected == 'selected') $tabActive = 'other';
 
             $others ++;
-        }
-        else if($product->status == 'closed')
-        {
-            $closedProductsHtml .= '<li>' . html::a($linkHtml, $productName, '', "class='$selected clickable' title='$productName' class='closed' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$app->tab'") . '</li>';
-
-            if($selected == 'selected') $tabActive = 'closed';
         }
 
         /* If the programID is greater than 0, the product is the last one in the program, print the closed label. */

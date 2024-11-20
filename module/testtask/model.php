@@ -107,7 +107,7 @@ class testtaskModel extends model
     {
         $begin = '';
         $end   = '';
-        $beginAndEnd = $this->loadModel('action')->computeBeginAndEnd($browseType);
+        $beginAndEnd = $this->loadModel('action')->computeBeginAndEnd($browseType, '', 'next');
         if($browseType != 'all' and $browseType != 'newest' and !empty($beginAndEnd))
         {
             $begin = $beginAndEnd['begin'];
@@ -1684,7 +1684,7 @@ class testtaskModel extends model
         if($action == 'activate') return ($testtask->status == 'blocked' || $testtask->status == 'done');
         if($action == 'close')    return $testtask->status != 'done';
         if($action == 'ztfrun')   return $testtask->auto == 'auto';
-        if($action == 'runcase')  return (empty($testtask->lib) || !empty($testtask->product)) && $testtask->auto == 'no' && $testtask->status != 'wait';
+        if($action == 'runcase')  return (empty($testtask->lib) || !empty($testtask->product)) && $testtask->status != 'wait';
 
         return true;
     }

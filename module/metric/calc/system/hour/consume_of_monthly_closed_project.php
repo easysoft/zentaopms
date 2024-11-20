@@ -29,12 +29,12 @@ class consume_of_monthly_closed_project extends baseCalc
     public function calculate($data)
     {
         $project  = $data->project;
-        $year     = substr($data->closedDate, 0, 4);
         $consumed = $data->consumed;
         $status   = $data->status;
 
         if($status != 'closed') return false;
-        if(empty($year) || $year == '0000') return false;
+        $year = $this->getYear($data->closedDate);
+        if(!$year) return false;
 
         $month = substr($data->closedDate, 5, 2);
 

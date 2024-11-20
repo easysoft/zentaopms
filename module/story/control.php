@@ -514,7 +514,7 @@ class story extends control
         $story   = $this->story->getById($storyID, $version, true);
         $product = $this->product->getByID((int)$story->product);
 
-        if($tab == 'product' and !empty($product->shadow)) return $this->send(array('result' => 'success', 'open' => array('url' => $uri, 'app' => 'project')));
+        if(!isInModal() && $tab == 'product' && !empty($product->shadow)) return $this->send(array('result' => 'success', 'open' => array('url' => $uri, 'app' => 'project')));
 
         if(!$story || (isset($story->type) && $story->type != $storyType))
         {

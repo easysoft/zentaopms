@@ -31,12 +31,12 @@ class count_of_monthly_finished_story extends baseCalc
         $closedDate   = $data->closedDate;
         $closedReason = $data->closedReason;
 
-        if(empty($closedDate)) return false;
+        $year = $this->getYear($closedDate);
+        if(!$year) return false;
 
-        $year  = substr($closedDate, 0, 4);
         $month = substr($closedDate, 5, 2);
 
-        if($year == '0000' || $closedReason != 'done') return false;
+        if($closedReason != 'done') return false;
 
         if(!isset($this->result[$year])) $this->result[$year] = array();
         if(!isset($this->result[$year][$month])) $this->result[$year][$month] = 0;

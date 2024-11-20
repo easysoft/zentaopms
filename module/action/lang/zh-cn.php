@@ -353,6 +353,14 @@ $lang->action->desc->updatecustom            = '$date, 由 <strong>$actor</stron
 $lang->action->desc->delist  = '$date, 由 <strong>$actor</strong> 下架。' . "\n";
 $lang->action->desc->publish = '$date, 由 <strong>$actor</strong> 发布。' . "\n";
 
+$lang->action->desc->manualbackup        = '$date, 由 <strong>$actor</strong> 手动备份。' . "\n";
+$lang->action->desc->autobackup          = '$date, 由 <strong>$actor</strong> 自动备份。' . "\n";
+$lang->action->desc->openautobackup      = '$date, 由 <strong>$actor</strong> 开启自动备份。' . "\n";
+$lang->action->desc->closeautobackup     = '$date, 由 <strong>$actor</strong> 关闭自动备份。' . "\n";
+$lang->action->desc->autodeletebackups   = '$date, 由 <strong>$actor</strong> 自动清理备份。' . "\n";
+$lang->action->desc->savebackupsettings  = '$date, 由 <strong>$actor</strong> 保存备份设置。' . "\n";
+$lang->action->desc->deleteexpiredbackup = '$date, 由 <strong>$actor</strong> 清理过期备份。' . "\n";
+
 /* 用来显示动态信息。*/
 $lang->action->label = new stdclass();
 $lang->action->label->install                 = '安装了';
@@ -553,8 +561,15 @@ $lang->action->label->deletebackup            = '删除了系统备份';
 $lang->action->label->restorebackup           = '还原了系统备份';
 $lang->action->label->upgradesystem           = '执行了系统升级';
 $lang->action->label->system                  = '';
-$lang->action->label->synced                  = '同步了';
-$lang->action->label->imported                = '导入了';
+$lang->action->label->manualbackup            = '手动备份了';
+$lang->action->label->autobackup              = '自动备份了';
+$lang->action->label->openautobackup          = '开启自动备份';
+$lang->action->label->closeautobackup         = '关闭自动备份';
+$lang->action->label->autodeletebackups       = '自动清理备份';
+$lang->action->label->savebackupsettings      = '保存备份设置';
+$lang->action->label->deleteexpiredbackup     = '清理过期备份';
+
+
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();

@@ -1869,9 +1869,10 @@ class pivotModel extends model
         /* Calculate row span config. */
         $records = $this->processRowSpan($records, $groups);
 
-        $data->cols   = $cols;
-        $data->array  = $this->processRecordsForDisplay($records);
-        $data->drills = $this->getDrillsFromRecords($records, $groups);
+        $data->cols         = $cols;
+        $data->array        = $this->processRecordsForDisplay($records);
+        $data->drills       = $this->getDrillsFromRecords($records, $groups);
+        $data->showAllTotal = $showAllTotal;
 
         $configs = $this->getRowSpanConfig($records);
 
@@ -2447,7 +2448,34 @@ class pivotModel extends model
      */
     public function buildPivotTable($data, $configs)
     {
-        $width = 128;
+        $width   = 128;
+
+        $nowSpan = 1;
+        $inFlow  = false;
+
+        /* 处理不需要展示的单元格，设置为0 */
+        $columnCount = count(current($configs));
+        $lineCount   = count($configs);
+        for($i = 0; $i < $columnCount; $i ++)
+        {
+            for($j = 0; $j < $lineCount; $j ++)
+            {
+                if($configs[$j][$i] > 1 && !$inFlow)
+                {
+                    $inFlow  = true;
+                    $nowSpan = $configs[$j][$i];
+                    continue;
+                }
+
+                if($configs[$j][$i] > 1 && $inFlow)
+                {
+                    $configs[$j][$i] = 0;
+
+                    $nowSpan --;
+                    if($nowSpan == 1) $inFlow = false;
+                }
+            }
+        }
 
         /* Init table. */
         $table = "<div class='reportData'><table class='table table-condensed table-striped table-bordered table-fixed datatable' style='width: auto; min-width: 100%' data-fixed-left-width='400'>";
@@ -2489,13 +2517,13 @@ class pivotModel extends model
         $table .= "<tbody>";
         $rowCount = 0;
 
-        $useColumnTotal = (!empty($data->columnTotal) and $data->columnTotal === 'sum');
+        $showAllTotal = $data->showAllTotal;
 
         for($i = 0; $i < count($data->array); $i ++)
         {
             $rowCount ++;
 
-            if($useColumnTotal and $rowCount == count($data->array)) continue;
+            if($showAllTotal and $rowCount == count($data->array)) continue;
 
             $line   = array_values($data->array[$i]);
             $table .= "<tr class='text-center'>";
@@ -2503,7 +2531,7 @@ class pivotModel extends model
             {
                 $isGroup = !empty($data->cols[0][$j]->isGroup) ? $data->cols[0][$j]->isGroup : false;
                 $rowspan = isset($configs[$i][$j]) ? $configs[$i][$j] : 1;
-                $hidden  = isset($configs[$i][$j]) ? false : (!$isGroup ? false : true);
+                $hidden  = (isset($configs[$i][$j]) and $configs[$i][$j]) ? false : (!$isGroup ? false : true);
 
                 $showOrigin = $showOrigins[$j];
                 if($hasShowOrigin && !$isGroup && !$showOrigin)
@@ -2520,7 +2548,7 @@ class pivotModel extends model
             $table .= "</tr>";
         }
 
-        if($useColumnTotal and !empty($data->array))
+        if($showAllTotal and !empty($data->array))
         {
             $table .= "<tr class='text-center'>";
             $table .= "<td colspan='" . count($data->groups) . "'>{$this->lang->pivot->stepDesign->total}</td>";

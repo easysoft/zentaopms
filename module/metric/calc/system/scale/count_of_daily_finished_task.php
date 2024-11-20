@@ -29,10 +29,10 @@ class count_of_daily_finished_task extends baseCalc
     public function calculate($row)
     {
         $finishedDate = $row->finishedDate;
-        if(empty($finishedDate)) return false;
 
-        $year = substr($finishedDate, 0, 4);
-        if($year == '0000') return false;
+        $year = $this->getYear($finishedDate);
+        if(!$year) return false;
+
         $month = substr($finishedDate, 5, 2);
         $day   = substr($finishedDate, 8, 2);
 

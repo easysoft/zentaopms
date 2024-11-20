@@ -46,7 +46,6 @@ class host extends control
         $this->view->title      = $this->lang->host->common;
         $this->view->hostList   = $this->host->getList($browseType, $param, $orderBy, $pager);
         $this->view->rooms      = $rooms;
-        $this->view->accounts   = $this->loadModel('account')->getPairs();
         $this->view->param      = $param;
         $this->view->browseType = $browseType;
         $this->view->orderBy    = $orderBy;
@@ -64,11 +63,11 @@ class host extends control
      * @access public
      * @return void
      */
-    public function create(string $osName = 'linux')
+    public function create()
     {
         if($_POST)
         {
-            $formData = form::data($this->config->host->form->create)->add('createdBy', $this->app->user->account)->add('createdDate', helper::now())->get();
+            $formData = form::data($this->config->host->form->create)->add('createdBy', $this->app->user->account)->add('createdDate', helper::now())->skipSpecial('name,desc')->get();
             $this->hostZen->checkFormData($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -79,9 +78,7 @@ class host extends control
         }
 
         $this->view->title      = $this->lang->host->create;
-        $this->view->osName     = $osName;
         $this->view->rooms      = $this->loadModel('serverroom')->getPairs();
-        $this->view->accounts   = $this->loadModel('account')->getPairs();
         $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu(0, 'host');
         $this->display();
     }
@@ -95,25 +92,23 @@ class host extends control
      * @access public
      * @return void
      */
-    public function edit(int $id, string $osName = '')
+    public function edit(int $id)
     {
         if($_POST)
         {
-            $formData = form::data($this->config->host->form->edit)->add('id', $id)->add('editedBy', $this->app->user->account)->add('editedDate', helper::now())->get();
+            $formData = form::data($this->config->host->form->edit)->add('id', $id)->add('editedBy', $this->app->user->account)->add('editedDate', helper::now())->skipSpecial('name,desc')->get();
             $this->hostZen->checkFormData($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->host->update($formData);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('browse'), 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('browse')));
         }
 
         $this->view->title      = $this->lang->host->edit;
         $this->view->host       = $this->host->fetchByID($id);
-        $this->view->osName     = $osName ? $osName : $this->view->host->osName;
         $this->view->rooms      = $this->loadModel('serverroom')->getPairs();
-        $this->view->accounts   = $this->loadModel('account')->getPairs();
         $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu(0, 'host');
         $this->display();
     }
@@ -133,7 +128,6 @@ class host extends control
         $this->view->rooms      = $this->loadModel('serverroom')->getPairs();
         $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu(0, 'host');
         $this->view->actions    = $this->loadModel('action')->getList('host', $id);
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
@@ -194,5 +188,25 @@ class host extends control
         $this->view->treemap = $this->host->$func();
         $this->view->type    = $type;
         $this->display();
+    }
+
+    /**
+     * Js获取所有的操作系统列表。
+     * Get all os list.
+     *
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function ajaxGetOS(string $type)
+    {
+        $type  .= 'List';
+        $osList = $this->lang->host->{$type};
+        if(empty($osList)) return '';
+
+        $osItems = array();
+        foreach($osList as $version => $os) $osItems[] = array('text' => $os, 'value' => $version);
+
+        return print(json_encode($osItems));
     }
 }

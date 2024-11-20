@@ -29,6 +29,7 @@ $canBatchCreate = common::canModify('execution', $execution) && hasPriv('task', 
 $canImportTask  = common::canModify('execution', $execution) && hasPriv('execution', 'importTask');
 $canImportBug   = common::canModify('execution', $execution) && hasPriv('execution', 'importBug');
 
+$app->loadLang('my');
 $this->loadModel('task');
 $importItems = array();
 if(common::canModify('execution', $execution))
@@ -56,6 +57,7 @@ $cols = $this->loadModel('datatable')->getSetting('execution');
 if($execution->type != 'stage') unset($cols['design']);
 
 $tableData = initTableData($tasks, $cols, $this->task);
+$lang->task->statusList['changed'] = $lang->my->storyChanged;
 foreach($tableData as $task)
 {
     $task->rawStatus = $task->status;

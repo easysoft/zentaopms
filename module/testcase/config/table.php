@@ -131,6 +131,22 @@ $config->testcase->dtable->fieldList['stepNumber']['type']     = 'number';
 $config->testcase->dtable->fieldList['stepNumber']['group']    = 5;
 $config->testcase->dtable->fieldList['stepNumber']['sortType'] = false;
 
+if($config->edition != 'open')
+{
+    $config->testcase->dtable->fieldList['relatedObject']['name']        = 'relatedObject';
+    $config->testcase->dtable->fieldList['relatedObject']['title']       = $lang->custom->relateObject;
+    $config->testcase->dtable->fieldList['relatedObject']['sortType']    = false;
+    $config->testcase->dtable->fieldList['relatedObject']['width']       = '70';
+    $config->testcase->dtable->fieldList['relatedObject']['type']        = 'text';
+    $config->testcase->dtable->fieldList['relatedObject']['link']        = common::hasPriv('custom', 'showRelationGraph') ? "RAWJS<function(info){ if(info.row.data.relatedObject == 0) return 0; else return '" . helper::createLink('custom', 'showRelationGraph', 'objectID={caseID}&objectType=testcase') . "'; }>RAWJS" : null;
+    $config->testcase->dtable->fieldList['relatedObject']['data-toggle'] = 'modal';
+    $config->testcase->dtable->fieldList['relatedObject']['data-size']   = 'lg';
+    $config->testcase->dtable->fieldList['relatedObject']['show']        = true;
+    $config->testcase->dtable->fieldList['relatedObject']['group']       = 5;
+    $config->testcase->dtable->fieldList['relatedObject']['flex']        = false;
+    $config->testcase->dtable->fieldList['relatedObject']['align']       = 'center';
+}
+
 $config->testcase->dtable->fieldList['version']['title']    = $lang->testcase->version;
 $config->testcase->dtable->fieldList['version']['type']     = 'text';
 $config->testcase->dtable->fieldList['version']['group']    = 5;
@@ -148,7 +164,8 @@ $config->testcase->dtable->fieldList['lastEditedDate']['type']     = 'date';
 $config->testcase->dtable->fieldList['lastEditedDate']['group']    = 6;
 $config->testcase->dtable->fieldList['lastEditedDate']['sortType'] = true;
 
-$config->testcase->dtable->fieldList['product']['title']      = 'product';
+$config->testcase->dtable->fieldList['product']['title']      = $lang->testcase->product;
+$config->testcase->dtable->fieldList['product']['name']       = 'product';
 $config->testcase->dtable->fieldList['product']['control']    = 'hidden';
 $config->testcase->dtable->fieldList['product']['dataSource'] = array('module' => 'product', 'method' => 'getPairs', 'params' => ['mode' => '', 'programID' => 0, 'append' => '', 'shadow' => 'all']);
 $config->testcase->dtable->fieldList['product']['display']    = false;

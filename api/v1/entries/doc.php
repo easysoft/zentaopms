@@ -23,25 +23,20 @@ class docEntry extends entry
         $this->resetOpenApp($this->param('tab', 'doc'));
 
         $control = $this->loadController('doc', 'view');
-        $control->view($docID);
 
-        $data = $this->getData();
-
-        if(!$data or !isset($data->status)) return $this->send400('error');
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
-
-        $doc  = $data->data->doc;
+        $doc = $this->loadModel('doc')->getByID($docID, 0, true);
+        if(!$doc) return $this->send400('error');
 
         unset($doc->draft);
         if(!empty($doc->files)) $doc->files = array_values((array)$doc->files);
 
-        /* Set lib name */
-        $doc->libName = $data->data->lib->name;
+        $lib = null;
+        if($doc->lib) $lib = $this->doc->getLibByID((int)$doc->lib);
+        $doc->libName = $lib ? $lib->name : '';
 
-        $preAndNext = $data->data->preAndNext;
         $doc->preAndNext = array();
-        $doc->preAndNext['pre']  = $preAndNext->pre  ? $preAndNext->pre->id : '';
-        $doc->preAndNext['next'] = $preAndNext->next ? $preAndNext->next->id : '';
+        $doc->preAndNext['pre']  = '';
+        $doc->preAndNext['next'] = '';
 
         return $this->send(200, $this->format($doc, 'addedBy:user,addedDate:time,assignedTo:user,assignedDate:date,editedBy:user,editedDate:time,mailto:userList'));
     }
