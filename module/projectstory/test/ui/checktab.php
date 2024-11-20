@@ -56,3 +56,23 @@ $project->name->range('项目1,执行1');
 $project->hasProduct->range('1');
 $project->status->range('wait');
 $project->acl->range('open');
+$project->gen(2);
+
+$projectProduct = zenData('projectproduct');
+$projectProduct->project->range('1');
+$projectProduct->product->range('1');
+$projectProduct->gen(1);
+
+$story = zenData('story');
+$story->id->range('1-10');
+$story->parent->range('0');
+$story->isParent->range('0');
+$story->root->range('1-10');
+$story->path->range('`,1,`, `,2,`, `,3,`, `,4,`, `,5,`, `,6,`, `,7,`, `,8,`, `,9,`, `,10,`');
+$story->grade->range('1');
+$story->product->range('1');
+$story->module->range('0');
+$story->plan->range('0');
+$story->title->range('需求001,需求002,需求003,需求004,需求005,需求006,需求007,需求008,需求009,需求010');
+$story->type->range('story');
+$story->estimate->range('0');
