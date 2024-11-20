@@ -14,17 +14,21 @@ declare(strict_types=1);
 class systemModel extends model
 {
     /**
-     * Construct function: load setting model.
+     * 获取应用列表。
+     * Get app list.
      *
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
-     * @return mixed
+     * @return array
      */
-    public function __construct()
+    public function getList(string $orderBy = 'id_desc', object $pager = null): array
     {
-        parent::__construct();
-        $this->loadModel('setting');
-        $this->loadModel('cne');
-        $this->loadModel('instance');
+        return $this->dao->select('*')->from(TABLE_SYSTEM)
+            ->where('deleted')->eq('0')
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
     }
 
     /**
@@ -36,6 +40,8 @@ class systemModel extends model
      */
     public function getDomainSettings()
     {
+        $this->loadModel('setting');
+
         $settings = new stdclass;
         $settings->customDomain = $this->setting->getItem('owner=system&module=common&section=domain&key=customDomain');
         $settings->https        = $this->setting->getItem('owner=system&module=common&section=domain&key=https');
@@ -55,6 +61,8 @@ class systemModel extends model
      */
     public function saveDomainSettings(object $settings)
     {
+        $this->loadModel('setting');
+
         $this->dao->from('system')->data($settings)
             ->check('customDomain', 'notempty')
             ->checkIf($settings->https == 'true', 'certPem', 'notempty')
@@ -135,6 +143,8 @@ class systemModel extends model
      */
     public function backup(?object $instance, string $mode = ''): array
     {
+        $this->loadModel('cne');
+
         if(empty($instance)) $instance = $this->config->instance->zentaopaas;
 
         if(empty($_SESSION['fromCron'])) $this->setMaintenance('backup');
@@ -161,6 +171,8 @@ class systemModel extends model
      */
     public function getBackupStatus(object $instance, string $backupName): array
     {
+        $this->loadModel('cne');
+
         $rawResult = $this->cne->getBackupStatus($instance, $backupName);
 
         if(!empty($rawResult->code) && $rawResult->code == 200)
@@ -182,6 +194,7 @@ class systemModel extends model
      */
     public function getBackupList(object $instance): array
     {
+        $this->loadModel('cne');
         $rawResult = $this->cne->getBackupList($instance);
 
         if(!empty($rawResult->code) && $rawResult->code == 200)
@@ -205,6 +218,7 @@ class systemModel extends model
      */
     public function restore(object $instance, string $backupName, string $account = ''): array
     {
+        $this->loadModel('cne');
         $rawResult = $this->cne->restore($instance, $backupName, $account);
 
         if(!empty($rawResult->code) && $rawResult->code == 200)
@@ -227,6 +241,7 @@ class systemModel extends model
      */
     public function deleteBackup(object $instance, string $backupName): array
     {
+        $this->loadModel('cne');
         $rawResult = $this->cne->deleteBackup($instance, $backupName);
 
         if(!empty($rawResult->code) && $rawResult->code == 200)
