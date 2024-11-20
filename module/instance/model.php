@@ -1379,4 +1379,17 @@ class instanceModel extends model
         if(count($deleteData) > 0) $this->action->create('instance', $instance->id, 'deleteexpiredbackup', '', json_encode(array('result' => 'success', 'data' =>$deleteData)));
         return true;
     }
+
+    /**
+     * Delete backup.
+     * 删除备份。
+     * @param  object $instance
+     * @param  string $backupName
+     * @access public
+     * @return bool
+     */
+    public function deleteBackup($instance, $backupName)
+    {
+        return $this->cne->deleteBackup($instance, $backupName);
+    }
 }

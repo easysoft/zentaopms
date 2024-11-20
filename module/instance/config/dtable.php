@@ -50,10 +50,16 @@ if(!isset($config->backup))
 
     $config->backup->dtable->fieldList['actions']['type']  = 'actions';
     $config->backup->dtable->fieldList['actions']['width'] = '100';
-    $config->backup->dtable->fieldList['actions']['menu']  = array('restore');
+    $config->backup->dtable->fieldList['actions']['menu']  = array('restore', 'delete');
 
     $config->backup->dtable->fieldList['actions']['list']['restore']['icon']      = 'icon-restart';
     $config->backup->dtable->fieldList['actions']['list']['restore']['hint']      = $lang->instance->restore->common;
     $config->backup->dtable->fieldList['actions']['list']['restore']['url']       = array('module' => 'instance', 'method' => 'ajaxRestore', 'params' => 'instanceID={instanceId}&backupName={name}');
     $config->backup->dtable->fieldList['actions']['list']['restore']['className'] = 'ajax-submit';
+
+    $config->backup->dtable->fieldList['actions']['list']['delete']['icon']         = 'icon-trash';
+    $config->backup->dtable->fieldList['actions']['list']['delete']['hint']         = $lang->instance->backup->delete;
+    $config->backup->dtable->fieldList['actions']['list']['delete']['url']          = array('module' => 'instance', 'method' => 'ajaxDeleteBackup', 'params' => 'instanceID={instanceId}&backupName={name}');
+    $config->backup->dtable->fieldList['actions']['list']['delete']['className']    = 'ajax-submit';
+    $config->backup->dtable->fieldList['actions']['list']['delete']['data-confirm'] = array('message' => $lang->instance->backup->confirmDeleteTip, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 }
