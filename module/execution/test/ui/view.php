@@ -39,6 +39,21 @@ $projectproduct->project->range('2{2}, 3');
 $projectproduct->product->range('1, 2, 1');
 $projectproduct->gen(3);
 
+$user = zenData('user');
+$user->id->range('1-100');
+$user->dept->range('0');
+$user->account->range('admin, user1, user2');
+$user->realname->range('admin, USER1, USER2');
+$user->password->range($config->uitest->defaultPassword)->format('md5');
+$user->gen(3);
+
+$team = zenData('team');
+$team->id->range('1-100');
+$team->root->range('2{3}, 3{2}');
+$team->type->range('project{3}, execution{2}');
+$team->account->range('admin, user1, user2, admin, user1');
+$team->gen(5);
+
 $story->id->range('1-100');
 $story->parent->range('0');
 $story->isParent->range('0');
