@@ -3562,10 +3562,11 @@ class executionModel extends model
      * @param  string $condition
      * @param  string $orderBy
      * @param  object $pager
+     * @param  string $queryKey
      * @access public
      * @return array
      */
-    public function getSearchTasks(string $condition, string $orderBy, object $pager = null): array
+    public function getSearchTasks(string $condition, string $orderBy, object $pager = null, string $queryKey = 'task'): array
     {
         if(strpos($condition, '`assignedTo`') !== false)
         {
@@ -3573,7 +3574,7 @@ class executionModel extends model
             $condition = preg_replace('/`(\w+)`/', 't1.`$1`', $condition);
             foreach($matches[0] as $matchIndex => $match) $condition = str_replace("t1.{$match}", "(t1.{$match} or (t1.mode = 'multi' and t2.`account` {$matches[1][$matchIndex]} and t1.status != 'closed' and t2.status != 'done') )", $condition);
 
-            $this->session->set('taskQueryCondition', $condition, $this->app->tab);
+            $this->session->set("{$queryKey}QueryCondition", $condition, $this->app->tab);
         }
 
         $sql = $this->dao->select('t1.id')->from(TABLE_TASK)->alias('t1');
@@ -3965,11 +3966,21 @@ class executionModel extends model
             $executions  = $this->getPairs(0, 'all', "nocode,noprefix,multiple");
             $executionID = empty($executions) ? 0 : current(array_keys($executions));
         }
+        $execution = $this->getByID($executionID);
 
         $this->config->execution->search['actionURL'] = $actionURL;
         $this->config->execution->search['queryID']   = $queryID;
-        $this->config->execution->search['params']['execution']['values'] = $showAll ? $executions : array(''=>'', $executionID => $executions[$executionID], 'all' => $this->lang->execution->allExecutions);
-        $this->config->execution->search['params']['story']['values']     = $this->loadModel('story')->getExecutionStoryPairs($executionID, 0, 'all', '', 'full', 'unclosed', 'story', false);
+        $this->config->execution->search['params']['story']['values'] = $this->loadModel('story')->getExecutionStoryPairs($executionID, 0, 'all', '', 'full', 'unclosed', 'story', false);
+
+        if($execution->type == 'project')
+        {
+            unset($this->config->execution->search['fields']['project']);
+            $this->config->execution->search['params']['execution']['values'] = array('' => '') + $executions;
+        }
+        else
+        {
+            $this->config->execution->search['params']['execution']['values'] = $showAll ? $executions : array(''=>'', $executionID => $executions[$executionID], 'all' => $this->lang->execution->allExecutions);
+        }
 
         $projects = $this->loadModel('project')->getPairsByProgram();
         $this->config->execution->search['params']['project']['values'] = $projects + array('all' => $this->lang->project->allProjects);
