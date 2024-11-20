@@ -12,7 +12,7 @@ include '../lib/view.ui.class.php';
 
 $product = zenData('product');
 $product->id->range('1-100');
-$product->name->range('产品1,产品2');
+$product->name->range('产品1, 产品2');
 $product->type->range('normal');
 $product->gen(2);
 
@@ -112,7 +112,7 @@ $taskSpec->gen(12);
 $bug = zenData('bug');
 $bug->id->range('1-100');
 $bug->project->range('2{12}, 0{100}');
-$bug->product->range('1{8},2{100}');
+$bug->product->range('1{8}, 2{100}');
 $bug->execution->range('3{5}, 0{100}');
 $bug->title->range('1-100');
 $bug->status->range('active{3}, resolved{3}, closed{100}');
