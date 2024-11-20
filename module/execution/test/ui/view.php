@@ -109,3 +109,13 @@ $taskSpec->task->range('1-100');
 $taskSpec->version->range('0');
 $taskSpec->name->range('1-100');
 $taskSpec->gen(12);
+
+$bug = zenData('bug');
+$bug->id->range('1-100');
+$bug->project->range('2{12}, 0{100}');
+$bug->product->range('1{8},2{100}');
+$bug->execution->range('2{5}, 0{100}');
+$bug->title->range('1-100');
+$bug->status->range('active{5}, resolved{3}, closed{100}');
+$bug->assignedTo->range('[]');
+$bug->gen(12);
