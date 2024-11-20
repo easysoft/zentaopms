@@ -567,5 +567,25 @@ class system extends control
      */
     public function create($productID)
     {
+        if($_POST)
+        {
+            $integrated = $this->post->integrated;
+            if($integrated) $this->config->system->create->requiredFields .= ',children';
+
+            $formData = form::data($this->config->system->form->create)
+                ->setDefault('product', $productID)
+                ->setDefault('status', 'active')
+                ->setDefault('createdBy', $this->app->user->account)
+                ->get();
+            $systemID = $this->system->create($formData);
+            if(dao::isError()) return $this->sendError(dao::getError());
+
+            if($systemID) $this->loadModel('action')->create('system', $systemID, 'created');
+            $this->sendSuccess(array('load' => true));
+        }
+
+        $this->view->title      = $this->lang->system->create;
+        $this->view->systemList = $this->system->getPairs('0');
+        $this->display();
     }
 }
