@@ -491,3 +491,6 @@ $lang->pivot->drill->productName      = "产品名称";
 $lang->pivot->drill->activatedBug     = "激活的Bug数";
 $lang->pivot->drill->auto             = "自动";
 $lang->pivot->drill->designChangedTip = '设计变更，请检查';
+
+$lang->pivot->tipNewVersion   = '有新版本更新';
+$lang->pivot->checkNewVersion = '点击查看';
