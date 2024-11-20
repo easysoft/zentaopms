@@ -43,6 +43,7 @@ $config->uitest->chrome->options[] = '--ignore-certificate-errors';
 $config->uitest->chrome->options[] = '--test-type';
 $config->uitest->chrome->options[] = '--start-maximized';
 
+$config->uitest->setExceptionHandler    = true;
 $config->uitest->exitBrowserOnException = true;
 $extConfigFiles = glob(dirname(__FILE__) . DS . 'ext' . DS . '*.php');
 if($extConfigFiles) foreach($extConfigFiles as $extConfigFile) include $extConfigFile;

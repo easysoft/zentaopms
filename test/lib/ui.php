@@ -154,13 +154,13 @@ class tester extends result
         $this->cookieFile = '/tmp/cookie';
 
         // 设置异常处理函数
-        set_exception_handler(array($this, 'exceptionHandler'));
+        if($this->config->uitest->setExceptionHandler) set_exception_handler(array($this, 'exceptionHandler'));
     }
 
     /**
      * Exception handler.
      *
-     * @param  int    $e
+     * @param  object    $e
      * @access public
      * @return void
      */
