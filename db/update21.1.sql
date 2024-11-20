@@ -52,7 +52,7 @@ CREATE TABLE `zt_pivotspec` (
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 ALTER TABLE `zt_pivot` ADD `version` varchar(10) NOT NULL AFTER `builtin`;
-ALTER TABLE `zt_pivot` CHANGE `mode` `mode` varch(10) NOT NULL DEFAULT 'builder';
+ALTER TABLE `zt_pivot` CHANGE `mode` `mode` varchar(10) NOT NULL DEFAULT 'builder';
 ALTER TABLE `zt_pivot` CHANGE `sql` `sql` text NULL;
 ALTER TABLE `zt_pivot` CHANGE `fields` `fields` text NULL;
 ALTER TABLE `zt_pivot` CHANGE `langs` `langs` text NULL;
