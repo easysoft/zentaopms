@@ -84,6 +84,17 @@ $lang->project->invested            = '已投入';
 $lang->project->member              = '成员';
 $lang->project->manage              = '管理';
 $lang->project->market              = '目标市场';
+$lang->project->tips                = '提示';
+$lang->project->afterInfo           = "{$lang->projectCommon}添加成功，您现在可以进行以下操作：";
+$lang->project->setTeam             = '设置团队';
+$lang->project->linkStory           = '关联需求';
+$lang->project->createStory         = "提{$lang->SRCommon}";
+$lang->project->createTask          = "创建任务";
+$lang->project->createExecutionTip  = '添加%s';
+$lang->project->setDoc              = '维护文档';
+$lang->project->backToTaskList      = '返回任务列表';
+$lang->project->backToExecutionList = '返回项目%s列表';
+$lang->project->backToProjectList   = '返回项目列表';
 
 $lang->project->manDay          = '人天';
 $lang->project->day             = '天';
