@@ -98,7 +98,7 @@ class pivotZen extends pivot
             foreach($pivots as $pivot)
             {
                 $this->setNewMark($pivot, $firstAction);
-                $params  = helper::safe64Encode("groupID={$group->id}&pivotID={$pivot->id}");
+                $params  = helper::safe64Encode("groupID={$group->id}&pivotID={$pivot->id}&mark=view");
                 $url     = inlink('preview', "dimension={$dimensionID}&group={$currentGroup->id}&method=show&params={$params}");
                 $menus[] = (object)array('id' => $group->id . '_' . $pivot->id, 'parent' => $group->grade > 1 ? $group->id : 0, 'name' => $pivot->name, 'url' => $url);
             }
@@ -169,12 +169,14 @@ class pivotZen extends pivot
      * @access public
      * @return void
      */
-    public function show(int $groupID, int $pivotID): void
+    public function show(int $groupID, int $pivotID, string $mark = ''): void
     {
         $this->pivot->checkAccess($pivotID, 'preview');
 
         $pivot  = $this->pivot->getByID($pivotID, true);
         $driver = $pivot->driver;
+
+        if($mark) $this->loadModel('mark')->setMark(array($pivot->id), 'pivot', $pivot->version, 'view');
         if(isset($_POST['filterValues']) and $_POST['filterValues'])
         {
             foreach($this->post->filterValues as $key => $value) $pivot->filters[$key]['default'] = $value;

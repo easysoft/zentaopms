@@ -51,7 +51,6 @@ class pivot extends control
         if($method && $method != 'show' && !common::hasPriv('pivot', $method)) $this->loadModel('common')->deny('pivot', $method);
 
         parse_str($params, $result);
-
         if(method_exists($this->pivotZen, $method)) call_user_func_array(array($this->pivotZen, $method), $result);
         $this->session->set('backDimension', $dimensionID);
         $this->session->set('backGroup', $groupID);
