@@ -74,3 +74,5 @@ CREATE TABLE IF NOT EXISTS `zt_mark` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE INDEX `idx_object` ON `zt_mark`(`objectType`,`objectID`);
 CREATE INDEX `idx_account` ON `zt_mark`(`account`);
+
+UPDATE `zt_grouppriv` SET `module` = 'cache', `method` = 'setting' WHERE `module` = 'admin' AND `method` = 'cache';
