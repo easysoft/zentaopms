@@ -1,4 +1,4 @@
-$('.form-group').on('click', '.btn-add', function()
+$(document).off('click', '.form-group .btn-add').on('click', '.form-group .btn-add', function()
 {
     let $newRow   = $(this).closest('tr').clone();
 
@@ -26,7 +26,7 @@ $('.form-group').on('click', '.btn-add', function()
     }
 });
 
-$('.form-group').on('click', '.btn-split', function()
+$(document).off('click', '.form-group .btn-split').on('click', '.form-group .btn-split', function()
 {
     let $newRow = $(this).closest('tr').clone();
     $newRow.find('input').val('');
@@ -41,7 +41,7 @@ $('.form-group').on('click', '.btn-split', function()
     $(this).closest('tr').after($newRow);
 });
 
-$('.form-group').on('click', '.btn-delete', function()
+$(document).off('click', '.form-group .btn-delete').on('click', '.form-group .btn-delete', function()
 {
     if($(this).closest('table').find('.input-row').length == 1) return false;
 
@@ -59,20 +59,24 @@ $('.form-group').on('click', '.btn-delete', function()
     }
 });
 
-$('.params-group').on('keyup', 'input,textarea', function(){
+$(document).off('keyup', '.params-group input, .params-group textarea').on('keyup', '.params-group input, .params-group textarea', function()
+{
     generateParams($(this));
 })
 
-$('.params-group').on('change', 'input[type=checkbox]', function(){
+$(document).off('change', '.params-group input[type=checkbox]').on('change', '.params-group input[type=checkbox]', function()
+{
     generateParams($(this));
 })
 
-$('.params-group').on('change', 'select', function(){
+$(document).off('change', '.params-group select').on('change', '.params-group select', function()
+{
     generateParams($(this));
 })
 
-/* 变更请求类型时，判断是否隐藏拆分按钮. */
-$('.form-group').on('change', '.objectType', function(){
+$(document).off('change', '.form-group .objectType').on('change', '.form-group .objectType', function()
+{
+    /* 变更请求类型时，判断是否隐藏拆分按钮. */
     if($(this).val() != 'array' && $(this).val() != 'object')
     {
         $(this).closest('tr').find('.btn-split').addClass('hidden');
@@ -84,12 +88,21 @@ $('.form-group').on('change', '.objectType', function(){
 })
 
 /* 请求响应单独绑定事件. */
-$('#form-response').on('keyup', 'input,textarea', function(){generateResponse($(this))});
-$('#form-response').on('change', 'input[type=checkbox]', function(){generateResponse($(this))});
-$('#form-response').on('change', 'select', function(){generateResponse($(this))});
+$(document).off('keyup', '#form-response input, #form-response textarea').on('keyup', '#form-response input, #form-response textarea', function()
+{
+    generateResponse($(this));
+});
+$(document).off('change', '#form-response input[type=checkbox]').on('change', '#form-response input[type=checkbox]', function()
+{
+    generateResponse($(this));
+});
+$(document).off('change', '#form-response select').on('change', '#form-response select', function()
+{
+    generateResponse($(this));
+});
 
 /* 更改请求体类型. */
-$('.params-group').on('change', 'input[type=radio]', function()
+$(document).off('change', '.params-group input[type=radio]').on('change', '.params-group input[type=radio]', function()
 {
     const isStruct = $(this).closest('div.form-group').hasClass('struct');
     if(!isStruct)
