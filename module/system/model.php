@@ -68,6 +68,26 @@ class systemModel extends model
     }
 
     /**
+     * 编辑应用。
+     * Edit an app.
+     *
+     * @param  int    $id
+     * @param  object $formData
+     * @access public
+     * @return bool
+     */
+    public function update(int $id, object $formData, bool $checkRequired = true): bool
+    {
+        $this->dao->update(TABLE_SYSTEM)->data($formData)
+            ->check('name', 'unique', '`id` != ' . $id)
+            ->autoCheck()
+            ->beginIF($checkRequired)->batchCheck($this->config->system->edit->requiredFields, 'notempty')->fi()
+            ->where('id')->eq($id)
+            ->exec();
+        return !dao::isError();
+    }
+
+    /**
      * 获取自定义的域名设置。
      * Get customized domain settings.
      *
