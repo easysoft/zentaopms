@@ -35,4 +35,18 @@ formPanel
         set::required(true),
         set::value($system->name)
     ),
+    formGroup
+    (
+        setID('children'),
+        $system->integrated ? null : setClass('hidden'),
+        set::name('children'),
+        set::width(common::checkNotCN() ? '3/4' : '1/2'),
+        set::required(true),
+        set::label($lang->system->children),
+        set::labelWidth(common::checkNotCN() ? '160px' : '100px'),
+        set::control('picker'),
+        set::items($systemList),
+        set::multiple(true),
+        set::value($system->children)
+    ),
 );
