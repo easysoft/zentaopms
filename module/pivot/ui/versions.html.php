@@ -9,3 +9,20 @@ declare(strict_types = 1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+panel
+(
+    setID('pivotVersionPanel'),
+    set::title("{$pivot->name} #{$version}"),
+    set::shadow(false),
+    set::headingClass('h-12'),
+    set::bodyClass('pt-0'),
+    to::titleSuffix
+    (
+        icon
+        (
+            setClass('cursor-pointer text-warning'),
+            setData(array('toggle' => 'tooltip', 'title' => $lang->pivot->tipVersions, 'placement' => 'right', 'className' => 'text-wraning border border-light', 'type' => 'white')),
+            'help'
+        )
+    )
+);
