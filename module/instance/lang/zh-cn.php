@@ -132,7 +132,8 @@ $lang->instance->backup->keepBackupBySystem  = '备份数据超过1条时系统�
 $lang->instance->backup->backupSize          = '大小';
 $lang->instance->backup->confirmTip          = '确认要备份吗？';
 $lang->instance->backup->cronRemark          = 'Devops服务自动备份任务';
-$lang->instance->backup->backupSettingsTips  = '系统会删除超过设置天数的备份，但会保留至少一个有效备份。';
+$lang->instance->backup->backupSettingsTip  = '系统会删除超过设置天数的备份，但会保留至少一个有效备份。';
+$lang->instance->backup->confirmDeleteTip    = '确认要删除备份吗？';
 
 $lang->instance->backup->cycleList[1]  = '每日';
 

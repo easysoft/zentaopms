@@ -11,9 +11,10 @@ declare(strict_types=1);
 namespace zin;
 
 $canCreate  = hasPriv('system', 'create');
-$createLink = $this->createLink('system', 'create');
+$createLink = $this->createLink('system', 'create', 'productID=' . $productID);
 $createItem = array('text' => $lang->system->create, 'url' => $createLink, 'class' => 'primary', 'icon' => 'plus', 'data-toggle' => 'modal');
 
+$config->system->dtable->fieldList['children']['map'] = $appPairs;
 $tableData = initTableData($appList, $config->system->dtable->fieldList, $this->system);
 
 featureBar
@@ -35,7 +36,7 @@ dtable
 (
     set::cols($config->system->dtable->fieldList),
     set::data($tableData),
-    set::sortLink(createLink('system', 'browse', "orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
+    set::sortLink(createLink('system', 'browse', "productID={$productID}&branch={$branch}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
     set::orderBy($orderBy),
     set::footPager(usePager())
 );

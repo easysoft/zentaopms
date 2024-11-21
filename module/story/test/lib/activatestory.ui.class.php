@@ -33,6 +33,28 @@ class activateStoryTester extends tester
         $viewPage = $this->loadPage('story', 'view');   //进入需求详情页查看状态是否与关闭前一致
         if($viewPage->dom->status->getText() != $status) return $this->failed('激活需求后状态不正确');
 
-        return $this->success('激活需求成功');
+        return $this->success('激活研发需求成功');
+    }
+
+    /**
+     * check the information after activate an epic
+     * @param string $storyID
+     * @access public
+     * @return object
+     */
+    public function activateEpic($storyID, $status)
+    {
+        $form = $this->initform('epic', 'view', array('id' => $storyID), 'appIframe-product');  //进入业务需求详情页
+        $form->dom->btn($this->lang->story->activate)->click();  //点击激活需求按钮
+        $form->wait(1);
+
+        $form->dom->assignedTo->picker('admin'); //选择指派人
+        $form->dom->activate->click();           //点击激活按钮
+        $form->wait(1);
+
+        $viewPage = $this->loadPage('epic', 'view');   //进入需求详情页查看状态是否与关闭前一致
+        if($viewPage->dom->status->getText() != $status) return $this->failed('激活需求后状态不正确');
+
+        return $this->success('激活业务需求成功');
     }
 }

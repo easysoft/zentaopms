@@ -15355,22 +15355,23 @@ CREATE TABLE IF NOT EXISTS `zt_pivot`  (
   `dimension` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `group` varchar(255) NOT NULL DEFAULT '',
   `code` varchar(255) NOT NULL DEFAULT '',
-  `driver` enum('mysql', 'duckdb') not NULL default 'mysql',
-  `mode` enum('text', 'builder') not NULL default 'builder',
+  `driver` enum('mysql', 'duckdb') NOT NULL default 'mysql',
+  `mode` varchar(10) NOT NULL default 'builder',
   `name` text NULL,
   `desc` text NULL,
   `acl` enum('open','private') NOT NULL DEFAULT 'open',
   `whitelist` text NULL,
-  `sql` mediumtext NULL,
-  `fields` mediumtext NULL,
-  `langs` mediumtext NULL,
-  `vars` mediumtext NULL,
-  `objects` mediumtext NULL,
-  `settings` mediumtext NULL,
-  `filters` mediumtext NULL,
+  `sql` text NULL,
+  `fields` text NULL,
+  `langs` text NULL,
+  `vars` text NULL,
+  `objects` text NULL,
+  `settings` text NULL,
+  `filters` text NULL,
   `step` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `stage` enum('draft','published') NOT NULL DEFAULT 'draft',
   `builtin` enum('0', '1') NOT NULL DEFAULT '0',
+  `version` varchar(10) NOT NULL DEFAULT '0',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
@@ -15380,6 +15381,25 @@ CREATE TABLE IF NOT EXISTS `zt_pivot`  (
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
 CREATE INDEX `dimension` ON `zt_pivot` (`dimension`);
 CREATE INDEX `group`     ON `zt_pivot` (`group`);
+
+-- DROP TABLE IF EXISTS `zt_pivotspec`;
+CREATE TABLE IF NOT EXISTS `zt_pivotspec` (
+  `pivot` mediumint(8) NOT NULL,
+  `version` varchar(10) NOT NULL,
+  `driver` enum('mysql', 'duckdb') NOT NULL default 'mysql',
+  `mode` varchar(10) NOT NULL default 'builder',
+  `name` text NULL,
+  `desc` text NULL,
+  `sql` text NULL,
+  `fields` text NULL,
+  `langs` text NULL,
+  `vars` text NULL,
+  `objects` text NULL,
+  `settings` text NULL,
+  `filters` text NULL,
+  `createdDate` datetime NULL
+) ENGINE = InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `idx_pivot_version` ON `zt_pivotspec`(`pivot`, `version`);
 
 -- DROP TABLE IF EXISTS `zt_sqlbuilder`;
 CREATE TABLE IF NOT EXISTS `zt_sqlbuilder` (
@@ -16106,6 +16126,7 @@ REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`, `
 ('zh-tw', 'custom', 'relationList', '3', '{\"relation\":\"\\u91cd\\u8907\",\"relativeRelation\":\"\\u91cd\\u8907\"}', '0', 'all'),
 ('zh-tw', 'custom', 'relationList', '4', '{\"relation\":\"\\u5f15\\u7528\",\"relativeRelation\":\"\\u88ab\\u5f15\\u7528\"}', '0', 'all');
 
+-- DROP TABLE IF EXISTS `zt_system`;
 CREATE TABLE IF NOT EXISTS `zt_system` (
   `id` MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(100) NOT NULL DEFAULT '',
@@ -16125,3 +16146,18 @@ CREATE TABLE IF NOT EXISTS `zt_system` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE INDEX `idx_product` ON `zt_system`(`product`);
 CREATE INDEX `idx_status` ON `zt_system`(`status`);
+
+-- DROP TABLE IF EXISTS `zt_mark`;
+CREATE TABLE IF NOT EXISTS `zt_mark` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `objectType` varchar(50) NOT NULL DEFAULT '',
+  `objectID` mediumint(8) unsigned NOT NULL DEFAULT 0,
+  `version` varchar(50) NOT NULL DEFAULT '',
+  `account` char(30) NOT NULL DEFAULT '',
+  `date` datetime NULL,
+  `mark` varchar(50) NOT NULL DEFAULT '',
+  `extra` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE INDEX `idx_object` ON `zt_mark`(`objectType`,`objectID`);
+CREATE INDEX `idx_account` ON `zt_mark`(`account`);

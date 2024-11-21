@@ -28,7 +28,7 @@ formPanel
             set::label($this->lang->instance->backup->keepDays),
             set::control('input'),
             set::value((int)$instance->backupKeepDays),
-            span($this->lang->instance->backup->backupSettingsTips, set::className('text-warning inline-block mt-2'))
+            span($this->lang->instance->backup->backupSettingsTip, set::className('text-warning inline-block mt-2'))
         ),
     ),
     formRow

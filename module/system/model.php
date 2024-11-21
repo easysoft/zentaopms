@@ -32,6 +32,62 @@ class systemModel extends model
     }
 
     /**
+     * 获取应用键值对。
+     * Get app pairs.
+     *
+     * @param  string $integrated
+     * @access public
+     * @return array
+     */
+    public function getPairs(string $integrated = ''): array
+    {
+        return $this->dao->select('id, name')->from(TABLE_SYSTEM)
+            ->where('deleted')->eq('0')
+            ->beginIF($integrated !== '')->andWhere('integrated')->eq($integrated)->fi()
+            ->fetchPairs('id', 'name');
+    }
+
+    /**
+     * 创建应用。
+     * Create an app.
+     *
+     * @param  object $formData
+     * @access public
+     * @return bool|int
+     */
+    public function create(object $formData): bool|int
+    {
+        $this->dao->insert(TABLE_SYSTEM)->data($formData)
+            ->check('name', 'unique')
+            ->batchCheck($this->config->system->create->requiredFields, 'notempty')
+            ->autoCheck()
+            ->exec();
+
+        if(dao::isError()) return false;
+        return $this->dao->lastInsertID();
+    }
+
+    /**
+     * 编辑应用。
+     * Edit an app.
+     *
+     * @param  int    $id
+     * @param  object $formData
+     * @access public
+     * @return bool
+     */
+    public function update(int $id, object $formData, bool $checkRequired = true): bool
+    {
+        $this->dao->update(TABLE_SYSTEM)->data($formData)
+            ->check('name', 'unique', '`id` != ' . $id)
+            ->autoCheck()
+            ->beginIF($checkRequired)->batchCheck($this->config->system->edit->requiredFields, 'notempty')->fi()
+            ->where('id')->eq($id)
+            ->exec();
+        return !dao::isError();
+    }
+
+    /**
      * 获取自定义的域名设置。
      * Get customized domain settings.
      *
@@ -338,5 +394,21 @@ class systemModel extends model
         if(version_compare($latestRelease->version, $chartVersion, 'gt')) return true;
 
         return false;
+    }
+
+    /**
+     * 检查按钮是否可用。
+     * Check if the button is clickable.
+     *
+     * @param  object $system
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public function isClickable(object $system, string $action): bool
+    {
+        if($action == 'active') return $system->status == 'inactive';
+        if($action == 'inactive') return $system->status == 'active';
+        return true;
     }
 }

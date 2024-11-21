@@ -53,8 +53,17 @@ class settingModel extends model
         $item = $this->parseItemPath($path);
         if(empty($item)) return false;
 
+        $vision = zget($item, 'vision', '');
+
         $item->value = strval($value);
-        $this->dao->replace(TABLE_CONFIG)->data($item)->exec();
+        $this->dao->delete()->from(TABLE_CONFIG)
+            ->where('owner')->eq($item->owner)
+            ->andWhere('module')->eq($item->module)
+            ->andWhere('section')->eq($item->section)
+            ->andWhere('`key`')->eq($item->key)
+            ->beginIF($vision)->andWhere('vision')->eq($vision)->fi()
+            ->exec();
+        $this->dao->insert(TABLE_CONFIG)->data($item)->exec();
 
         return !dao::isError();
     }
@@ -226,7 +235,8 @@ class settingModel extends model
         $params['section'] = isset($params['section']) ? $params['section'] : '';
         $params['key']     = isset($params['key'])     ? $params['key']     : '';
 
-        return $this->dao->$method('*')->from(TABLE_CONFIG)->where('1 = 1')
+        $access = $method == 'select' ? $this->mao : $this->dao;
+        return $access->$method('*')->from(TABLE_CONFIG)->where('1 = 1')
             ->beginIF($params['vision'])->andWhere('vision')->in($params['vision'])->fi()
             ->beginIF($params['owner'])->andWhere('owner')->in($params['owner'])->fi()
             ->beginIF($params['module'])->andWhere('module')->in($params['module'])->fi()
@@ -244,8 +254,8 @@ class settingModel extends model
      */
     public function getSysAndPersonalConfig(string $account = ''): array
     {
-        $owner   = 'system,' . ($account ? $account : '');
-        $records = $this->dao->select('*')->from(TABLE_CONFIG)
+        $owner = 'system,' . ($account ? $account : '');
+        $records = $this->mao->select('*')->from(TABLE_CONFIG)
             ->where('owner')->in($owner)
             ->beginIF(!$this->app->upgrading)->andWhere('vision')->in(array('', $this->config->vision))->fi()
             ->orderBy('id')

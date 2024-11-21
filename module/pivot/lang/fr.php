@@ -26,6 +26,7 @@ $lang->pivot->exportRange  = 'Export Range';
 $lang->pivot->story        = 'Story';
 $lang->pivot->clear        = 'Clear';
 $lang->pivot->keep         = 'Keep';
+$lang->pivot->new          = 'New';
 
 $lang->pivot->accessDenied  = 'You do not have access to this pivot';
 $lang->pivot->acl = 'Access Control';
@@ -490,3 +491,6 @@ $lang->pivot->drill->productName      = "Product Name";
 $lang->pivot->drill->activatedBug     = "Activated Bug Count";
 $lang->pivot->drill->auto             = "Auto";
 $lang->pivot->drill->designChangedTip = 'Setting columns field change, please check';
+
+$lang->pivot->tipNewVersion   = 'Has New Version!';
+$lang->pivot->checkNewVersion = 'Click to check';

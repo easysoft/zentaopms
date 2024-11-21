@@ -204,6 +204,7 @@ $lang->contactUs->wechat = '微信';
 
 $lang->common->common       = '公有模块';
 $lang->common->story        = '需求';
+$lang->cache->common        = '缓存';
 $lang->my->common           = '地盘';
 $lang->todo->common         = '待办';
 $lang->block->common        = '区块';
@@ -441,7 +442,6 @@ $lang->admin->data        = '数据';
 $lang->admin->cron        = '定时';
 $lang->admin->buildIndex  = '重建索引';
 $lang->admin->tableEngine = '表引擎';
-$lang->admin->cache       = '缓存';
 
 $lang->convert->importJira = '导入Jira数据';
 

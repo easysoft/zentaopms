@@ -307,6 +307,15 @@ class baseRouter
     public $lang;
 
     /**
+     * 全局缓存对象，用于操作缓存。
+     * The global cache object, used to operate cache.
+     *
+     * @var object
+     * @access public
+     */
+    public $cache = null;
+
+    /**
      * 全局$dbh对象，数据库连接句柄。
      * The global $dbh object, the database connection handler.
      *
@@ -323,6 +332,15 @@ class baseRouter
      * @access public
      */
     public $dao;
+
+    /**
+     * $mao对象，用于访问或者更新缓存。
+     * The $mao object, used to access or update cache.
+     *
+     * @var mao
+     * @access public
+     */
+    public $mao;
 
     /**
      * 从数据库的句柄。
@@ -437,6 +455,14 @@ class baseRouter
     public $clientCacheTime = 0;
 
     /**
+     * 缓存Model。
+     * The cache model.
+     *
+     * @var object
+     */
+    public $cacheModel;
+
+    /**
      * 构造方法, 设置路径，类，超级变量等。注意：
      * 1.应该使用createApp()方法实例化router类；
      * 2.如果$appRoot为空，框架会根据$appName计算应用路径。
@@ -486,8 +512,7 @@ class baseRouter
         $this->setTimezone();
 
         if($this->config->framework->autoConnectDB) $this->connectDB();
-
-        if($this->config->redis) $this->redis = $this->connectToRedis();
+        $this->loadCache();
 
         $this->setupProfiling();
         $this->setupXhprof();
@@ -495,8 +520,6 @@ class baseRouter
         $this->setEdition();
 
         $this->setClient();
-
-        $this->loadCacheConfig();
     }
 
     /**
@@ -2799,29 +2822,6 @@ class baseRouter
     }
 
     /**
-     * 从数据库加载缓存配置。
-     * Load the cache config from the database.
-     *
-     * @access public
-     * @return void
-     */
-    public function loadCacheConfig()
-    {
-        if(!$this->checkInstalled()) return false;
-
-        $globalCache = $this->dao->select('`value`')->from(TABLE_CONFIG)->where('`module`')->eq('common')->andWhere('`section`')->eq('global')->andWhere('`key`')->eq('cache')->limit(1)->fetch('value');
-        if(!$globalCache) return false;
-
-        $caches = json_decode($globalCache);
-        foreach($caches as $cacheKey => $cache)
-        {
-            if(!isset($this->config->cache->$cacheKey)) $this->config->cache->$cacheKey = new stdClass();
-
-            foreach($cache as $key => $value) $this->config->cache->$cacheKey->$key = $value;
-        }
-    }
-
-    /**
      * 当multiSite功能打开的时候，加载额外的配置文件。
      * When multiSite feature enabled, load extra config file.
      *
@@ -3088,6 +3088,38 @@ class baseRouter
 
         $dao = new $driver($this);
         $this->dao = $dao;
+
+        $this->loadClass('mao', true);
+        $this->mao = new mao($this);
+    }
+
+    /**
+     * 加载缓存类，初始化全局缓存对象。
+     * Load the cache class and init the global cache object.
+     *
+     * @access public
+     * @return void
+     */
+    private function loadCache()
+    {
+        if(!$this->checkInstalled()) return false;
+
+        $cacheConfig = $this->dao->select('`key`, value')->from(TABLE_CONFIG)->where('owner')->eq('system')->andWhere('module')->eq('common')->andWhere('section')->eq('cache')->fetchPairs();
+        foreach($cacheConfig as $key => $value) $this->config->cache->$key = $value;
+        if(!$this->config->cache->enable) return;
+
+        if($this->config->cache->driver == 'redis')
+        {
+            $redisConfig = $this->dao->select('`key`, value')->from(TABLE_CONFIG)->where('owner')->eq('system')->andWhere('module')->eq('common')->andWhere('section')->eq('redis')->fetchPairs();
+            foreach($redisConfig as $key => $value) $this->config->redis->$key = $value;
+        }
+
+        $this->loadClass('cache', true);
+        $this->cache = new Zentao\Cache\cache($this);
+
+        /* 为 dao 和 mao 设置访问缓存的对象。 Set the cache object for dao and mao. */
+        $this->dao->cache = $this->cache;
+        $this->mao->cache = $this->cache;
     }
 
     /**
@@ -3205,6 +3237,9 @@ class baseRouter
      */
     public function shutdown()
     {
+        /* 如果开启了缓存则关闭缓存连接，主要用于 Redis 等缓存服务。Close the cache connection if it's open. */
+        if(!empty($this->cache)) $this->cache->close();
+
         /* 如果debug模式开启，保存sql语句(If debug on, save sql queries) */
         if(!empty($this->config->debug)) $this->saveSQL();
 
@@ -3508,45 +3543,6 @@ class baseRouter
         if(!isset($_SESSION['installing']) && !$installed && !empty($this->installing)) $_SESSION['installing'] = true;
 
         return $installed;
-    }
-
-    /**
-     * Connect to Redis Server.
-     * @link https://pecl.php.net/package/redis
-     * @link https://github.com/phpredis/phpredis/
-     * @return Redis|object|false
-     */
-    public function connectToRedis()
-    {
-        if(!extension_loaded('redis')) return false;
-
-        global $config;
-
-        if(empty($config->redis)) return false;
-
-        try
-        {
-            $redis = new Redis();
-
-            $version = phpversion('redis');
-            if(version_compare($version, '5.3.0', 'ge'))
-            {
-                $redis->connect($config->redis->host , $config->redis->port, $config->redis->timeout, '', 0, 0, ['auth' => [$config->redis->username, $config->redis->password]]);
-            }
-            else
-            {
-                $redis->connect($config->redis->host , $config->redis->port, $config->redis->timeout, '', 0, 0);
-                $redis->auth(['pass' => $config->redis->password]);
-            }
-
-            if(!$redis->ping()) return false;
-        }
-        catch(RedisException $e)
-        {
-            $this->triggerError($e->getMessage(), __FILE__, __LINE__, true);
-        }
-
-        if($redis) return $redis;
     }
 }
 

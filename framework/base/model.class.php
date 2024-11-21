@@ -124,13 +124,13 @@ class baseModel
     public $global;
 
     /**
-     * $cache对象，用于访问缓存。
-     * The $cache object, used to access the cache.
+     * $mao对象，用于访问缓存。
+     * The $mao object, used to access the cache.
      *
      * @var object
      * @access public
      */
-    public $cache;
+    public $mao;
 
     /**
      * 构造方法。
@@ -153,6 +153,7 @@ class baseModel
         $this->lang    = $lang;
         $this->dbh     = $dbh;
         $this->dao     = $dao;
+        $this->mao     = $app->mao;
         $this->appName = empty($appName) ? $this->app->getAppName() : $appName;
 
         $moduleName = $this->getModuleName();
@@ -160,7 +161,6 @@ class baseModel
         if($moduleName != 'common') $this->app->loadModuleConfig($moduleName, $this->appName);
 
         $this->setSuperVars();
-        if($this->config->cache->enable) $this->loadCache();
 
         /**
          * 读取当前模块的tao类。
@@ -308,20 +308,6 @@ class baseModel
         if($type == 'model') $extensionClass = str_replace(ucfirst($type), '', $extensionClass);
         $this->$extensionClass = $extensionObject;
         return $extensionObject;
-    }
-
-    /**
-     * 加载缓存类。
-     * Load cache class.
-     *
-     * @access public
-     * @return void
-     */
-    public function loadCache()
-    {
-        $this->app->loadClass('cache', $static = true);
-        $namespace   = isset($this->session->user->account) ? $this->session->user->account : 'guest';
-        $this->cache = cache::create($this->config->cache->driver, $namespace, $this->config->cache->lifetime);
     }
 
     /**

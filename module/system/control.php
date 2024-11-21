@@ -542,10 +542,143 @@ class system extends control
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $this->view->title   = $this->lang->system->browse;
-        $this->view->appList = $this->system->getList($orderBy, $pager);
-        $this->view->orderBy = $orderBy;
-        $this->view->pager   = $pager;
+        $systems = $this->system->getList($orderBy, $pager);
+        foreach($systems as &$system)
+        {
+            $system->latestRelease = $system->latestRelease ? $system->latestRelease : '';
+        }
+
+        $this->view->title     = $this->lang->system->browse;
+        $this->view->productID = $productID;
+        $this->view->appList   = $systems;
+        $this->view->appPairs  = $this->system->getPairs();
+        $this->view->orderBy   = $orderBy;
+        $this->view->pager     = $pager;
         $this->display();
+    }
+
+    /**
+     * 创建应用。
+     * Create application.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function create(int $productID)
+    {
+        if($_POST)
+        {
+            $integrated = $this->post->integrated;
+            if($integrated) $this->config->system->create->requiredFields .= ',children';
+
+            $formData = form::data($this->config->system->form->create)
+                ->setDefault('product', $productID)
+                ->setDefault('status', 'active')
+                ->setDefault('createdBy', $this->app->user->account)
+                ->setIF($integrated == '0', 'children', '')
+                ->get();
+
+            $systemID = $this->system->create($formData);
+            if(dao::isError()) return $this->sendError(dao::getError());
+
+            if($systemID) $this->loadModel('action')->create('system', $systemID, 'created');
+            $this->sendSuccess(array('load' => true));
+        }
+
+        $this->view->title      = $this->lang->system->create;
+        $this->view->systemList = $this->system->getPairs('0');
+        $this->display();
+    }
+
+    /**
+     * 编辑应用。
+     * Edit application.
+     *
+     * @param  int $id
+     * @access public
+     * @return void
+     */
+    public function edit(int $id)
+    {
+        $system = $this->system->fetchByID($id);
+        if($_POST)
+        {
+            $integrated = $system->integrated;
+            if($integrated) $this->config->system->edit->requiredFields .= ',children';
+
+            $formData = form::data($this->config->system->form->edit)
+                ->setDefault('editedBy', $this->app->user->account)
+                ->setDefault('integrated', $integrated)
+                ->setDefault('editedBy', $this->app->user->account)
+                ->get();
+
+            $this->system->update($id, $formData);
+            if(dao::isError()) return $this->sendError(dao::getError());
+
+            $this->loadModel('action')->create('system', $id, 'edited');
+            $this->sendSuccess(array('load' => true));
+        }
+
+        $this->view->title      = $this->lang->system->edit;
+        $this->view->system     = $system;
+        $this->view->systemList = $this->system->getPairs('0');
+        $this->display();
+    }
+
+    /**
+     * 上架应用。
+     * Active application.
+     *
+     * @param  int $id
+     * @access public
+     * @return void
+     */
+    public function active(int $id)
+    {
+        $system = new stdclass();
+        $system->status = 'active';
+
+        $this->system->update($id, $system, false);
+        if(dao::isError()) return $this->sendError(dao::getError());
+
+        $this->loadModel('action')->create('system', $id, 'active');
+        $this->sendSuccess(array('load' => true));
+    }
+
+    /**
+     * 下架应用。
+     * Inactive application.
+     *
+     * @param  int $id
+     * @access public
+     * @return void
+     */
+    public function inactive(int $id)
+    {
+        $system = new stdclass();
+        $system->status = 'inactive';
+
+        $this->system->update($id, $system, false);
+        if(dao::isError()) return $this->sendError(dao::getError());
+
+        $this->loadModel('action')->create('system', $id, 'inactive');
+        $this->sendSuccess(array('load' => true));
+    }
+
+    /**
+     * 删除应用。
+     * Delete application.
+     *
+     * @param  int $id
+     * @access public
+     * @return void
+     */
+    public function delete(int $id)
+    {
+        $this->system->delete(TABLE_SYSTEM, $id);
+
+        if(dao::isError()) return $this->sendError(dao::getError());
+        $this->sendSuccess(array('load' => true));
     }
 }

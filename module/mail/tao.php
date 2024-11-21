@@ -237,7 +237,7 @@ class mailTao extends mailModel
         $objectModel = $this->loadModel($objectType);
         if(!$objectModel) return false;
 
-        if(strpos(',story,meeting,review,', ",{$objectType},") !== false) return $objectModel->getToAndCcList($object, $action->action);
+        if(strpos(',story,meeting,review,deploy,', ",{$objectType},") !== false) return $objectModel->getToAndCcList($object, $action->action);
         if($objectType == 'ticket') return $objectModel->getToAndCcList($object, $action);
         return $objectModel->getToAndCcList($object);
     }

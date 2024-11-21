@@ -1901,6 +1901,33 @@ class storyTao extends storyModel
     }
 
     /**
+     * 检查操作按钮的触发条件。
+     * Check action conditions.
+     *
+     * @param  string    $method
+     * @param  object    $story
+     * @access protected
+     * @return bool
+     */
+    protected function checkConditions(string $method, object $story)
+    {
+        static $flowActions = [];
+        if(empty($flowActions)) $flowActions = $this->loadModel('workflowaction')->getList($story->type);
+        $this->loadModel('flow');
+
+        $isClickable = true;
+        foreach($flowActions as $flowAction)
+        {
+            if($flowAction->action == $method && $flowAction->extensionType != 'none' && $flowAction->status == 'enable' && !empty($flowAction->conditions))
+            {
+                $isClickable = $this->flow->checkConditions($flowAction->conditions, $story);
+            }
+        }
+
+        return $isClickable;
+    }
+
+    /**
      * 构建需求列表中的操作按钮。
      * Build action buttons on the browse page.
      *
@@ -1962,7 +1989,7 @@ class storyTao extends storyModel
         /* Change button. */
         $canChange = common::hasPriv($story->type, 'change') && $this->isClickable($story, 'change');
         $title     = $canChange ? $lang->story->change : $this->lang->story->changeTip;
-        if(common::hasPriv($story->type, 'change')) $actions[] = array('name' => 'change', 'url' => $canChange ? $changeLink : null, 'hint' => $title, 'disabled' => !$canChange, 'class' => 'story-change-btn');
+        if(common::hasPriv($story->type, 'change') && $this->checkConditions('change', $story)) $actions[] = array('name' => 'change', 'url' => $canChange ? $changeLink : null, 'hint' => $title, 'disabled' => !$canChange, 'class' => 'story-change-btn');
 
         /* Submitreview, review, recall buttons. */
         if(strpos('draft,changing', $story->status) !== false)

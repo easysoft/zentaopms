@@ -20,8 +20,6 @@
 include __DIR__ . '/base/control.class.php';
 class control extends baseControl
 {
-    public $redis = false;
-
     /**
      * Check requiredFields and set exportFields for workflow.
      *
@@ -36,8 +34,6 @@ class control extends baseControl
         parent::__construct($moduleName, $methodName, $appName);
 
         $this->app->setOpenApp();
-
-        if($this->config->redis) $this->redis = $this->app->redis;
 
         if($this->config->edition == 'open') return false;
 

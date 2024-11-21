@@ -20,15 +20,6 @@
 include __DIR__ . '/base/model.class.php';
 class model extends baseModel
 {
-    public $redis = false;
-
-    public function __construct($appName = '')
-    {
-        parent::__construct($appName);
-
-        if($this->config->redis) $this->redis = $this->app->redis;
-    }
-
     /**
      * 企业版部分功能是从然之合并过来的。ZDOO代码中调用loadModel方法时传递了一个非空的appName，在禅道中会导致错误。
      * 调用父类的loadModel方法来避免这个错误。
@@ -99,7 +90,7 @@ class model extends baseModel
         $table = zget($this->config->objectTables, $moduleName, '');
         if(empty($table)) return false;
 
-        return $this->dao->findById($objectID)->from($table)->fetch();
+        return $this->mao->findById($objectID)->from($table)->fetch();
     }
 
     /**
@@ -422,7 +413,7 @@ class model extends baseModel
      * @access public
      * @return mixed
      */
-    public function __call($method, $arguments)
+    public function __call(string $method, array $arguments)
     {
         $moduleName = $this->getModuleName();
         $taoClass   = $moduleName . 'Tao';

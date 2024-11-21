@@ -30,16 +30,22 @@ $lang->system->serviceQuantity = 'Number of services';
 $lang->system->cpuUsage        = 'CPU（Core）';
 $lang->system->memUsage        = 'Memory（GB）';
 $lang->system->name            = 'Application name';
+$lang->system->integrated      = 'Integrated application';
 $lang->system->latestRelease   = 'Latest version';
 $lang->system->children        = 'Included applications';
 $lang->system->latestRelease   = 'Latest version';
 $lang->system->status          = 'Status';
+$lang->system->desc            = 'Description';
 $lang->system->browse          = 'Application list';
 $lang->system->create          = 'Create application';
 $lang->system->edit            = 'Edit application';
 $lang->system->delete          = 'Delete application';
 $lang->system->active          = 'Online application';
 $lang->system->inactive        = 'Offline application';
+
+$lang->system->integratedList = array();
+$lang->system->integratedList[0] = 'No';
+$lang->system->integratedList[1] = 'Yes';
 
 $lang->system->statusList = array();
 $lang->system->statusList['active']   = 'Active';

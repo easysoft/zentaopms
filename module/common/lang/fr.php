@@ -204,6 +204,7 @@ $lang->contactUs->wechat = 'Wechat';
 
 $lang->common->common       = 'Module Commun';
 $lang->common->story        = 'Story';
+$lang->cache->common        = 'Cache';
 $lang->my->common           = 'My';
 $lang->todo->common         = 'Agenda';
 $lang->block->common        = 'Bloc';
@@ -441,7 +442,6 @@ $lang->admin->data        = 'Data';
 $lang->admin->cron        = 'Cron';
 $lang->admin->buildIndex  = 'Full Text Search';
 $lang->admin->tableEngine = 'Table Engine';
-$lang->admin->cache       = 'Cache';
 
 $lang->convert->importJira = 'Import Jira';
 

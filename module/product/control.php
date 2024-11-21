@@ -843,6 +843,14 @@ class product extends control
             $tracks['cols'] = $cols;
         }
 
+        $tasks = array();
+        foreach($tracks['items'] as $lane)
+        {
+            $taskIdList = array_column($lane['task'], 'id');
+            $taskList   = array_combine($taskIdList, $lane['task']);
+            $tasks     += $taskList;
+        }
+
         /* Build search form. */
         $this->productZen->buildSearchFormForTrack($productID, $branch, $projectID, $browseType, $param, $storyType);
 
@@ -862,6 +870,7 @@ class product extends control
         $this->view->storyTypeList   = $storyTypeList;
         $this->view->users           = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->projectProducts = $this->product->getProductPairsByProject($projectID);
+        $this->view->tasks           = $tasks;
 
         $this->display();
     }

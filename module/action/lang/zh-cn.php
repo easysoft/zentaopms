@@ -189,6 +189,7 @@ $lang->action->objectTypes['projectbuild']     = '版本';
 $lang->action->objectTypes['board']            = '白板';
 $lang->action->objectTypes['boardspace']       = '白板空间';
 $lang->action->objectTypes['productline']      = '产品线';
+$lang->action->objectTypes['system']           = '应用';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
@@ -358,9 +359,10 @@ $lang->action->desc->manualbackup        = '$date, 由 <strong>$actor</strong> �
 $lang->action->desc->autobackup          = '$date, 由 <strong>$actor</strong> 自动备份。' . "\n";
 $lang->action->desc->openautobackup      = '$date, 由 <strong>$actor</strong> 开启自动备份。' . "\n";
 $lang->action->desc->closeautobackup     = '$date, 由 <strong>$actor</strong> 关闭自动备份。' . "\n";
-$lang->action->desc->autodeletebackups   = '$date, 由 <strong>$actor</strong> 自动清理备份。' . "\n";
+$lang->action->desc->autodeletebackups   = '$date, 由 <strong>$actor</strong> 自动删除备份。' . "\n";
 $lang->action->desc->savebackupsettings  = '$date, 由 <strong>$actor</strong> 保存备份设置。' . "\n";
-$lang->action->desc->deleteexpiredbackup = '$date, 由 <strong>$actor</strong> 清理过期备份。' . "\n";
+$lang->action->desc->deleteexpiredbackup = '$date, 由 <strong>$actor</strong> 删除过期备份。' . "\n";
+$lang->action->desc->manualdeletebackup  = '$date, 由 <strong>$actor</strong> 手动删除备份。' . "\n";
 
 /* 用来显示动态信息。*/
 $lang->action->label = new stdclass();
@@ -561,15 +563,15 @@ $lang->action->label->createbackup            = '创建了系统备份';
 $lang->action->label->deletebackup            = '删除了系统备份';
 $lang->action->label->restorebackup           = '还原了系统备份';
 $lang->action->label->upgradesystem           = '执行了系统升级';
-$lang->action->label->system                  = '';
+$lang->action->label->system                  = '应用';
 $lang->action->label->manualbackup            = '手动备份了';
 $lang->action->label->autobackup              = '自动备份了';
 $lang->action->label->openautobackup          = '开启自动备份';
 $lang->action->label->closeautobackup         = '关闭自动备份';
-$lang->action->label->autodeletebackups       = '自动清理备份';
+$lang->action->label->autodeletebackups       = '自动删除备份';
 $lang->action->label->savebackupsettings      = '保存备份设置';
-$lang->action->label->deleteexpiredbackup     = '清理过期备份';
-
+$lang->action->label->deleteexpiredbackup     = '删除过期备份';
+$lang->action->label->manualdeletebackup      = '手动删除备份';
 
 
 /* 动态信息按照对象分组 */
@@ -924,7 +926,7 @@ $lang->action->label->chartgroup   = '分组';
 $lang->action->label->serverroom   = '机房|serverroom|browse|';
 $lang->action->label->host         = '主机|host|view|id=%s';
 $lang->action->label->account      = "账号|account|view|id=%s";
-$lang->action->label->instance     = '应用|instance|view|id=%s';
+$lang->action->label->instance     = '服务|instance|view|id=%s';
 $lang->action->label->prompt       = '提词|ai|promptview|id=%s';
 $lang->action->label->miniprogram  = '小程序|aiapp|browseminiprogram|id=%s';
 $lang->action->label->holiday      = '节假日|holiday|browse|';

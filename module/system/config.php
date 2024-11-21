@@ -2,6 +2,12 @@
 global $lang;
 $config->system = new stdclass();
 
+$config->system->create = new stdclass();
+$config->system->create->requiredFields = 'name';
+
+$config->system->edit = new stdclass();
+$config->system->edit->requiredFields   = 'name';
+
 $config->system->groupPrivs = array();
 $config->system->groupPrivs['dashboard']     = 'backup|index';
 $config->system->groupPrivs['deletebackup']  = 'backup|delete';

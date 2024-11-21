@@ -367,6 +367,19 @@ class actionModel extends model
     }
 
     /**
+     * 获取用户第一条操作。
+     * Get user first action.
+     *
+     * @param  string $account
+     * @access public
+     * @return object
+     */
+    public function getAccountFirstAction(string $account): object
+    {
+        return $this->dao->select('*')->from(TABLE_ACTION)->where('actor')->eq($account)->orderBy('id')->limit(1)->fetch();
+    }
+
+    /**
      * 获取已删除的对象。
      * Get deleted objects.
      *
@@ -1200,6 +1213,8 @@ class actionModel extends model
                     $actionObjectLabel = $this->lang->doc->menuTitle;
                 }
             }
+
+            if($objectType == 'system' && strpos(strtolower($actionType), 'backup') !== false) $actionObjectLabel = '';
         }
 
         if(in_array($this->config->edition, array('max', 'ipd')) && $objectType == 'assetlib')

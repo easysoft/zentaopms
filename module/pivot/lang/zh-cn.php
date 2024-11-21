@@ -26,6 +26,7 @@ $lang->pivot->exportRange  = '导出范围';
 $lang->pivot->story        = '需求';
 $lang->pivot->clear        = '清空';
 $lang->pivot->keep         = '保留设计';
+$lang->pivot->new          = '新';
 
 $lang->pivot->accessDenied  = '您无权访问该透视表';
 $lang->pivot->acl = '访问控制';
@@ -490,3 +491,6 @@ $lang->pivot->drill->productName      = "产品名称";
 $lang->pivot->drill->activatedBug     = "激活的Bug数";
 $lang->pivot->drill->auto             = "自动";
 $lang->pivot->drill->designChangedTip = '设计变更，请检查';
+
+$lang->pivot->tipNewVersion   = '有新版本更新';
+$lang->pivot->checkNewVersion = '点击查看';

@@ -90,6 +90,15 @@ class baseDAO
     public $slaveDBH;
 
     /**
+     * 全局对象$cache。
+     * The global cache object.
+     *
+     * @var object
+     * @access public
+     */
+    public $cache = null;
+
+    /**
      * sql对象，用于生成sql语句。
      * The sql object, used to create the query sql.
      *
@@ -211,24 +220,12 @@ class baseDAO
     public function __construct($app)
     {
         global $config, $lang, $dbh, $slaveDBH;
-        $this->app       = $app;
-        $this->config    = $config;
-        $this->lang      = $lang;
-        $this->dbh       = $dbh;
-        $this->slaveDBH  = $slaveDBH ? $slaveDBH : false;
-
-        if($config->cache->dao->enable)
-        {
-            $this->app->loadClass('cache', true);
-            try
-            {
-                $this->cache = new cache($config->cache->dao->driver, $config->db->name . '-dao-', $config->cache->dao->lifetime);
-            }
-            catch (Exception $e)
-            {
-                die($e->getMessage());
-            }
-        }
+        $this->app      = $app;
+        $this->config   = $config;
+        $this->lang     = $lang;
+        $this->dbh      = $dbh;
+        $this->cache    = $app->cache;
+        $this->slaveDBH = $slaveDBH ? $slaveDBH : false;
 
         $this->reset();
     }
@@ -332,6 +329,21 @@ class baseDAO
     }
 
     /**
+     * 生成缓存的 key。
+     * Create the cache key.
+     *
+     * @param  mixed  $args
+     * @access private
+     * @return string
+     */
+    private function createCacheKey(...$args): string
+    {
+        if(empty($this->cache)) return implode('-', $args);
+
+        return $this->cache->createKey('dao', ...$args);
+    }
+
+    /**
      * 获取缓存。
      * Get the cache.
      *
@@ -344,7 +356,7 @@ class baseDAO
     {
         if(!$this->app->isServing() || empty($this->cache)) return self::CACHE_MISS;
 
-        $cache = $this->cache->get($key);
+        $cache = $this->cache->getByKey($key);
         if($cache === null) return self::CACHE_MISS;
 
         /* 解析缓存的更新时间和值到变量中。 */
@@ -362,7 +374,8 @@ class baseDAO
         {
             if(strpos($table, 'boardlayer') !== false) return self::CACHE_MISS;
 
-            $tableCache = $this->cache->get($table);
+            $tableKey   = $this->createCacheKey('table', $table);
+            $tableCache = $this->cache->getByKey($tableKey);
             if($tableCache === null) continue;
 
             if($tableCache[0] > $cachedTime) return self::CACHE_MISS;
@@ -381,16 +394,17 @@ class baseDAO
      *
      * @param  string $key
      * @param  mixed  $value
+     * @param  int    $ttl
      * @access public
      * @return void
      */
-    public function setCache($key, $value = null)
+    public function setCache($key, $value = null, int $ttl = null)
     {
         if(!$this->app->isServing() || empty($this->cache)) return false;
 
         $this->app->useClientCache = false;
 
-        $this->cache->set($key, array(microtime(true), $value));
+        $this->cache->saveByKey($key, array(microtime(true), $value), $ttl ?? $this->config->cache->dao->lifetime);
     }
 
     /**
@@ -413,7 +427,8 @@ class baseDAO
             /* 更新表的缓存时间。*/
             /* Update the table cache time. */
             $table = str_replace(array('`', '"'), '', $table);
-            $this->setCache($table);
+            $key   = $this->createCacheKey('table', $table);
+            $this->setCache($key, $table, 0);
         }
     }
 
@@ -1047,26 +1062,33 @@ class baseDAO
             /* Real-time save log. */
             if(dao::$realTimeLog && dao::$realTimeFile) file_put_contents(dao::$realTimeFile, $sql . "\n", FILE_APPEND);
 
-            $table = trim($this->table, '`');
+            $table  = $this->table;
+            $method = $this->method;
             $this->reset();
 
             /* Force to query from master db, if db has been changed. */
             $this->slaveDBH = false;
 
+            if($this->cache) $this->cache->prepare($table, $method, $sql);
+
             $result = $this->dbh->exec($sql);
+
             /* See: https://www.php.net/manual/en/pdo.lastinsertid.php .*/
-            $this->_lastInsertID = $this->dbh->lastInsertId();
+            if($method == 'insert') $this->_lastInsertID = $this->dbh->lastInsertID();
+
+            if($this->cache) $result ? $this->cache->sync() : $this->cache->reset();
 
             $this->setTableCache($sql);
 
             if($this->config->enableDuckdb)
             {
-                $now        = helper::now();
-                $queueTable = trim(TABLE_DUCKDBQUEUE, '`');
+                $queueTable = TABLE_DUCKDBQUEUE;
                 if(!empty($table) && $table != $queueTable)
                 {
-                    $this->dbh->exec("UPDATE {$queueTable} SET updatedTime = '$now' WHERE object = '$table'");
-                    $this->dbh->exec("INSERT INTO {$queueTable} (object, updatedTime, syncTime) SELECT '$table', '$now', NULL WHERE NOT EXISTS (SELECT 1 FROM {$queueTable} WHERE object = '$table' );");
+                    $now    = helper::now();
+                    $object = trim($table, '`');
+                    $this->dbh->exec("UPDATE {$queueTable} SET updatedTime = '$now' WHERE object = '$object'");
+                    $this->dbh->exec("INSERT INTO {$queueTable} (`object`, `updatedTime`, `syncTime`) SELECT '$object', '$now', NULL WHERE NOT EXISTS (SELECT 1 FROM {$queueTable} WHERE `object` = '$object' );");
                 }
             }
 
@@ -1091,9 +1113,8 @@ class baseDAO
      */
     public function fetch($field = '')
     {
-        $sql = $this->processSQL();
-        $key = 'fetch-' . md5($sql);
-
+        $sql    = $this->processSQL();
+        $key    = $this->createCacheKey('fetch', md5($sql));
         $result = $this->getCache($key, $sql);
         if($result === self::CACHE_MISS)
         {
@@ -1117,9 +1138,8 @@ class baseDAO
      */
     public function fetchAll($keyField = '')
     {
-        $sql = $this->processSQL();
-        $key = 'fetchAll-' . md5($sql);
-
+        $sql  = $this->processSQL();
+        $key  = $this->createCacheKey('fetchAll', md5($sql));
         $rows = $this->getCache($key, $sql);
         if($rows === self::CACHE_MISS)
         {
@@ -1145,10 +1165,8 @@ class baseDAO
      */
     public function fetchGroup($groupField, $keyField = '')
     {
-        $sql   = $this->processSQL();
-        $table = $this->table;
-        $key   = 'fetchGroup-' . md5($sql);
-
+        $sql = $this->processSQL();
+        $key = $this->createCacheKey('fetchAll', md5($sql));
         $rows = $this->getCache($key, $sql);
         if($rows === self::CACHE_MISS)
         {
@@ -1178,9 +1196,8 @@ class baseDAO
      */
     public function fetchPairs($keyField = '', $valueField = '')
     {
-        $sql = $this->processSQL();
-        $key = 'fetchPairs-' . md5($sql);
-
+        $sql  = $this->processSQL();
+        $key  = $this->createCacheKey('fetchAll', md5($sql));
         $rows = $this->getCache($key, $sql);
         if($rows === self::CACHE_MISS)
         {

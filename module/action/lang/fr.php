@@ -361,6 +361,7 @@ $lang->action->desc->closeautobackup     = '$date, Disable automatic backup by <
 $lang->action->desc->autodeletebackups   = '$date, Automatically clean up backups by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->savebackupsettings  = '$date, Save backup settings backups by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->deleteexpiredbackup = '$date, Clean up expired backups by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->manualdeletebackup  = '$date, Manually clean up backup by <strong>$actor</strong>.' . "\n";
 
 /* Used to display dynamic information. */
 $lang->action->label = new stdclass();
@@ -561,7 +562,7 @@ $lang->action->label->createbackup            = 'Created system backup';
 $lang->action->label->deletebackup            = 'Deleted system backup';
 $lang->action->label->restorebackup           = 'Restored system backup';
 $lang->action->label->upgradesystem           = 'Executed system upgrade';
-$lang->action->label->system                  = '';
+$lang->action->label->system                  = 'Application';
 $lang->action->label->manualbackup            = 'Manual backup';
 $lang->action->label->autobackup              = 'Automatic backup';
 $lang->action->label->openautobackup          = 'Enable automatic backup';
@@ -569,6 +570,7 @@ $lang->action->label->closeautobackup         = 'Disable automatic backup';
 $lang->action->label->autodeletebackups       = 'Automatically clean up backups';
 $lang->action->label->savebackupsettings      = 'Save backup settings';
 $lang->action->label->deleteexpiredbackup     = 'Clean up expired backups';
+$lang->action->label->manualdeletebackup      = 'Manually clean up backup';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass();

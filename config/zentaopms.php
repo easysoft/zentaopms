@@ -464,6 +464,7 @@ define('TABLE_JOB',           '`' . $config->db->prefix . 'job`');
 define('TABLE_COMPILE',       '`' . $config->db->prefix . 'compile`');
 define('TABLE_MR',            '`' . $config->db->prefix . 'mr`');
 define('TABLE_MRAPPROVAL',    '`' . $config->db->prefix . 'mrapproval`');
+define('TABLE_MARK',          '`' . $config->db->prefix . 'mark`');
 
 define('TABLE_SERVERROOM',   '`' . $config->db->prefix . 'serverroom`');
 define('TABLE_HOST',         '`' . $config->db->prefix . 'host`');
@@ -490,6 +491,7 @@ if(!defined('TABLE_SEARCHDICT'))  define('TABLE_SEARCHDICT',  $config->db->prefi
 define('TABLE_SCREEN',     '`' . $config->db->prefix . 'screen`');
 define('TABLE_CHART',      '`' . $config->db->prefix . 'chart`');
 define('TABLE_PIVOT',      '`' . $config->db->prefix . 'pivot`');
+define('TABLE_PIVOTSPEC',  '`' . $config->db->prefix . 'pivotspec`');
 define('TABLE_PIVOTDRILL', '`' . $config->db->prefix . 'pivotdrill`');
 define('TABLE_DASHBOARD',  '`' . $config->db->prefix . 'dashboard`');
 define('TABLE_DATASET',    '`' . $config->db->prefix . 'dataset`');
@@ -726,6 +728,7 @@ $config->objectTables['workflowgroup']  = TABLE_WORKFLOWGROUP;
 $config->objectTables['productline']    = TABLE_MODULE;
 $config->objectTables['repocommit']     = TABLE_REPOHISTORY;
 $config->objectTables['system']         = TABLE_SYSTEM;
+$config->objectTables['mark']           = TABLE_MARK;
 
 $config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions', 'aiPrompts', 'promptDesign', 'promptExec');
 $config->disabledFeatures = '';

@@ -83,14 +83,26 @@ $generateData = function() use ($lang, $pivotName, $pivot, $data, $configs, $sho
             set::shadow(false),
             set::headingClass('h-12'),
             set::bodyClass('pt-0'),
-            $pivot->desc ? to::titleSuffix(
-                icon
+            to::titleSuffix
+            (
+                $pivot->desc ? icon
                 (
                     setClass('cursor-pointer'),
                     setData(array('toggle' => 'tooltip', 'title' => $pivot->desc, 'placement' => 'right', 'className' => 'text-gray border border-light', 'type' => 'white')),
                     'help'
+                ) : null,
+                span
+                (
+                    set::style(array('font-weight' => 'normal')),
+                    $lang->pivot->tipNewVersion . $lang->comma,
+                    h::a
+                    (
+                        $lang->pivot->checkNewVersion,
+                        set('data-toggle', 'modal'),
+                        set::url($this->createLink('pivot', 'versions', "pivotID={$pivot->id}"))
+                    )
                 )
-            ) : null,
+            ),
             toolbar
             (
                 item

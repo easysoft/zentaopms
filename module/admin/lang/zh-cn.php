@@ -53,18 +53,6 @@ $lang->admin->engineInfo                 = "表<strong>%s</strong>的引擎是<s
 $lang->admin->engineSummary['hasMyISAM'] = "有%s个表不是InnoDB引擎";
 $lang->admin->engineSummary['allInnoDB'] = "所有的表都是InnoDB引擎了";
 
-$lang->admin->daoCache       = '数据缓存';
-$lang->admin->clearCache     = '清除缓存';
-$lang->admin->clearSuccess   = '清除成功';
-$lang->admin->memory         = '内存使用';
-$lang->admin->usedMemory     = '总计 %s，已使用 %s';
-$lang->admin->apcuNotice     = '数据缓存基于 PHP-APCu 扩展实现，开启前需要先加载 APCu 扩展。';
-$lang->admin->apcuNotLoaded  = '请加载 APCu 扩展后再开启数据缓存';
-$lang->admin->apcuNotEnabled = '请启用 apc.enabled 选项后再开启数据缓存';
-
-$lang->admin->cacheStatusList[1] = '开启';
-$lang->admin->cacheStatusList[0] = '关闭';
-
 $lang->admin->info = new stdclass();
 $lang->admin->info->version = '当前系统的版本是%s，';
 $lang->admin->info->links   = '您可以访问以下链接：';

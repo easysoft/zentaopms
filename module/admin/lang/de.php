@@ -53,18 +53,6 @@ $lang->admin->engineInfo     = "The <strong>%s</strong> table engine is <strong>
 $lang->admin->engineSummary['hasMyISAM'] = "There are %s tables that are not InnoDB engines";
 $lang->admin->engineSummary['allInnoDB'] = "All tables are InnoDB engines";
 
-$lang->admin->daoCache       = 'Data Cache';
-$lang->admin->clearCache     = 'Clear';
-$lang->admin->clearSuccess   = 'Cleared';
-$lang->admin->memory         = 'Memory';
-$lang->admin->usedMemory     = 'Total %s, %s used';
-$lang->admin->apcuNotice     = 'Data cache is based on the PHP-APCu extension, which needs to be loaded before enabling.';
-$lang->admin->apcuNotLoaded  = 'Please load the APCu extension before enabling DAO cache';
-$lang->admin->apcuNotEnabled = 'Please enable the apc.enabled option before enabling DAO cache';
-
-$lang->admin->cacheStatusList[1] = 'On';
-$lang->admin->cacheStatusList[0] = 'Off';
-
 $lang->admin->info = new stdclass();
 $lang->admin->info->version = 'Aktuelle Version ist %s. ';
 $lang->admin->info->links   = 'You can visit links below';
