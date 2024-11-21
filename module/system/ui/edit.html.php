@@ -15,4 +15,24 @@ formPanel
     set::id('systemEditForm'),
     set::title($lang->system->edit),
     set::submitBtnText($lang->save),
+    formGroup
+    (
+        set::name('integrated'),
+        set::width('1/2'),
+        set::label($lang->system->integrated),
+        set::labelWidth(common::checkNotCN() ? '160px' : '100px'),
+        set::control('radioListInline'),
+        set::value($system->integrated),
+        set::items($lang->system->integratedList),
+        set::disabled(true)
+    ),
+    formGroup
+    (
+        set::name('name'),
+        set::width(common::checkNotCN() ? '3/4' : '1/2'),
+        set::label($lang->system->name),
+        set::labelWidth(common::checkNotCN() ? '160px' : '100px'),
+        set::required(true),
+        set::value($system->name)
+    ),
 );
