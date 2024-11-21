@@ -598,5 +598,6 @@ $lang->group->package->deleteJob             = '删除流水线';
 $lang->group->package->browseApplication     = '浏览应用';
 $lang->group->package->mangeApplication      = '管理应用';
 $lang->group->package->trainPracticeLib      = '实践库';
+$lang->group->package->application           = '管理应用';
 
 include (dirname(__FILE__) . '/resource.php');

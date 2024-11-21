@@ -1495,6 +1495,12 @@ $lang->resource->system->dashboard    = 'dashboard';
 $lang->resource->system->dblist       = 'dbList';
 $lang->resource->system->configdomain = 'configDomain';
 $lang->resource->system->ossview      = 'ossView';
+$lang->resource->system->browse   = 'browse';
+$lang->resource->system->create   = 'create';
+$lang->resource->system->edit     = 'edit';
+$lang->resource->system->delete   = 'delete';
+$lang->resource->system->active   = 'active';
+$lang->resource->system->inactive = 'inactive';
 
 $lang->resource->ops = new stdclass();
 $lang->resource->ops->provider = 'provider';

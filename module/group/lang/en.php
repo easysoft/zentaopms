@@ -598,5 +598,6 @@ $lang->group->package->deleteJob             = 'Delete PipeLine';
 $lang->group->package->browseApplication     = 'Application List';
 $lang->group->package->mangeApplication      = 'Manage Application';
 $lang->group->package->trainPracticeLib      = 'Practice Library';
+$lang->group->package->application           = 'Manage Application';
 
 include (dirname(__FILE__) . '/resource.php');

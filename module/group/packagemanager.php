@@ -941,6 +941,17 @@ $config->group->package->releaseNotify->subset = 'release';
 $config->group->package->releaseNotify->privs  = array();
 $config->group->package->releaseNotify->privs['release-notify'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 70, 'depend' => array('release-view'), 'recommend' => array('release-create', 'release-edit', 'release-linkBug', 'release-linkStory', 'release-unlinkBug', 'release-unlinkStory'));
 
+$config->group->package->application = new stdclass();
+$config->group->package->application->order  = 30;
+$config->group->package->application->subset = 'release';
+$config->group->package->application->privs  = array();
+$config->group->package->application->privs['system-browse']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array('release-browse'), 'recommend' => array('system-create', 'system-edit', 'system-active', 'system-inactive', 'system-delete'));
+$config->group->package->application->privs['system-create']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array('system-browse'), 'recommend' => array('system-edit', 'system-active', 'system-inactive', 'system-delete'));
+$config->group->package->application->privs['system-edit']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array('system-browse'), 'recommend' => array('system-create', 'system-active', 'system-inactive', 'system-delete'));
+$config->group->package->application->privs['system-active']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array('system-browse'), 'recommend' => array('system-create', 'system-edit', 'system-inactive', 'system-delete'));
+$config->group->package->application->privs['system-inactive'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array('system-browse'), 'recommend' => array('system-create', 'system-edit', 'system-active', 'system-delete'));
+$config->group->package->application->privs['system-delete']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array('system-browse'), 'recommend' => array('system-create', 'system-edit', 'system-active', 'system-inactive'));
+
 $config->group->package->projectPlan = new stdclass();
 $config->group->package->projectPlan->order  = 5;
 $config->group->package->projectPlan->subset = 'projectplan';
