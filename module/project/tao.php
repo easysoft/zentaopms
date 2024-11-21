@@ -300,11 +300,31 @@ class projectTao extends projectModel
         /* Remove execution members. */
         if($this->post->removeExecution == 'yes' and !empty($childSprints) and !empty($removedAccountList))
         {
+            $childTeams = $this->dao->select('root,account')->from(TABLE_TEAM)
+                ->where('root')->in($childSprints)
+                ->andWhere('type')->eq('execution')
+                ->andWhere('account')->in($removedAccounts)
+                ->fetchGroup('root', 'account');
+
             $this->dao->delete()->from(TABLE_TEAM)
                 ->where('root')->in($childSprints)
                 ->andWhere('type')->eq('execution')
                 ->andWhere('account')->in($removedAccounts)
                 ->exec();
+
+            foreach($childTeams as $sprintID => $childTeam)
+            {
+                $childAccounts      = array_keys($childTeam);
+                $removedAccountList = array_intersect($childAccounts, $removedAccounts);
+                if(empty($removedAccountList)) continue;
+
+                $removedAccountList = array_map(function($account) use ($users) { return zget($users, $account); }, $removedAccountList);
+
+                $changes = array(array('field' => 'removeDiff', 'old' => '', 'new' => '', 'diff' => join(',', $removedAccountList)));
+
+                $actionID = $this->action->create('execution', $sprintID, 'syncProjectTeam');
+                $this->action->logHistory($actionID, $changes);
+            }
         }
     }
 
