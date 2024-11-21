@@ -18,3 +18,9 @@ cid=1
 */
 global $tester;
 $system = $tester->loadModel('system');
+
+$default = new stdclass();
+$default->name       = '应用11';
+$default->desc       = '应用描述';
+$default->editedBy   = 'admin';
+$default->editedDate = '2024-01-01 00:00:00';
