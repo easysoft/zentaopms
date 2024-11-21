@@ -395,4 +395,20 @@ class systemModel extends model
 
         return false;
     }
+
+    /**
+     * 检查按钮是否可用。
+     * Check if the button is clickable.
+     *
+     * @param  object $system
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public function isClickable(object $system, string $action): bool
+    {
+        if($action == 'active') return $system->status == 'inactive';
+        if($action == 'inactive') return $system->status == 'active';
+        return true;
+    }
 }

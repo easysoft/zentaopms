@@ -6,7 +6,7 @@ zendata('system')->gen(10);
 
 /**
 
-title=测试 systemModel::create();
+title=测试 systemModel::update();
 timeout=0
 cid=1
 
