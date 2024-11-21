@@ -9,6 +9,17 @@ declare(strict_types = 1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+
+$versionsTableBody = array();
+foreach($versionSpecs as $versionSpec)
+{
+    $versionsTableBody[] = h::tr
+    (
+        h::td('#' . $versionSpec->version),
+        h::td($versionSpec->desc),
+    );
+}
+
 panel
 (
     setID('pivotVersionPanel'),
@@ -24,5 +35,15 @@ panel
             setData(array('toggle' => 'tooltip', 'title' => $lang->pivot->tipVersions, 'placement' => 'right', 'className' => 'text-wraning border border-light', 'type' => 'white')),
             'help'
         )
+    ),
+    h::table
+    (
+        set::className('versionTable table bordered'),
+        h::tr
+        (
+            h::th($lang->pivot->versionNumber),
+            h::th($lang->pivot->desc)
+        ),
+        $versionsTableBody
     )
 );
