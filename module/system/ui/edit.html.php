@@ -10,17 +10,18 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$width = common::checkNotCN() ? '3/4' : '1/2';
 formPanel
 (
     set::id('systemEditForm'),
     set::title($lang->system->edit),
     set::submitBtnText($lang->save),
+    set::labelWidth(common::checkNotCN() ? '160px' : '100px'),
     formGroup
     (
         set::name('integrated'),
         set::width('1/2'),
         set::label($lang->system->integrated),
-        set::labelWidth(common::checkNotCN() ? '160px' : '100px'),
         set::control('radioListInline'),
         set::value($system->integrated),
         set::items($lang->system->integratedList),
@@ -29,7 +30,7 @@ formPanel
     formGroup
     (
         set::name('name'),
-        set::width(common::checkNotCN() ? '3/4' : '1/2'),
+        set::width($width),
         set::label($lang->system->name),
         set::labelWidth(common::checkNotCN() ? '160px' : '100px'),
         set::required(true),
@@ -40,7 +41,7 @@ formPanel
         setID('children'),
         $system->integrated ? null : setClass('hidden'),
         set::name('children'),
-        set::width(common::checkNotCN() ? '3/4' : '1/2'),
+        set::width($width),
         set::required(true),
         set::label($lang->system->children),
         set::labelWidth(common::checkNotCN() ? '160px' : '100px'),

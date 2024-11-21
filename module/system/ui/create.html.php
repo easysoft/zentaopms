@@ -10,17 +10,18 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$width = common::checkNotCN() ? '3/4' : '1/2';
 formPanel
 (
     set::id('systemCreateForm'),
     set::title($lang->system->create),
     set::submitBtnText($lang->save),
+    set::labelWidth(common::checkNotCN() ? '160px' : '100px'),
     formGroup
     (
         set::name('integrated'),
         set::width('1/2'),
         set::label($lang->system->integrated),
-        set::labelWidth(common::checkNotCN() ? '160px' : '100px'),
         set::control('radioListInline'),
         set::value(0),
         set::items($lang->system->integratedList),
@@ -29,9 +30,8 @@ formPanel
     formGroup
     (
         set::name('name'),
-        set::width(common::checkNotCN() ? '3/4' : '1/2'),
+        set::width($width),
         set::label($lang->system->name),
-        set::labelWidth(common::checkNotCN() ? '160px' : '100px'),
         set::required(true)
     ),
     formGroup
@@ -39,10 +39,9 @@ formPanel
         setID('children'),
         setClass('hidden'),
         set::name('children'),
-        set::width(common::checkNotCN() ? '3/4' : '1/2'),
+        set::width($width),
         set::required(true),
         set::label($lang->system->children),
-        set::labelWidth(common::checkNotCN() ? '160px' : '100px'),
         set::control('picker'),
         set::items($systemList),
         set::multiple(true)
@@ -51,7 +50,6 @@ formPanel
     (
         set::name('desc'),
         set::label($lang->system->desc),
-        set::labelWidth(common::checkNotCN() ? '160px' : '100px'),
         set::control(array('type' => 'textarea', 'rows' => '4'))
     )
 );
