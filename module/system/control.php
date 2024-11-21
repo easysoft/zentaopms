@@ -656,5 +656,13 @@ class system extends control
      */
     public function inactive(int $id)
     {
+        $system = new stdclass();
+        $system->status = 'inactive';
+
+        $this->system->update($id, $system, false);
+        if(dao::isError()) return $this->sendError(dao::getError());
+
+        $this->loadModel('action')->create('system', $id, 'inactive');
+        $this->sendSuccess(array('load' => true));
     }
 }
