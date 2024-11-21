@@ -11,6 +11,8 @@ ALTER TABLE `zt_approvalobject` ADD `appliedBy` char(30) NOT NULL DEFAULT '' AFT
 ALTER TABLE `zt_approvalobject` ADD `appliedDate` datetime NULL AFTER `appliedBy`;
 ALTER TABLE `zt_approvalobject` ADD `desc` text NULL AFTER `appliedDate`;
 
+ALTER TABLE `zt_approval` ADD `extra` text NULL AFTER `result`;
+
 INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`, `createdBy`, `createdDate`, `datasource`, `view`, `keyField`, `valueField`) VALUES
 ('lang', '立项级别',     'charterLevel',        '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'charterLevel', '', '', ''),
 ('lang', '立项类型',     'charterCategory',     '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'charterCategory', '', '', ''),
