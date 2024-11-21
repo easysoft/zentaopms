@@ -15370,7 +15370,7 @@ CREATE TABLE IF NOT EXISTS `zt_pivot`  (
   `step` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `stage` enum('draft','published') NOT NULL DEFAULT 'draft',
   `builtin` enum('0', '1') NOT NULL DEFAULT '0',
-  `version` varchar(10) NOT NULL,
+  `version` varchar(10) NOT NULL DEFAULT '0',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
