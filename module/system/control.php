@@ -565,7 +565,7 @@ class system extends control
      * @access public
      * @return void
      */
-    public function create($productID)
+    public function create(int $productID)
     {
         if($_POST)
         {
@@ -576,6 +576,7 @@ class system extends control
                 ->setDefault('product', $productID)
                 ->setDefault('status', 'active')
                 ->setDefault('createdBy', $this->app->user->account)
+                ->setIF($integrated == '0', 'children', '')
                 ->get();
 
             $systemID = $this->system->create($formData);
@@ -586,6 +587,23 @@ class system extends control
         }
 
         $this->view->title      = $this->lang->system->create;
+        $this->view->systemList = $this->system->getPairs('0');
+        $this->display();
+    }
+
+    /**
+     * 编辑应用。
+     * Edit application.
+     *
+     * @param  int $id
+     * @access public
+     * @return void
+     */
+    public function edit(int $id)
+    {
+        $system = $this->system->fetchByID($id);
+        $this->view->title      = $this->lang->system->edit;
+        $this->view->system     = $system;
         $this->view->systemList = $this->system->getPairs('0');
         $this->display();
     }
