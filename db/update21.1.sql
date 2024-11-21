@@ -52,6 +52,7 @@ CREATE TABLE IF NOT EXISTS `zt_pivotspec` (
 CREATE UNIQUE INDEX `idx_pivot_version` ON `zt_pivotspec`(`pivot`, `version`);
 
 ALTER TABLE `zt_pivot` ADD `version` varchar(10) NOT NULL DEFAULT '0' AFTER `builtin`;
+ALTER TABLE `zt_chart` ADD `version` varchar(10) NOT NULL DEFAULT '0' AFTER `builtin`;
 ALTER TABLE `zt_pivot` CHANGE `mode` `mode` varchar(10) NOT NULL DEFAULT 'builder';
 ALTER TABLE `zt_pivot` CHANGE `sql` `sql` text NULL;
 ALTER TABLE `zt_pivot` CHANGE `fields` `fields` text NULL;
