@@ -28,6 +28,7 @@ $lang->pivot->clear        = 'Clear';
 $lang->pivot->keep         = 'Keep';
 $lang->pivot->new          = 'New';
 $lang->pivot->version      = 'Version';
+$lang->pivot->viewVersion  = 'View version';
 
 $lang->pivot->accessDenied  = 'You do not have access to this pivot';
 $lang->pivot->acl = 'Access Control';
@@ -41,7 +42,8 @@ $lang->pivot->otherLang->productType   = 'Product type';
 
 $lang->pivot->cancelAndBack = 'Cancel save and back';
 
-$lang->pivot->deleteTip = 'Are you sure you want to delete it ?';
+$lang->pivot->deleteTip         = 'Are you sure you want to delete it ?';
+$lang->pivot->disableVersionTip = 'The pivot table in draft mode does not support the version list popup at the moment.';
 
 $lang->pivot->rangeList['current'] = 'Current Page';
 $lang->pivot->rangeList['all']     = 'All Data';

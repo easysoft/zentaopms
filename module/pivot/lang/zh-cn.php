@@ -28,6 +28,7 @@ $lang->pivot->clear        = '清空';
 $lang->pivot->keep         = '保留设计';
 $lang->pivot->new          = '新';
 $lang->pivot->version      = '当前版本';
+$lang->pivot->viewVersion  = '查看版本列表';
 
 $lang->pivot->accessDenied  = '您无权访问该透视表';
 $lang->pivot->acl = '访问控制';
@@ -41,7 +42,8 @@ $lang->pivot->otherLang->productType   = '产品类型';
 
 $lang->pivot->cancelAndBack = '取消保存并返回';
 
-$lang->pivot->deleteTip = '您确认要删除吗？';
+$lang->pivot->deleteTip         = '您确认要删除吗？';
+$lang->pivot->disableVersionTip = '草稿态的透视表暂时不支持查看版本列表弹窗。';
 
 $lang->pivot->rangeList['current'] = '当前页';
 $lang->pivot->rangeList['all']     = '全部';
