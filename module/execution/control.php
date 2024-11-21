@@ -2220,7 +2220,7 @@ class execution extends control
 
         if(dao::isError()) return $this->sendError(dao::getError());
 
-        $this->loadModel('action')->create('team', $executionID, 'managedTeam');
+        $this->loadModel('action')->create('execution', $executionID, 'managedTeam');
         return $this->sendSuccess(array('message' => '', 'load' => helper::createLink('execution', 'team', "executionID={$executionID}")));
     }
 

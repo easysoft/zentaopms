@@ -3094,22 +3094,22 @@ class executionModel extends model
         $changedAccountList = array_merge($addedAccountList, $removedAccountList);
         $changedAccountList = array_unique($changedAccountList);
 
-        /* Add the execution team members to the project. */
-        if($execution->project) $this->addProjectMembers($execution->project, $executionMember);
-        if($execution->acl != 'open') $this->updateUserView($execution->id, 'sprint', $changedAccountList);
-
         /* Log history. */
         $actionID = $this->loadModel('action')->create('execution', $execution->id, 'managedTeam');
 
         if(empty($addedAccountList) && empty($removedAccountList)) return;
 
-        $users = $this->loadModel('user')->getPairs('noletter');
-        $addedAccountList = array_map(function($account) use ($users) { return $users[$account]; }, $addedAccountList);
-        $removedAccountList = array_map(function($account) use ($users) { return $users[$account]; }, $removedAccountList);
+        $users              = $this->loadModel('user')->getPairs('noletter');
+        $addedAccountList   = array_map(function($account) use ($users) { return zget($users, $account); }, $addedAccountList);
+        $removedAccountList = array_map(function($account) use ($users) { return zget($users, $account); }, $removedAccountList);
 
         if(!empty($addedAccountList)) $changes[] = array('field' => 'addDiff', 'old' => '', 'new' => '', 'diff' => join(',', $addedAccountList));
         if(!empty($removedAccountList)) $changes[] = array('field' => 'removeDiff', 'old' => '', 'new' => '', 'diff' => join(',', $removedAccountList));
         if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+
+        /* Add the execution team members to the project. */
+        if($execution->project) $this->addProjectMembers($execution->project, $executionMember);
+        if($execution->acl != 'open') $this->updateUserView($execution->id, 'sprint', $changedAccountList);
     }
 
     /**
@@ -3157,6 +3157,18 @@ class executionModel extends model
 
             if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', $changedAccountList);
         }
+
+        if(empty($accountList)) return;
+
+        /* Log history. */
+        $users       = $this->loadModel('user')->getPairs('noletter');
+        $accountList = array_map(function($account) use ($users) { return zget($users, $account); }, $accountList);
+
+        $actionID = $this->loadModel('action')->create('project', $projectID, 'syncExecutionTeam');
+
+        $changes = array();
+        if(!empty($accountList)) $changes[] = array('field' => 'addDiff', 'old' => '', 'new' => '', 'diff' => join(',', $accountList));
+        if(!empty($changes)) $this->action->logHistory($actionID, $changes);
     }
 
     /**
