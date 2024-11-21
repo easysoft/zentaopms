@@ -49,4 +49,12 @@ formPanel
         set::multiple(true),
         set::value($system->children)
     ),
+    formGroup
+    (
+        set::name('desc'),
+        set::label($lang->system->desc),
+        set::labelWidth(common::checkNotCN() ? '160px' : '100px'),
+        set::control(array('type' => 'textarea', 'rows' => '4')),
+        set::value($system->desc)
+    )
 );
