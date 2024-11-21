@@ -36,4 +36,19 @@ panel
 (
     setID('tipsModal'),
     set::title($lang->project->tips),
+    set::headingActions(array
+    (
+        array('url' => $backUrl, 'icon' => 'close', 'class' => 'ghost')
+    )),
+    setClass('m-auto'),
+    div
+    (
+        set::className('flex items-center mt-2'),
+        icon('check-circle text-success icon-2x mr-2'),
+        span
+        (
+            set::className('text-md font-bold tip-title'),
+            $lang->project->afterInfo
+        )
+    ),
 );
