@@ -625,4 +625,24 @@ class system extends control
         $this->view->systemList = $this->system->getPairs('0');
         $this->display();
     }
+
+    /**
+     * 上架应用。
+     * Active application.
+     *
+     * @param  int $id
+     * @access public
+     * @return void
+     */
+    public function active(int $id)
+    {
+        $system = new stdclass();
+        $system->status = 'active';
+
+        $this->system->update($id, $system, false);
+        if(dao::isError()) return $this->sendError(dao::getError());
+
+        $this->loadModel('action')->create('system', $id, 'active');
+        $this->sendSuccess(array('load' => true));
+    }
 }
