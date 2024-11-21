@@ -250,7 +250,7 @@ $tbody = function() use($tasks, $lang, $groupBy, $users, $groupByList, $executio
         {
             if($groupBy == 'story')
             {
-                if($task->parent >= 0)
+                if(!$task->isParent)
                 {
                     $groupEstimate += $task->estimate;
                     $groupConsumed += $task->consumed;
@@ -259,7 +259,7 @@ $tbody = function() use($tasks, $lang, $groupBy, $users, $groupByList, $executio
             }
             else
             {
-                if($task->parent >= 0)
+                if(!$task->isParent)
                 {
                     $groupEstimate += $task->estimate;
                     $groupConsumed += $task->consumed;
@@ -320,8 +320,8 @@ $tbody = function() use($tasks, $lang, $groupBy, $users, $groupByList, $executio
                     setClass('c-name'),
                     set('title', $task->name),
                     !empty($task->mode) ? span(setClass('label gray-pale rounded-xl'), $lang->task->multipleAB) : null,
-                    $task->parent > 0  ? span(setClass('label gray-pale rounded-xl'), $lang->task->childrenAB) : null,
-                    (isset($task->children) && $task->children == true) ? span(setClass('label gray-pale rounded-xl'), $lang->task->parentAB) : null,
+                    (!$task->isParent && $task->parent > 0) ? span(setClass('label gray-pale rounded-xl'), $lang->task->childrenAB) : null,
+                    $task->isParent ? span(setClass('label gray-pale rounded-xl'), $lang->task->parentAB) : null,
                     a(set::href(createLink('task', 'view', "task=$task->id")), $task->name, set('data-app', $app->tab))
                 ),
                 h::td

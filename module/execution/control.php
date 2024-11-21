@@ -257,7 +257,6 @@ class execution extends control
                     $groupTasks[] = $child;
                     $allCount ++;
                 }
-                $task->children = true;
                 unset($task->children);
             }
         }
