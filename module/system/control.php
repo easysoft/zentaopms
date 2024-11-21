@@ -602,6 +602,24 @@ class system extends control
     public function edit(int $id)
     {
         $system = $this->system->fetchByID($id);
+        if($_POST)
+        {
+            $integrated = $system->integrated;
+            if($integrated) $this->config->system->edit->requiredFields .= ',children';
+
+            $formData = form::data($this->config->system->form->edit)
+                ->setDefault('editedBy', $this->app->user->account)
+                ->setDefault('integrated', $integrated)
+                ->setDefault('editedBy', $this->app->user->account)
+                ->get();
+
+            $this->system->update($id, $formData);
+            if(dao::isError()) return $this->sendError(dao::getError());
+
+            $this->loadModel('action')->create('system', $id, 'edited');
+            $this->sendSuccess(array('load' => true));
+        }
+
         $this->view->title      = $this->lang->system->edit;
         $this->view->system     = $system;
         $this->view->systemList = $this->system->getPairs('0');
