@@ -2569,31 +2569,17 @@ class taskModel extends model
             }
         }
 
-        /* Process parent-child task task info. */
-        if($tasks)
+        /* Process parent-child task info. */
+        foreach($tasks as $task)
         {
-            $children = array();
-            foreach($tasks as $task)
-            {
-                if($task->parent > 0 && isset($tasks[$task->parent]))
-                {
-                    $children[$task->parent][$task->id] = $task;
-                    unset($tasks[$task->id]);
-                }
-            }
-            if(!empty($children))
-            {
-                $position = 0;
-                foreach($tasks as $task)
-                {
-                    $position ++;
-                    if(isset($children[$task->id]))
-                    {
-                        array_splice($tasks, $position, 0, $children[$task->id]);
-                        $position += count($children[$task->id]);
-                    }
-                }
-            }
+            if($task->parent > 0) $parentIdList[] = $task->parent;
+        }
+
+        $parents = $this->dao->select('id, name')->from(TABLE_TASK)->where('id')->in($parentIdList)->fetchPairs();
+        foreach($tasks as $task)
+        {
+            $task->parentId = $task->parent;
+            $task->parent   = zget($parents, $task->parent, '');
         }
 
         return $tasks;
