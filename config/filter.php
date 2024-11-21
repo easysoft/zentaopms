@@ -355,6 +355,7 @@ $filter->task->export->cookie['checkedItem']            = 'reg::checked';
 $filter->task->recordestimate->cookie['taskEffortFold'] = 'reg::checked';
 
 $filter->execution->default->cookie['kanbanview']          = 'code';
+$filter->execution->default->cookie['taskViewType']        = 'code';
 $filter->execution->story->cookie['storyPreExecutionID']   = 'int';
 $filter->execution->story->cookie['storyModuleParam']      = 'int';
 $filter->execution->story->cookie['storyProductParam']     = 'int';

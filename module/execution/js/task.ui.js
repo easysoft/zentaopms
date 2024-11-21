@@ -176,3 +176,10 @@ window.renderCell = function(result, info)
 
     return result;
 }
+
+$(document).off('click', '.switchButton').on('click', '.switchButton', function()
+{
+    var taskViewType = $(this).attr('data-type');
+    $.cookie.set('taskViewType', taskViewType, {expires:config.cookieLife, path:config.webRoot});
+    loadCurrentPage();
+});

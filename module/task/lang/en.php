@@ -245,6 +245,9 @@ $lang->task->afterChoices['continueAdding'] = ' Continue Adding Tasks';
 $lang->task->afterChoices['toTaskList']     = 'Go to Task List';
 $lang->task->afterChoices['toStoryList']    = 'Go to Story List';
 
+$lang->task->viewTypeList['tiled'] = 'Tiled';
+$lang->task->viewTypeList['tree']  = 'Tree';
+
 $lang->task->legendBasic  = 'Basic Info';
 $lang->task->legendEffort = 'Effort';
 $lang->task->legendLife   = 'Task Life';

@@ -241,6 +241,9 @@ $lang->task->editModeList['single'] = '单人任务';
 $lang->task->editModeList['linear'] = '多人串行';
 $lang->task->editModeList['multi']  = '多人并行';
 
+$lang->task->viewTypeList['tiled'] = '平铺';
+$lang->task->viewTypeList['tree']  = '树状';
+
 $lang->task->afterChoices['continueAdding'] = "继续为该{$lang->SRCommon}添加任务";
 $lang->task->afterChoices['toTaskList']     = '返回任务列表';
 $lang->task->afterChoices['toStoryList']    = "返回{$lang->SRCommon}列表";

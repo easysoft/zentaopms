@@ -86,8 +86,26 @@ if($config->edition == 'ipd')
     }
 }
 
+$viewType = $this->cookie->taskViewType ? $this->cookie->taskViewType : 'tree';
 toolbar
 (
+    item(set(array
+    (
+        'type'  => 'btnGroup',
+        'items' => array(array
+        (
+            'icon'      => 'list',
+            'class'     => 'btn-icon switchButton' . ($viewType == 'tiled' ? ' text-primary' : ''),
+            'data-type' => 'tiled',
+            'hint'      => $lang->task->viewTypeList['tiled']
+        ), array
+        (
+            'icon'      => 'treeview',
+            'class'     => 'switchButton btn-icon' . ($viewType == 'tree' ? ' text-primary' : ''),
+            'data-type' => 'tree',
+            'hint'      => $lang->task->viewTypeList['tree']
+        ))
+    ))),
     hasPriv('task', 'report') ? item(set(array
     (
         'icon'  => 'bar-chart',
@@ -206,6 +224,7 @@ jsVar('todayLabel',     $lang->today);
 jsVar('yesterdayLabel', $lang->yesterday);
 jsVar('teamLang',       $lang->task->team);
 
+if($viewType == 'tiled') $cols['name']['nestedToggle'] = false;
 dtable
 (
     set::groupDivider(true),
