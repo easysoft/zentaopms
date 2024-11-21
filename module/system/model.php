@@ -36,14 +36,18 @@ class systemModel extends model
      * 获取应用键值对。
      * Get app pairs.
      *
+     * @param  int    $productID
      * @param  string $integrated
+     * @param  string $status
      * @access public
      * @return array
      */
-    public function getPairs(string $integrated = ''): array
+    public function getPairs(int $productID = 0, string $integrated = '', string $status = ''): array
     {
         return $this->dao->select('id, name')->from(TABLE_SYSTEM)
             ->where('deleted')->eq('0')
+            ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
+            ->beginIF($status)->andWhere('status')->eq($status)->fi()
             ->beginIF($integrated !== '')->andWhere('integrated')->eq($integrated)->fi()
             ->fetchPairs('id', 'name');
     }

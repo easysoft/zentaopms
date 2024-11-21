@@ -587,7 +587,7 @@ class system extends control
         }
 
         $this->view->title      = $this->lang->system->create;
-        $this->view->systemList = $this->system->getPairs('0');
+        $this->view->systemList = $this->system->getPairs(0, '0');
         $this->display();
     }
 
@@ -622,7 +622,7 @@ class system extends control
 
         $this->view->title      = $this->lang->system->edit;
         $this->view->system     = $system;
-        $this->view->systemList = $this->system->getPairs('0');
+        $this->view->systemList = $this->system->getPairs(0, '0');
         $this->display();
     }
 
