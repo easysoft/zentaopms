@@ -234,7 +234,7 @@ class transferTao extends transferModel
      */
     protected function updateChildDatas(array $datas)
     {
-        foreach($datas as $data)
+        foreach($datas as $id => $data)
         {
             if(!empty($data->mode)) $datas[$id]->name = '[' . $this->lang->task->multipleAB . '] ' . $data->name; //任务类型（多人任务/单人任务）
         }
@@ -265,6 +265,8 @@ class transferTao extends transferModel
             return $result;
         };
 
-        return $buildTree(0);
+        $tree = $buildTree(0);
+        if(count($tree) != count($datas)) return $datas;
+        return $tree;
     }
 }
