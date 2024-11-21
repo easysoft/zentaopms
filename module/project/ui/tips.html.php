@@ -51,4 +51,28 @@ panel
             $lang->project->afterInfo
         )
     ),
+    div
+    (
+        setClass('mt-5 mb-5'),
+        btn
+        (
+            set::className('mr-2 tipBtn ml-1'),
+            $lang->project->setTeam,
+            set::url(createLink('project', 'team', "projectID={$projectID}"))
+        ),
+        $showLinkStory ? btn
+        (
+            set::className('mr-2 tipBtn linkstory-btn'),
+            $lang->project->linkStory,
+            setData('app', 'project'),
+            set::url(createLink($multiple ? 'projectstory' : 'execution', 'linkstory', "objectID={$objectID}"))
+        ) : null,
+        $showCreateStory ? btn
+        (
+            set::className('mr-2 tipBtn'),
+            $lang->project->createStory,
+            setData('app', 'project'),
+            set::url(createLink('story', 'create', "productID={$productID}&branch=0&moduleID=0&storyID=0&objectID=$objectID"))
+        ) : null,
+    )
 );
