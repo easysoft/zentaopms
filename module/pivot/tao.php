@@ -12,10 +12,14 @@ class pivotTao extends pivotModel
      */
     protected function fetchPivot(int $id): object|bool
     {
-        return $this->dao->select('*')->from(TABLE_PIVOT)
-            ->where('id')->eq($id)
-            ->andWhere('deleted')->eq('0')
-            ->fetch();
+        $pivot = $this->dao->select('*')->from(TABLE_PIVOT)->where('id')->eq($id)->andWhere('deleted')->eq('0')->fetch();
+        if(!$pivot) return false;
+
+        $specData = $this->dao->select('*')->from(TABLE_PIVOTSPEC)->where('pivot')->eq($id)->andWhere('version')->eq($pivot->version)->fetch();
+        if(!$specData) return $pivot;
+
+        foreach($specData as $specKey => $specValue) $pivot->$specKey = $specValue;
+        return $pivot;
     }
     /**
      * 获取产品列表。
