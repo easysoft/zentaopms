@@ -242,11 +242,19 @@ class transferTao extends transferModel
         /* 如果存在子数据,则将子数据插入到父数据之后。*/
         /* Move child data after parent data. */
         $children = array();
+        $orphans  = array();
         foreach($datas as $data)
         {
             $parentId = isset($data->parentId) ? $data->parentId : $data->parent;
-            if(!isset($children[$parentId])) $children[$parentId] = array();
-            $children[$parentId][] = $data;
+            if($parentId != 0 && !isset($datas[$parentId]))
+            {
+                $orphans[] = $data;
+            }
+            else
+            {
+                if(!isset($children[$parentId])) $children[$parentId] = array();
+                $children[$parentId][] = $data;
+            }
         }
 
         if(empty($children)) return $datas;
@@ -262,10 +270,11 @@ class transferTao extends transferModel
                     $result = array_merge($result, $buildTree($child->id));
                 }
             }
+
             return $result;
         };
 
-        $tree = $buildTree(0);
+        $tree = array_merge((array)$buildTree(0), $orphans);
         if(count($tree) != count($datas)) return $datas;
         return $tree;
     }
