@@ -443,6 +443,14 @@ class project extends control
 
         if($model == 'kanban') unset($this->lang->project->authList['reset']);
 
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+        if(!empty($output['showTips']) && !empty($output['project']))
+        {
+            $this->displayAfterCreated((int)$output['project']);
+            return;
+        }
+
         if($_POST)
         {
             if($this->post->longTime || $this->post->LONG_TIME) $this->config->project->form->create['end']['skipRequired'] = true;
@@ -464,26 +472,7 @@ class project extends control
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $projectID));
 
-            if($this->app->tab != 'project' and $this->session->createProjectLocate)
-            {
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->session->createProjectLocate));
-            }
-            else
-            {
-                if(in_array($model, array('waterfall', 'waterfallplus', 'ipd')))
-                {
-                    $productID = $this->loadModel('product')->getProductIDByProject($projectID, true);
-                    $session   = $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=lists", '', false, $projectID);
-                    if(in_array($this->config->edition, array('max', 'ipd'))) $session = $this->createLink('project', 'execution', "status=undone&projectID=$projectID", '', false);
-                    $this->session->set('projectPlanList', $session, 'project');
-                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('programplan', 'create', "projectID=$projectID", '', false, $projectID)));
-                }
-
-                $parent     = (int)$project->parent;
-                $systemMode = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=mode');
-                if(!empty($systemMode) and $systemMode == 'light') $parent = 0;
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('project', 'browse', "programID=$parent&browseType=all", '', false, $projectID)));
-            }
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('create', "model=$model&programID=$programID&copyProjectID=$projectID&extra=showTips=1,project=$projectID")));
         }
 
         $this->projectZen->buildCreateForm((string)$model, (int)$programID, (int)$copyProjectID, (string)$extra);
