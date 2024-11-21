@@ -94,5 +94,24 @@ panel
             setData('app', 'project'),
             set::url(createLink('doc', 'projectSpace', "objectID=$objectID"))
         ) : null,
+        $showBackToTaskList ? btn
+        (
+            set::className('mr-2 tipBtn'),
+            $lang->project->backToTaskList,
+            setData('app', 'project'),
+            set::url(createLink('execution', 'task', "executionID={$executionID}"))
+        ) : null,
+        $showBackToExecutionList ? btn
+        (
+            set::className('mr-2 tipBtn'),
+            sprintf($lang->project->backToExecutionList, $executionLang),
+            set::url(createLink('project', 'execution', "status=undone&projectID={$projectID}"))
+        ) : null,
+        btn
+        (
+            set::className('tipBtn'),
+            $lang->project->backToProjectList,
+            set::url(createLink('project', 'browse'))
+        )
     )
 );
