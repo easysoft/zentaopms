@@ -84,6 +84,17 @@ $lang->project->invested            = 'Invested';
 $lang->project->member              = 'Member';
 $lang->project->manage              = 'Manage';
 $lang->project->market              = 'Market';
+$lang->project->tips                = 'Note';
+$lang->project->afterInfo           = "{$lang->projectCommon} is created. Next you can";
+$lang->project->setTeam             = 'Set Team';
+$lang->project->linkStory           = 'Link Stories';
+$lang->project->createStory         = "Create {$lang->SRCommon}";
+$lang->project->createTask          = "Create Task";
+$lang->project->createExecutionTip  = 'Create %s';
+$lang->project->setDoc              = 'Set Doc';
+$lang->project->backToTaskList      = 'Go back to Task List';
+$lang->project->backToExecutionList = 'Go Back to Project %s List';
+$lang->project->backToProjectList   = 'Go Back to Project List';
 
 $lang->project->manDay          = 'Man Day';
 $lang->project->day             = 'Day';
