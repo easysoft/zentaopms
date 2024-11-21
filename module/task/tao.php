@@ -1055,4 +1055,43 @@ class taskTao extends taskModel
 
         if($task->mode == 'linear' && empty($record->order)) $this->updateEffortOrder($effortID, $currentTeam->order);
     }
+
+    /**
+     * 更新父子任务关系。
+     * Update relation of parent and child.
+     *
+     * @param  int       $childID
+     * @param  int       $parentID
+     * @access protected
+     * @return void
+     */
+    protected function updateRelation(int $childID, int $parentID = 0): void
+    {
+        if(empty($childID)) return;
+
+        $relation = $this->dao->select('*')->from(TABLE_RELATION)->where('AID')->eq($childID)->andWhere('relation')->eq('subdividefrom')->andWhere('AType')->eq('task')->andWhere('BType')->eq('task')->fetch();
+        if($relation)
+        {
+            if($parentID && $relation->BID == $parentID) return;
+
+            $this->dao->delete()->from(TABLE_RELATION)->where('BID')->eq($childID)->andWhere('relation')->eq('subdivideinto')->andWhere('AType')->eq('task')->andWhere('BType')->eq('task')->exec();
+            $this->dao->delete()->from(TABLE_RELATION)->where('AID')->eq($childID)->andWhere('relation')->eq('subdividefrom')->andWhere('AType')->eq('task')->andWhere('BType')->eq('task')->exec();
+        }
+
+        if(empty($parentID)) return;
+
+        $data = new stdclass();
+        $data->AType     = 'task';
+        $data->BType     = 'task';
+        $data->AID       = $childID;
+        $data->BID       = $parentID;
+        $data->relation  = 'subdividefrom';
+        $this->dao->insert(TABLE_RELATION)->data($data)->exec();
+
+        $data->AID      = $parentID;
+        $data->BID      = $childID;
+        $data->relation = 'subdivideinto';
+        $this->dao->insert(TABLE_RELATION)->data($data)->exec();
+        return;
+    }
 }

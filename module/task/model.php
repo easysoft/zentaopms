@@ -374,7 +374,7 @@ class taskModel extends model
         $isParentChanged = $task->parent != $oldTask->parent;
 
         /* If there is a parent task before updating the task, update the parent. */
-        if($task->parent > 0) $this->updateParent($task, $isParentChanged);
+        $this->updateParent($task, $isParentChanged);
         if($isParentChanged && $oldTask->parent > 0)
         {
             $oldParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($oldTask->parent)->fetch();
@@ -3223,11 +3223,12 @@ class taskModel extends model
     public function updateParent(object $task, bool $isParentChanged): void
     {
         $oldTask    = $this->fetchByID($task->id);
-        $parentTask = $this->fetchByID((int)$task->parent);
-        $path       = $parentTask->path . $task->id . ',';
+        $parentTask = empty($task->parent) ? null : $this->fetchByID((int)$task->parent);
+        $parentPath = $parentTask ? $parentTask->path : ',';
+        $path       = $parentPath . $task->id . ',';
 
         $this->dao->update(TABLE_TASK)->set('path')->eq($path)->where('id')->eq($task->id)->exec();
-        if(!$parentTask->isParent) $this->dao->update(TABLE_TASK)->set('isParent')->eq(1)->where('id')->eq((int)$task->parent)->exec();
+        if($parentTask && !$parentTask->isParent) $this->dao->update(TABLE_TASK)->set('isParent')->eq(1)->where('id')->eq((int)$task->parent)->exec();
 
         /* 更新所有子任务的path. */
         $childIdList = $this->getAllChildId($task->id, false);
@@ -3242,9 +3243,10 @@ class taskModel extends model
         }
 
         $this->updateParentStatus($task->id, $task->parent, !$isParentChanged);
-        $this->computeBeginAndEnd($task->parent);
+        if($task->parent) $this->computeBeginAndEnd($task->parent);
 
-        if($isParentChanged)
+        $this->taskTao->updateRelation((int)$task->id, (int)$task->parent);
+        if($isParentChanged && $task->parent)
         {
             $this->loadModel('action')->create('task', $task->id, 'linkParentTask', '', $task->parent, '', false);
             $actionID = $this->action->create('task', $task->parent, 'linkChildTask', '', $task->id, '', false);

@@ -2246,4 +2246,22 @@ class taskTest
         foreach($childTasks as $key => $value) $result .= $key . ':' . $value . ';';
         return rtrim($result, ';');
     }
+
+    /**
+     * 测试 updateRelation 方法
+     * Test updateRelationq
+     *
+     * @param  int $childID
+     * @param  int $parentID
+     * @access public
+     * @return void
+     */
+    public function updateRelationTest(int $childID, int $parentID = 0)
+    {
+        $this->objectModel->updateRelation($childID, $parentID);
+        $relation = $this->objectModel->dao->select('*')->from(TABLE_RELATION)->where('AID')->eq($childID)->andWhere('relation')->eq('subdividefrom')->andWhere('AType')->eq('task')->andWhere('BType')->eq('task')->fetch();
+
+        if(empty($relation)) return 'null';
+        return $relation->BID;
+    }
 }
