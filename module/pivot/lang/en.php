@@ -494,3 +494,4 @@ $lang->pivot->drill->designChangedTip = 'Setting columns field change, please ch
 
 $lang->pivot->tipNewVersion   = 'Has New Version!';
 $lang->pivot->checkNewVersion = 'Click to check';
+$lang->pivot->tipVersions     = 'You can click the button below to switch version. After switch version, the content of this pivot table and the configurations will be displayed according to the switched version.';

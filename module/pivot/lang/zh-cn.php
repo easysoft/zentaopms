@@ -494,3 +494,4 @@ $lang->pivot->drill->designChangedTip = '设计变更，请检查';
 
 $lang->pivot->tipNewVersion   = '有新版本更新';
 $lang->pivot->checkNewVersion = '点击查看';
+$lang->pivot->tipVersions     = '此版本的内容如下所示，您可以点击下方按钮进行版本切换。切换版本后，此透视表内容以及进入设计后的设计器内相关配置，均会按照切换的版本展示。';

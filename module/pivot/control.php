@@ -73,13 +73,15 @@ class pivot extends control
      * Show versions of a pivot.
      *
      * @param  int    $pivotID
+     * @param  string $version
      * @access public
      * @return void
      */
-    public function versions(int $pivotID)
+    public function versions(int $pivotID, string $version = 'newest')
     {
         $this->view->versions = $this->pivot->getPivotVersions($pivotID);
-        $this->view->pivotID  = $pivotID;
+        $this->view->version  = $version == 'newest' ? $this->pivot->getMaxVersion($pivotID) : $version;
+        $this->view->pivot    = $this->pivot->getByID($pivotID);
         $this->display();
     }
 
