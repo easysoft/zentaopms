@@ -74,5 +74,25 @@ panel
             setData('app', 'project'),
             set::url(createLink('story', 'create', "productID={$productID}&branch=0&moduleID=0&storyID=0&objectID=$objectID"))
         ) : null,
+        $showCreateTask ? btn
+        (
+            set::className('mr-2 tipBtn'),
+            $lang->project->createTask,
+            setData('app', 'project'),
+            set::url(createLink('task', 'create', "executionID=$executionID"))
+        ) : null,
+        $showCreateExecution ? btn
+        (
+            set::className('mr-2 tipBtn'),
+            sprintf($lang->project->createExecutionTip, $executionLang),
+            set::url(createLink('execution', 'create', "projectID=$projectID"))
+        ) : null,
+        $showSetDoc ? btn
+        (
+            set::className('mr-2 tipBtn'),
+            $lang->project->setDoc,
+            setData('app', 'project'),
+            set::url(createLink('doc', 'projectSpace', "objectID=$objectID"))
+        ) : null,
     )
 );
