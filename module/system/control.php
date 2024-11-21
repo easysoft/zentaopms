@@ -665,4 +665,20 @@ class system extends control
         $this->loadModel('action')->create('system', $id, 'inactive');
         $this->sendSuccess(array('load' => true));
     }
+
+    /**
+     * 删除应用。
+     * Delete application.
+     *
+     * @param  int $id
+     * @access public
+     * @return void
+     */
+    public function delete(int $id)
+    {
+        $this->system->delete(TABLE_SYSTEM, $id);
+
+        if(dao::isError()) return $this->sendError(dao::getError());
+        $this->sendSuccess(array('load' => true));
+    }
 }
