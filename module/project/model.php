@@ -1762,14 +1762,17 @@ class projectModel extends model
      */
     public function unlinkMember(int $projectID, string $account, bool $removeExecution = false): bool
     {
-        $this->projectTao->unlinkTeamMember($projectID, 'project', $account);
+        $user    = $this->loadModel('user')->getById($account);
+        $changes = array(array('field' => 'removeDiff', 'old' => '', 'new' => '', 'diff' => $user->realname)); 
 
-        $this->loadModel('user')->updateUserView(array($projectID), 'project', array($account));
+        $this->projectTao->unlinkTeamMember($projectID, 'project', $account, $user->realname, $changes);
+
+        $this->user->updateUserView(array($projectID), 'project', array($account));
 
         if($removeExecution)
         {
             $executions = $this->loadModel('execution')->getByProject($projectID, 'undone', 0, true);
-            $this->projectTao->unlinkTeamMember(array_keys($executions), 'execution', $account);
+            $this->projectTao->unlinkTeamMember(array_keys($executions), 'execution', $account, $user->realname, $changes);
             $this->user->updateUserView(array_keys($executions), 'sprint', array($account));
         }
 
@@ -1816,23 +1819,6 @@ class projectModel extends model
         $this->projectTao->updateMemberView($projectID, $accounts, $oldJoin);
 
         if(empty($project->multiple) and $project->model != 'waterfall') $this->loadModel('execution')->syncNoMultipleSprint($projectID);
-
-        /* Log history. */
-        $actionID = $this->loadModel('action')->create('project', $projectID, 'ManagedTeam');
-
-        $oldJoin = array_keys($oldJoin);
-        $addedAccountList   = array_diff($accounts, $oldJoin);
-        $removedAccountList = array_diff($oldJoin, $accounts);
-
-        if(empty($addedAccountList) && empty($removedAccountList)) return !dao::isError();
-
-        $users = $this->loadModel('user')->getPairs('noletter');
-        $addedAccountList = array_map(function($account) use ($users) { return $users[$account]; }, $addedAccountList);
-        $removedAccountList = array_map(function($account) use ($users) { return $users[$account]; }, $removedAccountList);
-
-        if(!empty($addedAccountList)) $changes[] = array('field' => 'addDiff', 'old' => '', 'new' => '', 'diff' => join(',', $addedAccountList));
-        if(!empty($removedAccountList)) $changes[] = array('field' => 'removeDiff', 'old' => '', 'new' => '', 'diff' => join(',', $removedAccountList));
-        if(!empty($changes)) $this->action->logHistory($actionID, $changes);
 
         return !dao::isError();
     }

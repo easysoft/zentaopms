@@ -1167,7 +1167,6 @@ class project extends control
         $account = $user->account;
 
         $this->project->unlinkMember($projectID, $account, $removeExecution == 'yes');
-        if(!dao::isError()) $this->loadModel('action')->create('team', $projectID, 'managedTeam');
 
         /* if ajax request, send result. */
         if(dao::isError()) return $this->sendError(dao::getError());
@@ -1219,7 +1218,7 @@ class project extends control
         $executionMembers = array();
         foreach($executionTeams as $executionID => $executionTeam)
         {
-            $executionMembers += array_keys($executionTeam);
+            $executionMembers = array_merge($executionMembers, array_keys($executionTeam));
         }
 
         $currentMembers = $this->project->getTeamMembers($projectID);
@@ -1235,7 +1234,7 @@ class project extends control
         $this->view->currentMembers   = $currentMembers;
         $this->view->copyProjectID    = $copyProjectID;
         $this->view->teamMembers      = $this->projectZen->buildMembers($currentMembers, $members2Import, $deptUsers, $project->days);
-        $this->view->executionMembers = $executionMembers;
+        $this->view->executionMembers = array_unique($executionMembers);
         $this->display();
     }
 
