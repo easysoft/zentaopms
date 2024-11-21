@@ -2827,6 +2827,26 @@ class pivotModel extends model
     {
         return $this->dao->select('*')->from(TABLE_PIVOTSPEC)->where('pivot')->eq($pivotID)->fetchAll();
     }
+
+    /**
+     * Get max version.
+     *
+     * @param  int    $pivotID
+     * @access public
+     * @return string
+     */
+    public function getMaxVersion(int $pivotID): string
+    {
+        $versions = $this->dao->select('version')->from(TABLE_PIVOTSPEC)->where('pivot')->eq($pivotID)->fetchPairs();
+
+        $maxVersion = current($versions);
+        foreach($versions as $version)
+        {
+            if(version_compare($version, $maxVersion, '>')) $maxVersion = $version;
+        }
+
+        return $maxVersion;
+    }
 }
 
 /**
