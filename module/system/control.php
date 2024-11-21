@@ -645,4 +645,16 @@ class system extends control
         $this->loadModel('action')->create('system', $id, 'active');
         $this->sendSuccess(array('load' => true));
     }
+
+    /**
+     * 下架应用。
+     * Inactive application.
+     *
+     * @param  int $id
+     * @access public
+     * @return void
+     */
+    public function inactive(int $id)
+    {
+    }
 }
