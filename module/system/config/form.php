@@ -9,3 +9,8 @@ $config->system->form->create['name']        = array('type' => 'string', 'requir
 $config->system->form->create['children']    = array('type' => 'array', 'required' => false, 'default' => array(), 'filter' => 'join');
 $config->system->form->create['desc']        = array('type' => 'string', 'required' => false, 'default' => '', 'filter' => 'trim');
 $config->system->form->create['createdDate'] = array('type' => 'datetime', 'required' => false, 'default' => helper::now());
+
+$config->system->form->edit['name']       = array('type' => 'string', 'required' => true, 'filter' => 'trim');
+$config->system->form->edit['children']   = array('type' => 'array', 'required' => false, 'default' => array(), 'filter' => 'join');
+$config->system->form->edit['desc']       = array('type' => 'string', 'required' => false, 'default' => '', 'filter' => 'trim');
+$config->system->form->edit['editedDate'] = array('type' => 'datetime', 'required' => false, 'default' => helper::now());
