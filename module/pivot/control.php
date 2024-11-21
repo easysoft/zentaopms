@@ -69,6 +69,21 @@ class pivot extends control
     }
 
     /**
+     * 透视表版本列表。
+     * Show versions of a pivot.
+     *
+     * @param  int    $pivotID
+     * @access public
+     * @return void
+     */
+    public function versions(int $pivotID)
+    {
+        $this->view->versions = $this->pivot->getPivotVersions($pivotID);
+        $this->view->pivotID  = $pivotID;
+        $this->display();
+    }
+
+    /**
      * Drill data modal.
      * 下钻数据的弹窗。
      *

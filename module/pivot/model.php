@@ -2815,6 +2815,18 @@ class pivotModel extends model
 
         return $datas;
     }
+
+    /**
+     * Get versions of a pivot.
+     *
+     * @param  int    $pivotID
+     * @access public
+     * @return array
+     */
+    public function getPivotVersions(int $pivotID): array
+    {
+        return $this->dao->select('*')->from(TABLE_PIVOTSPEC)->where('pivot')->eq($pivotID)->fetchAll();
+    }
 }
 
 /**

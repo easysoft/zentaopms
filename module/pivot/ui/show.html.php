@@ -99,7 +99,7 @@ $generateData = function() use ($lang, $pivotName, $pivot, $data, $configs, $sho
                     (
                         $lang->pivot->checkNewVersion,
                         set('data-toggle', 'modal'),
-                        set::url($this->createLink('pivot', 'versions', "pivotID={$pivot->id}"))
+                        set::href($this->createLink('pivot', 'versions', "pivotID={$pivot->id}"))
                     )
                 )
             ),
