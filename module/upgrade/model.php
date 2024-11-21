@@ -10451,4 +10451,21 @@ class upgradeModel extends model
             }
         }
     }
+
+    /**
+     * 根据旧的缓存配置生成新的缓存配置。
+     * Generate new cache config.
+     *
+     * @access public
+     * @return void
+     */
+    public function processCacheConfig()
+    {
+        $cache = json_decode($this->config->global->cache);
+        if(!empty($cache->dao->enable))
+        {
+            $this->loadModel('install')->enableCache();
+            $this->loadModel('setting')->deleteItems('owner=system&module=common&section=global&key=cache');
+        }
+    }
 }
