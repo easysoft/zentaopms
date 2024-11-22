@@ -55,3 +55,42 @@ $story->stage->range('projected{2}, developing, testing{2} ');
 $story->assignedTo->range('[]');
 $story->version->range('1');
 $story->gen(5);
+
+$storySpec = zenData('storyspec');
+$storySpec->story->range('1-100');
+$storySpec->version->range('1');
+$storySpec->title->range('1-100');
+$storySpec->gen(3);
+
+$projectStory = zenData('projectstory');
+$projectStory->project->range('1{5}, 2{5}');
+$projectStory->product->range('1');
+$projectStory->branch->range('0');
+$projectStory->story->range('1-5 ');
+$projectStory->version->range('1');
+$projectStory->order->range('1-5');
+$projectStory->gen(9);
+
+$task = zenData('task');
+$task->id->range('1-100');
+$task->project->range('1');
+$task->execution->range('2');
+$task->name->range('1-100');
+$task->status->range('wait, doing{2}, done{3}, pause{4}, cancel{5}, closed{6}');
+$task->gen(21);
+
+$taskSpec = zenData('taskspec');
+$taskSpec->task->range('1-100');
+$taskSpec->version->range('0');
+$taskSpec->name->range('1-100');
+$taskSpec->gen(21);
+
+$bug = zenData('bug');
+$bug->id->range('1-100');
+$bug->project->range('1{6}, 0{100}');
+$bug->product->range('1{8}');
+$bug->execution->range('2{5}, 0{100}');
+$bug->title->range('1-100');
+$bug->status->range('active{3}, resolved{3}, closed{100}');
+$bug->assignedTo->range('[]');
+$bug->gen(8);
