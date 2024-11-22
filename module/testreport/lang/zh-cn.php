@@ -25,7 +25,7 @@ $lang->testreport->begin       = '开始时间';
 $lang->testreport->end         = '结束时间';
 $lang->testreport->stories     = "测试的{$lang->SRCommon}";
 $lang->testreport->bugs        = '测试的Bug';
-$lang->testreport->builds      = '版本信息';
+$lang->testreport->builds      = '构建信息';
 $lang->testreport->goal        = $lang->projectCommon . '目标';
 $lang->testreport->cases       = '用例';
 $lang->testreport->bugInfo     = 'Bug分布';
@@ -73,21 +73,21 @@ $lang->testreport->bugStageList['resolved']  = '解决的Bug';
 $lang->testreport->featureBar['browse']['all'] = '全部';
 
 $lang->testreport->caseSummary     = '共有<strong>%s</strong>个用例，共执行<strong>%s</strong>个用例，产生了<strong>%s</strong>个结果，失败的用例有<strong>%s</strong>个。';
-$lang->testreport->buildSummary    = '共测试了<strong>%s</strong>个版本。';
+$lang->testreport->buildSummary    = '共测试了<strong>%s</strong>个构建。';
 $lang->testreport->confirmDelete   = '是否删除该报告？';
 $lang->testreport->moreNotice      = "更多功能可以参考<a href='https://www.zentao.net/page/extension.html' target='_blank'>禅道扩展机制</a>进行扩展，也可以联系我们进行定制。";
 $lang->testreport->exportNotice    = "由<a href='https://www.zentao.net' target='_blank' style='color:grey'>禅道项目管理软件</a>导出";
 $lang->testreport->noReport        = "暂无报告，请选择测试单生成测试报告。";
-$lang->testreport->foundBugTip     = "影响版本在测试轮次内，并且创建时间在测试时间范围内产生的Bug数。";
+$lang->testreport->foundBugTip     = "影响构建在测试轮次内，并且创建时间在测试时间范围内产生的Bug数。";
 $lang->testreport->legacyBugTip    = "Bug状态是激活，或Bug的解决时间在测试结束时间之后。";
 $lang->testreport->activatedBugTip = "在测试单时间范围内被激活的Bug数量。";
 $lang->testreport->fromCaseBugTip  = "测试时间范围内，用例执行失败后创建的Bug。";
-$lang->testreport->errorTrunk      = "主干版本不能创建测试报告，请修改关联版本！";
+$lang->testreport->errorTrunk      = "主干构建不能创建测试报告，请修改关联构建！";
 $lang->testreport->noTestTask      = "该{$lang->productCommon}下还没有关联的测试单，不能创建报告。请先创建测试单，再创建。";
 $lang->testreport->noObjectID      = "没有选定测试单或{$lang->executionCommon}，无法创建测试报告！";
 $lang->testreport->moreProduct     = "只能对同一个{$lang->productCommon}生成测试报告。";
 $lang->testreport->hiddenCase      = "隐藏 %s 个用例";
-$lang->testreport->goalTip         = "该版本所属{$lang->execution->common}的描述信息";
+$lang->testreport->goalTip         = "该构建所属{$lang->execution->common}的描述信息";
 
 $lang->testreport->bugSummary = <<<EOD
 共发现<strong>%s</strong>个Bug <i class='icon icon-help text-light' data-placement='top' data-title="{$lang->testreport->foundBugTip}" data-type='black' data-toggle='tooltip'></i>，

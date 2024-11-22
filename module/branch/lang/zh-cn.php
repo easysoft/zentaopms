@@ -46,7 +46,7 @@ $lang->branch->confirmClose      = '是否关闭该@branch@？';
 $lang->branch->confirmActivate   = '是否激活该@branch@？';
 $lang->branch->existName         = '@branch@名称已存在';
 $lang->branch->mergedMain        = '主干不支持被合并。';
-$lang->branch->mergeTips         = '合并@branch@后，会将@branch@下面对应的发布、计划、版本、模块、需求、Bug、用例都合并到新的@branch@下。';
+$lang->branch->mergeTips         = '合并@branch@后，会将@branch@下面对应的发布、计划、构建、模块、需求、Bug、用例都合并到新的@branch@下。';
 $lang->branch->targetBranchTips  = '您可以将其合并到已有的一个@branch@，也可以合并到主干或者新创建一个@branch@。';
 $lang->branch->confirmMerge      = '"mergedBranch"的数据将被合并到"targetBranch",请确认是否要执行分支合并操作，合并后数据将不可再恢复！';
 

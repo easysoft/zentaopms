@@ -114,8 +114,8 @@ $lang->action->objectTypes['program']          = '项目集';
 $lang->action->objectTypes['project']          = $lang->projectCommon;
 $lang->action->objectTypes['execution']        = '执行';
 $lang->action->objectTypes['task']             = '任务';
-$lang->action->objectTypes['build']            = '版本';
-$lang->action->objectTypes['projectbuild']     = '项目版本';
+$lang->action->objectTypes['build']            = '构建';
+$lang->action->objectTypes['projectbuild']     = '项目构建';
 $lang->action->objectTypes['job']              = '流水线';
 $lang->action->objectTypes['bug']              = 'Bug';
 $lang->action->objectTypes['case']             = '用例';
@@ -184,7 +184,7 @@ $lang->action->objectTypes['domain']           = '域名';
 $lang->action->objectTypes['prompt']           = '提词';
 $lang->action->objectTypes['miniprogram']      = '小程序';
 $lang->action->objectTypes['metric']           = '度量';
-$lang->action->objectTypes['projectbuild']     = '版本';
+$lang->action->objectTypes['projectbuild']     = '构建';
 $lang->action->objectTypes['board']            = '白板';
 $lang->action->objectTypes['boardspace']       = '白板空间';
 $lang->action->objectTypes['productline']      = '产品线';
@@ -236,7 +236,7 @@ $lang->action->desc->verified             = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->diff1                = '修改了 <strong><i>%s</i></strong>，旧值为 "%s"，新值为 "%s"。<br />' . "\n";
 $lang->action->desc->diff2                = '修改了 <strong><i>%s</i></strong>，区别为：' . "\n" . "<blockquote class='textdiff'>%s</blockquote>" . "\n<blockquote class='original'>%s</blockquote>";
 $lang->action->desc->diff3                = '将文件名 %s 改为 %s 。' . "\n";
-$lang->action->desc->linked2bug           = '$date 由 <strong>$actor</strong> 关联到版本 <strong>$extra</strong>';
+$lang->action->desc->linked2bug           = '$date 由 <strong>$actor</strong> 关联到构建 <strong>$extra</strong>';
 $lang->action->desc->linked2testtask      = '$date 由 <strong>$actor</strong> 关联到测试单 <strong>$extra</strong>';
 $lang->action->desc->unlinkedfromtesttask = '$date 由 <strong>$actor</strong> 从测试单 <strong>$extra</strong> 中移除';
 $lang->action->desc->resolved             = '$date, 由 <strong>$actor</strong> 解决。' . "\n";
@@ -255,7 +255,7 @@ $lang->action->desc->importedcard         = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->importedproductplan  = '$date, 由 <strong>$actor</strong> 从' . $lang->productCommon . '计划 <strong>$extra</strong> 导入。' . "\n";
 $lang->action->desc->importedrelease      = '$date, 由 <strong>$actor</strong> 从' . $lang->productCommon . '发布 <strong>$extra</strong> 导入。' . "\n";
 $lang->action->desc->importedexecution    = '$date, 由 <strong>$actor</strong> 从' . $lang->projectCommon . '执行 <strong>$extra</strong> 导入。' . "\n";
-$lang->action->desc->importedbuild        = '$date, 由 <strong>$actor</strong> 从' . $lang->projectCommon . '版本 <strong>$extra</strong> 导入。' . "\n";
+$lang->action->desc->importedbuild        = '$date, 由 <strong>$actor</strong> 从' . $lang->projectCommon . '构建 <strong>$extra</strong> 导入。' . "\n";
 $lang->action->desc->importedticket       = '$date, 由 <strong>$actor</strong> 从反馈工单 <strong>$extra</strong> 导入。' . "\n";
 $lang->action->desc->fromsonarqube        = '$date, 由 <strong>$actor</strong> 从<strong>SonarQube问题</strong>转化而来。' . "\n";
 $lang->action->desc->tolib                = '$date, 由 <strong>$actor</strong> 导入。' . "\n";
@@ -422,7 +422,7 @@ $lang->action->label->unlinkedfromexecution   = "移除了{$lang->executionCommo
 $lang->action->label->linked2kanban           = '关联了看板';
 $lang->action->label->linked2project          = "关联了{$lang->projectCommon}";
 $lang->action->label->unlinkedfromproject     = "移除了{$lang->projectCommon}";
-$lang->action->label->unlinkedfrombuild       = "移除了版本";
+$lang->action->label->unlinkedfrombuild       = "移除了构建";
 $lang->action->label->linked2release          = "关联了发布";
 $lang->action->label->unlinkedfromrelease     = "移除了发布";
 $lang->action->label->linked2revision         = "关联了代码提交";
@@ -646,8 +646,8 @@ $lang->action->dynamicAction->story['linked2release']        = "{$lang->SRCommon
 $lang->action->dynamicAction->story['unlinkedfromrelease']   = "发布移除{$lang->SRCommon}";
 $lang->action->dynamicAction->story['linked2revision']       = "{$lang->SRCommon}关联代码提交";
 $lang->action->dynamicAction->story['unlinkedfromrevision']  = "{$lang->SRCommon}取消关联代码提交";
-$lang->action->dynamicAction->story['linked2build']          = "{$lang->SRCommon}关联版本";
-$lang->action->dynamicAction->story['unlinkedfrombuild']     = "版本移除{$lang->SRCommon}";
+$lang->action->dynamicAction->story['linked2build']          = "{$lang->SRCommon}关联构建";
+$lang->action->dynamicAction->story['unlinkedfrombuild']     = "构建移除{$lang->SRCommon}";
 $lang->action->dynamicAction->story['unlinkedfromproject']   = "移除{$lang->projectCommon}";
 $lang->action->dynamicAction->story['undeleted']             = "还原{$lang->SRCommon}";
 $lang->action->dynamicAction->story['hidden']                = "隐藏{$lang->SRCommon}";
@@ -737,9 +737,9 @@ $lang->action->dynamicAction->task['ganttmove']            = '排序';
 $lang->action->dynamicAction->task['linked2revision']      = '任务关联代码提交';
 $lang->action->dynamicAction->task['unlinkedfromrevision'] = '任务取消关联代码提交';
 
-$lang->action->dynamicAction->build['opened']  = '创建版本';
-$lang->action->dynamicAction->build['edited']  = '编辑版本';
-$lang->action->dynamicAction->build['deleted'] = '删除版本';
+$lang->action->dynamicAction->build['opened']  = '创建构建';
+$lang->action->dynamicAction->build['edited']  = '编辑构建';
+$lang->action->dynamicAction->build['deleted'] = '删除构建';
 
 $lang->action->dynamicAction->bug['opened']               = '创建Bug';
 $lang->action->dynamicAction->bug['importfromgitlab']     = "从Gitlab关联创建Bug";
@@ -761,8 +761,8 @@ $lang->action->dynamicAction->bug['linked2release']       = 'Bug关联发布';
 $lang->action->dynamicAction->bug['unlinkedfromrelease']  = '发布移除Bug';
 $lang->action->dynamicAction->bug['linked2revision']      = 'Bug关联代码提交';
 $lang->action->dynamicAction->bug['unlinkedfromrevision'] = 'Bug取消关联代码提交';
-$lang->action->dynamicAction->bug['linked2bug']           = 'Bug关联版本';
-$lang->action->dynamicAction->bug['unlinkedfrombuild']    = '版本移除Bug';
+$lang->action->dynamicAction->bug['linked2bug']           = 'Bug关联构建';
+$lang->action->dynamicAction->bug['unlinkedfrombuild']    = '构建移除Bug';
 $lang->action->dynamicAction->bug['fromsonarqube']        = '由SonarQube问题创建';
 
 $lang->action->dynamicAction->testtask['opened']    = '创建测试单';
@@ -892,7 +892,7 @@ $lang->action->label->project     = "{$lang->projectCommon}|project|index|projec
 $lang->action->label->execution   = "执行|execution|task|executionID=%s";
 
 $lang->action->label->task         = '任务|task|view|taskID=%s';
-$lang->action->label->build        = '版本|build|view|buildID=%s';
+$lang->action->label->build        = '构建|build|view|buildID=%s';
 $lang->action->label->bug          = 'Bug|bug|view|bugID=%s';
 $lang->action->label->case         = '用例|testcase|view|caseID=%s';
 $lang->action->label->testtask     = '测试单|testtask|view|caseID=%s';
@@ -948,7 +948,7 @@ $lang->action->search->objectTypeList['user']        = '用户';
 $lang->action->search->objectTypeList['doc']         = '文档';
 $lang->action->search->objectTypeList['doclib']      = '文档库';
 $lang->action->search->objectTypeList['todo']        = '待办';
-$lang->action->search->objectTypeList['build']       = '版本';
+$lang->action->search->objectTypeList['build']       = '构建';
 $lang->action->search->objectTypeList['release']     = '发布';
 $lang->action->search->objectTypeList['productplan'] = '计划';
 $lang->action->search->objectTypeList['branch']      = '分支';
@@ -1039,7 +1039,7 @@ $lang->action->apiTitle->svncommited           = '提交代码，版本为<stron
 $lang->action->apiTitle->gitcommited           = '提交代码，版本为<strong>#%s</strong>。';
 $lang->action->apiTitle->finished              = '完成。';
 $lang->action->apiTitle->paused                = '暂停。';
-$lang->action->apiTitle->linked2bug            = '关联到版本 <strong>%s</strong>';
+$lang->action->apiTitle->linked2bug            = '关联到构建 <strong>%s</strong>';
 $lang->action->apiTitle->linked2testtask       = '关联到测试单 <strong>%s</strong>';
 $lang->action->apiTitle->resolved              = '解决。';
 $lang->action->apiTitle->managed               = '维护。';
@@ -1078,7 +1078,7 @@ $lang->action->apiTitle->unlinkedfromexecution = "移除{$lang->executionCommon}
 $lang->action->apiTitle->linked2kanban         = '关联看板';
 $lang->action->apiTitle->linked2project        = "关联{$lang->projectCommon}";
 $lang->action->apiTitle->unlinkedfromproject   = "移除{$lang->projectCommon}";
-$lang->action->apiTitle->unlinkedfrombuild     = "移除版本";
+$lang->action->apiTitle->unlinkedfrombuild     = "移除构建";
 $lang->action->apiTitle->linked2release        = "关联发布";
 $lang->action->apiTitle->unlinkedfromrelease   = "移除发布";
 $lang->action->apiTitle->linked2revision       = "关联代码提交";
