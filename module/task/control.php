@@ -1253,7 +1253,7 @@ class task extends control
      */
     public function ajaxGetStories(int $executionID, int $moduleID, string $zeroTaskStory = 'false')
     {
-        $stories       = $this->loadModel('story')->getExecutionStoryPairs($executionID, 0, 'all', $moduleID, 'short', 'active', 'story', false);
+        $stories       = $this->loadModel('story')->getExecutionStoryPairs($executionID, 0, 'all', $moduleID, 'full', 'active', 'story', false);
         $taskCountList = $this->task->getStoryTaskCounts(array_keys($stories), $executionID);
 
         $items = array();
