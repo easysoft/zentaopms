@@ -76,4 +76,9 @@ class thinkAppeals extends thinkModel
 
         return $this->buildEcharts();
     }
+
+    protected function build(): node
+    {
+        return div(setClass('model-appeals my-1 flex col flex-wrap justify-between'), $this->buildBody());
+    }
 }
