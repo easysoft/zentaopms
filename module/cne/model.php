@@ -621,16 +621,40 @@ class cneModel extends model
      *
      * @link https://yapi.qc.oop.cc/project/21/interface/api/189
      * @param object $instance
+     * @param string $component
      * @return object|null
      */
-    public function getPods(object $instance): ?object
+    public function getPods(object $instance,string $component = ''): ?object
     {
         $apiParams = new stdclass();
         $apiParams->cluster   = '';
         $apiParams->namespace = $instance->spaceData->k8space;
         $apiParams->name      = $instance->k8name;
 
+        !empty($component) && $apiParams->component = $component;
+
         $apiUrl = "/api/cne/app/pods";
+        return $this->apiGet($apiUrl, $apiParams, $this->config->CNE->api->headers);
+    }
+
+    /**
+     * 获取应用事件列表。
+     * Get app events.
+     *
+     * @param object $instance
+     * @param string $component
+     * @return object|null
+     */
+    public function getEvents(object $instance, string $component = ''): ?object
+    {
+        $apiParams = new stdclass();
+        $apiParams->cluster   = '';
+        $apiParams->namespace = $instance->spaceData->k8space;
+        $apiParams->name      = $instance->k8name;
+
+        !empty($component) && $apiParams->component = $component;
+
+        $apiUrl = "/api/cne/app/events";
         return $this->apiGet($apiUrl, $apiParams, $this->config->CNE->api->headers);
     }
 
