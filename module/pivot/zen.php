@@ -80,7 +80,9 @@ class pivotZen extends pivot
         $groups = $this->pivot->getGroupsByDimensionAndPath($dimensionID, $currentGroup->path);
         if(!$groups) return array();
 
+        $this->loadModel('bi');
         $firstAction = $this->loadModel('action')->getAccountFirstAction($this->app->user->account);
+        $builtins    = array_column($this->config->bi->builtin->pivots, 'id', 'id');
         $menus = array();
         foreach($groups as $group)
         {
@@ -97,7 +99,7 @@ class pivotZen extends pivot
 
             foreach($pivots as $pivot)
             {
-                $this->setNewMark($pivot, $firstAction);
+                $this->setNewMark($pivot, $firstAction, $builtins);
                 $params  = helper::safe64Encode("groupID={$group->id}&pivotID={$pivot->id}&mark=view");
                 $url     = inlink('preview', "dimension={$dimensionID}&group={$currentGroup->id}&method=show&params={$params}");
                 $menus[] = (object)array('id' => $group->id . '_' . $pivot->id, 'parent' => $group->grade > 1 ? $group->id : 0, 'name' => $pivot->name, 'url' => $url);
@@ -120,8 +122,9 @@ class pivotZen extends pivot
      * @access protected
      * @return void
      */
-    protected function setNewMark(object $pivot, object $firstAction): void
+    protected function setNewMark(object $pivot, object $firstAction, array $builtins): void
     {
+        if(!isset($builtins[$pivot->id])) return;
         if(!$pivot->mark && $pivot->createdDate < $firstAction->date) $pivot->mark = true;
         if(!$pivot->mark) $pivot->name = array('text' => $pivot->name, 'html' => $pivot->name . ' <span class="label ghost size-sm bg-secondary-50 text-secondary-500 rounded-full">' . $this->lang->pivot->new . '</span>');
     }
