@@ -91,7 +91,7 @@ $generateData = function() use ($lang, $groupID, $pivotName, $pivot, $data, $con
                     setData(array('toggle' => 'tooltip', 'title' => $pivot->desc, 'placement' => 'right', 'className' => 'text-gray border border-light', 'type' => 'white')),
                     'help'
                 ) : null,
-                span
+                hasPriv('pivot', 'design') ? span
                 (
                     set::style(array('font-weight' => 'normal')),
                     $lang->pivot->tipNewVersion . $lang->comma,
@@ -102,7 +102,7 @@ $generateData = function() use ($lang, $groupID, $pivotName, $pivot, $data, $con
                         set('data-size', 'lg'),
                         set::href($this->createLink('pivot', 'versions', "groupID={$groupID}&pivotID={$pivot->id}"))
                     )
-                )
+                ) : null
             ) : null,
             $this->app->rawMethod != 'versions' ? toolbar
             (
