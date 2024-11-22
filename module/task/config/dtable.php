@@ -368,9 +368,10 @@ $config->task->dtable->children->fieldList['assignedTo']['title']    = $lang->ta
 $config->task->dtable->children->fieldList['assignedTo']['sortType'] = false;
 $config->task->dtable->children->fieldList['assignedTo']['name']     = 'assignedTo';
 
-$config->task->dtable->children->fieldList['status']             = $config->task->dtable->fieldList['status'];
-$config->task->dtable->children->fieldList['status']['sortType'] = false;
-$config->task->dtable->children->fieldList['status']['name']     = 'status';
+$config->task->dtable->children->fieldList['status']              = $config->task->dtable->fieldList['status'];
+$config->task->dtable->children->fieldList['status']['sortType']  = false;
+$config->task->dtable->children->fieldList['status']['statusMap'] = $lang->task->statusList + array('changed' => $lang->task->storyChange);
+$config->task->dtable->children->fieldList['status']['name']      = 'status';
 
 $config->task->dtable->children->fieldList['actions']          = $config->task->dtable->fieldList['actions'];
 $config->task->dtable->children->fieldList['actions']['title'] = $lang->actions;

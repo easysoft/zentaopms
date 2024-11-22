@@ -1286,13 +1286,20 @@ class taskModel extends model
 
         /* Get the child tasks of the parent task. */
         $childIdList = $this->getAllChildId($taskID, false);
-        $children    = $this->getByIdList($childIdList);
+        $children    = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus')
+            ->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->where('t1.id')->in($childIdList)
+            ->beginIf($vision != 'all')->andWhere('t1.vision')->eq($this->config->vision)->fi()
+            ->fetchAll('id');
+
         foreach($children as $child)
         {
             $child->team    = array();
             $child->members = array();
         }
-        $task->children = $children;
+
+        $task->children = $this->processTasks($children);
 
         if($task->parent > 0) $task->parentName = $this->dao->findById($task->parent)->from(TABLE_TASK)->fetch('name');
 
@@ -2294,7 +2301,7 @@ class taskModel extends model
         if($action == 'activate')           return $task->status == 'done' || $task->status == 'closed' || $task->status == 'cancel';
         if($action == 'finish')             return $task->status != 'done' && $task->status != 'closed' && $task->status != 'cancel';
         if($action == 'cancel')             return $task->status != 'done' && $task->status != 'closed' && $task->status != 'cancel';
-        if($action == 'confirmstorychange') return !in_array($task->status, array('cancel', 'closed')) && !empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion;
+        if($action == 'confirmstorychange') return !in_array($task->status, array('cancel', 'closed')) && !empty($task->needConfirm);
 
         return true;
     }
@@ -2609,7 +2616,11 @@ class taskModel extends model
 
         /* Story changed or not. */
         $task->needConfirm = false;
-        if(!empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion) $task->needConfirm = true;
+        if(!empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion)
+        {
+            $task->needConfirm = true;
+            $task->status      = 'changed';
+        }
 
         /* Set product type for task. */
         if(!empty($task->product))

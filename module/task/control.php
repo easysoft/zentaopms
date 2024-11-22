@@ -381,6 +381,7 @@ class task extends control
         }
 
         if($task->team) $this->lang->task->assign = $this->lang->task->transfer;
+        $this->lang->task->statusList['changed'] = $this->lang->task->storyChange;
 
         /* Execute workflow hooks if edition is not open. */
         if($this->config->edition != 'open') $this->executeHooks($taskID);
