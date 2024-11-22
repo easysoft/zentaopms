@@ -237,7 +237,7 @@ $lang->scrum->menu->doc         = array('link' => "{$lang->doc->common}|doc|proj
 $lang->scrum->menu->qa          = array('link' => "{$lang->qa->common}|project|bug|projectID=%s", 'subModule' => 'testcase,testtask,bug,testreport', 'alias' => 'bug,testtask,testcase,testreport', 'exclude' => 'execution-create,execution-batchedit');
 if(helper::hasFeature('devops')) $lang->scrum->menu->devops      = array('link' => "{$lang->devops->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo,mr');
 $lang->scrum->menu->build       = array('link' => "{$lang->build->common}|projectbuild|browse|project=%s", 'subModule' => 'projectbuild');
-$lang->scrum->menu->release     = array('link' => "{$lang->release->common}|projectrelease|browse|project=%s", 'subModule' => 'projectrelease');
+$lang->scrum->menu->release     = array('link' => "{$lang->release->common}|projectrelease|browse|project=%s", 'subModule' => 'projectrelease,system');
 $lang->scrum->menu->dynamic     = array('link' => "$lang->dynamic|project|dynamic|project=%s");
 $lang->scrum->menu->settings    = array('link' => "$lang->settings|project|view|project=%s", 'subModule' => 'tree,stakeholder', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist,team', 'exclude' => 'tree-browsetask');
 

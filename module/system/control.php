@@ -535,9 +535,17 @@ class system extends control
      * @access public
      * @return void
      */
-    public function browse(int $productID, string $branch, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function browse(int $productID, int $projectID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $this->commonAction($productID, $branch);
+        if($projectID)
+        {
+            $this->loadModel('project')->setMenu($projectID);
+            $productID = $this->loadModel('product')->getProductIDByProject($projectID);
+        }
+        else
+        {
+            $this->commonAction($productID);
+        }
 
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
@@ -550,7 +558,9 @@ class system extends control
 
         $this->view->title     = $this->lang->system->browse;
         $this->view->productID = $productID;
+        $this->view->projectID = $projectID;
         $this->view->appList   = $systems;
+        $this->view->releases  = $this->loadModel('release')->getPairs();
         $this->view->appPairs  = $this->system->getPairs();
         $this->view->orderBy   = $orderBy;
         $this->view->pager     = $pager;
