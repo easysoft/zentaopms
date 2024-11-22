@@ -140,6 +140,7 @@ class release extends control
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed');
         $this->view->lastRelease = $this->release->getLast($productID, (int)$branch);
         $this->view->status      = $status;
+        $this->view->apps        = $this->loadModel('system')->getPairs($productID, '', 'active');
 
         $this->display();
     }

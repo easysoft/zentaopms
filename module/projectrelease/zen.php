@@ -27,6 +27,7 @@ class projectreleaseZen extends projectrelease
 
         $this->view->products = $this->products;
         $this->view->product  = $product;
+        $this->view->apps     = $this->loadModel('system')->getPairs($productID, '', 'active');
         $this->view->branches = (isset($product->type) and $product->type == 'normal') ? array() : $this->loadModel('branch')->getPairs($productID, 'active', $projectID);
         $this->view->branch   = $branch;
         $this->view->project  = $this->project->getByID($projectID);

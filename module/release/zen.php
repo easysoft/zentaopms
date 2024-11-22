@@ -71,6 +71,7 @@ class releaseZen extends release
     {
         $productID = $this->post->product ? $this->post->product : $productID;
         $branch    = $this->post->branch ? $this->post->branch : $branch;
+        $newSystem = $this->post->newSystem;
         if(empty($projectID))
         {
             $product = $this->loadModel('product')->getById($productID);
@@ -83,6 +84,12 @@ class releaseZen extends release
                     ->andWhere('t2.type')->eq('project')
                     ->fetch('id');
             }
+        }
+        if(!$newSystem && !$this->post->system) $this->config->release->form->create['system']['required'] = true;
+        if($newSystem  && !$this->post->systemName)
+        {
+            $this->config->release->form->create['systemName'] = array('type' => 'string', 'required' => true);
+            $this->lang->release->systemName = $this->lang->release->system;
         }
 
         $release = form::data()
