@@ -77,27 +77,27 @@ function useWg(string $name)
 
 function pageJS()
 {
-    call_user_func_array('\zin\context::js', func_get_args());
+    return call_user_func_array('\zin\context::js', func_get_args());
 }
 
 function jsCall()
 {
-    call_user_func_array('\zin\context::jsCall', func_get_args());
+    return call_user_func_array('\zin\context::jsCall', func_get_args());
 }
 
 function jsVar()
 {
-    call_user_func_array('\zin\context::jsVar', func_get_args());
+    return call_user_func_array('\zin\context::jsVar', func_get_args());
 }
 
 function pageCSS()
 {
-    call_user_func_array('\zin\context::css', func_get_args());
+    return call_user_func_array('\zin\context::css', func_get_args());
 }
 
 function import()
 {
-    call_user_func_array('\zin\context::import', func_get_args());
+    return call_user_func_array('\zin\context::import', func_get_args());
 }
 
 function setPageData($name, $value)
