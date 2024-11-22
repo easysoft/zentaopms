@@ -123,7 +123,7 @@ class pivotZen extends pivot
     protected function setNewMark(object $pivot, object $firstAction): void
     {
         if(!$pivot->mark && $pivot->createdDate < $firstAction->date) $pivot->mark = true;
-        if(!$pivot->mark) $pivot->name = array('html' => $pivot->name . ' <span class="label ghost size-sm bg-secondary-50 text-secondary-500 rounded-full">' . $this->lang->pivot->new . '</span>');
+        if(!$pivot->mark) $pivot->name = array('text' => $pivot->name, 'html' => $pivot->name . ' <span class="label ghost size-sm bg-secondary-50 text-secondary-500 rounded-full">' . $this->lang->pivot->new . '</span>');
     }
 
     /**
