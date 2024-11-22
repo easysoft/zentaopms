@@ -28,4 +28,24 @@ class thinkAppeals extends thinkModel
         }
         return $indicator;
     }
+
+    protected function buildEcharts(): node
+    {
+        $blocks = $this->prop('blocks');
+        return echarts
+        (
+            set::width('100%'),
+            set::height('900px'),
+            set::color(array('#29AA93', '#FF9F46')),
+            set::legend(array(array(
+                'data'       => $blocks['legend'],
+                'icon'       => 'circle',
+                'itemGap'    => 90,
+                'itemWidth'  => 14,
+                'itemHeight' => 14,
+                'bottom'     => 40,
+                'textStyle'  => array('color' => '#64758B', 'padding' => array(0, 0, 0, 16))
+            ))),
+        );
+    }
 }
