@@ -67,6 +67,8 @@ class pivotModel extends model
      *
      * @param  int         $pivotID
      * @param  bool        $processDateVar
+     * @param  string      $filterStatus
+     * @param  bool        $addDrills
      * @access public
      * @return object|bool
      */
@@ -96,6 +98,33 @@ class pivotModel extends model
         if($addDrills) $this->addDrills($pivot);
 
         // if(isset($pivot->stage) && $pivot->stage == 'published' && $this->app->methodName == 'preview') $this->processFieldSettings($pivot);
+
+        return $pivot;
+    }
+
+    public function getPivotSpec(int $pivotID, string $version, bool $processDateVar = false, bool $addDrills = true)
+    {
+        $pivot = $this->dao->select('*')->from(TABLE_PIVOTSPEC)->where('pivot')->eq($pivotID)->andWhere('version')->eq($version)->fetch();
+        if(!$pivot) return false;
+        $pivot->id = $pivot->pivot;
+
+        $pivot->fieldSettings = array();
+        if(!empty($pivot->fields) && $pivot->fields != 'null')
+        {
+            $pivot->fieldSettings = json_decode($pivot->fields);
+            $pivot->fields        = array_keys(get_object_vars($pivot->fieldSettings));
+        }
+
+        if(!empty($pivot->filters))
+        {
+            $filters = json_decode($pivot->filters, true);
+            $pivot->filters = $this->setFilterDefault($filters, $processDateVar);
+        }
+        else
+        {
+            $pivot->filters = array();
+        }
+        $this->completePivot($pivot);
 
         return $pivot;
     }
