@@ -41,11 +41,21 @@ panel
     set::bodyClass('pt-0'),
     to::titleSuffix
     (
-        icon
+        div
         (
-            setClass('cursor-pointer text-warning'),
-            setData(array('toggle' => 'tooltip', 'title' => $lang->pivot->tipVersions, 'placement' => 'right', 'className' => 'text-wraning border border-light', 'type' => 'white')),
-            'help'
+            label
+            (
+                to::before
+                (
+                    icon
+                    (
+                        setClass('warning-ghost margin-left8'),
+                        'help'
+                    )
+                ),
+                set::text($lang->pivot->tipVersions),
+                setClass('gray-200-pale')
+            )
         )
     ),
     h::table
