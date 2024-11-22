@@ -17,19 +17,22 @@ class systemModel extends model
      * 获取应用列表。
      * Get app list.
      *
+     * @param  int    $productID
+     * @param  string $status
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getList(int $product, string $orderBy = 'id_desc', object $pager = null): array
+    public function getList(int $productID, string $status = 'active', string $orderBy = 'id_desc', object $pager = null): array
     {
         return $this->dao->select('*')->from(TABLE_SYSTEM)
             ->where('deleted')->eq('0')
-            ->andWhere('product')->eq($product)
+            ->andWhere('product')->eq($productID)
+            ->beginIF($status && $status != 'all')->andWhere('status')->eq($status)->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id');
     }
 
     /**

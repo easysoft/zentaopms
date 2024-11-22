@@ -550,7 +550,7 @@ class system extends control
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $systems = $this->system->getList($productID, $orderBy, $pager);
+        $systems = $this->system->getList($productID, 'all', $orderBy, $pager);
         foreach($systems as &$system)
         {
             $system->latestRelease = $system->latestRelease ? $system->latestRelease : '';
