@@ -68,7 +68,7 @@ $fnGenerateFilters = function() use($pivot, $showOrigin, $lang)
     );
 };
 
-$generateData = function() use ($lang, $pivotName, $pivot, $data, $configs, $showOrigin, $fnGenerateFilters)
+$generateData = function() use ($lang, $groupID, $pivotName, $pivot, $data, $configs, $showOrigin, $fnGenerateFilters)
 {
     $clickable = !$pivot->builtin;
     $emptyTip  = $this->pivot->isFiltersAllEmpty($pivot->filters) ? $lang->pivot->filterEmptyVal : $lang->error->noData;
@@ -79,11 +79,11 @@ $generateData = function() use ($lang, $pivotName, $pivot, $data, $configs, $sho
         panel
         (
             setID('pivotPanel'),
-            set::title($pivotName),
+            $this->app->rawMethod != 'versions' ? set::title($pivotName) : null,
             set::shadow(false),
             set::headingClass('h-12'),
             set::bodyClass('pt-0'),
-            to::titleSuffix
+            $this->app->rawMethod != 'versions' ? to::titleSuffix
             (
                 $pivot->desc ? icon
                 (
@@ -99,11 +99,12 @@ $generateData = function() use ($lang, $pivotName, $pivot, $data, $configs, $sho
                     (
                         $lang->pivot->checkNewVersion,
                         set('data-toggle', 'modal'),
-                        set::href($this->createLink('pivot', 'versions', "pivotID={$pivot->id}"))
+                        set('data-size', 'lg'),
+                        set::href($this->createLink('pivot', 'versions', "groupID={$groupID}&pivotID={$pivot->id}"))
                     )
                 )
-            ),
-            toolbar
+            ) : null,
+            $this->app->rawMethod != 'versions' ? toolbar
             (
                 item
                 (
@@ -147,7 +148,7 @@ $generateData = function() use ($lang, $pivotName, $pivot, $data, $configs, $sho
                     'url'   => inlink('delete', "id=$pivot->id"),
                     'data-confirm' => array('message' => $lang->pivot->deleteTip, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x')
                 ))) : null) : null
-            ),
+            ) : null,
             div(setClass('divider')),
             $fnGenerateFilters(),
             dtable
