@@ -376,7 +376,7 @@ class docZen extends doc
         if(!empty($files)) $fileAction = $this->lang->addFiles . implode(',', $files) . "\n";
 
         $actionType = $_POST['status'] == 'draft' ? 'savedDraft' : 'releasedDoc';
-        $this->action->create($objectType, $docID, $actionType, $fileAction);
+        $this->action->create('doc', $docID, $actionType, $fileAction);
 
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
 
@@ -691,7 +691,7 @@ class docZen extends doc
 
             $fileAction = '';
             if(!empty($files)) $fileAction = $this->lang->addFiles . implode(',', $files) . "\n";
-            $actionID = $this->action->create('docTemplate', $doc->id, $action, $fileAction . $this->post->comment);
+            $actionID = $this->action->create('doc', $doc->id, $action, $fileAction . $this->post->comment);
             if(!empty($changes) && !empty($actionID)) $this->action->logHistory($actionID, $changes);
         }
 
