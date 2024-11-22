@@ -77,6 +77,15 @@ $storyspec->story->range('1-27');
 $storyspec->version->range('1');
 $storyspec->title->range('研需01,研需02,研需03,研需04,研需05,研需06,研需07,研需08,研需09,研需10,用需01,用需02,用需03,用需04,用需05,用需06,用需07,业需01,业需02,业需03,业需04,业需05,业需06,业需07,业需08,业需09,业需10');
 $storyspec->gen(27);
+
+$storyreview = zenData('storyreview');
+$storyreview->story->range('1-27');
+$storyreview->reviewer->range('admin{6},{4},admin{3},{9},admin{2},{4}');
+$storyreview->result->range('pass{6},{4},pass{3},{9},pass{2},{4}');
+$storyreview->result->range('1');
+$storyreview->gen(27);
+
+$bug = zenData('bug');
 $bug->id->range('1-7');
 $bug->product->range('1');
 $bug->project->range('1');
@@ -94,3 +103,34 @@ $bug->resolvedBuild->range('trunk{3},{4}');
 $bug->resolution->range('fixed{3},{4}');
 $bug->closedBy->range('admin{2},{5}');
 $bug->gen(7);
+
+$case = zenData('case');
+$case->id->range('1-5');
+$case->product->range('1');
+$case->project->range('0');
+$case->execution->range('2');
+$case->title->range('用例1,用例2,用例3,用例4,用例5');
+$case->type->range('feature');
+$case->status->range('normal');
+$case->openedBy->range('admin');
+$case->gen(5);
+
+$build = zenData('build');
+$build->id->range('1');
+$build->product->range('1');
+$build->project->range('1');
+$build->execution->range('2');
+$build->name->range('版本1');
+$build->gen(1);
+
+$testtask = zenData('testtask');
+$testtask->id->range('1');
+$testtask->product->range('1');
+$testtask->project->range('1');
+$testtask->execution->range('2');
+$testtask->name->range('测试单A');
+$testtask->status->range('done');
+$testtask->build->range('1');
+$testtask->owner->range('admin');
+$testtask->members->range('admin');
+$testtask->gen(1);
