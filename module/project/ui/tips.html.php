@@ -38,7 +38,7 @@ panel
     set::title($lang->project->tips),
     set::headingActions(array
     (
-        array('url' => $backUrl, 'icon' => 'close', 'class' => 'ghost')
+        array('url' => $backUrl, 'icon' => 'close', 'class' => 'ghost', 'data-app' => 'project')
     )),
     setClass('m-auto'),
     div
