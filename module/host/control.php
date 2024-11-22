@@ -144,7 +144,7 @@ class host extends control
         $this->host->delete(TABLE_HOST, $id);
 
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('browse'), 'closeModal' => true));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->host->deletedSuccess, 'load' => inlink('browse'), 'closeModal' => true));
     }
 
     /**

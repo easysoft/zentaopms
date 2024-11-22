@@ -163,6 +163,7 @@ $lang->host->diskTypeList['hdd'] = '机械硬盘';
 $lang->host->diskTypeList['ssd'] = '固态硬盘';
 
 $lang->host->confirmDelete  = '是否删除该主机记录？';
+$lang->host->deletedSuccess = '删除成功！';
 
 $lang->host->notice = new stdclass();
 $lang->host->notice->memory     = '内存大小只能为数字！';
