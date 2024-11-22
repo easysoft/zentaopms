@@ -82,7 +82,6 @@ $storyreview = zenData('storyreview');
 $storyreview->story->range('1-27');
 $storyreview->reviewer->range('admin{6},{4},admin{3},{9},admin{2},{4}');
 $storyreview->result->range('pass{6},{4},pass{3},{9},pass{2},{4}');
-$storyreview->result->range('1');
 $storyreview->gen(27);
 
 $bug = zenData('bug');
@@ -144,6 +143,7 @@ $action->project->range('1{4},0{13},1{3},0{14}');
 $action->execution->range('2{4},0{13},2{3},0{14}');
 $action->actor->range('admin');
 $action->action->range('assigned{20},submitreview{8},reviewed{6}');
+$storyreview->result->range('1');
 $action->gen(34);
 
 $tester = new contributeTester();
