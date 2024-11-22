@@ -125,11 +125,11 @@ class projectrelease extends control
             /* Check build if build is required. */
             if(strpos($this->config->release->create->requiredFields, 'build') !== false && empty($release->build)) dao::$errors['build'] = sprintf($this->lang->error->notempty, $this->lang->release->build);
 
-            if($this->post->newSystem && $this->post->systemName)
+            if($this->post->newSystem && $this->post->systemName && $this->post->product)
             {
                 $system = new stdclass();
                 $system->name        = $this->post->systemName;
-                $system->product     = $productID;
+                $system->product     = $this->post->product;
                 $system->createdBy   = $this->app->user->account;
                 $system->createdDate = helper::now();
 
