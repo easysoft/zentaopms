@@ -43,7 +43,8 @@ class formBatch extends formBase
         'sortable?: boo|array',         // 排序配置，设置为 false 不启用排序，设置为 true 使用默认排序
         'onRenderRow?: function',       // 渲染行时的回调函数。
         'hiddenFields?: array',         // 被隐藏的字段。
-        'onRenderRowCol?: function'     // 渲染列时的回调函数。
+        'onRenderRowCol?: function',    // 渲染列时的回调函数。
+        'batchFormOptions?: array'      // 批量表单选项。
     );
 
     /**
@@ -105,10 +106,8 @@ class formBatch extends formBase
 
         foreach($items as $item)
         {
-            if($item instanceof item || is_array($item))
-            {
-                $item = $this->onBuildItem($item);
-            }
+            if($item instanceof setting)                 $item = $item->toArray();
+            if($item instanceof item || is_array($item)) $item = $this->onBuildItem($item);
             if($item instanceof formBatchItem)
             {
                 if($item->hasProp('name') && is_null($item->prop('hidden'))) $item->setProp('hidden', in_array($item->prop('name'), $hiddenFields));
@@ -165,6 +164,7 @@ class formBatch extends formBase
         $props[] = setClass('form-batch');
 
         $batchFormOptions = $this->props->pick(array('minRows', 'maxRows', 'data', 'mode', 'idKey', 'onRenderRow', 'onRenderRowCol', 'addRowIcon', 'deleteRowIcon', 'sortRowIcon', 'sortable'));
+        $batchFormOptions = array_merge($batchFormOptions, $this->prop('batchFormOptions', array()));
         $props = array_merge($props, zui::create('batchForm', $batchFormOptions));
 
         return $props;
