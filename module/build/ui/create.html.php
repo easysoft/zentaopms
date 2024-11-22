@@ -137,6 +137,30 @@ formPanel
             set::width('1/2'),
             set::label($lang->build->system),
             set::required(true),
+            inputGroup
+            (
+                div
+                (
+                    setClass('w-full'),
+                    setId('systemBox'),
+                    picker
+                    (
+                        set::name('system'),
+                        set::required(true),
+                        set::items($apps)
+                    ),
+                    input(set::name('systemName'), setClass('hidden'))
+                ),
+                div
+                (
+                    setClass('input-group-addon flex'),
+                    checkbox
+                    (
+                        set::name('newSystem'),
+                        set::text($lang->build->addSystem)
+                    )
+                )
+            )
         )
     ),
     formRow
