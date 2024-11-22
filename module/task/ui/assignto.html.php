@@ -55,7 +55,7 @@ formPanel
         set::control("picker"),
         set::items($members)
     ),
-    $task->status != 'done' && $task->status != 'closed' && $task->parent >= 0 ? formGroup
+    $task->status != 'done' && $task->status != 'closed' && $task->isParent == '0' ? formGroup
     (
         set::width("1/3"),
         set::label($lang->task->left),
