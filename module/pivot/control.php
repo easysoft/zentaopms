@@ -79,10 +79,13 @@ class pivot extends control
      */
     public function versions(int $groupID, int $pivotID, string $version = 'newest')
     {
+        $versionSpecs = $this->pivot->getPivotVersions($pivotID);
+        if(empty($versionSpecs)) $this->sendError($this->lang->pivot->tipNoVersions);
+
         $pivot = $this->pivot->getByID($pivotID);
         $this->pivotZen->show($groupID, $pivotID, '', $version);
 
-        $this->view->versionSpecs = $this->pivot->getPivotVersions($pivotID);
+        $this->view->versionSpecs = $versionSpecs;
         $this->view->version      = $version == 'newest' ? $this->pivot->getMaxVersion($pivotID) : $version;
         $this->view->pivot        = $pivot;
         $this->view->groupID      = $groupID;
