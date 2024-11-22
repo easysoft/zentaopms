@@ -96,6 +96,10 @@ window.renderCell = function(result, info)
             result[0] = {html: '<span class="label danger-pale rounded-full size-sm">' + result[0] + '</span>'};
         }
     }
+    if(info.col.name == 'status' && result)
+    {
+        result[0] = {html: `<span class='status-${info.row.data.rawStatus}'>` + info.row.data.status + "</span>"};
+    }
     return result;
 }
 
