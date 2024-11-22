@@ -41,3 +41,22 @@ $projectProduct = zenData('projectproduct');
 $projectProduct->project->range('1');
 $projectProduct->product->range('1{1}, 2{1}');
 $projectProduct->gen(2);
+
+$bug = zenData('bug');
+$bug->id->range('1-10');
+$bug->project->range('1');
+$bug->product->range('1{2}, 2{2}');
+$bug->execution->range('0');
+$bug->title->range('Bug1, Bug2, Bug3, Bug4');
+$bug->openedBuild->range('trunk');
+$bug->status->range('active{2}, closed{2}');
+$bug->assignedTo->range('[]');
+$bug->gen(4);
+
+$team = zendata('team');
+$team->id->range('1');
+$team->root->range('1');
+$team->type->range('project');
+$team->account->range('admin');
+$team->join->range('(-2M)-(-M):1D')->type('timestamp')->format('YY/MM/DD');
+$team->gen(1);
