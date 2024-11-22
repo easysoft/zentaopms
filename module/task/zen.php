@@ -1080,7 +1080,7 @@ class taskZen extends task
             $oldTask = $oldTasks[$taskID];
 
             /* Check work hours. */
-            if(in_array($task->status, array('doing', 'pause')) && empty($oldTask->mode) && empty($task->left) && $task->parent >= 0)
+            if(in_array($task->status, array('doing', 'pause')) && empty($oldTask->mode) && empty($task->left) && !$oldTask->isParent)
             {
                 dao::$errors["left[{$taskID}]"] = (array)sprintf($this->lang->task->error->leftEmptyAB, zget($this->lang->task->statusList, $task->status));
             }
