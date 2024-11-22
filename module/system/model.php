@@ -416,4 +416,24 @@ class systemModel extends model
         if($action == 'inactive') return $system->status == 'active';
         return true;
     }
+
+    /**
+     * 更新应用的最新发布信息。
+     * Update the latest release of the app.
+     *
+     * @param  int    $systemID
+     * @param  int    $releaseID
+     * @param  string $releasedDate
+     * @access public
+     * @return bool
+     */
+    public function setSystemRelease(int $systemID, int $releaseID, string $releasedDate): bool
+    {
+        $system = $this->fetchByID($systemID);
+        if(!$system || $system->latestDate > $releasedDate) return false;
+        if($system->latestDate == $releasedDate && $system->latestRelease >= $releaseID) return false;
+
+        $this->dao->update(TABLE_SYSTEM)->set('latestDate')->eq($releasedDate)->set('latestRelease')->eq($releaseID)->where('id')->eq($systemID)->exec();
+        return !dao::isError();
+    }
 }
