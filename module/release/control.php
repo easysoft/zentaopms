@@ -562,6 +562,7 @@ class release extends control
      */
     public function publish(int $releaseID)
     {
+        $release = $this->release->getByID($releaseID);
         if($_POST)
         {
             if(!$this->post->releasedDate)
@@ -573,11 +574,13 @@ class release extends control
             $this->release->changeStatus($releaseID, $this->post->status, $this->post->releasedDate);
             if(dao::isError()) return $this->sendError(dao::getError());
 
+            if($release->system && $this->post->status == 'normal') $this->loadModel('system')->setSystemRelease($release->system, $releaseID, $this->post->releasedDate);
+
             $this->loadModel('action')->create('release', $releaseID, 'published', $this->post->comment, $this->post->status);
             return $this->sendSuccess(array('load' => true, 'closeModal' => true));
         }
 
-        $this->view->release = $this->release->getByID($releaseID);
+        $this->view->release = $release;
         $this->display();
     }
 
