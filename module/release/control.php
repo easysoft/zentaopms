@@ -198,6 +198,7 @@ class release extends control
         $this->view->release = $release;
         $this->view->builds  = $builds;
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed');
+        $this->view->apps    = $this->loadModel('system')->getPairs($release->product);
 
         $this->display();
     }

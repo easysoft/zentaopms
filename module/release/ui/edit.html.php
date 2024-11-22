@@ -15,6 +15,16 @@ formPanel
 (
     set::title($lang->release->edit),
     on::change('[name=status]', 'changeStatus'),
+    formGroup
+    (
+        set::width('1/2'),
+        set::label($lang->release->system),
+        set::name('system'),
+        set::control(array('type' => 'picker', 'required' => true)),
+        set::items($apps),
+        set::disabled(true),
+        set::value($release->system)
+    ),
     formRow
     (
         formGroup
