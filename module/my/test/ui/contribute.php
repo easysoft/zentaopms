@@ -134,3 +134,16 @@ $testtask->build->range('1');
 $testtask->owner->range('admin');
 $testtask->members->range('admin');
 $testtask->gen(1);
+$action = zenData('action');
+$action->id->range('1-34');
+$action->objectType->range('task{4},story{13},bug{3},story{14}');
+$action->objectID->range('3,4,5,6,1,2,3,7,8,16,17,18,19,20,21,22,23,3,4,5,1,2,3,11,12,13,22,23,1,2,3,11,12,13');
+$action->product->range('1');
+$action->project->range('1{4},0{13},1{3},0{14}');
+$action->execution->range('2{4},0{13},2{3},0{14}');
+$action->actor->range('admin');
+$action->action->range('assigned{20},submitreview{8},reviewed{6}');
+$action->gen(34);
+
+$tester = new contributeTester();
+$tester->login();
