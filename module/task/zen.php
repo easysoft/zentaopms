@@ -1449,7 +1449,6 @@ class taskZen extends task
                 $task->progress .= '%';
             }
 
-            if($this->config->edition == 'open' && $task->parent > 0 && strpos($task->name, htmlentities('>')) !== 0) $task->name = '>' . $task->name;
             if(!empty($task->team))
             {
                 $task->name = '[' . $this->lang->task->multipleAB . '] ' . $task->name;
