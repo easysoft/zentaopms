@@ -4195,7 +4195,7 @@ $config->group->package->manageThinkWizard->subset = 'thinkwizard';
 $config->group->package->manageThinkWizard->privs  = array();
 $config->group->package->manageThinkWizard->privs['thinkwizard-create']                       = array('edition' => 'ipd', 'vision' => 'or', 'order' => 5,  'depend' => array('thinkwizard-browse'));
 $config->group->package->manageThinkWizard->privs['thinkwizard-edit']                         = array('edition' => 'ipd', 'vision' => 'or', 'order' => 10, 'depend' => array('thinkwizard-browse'));
-$config->group->package->manageThinkWizard->privs['thinkwizard-design']                       = array('edition' => 'ipd', 'vision' => 'or', 'order' => 15, 'depend' => array('thinkwizard-browse', 'thinkwizard-result', 'thinkstep-create', 'thinkstep-edit', 'thinkstep-view', 'thinkstep-delete', 'thinkstep-link', 'thinkstep-cancelLink', 'thinkwizard-configureobjectsforappeals', 'thinkwizard-configuredimensionforappeals', 'thinkwizard-configurequestionsforappeals', 'thinkwizard-scoringcriteria'));
+$config->group->package->manageThinkWizard->privs['thinkwizard-design']                       = array('edition' => 'ipd', 'vision' => 'or', 'order' => 15, 'depend' => array('thinkwizard-browse', 'thinkwizard-result', 'thinkstep-create', 'thinkstep-edit', 'thinkstep-view', 'thinkstep-delete', 'thinkstep-link', 'thinkstep-cancelLink', 'thinkwizard-configureobjectsforappeals', 'thinkwizard-configuredimensionforappeals', 'thinkwizard-configurequestionsforappeals', 'thinkwizard-scoringcriteria', 'thinkwizard-previewforappeals', 'thinkwizard-prereleaseforappeals'));
 $config->group->package->manageThinkWizard->privs['thinkwizard-publish']                      = array('edition' => 'ipd', 'vision' => 'or', 'order' => 20, 'depend' => array('thinkwizard-browse'));
 $config->group->package->manageThinkWizard->privs['thinkwizard-offline']                      = array('edition' => 'ipd', 'vision' => 'or', 'order' => 25, 'depend' => array('thinkwizard-browse'));
 $config->group->package->manageThinkWizard->privs['thinkwizard-admin']                        = array('edition' => 'ipd', 'vision' => 'or', 'order' => 30, 'depend' => array('thinkwizard-browse'));
@@ -4203,6 +4203,8 @@ $config->group->package->manageThinkWizard->privs['thinkwizard-configureobjectsf
 $config->group->package->manageThinkWizard->privs['thinkwizard-configuredimensionforappeals'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 40, 'depend' => array('thinkwizard-admin'));
 $config->group->package->manageThinkWizard->privs['thinkwizard-configurequestionsforappeals'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 45, 'depend' => array('thinkwizard-admin'));
 $config->group->package->manageThinkWizard->privs['thinkwizard-scoringcriteria']              = array('edition' => 'ipd', 'vision' => 'or', 'order' => 50, 'depend' => array('thinkwizard-admin'));
+$config->group->package->manageThinkWizard->privs['thinkwizard-previewforappeals']            = array('edition' => 'ipd', 'vision' => 'or', 'order' => 55, 'depend' => array('thinkwizard-admin'));
+$config->group->package->manageThinkWizard->privs['thinkwizard-prereleaseforappeals']         = array('edition' => 'ipd', 'vision' => 'or', 'order' => 60, 'depend' => array('thinkwizard-admin'));
 
 $config->group->package->deleteThinkWizard = new stdclass();
 $config->group->package->deleteThinkWizard->subset = 'thinkwizard';
