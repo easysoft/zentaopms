@@ -18,15 +18,17 @@ class closeStoryTester extends tester
      * @access public
      * @return object
      */
-    public function closeStory($storyID, $closeReason)
+    public function closeStory($storyType, $storyID, $closeReason)
     {
-        $form = $this->initForm('story', 'view', array('id' => $storyID), 'appIframe-product');  //进入研发需求详情页
+        $form = $this->initForm($storyType, 'view', array('id' => $storyID), 'appIframe-product');  //进入研发需求详情页
         $form->dom->btn($this->lang->story->close)->click();  //点击关闭需求按钮
 
         $form->wait(1);
 
         $form->dom->closedReason->picker($closeReason); //选择关闭原因
-        $form->dom->getElement("//*[@id='zin_story_close_{$storyID}_form']/div[4]/div/button")->click();
+        if($storyType == 'story') $form->dom->getElement("//*[@id='zin_story_close_{$storyID}_form']/div[4]/div/button")->click();
+
+        $form->dom->closedBut->click();
         $form->wait(1);
 
         $viewPage = $this->loadPage('story', 'view');
