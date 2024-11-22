@@ -18,3 +18,19 @@ window.changeStatus = function(e)
         $('[data-name=date] .form-label').addClass('required');
     }
 }
+
+window.setSystemBox = function(e)
+{
+    const newSystem = $(e.target).is(':checked') ? 1 : 0;
+    $('#systemBox #systemName').addClass('hidden');
+    $('#systemBox .picker-box').addClass('hidden');
+    if(newSystem == 1)
+    {
+        $('#systemBox #systemName').removeClass('hidden');
+    }
+    else
+    {
+        $('#systemBox #systemName').val('');
+        $('#systemBox .picker-box').removeClass('hidden');
+    }
+}
