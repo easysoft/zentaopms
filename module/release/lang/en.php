@@ -23,6 +23,7 @@ $lang->release->batchUnlink      = 'Batch Unlink';
 $lang->release->batchUnlinkStory = 'Batch Unlink Stories';
 $lang->release->batchUnlinkBug   = 'Batch Unlink Bugs';
 $lang->release->manageSystem     = 'Manage Applications';
+$lang->release->addSystem        = 'Add Application';
 
 $lang->release->confirmDelete      = 'Do you want to delete this release?';
 $lang->release->syncFromBuilds     = 'Link the stories completed in the version and the bugs solved to the release';
