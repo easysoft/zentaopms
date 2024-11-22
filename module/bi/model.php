@@ -883,6 +883,7 @@ class biModel extends model
             $pivotSpec->version     = '1';
             $pivotSpec->pivot       = $pivot->id;
             $pivotSpec->mode        = 'text';
+            $pivotSpec->sql         = $pivot->sql;
             $pivotSpec->name        = $this->jsonEncode($pivot->name);
             $pivotSpec->createdDate = $createdDate;
 
@@ -903,6 +904,7 @@ class biModel extends model
             unset($pivot->driver);
             unset($pivot->name);
             unset($pivot->desc);
+            unset($pivot->sql);
             unset($pivot->settings);
             unset($pivot->filters);
             unset($pivot->fields);
@@ -925,11 +927,10 @@ class biModel extends model
                 $pivot->group     = $this->getCorrectGroup($pivot->group, 'pivot');
                 $pivotStmt = $this->dao->insert(TABLE_PIVOT)->data($pivot);
             }
+            if(isset($pivotStmt)) $pivotSQLs[] = $pivotStmt->get();
 
             $pivotSpecStmt = null;
             if($currentPivotSpecOperate == 'insert') $pivotSpecStmt = $this->dao->insert(TABLE_PIVOTSPEC)->data($pivotSpec);
-
-            if(isset($pivotStmt))     $pivotSQLs[] = $pivotStmt->get();
             if(isset($pivotSpecStmt)) $pivotSQLs[] = $pivotSpecStmt->get();
         }
 
