@@ -85,6 +85,7 @@ class releaseZen extends release
                     ->fetch('id');
             }
         }
+
         if(!$newSystem && !$this->post->system) $this->config->release->form->create['system']['required'] = true;
         if($newSystem  && !$this->post->systemName)
         {
@@ -105,6 +106,17 @@ class releaseZen extends release
         {
             dao::$errors['build'] = sprintf($this->lang->error->notempty, $this->lang->release->build);
             return false;
+        }
+
+        if($newSystem && $this->post->systemName)
+        {
+            $system = new stdclass();
+            $system->name        = $this->post->systemName;
+            $system->product     = $productID;
+            $system->createdBy   = $this->app->user->account;
+            $system->createdDate = helper::now();
+
+            $release->system = $this->loadModel('system')->create($system);
         }
 
         return $release;
