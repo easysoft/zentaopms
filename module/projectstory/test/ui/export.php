@@ -78,3 +78,21 @@ $projectStory->product->range('1');
 $projectStory->branch->range('0');
 $projectStory->story->range('1-10');
 $projectStory->version->range('1');
+$projectStory->order->range('1');
+$projectStory->gen(10);
+
+$tester = new exportTester();
+$tester->login();
+
+//设置项目需求导出数据
+$projectStory = array(
+    array('filename' => ''),
+    array('filename' => '项目导出文件1', 'encoding' => 'UTF-8', 'data' => '选中记录'),
+    array('filename' => '项目导出文件2', 'format' => 'xml'),
+);
+
+r($tester->export($projectStory['0'])) && p('message,status') && e('项目需求导出成功,SUCCESS');   // 按照默认设置导出项目需求
+r($tester->export($projectStory['1'])) && p('message,status') && e('项目需求导出成功,SUCCESS');   // 项目需求导出csv-UTF-8-选中记录
+r($tester->export($projectStory['2'])) && p('message,status') && e('项目需求导出成功,SUCCESS');   // 项目需求导出xml-全部记录
+
+$tester->closeBrowser();
