@@ -102,6 +102,17 @@ class pivotModel extends model
         return $pivot;
     }
 
+    /*
+     * 获取透视表某版本。
+     * Get pivot by id and version.
+     *
+     * @param  int         $pivotID
+     * @param  string      $version
+     * @param  bool        $processDateVar
+     * @param  bool        $addDrills
+     * @access public
+     * @return object|bool
+     */
     public function getPivotSpec(int $pivotID, string $version, bool $processDateVar = false, bool $addDrills = true)
     {
         $pivot = $this->dao->select('*')->from(TABLE_PIVOTSPEC)->where('pivot')->eq($pivotID)->andWhere('version')->eq($version)->fetch();
