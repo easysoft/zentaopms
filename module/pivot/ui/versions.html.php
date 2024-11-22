@@ -9,6 +9,7 @@ declare(strict_types = 1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+include_once 'show.html.php';
 
 $versionsTableBody = array();
 foreach($versionSpecs as $versionSpec)
@@ -45,5 +46,11 @@ panel
             h::th($lang->pivot->desc)
         ),
         $versionsTableBody
+    ),
+    div
+    (
+        setID('pivotContent'),
+        setClass('flex col gap-4 w-full'),
+        $generateData()
     )
 );

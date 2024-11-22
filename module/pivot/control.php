@@ -71,16 +71,20 @@ class pivot extends control
      * 透视表版本列表。
      * Show versions of a pivot.
      *
+     * @param  int    $groupID
      * @param  int    $pivotID
      * @param  string $version
      * @access public
      * @return void
      */
-    public function versions(int $pivotID, string $version = 'newest')
+    public function versions(int $groupID, int $pivotID, string $version = 'newest')
     {
+        $pivot = $this->pivot->getByID($pivotID);
+        $this->pivotZen->show($groupID, $pivotID, '', $version);
+
         $this->view->versionSpecs = $this->pivot->getPivotVersions($pivotID);
         $this->view->version      = $version == 'newest' ? $this->pivot->getMaxVersion($pivotID) : $version;
-        $this->view->pivot        = $this->pivot->getByID($pivotID);
+        $this->view->pivot        = $pivot;
         $this->display();
     }
 
