@@ -59,4 +59,21 @@ class thinkAppeals extends thinkModel
             )
         );
     }
+
+    protected function buildBody(): node
+    {
+        list($mode, $wizard) = $this->prop(array('mode', 'wizard'));
+
+        if($mode == 'preview')
+        {
+            $count = $wizard->config['configureDimension']['count'];
+            return div
+            (
+                setClass('flex justify-center'),
+                img(set::src("data/thinmory/wizardsetting/appeals/dimension$count.svg")),
+            );
+        }
+
+        return $this->buildEcharts();
+    }
 }
