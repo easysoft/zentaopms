@@ -1141,6 +1141,11 @@ class projectTao extends projectModel
             if(!isset($menu['dropMenu'])) continue;
             foreach($menu['dropMenu'] as $key2 => $dropMenu)
             {
+                if(strpos($this->config->project->multiple['execution'], ",{$key2},") !== false)
+                {
+                    $objectID = $executionID;
+                    $lang->$navGroup->menu->{$label}['subModule'] = 'project';
+                }
                 $lang->$navGroup->menu->{$label}['dropMenu']->$key2 = common::setMenuVarsEx($dropMenu, $objectID);
 
                 if(!isset($dropMenu['subMenu'])) continue;

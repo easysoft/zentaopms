@@ -1763,7 +1763,7 @@ class projectModel extends model
     public function unlinkMember(int $projectID, string $account, bool $removeExecution = false): bool
     {
         $user    = $this->loadModel('user')->getById($account);
-        $changes = array(array('field' => 'removeDiff', 'old' => '', 'new' => '', 'diff' => $user->realname)); 
+        $changes = array(array('field' => 'removeDiff', 'old' => '', 'new' => '', 'diff' => $user->realname));
 
         $this->projectTao->unlinkTeamMember($projectID, 'project', $account, $user->realname, $changes);
 
