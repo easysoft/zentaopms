@@ -36,7 +36,7 @@ window.setStatistics = function(element, checks)
     let left       = 0;
     checks.forEach((checkID) => {
         const task = element.getRowInfo(checkID).data;
-        if(task.hasChild) return false;
+        if(task.isParent) return false;
         if(task.status == 'wait')  waitCount ++;
         if(task.status == 'doing') doingCount ++;
         estimate += parseFloat(task.estimate);

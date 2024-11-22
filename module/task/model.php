@@ -1852,7 +1852,7 @@ class taskModel extends model
         foreach($tasks as $task)
         {
             /* 如果任务不是父任务，或者父任务已经在任务列表中，或者父任务已经在当前列表中，则跳过处理。*/
-            if($task->parent <= 0 || isset($tasks[$task->parent]) || isset($parentIdList[$task->parent])) continue;
+            if($task->parent <= 0 || isset($parentIdList[$task->parent])) continue;
             $parentIdList[$task->parent] = $task->parent;
         }
 
