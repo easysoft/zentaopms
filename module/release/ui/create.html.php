@@ -34,6 +34,40 @@ formPanel
 (
     set::title($lang->release->create),
     on::change('[name=status]', 'changeStatus'),
+    on::change('[name=newSystem]', 'setSystemBox'),
+    formRow
+    (
+        formGroup
+        (
+            set::width('1/2'),
+            set::label($lang->release->system),
+            set::required(true),
+            inputGroup
+            (
+                div
+                (
+                    setClass('w-full'),
+                    setId('systemBox'),
+                    picker
+                    (
+                        set::name('system'),
+                        set::required(true),
+                        set::items($apps)
+                    ),
+                    input(set::name('systemName'), setClass('hidden'))
+                ),
+                div
+                (
+                    setClass('input-group-addon flex'),
+                    checkbox
+                    (
+                        set::name('newSystem'),
+                        set::text($lang->release->addSystem)
+                    )
+                )
+            )
+        )
+    ),
     formRow
     (
         formGroup
