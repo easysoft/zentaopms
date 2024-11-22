@@ -678,6 +678,7 @@ class taskZen extends task
             $task->assignedDate = !empty($task->assignedTo) && $oldTask->assignedTo != $task->assignedTo ? $now : $oldTask->assignedDate;
             $task->version      = $oldTask->name != $task->name || $oldTask->estStarted != $task->estStarted || $oldTask->deadline != $task->deadline ?  $oldTask->version + 1 : $oldTask->version;
             $task->consumed     = $task->consumed < 0 ? $task->consumed  : $task->consumed + $oldTask->consumed;
+            $task->storyVersion = ($task->story && $oldTask->story != $task->story) ? $this->loadModel('story')->getVersion((int)$task->story) : 1;
 
             if(empty($task->closedReason) && $task->status == 'closed')
             {
