@@ -16,7 +16,7 @@ featureBar
     set::linkParams("projectID={$projectID}&executionID={$executionID}&type={key}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")
 );
 
-$canManageSystem  = hasPriv('system', 'browse') && common::canModify('project', $project);
+$canManageSystem = hasPriv('system', 'browse') && common::canModify('project', $project);
 toolbar
 (
     !$project->hasProduct && $canManageSystem ? item(set
