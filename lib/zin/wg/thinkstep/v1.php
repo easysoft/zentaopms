@@ -28,6 +28,7 @@ class thinkStep  extends wg
         if($questionType === 'checkbox')    return thinkCheckbox(set::step($step), set::questionType('checkbox'), set::mode($action), set::isRun($isRun), set::quoteQuestions($quoteQuestions), set::quotedQuestions($quotedQuestions));
         if($questionType === 'tableInput')  return thinkTableInput(set::step($step), set::questionType('tableInput'), set::mode($action), set::isRun($isRun));
         if($questionType === 'multicolumn') return thinkMulticolumn(set::step($step), set::questionType('multicolumn'), set::mode($action), set::isRun($isRun), set::quoteQuestions($quoteQuestions), set::quotedQuestions($quotedQuestions), set::modeClass($modeClass));
+        if($questionType === 'score')       return thinkScore(set::step($step), set::questionType('score'), set::mode($action), set::isRun($isRun), set::quoteQuestions($quoteQuestions), set::quotedQuestions($quotedQuestions));
         return array();
     }
 
@@ -48,6 +49,9 @@ class thinkStep  extends wg
         $linkmodel = !$isRun && in_array($wizard->model, $config->thinkwizard->venn);
         $canLink   = common::hasPriv('thinkstep', 'link') && $linkmodel && $basicType == 'question';
 
+        $hiddenModelType   = in_array($wizard->type, $config->thinkwizard->hiddenMenuType);
+        $previewCanActions = !$hiddenModelType || ($hiddenModelType && !empty($item->type) && $item->type == 'transition');
+
         return div
         (
             setClass('think-step relative h-full overflow-y-auto scrollbar-thin'),
@@ -63,7 +67,7 @@ class thinkStep  extends wg
                         setStyle(array('min-width' => '48px')),
                         btnGroup
                         (
-                            $canLink ? btn
+                            ($canLink && $previewCanActions) ? btn
                             (
                                 setClass('btn ghost text-gray w-5 h-5 mr-1'),
                                 set::icon('link'),
@@ -73,14 +77,14 @@ class thinkStep  extends wg
                                 set('data-dismiss', 'modal'),
                                 set('data-size', 'sm'),
                             ): null,
-                            $canEdit ? btn
+                            ($canEdit && $previewCanActions) ? btn
                             (
                                 setClass('btn ghost text-gray w-5 h-5'),
                                 set::icon('edit'),
                                 set::hint($lang->thinkstep->actions['edit']),
                                 set::url(createLink('thinkstep', 'edit', "marketID={$marketID}&stepID={$item->id}")),
                             ) : null,
-                            $canDelete ? ((!$item->existNotNode && empty($quotedQuestions)) ? btn
+                            ($canDelete && $previewCanActions) ? ((!$item->existNotNode && empty($quotedQuestions)) ? btn
                             (
                                 setClass('btn ghost text-gray w-5 h-5 ml-1 ajax-submit'),
                                 set::icon('trash'),
