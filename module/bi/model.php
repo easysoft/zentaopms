@@ -872,14 +872,20 @@ class biModel extends model
         $pivotSQLs = array();
         foreach($pivots as $pivot)
         {
-            $currentOperate = $operate;
+            $currentPivotOperate = $currentPivotSpecOperate= $operate;
+
             $pivot = (object)$pivot;
+            $createdDate = $operate == 'insert' ? $pivot->createdDate : helper::now();
+
+            $pivot->createdDate = $createdDate;
 
             $pivotSpec = new stdclass();
-            $pivotSpec->version = '1';
-            $pivotSpec->pivot   = $pivot->id;
-            $pivotSpec->mode    = 'text';
-            $pivotSpec->name    = $this->jsonEncode($pivot->name);
+            $pivotSpec->version     = '1';
+            $pivotSpec->pivot       = $pivot->id;
+            $pivotSpec->mode        = 'text';
+            $pivotSpec->name        = $this->jsonEncode($pivot->name);
+            $pivotSpec->createdDate = $createdDate;
+
             if(isset($pivot->desc))     $pivotSpec->desc     = $this->jsonEncode($pivot->desc);
             if(isset($pivot->settings)) $pivotSpec->settings = $this->jsonEncode($pivot->settings);
             if(isset($pivot->filters))  $pivotSpec->filters  = $this->jsonEncode($pivot->filters);
@@ -907,33 +913,21 @@ class biModel extends model
             $pivotSQLs = array_merge($pivotSQLs, $this->prepareBuilitinPivotDrillSQL($pivot->id, $pivot->drills));
             unset($pivot->drills);
 
-            $exists = $this->dao->select('id,name')->from(TABLE_PIVOT)->where('id')->eq($pivot->id)->fetch();
-            if(!$exists) $currentOperate = 'insert';
+            $pivotExists     = $this->dao->select('id,name')->from(TABLE_PIVOT)->where('id')->eq($pivot->id)->fetch();
+            $pivotSpecExists = $this->dao->select('pivot,version')->from(TABLE_PIVOTSPEC)->where('pivot')->eq($pivot->id)->andWhere('version')->eq($pivot->version)->fetch();
+            if(!$pivotExists)     $currentPivotOperate     = 'insert';
+            if(!$pivotSpecExists) $currentPivotSpecOperate = 'insert';
 
-            $pivotStmt     = null;
-            $pivotSpecStmt = null;
-            if($currentOperate == 'insert')
+            $pivotStmt = null;
+            if($currentPivotOperate == 'insert')
             {
-                $now = helper::now();
-                $pivot->createdBy   = 'system';
-                $pivot->createdDate = $now;
-                $pivot->group       = $this->getCorrectGroup($pivot->group, 'pivot');
-
+                $pivot->createdBy = 'system';
+                $pivot->group     = $this->getCorrectGroup($pivot->group, 'pivot');
                 $pivotStmt = $this->dao->insert(TABLE_PIVOT)->data($pivot);
+            }
 
-                $pivotSpec->createdDate = $now;
-                $pivotSpecStmt = $this->dao->insert(TABLE_PIVOTSPEC)->data($pivotSpec);
-            }
-            if($currentOperate == 'update')
-            {
-                $id = $pivot->id;
-                unset($pivot->group);
-                unset($pivot->id);
-                unset($pivotSpec->pivot);
-                unset($pivotSpec->version);
-                $pivotStmt     = $this->dao->update(TABLE_PIVOT)->data($pivot)->where('id')->eq($id);
-                $pivotSpecStmt = $this->dao->update(TABLE_PIVOTSPEC)->data($pivotSpec)->where('pivot')->eq($id)->andWhere('version')->eq('1');
-            }
+            $pivotSpecStmt = null;
+            if($currentPivotSpecOperate == 'insert') $pivotSpecStmt = $this->dao->insert(TABLE_PIVOTSPEC)->data($pivotSpec);
 
             if(isset($pivotStmt))     $pivotSQLs[] = $pivotStmt->get();
             if(isset($pivotSpecStmt)) $pivotSQLs[] = $pivotSpecStmt->get();
