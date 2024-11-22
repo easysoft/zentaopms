@@ -22,6 +22,8 @@ $lang->build->batchUnlinkStory = "Batch {$lang->SRCommon} Unlink";
 $lang->build->batchUnlinkBug   = 'Batch Bug Unlink';
 $lang->build->viewBug          = 'Bugs';
 $lang->build->bugList          = 'Bug List';
+$lang->build->system           = 'Application';
+$lang->build->addSystem        = 'Add Application';
 
 $lang->build->confirmDelete      = "Möchten Sie dieses Build löschen?";
 $lang->build->confirmUnlinkStory = "Möchten Sie diese {$lang->SRCommon} löschen?";
