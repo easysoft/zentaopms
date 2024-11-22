@@ -143,7 +143,7 @@ $action->project->range('1{4},0{13},1{3},0{14}');
 $action->execution->range('2{4},0{13},2{3},0{14}');
 $action->actor->range('admin');
 $action->action->range('assigned{20},submitreview{8},reviewed{6}');
-$storyreview->result->range('1');
+$action->extra->range('{28},Pass{6}');
 $action->gen(34);
 
 $tester = new contributeTester();
