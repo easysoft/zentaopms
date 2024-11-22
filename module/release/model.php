@@ -57,6 +57,22 @@ class releaseModel extends model
     }
 
     /**
+     * 获取发布列表。
+     * Get release list.
+     *
+     * @param  array  $idList
+     * @access public
+     * @return array
+     */
+    public function getPairs(array $idList = array()): array
+    {
+        return $this->dao->select('id, name')->from(TABLE_RELEASE)
+            ->where('deleted')->eq(0)
+            ->beginIF($idList)->andWhere('id')->in($idList)->fi()
+            ->fetchPairs();
+    }
+
+    /**
      * 获取发布列表信息。
      * Get release list information.
      *
