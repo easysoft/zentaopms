@@ -134,6 +134,7 @@ $testtask->build->range('1');
 $testtask->owner->range('admin');
 $testtask->members->range('admin');
 $testtask->gen(1);
+
 $action = zenData('action');
 $action->id->range('1-34');
 $action->objectType->range('task{4},story{13},bug{3},story{14}');
@@ -147,3 +148,38 @@ $action->gen(34);
 
 $tester = new contributeTester();
 $tester->login();
+
+r($tester->checkContribute('task', 'firstTab', '10')) && p('message,status') && e('任务的第1个tab下数据显示正确,SUCCESS');//检查任务列表-[由我创建]tab下的数据
+r($tester->checkContribute('task', 'secondTab', '2')) && p('message,status') && e('任务的第2个tab下数据显示正确,SUCCESS');//检查任务列表-[由我完成]tab下的数据
+r($tester->checkContribute('task', 'thirdTab', '8'))  && p('message,status') && e('任务的第3个tab下数据显示正确,SUCCESS');//检查任务列表-[由我参与]tab下的数据
+r($tester->checkContribute('task', 'fourthTab', '2')) && p('message,status') && e('任务的第4个tab下数据显示正确,SUCCESS');//检查任务列表-[由我关闭]tab下的数据
+r($tester->checkContribute('task', 'fifthTab', '1'))  && p('message,status') && e('任务的第5个tab下数据显示正确,SUCCESS');//检查任务列表-[由我取消]tab下的数据
+r($tester->checkContribute('task', 'sixthTab', '4'))  && p('message,status') && e('任务的第6个tab下数据显示正确,SUCCESS');//检查任务列表-[由我指派]tab下的数据
+
+r($tester->checkContribute('SR', 'firstTab', '10')) && p('message,status') && e('研发需求的第1个tab下数据显示正确,SUCCESS');//检查研发需求列表-[由我创建]tab下的数据
+r($tester->checkContribute('SR', 'secondTab', '3')) && p('message,status') && e('研发需求的第2个tab下数据显示正确,SUCCESS');//检查研发需求列表-[我评审过]tab下的数据
+r($tester->checkContribute('SR', 'thirdTab', '3'))  && p('message,status') && e('研发需求的第3个tab下数据显示正确,SUCCESS');//检查研发需求列表-[由我关闭]tab下的数据
+r($tester->checkContribute('SR', 'fourthTab', '5')) && p('message,status') && e('研发需求的第4个tab下数据显示正确,SUCCESS');//检查研发需求列表-[由我指派]tab下的数据
+
+r($tester->checkContribute('UR', 'firstTab', '7'))  && p('message,status') && e('用户需求的第1个tab下数据显示正确,SUCCESS');//检查用户需求列表-[由我创建]tab下的数据
+r($tester->checkContribute('UR', 'secondTab', '3')) && p('message,status') && e('用户需求的第2个tab下数据显示正确,SUCCESS');//检查用户需求列表-[我评审过]tab下的数据
+r($tester->checkContribute('UR', 'thirdTab', '2'))  && p('message,status') && e('用户需求的第3个tab下数据显示正确,SUCCESS');//检查用户需求列表-[由我关闭]tab下的数据
+r($tester->checkContribute('UR', 'fourthTab', '2')) && p('message,status') && e('用户需求的第4个tab下数据显示正确,SUCCESS');//检查用户需求列表-[由我指派]tab下的数据
+
+r($tester->checkContribute('ER', 'firstTab', '10')) && p('message,status') && e('业务需求的第1个tab下数据显示正确,SUCCESS');//检查业务需求列表-[由我创建]tab下的数据
+r($tester->checkContribute('ER', 'secondTab', '2')) && p('message,status') && e('业务需求的第2个tab下数据显示正确,SUCCESS');//检查业务需求列表-[我评审过]tab下的数据
+r($tester->checkContribute('ER', 'thirdTab', '2'))  && p('message,status') && e('业务需求的第3个tab下数据显示正确,SUCCESS');//检查业务需求列表-[由我关闭]tab下的数据
+
+r($tester->checkContribute('bug', 'firstTab', '7'))  && p('message,status') && e('Bug的第1个tab下数据显示正确,SUCCESS');//检查Bug列表-[由我创建]tab下的数据
+r($tester->checkContribute('bug', 'secondTab', '3')) && p('message,status') && e('Bug的第2个tab下数据显示正确,SUCCESS');//检查Bug列表-[由我解决]tab下的数据
+r($tester->checkContribute('bug', 'thirdTab', '2'))  && p('message,status') && e('Bug的第3个tab下数据显示正确,SUCCESS');//检查Bug列表-[由我关闭]tab下的数据
+r($tester->checkContribute('bug', 'fourthTab', '3')) && p('message,status') && e('Bug的第4个tab下数据显示正确,SUCCESS');//检查Bug列表-[由我指派]tab下的数据
+
+r($tester->checkContribute('case', 'firstTab', '5')) && p('message,status') && e('用例的第1个tab下数据显示正确,SUCCESS');//检查用例列表-[由我创建]tab下的数据
+
+r($tester->checkContribute('request', 'firstTab', '1')) && p('message,status') && e('测试单的第1个tab下数据显示正确,SUCCESS');//检查测试单列表-[已测测试单]tab下的数据
+
+r($tester->checkContribute('review', 'firstTab', '6'))  && p('message,status') && e('审批的第1个tab下数据显示正确,SUCCESS');//检查审批列表-[由我评审]tab下的数据
+r($tester->checkContribute('review', 'secondTab', '8')) && p('message,status') && e('审批的第2个tab下数据显示正确,SUCCESS');//检查审批列表-[由我发起]tab下的数据
+
+$tester->closeBrowser();
