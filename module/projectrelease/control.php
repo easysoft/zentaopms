@@ -107,6 +107,14 @@ class projectrelease extends control
 
         if(!empty($_POST))
         {
+            $this->lang->projectrelease->system = $this->lang->release->system;
+            if(!$this->post->newSystem && !$this->post->system) $this->config->release->form->create['system']['required'] = true;
+            if($this->post->newSystem  && !$this->post->systemName)
+            {
+                $this->config->release->form->create['systemName'] = array('type' => 'string', 'required' => true);
+                $this->lang->projectrelease->systemName = $this->lang->release->system;
+            }
+
             $release = form::data($this->config->release->form->create)
                 ->add('product', $this->post->product ? $this->post->product : 0)
                 ->add('branch', $this->post->branch ? $this->post->branch : 0)
@@ -116,6 +124,17 @@ class projectrelease extends control
 
             /* Check build if build is required. */
             if(strpos($this->config->release->create->requiredFields, 'build') !== false && empty($release->build)) dao::$errors['build'] = sprintf($this->lang->error->notempty, $this->lang->release->build);
+
+            if($this->post->newSystem && $this->post->systemName)
+            {
+                $system = new stdclass();
+                $system->name        = $this->post->systemName;
+                $system->product     = $productID;
+                $system->createdBy   = $this->app->user->account;
+                $system->createdDate = helper::now();
+
+                $release->system = $this->loadModel('system')->create($system);
+            }
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if(!empty($_FILES['releaseFiles'])) $_FILES['files'] = $_FILES['releaseFiles'];
