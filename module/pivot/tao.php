@@ -15,12 +15,38 @@ class pivotTao extends pivotModel
         $pivot = $this->dao->select('*')->from(TABLE_PIVOT)->where('id')->eq($id)->andWhere('deleted')->eq('0')->fetch();
         if(!$pivot) return false;
 
-        $specData = $this->dao->select('*')->from(TABLE_PIVOTSPEC)->where('pivot')->eq($id)->andWhere('version')->eq($pivot->version)->fetch();
-        if(!$specData) return $pivot;
-
-        foreach($specData as $specKey => $specValue) $pivot->$specKey = $specValue;
-        return $pivot;
+        return $this->mergePivotSpecData($pivot);
     }
+
+    /**
+     * 合并 pivotSpec 的数据。
+     * Merge pivotSpec data to pivot.
+     *
+     * @param int $id
+     * @access public
+     * @return object|bool
+     */
+    protected function mergePivotSpecData($pivots, $isObject = true)
+    {
+        if($isObject) $pivots = array($pivots);
+        $pivotIDList = array_column($pivots, 'id');
+
+        $pivotSpecs = $this->dao->select('t2.*')->from(TABLE_PIVOT)->alias('t1')
+            ->leftJoin(TABLE_PIVOTSPEC)->alias('t2')->on('t1.id = t2.pivot and t1.version = t2.version')
+            ->where('t1.id')->in($pivotIDList)
+            ->fetchAll('pivot');
+
+        foreach($pivots as $index => $pivot)
+        {
+            if(!isset($pivotSpecs[$pivot->id])) continue;
+
+            foreach($pivotSpecs[$pivot->id] as $specKey => $specValue) $pivot->$specKey = $specValue;
+            $pivots[$index] = $pivot;
+        }
+
+        return $isObject ? current($pivots) : $pivots;
+    }
+
     /**
      * 获取产品列表。
      * Get product list.
