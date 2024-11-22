@@ -212,6 +212,7 @@ function thinkTableInput(): thinkTableInput {return createWg('thinkTableInput', 
 function thinkInput(): thinkInput {return createWg('thinkInput', func_get_args());}
 function thinkMatrixOptions(): thinkMatrixOptions {return createWg('thinkMatrixOptions', func_get_args());}
 function thinkMulticolumn(): thinkMulticolumn {return createWg('thinkMulticolumn', func_get_args());}
+function thinkScore(): thinkScore {return createWg('thinkScore', func_get_args());}
 function thinkStepMenu(): thinkStepMenu {return createWg('thinkStepMenu', func_get_args());}
 function thinkResult(): thinkResult {return createWg('thinkResult', func_get_args());}
 function thinkSwot(): thinkSwot {return createWg('thinkSwot', func_get_args());}
