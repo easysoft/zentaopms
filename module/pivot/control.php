@@ -85,6 +85,7 @@ class pivot extends control
         $this->view->versionSpecs = $this->pivot->getPivotVersions($pivotID);
         $this->view->version      = $version == 'newest' ? $this->pivot->getMaxVersion($pivotID) : $version;
         $this->view->pivot        = $pivot;
+        $this->view->groupID      = $groupID;
         $this->display();
     }
 

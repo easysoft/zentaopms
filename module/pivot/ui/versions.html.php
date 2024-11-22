@@ -16,8 +16,19 @@ foreach($versionSpecs as $versionSpec)
 {
     $versionsTableBody[] = h::tr
     (
-        h::td('#' . $versionSpec->version),
-        h::td($versionSpec->desc),
+        h::td
+        (
+            h::a
+            (
+                '#' . $versionSpec->version,
+                set::href("javascript:;"),
+                on::click("switchVersion"),
+                setData('pivot', $pivot->id),
+                setData('version', $versionSpec->version),
+                setData('group', $groupID)
+            )
+        ),
+        h::td($versionSpec->desc)
     );
 }
 
