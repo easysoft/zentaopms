@@ -39,18 +39,18 @@ class thinkStep  extends wg
 
         list($item, $action, $wizard, $addType, $isRun, $quotedQuestions) = $this->prop(array('item', 'action', 'wizard', 'addType', 'isRun', 'quotedQuestions'));
         if(!$item && !$addType) return array();
+        $hiddenModelType   = in_array($wizard->type, $config->thinkwizard->hiddenMenuType);
+        $previewCanActions = !$hiddenModelType || ($hiddenModelType && !empty($item->type) && $item->type == 'transition');
+
         $marketID  = data('marketID');
         $basicType = $item->type ?? '';
         $typeLang  = $action . 'Step';
         $type      = $addType ? $addType : ($basicType == 'question' ? $item->options->questionType : $basicType);
         $title     = $action == 'detail' ? sprintf($lang->thinkstep->info, $lang->thinkstep->$basicType) : sprintf($lang->thinkstep->formTitle[$type], $lang->thinkstep->$typeLang);
         $canEdit   = common::hasPriv('thinkstep', 'edit');
-        $canDelete = common::hasPriv('thinkstep', 'delete');
+        $canDelete = common::hasPriv('thinkstep', 'delete') && $previewCanActions;
         $linkmodel = !$isRun && in_array($wizard->model, $config->thinkwizard->venn);
         $canLink   = common::hasPriv('thinkstep', 'link') && $linkmodel && $basicType == 'question';
-
-        $hiddenModelType   = in_array($wizard->type, $config->thinkwizard->hiddenMenuType);
-        $previewCanActions = !$hiddenModelType || ($hiddenModelType && !empty($item->type) && $item->type == 'transition');
 
         return div
         (
@@ -84,7 +84,7 @@ class thinkStep  extends wg
                                 set::hint($lang->thinkstep->actions['edit']),
                                 set::url(createLink('thinkstep', 'edit', "marketID={$marketID}&stepID={$item->id}")),
                             ) : null,
-                            ($canDelete && $previewCanActions) ? ((!$item->existNotNode && empty($quotedQuestions)) ? btn
+                            $canDelete ? ((!$item->existNotNode && empty($quotedQuestions)) ? btn
                             (
                                 setClass('btn ghost text-gray w-5 h-5 ml-1 ajax-submit'),
                                 set::icon('trash'),
