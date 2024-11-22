@@ -432,7 +432,7 @@ class cache
         /* 把被删除的数据的 id 从缓存中删除。Delete the id of the deleted data from cache. */
         $setCacheKey  = $this->getSetCacheKey($code);
         $objectIdList = $this->cache->get($setCacheKey);
-        $this->cache->set($setCacheKey, array_diff($objectIdList, array_map(function($object) use ($field) { return $object->$field; }, $this->objects)));
+        if($objectIdList) $this->cache->set($setCacheKey, array_diff($objectIdList, array_map(function($object) use ($field) { return $object->$field; }, $this->objects)));
 
         if(empty($this->config->cache->res[$this->table])) return;
 
