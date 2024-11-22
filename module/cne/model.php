@@ -597,6 +597,25 @@ class cneModel extends model
     }
 
     /**
+     * 获取应用组件列表
+     * Get app components.
+     *
+     * @link https://yapi.qc.oop.cc/project/21/interface/api/1043
+     * @param object $instance
+     * @return object|null
+     */
+    public function getComponents(object $instance): ?object
+    {
+        $apiParams = new stdclass();
+        $apiParams->cluster   = '';
+        $apiParams->namespace = $instance->spaceData->k8space;
+        $apiParams->name      = $instance->k8name;
+
+        $apiUrl = "/api/cne/app/components";
+        return $this->apiGet($apiUrl, $apiParams, $this->config->CNE->api->headers);
+    }
+
+    /**
      * 获取应用的安装日志。
      * Get app install logs.
      *

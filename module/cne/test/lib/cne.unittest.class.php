@@ -161,6 +161,23 @@ class cneTest
     }
 
     /**
+     * Test getComponents method.
+     *
+     * @access public
+     * @return object|null
+     */
+    public function getComponentsTest(): object|null
+    {
+        $this->objectModel->error = new stdclass();
+        $instance = $this->objectModel->loadModel('instance')->getByID(2);
+
+        $result = $this->objectModel->getComponents($instance);
+        if(!empty($this->objectModel->error->message)) return $this->objectModel->error;
+
+        return $result;
+    }
+
+    /**
      * Test getAppLogs method.
      *
      * @access public
