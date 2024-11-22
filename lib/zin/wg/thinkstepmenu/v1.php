@@ -148,6 +148,9 @@ class thinkStepMenu extends wg
         $wizard             = $this->prop('wizard');
         $canAddChild        = true;
         $showQuestionOfNode = true;
+        $hiddenModelType    = in_array($wizard->type, $config->thinkwizard->hiddenMenuType);
+        $previewCanActions  = !$hiddenModelType || ($hiddenModelType && $item->type == 'transition');
+
         if(!empty($item->children))
         {
             foreach($item->children as $child)
@@ -156,6 +159,7 @@ class thinkStepMenu extends wg
                 if($showQuestionOfNode && $child->type == 'node') $showQuestionOfNode = false;
             }
         }
+        if($hiddenModelType) $canAddChild = false;
         $canCreate   = common::hasPriv('thinkstep', 'create');
         $canEdit     = common::hasPriv('thinkstep', 'edit');
         $canDelete   = common::hasPriv('thinkstep', 'delete');
@@ -166,7 +170,7 @@ class thinkStepMenu extends wg
         $transitionAction = array();
         if($canCreate)
         {
-            if($item->type == 'node') $menus[] = array(
+            if($item->type == 'node' && !$hiddenModelType) $menus[] = array(
                 'key'     => 'addNode',
                 'icon'    => 'add-chapter',
                 'text'    => $this->lang->thinkstep->actions['sameNode'],
@@ -179,7 +183,7 @@ class thinkStepMenu extends wg
                 'onClick' => jsRaw("() => addNode({$item->id}, 'child')")
             );
 
-            $transitionAction[] = array('type' => 'divider');
+            $transitionAction[] = $previewCanActions ? array('type' => 'divider') : null;
             $transitionAction[] = array(
                 'key'     => 'transition',
                 'icon'    => 'transition',
@@ -219,19 +223,19 @@ class thinkStepMenu extends wg
             'innerClass'   => 'text-gray opacity-50',
             'hint'         => $this->lang->thinkstep->tips->linkBlocks
         );
-
         $menus = array_merge($menus, array(
-            $canEdit ? array(
+            ($canEdit && $previewCanActions) ? array(
                 'key'  => 'editNode',
                 'icon' => 'edit',
                 'text' => $this->lang->thinkstep->actions['edit'],
                 'url'  => createLink('thinkstep', 'edit', "marketID={$marketID}&stepID={$item->id}")
             ) : null,
-            $canDelete ? $deleteItem : null,
+            ($canDelete && $previewCanActions) ? $deleteItem : null,
             in_array($wizard->model, $config->thinkwizard->venn) && $item->type == 'question' && $canLink ? $linkItem : null
         ), $transitionAction);
 
-        if($canCreate && (($showQuestionOfNode && $item->type == 'node') || $item->hasSameQuestion || $item->type == 'question')) $menus = array_merge($menus, array(
+        $canAddQuestions = ($showQuestionOfNode && $item->type == 'node') || $item->hasSameQuestion || $item->type == 'question';
+        if($canCreate && !$hiddenModelType && $canAddQuestions) $menus = array_merge($menus, array(
             array('type' => 'divider'),
             $this->buildMenuItem('radio', 'radio', $this->lang->thinkstep->createStep . $this->lang->thinkstep->actions['radio'], $item, $parentID, 'radio'),
             $this->buildMenuItem('checkbox', 'checkbox', $this->lang->thinkstep->createStep . $this->lang->thinkstep->actions['checkbox'], $item, $parentID, 'checkbox'),
