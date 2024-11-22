@@ -76,6 +76,7 @@ docApp
     set::homeName($lang->doc->template),
     set::mode($mode),
     set::fetcher(createLink('doc', 'ajaxGetSpaceData', 'type=template&spaceID=1&picks={picks}')),
+    set::historyFetcher(createLink('action', 'ajaxGetList', 'objectType=docTemplate&objectID={objectID}')),
     set::privs($privs),
     set::userMap($users),
     set::spaceIcon(false),
