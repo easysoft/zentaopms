@@ -1060,6 +1060,7 @@ class project extends control
         $this->view->productID = $this->session->buildProductID;
         $this->view->project   = $project;
         $this->view->products  = $products;
+        $this->view->system    = $this->loadModel('system')->getPairs();
         $this->view->type      = $type;
         $this->view->orderBy   = $orderBy;
         $this->view->param     = $param;

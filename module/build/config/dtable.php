@@ -22,6 +22,12 @@ $config->build->dtable->fieldList['productName']['type']  = 'desc';
 $config->build->dtable->fieldList['productName']['group'] = 1;
 $config->build->dtable->fieldList['productName']['show'] = 1;
 
+$config->build->dtable->fieldList['system']['title'] = $lang->build->system;
+$config->build->dtable->fieldList['system']['name']  = 'system';
+$config->build->dtable->fieldList['system']['type']  = 'desc';
+$config->build->dtable->fieldList['system']['group'] = 1;
+$config->build->dtable->fieldList['system']['show'] = 1;
+
 $config->build->dtable->fieldList['branch']['title'] = $lang->build->branch;
 $config->build->dtable->fieldList['branch']['name']  = 'branchName';
 $config->build->dtable->fieldList['branch']['type']  = 'desc';

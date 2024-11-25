@@ -1062,6 +1062,8 @@ class executionZen extends execution
 
                 $builds[] = $build;
             }
+
+            if(!$build->system) $build->system = '';
         }
 
         if(!$showBranch) unset($this->config->build->dtable->fieldList['branch']);

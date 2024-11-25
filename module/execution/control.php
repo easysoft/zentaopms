@@ -712,6 +712,7 @@ class execution extends control
         $this->view->builds   = $this->executionZen->processBuildListData($builds, $executionID);
         $this->view->product  = $type == 'product' ? $param : '';
         $this->view->products = $products;
+        $this->view->system   = $this->loadModel('system')->getPairs();
         $this->view->type     = $type;
         $this->view->param    = $param;
         $this->view->orderBy  = $orderBy;

@@ -1488,6 +1488,7 @@ class projectZen extends project
                     $builds[] = $build;
                 }
             }
+            if(!$build->system) $build->system = '';
         }
 
         /* Set data table column. */
