@@ -148,7 +148,7 @@ class thinkStepMenu extends wg
         $wizard             = $this->prop('wizard');
         $canAddChild        = true;
         $showQuestionOfNode = true;
-        $hiddenModelType    = in_array($wizard->type, $config->thinkwizard->hiddenMenuType);
+        $hiddenModelType    = in_array($wizard->model, $config->thinkwizard->hiddenMenuModel);
         $previewCanActions  = !$hiddenModelType || ($hiddenModelType && $item->type == 'transition');
 
         if(!empty($item->children))
