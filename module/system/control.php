@@ -589,10 +589,9 @@ class system extends control
                 ->setIF($integrated == '0', 'children', '')
                 ->get();
 
-            $systemID = $this->system->create($formData);
+            $this->system->create($formData);
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            if($systemID) $this->loadModel('action')->create('system', $systemID, 'created');
             $this->sendSuccess(array('load' => true));
         }
 
@@ -626,7 +625,6 @@ class system extends control
             $this->system->update($id, $formData);
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            $this->loadModel('action')->create('system', $id, 'edited');
             $this->sendSuccess(array('load' => true));
         }
 

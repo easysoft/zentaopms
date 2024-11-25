@@ -56,6 +56,22 @@ class systemModel extends model
     }
 
     /**
+     * 根据ID列表获取应用。
+     * Get apps by id list.
+     *
+     * @param  array $idList
+     * @access public
+     * @return array
+     */
+    public function getByIdList(array $idList): array
+    {
+        return $this->dao->select('*')->from(TABLE_SYSTEM)
+            ->where('deleted')->eq('0')
+            ->andWhere('id')->in($idList)
+            ->fetchAll('id');
+    }
+
+    /**
      * 创建应用。
      * Create an app.
      *
@@ -70,9 +86,19 @@ class systemModel extends model
             ->batchCheck($this->config->system->create->requiredFields, 'notempty')
             ->autoCheck()
             ->exec();
+        if(dao::isError())
+        {
+            if($this->app->rawModule != 'system' && !empty(dao::$errors['name']))
+            {
+                dao::$errors['systemName'] = dao::$errors['name'];
+                unset(dao::$errors['name']);
+            }
+            return false;
+        }
 
-        if(dao::isError()) return false;
-        return $this->dao->lastInsertID();
+        $systemID = $this->dao->lastInsertID();
+        $this->loadModel('action')->create('system', $systemID, 'created');
+        return $systemID;
     }
 
     /**
@@ -92,6 +118,9 @@ class systemModel extends model
             ->beginIF($checkRequired)->batchCheck($this->config->system->edit->requiredFields, 'notempty')->fi()
             ->where('id')->eq($id)
             ->exec();
+        if(dao::isError()) return false;
+
+        $this->loadModel('action')->create('system', $id, 'edited');
         return !dao::isError();
     }
 
