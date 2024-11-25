@@ -19,8 +19,6 @@ class addTodoTester extends tester
         $todoList->wait(1);
         $todoList->dom->name->setValue($todoTitle->name);
         $todoList->wait(1);
-        $todoList->dom->status->picker($todoStatus->done);
-        $todoList->wait(1);
         $todoList->dom->btn($this->lang->save)->click();
 
         $this->openUrl('my', 'todo', array('type' => 'all'));
@@ -28,4 +26,21 @@ class addTodoTester extends tester
         if($todoList->dom->fstTodoTitle->getText() != $todoTitle->name) return $this->failed('编辑待办失败');
         return $this->success('编辑待办成功');
     }
-}
+
+    /**
+     * 开始待办。
+     * Start a todo.
+     *
+     * @param  string $todoStatus
+     * @access public
+     * @return void
+     */
+    public function startTodo($todoStatus)
+    {
+        $this->openUrl('my', 'todo', array('type' => 'all'));
+        $todoList = $this->loadPage('my', 'todo', array('type' => 'all'));
+        $todoList->dom->fstTodoStart->click();
+        $todoList->wait(1);
+        if($todoList->dom->fstTodoStatus->getText() != $todoStatus->doing) return $this->failed('开始待办失败');
+        return $this->success('开始待办成功');
+    }
