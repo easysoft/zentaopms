@@ -19,15 +19,16 @@ namespace zin;
 class thinkStepBase extends wg
 {
     protected static array $defineProps = array(
-        'title?: string',          // 标题
-        'desc?: string',           // 描述
-        'isRun?: bool=false',      // 是否是分析活动
-        'step?: object',           // 整个步骤的对象
-        'mode?: string="detail"',  // detail|create|edit
-        'type?: string="node"',    // node|transition/question
-        'quoteQuestions?: array'.  // 引用的问题
-        'quotedQuestions?: attay', // 被引用的问题
-        'isResult?: bool=false',   // 是否是结果页
+        'title?: string',            // 标题
+        'desc?: string',             // 描述
+        'isRun?: bool=false',        // 是否是分析活动
+        'step?: object',             // 整个步骤的对象
+        'mode?: string="detail"',    // detail|create|edit
+        'type?: string="node"',      // node|transition/question
+        'quoteQuestions?: array'.    // 引用的问题
+        'quotedQuestions?: attay',   // 被引用的问题
+        'isResult?: bool=false',     // 是否是结果页
+        'preViewModel?: bool=false', // 预览模型
     );
 
     public static function getPageCSS(): ?string
@@ -107,7 +108,7 @@ class thinkStepBase extends wg
         global $lang, $app, $config;
         $app->loadLang('thinkstep');
         $app->loadLang('thinkrun');
-        list($quoteQuestions, $quotedQuestions, $step, $isRun) = $this->prop(array('quoteQuestions', 'quotedQuestions', 'step', 'isRun'));
+        list($quoteQuestions, $quotedQuestions, $step, $isRun, $preViewModel) = $this->prop(array('quoteQuestions', 'quotedQuestions', 'step', 'isRun', 'preViewModel'));
 
         if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);
 
@@ -186,11 +187,17 @@ class thinkStepBase extends wg
                     ),
                     (!empty($questionType) && $questionType == 'multicolumn') ? div(setClass('text-sm text-gray-400 leading-loose mt-2'), $lang->thinkstep->tips->multicolumn) : null
                 ): null,
-                !empty($quotedQuestions) ? div
+                (!empty($quotedQuestions) && !$preViewModel) ? div
                 (
                     setClass('bg-primary-50 leading-normal p-2 mt-3'),
                     div(sprintf($lang->thinkstep->tips->optionsAreReferenced, $questionType == 'multicolumn' ? $lang->thinkstep->inputItem : $lang->thinkstep->label->option)),
                     $quotedItems
+                ) : null,
+                (!empty($quotedQuestions) && $preViewModel) ? div
+                (
+                    setClass('flex text-gray-400 mt-2 items-center text-sm ml-2'),
+                    icon(setClass('text-important mr-2'), 'about'),
+                    span(setClass('leading-6'), $lang->thinkwizard->previewSteps->quotedTips)
                 ) : null
             );
         }
