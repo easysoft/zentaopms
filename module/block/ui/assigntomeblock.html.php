@@ -13,6 +13,7 @@ namespace zin;
 jsVar('moreLabel', $lang->more);
 jsVar('todayLabel', $lang->today);
 jsVar('yesterdayLabel', $lang->yesterday);
+jsVar('delayWarning',   $lang->task->delayWarning);
 
 $blockNavCode = 'nav-' . uniqid();
 

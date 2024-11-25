@@ -16,6 +16,7 @@ jsVar('todayLabel', $lang->today);
 jsVar('yesterdayLabel', $lang->yesterday);
 jsVar('childrenAB', $lang->task->childrenAB);
 jsVar('multipleAB', $lang->task->multipleAB);
+jsVar('delayWarning', $lang->task->delayWarning);
 
 featureBar
 (
