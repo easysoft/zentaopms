@@ -80,3 +80,22 @@ class addTodoTester extends tester
         if($todoList->dom->fstTodoStatus->getText() != $todoStatus->waiting) return $this->failed('激活待办失败');
         return $this->success('激活待办成功');
     }
+
+    /**
+     * 关闭待办。
+     * Close a todo.
+     *
+     * @param  string $todoStatus
+     * @access public
+     * @return void
+     */
+    public function closeTodo($todoStatus)
+    {
+        $this->openUrl('my', 'todo', array('type' => 'all'));
+        $todoList = $this->loadPage('my', 'todo', array('type' => 'all'));
+        $todoList->dom->fstTodoClose->click();
+        $todoList->wait(1);
+        if($todoList->dom->fstTodoStatus->getText() != $todoStatus->close) return $this->failed('关闭待办失败');
+        return $this->success('关闭待办成功');
+    }
+}
