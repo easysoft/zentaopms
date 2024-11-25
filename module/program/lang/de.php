@@ -175,6 +175,7 @@ $lang->program->featureBar['browse']['unclosed']  = 'Unclosed';
 $lang->program->featureBar['browse']['wait']      = 'Waiting';
 $lang->program->featureBar['browse']['doing']     = 'Doing';
 $lang->program->featureBar['browse']['suspended'] = 'Suspended';
+$lang->program->featureBar['browse']['delayed']   = 'Delayed';
 $lang->program->featureBar['browse']['closed']    = 'Closed';
 
 $lang->program->featureBar['product']['all']      = 'Alle ' . $lang->productCommon;
