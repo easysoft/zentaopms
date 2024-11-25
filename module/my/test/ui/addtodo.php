@@ -6,6 +6,10 @@
 title=添加待办测试
 timeout=0
 
+- 添加一个待办，添加成功
+ - 测试结果 @添加待办成功
+ - 最终测试状态 @SUCCESS
+
 */
 chdir(__DIR__);
 include '../lib/addtodo.ui.class.php';
@@ -30,4 +34,4 @@ $todoStatus = new stdClass();
 $todoStatus->doing = '进行中';
 $todoStatus->done  = '已完成';
 
-r($tester->addTodo($todoTitle, $todoStatus)) && p('message,status') && e('添加待办成功，SUCCESS');   //添加待办，添加成功
+r($tester->addTodo($todoTitle, $todoStatus)) && p('message,status') && e('添加待办成功，SUCCESS'); //添加待办，添加成功
