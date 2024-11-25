@@ -203,14 +203,20 @@ class pivotModel extends model
 
         if(!empty($pivot->name))
         {
-            $pivot->names = json_decode($pivot->name, true);
-            $pivot->name  = zget($pivot->names, $clientLang, '') ?? reset(array_filter($pivot->names));
+            $pivot->names   = json_decode($pivot->name, true);
+            $langNames      = empty($pivot->names) ? array() : array_filter($pivot->names);
+            $firstName      = empty($langNames)    ? ''      : reset($langNames);
+            $clientLangName = zget($pivot->names, $clientLang, '');
+            $pivot->name    = empty($clientLangName) ? $firstName : $clientLangName;
         }
 
         if(!empty($pivot->desc))
         {
-            $pivot->descs = json_decode($pivot->desc, true);
-            $pivot->desc  = zget($pivot->descs, $clientLang, '');
+            $pivot->descs    = json_decode($pivot->desc, true);
+            $langDescs       = empty($pivot->descs) ? array() : array_filter($pivot->descs);
+            $firstDesc       = empty($langDescs)    ? ''      : reset($langDescs);
+            $clientLangDesc  = zget($pivot->descs, $clientLang, '');
+            $pivot->desc     = empty($clientLangDesc) ? $firstDesc : $clientLangDesc;
         }
     }
 
