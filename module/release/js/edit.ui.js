@@ -13,6 +13,12 @@ window.changeStatus = function(e)
     }
 }
 
-setTimeout(() => {
-    changeStatus({target: {value: oldStatus}});
-}, 100);
+
+$(function()
+{
+    setTimeout(function()
+    {
+        changeStatus({target: {value: oldStatus}});
+        window.loadSystemBlock();
+    }, 100);
+})

@@ -1,13 +1,15 @@
-window.loadSystemBlock = function(e)
+window.loadSystemBlock = function()
 {
-    const systemID = $(e.target).val();
+    const systemID = $('[name=system]').val();
     if(!systemID || !appList[systemID]) return;
 
     $('#systemBlock, #buildBox').addClass('hidden');
     if(appList[systemID].integrated == 1)
     {
+        if(typeof linkedRelease == 'undefined') linkedRelease = '';
+
         $('#systemBlock').removeClass('hidden');
-        loadTarget($.createLink('release', 'ajaxLoadSystemBlock', 'systemID=' + systemID), 'systemItems');
+        loadTarget($.createLink('release', 'ajaxLoadSystemBlock', `systemID=${systemID}&release=${linkedRelease}`), 'systemItems');
     }
     else
     {
