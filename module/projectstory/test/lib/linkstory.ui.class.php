@@ -18,3 +18,13 @@ class linkStoryTester extends tester
         $form->wait(2);
         $form->dom->searchBtn->click();
         $form->dom->selectAllStory->click();
+        $form->dom->saveBtn->click();
+        $form->wait(2);
+
+        $storyView = $this->loadPage('project', 'story');
+        $storyView->dom->allTab->click();
+        $storyView->wait(2);
+        if($storyView->dom->allTabNum->getText() !== $numBefore) return $this->success('关联需求成功');
+        return $this->failed('关联需求失败');
+    }
+}
