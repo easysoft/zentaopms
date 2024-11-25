@@ -2958,6 +2958,20 @@ class pivotModel extends model
 
         return $isObject ? current($pivots) : $pivots;
     }
+
+    /**
+     * Switch pivot to a new version.
+     *
+     * @param  int    $pivotID
+     * @param  string $version
+     * @access public
+     * @return bool
+     */
+    public function switchNewVersion(int $pivotID, string $version): bool
+    {
+        $this->dao->update(TABLE_PIVOT)->set('version')->eq($version)->where('id')->eq($pivotID)->exec();
+        return !dao::isError();
+    }
 }
 
 /**

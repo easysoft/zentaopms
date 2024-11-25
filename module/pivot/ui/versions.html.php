@@ -32,7 +32,7 @@ foreach($versionSpecs as $versionSpec)
     );
 }
 
-panel
+formPanel
 (
     setID('pivotVersionPanel'),
     set::title("{$pivot->name} #{$version}"),
@@ -74,5 +74,5 @@ panel
         setClass('flex col gap-4 w-full'),
         $generateData()
     ),
-    set::actions(array(array('text' => $lang->pivot->switchTo, 'class' => 'primary', 'type' => 'submit')))
+    set::submitBtnText($lang->pivot->switchTo)
 );
