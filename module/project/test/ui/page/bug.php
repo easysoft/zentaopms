@@ -53,7 +53,14 @@ class bugPage extends page
             'activeAssignTo'  => "//*[@name='assignedTo']",
             /* 搜索列表 */
             'status'          => "//*[@id='table-project-bug']/div[2]/div[2]/div/div[3]/div/span",
-            );
+            /* 导出Bug */
+            'exportBtn'       => "//*[@id='actionBar']/a[1]/span",
+            'fileName'        => "//*[@name='fileName']",
+            'fileType'        => "//*[@name='fileType']",
+            'encode'          => "//*[@name='encode']",
+            'exportType'      => "//*[@name='exportType']",
+            'exportBtnAlert'  => "//*[@type='submit']/span",
+        );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
 }
