@@ -76,3 +76,12 @@ $projectStory->branch->range('0');
 $projectStory->story->range('1-5');
 $projectStory->version->range('1');
 $projectStory->order->range('1');
+$projectStory->gen(5);
+
+$tester = new unLinkStoryTester();
+$tester->login();
+
+r($tester->unlinkStory())      && p('message,status') && e('单个移除需求成功,SUCCESS');  // 单个移除研发需求
+r($tester->batchUnlinkStory()) && p('message,status') && e('移除全部需求成功,SUCCESS');  // 批量移除研发需求
+
+$tester->closeBrowser();
