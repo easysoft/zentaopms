@@ -198,3 +198,80 @@ function checkBatchEstStartedAndDeadline(event)
         }
     }
 }
+
+window.handleClickBatchFormAction = function(action, $row, rowIndex)
+{
+    if(action !== 'addSub' && action !== 'addSibling') return;
+
+    if(!this.nestedLevelMap) this.nestedLevelMap = {};
+    const level = this.nestedLevelMap[$row.attr('data-gid')] || 0;
+    const nextGid = this._idSeed++;
+    this.nestedLevelMap[nextGid] = action === 'addSub' ? level + 1 : level;
+
+    if(action == 'addSibling')
+    {
+        $rawRow = $row;
+        while(true)
+        {
+            $nextRow = $row.next();
+            if($nextRow.length == 0 || $nextRow.attr('data-level') <= level)
+            {
+                rowIndex = $nextRow.length == 0 ? $row.index() : $nextRow.index() - 1;
+                break;
+            }
+
+            $row = $nextRow;
+        }
+    }
+    this.addRow(rowIndex, nextGid);
+};
+
+window.handleRenderRow = function($row, index)
+{
+    if(!this.nestedLevelMap) this.nestedLevelMap = {};
+
+    /* 上一行： */
+    const $prevRow = $row.prev();
+
+    /* 从行中查找层级文本展示元素： */
+    const nestedTextSelector = 'td[data-name="name"] .input-group-addon';
+
+    /* 获取当前行的层级，下面可能会根据上一行层级修改当前行层级： */
+    let level = this.nestedLevelMap[$row.attr('data-gid')] || 0;
+
+    /* 当前行层级信息文本： */
+    let text  = '1';
+
+    /* 处理有上一行的情况： */
+    if($prevRow.length)
+    {
+        /* 根据上一行层级，重新计算当前行层级：  */
+        const prevLevel = +$prevRow.attr('data-level') || 0;
+        if(prevLevel < level) level = prevLevel + 1;
+
+        /* 根据上一行的层级文本，生成当前行的层级文本： */
+        const prevText = $prevRow.find(nestedTextSelector).text();
+        const parts    = prevText.split('.');
+        if(prevLevel === level) parts[level] = +parts[level] + 1;
+        else if(prevLevel > level)
+        {
+            parts.length = level + 1;
+            parts[level] = +parts[level] + 1;
+        }
+        else parts[level] = 1;
+        text = parts.join('.');
+    }
+    else
+    {
+        /* 如果没有上一行，当前行层级为 0： */
+        level = 0;
+    }
+
+    /* 存储当前行层级信息： */
+    this.nestedLevelMap[$row.attr('data-gid')] = level;
+    $row.attr('data-level', level);
+
+    /* 创建隐藏表单域用于向服务器提交当前行层级信息。 */
+    $row.find(nestedTextSelector).text(text).append(`<input type="hidden" name="level[${index + 1}]" value="${level}">`);
+    if(edition == 'open' && (level > 0 || parentID)) $row.find('button[data-type=addSub]').attr('disabled', 'disabled');
+};

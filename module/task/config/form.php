@@ -131,6 +131,7 @@ $config->task->form->batchcreate['column']        = array('type' => 'int',      
 $config->task->form->batchcreate['openedBy']      = array('type' => 'string',   'required' => false, 'default' => $account);
 $config->task->form->batchcreate['openedDate']    = array('type' => 'datetime', 'required' => false, 'default' => $now);
 $config->task->form->batchcreate['vision']        = array('type' => 'string',   'required' => false, 'default' => $config->vision);
+$config->task->form->batchcreate['level']         = array('type' => 'string',   'required' => false, 'default' => 0);
 
 $config->task->form->pause = array();
 $config->task->form->pause['lastEditedBy']   = array('type' => 'string',   'required' => false, 'default' => $account);

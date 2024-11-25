@@ -497,17 +497,26 @@ class taskModel extends model
 
         $executionID = !empty($tasks) ? current($tasks)->execution : 0;
         $taskIdList  = array();
+        $parents     = array();
         foreach($tasks as $task)
         {
             /* Get the lane and column of the current task. */
             $laneID   = $task->lane;
             $columnID = $task->column;
-            unset($task->lane);
-            unset($task->column);
+            $level    = $task->level;
+            unset($task->lane, $task->column, $task->level);
 
             /* Create a task. */
             $taskID = $this->create($task);
             if(!$taskID) return false;
+
+            $parents[$level] = $taskID;
+            $task->id = $taskID;
+            if($level > 0)
+            {
+                $this->dao->update(TABLE_TASK)->set('parent')->eq($parents[$level - 1])->where('id')->eq($taskID)->exec();
+                $this->updateParent($task, false);
+            }
 
             /* Update Kanban and story stage. */
             if(!empty($task->story))
@@ -3231,7 +3240,7 @@ class taskModel extends model
      * @access public
      * @return void
      */
-    public function updateParent(object $task, bool $isParentChanged): void
+    public function updateParent(object $task, bool $isParentChanged = false): void
     {
         $oldTask    = $this->fetchByID($task->id);
         $parentTask = empty($task->parent) ? null : $this->fetchByID((int)$task->parent);

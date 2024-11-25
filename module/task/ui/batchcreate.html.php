@@ -13,6 +13,8 @@ namespace zin;
 include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
 
 /* ====== Preparing and processing page data ====== */
+jsVar('edition', $config->edition);
+jsVar('parentID', (int)$parent);
 jsVar('executionID', $execution->id);
 jsVar('storyTasks', $storyTasks);
 jsVar('parentEstStarted', isset($parentTask) ? $parentTask->estStarted : '');
@@ -141,6 +143,12 @@ if($execution->type == 'kanban')
     );
 }
 
+$batchFormOptions = array();
+$batchFormOptions['fixedActions']  = true; // 滚动时固定操作列。
+$batchFormOptions['actions']       = array(array('type' => 'addSibling', 'icon' => 'icon-plus', 'text' => '添加同级'), array('type' => 'addSub', 'icon' => 'icon-split', 'text' => '添加子级'), 'delete'); // 定义操作列按钮，在此处添加一个添加子级按钮。
+$batchFormOptions['onClickAction'] = jsRaw('window.handleClickBatchFormAction'); // 定义操作列按钮点击事件处理函数。
+$batchFormOptions['onRenderRow']   = jsRaw('window.handleRenderRow'); // 定义行渲染事件处理函数。
+
 /* ====== Define the page structure with zin widgets ====== */
 
 formBatchPanel
@@ -150,6 +158,7 @@ formBatchPanel
     set::pasteField('name'),
     set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'batchCreateFields')),
     set::headingActionsClass('flex-auto row-reverse justify-between w-11/12'),
+    set::batchFormOptions($batchFormOptions),
     $taskConsumed > 0 ? on::inited()->call('zui.Modal.alert', $lang->task->addChildTask) : null,
     to::headingActions
     (
@@ -160,13 +169,6 @@ formBatchPanel
             set::rootClass('items-center'),
             on::change('toggleZeroTaskStory')
         )
-    ),
-    formBatchItem
-    (
-        set::name('id'),
-        set::label($lang->idAB),
-        set::control('index'),
-        set::width('32px')
     ),
     formBatchItem
     (
@@ -187,7 +189,7 @@ formBatchPanel
     formBatchItem
     (
         set::name('name'),
-        set::control('colorInput'),
+        set::control(array('control' => 'inputGroup', 'id' => '', 'items' => array('#', array('control' => 'colorInput', 'name' => 'name')))),
         set::label($lang->task->name),
         set::width('240px')
     ),
