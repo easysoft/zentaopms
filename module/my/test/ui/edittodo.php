@@ -49,3 +49,7 @@ $todoStatus->waiting  = '未开始';
 $todoStatus->close    = '已关闭';
 
 r($tester->editTodo($todoTitle, $todoStatus)) && p('message,status') && e('编辑待办成功，SUCCESS'); //编辑待办，添加成功
+r($tester->startTodo($todoStatus))            && p('message,status') && e('开始待办成功，SUCCESS'); //开始待办，添加成功
+r($tester->finishTodo($todoStatus))           && p('message,status') && e('完成待办成功，SUCCESS'); //完成待办，添加成功
+r($tester->closeTodo($todoStatus))            && p('message,status') && e('关闭待办成功，SUCCESS'); //关闭待办，添加成功
+r($tester->activateTodo($todoStatus))         && p('message,status') && e('激活待办成功，SUCCESS'); //激活待办，添加成功
