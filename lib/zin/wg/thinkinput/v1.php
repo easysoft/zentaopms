@@ -10,17 +10,24 @@ requireWg('thinkQuestion');
  */
 class thinkInput extends thinkQuestion
 {
+    public static function getPageCSS(): ?string
+    {
+        $baseCss = file_get_contents(dirname(__FILE__, 2) . DS . 'thinkstepbase' . DS . 'css' . DS . 'v1.css');
+        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css') . $baseCss;
+    }
     protected function buildDetail(): array
     {
         global $lang, $app;
         $app->loadLang('thinkstep');
         $detailWg = parent::buildDetail();
-        list($step, $required, $value) = $this->prop(array('step', 'required', 'value'));
+        list($step, $required, $value, $isRun, $preViewModel) = $this->prop(array('step', 'required', 'value', 'isRun', 'preViewModel'));
         if($step)
         {
             $required = $step->options->required;
             $value    = !empty($step->answer->result) ? $step->answer->result[0] : '';
+            $disabled = !empty($value) && $preViewModel;
         }
+
         $detailWg[] = div(
             set::title($value),
             textarea
@@ -29,6 +36,7 @@ class thinkInput extends thinkQuestion
                 set::name('result'),
                 set::required($required),
                 set::value($value),
+                set::disabled($disabled),
                 set::placeholder($lang->thinkstep->placeholder->pleaseInput)
             ),
         );
