@@ -1,0 +1,1 @@
+.form-control[disabled] {background-color: rgba(var(--color-gray-100-rgb),var(--tw-bg-opacity)); --tw-bg-opacity: .4; color:rgba(var(--color-gray-700-rgb),var(--tw-bg-opacity))}
