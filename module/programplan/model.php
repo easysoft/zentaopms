@@ -794,6 +794,21 @@ class programplanModel extends model
         {
             $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('project')->eq($projectID)->andWhere('execution')->in($planIdList)->orderBy('execution_asc, order_asc, id_desc')->fetchAll('id');
         }
+
+        $today = helper::today();
+        foreach($tasks as $taskID => $task)
+        {
+            /* Delayed or not?. */
+            if(!empty($task->deadline) and !helper::isZeroDate($task->deadline))
+            {
+                $endDate = $today;
+                if(($task->status == 'done' || $task->status == 'closed') && !helper::isZeroDate($task->finishedDate)) $endDate = substr($task->finishedDate, 0, 10);
+
+                $actualDays = $this->loadModel('holiday')->getActualWorkingDays($task->deadline, $endDate);
+                $delay      = count($actualDays) - 1;
+                if($delay > 0) $tasks[$taskID]->delay = $delay;
+            }
+        }
         return $tasks;
     }
 }
