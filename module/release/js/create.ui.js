@@ -1,4 +1,4 @@
-function changeProduct(event)
+window.changeProduct = function(event)
 {
     let productID = $(event.target).val();
     loadPage($.createLink('projectrelease', 'create', 'projectID=' + projectID + '&' + 'productID=' + productID));
@@ -34,3 +34,11 @@ window.setSystemBox = function(e)
         $('#systemBox .picker-box').removeClass('hidden');
     }
 }
+
+$(function()
+{
+    setTimeout(function()
+    {
+        $('[name=system]').trigger('change');
+    }, 100);
+})
