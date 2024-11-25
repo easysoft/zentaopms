@@ -20,7 +20,7 @@ class thinkInput extends thinkQuestion
         global $lang, $app;
         $app->loadLang('thinkstep');
         $detailWg = parent::buildDetail();
-        list($step, $required, $value, $isRun, $preViewModel) = $this->prop(array('step', 'required', 'value', 'isRun', 'preViewModel'));
+        list($step, $required, $value, $preViewModel) = $this->prop(array('step', 'required', 'value', 'preViewModel'));
         if($step)
         {
             $required = $step->options->required;
