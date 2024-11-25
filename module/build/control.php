@@ -685,4 +685,23 @@ class build extends control
         if($this->post->bugIdList) $this->build->batchUnlinkBug($buildID, $this->post->bugIdList);
         return $this->sendSuccess(array('load' => $this->createLink($this->app->rawModule, 'view', "buildID=$buildID&type=bug")));
     }
+
+    /**
+     * 根据选择的产品获取应用列表。
+     * Get system list by product.
+     *
+     * @param  int $productID
+     * @access public
+     * @return string
+     */
+    public function ajaxGetSystemList(int $productID)
+    {
+        $systemList = $this->loadModel('system')->getPairs($productID, '0');
+        if(empty($systemList)) return '';
+
+        $system = array();
+        foreach($systemList as $systemID => $systemName) $system[] = array('text' => $systemName, 'value' => $systemID);
+
+        echo json_encode($system);
+    }
 }
