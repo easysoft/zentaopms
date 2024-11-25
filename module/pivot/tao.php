@@ -13,21 +13,13 @@ class pivotTao extends pivotModel
      */
     protected function fetchPivot(int $id, string|null $version = null): object|bool
     {
-        if(is_null($version))
-        {
-            return $this->dao->select('t1.*, t2.*')->from(TABLE_PIVOT)->alias('t1')
-                ->leftJoin(TABLE_PIVOTSPEC)->alias('t2')->on('t1.id=t2.pivot and t1.version=t2.version')
-                ->where('t1.id')->eq($id)
-                ->andWhere('t1.deleted')->eq('0')
-                ->fetch();
-        }
-
         $pivot = $this->dao->select('*')->from(TABLE_PIVOT)->where('id')->eq($id)->andWhere('deleted')->eq('0')->fetch();
         if(!$pivot) return false;
 
         $specData = $this->dao->select('*')->from(TABLE_PIVOTSPEC)
             ->where('pivot')->eq($id)
-            ->andWhere('version')->eq($version)
+            ->beginIF(is_null($version))->andWhere('version')->eq($pivot->version)->fi()
+            ->beginIF(!is_null($version))->andWhere('version')->eq($version)->fi()
             ->fetch();
         if(!$specData) return $pivot;
 
