@@ -87,7 +87,7 @@ class pivot extends control
         $versionSpecs = $this->pivot->getPivotVersions($pivotID);
         if(empty($versionSpecs)) $this->sendError($this->lang->pivot->tipNoVersions);
 
-        if(!empty($_POST))
+        if(!empty($_POST) && !isset($_POST['filterValues']))
         {
             $result = $this->pivot->switchNewVersion($pivotID, $version);
             if($result) $this->sendSuccess(array('closeModal' => true, 'message' => $this->lang->saveSuccess, 'load' => true));

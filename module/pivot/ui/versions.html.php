@@ -9,6 +9,10 @@ declare(strict_types = 1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+jsVar('pivot', $pivot->id);
+jsVar('version', $version);
+jsVar('group', $groupID);
+
 include_once 'show.html.php';
 
 $versionsTableBody = array();
@@ -16,6 +20,7 @@ foreach($versionSpecs as $versionSpec)
 {
     $versionsTableBody[] = h::tr
     (
+        $version == $versionSpec->version ? setClass('bg-secondary-50') : null,
         h::td
         (
             h::a
