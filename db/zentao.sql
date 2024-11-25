@@ -381,6 +381,7 @@ CREATE TABLE IF NOT EXISTS `zt_build` (
   `execution` mediumint(8) unsigned NOT NULL default '0',
   `builds` varchar(255) NOT NULL DEFAULT '',
   `name` char(150) NOT NULL DEFAULT '',
+  `system` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `scmPath` char(255) NOT NULL DEFAULT '',
   `filePath` char(255) NOT NULL DEFAULT '',
   `date` date NULL,
