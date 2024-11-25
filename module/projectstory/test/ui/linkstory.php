@@ -58,3 +58,21 @@ $story->estimate->range('0');
 $story->status->range('active{2}, reviewing{1}, draft{1}, changing{1}');
 $story->stage->range('wait');
 $story->assignedTo->range('[]');
+$story->version->range('1');
+$story->gen(5);
+
+$storySpec = zenData('storyspec');
+$storySpec->story->range('1-5');
+$storySpec->version->range('1');
+$storySpec->title->range('1-5');
+$storySpec->gen(5);
+
+$projectStory = zenData('projectstory');
+$projectStory->product->range('1');
+$projectStory->branch->range('0');
+$projectStory->story->range('1-5');
+$projectStory->version->range('1');
+$projectStory->order->range('1');
+$projectStory->gen(5);
+
+$tester = new linkStoryTester();
