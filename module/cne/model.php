@@ -606,13 +606,12 @@ class cneModel extends model
      */
     public function getComponents(object $instance): ?object
     {
-        $apiParams = new stdclass();
+        $apiParams = new stdClass();
         $apiParams->cluster   = '';
         $apiParams->namespace = $instance->spaceData->k8space;
         $apiParams->name      = $instance->k8name;
 
-        $apiUrl = "/api/cne/app/components";
-        return $this->apiGet($apiUrl, $apiParams, $this->config->CNE->api->headers);
+        return $this->apiGet('/api/cne/app/components', $apiParams, $this->config->CNE->api->headers);
     }
 
     /**
@@ -620,21 +619,20 @@ class cneModel extends model
      * Get app pods.
      *
      * @link https://yapi.qc.oop.cc/project/21/interface/api/189
-     * @param object $instance
-     * @param string $component
+     * @param object $instance 应用实例对象
+     * @param string $component 组件名称
      * @return object|null
      */
-    public function getPods(object $instance,string $component = ''): ?object
+    public function getPods(object $instance, string $component = ''): ?object
     {
-        $apiParams = new stdclass();
+        $apiParams = new stdClass();
         $apiParams->cluster   = '';
         $apiParams->namespace = $instance->spaceData->k8space;
         $apiParams->name      = $instance->k8name;
 
         !empty($component) && $apiParams->component = $component;
 
-        $apiUrl = "/api/cne/app/pods";
-        return $this->apiGet($apiUrl, $apiParams, $this->config->CNE->api->headers);
+        return $this->apiGet('/api/cne/app/pods', $apiParams, $this->config->CNE->api->headers);
     }
 
     /**
@@ -647,15 +645,14 @@ class cneModel extends model
      */
     public function getEvents(object $instance, string $component = ''): ?object
     {
-        $apiParams = new stdclass();
+        $apiParams = new stdClass();
         $apiParams->cluster   = '';
         $apiParams->namespace = $instance->spaceData->k8space;
         $apiParams->name      = $instance->k8name;
 
         !empty($component) && $apiParams->component = $component;
 
-        $apiUrl = "/api/cne/app/events";
-        return $this->apiGet($apiUrl, $apiParams, $this->config->CNE->api->headers);
+        return $this->apiGet('/api/cne/app/events', $apiParams, $this->config->CNE->api->headers);
     }
 
     /**
@@ -666,23 +663,27 @@ class cneModel extends model
      * @access public
      * @return object
      */
-    public function getAppLogs(object $instance): ?object
+    public function getAppLogs(object $instance, string $component = '', string $pod_name = '', string $container_name = '', string $previous = ''): ?object
     {
         if(!isset($this->app->user->account))
         {
-            $this->app->user = new stdclass();
+            $this->app->user = new stdClass();
             $this->app->user->account = $this->dao->select('*')->from(TABLE_USER)->where('deleted')->eq(0)->fetch('account');
         }
         $defaultSpace = $this->loadModel('space')->defaultSpace($this->app->user->account);
 
-        $apiParams = new stdclass();
+        $apiParams = new stdClass();
         $apiParams->cluster   = '';
         $apiParams->namespace = !empty($instance->spaceData->k8space) ? $instance->spaceData->k8space : $defaultSpace->k8space;
         $apiParams->name      = $instance->k8name;
         $apiParams->tail      = 500;
 
-        $apiUrl = "/api/cne/app/logs";
-        return $this->apiGet($apiUrl, $apiParams, $this->config->CNE->api->headers);
+        !empty($component)      && $apiParams->component      = $component;
+        !empty($pod_name)       && $apiParams->pod_name       = $pod_name;
+        !empty($container_name) && $apiParams->container_name = $container_name;
+        !empty($previous)       && $apiParams->previous       = $previous;
+
+        return $this->apiGet('/api/cne/app/logs', $apiParams, $this->config->CNE->api->headers);
     }
 
     /**
