@@ -56,3 +56,23 @@ $story->module->range('0');
 $story->plan->range('0');
 $story->title->range('需求001,需求002,需求003,需求004,需求005');
 $story->type->range('story');
+$story->estimate->range('0');
+$story->status->range('active{2}, reviewing{1}, draft{1}, changing{1}');
+$story->stage->range('projected');
+$story->assignedTo->range('[]');
+$story->version->range('1');
+$story->gen(5);
+
+$storySpec = zenData('storyspec');
+$storySpec->story->range('1-5');
+$storySpec->version->range('1');
+$storySpec->title->range('1-5');
+$storySpec->gen(5);
+
+$projectStory = zenData('projectstory');
+$projectStory->project->range('1');
+$projectStory->product->range('1');
+$projectStory->branch->range('0');
+$projectStory->story->range('1-5');
+$projectStory->version->range('1');
+$projectStory->order->range('1');
