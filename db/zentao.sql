@@ -2382,8 +2382,7 @@ INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type
 ('*/5',  '*',    '*',    '*',    '*',    'moduleName=ci&methodName=checkCompileStatus', '同步DevOps构建任务状态', 'zentao', 1, 'normal'),
 ('*/5',  '*',    '*',    '*',    '*',    'moduleName=ci&methodName=exec', '执行DevOps构建任务', 'zentao', 1, 'normal'),
 ('*/5',  '*',    '*',    '*',    '*',    'moduleName=mr&methodName=syncMR', '定时同步GitLab合并数据到禅道数据库', 'zentao', 1, 'normal'),
-('*/5',  '*',    '*',    '*',    '*',    'moduleName=compile&methodName=syncCompile', '定时同步构建记录', 'zentao', 1, 'normal'),
-('0',    '*',    '*',    '*',    '*',    'moduleName=misc&methodName=cleanCache', '清理缓存文件',    'zentao', 1, 'normal');
+('*/5',  '*',    '*',    '*',    '*',    'moduleName=compile&methodName=syncCompile', '定时同步构建记录', 'zentao', 1, 'normal');
 
 INSERT INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES
 ('rnd', 'ADMIN', 'admin', 'for administrator'),

@@ -83,3 +83,5 @@ UPDATE `zt_grouppriv` SET `module` = 'cache', `method` = 'setting' WHERE `module
 
 UPDATE `zt_pivot` SET `version` = '1';
 INSERT INTO `zt_pivotspec` SELECT `id`,`version`,`driver`,`mode`,`name`,`desc`,`sql`,`fields`,`langs`,`vars`,`objects`,`settings`,`filters`,`createdDate` FROM `zt_pivot`;
+
+DELETE FROM `zt_cron` WHERE `command` = 'moduleName=misc&methodName=cleanCache';
