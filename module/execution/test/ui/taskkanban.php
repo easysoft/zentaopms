@@ -8,7 +8,7 @@ cid=1
  */
 
 chdir(__DIR__);
-include '../lib/storykanban.ui.class.php';
+include '../lib/taskkanban.ui.class.php';
 
 $product = zenData('product');
 $product->id->range('1-100');
@@ -49,6 +49,7 @@ $story->grade->range('1{3}, 2{2}');
 $story->product->range('1');
 $story->title->range('1-100');
 $story->type->range('story');
+$story->category->range('feature, interface{100}');
 $story->estimate->range('0');
 $story->status->range('active');
 $story->stage->range('projected{2}, developing, testing{2} ');
@@ -94,3 +95,22 @@ $bug->title->range('1-100');
 $bug->status->range('active{3}, resolved{3}, closed{100}');
 $bug->assignedTo->range('[]');
 $bug->gen(8);
+
+$tester = new taskkanbanTester();
+$tester->login();
+
+r($tester->checkKanban('4', 1))           && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkKanban('8', 2))           && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkKanban('17', 1))          && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkKanban('18', 0))          && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkKanban('23', 2))          && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkKanban('24', 1))          && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkKanban('27', 2))          && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkKanban('32', 1))          && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkKanban('34', 2))          && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkKanban('35', 3))          && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkKanban('36', 4))          && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkKanban('37', 5))          && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkKanban('38', 6))          && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkKanban('1', 1, '2', '2')) && p('status,message') && e('SUCCESS,数据正确');
+$tester->closeBrowser();
