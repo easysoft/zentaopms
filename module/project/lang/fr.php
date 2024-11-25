@@ -93,6 +93,7 @@ $lang->project->createTask          = "Create Task";
 $lang->project->createExecutionTip  = 'Create %s';
 $lang->project->setDoc              = 'Set Doc';
 $lang->project->backToTaskList      = 'Go Back to Task List';
+$lang->project->backToKanban        = 'Go Back to Kanban';
 $lang->project->backToExecutionList = 'Go Back to Project %s List';
 $lang->project->backToProjectList   = 'Go Back to Project List';
 

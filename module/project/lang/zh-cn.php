@@ -93,6 +93,7 @@ $lang->project->createTask          = "创建任务";
 $lang->project->createExecutionTip  = '添加%s';
 $lang->project->setDoc              = '维护文档';
 $lang->project->backToTaskList      = '返回任务列表';
+$lang->project->backToKanban        = '返回看板';
 $lang->project->backToExecutionList = '返回项目%s列表';
 $lang->project->backToProjectList   = '返回项目列表';
 

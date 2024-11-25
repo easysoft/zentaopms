@@ -26,6 +26,7 @@ $showCreateTask          = !$multiple && strpos(',scrum,agileplus,', ",{$project
 $showCreateExecution     = $multiple && strpos(',scrum,agileplus,kanban,', ",{$project->model},") !== false;
 $showSetDoc              = !$isKanbanProject;
 $showBackToTaskList      = !$isKanbanProject && !$multiple;
+$showBackToKanban        = $isKanbanProject && !$multiple;
 $showBackToExecutionList = $multiple;
 
 $backUrl = createLink('project', 'execution', "status=undone&projectID={$projectID}");
@@ -100,6 +101,13 @@ panel
             $lang->project->backToTaskList,
             setData('app', 'project'),
             set::url(createLink('execution', 'task', "executionID={$executionID}"))
+        ) : null,
+        $showBackToKanban ? btn
+        (
+            set::className('mr-2 tipBtn'),
+            $lang->project->backToKanban,
+            setData('app', 'project'),
+            set::url(createLink('execution', 'kanban', "executionID={$executionID}"))
         ) : null,
         $showBackToExecutionList ? btn
         (
