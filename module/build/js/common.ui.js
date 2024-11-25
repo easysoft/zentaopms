@@ -45,7 +45,7 @@ window.loadSystem = function(productID)
             $systemPicker.render({items: data});
         }
     }, 'json');
-}
+};
 
 window.setSystemBox = function(e)
 {
@@ -61,4 +61,25 @@ window.setSystemBox = function(e)
         $('#systemBox #systemName').val('');
         $('#systemBox .picker-box').removeClass('hidden');
     }
+};
+
+window.loadBuilds = function()
+{
+    let isIntegrated = $('input[name=isIntegrated]:checked').val();
+    if(isIntegrated == 'no' || typeof(isIntegrated) == "undefined") return;
+
+    let projectID   = $('input[name=project]').val();
+    let executionID = $('input[name=execution]').val();
+    let systemID    = $('input[name=system]').val();
+    let productID   = $('input[name=product]').val();
+    $.get($.createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=builds&build=&branch=all&needCreate=&type=noempty,notrunk,separate,singled&system=' + systemID), function(data)
+    {
+        if(data)
+        {
+            data = JSON.parse(data);
+            const $buildsPicker = $('select[name^=builds]').zui('picker');
+            $buildsPicker.render({items: data, multiple: true});
+            $('select[name^=builds]').attr('data-placeholder', multipleSelect);
+        }
+    });
 }
