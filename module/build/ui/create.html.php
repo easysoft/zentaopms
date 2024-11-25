@@ -147,7 +147,7 @@ formPanel
                     (
                         set::name('system'),
                         set::required(true),
-                        set::items($apps)
+                        set::items(array())
                     ),
                     input(set::name('systemName'), setClass('hidden'))
                 ),
