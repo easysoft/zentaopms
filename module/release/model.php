@@ -156,6 +156,23 @@ class releaseModel extends model
     }
 
     /**
+     * 获取指定应用下的所有发布。
+     * Get releases by system.
+     *
+     * @param  array $systemList
+     * @access public
+     * @return array
+     */
+    public function getListBySystem(array $systemList): array
+    {
+        return $this->dao->select('*')->from(TABLE_RELEASE)
+            ->where('deleted')->eq(0)
+            ->andWhere('system')->in($systemList)
+            ->orderBy('id DESC')
+            ->fetchAll('id');
+    }
+
+    /**
      * 获取产品下发布的版本ID列表。
      * Get released builds from product.
      *
@@ -418,6 +435,7 @@ class releaseModel extends model
         if($shadowBuild) $this->dao->update(TABLE_BUILD)->data($shadowBuild)->where('id')->eq($oldRelease->shadow)->exec();
 
         $this->file->processFile4Object('release', $oldRelease, $release);
+
         return common::createChanges($oldRelease, $release);
     }
 
