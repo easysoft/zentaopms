@@ -33,3 +33,5 @@ $todoTitle->name = '待办test01';
 $todoStatus = new stdClass();
 $todoStatus->doing = '进行中';
 $todoStatus->done  = '已完成';
+
+r($tester->editTodo($todoTitle, $todoStatus)) && p('message,status') && e('编辑待办成功，SUCCESS'); //编辑待办，添加成功
