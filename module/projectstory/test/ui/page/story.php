@@ -27,7 +27,11 @@ class storyPage extends page
             'linkStoryBtn'   => "//*[@id='actionBar']/div[3]/a/span",
             'searchBtn'      => "//*[@class='btn primary']",
             'selectAllStory' => "//*[@id='table-projectstory-linkstory']/div[3]/div/div/label",
-            'saveBtn'        => "//*[@id='table-projectstory-linkstory']/div[3]/nav/button/span"
+            'saveBtn'        => "//*[@id='table-projectstory-linkstory']/div[3]/nav/button/span",
+            /* 移除需求 */
+            'unlinkFirBtn'   => "//*[@id='stories']/div[2]/div[3]/div/div[1]/div/nav/a[6]/i",
+            'batchUnlinkBtn' => "//*[@id='stories']/div[3]/nav[1]/button[1]/span",
+            'selectAllBtn'   => "//*[@id='stories']/div[3]/div/div/label"
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
