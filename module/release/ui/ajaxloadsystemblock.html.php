@@ -10,13 +10,34 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$apps        = array();
+$linkedApps  = array();
+foreach($linkedRelease as $releaseID)
+{
+    if(!isset($releases[$releaseID])) continue;
+
+    $systemID = $releases[$releaseID]->system;
+    if(!isset($appList[$systemID])) continue;
+
+    $apps[$systemID] = $appList[$systemID]->name;
+    unset($appList[$systemID]);
+
+    $linkedApps[$systemID] = $releaseID;
+}
+
+foreach($appList as $system) $apps[$system->id] = $system->name;
+
+$appReleases = array();
+foreach($releases as $releaseID => $release) $appReleases[$release->system][$releaseID] = $release->name;
+
 jsVar('releases', $releases);
-jsVar('appList',  $appList);
+jsVar('appList',  $apps);
 
 $systemTR = array();
 $i        = 0;
-foreach($appList as $system)
+foreach($apps as $system)
 {
+    $appID = $linkedApps ? key($linkedApps) : 0;
     $systemTR[] = h::tr
     (
         setClass('form-row'),
@@ -26,7 +47,8 @@ foreach($appList as $system)
             (
                 set::id("apps{$i}"),
                 set::name("apps[$i]"),
-                set::items($appList),
+                set::items($apps),
+                $appID ? set::value($appID) : null,
                 set('onchange', "setRelease(event, '{$i}')")
             )
         ),
@@ -36,7 +58,8 @@ foreach($appList as $system)
             (
                 set::id("releases{$i}"),
                 set::name("releases[$i]"),
-                set::items(array())
+                set::items($appID ? $appReleases[$appID] : array()),
+                $appID ? set::value(current($linkedApps)) : null
             )
         ),
         h::td
@@ -52,6 +75,7 @@ foreach($appList as $system)
         )
     );
 
+    unset($linkedApps[key($linkedApps)]);
     $i ++;
 }
 
