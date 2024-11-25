@@ -21,3 +21,5 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 ('lang', '立项关闭原因', 'charterCloseReason',  '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'charterCloseReason', '', '', ''),
 ('lang', '立项审批结果', 'charterReviewResult', '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'charterReviewResult', '', '', ''),
 ('lang', '立项审批状态', 'charterReviewStatus', '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'charterReviewStatus', '', '', '');
+
+UPDATE `zt_grouppriv` SET `method`='activateProjectApproval' WHERE `module`='charter' AND `method`='activate';
