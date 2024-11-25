@@ -33,7 +33,7 @@ foreach($versionSpecs as $versionSpec)
                 setData('group', $groupID)
             )
         ),
-        h::td($versionSpec->desc)
+        h::td(empty($versionSpec->desc) ? $lang->pivot->noDesc : $versionSpec->desc)
     );
 }
 
@@ -79,5 +79,6 @@ formPanel
         setClass('flex col gap-4 w-full'),
         $generateData()
     ),
+    set::actions(array('submit')),
     set::submitBtnText($lang->pivot->switchTo)
 );
