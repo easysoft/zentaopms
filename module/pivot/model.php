@@ -115,9 +115,8 @@ class pivotModel extends model
      */
     public function getPivotSpec(int $pivotID, string $version, bool $processDateVar = false, bool $addDrills = true)
     {
-        $pivot = $this->dao->select('*')->from(TABLE_PIVOTSPEC)->where('pivot')->eq($pivotID)->andWhere('version')->eq($version)->fetch();
+        $pivot = $this->pivotTao->fetchPivot($pivotID, $version);
         if(!$pivot) return false;
-        $pivot->id = $pivot->pivot;
 
         $pivot->fieldSettings = array();
         if(!empty($pivot->fields) && $pivot->fields != 'null')
