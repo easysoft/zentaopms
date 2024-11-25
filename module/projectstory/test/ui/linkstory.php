@@ -76,3 +76,8 @@ $projectStory->order->range('1');
 $projectStory->gen(5);
 
 $tester = new linkStoryTester();
+$tester->login();
+
+r($tester->linkstory()) && p('status,message') && e('SUCCESS,关联需求成功'); //正常关联需求
+
+$tester->closeBrowser();
