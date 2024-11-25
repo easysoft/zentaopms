@@ -65,3 +65,18 @@ $team->type->range('project');
 $team->account->range('admin');
 $team->join->range('(-2M)-(-M):1D')->type('timestamp')->format('YY/MM/DD');
 $team->gen(1);
+
+$tester = new bugTester();
+$tester->login();
+
+$bug = array(
+    array(''),
+    array('fileName' => '项目下Bug导出文件1', 'fileType' => 'xml', 'exportType' => '选中记录'),
+    array('fileName' => '项目下Bug导出文件2', 'fileType' => 'html', 'exportType' => '全部记录'),
+);
+
+r($tester->exportBug($bug[0])) && p('status,message') && e('SUCCESS,导出Bug成功'); //按照默认设置导出
+r($tester->exportBug($bug[1])) && p('status,message') && e('SUCCESS,导出Bug成功'); //导出xml选中记录
+r($tester->exportBug($bug[2])) && p('status,message') && e('SUCCESS,导出Bug成功'); //导出html全部记录
+
+$tester->closeBrowser();
