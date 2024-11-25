@@ -91,6 +91,7 @@ class pivotZen extends pivot
             $pivots = $this->pivot->getAllPivotByGroupID($group->id);
             $pivots = $this->pivot->filterInvisiblePivot($pivots);
             $pivots = $this->loadModel('mark')->getMarks($pivots, 'pivot', 'view');
+            $pivots = $this->pivot->isVersionChange($pivots);
             if(empty($pivots)) continue;
 
             if($group->grade > 1) $menus[] = (object)array('id' => $group->id, 'parent' => 0, 'name' => $group->name);
@@ -124,9 +125,17 @@ class pivotZen extends pivot
      */
     protected function setNewMark(object $pivot, object $firstAction, array $builtins): void
     {
-        if(!isset($builtins[$pivot->id])) return;
-        if(!$pivot->mark && $pivot->createdDate < $firstAction->date) $pivot->mark = true;
-        if(!$pivot->mark) $pivot->name = array('text' => $pivot->name, 'html' => $pivot->name . ' <span class="label ghost size-sm bg-secondary-50 text-secondary-500 rounded-full">' . $this->lang->pivot->new . '</span>');
+        // 版本没有改变，此时讨论是不是新透视表
+        if(!$pivot->versionChange)
+        {
+            if(!isset($builtins[$pivot->id])) return;
+            if(!$pivot->mark && $pivot->createdDate < $firstAction->date) $pivot->mark = true;
+            if(!$pivot->mark) $pivot->name = array('text' => $pivot->name, 'html' => $pivot->name . ' <span class="label ghost size-sm bg-secondary-50 text-secondary-500 rounded-full">' . $this->lang->pivot->new . '</span>');
+        }
+        else
+        {
+            $pivot->name = array('text' => $pivot->name, 'html' => $pivot->name . ' <span class="label ghost size-sm bg-secondary-50 text-secondary-500 rounded-full">' . $this->lang->pivot->newVersion . '</span>');
+        }
     }
 
     /**

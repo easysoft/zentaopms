@@ -27,6 +27,7 @@ $lang->pivot->story        = 'Story';
 $lang->pivot->clear        = 'Clear';
 $lang->pivot->keep         = 'Keep';
 $lang->pivot->new          = 'New';
+$lang->pivot->newVersion   = 'New version';
 $lang->pivot->version      = 'Version';
 $lang->pivot->viewVersion  = 'View version';
 

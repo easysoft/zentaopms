@@ -27,6 +27,7 @@ $lang->pivot->story        = '需求';
 $lang->pivot->clear        = '清空';
 $lang->pivot->keep         = '保留设计';
 $lang->pivot->new          = '新';
+$lang->pivot->newVersion   = '新版本';
 $lang->pivot->version      = '当前版本';
 $lang->pivot->viewVersion  = '查看版本列表';
 

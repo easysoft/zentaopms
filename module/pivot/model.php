@@ -2902,6 +2902,55 @@ class pivotModel extends model
 
         return $maxVersion;
     }
+
+    /**
+     * Get max version by idList.
+     *
+     * @param  string|array $pivotIDList
+     * @access public
+     * @return string
+     */
+    public function getMaxVersionByIDList(string|array $pivotIDList)
+    {
+        $pivotVersions = $this->dao->select('pivot,version')->from(TABLE_PIVOTSPEC)
+            ->where('pivot')->in($pivotIDList)
+            ->fetchGroup('pivot', 'version');
+        if(empty($pivotVersions)) return array();
+
+        $pivotMaxVersion = array();
+        foreach($pivotVersions as $pivotID => $versions)
+        {
+            $versions = array_keys($versions);
+            $maxVersion = current($versions);
+            foreach($versions as $version)
+            {
+                if(version_compare($version, $maxVersion, '>')) $maxVersion = $version;
+            }
+
+            $pivotMaxVersion[$pivotID] = $maxVersion;
+        }
+
+        return $pivotMaxVersion;
+    }
+
+    public function isVersionChange(array $pivots)
+    {
+        $pivotMaxVersion = $this->getMaxVersionByIDList(array_column($pivots, 'id'));
+
+        foreach($pivots as $index => $pivot)
+        {
+            if(isset($pivotMaxVersion[$pivot->id]) && $pivotMaxVersion[$pivot->id] != $pivot->version)
+            {
+                $pivots[$index]->versionChange = true;
+            }
+            else
+            {
+                $pivots[$index]->versionChange = false;
+            }
+        }
+
+        return $pivots;
+    }
 }
 
 /**
