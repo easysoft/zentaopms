@@ -1251,9 +1251,20 @@
                     const $data = $(info.data).children('.form-group[data-name]');
                     items.forEach(name =>
                     {
-                        const $item = $data.filter(`[data-name="${name}"]`);
-                        $oldItems.filter(`[data-name="${name}"]`).replaceWith($item);
-                        $item.zuiInit();
+                        if('.[#'.includes(name[0]))
+                        {
+                            const $items         = $data.filter(name);
+                            const $oldMatchItems = $oldItems.filter(name);
+                            $oldMatchItems.last().after($items);
+                            $oldMatchItems.remove();
+                            $items.zuiInit();
+                        }
+                        else
+                        {
+                            const $item = $data.filter(`[data-name="${name}"]`);
+                            $oldItems.filter(`[data-name="${name}"]`).replaceWith($item);
+                            $item.zuiInit();
+                        }
                     });
 
                     if(options.updateOrders)
