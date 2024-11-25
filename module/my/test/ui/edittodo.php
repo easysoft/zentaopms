@@ -9,6 +9,18 @@ timeout=0
 - 编辑列表第一个待办，编辑成功
  - 测试结果 @编辑待办成功
  - 最终测试状态 @SUCCESS
+- 开始列表第一个待办，状态修改成功
+ - 测试结果 @开始待办成功
+ - 最终测试状态 @SUCCESS
+- 完成列表第一个待办，状态修改成功
+ - 测试结果 @完成待办成功
+ - 最终测试状态 @SUCCESS
+- 关闭列表第一个待办，状态修改成功
+ - 测试结果 @关闭待办成功
+ - 最终测试状态 @SUCCESS
+- 激活列表第一个待办，状态修改成功
+ - 测试结果 @激活待办成功
+ - 最终测试状态 @SUCCESS
 
 */
 chdir(__DIR__);
@@ -31,7 +43,9 @@ $todoTitle = new stdClass();
 $todoTitle->name = '待办test01';
 
 $todoStatus = new stdClass();
-$todoStatus->doing = '进行中';
-$todoStatus->done  = '已完成';
+$todoStatus->doing    = '进行中';
+$todoStatus->done     = '已完成';
+$todoStatus->waiting  = '未开始';
+$todoStatus->close    = '已关闭';
 
 r($tester->editTodo($todoTitle, $todoStatus)) && p('message,status') && e('编辑待办成功，SUCCESS'); //编辑待办，添加成功
