@@ -43,7 +43,8 @@ class formBatchPanel extends formPanel
         'sortRowIcon?: string|false',   // 排序行的图标，如果设置为 `false` 则不显示图标
         'sortable?: boo|array',         // 排序配置，设置为 false 不启用排序，设置为 true 使用默认排序
         'onRenderRow?: function',       // 渲染行时的回调函数。
-        'onRenderRowCol?: function'     // 渲染列时的回调函数。
+        'onRenderRowCol?: function',    // 渲染列时的回调函数。
+        'batchFormOptions?: array'      // 批量表单选项。
     );
 
     public static function getPageCSS(): ?string
