@@ -2579,7 +2579,7 @@ class pivotModel extends model
             {
                 $isGroup = !empty($data->cols[0][$j]->isGroup) ? $data->cols[0][$j]->isGroup : false;
                 $rowspan = isset($configs[$i][$j]) ? $configs[$i][$j] : 1;
-                $hidden  = (isset($configs[$i][$j]) and $configs[$i][$j]) ? false : !!$isGroup;
+                $hidden  = (isset($configs[$i][$j]) and $configs[$i][$j]) ? false : (bool)$isGroup;
 
                 $showOrigin = $showOrigins[$j];
                 if($hasShowOrigin && !$isGroup && !$showOrigin)
