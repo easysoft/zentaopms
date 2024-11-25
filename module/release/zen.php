@@ -102,11 +102,23 @@ class releaseZen extends release
             ->get();
 
         /* Check build if build is required. */
-        if(strpos($this->config->release->create->requiredFields, 'build') !== false && empty($release->build))
+        if(strpos($this->config->release->create->requiredFields, 'build') !== false && empty($release->build)) dao::$errors['build'] = sprintf($this->lang->error->notempty, $this->lang->release->build);
+
+        if(!$newSystem && $this->post->system)
         {
-            dao::$errors['build'] = sprintf($this->lang->error->notempty, $this->lang->release->build);
-            return false;
+            $system = $this->loadModel('system')->fetchByID((int)$this->post->system);
+            if(!$system) dao::$errors['system'][] = sprintf($this->lang->error->notempty, $this->lang->release->system);
+
+            if($system->integrated == '1')
+            {
+                $releases = (array)$this->post->releases;
+
+                $release->build    = '';
+                $release->releases = trim(implode(',', $releases), ',');
+                if(!$release->releases) dao::$errors['releases[' . key($releases) . ']'][] = sprintf($this->lang->error->notempty, $this->lang->release->includedSystem);
+            }
         }
+        if(dao::isError()) return false;
 
         if($newSystem && $this->post->systemName)
         {
