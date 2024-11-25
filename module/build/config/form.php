@@ -22,6 +22,7 @@ $config->build->form->create['createdDate'] = array('type' => 'datetime ', 'requ
 
 $config->build->form->edit['execution'] = array('type' => 'int',       'required' => $app->tab == 'execution', 'default' => 0);
 $config->build->form->edit['product']   = array('type' => 'int',       'required' => false, 'default' => 0);
+$config->build->form->edit['system']    = array('type' => 'int',       'required' => false, 'default' => 0);
 $config->build->form->edit['scmPath']   = array('type' => 'string',    'required' => false, 'default' => '');
 $config->build->form->edit['filePath']  = array('type' => 'string',    'required' => false, 'default' => '');
 $config->build->form->edit['desc']      = array('type' => 'string',    'required' => false, 'default' => '', 'control' => 'editor');

@@ -77,7 +77,7 @@ class buildZen extends build
         $projectID     = $build->execution ? (int)$build->execution : (int)$build->project;
         $productGroups = $this->loadModel('product')->getProducts($projectID, $status);
         $branches      = $this->loadModel('branch')->getList($build->product, $projectID, 'all');
-        if(!$build->execution) $builds = $this->build->getBuildPairs(array($build->product), 'all', 'noempty,notrunk,singled,separate', $build->project, 'project', $build->builds, false);
+        if(!$build->execution) $builds = $this->build->getBuildPairs(array($build->product), 'all', 'noempty,notrunk,singled,separate', $build->project, 'project', $build->builds, false, $build->system);
 
         /* Get execution info. */
         $executions = $this->product->getExecutionPairsByProduct($build->product, $build->branch, (int)$this->session->project, 'stagefilter');
@@ -120,6 +120,7 @@ class buildZen extends build
         $this->view->executions      = $executions;
         $this->view->executionType   = !empty($execution) && $execution->type == 'stage' ? 1 : 0;
         $this->view->orderBy         = 'status_asc, stage_asc, id_desc';
+        $this->view->systemList      = $this->loadModel('system')->getPairs(zget($this->view->product, 'id', 0), '0');
         $this->display();
     }
 

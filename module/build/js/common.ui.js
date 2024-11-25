@@ -39,11 +39,9 @@ window.loadSystem = function(productID)
 
     $.get($.createLink('build', 'ajaxGetSystemList', 'productID=' + productID), function(data)
     {
-        if(data)
-        {
-            const $systemPicker = $('[name=system]').zui('picker');
-            $systemPicker.render({items: data});
-        }
+        const $systemPicker = $('[name=system]').zui('picker');
+        $systemPicker.$.clear();
+        $systemPicker.render({items: data});
     }, 'json');
 };
 
@@ -66,20 +64,18 @@ window.setSystemBox = function(e)
 window.loadBuilds = function()
 {
     let isIntegrated = $('input[name=isIntegrated]:checked').val();
-    if(isIntegrated == 'no' || typeof(isIntegrated) == "undefined") return;
+    if(typeof(build) == "undefined" && (isIntegrated == 'no' || typeof(isIntegrated) == "undefined")) return;
 
-    let projectID   = $('input[name=project]').val();
     let executionID = $('input[name=execution]').val();
     let systemID    = $('input[name=system]').val();
     let productID   = $('input[name=product]').val();
+
     $.get($.createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=builds&build=&branch=all&needCreate=&type=noempty,notrunk,separate,singled&system=' + systemID), function(data)
     {
-        if(data)
-        {
-            data = JSON.parse(data);
-            const $buildsPicker = $('select[name^=builds]').zui('picker');
-            $buildsPicker.render({items: data, multiple: true});
-            $('select[name^=builds]').attr('data-placeholder', multipleSelect);
-        }
+        data = JSON.parse(data);
+        const $buildsPicker = $('select[name^=builds]').zui('picker');
+        $buildsPicker.$.clear();
+        $buildsPicker.render({items: data, multiple: true});
+        $('select[name^=builds]').attr('data-placeholder', multipleSelect);
     });
 }
