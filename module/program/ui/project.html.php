@@ -60,6 +60,12 @@ foreach($projectStats as $project)
     $executions = zget($executionGroup, $project->id, array());
     $project->executionCount = count($executions);
 
+    if(!empty($project->delay) && $project->delay > 0)
+    {
+        $project->postponed = true;
+        $project->delayInfo = sprintf($lang->project->delayInfo, $project->delay);
+    }
+
     $project = $this->project->formatDataForList($project, $PMList);
 }
 
@@ -74,6 +80,7 @@ dtable
     set::data(array_values($projectStats)),
     set::checkable($canBatchEdit),
     set::nested(false),
+    set::onRenderCell(jsRaw('window.renderCell')),
     set::orderBy($orderBy),
     set::sortLink(createLink('program', 'project', "programID={$programID}&&browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footToolbar($footToolbar),
