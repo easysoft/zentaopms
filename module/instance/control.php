@@ -667,9 +667,7 @@ class instance extends control
 
         $success = $this->instance->deleteBackup($instance, $backupName);
         if(!$success) return $this->send(array('result' => 'fail', 'message' => zget($this->lang->instance->notices, 'deleteFail')));
-
         $this->action->create('instance', $instance->id, 'manualdeletebackup', '', json_encode(array('result' => 'success')));
-        $locate = $this->createLink('instance', 'view', 'id=' . $instanceID);
-        return $this->send(array('result' => 'success', 'load' => array('alert' => zget($this->lang->instance->notices, 'deleteSuccess'), 'locate' => $locate, 'closeModal' => true)));
+        return $this->send(array('result' => 'success', 'message' => zget($this->lang->instance->notices, 'deleteSuccess'), 'load' => $this->createLink('instance', 'view', 'id=' . $instanceID)));
     }
 }
