@@ -140,7 +140,7 @@ class release extends control
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed');
         $this->view->lastRelease = $this->release->getLast($productID, (int)$branch);
         $this->view->status      = $status;
-        $this->view->apps        = $this->loadModel('system')->getPairs($productID, '', 'active');
+        $this->view->appList     = $this->loadModel('system')->getList($productID);
 
         $this->display();
     }
@@ -621,5 +621,26 @@ class release extends control
 
         $this->loadModel('action')->create('release', $releaseID, 'changestatus', '', $action);
         return $this->sendSuccess(array('load' => true));
+    }
+
+    /**
+     * 获取生成应用和发布的联动组件。
+     * Get system and release combobox.
+     *
+     * @param  int    $systemID
+     * @access public
+     * @return void
+     */
+    public function ajaxLoadSystemBlock(int $systemID)
+    {
+        $system   = $this->loadModel('system')->fetchByID($systemID);
+        $children = explode(',', $system->children);
+
+        $appList  = $this->system->getByIdList($children);
+        $releases = $this->release->getListBySystem($children);
+
+        $this->view->appList  = array_column($appList, 'name', 'id');
+        $this->view->releases = $releases;
+        $this->display();
     }
 }
