@@ -459,7 +459,7 @@ class helper extends baseHelper
             else
             {
                 $redis->connect($setting->host, (int)$setting->port, 1, null, 0, 0);
-                $redis->auth(['pass' => $setting->password ?: null]);
+                $redis->auth($setting->password ?: null);
             }
 
             if(!$redis->ping()) throw new Exception('Can not connect to Redis server.');
