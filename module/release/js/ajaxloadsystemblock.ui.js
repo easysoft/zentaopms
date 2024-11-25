@@ -41,3 +41,22 @@ window.initAppPicker = function()
         $appsPicker.render({items: appsItems});
     });
 }
+
+window.addItem = function(obj)
+{
+    let item         = $('#addItem > tbody').html().replace(/_i/g, itemIndex);
+    const $currentTr = $(obj).closest('tr');
+    $currentTr.after(item);
+
+    setTimeout(window.initAppPicker, 100)
+
+    $('#systemForm tbody tr .actions-list .btn-link').eq(1).removeClass('hidden');
+
+    itemIndex ++;
+}
+
+window.deleteItem = function(obj)
+{
+    $(obj).closest('tr').remove();
+    if($('#systemForm tbody tr').length < 2) $('#systemForm tbody tr .actions-list .btn-link').eq(1).addClass('hidden');
+}
