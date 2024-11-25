@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('projectID', isset($projectID) ? $projectID : 0);
+jsVar('appList', $appList);
 
 $productRow = array();
 if(!empty($projectID))
@@ -35,6 +36,7 @@ formPanel
     set::title($lang->release->create),
     on::change('[name=status]', 'changeStatus'),
     on::change('[name=newSystem]', 'setSystemBox'),
+    on::change('[name=system]', 'loadSystemBlock'),
     formRow
     (
         formGroup
@@ -52,7 +54,7 @@ formPanel
                     (
                         set::name('system'),
                         set::required(true),
-                        set::items($apps)
+                        set::items(array_column($appList, 'name', 'id')),
                     ),
                     input(set::name('systemName'), setClass('hidden'))
                 ),
@@ -90,8 +92,17 @@ formPanel
         )
     ),
     $productRow,
+    formGroup
+    (
+        setClass('hidden'),
+        setID('systemBlock'),
+        set::required(true),
+        set::label($lang->release->includedSystem),
+        div(setID('systemItems'), setClass('w-full'))
+    ),
     formRow
     (
+        setID('buildBox'),
         formGroup
         (
             set::width('1/2'),
