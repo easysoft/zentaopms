@@ -287,6 +287,11 @@ detailBody
                                 set::name($lang->build->branch),
                                 $branchName
                             ) : null,
+                            $build->system ? item
+                            (
+                                set::name($lang->build->system),
+                                zget($systemList, $build->system)
+                            ) : null,
                             item
                             (
                                 set::name($lang->build->name),
