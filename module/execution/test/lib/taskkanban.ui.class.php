@@ -15,16 +15,15 @@ class taskkanbanTester extends tester
      */
     public function checkKanban($col, $num, $nameId = '', $groupId = '')
     {
-        $form  = $this->initForm('execution', 'taskkanban', array('execution' => '2'), 'appIframe-execution');
+        $form = $this->initForm('execution', 'taskkanban', array('execution' => '2'), 'appIframe-execution');
 
         if(!empty($nameId))
         {
-            $form->dom->xpath['kanbanName']  = "(//menu/menu/li)[{$nameId}]";
+            $form->dom->xpath['kanbanName'] = "(//menu/menu/li)[{$nameId}]";
             $form->dom->namePicker->click();
             $form->dom->kanbanName->click();
             $form->wait(1);
         }
-
         if(!empty($groupId))
         {
             $form->dom->xpath['kanbanGroup'] = "(//menu/menu/li)[{$groupId}]";
