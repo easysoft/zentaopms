@@ -738,7 +738,7 @@ $config->pipelineTypeList = array('gitlab', 'gogs', 'gitea', 'jenkins', 'sonarqu
 
 /* Program privs.*/
 $config->programPriv = new stdclass();
-$config->programPriv->noSprint      = array('task', 'story', 'requirement', 'epic', 'tree', 'project', 'execution', 'projectbuild', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'stakeholder', 'projectrelease', 'issue', 'risk', 'opportunity');
+$config->programPriv->noSprint      = array('task', 'story', 'requirement', 'epic', 'tree', 'project', 'execution', 'projectbuild', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'stakeholder', 'projectrelease', 'issue', 'risk', 'opportunity', 'auditplan');
 $config->programPriv->scrum         = array('story', 'requirement', 'epic', 'productplan', 'tree', 'projectplan', 'projectstory', 'projectrelease', 'project', 'execution', 'projectbuild', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'meeting', 'stakeholder', 'testtask', 'issue', 'risk', 'opportunity');
 $config->programPriv->waterfall     = array_merge($config->programPriv->scrum, array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'milestone', 'design', 'measrecord', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport'));
 $config->programPriv->agileplus     = $config->programPriv->scrum;
