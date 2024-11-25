@@ -171,4 +171,13 @@ class bugTester extends tester
         if($form->dom->status->getText() == '激活') return $this->success('激活Bug成功');
         return $this->failed('激活Bug失败');
     }
+
+    /**
+     * 导出bug。
+     * Export bug.
+     *
+     * @param  array $bug
+     * @access public
+     * @return object
+     */
 }
