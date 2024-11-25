@@ -487,7 +487,7 @@ EOT)->from(TABLE_TASK)->alias('t1')
             ->orderBy('id_desc')
             ->fetchAll();
 
-        return $this->mergePivotSpecData($pivots);
+        return $this->mergePivotSpecData($pivots, false);
     }
 
     /**
