@@ -31,6 +31,22 @@ window.loadBranches = function(productID)
     }, 'json');
 }
 
+window.loadSystem = function(productID)
+{
+    productID = parseInt(productID);
+    if(!productID) productID = $('input[name=product]').val();
+    if(typeof(productID) == "undefined") return;
+
+    $.get($.createLink('build', 'ajaxGetSystemList', 'productID=' + productID), function(data)
+    {
+        if(data)
+        {
+            const $systemPicker = $('[name=system]').zui('picker');
+            $systemPicker.render({items: data});
+        }
+    }, 'json');
+}
+
 window.setSystemBox = function(e)
 {
     const newSystem = $(e.target).is(':checked') ? 1 : 0;
