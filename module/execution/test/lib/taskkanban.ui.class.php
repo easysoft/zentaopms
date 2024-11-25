@@ -11,7 +11,7 @@ class taskkanbanTester extends tester
      * @param  string $nameId
      * @param  string $groupId
      * @access public
-     * @return void
+     * @return object
      */
     public function checkKanban($col, $num, $nameId = '', $groupId = '')
     {
