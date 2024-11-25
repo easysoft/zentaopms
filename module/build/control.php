@@ -280,7 +280,7 @@ class build extends control
      * @access public
      * @return string
      */
-    public function ajaxGetProjectBuilds(int $projectID, int $productID, string $varName, string $build = '', string|int $branch = 'all', $needCreate = false, $type = 'normal')
+    public function ajaxGetProjectBuilds(int $projectID, int $productID, string $varName, string $build = '', string|int $branch = 'all', $needCreate = false, $type = 'normal', int $system = 0)
     {
         $isJsonView = $this->app->getViewType() == 'json';
         if($varName == 'openedBuild')
@@ -308,7 +308,7 @@ class build extends control
 
         if(empty($projectID)) return $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $type);
 
-        $builds = $this->build->getBuildPairs(array($productID), $branch, $type, $projectID, 'project', $build, false);
+        $builds = $this->build->getBuildPairs(array($productID), $branch, $type, $projectID, 'project', $build, false, (int)$system);
         if($isJsonView) return print(json_encode($builds));
 
         $builds = $this->build->addReleaseLabelForBuilds($productID, $builds);
