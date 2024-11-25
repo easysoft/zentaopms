@@ -3569,7 +3569,7 @@ eof;
                     $dropMenu  = "<ul class='dropdown-menu'>{$dropMenu}</ul>";
                 }
 
-                $misc = (isset($lang->navGroup->$module) and $tab != $lang->navGroup->$module) ? "data-app='$tab'" : '';
+                $misc = "data-app='$tab'";
                 $menuItemHtml = "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target, $misc) . $dropMenu . "</li>\n";
 
                 if($isMobile) $menuItemHtml = html::a($link, $menuItem->text, $target, $misc . " class='$class $active'") . "\n";
