@@ -23,22 +23,25 @@ formPanel
     on::change('[name=lib],[name^=users]', 'checkLibPriv'),
     set::ajax(array('beforeSubmit' => jsRaw('window.beforeSetDocBasicInfo'))),
 
-    $objectType == 'project' ? formRow
-    (
-        formGroup
-        (
-            setClass('w-1/2'),
-            set::label($lang->doc->project),
-            set::required(true),
-            set::control(array('control' => 'picker', 'name' => 'project', 'items' => $objects, 'required' => true, 'value' => isset($execution) ? $execution->project : $objectID))
-        ),
-        ($mode == 'create' && $this->app->tab == 'doc' and $config->vision == 'rnd') ? formGroup
-        (
-            setClass('w-1/2'),
-            set::label($lang->doc->execution),
-            set::control(array('control' => 'picker', 'name' => 'execution', 'items' => $executions, 'value' => isset($execution) ? $objectID : ''))
-        ) : null
-    ) : null,
+    $objectType == 'project'
+        ? formRow(
+            formGroup(
+                setClass('w-1/2'),
+                set::label($lang->doc->project),
+                set::name('project'),
+                set::items(createLink('project', 'ajaxGetDropMenu', "objectID=$objectID&module=&method=&extra=selectmode&useLink=0")),
+                set::value(isset($execution) ? $execution->project : $objectID),
+                set::required(true)
+            ),
+            ($mode == 'create' && $this->app->tab == 'doc' and $config->vision == 'rnd')
+                ? formGroup(
+                    setClass('w-1/2'),
+                    set::label($lang->doc->execution),
+                    set::control(array('control' => 'picker', 'name' => 'execution', 'items' => $executions, 'value' => isset($execution) ? $objectID : ''))
+                )
+                : null
+        )
+        : null,
     ($objectType == 'execution') ? formGroup
     (
         set::width('1/2'),

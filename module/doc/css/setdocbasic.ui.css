@@ -1,4 +1,3 @@
-#whiteListBox .form-label {top: 28%;}
 .menu-item-inner .item-content .item-title {flex-grow: 0!important;}
 .menu-item.is-nested > .item-inner {background-color: inherit!important; color: inherit!important; cursor: default;}
 .menu-item.is-nested > .item-inner::before {display: none;}

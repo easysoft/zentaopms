@@ -15,6 +15,28 @@ $acl = 'default';
 if($type == 'mine')   $acl = 'private';
 if($type == 'custom') $acl = 'open';
 
+$renderObjectBox = function(string $type) use ($lang, $objects, $objectID)
+{
+    if(!in_array($type, array('product', 'project', 'execution'))) return null;
+
+    $items = $type === 'execution'
+        ? $objects
+        : createLink($type, 'ajaxGetDropMenu', "objectID=$objectID&module=&method=&extra=selectmode&useLink=0");
+
+    return formRow(
+        setClass('objectBox'),
+        formGroup(
+            set::width('5/6'),
+            set::label($lang->doc->{$type}),
+            set::name($type),
+            set::items($items),
+            set::value($objectID),
+            set::required(true),
+            $type == 'project' ? on::change('loadExecution') : null
+        )
+    );
+};
+
 formPanel
 (
     set::title($lang->doc->createLib),
@@ -36,20 +58,7 @@ formPanel
             on::change('changeDoclibAcl')
         )
     ) : null,
-    in_array($type, array('product', 'project', 'execution')) ? formRow
-    (
-        setClass('objectBox'),
-        formGroup
-        (
-            set::width('5/6'),
-            set::label($lang->doc->{$type}),
-            set::name($type),
-            set::items($objects),
-            set::value($objectID),
-            set::required(true),
-            $type == 'project' ? on::change('loadExecution') : ''
-        )
-    ) : null,
+    $renderObjectBox($type),
     in_array($type, array('product', 'project', 'execution')) && $app->tab == 'doc' && $type == 'project' ? formRow
     (
         setClass('executionBox'),
