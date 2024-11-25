@@ -478,10 +478,10 @@ class project extends control
                 $session   = $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=lists", '', false, $projectID);
                 if(in_array($this->config->edition, array('max', 'ipd'))) $session = $this->createLink('project', 'execution', "status=undone&projectID=$projectID", '', false);
                 $this->session->set('projectPlanList', $session, 'project');
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('programplan', 'create', "projectID=$projectID&productID=0&planID=0&executionType=stage&from=projectCreate", '', false, $projectID)));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('programplan', 'create', "projectID=$projectID&productID=0&planID=0&executionType=stage&from=projectCreate", '', false, $projectID)));
             }
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('create', "model=$model&programID=$programID&copyProjectID=$projectID&extra=showTips=1,project=$projectID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('create', "model=$model&programID=$programID&copyProjectID=$projectID&extra=showTips=1,project=$projectID")));
         }
 
         $this->projectZen->buildCreateForm((string)$model, (int)$programID, (int)$copyProjectID, (string)$extra);
