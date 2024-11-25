@@ -253,7 +253,7 @@ class buildModel extends model
      * @access public
      * @return array
      */
-    public function getBuildPairs(array|int $productIdList, string|int $branch = 'all', string $params = 'noterminate, nodone', int $objectID = 0, string $objectType = 'execution', string $buildIdList = '', bool $replace = true): array
+    public function getBuildPairs(array|int $productIdList, string|int $branch = 'all', string $params = 'noterminate, nodone', int $objectID = 0, string $objectType = 'execution', string $buildIdList = '', bool $replace = true, int $system = 0): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getBuildPairs();
 
@@ -263,7 +263,7 @@ class buildModel extends model
         $buildIdList    = str_replace('trunk', '0', $buildIdList);
         $shadows        = $this->dao->select('shadow')->from(TABLE_RELEASE)->where('product')->in($productIdList)->fetchPairs('shadow', 'shadow'); // Get the buildID under the shadow product.
         $selectedBuilds = $this->buildTao->selectedBuildPairs($buildIdList, $productIdList, $params, $objectID, $objectType);
-        $allBuilds      = $this->buildTao->fetchBuilds($productIdList, $params, $objectID, $objectType, $shadows);
+        $allBuilds      = $this->buildTao->fetchBuilds($productIdList, $params, $objectID, $objectType, $shadows, $system);
 
         /* Set builds and filter done executions and terminate releases. */
         list($builds, $excludedReleaseIdList) = $this->setBuildDateGroup($allBuilds, $branch, $params);

@@ -109,6 +109,7 @@ formPanel
 (
     set::title($lang->build->create),
     on::change('[name=newSystem]', 'setSystemBox'),
+    on::change('[name=system]', 'loadBuilds'),
     $integratedRow,
     $executionRow,
     $productRow,
