@@ -397,6 +397,7 @@ CREATE TABLE IF NOT EXISTS `zt_build` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE INDEX `product`   ON `zt_build`(`product`);
 CREATE INDEX `execution` ON `zt_build`(`execution`);
+CREATE INDEX `idx_system` ON `zt_build`(`system`);
 
 -- DROP TABLE IF EXISTS `zt_burn`;
 CREATE TABLE IF NOT EXISTS `zt_burn` (

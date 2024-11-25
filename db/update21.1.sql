@@ -24,6 +24,7 @@ ALTER TABLE `zt_release` ADD `releases` VARCHAR(255) NOT NULL DEFAULT '' AFTER `
 ALTER TABLE `zt_build` ADD `system` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0' AFTER `name`;
 
 CREATE INDEX `idx_system` ON `zt_release`(`system`);
+CREATE INDEX `idx_system` ON `zt_build`(`system`);
 
 ALTER TABLE `zt_review` ADD `toAuditBy` varchar(30) not NULL default '' AFTER `lastAuditedDate`;
 ALTER TABLE `zt_review` ADD `toAuditDate` datetime NULL AFTER `toAuditBy`;
