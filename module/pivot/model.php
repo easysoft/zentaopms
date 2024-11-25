@@ -2860,11 +2860,27 @@ class pivotModel extends model
      *
      * @param  int    $pivotID
      * @access public
-     * @return array
+     * @return array|bool
      */
-    public function getPivotVersions(int $pivotID): array
+    public function getPivotVersions(int $pivotID): array|bool
     {
-        return $this->dao->select('*')->from(TABLE_PIVOTSPEC)->where('pivot')->eq($pivotID)->fetchAll();
+        $pivot = $this->dao->select('*')->from(TABLE_PIVOT)->where('id')->eq($pivotID)->andWhere('deleted')->eq('0')->fetch();
+        if(!$pivot) return false;
+
+        $pivotSpecList = $this->dao->select('*')->from(TABLE_PIVOTSPEC)->where('pivot')->eq($pivotID)->fetchAll();
+        if(!$pivotSpecList) return false;
+
+        $pivotVersionList = array();
+        foreach($pivotSpecList as $index => $specData)
+        {
+            $pivotVersion = clone $pivot;
+            foreach($specData as $specKey => $specValue) $pivotVersion->$specKey = $specValue;
+            $this->processNameDesc($pivotVersion);
+
+            $pivotVersionList[] = $pivotVersion;
+        }
+
+        return $pivotVersionList;
     }
 
     /**

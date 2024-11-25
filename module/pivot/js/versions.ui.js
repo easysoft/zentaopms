@@ -1,4 +1,4 @@
-function switchVersion(e)
+function previewVersion(e)
 {
     const groupID = $(e.target).attr('data-group');
     const pivotID = $(e.target).attr('data-pivot');

@@ -22,7 +22,7 @@ foreach($versionSpecs as $versionSpec)
             (
                 '#' . $versionSpec->version,
                 set::href("javascript:;"),
-                on::click("switchVersion"),
+                on::click("previewVersion"),
                 setData('pivot', $pivot->id),
                 setData('version', $versionSpec->version),
                 setData('group', $groupID)
@@ -60,7 +60,7 @@ panel
     ),
     h::table
     (
-        set::className('versionTable table bordered'),
+        set::className('versionTable table bordered table-hover'),
         h::tr
         (
             h::th($lang->pivot->versionNumber),
@@ -73,5 +73,6 @@ panel
         setID('pivotContent'),
         setClass('flex col gap-4 w-full'),
         $generateData()
-    )
+    ),
+    set::actions(array(array('text' => $lang->pivot->switchTo, 'class' => 'primary', 'type' => 'submit')))
 );

@@ -501,3 +501,4 @@ $lang->pivot->tipNewVersion   = 'Has New Version!';
 $lang->pivot->checkNewVersion = 'Click to check';
 $lang->pivot->tipVersions     = 'This is the content of this version. You can click the button below to switch version, After switching version, the content of this pivot and related configurations in the designer will be displayed according to the switched version.';
 $lang->pivot->tipNoVersions   = 'There are no other versions of this pivot';
+$lang->pivot->switchTo        = 'Switch To This Version';
