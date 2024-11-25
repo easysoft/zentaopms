@@ -169,6 +169,19 @@ class release extends control
             }
 
             $releaseData = form::data(null, $releaseID)->setIF($this->post->build === false, 'build', 0)->get();
+            if($release->system)
+            {
+                $system = $this->loadModel('system')->fetchByID($release->system);
+                if($system->integrated == '1')
+                {
+                    $releases = (array)$this->post->releases;
+
+                    $release->build    = '';
+                    $release->releases = trim(implode(',', $releases), ',');
+                    if(!$release->releases) dao::$errors['releases[' . key($releases) . ']'][] = sprintf($this->lang->error->notempty, $this->lang->release->includedSystem);
+                }
+            }
+            if(dao::isError()) return $this->sendError(dao::getError());
 
             $changes = $this->release->update($releaseData, $release);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -198,7 +211,7 @@ class release extends control
         $this->view->release = $release;
         $this->view->builds  = $builds;
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed');
-        $this->view->apps    = $this->loadModel('system')->getPairs($release->product);
+        $this->view->appList = $this->loadModel('system')->getList($release->product);
 
         $this->display();
     }
@@ -628,10 +641,11 @@ class release extends control
      * Get system and release combobox.
      *
      * @param  int    $systemID
+     * @param  string $linkedRelease
      * @access public
      * @return void
      */
-    public function ajaxLoadSystemBlock(int $systemID)
+    public function ajaxLoadSystemBlock(int $systemID, string $linkedRelease = '')
     {
         $system   = $this->loadModel('system')->fetchByID($systemID);
         $children = explode(',', $system->children);
@@ -639,8 +653,9 @@ class release extends control
         $appList  = $this->system->getByIdList($children);
         $releases = $this->release->getListBySystem($children);
 
-        $this->view->appList  = array_column($appList, 'name', 'id');
-        $this->view->releases = $releases;
+        $this->view->appList       = $appList;
+        $this->view->releases      = $releases;
+        $this->view->linkedRelease = explode(',', $linkedRelease);
         $this->display();
     }
 }
