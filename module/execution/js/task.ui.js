@@ -108,6 +108,7 @@ window.renderCell = function(result, info)
     if(info.col.name == 'name' && result)
     {
         let html = '';
+        if(typeof result[0] == 'object') result[0].props.className = 'overflow-hidden';
 
         const module = this.options.modules[info.row.data.module];
         if(module) html += '<span class="label gray-pale rounded-full mr-1 whitespace-nowrap">' + module + '</span>'; // 添加模块标签
@@ -122,6 +123,8 @@ window.renderCell = function(result, info)
         }
         if(task.color) result[0].props.style = 'color: ' + task.color;
         if(html) result.unshift({html});
+        if(typeof task.delay != 'undefined' && task.delay) result[result.length] = {html:'<span class="label danger-pale ml-1 flex-none nowrap">' + delayWarning.replace('%s', task.delay) + '</span>', className: 'flex items-end', style:{flexDirection:"column"}};
+
 
         if(task.fromBug > 0)
         {

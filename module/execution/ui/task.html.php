@@ -204,6 +204,7 @@ jsVar('childrenAB',     $lang->task->childrenAB);
 jsVar('todayLabel',     $lang->today);
 jsVar('yesterdayLabel', $lang->yesterday);
 jsVar('teamLang',       $lang->task->team);
+jsVar('delayWarning',   $lang->task->delayWarning);
 
 dtable
 (

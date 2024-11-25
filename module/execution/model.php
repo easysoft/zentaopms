@@ -1931,11 +1931,23 @@ class executionModel extends model
         $taskIdList = array_unique($taskIdList);
         $teamGroups = $this->dao->select('id,task,account,status')->from(TABLE_TASKTEAM)->where('task')->in($taskIdList)->fetchGroup('task', 'id');
 
+        $today = helper::today();
         foreach($executionTasks as $tasks)
         {
             foreach($tasks as $task)
             {
                 if(isset($teamGroups[$task->id])) $task->team = $teamGroups[$task->id];
+
+                /* Delayed or not?. */
+                if(!empty($task->deadline) and !helper::isZeroDate($task->deadline))
+                {
+                    $endDate = $today;
+                    if(($task->status == 'done' || $task->status == 'closed') && !helper::isZeroDate($task->finishedDate)) $endDate = substr($task->finishedDate, 0, 10);
+
+                    $actualDays = $this->loadModel('holiday')->getActualWorkingDays($task->deadline, $endDate);
+                    $delay      = count($actualDays) - 1;
+                    if($delay > 0) $task->delay = $delay;
+                }
             }
         }
 
