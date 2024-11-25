@@ -1392,4 +1392,17 @@ class instanceModel extends model
     {
         return $this->cne->deleteBackup($instance, $backupName);
     }
+
+    /**
+     * Delete Backup Cron.
+     * 删除备份任务.
+     * @param $instance
+     * @return void
+     */
+    public function deleteBackupCron($instance)
+    {
+        $command = 'moduleName=instance&methodName=cronBackup&instanceID=' . $instance->id;
+        $cron    = $this->dao->select('*')->from(TABLE_CRON)->where('command')->eq($command)->fetch();
+        if($cron->id) $this->dao->delete()->from(TABLE_CRON)->where('id')->eq($cron->id)->exec();
+    }
 }

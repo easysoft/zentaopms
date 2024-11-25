@@ -419,6 +419,10 @@ class instance extends control
 
         $success = $this->instance->uninstall($instance);
         $this->action->create('instance', $instance->id, 'uninstall', '', json_encode(array('result' => $success, 'app' => array('alias' => $instance->appName, 'app_version' => $instance->version))));
+
+        /* Synchronize deletion of backup tasks. */
+        /* 同步删除备份任务。 */
+        $this->instance->deleteBackupCron($instance);
         if($success) return $this->send(array('result' => 'success', 'message' => zget($this->lang->instance->notices, 'uninstallSuccess'), 'load' => $this->createLink('space', 'browse')));
 
         return $this->send(array('result' => 'fail', 'message' => zget($this->lang->instance->notices, 'uninstallFail')));
