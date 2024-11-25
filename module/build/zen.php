@@ -237,8 +237,32 @@ class buildZen extends build
      */
     public function buildBuildForCreate()
     {
+        $newSystem = $this->post->newSystem;
+
         if($this->post->isIntegrated == 'yes') $this->config->build->create->requiredFields = str_replace(',execution,', ',', ',' . $this->config->build->create->requiredFields . ',');
-        return form::data($this->config->build->form->create)->setDefault('createdBy', $this->app->user->account)->get();
+
+        if(!$newSystem && !$this->post->system) $this->config->build->form->create['system']['required'] = true;
+        if($newSystem  && !$this->post->systemName)
+        {
+            $this->config->build->form->create['systemName'] = array('type' => 'string', 'required' => true);
+            $this->lang->build->systemName = $this->lang->build->system;
+        }
+        if($newSystem && $this->post->systemName)
+        {
+            $system = new stdclass();
+            $system->name    = $this->post->systemName;
+            $system->product = $this->post->product;
+            $system->createdBy   = $this->app->user->account;
+            $system->createdDate = helper::now();
+
+            $buildSystem = $this->loadModel('system')->create($system);
+        }
+        $formData = form::data($this->config->build->form->create)
+            ->setDefault('createdBy', $this->app->user->account)
+            ->setIF(isset($buildSystem), 'system', $buildSystem)
+            ->get();
+
+        return $formData;
     }
 
     /**
