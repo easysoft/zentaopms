@@ -54,3 +54,24 @@ foreach($appList as $system)
 
     $i ++;
 }
+
+jsVar('+itemIndex', $i);
+
+div
+(
+    setID('systemForm'),
+    h::table
+    (
+        h::tbody
+        (
+            setClass('form'),
+            $systemTR,
+            input
+            (
+                set::type('hidden'),
+                set::name('removeExecution'),
+                set::value('no')
+            )
+        )
+    )
+);
