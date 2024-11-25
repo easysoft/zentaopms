@@ -32,7 +32,7 @@ class thinkTableInput extends thinkQuestion
     {
         global $lang;
         $detailWg = parent::buildDetail();
-        list($step, $fields, $supportAdd, $canAddRows, $mode, $inputType) = $this->prop(array('step', 'fields', 'supportAdd', 'canAddRows', 'mode', 'inputType'));
+        list($step, $fields, $supportAdd, $canAddRows, $mode, $inputType, $preViewModel) = $this->prop(array('step', 'fields', 'supportAdd', 'canAddRows', 'mode', 'inputType', 'preViewModel'));
         if($mode != 'detail') return array();
 
         if($step)
@@ -43,7 +43,7 @@ class thinkTableInput extends thinkQuestion
             $answer       = $step->answer;
             $result       = isset($answer->result) && !empty($answer->result) ? (array) $answer->result : array();
             $customFields = !empty($answer->customFields) ? get_object_vars($answer->customFields) : array();
-            $inputType    = isset($step->options->inputType)? $step->options->inputType : false;
+            $inputType    = isset($step->options->inputType) ? $step->options->inputType : false;
         }
 
         $tableInputItems = array();
@@ -80,6 +80,7 @@ class thinkTableInput extends thinkQuestion
                                 'min'         => 1,
                                 'max'         => 100,
                                 'value'       => $value,
+                                'disabled'    => ($value && $preViewModel),
                                 'placeholder' => $lang->thinkrun->pleaseInput
                             )),
                             on::input('changeInput')
