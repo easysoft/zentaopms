@@ -80,6 +80,7 @@ CREATE INDEX `idx_object` ON `zt_mark`(`objectType`,`objectID`);
 CREATE INDEX `idx_account` ON `zt_mark`(`account`);
 
 UPDATE `zt_grouppriv` SET `module` = 'cache', `method` = 'setting' WHERE `module` = 'admin' AND `method` = 'cache';
+INSERT INTO `zt_grouppriv` SELECT `group`, 'cache', 'clear' FROM `zt_grouppriv` WHERE `module` = 'cache' AND `method` = 'setting';
 
 UPDATE `zt_pivot` SET `version` = '1';
 INSERT INTO `zt_pivotspec` SELECT `id`,`version`,`driver`,`mode`,`name`,`desc`,`sql`,`fields`,`langs`,`vars`,`objects`,`settings`,`filters`,`createdDate` FROM `zt_pivot`;
