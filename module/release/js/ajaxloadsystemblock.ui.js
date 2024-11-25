@@ -14,3 +14,30 @@ window.setRelease = function(e, releaseID)
 
     $releases.render({items: options, required: true});
 }
+
+window.initAppPicker = function()
+{
+    let selected    = [];
+    let $appList  = $('#systemForm').find('.picker-box [name^=apps]');
+    $appList.each(function()
+    {
+        let $apps       = $(this);
+        let apps        = $apps.val();
+        let $appsPicker = $apps.zui('picker');
+        let appsItems   = $appsPicker.options.items;
+
+        for(i = 0; i < $apps.length; i++)
+        {
+            let value = $apps.eq(i).val();
+            if(value != '') selected.push(value);
+        }
+
+        $.each(appsItems, function(i, item)
+        {
+            if(item.value == '') return;
+            appsItems[i].disabled = selected.includes(item.value) && item.value != apps;
+        })
+
+        $appsPicker.render({items: appsItems});
+    });
+}
