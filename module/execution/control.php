@@ -2955,10 +2955,7 @@ class execution extends control
             $checkedItem    = $this->cookie->checkedItem;
             foreach($executionStats as $i => $execution)
             {
-                if($this->post->exportType == 'selected')
-                {
-                    if(strpos(",$checkedItem,", ",pid{$execution->id},") === false) continue;
-                }
+                if($this->post->exportType == 'selected' && strpos(",$checkedItem,", ",pid{$execution->id},") === false) continue;
 
                 $execution->PM            = zget($users, $execution->PM);
                 $execution->status        = isset($execution->delay) ? $executionLang->delayed : $this->processStatus('execution', $execution);
