@@ -91,7 +91,7 @@ class pivotZen extends pivot
             $pivots = $this->pivot->getAllPivotByGroupID($group->id);
             $pivots = $this->pivot->filterInvisiblePivot($pivots);
             $pivots = $this->loadModel('mark')->getMarks($pivots, 'pivot', 'view');
-            $pivots = $this->pivot->isVersionChange($pivots);
+            $pivots = $this->pivot->isVersionChange($pivots, false);
             if(empty($pivots)) continue;
 
             if($group->grade > 1) $menus[] = (object)array('id' => $group->id, 'parent' => 0, 'name' => $group->name);
@@ -134,7 +134,11 @@ class pivotZen extends pivot
         }
         else
         {
-            $pivot->name = array('text' => $pivot->name, 'html' => $pivot->name . ' <span class="label ghost size-sm bg-secondary-50 text-secondary-500 rounded-full">' . $this->lang->pivot->newVersion . '</span>');
+            $maxVersion = $this->pivot->getMaxVersion($pivot->id);
+            if(!$this->loadModel('mark')->isMark('pivot', $pivot->id, $maxVersion, 'view'))
+            {
+                $pivot->name = array('text' => $pivot->name, 'html' => $pivot->name . ' <span class="label ghost size-sm bg-secondary-50 text-secondary-500 rounded-full">' . $this->lang->pivot->newVersion . '</span>');
+            }
         }
     }
 
@@ -198,7 +202,17 @@ class pivotZen extends pivot
         }
         $driver = $pivot->driver;
 
-        if($mark) $this->loadModel('mark')->setMark(array($pivot->id), 'pivot', $pivot->version, 'view');
+        if($mark)
+        {
+            $this->pivot->isVersionChange($pivot);
+            $markVersion = $pivot->versionChange ? $this->pivot->getMaxVersion($pivot->id) : $pivot->version;
+
+            if(!$this->loadModel('mark')->isMark('pivot', $pivot->id, $markVersion, 'view'))
+            {
+                $this->loadModel('mark')->setMark(array($pivot->id), 'pivot', $markVersion, 'view');
+            }
+        }
+
         if(isset($_POST['filterValues']) and $_POST['filterValues'])
         {
             foreach($this->post->filterValues as $key => $value) $pivot->filters[$key]['default'] = $value;

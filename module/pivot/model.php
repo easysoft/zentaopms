@@ -2933,8 +2933,9 @@ class pivotModel extends model
         return $pivotMaxVersion;
     }
 
-    public function isVersionChange(array $pivots)
+    public function isVersionChange(array|object $pivots, bool $isObject = true)
     {
+        if($isObject) $pivots = array($pivots);
         $pivotMaxVersion = $this->getMaxVersionByIDList(array_column($pivots, 'id'));
 
         foreach($pivots as $index => $pivot)
@@ -2949,7 +2950,7 @@ class pivotModel extends model
             }
         }
 
-        return $pivots;
+        return $isObject ? current($pivots) : $pivots;
     }
 }
 

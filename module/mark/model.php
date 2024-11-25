@@ -53,6 +53,17 @@ class markModel extends model
         return $objects;
     }
 
+    public function isMark(string $objectType, int $objectID, string $version, string $mark = 'view')
+    {
+        return $this->dao->select('*')->from(TABLE_MARK)
+            ->where('objectType')->eq($objectType)
+            ->andWhere('objectID')->in($objectID)
+            ->andWhere('version')->eq($version)
+            ->andWhere('account')->eq($this->app->user->account)
+            ->andWhere('mark')->eq($mark)
+            ->fetchAll();
+    }
+
     /**
      * 设置对象的标记。
      * Set object marks.
