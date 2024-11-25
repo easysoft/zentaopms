@@ -168,7 +168,7 @@ class cneTest
      */
     public function getComponentsTest(): object|null
     {
-        $this->objectModel->error = new stdclass();
+        $this->objectModel->error = new stdClass();
         $instance = $this->objectModel->loadModel('instance')->getByID(2);
 
         $result = $this->objectModel->getComponents($instance);
@@ -185,7 +185,7 @@ class cneTest
      */
     public function getPodsTest(): object|null
     {
-        $this->objectModel->error = new stdclass();
+        $this->objectModel->error = new stdClass();
         $instance = $this->objectModel->loadModel('instance')->getByID(2);
 
         $result = $this->objectModel->getComponents($instance);
@@ -202,7 +202,7 @@ class cneTest
      */
     public function getEventsTest(): object|null
     {
-        $this->objectModel->error = new stdclass();
+        $this->objectModel->error = new stdClass();
         $instance = $this->objectModel->loadModel('instance')->getByID(2);
 
         $result = $this->objectModel->getEvents($instance);
@@ -219,7 +219,7 @@ class cneTest
      */
     public function getAppLogsTest(): object|null
     {
-        $this->objectModel->error = new stdclass();
+        $this->objectModel->error = new stdClass();
         $instance = $this->objectModel->loadModel('instance')->getByID(2);
 
         $result = $this->objectModel->getAppLogs($instance);
