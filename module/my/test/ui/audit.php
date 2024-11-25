@@ -35,4 +35,20 @@ $story->assignedTo->range('admin');
 $story->reviewedBy->range('{11}');
 $story->deleted->range('0');
 $story->gen(11);
+
+$storyspec = zenData('storyspec');
+$storyspec->story->range('1-11');
+$storyspec->version->range('1');
+$storyspec->title->range('业需01,业需02,业需03,业需04,用需01,用需02,用需03,用需04,用需05,研需01,研需02');
+$storyspec->gen(11);
+
+$storyreview = zenData('storyreview');
+$storyreview->story->range('1-11');
+$storyreview->reviewer->range('admin');
+$storyreview->result->range('{11}');
+$storyreview->gen(11);
+
+$tester = new auditTester();
+$tester->login();
+
 $tester->closeBrowser();
