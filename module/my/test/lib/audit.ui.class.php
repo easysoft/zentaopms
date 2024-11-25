@@ -2,6 +2,14 @@
 include dirname(__FILE__, 5) . '/test/lib/ui.php';
 class auditTester extends tester
 {
+    /**
+     * 检查地盘审批下的数据
+     * check data of audit
+     *
+     * @param  $tabName   tab名称 all|SR|UR|ER
+     * @param  $expectNum 预期数据
+     * @return mixed
+     */
     public function checkAudit($tabName, $expectNum)
     {
         $form = $this->initForm('my', 'audit', array(), 'appIframe-my');
@@ -25,6 +33,15 @@ class auditTester extends tester
                 : $this->failed("{$tabMessage[$tabName]}tab下数据显示不正确");
         }
     }
+
+    /**
+     * 在审批列表中评审
+     * review in audit list
+     *
+     * @param  $type       类型 SR|UR|ER
+     * @param  $expectNum  预期数据
+     * @return mixed
+     */
     public function review($type, $expectNum)
     {
         $form = $this->initForm('my', 'audit', array(), 'appIframe-my');
