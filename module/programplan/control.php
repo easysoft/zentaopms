@@ -83,10 +83,11 @@ class programplan extends control
      * @param  int    $productID
      * @param  int    $planID
      * @param  string $executionType
+     * @param  string $from
      * @access public
      * @return void
      */
-    public function create(int $projectID = 0, int $productID = 0, int $planID = 0, string $executionType = 'stage')
+    public function create(int $projectID = 0, int $productID = 0, int $planID = 0, string $executionType = 'stage', string $from = '')
     {
         $this->loadModel('review');
         $this->productID = $this->commonAction($projectID, $productID);
@@ -104,6 +105,7 @@ class programplan extends control
             }
 
             $locate = $this->session->projectPlanList ? $this->session->projectPlanList : $this->createLink('project', 'execution', "status=all&projectID={$projectID}&orderBy=order_asc&productID={$productID}");
+            if($from == 'projectCreate') $locate = $this->createLink('project', 'create', "model=&programID=0&copyProjectID=0&extra=showTips=1,project=$projectID");
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
