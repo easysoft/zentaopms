@@ -488,6 +488,7 @@ $lang->project->featureBar['dynamic']['lastMonth'] = 'Last Month';
 
 $lang->project->moreSelects = array();
 $lang->project->moreSelects['suspended'] = 'Suspended';
+$lang->project->moreSelects['delayed']   = 'Delayed';
 $lang->project->moreSelects['closed']    = 'Closed';
 
 $lang->project->executionList['scrum']         = $lang->projectCommon . ' Sprint';

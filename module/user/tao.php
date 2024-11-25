@@ -35,6 +35,7 @@ class userTao extends userModel
             ->beginIF($status == 'done')->andWhere('t2.status')->in('done,closed')->fi()
             ->beginIF($status == 'undone')->andWhere('t2.status')->notin('done,closed')->fi()
             ->beginIF($status == 'openedbyme')->andWhere('t2.openedBy')->eq($account)->fi()
+            ->beginIF($status == 'delayed')->andWhere('t2.status')->notIn('done,closed,suspend')->andWhere('t2.end')->lt(helper::today())->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
             ->orderBy("t2.$orderBy")
             ->page($pager)

@@ -166,6 +166,7 @@ if($config->edition != 'open' and helper::hasFeature('OA')) $lang->my->featureBa
 $lang->my->featureBar['project']['doing']      = 'Doing';
 $lang->my->featureBar['project']['wait']       = 'Waiting';
 $lang->my->featureBar['project']['suspended']  = 'Suspended';
+$lang->my->featureBar['project']['delayed']    = 'Delayed';
 $lang->my->featureBar['project']['closed']     = 'Closed';
 $lang->my->featureBar['project']['openedbyme'] = 'CreatedByMe';
 

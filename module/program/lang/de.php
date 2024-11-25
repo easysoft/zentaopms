@@ -186,6 +186,7 @@ $lang->program->featureBar['project']['unclosed']  = 'Unclosed';
 $lang->program->featureBar['project']['wait']      = 'Waiting';
 $lang->program->featureBar['project']['doing']     = 'Doing';
 $lang->program->featureBar['project']['suspended'] = 'Suspended';
+$lang->program->featureBar['project']['delayed']   = 'Delayed';
 $lang->program->featureBar['project']['closed']    = 'Closed';
 
 $lang->program->featureBar['productview']['all']      = 'All';

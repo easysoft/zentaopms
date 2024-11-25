@@ -488,6 +488,7 @@ $lang->project->featureBar['dynamic']['lastMonth'] = '上月';
 
 $lang->project->moreSelects = array();
 $lang->project->moreSelects['suspended'] = '已挂起';
+$lang->project->moreSelects['delayed']   = '已延期';
 $lang->project->moreSelects['closed']    = '已关闭';
 
 $lang->project->executionList['scrum']         = $lang->projectCommon . '迭代';
