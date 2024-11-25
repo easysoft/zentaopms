@@ -1,4 +1,5 @@
 <?php
+$lang->cache->setting      = 'Cache Setting';
 $lang->cache->clear        = 'Clear Cache';
 $lang->cache->clearSuccess = 'Cache cleared successfully.';
 $lang->cache->status       = 'Status';

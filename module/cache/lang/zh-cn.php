@@ -1,4 +1,5 @@
 <?php
+$lang->cache->setting      = '缓存设置';
 $lang->cache->clear        = '清除缓存';
 $lang->cache->clearSuccess = '清除成功';
 $lang->cache->status       = '缓存状态';
