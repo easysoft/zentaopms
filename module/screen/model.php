@@ -1023,7 +1023,11 @@ class screenModel extends model
             }
 
             $dataset = array();
-            foreach($options->array as $data) $dataset[] = array_values($data);
+            foreach($options->array as $data)
+            {
+                $data = array_values($data);
+                $dataset[] = array_map('strval', $data);
+            }
 
             foreach($config as $i => $data)
             {
