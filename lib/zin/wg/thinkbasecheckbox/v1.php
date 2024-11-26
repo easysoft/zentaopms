@@ -136,7 +136,7 @@ class thinkBaseCheckbox extends wg
 
         return div
         (
-            setClass($inline ? 'think-check-list check-list-inline' : 'think-check-list check-list'),
+            setClass('think-check-list check-items', $inline ? 'check-list-inline' : 'check-list'),
             set($this->getRestProps()),
             $disabled ? set('disabled', 'disabled') : '',
             $items,
