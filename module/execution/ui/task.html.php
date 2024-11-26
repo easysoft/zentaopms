@@ -108,10 +108,11 @@ toolbar
     ))),
     hasPriv('task', 'report') ? item(set(array
     (
-        'icon'  => 'bar-chart',
-        'class' => 'ghost',
-        'text' => $lang->task->report->common,
-        'url'   => createLink('task', 'report', "execution={$execution->id}&browseType={$browseType}")
+        'icon'     => 'bar-chart',
+        'class'    => 'ghost',
+        'text'     => $lang->task->report->common,
+        'data-app' => $app->tab,
+        'url'      => createLink('task', 'report', "execution={$execution->id}&browseType={$browseType}")
     ))) : null,
     hasPriv('task', 'export') ? item(set(array
     (
