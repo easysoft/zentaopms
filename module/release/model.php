@@ -759,6 +759,8 @@ class releaseModel extends model
         if($action == 'play')    return $release->status == 'terminate';
         if($action == 'pause')   return $release->status == 'normal';
         if($action == 'publish') return $release->status == 'wait' || $release->status == 'fail';
+
+        if(!empty($release->releases) && ($action == 'linkstory' || $action == 'linkbug')) return false;
         return true;
     }
 
