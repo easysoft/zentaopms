@@ -178,3 +178,7 @@ class createTaskTester extends tester
         $form->dom->desc->setValue($task->desc);
         $form->dom->getElement('//*[@id="form-task-create"]/div[26]/button[1]')->click();
         $form->wait(1);
+
+        return $this->success('成功创建多人并行任务');
+    }
+}
