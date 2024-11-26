@@ -28,6 +28,21 @@ class thinkScore extends thinkQuestion
         global $lang;
         $detailWg = parent::buildDetail();
         list($step, $quoteQuestions, $preViewModel, $isRun, $scoreSetting) = $this->prop(array('step', 'quoteQuestions', 'preViewModel', 'isRun', 'scoreSetting'));
+        if($step)
+        {
+            $fields         = !empty($step->options->fields) ? $step->options->fields : array();
+            $scoreSetting   = isset($step->options->scoreSetting) ? $step->options->scoreSetting : '0';
+            $quoteTitleList = !empty($step->options->quoteTitle) ? explode(", ", $step->options->quoteTitle) : array();
+        }
+        if(empty($fields) && !empty($quoteTitleList)) $fields = array($lang->thinkwizard->previewSteps->objectReference, $lang->thinkwizard->previewSteps->objectReference,$lang->thinkwizard->previewSteps->objectReference);
+
+        $scoreCount = $scoreSetting == '0' ? 5 : 10;
+        $items      = array();
+        $radioItems = array();
+
+        for($i=1; $i<=$scoreCount; $i++){$items[] = array('text' => $i, 'value' => $i, 'disabledPrefix' => true);}
+
+        $detailWg[] = div(setClass('score-content', $scoreSetting == '0' ? 'score-5' : 'score-10'), $radioItems);
         return $detailWg;
     }
 }
