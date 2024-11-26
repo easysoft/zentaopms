@@ -17,8 +17,6 @@ class thinkAppeals extends thinkModel
 
     protected function getIndicator(): array
     {
-        global $app;
-
         $blocks    = $this->prop('blocks');
         $indicator = array();
 
