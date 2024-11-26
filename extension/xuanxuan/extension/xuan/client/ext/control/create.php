@@ -29,6 +29,7 @@ class client extends control
             if(dao::isError())
             {
                 $error = dao::getError();
+                while(is_array($error)) $error = current($error);
                 return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert({message: {html: \"$error\"}, size: 'sm'})"));
             }
 
