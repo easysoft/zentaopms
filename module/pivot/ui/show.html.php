@@ -30,25 +30,14 @@ $fnGenerateFilters = function() use($pivot, $showOrigin, $lang)
         $from   = zget($filter, 'from');
         $values = is_array($value) ? implode(',', $value) : $value;
 
-        $url  = createLink('pivot', 'ajaxGetSysOptions', "search={search}");
-        $data = array();
-        $data['values'] = $values;
+        $items = $this->getFilterOptionUrl($filter, $pivot->sql, (array)$pivot->fieldSettings);
+
         if($from == 'query')
         {
-            $data['type']   = $filter['typeOption'];
-            $items = (object)array('url' => $url, 'method' => 'post', 'data' => $data);
             $filters[]  = filter(set(array('title' => $name, 'type' => $type, 'name' => $field, 'value' => $value, 'items' => $items, 'multiple' => $type == 'multipleselect' ? true : false)));
         }
         else
         {
-            $fieldSetting   = $pivot->fieldSettings->$field;
-            $data['type']   = $fieldSetting->type;
-            $data['object'] = $fieldSetting->object;
-            $data['field']  = $fieldSetting->field;
-            $data['saveAs'] = zget($filter, 'saveAs', $field);
-            $data['sql']    = $pivot->sql;
-
-            $items = (object)array('url' => $url, 'method' => 'post', 'data' => $data);
             $filters[] = resultFilter(set(array('title' => $name, 'type' => $type, 'name' => $field, 'value' => $value, 'items' => $items)));
         }
     }

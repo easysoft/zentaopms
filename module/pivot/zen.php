@@ -480,4 +480,42 @@ class pivotZen extends pivot
         }
         return new stdclass();
     }
+
+    /**
+     * 获取筛选器的下拉选项 URL。
+     * Get filter options url.
+     *
+     * @param  array $filter
+     * @access public
+     * @return string
+     */
+    public function getFilterOptionUrl(array $filter, string $sql = '', array $fieldSettings = array()): object
+    {
+        $field  = $filter['field'];
+        $from   = zget($filter, 'from', 'result');
+        $value  = zget($filter, 'default', '');
+        $values = is_array($value) ? implode(',', $value) : $value;
+
+        $url = helper::createLink('pivot', 'ajaxGetSysOptions', "search={search}");
+        $data = array();
+        $data['values'] = $values;
+        if($from == 'query')
+        {
+            $data['type'] = $filter['typeOption'];
+        }
+        else
+        {
+            $fieldSetting = $fieldSettings[$field];
+            $fieldSetting = (array)$fieldSetting;
+            $fieldType = $fieldSetting['type'];
+
+            $data['type']   = $fieldType;
+            $data['object'] = $fieldSetting['object'];
+            $data['field']  = $fieldType != 'options' && $fieldType != 'object' ? $field : $fieldSetting['field'];
+            $data['saveAs'] = zget($filter, 'saveAs', $field);
+            $data['sql']    = $sql;
+        }
+
+        return (object)array('url' => $url, 'method' => 'post', 'data' => $data);
+    }
 }
