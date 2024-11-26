@@ -38,3 +38,23 @@ class createTaskTester extends tester
         $form->dom->assignedTo->picker('user2');
         $form->dom->estimate->setValue($task->estimate);
         $form->dom->desc->setValue($task->desc);
+        $form->dom->getElement('//*[@id="form-task-create"]/div[26]/button[1]')->click();
+        $form->wait(1);
+
+        return $this->success('成功创建设计任务');
+    }
+
+    /**
+     * Create a name blank task.
+     *
+     * @param  string    $task
+     * @access public
+     * @return object
+     *
+     */
+    public function createNameBlankTask($task)
+    {
+        $form = $this->initForm('task', 'create', array('executionID' => '2'), 'appIframe-execution');
+        $form->dom->name->setValue($task->name);
+        $form->dom->getElement('//*[@id="form-task-create"]/div[26]/button[1]')->click();
+        $form->wait(1);
