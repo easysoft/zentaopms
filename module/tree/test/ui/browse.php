@@ -18,3 +18,8 @@ $product->gen(1);
 
 $module = zenData('module');
 $module->gen(0, true);
+
+$tester = new browseTester();
+$tester->login();
+
+r($tester->createModule('模块1')) && p('status,message') && e('SUCCESS,创建模块成功');
