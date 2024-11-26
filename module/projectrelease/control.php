@@ -107,34 +107,7 @@ class projectrelease extends control
 
         if(!empty($_POST))
         {
-            $this->lang->projectrelease->system = $this->lang->release->system;
-            if(!$this->post->newSystem && !$this->post->system) $this->config->release->form->create['system']['required'] = true;
-            if($this->post->newSystem  && !$this->post->systemName)
-            {
-                $this->config->release->form->create['systemName'] = array('type' => 'string', 'required' => true);
-                $this->lang->projectrelease->systemName = $this->lang->release->system;
-            }
-
-            $release = form::data($this->config->release->form->create)
-                ->add('product', $this->post->product ? $this->post->product : 0)
-                ->add('branch', $this->post->branch ? $this->post->branch : 0)
-                ->setIF($projectID, 'project', $projectID)
-                ->setIF($this->post->build === false, 'build', 0)
-                ->get();
-
-            /* Check build if build is required. */
-            if(strpos($this->config->release->create->requiredFields, 'build') !== false && empty($release->build)) dao::$errors['build'] = sprintf($this->lang->error->notempty, $this->lang->release->build);
-
-            if($this->post->newSystem && $this->post->systemName && $this->post->product)
-            {
-                $system = new stdclass();
-                $system->name        = $this->post->systemName;
-                $system->product     = $this->post->product;
-                $system->createdBy   = $this->app->user->account;
-                $system->createdDate = helper::now();
-
-                $release->system = $this->loadModel('system')->create($system);
-            }
+            $release = $this->projectreleaseZen->buildReleaseForCreate($projectID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if(!empty($_FILES['releaseFiles'])) $_FILES['files'] = $_FILES['releaseFiles'];
