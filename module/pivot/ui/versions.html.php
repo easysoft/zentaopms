@@ -24,12 +24,11 @@ foreach($versionSpecs as $versionSpec)
         h::td
         (
             on::click("previewVersion"),
-            setData('pivot', $pivot->id),
-            setData('version', $versionSpec->version),
-            setData('group', $groupID),
+            setData(array('pivot' => $pivot->id, 'version' => $versionSpec->version, 'group' => $groupID)),
             '#' . $versionSpec->version,
             !in_array($versionSpec->version, $markedVersions) ? span
             (
+                setData(array('pivot' => $pivot->id, 'version' => $versionSpec->version, 'group' => $groupID)),
                 setClass("label ghost size-sm bg-secondary-50 text-secondary-500 rounded-full"),
                 $lang->pivot->newVersion
             ) : null
