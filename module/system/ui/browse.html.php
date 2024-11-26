@@ -24,7 +24,7 @@ featureBar
     (
         set::icon('back'),
         set::type('secondary'),
-        set::url($this->createLink('release', 'browse', "productID={$productID}")),
+        set::url($app->tab == 'product' ? $this->createLink('release', 'browse', "productID={$productID}") : $this->createLink('projectrelease', 'browse', "projectID={$projectID}")),
         $lang->goback
     )
 );
