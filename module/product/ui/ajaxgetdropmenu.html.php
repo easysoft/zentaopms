@@ -58,8 +58,6 @@ if($extra === 'selectmode')
 
         foreach($programProducts as $index => $product)
         {
-            $name  = (in_array($this->config->systemMode, array('ALM', 'PLM')) and $product->line) ? zget($lines, $product->line, '') . ' / ' . $product->name : $product->name;
-
             $item = array();
             $item['id']    = $product->id;
             $item['text']  = $product->name;
@@ -101,7 +99,6 @@ else
         foreach($programProducts as $index => $product)
         {
             $group = $productGroup[$product->id] = $getProductGroup($product);
-            $name  = (in_array($this->config->systemMode, array('ALM', 'PLM')) and $product->line) ? zget($lines, $product->line, '') . ' / ' . $product->name : $product->name;
 
             $item = array();
             $item['id']       = $product->id;
