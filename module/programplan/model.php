@@ -542,9 +542,29 @@ class programplanModel extends model
             $isCreate    = $this->isCreateTask($key);
             $parentTypes = $this->getParentChildrenTypes($key);
 
-            if(!$isCreate && $key != $plan->parent) unset($parentStage[$key]);
-            if($plan->type == 'stage' && (isset($parentTypes['sprint']) || isset($parentTypes['kanban']))) unset($parentStage[$key]);
-            if(($plan->type == 'sprint' || $plan->type == 'kanban') && isset($parentTypes['stage'])) unset($parentStage[$key]);
+            if(!empty($plan))
+            {
+                if(!$isCreate && $key != $plan->parent) unset($parentStage[$key]);
+                if($plan->type == 'stage' && (isset($parentTypes['sprint']) || isset($parentTypes['kanban']))) unset($parentStage[$key]);
+                if(($plan->type == 'sprint' || $plan->type == 'kanban') && isset($parentTypes['stage'])) unset($parentStage[$key]);
+            }
+            else
+            {
+                if(!$isCreate) unset($parentStage[$key]); // 隐藏有数据的阶段
+            }
+
+            /* Set stage name. */
+            if($withParent && isset($parentStage[$key]) && !empty($allExecutions))
+            {
+                $currentStage  = $allExecutions[$key];
+                $paths         = array_slice(explode(',', trim($currentStage->path, ',')), 1);
+                $executionName = '';
+                foreach($paths as $path)
+                {
+                    if(isset($allExecutions[$path])) $executionName .= '/' . $allExecutions[$path]->name;
+                }
+                $parentStage[$key] = $executionName;
+            }
         }
         $project = $this->fetchByID($executionID);
         if((!empty($plan) && $plan->type == 'stage') || $project->model == 'waterfall') $parentStage[0] = $this->lang->programplan->emptyParent;
