@@ -158,3 +158,23 @@ class createTaskTester extends tester
         $form->dom->type->picker('开发');
         $form->dom->multiple->click();
         $form->dom->getElement('//*[@id="form-task-create"]/div[6]/div/a/span')->click();
+        $form->wait(1);
+
+        $form->dom->mode->picker('多人并行');
+
+        $team = 'team[1]';
+        $form->dom->{$team}->picker('admin');
+        $form->dom->{'teamEstimate[1]'}->setValue($task->teamEstimate1);
+        $team = 'team[2]';
+        $form->dom->{$team}->picker('user1');
+        $form->dom->{'teamEstimate[2]'}->setValue($task->teamEstimate2);
+        $team = 'team[3]';
+        $form->dom->{$team}->picker('user2');
+        $form->dom->{'teamEstimate[3]'}->setValue($task->teamEstimate3);
+        $form->dom->getElement('//*[@id="teamTable"]/div[2]/button')->click();
+        $form->wait(1);
+
+        $form->dom->name->setValue($task->name);
+        $form->dom->desc->setValue($task->desc);
+        $form->dom->getElement('//*[@id="form-task-create"]/div[26]/button[1]')->click();
+        $form->wait(1);
