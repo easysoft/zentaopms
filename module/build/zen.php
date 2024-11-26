@@ -120,7 +120,7 @@ class buildZen extends build
         $this->view->executions      = $executions;
         $this->view->executionType   = !empty($execution) && $execution->type == 'stage' ? 1 : 0;
         $this->view->orderBy         = 'status_asc, stage_asc, id_desc';
-        $this->view->systemList      = $this->loadModel('system')->getPairs(zget($this->view->product, 'id', 0), '0');
+        $this->view->systemList      = $this->loadModel('system')->getPairs(zget($this->view->product, 'id', 0), '0', 'active');
         $this->display();
     }
 

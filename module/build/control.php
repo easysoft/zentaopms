@@ -697,7 +697,7 @@ class build extends control
      */
     public function ajaxGetSystemList(int $productID)
     {
-        $systemList = $this->loadModel('system')->getPairs($productID, '0');
+        $systemList = $this->loadModel('system')->getPairs($productID, '0', 'active');
 
         $system = array();
         foreach($systemList as $systemID => $systemName) $system[] = array('text' => $systemName, 'value' => $systemID);
