@@ -78,3 +78,23 @@ class createTaskTester extends tester
         $form->dom->assignedTo->click();
         $form->dom->getElement('//*[@class="pick-container"]/div//footer//button[1]')->click();
         $form->dom->estimate->setValue($task->estimate);
+        $form->dom->desc->setValue($task->desc);
+        $form->dom->getElement('//*[@id="form-task-create"]/div[26]/button[1]')->click();
+        $form->wait(1);
+
+        return $this->success('成功创建事务任务');
+    }
+
+
+    /**
+     * Create a test task.
+     *
+     * @param  string    $task
+     * @access public
+     * @return object
+     *
+     */
+    public function createTestTask($task)
+    {
+        $form = $this->initForm('task', 'create', array('executionID' => '2'), 'appIframe-execution');
+        $form->dom->type->picker('测试');
