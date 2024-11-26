@@ -98,3 +98,23 @@ class createTaskTester extends tester
     {
         $form = $this->initForm('task', 'create', array('executionID' => '2'), 'appIframe-execution');
         $form->dom->type->picker('测试');
+        $form->dom->selectTestStory->click();
+        $form->wait(1);
+        $form->dom->name->setValue($task->name);
+        $form->dom->assignedTo->picker('user1');
+        $form->dom->getElement('//*[@id="form-task-create"]/div[26]/button[1]')->click();
+        $form->wait(1);
+
+        return $this->success('成功创建测试任务');
+    }
+
+    /**
+     * Create a linear task.
+     *
+     * @param  string    $task
+     * @access public
+     * @return object
+     *
+     */
+    public function createLinearTask($task)
+    {
