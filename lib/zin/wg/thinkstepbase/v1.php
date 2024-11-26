@@ -202,7 +202,8 @@ class thinkStepBase extends wg
                         div(sprintf($lang->thinkstep->tips->sourceofOptions, $lang->thinkstep->tips->options[$questionType])),
                         $sourceItems
                     ),
-                    (!empty($questionType) && $questionType == 'multicolumn') ? div(setClass('text-sm text-gray-400 leading-loose mt-2'), $lang->thinkstep->tips->multicolumn) : null
+                    (!empty($questionType) && $questionType == 'multicolumn') ? div(setClass('text-sm text-gray-400 leading-loose mt-2'), $lang->thinkstep->tips->multicolumn) : null,
+                    (!empty($questionType) && $questionType == 'score') ? div(setClass('text-sm text-gray-400 leading-loose mt-2'), $lang->thinkstep->tips->score) : null
                 ) : null,
                 (!empty($quotedQuestions) && !$preViewModel) ? div
                 (
