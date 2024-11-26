@@ -204,24 +204,21 @@ window.handleClickBatchFormAction = function(action, $row, rowIndex)
     if(action !== 'addSub' && action !== 'addSibling') return;
 
     if(!this.nestedLevelMap) this.nestedLevelMap = {};
-    const level = this.nestedLevelMap[$row.attr('data-gid')] || 0;
+    const level   = this.nestedLevelMap[$row.attr('data-gid')] || 0;
     const nextGid = this._idSeed++;
     this.nestedLevelMap[nextGid] = action === 'addSub' ? level + 1 : level;
 
-    if(action == 'addSibling')
+    const nextLevel = level + 1;
+    while(true)
     {
-        $rawRow = $row;
-        while(true)
+        $nextRow = $row.next();
+        if($nextRow.length == 0 || $nextRow.attr('data-level') < nextLevel)
         {
-            $nextRow = $row.next();
-            if($nextRow.length == 0 || $nextRow.attr('data-level') <= level)
-            {
-                rowIndex = $nextRow.length == 0 ? $row.index() : $nextRow.index() - 1;
-                break;
-            }
-
-            $row = $nextRow;
+            rowIndex = $nextRow.length == 0 ? $row.index() : $nextRow.index() - 1;
+            break;
         }
+
+        $row = $nextRow;
     }
     this.addRow(rowIndex, nextGid);
 };

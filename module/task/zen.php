@@ -589,6 +589,17 @@ class taskZen extends task
     {
         $this->loadModel('story');
 
+        /* Check parent name is not empty when has child task. */
+        $levelNames = array();
+        foreach($this->post->level as $i => $level)
+        {
+            $level = (int)$level;
+            $levelNames[$level]['name']  = trim($this->post->name[$i]);
+            $levelNames[$level]['index'] = $i;
+            if($level > 0 && empty($levelNames[$level - 1]['name'])) dao::$errors["name[" . $levelNames[$level - 1]['index'] . "]"] = $this->lang->task->error->emptyParentName;
+        }
+        if(dao::isError()) return false;
+
         $tasks = form::batchData()->get();
         foreach($tasks as $task)
         {

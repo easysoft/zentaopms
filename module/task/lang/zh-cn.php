@@ -74,6 +74,8 @@ $lang->task->codeRepo            = '仓库名称';
 $lang->task->relatedBranch       = '相关分支';
 $lang->task->keywords            = '关键词';
 $lang->task->syncStory           = '同步至任务';
+$lang->task->addSibling          = '添加同级';
+$lang->task->addSub              = '添加子级';
 
 $lang->task->common            = '任务';
 $lang->task->id                = '编号';
@@ -334,6 +336,7 @@ $lang->task->error->endGtExecution    = "任务截止日期应小于等于%s的�
 $lang->task->error->endLtExecution    = "任务截止日期应大于等于%s的预计开始日期：%s。";
 $lang->task->error->dateExceed        = "任务%s的计划日期超过该{$lang->execution->common}计划日期，将自动改为{$lang->execution->common}的计划日期。";
 $lang->task->error->length            = "长度超过了%d个字符，无法保存，请修改后再试";
+$lang->task->error->emptyParentName   = "包含子任务，任务名称不能为空。";
 
 /* Report. */
 $lang->task->report         = new stdclass();

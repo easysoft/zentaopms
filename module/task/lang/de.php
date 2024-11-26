@@ -74,6 +74,8 @@ $lang->task->codeRepo            = 'Code Library';
 $lang->task->relatedBranch       = 'Related Branch';
 $lang->task->keywords            = 'Tags';
 $lang->task->syncStory           = 'Sync to task';
+$lang->task->addSibling          = 'Add Sibling';
+$lang->task->addSub              = 'Add Child';
 
 $lang->task->common            = 'Aufgabe';
 $lang->task->id                = 'ID';
@@ -334,6 +336,7 @@ $lang->task->error->endGtExecution    = "The 'Deadline' of the task must be less
 $lang->task->error->endLtExecution    = "The 'Deadline' of the task must be greater than or equal the 'Planned Begin' of %s to %s.";
 $lang->task->error->dateExceed        = "Because the scheduled date of task %s exceeds the scheduled date of {$lang->execution->common}, it is automatically changed to the scheduled date of {$lang->execution->common}";
 $lang->task->error->length            = "Length exceeds the limit of %d characters, cannot be saved. Please modify it again.";
+$lang->task->error->emptyParentName   = "Contains subtasks, task names cannot be empty.";
 
 /* Report. */
 $lang->task->report = new stdclass();
