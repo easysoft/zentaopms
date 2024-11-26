@@ -147,7 +147,8 @@ class thinkStepBase extends wg
         }
         if(!empty($sourceQuestion))
         {
-            foreach ($sourceQuestion as  $sourceQuestionItem) {
+            foreach ($sourceQuestion as  $sourceQuestionItem)
+            {
                 $sourceItems[] = a
                 (
                     setClass('block text-primary-500 leading-relaxed'),
@@ -166,7 +167,8 @@ class thinkStepBase extends wg
             $sourceQuestionTip = array();
             if(!empty($sourceQuestion))
             {
-                foreach ($sourceQuestion as $sourceQuestionItem) {
+                foreach ($sourceQuestion as $sourceQuestionItem)
+                {
                     $sourceQuestionType = is_string($sourceQuestionItem->options) ? json_decode($sourceQuestionItem->options)->questionType : $sourceQuestionItem->options->questionType;
                     if($sourceQuestionType == 'multicolumn') $tipType = sprintf($lang->thinkstep->entry, $step->options->selectColumn);
                     $sourceQuestionTip[] = div
