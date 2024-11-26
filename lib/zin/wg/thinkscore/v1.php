@@ -27,7 +27,7 @@ class thinkScore extends thinkQuestion
     {
         global $lang;
         $detailWg = parent::buildDetail();
-        list($step, $quoteQuestions, $preViewModel, $isRun, $scoreSetting) = $this->prop(array('step', 'quoteQuestions', 'preViewModel', 'isRun', 'scoreSetting'));
+        list($step, $scoreSetting) = $this->prop(array('step','scoreSetting'));
         if($step)
         {
             $fields         = !empty($step->options->fields) ? $step->options->fields : array();
@@ -42,7 +42,8 @@ class thinkScore extends thinkQuestion
 
         for($i=1; $i<=$scoreCount; $i++){$items[] = array('text' => $i, 'value' => $i, 'disabledPrefix' => true);}
 
-        foreach ($fields as $field) {
+        foreach ($fields as $field)
+        {
             $radioItems[] = array(
                 div(setClass('my-1 text-md leading-5 break-words'), $field),
                 thinkBaseCheckbox
@@ -50,7 +51,7 @@ class thinkScore extends thinkQuestion
                     set::type('radio'),
                     set::items($items),
                     set::name('result[]'),
-                    set::value($result[0] ?? ''),
+                    set::value(''),
                     set::inline(true),
                     set::disabled(false)
                 )
