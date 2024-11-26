@@ -2,8 +2,8 @@
 .think-form-batch .form-batch-container::-webkit-scrollbar-track {background: var(--color-gray-200);}
 .think-form-batch .form-batch-head .form-label {text-overflow: unset; white-space: unset; font-weight: 400; position: static; padding: 0;}
 .think-form-batch .form-batch-table>*>tr>* {padding-top: calc(var(--space)); padding-bottom: calc(var(--space));}
-.think-form-batch .form-batch-row-actions {padding: 0.5rem 0 !important;}
+.think-form-batch .form-batch-col-actions {padding: 0.5rem 0 !important;}
 .think-form-batch .form-batch-head[data-name="ACTIONS"], .think-form-batch .form-batch-row-actions {width: 3.325rem; position: sticky; right: 0; background: var(--color-canvas);}
 .think-form-batch .form-batch-head[data-name="ACTIONS"] .form-label {display: none;}
-.think-form-batch .form-batch-row-actions .btn {color: var(--color-primary-500);}
+.think-form-batch .form-batch-col-actions .btn {color: var(--color-primary-500);}
 .think-form-batch .form-control[disabled] {background-color: rgba(var(--color-gray-100-rgb),var(--tw-bg-opacity)); --tw-bg-opacity: .4; color:rgba(var(--color-gray-700-rgb),var(--tw-bg-opacity))}
