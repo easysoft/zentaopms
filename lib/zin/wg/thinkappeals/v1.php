@@ -74,7 +74,12 @@ class thinkAppeals extends thinkModel
             );
         }
 
-        return $this->buildEcharts();
+        return div
+        (
+            setClass('appleals-chart-content'),
+            div(setClass('appleals-chart'), $this->buildEcharts()),
+            on::inited()->call('initedAppealsChart')
+        );
     }
 
     protected function build(): node
