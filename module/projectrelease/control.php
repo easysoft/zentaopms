@@ -62,6 +62,7 @@ class projectrelease extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $releases = $this->projectrelease->getList($projectID, $type, $orderBy, $pager);
+        $children = implode(',', array_column($releases, 'releases'));
 
         /* 判断是否展示分支。*/
         /* Judge whether to show branch. */
@@ -75,19 +76,21 @@ class projectrelease extends control
         $project   = $this->project->getByID($projectID);
         $execution = $this->loadModel('execution')->getByID($executionID);
 
-        $this->view->title       = (isset($project->name) ? $project->name : $execution->name) . $this->lang->hyphen . $this->lang->release->browse;
-        $this->view->products    = $this->product->getProductPairsByProject($projectID);
-        $this->view->pageSummary = $this->release->getPageSummary($releases, $type);
-        $this->view->projectID   = $projectID;
-        $this->view->executionID = $executionID;
-        $this->view->type        = $type;
-        $this->view->from        = $this->app->tab;
-        $this->view->project     = $project;
-        $this->view->execution   = $execution;
-        $this->view->releases    = $releases;
-        $this->view->pager       = $pager;
-        $this->view->orderBy     = $orderBy;
-        $this->view->showBranch  = $showBranch;
+        $this->view->title         = (isset($project->name) ? $project->name : $execution->name) . $this->lang->hyphen . $this->lang->release->browse;
+        $this->view->products      = $this->product->getProductPairsByProject($projectID);
+        $this->view->pageSummary   = $this->release->getPageSummary($releases, $type);
+        $this->view->projectID     = $projectID;
+        $this->view->executionID   = $executionID;
+        $this->view->type          = $type;
+        $this->view->from          = $this->app->tab;
+        $this->view->project       = $project;
+        $this->view->execution     = $execution;
+        $this->view->releases      = $releases;
+        $this->view->pager         = $pager;
+        $this->view->orderBy       = $orderBy;
+        $this->view->showBranch    = $showBranch;
+        $this->view->appList       = $this->loadModel('system')->getPairs();
+        $this->view->childReleases = $this->release->getListByCondition(explode(',', $children));
         $this->display();
     }
 
