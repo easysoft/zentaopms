@@ -31,7 +31,6 @@ $appReleases = array();
 foreach($releases as $releaseID => $release) $appReleases[$release->system][$releaseID] = $release->name;
 
 jsVar('releases', $releases);
-jsVar('appList',  $apps);
 
 $systemTR = array();
 $i        = 0;
@@ -112,7 +111,7 @@ h::table
             (
                 set::id("apps{$i}"),
                 set::name("apps[$i]"),
-                set::items(array()),
+                set::items($apps),
                 set('onchange', "setRelease(event, '{$i}')")
             )
         ),

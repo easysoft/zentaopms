@@ -59,4 +59,6 @@ window.deleteItem = function(obj)
 {
     $(obj).closest('tr').remove();
     if($('#systemForm tbody tr').length < 2) $('#systemForm tbody tr .actions-list .btn-link').eq(1).addClass('hidden');
+
+    setTimeout(window.initAppPicker, 100)
 }
