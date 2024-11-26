@@ -34,8 +34,9 @@ class thinkAppeals extends thinkModel
         $blocks = $this->prop('blocks');
         return echarts
         (
-            set::width('100%'),
-            set::height('900px'),
+            set::animationDuration(0),
+            set::width('1000px'),
+            set::height('1000px'),
             set::color(array('#29AA93', '#FF9F46')),
             set::legend(array(array(
                 'data'       => $blocks['legend'],
