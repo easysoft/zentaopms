@@ -65,7 +65,10 @@ form
         (
             set::label($lang->doc->project),
             set::width('2/5'),
-            set::control(array('control' => 'picker', 'name' => 'project', 'items' => $projects, 'value' => $objectID, 'required' => true))
+            set::name('project'),
+            set::items(createLink('project', 'ajaxGetDropMenu', "objectID=$objectID&module=&method=&extra=selectmode&useLink=0")),
+            set::value($objectID),
+            set::required(true)
         ),
         $docType == 'doc' ? formGroup
         (
