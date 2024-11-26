@@ -188,7 +188,7 @@ class cneTest
         $this->objectModel->error = new stdClass();
         $instance = $this->objectModel->loadModel('instance')->getByID(2);
 
-        $result = $this->objectModel->getComponents($instance);
+        $result = $this->objectModel->getPods($instance);
         if(!empty($this->objectModel->error->message)) return $this->objectModel->error;
 
         return $result;
