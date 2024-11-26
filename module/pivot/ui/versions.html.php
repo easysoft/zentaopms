@@ -31,7 +31,12 @@ foreach($versionSpecs as $versionSpec)
                 setData('pivot', $pivot->id),
                 setData('version', $versionSpec->version),
                 setData('group', $groupID)
-            )
+            ),
+            !in_array($versionSpec->version, $markedVersions) ? span
+            (
+                setClass("label ghost size-sm bg-secondary-50 text-secondary-500 rounded-full"),
+                $lang->pivot->newVersion
+            ) : null
         ),
         h::td(empty($versionSpec->desc) ? $lang->pivot->noDesc : $versionSpec->desc)
     );
@@ -63,15 +68,19 @@ formPanel
             )
         )
     ),
-    h::table
+    div
     (
-        set::className('versionTable table bordered table-hover'),
-        h::tr
+        setClass('overflow-y-auto h-44'),
+        h::table
         (
-            h::th($lang->pivot->versionNumber),
-            h::th($lang->pivot->desc)
-        ),
-        $versionsTableBody
+            set::className('versionTable table bordered table-hover'),
+            h::tr
+            (
+                h::th($lang->pivot->versionNumber),
+                h::th($lang->pivot->desc)
+            ),
+            $versionsTableBody
+        )
     ),
     div
     (

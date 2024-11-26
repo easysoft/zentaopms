@@ -15,6 +15,7 @@ function loadCustomPivot()
         return acc;
     }, {});
     const form = zui.createFormData({filterValues});
+    form.append('preview', '1');
 
     const link = $.createLink('pivot', 'versions', 'groupID=' + group + '&pivotID=' + pivot + '&version=' + version);
     loadTarget(link, '#pivotVersionPanel', {method: 'POST', data: form});

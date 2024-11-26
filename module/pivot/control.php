@@ -87,7 +87,7 @@ class pivot extends control
         $versionSpecs = $this->pivot->getPivotVersions($pivotID);
         if(empty($versionSpecs)) $this->sendError($this->lang->pivot->tipNoVersions);
 
-        if(!empty($_POST) && !isset($_POST['filterValues']))
+        if(!empty($_POST) && !isset($_POST['preview']))
         {
             $result = $this->pivot->switchNewVersion($pivotID, $version);
             if($result) $this->sendSuccess(array('closeModal' => true, 'message' => $this->lang->saveSuccess, 'load' => true));
@@ -95,10 +95,13 @@ class pivot extends control
 
         $this->pivotZen->show($groupID, $pivotID, '', $version);
 
-        $this->view->versionSpecs = $versionSpecs;
-        $this->view->version      = $version;
-        $this->view->groupID      = $groupID;
-        $this->view->pivotID      = $groupID;
+        $marks = $this->loadModel('mark')->getNeededMarks(array($pivotID), 'pivot', 'all', 'version');
+
+        $this->view->versionSpecs   = $versionSpecs;
+        $this->view->markedVersions = array_column($marks, 'version');
+        $this->view->version        = $version;
+        $this->view->groupID        = $groupID;
+        $this->view->pivotID        = $groupID;
         $this->display();
     }
 
