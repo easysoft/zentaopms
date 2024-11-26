@@ -48,6 +48,24 @@ if(!$showBranch) unset($cols['branch']);
 if(isset($cols['branch']))  $cols['branch']['name'] = 'branchName';
 if(isset($cols['product'])) $cols['product']['map'] = $products;
 if(empty($project->hasProduct)) unset($cols['product']);
+$cols['system']['map'] = $appList;
+
+foreach($releases as $releaseID => $release)
+{
+    if(empty($release->releases)) continue;
+
+    $release->isParent = true;
+    foreach(explode(',', $release->releases) as $childID)
+    {
+        if(isset($childReleases[$childID]))
+        {
+            $child = clone $childReleases[$childID];
+            $child->id     = "{$release->id}-{$child->id}";
+            $child->parent = $release->id;
+            $releases[$child->id] = $child;
+        }
+    }
+}
 
 $tableData = initTableData($releases, $cols);
 dtable
