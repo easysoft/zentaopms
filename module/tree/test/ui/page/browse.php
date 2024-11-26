@@ -11,10 +11,12 @@ class browsePage extends page
             'firstRemoveBtn'   => "//*[@id='zin_tree_browse_form']/div[2]/div/div[2]/div/button[2]",
             'submitBtn'        => "//*[@id='zin_tree_browse_form']//button[@type='submit']",
 
-            'firstModule'  => "//*[@id='treeEditor-tree-browse']/li[1]/div/div/a",
-            'firstEditBtn' => "//*[@id='treeEditor-tree-browse']/li[1]/div/nav/a[1]",
-            'firstDelBtn'  => "//*[@id='treeEditor-tree-browse']/li[1]/div/nav/a[2]",
-            'firstViewBtn' => "//*[@id='treeEditor-tree-browse']/li[1]/div/nav/a[3]"
+            'firstModule'      => "//*[@id='treeEditor-tree-browse']/li[1]/div/div/a",
+            'firstChildModule' => "//*[@id='treeEditor-tree-browse']/li/menu/li[1]/div/div/a",
+            'firstEditBtn'     => "//*[@id='treeEditor-tree-browse']/li[1]/div/nav/a[1]",
+            'firstDelBtn'      => "//*[@id='treeEditor-tree-browse']/li[1]/div/nav/a[2]",
+            'firstViewBtn'     => "//*[@id='treeEditor-tree-browse']/li[1]/div/nav/a[3]",
+            'firstCaret'       => "//*[@id='treeEditor-tree-browse']/li/div/span/span",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
