@@ -383,6 +383,7 @@ CSS;
                 $this->block('main')
             ),
             $this->block('sections'),
+            $this->children(),
             $this->buildHistory(),
             $this->buildActions()
         );
