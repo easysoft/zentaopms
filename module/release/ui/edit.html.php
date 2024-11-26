@@ -13,11 +13,13 @@ namespace zin;
 jsVar('appList',       $appList);
 jsVar('oldStatus',     $release->status);
 jsVar('linkedRelease', $release->releases);
+jsVar('productID',     zget($product, 'id', 0));
 
 formPanel
 (
     set::title($lang->release->edit),
-    on::change('[name=status]', 'changeStatus'),
+    on::change('[name=status]')->call('changeStatus'),
+    on::change('[name=system]')->call('loadSystemBlock'),
     formGroup
     (
         set::width('1/2'),
@@ -25,7 +27,7 @@ formPanel
         set::name('system'),
         set::control(array('type' => 'picker', 'required' => true)),
         set::items(array_column($appList, 'name', 'id')),
-        set::disabled(true),
+        set::required(true),
         set::value($release->system)
     ),
     formRow
