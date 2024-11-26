@@ -23,6 +23,8 @@ fields:
         range: 版本
       - field: name4
         range: 1-1000
+  - field: system
+    range: 1-100
   - field: scmPath
     fields:
       - field: scmPath1
