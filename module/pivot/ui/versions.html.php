@@ -27,11 +27,7 @@ foreach($versionSpecs as $versionSpec)
             setData('pivot', $pivot->id),
             setData('version', $versionSpec->version),
             setData('group', $groupID),
-            h::a
-            (
-                '#' . $versionSpec->version,
-                set::href("javascript:;")
-            ),
+            '#' . $versionSpec->version,
             !in_array($versionSpec->version, $markedVersions) ? span
             (
                 setClass("label ghost size-sm bg-secondary-50 text-secondary-500 rounded-full"),

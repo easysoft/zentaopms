@@ -180,24 +180,23 @@ class pivotZen extends pivot
     /**
      * Preview pivots of a group.
      *
-     * @param  int    $groupID
-     * @param  int    $pivotID
-     * @param  string $mark
-     * @param  string $version
+     * @param  int         $groupID
+     * @param  int         $pivotID
+     * @param  string      $mark
+     * @param  string|null $version
      * @access public
      * @return void
      */
-    public function show(int $groupID, int $pivotID, string $mark = '', string $version = ''): void
+    public function show(int $groupID, int $pivotID, string $mark = '', string|null $version = null): void
     {
         $this->pivot->checkAccess($pivotID, 'preview');
 
-        if(empty($version))
+        if(is_null($version))
         {
             $pivot = $this->pivot->getByID($pivotID, true);
         }
         else
         {
-            $version = $version == 'newest' ? $this->pivot->getMaxVersion($pivotID) : $version;
             $pivot = $this->pivot->getPivotSpec($pivotID, $version, true);
         }
         $driver = $pivot->driver;
