@@ -37,6 +37,24 @@ jsVar('type', $type);
 
 $cols = $this->loadModel('datatable')->getSetting('release');
 if($showBranch) $cols['branch']['map'] = $branchPairs;
+$cols['system']['map'] = $appList;
+
+foreach($releases as $releaseID => $release)
+{
+    if(empty($release->releases)) continue;
+
+    $release->isParent = true;
+    foreach(explode(',', $release->releases) as $childID)
+    {
+        if(isset($childReleases[$childID]))
+        {
+            $child = clone $childReleases[$childID];
+            $child->id     = "{$release->id}-{$child->id}";
+            $child->parent = $release->id;
+            $releases[$child->id] = $child;
+        }
+    }
+}
 $releases = initTableData($releases, $cols, $this->release);
 dtable
 (
