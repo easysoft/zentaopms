@@ -17,7 +17,7 @@ class browseTester extends tester
         $form->dom->submitBtn->click();
         $form->wait(1);
 
-        if($form->dom->firstModule->getText() == $moduleName) return $this->success('创建模块成功');
+        if($form->dom->lastModule->getText() == $moduleName) return $this->success('创建模块成功');
         return $this->failed('创建模块失败');
     }
 
@@ -45,7 +45,32 @@ class browseTester extends tester
         $form->wait(1);
         if($form->dom->firstChildModule->getText() == $childModuleName) return $this->success('创建模块成功');
         return $this->failed('创建模块失败');
+    }
 
+    /**
+     * 编辑模块。
+     * Edit the module.
+     *
+     * @param  string $moduleName
+     * @access public
+     * @return object
+     */
+    public function editModule($newName)
+    {
+        $form = $this->initForm('tree', 'browse', array('product' => '1', 'view' => 'story'), 'appIframe-product');
+        $form->dom->firstEditBtn->click();
+        $form->wait(1);
+        $form->dom->name->setValue($newName);
+        $form->wait(1);
+        $form->dom->editSubmitBtn->click();
+        $form->wait(1);
 
+        if(empty($newName))
+        {
+            if($form->dom->nameTip->getText() == sprintf($this->lang->error->notempty, $this->lang->tree->name)) return $this->success('编辑模块时模块为空，提示正确');
+            return $this->failed('编辑模块时模块为空，提示错误');
+        }
+        if($form->dom->firstModule->getText() == $newName) return $this->success('编辑模块成功');
+        return $this->failed('编辑模块失败');
     }
 }
