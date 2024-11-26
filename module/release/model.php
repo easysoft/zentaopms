@@ -73,6 +73,24 @@ class releaseModel extends model
     }
 
     /**
+     * 通过条件获取发布列表信息。
+     * Get release list information by condition.
+     *
+     * @param  array  $idList
+     * @param  int    $includeRelease
+     * @access public
+     * @return array
+     */
+    public function getListByCondition(array $idList = array(), int $includeRelease = 0): array
+    {
+        return $this->dao->select('*')->from(TABLE_RELEASE)
+            ->where('deleted')->eq(0)
+            ->beginIF($idList)->andWhere('id')->in($idList)->fi()
+            ->beginIF($includeRelease)->andWhere("FIND_IN_SET($includeRelease, `releases`)")->fi()
+            ->fetchAll('id');
+    }
+
+    /**
      * 获取发布列表信息。
      * Get release list information.
      *
