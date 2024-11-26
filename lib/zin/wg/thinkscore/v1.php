@@ -42,6 +42,20 @@ class thinkScore extends thinkQuestion
 
         for($i=1; $i<=$scoreCount; $i++){$items[] = array('text' => $i, 'value' => $i, 'disabledPrefix' => true);}
 
+        foreach ($fields as $field) {
+            $radioItems[] = array(
+                div(setClass('my-1 text-md leading-5 break-words'), $field),
+                thinkBaseCheckbox
+                (
+                    set::type('radio'),
+                    set::items($items),
+                    set::name('result[]'),
+                    set::value($result[0] ?? ''),
+                    set::inline(true),
+                    set::disabled(false)
+                )
+            );
+        }
         $detailWg[] = div(setClass('score-content', $scoreSetting == '0' ? 'score-5' : 'score-10'), $radioItems);
         return $detailWg;
     }
