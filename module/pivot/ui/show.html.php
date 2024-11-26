@@ -57,7 +57,7 @@ $fnGenerateFilters = function() use($pivot, $showOrigin, $lang)
 
 $generateData = function() use ($lang, $groupID, $pivotName, $pivot, $data, $configs, $showOrigin, $fnGenerateFilters)
 {
-    $clickable = !$pivot->builtin;
+    $clickable = $this->config->edition != 'open';
     $emptyTip  = $this->pivot->isFiltersAllEmpty($pivot->filters) ? $lang->pivot->filterEmptyVal : $lang->error->noData;
     list($cols, $rows, $cellSpan) = $this->loadModel('bi')->convertDataForDtable($data, $configs, $pivot->version);
 
@@ -70,17 +70,19 @@ $generateData = function() use ($lang, $groupID, $pivotName, $pivot, $data, $con
             set::shadow(false),
             set::headingClass('h-12'),
             set::bodyClass('pt-0'),
-            $this->app->rawMethod != 'versions' ? to::titleSuffix
+            to::titleSuffix
             (
-                $pivot->desc ? icon
+                setClass(array('hidden' => $this->app->rawMethod == 'versions')),
+                icon
                 (
-                    setClass('cursor-pointer'),
+                    setClass('cursor-pointer', array('hidden' => !$pivot->desc)),
                     setData(array('toggle' => 'tooltip', 'title' => $pivot->desc, 'placement' => 'right', 'className' => 'text-gray border border-light', 'type' => 'white')),
                     'help'
-                ) : null,
-                hasPriv('pivot', 'design') ? span
+                ),
+                span
                 (
                     set::style(array('font-weight' => 'normal')),
+                    setClass(array('hidden' => !hasPriv('pivot', 'design') || !$pivot->versionChange)),
                     $lang->pivot->tipNewVersion . $lang->comma,
                     h::a
                     (
@@ -89,10 +91,11 @@ $generateData = function() use ($lang, $groupID, $pivotName, $pivot, $data, $con
                         set('data-size', 'lg'),
                         set::href($this->createLink('pivot', 'versions', "groupID={$groupID}&pivotID={$pivot->id}"))
                     )
-                ) : null
-            ) : null,
-            $this->app->rawMethod != 'versions' ? toolbar
+                )
+            ),
+            toolbar
             (
+                setClass(array('hidden' => $this->app->rawMethod == 'versions')),
                 item
                 (
                     setID('origin-query'),
@@ -109,33 +112,32 @@ $generateData = function() use ($lang, $groupID, $pivotName, $pivot, $data, $con
                     set::text($lang->pivot->showPivot),
                     on::click("toggleShowMode('group')"),
                 ),
-                $this->config->edition != 'open' && $clickable ? array(
-                hasPriv('pivot', 'design') ? item(set(array
+                item(set(array
                 (
                     'text'  => $lang->pivot->designAB,
                     'icon'  => 'design',
-                    'class' => 'ghost',
+                    'class' => array('ghost', 'hidden' => !hasPriv('pivot', 'design') || !$clickable),
                     'url'   => inlink('design', "id=$pivot->id"),
                     'data-confirm' => $this->pivot->checkIFChartInUse($pivot->id, 'pivot') ? array('message' => $lang->pivot->confirm->design, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x') : null
-                ))) : null,
-                hasPriv('pivot', 'edit') ? item(set(array
+                ))),
+                item(set(array
                 (
                     'text'  => $lang->edit,
                     'icon'  => 'edit',
-                    'class' => 'ghost',
+                    'class' => array('ghost', 'hidden' => !hasPriv('pivot', 'edit') || !$clickable),
                     'url'   => inlink('edit', "id=$pivot->id", '', true),
                     'data-toggle' => 'modal',
                     'data-size'  => 'sm'
-                ))) : null,
-                hasPriv('pivot', 'delete') ? item(set(array
+                ))),
+                item(set(array
                 (
                     'text'  => $lang->delete,
                     'icon'  => 'trash',
-                    'class' => 'ghost ajax-submit',
+                    'class' => array('ghost ajax-submit', 'hidden' => !hasPriv('pivot', 'delete') || !$clickable),
                     'url'   => inlink('delete', "id=$pivot->id"),
                     'data-confirm' => array('message' => $lang->pivot->deleteTip, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x')
-                ))) : null) : null
-            ) : null,
+                )))
+            ),
             div(setClass('divider')),
             $fnGenerateFilters(),
             dtable
