@@ -1053,6 +1053,12 @@ class execution extends control
         list($this->view->pmUsers, $this->view->poUsers, $this->view->qdUsers, $this->view->rdUsers) = $this->executionZen->setUserMoreLink();
         $this->executionZen->setCopyProjects($project);
 
+        if($project->model == 'waterfall' || $project->model == 'waterfallplus')
+        {
+            $this->view->parentStage  = 0;
+            $this->view->parentStages = $this->loadModel('programplan')->getParentStageList($projectID, 0, 0, 'withparent|noclosed');
+        }
+
         $this->view->title               = $this->app->tab == 'execution' ? $this->lang->execution->createExec : $this->lang->execution->create;
         $this->view->gobackLink          = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('execution', 'all') : '';
         $this->view->allProducts         = array_filter($this->executionZen->getAllProductsForCreate($project));

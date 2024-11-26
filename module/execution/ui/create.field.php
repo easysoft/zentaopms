@@ -20,6 +20,17 @@ $fields->field('project')
     ->items(data('allProjects'))
     ->value(data('projectID'));
 
+if($project->model == 'waterfall')
+{
+    $fields->field('parent')
+        ->wrapBefore(true)
+        ->required()
+        ->control('picker')
+        ->label($lang->execution->parentStage)
+        ->items(data('parentStages'))
+        ->value(data('parentStage'));
+}
+
 if(!empty($project->model) && in_array($project->model, array('agileplus', 'ipd', 'waterfallplus')))
 {
     unset($lang->execution->typeList['']);

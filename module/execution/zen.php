@@ -869,7 +869,7 @@ class executionZen extends execution
 
         $projectID = (int)$_POST['project'];
         $project   = $this->loadModel('project')->fetchByID($projectID);
-        $this->execution->checkBeginAndEndDate($projectID, $_POST['begin'], $_POST['end'], $projectID);
+        $this->execution->checkBeginAndEndDate($projectID, $_POST['begin'], $_POST['end'], isset($_POST['parent']) ? (int)$this->post->parent : $projectID);
         if(dao::isError()) return false;
 
         /* Judge workdays is legitimate. */
@@ -906,7 +906,7 @@ class executionZen extends execution
 
             if(isset($this->config->setPercent) && $this->config->setPercent == 1)
             {
-                $this->execution->checkWorkload('create', (int)$_POST['percent'], $project);
+                $this->execution->checkWorkload('create', (int)$this->post->percent, $project);
                 if(dao::isError()) return false;
             }
         }
