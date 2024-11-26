@@ -18,3 +18,23 @@ class createTaskTester extends tester
         $form->dom->estimate->setValue($task->estimate);
         $form->dom->getElement('//*[@id="form-task-create"]/div[26]/button[1]')->click();
         $form->wait(1);
+
+        return $this->success('成功创建开发任务');
+    }
+
+    /**
+     * Create a design task.
+     *
+     * @param  string    $task
+     * @access public
+     * @return object
+     *
+     */
+    public function createDesignTask($task)
+    {
+        $form = $this->initForm('task', 'create', array('executionID' => '2'), 'appIframe-execution');
+        $form->dom->type->picker('设计');
+        $form->dom->name->setValue($task->name);
+        $form->dom->assignedTo->picker('user2');
+        $form->dom->estimate->setValue($task->estimate);
+        $form->dom->desc->setValue($task->desc);
