@@ -48,7 +48,7 @@ detailHeader
             set::url($releaseModule, 'browse', $releaseModule == 'projectrelease' ? "projectID={$this->session->project}" : "productID={$release->product}"),
             $lang->goback
         ),
-        entityLabel(set(array('entityID' => $release->id, 'level' => 2, 'text' => $release->name))),
+        entityLabel(set(array('entityID' => $release->id, 'level' => 2, 'text' => zget($appList, $release->system) . $release->name))),
         $release->deleted ? span(setClass('label danger'), $lang->release->deleted) : null
     ),
     !empty($actions['mainActions']) || !empty($actions['suffixActions']) ? to::suffix
@@ -148,7 +148,15 @@ $releaseSystem = array();
 foreach($linkedReleases as $linkedRelease) $releaseSystem[] = zget($appList, $linkedRelease->system) . $linkedRelease->name;
 
 $releaseIncluded = array();
-foreach($includedApps as $includedApp) $releaseIncluded[] = zget($appList, $includedApp->system) . $includedApp->name;
+foreach($includedApps as $includedApp)
+{
+    $releaseIncluded[] = html::a
+    (
+        inLink('view', "releaseID={$includedApp->id}"),
+        zget($appList, $includedApp->system) . $includedApp->name,
+        '_blank'
+    );
+}
 
 /* Right menus, export and link. */
 $exportBtn = null;
