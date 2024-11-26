@@ -534,7 +534,7 @@ class execution extends control
         $project     = $this->loadModel('project')->getByID($execution->project);
         $executionID = $execution->id;
         $products    = $this->product->getProducts($execution->id);
-        $param       = (int)$param;
+        $param       = $type == 'all' ? 0 : (int)$param;
 
         if(count($products) === 1) $productID = current($products)->id;
 

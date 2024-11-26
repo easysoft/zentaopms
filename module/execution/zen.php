@@ -34,10 +34,10 @@ class executionZen extends execution
         $this->loadModel('product');
         $this->loadModel('tree');
 
-        $moduleID = $type != 'bysearch' ? $param : 0;
+        $moduleID = $type == 'bymodule' ? $param : 0;
 
         /* Get module tree.*/
-        $extra = array('projectID' => $execution->id, 'orderBy' => $orderBy, 'type' => $type, 'build' => $build, 'branchID' => $branch);
+        $extra = array('projectID' => $execution->id, 'orderBy' => $orderBy, 'type' => 'byModule', 'build' => $build, 'branchID' => $branch);
         if($execution->id and empty($productID) and count($products) > 1)
         {
             $moduleTree = $this->tree->getBugTreeMenu($execution->id, $productID, 0, array('treeModel', 'createBugLink'), $extra);
