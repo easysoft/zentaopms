@@ -368,6 +368,7 @@ window.loadWhitelist = function(libID)
  */
 function toggleLibType(e)
 {
+    $('.pick-container').addClass('hidden');
     libType = $(e.target).val() == undefined ? libType : $(e.target).val();
     if(libType == 'project')
     {
@@ -392,6 +393,7 @@ function toggleLibType(e)
         $('#productBox').addClass('hidden');
         $('#acldefault').closest('.radio-primary').hide();
     }
+    $('.pick-container').removeClass('hidden');
 }
 
 window.updateOrder = function(event, orders)
