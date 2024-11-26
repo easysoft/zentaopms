@@ -28,10 +28,8 @@ $fnGenerateFilters = function() use($pivot, $showOrigin, $lang)
         $field  = $filter['field'];
         $value  = zget($filter, 'default', '');
         $from   = zget($filter, 'from');
-        $values = is_array($value) ? implode(',', $value) : $value;
 
         $items = $this->getFilterOptionUrl($filter, $pivot->sql, (array)$pivot->fieldSettings);
-
         if($from == 'query')
         {
             $filters[]  = filter(set(array('title' => $name, 'type' => $type, 'name' => $field, 'value' => $value, 'items' => $items, 'multiple' => $type == 'multipleselect' ? true : false)));
