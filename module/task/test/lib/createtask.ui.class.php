@@ -58,3 +58,23 @@ class createTaskTester extends tester
         $form->dom->name->setValue($task->name);
         $form->dom->getElement('//*[@id="form-task-create"]/div[26]/button[1]')->click();
         $form->wait(1);
+
+        return $this->failed('任务名称不能为空');
+    }
+
+    /**
+     * Create a affair task.
+     *
+     * @param  string    $task
+     * @access public
+     * @return object
+     *
+     */
+    public function createAffairTask($task)
+    {
+        $form = $this->initForm('task', 'create', array('executionID' => '2'), 'appIframe-execution');
+        $form->dom->type->picker('事务');
+        $form->dom->name->setValue($task->name);
+        $form->dom->assignedTo->click();
+        $form->dom->getElement('//*[@class="pick-container"]/div//footer//button[1]')->click();
+        $form->dom->estimate->setValue($task->estimate);
