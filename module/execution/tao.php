@@ -276,11 +276,10 @@ class executionTao extends executionModel
     protected function fetchBurnData(array $executionIdList): array
     {
         $today = helper::today();
-        $burns = $this->dao->select("execution, '$today' AS date, sum(estimate) AS `estimate`, sum(`left`) AS `left`, SUM(consumed) AS `consumed`")
-            ->from(TABLE_TASK)
+        $burns = $this->dao->select("execution, '$today' AS date, sum(estimate) AS `estimate`, sum(`left`) AS `left`, SUM(consumed) AS `consumed`")->from(TABLE_TASK)
             ->where('execution')->in($executionIdList)
             ->andWhere('deleted')->eq('0')
-            ->andWhere('parent')->ge('0')
+            ->andWhere('isParent')->eq('0')
             ->andWhere('status')->ne('cancel')
             ->groupBy('execution')
             ->fetchAll('execution');
@@ -288,7 +287,7 @@ class executionTao extends executionModel
         $closedLefts = $this->dao->select('execution, sum(`left`) AS `left`')->from(TABLE_TASK)
             ->where('execution')->in($executionIdList)
             ->andWhere('deleted')->eq('0')
-            ->andWhere('parent')->ge('0')
+            ->andWhere('isParent')->eq('0')
             ->andWhere('status')->eq('closed')
             ->groupBy('execution')
             ->fetchAll('execution');
@@ -296,7 +295,7 @@ class executionTao extends executionModel
         $finishedEstimates = $this->dao->select("execution, sum(`estimate`) AS `estimate`")->from(TABLE_TASK)
             ->where('execution')->in($executionIdList)
             ->andWhere('deleted')->eq('0')
-            ->andWhere('parent')->ge('0')
+            ->andWhere('isParent')->eq('0')
             ->andWhere('status', true)->eq('done')
             ->orWhere('status')->eq('closed')
             ->markRight(1)
