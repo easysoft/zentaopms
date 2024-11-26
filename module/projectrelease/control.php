@@ -174,7 +174,21 @@ class projectrelease extends control
             }
 
             $releaseData = form::data($this->config->release->form->edit, $releaseID)->setIF($this->post->build === false, 'build', 0)->get();
-            $changes     = $this->release->update($releaseData, $release);
+            if($release->system)
+            {
+                $system = $this->loadModel('system')->fetchByID($release->system);
+                if($system->integrated == '1')
+                {
+                    $releases = (array)$this->post->releases;
+
+                    $release->build    = '';
+                    $release->releases = trim(implode(',', $releases), ',');
+                    if(!$release->releases) dao::$errors['releases[' . key($releases) . ']'][] = sprintf($this->lang->error->notempty, $this->lang->release->includedSystem);
+                }
+            }
+            if(dao::isError()) return $this->sendError(dao::getError());
+
+            $changes = $this->release->update($releaseData, $release);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($changes)
             {
