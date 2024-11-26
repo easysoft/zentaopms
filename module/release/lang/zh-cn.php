@@ -45,6 +45,7 @@ $lang->release->project        = '所属' . $lang->projectCommon;
 $lang->release->build          = '构建';
 $lang->release->includedBuild  = '包含构建';
 $lang->release->includedSystem = '包含应用';
+$lang->release->includedApp    = '被包含应用';
 $lang->release->relatedProject = '对应' . $lang->projectCommon;
 $lang->release->system         = '应用';
 $lang->release->name           = '应用版本号';
