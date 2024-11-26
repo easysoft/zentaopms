@@ -1080,7 +1080,7 @@ class userModel extends model
             /* 只要有一个权限分组没有配置过视图权限，就代表所有视图都没有访问限制。 */
             if(empty($group->acl))
             {
-                $actionAllow = true;
+                $programAllow = $projectAllow = $productAllow = $sprintAllow = $viewAllow = $actionAllow = true;
                 break;
             }
 
