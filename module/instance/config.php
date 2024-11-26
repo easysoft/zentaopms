@@ -21,6 +21,13 @@ $config->instance->enableAutoRestore = in_array('auto-rollback', $features);
 global $lang, $app;
 $app->loadLang('space');
 
+$config->instance->actionList['recordWorkhour']['icon']        = 'time';
+$config->instance->actionList['recordWorkhour']['hint']        = $lang->instance->log->viewButton;
+$config->instance->actionList['recordWorkhour']['text']        = $lang->instance->log->viewButton;
+$config->instance->actionList['recordWorkhour']['url']         = array('module' => 'instance', 'method' => 'logs', 'params' => 'id={id}&zin=1');
+$config->instance->actionList['recordWorkhour']['data-toggle'] = 'modal';
+$config->instance->actionList['recordWorkhour']['class']       = 'task-record-btn';
+
 $config->instance->actionList['ajaxStart']['icon']        = 'play';
 $config->instance->actionList['ajaxStart']['className']   = 'ajax-submit';
 $config->instance->actionList['ajaxStart']['hint']        = $lang->instance->start;
@@ -56,7 +63,7 @@ $config->instance->actionList['upgrade']['url']         = helper::createLink('in
 
 $config->instance->actions = new stdclass();
 $config->instance->actions->view = array();
-$config->instance->actions->view['mainActions']   = array('visit', 'ajaxStart', 'ajaxStop', 'upgrade');
+$config->instance->actions->view['mainActions']   = array('visit','recordWorkhour', 'ajaxStart', 'ajaxStop', 'upgrade');
 $config->instance->actions->view['suffixActions'] = array('ajaxUninstall');
 
 $config->instance->devopsApps   = array('gitea', 'gitlab', 'jenkins', 'sonarqube', 'nexus3', 'nexus');

@@ -674,4 +674,77 @@ class instance extends control
         $this->action->create('instance', $instance->id, 'manualdeletebackup', '', json_encode(array('result' => 'success')));
         return $this->send(array('result' => 'success', 'message' => zget($this->lang->instance->notices, 'deleteSuccess'), 'load' => $this->createLink('instance', 'view', 'id=' . $instanceID)));
     }
+    /**
+     * Ajax 方式获取组件列表。
+     * ajax Get Components.
+     * @param int $id
+     */
+    public function ajaxGetComponents(int $id)
+    {
+        $data       = [];
+        $instance   = $this->instance->getByID($id);
+        $components = $this->cne->getComponents($instance);
+        if(empty($components->data)) return print(json_encode($data));
+
+        foreach($components->data as $component)
+        {
+            $data[] = array('value' => $component->name, 'text' => $component->name);
+        }
+
+        return print(json_encode($data));
+    }
+
+    /**
+     * Ajax 方式获取 Pods 列表。
+     * ajax Get Pods.
+     * @param int $id
+     */
+    public function ajaxGetPods(int $id, string $component)
+    {
+        $data = [];
+        $instance = $this->instance->getByID($id);
+        $pods = $this->cne->getPods($instance, $component);
+        if(empty($pods->data)) return print(json_encode($data));
+
+        foreach($pods->data as $pod)
+        {
+            $data[] = array('value' => $pod->name, 'text' => $pod->name);
+        }
+        return print(json_encode($data));
+    }
+
+    /**
+     * watch Logs page.
+     * 查看日志页面.
+     *
+     * @param int $id
+     * @return void
+     */
+    public function logs(int $id): void
+    {
+        if (!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
+        $instance = $this->instance->getByID($id);
+
+        $this->view->instance = $instance;
+        $this->display();
+    }
+
+    /**
+     * Get logs api.
+     * 获取日志接口。
+     * @param int $id
+     * @param string $component
+     * @param string $pod
+     * @param int $previous
+     * @param string $container
+     * @return void
+     */
+    public function showLogs(int $id, $component = '', $pod = '', $previous = 0, $container = '')
+    {
+        $instance = $this->instance->getByID($id);
+        $previous = $previous == 1 ? true : false;
+
+        $data  = $this->cne->getAppLogs($instance, $component, $pod, $container, $previous) ?? new stdClass();
+        return print(json_encode($data));
+    }
 }

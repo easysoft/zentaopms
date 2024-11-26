@@ -191,6 +191,16 @@ $lang->instance->log = new stdclass;
 $lang->instance->log->date    = '日期';
 $lang->instance->log->message = '内容';
 
+$lang->instance->log->viewButton    = '日志';
+$lang->instance->log->title         = '查看日志';
+$lang->instance->log->button        = '立即查看';
+
+$lang->instance->component         = '组件';
+$lang->instance->pod               = 'Pod';
+$lang->instance->isPrevious        = '是否上个退出容器';
+$lang->instance->isPreviousList[0] = '否';
+$lang->instance->isPreviousList[1] = '是';
+
 $lang->instance->actionList = array();
 $lang->instance->actionList['install']                 = '安装了%s';
 $lang->instance->actionList['uninstall']               = '删除了%s';
