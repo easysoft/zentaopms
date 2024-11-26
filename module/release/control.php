@@ -78,17 +78,21 @@ class release extends control
 
         $releaseQuery = $type == 'bySearch' ? $this->releaseZen->getSearchQuery($queryID) : '';
         $releases     = $this->release->getList($productID, $branch, $type, $sort, $releaseQuery, $pager);
+        $children     = implode(',', array_column($releases, 'releases'));
+
         foreach($releases as $release) $release->desc = strip_tags($release->desc);
 
-        $this->view->title       = $this->view->product->name . $this->lang->hyphen . $this->lang->release->browse;
-        $this->view->releases    = $this->releaseZen->processReleaseListData($releases);
-        $this->view->pageSummary = $this->release->getPageSummary($releases, $type);
-        $this->view->type        = $type;
-        $this->view->orderBy     = $orderBy;
-        $this->view->param       = $param;
-        $this->view->pager       = $pager;
-        $this->view->showBranch  = $showBranch;
-        $this->view->branchPairs = $this->loadModel('branch')->getPairs($productID);
+        $this->view->title         = $this->view->product->name . $this->lang->hyphen . $this->lang->release->browse;
+        $this->view->releases      = $this->releaseZen->processReleaseListData($releases);
+        $this->view->pageSummary   = $this->release->getPageSummary($releases, $type);
+        $this->view->type          = $type;
+        $this->view->orderBy       = $orderBy;
+        $this->view->param         = $param;
+        $this->view->pager         = $pager;
+        $this->view->showBranch    = $showBranch;
+        $this->view->branchPairs   = $this->loadModel('branch')->getPairs($productID);
+        $this->view->appList       = $this->loadModel('system')->getPairs();
+        $this->view->childReleases = $this->release->getListByCondition(explode(',', $children));
         $this->display();
     }
 

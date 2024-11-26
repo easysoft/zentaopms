@@ -17,6 +17,14 @@ $config->release->dtable->fieldList['id']['title'] = $lang->idAB;
 $config->release->dtable->fieldList['id']['name']  = 'id';
 $config->release->dtable->fieldList['id']['type']  = 'id';
 
+$config->release->dtable->fieldList['system']['name']         = 'system';
+$config->release->dtable->fieldList['system']['title']        = $lang->release->system;
+$config->release->dtable->fieldList['system']['type']         = 'shortNestedTitle';
+$config->release->dtable->fieldList['system']['fixed']        = 'left';
+$config->release->dtable->fieldList['system']['show']         = true;
+$config->release->dtable->fieldList['system']['required']     = true;
+$config->release->dtable->fieldList['system']['nestedToggle'] = true;
+
 $config->release->dtable->fieldList['name']['title'] = $lang->release->name;
 $config->release->dtable->fieldList['name']['name']  = 'name';
 $config->release->dtable->fieldList['name']['link']  = array('module' => 'release', 'method' => 'view', 'params' => 'releaseID={id}');
