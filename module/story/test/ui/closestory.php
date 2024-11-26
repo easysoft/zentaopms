@@ -65,16 +65,9 @@ $action->gen(7);
 $tester = new closeStoryTester();
 $tester->login();
 
-$storyType = array();
-$storyType['story']       = 'story';
-$storyType['requirement'] = 'requirement';
-$storyType['epic']        = 'epic';
-
 $closeReason = array('已完成', '不做');
 
-r($tester->closeStory($storyType['story'], 1, $closeReason[0])) && p('message,status') && e('关闭需求成功,SUCCESS');
-r($tester->closeStory($storyType['epic'],  5, $closeReason[0])) && p('message,status') && e('关闭需求成功,SUCCESS');
-
-r($tester->batchCloseStory($closeReason[1])) && p('message,status') && e('批量关闭需求成功,SUCCESS');
+r($tester->closeStory(1, $closeReason[0])) && p('message,status') && e('关闭研发需求成功,SUCCESS');
+r($tester->batchCloseStory($closeReason[1])) && p('message,status') && e('批量关闭研发需求成功,SUCCESS');
 
 $tester->closeBrowser();
