@@ -1850,7 +1850,7 @@ class taskModel extends model
      */
     public function getListByStory(int $storyID, int $executionID = 0, int $projectID = 0): array
     {
-        $tasks = $this->dao->select('id, parent, name, assignedTo, pri, status, estimate, consumed, closedReason, `left`')
+        $tasks = $this->dao->select('id, parent, name, assignedTo, pri, status, isParent, estimate, consumed, closedReason, `left`')
             ->from(TABLE_TASK)
             ->where('story')->eq($storyID)
             ->andWhere('deleted')->eq('0')
