@@ -659,11 +659,11 @@ class cneModel extends model
      * 获取应用的安装日志。
      * Get app install logs.
      *
-     * @param  object $instance
+     * @param  ?object $instance
      * @access public
      * @return object
      */
-    public function getAppLogs(object $instance, string $component = '', string $pod_name = '', string $container_name = '', bool $previous = false): ?object
+    public function getAppLogs(?object $instance, string $component = '', string $pod_name = '', string $container_name = '', bool $previous = false): ?object
     {
         if(!isset($this->app->user->account))
         {

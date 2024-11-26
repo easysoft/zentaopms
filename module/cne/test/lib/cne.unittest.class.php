@@ -18,9 +18,9 @@ class cneTest
         su('admin');
 
         global $tester, $config;
-        $config->CNE->api->host   = 'http://20.205.128.72:32380';
-        $config->CNE->api->token  = 'hYFfFOTUR5CIBoonLFx1UjnmQ7NtBxo9';
-        $config->CNE->app->domain = 'g79n.corp.cc';
+        $config->CNE->api->host   = 'http://354z.corp.cc:32380';
+        $config->CNE->api->token  = 'LuWsdueJ2GqnE6agDG5YMK5YB7kWIWs4';
+        $config->CNE->app->domain = '354z.corp.cc';
 
         $this->objectModel = $tester->loadModel('cne');
     }
@@ -220,7 +220,7 @@ class cneTest
     public function getAppLogsTest(): object|null
     {
         $this->objectModel->error = new stdClass();
-        $instance = $this->objectModel->loadModel('instance')->getByID(2);
+        $instance = $this->objectModel->loadModel('instance')->getByID(3);
 
         $result = $this->objectModel->getAppLogs($instance);
         if(!empty($this->objectModel->error->message)) return $this->objectModel->error;
