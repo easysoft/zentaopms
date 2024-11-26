@@ -684,6 +684,12 @@ class system extends control
      */
     public function delete(int $id)
     {
+        $releases = $this->system->getReleasesByID($id);
+        if(!empty($releases)) return $this->sendError($this->lang->system->releaseExist);
+
+        $builds = $this->system->getBuildsByID($id);
+        if(!empty($builds)) return $this->sendError($this->lang->system->buildExist);
+
         $this->system->delete(TABLE_SYSTEM, $id);
 
         if(dao::isError()) return $this->sendError(dao::getError());
