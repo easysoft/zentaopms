@@ -518,15 +518,25 @@ class programplanModel extends model
      * @param  int    $executionID
      * @param  int    $planID
      * @param  int    $productID
+     * @param  string $param        withParent|noclosed
      * @access public
      * @return array
      */
-    public function getParentStageList(int $executionID, int $planID, int $productID): array
+    public function getParentStageList(int $executionID, int $planID, int $productID, string $param = ''): array
     {
-        $parentStage = $this->programplanTao->getParentStages($executionID, $planID, $productID);
+        $parentStage = $this->programplanTao->getParentStages($executionID, $planID, $productID, $param);
         if(!$parentStage) return array(0 => $this->lang->programplan->emptyParent);
 
-        $plan = $this->getByID($planID);
+        $plan          = $this->getByID($planID);
+        $parents       = array();
+        $withParent    = strpos($param, 'withparent') !== false;
+        $allExecutions = $withParent ? $this->dao->select('id,name,parent,grade,path,type')->from(TABLE_EXECUTION)
+            ->where('type')->notin(array('program', 'project'))
+            ->andWhere('deleted')->eq('0')
+            ->beginIf($executionID)->andWhere('project')->eq($executionID)->fi()
+            ->fetchAll('id') : array();
+        foreach($allExecutions as $execution) $parents[$execution->parent] = isset($allExecutions[$execution->parent]) ? $allExecutions[$execution->parent] : array();
+
         foreach($parentStage as $key => $stage)
         {
             $isCreate    = $this->isCreateTask($key);
@@ -536,7 +546,8 @@ class programplanModel extends model
             if($plan->type == 'stage' && (isset($parentTypes['sprint']) || isset($parentTypes['kanban']))) unset($parentStage[$key]);
             if(($plan->type == 'sprint' || $plan->type == 'kanban') && isset($parentTypes['stage'])) unset($parentStage[$key]);
         }
-        if($plan->type == 'stage') $parentStage[0] = $this->lang->programplan->emptyParent;
+        $project = $this->fetchByID($executionID);
+        if((!empty($plan) && $plan->type == 'stage') || $project->model == 'waterfall') $parentStage[0] = $this->lang->programplan->emptyParent;
         ksort($parentStage);
 
         return $parentStage;

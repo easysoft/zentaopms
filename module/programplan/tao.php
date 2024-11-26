@@ -105,10 +105,11 @@ class programplanTao extends programplanModel
      * @param  int    $executionID
      * @param  int    $planID
      * @param  int    $productID
+     * @param  string $param
      * @access protected
      * @return array|false
      */
-    protected function getParentStages(int $executionID, int $planID, int $productID): array|false
+    protected function getParentStages(int $executionID, int $planID, int $productID, string $param = ''): array|false
     {
         $parentStage = $this->dao->select('t1.id, t1.name')->from(TABLE_PROJECT)->alias('t1')
             ->beginIF($productID)
@@ -122,6 +123,7 @@ class programplanTao extends programplanModel
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.path')->notlike("%,$planID,%")
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
+            ->beginIF(strpos($param, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->orderBy('t1.id desc')
             ->fetchPairs();
 
