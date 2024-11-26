@@ -12,7 +12,7 @@ class viewPage extends page
             /*激活弹窗的激活按钮*/
             'activate'    => "//*[@type='submit']",
             /*关闭弹窗中的关闭按钮*/
-            'closedBut'   => "//*[@id='zin_epic_close_form']/div[4]/div/button"
+            'closedButton'   => "//*[@id='zin_epic_close_form']/div[4]/div/button"
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
