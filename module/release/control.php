@@ -169,17 +169,16 @@ class release extends control
             }
 
             $releaseData = form::data(null, $releaseID)->setIF($this->post->build === false, 'build', 0)->get();
-            if($release->system)
-            {
-                $system = $this->loadModel('system')->fetchByID($release->system);
-                if($system->integrated == '1')
-                {
-                    $releases = (array)$this->post->releases;
+            $releaseData->releases = '';
 
-                    $release->build    = '';
-                    $release->releases = trim(implode(',', $releases), ',');
-                    if(!$release->releases) dao::$errors['releases[' . key($releases) . ']'][] = sprintf($this->lang->error->notempty, $this->lang->release->includedSystem);
-                }
+            $system = $this->loadModel('system')->fetchByID($releaseData->system);
+            if($system->integrated == '1')
+            {
+                $releases = (array)$this->post->releases;
+
+                $releaseData->build    = '';
+                $releaseData->releases = trim(implode(',', $releases), ',');
+                if(!$release->releases) dao::$errors['releases[' . key($releases) . ']'][] = sprintf($this->lang->error->notempty, $this->lang->release->includedSystem);
             }
             if(dao::isError()) return $this->sendError(dao::getError());
 
