@@ -13,18 +13,18 @@ window.setRelease = function(e, releaseID)
     }
 
     $releases.render({items: options, required: true});
-}
+};
 
 window.initAppPicker = function()
 {
-    let selected    = [];
-    let $appList  = $('#systemForm').find('.picker-box [name^=apps]');
+    let selected = [];
+    let $appList = $('#systemForm').find('.picker-box [name^=apps]');
     $appList.each(function()
     {
-        let $apps       = $(this);
-        let apps        = $apps.val();
-        let $appsPicker = $apps.zui('picker');
-        let appsItems   = $appsPicker.options.items;
+        const $apps       = $(this);
+        const apps        = $apps.val();
+        const $appsPicker = $apps.zui('picker');
+        const appsItems   = $appsPicker.options.items;
 
         for(i = 0; i < $apps.length; i++)
         {
@@ -38,9 +38,9 @@ window.initAppPicker = function()
             appsItems[i].disabled = selected.includes(item.value) && item.value != apps;
         })
 
-        $appsPicker.render({items: appsItems});
+        $appsPicker.render({items: appsItems, required: true});
     });
-}
+};
 
 window.addItem = function(obj)
 {
@@ -48,17 +48,17 @@ window.addItem = function(obj)
     const $currentTr = $(obj).closest('tr');
     $currentTr.after(item);
 
-    setTimeout(window.initAppPicker, 100)
+    setTimeout(window.initAppPicker, 100);
 
     $('#systemForm tbody tr .actions-list .btn-link').eq(1).removeClass('hidden');
 
     itemIndex ++;
-}
+};
 
 window.deleteItem = function(obj)
 {
     $(obj).closest('tr').remove();
     if($('#systemForm tbody tr').length < 2) $('#systemForm tbody tr .actions-list .btn-link').eq(1).addClass('hidden');
 
-    setTimeout(window.initAppPicker, 100)
-}
+    setTimeout(window.initAppPicker, 100);
+};
