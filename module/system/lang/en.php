@@ -54,6 +54,8 @@ $lang->system->statusList['inactive'] = 'Inactive';
 $lang->system->confirmDelete   = 'Are you sure to delete the application?';
 $lang->system->confirmActive   = 'Are you sure to online the application?';
 $lang->system->confirmInactive = 'Are you sure to offline the application?';
+$lang->system->releaseExist    = 'Associated release applications cannot be deleted';
+$lang->system->buildExist      = 'Associated build applications cannot be deleted';
 
 /* LDAP */
 $lang->system->LDAP = new stdclass;
