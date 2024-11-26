@@ -704,4 +704,23 @@ class build extends control
 
         echo json_encode($system);
     }
+
+    /**
+     * 根据选择的系统获取版本列表。
+     * Get build list by system.
+     *
+     * @param  int    $productID
+     * @param  int    $systemID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetSystemBuilds(int $productID, int $systemID)
+    {
+        $builds = $this->build->getBuildPairs(array($productID), 'all', 'noterminate, nodone', 0, 'product', '', false, (int)$systemID);
+
+        $buildList = array();
+        foreach($builds as $buildID => $buildName) $build[] = array('text' => $buildName, 'value' => $buildID);
+
+        echo json_encode($buildList);
+    }
 }
