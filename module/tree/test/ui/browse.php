@@ -22,4 +22,5 @@ $module->gen(0, true);
 $tester = new browseTester();
 $tester->login();
 
-r($tester->createModule('模块1')) && p('status,message') && e('SUCCESS,创建模块成功');
+r($tester->createModule('模块1'))   && p('status,message') && e('SUCCESS,创建模块成功');
+r($tester->createChildModule('子模块1')) && p('status,message') && e('SUCCESS,创建模块成功');
