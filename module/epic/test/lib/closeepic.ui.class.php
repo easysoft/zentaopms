@@ -57,3 +57,22 @@ class closeEpicTester extends tester
         $browsePage = $this->initForm('product', 'browse', $storyParam);
         $browsePage->dom->firstSelect->click();
         $browsePage->dom->batchMore->click();
+        sleep(1);
+        $browsepage->dom->getelement("/html/body/div[2]/menu/menu/li[1]/a/div/div")->click();
+        sleep(1);
+
+        $batchclose = $this->loadpage($storytype, 'batchclose');
+        $batchclose->dom->batchclosedreason->picker($closereason);
+        $batchclose->dom->batchclosedsave->click();
+        $batchclose->wait(1);
+
+        /*检查需求详情页需求状态和关闭原因*/
+        $viewpage = $this->initform($storytype, 'view', array('id' => $storyid), 'appiframe-product');
+        if($viewpage->dom->status->gettext() != '已关闭') return $this->failed('需求状态不正确');
+
+        $viewpage->dom->btn($this->lang->story->legendlifetime)->click();
+        if($viewpage->dom->closereason->gettext() != $closereason) return $this->failed('需求关闭原因不正确');
+
+        return $this->success('批量关闭业务需求成功');
+    }
+}
