@@ -13,6 +13,7 @@ window.loadSystemBlock = function()
     }
     else
     {
+        window.loadBuilds(productID);
         $('#buildBox').removeClass('hidden');
     }
 }
