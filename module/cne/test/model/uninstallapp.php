@@ -8,7 +8,10 @@ timeout=0
 cid=1
 
 - 卸载CNE平台的卸载应用 status @normal
-
+- 卸载CNE平台的卸载应用 status @normal
+- 卸载CNE平台的卸载应用 status @normal
+- 卸载CNE平台的卸载应用 status @normal
+- 卸载CNE平台的卸载应用 status @normal
  */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -29,4 +32,8 @@ $apiParams->channel   = $instance->channel;
 
 $cneModel = $tester->loadModel('cne');
 
+r($cneModel->uninstallApp($apiParams)) && p('status') && e('normal');
+r($cneModel->uninstallApp($apiParams)) && p('status') && e('normal');
+r($cneModel->uninstallApp($apiParams)) && p('status') && e('normal');
+r($cneModel->uninstallApp($apiParams)) && p('status') && e('normal');
 r($cneModel->uninstallApp($apiParams)) && p('status') && e('normal');

@@ -8,6 +8,10 @@ timeout=0
 cid=1
 
 - 升级禅道DevOps平台版 status @normal
+- 升级禅道DevOps平台版 status @normal
+- 升级禅道DevOps平台版 status @normal
+- 升级禅道DevOps平台版 status @normal
+- 升级禅道DevOps平台版 status @normal
 
  */
 
@@ -20,4 +24,8 @@ $config->CNE->app->domain = 'g79n.corp.cc';
 
 $cneModel = $tester->loadModel('cne');
 
+r($cneModel->upgrade()) && p('status') && e('normal');
+r($cneModel->upgrade()) && p('status') && e('normal');
+r($cneModel->upgrade()) && p('status') && e('normal');
+r($cneModel->upgrade()) && p('status') && e('normal');
 r($cneModel->upgrade()) && p('status') && e('normal');
