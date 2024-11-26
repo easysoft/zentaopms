@@ -49,13 +49,13 @@ $lang->bug->notifyEmail      = '通知邮箱';
 $lang->bug->mailto           = '抄送给';
 $lang->bug->openedBy         = '由谁创建';
 $lang->bug->openedDate       = '创建日期';
-$lang->bug->openedBuild      = '影响构建';
+$lang->bug->openedBuild      = '影响版本';
 $lang->bug->assignedTo       = '指派给';
 $lang->bug->assignedToMe     = '指派给我';
 $lang->bug->assignedDate     = '指派日期';
 $lang->bug->resolvedBy       = '解决者';
 $lang->bug->resolution       = '解决方案';
-$lang->bug->resolvedBuild    = '解决构建';
+$lang->bug->resolvedBuild    = '解决版本';
 $lang->bug->resolvedDate     = '解决日期';
 $lang->bug->deadline         = '截止日期';
 $lang->bug->plan             = '所属计划';
@@ -293,7 +293,7 @@ $lang->bug->report->select = '请选择报表类型';
 $lang->bug->report->create = '生成报表';
 
 $lang->bug->report->charts['bugsPerExecution']      = $lang->executionCommon . 'Bug数量';
-$lang->bug->report->charts['bugsPerBuild']          = '构建Bug数量';
+$lang->bug->report->charts['bugsPerBuild']          = '版本Bug数量';
 $lang->bug->report->charts['bugsPerModule']         = '模块Bug数量';
 $lang->bug->report->charts['openedBugsPerDay']      = '每天新增Bug数';
 $lang->bug->report->charts['resolvedBugsPerDay']    = '每天解决Bug数';
@@ -356,7 +356,7 @@ $lang->bug->report->bugLiveDays->graph           = new stdclass();
 $lang->bug->report->bugHistories->graph          = new stdclass();
 
 $lang->bug->report->bugsPerExecution->graph->xAxisName = $lang->executionCommon;
-$lang->bug->report->bugsPerBuild->graph->xAxisName     = '构建';
+$lang->bug->report->bugsPerBuild->graph->xAxisName     = '版本';
 $lang->bug->report->bugsPerModule->graph->xAxisName    = '模块';
 
 $lang->bug->report->openedBugsPerDay->type             = 'bar';
@@ -390,8 +390,8 @@ $lang->bug->action->totask               = array('main' => '$date, 由 <strong>$
 $lang->bug->action->converttotask        = array('main' => '$date, 由 <strong>$actor</strong> 转为<strong>任务</strong>，编号为 <strong>$extra</strong>。');
 $lang->bug->action->linked2plan          = array('main' => '$date, 由 <strong>$actor</strong> 关联到计划 <strong>$extra</strong>。');
 $lang->bug->action->unlinkedfromplan     = array('main' => '$date, 由 <strong>$actor</strong> 从计划 <strong>$extra</strong> 移除。');
-$lang->bug->action->linked2build         = array('main' => '$date, 由 <strong>$actor</strong> 关联到构建 <strong>$extra</strong>。');
-$lang->bug->action->unlinkedfrombuild    = array('main' => '$date, 由 <strong>$actor</strong> 从构建 <strong>$extra</strong> 移除。');
+$lang->bug->action->linked2build         = array('main' => '$date, 由 <strong>$actor</strong> 关联到版本 <strong>$extra</strong>。');
+$lang->bug->action->unlinkedfrombuild    = array('main' => '$date, 由 <strong>$actor</strong> 从版本 <strong>$extra</strong> 移除。');
 $lang->bug->action->unlinkedfromrelease  = array('main' => '$date, 由 <strong>$actor</strong> 从发布 <strong>$extra</strong> 移除。');
 $lang->bug->action->linked2release       = array('main' => '$date, 由 <strong>$actor</strong> 关联到发布 <strong>$extra</strong>。');
 $lang->bug->action->linked2revision      = array('main' => '$date, 由 <strong>$actor</strong> 关联到代码提交 <strong>$extra</strong>.');
@@ -417,8 +417,8 @@ $lang->bug->moreSelects['browse']['more']['overduebugs']   = $lang->bug->overdue
 $lang->bug->moreSelects['browse']['more']['needconfirm']   = $lang->bug->needConfirm;
 
 $lang->bug->placeholder = new stdclass();
-$lang->bug->placeholder->chooseBuilds = '选择相关构建...';
-$lang->bug->placeholder->newBuildName = '新构建名称';
+$lang->bug->placeholder->chooseBuilds = '选择相关版本...';
+$lang->bug->placeholder->newBuildName = '新版本名称';
 $lang->bug->placeholder->duplicate    = '请输入关键字';
 
 /* 交互提示。*/
@@ -431,7 +431,7 @@ $lang->bug->notice->confirmDelete         = '您确认要删除该Bug吗？';
 $lang->bug->notice->remindTask            = '该Bug已经转化为任务，是否更新任务(编号:%s)状态 ?';
 $lang->bug->notice->skipClose             = 'Bug %s 不是已解决状态，不能关闭，将自动忽略。';
 $lang->bug->notice->executionAccessDenied = "您无权访问该Bug所属的{$lang->executionCommon}！";
-$lang->bug->notice->confirmUnlinkBuild    = "更换解决构建将取消与旧构建的关联，您确定取消该bug与%s的关联吗？";
+$lang->bug->notice->confirmUnlinkBuild    = "更换解决版本将取消与旧版本的关联，您确定取消该bug与%s的关联吗？";
 $lang->bug->notice->noSwitchBranch        = 'Bug%s所属模块不在当前分支下，将自动忽略。';
 $lang->bug->notice->confirmToStory        = '转需求后Bug将自动关闭，关闭原因为转为需求。';
 $lang->bug->notice->productDitto          = "该 bug 与上一 bug 不属于同一{$lang->productCommon}！";
