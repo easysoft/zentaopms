@@ -511,10 +511,11 @@ class taskModel extends model
             if(!$taskID) return false;
 
             $parents[$level] = $taskID;
-            $task->id = $taskID;
             if($level > 0)
             {
-                $this->dao->update(TABLE_TASK)->set('parent')->eq($parents[$level - 1])->where('id')->eq($taskID)->exec();
+                $task->id     = $taskID;
+                $task->parent = $parents[$level - 1];
+                $this->dao->update(TABLE_TASK)->set('parent')->eq($task->parent)->where('id')->eq($taskID)->exec();
                 $this->updateParent($task, false);
             }
 
