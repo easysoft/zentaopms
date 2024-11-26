@@ -1141,6 +1141,7 @@ class projectTao extends projectModel
             if(!isset($menu['dropMenu'])) continue;
             foreach($menu['dropMenu'] as $key2 => $dropMenu)
             {
+                if(strpos($this->config->project->multiple['project'], ",{$label},") !== false) $objectID = $project->id;
                 if(strpos($this->config->project->multiple['execution'], ",{$key2},") !== false)
                 {
                     $objectID = $executionID;
