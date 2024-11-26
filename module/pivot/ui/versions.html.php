@@ -23,14 +23,14 @@ foreach($versionSpecs as $versionSpec)
         $version == $versionSpec->version ? setClass('bg-secondary-50') : null,
         h::td
         (
+            on::click("previewVersion"),
+            setData('pivot', $pivot->id),
+            setData('version', $versionSpec->version),
+            setData('group', $groupID),
             h::a
             (
                 '#' . $versionSpec->version,
-                set::href("javascript:;"),
-                on::click("previewVersion"),
-                setData('pivot', $pivot->id),
-                setData('version', $versionSpec->version),
-                setData('group', $groupID)
+                set::href("javascript:;")
             ),
             !in_array($versionSpec->version, $markedVersions) ? span
             (

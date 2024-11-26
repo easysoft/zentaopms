@@ -48,10 +48,20 @@ window.latin1ToBase64 = function(str)
  * @access public
  * @return object
  */
-window.getFilterValues = function()
+window.getFilterValues = function(where)
 {
+    let root = '';
+    if(where == 'versions')
+    {
+        root = $('#pivotVersionPanel').find('#conditions .filter');
+    }
+    else
+    {
+        root = $('#conditions .filter');
+    }
+
     const filterValues = {};
-    $('#conditions .filter').each(function(index)
+    root.each(function(index)
     {
         const $filter = $(this);
         if ($filter.hasClass('filter-input'))

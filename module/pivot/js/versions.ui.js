@@ -8,12 +8,7 @@ function previewVersion(e)
 
 function loadCustomPivot()
 {
-    const filters = getFilterValues();
-    const keys = Object.keys(filters).slice(-3);
-    const filterValues = keys.reduce((acc, key, index) => {
-        acc[index] = filters[key];
-        return acc;
-    }, {});
+    const filterValues = getFilterValues('versions');
     const form = zui.createFormData({filterValues});
     form.append('preview', '1');
 
