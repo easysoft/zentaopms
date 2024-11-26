@@ -53,8 +53,10 @@ formPanel
     (
         set::width('1/2'),
         set::label($lang->doc->product),
-        set::required(true),
-        set::control(array('control' => 'picker', 'name' => 'product', 'items' => $objects, 'required' => true, 'value' => $objectID))
+        set::name('product'),
+        set::items(createLink('product', 'ajaxGetDropMenu', "objectID=$objectID&module=&method=&extra=selectmode&useLink=0")),
+        set::value($objectID),
+        set::required(true)
     ) : null,
     ($objectType == 'custom' || $objectType === 'mine') ? formGroup
     (
