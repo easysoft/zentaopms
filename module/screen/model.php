@@ -3168,7 +3168,8 @@ class screenModel extends model
         $images = $this->loadModel('file')->getByObject('screen', $screenIds);
         foreach($screens as $screen)
         {
-            $currentImages = array_filter($images, function($image) use ($screen) {
+            $currentImages = array_filter($images, function($image) use ($screen)
+            {
                 return $image->objectID == $screen->id;
             });
             if(empty($currentImages)) continue;
