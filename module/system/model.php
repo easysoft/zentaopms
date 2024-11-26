@@ -468,4 +468,36 @@ class systemModel extends model
         $this->dao->update(TABLE_SYSTEM)->set('latestDate')->eq($releasedDate)->set('latestRelease')->eq($releaseID)->where('id')->eq($systemID)->exec();
         return !dao::isError();
     }
+
+    /**
+     * 根据ID获取发布信息。
+     * Get release information by ID.
+     *
+     * @param  int $systemID
+     * @access public
+     * @return array
+     */
+    public function getReleasesByID(int $systemID): array
+    {
+        return $this->dao->select('*')->from(TABLE_RELEASE)
+            ->where('system')->eq($systemID)
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll('id');
+    }
+
+    /**
+     * 根据ID获取构建信息。
+     * Get build information by ID.
+     *
+     * @param  int $systemID
+     * @access public
+     * @return array
+     */
+    public function getBuildsByID(int $systemID): array
+    {
+        return $this->dao->select('*')->from(TABLE_BUILD)
+            ->where('system')->eq($systemID)
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll('id');
+    }
 }
