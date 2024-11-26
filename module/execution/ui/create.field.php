@@ -20,7 +20,7 @@ $fields->field('project')
     ->items(data('allProjects'))
     ->value(data('projectID'));
 
-if($project->model == 'waterfall')
+if($project->model == 'waterfall' || $project->model == 'waterfallplus')
 {
     $fields->field('parent')
         ->wrapBefore(true)

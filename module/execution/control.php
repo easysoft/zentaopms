@@ -1053,10 +1053,11 @@ class execution extends control
         list($this->view->pmUsers, $this->view->poUsers, $this->view->qdUsers, $this->view->rdUsers) = $this->executionZen->setUserMoreLink();
         $this->executionZen->setCopyProjects($project);
 
+        $isStage = isset($output['type']) && $output['type'] == 'stage';
         if($project->model == 'waterfall' || $project->model == 'waterfallplus')
         {
             $this->view->parentStage  = 0;
-            $this->view->parentStages = $this->loadModel('programplan')->getParentStageList($projectID, 0, 0, 'withparent|noclosed');
+            $this->view->parentStages = $this->loadModel('programplan')->getParentStageList($projectID, 0, 0, 'withparent|noclosed|' . ($isStage ? 'stage' : 'notstage'));
         }
 
         $this->view->title               = $this->app->tab == 'execution' ? $this->lang->execution->createExec : $this->lang->execution->create;
@@ -1071,7 +1072,7 @@ class execution extends control
         $this->view->productID           = $productID;
         $this->view->projectID           = $projectID;
         $this->view->from                = $this->app->tab;
-        $this->view->isStage             = isset($output['type']) && $output['type'] == 'stage';
+        $this->view->isStage             = $isStage;
         $this->view->isKanban            = isset($output['type']) && $output['type'] == 'kanban';
         $this->view->project             = $project;
         $this->view->planID              = $planID;

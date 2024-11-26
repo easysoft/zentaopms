@@ -530,6 +530,7 @@ class programplanModel extends model
         $plan          = $this->getByID($planID);
         $parents       = array();
         $withParent    = strpos($param, 'withparent') !== false;
+        $isStage       = strpos("|$param|", '|stage|') !== false || strpos($param, 'stage') === false;
         $allExecutions = $withParent ? $this->dao->select('id,name,parent,grade,path,type')->from(TABLE_EXECUTION)
             ->where('type')->notin(array('program', 'project'))
             ->andWhere('deleted')->eq('0')
@@ -551,6 +552,8 @@ class programplanModel extends model
             else
             {
                 if(!$isCreate) unset($parentStage[$key]); // 隐藏有数据的阶段
+                if($isStage && (isset($parentTypes['sprint']) || isset($parentTypes['kanban']))) unset($parentStage[$key]); // 如果是阶段，隐藏叶子节点是迭代和看板的数据
+                if(!$isStage && (isset($parentTypes['stage']) || isset($parentTypes['stage'])))  unset($parentStage[$key]); // 如果不是阶段，隐藏叶子节点是阶段的数据
             }
 
             /* Set stage name. */
@@ -567,7 +570,7 @@ class programplanModel extends model
             }
         }
         $project = $this->fetchByID($executionID);
-        if((!empty($plan) && $plan->type == 'stage') || $project->model == 'waterfall') $parentStage[0] = $this->lang->programplan->emptyParent;
+        if((!empty($plan) && $plan->type == 'stage') || $project->model == 'waterfall' || $isStage) $parentStage[0] = $this->lang->programplan->emptyParent;
         ksort($parentStage);
 
         return $parentStage;
