@@ -112,11 +112,15 @@ class thinkStepBase extends wg
 
         if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);
 
-        $questionType = !empty($step) && $step->type == 'questions' ? $step->options->questionType : '';
-        $isCheckBox   = !empty($step) && $step->type == 'question' && in_array($questionType, $config->thinkstep->quoteQuestionType);
-        $isQuoteItem  = $isCheckBox && !empty($step->options->setOption) && $step->options->setOption == 1;
-        $detailTip    = array();
-        $quotedItems  = array();
+        $questionType   = !empty($step) && $step->type == 'question' ? $step->options->questionType : '';
+        $isCheckBox     = !empty($step) && $step->type == 'question' && in_array($questionType, $config->thinkstep->quoteQuestionType);
+        $isQuoteItem    = $isCheckBox && !empty($step->options->setOption) && $step->options->setOption == 1;
+        $quoteTitleList = !empty($step->options->quoteTitle) ? explode(", ", $step->options->quoteTitle) : array();
+        $detailTip      = array();
+        $quotedItems    = array();
+        $sourceQuestion = array();
+        $sourceItems    = array();
+
         if(!empty($quotedQuestions))
         {
             foreach($quotedQuestions as $item)
@@ -137,17 +141,41 @@ class thinkStepBase extends wg
         {
             foreach($quoteQuestions as $item)
             {
-                if(!$isRun && $item->id == $step->options->quoteTitle) $sourceQuestion = $item;
-                if($isRun && $item->origin == $step->options->quoteTitle) $sourceQuestion = $item;
+                if(!$isRun && in_array($item->id, $quoteTitleList)) $sourceQuestion[] = $item;
+                if($isRun && in_array($item->origin, $quoteTitleList)) $sourceQuestion[] = $item;
             }
         }
+        if(!empty($sourceQuestion))
+        {
+            foreach ($sourceQuestion as  $sourceQuestionItem) {
+                $sourceItems[] = a
+                (
+                    setClass('block text-primary-500 leading-relaxed'),
+                    set::href(createLink('thinkstep', 'view', "marketID=0&&wizardID=$sourceQuestionItem->wizard&&stepID=$sourceQuestionItem->id&&from=detail")),
+                    setData('toggle', 'modal'),
+                    setData('dismiss', 'modal'),
+                    setData('size', 'sm'),
+                    $sourceQuestionItem->index . '. ' . $sourceQuestionItem->title
+                );
+            }
+        }
+
         if($isRun && (!empty($quotedQuestions) || !empty($sourceQuestion)))
         {
-            $tipType = $lang->thinkstep->label->option;
+            $tipType           = $lang->thinkstep->label->option;
+            $sourceQuestionTip = array();
             if(!empty($sourceQuestion))
             {
-                $sourceQuestionType = is_string($sourceQuestion->options) ? json_decode($sourceQuestion->options)->questionType : $sourceQuestion->options->questionType;
-                if($sourceQuestionType == 'multicolumn') $tipType = sprintf($lang->thinkstep->entry, $step->options->selectColumn);
+                foreach ($sourceQuestion as $sourceQuestionItem) {
+                    $sourceQuestionType = is_string($sourceQuestionItem->options) ? json_decode($sourceQuestionItem->options)->questionType : $sourceQuestionItem->options->questionType;
+                    if($sourceQuestionType == 'multicolumn') $tipType = sprintf($lang->thinkstep->entry, $step->options->selectColumn);
+                    $sourceQuestionTip[] = div
+                    (
+                        setClass('ml-4 pl-0.5'),
+                        sprintf($lang->thinkstep->tips->checkbox, $lang->thinkstep->tips->options[$questionType], ($sourceQuestionItem->index . '. ' . $sourceQuestionItem->title)),
+                        $tipType
+                    );
+                }
             }
             $detailTip[] = div
             (
@@ -158,12 +186,7 @@ class thinkStepBase extends wg
                     icon(setClass('font text-warning mr-1'), 'about'),
                     $lang->thinkrun->tips->quotedTip
                 ) : null,
-                !empty($sourceQuestion) ? div
-                (
-                    setClass('ml-4 pl-0.5'),
-                    sprintf($lang->thinkstep->tips->checkbox, $lang->thinkstep->tips->options[$questionType], ($sourceQuestion->index . '. ' . $sourceQuestion->title)),
-                    $tipType
-                ) : null
+                !empty($sourceQuestion) ? $sourceQuestionTip : null
             );
         }
         if(!$isRun)
@@ -175,18 +198,10 @@ class thinkStepBase extends wg
                     (
                         setClass('bg-primary-50 leading-normal p-2 mt-3'),
                         div(sprintf($lang->thinkstep->tips->sourceofOptions, $lang->thinkstep->tips->options[$questionType])),
-                        a
-                        (
-                            setClass('block text-primary-500 leading-relaxed'),
-                            set::href(createLink('thinkstep', 'view', "marketID=0&&wizardID=$sourceQuestion->wizard&&stepID=$sourceQuestion->id&&from=detail")),
-                            setData('toggle', 'modal'),
-                            setData('dismiss', 'modal'),
-                            setData('size', 'sm'),
-                            $sourceQuestion->index . '. ' . $sourceQuestion->title
-                        )
+                        $sourceItems
                     ),
                     (!empty($questionType) && $questionType == 'multicolumn') ? div(setClass('text-sm text-gray-400 leading-loose mt-2'), $lang->thinkstep->tips->multicolumn) : null
-                ): null,
+                ) : null,
                 (!empty($quotedQuestions) && !$preViewModel) ? div
                 (
                     setClass('bg-primary-50 leading-normal p-2 mt-3'),
