@@ -3,11 +3,11 @@
 
 /**
 
-title=测试 cneModel->uninstallApp();
+title=测试 cneModel->upgrade();
 timeout=0
 cid=1
 
-- 卸载CNE平台的卸载应用 status @normal
+- 升级禅道DevOps平台版 status @normal
 
  */
 
@@ -20,4 +20,4 @@ $config->CNE->app->domain = 'g79n.corp.cc';
 
 $cneModel = $tester->loadModel('cne');
 
-r($cneModel->uninstallApp()) && p('status') && e('normal');
+r($cneModel->upgrade()) && p('status') && e('normal');
