@@ -1342,7 +1342,7 @@ class my extends control
         {
             $mode  = $list->account == $this->app->user->account ? 'edit' : ($this->app->user->admin ? 'adminView' : 'view');
             $label = $mode == 'edit' ? $this->lang->my->manageContacts : $this->lang->my->viewContacts;
-            $tip   = $mode == 'edit' ? $this->lang->my->manageSelf : ($this->app->user->admin ? $this->lang->my->adminView : '');
+            $tip   = $mode == 'edit' ? $this->lang->my->manageSelf : $this->lang->my->adminView;
         }
         else
         {
