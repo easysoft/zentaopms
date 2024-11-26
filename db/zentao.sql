@@ -15666,7 +15666,7 @@ CREATE UNIQUE INDEX `demand` ON `zt_demandreview`(`demand`,`version`,`reviewer`)
 CREATE TABLE `zt_charter` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
-  `level` int(8) NOT NULL DEFAULT '0',
+  `level` varchar(255) NOT NULL DEFAULT '',
   `category` char(30) NOT NULL DEFAULT '',
   `market` varchar(30) NOT NULL DEFAULT '',
   `check` enum('0','1') NOT NULL DEFAULT '0',
@@ -15677,6 +15677,7 @@ CREATE TABLE `zt_charter` (
   `product` text NULL,
   `roadmap` text NULL,
   `plan` text NULL,
+  `filesConfig` text NULL,
   `spec` mediumtext NULL,
   `status` char(30) NOT NULL DEFAULT '',
   `createdBy` char(30) NOT NULL DEFAULT '',
