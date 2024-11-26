@@ -24,6 +24,7 @@ featureBar
     (
         set::icon('back'),
         set::type('secondary'),
+        set::url($this->createLink('release', 'browse', "productID={$productID}")),
         $lang->goback
     )
 );
@@ -39,5 +40,6 @@ dtable
     set::data($tableData),
     set::sortLink(createLink('system', 'browse', "productID={$productID}&projectID={$projectID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
     set::orderBy($orderBy),
-    set::footPager(usePager())
+    set::footPager(usePager()),
+    set::onRenderCell(jsRaw('window.renderCell'))
 );

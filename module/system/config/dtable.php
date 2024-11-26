@@ -32,6 +32,10 @@ $config->system->dtable->fieldList['status']['statusMap'] = $lang->system->statu
 $config->system->dtable->fieldList['status']['width']     = 100;
 $config->system->dtable->fieldList['status']['sortType']  = true;
 
+$config->system->dtable->fieldList['desc']['title']     = $lang->system->desc;
+$config->system->dtable->fieldList['desc']['name']      = 'desc';
+$config->system->dtable->fieldList['desc']['type']      = 'desc';
+
 $config->system->dtable->fieldList['actions']['name']     = 'actions';
 $config->system->dtable->fieldList['actions']['title']    = $lang->actions;
 $config->system->dtable->fieldList['actions']['type']     = 'actions';
