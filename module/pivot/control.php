@@ -97,7 +97,6 @@ class pivot extends control
 
         $this->view->versionSpecs = $versionSpecs;
         $this->view->version      = $version;
-        $this->view->pivot        = $pivot;
         $this->view->groupID      = $groupID;
         $this->view->pivotID      = $groupID;
         $this->display();
@@ -116,9 +115,9 @@ class pivot extends control
      * @access public
      * @return void
      */
-    public function drillModal(int $pivotID, string $colName, string $status, string $conditions, string $filterValues, string $value)
+    public function drillModal(int $pivotID, string $version, string $colName, string $status, string $conditions, string $filterValues, string $value)
     {
-        $drill        = $this->pivotZen->getDrill($pivotID, $colName, $status);
+        $drill        = $this->pivotZen->getDrill($pivotID, $version, $colName, $status);
         $conditions   = json_decode(base64_decode($conditions), true);
         $filterValues = json_decode(base64_decode($filterValues), true);
 

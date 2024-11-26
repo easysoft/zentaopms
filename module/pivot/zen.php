@@ -462,11 +462,11 @@ class pivotZen extends pivot
      * @access public
      * @return object
      */
-    public function getDrill(int $pivotID, string $colName, string $status = 'published'): object
+    public function getDrill(int $pivotID, string $version, string $colName, string $status = 'published'): object
     {
         if($status == 'published')
         {
-            $drills = $this->pivot->fetchPivotDrills($pivotID, $colName);
+            $drills = $this->pivot->fetchPivotDrills($pivotID, $version, $colName);
             return reset($drills);
         }
 

@@ -135,6 +135,7 @@ class pivotModel extends model
             $pivot->filters = array();
         }
         $this->completePivot($pivot);
+        if($addDrills) $this->addDrills($pivot);
 
         return $pivot;
     }
@@ -249,7 +250,7 @@ class pivotModel extends model
         if(!is_array($settings) || !isset($settings['columns'])) return;
         $columns  = $settings['columns'];
         $drillFields = array_column($columns, 'field');
-        $drills = $this->pivotTao->fetchPivotDrills($pivot->id, $drillFields);
+        $drills = $this->pivotTao->fetchPivotDrills($pivot->id, $pivot->version, $drillFields);
         foreach($columns as $index => $column) $pivot->settings['columns'][$index]['drill'] = zget($drills, $column['field']);
     }
 

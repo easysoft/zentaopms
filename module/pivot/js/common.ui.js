@@ -3,6 +3,7 @@ window.clickCell = function(col, {colName, rowInfo})
 {
     const drillConditions = rowInfo.data.conditions[colName];
     const isDrill         = rowInfo.data.isDrill[colName];
+    const version         = rowInfo.data.version;
     let value             = rowInfo.data[colName];
 
     if(!isDrill || rowInfo.data.field0_colspan) return false;
@@ -26,10 +27,10 @@ window.clickCell = function(col, {colName, rowInfo})
     filterValues = latin1ToBase64(JSON.stringify(filterValues))
     if(typeof(pivotState) != 'undefined') status = 'design';
 
-    let drillModalLink = $.createLink('pivot', 'drillModal', `pivotID=${id}&colName=${originField}&status=${status}&conditions=${conditions}&filterValues=${filterValues}&value=${value}`);
+    let drillModalLink = $.createLink('pivot', 'drillModal', `pivotID=${id}&version=${version}&colName=${originField}&status=${status}&conditions=${conditions}&filterValues=${filterValues}&value=${value}`);
     drillModalLink = drillModalLink.replace(/\+/g, '%2B');
 
-    zui.Modal.open({url: drillModalLink, size: 'lg'});
+    zui.Modal.open({url: drillModalLink, size: 'lg', key: 'drill'});
 }
 
 window.latin1ToBase64 = function(str)

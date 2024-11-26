@@ -72,7 +72,7 @@ $generateData = function() use ($lang, $groupID, $pivotName, $pivot, $data, $con
 {
     $clickable = !$pivot->builtin;
     $emptyTip  = $this->pivot->isFiltersAllEmpty($pivot->filters) ? $lang->pivot->filterEmptyVal : $lang->error->noData;
-    list($cols, $rows, $cellSpan) = $this->loadModel('bi')->convertDataForDtable($data, $configs);
+    list($cols, $rows, $cellSpan) = $this->loadModel('bi')->convertDataForDtable($data, $configs, $pivot->version);
 
     return array
     (
@@ -160,12 +160,61 @@ $generateData = function() use ($lang, $groupID, $pivotName, $pivot, $data, $con
                 set::emptyTip($emptyTip),
                 set::rowHover(false),
                 set::colHover(false),
-                set::onRenderCell(jsRaw('renderCell')),
                 set::onCellClick(jsRaw('clickCell')),
                 set::rowKey('ROW_ID'),
                 set::plugins(array('header-group', 'cellspan')),
-                set::getCellSpan(jsRaw('getCellSpan')),
-                set::cellSpanOptions($cellSpan)
+                set::cellSpanOptions($cellSpan),
+                set::getCellSpan(jsRaw(<<<JS
+                function(cell)
+                {
+                    const options = this.options.cellSpanOptions[cell.col.name];
+                    if(options)
+                    {
+                        const rowSpan = cell.row.data[options.rowspan ?? 'rowspan'] ?? 1;
+                        const colSpan = cell.row.data[options.colspan ?? 'colspan'] ?? 1;
+                        return {rowSpan, colSpan};
+                    }
+                }
+                JS)),
+                set::onRenderCell(jsRaw(<<<JS
+                function(result, {row, col})
+                {
+                    if(result)
+                    {
+                        let values  = result.shift();
+                        let isDrill = row.data.isDrill[col.name];
+                        let isTotal = row.data.isTotal;
+                        if(col.setting.colspan && typeof(values.type) != 'undefined' && values.type == 'a')
+                        {
+                            values = values.props['children'];
+                            result.push({className: 'gap-0 p-0.5'});
+                            values.forEach((value, index) =>
+                              result.push({
+                                html: value + '' || !Number.isNaN(value) ? (isDrill && index == 0 ? "<a href='#'>" + `\${value}` + '</a>' : `\${value}`) : '&nbsp;',
+                                className: 'flex justify-center items-center h-full w-1/2' + (index == 0 ? ' border-r': ''),
+                                style: 'border-color: var(--dtable-border-color)' + (isTotal ? '; background-color: var(--color-surface-light);' : '')
+                              })
+                            );
+                        }
+                        else
+                        {
+                            if(!isDrill && values?.type == 'a') values = values.props.children;
+                            if(isTotal)
+                            {
+                                result.push({className: 'gap-0 p-0.5'});
+                                values = {
+                                    html: values + '',
+                                    className: 'flex justify-center items-center h-full w-full',
+                                    style: 'border-color: var(--dtable-border-color)' + (isTotal ? '; background-color: var(--color-surface-light);' : '')
+                                };
+                            }
+                            result.push(values);
+                        }
+                    }
+
+                    return result;
+                }
+                JS))
             ),
             div
             (

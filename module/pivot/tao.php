@@ -500,11 +500,12 @@ EOT)->from(TABLE_TASK)->alias('t1')
      * @access public
      * @return object|bool
      */
-    public function fetchPivotDrills(int $pivotID, string|array $fields): array
+    public function fetchPivotDrills(int $pivotID, string $version, string|array $fields): array
     {
         if(is_string($fields)) $fields = array($fields);
         $records = $this->dao->select('*')->from(TABLE_PIVOTDRILL)
             ->where('pivot')->eq($pivotID)
+            ->andWhere('version')->eq($version)
             ->andWhere('field')->in($fields)
             ->fetchAll('field');
 

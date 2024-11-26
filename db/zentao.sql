@@ -15417,6 +15417,7 @@ CREATE TABLE IF NOT EXISTS `zt_sqlbuilder` (
 -- DROP TABLE IF EXISTS `zt_pivotdrill`;
 CREATE TABLE `zt_pivotdrill` (
   `pivot`     mediumint    NOT NULL,
+  `version`   varchar(10) NOT NULL DEFAULT '0',
   `field`     varchar(255) NOT NULL,
   `object`    varchar(40)  NOT NULL,
   `whereSql`  mediumtext   NOT NULL,

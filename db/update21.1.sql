@@ -56,6 +56,7 @@ CREATE UNIQUE INDEX `idx_pivot_version` ON `zt_pivotspec`(`pivot`, `version`);
 
 ALTER TABLE `zt_pivot` ADD `version` varchar(10) NOT NULL DEFAULT '0' AFTER `builtin`;
 ALTER TABLE `zt_chart` ADD `version` varchar(10) NOT NULL DEFAULT '0' AFTER `builtin`;
+ALTER TABLE `zt_pivotdrill` ADD `version` varchar(10) NOT NULL DEFAULT '0' AFTER `pivot`;
 ALTER TABLE `zt_pivot` CHANGE `mode` `mode` varchar(10) NOT NULL DEFAULT 'builder';
 ALTER TABLE `zt_pivot` CHANGE `sql` `sql` text NULL;
 ALTER TABLE `zt_pivot` CHANGE `fields` `fields` text NULL;
@@ -84,5 +85,6 @@ INSERT INTO `zt_grouppriv` SELECT `group`, 'cache', 'clear' FROM `zt_grouppriv` 
 
 UPDATE `zt_pivot` SET `version` = '1';
 INSERT INTO `zt_pivotspec` SELECT `id`,`version`,`driver`,`mode`,`name`,`desc`,`sql`,`fields`,`langs`,`vars`,`objects`,`settings`,`filters`,`createdDate` FROM `zt_pivot`;
+UPDATE `zt_pivotdrill` SET `version` = '1';
 
 DELETE FROM `zt_cron` WHERE `command` = 'moduleName=misc&methodName=cleanCache';
