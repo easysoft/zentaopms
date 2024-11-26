@@ -144,6 +144,12 @@ if($product->type != 'normal')
     foreach($release->branches as $branchID) $releaseBranch[] = zget($branches, $branchID, '');
 }
 
+$releaseSystem = array();
+foreach($linkedReleases as $linkedRelease) $releaseSystem[] = zget($appList, $linkedRelease->system) . $linkedRelease->name;
+
+$releaseIncluded = array();
+foreach($includedApps as $includedApp) $releaseIncluded[] = zget($appList, $includedApp->system) . $includedApp->name;
+
 /* Right menus, export and link. */
 $exportBtn = null;
 if(common::hasPriv($releaseModule, 'export') && ($summary || count($bugs) || count($leftBugs)))
@@ -163,7 +169,7 @@ $linkStoryBtn = $linkBugBtn = $linkLeftBtn = null;
 jsVar('linkParams', $decodeParam);
 jsVar('releaseModule', $releaseModule);
 
-if($canBeChanged)
+if($canBeChanged && empty($release->releases))
 {
     if(common::hasPriv($releaseModule, 'linkStory'))
     {
@@ -197,6 +203,13 @@ if($canBeChanged)
                 bind::click('window.showLink', array('params' => array('leftBug')))
             );
     }
+}
+
+if(!empty($release->releases))
+{
+    unset($config->release->dtable->story->fieldList['actions']);
+    unset($config->release->dtable->bug->fieldList['actions']);
+    unset($config->release->dtable->leftBug->fieldList['actions']);
 }
 
 detailBody
@@ -322,21 +335,31 @@ detailBody
                                 set::name($lang->release->product),
                                 $release->productName
                             ),
-                            item
-                            (
-                                set::name($lang->release->name),
-                                $release->name
-                            ),
-                            item
-                            (
-                                set::name($lang->release->includedBuild),
-                                implode($lang->comma, $releaseBuild)
-                            ),
                             !empty($releaseBranch) ? item
                             (
                                 set::name($lang->release->branch),
                                 implode($lang->comma, $releaseBranch)
                             ) : null,
+                            item
+                            (
+                                set::name($lang->release->system),
+                                zget($appList, $release->system)
+                            ),
+                            item
+                            (
+                                set::name($lang->release->name),
+                                $release->name
+                            ),
+                            empty($releaseBuild) ? null : item
+                            (
+                                set::name($lang->release->includedBuild),
+                                implode($lang->comma, $releaseBuild)
+                            ),
+                            empty($releaseSystem) ? null : item
+                            (
+                                set::name($lang->release->includedSystem),
+                                implode($lang->comma, $releaseSystem)
+                            ),
                             item
                             (
                                 set::name($lang->release->status),
@@ -351,6 +374,11 @@ detailBody
                             (
                                 set::name($lang->release->releasedDate),
                                 $release->releasedDate
+                            ),
+                            empty($releaseIncluded) ? null : item
+                            (
+                                set::name($lang->release->includedApp),
+                                html(implode($lang->comma, $releaseIncluded))
                             ),
                             item
                             (
