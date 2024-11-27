@@ -209,7 +209,7 @@ class dataviewModel extends model
 
         foreach($mergeFields as $fieldName => $fieldValue)
         {
-            if(empty($fieldValue)) $mergeFields[$fieldName] = $fieldName;
+            if(empty($fieldValue) || !is_string($fieldValue)) $mergeFields[$fieldName] = $fieldName;
         }
 
         foreach($mergeFields as $field => $name) $mergeFields[$field] = $this->replace4Workflow($name);
