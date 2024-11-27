@@ -12,5 +12,12 @@ window.loadBuilds = function(productID)
     $.getJSON($.createLink('build', 'ajaxGetSystemBuilds', `productID=${productID}&systemID=${systemID}`), function(data)
     {
         $buildPicker.render({items: data, multiple: true});
+
+        const values = [];
+        data.forEach(function(item)
+        {
+            if(`,${releaseBuilds}`.includes(item.value)) values.push(item.value);
+        });
+        $buildPicker.$.setValue(values);
     });
 }

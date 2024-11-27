@@ -14,6 +14,7 @@ jsVar('appList',       $appList);
 jsVar('oldStatus',     $release->status);
 jsVar('linkedRelease', $release->releases);
 jsVar('productID',     zget($product, 'id', 0));
+jsVar('releaseBuilds', $release->build);
 
 formPanel
 (
