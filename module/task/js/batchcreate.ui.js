@@ -271,5 +271,6 @@ window.handleRenderRow = function($row, index)
 
     /* 创建隐藏表单域用于向服务器提交当前行层级信息。 */
     $row.find(nestedTextSelector).text(text).append(`<input type="hidden" name="level[${index + 1}]" value="${level}">`);
+    $row.find('.form-batch-col-actions').addClass('is-pinned');
     if(edition == 'open' && (level > 0 || parentID)) $row.find('button[data-type=addSub]').attr('disabled', 'disabled');
 };
