@@ -2045,44 +2045,4 @@ class storyZen extends story
         }
         return $storyIdList;
     }
-
-    /**
-     * 创建需求后存储上传的文件。
-     * Save files after create a story.
-     *
-     * @param  int     $storyID
-     * @param  string  $storyType
-     * @access public
-     * @return bool
-     */
-    public function updateFileAfterCreate(int $storyID, string $storyType): bool
-    {
-        $this->loadModel('file');
-        if(!empty($_POST['fileList']))
-        {
-            $fileList = $this->post->fileList;
-            if($fileList) $fileList = json_decode($fileList, true);
-            if(!empty($_POST['deleteFiles']))
-            {
-                foreach($this->post->deleteFiles as $deletedCaseFileID) unset($fileList[$deletedCaseFileID]);
-            }
-
-            $fileIdList = '';
-            foreach($fileList as $file)
-            {
-                unset($file['id']);
-                $file['objectType'] = $storyType;
-                $file['objectID']   = $storyID;
-                $file['extra']      = 1;
-                $fileIdList .= ',' . $this->file->saveFile($file, 'url,deleted,realPath,webPath,name,url');
-            }
-            $this->dao->update(TABLE_STORYSPEC)->set("files = CONCAT(files, '{$fileIdList}')")->where('story')->eq($storyID)->exec();
-        }
-
-        $uid = $this->post->uid ? $this->post->uid : '';
-        $this->file->updateObjectID($uid, $storyID, $storyType);
-        $this->file->saveUpload($storyType, $storyID, 1);
-
-        return !dao::isError();
-    }
 }

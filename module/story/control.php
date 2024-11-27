@@ -78,7 +78,12 @@ class story extends control
             $storyID        = $this->story->{$createFunction}($storyData, $objectID, $bugID, $extra, $todoID);
             if(empty($storyID) || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->storyZen->updateFileAfterCreate($storyID, $storyType);
+            if(!empty($_POST['fileList']))
+            {
+                $fileList = $this->post->fileList;
+                if($fileList) $fileList = json_decode($fileList, true);
+                $this->loadModel('file')->saveDefaultFiles($fileList, 'story', $storyID, 1);
+            }
 
             $productID = $this->post->product ? $this->post->product : $productID;
             $message   = $this->executeHooks($storyID);

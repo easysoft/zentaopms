@@ -2393,47 +2393,16 @@ class testcaseZen extends testcase
         helper::setcookie('lastCaseScene',  (string)$case->scene);
         helper::setcookie('caseModule', '0');
 
-        /* 创建用例后存储上传的文件。*/
-        $this->updateFileAfterCreate($caseID);
-
-        /* 如果需求关联到项目，把用例也关联到项目。 */
-        /* If the story is linked project, make the case link the project. */
-        $this->testcase->syncCase2Project($case, $caseID);
-    }
-
-    /**
-     * 创建testcase后存储上传的文件。
-     * Save files after create a testcase.
-     *
-     * @param  int     $testcaseID
-     * @access private
-     * @return bool
-     */
-    private function updateFileAfterCreate(int $testcaseID): bool
-    {
-        $this->loadModel('file');
         if(!empty($_POST['fileList']))
         {
             $fileList = $this->post->fileList;
             if($fileList) $fileList = json_decode($fileList, true);
-            if(!empty($_POST['deleteFiles']))
-            {
-                foreach($this->post->deleteFiles as $deletedCaseFileID) unset($fileList[$deletedCaseFileID]);
-            }
-            foreach($fileList as $file)
-            {
-                unset($file['id']);
-                $file['objectType'] = 'testcase';
-                $file['objectID']   = $testcaseID;
-                $this->file->saveFile($file, 'url,deleted,realPath,webPath,name,url,extra');
-            }
+            $this->loadModel('file')->saveDefaultFiles($fileList, 'testcase', $caseID);
         }
 
-        $uid = $this->post->uid ? $this->post->uid : '';
-        $this->file->updateObjectID($uid, $testcaseID, 'testcase');
-        $this->file->saveUpload('testcase', $testcaseID);
-
-        return !dao::isError();
+        /* 如果需求关联到项目，把用例也关联到项目。 */
+        /* If the story is linked project, make the case link the project. */
+        $this->testcase->syncCase2Project($case, $caseID);
     }
 
     /**
