@@ -941,4 +941,30 @@ class programplanTao extends programplanModel
 
         return $plans;
     }
+
+    /**
+     * 将父阶段数据转移到第一个子阶段中。
+     * Sync parent data to first stage.
+     *
+     * @param  int       $executionID
+     * @param  int       $parentID
+     * @access protected
+     * @return bool
+     */
+    protected function syncParentData(int $executionID, int $parentID): bool
+    {
+        $this->dao->update(TABLE_TASK)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->exec();
+        $this->dao->update(TABLE_PROJECTSTORY)->set('project')->eq($executionID)->where('project')->eq($parentID)->exec();
+        $this->dao->update(TABLE_BUG)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->exec();
+        $this->dao->update(TABLE_CASE)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->exec();
+        $this->dao->update(TABLE_PROJECTCASE)->set('project')->eq($executionID)->where('project')->eq($parentID)->exec();
+        $this->dao->update(TABLE_TESTTASK)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->exec();
+        $this->dao->update(TABLE_TESTREPORT)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->exec();
+        $this->dao->update(TABLE_BUILD)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->exec();
+        $this->dao->update(TABLE_EFFORT)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->exec();
+        $this->dao->update(TABLE_ACTION)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->andWhere('objectType')->ne('execution')->exec();
+        $this->dao->update(TABLE_ACTIONRECENT)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->andWhere('objectType')->ne('execution')->exec();
+        $this->dao->update(TABLE_DOCLIB)->set('execution')->eq($executionID)->where('type')->eq('execution')->andWhere('execution')->eq($parentID)->andWhere('main')->eq('0')->exec();
+        return !dao::isError();
+    }
 }

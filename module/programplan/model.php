@@ -329,7 +329,6 @@ class programplanModel extends model
      */
     public function create(array $plans, int $projectID = 0, int $productID = 0, int $parentID = 0): bool
     {
-        if(!$this->isCreateTask($parentID)) dao::$errors['message'][] = $this->lang->programplan->error->createdTask;
         if(empty($plans)) dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->programplan->name);
         if(dao::isError()) return false;
 
@@ -343,6 +342,7 @@ class programplanModel extends model
         $updateUserViewIdList = array();
         $enabledPoints        = array();
         $parallel             = 0;
+        $firstStageID         = 0;
         foreach($plans as $plan)
         {
             $parallel = isset($plan->parallel) ? $plan->parallel : 0;
@@ -374,12 +374,15 @@ class programplanModel extends model
 
                 $this->execution->updateProducts($stageID, $linkProducts);
                 if($plan->acl != 'open') $updateUserViewIdList[] = $stageID;
+
+                if(!$firstStageID) $firstStageID = $stageID;
             }
         }
 
         if($project && $project->model == 'ipd') $this->dao->update(TABLE_PROJECT)->set('parallel')->eq($parallel)->where('id')->eq($projectID)->exec();
         if($updateUserViewIdList) $this->loadModel('user')->updateUserView($updateUserViewIdList, 'sprint');
         if($enabledPoints) $this->programplanTao->updatePoint($projectID, $enabledPoints);
+        if(!$this->isCreateTask($parentID) && $firstStageID) $this->programplanTao->syncParentData($firstStageID, $parentID);
         return true;
     }
 
