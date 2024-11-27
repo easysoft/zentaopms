@@ -50,19 +50,19 @@ if(isset($cols['product'])) $cols['product']['map'] = $products;
 if(empty($project->hasProduct)) unset($cols['product']);
 $cols['system']['map'] = array(0 => '') + $appList;
 
-foreach($releases as $releaseID => $release)
+foreach($releases as $release)
 {
+    $release->rowID = $release->id;
     if(empty($release->releases)) continue;
 
-    $release->isParent = true;
     foreach(explode(',', $release->releases) as $childID)
     {
         if(isset($childReleases[$childID]))
         {
             $child = clone $childReleases[$childID];
-            $child->id     = "{$release->id}-{$child->id}";
+            $child->rowID  = "{$release->id}-{$childID}";
             $child->parent = $release->id;
-            $releases[$child->id] = $child;
+            $releases[$child->rowID] = $child;
         }
     }
 }
@@ -73,6 +73,7 @@ dtable
     set::cols(array_values($cols)),
     set::data($tableData),
     set::customCols(true),
+    set::rowKey('rowID'),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::sortLink(createLink('projectrelease', 'browse', "projectID={$project->id}&executionID={$executionID}&type={$type}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footer([jsRaw("function(){return {html: '{$pageSummary}'};}"), 'flex', 'pager']),
