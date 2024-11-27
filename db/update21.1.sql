@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS `zt_system` (
   `product` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
   `integrated` ENUM('0','1') NOT NULL DEFAULT '0',
   `latestRelease` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
-  `latestDate` DATE NULL,
+  `latestDate` DATETIME NULL,
   `children` VARCHAR(255) NOT NULL DEFAULT '',
   `status` ENUM('active','inactive') NOT NULL DEFAULT 'active',
   `desc` mediumtext NULL,
