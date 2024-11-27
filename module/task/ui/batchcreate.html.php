@@ -148,6 +148,7 @@ $batchFormOptions['fixedActions']  = true; // 滚动时固定操作列。
 $batchFormOptions['actions']       = array(array('type' => 'addSibling', 'icon' => 'icon-plus', 'text' => $lang->task->addSibling), array('type' => 'addSub', 'icon' => 'icon-split', 'text' => $lang->task->addSub), 'delete');
 $batchFormOptions['onClickAction'] = jsRaw('window.handleClickBatchFormAction'); // 定义操作列按钮点击事件处理函数。
 $batchFormOptions['onRenderRow']   = jsRaw('window.handleRenderRow'); // 定义行渲染事件处理函数。
+if($config->vision == 'lite') unset($batchFormOptions['fixedActions'], $batchFormOptions['actions'], $batchFormOptions['onClickAction']);
 
 /* ====== Define the page structure with zin widgets ====== */
 
