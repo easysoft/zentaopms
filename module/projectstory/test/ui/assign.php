@@ -97,3 +97,9 @@ $team->account->range('admin, user1, user2');
 $team->gen(3);
 
 $tester = new assignStoryTester();
+$tester->login();
+
+r($tester->assignTo('用户1')) && p('status,message') && e('SUCCESS,指派成功');     //单个指派
+r($tester->batchAssignTo())   && p('status,message') && e('SUCCESS,批量指派成功'); //批量指派
+
+$tester->closeBrowser();
