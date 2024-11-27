@@ -84,7 +84,7 @@ UPDATE `zt_grouppriv` SET `module` = 'cache', `method` = 'setting' WHERE `module
 INSERT INTO `zt_grouppriv` SELECT `group`, 'cache', 'clear' FROM `zt_grouppriv` WHERE `module` = 'cache' AND `method` = 'setting';
 
 UPDATE `zt_pivot` SET `version` = '1';
-UPDATE `zt_pivot` SET `builtin` = '1' WHERE `id` >= 1000 AND `id` <= 1028;
+UPDATE `zt_pivot` SET `builtin` = '1', `createdDate` = '2009-03-14' WHERE `id` >= 1000 AND `id` <= 1028;
 INSERT INTO `zt_pivotspec` SELECT `id`,`version`,`driver`,`mode`,`name`,`desc`,`sql`,`fields`,`langs`,`vars`,`objects`,`settings`,`filters`,`createdDate` FROM `zt_pivot`;
 UPDATE `zt_pivotdrill` SET `version` = '1';
 
