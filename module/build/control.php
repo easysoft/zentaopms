@@ -719,7 +719,7 @@ class build extends control
         $builds = $this->build->getBuildPairs(array($productID), 'all', 'noterminate, nodone', 0, 'product', '', false, (int)$systemID);
 
         $buildList = array();
-        foreach($builds as $buildID => $buildName) $build[] = array('text' => $buildName, 'value' => $buildID);
+        foreach($builds as $buildID => $buildName) $buildList[] = array('text' => $buildName, 'value' => $buildID);
 
         echo json_encode($buildList);
     }
