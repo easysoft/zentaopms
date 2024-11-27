@@ -965,6 +965,26 @@ class programplanTao extends programplanModel
         $this->dao->update(TABLE_ACTION)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->andWhere('objectType')->ne('execution')->exec();
         $this->dao->update(TABLE_ACTIONRECENT)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->andWhere('objectType')->ne('execution')->exec();
         $this->dao->update(TABLE_DOCLIB)->set('execution')->eq($executionID)->where('type')->eq('execution')->andWhere('execution')->eq($parentID)->andWhere('main')->eq('0')->exec();
+
+        /* Update doc in the main doc lib. */
+        $parentLibID = $this->dao->select('id')->from(TABLE_DOCLIB)->where('type')->eq('execution')->andWhere('execution')->eq($parentID)->andWhere('main')->eq('1')->fetch('id');
+        $libID       = $this->dao->select('id')->from(TABLE_DOCLIB)->where('type')->eq('execution')->andWhere('execution')->eq($executionID)->andWhere('main')->eq('1')->fetch('id');
+        $this->dao->update(TABLE_DOC)->set('execution')->eq($executionID)->set('lib')->eq($libID)->where('lib')->eq($parentLibID)->exec();
+
+        /* Update task and doc module. */
+        $this->dao->update(TABLE_MODULE)->set('root')->eq($executionID)->where('root')->eq($parentID)->andWhere('type')->eq('task')->exec();
+        $this->dao->update(TABLE_MODULE)->set('root')->eq($libID)->where('root')->eq($parentLibID)->andWhere('type')->eq('doc')->exec();
+
+        /* Update execution team. */
+        $today         = helper::today();
+        $execution     = $this->fetchByID($executionID);
+        $teamMembers   = $this->dao->select('account')->from(TABLE_TEAM)->where('root')->eq($executionID)->andWhere('type')->eq('execution')->fetchPairs('account');
+        $parentMembers = $this->dao->select('account')->from(TABLE_TEAM)->where('root')->eq($parentID)->andWhere('type')->eq('execution')->fetchPairs('account');
+        foreach($parentMembers as $account)
+        {
+            if(isset($teamMembers[$account])) continue;
+            $this->dao->insert(TABLE_TEAM)->data(array('root' => $executionID, 'type' => 'execution', 'account' => $account, 'join' => $today, 'days' => $execution->days, 'hours' => $this->config->execution->defaultWorkhours))->exec();
+        }
         return !dao::isError();
     }
 }
