@@ -884,6 +884,7 @@ class tutorialModel extends model
     {
         $build = new stdClass();
         $build->id             = 1;
+        $build->system         = 1;
         $build->project        = 2;
         $build->product        = 1;
         $build->branch         = '0';
@@ -1854,6 +1855,47 @@ class tutorialModel extends model
     }
 
     /**
+     * 获取新手模式系统。
+     * Get system.
+     *
+     * @access public
+     * @return object
+     */
+    public function getSystem(): object
+    {
+        $system = new stdclass();
+        $system->id         = 1;
+        $system->name       = 'Test App';
+        $system->product    = 1;
+        $system->integrated = '0';
+        return $system;
+    }
+
+    /**
+     * 获取新手模式应用键值对。
+     * Get system pairs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getSystemPairs(): array
+    {
+        return array(1 => $this->getSystem()->name);
+    }
+
+    /**
+     * 获取新手模式产品应用列表。
+     * Get product app list.
+     *
+     * @access public
+     * @return array
+     */
+    public function getSystemList(): array
+    {
+        return array(1 => $this->getSystem());
+    }
+
+    /**
      * 获取新手模式发布。
      * Get releases.
      *
@@ -1864,6 +1906,7 @@ class tutorialModel extends model
     {
         $release = new stdClass();
         $release->id           = 1;
+        $release->system       = 1;
         $release->project      = 0;
         $release->product      = 1;
         $release->branch       = '0';
