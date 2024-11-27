@@ -46,6 +46,10 @@ window.setSystemBox = function()
     $('#systemBox .picker-box').addClass('hidden');
     if(newSystem == 1)
     {
+        const $buildPicker = $('select[name^=build]').zui('picker');
+        $buildPicker.render({items: [], multiple: true});
+        $buildPicker.$.setValue('');
+
         $('#systemBox #systemName').removeClass('hidden');
     }
     else
