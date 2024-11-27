@@ -5,13 +5,12 @@ window.loadBuilds = function(productID)
     const systemID = $('[name=system]').val();
     if(!systemID) return;
 
-    let options = [];
+    const $buildPicker = $('select[name^=build]').zui('picker');
+    $buildPicker.render({items: [], multiple: true});
+    $buildPicker.$.setValue('');
+
     $.getJSON($.createLink('build', 'ajaxGetSystemBuilds', `productID=${productID}&systemID=${systemID}`), function(data)
     {
-        options = data;
+        $buildPicker.render({items: data, multiple: true});
     });
-
-    const $buildPicker = $('select[name^=build]').zui('picker');
-    $buildPicker.render({items: options, multiple: true});
-    $buildPicker.$.setValue('');
 }

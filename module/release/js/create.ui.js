@@ -39,9 +39,9 @@ window.changeStatus = function(e)
     }
 }
 
-window.setSystemBox = function(e)
+window.setSystemBox = function()
 {
-    const newSystem = $(e.target).is(':checked') ? 1 : 0;
+    const newSystem = $('[name="newSystem"]').is(':checked') ? 1 : 0;
     $('#systemBox #systemName').addClass('hidden');
     $('#systemBox .picker-box').addClass('hidden');
     if(newSystem == 1)
