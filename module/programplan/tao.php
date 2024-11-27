@@ -955,8 +955,6 @@ class programplanTao extends programplanModel
     {
         if(empty($executionID) || empty($parentID)) return false;
 
-        $this->app->loadConfig('execution');
-
         $this->dao->update(TABLE_TASK)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->exec();
         $this->dao->update(TABLE_PROJECTSTORY)->set('project')->eq($executionID)->where('project')->eq($parentID)->exec();
         $this->dao->update(TABLE_BUG)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->exec();
@@ -973,7 +971,7 @@ class programplanTao extends programplanModel
         /* Update doc in the main doc lib. */
         $parentLibID = $this->dao->select('id')->from(TABLE_DOCLIB)->where('type')->eq('execution')->andWhere('execution')->eq($parentID)->andWhere('main')->eq('1')->limit(1)->fetch('id');
         $libID       = $this->dao->select('id')->from(TABLE_DOCLIB)->where('type')->eq('execution')->andWhere('execution')->eq($executionID)->andWhere('main')->eq('1')->limit(1)->fetch('id');
-        $this->dao->update(TABLE_DOC)->set('execution')->eq($executionID)->set('lib')->eq($libID)->where('lib')->eq($parentLibID)->exec();
+        if($parentLibID && $libID) $this->dao->update(TABLE_DOC)->set('execution')->eq($executionID)->set('lib')->eq($libID)->where('lib')->eq($parentLibID)->exec();
 
         /* Update task and doc module. */
         $this->dao->update(TABLE_MODULE)->set('root')->eq($executionID)->where('root')->eq($parentID)->andWhere('type')->eq('task')->exec();
@@ -983,11 +981,11 @@ class programplanTao extends programplanModel
         $today         = helper::today();
         $execution     = $this->fetchByID($executionID);
         $teamMembers   = $this->dao->select('account')->from(TABLE_TEAM)->where('root')->eq($executionID)->andWhere('type')->eq('execution')->fetchPairs('account');
-        $parentMembers = $this->dao->select('account')->from(TABLE_TEAM)->where('root')->eq($parentID)->andWhere('type')->eq('execution')->fetchPairs('account');
-        foreach($parentMembers as $account)
+        $parentMembers = $this->dao->select('account,hours')->from(TABLE_TEAM)->where('root')->eq($parentID)->andWhere('type')->eq('execution')->fetchPairs();
+        foreach($parentMembers as $account => $hours)
         {
             if(isset($teamMembers[$account])) continue;
-            $this->dao->insert(TABLE_TEAM)->data(array('root' => $executionID, 'type' => 'execution', 'account' => $account, 'join' => $today, 'days' => $execution->days, 'hours' => $this->config->execution->defaultWorkhours))->exec();
+            $this->dao->insert(TABLE_TEAM)->data(array('root' => $executionID, 'type' => 'execution', 'account' => $account, 'join' => $today, 'days' => $execution->days, 'hours' => $hours))->exec();
         }
         return !dao::isError();
     }
