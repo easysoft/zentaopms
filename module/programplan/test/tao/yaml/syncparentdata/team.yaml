@@ -1,0 +1,12 @@
+title: zt_team
+author: tianshujie
+version: '1.0'
+fields:
+    - field: id
+      range: 1-100
+    - field: root
+      range: '5{4},6'
+    - field: account
+      range: 'admin,user1,user2,user3,admin'
+    - field: type
+      range: 'execution'
