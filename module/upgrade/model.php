@@ -10461,11 +10461,11 @@ class upgradeModel extends model
      */
     public function processCacheConfig()
     {
-        $cache = json_decode($this->config->global->cache);
-        if(!empty($cache->dao->enable))
+        $cache = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=cache');
+        if($cache == '{"dao":{"enable":"1"}}')
         {
             $this->loadModel('install')->enableCache();
-            $this->loadModel('setting')->deleteItems('owner=system&module=common&section=global&key=cache');
+            $this->setting->deleteItems('owner=system&module=common&section=global&key=cache');
         }
     }
 }
