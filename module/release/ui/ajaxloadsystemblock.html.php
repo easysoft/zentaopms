@@ -25,7 +25,11 @@ foreach($linkedRelease as $releaseID)
     $linkedApps[$systemID] = $releaseID;
 }
 
-foreach($appList as $system) $apps[$system->id] = $system->name;
+foreach($appList as $system)
+{
+    $apps[$system->id]       = $system->name;
+    $linkedApps[$system->id] = 0;
+}
 
 $appReleases = array();
 foreach($releases as $releaseID => $release) $appReleases[$release->system][$releaseID] = $release->name;
@@ -48,6 +52,7 @@ foreach($apps as $system)
                 set::name("apps[$i]"),
                 set::items($apps),
                 $appID ? set::value($appID) : null,
+                set::required(true),
                 set('onchange', "setRelease(event, '{$i}')")
             )
         ),
@@ -57,7 +62,8 @@ foreach($apps as $system)
             (
                 set::id("releases{$i}"),
                 set::name("releases[$i]"),
-                set::items($appID ? $appReleases[$appID] : array()),
+                set::required(true),
+                set::items(zget($appReleases, $appID, array())),
                 $appID ? set::value(current($linkedApps)) : null
             )
         ),
