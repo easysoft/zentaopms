@@ -152,7 +152,7 @@ formPanel
                     ),
                     input(set::name('systemName'), setClass('hidden'))
                 ),
-                div
+                common::hasPriv('system', 'create') ? div
                 (
                     setClass('input-group-addon flex'),
                     checkbox
@@ -160,7 +160,7 @@ formPanel
                         set::name('newSystem'),
                         set::text($lang->build->addSystem)
                     )
-                )
+                ) : null
             )
         )
     ),
