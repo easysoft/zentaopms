@@ -33,7 +33,7 @@ formPanel
             set::required(true),
             set::label($lang->instance->name),
             set::value($instance->name),
-            set::disabled(true),
+            set::disabled(true)
         )
     ),
     formRow
@@ -59,7 +59,7 @@ formPanel
             set::control('picker'),
             set::required(true),
             set::label($lang->instance->pod),
-            set::items(array()),
+            set::items(array())
         )
     ),
     formRow
