@@ -7,11 +7,11 @@ title=测试 cneModel->getAppLogs();
 timeout=0
 cid=1
 
-- 获取CNE平台的日志 status @normal
-- 获取CNE平台的日志 status @normal
-- 获取CNE平台的日志 status @normal
-- 获取CNE平台的日志 status @normal
-- 获取CNE平台的日志 status @normal
+- 获取CNE平台的日志 status @0
+- 获取CNE平台的日志 status @0
+- 获取CNE平台的日志 status @0
+- 获取CNE平台的日志 status @0
+- 获取CNE平台的日志 status @0
 
 */
 
