@@ -77,7 +77,7 @@ class markModel extends model
      */
     public function hasMark(string $objectType, int $objectID, string $version = 'all', string $mark = 'view', bool $onlyMajor = false)
     {
-        $mark = $this->dao->select('*')->from(TABLE_MARK)
+        $mark = $this->dao->select('id')->from(TABLE_MARK)
             ->where('objectType')->eq($objectType)
             ->andWhere('objectID')->in($objectID)
             ->beginIF($version != 'all')->andWhere('version')->eq($version)->fi()
