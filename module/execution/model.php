@@ -4471,9 +4471,7 @@ class executionModel extends model
                     );
                     break;
                 case 'product':
-                    $treeData[$index]['content'] = array(
-                        'html' => "<span class='label rounded-full p-2 gray-outline' title='{$tree->name}'>{$tree->name}</span>"
-                    );
+                    $treeData[$index]['content'] = array('html' => "<span class='label rounded-full p-2 gray-outline' title='{$tree->name}'>{$tree->name}</span>");
                     break;
                 case 'story':
                     $this->app->loadLang('story');
@@ -4510,14 +4508,18 @@ class executionModel extends model
                     break;
                 default:
                     $firstClass = $tree->id == 0 ? 'label rounded-full p-2 gray-outline' : '';
-                    $treeData[$index]['content'] = array(
-                        'html' => "<span class='{$firstClass} title' title='{$tree->name}'>" . $tree->name . '</span>'
-                    );
+                    $treeData[$index]['content'] = array('html' => "<span class='{$firstClass} title' title='{$tree->name}'>" . $tree->name . '</span>');
                     break;
             }
             if(isset($tree->children))
             {
-                if($tree->type == 'task') $treeData[$index]['content']['html'] = "<span class='title' title='{$tree->title}'>{$tree->title}</span>";
+                if($tree->type == 'task')
+                {
+                    $treeData[$index]['url']     = $canViewTask ? helper::createLink('execution', 'treeTask', "taskID={$tree->id}") : '';
+                    $treeData[$index]['content'] = array(
+                        'html' => "<div class='tree-link'><span class='label gray-pale rounded-full align-sub'>{$this->lang->task->common}</span><span class='ml-4 align-sub'>{$tree->id}</span><span class='title ml-4 " . ($canViewTask ? 'text-primary' : '') . " align-sub' title='{$tree->title}'>" . $tree->title . '</span>'. $assigedToHtml . '</div>',
+                    );
+                }
                 $treeData[$index]['items'] = $this->buildTree($tree->children, $hasProduct, $gradeGroup);
             }
         }

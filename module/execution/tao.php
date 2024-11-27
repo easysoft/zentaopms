@@ -518,27 +518,45 @@ class executionTao extends executionModel
      */
     protected function getTaskGroups(int $executionID): array
     {
+        $executionID = (int)$executionID;
         $tasks = $this->dao->select('*')->from(TABLE_TASK)
-            ->where('execution')->eq((int)$executionID)
+            ->where('execution')->eq($executionID)
             ->andWhere('deleted')->eq(0)
-            ->andWhere('parent')->lt(1)
+            ->andWhere('parent')->eq(0)
             ->orderBy('id_desc')
             ->fetchAll();
         $childTasks = $this->dao->select('*')->from(TABLE_TASK)
-            ->where('execution')->eq((int)$executionID)
+            ->where('execution')->eq($executionID)
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->ne(0)
             ->orderBy('id_desc')
             ->fetchGroup('parent');
 
         $taskGroups = array();
-        foreach($tasks as $task)
-        {
-            $taskGroups[$task->module][$task->story][$task->id] = $task;
-            if(!empty($childTasks[$task->id])) $taskGroups[$task->module][$task->story][$task->id]->children = $childTasks[$task->id];
-        }
+        foreach($tasks as $task) $taskGroups[$task->module][$task->story][$task->id] = $this->appendTaskChildren($task, $childTasks);
 
         return $taskGroups;
+    }
+
+    /**
+     * 追加子任务到任务
+     * Append children to task
+     *
+     * @param object  $task
+     * @param array   $childTasks
+     * @return object
+     */
+    protected function appendTaskChildren(object $task, array $childTasks): object
+    {
+        if(empty($childTasks[$task->id])) return $task;
+
+        $task->children = array();
+        foreach($childTasks[$task->id] as $child)
+        {
+            $child = $this->appendTaskChildren($child, $childTasks);
+            $task->children[] = $child;
+        }
+        return $task;
     }
 
     /**
@@ -615,7 +633,7 @@ class executionTao extends executionModel
             $storyTasks = isset($taskGroups[$node->id][$story->id]) ? $taskGroups[$node->id][$story->id] : array();
             if(!empty($storyTasks))
             {
-                $taskItems             = $this->formatTasksForTree($storyTasks, $story);
+                $taskItems             = $this->formatTasksForTree($storyTasks, $story, $node, $taskGroups);
                 $storyItem->tasksCount = count($taskItems);
                 $storyItem->children   = $taskItems;
             }
@@ -648,7 +666,7 @@ class executionTao extends executionModel
 
         foreach($taskGroups[$node->id] as $tasks)
         {
-            $taskItems = $this->formatTasksForTree($tasks);
+            $taskItems = $this->formatTasksForTree($tasks, null, $node, $taskGroups);
             $node->tasksCount += count($taskItems);
             foreach($taskItems as $taskItem)
             {
@@ -741,7 +759,7 @@ class executionTao extends executionModel
         {
             $avatarAccount = empty($task->assignedTo) ? zget($task, 'openedBy', '') : $task->assignedTo;
             $userAvatar    = zget($avatarPairs, $avatarAccount);
-            $userAvatar    = $userAvatar && $avatarAccount != 'closed' ? "<img src='{$userAvatar}'/>" : strtoupper(mb_substr($avatarAccount, 0, 1, 'utf-8'));
+            $userAvatar    = $userAvatar && $avatarAccount != 'closed' ? "<img src='{$userAvatar}' />" : strtoupper(mb_substr($avatarAccount, 0, 1, 'utf-8'));
 
             $taskItem = new stdclass();
             $taskItem->type          = 'task';
@@ -760,6 +778,9 @@ class executionTao extends executionModel
             $taskItem->storyChanged  = $story && $story->status == 'active' && $story->version > $story->taskVersion;
             $taskItem->avatarAccount = zget($users, $avatarAccount);
             $taskItem->avatar        = $userAvatar;
+
+            if(!empty($task->children)) $taskItem->children = $this->formatTasksForTree($task->children, $story);
+
             $taskItems[] = $taskItem;
         }
 
