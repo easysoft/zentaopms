@@ -1959,7 +1959,7 @@ class biModel extends model
      * @access public
      * @return array
      */
-    public function convertDataForDtable(object $data, array $configs, string $version): array
+    public function convertDataForDtable(object $data, array $configs, string $version, string $status): array
     {
         $columns      = array();
         $rows         = array();
@@ -2098,6 +2098,7 @@ class biModel extends model
             $rows[$rowKey]['isTotal']    = $totalColspan > 0;
             $rows[$rowKey]['ROW_ID']     = $rowKey;
             $rows[$rowKey]['version']    = $version;
+            $rows[$rowKey]['status']     = $status;
         }
 
         foreach($columns as $field => $column) $columns[$field]['width'] = 16 * $columnMaxLen[$field];

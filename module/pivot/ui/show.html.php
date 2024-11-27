@@ -59,7 +59,7 @@ $generateData = function() use ($lang, $groupID, $pivotName, $pivot, $data, $con
 {
     $clickable = $this->config->edition != 'open';
     $emptyTip  = $this->pivot->isFiltersAllEmpty($pivot->filters) ? $lang->pivot->filterEmptyVal : $lang->error->noData;
-    list($cols, $rows, $cellSpan) = $this->loadModel('bi')->convertDataForDtable($data, $configs, $pivot->version);
+    list($cols, $rows, $cellSpan) = $this->loadModel('bi')->convertDataForDtable($data, $configs, $pivot->version, 'published');
 
     return array
     (

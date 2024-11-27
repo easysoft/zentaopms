@@ -4,6 +4,7 @@ window.clickCell = function(col, {colName, rowInfo})
     const drillConditions = rowInfo.data.conditions[colName];
     const isDrill         = rowInfo.data.isDrill[colName];
     const version         = rowInfo.data.version;
+    const status          = rowInfo.data.status;
     let value             = rowInfo.data[colName];
 
     if(!isDrill || rowInfo.data.field0_colspan) return false;
@@ -12,7 +13,6 @@ window.clickCell = function(col, {colName, rowInfo})
     let filterValues = {};
     let originField  = '0';
     let id           = window.pivotID;
-    let status       = 'published';
 
     if(Array.isArray(value)) value = value[0];
     value = (value + '').replace('%', '');
@@ -25,7 +25,6 @@ window.clickCell = function(col, {colName, rowInfo})
     }
     conditions   = latin1ToBase64(JSON.stringify(conditions))
     filterValues = latin1ToBase64(JSON.stringify(filterValues))
-    if(typeof(pivotState) != 'undefined') status = 'design';
 
     let drillModalLink = $.createLink('pivot', 'drillModal', `pivotID=${id}&version=${version}&colName=${originField}&status=${status}&conditions=${conditions}&filterValues=${filterValues}&value=${value}`);
     drillModalLink = drillModalLink.replace(/\+/g, '%2B');
