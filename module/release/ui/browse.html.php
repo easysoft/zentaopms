@@ -37,7 +37,7 @@ jsVar('type', $type);
 
 $cols = $this->loadModel('datatable')->getSetting('release');
 if($showBranch) $cols['branch']['map'] = $branchPairs;
-$cols['system']['map'] = $appList;
+$cols['system']['map'] = array(0 => '') + $appList;
 
 foreach($releases as $releaseID => $release)
 {
