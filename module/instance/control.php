@@ -735,16 +735,47 @@ class instance extends control
      * @param int $id
      * @param string $component
      * @param string $pod
-     * @param int $previous
+     * @param mixed $previous
      * @param string $container
      * @return void
      */
-    public function showLogs(int $id, $component = '', $pod = '', $previous = 0, $container = '')
+    public function showLogs(int $id, string $component = '', string $pod = '', mixed $previous = 0, string $container = '')
     {
         $instance = $this->instance->getByID($id);
-        $previous = $previous == 1 ? true : false;
+        $previous = $previous == 1;
 
         $data  = $this->cne->getAppLogs($instance, $component, $pod, $container, $previous) ?? new stdClass();
+        return print(json_encode($data));
+    }
+
+    /**
+     * watch Events page.
+     * 查看事件页面.
+     *
+     * @param int $id
+     * @return void
+     */
+    public function events(int $id): void
+    {
+        if (!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
+        $instance = $this->instance->getByID($id);
+
+        $this->view->instance = $instance;
+        $this->display();
+    }
+
+    /**
+     * Get Events api.
+     * 获取日志接口。
+     * @param int $id
+     * @param string $component
+     * @return void
+     */
+    public function showEvents(int $id, string $component = '')
+    {
+        $instance = $this->instance->getByID($id);
+
+        $data  = $this->cne->getEvents($instance, $component) ?? new stdClass();
         return print(json_encode($data));
     }
 }

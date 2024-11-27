@@ -197,6 +197,11 @@ $lang->instance->isPrevious        = 'Is Previous container';
 $lang->instance->isPreviousList[0] = 'No';
 $lang->instance->isPreviousList[1] = 'Yes';
 
+$lang->instance->event = new stdClass;
+$lang->instance->event->viewButton = 'Events';
+$lang->instance->event->title      = 'Watch Events';
+$lang->instance->event->button     = 'View Now';
+
 $lang->instance->actionList  =  array();
 $lang->instance->actionList['install']                  = '%s installed';
 $lang->instance->actionList['uninstall']               = '%s deleted';

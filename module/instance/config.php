@@ -28,6 +28,13 @@ $config->instance->actionList['showLogs']['url']         = array('module' => 'in
 $config->instance->actionList['showLogs']['data-toggle'] = 'modal';
 $config->instance->actionList['showLogs']['class']       = 'task-record-btn';
 
+$config->instance->actionList['showEvents']['icon']        = 'magic';
+$config->instance->actionList['showEvents']['hint']        = $lang->instance->event->viewButton;
+$config->instance->actionList['showEvents']['text']        = $lang->instance->event->viewButton;
+$config->instance->actionList['showEvents']['url']         = array('module' => 'instance', 'method' => 'events', 'params' => 'id={id}');
+$config->instance->actionList['showEvents']['data-toggle'] = 'modal';
+$config->instance->actionList['showEvents']['class']       = 'task-record-btn';
+
 $config->instance->actionList['ajaxStart']['icon']        = 'play';
 $config->instance->actionList['ajaxStart']['className']   = 'ajax-submit';
 $config->instance->actionList['ajaxStart']['hint']        = $lang->instance->start;
@@ -63,7 +70,7 @@ $config->instance->actionList['upgrade']['url']         = helper::createLink('in
 
 $config->instance->actions = new stdclass();
 $config->instance->actions->view = array();
-$config->instance->actions->view['mainActions']   = array('visit', 'showLogs', 'ajaxStart', 'ajaxStop', 'upgrade');
+$config->instance->actions->view['mainActions']   = array('visit', 'showLogs', 'showEvents', 'ajaxStart', 'ajaxStop', 'upgrade');
 $config->instance->actions->view['suffixActions'] = array('ajaxUninstall');
 
 $config->instance->devopsApps   = array('gitea', 'gitlab', 'jenkins', 'sonarqube', 'nexus3', 'nexus');
