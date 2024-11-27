@@ -37,6 +37,8 @@ class thinkScore extends thinkQuestion
             $quoteTitleList = !empty($step->options->quoteTitle) ? explode(", ", $step->options->quoteTitle) : array();
             $criterions5    = isset($step->options->criterions5) ? $step->options->criterions5 : $lang->thinkwizard->criterion->defaultCriteria5;
             $criterions10   = isset($step->options->criterions10) ? $step->options->criterions10 : $lang->thinkwizard->criterion->defaultCriteria10;
+            $answer         = $step->answer;
+            $result         = !empty($answer->result) ? $answer->result : array();
         }
         if(empty($fields) && !empty($quoteTitleList)) $fields = array($lang->thinkwizard->previewSteps->objectReference, $lang->thinkwizard->previewSteps->objectReference,$lang->thinkwizard->previewSteps->objectReference);
 
@@ -47,7 +49,7 @@ class thinkScore extends thinkQuestion
 
         for($i=1; $i<=$scoreCount; $i++){$items[] = array('text' => $i, 'value' => $i, 'disabledPrefix' => true, 'title' => $criterions[$i - 1]);}
 
-        foreach ($fields as $field)
+        foreach ($fields as $index => $field)
         {
             $radioItems[] = array(
                 div(setClass('my-1 text-md leading-5 break-words'), $field),
@@ -55,8 +57,8 @@ class thinkScore extends thinkQuestion
                 (
                     set::type('radio'),
                     set::items($items),
-                    set::name('result[]'),
-                    set::value(''),
+                    set::name('result[' . $index . ']'),
+                    set::value(!empty($result[$index]) ? $result[$index] : ''),
                     set::inline(true),
                     set::disabled(false)
                 )
