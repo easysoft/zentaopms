@@ -531,7 +531,7 @@ class systemModel extends model
         {
             $system->name    = $productName;
             $system->product = $productID;
-            $systemID = $this->system->create($system);
+            $systemID = $this->create($system);
 
             $this->dao->update(TABLE_BUILD)->set('system')->eq($systemID)->where('id')->eq($systemID)->exec();
             $this->dao->update(TABLE_RELEASE)->set('system')->eq($systemID)->where('id')->eq($systemID)->exec();
