@@ -23,7 +23,7 @@ toolbar
     (
         array
         (
-            'class' => 'ghost',
+            'class' => 'primary',
             'text' => $lang->release->manageSystem,
             'url' => $this->createLink('system', 'browse', "productID=0&projectID={$projectID}"),
             'data-app' => 'project'

@@ -12,7 +12,7 @@ $config->system->dtable->fieldList['id']['sortType'] = true;
 
 $config->system->dtable->fieldList['name']['title'] = $lang->system->name;
 $config->system->dtable->fieldList['name']['name']  = 'name';
-$config->system->dtable->fieldList['name']['type']  = 'shortNestedTitle';
+$config->system->dtable->fieldList['name']['type']  = 'title';
 $config->system->dtable->fieldList['name']['flex']  = 4;
 $config->system->dtable->fieldList['name']['hint']  = true;
 
