@@ -590,7 +590,7 @@ class cneModel extends model
      */
     public function uninstallApp(object $apiParams): ?object
     {
-        if(is_null($apiParams->name) && empty($apiParams->name)) return null;
+        if(empty($apiParams->name)) return null;
         if(empty($apiParams->channel)) $apiParams->channel = $this->config->CNE->api->channel;
 
         $apiUrl = "/api/cne/app/uninstall";
