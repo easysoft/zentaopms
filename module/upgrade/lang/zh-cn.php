@@ -187,3 +187,20 @@ $lang->upgrade->flowFields['program']   = '所属项目集';
 $lang->upgrade->flowFields['product']   = '所属产品';
 $lang->upgrade->flowFields['project']   = '所属项目';
 $lang->upgrade->flowFields['execution'] = '所属执行';
+
+$lang->upgrade->defaultCharterApprovalFlow = new stdclass();
+$lang->upgrade->defaultCharterApprovalFlow->projectApproval = new stdclass();
+$lang->upgrade->defaultCharterApprovalFlow->projectApproval->title = '立项审批流';
+$lang->upgrade->defaultCharterApprovalFlow->projectApproval->desc  = '可以为发起立项审批设计审批流程。';
+
+$lang->upgrade->defaultCharterApprovalFlow->completionApproval = new stdclass();
+$lang->upgrade->defaultCharterApprovalFlow->completionApproval->title = '结项审批流';
+$lang->upgrade->defaultCharterApprovalFlow->completionApproval->desc  = '可以为发起结项审批设计审批流程。';
+
+$lang->upgrade->defaultCharterApprovalFlow->cancelProjectApproval = new stdclass();
+$lang->upgrade->defaultCharterApprovalFlow->cancelProjectApproval->title = '取消立项审批流';
+$lang->upgrade->defaultCharterApprovalFlow->cancelProjectApproval->desc  = '可以为取消立项审批设计审批流程。';
+
+$lang->upgrade->defaultCharterApprovalFlow->activateProjectApproval = new stdclass();
+$lang->upgrade->defaultCharterApprovalFlow->activateProjectApproval->title = '激活立项审批流';
+$lang->upgrade->defaultCharterApprovalFlow->activateProjectApproval->desc  = '可以为激活立项审批设计审批流程。';

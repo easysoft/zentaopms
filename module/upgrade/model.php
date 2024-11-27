@@ -10474,7 +10474,7 @@ class upgradeModel extends model
     {
         $this->app->loadLang('charter');
 
-        foreach($this->lang->charter->defaultApprovalFlow as $approvalType => $approval)
+        foreach($this->lang->upgrade->defaultCharterApprovalFlow as $approvalType => $approval)
         {
             $approvalflow = new stdclass();
             $approvalflow->name        = $approval->title;
@@ -10483,7 +10483,7 @@ class upgradeModel extends model
             $approvalflow->version     = 1;
             $approvalflow->createdBy   = 'system';
             $approvalflow->createdDate = helper::now();
-            $approvalflow->workflow    = '';
+            $approvalflow->workflow    = 'charter';
             $approvalflow->deleted     = 0;
             $this->dao->insert(TABLE_APPROVALFLOW)->data($approvalflow)->exec();
 
