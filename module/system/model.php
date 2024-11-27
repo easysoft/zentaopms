@@ -26,6 +26,8 @@ class systemModel extends model
      */
     public function getList(int $productID, string $status = 'active', string $orderBy = 'id_desc', object $pager = null): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getSystemList();
+
         return $this->dao->select('*')->from(TABLE_SYSTEM)
             ->where('deleted')->eq('0')
             ->andWhere('product')->eq($productID)
@@ -47,6 +49,8 @@ class systemModel extends model
      */
     public function getPairs(int $productID = 0, string $integrated = '', string $status = ''): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getSystemPairs();
+
         return $this->dao->select('id, name')->from(TABLE_SYSTEM)
             ->where('deleted')->eq('0')
             ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
