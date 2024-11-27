@@ -45,7 +45,7 @@ class thinkStepBase extends wg
         if($mode != 'detail') return array();
 
         $options = $step->options;
-        if($step->type == 'questions')
+        if($step->type == 'question')
         {
             $questionType = $options->questionType;
             $tips         = $lang->thinkstep->$questionType;
