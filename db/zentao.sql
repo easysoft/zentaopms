@@ -668,6 +668,7 @@ CREATE TABLE IF NOT EXISTS `zt_dataview` (
   `name` varchar(155) NOT NULL DEFAULT '',
   `code` varchar(50) NOT NULL DEFAULT '',
   `mode` enum('text', 'builder') not NULL default 'builder',
+  `driver` enum('mysql', 'duckdb') not NULL default 'mysql',
   `view` varchar(57) NOT NULL DEFAULT '',
   `sql` text NULL,
   `fields` mediumtext NULL,
