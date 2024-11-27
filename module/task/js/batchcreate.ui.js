@@ -65,45 +65,38 @@ function setStoryRelated(event)
     let $currentRow = $(event.target).closest('tr');
     let storyID     = $story.val();
     let link        = $.createLink('story', 'ajaxGetInfo', 'storyID=' + storyID + '&pageType=batch');
-    let $row        = $currentRow;
 
-    while($row.length)
+    let $storyEstimate = $currentRow.find('.form-batch-input[data-name="storyEstimate"]');
+    let $storyPri      = $currentRow.find('.form-batch-input[data-name="storyPri"]');
+    let $storyDesc     = $currentRow.find('.form-batch-input[data-name="storyDesc"]');
+    let $module        = $currentRow.find('input[name^="module"]');
+    let $preview       = $currentRow.find('.form-batch-input[data-name="preview"] + button');
+
+    if(storyID > 0)
     {
-        let $storyEstimate = $row.find('.form-batch-input[data-name="storyEstimate"]');
-        let $storyPri      = $row.find('.form-batch-input[data-name="storyPri"]');
-        let $storyDesc     = $row.find('.form-batch-input[data-name="storyDesc"]');
-        let $module        = $row.find('input[name^="module"]');
-        let $preview       = $row.find('.form-batch-input[data-name="preview"] + button');
-
-        if(storyID > 0)
+        $.getJSON(link, function(data)
         {
-            $.getJSON(link, function(data)
-            {
-                const storyInfo = data['storyInfo'];
+            const storyInfo = data['storyInfo'];
 
-                $module.zui('picker').$.setValue(parseInt(storyInfo.moduleID), true);
-                $storyEstimate.val(storyInfo.estimate);
-                $storyPri.val(storyInfo.pri);
-                $storyDesc.val(storyInfo.spec);
+            $module.zui('picker').$.setValue(parseInt(storyInfo.moduleID), true);
+            $storyEstimate.val(storyInfo.estimate);
+            $storyPri.val(storyInfo.pri);
+            $storyDesc.val(storyInfo.spec);
 
-                $preview.removeClass('disabled');
-                $preview.css('pointer-events', 'auto');
-                $preview.attr('data-url', $.createLink('story', 'view', "storyID=" + storyID));
-            });
-        }
-        else
-        {
-            $storyEstimate.val('');
-            $storyPri.val(3);
-            $storyDesc.val('');
+            $preview.removeClass('disabled');
+            $preview.css('pointer-events', 'auto');
+            $preview.attr('data-url', $.createLink('story', 'view', "storyID=" + storyID));
+        });
+    }
+    else
+    {
+        $storyEstimate.val('');
+        $storyPri.val(3);
+        $storyDesc.val('');
 
-            $preview.addClass('disabled');
-            $preview.css('pointer-events', 'none');
-            $preview.attr('data-url', '#');
-        }
-
-        $row = $row.next('tr');
-        if(!$row.find('td[data-name="story"][data-ditto="on"]').length) break;
+        $preview.addClass('disabled');
+        $preview.css('pointer-events', 'none');
+        $preview.attr('data-url', '#');
     }
 }
 
