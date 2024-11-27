@@ -30,10 +30,11 @@ class thinkTableInput extends thinkQuestion
 
     protected function buildDetail(): array
     {
-        global $lang;
+        global $lang, $config;
         $detailWg = parent::buildDetail();
-        list($step, $fields, $supportAdd, $canAddRows, $mode, $inputType, $preViewModel) = $this->prop(array('step', 'fields', 'supportAdd', 'canAddRows', 'mode', 'inputType', 'preViewModel'));
+        list($step, $fields, $supportAdd, $canAddRows, $mode, $inputType, $wizard) = $this->prop(array('step', 'fields', 'supportAdd', 'canAddRows', 'mode', 'inputType', 'wizard'));
         if($mode != 'detail') return array();
+        $preViewModel = in_array($wizard->model, $config->thinkwizard->hiddenMenuModel);
 
         if($step)
         {

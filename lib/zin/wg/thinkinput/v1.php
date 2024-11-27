@@ -17,10 +17,11 @@ class thinkInput extends thinkQuestion
     }
     protected function buildDetail(): array
     {
-        global $lang, $app;
+        global $lang, $app, $config;
         $app->loadLang('thinkstep');
         $detailWg = parent::buildDetail();
-        list($step, $required, $value, $preViewModel) = $this->prop(array('step', 'required', 'value', 'preViewModel'));
+        list($step, $required, $value, $wizard) = $this->prop(array('step', 'required', 'value', 'wizard'));
+        $preViewModel = in_array($wizard->model, $config->thinkwizard->hiddenMenuModel);
         if($step)
         {
             $required = $step->options->required;

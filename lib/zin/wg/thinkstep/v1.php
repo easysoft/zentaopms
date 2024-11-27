@@ -22,15 +22,14 @@ class thinkStep  extends wg
 
         $step            = $addType ? null : $item;
         $questionType    = $addType ? $addType : ($item->options->questionType ?? '');
-        $hiddenMenuModel = in_array($wizard->model, $config->thinkwizard->hiddenMenuModel);
-        if($addType === 'node' || !$addType && $item->type === 'node') return thinkNode(set::step($step), set::mode($action), set::isRun($isRun), set::preViewModel($hiddenMenuModel));
-        if($addType === 'transition' || !$addType && $item->type === 'transition') return thinkTransition(set::step($step), set::mode($action), set::isRun($isRun), set::preViewModel($hiddenMenuModel));
-        if($questionType === 'input')       return thinkInput(set::step($step), set::questionType('input'), set::mode($action), set::isRun($isRun), set::quotedQuestions($quotedQuestions), set::preViewModel($hiddenMenuModel));
-        if($questionType === 'radio')       return thinkRadio(set::step($step), set::questionType('radio'), set::mode($action), set::isRun($isRun), set::quotedQuestions($quotedQuestions), set::preViewModel($hiddenMenuModel));
-        if($questionType === 'checkbox')    return thinkCheckbox(set::step($step), set::questionType('checkbox'), set::mode($action), set::isRun($isRun), set::quoteQuestions($quoteQuestions), set::quotedQuestions($quotedQuestions), set::preViewModel($hiddenMenuModel));
-        if($questionType === 'tableInput')  return thinkTableInput(set::step($step), set::questionType('tableInput'), set::mode($action), set::isRun($isRun), set::preViewModel($hiddenMenuModel));
-        if($questionType === 'multicolumn') return thinkMulticolumn(set::step($step), set::questionType('multicolumn'), set::mode($action), set::isRun($isRun), set::quoteQuestions($quoteQuestions), set::quotedQuestions($quotedQuestions), set::modeClass($modeClass), set::preViewModel($hiddenMenuModel));
-        if($questionType === 'score')       return thinkScore(set::step($step), set::questionType('score'), set::mode($action), set::isRun($isRun), set::quoteQuestions($quoteQuestions), set::quotedQuestions($quotedQuestions), set::preViewModel($hiddenMenuModel));
+        if($addType === 'node' || !$addType && $item->type === 'node') return thinkNode(set::step($step), set::mode($action), set::isRun($isRun), set::wizard($wizard));
+        if($addType === 'transition' || !$addType && $item->type === 'transition') return thinkTransition(set::step($step), set::mode($action), set::isRun($isRun), set::wizard($wizard));
+        if($questionType === 'input')       return thinkInput(set::step($step), set::questionType('input'), set::mode($action), set::isRun($isRun), set::quotedQuestions($quotedQuestions), set::wizard($wizard));
+        if($questionType === 'radio')       return thinkRadio(set::step($step), set::questionType('radio'), set::mode($action), set::isRun($isRun), set::quotedQuestions($quotedQuestions), set::wizard($wizard));
+        if($questionType === 'checkbox')    return thinkCheckbox(set::step($step), set::questionType('checkbox'), set::mode($action), set::isRun($isRun), set::quoteQuestions($quoteQuestions), set::quotedQuestions($quotedQuestions), set::wizard($wizard));
+        if($questionType === 'tableInput')  return thinkTableInput(set::step($step), set::questionType('tableInput'), set::mode($action), set::isRun($isRun), set::wizard($wizard));
+        if($questionType === 'multicolumn') return thinkMulticolumn(set::step($step), set::questionType('multicolumn'), set::mode($action), set::isRun($isRun), set::quoteQuestions($quoteQuestions), set::quotedQuestions($quotedQuestions), set::modeClass($modeClass), set::wizard($wizard));
+        if($questionType === 'score')       return thinkScore(set::step($step), set::questionType('score'), set::mode($action), set::isRun($isRun), set::quoteQuestions($quoteQuestions), set::quotedQuestions($quotedQuestions), set::wizard($wizard));
         return array();
     }
 

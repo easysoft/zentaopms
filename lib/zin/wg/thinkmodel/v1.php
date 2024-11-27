@@ -12,11 +12,12 @@ class thinkModel extends wg
 
     protected function buildQuestionItem(object $step): wg|array
     {
+        $wizard       = $this->prop('wizard');
         $questionType = $step->options->questionType;
         $wgMap        = array('input' => 'thinkInput', 'radio' => 'thinkRadio', 'checkbox' => 'thinkCheckbox', 'tableInput' => 'thinkTableInput', 'multicolumn' => 'thinkMulticolumn');
         if(!isset($wgMap[$questionType])) return array();
 
-        return createWg($wgMap[$questionType], array(set::step($step), set::questionType($questionType), set::mode('detail'), set::isResult(true)));
+        return createWg($wgMap[$questionType], array(set::step($step), set::questionType($questionType), set::mode('detail'), set::isResult(true), set::wizard($wizard)));
     }
 
     protected function buildOptionsContent(object $step, int $blockID): array
