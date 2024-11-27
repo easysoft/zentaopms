@@ -221,7 +221,7 @@ class cneTest
     {
         $this->objectModel->error = new stdClass();
         $instance = $this->objectModel->loadModel('instance')->getByID(3);
-
+        if(is_null($instance)) return null;
         $result = $this->objectModel->getAppLogs($instance);
         if(!empty($this->objectModel->error->message)) return $this->objectModel->error;
 
