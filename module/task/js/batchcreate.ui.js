@@ -122,11 +122,11 @@ function copyStoryTitle(event)
     const $storyDesc     = $currentRow.find('.form-batch-input[data-name="storyDesc"]');
     let   storyTitle     = $story.find('.picker-single-selection').text();
 
-    startPosition  = storyTitle.indexOf(':') + 1;
-    endPosition    = storyTitle.lastIndexOf('[');
-    storyTitle     = storyTitle.substr(startPosition, endPosition - startPosition);
+    startPosition = storyTitle.indexOf(':') + 1;
+    endPosition   = storyTitle.lastIndexOf('[');
+    if(endPosition < 0) endPosition = storyTitle.lastIndexOf('(');
 
-    $currentRow.find('.form-batch-input[data-name="name"]').val(storyTitle);
+    $currentRow.find('.form-batch-input[data-name="name"]').val(storyTitle.substr(startPosition, endPosition - startPosition));
     $currentRow.find('.form-batch-input[data-name="estimate"]').val($storyEstimate.val());
     $currentRow.find('input[name^="pri"]').zui('pripicker').$.setValue($storyPri.val() ? $storyPri.val() : 0);
     $currentRow.find('.form-batch-input[data-name="desc"]').val(($storyDesc.val()).replace(/<[^>]+>/g,'').replace(/(\n)+\n/g, "\n").replace(/^\n/g, '').replace(/\t/g, ''));
