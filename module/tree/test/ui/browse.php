@@ -54,8 +54,8 @@ r($tester->editModule('模块 2'))    && p('status,message') && e('SUCCESS,编�
 r($tester->editModule('模块2'))     && p('status,message') && e('SUCCESS,编辑模块时模块已存在，提示正确');
 r($tester->editModule('编辑模块1')) && p('status,message') && e('SUCCESS,编辑模块成功');
 
-r($tester->copyModule(array('产品4'), false))                     && p('status,message') && e('SUCCESS,复制模块时所选产品下没有模块，提示正确');
-r($tester->copyModule(array('产品2', '模块1', '模块2'), true))    && p('status,message') && e('SUCCESS,复制模块成功');
+r($tester->copyModule(array('产品4'), false))                  && p('status,message') && e('SUCCESS,复制模块时所选产品下没有模块，提示正确');
+r($tester->copyModule(array('产品2', '模块1', '模块2'), true)) && p('status,message') && e('SUCCESS,复制模块成功');
 
 r($tester->deleteModule()) && p('status,message') && e('SUCCESS,删除模块成功');
 $tester->closeBrowser();
