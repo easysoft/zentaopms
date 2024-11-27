@@ -132,4 +132,33 @@ class browseTester extends tester
         if($form->dom->firstChildModule->getText() == $moduleName) return $this->failed('删除模块失败');
         return $this->success('删除模块成功');
     }
+
+    /**
+     * 复制模块。
+     * Copy the module.
+     *
+     * @param  array  $product
+     * @param  bool   $hasModule
+     * @access public
+     * @return object
+     */
+    public function copyModule($product, $hasModule = true)
+    {
+        $form = $this->initForm('tree', 'browse', array('product' => '3', 'view' => 'story'), 'appIframe-product');
+        $form->dom->btn($this->lang->tree->syncFromProduct)->click();
+        $form->dom->allProduct->picker($product[0]);
+        $form->dom->copyIcon->click();
+        $form->wait(1);
+
+        if(!$hasModule)
+        {
+            if(!is_object($form->dom->modalText)) return $this->failed('复制模块时所选产品下没有模块，没有提示');
+            if($form->dom->modalText->getText() == $this->lang->tree->noSubmodule) return $this->success('复制模块时所选产品下没有模块，提示正确');
+            return $this->failed('复制模块时所选产品下没有模块，提示错误');
+        }
+
+        $form->dom->submitBtn->click();
+        if($form->dom->firstModule->getText() == $product[1] && $form->dom->lastModule->getText() == $product[2]) return $this->success('复制模块成功');
+        return $this->failed('复制模块失败');
+    }
 }
