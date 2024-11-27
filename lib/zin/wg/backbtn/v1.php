@@ -54,7 +54,7 @@ class backBtn extends btn
             'doc'            => 'doc-mySpace,doc-productSpace,doc-projectSpace,doc-teamSpace,doc-view,execution-doc',
             'design'         => 'design-browse,projectstory-track,my-effort,my-index',
             'release'        => 'release-browse,release-view,product-roadmap,kanban-view,projectrelease-browse,story-view,my-index,my-effort,product-dynamic,project-dynamic,project-view',
-            'productplan'    => 'productplan-browse,kanban-view,projectplan-browse,my-index,my-effort,product-dynamic,project-dynamic,project-view',
+            'productplan'    => 'productplan-browse,kanban-view,projectplan-browse,my-index,my-effort,product-dynamic,project-dynamic,project-view,charter-view',
             'programplan'    => 'project-execution',
             'projectrelease' => 'projectrelease-browse',
             'projectstory'   => 'projectstory-story',
