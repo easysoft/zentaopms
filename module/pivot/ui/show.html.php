@@ -55,7 +55,7 @@ $fnGenerateFilters = function() use($pivot, $showOrigin, $lang)
     );
 };
 
-$generateData = function() use ($lang, $groupID, $pivotName, $pivot, $data, $configs, $showOrigin, $fnGenerateFilters)
+$generateData = function() use ($lang, $groupID, $pivotName, $pivot, $data, $configs, $showOrigin, $fnGenerateFilters, $hasVersionMark)
 {
     $clickable = $this->config->edition != 'open';
     $emptyTip  = $this->pivot->isFiltersAllEmpty($pivot->filters) ? $lang->pivot->filterEmptyVal : $lang->error->noData;
@@ -82,7 +82,7 @@ $generateData = function() use ($lang, $groupID, $pivotName, $pivot, $data, $con
                 span
                 (
                     set::style(array('font-weight' => 'normal')),
-                    setClass(array('hidden' => !hasPriv('pivot', 'design') || !$pivot->versionChange)),
+                    setClass(array('hidden' => !hasPriv('pivot', 'design') || !$pivot->versionChange || $hasVersionMark)),
                     $lang->pivot->tipNewVersion . $lang->comma,
                     h::a
                     (

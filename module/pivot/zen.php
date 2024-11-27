@@ -234,14 +234,15 @@ class pivotZen extends pivot
             list($data, $configs) = $this->pivot->genSheet($fields, $pivot->settings, $sql, $filterFormat, $langs, $driver);
         }
 
-        $this->view->pivotName    = $pivot->name;
-        $this->view->title        = $pivot->name;
-        $this->view->currentMenu  = $groupID . '_' . $pivot->id;
-        $this->view->currentGroup = $groupID;
-        $this->view->pivot        = $pivot;
-        $this->view->showOrigin   = $showOrigin;
-        $this->view->data         = $data;
-        $this->view->configs      = $configs;
+        $this->view->hasVersionMark = $this->loadModel('mark')->hasMark('pivot', $pivotID, 'all', 'version');
+        $this->view->pivotName      = $pivot->name;
+        $this->view->title          = $pivot->name;
+        $this->view->currentMenu    = $groupID . '_' . $pivot->id;
+        $this->view->currentGroup   = $groupID;
+        $this->view->pivot          = $pivot;
+        $this->view->showOrigin     = $showOrigin;
+        $this->view->data           = $data;
+        $this->view->configs        = $configs;
     }
 
     /**
