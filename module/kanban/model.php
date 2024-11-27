@@ -1504,7 +1504,8 @@ class kanbanModel extends model
             if(in_array($laneType, array('epic', 'requirement')) && strpos($project->storyType, $laneType) === false) continue;
             list($laneData, $columnData, $cardsData) = $this->buildExecutionGroup($lane, $columns, $objectGroup, $searchValue, $menus);
 
-            if($lane->type == 'risk') $cardsData = $this->appendRiskField($cardsData, $objectGroup['risk']);
+            if($lane->type == 'risk' && in_array($this->config->edition, array('max', 'ipd'))) $cardsData = $this->appendRiskField($cardsData, $objectGroup['risk']);
+
             $kanbanID = 'group' . $lane->id;
 
             $kanbanGroup[$laneType]['id']   = $lane->id;
@@ -2885,7 +2886,8 @@ class kanbanModel extends model
         if($laneType == 'story') $cardPairs = $this->kanbanTao->refreshStoryCards($cardPairs, $executionID, $otherCardList);
         if($laneType == 'bug')   $cardPairs = $this->kanbanTao->refreshBugCards($cardPairs, $executionID, $otherCardList);
         if($laneType == 'task')  $cardPairs = $this->kanbanTao->refreshTaskCards($cardPairs, $executionID, $otherCardList);
-        if($laneType == 'risk')  $cardPairs = $this->refreshRiskCards($cardPairs, $executionID, $otherCardList);
+
+        if($laneType == 'risk' && in_array($this->config->edition, array('max', 'ipd'))) $cardPairs = $this->refreshRiskCards($cardPairs, $executionID, $otherCardList);
 
         $colPairs = $this->dao->select('t2.type, t2.id')->from(TABLE_KANBANCELL)->alias('t1')
             ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.`column` = t2.id')
