@@ -2676,6 +2676,23 @@ class projectModel extends model
     {
         if(empty($executionID)) return false;
 
+        $task = $this->dao->select('id')->from(TABLE_TASK)->where('execution')->eq($executionID)->andWhere('deleted')->eq(0)->limit(1)->fetch();
+        if(!empty($task)) return true;
+
+        $effort = $this->dao->select('id')->from(TABLE_EFFORT)->where('execution')->eq($executionID)->andWhere('deleted')->eq(0)->limit(1)->fetch();
+        if(!empty($effort)) return true;
+
+        $bug = $this->dao->select('id')->from(TABLE_BUG)->where('execution')->eq($executionID)->andWhere('deleted')->eq(0)->limit(1)->fetch();
+        if(!empty($bug)) return true;
+
+        $story = $this->dao->select('id')->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.story')
+            ->where('t2.project')->eq($executionID)
+            ->andWhere('t1.deleted')->eq(0)
+            ->limit(1)->fetch();
+        if(!empty($story)) return true;
+
+
         return false;
     }
 }
