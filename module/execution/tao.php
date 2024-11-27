@@ -539,6 +539,26 @@ class executionTao extends executionModel
     }
 
     /**
+     * 递归获取任务数量。
+     * Get task count.
+     *
+     * @param  array     $tasks
+     * @access protected
+     * @return int
+     *
+     */
+    protected function getTaskCount(array $tasks): int
+    {
+        $taskCount = count($tasks);
+        foreach($tasks as $task)
+        {
+            if(!empty($task->children)) $taskCount += $this->getTaskCount($task->children);
+        }
+
+        return $taskCount;
+    }
+
+    /**
      * 追加子任务到任务
      * Append children to task
      *
@@ -581,7 +601,7 @@ class executionTao extends executionModel
         if($node->id && isset($taskGroups[$node->id][0]))
         {
             $taskItems = $this->formatTasksForTree($taskGroups[$node->id][0]);
-            $node->tasksCount = count($taskItems);
+            $node->tasksCount = $this->getTaskCount($taskItems);
             foreach($taskItems as $taskItem) $node->children[] = $taskItem;
         }
 
@@ -633,8 +653,8 @@ class executionTao extends executionModel
             $storyTasks = isset($taskGroups[$node->id][$story->id]) ? $taskGroups[$node->id][$story->id] : array();
             if(!empty($storyTasks))
             {
-                $taskItems             = $this->formatTasksForTree($storyTasks, $story, $node, $taskGroups);
-                $storyItem->tasksCount = count($taskItems);
+                $taskItems             = $this->formatTasksForTree($storyTasks, $stories);
+                $storyItem->tasksCount = $this->getTaskCount($taskItems);
                 $storyItem->children   = $taskItems;
             }
             else
@@ -666,18 +686,9 @@ class executionTao extends executionModel
 
         foreach($taskGroups[$node->id] as $tasks)
         {
-            $taskItems = $this->formatTasksForTree($tasks, null, $node, $taskGroups);
-            $node->tasksCount += count($taskItems);
-            foreach($taskItems as $taskItem)
-            {
-                $node->children[$taskItem->id] = $taskItem;
-                if(!empty($tasks[$taskItem->id]->children))
-                {
-                    $task = $this->formatTasksForTree($tasks[$taskItem->id]->children);
-                    $node->children[$taskItem->id]->children=$task;
-                    $node->tasksCount += count($task);
-                }
-            }
+            $taskItems = $this->formatTasksForTree($tasks);
+            $node->tasksCount += $this->getTaskCount($taskItems);
+            foreach($taskItems as $taskItem) $node->children[$taskItem->id] = $taskItem;
         }
         $node->children = array_values($node->children);
 
@@ -744,11 +755,11 @@ class executionTao extends executionModel
      * Format tasks for tree.
      *
      * @param  array     $tasks
-     * @param  object    $story
+     * @param  array     $stories
      * @access protected
      * @return array
      */
-    protected function formatTasksForTree(array $tasks, object $story = null): array
+    protected function formatTasksForTree(array $tasks, array $stories = array()): array
     {
         static $users, $avatarPairs;
         if(empty($users))       $users       = $this->loadModel('user')->getPairs('noletter');
@@ -761,6 +772,7 @@ class executionTao extends executionModel
             $userAvatar    = zget($avatarPairs, $avatarAccount);
             $userAvatar    = $userAvatar && $avatarAccount != 'closed' ? "<img src='{$userAvatar}' />" : strtoupper(mb_substr($avatarAccount, 0, 1, 'utf-8'));
 
+            $story    = zget($stories, $task->story, '');
             $taskItem = new stdclass();
             $taskItem->type          = 'task';
             $taskItem->id            = $task->id;
@@ -779,7 +791,7 @@ class executionTao extends executionModel
             $taskItem->avatarAccount = zget($users, $avatarAccount);
             $taskItem->avatar        = $userAvatar;
 
-            if(!empty($task->children)) $taskItem->children = $this->formatTasksForTree($task->children, $story);
+            if(!empty($task->children)) $taskItem->children = $this->formatTasksForTree($task->children, $stories);
 
             $taskItems[] = $taskItem;
         }
