@@ -65,7 +65,7 @@ $config->projectrelease->dtable->fieldList['system']['required']     = true;
 
 $config->projectrelease->dtable->fieldList['name']['name']     = 'name';
 $config->projectrelease->dtable->fieldList['name']['title']    = $lang->release->name;
-$config->projectrelease->dtable->fieldList['name']['type']     = 'text';
+$config->projectrelease->dtable->fieldList['name']['type']     = 'shortTitle';
 $config->projectrelease->dtable->fieldList['name']['fixed']    = 'left';
 $config->projectrelease->dtable->fieldList['name']['link']     = array('module' => 'projectrelease', 'method' => 'view', 'params' => 'releaseID={id}');
 $config->projectrelease->dtable->fieldList['name']['show']     = true;

@@ -28,7 +28,7 @@ $config->release->dtable->fieldList['system']['nestedToggle'] = true;
 $config->release->dtable->fieldList['name']['title'] = $lang->release->name;
 $config->release->dtable->fieldList['name']['name']  = 'name';
 $config->release->dtable->fieldList['name']['link']  = array('module' => 'release', 'method' => 'view', 'params' => 'releaseID={id}');
-$config->release->dtable->fieldList['name']['type']  = 'title';
+$config->release->dtable->fieldList['name']['type']  = 'shortTitle';
 
 $config->release->dtable->fieldList['branch']['title']    = $lang->release->branch;
 $config->release->dtable->fieldList['branch']['name']     = 'branchName';
