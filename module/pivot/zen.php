@@ -201,9 +201,9 @@ class pivotZen extends pivot
         }
         $driver = $pivot->driver;
 
+        $this->pivot->isVersionChange($pivot);
         if($mark)
         {
-            $this->pivot->isVersionChange($pivot);
             $markVersion = $pivot->versionChange ? $this->pivot->getMaxVersion($pivot->id) : $pivot->version;
 
             if(!$this->loadModel('mark')->isMark('pivot', $pivot->id, $markVersion, 'view'))
