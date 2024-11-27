@@ -38,3 +38,13 @@ class assignStoryTester extends tester
         $form->dom->allTab->click();
         $form->dom->selectAllBtn->click();
         $form->wait(1);
+        $form->dom->batchAssignBtn->click();
+        $form->wait(1);
+        $form->dom->assignToAdmin->click();
+        $form->wait(3);
+
+        $assignedToAfter = $form->dom->firstAssignTo->getText();
+        if($assignedToAfter == 'admin') return $this->success('批量指派成功');
+        return $this->failed('批量指派失败');
+    }
+}
