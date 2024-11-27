@@ -73,5 +73,5 @@ $config->instance->initUserApps = array();
 $config->instance->zentaopaas = new stdclass();
 $config->instance->zentaopaas->spaceData = new stdclass();
 $config->instance->zentaopaas->spaceData->k8space = $config->k8space;
-$config->instance->zentaopaas->k8name             = 'zentaopaas';
-$config->instance->zentaopaas->channel            = $config->CNE->api->channel ?: $config->cloud->api->channel;
+$config->instance->zentaopaas->k8name  = 'zentaopaas';
+$config->instance->zentaopaas->channel = $config->CNE->api->channel ?: $config->cloud->api->channel;
