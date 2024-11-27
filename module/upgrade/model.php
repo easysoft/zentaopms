@@ -9145,7 +9145,7 @@ class upgradeModel extends model
         catch(Error $e)
         {
             a($e->getMessage());
-            die;
+            exit;
         }
 
         return true;
@@ -9496,9 +9496,10 @@ class upgradeModel extends model
                 $data->options  = zget($options, 'options', '[]');
                 $data->default  = zget($options, 'default', '');
                 $data->buildin  = zget($options, 'buildin', 1);
-                $data->order    = $order++;
+                $data->order    = $order;
                 $data->readonly = ($field == 'subStatus') ? '0' : '1';
                 $data->rules    = zget($options, 'rules', '');
+                $order++;
 
                 if($module == 'execution')
                 {
@@ -9527,8 +9528,9 @@ class upgradeModel extends model
                     $data->field      = $field;
                     $data->width      = zget($options, 'width', 0);
                     $data->mobileShow = zget($options, 'mobileShow', 0);
-                    $data->order      = $order++;
+                    $data->order      = $order;
                     $data->vision     = 'rnd';
+                    $order++;
 
                     if(!empty($visions[$module])) $data->vision = $visions[$module];
                     if($data->width == 'auto')    $data->width  = 0;
@@ -9600,7 +9602,8 @@ class upgradeModel extends model
                 {
                     $data->code  = $key;
                     $data->label = trim(strip_tags($label));
-                    $data->order = $order++;
+                    $data->order = $order;
+                    $order++;
 
                     $this->dao->delete()->from(TABLE_WORKFLOWLABEL)->where('module')->eq($module)->andWhere('code')->eq($key)->exec();
                     $this->dao->insert(TABLE_WORKFLOWLABEL)->data($data)->exec();
@@ -9883,7 +9886,7 @@ class upgradeModel extends model
         foreach($flowTables as $flowTable)
         {
             $desc = $this->dao->query("DESC $flowTable")->fetchAll(PDO::FETCH_ASSOC);
-            $flowTableDesc[$flowTable] = array_column($desc, NULL, 'Field');
+            $flowTableDesc[$flowTable] = array_column($desc, null, 'Field');
         }
 
         $defaultData = array('type' => 'mediumint', 'length' => '8', 'control' => 'select', 'readonly' => 1, 'buildin' => 1, 'role' => 'default');
