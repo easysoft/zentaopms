@@ -89,7 +89,7 @@ EOT,
         'rate'               => array('zh-cn' => '工期偏差率', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '')
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
@@ -219,7 +219,7 @@ EOT,
         'closeddate'             => array('zh-cn' => '关闭日期', 'zh-tw' => '关闭日期', 'en' => 'closeddate')
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
@@ -356,7 +356,7 @@ EOT,
         'fixedbugsrate'     => array('zh-cn' => 'Bug修复率', 'zh-tw' => 'Bug修复率', 'en' => 'fixedbugsrate')
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
@@ -442,7 +442,7 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
@@ -514,7 +514,7 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
@@ -587,7 +587,7 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
@@ -660,7 +660,7 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
@@ -769,7 +769,7 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
@@ -873,7 +873,7 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
@@ -978,7 +978,7 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
@@ -1082,7 +1082,7 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
@@ -1229,7 +1229,7 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
@@ -1323,7 +1323,7 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
@@ -1417,7 +1417,7 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
@@ -1514,7 +1514,7 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
@@ -1610,7 +1610,7 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
@@ -1706,7 +1706,7 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
@@ -1804,7 +1804,7 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
@@ -1899,7 +1899,7 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
@@ -2091,7 +2091,7 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
@@ -2168,7 +2168,7 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
@@ -2301,7 +2301,7 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
@@ -2374,7 +2374,7 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
@@ -2458,7 +2458,7 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
@@ -2637,7 +2637,7 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
@@ -2713,7 +2713,7 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
@@ -2885,7 +2885,7 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
@@ -2979,7 +2979,7 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
@@ -3051,5 +3051,5 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
