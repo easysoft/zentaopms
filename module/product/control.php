@@ -844,11 +844,14 @@ class product extends control
         }
 
         $tasks = array();
-        foreach($tracks['items'] as $lane)
+        if(!empty($tracks['items']))
         {
-            $taskIdList = array_column($lane['task'], 'id');
-            $taskList   = array_combine($taskIdList, $lane['task']);
-            $tasks     += $taskList;
+            foreach($tracks['items'] as $lane)
+            {
+                $taskIdList = array_column($lane['task'], 'id');
+                $taskList   = array_combine($taskIdList, $lane['task']);
+                $tasks     += $taskList;
+            }
         }
 
         /* Build search form. */
