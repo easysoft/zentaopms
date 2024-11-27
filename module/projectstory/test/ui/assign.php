@@ -78,3 +78,22 @@ $projectStory->branch->range('0');
 $projectStory->story->range('1-5');
 $projectStory->version->range('1');
 $projectStory->order->range('1');
+$projectStory->gen(5);
+
+$user = zenData('user');
+$user->id->range('1-3');
+$user->dept->range('0');
+$user->account->range('admin, user1, user2');
+$user->realname->range('admin, 用户1, 用户2');
+$user->visions->range('`rnd,lite`');
+$user->password->range($config->uitest->defaultPassword)->format('md5');
+$user->gen(3);
+
+$team = zenData('team');
+$team->id->range('1-3');
+$team->root->range('1');
+$team->type->range('project');
+$team->account->range('admin, user1, user2');
+$team->gen(3);
+
+$tester = new assignStoryTester();
