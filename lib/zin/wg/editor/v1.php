@@ -64,6 +64,7 @@ class editor extends wg
     {
         if(empty($this->prop('uid'))) $this->setProp('uid', uniqid());
         $this->setDefaultProps(array('uploadUrl' => createLink('file', 'ajaxUpload', 'uid=' . $this->prop('uid'))));
+        if(helper::getBrowser()['name'] == 'safari') $this->setProp('neglectDefaultTextStyle', true);
     }
 
     protected function buildTemplate(string $editor, string $type): node
