@@ -27,10 +27,10 @@ $instance = $cneModel->loadModel('instance')->getByID(2);
 
 $apiParams = new stdclass();
 $apiParams->cluster   = '';
-$apiParams->name      = $instance->k8name;
-$apiParams->chart     = $instance->chart;
-$apiParams->namespace = $instance->spaceData->k8space;
-$apiParams->channel   = $instance->channel;
+$apiParams->name      = $instance->k8name ?? '';
+$apiParams->chart     = $instance->chart ?? '';
+$apiParams->namespace = $instance->spaceData->k8space ?? '';
+$apiParams->channel   = $instance->channel ?? 'test';
 
 r($cneModel->uninstallApp($apiParams)) && p('status') && e('0');
 r($cneModel->uninstallApp($apiParams)) && p('status') && e('0');
