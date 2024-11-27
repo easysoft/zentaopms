@@ -1,8 +1,6 @@
 <?php
 declare(strict_types=1);
 
-use zin\to;
-
 /**
  * The control file of system module of ZenTaoPMS.
  *
