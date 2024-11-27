@@ -463,11 +463,19 @@ class systemModel extends model
      * @access public
      * @return bool
      */
-    public function setSystemRelease(int $systemID, int $releaseID, string $releasedDate): bool
+    public function setSystemRelease(int $systemID, int $releaseID, string $releasedDate = ''): bool
     {
         $system = $this->fetchByID($systemID);
-        if(!$system || $system->latestDate > $releasedDate) return false;
-        if($system->latestDate == $releasedDate && $system->latestRelease >= $releaseID) return false;
+        if(!$system) return false;
+
+        if(empty($releasedDate))
+        {
+            if($releaseID != $system->latestRelease) return false;
+
+            $release      = $this->dao->select('id,createdDate')->from(TABLE_RELEASE)->where('deleted')->eq(0)->andWhere('system')->eq($systemID)->orderBy('id DESC')->fetch();
+            $releaseID    = $release ? $release->id : 0;
+            $releasedDate = $release ? $release->createdDate : null;
+        }
 
         $this->dao->update(TABLE_SYSTEM)->set('latestDate')->eq($releasedDate)->set('latestRelease')->eq($releaseID)->where('id')->eq($systemID)->exec();
         return !dao::isError();

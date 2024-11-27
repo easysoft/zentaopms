@@ -326,9 +326,12 @@ class release extends control
      */
     public function delete(int $releaseID)
     {
+        $release = $this->fetchByID($releaseID);
+
         $this->release->delete(TABLE_RELEASE, $releaseID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+        if($release && $release->system) $this->loadModel('system')->setSystemRelease($release->system, $releaseID);
         $message = $this->executeHooks($releaseID) ?: $this->lang->saveSuccess;
 
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message));
@@ -593,8 +596,6 @@ class release extends control
 
             $this->release->changeStatus($releaseID, $this->post->status, $this->post->releasedDate);
             if(dao::isError()) return $this->sendError(dao::getError());
-
-            if($release->system && $this->post->status == 'normal') $this->loadModel('system')->setSystemRelease($release->system, $releaseID, $this->post->releasedDate);
 
             $this->loadModel('action')->create('release', $releaseID, 'published', $this->post->comment, $this->post->status);
             return $this->sendSuccess(array('load' => true, 'closeModal' => true));

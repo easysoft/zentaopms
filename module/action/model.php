@@ -1470,6 +1470,7 @@ class actionModel extends model
         list($table, $orderby, $field, $queryKey) = $this->actionTao->getUndeleteParamsByObjectType($action->objectType);
         if(empty($queryKey)) $queryKey = 'id';
         $object = $this->actionTao->getObjectBaseInfo($table, array($queryKey => $action->objectID), $field, $orderby);
+        a($object); die;
         if(empty($object)) return false;
 
         $result = $this->checkActionCanUndelete($action, $object);
@@ -1500,6 +1501,7 @@ class actionModel extends model
             $this->story->updateParentStatus($action->objectID);
         }
         if($action->objectType == 'demand' && !empty($object->parent)) $this->loadModel('demand')->updateParentDemandStage($object->parent);
+        if($action->objectType == 'release') $this->loadModel('system')->setSystemRelease((int)$object->system, $action->objectID);
 
         /* 在action表中更新action记录。 */
         /* Update action record in action table. */

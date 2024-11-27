@@ -338,7 +338,7 @@ class releaseModel extends model
             }
         }
 
-        if($release->system && $release->status == 'normal') $this->loadModel('system')->setSystemRelease($release->system, $releaseID, $release->releasedDate);
+        if($release->system) $this->loadModel('system')->setSystemRelease($release->system, $releaseID, $release->createdDate);
 
         return $releaseID;
     }
