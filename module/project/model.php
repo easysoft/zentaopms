@@ -2692,7 +2692,24 @@ class projectModel extends model
             ->limit(1)->fetch();
         if(!empty($story)) return true;
 
+        $case = $this->dao->select('id')->from(TABLE_CASE)->alias('t1')
+            ->leftJoin(TABLE_PROJECTCASE)->alias('t2')->on('t1.id=t2.case')
+            ->where('t2.project')->eq($executionID)
+            ->andWhere('t1.deleted')->eq(0)
+            ->limit(1)->fetch();
+        if(!empty($case)) return true;
 
+        $build = $this->dao->select('id')->from(TABLE_BUILD)->where('execution')->eq($executionID)->andWhere('deleted')->eq(0)->limit(1)->fetch();
+        if(!empty($build)) return true;
+
+        $testtask = $this->dao->select('id')->from(TABLE_TESTTASK)->where('execution')->eq($executionID)->andWhere('deleted')->eq(0)->limit(1)->fetch();
+        if(!empty($testtask)) return true;
+
+        $testreport = $this->dao->select('id')->from(TABLE_TESTREPORT)->where('execution')->eq($executionID)->andWhere('deleted')->eq(0)->limit(1)->fetch();
+        if(!empty($testreport)) return true;
+
+        $doc = $this->dao->select('id')->from(TABLE_DOC)->where('execution')->eq($executionID)->andWhere('deleted')->eq(0)->limit(1)->fetch();
+        if(!empty($doc)) return true;
         return false;
     }
 }
