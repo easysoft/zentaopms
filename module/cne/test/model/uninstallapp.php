@@ -23,7 +23,7 @@ $config->CNE->app->domain = 'g79n.corp.cc';
 
 $cneModel = $tester->loadModel('cne');
 
-$instance = $this->objectModel->loadModel('instance')->getByID(2);
+$instance = $cneModel->loadModel('instance')->getByID(2);
 
 $apiParams = new stdclass();
 $apiParams->cluster   = '';
