@@ -73,6 +73,7 @@ formPanel
             set::label($lang->instance->isPrevious),
             set::items($lang->instance->isPreviousList),
             set::value(0),
+            on::change()->call('showLogs', $instance->id),
             on::inited()->call('initComponent', $instance->id)
         )
     ),
@@ -84,7 +85,7 @@ formPanel
             setClass('py-2'),
             form
             (
-                h::pre(setID('logs-content'), setClass('progress block h-96')),
+                h::pre(setID('logs-content'), setClass('bg-gray-800 text-white progress block h-96')),
                 set::actions(false)
             )
         )

@@ -23,6 +23,7 @@ window.changeComponent = function (instanceID) {
             $picker.$.setValue(items.pod);
         }
         toggleLoading('#logs-panel', false);
+        showLogs(instanceID);
     });
 };
 
