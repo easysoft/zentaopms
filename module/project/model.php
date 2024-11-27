@@ -2710,6 +2710,23 @@ class projectModel extends model
 
         $doc = $this->dao->select('id')->from(TABLE_DOC)->where('execution')->eq($executionID)->andWhere('deleted')->eq(0)->limit(1)->fetch();
         if(!empty($doc)) return true;
+
+        $doclib = $this->dao->select('id')->from(TABLE_DOCLIB)->where('execution')->eq($executionID)->andWhere('type')->eq('execution')->andWhere('main')->ne('1')->andWhere('deleted')->eq(0)->limit(1)->fetch();
+        if(!empty($doclib)) return true;
+
+        $libID  = $this->dao->select('id')->from(TABLE_DOCLIB)->where('type')->eq('execution')->andWhere('execution')->eq($executionID)->andWhere('main')->eq('1')->limit(1)->fetch('id');
+        $module = $this->dao->select('id')->from(TABLE_MODULE)
+            ->where('deleted')->eq(0)
+            ->andWhere('((type')->eq('task')
+            ->andWhere('root')->eq($executionID)
+            ->markRight(1)
+            ->orWhere('(type')->eq('doc')
+            ->andWhere('root')->eq($libID)
+            ->markRight(2)
+            ->limit(1)
+            ->fetch();
+        if(!empty($module)) return true;
+
         return false;
     }
 }
