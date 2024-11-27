@@ -757,10 +757,12 @@ class instance extends control
      */
     public function events(int $id): void
     {
-        if (!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
-        $instance = $this->instance->getByID($id);
+        if (!commonModel::hasPriv('instance', 'manage'))
+        {
+            $this->loadModel('common')->deny('instance', 'manage', false);
+        }
 
-        $this->view->instance = $instance;
+        $this->view->instance =  $this->instance->getByID($id);
         $this->display();
     }
 
