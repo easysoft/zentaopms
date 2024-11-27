@@ -10472,8 +10472,6 @@ class upgradeModel extends model
      */
     public function addCharterApprovalFlow()
     {
-        $this->app->loadLang('charter');
-
         foreach($this->lang->upgrade->defaultCharterApprovalFlow as $approvalType => $approval)
         {
             $approvalflow = new stdclass();

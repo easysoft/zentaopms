@@ -105,7 +105,7 @@ $config->upgrade->execFlow['20_5']        = array('functions' => 'fixWorkflowFie
 $config->upgrade->execFlow['20_6']        = array('functions' => 'processDemandFiles,processSqlbuilderTables');
 $config->upgrade->execFlow['20_7']        = array('functions' => 'upgradeMyDocSpace');
 $config->upgrade->execFlow['20_8']        = array('functions' => 'processWorkflowGroups');
-$config->upgrade->execFlow['21_0']        = array('functions' => 'importBuildinWorkflow', 'params' => array('importBuildinWorkflow' => array('or', 'charter')));
+$config->upgrade->execFlow['21_0']        = array('functions' => 'importBuildinWorkflow,addCharterApprovalFlow', 'params' => array('importBuildinWorkflow' => array('or', 'charter')));
 
 if(!empty($config->isINT))
 {
@@ -138,7 +138,6 @@ if($config->edition != 'open')
     $config->upgrade->execFlow['18_3']['functions']      .= ',processDataset,processChart,processReport,processDashboard';
     $config->upgrade->execFlow['18_4_beta1']['functions'] = 'processDeployStepAction,updateBISQL,updatePivotStage';
     $config->upgrade->execFlow['20_4']['functions']      .= ',updateTaskRelationPriv';
-    $config->upgrade->execFlow['21_0']['functions']      .= ',addCharterApprovalFlow';
 }
 
 if(in_array($this->config->edition, array('max', 'ipd'))) $config->upgrade->execFlow['18_7']['functions'] = 'processOldMetrics,processHistoryDataForMetric,metric-updateMetricDate';
