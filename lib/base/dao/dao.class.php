@@ -1076,9 +1076,18 @@ class baseDAO
             /* See: https://www.php.net/manual/en/pdo.lastinsertid.php .*/
             if($method == 'insert') $this->_lastInsertID = $this->dbh->lastInsertID();
 
-            if($this->cache) $result ? $this->cache->sync() : $this->cache->reset();
-
-            $this->setTableCache($sql);
+            if($this->cache)
+            {
+                if($result)
+                {
+                    $this->setTableCache($sql);
+                    $this->cache->sync();
+                }
+                else
+                {
+                    $this->cache->reset();
+                }
+            }
 
             if($this->config->enableDuckdb)
             {
