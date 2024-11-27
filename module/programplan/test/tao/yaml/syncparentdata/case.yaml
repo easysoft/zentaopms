@@ -1,0 +1,13 @@
+title: zt_case
+author: tianshujie
+version: '1.0'
+fields:
+    - field: id
+      range: 1-100
+    - field: project
+      range: '1,4'
+    - field: execution
+      range: '2,5'
+    - field: title
+      prefix: '用例'
+      range: 1-100
