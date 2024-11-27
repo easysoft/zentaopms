@@ -63,7 +63,7 @@ $config->instance->actionList['upgrade']['url']         = helper::createLink('in
 
 $config->instance->actions = new stdclass();
 $config->instance->actions->view = array();
-$config->instance->actions->view['mainActions']   = array('visit','showLogs', 'ajaxStart', 'ajaxStop', 'upgrade');
+$config->instance->actions->view['mainActions']   = array('visit', 'showLogs', 'ajaxStart', 'ajaxStop', 'upgrade');
 $config->instance->actions->view['suffixActions'] = array('ajaxUninstall');
 
 $config->instance->devopsApps   = array('gitea', 'gitlab', 'jenkins', 'sonarqube', 'nexus3', 'nexus');

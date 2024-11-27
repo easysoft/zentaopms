@@ -187,9 +187,9 @@ $lang->instance->log = new stdclass;
 $lang->instance->log->date    = 'date';
 $lang->instance->log->message = 'Content';
 
-$lang->instance->log->viewButton    = 'Logs';
-$lang->instance->log->title         = 'Watch Logs';
-$lang->instance->log->button        = 'View Now';
+$lang->instance->log->viewButton = 'Logs';
+$lang->instance->log->title      = 'Watch Logs';
+$lang->instance->log->button     = 'View Now';
 
 $lang->instance->component         = 'Component';
 $lang->instance->pod               = 'Pod';

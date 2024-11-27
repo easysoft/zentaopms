@@ -191,9 +191,9 @@ $lang->instance->log = new stdclass;
 $lang->instance->log->date    = '日期';
 $lang->instance->log->message = '内容';
 
-$lang->instance->log->viewButton    = '日志';
-$lang->instance->log->title         = '查看日志';
-$lang->instance->log->button        = '立即查看';
+$lang->instance->log->viewButton = '日志';
+$lang->instance->log->title      = '查看日志';
+$lang->instance->log->button     = '立即查看';
 
 $lang->instance->component         = '组件';
 $lang->instance->pod               = 'Pod';

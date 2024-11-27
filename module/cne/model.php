@@ -679,10 +679,10 @@ class cneModel extends model
         $apiParams->name      = $instance->k8name;
         $apiParams->tail      = 500;
 
-        !empty($component)      && $apiParams->component      = $component;
-        !empty($pod)            && $apiParams->pod_name       = $pod;
-        !empty($container)      && $apiParams->container_name = $container;
-        $previous               && $apiParams->previous       = $previous;
+        !empty($component) && $apiParams->component      = $component;
+        !empty($pod)       && $apiParams->pod_name       = $pod;
+        !empty($container) && $apiParams->container_name = $container;
+        $previous          && $apiParams->previous       = $previous;
 
         return $this->apiGet('/api/cne/app/logs', $apiParams, $this->config->CNE->api->headers);
     }
