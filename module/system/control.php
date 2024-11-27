@@ -1,5 +1,8 @@
 <?php
 declare(strict_types=1);
+
+use zin\to;
+
 /**
  * The control file of system module of ZenTaoPMS.
  *
@@ -694,5 +697,20 @@ class system extends control
 
         if(dao::isError()) return $this->sendError(dao::getError());
         $this->sendSuccess(array('load' => true));
+    }
+
+    /**
+     * 初始化产品下的应用数据（仅用于第一次安装）。
+     * Init the application data of the product.
+     *
+     * @access public
+     * @return void
+     */
+    public function initSystem()
+    {
+        $releaseList = $this->loadModel('release')->getListBySystem(array('0'));
+        if(!$releaseList) return false;
+
+        return $this->system->initSystem();
     }
 }

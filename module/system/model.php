@@ -512,4 +512,33 @@ class systemModel extends model
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
     }
+
+    /**
+     * 初始化应用。
+     * Initialize application.
+     *
+     * @access public
+     * @return bool
+     */
+    public function initSystem(): bool
+    {
+        $system = new stdclass();
+        $system->createdDate = helper::now();
+        $system->createdBy   = 'system';
+
+        $productPairs = $this->loadModel('product')->getPairs('all', 0, '', 1);
+        foreach($productPairs as $productID => $productName)
+        {
+            $system->name    = $productName;
+            $system->product = $productID;
+            $systemID = $this->system->create($system);
+
+            $this->dao->update(TABLE_BUILD)->set('system')->eq($systemID)->where('id')->eq($systemID)->exec();
+            $this->dao->update(TABLE_RELEASE)->set('system')->eq($systemID)->where('id')->eq($systemID)->exec();
+        }
+
+        if(!dao::isError()) $this->dao->delete()->from(TABLE_CRON)->where('command')->eq('moduleName=system&methodName=initSystem')->exec();
+
+        return dao::isError();
+    }
 }
