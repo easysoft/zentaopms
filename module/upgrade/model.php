@@ -186,19 +186,7 @@ class upgradeModel extends model
         $this->deletePatch();
         $this->processDataset();
         $this->upgradeScreenAndMetricData();
-
-        if($fromEdition == 'open')
-        {
-            if(version_compare($fromVersion, '18.4', '<=')) $this->upgradeBIData();
-        }
-        elseif($fromEdition == 'pro' || $fromEdition == 'biz')
-        {
-            if(version_compare($fromVersion, 'biz8.4', '<=')) $this->upgradeBIData();
-        }
-        elseif($fromEdition == 'max')
-        {
-            if(version_compare($fromVersion, 'max4.4', '<=')) $this->upgradeBIData();
-        }
+        $this->upgradeBIData();
     }
 
     /**
