@@ -231,6 +231,14 @@ window.handleRenderRow = function($row, index)
     /* 上一行： */
     const $prevRow = $row.prev();
 
+    /* 添加序号。 */
+    const $nameTd = $row.find('td[data-name="name"]');
+    if($nameTd.find('.input-group').length == 0)
+    {
+        $nameTd.find('.input-control').wrap('<div class="input-group"></div>');
+        $nameTd.find('.input-group').prepend('<div class="input-group-addon"></div>');
+    }
+
     /* 从行中查找层级文本展示元素： */
     const nestedTextSelector = 'td[data-name="name"] .input-group-addon';
 
