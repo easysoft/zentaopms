@@ -32,6 +32,12 @@ class storyPage extends page
             'unlinkFirBtn'   => "//*[@id='stories']/div[2]/div[3]/div/div[1]/div/nav/a[6]/i",
             'batchUnlinkBtn' => "//*[@id='stories']/div[3]/nav[1]/button[1]/span",
             'selectAllBtn'   => "//*[@id='stories']/div[3]/div/div/label"
+            /* 指派 */
+            'firstAssignTo'  => "//*[@id='stories']/div[2]/div[2]/div/div[7]/div/a/span",
+            'assignedTo'     => "//*[@data-name='assignedTo']/div/div",
+            'assignBtn'      => "//*[@class='panel-body']/form/div[3]/div/button",
+            'batchAssignBtn' => "//*[@id='stories']/div[3]/nav/button[4]/span[1]",
+            'assignToAdmin'  => "//*[@class='item-content']/div"
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
