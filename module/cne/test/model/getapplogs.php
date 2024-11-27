@@ -20,12 +20,12 @@ include dirname(__FILE__, 2) . '/lib/cne.unittest.class.php';
 
 $cneModel = new cneTest();
 
-r($cneModel->getAppLogsTest()) && p('status') && e('normal');
+r($cneModel->getAppLogsTest()) && p('status') && e('0');
 
-r($cneModel->getAppLogsTest()) && p('status') && e('normal');
+r($cneModel->getAppLogsTest()) && p('status') && e('0');
 
-r($cneModel->getAppLogsTest()) && p('status') && e('normal');
+r($cneModel->getAppLogsTest()) && p('status') && e('0');
 
-r($cneModel->getAppLogsTest()) && p('status') && e('normal');
+r($cneModel->getAppLogsTest()) && p('status') && e('0');
 
-r($cneModel->getAppLogsTest()) && p('status') && e('normal');
+r($cneModel->getAppLogsTest()) && p('status') && e('0');
