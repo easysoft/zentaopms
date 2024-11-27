@@ -42,6 +42,7 @@ $lang->system->edit            = 'Edit application';
 $lang->system->delete          = 'Delete application';
 $lang->system->active          = 'Online application';
 $lang->system->inactive        = 'Offline application';
+$lang->system->integratedLabel = 'Integrated';
 
 $lang->system->integratedList = array();
 $lang->system->integratedList[0] = 'No';

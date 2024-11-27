@@ -68,6 +68,8 @@ $lang->build->emptyExecution = $lang->executionCommon . 'should be not empty.';
 $lang->build->linkedBuild    = 'Linked Build';
 $lang->build->createTest     = 'Submit Request';
 
+$lang->build->integratedLabel = 'Integrated';
+
 $lang->build->notice = new stdclass();
 $lang->build->notice->changeProduct   = "The {$lang->SRCommon}, bug, or the version of the submitted test order has been linked, and its {$lang->productCommon} cannot be modified";
 $lang->build->notice->changeExecution = "The version of the submitted test order cannot be modified {$lang->executionCommon}";

@@ -2,8 +2,8 @@ window.renderCell = function(result, {col, row})
 {
     if(col.name === 'name' && row.data.integrated == 1)
     {
-        const name = row.data.name;
-        result[0] = {html: '<div title = "' + name + '">' + name + '<span class="icon icon-code-fork text-gray" title="集成应用"></span></div>'};
+        result[0] = {className: 'overflow-hidden', html: result[0]};
+        result[result.length] = {html:'<span class="label gray-pale rounded-xl clip">' + systemLang.integratedLabel + '</span>', className:'flex items-end', style:{flexDirection:"column"}};
     }
 
     return result;

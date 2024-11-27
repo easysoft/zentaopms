@@ -42,6 +42,7 @@ $lang->system->edit            = '编辑应用';
 $lang->system->delete          = '删除应用';
 $lang->system->active          = '上架应用';
 $lang->system->inactive        = '下架应用';
+$lang->system->integratedLabel = '集成';
 
 $lang->system->integratedList = array();
 $lang->system->integratedList[0] = '否';

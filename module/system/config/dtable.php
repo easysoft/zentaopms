@@ -10,11 +10,12 @@ $config->system->dtable->fieldList['id']['name']     = 'id';
 $config->system->dtable->fieldList['id']['type']     = 'id';
 $config->system->dtable->fieldList['id']['sortType'] = true;
 
-$config->system->dtable->fieldList['name']['title'] = $lang->system->name;
-$config->system->dtable->fieldList['name']['name']  = 'name';
-$config->system->dtable->fieldList['name']['type']  = 'shortNestedTitle';
-$config->system->dtable->fieldList['name']['flex']  = 4;
-$config->system->dtable->fieldList['name']['hint']  = true;
+$config->system->dtable->fieldList['name']['title']     = $lang->system->name;
+$config->system->dtable->fieldList['name']['name']      = 'name';
+$config->system->dtable->fieldList['name']['type']      = 'shortNestedTitle';
+$config->system->dtable->fieldList['name']['flex']      = 4;
+$config->system->dtable->fieldList['name']['hint']      = true;
+$config->system->dtable->fieldList['name']['className'] = 'overflow-hidden';
 
 $config->system->dtable->fieldList['latestRelease']['title'] = $lang->system->latestRelease;
 $config->system->dtable->fieldList['latestRelease']['name']  = 'latestRelease';

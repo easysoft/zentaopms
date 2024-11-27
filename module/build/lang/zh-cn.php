@@ -68,6 +68,8 @@ $lang->build->emptyExecution = $lang->executionCommon . '不能为空。';
 $lang->build->linkedBuild    = '关联构建';
 $lang->build->createTest     = '提交测试';
 
+$lang->build->integratedLabel = '集成';
+
 $lang->build->notice = new stdclass();
 $lang->build->notice->changeProduct   = "已经关联{$lang->SRCommon}、Bug或提交测试单的构建，不能修改其所属{$lang->productCommon}";
 $lang->build->notice->changeExecution = "提交测试单的构建，不能修改其所属{$lang->executionCommon}";

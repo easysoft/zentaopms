@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+jsVar('systemLang', $lang->system);
 
 $canCreate  = hasPriv('system', 'create');
 $createLink = $this->createLink('system', 'create', 'productID=' . $productID);
