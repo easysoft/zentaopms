@@ -7,11 +7,11 @@ title=测试 cneModel->uninstallApp();
 timeout=0
 cid=1
 
-- 卸载CNE平台的卸载应用 code @0
-- 卸载CNE平台的卸载应用 code @0
-- 卸载CNE平台的卸载应用 code @0
-- 卸载CNE平台的卸载应用 code @0
-- 卸载CNE平台的卸载应用 code @0
+- 卸载CNE平台的卸载应用 code @400
+- 卸载CNE平台的卸载应用 code @400
+- 卸载CNE平台的卸载应用 code @400
+- 卸载CNE平台的卸载应用 code @400
+- 卸载CNE平台的卸载应用 code @400
  */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -32,8 +32,8 @@ $apiParams->chart     = $instance->chart ?? '';
 $apiParams->namespace = $instance->spaceData->k8space ?? '';
 $apiParams->channel   = $instance->channel ?? 'test';
 
-r($cneModel->uninstallApp($apiParams)) && p('code') && e('600');
-r($cneModel->uninstallApp($apiParams)) && p('code') && e('600');
-r($cneModel->uninstallApp($apiParams)) && p('code') && e('600');
-r($cneModel->uninstallApp($apiParams)) && p('code') && e('600');
-r($cneModel->uninstallApp($apiParams)) && p('code') && e('600');
+r($cneModel->uninstallApp($apiParams)) && p('code') && e('400');
+r($cneModel->uninstallApp($apiParams)) && p('code') && e('400');
+r($cneModel->uninstallApp($apiParams)) && p('code') && e('400');
+r($cneModel->uninstallApp($apiParams)) && p('code') && e('400');
+r($cneModel->uninstallApp($apiParams)) && p('code') && e('400');
