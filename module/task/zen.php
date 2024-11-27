@@ -596,7 +596,9 @@ class taskZen extends task
             $level = (int)$level;
             $levelNames[$level]['name']  = trim($this->post->name[$i]);
             $levelNames[$level]['index'] = $i;
-            if($level > 0 && empty($levelNames[$level - 1]['name'])) dao::$errors["name[" . $levelNames[$level - 1]['index'] . "]"] = $this->lang->task->error->emptyParentName;
+
+            $preLevel = $level - 1;
+            if($level > 0 && !empty($levelNames[$level]['name']) && empty($levelNames[$preLevel]['name'])) dao::$errors["name[" . $levelNames[$preLevel]['index'] . "]"] = $this->lang->task->error->emptyParentName;
         }
         if(dao::isError()) return false;
 
