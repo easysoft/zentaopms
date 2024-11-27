@@ -28,7 +28,7 @@ class thinkStepBase extends wg
         'quoteQuestions?: array'.    // 引用的问题
         'quotedQuestions?: attay',   // 被引用的问题
         'isResult?: bool=false',     // 是否是结果页
-        'preViewModel?: bool=false', // 预览模型
+        'wizard?: object',           // 模型数据
     );
 
     public static function getPageCSS(): ?string
@@ -108,8 +108,9 @@ class thinkStepBase extends wg
         global $lang, $app, $config;
         $app->loadLang('thinkstep');
         $app->loadLang('thinkrun');
-        list($quoteQuestions, $quotedQuestions, $step, $isRun, $preViewModel) = $this->prop(array('quoteQuestions', 'quotedQuestions', 'step', 'isRun', 'preViewModel'));
+        list($quoteQuestions, $quotedQuestions, $step, $isRun, $wizard) = $this->prop(array('quoteQuestions', 'quotedQuestions', 'step', 'isRun', 'wizard'));
 
+        $preViewModel = in_array($wizard->model, $config->thinkwizard->hiddenMenuModel);
         if(!empty($step->options->fields)) $step->options->fields = is_string($step->options->fields) ? explode(', ', $step->options->fields) : array_values((array)$step->options->fields);
 
         $questionType   = !empty($step) && $step->type == 'question' ? $step->options->questionType : '';
@@ -179,7 +180,8 @@ class thinkStepBase extends wg
                     );
                 }
             }
-            $detailTip[] = div
+            $showRunTips = (!empty($quotedQuestions) || !empty($sourceQuestion)) && !$preViewModel;
+            $detailTip[] = $showRunTips ? div
             (
                 setClass('bg-primary-50 text-gray p-2 mt-3 leading-normal'),
                 !empty($quotedQuestions) ? div
@@ -189,7 +191,7 @@ class thinkStepBase extends wg
                     $lang->thinkrun->tips->quotedTip
                 ) : null,
                 !empty($sourceQuestion) ? $sourceQuestionTip : null
-            );
+            ) : null;
         }
         if(!$isRun)
         {
@@ -213,14 +215,21 @@ class thinkStepBase extends wg
                     setClass('bg-primary-50 leading-normal p-2 mt-3'),
                     div(sprintf($lang->thinkstep->tips->optionsAreReferenced, $questionType == 'multicolumn' ? $lang->thinkstep->inputItem : $lang->thinkstep->label->option)),
                     $quotedItems
-                ) : null,
-                (!empty($quotedQuestions) && $preViewModel) ? div
-                (
-                    setClass('flex text-gray-400 mt-2 items-center text-sm ml-2'),
-                    icon(setClass('text-important mr-2'), 'about'),
-                    span(setClass('leading-6'), $lang->thinkwizard->previewSteps->quotedTips)
                 ) : null
             );
+        }
+        if($preViewModel)
+        {
+            $wizard->config   = !empty($wizard->config) ? $wizard->config : array();
+            $wizard->config   = is_string($wizard->config) ? json_decode($wizard->config, true) : $wizard->config;
+            $configureObjects = !empty($wizard->config['configureObjects']) ? json_decode($wizard->config['configureObjects'], true) : array();
+            $isAssignedObject = !empty($configureObjects['isAssignedObject']) ? $configureObjects['isAssignedObject'] : 0;
+            $detailTip[]      = (!empty($quotedQuestions) && !empty($isAssignedObject)) ? div
+            (
+                setClass('flex text-gray-400 mt-2 items-center text-sm ml-2'),
+                icon(setClass('text-important mr-2'), 'about'),
+                span(setClass('leading-6'), $lang->thinkwizard->previewSteps->quotedTips)
+            ) : null;
         }
         return $detailTip;
     }
