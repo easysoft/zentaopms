@@ -34,7 +34,11 @@ class thinkTableInput extends thinkQuestion
         $detailWg = parent::buildDetail();
         list($step, $fields, $supportAdd, $canAddRows, $mode, $inputType, $wizard) = $this->prop(array('step', 'fields', 'supportAdd', 'canAddRows', 'mode', 'inputType', 'wizard'));
         if($mode != 'detail') return array();
-        $preViewModel = in_array($wizard->model, $config->thinkwizard->hiddenMenuModel);
+
+        $wizard->config     = !empty($wizard->config) ? $wizard->config : array();
+        $wizard->config     = is_string($wizard->config) ? json_decode($wizard->config, true) : $wizard->config;
+        $configureDimension = !empty($wizard->config['configureDimension']) ? $wizard->config['configureDimension'] : array();
+        $canConfigureRatio  = !empty($configureDimension['canConfigureRatio']) ? $configureDimension['canConfigureRatio'] : '0';
 
         if($step)
         {
@@ -81,10 +85,10 @@ class thinkTableInput extends thinkQuestion
                                 'min'         => 1,
                                 'max'         => 100,
                                 'value'       => $value,
-                                'disabled'    => ($value && $preViewModel),
+                                'disabled'    => ($value && !$canConfigureRatio ),
                                 'placeholder' => $lang->thinkrun->pleaseInput
                             )),
-                            on::input('changeInput')
+                            on::input('changePercentInput')
                         ),
                         to::suffix($lang->thinkwizard->dimension->percentageSign),
                         set::suffixWidth(32)
