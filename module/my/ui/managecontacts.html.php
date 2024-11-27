@@ -86,7 +86,7 @@ div
                 (
                     span
                     (
-                        setClass('text-warning'),
+                        setClass('flex text-warning'),
                         icon('info')
                     ),
                     span
