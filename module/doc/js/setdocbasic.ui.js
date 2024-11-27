@@ -2,8 +2,9 @@ window.loadExecutions = function(e)
 {
     const officeTypes      = $('#setDocBasicForm').data('officeTypes');
     const docType          = $('#setDocBasicForm').data('docType');
-    const projectElement   = officeTypes.includes(docType) ? '.projectBox input[name="project"]': '#setDocBasicForm input[name="project"]';
-    const executionElement = officeTypes.includes(docType) ? '.executionBox input[name="execution"]': '#setDocBasicForm input[name="execution"]';
+    const isOfficeType     = officeTypes.includes(docType);
+    const projectElement   = isOfficeType ? '.projectBox input[name="project"]': '#setDocBasicForm input[name="project"]';
+    const executionElement = isOfficeType ? '.executionBox input[name="execution"]': '#setDocBasicForm input[name="execution"]';
     const projectID        = $(projectElement).val();
     if($(executionElement))
     {
@@ -20,7 +21,6 @@ window.loadExecutions = function(e)
     const link = $.createLink('doc', 'ajaxGetModules', 'objectType=project&objectID=' + projectID + '&type=doc');
     $.getJSON(link, function(data)
     {
-        const isOfficeType = officeTypes.includes(docType);
         const $libPicker = $(`${isOfficeType ? '' : '#setDocBasicForm'} [name='lib']`).zui('picker');
         $libPicker.render({items: data.libs});
         $libPicker.$.setValue('');

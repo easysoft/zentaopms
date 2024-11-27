@@ -14,7 +14,7 @@ formPanel
 (
     setID('setDocBasicForm'),
     setData('officeTypes', $this->config->doc->officeTypes),
-    setData('docType', isset($doc) ? $doc->users : 'undefined'),
+    setData('docType', isset($doc) ? $doc->type : 'undefined'),
     set::title($title),
     set::submitBtnText($isDraft ? $lang->doc->saveDraft : (empty($docID) ? $lang->doc->release : $lang->save)),
     on::change('[name=space],[name=product],[name=execution]')->call('loadObjectModules', jsRaw('event')),
