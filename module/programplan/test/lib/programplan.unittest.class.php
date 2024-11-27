@@ -513,4 +513,19 @@ class programplanTest
 
         return implode(array_keys($tasks));
     }
+
+    /**
+     * 将父阶段数据转移到第一个子阶段中。
+     * Sync parent data to first stage.
+     *
+     * @param  int    $executionID
+     * @param  int    $parentID
+     * @access public
+     * @return array
+     */
+    public function syncParentDataTest(int $executionID, int $parentID): array
+    {
+        $this->objectModel->syncParentData($executionID, $parentID);
+        return $this->objectModel->dao->select('*')->from(TABLE_TASK)->where('execution')->eq($executionID)->fetchAll();
+    }
 }
