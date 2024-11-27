@@ -157,6 +157,7 @@ class programplanZen extends programplan
         $this->view->programPlan        = $viewData->programPlan;
         $this->view->plans              = $viewData->plans;
         $this->view->planID             = $viewData->planID;
+        $this->view->syncData           = $viewData->syncData;
         $this->view->type               = 'lists';
         $this->view->executionType      = $viewData->executionType;
         $this->view->PMUsers            = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $viewData->project->PM);

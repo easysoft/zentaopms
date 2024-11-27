@@ -1749,4 +1749,17 @@ class project extends control
         $items = $this->workflowgroup->appendBuildinLabel($workflowGroups);
         return $this->send(array('items' => array_values($items), 'defaultValue' => key($workflowGroups)));
     }
+
+    /**
+     * 检查是否同步阶段数据。
+     * AJAX: check whether stage data is sync.
+     *
+     * @param  int $executionID
+     * @access public
+     * @return void
+     */
+    public function ajaxCheckHasStageData(int $executionID)
+    {
+        return print($this->project->hasStageData($executionID));
+    }
 }

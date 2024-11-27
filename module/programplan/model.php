@@ -324,10 +324,11 @@ class programplanModel extends model
      * @param  int    $projectID
      * @param  int    $productID
      * @param  int    $parentID
+     * @param  bool   $syncData
      * @access public
      * @return bool
      */
-    public function create(array $plans, int $projectID = 0, int $productID = 0, int $parentID = 0): bool
+    public function create(array $plans, int $projectID = 0, int $productID = 0, int $parentID = 0, bool $syncData = false): bool
     {
         if(empty($plans)) dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->programplan->name);
         if(dao::isError()) return false;
@@ -382,7 +383,7 @@ class programplanModel extends model
         if($project && $project->model == 'ipd') $this->dao->update(TABLE_PROJECT)->set('parallel')->eq($parallel)->where('id')->eq($projectID)->exec();
         if($updateUserViewIdList) $this->loadModel('user')->updateUserView($updateUserViewIdList, 'sprint');
         if($enabledPoints) $this->programplanTao->updatePoint($projectID, $enabledPoints);
-        if(!$this->isCreateTask($parentID) && $firstStageID) $this->programplanTao->syncParentData($firstStageID, $parentID);
+        if($syncData && $firstStageID) $this->programplanTao->syncParentData($firstStageID, $parentID);
         return true;
     }
 

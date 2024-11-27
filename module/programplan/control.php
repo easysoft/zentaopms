@@ -84,10 +84,11 @@ class programplan extends control
      * @param  int    $planID
      * @param  string $executionType
      * @param  string $from
+     * @param  bool   $syncData
      * @access public
      * @return void
      */
-    public function create(int $projectID = 0, int $productID = 0, int $planID = 0, string $executionType = 'stage', string $from = '')
+    public function create(int $projectID = 0, int $productID = 0, int $planID = 0, string $executionType = 'stage', string $from = '', bool $syncData = false)
     {
         $this->loadModel('review');
         $this->productID = $this->commonAction($projectID, $productID);
@@ -96,7 +97,7 @@ class programplan extends control
             $plans = $this->programplanZen->buildPlansForCreate($projectID, $planID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->programplan->create($plans, $projectID, $this->productID, $planID);
+            $this->programplan->create($plans, $projectID, $this->productID, $planID, $syncData);
             if(dao::isError())
             {
                 $errors = dao::getError();
@@ -143,6 +144,7 @@ class programplan extends control
         $viewData->productList   = $productList;
         $viewData->project       = $project;
         $viewData->plans         = !empty($executions) ? $executions : $plans;
+        $viewData->syncData      = $syncData;
 
         $this->programplanZen->buildCreateView($viewData);
     }

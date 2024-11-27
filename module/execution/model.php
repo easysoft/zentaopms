@@ -3739,12 +3739,7 @@ class executionModel extends model
      */
     public static function isClickable(object $execution, string $action): bool
     {
-        if($action == 'createChildStage')
-        {
-            global $dao;
-            $tasks = $dao->select('id')->from(TABLE_TASK)->where('execution')->eq($execution->rawID)->andWhere('deleted')->eq(0)->fetchPairs();
-            return commonModel::hasPriv('programplan', 'create') && empty($tasks) && $execution->type == 'stage';
-        }
+        if($action == 'createChildStage') return commonModel::hasPriv('programplan', 'create') && $execution->type == 'stage';
         if($action == 'createTask')  return commonModel::hasPriv('task', 'create') && commonModel::hasPriv('execution', 'create') && empty($execution->isParent);
         if(!commonModel::hasPriv('execution', $action)) return false;
 
@@ -4688,7 +4683,6 @@ class executionModel extends model
             $execution->parent      = (isset($executionList[$execution->parent]) && $execution->parent && $execution->grade > 1) ? 'pid' . (string)$execution->parent : '';
             $execution->isParent    = !empty($execution->isParent) or !empty($execution->tasks);
             $execution->actions     = array();
-            $execution->hasTask     = false;
 
             $canModify = common::canModify('execution', $execution);
             if($canModify && isset($this->config->project->execution->dtable->actionsRule[$execution->projectModel]))
@@ -4703,15 +4697,7 @@ class executionModel extends model
                         if($actionName == 'createTask' && !commonModel::hasPriv('task', 'create'))  continue;
                         if(!in_array($actionName, array('createTask', 'createChildStage')) && !commonModel::hasPriv('execution', $actionName)) continue;
                         $action = array('name' => $actionName, 'disabled' => $this->isClickable($execution, $actionName) ? false : true);
-                        if($actionName == 'createChildStage' && $action['disabled'])
-                        {
-                            if($execution->type == 'stage')
-                            {
-                                $action['disabled'] = false;
-                                $execution->hasTask = true;
-                            }
-                            if($execution->type != 'stage') $action['hint'] = $this->lang->programplan->error->notStage;
-                        }
+                        if($actionName == 'createChildStage' && $action['disabled'] && $execution->type != 'stage') $action['hint'] = $this->lang->programplan->error->notStage;
                         if(!$action['disabled']) break;
                         if($actionName == 'close' && $execution->status != 'closed') break;
                     }

@@ -956,14 +956,14 @@ class programplanTao extends programplanModel
         if(empty($executionID) || empty($parentID)) return false;
 
         $this->dao->update(TABLE_TASK)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->exec();
+        $this->dao->update(TABLE_EFFORT)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->exec();
         $this->dao->update(TABLE_PROJECTSTORY)->set('project')->eq($executionID)->where('project')->eq($parentID)->exec();
         $this->dao->update(TABLE_BUG)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->exec();
         $this->dao->update(TABLE_CASE)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->exec();
         $this->dao->update(TABLE_PROJECTCASE)->set('project')->eq($executionID)->where('project')->eq($parentID)->exec();
+        $this->dao->update(TABLE_BUILD)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->exec();
         $this->dao->update(TABLE_TESTTASK)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->exec();
         $this->dao->update(TABLE_TESTREPORT)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->exec();
-        $this->dao->update(TABLE_BUILD)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->exec();
-        $this->dao->update(TABLE_EFFORT)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->exec();
         $this->dao->update(TABLE_ACTION)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->andWhere('objectType')->ne('execution')->exec();
         $this->dao->update(TABLE_ACTIONRECENT)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->andWhere('objectType')->ne('execution')->exec();
         $this->dao->update(TABLE_DOCLIB)->set('execution')->eq($executionID)->where('type')->eq('execution')->andWhere('execution')->eq($parentID)->andWhere('main')->eq('0')->exec();
@@ -977,16 +977,6 @@ class programplanTao extends programplanModel
         $this->dao->update(TABLE_MODULE)->set('root')->eq($executionID)->where('root')->eq($parentID)->andWhere('type')->eq('task')->exec();
         $this->dao->update(TABLE_MODULE)->set('root')->eq($libID)->where('root')->eq($parentLibID)->andWhere('type')->eq('doc')->exec();
 
-        /* Update execution team. */
-        $today         = helper::today();
-        $execution     = $this->fetchByID($executionID);
-        $teamMembers   = $this->dao->select('account')->from(TABLE_TEAM)->where('root')->eq($executionID)->andWhere('type')->eq('execution')->fetchPairs('account');
-        $parentMembers = $this->dao->select('account,hours')->from(TABLE_TEAM)->where('root')->eq($parentID)->andWhere('type')->eq('execution')->fetchPairs();
-        foreach($parentMembers as $account => $hours)
-        {
-            if(isset($teamMembers[$account])) continue;
-            $this->dao->insert(TABLE_TEAM)->data(array('root' => $executionID, 'type' => 'execution', 'account' => $account, 'join' => $today, 'days' => $execution->days, 'hours' => $hours))->exec();
-        }
         return !dao::isError();
     }
 }

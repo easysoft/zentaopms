@@ -42,7 +42,7 @@ else
 }
 
 /* Generate product list dropdown menu while stage by product. */
-$fnGenerateStageByProductList = function() use ($productID, $productList, $project, $planID)
+$fnGenerateStageByProductList = function() use ($productID, $productList, $project, $planID, $syncData)
 {
     if(empty($productList) || $project->stageBy != 'product') return null;
 
@@ -51,7 +51,7 @@ $fnGenerateStageByProductList = function() use ($productID, $productList, $proje
     $items = array();
     foreach($productList as $key => $product)
     {
-        $items[] = array('text' => $product, 'active' => $productID == $key, 'url' => createLink('programplan', 'create', "projectID=$project->id&productID=$key&planID=$planID"));
+        $items[] = array('text' => $product, 'active' => $productID == $key, 'url' => createLink('programplan', 'create', "projectID=$project->id&productID=$key&planID=$planID&executionType=stage&from=&syncData={$syncData}"));
     }
 
     return dropdown
@@ -275,6 +275,7 @@ jsVar('planID',           $planID);
 jsVar('type',             $executionType);
 jsVar('project',          $project);
 jsVar('plans',            $plans);
+jsVar('syncData',         $syncData);
 jsVar('cropStageTip',     $lang->programplan->cropStageTip);
 jsVar('ipdStagePoint',    $project->model == 'ipd' ? $config->review->ipdReviewPoint : array());
 jsVar('attributeList',    $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList);

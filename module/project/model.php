@@ -2663,4 +2663,19 @@ class projectModel extends model
 
         return $output;
     }
+
+    /**
+     * 检查阶段是否有相关数据。
+     * Check whether the stage has related data.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return bool
+     */
+    public function hasStageData(int $executionID): bool
+    {
+        if(empty($executionID)) return false;
+
+        return false;
+    }
 }

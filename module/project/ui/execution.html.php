@@ -65,7 +65,7 @@ if(in_array($project->model, array('waterfall', 'waterfallplus')))
     $fieldList['actions']['actionsMap']['edit']['data-size'] = 'md';
     $fieldList['actions']['actionsMap']['edit']['url'] = createLink('programplan', 'edit', "stageID={rawID}&projectID={projectID}");
 
-    $fieldList['actions']['actionsMap']['createChildStage']['url'] = 'javascript:confirmCreateStage({projectID}, {productID}, {rawID}, {hasTask});';
+    $fieldList['actions']['actionsMap']['createChildStage']['url'] = 'javascript:confirmCreateStage({projectID}, {productID}, {rawID});';
 }
 if(!$this->cookie->showStage && !$this->cookie->showTask)
 {

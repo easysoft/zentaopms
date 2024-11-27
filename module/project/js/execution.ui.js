@@ -92,17 +92,21 @@ window.footerSummary = function(element, checkedIdList)
     return {html: (checkedIdList.length > 0 ? checkedExecSummary : pageExecSummary).replace('%total%', totalCount).replace('%wait%', waitCount).replace('%doing%', doingCount)};
 };
 
-window.confirmCreateStage = function(projectID, productID, executionID, hasTask)
+window.confirmCreateStage = function(projectID, productID, executionID)
 {
-    if(hasTask)
+    const link = $.createLink('project', 'ajaxCheckHasStageData', `executionID=${executionID}`);
+    $.get(link, function(hasData)
     {
-        zui.Modal.confirm(confirmCreateStage).then((res) =>
+        if(hasData)
         {
-            if(res) loadPage($.createLink('programplan', 'create', `projectID=${projectID}&productID=${productID}&planID=${executionID}`));
-        });
-    }
-    else
-    {
-        loadPage($.createLink('programplan', 'create', `projectID=${projectID}&productID=${productID}&planID=${executionID}`));
-    }
+            zui.Modal.confirm(confirmCreateStage).then((res) =>
+            {
+                if(res) loadPage($.createLink('programplan', 'create', `projectID=${projectID}&productID=${productID}&planID=${executionID}&executionType=stage&from=&syncData=true`));
+            });
+        }
+        else
+        {
+            loadPage($.createLink('programplan', 'create', `projectID=${projectID}&productID=${productID}&planID=${executionID}`));
+        }
+    })
 }
