@@ -3136,15 +3136,6 @@ $config->group->package->meetingroom->privs['meetingroom-view']        = array('
 $config->group->package->meetingroom->privs['meetingroom-batchCreate'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('meetingroom-browse'), 'recommend' => array('meetingroom-create'));
 $config->group->package->meetingroom->privs['meetingroom-batchEdit']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('meetingroom-browse'), 'recommend' => array('meetingroom-create'));
 
-$config->group->package->sqlBuilder = new stdclass();
-$config->group->package->sqlBuilder->order  = 20;
-$config->group->package->sqlBuilder->subset = 'featureconfig';
-$config->group->package->sqlBuilder->privs  = array();
-$config->group->package->sqlBuilder->privs['sqlbuilder-browseSQLView'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
-$config->group->package->sqlBuilder->privs['sqlbuilder-createSQLView'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('sqlbuilder-browseSQLView'), 'recommend' => array('sqlbuilder-deleteSQLView', 'sqlbuilder-editSQLView'));
-$config->group->package->sqlBuilder->privs['sqlbuilder-editSQLView']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('sqlbuilder-browseSQLView'), 'recommend' => array('sqlbuilder-createSQLView', 'sqlbuilder-deleteSQLView'));
-$config->group->package->sqlBuilder->privs['sqlbuilder-deleteSQLView'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('sqlbuilder-browseSQLView'), 'recommend' => array('sqlbuilder-createSQLView', 'sqlbuilder-editSQLView'));
-
 $config->group->package->designSetting = new stdclass();
 $config->group->package->designSetting->order  = 55;
 $config->group->package->designSetting->subset = 'modelconfig';
