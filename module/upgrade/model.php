@@ -5735,7 +5735,8 @@ class upgradeModel extends model
         /** @var array[] $chatTablePairs Associations of chats and partition tables, without main table. */
         $chatTablePairs = array();
 
-        ini_set('memory_limit', '1024M');
+
+        ini_set('memory_limit', '-1');
         set_time_limit(0);
 
         /* Fetch chat and message partition table associations. */
