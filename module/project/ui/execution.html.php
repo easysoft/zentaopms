@@ -21,6 +21,7 @@ jsVar('delayed', $lang->execution->delayed);
 jsVar('delayWarning', $lang->task->delayWarning);
 jsVar('pageExecSummary', $lang->execution->pageExecSummary);
 jsVar('checkedExecSummary', $lang->execution->checkedExecSummary);
+jsVar('confirmCreateStage', $lang->project->confirmCreateStage);
 
 $searchTask = strtolower($status) == 'bysearch';
 
@@ -63,6 +64,8 @@ if(in_array($project->model, array('waterfall', 'waterfallplus')))
 {
     $fieldList['actions']['actionsMap']['edit']['data-size'] = 'md';
     $fieldList['actions']['actionsMap']['edit']['url'] = createLink('programplan', 'edit', "stageID={rawID}&projectID={projectID}");
+
+    $fieldList['actions']['actionsMap']['createChildStage']['url'] = 'javascript:confirmCreateStage({projectID}, {productID}, {rawID}, {hasTask});';
 }
 if(!$this->cookie->showStage && !$this->cookie->showTask)
 {

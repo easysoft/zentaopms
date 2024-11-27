@@ -91,3 +91,18 @@ window.footerSummary = function(element, checkedIdList)
 
     return {html: (checkedIdList.length > 0 ? checkedExecSummary : pageExecSummary).replace('%total%', totalCount).replace('%wait%', waitCount).replace('%doing%', doingCount)};
 };
+
+window.confirmCreateStage = function(projectID, productID, executionID, hasTask)
+{
+    if(hasTask)
+    {
+        zui.Modal.confirm(confirmCreateStage).then((res) =>
+        {
+            if(res) loadPage($.createLink('programplan', 'create', `projectID=${projectID}&productID=${productID}&planID=${executionID}`));
+        });
+    }
+    else
+    {
+        loadPage($.createLink('programplan', 'create', `projectID=${projectID}&productID=${productID}&planID=${executionID}`));
+    }
+}

@@ -449,6 +449,7 @@ $lang->project->cannotChangeToCat       = "The {$lang->projectCommon} has conten
 $lang->project->cannotCancelCat         = "There are child {$lang->projectCommon}s of this {$lang->projectCommon}. You cannot cancel the parent {$lang->projectCommon} mark.";
 $lang->project->parentBeginEnd          = "The begin and end date of the parent {$lang->projectCommon}: %s ~ %s";
 $lang->project->parentBudget            = "The budget of the parent program: ";
+$lang->project->confirmCreateStage      = "Given that data has already been generated in this phase, are you certain you wish to proceed with the split? If you choose to continue, in order to maintain data consistency, we will assist you by recording the existing data in the initial {$lang->execution->common} of the split.";
 
 $lang->project->beginLessThanParent     = "The start date of the {$lang->projectCommon} is < the start date of the parent program: %s. ";
 $lang->project->endGreatThanParent      = "The finish date of the {$lang->projectCommon} is > the finish date of the parent program: %s. ";

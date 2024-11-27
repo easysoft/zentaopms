@@ -449,6 +449,7 @@ $lang->project->cannotChangeToCat       = "该{$lang->projectCommon}已经有实
 $lang->project->cannotCancelCat         = "该{$lang->projectCommon}下已经有子{$lang->projectCommon}，无法取消父{$lang->projectCommon}标记";
 $lang->project->parentBeginEnd          = "父{$lang->projectCommon}起止时间：%s ~ %s";
 $lang->project->parentBudget            = "父项目集预算：";
+$lang->project->confirmCreateStage      = "因该阶段下已经产生了数据，您确定要拆分吗？如果继续拆分，为保证数据一致性，我们会帮您把已有的数据记录在拆分的第一个{$lang->execution->common}中";
 
 $lang->project->beginLessThanParent     = "{$lang->projectCommon}的开始日期小于了父项目集的开始日期：%s。";
 $lang->project->endGreatThanParent      = "{$lang->projectCommon}的完成日期大于了父项目集的完成日期：%s。";
