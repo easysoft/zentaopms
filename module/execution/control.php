@@ -1596,6 +1596,7 @@ class execution extends control
 
         $this->view->title         = $this->view->execution->name . $this->lang->hyphen .$this->lang->execution->close;
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');
+        $this->view->from          = $from;
         $this->view->actions       = $this->loadModel('action')->getList($this->objectType, $executionID);
         $this->view->unclosedTasks = $this->loadModel('task')->getUnclosedTasksByExecution($executionID);
         $this->display();
