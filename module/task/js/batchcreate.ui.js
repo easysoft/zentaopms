@@ -158,9 +158,10 @@ function loadLanes(event)
     }
 }
 
-$('#formSettingBtn').on('click', '.checkbox-primary [value=story]', function()
+$(document).off('change', '#formSettingBtn input[value=story]').on('change', '#formSettingBtn input[value=story]', function()
 {
-    $('#formSettingBtn .checkbox-primary [value=preview], #formSettingBtn .checkbox-primary [value=copyStory]').prop('checked', $('#formSettingBtn .checkbox-primary [value=story]').prop('checked'));
+    const checked = $('#formSettingBtn input[value=story]').prop('checked');
+    $('#formSettingBtn input[value=preview], #formSettingBtn input[value=copyStory]').prop('checked', checked);
 })
 
 function checkBatchEstStartedAndDeadline(event)

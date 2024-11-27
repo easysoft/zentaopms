@@ -398,7 +398,14 @@ class taskZen extends task
         if(isset($customFields['story'])) $customFields['preview'] = $customFields['copyStory'] = '';
 
         $showFields = $this->config->task->custom->batchCreateFields;
-        if(strpos(",$showFields,", ',story,') !== false) $showFields .= ',preview,copyStory';
+        if(strpos(",$showFields,", ',story,') !== false)
+        {
+            $showFields .= ',preview,copyStory';
+        }
+        else
+        {
+            $showFields = trim(str_replace(array(',copyStory,', ',preview,'), ',', ",{$showFields},"), ',');
+        }
 
         $this->config->task->batchcreate->requiredFields = $this->config->task->create->requiredFields;
 
