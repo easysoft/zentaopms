@@ -664,7 +664,7 @@ class cneModel extends model
      * @access public
      * @return object
      */
-    public function getAppLogs(?object $instance, string $component = '', string $pod_name = '', string $container_name = '', bool $previous = false): ?object
+    public function getAppLogs(?object $instance, string $component = '', string $pod = '', string $container = '', bool $previous = false): ?object
     {
         if(!isset($this->app->user->account))
         {
@@ -680,8 +680,8 @@ class cneModel extends model
         $apiParams->tail      = 500;
 
         !empty($component)      && $apiParams->component      = $component;
-        !empty($pod_name)       && $apiParams->pod_name       = $pod_name;
-        !empty($container_name) && $apiParams->container_name = $container_name;
+        !empty($pod)            && $apiParams->pod_name       = $pod;
+        !empty($container)      && $apiParams->container_name = $container;
         $previous               && $apiParams->previous       = $previous;
 
         return $this->apiGet('/api/cne/app/logs', $apiParams, $this->config->CNE->api->headers);
