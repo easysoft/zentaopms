@@ -30,7 +30,10 @@ $().ready(function()
             {
                 $('#branch').prev('.form-label').html(data.branchName);
             }, 'json');
+
+            loadSystem(productID);
         }
+
     });
 
     $(document).on('change', 'input[name=isIntegrated]', function()
@@ -67,7 +70,6 @@ $().ready(function()
         }
     });
     loadBranches();
-    loadSystem();
     if(multipleProject)
     {
         window.waitDom('[name=execution]', function()
@@ -115,7 +117,6 @@ function loadProducts(executionID)
     });
 
     loadLastBuild();
-    loadSystem();
 }
 
 /**

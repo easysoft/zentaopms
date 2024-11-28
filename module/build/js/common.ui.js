@@ -35,7 +35,6 @@ window.loadSystem = function(productID)
 {
     productID = parseInt(productID);
     if(!productID) productID = $('input[name=product]').val();
-    if(typeof(productID) == "undefined") return;
 
     $.get($.createLink('build', 'ajaxGetSystemList', 'productID=' + productID), function(data)
     {
