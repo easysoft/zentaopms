@@ -565,7 +565,7 @@ class baseMao
                 if(is_string($value))  $value = explode(',', str_replace(' ', '', $value));
                 if(is_array($value))
                 {
-                    $rawResult = $this->cache->fetchAll($this->table, $value);
+                    $rawResult = $this->cache->fetchAll($this->table, array_filter($value));
                     break;
                 }
             }
