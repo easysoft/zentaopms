@@ -25,3 +25,20 @@ zenData('doc')->loadYaml('doc')->gen(2);
 zenData('module')->loadYaml('module')->gen(6);
 
 $executionIdList = array(0) + range(1, 14);
+
+global $tester;
+$projectModel = $tester->loadModel('project');
+r($projectModel->hasStageData($executionIdList[0]))  && p() && e('0'); // 测试传入执行ID为0的情况
+r($projectModel->hasStageData($executionIdList[1]))  && p() && e('0'); // 测试有子阶段的情况
+r($projectModel->hasStageData($executionIdList[2]))  && p() && e('0'); // 测试子阶段没有数据的情况
+r($projectModel->hasStageData($executionIdList[3]))  && p() && e('1'); // 测试有任务数据的情况
+r($projectModel->hasStageData($executionIdList[4]))  && p() && e('1'); // 测试有日志数据的情况
+r($projectModel->hasStageData($executionIdList[5]))  && p() && e('1'); // 测试有Bug数据的情况
+r($projectModel->hasStageData($executionIdList[6]))  && p() && e('1'); // 测试有需求数据的情况
+r($projectModel->hasStageData($executionIdList[7]))  && p() && e('1'); // 测试有用例数据的情况
+r($projectModel->hasStageData($executionIdList[8]))  && p() && e('1'); // 测试有版本数据的情况
+r($projectModel->hasStageData($executionIdList[9]))  && p() && e('1'); // 测试有测试单数据的情况
+r($projectModel->hasStageData($executionIdList[10])) && p() && e('1'); // 测试有测试报告数据的情况
+r($projectModel->hasStageData($executionIdList[11])) && p() && e('1'); // 测试有文档数据的情况
+r($projectModel->hasStageData($executionIdList[12])) && p() && e('1'); // 测试有非文档主库数据的情况
+r($projectModel->hasStageData($executionIdList[13])) && p() && e('1'); // 测试有模块数据的情况
