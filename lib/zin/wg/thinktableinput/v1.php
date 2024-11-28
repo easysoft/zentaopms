@@ -86,7 +86,7 @@ class thinkTableInput extends thinkQuestion
                                     'min'         => 1,
                                     'max'         => 100,
                                     'value'       => $value,
-                                    'disabled'    => ($value && !$canConfigureRatio),
+                                    'readonly'    => ($value && !$canConfigureRatio),
                                     'placeholder' => $lang->thinkrun->pleaseInput
                                 )),
                                 on::input('changePercentInput')
@@ -109,7 +109,6 @@ class thinkTableInput extends thinkQuestion
                         ) : null,
                     )
                 ),
-                (!empty($inputType) && $value && !$canConfigureRatio) ? formHidden('result[' . $index . ']', $value) : null
             );
             $index ++;
         }
