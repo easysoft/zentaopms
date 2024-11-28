@@ -210,11 +210,13 @@ class release extends control
             if(strpos(',' . trim($release->build, ',') . ',', ",{$releasedBuild},") === false) unset($builds[$releasedBuild]);
         }
 
+        $appList = $this->loadModel('system')->getList($release->product);
+        if($release->system && !isset($appList[$release->system])) $appList[$release->system] = $this->system->fetchByID($release->system);
         $this->view->title   = $this->view->product->name . $this->lang->hyphen . $this->lang->release->edit;
         $this->view->release = $release;
         $this->view->builds  = $builds;
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed');
-        $this->view->appList = $this->loadModel('system')->getList($release->product);
+        $this->view->appList = $appList;
 
         $this->display();
     }

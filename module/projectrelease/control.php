@@ -220,10 +220,14 @@ class projectrelease extends control
             if(!isset($bindBuilds[$releasedBuild])) unset($builds[$releasedBuild]);
         }
 
+        $appList = $this->view->appList;
+        if($release->system && !isset($appList[$release->system])) $appList[$release->system] = $this->system->fetchByID($release->system);
+
         $this->view->title   = $this->view->product->name . $this->lang->hyphen . $this->lang->release->edit;
         $this->view->release = $release;
         $this->view->builds  = $builds;
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed');
+        $this->view->appList = $appList;
         $this->display('release', 'edit');
     }
 
