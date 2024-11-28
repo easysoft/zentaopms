@@ -1414,6 +1414,7 @@ class docModel extends model
         $docContent->digest  = '';
         $docContent->version = 1;
         unset($doc->contentType);
+        unset($doc->html);
 
         return $this->insertSeperateDocs($doc, $docContent, $files);
     }
