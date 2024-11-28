@@ -38,6 +38,7 @@ class filter extends wg
             set::items($items),
             set::menu($menu),
             set::multiple($multiple),
+            set::toolbar($multiple),
             on::change()->do(<<<JS
             const hasUrl = () => \$this.zui().\$.props.items.hasOwnProperty('url');
             if(hasUrl()) \$this.zui().\$.props.items.data.values = \$this.zui().\$.value;
