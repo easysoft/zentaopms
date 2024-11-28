@@ -45,7 +45,14 @@ class thinkAppeals extends thinkModel
                 'bottom'     => 40,
                 'textStyle'  => array('color' => '#64758B', 'padding' => array(0, 0, 0, 16))
             ))),
-            set::radar(array('nameGap' => 32, 'indicator' => $this->getIndicator())),
+            set::radar(array(
+                'nameGap'   => 32,
+                'splitArea' => array('areaStyle' => array('color' => array('#EAF5FF'))),
+                'splitLine' => array('lineStyle' => array('color' => '#CFE7FE')),
+                'axisLine'  => array('lineStyle' => array('color' => '#CFE7FE')),
+                'axisLabel' => array('color' => '#9EA3B0'),
+                'indicator' => $this->getIndicator()
+            )),
             set::series
             (
                 array(
