@@ -92,3 +92,5 @@ UPDATE `zt_pivotdrill` SET `version` = '1';
 DELETE FROM `zt_cron` WHERE `command` = 'moduleName=misc&methodName=cleanCache';
 
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`) VALUES ('0', '2', '*', '*', '*', 'moduleName=system&methodName=initSystem', '初始化产品下应用数据', 'zentao', 1, 'normal');
+
+DELETE FROM `zt_object` WHERE `type` = 'taged' AND `deleted` = '1';
