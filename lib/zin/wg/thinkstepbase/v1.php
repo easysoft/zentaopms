@@ -122,10 +122,12 @@ class thinkStepBase extends wg
         $sourceQuestion = array();
         $sourceItems    = array();
 
-        $wizard->config   = !empty($wizard->config) ? $wizard->config : array();
-        $wizard->config   = is_string($wizard->config) ? json_decode($wizard->config, true) : $wizard->config;
-        $configureObjects = !empty($wizard->config['configureObjects']) ? json_decode($wizard->config['configureObjects'], true) : array();
-        $isAssignedObject = !empty($configureObjects['isAssignedObject']) ? $configureObjects['isAssignedObject'] : 0;
+        $wizard->config    = !empty($wizard->config) ? $wizard->config : array();
+        $wizard->config    = is_string($wizard->config) ? json_decode($wizard->config, true) : $wizard->config;
+        $configureObjects  = !empty($wizard->config['configureObjects']) ? json_decode($wizard->config['configureObjects'], true) : array();
+        $isAssignedObject  = !empty($configureObjects['isAssignedObject']) ? $configureObjects['isAssignedObject'] : 0;
+        $canConfigureRatio = !empty($step->options->canConfigureRatio) ? $step->options->canConfigureRatio : '0';
+        $showBuiltTip      = !$canConfigureRatio && !empty($step->options->canBuilt);
 
         if(!empty($quotedQuestions))
         {
@@ -225,7 +227,7 @@ class thinkStepBase extends wg
         }
         if($preViewModel)
         {
-            $detailTip[] = (!empty($quotedQuestions) && !empty($isAssignedObject)) ? div
+            $detailTip[] = ((!empty($quotedQuestions) && !empty($isAssignedObject)) || $showBuiltTip )? div
             (
                 setClass('flex text-gray-400 mt-2 items-center text-sm ml-2'),
                 icon(setClass('text-important mr-2'), 'about'),
