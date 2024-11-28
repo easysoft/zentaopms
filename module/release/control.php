@@ -326,7 +326,7 @@ class release extends control
      */
     public function delete(int $releaseID)
     {
-        $release = $this->fetchByID($releaseID);
+        $release = $this->release->fetchByID($releaseID);
 
         $this->release->delete(TABLE_RELEASE, $releaseID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
