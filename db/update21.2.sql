@@ -1,1 +1,1 @@
-ALTER TABLE `zt_doccontent` ADD `html` longtext DEFAULT NULL AFTER `content`;
+ALTER TABLE `zt_doccontent` ADD `rawContent` longtext DEFAULT NULL AFTER `content`;

@@ -1680,10 +1680,12 @@ class doc extends control
             $doc->object     = $object;
         }
 
+        if(!empty($doc->rawContent))                                $doc->content  = $doc->rawContent;
         if($doc->contentType === 'doc' && is_string($doc->content)) $doc->content  = htmlspecialchars_decode($doc->content);
         if(is_string($doc->title))                                  $doc->title    = htmlspecialchars_decode($doc->title);
         if(!empty($doc->keywords) && is_string($doc->keywords))     $doc->keywords = htmlspecialchars_decode($doc->keywords);
 
+        unset($doc->rawContent);
         if($docID) $this->doc->createAction($docID, 'view');
 
         $this->send($doc);

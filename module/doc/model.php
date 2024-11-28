@@ -811,7 +811,7 @@ class docModel extends model
 
         foreach($docs as $doc)
         {
-            if(empty($doc->html) && !empty($doc->content)) $ids[] = $doc->id;
+            if(empty($doc->rawContent) && !empty($doc->content)) $ids[] = $doc->id;
         }
         return $ids;
     }
@@ -826,7 +826,15 @@ class docModel extends model
      */
     public function migrateDoc(int $docID, int $version, string $html): bool
     {
-        $this->dao->update(TABLE_DOCCONTENT)->set('html')->eq($html)->where('doc')->eq($docID)->andWhere('version')->eq($version)->exec();
+        $docContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($docID)->andWhere('version')->eq($version)->fetch();
+        if(empty($docContent)) return false;
+
+        $rawContent = empty($docContent->rawContent) ? $docContent->content : $docContent->rawContent;
+        $this->dao->update(TABLE_DOCCONTENT)
+            ->set('rawContent')->eq($rawContent)
+            ->set('content')->eq($html)
+            ->where('id')->eq($docContent->id)
+            ->exec();
 
         if(dao::isError()) return false;
         return true;
@@ -1113,6 +1121,7 @@ class docModel extends model
         $doc->title          = isset($docContent->title) ? $docContent->title : $doc->title;
         $doc->digest         = isset($docContent->digest) ? $docContent->digest : '';
         $doc->content        = isset($docContent->content) ? $docContent->content : '';
+        $doc->rawContent     = isset($docContent->rawContent) ? $docContent->rawContent : '';
         $doc->contentType    = isset($docContent->type) ? $docContent->type : '';
         $doc->contentVersion = isset($docContent->version) ? $docContent->version : $version;
         if($doc->type != 'url' && $doc->contentType != 'markdown' && $doc->contentType != 'doc') $doc = $this->loadModel('file')->replaceImgURL($doc, 'content,draft');
@@ -1414,7 +1423,7 @@ class docModel extends model
         $docContent->digest  = '';
         $docContent->version = 1;
         unset($doc->contentType);
-        unset($doc->html);
+        unset($doc->rawContent);
 
         return $this->insertSeperateDocs($doc, $docContent, $files);
     }
@@ -1493,15 +1502,15 @@ class docModel extends model
         $doc->project   = $lib->project;
         $doc->execution = $lib->execution;
 
-        $docContent          = new stdclass();
-        $docContent->title   = $doc->title;
-        $docContent->content = $doc->content;
-        $docContent->type    = $doc->contentType;
-        $docContent->html    = isset($doc->html) ? $doc->html : '';
-        $docContent->digest  = '';
-        $docContent->version = 1;
+        $docContent             = new stdclass();
+        $docContent->title      = $doc->title;
+        $docContent->content    = $doc->content;
+        $docContent->type       = $doc->contentType;
+        $docContent->rawContent = isset($doc->rawContent) ? $doc->rawContent : '';
+        $docContent->digest     = '';
+        $docContent->version    = 1;
         unset($doc->contentType);
-        unset($doc->html);
+        unset($doc->rawContent);
 
         $requiredFields = $this->config->doc->create->requiredFields;
         if($doc->status == 'draft') $requiredFields = 'title';
@@ -1566,15 +1575,15 @@ class docModel extends model
 
         if($changed)
         {
-            $docContent          = new stdclass();
-            $docContent->doc     = $oldDoc->id;
-            $docContent->title   = $doc->title;
-            $docContent->content = isset($doc->content) ? $doc->content : '';
-            $docContent->files   = $oldDocContent->files;
-            $docContent->type    = isset($doc->contentType) ? $doc->contentType : $oldDocContent->type;
+            $docContent                 = new stdclass();
+            $docContent->doc            = $oldDoc->id;
+            $docContent->title          = $doc->title;
+            $docContent->content        = isset($doc->content) ? $doc->content : '';
+            $docContent->files          = $oldDocContent->files;
+            $docContent->type           = isset($doc->contentType) ? $doc->contentType : $oldDocContent->type;
             if($files) $docContent->files .= ',' . join(',', array_keys($files));
-            $docContent->html    = isset($doc->html) ? $doc->html : '';
-            $docContent->files   = trim($docContent->files, ',');
+            $docContent->rawContent     = isset($doc->rawContent) ? $doc->rawContent : '';
+            $docContent->files          = trim($docContent->files, ',');
             if(isset($doc->digest)) $docContent->digest = $doc->digest;
 
             if($oldDoc->status == 'draft') $this->dao->update(TABLE_DOCCONTENT)->data($docContent)->where('id')->eq($oldDocContent->id)->exec();
@@ -1587,7 +1596,7 @@ class docModel extends model
         }
 
         unset($doc->contentType);
-        unset($doc->html);
+        unset($doc->rawContent);
         $doc->draft = isset($doc->content) ? $doc->content : '';
         $this->dao->update(TABLE_DOC)->data($doc, 'content')
             ->autoCheck()
