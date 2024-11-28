@@ -324,11 +324,11 @@ class programplanModel extends model
      * @param  int    $projectID
      * @param  int    $productID
      * @param  int    $parentID
-     * @param  bool   $syncData
+     * @param  int    $syncData
      * @access public
      * @return bool
      */
-    public function create(array $plans, int $projectID = 0, int $productID = 0, int $parentID = 0, bool $syncData = false): bool
+    public function create(array $plans, int $projectID = 0, int $productID = 0, int $parentID = 0, int $syncData = 0): bool
     {
         if(empty($plans)) dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->programplan->name);
         if(dao::isError()) return false;

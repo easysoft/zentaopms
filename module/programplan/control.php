@@ -84,11 +84,11 @@ class programplan extends control
      * @param  int    $planID
      * @param  string $executionType
      * @param  string $from
-     * @param  bool   $syncData
+     * @param  int    $syncData
      * @access public
      * @return void
      */
-    public function create(int $projectID = 0, int $productID = 0, int $planID = 0, string $executionType = 'stage', string $from = '', bool $syncData = false)
+    public function create(int $projectID = 0, int $productID = 0, int $planID = 0, string $executionType = 'stage', string $from = '', int $syncData = 0)
     {
         $this->loadModel('review');
         $this->productID = $this->commonAction($projectID, $productID);

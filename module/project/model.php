@@ -2676,6 +2676,9 @@ class projectModel extends model
     {
         if(empty($executionID)) return false;
 
+        $childStage = $this->dao->select('id')->from(TABLE_EXECUTION)->where('parent')->eq($executionID)->andWhere('type')->in('sprint,stage,kanban')->andWhere('deleted')->eq(0)->limit(1)->fetch();
+        if(!empty($childStage)) return false;
+
         $task = $this->dao->select('id')->from(TABLE_TASK)->where('execution')->eq($executionID)->andWhere('deleted')->eq(0)->limit(1)->fetch();
         if(!empty($task)) return true;
 

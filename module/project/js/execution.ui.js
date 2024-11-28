@@ -101,7 +101,7 @@ window.confirmCreateStage = function(projectID, productID, executionID)
         {
             zui.Modal.confirm(confirmCreateStage).then((res) =>
             {
-                if(res) loadPage($.createLink('programplan', 'create', `projectID=${projectID}&productID=${productID}&planID=${executionID}&executionType=stage&from=&syncData=true`));
+                if(res) loadPage($.createLink('programplan', 'create', `projectID=${projectID}&productID=${productID}&planID=${executionID}&executionType=stage&from=&syncData=1`));
             });
         }
         else
