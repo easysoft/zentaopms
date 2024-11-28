@@ -125,6 +125,7 @@ class pivotZen extends pivot
      */
     protected function setNewMark(object $pivot, object $firstAction, array $builtins): void
     {
+        if($pivot->builtin == 1) return;
         // 版本没有改变，此时讨论是不是新透视表
         if(!$pivot->versionChange)
         {
@@ -202,7 +203,7 @@ class pivotZen extends pivot
         $driver = $pivot->driver;
 
         $this->pivot->isVersionChange($pivot);
-        if($mark)
+        if($mark && $pivot->builtin == 1)
         {
             $markVersion = $pivot->versionChange ? $this->pivot->getMaxVersion($pivot->id) : $pivot->version;
 

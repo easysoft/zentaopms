@@ -2947,14 +2947,8 @@ class pivotModel extends model
 
         foreach($pivots as $index => $pivot)
         {
-            if(isset($pivotMaxVersion[$pivot->id]) && $pivotMaxVersion[$pivot->id] != $pivot->version)
-            {
-                $pivots[$index]->versionChange = true;
-            }
-            else
-            {
-                $pivots[$index]->versionChange = false;
-            }
+            $maxVersion = zget($pivotMaxVersion, $pivot->id, '');
+            $pivots[$index]->versionChange = $maxVersion != $pivot->version && $pivot->builtin == 1;
         }
 
         return $isObject ? current($pivots) : $pivots;
