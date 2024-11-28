@@ -1611,6 +1611,32 @@ class doc extends control
     }
 
     /**
+     * Ajax: Migrate doc.
+     * Ajax: 迁移文档。
+     *
+     * @param  int    $docID
+     * @access public
+     * @return void
+     */
+    public function ajaxMigrateDoc(int $docID)
+    {
+        if(!common::hasPriv('doc', 'edit')) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorPrivilege));
+
+        if(empty($_POST)) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->unsupportedReq));
+
+        $doc = $this->doc->getByID($docID);
+        if(empty($doc)) return $this->send(array('result' => 'fail', 'message' => $this->lang->notFound));
+
+        if(!$this->doc->checkPrivDoc($doc)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorPrivilege));
+
+        $html = $this->post->html;
+        $result = $this->doc->migrateDoc($docID, $doc->version, $html);
+        if(!$result) return $this->send(array('result' => 'fail', 'message' => $this->lang->saveFailed));
+
+        $this->send(array('result' => 'success'));
+    }
+
+    /**
      * Ajax: Get doc data.
      * Ajax: 获取文档数据。
      *
