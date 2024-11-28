@@ -63,7 +63,7 @@ foreach($apps as $system)
             (
                 set::id("releases{$i}"),
                 set::name("releases[$i]"),
-                set::required(true),
+                set::required($app->rawMethod != 'edit'),
                 set::items(zget($appReleases, $appID, array())),
                 $appID ? set::value(current($linkedApps)) : null
             )
