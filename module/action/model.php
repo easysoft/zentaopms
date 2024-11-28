@@ -1103,7 +1103,7 @@ class actionModel extends model
         $shadowProducts   = $this->dao->select('id')->from(TABLE_PRODUCT)->where('shadow')->eq(1)->fetchPairs();
         $projectMultiples = $this->dao->select('id,type,multiple')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
         $docList          = $this->loadModel('doc')->getPrivDocs(array(), 0, 'all');
-        $apiList          = $this->loadModel('api')->getPrivApis();
+        $apiList          = $this->loadModel('api')->getPrivApis('all');
         $docLibList       = $this->doc->getLibs('hasApi');
         foreach($actions as $i => $action)
         {
