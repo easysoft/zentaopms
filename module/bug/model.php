@@ -451,7 +451,7 @@ class bugModel extends model
      * 解决一个bug。
      * Resolve a bug.
      *
-     * @param  object      $bugID
+     * @param  object      $bug
      * @param  array       $output
      * @access public
      * @return bool
