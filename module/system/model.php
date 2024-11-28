@@ -554,8 +554,8 @@ class systemModel extends model
                 if(dao::isError()) continue;
             }
 
-            $this->dao->update(TABLE_BUILD)->set('system')->eq($systemID)->where('product')->eq($productID)->exec();
-            $this->dao->update(TABLE_RELEASE)->set('system')->eq($systemID)->where('product')->eq($productID)->exec();
+            $this->dao->update(TABLE_BUILD)->set('system')->eq($systemID)->where('product')->eq($productID)->andWhere('system')->eq(0)->exec();
+            $this->dao->update(TABLE_RELEASE)->set('system')->eq($systemID)->where('product')->eq($productID)->andWhere('system')->eq(0)->exec();
         }
 
         if(!dao::isError()) $this->dao->delete()->from(TABLE_CRON)->where('command')->eq('moduleName=system&methodName=initSystem')->exec();
