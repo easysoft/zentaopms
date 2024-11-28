@@ -188,7 +188,7 @@ $lang->action->objectTypes['projectbuild']     = '构建';
 $lang->action->objectTypes['board']            = '白板';
 $lang->action->objectTypes['boardspace']       = '白板空间';
 $lang->action->objectTypes['productline']      = '产品线';
-$lang->action->objectTypes['system']           = '应用';
+$lang->action->objectTypes['system']           = $lang->product->system;
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
@@ -562,7 +562,7 @@ $lang->action->label->createbackup            = '创建了系统备份';
 $lang->action->label->deletebackup            = '删除了系统备份';
 $lang->action->label->restorebackup           = '还原了系统备份';
 $lang->action->label->upgradesystem           = '执行了系统升级';
-$lang->action->label->system                  = '应用';
+$lang->action->label->system                  = $lang->product->system;
 $lang->action->label->manualbackup            = '手动备份了';
 $lang->action->label->autobackup              = '自动备份了';
 $lang->action->label->openautobackup          = '开启自动备份';
