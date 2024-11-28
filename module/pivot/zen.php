@@ -125,8 +125,11 @@ class pivotZen extends pivot
      */
     protected function setNewMark(object $pivot, object $firstAction, array $builtins): void
     {
-        if($pivot->builtin == 1) return;
-        // 版本没有改变，此时讨论是不是新透视表
+        /* 如果不是内置透视表，则不需要展示“新”标签。*/
+        /* If the pivot is not built-in, no need to display the "new" tag. */
+        if($pivot->builtin == 0) return;
+        /* 版本没有改变，此时讨论是不是新透视表。*/
+        /* The version has not changed, so it is judged whether it is a new pivot. */
         if(!$pivot->versionChange)
         {
             if(!isset($builtins[$pivot->id])) return;
