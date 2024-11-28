@@ -1051,7 +1051,7 @@ class executionModel extends model
         $project = $this->loadModel('project')->getByID($projectID);
         if(empty($project)) return;
 
-        if(($project->model == 'waterfall' || $project->model == 'waterfallplus') && $parentID != $projectID)
+        if(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')) && $parentID != $projectID)
         {
             $this->app->loadLang('programplan');
             $parent = $this->getByID($parentID);
