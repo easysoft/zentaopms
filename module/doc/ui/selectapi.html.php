@@ -17,11 +17,12 @@ $apiType  = isset($params['apiType'])  ? $params['apiType']  : 'product';
 $products = $this->loadModel('product')->getPairs();
 $projects = $this->loadModel('project')->getPairsByProgram(0, 'all', false, 'order_asc');
 
+$libs = array();
 if($apiType == 'product')
 {
     $useType  = $apiType;
     $objectID = isset($params['objectID']) ? (int)$params['objectID'] : key($products);
-    $libPairs = $this->doc->getLibs($useType, '', '', (int)$objectID);
+    $libs     = $this->doc->getApiLibs(0, $useType, (int)$objectID);
 }
 elseif($apiType == 'project')
 {
@@ -31,14 +32,14 @@ elseif($apiType == 'project')
 
     $useType  = $executionID ? 'execution' : 'project';
     $useID    = $executionID ? $executionID : $objectID;
-    $libPairs = $this->doc->getLibs($useType, '', '', (int)$useID);
+    $libs     = $this->doc->getApiLibs(0, $useType, (int)$useID);
 }
 elseif($apiType == 'nolink')
 {
-    $libs     = $this->doc->getApiLibs(0, 'nolink');
-    $libPairs = array();
-    foreach($libs as $libID => $lib) $libPairs[$libID] = $lib->name;
+    $libs = $this->doc->getApiLibs(0, 'nolink');
 }
+$libPairs = array();
+foreach($libs as $libID => $lib) $libPairs[$libID] = $lib->name;
 
 $libID = isset($params['libID']) && isset($libPairs[$params['libID']]) ? $params['libID'] : key($libPairs);
 
