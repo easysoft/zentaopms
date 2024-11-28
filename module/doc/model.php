@@ -789,6 +789,33 @@ class docModel extends model
     }
 
     /**
+     * 获取需要迁移的文档ID列表。
+     * Get docs need to migrate.
+     *
+     * @param  string $spaceType
+     * @access public
+     * @return array
+     */
+    public function getMigrateDocs(string $spaceType)
+    {
+        $docs = $this->dao->select('t1.*,t2.title,t2.content,t2.type as contentType,t2.html')->from(TABLE_DOC)->alias('t1')
+            ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id=t2.doc && t1.version=t2.version')
+            ->where('t2.type')->eq('doc')
+            ->andWhere('t2.html')->in(NULL)
+            ->andWhere('t1.deleted')->eq('0')
+            ->fetchAll('id');
+
+        $docs = $this->filterPrivDocs($docs, $spaceType);
+        $ids  = array();
+
+        foreach($docs as $doc)
+        {
+            if(empty($doc->html) && !empty($doc->content)) $ids[] = $doc->id;
+        }
+        return $ids;
+    }
+
+    /**
      * 过滤出有权限的文档列表。
      * Filter docs which has privilege.
      *
