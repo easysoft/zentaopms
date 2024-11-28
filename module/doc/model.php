@@ -1524,6 +1524,7 @@ class docModel extends model
             $docContent->title   = $doc->title;
             $docContent->content = isset($doc->content) ? $doc->content : '';
             $docContent->files   = $oldDocContent->files;
+            $docContent->type    = isset($doc->contentType) ? $doc->contentType : $oldDocContent->type;
             if($files) $docContent->files .= ',' . join(',', array_keys($files));
             $docContent->files = trim($docContent->files, ',');
             if(isset($doc->digest)) $docContent->digest = $doc->digest;
@@ -1533,7 +1534,6 @@ class docModel extends model
             {
                 $doc->version        = $oldDoc->version + 1;
                 $docContent->version = $doc->version;
-                $docContent->type    = $oldDocContent->type;
                 $this->dao->replace(TABLE_DOCCONTENT)->data($docContent)->exec();
             }
         }
