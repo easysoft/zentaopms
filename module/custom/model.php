@@ -52,6 +52,7 @@ class customModel extends model
             }
             else
             {
+                if($customLang->module == 'productMenu' && $customLang->key == 'system') $this->lang->product->system = $customLang->value;
                 $processedLang[$customLang->module][$customLang->section][$customLang->key] = $customLang->value;
             }
         }
