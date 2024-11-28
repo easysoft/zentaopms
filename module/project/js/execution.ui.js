@@ -92,8 +92,9 @@ window.footerSummary = function(element, checkedIdList)
     return {html: (checkedIdList.length > 0 ? checkedExecSummary : pageExecSummary).replace('%total%', totalCount).replace('%wait%', waitCount).replace('%doing%', doingCount)};
 };
 
-window.confirmCreateStage = function(projectID, productID, executionID)
+window.confirmCreateStage = function(projectID, productID, executionID, hasChild)
 {
+    if(hasChild) loadPage($.createLink('programplan', 'create', `projectID=${projectID}&productID=${productID}&planID=${executionID}`));
     const link = $.createLink('project', 'ajaxCheckHasStageData', `executionID=${executionID}`);
     $.get(link, function(hasData)
     {
