@@ -121,6 +121,8 @@ class dev extends control
                 $method = 'work';
             }
             $moduleName = $module . 'SubMenu';
+
+            if($moduleName == 'qa' && $method = 'automation') $this->loadModel('zanode')->setMenu();
         }
 
         if($type == 'tag')
