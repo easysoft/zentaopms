@@ -74,5 +74,6 @@ docApp
     set::homeName($homeName),
     set::pager(array('recTotal' => $recTotal, 'recPerPage' => $recPerPage, 'page' => $pageID)),
     set::privs($privs),
+    set::migrateUrl(createLink('doc', 'ajaxGetMigrateDocs', "type=$type")),
     set('$options', jsRaw('window.setDocAppOptions'))
 );

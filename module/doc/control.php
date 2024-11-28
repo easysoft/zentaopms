@@ -1597,6 +1597,20 @@ class doc extends control
     }
 
     /**
+     * Ajax: Get migrate docs id list.
+     * Ajax: 获取迁移文档ID列表。
+     *
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function ajaxGetMigrateDocs(string $type)
+    {
+        $docs = $this->doc->getMigrateDocs($type);
+        echo json_encode($docs);
+    }
+
+    /**
      * Ajax: Get doc data.
      * Ajax: 获取文档数据。
      *
