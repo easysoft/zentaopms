@@ -62,6 +62,8 @@ foreach($tableData as $task)
 {
     $task->rawStatus = $task->status;
     $task->status    = $this->processStatus('task', $task);
+    $task->rawStory  = $task->story;
+    $task->story     = $task->storyTitle;
     if(helper::isZeroDate($task->deadline))   $task->deadline   = '';
     if(helper::isZeroDate($task->estStarted)) $task->estStarted = '';
 }

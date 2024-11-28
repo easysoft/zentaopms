@@ -165,15 +165,15 @@ $config->task->dtable->fieldList['activatedDate']['type']     = 'date';
 $config->task->dtable->fieldList['activatedDate']['sortType'] = true;
 $config->task->dtable->fieldList['activatedDate']['group']    = 8;
 
-$config->task->dtable->fieldList['storyTitle']['title']      = $lang->task->storyAB;
-$config->task->dtable->fieldList['storyTitle']['name']       = 'storyTitle';
-$config->task->dtable->fieldList['storyTitle']['type']       = 'desc';
-$config->task->dtable->fieldList['storyTitle']['sortType']   = true;
-$config->task->dtable->fieldList['storyTitle']['show']       = true;
-$config->task->dtable->fieldList['storyTitle']['group']      = 9;
-$config->task->dtable->fieldList['storyTitle']['link']       = array('url' => array('module' => 'story', 'method' => 'view', 'params' => 'id={story}'), 'className' => 'text-inherit');
-$config->task->dtable->fieldList['storyTitle']['dataSource'] = array('module' => 'story', 'method' => 'getExecutionStoryPairs', 'params' => ['executionID' => '$executionID', 'productID' => 0, 'branch' => 'all', 'moduleIdList' => '', 'type' => '', 'status' => 'active']);
-$config->task->dtable->fieldList['storyTitle']['data-app']   = $app->tab;
+$config->task->dtable->fieldList['story']['title']      = $lang->task->storyAB;
+$config->task->dtable->fieldList['story']['name']       = 'story';
+$config->task->dtable->fieldList['story']['type']       = 'desc';
+$config->task->dtable->fieldList['story']['sortType']   = true;
+$config->task->dtable->fieldList['story']['show']       = true;
+$config->task->dtable->fieldList['story']['group']      = 9;
+$config->task->dtable->fieldList['story']['link']       = array('url' => array('module' => 'story', 'method' => 'view', 'params' => 'id={rawStory}'), 'className' => 'text-inherit');
+$config->task->dtable->fieldList['story']['dataSource'] = array('module' => 'story', 'method' => 'getExecutionStoryPairs', 'params' => ['executionID' => '$executionID', 'productID' => 0, 'branch' => 'all', 'moduleIdList' => '', 'type' => '', 'status' => 'active']);
+$config->task->dtable->fieldList['story']['data-app']   = $app->tab;
 
 $config->task->dtable->fieldList['module']['title']      = 'module';
 $config->task->dtable->fieldList['module']['control']    = 'select';
