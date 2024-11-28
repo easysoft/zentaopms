@@ -18,6 +18,8 @@ jsVar('projectID', $projectID);
 jsVar('executionID', $executionID);
 jsVar('today', helper::today());
 jsVar('projectModel', isset($project->model) ? $project->model : '');
+jsVar('currentProduct', $productID);
+jsVar('hidden', $hidden);
 
 $integratedRow = '';
 if($app->tab == 'project' && !empty($multipleProject))

@@ -59,6 +59,7 @@ class buildZen extends build
         $this->view->executions  = $executions;
         $this->view->lastBuild   = $this->build->getLast($executionID, $projectID);
         $this->view->project     = $this->project->getByID($projectID);
+        $this->view->productID   = $productID;
         $this->display();
     }
 

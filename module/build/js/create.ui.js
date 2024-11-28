@@ -77,6 +77,10 @@ $().ready(function()
             loadProducts();
         })
     }
+    if(hidden == 'hide')
+    {
+        loadSystem(currentProduct);
+    }
 });
 
 /**
