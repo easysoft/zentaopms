@@ -230,7 +230,7 @@ window.handleRenderRow = function($row, index)
     if($nameTd.find('.input-group').length == 0)
     {
         $nameTd.find('.input-control').wrap('<div class="input-group"></div>');
-        $nameTd.find('.input-group').prepend('<div class="input-group-addon"></div>');
+        $nameTd.find('.input-group').prepend('<div class="input-group-addon max-w-100px"></div>');
     }
 
     /* 从行中查找层级文本展示元素： */
@@ -272,7 +272,7 @@ window.handleRenderRow = function($row, index)
     $row.attr('data-level', level);
 
     /* 创建隐藏表单域用于向服务器提交当前行层级信息。 */
-    $row.find(nestedTextSelector).text(text).append(`<input type="hidden" name="level[${index + 1}]" value="${level}">`);
+    $row.find(nestedTextSelector).attr('title', text).text(text).append(`<input type="hidden" name="level[${index + 1}]" value="${level}">`);
     $row.find('.form-batch-col-actions').addClass('is-pinned');
     if($prevRow.length && $prevRow.attr('data-level') == level) $prevRow.find('input[data-name="estimate"]').prop('readonly', false); // 如果没有子任务，重置预计字段的可编辑状态。
     if(edition == 'open' && (level > 0 || parentID)) $row.find('button[data-type=addSub]').attr('disabled', 'disabled');
