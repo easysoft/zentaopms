@@ -1,0 +1,23 @@
+title: zt_project
+author: tianshujie
+version: '1.0'
+fields:
+    - field: id
+      range: 1-100
+    - field: project
+      range: '0,1{99}'
+    - field: name
+      range: '瀑布项目1,阶段1,阶段1子阶段1,阶段2,阶段3,阶段4,阶段5,阶段6,阶段7,阶段8,阶段9,阶段10,阶段11,阶段12'
+    - field: parent
+      range: '0,1,2,1{97}'
+    - field: model
+      range: 'waterfall,[]{99}'
+    - field: type
+      range: 'project,stage{99}'
+    - field: percent
+      range: 1-6
+      prefix: '2'
+    - field: days
+      range: 30
+    - field: status
+      range: 'doing{3},wait{97}'
