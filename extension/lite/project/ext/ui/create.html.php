@@ -41,7 +41,7 @@ formPanel
             set::url('#copyProjectModal'),
             set('data-destroyOnHide', true),
             set('data-toggle', 'modal'),
-            set('data-size', 'sm'),
+            set('data-size', 'md'),
             $lang->project->copy
         )
     ),
