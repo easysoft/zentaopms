@@ -801,7 +801,7 @@ class docModel extends model
         $docs = $this->dao->select('t1.*,t2.title,t2.content,t2.type as contentType,t2.html')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id=t2.doc && t1.version=t2.version')
             ->where('t2.type')->eq('doc')
-            ->andWhere('t2.html')->in(NULL)
+            ->andWhere('t2.html')->in(null)
             ->andWhere('t1.deleted')->eq('0')
             ->fetchAll('id');
 
