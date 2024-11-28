@@ -976,6 +976,7 @@ class projectModel extends model
         $this->config->build->search['actionURL'] = helper::createLink($this->app->rawModule, $this->app->rawMethod, "projectID=$projectID&type=bysearch&queryID=myQueryID");
         $this->config->build->search['queryID']   = $queryID;
         $this->config->build->search['params']['product']['values'] = $products;
+        $this->config->build->search['params']['system']['values']  = $this->loadModel('system')->getPairs();
 
         $this->loadModel('search')->setSearchParams($this->config->build->search);
         return true;

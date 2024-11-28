@@ -12,6 +12,7 @@ $config->build->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools')
 global $lang, $app;
 $config->build->search['module']             = 'build';
 $config->build->search['fields']['name']     = $lang->build->nameAB;
+$config->build->search['fields']['system']   = $lang->build->system;
 $config->build->search['fields']['id']       = $lang->build->id;
 $config->build->search['fields']['product']  = $lang->build->product;
 $config->build->search['fields']['scmPath']  = $lang->build->scmPath;
@@ -21,6 +22,7 @@ $config->build->search['fields']['builder']  = $lang->build->builder;
 $config->build->search['fields']['desc']     = $lang->build->desc;
 
 $config->build->search['params']['name']     = array('operator' => 'include', 'control' => 'input',  'values' => '');
+$config->build->search['params']['system']   = array('operator' => '=',       'control' => 'select', 'values' => array());
 $config->build->search['params']['product']  = array('operator' => '=',       'control' => 'select', 'values' => 'products');
 $config->build->search['params']['scmPath']  = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->build->search['params']['filePath'] = array('operator' => 'include', 'control' => 'input',  'values' => '');
