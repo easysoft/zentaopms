@@ -104,7 +104,7 @@ class featureBar extends wg
 
                     $subItems[] = $subItem;
 
-                    if($key === $current || ($current == 'bysearch' && $key == $param))
+                    if($key === $current || ($current == 'bysearch' && $key === $param))
                     {
                         $isActive   = true;
                         $activeText = $text;
