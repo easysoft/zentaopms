@@ -1863,7 +1863,7 @@ class pivotModel extends model
         $data->array  = array();
         $data->drills = array();
 
-        if(!isset($settings['columns'])) return array(data, array());
+        if(!isset($settings['columns'])) return array($data, array());
 
         $filters = $this->processQueryFilterDefaults($filters);
         /* Replace the variable with the default value. */
