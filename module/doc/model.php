@@ -3275,7 +3275,7 @@ class docModel extends model
     {
         $allLibs          = $this->getLibs('hasApi');
         $hasPrivDocIdList = $this->getPrivDocs(array(), 0, 'all');
-        $apiList          = $this->loadModel('api')->getPrivApis();
+        $apiList          = $this->loadModel('api')->getPrivApis('all');
         $actionCondition  = $this->loadModel('action')->getActionCondition('doc');
 
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
