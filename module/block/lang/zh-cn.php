@@ -230,7 +230,7 @@ $lang->block->availableBlocks['product']     = $lang->productCommon . '列表';
 $lang->block->availableBlocks['execution']   = $lang->execution->common . '列表';
 $lang->block->availableBlocks['plan']        = "计划列表";
 $lang->block->availableBlocks['release']     = '发布列表';
-$lang->block->availableBlocks['build']       = '版本列表';
+$lang->block->availableBlocks['build']       = '构建列表';
 $lang->block->availableBlocks['testcase']    = '用例';
 $lang->block->availableBlocks['testtask']    = '测试单';
 $lang->block->availableBlocks['risk']        = '风险';
@@ -288,7 +288,7 @@ $lang->block->modules['execution']->availableBlocks['statistic'] = $lang->execut
 $lang->block->modules['execution']->availableBlocks['overview']  = $lang->execution->common . '总览';
 $lang->block->modules['execution']->availableBlocks['list']      = $lang->execution->common . '列表';
 $lang->block->modules['execution']->availableBlocks['task']      = '任务列表';
-$lang->block->modules['execution']->availableBlocks['build']     = '版本列表';
+$lang->block->modules['execution']->availableBlocks['build']     = '构建列表';
 
 $lang->block->modules['qa'] = new stdclass();
 $lang->block->modules['qa']->availableBlocks['statistic'] = "{$lang->productCommon}的测试统计";

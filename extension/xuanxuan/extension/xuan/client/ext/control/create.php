@@ -26,7 +26,12 @@ class client extends control
             $this->post->set('desc', mb_substr($this->post->desc, 0, 100));
 
             $this->client->create();
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError())
+            {
+                $error = dao::getError();
+                while(is_array($error)) $error = current($error);
+                return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert({message: {html: \"$error\"}, size: 'sm'})"));
+            }
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
         }

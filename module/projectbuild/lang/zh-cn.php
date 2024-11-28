@@ -9,12 +9,12 @@
  * @version     $Id: zh-cn.php 4129 2020-11-27 01:58:14Z wwccss $
  * @link        https://www.zentao.net
  */
-$lang->projectbuild->common           = $lang->projectCommon . '版本';
-$lang->projectbuild->browse           = '版本列表';
-$lang->projectbuild->create           = "创建版本";
-$lang->projectbuild->edit             = "编辑版本";
-$lang->projectbuild->delete           = "删除版本";
-$lang->projectbuild->view             = "版本详情";
+$lang->projectbuild->common           = $lang->projectCommon . '构建';
+$lang->projectbuild->browse           = '构建列表';
+$lang->projectbuild->create           = "创建构建";
+$lang->projectbuild->edit             = "编辑构建";
+$lang->projectbuild->delete           = "删除构建";
+$lang->projectbuild->view             = "构建详情";
 $lang->projectbuild->linkStory        = "关联{$lang->SRCommon}";
 $lang->projectbuild->linkBug          = "关联Bug";
 $lang->projectbuild->unlinkStory      = "移除{$lang->SRCommon}";

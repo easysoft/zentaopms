@@ -33,81 +33,121 @@ $getProductGroup = function($product): string
     return 'other';
 };
 
-/**
- * 定义每个分组下的选项数据列表。
- * Define the grouped data list.
- */
-$data = array('my' => array(), 'other' => array(), 'closed' => array());
-
-/**
- * 定义产品所属分组。
- * Define the group of product.
- */
-$productGroup = array();
-
-/* 处理分组数据。Process grouped data. */
-foreach($products as $programID => $programProducts)
+if($extra === 'selectmode')
 {
-    $programItem = array();
-    $programItem['id']    = $programID;
-    $programItem['type']  = 'program';
-    $programItem['text']  = $programID ? zget($programs, $programID) : $lang->product->emptyProgram;
-    $programItem['items'] = array();
+    $data = array();
 
-    if(!$programID) $programItem['label'] = '';
-
-    foreach($programProducts as $index => $product)
+    /* 处理分组数据。Process grouped data. */
+    foreach($products as $programID => $programProducts)
     {
-        $group = $productGroup[$product->id] = $getProductGroup($product);
-        $name  = (in_array($this->config->systemMode, array('ALM', 'PLM')) and $product->line) ? zget($lines, $product->line, '') . ' / ' . $product->name : $product->name;
-
-        $item = array();
-        $item['id']       = $product->id;
-        $item['text']     = $product->name;
-        $item['active']   = $productID == $product->id;
-        $item['keys']     = zget(common::convert2Pinyin(array($product->name)), $product->name, '');
-        $item['data-app'] = $app->tab;
-        $item['isPO']     = $product->PO == $this->app->user->account;
-
-        if($config->systemMode == 'light' || $config->vision == 'or')
+        if(empty($data[$programID]))
         {
-            $data[$group][] = $item;
+            $programItem = array();
+            $programItem['id']       = $programID;
+            $programItem['text']     = $programID ? zget($programs, $programID) : $lang->product->emptyProgram;
+            $programItem['subtitle'] = $lang->program->common;
+            $programItem['items']    = array();
+
+            $data[$programID] = $programItem;
         }
         else
         {
-            if(!isset($data[$group][$programID])) $data[$group][$programID] = $programItem;
-            $data[$group][$programID]['items'][] = $item;
+            $programItem = $data[$programID];
+        }
+
+
+        foreach($programProducts as $index => $product)
+        {
+            $item = array();
+            $item['id']    = $product->id;
+            $item['text']  = $product->name;
+            $item['keys']  = zget(common::convert2Pinyin(array($product->name)), $product->name, '');
+            $item['value'] = $product->id;
+
+            $data[$programID]['items'][] = $item;
         }
     }
+
+    $data = array_values($data);
+    renderJson($data);
 }
+else
+{
+    /**
+     * 定义每个分组下的选项数据列表。
+     * Define the grouped data list.
+     */
+    $data = array('my' => array(), 'other' => array(), 'closed' => array());
 
-/* 将分组数据转换为索引数组。Format grouped data to indexed array. */
-foreach($data as $key => $value) $data[$key] = array_values($value);
+    /**
+     * 定义产品所属分组。
+     * Define the group of product.
+     */
+    $productGroup = array();
 
-/**
- * 定义每个分组名称信息，包括可展开的已关闭分组。
- * Define every group name, include expanded group.
- */
-$tabs = array();
-$tabs[] = array('name' => 'my',     'text' => $lang->product->mine, 'active' => zget($productGroup, $productID, '') === 'my');
-$tabs[] = array('name' => 'other',  'text' => $lang->product->other, 'active' => zget($productGroup, $productID, '') === 'other');
-$tabs[] = array('name' => 'closed', 'text' => $lang->product->closedProducts);
+    /* 处理分组数据。Process grouped data. */
+    foreach($products as $programID => $programProducts)
+    {
+        $programItem = array();
+        $programItem['id']    = $programID;
+        $programItem['type']  = 'program';
+        $programItem['text']  = $programID ? zget($programs, $programID) : $lang->product->emptyProgram;
+        $programItem['items'] = array();
 
-/**
- * 定义最终的 JSON 数据。
- * Define the final json data.
- */
-$json = array();
-$json['data']       = $data;
-$json['tabs']       = $tabs;
-$json['searchHint'] = $lang->searchAB;
-$json['link']       = array('product' => sprintf($link, '{id}'));
-$json['labelMap']   = array('program' => $lang->program->common);
-$json['expandName'] = 'closed';
-$json['itemType']   = 'product';
+        if(!$programID) $programItem['label'] = '';
 
-/**
- * 渲染 JSON 字符串并发送到客户端。
- * Render json data to string and send to client.
- */
-renderJson($json);
+        foreach($programProducts as $index => $product)
+        {
+            $group = $productGroup[$product->id] = $getProductGroup($product);
+
+            $item = array();
+            $item['id']       = $product->id;
+            $item['text']     = $product->name;
+            $item['active']   = $productID == $product->id;
+            $item['keys']     = zget(common::convert2Pinyin(array($product->name)), $product->name, '');
+            $item['data-app'] = $app->tab;
+            $item['isPO']     = $product->PO == $this->app->user->account;
+
+            if($config->systemMode == 'light' || $config->vision == 'or')
+            {
+                $data[$group][] = $item;
+            }
+            else
+            {
+                if(!isset($data[$group][$programID])) $data[$group][$programID] = $programItem;
+                $data[$group][$programID]['items'][] = $item;
+            }
+        }
+    }
+
+    /* 将分组数据转换为索引数组。Format grouped data to indexed array. */
+    foreach($data as $key => $value) $data[$key] = array_values($value);
+
+    /**
+     * 定义每个分组名称信息，包括可展开的已关闭分组。
+     * Define every group name, include expanded group.
+     */
+    $tabs = array();
+    $tabs[] = array('name' => 'my',     'text' => $lang->product->mine, 'active' => zget($productGroup, $productID, '') === 'my');
+    $tabs[] = array('name' => 'other',  'text' => $lang->product->other, 'active' => zget($productGroup, $productID, '') === 'other');
+    $tabs[] = array('name' => 'closed', 'text' => $lang->product->closedProducts);
+
+    /**
+     * 定义最终的 JSON 数据。
+     * Define the final json data.
+     */
+    $json = array();
+    $json['data']       = $data;
+    $json['tabs']       = $tabs;
+    $json['searchHint'] = $lang->searchAB;
+    $json['link']       = array('product' => sprintf($link, '{id}'));
+    $json['labelMap']   = array('program' => $lang->program->common);
+    $json['expandName'] = 'closed';
+    $json['itemType']   = 'product';
+
+    /**
+     * 渲染 JSON 字符串并发送到客户端。
+     * Render json data to string and send to client.
+     */
+    renderJson($json);
+}

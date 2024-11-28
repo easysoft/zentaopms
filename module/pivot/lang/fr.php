@@ -27,6 +27,9 @@ $lang->pivot->story        = 'Story';
 $lang->pivot->clear        = 'Clear';
 $lang->pivot->keep         = 'Keep';
 $lang->pivot->new          = 'New';
+$lang->pivot->newVersion   = 'New version';
+$lang->pivot->version      = 'Version';
+$lang->pivot->viewVersion  = 'View version';
 
 $lang->pivot->accessDenied  = 'You do not have access to this pivot';
 $lang->pivot->acl = 'Access Control';
@@ -40,7 +43,8 @@ $lang->pivot->otherLang->productType   = 'Product type';
 
 $lang->pivot->cancelAndBack = 'Cancel save and back';
 
-$lang->pivot->deleteTip = 'Are you sure you want to delete it ?';
+$lang->pivot->deleteTip         = 'Are you sure you want to delete it ?';
+$lang->pivot->disableVersionTip = 'The pivot table in draft mode does not support the version list popup at the moment.';
 
 $lang->pivot->rangeList['current'] = 'Current Page';
 $lang->pivot->rangeList['all']     = 'All Data';
@@ -492,5 +496,11 @@ $lang->pivot->drill->activatedBug     = "Activated Bug Count";
 $lang->pivot->drill->auto             = "Auto";
 $lang->pivot->drill->designChangedTip = 'Setting columns field change, please check';
 
+$lang->pivot->versionNumber   = 'Version';
+$lang->pivot->versionDesc     = 'Desc';
 $lang->pivot->tipNewVersion   = 'Has New Version!';
 $lang->pivot->checkNewVersion = 'Click to check';
+$lang->pivot->tipVersions     = 'This is the pivot of this version. You can click the button to switch version. the pivot and designer config will be changed after switch version.';
+$lang->pivot->tipNoVersions   = 'There are no other versions of this pivot';
+$lang->pivot->switchTo        = 'Switch To This Version';
+$lang->pivot->noDesc          = 'No Description';

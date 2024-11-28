@@ -31,7 +31,8 @@ window.renderCell = function(result, {col, row})
 
     if(col.name == 'name' && row.data.execution == 0)
     {
-        result[result.length] = {html: "<span class='icon icon-code-fork text-gray' title='" + integratedTip + "'></span>"};
+        result[0].props.className = 'overflow-hidden';
+        result[result.length] = {html:'<span class="label gray-pale rounded-xl clip">' + integratedTip + '</span>', className:'flex items-end', style:{flexDirection:"column"}};
         return result;
     }
 

@@ -1,0 +1,7 @@
+.score-content .check-items{column-gap: 2px;}
+.score-content.score-5 .check-items .item-control{width: calc(20% - 2px); text-align: center;}
+.score-content.score-10 .check-items .item-control{width: calc(10% - 2px); text-align: center;}
+.score-content .check-items .item-control{border-color:rgba(var(--color-primary-100-rgb),var(--tw-border-opacity));}
+.score-content .check-items .item-control:hover{background: rgba(var(--color-primary-100-rgb),var(--tw-bg-opacity));}
+.score-content .check-items .item-control .radio-primary{display: none;}
+.score-content .check-items .item-control.is-checked{background: rgba(var(--color-primary-500-rgb),var(--tw-bg-opacity)); color: rgba(var(--color-white-rgb),var(--tw-text-opacity));}

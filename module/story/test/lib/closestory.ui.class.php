@@ -24,17 +24,16 @@ class closeStoryTester extends tester
         $form->dom->btn($this->lang->story->close)->click();  //点击关闭需求按钮
 
         $form->wait(1);
-
         $form->dom->closedReason->picker($closeReason); //选择关闭原因
         $form->dom->getElement("//*[@id='zin_story_close_{$storyID}_form']/div[4]/div/button")->click();
         $form->wait(1);
 
-        $viewPage = $this->loadPage('story', 'view');
+        $viewPage = $this->loadPage();
         if($viewPage->dom->status->getText() != '已关闭') return $this->failed('需求状态不正确');
         $viewPage->dom->btn($this->lang->story->legendLifeTime)->click();
         if($viewPage->dom->closeReason->getText() != $closeReason) return $this->failed('需求关闭原因不正确');
 
-        return $this->success('关闭需求成功');
+        return $this->success('关闭研发需求成功');
     }
 
     /**
@@ -66,6 +65,6 @@ class closeStoryTester extends tester
         $viewPage->dom->btn($this->lang->story->legendLifeTime)->click();
         if($viewPage->dom->closeReason->getText() != $closeReason) return $this->failed('需求关闭原因不正确');
 
-        return $this->success('批量关闭需求成功');
+        return $this->success('批量关闭研发需求成功');
     }
 }

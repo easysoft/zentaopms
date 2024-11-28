@@ -53,6 +53,41 @@ class markModel extends model
         return $objects;
     }
 
+    public function isMark(string $objectType, int $objectID, string $version, string $mark = 'view')
+    {
+        return $this->dao->select('*')->from(TABLE_MARK)
+            ->where('objectType')->eq($objectType)
+            ->andWhere('objectID')->in($objectID)
+            ->andWhere('version')->eq($version)
+            ->andWhere('account')->eq($this->app->user->account)
+            ->andWhere('mark')->eq($mark)
+            ->fetchAll();
+    }
+
+    /**
+     * Judge has mark.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  string $version
+     * @param  string $mark
+     * @param  bool   $onlyMajor
+     * @access public
+     * @return bool
+     */
+    public function hasMark(string $objectType, int $objectID, string $version = 'all', string $mark = 'view', bool $onlyMajor = false)
+    {
+        $mark = $this->dao->select('id')->from(TABLE_MARK)
+            ->where('objectType')->eq($objectType)
+            ->andWhere('objectID')->in($objectID)
+            ->beginIF($version != 'all')->andWhere('version')->eq($version)->fi()
+            ->beginIF($onlyMajor)->andWhere('version')->notlike('%.%')->fi()
+            ->andWhere('account')->eq($this->app->user->account)
+            ->andWhere('mark')->eq($mark)
+            ->fetch();
+        return !empty($mark);
+    }
+
     /**
      * 设置对象的标记。
      * Set object marks.

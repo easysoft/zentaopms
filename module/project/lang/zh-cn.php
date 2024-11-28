@@ -38,7 +38,7 @@ $lang->project->execution           = '执行列表';
 $lang->project->bug                 = 'Bug列表';
 $lang->project->testcase            = '用例列表';
 $lang->project->testtask            = '测试单';
-$lang->project->build               = '版本';
+$lang->project->build               = '构建';
 $lang->project->updateOrder         = '排序';
 $lang->project->sort                = "{$lang->projectCommon}排序";
 $lang->project->whitelist           = "{$lang->projectCommon}白名单";
@@ -241,7 +241,7 @@ $lang->project->createExecution        = "该{$lang->projectCommon}下没有{$la
 $lang->project->unlinkExecutionMember  = "该用户参与了%s%s%s个{$lang->execution->common}，是否同时将其移除？（该用户所产生的数据不会受影响。）";
 $lang->project->unlinkExecutionMembers = "移除的团队成员还参与了{$lang->projectCommon}下的执行，是否同步从执行团队中移除？";
 $lang->project->productTip             = "点击新建{$lang->productCommon}后，{$lang->projectCommon}将不会关联已选中的{$lang->productCommon}。";
-$lang->project->noDevStage             = "该{$lang->projectCommon}下没有研发类型的阶段，或者您没有权限访问，暂时不支持创建版本。";
+$lang->project->noDevStage             = "该{$lang->projectCommon}下没有研发类型的阶段，或者您没有权限访问，暂时不支持创建构建。";
 $lang->project->budgetOverrun          = "{$lang->projectCommon}的预算超出了项目集的剩余预算：%s。";
 $lang->project->disabledInputTip       = '请先取消%s';
 $lang->project->linkRepoFailed         = '关联代码库失败';
@@ -342,7 +342,7 @@ $lang->project->featureBar['bug']['unresolved'] = '未解决';
 $app->loadLang('testcase');
 $lang->project->featureBar['testcase'] = $lang->testcase->featureBar['browse'];
 
-$lang->project->featureBar['build']['all'] = '全部版本';
+$lang->project->featureBar['build']['all'] = '全部构建';
 
 $lang->project->featureBar['group']['all'] = '浏览分组';
 

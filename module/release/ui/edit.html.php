@@ -10,11 +10,27 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('oldStatus', $release->status);
+jsVar('appList',       $appList);
+jsVar('oldStatus',     $release->status);
+jsVar('linkedRelease', $release->releases);
+jsVar('productID',     zget($product, 'id', 0));
+jsVar('releaseBuilds', $release->build);
+
 formPanel
 (
     set::title($lang->release->edit),
-    on::change('[name=status]', 'changeStatus'),
+    on::change('[name=status]')->call('changeStatus'),
+    on::change('[name=system]')->call('loadSystemBlock'),
+    formGroup
+    (
+        set::width('1/2'),
+        set::label($lang->release->system),
+        set::name('system'),
+        set::control(array('type' => 'picker', 'required' => true)),
+        set::items(array_column($appList, 'name', 'id')),
+        set::required(true),
+        set::value($release->system)
+    ),
     formRow
     (
         formGroup
@@ -37,8 +53,17 @@ formPanel
             )
         ) : ''
     ),
+    formGroup
+    (
+        setClass('hidden'),
+        setID('systemBlock'),
+        set::required(true),
+        set::label($lang->release->includedSystem),
+        div(setID('systemItems'), setClass('w-full'))
+    ),
     formRow
     (
+        setID('buildBox'),
         formGroup
         (
             set::width('1/2'),

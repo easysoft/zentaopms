@@ -17,34 +17,62 @@ class systemModel extends model
      * 获取应用列表。
      * Get app list.
      *
+     * @param  int    $productID
+     * @param  string $status
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getList(string $orderBy = 'id_desc', object $pager = null): array
+    public function getList(int $productID, string $status = 'active', string $orderBy = 'id_desc', object $pager = null): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getSystemList();
+
         return $this->dao->select('*')->from(TABLE_SYSTEM)
             ->where('deleted')->eq('0')
+            ->andWhere('product')->eq($productID)
+            ->beginIF($status && $status != 'all')->andWhere('status')->eq($status)->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id');
     }
 
     /**
      * 获取应用键值对。
      * Get app pairs.
      *
+     * @param  int    $productID
      * @param  string $integrated
+     * @param  string $status
      * @access public
      * @return array
      */
-    public function getPairs(string $integrated = ''): array
+    public function getPairs(int $productID = 0, string $integrated = '', string $status = ''): array
     {
+        if(common::isTutorialMode()) return $this->loadModel('tutorial')->getSystemPairs();
+
         return $this->dao->select('id, name')->from(TABLE_SYSTEM)
             ->where('deleted')->eq('0')
+            ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
+            ->beginIF($status)->andWhere('status')->eq($status)->fi()
             ->beginIF($integrated !== '')->andWhere('integrated')->eq($integrated)->fi()
             ->fetchPairs('id', 'name');
+    }
+
+    /**
+     * 根据ID列表获取应用。
+     * Get apps by id list.
+     *
+     * @param  array $idList
+     * @access public
+     * @return array
+     */
+    public function getByIdList(array $idList): array
+    {
+        return $this->dao->select('*')->from(TABLE_SYSTEM)
+            ->where('deleted')->eq('0')
+            ->andWhere('id')->in($idList)
+            ->fetchAll('id');
     }
 
     /**
@@ -62,9 +90,19 @@ class systemModel extends model
             ->batchCheck($this->config->system->create->requiredFields, 'notempty')
             ->autoCheck()
             ->exec();
+        if(dao::isError())
+        {
+            if($this->app->rawModule != 'system' && !empty(dao::$errors['name']))
+            {
+                dao::$errors['systemName'] = dao::$errors['name'];
+                unset(dao::$errors['name']);
+            }
+            return false;
+        }
 
-        if(dao::isError()) return false;
-        return $this->dao->lastInsertID();
+        $systemID = $this->dao->lastInsertID();
+        $this->loadModel('action')->create('system', $systemID, 'created');
+        return $systemID;
     }
 
     /**
@@ -84,6 +122,9 @@ class systemModel extends model
             ->beginIF($checkRequired)->batchCheck($this->config->system->edit->requiredFields, 'notempty')->fi()
             ->where('id')->eq($id)
             ->exec();
+        if(dao::isError()) return false;
+
+        $this->loadModel('action')->create('system', $id, 'edited');
         return !dao::isError();
     }
 
@@ -410,5 +451,94 @@ class systemModel extends model
         if($action == 'active') return $system->status == 'inactive';
         if($action == 'inactive') return $system->status == 'active';
         return true;
+    }
+
+    /**
+     * 更新应用的最新发布信息。
+     * Update the latest release of the app.
+     *
+     * @param  int    $systemID
+     * @param  int    $releaseID
+     * @param  string $releasedDate
+     * @access public
+     * @return bool
+     */
+    public function setSystemRelease(int $systemID, int $releaseID, string $releasedDate = ''): bool
+    {
+        $system = $this->fetchByID($systemID);
+        if(!$system) return false;
+
+        if(empty($releasedDate))
+        {
+            if($releaseID != $system->latestRelease) return false;
+
+            $release      = $this->dao->select('id,createdDate')->from(TABLE_RELEASE)->where('deleted')->eq(0)->andWhere('system')->eq($systemID)->orderBy('id DESC')->fetch();
+            $releaseID    = $release ? $release->id : 0;
+            $releasedDate = $release ? $release->createdDate : null;
+        }
+
+        $this->dao->update(TABLE_SYSTEM)->set('latestDate')->eq($releasedDate)->set('latestRelease')->eq($releaseID)->where('id')->eq($systemID)->exec();
+        return !dao::isError();
+    }
+
+    /**
+     * 根据ID获取发布信息。
+     * Get release information by ID.
+     *
+     * @param  int $systemID
+     * @access public
+     * @return array
+     */
+    public function getReleasesByID(int $systemID): array
+    {
+        return $this->dao->select('*')->from(TABLE_RELEASE)
+            ->where('system')->eq($systemID)
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll('id');
+    }
+
+    /**
+     * 根据ID获取构建信息。
+     * Get build information by ID.
+     *
+     * @param  int $systemID
+     * @access public
+     * @return array
+     */
+    public function getBuildsByID(int $systemID): array
+    {
+        return $this->dao->select('*')->from(TABLE_BUILD)
+            ->where('system')->eq($systemID)
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll('id');
+    }
+
+    /**
+     * 初始化应用。
+     * Initialize application.
+     *
+     * @access public
+     * @return bool
+     */
+    public function initSystem(): bool
+    {
+        $system = new stdclass();
+        $system->createdDate = helper::now();
+        $system->createdBy   = 'system';
+
+        $productPairs = $this->loadModel('product')->getPairs('all', 0, '', 1);
+        foreach($productPairs as $productID => $productName)
+        {
+            $system->name    = $productName;
+            $system->product = $productID;
+            $systemID = $this->create($system);
+
+            $this->dao->update(TABLE_BUILD)->set('system')->eq($systemID)->where('id')->eq($systemID)->exec();
+            $this->dao->update(TABLE_RELEASE)->set('system')->eq($systemID)->where('id')->eq($systemID)->exec();
+        }
+
+        if(!dao::isError()) $this->dao->delete()->from(TABLE_CRON)->where('command')->eq('moduleName=system&methodName=initSystem')->exec();
+
+        return dao::isError();
     }
 }

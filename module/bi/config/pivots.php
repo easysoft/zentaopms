@@ -3,13 +3,15 @@ $config->bi->builtin->pivots = array();
 
 $config->bi->builtin->pivots[] = array
 (
-    'id'        => 1000,
-    'name'      => array('zh-cn' => '完成项目工期透视表', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-    'code'      => 'finishedProjectDuration',
-    'dimension' => '2',
-    'driver'    => 'mysql',
-    'group'     => '86',
-    'sql'       => <<<EOT
+    'id'          => 1000,
+    'version'     => '1',
+    'name'        => array('zh-cn' => '完成项目工期透视表', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+    'code'        => 'finishedProjectDuration',
+    'dimension'   => '2',
+    'driver'      => 'mysql',
+    'group'       => '86',
+    'createdDate' => '2009-03-14',
+    'sql'         => <<<EOT
 select
     t1.name,
     t2.program1,
@@ -87,18 +89,20 @@ EOT,
         'rate'               => array('zh-cn' => '工期偏差率', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '')
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
 (
-    'id'        => 1001,
-    'name'      => array('zh-cn' => '完成项目工时透视表', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-    'code'      => 'finishedProjectHour',
-    'dimension' => '2',
-    'driver'    => 'mysql',
-    'group'     => '85',
-    'sql'       => <<<EOT
+    'id'          => 1001,
+    'version'     => '1',
+    'name'        => array('zh-cn' => '完成项目工时透视表', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+    'code'        => 'finishedProjectHour',
+    'dimension'   => '2',
+    'driver'      => 'mysql',
+    'group'       => '85',
+    'createdDate' => '2009-03-14',
+    'sql'         => <<<EOT
 select
     t1.name as "projectname",
     t4.program1 as "topprogram",
@@ -215,18 +219,20 @@ EOT,
         'closeddate'             => array('zh-cn' => '关闭日期', 'zh-tw' => '关闭日期', 'en' => 'closeddate')
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
 (
-    'id'        => 1002,
-    'name'      => array('zh-cn' => '产品缺陷数据汇总表', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
-    'code'      => 'productBugSummary',
-    'dimension' => '3',
-    'driver'    => 'mysql',
-    'group'     => '100',
-    'sql'       => <<<EOT
+    'id'          => 1002,
+    'version'     => '1',
+    'name'        => array('zh-cn' => '产品缺陷数据汇总表', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+    'code'        => 'productBugSummary',
+    'dimension'   => '3',
+    'driver'      => 'mysql',
+    'group'       => '100',
+    'createdDate' => '2009-03-14',
+    'sql'         => <<<EOT
 select
     t1.name as product,
     coalesce(t2.name, '/') as topprogram,
@@ -350,19 +356,21 @@ EOT,
         'fixedbugsrate'     => array('zh-cn' => 'Bug修复率', 'zh-tw' => 'Bug修复率', 'en' => 'fixedbugsrate')
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
 (
-    'id'        => 1003,
-    'name'      => array('zh-cn' => '产品需求交付统计表', 'zh-tw' => '產品完成度統計表', 'en' => 'Product Progress', 'de' => 'Product Progress', 'fr' => 'Product Progress'),
-    'code'      => 'productProgress',
-    'desc'      => array('zh-cn' => '按照产品列出需求总数，交付的需求总数(状态是关闭且关闭原因为已完成，或者研发阶段是已发布的需求)。', 'zh-tw' => '按照產品列出需求總數，完成的總數(狀態是關閉，或者研發階段是發布)，完成的百分比。', 'en' => 'Number of total stories,done stories(state is closed, or stage is released), percent of completion.', 'de' => 'Number of total stories,done stories(state is closed, or stage is released), percent of completion.', 'fr' => 'Number of total stories,done stories(state is closed, or stage is released), percent of completion.'),
-    'dimension' => '1',
-    'driver'    => 'mysql',
-    'group'     => '59',
-    'sql'       => <<<EOT
+    'id'          => 1003,
+    'version'     => '1',
+    'name'        => array('zh-cn' => '产品需求交付统计表', 'zh-tw' => '產品完成度統計表', 'en' => 'Product Progress', 'de' => 'Product Progress', 'fr' => 'Product Progress'),
+    'code'        => 'productProgress',
+    'desc'        => array('zh-cn' => '按照产品列出需求总数，交付的需求总数(状态是关闭且关闭原因为已完成，或者研发阶段是已发布的需求)。', 'zh-tw' => '按照產品列出需求總數，完成的總數(狀態是關閉，或者研發階段是發布)，完成的百分比。', 'en' => 'Number of total stories,done stories(state is closed, or stage is released), percent of completion.', 'de' => 'Number of total stories,done stories(state is closed, or stage is released), percent of completion.', 'fr' => 'Number of total stories,done stories(state is closed, or stage is released), percent of completion.'),
+    'dimension'   => '1',
+    'driver'      => 'mysql',
+    'group'       => '59',
+    'createdDate' => '2009-03-14',
+    'sql'         => <<<EOT
 select
     t1.product,
     t2.name,
@@ -434,19 +442,21 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
 (
-    'id'        => 1004,
-    'name'      => array('zh-cn' => '产品需求状态分布表', 'zh-tw' => '產品需求狀態分布表', 'en' => 'Story Status', 'de' => 'Story Status', 'fr' => 'Story Status'),
-    'code'      => 'productStoryStatus',
-    'desc'      => array('zh-cn' => '按照产品列出需求总数，状态的分布情况。', 'zh-tw' => '按照產品列出需求總數，狀態的分布情況。', 'en' => 'Total number and status distribution of stories.', 'de' => 'Total number and status distribution of stories.', 'fr' => 'Total number and status distribution of stories.'),
-    'dimension' => '1',
-    'driver'    => 'mysql',
-    'group'     => '59',
-    'sql'       => <<<EOT
+    'id'          => 1004,
+    'version'     => '1',
+    'name'        => array('zh-cn' => '产品需求状态分布表', 'zh-tw' => '產品需求狀態分布表', 'en' => 'Story Status', 'de' => 'Story Status', 'fr' => 'Story Status'),
+    'code'        => 'productStoryStatus',
+    'desc'        => array('zh-cn' => '按照产品列出需求总数，状态的分布情况。', 'zh-tw' => '按照產品列出需求總數，狀態的分布情況。', 'en' => 'Total number and status distribution of stories.', 'de' => 'Total number and status distribution of stories.', 'fr' => 'Total number and status distribution of stories.'),
+    'dimension'   => '1',
+    'driver'      => 'mysql',
+    'group'       => '59',
+    'createdDate' => '2009-03-14',
+    'sql'         => <<<EOT
 select
     t1.product, t1.status,
     t2.name
@@ -504,19 +514,21 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
 (
-    'id'        => 1005,
-    'name'      => array('zh-cn' => '产品需求阶段分布表', 'zh-tw' => '產品需求階段分布表', 'en' => 'Story Stage', 'de' => 'Story Stage', 'fr' => 'Story Stage'),
-    'code'      => 'productStoryStage',
-    'desc'      => array('zh-cn' => '按照产品列出需求总数，研发阶段的分布情况。', 'zh-tw' => '按照產品列出需求總數，研發階段的分布情況。', 'en' => 'Total number and stage distribution of stories ', 'de' => 'Total number and stage distribution of stories ', 'fr' => 'Total number and stage distribution of stories '),
-    'dimension' => '1',
-    'driver'    => 'mysql',
-    'group'     => '59',
-    'sql'       => <<<EOT
+    'id'          => 1005,
+    'version'     => '1',
+    'name'        => array('zh-cn' => '产品需求阶段分布表', 'zh-tw' => '產品需求階段分布表', 'en' => 'Story Stage', 'de' => 'Story Stage', 'fr' => 'Story Stage'),
+    'code'        => 'productStoryStage',
+    'desc'        => array('zh-cn' => '按照产品列出需求总数，研发阶段的分布情况。', 'zh-tw' => '按照產品列出需求總數，研發階段的分布情況。', 'en' => 'Total number and stage distribution of stories ', 'de' => 'Total number and stage distribution of stories ', 'fr' => 'Total number and stage distribution of stories '),
+    'dimension'   => '1',
+    'driver'      => 'mysql',
+    'group'       => '59',
+    'createdDate' => '2009-03-14',
+    'sql'         => <<<EOT
 select
     t1.product, t1.stage,
     t2.name
@@ -575,19 +587,21 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
 (
-    'id'        => 1006,
-    'name'      => array('zh-cn' => '产品发布数量统计表', 'zh-tw' => '產品發布數量統計表', 'en' => 'Product Release', 'de' => 'Product Release', 'fr' => 'Product Release'),
-    'code'      => 'productRelease',
-    'desc'      => array('zh-cn' => '按照产品列出发布的数量。', 'zh-tw' => '按照產品列出發布的數量。', 'en' => 'Product Release.', 'de' => 'Product Release.', 'fr' => 'Product Release.'),
-    'dimension' => '1',
-    'driver'    => 'mysql',
-    'group'     => '59',
-    'sql'       => <<<EOT
+    'id'          => 1006,
+    'version'     => '1',
+    'name'        => array('zh-cn' => '产品发布数量统计表', 'zh-tw' => '產品發布數量統計表', 'en' => 'Product Release', 'de' => 'Product Release', 'fr' => 'Product Release'),
+    'code'        => 'productRelease',
+    'desc'        => array('zh-cn' => '按照产品列出发布的数量。', 'zh-tw' => '按照產品列出發布的數量。', 'en' => 'Product Release.', 'de' => 'Product Release.', 'fr' => 'Product Release.'),
+    'dimension'   => '1',
+    'driver'      => 'mysql',
+    'group'       => '59',
+    'createdDate' => '2009-03-14',
+    'sql'         => <<<EOT
 select
     t1.product,
     t2.name,
@@ -646,19 +660,21 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
 (
-    'id'        => 1007,
-    'name'      => array('zh-cn' => '任务状态统计表', 'zh-tw' => '任務狀態統計表', 'en' => 'Task Status Report', 'de' => 'Task Status Report', 'fr' => 'Task Status Report', 'vi' => 'Task Status Report', 'ja' => 'Task Status Report'),
-    'code'      => 'taskStatus',
-    'desc'      => array('zh-cn' => '按照执行统计任务的状态分布情况。', 'zh-tw' => '按照執行統計任務的狀態分布情況。', 'en' => '', 'de' => '', 'fr' => '', 'vi' => '', 'ja' => ''),
-    'dimension' => '1',
-    'driver'    => 'mysql',
-    'group'     => '60',
-    'sql'       => <<<EOT
+    'id'          => 1007,
+    'version'     => '1',
+    'name'        => array('zh-cn' => '任务状态统计表', 'zh-tw' => '任務狀態統計表', 'en' => 'Task Status Report', 'de' => 'Task Status Report', 'fr' => 'Task Status Report', 'vi' => 'Task Status Report', 'ja' => 'Task Status Report'),
+    'code'        => 'taskStatus',
+    'desc'        => array('zh-cn' => '按照执行统计任务的状态分布情况。', 'zh-tw' => '按照執行統計任務的狀態分布情況。', 'en' => '', 'de' => '', 'fr' => '', 'vi' => '', 'ja' => ''),
+    'dimension'   => '1',
+    'driver'      => 'mysql',
+    'group'       => '60',
+    'createdDate' => '2009-03-14',
+    'sql'         => <<<EOT
 select
     t1.project,
     t3.name as projectname,
@@ -753,19 +769,21 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
 (
-    'id'        => 1008,
-    'name'      => array('zh-cn' => '任务类型统计表', 'zh-tw' => '任務類型統計表', 'en' => 'Task Type Report', 'de' => 'Task Type Report', 'fr' => 'Task Type Report', 'vi' => 'Task Type Report', 'ja' => 'Task Type Report'),
-    'code'      => 'taskType',
-    'desc'      => array('zh-cn' => '按照项目统计任务的类型分布情况。', 'zh-tw' => '按照項目統計任務的類型分布情況。', 'en' => '', 'de' => '', 'fr' => '', 'vi' => '', 'ja' => ''),
-    'dimension' => '1',
-    'driver'    => 'mysql',
-    'group'     => '60',
-    'sql'       => <<<EOT
+    'id'          => 1008,
+    'version'     => '1',
+    'name'        => array('zh-cn' => '任务类型统计表', 'zh-tw' => '任務類型統計表', 'en' => 'Task Type Report', 'de' => 'Task Type Report', 'fr' => 'Task Type Report', 'vi' => 'Task Type Report', 'ja' => 'Task Type Report'),
+    'code'        => 'taskType',
+    'desc'        => array('zh-cn' => '按照项目统计任务的类型分布情况。', 'zh-tw' => '按照項目統計任務的類型分布情況。', 'en' => '', 'de' => '', 'fr' => '', 'vi' => '', 'ja' => ''),
+    'dimension'   => '1',
+    'driver'      => 'mysql',
+    'group'       => '60',
+    'createdDate' => '2009-03-14',
+    'sql'         => <<<EOT
 select
     t1.id,
     t3.name as projectname,
@@ -855,19 +873,21 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
 (
-    'id'        => 1009,
-    'name'      => array('zh-cn' => '项目任务指派统计表', 'zh-tw' => '項目任務指派統計表', 'en' => 'Task Assign Report', 'de' => 'Task Assign Report', 'fr' => 'Task Assign Report', 'vi' => 'Task Assign Report', 'ja' => 'Task Assign Report'),
-    'code'      => 'projectTaskAssign',
-    'desc'      => array('zh-cn' => '按照项目统计任务的指派给分布情况。', 'zh-tw' => '按照項目統計任務的指派給分布情況。', 'en' => '', 'de' => '', 'fr' => '', 'vi' => '', 'ja' => ''),
-    'dimension' => '1',
-    'driver'    => 'mysql',
-    'group'     => '60',
-    'sql'       => <<<EOT
+    'id'          => 1009,
+    'version'     => '1',
+    'name'        => array('zh-cn' => '项目任务指派统计表', 'zh-tw' => '項目任務指派統計表', 'en' => 'Task Assign Report', 'de' => 'Task Assign Report', 'fr' => 'Task Assign Report', 'vi' => 'Task Assign Report', 'ja' => 'Task Assign Report'),
+    'code'        => 'projectTaskAssign',
+    'desc'        => array('zh-cn' => '按照项目统计任务的指派给分布情况。', 'zh-tw' => '按照項目統計任務的指派給分布情況。', 'en' => '', 'de' => '', 'fr' => '', 'vi' => '', 'ja' => ''),
+    'dimension'   => '1',
+    'driver'      => 'mysql',
+    'group'       => '60',
+    'createdDate' => '2009-03-14',
+    'sql'         => <<<EOT
 select
     t1.id,
     t4.name as projectname,
@@ -958,19 +978,21 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
 (
-    'id'        => 1010,
-    'name'      => array('zh-cn' => '项目任务完成者统计表', 'zh-tw' => '項目任務完成者統計表', 'en' => 'Task Finish Report', 'de' => 'Task Finish Report', 'fr' => 'Task Finish Report', 'vi' => 'Task Finish Report', 'ja' => 'Task Finish Report'),
-    'code'      => 'projectTaskFinished',
-    'desc'      => array('zh-cn' => '按照项目统计任务的完成者分布情况。', 'zh-tw' => '按照項目統計任務的完成者分布情況。', 'en' => '', 'de' => '', 'fr' => '', 'vi' => '', 'ja' => ''),
-    'dimension' => '1',
-    'driver'    => 'mysql',
-    'group'     => '60',
-    'sql'       => <<<EOT
+    'id'          => 1010,
+    'version'     => '1',
+    'name'        => array('zh-cn' => '项目任务完成者统计表', 'zh-tw' => '項目任務完成者統計表', 'en' => 'Task Finish Report', 'de' => 'Task Finish Report', 'fr' => 'Task Finish Report', 'vi' => 'Task Finish Report', 'ja' => 'Task Finish Report'),
+    'code'        => 'projectTaskFinished',
+    'desc'        => array('zh-cn' => '按照项目统计任务的完成者分布情况。', 'zh-tw' => '按照項目統計任務的完成者分布情況。', 'en' => '', 'de' => '', 'fr' => '', 'vi' => '', 'ja' => ''),
+    'dimension'   => '1',
+    'driver'      => 'mysql',
+    'group'       => '60',
+    'createdDate' => '2009-03-14',
+    'sql'         => <<<EOT
 select
  t1.id,
  t3.name as projectname,
@@ -1060,19 +1082,21 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
 (
-    'id'        => 1011,
-    'name'      => array('zh-cn' => '项目投入统计表', 'zh-tw' => '項目投入統計表', 'en' => 'Project Invest Report', 'de' => 'Project Invest Report', 'fr' => 'Project Invest Report', 'vi' => 'Project Invest Report', 'ja' => 'Project Invest Report'),
-    'code'      => 'projectInvested',
-    'desc'      => array('zh-cn' => '按照项目列出：任务数，需求数，人数，总消耗工时。', 'zh-tw' => '按照項目列出：任務數，需求數，人數，總消耗工時。', 'en' => '', 'de' => '', 'fr' => '', 'vi' => '', 'ja' => ''),
-    'dimension' => '1',
-    'driver'    => 'mysql',
-    'group'     => '60',
-    'sql'       => <<<EOT
+    'id'          => 1011,
+    'version'     => '1',
+    'name'        => array('zh-cn' => '项目投入统计表', 'zh-tw' => '項目投入統計表', 'en' => 'Project Invest Report', 'de' => 'Project Invest Report', 'fr' => 'Project Invest Report', 'vi' => 'Project Invest Report', 'ja' => 'Project Invest Report'),
+    'code'        => 'projectInvested',
+    'desc'        => array('zh-cn' => '按照项目列出：任务数，需求数，人数，总消耗工时。', 'zh-tw' => '按照項目列出：任務數，需求數，人數，總消耗工時。', 'en' => '', 'de' => '', 'fr' => '', 'vi' => '', 'ja' => ''),
+    'dimension'   => '1',
+    'driver'      => 'mysql',
+    'group'       => '60',
+    'createdDate' => '2009-03-14',
+    'sql'         => <<<EOT
 select
     t1.id,
     t5.name as projectname,
@@ -1205,19 +1229,21 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
 (
-    'id'        => 1012,
-    'name'      => array('zh-cn' => '项目需求状态分布表', 'zh-tw' => '項目需求狀態分布表', 'en' => 'Project Story Status', 'de' => 'Project Story Status', 'fr' => 'Project Story Status', 'vi' => 'Project Story Status', 'ja' => 'Project Story Status'),
-    'code'      => 'projectStoryStatus',
-    'desc'      => array('zh-cn' => '按照项目统计需求的状态分布情况。', 'zh-tw' => '按照項目統計需求的狀態分布情況。', 'en' => '', 'de' => '', 'fr' => '', 'vi' => '', 'ja' => ''),
-    'dimension' => '1',
-    'driver'    => 'mysql',
-    'group'     => '60',
-    'sql'       => <<<EOT
+    'id'          => 1012,
+    'version'     => '1',
+    'name'        => array('zh-cn' => '项目需求状态分布表', 'zh-tw' => '項目需求狀態分布表', 'en' => 'Project Story Status', 'de' => 'Project Story Status', 'fr' => 'Project Story Status', 'vi' => 'Project Story Status', 'ja' => 'Project Story Status'),
+    'code'        => 'projectStoryStatus',
+    'desc'        => array('zh-cn' => '按照项目统计需求的状态分布情况。', 'zh-tw' => '按照項目統計需求的狀態分布情況。', 'en' => '', 'de' => '', 'fr' => '', 'vi' => '', 'ja' => ''),
+    'dimension'   => '1',
+    'driver'      => 'mysql',
+    'group'       => '60',
+    'createdDate' => '2009-03-14',
+    'sql'         => <<<EOT
 select
     t2.id,
     t4.name as projectname,
@@ -1297,19 +1323,21 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
 (
-    'id'        => 1013,
-    'name'      => array('zh-cn' => '项目需求阶段分布表', 'zh-tw' => '項目需求階段分布表', 'en' => 'Project Stage Report', 'de' => 'Project Stage Report', 'fr' => 'Project Stage Report', 'vi' => 'Project Stage Report', 'ja' => 'Project Stage Report'),
-    'code'      => 'projectStoryStage',
-    'desc'      => array('zh-cn' => '按照项目统计需求阶段分布情况。', 'zh-tw' => '按照項目統計需求階段分布情況。', 'en' => '', 'de' => '', 'fr' => '', 'vi' => '', 'ja' => ''),
-    'dimension' => '1',
-    'driver'    => 'mysql',
-    'group'     => '60',
-    'sql'       => <<<EOT
+    'id'          => 1013,
+    'version'     => '1',
+    'name'        => array('zh-cn' => '项目需求阶段分布表', 'zh-tw' => '項目需求階段分布表', 'en' => 'Project Stage Report', 'de' => 'Project Stage Report', 'fr' => 'Project Stage Report', 'vi' => 'Project Stage Report', 'ja' => 'Project Stage Report'),
+    'code'        => 'projectStoryStage',
+    'desc'        => array('zh-cn' => '按照项目统计需求阶段分布情况。', 'zh-tw' => '按照項目統計需求階段分布情況。', 'en' => '', 'de' => '', 'fr' => '', 'vi' => '', 'ja' => ''),
+    'dimension'   => '1',
+    'driver'      => 'mysql',
+    'group'       => '60',
+    'createdDate' => '2009-03-14',
+    'sql'         => <<<EOT
 select
     t2.id,
     t4.name as projectname,
@@ -1389,19 +1417,21 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
 (
-    'id'        => 1014,
-    'name'      => array('zh-cn' => '项目Bug解决方案分布表', 'zh-tw' => '項目Bug解決方案分布表', 'en' => 'Project Bug Resolution', 'de' => 'Project Bug Resolution', 'fr' => 'Project Bug Resolution', 'vi' => 'Project Bug Resolution', 'ja' => 'Project Bug Resolution'),
-    'code'      => 'projectBugResolution',
-    'desc'      => array('zh-cn' => '按照项目统计Bug的解决方案分布情况。', 'zh-tw' => '按照項目統計Bug的解決方案分布情況。', 'en' => '', 'de' => '', 'fr' => '', 'vi' => '', 'ja' => ''),
-    'dimension' => '1',
-    'driver'    => 'mysql',
-    'group'     => '60,61',
-    'sql'       => <<<EOT
+    'id'          => 1014,
+    'version'     => '1',
+    'name'        => array('zh-cn' => '项目Bug解决方案分布表', 'zh-tw' => '項目Bug解決方案分布表', 'en' => 'Project Bug Resolution', 'de' => 'Project Bug Resolution', 'fr' => 'Project Bug Resolution', 'vi' => 'Project Bug Resolution', 'ja' => 'Project Bug Resolution'),
+    'code'        => 'projectBugResolution',
+    'desc'        => array('zh-cn' => '按照项目统计Bug的解决方案分布情况。', 'zh-tw' => '按照項目統計Bug的解決方案分布情況。', 'en' => '', 'de' => '', 'fr' => '', 'vi' => '', 'ja' => ''),
+    'dimension'   => '1',
+    'driver'      => 'mysql',
+    'group'       => '60,61',
+    'createdDate' => '2009-03-14',
+    'sql'         => <<<EOT
 select
     t1.id,
     t3.name as project,
@@ -1484,19 +1514,21 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
 (
-    'id'        => 1015,
-    'name'      => array('zh-cn' => '项目Bug状态分布表', 'zh-tw' => '項目Bug狀態分布表', 'en' => 'Project Bug Status', 'de' => 'Project Bug Status', 'fr' => 'Project Bug Status', 'vi' => 'Project Bug Status', 'ja' => 'Project Bug Status'),
-    'code'      => 'projectBugStatus',
-    'desc'      => array('zh-cn' => '按照项目统计Bug的状态分布情况。', 'zh-tw' => '按照項目統計Bug的狀態分布情況。', 'en' => '', 'de' => '', 'fr' => '', 'vi' => '', 'ja' => ''),
-    'dimension' => '1',
-    'driver'    => 'mysql',
-    'group'     => '60,61',
-    'sql'       => <<<EOT
+    'id'          => 1015,
+    'version'     => '1',
+    'name'        => array('zh-cn' => '项目Bug状态分布表', 'zh-tw' => '項目Bug狀態分布表', 'en' => 'Project Bug Status', 'de' => 'Project Bug Status', 'fr' => 'Project Bug Status', 'vi' => 'Project Bug Status', 'ja' => 'Project Bug Status'),
+    'code'        => 'projectBugStatus',
+    'desc'        => array('zh-cn' => '按照项目统计Bug的状态分布情况。', 'zh-tw' => '按照項目統計Bug的狀態分布情況。', 'en' => '', 'de' => '', 'fr' => '', 'vi' => '', 'ja' => ''),
+    'dimension'   => '1',
+    'driver'      => 'mysql',
+    'group'       => '60,61',
+    'createdDate' => '2009-03-14',
+    'sql'         => <<<EOT
 select
     t1.id,
     t3.name as project,
@@ -1578,19 +1610,21 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
 (
-    'id'        => 1016,
-    'name'      => array('zh-cn' => '项目Bug创建者分布表', 'zh-tw' => '項目Bug創建者分布表', 'en' => 'Project Bug Opened', 'de' => 'Project Bug Opened', 'fr' => 'Project Bug Opened', 'vi' => 'Project Bug Opened', 'ja' => 'Project Bug Opened'),
-    'code'      => 'projectBugOpenedBy',
-    'desc'      => array('zh-cn' => '按照项目统计Bug的创建者分布情况。', 'zh-tw' => '按照項目統計Bug的創建者分布情況。', 'en' => '', 'de' => '', 'fr' => '', 'vi' => '', 'ja' => ''),
-    'dimension' => '1',
-    'driver'    => 'mysql',
-    'group'     => '60,61',
-    'sql'       => <<<EOT
+    'id'          => 1016,
+    'version'     => '1',
+    'name'        => array('zh-cn' => '项目Bug创建者分布表', 'zh-tw' => '項目Bug創建者分布表', 'en' => 'Project Bug Opened', 'de' => 'Project Bug Opened', 'fr' => 'Project Bug Opened', 'vi' => 'Project Bug Opened', 'ja' => 'Project Bug Opened'),
+    'code'        => 'projectBugOpenedBy',
+    'desc'        => array('zh-cn' => '按照项目统计Bug的创建者分布情况。', 'zh-tw' => '按照項目統計Bug的創建者分布情況。', 'en' => '', 'de' => '', 'fr' => '', 'vi' => '', 'ja' => ''),
+    'dimension'   => '1',
+    'driver'      => 'mysql',
+    'group'       => '60,61',
+    'createdDate' => '2009-03-14',
+    'sql'         => <<<EOT
 select
     t1.id,
     t3.name as projectname,
@@ -1672,19 +1706,21 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
 (
-    'id'        => 1017,
-    'name'      => array('zh-cn' => '项目Bug解决者分布表', 'zh-tw' => '項目Bug解決者分布表', 'en' => 'Project Bug Resolve', 'de' => 'Project Bug Resolve', 'fr' => 'Project Bug Resolve', 'vi' => 'Project Bug Resolve', 'ja' => 'Project Bug Resolve'),
-    'code'      => 'projectBugResolvedBy',
-    'desc'      => array('zh-cn' => '按照项目统计Bug的解决者分布情况。', 'zh-tw' => '按照項目統計Bug的解決者分布情況。', 'en' => '', 'de' => '', 'fr' => '', 'vi' => '', 'ja' => ''),
-    'dimension' => '1',
-    'driver'    => 'mysql',
-    'group'     => '60,61',
-    'sql'       => <<<EOT
+    'id'          => 1017,
+    'version'     => '1',
+    'name'        => array('zh-cn' => '项目Bug解决者分布表', 'zh-tw' => '項目Bug解決者分布表', 'en' => 'Project Bug Resolve', 'de' => 'Project Bug Resolve', 'fr' => 'Project Bug Resolve', 'vi' => 'Project Bug Resolve', 'ja' => 'Project Bug Resolve'),
+    'code'        => 'projectBugResolvedBy',
+    'desc'        => array('zh-cn' => '按照项目统计Bug的解决者分布情况。', 'zh-tw' => '按照項目統計Bug的解決者分布情況。', 'en' => '', 'de' => '', 'fr' => '', 'vi' => '', 'ja' => ''),
+    'dimension'   => '1',
+    'driver'      => 'mysql',
+    'group'       => '60,61',
+    'createdDate' => '2009-03-14',
+    'sql'         => <<<EOT
 select
     t1.id,
     t3.name as projectname,
@@ -1768,19 +1804,21 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
 (
-    'id'        => 1018,
-    'name'      => array('zh-cn' => '项目Bug指派给分布表', 'zh-tw' => '項目Bug指派給分布表', 'en' => 'Project Bug Assign', 'de' => 'Project Bug Assign', 'fr' => 'Project Bug Assign', 'vi' => 'Project Bug Assign', 'ja' => 'Project Bug Assign'),
-    'code'      => 'projectBugAssignedBy',
-    'desc'      => array('zh-cn' => '按照项目统计Bug的指派给分布情况。', 'zh-tw' => '按照項目統計Bug的指派給分布情況。', 'en' => '', 'de' => '', 'fr' => '', 'vi' => '', 'ja' => ''),
-    'dimension' => '1',
-    'driver'    => 'mysql',
-    'group'     => '60,61',
-    'sql'       => <<<EOT
+    'id'          => 1018,
+    'version'     => '1',
+    'name'        => array('zh-cn' => '项目Bug指派给分布表', 'zh-tw' => '項目Bug指派給分布表', 'en' => 'Project Bug Assign', 'de' => 'Project Bug Assign', 'fr' => 'Project Bug Assign', 'vi' => 'Project Bug Assign', 'ja' => 'Project Bug Assign'),
+    'code'        => 'projectBugAssignedBy',
+    'desc'        => array('zh-cn' => '按照项目统计Bug的指派给分布情况。', 'zh-tw' => '按照項目統計Bug的指派給分布情況。', 'en' => '', 'de' => '', 'fr' => '', 'vi' => '', 'ja' => ''),
+    'dimension'   => '1',
+    'driver'      => 'mysql',
+    'group'       => '60,61',
+    'createdDate' => '2009-03-14',
+    'sql'         => <<<EOT
 select
     t1.id,
     t3.name as project,
@@ -1861,19 +1899,21 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
 (
-    'id'        => 1019,
-    'name'      => array('zh-cn' => '项目质量表', 'zh-tw' => '項目質量表', 'en' => 'Project Quality Report', 'de' => 'Project Quality Report', 'fr' => 'Project Quality Report', 'vi' => 'Project Quality Report', 'ja' => 'Project Quality Report'),
-    'code'      => 'projectQuality',
-    'desc'      => array('zh-cn' => '列出项目的需求总数，完成需求数，任务总数，完成的任务数，Bug数，解决的Bug数，Bug/需求，Bug/任务，重要Bug数量(严重程度不大于3）。', 'zh-tw' => '列出項目的需求總數，完成需求數，任務總數，完成的任務數，Bug數，解決的Bug數，Bug/需求，Bug/任務，重要Bug數量(嚴重程度不大於3）。', 'en' => '', 'de' => '', 'fr' => '', 'vi' => '', 'ja' => ''),
-    'dimension' => '1',
-    'driver'    => 'mysql',
-    'group'     => '60',
-    'sql'       => <<<EOT
+    'id'          => 1019,
+    'version'     => '1',
+    'name'        => array('zh-cn' => '项目质量表', 'zh-tw' => '項目質量表', 'en' => 'Project Quality Report', 'de' => 'Project Quality Report', 'fr' => 'Project Quality Report', 'vi' => 'Project Quality Report', 'ja' => 'Project Quality Report'),
+    'code'        => 'projectQuality',
+    'desc'        => array('zh-cn' => '列出项目的需求总数，完成需求数，任务总数，完成的任务数，Bug数，解决的Bug数，Bug/需求，Bug/任务，重要Bug数量(严重程度不大于3）。', 'zh-tw' => '列出項目的需求總數，完成需求數，任務總數，完成的任務數，Bug數，解決的Bug數，Bug/需求，Bug/任務，重要Bug數量(嚴重程度不大於3）。', 'en' => '', 'de' => '', 'fr' => '', 'vi' => '', 'ja' => ''),
+    'dimension'   => '1',
+    'driver'      => 'mysql',
+    'group'       => '60',
+    'createdDate' => '2009-03-14',
+    'sql'         => <<<EOT
 select
     t1.id,
     t5.name as projectname,
@@ -2051,19 +2091,21 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
 (
-    'id'        => 1020,
-    'name'      => array('zh-cn' => '产品Bug类型统计表', 'zh-tw' => '產品Bug類型統計表', 'en' => 'Bug Type of Product', 'de' => 'Bug Type of Product', 'fr' => 'Bug Type of Product'),
-    'code'      => 'productBugType',
-    'desc'      => array('zh-cn' => '按照产品统计Bug的类型分布情况。', 'zh-tw' => '按照產品統計Bug的類型分布情況。', 'en' => 'Type distribution of Bugs.', 'de' => 'Type distribution of Bugs.', 'fr' => 'Type distribution of Bugs.'),
-    'dimension' => '1',
-    'driver'    => 'mysql',
-    'group'     => '59,61',
-    'sql'       => <<<EOT
+    'id'          => 1020,
+    'version'     => '1',
+    'name'        => array('zh-cn' => '产品Bug类型统计表', 'zh-tw' => '產品Bug類型統計表', 'en' => 'Bug Type of Product', 'de' => 'Bug Type of Product', 'fr' => 'Bug Type of Product'),
+    'code'        => 'productBugType',
+    'desc'        => array('zh-cn' => '按照产品统计Bug的类型分布情况。', 'zh-tw' => '按照產品統計Bug的類型分布情況。', 'en' => 'Type distribution of Bugs.', 'de' => 'Type distribution of Bugs.', 'fr' => 'Type distribution of Bugs.'),
+    'dimension'   => '1',
+    'driver'      => 'mysql',
+    'group'       => '59,61',
+    'createdDate' => '2009-03-14',
+    'sql'         => <<<EOT
 select
     t2.product,
     t1.name,
@@ -2126,19 +2168,21 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
 (
-    'id'        => 1021,
-    'name'      => array('zh-cn' => '产品质量表', 'zh-tw' => '產品質量表', 'en' => 'Product Quality', 'de' => 'Product Quality', 'fr' => 'Product Quality'),
-    'code'      => 'productQuality',
-    'desc'      => array('zh-cn' => '列出产品的需求数，完成的需求总数，Bug数，解决的Bug总数，Bug/需求，重要Bug数量(严重程度小于3)。', 'zh-tw' => '列出產品的需求數，完成的需求總數，Bug數，解決的Bug總數，Bug/需求，重要Bug數量(嚴重程度小於3)。', 'en' => 'Serious Bug (severity is less than 3).', 'de' => 'Serious Bug (severity is less than 3).', 'fr' => 'Serious Bug (severity is less than 3).'),
-    'dimension' => '1',
-    'driver'    => 'mysql',
-    'group'     => '59',
-    'sql'       => <<<EOT
+    'id'          => 1021,
+    'version'     => '1',
+    'name'        => array('zh-cn' => '产品质量表', 'zh-tw' => '產品質量表', 'en' => 'Product Quality', 'de' => 'Product Quality', 'fr' => 'Product Quality'),
+    'code'        => 'productQuality',
+    'desc'        => array('zh-cn' => '列出产品的需求数，完成的需求总数，Bug数，解决的Bug总数，Bug/需求，重要Bug数量(严重程度小于3)。', 'zh-tw' => '列出產品的需求數，完成的需求總數，Bug數，解決的Bug總數，Bug/需求，重要Bug數量(嚴重程度小於3)。', 'en' => 'Serious Bug (severity is less than 3).', 'de' => 'Serious Bug (severity is less than 3).', 'fr' => 'Serious Bug (severity is less than 3).'),
+    'dimension'   => '1',
+    'driver'      => 'mysql',
+    'group'       => '59',
+    'createdDate' => '2009-03-14',
+    'sql'         => <<<EOT
 select
     t1.id,
     t1.name,
@@ -2257,19 +2301,21 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
 (
-    'id'        => 1022,
-    'name'      => array('zh-cn' => '员工登录次数统计表', 'zh-tw' => '員工登錄次數統計表', 'en' => 'Login Times', 'de' => 'Login Times', 'fr' => 'Login Times'),
-    'code'      => 'loginTimes',
-    'desc'      => array('zh-cn' => '实现员工登录次数统计报表，按照天统计每天每个人的登录次数，以及总数。', 'zh-tw' => '實現員工登錄次數統計報表，按照天統計每天每個人的登錄次數，以及總數。', 'en' => 'The summary of user login times.', 'de' => 'The summary of user login times.', 'fr' => 'The summary of user login times.'),
-    'dimension' => '1',
-    'driver'    => 'mysql',
-    'group'     => '62',
-    'sql'       => <<<EOT
+    'id'          => 1022,
+    'version'     => '1',
+    'name'        => array('zh-cn' => '员工登录次数统计表', 'zh-tw' => '員工登錄次數統計表', 'en' => 'Login Times', 'de' => 'Login Times', 'fr' => 'Login Times'),
+    'code'        => 'loginTimes',
+    'desc'        => array('zh-cn' => '实现员工登录次数统计报表，按照天统计每天每个人的登录次数，以及总数。', 'zh-tw' => '實現員工登錄次數統計報表，按照天統計每天每個人的登錄次數，以及總數。', 'en' => 'The summary of user login times.', 'de' => 'The summary of user login times.', 'fr' => 'The summary of user login times.'),
+    'dimension'   => '1',
+    'driver'      => 'mysql',
+    'group'       => '62',
+    'createdDate' => '2009-03-14',
+    'sql'         => <<<EOT
 select t1.actor,LEFT(t1.`date`,10) as `day` from zt_action t1
 left join zt_user as t2 on t1.actor = t2.account
 where t1.`action`='login'
@@ -2328,19 +2374,21 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
 (
-    'id'        => 1023,
-    'name'      => array('zh-cn' => '日志汇总表', 'zh-tw' => '日誌匯總表', 'en' => 'Effort Summary', 'de' => 'Effort Summary', 'fr' => 'Effort Summary'),
-    'code'      => 'effortSummary',
-    'desc'      => array('zh-cn' => '查看某个时间段内的日志情况，可以按照部门选择。', 'zh-tw' => '查看某個時間段內的日誌情況，可以按照部門選擇。', 'en' => 'Effort summary of users within a certain period of time, you can select by department.', 'de' => 'Effort summary of users within a certain period of time, you can select by department.', 'fr' => 'Effort summary of users within a certain period of time, you can select by department.'),
-    'dimension' => '1',
-    'driver'    => 'mysql',
-    'group'     => '62',
-    'sql'       => <<<EOT
+    'id'          => 1023,
+    'version'     => '1',
+    'name'        => array('zh-cn' => '日志汇总表', 'zh-tw' => '日誌匯總表', 'en' => 'Effort Summary', 'de' => 'Effort Summary', 'fr' => 'Effort Summary'),
+    'code'        => 'effortSummary',
+    'desc'        => array('zh-cn' => '查看某个时间段内的日志情况，可以按照部门选择。', 'zh-tw' => '查看某個時間段內的日誌情況，可以按照部門選擇。', 'en' => 'Effort summary of users within a certain period of time, you can select by department.', 'de' => 'Effort summary of users within a certain period of time, you can select by department.', 'fr' => 'Effort summary of users within a certain period of time, you can select by department.'),
+    'dimension'   => '1',
+    'driver'      => 'mysql',
+    'group'       => '62',
+    'createdDate' => '2009-03-14',
+    'sql'         => <<<EOT
 select
     t1.account,
     t1.consumed,
@@ -2410,19 +2458,21 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
 (
-    'id'        => 1024,
-    'name'      => array('zh-cn' => '公司动态汇总表', 'zh-tw' => '公司動態匯總表', 'en' => 'Company Dynamics', 'de' => 'Company Dynamics', 'fr' => 'Company Dynamics'),
-    'code'      => 'companyDynamics',
-    'desc'      => array('zh-cn' => '可以指定一个时期，列出相应的数据：1. 每天的登录次数。2. 每天的日志工时量。3. 每天新增的需求数。4. 每天关闭的需求数。5. 每天新增的任务数。6. 每天完成的任务数。7. 每天新增的Bug数。8. 每天解决的Bug数。9. 每天的动态数。', 'zh-tw' => '可以指定一個時期，列出相應的數據：1. 每天的登錄次數。2. 每天的日誌工時量。3. 每天新增的需求數。4. 每天關閉的需求數。5. 每天新增的任務數。6. 每天完成的任務數。7. 每天新增的Bug數。8. 每天解決的Bug數。9. 每天的動態數。', 'en' => 'The summary of company dynamics', 'de' => 'The summary of company dynamics', 'fr' => 'The summary of company dynamics'),
-    'dimension' => '1',
-    'driver'    => 'mysql',
-    'group'     => '62',
-    'sql'       => <<<EOT
+    'id'          => 1024,
+    'version'     => '1',
+    'name'        => array('zh-cn' => '公司动态汇总表', 'zh-tw' => '公司動態匯總表', 'en' => 'Company Dynamics', 'de' => 'Company Dynamics', 'fr' => 'Company Dynamics'),
+    'code'        => 'companyDynamics',
+    'desc'        => array('zh-cn' => '可以指定一个时期，列出相应的数据：1. 每天的登录次数。2. 每天的日志工时量。3. 每天新增的需求数。4. 每天关闭的需求数。5. 每天新增的任务数。6. 每天完成的任务数。7. 每天新增的Bug数。8. 每天解决的Bug数。9. 每天的动态数。', 'zh-tw' => '可以指定一個時期，列出相應的數據：1. 每天的登錄次數。2. 每天的日誌工時量。3. 每天新增的需求數。4. 每天關閉的需求數。5. 每天新增的任務數。6. 每天完成的任務數。7. 每天新增的Bug數。8. 每天解決的Bug數。9. 每天的動態數。', 'en' => 'The summary of company dynamics', 'de' => 'The summary of company dynamics', 'fr' => 'The summary of company dynamics'),
+    'dimension'   => '1',
+    'driver'      => 'mysql',
+    'group'       => '62',
+    'createdDate' => '2009-03-14',
+    'sql'         => <<<EOT
 select t1.day,t2.userlogin,t3.consumed,t4.storyopen,t5.storyclose,t6.taskopen,t7.taskfinish,t8.bugopen,t9.bugresolve,t1.actions from ztv_dayactions as t1
 left join ztv_dayuserlogin as t2 on t1.day=t2.day
 left join ztv_dayeffort as t3 on t1.day=t3.date
@@ -2587,19 +2637,21 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
 (
-    'id'        => 1025,
-    'name'      => array('zh-cn' => 'Bug解决表', 'zh-tw' => 'Bug解決表', 'en' => 'Solved Bugs', 'de' => 'Solved Bugs', 'fr' => 'Solved Bugs'),
-    'code'      => 'slovedBugs',
-    'desc'      => array('zh-cn' => '列出解决的Bug总数，解决方案的分布，占的比例（该用户解决的Bug的数量占所有的解决的Bug的数量)。', 'zh-tw' => '列出解決的Bug總數，解決方案的分布，占的比例（該用戶解決的Bug的數量占所有的解決的Bug的數量)。', 'en' => 'percentage:self resolved / all resolved', 'de' => 'percentage:self resolved / all resolved', 'fr' => 'percentage:self resolved / all resolved'),
-    'dimension' => '1',
-    'driver'    => 'mysql',
-    'group'     => '61',
-    'sql'       => <<<EOT
+    'id'          => 1025,
+    'version'     => '1',
+    'name'        => array('zh-cn' => 'Bug解决表', 'zh-tw' => 'Bug解決表', 'en' => 'Solved Bugs', 'de' => 'Solved Bugs', 'fr' => 'Solved Bugs'),
+    'code'        => 'slovedBugs',
+    'desc'        => array('zh-cn' => '列出解决的Bug总数，解决方案的分布，占的比例（该用户解决的Bug的数量占所有的解决的Bug的数量)。', 'zh-tw' => '列出解決的Bug總數，解決方案的分布，占的比例（該用戶解決的Bug的數量占所有的解決的Bug的數量)。', 'en' => 'percentage:self resolved / all resolved', 'de' => 'percentage:self resolved / all resolved', 'fr' => 'percentage:self resolved / all resolved'),
+    'dimension'   => '1',
+    'driver'      => 'mysql',
+    'group'       => '61',
+    'createdDate' => '2009-03-14',
+    'sql'         => <<<EOT
 select
     t1.resolvedBy,t1.resolution
 from zt_bug as t1
@@ -2661,19 +2713,21 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
 (
-    'id'        => 1026,
-    'name'      => array('zh-cn' => '项目进展表', 'zh-tw' => '項目進展表', 'en' => 'Project Progress Report', 'de' => 'Project Progress Report', 'fr' => 'Project Progress Report', 'vi' => 'Project Progress Report', 'ja' => 'Project Progress Report'),
-    'code'      => 'projectProgress',
-    'desc'      => array('zh-cn' => '项目的：需求数，剩余需求数(过滤状态为已关闭的需求)，任务数，剩余任务数(过滤状态为已完成和已关闭的任务)，剩余工时（剩余任务的剩余工时），已消耗工时。', 'zh-tw' => '項目的需求數，任務數，已消耗工時，剩餘工時，剩餘需求數，剩餘任務數，進度。', 'en' => '', 'de' => '', 'fr' => '', 'vi' => '', 'ja' => ''),
-    'dimension' => '1',
-    'driver'    => 'mysql',
-    'group'     => '60',
-    'sql'       => <<<EOT
+    'id'          => 1026,
+    'version'     => '1',
+    'name'        => array('zh-cn' => '项目进展表', 'zh-tw' => '項目進展表', 'en' => 'Project Progress Report', 'de' => 'Project Progress Report', 'fr' => 'Project Progress Report', 'vi' => 'Project Progress Report', 'ja' => 'Project Progress Report'),
+    'code'        => 'projectProgress',
+    'desc'        => array('zh-cn' => '项目的：需求数，剩余需求数(过滤状态为已关闭的需求)，任务数，剩余任务数(过滤状态为已完成和已关闭的任务)，剩余工时（剩余任务的剩余工时），已消耗工时。', 'zh-tw' => '項目的需求數，任務數，已消耗工時，剩餘工時，剩餘需求數，剩餘任務數，進度。', 'en' => '', 'de' => '', 'fr' => '', 'vi' => '', 'ja' => ''),
+    'dimension'   => '1',
+    'driver'      => 'mysql',
+    'group'       => '60',
+    'createdDate' => '2009-03-14',
+    'sql'         => <<<EOT
 select
     t1.id,
     t4.name as projectname,
@@ -2831,19 +2885,21 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
 (
-    'id'        => 1027,
-    'name'      => array('zh-cn' => '项目执行Bug类型统计表', 'zh-tw' => '項目Bug類型統計表', 'en' => 'Project Bug Type', 'de' => 'Project Bug Type', 'fr' => 'Project Bug Type'),
-    'code'      => 'projectBugType',
-    'desc'      => array('zh-cn' => '按照项目下不同执行统计Bug的类型分布情况。', 'zh-tw' => '按照項目統計Bug的類型分布情況。'),
-    'dimension' => '1',
-    'driver'    => 'mysql',
-    'group'     => '60,61',
-    'sql'       => <<<EOT
+    'id'          => 1027,
+    'version'     => '1',
+    'name'        => array('zh-cn' => '项目执行Bug类型统计表', 'zh-tw' => '項目Bug類型統計表', 'en' => 'Project Bug Type', 'de' => 'Project Bug Type', 'fr' => 'Project Bug Type'),
+    'code'        => 'projectBugType',
+    'desc'        => array('zh-cn' => '按照项目下不同执行统计Bug的类型分布情况。', 'zh-tw' => '按照項目統計Bug的類型分布情況。'),
+    'dimension'   => '1',
+    'driver'      => 'mysql',
+    'group'       => '60,61',
+    'createdDate' => '2009-03-14',
+    'sql'         => <<<EOT
 select
     t1.id,
     t2.project as project,
@@ -2923,19 +2979,21 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );
 
 $config->bi->builtin->pivots[] = array
 (
-    'id'        => 1028,
-    'name'      => array('zh-cn' => '产品Bug解决方案统计表', 'zh-tw' => '産品Bug解決方案統計表', 'en' => 'Bug Solution of Product'),
-    'code'      => 'productBugSolution',
-    'desc'      => array('zh-cn' => '按照产品统计Bug的解决方案分布情况。', 'zh-tw' => '按照産品統計Bug的解決方案分布情況。', 'en' => 'Solution distribution of bugs.'),
-    'dimension' => '1',
-    'driver'    => 'mysql',
-    'group'     => '59,61',
-    'sql'       => <<<EOT
+    'id'          => 1028,
+    'version'     => '1',
+    'name'        => array('zh-cn' => '产品Bug解决方案统计表', 'zh-tw' => '産品Bug解決方案統計表', 'en' => 'Bug Solution of Product'),
+    'code'        => 'productBugSolution',
+    'desc'        => array('zh-cn' => '按照产品统计Bug的解决方案分布情况。', 'zh-tw' => '按照産品統計Bug的解決方案分布情況。', 'en' => 'Solution distribution of bugs.'),
+    'dimension'   => '1',
+    'driver'      => 'mysql',
+    'group'       => '59,61',
+    'createdDate' => '2009-03-14',
+    'sql'         => <<<EOT
 select t1.product,t2.name,t1.id as bugID,t1.resolution from zt_bug as t1
 left join zt_product as t2 on t2.id=t1.product
 left join zt_project as t3 on t2.program=t3.id
@@ -2993,5 +3051,5 @@ EOT,
         )
     ),
     'stage'     => 'published',
-    'builtin'   => '0'
+    'builtin'   => '1'
 );

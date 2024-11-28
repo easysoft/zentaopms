@@ -102,7 +102,7 @@ $lang->execution->all                 = '所有';
 $lang->execution->undone              = '未完成';
 $lang->execution->unclosed            = '未关闭';
 $lang->execution->closedExecution     = '已关闭的执行';
-$lang->execution->typeDesc            = "运维{$lang->executionCommon}没有{$lang->SRCommon}、bug、版本、测试功能。";
+$lang->execution->typeDesc            = "运维{$lang->executionCommon}没有{$lang->SRCommon}、bug、构建、测试功能。";
 $lang->execution->mine                = '我负责：';
 $lang->execution->involved            = '我参与';
 $lang->execution->other               = '其他';
@@ -231,7 +231,7 @@ $lang->execution->bug                       = 'Bug列表';
 $lang->execution->testcase                  = '用例列表';
 $lang->execution->dynamic                   = '动态';
 $lang->execution->latestDynamic             = '最新动态';
-$lang->execution->build                     = '版本列表';
+$lang->execution->build                     = '构建列表';
 $lang->execution->testtask                  = '测试单';
 $lang->execution->burn                      = '燃尽图';
 $lang->execution->computeBurn               = '更新燃尽图';
@@ -559,7 +559,7 @@ $lang->execution->featureBar['all']['closed']    = $lang->execution->statusList[
 $lang->execution->featureBar['bug']['all']        = '全部';
 $lang->execution->featureBar['bug']['unresolved'] = '未解决';
 
-$lang->execution->featureBar['build']['all'] = '全部版本';
+$lang->execution->featureBar['build']['all'] = '全部构建';
 
 $lang->execution->featureBar['story']['all']       = '全部';
 $lang->execution->featureBar['story']['unclosed']  = '未关闭';

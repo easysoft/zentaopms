@@ -67,6 +67,8 @@ class pivotModel extends model
      *
      * @param  int         $pivotID
      * @param  bool        $processDateVar
+     * @param  string      $filterStatus
+     * @param  bool        $addDrills
      * @access public
      * @return object|bool
      */
@@ -96,6 +98,44 @@ class pivotModel extends model
         if($addDrills) $this->addDrills($pivot);
 
         // if(isset($pivot->stage) && $pivot->stage == 'published' && $this->app->methodName == 'preview') $this->processFieldSettings($pivot);
+
+        return $pivot;
+    }
+
+    /*
+     * 获取透视表某版本。
+     * Get pivot by id and version.
+     *
+     * @param  int         $pivotID
+     * @param  string      $version
+     * @param  bool        $processDateVar
+     * @param  bool        $addDrills
+     * @access public
+     * @return object|bool
+     */
+    public function getPivotSpec(int $pivotID, string $version, bool $processDateVar = false, bool $addDrills = true)
+    {
+        $pivot = $this->pivotTao->fetchPivot($pivotID, $version);
+        if(!$pivot) return false;
+
+        $pivot->fieldSettings = array();
+        if(!empty($pivot->fields) && $pivot->fields != 'null')
+        {
+            $pivot->fieldSettings = json_decode($pivot->fields);
+            $pivot->fields        = array_keys(get_object_vars($pivot->fieldSettings));
+        }
+
+        if(!empty($pivot->filters))
+        {
+            $filters = json_decode($pivot->filters, true);
+            $pivot->filters = $this->setFilterDefault($filters, $processDateVar);
+        }
+        else
+        {
+            $pivot->filters = array();
+        }
+        $this->completePivot($pivot);
+        if($addDrills) $this->addDrills($pivot);
 
         return $pivot;
     }
@@ -164,14 +204,20 @@ class pivotModel extends model
 
         if(!empty($pivot->name))
         {
-            $pivot->names = json_decode($pivot->name, true);
-            $pivot->name  = zget($pivot->names, $clientLang, '') ?? reset(array_filter($pivot->names));
+            $pivot->names   = json_decode($pivot->name, true);
+            $langNames      = empty($pivot->names) ? array() : array_filter($pivot->names);
+            $firstName      = empty($langNames)    ? ''      : reset($langNames);
+            $clientLangName = zget($pivot->names, $clientLang, '');
+            $pivot->name    = empty($clientLangName) ? $firstName : $clientLangName;
         }
 
         if(!empty($pivot->desc))
         {
-            $pivot->descs = json_decode($pivot->desc, true);
-            $pivot->desc  = zget($pivot->descs, $clientLang, '');
+            $pivot->descs    = json_decode($pivot->desc, true);
+            $langDescs       = empty($pivot->descs) ? array() : array_filter($pivot->descs);
+            $firstDesc       = empty($langDescs)    ? ''      : reset($langDescs);
+            $clientLangDesc  = zget($pivot->descs, $clientLang, '');
+            $pivot->desc     = empty($clientLangDesc) ? $firstDesc : $clientLangDesc;
         }
     }
 
@@ -204,7 +250,7 @@ class pivotModel extends model
         if(!is_array($settings) || !isset($settings['columns'])) return;
         $columns  = $settings['columns'];
         $drillFields = array_column($columns, 'field');
-        $drills = $this->pivotTao->fetchPivotDrills($pivot->id, $drillFields);
+        $drills = $this->pivotTao->fetchPivotDrills($pivot->id, $pivot->version, $drillFields);
         foreach($columns as $index => $column) $pivot->settings['columns'][$index]['drill'] = zget($drills, $column['field']);
     }
 
@@ -2534,7 +2580,7 @@ class pivotModel extends model
             {
                 $isGroup = !empty($data->cols[0][$j]->isGroup) ? $data->cols[0][$j]->isGroup : false;
                 $rowspan = isset($configs[$i][$j]) ? $configs[$i][$j] : 1;
-                $hidden  = (isset($configs[$i][$j]) and $configs[$i][$j]) ? false : (!$isGroup ? false : true);
+                $hidden  = (isset($configs[$i][$j]) and $configs[$i][$j]) ? false : (bool)$isGroup;
 
                 $showOrigin = $showOrigins[$j];
                 if($hasShowOrigin && !$isGroup && !$showOrigin)
@@ -2814,6 +2860,118 @@ class pivotModel extends model
         }
 
         return $datas;
+    }
+
+    /**
+     * Get versions of a pivot.
+     *
+     * @param  int    $pivotID
+     * @access public
+     * @return array|bool
+     */
+    public function getPivotVersions(int $pivotID): array|bool
+    {
+        $pivot = $this->dao->select('*')->from(TABLE_PIVOT)->where('id')->eq($pivotID)->andWhere('deleted')->eq('0')->fetch();
+        if(!$pivot) return false;
+
+        $pivotSpecList = $this->dao->select('*')->from(TABLE_PIVOTSPEC)->where('pivot')->eq($pivotID)->fetchAll();
+        if(!$pivotSpecList) return false;
+
+        $pivotVersionList = array();
+        foreach($pivotSpecList as $specData)
+        {
+            $pivotVersion = clone $pivot;
+            foreach($specData as $specKey => $specValue) $pivotVersion->$specKey = $specValue;
+            $this->processNameDesc($pivotVersion);
+
+            $pivotVersionList[] = $pivotVersion;
+        }
+
+        return $pivotVersionList;
+    }
+
+    /**
+     * Get max version.
+     *
+     * @param  int    $pivotID
+     * @access public
+     * @return string
+     */
+    public function getMaxVersion(int $pivotID): string
+    {
+        $versions = $this->dao->select('version')->from(TABLE_PIVOTSPEC)->where('pivot')->eq($pivotID)->fetchPairs();
+
+        $maxVersion = current($versions);
+        foreach($versions as $version)
+        {
+            if(version_compare($version, $maxVersion, '>')) $maxVersion = $version;
+        }
+
+        return $maxVersion;
+    }
+
+    /**
+     * Get max version by idList.
+     *
+     * @param  string|array $pivotIDList
+     * @access public
+     * @return string
+     */
+    public function getMaxVersionByIDList(string|array $pivotIDList)
+    {
+        $pivotVersions = $this->dao->select('pivot,version')->from(TABLE_PIVOTSPEC)
+            ->where('pivot')->in($pivotIDList)
+            ->fetchGroup('pivot', 'version');
+        if(empty($pivotVersions)) return array();
+
+        $pivotMaxVersion = array();
+        foreach($pivotVersions as $pivotID => $versions)
+        {
+            $versions = array_keys($versions);
+            $maxVersion = current($versions);
+            foreach($versions as $version)
+            {
+                if(version_compare($version, $maxVersion, '>')) $maxVersion = $version;
+            }
+
+            $pivotMaxVersion[$pivotID] = $maxVersion;
+        }
+
+        return $pivotMaxVersion;
+    }
+
+    public function isVersionChange(array|object $pivots, bool $isObject = true)
+    {
+        if($isObject) $pivots = array($pivots);
+        $pivotMaxVersion = $this->getMaxVersionByIDList(array_column($pivots, 'id'));
+
+        foreach($pivots as $index => $pivot)
+        {
+            if(isset($pivotMaxVersion[$pivot->id]) && $pivotMaxVersion[$pivot->id] != $pivot->version)
+            {
+                $pivots[$index]->versionChange = true;
+            }
+            else
+            {
+                $pivots[$index]->versionChange = false;
+            }
+        }
+
+        return $isObject ? current($pivots) : $pivots;
+    }
+
+    /**
+     * Switch pivot to a new version.
+     *
+     * @param  int    $pivotID
+     * @param  string $version
+     * @access public
+     * @return bool
+     */
+    public function switchNewVersion(int $pivotID, string $version): bool
+    {
+        $this->dao->update(TABLE_PIVOT)->set('version')->eq($version)->where('id')->eq($pivotID)->exec();
+        return !dao::isError();
     }
 }
 

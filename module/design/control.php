@@ -539,6 +539,10 @@ class design extends control
         $this->design->confirmStoryChange($designID);
 
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        $design = $this->design->fetchByID($designID);
+        $this->loadModel('action')->create('design', $designID, 'confirmed', '', $design->storyVersion);
+
         return $this->send(array('result' => 'success', 'load' => true));
     }
 }

@@ -24,7 +24,10 @@ CREATE INDEX `idx_status` ON `zt_system`(`status`);
 ALTER TABLE `zt_release` ADD `system` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0' AFTER `name`;
 ALTER TABLE `zt_release` ADD `releases` VARCHAR(255) NOT NULL DEFAULT '' AFTER `system`;
 
+ALTER TABLE `zt_build` ADD `system` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0' AFTER `name`;
+
 CREATE INDEX `idx_system` ON `zt_release`(`system`);
+CREATE INDEX `idx_system` ON `zt_build`(`system`);
 
 ALTER TABLE `zt_review` ADD `toAuditBy` varchar(30) not NULL default '' AFTER `lastAuditedDate`;
 ALTER TABLE `zt_review` ADD `toAuditDate` datetime NULL AFTER `toAuditBy`;
@@ -54,7 +57,9 @@ CREATE TABLE IF NOT EXISTS `zt_pivotspec` (
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
 CREATE UNIQUE INDEX `idx_pivot_version` ON `zt_pivotspec`(`pivot`, `version`);
 
-ALTER TABLE `zt_pivot` ADD `version` varchar(10) NOT NULL DEFAULT '0' AFTER `builtin`;
+ALTER TABLE `zt_pivot` ADD `version` varchar(10) NOT NULL DEFAULT '1' AFTER `builtin`;
+ALTER TABLE `zt_chart` ADD `version` varchar(10) NOT NULL DEFAULT '1' AFTER `builtin`;
+ALTER TABLE `zt_pivotdrill` ADD `version` varchar(10) NOT NULL DEFAULT '1' AFTER `pivot`;
 ALTER TABLE `zt_pivot` CHANGE `mode` `mode` varchar(10) NOT NULL DEFAULT 'builder';
 ALTER TABLE `zt_pivot` CHANGE `sql` `sql` text NULL;
 ALTER TABLE `zt_pivot` CHANGE `fields` `fields` text NULL;
@@ -77,3 +82,16 @@ CREATE TABLE IF NOT EXISTS `zt_mark` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE INDEX `idx_object` ON `zt_mark`(`objectType`,`objectID`);
 CREATE INDEX `idx_account` ON `zt_mark`(`account`);
+
+UPDATE `zt_grouppriv` SET `module` = 'cache', `method` = 'setting' WHERE `module` = 'admin' AND `method` = 'cache';
+REPLACE INTO `zt_grouppriv` SELECT `group`, 'cache', 'clear' FROM `zt_grouppriv` WHERE `module` = 'cache' AND `method` = 'setting';
+REPLACE INTO `zt_grouppriv` SELECT `group`, 'system', 'create' FROM `zt_grouppriv` WHERE `module` IN ('release', 'projectrelease', 'build', 'projectbuild') AND `method` = 'create';
+
+UPDATE `zt_pivot` SET `version` = '1';
+UPDATE `zt_pivot` SET `builtin` = '1', `createdDate` = '2009-03-14' WHERE `id` >= 1000 AND `id` <= 1028;
+INSERT INTO `zt_pivotspec` SELECT `id`,`version`,`driver`,`mode`,`name`,`desc`,`sql`,`fields`,`langs`,`vars`,`objects`,`settings`,`filters`,`createdDate` FROM `zt_pivot`;
+UPDATE `zt_pivotdrill` SET `version` = '1';
+
+DELETE FROM `zt_cron` WHERE `command` = 'moduleName=misc&methodName=cleanCache';
+
+INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`) VALUES ('0', '2', '*', '*', '*', 'moduleName=system&methodName=initSystem', '初始化产品下应用数据', 'zentao', 1, 'normal');

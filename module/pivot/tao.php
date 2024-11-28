@@ -6,21 +6,55 @@ class pivotTao extends pivotModel
      * 获取透视表。
      * Fetch pivot by id.
      *
-     * @param int $id
+     * @param int         $id
+     * @param string|null $version
      * @access public
      * @return object|bool
      */
-    protected function fetchPivot(int $id): object|bool
+    protected function fetchPivot(int $id, string|null $version = null): object|bool
     {
         $pivot = $this->dao->select('*')->from(TABLE_PIVOT)->where('id')->eq($id)->andWhere('deleted')->eq('0')->fetch();
         if(!$pivot) return false;
 
-        $specData = $this->dao->select('*')->from(TABLE_PIVOTSPEC)->where('pivot')->eq($id)->andWhere('version')->eq($pivot->version)->fetch();
+        if(is_null($version)) return $this->mergePivotSpecData($pivot);
+
+        $specData = $this->dao->select('*')->from(TABLE_PIVOTSPEC)->where('pivot')->eq($id)->andWhere('version')->eq($version)->fetch();
         if(!$specData) return $pivot;
 
         foreach($specData as $specKey => $specValue) $pivot->$specKey = $specValue;
         return $pivot;
     }
+
+    /**
+     * 合并 pivotSpec 的数据。
+     * Merge pivotSpec data to pivot.
+     *
+     * @param int     $id
+     * @param bool    $isObject
+     * @access public
+     * @return object|bool
+     */
+    protected function mergePivotSpecData($pivots, $isObject = true)
+    {
+        if($isObject) $pivots = array($pivots);
+        $pivotIDList = array_column($pivots, 'id');
+
+        $pivotSpecs = $this->dao->select('t2.*')->from(TABLE_PIVOT)->alias('t1')
+            ->leftJoin(TABLE_PIVOTSPEC)->alias('t2')->on('t1.id = t2.pivot and t1.version = t2.version')
+            ->where('t1.id')->in($pivotIDList)
+            ->fetchAll('pivot');
+
+        foreach($pivots as $index => $pivot)
+        {
+            if(!isset($pivotSpecs[$pivot->id])) continue;
+
+            foreach($pivotSpecs[$pivot->id] as $specKey => $specValue) $pivot->$specKey = $specValue;
+            $pivots[$index] = $pivot;
+        }
+
+        return $isObject ? current($pivots) : $pivots;
+    }
+
     /**
      * 获取产品列表。
      * Get product list.
@@ -446,12 +480,14 @@ EOT)->from(TABLE_TASK)->alias('t1')
      */
     protected function getAllPivotByGroupID(int $groupID): array
     {
-        return $this->dao->select('*')->from(TABLE_PIVOT)
+        $pivots = $this->dao->select('*')->from(TABLE_PIVOT)
             ->where("FIND_IN_SET({$groupID}, `group`)")
             ->andWhere('stage')->ne('draft')
             ->andWhere('deleted')->eq('0')
             ->orderBy('id_desc')
             ->fetchAll();
+
+        return $this->mergePivotSpecData($pivots, false);
     }
 
     /**
@@ -464,11 +500,12 @@ EOT)->from(TABLE_TASK)->alias('t1')
      * @access public
      * @return object|bool
      */
-    public function fetchPivotDrills(int $pivotID, string|array $fields): array
+    public function fetchPivotDrills(int $pivotID, string $version, string|array $fields): array
     {
         if(is_string($fields)) $fields = array($fields);
         $records = $this->dao->select('*')->from(TABLE_PIVOTDRILL)
             ->where('pivot')->eq($pivotID)
+            ->andWhere('version')->eq($version)
             ->andWhere('field')->in($fields)
             ->fetchAll('field');
 

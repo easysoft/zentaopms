@@ -11,6 +11,8 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('projectID', isset($projectID) ? $projectID : 0);
+jsVar('appList',   $appList);
+jsVar('productID', zget($product, 'id', 0));
 
 $productRow = array();
 if(!empty($projectID))
@@ -33,7 +35,42 @@ if(!empty($projectID))
 formPanel
 (
     set::title($lang->release->create),
-    on::change('[name=status]', 'changeStatus'),
+    on::change('[name=status]')->call('changeStatus'),
+    on::change('[name=newSystem]')->call('setSystemBox'),
+    on::change('[name=system]')->call('loadSystemBlock'),
+    formRow
+    (
+        formGroup
+        (
+            set::width('1/2'),
+            set::label($lang->release->system),
+            set::required(true),
+            inputGroup
+            (
+                div
+                (
+                    setClass('w-full'),
+                    setId('systemBox'),
+                    picker
+                    (
+                        set::name('system'),
+                        set::required(true),
+                        set::items(array_column($appList, 'name', 'id')),
+                    ),
+                    input(set::name('systemName'), setClass('hidden'))
+                ),
+                hasPriv('system', 'create') ? div
+                (
+                    setClass('input-group-addon flex'),
+                    checkbox
+                    (
+                        set::name('newSystem'),
+                        set::text($lang->release->addSystem)
+                    )
+                ) : null
+            )
+        )
+    ),
     formRow
     (
         formGroup
@@ -56,8 +93,17 @@ formPanel
         )
     ),
     $productRow,
+    formGroup
+    (
+        setClass('hidden'),
+        setID('systemBlock'),
+        set::required(true),
+        set::label($lang->release->includedSystem),
+        div(setID('systemItems'), setClass('w-full'))
+    ),
     formRow
     (
+        setID('buildBox'),
         formGroup
         (
             set::width('1/2'),

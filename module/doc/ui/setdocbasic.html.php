@@ -20,7 +20,7 @@ formPanel
 (
     setID('setDocBasicForm'),
     setData('officeTypes', $this->config->doc->officeTypes),
-    setData('docType', isset($doc) ? $doc->users : 'undefined'),
+    setData('docType', isset($doc) ? $doc->type : 'undefined'),
     set::title($title),
     set::submitBtnText($isDraft ? $lang->doc->saveDraft : (empty($docID) ? $lang->doc->release : $lang->save)),
     on::change('[name=space],[name=product],[name=execution]')->call('loadObjectModules', jsRaw('event')),
@@ -29,22 +29,25 @@ formPanel
     on::change('[name=lib],[name^=users]', 'checkLibPriv'),
     set::ajax(array('beforeSubmit' => jsRaw('window.beforeSetDocBasicInfo'))),
 
-    $objectType == 'project' ? formRow
-    (
-        formGroup
-        (
-            setClass('w-1/2'),
-            set::label($lang->doc->project),
-            set::required(true),
-            set::control(array('control' => 'picker', 'name' => 'project', 'items' => $objects, 'required' => true, 'value' => isset($execution) ? $execution->project : $objectID))
-        ),
-        ($mode == 'create' && $this->app->tab == 'doc' and $config->vision == 'rnd') ? formGroup
-        (
-            setClass('w-1/2'),
-            set::label($lang->doc->execution),
-            set::control(array('control' => 'picker', 'name' => 'execution', 'items' => $executions, 'value' => isset($execution) ? $objectID : ''))
-        ) : null
-    ) : null,
+    $objectType == 'project'
+        ? formRow(
+            formGroup(
+                setClass('w-1/2'),
+                set::label($lang->doc->project),
+                set::name('project'),
+                set::items(createLink('project', 'ajaxGetDropMenu', "objectID=$objectID&module=&method=&extra=selectmode&useLink=0")),
+                set::value(isset($execution) ? $execution->project : $objectID),
+                set::required(true)
+            ),
+            ($mode == 'create' && $this->app->tab == 'doc' and $config->vision == 'rnd')
+                ? formGroup(
+                    setClass('w-1/2'),
+                    set::label($lang->doc->execution),
+                    set::control(array('control' => 'picker', 'name' => 'execution', 'items' => $executions, 'value' => isset($execution) ? $objectID : ''))
+                )
+                : null
+        )
+        : null,
     ($objectType == 'execution') ? formGroup
     (
         set::width('1/2'),
@@ -56,8 +59,10 @@ formPanel
     (
         set::width('1/2'),
         set::label($lang->doc->product),
-        set::required(true),
-        set::control(array('control' => 'picker', 'name' => 'product', 'items' => $objects, 'required' => true, 'value' => $objectID))
+        set::name('product'),
+        set::items(createLink('product', 'ajaxGetDropMenu', "objectID=$objectID&module=&method=&extra=selectmode&useLink=0")),
+        set::value($objectID),
+        set::required(true)
     ) : null,
     ($objectType == 'custom' || $objectType === 'mine') ? formGroup
     (

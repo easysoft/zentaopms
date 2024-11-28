@@ -51,7 +51,6 @@ class pivot extends control
         if($method && $method != 'show' && !common::hasPriv('pivot', $method)) $this->loadModel('common')->deny('pivot', $method);
 
         parse_str($params, $result);
-
         if(method_exists($this->pivotZen, $method)) call_user_func_array(array($this->pivotZen, $method), $result);
         $this->session->set('backDimension', $dimensionID);
         $this->session->set('backGroup', $groupID);
@@ -69,6 +68,45 @@ class pivot extends control
     }
 
     /**
+     * 透视表版本列表。
+     * Show versions of a pivot.
+     *
+     * @param  int    $groupID
+     * @param  int    $pivotID
+     * @param  string $version
+     * @access public
+     * @return void
+     */
+    public function versions(int $groupID, int $pivotID, string $version = 'newest')
+    {
+        $pivot = $this->pivot->getByID($pivotID);
+
+        if($version == 'newest')  $version = $this->pivot->getMaxVersion($pivotID);
+        if($version == 'current') $version = $pivot->version;
+
+        $versionSpecs = $this->pivot->getPivotVersions($pivotID);
+        if(empty($versionSpecs)) $this->sendError($this->lang->pivot->tipNoVersions);
+
+        if(strtolower($this->server->request_method) == 'post' && !isset($_POST['preview']))
+        {
+            $result = $this->pivot->switchNewVersion($pivotID, $version);
+            if($result) $this->sendSuccess(array('closeModal' => true, 'message' => $this->lang->saveSuccess, 'load' => true));
+        }
+
+        $this->pivotZen->show($groupID, $pivotID, '', $version);
+
+        $this->loadModel('mark')->setMark(array($pivotID), 'pivot', $version, 'version');
+        $marks = $this->loadModel('mark')->getNeededMarks(array($pivotID), 'pivot', 'all', 'version');
+
+        $this->view->versionSpecs   = $versionSpecs;
+        $this->view->markedVersions = array_column($marks, 'version');
+        $this->view->version        = $version;
+        $this->view->groupID        = $groupID;
+        $this->view->pivotID        = $groupID;
+        $this->display();
+    }
+
+    /**
      * Drill data modal.
      * 下钻数据的弹窗。
      *
@@ -81,9 +119,9 @@ class pivot extends control
      * @access public
      * @return void
      */
-    public function drillModal(int $pivotID, string $colName, string $status, string $conditions, string $filterValues, string $value)
+    public function drillModal(int $pivotID, string $version, string $colName, string $status, string $conditions, string $filterValues, string $value)
     {
-        $drill        = $this->pivotZen->getDrill($pivotID, $colName, $status);
+        $drill        = $this->pivotZen->getDrill($pivotID, $version, $colName, $status);
         $conditions   = json_decode(base64_decode($conditions), true);
         $filterValues = json_decode(base64_decode($filterValues), true);
 

@@ -23,7 +23,7 @@ class buildTao extends buildModel
      * @access protected
      * @return array
      */
-    protected function fetchBuilds(array|int $productIdList, string $params = '', int $objectID = 0, string $objectType = '', array $shadows = array()): array
+    protected function fetchBuilds(array|int $productIdList, string $params = '', int $objectID = 0, string $objectType = '', array $shadows = array(), int $system = 0): array
     {
         $fieldList = 't1.id, t1.name, t1.branch, t1.execution, t1.date, t1.deleted, t3.status as releaseStatus, t3.id as releaseID, t4.type as productType';
         if($objectType == 'execution' || $objectType == 'project') $fieldList .= ', t2.status as objectStatus';
@@ -41,6 +41,7 @@ class buildTao extends buildModel
             ->beginIF(!empty($productIdList))->andWhere('t1.product')->in($productIdList)->fi()
             ->beginIF($objectType === 'execution' && $objectID)->andWhere('t1.execution')->eq($objectID)->fi()
             ->beginIF($objectType === 'project' && $objectID)->andWhere('t1.project')->eq($objectID)->fi()
+            ->beginIF($system)->andWhere('t1.system')->eq($system)->fi()
             ->orderBy('t1.date desc, t1.id desc')
             ->fetchAll('id');
     }

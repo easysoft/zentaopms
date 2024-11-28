@@ -192,6 +192,7 @@ class build extends control
         $this->view->execution    = $this->loadModel('execution')->getByID((int)$build->execution);
         $this->view->childBuilds  = empty($build->builds) ? array() : $this->build->getByList(explode(',', $build->builds));
         $this->view->productID    = $build->product;
+        $this->view->systemList   = $this->loadModel('system')->getPairs();
 
         $this->display();
     }
@@ -280,7 +281,7 @@ class build extends control
      * @access public
      * @return string
      */
-    public function ajaxGetProjectBuilds(int $projectID, int $productID, string $varName, string $build = '', string|int $branch = 'all', $needCreate = false, $type = 'normal')
+    public function ajaxGetProjectBuilds(int $projectID, int $productID, string $varName, string $build = '', string|int $branch = 'all', $needCreate = false, $type = 'normal', int $system = 0)
     {
         $isJsonView = $this->app->getViewType() == 'json';
         if($varName == 'openedBuild')
@@ -308,7 +309,7 @@ class build extends control
 
         if(empty($projectID)) return $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $type);
 
-        $builds = $this->build->getBuildPairs(array($productID), $branch, $type, $projectID, 'project', $build, false);
+        $builds = $this->build->getBuildPairs(array($productID), $branch, $type, $projectID, 'project', $build, false, (int)$system);
         if($isJsonView) return print(json_encode($builds));
 
         $builds = $this->build->addReleaseLabelForBuilds($productID, $builds);
@@ -684,5 +685,42 @@ class build extends control
     {
         if($this->post->bugIdList) $this->build->batchUnlinkBug($buildID, $this->post->bugIdList);
         return $this->sendSuccess(array('load' => $this->createLink($this->app->rawModule, 'view', "buildID=$buildID&type=bug")));
+    }
+
+    /**
+     * 根据选择的产品获取应用列表。
+     * Get system list by product.
+     *
+     * @param  int $productID
+     * @access public
+     * @return string
+     */
+    public function ajaxGetSystemList(int $productID)
+    {
+        $systemList = $this->loadModel('system')->getPairs($productID, '0', 'active');
+
+        $system = array();
+        foreach($systemList as $systemID => $systemName) $system[] = array('text' => $systemName, 'value' => $systemID);
+
+        echo json_encode($system);
+    }
+
+    /**
+     * 根据选择的系统获取版本列表。
+     * Get build list by system.
+     *
+     * @param  int    $productID
+     * @param  int    $systemID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetSystemBuilds(int $productID, int $systemID)
+    {
+        $builds = $this->build->getBuildPairs(array($productID), 'all', 'noterminate, nodone, notrunk', 0, 'product', '', false, (int)$systemID);
+
+        $buildList = array();
+        foreach($builds as $buildID => $buildName) $buildList[] = array('text' => $buildName, 'value' => $buildID);
+
+        echo json_encode($buildList);
     }
 }

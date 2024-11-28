@@ -162,7 +162,8 @@ $lang->host->diskType   = 'Disk Type';
 $lang->host->diskTypeList['hdd'] = 'HDD';
 $lang->host->diskTypeList['ssd'] = 'SSD';
 
-$lang->host->confirmDelete = 'Do you want to delete this host?';
+$lang->host->confirmDelete  = 'Do you want to delete this host?';
+$lang->host->deletedSuccess = 'Deleted successfully!';
 
 $lang->host->notice = new stdclass();
 $lang->host->notice->memory     = 'Memory size should be numbers！';

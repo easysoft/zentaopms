@@ -1500,6 +1500,7 @@ class actionModel extends model
             $this->story->updateParentStatus($action->objectID);
         }
         if($action->objectType == 'demand' && !empty($object->parent)) $this->loadModel('demand')->updateParentDemandStage($object->parent);
+        if($action->objectType == 'release') $this->loadModel('system')->setSystemRelease((int)$object->system, $action->objectID);
 
         /* 在action表中更新action记录。 */
         /* Update action record in action table. */

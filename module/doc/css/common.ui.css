@@ -30,3 +30,8 @@
 .files-grid .img-holder {height: 64px; line-height: 64px; margin: 0 auto 8px; width: 100%; background-size: contain; background-repeat: no-repeat; background-position: center;}
 .files-grid .img-holder > img {width: 33%; margin: 0 auto; max-height: 64px;}
 .files-grid .img-holder > img.not-exist {opacity: 0;}
+
+.menu-item.is-nested > .item-inner .item-content .item-title {flex-grow: 0!important; opacity: .6;}
+.menu-item.is-nested > .item-inner .item-content .item-subtitle {--skin-pale-rgb: var(--color-gray-500-rgb); height: 1rem; min-width: 1rem; border-radius: var(--radius-full); --skin-color: rgba(var(--skin-pale-rgb), .1); --skin-text: rgba(var(--skin-pale-rgb), 1); --state-color: rgba(var(--skin-pale-rgb), .1); --skin-bg: var(--skin-color); --skin-ring: var(--skin-color); --skin-border: var(--skin-color); --skin-hover-text: var(--skin-text); --skin-hover-bg: var(--skin-bg); --tw-ring-color: var(--skin-ring); --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color); --color-link-hover: var(--skin-text); background-color: var(--skin-bg); border-color: var(--skin-border); box-shadow: var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000); color: var(--skin-text); display: inline-flex; font-size: .75rem; align-items: center; justify-content: center; line-height: 1rem; padding-left: .25rem; padding-right: .25rem;}
+.menu-item.is-nested > .item-inner {background-color: inherit!important; color: inherit!important; cursor: default;}
+.menu-item.is-nested > .item-inner::before {display: none;}

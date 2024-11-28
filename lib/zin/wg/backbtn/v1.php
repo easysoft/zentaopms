@@ -94,7 +94,7 @@ class backBtn extends btn
             'roadmap'        => 'charter-view',
             'approvalflow'   => 'approvalflow-browse',
             'host'           => 'host-browse,my-index',
-            'deploy'         => 'deploy-browse',
+            'deploy'         => 'deploy-browse'
         );
 
         $props  = parent::getProps();

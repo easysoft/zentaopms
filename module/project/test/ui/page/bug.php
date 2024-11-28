@@ -47,6 +47,19 @@ class bugPage extends page
             /* 关闭页面 */
             'close'           => "//*[@class='form load-indicator form-ajax no-morph form-horz']/div[2]/div/button",
             'closeTitle'      => "//*[@class='modal modal-async load-indicator modal-trans show in']/div/div/div[1]/div/div[2]/span[1]",
+            /* 激活页面 */
+            'active'          => "//*[@class='form load-indicator form-ajax no-morph form-horz']/div[5]/div/button",
+            'activeTitle'     => "//*[@class='modal modal-async load-indicator modal-trans show in']/div/div/div[1]/div/div[2]/span[1]",
+            'activeAssignTo'  => "//*[@name='assignedTo']",
+            /* 搜索列表 */
+            'status'          => "//*[@id='table-project-bug']/div[2]/div[2]/div/div[3]/div/span",
+            /* 导出Bug */
+            'exportBtn'       => "//*[@id='actionBar']/a[1]/span",
+            'fileName'        => "//*[@name='fileName']",
+            'fileType'        => "//*[@name='fileType']",
+            'encode'          => "//*[@name='encode']",
+            'exportType'      => "//*[@name='exportType']",
+            'exportBtnAlert'  => "//*[@type='submit']/span",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }

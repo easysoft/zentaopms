@@ -1843,41 +1843,6 @@ class bugZen extends bug
     }
 
     /**
-     * 创建bug后存储上传的文件。
-     * Save files after create a bug.
-     *
-     * @param  int     $bugID
-     * @access private
-     * @return bool
-     */
-    private function updateFileAfterCreate(int $bugID): bool
-    {
-        $this->loadModel('file');
-        if(!empty($_POST['fileList']))
-        {
-            $fileList = $this->post->fileList;
-            if($fileList) $fileList = json_decode($fileList, true);
-            if(!empty($_POST['deleteFiles']))
-            {
-                foreach($this->post->deleteFiles as $deletedCaseFileID) unset($fileList[$deletedCaseFileID]);
-            }
-            foreach($fileList as $file)
-            {
-                unset($file['id']);
-                $file['objectType'] = 'bug';
-                $file['objectID']   = $bugID;
-                $this->file->saveFile($file, 'url,deleted,realPath,webPath,name,url,extra');
-            }
-        }
-
-        $uid = $this->post->uid ? $this->post->uid : '';
-        $this->file->updateObjectID($uid, $bugID, 'bug');
-        $this->file->saveUpload('bug', $bugID);
-
-        return !dao::isError();
-    }
-
-    /**
      * 创建bug后更新执行看板。
      * Update execution kanban after create a bug.
      *
@@ -1959,7 +1924,12 @@ class bugZen extends bug
         /* Set module of bug to cookie. */
         helper::setcookie('lastBugModule', (string)$bug->module);
 
-        $this->updateFileAfterCreate($bug->id);
+        if(!empty($_POST['fileList']))
+        {
+            $fileList = $this->post->fileList;
+            if($fileList) $fileList = json_decode($fileList, true);
+            $this->loadModel('file')->saveDefaultFiles($fileList, 'bug', $bug->id);
+        }
 
         list($laneID, $columnID) = $this->getKanbanVariable($params);
         $this->updateKanbanAfterCreate($bug, $laneID, $columnID, $from);

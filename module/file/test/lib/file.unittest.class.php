@@ -383,4 +383,30 @@ class fileTest
 
         return array('old' => $oldObject, 'new' => $newObject, 'count' => $count);
     }
+
+    /**
+     * 测试保存默认文件。
+     * Test save default files.
+     *
+     * @param  array      $fileIdList
+     * @param  string     $objectType
+     * @param  int|array  $objectID
+     * @param  string|int $extra
+     * @access public
+     * @return array
+     */
+    public function saveDefaultFilesTest(array $fileIdList, string $objectType, int|array $objectID, string|int $extra): array|string
+    {
+        $fileList = $this->objectModel->getByIdList($fileIdList);
+        $fileList = json_decode(json_encode($fileList), true);
+        $this->objectModel->saveDefaultFiles($fileList, $objectType, $objectID, $extra);
+
+        global $tester;
+        $objects = $tester->dao->select('id')->from(TABLE_FILE)->where('objectID')->in($objectID)->andWhere('objectType')->eq($objectType)->andWhere('extra')->eq($extra)->fetchPairs('id');
+
+        if(dao::isError()) return dao::getError();
+
+        if(!$objects) return '0';
+        return implode(',', $objects);
+    }
 }

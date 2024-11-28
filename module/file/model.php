@@ -1304,4 +1304,51 @@ class fileModel extends model
         if($this->config->file->storageType == 'fs') return $file->realPath;
         return '';
     }
+
+    /**
+     * 保存默认文件。
+     * Save default files.
+     *
+     * @param  array      $fileList
+     * @param  string     $objectType
+     * @param  int|array  $objectID
+     * @param  string|int $extra
+     * @access public
+     */
+    public function saveDefaultFiles(array $fileList, string $objectType, int|array $objectIdList, string|int $extra = '')
+    {
+        if(is_int($objectIdList)) $objectIdList = array($objectIdList);
+        if(!empty($fileList))
+        {
+            if(!empty($_POST['deleteFiles']))
+            {
+                foreach($this->post->deleteFiles as $deletedFileID) unset($fileList[$deletedFileID]);
+            }
+            if(!empty($_POST['renameFiles']))
+            {
+                foreach($this->post->renameFiles as $renamedFileID => $newName) $fileList[$renamedFileID]['title'] = $newName;
+            }
+
+            foreach($objectIdList as $objectID)
+            {
+                $fileIdList = '';
+                foreach($fileList as $file)
+                {
+                    unset($file['id']);
+                    $file['objectType'] = $objectType;
+                    $file['objectID']   = $objectID;
+                    $file['extra']      = $extra;
+                    $fileIdList .= ',' . $this->fileTao->saveFile($file, 'url,deleted,realPath,webPath,name,url');
+                }
+                if($objectType == 'story') $this->dao->update(TABLE_STORYSPEC)->set("files = CONCAT(files, '{$fileIdList}')")->where('story')->eq($objectID)->exec();
+            }
+        }
+
+        foreach($objectIdList as $objectID)
+        {
+            $uid = $this->post->uid ? $this->post->uid : '';
+            $this->updateObjectID($uid, $objectID, $objectType);
+            $this->saveUpload($objectType, $objectID, $extra);
+        }
+    }
 }

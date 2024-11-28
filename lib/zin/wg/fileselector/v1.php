@@ -22,6 +22,8 @@ class fileSelector extends wg
         'gridHeight?: string|int',                     // 网格模式的高度。
         'gridGap?: string|int',                        // 网格模式的间距。
         'defaultFiles?: array[]',                      // 默认显示的文件列表。
+        'deleteName: string="deleteFiles"',            // 默认显示文件中被删除的文件。
+        'renameName: string="renameFiles"',            // 默认显示文件中被重命名的文件。
         'multiple?: bool=true',                        // 是否允许在文件选择对话框中一次性选择多个文件（需要操作系统支持）。
         'itemProps?: array|callback',                  // 文件项的属性。
         'draggable?: bool=true',                       // 是否允许拖拽。
@@ -135,16 +137,6 @@ class fileSelector extends wg
         }
         $checkFiles = $checkFiles->do('return file');
         $this->setProp('onAdd', $checkFiles);
-
-        $removeFile = jsCallback('file')
-            ->do(<<<'JS'
-            if(file.url != undefined && file.file == undefined)
-            {
-                const $form = $(event.target).closest('form');
-                if($form.length > 0) $('<input />').attr('type', 'hidden').attr('name', 'deleteFiles[' + file.id + ']').attr('value', file.id).appendTo($form);
-            }
-        JS)->do('return file;');
-        $this->setProp('onRemove', $removeFile);
     }
 
     /**

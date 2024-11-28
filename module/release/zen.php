@@ -71,6 +71,7 @@ class releaseZen extends release
     {
         $productID = $this->post->product ? $this->post->product : $productID;
         $branch    = $this->post->branch ? $this->post->branch : $branch;
+        $newSystem = $this->post->newSystem;
         if(empty($projectID))
         {
             $product = $this->loadModel('product')->getById($productID);
@@ -85,6 +86,13 @@ class releaseZen extends release
             }
         }
 
+        if(!$newSystem && !$this->post->system) $this->config->release->form->create['system']['required'] = true;
+        if($newSystem  && !$this->post->systemName)
+        {
+            $this->config->release->form->create['systemName'] = array('type' => 'string', 'required' => true);
+            $this->lang->release->systemName = $this->lang->release->system;
+        }
+
         $release = form::data()
             ->add('product', (int)$productID)
             ->add('branch',  (int)$branch)
@@ -94,10 +102,33 @@ class releaseZen extends release
             ->get();
 
         /* Check build if build is required. */
-        if(strpos($this->config->release->create->requiredFields, 'build') !== false && empty($release->build))
+        if(strpos($this->config->release->create->requiredFields, 'build') !== false && empty($release->build)) dao::$errors['build'] = sprintf($this->lang->error->notempty, $this->lang->release->build);
+
+        if(!$newSystem && $this->post->system)
         {
-            dao::$errors['build'] = sprintf($this->lang->error->notempty, $this->lang->release->build);
-            return false;
+            $system = $this->loadModel('system')->fetchByID((int)$this->post->system);
+            if(!$system) dao::$errors['system'][] = sprintf($this->lang->error->notempty, $this->lang->release->system);
+
+            if($system->integrated == '1')
+            {
+                $releases = (array)$this->post->releases;
+
+                $release->build    = '';
+                $release->releases = trim(implode(',', $releases), ',');
+                if(!$release->releases) dao::$errors['releases[' . key($releases) . ']'][] = sprintf($this->lang->error->notempty, $this->lang->release->includedSystem);
+            }
+        }
+        if(dao::isError()) return false;
+
+        if($newSystem && $this->post->systemName)
+        {
+            $system = new stdclass();
+            $system->name        = $this->post->systemName;
+            $system->product     = $productID;
+            $system->createdBy   = $this->app->user->account;
+            $system->createdDate = helper::now();
+
+            $release->system = $this->loadModel('system')->create($system);
         }
 
         return $release;

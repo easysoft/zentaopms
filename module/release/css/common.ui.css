@@ -1,1 +1,4 @@
 .items-center {align-items: center !important;}
+
+#systemForm td {width: 235px;}
+#systemForm tbody.form {gap: 0;}

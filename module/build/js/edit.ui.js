@@ -28,6 +28,7 @@ function changeProduct()
 
     $('[name^=branch]').zui('picker').$.setValue('');
     loadBranches();
+    loadSystem();
 }
 
 function changeBranches()

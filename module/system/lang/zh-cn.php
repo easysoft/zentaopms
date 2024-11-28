@@ -42,6 +42,7 @@ $lang->system->edit            = '编辑应用';
 $lang->system->delete          = '删除应用';
 $lang->system->active          = '上架应用';
 $lang->system->inactive        = '下架应用';
+$lang->system->integratedLabel = '集成';
 
 $lang->system->integratedList = array();
 $lang->system->integratedList[0] = '否';
@@ -54,6 +55,8 @@ $lang->system->statusList['inactive'] = '已下架';
 $lang->system->confirmDelete   = '确定要删除应用吗？';
 $lang->system->confirmActive   = '确定要上架应用吗？';
 $lang->system->confirmInactive = '确定要下架应用吗？';
+$lang->system->releaseExist    = '关联发布的应用不可删除';
+$lang->system->buildExist      = '关联构建的应用不可删除';
 
 /* LDAP */
 $lang->system->LDAP = new stdclass;

@@ -60,8 +60,10 @@ form
         (
             set::width('4/5'),
             set::label($lang->doc->product),
-            set::required(true),
-            set::control(array('control' => 'picker', 'name' => 'product', 'items' => $products, 'value' => $objectID, 'required' => true))
+            set::name('product'),
+            set::items(createLink('product', 'ajaxGetDropMenu', "objectID=$objectID&module=&method=&extra=selectmode&useLink=0")),
+            set::value($objectID),
+            set::required(true)
         )
     ),
     formGroup

@@ -37,7 +37,7 @@ formPanel
             set::label($lang->api->product),
             set::width('3/4'),
             set::name('product'),
-            set::items($products),
+            set::items(createLink('product', 'ajaxGetDropMenu', "objectID=$objectID&module=&method=&extra=selectmode&useLink=0")),
             set::value($type == 'product' ? $objectID : 0),
             set::required(true)
         )
@@ -51,7 +51,7 @@ formPanel
             set::label($lang->api->project),
             set::width('3/4'),
             set::name('project'),
-            set::items($projects),
+            set::items(createLink('project', 'ajaxGetDropMenu', "objectID=$objectID&module=&method=&extra=selectmode&useLink=0")),
             set::value($type == 'project' ? $objectID : 0),
             set::required(true)
         )

@@ -1009,22 +1009,22 @@ $lang->tutorial->kanbanProjectManage->manageKanban->step23 = new stdClass();
 $lang->tutorial->kanbanProjectManage->manageKanban->step23->name = '保存表单';
 
 $lang->tutorial->kanbanProjectManage->manageBuild = new stdClass();
-$lang->tutorial->kanbanProjectManage->manageBuild->title = '版本管理';
+$lang->tutorial->kanbanProjectManage->manageBuild->title = '构建管理';
 
 $lang->tutorial->kanbanProjectManage->manageBuild->step1 = new stdClass();
-$lang->tutorial->kanbanProjectManage->manageBuild->step1->name = '点击版本';
-$lang->tutorial->kanbanProjectManage->manageBuild->step1->desc = '可以在这里进行版本管理';
+$lang->tutorial->kanbanProjectManage->manageBuild->step1->name = '点击构建';
+$lang->tutorial->kanbanProjectManage->manageBuild->step1->desc = '可以在这里进行构建管理';
 
 $lang->tutorial->kanbanProjectManage->manageBuild->step2 = new stdClass();
-$lang->tutorial->kanbanProjectManage->manageBuild->step2->name = '点击创建版本';
-$lang->tutorial->kanbanProjectManage->manageBuild->step2->desc = '可以在这里创建新的版本';
+$lang->tutorial->kanbanProjectManage->manageBuild->step2->name = '点击创建构建';
+$lang->tutorial->kanbanProjectManage->manageBuild->step2->desc = '可以在这里创建新的构建';
 
 $lang->tutorial->kanbanProjectManage->manageBuild->step3 = new stdClass();
 $lang->tutorial->kanbanProjectManage->manageBuild->step3->name = '填写表单';
 
 $lang->tutorial->kanbanProjectManage->manageBuild->step4 = new stdClass();
 $lang->tutorial->kanbanProjectManage->manageBuild->step4->name = '保存表单';
-$lang->tutorial->kanbanProjectManage->manageBuild->step4->desc = '保存后在版本列表中显示';
+$lang->tutorial->kanbanProjectManage->manageBuild->step4->desc = '保存后在构建列表中显示';
 
 $lang->tutorial->kanbanProjectManage->manageBuild->step5 = new stdClass();
 $lang->tutorial->kanbanProjectManage->manageBuild->step5->name = '点击累积流图';
@@ -1590,7 +1590,7 @@ $lang->tutorial->productManage->branchManage->step12->name = '选择分支';
 
 $lang->tutorial->productManage->branchManage->step13 = new stdClass();
 $lang->tutorial->productManage->branchManage->step13->name = '保存表单';
-$lang->tutorial->productManage->branchManage->step13->desc = '保存后分支下面对应的发布、计划、版本、模块、需求、Bug、用例都合并到新的分支下';
+$lang->tutorial->productManage->branchManage->step13->desc = '保存后分支下面对应的发布、计划、构建、模块、需求、Bug、用例都合并到新的分支下';
 
 $lang->tutorial->productManage->branchManage->step14 = new stdClass();
 $lang->tutorial->productManage->branchManage->step14->name = '点击研发需求';

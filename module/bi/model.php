@@ -867,57 +867,94 @@ class biModel extends model
      */
     public function prepareBuiltinPivotSQL($operate = 'insert')
     {
-        $pivots = $this->config->bi->builtin->pivots;
+        $pivots    = $this->config->bi->builtin->pivots;
+        $isInstall = $operate == 'insert';
 
         $pivotSQLs = array();
         foreach($pivots as $pivot)
         {
-            $currentOperate = $operate;
-            $pivot = (object)$pivot;
-            $pivot->name     = $this->jsonEncode($pivot->name);
-            $pivot->mode     = 'text';
-            if(isset($pivot->desc))     $pivot->desc     = $this->jsonEncode($pivot->desc);
-            if(isset($pivot->settings)) $pivot->settings = $this->jsonEncode($pivot->settings);
-            if(isset($pivot->filters))  $pivot->filters  = $this->jsonEncode($pivot->filters);
-            if(isset($pivot->fields))   $pivot->fields   = $this->jsonEncode($pivot->fields);
-            if(isset($pivot->langs))    $pivot->langs    = $this->jsonEncode($pivot->langs);
-            if(isset($pivot->vars))     $pivot->vars     = $this->jsonEncode($pivot->vars);
-            if(!isset($pivot->driver))  $pivot->driver   = $this->config->bi->defaultDriver;
-            if(!isset($pivot->drills))  $pivot->drills   = array();
+            $pivot       = (object)$pivot;
+            $createdDate = $pivot->createdDate;
 
-            if(!isset($pivot->settings)) $pivot->settings = null;
-            if(!isset($pivot->filters))  $pivot->filters = null;
-            if(!isset($pivot->fields))   $pivot->fields = null;
-            if(!isset($pivot->langs))    $pivot->langs = null;
-            if(!isset($pivot->vars))     $pivot->vars = null;
+            $pivotExists     = $this->dao->select('id,name')->from(TABLE_PIVOT)->where('id')->eq($pivot->id)->fetch();
+            $pivotSpecExists = $this->dao->select('pivot,version')->from(TABLE_PIVOTSPEC)->where('pivot')->eq($pivot->id)->andWhere('version')->eq($pivot->version)->fetch();
+            list($pivot, $pivotSpec, $drills) = $this->preparePivotObject($pivot);
 
-            $pivotSQLs = array_merge($pivotSQLs, $this->prepareBuilitinPivotDrillSQL($pivot->id, $pivot->drills));
-            unset($pivot->drills);
-
-            $exists = $this->dao->select('id,name')->from(TABLE_PIVOT)->where('id')->eq($pivot->id)->orWhere('name')->eq($pivot->name)->fetch();
-            if(!$exists) $currentOperate = 'insert';
-
-            $stmt = null;
-            if($currentOperate == 'insert')
+            if(!$pivotExists)
             {
                 $pivot->createdBy   = 'system';
-                $pivot->createdDate = helper::now();
                 $pivot->group       = $this->getCorrectGroup($pivot->group, 'pivot');
-
-                $stmt = $this->dao->insert(TABLE_PIVOT)->data($pivot);
+                /* 如果透视表不存在，就要通过安装或者升级来决定创建日期。*/
+                /* 如果是安装模式，那么需要采用真实的创建时间，确保用户不会看到“新”标签。*/
+                /* 如果是升级模式，那么需要采用当前时间，确保用户可以看到“新”标签。*/
+                $pivot->createdDate = $isInstall ? $createdDate : helper::now();
+                $pivotStmt = $this->dao->insert(TABLE_PIVOT)->data($pivot);
+                $pivotSQLs[] = $pivotStmt->get();
             }
-            if($currentOperate == 'update')
+
+            $pivotSQLs = array_merge($pivotSQLs, $this->prepareBuilitinPivotDrillSQL($pivot->id, $drills, $pivot->version));
+
+            if(!$pivotSpecExists)
             {
-                $id = $pivot->id;
-                unset($pivot->group);
-                unset($pivot->id);
-                $stmt = $this->dao->update(TABLE_PIVOT)->data($pivot)->where('id')->eq($id);
+                /* 如果透视表版本不存在，就要通过安装或者升级来决定创建日期。*/
+                /* 如果是安装模式，那么需要采用真实的创建时间，确保用户不会看到“新”标签。*/
+                /* 如果是升级模式，那么需要采用当前时间，确保用户可以看到“新”标签。*/
+                $pivotSpec->createdDate = $isInstall ? $createdDate : helper::now();
+                $pivotSpecStmt = $this->dao->insert(TABLE_PIVOTSPEC)->data($pivotSpec);
+                $pivotSpecSQLs[] = $pivotSpecStmt->get();
             }
-
-            if(isset($stmt)) $pivotSQLs[] = $stmt->get();
         }
 
         return $pivotSQLs;
+    }
+
+    /**
+     * 准备透视表对象。
+     * Prepare pivot object.
+     *
+     * @param  object  $pivot
+     * @access public
+     * @return array
+     */
+    public function preparePivotObject($pivot)
+    {
+            $pivot = (object)$pivot;
+
+            $pivotSpec = new stdclass();
+            $pivotSpec->version     = $pivot->version;
+            $pivotSpec->pivot       = $pivot->id;
+            $pivotSpec->mode        = 'text';
+            $pivotSpec->sql         = $pivot->sql;
+            $pivotSpec->name        = $this->jsonEncode($pivot->name);
+
+            if(isset($pivot->desc))     $pivotSpec->desc     = $this->jsonEncode($pivot->desc);
+            if(isset($pivot->settings)) $pivotSpec->settings = $this->jsonEncode($pivot->settings);
+            if(isset($pivot->filters))  $pivotSpec->filters  = $this->jsonEncode($pivot->filters);
+            if(isset($pivot->fields))   $pivotSpec->fields   = $this->jsonEncode($pivot->fields);
+            if(isset($pivot->langs))    $pivotSpec->langs    = $this->jsonEncode($pivot->langs);
+            if(isset($pivot->vars))     $pivotSpec->vars     = $this->jsonEncode($pivot->vars);
+            if(!isset($pivot->driver))  $pivotSpec->driver   = $this->config->bi->defaultDriver;
+
+            if(!isset($pivot->settings)) $pivotSpec->settings = null;
+            if(!isset($pivot->filters))  $pivotSpec->filters  = null;
+            if(!isset($pivot->fields))   $pivotSpec->fields   = null;
+            if(!isset($pivot->langs))    $pivotSpec->langs    = null;
+            if(!isset($pivot->vars))     $pivotSpec->vars     = null;
+
+            unset($pivot->driver);
+            unset($pivot->name);
+            unset($pivot->desc);
+            unset($pivot->sql);
+            unset($pivot->settings);
+            unset($pivot->filters);
+            unset($pivot->fields);
+            unset($pivot->langs);
+            unset($pivot->vars);
+
+            $drills = zget($pivot, 'drills', array());
+            unset($pivot->drills);
+
+            return array($pivot, $pivotSpec, $drills);
     }
 
     /**
@@ -929,7 +966,7 @@ class biModel extends model
      * @access public
      * @return array
      */
-    public function prepareBuilitinPivotDrillSQL($pivotID, $drills)
+    public function prepareBuilitinPivotDrillSQL($pivotID, $drills, $version)
     {
         if(empty($drills)) return array();
 
@@ -942,6 +979,7 @@ class biModel extends model
             $drill->pivot     = $pivotID;
             $drill->status    = 'published';
             $drill->type      = 'manual';
+            $drill->version   = $version;
 
             $sqls[] = $this->dao->insert(TABLE_PIVOTDRILL)->data($drill)->get();
         }
@@ -1942,7 +1980,7 @@ class biModel extends model
      * @access public
      * @return array
      */
-    public function convertDataForDtable(object $data, array $configs): array
+    public function convertDataForDtable(object $data, array $configs, string $version, string $status): array
     {
         $columns      = array();
         $rows         = array();
@@ -2080,6 +2118,8 @@ class biModel extends model
             $rows[$rowKey]['isDrill']    = $isDrill;
             $rows[$rowKey]['isTotal']    = $totalColspan > 0;
             $rows[$rowKey]['ROW_ID']     = $rowKey;
+            $rows[$rowKey]['version']    = $version;
+            $rows[$rowKey]['status']     = $status;
         }
 
         foreach($columns as $field => $column) $columns[$field]['width'] = 16 * $columnMaxLen[$field];

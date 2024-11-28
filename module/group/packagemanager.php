@@ -2877,7 +2877,8 @@ $config->group->package->systemSetting = new stdclass();
 $config->group->package->systemSetting->order  = 5;
 $config->group->package->systemSetting->subset = 'systemsetting';
 $config->group->package->systemSetting->privs  = array();
-$config->group->package->systemSetting->privs['admin-cache']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 45, 'depend' => array('admin-index'), 'recommend' => array());
+$config->group->package->systemSetting->privs['cache-setting']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 45, 'depend' => array('admin-index'), 'recommend' => array());
+$config->group->package->systemSetting->privs['cache-clear']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 45, 'depend' => array('admin-index', 'cache-setting'), 'recommend' => array());
 $config->group->package->systemSetting->privs['admin-tableEngine']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 45, 'depend' => array('admin-index'), 'recommend' => array());
 $config->group->package->systemSetting->privs['custom-timezone']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 45, 'depend' => array('admin-index'), 'recommend' => array());
 $config->group->package->systemSetting->privs['custom-libreoffice'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 100, 'depend' => array(), 'recommend' => array());
@@ -3144,15 +3145,6 @@ $config->group->package->meetingroom->privs['meetingroom-delete']      = array('
 $config->group->package->meetingroom->privs['meetingroom-view']        = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('meetingroom-browse'), 'recommend' => array('meetingroom-batchCreate', 'meetingroom-batchEdit', 'meetingroom-create', 'meetingroom-delete', 'meetingroom-edit'));
 $config->group->package->meetingroom->privs['meetingroom-batchCreate'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('meetingroom-browse'), 'recommend' => array('meetingroom-create'));
 $config->group->package->meetingroom->privs['meetingroom-batchEdit']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('meetingroom-browse'), 'recommend' => array('meetingroom-create'));
-
-$config->group->package->sqlBuilder = new stdclass();
-$config->group->package->sqlBuilder->order  = 20;
-$config->group->package->sqlBuilder->subset = 'featureconfig';
-$config->group->package->sqlBuilder->privs  = array();
-$config->group->package->sqlBuilder->privs['sqlbuilder-browseSQLView'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
-$config->group->package->sqlBuilder->privs['sqlbuilder-createSQLView'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('sqlbuilder-browseSQLView'), 'recommend' => array('sqlbuilder-deleteSQLView', 'sqlbuilder-editSQLView'));
-$config->group->package->sqlBuilder->privs['sqlbuilder-editSQLView']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('sqlbuilder-browseSQLView'), 'recommend' => array('sqlbuilder-createSQLView', 'sqlbuilder-deleteSQLView'));
-$config->group->package->sqlBuilder->privs['sqlbuilder-deleteSQLView'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('sqlbuilder-browseSQLView'), 'recommend' => array('sqlbuilder-createSQLView', 'sqlbuilder-editSQLView'));
 
 $config->group->package->designSetting = new stdclass();
 $config->group->package->designSetting->order  = 55;
@@ -4205,7 +4197,7 @@ $config->group->package->manageThinkWizard->subset = 'thinkwizard';
 $config->group->package->manageThinkWizard->privs  = array();
 $config->group->package->manageThinkWizard->privs['thinkwizard-create']                       = array('edition' => 'ipd', 'vision' => 'or', 'order' => 5,  'depend' => array('thinkwizard-browse'));
 $config->group->package->manageThinkWizard->privs['thinkwizard-edit']                         = array('edition' => 'ipd', 'vision' => 'or', 'order' => 10, 'depend' => array('thinkwizard-browse'));
-$config->group->package->manageThinkWizard->privs['thinkwizard-design']                       = array('edition' => 'ipd', 'vision' => 'or', 'order' => 15, 'depend' => array('thinkwizard-browse', 'thinkwizard-result', 'thinkstep-create', 'thinkstep-edit', 'thinkstep-view', 'thinkstep-delete', 'thinkstep-link', 'thinkstep-cancelLink', 'thinkwizard-configureobjectsforappeals', 'thinkwizard-configuredimensionforappeals', 'thinkwizard-configurequestionsforappeals', 'thinkwizard-scoringcriteria'));
+$config->group->package->manageThinkWizard->privs['thinkwizard-design']                       = array('edition' => 'ipd', 'vision' => 'or', 'order' => 15, 'depend' => array('thinkwizard-browse', 'thinkwizard-result', 'thinkstep-create', 'thinkstep-edit', 'thinkstep-view', 'thinkstep-delete', 'thinkstep-link', 'thinkstep-cancelLink', 'thinkwizard-configureobjectsforappeals', 'thinkwizard-configuredimensionforappeals', 'thinkwizard-configurequestionsforappeals', 'thinkwizard-scoringcriteria', 'thinkwizard-previewforappeals', 'thinkwizard-prereleaseforappeals'));
 $config->group->package->manageThinkWizard->privs['thinkwizard-publish']                      = array('edition' => 'ipd', 'vision' => 'or', 'order' => 20, 'depend' => array('thinkwizard-browse'));
 $config->group->package->manageThinkWizard->privs['thinkwizard-offline']                      = array('edition' => 'ipd', 'vision' => 'or', 'order' => 25, 'depend' => array('thinkwizard-browse'));
 $config->group->package->manageThinkWizard->privs['thinkwizard-admin']                        = array('edition' => 'ipd', 'vision' => 'or', 'order' => 30, 'depend' => array('thinkwizard-browse'));
@@ -4213,6 +4205,8 @@ $config->group->package->manageThinkWizard->privs['thinkwizard-configureobjectsf
 $config->group->package->manageThinkWizard->privs['thinkwizard-configuredimensionforappeals'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 40, 'depend' => array('thinkwizard-admin'));
 $config->group->package->manageThinkWizard->privs['thinkwizard-configurequestionsforappeals'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 45, 'depend' => array('thinkwizard-admin'));
 $config->group->package->manageThinkWizard->privs['thinkwizard-scoringcriteria']              = array('edition' => 'ipd', 'vision' => 'or', 'order' => 50, 'depend' => array('thinkwizard-admin'));
+$config->group->package->manageThinkWizard->privs['thinkwizard-previewforappeals']            = array('edition' => 'ipd', 'vision' => 'or', 'order' => 55, 'depend' => array('thinkwizard-admin'));
+$config->group->package->manageThinkWizard->privs['thinkwizard-prereleaseforappeals']         = array('edition' => 'ipd', 'vision' => 'or', 'order' => 60, 'depend' => array('thinkwizard-admin'));
 
 $config->group->package->deleteThinkWizard = new stdclass();
 $config->group->package->deleteThinkWizard->subset = 'thinkwizard';

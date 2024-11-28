@@ -22,6 +22,8 @@ $lang->build->batchUnlinkStory = "Batch {$lang->SRCommon} Unlink";
 $lang->build->batchUnlinkBug   = 'Batch Bug Unlink';
 $lang->build->viewBug          = 'Bugs';
 $lang->build->bugList          = 'Bug List';
+$lang->build->system           = 'Application';
+$lang->build->addSystem        = 'Add Application';
 
 $lang->build->confirmDelete      = "Möchten Sie dieses Build löschen?";
 $lang->build->confirmUnlinkStory = "Möchten Sie diese {$lang->SRCommon} löschen?";
@@ -65,6 +67,8 @@ $lang->build->noBuild        = 'Keine Builds. ';
 $lang->build->emptyExecution = $lang->executionCommon . 'should be not empty.';
 $lang->build->linkedBuild    = 'Linked Build';
 $lang->build->createTest     = 'Submit Request';
+
+$lang->build->integratedLabel = 'Integrated';
 
 $lang->build->notice = new stdclass();
 $lang->build->notice->changeProduct   = "The {$lang->SRCommon}, bug, or the version of the submitted test order has been linked, and its {$lang->productCommon} cannot be modified";

@@ -57,6 +57,40 @@ class releaseModel extends model
     }
 
     /**
+     * 获取发布列表。
+     * Get release list.
+     *
+     * @param  array  $idList
+     * @access public
+     * @return array
+     */
+    public function getPairs(array $idList = array()): array
+    {
+        return $this->dao->select('id, name')->from(TABLE_RELEASE)
+            ->where('deleted')->eq(0)
+            ->beginIF($idList)->andWhere('id')->in($idList)->fi()
+            ->fetchPairs();
+    }
+
+    /**
+     * 通过条件获取发布列表信息。
+     * Get release list information by condition.
+     *
+     * @param  array  $idList
+     * @param  int    $includeRelease
+     * @access public
+     * @return array
+     */
+    public function getListByCondition(array $idList = array(), int $includeRelease = 0): array
+    {
+        return $this->dao->select('*')->from(TABLE_RELEASE)
+            ->where('deleted')->eq(0)
+            ->beginIF($idList)->andWhere('id')->in($idList)->fi()
+            ->beginIF($includeRelease)->andWhere("FIND_IN_SET($includeRelease, `releases`)")->fi()
+            ->fetchAll('id');
+    }
+
+    /**
      * 获取发布列表信息。
      * Get release list information.
      *
@@ -137,6 +171,23 @@ class releaseModel extends model
             ->beginIF($branch)->andWhere('branch')->eq($branch)->fi()
             ->orderBy('id DESC')
             ->fetch();
+    }
+
+    /**
+     * 获取指定应用下的所有发布。
+     * Get releases by system.
+     *
+     * @param  array $systemList
+     * @access public
+     * @return array
+     */
+    public function getListBySystem(array $systemList): array
+    {
+        return $this->dao->select('*')->from(TABLE_RELEASE)
+            ->where('deleted')->eq(0)
+            ->andWhere('system')->in($systemList)
+            ->orderBy('id DESC')
+            ->fetchAll('id');
     }
 
     /**
@@ -287,6 +338,8 @@ class releaseModel extends model
             }
         }
 
+        if($release->system) $this->loadModel('system')->setSystemRelease($release->system, $releaseID, $release->createdDate);
+
         return $releaseID;
     }
 
@@ -400,6 +453,7 @@ class releaseModel extends model
         if($shadowBuild) $this->dao->update(TABLE_BUILD)->data($shadowBuild)->where('id')->eq($oldRelease->shadow)->exec();
 
         $this->file->processFile4Object('release', $oldRelease, $release);
+
         return common::createChanges($oldRelease, $release);
     }
 
@@ -705,6 +759,8 @@ class releaseModel extends model
         if($action == 'play')    return $release->status == 'terminate';
         if($action == 'pause')   return $release->status == 'normal';
         if($action == 'publish') return $release->status == 'wait' || $release->status == 'fail';
+
+        if(!empty($release->releases) && ($action == 'linkstory' || $action == 'linkbug')) return false;
         return true;
     }
 

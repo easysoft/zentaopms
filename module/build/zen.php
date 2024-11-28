@@ -77,7 +77,7 @@ class buildZen extends build
         $projectID     = $build->execution ? (int)$build->execution : (int)$build->project;
         $productGroups = $this->loadModel('product')->getProducts($projectID, $status);
         $branches      = $this->loadModel('branch')->getList($build->product, $projectID, 'all');
-        if(!$build->execution) $builds = $this->build->getBuildPairs(array($build->product), 'all', 'noempty,notrunk,singled,separate', $build->project, 'project', $build->builds, false);
+        if(!$build->execution) $builds = $this->build->getBuildPairs(array($build->product), 'all', 'noempty,notrunk,singled,separate', $build->project, 'project', $build->builds, false, $build->system);
 
         /* Get execution info. */
         $executions = $this->product->getExecutionPairsByProduct($build->product, $build->branch, (int)$this->session->project, 'stagefilter');
@@ -120,6 +120,7 @@ class buildZen extends build
         $this->view->executions      = $executions;
         $this->view->executionType   = !empty($execution) && $execution->type == 'stage' ? 1 : 0;
         $this->view->orderBy         = 'status_asc, stage_asc, id_desc';
+        $this->view->systemList      = $this->loadModel('system')->getPairs(zget($this->view->product, 'id', 0), '0', 'active');
         $this->display();
     }
 
@@ -237,8 +238,33 @@ class buildZen extends build
      */
     public function buildBuildForCreate()
     {
+        $newSystem = $this->post->newSystem;
+
         if($this->post->isIntegrated == 'yes') $this->config->build->create->requiredFields = str_replace(',execution,', ',', ',' . $this->config->build->create->requiredFields . ',');
-        return form::data($this->config->build->form->create)->setDefault('createdBy', $this->app->user->account)->get();
+
+        if(!$newSystem && !$this->post->system) $this->config->build->form->create['system']['required'] = true;
+        if($newSystem  && !$this->post->systemName)
+        {
+            $this->config->build->form->create['systemName'] = array('type' => 'string', 'required' => true);
+            $this->lang->build->systemName = $this->lang->build->system;
+        }
+
+        $formData = form::data($this->config->build->form->create)
+            ->setDefault('createdBy', $this->app->user->account)
+            ->get();
+
+        if($newSystem && $this->post->systemName)
+        {
+            $system = new stdclass();
+            $system->name        = $this->post->systemName;
+            $system->product     = $this->post->product;
+            $system->createdBy   = $this->app->user->account;
+            $system->createdDate = helper::now();
+
+            $formData->system = $this->loadModel('system')->create($system);
+        }
+
+        return $formData;
     }
 
     /**

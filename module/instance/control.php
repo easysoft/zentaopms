@@ -419,6 +419,10 @@ class instance extends control
 
         $success = $this->instance->uninstall($instance);
         $this->action->create('instance', $instance->id, 'uninstall', '', json_encode(array('result' => $success, 'app' => array('alias' => $instance->appName, 'app_version' => $instance->version))));
+
+        /* Synchronize deletion of backup tasks. */
+        /* 同步删除备份任务。 */
+        $this->instance->deleteBackupCron($instance);
         if($success) return $this->send(array('result' => 'success', 'message' => zget($this->lang->instance->notices, 'uninstallSuccess'), 'load' => $this->createLink('space', 'browse')));
 
         return $this->send(array('result' => 'fail', 'message' => zget($this->lang->instance->notices, 'uninstallFail')));
@@ -667,9 +671,113 @@ class instance extends control
 
         $success = $this->instance->deleteBackup($instance, $backupName);
         if(!$success) return $this->send(array('result' => 'fail', 'message' => zget($this->lang->instance->notices, 'deleteFail')));
-
         $this->action->create('instance', $instance->id, 'manualdeletebackup', '', json_encode(array('result' => 'success')));
-        $locate = $this->createLink('instance', 'view', 'id=' . $instanceID);
-        return $this->send(array('result' => 'success', 'load' => array('alert' => zget($this->lang->instance->notices, 'deleteSuccess'), 'locate' => $locate, 'closeModal' => true)));
+        return $this->send(array('result' => 'success', 'message' => zget($this->lang->instance->notices, 'deleteSuccess'), 'load' => $this->createLink('instance', 'view', 'id=' . $instanceID)));
+    }
+    /**
+     * Ajax 方式获取组件列表。
+     * ajax Get Components.
+     * @param int $id
+     */
+    public function ajaxGetComponents(int $id)
+    {
+        $data       = [];
+        $instance   = $this->instance->getByID($id);
+        $components = $this->cne->getComponents($instance);
+        if(empty($components->data)) return print(json_encode($data));
+
+        foreach($components->data as $component)
+        {
+            $data[] = array('value' => $component->name, 'text' => $component->name);
+        }
+
+        return print(json_encode($data));
+    }
+
+    /**
+     * Ajax 方式获取 Pods 列表。
+     * ajax Get Pods.
+     * @param int $id
+     */
+    public function ajaxGetPods(int $id, string $component)
+    {
+        $data = [];
+        $instance = $this->instance->getByID($id);
+        $pods = $this->cne->getPods($instance, $component);
+        if(empty($pods->data)) return print(json_encode($data));
+
+        foreach($pods->data as $pod)
+        {
+            $data[] = array('value' => $pod->name, 'text' => $pod->name);
+        }
+        return print(json_encode($data));
+    }
+
+    /**
+     * watch Logs page.
+     * 查看日志页面.
+     *
+     * @param int $id
+     * @return void
+     */
+    public function logs(int $id): void
+    {
+        if (!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
+        $instance = $this->instance->getByID($id);
+
+        $this->view->instance = $instance;
+        $this->display();
+    }
+
+    /**
+     * Get logs api.
+     * 获取日志接口。
+     * @param int $id
+     * @param string $component
+     * @param string $pod
+     * @param mixed $previous
+     * @param string $container
+     * @return void
+     */
+    public function showLogs(int $id, string $component = '', string $pod = '', mixed $previous = 0, string $container = '')
+    {
+        $instance = $this->instance->getByID($id);
+        $previous = $previous == 1;
+
+        $data  = $this->cne->getAppLogs($instance, $component, $pod, $container, $previous) ?? new stdClass();
+        return print(json_encode($data));
+    }
+
+    /**
+     * watch Events page.
+     * 查看事件页面.
+     *
+     * @param int $id
+     * @return void
+     */
+    public function events(int $id): void
+    {
+        if (!commonModel::hasPriv('instance', 'manage'))
+        {
+            $this->loadModel('common')->deny('instance', 'manage', false);
+        }
+
+        $this->view->instance =  $this->instance->getByID($id);
+        $this->display();
+    }
+
+    /**
+     * Get Events api.
+     * 获取日志接口。
+     * @param int $id
+     * @param string $component
+     * @return void
+     */
+    public function showEvents(int $id, string $component = '')
+    {
+        $instance = $this->instance->getByID($id);
+
+        $data  = $this->cne->getEvents($instance, $component) ?? new stdClass();
+        return print(json_encode($data));
     }
 }

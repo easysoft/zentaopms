@@ -590,6 +590,7 @@ class cneModel extends model
      */
     public function uninstallApp(object $apiParams): ?object
     {
+        if(empty($apiParams->name)) return null;
         if(empty($apiParams->channel)) $apiParams->channel = $this->config->CNE->api->channel;
 
         $apiUrl = "/api/cne/app/uninstall";
@@ -597,30 +598,93 @@ class cneModel extends model
     }
 
     /**
+     * 获取应用组件列表
+     * Get app components.
+     *
+     * @link https://yapi.qc.oop.cc/project/21/interface/api/1043
+     * @param object $instance
+     * @return object|null
+     */
+    public function getComponents(object $instance): ?object
+    {
+        $apiParams = new stdClass();
+        $apiParams->cluster   = '';
+        $apiParams->namespace = $instance->spaceData->k8space;
+        $apiParams->name      = $instance->k8name;
+
+        return $this->apiGet('/api/cne/app/components', $apiParams, $this->config->CNE->api->headers);
+    }
+
+    /**
+     * 获取应用 pod 列表
+     * Get app pods.
+     *
+     * @link https://yapi.qc.oop.cc/project/21/interface/api/189
+     * @param object $instance 应用实例对象
+     * @param string $component 组件名称
+     * @return object|null
+     */
+    public function getPods(object $instance, string $component = ''): ?object
+    {
+        $apiParams = new stdClass();
+        $apiParams->cluster   = '';
+        $apiParams->namespace = $instance->spaceData->k8space;
+        $apiParams->name      = $instance->k8name;
+
+        !empty($component) && $apiParams->component = $component;
+
+        return $this->apiGet('/api/cne/app/pods', $apiParams, $this->config->CNE->api->headers);
+    }
+
+    /**
+     * 获取应用事件列表。
+     * Get app events.
+     *
+     * @param object $instance
+     * @param string $component
+     * @return object|null
+     */
+    public function getEvents(object $instance, string $component = ''): ?object
+    {
+        $apiParams = new stdClass();
+        $apiParams->cluster   = '';
+        $apiParams->namespace = $instance->spaceData->k8space;
+        $apiParams->name      = $instance->k8name;
+
+        !empty($component) && $apiParams->component = $component;
+
+        return $this->apiGet('/api/cne/app/events', $apiParams, $this->config->CNE->api->headers);
+    }
+
+    /**
      * 获取应用的安装日志。
      * Get app install logs.
      *
-     * @param  object $instance
+     * @param  ?object $instance
      * @access public
      * @return object
      */
-    public function getAppLogs(object $instance): ?object
+    public function getAppLogs(?object $instance, string $component = '', string $pod = '', string $container = '', bool $previous = false): ?object
     {
         if(!isset($this->app->user->account))
         {
-            $this->app->user = new stdclass();
+            $this->app->user = new stdClass();
             $this->app->user->account = $this->dao->select('*')->from(TABLE_USER)->where('deleted')->eq(0)->fetch('account');
         }
         $defaultSpace = $this->loadModel('space')->defaultSpace($this->app->user->account);
 
-        $apiParams = new stdclass();
+        $apiParams = new stdClass();
         $apiParams->cluster   = '';
         $apiParams->namespace = !empty($instance->spaceData->k8space) ? $instance->spaceData->k8space : $defaultSpace->k8space;
         $apiParams->name      = $instance->k8name;
         $apiParams->tail      = 500;
 
-        $apiUrl = "/api/cne/app/logs";
-        return $this->apiGet($apiUrl, $apiParams, $this->config->CNE->api->headers);
+        !empty($component) && $apiParams->component      = $component;
+        !empty($pod)       && $apiParams->pod_name       = $pod;
+        !empty($container) && $apiParams->container_name = $container;
+        $previous          && $apiParams->previous       = $previous;
+
+        return $this->apiGet('/api/cne/app/logs', $apiParams, $this->config->CNE->api->headers);
     }
 
     /**

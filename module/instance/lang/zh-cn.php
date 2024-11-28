@@ -191,6 +191,21 @@ $lang->instance->log = new stdclass;
 $lang->instance->log->date    = '日期';
 $lang->instance->log->message = '内容';
 
+$lang->instance->log->viewButton = '日志';
+$lang->instance->log->title      = '查看日志';
+$lang->instance->log->button     = '立即查看';
+
+$lang->instance->component         = '组件';
+$lang->instance->pod               = 'Pod';
+$lang->instance->isPrevious        = '是否上个退出容器';
+$lang->instance->isPreviousList[0] = '否';
+$lang->instance->isPreviousList[1] = '是';
+
+$lang->instance->event = new stdClass;
+$lang->instance->event->viewButton = '事件';
+$lang->instance->event->title      = '查看事件';
+$lang->instance->event->button     = '立即查看';
+
 $lang->instance->actionList = array();
 $lang->instance->actionList['install']                 = '安装了%s';
 $lang->instance->actionList['uninstall']               = '删除了%s';
@@ -297,7 +312,7 @@ $lang->instance->notices['backupFail']               = '备份失败';
 $lang->instance->notices['cleanBackupsSuccess']       = '备份清理成功';
 $lang->instance->notices['restoreSuccess']           = '还原任务已提交';
 $lang->instance->notices['restoreFail']              = '还原失败';
-$lang->instance->notices['deleteSuccess']            = '删除成功';
+$lang->instance->notices['deleteSuccess']            = '删除任务已提交';
 $lang->instance->notices['deleteFail']               = '删除失败';
 $lang->instance->notices['starting']                 = '启动中，请稍候...';
 $lang->instance->notices['stopping']                 = '关闭中，请稍候...';

@@ -381,6 +381,7 @@ CREATE TABLE IF NOT EXISTS `zt_build` (
   `execution` mediumint(8) unsigned NOT NULL default '0',
   `builds` varchar(255) NOT NULL DEFAULT '',
   `name` char(150) NOT NULL DEFAULT '',
+  `system` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `scmPath` char(255) NOT NULL DEFAULT '',
   `filePath` char(255) NOT NULL DEFAULT '',
   `date` date NULL,
@@ -396,6 +397,7 @@ CREATE TABLE IF NOT EXISTS `zt_build` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE INDEX `product`   ON `zt_build`(`product`);
 CREATE INDEX `execution` ON `zt_build`(`execution`);
+CREATE INDEX `idx_system` ON `zt_build`(`system`);
 
 -- DROP TABLE IF EXISTS `zt_burn`;
 CREATE TABLE IF NOT EXISTS `zt_burn` (
@@ -512,6 +514,7 @@ CREATE TABLE IF NOT EXISTS `zt_chart` (
   `fields` mediumtext NULL,
   `langs` text NULL,
   `sql` mediumtext NULL,
+  `version` varchar(10) NOT NULL DEFAULT '1',
   `stage` enum('draft','published') NOT NULL DEFAULT 'draft',
   `builtin` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `objects` mediumtext NULL,
@@ -665,6 +668,7 @@ CREATE TABLE IF NOT EXISTS `zt_dataview` (
   `name` varchar(155) NOT NULL DEFAULT '',
   `code` varchar(50) NOT NULL DEFAULT '',
   `mode` enum('text', 'builder') not NULL default 'builder',
+  `driver` enum('mysql', 'duckdb') not NULL default 'mysql',
   `view` varchar(57) NOT NULL DEFAULT '',
   `sql` text NULL,
   `fields` mediumtext NULL,
@@ -798,6 +802,7 @@ CREATE TABLE IF NOT EXISTS `zt_doccontent` (
   `title` varchar(255) NOT NULL DEFAULT '',
   `digest` varchar(255) NOT NULL DEFAULT '',
   `content` longtext NULL,
+  `html` longtext DEFAULT NULL,
   `files` text NULL,
   `type` varchar(10) NOT NULL DEFAULT '',
   `version` smallint(6) unsigned NOT NULL DEFAULT '0',
@@ -2381,8 +2386,7 @@ INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type
 ('*/5',  '*',    '*',    '*',    '*',    'moduleName=ci&methodName=checkCompileStatus', '同步DevOps构建任务状态', 'zentao', 1, 'normal'),
 ('*/5',  '*',    '*',    '*',    '*',    'moduleName=ci&methodName=exec', '执行DevOps构建任务', 'zentao', 1, 'normal'),
 ('*/5',  '*',    '*',    '*',    '*',    'moduleName=mr&methodName=syncMR', '定时同步GitLab合并数据到禅道数据库', 'zentao', 1, 'normal'),
-('*/5',  '*',    '*',    '*',    '*',    'moduleName=compile&methodName=syncCompile', '定时同步构建记录', 'zentao', 1, 'normal'),
-('0',    '*',    '*',    '*',    '*',    'moduleName=misc&methodName=cleanCache', '清理缓存文件',    'zentao', 1, 'normal');
+('*/5',  '*',    '*',    '*',    '*',    'moduleName=compile&methodName=syncCompile', '定时同步构建记录', 'zentao', 1, 'normal');
 
 INSERT INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES
 ('rnd', 'ADMIN', 'admin', 'for administrator'),
@@ -3363,6 +3367,8 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (1,	'build',	'unlinkBug'),
 (1,	'build',	'unlinkStory'),
 (1,	'build',	'view'),
+(1,	'cache',	'clear'),
+(1,	'cache',	'setting'),
 (1,	'caselib',	'batchCreateCase'),
 (1,	'caselib',	'batchEditCase'),
 (1,	'caselib',	'browse'),
@@ -12875,7 +12881,6 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (19, 'user', 'testCase'),
 (19, 'user', 'testTask'),
 (19, 'user', 'todo'),
-(20, 'admin', 'cache'),
 (20, 'admin', 'checkWeak'),
 (20, 'admin', 'index'),
 (20, 'admin', 'register'),
@@ -12897,6 +12902,8 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (20, 'branch', 'manage'),
 (20, 'branch', 'mergeBranch'),
 (20, 'branch', 'sort'),
+(20, 'cache', 'setting'),
+(20, 'cache', 'clear'),
 (20, 'charter', 'browse'),
 (20, 'charter', 'create'),
 (20, 'charter', 'delete'),
@@ -15371,7 +15378,7 @@ CREATE TABLE IF NOT EXISTS `zt_pivot`  (
   `step` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `stage` enum('draft','published') NOT NULL DEFAULT 'draft',
   `builtin` enum('0', '1') NOT NULL DEFAULT '0',
-  `version` varchar(10) NOT NULL DEFAULT '0',
+  `version` varchar(10) NOT NULL DEFAULT '1',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
@@ -15414,6 +15421,7 @@ CREATE TABLE IF NOT EXISTS `zt_sqlbuilder` (
 -- DROP TABLE IF EXISTS `zt_pivotdrill`;
 CREATE TABLE `zt_pivotdrill` (
   `pivot`     mediumint    NOT NULL,
+  `version`   varchar(10) NOT NULL DEFAULT '1',
   `field`     varchar(255) NOT NULL,
   `object`    varchar(40)  NOT NULL,
   `whereSql`  mediumtext   NOT NULL,

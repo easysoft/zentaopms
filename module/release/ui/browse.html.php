@@ -23,8 +23,8 @@ featureBar
 /* zin: Define the toolbar on main menu. */
 $canCreateRelease = hasPriv('release', 'create') && common::canModify('product', $product);
 $canManageSystem  = hasPriv('system', 'browse') && common::canModify('product', $product);
-if($canCreateRelease) $createItem = array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->release->create, 'url' => $this->createLink('release', 'create', "productID={$product->id}&branch={$branch}"));
-if($canManageSystem)  $manageSystemItem = array('class' => 'ghost', 'text' => $lang->release->manageSystem, 'url' => $this->createLink('system', 'browse', "productID={$product->id}&branch={$branch}"), 'data-app' => 'product');
+if($canCreateRelease) $createItem = array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->release->create, 'url' => $this->createLink('release', 'create', "productID={$product->id}"));
+if($canManageSystem)  $manageSystemItem = array('class' => 'primary', 'text' => $lang->release->manageSystem, 'url' => $this->createLink('system', 'browse', "productID={$product->id}"), 'data-app' => 'product');
 toolbar
 (
     !empty($manageSystemItem) ? item(set($manageSystemItem)) : null,
@@ -37,12 +37,32 @@ jsVar('type', $type);
 
 $cols = $this->loadModel('datatable')->getSetting('release');
 if($showBranch) $cols['branch']['map'] = $branchPairs;
+$cols['system']['map'] = array(0 => '') + $appList;
+
+foreach($releases as $release)
+{
+    $release->rowID = $release->id;
+    if(empty($release->releases)) continue;
+
+    foreach(explode(',', $release->releases) as $childID)
+    {
+        if(isset($childReleases[$childID]))
+        {
+            $child = clone $childReleases[$childID];
+            $child->rowID  = "{$release->id}-{$childID}";
+            $child->parent = $release->id;
+            $releases[$child->rowID] = $child;
+        }
+    }
+}
+
 $releases = initTableData($releases, $cols, $this->release);
 dtable
 (
     set::cols(array_values($cols)),
     set::data($releases),
     set::customCols(true),
+    set::rowKey('rowID'),
     set::plugins(array('cellspan')),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::getCellSpan(jsRaw('window.getCellSpan')),

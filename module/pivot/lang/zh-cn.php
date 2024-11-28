@@ -27,6 +27,9 @@ $lang->pivot->story        = '需求';
 $lang->pivot->clear        = '清空';
 $lang->pivot->keep         = '保留设计';
 $lang->pivot->new          = '新';
+$lang->pivot->newVersion   = '新版本';
+$lang->pivot->version      = '当前版本';
+$lang->pivot->viewVersion  = '查看版本列表';
 
 $lang->pivot->accessDenied  = '您无权访问该透视表';
 $lang->pivot->acl = '访问控制';
@@ -40,7 +43,8 @@ $lang->pivot->otherLang->productType   = '产品类型';
 
 $lang->pivot->cancelAndBack = '取消保存并返回';
 
-$lang->pivot->deleteTip = '您确认要删除吗？';
+$lang->pivot->deleteTip         = '您确认要删除吗？';
+$lang->pivot->disableVersionTip = '草稿态的透视表暂时不支持查看版本列表弹窗。';
 
 $lang->pivot->rangeList['current'] = '当前页';
 $lang->pivot->rangeList['all']     = '全部';
@@ -492,5 +496,11 @@ $lang->pivot->drill->activatedBug     = "激活的Bug数";
 $lang->pivot->drill->auto             = "自动";
 $lang->pivot->drill->designChangedTip = '设计变更，请检查';
 
+$lang->pivot->versionNumber   = '版本号';
+$lang->pivot->versionDesc     = '版本描述';
 $lang->pivot->tipNewVersion   = '有新版本更新';
 $lang->pivot->checkNewVersion = '点击查看';
+$lang->pivot->tipVersions     = '此版本的内容如下所示，您可以点击下方按钮进行版本切换。切换版本后，此透视表内容以及设计器内相关配置均会按照切换的版本展示。';
+$lang->pivot->tipNoVersions   = '该透视表没有其他版本';
+$lang->pivot->switchTo        = '切换到此版本';
+$lang->pivot->noDesc          = '暂无描述';

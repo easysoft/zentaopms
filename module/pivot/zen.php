@@ -80,7 +80,9 @@ class pivotZen extends pivot
         $groups = $this->pivot->getGroupsByDimensionAndPath($dimensionID, $currentGroup->path);
         if(!$groups) return array();
 
+        $this->loadModel('bi');
         $firstAction = $this->loadModel('action')->getAccountFirstAction($this->app->user->account);
+        $builtins    = array_column($this->config->bi->builtin->pivots, 'id', 'id');
         $menus = array();
         foreach($groups as $group)
         {
@@ -89,6 +91,7 @@ class pivotZen extends pivot
             $pivots = $this->pivot->getAllPivotByGroupID($group->id);
             $pivots = $this->pivot->filterInvisiblePivot($pivots);
             $pivots = $this->loadModel('mark')->getMarks($pivots, 'pivot', 'view');
+            $pivots = $this->pivot->isVersionChange($pivots, false);
             if(empty($pivots)) continue;
 
             if($group->grade > 1) $menus[] = (object)array('id' => $group->id, 'parent' => 0, 'name' => $group->name);
@@ -97,8 +100,8 @@ class pivotZen extends pivot
 
             foreach($pivots as $pivot)
             {
-                $this->setNewMark($pivot, $firstAction);
-                $params  = helper::safe64Encode("groupID={$group->id}&pivotID={$pivot->id}");
+                $this->setNewMark($pivot, $firstAction, $builtins);
+                $params  = helper::safe64Encode("groupID={$group->id}&pivotID={$pivot->id}&mark=view");
                 $url     = inlink('preview', "dimension={$dimensionID}&group={$currentGroup->id}&method=show&params={$params}");
                 $menus[] = (object)array('id' => $group->id . '_' . $pivot->id, 'parent' => $group->grade > 1 ? $group->id : 0, 'name' => $pivot->name, 'url' => $url);
             }
@@ -120,10 +123,23 @@ class pivotZen extends pivot
      * @access protected
      * @return void
      */
-    protected function setNewMark(object $pivot, object $firstAction): void
+    protected function setNewMark(object $pivot, object $firstAction, array $builtins): void
     {
-        if(!$pivot->mark && $pivot->createdDate < $firstAction->date) $pivot->mark = true;
-        if(!$pivot->mark) $pivot->name = array('html' => $pivot->name . ' <span class="label ghost size-sm bg-secondary-50 text-secondary-500 rounded-full">' . $this->lang->pivot->new . '</span>');
+        // 版本没有改变，此时讨论是不是新透视表
+        if(!$pivot->versionChange)
+        {
+            if(!isset($builtins[$pivot->id])) return;
+            if(!$pivot->mark && $pivot->createdDate < $firstAction->date) $pivot->mark = true;
+            if(!$pivot->mark) $pivot->name = array('text' => $pivot->name, 'html' => $pivot->name . ' <span class="label ghost size-sm bg-secondary-50 text-secondary-500 rounded-full">' . $this->lang->pivot->new . '</span>');
+        }
+        else
+        {
+            $maxVersion = $this->pivot->getMaxVersion($pivot->id);
+            if(!$this->loadModel('mark')->isMark('pivot', $pivot->id, $maxVersion, 'view'))
+            {
+                $pivot->name = array('text' => $pivot->name, 'html' => $pivot->name . ' <span class="label ghost size-sm bg-secondary-50 text-secondary-500 rounded-full">' . $this->lang->pivot->newVersion . '</span>');
+            }
+        }
     }
 
     /**
@@ -164,17 +180,38 @@ class pivotZen extends pivot
     /**
      * Preview pivots of a group.
      *
-     * @param  int    $groupID
-     * @param  int    $pivotID
+     * @param  int         $groupID
+     * @param  int         $pivotID
+     * @param  string      $mark
+     * @param  string|null $version
      * @access public
      * @return void
      */
-    public function show(int $groupID, int $pivotID): void
+    public function show(int $groupID, int $pivotID, string $mark = '', string|null $version = null): void
     {
         $this->pivot->checkAccess($pivotID, 'preview');
 
-        $pivot  = $this->pivot->getByID($pivotID, true);
+        if(is_null($version))
+        {
+            $pivot = $this->pivot->getByID($pivotID, true);
+        }
+        else
+        {
+            $pivot = $this->pivot->getPivotSpec($pivotID, $version, true);
+        }
         $driver = $pivot->driver;
+
+        $this->pivot->isVersionChange($pivot);
+        if($mark)
+        {
+            $markVersion = $pivot->versionChange ? $this->pivot->getMaxVersion($pivot->id) : $pivot->version;
+
+            if(!$this->loadModel('mark')->isMark('pivot', $pivot->id, $markVersion, 'view'))
+            {
+                $this->loadModel('mark')->setMark(array($pivot->id), 'pivot', $markVersion, 'view');
+            }
+        }
+
         if(isset($_POST['filterValues']) and $_POST['filterValues'])
         {
             foreach($this->post->filterValues as $key => $value) $pivot->filters[$key]['default'] = $value;
@@ -197,14 +234,15 @@ class pivotZen extends pivot
             list($data, $configs) = $this->pivot->genSheet($fields, $pivot->settings, $sql, $filterFormat, $langs, $driver);
         }
 
-        $this->view->pivotName    = $pivot->name;
-        $this->view->title        = $pivot->name;
-        $this->view->currentMenu  = $groupID . '_' . $pivot->id;
-        $this->view->currentGroup = $groupID;
-        $this->view->pivot        = $pivot;
-        $this->view->showOrigin   = $showOrigin;
-        $this->view->data         = $data;
-        $this->view->configs      = $configs;
+        $this->view->hasVersionMark = $this->loadModel('mark')->hasMark('pivot', $pivotID, 'all', 'version');
+        $this->view->pivotName      = $pivot->name;
+        $this->view->title          = $pivot->name;
+        $this->view->currentMenu    = $groupID . '_' . $pivot->id;
+        $this->view->currentGroup   = $groupID;
+        $this->view->pivot          = $pivot;
+        $this->view->showOrigin     = $showOrigin;
+        $this->view->data           = $data;
+        $this->view->configs        = $configs;
     }
 
     /**
@@ -424,11 +462,11 @@ class pivotZen extends pivot
      * @access public
      * @return object
      */
-    public function getDrill(int $pivotID, string $colName, string $status = 'published'): object
+    public function getDrill(int $pivotID, string $version, string $colName, string $status = 'published'): object
     {
         if($status == 'published')
         {
-            $drills = $this->pivot->fetchPivotDrills($pivotID, $colName);
+            $drills = $this->pivot->fetchPivotDrills($pivotID, $version, $colName);
             return reset($drills);
         }
 
@@ -441,5 +479,43 @@ class pivotZen extends pivot
             if($drill->field == $colName) return $drill;
         }
         return new stdclass();
+    }
+
+    /**
+     * 获取筛选器的下拉选项 URL。
+     * Get filter options url.
+     *
+     * @param  array $filter
+     * @access public
+     * @return string
+     */
+    public function getFilterOptionUrl(array $filter, string $sql = '', array $fieldSettings = array()): object
+    {
+        $field  = $filter['field'];
+        $from   = zget($filter, 'from', 'result');
+        $value  = zget($filter, 'default', '');
+        $values = is_array($value) ? implode(',', $value) : $value;
+
+        $url = helper::createLink('pivot', 'ajaxGetSysOptions', "search={search}");
+        $data = array();
+        $data['values'] = $values;
+        if($from == 'query')
+        {
+            $data['type'] = $filter['typeOption'];
+        }
+        else
+        {
+            $fieldSetting = $fieldSettings[$field];
+            $fieldSetting = (array)$fieldSetting;
+            $fieldType = $fieldSetting['type'];
+
+            $data['type']   = $fieldType;
+            $data['object'] = $fieldSetting['object'];
+            $data['field']  = $fieldType != 'options' && $fieldType != 'object' ? $field : $fieldSetting['field'];
+            $data['saveAs'] = zget($filter, 'saveAs', $field);
+            $data['sql']    = $sql;
+        }
+
+        return (object)array('url' => $url, 'method' => 'post', 'data' => $data);
     }
 }

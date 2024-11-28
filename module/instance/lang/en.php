@@ -187,6 +187,21 @@ $lang->instance->log = new stdclass;
 $lang->instance->log->date    = 'date';
 $lang->instance->log->message = 'Content';
 
+$lang->instance->log->viewButton = 'Logs';
+$lang->instance->log->title      = 'Watch Logs';
+$lang->instance->log->button     = 'View Now';
+
+$lang->instance->component         = 'Component';
+$lang->instance->pod               = 'Pod';
+$lang->instance->isPrevious        = 'Is Previous container';
+$lang->instance->isPreviousList[0] = 'No';
+$lang->instance->isPreviousList[1] = 'Yes';
+
+$lang->instance->event = new stdClass;
+$lang->instance->event->viewButton = 'Events';
+$lang->instance->event->title      = 'Watch Events';
+$lang->instance->event->button     = 'View Now';
+
 $lang->instance->actionList  =  array();
 $lang->instance->actionList['install']                  = '%s installed';
 $lang->instance->actionList['uninstall']               = '%s deleted';
@@ -293,7 +308,7 @@ $lang->instance->notices['backupFail']               = 'Backup failed';
 $lang->instance->notices['cleanBackupsSuccess']      = 'Backup cleanup successfuls';
 $lang->instance->notices['restoreSuccess']           = 'The rollback task has been submitted';
 $lang->instance->notices['restoreFail']              = 'Rollback failed';
-$lang->instance->notices['deleteSuccess']            = 'DeleteSuccess';
+$lang->instance->notices['deleteSuccess']            = 'The deletion task has been submitted';
 $lang->instance->notices['deleteFail']               = 'Delete failed';
 $lang->instance->notices['starting']                 = 'Starting, please wait...';
 $lang->instance->notices['stopping']                 = 'Closing, please wait...';

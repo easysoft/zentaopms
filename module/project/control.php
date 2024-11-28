@@ -121,6 +121,7 @@ class project extends control
         $this->view->module    = $module;
         $this->view->method    = $method;
         $this->view->programs  = $programs;
+        $this->view->extra     = $extra;
 
         $this->view->projects         = $orderedProjects;
         $this->view->involvedProjects = $involvedProjects;
@@ -1060,6 +1061,7 @@ class project extends control
         $this->view->productID = $this->session->buildProductID;
         $this->view->project   = $project;
         $this->view->products  = $products;
+        $this->view->system    = $this->loadModel('system')->getPairs();
         $this->view->type      = $type;
         $this->view->orderBy   = $orderBy;
         $this->view->param     = $param;

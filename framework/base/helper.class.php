@@ -1099,14 +1099,13 @@ class baseHelper
      * Convert scientific notation to two decimal places.
      *
      * @param  int|float|string $hours
-     * @param  string           $characters
      * @static
      * @access public
      * @return float
      */
-    public static function formatHours($hours, $characters = '.0'): float
+    public static function formatHours($hours): float
     {
-        return (float)rtrim(number_format((float)$hours, 2, '.', ''), $characters);
+        return (float)rtrim(rtrim(number_format((float)$hours, 2, '.', ''), '0'), '.');
     }
 }
 

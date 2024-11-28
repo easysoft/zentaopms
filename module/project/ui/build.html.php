@@ -46,10 +46,11 @@ jsVar('projectID', $project->id);
 jsVar('changeProductLink', createLink($app->rawModule, $app->rawMethod, "projectID={$project->id}&type=product&param={productID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 jsVar('scmPathTip', $lang->build->scmPath);
 jsVar('filePathTip', $lang->build->filePath);
-jsVar('integratedTip', $lang->build->integrated);
+jsVar('integratedTip', $lang->build->integratedLabel);
 jsVar('deletedTip', $lang->build->deleted);
 
 $fieldList = $this->loadModel('datatable')->getSetting('project', 'build');
+$fieldList['system']['map'] = $system;
 if(($project->model == 'kanban' && $app->rawModule == 'projectbuild') || !$project->multiple)
 {
     unset($fieldList['actions']['list']['createTest']['data-app']);

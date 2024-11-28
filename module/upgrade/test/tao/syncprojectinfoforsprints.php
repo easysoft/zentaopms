@@ -72,7 +72,6 @@ $endTimeArr   = array_map('strtotime', array_map(function($sprint) {return $spri
 $maxStartTime = max($startTimeArr);
 $minEndTime   = min($endTimeArr);
 
-unset(dao::$cache[TABLE_PROJECT]);
 $project = $tester->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID[1])->fetch();
 $program = $tester->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch();
 if(strtotime($project->begin) === $maxStartTime) $checkSprint = false;

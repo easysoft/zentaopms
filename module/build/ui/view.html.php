@@ -11,8 +11,9 @@ declare(strict_types=1);
 namespace zin;
 
 $buildModule  = $app->tab == 'project' ? 'projectbuild' : 'build';
-$canBeChanged = common::canModify('execution', $execution) && common::canBeChanged($buildModule, $build);
 $decodeParam  = helper::safe64Decode($param);
+$canBeChanged = common::canBeChanged($buildModule, $build);
+if($canBeChanged && $execution) $canBeChanged = common::canModify('execution', $execution);
 
 $buildItems = array();
 foreach($buildPairs as $id => $name)
@@ -285,6 +286,11 @@ detailBody
                             (
                                 set::name($lang->build->branch),
                                 $branchName
+                            ) : null,
+                            $build->system ? item
+                            (
+                                set::name($lang->build->system),
+                                zget($systemList, $build->system)
                             ) : null,
                             item
                             (

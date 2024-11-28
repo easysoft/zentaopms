@@ -171,6 +171,14 @@ class pivotState
     public $stage;
 
     /**
+     * Pivot state version.
+     *
+     * @var string
+     * @access public
+     */
+    public $version;
+
+    /**
      * Pivot state acl.
      *
      * @var string
@@ -360,6 +368,7 @@ class pivotState
         $this->sql       = $pivot->sql;
         $this->step      = 'query';
         $this->stage     = $pivot->stage;
+        $this->version   = $pivot->version;
         $this->acl       = $pivot->acl;
         $this->whitelist = $pivot->whitelist;
 

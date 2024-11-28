@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 /**
  * The control file of system module of ZenTaoPMS.
  *
@@ -535,14 +536,22 @@ class system extends control
      * @access public
      * @return void
      */
-    public function browse(int $productID, string $branch, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function browse(int $productID, int $projectID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $this->commonAction($productID, $branch);
+        if($projectID)
+        {
+            $this->loadModel('project')->setMenu($projectID);
+            $productID = $this->loadModel('product')->getProductIDByProject($projectID);
+        }
+        else
+        {
+            $this->commonAction($productID);
+        }
 
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $systems = $this->system->getList($orderBy, $pager);
+        $systems = $this->system->getList($productID, 'all', $orderBy, $pager);
         foreach($systems as &$system)
         {
             $system->latestRelease = $system->latestRelease ? $system->latestRelease : '';
@@ -550,7 +559,9 @@ class system extends control
 
         $this->view->title     = $this->lang->system->browse;
         $this->view->productID = $productID;
+        $this->view->projectID = $projectID;
         $this->view->appList   = $systems;
+        $this->view->releases  = $this->loadModel('release')->getPairs();
         $this->view->appPairs  = $this->system->getPairs();
         $this->view->orderBy   = $orderBy;
         $this->view->pager     = $pager;
@@ -579,15 +590,14 @@ class system extends control
                 ->setIF($integrated == '0', 'children', '')
                 ->get();
 
-            $systemID = $this->system->create($formData);
+            $this->system->create($formData);
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            if($systemID) $this->loadModel('action')->create('system', $systemID, 'created');
             $this->sendSuccess(array('load' => true));
         }
 
         $this->view->title      = $this->lang->system->create;
-        $this->view->systemList = $this->system->getPairs('0');
+        $this->view->systemList = $this->system->getPairs(0, '0');
         $this->display();
     }
 
@@ -616,13 +626,12 @@ class system extends control
             $this->system->update($id, $formData);
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            $this->loadModel('action')->create('system', $id, 'edited');
             $this->sendSuccess(array('load' => true));
         }
 
         $this->view->title      = $this->lang->system->edit;
         $this->view->system     = $system;
-        $this->view->systemList = $this->system->getPairs('0');
+        $this->view->systemList = $this->system->getPairs(0, '0');
         $this->display();
     }
 
@@ -676,9 +685,30 @@ class system extends control
      */
     public function delete(int $id)
     {
+        $releases = $this->system->getReleasesByID($id);
+        if(!empty($releases)) return $this->sendError($this->lang->system->releaseExist);
+
+        $builds = $this->system->getBuildsByID($id);
+        if(!empty($builds)) return $this->sendError($this->lang->system->buildExist);
+
         $this->system->delete(TABLE_SYSTEM, $id);
 
         if(dao::isError()) return $this->sendError(dao::getError());
         $this->sendSuccess(array('load' => true));
+    }
+
+    /**
+     * 初始化产品下的应用数据（仅用于第一次安装）。
+     * Init the application data of the product.
+     *
+     * @access public
+     * @return void
+     */
+    public function initSystem()
+    {
+        $releaseList = $this->loadModel('release')->getListBySystem(array('0'));
+        if(!$releaseList) return false;
+
+        return $this->system->initSystem();
     }
 }

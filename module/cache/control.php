@@ -104,7 +104,7 @@ class cache extends control
      * @access public
      * @return void
      */
-    public function ajaxClear()
+    public function clear()
     {
         $this->cache->clear();
         return $this->send(array('result' => 'success', 'message' => $this->lang->cache->clearSuccess, 'load' => true));

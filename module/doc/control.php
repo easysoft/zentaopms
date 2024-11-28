@@ -123,15 +123,10 @@ class doc extends control
         }
 
         $objects = array();
-        if($type == 'product') $objects = $this->product->getPairs();
-        if($type == 'project')
+        if($type == 'project' && $this->app->tab == 'doc')
         {
-            $objects = $this->project->getPairsByProgram(0, 'all', false, 'order_asc');
-            if($this->app->tab == 'doc')
-            {
-                $this->view->executionPairs = $this->execution->getPairs($objectID, 'all', 'multiple,leaf,noprefix');
-                $this->view->project        = $this->project->getById($objectID);
-            }
+            $this->view->executionPairs = $this->execution->getPairs($objectID, 'all', 'multiple,leaf,noprefix');
+            $this->view->project        = $this->project->getById($objectID);
         }
 
         if($type == 'execution')

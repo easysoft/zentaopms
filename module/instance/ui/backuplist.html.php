@@ -45,10 +45,9 @@ foreach($backupList as &$backup)
     foreach($config->backup->dtable->fieldList['actions']['actionsMap'] as $actionType => $actionItems)
     {
         $backup->actions[$actionIdx]['name']     = $actionType;
-        $backup->actions[$actionIdx]['disabled'] = false;
+        $backup->actions[$actionIdx]['disabled'] = (!in_array($status, array('success', 'completed', 'deleting')) || (!empty($restoreStatus) && in_array($restoreStatus, array('pending', 'inprogress')))) ? true : false;
         $actionIdx++;
     }
-    if(!in_array($status, array('success', 'completed')) || in_array($restoreStatus, array('pending', 'inprogress')))  $backup->actions[0]['disabled'] = true;
 }
 dtable
 (

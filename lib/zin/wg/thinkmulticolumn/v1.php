@@ -34,16 +34,18 @@ class thinkMulticolumn extends thinkQuestion
 
     protected function buildFormBatchItem(string $label, int $index, $isRun, $quotedQuestions, $hasResult): wg
     {
-        $step         = $this->prop('step');
-        $key          = $index + 1;
-        $requiredCols = isset($step->options->requiredCols) ? $step->options->requiredCols : array();
+        $step            = $this->prop('step');
+        $key             = $index + 1;
+        $requiredCols    = isset($step->options->requiredCols) ? $step->options->requiredCols : array();
+        $runDisabled     = $isRun && !empty($quotedQuestions) && $hasResult;
+        $preViewDisabled = !$isRun && $hasResult;
 
         return formBatchItem
         (
             set::label($label),
             set::name("result[col$key]"),
             set::width('110px'),
-            set::disabled($isRun && !empty($quotedQuestions) && $hasResult),
+            set::disabled($runDisabled || $preViewDisabled),
             set::required(!empty($step->options->required) && empty($step->options->fields) ? true : in_array($key, $requiredCols))
         );
     }
@@ -86,10 +88,12 @@ class thinkMulticolumn extends thinkQuestion
             $answer     = $step->answer;
             $result     = isset($answer->result) && !empty($answer->result) ? (array) $answer->result : array();
         }
+        $runDisabled = $isRun && !empty($quotedQuestions) && !empty($result);
+        $preViewDisabled = !$isRun && !empty($result);
         jsVar('canAddRowsOfMulticol', $canAddRows + 5);
         jsVar('addRowsTips', $lang->thinkrun->tips->addRow);
         jsVar('addLang', $lang->thinkrun->add);
-        jsVar('disabled', $isRun && !empty($quotedQuestions) && !empty($result));
+        jsVar('disabled', $runDisabled || $preViewDisabled);
         jsVar('modeClass', !empty($modeClass) ? '.' . $modeClass : '');
 
         $fields       = array_values((array)$fields);

@@ -3,6 +3,8 @@ window.clickCell = function(col, {colName, rowInfo})
 {
     const drillConditions = rowInfo.data.conditions[colName];
     const isDrill         = rowInfo.data.isDrill[colName];
+    const version         = rowInfo.data.version;
+    const status          = rowInfo.data.status;
     let value             = rowInfo.data[colName];
 
     if(!isDrill || rowInfo.data.field0_colspan) return false;
@@ -11,7 +13,6 @@ window.clickCell = function(col, {colName, rowInfo})
     let filterValues = {};
     let originField  = '0';
     let id           = window.pivotID;
-    let status       = 'published';
 
     if(Array.isArray(value)) value = value[0];
     value = (value + '').replace('%', '');
@@ -24,12 +25,11 @@ window.clickCell = function(col, {colName, rowInfo})
     }
     conditions   = latin1ToBase64(JSON.stringify(conditions))
     filterValues = latin1ToBase64(JSON.stringify(filterValues))
-    if(typeof(pivotState) != 'undefined') status = 'design';
 
-    let drillModalLink = $.createLink('pivot', 'drillModal', `pivotID=${id}&colName=${originField}&status=${status}&conditions=${conditions}&filterValues=${filterValues}&value=${value}`);
+    let drillModalLink = $.createLink('pivot', 'drillModal', `pivotID=${id}&version=${version}&colName=${originField}&status=${status}&conditions=${conditions}&filterValues=${filterValues}&value=${value}`);
     drillModalLink = drillModalLink.replace(/\+/g, '%2B');
 
-    zui.Modal.open({url: drillModalLink, size: 'lg'});
+    zui.Modal.open({url: drillModalLink, size: 'lg', key: 'drill'});
 }
 
 window.latin1ToBase64 = function(str)
@@ -47,10 +47,20 @@ window.latin1ToBase64 = function(str)
  * @access public
  * @return object
  */
-window.getFilterValues = function()
+window.getFilterValues = function(where)
 {
+    let root = '';
+    if(where == 'versions')
+    {
+        root = $('#pivotVersionPanel').find('#conditions .filter');
+    }
+    else
+    {
+        root = $('#conditions .filter');
+    }
+
     const filterValues = {};
-    $('#conditions .filter').each(function(index)
+    root.each(function(index)
     {
         const $filter = $(this);
         if ($filter.hasClass('filter-input'))
@@ -78,4 +88,26 @@ window.getFilterValues = function()
     });
 
     return filterValues;
+}
+
+/**
+ * 计算数据表格的高度。
+ * Calculate height of data table.
+ *
+ * @param  int    height
+ * @access public
+ * @return int
+ */
+window.getHeight = function(height = 800)
+{
+    const windowHeight = $(window).height();
+
+    const $panelBody = $('#pivotPanel .panel-body');
+    const styles = $panelBody.length ? window.getComputedStyle($panelBody[0]) : null;
+    const paddingBottom = parseInt(styles?.paddingBottom ?? 0, 10);
+
+    const boundingRect = $panelBody.length ? $panelBody[0].getBoundingClientRect() : null;
+    const offsetTop = boundingRect?.y ?? 0;
+
+    return Math.min(windowHeight - offsetTop - paddingBottom * 2 - 10, height);
 }

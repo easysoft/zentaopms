@@ -368,7 +368,7 @@ $productManage->basic->tasks['releaseManage']['steps'][] = array(
 
 $productManage->basic->tasks['releaseManage']['steps'][] = array(
     'type'   => 'click',
-    'target' => '#actionBar a',
+    'target' => '#actionBar a.primary',
     'page'   => 'release-browse',
     'url'    => array('release', 'browse', 'productID=1'),
     'title'  => $lang->tutorial->productManage->releaseManage->step2->name,

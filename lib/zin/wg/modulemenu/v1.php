@@ -84,7 +84,7 @@ class moduleMenu extends wg
             $item = array(
                 'key'          => $child->id,
                 'text'         => $child->name,
-                'hint'         => $child->name,
+                'hint'         => is_array($child->name) ? (isset($child->name['text']) ? $child->name['text'] : current($child->name)) : $child->name,
                 'url'          => zget($child, 'url', ''),
                 'titleAttrs'   => $titleAttrs,
                 'contentClass' => 'overflow-x-hidden'

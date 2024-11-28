@@ -2624,6 +2624,7 @@ eof;
      */
     protected function checkPrivForOperateAction(array $actionData, string $action, string $moduleName, object $data, string $menu): array|bool
     {
+        $rawModule = $moduleName;
         if(!empty($actionData['url']) && is_array($actionData['url']))
         {
             $moduleName = ($actionData['url']['module'] == 'story' && in_array($moduleName, array('epic', 'requirement', 'story'))) ? $data->type : $actionData['url']['module'];
@@ -2650,6 +2651,7 @@ eof;
             if(!common::hasPriv($moduleName, $action, $data)) return false;
         }
 
+        if(!empty($actionData['notLoadModel']) && $moduleName != $rawModule) $moduleName = $rawModule;
         if(!isset($this->$moduleName)) $this->loadModel($moduleName);
         if(isset($this->$moduleName) && method_exists($this->{$moduleName}, 'isClickable') && false === $this->{$moduleName}->isClickable($data, $action)) return false;
         if(!empty($actionData['hint']) && !isset($actionData['text'])) $actionData['text'] = $actionData['hint'];

@@ -78,17 +78,21 @@ class release extends control
 
         $releaseQuery = $type == 'bySearch' ? $this->releaseZen->getSearchQuery($queryID) : '';
         $releases     = $this->release->getList($productID, $branch, $type, $sort, $releaseQuery, $pager);
+        $children     = implode(',', array_column($releases, 'releases'));
+
         foreach($releases as $release) $release->desc = strip_tags($release->desc);
 
-        $this->view->title       = $this->view->product->name . $this->lang->hyphen . $this->lang->release->browse;
-        $this->view->releases    = $this->releaseZen->processReleaseListData($releases);
-        $this->view->pageSummary = $this->release->getPageSummary($releases, $type);
-        $this->view->type        = $type;
-        $this->view->orderBy     = $orderBy;
-        $this->view->param       = $param;
-        $this->view->pager       = $pager;
-        $this->view->showBranch  = $showBranch;
-        $this->view->branchPairs = $this->loadModel('branch')->getPairs($productID);
+        $this->view->title         = $this->view->product->name . $this->lang->hyphen . $this->lang->release->browse;
+        $this->view->releases      = $this->releaseZen->processReleaseListData($releases);
+        $this->view->pageSummary   = $this->release->getPageSummary($releases, $type);
+        $this->view->type          = $type;
+        $this->view->orderBy       = $orderBy;
+        $this->view->param         = $param;
+        $this->view->pager         = $pager;
+        $this->view->showBranch    = $showBranch;
+        $this->view->branchPairs   = $this->loadModel('branch')->getPairs($productID);
+        $this->view->appList       = $this->loadModel('system')->getPairs();
+        $this->view->childReleases = $this->release->getListByCondition(explode(',', $children));
         $this->display();
     }
 
@@ -140,6 +144,7 @@ class release extends control
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed');
         $this->view->lastRelease = $this->release->getLast($productID, (int)$branch);
         $this->view->status      = $status;
+        $this->view->appList     = $this->loadModel('system')->getList($productID);
 
         $this->display();
     }
@@ -168,6 +173,18 @@ class release extends control
             }
 
             $releaseData = form::data(null, $releaseID)->setIF($this->post->build === false, 'build', 0)->get();
+            $releaseData->releases = '';
+
+            $system = $this->loadModel('system')->fetchByID($releaseData->system);
+            if($system->integrated == '1')
+            {
+                $releases = (array)$this->post->releases;
+
+                $releaseData->build    = '';
+                $releaseData->releases = trim(implode(',', $releases), ',');
+                if(!$release->releases) dao::$errors['releases[' . key($releases) . ']'][] = sprintf($this->lang->error->notempty, $this->lang->release->includedSystem);
+            }
+            if(dao::isError()) return $this->sendError(dao::getError());
 
             $changes = $this->release->update($releaseData, $release);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -197,6 +214,7 @@ class release extends control
         $this->view->release = $release;
         $this->view->builds  = $builds;
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed');
+        $this->view->appList = $this->loadModel('system')->getList($release->product);
 
         $this->display();
     }
@@ -249,6 +267,9 @@ class release extends control
 
         $this->executeHooks($releaseID);
 
+        $this->view->appList        = $this->loadModel('system')->getPairs();
+        $this->view->linkedReleases = $release->releases ? $this->release->getListByCondition(explode(',', $release->releases)) : array();
+        $this->view->includedApps   = $this->release->getListByCondition(array(), $release->id);
         $this->display();
     }
 
@@ -305,9 +326,12 @@ class release extends control
      */
     public function delete(int $releaseID)
     {
+        $release = $this->fetchByID($releaseID);
+
         $this->release->delete(TABLE_RELEASE, $releaseID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+        if($release && $release->system) $this->loadModel('system')->setSystemRelease($release->system, $releaseID);
         $message = $this->executeHooks($releaseID) ?: $this->lang->saveSuccess;
 
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message));
@@ -561,6 +585,7 @@ class release extends control
      */
     public function publish(int $releaseID)
     {
+        $release = $this->release->getByID($releaseID);
         if($_POST)
         {
             if(!$this->post->releasedDate)
@@ -576,7 +601,7 @@ class release extends control
             return $this->sendSuccess(array('load' => true, 'closeModal' => true));
         }
 
-        $this->view->release = $this->release->getByID($releaseID);
+        $this->view->release = $release;
         $this->display();
     }
 
@@ -616,5 +641,28 @@ class release extends control
 
         $this->loadModel('action')->create('release', $releaseID, 'changestatus', '', $action);
         return $this->sendSuccess(array('load' => true));
+    }
+
+    /**
+     * 获取生成应用和发布的联动组件。
+     * Get system and release combobox.
+     *
+     * @param  int    $systemID
+     * @param  string $linkedRelease
+     * @access public
+     * @return void
+     */
+    public function ajaxLoadSystemBlock(int $systemID, string $linkedRelease = '')
+    {
+        $system   = $this->loadModel('system')->fetchByID($systemID);
+        $children = explode(',', $system->children);
+
+        $appList  = $this->system->getByIdList($children);
+        $releases = $this->release->getListBySystem($children);
+
+        $this->view->appList       = $appList;
+        $this->view->releases      = $releases;
+        $this->view->linkedRelease = explode(',', $linkedRelease);
+        $this->display();
     }
 }

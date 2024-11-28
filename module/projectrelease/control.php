@@ -62,6 +62,7 @@ class projectrelease extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $releases = $this->projectrelease->getList($projectID, $type, $orderBy, $pager);
+        $children = implode(',', array_column($releases, 'releases'));
 
         /* 判断是否展示分支。*/
         /* Judge whether to show branch. */
@@ -75,19 +76,21 @@ class projectrelease extends control
         $project   = $this->project->getByID($projectID);
         $execution = $this->loadModel('execution')->getByID($executionID);
 
-        $this->view->title       = (isset($project->name) ? $project->name : $execution->name) . $this->lang->hyphen . $this->lang->release->browse;
-        $this->view->products    = $this->product->getProductPairsByProject($projectID);
-        $this->view->pageSummary = $this->release->getPageSummary($releases, $type);
-        $this->view->projectID   = $projectID;
-        $this->view->executionID = $executionID;
-        $this->view->type        = $type;
-        $this->view->from        = $this->app->tab;
-        $this->view->project     = $project;
-        $this->view->execution   = $execution;
-        $this->view->releases    = $releases;
-        $this->view->pager       = $pager;
-        $this->view->orderBy     = $orderBy;
-        $this->view->showBranch  = $showBranch;
+        $this->view->title         = (isset($project->name) ? $project->name : $execution->name) . $this->lang->hyphen . $this->lang->release->browse;
+        $this->view->products      = $this->product->getProductPairsByProject($projectID);
+        $this->view->pageSummary   = $this->release->getPageSummary($releases, $type);
+        $this->view->projectID     = $projectID;
+        $this->view->executionID   = $executionID;
+        $this->view->type          = $type;
+        $this->view->from          = $this->app->tab;
+        $this->view->project       = $project;
+        $this->view->execution     = $execution;
+        $this->view->releases      = $releases;
+        $this->view->pager         = $pager;
+        $this->view->orderBy       = $orderBy;
+        $this->view->showBranch    = $showBranch;
+        $this->view->appList       = $this->loadModel('system')->getPairs();
+        $this->view->childReleases = $this->release->getListByCondition(explode(',', $children));
         $this->display();
     }
 
@@ -107,15 +110,7 @@ class projectrelease extends control
 
         if(!empty($_POST))
         {
-            $release = form::data($this->config->release->form->create)
-                ->add('product', $this->post->product ? $this->post->product : 0)
-                ->add('branch', $this->post->branch ? $this->post->branch : 0)
-                ->setIF($projectID, 'project', $projectID)
-                ->setIF($this->post->build === false, 'build', 0)
-                ->get();
-
-            /* Check build if build is required. */
-            if(strpos($this->config->release->create->requiredFields, 'build') !== false && empty($release->build)) dao::$errors['build'] = sprintf($this->lang->error->notempty, $this->lang->release->build);
+            $release = $this->projectreleaseZen->buildReleaseForCreate($projectID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if(!empty($_FILES['releaseFiles'])) $_FILES['files'] = $_FILES['releaseFiles'];
@@ -182,7 +177,19 @@ class projectrelease extends control
             }
 
             $releaseData = form::data($this->config->release->form->edit, $releaseID)->setIF($this->post->build === false, 'build', 0)->get();
-            $changes     = $this->release->update($releaseData, $release);
+            $releaseData->releases = '';
+            $system = $this->loadModel('system')->fetchByID($releaseData->system);
+            if($system->integrated == '1')
+            {
+                $releases = (array)$this->post->releases;
+
+                $releaseData->build    = '';
+                $releaseData->releases = trim(implode(',', $releases), ',');
+                if(!$releaseData->releases) dao::$errors['releases[' . key($releases) . ']'][] = sprintf($this->lang->error->notempty, $this->lang->release->includedSystem);
+            }
+            if(dao::isError()) return $this->sendError(dao::getError());
+
+            $changes = $this->release->update($releaseData, $release);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($changes)
             {

@@ -1911,6 +1911,8 @@ class storyTao extends storyModel
      */
     protected function checkConditions(string $method, object $story)
     {
+        if($this->config->edition == 'open') return true;
+
         static $flowActions = [];
         if(empty($flowActions)) $flowActions = $this->loadModel('workflowaction')->getList($story->type);
         $this->loadModel('flow');

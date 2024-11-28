@@ -1,3 +1,23 @@
+window.loadSystemBlock = function()
+{
+    const systemID = $('[name=system]').val();
+    if(!systemID || !appList[systemID]) return;
+
+    $('#systemBlock, #buildBox').addClass('hidden');
+    if(appList[systemID].integrated == 1)
+    {
+        if(typeof linkedRelease == 'undefined') linkedRelease = '';
+
+        $('#systemBlock').removeClass('hidden');
+        loadTarget($.createLink('release', 'ajaxLoadSystemBlock', `systemID=${systemID}&release=${linkedRelease}`), 'systemItems');
+    }
+    else
+    {
+        window.loadBuilds(productID);
+        $('#buildBox').removeClass('hidden');
+    }
+};
+
 window.changeStatus = function(e)
 {
     const status = e.target.value;
@@ -11,8 +31,14 @@ window.changeStatus = function(e)
         $('#releasedDate').closest('.form-row').removeClass('hidden');
         $('[data-name=date] .form-label').removeClass('required');
     }
-}
+};
 
-setTimeout(() => {
-    changeStatus({target: {value: oldStatus}});
-}, 100);
+
+$(function()
+{
+    setTimeout(function()
+    {
+        changeStatus({target: {value: oldStatus}});
+        window.loadSystemBlock();
+    }, 100);
+})

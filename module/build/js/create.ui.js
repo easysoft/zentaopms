@@ -11,7 +11,8 @@ $().ready(function()
     {
         let projectID = $('input[name=project]').val();
         let productID = $('input[name=product]').val();
-        $.get($.createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=builds&build=&branch=all&&needCreate=&type=noempty,notrunk,separate,singled'), function(data)
+        let systemID    = $('input[name=system]').val();
+        $.get($.createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=builds&build=&branch=all&&needCreate=&type=noempty,notrunk,separate,singled&systemID=' + systemID), function(data)
         {
             if(data)
             {
@@ -36,21 +37,24 @@ $().ready(function()
     {
         let projectID   = $('input[name=project]').val();
         let executionID = $('input[name=execution]').val();
+        let systemID    = $('input[name=system]').val();
 
         if($(this).val() == 'no')
         {
+            $('[name=newSystem]').closest('.input-group-addon').removeClass('hidden');
             $('input[name=execution]').closest('.form-row').removeClass('hidden');
             $('select[name^=builds]').closest('.form-row').addClass('hidden');
             loadProducts(executionID);
         }
         else
         {
+            $('[name=newSystem]').closest('.input-group-addon').addClass('hidden');
             $('input[name=execution]').closest('.form-row').addClass('hidden');
             $('select[name^=builds]').closest('.form-row').removeClass('hidden');
 
             loadProducts(projectID);
             let productID = $('input[name=product]').val();
-            $.get($.createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=builds&build=&branch=all&needCreate=&type=noempty,notrunk,separate,singled'), function(data)
+            $.get($.createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=builds&build=&branch=all&needCreate=&type=noempty,notrunk,separate,singled&system=' + systemID), function(data)
             {
                 if(data)
                 {
@@ -63,6 +67,7 @@ $().ready(function()
         }
     });
     loadBranches();
+    loadSystem();
     if(multipleProject)
     {
         window.waitDom('[name=execution]', function()
@@ -99,6 +104,7 @@ function loadProducts(executionID)
 
             $('select[name^=builds]').attr('data-placeholder', multipleSelect);
             loadBranches(productID);
+            loadSystem(productID);
         }
         else
         {
@@ -109,6 +115,7 @@ function loadProducts(executionID)
     });
 
     loadLastBuild();
+    loadSystem();
 }
 
 /**

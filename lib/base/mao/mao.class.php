@@ -707,11 +707,8 @@ class baseMao
         if(empty($this->cache))
         {
             /* 如果缓存关闭，从数据库中获取。If the cache is off, get from the database. */
-            $fields = [];
-            foreach($this->fields as $field => $alias) $fields[] = $field == $alias ? $field : "$field AS $alias";
-            $fields = implode(',', $fields);
-
             $primaryKey  = $this->config->cache->raw[$this->table];
+            $fields 	 = $primaryKey . ',' . implode(',', array_keys($this->fields));
             $cacheResult = $this->dao->select($fields)->from($this->table)->where($primaryKey)->in(array_unique($keyList))->fetchAll($primaryKey);
         }
         else
@@ -721,10 +718,16 @@ class baseMao
 
         foreach($data as $index => $row)
         {
-            $key      = $keyList[$index];
-            $cacheRow = $cacheResult[$key];
-
-            foreach($this->fields as $field => $alias) $row->$alias = $cacheRow->$field;
+            $key = $keyList[$index];
+            if(isset($cacheResult[$key]))
+            {
+                $cacheRow = $cacheResult[$key];
+                foreach($this->fields as $field => $alias) $row->$alias = $cacheRow->$field;
+            }
+            else
+            {
+                foreach($this->fields as $field => $alias) $row->$alias = '';
+            }
         }
     }
 

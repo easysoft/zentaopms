@@ -175,8 +175,10 @@ class dtable extends wg
             {
                 if(!empty($config['map']))     $dataPairs = $config['map'];
                 if(!empty($config['userMap'])) $dataPairs = $config['userMap'];
-                $delimiter = is_string($config['delimiter']) ? $config['delimiter'] : ',';
-                $config['map'] = jsRaw("(value) => {return window.setMultipleCell(value, '" . json_encode($dataPairs). "', '{$delimiter}')}");
+
+                $config['dataPairs'] = $dataPairs;
+                $config['delimiter'] = is_string($config['delimiter']) ? $config['delimiter'] : ',';
+                $config['map']       = jsRaw("window.setMultipleCell");
             }
 
             if(isset($config['type']))

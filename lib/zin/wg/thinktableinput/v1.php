@@ -30,10 +30,15 @@ class thinkTableInput extends thinkQuestion
 
     protected function buildDetail(): array
     {
-        global $lang;
+        global $lang, $config;
         $detailWg = parent::buildDetail();
-        list($step, $fields, $supportAdd, $canAddRows, $mode, $inputType) = $this->prop(array('step', 'fields', 'supportAdd', 'canAddRows', 'mode', 'inputType'));
+        list($step, $fields, $supportAdd, $canAddRows, $mode, $inputType, $wizard) = $this->prop(array('step', 'fields', 'supportAdd', 'canAddRows', 'mode', 'inputType', 'wizard'));
         if($mode != 'detail') return array();
+
+        $wizard->config     = !empty($wizard->config) ? $wizard->config : array();
+        $wizard->config     = is_string($wizard->config) ? json_decode($wizard->config, true) : $wizard->config;
+        $configureDimension = !empty($wizard->config['configureDimension']) ? $wizard->config['configureDimension'] : array();
+        $canConfigureRatio  = !empty($configureDimension['canConfigureRatio']) ? $configureDimension['canConfigureRatio'] : '0';
 
         if($step)
         {
@@ -43,7 +48,7 @@ class thinkTableInput extends thinkQuestion
             $answer       = $step->answer;
             $result       = isset($answer->result) && !empty($answer->result) ? (array) $answer->result : array();
             $customFields = !empty($answer->customFields) ? get_object_vars($answer->customFields) : array();
-            $inputType    = isset($step->options->inputType)? $step->options->inputType : false;
+            $inputType    = isset($step->options->inputType) ? $step->options->inputType : false;
         }
 
         $tableInputItems = array();
@@ -80,9 +85,10 @@ class thinkTableInput extends thinkQuestion
                                 'min'         => 1,
                                 'max'         => 100,
                                 'value'       => $value,
+                                'disabled'    => ($value && !$canConfigureRatio ),
                                 'placeholder' => $lang->thinkrun->pleaseInput
                             )),
-                            on::input('changeInput')
+                            on::input('changePercentInput')
                         ),
                         to::suffix($lang->thinkwizard->dimension->percentageSign),
                         set::suffixWidth(32)

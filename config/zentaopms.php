@@ -325,6 +325,7 @@ $config->logonMethods[] = 'my.settutorialconfig';
 $config->logonMethods[] = 'personnel.unbindwhitelist';
 $config->logonMethods[] = 'project.createguide';
 $config->logonMethods[] = 'pivot.drillmodal';
+$config->logonMethods[] = 'pivot.versions';
 $config->logonMethods[] = 'search.buildzinform';
 $config->logonMethods[] = 'search.buildzinquery';
 $config->logonMethods[] = 'search.deletezinquery';

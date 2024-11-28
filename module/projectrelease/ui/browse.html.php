@@ -16,8 +16,20 @@ featureBar
     set::linkParams("projectID={$projectID}&executionID={$executionID}&type={key}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")
 );
 
+$canManageSystem = hasPriv('system', 'browse') && common::canModify('project', $project);
 toolbar
 (
+    !$project->hasProduct && $canManageSystem ? item(set
+    (
+        array
+        (
+            'class' => 'primary',
+            'text' => $lang->release->manageSystem,
+            'url' => $this->createLink('system', 'browse', "productID=0&projectID={$projectID}"),
+            'data-app' => 'project'
+        )
+    )) : null,
+
     common::canModify('project', $project) && hasPriv('projectrelease', 'create') ? item(set
     ([
         'text'  => $lang->release->create,
@@ -36,6 +48,24 @@ if(!$showBranch) unset($cols['branch']);
 if(isset($cols['branch']))  $cols['branch']['name'] = 'branchName';
 if(isset($cols['product'])) $cols['product']['map'] = $products;
 if(empty($project->hasProduct)) unset($cols['product']);
+$cols['system']['map'] = array(0 => '') + $appList;
+
+foreach($releases as $release)
+{
+    $release->rowID = $release->id;
+    if(empty($release->releases)) continue;
+
+    foreach(explode(',', $release->releases) as $childID)
+    {
+        if(isset($childReleases[$childID]))
+        {
+            $child = clone $childReleases[$childID];
+            $child->rowID  = "{$release->id}-{$childID}";
+            $child->parent = $release->id;
+            $releases[$child->rowID] = $child;
+        }
+    }
+}
 
 $tableData = initTableData($releases, $cols);
 dtable
@@ -43,6 +73,7 @@ dtable
     set::cols(array_values($cols)),
     set::data($tableData),
     set::customCols(true),
+    set::rowKey('rowID'),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::sortLink(createLink('projectrelease', 'browse', "projectID={$project->id}&executionID={$executionID}&type={$type}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footer([jsRaw("function(){return {html: '{$pageSummary}'};}"), 'flex', 'pager']),

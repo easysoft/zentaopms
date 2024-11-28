@@ -534,7 +534,7 @@ class execution extends control
         $project     = $this->loadModel('project')->getByID($execution->project);
         $executionID = $execution->id;
         $products    = $this->product->getProducts($execution->id);
-        $param       = (int)$param;
+        $param       = in_array($type, array('bysearch', 'bymodule')) ? (int)$param : 0;
 
         if(count($products) === 1) $productID = current($products)->id;
 
@@ -712,6 +712,7 @@ class execution extends control
         $this->view->builds   = $this->executionZen->processBuildListData($builds, $executionID);
         $this->view->product  = $type == 'product' ? $param : '';
         $this->view->products = $products;
+        $this->view->system   = $this->loadModel('system')->getPairs();
         $this->view->type     = $type;
         $this->view->param    = $param;
         $this->view->orderBy  = $orderBy;
@@ -2601,23 +2602,6 @@ class execution extends control
         $this->view->executionID = $executionID;
         $this->view->extra       = $extra;
 
-        $cacheProjectsKey   = $this->config->cacheKeys->execution->ajaxGetDropMenuProjects;
-        $cacheExecutionsKey = $this->config->cacheKeys->execution->ajaxGetDropMenuExecutions;
-
-        if(helper::isCacheEnabled())
-        {
-            $projects          = $this->cache->get($cacheProjectsKey);
-            $projectExecutions = $this->cache->get($cacheExecutionsKey);
-
-            if(!empty($projects) && !empty($projectExecutions))
-            {
-                $this->view->projects          = $projects;
-                $this->view->projectExecutions = $projectExecutions;
-                $this->display();
-                return;
-            }
-        }
-
         $projects = $this->loadModel('program')->getProjectList(0, 'all', 0, 'order_asc', '', true); /* 获取所有项目的列表。*/
         $executionGroups = $this->dao->select('*')->from(TABLE_EXECUTION) /* 按照项目分组，获取有权限访问的执行列表。*/
             ->where('deleted')->eq('0')
@@ -2667,12 +2651,6 @@ class execution extends control
 
             $execution->name = $executionNameList[$execution->id];
             $projectExecutions[$execution->project][] = $execution;
-        }
-
-        if($this->config->cache->enable)
-        {
-            $this->cache->set($cacheProjectsKey, $projectPairs);
-            $this->cache->set($cacheExecutionsKey, $projectExecutions);
         }
 
         $this->view->projects           = $projectPairs;      /* 项目ID为索引，项目名称为值的数组 [projectID => projectName]。 */
@@ -2978,10 +2956,7 @@ class execution extends control
             $checkedItem    = $this->cookie->checkedItem;
             foreach($executionStats as $i => $execution)
             {
-                if($this->post->exportType == 'selected')
-                {
-                    if(strpos(",$checkedItem,", ",pid{$execution->id},") === false) continue;
-                }
+                if($this->post->exportType == 'selected' && strpos(",$checkedItem,", ",pid{$execution->id},") === false) continue;
 
                 $execution->PM            = zget($users, $execution->PM);
                 $execution->status        = isset($execution->delay) ? $executionLang->delayed : $this->processStatus('execution', $execution);

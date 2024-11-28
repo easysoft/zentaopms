@@ -13,8 +13,6 @@ fields:
     range: 0-1
   - field: latestRelease
     range: 0
-  - field: latestDate
-    range: []
   - field: children
     range: "[],1"
   - field: status

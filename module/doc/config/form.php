@@ -53,8 +53,9 @@ $config->doc->form->create['editedDate']   = array('type' => 'datetime', 'requir
 $config->doc->form->create['groups']       = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
 $config->doc->form->create['users']        = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
 $config->doc->form->create['mailto']       = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
-$config->doc->form->create['contentType']  = array('type' => 'string',   'required' => false, 'default' => 'html');
+$config->doc->form->create['contentType']  = array('type' => 'string',   'required' => false, 'default' => 'doc');
 $config->doc->form->create['content']      = array('type' => 'string',   'required' => false, 'default' => '', 'control' => 'editor', 'skipRequired' => true);
+$config->doc->form->create['html']         = array('type' => 'string',   'required' => false, 'default' => '', 'skipRequired' => true);
 $config->doc->form->create['template']     = array('type' => 'string',   'required' => false, 'default' => '');
 $config->doc->form->create['templateType'] = array('type' => 'string',   'required' => false, 'default' => '');
 $config->doc->form->create['chapterType']  = array('type' => 'string',   'required' => false, 'default' => '');
@@ -71,7 +72,9 @@ $config->doc->form->edit['status']     = array('type' => 'string',   'required' 
 $config->doc->form->edit['type']       = array('type' => 'string',   'required' => false, 'default' => '');
 $config->doc->form->edit['keywords']   = array('type' => 'string',   'required' => false, 'default' => '', 'skipRequired' => true);
 $config->doc->form->edit['acl']        = array('type' => 'string',   'required' => false, 'default' => '');
+$config->doc->form->edit['contentType']= array('type' => 'string',   'required' => false, 'default' => 'html');
 $config->doc->form->edit['content']    = array('type' => 'string',   'required' => false, 'default' => '', 'control' => 'editor', 'skipRequired' => true);
+$config->doc->form->edit['html']       = array('type' => 'string',   'required' => false, 'default' => '', 'control' => 'editor', 'skipRequired' => true);
 $config->doc->form->edit['groups']     = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
 $config->doc->form->edit['users']      = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
 $config->doc->form->edit['mailto']     = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');

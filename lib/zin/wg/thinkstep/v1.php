@@ -17,17 +17,19 @@ class thinkStep  extends wg
 
     protected function buildBody(): wg|array
     {
-        list($item, $action, $addType, $isRun, $quoteQuestions, $quotedQuestions, $modeClass) = $this->prop(array('item', 'action', 'addType', 'isRun', 'quoteQuestions', 'quotedQuestions', 'modeClass'));
+        global $config;
+        list($item, $action, $addType, $isRun, $quoteQuestions, $quotedQuestions, $modeClass, $wizard) = $this->prop(array('item', 'action', 'addType', 'isRun', 'quoteQuestions', 'quotedQuestions', 'modeClass', 'wizard'));
 
-        $step         = $addType ? null : $item;
-        $questionType = $addType ? $addType : ($item->options->questionType ?? '');
-        if($addType === 'node' || !$addType && $item->type === 'node') return thinkNode(set::step($step), set::mode($action), set::isRun($isRun));
-        if($addType === 'transition' || !$addType && $item->type === 'transition') return thinkTransition(set::step($step), set::mode($action), set::isRun($isRun));
-        if($questionType === 'input')       return thinkInput(set::step($step), set::questionType('input'), set::mode($action), set::isRun($isRun));
-        if($questionType === 'radio')       return thinkRadio(set::step($step), set::questionType('radio'), set::mode($action), set::isRun($isRun), set::quotedQuestions($quotedQuestions));
-        if($questionType === 'checkbox')    return thinkCheckbox(set::step($step), set::questionType('checkbox'), set::mode($action), set::isRun($isRun), set::quoteQuestions($quoteQuestions), set::quotedQuestions($quotedQuestions));
-        if($questionType === 'tableInput')  return thinkTableInput(set::step($step), set::questionType('tableInput'), set::mode($action), set::isRun($isRun));
-        if($questionType === 'multicolumn') return thinkMulticolumn(set::step($step), set::questionType('multicolumn'), set::mode($action), set::isRun($isRun), set::quoteQuestions($quoteQuestions), set::quotedQuestions($quotedQuestions), set::modeClass($modeClass));
+        $step            = $addType ? null : $item;
+        $questionType    = $addType ? $addType : ($item->options->questionType ?? '');
+        if($addType === 'node' || !$addType && $item->type === 'node') return thinkNode(set::step($step), set::mode($action), set::isRun($isRun), set::wizard($wizard));
+        if($addType === 'transition' || !$addType && $item->type === 'transition') return thinkTransition(set::step($step), set::mode($action), set::isRun($isRun), set::wizard($wizard));
+        if($questionType === 'input')       return thinkInput(set::step($step), set::questionType('input'), set::mode($action), set::isRun($isRun), set::quotedQuestions($quotedQuestions), set::wizard($wizard));
+        if($questionType === 'radio')       return thinkRadio(set::step($step), set::questionType('radio'), set::mode($action), set::isRun($isRun), set::quotedQuestions($quotedQuestions), set::wizard($wizard));
+        if($questionType === 'checkbox')    return thinkCheckbox(set::step($step), set::questionType('checkbox'), set::mode($action), set::isRun($isRun), set::quoteQuestions($quoteQuestions), set::quotedQuestions($quotedQuestions), set::wizard($wizard));
+        if($questionType === 'tableInput')  return thinkTableInput(set::step($step), set::questionType('tableInput'), set::mode($action), set::isRun($isRun), set::wizard($wizard));
+        if($questionType === 'multicolumn') return thinkMulticolumn(set::step($step), set::questionType('multicolumn'), set::mode($action), set::isRun($isRun), set::quoteQuestions($quoteQuestions), set::quotedQuestions($quotedQuestions), set::modeClass($modeClass), set::wizard($wizard));
+        if($questionType === 'score')       return thinkScore(set::step($step), set::questionType('score'), set::mode($action), set::isRun($isRun), set::quoteQuestions($quoteQuestions), set::quotedQuestions($quotedQuestions), set::wizard($wizard));
         return array();
     }
 
@@ -38,13 +40,16 @@ class thinkStep  extends wg
 
         list($item, $action, $wizard, $addType, $isRun, $quotedQuestions) = $this->prop(array('item', 'action', 'wizard', 'addType', 'isRun', 'quotedQuestions'));
         if(!$item && !$addType) return array();
+        $hiddenModelType   = in_array($wizard->model, $config->thinkwizard->hiddenMenuModel);
+        $previewCanActions = !$hiddenModelType || ($hiddenModelType && !empty($item->type) && $item->type == 'transition');
+
         $marketID  = data('marketID');
         $basicType = $item->type ?? '';
         $typeLang  = $action . 'Step';
         $type      = $addType ? $addType : ($basicType == 'question' ? $item->options->questionType : $basicType);
         $title     = $action == 'detail' ? sprintf($lang->thinkstep->info, $lang->thinkstep->$basicType) : sprintf($lang->thinkstep->formTitle[$type], $lang->thinkstep->$typeLang);
         $canEdit   = common::hasPriv('thinkstep', 'edit');
-        $canDelete = common::hasPriv('thinkstep', 'delete');
+        $canDelete = common::hasPriv('thinkstep', 'delete') && $previewCanActions;
         $linkmodel = !$isRun && in_array($wizard->model, $config->thinkwizard->venn);
         $canLink   = common::hasPriv('thinkstep', 'link') && $linkmodel && $basicType == 'question';
 
@@ -63,7 +68,7 @@ class thinkStep  extends wg
                         setStyle(array('min-width' => '48px')),
                         btnGroup
                         (
-                            $canLink ? btn
+                            ($canLink && $previewCanActions) ? btn
                             (
                                 setClass('btn ghost text-gray w-5 h-5 mr-1'),
                                 set::icon('link'),
@@ -73,7 +78,7 @@ class thinkStep  extends wg
                                 set('data-dismiss', 'modal'),
                                 set('data-size', 'sm'),
                             ): null,
-                            $canEdit ? btn
+                            ($canEdit && $previewCanActions) ? btn
                             (
                                 setClass('btn ghost text-gray w-5 h-5'),
                                 set::icon('edit'),

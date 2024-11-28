@@ -459,13 +459,13 @@ class helper extends baseHelper
             else
             {
                 $redis->connect($setting->host, (int)$setting->port, 1, null, 0, 0);
-                $redis->auth(['pass' => $setting->password ?: null]);
+                $redis->auth($setting->password ?: null);
             }
 
             if(!$redis->ping()) throw new Exception('Can not connect to Redis server.');
 
             $databases = $redis->config('GET', 'databases');
-            if($setting->database >= $databases['databases']) throw new Exception("The database number is out of range. Your Redis server's max database number is " . $databases['databases'] - 1 . '.');
+            if($setting->database >= $databases['databases']) throw new Exception("The database number is out of range. Your Redis server's max database number is " . ($databases['databases'] - 1) . '.');
 
             return $redis;
         }

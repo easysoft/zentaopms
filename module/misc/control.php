@@ -334,26 +334,6 @@ class misc extends control
     }
 
     /**
-     * 清除缓存。
-     * Clean cache files.
-     *
-     * @return void
-     */
-    public function cleanCache()
-    {
-        $cacheConfig = $this->config->cache;
-        if(!$cacheConfig->enable && !$cacheConfig->enableFullPage)
-        {
-            echo 'Cache is disabled.';
-            return;
-        }
-
-        $this->miscZen->cleanCachaFiles(rtrim($this->app->getCacheRoot(), DS));
-
-        echo 'Cleaned cache files.';
-    }
-
-    /**
      * 向官网发送安装事件。
      * Send event to website with step.
      *

@@ -45,7 +45,7 @@ class compileTao extends compileModel
             $urlPrefix = sprintf('%s/job/%s/', $url, $pipeline);
         }
 
-        return $urlPrefix;
+        return rtrim($urlPrefix, '/') . '/';
     }
 
     /**

@@ -55,12 +55,21 @@ $config->projectrelease->dtable->fieldList['id']['title'] = $lang->idAB;
 $config->projectrelease->dtable->fieldList['id']['type']  = 'id';
 $config->projectrelease->dtable->fieldList['id']['fixed'] = 'left';
 
-$config->projectrelease->dtable->fieldList['name']['name']  = 'name';
-$config->projectrelease->dtable->fieldList['name']['title'] = $lang->release->name;
-$config->projectrelease->dtable->fieldList['name']['type']  = 'text';
-$config->projectrelease->dtable->fieldList['name']['fixed'] = 'left';
-$config->projectrelease->dtable->fieldList['name']['link']  = array('module' => 'projectrelease', 'method' => 'view', 'params' => 'releaseID={id}');
-$config->projectrelease->dtable->fieldList['name']['show']  = true;
+$config->projectrelease->dtable->fieldList['system']['name']         = 'system';
+$config->projectrelease->dtable->fieldList['system']['title']        = $lang->release->system;
+$config->projectrelease->dtable->fieldList['system']['type']         = 'shortNestedTitle';
+$config->projectrelease->dtable->fieldList['system']['fixed']        = 'left';
+$config->projectrelease->dtable->fieldList['system']['show']         = true;
+$config->projectrelease->dtable->fieldList['system']['nestedToggle'] = true;
+$config->projectrelease->dtable->fieldList['system']['required']     = true;
+
+$config->projectrelease->dtable->fieldList['name']['name']     = 'name';
+$config->projectrelease->dtable->fieldList['name']['title']    = $lang->release->name;
+$config->projectrelease->dtable->fieldList['name']['type']     = 'shortTitle';
+$config->projectrelease->dtable->fieldList['name']['fixed']    = 'left';
+$config->projectrelease->dtable->fieldList['name']['link']     = array('module' => 'projectrelease', 'method' => 'view', 'params' => 'releaseID={id}');
+$config->projectrelease->dtable->fieldList['name']['show']     = true;
+$config->projectrelease->dtable->fieldList['name']['required'] = true;
 
 $config->projectrelease->dtable->fieldList['product']['name']  = 'product';
 $config->projectrelease->dtable->fieldList['product']['title'] = $lang->projectrelease->product;

@@ -18,9 +18,9 @@ class cneTest
         su('admin');
 
         global $tester, $config;
-        $config->CNE->api->host   = 'http://20.205.128.72:32380';
-        $config->CNE->api->token  = 'hYFfFOTUR5CIBoonLFx1UjnmQ7NtBxo9';
-        $config->CNE->app->domain = 'g79n.corp.cc';
+        $config->CNE->api->host   = 'http://354z.corp.cc:32380';
+        $config->CNE->api->token  = 'LuWsdueJ2GqnE6agDG5YMK5YB7kWIWs4';
+        $config->CNE->app->domain = '354z.corp.cc';
 
         $this->objectModel = $tester->loadModel('cne');
     }
@@ -161,6 +161,60 @@ class cneTest
     }
 
     /**
+     * Test getComponents method.
+     *
+     * @access public
+     * @return object|null
+     */
+    public function getComponentsTest(): object|null
+    {
+        $this->objectModel->error = new stdClass();
+        $instance = $this->objectModel->loadModel('instance')->getByID(2);
+        if(is_null($instance)) return null;
+
+        $result = $this->objectModel->getComponents($instance);
+        if(!empty($this->objectModel->error->message)) return $this->objectModel->error;
+
+        return $result;
+    }
+
+    /**
+     * Test getPods method.
+     *
+     * @access public
+     * @return object|null
+     */
+    public function getPodsTest(): object|null
+    {
+        $this->objectModel->error = new stdClass();
+        $instance = $this->objectModel->loadModel('instance')->getByID(2);
+        if(is_null($instance)) return null;
+
+        $result = $this->objectModel->getPods($instance);
+        if(!empty($this->objectModel->error->message)) return $this->objectModel->error;
+
+        return $result;
+    }
+
+    /**
+     * Test getEvents method.
+     *
+     * @access public
+     * @return object|null
+     */
+    public function getEventsTest(): object|null
+    {
+        $this->objectModel->error = new stdClass();
+        $instance = $this->objectModel->loadModel('instance')->getByID(2);
+        if(is_null($instance)) return null;
+
+        $result = $this->objectModel->getEvents($instance);
+        if(!empty($this->objectModel->error->message)) return $this->objectModel->error;
+
+        return $result;
+    }
+
+    /**
      * Test getAppLogs method.
      *
      * @access public
@@ -168,8 +222,9 @@ class cneTest
      */
     public function getAppLogsTest(): object|null
     {
-        $this->objectModel->error = new stdclass();
-        $instance = $this->objectModel->loadModel('instance')->getByID(2);
+        $this->objectModel->error = new stdClass();
+        $instance = $this->objectModel->loadModel('instance')->getByID(3);
+        if(is_null($instance)) return null;
 
         $result = $this->objectModel->getAppLogs($instance);
         if(!empty($this->objectModel->error->message)) return $this->objectModel->error;
