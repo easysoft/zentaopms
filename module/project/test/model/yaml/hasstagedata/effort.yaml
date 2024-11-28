@@ -1,0 +1,15 @@
+title: zt_effort
+author: tianshujie
+version: '1.0'
+fields:
+    - field: id
+      range: 1-100
+    - field: project
+      range: '1'
+    - field: execution
+      range: 5
+    - field: work
+      prefix: '工作内容'
+      range: '1-100'
+    - field: deleted
+      range: 0,1
