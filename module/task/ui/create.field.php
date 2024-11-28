@@ -72,10 +72,13 @@ $buildAssignedTo = function()
         );
 };
 
-$fields->field('parent')
-    ->label($lang->task->parent)
-    ->control('picker')
-    ->items(data('parents'));
+if($config->vision != 'lite')
+{
+    $fields->field('parent')
+        ->label($lang->task->parent)
+        ->control('picker')
+        ->items(data('parents'));
+}
 
 $fields->field('assignedToBox')
     ->label($lang->task->assignedTo)
