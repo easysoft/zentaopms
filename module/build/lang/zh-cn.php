@@ -22,8 +22,8 @@ $lang->build->batchUnlinkStory = "批量移除{$lang->SRCommon}";
 $lang->build->batchUnlinkBug   = '批量移除Bug';
 $lang->build->viewBug          = '查看Bug';
 $lang->build->bugList          = 'Bug列表';
-$lang->build->system           = '所属应用';
-$lang->build->addSystem        = '新建应用';
+$lang->build->system           = '所属' . $lang->product->system;
+$lang->build->addSystem        = '新建' . $lang->product->system;
 
 $lang->build->confirmDelete      = "您确认删除该构建吗？";
 $lang->build->confirmUnlinkStory = "您确认移除该{$lang->SRCommon}吗？";
