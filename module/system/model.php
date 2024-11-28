@@ -116,6 +116,7 @@ class systemModel extends model
      */
     public function update(int $id, object $formData, bool $checkRequired = true): bool
     {
+        $oldSystem = $this->fetchById($id);
         $this->dao->update(TABLE_SYSTEM)->data($formData)
             ->check('name', 'unique', '`id` != ' . $id)
             ->autoCheck()
@@ -123,8 +124,9 @@ class systemModel extends model
             ->where('id')->eq($id)
             ->exec();
         if(dao::isError()) return false;
+        $change = common::createChanges($oldSystem, $formData);
 
-        $this->loadModel('action')->create('system', $id, 'edited');
+        if(!empty($change))$this->loadModel('action')->create('system', $id, 'edited');
         return !dao::isError();
     }
 
