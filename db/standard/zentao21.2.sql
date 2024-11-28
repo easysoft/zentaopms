@@ -1413,6 +1413,7 @@ CREATE TABLE `zt_doccontent` (
   `title` varchar(255) NOT NULL DEFAULT '',
   `digest` varchar(255) NOT NULL DEFAULT '',
   `content` longtext DEFAULT NULL,
+  `html` longtext DEFAULT NULL,
   `files` text DEFAULT NULL,
   `type` varchar(10) NOT NULL DEFAULT '',
   `version` smallint(6) unsigned NOT NULL DEFAULT 0,

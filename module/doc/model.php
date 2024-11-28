@@ -1452,9 +1452,11 @@ class docModel extends model
         $docContent->title   = $doc->title;
         $docContent->content = $doc->content;
         $docContent->type    = $doc->contentType;
+        $docContent->html    = isset($doc->html) ? $doc->html : '';
         $docContent->digest  = '';
         $docContent->version = 1;
         unset($doc->contentType);
+        unset($doc->html);
 
         $requiredFields = $this->config->doc->create->requiredFields;
         if($doc->status == 'draft') $requiredFields = 'title';
@@ -1512,7 +1514,7 @@ class docModel extends model
             if(isset($doc->content) && empty($doc->content)) return dao::$errors['content'] = sprintf($this->lang->error->notempty, $this->lang->doc->content);
         }
 
-        $files   = $this->file->saveUpload('doc', $docID);
+        $files   = $this->loadModel('file')->saveUpload('doc', $docID);
         $changes = common::createChanges($oldDoc, $doc);
         $changed = $files ? true : false;
         foreach($changes as $change) if($change['field'] == 'content' || $change['field'] == 'title') $changed = true;
@@ -1526,7 +1528,8 @@ class docModel extends model
             $docContent->files   = $oldDocContent->files;
             $docContent->type    = isset($doc->contentType) ? $doc->contentType : $oldDocContent->type;
             if($files) $docContent->files .= ',' . join(',', array_keys($files));
-            $docContent->files = trim($docContent->files, ',');
+            $docContent->html    = isset($doc->html) ? $doc->html : '';
+            $docContent->files   = trim($docContent->files, ',');
             if(isset($doc->digest)) $docContent->digest = $doc->digest;
 
             if($oldDoc->status == 'draft') $this->dao->update(TABLE_DOCCONTENT)->data($docContent)->where('id')->eq($oldDocContent->id)->exec();
@@ -1539,6 +1542,7 @@ class docModel extends model
         }
 
         unset($doc->contentType);
+        unset($doc->html);
         $doc->draft = isset($doc->content) ? $doc->content : '';
         $this->dao->update(TABLE_DOC)->data($doc, 'content')
             ->autoCheck()
