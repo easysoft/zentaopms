@@ -1314,7 +1314,6 @@ class taskZen extends task
         /* Set the universal return value. */
         $response['result']  = 'success';
         $response['message'] = $this->lang->saveSuccess;
-        $response['load']    = $this->createLink('execution', 'browse', "executionID={$executionID}&tab=task");
 
         /* Set the response to continue adding task to story. */
         $executionID = $task->execution;
@@ -1336,12 +1335,8 @@ class taskZen extends task
         }
 
         /* Set the response to return story list. */
-        $response['load'] = $this->createLink('execution', 'story', "executionID={$executionID}");
-        if($this->config->vision == 'lite')
-        {
-            $execution = $this->execution->getByID($executionID);
-            $response['load'] = $this->createLink('projectstory', 'story', "projectID={$execution->project}");
-        }
+        $back = $this->config->vision == 'lite' ? 'projectstory-story' : 'execution-story';
+        $response['callback'] = "openUrl(" . json_encode(array('back' => $back)) . ")";
         return $response;
     }
 

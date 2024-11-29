@@ -27,6 +27,7 @@ jsVar('hourPointNotError',  sprintf($lang->story->float, $lang->story->convertRe
 
 /* Show feature bar. */
 $queryMenuLink = createLink($app->rawModule, $app->rawMethod, "&executionID=$execution->id&storyType=$storyType&orderBy=$orderBy&type=bySearch&param={queryID}");
+if(empty($param) && $this->cookie->storyModuleParam) $param = $this->cookie->storyModuleParam;
 featureBar
 (
     to::leading
