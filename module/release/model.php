@@ -303,7 +303,7 @@ class releaseModel extends model
         $this->dao->insert(TABLE_RELEASE)->data($release)
             ->autoCheck()
             ->batchCheck($this->config->release->create->requiredFields, 'notempty')
-            ->check('name', 'unique', "product = '{$release->product}' AND branch = '{$release->branch}' AND deleted = '0'")
+            ->check('name', 'unique', "system = '{$release->system}' AND deleted = '0'")
             ->checkFlow();
 
         if(dao::isError()) return false;
@@ -437,7 +437,7 @@ class releaseModel extends model
         $this->dao->update(TABLE_RELEASE)->data($release, 'deleteFiles')
             ->autoCheck()
             ->batchCheck($this->config->release->edit->requiredFields, 'notempty')
-            ->check('name', 'unique', "id != '{$oldRelease->id}' AND product = '{$release->product}' AND branch = '{$release->branch}' AND deleted = '0'")
+            ->check('name', 'unique', "id != '{$oldRelease->id}' AND system = '{$release->system}' AND deleted = '0'")
             ->checkFlow()
             ->where('id')->eq($oldRelease->id)
             ->exec();
