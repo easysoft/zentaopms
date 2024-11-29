@@ -42,7 +42,8 @@
     "bucket": "download",
     "nexus": {
       "release": "easycorp",
-      "snapshot": "easycorp-snapshot"
+      "snapshot": "easycorp-snapshot",
+      "source": "easycorp-source"
     }
   },
   "push_version": "true",

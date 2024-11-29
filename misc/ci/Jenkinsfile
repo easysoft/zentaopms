@@ -1,5 +1,5 @@
-library 'z-common@main'
-library 'z-zentaopms@feat-241030'
+library 'z-common@feat-241129'
+library 'z-zentaopms@feat-241129'
 
 pipeline {
   agent {
