@@ -13,7 +13,7 @@ window.setRelease = function(target)
         if(releases[id].system == apps) options.push({value: id, text: releases[id].name, disabled: id == index});
     }
 
-    $releases.render({items: options, required: currentMethod != 'edit'});
+    $releases.render({items: options, required: rawMethod != 'edit'});
 };
 
 window.initAppPicker = function()
