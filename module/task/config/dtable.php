@@ -305,7 +305,7 @@ $config->task->dtable->importTask->fieldList['pri']['group']    = 1;
 $config->task->dtable->importTask->fieldList['status']['title']     = $lang->statusAB;
 $config->task->dtable->importTask->fieldList['status']['name']      = 'status';
 $config->task->dtable->importTask->fieldList['status']['type']      = 'status';
-$config->task->dtable->importTask->fieldList['status']['statusMap'] = $lang->task->statusList;
+$config->task->dtable->importTask->fieldList['status']['statusMap'] = $lang->task->statusList + array('changed' => $lang->task->storyChange);
 $config->task->dtable->importTask->fieldList['status']['sortType']  = true;
 $config->task->dtable->importTask->fieldList['status']['group']     = 1;
 
