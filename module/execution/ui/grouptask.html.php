@@ -45,6 +45,8 @@ else
     );
 }
 
+$app->loadLang('my');
+$lang->task->statusList['changed'] = $lang->my->storyChanged;
 featureBar
 (
     !empty($tasks) ? li
@@ -330,7 +332,7 @@ $tbody = function() use($tasks, $lang, $groupBy, $users, $groupByList, $executio
                     span
                     (
                         setClass("status-{$task->status}"),
-                        $lang->task->statusList[$task->status]
+                        zget($lang->task->statusList, $task->status, '')
                     )
                 ),
                 h::td
