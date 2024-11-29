@@ -25,9 +25,9 @@ foreach($versionSpecs as $versionSpec)
     $versionsTableBody[] = h::tr
     (
         $version == $versionSpec->version ? setClass('bg-secondary-50') : null,
+        on::click("previewVersion"),
         h::td
         (
-            on::click("previewVersion"),
             setData(array('pivot' => $pivot->id, 'version' => $versionSpec->version, 'group' => $groupID)),
             '#' . $versionSpec->version,
             span
@@ -37,7 +37,11 @@ foreach($versionSpecs as $versionSpec)
                 $lang->pivot->newVersion
             )
         ),
-        h::td(empty($versionSpec->desc) ? $lang->pivot->noDesc : $versionSpec->desc)
+        h::td
+        (
+            setData(array('pivot' => $pivot->id, 'version' => $versionSpec->version, 'group' => $groupID)),
+            empty($versionSpec->desc) ? $lang->pivot->noDesc : $versionSpec->desc
+        )
     );
 }
 
