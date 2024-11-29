@@ -55,6 +55,7 @@ $config->release->dtable->fieldList['status']['title']     = $lang->release->sta
 $config->release->dtable->fieldList['status']['name']      = 'status';
 $config->release->dtable->fieldList['status']['type']      = 'status';
 $config->release->dtable->fieldList['status']['statusMap'] = $lang->release->statusList;
+$config->release->dtable->fieldList['status']['width']     = 120;
 $config->release->dtable->fieldList['status']['show']      = true;
 
 $config->release->dtable->fieldList['date']['title']    = $lang->release->date;

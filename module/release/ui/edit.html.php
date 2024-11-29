@@ -24,7 +24,7 @@ formPanel
     formGroup
     (
         set::width('1/2'),
-        set::label($lang->release->system),
+        set::label($lang->release->selectSystem),
         set::name('system'),
         set::control(array('type' => 'picker', 'required' => true)),
         set::items(array_column($appList, 'name', 'id')),

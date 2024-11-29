@@ -94,6 +94,7 @@ $config->projectrelease->dtable->fieldList['status']['name']      = 'status';
 $config->projectrelease->dtable->fieldList['status']['type']      = 'status';
 $config->projectrelease->dtable->fieldList['status']['statusMap'] = $lang->release->statusList;
 $config->projectrelease->dtable->fieldList['status']['group']     = '2';
+$config->projectrelease->dtable->fieldList['status']['width']     = 120;
 $config->projectrelease->dtable->fieldList['status']['show']      = true;
 
 $config->projectrelease->dtable->fieldList['date']['title']    = $lang->release->date;
