@@ -63,7 +63,7 @@ jsVar('releaseID', $release->id);
 jsVar('showGrade', $showGrade);
 jsVar('grades', $grades);
 
-if($app->tab == 'project' && !common::canModify('project', $project))
+if($release->deleted || ($app->tab == 'project' && !common::canModify('project', $project)))
 {
     unset($config->release->dtable->story->fieldList['actions']['list']);
     unset($config->release->dtable->bug->fieldList['actions']['list']);
@@ -213,7 +213,7 @@ if($canBeChanged && empty($release->releases))
     }
 }
 
-if(!empty($release->releases))
+if($release->deleted || !empty($release->releases))
 {
     unset($config->release->dtable->story->fieldList['actions']);
     unset($config->release->dtable->bug->fieldList['actions']);
