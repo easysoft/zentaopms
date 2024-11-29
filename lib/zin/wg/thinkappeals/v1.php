@@ -33,7 +33,7 @@ class thinkAppeals extends thinkModel
         return echarts
         (
             set::animationDuration(0),
-            set::width('1000px'),
+            set::width('1600px'),
             set::height('1000px'),
             set::color(array('#29AA93', '#FF9F46')),
             set::legend(array(array(
@@ -51,7 +51,7 @@ class thinkAppeals extends thinkModel
                 'splitLine' => array('lineStyle' => array('color' => '#CFE7FE', 'width' => 3)),
                 'axisLine'  => array('lineStyle' => array('color' => '#CFE7FE', 'width' => 3)),
                 'axisLabel' => array('color' => '#9EA3B0', 'textStyle' => array('fontSize' => 24)),
-                'name'      => array('formatter' => jsRaw('formatIndicatorName'), 'textStyle' => array('fontSize' => 24)),
+                'name'      => array('textStyle' => array('fontSize' => 24)),
                 'indicator' => $this->getIndicator()
             )),
             set::series
