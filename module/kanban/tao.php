@@ -517,20 +517,23 @@ class kanbanTao extends kanbanModel
                 $strLength  = strlen($realname);
 
                 $displayText = '';
-                if($strLength === $mbLength)
+                if($realname)
                 {
-                    /* Pure alphabet or numbers 纯英文情况 */
-                    $displayText = strtoupper($realname[0]);
-                }
-                else if($strLength % $mbLength == 0 && $strLength % 3 == 0)
-                {
-                    /* Pure chinese characters 纯中文的情况 */
-                    $displayText = $mbLength <= $maxTextLen ? $realname : mb_substr($realname, $mbLength - $maxTextLen, $mbLength, 'utf-8');
-                }
-                else
-                {
-                    /* Mix of Chinese and English 中英文混合的情况 */
-                    $displayText = $mbLength <= $maxTextLen ? $realname : mb_substr($realname, 0, $maxTextLen, 'utf-8');
+                    if(isset($realname[0]) && $strLength === $mbLength)
+                    {
+                        /* Pure alphabet or numbers 纯英文情况 */
+                        $displayText = strtoupper($realname[0]);
+                    }
+                    else if($strLength % $mbLength == 0 && $strLength % 3 == 0)
+                    {
+                        /* Pure chinese characters 纯中文的情况 */
+                        $displayText = $mbLength <= $maxTextLen ? $realname : mb_substr($realname, $mbLength - $maxTextLen, $mbLength, 'utf-8');
+                    }
+                    else
+                    {
+                        /* Mix of Chinese and English 中英文混合的情况 */
+                        $displayText = $mbLength <= $maxTextLen ? $realname : mb_substr($realname, 0, $maxTextLen, 'utf-8');
+                    }
                 }
 
                 $userAvatar = zget($avatarPairs, $account, '');
