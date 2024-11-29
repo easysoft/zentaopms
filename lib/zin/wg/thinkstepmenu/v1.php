@@ -53,6 +53,7 @@ class thinkStepMenu extends wg
 
     private function buildMenuTree(array $items, int $parentID = 0): array
     {
+        global $config;
         if(empty($items)) $items = $this->modules;
         if(empty($items)) return array();
 
@@ -60,7 +61,13 @@ class thinkStepMenu extends wg
         $toggleNonNodeShow = $this->prop('toggleNonNodeShow');
         $hidden            = $this->prop('hidden');
         $sortTree          = $this->prop('sortable') || $this->prop('onSort');
+        $wizard            = $this->prop('wizard');
+        $hiddenModelType   = in_array($wizard->model, $config->thinkwizard->hiddenMenuModel);
         $parentItems       = array();
+        $questionItems     = array();
+
+        if($hiddenModelType) $questionItems = array_values($items);
+
         foreach($items as $setting)
         {
             if(!is_object($setting)) continue;
@@ -73,8 +80,18 @@ class thinkStepMenu extends wg
                 $quotedText = $this->getQuotedText($this->modules, $quotedTitle);
             }
 
+            $itemQuestionIndex = 0;
+
+            foreach ($questionItems as $index => $questionItem)
+            {
+                if($questionItem->id == $setting->id) $itemQuestionIndex = $index;
+            }
+
+            if(!empty($itemQuestionIndex) && $hiddenModelType) $preStep = $questionItems[$itemQuestionIndex - 1];
+
             $canView     = common::hasPriv('thinkstep', 'view');
             $unClickable = $toggleNonNodeShow && $setting->id != $activeKey && $setting->type != 'node' && json_decode($setting->answer) == null;
+            $hiddenStep  = $unClickable || (!empty($preStep) && empty($preStep->answer));
             $item        = array(
                 'key'         => $setting->id,
                 'text'        => (isset($setting->index) ? ($setting->index . '. ') : '') . $setting->title,
@@ -90,7 +107,7 @@ class thinkStepMenu extends wg
                 'disabled'    => $unClickable,
                 'actions'     => $this->prop('showAction') ? $this->getActions($setting) : null,
                 'data-wizard' => $setting->wizard,
-                'class'       => $unClickable && $hidden ? 'hidden': ''
+                'class'       => $hiddenStep && $hidden ? 'hidden' : ''
             );
 
             if($sortTree) $item['trailingIcon'] = 'move muted cursor-move';
