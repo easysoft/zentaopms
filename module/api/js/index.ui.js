@@ -228,8 +228,10 @@ function getSpaceMenuText(text, state)
 function getSpaceMenuOptions(spaceType, spaceID)
 {
     const libID = this.libID;
+    const lang = $('html').attr('lang');
+
     return {
-        popWidth    : 350,
+        popWidth    : ['zh-cn', 'zh-tw'].includes(lang) ? 350 : 400,
         onClickItem : handleClickSpaceMenu,
         defaultValue: spaceID === 'nolink' ? `lib.${libID}`: spaceID,
         display     : getSpaceMenuText.bind(this)
