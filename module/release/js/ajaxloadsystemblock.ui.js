@@ -7,13 +7,13 @@ window.setRelease = function(target)
     const $releases = $('#releases' + index).zui('picker');
     $releases.$.setValue('');
 
-    const options = [];
+    const options = [{text: '', value: ''}];
     for(let id in releases)
     {
         if(releases[id].system == apps) options.push({value: id, text: releases[id].name, disabled: id == index});
     }
 
-    $releases.render({items: options, required: true});
+    $releases.render({items: options, required: currentMethod != 'edit'});
 };
 
 window.initAppPicker = function()

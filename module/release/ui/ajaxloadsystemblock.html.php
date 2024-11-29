@@ -36,8 +36,9 @@ foreach($releases as $releaseID => $release) $appReleases[$release->system][$rel
 
 if(!$apps) $apps = array(0 => '');
 
-jsVar('releases', $releases);
+jsVar('releases',  $releases);
 jsVar('appLength', count($apps));
+jsVar('rawMethod', $app->rawMethod);
 
 $systemTR = array();
 $i        = 0;
