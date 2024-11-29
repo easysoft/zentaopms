@@ -1900,7 +1900,7 @@ class userModel extends model
         if(empty($account)) $account = $this->session->user->account;
         if(empty($account)) return $userView;
 
-        $userView = $this->dao->select('*')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch();
+        $userView = $this->mao->select('*')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch();
         if(!empty($userView) && !$force) return $userView;
 
         /* Init objects. */
@@ -2167,7 +2167,7 @@ class userModel extends model
         /* 如果没传users参数，则获取项目集关联的所有人。*/
         if(empty($users)) $authedUsers += $this->getObjectsAuthedUsers($programs, 'program', $stakeholderGroup, array(), $whiteListGroup, $programAdmins, $parentStakeholderGroup, $parentPMGroup);
 
-        $userViews = $this->dao->select("account,programs")->from(TABLE_USERVIEW)->where('account')->in($authedUsers)->fetchPairs('account', 'programs');
+        $userViews = $this->mao->select("account,programs")->from(TABLE_USERVIEW)->where('account')->in($authedUsers)->fetchPairs('account', 'programs');
 
         /* Judge auth and update view. */
         foreach($authedUsers as $account)
@@ -2232,7 +2232,7 @@ class userModel extends model
         if(empty($users)) $authedUsers += $this->getObjectsAuthedUsers($projects, 'project', $stakeholderGroup, $teamsGroup, $whiteListGroup, $projectAdmins, $parentStakeholderGroup, array());
 
         /* Get all projects user view. */
-        $userViews = $this->dao->select("account,projects")->from(TABLE_USERVIEW)->where('account')->in($authedUsers)->fetchPairs('account', 'projects');
+        $userViews = $this->mao->select("account,projects")->from(TABLE_USERVIEW)->where('account')->in($authedUsers)->fetchPairs('account', 'projects');
 
         /* Judge auth and update view. */
         foreach($authedUsers as $account)
@@ -2292,7 +2292,7 @@ class userModel extends model
         if(empty($users)) $authedUsers += $this->getObjectsAuthedUsers($products, 'product', $stakeholderGroup, $teamsGroup, $whiteListGroup, $productAdmins, array(), array());
 
         /* Get all products user view. */
-        $userViews = $this->dao->select("account,products")->from(TABLE_USERVIEW)->where('account')->in($authedUsers)->fetchPairs('account', 'products');
+        $userViews = $this->mao->select("account,products")->from(TABLE_USERVIEW)->where('account')->in($authedUsers)->fetchPairs('account', 'products');
 
         /* Judge auth and update view. */
         foreach($authedUsers as $account)
@@ -2353,7 +2353,7 @@ class userModel extends model
 
         $authedUsers = $users;
         if(empty($users)) $authedUsers += $this->getObjectsAuthedUsers($sprints, 'sprint', $stakeholderGroup, $teamsGroup, $whiteListGroup, $executionAdmins, array(), array());
-        $userViews = $this->dao->select("account,sprints")->from(TABLE_USERVIEW)->where('account')->in($authedUsers)->fetchPairs('account', 'sprints'); // Get all sprints user view.
+        $userViews = $this->mao->select("account,sprints")->from(TABLE_USERVIEW)->where('account')->in($authedUsers)->fetchPairs('account', 'sprints'); // Get all sprints user view.
         foreach($authedUsers as $account)
         {
             $view       = isset($userViews[$account]) ? $userViews[$account] : '';
@@ -2505,7 +2505,7 @@ class userModel extends model
         if($program->parent != 0 && $program->acl == 'program')
         {
             $path    = str_replace(",{$program->id},", ',', "{$program->path}");
-            $parents = $this->dao->select('openedBy,PM')->from(TABLE_PROGRAM)->where('id')->in($path)->fetchAll();
+            $parents = $this->mao->select('openedBy,PM')->from(TABLE_PROGRAM)->where('id')->in($path)->fetchAll();
             foreach($parents as $parent)
             {
                 /* 当前用户是其中一个父项目集的PM或创建者则判断为有权限。 */
@@ -2552,7 +2552,7 @@ class userModel extends model
         if($project->type == 'project' && $project->parent != 0 && $project->acl == 'program')
         {
             $path     = str_replace(",{$project->id},", ',', "{$project->path}");
-            $programs = $this->dao->select('openedBy,PM')->from(TABLE_PROJECT)->where('id')->in($path)->fetchAll();
+            $programs = $this->mao->select('openedBy,PM')->from(TABLE_PROJECT)->where('id')->in($path)->fetchAll();
             foreach($programs as $program)
             {
                 /* 当前用户是其中一个父项目集的PM或创建者则判断为有权限。 */
@@ -2563,7 +2563,7 @@ class userModel extends model
         /* 如果是迭代并且是私有的，则检查所属项目的权限。 */
         if(($project->type == 'sprint' || $project->type == 'stage' || $project->type == 'kanban') && $project->acl == 'private')
         {
-            $project = $this->dao->select('openedBy,PM')->from(TABLE_PROJECT)->where('id')->eq($project->project)->fetch();
+            $project = $this->mao->select('openedBy,PM')->from(TABLE_PROJECT)->where('id')->eq($project->project)->fetch();
             if(empty($project)) return false;
 
             /* 当前用户是所属项目的PM或创建者则判断为有权限。 */
@@ -2635,7 +2635,7 @@ class userModel extends model
         if($program->parent != 0 && $program->acl == 'program')
         {
             $path    = str_replace(",{$program->id},", ',', "{$program->path}");
-            $parents = $this->dao->select('openedBy,PM')->from(TABLE_PROGRAM)->where('id')->in($path)->fetchAll();
+            $parents = $this->mao->select('openedBy,PM')->from(TABLE_PROGRAM)->where('id')->in($path)->fetchAll();
             foreach($parents as $parent)
             {
                 $users[$parent->openedBy] = $parent->openedBy;
@@ -2679,7 +2679,7 @@ class userModel extends model
         if($project->type == 'project' && $project->parent != 0 && $project->acl == 'program')
         {
             $path     = str_replace(",{$project->id},", ',', "{$project->path}");
-            $programs = $this->dao->select('openedBy,PM')->from(TABLE_PROJECT)->where('id')->in($path)->fetchAll();
+            $programs = $this->mao->select('openedBy,PM')->from(TABLE_PROJECT)->where('id')->in($path)->fetchAll();
             foreach($programs as $program)
             {
                 $users[$program->openedBy] = $program->openedBy;
@@ -2690,7 +2690,7 @@ class userModel extends model
         /* 如果是迭代类型并且是私有的，则所属项目的PM和创建者是关系人。 */
         if(($project->type == 'sprint' || $project->type == 'stage' || $project->type == 'kanban') && $project->acl == 'private')
         {
-            $parent = $this->dao->select('openedBy,PM')->from(TABLE_PROJECT)->where('id')->eq($project->project)->fetch();
+            $parent = $this->mao->select('openedBy,PM')->from(TABLE_PROJECT)->where('id')->eq($project->project)->fetch();
             if($parent)
             {
                 $users[$parent->openedBy] = $parent->openedBy;

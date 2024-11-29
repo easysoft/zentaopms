@@ -683,7 +683,7 @@ class personnelModel extends model
             $newWhitelist = str_replace(',' . $account, '', $product->whitelist);
             $this->dao->update(TABLE_PRODUCT)->set('whitelist')->eq($newWhitelist)->where('id')->eq($productID)->exec();
 
-            $viewProducts    = $this->dao->select('products')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch('products');
+            $viewProducts    = $this->mao->select('products')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch('products');
             $newViewProducts = trim(str_replace(",{$productID},", '', ",{$viewProducts},"), ',');
             $this->dao->update(TABLE_USERVIEW)->set('products')->eq($newViewProducts)->where('account')->eq($account)->exec();
         }
@@ -725,7 +725,7 @@ class personnelModel extends model
                 $newWhitelist = str_replace(',' . $account, '', $program->whitelist);
                 $this->dao->update(TABLE_PROGRAM)->set('whitelist')->eq($newWhitelist)->where('id')->eq($programID)->exec();
 
-                $viewPrograms    = $this->dao->select('programs')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch('programs');
+                $viewPrograms    = $this->mao->select('programs')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch('programs');
                 $newViewPrograms = trim(str_replace(",{$programID},", '', ",{$viewPrograms},"), ',');
                 $this->dao->update(TABLE_USERVIEW)->set('programs')->eq($newViewPrograms)->where('account')->eq($account)->exec();
             }
@@ -770,7 +770,7 @@ class personnelModel extends model
                 $newWhitelist = str_replace(',' . $account, '', $project->whitelist);
                 $this->dao->update(TABLE_PROJECT)->set('whitelist')->eq($newWhitelist)->where('id')->eq($projectID)->exec();
 
-                $viewProjects    = $this->dao->select('projects')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch('projects');
+                $viewProjects    = $this->mao->select('projects')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch('projects');
                 $newViewProjects = trim(str_replace(",{$projectID},", '', ",{$viewProjects},"), ',');
                 $this->dao->update(TABLE_USERVIEW)->set('projects')->eq($newViewProjects)->where('account')->eq($account)->exec();
             }
@@ -807,7 +807,7 @@ class personnelModel extends model
             $newWhitelist = str_replace(',' . $account, '', $execution->whitelist);
             $this->dao->update(TABLE_EXECUTION)->set('whitelist')->eq($newWhitelist)->where('id')->eq($executionID)->exec();
 
-            $viewExecutions    = $this->dao->select('sprints')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch('sprints');
+            $viewExecutions    = $this->mao->select('sprints')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch('sprints');
             $newViewExecutions = trim(str_replace(",{$executionID},", '', ",{$viewExecutions},"), ',');
             $this->dao->update(TABLE_USERVIEW)->set('sprints')->eq($newViewExecutions)->where('account')->eq($account)->exec();
         }
