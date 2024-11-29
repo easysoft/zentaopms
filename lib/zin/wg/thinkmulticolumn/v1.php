@@ -94,7 +94,6 @@ class thinkMulticolumn extends thinkQuestion
         jsVar('addRowsTips', $lang->thinkrun->tips->addRow);
         jsVar('addLang', $lang->thinkrun->add);
         jsVar('disabled', $runDisabled || $preViewDisabled);
-        jsVar('modeClass', !empty($modeClass) ? '.' . $modeClass : '');
 
         $fields       = array_values((array)$fields);
         $batchItems   = array();
@@ -113,6 +112,7 @@ class thinkMulticolumn extends thinkQuestion
             set::onRenderRow(jsRaw('renderRowData')),
             $isRun ? formHidden('status', '') : null,
             set::data($result),
+            setData('modeClass', !empty($modeClass) ? '.' . $modeClass : ''),
             $batchItems
         );
         return $detailWg;
