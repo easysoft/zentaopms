@@ -56,6 +56,7 @@ class systemModel extends model
             ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
             ->beginIF($status)->andWhere('status')->eq($status)->fi()
             ->beginIF($integrated !== '')->andWhere('integrated')->eq($integrated)->fi()
+            ->orderBy('id DESC')
             ->fetchPairs('id', 'name');
     }
 
