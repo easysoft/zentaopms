@@ -161,9 +161,10 @@ class execution extends control
         foreach($this->view->teamMembers as $key => $member) $memberPairs[$key] = $member->realname;
         $memberPairs = $this->loadModel('user')->setCurrentUserFirst($memberPairs);
 
+        if($this->config->edition != 'open') $taskRelatedObject = $this->loadModel('custom')->getRelatedObjectList(array_keys($tasks), 'task', 'byRelation', true);
+
         /* Append branches to task. */
         $this->loadModel('task');
-        $this->loadModel('custom');
         $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($this->view->products));
         foreach($tasks as $task)
         {
@@ -183,7 +184,7 @@ class execution extends control
             }
             if(isset($branchGroups[$task->product][$task->branch])) $task->branch = $branchGroups[$task->product][$task->branch];
             if($task->needConfirm) $task->status = 'changed';
-            if($this->config->edition != 'open') $task->relatedObject = $this->custom->getRelatedObjectList($task->id, 'task', 'byRelation', true);
+            if($this->config->edition != 'open') $task->relatedObject = zget($taskRelatedObject, $task->id, 0);
         }
 
         $showAllModule = empty($this->config->execution->task->allModule) ? '' : 'allModule';
