@@ -921,7 +921,11 @@ class testcaseZen extends testcase
     private function assignStoriesForEdit(object $case): void
     {
         $moduleIdList = array();
-        if($case->module) $moduleIdList = $this->tree->getAllChildID($case->module);
+        if($case->module)
+        {
+            $moduleID     = $this->loadModel('tree')->getStoryModule($case->module);
+            $moduleIdList = $this->tree->getAllChildID($moduleID);
+        }
 
         $storyStatus = $this->loadModel('story')->getStatusList('noclosed');
         if(in_array($this->app->tab, array('project', 'execution')))
