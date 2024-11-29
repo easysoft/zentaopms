@@ -134,7 +134,7 @@ class pivotZen extends pivot
         {
             if(!isset($builtins[$pivot->id])) return;
             if(!$pivot->mark && $pivot->createdDate < $firstAction->date) $pivot->mark = true;
-            $isMainVersion = filter_var($maxVersion, FILTER_VALIDATE_INT) !== false;
+            $isMainVersion = filter_var($pivot->version, FILTER_VALIDATE_INT) !== false;
             if(!$pivot->mark && $isMainVersion) $pivot->name = array('text' => $pivot->name, 'html' => $pivot->name . ' <span class="label ghost size-sm bg-secondary-50 text-secondary-500 rounded-full">' . $this->lang->pivot->new . '</span>');
         }
         else
