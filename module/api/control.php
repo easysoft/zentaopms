@@ -159,8 +159,9 @@ class api extends control
                 {
                     if(!isset($programs[$product->program])) continue;
                     $program = $programs[$product->program];
-                    $program->products[] = $product;
                     $product->apiCount = isset($productsCount[$product->id]) ? $productsCount[$product->id] : 0;
+                    if($notempty && $product->apiCount == 0) continue;
+                    $program->products[] = $product;
                     $program->apiCount = isset($program->apiCount) ? $program->apiCount + $product->apiCount : $product->apiCount;
                 }
             }
@@ -172,9 +173,10 @@ class api extends control
                     $topParent = $project->parent ? explode(',', trim($project->path, ','))[0] : 0;
                     if(!isset($programs[$topParent])) continue;
                     $program = $programs[$topParent];
-                    $program->projects[] = $project;
                     $project->apiCount = isset($projectsCount[$project->id]) ? $projectsCount[$project->id] : 0;
+                    if($notempty && $project->apiCount == 0) continue;
                     $program->apiCount = isset($program->apiCount) ? $program->apiCount + $project->apiCount : $project->apiCount;
+                    $program->projects[] = $project;
                 }
             }
 
