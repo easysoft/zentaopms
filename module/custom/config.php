@@ -111,7 +111,7 @@ $config->custom->customFields['todo']        = array('custom' => array('batchCre
 $config->custom->customFields['user']        = array('custom' => array('batchCreateFields', 'batchEditFields'));
 
 global $lang;
-$config->custom->commonLang = array('$URCOMMON' => $lang->URCommon, '$SRCOMMON' => $lang->SRCommon, '$PRODUCTCOMMON' => $lang->productCommon, '$PROJECTCOMMON' => $lang->projectCommon, '$EXECUTIONCOMMON' => $lang->executionCommon);
+$config->custom->commonLang = array('$ERCOMMON' => $lang->ERCommon, '$URCOMMON' => $lang->URCommon, '$SRCOMMON' => $lang->SRCommon, '$PRODUCTCOMMON' => $lang->productCommon, '$PROJECTCOMMON' => $lang->projectCommon, '$EXECUTIONCOMMON' => $lang->executionCommon);
 
 $config->custom->browseStoryConcept = new stdclass();
 
