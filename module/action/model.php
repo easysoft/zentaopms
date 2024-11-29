@@ -1501,6 +1501,11 @@ class actionModel extends model
         }
         if($action->objectType == 'demand' && !empty($object->parent)) $this->loadModel('demand')->updateParentDemandStage($object->parent);
         if($action->objectType == 'release') $this->loadModel('system')->setSystemRelease((int)$object->system, $action->objectID);
+        if(in_array($action->objectType, array('release', 'build')) && !empty($object->system))
+        {
+            $systemActionID = $this->dao->select('id')->from(TABLE_ACTION)->where('objectType')->eq('system')->andWhere('objectID')->eq($object->system)->andWhere('action')->eq('deleted')->orderBy('id_desc')->fetch('id');
+            if($systemActionID) $this->undelete($systemActionID);
+        }
 
         /* 在action表中更新action记录。 */
         /* Update action record in action table. */
