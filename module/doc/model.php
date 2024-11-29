@@ -750,8 +750,9 @@ class docModel extends model
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('templateType')->eq('')
             ->andWhere("(status = 'normal' or (status = 'draft' and addedBy='{$this->app->user->account}'))")
-            ->andWhere('module')->eq(0)
+            ->andWhere('module')->in(array('0', ''))
             ->andWhere('deleted')->eq('0')
+            ->andWhere('type')->ne('chapter')
             ->orderBy('`order` asc, id_asc')
             ->fetchAll('id');
 
