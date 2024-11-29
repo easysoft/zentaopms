@@ -110,10 +110,17 @@ else
             $item['text']     = $project->name;
             $item['icon']     = $project->model == 'scrum' ? 'sprint' : $project->model;
             $item['keys']     = zget(common::convert2Pinyin(array($project->name)), $project->name, '');
-            $item['url']      = sprintf($link, $project->id);
             $item['involved'] = isset($involvedProjects[$project->id]);
 
-            if((empty($project->multiple) || $project->type == 'kanban' || $project->model == 'kanban') && strpos($link, 'ajaxSwitchBelong') === false) $item['url'] = helper::createLink('project', 'index', "projectID={$project->id}");
+            if($useLink == 1)
+            {
+                $item['url'] = sprintf($link, $project->id);
+                if((empty($project->multiple) || $project->type == 'kanban' || $project->model == 'kanban') && strpos($link, 'ajaxSwitchBelong') === false) $item['url'] = helper::createLink('project', 'index', "projectID={$project->id}");
+            }
+            else
+            {
+                $item['url'] = '#';
+            }
 
             if(empty($activeGroup) && $projectID == $project->id) $activeGroup = $group;
 

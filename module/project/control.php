@@ -122,6 +122,7 @@ class project extends control
         $this->view->method    = $method;
         $this->view->programs  = $programs;
         $this->view->extra     = $extra;
+        $this->view->useLink   = $useLink;
 
         $this->view->projects         = $orderedProjects;
         $this->view->involvedProjects = $involvedProjects;
