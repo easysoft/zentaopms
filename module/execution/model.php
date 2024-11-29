@@ -4464,7 +4464,9 @@ class executionModel extends model
             switch($tree->type)
             {
                 case 'task':
-                    $label = $tree->parent > 0 ? $this->lang->task->children : $this->lang->task->common;
+                    $label = $this->lang->task->common;
+                    if($tree->parent > 0 && !$tree->isParent) $label = $this->lang->task->children;
+                    if($tree->isParent) $label = $this->lang->task->parent;
                     $treeData[$index]['url']     = $canViewTask ? helper::createLink('execution', 'treeTask', "taskID={$tree->id}") : '';
                     $treeData[$index]['content'] = array(
                         'html' => "<div class='tree-link'><span class='label gray-pale rounded-full align-sub'>{$label}</span><span class='ml-4 align-sub'>{$tree->id}</span><span class='title ml-4 " . ($canViewTask ? 'text-primary' : '') . " align-sub' title='{$tree->title}'>" . $tree->title . '</span>'. $assigedToHtml . '</div>',
@@ -4515,9 +4517,12 @@ class executionModel extends model
             {
                 if($tree->type == 'task')
                 {
+                    $label = $this->lang->task->common;
+                    if($tree->parent > 0 && !$tree->isParent) $label = $this->lang->task->children;
+                    if($tree->isParent) $label = $this->lang->task->parent;
                     $treeData[$index]['url']     = $canViewTask ? helper::createLink('execution', 'treeTask', "taskID={$tree->id}") : '';
                     $treeData[$index]['content'] = array(
-                        'html' => "<div class='tree-link'><span class='label gray-pale rounded-full align-sub'>{$this->lang->task->common}</span><span class='ml-4 align-sub'>{$tree->id}</span><span class='title ml-4 " . ($canViewTask ? 'text-primary' : '') . " align-sub' title='{$tree->title}'>" . $tree->title . '</span>'. $assigedToHtml . '</div>',
+                        'html' => "<div class='tree-link'><span class='label gray-pale rounded-full align-sub'>{$label}</span><span class='ml-4 align-sub'>{$tree->id}</span><span class='title ml-4 " . ($canViewTask ? 'text-primary' : '') . " align-sub' title='{$tree->title}'>" . $tree->title . '</span>'. $assigedToHtml . '</div>',
                     );
                 }
                 $treeData[$index]['items'] = $this->buildTree($tree->children, $hasProduct, $gradeGroup);

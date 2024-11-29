@@ -781,6 +781,9 @@ class executionTao extends executionModel
             $taskItem->pri           = (int)$task->pri;
             $taskItem->status        = $task->status;
             $taskItem->parent        = $task->parent;
+            $taskItem->isParent      = $task->isParent;
+            $taskItem->estStarted    = $task->estStarted;
+            $taskItem->realStarted   = $task->realStarted;
             $taskItem->estimate      = $task->estimate;
             $taskItem->consumed      = $task->consumed;
             $taskItem->left          = $task->left;

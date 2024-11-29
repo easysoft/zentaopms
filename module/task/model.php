@@ -2587,6 +2587,7 @@ class taskModel extends model
         }
 
         /* Process parent-child task info. */
+        $parentIdList = array();
         foreach($tasks as $task)
         {
             if($task->parent > 0) $parentIdList[] = $task->parent;
