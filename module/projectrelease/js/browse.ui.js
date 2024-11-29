@@ -1,14 +1,5 @@
 window.renderCell = function(result, {col, row})
 {
-    if(col.name == 'id')
-    {
-        if(typeof row.data.id == 'string' && row.data.id.includes('-'))
-        {
-            result[0] = row.data.id.split('-')[1];
-            return result;
-        }
-    }
-
     if(col.name == 'name')
     {
         if(row.data.marker == 1)

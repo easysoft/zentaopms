@@ -1,14 +1,5 @@
 window.renderCell = function(result, {col, row})
 {
-    if(col.name == 'id')
-    {
-        if(typeof row.data.id == 'string' && row.data.id.includes('-'))
-        {
-            result[0] = row.data.id.split('-')[1];
-            return result;
-        }
-    }
-
     if(col.name == 'name')
     {
         if(row.data.marker == 1)
@@ -50,7 +41,7 @@ window.renderCell = function(result, {col, row})
  */
 window.getCellSpan = function(cell)
 {
-    if(['id', 'branchName', 'name', 'branch', 'status', 'date', 'desc', 'releasedDate', 'actions'].includes(cell.col.name) && cell.row.data.rowspan)
+    if(['id', 'branchName', 'name', 'branch', 'status', 'date', 'desc', 'releasedDate', 'actions', 'system'].includes(cell.col.name) && cell.row.data.rowspan)
     {
         return {rowSpan: cell.row.data.rowspan};
     }
