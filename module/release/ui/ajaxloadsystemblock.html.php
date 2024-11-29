@@ -34,6 +34,8 @@ foreach($appList as $system)
 $appReleases = array();
 foreach($releases as $releaseID => $release) $appReleases[$release->system][$releaseID] = $release->name;
 
+if(!$apps) $apps = array(0 => '');
+
 jsVar('releases', $releases);
 jsVar('appLength', count($apps));
 
