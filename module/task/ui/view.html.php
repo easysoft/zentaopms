@@ -57,15 +57,17 @@ foreach($actions as $key => $action)
         }
         if($task->parent == 0) unset($actions[$key]);
     }
-    if(isonlybody() && isset($actions[$key]['data-load']))
+    if($isInModal && isset($actions[$key]['data-load']))
     {
         unset($actions[$key]['data-load']);
         $actions[$key]['data-toggle'] = 'modal';
     }
-    if(isset($actions[$key]['url']))
+    if($isInModal && isset($action['url']) && stripos($action['url'], 'batchCreate') !== false)
     {
-        $actions[$key]['url'] = str_replace(array('{story}', '{module}', '{parent}', '{execution}'), array($task->story, $task->module, $task->parent, $task->execution), $action['url']);
+        $actions[$key]['data-toggle'] = 'modal';
+        $actions[$key]['data-size']   = 'lg';
     }
+    if(isset($actions[$key]['url'])) $actions[$key]['url'] = str_replace(array('{story}', '{module}', '{parent}', '{execution}'), array($task->story, $task->module, $task->parent, $task->execution), $action['url']);
 }
 
 /* 初始化主栏内容。Init sections in main column. */
