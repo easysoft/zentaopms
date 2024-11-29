@@ -56,9 +56,9 @@ sidebar
 $canBatchAssignTo = hasPriv('bug', 'batchAssignTo');
 
 $config->bug->dtable->fieldList['module']['map']    = $modulePairs;
-$config->bug->dtable->fieldList['story']['map']     = $stories;
-$config->bug->dtable->fieldList['task']['map']      = $tasks;
-$config->bug->dtable->fieldList['toTask']['map']    = $tasks;
+$config->bug->dtable->fieldList['story']['map']     = array('') + $stories;
+$config->bug->dtable->fieldList['task']['map']      = array('') + $tasks;
+$config->bug->dtable->fieldList['toTask']['map']    = array('') + $tasks;
 $config->bug->dtable->fieldList['branch']['map']    = $branchTagOption;
 $config->bug->dtable->fieldList['project']['map']   = $projectPairs;
 $config->bug->dtable->fieldList['execution']['map'] = $executions;
