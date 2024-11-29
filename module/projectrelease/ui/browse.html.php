@@ -48,6 +48,11 @@ if(!$showBranch) unset($cols['branch']);
 if(isset($cols['branch']))  $cols['branch']['name'] = 'branchName';
 if(isset($cols['product'])) $cols['product']['map'] = $products;
 if(empty($project->hasProduct)) unset($cols['product']);
+
+foreach(array_column($releases, 'system') as $system)
+{
+    if(!isset($appList[$system])) $appList[$system] = '';
+}
 $cols['system']['map'] = array(0 => '') + $appList;
 
 foreach($releases as $release)
