@@ -753,6 +753,8 @@ class releaseModel extends model
      */
     public static function isClickable(object $release, string $action): bool
     {
+        if($release->deleted) return false;
+
         $action = strtolower($action);
 
         if($action == 'notify')  return ($release->bugs || $release->stories) && $release->status == 'normal';
