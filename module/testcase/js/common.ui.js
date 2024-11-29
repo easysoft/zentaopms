@@ -8,7 +8,7 @@ window.loadProductStories = function(productID)
     if(typeof(moduleID) == 'undefined') moduleID = 0;
     if(typeof(storyID)  == 'undefined') storyID  = 0;
 
-    const link = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID=' + storyID + '&onlyOption=false&status=noclosed&limit=0&type=full&hasParent=0&objectID=' + objectID);
+    const link = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID=' + storyID + '&onlyOption=false&status=noclosed&limit=0&type=&hasParent=0&objectID=' + objectID);
     $.getJSON(link, function(data)
     {
         let $storyPicker = $('[name=story]').zui('picker');
