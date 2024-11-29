@@ -26,13 +26,9 @@ if($apiType == 'product')
 }
 elseif($apiType == 'project')
 {
-    $objectID   = isset($params['objectID']) ? (int)$params['objectID'] : key($projects);
-    $executions = $this->loadModel('execution')->getPairs($objectID, 'all', 'multiple,leaf,noprefix');
-    $executionID = (isset($params['executionID']) && isset($executions[$params['executionID']])) ? $params['executionID'] : '';
-
-    $useType  = $executionID ? 'execution' : 'project';
-    $useID    = $executionID ? $executionID : $objectID;
-    $libs     = $this->doc->getApiLibs(0, $useType, (int)$useID);
+    $useType  = $apiType;
+    $objectID = isset($params['objectID']) ? (int)$params['objectID'] : key($projects);
+    $libs     = $this->doc->getApiLibs(0, $useType, (int)$objectID);
 }
 elseif($apiType == 'nolink')
 {
@@ -75,32 +71,11 @@ form
         formGroup
         (
             set::label($lang->doc->project),
-            set::width('2/5'),
+            set::width('4/5'),
             set::name('project'),
             set::items(createLink('project', 'ajaxGetDropMenu', "objectID=$objectID&module=&method=&extra=selectmode&useLink=0")),
             set::value($objectID),
             set::required(true)
-        ),
-        formGroup
-        (
-            set::width('2/5'),
-            set::label($lang->doc->execution),
-            set::labelClass('executionTH'),
-            set::control(array('control' => 'picker', 'name' => 'execution', 'items' => $executions, 'value' => $executionID))
-        ),
-        formGroup
-        (
-            setClass('executionHelp'),
-            icon
-            (
-                'help',
-                set('data-toggle', 'tooltip'),
-                set('data-title', $lang->doc->placeholder->execution),
-                set('data-placement', 'right'),
-                set('data-type', 'white'),
-                set('data-class-name', 'text-gray border border-light'),
-                setClass('ml-2 mt-2 text-gray')
-            )
         )
     ) : null,
     $apiType == 'product' ? formRow
