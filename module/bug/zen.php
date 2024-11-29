@@ -785,7 +785,6 @@ class bugZen extends bug
             if($this->config->edition != 'open') $bug->relatedObject = zget($bugRelatedObjectList, $bug->id, 0);
         }
 
-
         $showModule = !empty($this->config->bug->browse->showModule) ? $this->config->bug->browse->showModule : '';
 
         /* Set view. */
