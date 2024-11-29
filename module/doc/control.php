@@ -1707,18 +1707,25 @@ class doc extends control
      */
     public function ajaxGetFiles(string $type, int $objectID, string $browseType = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 9999, int $pageID = 1)
     {
-        /* Load pager. */
-        $rawMethod = $this->app->rawMethod;
-        $this->app->rawMethod = 'showFiles';
-        $this->app->loadClass('pager', true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-        $this->app->rawMethod = $rawMethod;
+        if(common::hasPriv('doc', 'showFiles'))
+        {
+            /* Load pager. */
+            $rawMethod = $this->app->rawMethod;
+            $this->app->rawMethod = 'showFiles';
+            $this->app->loadClass('pager', true);
+            $pager = new pager($recTotal, $recPerPage, $pageID);
+            $this->app->rawMethod = $rawMethod;
 
-        $files       = $this->doc->getLibFiles($type, $objectID, $browseType, 0, $orderBy, $pager);
-        $sourcePairs = $this->doc->getFileSourcePairs($files);
-        $files       = $this->docZen->processFiles($files, array(), $sourcePairs, true);
+            $files       = $this->doc->getLibFiles($type, $objectID, $browseType, 0, $orderBy, $pager);
+            $sourcePairs = $this->doc->getFileSourcePairs($files);
+            $files       = $this->docZen->processFiles($files, array(), $sourcePairs, true);
 
-        echo json_encode(array_values($files)); // $this->send($files); not work.
+            echo json_encode(array_values($files)); // $this->send($files); not work.
+        }
+        else
+        {
+            echo '[]';
+        }
     }
 
     /**
