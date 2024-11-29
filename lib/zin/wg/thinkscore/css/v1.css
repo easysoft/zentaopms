@@ -4,4 +4,4 @@
 .score-content .check-items .item-control{border-color:rgba(var(--color-primary-100-rgb),var(--tw-border-opacity));}
 .score-content .check-items .item-control:hover{background: rgba(var(--color-primary-100-rgb),var(--tw-bg-opacity));}
 .score-content .check-items .item-control .radio-primary{display: none;}
-.score-content .check-items .item-control.is-checked{background: rgba(var(--color-primary-500-rgb),var(--tw-bg-opacity)); color: rgba(var(--color-white-rgb),var(--tw-text-opacity));}
+.score-content .check-items .item-control.is-checked{background: rgba(var(--color-primary-500-rgb),var(--tw-bg-opacity)); color: rgba(var(--color-white-rgb),var(--tw-text-opacity)); border-color: rgba(var(--color-primary-500-rgb),var(--tw-bg-opacity));}
