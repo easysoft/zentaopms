@@ -33,7 +33,7 @@ foreach($versionSpecs as $versionSpec)
             span
             (
                 setData(array('pivot' => $pivot->id, 'version' => $versionSpec->version, 'group' => $groupID)),
-                setClass("label ghost size-sm bg-secondary-50 text-secondary-500 rounded-full", array('hidden' => $isMarked || $isFirstVersion || ($isBuiltIn && !$isMainVersion))),
+                setClass("label ghost size-sm bg-secondary-50 text-secondary-500 rounded-full", array('hidden' => $isMarked || $isFirstVersion || !$isBuiltIn || ($isBuiltIn && !$isMainVersion))),
                 $lang->pivot->newVersion
             )
         ),
