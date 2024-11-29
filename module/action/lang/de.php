@@ -901,6 +901,7 @@ $lang->action->label->todo         = 'Todo|todo|view|todoID=%s';
 $lang->action->label->doclib       = 'Dok Bibliothek|doc|teamspace|objectID=%s&libID=%s';
 $lang->action->label->docspace     = 'Dok Space';
 $lang->action->label->doc          = 'Dok|doc|view|docID=%s';
+$lang->action->label->doctemplate  = 'Doc Template|doc|view|docID=%s';
 $lang->action->label->user         = 'Benutzer|user|view|account=%s';
 $lang->action->label->testreport   = 'Berichte|testreport|view|report=%s';
 $lang->action->label->entry        = 'Eintrag|entry|browse|';

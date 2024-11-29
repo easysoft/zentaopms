@@ -903,6 +903,7 @@ $lang->action->label->todo         = '待办|todo|view|todoID=%s';
 $lang->action->label->doclib       = '文档库|doc|teamspace|objectID=%s&libID=%s';
 $lang->action->label->docspace     = '文档空间';
 $lang->action->label->doc          = '文档|doc|view|docID=%s';
+$lang->action->label->doctemplate  = '文档模板|doc|view|docID=%s';
 $lang->action->label->user         = '用户|user|view|account=%s';
 $lang->action->label->testreport   = '报告|testreport|view|report=%s';
 $lang->action->label->entry        = '应用|entry|browse|';
