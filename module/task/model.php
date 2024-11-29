@@ -801,14 +801,15 @@ class taskModel extends model
         }
 
         /* Initialize task data and update it. */
+        $parent = $this->fetchById($taskID);
+
         $newTask = array();
-        if(!empty($earliestEstStarted))  $newTask['estStarted']  = $earliestEstStarted;
-        if(!empty($earliestRealStarted)) $newTask['realStarted'] = $earliestRealStarted;
-        if(!empty($latestDeadline))      $newTask['deadline']    = $latestDeadline;
+        if(!empty($earliestEstStarted) && $parent->estStarted > $earliestEstStarted)    $newTask['estStarted']  = $earliestEstStarted;
+        if(!empty($earliestRealStarted) && $parent->realStarted > $earliestRealStarted) $newTask['realStarted'] = $earliestRealStarted;
+        if(!empty($latestDeadline) && $parent->deadline < $latestDeadline)              $newTask['deadline']    = $latestDeadline;
         if(!empty($newTask)) $this->dao->update(TABLE_TASK)->data($newTask)->autoCheck()->where('id')->eq($taskID)->exec();
 
-        $task = $this->fetchById($taskID);
-        if($task->parent) $this->computeBeginAndEnd($task->parent);
+        if($parent->parent) $this->computeBeginAndEnd($parent->parent);
 
         return !dao::isError();
     }
