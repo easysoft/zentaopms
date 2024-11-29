@@ -185,7 +185,7 @@ class projectrelease extends control
 
                 $releaseData->build    = '';
                 $releaseData->releases = trim(implode(',', $releases), ',');
-                if(!$releaseData->releases) dao::$errors['releases[' . key($releases) . ']'][] = sprintf($this->lang->error->notempty, $this->lang->release->includedSystem);
+                if(!$releaseData->releases) dao::$errors['releases[' . key($releases) . ']'][] = sprintf($this->lang->error->notempty, $this->lang->release->name);
             }
             if(dao::isError()) return $this->sendError(dao::getError());
 

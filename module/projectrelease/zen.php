@@ -71,7 +71,7 @@ class projectreleaseZen extends projectrelease
 
                 $release->build    = '';
                 $release->releases = trim(implode(',', $releases), ',');
-                if(!$release->releases) dao::$errors['releases[' . key($releases) . ']'][] = sprintf($this->lang->error->notempty, $this->lang->release->includedSystem);
+                if(!$release->releases) dao::$errors['releases[' . key($releases) . ']'][] = sprintf($this->lang->error->notempty, $this->lang->release->name);
             }
         }
         if(dao::isError()) return false;
