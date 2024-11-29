@@ -404,6 +404,7 @@ class actionModel extends model
             ->orWhere('(objectType')->eq('execution')->andWhere('objectID')->notIn($noMultipleExecutions)
             ->markRight(2)
             ->fi()
+            ->andWhere('objectType')->notIn($this->config->action->hiddenTrashObjects)
             ->andWhere('extra')->eq($extra)
             ->andWhere('vision')->eq($this->config->vision)
             ->orderBy($orderBy)
@@ -511,6 +512,7 @@ class actionModel extends model
             ->andWhere($trashQuery)
             ->andWhere('t1.extra')->eq($extra)
             ->andWhere('t1.vision')->eq($this->config->vision)
+            ->andWhere('objectType')->notIn($this->config->action->hiddenTrashObjects)
             ->beginIF($objectType != 'pipeline' && $objectType != 'all')->andWhere('t1.objectType')->eq($objectType)->fi()
 
             ->beginIF($objectType == 'pipeline')
