@@ -187,20 +187,24 @@ $lang->instance->log = new stdclass;
 $lang->instance->log->date    = 'date';
 $lang->instance->log->message = 'Content';
 
-$lang->instance->log->viewButton = 'Logs';
-$lang->instance->log->title      = 'Watch Logs';
-$lang->instance->log->button     = 'View Now';
+$lang->instance->log->viewButton  = 'Logs';
+$lang->instance->log->title       = 'Watch Logs';
+$lang->instance->log->button      = 'View Now';
+$lang->instance->log->autoRefresh = 'Switch refresh status';
+$lang->instance->log->tips        = 'The logs are refreshed automatically by default, and you can switch the button to switch';
+$lang->instance->log->noLog       = 'No logs yet';
+
 
 $lang->instance->component         = 'Component';
 $lang->instance->pod               = 'Pod';
-$lang->instance->isPrevious        = 'Is Previous container';
-$lang->instance->isPreviousList[0] = 'No';
-$lang->instance->isPreviousList[1] = 'Yes';
+$lang->instance->isPreviousList[0] = 'Current container';
+$lang->instance->isPreviousList[1] = 'Previous container';
 
 $lang->instance->event = new stdClass;
 $lang->instance->event->viewButton = 'Events';
 $lang->instance->event->title      = 'Watch Events';
 $lang->instance->event->button     = 'View Now';
+$lang->instance->event->noEvents   = 'No events yet';
 
 $lang->instance->actionList  =  array();
 $lang->instance->actionList['install']                  = '%s installed';
