@@ -11,83 +11,85 @@ declare(strict_types=1);
  */
 
 namespace zin;
+set::zui(true);
 
-formPanel
+div
 (
-    set::title($lang->instance->log->title),
-    set::actions(array(
-        array(
-            'text'    => $lang->instance->log->button,
-            'type'    => 'primary',
-            'onclick' => 'window.showLogs('.$instance->id.')',
-        )
-    )),
     setID('logs-panel'),
-    setClass('w-full'),
+    setClass('px-1 mt-2 w-full'),
     formRow
     (
+        setID('logs-header'),
+        setClass('flex px-1 top-0 bg-white'),
+        formGroup(
+            inputGroup
+            (
+                h::button
+                (
+                    setClass('btn primary'),
+                    $lang->instance->log->autoRefresh,
+                    span(
+                    setID('autoRefreshBtn'),
+                    icon(setClass('icon icon-pause'))
+                ),
+                on::click()->call('toggleAutoRefresh', $instance->id)
+                ),
+                $lang->instance->name,
+                input
+                (
+                    set::class('input-group-addon'),
+                    set::name('name'),
+                    set::required(true),
+                    set::value($instance->name),
+                    set::disabled(true)
+                ),
+                $lang->instance->component,
+                picker
+                (
+                    setClass('input-group-addon w-48'),
+                    setID('component-logs'),
+                    set::name('component'),
+                    set::control('picker'),
+                    set::required(true),
+                    on::change()->call('changeComponent', $instance->id)
+                ),
+                $lang->instance->pod,
+                picker
+                (
+                    setClass('input-group-addon w-72'),
+                    setID('pod-logs'),
+                    set::name('pod'),
+                    set::required(true),
+                    set::items(array()),
+                    set::inline(true),
+                    on::inited()->call('initComponent', $instance->id)
+                )
+            )
+        ),
         formGroup
         (
-            set::name('name'),
-            set::labelWidth('160px'),
-            set::required(true),
-            set::label($lang->instance->name),
-            set::value($instance->name),
-            set::disabled(true)
-        )
-    ),
-    formRow
-    (
-        formGroup
-        (
-            setID('component-logs'),
-            set::name('component'),
-            set::labelWidth('160px'),
-            set::control('picker'),
-            set::required(true),
-            set::label($lang->instance->component),
-            on::change()->call('changeComponent', $instance->id)
-        )
-    ),
-    formRow
-    (
-        formGroup
-        (
-            setID('pod-logs'),
-            set::name('pod'),
-            set::labelWidth('160px'),
-            set::control('picker'),
-            set::required(true),
-            set::label($lang->instance->pod),
-            set::items(array())
-        )
-    ),
-    formRow
-    (
-        formGroup
-        (
+            setClass('flex mx-2'),
             setID('is-previous'),
             set::name('previous'),
-            set::labelWidth('160px'),
-            set::control('picker'),
-            set::label($lang->instance->isPrevious),
+            set::control('radioListInline'),
             set::items($lang->instance->isPreviousList),
             set::value(0),
-            on::change()->call('showLogs', $instance->id),
-            on::inited()->call('initComponent', $instance->id)
+            set::inline(true),
+            on::change()->call('showLogs', $instance->id)
+        ),
+        formGroup(
+            setClass('flex mx-2 text-sm text-gray-500'),
+            set::label( setClass('text-danger'), $lang->instance->log->tips)
         )
     ),
     div
     (
-        setClass('px-1 mt-2 w-full'),
-        panel
-        (
-            setClass('py-2'),
-            form
-            (
-                h::pre(setID('logs-content'), setClass('bg-gray-800 text-white progress block h-96')),
-                set::actions(false)
-            )
-        )
+        setClass('px-1 mt-2 w-full h-full'),
+        h::pre(
+            setID('logs-content'),
+            setClass('bg-gray-800 text-white block h-screen scrollbar-thin')
+        ),
+        set::actions(false)
     )
 );
+render('pagebase');
