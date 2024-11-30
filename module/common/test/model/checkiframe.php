@@ -24,3 +24,11 @@ r($tester->common->checkIframe()) && p() && e('1'); // 查看该页面是否要�
 $app->moduleName = 'execution';
 $app->methodName = 'task';
 r($tester->common->checkIframe()) && p() && e('1'); // 查看该页面是否要在iframe中打开
+
+$app->moduleName = 'instance';
+$app->methodName = 'terminal';
+r($tester->common->checkIframe()) && p() && e('1');
+
+$app->moduleName = 'instance';
+$app->methodName = 'logs';
+r($tester->common->checkIframe()) && p() && e('1');
