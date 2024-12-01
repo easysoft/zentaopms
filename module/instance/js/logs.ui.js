@@ -33,7 +33,7 @@ window.changeComponent = function (instanceID)
     });
 };
 
-window.showLogs = function (instanceID)
+window.showLogs = function (instanceID, noLogsTip)
 {
     const headerHeight = document.getElementById('logs-header').offsetHeight;
     document.getElementById('logs-content').style.height = `calc(100vh - ${headerHeight}px - 16px)`;
@@ -43,6 +43,13 @@ window.showLogs = function (instanceID)
     const target = $.createLink('instance', 'showlogs', 'id=' + instanceID + "&component=" + instanceComponent + "&pod=" + instancePod + "&previous=" + previous);
     $.getJSON(target, function (resp)
     {
+        $('#logs-content').removeClass('dtable-empty-tip flex');
+        if (resp.code !== 200 || resp.data.length === 0)
+        {
+            $('#logs-content').html(noLogsTip);
+            $('#logs-content').addClass('dtable-empty-tip flex');
+            return;
+        }
         $('#logs-content').html(resp.data.map(item => item.timestamp + ' ' + item.content).join('\n'));
         $('#logs-content')[0].scrollTop = $('#logs-content')[0].scrollHeight;
     });
@@ -50,10 +57,10 @@ window.showLogs = function (instanceID)
 
 let logsTimer = null;
 
-window.startAutoRefreshLogs = function(instanceID) {
+window.startAutoRefreshLogs = function(instanceID, noLogsTip) {
     if(logsTimer) clearInterval(logsTimer);
     logsTimer = setInterval(function() {
-        showLogs(instanceID);
+        showLogs(instanceID,noLogsTip);
     }, 5000);
 }
 

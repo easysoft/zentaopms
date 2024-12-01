@@ -41,7 +41,7 @@ formPanel
                 set::label($lang->instance->component),
                 set::inline(true),
                 on::inited()->call('initComponent', $instance->id),
-                on::change()->call('showEvents', $instance->id,$lang->instance->event->noEvents)
+                on::change()->call('showEvents', $instance->id, $lang->instance->event->noEvents)
             )
         )
     ),

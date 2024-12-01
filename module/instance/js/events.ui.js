@@ -24,7 +24,7 @@ window.showEvents = function (instanceID,noEventTip)
     {
         toggleLoading('#events-panel', false);
         $('#events-content').removeClass('dtable-empty-tip flex');
-        if (resp.data.length === 0)
+        if (resp.code !== 200 || resp.data.length === 0)
         {
             $('#events-content').html(noEventTip);
             $('#events-content').addClass('dtable-empty-tip flex');

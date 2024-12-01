@@ -29,10 +29,10 @@ div
                     setClass('btn primary'),
                     $lang->instance->log->autoRefresh,
                     span(
-                    setID('autoRefreshBtn'),
-                    icon(setClass('icon icon-pause'))
-                ),
-                on::click()->call('toggleAutoRefresh', $instance->id)
+                        setID('autoRefreshBtn'),
+                        icon(setClass('icon icon-pause'))
+                    ),
+                    on::click()->call('toggleAutoRefresh', $instance->id, $lang->instance->log->noLog)
                 ),
                 $lang->instance->name,
                 input
@@ -75,7 +75,7 @@ div
             set::items($lang->instance->isPreviousList),
             set::value(0),
             set::inline(true),
-            on::change()->call('showLogs', $instance->id)
+            on::change()->call('showLogs', $instance->id, $lang->instance->log->noLog)
         ),
         formGroup(
             setClass('flex mx-2 text-sm text-gray-500'),
