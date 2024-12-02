@@ -51,7 +51,7 @@ div
                     set::name('component'),
                     set::control('picker'),
                     set::required(true),
-                    on::change()->call('changeComponent', $instance->id)
+                    on::change()->call('changeComponent', $instance->id, $lang->instance->log->noLog)
                 ),
                 $lang->instance->pod,
                 picker
@@ -62,7 +62,7 @@ div
                     set::required(true),
                     set::items(array()),
                     set::inline(true),
-                    on::inited()->call('initComponent', $instance->id)
+                    on::inited()->call('initComponent', $instance->id, $lang->instance->log->noLog)
                 )
             )
         ),

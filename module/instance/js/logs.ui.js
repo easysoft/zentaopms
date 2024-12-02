@@ -15,7 +15,7 @@ window.initComponent = function (instanceID)
     });
 };
 
-window.changeComponent = function (instanceID)
+window.changeComponent = function (instanceID, noLogsTip)
 {
     toggleLoading('#logs-panel', true);
     const $picker = $('[name=pod]').zui('picker');
@@ -29,7 +29,8 @@ window.changeComponent = function (instanceID)
             $picker.$.setValue(items.pod);
         }
         toggleLoading('#logs-panel', false);
-        startAutoRefreshLogs(instanceID);
+        showLogs(instanceID, noLogsTip);
+        startAutoRefreshLogs(instanceID, noLogsTip);
     });
 };
 
@@ -57,30 +58,21 @@ window.showLogs = function (instanceID, noLogsTip)
 
 let logsTimer = null;
 
-window.startAutoRefreshLogs = function(instanceID, noLogsTip) {
+window.startAutoRefreshLogs = function (instanceID, noLogsTip) {
     if(logsTimer) clearInterval(logsTimer);
     logsTimer = setInterval(function() {
-        showLogs(instanceID,noLogsTip);
+        showLogs(instanceID, noLogsTip);
     }, 5000);
 }
 
-$(window).on('unload', function() {
-    if(logsTimer) clearInterval(logsTimer);
-});
-
-$(document).ready(function() {
-    const instanceID = $('#logs-panel').data('id');
-    if(instanceID) startAutoRefreshLogs(instanceID);
-});
-
-window.toggleAutoRefresh = function(instanceID) {
+window.toggleAutoRefresh = function(instanceID, noLogsTip) {
     const $toggleBtn = $('#autoRefreshBtn');
     if(logsTimer) {
         clearInterval(logsTimer);
         logsTimer = null;
         $toggleBtn.html('<i class="icon icon-play"></i>');
     } else {
-        startAutoRefreshLogs(instanceID);
+        startAutoRefreshLogs(instanceID, noLogsTip);
         $toggleBtn.html('<i class="icon icon-pause"></i>');
     }
 }

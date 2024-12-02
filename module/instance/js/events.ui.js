@@ -15,7 +15,7 @@ window.initComponent = function (instanceID)
 };
 
 
-window.showEvents = function (instanceID,noEventTip)
+window.showEvents = function (instanceID, noEventTip)
 {
     const instanceComponent = $('[name=component]').val();
     const target = $.createLink('instance', 'showEvents', 'id=' + instanceID + "&component=" + instanceComponent);
