@@ -21,11 +21,11 @@ $config->instance->enableAutoRestore = in_array('auto-rollback', $features);
 global $lang, $app;
 $app->loadLang('space');
 
-$config->instance->actionList['showLogs']['icon']        = 'time';
-$config->instance->actionList['showLogs']['hint']        = $lang->instance->log->viewButton;
-$config->instance->actionList['showLogs']['text']        = $lang->instance->log->viewButton;
-$config->instance->actionList['showLogs']['url']         = array('module' => 'instance', 'method' => 'logs', 'params' => 'id={id}');
-$config->instance->actionList['showLogs']['target']    = '_blank';
+$config->instance->actionList['showLogs']['icon']   = 'time';
+$config->instance->actionList['showLogs']['hint']   = $lang->instance->log->viewButton;
+$config->instance->actionList['showLogs']['text']   = $lang->instance->log->viewButton;
+$config->instance->actionList['showLogs']['url']    = array('module' => 'instance', 'method' => 'logs', 'params' => 'id={id}');
+$config->instance->actionList['showLogs']['target'] = '_blank';
 
 $config->instance->actionList['showEvents']['icon']        = 'summary';
 $config->instance->actionList['showEvents']['hint']        = $lang->instance->event->viewButton;
