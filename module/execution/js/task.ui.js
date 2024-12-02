@@ -162,6 +162,11 @@ window.renderCell = function(result, info)
         {
             result[0]['props']['children'][1]['props']['children'] = teamLang;
         }
+        if(!task.canAssignTo && typeof result[0] == 'object')
+        {
+            let taskAssignTo = typeof this.props.userMap[task.assignedTo] != undefined ? this.props.userMap[task.assignedTo] : task.assignedTo;
+            result[0] = {html: `<span class='text-center'>` + taskAssignTo + "</span>", className: 'flex mx-auto'};
+        }
     }
 
     if(['estimate', 'consumed','left'].includes(info.col.name) && result) result[0] = {html: result[0] + ' h'};
