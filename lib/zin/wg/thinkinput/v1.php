@@ -22,6 +22,7 @@ class thinkInput extends thinkQuestion
         $detailWg = parent::buildDetail();
         list($step, $required, $value, $wizard) = $this->prop(array('step', 'required', 'value', 'wizard'));
         $preViewModel = in_array($wizard->model, $config->thinkwizard->hiddenMenuModel);
+        $disabled = false;
         if($step)
         {
             $required = $step->options->required;
