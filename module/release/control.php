@@ -80,7 +80,7 @@ class release extends control
         $releases     = $this->release->getList($productID, $branch, $type, $sort, $releaseQuery, $pager);
         $children     = implode(',', array_column($releases, 'releases'));
 
-        foreach($releases as $release) $release->desc = strip_tags($release->desc);
+        foreach($releases as $release) $release->desc = str_replace('&nbsp;', ' ', strip_tags($release->desc));
 
         $this->view->title         = $this->view->product->name . $this->lang->hyphen . $this->lang->release->browse;
         $this->view->releases      = $this->releaseZen->processReleaseListData($releases);

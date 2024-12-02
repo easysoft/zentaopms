@@ -69,7 +69,7 @@ class projectrelease extends control
         $showBranch = false;
         foreach($releases as $release)
         {
-            $release->desc = strip_tags($release->desc);
+            $release->desc = str_replace('&nbsp;', ' ', strip_tags($release->desc));
             if($release->productType != 'normal') $showBranch = true;
         }
 
