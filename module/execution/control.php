@@ -700,7 +700,7 @@ class execution extends control
         $this->loadModel('build');
         if($type == 'bysearch')
         {
-            $builds = $this->loadModel('build')->getExecutionBuildsBySearch($executionID, 0, $pager);
+            $builds = $this->loadModel('build')->getExecutionBuildsBySearch($executionID, (int)$param, $pager);
         }
         else
         {
