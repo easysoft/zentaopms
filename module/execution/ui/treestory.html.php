@@ -326,12 +326,12 @@ div
                         array_values(array_map(function($bug) use($lang)
                         {
                             return h::li
-                                (
-                                    set::title($bug->title),
-                                    label(setClass('circle size-sm'), $bug->id),
-                                    common::hasPriv('bug', 'view') ? a(set::href(helper::createLink('bug', 'view', "bugID=$bug->id")), setClass('title'), set('data-toggle', 'modal'), set::title($bug->title), $bug->title) : span(setClass('title'), $bug->title),
-                                    label(setClass("status-{$bug->status} size-sm"), $lang->bug->statusList[$bug->status])
-                                );
+                            (
+                                set::title($bug->title),
+                                label(setClass('circle size-sm'), $bug->id),
+                                common::hasPriv('bug', 'view') ? a(set::href(helper::createLink('bug', 'view', "bugID=$bug->id")), setClass('title'), set('data-toggle', 'modal'), set::title($bug->title), $bug->title) : span(setClass('title'), $bug->title),
+                                label(setClass("status-{$bug->status} size-sm ml-1"), $lang->bug->statusList[$bug->status])
+                            );
                         }, $bugs))
                     )
                 ) : null,
