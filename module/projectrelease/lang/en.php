@@ -29,7 +29,7 @@ $lang->projectrelease->browseAction     = "Release List";
 $lang->projectrelease->notify           = 'notify';
 $lang->projectrelease->publish          = "Publish";
 $lang->projectrelease->product          = $lang->productCommon;
-$lang->projectrelease->name             = "Name";
+$lang->projectrelease->name             = $lang->product->system . ' Version';
 
 $lang->projectrelease->featureBar['browse']['all']       = 'All';
 $lang->projectrelease->featureBar['browse']['wait']      = 'Wait';
