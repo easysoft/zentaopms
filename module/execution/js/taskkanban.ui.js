@@ -231,9 +231,9 @@ window.getItem = function(info)
     }
 
     if(info.laneInfo.type == 'story' && priv.canAssignStory) assignLink = $.createLink('story', 'assignto', 'id=' + info.item.id + '&kanbanGroup=default&from=taskkanban');
-    if(info.laneInfo.type == 'task' && priv.canAssignTask)   assignLink = $.createLink('task', 'assignto', 'executionID=' + executionID + '&id=' + info.item.id + '&kanbanGroup=default&from=taskkanban');
     if(info.laneInfo.type == 'bug' && priv.canAssignBug)     assignLink = $.createLink('bug', 'assignto', 'id=' + info.item.id + '&kanbanGroup=default&from=taskkanban');
     if(info.laneInfo.type == 'risk' && priv.canAssignRisk)   assignLink = $.createLink('risk', 'assignto', 'id=' + info.item.id + '&kanbanGroup=default&from=taskkanban');
+    if(info.laneInfo.type == 'task' && priv.canAssignTask && info.item.canAssignTo) assignLink = $.createLink('task', 'assignto', 'executionID=' + executionID + '&id=' + info.item.id + '&kanbanGroup=default&from=taskkanban');
     if(assignLink)
     {
         avatar = "<a href='" + assignLink + "' data-toggle='modal'>" + avatar + "</a>";

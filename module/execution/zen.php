@@ -362,6 +362,8 @@ class executionZen extends execution
             foreach($plans as $plan) $allPlans += $plan;
         }
 
+        if(!isset($_SESSION['limitedExecutions'])) $this->execution->getLimitedExecution();
+
         $project = $this->project->getByID($execution->project);
 
         $this->view->title        = $this->lang->execution->kanban;
@@ -375,6 +377,7 @@ class executionZen extends execution
         $this->view->execution    = $execution;
         $this->view->project      = $project;
         $this->view->canBeChanged = common::canModify('execution', $execution);
+        $this->view->isLimited    = strpos(",{$this->session->limitedExecutions},", ",{$execution->id},") !== false;
     }
 
     /**

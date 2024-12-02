@@ -2581,7 +2581,7 @@ class taskModel extends model
         /* Set product type for task. */
         if(!empty($task->product))
         {
-            $product = $this->loadModel('product')->getById($task->product);
+            $product = $this->loadModel('product')->fetchByID($task->product);
             if($product) $task->productType = $product->type;
         }
 
