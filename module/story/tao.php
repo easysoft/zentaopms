@@ -2412,11 +2412,13 @@ class storyTao extends storyModel
 
         $projects   = array();
         $executions = array();
-        $stmt       = $this->dao->select('id,type AS projectType,model,parent,path,grade,name as title,hasProduct,begin,end,status,project,progress')->from(TABLE_PROJECT)->where('id')->in(array_keys($projectStoryList))->andWhere('deleted')->eq(0)->orderBy('id')->query();
+        $stmt       = $this->dao->select('id,type AS projectType,model,parent,path,grade,name as title,hasProduct,begin,end,status,project,progress,multiple')->from(TABLE_PROJECT)->where('id')->in(array_keys($projectStoryList))->andWhere('deleted')->eq(0)->orderBy('id')->query();
         $today      = helper::today();
         $storyGroup = array();
         while($project = $stmt->fetch())
         {
+            if($project->projectType != 'project' && empty($project->multiple)) continue;
+
             $delay = 0;
             if($project->status != 'done' && $project->status != 'closed' && $project->status != 'suspended') $delay = helper::diffDate($today, $project->end);
 
