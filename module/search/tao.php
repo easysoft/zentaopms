@@ -1219,6 +1219,8 @@ class searchTao extends searchModel
             if($file->extension == 'txt') $object->comment .= substr(file_get_contents($file->realPath), 0, $this->config->search->maxFileSize);
         }
 
+        $object->comment = htmlspecialchars($object->comment);
+
         return $object;
     }
 }
