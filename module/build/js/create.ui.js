@@ -70,6 +70,7 @@ $().ready(function()
         }
     });
     loadBranches();
+    loadSystem();
     if(multipleProject)
     {
         window.waitDom('[name=execution]', function()
