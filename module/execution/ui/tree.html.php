@@ -39,7 +39,7 @@ if(common::canModify('execution', $execution))
     {
         $importBugItem = array('text' => $lang->execution->importBug, 'url' => $this->createLink('execution', 'importBug', "execution={$execution->id}"), 'className' => 'importBug');
     }
-    $canCreateTask = hasPriv('task', 'create');
+    $canCreateTask = hasPriv('task', 'create') && !$isLimited;
 }
 $importItems = !empty($importTaskItem) && empty($importBugItem) ? array($importTaskItem) : array();
 $importItems = empty($importTaskItem) && !empty($importBugItem) ? array($importBugItem) : $importItems;

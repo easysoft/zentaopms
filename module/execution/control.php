@@ -272,6 +272,8 @@ class execution extends control
         $filter = (empty($filter) && isset($this->lang->execution->groupFilter[$groupBy])) ? key($this->lang->execution->groupFilter[$groupBy]) : $filter;
         list($groupTasks, $allCount) = $this->executionZen->filterGroupTasks($groupTasks, $groupBy, $filter, $allCount, $tasks);
 
+        if(!isset($_SESSION['limitedExecutions'])) $this->execution->getLimitedExecution();
+
         /* Assign. */
         $this->view->title       = $execution->name . $this->lang->hyphen . $this->lang->execution->task;
         $this->view->members     = $this->execution->getTeamMembers($executionID);
@@ -286,6 +288,7 @@ class execution extends control
         $this->view->filter      = $filter;
         $this->view->allCount    = $allCount;
         $this->view->execution   = $execution;
+        $this->view->isLimited   = !$this->app->user->admin && strpos(",{$this->session->limitedExecutions},", ",{$executionID},") !== false;
         $this->display();
     }
 
@@ -1933,12 +1936,15 @@ class execution extends control
 
         $gradeGroup = $this->loadModel('story')->getGradeGroup();
 
+        if(!isset($_SESSION['limitedExecutions'])) $this->execution->getLimitedExecution();
+
         $this->view->title       = $this->lang->execution->tree;
         $this->view->execution   = $execution;
         $this->view->executionID = $executionID;
         $this->view->level       = $type;
         $this->view->tree        = $this->execution->buildTree($tree, (bool)$project->hasProduct, $gradeGroup);
         $this->view->features    = $this->execution->getExecutionFeatures($execution);
+        $this->view->isLimited   = !$this->app->user->admin && strpos(",{$this->session->limitedExecutions},", ",{$executionID},") !== false;
         $this->display();
     }
 

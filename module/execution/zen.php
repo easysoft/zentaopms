@@ -123,7 +123,7 @@ class executionZen extends execution
             foreach($plans as $plan) $allPlans += $plan;
         }
 
-        $this->execution->getLimitedExecution();
+        if(!isset($_SESSION['limitedExecutions'])) $this->execution->getLimitedExecution();
 
         $this->view->users        = $users;
         $this->view->userList     = $userList;

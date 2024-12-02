@@ -70,7 +70,7 @@ featureBar
     $items
 );
 
-$canCreate     = hasPriv('task', 'create');
+$canCreate     = !$isLimited && hasPriv('task', 'create');
 $canImportTask = hasPriv('task', 'importTask');
 $canImportBug  = hasPriv('task', 'importBug');
 if(common::canModify('execution', $execution))
@@ -381,7 +381,7 @@ $tbody = function() use($tasks, $lang, $groupBy, $users, $groupByList, $executio
                 common::canModify('execution', $execution) ? h::td
                 (
                     setClass('text-center'),
-                    common::hasPriv('task', 'assignTo') ? btn
+                    common::hasPriv('task', 'assignTo') && common::hasDBPriv($task, 'task', 'assignto') ? btn
                     (
                         set
                         (
@@ -395,7 +395,7 @@ $tbody = function() use($tasks, $lang, $groupBy, $users, $groupByList, $executio
                             )
                         )
                     ) : null,
-                    common::hasPriv('task', 'edit') ? btn
+                    common::hasPriv('task', 'edit') && common::hasDBPriv($task, 'task', 'edit')? btn
                     (
                         set
                         (
@@ -408,7 +408,7 @@ $tbody = function() use($tasks, $lang, $groupBy, $users, $groupByList, $executio
                             )
                         )
                     ) : null,
-                    common::hasPriv('task', 'edit') ? btn
+                    common::hasPriv('task', 'delete') && common::hasDBPriv($task, 'task', 'delete') ? btn
                     (
                         set
                         (
