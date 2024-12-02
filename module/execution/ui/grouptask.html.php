@@ -45,8 +45,7 @@ else
     );
 }
 
-$app->loadLang('my');
-$lang->task->statusList['changed'] = $lang->my->storyChanged;
+$lang->task->statusList['changed'] = $lang->task->storyChange;
 featureBar
 (
     !empty($tasks) ? li
