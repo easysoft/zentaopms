@@ -178,7 +178,7 @@ class release extends control
             $system = $this->loadModel('system')->fetchByID($releaseData->system);
             if($system->integrated == '1')
             {
-                $releases = (array)$this->post->releases;
+                $releases = array_filter((array)$this->post->releases);
 
                 $releaseData->build    = '';
                 $releaseData->releases = trim(implode(',', $releases), ',');

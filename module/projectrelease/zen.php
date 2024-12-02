@@ -67,7 +67,7 @@ class projectreleaseZen extends projectrelease
 
             if($system->integrated == '1')
             {
-                $releases = (array)$this->post->releases;
+                $releases = array_filter((array)$this->post->releases);
 
                 $release->build    = '';
                 $release->releases = trim(implode(',', $releases), ',');
