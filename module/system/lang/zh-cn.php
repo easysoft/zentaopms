@@ -29,19 +29,19 @@ $lang->system->nodeQuantity    = '节点数';
 $lang->system->serviceQuantity = '服务数';
 $lang->system->cpuUsage        = 'CPU（核）';
 $lang->system->memUsage        = '内存（GB）';
-$lang->system->name            = '应用名称';
-$lang->system->integrated      = '集成应用';
+$lang->system->name            = $lang->product->system . '名称';
+$lang->system->integrated      = '集成' . $lang->product->system;
 $lang->system->latestRelease   = '最新版本号';
-$lang->system->children        = '包含应用';
+$lang->system->children        = '包含' . $lang->product->system;
 $lang->system->latestRelease   = '最新版本号';
 $lang->system->status          = '状态';
 $lang->system->desc            = '描述';
-$lang->system->browse          = '应用列表';
-$lang->system->create          = '创建应用';
-$lang->system->edit            = '编辑应用';
-$lang->system->delete          = '删除应用';
-$lang->system->active          = '上架应用';
-$lang->system->inactive        = '下架应用';
+$lang->system->browse          = "{$lang->product->system}列表";
+$lang->system->create          = "创建{$lang->product->system}";
+$lang->system->edit            = "编辑{$lang->product->system}";
+$lang->system->delete          = "删除{$lang->product->system}";
+$lang->system->active          = "上架{$lang->product->system}";
+$lang->system->inactive        = "下架{$lang->product->system}";
 $lang->system->integratedLabel = '集成';
 
 $lang->system->integratedList = array();
@@ -52,11 +52,11 @@ $lang->system->statusList = array();
 $lang->system->statusList['active']   = '已上架';
 $lang->system->statusList['inactive'] = '已下架';
 
-$lang->system->confirmDelete   = '确定要删除应用吗？';
-$lang->system->confirmActive   = '确定要上架应用吗？';
-$lang->system->confirmInactive = '确定要下架应用吗？';
-$lang->system->releaseExist    = '关联发布的应用不可删除';
-$lang->system->buildExist      = '关联构建的应用不可删除';
+$lang->system->confirmDelete   = '确定要删除' . $lang->product->system . '吗？';
+$lang->system->confirmActive   = '确定要上架' . $lang->product->system . '吗？';
+$lang->system->confirmInactive = '确定要下架' . $lang->product->system . '吗？';
+$lang->system->releaseExist    = '关联发布的' . $lang->product->system . '不可删除';
+$lang->system->buildExist      = '关联构建的' . $lang->product->system . '不可删除';
 
 /* LDAP */
 $lang->system->LDAP = new stdclass;

@@ -726,6 +726,7 @@ class instance extends control
         $instance = $this->instance->getByID($id);
 
         $this->view->instance = $instance;
+        $this->view->title    = $this->lang->instance->log->viewButton;
         $this->display();
     }
 

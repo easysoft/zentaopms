@@ -802,7 +802,7 @@ CREATE TABLE IF NOT EXISTS `zt_doccontent` (
   `title` varchar(255) NOT NULL DEFAULT '',
   `digest` varchar(255) NOT NULL DEFAULT '',
   `content` longtext NULL,
-  `html` longtext DEFAULT NULL,
+  `rawContent` longtext DEFAULT NULL,
   `files` text NULL,
   `type` varchar(10) NOT NULL DEFAULT '',
   `version` smallint(6) unsigned NOT NULL DEFAULT '0',

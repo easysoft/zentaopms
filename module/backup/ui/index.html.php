@@ -137,7 +137,7 @@ if($config->inQuickon)
 
 if($this->config->inQuickon)
 {
-    $data = null;
+    $data = array();
     if(!empty($backups)) $data = initTableData($backups, $config->system->dtable->backup->fieldList, $this->system);
 
     foreach($data as &$backup)

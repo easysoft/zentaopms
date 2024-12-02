@@ -56,6 +56,7 @@ class systemModel extends model
             ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
             ->beginIF($status)->andWhere('status')->eq($status)->fi()
             ->beginIF($integrated !== '')->andWhere('integrated')->eq($integrated)->fi()
+            ->orderBy('id DESC')
             ->fetchPairs('id', 'name');
     }
 
@@ -522,19 +523,40 @@ class systemModel extends model
      */
     public function initSystem(): bool
     {
+        $productPairs = $this->loadModel('product')->getPairs('all', 0, '', 'all');
+        $releasePairs = $this->dao->select('id,product,createdDate')->from(TABLE_RELEASE)->where('deleted')->eq('0')->fetchAll('product');
+
+        $systemPairs = array();
+        $systemNames = array();
+        $systemList  = $this->dao->select('id,product,name')->from(TABLE_SYSTEM)->where('deleted')->eq('0')->fetchAll();
+        foreach($systemList as $system)
+        {
+            $system->name = strtolower($system->name);
+            $systemNames[$system->name]    = $system->id;
+            $systemPairs[$system->product] = $system->id;
+        }
+
         $system = new stdclass();
         $system->createdDate = helper::now();
         $system->createdBy   = 'system';
-
-        $productPairs = $this->loadModel('product')->getPairs('all', 0, '', 1);
         foreach($productPairs as $productID => $productName)
         {
-            $system->name    = $productName;
-            $system->product = $productID;
-            $systemID = $this->create($system);
+            $systemID = zget($systemPairs, $productID, 0);
+            if(!$systemID)
+            {
+                if(isset($systemNames[strtolower($productName)])) $productName .= '-1';
 
-            $this->dao->update(TABLE_BUILD)->set('system')->eq($systemID)->where('id')->eq($systemID)->exec();
-            $this->dao->update(TABLE_RELEASE)->set('system')->eq($systemID)->where('id')->eq($systemID)->exec();
+                $system->name          = $productName;
+                $system->product       = $productID;
+                $system->latestDate    = isset($releasePairs[$productID]) ? $releasePairs[$productID]->createdDate : null;
+                $system->latestRelease = isset($releasePairs[$productID]) ? $releasePairs[$productID]->id : 0;
+                $systemID = $this->create($system);
+
+                if(dao::isError()) continue;
+            }
+
+            $this->dao->update(TABLE_BUILD)->set('system')->eq($systemID)->where('product')->eq($productID)->andWhere('system')->eq(0)->exec();
+            $this->dao->update(TABLE_RELEASE)->set('system')->eq($systemID)->where('product')->eq($productID)->andWhere('system')->eq(0)->exec();
         }
 
         if(!dao::isError()) $this->dao->delete()->from(TABLE_CRON)->where('command')->eq('moduleName=system&methodName=initSystem')->exec();

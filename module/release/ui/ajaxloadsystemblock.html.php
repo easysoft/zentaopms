@@ -34,7 +34,11 @@ foreach($appList as $system)
 $appReleases = array();
 foreach($releases as $releaseID => $release) $appReleases[$release->system][$releaseID] = $release->name;
 
-jsVar('releases', $releases);
+if(!$apps) $apps = array(0 => '');
+
+jsVar('releases',  $releases);
+jsVar('appLength', count($apps));
+jsVar('rawMethod', $app->rawMethod);
 
 $systemTR = array();
 $i        = 0;
@@ -44,6 +48,7 @@ foreach($apps as $system)
     $systemTR[] = h::tr
     (
         setClass('form-row'),
+        setData('index', $i),
         h::td
         (
             picker
@@ -52,8 +57,7 @@ foreach($apps as $system)
                 set::name("apps[$i]"),
                 set::items($apps),
                 $appID ? set::value($appID) : null,
-                set::required(true),
-                set('onchange', "setRelease(event, '{$i}')")
+                set::required(true)
             )
         ),
         h::td
@@ -62,7 +66,7 @@ foreach($apps as $system)
             (
                 set::id("releases{$i}"),
                 set::name("releases[$i]"),
-                set::required(true),
+                set::required($app->rawMethod != 'edit'),
                 set::items(zget($appReleases, $appID, array())),
                 $appID ? set::value(current($linkedApps)) : null
             )
@@ -73,8 +77,8 @@ foreach($apps as $system)
             btnGroup
             (
                 set::items(array(
-                    array('class' => 'btn btn-link text-gray', 'icon' => 'plus', 'onclick' => 'addItem(this)'),
-                    array('class' => 'btn btn-link text-gray', 'icon' => 'trash', 'onclick' => 'deleteItem(this)')
+                    array('class' => 'btn btn-link text-gray add-item hidden', 'icon' => 'plus', 'onclick' => 'addItem(this)'),
+                    array('class' => 'btn btn-link text-gray del-item', 'icon' => 'trash', 'onclick' => 'deleteItem(this)')
                 ))
             )
         )
@@ -91,6 +95,7 @@ div
     setID('systemForm'),
     h::table
     (
+        on::change('[name^=apps]')->call("setRelease", jsRaw('target')),
         h::tbody
         (
             setClass('form'),
@@ -111,14 +116,14 @@ h::table
     set::className('hidden'),
     set::id('addItem'),
     h::tr(
+        setData('index', $i),
         h::td
         (
             picker
             (
                 set::id("apps{$i}"),
                 set::name("apps[$i]"),
-                set::items($apps),
-                set('onchange', "setRelease(event, '{$i}')")
+                set::items($apps)
             )
         ),
         h::td
@@ -136,8 +141,8 @@ h::table
             btnGroup
             (
                 set::items(array(
-                    array('class' => 'btn btn-link text-gray', 'icon' => 'plus', 'onclick' => 'addItem(this)'),
-                    array('class' => 'btn btn-link text-gray', 'icon' => 'trash', 'onclick' => 'deleteItem(this)')
+                    array('class' => 'btn btn-link text-gray add-item', 'icon' => 'plus', 'onclick' => 'addItem(this)'),
+                    array('class' => 'btn btn-link text-gray del-item', 'icon' => 'trash', 'onclick' => 'deleteItem(this)')
                 ))
             )
         )

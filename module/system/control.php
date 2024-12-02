@@ -623,6 +623,9 @@ class system extends control
                 ->setDefault('editedBy', $this->app->user->account)
                 ->get();
 
+            $change = common::createChanges($system, $formData);
+            if(empty($change)) return $this->sendSuccess(array('load' => true));
+
             $this->system->update($id, $formData);
             if(dao::isError()) return $this->sendError(dao::getError());
 

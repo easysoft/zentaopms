@@ -282,6 +282,7 @@ $lang->store->common        = 'Store';
 $lang->instance->common     = 'Instance';
 $lang->ai->common           = 'AI';
 $lang->aiapp->common        = 'AI';
+$lang->product->system      = 'Application';
 
 $lang->programstakeholder->common = 'Stakeholder';
 $lang->featureswitch->common      = 'Features On/Off';

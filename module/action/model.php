@@ -404,6 +404,7 @@ class actionModel extends model
             ->orWhere('(objectType')->eq('execution')->andWhere('objectID')->notIn($noMultipleExecutions)
             ->markRight(2)
             ->fi()
+            ->andWhere('objectType')->notIn($this->config->action->hiddenTrashObjects)
             ->andWhere('extra')->eq($extra)
             ->andWhere('vision')->eq($this->config->vision)
             ->orderBy($orderBy)
@@ -511,6 +512,7 @@ class actionModel extends model
             ->andWhere($trashQuery)
             ->andWhere('t1.extra')->eq($extra)
             ->andWhere('t1.vision')->eq($this->config->vision)
+            ->andWhere('objectType')->notIn($this->config->action->hiddenTrashObjects)
             ->beginIF($objectType != 'pipeline' && $objectType != 'all')->andWhere('t1.objectType')->eq($objectType)->fi()
 
             ->beginIF($objectType == 'pipeline')
@@ -1103,7 +1105,7 @@ class actionModel extends model
         $shadowProducts   = $this->dao->select('id')->from(TABLE_PRODUCT)->where('shadow')->eq(1)->fetchPairs();
         $projectMultiples = $this->dao->select('id,type,multiple')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
         $docList          = $this->loadModel('doc')->getPrivDocs(array(), 0, 'all');
-        $apiList          = $this->loadModel('api')->getPrivApis();
+        $apiList          = $this->loadModel('api')->getPrivApis('all');
         $docLibList       = $this->doc->getLibs('hasApi');
         foreach($actions as $i => $action)
         {
@@ -1501,6 +1503,11 @@ class actionModel extends model
         }
         if($action->objectType == 'demand' && !empty($object->parent)) $this->loadModel('demand')->updateParentDemandStage($object->parent);
         if($action->objectType == 'release') $this->loadModel('system')->setSystemRelease((int)$object->system, $action->objectID);
+        if(in_array($action->objectType, array('release', 'build')) && !empty($object->system))
+        {
+            $systemActionID = $this->dao->select('id')->from(TABLE_ACTION)->where('objectType')->eq('system')->andWhere('objectID')->eq($object->system)->andWhere('action')->eq('deleted')->orderBy('id_desc')->fetch('id');
+            if($systemActionID) $this->undelete($systemActionID);
+        }
 
         /* 在action表中更新action记录。 */
         /* Update action record in action table. */

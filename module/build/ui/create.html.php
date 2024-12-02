@@ -18,6 +18,8 @@ jsVar('projectID', $projectID);
 jsVar('executionID', $executionID);
 jsVar('today', helper::today());
 jsVar('projectModel', isset($project->model) ? $project->model : '');
+jsVar('currentProduct', $productID);
+jsVar('hidden', $hidden);
 
 $integratedRow = '';
 if($app->tab == 'project' && !empty($multipleProject))
@@ -108,6 +110,7 @@ $productBranches = zget($product, 'branches', array());
 formPanel
 (
     set::title($lang->build->create),
+    set::formID('createBuildForm'),
     on::change('[name=newSystem]', 'setSystemBox'),
     on::change('[name=system]', 'loadBuilds'),
     $integratedRow,

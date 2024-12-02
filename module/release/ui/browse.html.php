@@ -17,7 +17,7 @@ featureBar
 (
     set::current($type),
     set::linkParams("productID={$product->id}&branch={$branch}&type={key}&orderBy={$orderBy}&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
-    li(searchToggle(set::module('release')))
+    li(searchToggle(set::module('release'), set::open($type == 'bySearch')))
 );
 
 /* zin: Define the toolbar on main menu. */
@@ -37,6 +37,11 @@ jsVar('type', $type);
 
 $cols = $this->loadModel('datatable')->getSetting('release');
 if($showBranch) $cols['branch']['map'] = $branchPairs;
+
+foreach(array_column($releases, 'system') as $system)
+{
+    if(!isset($appList[$system])) $appList[$system] = '';
+}
 $cols['system']['map'] = array(0 => '') + $appList;
 
 foreach($releases as $release)

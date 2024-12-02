@@ -86,9 +86,9 @@ foreach($lang->bug->priList as $key => $value)
     $color = current($colorList);
     $label = $key == 0 ? $lang->null : $value;
 
-    $generated = !empty($infoValue[$key]['generated']) ? $infoValue[$key]['generated'] : 0;
-    $legacy    = !empty($infoValue[$key]['legacy'])    ? $infoValue[$key]['legacy']    : 0;
-    $resolved  = !empty($infoValue[$key]['resolved'])  ? $infoValue[$key]['resolved']  : 0;
+    $generated = !empty($bugInfo['bugStageGroups'][$key]['generated']) ? $bugInfo['bugStageGroups'][$key]['generated'] : 0;
+    $legacy    = !empty($bugInfo['bugStageGroups'][$key]['legacy'])    ? $bugInfo['bugStageGroups'][$key]['legacy']    : 0;
+    $resolved  = !empty($bugInfo['bugStageGroups'][$key]['resolved'])  ? $bugInfo['bugStageGroups'][$key]['resolved']  : 0;
 
     $chartOption[] = array('name' => $label, 'type' => 'bar', 'data' => array($generated, $legacy, $resolved));
     $tableTR[] = h::tr
@@ -161,9 +161,9 @@ foreach(array('generated', 'legacy', 'resolved') as $field)
 for($time = $beginTime; $time <= $endTime; $time += 86400)
 {
     $date      = date('m-d', $time);
-    $generated = !empty($infoValue['generated'][$date]) ? $infoValue['generated'][$date] : 0;
-    $legacy    = !empty($infoValue['legacy'][$date])    ? $infoValue['legacy'][$date]    : 0;
-    $resolved  = !empty($infoValue['resolved'][$date])  ? $infoValue['resolved'][$date]  : 0;
+    $generated = !empty($bugInfo['bugHandleGroups']['generated'][$date]) ? $bugInfo['bugHandleGroups']['generated'][$date] : 0;
+    $legacy    = !empty($bugInfo['bugHandleGroups']['legacy'][$date])    ? $bugInfo['bugHandleGroups']['legacy'][$date]    : 0;
+    $resolved  = !empty($bugInfo['bugHandleGroups']['resolved'][$date])  ? $bugInfo['bugHandleGroups']['resolved'][$date]  : 0;
 
     $chartOption['generated']['data'][] = $generated;
     $chartOption['legacy']['data'][]    = $legacy;

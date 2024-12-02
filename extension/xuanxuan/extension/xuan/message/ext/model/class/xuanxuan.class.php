@@ -17,6 +17,7 @@ class xuanxuanMessage extends messageModel
                 if($objectType == 'story')    $field = 'obj.*,product.name as productName';
                 if($objectType == 'bug')      $field = 'obj.*,project.name as projectName,product.name as productName,execu.name as execuName';
                 if($objectType == 'feedback') $field = 'obj.*,product.name as productName';
+                if($objectType == 'demand')   $field = 'obj.*,pool.name as poolName';
 
                 $object = $this->dao->select($field)->from($this->config->objectTables[$objectType])->alias('obj')
                     ->beginIF($objectType == 'task')
@@ -33,6 +34,9 @@ class xuanxuanMessage extends messageModel
                     ->fi()
                     ->beginIF($objectType == 'feedback')
                     ->leftJoin($this->config->objectTables['product'])->alias('product')->on('product.id = obj.product')
+                    ->fi()
+                    ->beginIF($objectType == 'demand')
+                    ->leftJoin($this->config->objectTables['demandpool'])->alias('pool')->on('pool.id = obj.pool')
                     ->fi()
                     ->where('obj.id')->eq($objectID)
                     ->fetch();
@@ -69,6 +73,21 @@ class xuanxuanMessage extends messageModel
                     {
                         foreach($senderUser as $user) $target .= ',' . $user;
                     }
+                }
+                elseif($objectType == 'demandpool')
+                {
+                    if(!empty($object->owner))    $target .= trim($object->owner, ',');
+                    if(!empty($object->reviewer)) $target .= ',' . trim($object->reviewer, ',');
+                }
+                elseif($objectType == 'demand')
+                {
+                    $target .= $object->createdBy;
+                    if(!empty($object->assignedTo)) $target .= $object->assignedTo == 'closed' ? '' : $object->assignedTo;
+                    if(!empty($object->mailto))     $target .= ",{$object->mailto}";
+                    $reviewers = $this->loadModel('demand')->getReviewerPairs($object->id, $object->version);
+                    $reviewers = array_keys($reviewers);
+                    if($reviewers) $target .= ',' . implode(',', $reviewers);
+                    $target = trim($target, ',');
                 }
                 else
                 {
@@ -126,18 +145,19 @@ class xuanxuanMessage extends messageModel
                 }
                 elseif($objectType == 'demandpool')
                 {
-                    if(!empty($object->owner))    $target .= trim($object->owner, ',');
-                    if(!empty($object->reviewer)) $target .= ',' . trim($object->reviewer, ',');
+                    $subcontent->headTitle  = $object->name;
+                    $subcontent->parentType = '';
+                    $subcontent->parent     = 0;
+                    $subcontent->parentURL  = "xxc:openInApp/zentao-integrated/" . urlencode($server . helper::createLink('demandpool', 'browse', '', 'html'));
+                    $subcontent->cardURL    = $url;
                 }
                 elseif($objectType == 'demand')
                 {
-                    $target .= $object->createdBy;
-                    if(!empty($object->assignedTo)) $target .= $object->assignedTo == 'closed' ? '' : $object->assignedTo;
-                    if(!empty($object->mailto))     $target .= ",{$object->mailto}";
-                    $reviewers = $this->loadModel('demand')->getReviewerPairs($object->id, $object->version);
-                    $reviewers = array_keys($reviewers);
-                    if($reviewers) $target .= ',' . implode(',', $reviewers);
-                    $target = trim($target, ',');
+                    $subcontent->headTitle  = $object->poolName;
+                    $subcontent->parentType = 'demandpool';
+                    $subcontent->parent     = $object->pool;
+                    $subcontent->parentURL  = "xxc:openInApp/zentao-integrated/" . urlencode($server . helper::createLink('demand', 'browse', "id=$object->pool", 'html'));
+                    $subcontent->cardURL    = $url;
                 }
                 else
                 {
@@ -179,7 +199,7 @@ class xuanxuanMessage extends messageModel
 
                 $content = json_encode($contentData);
                 $avatarUrl = $server . $this->app->getWebRoot() . 'favicon.ico';
-                if($target && ($objectType == 'bug' || $objectType == 'task' || $objectType == 'story' || $objectType == 'feedback')) $this->loadModel('im')->messageCreateNotify($target, $title, $subtitle = '', $content, $contentType = 'object', $url, $actions = array(), $sender = array('id' => 'zentao', 'realname' => $this->lang->message->sender, 'name' => $this->lang->message->sender, 'avatar' => $avatarUrl));
+                if($target && ($objectType == 'bug' || $objectType == 'task' || $objectType == 'story' || $objectType == 'feedback' || $objectType == 'demand' || $objectType == 'demandpool')) $this->loadModel('im')->messageCreateNotify($target, $title, $subtitle = '', $content, $contentType = 'object', $url, $actions = array(), $sender = array('id' => 'zentao', 'realname' => $this->lang->message->sender, 'name' => $this->lang->message->sender, 'avatar' => $avatarUrl));
 
                 if($objectType == 'mr' and is_array($this->lang->message->mr->$actionType) and !empty($object->assignee))
                 {

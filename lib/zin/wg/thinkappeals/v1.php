@@ -33,7 +33,7 @@ class thinkAppeals extends thinkModel
         return echarts
         (
             set::animationDuration(0),
-            set::width('1000px'),
+            set::width('1600px'),
             set::height('1000px'),
             set::color(array('#29AA93', '#FF9F46')),
             set::legend(array(array(
@@ -42,17 +42,30 @@ class thinkAppeals extends thinkModel
                 'itemGap'    => 90,
                 'itemWidth'  => 14,
                 'itemHeight' => 14,
-                'bottom'     => 40,
-                'textStyle'  => array('color' => '#64758B', 'padding' => array(0, 0, 0, 16))
+                'bottom'     => 20,
+                'textStyle'  => array('color' => '#64758B', 'fontSize' => 20, 'padding' => array(0, 0, 0, 16))
             ))),
-            set::radar(array('nameGap' => 32, 'indicator' => $this->getIndicator())),
+            set::radar(array(
+                'nameGap'   => 32,
+                'splitArea' => array('areaStyle' => array('color' => array('#EAF5FF'))),
+                'splitLine' => array('lineStyle' => array('color' => '#CFE7FE', 'width' => 3)),
+                'axisLine'  => array('lineStyle' => array('color' => '#CFE7FE', 'width' => 3)),
+                'axisLabel' => array('color' => '#9EA3B0', 'textStyle' => array('fontSize' => 24)),
+                'name'      => array('textStyle' => array('fontSize' => 24)),
+                'indicator' => $this->getIndicator()
+            )),
             set::series
             (
                 array(
                     array(
-                        'type'  => 'radar',
-                        'data'  => $blocks['seriesData'],
-                        'label' => array('normal' => array('show' => true, 'formatter' => jsRaw('formatSeriesLabel')))
+                        'symbolSize' => 10,
+                        'type'       => 'radar',
+                        'data'       => $blocks['seriesData'],
+                        'label'      => array('normal' => array(
+                            'show'      => true,
+                            'formatter' => jsRaw('formatSeriesLabel'),
+                            'textStyle' => array('fontSize' => 24)
+                        ))
                     )
                 )
             )

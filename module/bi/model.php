@@ -901,7 +901,7 @@ class biModel extends model
                 /* 如果是升级模式，那么需要采用当前时间，确保用户可以看到“新”标签。*/
                 $pivotSpec->createdDate = $isInstall ? $createdDate : helper::now();
                 $pivotSpecStmt = $this->dao->insert(TABLE_PIVOTSPEC)->data($pivotSpec);
-                $pivotSpecSQLs[] = $pivotSpecStmt->get();
+                $pivotSQLs[] = $pivotSpecStmt->get();
             }
         }
 

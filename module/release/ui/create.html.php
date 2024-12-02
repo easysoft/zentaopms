@@ -43,7 +43,7 @@ formPanel
         formGroup
         (
             set::width('1/2'),
-            set::label($lang->release->system),
+            set::label($lang->release->selectSystem),
             set::required(true),
             inputGroup
             (

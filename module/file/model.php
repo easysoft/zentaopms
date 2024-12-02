@@ -1010,7 +1010,7 @@ class fileModel extends model
         $contentType = isset($mimes[$fileType]) ? $mimes[$fileType] : $mimes['default'];
 
         /* Safari浏览器下载文件名乱码问题。 */
-        if($_SERVER['CONTENT_TYPE'] == 'application/x-www-form-urlencoded' && preg_match("/Safari/", $_SERVER["HTTP_USER_AGENT"]))
+        if(isset($_SERVER['CONTENT_TYPE']) && isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['CONTENT_TYPE'] == 'application/x-www-form-urlencoded' && preg_match("/Safari/", $_SERVER["HTTP_USER_AGENT"]))
         {
             $fileName   = rawurlencode($fileName);
             $attachment = 'attachment; filename*=utf-8\'\'' . $fileName;

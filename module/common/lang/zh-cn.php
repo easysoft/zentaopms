@@ -282,6 +282,7 @@ $lang->store->common        = '应用市场';
 $lang->instance->common     = '服务';
 $lang->ai->common           = 'AI';
 $lang->aiapp->common        = 'AI';
+$lang->product->system      = '应用';
 
 $lang->programstakeholder->common = '干系人';
 $lang->featureswitch->common      = '功能开关';

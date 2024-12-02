@@ -122,6 +122,12 @@ class thinkStepBase extends wg
         $sourceQuestion = array();
         $sourceItems    = array();
 
+        $wizard->config   = !empty($wizard->config) ? $wizard->config : array();
+        $wizard->config   = is_string($wizard->config) ? json_decode($wizard->config, true) : $wizard->config;
+        $configureObjects = !empty($wizard->config['configureObjects']) ? json_decode($wizard->config['configureObjects'], true) : array();
+        $isAssignedObject = !empty($configureObjects['isAssignedObject']) ? $configureObjects['isAssignedObject'] : 0;
+        $showBuiltTip     = isset($step->options->canConfigureRatio) && $step->options->canConfigureRatio == 0;
+
         if(!empty($quotedQuestions))
         {
             foreach($quotedQuestions as $item)
@@ -161,12 +167,13 @@ class thinkStepBase extends wg
                 );
             }
         }
+        $runSourceTip = !empty($sourceQuestion) && !$preViewModel;
 
-        if($isRun && (!empty($quotedQuestions) || !empty($sourceQuestion)))
+        if($isRun && (!empty($quotedQuestions) || $runSourceTip))
         {
             $tipType           = $lang->thinkstep->label->option;
             $sourceQuestionTip = array();
-            if(!empty($sourceQuestion))
+            if($runSourceTip)
             {
                 foreach ($sourceQuestion as $sourceQuestionItem)
                 {
@@ -180,11 +187,11 @@ class thinkStepBase extends wg
                     );
                 }
             }
-            $showRunTips = (!empty($quotedQuestions) || !empty($sourceQuestion)) && !$preViewModel;
+            $showRunTips = ((!empty($quotedQuestions) && empty($isAssignedObject)) || !empty($sourceQuestion));
             $detailTip[] = $showRunTips ? div
             (
                 setClass('bg-primary-50 text-gray p-2 mt-3 leading-normal'),
-                !empty($quotedQuestions) ? div
+                (!empty($quotedQuestions) && empty($isAssignedObject)) ? div
                 (
                     setClass('flex items-center'),
                     icon(setClass('font text-warning mr-1'), 'about'),
@@ -220,11 +227,7 @@ class thinkStepBase extends wg
         }
         if($preViewModel)
         {
-            $wizard->config   = !empty($wizard->config) ? $wizard->config : array();
-            $wizard->config   = is_string($wizard->config) ? json_decode($wizard->config, true) : $wizard->config;
-            $configureObjects = !empty($wizard->config['configureObjects']) ? json_decode($wizard->config['configureObjects'], true) : array();
-            $isAssignedObject = !empty($configureObjects['isAssignedObject']) ? $configureObjects['isAssignedObject'] : 0;
-            $detailTip[]      = (!empty($quotedQuestions) && !empty($isAssignedObject)) ? div
+            $detailTip[] = ((!empty($quotedQuestions) && !empty($isAssignedObject)) || $showBuiltTip)? div
             (
                 setClass('flex text-gray-400 mt-2 items-center text-sm ml-2'),
                 icon(setClass('text-important mr-2'), 'about'),

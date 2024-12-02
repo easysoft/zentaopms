@@ -95,11 +95,16 @@ class pivot extends control
 
         $this->pivotZen->show($groupID, $pivotID, '', $version);
 
-        $this->loadModel('mark')->setMark(array($pivotID), 'pivot', $version, 'version');
-        $marks = $this->loadModel('mark')->getNeededMarks(array($pivotID), 'pivot', 'all', 'version');
+        $marks = array();
+        if($pivot->builtin == 1)
+        {
+            $this->loadModel('mark')->setMark(array($pivotID), 'pivot', $version, 'version');
+            $marks = $this->loadModel('mark')->getNeededMarks(array($pivotID), 'pivot', 'all', 'version');
+        }
 
         $this->view->versionSpecs   = $versionSpecs;
         $this->view->markedVersions = array_column($marks, 'version');
+        $this->view->builtin        = $pivot->builtin;
         $this->view->version        = $version;
         $this->view->groupID        = $groupID;
         $this->view->pivotID        = $groupID;

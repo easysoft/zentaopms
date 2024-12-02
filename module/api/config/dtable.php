@@ -75,6 +75,8 @@ $config->api->dtable->release->fieldList['addedDate']['type']  = 'date';
 
 $config->api->dtable->release->fieldList['actions']['name']  = 'actions';
 $config->api->dtable->release->fieldList['actions']['title'] = $lang->actions;
+$config->api->dtable->release->fieldList['actions']['width'] = '70px';
+$config->api->dtable->release->fieldList['actions']['align'] = 'center';
 $config->api->dtable->release->fieldList['actions']['type']  = 'actions';
 $config->api->dtable->release->fieldList['actions']['menu']  = array('deleteRelease');
 $config->api->dtable->release->fieldList['actions']['list']['deleteRelease']['icon']         = 'trash';

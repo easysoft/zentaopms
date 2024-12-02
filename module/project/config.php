@@ -292,7 +292,7 @@ $config->project->linkMap->reviewissue = array();
 $config->project->linkMap->reviewissue[''] = array('reviewissue', 'issue', 'projectID=%s', '');
 
 $config->project->linkMap->cm = array();
-$config->project->linkMap->cm['report'] = array('cm', 'report', 'projectID=%s', '');
+$config->project->linkMap->cm['report'] = array('project', 'index', 'projectID=%s', '');
 
 $config->project->linkMap->weekly = array();
 $config->project->linkMap->weekly['index'] = array('weekly', 'index', 'projectID=%s', '');

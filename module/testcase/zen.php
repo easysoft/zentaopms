@@ -519,8 +519,8 @@ class testcaseZen extends testcase
 
         if($this->config->edition != 'open')
         {
-            $this->loadModel('custom');
-            foreach($cases as $caseID => $case) $case->relatedObject = $this->custom->getRelatedObjectList($caseID, 'testcase', 'byRelation', true);
+            $caseRelatedObjectList = $this->loadModel('custom')->getRelatedObjectList(array_keys($cases), 'testcase', 'byRelation', true);
+            foreach($cases as $caseID => $case) $case->relatedObject = zget($caseRelatedObjectList, $caseID, 0);
         }
 
         $this->view->cases   = array_merge($scenes, $cases);
@@ -921,7 +921,11 @@ class testcaseZen extends testcase
     private function assignStoriesForEdit(object $case): void
     {
         $moduleIdList = array();
-        if($case->module) $moduleIdList = $this->tree->getAllChildID($case->module);
+        if($case->module)
+        {
+            $moduleID     = $this->loadModel('tree')->getStoryModule($case->module);
+            $moduleIdList = $this->tree->getAllChildID($moduleID);
+        }
 
         $storyStatus = $this->loadModel('story')->getStatusList('noclosed');
         if(in_array($this->app->tab, array('project', 'execution')))

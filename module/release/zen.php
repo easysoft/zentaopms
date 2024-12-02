@@ -111,11 +111,11 @@ class releaseZen extends release
 
             if($system->integrated == '1')
             {
-                $releases = (array)$this->post->releases;
+                $releases = array_filter((array)$this->post->releases);
 
                 $release->build    = '';
                 $release->releases = trim(implode(',', $releases), ',');
-                if(!$release->releases) dao::$errors['releases[' . key($releases) . ']'][] = sprintf($this->lang->error->notempty, $this->lang->release->includedSystem);
+                if(!$release->releases) dao::$errors['releases[' . key($releases) . ']'][] = sprintf($this->lang->error->notempty, $this->lang->release->name);
             }
         }
         if(dao::isError()) return false;
@@ -234,13 +234,27 @@ class releaseZen extends release
         if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
         $sort .= ',buildID_asc';
 
-        $stories = $this->release->getStoryList($release->stories, $release->branch, $type == 'story' ? $sort : '', $storyPager);
+        $storyIdList   = trim($release->stories, ',');
+        $bugIdList     = trim($release->bugs, ',');
+        $leftBugIdList = trim($release->leftBugs, ',');
+        if($release->releases)
+        {
+            $linkedReleases = $this->release->getListByCondition(explode(',', $release->releases));
+            foreach($linkedReleases as $linkedRelease)
+            {
+                $storyIdList   .= ',' . $linkedRelease->stories;
+                $bugIdList     .= ',' . $linkedRelease->bugs;
+                $leftBugIdList .= ',' . $linkedRelease->leftBugs;
+            }
+        }
+
+        $stories = $this->release->getStoryList($storyIdList, $release->branch, $type == 'story' ? $sort : '', $storyPager);
 
         $sort = common::appendOrder($orderBy);
-        $bugs = $this->release->getBugList($release->bugs, $type == 'bug' ? $sort : '', $bugPager);
+        $bugs = $this->release->getBugList($bugIdList, $type == 'bug' ? $sort : '', $bugPager);
 
         if($type == 'leftBug' && strpos($orderBy, 'severity_') !== false) $sort = str_replace('severity_', 'severityOrder_', $sort);
-        $leftBugs = $this->release->getBugList($release->leftBugs, $type == 'leftBug' ? $sort : '', $leftBugPager, 'left');
+        $leftBugs = $this->release->getBugList($leftBugIdList, $type == 'leftBug' ? $sort : '', $leftBugPager, 'left');
 
         $product = $this->loadModel('product')->getByID($release->product);
 

@@ -480,23 +480,23 @@ $lang->tutorial->scrumProjectManage->manageTask->step17->name = '保存表单';
 $lang->tutorial->scrumProjectManage->manageTask->step17->desc = '保存后返回任务列表';
 
 $lang->tutorial->scrumProjectManage->manageTask->step18 = new stdClass();
-$lang->tutorial->scrumProjectManage->manageTask->step18->name = '点击版本';
-$lang->tutorial->scrumProjectManage->manageTask->step18->desc = '进入版本模块中可以创建版本';
+$lang->tutorial->scrumProjectManage->manageTask->step18->name = '点击构建';
+$lang->tutorial->scrumProjectManage->manageTask->step18->desc = '进入构建模块中可以创建构建';
 
 $lang->tutorial->scrumProjectManage->manageTask->step19 = new stdClass();
-$lang->tutorial->scrumProjectManage->manageTask->step19->name = '点击创建版本';
-$lang->tutorial->scrumProjectManage->manageTask->step19->desc = '可以在这里创建新的版本';
+$lang->tutorial->scrumProjectManage->manageTask->step19->name = '点击创建构建';
+$lang->tutorial->scrumProjectManage->manageTask->step19->desc = '可以在这里创建新的构建';
 
 $lang->tutorial->scrumProjectManage->manageTask->step20 = new stdClass();
 $lang->tutorial->scrumProjectManage->manageTask->step20->name = '填写表单';
 
 $lang->tutorial->scrumProjectManage->manageTask->step21 = new stdClass();
 $lang->tutorial->scrumProjectManage->manageTask->step21->name = '保存表单';
-$lang->tutorial->scrumProjectManage->manageTask->step21->desc = '保存后进入版本详情';
+$lang->tutorial->scrumProjectManage->manageTask->step21->desc = '保存后进入构建详情';
 
 $lang->tutorial->scrumProjectManage->manageTask->step22 = new stdClass();
 $lang->tutorial->scrumProjectManage->manageTask->step22->name = '关联需求';
-$lang->tutorial->scrumProjectManage->manageTask->step22->desc = '可以将完成的研发需求关联在版本中';
+$lang->tutorial->scrumProjectManage->manageTask->step22->desc = '可以将完成的研发需求关联在构建中';
 
 $lang->tutorial->scrumProjectManage->manageTask->step23 = new stdClass();
 $lang->tutorial->scrumProjectManage->manageTask->step23->name = '选择需求';
@@ -504,7 +504,7 @@ $lang->tutorial->scrumProjectManage->manageTask->step23->desc = '在这里可以
 
 $lang->tutorial->scrumProjectManage->manageTask->step24 = new stdClass();
 $lang->tutorial->scrumProjectManage->manageTask->step24->name = '保存关联的需求';
-$lang->tutorial->scrumProjectManage->manageTask->step24->desc = '您可以将完成的需求关联在当前版本中';
+$lang->tutorial->scrumProjectManage->manageTask->step24->desc = '您可以将完成的需求关联在当前构建中';
 
 $lang->tutorial->scrumProjectManage->manageTest = new stdClass();
 $lang->tutorial->scrumProjectManage->manageTest->title = '测试管理';

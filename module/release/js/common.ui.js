@@ -21,3 +21,18 @@ window.loadBuilds = function(productID)
         $buildPicker.$.setValue(values);
     });
 }
+
+window.changeStatus = function()
+{
+    const status = $('[name=status]').val();
+    if(status == 'wait')
+    {
+        $('#releasedDate').closest('.form-row').addClass('hidden');
+        $('[data-name=date] .form-label').addClass('required');
+    }
+    else
+    {
+        $('#releasedDate').closest('.form-row').removeClass('hidden');
+        $('[data-name=date] .form-label').removeClass('required');
+    }
+}

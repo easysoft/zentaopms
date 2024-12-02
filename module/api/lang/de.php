@@ -188,9 +188,9 @@ $lang->api->requestTypeOptions['application/x-www-form-urlencoded'] = 'applicati
 $lang->api->requestTypeOptions['multipart/form-data']               = 'multipart/form-data';
 
 $lang->api->libTypeList = array();
-$lang->api->libTypeList['product'] = $lang->productCommon . ' Api Library';
-$lang->api->libTypeList['project'] = $lang->projectCommon . ' Api Library';
-$lang->api->libTypeList['nolink']  = 'Independent Api Library';
+$lang->api->libTypeList['product'] = $lang->productCommon . ' API';
+$lang->api->libTypeList['project'] = $lang->projectCommon . ' API';
+$lang->api->libTypeList['nolink']  = 'Independent API';
 
 $lang->api->statusOptions      = array(
     'done'   => 'Done',

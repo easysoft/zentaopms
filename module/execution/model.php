@@ -1051,7 +1051,7 @@ class executionModel extends model
         $project = $this->loadModel('project')->getByID($projectID);
         if(empty($project)) return;
 
-        if(($project->model == 'waterfall' || $project->model == 'waterfallplus') && $parentID != $projectID)
+        if(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')) && $parentID != $projectID)
         {
             $this->app->loadLang('programplan');
             $parent = $this->getByID($parentID);
@@ -4507,27 +4507,30 @@ class executionModel extends model
                     $this->app->loadLang('story');
                     $gradePairs = zget($gradeGroup, $tree->type, array());
                     $grade      = zget($gradePairs, $tree->grade, $tree->grade);
+                    $gradeName  = ($grade && isset($grade->name)) ? "<span class='label gray-pale rounded-full'>{$grade->name}</span>" : '';
                     $treeData[$index]['url']     = $canViewStory ? helper::createLink('execution', 'treeStory', "taskID={$tree->storyId}") : '';
                     $treeData[$index]['content'] = array(
-                        'html' => "<div class='tree-link'><span class='label gray-pale rounded-full'>{$grade->name}</span><span class='ml-4'>{$tree->storyId}</span><span class='title " . ($canViewStory ? 'text-primary' : '') . " ml-4' title='{$tree->title}'>{$tree->title}</span>" . $assigedToHtml . '</div>',
+                        'html' => "<div class='tree-link'>{$gradeName}<span class='ml-4'>{$tree->storyId}</span><span class='title " . ($canViewStory ? 'text-primary' : '') . " ml-4' title='{$tree->title}'>{$tree->title}</span>" . $assigedToHtml . '</div>',
                     );
                     break;
                 case 'requirement':
                     $this->app->loadLang('requirement');
                     $gradePairs = zget($gradeGroup, $tree->type, array());
                     $grade      = zget($gradePairs, $tree->grade, $tree->grade);
+                    $gradeName  = ($grade && isset($grade->name)) ? "<span class='label gray-pale rounded-full'>{$grade->name}</span>" : '';
                     $treeData[$index]['url']     = helper::createLink('execution', 'treeStory', "taskID={$tree->storyId}");
                     $treeData[$index]['content'] = array(
-                        'html' => "<div class='tree-link'><span class='label gray-pale rounded-full'>{$grade->name}</span><span class='ml-4'>{$tree->storyId}</span><span class='title text-primary ml-4' title='{$tree->title}'>{$tree->title}</span>" . $assigedToHtml . '</div>',
+                        'html' => "<div class='tree-link'>{$gradeName}<span class='ml-4'>{$tree->storyId}</span><span class='title text-primary ml-4' title='{$tree->title}'>{$tree->title}</span>" . $assigedToHtml . '</div>',
                     );
                     break;
                 case 'epic':
                     $this->app->loadLang('epic');
                     $gradePairs = zget($gradeGroup, $tree->type, array());
                     $grade      = zget($gradePairs, $tree->grade, $tree->grade);
+                    $gradeName  = ($grade && isset($grade->name)) ? "<span class='label gray-pale rounded-full'>{$grade->name}</span>" : '';
                     $treeData[$index]['url']     = helper::createLink('execution', 'treeStory', "taskID={$tree->storyId}");
                     $treeData[$index]['content'] = array(
-                        'html' => "<div class='tree-link'><span class='label gray-pale rounded-full'>{$grade->name}</span><span class='ml-4'>{$tree->storyId}</span><span class='title text-primary ml-4' title='{$tree->title}'>{$tree->title}</span>" . $assigedToHtml . '</div>',
+                        'html' => "<div class='tree-link'>{$gradeName}<span class='ml-4'>{$tree->storyId}</span><span class='title text-primary ml-4' title='{$tree->title}'>{$tree->title}</span>" . $assigedToHtml . '</div>',
                     );
                     break;
                 case 'branch':

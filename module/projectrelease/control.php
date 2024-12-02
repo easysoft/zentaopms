@@ -69,7 +69,7 @@ class projectrelease extends control
         $showBranch = false;
         foreach($releases as $release)
         {
-            $release->desc = strip_tags($release->desc);
+            $release->desc = str_replace('&nbsp;', ' ', strip_tags($release->desc));
             if($release->productType != 'normal') $showBranch = true;
         }
 
@@ -181,11 +181,11 @@ class projectrelease extends control
             $system = $this->loadModel('system')->fetchByID($releaseData->system);
             if($system->integrated == '1')
             {
-                $releases = (array)$this->post->releases;
+                $releases = array_filter((array)$this->post->releases);
 
                 $releaseData->build    = '';
                 $releaseData->releases = trim(implode(',', $releases), ',');
-                if(!$releaseData->releases) dao::$errors['releases[' . key($releases) . ']'][] = sprintf($this->lang->error->notempty, $this->lang->release->includedSystem);
+                if(!$releaseData->releases) dao::$errors['releases[' . key($releases) . ']'][] = sprintf($this->lang->error->notempty, $this->lang->release->name);
             }
             if(dao::isError()) return $this->sendError(dao::getError());
 
@@ -220,10 +220,14 @@ class projectrelease extends control
             if(!isset($bindBuilds[$releasedBuild])) unset($builds[$releasedBuild]);
         }
 
+        $appList = $this->view->appList;
+        if($release->system && !isset($appList[$release->system])) $appList[$release->system] = $this->system->fetchByID($release->system);
+
         $this->view->title   = $this->view->product->name . $this->lang->hyphen . $this->lang->release->edit;
         $this->view->release = $release;
         $this->view->builds  = $builds;
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed');
+        $this->view->appList = $appList;
         $this->display('release', 'edit');
     }
 

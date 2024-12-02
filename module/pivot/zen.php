@@ -125,12 +125,17 @@ class pivotZen extends pivot
      */
     protected function setNewMark(object $pivot, object $firstAction, array $builtins): void
     {
-        // 版本没有改变，此时讨论是不是新透视表
+        /* 如果不是内置透视表，则不需要展示“新”标签。*/
+        /* If the pivot is not built-in, no need to display the "new" tag. */
+        if($pivot->builtin == 0) return;
+        /* 版本没有改变，此时讨论是不是新透视表。*/
+        /* The version has not changed, so it is judged whether it is a new pivot. */
         if(!$pivot->versionChange)
         {
             if(!isset($builtins[$pivot->id])) return;
             if(!$pivot->mark && $pivot->createdDate < $firstAction->date) $pivot->mark = true;
-            if(!$pivot->mark) $pivot->name = array('text' => $pivot->name, 'html' => $pivot->name . ' <span class="label ghost size-sm bg-secondary-50 text-secondary-500 rounded-full">' . $this->lang->pivot->new . '</span>');
+            $isMainVersion = filter_var($pivot->version, FILTER_VALIDATE_INT) !== false;
+            if(!$pivot->mark && $isMainVersion) $pivot->name = array('text' => $pivot->name, 'html' => $pivot->name . ' <span class="label ghost size-sm bg-secondary-50 text-secondary-500 rounded-full">' . $this->lang->pivot->new . '</span>');
         }
         else
         {
@@ -202,7 +207,7 @@ class pivotZen extends pivot
         $driver = $pivot->driver;
 
         $this->pivot->isVersionChange($pivot);
-        if($mark)
+        if($mark && $pivot->builtin == 1)
         {
             $markVersion = $pivot->versionChange ? $this->pivot->getMaxVersion($pivot->id) : $pivot->version;
 

@@ -1422,6 +1422,9 @@ class myModel extends model
             $review->status = $objectType == 'attend' ? $object->reviewStatus : (isset($object->status) && !isset($flows[$objectType]) ? $object->status : 'done');
             if(strpos($review->result, ',') !== false) list($review->result) = explode(',', $review->result);
 
+            $review->product = isset($object->product) ? $object->product : 0;
+            $review->project = isset($object->project) ? $object->project : 0;
+
             if($objectType == 'story')    $review->storyType = $object->type;
             if($review->type == 'review') $review->type = 'projectreview';
             if($review->type == 'case')   $review->type = 'testcase';

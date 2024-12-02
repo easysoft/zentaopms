@@ -25,26 +25,29 @@ $config->release->dtable->fieldList['system']['show']         = true;
 $config->release->dtable->fieldList['system']['required']     = true;
 $config->release->dtable->fieldList['system']['nestedToggle'] = true;
 
-$config->release->dtable->fieldList['name']['title'] = $lang->release->name;
-$config->release->dtable->fieldList['name']['name']  = 'name';
-$config->release->dtable->fieldList['name']['link']  = array('module' => 'release', 'method' => 'view', 'params' => 'releaseID={id}');
-$config->release->dtable->fieldList['name']['type']  = 'shortTitle';
+$config->release->dtable->fieldList['name']['title']    = $lang->release->name;
+$config->release->dtable->fieldList['name']['name']     = 'name';
+$config->release->dtable->fieldList['name']['link']     = array('module' => 'release', 'method' => 'view', 'params' => 'releaseID={id}');
+$config->release->dtable->fieldList['name']['type']     = 'category';
+$config->release->dtable->fieldList['name']['fixed']    = 'left';
+$config->release->dtable->fieldList['name']['show']     = true;
+$config->release->dtable->fieldList['name']['required'] = true;
 
 $config->release->dtable->fieldList['branch']['title']    = $lang->release->branch;
 $config->release->dtable->fieldList['branch']['name']     = 'branchName';
-$config->release->dtable->fieldList['branch']['type']     = 'text';
+$config->release->dtable->fieldList['branch']['type']     = 'category';
 $config->release->dtable->fieldList['branch']['sortType'] = true;
 $config->release->dtable->fieldList['branch']['show']     = true;
 
 $config->release->dtable->fieldList['project']['title'] = $lang->release->project;
 $config->release->dtable->fieldList['project']['name']  = 'project';
-$config->release->dtable->fieldList['project']['type']  = 'text';
+$config->release->dtable->fieldList['project']['type']  = 'category';
 $config->release->dtable->fieldList['project']['group'] = 1;
 $config->release->dtable->fieldList['project']['show']  = true;
 
 $config->release->dtable->fieldList['build']['title'] = $lang->release->includedBuild;
 $config->release->dtable->fieldList['build']['name']  = 'build';
-$config->release->dtable->fieldList['build']['type']  = 'desc';
+$config->release->dtable->fieldList['build']['type']  = 'category';
 $config->release->dtable->fieldList['build']['group'] = 1;
 $config->release->dtable->fieldList['build']['show']  = true;
 
@@ -52,6 +55,7 @@ $config->release->dtable->fieldList['status']['title']     = $lang->release->sta
 $config->release->dtable->fieldList['status']['name']      = 'status';
 $config->release->dtable->fieldList['status']['type']      = 'status';
 $config->release->dtable->fieldList['status']['statusMap'] = $lang->release->statusList;
+$config->release->dtable->fieldList['status']['width']     = 120;
 $config->release->dtable->fieldList['status']['show']      = true;
 
 $config->release->dtable->fieldList['date']['title']    = $lang->release->date;
@@ -68,7 +72,7 @@ $config->release->dtable->fieldList['releasedDate']['show']     = true;
 
 $config->release->dtable->fieldList['desc']['title']    = $lang->release->desc;
 $config->release->dtable->fieldList['desc']['name']     = 'desc';
-$config->release->dtable->fieldList['desc']['type']     = 'html';
+$config->release->dtable->fieldList['desc']['type']     = 'desc';
 $config->release->dtable->fieldList['desc']['width']    = '160';
 $config->release->dtable->fieldList['desc']['sortType'] = false;
 $config->release->dtable->fieldList['desc']['hint']     = true;

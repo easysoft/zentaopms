@@ -9276,7 +9276,7 @@ class upgradeModel extends model
         $datasourceID = $this->dao->lastInsertID();
 
         $view = "view_datasource_$datasourceID";
-        $sql  = "CREATE VIEW $view (`id`, `title`) AS $datasource->datasource";
+        $sql  = "CREATE VIEW IF NOT EXISTS $view (`id`, `title`) AS $datasource->datasource";
 
         $this->dbh->query($sql);
 

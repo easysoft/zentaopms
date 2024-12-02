@@ -53,6 +53,7 @@ $privs['sortModule']   = hasPriv('doc', 'sortCatalog');
 $privs['sortDoclib']   = hasPriv('doc', 'sortDoclib');
 $privs['sortDoc']      = hasPriv('doc', 'sortDoc');
 $privs['batchMoveDoc'] = hasPriv('doc', 'batchMoveDoc');
+$privs['showFiles']    = hasPriv('doc', 'showFiles');
 $privs['createApi']    = hasPriv('api', 'create');
 $privs['editApi']      = hasPriv('api', 'edit');
 $privs['viewApi']      = hasPriv('api', 'view');
@@ -74,5 +75,7 @@ docApp
     set::homeName($homeName),
     set::pager(array('recTotal' => $recTotal, 'recPerPage' => $recPerPage, 'page' => $pageID)),
     set::privs($privs),
+    set::showLibFiles($privs['showFiles'] ? array('product', 'project', 'execution') : false),
+    set::migrateUrl(createLink('doc', 'ajaxGetMigrateDocs', "type=$type")),
     set('$options', jsRaw('window.setDocAppOptions'))
 );

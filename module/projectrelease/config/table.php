@@ -65,7 +65,7 @@ $config->projectrelease->dtable->fieldList['system']['required']     = true;
 
 $config->projectrelease->dtable->fieldList['name']['name']     = 'name';
 $config->projectrelease->dtable->fieldList['name']['title']    = $lang->release->name;
-$config->projectrelease->dtable->fieldList['name']['type']     = 'shortTitle';
+$config->projectrelease->dtable->fieldList['name']['type']     = 'category';
 $config->projectrelease->dtable->fieldList['name']['fixed']    = 'left';
 $config->projectrelease->dtable->fieldList['name']['link']     = array('module' => 'projectrelease', 'method' => 'view', 'params' => 'releaseID={id}');
 $config->projectrelease->dtable->fieldList['name']['show']     = true;
@@ -73,19 +73,19 @@ $config->projectrelease->dtable->fieldList['name']['required'] = true;
 
 $config->projectrelease->dtable->fieldList['product']['name']  = 'product';
 $config->projectrelease->dtable->fieldList['product']['title'] = $lang->projectrelease->product;
-$config->projectrelease->dtable->fieldList['product']['type']  = 'text';
+$config->projectrelease->dtable->fieldList['product']['type']  = 'category';
 $config->projectrelease->dtable->fieldList['product']['group'] = '1';
 $config->projectrelease->dtable->fieldList['product']['show']  = true;
 
 $config->projectrelease->dtable->fieldList['branch']['title'] = $lang->release->branch;
 $config->projectrelease->dtable->fieldList['branch']['name']  = 'branch';
-$config->projectrelease->dtable->fieldList['branch']['type']  = 'text';
+$config->projectrelease->dtable->fieldList['branch']['type']  = 'category';
 $config->projectrelease->dtable->fieldList['branch']['group'] = '1';
 $config->projectrelease->dtable->fieldList['branch']['show']  = true;
 
 $config->projectrelease->dtable->fieldList['build']['name']  = 'build';
 $config->projectrelease->dtable->fieldList['build']['title'] = $lang->release->includedBuild;
-$config->projectrelease->dtable->fieldList['build']['type']  = 'text';
+$config->projectrelease->dtable->fieldList['build']['type']  = 'category';
 $config->projectrelease->dtable->fieldList['build']['group'] = '1';
 $config->projectrelease->dtable->fieldList['build']['show']  = true;
 
@@ -94,6 +94,7 @@ $config->projectrelease->dtable->fieldList['status']['name']      = 'status';
 $config->projectrelease->dtable->fieldList['status']['type']      = 'status';
 $config->projectrelease->dtable->fieldList['status']['statusMap'] = $lang->release->statusList;
 $config->projectrelease->dtable->fieldList['status']['group']     = '2';
+$config->projectrelease->dtable->fieldList['status']['width']     = 120;
 $config->projectrelease->dtable->fieldList['status']['show']      = true;
 
 $config->projectrelease->dtable->fieldList['date']['title']    = $lang->release->date;
@@ -111,7 +112,7 @@ $config->projectrelease->dtable->fieldList['releasedDate']['show']     = true;
 
 $config->projectrelease->dtable->fieldList['desc']['title']    = $lang->release->desc;
 $config->projectrelease->dtable->fieldList['desc']['name']     = 'desc';
-$config->projectrelease->dtable->fieldList['desc']['type']     = 'html';
+$config->projectrelease->dtable->fieldList['desc']['type']     = 'desc';
 $config->projectrelease->dtable->fieldList['desc']['width']    = '160';
 $config->projectrelease->dtable->fieldList['desc']['sortType'] = false;
 $config->projectrelease->dtable->fieldList['desc']['hint']     = true;

@@ -934,7 +934,7 @@ class my extends control
         $this->view->mode        = 'audit';
         $this->view->flows       = $flows;
         $this->view->products    = $this->loadModel('product')->getPairs('', 0, '', 'all');;
-        $this->view->projects    = $this->loadModel('project')->getPairsByProgram();;
+        $this->view->projects    = $this->loadModel('project')->getPairs();
         $this->display();
     }
 

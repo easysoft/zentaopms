@@ -21,19 +21,17 @@ $config->instance->enableAutoRestore = in_array('auto-rollback', $features);
 global $lang, $app;
 $app->loadLang('space');
 
-$config->instance->actionList['showLogs']['icon']        = 'time';
-$config->instance->actionList['showLogs']['hint']        = $lang->instance->log->viewButton;
-$config->instance->actionList['showLogs']['text']        = $lang->instance->log->viewButton;
-$config->instance->actionList['showLogs']['url']         = array('module' => 'instance', 'method' => 'logs', 'params' => 'id={id}&zin=1');
-$config->instance->actionList['showLogs']['data-toggle'] = 'modal';
-$config->instance->actionList['showLogs']['class']       = 'task-record-btn';
+$config->instance->actionList['showLogs']['icon']   = 'time';
+$config->instance->actionList['showLogs']['hint']   = $lang->instance->log->viewButton;
+$config->instance->actionList['showLogs']['text']   = $lang->instance->log->viewButton;
+$config->instance->actionList['showLogs']['url']    = array('module' => 'instance', 'method' => 'logs', 'params' => 'id={id}');
+$config->instance->actionList['showLogs']['target'] = '_blank';
 
-$config->instance->actionList['showEvents']['icon']        = 'magic';
+$config->instance->actionList['showEvents']['icon']        = 'summary';
 $config->instance->actionList['showEvents']['hint']        = $lang->instance->event->viewButton;
 $config->instance->actionList['showEvents']['text']        = $lang->instance->event->viewButton;
 $config->instance->actionList['showEvents']['url']         = array('module' => 'instance', 'method' => 'events', 'params' => 'id={id}');
 $config->instance->actionList['showEvents']['data-toggle'] = 'modal';
-$config->instance->actionList['showEvents']['class']       = 'task-record-btn';
 
 $config->instance->actionList['ajaxStart']['icon']        = 'play';
 $config->instance->actionList['ajaxStart']['className']   = 'ajax-submit';

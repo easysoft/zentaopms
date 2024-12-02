@@ -64,7 +64,7 @@ form
         formGroup
         (
             set::label($lang->doc->project),
-            set::width('2/5'),
+            set::width($docType == 'doc' ? '2/5' : '4/5'),
             set::name('project'),
             set::items(createLink('project', 'ajaxGetDropMenu', "objectID=$objectID&module=&method=&extra=selectmode&useLink=0")),
             set::value($objectID),

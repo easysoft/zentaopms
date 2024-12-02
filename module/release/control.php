@@ -80,7 +80,7 @@ class release extends control
         $releases     = $this->release->getList($productID, $branch, $type, $sort, $releaseQuery, $pager);
         $children     = implode(',', array_column($releases, 'releases'));
 
-        foreach($releases as $release) $release->desc = strip_tags($release->desc);
+        foreach($releases as $release) $release->desc = str_replace('&nbsp;', ' ', strip_tags($release->desc));
 
         $this->view->title         = $this->view->product->name . $this->lang->hyphen . $this->lang->release->browse;
         $this->view->releases      = $this->releaseZen->processReleaseListData($releases);
@@ -178,11 +178,11 @@ class release extends control
             $system = $this->loadModel('system')->fetchByID($releaseData->system);
             if($system->integrated == '1')
             {
-                $releases = (array)$this->post->releases;
+                $releases = array_filter((array)$this->post->releases);
 
                 $releaseData->build    = '';
                 $releaseData->releases = trim(implode(',', $releases), ',');
-                if(!$release->releases) dao::$errors['releases[' . key($releases) . ']'][] = sprintf($this->lang->error->notempty, $this->lang->release->includedSystem);
+                if(!$releaseData->releases) dao::$errors['releases[' . key($releases) . ']'][] = sprintf($this->lang->error->notempty, $this->lang->release->name);
             }
             if(dao::isError()) return $this->sendError(dao::getError());
 
@@ -210,11 +210,13 @@ class release extends control
             if(strpos(',' . trim($release->build, ',') . ',', ",{$releasedBuild},") === false) unset($builds[$releasedBuild]);
         }
 
+        $appList = $this->loadModel('system')->getList($release->product);
+        if($release->system && !isset($appList[$release->system])) $appList[$release->system] = $this->system->fetchByID($release->system);
         $this->view->title   = $this->view->product->name . $this->lang->hyphen . $this->lang->release->edit;
         $this->view->release = $release;
         $this->view->builds  = $builds;
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed');
-        $this->view->appList = $this->loadModel('system')->getList($release->product);
+        $this->view->appList = $appList;
 
         $this->display();
     }
@@ -326,7 +328,7 @@ class release extends control
      */
     public function delete(int $releaseID)
     {
-        $release = $this->fetchByID($releaseID);
+        $release = $this->release->fetchByID($releaseID);
 
         $this->release->delete(TABLE_RELEASE, $releaseID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));

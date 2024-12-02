@@ -57,56 +57,58 @@ class thinkTableInput extends thinkQuestion
         foreach($fields as $item)
         {
             $value = !empty($result) && isset($result[$index]) ? $result[$index] : '';
-            $tableInputItems[] = formGroup
-            (
-                setClass('flex items-center'),
-                div
+            $tableInputItems[] = array(
+                formGroup
                 (
+                    setClass('flex items-center'),
+                    div
+                    (
                     setClass('text-right mr-2 w-24 line-clamp-2'),
                     $item,
                     set::title($item)
-                ),
-                div
-                (
-                    set::title($value),
-                    setClass(empty($inputType) ? 'result-width' : '', $index == 0 ? '' : 'mt-2'),
-                    empty($inputType) ? textarea
-                    (
-                        set::rows('2'),
-                        set::name('result[' . $index . ']'),
-                        set::value($value),
-                        set::placeholder($lang->thinkrun->pleaseInput)
-                    ) : inputControl
-                    (
-                        input(set(array(
-                                'class'       => 'w-72 h-10 dimension-weight',
-                                'name'        => 'result[' . $index . ']',
-                                'type'        => 'number',
-                                'min'         => 1,
-                                'max'         => 100,
-                                'value'       => $value,
-                                'disabled'    => ($value && !$canConfigureRatio ),
-                                'placeholder' => $lang->thinkrun->pleaseInput
-                            )),
-                            on::input('changePercentInput')
-                        ),
-                        to::suffix($lang->thinkwizard->dimension->percentageSign),
-                        set::suffixWidth(32)
                     ),
-                ),
-                div
-                (
-                    setClass('flex'),
-                    setStyle(array('min-width' => '40px')),
-                    ($index == count($fields) - 1 && $supportAdd) ? icon
+                    div
                     (
-                        'plus',
-                        setClass('mr-1 btn-add ml-2 text-sm text-primary add-rows cursor-pointer', $disabledAdd ? 'disabled' : ''),
-                        setData('canAddRows', $canAddRows),
-                        setData('fieldsCount', count($fields)),
-                        set::title(sprintf($lang->thinkrun->tips->add, $canAddRows)),
-                    ) : null,
-                )
+                        set::title($value),
+                        setClass(empty($inputType) ? 'result-width' : '', $index == 0 ? '' : 'mt-2'),
+                        empty($inputType) ? textarea
+                        (
+                            set::rows('2'),
+                            set::name('result[' . $index . ']'),
+                            set::value($value),
+                            set::placeholder($lang->thinkrun->pleaseInput)
+                        ) : inputControl
+                        (
+                            input(set(array(
+                                    'class'       => 'w-72 h-10 dimension-weight',
+                                    'name'        => 'result[' . $index . ']',
+                                    'type'        => 'number',
+                                    'min'         => 1,
+                                    'max'         => 100,
+                                    'value'       => $value,
+                                    'readonly'    => ($value && !$canConfigureRatio),
+                                    'placeholder' => $lang->thinkrun->pleaseInput
+                                )),
+                                on::input('changePercentInput')
+                            ),
+                            to::suffix($lang->thinkwizard->dimension->percentageSign),
+                            set::suffixWidth(32)
+                        ),
+                    ),
+                    div
+                    (
+                        setClass('flex'),
+                        setStyle(array('min-width' => '40px')),
+                        ($index == count($fields) - 1 && $supportAdd) ? icon
+                        (
+                            'plus',
+                            setClass('mr-1 btn-add ml-2 text-sm text-primary add-rows cursor-pointer', $disabledAdd ? 'disabled' : ''),
+                            setData('canAddRows', $canAddRows),
+                            setData('fieldsCount', count($fields)),
+                            set::title(sprintf($lang->thinkrun->tips->add, $canAddRows)),
+                        ) : null,
+                    )
+                ),
             );
             $index ++;
         }

@@ -1863,7 +1863,7 @@ class pivotModel extends model
         $data->array  = array();
         $data->drills = array();
 
-        if(!isset($settings['columns'])) return array(data, array());
+        if(!isset($settings['columns'])) return array($data, array());
 
         $filters = $this->processQueryFilterDefaults($filters);
         /* Replace the variable with the default value. */
@@ -2947,14 +2947,8 @@ class pivotModel extends model
 
         foreach($pivots as $index => $pivot)
         {
-            if(isset($pivotMaxVersion[$pivot->id]) && $pivotMaxVersion[$pivot->id] != $pivot->version)
-            {
-                $pivots[$index]->versionChange = true;
-            }
-            else
-            {
-                $pivots[$index]->versionChange = false;
-            }
+            $maxVersion = zget($pivotMaxVersion, $pivot->id, '');
+            $pivots[$index]->versionChange = $maxVersion != $pivot->version && $pivot->builtin == 1;
         }
 
         return $isObject ? current($pivots) : $pivots;

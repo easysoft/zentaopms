@@ -182,15 +182,7 @@ class zahostModel extends model
         $address = str_replace(array('https://', 'http://'), '', $address);
 
         if(!filter_var($address, FILTER_VALIDATE_IP) && !filter_var(gethostbyname($address), FILTER_VALIDATE_IP)) return false;
-        if($this->ping($address)) return true;
-
-        foreach(array(80, 443, $this->config->zahost->defaultPort) as $port)
-        {
-            $fp = @fsockopen($address, $port, $errno, $errstr, 3);
-            if($fp) return true;
-        }
-
-        return false;
+        return true;
     }
 
     /**

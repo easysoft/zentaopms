@@ -653,7 +653,11 @@ class cache
         if(empty($objectIdList)) $objectIdList = $allObjectIdList;
 
         $keys = [];
-        foreach($objectIdList as $objectID) $keys[$objectID] = $this->getRawCacheKey($code, $objectID);
+        foreach($objectIdList as $objectID)
+        {
+            if(!$objectID) continue;
+            $keys[$objectID] = $this->getRawCacheKey($code, $objectID);
+        }
 
         $objects = $this->cache->getMultiple(array_values($keys));
 

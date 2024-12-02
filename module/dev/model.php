@@ -318,6 +318,12 @@ class devModel extends model
 
             if(isset($defaultLang->$module->menu))
             {
+                if($module == 'product')
+                {
+                    $defaultLang->product->menu->system  = $defaultLang->product->system;
+                    $defaultLang->product->menuOrder[41] = 'system';
+                }
+
                 $menuList = $defaultLang->$module->menu;
                 if(isset($defaultLang->$module->menuOrder)) $menuList->menuOrder = $defaultLang->$module->menuOrder;
                 $menuList = $this->sortMenus($menuList);

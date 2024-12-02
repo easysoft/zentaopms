@@ -10,8 +10,8 @@ $().ready(function()
     $(document).off('change', '[name=product], [name^=branch]').on('change', '[name=product], [name^=branch]', function()
     {
         let projectID = $('input[name=project]').val();
-        let productID = $('input[name=product]').val();
-        let systemID    = $('input[name=system]').val();
+        let productID = $('#createBuildForm input[name=product]').val();
+        let systemID  = $('input[name=system]').val();
         $.get($.createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=builds&build=&branch=all&&needCreate=&type=noempty,notrunk,separate,singled&systemID=' + systemID), function(data)
         {
             if(data)
@@ -30,7 +30,10 @@ $().ready(function()
             {
                 $('#branch').prev('.form-label').html(data.branchName);
             }, 'json');
+
+            loadSystem(productID);
         }
+
     });
 
     $(document).on('change', 'input[name=isIntegrated]', function()
@@ -67,13 +70,16 @@ $().ready(function()
         }
     });
     loadBranches();
-    loadSystem();
     if(multipleProject)
     {
         window.waitDom('[name=execution]', function()
         {
             loadProducts();
         })
+    }
+    if(hidden == 'hide')
+    {
+        loadSystem(currentProduct);
     }
 });
 
@@ -115,7 +121,6 @@ function loadProducts(executionID)
     });
 
     loadLastBuild();
-    loadSystem();
 }
 
 /**

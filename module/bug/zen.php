@@ -770,6 +770,7 @@ class bugZen extends bug
         /* Get story and task id list. */
         $storyIdList = $taskIdList = array();
         if($this->config->edition == 'max') $identifyList = $this->loadModel('review')->getPairs(0, 0, true);
+        if($this->config->edition != 'open') $bugRelatedObjectList = $this->custom->getRelatedObjectList(array_keys($bugs), 'bug', 'byRelation', true);
         foreach($bugs as $bug)
         {
             if($bug->story)  $storyIdList[$bug->story] = $bug->story;
@@ -781,8 +782,7 @@ class bugZen extends bug
                 $bug->injection = zget($identifyList, $bug->injection, '');
                 $bug->identify  = zget($identifyList, $bug->identify, '');
             }
-
-            if($this->config->edition != 'open') $bug->relatedObject = $this->custom->getRelatedObjectList($bug->id, 'bug', 'byRelation', true);
+            if($this->config->edition != 'open') $bug->relatedObject = zget($bugRelatedObjectList, $bug->id, 0);
         }
 
         $showModule = !empty($this->config->bug->browse->showModule) ? $this->config->bug->browse->showModule : '';
