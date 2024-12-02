@@ -42,7 +42,7 @@ foreach(array_column($releases, 'system') as $system)
 {
     if(!isset($appList[$system])) $appList[$system] = '';
 }
-$cols['system']['map'] = array(0 => '') + $appList;
+if(!empty($cols['system'])) $cols['system']['map'] = array(0 => '') + $appList;
 
 foreach($releases as $release)
 {

@@ -44,7 +44,7 @@ jsVar('filePathTip', $lang->build->filePath);
 jsVar('confirmDelete', $lang->build->confirmDelete);
 
 $fieldList = $this->loadModel('datatable')->getSetting('execution', 'build');
-$fieldList['system']['map'] = $system;
+if(!empty($fieldList['system'])) $fieldList['system']['map'] = $system;
 if($execution->type == 'kanban')
 {
     unset($fieldList['actions']['list']['createTest']['data-app']);

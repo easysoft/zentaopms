@@ -50,7 +50,7 @@ jsVar('integratedTip', $lang->build->integratedLabel);
 jsVar('deletedTip', $lang->build->deleted);
 
 $fieldList = $this->loadModel('datatable')->getSetting('project', 'build');
-$fieldList['system']['map'] = $system;
+if(!empty($fieldList['system'])) $fieldList['system']['map'] = $system;
 if(($project->model == 'kanban' && $app->rawModule == 'projectbuild') || !$project->multiple)
 {
     unset($fieldList['actions']['list']['createTest']['data-app']);
