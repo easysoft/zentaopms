@@ -10,9 +10,9 @@ cid=1
 
 - 查看任务一和任务二的描述差异长度 @1
 - 查看返回的差异中<ins>标签的位置 查看返回的差异中<del>标签的位置 @1
-- 查看实例的终端页面是否要在iframe中打开 @1
-- 查看实例的日志页面是否要在iframe中打开 @1
-- 查看实例的事件页面是否要在iframe中打开 @1
+- 查看实例的终端页面instance-terminal会跳出iframe打开 @1
+- 实例的日志页面instance-logs也会跳出iframe打开 @1
+- 查看实例的事件页面instance-events会在iframe中打开 @1
 
 */
 
