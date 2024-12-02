@@ -110,6 +110,7 @@ $productBranches = zget($product, 'branches', array());
 formPanel
 (
     set::title($lang->build->create),
+    set::formID('createBuildForm'),
     on::change('[name=newSystem]', 'setSystemBox'),
     on::change('[name=system]', 'loadBuilds'),
     $integratedRow,
