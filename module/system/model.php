@@ -41,13 +41,13 @@ class systemModel extends model
      * 获取应用键值对。
      * Get app pairs.
      *
-     * @param  int    $productID
+     * @param  mixed    $productID
      * @param  string $integrated
      * @param  string $status
      * @access public
      * @return array
      */
-    public function getPairs(int $productID = 0, string $integrated = '', string $status = ''): array
+    public function getPairs(mixed $productID = 0, string $integrated = '', string $status = ''): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getSystemPairs();
 
@@ -56,6 +56,23 @@ class systemModel extends model
             ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
             ->beginIF($status)->andWhere('status')->eq($status)->fi()
             ->beginIF($integrated !== '')->andWhere('integrated')->eq($integrated)->fi()
+            ->orderBy('id DESC')
+            ->fetchPairs('id', 'name');
+    }
+
+    /**
+     * 根据产品ids列表获取状态正常的非集成应用键值对。
+     * @param int[] $products
+     * @return array
+     */
+    public function getPairsByProducts(array $products): array
+    {
+        $products = array_values(array_filter($products));
+        return $this->dao->select('id, name')->from(TABLE_SYSTEM)
+            ->where('deleted')->eq('0')
+            ->beginIF(!empty($products))->andWhere('product')->in($products)->fi()
+            ->andWhere('status')->eq('active')
+            ->andWhere('integrated')->eq(0)
             ->orderBy('id DESC')
             ->fetchPairs('id', 'name');
     }
