@@ -29,8 +29,6 @@ clean:
 	rm -f  *.sh
 	rm -f *.deb *.rpm
 common:
-	curl https://$(GITFOX_HOST)/_artifacts/zentao/raw/zui3/static/blocksuite/$(SUITEVERSION)/blocksuite-$(SUITEVERSION).tar.gz  | tar zxf - -C www/js/zui3/editor/
-
 	mkdir zentaopms
 	cp -fr api zentaopms/
 	cp -fr bin zentaopms/
@@ -44,6 +42,8 @@ common:
 	cp -fr sdk zentaopms/
 	cp -fr roadrunner zentaopms/
 	cp -fr www zentaopms && rm -fr zentaopms/www/data/ && mkdir -p zentaopms/www/data/upload && mkdir zentaopms/www/data/course
+	if [ ! -d "zentaopms/www/js/zui3/editor" ]; then mkdir -p zentaopms/www/js/zui3/editor; fi
+	curl https://$(GITFOX_HOST)/_artifacts/zentao/raw/zui3/static/blocksuite/$(SUITEVERSION)/blocksuite-$(SUITEVERSION).tar.gz  | tar zxf - -C zentaopms/www/js/zui3/editor/
 	mkdir zentaopms/tmp
 	mkdir zentaopms/tmp/cache/
 	mkdir zentaopms/tmp/duckdb/
