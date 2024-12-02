@@ -1626,6 +1626,8 @@ CREATE TABLE IF NOT EXISTS `zt_relation` (
   PRIMARY KEY (`id`)
 ) ENGINE='InnoDB' DEFAULT CHARSET=utf8;
 CREATE UNIQUE INDEX `relation` ON `zt_relation`(`product`,`relation`,`AType`,`BType`, `AID`, `BID`);
+CREATE INDEX `AID` ON `zt_relation` (`AType`, `AID`);
+CREATE INDEX `BID` ON `zt_relation` (`BType`, `BID`);
 
 -- DROP TABLE IF EXISTS `zt_release`;
 CREATE TABLE IF NOT EXISTS `zt_release` (

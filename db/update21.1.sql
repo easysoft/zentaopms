@@ -96,3 +96,6 @@ INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type
 DELETE FROM `zt_object` WHERE `type` = 'taged' AND `deleted` = '1';
 
 ALTER TABLE `zt_doccontent` ADD `rawContent` longtext DEFAULT NULL AFTER `content`;
+
+CREATE INDEX `AID` ON `zt_relation` (`AType`, `AID`);
+CREATE INDEX `BID` ON `zt_relation` (`BType`, `BID`);
