@@ -941,7 +941,7 @@ class storyTao extends storyModel
         if(empty($executionID) || empty($storyID)) return;
 
         $this->linkStory($executionID, $story->product, $storyID);
-        if($this->config->systemMode == 'ALM' && $this->session->project && $executionID != $this->session->project) $this->linkStory((int)$this->session->project, $story->product, $storyID);
+        if(in_array($this->config->systemMode, array('ALM', 'PLM')) && $this->session->project && $executionID != $this->session->project) $this->linkStory((int)$this->session->project, $story->product, $storyID);
 
         $this->loadModel('action');
         $extra  = $this->parseExtra($extra);
