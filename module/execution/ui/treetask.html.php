@@ -193,6 +193,8 @@ div
 
 history
 (
+    set::objectType('task'),
+    set::objectID($task->id),
     set::commentBtn(true),
     set::commentUrl(createLink('action', 'comment', array('objectType' => 'task', 'objectID' => $task->id)))
 );

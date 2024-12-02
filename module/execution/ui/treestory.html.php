@@ -423,6 +423,8 @@ div
 
 history
 (
+    set::objectType('story'),
+    set::objectID($story->id),
     set::commentBtn(true),
     set::commentUrl(createLink('action', 'comment', array('objectType' => 'story', 'objectID' => $story->id)))
 );
