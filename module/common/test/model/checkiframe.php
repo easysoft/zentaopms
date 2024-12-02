@@ -29,12 +29,12 @@ r($tester->common->checkIframe()) && p() && e('1'); // 查看该页面是否要�
 
 $app->moduleName = 'instance';
 $app->methodName = 'terminal';
-r($tester->common->checkIframe()) && p() && e('1');
+r($tester->common->checkIframe()) && p('1') && e(0);
 
 $app->moduleName = 'instance';
 $app->methodName = 'logs';
-r($tester->common->checkIframe()) && p() && e('1');
+r($tester->common->checkIframe()) && p('1') && e(0);
 
 $app->moduleName = 'instance';
 $app->methodName = 'events';
-r($tester->common->checkIframe()) && p() && e('1');
+r($tester->common->checkIframe()) && p(0) && e('1');
