@@ -114,7 +114,7 @@ $lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec
 $lang->misc->feature->promptLearnMore   = 'https://www.zentao.net/book/zentaopms/1097.html';
 
 /* Release Date. */
-$lang->misc->releaseDate['21.2']        = '2024-11-29';
+$lang->misc->releaseDate['21.2']        = '2024-12-03';
 $lang->misc->releaseDate['21.1']        = '2024-11-15';
 $lang->misc->releaseDate['21.0']        = '2024-11-01';
 $lang->misc->releaseDate['20.8']        = '2024-10-21';
