@@ -177,7 +177,7 @@ $linkStoryBtn = $linkBugBtn = $linkLeftBtn = null;
 jsVar('linkParams', $decodeParam);
 jsVar('releaseModule', $releaseModule);
 
-if($canBeChanged && empty($release->releases))
+if(!$release->deleted && $canBeChanged && empty($release->releases))
 {
     if(common::hasPriv($releaseModule, 'linkStory'))
     {
