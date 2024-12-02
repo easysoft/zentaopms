@@ -548,6 +548,14 @@ class kanbanTao extends kanbanModel
             $item['left']       = helper::formatHours($card->left);
             $item['estStarted'] = $card->estStarted;
             $item['mode']       = $card->mode;
+
+            $dbPrivs = array();
+            $actions = array('edit', 'restart', 'pause', 'recordworkhour', 'activate', 'delete', 'cancel', 'assignto');
+            foreach($actions as $action)
+            {
+                $dbPrivs[$action] = common::hasDBPriv($card, 'task', $action);
+            }
+            $item['dbPrivs'] = $dbPrivs;
         }
 
         return $item;

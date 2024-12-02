@@ -123,6 +123,8 @@ class executionZen extends execution
             foreach($plans as $plan) $allPlans += $plan;
         }
 
+        $this->execution->getLimitedExecution();
+
         $this->view->users        = $users;
         $this->view->userList     = $userList;
         $this->view->productID    = $productID;
@@ -130,6 +132,7 @@ class executionZen extends execution
         $this->view->productNames = $productNames;
         $this->view->productNum   = count($products);
         $this->view->allPlans     = $allPlans;
+        $this->view->isLimited    = !$this->app->user->admin && strpos(",{$this->session->limitedExecutions},", ",{$executionID},") !== false;
     }
 
     /**
@@ -377,7 +380,7 @@ class executionZen extends execution
         $this->view->execution    = $execution;
         $this->view->project      = $project;
         $this->view->canBeChanged = common::canModify('execution', $execution);
-        $this->view->isLimited    = strpos(",{$this->session->limitedExecutions},", ",{$execution->id},") !== false;
+        $this->view->isLimited    = !$this->app->user->admin && strpos(",{$this->session->limitedExecutions},", ",{$execution->id},") !== false;
     }
 
     /**

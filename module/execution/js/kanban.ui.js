@@ -228,9 +228,9 @@ window.renderAvatar = function(item)
         return '<div class="avatar child-item rounded-full size-xs ml-1" title="' + storyLang.children + '" style="background: #ccc; color: #fff; cursor: pointer;"><i class="icon icon-split"></i></div>';
     }
 
-    if(item.cardType == 'story' && priv.canAssignStory)             assignLink = $.createLink('story', 'assignTo', "id=" + item.id);
-    if(item.cardType == 'bug' && priv.canAssignBug)                 assignLink = $.createLink('bug', 'assignTo', "id=" + item.id);
-    if(item.cardType == 'task' && priv.canAssignTask)               assignLink = $.createLink('task', 'assignTo', "executionID=" + executionID + "&id=" + item.id);
+    if(item.cardType == 'story' && priv.canAssignStory) assignLink = $.createLink('story', 'assignTo', "id=" + item.id);
+    if(item.cardType == 'bug' && priv.canAssignBug)     assignLink = $.createLink('bug', 'assignTo', "id=" + item.id);
+    if(item.cardType == 'task' && priv.canAssignTask && item.dbPrivs.assignto) assignLink = $.createLink('task', 'assignTo', "executionID=" + executionID + "&id=" + item.id);
 
     if(item.assignedTo.length == 0)
     {
@@ -311,14 +311,14 @@ window.buildTaskActions = function(item)
 {
     let actions = [];
 
-    if(priv.canEditTask) actions.push({text: taskLang.edit, icon: 'edit', url: $.createLink('task', 'edit', 'taskID=' + item.id + '&comment=&kanbanGroup=' + groupBy), 'data-toggle': 'modal', 'data-size': 'lg'});
-    if(priv.canRestartTask && item.status == 'pause') actions.push({text: taskLang.restart, icon: 'play', url: $.createLink('task', 'restart', 'taskID=' + item.id + '&from=execution'), 'data-toggle': 'modal'});
-    if(priv.canPauseTask && item.status == 'developing') actions.push({text: taskLang.pause, icon: 'pause', url: $.createLink('task', 'pause', 'taskID=' + item.id), 'data-toggle': 'modal'});
-    if(priv.canRecordWorkhourTask) actions.push({text: executionLang.effort, icon: 'time', url: $.createLink('task', 'recordWorkhour', 'taskID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
-    if(priv.canActivateTask && (item.status == 'developed' || item.status == 'canceled' || item.status == 'closed')) actions.push({text: executionLang.activate, icon: 'magic', url: $.createLink('task', 'activate', 'taskID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
-    if(priv.canCreateTask) actions.push({text: taskLang.copy, icon: 'copy', url: $.createLink('task', 'create', 'executionID=' + executionID + '&storyID=' + '0' + '&moduleID=' + '0' + '&taskID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
-    if(priv.canCancelTask && (item.status == 'wait' || item.status == 'developing' || item.status == 'pause')) actions.push({text: taskLang.cancel, icon: 'cancel', url: $.createLink('task', 'cancel', 'taskID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
-    if(priv.canDeleteTask) actions.push({text: taskLang.delete, icon: 'trash', url: $.createLink('task', 'delete', 'executionID=0&taskID=' + item.id + '&from=taskkanban'), 'data-confirm': taskLang.confirmDelete, 'innerClass': 'ajax-submit'});
+    if(priv.canEditTask && item.dbPrivs.edit) actions.push({text: taskLang.edit, icon: 'edit', url: $.createLink('task', 'edit', 'taskID=' + item.id + '&comment=&kanbanGroup=' + groupBy), 'data-toggle': 'modal', 'data-size': 'lg'});
+    if(priv.canRestartTask && item.dbPrivs.restart && item.status == 'pause') actions.push({text: taskLang.restart, icon: 'play', url: $.createLink('task', 'restart', 'taskID=' + item.id + '&from=execution'), 'data-toggle': 'modal'});
+    if(priv.canPauseTask && item.dbPrivs.pause && item.status == 'developing') actions.push({text: taskLang.pause, icon: 'pause', url: $.createLink('task', 'pause', 'taskID=' + item.id), 'data-toggle': 'modal'});
+    if(priv.canRecordWorkhourTask && item.dbPrivs.recordworkhour) actions.push({text: executionLang.effort, icon: 'time', url: $.createLink('task', 'recordWorkhour', 'taskID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
+    if(priv.canActivateTask && item.dbPrivs.activate && (item.status == 'developed' || item.status == 'canceled' || item.status == 'closed')) actions.push({text: executionLang.activate, icon: 'magic', url: $.createLink('task', 'activate', 'taskID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
+    if(priv.canCreateTask && !isLimited) actions.push({text: taskLang.copy, icon: 'copy', url: $.createLink('task', 'create', 'executionID=' + executionID + '&storyID=' + '0' + '&moduleID=' + '0' + '&taskID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
+    if(priv.canCancelTask && item.dbPrivs.cancel && (item.status == 'wait' || item.status == 'developing' || item.status == 'pause')) actions.push({text: taskLang.cancel, icon: 'cancel', url: $.createLink('task', 'cancel', 'taskID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
+    if(priv.canDeleteTask && item.dbPrivs.delete) actions.push({text: taskLang.delete, icon: 'trash', url: $.createLink('task', 'delete', 'executionID=0&taskID=' + item.id + '&from=taskkanban'), 'data-confirm': taskLang.confirmDelete, 'innerClass': 'ajax-submit'});
 
     return actions;
 }
