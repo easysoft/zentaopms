@@ -11,6 +11,8 @@ window.renderCell = function(result, {col, row})
 
     if(col.name == 'build')
     {
+        if(!row.data.buildInfos) row.data.buildInfos = row.data.builds;
+
         let result = [];
         for(key in row.data.buildInfos)
         {

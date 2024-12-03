@@ -44,23 +44,6 @@ foreach(array_column($releases, 'system') as $system)
 }
 if(!empty($cols['system'])) $cols['system']['map'] = array(0 => '') + $appList;
 
-foreach($releases as $release)
-{
-    $release->rowID = $release->id;
-    if(empty($release->releases)) continue;
-
-    foreach(explode(',', $release->releases) as $childID)
-    {
-        if(isset($childReleases[$childID]))
-        {
-            $child = clone $childReleases[$childID];
-            $child->rowID  = "{$release->id}-{$childID}";
-            $child->parent = $release->id;
-            $releases[$child->rowID] = $child;
-        }
-    }
-}
-
 $releases = initTableData($releases, $cols, $this->release);
 dtable
 (

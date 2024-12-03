@@ -72,7 +72,6 @@ foreach($releases as $release)
     }
 }
 
-\a($cols);
 $tableData = initTableData($releases, $cols);
 dtable
 (
