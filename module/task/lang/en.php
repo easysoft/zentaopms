@@ -74,6 +74,8 @@ $lang->task->codeRepo            = 'Code Library';
 $lang->task->relatedBranch       = 'Related Branch';
 $lang->task->keywords            = 'Tags';
 $lang->task->syncStory           = 'Sync to task';
+$lang->task->addSibling          = 'Add Sibling';
+$lang->task->addSub              = 'Add Child';
 
 $lang->task->common            = 'Task';
 $lang->task->id                = 'ID';
@@ -175,6 +177,7 @@ $lang->task->children          = 'Child Task';
 $lang->task->childrenAB        = 'C';
 $lang->task->parent            = 'Parent Task';
 $lang->task->parentAB          = 'Parent';
+$lang->task->showParent        = 'Show Parent Tasks';
 $lang->task->lblPri            = 'P';
 $lang->task->lblHour           = '(h)';
 $lang->task->lblTestStory      = 'Story Tested';
@@ -245,6 +248,9 @@ $lang->task->afterChoices['continueAdding'] = ' Continue Adding Tasks';
 $lang->task->afterChoices['toTaskList']     = 'Go to Task List';
 $lang->task->afterChoices['toStoryList']    = 'Go to Story List';
 
+$lang->task->viewTypeList['tiled'] = 'Tiled';
+$lang->task->viewTypeList['tree']  = 'Tree';
+
 $lang->task->legendBasic  = 'Basic Info';
 $lang->task->legendEffort = 'Effort';
 $lang->task->legendLife   = 'Task Life';
@@ -253,8 +259,16 @@ $lang->task->legendDetail = 'Task Detail';
 $lang->task->legendMisc   = 'Misc.';
 
 $lang->task->action = new stdclass();
-$lang->task->action->linked2revision      = array('main' => '$date, linked by <strong>$actor</strong> to Revision <strong>$extra</strong>.');
-$lang->task->action->unlinkedfromrevision = array('main' => '$date, unlinked by <strong>$actor</strong> to Revision <strong>$extra</strong>.');
+$lang->task->action->linked2revision       = array('main' => '$date, linked by <strong>$actor</strong> to Revision <strong>$extra</strong>.');
+$lang->task->action->unlinkedfromrevision  = array('main' => '$date, unlinked by <strong>$actor</strong> to Revision <strong>$extra</strong>.');
+$lang->task->action->autobyparentrestarted = array('main' => '$date, continued parent task by <strong>$actor</strong>, this task automatically continue.');
+$lang->task->action->autobychildrestarted  = array('main' => '$date, continued child task by <strong>$actor</strong>, this task automatically continue.');
+$lang->task->action->autobyparentpaused    = array('main' => '$date, paused parent task by <strong>$actor</strong>, this task automatically pause.');
+$lang->task->action->autobyparentcanceled  = array('main' => '$date, cancelled parent task by <strong>$actor</strong>, this task automatically cancel.');
+$lang->task->action->autobyparentclosed    = array('main' => '$date, closed parent task by <strong>$actor</strong>, this task automatically close.');
+$lang->task->action->autobychildstarted    = array('main' => '$date, started child task by <strong>$actor</strong>, this task automatically start.');
+$lang->task->action->autobychildfinished   = array('main' => '$date, finished child task by <strong>$actor</strong>, this task automatically finish.');
+$lang->task->action->autobychildactivated  = array('main' => '$date, activated child task by <strong>$actor</strong>, this task automatically activate.');
 
 $lang->task->confirmDelete             = "Do you want to delete this task?";
 $lang->task->confirmDeleteEffort       = "Do you want to delete it?";
@@ -323,6 +337,7 @@ $lang->task->error->endGtExecution    = "The 'Deadline' of the task must be less
 $lang->task->error->endLtExecution    = "The 'Deadline' of the task must be greater than or equal the 'Planned Begin' of %s to %s.";
 $lang->task->error->dateExceed        = "Because the scheduled date of task %s exceeds the scheduled date of {$lang->execution->common}, it is automatically changed to the scheduled date of {$lang->execution->common}";
 $lang->task->error->length            = "Length exceeds the limit of %d characters, cannot be saved. Please modify it again.";
+$lang->task->error->emptyParentName   = "Contains subtasks, task names cannot be empty.";
 
 /* Report. */
 $lang->task->report = new stdclass();

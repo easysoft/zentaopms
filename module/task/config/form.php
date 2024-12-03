@@ -11,6 +11,7 @@ $account = isset($app->user->account) ? $app->user->account : '';
 $config->task->form->create = array();
 $config->task->form->create['execution']    = array('type' => 'int',      'required' => true,  'default' => 0);
 $config->task->form->create['type']         = array('type' => 'string',   'required' => true,  'default' => '');
+$config->task->form->create['parent']       = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->task->form->create['assignedTo']   = array('type' => 'string',   'required' => false, 'default' => '');
 $config->task->form->create['module']       = array('type' => 'int',      'required' => false);
 $config->task->form->create['story']        = array('type' => 'int',      'required' => false);
@@ -130,6 +131,7 @@ $config->task->form->batchcreate['column']        = array('type' => 'int',      
 $config->task->form->batchcreate['openedBy']      = array('type' => 'string',   'required' => false, 'default' => $account);
 $config->task->form->batchcreate['openedDate']    = array('type' => 'datetime', 'required' => false, 'default' => $now);
 $config->task->form->batchcreate['vision']        = array('type' => 'string',   'required' => false, 'default' => $config->vision);
+$config->task->form->batchcreate['level']         = array('type' => 'string',   'required' => false, 'default' => 0);
 
 $config->task->form->pause = array();
 $config->task->form->pause['lastEditedBy']   = array('type' => 'string',   'required' => false, 'default' => $account);

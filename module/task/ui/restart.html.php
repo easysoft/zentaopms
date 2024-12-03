@@ -99,9 +99,10 @@ else
                     (
                         set::name('consumed'),
                         set::value(!empty($currentTeam) ? (float)$currentTeam->consumed : $task->consumed),
-                        set::disabled(!empty($currentTeam) ? true : false),
+                        set::disabled((!empty($currentTeam) || $task->isParent) ? true : false),
                     ),
                     !empty($currentTeam) ? formHidden('consumed', (float)$currentTeam->consumed) : null,
+                    $task->isParent      ? formHidden('consumed', (float)$task->consumed)        : null,
                     to::suffix($lang->task->suffixHour),
                     set::suffixWidth(20)
                 )
@@ -116,7 +117,9 @@ else
                     (
                         set::name('left'),
                         set::value(!empty($currentTeam) ? (float)$currentTeam->left : $task->left),
+                        set::disabled($task->isParent ? true : false),
                     ),
+                    $task->isParent ? formHidden('left', $task->left) : null,
                     to::suffix($lang->task->suffixHour),
                     set::suffixWidth(20)
                 )

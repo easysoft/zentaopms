@@ -36,7 +36,7 @@ window.setStatistics = function(element, checks)
     let left       = 0;
     checks.forEach((checkID) => {
         const task = element.getRowInfo(checkID).data;
-        if(task.hasChild) return false;
+        if(task.isParent) return false;
         if(task.status == 'wait')  waitCount ++;
         if(task.status == 'doing') doingCount ++;
         estimate += parseFloat(task.estimate);
@@ -67,10 +67,15 @@ window.renderCell = function(result, info)
         {
             html += "<span class='label gray-pale rounded-xl nowrap'>" + multipleAB + "</span>";
         }
-        if(task.isChild)
+        if(task.isParent > 0)
         {
-            html += "<span class='label gray-pale rounded-xl nowrap'>" + childrenAB + "</span>";
+            html += "<span class='label gray-pale rounded p-0 size-sm whitespace-nowrap'>" + parentAB + "</span>";
         }
+        else if(task.parent > 0)
+        {
+            html += "<span class='label gray-pale rounded p-0 size-sm whitespace-nowrap'>" + childrenAB + "</span>";
+        }
+
         if(html) result.unshift({html});
         if(typeof task.delay != 'undefined' && task.delay)
         {
@@ -95,6 +100,10 @@ window.renderCell = function(result, info)
         {
             result[0] = {html: '<span class="label danger-pale rounded-full size-sm">' + result[0] + '</span>'};
         }
+    }
+    if(info.col.name == 'status' && result)
+    {
+        result[0] = {html: `<span class='status-${info.row.data.rawStatus}'>` + info.row.data.status + "</span>"};
     }
     return result;
 }

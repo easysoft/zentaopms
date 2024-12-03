@@ -21,12 +21,17 @@ div
             setClass('flex-none rounded-full gray-outline'),
             $task->id
         ),
-        $task->parent > 0 ?  label
+        $task->isParent ? label
+        (
+            setClass('flex-none rounded-full dark-outline ml-2'),
+            $this->lang->task->parentAB
+        ) : null,
+        $task->parent > 0 && !$task->isParent ? label
         (
             setClass('flex-none rounded-full dark-outline ml-2'),
             $this->lang->task->childrenAB
         ) : null,
-        !empty($task->mode) ?  label
+        !empty($task->mode) ? label
         (
             setClass('flex-none rounded-full dark-outline ml-2'),
             $this->lang->task->multipleAB
@@ -188,6 +193,8 @@ div
 
 history
 (
+    set::objectType('task'),
+    set::objectID($task->id),
     set::commentBtn(true),
     set::commentUrl(createLink('action', 'comment', array('objectType' => 'task', 'objectID' => $task->id)))
 );

@@ -1674,6 +1674,8 @@ class kanbanModel extends model
         {
             $cardData['title']       = $object->name;
             $cardData['status']      = $object->status;
+            $cardData['parent']      = $object->parent;
+            $cardData['isParent']    = $object->isParent;
             $cardData['left']        = helper::formatHours($object->left);
             $cardData['estStarted']  = $object->estStarted;
             $cardData['mode']        = $object->mode;

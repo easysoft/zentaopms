@@ -4879,10 +4879,11 @@ class storyModel extends model
             foreach($reviewedByList as $i => $reviewedBy) $reviewedByList[$i] = zget($users, trim($reviewedBy));
             $story->reviewedBy = implode(',', array_filter($reviewedByList));
 
-            $gradePairs    = zget($gradeGroup, $story->type, array());
-            $grade         = zget($gradePairs, $story->grade, '');
-            $story->grade  = $grade->name;
-            $story->parent = zget($parents, $story->parent, '');
+            $gradePairs      = zget($gradeGroup, $story->type, array());
+            $grade           = zget($gradePairs, $story->grade, '');
+            $story->grade    = $grade->name;
+            $story->parentId = $story->parent;
+            $story->parent   = zget($parents, $story->parent, '');
         }
 
         return $stories;

@@ -15,6 +15,7 @@ include 'header.html.php';
 jsVar('todayLabel', $lang->today);
 jsVar('yesterdayLabel', $lang->yesterday);
 jsVar('childrenAB', $lang->task->childrenAB);
+jsVar('parentAB', $lang->task->parentAB);
 jsVar('multipleAB', $lang->task->multipleAB);
 jsVar('delayWarning', $lang->task->delayWarning);
 

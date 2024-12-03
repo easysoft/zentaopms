@@ -399,6 +399,25 @@ window.setStoryModule = function()
         });
     }
 }
+
+getParentEstStartedAndDeadline = function()
+{
+    const parent = $('[name=parent]').val();
+    if(!parent) return;
+
+    const link = $.createLink('task', 'ajaxGetTaskEstStartedAndDeadline', 'taskID=' + parent);
+    $.getJSON(link, function(data)
+    {
+        parentEstStarted         = data.estStarted;
+        parentDeadline           = data.deadline;
+        overParentEstStartedLang = data.overParentEstStartedLang;
+        overParentDeadlineLang   = data.overParentDeadlineLang;
+
+        window.checkEstStartedAndDeadline({target: $('[name=estStarted]')});
+        window.checkEstStartedAndDeadline({target: $('[name=deadline]')});
+    });
+}
+
 function checkEstStartedAndDeadline(event)
 {
     const $form       = $(event.target).closest('form');
@@ -408,7 +427,7 @@ function checkEstStartedAndDeadline(event)
     const $deadline   = $form.find('[name=deadline]');
     const deadline    = $deadline.val();
 
-    if(field == 'estStarted' && estStarted.length > 0 && parentEstStarted.length > 0&& estStarted < parentEstStarted)
+    if(field == 'estStarted' && estStarted.length > 0 && parentEstStarted.length > 0 && estStarted < parentEstStarted)
     {
         const $estStartedDiv = $estStarted.closest('.form-group');
         if($estStartedDiv.find('.date-tip').length == 0 || $estStartedDiv.find('.date-tip .form-tip').length > 0)

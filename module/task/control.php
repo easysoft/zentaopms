@@ -148,6 +148,7 @@ class task extends control
 
         if(!empty($_POST))
         {
+            $parent = $taskID > 0 ? $this->task->fetchById($taskID) : null;
             /* Process the request data for the batch create tasks. */
             $taskData = $this->taskZen->buildTasksForBatchCreate($execution, $taskID, $output);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -156,7 +157,7 @@ class task extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Update other data related to the task after it is created. */
-            $this->task->afterBatchCreate($taskIdList, $taskID);
+            $this->task->afterBatchCreate($taskIdList, $parent);
             if(!isset($output['laneID']) || !isset($output['columnID'])) $this->loadModel('kanban')->updateLane($executionID, 'task');
 
             $response = $this->taskZen->responseAfterbatchCreate($taskIdList, $execution);
@@ -387,6 +388,7 @@ class task extends control
         }
 
         if($task->team) $this->lang->task->assign = $this->lang->task->transfer;
+        $this->lang->task->statusList['changed'] = $this->lang->task->storyChange;
 
         /* Execute workflow hooks if edition is not open. */
         if($this->config->edition != 'open') $this->executeHooks($taskID);
@@ -731,9 +733,8 @@ class task extends control
             $changes = $this->task->start($task, $taskData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $action   = $this->post->left == 0 ? 'Finished' : 'Restarted';
-            $actionID = $this->loadModel('action')->create('task', $taskID, $action, $this->post->comment);
-            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+            $result = $this->task->afterStart($task, $changes, (float)$this->post->left);
+            if(is_array($result)) $this->send($result);
 
             $this->executeHooks($taskID);
             $response = $this->taskZen->responseAfterChangeStatus($task, $from);
@@ -797,17 +798,17 @@ class task extends control
      */
     public function batchCancel()
     {
-        if($this->post->taskIdList)
+        $taskIdList = $this->post->taskIdList ? array_unique($this->post->taskIdList) : array();
+        if($taskIdList) $taskIdList = array_filter(array_unique($taskIdList));
+        if($taskIdList)
         {
-            $taskIdList = array_unique($this->post->taskIdList);
-
-            $tasks = $this->task->getByIdList($taskIdList);
-            foreach($tasks as $task)
+            foreach($taskIdList as $taskID)
             {
+                $task = $this->task->fetchById((int)$taskID);
                 if(!in_array($task->status, $this->config->task->unfinishedStatus)) continue;
 
-                $task = $this->taskZen->buildTaskForCancel($task);
-                $this->task->cancel($task);
+                $taskData = $this->taskZen->buildTaskForCancel($task);
+                $this->task->cancel($task, $taskData);
             }
         }
 
@@ -824,9 +825,8 @@ class task extends control
      */
     public function batchClose(string $confirm = 'no')
     {
-        $skipTasks      = array();
-        $parentTasks    = array();
-        $taskIdList     = $this->post->taskIdList ? array_unique($this->post->taskIdList) : array();
+        $skipTasks  = array();
+        $taskIdList = $this->post->taskIdList ? array_unique($this->post->taskIdList) : array();
         if(!empty($taskIdList) || $confirm == 'yes')
         {
             if(!isset($_POST['taskIdList']) && !empty($_SESSION['batchCloseTaskIDList']))
@@ -834,23 +834,16 @@ class task extends control
                 $taskIdList = explode(',', $this->session->batchCloseTaskIDList);
                 unset($_SESSION['batchCloseTaskIDList']);
             }
-            if($taskIdList) $taskIdList = array_unique($taskIdList);
+            if($taskIdList) $taskIdList = array_filter(array_unique($taskIdList));
 
-            $tasks = $this->task->getByIdList($taskIdList);
-            foreach($tasks as $taskID => $task)
+            foreach($taskIdList as $taskID)
             {
+                $task = $this->task->fetchById((int)$taskID);
                 if($task->status == 'closed') continue;
 
                 if($confirm == 'no' && !in_array($task->status, array('done', 'cancel')))
                 {
                     $skipTasks[$taskID] = $taskID;
-                    continue;
-                }
-
-                /* Skip parent task when batch close task. */
-                if($task->parent == '-1')
-                {
-                    $parentTasks[$taskID] = $taskID;
                     continue;
                 }
 
@@ -861,7 +854,7 @@ class task extends control
             if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         }
 
-        return $this->send($this->taskZen->responseAfterBatchClose($skipTasks, $parentTasks, $confirm));
+        return $this->send($this->taskZen->responseAfterBatchClose($skipTasks, $confirm));
     }
 
     /**
@@ -883,14 +876,10 @@ class task extends control
 
         if(!empty($_POST))
         {
-            $this->loadModel('action');
-
             $oldTask = $this->task->getByID($taskID);
             $task    = $this->taskZen->buildTaskForCancel($oldTask);
-            $laneID  = isset($output['laneID']) ? $output['laneID'] : '';
-            $this->task->cancel($task, (string)$laneID);
-
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $result  = $this->task->cancel($oldTask, $task, $output);
+            if(!$result) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->executeHooks($taskID);
 
@@ -979,7 +968,7 @@ class task extends control
     public function delete(int $executionID, int $taskID, string $from = '')
     {
         $task = $this->task->getByID($taskID);
-        if($task->parent == '-1') return $this->send(array('result' => 'fail', 'message' => $this->lang->task->cannotDeleteParent));
+        if($task->isParent) return $this->send(array('result' => 'fail', 'message' => $this->lang->task->cannotDeleteParent));
 
         $this->task->delete(TABLE_TASK, $taskID);
         if($task->parent > 0)
@@ -1271,7 +1260,7 @@ class task extends control
      */
     public function ajaxGetStories(int $executionID, int $moduleID, string $zeroTaskStory = 'false')
     {
-        $stories       = $this->loadModel('story')->getExecutionStoryPairs($executionID, 0, 'all', $moduleID, 'short', 'active', 'story', false);
+        $stories       = $this->loadModel('story')->getExecutionStoryPairs($executionID, 0, 'all', $moduleID, 'full', 'active', 'story', false);
         $taskCountList = $this->task->getStoryTaskCounts(array_keys($stories), $executionID);
 
         $items = array();
@@ -1283,6 +1272,23 @@ class task extends control
         }
 
         return print(json_encode($items));
+    }
+
+    /**
+     * AJAX: 获取任务的开始时间和截止时间。
+     * AJAX: Get the start time and end time of the task.
+     *
+     * @param  int    $taskID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetTaskEstStartedAndDeadline(int $taskID)
+    {
+        $task = $this->task->fetchById($taskID);
+        $overParentEstStartedLang = !empty($task) ? sprintf($this->lang->task->overParentEsStarted, $task->estStarted) : '';
+        $overParentDeadlineLang   = !empty($task) ? sprintf($this->lang->task->overParentDeadline, $task->deadline) : '';
+
+        return print(json_encode(array('estStarted' => $task->estStarted, 'deadline' => $task->deadline, 'overParentEstStartedLang' => $overParentEstStartedLang, 'overParentDeadlineLang' => $overParentDeadlineLang)));
     }
 
     /**

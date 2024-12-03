@@ -161,6 +161,11 @@ window.onRenderCell = function(result, {row, col})
             {
                 if(data.auto == 'auto') result.unshift({html: '<span class="label gray-pale rounded-full nowrap">' + automated + '</span>'}); // 添加自动化标签
                 if(module) result.unshift({html: '<span class="label gray-pale rounded-full nowrap">' + module + '</span>'}); // 添加模块标签
+                if(row.data.fromCaseID)
+                {
+                    let caseLink = $.createLink('testcase', 'view', `id=${row.data.fromCaseID}`);
+                    result.push({html: `[<a href=${caseLink} data-app='qa'><i class='icon icon-share'></i> #${row.data.fromCaseID}</a>]`}); // 添加来源用例链接
+                }
             }
         }
         if(col.name == 'pri' && row.data.isScene)

@@ -165,15 +165,15 @@ $config->task->dtable->fieldList['activatedDate']['type']     = 'date';
 $config->task->dtable->fieldList['activatedDate']['sortType'] = true;
 $config->task->dtable->fieldList['activatedDate']['group']    = 8;
 
-$config->task->dtable->fieldList['storyTitle']['title']      = $lang->task->storyAB;
-$config->task->dtable->fieldList['storyTitle']['name']       = 'storyTitle';
-$config->task->dtable->fieldList['storyTitle']['type']       = 'desc';
-$config->task->dtable->fieldList['storyTitle']['sortType']   = true;
-$config->task->dtable->fieldList['storyTitle']['show']       = true;
-$config->task->dtable->fieldList['storyTitle']['group']      = 9;
-$config->task->dtable->fieldList['storyTitle']['link']       = array('url' => array('module' => 'story', 'method' => 'view', 'params' => 'id={story}'), 'className' => 'text-inherit');
-$config->task->dtable->fieldList['storyTitle']['dataSource'] = array('module' => 'story', 'method' => 'getExecutionStoryPairs', 'params' => ['executionID' => '$executionID', 'productID' => 0, 'branch' => 'all', 'moduleIdList' => '', 'type' => '', 'status' => 'active']);
-$config->task->dtable->fieldList['storyTitle']['data-app']   = $app->tab;
+$config->task->dtable->fieldList['story']['title']      = $lang->task->storyAB;
+$config->task->dtable->fieldList['story']['name']       = 'story';
+$config->task->dtable->fieldList['story']['type']       = 'desc';
+$config->task->dtable->fieldList['story']['sortType']   = true;
+$config->task->dtable->fieldList['story']['show']       = true;
+$config->task->dtable->fieldList['story']['group']      = 9;
+$config->task->dtable->fieldList['story']['link']       = array('url' => array('module' => 'story', 'method' => 'view', 'params' => 'id={rawStory}'), 'className' => 'text-inherit');
+$config->task->dtable->fieldList['story']['dataSource'] = array('module' => 'story', 'method' => 'getExecutionStoryPairs', 'params' => ['executionID' => '$executionID', 'productID' => 0, 'branch' => 'all', 'moduleIdList' => '', 'type' => '', 'status' => 'active']);
+$config->task->dtable->fieldList['story']['data-app']   = $app->tab;
 
 $config->task->dtable->fieldList['module']['title']      = 'module';
 $config->task->dtable->fieldList['module']['control']    = 'select';
@@ -287,12 +287,14 @@ $config->task->dtable->importTask->fieldList['id']['type']     = 'checkID';
 $config->task->dtable->importTask->fieldList['id']['sortType'] = true;
 $config->task->dtable->importTask->fieldList['id']['checkbox'] = true;
 
-$config->task->dtable->importTask->fieldList['name']['title']       = $lang->task->name;
-$config->task->dtable->importTask->fieldList['name']['name']        = 'name';
-$config->task->dtable->importTask->fieldList['name']['type']        = 'nestedTitle';
-$config->task->dtable->importTask->fieldList['name']['link']        = array('module' => 'task', 'method' => 'view', 'params' => 'taskID={id}');
-$config->task->dtable->importTask->fieldList['name']['data-toggle'] = 'modal';
-$config->task->dtable->importTask->fieldList['name']['data-size']   = 'lg';
+$config->task->dtable->importTask->fieldList['name']['title']        = $lang->task->name;
+$config->task->dtable->importTask->fieldList['name']['name']         = 'name';
+$config->task->dtable->importTask->fieldList['name']['type']         = 'nestedTitle';
+$config->task->dtable->importTask->fieldList['name']['nestedToggle'] = true;
+$config->task->dtable->importTask->fieldList['name']['required']     = true;
+$config->task->dtable->importTask->fieldList['name']['link']         = array('module' => 'task', 'method' => 'view', 'params' => 'taskID={id}');
+$config->task->dtable->importTask->fieldList['name']['data-toggle']  = 'modal';
+$config->task->dtable->importTask->fieldList['name']['data-size']    = 'lg';
 
 $config->task->dtable->importTask->fieldList['pri']['title']    = $lang->priAB;
 $config->task->dtable->importTask->fieldList['pri']['name']     = 'pri';
@@ -303,7 +305,7 @@ $config->task->dtable->importTask->fieldList['pri']['group']    = 1;
 $config->task->dtable->importTask->fieldList['status']['title']     = $lang->statusAB;
 $config->task->dtable->importTask->fieldList['status']['name']      = 'status';
 $config->task->dtable->importTask->fieldList['status']['type']      = 'status';
-$config->task->dtable->importTask->fieldList['status']['statusMap'] = $lang->task->statusList;
+$config->task->dtable->importTask->fieldList['status']['statusMap'] = $lang->task->statusList + array('changed' => $lang->task->storyChange);
 $config->task->dtable->importTask->fieldList['status']['sortType']  = true;
 $config->task->dtable->importTask->fieldList['status']['group']     = 1;
 
@@ -348,9 +350,10 @@ $config->task->dtable->children->fieldList['name']                 = $config->ta
 $config->task->dtable->children->fieldList['name']['title']        = $lang->task->name;
 $config->task->dtable->children->fieldList['name']['sortType']     = false;
 $config->task->dtable->children->fieldList['name']['name']         = 'name';
-$config->task->dtable->children->fieldList['name']['nestedToggle'] = false;
+$config->task->dtable->children->fieldList['name']['nestedToggle'] = true;
 $config->task->dtable->children->fieldList['name']['data-toggle']  = 'modal';
 $config->task->dtable->children->fieldList['name']['data-size']    = 'lg';
+$config->task->dtable->children->fieldList['name']['data-load']    = 'modal';
 
 $config->task->dtable->children->fieldList['pri']             = $config->task->dtable->fieldList['pri'];
 $config->task->dtable->children->fieldList['pri']['sortType'] = false;
@@ -365,9 +368,10 @@ $config->task->dtable->children->fieldList['assignedTo']['title']    = $lang->ta
 $config->task->dtable->children->fieldList['assignedTo']['sortType'] = false;
 $config->task->dtable->children->fieldList['assignedTo']['name']     = 'assignedTo';
 
-$config->task->dtable->children->fieldList['status']             = $config->task->dtable->fieldList['status'];
-$config->task->dtable->children->fieldList['status']['sortType'] = false;
-$config->task->dtable->children->fieldList['status']['name']     = 'status';
+$config->task->dtable->children->fieldList['status']              = $config->task->dtable->fieldList['status'];
+$config->task->dtable->children->fieldList['status']['sortType']  = false;
+$config->task->dtable->children->fieldList['status']['statusMap'] = $lang->task->statusList + array('changed' => $lang->task->storyChange);
+$config->task->dtable->children->fieldList['status']['name']      = 'status';
 
 $config->task->dtable->children->fieldList['actions']          = $config->task->dtable->fieldList['actions'];
 $config->task->dtable->children->fieldList['actions']['title'] = $lang->actions;

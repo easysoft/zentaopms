@@ -102,7 +102,7 @@ if($isMultiple)
 }
 
 $leftBox = '';
-if($task->parent != '-1')
+if($task->isParent == '0')
 {
     $leftBox = formGroup(
         set::width('1/2'),

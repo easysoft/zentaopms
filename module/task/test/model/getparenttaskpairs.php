@@ -14,6 +14,17 @@ title=taskModel->getParentTaskPairs();
 timeout=0
 cid=1
 
+- 查找有父任务的执行下的开发任务11属性1 @开发任务11
+- 查找有父任务的执行下的开发任务12属性2 @开发任务12
+- 查找有父任务的执行下的父任务开发任务16属性6 @开发任务16
+- 查找有父任务的执行下的父任务开发任务16属性6 @开发任务16
+- 查找有父任务的执行下的父任务开发任务20属性10 @开发任务20
+- 查找没有父任务的执行 @0
+- 查找没有父任务的执行下的开发任务11属性1 @开发任务11
+- 查找没有父任务的执行下的开发任务12属性2 @开发任务12
+- 查找不是执行的父任务 @0
+- 查找不存在的执行下的父任务 @0
+
 */
 
 $executionIDList = array(3, 2, 1, 10);
@@ -25,7 +36,7 @@ r($taskModel->getParentTaskPairs($executionIDList[0], $append)) && p('1')  && e(
 r($taskModel->getParentTaskPairs($executionIDList[0], $append)) && p('2')  && e('开发任务12'); // 查找有父任务的执行下的开发任务12
 r($taskModel->getParentTaskPairs($executionIDList[0], $append)) && p('6')  && e('开发任务16'); // 查找有父任务的执行下的父任务开发任务16
 r($taskModel->getParentTaskPairs($executionIDList[0]))          && p('6')  && e('开发任务16'); // 查找有父任务的执行下的父任务开发任务16
-r($taskModel->getParentTaskPairs($executionIDList[0]))          && p('10') && e('`^$`');       // 查找有父任务的执行下的父任务开发任务20
+r($taskModel->getParentTaskPairs($executionIDList[0]))          && p('10') && e('开发任务20'); // 查找有父任务的执行下的父任务开发任务20
 r($taskModel->getParentTaskPairs($executionIDList[1]))          && p()     && e('0');          // 查找没有父任务的执行
 r($taskModel->getParentTaskPairs($executionIDList[1], $append)) && p('1')  && e('开发任务11'); // 查找没有父任务的执行下的开发任务11
 r($taskModel->getParentTaskPairs($executionIDList[1], $append)) && p('2')  && e('开发任务12'); // 查找没有父任务的执行下的开发任务12

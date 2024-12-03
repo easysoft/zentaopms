@@ -70,6 +70,7 @@ class taskZen extends task
         $this->view->hideStory     = $this->task->isNoStoryExecution($execution);
         $this->view->from          = $storyID || $todoID || $bugID  ? 'other' : 'task';
         $this->view->taskID        = $taskID;
+        $this->view->parents       = $this->task->getParentTaskPairs($executionID);
         $this->view->loadUrl       = $this->createLink('task', 'create', "executionID={execution}&storyID={$storyID}&moduleID={$moduleID}&task={$taskID}&todoID={$todoID}&cardPosition={$cardPosition}&bugID={$bugID}");
 
         $this->display();
@@ -274,7 +275,7 @@ class taskZen extends task
         $task = $this->view->task;
 
         /* Get the task parent id,name pairs. */
-        $tasks = $this->task->getParentTaskPairs($this->view->execution->id, strVal($task->parent));
+        $tasks = $this->task->getParentTaskPairs($this->view->execution->id, strVal($task->parent), $taskID);
         if(isset($tasks[$taskID])) unset($tasks[$taskID]);
 
         /* Prepare to assign to relevant parameters. */
@@ -397,7 +398,14 @@ class taskZen extends task
         if(isset($customFields['story'])) $customFields['preview'] = $customFields['copyStory'] = '';
 
         $showFields = $this->config->task->custom->batchCreateFields;
-        if(strpos(",$showFields,", ',story,') !== false) $showFields .= ',preview,copyStory';
+        if(strpos(",$showFields,", ',story,') !== false)
+        {
+            $showFields .= ',preview,copyStory';
+        }
+        else
+        {
+            $showFields = trim(str_replace(array(',copyStory,', ',preview,'), ',', ",{$showFields},"), ',');
+        }
 
         $this->config->task->batchcreate->requiredFields = $this->config->task->create->requiredFields;
 
@@ -411,7 +419,7 @@ class taskZen extends task
         $this->view->stories       = array_filter($stories);
         $this->view->storyTasks    = $this->task->getStoryTaskCounts(array_keys($stories), $execution->id);
         $this->view->members       = $this->loadModel('user')->getTeamMemberPairs($execution->id, 'execution', 'nodeleted');
-        $this->view->taskConsumed  = isset($task) && $task->parent == 0 ? $task->consumed : 0;
+        $this->view->taskConsumed  = isset($task) && $task->isParent == 0 ? $task->consumed : 0;
         $this->view->customFields  = $customFields;
         $this->view->checkedFields = $checkedFields;
         $this->view->hideStory     = $this->task->isNoStoryExecution($execution);
@@ -588,6 +596,19 @@ class taskZen extends task
     {
         $this->loadModel('story');
 
+        /* Check parent name is not empty when has child task. */
+        $levelNames = array();
+        foreach($this->post->level as $i => $level)
+        {
+            $level = (int)$level;
+            $levelNames[$level]['name']  = trim($this->post->name[$i]);
+            $levelNames[$level]['index'] = $i;
+
+            $preLevel = $level - 1;
+            if($level > 0 && !empty($levelNames[$level]['name']) && empty($levelNames[$preLevel]['name'])) dao::$errors["name[" . $levelNames[$preLevel]['index'] . "]"] = $this->lang->task->error->emptyParentName;
+        }
+        if(dao::isError()) return false;
+
         $tasks = form::batchData()->get();
         foreach($tasks as $task)
         {
@@ -677,6 +698,7 @@ class taskZen extends task
             $task->assignedDate = !empty($task->assignedTo) && $oldTask->assignedTo != $task->assignedTo ? $now : $oldTask->assignedDate;
             $task->version      = $oldTask->name != $task->name || $oldTask->estStarted != $task->estStarted || $oldTask->deadline != $task->deadline ?  $oldTask->version + 1 : $oldTask->version;
             $task->consumed     = $task->consumed < 0 ? $task->consumed  : $task->consumed + $oldTask->consumed;
+            $task->storyVersion = ($task->story && $oldTask->story != $task->story) ? $this->loadModel('story')->getVersion((int)$task->story) : 1;
 
             if(empty($task->closedReason) && $task->status == 'closed')
             {
@@ -1078,7 +1100,7 @@ class taskZen extends task
             $oldTask = $oldTasks[$taskID];
 
             /* Check work hours. */
-            if(in_array($task->status, array('doing', 'pause')) && empty($oldTask->mode) && empty($task->left) && $task->parent >= 0)
+            if(in_array($task->status, array('doing', 'pause')) && empty($oldTask->mode) && empty($task->left) && !$oldTask->isParent)
             {
                 dao::$errors["left[{$taskID}]"] = (array)sprintf($this->lang->task->error->leftEmptyAB, zget($this->lang->task->statusList, $task->status));
             }
@@ -1443,7 +1465,6 @@ class taskZen extends task
                 $task->progress .= '%';
             }
 
-            if($this->config->edition == 'open' && $task->parent > 0 && strpos($task->name, htmlentities('>')) !== 0) $task->name = '>' . $task->name;
             if(!empty($task->team))
             {
                 $task->name = '[' . $this->lang->task->multipleAB . '] ' . $task->name;
@@ -1557,7 +1578,7 @@ class taskZen extends task
         case 'closed':
             $task->closedBy   = $oldTask->status == 'closed' ? $oldTask->closedBy : $currentAccount;
             $task->closedDate = $oldTask->status == 'closed' ? $oldTask->closedDate : $now;
-            if(isset($task->closedReason) && $task->closedReason == 'cancel' && helper::isZeroDate($task->finishedDate)) $task->finishedDate = null;
+            if(isset($task->closedReason) && $task->closedReason == 'cancel' && isset($task->finishedDate) && helper::isZeroDate($task->finishedDate)) $task->finishedDate = null;
             break;
         case 'wait':
             if($task->consumed > 0 and $task->left > 0) $task->status = 'doing';
@@ -1815,12 +1836,11 @@ class taskZen extends task
      * The information return after process the batch close task.
      *
      * @param  array     $skipTasks
-     * @param  array     $parentTasks
      * @param  string    $confirm       yes|no
      * @access protected
      * @return array
      */
-    protected function responseAfterBatchClose(array $skipTasks, array $parentTasks, string $confirm): array
+    protected function responseAfterBatchClose(array $skipTasks, string $confirm): array
     {
         if(!empty($skipTasks) && $confirm == 'no')
         {
@@ -1828,12 +1848,6 @@ class taskZen extends task
             $confirmURL = $this->createLink('task', 'batchClose', "confirm=yes");
             $this->session->set('batchCloseTaskIDList', $skipTasks, 'task');
             return array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->task->error->skipClose, $skipTasks), 'confirmed' => $confirmURL));
-        }
-
-        if(!empty($parentTasks))
-        {
-            $parentTasks = implode(',', $parentTasks);
-            return array('result' => 'success', 'load' => true, 'message' => sprintf($this->lang->task->error->closeParent, $parentTasks));
         }
 
         return array('result' => 'success', 'load' => true);

@@ -234,34 +234,48 @@ class transferTao extends transferModel
      */
     protected function updateChildDatas(array $datas)
     {
-        $children = array();
-        foreach($datas as $data)
+        foreach($datas as $id => $data)
         {
-            $id = $data->id;
             if(!empty($data->mode)) $datas[$id]->name = '[' . $this->lang->task->multipleAB . '] ' . $data->name; //任务类型（多人任务/单人任务）
-            if(!empty($data->parent) and isset($datas[$data->parent]))
-            {
-                /* 根据name或title获取父数据。*/
-                /* Get parent data by name or title. */
-                if(!empty($data->name)) $data->name = '>' . $data->name;
-                $children[$data->parent][$id] = $data;
-                unset($datas[$id]);
-            }
         }
-        if(empty($children)) return $datas;
 
         /* 如果存在子数据,则将子数据插入到父数据之后。*/
         /* Move child data after parent data. */
-        $position = 0;
+        $children = array();
+        $orphans  = array();
         foreach($datas as $data)
         {
-            $position ++;
-            if(!isset($children[$data->id])) continue;
-
-            array_splice($datas, $position, 0, $children[$data->id]);
-            $position += count($children[$data->id]);
+            $parentId = isset($data->parentId) ? $data->parentId : $data->parent;
+            if($parentId != 0 && !isset($datas[$parentId]))
+            {
+                $orphans[] = $data;
+            }
+            else
+            {
+                if(!isset($children[$parentId])) $children[$parentId] = array();
+                $children[$parentId][] = $data;
+            }
         }
 
-        return $datas;
+        if(empty($children)) return $datas;
+
+        $buildTree = function($parentId) use (&$buildTree, &$children)
+        {
+            $result = array();
+            if(isset($children[$parentId]))
+            {
+                foreach($children[$parentId] as $child)
+                {
+                    $result[] = $child;
+                    $result = array_merge($result, $buildTree($child->id));
+                }
+            }
+
+            return $result;
+        };
+
+        $tree = array_merge((array)$buildTree(0), $orphans);
+        if(count($tree) != count($datas)) return $datas;
+        return $tree;
     }
 }

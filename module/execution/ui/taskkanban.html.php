@@ -80,6 +80,8 @@ jsVar('kanbanList', array_keys($kanbanGroup));
 jsVar('browseType', $browseType);
 jsVar('groupBy', $groupBy);
 jsVar('productNum', $productNum);
+jsVar('childrenAB', $lang->task->childrenAB);
+jsVar('parentAB', $lang->task->parentAB);
 jsVar('priv', array(
         'canEditName'         => common::hasPriv('kanban', 'setColumn'),
         'canSetWIP'           => common::hasPriv('kanban', 'setWIP'),
@@ -184,6 +186,14 @@ row
                 set::required(true),
                 set::onchange('changeGroupBy()')
             )
+        ) : null,
+        in_array($browseType, array('all', 'task')) ? checkbox
+        (
+            set::rootClass('ml-2 mr-4 mt-1'),
+            set::name('showParent'),
+            set::checked($this->cookie->showParent ? 'checked' : ''),
+            set::onchange('changeShowParent()'),
+            set::text($lang->task->showParent)
         ) : null
     ),
     cell
@@ -262,6 +272,7 @@ div
     setClass('bg-white'),
     zui::kanbanList
     (
+        set('$replace', false),
         set::key('kanban'),
         set::items($kanbanGroup),
         set::height('calc(100vh - 120px)'),

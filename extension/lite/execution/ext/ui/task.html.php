@@ -27,6 +27,7 @@ $canCreate      = hasPriv('task', 'create');
 $canBatchCreate = hasPriv('task', 'batchCreate');
 $canImportTask  = hasPriv('task', 'importTask');
 
+$app->loadLang('my');
 $this->loadModel('task');
 $importItems = array();
 if(common::canModify('execution', $execution))
@@ -48,6 +49,14 @@ if(common::canModify('execution', $execution))
 
 $cols = $this->loadModel('datatable')->getSetting('execution');
 $tableData = initTableData($tasks, $cols, $this->task);
+$lang->task->statusList['changed'] = $lang->my->storyChanged;
+foreach($tableData as $task)
+{
+    $task->rawStatus = $task->status;
+    $task->status    = $this->processStatus('task', $task);
+    if(helper::isZeroDate($task->deadline))   $task->deadline   = '';
+    if(helper::isZeroDate($task->estStarted)) $task->estStarted = '';
+}
 
 toolbar
 (

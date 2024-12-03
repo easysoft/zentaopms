@@ -59,11 +59,11 @@ window.setStatistics = function(element, checkedIDList)
             const task = row.data;
 
             totalCount ++;
-            if(task.status == 'wait')
+            if(task.rawStatus == 'wait')
             {
                 waitCount ++;
             }
-            else if(task.status == 'doing')
+            else if(task.rawStatus == 'doing')
             {
                 doingCount ++;
             }
@@ -76,7 +76,7 @@ window.setStatistics = function(element, checkedIDList)
                 totalConsumed += Number(task.consumed);
             }
 
-            if(task.status != 'cancel' && task.status != 'closed' && !task.isParent) totalLeft += Number(task.left);
+            if(task.rawStatus != 'cancel' && task.rawStatus != 'closed' && !task.isParent) totalLeft += Number(task.left);
         }
     })
 
@@ -117,10 +117,16 @@ window.renderCell = function(result, info)
         {
             html += "<span class='label gray-pale rounded p-0 size-sm whitespace-nowrap'>" + multipleAB + "</span>";
         }
-        if(task.parent > 0)
+
+        if(task.isParent > 0)
+        {
+            html += "<span class='label gray-pale rounded p-0 size-sm whitespace-nowrap'>" + parentAB + "</span>";
+        }
+        else if(task.parent > 0)
         {
             html += "<span class='label gray-pale rounded p-0 size-sm whitespace-nowrap'>" + childrenAB + "</span>";
         }
+
         if(task.color) result[0].props.style = 'color: ' + task.color;
         if(html) result.unshift({html});
         if(typeof task.delay != 'undefined' && task.delay) result[result.length] = {html:'<span class="label danger-pale ml-1 flex-none nowrap">' + delayWarning.replace('%s', task.delay) + '</span>', className: 'flex items-end', style:{flexDirection:"column"}};
@@ -158,7 +164,7 @@ window.renderCell = function(result, info)
     }
     if(info.col.name == 'assignedTo' && result)
     {
-        if(task.mode == 'multi' && !task.assignedTo && !['done,closed'].includes(task.status))
+        if(task.mode == 'multi' && !task.assignedTo && !['done,closed'].includes(task.rawStatus))
         {
             result[0]['props']['children'][1]['props']['children'] = teamLang;
         }
@@ -178,3 +184,10 @@ window.renderCell = function(result, info)
 
     return result;
 }
+
+$(document).off('click', '.switchButton').on('click', '.switchButton', function()
+{
+    var taskViewType = $(this).attr('data-type');
+    $.cookie.set('taskViewType', taskViewType, {expires:config.cookieLife, path:config.webRoot});
+    loadCurrentPage();
+});

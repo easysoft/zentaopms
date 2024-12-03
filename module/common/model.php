@@ -1956,6 +1956,8 @@ eof;
                 }
                 if($projectsStatus[$object->project] == 'closed') return false;
             }
+
+            if(isset($object->project) && $projectsStatus[$object->project] == 'closed') return false;
         }
 
         return true;

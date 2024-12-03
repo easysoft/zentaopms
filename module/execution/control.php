@@ -258,7 +258,6 @@ class execution extends control
                     $groupTasks[] = $child;
                     $allCount ++;
                 }
-                $task->children = true;
                 unset($task->children);
             }
         }
@@ -338,7 +337,7 @@ class execution extends control
         $pager = new pager(count($tasks2Imported), $recPerPage, $pageID);
 
         $tasks2ImportedList = array_chunk($tasks2Imported, $pager->recPerPage, true);
-        $tasks2ImportedList = empty($tasks2ImportedList) ? $tasks2ImportedList : $tasks2ImportedList[$pageID - 1];
+        $tasks2ImportedList = empty($tasks2ImportedList) ? $tasks2ImportedList : (isset($tasks2ImportedList[$pageID - 1]) ? $tasks2ImportedList[$pageID - 1] : current($tasks2ImportedList));
         $tasks2ImportedList = $this->loadModel('task')->processTasks($tasks2ImportedList);
 
         $this->view->title          = $execution->name . $this->lang->hyphen . $this->lang->execution->importTask;
@@ -3115,8 +3114,7 @@ class execution extends control
         $this->view->product     = $product;
         $this->view->branches    = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
         $this->view->plan        = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fields('title')->fetch('title');
-        $this->view->bugs        = $this->dao->select('id,title')->from(TABLE_BUG)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
-        $this->view->fromBug     = $this->dao->select('id,title')->from(TABLE_BUG)->where('toStory')->eq($storyID)->fetch();
+        $this->view->bugs        = $this->dao->select('id,title,status')->from(TABLE_BUG)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
         $this->view->cases       = $this->dao->select('id,title')->from(TABLE_CASE)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
         $this->view->modulePath  = $this->loadModel('tree')->getParents($story->module);
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
