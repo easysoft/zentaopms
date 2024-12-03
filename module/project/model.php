@@ -51,7 +51,7 @@ class projectModel extends model
         $projects = $this->mao->key(CACHE_PROJECT_ACL, $acl, $type)->get();
         if(!$projects)
         {
-            $projects = $this->dao->select('id, type, parent, path, openedBy, PO, PM, QD, RD, acl')->from(TABLE_PROJECT)->where('acl')->eq($acl)->andWhere('type')->eq($type)->fetchAll('id');
+            $projects = $this->dao->select('id, project, type, parent, path, openedBy, PO, PM, QD, RD, acl')->from(TABLE_PROJECT)->where('acl')->eq($acl)->andWhere('type')->eq($type)->fetchAll('id');
             $this->mao->save($projects);
         }
         return $projects ?: [];
