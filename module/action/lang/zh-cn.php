@@ -287,6 +287,8 @@ $lang->action->desc->createrepobranch     = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->unlinkrepobranch     = '$date, 由 <strong>$actor</strong> 取消关联了代码分支 <strong>$extra</strong>。' . "\n";
 $lang->action->desc->changedprogram       = '$date, 由 <strong>$actor</strong> 调整了所属项目集。' . "\n";
 $lang->action->desc->managedteam          = '$date, 由 <strong>$actor</strong> 维护团队。' . "\n";
+$lang->action->desc->syncexecutionteam    = '$date, 同步更新执行增加的团队成员。' . "\n";
+$lang->action->desc->syncprojectteam      = '$date, 同步更新项目删除的团队成员。' . "\n";
 
 /* 用来描述和父子任务相关的操作历史记录。*/
 $lang->action->desc->createchildren        = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";
@@ -574,6 +576,8 @@ $lang->action->label->autodeletebackups       = '自动删除备份';
 $lang->action->label->savebackupsettings      = '保存备份设置';
 $lang->action->label->deleteexpiredbackup     = '删除过期备份';
 $lang->action->label->manualdeletebackup      = '手动删除备份';
+$lang->action->label->syncexecutionteam       = '同步了';
+$lang->action->label->syncprojectteam         = '同步了';
 
 
 /* 动态信息按照对象分组 */
