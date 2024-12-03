@@ -664,7 +664,7 @@ class release extends control
 
         $this->view->appList       = $appList;
         $this->view->releases      = $releases;
-        $this->view->linkedRelease = explode(',', $linkedRelease);
+        $this->view->linkedRelease = $linkedRelease ? explode(',', $linkedRelease) : array();
         $this->display();
     }
 }

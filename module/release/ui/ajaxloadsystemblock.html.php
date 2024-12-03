@@ -36,15 +36,15 @@ foreach($releases as $releaseID => $release) $appReleases[$release->system][$rel
 
 if(!$apps) $apps = array(0 => '');
 
-jsVar('releases',  $releases);
-jsVar('appLength', count($apps));
-jsVar('rawMethod', $app->rawMethod);
+jsVar('releases',    $releases);
+jsVar('appLength',   count($apps));
 
 $systemTR = array();
 $i        = 0;
 foreach($apps as $system)
 {
-    $appID = $linkedApps ? key($linkedApps) : 0;
+    $appID  = $linkedApps ? key($linkedApps) : 0;
+    $linked = current($linkedApps);
     $systemTR[] = h::tr
     (
         setClass('form-row'),
@@ -66,9 +66,8 @@ foreach($apps as $system)
             (
                 set::id("releases{$i}"),
                 set::name("releases[$i]"),
-                set::required($app->rawMethod != 'edit'),
                 set::items(zget($appReleases, $appID, array())),
-                $appID ? set::value(current($linkedApps)) : null
+                $appID ? set::value($linked) : null
             )
         ),
         h::td
