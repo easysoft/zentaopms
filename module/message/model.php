@@ -28,7 +28,7 @@ class messageModel extends model
             ->andWhere('toList')->eq(",{$this->app->user->account},")
             ->beginIF(!empty($status) && $status != 'all')->andWhere('status')->eq($status)->fi()
             ->orderBy($orderBy)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
