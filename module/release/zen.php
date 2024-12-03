@@ -111,10 +111,10 @@ class releaseZen extends release
 
             if($system->integrated == '1')
             {
-                $releases = array_filter((array)$this->post->releases);
+                $releases = (array)$this->post->releases;
 
                 $release->build    = '';
-                $release->releases = trim(implode(',', $releases), ',');
+                $release->releases = trim(implode(',', array_filter($releases)), ',');
                 if(!$release->releases) dao::$errors['releases[' . key($releases) . ']'][] = sprintf($this->lang->error->notempty, $this->lang->release->name);
             }
         }
