@@ -65,11 +65,13 @@ jsVar('grades', $grades);
 
 if(!empty($release->releases) || $release->deleted || ($app->tab == 'project' && !common::canModify('project', $project)))
 {
-    $config->release->dtable->story->fieldList['id']['type'] = 'ID';
-    $config->release->dtable->bug->fieldList['id']['type']   = 'ID';
+    $config->release->dtable->story->fieldList['id']['type']   = 'ID';
+    $config->release->dtable->bug->fieldList['id']['type']     = 'ID';
+    $config->release->dtable->leftBug->fieldList['id']['type'] = 'ID';
 
-    unset($config->release->dtable->story->fieldList['actions']['list']);
-    unset($config->release->dtable->bug->fieldList['actions']['list']);
+    unset($config->release->dtable->story->fieldList['actions']);
+    unset($config->release->dtable->bug->fieldList['actions']);
+    unset($config->release->dtable->leftBug->fieldList['actions']);
 }
 
 /* Table data and setting for finished stories tab. */
@@ -214,13 +216,6 @@ if(!$release->deleted && $canBeChanged && empty($release->releases))
                 bind::click('window.showLink', array('params' => array('leftBug')))
             );
     }
-}
-
-if($release->deleted || !empty($release->releases))
-{
-    unset($config->release->dtable->story->fieldList['actions']);
-    unset($config->release->dtable->bug->fieldList['actions']);
-    unset($config->release->dtable->leftBug->fieldList['actions']);
 }
 
 detailBody
