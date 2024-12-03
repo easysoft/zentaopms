@@ -142,7 +142,7 @@ class router extends baseRouter
             $customMenus = array();
             try
             {
-                $customMenus = $this->dbQuery('SELECT * FROM ' . TABLE_LANG . " WHERE `module`='common' AND `section`='mainNav' AND `lang`='{$this->clientLang}' AND `vision`='{$this->config->vision}'")->fetchAll();
+                $customMenus = $this->dbQuery('SELECT `key`, `value` FROM ' . TABLE_LANG . " WHERE `module`='common' AND `section`='mainNav' AND `lang`='{$this->clientLang}' AND `vision`='{$this->config->vision}'")->fetchAll();
             }
             catch(PDOException){}
 
@@ -223,7 +223,7 @@ class router extends baseRouter
 	    /* When upgrading from version 12 to the paid version, the workflow table does not exist. */
         try
         {
-            $flows = $this->dbQuery('SELECT * FROM ' . TABLE_WORKFLOW . " WHERE `buildin` = 0 AND `vision` = '{$this->config->vision}' AND status = 'normal' AND type = 'flow'")->fetchAll();
+            $flows = $this->dbQuery('SELECT `module`, `name`, `navigator` FROM ' . TABLE_WORKFLOW . " WHERE `buildin` = 0 AND `vision` = '{$this->config->vision}' AND status = 'normal' AND type = 'flow'")->fetchAll();
             foreach($flows as $flow)
             {
                 if($flow->navigator == 'primary') $this->lang->mainNav->{$flow->module} = "{$this->lang->navIcons['workflow']} {$flow->name}|{$flow->module}|browse|";
@@ -376,7 +376,7 @@ class router extends baseRouter
                 $customMenus = array();
                 try
                 {
-                    $customMenus = $this->dbQuery('SELECT * FROM' . TABLE_LANG . "WHERE `module`='common' AND `lang`='{$this->clientLang}' AND `section`='' AND `vision`='{$config->vision}'")->fetchAll();
+                    $customMenus = $this->dbQuery('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE `module`='common' AND `lang`='{$this->clientLang}' AND `section`='' AND `vision`='{$config->vision}'")->fetchAll();
                 }
                 catch(PDOException){}
 
