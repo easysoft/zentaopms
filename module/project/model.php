@@ -3,6 +3,35 @@ declare(strict_types=1);
 class projectModel extends model
 {
     /**
+     * 根据权限控制范围和类型获取项目。
+     * Get projects by acl and type.
+     *
+     * @param  string $acl
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function getListByAclAndType(string $acl, string $type): array
+    {
+        /* 如果一次获取多个类型的项目，需要分别获取再合并。If multiple types of projects are obtained at one time, they need to be obtained separately and then merged. */
+        if(strpos($type, ',') !== false)
+        {
+            $projects = [];
+            $types    = array_filter(explode(',', $type));
+            foreach($types as $type) $projects += $this->getListByAclAndType($acl, $type);
+            return $projects;
+        }
+
+        $projects = $this->mao->key(CACHE_PROJECT_ACL, $acl, $type)->get();
+        if(!$projects)
+        {
+            $projects = $this->dao->select('id, type, parent, path, openedBy, PO, PM, QD, RD, acl')->from(TABLE_PROJECT)->where('acl')->eq($acl)->andWhere('type')->eq($type)->fetchAll('id');
+            $this->mao->save($projects);
+        }
+        return $projects ?: [];
+    }
+
+    /**
      * 获取当前登录用户有权限查看的项目列表.
      * Get project list by current user.
      *
