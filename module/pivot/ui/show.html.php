@@ -78,7 +78,8 @@ $generateData = function() use ($lang, $groupID, $pivotName, $pivot, $data, $con
                     setClass('cursor-pointer', array('hidden' => !$pivot->desc)),
                     setData(array('toggle' => 'tooltip', 'title' => $pivot->desc, 'placement' => 'right', 'className' => 'text-gray border border-light', 'type' => 'white')),
                     'help'
-                ),
+                )
+                /**
                 span
                 (
                     set::style(array('font-weight' => 'normal')),
@@ -92,6 +93,7 @@ $generateData = function() use ($lang, $groupID, $pivotName, $pivot, $data, $con
                         set::href($this->createLink('pivot', 'versions', "groupID={$groupID}&pivotID={$pivot->id}"))
                     )
                 )
+                */
             ),
             toolbar
             (
