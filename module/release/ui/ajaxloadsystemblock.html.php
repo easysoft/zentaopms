@@ -27,22 +27,26 @@ foreach($linkedRelease as $releaseID)
 
 foreach($appList as $system)
 {
-    $apps[$system->id]       = $system->name;
-    $linkedApps[$system->id] = 0;
+    $apps[$system->id] = $system->name;
+    if(!$linkedRelease) $linkedApps[$system->id] = 0;
 }
 
 $appReleases = array();
 foreach($releases as $releaseID => $release) $appReleases[$release->system][$releaseID] = $release->name;
 
+if($linkedRelease && !$linkedApps) $linkedApps = array(0 => '');
+
 if(!$apps) $apps = array(0 => '');
 
-jsVar('releases',    $releases);
-jsVar('appLength',   count($apps));
+jsVar('releases',  $releases);
+jsVar('appLength', count($apps));
 
 $systemTR = array();
 $i        = 0;
-$appCount = count($apps);
-foreach($apps as $system)
+
+$list     = $linkedRelease ? $linkedApps : $apps;
+$appCount = count($list);
+foreach($list as $system)
 {
     $appID  = $linkedApps ? key($linkedApps) : 0;
     $linked = current($linkedApps);
@@ -71,17 +75,29 @@ foreach($apps as $system)
                 $appID ? set::value($linked) : null
             )
         ),
-        $appCount > 1 ? h::td
+        h::td
         (
             set::className('actions-list'),
             btnGroup
             (
-                set::items(array(
-                    array('class' => 'btn btn-link text-gray add-item hidden', 'icon' => 'plus', 'onclick' => 'addItem(this)'),
-                    array('class' => 'btn btn-link text-gray del-item', 'icon' => 'trash', 'onclick' => 'deleteItem(this)')
-                ))
+                item(
+                    set(
+                        array(
+                            'icon'    => 'plus',
+                            'class'   => 'btn btn-link text-gray add-item' . ($appCount < count($apps) ? '' : ' hidden'),
+                            'onclick' => 'addItem(this)')
+                    )
+                ),
+                item(
+                    set(
+                        array(
+                            'icon'    => 'trash',
+                            'class'   => 'btn btn-link text-gray del-item' . ($appCount > 1 ? '' : ' hidden'),
+                            'onclick' => 'deleteItem(this)')
+                    )
+                )
             )
-        ) : null
+        )
     );
 
     unset($linkedApps[key($linkedApps)]);
