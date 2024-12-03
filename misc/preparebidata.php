@@ -36,6 +36,7 @@ function jsonEncode($object)
 
 function prepareFieldAndValueStr($data)
 {
+    $data = (array)$data;
     $keys = array_keys($data);
 
     $fieldStr = "`" . implode("`, `", $keys) . "`";
@@ -142,7 +143,28 @@ foreach($config->bi->builtin->pivots as $pivot)
     }
     unset($pivot['drills']);
 
+    $pivotSpec = new stdclass();
+    $pivotSpec->version     = $pivot['version'];
+    $pivotSpec->pivot       = $pivot['id'];
+    $pivotSpec->mode        = 'text';
+    $pivotSpec->sql         = $pivot['sql'];
+    $pivotSpec->name        = $pivot['name'];
+
+    if(isset($pivot['desc']))     $pivotSpec->desc     = $pivot['desc'];
+    if(isset($pivot['settings'])) $pivotSpec->settings = $pivot['settings'];
+    if(isset($pivot['filters']))  $pivotSpec->filters  = $pivot['filters'];
+    if(isset($pivot['fields']))   $pivotSpec->fields   = $pivot['fields'];
+    if(isset($pivot['langs']))    $pivotSpec->langs    = $pivot['langs'];
+    if(isset($pivot['vars']))     $pivotSpec->vars     = $pivot['vars'];
+
+    if(!isset($pivot['settings'])) $pivotSpec->settings = null;
+    if(!isset($pivot['filters']))  $pivotSpec->filters  = null;
+    if(!isset($pivot['fields']))   $pivotSpec->fields   = null;
+    if(!isset($pivot['langs']))    $pivotSpec->langs    = null;
+    if(!isset($pivot['vars']))     $pivotSpec->vars     = null;
+
     insert('zt_pivot', $pivot);
+    insert('zt_pivotspec', $pivotSpec);
 }
 
 foreach($config->bi->builtin->metrics as $metric)
