@@ -32,6 +32,7 @@ $config->cache->res = [];
 $config->cache->res[TABLE_MODULE][]  = ['name' => 'CACHE_MODULE_TREE', 'fields' => ['type', 'root', 'branch']];
 $config->cache->res[TABLE_PRODUCT][] = ['name' => 'CACHE_PRODUCT_ACL', 'fields' => ['acl']];
 $config->cache->res[TABLE_PROJECT][] = ['name' => 'CACHE_PROJECT_ACL', 'fields' => ['acl', 'type']];
+$config->cache->res[TABLE_PROJECT][] = ['name' => 'CACHE_PROJECT_TYPE'];
 
 $config->cache->keys = [];
 foreach($config->cache->res as $table => $caches)
