@@ -182,7 +182,7 @@ div
             set::disabled(!$this->story->isClickable($story, 'edit')),
             set('data-app', $app->tab)
         ) : null,
-        hasPriv('testcase', 'create') ? btn
+        $story->isParent == '0' && hasPriv('testcase', 'create') ? btn
         (
             setClass('text-primary ml-2'),
             set::icon('sitemap'),
