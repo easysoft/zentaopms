@@ -699,7 +699,7 @@ class actionTao extends actionModel
             ->beginIF($actionCondition)->andWhere("($actionCondition)")->fi()
             ->orderBy($orderBy)
             ->limit($limit)
-            ->fetchAll();
+            ->fetchAll('', false);
     }
 
     /**
