@@ -18,10 +18,12 @@ include_once 'show.html.php';
 $versionsTableBody = array();
 foreach($versionSpecs as $versionSpec)
 {
+    /*
     $isMarked       = in_array($versionSpec->version, $markedVersions);
     $isBuiltIn      = $builtin == 1;
     $isFirstVersion = $versionSpec->version == 1;
     $isMainVersion  = filter_var($versionSpec->version, FILTER_VALIDATE_INT) !== false;
+     */
     $versionsTableBody[] = h::tr
     (
         $version == $versionSpec->version ? setClass('bg-secondary-50') : null,
@@ -30,12 +32,14 @@ foreach($versionSpecs as $versionSpec)
         (
             setData(array('pivot' => $pivot->id, 'version' => $versionSpec->version, 'group' => $groupID)),
             '#' . $versionSpec->version,
+            /*
             span
             (
                 setData(array('pivot' => $pivot->id, 'version' => $versionSpec->version, 'group' => $groupID)),
                 setClass("label ghost size-sm bg-secondary-50 text-secondary-500 rounded-full", array('hidden' => $isMarked || $isFirstVersion || !$isBuiltIn || ($isBuiltIn && !$isMainVersion))),
                 $lang->pivot->newVersion
             )
+             */
         ),
         h::td
         (

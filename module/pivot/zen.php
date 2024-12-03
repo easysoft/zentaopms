@@ -81,8 +81,8 @@ class pivotZen extends pivot
         if(!$groups) return array();
 
         $this->loadModel('bi');
-        $firstAction = $this->loadModel('action')->getAccountFirstAction($this->app->user->account);
-        $builtins    = array_column($this->config->bi->builtin->pivots, 'id', 'id');
+        /* $firstAction = $this->loadModel('action')->getAccountFirstAction($this->app->user->account);
+        $builtins    = array_column($this->config->bi->builtin->pivots, 'id', 'id');*/
         $menus = array();
         foreach($groups as $group)
         {
@@ -100,7 +100,7 @@ class pivotZen extends pivot
 
             foreach($pivots as $pivot)
             {
-                $this->setNewMark($pivot, $firstAction, $builtins);
+                /* $this->setNewMark($pivot, $firstAction, $builtins);*/
                 $params  = helper::safe64Encode("groupID={$group->id}&pivotID={$pivot->id}&mark=view");
                 $url     = inlink('preview', "dimension={$dimensionID}&group={$currentGroup->id}&method=show&params={$params}");
                 $menus[] = (object)array('id' => $group->id . '_' . $pivot->id, 'parent' => $group->grade > 1 ? $group->id : 0, 'name' => $pivot->name, 'url' => $url);
