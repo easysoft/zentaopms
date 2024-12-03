@@ -248,8 +248,8 @@ div
                 ) : null,
                 isset($execution->delay) ? label
                 (
-                    setClass('danger-pale ring-danger ml-2 flex-none'),
-                    $lang->execution->delayed
+                    setClass('danger-pale circle size-sm nowrap ml-2 flex-none'),
+                    sprintf($lang->project->delayInfo, $execution->delay)
                 ) : label
                 (
                     setClass("status-{$execution->status} ml-2 flex-none"),

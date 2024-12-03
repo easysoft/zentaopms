@@ -34,11 +34,12 @@ if(hasPriv('execution', 'create'))
 
 $app->loadLang('kanban');
 $kanbanCards = array();
+$today       = helper::today();
 if(!empty($kanbanList))
 {
     foreach($kanbanList as $kanban)
     {
-        $status      = ($kanban->end < helper::today() && !in_array($kanban->status, array('done', 'closed', 'suspended'))) ? 'delay' : $kanban->status;
+        $status      = ($kanban->end < $today && !in_array($kanban->status, array('done', 'closed', 'suspended'))) ? 'delay' : $kanban->status;
         $statusLabel = $config->project->statusLabelList[$status];
 
         $count         = 0;
@@ -108,7 +109,7 @@ if(!empty($kanbanList))
                         span
                         (
                             setClass("project-status label rounded-full {$statusLabel}"),
-                            $lang->project->statusList[$status]
+                            $status != 'delay' ? $lang->project->statusList[$status] : sprintf($lang->project->delayInfo, helper::diffDate($today, $kanban->end))
                         ),
                         a
                         (

@@ -12,8 +12,8 @@ window.getItem = function(info)
 {
     if(info.item.delay)
     {
-        info.item.suffix      = delayed;
-        info.item.suffixClass = 'label danger rounded-xl' + (info.item.status == 'doing' ? ' mr-8' : '');
+        info.item.suffix      = delayInfo.replace('%s', info.item.delay);
+        info.item.suffixClass = 'label danger-pale circle size-sm nowrap' + (info.item.status == 'doing' ? ' mr-8' : '');
     }
     if(info.item.status == 'doing') info.item.prefix = {component: 'ProgressCircle', props: {percent: info.item.progress, size: 24}};
     if(info.item.cardType == 'doingExecutions' && privs.canViewExecution)

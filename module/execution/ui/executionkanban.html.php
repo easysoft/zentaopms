@@ -34,7 +34,7 @@ foreach($kanbanList as $current => $region)
 }
 
 jsVar('privs',   $privs);
-jsVar('delayed', $lang->project->statusList['delay']);
+jsVar('delayInfo', $lang->project->delayInfo);
 
 if(empty($kanbanList))
 {

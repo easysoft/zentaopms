@@ -125,7 +125,7 @@ panel
     (
         setClass('flex items-center justify-center'),
         $executionName . ' ' . $this->lang->execution->burn . '(' . zget($lang->execution->burnByList, $burnBy) . ')',
-        isset($execution->delay) ? label(setClass('label danger-pale ring-danger ml-3'), $lang->execution->delayed) : null
+        isset($execution->delay) ? label(setClass('label danger-pale circle size-sm nowrap ml-3'), sprintf($lang->project->delayInfo, $execution->delay)) : null
     ),
     echarts
     (

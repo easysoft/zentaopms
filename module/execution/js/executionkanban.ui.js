@@ -12,8 +12,8 @@ window.getItem = function(info)
 {
     if(info.item.delay)
     {
-        info.item.suffix      = delayed;
-        info.item.suffixClass = 'label danger rounded-xl mr-8';
+        info.item.suffix      = delayInfo.replace('%s', info.item.delay);
+        info.item.suffixClass = 'label danger-pale circle size-sm nowrap mr-8';
     }
     info.item.prefix     = {component: 'ProgressCircle', props: {percent: info.item.progress, size: 24}};
     info.item.titleAttrs = {'class': 'text-black clip ' + (info.item.delay ? '' : 'mr-8'), 'title' : info.item.title};
