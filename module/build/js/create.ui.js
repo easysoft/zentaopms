@@ -68,6 +68,7 @@ $().ready(function()
             });
         }
     });
+
     loadBranches();
     if(multipleProject)
     {
@@ -76,11 +77,11 @@ $().ready(function()
             loadProducts();
         })
     }
+
     if(hidden == 'hide')
     {
         loadSystem(currentProduct);
     }
-
 });
 
 /**
