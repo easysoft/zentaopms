@@ -3988,7 +3988,7 @@ class executionModel extends model
             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
             ->where('t1.execution')->eq($executionID)
             ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t1.parent')->ge(0)
+            ->beginIF(!$this->cookie->showParent)->andWhere('t1.isParent')->ne('1')->fi()
             ->beginIF($excludeTasks)->andWhere('t1.id')->notIN($excludeTasks)->fi()
             ->orderBy($orderBy)
             ->page($pager)

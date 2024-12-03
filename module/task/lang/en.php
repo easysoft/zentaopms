@@ -177,6 +177,7 @@ $lang->task->children          = 'Child Task';
 $lang->task->childrenAB        = 'C';
 $lang->task->parent            = 'Parent Task';
 $lang->task->parentAB          = 'Parent';
+$lang->task->showParent        = 'Show Parent Tasks';
 $lang->task->lblPri            = 'P';
 $lang->task->lblHour           = '(h)';
 $lang->task->lblTestStory      = 'Story Tested';

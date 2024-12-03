@@ -177,6 +177,7 @@ $lang->task->children          = '子任务';
 $lang->task->childrenAB        = '子';
 $lang->task->parent            = '父任务';
 $lang->task->parentAB          = '父';
+$lang->task->showParent        = '显示父任务';
 $lang->task->lblPri            = 'P';
 $lang->task->lblHour           = '(h)';
 $lang->task->lblTestStory      = "测试{$lang->SRCommon}";
