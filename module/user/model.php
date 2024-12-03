@@ -2106,11 +2106,8 @@ class userModel extends model
 
         /* 可以看到项目，就能看到项目下公开的迭代。 */
         /* Set opened sprints and stages into userview. */
-        $openedSprints = $this->dao->select('id')->from(TABLE_PROJECT)
-            ->where('acl')->eq('open')
-            ->andWhere('type')->in('sprint,stage,kanban')
-            ->andWhere('project')->in($userView->projects)
-            ->fetchPairs();
+        $openedSprints = $this->loadModel('project')->getListByAclAndType('open', 'sprint,stage,kanban');
+        $openedSprints = array_filter(array_map(function($sprint) use ($userView) { if(strpos(",{$userView->projects},", ",{$sprint->project},") !== false) return $sprint->id; }, $openedSprints));
 
         $userView->sprints = rtrim($userView->sprints, ',')  . ',' . join(',', $openedSprints);
 
