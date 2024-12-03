@@ -1653,10 +1653,10 @@ class userModel extends model
     {
         static $allProducts, $allProjects, $allPrograms, $allSprints, $teams, $whiteList, $stakeholders;
 
-        if(!$allProducts || $force) $allProducts = $this->dao->select('id,PO,QD,RD,acl,whitelist,program,createdBy,reviewer,PMT,feedback,ticket')->from(TABLE_PRODUCT)->where('acl')->ne('open')->fetchAll('id');
-        if(!$allProjects || $force) $allProjects = $this->dao->select('id,PO,PM,QD,RD,acl,type,path,parent,openedBy')->from(TABLE_PROJECT)->where('acl')->ne('open')->andWhere('type')->eq('project')->fetchAll('id');
-        if(!$allPrograms || $force) $allPrograms = $this->dao->select('id,PO,PM,QD,RD,acl,type,path,parent,openedBy')->from(TABLE_PROGRAM)->where('acl')->ne('open')->andWhere('type')->eq('program')->fetchAll('id');
-        if(!$allSprints  || $force) $allSprints  = $this->dao->select('id,PO,PM,QD,RD,acl,project,path,parent,type,openedBy')->from(TABLE_PROJECT)->where('acl')->eq('private')->andWhere('type')->in('sprint,stage,kanban')->fetchAll('id');
+        if(!$allProducts || $force) $allProducts = $this->loadModel('product')->getListByAcl('private');
+        if(!$allProjects || $force) $allProjects = $this->loadModel('project')->getListByAclAndType('private', 'project');
+        if(!$allPrograms || $force) $allPrograms = $this->project->getListByAclAndType('private', 'program');
+        if(!$allSprints  || $force) $allSprints  = $this->project->getListByAclAndType('private', 'sprint,stage,kanban');
 
         if(!$teams || $force)
         {
@@ -2057,12 +2057,12 @@ class userModel extends model
         $userView = $this->computeUserView($account, true);
 
         /* Get opened projects, programs, products and set it to userview. */
-        $openedPrograms = $this->dao->select('id')->from(TABLE_PROJECT)->where('acl')->eq('open')->andWhere('type')->eq('program')->fetchPairs();
-        $openedProjects = $this->dao->select('id')->from(TABLE_PROJECT)->where('acl')->eq('open')->andWhere('type')->eq('project')->fetchPairs();
-        $openedProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('acl')->eq('open')->fetchPairs();
+        $openedProducts = array_keys($this->loadModel('product')->getListByAcl('open'));
+        $openedPrograms = array_keys($this->loadModel('project')->getListByAclAndType('open', 'program'));
+        $openedProjects = array_keys($this->project->getListByAclAndType('open', 'project'));
 
-        $userView->programs = rtrim($userView->programs, ',') . ',' . join(',', $openedPrograms);
         $userView->products = rtrim($userView->products, ',') . ',' . join(',', $openedProducts);
+        $userView->programs = rtrim($userView->programs, ',') . ',' . join(',', $openedPrograms);
         $userView->projects = rtrim($userView->projects, ',') . ',' . join(',', $openedProjects);
 
         /* 合并用户视图权限到用户访问权限。 */
