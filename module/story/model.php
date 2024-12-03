@@ -2871,6 +2871,7 @@ class storyModel extends model
                 ->where('deleted')->eq('0')
                 ->andWhere('product')->eq($productID)
                 ->andWhere('type')->eq('requirement')
+                ->andWhere("FIND_IN_SET('{$this->config->vision}', vision)")
                 ->beginIF($this->config->requirement->gradeRule == 'stepwise')->andWhere('grade')->eq($maxGradeGroup['requirement'])->fi()
                 ->fetchAll('id');
 
