@@ -167,6 +167,7 @@ $lang->shortcutOperation = 'Quick Start';
 
 $lang->select        = 'Auswählen';
 $lang->selectAll     = 'Alle';
+$lang->cancelSelect  = 'Cancel Select';
 $lang->selectReverse = 'Auswahl umkehren';
 $lang->loading       = 'Lade...';
 $lang->notFound      = 'Nicht gefunden!';

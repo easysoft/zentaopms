@@ -14,6 +14,7 @@ jsVar('users', $users);
 jsVar('roles', $roles);
 jsVar('team2Import', $team2Import);
 jsVar('executionID', $execution->id);
+jsVar('isInModal', isInModal());
 
 /* zin: Define the set::module('team') feature bar on main menu. */
 $copyTeamBox = '';
@@ -263,7 +264,7 @@ div
                             toggle::tooltip(array('title' => $lang->execution->limitedTip)),
                             'help'
                         ),
-                        set::width('96px')
+                        set::width('120px')
                     ),
                     h::th
                     (

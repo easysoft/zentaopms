@@ -275,6 +275,7 @@ $lang->execution->batchEdit                 = "Mehere bearbeiten";
 $lang->execution->batchEditAction           = "Batch Edit";
 $lang->execution->batchChangeStatus         = "Batch Change Status";
 $lang->execution->manageMembers             = 'Teams verwalten';
+$lang->execution->manageTeamMember          = 'Manage Team Member';
 $lang->execution->unlinkMember              = 'Mitgliefer entfernen';
 $lang->execution->unlinkStory               = 'Story entfernen';
 $lang->execution->unlinkStoryAB             = 'Unlink';

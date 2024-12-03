@@ -275,6 +275,7 @@ $lang->execution->batchEdit                 = "编辑";
 $lang->execution->batchEditAction           = "批量编辑";
 $lang->execution->batchChangeStatus         = "批量修改状态";
 $lang->execution->manageMembers             = '团队管理';
+$lang->execution->manageTeamMember          = '维护团队成员';
 $lang->execution->unlinkMember              = '移除成员';
 $lang->execution->unlinkStory               = "移除{$lang->SRCommon}";
 $lang->execution->unlinkStoryAB             = "移除{$lang->SRCommon}";

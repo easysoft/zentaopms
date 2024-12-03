@@ -37,9 +37,9 @@ window.deleteItem = function(obj)
  */
 window.setDeptUsers = function()
 {
-    const dept = $('input[name=dept]').val(); // Get dept ID.
+    const dept = $('#featureBar input[name=dept]').val(); // Get dept ID.
     const link = $.createLink('execution', 'manageMembers', 'executionID=' + executionID + '&team2Import=' + team2Import + '&dept=' + dept); // Create manageMembers link.
-    loadPage(link);
+    isInModal ? loadModal(link) : loadPage(link);
 }
 
 /**
@@ -51,10 +51,10 @@ window.setDeptUsers = function()
  */
 function choseTeam2Copy()
 {
-    const team = $('input[name=execution]').val();
-    const dept = $('input[name=dept]').val();
+    const team = $('#featureBar input[name=execution]').val();
+    const dept = $('#featureBar input[name=dept]').val();
     const link = $.createLink('execution', 'manageMembers', 'executionID=' + executionID + '&team2Import=' + team + '&dept=' + dept);
-    loadPage(link);
+    isInModal ? loadModal(link) : loadPage(link);
 }
 
 /**

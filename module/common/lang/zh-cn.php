@@ -167,6 +167,7 @@ $lang->shortcutOperation = '快捷操作';
 
 $lang->select        = '选择';
 $lang->selectAll     = '全选';
+$lang->cancelSelect  = '取消选择';
 $lang->selectReverse = '反选';
 $lang->loading       = '稍候...';
 $lang->notFound      = '抱歉，您访问的对象不存在！';
