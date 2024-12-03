@@ -3,6 +3,32 @@ declare(strict_types=1);
 class projectModel extends model
 {
     /**
+     * 根据权限控制范围获取项目。
+     * Get projects by acl.
+     *
+     * @param  string $acl
+     * @param  array  $idList
+     * @access public
+     * @return array
+     */
+    public function getListByAcl(string $acl, array $idList = []): array
+    {
+        $types = $this->mao->key(CACHE_PROJECT_TYPE)->get();
+        if(!$types)
+        {
+            $types = $this->dao->select('DINSTINCT type')->from(TABLE_PROJECT)->fetchPairs();
+            $this->mao->save($types);
+        }
+        if(!$types) return [];
+
+        $projects = $this->getListByAclAndType($acl, implode(',', $types));
+        if(!$projects) return [];
+
+        if($idList) $projects = array_intersect_key($projects, array_flip($idList));
+
+        return $projects ?: [];
+    }
+    /**
      * 根据权限控制范围和类型获取项目。
      * Get projects by acl and type.
      *
