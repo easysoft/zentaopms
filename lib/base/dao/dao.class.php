@@ -384,7 +384,7 @@ class baseDAO
         /* Check if can use the client cache. */
         $this->app->useClientCache = $this->app->clientCacheTime > $cachedTime;
 
-        return $cachedValue;
+        return $cachedValue ?: self::CACHE_MISS;
     }
 
     /**
