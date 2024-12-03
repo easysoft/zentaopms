@@ -745,6 +745,19 @@ class baseMao
     }
 
     /**
+     * 根据当前缓存键获取缓存。
+     * Get cache according to the current cache key.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function get()
+    {
+        if(empty($this->cache)) return false;
+        return $this->cache->get();
+    }
+
+    /**
      * 魔术方法。
      * 1. 转换 findByxxx 为 where 条件。
      * 2. 调用cache对象的方法。
@@ -767,7 +780,7 @@ class baseMao
          **/
         if(strpos($method, 'findby') !== false) return $this->findBy($method, $args);
 
-        if(empty($this->cache)) return false;
+        if(empty($this->cache)) return $this;
 
         if(method_exists($this->cache, $method)) return call_user_func_array([$this->cache, $method], $args);
 
