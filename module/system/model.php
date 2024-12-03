@@ -112,20 +112,28 @@ class systemModel extends model
      *
      * @param  int    $id
      * @param  object $formData
+     * @param  string $type
      * @access public
      * @return bool
      */
-    public function update(int $id, object $formData, bool $checkRequired = true): bool
+    public function update(int $id, object $formData, string $type = 'edit'): bool
     {
+        $oldSystem = $this->fetchByID($id);
+        $change    = common::createChanges($oldSystem, $formData);
+        if(empty($change)) return true;
+
         $this->dao->update(TABLE_SYSTEM)->data($formData)
             ->check('name', 'unique', '`id` != ' . $id)
             ->autoCheck()
-            ->beginIF($checkRequired)->batchCheck($this->config->system->edit->requiredFields, 'notempty')->fi()
+            ->beginIF($type == 'edit')->batchCheck($this->config->system->edit->requiredFields, 'notempty')->fi()
             ->where('id')->eq($id)
             ->exec();
         if(dao::isError()) return false;
 
-        $this->loadModel('action')->create('system', $id, 'edited');
+        $actionType = $type == 'edit' ? 'edited' : $type;
+
+        $actionID = $this->loadModel('action')->create('system', $id, $actionType);
+        if($actionID) $this->action->logHistory($actionID, $change);
         return !dao::isError();
     }
 

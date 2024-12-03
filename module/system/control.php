@@ -623,9 +623,6 @@ class system extends control
                 ->setDefault('editedBy', $this->app->user->account)
                 ->get();
 
-            $change = common::createChanges($system, $formData);
-            if(empty($change)) return $this->sendSuccess(array('load' => true));
-
             $this->system->update($id, $formData);
             if(dao::isError()) return $this->sendError(dao::getError());
 
@@ -651,10 +648,9 @@ class system extends control
         $system = new stdclass();
         $system->status = 'active';
 
-        $this->system->update($id, $system, false);
+        $this->system->update($id, $system, 'active');
         if(dao::isError()) return $this->sendError(dao::getError());
 
-        $this->loadModel('action')->create('system', $id, 'active');
         $this->sendSuccess(array('load' => true));
     }
 
@@ -671,10 +667,9 @@ class system extends control
         $system = new stdclass();
         $system->status = 'inactive';
 
-        $this->system->update($id, $system, false);
+        $this->system->update($id, $system, 'inactive');
         if(dao::isError()) return $this->sendError(dao::getError());
 
-        $this->loadModel('action')->create('system', $id, 'inactive');
         $this->sendSuccess(array('load' => true));
     }
 
