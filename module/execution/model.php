@@ -1816,6 +1816,27 @@ class executionModel extends model
         /* If is admin, return true. */
         if($this->app->user->admin) return true;
 
+        /* Get all teams of all limited projects and group by projects. */
+        $projects = $this->dao->select('root, limited')->from(TABLE_TEAM)
+            ->where('type')->eq('project')
+            ->andWhere('account')->eq($this->app->user->account)
+            ->andWhere('limited')->eq('yes')
+            ->orderBy('root asc')
+            ->fetchPairs('root', 'root');
+        $subExecutions = $this->dao->select('id, id')->from(TABLE_EXECUTION)->where('project')->in($projects)->fetchPairs();
+
+        /* Get no limited executions in limited projects. */
+        $notLimitedExecutions = $this->dao->select('root, limited')->from(TABLE_TEAM)
+            ->where('type')->eq('execution')
+            ->andWhere('account')->eq($this->app->user->account)
+            ->andWhere('limited')->eq('no')
+            ->andWhere('root')->in($subExecutions)
+            ->orderBy('root asc')
+            ->fetchPairs('root', 'root');
+
+        /* 获取当前用户再受限项目下的非受限执行以外的执行。 */
+        $subExecutions = array_diff($subExecutions, $notLimitedExecutions);
+
         /* Get all teams of all executions and group by executions, save it as static. */
         $executions = $this->dao->select('root, limited')->from(TABLE_TEAM)
             ->where('type')->eq('execution')
@@ -1823,6 +1844,8 @@ class executionModel extends model
             ->andWhere('limited')->eq('yes')
             ->orderBy('root asc')
             ->fetchPairs('root', 'root');
+
+        $executions = array_merge($executions, $subExecutions);
 
         $this->session->set('limitedExecutions', implode(',', $executions));
         return $this->session->limitedExecutions;
