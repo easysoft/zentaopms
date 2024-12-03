@@ -1936,7 +1936,7 @@ class userModel extends model
         }
 
         /* 更新访问权限表。 */
-        $this->delete()->from(TABLE_USERVIEW)->where('account')->eq($account)->exec();
+        $this->dao->delete()->from(TABLE_USERVIEW)->where('account')->eq($account)->exec();
         $this->dao->insert(TABLE_USERVIEW)->data($userView)->exec();
 
         return $userView;
