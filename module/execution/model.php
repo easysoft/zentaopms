@@ -1167,7 +1167,7 @@ class executionModel extends model
 
         if($productID != 0)
         {
-            return $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            return $this->dao->select('t2.*, t2.`desc`')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project= t2.id')
                 ->where('t1.product')->eq($productID)
                 ->andWhere('t2.deleted')->eq(0)
@@ -1186,7 +1186,7 @@ class executionModel extends model
         }
         else
         {
-            return $this->dao->select("*, IF(INSTR(' done,closed', status) < 2, 0, 1) AS isDone")->from(TABLE_EXECUTION)
+            return $this->dao->select("*, `desc`, IF(INSTR(' done,closed', status) < 2, 0, 1) AS isDone")->from(TABLE_EXECUTION)
                 ->where('deleted')->eq(0)
                 ->andWhere('vision')->eq($this->config->vision)
                 ->beginIF($type == 'all')->andWhere('type')->in('sprint,stage,kanban')->fi()
