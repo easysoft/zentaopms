@@ -89,6 +89,14 @@ class xuanxuanMessage extends messageModel
                     if($reviewers) $target .= ',' . implode(',', $reviewers);
                     $target = trim($target, ',');
                 }
+                elseif($objectType == 'deploy')
+                {
+                    $senderUser = $this->loadModel('deploy')->getToAndCcList($object, $actionType);
+                    if(is_array($senderUser) && !empty($senderUser))
+                    {
+                        foreach($senderUser as $user) $target .= ',' . $user;
+                    }
+                }
                 else
                 {
                     if(!empty($object->assignedTo)) $target .= $object->assignedTo == 'closed' ? $object->openedBy : $object->assignedTo;
@@ -103,65 +111,73 @@ class xuanxuanMessage extends messageModel
                     ->fetchAll('id');
                 $target = array_keys($target);
 
-                $subcontent = (object)array('action' => $actionType, 'object' => $objectID, 'objectName' => $object->$field, 'objectType' => $objectType, 'actor' => $this->app->user->id, 'actorName' => $this->app->user->realname);
-                $subcontent->name = $object->$field;
-                $subcontent->id = sprintf('%03d', $object->id);
-                $subcontent->count = 1;
+                $subContent = (object)array('action' => $actionType, 'object' => $objectID, 'objectName' => $object->$field, 'objectType' => $objectType, 'actor' => $this->app->user->id, 'actorName' => $this->app->user->realname);
+                $subContent->name = $object->$field;
+                $subContent->id = sprintf('%03d', $object->id);
+                $subContent->count = 1;
                 if($objectType == 'task')
                 {
-                    $subcontent->headTitle    = $object->projectName;
-                    $subcontent->headSubTitle = $object->execuName;
-                    $subcontent->parentType   = 'execution';
-                    $subcontent->parent       = $object->execution;
-                    $subcontent->parentURL    = "xxc:openInApp/zentao-integrated/" . urlencode($server . helper::createLink('execution', 'task', "id=$object->execution", 'html'));
-                    $subcontent->cardURL      = $url;
+                    $subContent->headTitle    = $object->projectName;
+                    $subContent->headSubTitle = $object->execuName;
+                    $subContent->parentType   = 'execution';
+                    $subContent->parent       = $object->execution;
+                    $subContent->parentURL    = "xxc:openInApp/zentao-integrated/" . urlencode($server . helper::createLink('execution', 'task', "id=$object->execution", 'html'));
+                    $subContent->cardURL      = $url;
                 }
                 elseif($objectType == 'story')
                 {
-                    $subcontent->headTitle  = $object->productName;
-                    $subcontent->parentType = 'product';
-                    $subcontent->parent     = $object->product;
-                    $subcontent->parentURL  = "xxc:openInApp/zentao-integrated/" . urlencode($server . helper::createLink('product', 'browse', "id=$object->product", 'html'));
-                    $subcontent->cardURL    = $url;
+                    $subContent->headTitle  = $object->productName;
+                    $subContent->parentType = 'product';
+                    $subContent->parent     = $object->product;
+                    $subContent->parentURL  = "xxc:openInApp/zentao-integrated/" . urlencode($server . helper::createLink('product', 'browse', "id=$object->product", 'html'));
+                    $subContent->cardURL    = $url;
                 }
                 elseif($objectType == 'bug')
                 {
                     $parentType = empty($object->execuName) ? 'product' : 'project';
                     $parentNameKey = $parentType . 'Name';
-                    $subcontent->headTitle    = $object->$parentNameKey;
-                    $subcontent->headSubTitle = $object->execuName;
-                    $subcontent->parentType   = $parentType;
-                    $subcontent->parent       = $object->$parentType;
-                    $subcontent->parentURL    = "xxc:openInApp/zentao-integrated/" . urlencode($server . helper::createLink($parentType, 'browse', "id=$subcontent->parent", 'html'));
-                    $subcontent->cardURL      = $url;
+                    $subContent->headTitle    = $object->$parentNameKey;
+                    $subContent->headSubTitle = $object->execuName;
+                    $subContent->parentType   = $parentType;
+                    $subContent->parent       = $object->$parentType;
+                    $subContent->parentURL    = "xxc:openInApp/zentao-integrated/" . urlencode($server . helper::createLink($parentType, 'browse', "id=$subContent->parent", 'html'));
+                    $subContent->cardURL      = $url;
                 }
                 elseif($objectType == 'feedback')
                 {
-                    $subcontent->headTitle  = $object->productName;
-                    $subcontent->parentType = 'product';
-                    $subcontent->parent     = $object->product;
-                    $subcontent->parentURL  = "xxc:openInApp/zentao-integrated/" . urlencode($server . helper::createLink('feedback', 'browse', "id=$object->product", 'html'));
-                    $subcontent->cardURL    = $url;
+                    $subContent->headTitle  = $object->productName;
+                    $subContent->parentType = 'product';
+                    $subContent->parent     = $object->product;
+                    $subContent->parentURL  = "xxc:openInApp/zentao-integrated/" . urlencode($server . helper::createLink('feedback', 'browse', "id=$object->product", 'html'));
+                    $subContent->cardURL    = $url;
                 }
                 elseif($objectType == 'demandpool')
                 {
-                    $subcontent->headTitle  = $object->name;
-                    $subcontent->parentType = '';
-                    $subcontent->parent     = 0;
-                    $subcontent->parentURL  = "xxc:openInApp/zentao-integrated/" . urlencode($server . helper::createLink('demandpool', 'browse', '', 'html'));
-                    $subcontent->cardURL    = $url;
+                    $subContent->headTitle  = $object->name;
+                    $subContent->parentType = '';
+                    $subContent->parent     = 0;
+                    $subContent->parentURL  = "xxc:openInApp/zentao-integrated/" . urlencode($server . helper::createLink('demandpool', 'browse', '', 'html'));
+                    $subContent->cardURL    = $url;
                 }
                 elseif($objectType == 'demand')
                 {
-                    $subcontent->headTitle  = $object->poolName;
-                    $subcontent->parentType = 'demandpool';
-                    $subcontent->parent     = $object->pool;
-                    $subcontent->parentURL  = "xxc:openInApp/zentao-integrated/" . urlencode($server . helper::createLink('demand', 'browse', "id=$object->pool", 'html'));
-                    $subcontent->cardURL    = $url;
+                    $subContent->headTitle  = $object->poolName;
+                    $subContent->parentType = 'demandpool';
+                    $subContent->parent     = $object->pool;
+                    $subContent->parentURL  = "xxc:openInApp/zentao-integrated/" . urlencode($server . helper::createLink('demand', 'browse', "id=$object->pool", 'html'));
+                    $subContent->cardURL    = $url;
+                }
+                elseif($objectType == 'deploy')
+                {
+                    $subContent->headTitle    = $object->name;
+                    $subContent->parentType   = $objectType;
+                    $subContent->parent       = 0;
+                    $subContent->parentURL    = "xxc:openInApp/zentao-integrated/" . urlencode($url);
+                    $subContent->cardURL      = $url;
                 }
                 else
                 {
-                    $subcontent->parentType = $objectType;
+                    $subContent->parentType = $objectType;
                 }
 
                 $contentData = new stdclass();
@@ -190,16 +206,18 @@ class xuanxuanMessage extends messageModel
                     $contentData->title       = $title;
                     $contentData->subtitle    = '';
                     $contentData->contentType = "zentao-$objectType-$actionType";
-                    $contentData->parentType  = $subcontent->parentType;
-                    $contentData->content     = json_encode($subcontent);
+                    $contentData->parentType  = $subContent->parentType;
+                    $contentData->content     = json_encode($subContent);
                     $contentData->actions     = array();
                     $contentData->url         = "xxc:openInApp/zentao-integrated/" . urlencode($url);
                 }
                 $contentData->extra = is_array($extra) ? $extra : '';
 
-                $content = json_encode($contentData);
+                $content   = json_encode($contentData);
                 $avatarUrl = $server . $this->app->getWebRoot() . 'favicon.ico';
-                if($target && ($objectType == 'bug' || $objectType == 'task' || $objectType == 'story' || $objectType == 'feedback' || $objectType == 'demand' || $objectType == 'demandpool')) $this->loadModel('im')->messageCreateNotify($target, $title, $subtitle = '', $content, $contentType = 'object', $url, $actions = array(), $sender = array('id' => 'zentao', 'realname' => $this->lang->message->sender, 'name' => $this->lang->message->sender, 'avatar' => $avatarUrl));
+
+                $objectTypeList = array('bug', 'task', 'story', 'feedback', 'demand', 'demandpool', 'deploy');
+                if($target && in_array($objectType, $objectTypeList)) $this->loadModel('im')->messageCreateNotify($target, $title, '', $content, 'object', $url, array(), array('id' => 'zentao', 'realname' => $this->lang->message->sender, 'name' => $this->lang->message->sender, 'avatar' => $avatarUrl));
 
                 if($objectType == 'mr' and is_array($this->lang->message->mr->$actionType) and !empty($object->assignee))
                 {
@@ -207,7 +225,7 @@ class xuanxuanMessage extends messageModel
 
                     $content = json_encode($contentData);
                     $target  = $this->dao->select('id')->from(TABLE_USER)->where('account')->eq($object->assignee)->fetch('id');
-                    if($target) $this->loadModel('im')->messageCreateNotify(array($target), $title, $subtitle = '', $content, $contentType = 'object', $url, $actions = array(), $sender = array('id' => 'zentao', 'realname' => $this->lang->message->sender, 'name' => $this->lang->message->sender, 'avatar' => $avatarUrl));
+                    if($target) $this->loadModel('im')->messageCreateNotify(array($target), $title, '', $content, 'object', $url, array(), array('id' => 'zentao', 'realname' => $this->lang->message->sender, 'name' => $this->lang->message->sender, 'avatar' => $avatarUrl));
                 }
             }
         }
