@@ -95,7 +95,7 @@ class releaseModel extends model
         foreach($releases as $release) $projectIdList .= trim($release->project, ',') . ',';
         $projectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchPairs();
 
-        $builds = $this->dao->select('id,name')
+        $builds = $this->dao->select('id,name,execution,project')
             ->from(TABLE_BUILD)
             ->where('deleted')->eq(0)
             ->fetchAll('id');
