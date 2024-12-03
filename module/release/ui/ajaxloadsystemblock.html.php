@@ -41,6 +41,7 @@ jsVar('appLength',   count($apps));
 
 $systemTR = array();
 $i        = 0;
+$appCount = count($apps);
 foreach($apps as $system)
 {
     $appID  = $linkedApps ? key($linkedApps) : 0;
@@ -70,7 +71,7 @@ foreach($apps as $system)
                 $appID ? set::value($linked) : null
             )
         ),
-        h::td
+        $appCount > 1 ? h::td
         (
             set::className('actions-list'),
             btnGroup
@@ -80,7 +81,7 @@ foreach($apps as $system)
                     array('class' => 'btn btn-link text-gray del-item', 'icon' => 'trash', 'onclick' => 'deleteItem(this)')
                 ))
             )
-        )
+        ) : null
     );
 
     unset($linkedApps[key($linkedApps)]);
