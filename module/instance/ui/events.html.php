@@ -48,7 +48,12 @@ formPanel
     div
     (
         setClass('w-full'),
-        h::pre(setID('events-content'), setClass('bg-gray-800 text-white block h-96 scrollbar-thin')),
+        h::pre(
+            setID('events-content'),
+            /** 颜色值为: --color-gray-900 */
+            setStyle('--scrollbar-bar-bg','#30394a'),
+            setClass('bg-black text-white block h-96 scrollbar-thin')
+        ),
         set::actions(false)
     )
 );

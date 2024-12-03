@@ -41,13 +41,13 @@ class systemModel extends model
      * 获取应用键值对。
      * Get app pairs.
      *
-     * @param  mixed    $productID
+     * @param  int    $productID
      * @param  string $integrated
      * @param  string $status
      * @access public
      * @return array
      */
-    public function getPairs(mixed $productID = 0, string $integrated = '', string $status = ''): array
+    public function getPairs(int $productID = 0, string $integrated = '', string $status = ''): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getSystemPairs();
 
