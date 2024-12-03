@@ -28,3 +28,4 @@ $lang->projectbuild->product          = $lang->productCommon;
 $lang->projectbuild->scmPath          = 'SCM Path';
 $lang->projectbuild->filePath         = 'File Path';
 $lang->projectbuild->desc             = 'Description';
+$lang->projectbuild->systemName       = 'System';
