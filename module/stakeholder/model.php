@@ -306,8 +306,8 @@ class stakeholderModel extends model
      */
     public function getParentStakeholderGroup(array $objectIdList): array
     {
-        $objects = $this->dao->select('id, path, parent')->from(TABLE_PROJECT)->where('id')->in($objectIdList)->andWhere('acl')->ne('open')->fetchAll('id');
         $parents = array();
+        $objects = $this->loadModel('project')->getListByAcl('private', $objectIdList);
         foreach($objects as $object)
         {
             if($object->parent == 0) continue;
