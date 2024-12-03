@@ -74,7 +74,7 @@ class screenModel extends model
             ->where('dimension')->eq($dimensionID)
             ->beginIF($this->config->edition == 'open')->andWhere('id')->ne($this->config->screen->phpScreen['usageReport'])->fi()
             ->andWhere('deleted')->eq('0')
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**

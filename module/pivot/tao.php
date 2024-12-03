@@ -485,7 +485,7 @@ EOT)->from(TABLE_TASK)->alias('t1')
             ->andWhere('stage')->ne('draft')
             ->andWhere('deleted')->eq('0')
             ->orderBy('id_desc')
-            ->fetchAll();
+            ->fetchAll('', false);
 
         return $this->mergePivotSpecData($pivots, false);
     }
@@ -507,7 +507,7 @@ EOT)->from(TABLE_TASK)->alias('t1')
             ->where('pivot')->eq($pivotID)
             ->andWhere('version')->eq($version)
             ->andWhere('field')->in($fields)
-            ->fetchAll('field');
+            ->fetchAll('field', false);
 
         foreach($records as $field => $record)
         {

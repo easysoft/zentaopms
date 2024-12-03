@@ -2874,7 +2874,7 @@ class pivotModel extends model
         $pivot = $this->dao->select('*')->from(TABLE_PIVOT)->where('id')->eq($pivotID)->andWhere('deleted')->eq('0')->fetch();
         if(!$pivot) return false;
 
-        $pivotSpecList = $this->dao->select('*')->from(TABLE_PIVOTSPEC)->where('pivot')->eq($pivotID)->fetchAll();
+        $pivotSpecList = $this->dao->select('*')->from(TABLE_PIVOTSPEC)->where('pivot')->eq($pivotID)->fetchAll('', false);
         if(!$pivotSpecList) return false;
 
         $pivotVersionList = array();
