@@ -1933,6 +1933,7 @@ class tutorialModel extends model
         $release->branchName   = 'Test branch';
         $release->projectName  = '';
         $release->files        = array();
+        $release->releases     = '';
 
         return $release;
     }

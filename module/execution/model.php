@@ -100,7 +100,7 @@ class executionModel extends model
      */
     public function setMenu(int $executionID)
     {
-        $execution = $this->fetchByID((int)$executionID);
+        $execution = commonModel::isTutorialMode() ? $this->loadModel('tutorial')->getExecution() : $this->fetchByID((int)$executionID);
         if(!$execution) return;
 
         if($execution->type == 'kanban') $this->executionTao->setKanbanMenu();
