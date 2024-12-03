@@ -33,7 +33,6 @@ $().ready(function()
 
             loadSystem(productID);
         }
-
     });
 
     $(document).on('change', 'input[name=isIntegrated]', function()
