@@ -7,11 +7,11 @@ $config->projectrelease->actionList = array();
 
 $config->projectrelease->actionList['linkStory']['icon'] = 'link';
 $config->projectrelease->actionList['linkStory']['hint'] = $lang->release->linkStory;
-$config->projectrelease->actionList['linkStory']['url']  = helper::createLink('projectrelease', 'view', 'releaseID={id}&type=story&link=true');
+$config->projectrelease->actionList['linkStory']['url']  = array('module' => 'projectrelease', 'method' => 'view', 'params' => 'releaseID={id}&type=story&link=true');
 
 $config->projectrelease->actionList['linkBug']['icon'] = 'bug';
 $config->projectrelease->actionList['linkBug']['hint'] = $lang->release->linkBug;
-$config->projectrelease->actionList['linkBug']['url']  = helper::createLink('projectrelease', 'view', 'releaseID={id}&type=bug&link=true');
+$config->projectrelease->actionList['linkBug']['url']  = array('module' => 'projectrelease', 'method' => 'view', 'params' => 'releaseID={id}&type=bug&link=true');
 
 $config->projectrelease->actionList['publish']['icon']         = 'publish';
 $config->projectrelease->actionList['publish']['text ']        = $this->lang->release->changeStatusList['wait'];
@@ -22,15 +22,13 @@ $config->projectrelease->actionList['publish']['data-toggle']  = 'modal';
 
 $config->projectrelease->actionList['play']['icon']         = 'play';
 $config->projectrelease->actionList['play']['hint']         = $lang->release->changeStatusList['normal'];
-$config->projectrelease->actionList['play']['url']          = helper::createLink('projectrelease', 'changeStatus', 'releaseID={id}&action=active');
-$config->projectrelease->actionList['play']['notLoadModel'] = true;
+$config->projectrelease->actionList['play']['url']          = array('module' => 'projectrelease', 'method' => 'changeStatus', 'params' => 'releaseID={id}&action=active');
 $config->projectrelease->actionList['play']['className']    = 'ajax-submit';
 $config->projectrelease->actionList['play']['data-confirm'] = array('message' => $lang->release->confirmActivate, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 
 $config->projectrelease->actionList['pause']['icon']         = 'pause';
 $config->projectrelease->actionList['pause']['hint']         = $lang->release->changeStatusList['terminate'];
-$config->projectrelease->actionList['pause']['url']          = helper::createLink('projectrelease', 'changeStatus', 'releaseID={id}&action=pause');
-$config->projectrelease->actionList['pause']['notLoadModel'] = true;
+$config->projectrelease->actionList['pause']['url']          = array('module' => 'projectrelease', 'method' => 'changeStatus', 'params' => 'releaseID={id}&action=pause');
 $config->projectrelease->actionList['pause']['className']    = 'ajax-submit';
 $config->projectrelease->actionList['pause']['data-confirm'] = array('message' => $lang->release->confirmTerminate, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 

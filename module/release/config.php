@@ -14,7 +14,7 @@ $config->release->editor->edit    = array('id' => 'desc', 'tools' => 'simpleTool
 global $lang, $app;
 $config->release->actionList['linkStory']['icon'] = 'link';
 $config->release->actionList['linkStory']['hint'] = $lang->release->linkStory;
-$config->release->actionList['linkStory']['url']  = helper::createLink('release', 'view', 'releaseID={id}&type=story&link=true');
+$config->release->actionList['linkStory']['url']  = array('module' => 'release', 'method' => 'view', 'params' => 'releaseID={id}&type=story&link=true');
 
 $config->release->actionList['unlinkStory']['icon'] = 'unlink';
 $config->release->actionList['unlinkStory']['hint'] = $lang->release->unlinkStory;
@@ -22,7 +22,7 @@ $config->release->actionList['unlinkStory']['url']  = 'javascript: unlinkObject(
 
 $config->release->actionList['linkBug']['icon'] = 'bug';
 $config->release->actionList['linkBug']['hint'] = $lang->release->linkBug;
-$config->release->actionList['linkBug']['url']  = helper::createLink('release', 'view', 'releaseID={id}&type=bug&link=true');
+$config->release->actionList['linkBug']['url']  = array('module' => 'release', 'method' => 'view', 'params' => 'releaseID={id}&type=bug&link=true');
 
 $config->release->actionList['unlinkBug']['icon'] = 'unlink';
 $config->release->actionList['unlinkBug']['hint'] = $lang->release->unlinkBug;
