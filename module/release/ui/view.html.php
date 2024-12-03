@@ -63,8 +63,11 @@ jsVar('releaseID', $release->id);
 jsVar('showGrade', $showGrade);
 jsVar('grades', $grades);
 
-if($release->deleted || ($app->tab == 'project' && !common::canModify('project', $project)))
+if(!empty($release->releases) || $release->deleted || ($app->tab == 'project' && !common::canModify('project', $project)))
 {
+    $config->release->dtable->story->fieldList['id']['type'] = 'ID';
+    $config->release->dtable->bug->fieldList['id']['type']   = 'ID';
+
     unset($config->release->dtable->story->fieldList['actions']['list']);
     unset($config->release->dtable->bug->fieldList['actions']['list']);
 }
@@ -252,7 +255,7 @@ detailBody
                     set::cols(array_values($config->release->dtable->story->fieldList)),
                     set::data($storyTableData),
                     set::userMap($users),
-                    set::checkable($canBatchUnlinkStory || $canBatchCloseStory),
+                    set::checkable(empty($release->releases) && ($canBatchUnlinkStory || $canBatchCloseStory)),
                     set::sortLink(createLink($releaseModule, 'view', "releaseID={$release->id}&type=story&link={$link}&param={$param}&orderBy={name}_{sortType}")),
                     set::orderBy($orderBy),
                     set::onRenderCell(jsRaw('window.renderStoryCell')),
@@ -283,7 +286,7 @@ detailBody
                     set::userMap($users),
                     set::cols(array_values($config->release->dtable->bug->fieldList)),
                     set::data($bugTableData),
-                    set::checkable($canBatchUnlinkBug || $canBatchCloseBug),
+                    set::checkable(empty($release->releases) && ($canBatchUnlinkBug || $canBatchCloseBug)),
                     set::sortLink(createLink($releaseModule, 'view', "releaseID={$release->id}&type=bug&link={$link}&param={$param}&orderBy={name}_{sortType}")),
                     set::orderBy($orderBy),
                     set::extraHeight('+144'),
@@ -312,7 +315,7 @@ detailBody
                     set::userMap($users),
                     set::cols(array_values($config->release->dtable->leftBug->fieldList)),
                     set::data($leftBugTableData),
-                    set::checkable($canBatchUnlinkBug || $canBatchCloseBug),
+                    set::checkable(empty($release->releases) && ($canBatchUnlinkBug || $canBatchCloseBug)),
                     set::sortLink(createLink($releaseModule, 'view', "releaseID={$release->id}&type=leftBug&link={$link}&param={$param}&orderBy={name}_{sortType}")),
                     set::orderBy($orderBy),
                     set::extraHeight('+144'),
