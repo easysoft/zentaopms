@@ -182,6 +182,15 @@ class baseDAO
     static public $querys = array();
 
     /**
+     * 执行fetchAll是否跳过text类型字段。
+     * Exclude text fields when fetchAll.
+     *
+     * @var bool
+     * @access public
+     */
+    static public $autoExclude = true;
+
+    /**
      * 存放错误的数组。
      * The errors.
      *
@@ -1137,17 +1146,78 @@ class baseDAO
     }
 
     /**
+     * 匹配SQL语句中的表别名，返回['t1.*' => 't1', '*' => '']
+     * Match table alias name.
+     *
+     * @param  string $sql
+     * @access private
+     * @return array
+     */
+    private function matchTableAlias($sql)
+    {
+        $pattern = '/SELECT\s+((\w+\.\*,?\s*)+|\*)/i';
+
+        if(preg_match($pattern, $sql, $matches))
+        {
+            if (trim($matches[1]) === '*') return ['*' => ''];
+
+            /* Get table alias name */
+            preg_match_all('/(\w+)\.\*/', $matches[1], $aliasName);
+
+            return !empty($aliasName[1]) ? [$aliasName[0][0] => $aliasName[1][0]] : [];
+        }
+
+        return [];
+    }
+
+    /**
+     * 将SQL语句中的*展开为具体的字段。
+     * Extract fields in SQL.
+     *
+     * @param  string $sql
+     * @access private
+     * @return string
+     */
+    private function extractSQLFields($sql)
+    {
+        $aliasList = $this->matchTableAlias($sql);
+
+        foreach($aliasList as $selectStr => $tableAlias)
+        {
+            /* Get fields for selectStr. */
+            $tableName = $this->sqlobj->tableAlias[$tableAlias];
+            $fields    = $this->descTable($tableName);
+
+            /* 使用具体的字段替换星号。 Replace selectStr with fields. */
+            $tableFields = [];
+            foreach($fields as $field)
+            {
+                if(strpos($field->type, 'text') !== false) continue;
+
+                $tableFields[] = ($tableAlias ? $tableAlias . '.`' : '`') . $field->field . '`';
+            }
+
+            $sql = str_replace($selectStr, implode(',', $tableFields), $sql);
+        }
+
+        return $sql;
+    }
+
+    /**
      * 获取所有记录。
      * Fetch all records.
      *
      * @param  string $keyField     返回以该字段做键的记录
      *                              the key field, thus the return records is keyed by this field
+     * @param  bool   $autoExclude  是否排除text类型字段 exclude field type of text
      * @access public
      * @return array the records
      */
-    public function fetchAll($keyField = '')
+    public function fetchAll($keyField = '', $autoExclude = true)
     {
-        $sql  = $this->processSQL();
+        $sql = $this->processSQL();
+        if(self::$autoExclude && $autoExclude) $sql = $this->extractSQLFields($sql);
+
         $key  = $this->createCacheKey('fetchAll', md5($sql));
         $rows = $this->getCache($key);
         if($rows === self::CACHE_MISS)
@@ -1832,6 +1902,24 @@ class baseSQL
     public $magicQuote;
 
     /**
+     * 表别名。
+     * Table alias.
+     *
+     * @var array
+     * @access public
+     */
+    public $tableAlias;
+
+    /**
+     * 当前操作的表。
+     * Current table.
+     *
+     * @var array
+     * @access public
+     */
+    public $currentTable;
+
+    /**
      * 构造方法。
      * The construct function.
      *
@@ -1844,6 +1932,7 @@ class baseSQL
         $this->dbh        = $dbh;
         $this->data       = new stdclass();
         $this->skipFields = '';
+        $this->tableAlias = [];
         $this->magicQuote = (version_compare(phpversion(), '5.4', '<') and function_exists('get_magic_quotes_gpc') and get_magic_quotes_gpc());
     }
 
@@ -2064,7 +2153,12 @@ class baseSQL
      */
     public function from($table)
     {
-        $this->sql .= "FROM $table";
+        $this->sql         .= "FROM $table";
+        $this->currentTable = $table;
+
+        /* Default table. */
+        $this->tableAlias[''] = $table;
+
         return $this;
     }
 
@@ -2080,6 +2174,9 @@ class baseSQL
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
         $this->sql .= " AS $alias ";
+
+        $this->tableAlias[$alias] = $this->currentTable;
+
         return $this;
     }
 
@@ -2094,7 +2191,9 @@ class baseSQL
     public function leftJoin($table)
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
-        $this->sql .= " LEFT JOIN $table";
+        $this->sql         .= " LEFT JOIN $table";
+        $this->currentTable = $table;
+
         return $this;
     }
 

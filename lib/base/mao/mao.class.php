@@ -550,7 +550,7 @@ class baseMao
      */
     public function fetchAll(string $keyField = ''): array
     {
-        if(empty($this->cache) || empty($this->config->cache->raw[$this->table])) return $this->fetchFromDB('fetchAll', $keyField);
+        if(empty($this->cache) || empty($this->config->cache->raw[$this->table])) return $this->fetchFromDB('fetchAll', $keyField, false);
 
         $rawResult = [];
 
@@ -572,7 +572,7 @@ class baseMao
         }
 
         if(empty($rawResult)) $rawResult = $this->cache->fetchAll($this->table);
-        if(empty($rawResult)) return $this->fetchFromDB('fetchAll', $keyField);
+        if(empty($rawResult)) return $this->fetchFromDB('fetchAll', $keyField, false);
 
         $result = [];
         foreach($rawResult as $row)
@@ -640,11 +640,11 @@ class baseMao
      *
      * @param  string $fetchFunc    fetch|fetchAll
      * @param  string $keyField
-     * @param  string $valueField
+     * @param  string|bool $valueField
      * @access private
      * @return mixed
      */
-    private function fetchFromDB(string $fetchFunc, string $keyField, string $valueField = '')
+    private function fetchFromDB(string $fetchFunc, string $keyField, string|bool $valueField = '')
     {
         $fields = implode(',', $this->fields);
         $this->dao->select($fields)->from($this->table)->where('1=1');
