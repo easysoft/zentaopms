@@ -385,7 +385,7 @@ class cache
         $objectIdList = array_map(function($object) use ($field) { return $object->$field; }, $this->objects);
 
         /* 获取更新后的数据。Get the updated data. */
-        $objects = $this->dao->select('*')->from($this->table)->where($field)->in($objectIdList)->fetchAll($field);
+        $objects = $this->dao->select('*')->from($this->table)->where($field)->in($objectIdList)->fetchAll($field, false);
         if(!$objects) return $this->log('Failed to fetch updated objects. The sql is: ' . $this->dao->get(), __FILE__, __LINE__);
 
         /* 把更新后的数据保存到缓存中。Save the updated data to cache. */
@@ -558,7 +558,7 @@ class cache
     private function initTableCache(): array
     {
         $field   = $this->getTableField();
-        $objects = $this->dao->select('*')->from($this->table)->fetchAll($field);
+        $objects = $this->dao->select('*')->from($this->table)->fetchAll($field, false);
         if(!$objects) return [];
 
         $values = [];
@@ -666,7 +666,7 @@ class cache
         {
             $lostObjects = [];
             $diffIdList  = array_keys(array_diff($keys, array_keys($objects)));
-            $diffObjects = $this->dao->select('*')->from($table)->where('id')->in($diffIdList)->fetchAll();
+            $diffObjects = $this->dao->select('*')->from($table)->where('id')->in($diffIdList)->fetchAll('', false);
             foreach($diffObjects as $object)
             {
                 $rawCacheKey = $this->getRawCacheKey($code, $object->id);
@@ -885,7 +885,7 @@ class cache
 
             /* 执行操作后数据已经被修改，所以需要提前获取被影响的数据。*/
             $field   = $this->getTableField();
-            $objects = $this->dao->select('*')->from($table)->beginIF($where)->where($where)->fi()->fetchAll($field);
+            $objects = $this->dao->select('*')->from($table)->beginIF($where)->where($where)->fi()->fetchAll($field, false);
 
             $this->setWhere($where);
             $this->setObjects($objects);
