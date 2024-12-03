@@ -236,6 +236,8 @@ $lang->action->desc->verified             = '$date, verifié par <strong>$actor<
 $lang->action->desc->diff1                = '<strong><i>%s</i></strong> a changé. Il est passé de "%s" à "%s".<br />' . "\n";
 $lang->action->desc->diff2                = '<strong><i>%s</i></strong> a changé. La différence est ' . "\n" . "<blockquote class='textdiff'>%s</blockquote>" . "\n<blockquote class='original'>%s</blockquote>";
 $lang->action->desc->diff3                = 'Le nom du fichier %s a changé pour %s .' . "\n";
+$lang->action->desc->addDiff              = 'Added "%s"。' . "\n";
+$lang->action->desc->removeDiff           = 'Removed "%s"。' . "\n";
 $lang->action->desc->linked2bug           = '$date, affecté à <strong>$extra</strong> par <strong>$actor</strong>';
 $lang->action->desc->linked2testtask      = '$date, linked to <strong>$extra</strong> by <strong>$actor</strong>';
 $lang->action->desc->unlinkedfromtesttask = '$date, unlinked from <strong>$extra</strong> by <strong>$actor</strong>';
@@ -284,6 +286,7 @@ $lang->action->desc->linkhost             = '$date, the host is linked by <stron
 $lang->action->desc->createrepobranch     = '$date, <strong>$actor</strong> created code branch <strong>$extra</strong>.' . "\n";
 $lang->action->desc->unlinkrepobranch     = '$date, <strong>$actor</strong> unlinked code branch <strong>$extra</strong>.' . "\n";
 $lang->action->desc->changedprogram       = '$date, <strong>$actor</strong> adjust the program <strong>$extra</strong>.' . "\n";
+$lang->action->desc->managedteam          = '$date, by <strong>$actor</strong> managed team.' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren        = '$date, <strong>$actor</strong> a créé un sous-tâche <strong>$extra</strong>。' . "\n";
