@@ -70,7 +70,6 @@ $().ready(function()
         }
     });
     loadBranches();
-    loadSystem();
     if(multipleProject)
     {
         window.waitDom('[name=execution]', function()
@@ -82,6 +81,7 @@ $().ready(function()
     {
         loadSystem(currentProduct);
     }
+
 });
 
 /**
@@ -111,7 +111,6 @@ function loadProducts(executionID)
 
             $('select[name^=builds]').attr('data-placeholder', multipleSelect);
             loadBranches(productID);
-            loadSystem(productID);
         }
         else
         {

@@ -113,6 +113,8 @@ formPanel
     set::formID('createBuildForm'),
     on::change('[name=newSystem]', 'setSystemBox'),
     on::change('[name=system]', 'loadBuilds'),
+    on::init('[name=system]')->do("setTimeout('loadSystem()', 50)"),
+    on::change('[name=product]', 'loadSystem'),
     $integratedRow,
     $executionRow,
     $productRow,
