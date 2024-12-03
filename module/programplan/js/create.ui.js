@@ -2,7 +2,11 @@ window.onRenderRow = function(row, rowIdx, data)
 {
     if(row.children('[data-name=milestone]').find('input[type=radio]:checked').length == 0) row.children('[data-name=milestone]').find('input[type=radio]').eq(1).prop('checked', true);
     row.children('[data-name=type]').find('[name^=type]').picker({disabled: true});
-    if(typeof data != 'undefined' && typeof data.id != 'undefined') row.find('[data-type="delete"]').css('display', 'none');
+    if(typeof data != 'undefined' && typeof data.id != 'undefined')
+    {
+        row.find('[data-type="delete"]').css('display', 'none');
+        row.find('[data-type="add"]').css('display', 'none');
+    }
 
     if(project.model == 'ipd' && planID == '0')
     {
