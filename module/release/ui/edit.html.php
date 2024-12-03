@@ -21,6 +21,7 @@ formPanel
     set::title($lang->release->edit),
     on::change('[name=status]')->call('changeStatus'),
     on::change('[name=system]')->call('loadSystemBlock'),
+    common::checkNotCN() ? set::labelWidth('160px') : null,
     formGroup
     (
         set::width('1/2'),
