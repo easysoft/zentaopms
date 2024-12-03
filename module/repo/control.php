@@ -763,7 +763,8 @@ class repo extends control
             $lines   = $bugData[1];
         }
 
-        if($repo->SCM == 'Git' && !is_dir($repo->path)) return $this->sendError(sprintf($this->lang->repo->error->notFound, $repo->name, $repo->path), $this->repo->createLink('maintain'));
+        $this->config->repo->notSyncSCM[] = 'Subversion';
+        if(!in_array($repo->SCM, $this->config->repo->notSyncSCM) && !is_dir($repo->path)) return $this->sendError(sprintf($this->lang->repo->error->notFound, $repo->name, $repo->path), $this->repo->createLink('maintain'));
 
         $arrange = $this->cookie->arrange ? $this->cookie->arrange : 'inline';
         if($this->server->request_method == 'POST') return $this->repoZen->locateDiffPage($repoID, $objectID, $arrange, $isBranchOrTag, $file);
