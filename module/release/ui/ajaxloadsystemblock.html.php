@@ -75,7 +75,7 @@ foreach($list as $system)
                 $appID ? set::value($linked) : null
             )
         ),
-        $appCount > 1 ? h::td
+        h::td
         (
             set::className('actions-list'),
             btnGroup
@@ -97,7 +97,7 @@ foreach($list as $system)
                     )
                 )
             )
-        ) : null
+        )
     );
 
     unset($linkedApps[key($linkedApps)]);
