@@ -56,6 +56,25 @@ class productModel extends model
     }
 
     /**
+     * 根据权限控制范围获取产品。
+     * Get products by acl.
+     *
+     * @param  string $acl
+     * @access public
+     * @return array
+     */
+    public function getListByAcl(string $acl): array
+    {
+        $products = $this->mao->key(CACHE_PRODUCT_ACL, $acl)->get();
+        if(!$products)
+        {
+            $products = $this->dao->select('id, program, PO, QD, RD, feedback, ticket, acl, whitelist, reviewer, PMT, createdBy')->from(TABLE_PRODUCT)->where('acl')->eq($acl)->fetchAll('id');
+            $this->mao->save($products);
+        }
+        return $products ?: [];
+    }
+
+    /**
      * 通过session 中的搜索条件查询产品列表。
      * Get product list by search.
      *
