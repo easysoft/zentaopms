@@ -2350,11 +2350,13 @@ CREATE INDEX `account` ON `zt_usertpl` (`account`);
 
 -- DROP TABLE IF EXISTS `zt_userview`;
 CREATE TABLE IF NOT EXISTS `zt_userview` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `account` char(30) NOT NULL DEFAULT '',
   `programs` mediumtext NULL,
   `products` mediumtext NULL,
   `projects` mediumtext NULL,
-  `sprints` mediumtext NULL
+  `sprints` mediumtext NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE UNIQUE INDEX `account` ON `zt_userview`(`account`);
 
