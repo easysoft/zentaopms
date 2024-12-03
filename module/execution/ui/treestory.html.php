@@ -182,7 +182,7 @@ div
             set::disabled(!$this->story->isClickable($story, 'edit')),
             set('data-app', $app->tab)
         ) : null,
-        hasPriv('testcase', 'create') ? btn
+        $story->isParent == '0' && hasPriv('testcase', 'create') ? btn
         (
             setClass('text-primary ml-2'),
             set::icon('sitemap'),
@@ -423,6 +423,8 @@ div
 
 history
 (
+    set::objectType('story'),
+    set::objectID($story->id),
     set::commentBtn(true),
     set::commentUrl(createLink('action', 'comment', array('objectType' => 'story', 'objectID' => $story->id)))
 );
