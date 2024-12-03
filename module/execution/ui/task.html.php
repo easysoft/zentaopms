@@ -59,10 +59,11 @@ $tableData = initTableData($tasks, $cols, $this->task);
 $lang->task->statusList['changed'] = $lang->task->storyChange;
 foreach($tableData as $task)
 {
-    $task->rawStatus = $task->status;
-    $task->status    = $this->processStatus('task', $task);
-    $task->rawStory  = $task->story;
-    $task->story     = $task->storyTitle;
+    $task->rawStatus   = $task->status;
+    $task->status      = $this->processStatus('task', $task);
+    $task->rawStory    = $task->story;
+    $task->story       = $task->storyTitle;
+    $task->canAssignTo = $canAssignTo ? common::hasDBPriv($task, 'task', 'assignTo') : false;
     if(helper::isZeroDate($task->deadline))   $task->deadline   = '';
     if(helper::isZeroDate($task->estStarted)) $task->estStarted = '';
 }
@@ -225,6 +226,7 @@ jsVar('parentAB',       $lang->task->parentAB);
 jsVar('todayLabel',     $lang->today);
 jsVar('yesterdayLabel', $lang->yesterday);
 jsVar('teamLang',       $lang->task->team);
+jsVar('delayWarning',   $lang->task->delayWarning);
 
 if($viewType == 'tiled') $cols['name']['nestedToggle'] = false;
 dtable

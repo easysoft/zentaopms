@@ -271,6 +271,8 @@ class execution extends control
         $filter = (empty($filter) && isset($this->lang->execution->groupFilter[$groupBy])) ? key($this->lang->execution->groupFilter[$groupBy]) : $filter;
         list($groupTasks, $allCount) = $this->executionZen->filterGroupTasks($groupTasks, $groupBy, $filter, $allCount, $tasks);
 
+        if(!isset($_SESSION['limitedExecutions'])) $this->execution->getLimitedExecution();
+
         /* Assign. */
         $this->view->title       = $execution->name . $this->lang->hyphen . $this->lang->execution->task;
         $this->view->members     = $this->execution->getTeamMembers($executionID);
@@ -285,6 +287,7 @@ class execution extends control
         $this->view->filter      = $filter;
         $this->view->allCount    = $allCount;
         $this->view->execution   = $execution;
+        $this->view->isLimited   = !$this->app->user->admin && strpos(",{$this->session->limitedExecutions},", ",{$executionID},") !== false;
         $this->display();
     }
 
@@ -1052,6 +1055,13 @@ class execution extends control
         list($this->view->pmUsers, $this->view->poUsers, $this->view->qdUsers, $this->view->rdUsers) = $this->executionZen->setUserMoreLink();
         $this->executionZen->setCopyProjects($project);
 
+        $isStage = isset($output['type']) && $output['type'] == 'stage';
+        if($project->model == 'waterfall' || $project->model == 'waterfallplus')
+        {
+            $this->view->parentStage  = 0;
+            $this->view->parentStages = $this->loadModel('programplan')->getParentStageList($projectID, 0, 0, 'withparent|noclosed|' . ($isStage ? 'stage' : 'notstage'));
+        }
+
         $this->view->title               = $this->app->tab == 'execution' ? $this->lang->execution->createExec : $this->lang->execution->create;
         $this->view->gobackLink          = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('execution', 'all') : '';
         $this->view->allProducts         = array_filter($this->executionZen->getAllProductsForCreate($project));
@@ -1064,7 +1074,7 @@ class execution extends control
         $this->view->productID           = $productID;
         $this->view->projectID           = $projectID;
         $this->view->from                = $this->app->tab;
-        $this->view->isStage             = isset($output['type']) && $output['type'] == 'stage';
+        $this->view->isStage             = $isStage;
         $this->view->isKanban            = isset($output['type']) && $output['type'] == 'kanban';
         $this->view->project             = $project;
         $this->view->planID              = $planID;
@@ -1925,12 +1935,15 @@ class execution extends control
 
         $gradeGroup = $this->loadModel('story')->getGradeGroup();
 
+        if(!isset($_SESSION['limitedExecutions'])) $this->execution->getLimitedExecution();
+
         $this->view->title       = $this->lang->execution->tree;
         $this->view->execution   = $execution;
         $this->view->executionID = $executionID;
         $this->view->level       = $type;
         $this->view->tree        = $this->execution->buildTree($tree, (bool)$project->hasProduct, $gradeGroup);
         $this->view->features    = $this->execution->getExecutionFeatures($execution);
+        $this->view->isLimited   = !$this->app->user->admin && strpos(",{$this->session->limitedExecutions},", ",{$executionID},") !== false;
         $this->display();
     }
 
@@ -2170,7 +2183,6 @@ class execution extends control
             $this->execution->manageMembers($execution, $memberDataList);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->loadModel('action')->create('team', $executionID, 'managedTeam');
             return $this->sendSuccess(array('load' => $this->createLink('execution', 'team', "executionID={$executionID}")));
         }
 
@@ -2220,7 +2232,7 @@ class execution extends control
 
         if(dao::isError()) return $this->sendError(dao::getError());
 
-        $this->loadModel('action')->create('team', $executionID, 'managedTeam');
+        $this->loadModel('action')->create('execution', $executionID, 'managedTeam');
         return $this->sendSuccess(array('message' => '', 'load' => helper::createLink('execution', 'team', "executionID={$executionID}")));
     }
 

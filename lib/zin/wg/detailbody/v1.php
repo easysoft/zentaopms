@@ -57,7 +57,8 @@ class detailBody extends wg
                     set::disabled((bool)$field->readonly),
                     set::control($field->control),
                     set::items($field->items),
-                    set::value($field->value)
+                    set::value($field->value),
+                    set::placeholder($field->placeholder)
 
                 )
             );

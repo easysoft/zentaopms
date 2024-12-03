@@ -263,7 +263,8 @@ class projectTao extends projectModel
         /* Only changed account update userview. */
         $oldAccounts     = array_keys($oldJoin);
         $removedAccounts = array_diff($oldAccounts, $accounts);
-        $changedAccounts = array_merge($removedAccounts, array_diff($accounts, $oldAccounts));
+        $addedAccounts   = array_diff($accounts, $oldAccounts);
+        $changedAccounts = array_merge($removedAccounts, $addedAccounts);
         $changedAccounts = array_unique($changedAccounts);
 
         $childSprints = $this->dao->select('id')->from(TABLE_PROJECT)
@@ -283,14 +284,47 @@ class projectTao extends projectModel
         if(!empty($childSprints))   $this->user->updateUserView($childSprints, 'sprint', $changedAccounts);
         if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', $changedAccounts);
 
+        if(empty($addedAccounts) && empty($removedAccounts)) return;
+
+        /* Log history. */
+        $actionID = $this->loadModel('action')->create('project', $projectID, 'ManagedTeam');
+
+        $users              = $this->loadModel('user')->getPairs('noletter');
+        $addedAccountList   = array_map(function($account) use ($users) { return zget($users, $account); }, $addedAccounts);
+        $removedAccountList = array_map(function($account) use ($users) { return zget($users, $account); }, $removedAccounts);
+
+        if(!empty($addedAccountList)) $changes[] = array('field' => 'addDiff', 'old' => '', 'new' => '', 'diff' => join(',', $addedAccountList));
+        if(!empty($removedAccountList)) $changes[] = array('field' => 'removeDiff', 'old' => '', 'new' => '', 'diff' => join(',', $removedAccountList));
+        if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+
         /* Remove execution members. */
-        if($this->post->removeExecution == 'yes' and !empty($childSprints) and !empty($removedAccounts))
+        if($this->post->removeExecution == 'yes' and !empty($childSprints) and !empty($removedAccountList))
         {
+            $childTeams = $this->dao->select('root,account')->from(TABLE_TEAM)
+                ->where('root')->in($childSprints)
+                ->andWhere('type')->eq('execution')
+                ->andWhere('account')->in($removedAccounts)
+                ->fetchGroup('root', 'account');
+
             $this->dao->delete()->from(TABLE_TEAM)
                 ->where('root')->in($childSprints)
                 ->andWhere('type')->eq('execution')
                 ->andWhere('account')->in($removedAccounts)
                 ->exec();
+
+            foreach($childTeams as $sprintID => $childTeam)
+            {
+                $childAccounts      = array_keys($childTeam);
+                $removedAccountList = array_intersect($childAccounts, $removedAccounts);
+                if(empty($removedAccountList)) continue;
+
+                $removedAccountList = array_map(function($account) use ($users) { return zget($users, $account); }, $removedAccountList);
+
+                $changes = array(array('field' => 'removeDiff', 'old' => '', 'new' => '', 'diff' => join(',', $removedAccountList)));
+
+                $actionID = $this->action->create('execution', $sprintID, 'syncProjectTeam');
+                $this->action->logHistory($actionID, $changes);
+            }
         }
     }
 
@@ -629,16 +663,31 @@ class projectTao extends projectModel
      * @param  array|int $projectIdList
      * @param  string    $type
      * @param  string    $account
+     * @param  string    $realname
+     * @param  array     $changes
      * @access protected
      * @return bool
      */
-    protected function unlinkTeamMember(int|array $projectIdList, string $type, string $account): bool
+    protected function unlinkTeamMember(int|array $projectIdList, string $type, string $account, string $realname, array $changes): bool
     {
+        $accountProjects =  $this->dao->select('root')->from(TABLE_TEAM)
+            ->where('root')->in($projectIdList)
+            ->andWhere('type')->eq($type)
+            ->andWhere('account')->eq($account)
+            ->fetchPairs();
+
         $this->dao->delete()->from(TABLE_TEAM)
             ->where('root')->in($projectIdList)
             ->andWhere('type')->eq($type)
             ->andWhere('account')->eq($account)
             ->exec();
+
+        $this->loadModel('action');
+        foreach($accountProjects as $projectID)
+        {
+            $actionID = $this->action->create($type, $projectID, $type == 'project' ? 'managedTeam' : 'syncProjectTeam');
+            $this->action->logHistory($actionID, $changes);
+        }
         return !dao::isError();
     }
 
@@ -1092,6 +1141,12 @@ class projectTao extends projectModel
             if(!isset($menu['dropMenu'])) continue;
             foreach($menu['dropMenu'] as $key2 => $dropMenu)
             {
+                if(strpos($this->config->project->multiple['project'], ",{$label},") !== false) $objectID = $project->id;
+                if(strpos($this->config->project->multiple['execution'], ",{$key2},") !== false)
+                {
+                    $objectID = $executionID;
+                    $lang->$navGroup->menu->{$label}['subModule'] = 'project';
+                }
                 $lang->$navGroup->menu->{$label}['dropMenu']->$key2 = common::setMenuVarsEx($dropMenu, $objectID);
 
                 if(!isset($dropMenu['subMenu'])) continue;

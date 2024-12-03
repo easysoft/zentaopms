@@ -2618,7 +2618,7 @@ class taskModel extends model
         $today = helper::today();
 
         /* Delayed or not?. */
-        if(!empty($task->deadline) && !helper::isZeroDate($task->deadline) && $this->app->rawMethod != 'task')
+        if(!empty($task->deadline) && !helper::isZeroDate($task->deadline))
         {
             $finishedDate = ($task->status == 'done' || $task->status == 'closed') && $task->finishedDate ? substr($task->finishedDate, 0, 10) : $today;
             $actualDays   = $this->loadModel('holiday')->getActualWorkingDays($task->deadline, $finishedDate);
@@ -2637,7 +2637,7 @@ class taskModel extends model
         /* Set product type for task. */
         if(!empty($task->product))
         {
-            $product = $this->loadModel('product')->getById($task->product);
+            $product = $this->loadModel('product')->fetchByID($task->product);
             if($product) $task->productType = $product->type;
         }
 

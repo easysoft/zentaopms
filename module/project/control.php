@@ -443,6 +443,14 @@ class project extends control
 
         if($model == 'kanban') unset($this->lang->project->authList['reset']);
 
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+        if(!empty($output['showTips']) && !empty($output['project']))
+        {
+            $this->displayAfterCreated((int)$output['project']);
+            return;
+        }
+
         if($_POST)
         {
             if($this->post->longTime || $this->post->LONG_TIME) $this->config->project->form->create['end']['skipRequired'] = true;
@@ -464,26 +472,16 @@ class project extends control
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $projectID));
 
-            if($this->app->tab != 'project' and $this->session->createProjectLocate)
+            if(in_array($model, array('waterfall', 'waterfallplus', 'ipd')))
             {
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->session->createProjectLocate));
+                $productID = $this->loadModel('product')->getProductIDByProject($projectID, true);
+                $session   = $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=lists", '', false, $projectID);
+                if(in_array($this->config->edition, array('max', 'ipd'))) $session = $this->createLink('project', 'execution', "status=undone&projectID=$projectID", '', false);
+                $this->session->set('projectPlanList', $session, 'project');
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('programplan', 'create', "projectID=$projectID&productID=0&planID=0&executionType=stage&from=projectCreate", '', false, $projectID)));
             }
-            else
-            {
-                if(in_array($model, array('waterfall', 'waterfallplus', 'ipd')))
-                {
-                    $productID = $this->loadModel('product')->getProductIDByProject($projectID, true);
-                    $session   = $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=lists", '', false, $projectID);
-                    if(in_array($this->config->edition, array('max', 'ipd'))) $session = $this->createLink('project', 'execution', "status=undone&projectID=$projectID", '', false);
-                    $this->session->set('projectPlanList', $session, 'project');
-                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('programplan', 'create', "projectID=$projectID", '', false, $projectID)));
-                }
 
-                $parent     = (int)$project->parent;
-                $systemMode = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=mode');
-                if(!empty($systemMode) and $systemMode == 'light') $parent = 0;
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('project', 'browse', "programID=$parent&browseType=all", '', false, $projectID)));
-            }
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('create', "model=$model&programID=$programID&copyProjectID=$projectID&extra=showTips=1,project=$projectID")));
         }
 
         $this->projectZen->buildCreateForm((string)$model, (int)$programID, (int)$copyProjectID, (string)$extra);
@@ -1167,7 +1165,6 @@ class project extends control
         $account = $user->account;
 
         $this->project->unlinkMember($projectID, $account, $removeExecution == 'yes');
-        if(!dao::isError()) $this->loadModel('action')->create('team', $projectID, 'managedTeam');
 
         /* if ajax request, send result. */
         if(dao::isError()) return $this->sendError(dao::getError());
@@ -1207,8 +1204,6 @@ class project extends control
                 if($executionID) $this->execution->manageMembers($execution, $members);
             }
 
-            $this->loadModel('action')->create('team', $projectID, 'ManagedTeam');
-
             return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'load' => $this->createLink('project', 'team', "projectID=$projectID")));
         }
 
@@ -1221,7 +1216,7 @@ class project extends control
         $executionMembers = array();
         foreach($executionTeams as $executionID => $executionTeam)
         {
-            $executionMembers += array_keys($executionTeam);
+            $executionMembers = array_merge($executionMembers, array_keys($executionTeam));
         }
 
         $currentMembers = $this->project->getTeamMembers($projectID);
@@ -1237,7 +1232,7 @@ class project extends control
         $this->view->currentMembers   = $currentMembers;
         $this->view->copyProjectID    = $copyProjectID;
         $this->view->teamMembers      = $this->projectZen->buildMembers($currentMembers, $members2Import, $deptUsers, $project->days);
-        $this->view->executionMembers = $executionMembers;
+        $this->view->executionMembers = array_unique($executionMembers);
         $this->display();
     }
 
@@ -1753,5 +1748,18 @@ class project extends control
 
         $items = $this->workflowgroup->appendBuildinLabel($workflowGroups);
         return $this->send(array('items' => array_values($items), 'defaultValue' => key($workflowGroups)));
+    }
+
+    /**
+     * 检查是否同步阶段数据。
+     * AJAX: check whether stage data is sync.
+     *
+     * @param  int $executionID
+     * @access public
+     * @return void
+     */
+    public function ajaxCheckHasStageData(int $executionID)
+    {
+        return print($this->project->hasStageData($executionID));
     }
 }

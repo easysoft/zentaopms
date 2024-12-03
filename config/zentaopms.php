@@ -738,15 +738,15 @@ $config->pipelineTypeList = array('gitlab', 'gogs', 'gitea', 'jenkins', 'sonarqu
 
 /* Program privs.*/
 $config->programPriv = new stdclass();
-$config->programPriv->noSprint      = array('task', 'story', 'requirement', 'epic', 'tree', 'project', 'execution', 'projectbuild', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'stakeholder', 'projectrelease');
-$config->programPriv->scrum         = array('story', 'requirement', 'epic', 'productplan', 'tree', 'projectplan', 'projectstory', 'projectrelease', 'project', 'execution', 'projectbuild', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'meeting', 'stakeholder', 'testtask', 'issue', 'risk');
-$config->programPriv->waterfall     = array_merge($config->programPriv->scrum, array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'milestone', 'design', 'opportunity', 'measrecord', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport'));
+$config->programPriv->noSprint      = array('task', 'story', 'requirement', 'epic', 'tree', 'project', 'execution', 'projectbuild', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'stakeholder', 'projectrelease', 'issue', 'risk', 'opportunity', 'meeting', 'pssp', 'auditplan');
+$config->programPriv->scrum         = array('story', 'requirement', 'epic', 'productplan', 'tree', 'projectplan', 'projectstory', 'projectrelease', 'project', 'execution', 'projectbuild', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'meeting', 'stakeholder', 'testtask', 'issue', 'risk', 'opportunity');
+$config->programPriv->waterfall     = array_merge($config->programPriv->scrum, array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'milestone', 'design', 'measrecord', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport'));
 $config->programPriv->agileplus     = $config->programPriv->scrum;
 $config->programPriv->waterfallplus = $config->programPriv->waterfall;
 $config->programPriv->ipd           = $config->programPriv->waterfall;
 
 $config->safeFileTimeout  = 3600;
-$config->waterfallModules = array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'milestone', 'design', 'opportunity', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport');
+$config->waterfallModules = array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'milestone', 'design', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport');
 
 $config->showMainMenu = true;
 $config->maxPriValue  = '256';

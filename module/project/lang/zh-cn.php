@@ -84,6 +84,18 @@ $lang->project->invested            = '已投入';
 $lang->project->member              = '成员';
 $lang->project->manage              = '管理';
 $lang->project->market              = '目标市场';
+$lang->project->tips                = '提示';
+$lang->project->afterInfo           = "{$lang->projectCommon}添加成功，您现在可以进行以下操作：";
+$lang->project->setTeam             = '设置团队';
+$lang->project->linkStory           = '关联需求';
+$lang->project->createStory         = "提{$lang->SRCommon}";
+$lang->project->createTask          = "创建任务";
+$lang->project->createExecutionTip  = '添加%s';
+$lang->project->setDoc              = '维护文档';
+$lang->project->backToTaskList      = '返回任务列表';
+$lang->project->backToKanban        = '返回看板';
+$lang->project->backToExecutionList = '返回项目%s列表';
+$lang->project->backToProjectList   = '返回项目列表';
 
 $lang->project->manDay          = '人天';
 $lang->project->day             = '天';
@@ -437,6 +449,7 @@ $lang->project->cannotChangeToCat       = "该{$lang->projectCommon}已经有实
 $lang->project->cannotCancelCat         = "该{$lang->projectCommon}下已经有子{$lang->projectCommon}，无法取消父{$lang->projectCommon}标记";
 $lang->project->parentBeginEnd          = "父{$lang->projectCommon}起止时间：%s ~ %s";
 $lang->project->parentBudget            = "父项目集预算：";
+$lang->project->confirmCreateStage      = "因该阶段下已经产生了数据，您确定要拆分吗？如果继续拆分，为保证数据一致性，我们会帮您把已有的数据记录在拆分的第一个{$lang->execution->common}中";
 
 $lang->project->beginLessThanParent     = "{$lang->projectCommon}的开始日期小于了父项目集的开始日期：%s。";
 $lang->project->endGreatThanParent      = "{$lang->projectCommon}的完成日期大于了父项目集的完成日期：%s。";
@@ -476,6 +489,7 @@ $lang->project->featureBar['dynamic']['lastMonth'] = '上月';
 
 $lang->project->moreSelects = array();
 $lang->project->moreSelects['suspended'] = '已挂起';
+$lang->project->moreSelects['delayed']   = '已延期';
 $lang->project->moreSelects['closed']    = '已关闭';
 
 $lang->project->executionList['scrum']         = $lang->projectCommon . '迭代';

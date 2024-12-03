@@ -115,7 +115,7 @@ window.onRenderRow = function(row, rowIdx, data)
 
 window.onChangeExecutionType = function(event)
 {
-    loadPage($.createLink('programplan', 'create', `projectID=${projectID}&productID=${productID}&planID=${planID}&type=` + $(event.target).val()));
+    loadPage($.createLink('programplan', 'create', `projectID=${projectID}&productID=${productID}&planID=${planID}&type=` + $(event.target).val() + `&from=&syncData=${syncData}`));
 };
 
 window.onChangeParallel = function(event)

@@ -13284,7 +13284,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowfield` (
   `options` text NULL,
   `default` varchar(100) NOT NULL DEFAULT '',
   `rules` varchar(255) NOT NULL DEFAULT '',
-  `placeholder` varchar(100) NOT NULL DEFAULT '',
+  `placeholder` varchar(255) NOT NULL DEFAULT '',
   `order` smallint(5) unsigned NOT NULL DEFAULT '0',
   `searchOrder` smallint(5) unsigned NOT NULL DEFAULT '0',
   `exportOrder` smallint(5) unsigned NOT NULL DEFAULT '0',

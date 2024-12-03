@@ -1,0 +1,8 @@
+title: zt_projectstory
+author: tianshujie
+version: '1.0'
+fields:
+    - field: project
+      range: 8
+    - field: case
+      range: 1-100

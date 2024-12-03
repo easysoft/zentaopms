@@ -1,0 +1,19 @@
+title: zt_doclib
+author: tianshujie
+version: '1.0'
+fields:
+    - field: id
+      range: 1-100
+    - field: type
+      range: 'execution'
+    - field: project
+      range: '1'
+    - field: execution
+      range: 13
+    - field: name
+      prefix: '文档库'
+      range: '1-100'
+    - field: main
+      range: 1,0{99}
+    - field: deleted
+      range: 0,1

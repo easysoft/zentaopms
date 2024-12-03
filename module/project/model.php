@@ -1762,14 +1762,17 @@ class projectModel extends model
      */
     public function unlinkMember(int $projectID, string $account, bool $removeExecution = false): bool
     {
-        $this->projectTao->unlinkTeamMember($projectID, 'project', $account);
+        $user    = $this->loadModel('user')->getById($account);
+        $changes = array(array('field' => 'removeDiff', 'old' => '', 'new' => '', 'diff' => $user->realname));
 
-        $this->loadModel('user')->updateUserView(array($projectID), 'project', array($account));
+        $this->projectTao->unlinkTeamMember($projectID, 'project', $account, $user->realname, $changes);
+
+        $this->user->updateUserView(array($projectID), 'project', array($account));
 
         if($removeExecution)
         {
             $executions = $this->loadModel('execution')->getByProject($projectID, 'undone', 0, true);
-            $this->projectTao->unlinkTeamMember(array_keys($executions), 'execution', $account);
+            $this->projectTao->unlinkTeamMember(array_keys($executions), 'execution', $account, $user->realname, $changes);
             $this->user->updateUserView(array_keys($executions), 'sprint', array($account));
         }
 
@@ -2659,5 +2662,74 @@ class projectModel extends model
         $output .= "</div></div>";
 
         return $output;
+    }
+
+    /**
+     * 检查阶段是否有相关数据。
+     * Check whether the stage has related data.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return bool
+     */
+    public function hasStageData(int $executionID): bool
+    {
+        if(empty($executionID)) return false;
+
+        $childStage = $this->dao->select('id')->from(TABLE_EXECUTION)->where('parent')->eq($executionID)->andWhere('type')->in('sprint,stage,kanban')->andWhere('deleted')->eq(0)->limit(1)->fetch();
+        if(!empty($childStage)) return false;
+
+        $task = $this->dao->select('id')->from(TABLE_TASK)->where('execution')->eq($executionID)->andWhere('deleted')->eq(0)->limit(1)->fetch();
+        if(!empty($task)) return true;
+
+        $effort = $this->dao->select('id')->from(TABLE_EFFORT)->where('execution')->eq($executionID)->andWhere('deleted')->eq(0)->limit(1)->fetch();
+        if(!empty($effort)) return true;
+
+        $bug = $this->dao->select('id')->from(TABLE_BUG)->where('execution')->eq($executionID)->andWhere('deleted')->eq(0)->limit(1)->fetch();
+        if(!empty($bug)) return true;
+
+        $story = $this->dao->select('id')->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.story')
+            ->where('t2.project')->eq($executionID)
+            ->andWhere('t1.deleted')->eq(0)
+            ->limit(1)->fetch();
+        if(!empty($story)) return true;
+
+        $case = $this->dao->select('id')->from(TABLE_CASE)->alias('t1')
+            ->leftJoin(TABLE_PROJECTCASE)->alias('t2')->on('t1.id=t2.case')
+            ->where('t2.project')->eq($executionID)
+            ->andWhere('t1.deleted')->eq(0)
+            ->limit(1)->fetch();
+        if(!empty($case)) return true;
+
+        $build = $this->dao->select('id')->from(TABLE_BUILD)->where('execution')->eq($executionID)->andWhere('deleted')->eq(0)->limit(1)->fetch();
+        if(!empty($build)) return true;
+
+        $testtask = $this->dao->select('id')->from(TABLE_TESTTASK)->where('execution')->eq($executionID)->andWhere('deleted')->eq(0)->limit(1)->fetch();
+        if(!empty($testtask)) return true;
+
+        $testreport = $this->dao->select('id')->from(TABLE_TESTREPORT)->where('execution')->eq($executionID)->andWhere('deleted')->eq(0)->limit(1)->fetch();
+        if(!empty($testreport)) return true;
+
+        $doc = $this->dao->select('id')->from(TABLE_DOC)->where('execution')->eq($executionID)->andWhere('deleted')->eq(0)->limit(1)->fetch();
+        if(!empty($doc)) return true;
+
+        $doclib = $this->dao->select('id')->from(TABLE_DOCLIB)->where('execution')->eq($executionID)->andWhere('type')->eq('execution')->andWhere('main')->ne('1')->andWhere('deleted')->eq(0)->limit(1)->fetch();
+        if(!empty($doclib)) return true;
+
+        $libID  = $this->dao->select('id')->from(TABLE_DOCLIB)->where('type')->eq('execution')->andWhere('execution')->eq($executionID)->andWhere('main')->eq('1')->limit(1)->fetch('id');
+        $module = $this->dao->select('id')->from(TABLE_MODULE)
+            ->where('deleted')->eq(0)
+            ->andWhere('((type')->eq('task')
+            ->andWhere('root')->eq($executionID)
+            ->markRight(1)
+            ->orWhere('(type')->eq('doc')
+            ->andWhere('root')->eq($libID)
+            ->markRight(2)
+            ->limit(1)
+            ->fetch();
+        if(!empty($module)) return true;
+
+        return false;
     }
 }

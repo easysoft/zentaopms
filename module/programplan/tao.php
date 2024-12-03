@@ -105,10 +105,11 @@ class programplanTao extends programplanModel
      * @param  int    $executionID
      * @param  int    $planID
      * @param  int    $productID
+     * @param  string $param
      * @access protected
      * @return array|false
      */
-    protected function getParentStages(int $executionID, int $planID, int $productID): array|false
+    protected function getParentStages(int $executionID, int $planID, int $productID, string $param = ''): array|false
     {
         $parentStage = $this->dao->select('t1.id, t1.name')->from(TABLE_PROJECT)->alias('t1')
             ->beginIF($productID)
@@ -122,6 +123,7 @@ class programplanTao extends programplanModel
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.path')->notlike("%,$planID,%")
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
+            ->beginIF(strpos($param, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->orderBy('t1.id desc')
             ->fetchPairs();
 
@@ -938,5 +940,47 @@ class programplanTao extends programplanModel
         }
 
         return $plans;
+    }
+
+    /**
+     * 将父阶段数据转移到第一个子阶段中。
+     * Sync parent data to first stage.
+     *
+     * @param  int       $executionID
+     * @param  int       $parentID
+     * @access protected
+     * @return bool
+     */
+    protected function syncParentData(int $executionID, int $parentID): bool
+    {
+        if(empty($executionID) || empty($parentID)) return false;
+
+        $this->dao->update(TABLE_TASK)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->andWhere('deleted')->eq('0')->exec();
+        $this->dao->update(TABLE_EFFORT)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->andWhere('deleted')->eq('0')->exec();
+        $this->dao->update(TABLE_BUG)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->andWhere('deleted')->eq('0')->exec();
+        $this->dao->update(TABLE_CASE)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->andWhere('deleted')->eq('0')->exec();
+        $this->dao->update(TABLE_BUILD)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->andWhere('deleted')->eq('0')->exec();
+        $this->dao->update(TABLE_TESTTASK)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->andWhere('deleted')->eq('0')->exec();
+        $this->dao->update(TABLE_TESTREPORT)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->andWhere('deleted')->eq('0')->exec();
+        $this->dao->update(TABLE_ACTION)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->andWhere('objectType')->ne('execution')->exec();
+        $this->dao->update(TABLE_ACTIONRECENT)->set('execution')->eq($executionID)->where('execution')->eq($parentID)->andWhere('objectType')->ne('execution')->exec();
+        $this->dao->update(TABLE_DOCLIB)->set('execution')->eq($executionID)->where('type')->eq('execution')->andWhere('execution')->eq($parentID)->andWhere('main')->eq('0')->andWhere('deleted')->eq('0')->exec();
+
+        $storyIdSQL = $this->dao->select('id')->from(TABLE_STORY)->where('deleted')->eq('0')->get();
+        $this->dao->update(TABLE_PROJECTSTORY)->set('project')->eq($executionID)->where('project')->eq($parentID)->andWhere('story')->subIn($storyIdSQL)->exec();
+
+        $caseIdSQL = $this->dao->select('id')->from(TABLE_CASE)->where('deleted')->eq('0')->get();
+        $this->dao->update(TABLE_PROJECTCASE)->set('project')->eq($executionID)->where('project')->eq($parentID)->andWhere('case')->subIn($caseIdSQL)->exec();
+
+        /* Update doc in the main doc lib. */
+        $parentLibID = $this->dao->select('id')->from(TABLE_DOCLIB)->where('type')->eq('execution')->andWhere('execution')->eq($parentID)->andWhere('main')->eq('1')->limit(1)->fetch('id');
+        $libID       = $this->dao->select('id')->from(TABLE_DOCLIB)->where('type')->eq('execution')->andWhere('execution')->eq($executionID)->andWhere('main')->eq('1')->limit(1)->fetch('id');
+        if($parentLibID && $libID) $this->dao->update(TABLE_DOC)->set('execution')->eq($executionID)->set('lib')->eq($libID)->where('lib')->eq($parentLibID)->andWhere('deleted')->eq('0')->exec();
+
+        /* Update task and doc module. */
+        $this->dao->update(TABLE_MODULE)->set('root')->eq($executionID)->where('root')->eq($parentID)->andWhere('type')->eq('task')->andWhere('deleted')->eq('0')->exec();
+        $this->dao->update(TABLE_MODULE)->set('root')->eq($libID)->where('root')->eq($parentLibID)->andWhere('type')->eq('doc')->andWhere('deleted')->eq('0')->exec();
+
+        return !dao::isError();
     }
 }

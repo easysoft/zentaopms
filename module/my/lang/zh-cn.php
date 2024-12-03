@@ -166,6 +166,7 @@ if($config->edition != 'open' and helper::hasFeature('OA')) $lang->my->featureBa
 $lang->my->featureBar['project']['doing']      = '进行中';
 $lang->my->featureBar['project']['wait']       = '未开始';
 $lang->my->featureBar['project']['suspended']  = '已挂起';
+$lang->my->featureBar['project']['delayed']    = '已延期';
 $lang->my->featureBar['project']['closed']     = '已关闭';
 $lang->my->featureBar['project']['openedbyme'] = '由我创建';
 

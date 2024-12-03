@@ -1,0 +1,15 @@
+title: zt_testreport
+author: tianshujie
+version: '1.0'
+fields:
+    - field: id
+      range: 1-100
+    - field: project
+      range: '1'
+    - field: execution
+      range: 11
+    - field: title
+      prefix: '测试报告'
+      range: '1-100'
+    - field: deleted
+      range: 0,1

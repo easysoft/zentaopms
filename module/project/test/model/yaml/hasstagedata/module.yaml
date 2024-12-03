@@ -1,0 +1,15 @@
+title: zt_module
+author: tianshujie
+version: '1.0'
+fields:
+    - field: id
+      range: 1-100
+    - field: root
+      range: '14,1'
+    - field: type
+      range: 'task,doc'
+    - field: name
+      prefix: '模块'
+      range: '1-100'
+    - field: deleted
+      range: 0,1{2}

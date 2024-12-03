@@ -236,6 +236,8 @@ $lang->action->desc->verified             = '$date, verified by <strong>$actor</
 $lang->action->desc->diff1                = '<strong><i>%s</i></strong> is changed. It was "%s" and it is "%s".<br />' . "\n";
 $lang->action->desc->diff2                = '<strong><i>%s</i></strong> is changed. The difference is ' . "\n" . "<blockquote class='textdiff'>%s</blockquote>" . "\n<blockquote class='original'>%s</blockquote>";
 $lang->action->desc->diff3                = 'File Name %s was changed to %s .' . "\n";
+$lang->action->desc->addDiff              = 'Added "%s"。' . "\n";
+$lang->action->desc->removeDiff           = 'Removed "%s"。' . "\n";
 $lang->action->desc->linked2bug           = '$date, linked to <strong>$extra</strong> by <strong>$actor</strong>';
 $lang->action->desc->linked2testtask      = '$date, linked to <strong>$extra</strong> by <strong>$actor</strong>';
 $lang->action->desc->unlinkedfromtesttask = '$date, unlinked from <strong>$extra</strong> by <strong>$actor</strong>';
@@ -284,6 +286,9 @@ $lang->action->desc->linkhost             = '$date, the host is linked by <stron
 $lang->action->desc->createrepobranch     = '$date, <strong>$actor</strong> created code branch <strong>$extra</strong>.' . "\n";
 $lang->action->desc->unlinkrepobranch     = '$date, <strong>$actor</strong> unlinked code branch <strong>$extra</strong>.' . "\n";
 $lang->action->desc->changedprogram       = '$date, <strong>$actor</strong> adjust the program <strong>$extra</strong>.' . "\n";
+$lang->action->desc->managedteam          = '$date, by <strong>$actor</strong> managed team.' . "\n";
+$lang->action->desc->syncexecutionteam    = '$date, synchronise members when execution adds members.' . "\n";
+$lang->action->desc->syncprojectteam      = '$date, synchronise members when project removes members' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren        = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";
@@ -571,6 +576,8 @@ $lang->action->label->autodeletebackups       = 'Automatically clean up backups'
 $lang->action->label->savebackupsettings      = 'Save backup settings';
 $lang->action->label->deleteexpiredbackup     = 'Clean up expired backups';
 $lang->action->label->manualdeletebackup      = 'Manually clean up backup';
+$lang->action->label->syncexecutionteam       = 'synchronized';
+$lang->action->label->syncprojectteam         = 'synchronized';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;

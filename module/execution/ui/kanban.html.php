@@ -55,13 +55,13 @@ if($this->execution->isClickable($execution, 'close'))    $operationMenu[] = arr
 if($this->execution->isClickable($execution, 'activate')) $operationMenu[] = array('text' => $lang->execution->activate, 'url' => inlink('activate', "id=$execution->id"), 'data-toggle' => 'modal', 'icon' => 'off');
 if($this->execution->isClickable($execution, 'delete'))   $operationMenu[] = array('text' => $lang->delete, 'url' => inlink('delete', "id=$execution->id&confirm=no"), 'innerClass' => 'ajax-submit', 'icon' => 'trash');
 
-$canCreateTask      = $canModifyExecution && common::hasPriv('task', 'create');
-$canBatchCreateTask = $canModifyExecution && common::hasPriv('task', 'batchCreate');
-$canImportTask      = $canModifyExecution && common::hasPriv('execution', 'importTask') && $execution->multiple && $this->config->vision != 'lite';
+$canCreateTask      = $canModifyExecution && !$isLimited && common::hasPriv('task', 'create');
+$canBatchCreateTask = $canModifyExecution && !$isLimited && common::hasPriv('task', 'batchCreate');
+$canImportTask      = $canModifyExecution && !$isLimited && common::hasPriv('execution', 'importTask') && $execution->multiple && $this->config->vision != 'lite';
 
 $canCreateBug        = $features['qa'] && $canModifyExecution && common::hasPriv('bug', 'create') && $productID && $this->config->vision != 'lite';
 $canBatchCreateBug   = $features['qa'] && $canModifyExecution && common::hasPriv('bug', 'batchCreate') && $execution->multiple && $productID && $this->config->vision != 'lite';
-$canImportBug        = $features['qa'] && $canModifyExecution && common::hasPriv('execution', 'importBug') && $execution->multiple && $productID && $this->config->vision != 'lite';
+$canImportBug        = $features['qa'] && $canModifyExecution && !$isLimited && common::hasPriv('execution', 'importBug') && $execution->multiple && $productID && $this->config->vision != 'lite';
 $hasBugButton        = $canCreateBug || $canBatchCreateBug;
 
 $canCreateStory      = $features['story'] && $canModifyExecution && common::hasPriv('story', 'create') && common::canModify('execution', $execution) && $productID && $this->config->vision != 'lite';
@@ -115,6 +115,7 @@ jsVar('vision', $config->vision);
 jsVar('groupBy', $groupBy);
 jsVar('browseType', $browseType);
 jsVar('orderBy', $orderBy);
+jsVar('isLimited', $isLimited);
 jsVar('minColWidth', $execution->fluidBoard == '0' ? $execution->colWidth : $execution->minColWidth);
 jsVar('maxColWidth', $execution->fluidBoard == '0' ? $execution->colWidth : $execution->maxColWidth);
 jsVar('priv',

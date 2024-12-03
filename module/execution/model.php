@@ -1816,6 +1816,27 @@ class executionModel extends model
         /* If is admin, return true. */
         if($this->app->user->admin) return true;
 
+        /* Get all teams of all limited projects and group by projects. */
+        $projects = $this->dao->select('root, limited')->from(TABLE_TEAM)
+            ->where('type')->eq('project')
+            ->andWhere('account')->eq($this->app->user->account)
+            ->andWhere('limited')->eq('yes')
+            ->orderBy('root asc')
+            ->fetchPairs('root', 'root');
+        $subExecutions = $this->dao->select('id, id')->from(TABLE_EXECUTION)->where('project')->in($projects)->fetchPairs();
+
+        /* Get no limited executions in limited projects. */
+        $notLimitedExecutions = $this->dao->select('root, limited')->from(TABLE_TEAM)
+            ->where('type')->eq('execution')
+            ->andWhere('account')->eq($this->app->user->account)
+            ->andWhere('limited')->eq('no')
+            ->andWhere('root')->in($subExecutions)
+            ->orderBy('root asc')
+            ->fetchPairs('root', 'root');
+
+        /* 获取当前用户再受限项目下的非受限执行以外的执行。 */
+        $subExecutions = array_diff($subExecutions, $notLimitedExecutions);
+
         /* Get all teams of all executions and group by executions, save it as static. */
         $executions = $this->dao->select('root, limited')->from(TABLE_TEAM)
             ->where('type')->eq('execution')
@@ -1823,6 +1844,8 @@ class executionModel extends model
             ->andWhere('limited')->eq('yes')
             ->orderBy('root asc')
             ->fetchPairs('root', 'root');
+
+        $executions = array_merge($executions, $subExecutions);
 
         $this->session->set('limitedExecutions', implode(',', $executions));
         return $this->session->limitedExecutions;
@@ -1931,11 +1954,23 @@ class executionModel extends model
         $taskIdList = array_unique($taskIdList);
         $teamGroups = $this->dao->select('id,task,account,status')->from(TABLE_TASKTEAM)->where('task')->in($taskIdList)->fetchGroup('task', 'id');
 
+        $today = helper::today();
         foreach($executionTasks as $tasks)
         {
             foreach($tasks as $task)
             {
                 if(isset($teamGroups[$task->id])) $task->team = $teamGroups[$task->id];
+
+                /* Delayed or not?. */
+                if(!empty($task->deadline) and !helper::isZeroDate($task->deadline))
+                {
+                    $endDate = $today;
+                    if(($task->status == 'done' || $task->status == 'closed') && !helper::isZeroDate($task->finishedDate)) $endDate = substr($task->finishedDate, 0, 10);
+
+                    $actualDays = $this->loadModel('holiday')->getActualWorkingDays($task->deadline, $endDate);
+                    $delay      = count($actualDays) - 1;
+                    if($delay > 0) $task->delay = $delay;
+                }
             }
         }
 
@@ -3085,9 +3120,23 @@ class executionModel extends model
 
         /* Only changed account update userview. */
         $oldAccountList     = array_keys($oldJoin);
-        $changedAccountList = array_diff($accountList, $oldAccountList);
-        $changedAccountList = array_merge($changedAccountList, array_diff($oldAccountList, $accountList));
+        $addedAccountList   = array_diff($accountList, $oldAccountList);
+        $removedAccountList = array_diff($oldAccountList, $accountList);
+        $changedAccountList = array_merge($addedAccountList, $removedAccountList);
         $changedAccountList = array_unique($changedAccountList);
+
+        /* Log history. */
+        $actionID = $this->loadModel('action')->create('execution', $execution->id, 'managedTeam');
+
+        if(empty($addedAccountList) && empty($removedAccountList)) return;
+
+        $users              = $this->loadModel('user')->getPairs('noletter');
+        $addedAccountList   = array_map(function($account) use ($users) { return zget($users, $account); }, $addedAccountList);
+        $removedAccountList = array_map(function($account) use ($users) { return zget($users, $account); }, $removedAccountList);
+
+        if(!empty($addedAccountList)) $changes[] = array('field' => 'addDiff', 'old' => '', 'new' => '', 'diff' => join(',', $addedAccountList));
+        if(!empty($removedAccountList)) $changes[] = array('field' => 'removeDiff', 'old' => '', 'new' => '', 'diff' => join(',', $removedAccountList));
+        if(!empty($changes)) $this->action->logHistory($actionID, $changes);
 
         /* Add the execution team members to the project. */
         if($execution->project) $this->addProjectMembers($execution->project, $executionMember);
@@ -3139,6 +3188,18 @@ class executionModel extends model
 
             if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', $changedAccountList);
         }
+
+        if(empty($accountList)) return;
+
+        /* Log history. */
+        $users       = $this->loadModel('user')->getPairs('noletter');
+        $accountList = array_map(function($account) use ($users) { return zget($users, $account); }, $accountList);
+
+        $actionID = $this->loadModel('action')->create('project', $projectID, 'syncExecutionTeam');
+
+        $changes = array();
+        if(!empty($accountList)) $changes[] = array('field' => 'addDiff', 'old' => '', 'new' => '', 'diff' => join(',', $accountList));
+        if(!empty($changes)) $this->action->logHistory($actionID, $changes);
     }
 
     /**
@@ -3690,12 +3751,7 @@ class executionModel extends model
      */
     public static function isClickable(object $execution, string $action): bool
     {
-        if($action == 'createChildStage')
-        {
-            global $dao;
-            $tasks = $dao->select('id')->from(TABLE_TASK)->where('execution')->eq($execution->rawID)->andWhere('deleted')->eq(0)->fetchPairs();
-            return commonModel::hasPriv('programplan', 'create') && empty($tasks) && $execution->type == 'stage';
-        }
+        if($action == 'createChildStage') return commonModel::hasPriv('programplan', 'create') && $execution->type == 'stage';
         if($action == 'createTask')  return commonModel::hasPriv('task', 'create') && commonModel::hasPriv('execution', 'create') && empty($execution->isParent);
         if(!commonModel::hasPriv('execution', $action)) return false;
 
@@ -4644,6 +4700,7 @@ class executionModel extends model
             $execution->projectID   = $execution->project;
             $execution->project     = $execution->projectName;
             $execution->parent      = (isset($executionList[$execution->parent]) && $execution->parent && $execution->grade > 1) ? 'pid' . (string)$execution->parent : '';
+            $execution->hasChild    = !empty($execution->isParent);
             $execution->isParent    = !empty($execution->isParent) or !empty($execution->tasks);
             $execution->actions     = array();
 
@@ -4660,7 +4717,7 @@ class executionModel extends model
                         if($actionName == 'createTask' && !commonModel::hasPriv('task', 'create'))  continue;
                         if(!in_array($actionName, array('createTask', 'createChildStage')) && !commonModel::hasPriv('execution', $actionName)) continue;
                         $action = array('name' => $actionName, 'disabled' => $this->isClickable($execution, $actionName) ? false : true);
-                        if($actionName == 'createChildStage' && $action['disabled']) $action['hint'] = $execution->type == 'stage' ? $this->lang->programplan->error->createdTask : $this->lang->programplan->error->notStage;
+                        if($actionName == 'createChildStage' && $action['disabled'] && $execution->type != 'stage') $action['hint'] = $this->lang->programplan->error->notStage;
                         if(!$action['disabled']) break;
                         if($actionName == 'close' && $execution->status != 'closed') break;
                     }

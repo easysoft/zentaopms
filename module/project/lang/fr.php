@@ -84,6 +84,18 @@ $lang->project->invested            = 'Invested';
 $lang->project->member              = 'Member';
 $lang->project->manage              = 'Manage';
 $lang->project->market              = 'Market';
+$lang->project->tips                = 'Note';
+$lang->project->afterInfo           = "{$lang->projectCommon} is created. Next you can";
+$lang->project->setTeam             = 'Set Team';
+$lang->project->linkStory           = 'Link Stories';
+$lang->project->createStory         = "Create {$lang->SRCommon}";
+$lang->project->createTask          = "Create Task";
+$lang->project->createExecutionTip  = 'Create %s';
+$lang->project->setDoc              = 'Set Doc';
+$lang->project->backToTaskList      = 'Go Back to Task List';
+$lang->project->backToKanban        = 'Go Back to Kanban';
+$lang->project->backToExecutionList = 'Go Back to Project %s List';
+$lang->project->backToProjectList   = 'Go Back to Project List';
 
 $lang->project->manDay          = 'Man Day';
 $lang->project->day             = 'Day';
@@ -437,6 +449,7 @@ $lang->project->cannotChangeToCat       = "The {$lang->projectCommon} has conten
 $lang->project->cannotCancelCat         = "There are child {$lang->projectCommon}s of this {$lang->projectCommon}. You cannot cancel the parent {$lang->projectCommon} mark.";
 $lang->project->parentBeginEnd          = "The begin and end date of the parent {$lang->projectCommon}: %s ~ %s";
 $lang->project->parentBudget            = "The budget of the parent program: ";
+$lang->project->confirmCreateStage      = "Given that data has already been generated in this phase, are you certain you wish to proceed with the split? If you choose to continue, in order to maintain data consistency, we will assist you by recording the existing data in the initial {$lang->execution->common} of the split.";
 
 $lang->project->beginLessThanParent     = "The start date of the {$lang->projectCommon} is < the start date of the parent program: %s. ";
 $lang->project->endGreatThanParent      = "The finish date of the {$lang->projectCommon} is > the finish date of the parent program: %s. ";
@@ -476,6 +489,7 @@ $lang->project->featureBar['dynamic']['lastMonth'] = 'Last Month';
 
 $lang->project->moreSelects = array();
 $lang->project->moreSelects['suspended'] = 'Suspended';
+$lang->project->moreSelects['delayed']   = 'Delayed';
 $lang->project->moreSelects['closed']    = 'Closed';
 
 $lang->project->executionList['scrum']         = $lang->projectCommon . ' Sprint';

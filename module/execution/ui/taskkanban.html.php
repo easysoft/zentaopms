@@ -50,13 +50,13 @@ $checkObject = new stdclass();
 $checkObject->execution = $executionID;
 
 $canModifyExecution  = common::canModify('execution', $execution);
-$canCreateTask       = $canModifyExecution && common::hasPriv('task', 'create', $checkObject);
-$canBatchCreateTask  = $canModifyExecution && common::hasPriv('task', 'batchCreate', $checkObject);
+$canCreateTask       = $canModifyExecution && !$isLimited && common::hasPriv('task', 'create', $checkObject);
+$canBatchCreateTask  = $canModifyExecution && !$isLimited && common::hasPriv('task', 'batchCreate', $checkObject);
 $canCreateRisk       = $canModifyExecution && common::hasPriv('risk', 'create', $checkObject) && in_array($config->edition, array('max', 'ipd'));
 $canBatchCreateRisk  = $canModifyExecution && common::hasPriv('risk', 'batchCreate', $checkObject) && in_array($config->edition, array('max', 'ipd'));
 $canCreateBug        = ($canModifyExecution && $productID && common::hasPriv('bug', 'create'));
 $canBatchCreateBug   = ($canModifyExecution && $productID && common::hasPriv('bug', 'batchCreate'));
-$canImportBug        = ($canModifyExecution && $productID && common::hasPriv('execution', 'importBug'));
+$canImportBug        = ($canModifyExecution && $productID && !$isLimited && common::hasPriv('execution', 'importBug'));
 $canCreateStory      = ($canModifyExecution && $productID && common::hasPriv('story', 'create'));
 $canBatchCreateStory = ($canModifyExecution && $productID && common::hasPriv('story', 'batchCreate'));
 $canLinkStory        = ($canModifyExecution && $productID && common::hasPriv('execution', 'linkStory') && !empty($execution->hasProduct));
@@ -226,7 +226,7 @@ row
             set::items(array
             (
                 common::hasPriv('execution', 'importTask') && $execution->multiple ? array('text' => $lang->execution->importTask, 'url' => createLink('execution', 'importTask', "execution=$execution->id")) : null,
-                ($features['qa'] && common::hasPriv('execution', 'importBug')) ? array('text' => $lang->execution->importBug, 'url' => createLink('execution', 'importBug', "execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null
+                ($features['qa'] && !$isLimited && common::hasPriv('execution', 'importBug')) ? array('text' => $lang->execution->importBug, 'url' => createLink('execution', 'importBug', "execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null
             ))
         ) : null,
         dropdown
@@ -255,7 +255,7 @@ row
                 $features['qa'] && common::hasPriv('bug', 'create') ? ($canCreateBug && !empty($productID) ? array('text' => $lang->bug->create, 'url' => createLink('bug', 'create', "productID=$productID&branch=0&extra=executionID=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : array('text' => $lang->bug->create, 'data-on' => 'click', 'data-do' => "zui.Modal.alert('" . $lang->execution->needLinkProducts . "')" )) : null,
                 ($features['qa'] && $canBatchCreateBug) ? array('text' => $lang->bug->batchCreate, 'url' => ($productNum > 1 ? '#batchCreateBug' : createLink('bug', 'batchCreate', "productID=$productID&branch=0&executionID=$execution->id")), 'data-toggle' => 'modal', 'data-size' => $productNum > 1 ? null : 'lg') : null,
                 ($features['qa'] && $canImportBug) ? array('text' => $lang->execution->importBug, 'url' => createLink('execution', 'importBug', "execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null,
-                ($features['story'] && $hasStoryButton && $features['qa']) ? array('text' => '', 'class' => 'divider menu-divider') : null,
+                ($features['qa'] && ($canCreateTask || $canBatchCreateTask)) ? array('text' => '', 'class' => 'divider menu-divider') : null,
                 ($canCreateTask) ? array('text' => $lang->task->create, 'url' => createLink('task', 'create', "execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null,
                 ($canBatchCreateTask) ? array('text' => $lang->execution->batchCreateTask, 'url' => createLink('task', 'batchCreate', "execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null,
                 array('class' => 'divider menu-divider'),

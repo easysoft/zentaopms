@@ -1,3 +1,15 @@
+window.renderCell = function(result, {col, row})
+{
+    if(col.name === 'name')
+    {
+        if(typeof result[0].props == 'object') result[0].props.className = 'clip w-max';
+        if(row.data.postponed) result[result.length] = {html:'<span class="label size-sm circle danger-pale w-max">' + row.data.delayInfo + '</span>'};
+        return result;
+    }
+
+    return result;
+}
+
 $(document).on('click', '#involved', function()
 {
     var involved = $(this).prop('checked') ? 1 : 0;

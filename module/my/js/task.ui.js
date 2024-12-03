@@ -61,10 +61,11 @@ window.renderCell = function(result, info)
     const task = info.row.data;
     if(info.col.name == 'name' && result)
     {
+        if(typeof result[0] == 'object') result[0].props.className = 'overflow-hidden';
         let html = '';
         if(task.team)
         {
-            html += "<span class='label gray-pale rounded-xl'>" + multipleAB + "</span>";
+            html += "<span class='label gray-pale rounded-xl nowrap'>" + multipleAB + "</span>";
         }
         if(task.isParent > 0)
         {
@@ -76,6 +77,10 @@ window.renderCell = function(result, info)
         }
 
         if(html) result.unshift({html});
+        if(typeof task.delay != 'undefined' && task.delay)
+        {
+            result[result.length] = {html:'<span class="label danger-pale ml-1 flex-none nowrap">' + delayWarning.replace('%s', task.delay) + '</span>', className:'flex items-end', style:{flexDirection:"column"}};
+        }
     }
     if(info.col.name == 'deadline' && result[0])
     {
