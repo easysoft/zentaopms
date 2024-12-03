@@ -43,7 +43,7 @@ $config->task->editor->pause    = array('id' => 'comment', 'tools' => 'simpleToo
 $config->task->removeFields = 'objectTypeList,productList,executionList,gitlabID,gitlabProjectID,product';
 $config->task->exportFields = '
     id, project, execution, module, story, fromBug,
-    name, desc,
+    name, desc, parent,
     type, pri,estStarted, realStarted, deadline, status,estimate, consumed, left,
     keywords,mailto, progress, mode,
     openedBy, openedDate, assignedTo, assignedDate,
@@ -199,5 +199,5 @@ $config->task->actionList['createBranch']['data-toggle'] = 'modal';
 
 $config->task->actions = new stdclass();
 $config->task->actions->view = array();
-$config->task->actions->view['mainActions']   = array('batchCreate', 'assignTo', 'start', 'restart', 'createBranch', 'recordWorkhour', 'pause', 'finish', 'activate', 'close', 'cancel');
+$config->task->actions->view['mainActions']   = array('batchCreate', 'assignTo', 'start', 'createBranch', 'recordWorkhour', 'restart', 'pause', 'finish', 'activate', 'close', 'cancel');
 $config->task->actions->view['suffixActions'] = array('edit', 'create', 'delete', 'view');

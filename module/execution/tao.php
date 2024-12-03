@@ -276,11 +276,10 @@ class executionTao extends executionModel
     protected function fetchBurnData(array $executionIdList): array
     {
         $today = helper::today();
-        $burns = $this->dao->select("execution, '$today' AS date, sum(estimate) AS `estimate`, sum(`left`) AS `left`, SUM(consumed) AS `consumed`")
-            ->from(TABLE_TASK)
+        $burns = $this->dao->select("execution, '$today' AS date, sum(estimate) AS `estimate`, sum(`left`) AS `left`, SUM(consumed) AS `consumed`")->from(TABLE_TASK)
             ->where('execution')->in($executionIdList)
             ->andWhere('deleted')->eq('0')
-            ->andWhere('parent')->ge('0')
+            ->andWhere('isParent')->eq('0')
             ->andWhere('status')->ne('cancel')
             ->groupBy('execution')
             ->fetchAll('execution');
@@ -288,7 +287,7 @@ class executionTao extends executionModel
         $closedLefts = $this->dao->select('execution, sum(`left`) AS `left`')->from(TABLE_TASK)
             ->where('execution')->in($executionIdList)
             ->andWhere('deleted')->eq('0')
-            ->andWhere('parent')->ge('0')
+            ->andWhere('isParent')->eq('0')
             ->andWhere('status')->eq('closed')
             ->groupBy('execution')
             ->fetchAll('execution');
@@ -296,7 +295,7 @@ class executionTao extends executionModel
         $finishedEstimates = $this->dao->select("execution, sum(`estimate`) AS `estimate`")->from(TABLE_TASK)
             ->where('execution')->in($executionIdList)
             ->andWhere('deleted')->eq('0')
-            ->andWhere('parent')->ge('0')
+            ->andWhere('isParent')->eq('0')
             ->andWhere('status', true)->eq('done')
             ->orWhere('status')->eq('closed')
             ->markRight(1)
@@ -519,27 +518,65 @@ class executionTao extends executionModel
      */
     protected function getTaskGroups(int $executionID): array
     {
+        $executionID = (int)$executionID;
         $tasks = $this->dao->select('*')->from(TABLE_TASK)
-            ->where('execution')->eq((int)$executionID)
+            ->where('execution')->eq($executionID)
             ->andWhere('deleted')->eq(0)
-            ->andWhere('parent')->lt(1)
+            ->andWhere('parent')->eq(0)
             ->orderBy('id_desc')
             ->fetchAll();
         $childTasks = $this->dao->select('*')->from(TABLE_TASK)
-            ->where('execution')->eq((int)$executionID)
+            ->where('execution')->eq($executionID)
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->ne(0)
             ->orderBy('id_desc')
             ->fetchGroup('parent');
 
         $taskGroups = array();
-        foreach($tasks as $task)
-        {
-            $taskGroups[$task->module][$task->story][$task->id] = $task;
-            if(!empty($childTasks[$task->id])) $taskGroups[$task->module][$task->story][$task->id]->children = $childTasks[$task->id];
-        }
+        foreach($tasks as $task) $taskGroups[$task->module][$task->story][$task->id] = $this->appendTaskChildren($task, $childTasks);
 
         return $taskGroups;
+    }
+
+    /**
+     * 递归获取任务数量。
+     * Get task count.
+     *
+     * @param  array     $tasks
+     * @access protected
+     * @return int
+     *
+     */
+    protected function getTaskCount(array $tasks): int
+    {
+        $taskCount = count($tasks);
+        foreach($tasks as $task)
+        {
+            if(!empty($task->children)) $taskCount += $this->getTaskCount($task->children);
+        }
+
+        return $taskCount;
+    }
+
+    /**
+     * 追加子任务到任务
+     * Append children to task
+     *
+     * @param object  $task
+     * @param array   $childTasks
+     * @return object
+     */
+    protected function appendTaskChildren(object $task, array $childTasks): object
+    {
+        if(empty($childTasks[$task->id])) return $task;
+
+        $task->children = array();
+        foreach($childTasks[$task->id] as $child)
+        {
+            $child = $this->appendTaskChildren($child, $childTasks);
+            $task->children[] = $child;
+        }
+        return $task;
     }
 
     /**
@@ -564,7 +601,7 @@ class executionTao extends executionModel
         if($node->id && isset($taskGroups[$node->id][0]))
         {
             $taskItems = $this->formatTasksForTree($taskGroups[$node->id][0]);
-            $node->tasksCount = count($taskItems);
+            $node->tasksCount = $this->getTaskCount($taskItems);
             foreach($taskItems as $taskItem) $node->children[] = $taskItem;
         }
 
@@ -616,8 +653,8 @@ class executionTao extends executionModel
             $storyTasks = isset($taskGroups[$node->id][$story->id]) ? $taskGroups[$node->id][$story->id] : array();
             if(!empty($storyTasks))
             {
-                $taskItems             = $this->formatTasksForTree($storyTasks, $story);
-                $storyItem->tasksCount = count($taskItems);
+                $taskItems             = $this->formatTasksForTree($storyTasks, $stories);
+                $storyItem->tasksCount = $this->getTaskCount($taskItems);
                 $storyItem->children   = $taskItems;
             }
             else
@@ -650,17 +687,8 @@ class executionTao extends executionModel
         foreach($taskGroups[$node->id] as $tasks)
         {
             $taskItems = $this->formatTasksForTree($tasks);
-            $node->tasksCount += count($taskItems);
-            foreach($taskItems as $taskItem)
-            {
-                $node->children[$taskItem->id] = $taskItem;
-                if(!empty($tasks[$taskItem->id]->children))
-                {
-                    $task = $this->formatTasksForTree($tasks[$taskItem->id]->children);
-                    $node->children[$taskItem->id]->children=$task;
-                    $node->tasksCount += count($task);
-                }
-            }
+            $node->tasksCount += $this->getTaskCount($taskItems);
+            foreach($taskItems as $taskItem) $node->children[$taskItem->id] = $taskItem;
         }
         $node->children = array_values($node->children);
 
@@ -727,11 +755,11 @@ class executionTao extends executionModel
      * Format tasks for tree.
      *
      * @param  array     $tasks
-     * @param  object    $story
+     * @param  array     $stories
      * @access protected
      * @return array
      */
-    protected function formatTasksForTree(array $tasks, object $story = null): array
+    protected function formatTasksForTree(array $tasks, array $stories = array()): array
     {
         static $users, $avatarPairs;
         if(empty($users))       $users       = $this->loadModel('user')->getPairs('noletter');
@@ -742,8 +770,9 @@ class executionTao extends executionModel
         {
             $avatarAccount = empty($task->assignedTo) ? zget($task, 'openedBy', '') : $task->assignedTo;
             $userAvatar    = zget($avatarPairs, $avatarAccount);
-            $userAvatar    = $userAvatar && $avatarAccount != 'closed' ? "<img src='{$userAvatar}'/>" : strtoupper(mb_substr($avatarAccount, 0, 1, 'utf-8'));
+            $userAvatar    = $userAvatar && $avatarAccount != 'closed' ? "<img src='{$userAvatar}' />" : strtoupper(mb_substr($avatarAccount, 0, 1, 'utf-8'));
 
+            $story    = zget($stories, $task->story, '');
             $taskItem = new stdclass();
             $taskItem->type          = 'task';
             $taskItem->id            = $task->id;
@@ -752,6 +781,9 @@ class executionTao extends executionModel
             $taskItem->pri           = (int)$task->pri;
             $taskItem->status        = $task->status;
             $taskItem->parent        = $task->parent;
+            $taskItem->isParent      = $task->isParent;
+            $taskItem->estStarted    = $task->estStarted;
+            $taskItem->realStarted   = $task->realStarted;
             $taskItem->estimate      = $task->estimate;
             $taskItem->consumed      = $task->consumed;
             $taskItem->left          = $task->left;
@@ -761,6 +793,9 @@ class executionTao extends executionModel
             $taskItem->storyChanged  = $story && $story->status == 'active' && $story->version > $story->taskVersion;
             $taskItem->avatarAccount = zget($users, $avatarAccount);
             $taskItem->avatar        = $userAvatar;
+
+            if(!empty($task->children)) $taskItem->children = $this->formatTasksForTree($task->children, $stories);
+
             $taskItems[] = $taskItem;
         }
 

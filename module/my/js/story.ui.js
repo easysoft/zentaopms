@@ -41,10 +41,6 @@ window.renderCell = function(result, info)
         if(story.color) result[0].props.style = 'color: ' + story.color;
         if(html) result.unshift({html});
     }
-    if(info.col.name == 'status' && result)
-    {
-        if(info.row.data.URChanged == '1') result[0] = {html: "<span class='status-changed'>" + URChanged + "</span>"};
-    }
     return result;
 }
 

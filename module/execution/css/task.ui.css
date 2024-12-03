@@ -1,2 +1,2 @@
-#table-execution-task .dtable-nested-toggle.is-no-child {display: none}
+#table-execution-task .dtable-nested-toggle.is-no-child {margin-left: 0}
 [data-key='__alert'] .modal-body > div{word-wrap: break-word;}

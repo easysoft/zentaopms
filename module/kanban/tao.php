@@ -483,6 +483,8 @@ class kanbanTao extends kanbanModel
         $item['color']        = $card->color;
         $item['assignedTo']   = $card->assignedTo;
         $item['parent']       = !empty($card->originParent) ? $card->originParent : 0;
+        $item['parent']       = !empty($card->rawParent) ? $card->rawParent : 0;
+        $item['isParent']     = !empty($card->isParent) ? $card->isParent: 0;
         $item['progress']     = !empty($card->progress) ? $card->progress : 0;
         $item['group']        = !empty($card->group) ? $card->group : '';
         $item['region']       = !empty($card->region) ? $card->region : '';

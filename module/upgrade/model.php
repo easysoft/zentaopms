@@ -10459,4 +10459,37 @@ class upgradeModel extends model
             $this->setting->deleteItems('owner=system&module=common&section=global&key=cache');
         }
     }
+
+    /**
+     * 初始化任务关联。
+     * Init task relation.
+     *
+     * @access public
+     * @return void
+     */
+    public function initTaskRelation()
+    {
+        $childTasks = $this->dao->select('id,parent')->from(TABLE_TASK)->where('parent')->gt(0)->fetchPairs('id', 'parent');
+        if(empty($childTasks)) return;
+
+        $childIdList = array_keys($childTasks);
+        $this->dao->delete()->from(TABLE_RELATION)->where('BID')->in($childIdList)->andWhere('relation')->eq('subdivideinto')->andWhere('AType')->eq('task')->andWhere('BType')->eq('task')->exec();
+        $this->dao->delete()->from(TABLE_RELATION)->where('AID')->in($childIdList)->andWhere('relation')->eq('subdividefrom')->andWhere('AType')->eq('task')->andWhere('BType')->eq('task')->exec();
+
+        $data = new stdclass();
+        $data->AType = 'task';
+        $data->BType = 'task';
+        foreach($childTasks as $taskID => $parentID)
+        {
+            $data->AID      = $taskID;
+            $data->BID      = $parentID;
+            $data->relation = 'subdividefrom';
+            $this->dao->insert(TABLE_RELATION)->data($data)->exec();
+
+            $data->AID      = $parentID;
+            $data->BID      = $taskID;
+            $data->relation = 'subdivideinto';
+            $this->dao->insert(TABLE_RELATION)->data($data)->exec();
+        }
+    }
 }

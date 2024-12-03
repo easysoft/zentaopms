@@ -260,13 +260,6 @@ class messageModel extends model
             list($toList, $ccList) = $this->loadModel($objectType)->getToAndCcList($object);
             $toList = $toList . ',' . $ccList;
         }
-        if(empty($toList) && $objectType == 'task' && $object->mode == 'multi')
-        {
-            /* Get task team members. */
-            $teamMembers = $this->loadModel('task')->getMultiTaskMembers($object->id);
-            $toList      = array_filter($teamMembers, function($account){return $account != $this->app->user->account; });
-            $toList      = implode(',', $toList);
-        }
 
         if($toList == 'closed') $toList = '';
         if($objectType == 'feedback' && $object->status == 'replied') $toList = ',' . $object->openedBy . ',';
@@ -303,10 +296,7 @@ class messageModel extends model
         if($this->config->edition != 'open')
         {
             $flow = $this->loadModel('workflow')->getByModule($objectType);
-            if($flow && !$flow->buildin)
-            {
-                $toList = $this->loadModel('flow')->getToList($flow, $object->id);
-            }
+            if($flow && !$flow->buildin) $toList = $this->loadModel('flow')->getToList($flow, $object->id);
         }
 
         return trim($toList, ',');

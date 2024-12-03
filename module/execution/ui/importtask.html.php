@@ -33,6 +33,28 @@ featureBar
     )
 );
 
+$viewType = $this->cookie->taskViewType ? $this->cookie->taskViewType : 'tree';
+toolbar
+(
+    item(set(array
+    (
+        'type'  => 'btnGroup',
+        'items' => array(array
+        (
+            'icon'      => 'list',
+            'class'     => 'btn-icon switchButton' . ($viewType == 'tiled' ? ' text-primary' : ''),
+            'data-type' => 'tiled',
+            'hint'      => $lang->task->viewTypeList['tiled']
+        ), array
+        (
+            'icon'      => 'treeview',
+            'class'     => 'switchButton btn-icon' . ($viewType == 'tree' ? ' text-primary' : ''),
+            'data-type' => 'tree',
+            'hint'      => $lang->task->viewTypeList['tree']
+        ))
+    )))
+);
+
 $config->task->dtable->importTask->fieldList['execution']['map'] = $executions;
 if($execution->lifetime == 'ops' || in_array($execution->attribute, array('request', 'review'))) unset($config->task->dtable->importTask->fieldList['story']);
 
@@ -52,15 +74,20 @@ if(!isInModal())
 }
 
 jsVar('executionID', $execution->id);
+jsVar('childrenAB', $lang->task->childrenAB);
+jsVar('parentAB', $lang->task->parentAB);
+if($viewType == 'tiled') $config->task->dtable->importTask->fieldList['name']['nestedToggle'] = false;
+$cols = array_values($config->task->dtable->importTask->fieldList);
 dtable
 (
     set::userMap($memberPairs),
-    set::cols(array_values($config->task->dtable->importTask->fieldList)),
+    set::cols($cols),
     set::data($tasks2Imported),
     set::showToolbarOnChecked(false),
     set::orderBy($orderBy),
     set::sortLink(createLink('execution', 'importTask', "executionID={$execution->id}&fromExecution={$fromExecution}&orderBy={name}_{sortType}&recPerPage={$pager->recPerPage}")),
     set::footToolbar($footToolbar),
+    set::onRenderCell(jsRaw('window.renderCell')),
     set::footPager(
         usePager
         (

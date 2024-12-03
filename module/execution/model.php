@@ -2313,7 +2313,6 @@ class executionModel extends model
             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
             ->where('t1.status')->in('wait,doing,pause,cancel')
             ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t1.parent')->lt(1)
             ->andWhere('t1.execution')->in(array_keys($executions))
             ->andWhere("(t1.story = 0 OR (t2.branch IN ('0','" . implode("','", $branches) . "') AND t2.product " . helper::dbIN(array_keys($branches)) . "))")
             ->orderBy($orderBy)
@@ -2343,7 +2342,7 @@ class executionModel extends model
             /* Save the assignedToes and stories, should linked to execution. */
             $assignedToes[$task->assignedTo] = $task->execution;
             $taskStories[$task->story]       = $task->story;
-            if($task->parent < 0) $parents[$task->id] = $task->id;
+            if($task->isParent) $parents[$task->id] = $task->id;
 
             $data = new stdclass();
             $data->project      = $execution->project;
@@ -2357,9 +2356,6 @@ class executionModel extends model
                 if($task->estStarted < $execution->begin || $task->estStarted > $execution->end) $data->estStarted = $execution->begin;
                 if($task->deadline > $execution->end || $task->deadline < $execution->begin)     $data->deadline   = $execution->end;
             }
-
-            /* Update tasks and save logs. */
-            if($task->parent < 0) $this->dao->update(TABLE_TASK)->data($data)->where('parent')->eq($task->id)->exec();
 
             $data->status = $task->consumed > 0 ? 'doing' : 'wait';
             $this->dao->update(TABLE_TASK)->data($data)->where('id')->eq($task->id)->exec();
@@ -3635,13 +3631,6 @@ class executionModel extends model
             foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;
         }
 
-        $parents = array();
-        foreach($tasks as $task)
-        {
-            if($task->parent > 0) $parents[$task->parent] = $task->parent;
-        }
-        $parents = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($parents)->fetchAll('id');
-
         if($this->config->vision == 'lite') $tasks = $this->loadModel('task')->appendLane($tasks);
         return $this->loadModel('task')->processTasks($tasks);
     }
@@ -3667,7 +3656,7 @@ class executionModel extends model
 
         foreach($tasks as $task)
         {
-            if(!isset($tasks[$task->parent]) or $task->parent <= 0)
+            if($task->isParent == '0')
             {
                 $totalEstimate += $task->estimate;
                 $totalConsumed += $task->consumed;
@@ -4016,7 +4005,7 @@ class executionModel extends model
             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
             ->where('t1.execution')->eq($executionID)
             ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t1.parent')->ge(0)
+            ->beginIF(!$this->cookie->showParent)->andWhere('t1.isParent')->ne('1')->fi()
             ->beginIF($excludeTasks)->andWhere('t1.id')->notIN($excludeTasks)->fi()
             ->orderBy($orderBy)
             ->page($pager)
@@ -4492,16 +4481,16 @@ class executionModel extends model
             switch($tree->type)
             {
                 case 'task':
-                    $label = $tree->parent > 0 ? $this->lang->task->children : $this->lang->task->common;
+                    $label = $this->lang->task->common;
+                    if($tree->parent > 0 && !$tree->isParent) $label = $this->lang->task->children;
+                    if($tree->isParent) $label = $this->lang->task->parent;
                     $treeData[$index]['url']     = $canViewTask ? helper::createLink('execution', 'treeTask', "taskID={$tree->id}") : '';
                     $treeData[$index]['content'] = array(
                         'html' => "<div class='tree-link'><span class='label gray-pale rounded-full align-sub'>{$label}</span><span class='ml-4 align-sub'>{$tree->id}</span><span class='title ml-4 " . ($canViewTask ? 'text-primary' : '') . " align-sub' title='{$tree->title}'>" . $tree->title . '</span>'. $assigedToHtml . '</div>',
                     );
                     break;
                 case 'product':
-                    $treeData[$index]['content'] = array(
-                        'html' => "<span class='label rounded-full p-2 gray-outline' title='{$tree->name}'>{$tree->name}</span>"
-                    );
+                    $treeData[$index]['content'] = array('html' => "<span class='label rounded-full p-2 gray-outline' title='{$tree->name}'>{$tree->name}</span>");
                     break;
                 case 'story':
                     $this->app->loadLang('story');
@@ -4541,14 +4530,21 @@ class executionModel extends model
                     break;
                 default:
                     $firstClass = $tree->id == 0 ? 'label rounded-full p-2 gray-outline' : '';
-                    $treeData[$index]['content'] = array(
-                        'html' => "<span class='{$firstClass} title' title='{$tree->name}'>" . $tree->name . '</span>'
-                    );
+                    $treeData[$index]['content'] = array('html' => "<span class='{$firstClass} title' title='{$tree->name}'>" . $tree->name . '</span>');
                     break;
             }
             if(isset($tree->children))
             {
-                if($tree->type == 'task') $treeData[$index]['content']['html'] = "<span class='title' title='{$tree->title}'>{$tree->title}</span>";
+                if($tree->type == 'task')
+                {
+                    $label = $this->lang->task->common;
+                    if($tree->parent > 0 && !$tree->isParent) $label = $this->lang->task->children;
+                    if($tree->isParent) $label = $this->lang->task->parent;
+                    $treeData[$index]['url']     = $canViewTask ? helper::createLink('execution', 'treeTask', "taskID={$tree->id}") : '';
+                    $treeData[$index]['content'] = array(
+                        'html' => "<div class='tree-link'><span class='label gray-pale rounded-full align-sub'>{$label}</span><span class='ml-4 align-sub'>{$tree->id}</span><span class='title ml-4 " . ($canViewTask ? 'text-primary' : '') . " align-sub' title='{$tree->title}'>" . $tree->title . '</span>'. $assigedToHtml . '</div>',
+                    );
+                }
                 $treeData[$index]['items'] = $this->buildTree($tree->children, $hasProduct, $gradeGroup);
             }
         }
