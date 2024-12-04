@@ -71,4 +71,42 @@ class browsetaskTester extends tester
         if($form->dom->lastChildModule->getText() == $childModuleName) return $this->success('创建子模块成功');
         return $this->failed('创建子模块失败');
     }
+
+    /**
+     * 编辑模块。
+     * Edit the module.
+     *
+     * @param  string $moduleName
+     * @access public
+     * @return object
+     */
+    public function editModule($newName)
+    {
+        $form = $this->initForm('tree', 'browsetree', array('rootID' => '2'), 'appIframe-execution');
+        $form->dom->firstEditBtn->click();
+        $form->wait(1);
+        $form->dom->name->setValue($newName);
+        $form->wait(1);
+        $form->dom->editSubmitBtn->click();
+        $form->wait(1);
+
+        if(empty($newName))
+        {
+            if($form->dom->nameTip->getText() == sprintf($this->lang->error->notempty, $this->lang->tree->name)) return $this->success('编辑模块时模块为空，提示正确');
+            return $this->failed('编辑模块时模块为空，提示错误');
+        }
+        if($form->dom->lastModule->getText() == $newName)
+        {
+            if($form->dom->nameTip->getText() == sprintf($this->lang->tree->repeatName, $newName)) return $this->success('编辑模块时模块已存在，提示正确');
+            return $this->failed('编辑模块时模块已存在，提示错误');
+        }
+        if(preg_match('/\s/', $newName))
+        {
+            if(!is_object($form->dom->modalText)) return $this->failed('编辑模块时模块名包含空格，没有提示');
+            if($form->dom->modalText->getText() == $this->lang->tree->shouldNotBlank) return $this->success('编辑模块时模块名包含空格，提示正确');
+            return $this->failed('编辑模块时模块名包含空格，提示错误');
+        }
+        if($form->dom->firstModule->getText() == $newName) return $this->success('编辑模块成功');
+        return $this->failed('编辑模块失败');
+    }
 }
