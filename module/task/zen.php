@@ -61,20 +61,24 @@ class taskZen extends task
 
         $parents = $this->task->getParentTaskPairs($executionID);
         $parents = $this->task->addTaskLabel($parents);
+        if($execution->multiple)  $manageLink = common::hasPriv('execution', 'manageMembers') ? $this->createLink('execution', 'manageMembers', "execution={$execution->id}") : '';
+        if(!$execution->multiple) $manageLink = common::hasPriv('project', 'manageMembers') ? $this->createLink('project', 'manageMembers', "projectID={$execution->project}") : '';
 
-        $this->view->title         = $execution->name . $this->lang->hyphen . $this->lang->task->create;
-        $this->view->customFields  = $customFields;
-        $this->view->modulePairs   = $modulePairs;
-        $this->view->showFields    = $this->config->task->custom->createFields;
-        $this->view->gobackLink    = (isset($output['from']) && $output['from'] == 'global') ? $this->createLink('execution', 'task', "executionID={$executionID}") : '';
-        $this->view->execution     = $execution;
-        $this->view->storyID       = $storyID;
-        $this->view->blockID       = helper::isAjaxRequest('modal') ? $this->loadModel('block')->getSpecifiedBlockID('my', 'assigntome', 'assigntome') : 0;
-        $this->view->hideStory     = $this->task->isNoStoryExecution($execution);
-        $this->view->from          = $storyID || $todoID || $bugID  ? 'other' : 'task';
-        $this->view->taskID        = $taskID;
-        $this->view->parents       = $parents;
-        $this->view->loadUrl       = $this->createLink('task', 'create', "executionID={execution}&storyID={$storyID}&moduleID={$moduleID}&task={$taskID}&todoID={$todoID}&cardPosition={$cardPosition}&bugID={$bugID}");
+        $this->view->title             = $execution->name . $this->lang->hyphen . $this->lang->task->create;
+        $this->view->customFields      = $customFields;
+        $this->view->modulePairs       = $modulePairs;
+        $this->view->showFields        = $this->config->task->custom->createFields;
+        $this->view->gobackLink        = (isset($output['from']) && $output['from'] == 'global') ? $this->createLink('execution', 'task', "executionID={$executionID}") : '';
+        $this->view->execution         = $execution;
+        $this->view->storyID           = $storyID;
+        $this->view->blockID           = helper::isAjaxRequest('modal') ? $this->loadModel('block')->getSpecifiedBlockID('my', 'assigntome', 'assigntome') : 0;
+        $this->view->hideStory         = $this->task->isNoStoryExecution($execution);
+        $this->view->from              = $storyID || $todoID || $bugID  ? 'other' : 'task';
+        $this->view->taskID            = $taskID;
+        $this->view->parents           = $parents;
+        $this->view->loadUrl           = $this->createLink('task', 'create', "executionID={execution}&storyID={$storyID}&moduleID={$moduleID}&task={$taskID}&todoID={$todoID}&cardPosition={$cardPosition}&bugID={$bugID}");
+        $this->view->assignedToOptions = $this->getAssignedToOptions($manageLink);
+        $this->view->manageLink        = $manageLink;
 
         $this->display();
     }
@@ -2074,5 +2078,27 @@ class taskZen extends task
         }
 
         return false;
+    }
+
+    /**
+     * 获取指派给配置。
+     * Get assigned to options.
+     *
+     * @param  string    $manageLink
+     * @access protected
+     * @return array
+     */
+    protected function getAssignedToOptions(string $manageLink): array
+    {
+        $options = array();
+        $options['single']['multiple'] = false;
+        $options['single']['checkbox'] = false;
+        $options['single']['toolbar']  = false;
+
+        $options['multiple']['multiple']  = true;
+        $options['multiple']['checkbox']  = true;
+        $options['multiple']['toolbar'][] = array('key' => 'selectAll', 'text' => $this->lang->selectAll);
+        $options['multiple']['toolbar'][] = array('key' => 'cancelSelect', 'text' => $this->lang->cancelSelect);
+        return $options;
     }
 }
