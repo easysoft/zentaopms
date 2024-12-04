@@ -55,7 +55,8 @@ if(common::canModify('execution', $execution))
 $cols = $this->loadModel('datatable')->getSetting('execution');
 if($execution->type != 'stage') unset($cols['design']);
 
-$tableData = initTableData($tasks, $cols, $this->task);
+$canAssignTo = common::hasPriv('task', 'assignTo');
+$tableData   = initTableData($tasks, $cols, $this->task);
 $lang->task->statusList['changed'] = $lang->task->storyChange;
 foreach($tableData as $task)
 {
