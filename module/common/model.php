@@ -2583,9 +2583,9 @@ eof;
 
                 if(isset($actionData['items']) && is_array($actionData['items']))
                 {
+                    $itemList = array();
                     foreach($actionData['items'] as $itemAction)
                     {
-                        $itemList       = array();
                         $itemActionData = $config->{$moduleName}->actionList[$itemAction];
                         $itemActionData = $this->checkPrivForOperateAction($itemActionData, $itemAction, $moduleName, $data, $menu);
                         if(($isInModal && !empty($itemActionData['notInModal'])) || $itemActionData === false) continue;
