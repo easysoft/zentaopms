@@ -782,6 +782,9 @@ class releaseModel extends model
     {
         if($release->deleted) return false;
 
+        global $app;
+        if($app->rawMethod == 'browse' && !empty($release->releases) && $action == 'view') return false;
+
         $action = strtolower($action);
 
         if($action == 'notify')  return ($release->bugs || $release->stories) && $release->status == 'normal';
