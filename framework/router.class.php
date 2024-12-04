@@ -789,4 +789,55 @@ class router extends baseRouter
         $versionName = ($config->inQuickon ? $lang->devopsPrefix : '') . $versionName;
         return $versionName;
     }
+
+    /**
+     * 当找不到control文件时，尝试去其他界面下寻找，如果有则重设视图。
+     * When the control file cannot be found, try to find it under other interfaces, and if there is one, reset the view.
+     *
+     * @return bool
+     */
+    public function tryResetVision()
+    {
+        $vision = $this->config->vision;
+        if($vision == 'rnd')
+        {
+            if($this->resetVision('or')) return true;
+            else if($this->resetVision('lite')) return true;
+        }
+        else if($vision == 'or')
+        {
+            return $this->resetVision('lite');
+        }
+        else if($vision == 'lite')
+        {
+            return $this->resetVision('or');
+        }
+
+        return false;
+    }
+
+    /**
+     * 当找不到control文件时，尝试去其他界面下寻找，如果有则重设视图。
+     * When the control file cannot be found, try to find it under other interfaces, and if there is one, reset the view.
+     *
+     * @param  $vision string 界面名称
+     * @return bool
+     */
+    public function resetVision($vision)
+    {
+        $controlFile = $this->getExtensionRoot() . $vision . DS . $this->moduleName . DS . 'control.php';
+        if(file_exists($controlFile))
+        {
+            include_once $controlFile;
+            $module = new $this->moduleName();
+            if(method_exists($module, $this->methodName))
+            {
+                helper::setcookie('vision', $vision);
+                $this->config->vision = $vision;
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

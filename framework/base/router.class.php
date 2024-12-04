@@ -1677,7 +1677,7 @@ class baseRouter
     {
         $this->controlFile = $this->getModulePath() . 'control.php';
         if(file_exists($this->controlFile)) return true;
-        $this->triggerError("the control file $this->controlFile not found.", __FILE__, __LINE__, $exitIfNone);
+        if(!$this->tryResetVision()) $this->triggerError("the control file $this->controlFile not found.", __FILE__, __LINE__, $exitIfNone);
     }
 
     /**
