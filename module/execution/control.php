@@ -2185,6 +2185,7 @@ class execution extends control
 
             $this->execution->getLimitedExecution();
 
+            if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "renderTaskAssignedTo($executionID);"));
             return $this->sendSuccess(array('load' => $this->createLink('execution', 'team', "executionID={$executionID}")));
         }
 
@@ -2546,17 +2547,18 @@ class execution extends control
     }
 
     /**
-     * 通过执行ID和指派给获取团队成员。
+     * 通过执行ID/项目ID和指派给获取团队成员。
      * AJAX: get team members of the execution.
      *
-     * @param  int    $executionID
+     * @param  int    $objectID
      * @param  string $assignedTo
      * @access public
      * @return void
      */
-    public function ajaxGetMembers(int $executionID, string $assignedTo = '')
+    public function ajaxGetMembers(int $objectID, string $assignedTo = '')
     {
-        $users = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution');
+        $object = $this->execution->fetchByID($objectID);
+        $users  = $this->loadModel('user')->getTeamMemberPairs($objectID, $object->type == 'project' ? 'project' : 'execution');
         if($this->app->getViewType() === 'json') return print(json_encode($users));
 
         $items = array();

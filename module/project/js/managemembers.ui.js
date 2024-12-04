@@ -108,20 +108,23 @@ function choseTeam2Copy(e)
 window.changeProjectMembers = function()
 {
     let isDeleted   = false;
-    let accountList = [];
-    $("[name^='account']").each(function()
+    if(!noSprintProject)
     {
-        if($(this).val()) accountList.push($(this).val());
-    });
-
-    oldAccountList.forEach(function(account)
-    {
-        if(accountList.indexOf(account.toString()) < 0 && executionMembers.indexOf(account.toString()) !== -1)
+        let accountList = [];
+        $("[name^='account']").each(function()
         {
-            isDeleted = true;
-            return false;
-        }
-    });
+            if($(this).val()) accountList.push($(this).val());
+        });
+
+        oldAccountList.forEach(function(account)
+        {
+            if(accountList.indexOf(account.toString()) < 0 && executionMembers.indexOf(account.toString()) !== -1)
+            {
+                isDeleted = true;
+                return false;
+            }
+        });
+    }
 
     if(!isDeleted)
     {

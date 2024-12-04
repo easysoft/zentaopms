@@ -248,7 +248,7 @@ div
                     h::th
                     (
                         $lang->team->days,
-                        set::width('76px')
+                        set::width('96px')
                     ),
                     h::th
                     (

@@ -18,6 +18,7 @@ jsVar('oldAccountList', array_keys($currentMembers));
 jsVar('unlinkExecutionMembers', $lang->project->unlinkExecutionMembers);
 jsVar('executionMembers', array_values($executionMembers));
 jsVar('isInModal', isInModal());
+jsVar('noSprintProject', !$project->multiple);
 
 /* zin: Define the set::module('team') feature bar on main menu. */
 $copyTeamBox = '';
