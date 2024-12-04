@@ -326,9 +326,8 @@ class taskZen extends task
             }
         }
 
-        $execution = $this->execution->fetchByID($task->execution);
-        if($execution->multiple)  $manageLink = common::hasPriv('execution', 'manageMembers') ? $this->createLink('execution', 'manageMembers', "execution={$execution->id}") : '';
-        if(!$execution->multiple) $manageLink = common::hasPriv('project', 'manageMembers') ? $this->createLink('project', 'manageMembers', "projectID={$execution->project}") : '';
+        if($this->view->execution->multiple)  $manageLink = common::hasPriv('execution', 'manageMembers') ? $this->createLink('execution', 'manageMembers', "execution={$this->view->execution->id}") : '';
+        if(!$this->view->execution->multiple) $manageLink = common::hasPriv('project', 'manageMembers') ? $this->createLink('project', 'manageMembers', "projectID={$this->view->execution->project}") : '';
 
         $this->view->title         = $this->lang->task->edit . 'TASK' . $this->lang->hyphen . $this->view->task->name;
         $this->view->stories       = $this->story->addGradeLabel($stories);
@@ -371,8 +370,12 @@ class taskZen extends task
         if(!isset($members[$task->assignedTo])) $members[$task->assignedTo] = $task->assignedTo;
         if(isset($members['closed']) || $task->status == 'closed') $members['closed'] = 'Closed';
 
-        $this->view->members = $members;
-        $this->view->users   = $this->loadModel('user')->getPairs();
+        if($this->view->execution->multiple)  $manageLink = common::hasPriv('execution', 'manageMembers') ? $this->createLink('execution', 'manageMembers', "execution={$this->view->execution->id}") : '';
+        if(!$this->view->execution->multiple) $manageLink = common::hasPriv('project', 'manageMembers') ? $this->createLink('project', 'manageMembers', "projectID={$this->view->execution->project}") : '';
+
+        $this->view->members    = $members;
+        $this->view->users      = $this->loadModel('user')->getPairs();
+        $this->view->manageLink = $manageLink;
     }
 
     /**

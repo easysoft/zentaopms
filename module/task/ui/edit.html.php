@@ -19,6 +19,7 @@ jsVar('oldStoryID', $task->story);
 jsVar('oldAssignedTo', $task->assignedTo);
 jsVar('oldExecutionID', $task->execution);
 jsVar('oldConsumed', $task->consumed);
+jsVar('objectID', $execution->multiple ? $execution->id : $execution->project);
 jsVar('taskStatus', $task->status);
 jsVar('currentUser', $app->user->account);
 jsVar('team', array_values($task->members));
