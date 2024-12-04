@@ -5,11 +5,11 @@ class browsePage extends page
     {
         parent::__construct($webdriver);
         $xpath = array(
-            /* 左侧区块中元素 */
+            /* 右侧区块中元素 */
             'firsrNullModule' => "(//*[@name='modules[]'])[1]",
             'copyIcon'        => "//button[@id='copyModule']",
             'submitBtn'       => "//*[@id='zin_tree_browse_form']//button[@type='submit']",
-            /* 右侧区块中元素 */
+            /* 左侧区块中元素 */
             'firstModule'      => "//*[@id='treeEditor-tree-browse']/li[1]/div/div/a",
             'lastModule'       => "(//*[@id='treeEditor-tree-browse']/li)[last()]/div/div/a",
             'firstChildModule' => "//*[@id='treeEditor-tree-browse']/li/menu/li[1]/div/div/a",
@@ -18,7 +18,7 @@ class browsePage extends page
             'firstChildDelBtn' => "//*[@id='treeEditor-tree-browse']/li[1]/menu/li[1]/div/nav/a[2]",
             'firstViewBtn'     => "//*[@id='treeEditor-tree-browse']/li[1]/div/nav/a[3]",
             'firstCaret'       => "//*[@id='treeEditor-tree-browse']/li/div/span/span",
-            /* 确认弹窗中元素 */
+            /* 删除确认弹窗中元素 */
             'modalText'    => "//div[contains(@class,'modal-body')]//div[text()!='']",
             'modalConfirm' => "//button[@z-key='confirm']",
             /* 编辑弹窗中元素 */
