@@ -804,14 +804,9 @@ class router extends baseRouter
             if($this->resetVision('or')) return true;
             else if($this->resetVision('lite')) return true;
         }
-        else if($vision == 'or')
-        {
-            return $this->resetVision('lite');
-        }
-        else if($vision == 'lite')
-        {
-            return $this->resetVision('or');
-        }
+
+        if($vision == 'or')   return $this->resetVision('lite');
+        if($vision == 'lite') return $this->resetVision('or');
 
         return false;
     }
