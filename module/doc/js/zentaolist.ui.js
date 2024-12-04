@@ -15,11 +15,19 @@ function updatePicker(name, items)
     $picker.$.setValue(items[0]?.value)
 }
 
+function preview()
+{
+    const form = $('#zentaolist form');
+    const formData = new FormData(form[0]);
+    const url = $.createLink('doc', 'zentaolist', 'type=' + getType());
+    postAndLoadPage(url, formData, '#previewForm,pageJS/.zin-page-js,#configJS');
+}
+
 function changeProduct()
 {
     const product = getValue('product');
     const type = getType();
-    if(type === 'planstory')
+    if(type === 'planStory')
     {
         const link = $.createLink('productplan', 'ajaxGetProductplans', 'product=' + product);
         $.get(link, function(resp)
