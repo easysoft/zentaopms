@@ -111,6 +111,8 @@ foreach($hasViewPriv as $type => $bool)
             if(!in_array($reviewType, array('story', 'testcase', 'feedback', 'review')) and strpos(",{$config->my->oaObjectType},", ",$reviewType,") === false) $statusList = array_merge($statusList, $lang->approval->nodeList);
 
             $review->type = $typeName;
+            if(isset($review->project) && $review->project == 0) $review->project = '';
+            if(isset($review->product) && $review->product == 0) $review->product = '';
         }
         $config->block->review->dtable->fieldList['status']['statusMap'] = $statusList;
     }
