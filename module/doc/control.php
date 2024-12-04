@@ -51,18 +51,15 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function zentaoList(string $type)
+    public function zentaoList(string $type, string $view = 'setting', string $idList = '')
     {
-        $this->view->cols = array();
-        $this->view->data = array();
-        if(!empty($_POST))
-        {
-            $funcName = "preview$type";
-            if(method_exists($this->docZen, $funcName)) $this->docZen->$funcName();
-        }
+        $funcName = "preview$type";
+        if(method_exists($this->docZen, $funcName)) $this->docZen->$funcName($view, $idList);
 
-        $this->view->title = sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList[$type]);
-        $this->view->type  = $type;
+        $this->view->title  = sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList[$type]);
+        $this->view->type   = $type;
+        $this->view->view   = $view;
+        $this->view->idList = $idList;
         $this->display();
     }
 

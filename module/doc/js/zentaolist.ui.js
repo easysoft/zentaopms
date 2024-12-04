@@ -23,6 +23,19 @@ function preview()
     postAndLoadPage(url, formData, '#previewForm,pageJS/.zin-page-js,#configJS');
 }
 
+function insert()
+{
+    const dtable = zui.DTable.query($('#previewTable'));
+    const checkedList = dtable.$.getChecks();
+
+    const url = $.createLink('doc', 'zentaolist', 'type=' + getType() + '&view=list&idList=' + checkedList.join(','));
+    loadPage(url);
+}
+
+function cancel()
+{
+}
+
 function changeProduct()
 {
     const product = getValue('product');

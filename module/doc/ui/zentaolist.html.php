@@ -14,10 +14,12 @@ set::zui();
 $lowerType = strtolower($type);
 include "zentaolist.{$lowerType}.html.php";
 
+$isSetting = $view == 'setting';
+
 formPanel
 (
     setID('zentaolist'),
-    setClass('mb-0 pb-0'),
+    setClass('mb-0 pb-0', array('hidden' => !$isSetting)),
     set('data-type', $type),
     set::title($title),
     set::actions(array()),
@@ -52,9 +54,11 @@ formPanel
 formPanel
 (
     setID('previewForm'),
+    set::bodyClass('p-0-important'),
     set::actions(array()),
     dtable
     (
+        setID('previewTable'),
         set::height(320),
         set::bordered(true),
         set::cols($cols),
@@ -63,7 +67,7 @@ formPanel
     ),
     to::footer
     (
-        setClass('form-actions'),
+        setClass('form-actions', array('hidden' => !$isSetting)),
         setStyle(array('position' => 'relative')),
         btn
         (
@@ -75,7 +79,9 @@ formPanel
         (
             setID('cancel'),
             $lang->cancel
-        )
+        ),
+        on::click('#insert', "insert"),
+        on::click('#cancel', "cancel")
     )
 );
 render('pagebase');
