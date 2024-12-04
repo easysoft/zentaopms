@@ -998,4 +998,21 @@ class docZen extends doc
             $this->action->logHistory($actionID, $changes);
         }
     }
+
+    /**
+     * 预览计划需求。
+     * Preview plan story.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function previewPlanStory(): void
+    {
+        $cols = $this->loadModel('datatable')->getSetting('product', 'browse');
+        $data = $this->loadModel('story')->getPlanStories((int)$this->post->plan);
+        unset($cols['actions']);
+
+        $this->view->cols = array_values($cols);
+        $this->view->data = array_values($data);
+    }
 }
