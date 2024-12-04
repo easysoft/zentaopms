@@ -268,14 +268,14 @@ $lang->doc->zentaoList['caselib']     = 'Case Library' . $lang->testcase->common
 $lang->doc->zentaoList['task'] = $lang->task->common;
 $lang->doc->zentaoList['bug']  = $lang->bug->common;
 
-$lang->doc->zentaoList['more']           = 'More';
-$lang->doc->zentaoList['productPlan']    = 'One ' . $lang->productCommon . ' Plan';
+$lang->doc->zentaoList['more']               = 'More';
+$lang->doc->zentaoList['productPlan']        = $lang->productCommon . ' Plan';
 $lang->doc->zentaoList['productPlanContent'] = $lang->productCommon . ' Plan Content';
-$lang->doc->zentaoList['productRelease'] = $lang->productCommon . $lang->release->common;
-$lang->doc->zentaoList['ER']             = $lang->defaultERName;
-$lang->doc->zentaoList['UR']             = $lang->URCommon;
-$lang->doc->zentaoList['feedback']       = 'Feedback';
-$lang->doc->zentaoList['ticket']         = 'Ticket';
+$lang->doc->zentaoList['productRelease']     = $lang->productCommon . $lang->release->common;
+$lang->doc->zentaoList['ER']                 = $lang->defaultERName;
+$lang->doc->zentaoList['UR']                 = $lang->URCommon;
+$lang->doc->zentaoList['feedback']           = 'Feedback';
+$lang->doc->zentaoList['ticket']             = 'Ticket';
 
 $lang->doc->uploadFormatList = array();
 $lang->doc->uploadFormatList['separateDocs'] = 'Save files as different document';

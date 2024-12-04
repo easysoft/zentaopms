@@ -268,14 +268,14 @@ $lang->doc->zentaoList['caselib']     = '用例库' . $lang->testcase->common;
 $lang->doc->zentaoList['task'] = $lang->task->common;
 $lang->doc->zentaoList['bug']  = $lang->bug->common;
 
-$lang->doc->zentaoList['more']           = '更多';
-$lang->doc->zentaoList['productPlan']    = '某一' . $lang->productCommon . '下计划';
+$lang->doc->zentaoList['more']               = '更多';
+$lang->doc->zentaoList['productPlan']        = $lang->productCommon . '下计划';
 $lang->doc->zentaoList['productPlanContent'] = $lang->productCommon . '计划下的内容';
-$lang->doc->zentaoList['productRelease'] = $lang->productCommon . $lang->release->common;
-$lang->doc->zentaoList['ER']             = $lang->defaultERName;
-$lang->doc->zentaoList['UR']             = $lang->URCommon;
-$lang->doc->zentaoList['feedback']       = '反馈';
-$lang->doc->zentaoList['ticket']         = '工单';
+$lang->doc->zentaoList['productRelease']     = $lang->productCommon . $lang->release->common;
+$lang->doc->zentaoList['ER']                 = $lang->defaultERName;
+$lang->doc->zentaoList['UR']                 = $lang->URCommon;
+$lang->doc->zentaoList['feedback']           = '反馈';
+$lang->doc->zentaoList['ticket']             = '工单';
 
 $lang->doc->uploadFormatList = array();
 $lang->doc->uploadFormatList['separateDocs'] = '每个文件存为不同文档';
