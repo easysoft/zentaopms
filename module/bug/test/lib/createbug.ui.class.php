@@ -28,4 +28,37 @@ class createBugTester extends tester
             return $this->failed('bug表单必填项校验失败');
         }
     }
+
+	/**
+     * 批量创建bug。
+     * batch create bugs.
+     *
+     * @param  array  $product
+     * @param  array  $bugs
+     * @access public
+     * @return object
+     */
+    public function batchCreate($product = array(), $bugs = array())
+    {
+        $this->login();
+        $form = $this->initForm('bug', 'batchCreate', $product, 'appIframe-qa');
+        if(isset($bugs))
+        {
+            for($i = 0; $i < count($bugs); $i++)
+            {
+                if(isset($bugs[$i]['title']))    $form->dom->{"title[" . ($i + 1) . "]"}->setValue($bugs[$i]['title']); 
+                if(isset($bugs[$i]['deadline'])) $form->dom->{"deadline[" . ($i + 1) . "]"}->datePicker($bugs[$i]['deadline']); 
+                if(isset($bugs[$i]['steps']))    $form->dom->{"steps[" . ($i + 1) . "]"}->setValue($bugs[$i]['steps']); 
+                if(isset($bugs[$i]['type']))     $form->dom->{"type[" . ($i + 1) . "]"}->picker($bugs[$i]['type']); 
+                if(isset($bugs[$i]['pri']))      $form->dom->{"pri[" . ($i + 1) . "]"}->picker($bugs[$i]['pri']); 
+                if(isset($bugs[$i]['severity'])) $form->dom->{"severity[" . ($i + 1) . "]"}->picker($bugs[$i]['severity']); 
+                if(isset($bugs[$i]['os']))       $form->dom->{"os[" . ($i + 1) . "]"}->multiPicker($bugs[$i]['os']); 
+                if(isset($bugs[$i]['browser']))  $form->dom->{"browser[" . ($i + 1) . "]"}->multiPicker($bugs[$i]['browser']); 
+            }
+        }
+        $form->dom->save->click();
+        $form->wait(3);
+        if($this->response('method') == 'browse') return $this->success('批量创建bug成功');
+        return $this->failed('批量创建bug失败');
+    }
 }
