@@ -261,13 +261,7 @@ class docApp extends wg
             set::fileUrl($fileUrl),
             set::viewModeUrl($viewModeUrl),
             set::langData($langData),
-            div
-            (
-                setID('zentaoMenus'),
-                setClass('hidden'),
-                set('data-menus', $this->getZentaoListMenu()),
-                set('data-title', $lang->doc->zentaoData),
-            )
+            jsCall('setZentaoSlashMenu', $this->getZentaoListMenu(), $lang->doc->zentaoData)
         );
     }
 }
