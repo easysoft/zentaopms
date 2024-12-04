@@ -140,11 +140,12 @@ class program extends control
      * Create a program.
      *
      * @param  int    $parentProgramID
+     * @param  int    $charterID
      * @param  string $extra
      * @access public
      * @return void
      */
-    public function create(int $parentProgramID = 0, string $extra = '')
+    public function create(int $parentProgramID = 0, int $charterID = 0, string $extra = '')
     {
         $parentProgram = $this->program->getByID($parentProgramID);
 
@@ -173,7 +174,7 @@ class program extends control
         $this->view->programList    = $this->program->getList();
         $this->view->budgetUnitList = $this->project->getBudgetUnitList();
         $this->view->budgetLeft     = empty($parentProgram) ? 0 : $this->program->getBudgetLeft($parentProgram);
-        $this->view->loadUrl        = $this->createLink('program', 'create', "parentProgramID={parent}" . (empty($originExtra) ? '' : "&extra=$originExtra"));
+        $this->view->loadUrl        = $this->createLink('program', 'create', "parentProgramID={parent}&charterID=0" . (empty($originExtra) ? '' : "&extra=$originExtra"));
 
         $this->display();
     }
