@@ -1133,8 +1133,6 @@ class myModel extends model
      */
     public function getReviewingApprovals(string $orderBy = 'id_desc', bool $checkExists = false): array|bool
     {
-        if($this->config->edition != 'max' and $this->config->edition != 'ipd') return array();
-
         $pendingList    = $this->loadModel('approval')->getPendingReviews('review');
         $projectReviews = $this->loadModel('review')->getByList(0, $pendingList, $orderBy);
 
@@ -1170,8 +1168,6 @@ class myModel extends model
      */
     public function getReviewingFlows($objectType = 'all', $orderBy = 'id_desc', $checkExists = false): array|bool
     {
-        if($this->config->edition != 'max' and $this->config->edition != 'ipd') return array();
-
         $stmt = $this->dao->select('t2.objectType,t2.objectID')->from(TABLE_APPROVALNODE)->alias('t1')
             ->leftJoin(TABLE_APPROVALOBJECT)->alias('t2')->on('t2.approval = t1.approval')
             ->where('t2.objectType')->ne('review')
@@ -1182,7 +1178,6 @@ class myModel extends model
             ->query();
         $objectIdList = array();
         while($object = $stmt->fetch()) $objectIdList[$object->objectType][$object->objectID] = $object->objectID;
-        if($checkExists) return array_keys($objectIdList);
 
         $this->loadModel('flow');
         $this->loadModel('workflowaction');
@@ -1209,6 +1204,7 @@ class myModel extends model
                 }
             }
         }
+        if($checkExists) return array_keys(array_filter($objectGroup));
 
         $this->app->loadConfig('action');
         return $this->myTao->buildReviewingFlows($objectGroup, $flows, $this->config->action->objectNameFields);

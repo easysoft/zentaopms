@@ -11,7 +11,7 @@ window.onRenderCell = function(result, {row, col})
         else if(reviewPrivs[row.data.module])
         {
             let link = reviewLink;
-            if(!noFlowAuditModules.includes(row.data.module)) link = flowReviewLink;
+            if(!noFlowAuditModules.includes(row.data.module) && row.data.module != 'charter') link = flowReviewLink;
             link = link.replace('{module}', row.data.module).replace('{id}', row.data.id);
 
             result[0].props.items[0]['data-toggle'] = 'modal'
