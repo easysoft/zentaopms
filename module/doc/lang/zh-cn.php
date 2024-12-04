@@ -261,8 +261,11 @@ $lang->doc->zentaoList['projectStory']   = $lang->projectCommon . $lang->SRCommo
 $lang->doc->zentaoList['executionStory'] = $lang->execution->common . $lang->SRCommon;
 $lang->doc->zentaoList['planStory']      = $lang->productplan->shortCommon . $lang->SRCommon;
 
+$lang->doc->zentaoList['case']        = $lang->testcase->common;
+$lang->doc->zentaoList['productCase'] = $lang->productCommon . $lang->testcase->common;
+$lang->doc->zentaoList['caselib']     = '用例库' . $lang->testcase->common;
+
 $lang->doc->zentaoList['task'] = $lang->task->common;
-$lang->doc->zentaoList['case'] = $lang->testcase->common;
 $lang->doc->zentaoList['bug']  = $lang->bug->common;
 
 $lang->doc->zentaoList['more']           = '更多';

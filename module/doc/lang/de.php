@@ -245,6 +245,38 @@ $lang->doc->editedList         = 'File editor';
 $lang->doc->moveTo             = 'Move to';
 $lang->doc->notSupportExport   = 'This document does not support export';
 
+$lang->doc->preview         = 'Preview';
+$lang->doc->insertTitle     = 'Insert %s list';
+$lang->doc->insertTip       = 'Through the filter configuration, you can modify the insertion display data, and the system records the insertion data ID. ';
+$lang->doc->previewTip      = 'Click "Preview" button, this will display the insertion data according to the configuration on the left side. ';
+$lang->doc->insertText      = 'Insert';
+$lang->doc->searchCondition = 'Search Condition';
+$lang->doc->list            = 'List';
+$lang->doc->zentaoData      = 'Zentao Data';
+
+$lang->doc->zentaoList = array();
+$lang->doc->zentaoList['story']          = $lang->SRCommon;
+$lang->doc->zentaoList['productStory']   = $lang->productCommon . $lang->SRCommon;
+$lang->doc->zentaoList['projectStory']   = $lang->projectCommon . $lang->SRCommon;
+$lang->doc->zentaoList['executionStory'] = $lang->execution->common . $lang->SRCommon;
+$lang->doc->zentaoList['planStory']      = $lang->productplan->shortCommon . $lang->SRCommon;
+
+$lang->doc->zentaoList['case']        = $lang->testcase->common;
+$lang->doc->zentaoList['productCase'] = $lang->productCommon . $lang->testcase->common;
+$lang->doc->zentaoList['caselib']     = 'Case Library' . $lang->testcase->common;
+
+$lang->doc->zentaoList['task'] = $lang->task->common;
+$lang->doc->zentaoList['bug']  = $lang->bug->common;
+
+$lang->doc->zentaoList['more']           = 'More';
+$lang->doc->zentaoList['productPlan']    = 'One ' . $lang->productCommon . ' Plan';
+$lang->doc->zentaoList['productPlanContent'] = $lang->productCommon . ' Plan Content';
+$lang->doc->zentaoList['productRelease'] = $lang->productCommon . $lang->release->common;
+$lang->doc->zentaoList['ER']             = $lang->defaultERName;
+$lang->doc->zentaoList['UR']             = $lang->URCommon;
+$lang->doc->zentaoList['feedback']       = 'Feedback';
+$lang->doc->zentaoList['ticket']         = 'Ticket';
+
 $lang->doc->uploadFormatList = array();
 $lang->doc->uploadFormatList['separateDocs'] = 'Save files as different document';
 $lang->doc->uploadFormatList['combinedDocs'] = 'Save files as one document';
