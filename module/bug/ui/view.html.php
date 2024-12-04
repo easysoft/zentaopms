@@ -33,8 +33,9 @@ jsVar('isInModal',        isInModal());
 jsVar('executions',       $executions);
 jsVar('disableExecution', $lang->project->disableExecution);
 
+$canModify    = !empty($project) ? common::canModify('project', $project) : true;
 $isInModal    = isInModal();
-$canCreateBug = $this->app->tab != 'devops' && hasPriv('bug', 'create');
+$canCreateBug = $canModify && $this->app->tab != 'devops' && hasPriv('bug', 'create');
 $canViewRepo  = hasPriv('repo', 'revision');
 $canViewMR    = hasPriv('mr', 'view');
 $canViewBug   = hasPriv('bug', 'view');
@@ -56,7 +57,7 @@ if(!$isInModal && $canCreateBug)
 
 /* 初始化底部操作栏。Init bottom actions. */
 $actions = array();
-if(!$bug->deleted)
+if(!$bug->deleted && $canModify)
 {
     /* Construct common actions for bug. */
     $actions = $operateList['mainActions'];
