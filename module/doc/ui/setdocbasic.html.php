@@ -87,6 +87,12 @@ formPanel
             )
         )
         : null,
+    $doc->contentType != 'doc' ? formGroup
+    (
+        setStyle('min-height', 'auto'),
+        set::label($lang->doc->files),
+        fileSelector()
+    ) : null,
     $isDraft ? null : formGroup
     (
         set::label($lang->doclib->control),
