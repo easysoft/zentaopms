@@ -2187,7 +2187,6 @@ class blockZen extends block
             {
                 $this->app->loadLang('feedback');
                 $this->app->loadLang('ticket');
-                $this->view->products = $this->dao->select('id, name')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->fetchPairs('id', 'name');
             }
 
             $count[$objectType] = count($objects);
@@ -2228,6 +2227,8 @@ class blockZen extends block
         $this->view->users          = $this->loadModel('user')->getPairs('all,noletter');
         $this->view->isExternalCall = $this->isExternalCall();
         $this->view->hasViewPriv    = $hasViewPriv;
+        $this->view->products       = $this->dao->select('id, name')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->fetchPairs('id', 'name');
+        $this->view->projects       = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('deleted')->eq('0')->fetchPairs('id', 'name');
         $this->view->count          = $count;
     }
 

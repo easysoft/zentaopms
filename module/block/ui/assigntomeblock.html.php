@@ -122,6 +122,9 @@ foreach($hasViewPriv as $type => $bool)
     if($type == 'feedback')    $config->block->feedback->dtable->fieldList['product']['map'] = $products;
     if($type == 'meeting')     $config->block->meeting->dtable->fieldList['dept']['map']     = $depts;
 
+    $config->block->review->dtable->fieldList['product']['map'] = $products;
+    $config->block->review->dtable->fieldList['project']['map'] = $projects;
+
     $selected  = key($hasViewPriv);
     $contents[] = div
     (
