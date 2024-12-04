@@ -27,13 +27,17 @@ class taskAssignedTo extends wg
         return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
+    public static function getPageJS(): ?string
+    {
+        return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
+    }
+
     protected function build()
     {
         global $app, $lang;
         $app->loadLang('execution');
 
-        $pickerToolbar = false;
-        $manageLink    = $this->prop('manageLink');
+        $manageLink = $this->prop('manageLink');
         if($this->prop('multiple') || $manageLink)
         {
             $pickerToolbar = array();
@@ -46,9 +50,8 @@ class taskAssignedTo extends wg
             }
 
             if($manageLink) $pickerToolbar[] = array('type' => 'button', 'className' => 'text-primary manageTeamBtn', 'key' => 'manageTeam', 'text' => $lang->execution->manageTeamMember, 'icon' => 'plus-solid-circle', 'url' => $manageLink, 'data-toggle' => 'modal', 'data-size' => 'lg', 'data-dismiss' => 'pick');
+            $this->setProp('toolbar', $pickerToolbar);
         }
-
-        $this->setProp('toolbar', $pickerToolbar);
 
         return picker
         (
