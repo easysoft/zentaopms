@@ -139,13 +139,19 @@ div
 (
     setID('api-content'),
     setClass('article'),
+    setData('api', $api),
     div
     (
         setClass("api-list-item row items-center mb-1 gap-2 flex-auto is-$api->method rounded"),
         div(setClass('font-mono w-14 text-center api-method py-1 rounded rounded-r-none'), $api->method),
         div(setClass('font-mono font-bold text-md api-path'), $api->path)
     ),
-    h2($api->title),
+    div
+    (
+        setClass('flex gap-2 items-center'),
+        h2(setClass('flex-none min-w-0 max-w-full'), $api->title),
+        $api->deleted ? span(setClass('label danger flex-none'), $lang->deleted) : null
+    ),
     div(setClass('desc'), html($api->desc)),
     $apiHeader,
     $apiQuery,
@@ -154,5 +160,10 @@ div
     $api->paramsExample ? html("<pre><code>" . $api->paramsExample . "</code></pre>") : null,
     $apiResponse,
     $api->responseExample ? h3($lang->api->responseExample) : null,
-    $api->responseExample ? html("<pre><code>" . $api->responseExample . "</code></pre>") : null
+    $api->responseExample ? html("<pre><code>" . $api->responseExample . "</code></pre>") : null,
+    on::init()->do(
+        'const docApp = zui.DocApp.query("#api-content");',
+        'if(!docApp) return;',
+        'docApp.$.update("doc", ' . json_encode($api) . ');'
+    )
 );
