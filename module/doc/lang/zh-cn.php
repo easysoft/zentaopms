@@ -78,6 +78,7 @@ $lang->doc->id           = 'ID';
 $lang->doc->product      = '所属' . $lang->productCommon;
 $lang->doc->project      = "所属{$lang->projectCommon}";
 $lang->doc->execution    = '所属' . $lang->execution->common;
+$lang->doc->plan         = '所属计划';
 $lang->doc->lib          = '所属库';
 $lang->doc->module       = '所属目录';
 $lang->doc->libAndModule = '所属库&目录';

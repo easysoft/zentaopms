@@ -78,6 +78,7 @@ $lang->doc->id           = 'ID';
 $lang->doc->product      = $lang->productCommon;
 $lang->doc->project      = $lang->projectCommon;
 $lang->doc->execution    = $lang->execution->common;
+$lang->doc->plan         = $lang->productplan->shortCommon;
 $lang->doc->lib          = 'Bibliothek';
 $lang->doc->module       = 'Modul';
 $lang->doc->libAndModule = 'Bibliothek&Modul';
