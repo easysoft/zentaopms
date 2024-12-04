@@ -228,7 +228,7 @@ class executionModel extends model
      */
     public function setProjectSession(int $executionID)
     {
-        $execution = $this->getByID($executionID);
+        $execution = $this->fetchByID($executionID);
         if(!empty($execution)) $this->session->set('project', $execution->project, $this->app->tab);
     }
 
@@ -701,7 +701,7 @@ class executionModel extends model
      */
     public function start(int $executionID, object $postData): array|false
     {
-        $oldExecution = $this->getById($executionID);
+        $oldExecution = $this->fetchById($executionID);
 
         $execution = $postData;
         if(!empty($postData->uid)) $execution = $this->loadModel('file')->processImgURL($execution, $this->config->execution->editor->start['id'], $postData->uid);
@@ -744,7 +744,7 @@ class executionModel extends model
      */
     public function putoff(int $executionID, object $postData): array|false
     {
-        $oldExecution = $this->getById($executionID);
+        $oldExecution = $this->fetchById($executionID);
 
         $this->checkBeginAndEndDate($oldExecution->project, $postData->begin, $postData->end);
         if(dao::isError()) return false;
@@ -779,7 +779,7 @@ class executionModel extends model
      */
     public function suspend(int $executionID, object $postData): array|false
     {
-        $oldExecution = $this->getById($executionID);
+        $oldExecution = $this->fetchById($executionID);
 
         $execution = $this->loadModel('file')->processImgURL($postData, $this->config->execution->editor->suspend['id'], (string)$this->post->uid);
         $this->dao->update(TABLE_EXECUTION)->data($execution, 'comment')
@@ -810,7 +810,7 @@ class executionModel extends model
      */
     public function activate(int $executionID, object $postData): array|false
     {
-        $oldExecution = $this->getById($executionID);
+        $oldExecution = $this->fetchById($executionID);
 
         if(empty($oldExecution->totalConsumed) and helper::isZeroDate($oldExecution->realBegan)) $postData->status = 'wait';
 
@@ -912,7 +912,7 @@ class executionModel extends model
      */
     public function close(int $executionID, object $postData): array|false
     {
-        $oldExecution = $this->getById($executionID); /* Save previous execution to variable for later compare. */
+        $oldExecution = $this->fetchById($executionID); /* Save previous execution to variable for later compare. */
 
         $this->lang->error->ge = $this->lang->execution->ge;
 
@@ -1048,13 +1048,13 @@ class executionModel extends model
      */
     public function checkBeginAndEndDate(int $projectID, string $begin, string $end, int $parentID = 0)
     {
-        $project = $this->loadModel('project')->getByID($projectID);
+        $project = $this->loadModel('project')->fetchByID($projectID);
         if(empty($project)) return;
 
         if(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')) && $parentID != $projectID)
         {
             $this->app->loadLang('programplan');
-            $parent = $this->getByID($parentID);
+            $parent = $this->fetchByID($parentID);
             if($parent && $begin < $parent->begin) dao::$errors['begin'] = sprintf($this->lang->programplan->error->letterParent, $parent->begin);
             if($parent && $end > $parent->end)     dao::$errors['end']   = sprintf($this->lang->programplan->error->greaterParent, $parent->end);
         }
@@ -1549,7 +1549,7 @@ class executionModel extends model
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getExecutionPairs();
 
-        $project    = $this->loadModel('project')->getByID($projectID);
+        $project    = $this->loadModel('project')->fetchByID($projectID);
         $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
             ->where('type')->in('stage,sprint,kanban')
             ->andWhere('deleted')->eq('0')
@@ -2332,8 +2332,8 @@ class executionModel extends model
      */
     public function getTasks2Imported(int $toExecution, array $branches, string $orderBy = 'id_desc'): array
     {
-        $execution       = $this->getById($toExecution);
-        $project         = $this->loadModel('project')->getById($execution->project);
+        $execution       = $this->fetchById($toExecution);
+        $project         = $this->loadModel('project')->fetchById($execution->project);
         $brotherProjects = $this->project->getBrotherProjects($project);
         $executions      = $this->dao->select('id')->from(TABLE_EXECUTION)
             ->where('project')->in($brotherProjects)

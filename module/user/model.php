@@ -190,7 +190,7 @@ class userModel extends model
             ->beginIF(strpos($params, 'all') === false)->andWhere('type')->eq('inside')->fi()
             ->beginIF(strpos($params, 'nodeleted') !== false)->andWhere('deleted')->eq(0)->fi()
             ->orderBy('account')
-            ->fetchAll();
+            ->fetchAll('', false);
     }
 
     /**
