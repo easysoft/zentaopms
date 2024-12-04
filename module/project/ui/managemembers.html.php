@@ -17,6 +17,7 @@ jsVar('copyProjectID', $copyProjectID);
 jsVar('oldAccountList', array_keys($currentMembers));
 jsVar('unlinkExecutionMembers', $lang->project->unlinkExecutionMembers);
 jsVar('executionMembers', array_values($executionMembers));
+jsVar('isInModal', isInModal());
 
 /* zin: Define the set::module('team') feature bar on main menu. */
 $copyTeamBox = '';
@@ -232,6 +233,7 @@ div
     (
         setClass('main-form'),
         set::id('teamForm'),
+        commonModel::isTutorialMode() ? null : set::ajax(array('beforeSubmit' => jsRaw("changeProjectMembers"))),
         h::table
         (
             set::className('table table-form'),
@@ -282,16 +284,6 @@ div
                 )
             )
         ),
-        set::actions(array(
-            array(
-            'id'      => 'saveButton',
-            'text'    => $lang->save,
-            'type'    => 'primary',
-            'btnType' => 'button',
-            'onclick' => commonModel::isTutorialMode() ? '' : 'changeProjectMembers()'
-            ),
-            'cancel'
-        ))
     )
 );
 

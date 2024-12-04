@@ -87,7 +87,7 @@ window.setDeptUsers = function(e)
 {
     const dept = $(e.target).val(); // Get dept ID.
     const link = $.createLink('project', 'manageMembers', 'projectID=' + projectID + '&dept=' + dept + '&copyProjectID=' + copyProjectID); // Create manageMembers link.
-    loadPage(link);
+    isInModal ? loadModal(link) : loadPage(link);
 }
 
 /**
@@ -102,7 +102,7 @@ function choseTeam2Copy(e)
     const copyProjectID = $(e.target).val();
     const dept          = $('input[name=dept]').val();
     const link          = $.createLink('project', 'manageMembers', 'projectID=' + projectID + '&dept=' + dept + '&copyProjectID=' + copyProjectID);
-    loadPage(link);
+    isInModal ? loadModal(link) : loadPage(link);
 }
 
 window.changeProjectMembers = function()
@@ -126,7 +126,8 @@ window.changeProjectMembers = function()
     if(!isDeleted)
     {
         const formData = new FormData($("#teamForm")[0]);
-        $.ajaxSubmit({url: $('#teamForm').attr('action'), data: formData});
+        const options  = isInModal ? {url: $('#teamForm').attr('action'), data: formData, callback: `renderTaskAssignedTo(${projectID})`, 'load': false, 'closeModal': true} : {url: $('#teamForm').attr('action'), data: formData};
+        $.ajaxSubmit(options);
     }
     else
     {
@@ -136,7 +137,8 @@ window.changeProjectMembers = function()
             {
                 $('#removeExecution').val('yes');
                 const formData = new FormData($("#teamForm")[0]);
-                $.ajaxSubmit({url: $('#teamForm').attr('action'), data: formData});
+                const options  = isInModal ? {url: $('#teamForm').attr('action'), data: formData, callback: `renderTaskAssignedTo(${projectID})`, 'load': false, 'closeModal': true} : {url: $('#teamForm').attr('action'), data: formData};
+                $.ajaxSubmit(options);
             }
         });
     }
