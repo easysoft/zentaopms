@@ -1,1 +1,1 @@
-.search-menu-footer > .toolbar > .manageTeamBtn {--tw-ring-color: var(--skin-ring);}
+.search-menu-footer > .toolbar > .manageTeamBtn:hover {color: rgba(var(--color-link-hover-rgb),var(--tw-text-opacity));}

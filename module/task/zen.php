@@ -326,6 +326,10 @@ class taskZen extends task
             }
         }
 
+        $execution = $this->execution->fetchByID($task->execution);
+        if($execution->multiple)  $manageLink = common::hasPriv('execution', 'manageMembers') ? $this->createLink('execution', 'manageMembers', "execution={$execution->id}") : '';
+        if(!$execution->multiple) $manageLink = common::hasPriv('project', 'manageMembers') ? $this->createLink('project', 'manageMembers', "projectID={$execution->project}") : '';
+
         $this->view->title         = $this->lang->task->edit . 'TASK' . $this->lang->hyphen . $this->view->task->name;
         $this->view->stories       = $this->story->addGradeLabel($stories);
         $this->view->tasks         = $tasks;
@@ -336,6 +340,7 @@ class taskZen extends task
         $this->view->executions    = $executions;
         $this->view->syncChildren  = $syncChildren;
         $this->view->parentTask    = !empty($task->parent) ? $this->task->getById($task->parent) : null;
+        $this->view->manageLink    = $manageLink;
         $this->display();
     }
 

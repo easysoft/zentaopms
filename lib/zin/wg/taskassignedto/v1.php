@@ -49,14 +49,14 @@ class taskAssignedTo extends wg
                 $this->setProp('menu', array('checkbox' => true));
             }
 
-            if($manageLink) $pickerToolbar[] = array('type' => 'button', 'className' => 'text-primary manageTeamBtn', 'key' => 'manageTeam', 'text' => $lang->execution->manageTeamMember, 'icon' => 'plus-solid-circle', 'url' => $manageLink, 'data-toggle' => 'modal', 'data-size' => 'lg', 'data-dismiss' => 'pick');
+            if($manageLink) $pickerToolbar[] = array('className' => 'text-primary manageTeamBtn', 'key' => 'manageTeam', 'text' => $lang->execution->manageTeamMember, 'icon' => 'plus-solid-circle', 'url' => $manageLink, 'data-toggle' => 'modal', 'data-size' => 'lg', 'data-dismiss' => 'pick');
             $this->setProp('toolbar', $pickerToolbar);
         }
 
         return picker
         (
             setClass('taskAssignedToBox'),
-            set($this->props->pick(array('id', 'name', 'value', 'required', 'items', 'toolbar', 'menu', 'multiple')))
+            set($this->props->pick(array('id', 'name', 'value', 'required', 'items', 'toolbar', 'menu', 'multiple', 'disabled')))
         );
     }
 }

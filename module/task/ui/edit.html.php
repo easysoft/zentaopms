@@ -280,7 +280,7 @@ detailBody
                     div
                     (
                         setClass('flex grow'),
-                        picker
+                        taskAssignedTo
                         (
                             setID('assignedTo'),
                             setClass('w-full'),
@@ -290,6 +290,7 @@ detailBody
                             !empty($task->team) ? set::required(true) : null,
                             !empty($task->team) && $task->mode == 'linear' && !in_array($task->status, array('done', 'closed')) ? set::disabled(true) : null,
                             $task->status == 'closed' ? set::disabled(true) : null,
+                            $manageLink ? set::manageLink($manageLink) : null
                         )
                     ),
                     div
@@ -391,7 +392,7 @@ detailBody
                         set::name('team'),
                         set::label($lang->task->teamMember),
                         set::width('160px'),
-                        set::control('picker'),
+                        set::control(array('control' => 'taskAssignedTo', 'manageLink' => ($manageLink ? $manageLink : ''))),
                         set::items($members)
                     ),
                     formBatchItem
