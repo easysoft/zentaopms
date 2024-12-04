@@ -109,4 +109,27 @@ class browsetaskTester extends tester
         if($form->dom->firstModule->getText() == $newName) return $this->success('编辑模块成功');
         return $this->failed('编辑模块失败');
     }
+
+    /**
+     * 删除模块。
+     * Delete the module.
+     *
+     * @access public
+     * @return object
+     */
+    public function deleteModule()
+    {
+        $form = $this->initForm('tree', 'browsetask', array('rootID' => '3'), 'appIframe-execution');
+        if($form->dom->firstCaret->attr('class') == 'caret-right') $form->dom->firstCaret->click();
+        $form->wait(1);
+        $moduleName = $form->dom->firstChildModule->getText();
+        $form->dom->firstChildDelBtn->click();
+        $form->wait(1);
+        if($form->dom->modalText->getText() != $this->lang->tree->confirmDelete) return $this->failed('删除模块提示信息错误');
+        $form->dom->modalConfirm->click();
+        $form->wait(1);
+
+        if($form->dom->firstChildModule->getText() == $moduleName) return $this->failed('删除模块失败');
+        return $this->success('删除模块成功');
+    }
 }
