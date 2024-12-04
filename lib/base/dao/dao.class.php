@@ -1192,7 +1192,7 @@ class baseDAO
             $tableFields = [];
             foreach($fields as $field)
             {
-                if(strpos($field->type, 'text') !== false) continue;
+                if(strpos($field->type, 'text') !== false || strpos($field->type, 'blob') !== false) continue;
 
                 $tableFields[] = ($tableAlias ? $tableAlias . '.`' : '`') . $field->field . '`';
             }
