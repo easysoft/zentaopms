@@ -14,7 +14,7 @@ class browsetaskTester extends tester
     public function createModule($moduleName, $checkRepeat = false)
     {
         $form = $this->initForm('tree', 'browsetask', array('rootID' => '2'), 'appIframe-execution');
-        if($checkRepeat) $moduleName = $form->dom->firstModule->getText();
+        if($checkRepeat) $moduleName = preg_replace('/\[.*]/', '', $form->dom->firstModule->getText());
         $form->dom->firsrNullModule->setValue($moduleName);
         $form->dom->submitBtn->click();
         $form->wait(1);
@@ -29,7 +29,7 @@ class browsetaskTester extends tester
             if($form->dom->modalText->getText() == $this->lang->tree->shouldNotBlank) return $this->success('创建模块时模块名包含空格，提示正确');
             return $this->failed('创建模块时模块名包含空格，提示错误');
         }
-        if($form->dom->lastModule->getText() == $moduleName) return $this->success('创建模块成功');
+        if(preg_replace('/\[.*]/', '', $form->dom->lastModule->getText()) == $moduleName) return $this->success('创建模块成功');
         return $this->failed('创建模块失败');
     }
 
@@ -48,7 +48,7 @@ class browsetaskTester extends tester
         if(!is_object($form->dom->firstViewBtn)) return $this->failed('不能创建子模块');
         $form->dom->firstViewBtn->click();
         $form->wait(1);
-        if($checkRepeat) $childModuleName = $form->dom->firstChildModule->getText();
+        if($checkRepeat) $childModuleName = preg_replace('/\[.*]/', '', $form->dom->firstChildModule->getText());
         $form->dom->firsrNullModule->setValue($childModuleName);
         $form->dom->submitBtn->click();
         $form->wait(1);
@@ -68,7 +68,7 @@ class browsetaskTester extends tester
         }
         if($form->dom->firstCaret->attr('class') == 'caret-right') $form->dom->firstCaret->click();
         $form->wait(1);
-        if($form->dom->lastChildModule->getText() == $childModuleName) return $this->success('创建子模块成功');
+        if(preg_replace('/\[.*]/', '', $form->dom->lastChildModule->getText()) == $childModuleName) return $this->success('创建子模块成功');
         return $this->failed('创建子模块失败');
     }
 
@@ -82,7 +82,7 @@ class browsetaskTester extends tester
      */
     public function editModule($newName)
     {
-        $form = $this->initForm('tree', 'browsetree', array('rootID' => '2'), 'appIframe-execution');
+        $form = $this->initForm('tree', 'browsetask', array('rootID' => '2'), 'appIframe-execution');
         $form->dom->firstEditBtn->click();
         $form->wait(1);
         $form->dom->name->setValue($newName);
@@ -106,7 +106,7 @@ class browsetaskTester extends tester
             if($form->dom->modalText->getText() == $this->lang->tree->shouldNotBlank) return $this->success('编辑模块时模块名包含空格，提示正确');
             return $this->failed('编辑模块时模块名包含空格，提示错误');
         }
-        if($form->dom->firstModule->getText() == $newName) return $this->success('编辑模块成功');
+        if(preg_replace('/\[.*]/', '', $form->dom->firstModule->getText()) == $newName) return $this->success('编辑模块成功');
         return $this->failed('编辑模块失败');
     }
 
@@ -122,14 +122,14 @@ class browsetaskTester extends tester
         $form = $this->initForm('tree', 'browsetask', array('rootID' => '3'), 'appIframe-execution');
         if($form->dom->firstCaret->attr('class') == 'caret-right') $form->dom->firstCaret->click();
         $form->wait(1);
-        $moduleName = $form->dom->firstChildModule->getText();
+        $moduleName = preg_replace('/\[.*]/', '', $form->dom->firstChildModule->getText());
         $form->dom->firstChildDelBtn->click();
         $form->wait(1);
         if($form->dom->modalText->getText() != $this->lang->tree->confirmDelete) return $this->failed('删除模块提示信息错误');
         $form->dom->modalConfirm->click();
         $form->wait(1);
 
-        if($form->dom->firstChildModule->getText() == $moduleName) return $this->failed('删除模块失败');
+        if(preg_replace('/\[.*]/', '', $form->dom->firstChildModule->getText()) == $moduleName) return $this->failed('删除模块失败');
         return $this->success('删除模块成功');
     }
 }
