@@ -83,7 +83,7 @@ try
     $common->checkPriv();
     if(!$common->checkIframe()) helper::end();
 
-    if(session_id() != $app->sessionID && strpos($_SERVER['HTTP_USER_AGENT'], 'xuanxuan') === false && strpos($_SERVER['HTTP_USER_AGENT'], 'uni-app') === false) helper::restartSession($app->sessionID);
+    if($app->getViewType() != 'json' && (session_id() != $app->sessionID && strpos($_SERVER['HTTP_USER_AGENT'], 'xuanxuan') === false && strpos($_SERVER['HTTP_USER_AGENT'], 'uni-app') === false)) helper::restartSession($app->sessionID);
 
     $app->loadModule();
 }
