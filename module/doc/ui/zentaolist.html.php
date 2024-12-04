@@ -16,10 +16,11 @@ include "zentaolist.{$lowerType}.html.php";
 
 formPanel
 (
-    setClass('mb-0'),
+    setID('zentaolist'),
+    setClass('mb-0 pb-0'),
+    set('data-type', $lowerType),
     set::title($title),
-    set::actions(array('submit')),
-    set::submitBtnText($lang->doc->preview),
+    set::actions(array()),
     to::titleSuffix
     (
         span
@@ -33,7 +34,17 @@ formPanel
             $lang->doc->insertTip
         )
     ),
-    $fnGenerateFormRows()
+    $fnGenerateFormRows(),
+    to::footer
+    (
+        setClass('form-actions'),
+        btn
+        (
+            set::type('primary'),
+            $lang->doc->preview
+        )
+    ),
+    on::change('[name=product]', "changeProduct")
 );
 
 formPanel
