@@ -1093,21 +1093,6 @@ class baseHelper
     {
         throw EndResponseException::create($content);
     }
-
-    /**
-     * 将科学计数法转化为两位小数。
-     * Convert scientific notation to two decimal places.
-     *
-     * @param  int|float|string $hours
-     * @static
-     * @access public
-     * @return float
-     */
-    public static function formatHours($hours): float
-    {
-        if($hours == floor($hours)) return (float)$hours; // 整数不处理。Do not process the integer.
-        return (float)rtrim(rtrim(number_format((float)$hours, 2, '.', ''), '0'), '.');
-    }
 }
 
 //------------------------------- 常用函数。Some tool functions.-------------------------------//
