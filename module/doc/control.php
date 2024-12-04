@@ -44,6 +44,21 @@ class doc extends control
     }
 
     /**
+     * 禅道数据列表。
+     * Zentao data list.
+     *
+     * @param  string  $type
+     * @access public
+     * @return void
+     */
+    public function zentaoList(string $type)
+    {
+        $this->view->title = sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList[$type]);
+        $this->view->type  = $type;
+        $this->display();
+    }
+
+    /**
      * 我的空间。
      * My space.
      *
