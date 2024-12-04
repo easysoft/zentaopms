@@ -3368,12 +3368,28 @@ class execution extends control
     {
         $result = array();
 
-        foreach ($array as $key => $object) {
-            $result[$object->id] = $object;
+        $sortTasks = function($parents, $parentID = 0) use(&$sortTasks)
+        {
+            $tasks = array();
+            if(!isset($parents[$parentID])) return $tasks;
 
-            if (isset($object->children) && is_array($object->children)) {
-                $result = array_replace($result, $this->flattenObjectArray($object->children));
+            foreach($parents[$parentID] as $childTask)
+            {
+                $tasks[$childTask->id] = $childTask;
+                if(isset($parents[$childTask->id])) $tasks += $sortTasks($parents, $childTask->id);
             }
+            return $tasks;
+        };
+
+        foreach($array as $key => $object)
+        {
+            $result[$object->id] = $object;
+            $tasks = zget($object, 'tasks', array());
+            if(empty($tasks)) continue;
+
+            $parents = array();
+            foreach($tasks as $task) $parents[$task->parent][$task->id] = $task;
+            $object->tasks = $sortTasks($parents);
         }
 
         return $result;
