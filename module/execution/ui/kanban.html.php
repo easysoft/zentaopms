@@ -116,6 +116,8 @@ jsVar('groupBy', $groupBy);
 jsVar('browseType', $browseType);
 jsVar('orderBy', $orderBy);
 jsVar('isLimited', $isLimited);
+jsVar('childrenAB', $lang->task->childrenAB);
+jsVar('parentAB', $lang->task->parentAB);
 jsVar('minColWidth', $execution->fluidBoard == '0' ? $execution->colWidth : $execution->minColWidth);
 jsVar('maxColWidth', $execution->fluidBoard == '0' ? $execution->colWidth : $execution->maxColWidth);
 jsVar('priv',
@@ -200,6 +202,14 @@ featureBar
             set::onchange('changeGroupBy()'),
         )
     ) : null,
+    in_array($browseType, array('all', 'task')) ? checkbox
+    (
+        set::rootClass('ml-2 mr-4 mt-1'),
+        set::name('showParent'),
+        set::checked($this->cookie->showParent ? 'checked' : ''),
+        set::onchange('changeShowParent()'),
+        set::text($lang->task->showParent)
+    ) : null
 );
 
 $editModule = $execution->multiple ? 'execution' : 'project';

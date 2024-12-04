@@ -1105,6 +1105,7 @@ class baseHelper
      */
     public static function formatHours($hours): float
     {
+        if($hours == floor($hours)) return (float)$hours; // 整数不处理。Do not process the integer.
         return (float)rtrim(rtrim(number_format((float)$hours, 2, '.', ''), '0'), '.');
     }
 }

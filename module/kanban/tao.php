@@ -557,7 +557,8 @@ class kanbanTao extends kanbanModel
             {
                 $dbPrivs[$action] = common::hasDBPriv($card, 'task', $action);
             }
-            $item['dbPrivs'] = $dbPrivs;
+            $item['dbPrivs']  = $dbPrivs;
+            $item['canSplit'] = $this->loadModel('task')->isClickable($card, 'batchCreate') and !$card->mode;
         }
 
         return $item;

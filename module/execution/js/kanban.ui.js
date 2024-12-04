@@ -218,6 +218,21 @@ window.getItem = function(info)
         info.item.title = {html: info.item.title};
     }
     info.item.titleAttrs.class = 'card-title clip';
+    if(info.laneInfo.type == 'task')
+    {
+        let label = '';
+        if(info.item.isParent == '1')
+        {
+            label = "<span class='label gray-pale rounded p-0 size-sm whitespace-nowrap'>" + parentAB + "</span> ";
+        }
+        else if(info.item.parent > 0)
+        {
+            label = "<span class='label gray-pale rounded p-0 size-sm whitespace-nowrap'>" + childrenAB + "</span> ";
+        }
+
+        if(label && typeof info.item.title == 'string')      info.item.title      = {html: label + info.item.title};
+        else if(label && typeof info.item.title == 'object') info.item.title.html = label + info.item.title.html;
+    }
 }
 
 window.renderAvatar = function(item)
@@ -314,6 +329,7 @@ window.buildTaskActions = function(item)
     if(priv.canEditTask && item.dbPrivs.edit) actions.push({text: taskLang.edit, icon: 'edit', url: $.createLink('task', 'edit', 'taskID=' + item.id + '&comment=&kanbanGroup=' + groupBy), 'data-toggle': 'modal', 'data-size': 'lg'});
     if(priv.canRestartTask && item.dbPrivs.restart && item.status == 'pause') actions.push({text: taskLang.restart, icon: 'play', url: $.createLink('task', 'restart', 'taskID=' + item.id + '&from=execution'), 'data-toggle': 'modal'});
     if(priv.canPauseTask && item.dbPrivs.pause && item.status == 'developing') actions.push({text: taskLang.pause, icon: 'pause', url: $.createLink('task', 'pause', 'taskID=' + item.id), 'data-toggle': 'modal'});
+    if(priv.canBatchCreateTask && item.canSplit) actions.push({text: taskLang.children, icon: 'split', url: $.createLink('task', 'batchCreate', 'taskID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
     if(priv.canRecordWorkhourTask && item.dbPrivs.recordworkhour) actions.push({text: executionLang.effort, icon: 'time', url: $.createLink('task', 'recordWorkhour', 'taskID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
     if(priv.canActivateTask && item.dbPrivs.activate && (item.status == 'developed' || item.status == 'canceled' || item.status == 'closed')) actions.push({text: executionLang.activate, icon: 'magic', url: $.createLink('task', 'activate', 'taskID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
     if(priv.canCreateTask && !isLimited) actions.push({text: taskLang.copy, icon: 'copy', url: $.createLink('task', 'create', 'executionID=' + executionID + '&storyID=' + '0' + '&moduleID=' + '0' + '&taskID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
@@ -333,6 +349,8 @@ window.canDrop = function(dragInfo, dropInfo)
     const toLane   = this.getLane(dropInfo.lane);
     const item     = dragInfo.item;
     if(!toCol || !toLane) return false;
+
+    if(dragInfo.type == 'item' && dragInfo.item.cardType == 'task' && dragInfo.item.isParent == '1') return false; // 父任务不可拖动。
 
     /* 卡片的排序目前仅支持本单元格内排序 */
     if(dropInfo.type == 'item' && (fromCol != toCol || fromLane != toLane)) return false;
@@ -695,6 +713,19 @@ window.changeGroupBy = function()
     const group = $('.c-group [name=group]').val();
     const type  = $('.c-type [name=type]').val();
     loadPage($.createLink('execution', 'kanban',  'executionID=' + executionID + '&type=' + type + '&orderBy=order_asc' + '&groupBy=' + group));
+};
+
+window.changeShowParent = function()
+{
+    const showParent = $('[name=showParent]').prop('checked') ? 1 : 0;
+    $.cookie.set('showParent', showParent, {expires:config.cookieLife, path:config.webRoot});
+
+    const type  = $('.c-type [name=type]').val();
+    const group = $('.c-group [name=group]').val();
+
+    let link = $.createLink('execution', 'kanban', 'executionID=' + executionID + '&type=' + type);
+    if(typeof group != 'undefined') link = $.createLink('execution', 'kanban',  'executionID=' + executionID + '&type=' + type + '&orderBy=order_asc' + '&groupBy=' + group);
+    loadPage(link);
 };
 
 window.toggleSearchBox = function()
