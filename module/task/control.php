@@ -1242,9 +1242,14 @@ class task extends control
             $testStories[$testStoryID] = $storyTitle;
         }
 
+        $execution = $this->loadModel('execution')->fetchByID($executionID);
+        if($execution->multiple)  $manageLink = common::hasPriv('execution', 'manageMembers') ? $this->createLink('execution', 'manageMembers', "execution={$execution->id}") : '';
+        if(!$execution->multiple) $manageLink = common::hasPriv('project', 'manageMembers') ? $this->createLink('project', 'manageMembers', "projectID={$execution->project}") : '';
+
         $this->view->testStories = $testStories;
         $this->view->task        = $this->loadModel('task')->getByID($taskID);
         $this->view->members     = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
+        $this->view->manageLink  = $manageLink;
         $this->display();
     }
 

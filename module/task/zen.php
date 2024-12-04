@@ -2099,6 +2099,13 @@ class taskZen extends task
         $options['multiple']['checkbox']  = true;
         $options['multiple']['toolbar'][] = array('key' => 'selectAll', 'text' => $this->lang->selectAll);
         $options['multiple']['toolbar'][] = array('key' => 'cancelSelect', 'text' => $this->lang->cancelSelect);
+
+        if($manageLink)
+        {
+            $options['single']['toolbar'] = array();
+            $options['single']['toolbar'][] = $options['multiple']['toolbar'][] = array('type' => 'button', 'className' => 'text-primary manageTeamBtn', 'key' => 'manageTeam', 'text' => $this->lang->execution->manageTeamMember, 'icon' => 'plus-solid-circle', 'url' => $manageLink, 'data-toggle' => 'modal', 'data-size' => 'lg', 'data-dismiss' => 'pick');
+        }
+
         return $options;
     }
 }

@@ -47,13 +47,15 @@ function typeChange()
         $('.assignedToBox .assignedToList').addClass('hidden');
         $('.assignedToBox .add-team').addClass('hidden');
         $('[name=multiple]').prop("checked", false);
-        $assignedToPicker.render({multiple: true, checkbox: true, toolbar: true});
+        toggleTeam();
+
+        $assignedToPicker.render(assignedToOptions.multiple);
 
     }
     /* If assigned selection is multiple, remove multiple and hide the selection of select all members. */
     else if($assignedToPicker.options.multiple)
     {
-        $assignedToPicker.render({multiple: false, checkbox: false, toolbar: false});
+        $assignedToPicker.render(assignedToOptions.single);
         $assignedToPicker.$.setValue('');
     }
 

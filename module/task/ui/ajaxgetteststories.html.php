@@ -74,7 +74,7 @@ formBatch
     (
         set::name('testAssignedTo'),
         set::label($lang->task->assignedTo),
-        set::control('picker'),
+        set::control(array('control' => 'taskAssignedTo', 'manageLink' => ($manageLink ? $manageLink : ''))),
         set::items($members),
         set::width('160px'),
         set::ditto(true),
