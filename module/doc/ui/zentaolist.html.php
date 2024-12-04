@@ -18,7 +18,7 @@ formPanel
 (
     setID('zentaolist'),
     setClass('mb-0 pb-0'),
-    set('data-type', $lowerType),
+    set('data-type', $type),
     set::title($title),
     set::actions(array()),
     to::titleSuffix
@@ -40,24 +40,42 @@ formPanel
         setClass('form-actions'),
         btn
         (
+            setID('preview'),
             set::type('primary'),
             $lang->doc->preview
         )
     ),
-    on::change('[name=product]', "changeProduct")
+    on::change('[name=product]', "changeProduct"),
+    on::click('#preview', "preview")
 );
 
 formPanel
 (
+    setID('previewForm'),
+    set::actions(array()),
     dtable
     (
+        set::height(320),
         set::bordered(true),
-        set::height('400px'),
-        set::cols(array()),
-        set::data(array()),
+        set::cols($cols),
+        set::data($data),
         set::emptyTip($lang->doc->previewTip)
     ),
-    set::submitBtnText($lang->doc->insertText),
-    set::cancelBtnText($lang->cancel)
+    to::footer
+    (
+        setClass('form-actions'),
+        setStyle(array('position' => 'relative')),
+        btn
+        (
+            setID('insert'),
+            set::type('primary'),
+            $lang->doc->insertText
+        ),
+        btn
+        (
+            setID('cancel'),
+            $lang->cancel
+        )
+    )
 );
 render('pagebase');
