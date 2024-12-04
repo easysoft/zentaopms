@@ -6,7 +6,7 @@ class browsetaskPage extends page
         parent::__construct($webdriver);
         $xpath = array(
             /* 右侧区块中元素 */
-            'firsrNullModule' => "//*[@name='modules[1]']",
+            'firsrNullModule' => "//*[@name='modules[0]']",
             'submitBtn'       => "//*[@id='zin_tree_browsetask_form']//button[@type='submit']",
             /* 左侧区块中元素 */
             'firstModule'      => "//*[@id='treeEditor-tree-browsetask']/li[1]/div/div/a",
