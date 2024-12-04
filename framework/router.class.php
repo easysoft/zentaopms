@@ -801,8 +801,8 @@ class router extends baseRouter
         $vision = $this->config->vision;
         if($vision == 'rnd')
         {
-            if($this->resetVision('or')) return true;
-            else if($this->resetVision('lite')) return true;
+            if($this->resetVision('or'))   return true;
+            if($this->resetVision('lite')) return true;
         }
 
         if($vision == 'or')   return $this->resetVision('lite');
@@ -823,7 +823,7 @@ class router extends baseRouter
         $controlFile = $this->getExtensionRoot() . $vision . DS . $this->moduleName . DS . 'control.php';
         if(file_exists($controlFile))
         {
-            include_once $controlFile;
+            helper::import($controlFile);
             $module = new $this->moduleName();
             if(method_exists($module, $this->methodName))
             {
