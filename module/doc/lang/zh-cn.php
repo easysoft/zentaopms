@@ -250,6 +250,7 @@ $lang->doc->preview         = '预览';
 $lang->doc->insertTitle     = '插入%s列表';
 $lang->doc->insertTip       = '通过筛选配置可以修改插入内容的展示数据，系统会记录插入时的数据ID。';
 $lang->doc->previewTip      = '点击“预览”按钮，此处根据上方配置展示需要插入的禅道列表。';
+$lang->doc->insertTip       = '请预览后至少选择一条数据。';
 $lang->doc->insertText      = '插入';
 $lang->doc->searchCondition = '搜索条件';
 $lang->doc->list            = '列表';

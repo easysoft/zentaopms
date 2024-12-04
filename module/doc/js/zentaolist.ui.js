@@ -27,6 +27,12 @@ function insert()
 {
     const dtable = zui.DTable.query($('#previewTable'));
     const checkedList = dtable.$.getChecks();
+    const tip = $('#insert').data('tip');
+    if(checkedList.length == 0)
+    {
+        zui.Modal.alert(tip);
+        return;
+    }
 
     const url = $.createLink('doc', 'zentaolist', 'type=' + getType() + '&view=list&idList=' + checkedList.join(','));
     loadPage(url);

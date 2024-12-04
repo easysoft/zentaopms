@@ -72,6 +72,7 @@ formPanel
         btn
         (
             setID('insert'),
+            set('data-tip', $lang->doc->insertTip),
             set::type('primary'),
             $lang->doc->insertText
         ),
