@@ -273,6 +273,16 @@ window.renderRowData = function($row, index, row)
     $row.attr('data-consumed', row ? row.teamConsumed : 0);
     $row.attr('data-left',     row ? row.teamLeft : 0);
 
+    $row.find('[data-name=team]').find('.picker-box').on('inited', function(e, info)
+    {
+        const $team             = info[0];
+        const getAssignedToLink = $.createLink('execution', 'ajaxGetMembers', 'objectID=' + objectID);
+        $.getJSON(getAssignedToLink, function(data)
+        {
+            $team.render({items: data});
+        })
+    })
+
     if(row && row.memberDisabled)
     {
         $row.find('[data-name=team]').find('.picker-box').on('inited', function(e, info)

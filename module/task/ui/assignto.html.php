@@ -52,7 +52,7 @@ formPanel
         set::name("assignedTo"),
         set::label($lang->task->assignedTo),
         set::value((empty($task->team) or strpos('done,cancel,closed', $task->status) !== false) ? $task->assignedTo : $task->nextUser),
-        set::control("picker"),
+        set::control(array('control' => 'taskAssignedTo', 'manageLink' => ($manageLink ? $manageLink : ''))),
         set::items($members)
     ),
     $task->status != 'done' && $task->status != 'closed' && $task->isParent == '0' ? formGroup

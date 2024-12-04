@@ -1212,6 +1212,13 @@ class task extends control
             return $this->send($response);
         }
 
+        if($this->app->rawMethod == 'assignto')
+        {
+            if($this->view->execution->multiple)  $manageLink = common::hasPriv('execution', 'manageMembers') ? $this->createLink('execution', 'manageMembers', "execution={$this->view->execution->id}") : '';
+            if(!$this->view->execution->multiple) $manageLink = common::hasPriv('project', 'manageMembers') ? $this->createLink('project', 'manageMembers', "projectID={$this->view->execution->project}") : '';
+            $this->view->manageLink = $manageLink;
+        }
+
         $this->view->members = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
         $this->view->users   = $this->loadModel('user')->getPairs();
         $this->display();
