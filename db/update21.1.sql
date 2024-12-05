@@ -81,7 +81,7 @@ CREATE INDEX `idx_object` ON `zt_mark`(`objectType`,`objectID`);
 CREATE INDEX `idx_account` ON `zt_mark`(`account`);
 
 UPDATE `zt_grouppriv` SET `module` = 'cache', `method` = 'setting' WHERE `module` = 'admin' AND `method` = 'cache';
-INSERT INTO `zt_grouppriv` SELECT `group`, 'cache', 'clear' FROM `zt_grouppriv` WHERE `module` = 'cache' AND `method` = 'setting';
+INSERT INTO `zt_grouppriv` SELECT `group`, 'cache', 'flush' FROM `zt_grouppriv` WHERE `module` = 'cache' AND `method` = 'setting';
 INSERT INTO `zt_grouppriv` SELECT DISTINCT `group`, 'system', 'create' FROM `zt_grouppriv` WHERE `module` IN ('release', 'projectrelease', 'build', 'projectbuild') AND `method` = 'create';
 
 UPDATE `zt_pivot` SET `version` = '1';
