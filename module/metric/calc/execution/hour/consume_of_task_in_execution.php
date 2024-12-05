@@ -22,14 +22,13 @@ class consume_of_task_in_execution extends baseCalc
 {
     public $dataset = 'getTasks';
 
-    public $fieldList = array('t1.execution', 't1.consumed', 't1.parent');
+    public $fieldList = array('t1.execution', 't1.consumed', 't1.parent', 't1.isParent');
 
     public $result = array();
 
     public function calculate($row)
     {
-        $parent = $row->parent;
-        if($parent == '-1') return;
+        if($row->isParent == '1') return;
 
         if(!isset($this->result[$row->execution])) $this->result[$row->execution] = 0;
         $this->result[$row->execution] += $row->consumed;

@@ -22,7 +22,7 @@ class scale_of_story_in_product extends baseCalc
 {
     public $dataset = 'getDevStories';
 
-    public $fieldList = array('t1.product', 't1.estimate', 't1.parent');
+    public $fieldList = array('t1.product', 't1.estimate', 't1.parent', 't1.isParent');
 
     public $result = array();
 
@@ -30,9 +30,8 @@ class scale_of_story_in_product extends baseCalc
     {
         $product    = $data->product;
         $estimate   = $data->estimate;
-        $parent     = $data->parent;
 
-        if($parent == '-1') return false;
+        if($row->isParent == '1') return false;
 
         if(!isset($this->result[$product])) $this->result[$product] = 0;
 

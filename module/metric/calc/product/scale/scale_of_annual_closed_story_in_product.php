@@ -22,7 +22,7 @@ class scale_of_annual_closed_story_in_product extends baseCalc
 {
     public $dataset = 'getDevStories';
 
-    public $fieldList = array('t1.product', 't1.closedDate', 't1.estimate', 't1.parent');
+    public $fieldList = array('t1.product', 't1.closedDate', 't1.estimate', 't1.parent', 't1.isParent');
 
     public $result = array();
 
@@ -31,9 +31,8 @@ class scale_of_annual_closed_story_in_product extends baseCalc
         $product    = $data->product;
         $closedDate = $data->closedDate;
         $estimate   = $data->estimate;
-        $parent     = $data->parent;
 
-        if($parent == '-1') return false;
+        if($row->isParent == '1') return false;
 
         $year = $this->getYear($closedDate);
         if(!$year) return false;
@@ -49,10 +48,7 @@ class scale_of_annual_closed_story_in_product extends baseCalc
         $records = array();
         foreach($this->result as $product => $years)
         {
-            foreach($years as $year => $value)
-            {
-                $records[] = array('product' => $product, 'year' => $year, 'value' => $value);
-            }
+            foreach($years as $year => $value) $records[] = array('product' => $product, 'year' => $year, 'value' => $value);
         }
 
         return $this->filterByOptions($records, $options);

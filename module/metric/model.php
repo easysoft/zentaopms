@@ -1150,9 +1150,7 @@ class metricModel extends model
                 $record->calcType = $calcType;
                 $record->calculatedBy = $calcType == 'inference' ? $this->app->user->account : 'system';
 
-                $sql = $this->dao->insert(TABLE_METRICLIB)
-                    ->data($record)
-                    ->get();
+                $sql = $this->dao->insert(TABLE_METRICLIB)->data($record)->get();
 
                 $position = strpos($sql, 'VALUES');
 

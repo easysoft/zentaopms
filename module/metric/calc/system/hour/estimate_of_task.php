@@ -22,15 +22,13 @@ class estimate_of_task extends baseCalc
 {
     public $dataset = 'getTasks';
 
-    public $fieldList = array('t1.estimate', 't1.parent');
+    public $fieldList = array('t1.estimate', 't1.parent', 't1.isParent');
 
     public $result = 0;
 
     public function calculate($row)
     {
-        $parent = $row->parent;
-        if($parent == '-1') return false;
-
+        if($row->isParent == '1') return false;
         if(empty($row->estimate)) return false;
 
         $this->result += $row->estimate;
