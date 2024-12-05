@@ -15,6 +15,7 @@ window.onRenderExecutionCell = function(result, info)
 
         return result;
     }
+    if(['estimate', 'consumed','left'].includes(info.col.name) && result) result[0] = {html: result[0] + ' h'};
 
     return result;
 }

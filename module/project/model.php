@@ -409,7 +409,7 @@ class projectModel extends model
     public function getWaterfallPVEVAC(int $projectID): array
     {
         $executions = $this->dao->select('id,begin,end,realEnd,status')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('project')->eq($projectID)->fetchAll('id');
-        $stmt       = $this->dao->select('id,status,estimate,consumed,`left`,closedReason')->from(TABLE_TASK)->where('execution')->in(array_keys($executions))->andWhere("parent")->ge(0)->andWhere("deleted")->eq(0)->andWhere('status')->ne('cancel')->query();
+        $stmt       = $this->dao->select('id,status,estimate,consumed,`left`,closedReason')->from(TABLE_TASK)->where('execution')->in(array_keys($executions))->andWhere("isParent")->eq(0)->andWhere("deleted")->eq(0)->andWhere('status')->ne('cancel')->query();
 
         $PV   = 0;
         $EV   = 0;

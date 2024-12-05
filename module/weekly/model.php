@@ -389,7 +389,7 @@ class weeklyModel extends model
         $executions = $this->dao->select('id,begin,end,realBegan,realEnd,status')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('project')->eq($projectID)->fetchAll('id');
         $stmt       = $this->dao->select('*')->from(TABLE_TASK)
             ->where('execution')->in(array_keys($executions))
-            ->andWhere("parent")->ge(0)
+            ->andWhere("isParent")->eq(0)
             ->andWhere("deleted")->eq(0)
             ->andWhere("status")->ne('cancel')
             ->query();

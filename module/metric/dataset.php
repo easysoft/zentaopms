@@ -868,7 +868,7 @@ class dataset
             ->andWhere('t3.deleted')->eq('0')
             ->andWhere('t4.deleted')->eq('0')
             ->andWhere('t1.fromBug')->ne(0)
-            ->andWhere('t1.parent')->ne('-1');
+            ->andWhere('t1.isParent')->eq('0');
 
         return $this->defaultWhere($stmt, 't1');
     }
@@ -1148,7 +1148,7 @@ class dataset
         $stmt = $this->dao->select($fieldList)->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project = t3.id')
-            ->where('t1.parent')->ge(0)
+            ->where('t1.isParent')->eq(0)
             ->andWhere('t1.deleted')->eq('0')
             ->andWhere('t1.status')->ne('cancel')
             ->andWhere('t2.deleted')->eq('0')
@@ -1232,7 +1232,7 @@ class dataset
         $task = $this->dao->select('SUM(t1.consumed) AS consumed, t1.project')
             ->from(TABLE_TASK)->alias('t1')
             ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.parent')->ne('-1');
+            ->andWhere('t1.isParent')->eq('0');
 
         $query = $this->defaultWhere($task, 't1')->groupBy('t1.project')->get();
 
