@@ -1052,6 +1052,32 @@ class docZen extends doc
     }
 
     /**
+     * 预览产品下的用例。
+     * Preview product case.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function previewProductCase(string $view, string $idList): void
+    {
+        $cols = $this->loadModel('datatable')->getSetting('testcase', 'browse');
+        $data = array();
+        unset($cols['actions']);
+
+        if(!empty($_POST) && $view === 'setting')
+        {
+            $data = $this->loadModel('testcase')->getTestCases((int)$this->post->product, '', $this->post->condition, 0, 0);
+        }
+        elseif($view === 'list')
+        {
+            $data = $this->loadModel('testcase')->getByList($idList);
+        }
+
+        $this->view->cols = $cols;
+        $this->view->data = $data;
+    }
+
+    /**
      * 预览产品研发需求列表。
      * Preview product story.
      *
@@ -1075,7 +1101,7 @@ class docZen extends doc
             $data = $this->loadModel('story')->getByList($idList);
         }
 
-        $this->view->cols = array_values($cols);
-        $this->view->data = array_values($data);
+        $this->view->cols = $cols;
+        $this->view->data = $data;
     }
 }
