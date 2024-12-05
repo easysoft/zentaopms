@@ -70,7 +70,7 @@ function changeProduct()
 {
     const product = getValue('product');
     const type = getType();
-    if(type === 'planStory')
+    if(type === 'planStory' || type == 'productPlanContent')
     {
         const link = $.createLink('productplan', 'ajaxGetProductplans', 'product=' + product);
         $.get(link, function(resp)
