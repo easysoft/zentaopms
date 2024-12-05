@@ -19,12 +19,15 @@
 #mindmap .icon-minus-sign::before {content: '\e9b6'}
 #mindmap .icon-expand-full::before {content: '\e94e'}
 #mindmap .icon-dot-circle::before {content: '\e94c'}
+#mindmap .mindmap-node[data-type="sub"] > .wrapper {min-height: 24px;}
+#mindmap .mindmap-node[data-type="sub"] > .wrapper > .text,
+#mindmap .mindmap-node[data-type="node"] > .wrapper > .text {padding: 1px 4px;}
 </style>
 </head>
 <body>
 <div id="mindmap"></div>
 <script>
-const options = $.extend({minimap: false, toolbar: true}, window.parent[$.getSearchParam('options')]);
+const options = $.extend({minimap: false, toolbar: true, lineCurvature: 40, hSpace: 50, vSpace: 0}, window.parent[$.getSearchParam('options')]);
 if(!options.manual) $('#mindmap').mindmap(options);
 parent.createMindmap = function(userOptions){return $('#mindmap').mindmap($.extend({}, options, userOptions)).data('zui.mindmap');};
 parent.getMindmap = function(){return $('#mindmap').data('zui.mindmap');};
