@@ -71,18 +71,10 @@ class cache extends control
                 }
             }
 
-            /* 如果缓存配置发生变化，清空缓存。If the cache configuration changes, clear the cache. */
-            if($cache->enable != $this->config->cache->enable
-                || $cache->driver != $this->config->cache->driver
-                || $cache->namespace != $this->config->cache->namespace
-                || $redis->database != $this->config->redis->database
-                || $redis->serializer != $this->config->redis->serializer)
-            {
-                $this->cache->clear();
-            }
-
             $this->loadModel('setting')->setItems('system.common.cache', $cache);
             if($cache->driver == 'redis') $this->setting->setItems('system.common.redis', $redis);
+
+            $this->cache->clear();
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
