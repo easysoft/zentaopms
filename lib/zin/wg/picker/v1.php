@@ -77,7 +77,7 @@ class picker extends wg
         'onPopShown?: function',            // 菜单显示后的回调函数。
         'onPopHide?: function',             // 菜单隐藏时的回调函数。
         'onPopHidden?: function',           // 菜单隐藏后的回调函数。
-        'maxItemsCount?: int'               // 最大显示条目数。
+        'maxItemsCount?: int=200'           // 最大显示条目数。
     );
 
     /**
