@@ -15,10 +15,34 @@ function updatePicker(name, items)
     $picker.$.setValue(null);
 }
 
+function checkForm(form, formData)
+{
+    let isValid = true;
+    $(form).find('.error-tip').addClass('hidden');
+    $(form).find('.form-group').removeClass('has-error');
+
+    // 遍历 FormData 中的所有键值对
+    for (let [name, value] of formData.entries()) {
+        const inputElement = form.querySelector(`[name="${name}"]`);
+        const formGroup    = $(inputElement).closest('.form-group');
+
+        // 检查是否是必填项
+        if (inputElement && formGroup.hasClass('required') && !value?.length) {
+            isValid = false;
+            formGroup.find('.error-tip').removeClass('hidden');
+            formGroup.addClass('has-error');
+        }
+    }
+
+    return isValid;
+}
+
 function preview()
 {
-    const form = $('#zentaolist form');
+    const form     = $('#zentaolist form');
     const formData = new FormData(form[0]);
+    if(!checkForm(form[0], formData)) return;
+
     const url = $.createLink('doc', 'zentaolist', 'type=' + getType());
     postAndLoadPage(url, formData, '#previewForm,pageJS/.zin-page-js,#configJS');
 }
