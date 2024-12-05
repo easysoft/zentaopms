@@ -21,6 +21,7 @@ formPanel
     setID('zentaolist'),
     setClass('mb-0 pb-0', array('hidden' => !$isSetting)),
     set('data-type', $type),
+    set('data-params', $params),
     set::title($title),
     set::actions(array()),
     to::titleSuffix
@@ -36,7 +37,7 @@ formPanel
             $lang->doc->insertTip
         )
     ),
-    $fnGenerateFormRows(),
+    $fnGenerateFormRows($parsedParams),
     to::footer
     (
         setClass('form-actions'),
@@ -54,41 +55,53 @@ formPanel
 $cols = array_values($cols);
 $data = array_values($data);
 
+$actions = array();
+$actions[] = array('icon' => 'menu-backend', 'text' => $lang->doc->zentaoAction['set'], 'onClick' => jsRaw('backToSet'));
+$actions[] = array('icon' => 'trash', 'text' => $lang->doc->zentaoAction['delete']);
+
 formPanel
 (
     setID('previewForm'),
     set::bodyClass('p-0-important'),
     set::actions(array()),
-    !$isSetting ? set::title($lang->doc->zentaoList[$type] . $lang->doc->list) : null,
-    dtable
+    div
     (
-        setID('previewTable'),
-        $isSetting ? set::height(320) : null,
-        set::bordered(true),
-        set::cols($cols),
-        set::data($data),
-        set::emptyTip($lang->doc->previewTip),
-        set::checkable(),
-        set::plugins(array('checkable')),
+        setClass('relative'),
+        !$isSetting ? div
+        (
+            setClass('font-bold text-xl pb-2'),
+            $lang->doc->zentaoList[$type] . $lang->doc->list
+        ) : null,
+        dtable
+        (
+            setID('previewTable'),
+            $isSetting ? set::height(320) : null,
+            set::bordered(true),
+            set::cols($cols),
+            set::data($data),
+            set::emptyTip($lang->doc->previewTip),
+            set::checkable(),
+            set::plugins(array('checkable')),
+        ),
+        !$isSetting ? div
+        (
+            setClass('absolute right-0 top-0'),
+            dropdown
+            (
+                btn
+                (
+                    set::type('ghost'),
+                    set::icon('ellipsis-v'),
+                    set::caret(false),
+                    on::click()->prevent()->stop()
+                ),
+                set::items($actions),
+                set::flip(true),
+                set::strategy('absolute'),
+                set::hasIcons(false),
+                set::trigger('hover')
+            )
+        ) : null
     ),
-    to::footer
-    (
-        setClass('form-actions', array('hidden' => !$isSetting)),
-        setStyle(array('position' => 'relative')),
-        btn
-        (
-            setID('insert'),
-            set('data-tip', $lang->doc->insertTip),
-            set::type('primary'),
-            $lang->doc->insertText
-        ),
-        btn
-        (
-            setID('cancel'),
-            $lang->cancel
-        ),
-        on::click('#insert', "insert"),
-        on::click('#cancel', "cancel")
-    )
 );
 render('pagebase');
