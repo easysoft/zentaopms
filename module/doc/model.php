@@ -1951,7 +1951,7 @@ class docModel extends model
 
         $executionIDList = array();
         $apiLibs         = array();
-        foreach($libs as $lib)
+        foreach($libs as &$lib)
         {
             if($lib->type == 'api') $apiLibs[$lib->id] = $lib;
             if($lib->type != 'execution') continue;
@@ -1975,7 +1975,7 @@ class docModel extends model
             $releases   = $this->loadModel('api')->getReleaseByQuery(array_keys($apiLibs));
             $releaseMap = array();
             foreach($releases as $release) $releaseMap[$release->lib][] = $release;
-            foreach($apiLibs as $lib) $lib->versions = isset($releaseMap[$lib->id]) ? $releaseMap[$lib->id] : array();
+            foreach($apiLibs as &$lib) $lib->versions = isset($releaseMap[$lib->id]) ? $releaseMap[$lib->id] : array();
         }
 
         return $libs;
