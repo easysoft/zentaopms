@@ -15,6 +15,9 @@ class browsePage extends page
             'more'          => "//*[@id='mainContentCell']//button[text()='保存搜索条件']/following-sibling::button/i",
             'successTag'    => '//*[contains(@id,"messager")]//div[text() = "保存成功"]',
             'bugName'       => '//*[@id="mainContent"]//span[contains(text(), "bug")]',
+            'bugLabel'      => '(//label[last()])',
+            'bugCount'      => "//div[@id='mainContainer']//tbody/tr",
+            'save'          => "//button[@type='button']/span[text()]/../preceding-sibling::button[@type='submit']/span[text()]"
         );
 
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
