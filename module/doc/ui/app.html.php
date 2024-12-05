@@ -61,7 +61,7 @@ $privs['createStruct'] = hasPriv('api', 'createStruct');
 $privs['createRelease']= hasPriv('api', 'createRelease');
 $privs['releases']     = hasPriv('api', 'releases');
 $privs['struct']       = hasPriv('api', 'struct');
-$privs['createOffice'] = true;
+$privs['createOffice'] = $privs['create'];
 
 $homeName = false;
 if($app->moduleName == 'doc' && isset($lang->doc->spaceList[$type]) && !$noSpace) $homeName = $lang->doc->spaceList[$type];
