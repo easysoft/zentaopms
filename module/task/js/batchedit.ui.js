@@ -42,6 +42,7 @@ window.renderRowData = function($row, index, row)
         const pickerToolbar = manageLink && teams[row.id] == undefined ? [{'className': 'text-primary manageTeamBtn', 'key': 'manageTeam', 'text': manageTeamMemberText, 'url': manageLink, 'data-toggle': 'modal', 'data-size': 'lg', 'data-dismiss': 'pick'}] : '';
 
         if(!pickerToolbar) $row.find('.taskAssignedToBox').removeClass('taskAssignedToBox');
+        if(pickerToolbar) $row.find('.taskAssignedToBox').attr('data-object', noSprintPairs[row.project] != undefined ? row.project : row.execution);
         $assignedTo.render({items: taskUsers, disabled: disabled, toolbar: pickerToolbar});
     });
 
