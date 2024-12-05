@@ -3772,6 +3772,35 @@ class docModel extends model
         return true;
     }
 
+    public function upgradeCustomTemplateModule()
+    {
+        $projectOtherID = $this->dao->select('id')->from(TABLE_MODULE)->where('short')->eq('Project other')->fetch();
+        $oldTemplateTypes = $this->dao->select('`key`,`value`')->from(TABLE_LANG)
+            ->where('module')->eq('baseline')
+            ->andWhere('section')->eq('objectList')
+            ->andWhere('system')->eq('0')
+            ->fetchPairs('`key`');
+
+        foreach($oldTemplateTypes as $key => $value)
+        {
+            $module = new stdclass();
+            $module->root   = 2;
+            $module->name   = $value;
+            $module->parent = $projectOtherID;
+            $module->path   = '';
+            $module->grade  = 2;
+            $module->type   = 'docTemplate';
+            $module->short  = $key;
+            $this->dao->insert(TABLE_MODULE)->data($module)->exec();
+            if(dao::isError()) return false;
+
+            $moduleID = $this->dao->lastInsertID();
+            $this->dao->update(TABLE_MODULE)->set('path')->eq(",{$projectOtherID},{$moduleID},")->where('id')->eq($moduleID)->exec();
+        }
+
+        return true;
+    }
+
     /**
      * 获取文档模板类型的模块。
      * Get modules of doc template type.
