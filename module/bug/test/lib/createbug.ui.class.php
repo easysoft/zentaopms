@@ -61,4 +61,36 @@ class createBugTester extends tester
         if($this->response('method') == 'browse') return $this->success('批量创建bug成功');
         return $this->failed('批量创建bug失败');
     }
+
+	/**
+     * 批量编辑bug。
+     * batch edit bugs.
+     *
+     * @param  array  $product
+     * @param  array  $bugs
+     * @access public
+     * @return object
+     */
+    public function batchEdit($product = array(), $bugs = array())
+    {
+        $this->login();
+        $form = $this->initForm('bug', 'browse', $product, 'appIframe-qa');
+        $form->dom->bugLabel->click();
+        $form->dom->btn($this->lang->edit)->click();
+        $form->wait(1);
+        $bugList = $form->dom->getElementList($form->dom->xpath['bugCount']);
+        if(count($bugList->element) != count($bugs)) return $this->failed('zenData测试数据准备有误');
+        for($i = count($bugList->element); $i > 0; $i--)
+        {
+            if(isset($bugs[$i-1]['type']))     $form->dom->{"type[" . $i . "]"}->picker($bugs[$i-1]['type']); 
+            if(isset($bugs[$i-1]['pri']))      $form->dom->{"pri[" . $i . "]"}->picker($bugs[$i-1]['pri']); 
+            if(isset($bugs[$i-1]['severity'])) $form->dom->{"severity[" . $i . "]"}->picker($bugs[$i-1]['severity']); 
+            if(isset($bugs[$i-1]['title']))    $form->dom->{"title[" . $i . "]"}->setValue($bugs[$i-1]['title']); 
+            if(isset($bugs[$i-1]['deadline'])) $form->dom->{"deadline[" . $i . "]"}->datePicker($bugs[$i-1]['deadline']); 
+        }
+        $form->dom->save->click();
+        $form->wait(3);
+        if($this->response('method') == 'browse') return $this->success('批量编辑bug成功');
+        return $this->failed('批量编辑bug失败');
+    }
 }
