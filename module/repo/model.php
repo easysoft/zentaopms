@@ -556,7 +556,7 @@ class repoModel extends model
 
         $repos = $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq(0)
-            ->fetchAll();
+            ->fetchAll('id', false);
 
         /* Get products. */
         $productIdList = ($type == 'project' or $type == 'execution') ? $this->loadModel('product')->getProductIDByProject($projectID, false) : array();
@@ -2972,7 +2972,7 @@ class repoModel extends model
             ->beginIF($SCM)->andWhere('SCM')->in($SCM)->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /*
