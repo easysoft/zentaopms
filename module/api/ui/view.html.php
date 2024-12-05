@@ -149,7 +149,7 @@ div
     (
         setClass('flex gap-2 items-center'),
         h2(setClass('flex-none min-w-0 max-w-full'), $api->title),
-        $api->deleted ? span(setClass('label danger flex-none'), $lang->deleted) : null
+        (isset($api->deleted) && $api->deleted) ? span(setClass('label danger flex-none'), $lang->deleted) : null
     ),
     div(setClass('desc'), html($api->desc)),
     $apiHeader,
