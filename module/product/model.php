@@ -672,7 +672,7 @@ class productModel extends model
                 if($story->type != 'story' && $story->stage == 'closed') unset($stories[$storyID]);
             }
             $this->app->loadClass('pager', true);
-            $pager = new pager(count($stories), $pager->recPerPage, $pager->pageID);
+            $pager = new pager(count($stories), $pager ? $pager->recPerPage : 20, $pager ? $pager->pageID : 1);
             return $stories ? current(array_chunk($stories, $pager->recPerPage, true)) : array();
         }
 
