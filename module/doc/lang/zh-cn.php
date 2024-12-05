@@ -282,6 +282,10 @@ $lang->doc->zentaoList['UR']                 = $lang->URCommon;
 $lang->doc->zentaoList['feedback']           = '反馈';
 $lang->doc->zentaoList['ticket']             = '工单';
 
+$lang->doc->zentaoAction = array();
+$lang->doc->zentaoAction['set']    = '设置';
+$lang->doc->zentaoAction['delete'] = '删除';
+
 $lang->doc->uploadFormatList = array();
 $lang->doc->uploadFormatList['separateDocs'] = '每个文件存为不同文档';
 $lang->doc->uploadFormatList['combinedDocs'] = '所有文件存为一个文档';

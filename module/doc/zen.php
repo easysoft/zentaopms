@@ -1031,14 +1031,14 @@ class docZen extends doc
      * @access protected
      * @return void
      */
-    protected function previewProductPlanContent(string $view, string $idList): void
+    protected function previewProductPlanContent(string $view, array $params, string $idList): void
     {
         $cols = $this->loadModel('datatable')->getSetting('product', 'browse');
         $data = array();
 
-        if(!empty($_POST) && $view === 'setting')
+        if(!empty($params) && $view === 'setting')
         {
-            $data = $this->loadModel('story')->getPlanStories((int)$this->post->plan);
+            $data = $this->loadModel('story')->getPlanStories((int)$params['plan']);
         }
         elseif($view === 'list')
         {
