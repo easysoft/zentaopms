@@ -64,7 +64,9 @@ formPanel
         set::bordered(true),
         set::cols($cols),
         set::data($data),
-        set::emptyTip($lang->doc->previewTip)
+        set::emptyTip($lang->doc->previewTip),
+        set::checkable(),
+        set::plugins(array('checkable')),
     ),
     to::footer
     (
