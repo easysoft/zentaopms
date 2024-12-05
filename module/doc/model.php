@@ -3772,6 +3772,12 @@ class docModel extends model
         return true;
     }
 
+    /**
+     * Upgrade custom template types.
+     *
+     * @access public
+     * @return bool
+     */
     public function upgradeCustomTemplateModule()
     {
         $projectOtherID = $this->dao->select('id')->from(TABLE_MODULE)->where('short')->eq('Project other')->fetch();
