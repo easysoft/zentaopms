@@ -2297,7 +2297,7 @@ class storyModel extends model
         }
 
         $productQuery = $this->storyTao->buildProductsCondition($productID, $branch);
-        $stories      = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_STORY)
+        $stories      = $this->dao->select("*,plan,path,IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_STORY)
             ->where('deleted')->eq(0)
             ->andWhere($productQuery)
             ->beginIF(!$hasParent)->andWhere("isParent")->eq('0')->fi()
@@ -3058,7 +3058,7 @@ class storyModel extends model
             ->beginIF($productID)->andWhere('t1.product')->eq((int)$productID)->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
         $productIdList = array();
