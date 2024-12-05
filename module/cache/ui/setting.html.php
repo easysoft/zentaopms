@@ -13,14 +13,14 @@ namespace zin;
 $hiddenCache = $config->cache->enable ? '' : ' hidden';
 $hiddenApcu  = !$hiddenCache && $config->cache->driver == 'apcu'  ? '' : ' hidden';
 $hiddenRedis = !$hiddenCache && $config->cache->driver == 'redis' ? '' : ' hidden';
-$canClear    = $config->cache->enable && hasPriv('cache', 'clear');
+$canClear    = $config->cache->enable && hasPriv('cache', 'flush');
 
 formPanel
 (
     set::actions
     ([
         'submit',
-        $canClear ? ['text' => $lang->cache->clear, 'url' => inlink('ajaxClear'), 'class' => 'secondary ajax-submit'] : null,
+        $canClear ? ['text' => $lang->cache->clear, 'url' => inlink('flush'), 'class' => 'secondary ajax-submit'] : null,
         'cancel'
     ]),
     on::change('input[name=enable]', 'toggleCache'),
