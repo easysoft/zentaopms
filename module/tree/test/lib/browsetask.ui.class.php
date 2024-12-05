@@ -82,7 +82,7 @@ class browsetaskTester extends tester
      */
     public function editModule($newName)
     {
-        $form = $this->initForm('tree', 'browsetask', array('rootID' => '2'), 'appIframe-execution');
+        $form = $this->initForm('tree', 'browsetask', array('rootID' => '3'), 'appIframe-execution');
         $form->dom->firstEditBtn->click();
         $form->wait(1);
         $form->dom->name->setValue($newName);
@@ -95,7 +95,7 @@ class browsetaskTester extends tester
             if($form->dom->nameTip->getText() == sprintf($this->lang->error->notempty, $this->lang->tree->name)) return $this->success('编辑模块时模块为空，提示正确');
             return $this->failed('编辑模块时模块为空，提示错误');
         }
-        if($form->dom->lastModule->getText() == $newName)
+        if(preg_replace('/\[.*]/', '', $form->dom->lastModule->getText()) == $newName)
         {
             if($form->dom->nameTip->getText() == sprintf($this->lang->tree->repeatName, $newName)) return $this->success('编辑模块时模块已存在，提示正确');
             return $this->failed('编辑模块时模块已存在，提示错误');
