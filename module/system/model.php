@@ -532,7 +532,7 @@ class systemModel extends model
     public function initSystem(): bool
     {
         $productPairs = $this->loadModel('product')->getPairs('all', 0, '', 'all');
-        $releasePairs = $this->dao->select('id,product,createdDate')->from(TABLE_RELEASE)->where('deleted')->eq('0')->fetchAll('product');
+        $releasePairs = $this->dao->select('id,product,date,createdDate')->from(TABLE_RELEASE)->where('deleted')->eq('0')->fetchAll('product');
 
         $systemPairs = array();
         $systemNames = array();
@@ -556,8 +556,13 @@ class systemModel extends model
 
                 $system->name          = $productName;
                 $system->product       = $productID;
-                $system->latestDate    = isset($releasePairs[$productID]) ? $releasePairs[$productID]->createdDate : null;
-                $system->latestRelease = isset($releasePairs[$productID]) ? $releasePairs[$productID]->id : 0;
+                $system->latestDate    = null;
+                $system->latestRelease = 0;
+                if(isset($releasePairs[$productID]))
+                {
+                    $system->latestDate    = $releasePairs[$productID]->createdDate ? $releasePairs[$productID]->createdDate : "{$releasePairs[$productID]->date} 00:00:00";
+                    $system->latestRelease = $releasePairs[$productID]->id;
+                }
                 $systemID = $this->create($system);
 
                 if(dao::isError()) continue;
