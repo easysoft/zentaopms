@@ -103,5 +103,24 @@ formPanel
             )
         ) : null
     ),
+    to::footer
+    (
+        setClass('form-actions', array('hidden' => !$isSetting)),
+        setStyle(array('position' => 'relative')),
+        btn
+        (
+            setID('insert'),
+            set('data-tip', $lang->doc->insertTip),
+            set::type('primary'),
+            $lang->doc->insertText
+        ),
+        btn
+        (
+            setID('cancel'),
+            $lang->cancel
+        ),
+        on::click('#insert', "insert"),
+        on::click('#cancel', "cancel")
+    )
 );
 render('pagebase');
