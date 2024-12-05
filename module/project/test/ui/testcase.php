@@ -96,3 +96,12 @@ $case->storyVersion->range('1');
 $case->title->range('用例1, 用例2, 用例3, 用例4');
 $case->status->range('normal{2}, wait{2}');
 $case->gen(4);
+
+$projectCase = zenData('projectcase');
+$projectCase->project->range('1');
+$projectCase->product->range('1{2}, 2{2}');
+$projectCase->case->range('1-2, 3-4');
+$projectCase->gen(4);
+
+$tester = new testcaseTester();
+$tester->login();
