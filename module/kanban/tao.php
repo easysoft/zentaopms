@@ -550,6 +550,9 @@ class kanbanTao extends kanbanModel
             $item['left']       = $card->left;
             $item['estStarted'] = $card->estStarted;
             $item['mode']       = $card->mode;
+            $item['execution']  = $card->execution;
+            $item['story']      = $card->story;
+            $item['module']     = $card->module;
 
             $dbPrivs = array();
             $actions = array('edit', 'restart', 'pause', 'recordworkhour', 'activate', 'delete', 'cancel', 'assignto');
@@ -558,7 +561,7 @@ class kanbanTao extends kanbanModel
                 $dbPrivs[$action] = common::hasDBPriv($card, 'task', $action);
             }
             $item['dbPrivs']  = $dbPrivs;
-            $item['canSplit'] = $this->loadModel('task')->isClickable($card, 'batchCreate') and !$card->mode;
+            $item['canSplit'] = $this->loadModel('task')->isClickable($card, 'batchCreate') && !$card->mode;
         }
 
         return $item;

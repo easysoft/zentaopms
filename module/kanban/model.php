@@ -1487,10 +1487,12 @@ class kanbanModel extends model
         $menus['risk']        = $geMax && ($browseType == 'all' || $browseType == 'risk') ? $this->getKanbanCardMenu($executionID, $objectGroup['risk'], 'risk')   : array();
 
         /* 获取看板连线的fromKanbanID. */
-        $fromKanbanID = '';
+        $storyFromKanbanID = '';
+        $taskFromKanbanID  = '';
         foreach($lanes as $lane)
         {
-            if($lane->type == 'parentStory') $fromKanbanID = 'group' . $lane->id;
+            if($lane->type == 'parentStory') $storyFromKanbanID = 'group' . $lane->id;
+            if($lane->type == 'task')        $taskFromKanbanID  = 'group' . $lane->id;
         }
 
         /* Build kanban group data. */
@@ -1523,8 +1525,17 @@ class kanbanModel extends model
                     {
                         if($card['parent'] == 0) continue;
                         /* 获取看板卡片的连线关系，业需、用需和父需求共用同一组看板列，所以fromKanban和toKanban是一样的。 */
-                        $link = array('from' => $card['parent'], 'to' => $card['id'], 'fromKanban' => $fromKanbanID, 'toKanban' => $kanbanID);
-                        if(in_array($laneType, array('epic', 'requirement'))) $link['toKanban'] = $fromKanbanID;
+                        $link = array('from' => $card['parent'], 'to' => $card['id']);
+                        if($laneType == 'task')
+                        {
+                            $link['fromKanban'] = $taskFromKanbanID;
+                            $link['toKanban']   = $taskFromKanbanID;
+                        }
+                        else
+                        {
+                            $link['fromKanban'] = $storyFromKanbanID;
+                            $link['toKanban']   = in_array($laneType, array('epic', 'requirement')) ? $storyFromKanbanID : $kanbanID;
+                        }
 
                         $links[] = $link;
                     }
