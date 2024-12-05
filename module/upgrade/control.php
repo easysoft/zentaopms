@@ -829,7 +829,9 @@ class upgrade extends control
      */
     public function ajaxInsertBuiltinTemplateModule()
     {
-        $result = $this->upgrade->insertBuiltinTemplateModule();
+        $this->loadModel('doc');
+        $result = $this->doc->insertBuiltinTemplateModule()
+        $result = $this->doc->upgradeCustomTemplateModule();
         if($result)  echo 'ok';
         if(!$result) echo dao::getError();
     }

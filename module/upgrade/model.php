@@ -10037,17 +10037,6 @@ class upgradeModel extends model
     }
 
     /**
-     * Insert template module.
-     *
-     * @access public
-     * @return bool
-     */
-    public function insertBuiltinTemplateModule()
-    {
-        return $this->loadModel('doc')->insertBuiltinTemplateModule();
-    }
-
-    /**
      * 历史产品、项目绑定默认工作流模板。
      *
      * @access public
