@@ -110,7 +110,8 @@ formPanel
         (
             setClass('w-1/3'),
             set::name('redis[host]'),
-            set::value($config->redis->host)
+            set::value($config->redis->host),
+            set::autocomplete('off')
         ),
         span
         (
@@ -131,7 +132,8 @@ formPanel
             set::min(1),
             set::max(65535),
             set::name('redis[port]'),
-            set::value($config->redis->port)
+            set::value($config->redis->port),
+            set::autocomplete('off')
         )
     ),
     formGroup
@@ -142,7 +144,8 @@ formPanel
         (
             setClass('w-1/3'),
             set::name('redis[username]'),
-            set::value($config->redis->username)
+            set::value($config->redis->username),
+            set::autocomplete('off')
         )
     ),
     formGroup
@@ -154,7 +157,8 @@ formPanel
             setClass('w-1/3'),
             set::name('redis[password]'),
             set::type('password'),
-            set::value($config->redis->password)
+            set::value($config->redis->password),
+            set::autocomplete('off')
         )
     ),
     formGroup
