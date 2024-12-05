@@ -72,7 +72,7 @@ class cache extends control
             }
 
             $this->loadModel('setting')->setItems('system.common.cache', $cache);
-            if($cache->driver == 'redis') $this->setting->setItems('system.common.redis', $redis);
+            $this->setting->setItems('system.common.redis', $redis);
 
             $this->cache->clear();
 
