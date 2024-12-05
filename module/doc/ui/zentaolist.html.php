@@ -56,10 +56,11 @@ formPanel
     setID('previewForm'),
     set::bodyClass('p-0-important'),
     set::actions(array()),
+    !$isSetting ? set::title($lang->doc->zentaoList[$type] . $lang->doc->list) : null,
     dtable
     (
         setID('previewTable'),
-        set::height(320),
+        $isSetting ? set::height(320) : null,
         set::bordered(true),
         set::cols($cols),
         set::data($data),

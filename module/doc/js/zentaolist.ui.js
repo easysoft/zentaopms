@@ -12,7 +12,7 @@ function updatePicker(name, items)
 {
     const $picker = $('#zentaolist [name=' + name + ']').zui('picker');
     $picker.render({items});
-    $picker.$.setValue(items[0]?.value)
+    $picker.$.setValue(null);
 }
 
 function preview()
