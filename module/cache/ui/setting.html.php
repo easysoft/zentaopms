@@ -127,6 +127,9 @@ formPanel
         input
         (
             setClass('w-1/3'),
+            set::type('number'),
+            set::min(1),
+            set::max(65535),
             set::name('redis[port]'),
             set::value($config->redis->port)
         )
