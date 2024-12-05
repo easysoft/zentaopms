@@ -17,7 +17,12 @@ $fnGenerateFormRows = function () use ($lang)
                 set::label($lang->doc->product),
                 set::required(),
                 set::control(array('contorl' => 'picker', 'required' => false, 'maxItemsCount' => 50)),
-                set::items($productList)
+                set::items($productList),
+                span
+                (
+                    setClass('error-tip text-danger hidden'),
+                    $lang->doc->emptyError
+                )
             )
         ),
         formRow
@@ -30,6 +35,11 @@ $fnGenerateFormRows = function () use ($lang)
                 set::required(),
                 set::control(array('contorl' => 'picker', 'required' => false, 'maxItemsCount' => 50)),
                 set::items(array()),
+                span
+                (
+                    setClass('error-tip text-danger hidden'),
+                    $lang->doc->emptyError
+                )
             )
         )
     );
