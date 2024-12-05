@@ -10046,12 +10046,9 @@ class upgradeModel extends model
     {
         $this->loadModel('doc');
 
-        $this->doc->insertBuiltinTemplateModule();
-        if($fromEdition != 'open' && $fromEdition != 'biz')
-        {
-            $this->doc->upgradeCustomTemplateModule();
-            $this->doc->upgradeDocTemplate();
-        }
+        $this->doc->upgradeBuiltinTemplateTypes();
+        $this->doc->upgradeCustomTemplateTypes();
+        $this->doc->upgradeTemplate();
     }
 
     /**

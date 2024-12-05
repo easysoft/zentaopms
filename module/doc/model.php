@@ -3718,54 +3718,60 @@ class docModel extends model
     }
 
     /**
-     * 插入内置文档模板类型数据。
-     * insert doc template type.
+     * 构建模板类型数据。
+     * Build data of template type module.
+     *
+     * @param  int    $scope
+     * @param  int    $parent
+     * @param  string $name
+     * @param  string $code
+     * @param  int    $grade
+     * @param  string $path
+     * @access public
+     * @return object
+     */
+    public function buildTemplateModule($scope, $parent, $name, $code, $grade = 1, $path = '')
+    {
+        $module = new stdclass();
+        $module->type   = 'docTemplate';
+        $module->root   = $scope;
+        $module->parent = $parent;
+        $module->name   = $name;
+        $module->short  = $code;
+        $module->grade  = $grade;
+        $module->path   = $path;
+
+        return $module;
+    }
+
+    /**
+     * 插入内置模板类型数据。
+     * Insert builtin doc template types.
      *
      * @access public
      * @return bool
      */
-    public function insertBuiltinTemplateModule()
+    public function upgradeBuiltinTemplateTypes()
     {
         foreach($this->config->doc->templateModule as $scope => $moduleList)
         {
-            $moduleOrder = 10;
             foreach($moduleList as $moduleKey => $subModuleList)
             {
-                $module = new stdclass();
-                $module->root   = $scope;
-                $module->name   = $this->lang->docTemplate->moduleName[$moduleKey];
-                $module->parent = 0;
-                $module->path   = '';
-                $module->grade  = 1;
-                $module->order  = $moduleOrder;
-                $module->type   = 'docTemplate';
-                $module->short  = ucfirst($this->config->doc->scopeMaps[$scope]) . ' ' . $moduleKey;
+                $module = $this->buildTemplateModule($scope, 0, $this->lang->docTemplate->moduleName[$moduleKey], ucfirst($this->config->doc->scopeMaps[$scope]) . ' ' . $moduleKey, 1);
                 $this->dao->insert(TABLE_MODULE)->data($module)->exec();
                 if(dao::isError()) return false;
 
                 $moduleID = $this->dao->lastInsertID();
                 $this->dao->update(TABLE_MODULE)->set('path')->eq(",{$moduleID},")->where('id')->eq($moduleID)->exec();
 
-                $moduleOrder = $moduleOrder + 10;
-                $subModuleOrder = 10;
                 foreach($subModuleList as $subModuleKey => $subModuleCode)
                 {
-                    $subModule = new stdclass();
-                    $subModule->root   = $scope;
-                    $subModule->name   = $this->lang->docTemplate->moduleName[$subModuleKey];
-                    $subModule->parent = $moduleID;
-                    $subModule->path   = '';
-                    $subModule->grade  = 2;
-                    $subModule->order  = $subModuleOrder;
-                    $subModule->type   = 'docTemplate';
-                    $subModule->short  = $subModuleCode;
+                    $subModule = $this->buildTemplateModule($scope, $moduleID, $this->lang->docTemplate->moduleName[$subModuleKey], $subModuleCode, 2);
                     $this->dao->insert(TABLE_MODULE)->data($subModule)->exec();
                     if(dao::isError()) return false;
 
                     $subModuleID = $this->dao->lastInsertID();
                     $this->dao->update(TABLE_MODULE)->set('path')->eq(",{$moduleID},{$subModuleID},")->where('id')->eq($subModuleID)->exec();
-
-                    $subModuleOrder = $subModuleOrder + 10;
                 }
             }
         }
@@ -3773,60 +3779,56 @@ class docModel extends model
     }
 
     /**
-     * Upgrade custom template types.
+     * 升级用户自定义模板类型数据。
+     * Upgrade custom doc template types.
      *
      * @access public
      * @return bool
      */
-    public function upgradeCustomTemplateModule()
+    public function upgradeCustomTemplateTypes()
     {
-        $projectOtherID = $this->dao->select('id')->from(TABLE_MODULE)->where('short')->eq('Project other')->fetch('id');
         $oldTemplateTypes = $this->dao->select('`key`,`value`')->from(TABLE_LANG)
             ->where('module')->eq('baseline')
             ->andWhere('section')->eq('objectList')
             ->andWhere('system')->eq('0')
             ->fetchPairs('`key`');
+        if(empty($oldTemplateTypes)) return true;
 
+        $parentID = $this->dao->select('id')->from(TABLE_MODULE)->where('short')->eq('Project other')->fetch('id');
         foreach($oldTemplateTypes as $key => $value)
         {
-            $module = new stdclass();
-            $module->root   = 2;
-            $module->name   = $value;
-            $module->parent = $projectOtherID;
-            $module->path   = '';
-            $module->grade  = 2;
-            $module->type   = 'docTemplate';
-            $module->short  = $key;
+            $module = $this->buildTemplateModule(2, $parentID, $value, $key, 2);
             $this->dao->insert(TABLE_MODULE)->data($module)->exec();
             if(dao::isError()) return false;
 
             $moduleID = $this->dao->lastInsertID();
-            $this->dao->update(TABLE_MODULE)->set('path')->eq(",{$projectOtherID},{$moduleID},")->where('id')->eq($moduleID)->exec();
+            $this->dao->update(TABLE_MODULE)->set('path')->eq(",{$parentID},{$moduleID},")->where('id')->eq($moduleID)->exec();
         }
 
         return true;
     }
 
     /**
-     * Upgrade doc template.
+     * 升级旧的文档模板。
+     * Upgrade old template.
      *
      * @access public
      * @return bool
      */
-    public function upgradeDocTemplate()
+    public function upgradeTemplate()
     {
-        $projectOtherID = $this->dao->select('id')->from(TABLE_MODULE)->where('short')->eq('Project other')->fetch('id');
-        $modulePairs = $this->dao->select('short,id')->from(TABLE_MODULE)
-            ->where('deleted')->eq(0)
-            ->andWhere('type')->eq('docTemplate')
-            ->fetchPairs();
-
         $templateList = $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq(0)
             ->andWhere('templateType')->ne('')
             ->andWhere('lib')->eq('')
             ->andWhere('module')->eq('')
             ->fetchAll('id');
+        if(empty($templateList)) return true;
+
+        $modulePairs = $this->dao->select('short,id')->from(TABLE_MODULE)
+            ->where('deleted')->eq(0)
+            ->andWhere('type')->eq('docTemplate')
+            ->fetchPairs();
 
         foreach($templateList as $id => $template)
         {

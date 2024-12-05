@@ -830,6 +830,7 @@ class upgrade extends control
     public function ajaxUpgradeDocTemplate()
     {
         $this->upgrade->upgradeDocTemplate();
+        echo 'ok';
     }
 
     /**
