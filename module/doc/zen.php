@@ -1101,4 +1101,32 @@ class docZen extends doc
         $this->view->cols = $cols;
         $this->view->data = $data;
     }
+
+    /**
+     * 预览项目研发需求列表。
+     * Preview project story.
+     *
+     * @param  string    $view
+     * @param  string    $idList
+     * @access protected
+     * @return void
+     */
+    protected function previewProjectStory(string $view, string $idList): void
+    {
+        $cols = $this->loadModel('datatable')->getSetting('product', 'browse');
+        unset($cols['actions']);
+
+        $data = array();
+        if(!empty($_POST) && $view === 'setting')
+        {
+            $data = $this->loadModel('story')->getExecutionStories((int)$this->post->project, 0, '', $this->post->search);
+        }
+        elseif($view === 'list')
+        {
+            $data = $this->loadModel('story')->getByList($idList);
+        }
+
+        $this->view->cols = array_values($cols);
+        $this->view->data = array_values($data);
+    }
 }
