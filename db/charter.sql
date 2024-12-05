@@ -1,5 +1,13 @@
 ALTER TABLE `zt_charter` MODIFY `level` varchar(255) NOT NULL DEFAULT '';
 ALTER TABLE `zt_charter` ADD `reviewStatus` varchar(30) NOT NULL DEFAULT 'wait' AFTER `reviewedDate`;
+ALTER TABLE `zt_charter` ADD `appliedReviewer` text NULL DEFAULT NULL AFTER `appliedDate`;
+ALTER TABLE `zt_charter` ADD `complatedBy` varchar(30) NOT NULL DEFAULT '' AFTER `reviewStatus`;
+ALTER TABLE `zt_charter` ADD `complatedDate` datetime NULL DEFAULT NULL AFTER `complatedBy`;
+ALTER TABLE `zt_charter` ADD `complatedReviewer` text NULL DEFAULT NULL AFTER `complatedDate`;
+ALTER TABLE `zt_charter` ADD `canceledBy` varchar(30) NOT NULL DEFAULT '' AFTER `complatedReviewer`;
+ALTER TABLE `zt_charter` ADD `canceledDate` datetime NULL DEFAULT NULL AFTER `canceledBy`;
+ALTER TABLE `zt_charter` ADD `canceledReviewer` text NULL DEFAULT NULL AFTER `canceledDate`;
+ALTER TABLE `zt_charter` ADD `activatedReviewer` text NULL DEFAULT NULL AFTER `activatedDate`;
 ALTER TABLE `zt_charter` ADD `completionFiles` text NULL AFTER `charterFiles`;
 ALTER TABLE `zt_charter` ADD `canceledFiles` text NULL AFTER `completionFiles`;
 ALTER TABLE `zt_charter` ADD `beforeCanceled` varchar(30) NOT NULL DEFAULT '' AFTER `canceledFiles`;

@@ -1133,6 +1133,8 @@ class myModel extends model
      */
     public function getReviewingApprovals(string $orderBy = 'id_desc', bool $checkExists = false): array|bool
     {
+        if($this->config->edition != 'max' and $this->config->edition != 'ipd') return array();
+
         $pendingList    = $this->loadModel('approval')->getPendingReviews('review');
         $projectReviews = $this->loadModel('review')->getByList(0, $pendingList, $orderBy);
 
