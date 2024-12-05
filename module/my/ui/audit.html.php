@@ -79,7 +79,7 @@ foreach($reviewList as $review)
         $statusList = $lang->attend->reviewStatusList;
     }
 
-    if(!in_array($type, array('demand', 'story', 'testcase', 'feedback', 'review')) && !$isOAObject)
+    if(!in_array($type, array('demand', 'story', 'testcase', 'feedback', 'review', 'charter')) && !$isOAObject)
     {
         if($rawMethod == 'audit') $statusList = $lang->approval->nodeList;
 
