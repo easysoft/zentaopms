@@ -27,7 +27,7 @@
 <body>
 <div id="mindmap"></div>
 <script>
-const options = $.extend({minimap: false, toolbar: true, lineCurvature: 40, hSpace: 50, vSpace: 0}, window.parent[$.getSearchParam('options')]);
+const options = $.extend({minimap: false, toolbar: true, lineCurvature: 20, hSpace: 30, vSpace: 0}, window.parent[$.getSearchParam('options')]);
 if(!options.manual) $('#mindmap').mindmap(options);
 parent.createMindmap = function(userOptions){return $('#mindmap').mindmap($.extend({}, options, userOptions)).data('zui.mindmap');};
 parent.getMindmap = function(){return $('#mindmap').data('zui.mindmap');};
