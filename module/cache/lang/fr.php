@@ -28,6 +28,7 @@ $lang->cache->redis->host               = 'Redis Host';
 $lang->cache->redis->port               = 'Redis Port';
 $lang->cache->redis->username           = 'Redis User';
 $lang->cache->redis->password           = 'Redis Password';
+$lang->cache->redis->database           = 'Redis Database';
 $lang->cache->redis->serializer         = 'Redis Serializer';
 $lang->cache->redis->notice             = 'To use Redis cache, you need to load the Redis extension first.';
 $lang->cache->redis->notLoaded          = 'Please load the Redis extension before enabling cach.';
