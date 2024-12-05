@@ -32,9 +32,12 @@ jsVar('noPauseStatusList', $noPauseStatusList);
 jsVar('stories', $stories);
 jsVar('syncStoryToChildrenTip', $lang->task->syncStoryToChildrenTip);
 jsVar('parentTasks', $parentTasks);
+jsVar('manageLinkList', $manageLinkList);
+jsVar('noSprintPairs', $noSprintPairs);
 jsVar('ignoreLang', $lang->project->ignore);
 jsVar('overParentEstStartedLang', $lang->task->overParentEsStarted);
 jsVar('overParentDeadlineLang', $lang->task->overParentDeadline);
+jsVar('manageTeamMemberText', $lang->execution->manageTeamMember);
 
 /* ====== Define the page structure with zin widgets ====== */
 formBatchPanel
@@ -96,7 +99,7 @@ formBatchPanel
     (
         set::name('assignedTo'),
         set::label($lang->task->assignedTo),
-        set::control('picker'),
+        set::control(array('control' => 'taskAssignedTo')),
         set::items(array()),
         set::width('128px'),
         set::ditto(true),

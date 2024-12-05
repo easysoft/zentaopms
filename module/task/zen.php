@@ -238,9 +238,9 @@ class taskZen extends task
             foreach($tasks as $task)
             {
                 if(isset($moduleGroup[$task->execution])) continue;
-                $executionInfo    = $this->execution->getByID($task->execution);
+                $executionInfo    = $this->execution->fetchByID($task->execution);
                 $executionModules = $this->tree->getTaskOptionMenu($task->execution, 0, 'allModule');
-                foreach($executionModules as $moduleID => $moduleName) $moduleGroup[$task->execution][] = array('text' => $executionInfo->name. $moduleName, 'value' => $moduleID);
+                foreach($executionModules as $moduleID => $moduleName) $moduleGroup[$task->execution][] = array('text' => $executionInfo->name . $moduleName, 'value' => $moduleID);
             }
         }
 
@@ -254,6 +254,9 @@ class taskZen extends task
             if($story->module) $stories[$story->module][] = array('value' => $story->id, 'text' => $storyPairs[$story->id]);
         }
 
+        $manageLinkList['project']   = common::hasPriv('project', 'manageMembers') ? $this->createLink('project', 'manageMembers', "projectID={projectID}") : '';
+        $manageLinkList['execution'] = common::hasPriv('execution', 'manageMembers') ? $this->createLink('execution', 'manageMembers', "executionID={executionID}") : '';
+
         /* Assign. */
         $this->view->executionID        = $executionID;
         $this->view->tasks              = $tasks;
@@ -265,6 +268,8 @@ class taskZen extends task
         $this->view->nonStoryChildTasks = $nonStoryChildTasks;
         $this->view->stories            = $stories;
         $this->view->parentTasks        = $this->task->getByIdList($parentTaskIdList);
+        $this->view->noSprintPairs      = $this->loadModel('project')->getProjectExecutionPairs();
+        $this->view->manageLinkList     = $manageLinkList;
 
         $this->display();
     }
@@ -2115,7 +2120,7 @@ class taskZen extends task
         if($manageLink)
         {
             $options['single']['toolbar'] = array();
-            $options['single']['toolbar'][] = $options['multiple']['toolbar'][] = array('type' => 'button', 'className' => 'text-primary manageTeamBtn', 'key' => 'manageTeam', 'text' => $this->lang->execution->manageTeamMember, 'icon' => 'plus-solid-circle', 'url' => $manageLink, 'data-toggle' => 'modal', 'data-size' => 'lg', 'data-dismiss' => 'pick');
+            $options['single']['toolbar'][] = $options['multiple']['toolbar'][] = array('className' => 'text-primary manageTeamBtn', 'key' => 'manageTeam', 'text' => $this->lang->execution->manageTeamMember, 'icon' => 'plus-solid-circle', 'url' => $manageLink, 'data-toggle' => 'modal', 'data-size' => 'lg', 'data-dismiss' => 'pick');
         }
 
         return $options;

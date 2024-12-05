@@ -281,15 +281,23 @@ detailBody
                     div
                     (
                         setClass('flex grow'),
-                        taskAssignedTo
+                        !empty($task->team) ? picker
                         (
                             setID('assignedTo'),
                             setClass('w-full'),
                             set::name('assignedTo'),
                             set::value($task->assignedTo),
                             set::items($assignedToOptions),
-                            !empty($task->team) ? set::required(true) : null,
-                            !empty($task->team) && $task->mode == 'linear' && !in_array($task->status, array('done', 'closed')) ? set::disabled(true) : null,
+                            set::required(true),
+                            $task->mode == 'linear' && !in_array($task->status, array('done', 'closed')) ? set::disabled(true) : null,
+                            $task->status == 'closed' ? set::disabled(true) : null,
+                        ) :  taskAssignedTo
+                        (
+                            setID('assignedTo'),
+                            setClass('w-full'),
+                            set::name('assignedTo'),
+                            set::value($task->assignedTo),
+                            set::items($assignedToOptions),
                             $task->status == 'closed' ? set::disabled(true) : null,
                             $manageLink ? set::manageLink($manageLink) : null
                         )
