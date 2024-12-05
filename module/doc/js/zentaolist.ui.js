@@ -3,6 +3,11 @@ function getType()
     return $('#zentaolist').data('type');
 }
 
+function getParams()
+{
+    return $('#zentaolist').data('params');
+}
+
 function getValue(name)
 {
     return $('#zentaolist [name=' + name + ']').val();
@@ -37,14 +42,31 @@ function checkForm(form, formData)
     return isValid;
 }
 
+window.backToSet = function()
+{
+    const url = $.createLink('doc', 'zentaolist', 'type=' + getType() + '&view=setting&params=' + getParams());
+    loadPage(url);
+}
+
+function formDataConvertParams(formData)
+{
+    let params = '';
+    for (let [name, value] of formData.entries()) {
+        if(params) params += ',';
+        params += `${name}=${value}`;
+    };
+    return params;
+}
+
 function preview()
 {
     const form     = $('#zentaolist form');
     const formData = new FormData(form[0]);
     if(!checkForm(form[0], formData)) return;
 
-    const url = $.createLink('doc', 'zentaolist', 'type=' + getType());
-    postAndLoadPage(url, formData, '#previewForm,pageJS/.zin-page-js,#configJS');
+    const params = formDataConvertParams(formData);
+    const url    = $.createLink('doc', 'zentaolist', 'type=' + getType() + '&view=setting&params=' + params);
+    loadPage(url);
 }
 
 function insert()
@@ -58,7 +80,9 @@ function insert()
         return;
     }
 
-    const url = $.createLink('doc', 'zentaolist', 'type=' + getType() + '&view=list&idList=' + checkedList.join(','));
+    const form     = $('#zentaolist form');
+    const formData = new FormData(form[0]);
+    const url = $.createLink('doc', 'zentaolist', 'type=' + getType() + '&view=list&params=' + getParams() + '&idList=' + checkedList.join(','));
     loadPage(url);
 }
 
