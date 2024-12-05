@@ -822,18 +822,14 @@ class upgrade extends control
     }
 
     /**
-     * Insert template module.
+     * Ajax: upgrade doc template.
      *
      * @access public
      * @return void
      */
-    public function ajaxInsertBuiltinTemplateModule()
+    public function ajaxUpgradeDocTemplate()
     {
-        $this->loadModel('doc');
-        $result = $this->doc->insertBuiltinTemplateModule()
-        $result = $this->doc->upgradeCustomTemplateModule();
-        if($result)  echo 'ok';
-        if(!$result) echo dao::getError();
+        $this->upgrade->upgradeDocTemplate();
     }
 
     /**

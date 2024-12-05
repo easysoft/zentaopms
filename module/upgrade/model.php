@@ -10037,6 +10037,24 @@ class upgradeModel extends model
     }
 
     /**
+     * Upgrade doc template.
+     *
+     * @access public
+     * @return void
+     */
+    public function upgradeDocTemplate()
+    {
+        $this->loadModel('doc');
+
+        $this->doc->insertBuiltinTemplateModule();
+        if($fromEdition != 'open' && $fromEdition != 'biz')
+        {
+            $this->doc->upgradeCustomTemplateModule();
+            $this->doc->upgradeDocTemplate();
+        }
+    }
+
+    /**
      * 历史产品、项目绑定默认工作流模板。
      *
      * @access public

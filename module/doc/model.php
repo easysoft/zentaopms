@@ -3780,7 +3780,7 @@ class docModel extends model
      */
     public function upgradeCustomTemplateModule()
     {
-        $projectOtherID = $this->dao->select('id')->from(TABLE_MODULE)->where('short')->eq('Project other')->fetch();
+        $projectOtherID = $this->dao->select('id')->from(TABLE_MODULE)->where('short')->eq('Project other')->fetch('id');
         $oldTemplateTypes = $this->dao->select('`key`,`value`')->from(TABLE_LANG)
             ->where('module')->eq('baseline')
             ->andWhere('section')->eq('objectList')
@@ -3807,9 +3807,15 @@ class docModel extends model
         return true;
     }
 
+    /**
+     * Upgrade doc template.
+     *
+     * @access public
+     * @return bool
+     */
     public function upgradeDocTemplate()
     {
-        $projectOtherID = $this->dao->select('id')->from(TABLE_MODULE)->where('short')->eq('Project other')->fetch();
+        $projectOtherID = $this->dao->select('id')->from(TABLE_MODULE)->where('short')->eq('Project other')->fetch('id');
         $modulePairs = $this->dao->select('short,id')->from(TABLE_MODULE)
             ->where('deleted')->eq(0)
             ->andWhere('type')->eq('docTemplate')
@@ -3827,15 +3833,18 @@ class docModel extends model
             $belongBuiltinType = in_array($template->templateType, array_keys($this->config->doc->oldTemplateMap));
             if($belongBuiltinType)
             {
-                $templateMap = $this->config->doc->oldTemplateTypes[$template->templateType];
-                $scopeMaps   = array_flip($this->config->scopeMaps);
+                $templateMap = $this->config->doc->oldTemplateMap[$template->templateType];
+                $scopeMaps   = array_flip($this->config->doc->scopeMaps);
             }
 
             $template->lib          = $belongBuiltinType ? $scopeMaps[$templateMap['scope']] : $scopeMaps['project'];
             $template->templateType = $belongBuiltinType ? $templateMap['code'] : $template->templateType;
             $template->module       = $modulePairs[$template->templateType];
-            $this->update(TABLE_DOC)->data($template)->where('id')->eq($id)->exec();
+            $this->dao->update(TABLE_DOC)->data($template)->where('id')->eq($id)->exec();
+            if(dao::isError()) return false;
         }
+
+        return true;
     }
 
     /**
