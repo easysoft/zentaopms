@@ -134,6 +134,9 @@ if($api->response)
     );
 }
 
+$unsetProps = array('commonParams', 'params', 'paramsExample', 'response', 'responseExample');
+$apiData    = (array)$api;
+foreach($unsetProps as $prop) unset($apiData[$prop]);
 
 div
 (
@@ -163,6 +166,7 @@ div
     on::init()->do(
         'const docApp = zui.DocApp.query("#api-content");',
         'if(!docApp) return;',
-        'docApp.$.update("doc", ' . json_encode($api) . ');'
+        'const apiData = ' .  json_encode($apiData) . ';',
+        'docApp.$.update("doc", apiData);'
     )
 );
