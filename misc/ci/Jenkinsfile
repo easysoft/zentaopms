@@ -661,9 +661,9 @@ pipeline {
 
           steps {
             script {
-              checkout scmGit(branches: [[name: "master"]],
+              checkout scmGit(branches: [[name: "main"]],
                 extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
-                userRemoteConfigs: [[credentialsId: 'git-jenkins-bot-http', url: "https://${env.GIT_HOST}/web/rongpm.git"]]
+                userRemoteConfigs: [[credentialsId: 'gitfox-zcorp-cc-ci-robot', url: "https://${env.GITFOX_HOST}/git/web/rongpm.git"]]
               )
 
               container('package') {
