@@ -277,7 +277,7 @@ window.handleRenderRow = function($row, index)
     /* 复制上一行的人员下拉。*/
     $row.find('[data-name=assignedTo]').find('.picker-box').on('inited', function(e, info)
     {
-        const $assignedTo = info[0];
+        const $assignedTo    = info[0];
         const $preAssignedTo = $prevRow.find('input[name^=assignedTo]').zui('picker');
         if($preAssignedTo != undefined) $assignedTo.render({items: $preAssignedTo.options.items});
     })
