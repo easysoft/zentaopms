@@ -76,3 +76,23 @@ $storySpec->story->range('1-4');
 $storySpec->version->range('1');
 $storySpec->title->range('1-4');
 $storySpec->gen(2);
+
+$projectStory = zenData('projectstory');
+$projectStory->project->range('1');
+$projectStory->product->range('1');
+$projectStory->branch->range('0');
+$projectStory->story->range('1-4');
+$projectStory->version->range('1');
+$projectStory->order->range('1{2},2{2}');
+$projectStory->gen(4);
+
+$case = zenData('case');
+$case->id->range('1-4');
+$case->project->range('1');
+$case->product->range('1{2}, 2{2}');
+$case->execution->range('0');
+$case->story->range('1-4');
+$case->storyVersion->range('1');
+$case->title->range('用例1, 用例2, 用例3, 用例4');
+$case->status->range('normal{2}, wait{2}');
+$case->gen(4);
