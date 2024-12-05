@@ -38,3 +38,21 @@ class createProjectReleaseTester extends tester
         $form = $this->initForm('projectrelease', 'create', array('projectID' => 1), 'appIframe-project');
 
         /* 如果用例中设置了应用名称，就勾选新建应用，填写已设置的应用名称。没有设置应用名称，就自动使用数据库中的应用 */
+        if(isset($release['systemname']))
+        {
+            $form->dom->newSystem->click();
+            $form->dom->systemName->setValue($release['systemname']);
+        }
+        if(isset($release['systemname'])) $form->dom->systemName->setValue($release['systemname']);
+        if(isset($release['name']))       $form->dom->name->setValue($release['name']);
+        if(isset($release['status']))     $form->dom->status->picker($release['status']);
+        $form->wait(2);
+        if(isset($release['plandate']))    $form->dom->date->datepicker($release['plandate']);
+        if(isset($release['releasedate'])) $form->dom->releasedDate->datepicker($release['releasedate']);
+
+        $form->dom->btn($this->lang->save)->click();
+        $form->wait(2);
+
+        /* 跳转到发布概况页面，点击基本信息标签，查看信息是否正确 */
+        $viewPage = $this->loadPage('projectrelease', 'view');
+        $viewPage->dom->basic->click();
