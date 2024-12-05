@@ -256,6 +256,7 @@ $lang->doc->searchCondition = '搜索条件';
 $lang->doc->list            = '列表';
 $lang->doc->zentaoData      = '禅道数据';
 $lang->doc->emptyError      = '不能为空';
+$lang->doc->caselib         = '用例库';
 
 $lang->doc->zentaoList = array();
 $lang->doc->zentaoList['story']          = $lang->SRCommon;

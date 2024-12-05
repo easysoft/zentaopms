@@ -256,6 +256,7 @@ $lang->doc->searchCondition = 'Search Condition';
 $lang->doc->list            = 'List';
 $lang->doc->zentaoData      = 'Zentao Data';
 $lang->doc->emptyError      = 'Not empty';
+$lang->doc->caselib         = 'Case Library';
 
 $lang->doc->zentaoList = array();
 $lang->doc->zentaoList['story']          = $lang->SRCommon;
