@@ -915,7 +915,7 @@ class docModel extends model
 
             $doc->objectID   = zget($doc, $doc->objectType, 0);
             $doc->objectName = '';
-            if(isset($objects[$doc->objectType]))
+            if(isset($objects[$doc->objectType][$doc->objectID]))
             {
                 $doc->objectName = $objects[$doc->objectType][$doc->objectID];
             }
