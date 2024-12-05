@@ -56,3 +56,23 @@ $projectProduct = zenData('projectproduct');
 $projectProduct->project->range('1');
 $projectProduct->product->range('1{1}, 2{1}');
 $projectProduct->gen(2);
+
+$story = zenData('story');
+$story->id->range('1-4');
+$story->root->range('1-4');
+$story->path->range('`,1,`, `,2,`,`,3,`,`,4,`');
+$story->grade->range('1');
+$story->product->range('1');
+$story->title->range('研发需求01,研发需求02,研发需求3,研发需求4');
+$story->type->range('story');
+$story->estimate->range('0');
+$story->status->range('active{4}');
+$story->stage->range('projected');
+$story->version->range('1{2},2{2}');
+$story->gen(4);
+
+$storySpec = zenData('storyspec');
+$storySpec->story->range('1-4');
+$storySpec->version->range('1');
+$storySpec->title->range('1-4');
+$storySpec->gen(2);
