@@ -425,6 +425,9 @@ class taskZen extends task
 
         $this->config->task->batchcreate->requiredFields = $this->config->task->create->requiredFields;
 
+        if($execution->multiple)  $manageLink = common::hasPriv('execution', 'manageMembers') ? $this->createLink('execution', 'manageMembers', "execution={$execution->id}") : '';
+        if(!$execution->multiple) $manageLink = common::hasPriv('project', 'manageMembers') ? $this->createLink('project', 'manageMembers', "projectID={$execution->project}") : '';
+
         $this->view->title         = $this->lang->task->batchCreate;
         $this->view->execution     = $execution;
         $this->view->modules       = $modules;
@@ -440,6 +443,7 @@ class taskZen extends task
         $this->view->checkedFields = $checkedFields;
         $this->view->hideStory     = $this->task->isNoStoryExecution($execution);
         $this->view->showFields    = $showFields;
+        $this->view->manageLink    = $manageLink;
 
         $this->display();
     }

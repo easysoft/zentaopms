@@ -273,6 +273,14 @@ window.handleRenderRow = function($row, index)
     $row.find('.form-batch-col-actions').addClass('is-pinned');
     if($prevRow.length && $prevRow.attr('data-level') >= level) $prevRow.find('input[data-name="estimate"]').prop('readonly', false); // 如果没有子任务，重置预计字段的可编辑状态。
     if(edition == 'open' && (level > 0 || parentID)) $row.find('button[data-type=addSub]').attr('disabled', 'disabled');
+
+    /* 复制上一行的人员下拉。*/
+    $row.find('[data-name=assignedTo]').find('.picker-box').on('inited', function(e, info)
+    {
+        const $assignedTo = info[0];
+        const $preAssignedTo = $prevRow.find('input[name^=assignedTo]').zui('picker');
+        if($preAssignedTo != undefined) $assignedTo.render({items: $preAssignedTo.options.items});
+    })
 };
 
 $(function()

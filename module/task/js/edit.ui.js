@@ -273,14 +273,12 @@ window.renderRowData = function($row, index, row)
     $row.attr('data-consumed', row ? row.teamConsumed : 0);
     $row.attr('data-left',     row ? row.teamLeft : 0);
 
+    /* 复制上一行的人员下拉。*/
     $row.find('[data-name=team]').find('.picker-box').on('inited', function(e, info)
     {
-        const $team             = info[0];
-        const getAssignedToLink = $.createLink('execution', 'ajaxGetMembers', 'objectID=' + objectID);
-        $.getJSON(getAssignedToLink, function(data)
-        {
-            $team.render({items: data});
-        })
+        const $team = info[0];
+        const $preTeam = $row.prev().find('input[name^=team]').zui('picker');
+        if($preTeam != undefined) $team.render({items: $preTeam.options.items});
     })
 
     if(row && row.memberDisabled)
