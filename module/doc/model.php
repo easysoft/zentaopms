@@ -3807,6 +3807,37 @@ class docModel extends model
         return true;
     }
 
+    public function upgradeDocTemplate()
+    {
+        $projectOtherID = $this->dao->select('id')->from(TABLE_MODULE)->where('short')->eq('Project other')->fetch();
+        $modulePairs = $this->dao->select('short,id')->from(TABLE_MODULE)
+            ->where('deleted')->eq(0)
+            ->andWhere('type')->eq('docTemplate')
+            ->fetchPairs();
+
+        $templateList = $this->dao->select('*')->from(TABLE_DOC)
+            ->where('deleted')->eq(0)
+            ->andWhere('templateType')->ne('')
+            ->andWhere('lib')->eq('')
+            ->andWhere('module')->eq('')
+            ->fetchAll('id');
+
+        foreach($templateList as $id => $template)
+        {
+            $belongBuiltinType = in_array($template->templateType, array_keys($this->config->doc->oldTemplateMap));
+            if($belongBuiltinType)
+            {
+                $templateMap = $this->config->doc->oldTemplateTypes[$template->templateType];
+                $scopeMaps   = array_flip($this->config->scopeMaps);
+            }
+
+            $template->lib          = $belongBuiltinType ? $scopeMaps[$templateMap['scope']] : $scopeMaps['project'];
+            $template->templateType = $belongBuiltinType ? $templateMap['code'] : $template->templateType;
+            $template->module       = $modulePairs[$template->templateType];
+            $this->update(TABLE_DOC)->data($template)->where('id')->eq($id)->exec();
+        }
+    }
+
     /**
      * 获取文档模板类型的模块。
      * Get modules of doc template type.
