@@ -16,3 +16,14 @@ cid=1
 - 执行tester模块的checkTab方法，参数是'storyChangedTab', '2'
  - 最终测试状态 @SUCCESS
  - 测试结果 @storyChangedTab下显示用例数正确
+- 执行tester模块的checkTab方法，参数是'storyNoCaseTab', '2'
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @storyNoCaseTab下显示用例数正确
+- 执行tester模块的switchProduct方法，参数是'firstProduct', '2'
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @切换firstProduct查看用例数据成功
+- 执行tester模块的switchProduct方法，参数是'secondProduct', '2'
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @切换secondProduct查看用例数据成功
+
+ */
