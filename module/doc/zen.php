@@ -1010,7 +1010,6 @@ class docZen extends doc
     {
         $cols = $this->loadModel('datatable')->getSetting('product', 'browse');
         $data = array();
-        unset($cols['actions']);
 
         if(!empty($_POST) && $view === 'setting')
         {
@@ -1036,7 +1035,6 @@ class docZen extends doc
     {
         $cols = $this->loadModel('datatable')->getSetting('product', 'browse');
         $data = array();
-        unset($cols['actions']);
 
         if(!empty($_POST) && $view === 'setting')
         {
@@ -1064,9 +1062,6 @@ class docZen extends doc
         $cols = $this->config->testcase->dtable->fieldList;
         $data = array();
 
-        unset($cols['title']['nestedToggle']);
-        unset($cols['actions']);
-
         if(!empty($_POST) && $view === 'setting')
         {
             $data = $this->loadModel('testcase')->getTestCases((int)$this->post->product, '', $this->post->condition, 0, 0);
@@ -1092,7 +1087,6 @@ class docZen extends doc
     protected function previewProductStory(string $view, string $idList): void
     {
         $cols = $this->loadModel('datatable')->getSetting('product', 'browse');
-        unset($cols['actions']);
 
         $data = array();
         if(!empty($_POST) && $view === 'setting')

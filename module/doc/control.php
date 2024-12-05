@@ -57,11 +57,13 @@ class doc extends control
         if(method_exists($this->docZen, $funcName)) $this->docZen->$funcName($view, $idList);
 
         $cols = $this->view->cols;
+        if(isset($cols['actions'])) unset($cols['actions']);
         foreach($cols as $key => $col)
         {
             $cols[$key]['name']     = $key;
             $cols[$key]['sortType'] = false;
-            if(isset($col['link'])) unset($cols[$key]['link']);
+            if(isset($col['link']))         unset($cols[$key]['link']);
+            if(isset($col['nestedToggle'])) unset($cols[$key]['nestedToggle']);
         }
         $this->view->cols = $cols;
 
