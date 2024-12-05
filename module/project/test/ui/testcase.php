@@ -105,3 +105,14 @@ $projectCase->gen(4);
 
 $tester = new testcaseTester();
 $tester->login();
+
+/* 检查标签下统计数据 */
+r($tester->checkTab('allTab', '4'))          && p('status,message') && e('SUCCESS,allTab下显示用例数正确');
+r($tester->checkTab('waitingTab', '2'))      && p('status,message') && e('SUCCESS,waitingTab下显示用例数正确');
+r($tester->checkTab('storyChangedTab', '2')) && p('status,message') && e('SUCCESS,storyChangedTab下显示用例数正确');
+r($tester->checkTab('storyNoCaseTab', '2'))  && p('status,message') && e('SUCCESS,storyNoCaseTab下显示用例数正确');
+/* 切换1.5级导航产品 */
+r($tester->switchProduct('firstProduct', '2'))  && p('status,message') && e('SUCCESS,切换firstProduct查看用例数据成功');
+r($tester->switchProduct('secondProduct', '2')) && p('status,message') && e('SUCCESS,切换secondProduct查看用例数据成功');
+
+$tester->closeBrowser();
