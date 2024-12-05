@@ -51,10 +51,22 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function zentaoList(string $type, string $view = 'setting', string $idList = '')
+    public function zentaoList(string $type, string $view = 'setting', string $params = '', string $idList = '')
     {
+        $parsedParams = array();
+        if($params)
+        {
+            $params = explode(',', $params);
+            foreach($params as $param)
+            {
+                $key   = explode('=', $param)[0];
+                $value = explode('=', $param)[1];
+                $parsedParams[$key] = $value;
+            }
+        }
+
         $funcName = "preview$type";
-        if(method_exists($this->docZen, $funcName)) $this->docZen->$funcName($view, $idList);
+        if(method_exists($this->docZen, $funcName)) $this->docZen->$funcName($view, $parsedParams, $idList);
 
         $cols = $this->view->cols;
         if(isset($cols['actions'])) unset($cols['actions']);
@@ -71,6 +83,9 @@ class doc extends control
         $this->view->type   = $type;
         $this->view->view   = $view;
         $this->view->idList = $idList;
+
+        $this->view->params       = $params;
+        $this->view->parsedParams = $parsedParams;
         $this->display();
     }
 
