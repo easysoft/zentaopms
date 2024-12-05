@@ -87,7 +87,7 @@ formPanel
             )
         )
         : null,
-    $doc->contentType != 'doc' ? formGroup
+    isset($doc) && $doc->contentType != 'doc' ? formGroup
     (
         setStyle('min-height', 'auto'),
         set::label($lang->doc->files),
