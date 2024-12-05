@@ -1021,8 +1021,8 @@ class docZen extends doc
             $data = $this->loadModel('story')->getByList($idList);
         }
 
-        $this->view->cols = array_values($cols);
-        $this->view->data = array_values($data);
+        $this->view->cols = $cols;
+        $this->view->data = $data;
     }
 
     /**
@@ -1047,8 +1047,8 @@ class docZen extends doc
             $data = $this->loadModel('story')->getByList($idList);
         }
 
-        $this->view->cols = array_values($cols);
-        $this->view->data = array_values($data);
+        $this->view->cols = $cols;
+        $this->view->data = $data;
     }
 
     /**
@@ -1060,8 +1060,11 @@ class docZen extends doc
      */
     protected function previewProductCase(string $view, string $idList): void
     {
-        $cols = $this->loadModel('datatable')->getSetting('testcase', 'browse');
+        $this->loadModel('testcase');
+        $cols = $this->config->testcase->dtable->fieldList;
         $data = array();
+
+        unset($cols['title']['nestedToggle']);
         unset($cols['actions']);
 
         if(!empty($_POST) && $view === 'setting')
@@ -1070,7 +1073,7 @@ class docZen extends doc
         }
         elseif($view === 'list')
         {
-            $data = $this->loadModel('testcase')->getByList($idList);
+            $data = $this->loadModel('testcase')->getByList(explode(',', $idList));
         }
 
         $this->view->cols = $cols;

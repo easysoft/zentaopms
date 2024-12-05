@@ -56,6 +56,15 @@ class doc extends control
         $funcName = "preview$type";
         if(method_exists($this->docZen, $funcName)) $this->docZen->$funcName($view, $idList);
 
+        $cols = $this->view->cols;
+        foreach($cols as $key => $col)
+        {
+            $cols[$key]['name']     = $key;
+            $cols[$key]['sortType'] = false;
+            if(isset($col['link'])) unset($cols[$key]['link']);
+        }
+        $this->view->cols = $cols;
+
         $this->view->title  = sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList[$type]);
         $this->view->type   = $type;
         $this->view->view   = $view;

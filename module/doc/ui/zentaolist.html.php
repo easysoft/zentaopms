@@ -51,6 +51,9 @@ formPanel
     on::click('#preview', "preview")
 );
 
+$cols = array_values($cols);
+$data = array_values($data);
+
 formPanel
 (
     setID('previewForm'),
