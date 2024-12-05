@@ -194,6 +194,7 @@ CSS;
         (
             set::icon('back'),
             set::text($lang->goback),
+            set::hint($lang->goback),
             setKey('backBtn'),
             set($backBtn)
         );
