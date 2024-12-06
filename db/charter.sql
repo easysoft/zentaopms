@@ -12,7 +12,8 @@ ALTER TABLE `zt_charter` ADD `completionFiles` text NULL AFTER `charterFiles`;
 ALTER TABLE `zt_charter` ADD `canceledFiles` text NULL AFTER `completionFiles`;
 ALTER TABLE `zt_charter` ADD `beforeCanceled` varchar(30) NOT NULL DEFAULT '' AFTER `canceledFiles`;
 ALTER TABLE `zt_charter` ADD `plan` text NULL AFTER `roadmap`;
-ALTER TABLE `zt_charter` ADD `filesConfig` text NULL AFTER `plan`;
+ALTER TABLE `zt_charter` ADD `type` varchar(30) NOT NULL DEFAULT 'roadmap' AFTER `plan`;
+ALTER TABLE `zt_charter` ADD `filesConfig` text NULL AFTER `type`;
 ALTER TABLE `zt_approvalobject` ADD `reviewers` text DEFAULT NULL AFTER `objectID`;
 ALTER TABLE `zt_approvalobject` ADD `opinion` text DEFAULT NULL AFTER `reviewers`;
 ALTER TABLE `zt_approvalobject` ADD `result` varchar(10) NOT NULL DEFAULT '' AFTER `opinion`;
@@ -20,6 +21,7 @@ ALTER TABLE `zt_approvalobject` ADD `status` varchar(30) NOT NULL DEFAULT '' AFT
 ALTER TABLE `zt_approvalobject` ADD `appliedBy` char(30) NOT NULL DEFAULT '' AFTER `status`;
 ALTER TABLE `zt_approvalobject` ADD `appliedDate` datetime NULL AFTER `appliedBy`;
 ALTER TABLE `zt_approvalobject` ADD `desc` text NULL AFTER `appliedDate`;
+ALTER TABLE `zt_project` ADD `linkType` varchar(30) NOT NULL DEFAULT 'plan' AFTER `enabled`;
 
 ALTER TABLE `zt_approval` ADD `extra` text NULL AFTER `result`;
 
@@ -33,3 +35,5 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 ('lang', '立项审批状态', 'charterReviewStatus', '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'charterReviewStatus', '', '', '');
 
 UPDATE `zt_grouppriv` SET `method`='activateProjectApproval' WHERE `module`='charter' AND `method`='activate';
+
+UPDATE `zt_project` SET `linkType` = 'roadmap' WHERE `charter` != '0';

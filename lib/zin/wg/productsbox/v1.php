@@ -242,14 +242,14 @@ class productsBox extends wg
             {
                 $objects      = array();
                 $objectGroups = $type == 'plan' ? $planGroups : $roadmapGroups;
-                if(is_array($branchIdList) && isset($objectGroups[$product->id]))
+                if(is_array($branchIdList) && !empty($branchIdList) && isset($objectGroups[$product->id]))
                 {
                     foreach($branchIdList as $branchID)
                     {
                         if(isset($objectGroups[$product->id][$branchID])) $objects += $objectGroups[$product->id][$branchID];
                     }
                 }
-                if($type == 'roadmap' && empty($product->branches) && !empty($objectGroups[$product->id])) $objects += $objectGroups[$product->id];
+                if(empty($product->branches) && empty($objects) && !empty($objectGroups[$product->id])) $objects += $objectGroups[$product->id];
 
                 if($type == 'plan')
                 {
