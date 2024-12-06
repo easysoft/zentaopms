@@ -10527,7 +10527,11 @@ class upgradeModel extends model
         foreach($oldCharterFileConfig as $oldCharterFile) $projectApprovalFiles[] = array('index' => $oldCharterFile->key, 'name' => $oldCharterFile->value);
 
         $charterFiles = json_decode($this->config->custom->charterFiles, true);
-        foreach($charterFiles as $index => $charterFile) $charterFiles[$index]['projectApproval'] = $projectApprovalFiles;
+        foreach($charterFiles as $index => $charterFile)
+        {
+            $charterFiles[$index]['type']            = 'roadmap';
+            $charterFiles[$index]['projectApproval'] = $projectApprovalFiles;
+        }
 
         $this->loadModel('setting')->setItem('system.custom.charterFiles', json_encode($charterFiles));
 
