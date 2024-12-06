@@ -392,6 +392,23 @@ $productManage->basic->tasks['releaseManage']['steps'][] = array(
 );
 
 $productManage->basic->tasks['releaseManage']['steps'][] = array(
+    'type'   => 'saveForm',
+    'target' => '#systemCreateForm .form-actions button[type="submit"]',
+    'page'   => 'system-browse',
+    'title'  => $lang->tutorial->productManage->releaseManage->step23->name,
+    'desc'   => $lang->tutorial->productManage->releaseManage->step23->desc
+);
+
+$productManage->basic->tasks['releaseManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#featureBar a',
+    'page'   => 'system-browse',
+    'url'    => array('system', 'browse', 'productID=1'),
+    'title'  => $lang->tutorial->productManage->releaseManage->step24->name,
+    'desc'   => $lang->tutorial->productManage->releaseManage->step24->desc
+);
+
+$productManage->basic->tasks['releaseManage']['steps'][] = array(
     'type'   => 'click',
     'target' => '#actionBar a:last-child',
     'page'   => 'release-browse',
