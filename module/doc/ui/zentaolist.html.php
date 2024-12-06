@@ -13,6 +13,7 @@ set::zui();
 
 $lowerType = strtolower($type);
 include "zentaolist.{$lowerType}.html.php";
+/* include "zentaolist.customsearch.html.php"; */
 
 $isSetting = $view == 'setting';
 
@@ -21,7 +22,7 @@ formPanel
     setID('zentaolist'),
     setClass('mb-0 pb-0', array('hidden' => !$isSetting)),
     set('data-type', $type),
-    set('data-params', $params),
+    set('data-settings', $settings),
     set::title($title),
     set::actions(array()),
     to::titleSuffix
@@ -37,7 +38,8 @@ formPanel
             $lang->doc->insertTip
         )
     ),
-    $fnGenerateFormRows($parsedParams),
+    $fnGenerateFormRows(),
+    /* $fnGenerateCustomSearch(), */
     to::footer
     (
         setClass('form-actions'),
@@ -80,7 +82,7 @@ formPanel
             set::cols($cols),
             set::data($data),
             set::emptyTip($lang->doc->previewTip),
-            set::checkable(),
+            set::checkable($view === 'setting'),
             set::plugins(array('checkable')),
         ),
         !$isSetting ? div
