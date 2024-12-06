@@ -194,8 +194,15 @@ class screen extends control
                 return print(json_encode($metricData));
             }
 
-            $table = $this->config->objectTables[$type];
-            $chartOrPivot = $this->dao->select('*')->from($table)->where('id')->eq($sourceID)->fetch();
+            if($type == 'pivot')
+            {
+                $chartOrPivot = $this->loadModel('pivot')->getPivotDataByID($sourceID);
+            }
+            else
+            {
+                $table = $this->config->objectTables[$type];
+                $chartOrPivot = $this->dao->select('*')->from($table)->where('id')->eq($sourceID)->fetch();
+            }
 
             $filterFormat = array();
             if($queryType == 'filter') list($chartOrPivot, $filterFormat) = $this->screen->mergeChartAndPivotFilters($type, $chartOrPivot, $sourceID, $filterParams);

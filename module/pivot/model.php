@@ -62,6 +62,21 @@ class pivotModel extends model
     }
 
     /*
+     * 获取透视表数据。
+     * Get pivot data by id.
+     *
+     * @param  int    $id
+     * @access public
+     * @return object|bool
+     */
+    public function getPivotDataByID($id)
+    {
+        $pivot = $this->pivotTao->fetchPivot($id);
+        if(!$pivot) return false;
+        return $pivot;
+    }
+
+    /*
      * 获取透视表。
      * Get pivot.
      *
