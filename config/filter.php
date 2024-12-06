@@ -210,6 +210,7 @@ $filter->my->work->cookie['pagerMyBug']         = 'int';
 $filter->my->work->cookie['pagerMyTestcase']    = 'int';
 $filter->my->work->cookie['pagerMyTesttask']    = 'int';
 $filter->my->work->cookie['storyViewType']      = 'code';
+$filter->my->work->cookie['taskViewType']       = 'code';
 
 $filter->my->contribute->cookie['pagerMyTask']        = 'int';
 $filter->my->contribute->cookie['pagerMyRequirement'] = 'int';
@@ -219,6 +220,7 @@ $filter->my->contribute->cookie['pagerMyTestcase']    = 'int';
 $filter->my->contribute->cookie['pagerMyTesttask']    = 'int';
 $filter->my->contribute->cookie['pagerMyDoc']         = 'int';
 $filter->my->contribute->cookie['storyViewType']      = 'code';
+$filter->my->contribute->cookie['taskViewType']       = 'code';
 
 $filter->bug->batchcreate->cookie['preBranch'] = 'reg::word';
 $filter->bug->browse->cookie['bugModule']      = 'int';
