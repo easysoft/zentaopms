@@ -117,7 +117,7 @@ class releaseModel extends model
             ->beginIF($type == 'bySearch')->andWhere($releaseQuery)->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id', false);
 
         $projectIdList = '';
         foreach($releases as $release) $projectIdList .= trim($release->project, ',') . ',';
