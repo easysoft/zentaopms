@@ -69,6 +69,15 @@ class cache
     private $cache;
 
     /**
+     * 缓存状态。
+     * Cache status.
+     *
+     * @access private
+     * @var string
+     */
+    private $status = 'enabled';
+
+    /**
      * 缓存命名空间。
      * Cache namespace.
      *
@@ -175,6 +184,19 @@ class cache
         if($driver == self::DRIVER_REDIS) return $this->cache = new $className($namespace, $lifetime, $scope, $connector, $redis);
         if($driver == self::DRIVER_YAC) return $this->cache = new $className($namespace, $lifetime);
         if($driver == self::DRIVER_FILE) return $this->cache = new $className($namespace, $lifetime, $app->getCacheRoot());
+    }
+
+    /**
+     * 设置缓存状态。
+     * Set cache status.
+     *
+     * @param  string $status 缓存状态。enabled: 启用缓存；disabled: 禁用缓存。
+     * @access private
+     * @return void
+     */
+    private function setStatus(string $status)
+    {
+        $this->status = $status;
     }
 
     /**
@@ -599,8 +621,9 @@ class cache
      * @access public
      * @return object|false
      */
-    public function fetch(string $table, int|string $id): object|bool
+    public function fetch(string $table, int|string $id): object|null
     {
+        if($this->status == 'disabled') return null;
         if(!$this->checkTable($table)) return $this->log("Table {$table} is not set in the cache configuration", __FILE__, __LINE__);
 
         if(empty($table)) return $this->log('The table name is empty', __FILE__, __LINE__);
@@ -628,6 +651,7 @@ class cache
      */
     public function fetchAll(string $table, array $objectIdList = []): array
     {
+        if($this->status == 'disabled') return [];
         if(!$this->checkTable($table)) return $this->log("Table {$table} is not set in the cache configuration", __FILE__, __LINE__);
 
         if(empty($table)) return $this->log('The table name is empty', __FILE__, __LINE__);
@@ -751,6 +775,7 @@ class cache
      */
     public function get()
     {
+        if($this->status == 'disabled') return null;
         if(empty($this->key)) return $this->log('The key is empty', __FILE__, __LINE__);
         return $this->cache->get($this->key);
     }
@@ -765,6 +790,7 @@ class cache
      */
     public function getByKey(string $key)
     {
+        if($this->status == 'disabled') return null;
         if(empty($key)) return $this->log('The key is empty', __FILE__, __LINE__);
 
         return $this->cache->get($key);
@@ -780,6 +806,7 @@ class cache
      */
     public function save($value)
     {
+        if($this->status == 'disabled') return false;
         if(empty($this->key)) return $this->log('The key is empty', __FILE__, __LINE__);
         return $this->cache->set($this->key, $value);
     }
@@ -796,6 +823,7 @@ class cache
      */
     public function saveByKey(string $key, $value, int $ttl = 0)
     {
+        if($this->status == 'disabled') return false;
         if(empty($key)) return $this->log('The key is empty', __FILE__, __LINE__);
 
         return $this->cache->set($key, $value, $ttl);
@@ -812,6 +840,7 @@ class cache
      */
     public function saveByLabel(string $label, $value)
     {
+        if($this->status == 'disabled') return false;
         if(empty($label)) return $this->log('The label is empty', __FILE__, __LINE__);
         if(empty($this->labels[$label])) return $this->log("Label {$label} does not exist", __FILE__, __LINE__);
 
@@ -848,6 +877,7 @@ class cache
     {
         $this->reset();
 
+        if($this->status == 'disabled') return;
         if(!$this->checkTable($table)) return;
 
         if(empty($table)) return $this->log('Table name is required.', __FILE__, __LINE__);
@@ -901,6 +931,7 @@ class cache
      */
     public function sync()
     {
+        if($this->status == 'disabled') return;
         if(!$this->checkTable()) return;
 
         if(empty($this->table)) return $this->log('Table name is required.', __FILE__, __LINE__);
@@ -922,7 +953,9 @@ class cache
      */
     public function clear()
     {
-        return $this->cache->clear();
+        $this->setStatus('disabled');
+        $this->cache->clear();
+        $this->setStatus('normal');
     }
 
     /**
