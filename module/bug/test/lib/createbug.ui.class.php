@@ -93,4 +93,26 @@ class createBugTester extends tester
         if($this->response('method') == 'browse') return $this->success('批量编辑bug成功');
         return $this->failed('批量编辑bug失败');
     }
+
+	/**
+     * bug列表页。
+     * bug browse.
+     *
+     * @param  array  $product
+     * @param  array  $bugs
+     * @access public
+     * @return object
+     */
+    public function browse($product = array(), $bugs = array())
+    {
+        $this->login();
+        $form = $this->initForm('bug', 'browse', $product, 'appIframe-qa');
+        $bugIDList    = array_map(function($element) {return $element->getText();}, $form->dom->getELementList($form->dom->xpath['bugID'])->element);
+        $bugTitleList = array_map(function($element) {return $element->getText();}, $form->dom->getELementList($form->dom->xpath['bugTitle'])->element);
+        foreach($bugs as $bug)
+        {
+            if(in_array($bug->id, $bugIDList) && in_array($bug->title, $bugTitleList)) return $this->success('bug列表页检查成功');
+            return $this->failed('bug列表页检查失败');
+        }
+    }
 }
