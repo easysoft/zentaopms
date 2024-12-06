@@ -7,15 +7,15 @@ class confirmBugTester extends tester
      * 确认bug。
      * Confirm a bug.
      *
-     * @param  array  $project
+     * @param  array  $product
      * @param  array  $bug
      * @access public
      * @return object
      */
-    public function confirmBug(array $project, array $bug)
+    public function confirmBug(array $product, array $bug)
     {
         $this->login();
-        $list = $this->searchBug($bug, $project);
+        $list = $this->searchBug($bug, $product);
         $bugTitle = $list->dom->bugTitle->getText();
         $list->dom->confirmButton->click();
         $this->webdriver->wait(1);
@@ -116,11 +116,30 @@ class confirmBugTester extends tester
     public function bugAssert(string $bugTitle = '', object $list = null)
     {
         if(empty($bugTitle) || !is_object($list)) return $this->failed('获取bug标题失败');
+        
+        $backtrace = debug_backtrace();
+        if(!$backtrace[1]['function']) return $this->failed("代码有误");
+        switch($backtrace[1]['function']){
+            case 'confirmBug':
+                $action = '确认';
+                break;
+            case 'resolveBug':
+                $action = '解决';
+                break;
+            case 'closeBug';
+                $action = '关闭';
+                break;
+            case 'editBug';
+                $action = '编辑';
+                break;
+            default:
+                $action = '操作';
+        }
 
         $bugTitleLists = $list->dom->getElementList($list->dom->xpath['bugTitleList']);
         $bugList = array_map(function($element){return $element->getText();}, $bugTitleLists->element);
-        if(!in_array($bugTitle, $bugList)) return $this->success('操作bug成功');
-        return $this->failed('操作bug失败');
+        if(!in_array($bugTitle, $bugList)) return $this->success($action . "bug成功");
+        return $this->failed($action . "bug失败");
     }
 
     /**
