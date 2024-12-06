@@ -155,4 +155,18 @@ $action->action->range('assigned{20},submitreview{8},reviewed{6}');
 $action->extra->range('{28},Pass{6}');
 $action->gen(34);
 
+$tester = new workTester();
+$tester->login();
+
+r($tester->checkWork('task', 'firstTab', '5'))    && p('message,status') && e('任务的指派给我tab下数据显示正确,SUCCESS');//检查任务列表-[指派给我]tab下的数据
+r($tester->checkWork('SR', 'firstTab', '5'))      && p('message,status') && e('研发需求的指派给我tab下数据显示正确,SUCCESS');//检查研发需求列表-[指派给我]tab下的数据
+r($tester->checkWork('SR', 'secondTab', '4'))     && p('message,status') && e('研发需求的待我评审tab下数据显示正确,SUCCESS');//检查研发需求列表-[待我评审]tab下的数据
+r($tester->checkWork('UR', 'firstTab', '2'))      && p('message,status') && e('用户需求的指派给我tab下数据显示正确,SUCCESS');//检查用户需求列表-[指派给我]tab下的数据
+r($tester->checkWork('UR', 'secondTab', '2'))     && p('message,status') && e('用户需求的待我评审tab下数据显示正确,SUCCESS');//检查用户需求列表-[待我评审]tab下的数据
+r($tester->checkWork('ER', 'firstTab', '10'))     && p('message,status') && e('业务需求的指派给我tab下数据显示正确,SUCCESS');//检查业务需求列表-[指派给我]tab下的数据
+r($tester->checkWork('ER', 'secondTab', '7'))     && p('message,status') && e('业务需求的待我评审tab下数据显示正确,SUCCESS');//检查业务需求列表-[待我评审]tab下的数据
+r($tester->checkWork('bug', 'firstTab', '3'))     && p('message,status') && e('Bug的指派给我tab下数据显示正确,SUCCESS');//检查Bug列表-[指派给我]tab下的数据
+r($tester->checkWork('case', 'firstTab', '3'))    && p('message,status') && e('用例的指派给我tab下数据显示正确,SUCCESS');//检查用例列表-[指派给我]tab下的数据
+r($tester->checkWork('request', 'firstTab', '1')) && p('message,status') && e('测试单的指派给我tab下数据显示正确,SUCCESS');//检查测试单列表-[由我负责]tab下的数据
+
 $tester->closeBrowser();
