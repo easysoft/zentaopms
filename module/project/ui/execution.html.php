@@ -58,6 +58,7 @@ if($canBatchAction)
 
 /* Generate data table fields. */
 $fieldList = $config->project->execution->dtable->fieldList;
+$fieldList['status']['statusMap']['changed'] = $lang->task->storyChange;
 
 /* waterfall & waterfallplus model with different edit link. */
 if(in_array($project->model, array('waterfall', 'waterfallplus')))
