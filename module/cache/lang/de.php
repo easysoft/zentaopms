@@ -24,15 +24,16 @@ $lang->cache->apcu->notLoaded  = 'Please load the APCu extension before enabling
 $lang->cache->apcu->notEnabled = 'Please enable the apc.enabled option before enabling cach.';
 
 $lang->cache->redis = new stdClass();
-$lang->cache->redis->host               = 'Redis Host';
-$lang->cache->redis->port               = 'Redis Port';
-$lang->cache->redis->username           = 'Redis User';
-$lang->cache->redis->password           = 'Redis Password';
-$lang->cache->redis->database           = 'Redis Database';
-$lang->cache->redis->serializer         = 'Redis Serializer';
-$lang->cache->redis->notice             = 'To use Redis cache, you need to load the Redis extension first.';
-$lang->cache->redis->notLoaded          = 'Please load the Redis extension before enabling cach.';
-$lang->cache->redis->igbinaryNotLoaded  = 'Please load the igbinary extension before enabling cach.';
+$lang->cache->redis->host                 = 'Redis Host';
+$lang->cache->redis->port                 = 'Redis Port';
+$lang->cache->redis->username             = 'Redis User';
+$lang->cache->redis->password             = 'Redis Password';
+$lang->cache->redis->database             = 'Redis Database';
+$lang->cache->redis->serializer           = 'Redis Serializer';
+$lang->cache->redis->notice               = 'To use Redis cache, you need to load the Redis extension first.';
+$lang->cache->redis->notLoaded            = 'Please load the Redis extension before enabling cach.';
+$lang->cache->redis->igbinaryNotLoaded    = 'Please load the igbinary extension before enabling cach.';
+$lang->cache->redis->igbinaryNotSupported = 'Redis does not support igbinary. Please change the serializer.';
 
 $lang->cache->redis->serializerList['php']      = 'PHP Serialize';
 $lang->cache->redis->serializerList['igbinary'] = 'igbinary';
