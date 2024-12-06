@@ -81,23 +81,27 @@ class confirmBugTester extends tester
      * 关闭bug。
      * Close a bug.
      *
-     * @param  array  $project
+     * @param  array  $product
      * @param  array  $bug
      * @access public
      * @return object
      */
-    public function closeBug(array $project, array $bug)
+    public function closeBug(array $product, array $bug)
     {
         $this->login();
-        $list = $this->searchBug($bug, $project);
-        $bugTitle = $list->dom->bugTitle->getText();
+        $list = $this->initForm('bug', 'browse', $product, 'appIframe-qa');
+        $id = $list->dom->bugID->getText();
         $list->dom->closeButton->click();
         $this->webdriver->wait(1);
 
+        if(isset($bug['comment'])) $list->dom->closeComment->setValueInZenEditor($bug['comment']);
         $list->dom->btn($this->lang->bug->close)->click();
         $this->webdriver->wait(1);
 
-        return $this->bugAssert($bugTitle, $list);
+        $list->dom->search($searchList = array("bug编号,=,$id"));
+        $this->webdriver->wait(1);
+        if($list->dom->bugStatus->getText() == '已关闭') return $this->success('关闭bug成功');
+        return $this->failed('bug关闭失败');
     }
 
     /**
