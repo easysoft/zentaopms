@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace zin;
 
-$fnGenerateFormRows = function () use ($lang)
+$fnGenerateFormRows = function () use ($lang, $settings)
 {
     $products = $this->loadModel('product')->getPairs();
     $searchConditions = array();
@@ -34,7 +34,8 @@ $fnGenerateFormRows = function () use ($lang)
                 set::width('1/2'),
                 set::name('product'),
                 set::label($lang->doc->product),
-                set::items($products)
+                set::items($products),
+                set::value(isset($settings['product']) ? $settings['product'] : '')
             )
         ),
         formRow
@@ -42,9 +43,10 @@ $fnGenerateFormRows = function () use ($lang)
             formGroup
             (
                 set::width('1/2'),
-                set::name('search'),
+                set::name('condition'),
                 set::label($lang->doc->searchCondition),
-                set::items($searchConditions)
+                set::items($searchConditions),
+                set::value(isset($settings['condition']) ? $settings['condition'] : '')
             )
         )
     );

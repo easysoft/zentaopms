@@ -1138,12 +1138,13 @@ class docZen extends doc
      */
     protected function previewProductStory(string $view, array $settings, string $idList): void
     {
-        $cols = $this->loadModel('datatable')->getSetting('product', 'browse');
+        $cols   = $this->loadModel('datatable')->getSetting('product', 'browse');
+        $data   = array();
+        $action = $settings['action'];
 
-        $data = array();
-        if(!empty($_POST) && $view === 'setting')
+        if($action === 'preview' && $view === 'setting')
         {
-            $data = $this->loadModel('product')->getStories((int)$settings['product'], '', $settings['search'], 0, 0);
+            $data = $this->loadModel('product')->getStories((int)$settings['product'], '', $settings['condition'], 0, 0);
         }
         elseif($view === 'list')
         {
