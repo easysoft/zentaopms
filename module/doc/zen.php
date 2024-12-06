@@ -1126,7 +1126,35 @@ class docZen extends doc
             $data = $this->loadModel('story')->getByList($idList);
         }
 
-        $this->view->cols = array_values($cols);
-        $this->view->data = array_values($data);
+        $this->view->cols = $cols;
+        $this->view->data = $data;
+    }
+
+    /**
+     * 预览执行需求列表。
+     * Preview execution story.
+     *
+     * @param  string    $view
+     * @param  string    $idList
+     * @access protected
+     * @return void
+     */
+    protected function previewExecutionStory(string $view, string $idList): void
+    {
+        $cols = $this->loadModel('datatable')->getSetting('execution', 'story', false, 'story');
+        unset($cols['actions']);
+
+        $data = array();
+        if(!empty($_POST) && $view === 'setting')
+        {
+            $data = $this->loadModel('story')->getExecutionStories((int)$this->post->execution, 0, '', $this->post->search, '', 'story');
+        }
+        elseif($view === 'list')
+        {
+            $data = $this->loadModel('story')->getByList($idList);
+        }
+
+        $this->view->cols = $cols;
+        $this->view->data = $data;
     }
 }
