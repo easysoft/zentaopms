@@ -6,7 +6,7 @@ function toggleCache()
 
 function toggleDriver()
 {
-    const enable = !!$('[name=enable]:checked').val();
-    $('.apcu').toggleClass('hidden', !enable || $(this).val() != 'apcu');
-    $('.redis').toggleClass('hidden', !enable || $(this).val() != 'redis');
+    const enable = $('[name=enable]:checked').val();
+    $('.apcu').toggleClass('hidden', enable == 0 || $(this).val() != 'apcu');
+    $('.redis').toggleClass('hidden', enable == 0|| $(this).val() != 'redis');
 }
