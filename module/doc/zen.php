@@ -1000,6 +1000,35 @@ class docZen extends doc
     }
 
     /**
+     * 从session中获取数据。
+     * Get data from session.
+     *
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    protected function formFromSession(string $type): array
+    {
+        $sessionName = 'zentaoList' . $type;
+        $session = array();
+        if(isset($_SESSION[$sessionName]))
+        {
+            $session = $_SESSION[$sessionName];
+            unset($_SESSION[$sessionName]);
+        }
+        if(!isset($session['action'])) $session['action'] = '';
+
+        $idList = '';
+        if(isset($session['idList']))
+        {
+            $idList = $session['idList'];
+            unset($session['idList']);
+        }
+
+        return array($session, $idList);
+    }
+
+    /**
      * 处理表格列配置。
      * Handle table column config.
      *
