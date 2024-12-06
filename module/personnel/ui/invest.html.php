@@ -40,8 +40,8 @@ dropmenu();
         <th><?php echo $lang->personnel->resolved;?></th>
         <th><?php echo $lang->personnel->wait;?></th>
         <?php if($this->config->URAndSR):?>
-        <th class='w-24'><?php echo $lang->personnel->UR;?></th>
-        <th class='w-24'><?php echo $lang->personnel->SR;?></th>
+        <th><?php echo $lang->personnel->UR;?></th>
+        <th><?php echo $lang->personnel->SR;?></th>
         <?php endif;?>
         <?php if($this->config->edition == 'max' or $this->config->edition == 'ipd'): ?>
         <th><?php echo $lang->personnel->created;?></th>
