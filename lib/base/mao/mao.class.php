@@ -518,7 +518,8 @@ class baseMao
         {
             if($condition['field'] == $field && $condition['operator'] == 'eq')
             {
-                $rawResult[] = $this->cache->fetch($this->table, $condition['value']);
+                $result = $this->cache->fetch($this->table, $condition['value']);
+                if($result !== null) $rawResult[] = $result;
                 break;
             }
         }
