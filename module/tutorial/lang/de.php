@@ -1525,6 +1525,25 @@ $lang->tutorial->productManage->releaseManage->step19 = new stdClass();
 $lang->tutorial->productManage->releaseManage->step19->name = 'Save the form';
 $lang->tutorial->productManage->releaseManage->step19->desc = 'After saving, the requirements will change stages based on the release status.';
 
+$lang->tutorial->productManage->releaseManage->step20 = new stdClass();
+$lang->tutorial->productManage->releaseManage->step20->name = 'Click on Manage Application';
+$lang->tutorial->productManage->releaseManage->step20->desc = 'Here you can maintain and manage the application information of the product.';
+
+$lang->tutorial->productManage->releaseManage->step21 = new stdClass();
+$lang->tutorial->productManage->releaseManage->step21->name = 'Click to Create Application';
+$lang->tutorial->productManage->releaseManage->step21->desc = 'Click to create an application for the product. ';
+
+$lang->tutorial->productManage->releaseManage->step22 = new stdClass();
+$lang->tutorial->productManage->releaseManage->step22->name = 'Fill out the form';
+
+$lang->tutorial->productManage->releaseManage->step23 = new stdClass();
+$lang->tutorial->productManage->releaseManage->step23->name = 'Save the form';
+$lang->tutorial->productManage->releaseManage->step23->desc = 'After saving, the application is successfully created. ';
+
+$lang->tutorial->productManage->releaseManage->step24 = new stdClass();
+$lang->tutorial->productManage->releaseManage->step24->name = 'Click on Back';
+$lang->tutorial->productManage->releaseManage->step24->desc = 'Click to return to the previous page. ';
+
 $lang->tutorial->productManage->lineManage = new stdClass();
 $lang->tutorial->productManage->lineManage->title = 'Product Line Management';
 
