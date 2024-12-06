@@ -1084,6 +1084,32 @@ class docZen extends doc
     }
 
     /**
+     * 预览产品下的Bug列表。
+     * Preview product story.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function previewProductBug(string $view, array $settings, string $idList): void
+    {
+        $cols   = $this->loadModel('datatable')->getSetting('bug', 'browse');
+        $data   = array();
+        $action = $settings['action'];
+
+        if($action === 'preview' && $view === 'setting')
+        {
+            $data = $this->loadModel('bug')->getProductBugs(array((int)$settings['product']));
+        }
+        elseif($view === 'list')
+        {
+            $data = $this->loadModel('bug')->getByIdList($idList);
+        }
+
+        $this->view->cols = $cols;
+        $this->view->data = $data;
+    }
+
+    /**
      * 预览产品计划下的内容列表。
      * Preview plan story.
      *
@@ -1092,7 +1118,7 @@ class docZen extends doc
      */
     protected function previewPlanBug(string $view, array $settings, string $idList): void
     {
-        $cols   = $this->loadModel('datatable')->getSetting('product', 'browse');
+        $cols   = $this->loadModel('datatable')->getSetting('bug', 'browse');
         $data   = array();
         $action = $settings['action'];
 
