@@ -18,8 +18,14 @@ class cacheModel extends model
      * @access public
      * @return void
      */
-    public function clear()
+    public function clear($needStart = true)
     {
+        /* 先关闭缓存防止清空缓存过程中有新的数据写入。Close the cache first to prevent new data from being written during the cache clearing process. */
+        $needStop = $this->config->cache->enable;
+        if($needStop) $this->loadModel('setting')->setItem('system.common.cache.enable', 0);
+
         $this->mao->clearCache();
+
+        if($needStop && $needStart) $this->loadModel('setting')->setItem('system.common.cache.enable', 1);
     }
 }
