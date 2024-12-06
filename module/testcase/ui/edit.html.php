@@ -137,14 +137,7 @@ detailBody
         section
         (
             set::title($lang->files),
-            $case->files ? fileList
-            (
-                set::files($case->files),
-                set::fieldset(false),
-                set::showEdit(true),
-                set::showDelete(true)
-            ) : null,
-            fileSelector()
+            fileSelector($case->files ? set::defaultFiles(array_values($case->files)) : false)
         ),
         section
         (

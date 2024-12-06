@@ -66,6 +66,8 @@ $config->testcase->form->edit['stepType']     = array('required' => false, 'type
 $config->testcase->form->edit['version']      = array('required' => false, 'type' => 'int',    'default' => 1);
 $config->testcase->form->edit['auto']         = array('required' => false, 'type' => 'string', 'default' => 'no');
 $config->testcase->form->edit['script']       = array('required' => false, 'type' => 'string', 'default' => '');
+$config->testcase->form->edit['deleteFiles']  = array('required' => false, 'type' => 'array',  'default' => array());
+$config->testcase->form->edit['renameFiles']  = array('required' => false, 'type' => 'array',  'default' => array());
 $config->testcase->form->edit['comment']      = array('required' => false, 'type' => 'string', 'default' => '', 'control' => 'editor');
 
 $config->testcase->form->batchEdit = array();

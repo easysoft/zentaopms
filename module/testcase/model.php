@@ -629,7 +629,7 @@ class testcaseModel extends model
 
         if($case->branch && !empty($testtasks)) $this->testcaseTao->unlinkCaseFromTesttask($oldCase->id, $case->branch, $testtasks);
 
-        $this->loadModel('file')->processFile4Object('testcase', $oldCase, $case);
+        $this->loadModel('file')->processFileDiffsForObject('testcase', $oldCase, $case);
 
         /* Join the steps to diff. */
         if(!empty($case->stepChanged) && $case->steps)
