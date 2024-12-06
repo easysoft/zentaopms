@@ -3,12 +3,10 @@ declare(strict_types=1);
 
 namespace zin;
 
-$fnGenerateFormRows = function ($parsedParams) use ($lang)
+$fnGenerateFormRows = function () use ($lang, $settings)
 {
     $productList = $this->loadModel('product')->getPairs();
-    $plans       = isset($parsedParams['product']) ? $this->loadModel('productplan')->getPairs((int)$parsedParams['product'], '', '', true) : array();
-    $productID   = isset($parsedParams['product']) ? (int)isset($parsedParams['product']) : '';
-    $planID      = isset($parsedParams['plan'])    ? (int)isset($parsedParams['plan'])    : '';
+    $planList    = isset($settings['product']) ? $this->loadModel('productplan')->getPairs((int)$settings['product'], '', '', true) : array();
     return array
     (
         formRow
@@ -21,7 +19,7 @@ $fnGenerateFormRows = function ($parsedParams) use ($lang)
                 set::required(),
                 set::control(array('contorl' => 'picker', 'required' => false, 'maxItemsCount' => 50)),
                 set::items($productList),
-                set::value($productID),
+                set::value(isset($settings['product']) ? $settings['product'] : null),
                 span
                 (
                     setClass('error-tip text-danger hidden'),
@@ -38,8 +36,8 @@ $fnGenerateFormRows = function ($parsedParams) use ($lang)
                 set::label($lang->doc->plan),
                 set::required(),
                 set::control(array('contorl' => 'picker', 'required' => false, 'maxItemsCount' => 50)),
-                set::items($plans),
-                set::value($planID),
+                set::items($planList),
+                set::value(isset($settings['plan']) ? $settings['plan'] : null),
                 span
                 (
                     setClass('error-tip text-danger hidden'),
