@@ -17,14 +17,14 @@ dropmenu();
   <table class="table has-sort-head bordered table-fixed text-center">
     <thead>
       <tr>
-        <th rowspan='2' class="c-role"><?php echo $lang->personnel->role;?></th>
-        <th rowspan='2' class="c-user"> <?php echo $lang->personnel->name;?></th>
+        <th rowspan='2' class="c-role w-24"><?php echo $lang->personnel->role;?></th>
+        <th rowspan='2' class="c-user w-24"> <?php echo $lang->personnel->name;?></th>
         <th rowspan='2'><?php echo $lang->personnel->projects;?></th>
         <th rowspan='2'><?php echo $lang->personnel->executions;?></th>
         <th colspan="2"><?php echo $lang->personnel->workingHours;?></th>
         <th colspan="3"><?php echo $lang->personnel->task;?></th>
         <th colspan="3"><?php echo $lang->personnel->bug;?></th>
-        <th <?php echo $config->URAndSR ? "colspan='2'" : "rowspan='2'";?> class="c-story"><?php echo $lang->personnel->createStories;?></th>
+        <th <?php echo $config->URAndSR ? "colspan='2' class='w-40'" : "rowspan='2' class='w-20'";?>><?php echo $lang->personnel->createStories;?></th>
         <?php if($this->config->edition == 'max' or $this->config->edition == 'ipd'): ?>
         <th colspan="3"><?php echo $lang->personnel->issue;?></th>
         <th colspan="3"><?php echo $lang->personnel->risk;?></th>
@@ -40,8 +40,8 @@ dropmenu();
         <th><?php echo $lang->personnel->resolved;?></th>
         <th><?php echo $lang->personnel->wait;?></th>
         <?php if($this->config->URAndSR):?>
-        <th><?php echo $lang->personnel->UR;?></th>
-        <th><?php echo $lang->personnel->SR;?></th>
+        <th class='w-24'><?php echo $lang->personnel->UR;?></th>
+        <th class='w-24'><?php echo $lang->personnel->SR;?></th>
         <?php endif;?>
         <?php if($this->config->edition == 'max' or $this->config->edition == 'ipd'): ?>
         <th><?php echo $lang->personnel->created;?></th>
