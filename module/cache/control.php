@@ -57,7 +57,12 @@ class cache extends control
                 {
                     /* 检查是否加载了 Redis 扩展。Check if the Redis extension is loaded. */
                     if(!extension_loaded('redis')) return $this->send(array('result' => 'fail', 'message' => $this->lang->cache->redis->notLoaded));
-                    if(!extension_loaded('igbinary') && $redis->serializer == 'igbinary') return $this->send(array('result' => 'fail', 'message' => $this->lang->cache->redis->igbinaryNotLoaded));
+                    if($redis->serializer == 'igbinary')
+                    {
+                        if(!extension_loaded('igbinary')) return $this->send(array('result' => 'fail', 'message' => $this->lang->cache->redis->igbinaryNotLoaded));
+                        $reflection = new ReflectionClass(new Redis());
+                        if(!$reflection->hasConstant('SERIALIZER_IGBINARY')) return $this->send(array('result' => 'fail', 'message' => $this->lang->cache->redis->igbinaryNotSupported));
+                    }
 
                     /* 检查 Redis 连接是否正常。Check if the Redis connection is normal. */
                     try

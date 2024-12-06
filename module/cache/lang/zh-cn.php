@@ -24,15 +24,16 @@ $lang->cache->apcu->notLoaded  = '请加载 APCu 扩展后再开启数据缓存'
 $lang->cache->apcu->notEnabled = '请启用 apc.enabled 选项后再开启数据缓存';
 
 $lang->cache->redis = new stdClass();
-$lang->cache->redis->host               = 'Redis 主机';
-$lang->cache->redis->port               = 'Redis 端口';
-$lang->cache->redis->username           = 'Redis 用户名';
-$lang->cache->redis->password           = 'Redis 密码';
-$lang->cache->redis->database           = 'Redis 数据库';
-$lang->cache->redis->serializer         = 'Redis 序列化器';
-$lang->cache->redis->notice             = '使用 Redis 缓存需要先加载 Redis 扩展。';
-$lang->cache->redis->notLoaded          = '请加载 Redis 扩展后再开启数据缓存。';
-$lang->cache->redis->igbinaryNotLoaded  = '请加载 igbinary 扩展后再开启数据缓存。';
+$lang->cache->redis->host                 = 'Redis 主机';
+$lang->cache->redis->port                 = 'Redis 端口';
+$lang->cache->redis->username             = 'Redis 用户名';
+$lang->cache->redis->password             = 'Redis 密码';
+$lang->cache->redis->database             = 'Redis 数据库';
+$lang->cache->redis->serializer           = 'Redis 序列化器';
+$lang->cache->redis->notice               = '使用 Redis 缓存需要先加载 Redis 扩展。';
+$lang->cache->redis->notLoaded            = '请加载 Redis 扩展后再开启数据缓存。';
+$lang->cache->redis->igbinaryNotLoaded    = '请加载 igbinary 扩展后再开启数据缓存。';
+$lang->cache->redis->igbinaryNotSupported = 'Redis 未启用 igbinary 支持。请更改序列化器。';
 
 $lang->cache->redis->serializerList['php']      = 'PHP 内置序列化器';
 $lang->cache->redis->serializerList['igbinary'] = 'igbinary';
