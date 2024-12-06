@@ -1000,20 +1000,41 @@ class docZen extends doc
     }
 
     /**
+     * 处理表格列配置。
+     * Handle table column config.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function prepareCols()
+    {
+        $cols = $this->view->cols;
+        if(isset($cols['actions'])) unset($cols['actions']);
+        foreach($cols as $key => $col)
+        {
+            $cols[$key]['name']     = $key;
+            $cols[$key]['sortType'] = false;
+            if(isset($col['link']))         unset($cols[$key]['link']);
+            if(isset($col['nestedToggle'])) unset($cols[$key]['nestedToggle']);
+        }
+        $this->view->cols = $cols;
+    }
+
+    /**
      * 预览计划需求。
      * Preview plan story.
      *
      * @access protected
      * @return void
      */
-    protected function previewPlanStory(string $view, string $idList): void
+    protected function previewPlanStory(string $view, array $settings, string $idList): void
     {
         $cols = $this->loadModel('datatable')->getSetting('product', 'browse');
         $data = array();
 
-        if(!empty($_POST) && $view === 'setting')
+        if($settings['action'] === 'preview' && $view === 'setting')
         {
-            $data = $this->loadModel('story')->getPlanStories((int)$this->post->plan);
+            $data = $this->loadModel('story')->getPlanStories((int)$settings['plan']);
         }
         elseif($view === 'list')
         {
@@ -1031,14 +1052,14 @@ class docZen extends doc
      * @access protected
      * @return void
      */
-    protected function previewProductPlanContent(string $view, array $params, string $idList): void
+    protected function previewProductPlanContent(string $view, array $settings, string $idList): void
     {
         $cols = $this->loadModel('datatable')->getSetting('product', 'browse');
         $data = array();
 
         if(!empty($params) && $view === 'setting')
         {
-            $data = $this->loadModel('story')->getPlanStories((int)$params['plan']);
+            $data = $this->loadModel('story')->getPlanStories((int)$settings['plan']);
         }
         elseif($view === 'list')
         {
@@ -1056,7 +1077,7 @@ class docZen extends doc
      * @access protected
      * @return void
      */
-    protected function previewProductCase(string $view, string $idList): void
+    protected function previewProductCase(string $view, array $settings, string $idList): void
     {
         $this->loadModel('testcase');
         $cols = $this->config->testcase->dtable->fieldList;
@@ -1064,7 +1085,7 @@ class docZen extends doc
 
         if(!empty($_POST) && $view === 'setting')
         {
-            $data = $this->loadModel('testcase')->getTestCases((int)$this->post->product, '', $this->post->condition, 0, 0);
+            $data = $this->loadModel('testcase')->getTestCases((int)$settings['product'], '', $settings['condition'], 0, 0);
         }
         elseif($view === 'list')
         {
@@ -1084,14 +1105,14 @@ class docZen extends doc
      * @access protected
      * @return void
      */
-    protected function previewProductStory(string $view, string $idList): void
+    protected function previewProductStory(string $view, array $settings, string $idList): void
     {
         $cols = $this->loadModel('datatable')->getSetting('product', 'browse');
 
         $data = array();
         if(!empty($_POST) && $view === 'setting')
         {
-            $data = $this->loadModel('product')->getStories((int)$this->post->product, '', $this->post->search, 0, 0);
+            $data = $this->loadModel('product')->getStories((int)$settings['product'], '', $settings['search'], 0, 0);
         }
         elseif($view === 'list')
         {
@@ -1111,7 +1132,7 @@ class docZen extends doc
      * @access protected
      * @return void
      */
-    protected function previewProjectStory(string $view, string $idList): void
+    protected function previewProjectStory(string $view, array $settings, string $idList): void
     {
         $cols = $this->loadModel('datatable')->getSetting('product', 'browse');
         unset($cols['actions']);
@@ -1119,7 +1140,7 @@ class docZen extends doc
         $data = array();
         if(!empty($_POST) && $view === 'setting')
         {
-            $data = $this->loadModel('story')->getExecutionStories((int)$this->post->project, 0, '', $this->post->search);
+            $data = $this->loadModel('story')->getExecutionStories((int)$settings['project'], 0, '', $settings['search']);
         }
         elseif($view === 'list')
         {
