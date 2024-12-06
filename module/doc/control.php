@@ -51,42 +51,38 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function zentaoList(string $type, string $view = 'setting', string $params = '', string $idList = '')
+    public function zentaoList(string $type, string $view = 'setting')
     {
-        $parsedParams = array();
-        if($params)
-        {
-            $params = explode(',', $params);
-            foreach($params as $param)
-            {
-                $key   = explode('=', $param)[0];
-                $value = explode('=', $param)[1];
-                $parsedParams[$key] = $value;
-            }
-        }
+        list($settings, $idList) = $this->docZen->formFromSession($type);
 
         $funcName = "preview$type";
-        if(method_exists($this->docZen, $funcName)) $this->docZen->$funcName($view, $parsedParams, $idList);
+        if(method_exists($this->docZen, $funcName)) $this->docZen->$funcName($view, $settings, $idList);
 
-        $cols = $this->view->cols;
-        if(isset($cols['actions'])) unset($cols['actions']);
-        foreach($cols as $key => $col)
-        {
-            $cols[$key]['name']     = $key;
-            $cols[$key]['sortType'] = false;
-            if(isset($col['link']))         unset($cols[$key]['link']);
-            if(isset($col['nestedToggle'])) unset($cols[$key]['nestedToggle']);
-        }
-        $this->view->cols = $cols;
+        $this->docZen->prepareCols();
 
-        $this->view->title  = sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList[$type]);
-        $this->view->type   = $type;
-        $this->view->view   = $view;
-        $this->view->idList = $idList;
+        $this->view->title    = sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList[$type]);
+        $this->view->type     = $type;
+        $this->view->view     = $view;
+        $this->view->idList   = $idList;
+        $this->view->settings = $settings;
 
-        $this->view->params       = $params;
-        $this->view->parsedParams = $parsedParams;
         $this->display();
+    }
+
+    /**
+     * 构建禅道数据列表。
+     * Build Zentao data list.
+     *
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function buildZentaoList(string $type)
+    {
+        $sessionName = 'zentaoList' . $type;
+        $this->session->set($sessionName, $_POST);
+
+        return print(json_encode(array('result' => 'success')));
     }
 
     /**
