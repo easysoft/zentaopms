@@ -60,7 +60,7 @@ class thinkMulticolumn extends thinkQuestion
             $item = new stdClass();
             foreach($data as $key => $values)
             {
-                $values = (array)$values;
+                $values = json_decode(json_encode($values), true);
                 $name   = "result[$key]";
                 $item->$name = isset($values[$i]) ? $values[$i] : '';
             }
