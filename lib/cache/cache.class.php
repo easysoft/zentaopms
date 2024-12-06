@@ -614,7 +614,7 @@ class cache
         if($object) return $object;
 
         $objects = $this->initTableCache();
-        return isset($objects[$id]) ? $objects[$id] : false;
+        return isset($objects[$id]) ? $objects[$id] : null;
     }
 
     /**
