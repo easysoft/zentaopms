@@ -22,6 +22,7 @@ class fileSelector extends wg
         'gridHeight?: string|int',                     // 网格模式的高度。
         'gridGap?: string|int',                        // 网格模式的间距。
         'defaultFiles?: array[]',                      // 默认显示的文件列表。
+        'extra?:string=""',                            // 根据extra筛选默认显示的文件列表
         'multiple?: bool=true',                        // 是否允许在文件选择对话框中一次性选择多个文件（需要操作系统支持）。
         'itemProps?: array|callback',                  // 文件项的属性。
         'draggable?: bool=true',                       // 是否允许拖拽。
@@ -82,6 +83,17 @@ class fileSelector extends wg
         if(!str_ends_with($name, ']') && ($this->prop('multiple') !== false || $this->prop('maxFileCount') !== 1))
         {
             $this->setProp('name', $name . '[]');
+        }
+
+        if($this->hasProp('defaultFiles') && $this->hasProp('extra'))
+        {
+            $defaultFiles = array();
+            foreach($this->prop('defaultFiles') as $file)
+            {
+                if($file->extra !== $this->prop('extra')) continue;
+                $defaultFiles[] = $file;
+            }
+            $this->setProp('defaultFiles', $defaultFiles);
         }
 
         /* Check file type. */
