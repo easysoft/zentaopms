@@ -1133,27 +1133,44 @@ class docZen extends doc
      * Preview product story.
      *
      * @param  string $view
+     * @param  array  $settings
      * @param  string $idList
      * @access protected
      * @return void
      */
     protected function previewProductStory(string $view, array $settings, string $idList): void
     {
-        $cols   = $this->loadModel('datatable')->getSetting('product', 'browse');
-        $data   = array();
-        $action = $settings['action'];
+        $this->previewStory('story', $view, $settings, $idList);
+    }
 
-        if($action === 'preview' && $view === 'setting')
-        {
-            $data = $this->loadModel('product')->getStories((int)$settings['product'], '', $settings['condition'], 0, 0);
-        }
-        elseif($view === 'list')
-        {
-            $data = $this->loadModel('story')->getByList($idList);
-        }
+    /**
+     * 预览业务需求列表。
+     * Preview epic story.
+     *
+     * @param  string $view
+     * @param  array  $settings
+     * @param  string $idList
+     * @access protected
+     * @return void
+     */
+    protected function previewER(string $view, array $settings, string $idList): void
+    {
+        $this->previewStory('epic', $view, $settings, $idList);
+    }
 
-        $this->view->cols = $cols;
-        $this->view->data = $data;
+    /**
+     * 预览用户需求列表。
+     * Preview requirement story.
+     *
+     * @param  string $view
+     * @param  array  $settings
+     * @param  string $idList
+     * @access protected
+     * @return void
+     */
+    protected function previewUR(string $view, array $settings, string $idList): void
+    {
+        $this->previewStory('requirement', $view, $settings, $idList);
     }
 
     /**
@@ -1202,6 +1219,36 @@ class docZen extends doc
         if($action === 'preview' && $view === 'setting')
         {
             $data = $this->loadModel('story')->getExecutionStories((int)$settings['execution'], 0, '', $settings['condition'], '', 'story');
+        }
+        elseif($view === 'list')
+        {
+            $data = $this->loadModel('story')->getByList($idList);
+        }
+
+        $this->view->cols = $cols;
+        $this->view->data = $data;
+    }
+
+    /**
+     * 预览需求列表。
+     * Preview story list.
+     *
+     * @param  string    $storyType
+     * @param  string    $view
+     * @param  array     $settings
+     * @param  string    $idList
+     * @access protected
+     * @return void
+     */
+    protected function previewStory(string $storyType, string $view, array $settings, string $idList): void
+    {
+        $cols   = $this->loadModel('datatable')->getSetting('product', 'browse');
+        $data   = array();
+        $action = $settings['action'];
+
+        if($action === 'preview' && $view === 'setting')
+        {
+            $data = $this->loadModel('product')->getStories((int)$settings['product'], '', $settings['condition'], 0, 0, $storyType);
         }
         elseif($view === 'list')
         {
