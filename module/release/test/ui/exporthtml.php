@@ -18,3 +18,23 @@ cid=73
  - 最终测试状态 @SUCCESS
 
 */
+chdir(__DIR__);
+include '../lib/exporthtml.ui.class.php';
+
+$product = zenData('product');
+$product->id->range('1');
+$product->name->range('产品1');
+$product->type->range('normal');
+$product->gen(1);
+
+$system = zenData('system');
+$system->id->range('1');
+$system->product->range('1');
+$system->name->range('应用AAA');
+$system->status->range('active');
+$system->createdBy->range('admin');
+$system->gen(1);
+
+$release = zenData('release');
+$release->id->range('1');
+$release->project->range('0');
