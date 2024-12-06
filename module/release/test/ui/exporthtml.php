@@ -38,3 +38,21 @@ $system->gen(1);
 $release = zenData('release');
 $release->id->range('1');
 $release->project->range('0');
+$release->product->range('1');
+$release->branch->range('0');
+$release->name->range('发布1');
+$release->system->range('1');
+$release->stories->range('[]');
+$release->bugs->range('[]');
+$release->desc->range('描述111');
+$release->deleted->range('0');
+$release->gen(1);
+
+$tester = new exportHtmlTester();
+$tester->login();
+
+//设置导出发布数据
+$release = array(
+    array('filename' => ''),
+    array('filename' => '导出文件1'),
+    array('filename' => '导出文件2', 'exportdata' => '解决的Bug'),
