@@ -202,9 +202,12 @@ class thinkStepBase extends wg
         }
         if(!$isRun)
         {
-            $multicolumnTip = (!empty($sourceQuestion) && !empty($questionType) && $questionType == 'multicolumn') ? div(setClass('text-sm text-gray-400 leading-loose mt-2'), $lang->thinkstep->tips->multicolumn) : null;
-            $scoreTip       = (!empty($sourceQuestion) && !empty($questionType) && $questionType == 'score') ? div(setClass('text-sm text-gray-400 leading-loose mt-2'), $lang->thinkstep->tips->score) : null;
 
+            $multicolumnTip = (!empty($sourceQuestion) && !empty($questionType) && $questionType == 'multicolumn') ? div(setClass('text-sm text-gray-400 leading-loose mt-2'), $lang->thinkstep->tips->multicolumn) : null;
+            if(!empty($sourceQuestion) && !empty($questionType) && $questionType == 'score')
+            {
+                $scoreTip = empty($step->options->fields) ? div(setClass('text-sm text-gray-400 leading-loose mt-2'), $lang->thinkstep->tips->score) : null;
+            }
             $detailTip[] = array
             (
                 !empty($sourceQuestion) ? array(
@@ -215,7 +218,7 @@ class thinkStepBase extends wg
                         $sourceItems
                     ),
                     $multicolumnTip,
-                    $scoreTip
+                    !empty($scoreTip) ? $scoreTip : null
                 ) : null,
                 (!empty($quotedQuestions) && !$preViewModel) ? div
                 (
