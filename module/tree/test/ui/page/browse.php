@@ -22,7 +22,12 @@ class browsePage extends page
             'modalText'    => "//div[contains(@class,'modal-body')]//div[text()!='']",
             'modalConfirm' => "//button[@z-key='confirm']",
             /* 编辑弹窗中元素 */
-            'editSubmitBtn' => "//*[@id='zin_tree_edit_form']//button[@type='submit']"
+            'editSubmitBtn' => "//*[@id='zin_tree_edit_form']//button[@type='submit']",
+            /* 历史记录相关元素 */
+            'historya' => "(//div[@class='item-title'])[1]/div",
+            'historyb' => "(//div[@class='item-title'])[2]/div",
+            'historyc' => "(//div[@class='item-title'])[3]/div",
+            'historyd' => "(//div[@class='item-title'])[4]/div"
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
