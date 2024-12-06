@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace zin;
 
-$fnGenerateFormRows = function () use ($lang)
+$fnGenerateFormRows = function () use ($lang, $settings)
 {
     $productList = $this->loadModel('product')->getPairs();
     $this->app->loadLang('testcase');
@@ -21,6 +21,7 @@ $fnGenerateFormRows = function () use ($lang)
                 set::required(),
                 set::control(array('contorl' => 'picker', 'required' => false, 'maxItemsCount' => 50)),
                 set::items($productList),
+                set::value(isset($settings['product']) ? $settings['product'] : ''),
                 span
                 (
                     setClass('error-tip text-danger hidden'),
@@ -38,6 +39,7 @@ $fnGenerateFormRows = function () use ($lang)
                 set::required(),
                 set::control(array('contorl' => 'picker', 'required' => false, 'maxItemsCount' => 50)),
                 set::items($conditions),
+                set::value(isset($settings['condition']) ? $settings['condition'] : ''),
                 span
                 (
                     setClass('error-tip text-danger hidden'),

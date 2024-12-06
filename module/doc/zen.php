@@ -1058,10 +1058,11 @@ class docZen extends doc
      */
     protected function previewPlanStory(string $view, array $settings, string $idList): void
     {
-        $cols = $this->loadModel('datatable')->getSetting('product', 'browse');
-        $data = array();
+        $cols   = $this->loadModel('datatable')->getSetting('product', 'browse');
+        $data   = array();
+        $action = $settings['action'];
 
-        if($settings['action'] === 'preview' && $view === 'setting')
+        if($action === 'preview' && $view === 'setting')
         {
             $data = $this->loadModel('story')->getPlanStories((int)$settings['plan']);
         }
@@ -1109,10 +1110,11 @@ class docZen extends doc
     protected function previewProductCase(string $view, array $settings, string $idList): void
     {
         $this->loadModel('testcase');
-        $cols = $this->config->testcase->dtable->fieldList;
-        $data = array();
+        $cols   = $this->config->testcase->dtable->fieldList;
+        $data   = array();
+        $action = $settings['action'];
 
-        if(!empty($_POST) && $view === 'setting')
+        if($action === 'preview' && $view === 'setting')
         {
             $data = $this->loadModel('testcase')->getTestCases((int)$settings['product'], '', $settings['condition'], 0, 0);
         }
