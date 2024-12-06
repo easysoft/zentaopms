@@ -79,6 +79,25 @@ class doc extends control
      */
     public function buildZentaoList(string $type)
     {
+        if(isset($_POST['conditionAction']))
+        {
+            $action = $_POST['conditionAction'];
+            $index  = (int)$_POST['conditionIndex'];
+            if($action === 'add')
+            {
+                array_splice($_POST['andor'],    $index + 1, 0, 'and');
+                array_splice($_POST['field'],    $index + 1, 0, '');
+                array_splice($_POST['operator'], $index + 1, 0, 'include');
+                array_splice($_POST['value'],    $index + 1, 0, '');
+            }
+            elseif($action === 'remove')
+            {
+                array_splice($_POST['andor'],    $index, 1);
+                array_splice($_POST['field'],    $index, 1);
+                array_splice($_POST['operator'], $index, 1);
+                array_splice($_POST['value'],    $index, 1);
+            }
+        }
         $sessionName = 'zentaoList' . $type;
         $this->session->set($sessionName, $_POST);
 
