@@ -51,7 +51,11 @@ $fnGenerateCustomSearch = function () use ($lang, $config, $settings, $fnGenerat
     $this->loadModel('product');
     $this->loadModel('search');
     $items = array();
-    return null;
+
+    foreach ($settings as $index => $form)
+    {
+        $items[] = $fnGenerateCustomSearchItem($index, $form);
+    }
 
     return div
     (
