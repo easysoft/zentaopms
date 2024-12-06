@@ -144,7 +144,7 @@ class repoModel extends model
         $repos = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq('0')
             ->andWhere('SCM')->in($scm)
             ->andWhere('synced')->eq(1)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         foreach($repos as $i => $repo)
         {
