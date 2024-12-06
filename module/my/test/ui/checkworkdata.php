@@ -72,15 +72,36 @@ $story->closedBy->range('{3},admin{3},{7},admin{2},{6},admin{2},{4}');
 $story->reviewedBy->range('admin{3},{7},admin{3},{8},admin{2},{4}');
 $story->deleted->range('0');
 $story->gen(27);
+
 $storyspec = zenData('storyspec');
 $storyspec->story->range('1-27');
 $storyspec->version->range('1');
 $storyspec->title->range('研需01,研需02,研需03,研需04,研需05,研需06,研需07,研需08,研需09,研需10,用需01,用需02,用需03,用需04,用需05,用需06,用需07,业需01,业需02,业需03,业需04,业需05,业需06,业需07,业需08,业需09,业需10');
 $storyspec->gen(27);
+
 $storyreview = zenData('storyreview');
 $storyreview->story->range('1-27');
 $storyreview->reviewer->range('admin');
 $storyreview->result->range('pass{6},{4},pass{3},{9},pass{2},{4}');
 $storyreview->gen(27);
+
+$bug = zenData('bug');
+$bug->id->range('1-7');
+$bug->product->range('1');
+$bug->project->range('1');
+$bug->execution->range('2');
+$bug->module->range('0');
+$bug->plan->range('0');
+$bug->story->range('0');
+$bug->storyVersion->range('0');
+$bug->openedBuild->range('trunk');
+$bug->title->range('bug1,bug2,bug3,bug4,bug5,bug6,bug7');
+$bug->status->range('closed{2},resolved,active{4}');
+$bug->assignedTo->range('closed{2},admin{3},{2}');
+$bug->resolvedBy->range('admin{3},{4}');
+$bug->resolvedBuild->range('trunk{3},{4}');
+$bug->resolution->range('fixed{3},{4}');
+$bug->closedBy->range('admin{2},{5}');
+$bug->gen(7);
 
 $tester->closeBrowser();
