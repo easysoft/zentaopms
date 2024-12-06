@@ -17,7 +17,9 @@ class browsePage extends page
             'bugName'       => '//*[@id="mainContent"]//span[contains(text(), "bug")]',
             'bugLabel'      => '(//label[last()])',
             'bugCount'      => "//div[@id='mainContainer']//tbody/tr",
-            'save'          => "//button[@type='button']/span[text()]/../preceding-sibling::button[@type='submit']/span[text()]"
+            'save'          => "//button[@type='button']/span[text()]/../preceding-sibling::button[@type='submit']/span[text()]",
+            'bugID'         => "//div[@data-col='id' and @data-type='checkID']/div[text()]",
+            'bugTitle'      => "//div[@data-col='title' and @data-type='title']/div/a[text() and @data-app]"
         );
 
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
