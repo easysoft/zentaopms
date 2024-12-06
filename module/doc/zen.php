@@ -1192,15 +1192,15 @@ class docZen extends doc
      * @access protected
      * @return void
      */
-    protected function previewExecutionStory(string $view, string $idList): void
+    protected function previewExecutionStory(string $view, array $settings, string $idList): void
     {
-        $cols = $this->loadModel('datatable')->getSetting('execution', 'story', false, 'story');
-        unset($cols['actions']);
+        $cols   = $this->loadModel('datatable')->getSetting('execution', 'story', false, 'story');
+        $data   = array();
+        $action = $settings['action'];
 
-        $data = array();
-        if(!empty($_POST) && $view === 'setting')
+        if($action === 'preview' && $view === 'setting')
         {
-            $data = $this->loadModel('story')->getExecutionStories((int)$this->post->execution, 0, '', $this->post->search, '', 'story');
+            $data = $this->loadModel('story')->getExecutionStories((int)$settings['execution'], 0, '', $settings['condition'], '', 'story');
         }
         elseif($view === 'list')
         {

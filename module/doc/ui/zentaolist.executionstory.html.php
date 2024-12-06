@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace zin;
 
-$fnGenerateFormRows = function () use ($lang)
+$fnGenerateFormRows = function () use ($lang, $settings)
 {
     $executions = $this->loadModel('execution')->getPairs();
 
@@ -19,7 +19,8 @@ $fnGenerateFormRows = function () use ($lang)
                 set::width('1/2'),
                 set::name('execution'),
                 set::label($lang->doc->execution),
-                set::items($executions)
+                set::items($executions),
+                set::value(isset($settings['execution']) ? $settings['execution'] : null)
             )
         ),
         formRow
@@ -27,9 +28,10 @@ $fnGenerateFormRows = function () use ($lang)
             formGroup
             (
                 set::width('1/2'),
-                set::name('search'),
+                set::name('condition'),
                 set::label($lang->doc->searchCondition),
-                set::items($searchConditions)
+                set::items($searchConditions),
+                set::value(isset($settings['condition']) ? $settings['condition'] : null)
             )
         )
     );
