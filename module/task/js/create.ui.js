@@ -626,6 +626,14 @@ window.renderRowData = function($row, index, row)
 {
     const mode = $('[name=mode]').val();
     $row.find('[data-name=id]').addClass('center').html("<span class='team-number'>" + $row.find('[data-name=id]').text() + "</span><i class='icon-angle-down " + (mode == 'linear' ? '' : 'hidden') + "'><i/>");
+
+    /* 复制上一行的人员下拉。*/
+    $row.find('[data-name=team]').find('.picker-box').on('inited', function(e, info)
+    {
+        const $team = info[0];
+        const $preTeam = $row.prev().find('input[name^=team]').zui('picker');
+        if($preTeam != undefined) $team.render({items: $preTeam.options.items});
+    })
 }
 
 parentEstStarted         = '';
