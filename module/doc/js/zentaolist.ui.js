@@ -3,9 +3,10 @@ function getType()
     return $('#zentaolist').data('type');
 }
 
-function getParams()
+function getSettings(formData = false)
 {
-    return $('#zentaolist').data('params');
+    const settings = $('#zentaolist').data('settings');
+    return formData ? zui.createFormData(settings) : settings;
 }
 
 function getValue(name)
@@ -44,18 +45,20 @@ function checkForm(form, formData)
 
 window.backToSet = function()
 {
-    const url = $.createLink('doc', 'zentaolist', 'type=' + getType() + '&view=setting&params=' + getParams());
-    loadPage(url);
+    const formData = getSettings(true);
+    loadWithForm(formData, 'setting');
 }
 
-function formDataConvertParams(formData)
+function loadWithForm(formData, view = 'setting')
 {
-    let params = '';
-    for (let [name, value] of formData.entries()) {
-        if(params) params += ',';
-        params += `${name}=${value}`;
-    };
-    return params;
+    const sessionUrl = $.createLink('doc', 'buildZentaoList', 'type=' + getType());
+    const loadUrl    = $.createLink('doc', 'zentaolist', 'type=' + getType() + '&view=' + view);
+
+    $.post(sessionUrl, formData, function(data)
+    {
+        data = JSON.parse(data);
+        if(data.result == 'success') loadPage(loadUrl);
+    });
 }
 
 function preview()
@@ -64,9 +67,8 @@ function preview()
     const formData = new FormData(form[0]);
     if(!checkForm(form[0], formData)) return;
 
-    const params = formDataConvertParams(formData);
-    const url    = $.createLink('doc', 'zentaolist', 'type=' + getType() + '&view=setting&params=' + params);
-    loadPage(url);
+    formData.append('action', 'preview');
+    loadWithForm(formData);
 }
 
 function insert()
@@ -82,11 +84,20 @@ function insert()
 
     const form     = $('#zentaolist form');
     const formData = new FormData(form[0]);
-    const url = $.createLink('doc', 'zentaolist', 'type=' + getType() + '&view=list&params=' + getParams() + '&idList=' + checkedList.join(','));
-    loadPage(url);
+    formData.append('action', 'insert');
+    formData.append('idList', checkedList.join(','));
+    loadWithForm(formData, 'list');
 }
 
 function cancel()
+{
+}
+
+function addCustomSearchItem()
+{
+}
+
+function removeCustomSearchItem()
 {
 }
 
