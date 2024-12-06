@@ -364,23 +364,24 @@ class cache
      */
     private function create()
     {
+        $code         = $this->getTableCode();
+        $setCacheKey  = $this->getSetCacheKey($code);
+        $objectIdList = $this->cache->get($setCacheKey);
+        if(!is_array($objectIdList)) return;
+
         $objectID = $this->dao->lastInsertID();
         if(!$objectID) return $this->log('Failed to fetch last insert id.', __FILE__, __LINE__);
-
-        $field = $this->getTableField();
-        $code  = $this->getTableCode();
 
         /* 获取新增的数据。Get the new data. */
         $object = $this->dao->select('*')->from($this->table)->where('id')->eq($objectID)->fetch();
         if(!$object) return $this->log('Failed to fetch new object. The sql is: ' . $this->dao->get(), __FILE__, __LINE__);
 
         /* 把新增的数据保存到缓存中。Save the new data to cache. */
+        $field       = $this->getTableField();
         $rawCacheKey = $this->getRawCacheKey($code, $object->$field);
         $this->cache->set($rawCacheKey, $object);
 
         /* 把新增的数据的 id 保存到缓存中。Save the id of the new data to cache. */
-        $setCacheKey  = $this->getSetCacheKey($code);
-        $objectIdList = $this->cache->get($setCacheKey);
         $this->cache->set($setCacheKey, $objectIdList ? array_merge($objectIdList, [$object->$field]) : [$object->$field]);
 
         if(empty($this->config->cache->res[$this->table])) return;
@@ -443,8 +444,12 @@ class cache
     {
         if(empty($this->objects)) return $this->log('No objects to delete.', __FILE__, __LINE__);
 
+        $code         = $this->getTableCode();
+        $setCacheKey  = $this->getSetCacheKey($code);
+        $objectIdList = $this->cache->get($setCacheKey);
+        if(!is_array($objectIdList)) return;
+
         $field = $this->getTableField();
-        $code  = $this->getTableCode();
 
         /* 把被删除的数据从缓存中删除。Delete the deleted data from cache. */
         $affectedKeys = [];
@@ -452,9 +457,7 @@ class cache
         $this->cache->deleteMultiple($affectedKeys);
 
         /* 把被删除的数据的 id 从缓存中删除。Delete the id of the deleted data from cache. */
-        $setCacheKey  = $this->getSetCacheKey($code);
-        $objectIdList = $this->cache->get($setCacheKey);
-        if($objectIdList) $this->cache->set($setCacheKey, array_diff($objectIdList, array_map(function($object) use ($field) { return $object->$field; }, $this->objects)));
+        $this->cache->set($setCacheKey, array_diff($objectIdList, array_map(function($object) use ($field) { return $object->$field; }, $this->objects)));
 
         if(empty($this->config->cache->res[$this->table])) return;
 
