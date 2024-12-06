@@ -1058,7 +1058,7 @@ class docZen extends doc
      */
     protected function previewPlanStory(string $view, array $settings, string $idList): void
     {
-        $cols   = $this->loadModel('datatable')->getSetting('product', 'browse');
+        $cols   = $this->loadModel('datatable')->getSetting('bug', 'browse');
         $data   = array();
         $action = $settings['action'];
 
@@ -1069,6 +1069,32 @@ class docZen extends doc
         elseif($view === 'list')
         {
             $data = $this->loadModel('story')->getByList($idList);
+        }
+
+        $this->view->cols = $cols;
+        $this->view->data = $data;
+    }
+
+    /**
+     * 预览产品计划下的内容列表。
+     * Preview plan story.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function previewPlanBug(string $view, array $settings, string $idList): void
+    {
+        $cols   = $this->loadModel('datatable')->getSetting('product', 'browse');
+        $data   = array();
+        $action = $settings['action'];
+
+        if($action === 'preview' && $view === 'setting')
+        {
+            $data = $this->loadModel('bug')->getPlanBugs((int)$settings['plan']);
+        }
+        elseif($view === 'list')
+        {
+            $data = $this->loadModel('bug')->getByIdList($idList);
         }
 
         $this->view->cols = $cols;
