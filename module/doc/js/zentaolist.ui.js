@@ -49,7 +49,7 @@ window.backToSet = function()
     loadWithForm(formData, 'setting');
 }
 
-function loadWithForm(formData, view = 'setting')
+function loadWithForm(formData, view = 'setting', action = 'load')
 {
     const sessionUrl = $.createLink('doc', 'buildZentaoList', 'type=' + getType());
     const loadUrl    = $.createLink('doc', 'zentaolist', 'type=' + getType() + '&view=' + view);
@@ -57,7 +57,7 @@ function loadWithForm(formData, view = 'setting')
     $.post(sessionUrl, formData, function(data)
     {
         data = JSON.parse(data);
-        if(data.result == 'success') loadPage(loadUrl);
+        if(data.result == 'success') action === 'load' ? loadPage(loadUrl) : loadCurrentPage('#customSearchContent');
     });
 }
 
@@ -93,12 +93,27 @@ function cancel()
 {
 }
 
-function addCustomSearchItem()
+function changeCondition()
 {
+    const condition = getValue('condition');
+    if(condition == 'customSearch')
+    {
+        $('#customSearchContent').removeClass('hidden');
+    }
+    else
+    {
+        $('#customSearchContent').addClass('hidden');
+    }
 }
 
-function removeCustomSearchItem()
+window.updateCustomSearchItem = function($this, action)
 {
+    const index    = $this.data('index');
+    const form     = $('#zentaolist form');
+    const formData = new FormData(form[0]);
+    formData.append('conditionAction', action);
+    formData.append('conditionIndex',  index);
+    loadWithForm(formData, 'setting', 'post');
 }
 
 function changeProduct()

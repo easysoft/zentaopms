@@ -5,29 +5,35 @@ namespace zin;
 $fnGenerateCustomSearchItem = function ($index, $form) use ($lang, $config)
 {
     list($andor, $field, $operator, $value) = $form;
+    $isFirst = $index === 0;
     return formRow
     (
         setClass('flex gap-x-2'),
-        $index !== 0 ? formGroup
+        setID('row' . $index),
+        formGroup
         (
+            setClass(array('hidden' => $isFirst)),
             set::width('22'),
-            set::name('andor'),
+            setID('andor' . $index),
+            set::name('andor[]'),
             set::control(array('required' => true)),
             set::items($lang->search->andor),
             set::value($andor)
-        ) : null,
+        ),
         formGroup
         (
-            set::width($index === 0 ? '56' : '32'),
-            set::label($index === 0 ? $lang->doc->customSearch : null),
-            set::name("field$index"),
+            set::width($isFirst ? '56' : '32'),
+            set::label($isFirst ? $lang->doc->customSearch : null),
+            setID('field' . $index),
+            set::name("field[]"),
             set::items($config->product->search['fields']),
             set::value($field)
         ),
         formGroup
         (
             set::width('20'),
-            set::name("operator$index"),
+            setID('operator' . $index),
+            set::name("operator[]"),
             set::control(array('required' => true)),
             set::items($lang->search->operators),
             set::value($operator)
@@ -35,13 +41,14 @@ $fnGenerateCustomSearchItem = function ($index, $form) use ($lang, $config)
         formGroup
         (
             set::width('60'),
-            set::name("value$index"),
+            setID('value' . $index),
+            set::name("value[]"),
             set::value($value)
         ),
         btnGroup
         (
-            btn(set(array('type' => 'ghost', 'icon' => 'plus',  'class' => 'search-add'))),
-            btn(set(array('type' => 'ghost', 'icon' => 'minus', 'class' => array('search-remove', 'hidden' => $index == 0))))
+            btn(set(array('type' => 'ghost', 'icon' => 'plus',  'data-index' => $index, 'class' => 'search-add'))),
+            btn(set(array('type' => 'ghost', 'icon' => 'minus', 'data-index' => $index, 'class' => array('search-remove', 'hidden' => $isFirst))))
         )
     );
 };
@@ -51,19 +58,23 @@ $fnGenerateCustomSearch = function () use ($lang, $config, $settings, $fnGenerat
     $this->loadModel('product');
     $this->loadModel('search');
     $items = array();
+    $condition = zget($settings, 'condition', '');
+    $isCustom  = $condition === 'customSearch';
 
-    foreach ($settings as $index => $form)
+    foreach($settings['field'] as $index => $field)
     {
-        $items[] = $fnGenerateCustomSearchItem($index, $form);
+        $andor    = $settings['andor'][$index];
+        $operator = $settings['operator'][$index];
+        $value    = $settings['value'][$index];
+        $items[]  = $fnGenerateCustomSearchItem($index, array($andor, $field, $operator, $value));
     }
 
     return div
     (
         setID('customSearchContent'),
-        setClass('flex col gap-y-2'),
-        set('data-searchform', $searchForm),
+        setClass('flex col gap-y-2', array('hidden' => !$isCustom)),
         $items,
-        on::click('#customSearchContent .search-add', "addCustomSearchItem"),
-        on::click('#customSearchContent .search-remove', "removeCustomSearchItem")
+        on::click('#customSearchContent .search-add')->do("updateCustomSearchItem(\$this, 'add')"),
+        on::click('#customSearchContent .search-remove')->do("updateCustomSearchItem(\$this, 'remove')")
     );
 };
