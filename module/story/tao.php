@@ -2480,8 +2480,8 @@ class storyTao extends storyModel
      */
     public function getTasksForTrack(array $storyIdList): array
     {
-        $stmt  = $this->dao->select('id,project,execution,mode,pri,status,color,name as title,assignedTo,story,estimate,consumed,`left`,parent')->from(TABLE_TASK)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->orderBy('project,execution')->query();
-        $tasks = array();
+        $stmt       = $this->dao->select('id,project,execution,mode,pri,status,color,name as title,assignedTo,story,estimate,consumed,`left`,parent,isParent,path')->from(TABLE_TASK)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->orderBy('project,execution,isParent_desc,path')->query();
+        $tasks      = array();
         $multiTasks = array();
         while($task = $stmt->fetch())
         {
@@ -2489,31 +2489,17 @@ class storyTao extends storyModel
             if($task->consumed + $task->left) $task->progress = round(($task->consumed / ($task->consumed + $task->left)) * 100, 2);
             if($task->mode == 'multi') $multiTasks[$task->id] = $task->id;
 
-            if($task->parent > 0 && isset($tasks[$task->parent]))
-            {
-                $tasks[$task->parent]->children[$task->id] = $task;
-            }
-            else
-            {
-                $tasks[$task->id] = $task;
-            }
+            $tasks[$task->id] = $task;
         }
 
+        $tasks     = $this->loadModel('task')->mergeChildIntoParent($tasks);
         $taskTeams = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in($multiTasks)->fetchGroup('task', 'account');
         $taskGroup = array();
         $account   = $this->app->user->account;
         foreach($tasks as $task)
         {
-            $children = !empty($task->children) ? $task->children : array();
-            unset($task->children);
-
             $taskGroup[$task->story][$task->id] = $task;
             if(isset($taskTeams[$task->id])) $task->assignedTo = isset($taskTeams[$task->id][$account]) ? $account : $this->lang->task->team;
-            foreach($children as $subTask)
-            {
-                if(isset($taskTeams[$subTask->id]) && empty($subTask->assignedTo)) $subTask->assignedTo = isset($taskTeams[$task->id][$account]) ? $account : $this->lang->task->team;
-                $taskGroup[$subTask->story][$subTask->id] = $subTask;
-            }
         }
         return $taskGroup;
     }
