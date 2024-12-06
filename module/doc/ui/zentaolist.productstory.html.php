@@ -24,30 +24,4 @@ $fnGenerateFormRows = function () use ($lang, $settings)
             $searchConditions[$key] = $label;
         }
     }
-
-    return array
-    (
-        formRow
-        (
-            formGroup
-            (
-                set::width('1/2'),
-                set::name('product'),
-                set::label($lang->doc->product),
-                set::items($products),
-                set::value(isset($settings['product']) ? $settings['product'] : '')
-            )
-        ),
-        formRow
-        (
-            formGroup
-            (
-                set::width('1/2'),
-                set::name('condition'),
-                set::label($lang->doc->searchCondition),
-                set::items($searchConditions),
-                set::value(isset($settings['condition']) ? $settings['condition'] : '')
-            )
-        )
-    );
 };
