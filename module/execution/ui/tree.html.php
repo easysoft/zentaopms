@@ -52,6 +52,7 @@ toolbar
         'icon'  => 'bar-chart',
         'text'  => $lang->task->report->common,
         'class' => 'ghost',
+        'data-app' => $app->tab,
         'url'   => createLink('task', 'report', "execution={$executionID}&browseType={$browseType}")
     ))) : null,
     hasPriv('task', 'export') ? item(set(array
