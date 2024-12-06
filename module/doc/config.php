@@ -132,10 +132,11 @@ $config->doc->zentaoList['task']               = array('name' => 'task',        
 $config->doc->zentaoList['case']               = array('name' => 'case',               'icon' => 'testcase', 'subMenu' => array());
 $config->doc->zentaoList['case']['subMenu'][]  = array('name' => 'productCase',        'icon' => 'testcase', 'subMenu' => array());
 $config->doc->zentaoList['case']['subMenu'][]  = array('name' => 'caselib',            'icon' => 'testcase', 'subMenu' => array());
-$config->doc->zentaoList['bug']                = array('name' => 'bug',                'icon' => 'bug');
+$config->doc->zentaoList['bug']                = array('name' => 'bug',                'icon' => 'bug', 'subMenu' => array());
+$config->doc->zentaoList['bug']['subMenu'][]   = array('name' => 'productBug',         'icon' => 'bug');
+$config->doc->zentaoList['bug']['subMenu'][]   = array('name' => 'planBug',         'icon' => 'bug');
 $config->doc->zentaoList['more']               = array('name' => 'more',               'icon' => 'more', 'subMenu' => array());
 $config->doc->zentaoList['more']['subMenu'][]  = array('name' => 'productPlan',        'icon' => 'lightbulb-alt');
-$config->doc->zentaoList['more']['subMenu'][]  = array('name' => 'productPlanContent', 'icon' => 'lightbulb-alt');
 $config->doc->zentaoList['more']['subMenu'][]  = array('name' => 'productRelease',     'icon' => 'lightbulb-alt');
 $config->doc->zentaoList['more']['subMenu'][]  = array('name' => 'ER',                 'icon' => 'lightbulb-alt');
 $config->doc->zentaoList['more']['subMenu'][]  = array('name' => 'UR',                 'icon' => 'lightbulb-alt');

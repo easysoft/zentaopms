@@ -270,8 +270,10 @@ $lang->doc->zentaoList['case']        = $lang->testcase->common;
 $lang->doc->zentaoList['productCase'] = $lang->productCommon . $lang->testcase->common;
 $lang->doc->zentaoList['caselib']     = '用例库' . $lang->testcase->common;
 
-$lang->doc->zentaoList['task'] = $lang->task->common;
-$lang->doc->zentaoList['bug']  = $lang->bug->common;
+$lang->doc->zentaoList['task']       = $lang->task->common;
+$lang->doc->zentaoList['bug']        = $lang->bug->common;
+$lang->doc->zentaoList['productBug'] = '产品Bug列表';
+$lang->doc->zentaoList['planBug']    = '计划Bug列表';
 
 $lang->doc->zentaoList['more']               = '更多';
 $lang->doc->zentaoList['productPlan']        = $lang->productCommon . '下计划';

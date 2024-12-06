@@ -1050,39 +1050,13 @@ class docZen extends doc
     }
 
     /**
-     * 预览计划需求。
-     * Preview plan story.
-     *
-     * @access protected
-     * @return void
-     */
-    protected function previewPlanStory(string $view, array $settings, string $idList): void
-    {
-        $cols   = $this->loadModel('datatable')->getSetting('product', 'browse');
-        $data   = array();
-        $action = $settings['action'];
-
-        if($action === 'preview' && $view === 'setting')
-        {
-            $data = $this->loadModel('story')->getPlanStories((int)$settings['plan']);
-        }
-        elseif($view === 'list')
-        {
-            $data = $this->loadModel('story')->getByList($idList);
-        }
-
-        $this->view->cols = $cols;
-        $this->view->data = $data;
-    }
-
-    /**
      * 预览产品计划下的内容列表。
      * Preview plan story.
      *
      * @access protected
      * @return void
      */
-    protected function previewProductPlanContent(string $view, array $settings, string $idList): void
+    protected function previewPlanStory(string $view, array $settings, string $idList): void
     {
         $cols   = $this->loadModel('datatable')->getSetting('product', 'browse');
         $data   = array();
