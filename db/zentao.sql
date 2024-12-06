@@ -164,7 +164,7 @@ CREATE TABLE IF NOT EXISTS `zt_approval` (
   `version` mediumint(9) NOT NULL DEFAULT '0',
   `status` varchar(20) NOT NULL DEFAULT 'doing',
   `result` varchar(20) NOT NULL DEFAULT '',
-  `extra` text NULL;
+  `extra` text NULL,
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `deleted` tinyint(4) NOT NULL DEFAULT '0',

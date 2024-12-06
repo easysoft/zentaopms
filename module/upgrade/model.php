@@ -10510,4 +10510,27 @@ class upgradeModel extends model
 
         return true;
     }
+
+    /**
+     * 对立项附件配置做升级处理。
+     * Process charter file config.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processCharterFileConfig()
+    {
+        $oldCharterFileConfig = $this->loadModel('custom')->getItems('owner=system&module=charter&section=charterList&vision=or');
+        if(!$oldCharterFileConfig) return false;
+
+        $projectApprovalFiles = array();
+        foreach($oldCharterFileConfig as $oldCharterFile) $projectApprovalFiles[] = array('index' => $oldCharterFile->key, 'name' => $oldCharterFile->value);
+
+        $charterFiles = json_decode($this->config->custom->charterFiles, true);
+        foreach($charterFiles as $index => $charterFile) $charterFiles[$index]['projectApproval'] = $projectApprovalFiles;
+
+        $this->loadModel('setting')->setItem('system.custom.charterFiles', json_encode($charterFiles));
+
+        return true;
+    }
 }
