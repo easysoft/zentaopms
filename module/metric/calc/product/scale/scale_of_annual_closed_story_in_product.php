@@ -32,7 +32,7 @@ class scale_of_annual_closed_story_in_product extends baseCalc
         $closedDate = $data->closedDate;
         $estimate   = $data->estimate;
 
-        if($row->isParent == '1') return false;
+        if($data->isParent == '1') return false;
 
         $year = $this->getYear($closedDate);
         if(!$year) return false;

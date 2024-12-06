@@ -31,7 +31,7 @@ class scale_of_story_in_product extends baseCalc
         $product    = $data->product;
         $estimate   = $data->estimate;
 
-        if($row->isParent == '1') return false;
+        if($data->isParent == '1') return false;
 
         if(!isset($this->result[$product])) $this->result[$product] = 0;
 

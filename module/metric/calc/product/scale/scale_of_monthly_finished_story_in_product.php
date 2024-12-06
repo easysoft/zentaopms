@@ -33,7 +33,7 @@ class scale_of_monthly_finished_story_in_product extends baseCalc
         $closedReason = $data->closedReason;
         $estimate     = $data->estimate;
 
-        if($row->isParent == '1') return false;
+        if($data->isParent == '1') return false;
         if($closedReason != 'done') return false;
 
         $year = $this->getYear($closedDate);
