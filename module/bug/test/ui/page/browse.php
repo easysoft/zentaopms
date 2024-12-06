@@ -19,7 +19,9 @@ class browsePage extends page
             'bugCount'      => "//div[@id='mainContainer']//tbody/tr",
             'save'          => "//button[@type='button']/span[text()]/../preceding-sibling::button[@type='submit']/span[text()]",
             'bugID'         => "//div[@data-col='id' and @data-type='checkID']/div[text()]",
-            'bugTitle'      => "//div[@data-col='title' and @data-type='title']/div/a[text() and @data-app]"
+            'bugTitle'      => "//div[@data-col='title' and @data-type='title']/div/a[text() and @data-app]",
+            'bugStatus'     => "//div[@data-col='status' and @data-type='status']/div/span[text()]",
+            'closeComment'  => "//zen-editor[@id='comment']",
         );
 
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
