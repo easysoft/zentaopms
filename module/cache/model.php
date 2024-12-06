@@ -18,12 +18,14 @@ class cacheModel extends model
      * @access public
      * @return void
      */
-    public function clear()
+    public function clear($needStart = true)
     {
         /* 多应用共享时采用遍历删除的方式，所以需要先关闭缓存，清空之后再打开。When multiple applications share the cache, the cache needs to be closed first, cleared, and then opened. */
-        $needStop = $this->config->cache->scope == 'shared';
+        $needStop = $this->config->cache->enable && $this->config->cache->scope == 'shared';
         if($needStop) $this->loadModel('setting')->setItem('system.common.cache.enable', 0);
+
         $this->mao->clearCache();
-        if($needStop) $this->setting->setItem('system.common.cache.enable', 1);
+
+        if($needStop && $needStart) $this->loadModel('setting')->setItem('system.common.cache.enable', 1);
     }
 }
