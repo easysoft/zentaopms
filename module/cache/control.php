@@ -74,7 +74,7 @@ class cache extends control
             $this->loadModel('setting')->setItems('system.common.cache', $cache);
             $this->setting->setItems('system.common.redis', $redis);
 
-            $this->cache->clear();
+            $this->cache->clear($cache->enable);
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
@@ -99,7 +99,7 @@ class cache extends control
      */
     public function flush()
     {
-        $this->cache->clear();
+        $this->cache->clear($this->config->cache->enable);
         return $this->send(array('result' => 'success', 'message' => $this->lang->cache->clearSuccess, 'load' => true));
     }
 }
