@@ -106,6 +106,20 @@ function getErrorType(phpErr) // 'error' | 'warning' | 'info'
     return 'info';
 }
 
+function renderErrorDetail(error, index)
+{
+    const phpErrType = getPhpErrType(error.level || error.type);
+    const errorType = getErrorType(phpErrType);
+    const classType = errorType === 'info' ? 'secondary' : errorType;
+    return [
+        `<details class="border rounded-lg border-${classType}" open>`,
+            `<summary class="${classType}-pale rounded-lg rounded-b-none px-2 py-1">#${index + 1} <span class="label ${classType} rounded-full size-sm mx-1">${phpErrType.toUpperCase()}</span> <strong>${error.message}</strong></summary>`,
+            `<div class="text-sm opacity-50 px-2 border-b py-1"><i class="icon icon-file"></i> ${error.file} <strong>Line ${error.line}</strong></div>`,
+            `<pre>${error.trace}</pre>`,
+        '</details>',
+    ].join('\n');
+}
+
 function getQueryUrl()
 {
     const search = new URLSearchParams($('#params').val());
