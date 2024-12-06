@@ -158,7 +158,7 @@ formPanel
             set::name('redis[password]'),
             set::type('password'),
             set::value($config->redis->password),
-            set::autocomplete('off')
+            set::autocomplete('new-password')
         )
     ),
     formGroup
