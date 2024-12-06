@@ -104,4 +104,26 @@ $bug->resolution->range('fixed{3},{4}');
 $bug->closedBy->range('admin{2},{5}');
 $bug->gen(7);
 
+$case = zenData('case');
+$case->id->range('1-5');
+$case->product->range('1');
+$case->project->range('0');
+$case->execution->range('2');
+$case->title->range('用例1,用例2,用例3,用例4,用例5');
+$case->type->range('feature');
+$case->status->range('normal');
+$case->openedBy->range('admin');
+$case->gen(5);
+
+$build = zenData('build');
+$build->id->range('1');
+$build->product->range('1');
+$build->project->range('1');
+$build->execution->range('2');
+$build->name->range('版本1');
+$build->gen(1);
+
+$testtask = zenData('testtask');
+$testtask->id->range('1');
+
 $tester->closeBrowser();
