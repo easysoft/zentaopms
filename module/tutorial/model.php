@@ -1864,10 +1864,14 @@ class tutorialModel extends model
     public function getSystem(): object
     {
         $system = new stdclass();
-        $system->id         = 1;
-        $system->name       = 'Test App';
-        $system->product    = 1;
-        $system->integrated = '0';
+        $system->id            = 1;
+        $system->name          = 'Test App';
+        $system->product       = 1;
+        $system->integrated    = '0';
+        $system->latestRelease = 0;
+        $system->status        = 'active';
+        $system->children      = '';
+        $system->desc          = '';
         return $system;
     }
 
