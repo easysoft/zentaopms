@@ -3366,30 +3366,16 @@ class execution extends control
      */
     public function flattenObjectArray(array $array = array())
     {
+        $this->loadModel('task');
+
         $result = array();
-
-        $sortTasks = function($parents, $parentID = 0) use(&$sortTasks)
-        {
-            $tasks = array();
-            if(!isset($parents[$parentID])) return $tasks;
-
-            foreach($parents[$parentID] as $childTask)
-            {
-                $tasks[$childTask->id] = $childTask;
-                if(isset($parents[$childTask->id])) $tasks += $sortTasks($parents, $childTask->id);
-            }
-            return $tasks;
-        };
-
         foreach($array as $key => $object)
         {
             $result[$object->id] = $object;
             $tasks = zget($object, 'tasks', array());
             if(empty($tasks)) continue;
 
-            $parents = array();
-            foreach($tasks as $task) $parents[$task->parent][$task->id] = $task;
-            $object->tasks = $sortTasks($parents);
+            $object->tasks = $this->task->mergeChildIntoParent($tasks);
         }
 
         return $result;

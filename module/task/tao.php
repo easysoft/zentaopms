@@ -1094,4 +1094,42 @@ class taskTao extends taskModel
         $this->dao->insert(TABLE_RELATION)->data($data)->exec();
         return;
     }
+
+    /**
+     * 归并子任务到父任务下。
+     * Merge child into parent
+     *
+     * @param  array  $tasks
+     * @access public
+     * @return array
+     */
+    public function mergeChildIntoParent(array $tasks): array
+    {
+        $mergeTasks = function($parents, $parentID = 0) use(&$mergeTasks)
+        {
+            $tasks = array();
+            if(!isset($parents[$parentID])) return $tasks;
+
+            foreach($parents[$parentID] as $childTask)
+            {
+                $tasks[$childTask->id] = $childTask;
+                if(isset($parents[$childTask->id])) $tasks += $mergeTasks($parents, $childTask->id);
+            }
+            return $tasks;
+        };
+
+        $parents = array();
+        foreach($tasks as $task) $parents[$task->parent][$task->id] = $task;
+
+        $mergedTasks = array();
+        foreach($tasks as $task)
+        {
+            if(isset($mergedTasks[$task->id])) continue;
+            if($task->parent && isset($tasks[$task->parent])) continue;
+
+            $mergedTasks[$task->id] = $task;
+            $mergedTasks           += $mergeTasks($parents, $task->id);
+        }
+        return $mergedTasks;
+    }
 }
