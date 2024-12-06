@@ -90,6 +90,22 @@ const $table            = $('#table');
 const metricsLevelNames = ['', 'BLOCK', 'WARN', 'PASS'];
 const metricsStats      = {warning: 0, danger: 0};
 
+const phpErrTypes = {'1': 'error', '2': 'warning', '4': 'parse', '8': 'notice', '16': 'core-error', '32': 'core-warning', '64': 'compile-error', '128': 'compile-warning', '256': 'user-error', '512': 'user-warning', '1024': 'user-notice', '2048': 'strict', '4096': 'recoverable-error', '8192': 'deprecated', '16384': 'user-deprecated', '32767': 'all'};
+
+function getPhpErrType(phpErr)
+{
+    if(typeof phpErr === 'number') phpErr = phpErrTypes[phpErr];
+    return phpErr;
+}
+
+function getErrorType(phpErr) // 'error' | 'warning' | 'info'
+{
+    phpErr = getPhpErrType(phpErr);
+    if(phpErr.includes('error')) return 'error';
+    if(phpErr.includes('warning')) return 'warning';
+    return 'info';
+}
+
 function getQueryUrl()
 {
     const search = new URLSearchParams($('#params').val());
