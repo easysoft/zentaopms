@@ -1572,7 +1572,18 @@ class docModel extends model
         $files   = $this->loadModel('file')->saveUpload('doc', $docID);
         $changes = common::createChanges($oldDoc, $doc);
         $changed = $files ? true : false;
-        foreach($changes as $change) if($change['field'] == 'content' || $change['field'] == 'title') $changed = true;
+        if(!$changed && isset($doc->rawContent)) $changed = (isset($oldDoc->rawContent) ? $oldDoc->rawContent : null) != $doc->rawContent;
+        if(!$changed)
+        {
+            foreach($changes as $change)
+            {
+                if($change['field'] == 'content' || $change['field'] == 'title' || $change['field'] == 'rawContent')
+                {
+                    $changed = true;
+                    break;
+                }
+            }
+        }
 
         if($changed)
         {
