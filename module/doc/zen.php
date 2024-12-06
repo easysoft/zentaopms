@@ -1018,6 +1018,14 @@ class docZen extends doc
         }
         if(!isset($session['action'])) $session['action'] = '';
 
+        if(!isset($session['field']))
+        {
+            $session['andor']    = array('and');
+            $session['field']    = array('');
+            $session['operator'] = array('include');
+            $session['value']    = array('');
+        }
+
         $idList = '';
         if(isset($session['idList']))
         {

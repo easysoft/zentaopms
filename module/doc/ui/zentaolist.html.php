@@ -13,7 +13,7 @@ set::zui();
 
 $lowerType = strtolower($type);
 include "zentaolist.{$lowerType}.html.php";
-/* include "zentaolist.customsearch.html.php"; */
+include "zentaolist.customsearch.html.php";
 
 $isSetting = $view == 'setting';
 
@@ -39,7 +39,7 @@ formPanel
         )
     ),
     $fnGenerateFormRows(),
-    /* $fnGenerateCustomSearch(), */
+    $fnGenerateCustomSearch(),
     to::footer
     (
         setClass('form-actions'),
@@ -51,7 +51,8 @@ formPanel
         )
     ),
     on::change('[name=product]', "changeProduct"),
-    on::click('#preview', "preview")
+    on::click('#preview', "preview"),
+    on::change('[name=condition]', "changeCondition")
 );
 
 $cols = array_values($cols);
