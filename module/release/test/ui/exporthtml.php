@@ -56,3 +56,10 @@ $release = array(
     array('filename' => ''),
     array('filename' => '导出文件1'),
     array('filename' => '导出文件2', 'exportdata' => '解决的Bug'),
+);
+
+r($tester->exportWithNoFilename($release['0'])) && p('message,status') && e('发布导出必填提示信息正确,SUCCESS'); // 发布导出时文件名必填项检查
+r($tester->exportHtml($release['1']))           && p('message,status') && e('发布导出成功,SUCCESS');             // 发布导出所有数据
+r($tester->exportHtml($release['2']))           && p('message,status') && e('发布导出成功,SUCCESS');             // 发布导出指定数据
+
+$tester->closeBrowser();
