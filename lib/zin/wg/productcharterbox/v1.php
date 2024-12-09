@@ -190,6 +190,7 @@ class productCharterBox extends wg
                         set::width('1/2'),
                         set::label($lang->charter->$objectType),
                         set::labelClass($charter ? 'hidden' : ''),
+                        $config->edition == 'ipd' ? set::labelControl(array('control' => 'icon', 'name' => 'help', 'data-toggle' => 'tooltip', 'data-title' => $lang->custom->charter->tips->type)) : null,
                         set::className("{$objectType}Box"),
                         inputGroup
                         (
