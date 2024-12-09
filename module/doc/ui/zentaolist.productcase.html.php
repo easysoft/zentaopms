@@ -3,12 +3,15 @@ declare(strict_types=1);
 
 namespace zin;
 
-$fnGenerateFormRows = function () use ($lang, $settings)
+$fnGenerateFormRows = function () use ($lang, $settings, $fnGenerateCustomSearch)
 {
     $productList = $this->loadModel('product')->getPairs();
-    $this->app->loadLang('testcase');
+    $product     = isset($settings['product']) ? $settings['product'] : 0;
+    $this->loadModel('testcase');
     $conditions = array_filter($lang->testcase->featureBar['browse'], fn($value) => $value !== '-');
     $conditions['customSearch'] = $lang->doc->customSearch;
+
+    $searchConfig = $this->testcase->buildSearchConfig((int)$product);
     return array
     (
         formRow
@@ -21,7 +24,7 @@ $fnGenerateFormRows = function () use ($lang, $settings)
                 set::required(),
                 set::control(array('contorl' => 'picker', 'required' => false, 'maxItemsCount' => 50)),
                 set::items($productList),
-                set::value(isset($settings['product']) ? $settings['product'] : ''),
+                set::value($product),
                 span
                 (
                     setClass('error-tip text-danger hidden'),
@@ -46,6 +49,7 @@ $fnGenerateFormRows = function () use ($lang, $settings)
                     $lang->doc->emptyError
                 )
             )
-        )
+        ),
+        $fnGenerateCustomSearch($searchConfig)
     );
 };
