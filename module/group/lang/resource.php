@@ -1502,11 +1502,6 @@ $lang->resource->system->delete   = 'delete';
 $lang->resource->system->active   = 'active';
 $lang->resource->system->inactive = 'inactive';
 
-$lang->resource->ops = new stdclass();
-$lang->resource->ops->provider = 'provider';
-$lang->resource->ops->city     = 'city';
-$lang->resource->ops->os       = 'os';
-
 /* Doc. */
 $lang->resource->doc = new stdclass();
 $lang->resource->doc->index          = 'index';

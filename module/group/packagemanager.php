@@ -3940,24 +3940,6 @@ $config->group->package->resource = new stdclass();
 $config->group->package->resource->order  = 2200;
 $config->group->package->resource->subset = 'ops';
 
-$config->group->package->manageServiceProvider = new stdclass();
-$config->group->package->manageServiceProvider->order  = 2300;
-$config->group->package->manageServiceProvider->subset = 'ops';
-$config->group->package->manageServiceProvider->privs  = array();
-$config->group->package->manageServiceProvider->privs['ops-provider'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array(), 'recommend' => array());
-
-$config->group->package->manageCity = new stdclass();
-$config->group->package->manageCity->order  = 2320;
-$config->group->package->manageCity->subset = 'ops';
-$config->group->package->manageCity->privs  = array();
-$config->group->package->manageCity->privs['ops-city'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array(), 'recommend' => array());
-
-$config->group->package->manageOS = new stdclass();
-$config->group->package->manageOS->order  = 2360;
-$config->group->package->manageOS->subset = 'ops';
-$config->group->package->manageOS->privs  = array();
-$config->group->package->manageOS->privs['ops-os'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array(), 'recommend' => array());
-
 $config->group->package->repoRules = new stdclass();
 $config->group->package->repoRules->order  = 2380;
 $config->group->package->repoRules->subset = 'ops';
