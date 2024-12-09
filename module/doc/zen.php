@@ -1057,6 +1057,16 @@ class docZen extends doc
         $this->view->cols = $cols;
     }
 
+    /**
+     * 预览产品计划列表。
+     * Preview plan list.
+     *
+     * @param  string    $view
+     * @param  array     $settings
+     * @param  string    $idList
+     * @access protected
+     * @return void
+     */
     protected function previewFeedback(string $view, array $settings, string $idList): void
     {
         $cols   = $this->loadModel('datatable')->getSetting('feedback', 'browse');
