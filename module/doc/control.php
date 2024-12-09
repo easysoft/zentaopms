@@ -87,7 +87,7 @@ class doc extends control
             {
                 array_splice($_POST['andor'],    $index + 1, 0, 'and');
                 array_splice($_POST['field'],    $index + 1, 0, '');
-                array_splice($_POST['operator'], $index + 1, 0, 'include');
+                array_splice($_POST['operator'], $index + 1, 0, '');
                 array_splice($_POST['value'],    $index + 1, 0, '');
             }
             elseif($action === 'remove')

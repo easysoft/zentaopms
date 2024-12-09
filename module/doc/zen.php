@@ -1022,7 +1022,7 @@ class docZen extends doc
         {
             $session['andor']    = array('and');
             $session['field']    = array('');
-            $session['operator'] = array('include');
+            $session['operator'] = array('');
             $session['value']    = array('');
         }
 
@@ -1283,6 +1283,15 @@ class docZen extends doc
         if($action === 'preview' && $view === 'setting')
         {
             $data = $this->loadModel('testcase')->getTestCases((int)$settings['product'], '', $settings['condition'], 0, 0);
+            if($settings['condition'] == 'customSearch')
+            {
+                $where = '';
+                foreach($settings['field'] as $index => $field)
+                {
+                    $where = $this->loadModel('search')->setWhere($where, $field, $settings['operator'][$index], $settings['value'][$index], $settings['andor'][$index]);
+                }
+                a($where);
+            }
         }
         elseif($view === 'list')
         {

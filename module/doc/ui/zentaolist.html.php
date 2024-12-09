@@ -12,8 +12,8 @@ namespace zin;
 set::zui();
 
 $lowerType = strtolower($type);
-include "zentaolist.{$lowerType}.html.php";
 include "zentaolist.customsearch.html.php";
+include "zentaolist.{$lowerType}.html.php";
 
 $isSetting = $view == 'setting';
 
@@ -39,7 +39,6 @@ formPanel
         )
     ),
     $fnGenerateFormRows(),
-    $fnGenerateCustomSearch(),
     to::footer
     (
         setClass('form-actions'),
