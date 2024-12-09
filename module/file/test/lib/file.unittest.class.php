@@ -409,4 +409,26 @@ class fileTest
         if(!$objects) return '0';
         return implode(',', $objects);
     }
+
+    /**
+     * Test processFileDiffsForObject.
+     *
+     * @param  string $objectType
+     * @param  object $oldObject
+     * @param  object $newObject
+     * @access public
+     * @return string
+     */
+    public function processFileDiffsForObjectTest(string $objectType, object $oldObject, object $newObject): string
+    {
+        $this->objectModel->processFileDiffsForObject($objectType, $oldObject, $newObject);
+
+        $return = 'added:';
+        $return .= isset($newObject->addedFiles) ? implode(',', $newObject->addedFiles) : '';
+        $return .= ';';
+        $return .= 'delete:';
+        $return .= isset($newObject->deleteFiles) ? implode(',', $newObject->deleteFiles) : '';
+        $return .= ';';
+        return $return;
+    }
 }
