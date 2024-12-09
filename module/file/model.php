@@ -526,6 +526,8 @@ class fileModel extends model
             $file->realPath = $this->savePath . $pathName;
             $file->webPath  = $this->webPath . $pathName;
         }
+        if(!isset($file->name)) $file->name = $file->title;
+        if(!isset($file->url))  $file->url  = helper::createLink('file', 'download', "fileID={$file->id}");
     }
 
     /**
@@ -1371,5 +1373,23 @@ class fileModel extends model
             $this->updateObjectID($uid, $objectID, $objectType);
             $this->saveUpload($objectType, $objectID, $extra);
         }
+    }
+
+    /**
+     * Process file differcences for object.
+     *
+     * @param  string $objectType
+     * @param  object $oldObject
+     * @param  object $newObject
+     * @param  string $extra
+     * @param  string $filesName
+     * @param  string $labelsName
+     * @access public
+     * @return void
+     */
+    public function processFileDiffsForObject(string $objectType, object $oldObject, object $newObject, string $extra = '', string $filesName = 'files', string $labelsName = 'labels'): void
+    {
+        if(empty($oldObject->id)) return;
+
     }
 }
