@@ -1061,6 +1061,9 @@ class docZen extends doc
      * 预览产品计划列表。
      * Preview plan list.
      *
+     * @param  string    $view
+     * @param  array     $settings
+     * @param  string    $idList
      * @access protected
      * @return void
      */
@@ -1089,6 +1092,9 @@ class docZen extends doc
      * 预览产品计划下的内容列表。
      * Preview plan story.
      *
+     * @param  string    $view
+     * @param  array     $settings
+     * @param  string    $idList
      * @access protected
      * @return void
      */
@@ -1115,6 +1121,9 @@ class docZen extends doc
      * 预览产品下的Bug列表。
      * Preview product story.
      *
+     * @param  string    $view
+     * @param  array     $settings
+     * @param  string    $idList
      * @access protected
      * @return void
      */
@@ -1141,6 +1150,9 @@ class docZen extends doc
      * 预览产品计划下的内容列表。
      * Preview plan story.
      *
+     * @param  string    $view
+     * @param  array     $settings
+     * @param  string    $idList
      * @access protected
      * @return void
      */
@@ -1167,6 +1179,9 @@ class docZen extends doc
      * 预览产品下的用例。
      * Preview product case.
      *
+     * @param  string    $view
+     * @param  array     $settings
+     * @param  string    $idList
      * @access protected
      * @return void
      */
@@ -1240,6 +1255,7 @@ class docZen extends doc
      * Preview project story.
      *
      * @param  string    $view
+     * @param  array     $settings
      * @param  string    $idList
      * @access protected
      * @return void
@@ -1268,6 +1284,7 @@ class docZen extends doc
      * Preview execution story.
      *
      * @param  string    $view
+     * @param  array     $settings
      * @param  string    $idList
      * @access protected
      * @return void
