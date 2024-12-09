@@ -38,12 +38,14 @@ window.getItem = function(info)
     else if(col == 'task')
     {
         if(privs['task']) titleHtml = "<a href='" + $.createLink('task', 'view', `taskID=${info.item.id}`) + "' data-toggle='modal' data-size='lg'" + color + ">" + title + "</a>";
+        if(info.item.isParent == '1') titleHtml = "<span class='label size-sm'>" + langParent + "</span> " + titleHtml;
+        if(info.item.parent > 0 && info.item.isParent == '0') titleHtml = "<span class='label size-sm'>" + langChildren + "</span> " + titleHtml;
         info.item.title = {html: `<div class='line-clamp-2'><span class="align-sub pri-${info.item.pri}">${langTaskPriList[info.item.pri]}</span> ${titleHtml}</div>`}
         info.item.titleAttrs = {'title' : title};
 
         if(info.item.isParent == '1') info.item.content.push({html: `<span class="label cursor-pointer primary rounded-xl toggle-btn is-collapsed" data-id="${info.item.id}" onclick="toggleChildren(this, ${info.item.id})">${langChildren} <span class="toggle-icon ml-1"></span></span>`});
-        info.item.content.push({html: `<div class="status-${info.item.status}">${langTaskStatusList[info.item.status]}</div>`});
-        if(info.item.assignedTo) info.item.content.push({html: "<i class='icon icon-hand-right'></i> " + (users[info.item.assignedTo] ? users[info.item.assignedTo] : info.item.assignedTo)});
+        info.item.content.push({html: `<div class="status-${info.item.status}" style='white-space:nowrap'>${langTaskStatusList[info.item.status]}</div>`});
+        if(info.item.assignedTo) info.item.content.push({html: "<div style='white-space:nowrap'><i class='icon icon-hand-right'></i> " + (users[info.item.assignedTo] ? users[info.item.assignedTo] : info.item.assignedTo) + "</div>"});
         info.item.content.push({component: 'ProgressCircle', props: {percent: info.item.progress, size: 24}});
     }
     else if(col == 'bug')
