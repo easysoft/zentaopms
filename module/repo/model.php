@@ -141,7 +141,7 @@ class repoModel extends model
      */
     public function getListBySCM(string $scm, string $type = 'all')
     {
-        $repos = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq('0')
+        $repos = $this->dao->select('*,acl')->from(TABLE_REPO)->where('deleted')->eq('0')
             ->andWhere('SCM')->in($scm)
             ->andWhere('synced')->eq(1)
             ->fetchAll('id', false);
