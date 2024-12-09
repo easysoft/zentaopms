@@ -1057,6 +1057,35 @@ class docZen extends doc
         $this->view->cols = $cols;
     }
 
+    protected function previewFeedback(string $view, array $settings, string $idList): void
+    {
+        $cols   = $this->loadModel('datatable')->getSetting('feedback', 'browse');
+        $data   = array();
+        $action = $settings['action'];
+
+        if($action === 'preview' && $view === 'setting')
+        {
+            $haveSession = false;
+            if(isset($_SESSION['feedbackProduct']))
+            {
+                $tmpSession  = $_SESSION['feedbackProduct'];
+                $haveSession = true;
+            }
+            $_SESSION['feedbackProduct'] = (int)$settings['product'];
+            $data = $this->loadModel('feedback')->getList('all');
+
+            if($haveSession) $_SESSION['feedbackProduct'] = $tmpSession;
+            else unset($_SESSION['feedbackProduct']);
+        }
+        elseif($view === 'list')
+        {
+            $data = $this->loadModel('feedback')->getByList($idList);
+        }
+
+        $this->view->cols = $cols;
+        $this->view->data = $data;
+    }
+
     /**
      * 预览产品计划列表。
      * Preview plan list.
