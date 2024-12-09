@@ -10537,4 +10537,40 @@ class upgradeModel extends model
 
         return true;
     }
+
+    /**
+     * 处理立项状态及评审状态。
+     * Process charter status.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processCharterStatus()
+    {
+        $this->dao->update(TABLE_CHARTER)
+            ->set('status')->eq('wait')
+            ->set('reviewStatus')->eq('projectReject')
+            ->where('status')->eq('failed')
+            ->andWhere('reviewedResult')->eq('failed')
+            ->exec();
+
+        $this->dao->update(TABLE_CHARTER)
+            ->set('reviewStatus')->eq('projectPass')
+            ->where('status')->eq('launched')
+            ->exec();
+
+        $this->dao->update(TABLE_CHARTER)
+            ->set('reviewStatus')->eq('completionPass')
+            ->where('status')->eq('closed')
+            ->andWhere('closedReason')->eq('done')
+            ->exec();
+
+        $this->dao->update(TABLE_CHARTER)
+            ->set('beforeCanceled')->eq('wait')
+            ->set('reviewStatus')->eq('cancelPass')
+            ->where('status')->eq('closed')
+            ->andWhere('closedReason')->eq('canceled')
+            ->exec();
+        return true;
+    }
 }
