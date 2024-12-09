@@ -116,6 +116,13 @@ window.updateCustomSearchItem = function($this, action)
     loadWithForm(formData, 'setting', 'post');
 }
 
+window.updateCustomSearch = function()
+{
+    const form = $('#zentaolist form');
+    const formData = new FormData(form[0]);
+    loadWithForm(formData, 'setting', 'post');
+}
+
 function changeProduct()
 {
     const product = getValue('product');
@@ -128,5 +135,11 @@ function changeProduct()
             resp = JSON.parse(resp);
             updatePicker('plan', resp);
         });
+    }
+
+    if(type === 'productCase')
+    {
+        const condition = getValue('condition');
+        if(condition == 'customSearch') updateCustomSearch();
     }
 }
