@@ -2795,7 +2795,16 @@ class testcaseModel extends model
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
     }
 
-    public function buildSearchConfig(int $productID, string $branch = 'all')
+    /**
+     * 构建搜索配置。
+     * Build search config.
+     *
+     * @param  int $productID
+     * @param  string $branch
+     * @access public
+     * @return array
+     */
+    public function buildSearchConfig(int $productID, string $branch = 'all'): array
     {
         $this->config->testcase->search['params']['story']['values'] = $this->loadModel('story')->getProductStoryPairs($productID, $branch, array(), 'active,reviewing', 'id_desc', 0, '', 'story', false);
 
