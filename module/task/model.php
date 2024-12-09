@@ -2681,7 +2681,7 @@ class taskModel extends model
         $task->rawParent = $task->parent;
         if($convertParent)
         {
-            $task->parent    = array();
+            $task->parent = array();
             foreach(explode(',', trim((string)$task->path, ',')) as $parentID)
             {
                 if(!$parentID) continue;
