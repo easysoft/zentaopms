@@ -4000,24 +4000,28 @@ class docModel extends model
      * 获取某个模板类型下的所有模板。
      * Get template list by type.
      *
-     * @param  int    $type
+     * @param  int|null $type
      * @access public
      * @return int
      */
-    public function getTemplatesByType($type)
+    public function getTemplatesByType($type = null)
     {
-        $subTypes = $this->dao->select('id')->from(TABLE_MODULE)
-            ->where('deleted')->eq('0')
-            ->andWhere('parent')->eq($type)
-            ->andWhere('type')->eq('docTemplate')
-            ->fetchPairs('id');
-        $types = array_values($subTypes);
-        $types[] = $type;
+        $types = array();
+        if(!is_null($type))
+        {
+            $subTypes = $this->dao->select('id')->from(TABLE_MODULE)
+                ->where('deleted')->eq('0')
+                ->andWhere('parent')->eq($type)
+                ->andWhere('type')->eq('docTemplate')
+                ->fetchPairs('id');
+            $types = array_values($subTypes);
+            $types[] = $type;
+        }
 
         return $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq('0')
             ->andWhere('templateType')->ne('')
-            ->andWhere('module')->in($types)
+            ->beginIF(!is_null($type))->andWhere('module')->in($types)->fi()
             ->fetchAll('id');
     }
 }
