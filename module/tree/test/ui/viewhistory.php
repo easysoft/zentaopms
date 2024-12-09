@@ -44,3 +44,4 @@ r($tester->checkHistory('historya', 'created')) && p('status,message') && e('SUC
 r($tester->checkHistory('historyb', 'created')) && p('status,message') && e('SUCCESS,历史记录正确');
 r($tester->checkHistory('historyc', 'edited'))  && p('status,message') && e('SUCCESS,历史记录正确');
 r($tester->checkHistory('historyd', 'deleted')) && p('status,message') && e('SUCCESS,历史记录正确');
+$tester->closeBrowser();
