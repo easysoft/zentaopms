@@ -926,6 +926,7 @@ CREATE TABLE IF NOT EXISTS `zt_file` (
   `size` int(11) unsigned NOT NULL DEFAULT '0',
   `objectType` char(30) NOT NULL DEFAULT '',
   `objectID` mediumint(9) NOT NULL DEFAULT '0',
+  `gid` char(48) NOT NULL DEFAULT '',
   `addedBy` char(30) NOT NULL DEFAULT '',
   `addedDate` datetime NULL,
   `downloads` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -935,6 +936,7 @@ CREATE TABLE IF NOT EXISTS `zt_file` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE INDEX `objectType` ON `zt_file`(`objectType`);
 CREATE INDEX `objectID`   ON `zt_file`(`objectID`);
+CREATE INDEX `gid`        ON `zt_file`(`gid`);
 
 -- DROP TABLE IF EXISTS `zt_group`;
 CREATE TABLE IF NOT EXISTS `zt_group` (

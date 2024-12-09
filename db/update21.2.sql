@@ -7,3 +7,6 @@ ALTER TABLE zt_dataview ADD `driver` enum('mysql','duckdb') NOT NULL DEFAULT 'my
 
 ALTER TABLE `zt_doccontent` ADD `html` longtext DEFAULT NULL AFTER `content`;
 ALTER TABLE `zt_doccontent` ADD `rawContent` longtext DEFAULT NULL AFTER `content`;
+
+ALTER TABLE `zt_file` ADD `gid` CHAR(48) NOT NULL DEFAULT '' AFTER `objectID`;
+CREATE INDEX `gid` ON `zt_file`(`gid`);
