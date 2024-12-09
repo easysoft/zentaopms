@@ -16,10 +16,13 @@ class viewhistoryTester extends tester
         $form = $this->initForm('tree', 'browse', array('product' => '1', 'view' => 'story'), 'appIframe-product');
         $form->dom->btn($this->lang->history)->click();
         $form->wait();
-        $history = sprintf($this->ang->module->action->{$action}, '1', '2', '3');
-        var_dump($history);die;
-        var_dump($form->dom->{$param}->getText());die;
-        if(strpos($form->dom->{$param}->getText(), $this->lang->action->label->{$action}) !== false) return $this->success('历史记录正确');
+        $content = explode(" ", $form->dom->{$param}->getText());
+
+        $history = $this->lang->module->action->{$action}->main;
+        if($action == 'edited') $history = $this->lang->action->desc->{$action};
+        $history = explode(" ", $history);
+
+        if(trim($history[3]) == $content[4]) return $this->success('历史记录正确');
         return $this->failed('历史记录不正确');
     }
 }
