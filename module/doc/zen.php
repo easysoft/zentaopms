@@ -1292,4 +1292,33 @@ class docZen extends doc
         $this->view->cols = $cols;
         $this->view->data = $data;
     }
+
+    /**
+     * 预览任务列表。
+     * Preview task list.
+     *
+     * @param  string    $view
+     * @param  array     $settings
+     * @param  string    $idList
+     * @access protected
+     * @return void
+     */
+    protected function previewTask(string $view, array $settings, string $idList): void
+    {
+        $cols   = $this->loadModel('datatable')->getSetting('execution', 'task');
+        $data   = array();
+        $action = $settings['action'];
+
+        if($action === 'preview' && $view === 'setting')
+        {
+            $data = $this->loadModel('task')->getExecutionTasks((int)$settings['execution']);
+        }
+        elseif($view === 'list')
+        {
+            $data = $this->loadModel('task')->getByIdList(explode(',', $idList));
+        }
+
+        $this->view->cols = $cols;
+        $this->view->data = $data;
+    }
 }
