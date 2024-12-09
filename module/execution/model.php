@@ -2389,6 +2389,9 @@ class executionModel extends model
                 if($task->deadline > $execution->end || $task->deadline < $execution->begin)     $data->deadline   = $execution->end;
             }
 
+            /* Update tasks and save logs. */
+            if($task->isParent) $this->dao->update(TABLE_TASK)->data($data)->where('parent')->eq($task->id)->exec();
+
             $data->status = $task->consumed > 0 ? 'doing' : 'wait';
             $this->dao->update(TABLE_TASK)->data($data)->where('id')->eq($task->id)->exec();
             $this->action->create('task', $task->id, 'moved', '', $task->execution);
@@ -3714,7 +3717,7 @@ class executionModel extends model
 
         foreach($tasks as $task)
         {
-            if($task->isParent == '0')
+            if(!isset($tasks[$task->parent]) || $task->isParent == '0')
             {
                 $totalEstimate += $task->estimate;
                 $totalConsumed += $task->consumed;
