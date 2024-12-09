@@ -27,3 +27,23 @@ $debug = $config->debug;
 $config->debug = 0;
 
 r($file->processFileDiffsForObjectTest('story', new stdclass(), new stdclass())) && p('count') && e('added:;delete:;rename:;'); //传入空对象。
+
+$oldFiles = $file->objectModel->getByIdList('1,2,3,4');
+$oldObject = new stdclass();
+$oldObject->id = 1;
+$oldObject->files = $oldFiles;
+
+$newObject = new stdclass();
+$newObject->id = 1;
+r($file->processFileDiffsForObjectTest('story', $oldObject, $newObject)) && p() && e('added:;delete:;rename:;'); //没有删除文件字段。
+
+$oldObject->files       = $oldFiles;
+$newObject->deleteFiles = array(1, 2);
+r($file->processFileDiffsForObjectTest('story', $oldObject, $newObject)) && p() && e('added:;delete:文件标题1,文件标题2;rename:;'); //有删除文件字段。
+
+$oldObject->files       = $oldFiles;
+$newObject->deleteFiles = array(3);
+$newObject->renameFiles = array(3 => '11', 4 => '22');
+r($file->processFileDiffsForObjectTest('story', $oldObject, $newObject)) && p() && e('added:;delete:文件标题3;rename:文件标题3,11,文件标题4,22;'); //有重命名文件字段。
+
+$config->debug = $debug;
