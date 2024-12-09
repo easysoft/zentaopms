@@ -1058,8 +1058,8 @@ class docZen extends doc
     }
 
     /**
-     * 预览产品计划列表。
-     * Preview plan list.
+     * 预览反馈列表。
+     * Preview feedback list.
      *
      * @param  string    $view
      * @param  array     $settings
@@ -1096,6 +1096,16 @@ class docZen extends doc
         $this->view->data = $data;
     }
 
+    /**
+     * 预览工单列表。
+     * Preview ticket list.
+     *
+     * @param  string    $view
+     * @param  array     $settings
+     * @param  string    $idList
+     * @access protected
+     * @return void
+     */
     protected function previewTicket(string $view, array $settings, string $idList): void
     {
         $cols   = $this->loadModel('datatable')->getSetting('ticket', 'browse');
