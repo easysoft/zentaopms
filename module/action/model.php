@@ -1413,9 +1413,10 @@ class actionModel extends model
         foreach($histories as $history)
         {
             $history->fieldLabel = str_pad($history->fieldLabel, $maxLength, $this->lang->action->label->space);
-            if(strpos(',project,execution,', ",{$objectType},") !== false && strpos(',addDiff,removeDiff,', ",{$history->field},") !== false)
+            if(strpos(',addDiff,removeDiff,', ",{$history->field},") !== false)
             {
-                $content .= sprintf($this->lang->action->desc->{$history->field}, $history->diff) . '<br/>';
+                $fileLabel = isset($this->lang->file->common) ? $this->lang->file->common . ' ' : '';
+                $content .= sprintf($this->lang->action->desc->{$history->field}, strpos(',project,execution,', ",{$objectType},") !== false ? '' : $fileLabel, $history->diff) . '<br/>';
             }
             elseif($history->diff != '')
             {

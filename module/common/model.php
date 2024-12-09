@@ -895,6 +895,19 @@ class commonModel extends model
         $changes = array();
         foreach($new as $key => $value)
         {
+            if($key == 'addedFiles')
+            {
+                foreach($value as $addedFile) $changes[] = array('field' => 'addDiff', 'old' => '', 'new' => '', 'diff' => $addedFile);
+            }
+            elseif($key == 'deleteFiles')
+            {
+                foreach($value as $deleteFile) $changes[] = array('field' => 'removeDiff', 'old' => '', 'new' => '', 'diff' => $deleteFile);
+            }
+            elseif($key == 'renameFiles')
+            {
+                foreach($value as $renameFile) $changes[] = array('field' => 'fileName', 'old' => $renameFile['old'], 'new' => $renameFile['new'], 'diff' => '');
+            }
+
             if(is_object($value) || is_array($value)) continue;
 
             $check = strtolower($key);

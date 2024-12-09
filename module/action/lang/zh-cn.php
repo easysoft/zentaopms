@@ -236,8 +236,8 @@ $lang->action->desc->verified             = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->diff1                = '修改了 <strong><i>%s</i></strong>，旧值为 "%s"，新值为 "%s"。<br />' . "\n";
 $lang->action->desc->diff2                = '修改了 <strong><i>%s</i></strong>，区别为：' . "\n" . "<blockquote class='textdiff'>%s</blockquote>" . "\n<blockquote class='original'>%s</blockquote>";
 $lang->action->desc->diff3                = '将文件名 %s 改为 %s 。' . "\n";
-$lang->action->desc->addDiff              = '添加了 "%s"。' . "\n";
-$lang->action->desc->removeDiff           = '移除了 "%s"。' . "\n";
+$lang->action->desc->addDiff              = '添加了 <strong><i>%s</i></strong>"%s"。' . "\n";
+$lang->action->desc->removeDiff           = '移除了 <strong><i>%s</i></strong>"%s"。' . "\n";
 $lang->action->desc->linked2bug           = '$date 由 <strong>$actor</strong> 关联到构建 <strong>$extra</strong>';
 $lang->action->desc->linked2testtask      = '$date 由 <strong>$actor</strong> 关联到测试单 <strong>$extra</strong>';
 $lang->action->desc->unlinkedfromtesttask = '$date 由 <strong>$actor</strong> 从测试单 <strong>$extra</strong> 中移除';
