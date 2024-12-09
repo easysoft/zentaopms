@@ -429,6 +429,19 @@ class fileTest
         $return .= 'delete:';
         $return .= isset($newObject->deleteFiles) ? implode(',', $newObject->deleteFiles) : '';
         $return .= ';';
+
+        $renameFiles = array();
+        if(is_array($newObject->renameFiles))
+        {
+            foreach($newObject->renameFiles as $renameFile)
+            {
+                $renameFiles[] = $renameFile['old'] . ',' . $renameFile['new'];
+            }
+        }
+        $return .= 'rename:';
+        $return .= implode(',', $renameFiles);
+        $return .= ';';
+
         return $return;
     }
 }
