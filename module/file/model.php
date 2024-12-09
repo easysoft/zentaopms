@@ -1391,5 +1391,32 @@ class fileModel extends model
     {
         if(empty($oldObject->id)) return;
 
+        $deleteFiles = array();
+        if(!empty($newObject->deleteFiles))
+        {
+            $this->dao->delete()->from(TABLE_FILE)->where('id')->in($newObject->deleteFiles)->exec();
+            foreach($newObject->deleteFiles as $fileID)
+            {
+                $this->unlinkFile($oldObject->files[$fileID]);
+                $deleteFiles[] = isset($oldObject->files[$fileID]) ? $oldObject->files[$fileID]->title : '';
+            }
+        }
+
+        $renameFiles = array();
+        if(!empty($newObject->renameFiles))
+        {
+            foreach($newObject->renameFiles as $renamedFileID => $newName)
+            {
+                $this->dao->update(TABLE_FILE)->set('title')->eq($newName)->where('id')->in($renamedFileID)->exec();
+                $renameFiles[$renamedFileID] = array('old' => isset($oldObject->files[$renamedFileID]) ? $oldObject->files[$renamedFileID]->title : '', 'new' => $newName);
+            }
+        }
+
+        $this->updateObjectID($this->post->uid, $oldObject->id, $objectType);
+        $addedFiles = $this->saveUpload($objectType, $oldObject->id, $extra, $filesName, $labelsName);
+
+        $newObject->addedFiles  = $addedFiles;
+        $newObject->renameFiles = $renameFiles;
+        $newObject->deleteFiles = $deleteFiles;
     }
 }
