@@ -14,10 +14,24 @@ formPanel
     set::title($lang->doc->template),
     formGroup
     (
+        setID('template'),
         set::label($lang->doc->selectTemplate),
         set::name('template'),
         set::required(true),
         set::width('5/6'),
         set::items($templatePairs)
+    ),
+    set::actions(array()),
+    formGroup
+    (
+        setClass('form-actions'),
+        btn
+        (
+            $lang->save,
+            set::btnType('button'),
+            set::type('primary'),
+            setData('dismiss', 'modal'),
+            on::click('applyTemplate')
+        )
     )
 );
