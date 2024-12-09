@@ -36,17 +36,13 @@ class productCharterBox extends wg
         return div
         (
             setClass('productsBox'),
-            on::click('.productsBox .addLine', 'window.addNewLine'),
-            on::click('.productsBox .removeLine', 'window.removeLine'),
-            on::click('#loadRoadmapStories', 'window.loadRoadmapStories'),
-            on::change('.linkProduct .pick-value', 'window.refreshPicker(e.target)'),
             $productsBox
         );
     }
 
     protected function initProductsBox(): array
     {
-        global $lang, $app;
+        global $lang, $app, $config;
         $products    = $this->prop('products');
         $charter     = $this->prop('charter');
         $objectType  = $this->prop('objectType');
@@ -85,6 +81,7 @@ class productCharterBox extends wg
                                     setClass('grow linkProduct w-1/2'),
                                     picker
                                     (
+                                        setData(array('on' => 'change', 'call' => 'refreshPicker', 'params' => 'event')),
                                         set::name("product[$index]"),
                                         set::items($products),
                                         set::value($productID)
@@ -96,6 +93,7 @@ class productCharterBox extends wg
                         (
                             set::width('1/2'),
                             set::label($lang->charter->$objectType),
+                            $config->edition == 'ipd' ? set::labelControl(array('control' => 'icon', 'name' => 'help', 'data-toggle' => 'tooltip', 'data-title' => $lang->custom->charter->tips->type)) : null,
                             set::className("{$objectType}Box"),
                             $index != 0 ? set::labelClass('hidden') : null,
                             inputGroup
@@ -120,6 +118,7 @@ class productCharterBox extends wg
                                         (
                                             setID('loadRoadmapStories'),
                                             setClass('ghost'),
+                                            setData(array('on' => 'click', 'call' => 'loadRoadmapStories', 'params' => 'event')),
                                             $lang->charter->loadStories
                                         )
                                     ) : null
@@ -139,11 +138,13 @@ class productCharterBox extends wg
                                 setClass('pl-2 flex self-center line-btn'),
                                 btn
                                 (
+                                    setData(array('on' => 'click', 'call' => 'addNewLine', 'params' => 'event')),
                                     setClass('btn btn-link text-gray addLine'),
                                     icon('plus')
                                 ),
                                 btn
                                 (
+                                    setData(array('on' => 'click', 'call' => 'removeLine', 'params' => 'event')),
                                     setClass('btn btn-link text-gray removeLine', $index == 0 && count($charterProductMaps) <= 1 ? 'hidden' : ''),
                                     icon('trash')
                                 )
@@ -175,6 +176,7 @@ class productCharterBox extends wg
                                 setClass('grow linkProduct w-1/2'),
                                 picker
                                 (
+                                    setData(array('on' => 'change', 'call' => 'refreshPicker', 'params' => 'event')),
                                     set::name("product[$index]"),
                                     set::items($products),
                                     set::defaultValue(''),
@@ -210,6 +212,7 @@ class productCharterBox extends wg
                                     (
                                         setID('loadRoadmapStories'),
                                         setClass('ghost'),
+                                        setData(array('on' => 'click', 'call' => 'loadRoadmapStories', 'params' => 'event')),
                                         $lang->charter->loadStories
                                     )
                                 ) : null
@@ -229,11 +232,13 @@ class productCharterBox extends wg
                             setClass('pl-2 flex self-center line-btn'),
                             btn
                             (
+                                setData(array('on' => 'click', 'call' => 'addNewLine', 'params' => 'event')),
                                 setClass('btn btn-link text-gray addLine'),
                                 icon('plus')
                             ),
                             btn
                             (
+                                setData(array('on' => 'click', 'call' => 'removeLine', 'params' => 'event')),
                                 setClass('btn btn-link text-gray removeLine', $charter ? '' : 'hidden'),
                                 icon('trash')
                             )
