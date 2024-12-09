@@ -1114,17 +1114,27 @@ class docZen extends doc
 
         if($action === 'preview' && $view === 'setting')
         {
-            $haveSession = false;
+            $ticketProduct = false;
+            $browseType    = false;
             if(isset($_SESSION['ticketProduct']))
             {
-                $tmpSession  = $_SESSION['ticketProduct'];
-                $haveSession = true;
+                $tmpProduct  = $_SESSION['ticketProduct'];
+                $ticketProduct = true;
             }
+            if(isset($_SESSION['browseType']))
+            {
+                $tmpType  = $_SESSION['browseType'];
+                $browseType = true;
+            }
+
             $_SESSION['ticketProduct'] = (int)$settings['product'];
+            $_SESSION['browseType']    = 'byProduct';
             $data = $this->loadModel('ticket')->getList('all');
 
-            if($haveSession) $_SESSION['ticketProduct'] = $tmpSession;
+            if($ticketProduct) $_SESSION['ticketProduct'] = $tmpProduct;
             else unset($_SESSION['ticketProduct']);
+            if($browseType) $_SESSION['browseType'] = $tmpType;
+            else unset($_SESSION['browseType']);
         }
         elseif($view === 'list')
         {
