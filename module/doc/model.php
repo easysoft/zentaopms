@@ -3997,14 +3997,27 @@ class docModel extends model
     }
 
     /**
+     * Get template content by doc id.
+     *
+     * @param  int    $id
+     * @access public
+     * @return int
+     */
+    public function getTemplateContentByID($id)
+    {
+        return $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($id)->orderBy('version_desc')->fetch();
+    }
+
+    /**
      * 获取某个模板类型下的所有模板。
      * Get template list by type.
      *
      * @param  int|null $type
+     * @param  string   $status
      * @access public
      * @return int
      */
-    public function getTemplatesByType($type = null)
+    public function getTemplatesByType($type = null, $status = 'all')
     {
         $types = array();
         if(!is_null($type))
@@ -4022,6 +4035,7 @@ class docModel extends model
             ->where('deleted')->eq('0')
             ->andWhere('templateType')->ne('')
             ->beginIF(!is_null($type))->andWhere('module')->in($types)->fi()
+            ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
             ->fetchAll('id');
     }
 }

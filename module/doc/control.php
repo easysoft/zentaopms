@@ -315,13 +315,26 @@ class doc extends control
      */
     public function selectTemplate()
     {
-        $templateList = $this->doc->getTemplatesByType();
+        $templateList = $this->doc->getTemplatesByType(null, 'normal');
 
         $templatePairs = array();
         foreach($templateList as $template) $templatePairs[$template->id] = $template->title;
 
         $this->view->templatePairs = $templatePairs;
         $this->display();
+    }
+
+    /**
+     * Ajax: get template content.
+     *
+     * @param  int    $id
+     * @access public
+     * @return void
+     */
+    public function ajaxGetTemplateContent($id)
+    {
+        $template = $this->doc->getTemplateContentByID($id);
+        return print(json_encode(array('type' => $template->type, 'content' => $template->content)));
     }
 
     /**
