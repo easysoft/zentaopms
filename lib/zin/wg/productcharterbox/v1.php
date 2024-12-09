@@ -29,13 +29,12 @@ class productCharterBox extends wg
 
     protected function build()
     {
-        jsVar('objectType', $this->prop('objectType'));
-
         $productsBox = $this->initProductsBox();
 
         return div
         (
             setClass('productsBox'),
+            setData(array('objecttype' => $this->prop('objectType'))),
             $productsBox
         );
     }
