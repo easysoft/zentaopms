@@ -981,6 +981,17 @@ class programplanTao extends programplanModel
         $this->dao->update(TABLE_MODULE)->set('root')->eq($executionID)->where('root')->eq($parentID)->andWhere('type')->eq('task')->andWhere('deleted')->eq('0')->exec();
         $this->dao->update(TABLE_MODULE)->set('root')->eq($libID)->where('root')->eq($parentLibID)->andWhere('type')->eq('doc')->andWhere('deleted')->eq('0')->exec();
 
+        /* Update stage info. */
+        $parent = $this->fetchByID($parentID);
+        $data   = new stdclass();
+        $data->status   = $parent->status;
+        $data->progress = $parent->progress;
+        $data->estimate = $parent->estimate;
+        $data->left     = $parent->left;
+        $data->consumed = $parent->consumed;
+
+        $this->dao->update(TABLE_EXECUTION)->data($data)->where('id')->eq($executionID)->exec();
+
         return !dao::isError();
     }
 }
