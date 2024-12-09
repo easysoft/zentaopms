@@ -2810,6 +2810,22 @@ class testcaseModel extends model
         unset($this->config->testcase->search['fields']['product']);
         unset($this->config->testcase->search['params']['product']);
 
+        $product = $this->loadModel('product')->getByID($productID ? $productID : 0);
+        if($productID)
+        {
+            if(isset($product->type) && $product->type == 'normal')
+            {
+                unset($this->config->testcase->search['fields']['branch']);
+                unset($this->config->testcase->search['params']['branch']);
+            }
+            else
+            {
+                $branches = $this->loadModel('branch')->getPairs($productID, '', 0);
+                $this->config->testcase->search['fields']['branch']           = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+                $this->config->testcase->search['params']['branch']['values'] = array('' => '', BRANCH_MAIN => $this->lang->branch->main) + $branches + array('all' => $this->lang->branch->all);
+            }
+        }
+
         if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
 
         $searchConfig = $this->loadModel('search')->processBuildinFields('testcase', $this->config->testcase->search);
