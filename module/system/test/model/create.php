@@ -31,10 +31,10 @@ $default->createdDate = '2024-01-01 00:00:00';
 
 r($system->create($default)) && p() && e('1'); // 默认创建
 $system->create($default);
-r(dao::getError()) && p('name:0') && e('『应用名称』已经有『应用10』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。'); // 重复创建
+r(dao::getError()) && p('systemName:0') && e('『应用名称』已经有『应用10』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。'); // 重复创建
 $default->name = '';
 $system->create($default);
-r(dao::getError()) && p('name:0') && e('『应用名称』不能为空。'); // 创建空名称失败
+r(dao::getError()) && p('systemName:0') && e('『应用名称』不能为空。'); // 创建空名称失败
 $default->name    = '应用11';
 $default->product = '字符串';
 $system->create($default);
