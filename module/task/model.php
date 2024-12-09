@@ -2137,6 +2137,17 @@ class taskModel extends model
         /* If the assignor is empty, consider the first one with the cc as the assignor. */
         if(empty($assignedTo)) $assignedTo = array_shift($mailto);
 
+        if(in_array($action, array('paused', 'closed', 'canceled')) && $task->parent > 0)
+        {
+            $parentTasks = $this->dao->select('id,assignedTo,finishedBy,mailto')->from(TABLE_TASK)->where('id')->in($task->path)->fetchAll('id');
+            foreach($parentTasks as $parentID => $parentTask)
+            {
+                $mailto[] = (strtolower($parentTask->assignedTo) == 'closed') ? $parentTask->finishedBy : $parentTask->assignedTo;
+                $mailto  += is_null($parentTask->mailto) ? array() : explode(',', trim($parentTask->mailto, ','));
+            }
+        }
+        $mailto = array_unique(array_filter(array_map(function($account) use($assignedTo){ return $account == $assignedTo ? '' : $account;}, $mailto)));
+
         return array($assignedTo, implode(',', $mailto));
     }
 
