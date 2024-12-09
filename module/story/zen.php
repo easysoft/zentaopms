@@ -780,6 +780,8 @@ class storyZen extends story
         $story  = $this->view->story;
         $fields = $this->config->story->form->change;
         unset($fields['relievedTwins']);
+        unset($fields['deleteFiles']);
+        unset($fields['renameFiles']);
 
         foreach(array_keys($fields) as $field)
         {

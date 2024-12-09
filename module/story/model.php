@@ -772,7 +772,7 @@ class storyModel extends model
     public function change(int $storyID, object $story): array|false
     {
         $oldStory = $this->getById($storyID);
-        $this->dao->update(TABLE_STORY)->data($story, 'spec,verify,deleteFiles,relievedTwins,reviewer,reviewerHasChanged')
+        $this->dao->update(TABLE_STORY)->data($story, 'spec,verify,deleteFiles,renameFiles,relievedTwins,reviewer,reviewerHasChanged')
             ->autoCheck()
             ->batchCheck($this->config->{$oldStory->type}->change->requiredFields, 'notempty')
             ->checkFlow()
@@ -784,12 +784,13 @@ class storyModel extends model
         $specChanged = $oldStory->version != $story->version;
         if($specChanged)
         {
-            $addedFiles = $this->file->saveUpload($oldStory->type, $storyID, $story->version);
-            $addedFiles = empty($addedFiles) ? '' : implode(',', array_keys($addedFiles)) . ',';
+            $this->loadModel('file')->processFileDiffsForObject('story', $oldStory, $story, (string)$story->version);
+
+            $addedFiles = empty($story->addedFiles) ? '' : implode(',', array_keys($story->addedFiles)) . ',';
             $storyFiles = $oldStory->files = implode(',', array_keys($oldStory->files));
             foreach($story->deleteFiles as $fileID) $storyFiles = str_replace(",$fileID,", ',', ",$storyFiles,");
-
             $story->files = $addedFiles . trim($storyFiles, ',');
+
             $this->storyTao->doCreateSpec($storyID, $story, $story->files);
             if(!empty($story->reviewer)) $this->storyTao->doCreateReviewer($storyID, $story->reviewer, $story->version);
 
