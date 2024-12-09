@@ -94,6 +94,32 @@ class systemModel extends model
     }
 
     /**
+     * 根据应用标识获取应用详情。
+     * Get an app by appKey.
+     *
+     * @param string $appKey
+     * @return array|bool
+     */
+    public function getByAppKey(string $appKey)
+    {
+        return $this->dao->select('*')->from(TABLE_SYSTEM)
+            ->where('appkey')->eq($appKey)
+            ->fetch();
+    }
+
+    /**
+     * 根据应用ID列表获取产品ID列表。
+     * Get product id list by system id list.
+     *
+     * @param  array $systemIDs
+     * @return array
+     */
+    public function getProductListBySystemIds(array $systemIDs)
+    {
+
+    }
+
+    /**
      * 创建应用。
      * Create an app.
      *
