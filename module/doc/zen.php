@@ -1096,6 +1096,35 @@ class docZen extends doc
         $this->view->data = $data;
     }
 
+    protected function previewTicket(string $view, array $settings, string $idList): void
+    {
+        $cols   = $this->loadModel('datatable')->getSetting('ticket', 'browse');
+        $data   = array();
+        $action = $settings['action'];
+
+        if($action === 'preview' && $view === 'setting')
+        {
+            $haveSession = false;
+            if(isset($_SESSION['ticketProduct']))
+            {
+                $tmpSession  = $_SESSION['ticketProduct'];
+                $haveSession = true;
+            }
+            $_SESSION['ticketProduct'] = (int)$settings['product'];
+            $data = $this->loadModel('ticket')->getList('all');
+
+            if($haveSession) $_SESSION['ticketProduct'] = $tmpSession;
+            else unset($_SESSION['ticketProduct']);
+        }
+        elseif($view === 'list')
+        {
+            $data = $this->loadModel('ticket')->getByList($idList);
+        }
+
+        $this->view->cols = $cols;
+        $this->view->data = $data;
+    }
+
     /**
      * 预览产品计划列表。
      * Preview plan list.
