@@ -317,7 +317,7 @@ class bugModel extends model
     {
         $oldBug = $this->fetchByID($bug->id);
 
-        $this->dao->update(TABLE_BUG)->data($bug, 'deleteFiles,comment')
+        $this->dao->update(TABLE_BUG)->data($bug, 'deleteFiles,renameFiles,comment')
             ->autoCheck()
             ->batchCheck($this->config->bug->edit->requiredFields, 'notempty')
             ->checkIF(!empty($bug->resolvedBy), 'resolution',  'notempty')
@@ -330,6 +330,10 @@ class bugModel extends model
             ->exec();
 
         if(dao::isError()) return false;
+
+        /* 更新 bug 的附件。*/
+        /* Update the files of bug. */
+        $this->loadModel('file')->processFileDiffsForObject('bug', $oldBug, $bug);
 
         $changes = common::createChanges($oldBug, $bug);
         if($changes || !empty($bug->comment))

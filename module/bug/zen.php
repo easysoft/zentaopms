@@ -1983,10 +1983,6 @@ class bugZen extends bug
         /* Update the status of feedback. */
         if(($this->config->edition != 'open') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
 
-        /* 更新 bug 的附件。*/
-        /* Update the files of bug. */
-        $this->loadModel('file')->processFile4Object('bug', $oldBug, $bug);
-
         return !dao::isError();
     }
 
