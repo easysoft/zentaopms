@@ -1058,6 +1058,34 @@ class docZen extends doc
     }
 
     /**
+     * 预览产品计划列表。
+     * Preview plan list.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function previewProductplan(string $view, array $settings, string $idList): void
+    {
+        $cols   = $this->loadModel('datatable')->getSetting('productplan', 'browse');
+        $data   = array();
+        $action = $settings['action'];
+
+        if($action === 'preview' && $view === 'setting')
+        {
+            $productID    = (int)$settings['product'];
+            $productPlans = $this->loadModel('productplan')->getProductPlans(array($productID));
+            $data         = isset($productPlans[$productID]) ? $productPlans[$productID] : array();
+        }
+        elseif($view === 'list')
+        {
+            $data = $this->loadModel('productplan')->getByIDList(explode(',', $idList));
+        }
+
+        $this->view->cols = $cols;
+        $this->view->data = $data;
+    }
+
+    /**
      * 预览产品计划下的内容列表。
      * Preview plan story.
      *
