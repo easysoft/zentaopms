@@ -2795,6 +2795,29 @@ class testcaseModel extends model
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
     }
 
+    public function buildSearchConfig(int $productID, string $branch = 'all')
+    {
+        $this->config->testcase->search['params']['story']['values'] = $this->loadModel('story')->getProductStoryPairs($productID, $branch, array(), 'active,reviewing', 'id_desc', 0, '', 'story', false);
+
+        /* 获取模块列表。*/
+        /* Get moduleList. */
+        $modules = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, $branch);
+
+        $this->config->testcase->search['params']['module']['values']  = $modules;
+        $this->config->testcase->search['params']['scene']['values']   = $this->getSceneMenu($productID, 0, $branch, 0, 0, true);
+        $this->config->testcase->search['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();
+
+        unset($this->config->testcase->search['fields']['product']);
+        unset($this->config->testcase->search['params']['product']);
+
+        if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
+
+        $searchConfig = $this->loadModel('search')->processBuildinFields('testcase', $this->config->testcase->search);
+        $searchConfig['params'] = $this->search->setDefaultParams($searchConfig['fields'], $searchConfig['params']);
+
+        return $searchConfig;
+    }
+
     /**
      * 过滤自动测试用例的ID列表。
      * Ignore auto testcase id list.
