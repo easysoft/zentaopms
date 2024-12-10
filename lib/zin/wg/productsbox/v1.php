@@ -65,6 +65,7 @@ class productsBox extends wg
         return div
         (
             setClass('productsBox', $hidden ? ' hidden' : ''),
+            setData('linkType', $type),
             jsVar('multiBranchProducts', data('multiBranchProducts')),
             jsVar('project', \zget($project, 'id', 0)),
             jsVar('errorSameProducts', $errorSameProducts),
@@ -225,7 +226,7 @@ class productsBox extends wg
         $typeClass = $type == 'plan' ? 'planBox' : 'roadmapBox';
 
         $linkedProductsBox = array();
-        $hiddenPlusBtn     = $type == 'roadmap' && count($productItems) == count(array_keys($linkedProducts)) ? ' hidden' : '';
+        $hiddenPlusBtn     = count($productItems) == count(array_keys($linkedProducts)) ? ' hidden' : '';
         foreach(array_values($linkedProducts) as $i => $product)
         {
             $hasBranch = $product->type != 'normal' && isset($branchGroups[$product->id]);
@@ -242,14 +243,14 @@ class productsBox extends wg
             {
                 $objects      = array();
                 $objectGroups = $type == 'plan' ? $planGroups : $roadmapGroups;
-                if(is_array($branchIdList) && isset($objectGroups[$product->id]))
+                if(is_array($branchIdList) && !empty($branchIdList) && isset($objectGroups[$product->id]))
                 {
                     foreach($branchIdList as $branchID)
                     {
                         if(isset($objectGroups[$product->id][$branchID])) $objects += $objectGroups[$product->id][$branchID];
                     }
                 }
-                if($type == 'roadmap' && empty($product->branches) && !empty($objectGroups[$product->id])) $objects += $objectGroups[$product->id];
+                if(empty($product->branches) && empty($objects) && !empty($objectGroups[$product->id])) $objects += $objectGroups[$product->id];
 
                 if($type == 'plan')
                 {

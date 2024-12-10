@@ -347,7 +347,7 @@ class commonModel extends model
      */
     public function setApproval()
     {
-        $this->config->openedApproval = (in_array($this->config->edition, array('max', 'ipd'))) && ($this->config->vision == 'rnd');
+        $this->config->openedApproval = (in_array($this->config->edition, array('biz', 'max', 'ipd'))) && ($this->config->vision == 'rnd');
     }
 
     /**
@@ -2585,19 +2585,15 @@ eof;
 
                 if(isset($actionData['items']) && is_array($actionData['items']))
                 {
-                    foreach($actionData['items'] as $key => $itemAction)
+                    $itemList = array();
+                    foreach($actionData['items'] as $itemAction)
                     {
                         $itemActionData = $config->{$moduleName}->actionList[$itemAction];
                         $itemActionData = $this->checkPrivForOperateAction($itemActionData, $itemAction, $moduleName, $data, $menu);
-                        if(($isInModal && !empty($itemActionData['notInModal'])) || $itemActionData === false)
-                        {
-                            unset($actionData['items'][$key]);
-                        }
-                        else
-                        {
-                            $actionData['items'][$key] = $itemActionData;
-                        }
+                        if(($isInModal && !empty($itemActionData['notInModal'])) || $itemActionData === false) continue;
+                        $itemList[] = $itemActionData;
                     }
+                    $actionData['items'] = $itemList;
                     if(!empty($actionData['items'])) $actions[] = $actionData;
                 }
                 else

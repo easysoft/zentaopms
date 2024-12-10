@@ -107,7 +107,7 @@ $config->upgrade->execFlow['20_7']        = array('functions' => 'upgradeMyDocSp
 $config->upgrade->execFlow['20_8']        = array('functions' => 'processWorkflowGroups');
 $config->upgrade->execFlow['20_9']        = array('functions' => 'initTaskRelation');
 $config->upgrade->execFlow['21_1']        = array('functions' => 'processCacheConfig');
-$config->upgrade->execFlow['21_2']        = array('functions' => 'initTaskRelation');
+$config->upgrade->execFlow['21_2']        = array('functions' => 'initTaskRelation,importBuildinWorkflow,addCharterApprovalFlow,processCharterFileConfig,processCharterStatus', 'params' => array('importBuildinWorkflow' => array('or', 'charter')));
 
 if(!empty($config->isINT))
 {

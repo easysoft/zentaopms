@@ -54,7 +54,7 @@ class backBtn extends btn
             'doc'            => 'doc-mySpace,doc-productSpace,doc-projectSpace,doc-teamSpace,doc-view,execution-doc',
             'design'         => 'design-browse,projectstory-track,my-effort,my-index',
             'release'        => 'release-browse,release-view,product-roadmap,kanban-view,projectrelease-browse,story-view,my-index,my-effort,product-dynamic,project-dynamic,project-view',
-            'productplan'    => 'productplan-browse,kanban-view,projectplan-browse,my-index,my-effort,product-dynamic,project-dynamic,project-view',
+            'productplan'    => 'productplan-browse,kanban-view,projectplan-browse,my-index,my-effort,product-dynamic,project-dynamic,project-view,charter-view',
             'programplan'    => 'project-execution',
             'projectrelease' => 'projectrelease-browse',
             'projectstory'   => 'projectstory-story',
@@ -90,11 +90,12 @@ class backBtn extends btn
             'domain'         => 'domain-browse,domain-view',
             'researchtask'   => 'marketresearch-task,my-index,product-dynamic,project-dynamic,project-view,my-contribute',
             'review'         => 'review-browse,my-index,product-dynamic,project-dynamic,project-view,programplan-browse,project-execution,my-contribute',
-            'charter'        => 'charter-browse',
+            'charter'        => 'my-index,charter-browse,charter-view,my-audit,program-browse',
             'roadmap'        => 'charter-view',
             'approvalflow'   => 'approvalflow-browse',
             'host'           => 'host-browse,my-index',
-            'deploy'         => 'deploy-browse'
+            'deploy'         => 'deploy-browse',
+            'program'        => 'program-browse,program-productview'
         );
 
         $props  = parent::getProps();

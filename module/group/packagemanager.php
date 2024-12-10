@@ -463,7 +463,7 @@ $config->group->subset->traincourse->nav   = 'traincourse';
 
 $config->group->subset->charter = new stdclass();
 $config->group->subset->charter->order = 165;
-$config->group->subset->charter->nav   = 'charter';
+$config->group->subset->charter->nav   = $config->vision == 'or' ? 'charter' : 'program';
 
 $config->group->subset->demandpool = new stdclass();
 $config->group->subset->demandpool->order = 55;
@@ -2593,7 +2593,7 @@ $config->group->package->workflow->privs['workflow-ui']                = array('
 $config->group->package->workflow->privs['workflow-release']           = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 60, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflow->privs['workflow-deactivate']        = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 65, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflow->privs['workflow-activate']          = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 70, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
-$config->group->package->workflow->privs['workflow-setApproval']       = array('edition' => 'max,ipd',     'vision' => 'rnd,lite',    'order' => 75, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
+$config->group->package->workflow->privs['workflow-setApproval']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite',    'order' => 75, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflow->privs['workflow-setFulltextSearch'] = array('edition' => 'max,ipd',     'vision' => 'rnd,lite',    'order' => 80, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflow->privs['workflow-setJS']             = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 85, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflow->privs['workflow-setCSS']            = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 90, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
@@ -3097,21 +3097,28 @@ $config->group->package->custom->privs['custom-kanban']             = array('edi
 $config->group->package->custom->privs['custom-setStoryConcept']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 6, 'depend' => array('custom-browseStoryConcept'), 'recommend' => array());
 $config->group->package->custom->privs['custom-limitTaskDate']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('custom-execution'), 'recommend' => array());
 
+$config->group->package->charter = new stdclass();
+$config->group->package->charter->order  = 6;
+$config->group->package->charter->subset = 'featureconfig';
+$config->group->package->charter->privs  = array();
+$config->group->package->charter->privs['custom-setCharterInfo']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,or', 'order' => 10, 'depend' => array(), 'recommend' => array());
+$config->group->package->charter->privs['custom-resetCharterInfo'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,or', 'order' => 10, 'depend' => array(), 'recommend' => array());
+
 $config->group->package->approvalflow = new stdclass();
 $config->group->package->approvalflow->order  = 10;
 $config->group->package->approvalflow->subset = 'featureconfig';
 $config->group->package->approvalflow->privs  = array();
-$config->group->package->approvalflow->privs['approval-progress']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('approvalflow-browse'), 'recommend' => array());
-$config->group->package->approvalflow->privs['approvalflow-browse']     = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('approvalflow-role'), 'recommend' => array());
-$config->group->package->approvalflow->privs['approvalflow-create']     = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 6, 'depend' => array('approvalflow-browse'), 'recommend' => array('approvalflow-delete', 'approvalflow-design', 'approvalflow-edit', 'approvalflow-view'));
-$config->group->package->approvalflow->privs['approvalflow-edit']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 7, 'depend' => array('approvalflow-browse'), 'recommend' => array('approvalflow-create', 'approvalflow-delete', 'approvalflow-design', 'approvalflow-view'));
-$config->group->package->approvalflow->privs['approvalflow-view']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('approvalflow-browse'), 'recommend' => array());
-$config->group->package->approvalflow->privs['approvalflow-design']     = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 8, 'depend' => array('approvalflow-browse'), 'recommend' => array('approvalflow-create', 'approvalflow-delete', 'approvalflow-edit', 'approvalflow-view'));
-$config->group->package->approvalflow->privs['approvalflow-delete']     = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 9, 'depend' => array('approvalflow-browse'), 'recommend' => array('approvalflow-create', 'approvalflow-design', 'approvalflow-edit', 'approvalflow-view'));
-$config->group->package->approvalflow->privs['approvalflow-role']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array());
-$config->group->package->approvalflow->privs['approvalflow-createRole'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('approvalflow-role'), 'recommend' => array('approvalflow-deleteRole', 'approvalflow-editRole'));
-$config->group->package->approvalflow->privs['approvalflow-editRole']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('approvalflow-role'), 'recommend' => array('approvalflow-createRole', 'approvalflow-deleteRole'));
-$config->group->package->approvalflow->privs['approvalflow-deleteRole'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('approvalflow-role'), 'recommend' => array('approvalflow-createRole', 'approvalflow-editRole'));
+$config->group->package->approvalflow->privs['approval-progress']       = array('edition' => 'max,ipd',     'vision' => 'rnd', 'order' => 10, 'depend' => array('approvalflow-browse'), 'recommend' => array());
+$config->group->package->approvalflow->privs['approvalflow-browse']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('approvalflow-role'), 'recommend' => array());
+$config->group->package->approvalflow->privs['approvalflow-create']     = array('edition' => 'max,ipd',     'vision' => 'rnd', 'order' => 6, 'depend' => array('approvalflow-browse'), 'recommend' => array('approvalflow-delete', 'approvalflow-design', 'approvalflow-edit', 'approvalflow-view'));
+$config->group->package->approvalflow->privs['approvalflow-edit']       = array('edition' => 'max,ipd',     'vision' => 'rnd', 'order' => 7, 'depend' => array('approvalflow-browse'), 'recommend' => array('approvalflow-create', 'approvalflow-delete', 'approvalflow-design', 'approvalflow-view'));
+$config->group->package->approvalflow->privs['approvalflow-view']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('approvalflow-browse'), 'recommend' => array());
+$config->group->package->approvalflow->privs['approvalflow-design']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 8, 'depend' => array('approvalflow-browse'), 'recommend' => array('approvalflow-create', 'approvalflow-delete', 'approvalflow-edit', 'approvalflow-view'));
+$config->group->package->approvalflow->privs['approvalflow-delete']     = array('edition' => 'max,ipd',     'vision' => 'rnd', 'order' => 9, 'depend' => array('approvalflow-browse'), 'recommend' => array('approvalflow-create', 'approvalflow-design', 'approvalflow-edit', 'approvalflow-view'));
+$config->group->package->approvalflow->privs['approvalflow-role']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array());
+$config->group->package->approvalflow->privs['approvalflow-createRole'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('approvalflow-role'), 'recommend' => array('approvalflow-deleteRole', 'approvalflow-editRole'));
+$config->group->package->approvalflow->privs['approvalflow-editRole']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('approvalflow-role'), 'recommend' => array('approvalflow-createRole', 'approvalflow-deleteRole'));
+$config->group->package->approvalflow->privs['approvalflow-deleteRole'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('approvalflow-role'), 'recommend' => array('approvalflow-createRole', 'approvalflow-editRole'));
 
 $config->group->package->meetingroom = new stdclass();
 $config->group->package->meetingroom->order  = 30;
@@ -3689,9 +3696,8 @@ $config->group->package->browseCharter = new stdclass();
 $config->group->package->browseCharter->order  = 5;
 $config->group->package->browseCharter->subset = 'charter';
 $config->group->package->browseCharter->privs  = array();
-$config->group->package->browseCharter->privs['charter-browse']             = array('edition' => 'ipd', 'vision' => 'or', 'order' => 10, 'depend' => array(), 'recommend' => array());
-$config->group->package->browseCharter->privs['charter-view']               = array('edition' => 'ipd', 'vision' => 'or', 'order' => 40, 'depend' => array('charter-browse'), 'recommend' => array());
-$config->group->package->browseCharter->privs['charter-loadRoadmapStories'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 70, 'depend' => array('charter-browse', 'charter-view'), 'recommend' => array());
+$config->group->package->browseCharter->privs['charter-browse']             = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd', 'order' => 10, 'depend' => array(), 'recommend' => array());
+$config->group->package->browseCharter->privs['charter-view']               = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd', 'order' => 40, 'depend' => array('charter-browse'), 'recommend' => array());
 
 $config->group->package->manageDemandPool = new stdclass();
 $config->group->package->manageDemandPool->order  = 5;
@@ -3706,17 +3712,22 @@ $config->group->package->manageCharter = new stdclass();
 $config->group->package->manageCharter->order  = 5;
 $config->group->package->manageCharter->subset = 'charter';
 $config->group->package->manageCharter->privs  = array();
-$config->group->package->manageCharter->privs['charter-create']   = array('edition' => 'ipd', 'vision' => 'or', 'order' => 20, 'depend' => array('charter-browse'), 'recommend' => array('charter-delete', 'charter-edit'));
-$config->group->package->manageCharter->privs['charter-edit']     = array('edition' => 'ipd', 'vision' => 'or', 'order' => 30, 'depend' => array('charter-browse', 'charter-loadRoadmapStories', 'charter-view'), 'recommend' => array('charter-create', 'charter-delete'));
-$config->group->package->manageCharter->privs['charter-delete']   = array('edition' => 'ipd', 'vision' => 'or', 'order' => 50, 'depend' => array('charter-browse', 'charter-view'), 'recommend' => array());
-$config->group->package->manageCharter->privs['charter-close']    = array('edition' => 'ipd', 'vision' => 'or', 'order' => 80, 'depend' => array('charter-browse', 'charter-view'), 'recommend' => array('charter-activate', 'charter-create', 'charter-edit'));
-$config->group->package->manageCharter->privs['charter-activate'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 90, 'depend' => array('charter-browse', 'charter-view'), 'recommend' => array('charter-close', 'charter-create', 'charter-edit'));
+$config->group->package->manageCharter->privs['charter-create']   = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd', 'order' => 20, 'depend' => array('charter-browse'), 'recommend' => array('charter-delete', 'charter-edit'));
+$config->group->package->manageCharter->privs['charter-edit']     = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd', 'order' => 30, 'depend' => array('charter-browse', 'charter-view'), 'recommend' => array('charter-create', 'charter-delete'));
+$config->group->package->manageCharter->privs['charter-delete']   = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd', 'order' => 50, 'depend' => array('charter-view'), 'recommend' => array());
+$config->group->package->manageCharter->privs['charter-close']    = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd', 'order' => 80, 'depend' => array('charter-browse'), 'recommend' => array('charter-create', 'charter-edit'));
 
 $config->group->package->reviewCharter = new stdclass();
 $config->group->package->reviewCharter->order  = 5;
 $config->group->package->reviewCharter->subset = 'charter';
 $config->group->package->reviewCharter->privs  = array();
-$config->group->package->reviewCharter->privs['charter-review'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 60, 'depend' => array('charter-browse', 'charter-loadRoadmapStories', 'charter-view'), 'recommend' => array());
+$config->group->package->reviewCharter->privs['charter-projectApproval']         = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd', 'order' => 10, 'depend' => array('charter-browse'), 'recommend' => array());
+$config->group->package->reviewCharter->privs['charter-completionApproval']      = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd', 'order' => 15, 'depend' => array('charter-browse'), 'recommend' => array());
+$config->group->package->reviewCharter->privs['charter-cancelProjectApproval']   = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd', 'order' => 20, 'depend' => array('charter-view'),   'recommend' => array());
+$config->group->package->reviewCharter->privs['charter-activateProjectApproval'] = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd', 'order' => 25, 'depend' => array('charter-browse'), 'recommend' => array());
+$config->group->package->reviewCharter->privs['charter-approvalcancel']          = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd', 'order' => 30, 'depend' => array('charter-browse'), 'recommend' => array());
+$config->group->package->reviewCharter->privs['charter-review']                  = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd', 'order' => 35, 'depend' => array('charter-browse'), 'recommend' => array());
+$config->group->package->reviewCharter->privs['charter-approvalProgress']        = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd', 'order' => 40, 'depend' => array('charter-browse'), 'recommend' => array());
 
 $config->group->package->browseDemand = new stdclass();
 $config->group->package->browseDemand->order  = 5;

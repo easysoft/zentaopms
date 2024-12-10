@@ -16,7 +16,7 @@ foreach(array_keys($lang->my->featureBar['audit']) as $type)
 {
     $priv     = hasPriv($type, 'review');
     $viewPriv = $type == 'feedback' ? hasPriv($type, 'adminView') : hasPriv($type, 'view');
-    if(!in_array($type, $config->my->noFlowAuditModules)) $priv = hasPriv($type, 'approvalreview');
+    if(!in_array($type, $config->my->noFlowAuditModules) && $type != 'charter') $priv = hasPriv($type, 'approvalreview');
     $reviewPrivs[$type] = $priv;
     $viewPrivs[$type]   = $viewPriv;
 }
@@ -79,7 +79,7 @@ foreach($reviewList as $review)
         $statusList = $lang->attend->reviewStatusList;
     }
 
-    if(!in_array($type, array('demand', 'story', 'testcase', 'feedback', 'review')) && !$isOAObject)
+    if(!in_array($type, array('demand', 'story', 'testcase', 'feedback', 'review', 'charter')) && !$isOAObject)
     {
         if($rawMethod == 'audit') $statusList = $lang->approval->nodeList;
 
