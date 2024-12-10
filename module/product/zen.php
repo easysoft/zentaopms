@@ -472,7 +472,7 @@ class productZen extends product
         }
 
         if($this->app->tab == 'project')  return $this->product->getProducts($this->session->project);
-        if($this->app->tab == 'feedback') return $this->loadModel('feedback')->getGrantProducts(false);
+        if($this->app->tab == 'feedback') return $this->loadModel('feedback')->getGrantProducts(false, false, 'all');
         return $this->product->getList(0, 'all', 0, 0, $shadow);
     }
 
