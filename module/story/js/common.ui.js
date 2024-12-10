@@ -79,7 +79,7 @@ window.loadProductPlans = function(productID, branch)
         if(items.length == 0)
         {
             $inputGroup.append('<a class="btn btn-default" type="button" data-size="lg" data-toggle="modal" href="' + $.createLink('productplan', 'create', 'productID=' + productID + '&branch=' + branch) + '"><i class="icon icon-plus"></i></a>');
-            $inputGroup.append('<button class="refresh btn" type="button" onclick="window.loadProductPlans(' + productID + ')"><i class="icon icon-refresh"></i></button>');
+            $inputGroup.append(`<button class="refresh btn" type="button" onclick="window.loadProductPlans(${productID},${branch})"><i class="icon icon-refresh"></i></button>`);
         }
     })
 };
