@@ -47,5 +47,3 @@ dtable
     set::orderBy($orderBy),
     set::footPager(usePager())
 );
-
-render();
