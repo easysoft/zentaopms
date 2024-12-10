@@ -109,7 +109,7 @@ r($tester->checkData($urUrl, 'UR', 'reviewing', '2'))    && p('message,status') 
 r($tester->checkData($urUrl, 'UR', 'toBeClosed', '1'))   && p('message,status') && e('用户需求的待关闭tab下数据正确,SUCCESS');//检查用户需求列表待关闭tab下的数据
 r($tester->checkData($urUrl, 'UR', 'closed', '2'))       && p('message,status') && e('用户需求的已关闭tab下数据正确,SUCCESS');//检查用户需求列表已关闭tab下的数据
 
-$srUrl['productTD']  = 1;
+$srUrl['productTD'] = 1;
 r($tester->checkData($srUrl, 'SR', 'all','10'))          && p('message,status') && e('研发需求的全部tab下数据正确,SUCCESS');//检查研发需求列表全部tab下的数据
 r($tester->checkData($srUrl, 'SR', 'open','7'))          && p('message,status') && e('研发需求的未关闭tab下数据正确,SUCCESS');//检查研发需求列表未关闭tab下的数据
 r($tester->checkData($srUrl, 'SR', 'assignedToMe','5'))  && p('message,status') && e('研发需求的指给我tab下数据正确,SUCCESS');//检查研发需求列表指给我tab下的数据
