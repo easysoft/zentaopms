@@ -97,6 +97,27 @@ class fileModel extends model
     }
 
     /**
+     * Get file by gid.
+     *
+     * @param  string    $gid
+     * @access public
+     * @return string
+     */
+    public function getByGid(string $gid): object|false
+    {
+        $file = $this->dao->select('*')->from(TABLE_FILE)
+            ->where('gid')->eq($gid)
+            ->orWhere('(gid')->eq('')
+            ->andWhere('title')->eq($gid)
+            ->markRight(1)
+            ->fetch();
+        if(empty($file)) return false;
+
+        $this->setFileWebAndRealPaths($file);
+        return $file;
+    }
+
+    /**
      * Get file by object.
      *
      * @param  string    $objectType
