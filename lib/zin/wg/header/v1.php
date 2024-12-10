@@ -421,7 +421,7 @@ class header extends wg
                     $params = "programID=&extra=from=global";
                     break;
                 case 'program':
-                    $params = "parentProgramID=0&extra=from=global";
+                    $params = "parentProgramID=0&charterID=0&extra=from=global";
                     break;
                 case 'kanbanspace':
                     $isOnlyBody          = true;

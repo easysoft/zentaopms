@@ -194,6 +194,7 @@ CSS;
         (
             set::icon('back'),
             set::text($lang->goback),
+            set::hint($lang->goback),
             setKey('backBtn'),
             set($backBtn)
         );
@@ -383,6 +384,7 @@ CSS;
                 $this->block('main')
             ),
             $this->block('sections'),
+            $this->children(),
             $this->buildHistory(),
             $this->buildActions()
         );

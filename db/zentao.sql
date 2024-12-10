@@ -164,6 +164,7 @@ CREATE TABLE IF NOT EXISTS `zt_approval` (
   `version` mediumint(9) NOT NULL DEFAULT '0',
   `status` varchar(20) NOT NULL DEFAULT 'doing',
   `result` varchar(20) NOT NULL DEFAULT '',
+  `extra` text NULL,
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `deleted` tinyint(4) NOT NULL DEFAULT '0',
@@ -241,6 +242,13 @@ CREATE TABLE IF NOT EXISTS `zt_approvalobject` (
   `approval` int(8) NOT NULL DEFAULT '0',
   `objectType` char(30) NOT NULL DEFAULT '',
   `objectID` mediumint(8) NOT NULL DEFAULT '0',
+  `reviewers` text DEFAULT NULL,
+  `opinion` text DEFAULT NULL,
+  `result` varchar(10) NOT NULL DEFAULT '',
+  `status` varchar(30) NOT NULL DEFAULT '',
+  `appliedBy` char(30) NOT NULL DEFAULT '',
+  `appliedDate` datetime NULL,
+  `desc` text NULL,
   `extra` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1526,6 +1534,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `multiple` enum('0','1') NOT NULL DEFAULT '1',
   `parallel` mediumint(9) NOT NULL DEFAULT '0',
   `enabled` enum('on','off') NOT NULL DEFAULT 'on',
+  `linkType` varchar(30) NOT NULL DEFAULT 'plan',
   `colWidth` smallint(6) NOT NULL DEFAULT '264',
   `minColWidth` smallint(6) NOT NULL DEFAULT '200',
   `maxColWidth` smallint(6) NOT NULL DEFAULT '384',
@@ -14457,10 +14466,18 @@ CREATE TABLE `zt_scene` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 REPLACE INTO `zt_approvalflow` (`id`, `name`, `code`, `desc`, `version`, `createdBy`, `createdDate`, `workflow`, `deleted`) VALUES
-(1, '最简审批', 'simple', '', 1, 'admin', '2022-04-29 08:46:40', '', 0);
+(1, '最简审批', 'simple', '', 1, 'admin', '2022-04-29 08:46:40', '', 0),
+(2, '立项审批流', 'projectApproval', '可以为发起立项审批设计审批流程。', 1, 'system', NOW(), 'charter', 0),
+(3, '结项审批流', 'completionApproval', '可以为发起结项审批设计审批流程。', 1, 'system', NOW(), 'charter', 0),
+(4, '取消立项审批流', 'cancelProjectApproval', '可以为取消立项审批设计审批流程。', 1, 'system', NOW(), 'charter', 0),
+(5, '激活立项审批流', 'activateProjectApproval', '可以为激活立项审批设计审批流程。', 1, 'system', NOW(), 'charter', 0);
 
 REPLACE INTO `zt_approvalflowspec` (`id`, `flow`, `version`, `nodes`, `createdBy`, `createdDate`) VALUES
-(1, 1, 1, '[{\"type\":\"start\",\"ccs\":[]},{\"id\":\"3ewcj92p55e\",\"type\":\"approval\",\"title\":\"审批\",\"reviewType\":\"manual\",\"multiple\":\"and\",\"agentType\":\"pass\",\"reviewers\":[{\"type\":\"select\"}],\"ccs\":[]},{\"type\":\"end\",\"ccs\":[]}]', 'admin', '2022-04-29 08:46:40');
+(1, 1, 1, '[{\"type\":\"start\",\"ccs\":[]},{\"id\":\"3ewcj92p55e\",\"type\":\"approval\",\"title\":\"审批\",\"reviewType\":\"manual\",\"multiple\":\"and\",\"agentType\":\"pass\",\"reviewers\":[{\"type\":\"select\"}],\"ccs\":[]},{\"type\":\"end\",\"ccs\":[]}]', 'admin', '2022-04-29 08:46:40'),
+(2, 2, 1, '[{\"type\":\"start\",\"ccs\":[]},{\"id\":\"3ewcj92p55e\",\"type\":\"approval\",\"title\":\"审批\",\"reviewType\":\"manual\",\"multiple\":\"and\",\"percent\":\"50\",\"commentType\":\"noRequired\",\"agentType\":\"pass\",\"selfType\":\"selfReview\",\"deletedType\":\"setAdmin\",\"reviewers\":[{\"type\":\"select\",\"users\":[],\"roles\":[\"\"],\"depts\":[\"\"],\"positions\":[\"\"],\"userRange\":\"all\",\"required\":\"yes\"}],\"ccs\":[{\"type\":\"select\",\"users\":[],\"roles\":[\"\"],\"depts\":[\"\"],\"positions\":[\"\"],\"userRange\":\"all\"}]},{\"type\":\"end\",\"ccs\":[]}]', 'system', NOW()),
+(3, 3, 1, '[{\"type\":\"start\",\"ccs\":[]},{\"id\":\"3ewcj92p55e\",\"type\":\"approval\",\"title\":\"审批\",\"reviewType\":\"manual\",\"multiple\":\"and\",\"percent\":\"50\",\"commentType\":\"noRequired\",\"agentType\":\"pass\",\"selfType\":\"selfReview\",\"deletedType\":\"setAdmin\",\"reviewers\":[{\"type\":\"select\",\"users\":[],\"roles\":[\"\"],\"depts\":[\"\"],\"positions\":[\"\"],\"userRange\":\"all\",\"required\":\"yes\"}],\"ccs\":[{\"type\":\"select\",\"users\":[],\"roles\":[\"\"],\"depts\":[\"\"],\"positions\":[\"\"],\"userRange\":\"all\"}]},{\"type\":\"end\",\"ccs\":[]}]', 'system', NOW()),
+(4, 4, 1, '[{\"type\":\"start\",\"ccs\":[]},{\"id\":\"3ewcj92p55e\",\"type\":\"approval\",\"title\":\"审批\",\"reviewType\":\"manual\",\"multiple\":\"and\",\"percent\":\"50\",\"commentType\":\"noRequired\",\"agentType\":\"pass\",\"selfType\":\"selfReview\",\"deletedType\":\"setAdmin\",\"reviewers\":[{\"type\":\"select\",\"users\":[],\"roles\":[\"\"],\"depts\":[\"\"],\"positions\":[\"\"],\"userRange\":\"all\",\"required\":\"yes\"}],\"ccs\":[{\"type\":\"select\",\"users\":[],\"roles\":[\"\"],\"depts\":[\"\"],\"positions\":[\"\"],\"userRange\":\"all\"}]},{\"type\":\"end\",\"ccs\":[]}]', 'system', NOW()),
+(5, 5, 1, '[{\"type\":\"start\",\"ccs\":[]},{\"id\":\"3ewcj92p55e\",\"type\":\"approval\",\"title\":\"审批\",\"reviewType\":\"manual\",\"multiple\":\"and\",\"percent\":\"50\",\"commentType\":\"noRequired\",\"agentType\":\"pass\",\"selfType\":\"selfReview\",\"deletedType\":\"setAdmin\",\"reviewers\":[{\"type\":\"select\",\"users\":[],\"roles\":[\"\"],\"depts\":[\"\"],\"positions\":[\"\"],\"userRange\":\"all\",\"required\":\"yes\"}],\"ccs\":[{\"type\":\"select\",\"users\":[],\"roles\":[\"\"],\"depts\":[\"\"],\"positions\":[\"\"],\"userRange\":\"all\"}]},{\"type\":\"end\",\"ccs\":[]}]', 'system', NOW());
 
 REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`) VALUES
 ('all', 'process', 'classify', 'support', '支持过程', '1'),
@@ -15688,29 +15705,44 @@ CREATE UNIQUE INDEX `demand` ON `zt_demandreview`(`demand`,`version`,`reviewer`)
 CREATE TABLE `zt_charter` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
-  `level` int(8) NOT NULL DEFAULT '0',
+  `level` varchar(255) NOT NULL DEFAULT '',
   `category` char(30) NOT NULL DEFAULT '',
   `market` varchar(30) NOT NULL DEFAULT '',
   `check` enum('0','1') NOT NULL DEFAULT '0',
   `appliedBy` char(30) NOT NULL DEFAULT '',
   `appliedDate` datetime NULL,
+  `appliedReviewer` text NULL,
   `budget` char(30) NOT NULL DEFAULT '',
   `budgetUnit` char(30) NOT NULL DEFAULT '',
   `product` text NULL,
   `roadmap` text NULL,
+  `plan` text NULL,
+  `type` varchar(30) NOT NULL DEFAULT 'roadmap',
+  `filesConfig` text NULL,
   `spec` mediumtext NULL,
   `status` char(30) NOT NULL DEFAULT '',
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `charterFiles` text NULL,
+  `completionFiles` text NULL,
+  `canceledFiles` text NULL,
+  `beforeCanceled` varchar(30) NOT NULL DEFAULT '',
   `closedBy` char(30) NOT NULL DEFAULT '',
   `closedDate` datetime NULL,
   `closedReason` varchar(255) NOT NULL DEFAULT '',
   `activatedBy` char(30) NOT NULL DEFAULT '',
   `activatedDate` datetime NULL,
+  `activatedReviewer` text NULL,
   `reviewedBy` varchar(255) NOT NULL DEFAULT '',
   `reviewedResult` char(30) NOT NULL DEFAULT '',
   `reviewedDate` datetime NULL,
+  `reviewStatus` varchar(30) NOT NULL DEFAULT 'wait',
+  `complatedBy` varchar(30) NOT NULL DEFAULT '',
+  `complatedDate` datetime NULL,
+  `complatedReviewer` text NULL,
+  `canceledBy` varchar(30) NOT NULL DEFAULT '',
+  `canceledDate` datetime NULL,
+  `canceledReviewer` text NULL,
   `meetingDate` date NULL,
   `meetingLocation` varchar(255) NOT NULL DEFAULT '',
   `meetingMinutes` mediumtext NULL,

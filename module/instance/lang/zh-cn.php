@@ -169,7 +169,6 @@ $lang->instance->restore->invalidTime        = '无效的时间';
 $lang->instance->restore->disableAutoRestore = '自动备份已关闭';
 $lang->instance->restore->firstStartTime     = '%s 首次自动备份将于%s 执行';
 
-
 $lang->instance->restore->cycleList[1] = '每日';
 
 $lang->instance->restore->statusList = array();

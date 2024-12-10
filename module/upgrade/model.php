@@ -9366,10 +9366,11 @@ class upgradeModel extends model
      * Import buildin workflow.
      *
      * @param  string $vision
+     * @param  string $importModule  指定导入的模块
      * @access public
      * @return void
      */
-    public function importBuildinWorkflow($vision = 'all')
+    public function importBuildinWorkflow($vision = 'all', $importModule = '')
     {
         $this->loadModel('workflow');
         $this->loadModel('workflowaction');
@@ -9402,6 +9403,8 @@ class upgradeModel extends model
             $data->app = $app;
             foreach($appModules as $module => $options)
             {
+                if($importModule && $importModule != $module) continue;
+
                 $this->app->loadLang($module);
 
                 $data->vision    = 'rnd';
@@ -9432,6 +9435,8 @@ class upgradeModel extends model
         $data->createdDate   = $now;
         foreach($actions as $module => $moduleActions)
         {
+            if($importModule && $importModule != $module) continue;
+
             $data->module = $module;
             foreach($moduleActions as $action)
             {
@@ -9478,6 +9483,8 @@ class upgradeModel extends model
         $data->createdDate = $now;
         foreach($fields as $module => $moduleFields)
         {
+            if($importModule && $importModule != $module) continue;
+
             $order = 1;
             $data->module = $module;
 
@@ -9517,6 +9524,8 @@ class upgradeModel extends model
         $data = new stdclass();
         foreach($layouts as $module => $moduleLayouts)
         {
+            if($importModule && $importModule != $module) continue;
+
             $data->module = $module;
             foreach($moduleLayouts as $action => $layoutFields)
             {
@@ -9553,6 +9562,8 @@ class upgradeModel extends model
         {
             foreach($appModules as $module => $options)
             {
+                if($importModule && $importModule != $module) continue;
+
                 $labels = array();
                 if($module == 'product')
                 {
@@ -10495,5 +10506,115 @@ class upgradeModel extends model
             $data->relation = 'subdivideinto';
             $this->dao->insert(TABLE_RELATION)->data($data)->exec();
         }
+
+    /**
+     * 创建内置立项审批流。
+     * Add default charter approval flow.
+     *
+     * @access public
+     * @return bool
+     */
+    public function addCharterApprovalFlow()
+    {
+        foreach($this->lang->upgrade->defaultCharterApprovalFlow as $approvalType => $approval)
+        {
+            $approvalflow = new stdclass();
+            $approvalflow->name        = $approval->title;
+            $approvalflow->code        = $approvalType;
+            $approvalflow->desc        = $approval->desc;
+            $approvalflow->version     = 1;
+            $approvalflow->createdBy   = 'system';
+            $approvalflow->createdDate = helper::now();
+            $approvalflow->workflow    = 'charter';
+            $approvalflow->deleted     = 0;
+            $this->dao->insert(TABLE_APPROVALFLOW)->data($approvalflow)->exec();
+
+            if(dao::isError()) return false;
+
+            $approvalflowID = $this->dao->lastInsertId();
+
+            $approvalflowSpec = new stdclass();
+            $approvalflowSpec->flow        = $approvalflowID;
+            $approvalflowSpec->version     = 1;
+            $approvalflowSpec->nodes       = '[{"type":"start","ccs":[]},{"id":"3ewcj92p55e","type":"approval","title":"审批","reviewType":"manual","multiple":"and","percent":"50","commentType":"noRequired","agentType":"pass","selfType":"selfReview","deletedType":"setAdmin","reviewers":[{"type":"select","users":[],"roles":[""],"depts":[""],"positions":[""],"userRange":"all","required":"yes"}],"ccs":[{"type":"select","users":[],"roles":[""],"depts":[""],"positions":[""],"userRange":"all"}]},{"type":"end","ccs":[]}]';
+            $approvalflowSpec->createdBy   = 'system';
+            $approvalflowSpec->createdDate = helper::now();
+            $this->dao->insert(TABLE_APPROVALFLOWSPEC)->data($approvalflowSpec)->exec();
+
+            if(dao::isError()) return false;
+
+            $approvalflowobject = new stdclass();
+            $approvalflowobject->flow       = $approvalflowID;
+            $approvalflowobject->objectType = 'charter';
+            $approvalflowobject->extra      = $approvalType;
+            $this->dao->insert(TABLE_APPROVALFLOWOBJECT)->data($approvalflowobject)->exec();
+
+            if(dao::isError()) return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * 对立项附件配置做升级处理。
+     * Process charter file config.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processCharterFileConfig()
+    {
+        $oldCharterFileConfig = $this->loadModel('custom')->getItems('owner=system&module=charter&section=charterList&vision=or');
+        if(!$oldCharterFileConfig) return false;
+
+        $projectApprovalFiles = array();
+        foreach($oldCharterFileConfig as $oldCharterFile) $projectApprovalFiles[] = array('index' => $oldCharterFile->key, 'name' => $oldCharterFile->value);
+
+        $charterFiles = json_decode($this->config->custom->charterFiles, true);
+        foreach($charterFiles as $index => $charterFile)
+        {
+            $charterFiles[$index]['type']            = 'roadmap';
+            $charterFiles[$index]['projectApproval'] = $projectApprovalFiles;
+        }
+
+        $this->loadModel('setting')->setItem('system.custom.charterFiles', json_encode($charterFiles));
+
+        return true;
+    }
+
+    /**
+     * 处理立项状态及评审状态。
+     * Process charter status.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processCharterStatus()
+    {
+        $this->dao->update(TABLE_CHARTER)
+            ->set('status')->eq('wait')
+            ->set('reviewStatus')->eq('projectReject')
+            ->where('status')->eq('failed')
+            ->andWhere('reviewedResult')->eq('failed')
+            ->exec();
+
+        $this->dao->update(TABLE_CHARTER)
+            ->set('reviewStatus')->eq('projectPass')
+            ->where('status')->eq('launched')
+            ->exec();
+
+        $this->dao->update(TABLE_CHARTER)
+            ->set('reviewStatus')->eq('completionPass')
+            ->where('status')->eq('closed')
+            ->andWhere('closedReason')->eq('done')
+            ->exec();
+
+        $this->dao->update(TABLE_CHARTER)
+            ->set('beforeCanceled')->eq('wait')
+            ->set('reviewStatus')->eq('cancelPass')
+            ->where('status')->eq('closed')
+            ->andWhere('closedReason')->eq('canceled')
+            ->exec();
+        return true;
     }
 }

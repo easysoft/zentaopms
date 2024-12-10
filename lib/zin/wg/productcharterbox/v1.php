@@ -12,8 +12,9 @@ class productCharterBox extends wg
      * @access protected
      */
     protected static array $defineProps = array(
-        'charter?: object',     // 所属立项。
-        'products?: array'      // 产品下拉列表。
+        'charter?: object',      // 所属立项。
+        'products?: array',      // 产品下拉列表。
+        'objectType?: string'    // 立项关联的对象类型。
     );
 
     public static function getPageCSS(): ?string
@@ -33,30 +34,32 @@ class productCharterBox extends wg
         return div
         (
             setClass('productsBox'),
-            on::click('.productsBox .addLine', 'window.addNewLine'),
-            on::click('.productsBox .removeLine', 'window.removeLine'),
-            on::click('#loadRoadmapStories', 'window.loadRoadmapStories'),
-            on::change('.linkProduct .pick-value', 'window.refreshPicker(e.target)'),
+            setData(array('objecttype' => $this->prop('objectType'))),
             $productsBox
         );
     }
 
     protected function initProductsBox(): array
     {
-        global $lang, $app;
+        global $lang, $app, $config;
         $products    = $this->prop('products');
         $charter     = $this->prop('charter');
+        $objectType  = $this->prop('objectType');
         $productsBox = array();
         $index       = 0;
 
         if($charter)
         {
-            $roadmapGroup       = $app->control->loadModel('roadmap')->groupByProduct('nolaunching');
+            $objectsGroup = array();
+            if($objectType == 'plan')    $objectsGroup = $app->control->loadModel('productplan')->getPlansForCharter(explode(',', trim($charter->product, ',')), trim($charter->plan, ','));
+            if($objectType == 'roadmap') $objectsGroup = $app->control->loadModel('roadmap')->groupByProduct('nolaunching');
+
             $charterProductMaps = $app->control->loadModel('charter')->getGroupDataByID($charter->id);
-            foreach($charterProductMaps as $productID => $roadmaps)
+            if(empty($charterProductMaps)) $charterProductMaps = array(array()); // 没有产品时，至少渲染一行数据。
+            foreach($charterProductMaps as $productID => $objects)
             {
-                $nolaunchRoadmaps = isset($roadmapGroup[$productID]) ? array_keys($roadmapGroup[$productID]) : array();
-                $roadmaps         = array_intersect($nolaunchRoadmaps, array_keys($roadmaps));
+                $productObjects = isset($objectsGroup[$productID]) ? array_keys($objectsGroup[$productID]) : array();
+                $objects        = array_intersect($productObjects, array_keys($objects));
 
                 $productsBox[] = div
                 (
@@ -69,7 +72,6 @@ class productCharterBox extends wg
                             set::width('1/2'),
                             setClass('distributeProduct text-clip'),
                             $index != 0 ? set::labelClass('hidden') : null,
-                            set::required(true),
                             set::label($lang->charter->product),
                             inputGroup
                             (
@@ -78,6 +80,7 @@ class productCharterBox extends wg
                                     setClass('grow linkProduct w-1/2'),
                                     picker
                                     (
+                                        setData(array('on' => 'change', 'call' => 'refreshPicker', 'params' => 'event')),
                                         set::name("product[$index]"),
                                         set::items($products),
                                         set::value($productID)
@@ -88,33 +91,33 @@ class productCharterBox extends wg
                         formGroup
                         (
                             set::width('1/2'),
-                            set::label($lang->charter->roadmap),
-                            set::className('roadmapBox'),
+                            set::label($lang->charter->$objectType),
+                            $config->edition == 'ipd' ? set::labelControl(array('control' => 'icon', 'name' => 'help', 'data-toggle' => 'tooltip', 'data-title' => $lang->custom->charter->tips->type)) : null,
+                            set::className("{$objectType}Box"),
                             $index != 0 ? set::labelClass('hidden') : null,
-                            set::required(true),
                             inputGroup
                             (
                                 div
                                 (
-                                    setClass('grow linkRoadmap w-1/2'),
+                                    setClass('grow w-1/2', $objectType == 'roadmap' ? 'linkRoadmap' : 'linkPlan'),
                                     picker
                                     (
-                                        set::name("roadmap[$index]"),
+                                        set::name("{$objectType}[$index]"),
                                         set::multiple(true),
-                                        set::required(true),
-                                        set::items(isset($roadmapGroup[$productID]) ? $roadmapGroup[$productID] : array()),
-                                        set::value($roadmaps)
+                                        set::items(isset($objectsGroup[$productID]) ? $objectsGroup[$productID] : array()),
+                                        set::value(array_values($objects))
                                     )
                                 ),
                                 div
                                 (
-                                    common::hasPriv('charter', 'loadRoadmapStories') ? inputGroupAddon
+                                    $objectType == 'roadmap' && common::hasPriv('charter', 'loadRoadmapStories') ? inputGroupAddon
                                     (
                                         setClass('p-0'),
                                         btn
                                         (
                                             setID('loadRoadmapStories'),
                                             setClass('ghost'),
+                                            setData(array('on' => 'click', 'call' => 'loadRoadmapStories', 'params' => 'event')),
                                             $lang->charter->loadStories
                                         )
                                     ) : null
@@ -134,11 +137,13 @@ class productCharterBox extends wg
                                 setClass('pl-2 flex self-center line-btn'),
                                 btn
                                 (
+                                    setData(array('on' => 'click', 'call' => 'addNewLine', 'params' => 'event')),
                                     setClass('btn btn-link text-gray addLine'),
                                     icon('plus')
                                 ),
                                 btn
                                 (
+                                    setData(array('on' => 'click', 'call' => 'removeLine', 'params' => 'event')),
                                     setClass('btn btn-link text-gray removeLine', $index == 0 && count($charterProductMaps) <= 1 ? 'hidden' : ''),
                                     icon('trash')
                                 )
@@ -161,7 +166,6 @@ class productCharterBox extends wg
                     (
                         set::width('1/2'),
                         setClass('distributeProduct text-clip'),
-                        set::required(true),
                         set::label($lang->charter->product),
                         set::labelClass($charter ? 'hidden' : ''),
                         inputGroup
@@ -171,6 +175,7 @@ class productCharterBox extends wg
                                 setClass('grow linkProduct w-1/2'),
                                 picker
                                 (
+                                    setData(array('on' => 'change', 'call' => 'refreshPicker', 'params' => 'event')),
                                     set::name("product[$index]"),
                                     set::items($products),
                                     set::defaultValue(''),
@@ -182,32 +187,32 @@ class productCharterBox extends wg
                     formGroup
                     (
                         set::width('1/2'),
-                        set::label($lang->charter->roadmap),
+                        set::label($lang->charter->$objectType),
                         set::labelClass($charter ? 'hidden' : ''),
-                        set::className('roadmapBox'),
-                        set::required(true),
+                        $config->edition == 'ipd' ? set::labelControl(array('control' => 'icon', 'name' => 'help', 'data-toggle' => 'tooltip', 'data-title' => $lang->custom->charter->tips->type)) : null,
+                        set::className("{$objectType}Box"),
                         inputGroup
                         (
                             div
                             (
-                                setClass('grow linkRoadmap w-1/2'),
+                                setClass('grow w-1/2', $objectType == 'roadmap' ? 'linkRoadmap' : 'linkPlan'),
                                 picker
                                 (
-                                    set::name("roadmap[$index]"),
+                                    set::name("{$objectType}[$index]"),
                                     set::multiple(true),
-                                    set::required(true),
                                     set::items(array())
                                 )
                             ),
                             div
                             (
-                                common::hasPriv('charter', 'loadRoadmapStories') ? inputGroupAddon
+                                $objectType == 'roadmap' && common::hasPriv('charter', 'loadRoadmapStories') ? inputGroupAddon
                                 (
                                     setClass('p-0'),
                                     btn
                                     (
                                         setID('loadRoadmapStories'),
                                         setClass('ghost'),
+                                        setData(array('on' => 'click', 'call' => 'loadRoadmapStories', 'params' => 'event')),
                                         $lang->charter->loadStories
                                     )
                                 ) : null
@@ -227,11 +232,13 @@ class productCharterBox extends wg
                             setClass('pl-2 flex self-center line-btn'),
                             btn
                             (
+                                setData(array('on' => 'click', 'call' => 'addNewLine', 'params' => 'event')),
                                 setClass('btn btn-link text-gray addLine'),
                                 icon('plus')
                             ),
                             btn
                             (
+                                setData(array('on' => 'click', 'call' => 'removeLine', 'params' => 'event')),
                                 setClass('btn btn-link text-gray removeLine', $charter ? '' : 'hidden'),
                                 icon('trash')
                             )
