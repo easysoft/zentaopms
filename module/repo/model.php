@@ -554,7 +554,7 @@ class repoModel extends model
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getRepoPairs();
 
-        $repos = $this->dao->select('*')->from(TABLE_REPO)
+        $repos = $this->dao->select('*,acl')->from(TABLE_REPO)
             ->where('deleted')->eq(0)
             ->fetchAll('id', false);
 
