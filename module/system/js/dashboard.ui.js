@@ -35,7 +35,7 @@ $(function()
         size: baseFontSize * 10,
         circleColor: cpuInfo.color,
         circleWidth: 8,
-        text: '',
+        text: ''
     });
 
     new zui.ProgressCircle('#progressMemory', {
@@ -43,7 +43,7 @@ $(function()
         size: baseFontSize * 10,
         circleColor: memoryInfo.color,
         circleWidth: 8,
-        text: '',
+        text: ''
     });
 
     if(typeof timer !== 'undefined') clearInterval(timer);
