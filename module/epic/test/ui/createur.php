@@ -38,3 +38,23 @@ $story->openedBy->range('admin');
 $story->version->range('1');
 $story->assignedTo->range('[]');
 $story->reviewedBy->range('admin,[]{2}');
+$story->reviewedDate->range('`NULL`');
+$story->closedBy->range('[]');
+$story->closedReason->range('[], 2024-12-10 14:58:34,  []');
+$story->gen(3);
+
+$storyspec = zenData('storyspec');
+$storyspec->story->range('1-3');
+$storyspec->version->range('1');
+$storyspec->title->range('评审中业务需求,已关闭业务需求,激活业务需求');
+$storyspec->gen(3);
+
+$storyreview = zenData('storyreview');
+$storyreview->gen(0);
+
+$action = zenData('action');
+$action->id->range('1-4');
+$action->objectType->range('product,story,story,story');
+$action->objectID->range('1,1,2,3');
+$action->product->range('`,1,`');
+$action->project->range('0');
