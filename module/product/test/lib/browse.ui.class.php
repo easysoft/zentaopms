@@ -17,9 +17,9 @@ class browseTester extends tester
         $form->wait(2);
         $numDom = $tab . 'Num';
         $typeMessage = [
-            'SR'      => '研发需求',
-            'UR'      => '用户需求',
-            'ER'      => '业务需求'
+            'SR' => '研发需求',
+            'UR' => '用户需求',
+            'ER' => '业务需求'
         ];
         $tabMessage = [
             'all'          => '全部',
