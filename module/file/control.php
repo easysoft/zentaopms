@@ -64,7 +64,7 @@ class file extends control
      * @access public
      * @return void
      */
-    public function ajaxUpload(string $uid = '', string $objectType = '', int $objectID = 0, string $extra = '', string $field = 'imgFile', bool $api = false)
+    public function ajaxUpload(string $uid = '', string $objectType = '', int $objectID = 0, string $extra = '', string $field = 'imgFile', bool $api = false, string $gid = '')
     {
         $file = $this->file->getUpload($field);
 
@@ -89,6 +89,7 @@ class file extends control
                 $file['objectType'] = $objectType;
                 $file['objectID']   = $objectID;
                 $file['extra']      = $extra;
+                $file['gid']        = empty($gid) ? '' : base64_decode($gid);
                 unset($file['tmpname']);
                 $this->dao->insert(TABLE_FILE)->data($file)->exec();
 
