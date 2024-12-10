@@ -58,3 +58,21 @@ class createChildStoryTester extends tester
         $form->wait(1);
 
         if($this->response('method') != 'view')
+        {
+            if($form->dom->alertModal('text') == '已有相同标题的需求或标题为空，请检查输入。') return $this->success('批量创建需求页面名称为空提示正确');
+            return $this->failed('批量创建需求表单页面提示信息不正确');
+        }
+
+        /* 跳转到父需求详情页。 */
+
+        $viewPage = $this->loadPage('story', 'view');
+        if($viewPage->dom->childStoryName->getText()   != $storyName) return $this->failed('需求名称不正确');
+        if($viewPage->dom->childStoryStatus->getText() != '评审中')   return $this->failed('需求状态不正确');
+
+        $viewPage->dom->childStoryName->click();
+        $viewPage->$this->loadPage();
+        if($viewPage->dom->parentStoryName->getText() != '激活业务需求') return $this->failed('父需求不正确');
+
+        return $this->success('拆分业务需求成功');
+    }
+}
