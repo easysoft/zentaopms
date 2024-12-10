@@ -521,12 +521,12 @@ $lang->qa->menu->automation['subMenu']->zanode      = array('link' => "{$lang->z
 $lang->devops->homeMenu = new stdclass();
 $lang->devops->homeMenu->repos   = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit,import,createrepo', 'exclude' => 'repo-setrules');
 $lang->devops->homeMenu->compile = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
-$lang->devops->homeMenu->deploy  = array('link' => "{$lang->devops->host}|host|browse", 'alias' => 'create,edit,view,treemap,changestatus,group', 'subModule' => 'tree');
+$lang->devops->homeMenu->deploy  = array('link' => "{$lang->devops->host}|host|browse", 'alias' => 'create,edit,view,treemap,changestatus,group', 'subModule' => 'tree,serverroom');
 $lang->devops->homeMenu->apps    = array('link' => "{$lang->app->common}|space|browse", 'subModule' => 'instance,gitlab,gitea,gogs,jenkins,sonarqube', 'alias' => 'createapplication,binduser,edit');
 
 $configureUrl = 'serverroom|browse';
 if($config->inQuickon) $configureUrl = 'system|dashboard';
-$lang->devops->homeMenu->configure = array('link' => "{$lang->devops->configure}|{$configureUrl}", 'subModule' => 'system,store,instance,repo,serverroom', 'exclude' => 'repo-maintain,repo-browsesystem,instance-view,system-view');
+$lang->devops->homeMenu->configure = array('link' => "{$lang->devops->configure}|{$configureUrl}", 'subModule' => 'system,store,instance,repo', 'exclude' => 'repo-maintain,repo-browsesystem,instance-view,system-view');
 
 $lang->devops->menu = new stdclass();
 $lang->devops->menu->code    = array('link' => "{$lang->repocode->common}|repo|browse|repoID=%s", 'subModule' => 'repo', 'exclude' => 'repo-review,repo-browsetag,repo-browsebranch,repo-log,repo-diff,repo-revision,repo-setrule  s');
