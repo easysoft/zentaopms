@@ -38,3 +38,23 @@ class createChildStoryTester extends tester
     {
         $browseStoryParam = array(
             'productID'  => '1',
+            'branch'     => '',
+            'browseType' => 'unclosed',
+            'param'      => '0',
+            'storyType'  => 'epic'
+        );
+
+        $form = $this->initForm('product', 'browse', $browseStoryParam, 'appIframe-product');
+        $form->dom->search($searchList = array("需求名称,包含,$storyName"));
+        $form->wait(1);
+
+        $form->dom->decompose->click();
+        $form->wait(1);
+
+        $form = $this->loadPage();
+        $form->dom->name->setValue($childName);
+        $form->dom->reviewer->multiPicker(array('admin'));
+        $form->dom->requirementSave->click();
+        $form->wait(1);
+
+        if($this->response('method') != 'view')
